@@ -1,0 +1,37 @@
+.back-btn {
+  position: absolute !important;
+  top: 12px;
+  background: transparent;
+  margin-left: 15px;
+  z-index: 3;
+}
+
+.searchBoxStyles {
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  width: 91.1%;
+  height: 45px;
+  margin-top: 48px;
+  padding: 0 12px 0 12px;
+  border-radius: 3px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+  outline: none;
+  text-overflow: ellipses;
+  padding-left: 30px;
+  font-family: Roboto;
+  letter-spacing: 0px;
+  text-align: left;
+  color: #484848;
+  padding-left: 48px;
+}
+
+// .pickBtn {
+//   width: 100%;
+//   position: fixed;
+//   bottom: 0px;
+//   height: 56px;
+//   padding: 9px 16px 0 16px;
+//   background-color: rgb(255, 255, 255);
+//   box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.1), 0 -2px 5px 0 rgba(0, 0, 0, 0);
+// }

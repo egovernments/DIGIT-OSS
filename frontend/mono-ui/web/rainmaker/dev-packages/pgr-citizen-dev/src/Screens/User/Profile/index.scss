@@ -1,0 +1,62 @@
+.profileFormContainer {
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 16px !important;
+}
+.profileBtn {
+  height: 48px;
+  box-shadow: none !important;
+}
+.profileBtnWrapper {
+  z-index: 1000;
+}
+
+.profileContainer {
+  position: relative;
+}
+
+.profile-form-field > label {
+  color: #03b0c6 !important;
+}
+
+.profileContainer {
+  position: relative;
+}
+
+.citizen-profile-screen {
+  padding: 0 !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .profile-card-container {
+    margin: 0px !important;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .profile-card-container {
+    margin: 70px 16px 24px !important;
+  }
+  .profileBtnWrapper {
+    position: relative !important;
+    width: 18% !important;
+    bottom: 0px !important;
+    left: -25px !important;
+    z-index: 1 !important;
+  }
+  .profile-profilesection {
+    padding: 20px !important;
+    background-color: #ffffff;
+  }
+  .profile-profilesection .profileSection {
+    height: 300px !important;
+  }
+  .profile-profilesection .img-Profile {
+    height: 170px !important;
+    width: 170px !important;
+    margin-top: 30px !important;
+  }
+  .profileFormContainer {
+    padding: 4px 140px 120px 25px !important;
+  }
+}

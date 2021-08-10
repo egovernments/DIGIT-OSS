@@ -1,0 +1,14 @@
+.checkbox-label {
+  letter-spacing: 0.58px;
+  margin-bottom: 0;
+  color: rgba(0, 0, 0, 0.87);
+}
+.amend-checkbox-label{
+  font-size: 1em;
+}
+@media (max-width:400px) {
+  .amend-checkbox-label{
+    font-size: 0.8em;
+    margin-left: -10px;
+  }
+}

@@ -1,0 +1,633 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Vehicle Registry
+  description: |
+    ### API specs to capture Vehicle details###
+    * Allow to add the new Vehicle details
+    * Allow to update the existing Vehicle details
+    * Search the Vehicle by unique no
+    *
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+x-module: FSM
+x-common-path: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml'
+paths:
+  /vehicle/v1/_search:
+    post:
+      summary: Get the Vehicle details
+      description: |
+        Gets the list of Vehicle for a particular ULB based on search criteria.
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/parameters/tenantId'
+        - name: registrationNumber
+          in: query
+          description: Allows search for service type - comma separated list
+          schema:
+            type: array
+            items:
+              type: string
+              maxItems: 10
+        - name: ids
+          in: query
+          description: Search by list of UUID
+          schema:
+            type: array
+            items:
+              type: string
+              maxItems: 10
+        - name: mobileNumber
+          in: query
+          description: Search by mobile number of service requester
+          schema:
+            type: string
+        - name: ownerId
+          in: query
+          description: Search by uuid  of service requester
+          schema:
+            type: array
+            items:
+              type: string
+              maxItems: 10
+        - name: type
+          in: query
+          description: Search by type of the vehicle
+          schema:
+            type: array
+            items:
+              type: string
+              maxItems: 10
+        - name: model
+          in: query
+          description: Search by model of the vehicle
+          schema:
+            type: array
+            items:
+              type: string
+              maxItems: 10
+        - name: tankCapacity
+          in: query
+          description: Search by tankCapacity of the vehicle
+          schema:
+            type: string
+        - name: sortBy
+          in: query
+          description: sort the search results by fields
+          schema:
+           type: string
+           enum:
+            - type
+            - model
+            - suctionType
+            - pollutionCertiValidTill
+            - InsuranceCertValidTill
+            - fitnessValidTill
+            - roadTaxPaidTill
+            - tankCapicity
+            - createdTime
+        - name: sortOrder
+          in: query
+          description: sorting order of the search resulsts
+          schema:
+            type: string
+        - name: suctionType
+          in: query
+          description: Search by model of the vehicle
+          schema:
+            type: array
+            items:
+              type: string
+        - name: limit
+          in: query
+          description: limit on the resulsts
+          schema:
+            type: string
+        - name: offset
+          in: query
+          description: offset index of the overall search resulsts
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Successful response sorted by reverse chrnological order of creation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VehicleResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+      tags:
+        - Vehicle
+  /vehicle/v1/_create:
+    post:
+      summary: Add new vehicle  
+      description: Add the vehicle details into the system
+      tags:
+        - Vehicle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleRequest'
+        description: Request schema.
+        required: true
+      responses:
+        '202':
+          description: Request submitted successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VehicleResponse'
+        '400':
+          description: Failed to process the Request
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+  /vehicle/v1/_update:
+    post:
+      summary: Update existing vehicle details
+      description: Updates the details of the vehicle 
+      tags:
+        - Vehicle
+      responses:
+        '202':
+          description: Request submitted successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VehicleResponse'
+        '400':
+          description: Failed to process the application
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleRequest'
+        description: Request schema.
+        required: true
+  /vehicle/trip/v1/_search:
+    post:
+      summary: Get the VehicleTrip details
+      description: |
+        Gets the list of VehicleLog for a particular ULB based on search criteria.
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/parameters/tenantId'
+        - name: registrationNumber
+          in: query
+          description: Allows search for service type - comma separated list
+          schema:
+            type: array
+            items:
+              type: string
+              maxItems: 10
+        - name: ids
+          in: query
+          description: Search by list of UUID of vehicleLog
+          schema:
+            type: array
+            items:
+              type: string
+              maxItems: 10
+        - name: tripOwnerIds
+          in: query
+          description: Search by list of UUID of of the trip owners
+          schema:
+            type: array
+            items:
+              type: string
+              maxItems: 10
+        - name: driverIds
+          in: query
+          description: Search by list of UUID of of the drivers
+          schema:
+            type: array
+            items:
+              type: string
+              maxItems: 10
+        - name: vehicleIds
+          in: query
+          description: Search by list of UUID of vehicle(s)
+          schema:
+            type: array
+            items:
+              type: string
+              maxItems: 10
+        - name: referenceNos
+          in: query
+          description: Search by the referenceNo(s)
+          schema:
+            type: array
+            items:
+              type: string
+              maxItems: 10
+        - name: applicationNos
+          in: query
+          description: Search by the applicationNo(s)
+          schema:
+            type: array
+            items:
+              type: string
+              maxItems: 10
+        - name: businessService
+          in: query
+          description: search by the businessService of the vehicleLog
+          schema:
+            type: string
+        - name: applicationStatus
+          in: query
+          description: search by the list of applicationStatus of the vehicleLog
+          schema:
+            type: array
+            items:
+              type: string
+              maxItems: 10
+        - name : offset
+          in: query
+          description: offset for the pagination results
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: limit for the pagination results
+          schema:
+           type: integer
+        - name: sortOrder
+          in: query
+          description: sort the search results in Ascending or descending order
+          schema:
+           type: string
+           enum:
+            - ASC
+            - DESC
+        - name: sortBy
+          in: query
+          description: sort the search results by fields
+          schema:
+           type: string
+           enum: 
+            - applicationStatus
+            - applicationiNo
+            - referenceNo
+            - vehicle
+            - tripStartTime
+            - tripEndTime
+            - createdTime
+      responses:
+        '202':
+          description: Successful response sorted by reverse chrnological order of creation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VehicleTripResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+      tags:
+        - VehicleTrip
+  /vehicle/trip/v1/_create:
+    post:
+      summary: Add new vehicleLog  
+      description: Add the vehicleLog details into the system
+      tags:
+        - VehicleTrip
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleTripRequest'
+        description: Request schema.
+        required: true
+      responses:
+        '202':
+          description: Request submitted successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VehicleTripResponse'
+        '400':
+          description: Failed to process the Request
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+  /vehicle/trip/v1/_update:
+    post:
+      summary: Update existing vehicleLog details
+      description: Updates the details of the vehicleLog
+      tags:
+        - VehicleTrip
+      responses:
+        '202':
+          description: Request submitted successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VehicleTripResponse'
+        '400':
+          description: Failed to process the application
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleTripRequest'
+        description: Request schema.
+        required: true
+components:
+  schemas:
+    Vehicle:
+      type: object
+      description: |
+        Instance of Service request raised for a particular service. As per extension propsed in the Service definition "attributes" carry the input values requried by metadata definition in the structure as described by the corresponding schema.
+
+        * Any one of 'address' or '(lat and lang)' or 'addressid' is mandatory
+      properties:
+        vehicleOwner:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/UserInfo'
+        id:
+          type: string
+          readOnly: true
+          description: The server generated unique ID(UUID).
+          minLength: 2
+          maxLength: 64
+        tenantId:
+          type: string
+          description: Unique identifier of the tenant.
+          minLength: 2
+          maxLength: 64
+        registrationNumber: 
+          type: string
+          description: Unique Vehicle registration number.
+          minLength: 2
+          maxLength: 128
+        model:
+          type: string
+          description: Vehicle model number(this the master data defined in MDMS).
+          minLength: 2
+          maxLength: 256
+        type:
+          type: string
+          description: Vehicle Type master, defined in MDMS. 
+          minLength: 2
+          maxLength: 64
+        tankCapicity:
+          type: integer
+          format: int64
+          description: Tank capacity in liters. 
+          minLength: 2
+          maxLength: 64
+        suctionType:
+          type: string
+          description: This is the mdms master data. 
+          minLength: 2
+          maxLength: 64
+        pollutionCertiValidTill:
+          type: integer
+          format: int64
+          description: Pollution certificate valid till for vehicle(epoc date). 
+          minLength: 2
+          maxLength: 64
+        InsuranceCertValidTill:
+          type: integer
+          format: int64
+          description: Vehicle insurance valid till(epoc date). 
+          minLength: 2
+          maxLength: 64
+        fitnessValidTill:
+          type: integer
+          format: int64
+          description: Vehicle fitness valid till(epoc date). 
+          minLength: 2
+          maxLength: 64
+        roadTaxPaidTill:
+          type: integer
+          format: int64
+          description: Road tax paid for the Vehicle. 
+          minLength: 2
+          maxLength: 64
+        gpsEnabled:
+          type: boolean
+          description: Whether Vehicle equipped with GPS device. 
+        additionalDetail:
+          type: object
+          description: This is the json object that will carry the actual input (whereever the metadata requries input). Structure should be same as the schema definition provided in the metadata of the service (schema compliance check to be performed at client/server)
+        source:
+          type: string
+          description: 'Source mdms master data. Which captures the source of the service request(ex:- whatsapp, ivr, Swachhata etc)'
+          minLength: 2
+          maxLength: 64
+          example: whatsapp, ivr etc
+        status:
+          type: string
+          description: Inactive records will be consider as soft deleted 
+          enum:
+           - ACTIVE
+           - INACTIVE
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/AuditDetails'
+      required:
+        - tenantId
+        - registrationNumber
+        - model
+        - type
+        
+    VehicleRequest:
+      type: object
+      description: Request for vehicle details
+      properties:
+        requestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/RequestHeader'
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+      required:
+        - RequestInfo
+        - services
+    VehicleResponse:
+      type: object
+      description: Response of vehicle detail
+      properties:
+        responseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/RequestHeader'
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        totalCount:
+          type: string
+          description: count of total records in the system meeting the search criteria
+      required:
+        - ResponseInfo
+        - services
+        
+    VehicleTrip:
+      type: object
+      description: |
+        vehicle Trip will be created for each trip for a specific service
+      
+      properties:
+        tripOwner:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/UserInfo'
+        driver:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/UserInfo'  
+        id:
+          type: string
+          readOnly: true
+          description: The server generated unique ID(UUID).
+          minLength: 2
+          maxLength: 64
+        tenantId:
+          type: string
+          description: Unique identifier of the tenant.
+          minLength: 2
+          maxLength: 64
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        applicationNo:
+          type: string
+          description: Unique identifier of the for the vehicleLog generated through idGen Service.
+          minLength: 2
+          maxLength: 64
+        additionalDetail:
+          type: object
+          description: This is the json object that will carry the actual input (whereever the metadata requries input). Structure should be same as the schema definition provided in the metadata of the service (schema compliance check to be performed at client/server)
+        status:
+          type: string
+          description: Inactive records will be consider as soft deleted 
+          enum:
+           - ACTIVE
+           - INACTIVE
+        businessService:
+          type: string
+          description: business service name of the workflow to be applied for this vehicle. example in FSM Case it will FSM_VEHICLETRIP.
+        tripDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehicleTripDetail'
+            description: ApplicationNo of the applications like fsm or sw etc..
+        applicationStatus:
+          type: string
+          minLength: 2
+          maxLength: 64
+          description: status of the application driven by workflow
+        tripStartTime:
+          type: integer
+          format: int64
+          description: epoc of the time trip started
+        tripEndTime:
+          type: integer
+          format: int64
+          description: epoc of the time trip ended.
+        fstpEntryTime:
+          type: integer
+          format: int64
+          description: epoc of the time vehicle entry time at FSTP plant.
+        fstpExitTime:
+          type: integer
+          format: int64
+          description: epoc of the time vehicle exit time from FSTP plant.
+        volumeCarried:
+          type: integer
+          format: int64
+          description: volume of the material carried by the vehicle in this trip. With respect to FSM this can be maped to wasteDumped.
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/AuditDetails'
+      required:
+        - tenantId
+        - vehicleId
+        - businessService
+    VehicleTripDetail:
+      type: object
+      description:  Trip Item contains the items considered in the given trip.
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The server generated unique ID(UUID).
+          minLength: 2
+          maxLength: 64
+        tenantId:
+          type: string
+          description: Unique identifier of the tenant.
+          minLength: 2
+          maxLength: 64
+        referenceNo:
+         type: string
+         description: Unique identifier of the tenant.
+         minLength: 2
+         maxLength: 64
+        referenceStatus:
+          type: string
+          description: this status of the application of FSM. 
+        additionalDetail:
+          type: object
+          description: This is the json object that will carry the actual input (whereever the metadata requries input). Structure should be same as the schema definition provided in the metadata of the service (schema compliance check to be performed at client/server)
+        status:
+          type: string
+          description: Inactive records will be consider as soft deleted 
+          enum:
+           - ACTIVE
+           - INACTIVE
+        itemStartTime:
+          type: integer
+          format: int64
+          description: epoc of the time trip started
+        itemEndTime:
+          type: integer
+          format: int64
+          description: epoc of the time trip ended.
+        volume:
+          type: integer
+          format: int64
+          description: volume of the material collected from the given reference application
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/AuditDetails'
+      required:
+        - tenantId
+        - referenceNo
+        
+    VehicleTripRequest:
+      type: object
+      description: Request for vehiclTrip details
+      properties:
+        requestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/RequestHeader'
+        VehicleTrip:
+          $ref: '#/components/schemas/VehicleTrip'
+      required:
+        - requestInfo
+        - VehicleTrip
+    VehicleTripResponse:
+      type: object
+      description: Response of VehicleTrip detail
+      properties:
+        responseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/RequestHeader'
+        VehicleTrip:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehicleTrip'
+        totalCount:
+          type: string
+          description: count of total records in the system meeting the search criteria
+      required:
+        - responseInfo
+        - VehicleTrip
+          
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/WalkingTreeDev/VehicleRegistry/1.0.0

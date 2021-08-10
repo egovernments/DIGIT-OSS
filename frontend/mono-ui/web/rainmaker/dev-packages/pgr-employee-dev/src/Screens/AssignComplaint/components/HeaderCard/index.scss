@@ -1,0 +1,12 @@
+.map-icon {
+  width: 35px !important;
+  height: 20px !important;
+  margin-top: 2px !important;
+}
+
+@media only screen and (min-width: 768px) {
+  .map-icon {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}

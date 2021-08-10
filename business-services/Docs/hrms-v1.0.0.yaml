@@ -1,0 +1,670 @@
+ swagger: '2.0'
+ info:
+  version: 1.0.0
+  title: Employee Information System APIs - Employee
+  description: >-
+    All APIs available from Employee Information System  for employee services are listed here.
+    1. To create statewide standardized database of the employee in order to streamline processes related to personnel management.
+    2. To increase transparency for higher management for efficient resource planning
+    3. Integration with rainmaker modules for  security, authentication and workflow handling 
+    4. Setting KPIs for employees and timely report generation
+
+  contact:
+    name: Vishal Mahuli
+ schemes:
+  - https
+ basePath: '/rainmaker-hrms/[API endpoint]'
+ paths:
+  /employees/_search:
+    post:
+      summary: Get the list of employees defined in the system.
+      description: >
+        Get the employee list based on the input parameters. Response will give
+        the minimum set of information related to the employee.
+      parameters:
+        - name: requestInfo
+          in: body
+          description: Common request info for getting employee.
+          required: true
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo
+        - name: codes
+          in: query
+          required: false
+          description: List of employee codes
+          type: array
+          items:
+            type: string
+          exclusiveMinimum: true
+          exclusiveMaximum: false
+        - name: names
+          in: query
+          required: false
+          description: List of employee names
+          type: array
+          items:
+            type: string
+          exclusiveMinimum: true
+          exclusiveMaximum: false
+        - name: departments
+          in: query
+          description: List of Department codes for the employee assignment.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: designations
+          in: query
+          description: List of Designation codes for the employee assignment.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: asOnDate
+          in: query
+          description: Epoch Date of assignment
+          required: false
+          type: number
+        - name: ids
+          in: query
+          description: List of Unique Id of employee
+          required: false
+          type: array
+          items:
+            type: integer
+          format: int64
+          maxItems: 100
+        - name: employeestatuses
+          in: query
+          description: List of Unique codes of employee status
+          required: false
+          type: array
+          items:
+            type: string
+        - name: employeetypes
+          in: query
+          description: List of Unique codes of employee type
+          required: false
+          type: array
+          items:
+            type: string
+        - name: uuids
+          in: query
+          description: List of Unique uuid of employee
+          required: false
+          type: array
+          items:
+            type: string
+        - name: positions
+          in: query
+          description: List of Unique Positions
+          required: false
+          type: array
+          items:
+            type: integer
+        - name: roles
+          in: query
+          description: List of Roles of employee
+          required: false
+          type: array
+          items:
+            type: string
+        - name: phone
+          in: query
+          description: Phone Number
+          required: true
+          type: string
+        - name: isActive
+          in: query
+          description: True will return active employees, False otherwise
+          required: true
+          type: boolean
+        - name: offset
+          in: query
+          description: Offset of the search result
+          required: true
+          type: integer
+        - name: limit
+          in: query
+          description: No of records to be returned from the offset
+          required: true
+          type: integer
+        - name: tenantid
+          in: query
+          description: Tenant id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            $ref: '#/definitions/EmployeeRes'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes
+      tags:
+        - Employee
+  /employees/_create:
+    post:
+      summary: >-
+        Create a new employee in the system along with all the related
+        informations like - assignment, jurisdiction, service, education and
+        probation
+      description: >-
+        To create a new employee we can use POST and set all the required and
+        non-mandatory parameters. When an employee is created, an user is also
+        created along with it. Type value in object will be "EMPLOYEE".
+      parameters:
+        - name: employees
+          in: body
+          description: Details for the new employee.
+          required: true
+          schema:
+            $ref: '#/definitions/EmployeeReq'
+      tags:
+        - Employee
+      responses:
+        '202':
+          description: Employee request accepted for creation.
+          schema:
+            $ref: '#/definitions/EmployeeRes'
+        '400':
+          description: Invalid Input.
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes
+
+  /employees/_update:
+    post:
+      summary: Update Employee data for a particular employee
+      description: >-
+        To update an existing employee's employee details and all other details
+        like assignment, jurisdiction, qualification service details and
+        porbation. This API will also be used for deactivating an employee
+      parameters:
+        - name: employees
+          in: body
+          description: Request header for the employee with new of values.
+          required: true
+          schema:
+            $ref: '#/definitions/EmployeeReq'
+      tags:
+        - Employee
+      responses:
+        '202':
+          description: Employee request accepted for update.
+          schema:
+            $ref: '#/definitions/EmployeeRes'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes
+
+  /employees/_count:
+    post:
+      summary: Get the list of count of active and inactive employee. 
+      description: |
+        Get the list of count of active and inactive employee for given tenant Id.
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/parameters/tenantId'
+      responses:
+        '200':
+          description: Successful response, present the list of count of active and inactive employee for given tenant Id.
+          schema:
+            $ref: '#/definitions/EmployeeCountResponse'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+      tags:
+        - Employee
+ 
+ definitions:
+  Employee:
+    description: >-
+      An employee is by default User of the system. User will be created from
+      employee.
+    type: object
+    properties:
+      user:
+        type: object
+        description: User related information
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/egov-user/contracts/v1-0-0.yml#/definitions/User'
+      id:
+        type: integer
+        description: Numeric id of the employee, this is same as user id.
+      uuid:
+        type: string
+        description: UUID of the employee, this is same as user uuid.
+      code:
+        type: string
+        description: >-
+          The unique code for an employee. This will autogenerated if
+          there's no input otherwise user will have to input a unique code.
+        minLength: 1
+        maxLength: 256
+      employeeStatus:
+        description: >-
+          Status of the employee from the status master where object type is
+          "Employee Master". Default value will be "EMPLOYED".  Possible status
+          list for employee are - EMPLOYED,RETIRED,SUSPENDED and DECEASED
+        type: string
+      employeeType:
+        type: string
+        description: Type of employment of the employee from the EmployeeType.
+      dateOfAppointment:
+        type: number
+        format: int128
+        description: Epoch Date of appointment of the employee.
+      jurisdictions:
+        type: array
+        description: >-
+          List of Jurisdictions for which this employee has
+          access to. Currently we dont validate this
+        minItems: 1
+        maxItems: 50
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/Jurisdiction'
+      assignments:
+        type: array
+        description: List of assignments for the employee.
+        items:
+          $ref: '#/definitions/Assignment'
+      serviceHistory:
+        type: array
+        description: List of service history for the employee.
+        maxItems: 25
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/ServiceHistory'
+      isActive:
+        type: boolean
+        description: Field to mark whether the employee is active
+      education:
+        type: array
+        description: List of educational qualification for the employee.
+        maxItems: 25
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/EducationalQualification'
+      tests:
+        type: array
+        description: List of departmental tests qualified by the employee.
+        maxItems: 25
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/DepartmentalTest'
+      tenantId:
+        type: string
+        description: >-
+          Unique Identifier of which tenant this data is defined
+        maxLength: 256
+      deactivationDetails:
+        type: array
+        description: List of deactivation details for the employee.
+        maxItems: 25
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/DeactivationDetails'
+      reactivationDetails:
+        type: array
+        description: List of reactivation details for the employee.
+        maxItems: 25
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/ReactivationDetails'
+      documents:
+        type: array
+        description: List of all the documents associated with an employee.
+        maxItems: 50
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/EmployeeDocuments'
+      auditDetails:
+        type: object
+        $ref:  '#/definitions/AuditDetails'
+    required:
+      - jurisdictions
+      - assignments
+      - employeeStatus
+      - employeeType
+      - tenantId
+      - user
+      
+  Assignment:
+    type: object
+    properties:
+      id:
+        type: string
+        description: UUID of the assignment.
+      position:
+        type: integer
+        format: int64
+        description: Position Id associated with the assignment - autogenerated.
+      designation:
+        type: string
+        description: Designation code associated with the assignment.
+      department:
+        type: string
+        description: Unique code of the Department associated with the assignment.
+      fromDate:
+        type: integer
+        format: int128
+        description: Epoch value of From Date of assignment period.
+      toDate:
+        type: integer
+        format: int128
+        description: Epoch value of Till Date of assignment period.
+      govtOrderNumber:
+        type: string
+        description: >-
+          The order number issued for any transfer, promotion, demotion or
+          delegation of power.
+      reportingTo:
+        type: string
+        description: Name of the employee who this employee reports to.
+      isHOD:
+        type: boolean
+        description: Value true means, this guy is the HOD under this assignment.
+      isCurrentAssignment:
+        type: boolean
+        description: Value true means, This is the guy's current assignment.
+      auditDetails:
+        type: object
+        $ref:  '#/definitions/AuditDetails'
+    required:
+      - fromDate
+      - toDate
+      - department
+      - designation
+
+  ServiceHistory:
+    type: object
+    properties:
+      id:
+        type: string
+        description: UUID of the service details.
+      serviceStatus:
+        type: string
+        description: Detail of the service that the employee has done.
+      serviceFrom:
+        type: integer
+        format: int128
+        description: Epoch date on which this service was applicable from.
+      serviceTo:
+        type: integer
+        format: int128
+        description: Epoch date on which this service was applicable from.
+      location:
+        type: string
+        description: The government order number passed for the service change.
+      orderNo:
+        type: string
+        description: The government order number passed for the service change.
+      isCurrentPosition:
+        type: boolean
+        description: Value signifies if this is the current working status.    
+      auditDetails:
+        type: object
+        $ref:  '#/definitions/AuditDetails'
+    required:
+      - orderNo
+      - serviceFrom
+      - serviceTo
+      - serviceStatus
+      
+  EducationalQualification:
+    type: object
+    properties:
+      id:
+        type: string
+        description: UUID of the qualification details.
+      qualification:
+        type: string
+        description: Name of the qualifying degree.
+      stream:
+        type: string
+        description: The main subject studies as part of the qualifying degree.
+      yearOfPassing:
+        type: integer
+        format: int32
+        description: The year in which the employee has finished the qualification.
+      university:
+        type: string
+        description: >-
+          Name of the university/board from which the mentioned qualification
+          was acquired.
+      remarks:
+        type: string
+        description: Any remarks to be captured for this technical qualification.
+      auditDetails:
+        type: object
+        $ref:  '#/definitions/AuditDetails'
+    required:
+      - qualification
+      - yearOfPassing
+      - stream
+
+  DepartmentalTest:
+    type: object
+    properties:
+      id:
+        type: string
+        description: UUID of the departmental test details.
+      test:
+        type: string
+        description: Name of the Test taken.
+      yearOfPassing:
+        type: integer
+        format: int32
+        description: The year in which the employee has qualified this test.
+      remarks:
+        type: string
+        description: Any general remarks.
+      auditDetails:
+        type: object
+        $ref:  '#/definitions/AuditDetails'
+    required:
+      - test
+      - yearOfPassing
+      
+  EmployeeReq:
+    type: object
+    properties:
+      RequestInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo
+      Employee:
+        type: array
+        items:
+          $ref: '#/definitions/Employee'
+    required:
+      - RequestInfo
+      - Employee
+            
+
+  EmployeeRes:
+    type: object
+    properties:
+      ResponseInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ResponseInfo
+      Employee:
+        type: array
+        items:
+          $ref: '#/definitions/Employee'
+      
+        
+  EmployeeDocuments:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        description: The unique id of this object.
+      employeeId:
+        type: integer
+        format: int64
+        description: The unique id of employee.
+      documentId:
+        type: string
+        description: The unique url for the document attached.
+      documentName:
+        type: string
+        description: Name of the document attached.
+      referenceType:
+        type: string
+        description: >-
+          Each details in Employee can have multiple documents attached. Based
+          on the reference type we are differentiate which document is relevant
+          from which details.
+        items:
+          type: string
+          enum:
+            - HEADER
+            - ASSIGNMENT
+            - JURISDICTION
+            - SERVICE
+            - EDUCATION
+            - TEST
+            - DEACTIVATION
+      referenceId:
+        type: string
+        description: The unique id of the referenced objecy. (Assignment id, Service id etc).
+      auditDetails:
+        type: object
+        $ref:  '#/definitions/AuditDetails'
+    required:
+      - employeeId
+      - document
+
+  Jurisdiction:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: UUID of the jurisdiction - autogenerated
+      hierarchy:
+        type: string
+        description: Hierarchy code from the boundary data
+      boundary:
+        type: string
+        description: Boundary code from the boundary data
+      boundaryType:
+        type: string
+        description: Boundary Type code from the boundary data
+      auditDetails:
+        type: object
+        $ref:  '#/definitions/AuditDetails'
+    required:
+      - hierarchy
+      - boundary
+      - boundaryType
+      
+  DeactivationDetails:
+    type: object
+    properties:
+      id:
+        type: string
+        description: UUID of the deactivation detail
+      employeeId:
+        type: string
+        description: UUID of the employee to whom this details belongs.
+      reasonForDeactivation:
+        type: string
+        description: Reason for deactivation
+      effectiveFrom:
+        type: integer
+        format: int128
+        description: Epoch date from which the deactivation is effective.
+      orderNo:
+        type: string
+        description: The government order number passed for the deactivation
+      typeOfDeactivation:
+        items:
+          type: string
+          enum:
+            - SUSPENSION
+            - DEATH
+            - RETIRED
+      auditDetails:
+        type: object
+        $ref:  '#/definitions/AuditDetails'
+    
+  
+  ReactivationDetails:
+    type: object
+    properties:
+      id:
+        type: string
+        description: UUID of the deactivation detail
+      employeeId:
+        type: string
+        description: UUID of the employee to whom this details belongs.
+      reasonForReactivation:
+        type: string
+        description: Reason for deactivation
+      effectiveFrom:
+        type: integer
+        format: int128
+        description: Epoch date from which the reactivation is effective.
+      orderNo:
+        type: string
+        description: The government order number passed for the reactivation
+      typeOfReactivation:
+        items:
+          type: string
+          enum:
+            - ORDER FROM COMISSIONER
+            - OTHERS
+      auditDetails:
+        type: object
+        $ref:  '#/definitions/AuditDetails'    
+  AuditDetails:
+    type: object
+    properties:
+      createdBy:
+        type: string
+        description: Id of the user who created the record.
+      createdDate:
+        type: integer
+        format: int64
+        description: Epoch Date on which the user master data was added into the system.
+      lastModifiedBy:
+        type: string
+        description: Id of the user who last modified the record.
+      lastModifiedDate:
+        type: integer
+        format: int64
+        description: Epoch Date on which the user master data was last modified.
+
+  EmployeeCount:
+    type: object
+    description: Capture the employee count details
+    properties:
+      activeEmployee:
+        type: string
+        description: Number of active employee present in the system
+      inactiveEmployee:
+        type: string
+        description: Number of inactive employee present in the system
+      totalEmployee:
+        type: string
+        description: Total number of employee present in the system
+  
+  EmployeeCountResponse:
+    type: object
+    description: Response to the service request
+    properties:
+      responseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ResponseHeader'
+      EmployeeCount:
+          $ref: '#/definitions/EmployeeCount'
+
+#Masters from MDMS - Department, Designation, Employee Status, Employee Type, Service Status, Roles, Qualification (?), Stream (?), University (?), Year, Departmental Test.

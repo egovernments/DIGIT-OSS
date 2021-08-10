@@ -1,0 +1,75 @@
+server.port=8089
+
+
+spring.datasource.url={{ datasource_url | b64decode }}
+spring.datasource.username={{ datasource_user | b64decode }}
+spring.datasource.password={{ datasource_pwd | b64decode }}
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+
+#----------------------------- ELASTIC SEARCH CONFIGURATIONS ------------------------------#
+services.esindexer.host={{ es_host | b64decode }}
+services.esindexer.host.name={{ es_host_name | b64decode }}
+services.esindexer.host.port=9200
+services.esindexer.username={{ es_user | b64decode }}
+services.esindexer.password={{ es_pwd | b64decode }}
+es.index.name=_transaction
+es.document.type=transaction
+es.transaction.index.name=_transaction
+es.transaction.document.type=transaction
+es.target.index.name=store_target
+es.target.document.type=storeTarget
+es.index.name.storeTarget=store_target
+es.index.name.feedback=_app_feedback
+es.index.name.storeFeedback=rain_feedback
+es.document.type.storeTarget=storeTarget
+es.document.type.feedback=appFeedback
+es.document.type.storeFeedback=rainFeedback
+
+#---------------------------------Microservice details------------------------------------#
+services.user.host.name=localhost
+services.user.host.port=8081
+services.user.host.url=/user
+
+#----------------------------- MISCELLANEOUS CONFIGURATION ----------------------------------#
+top.performance.store.count=5
+
+#------------------------------ KAFKA CONFIGURATIONS ------------------------------#
+
+# KAFKA SERVER CONFIGURATIONS
+kafka.config.bootstrap_server_config=localhost:9092
+
+spring.kafka.consumer.value-deserializer=com.tarento.analytics.consumer.HashMapDeserializer
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.consumer.group-id=rain-transaction-chain
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
+
+# KAFKA CONSUMER CONFIGURATIONS
+kafka.consumer.config.auto_commit=true
+kafka.consumer.config.auto_commit_interval=100
+kafka.consumer.config.session_timeout=15000
+kafka.consumer.config.group_id=rain-transaction-chain
+kafka.consumer.config.auto_offset_reset=earliest
+
+# KAFKA PRODUCER CONFIGURATIONS
+kafka.producer.config.retries_config=0
+kafka.producer.config.batch_size_config=100000
+kafka.producer.config.linger_ms_config=100
+kafka.producer.config.buffer_memory_config=66554432
+
+#--------------------------- KAFKA TOPICS TO CONSUME ---------------------------#
+
+kafka.topics.notify.newmessage.name=NewContentMessage
+kafka.topics.notify.newmessage.key=content
+
+kafka.topics.transaction.pushdata.name=RainTransactionData
+kafka.topics.transaction.pushdata.key=transactiondata
+
+kafka.topics.target.pushdata.name=NewTargetData
+kafka.topics.target.pushdata.key=targetdata
+
+kafka.topics.feedback.pushdata.name=NewFeedbackData
+kafka.topics.feedback.pushdata.key=feedbackdata
+
+kafka.topics.rating.pushdata.name=RainRatingData
+kafka.topics.rating.pushdata.key=ratingdata

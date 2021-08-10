@@ -1,0 +1,10 @@
+"banks":[
+   {
+      "code":"codeupdate",
+      "name":"nameupdate",
+      "description":"descriptionupdate",
+      "active":true,
+      "type":"typeupdate",
+      "tenantId":"default"
+   }
+]

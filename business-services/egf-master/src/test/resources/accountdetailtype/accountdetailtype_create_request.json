@@ -1,0 +1,11 @@
+"accountDetailTypes": 
+	   [
+		   	{
+		   	    "id":"1",
+			    "name":"name",
+			    "tableName":"contractor",
+			    "fullyQualifiedName":"abc/contractor",
+		   		"tenantId":"default"
+		   	}
+	   	
+	   ]

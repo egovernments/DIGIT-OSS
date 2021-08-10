@@ -1,0 +1,109 @@
+{
+    "requestInfo": {
+        "apiId": "emp",
+        "ver": "1.0",
+        "ts": "Fri Mar 10 00:00:00 IST 2017",
+        "resMsgId": "uief87324",
+        "msgId": "20170310130900",
+        "status": "200"
+    },
+    "tenantId": "default",
+    "reportDetails": {
+        "reportName": "RouterEscalation",
+        "summary": "Router Escalation Report",
+        "reportHeader": [
+            {
+                "name": "ctname",
+                "label": "reports.pgr.complainttype.name",
+                "type": "string",
+                "defaultValue": null,
+                "isMandatory": false,
+                "showColumn": true,
+                "total": false
+            },
+            {
+                "name": "routerposname",
+                "label": "reports.pgr.position.name",
+                "type": "number",
+                "defaultValue": null,
+                "isMandatory": false,
+                "showColumn": true,
+                "total": false
+            },
+            {
+                "name": "bndryname",
+                "label": "reports.pgr.boundary.name",
+                "type": "number",
+                "defaultValue": null,
+                "isMandatory": false,
+                "showColumn": true,
+                "total": false
+            },
+            {
+                "name": "esclvl1posname",
+                "label": "reports.pgr.position1.name",
+                "type": "number",
+                "defaultValue": null,
+                "isMandatory": false,
+                "showColumn": true,
+                "total": false
+            },
+            {
+                "name": "esclvl2posname",
+                "label": "reports.pgr.position2.name",
+                "type": "number",
+                "defaultValue": null,
+                "isMandatory": false,
+                "showColumn": true,
+                "total": false
+            },
+            {
+                "name": "esclvl3posname",
+                "label": "reports.pgr.position3.name",
+                "type": "number",
+                "defaultValue": null,
+                "isMandatory": false,
+                "showColumn": true,
+                "total": false
+            }
+        ],
+        "searchParams": [
+            {
+                "name": "complaintcategorytype",
+                "label": "reports.pgr.complaintcategorytype",
+                "type": "singlevaluelist",
+                "defaultValue": null,
+                "isMandatory": false,
+                "showColumn": true,
+                "total": false
+            },
+            {
+                "name": "complainttype",
+                "label": "reports.pgr.complainttype",
+                "type": "url",
+                "defaultValue": null,
+                "isMandatory": false,
+                "showColumn": true,
+                "total": false
+            },
+            {
+                "name": "positiontype",
+                "label": "reports.pgr.positiontype",
+                "type": "singlevaluelist",
+                "defaultValue": null,
+                "isMandatory": false,
+                "showColumn": true,
+                "total": false
+            },
+            {
+                "name": "wardtype",
+                "label": "reports.pgr.wardtype",
+                "type": "singlevaluelist",
+                "defaultValue": null,
+                "isMandatory": false,
+                "showColumn": true,
+                "total": false
+            }
+        ]
+    }
+}

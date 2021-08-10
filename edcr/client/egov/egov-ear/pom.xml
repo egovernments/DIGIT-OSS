@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.egov.edcr</groupId>
+        <artifactId>egov-erp-edcr-impl</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>egov-erp-edcr-impl-ear</artifactId>
+    <packaging>ear</packaging>
+
+    <name>e-governments edcr erp ear</name>
+
+    <dependencies>
+        <!-- EAR Web Dependencies Starts -->
+        <dependency>
+            <groupId>org.egov.edcr</groupId>
+            <artifactId>egov-egiweb</artifactId>
+            <version>${erp-version}</version>
+            <type>war</type>
+        </dependency>
+      
+        <dependency>
+            <groupId>org.egov.edcr</groupId>
+            <artifactId>egov-edcrweb</artifactId>
+            <version>${erp-version}</version>
+            <type>war</type>
+        </dependency>
+      
+        <!-- EAR Web Dependencies Ends -->
+
+        <!-- EAR Java Dependencies Starts -->
+        <dependency>
+            <groupId>org.egov.edcr</groupId>
+            <artifactId>egov-egi</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.egov.edcr</groupId>
+            <artifactId>egov-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.egov.edcr</groupId>
+            <artifactId>egov-commons</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.egov.edcr</groupId>
+            <artifactId>egov-edcr-extract</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.egov.edcr</groupId>
+            <artifactId>egov-edcr</artifactId>
+        </dependency>
+        
+	<dependency>
+            <groupId>org.egov.edcr</groupId>
+            <artifactId>egov-client-impl</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- EAR Java Dependencies Ends -->
+
+        <!-- MISC START -->
+        <dependency>
+            <groupId>opensymphony</groupId>
+            <artifactId>sitemesh</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache-web</artifactId>
+        </dependency>
+        <!-- MISC END -->
+
+
+        <!-- VIEWS RELATED END -->
+        <dependency>
+            <groupId>org.apache.tiles</groupId>
+            <artifactId>tiles-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tiles</groupId>
+            <artifactId>tiles-jsp</artifactId>
+        </dependency>
+        <!-- VIEWS RELATED END -->
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>${mvn.ear.plugin.version}</version>
+                <configuration>
+                    <version>6</version>
+                    <modules>
+                        <webModule>
+                            <groupId>org.egov.edcr</groupId>
+                            <artifactId>egov-egiweb</artifactId>
+                            <contextRoot>/egi</contextRoot>
+                        </webModule>
+                        
+                        <webModule>
+                            <groupId>org.egov.edcr</groupId>
+                            <artifactId>egov-edcrweb</artifactId>
+                            <contextRoot>/edcr</contextRoot>
+                        </webModule>
+                        
+                    </modules>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <skinnyWars>true</skinnyWars>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

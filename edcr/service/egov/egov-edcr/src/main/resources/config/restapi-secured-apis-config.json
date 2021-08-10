@@ -1,0 +1,8 @@
+{
+	"resources": [
+		{
+			"url": "/test",
+			"roles": "hasAnyRole('Third Party Operator')"
+		}
+	]
+}

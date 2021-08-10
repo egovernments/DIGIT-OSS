@@ -1,0 +1,406 @@
+openapi: 3.0.0
+info:
+  title: Property Mutation Calculation APIs
+  description: >
+    APIs available for Property Mutation
+      - Calculate Property Mutation Fee.
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+  version: '1.0.0'
+servers:
+- url: https://virtserver.swaggerhub.com/egovernmets-faundation/PT-2.0/1.0.0
+  description: SwaggerHub API Auto Mocking
+  variables: {}
+- url: https://egov-micro-dev.egovernments.org
+  variables: {}
+paths:
+  /pt-calculator-v2/propertytax/mutation/_calculate:
+    post:
+      tags:
+      - Property
+      summary: Calculates property mutation fee and generates the respective demands in the system.
+      description: Calculate property mutation fee  based on criteria.
+      operationId: CalculatePropertyMutationFee
+      parameters: []
+      requestBody:
+        description: Add fields like marketValue, documentDate, adhocPenalty and adhocRebate in additional detail object
+        content:
+          application/json:
+            schema:
+              
+              $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/master/docs/property-services/property-services.yml#/components/schemas/PropertyRequest'
+        required: true
+      responses:
+        201:
+          description: Success response with calculated total amount fee and tax amount.
+          headers: {}
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Calculate"
+                description: Property mutation fees calculated sucessfully
+        400:
+          description: Property(s) creation failed
+          headers: {}
+          content:
+            text/plain:
+              schema:
+                $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"
+                description: Error in Property mutation fees calculation
+      deprecated: false
+  /pt-calculator-v2/billingslab/mutation/_search:
+    post:
+      tags:
+      - Mutation BillingSlab
+      summary: Get the list of bill slabs defined in the system for property mutation calculation.
+      description: >
+        Get the bill slabs list based on the input parameters.
+      operationId: Getthelistofbillingsalbsdefinedinthesystem.
+      parameters:
+      - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/requestInfo"
+      - name: tenantId
+        in: query
+        description: Unique id for a tenant.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: propertyType
+        in: query
+        description: Type of a property like Private, Vacant Land, State Government, Central
+        style: form
+        explode: true
+        schema:
+          type: string
+          nullable: true
+      - name: propertySubType
+        in: query
+        description: Sub-Type of a property.
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: usageCategoryMajor
+        in: query
+        description: Major usage Category of the property like RESIDENTIAL, NONRESIDENTIAL etc
+        style: form
+        explode: true
+        schema:
+          maxLength: 128
+          minLength: 4
+          type: string
+      - name: usageCategoryMinor
+        in: query
+        description: Minor usage Category of the property like INSTITUTIONAL etc
+        style: form
+        explode: true
+        schema:
+          maxLength: 128
+          minLength: 4
+          type: string
+      - name: marketValue
+        in: query
+        required: false
+        description: Current market value of the property. Search result based on market value gives the billing slab which comes in between minimum and maximum market value.  
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: RequestInfo data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfo'
+        required: true
+      responses:
+        200:
+          description: Successful search response
+          headers: {}
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/BillingSlabRes"
+                description: Successful search response
+        400:
+          description: Property(s) creation failed
+          headers: {}
+          content:
+            text/plain:
+              schema:
+                $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"
+                description: Error in Property mutation fees calculation
+      deprecated: false
+  /pt-calculator-v2/billingslab/mutation/_create:
+    post:
+      tags:
+      - Mutation BillingSlab
+      summary: Create new billing slabs for property mutation calculation.
+      description: API to create billing slabs for property mutation calculation.
+      operationId: createmutationbillingslab.
+      parameters: []
+      requestBody:
+        description: Request header for the Mutation billing slab request.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillingSlabReq'
+        required: true
+      responses:
+        200:
+          description: Create mutation billing slab successful
+          headers: {}
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/BillingSlabRes'
+                type: object
+                description: Created mutation billing slab successful
+        400:
+          description: Mutation billing slab(s) creation failed
+          headers: {}
+          content:
+            text/plain:
+              schema:
+                $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"
+                description: Error in creating mutation billing slab
+      deprecated: false
+  /pt-calculator-v2/billingslab/mutation/_update:
+    post:
+      tags:
+      - Mutation BillingSlab
+      summary: Update existing billing slabs.
+      description: Updates a given billing slab with new properties values
+      operationId: Updateexistingbillingslab.
+      parameters: []
+      requestBody:
+        description: Request header for the Mutation billing slab request.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillingSlabReq'
+        required: true
+      responses:
+        200:
+          description: Update mutation billing slab successful
+          headers: {}
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/BillingSlabRes'
+                type: object
+                description: Update mutation billing slab successful
+        400:
+          description: Mutation billing slab(s) updation failed
+          headers: {}
+          content:
+            text/plain:
+              schema:
+                $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"
+                description: Error in updating mutation billing slab(s)
+      deprecated: false
+      
+components:
+  schemas:
+    Calculate:
+      title: Calculate
+      type: object
+      properties:
+        tenantId:
+          type: string
+          description: tenantId of the property
+        totalAmount:
+          type: integer
+          description: Calculated fees for property mutation
+        taxAmount:
+          type: integer
+          description: Calculated tax amount for property mutation
+        exemption:
+          type: integer
+          description: exemption amount for property mutation  
+        penalty:
+          type: integer
+          description: penalty amount for property mutation
+          format: int64
+        rebate:
+          type: integer
+          description: rebate amount for property mutation
+        serviceNumber:
+          type: string
+          description: Application number of the property
+        fromDate:
+          type: integer
+          description: Date from which the tax period is valid 
+        toDate:
+          type: integer
+          description: Date upto which the tax period is valid
+        taxHeadEstimates:
+          type: string
+          description: Gives details about the tax/penalty and rebate which used for calculation of fees. 
+        billingSlabIds:
+          type: array
+          items:
+            type: string
+          description: Id of the billing slab used for calculation of fees.  
+          
+          format: int64
+      description: Following response is obtained after calcuating the fees and generating the demand for the property.   
+    BillingSlab:
+      title: Mutation BillingSlab
+      type: object
+      properties:
+        tenantId:
+          type: string
+          description: tenantId of the property
+        id:
+          type: string
+          description: id of the billing slab  
+        propertyType:
+          type: string
+          description: Type of a property like Private, Vacant Land, State Government, Central Government etc.
+        propertySubType:
+          type: string
+          description: Sub-Type of a property
+        usageCategoryMajor:
+          type: string
+          description: Major usage Category of the property like RESIDENTIAL, NONRESIDENTIAL etc
+        usageCategoryMinor:
+          type: string
+          description: Minor usage Category of the property like INSTITUTIONAL etc
+          format: int64
+        usageCategorySubMinor:
+          type: string
+          description: Sub-minor usage Category of the property
+        usageCategoryDetail:
+          type: string
+          description: Usage Category details of the property
+        ownerShipCategory:
+          type: string
+          description: Date from which the tax period is valid 
+        subOwnerShipCategory:
+          type: string
+          description: Date upto which the tax period is valid
+        minMarketValue:
+          type: integer
+          description: Minimum market value of the properties in particular ULB or state based on which mutation fees is calculated 
+        maxMarketValue:
+          type: integer
+          description: Maximum market value of the properties in particular ULB or state based on which mutation fees is calculated 
+        fixedAmount:
+          type: integer
+          description: Mutation fee for calculation type FLAT is the amount present in this field, if current market value of property comes in between minMarketValue and maxMarketValue
+        rate:
+          type: integer
+          description: Following field contains the rate% for calculation type RATE. Mutation fee for calculation type RATE is rate% of current market value, if current market value of property comes in between minMarketValue and maxMarketValue  
+        type:
+          type: integer
+          description: Calculation Type for property mutation like FLAT and RATE
+    BillingSlabReq:
+      title: BillingSlab Request
+      type: object
+      properties:
+        RequestInfo:
+          $ref: '#/components/schemas/RequestInfo'
+        MutationBillingSlab:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillingSlab'
+      description: Following object is the calcualtion request object which is used in case of create and update mutation billing slab
+    BillingSlabRes:
+      title: BillingSlab Response
+      type: object
+      properties:
+        ResponseInfo:
+          $ref: '#/components/schemas/ResponseInfo'
+        MutationBillingSlab:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillingSlab'
+      description: Following object is the calcualtion response object which is receieved after creation and updatation of mutation billing slab   
+      
+    RequestInfo:
+      title: RequestInfo    
+      type: object
+      description: RequestInfo should be used to carry meta information about the requests to the server as described in the fields below. All eGov APIs will use requestinfo as a part of the request body to carry this meta information. Some of this information will be returned back from the server as part of the ResponseInfo in the response body to ensure correlation.
+      properties:
+        apiId:
+          type: string
+          description: unique API ID
+          maxLength: 128
+        ver:
+          type: string
+          description: API version - for HTTP based request this will be same as used in path
+          maxLength: 32
+        ts:
+          type: integer
+          format: int64
+          description: time in epoch
+        action:
+          type: string
+          description: API action to be performed like _create, _update, _search (denoting POST, PUT, GET) or _oauth etc
+          maxLength: 32
+        did:
+          type: string
+          description: Device ID from which the API is called
+          maxLength: 1024
+        key:
+          type: string
+          description: API key (API key provided to the caller in case of server to server communication)
+          maxLength: 256
+        msgId:
+          type: string
+          description: Unique request message id from the caller
+          maxLength: 256
+        requesterId:
+          type: string
+          description: UserId of the user calling
+          maxLength: 256
+        authToken:
+          type: string
+          description: //session/jwt/saml token/oauth token - the usual value that would go into HTTP bearer token
+      required:
+        - apiId
+        - ver
+        - ts
+        - msgId
+        - action
+    ResponseInfo:
+      type: object
+      readOnly: true
+      description: ResponseInfo should be used to carry metadata information about the response from the server. apiId, ver and msgId in ResponseInfo should always correspond to the same values in respective request's RequestInfo.
+      properties:
+        apiId:
+          type: string
+          description: unique API ID
+          maxLength: 128
+        ver:
+          type: string
+          description: API version
+          maxLength: 32
+        ts:
+          type: integer
+          format: int64
+          description: response time in epoch
+        resMsgId:
+          type: string
+          description: unique response message id (UUID) - will usually be the correlation id from the server
+          maxLength: 256
+        msgId:
+          type: string
+          description: message id of the request
+          maxLength: 256
+        status:
+          type: string
+          description: status of request processing - to be enhanced in futuer to include INPROGRESS
+          enum:
+            - SUCCESSFUL
+            - FAILED
+      required:
+        - apiId
+        - ver
+        - ts
+        - status
+          

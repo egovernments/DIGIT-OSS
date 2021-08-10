@@ -1,0 +1,33 @@
+.rating-star-wrap {
+  @apply flex w-full mb-lg;
+  img {
+    width: 40px;
+    height: 38px;
+    display: block;
+    @apply mr-sm;
+  }
+
+  svg {
+    width: 40px;
+    height: 38px;
+    display: block;
+    @apply mr-sm;
+  }
+}
+
+@screen dt {
+  .rating-star-wrap {
+    @apply w-2/5;
+  }
+}
+
+.rating-with-text {
+  @apply flex place-items-center w-full;
+
+  svg {
+    width: 24px;
+    height: 38px;
+    display: block;
+    @apply mr-sm;
+  }
+}

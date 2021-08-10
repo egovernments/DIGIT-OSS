@@ -1,0 +1,7 @@
+/target/
+.settings/
+.classpath
+.project
+**/META-INF/
+/bin/
+egov-erp-*.properties

@@ -1,0 +1,119 @@
+
+@media only screen and (min-width: 768px) {
+  .downloadprint-commonmenu {
+    float: right;
+    margin-top: -50px;}}
+
+@media only screen and (min-width: 768px) {
+  .searchreceipt-commonButton {
+    float: right;
+    margin-top: -50px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .uc-download-button {
+    margin-left: 5px;
+    margin-right: 1px;
+    width: 178px;
+  }
+  .uc-print-button {
+    margin-left: 1px;
+    width: 140px;
+  }
+  div#custom-atoms-rightdiv {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .uc-download-button {
+    margin-left: 10px;
+    width: 180px;
+  }
+  .uc-print-button {
+    margin-left: 5px;
+    width: 150px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .uc-searchAndPayBtn-button {
+    margin-left: 5px;
+    margin-right: 1px;
+    width: 178px;
+  }
+  .uc-search-button {
+    margin-left: 1px;
+    width: 140px;
+  }
+  div#custom-atoms-rightdiv {
+    width: 100%;
+  }
+  .searchChallan-btn{
+    width: 100%;
+    height: 48px;
+    position: relative;
+    border-radius: 0px ;
+    margin-top: 5px;
+}
+}
+
+@media only screen and (min-width: 768px) {
+  .uc-searchAndPayBtn-button {
+    margin-left: 10px;
+    width: 180px;
+  }
+  .uc-search-button {
+    margin-left: 5px;
+    width: 150px;
+  }
+  .searchChallan-btn{
+    width: 300px;
+    height: 48px;
+    right: 19px;
+    margin-right: 1px;
+    position: relative;
+    border-radius: 0px ;
+    margin-top: 5px;
+}
+
+}
+
+.autocomplete-dropdown {
+    min-width: 80%;
+    position: absolute;
+    z-index: 1900;
+    max-height: 150px;
+    overflow: hidden;
+  }
+  .autocomplete-dropdown div {
+	  min-width: 80%;
+	  max-height: 150px;
+    overflow: auto;
+  }
+
+
+  @media only screen and (min-width: 768px) {
+    .preview-challan-btn {
+      width: 200px;
+      height: 48px;
+      margin-left: 16px;
+      position: relative;
+      border-radius: 0px;
+      margin-top: 5px; 
+    } 
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .preview-challan-btn {
+      width: 100%;
+      height: 48px;
+      margin-left: 16px;
+      position: relative;
+      border-radius: 0px;
+      margin-top: 5px;
+    } 
+  
+  }
+  

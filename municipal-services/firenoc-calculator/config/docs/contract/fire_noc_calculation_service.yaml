@@ -1,0 +1,339 @@
+swagger: "2.0"
+info:
+  version: 2.0.0
+  title: Fire NOC Calculation APIs
+  description: |
+    APIs available for Fire NOC
+      - Calculate Fire NOC Fee.
+  contact:
+    name: eGovernments Foundation
+    email: contacts@egovernments.org
+schemes:
+  - https
+basePath: /firenoc-calculator/
+paths:
+  /v1/_calculate:
+    post:
+      summary: Calculates Fire  NOC fee and generates the respective demands in the system.
+      description: Calculate Fire NOC Fee based on criteria.
+      tags:
+        - Fire NOC Calculation
+      parameters:
+        - name: calculationReq
+          in: body
+          description: required parameters have to be populated
+          required: true
+          schema:
+            $ref: "#/definitions/CalculationReq"
+      responses:
+        "200":
+          description: Success response with calculated tax amount.
+          schema:
+            $ref: "#/definitions/CalculationRes"
+        "400":
+          description: Error response in case of failures.
+          schema:
+            $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"
+  /v1/_getbill:
+    post:
+      summary: Updates demand with time based penalty if applicable and Generates bill for the given criteria.
+      description: Generates bill for payment.
+      tags:
+        - Fire NOC Bill
+      parameters:
+        - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/requestInfo"
+        - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/tenantId"
+        - name: consumerCode
+          in: query
+          description: Unique Fire NOC application number.
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success response calculated tax amount.
+          schema:
+            $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/billingservice/contracts/v1-0-0.yml#/definitions/Bill"
+        "400":
+          description: Error response in case of failures.
+          schema:
+            $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"
+  /billingslab/_search:
+    post:
+      summary: Get the list of bill slabs defined in the system for Fire NOC calculation.
+      description: |
+        Get the properties list based on the input parameters.
+      tags:
+        - BillingSlab
+      parameters:
+        - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/requestInfo"
+        - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+        - name: isActive
+          in: query
+          description: True will be set in cases where only active billslab entries are needed and False will be set when inactive billslab entries are needed .
+          required: false
+          type: boolean
+          format: varchar
+          allowEmptyValue: true
+        - name: fireNOCType
+          in: query
+          description: Fire NOC type for bulling slab.
+          required: false
+          type: string
+          format: varchar
+          enum:
+            - NEW
+            - PROVISIONAL
+        - name: buildingUsageType
+          in: query
+          required: false
+          description: buildingUsageType of property.
+          type: string
+          minLength: 4
+          maxLength: 128
+          exclusiveMinimum: true
+          exclusiveMaximum: false
+        - name: calculationType
+          in: query
+          required: false
+          description: Enum for billing slab type.
+          type: string
+          minLength: 4
+          maxLength: 128
+          exclusiveMinimum: true
+          exclusiveMaximum: false
+          enum:
+            - SINGLESLAB
+            - MULTISLAB
+            - FLAT
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            $ref: "#/definitions/BillingSlabRes"
+        "400":
+          description: Invalid input.
+          schema:
+            $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes"
+  /billingslab/_create:
+    post:
+      summary: Create new billing slabs for Fire NOC calculation.
+      description: API to billing slabs for Fire NOC calculation.
+      tags:
+        - BillingSlab
+      parameters:
+        - name: billingSlab
+          in: body
+          description: Details for the new slab + RequestInfo meta data.
+          required: true
+          schema:
+            $ref: "#/definitions/BillingSlabReq"
+      responses:
+        "201":
+          description: Billing Slab(s) created sucessfully
+          schema:
+            $ref: "#/definitions/BillingSlabRes"
+        "400":
+          description: Billing Slab(s) creation failed
+          schema:
+            $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes"
+  /billingslab/_update:
+    post:
+      summary: Update existing billing slabs.
+      description: Updates a given billing slab with new properties
+      parameters:
+        - name: billingSlab
+          in: body
+          description: Request header for the update of billing slab.
+          required: true
+          schema:
+            $ref: "#/definitions/BillingSlabReq"
+      tags:
+        - BillingSlab
+      responses:
+        "200":
+          description: Update Billing Slab(s) successful
+          schema:
+            $ref: "#/definitions/BillingSlabRes"
+        "400":
+          description: Update Billing Slab(s) failed
+          schema:
+            $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes"
+definitions:
+  CalulationCriteria:
+    description: Either Fire NOC object or the application number is mandatory apart from tenantid.
+    type: object
+    properties:
+      fireNOC:
+        $ref: "https://raw.githubusercontent.com/egovernments/egov-services/noc/rainmaker/firenoc-services/docs/contract/fire_noc_contract.yaml#/definitions/FireNOC"
+      applicationNumber:
+        type: string
+        minLength: 2
+        maxLength: 64
+      tenantId:
+        type: string
+        minLength: 2
+        maxLength: 256
+    required:
+      - tenantId
+  Calculation:
+    type: object
+    properties:
+      applicationNumber:
+        type: string
+        description: Fire NOC application number.
+      fireNoc:
+        $ref: "https://raw.githubusercontent.com/egovernments/egov-services/noc/rainmaker/firenoc-services/docs/contract/fire_noc_contract.yaml#/definitions/FireNOC"
+      tenantId:
+        type: string
+        minLength: 2
+        maxLength: 256
+      taxHeadEstimates:
+        type: array
+        items:
+          $ref: "#/definitions/taxHeadEstimate"
+
+        description: Total Exemption amount if applicable.
+  BillingSlab:
+    type: object
+    properties:
+      tenantId:
+        type: string
+        description: Unique ulb identifier
+        maxLength: 128
+        minLength: 4
+      id:
+        type: string
+        description: unique identifier of the billing slab uuid
+        maxLength: 64
+        minLength: 2
+      isActive:
+        type: boolean
+        description: boolean value to specify if billslab entry is active or not
+      fireNOCType:
+        type: string
+        description: FireNOCType, is unique enum value for a noc
+        enum:
+          - NEW
+          - PROVISIONAL
+      buildingUsageType:
+        type: string
+        description: buildingUsageType, this is mdms data which specifies builiding usage and one of the factor to decide rate.
+        maxLength: 64
+        minLength: 2
+      calculationType:
+        type: string
+        description: Type will define the rate value is flat amount or rate.
+        enum:
+          - SINGLESLAB
+          - MULTISLAB
+          - FLAT
+      rate:
+        type: number
+        format: double
+        description: Rate of the Fire NOC, this can be the rate of flat amount based on type or can be slab rate per unit based on type.
+      uom:
+        type: string
+        description: unit of measurement of bill slab.
+        maxLength: 32
+        minLength: 2
+      fromUom:
+        type: number
+        format: double
+        description: uom value lower bound.
+      toUom:
+        type: number
+        format: double
+        description: uom value upper bound.
+      fromDate:
+        type: integer
+        format: int64
+        description: Epoch Date for starting of billing slab.
+      toDate:
+        type: integer
+        format: int64
+        description: Epoch Date for ending of billing slab.
+      auditDetails:
+        $ref: "#/definitions/AuditDetails"
+
+    required:
+      - tenantId
+      - calculationType
+      - rate
+      - uom
+      - buildingUsageType
+      - fireNOCType
+      - fromDate
+  CalculationReq:
+    type: object
+    properties:
+      RequestInfo:
+        $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo"
+      CalulationCriteria:
+        type: array
+        maximum: 100
+        items:
+          $ref: "#/definitions/CalulationCriteria"
+    required:
+      - RequestInfo
+      - CalulationCriteria
+  CalculationRes:
+    type: object
+    properties:
+      ResponseInfo:
+        $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo"
+      Calculation:
+        type: array
+        items:
+          $ref: "#/definitions/Calculation"
+  BillingSlabReq:
+    type: object
+    properties:
+      RequestInfo:
+        $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo"
+      BillingSlabs:
+        type: array
+        maximum: 100
+        items:
+          $ref: "#/definitions/BillingSlab"
+    required:
+      - RequestInfo
+      - BillingSlabs
+  BillingSlabRes:
+    type: object
+    properties:
+      ResponseInfo:
+        $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ResponseInfo"
+      BillingSlabs:
+        type: array
+        items:
+          $ref: "#/definitions/BillingSlab"
+  AuditDetails:
+    type: object
+    properties:
+      createdBy:
+        type: string
+        description: Id of the user who created the record.
+      createdDate:
+        type: integer
+        format: int64
+        description: Epoch Date on which the user master data was added into the system.
+      lastModifiedBy:
+        type: string
+        description: Id of the user who last modified the record.
+      lastModifiedDate:
+        type: integer
+        format: int64
+        description: Epoch Date on which the user master data was last modified.
+  taxHeadEstimate:
+    type: object
+    properties:
+      category:
+        type: string
+        description: Category of taxhead
+      taxHeadCode:
+        type: string
+        description: Taxhead code from billing service for estimate
+      setimateAmount:
+        type: number
+        format: double
+        description: Calculated amount for taxhead

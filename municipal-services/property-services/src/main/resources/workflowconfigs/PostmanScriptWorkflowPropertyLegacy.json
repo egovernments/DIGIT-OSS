@@ -1,0 +1,92 @@
+curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/businessservice/_create' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "RequestInfo": {
+      "apiId": "Rainmaker",
+      "action": "",
+      "did": 1,
+      "key": "",
+      "msgId": "20170310130900|en_IN",
+      "requesterId": "",
+      "ts": 1513579888683,
+      "ver": ".01",
+      "authToken": "{{authToken_amritsar}}"
+    },
+    "BusinessServices": [
+      {
+        "tenantId": "pb",
+        "businessService": "PT.LEGACY",
+        "business": "PT",
+        "businessServiceSla": null,
+        "states": [
+          {
+            "tenantId": "pb",
+            "sla": null,
+            "state": null,
+            "applicationStatus": "INWORKFLOW",
+            "docUploadRequired": false,
+            "isStartState": true,
+            "isTerminateState": false,
+            "actions": [
+              {
+                "tenantId": "pb",
+                "action": "OPEN",
+                "nextState": "APPROVALPENDING",
+                "roles": [
+                  "CITIZEN",
+                  "EMPLOYEE"
+                ]
+              }
+            ]
+          },
+          {
+            "tenantId": "pb",
+            "sla": null,
+            "state": "APPROVALPENDING",
+            "applicationStatus": "INWORKFLOW",
+            "docUploadRequired": false,
+            "isStartState": true,
+            "isTerminateState": false,
+            "actions": [
+              {
+                "tenantId": "pb",
+                "action": "APPROVE",
+                "nextState": "APPROVED",
+                "roles": [
+                  "EMPLOYEE"
+                ]
+              },
+              {
+                "tenantId": "pb",
+                "action": "REJECT",
+                "nextState": "REJECTED",
+                "roles": [
+                  "EMPLOYEE"
+                ]
+              }
+            ]
+          },
+          {
+            "tenantId": "pb",
+            "sla": null,
+            "state": "REJECTED",
+            "applicationStatus": "INACTIVE",
+            "docUploadRequired": false,
+            "isStartState": false,
+            "isTerminateState": true,
+            "actions": null
+          },
+          {
+            "tenantId": "pb",
+            "sla": null,
+            "state": "APPROVED",
+            "applicationStatus": "INACTIVE",
+            "docUploadRequired": false,
+            "isStartState": false,
+            "isTerminateState": true,
+            "actions": null
+          }
+        ]
+      }
+    ]
+  }'

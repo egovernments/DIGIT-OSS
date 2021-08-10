@@ -1,0 +1,207 @@
+{
+	"info": {
+		"_postman_id": "171b69c2-6e43-432a-a845-186dca9a6331",
+		"name": "eDcr Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Plan Scrutiny",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "edcrRequest",
+							"value": "{\"transactionNumber\":\"TRA2N222S12242k1\", \"applicationSubType\":\"NEW_CONSTRUCTION\",\"appliactionType\":\"BUILDING_PLAN_SCRUTINY\",\"applicantName\":\"sanjeev\",\"planFile\":null,\"tenantId\":\"0002\", \"RequestInfo\":{\"apiId\":\"1\",\"ver\":\"1\",\"ts\":\"01-01-2017 01:01:01\",\"action\":\"create\",\"did\":\"jh\",\"key\":\"\",\"msgId\":\"gfcfc\",\"correlationId\":\"wefiuweiuff897\",\"authToken\":\"4d3ee8fc-03dc-49c7-912a-090bc7a2f699\",\"userInfo\":{\"id\":\"1c79f77e-e847-4663-98a7-5aee31f185c5\",\"tenantId\":\"0002\"}}}",
+							"type": "text"
+						},
+						{
+							"key": "planFile",
+							"type": "file",
+							"src": "/home/sanjeev/nic1_demo/multi block.dxf"
+						}
+					],
+					"options": {
+						"formdata": {}
+					}
+				},
+				"url": {
+					"raw": "http://ulb.egovernments.org:8080/edcr/rest/dcr/scrutinize",
+					"protocol": "http",
+					"host": [
+						"ulb",
+						"egovernments",
+						"org"
+					],
+					"port": "8080",
+					"path": [
+						"edcr",
+						"rest",
+						"dcr",
+						"scrutinize"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Extract",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "edcrRequest",
+							"value": "{\"transactionNumber\":\"TRANS1124\", \"applicationSubType\":\"NEW_CONSTRUCTION\",\"appliactionType\":\"BUILDING_PLAN_SCRUTINY\",\"applicantName\":\"sanjeev\",\"planFile\":null,\"tenantId\":\"0002\", \"RequestInfo\":{\"apiId\":\"1\",\"ver\":\"1\",\"ts\":\"01-01-2017 01:01:01\",\"action\":\"create\",\"did\":\"jh\",\"key\":\"\",\"msgId\":\"gfcfc\",\"correlationId\":\"wefiuweiuff897\",\"authToken\":\"4d3ee8fc-03dc-49c7-912a-090bc7a2f699\",\"userInfo\":{\"id\":\"1c79f77e-e847-4663-98a7-5aee31f185c5\",\"tenantId\":\"0002\"}}}",
+							"type": "text"
+						},
+						{
+							"key": "planFile",
+							"type": "file",
+							"src": "/home/sanjeev/nic_demo/DILIP AGARWAL DRG1.dxf"
+						}
+					],
+					"options": {
+						"formdata": {}
+					}
+				},
+				"url": {
+					"raw": "http://ulb.egovernments.org:8080/edcr/rest/dcr/extractplan",
+					"protocol": "http",
+					"host": [
+						"ulb",
+						"egovernments",
+						"org"
+					],
+					"port": "8080",
+					"path": [
+						"edcr",
+						"rest",
+						"dcr",
+						"extractplan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OC Plan Scrutiny",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "edcrRequest",
+							"value": "{\"transactionNumber\":\"TRANS909\",  \"comparisonEdcrNumber\":\"DCR82020FJPQA\", \"permitNumber\":\"BPA000132019B7KQD\",\"applicationSubType\":\"NEW_CONSTRUCTION\",\"appliactionType\":\"BUILDING_OC_PLAN_SCRUTINY\",\"permitDate\":\"1588876200000\",\"applicantName\":\"sanjeev\",\"planFile\":null,\"tenantId\":\"0002\", \"RequestInfo\":{\"apiId\":\"\",\"ver\":\"\",\"ts\":\"\",\"action\":\"\",\"did\":\"\",\"authToken\":\"7608372d-0501-4495-b103-8a2117d46257\",\"key\":\"\",\"msgId\":\"\",\"correlationId\":\"\",\"userInfo\":{\"id\":\"1c79f77e-e847-4663-98a7-5aee31f185c5\",\"tenantId\":\"0002\"}}}\n",
+							"type": "text"
+						},
+						{
+							"key": "planFile",
+							"type": "file",
+							"src": "/home/sanjeev/nic_demo/multi block_dev_ac.dxf"
+						}
+					],
+					"options": {
+						"formdata": {}
+					}
+				},
+				"url": {
+					"raw": "http://ulb.egovernments.org:8080/edcr/rest/dcr/scrutinize",
+					"protocol": "http",
+					"host": [
+						"ulb",
+						"egovernments",
+						"org"
+					],
+					"port": "8080",
+					"path": [
+						"edcr",
+						"rest",
+						"dcr",
+						"scrutinize"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Plan Details",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"RequestInfo\":{\"apiId\":\"1\",\"ver\":\"1\",\"ts\":\"01-01-2017 01:01:01\",\"action\":\"create\",\"did\":\"jh\",\"key\":\"\",\"msgId\":\"gfcfc\",\"correlationId\":\"wefiuweiuff897\",\"authToken\":\"4d3ee8fc-03dc-49c7-912a-090bc7a2f699\"}}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "http://ulb.egovernments.org:8080/edcr/rest/dcr/scrutinydetails?tenantId=0002&edcrNumber=DCR82020IGEQZ",
+					"protocol": "http",
+					"host": [
+						"ulb",
+						"egovernments",
+						"org"
+					],
+					"port": "8080",
+					"path": [
+						"edcr",
+						"rest",
+						"dcr",
+						"scrutinydetails"
+					],
+					"query": [
+						{
+							"key": "tenantId",
+							"value": "0002"
+						},
+						{
+							"key": "edcrNumber",
+							"value": "DCR82020IGEQZ"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

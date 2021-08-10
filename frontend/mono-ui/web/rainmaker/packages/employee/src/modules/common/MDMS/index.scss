@@ -1,0 +1,49 @@
+.add-row-mdms-table {
+  button {
+    width: 72px !important;
+    height: 22px !important;
+    color: #ffffff !important;
+    line-height: 22px !important;
+  }
+  span {
+    padding-left: 8px !important;
+    color: #ffffff !important;
+  }
+}
+
+.rt-resizable-header-content {
+  font-size: 12px;
+}
+
+.title-add-search-bar {
+  height: 64px;
+  margin-top: 33px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.13), 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+.table-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.table-title {
+  font-family: "Roboto";
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0px;
+  text-align: left;
+  color: #484848;
+}
+.mdms-table-search-bar {
+  margin-top: 5px;
+}
+
+.mdms-form-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.mdms-form-wrapper > [class*="col-"] {
+  display: flex;
+  flex-direction: column;
+}

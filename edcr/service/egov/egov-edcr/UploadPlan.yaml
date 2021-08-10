@@ -1,0 +1,155 @@
+    /uploadplans/_search:
+      post:
+        summary: Get the list of uploadplans
+        description: uploadplans
+        tags: 
+          - Master
+          - UploadPlan
+        parameters:
+          - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+          - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+          - name: transactionNumber
+            type: string
+            in: query
+            description: |
+              transaction number of the UploadPlan
+          - name: planFile
+            type: 
+            in: query
+            description: |
+              plan file of the UploadPlan
+          - name: planReport
+            type: 
+            in: query
+            description: |
+              plan report of the UploadPlan
+          - name: status
+            type: string
+            in: query
+            description: |
+              status of the UploadPlan
+          - name: planDetail
+            type: string
+            in: query
+            description: |
+              plan detail of the UploadPlan
+          - name: edcrNumber
+            type: string
+            in: query
+            description: |
+              edcr number of the UploadPlan
+          - $ref: "#/parameters/pageSize"
+          - $ref: "#/parameters/offset"
+          - name: sortBy
+            type: string
+            in: query
+            description: |
+              This takes any field from the Object seperated by comma and asc,desc keywords.  
+              example name asc,code desc or name,code or name,code desc 
+        responses:
+          200:
+            description: UploadPlan retrieved Successfully
+            schema:
+              $ref: '#/definitions/UploadPlanResponse'
+          400:
+            description: Invalid Input
+            schema:
+              $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+    /uploadplans/_create:
+      post:
+        summary: Create  new  uploadplans
+        description: Create  new uploadplans
+        tags: 
+          - Master
+          - UploadPlan
+        parameters:
+          - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+          - name: uploadPlanRequest
+            in: body
+            description: Create  new 
+            schema:
+              $ref: '#/definitions/UploadPlanRequest'
+        responses:
+          201:
+            description: UploadPlan created Successfully
+            schema:
+              $ref: '#/definitions/UploadPlanResponse'
+          400:
+            description: Invalid Input
+            schema:
+              $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+    /uploadplans/_update:
+      post:
+        summary: Update any of the uploadplans
+        description: Update any of the uploadplans
+        tags: 
+          - Master
+          - UploadPlan
+        parameters:
+          - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+          - name: uploadPlanRequest
+            in: body
+            description: common Request info
+            schema:
+              $ref: '#/definitions/UploadPlanRequest'
+        responses:
+          200:
+            description: UploadPlan updated Successfully
+            schema:
+              $ref: '#/definitions/UploadPlanResponse'
+          400:
+            description: Invalid Input
+            schema:
+              $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+definitions:
+    UploadPlan:
+      type: object
+      description: |
+          
+      properties:
+        transactionNumber:
+          type: string
+          description: |
+            transaction number of the UploadPlan
+        planFile:
+          type: 
+          description: |
+            plan file of the UploadPlan
+        planReport:
+          type: 
+          description: |
+            plan report of the UploadPlan
+        status:
+          type: string
+          description: |
+            status of the UploadPlan
+        planDetail:
+          type: string
+          description: |
+            plan detail of the UploadPlan
+        edcrNumber:
+          type: string
+          description: |
+            edcr number of the UploadPlan
+    UploadPlanRequest:
+      description: Contract class for web request. Array of UploadPlan items  are used in case of create or update
+      properties:
+        requestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+        uploadPlans:
+          description: Used for search result and create only
+          type:  array
+          items:
+            $ref: '#/definitions/UploadPlan'
+    UploadPlanResponse:
+      description: Contract class for web response. Array of UploadPlan items  are used in case of search ,create or update request. 
+      properties:
+        responseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+        uploadPlans:
+          description: Used for search result and create only
+          type:  array
+          items:
+            $ref: '#/definitions/UploadPlan'
+        page:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/financials/contracts/egf-master/v1-0-0.yml#/definitions/Page'

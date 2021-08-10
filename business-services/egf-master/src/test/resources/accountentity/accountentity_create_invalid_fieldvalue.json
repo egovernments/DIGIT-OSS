@@ -1,0 +1,25 @@
+{
+   "requestInfo": {
+	   "action": "action",
+	   "did": "did",
+	   "msgId": "msgId",
+	   "requesterId": "requesterId",
+	   "ts": "01-01-2017 01:01:01",
+	   "authToken": null
+   },
+	   "accountEntities":
+	   [
+		   {
+			   "id":"1",
+			   "name":"nameee",
+			   "code":"code",
+			   "accountDetailType":null,
+			   "active":true,
+			   "description":"entity",
+			   "tenantId":"default"
+		   }
+
+	   ]
+
+
+   }
