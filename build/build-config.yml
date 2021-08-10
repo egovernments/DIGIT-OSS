@@ -649,7 +649,7 @@ config:
 
   - name: builds/digit-dev/frontend/micro-ui/digit-ui
     build:
-      - work-dir: frontend/micro-ui/
+      - work-dir: .
         dockerfile: frontend/micro-ui/web/docker/Dockerfile
         image-name: digit-ui
   
@@ -657,14 +657,14 @@ config:
   
   - name: builds/digit-dev/edcr/dcr-client/egov-dcr
     build:
-      - work-dir: digit-dev/edcr/client/egov
-        dockerfile: digit-dev/edcr/client/Dockerfile
+      - work-dir: edcr/client/egov
+        dockerfile: edcr/client/Dockerfile
         image-name: egov-edcr
         
   - name: builds/digit-dev/edcr/dcr-service/egov-dcr
     build:
-      - work-dir: digit-dev/edcr/service/egov
-        dockerfile: digit-dev/edcr/service/Dockerfile
+      - work-dir: edcr/service/egov
+        dockerfile: edcr/service/Dockerfile
         image-name: egov-edcr
               
 
