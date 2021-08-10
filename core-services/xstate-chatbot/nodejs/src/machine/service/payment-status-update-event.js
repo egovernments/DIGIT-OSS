@@ -5,6 +5,7 @@ const dialog = require('../util/dialog');
 const userService = require('../../session/user-service');
 const chatStateRepository = require('../../session/repo');
 const localisationService = require('../util/localisation-service');
+const telemetry = require('../../session/telemetry');
 
 const consumerGroupOptions = require('../../session/kafka/kafka-consumer-group-options');
 
@@ -61,7 +62,8 @@ class PaymentStatusUpdateEventFormatter{
     let locale = config.supportedLocales.split(',');
     locale = locale[0];
     let user = await userService.getUserForMobileNumber(payment.mobileNumber, config.rootTenantId);
-    let chatState = await chatStateRepository.getActiveStateForUserId(user.userId);
+    let userId = user.userId;
+    let chatState = await chatStateRepository.getActiveStateForUserId(userId);
     if(chatState)
       locale = chatState.context.user.locale;
   
@@ -174,6 +176,7 @@ class PaymentStatusUpdateEventFormatter{
           await new Promise(resolve => setTimeout(resolve, 3000));
           await valueFirst.sendMessageToUser(user, [registrationMessage], extraInfo);
         }
+        telemetry.log(userId, 'payment', {message : {type: "whatsapp payment", status: "success", businessService: businessService, consumerCode: consumerCode,transactionNumber: payment.transactionNumber, locale: user.locale}});
       }
     }
 
@@ -243,6 +246,7 @@ class PaymentStatusUpdateEventFormatter{
     //template = template.replace('{{link}}',link);
     message.push(template);
     await valueFirst.sendMessageToUser(user, message,extraInfo);
+    telemetry.log(payerUser.userId, 'payment', {message : {type: "whatsapp payment", status: "failed", businessService: businessService, consumerCode: consumerCode,transactionNumber: transactionNumber, locale: locale}});
   }
 
   /*async getShortenedURL(finalPath){
