@@ -87,7 +87,7 @@ config:
         dockerfile: "build/maven/Dockerfile"
   - name: "builds/digit-dev/core-services/egov-accesscontrol"
     build:
-      - work-dir: "egov-accesscontrol"
+      - work-dir: "core-services/egov-accesscontrol"
         image-name: "egov-accesscontrol"
         dockerfile: "build/maven/Dockerfile"
 # Core Services
@@ -336,7 +336,7 @@ config:
       - work-dir: "core-services/xstate-chatbot/nodejs"
         image-name: "xstate-chatbot"
       - work-dir: "core-services/xstate-chatbot/nodejs/db"
-        image-name: "core-services/xstate-chatbot-db"
+        image-name: "xstate-chatbot-db"
         
 #Municipal Services
 
