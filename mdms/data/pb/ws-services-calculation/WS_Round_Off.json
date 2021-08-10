@@ -1,9 +1,0 @@
-{
-  "tenantId": "pb",
-  "moduleName": "ws-services-calculation",
-  "WS_Round_Off": [
-    {
-      "description": "Water round off refers to rounding off water charge to one value greater than existing water charge when decimal value is greater than 0.5 and one value less than existing water charger when decimal value is less than 0.5."
-    }
-  ]
-}

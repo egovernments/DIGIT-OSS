@@ -1,9 +1,0 @@
-{
-  "tenantId": "pb",
-  "moduleName": "ws-services-calculation",
-  "WS_WATER_CESS": [
-    {
-      "description": " Water cess refers to the tax levied on water consumed by persons operating and carrying on water charge calculated for particular billing cycle."
-    }
-  ]
-}

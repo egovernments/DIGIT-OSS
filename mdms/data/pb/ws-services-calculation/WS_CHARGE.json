@@ -1,9 +1,0 @@
-{
-  "tenantId": "pb",
-  "moduleName": "ws-services-calculation",
-  "WS_CHARGE": [
-    {
-      "description": "The base water charge calculated for particular billing period based on different units of measurement and calculation criteria."
-    }
-  ]
-}

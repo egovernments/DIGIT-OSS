@@ -1,9 +1,0 @@
-{
-  "tenantId": "pb",
-  "moduleName": "ws-services-calculation",
-  "WS_TIME_PENALTY": [
-    {
-      "description": "Penalty is the tax head applicable  on the total previous bill amount or balance pending from the day bill expiry date exceeds. Penalty applicable after 15 days is 10% of pending balance or total previous bill amount respectively."
-    }
-  ]
-}

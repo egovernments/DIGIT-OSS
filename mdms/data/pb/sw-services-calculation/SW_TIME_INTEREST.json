@@ -1,9 +1,0 @@
-{
-  "tenantId": "pb",
-  "moduleName": "sw-services-calculation",
-  "SW_TIME_INTEREST": [
-    {
-      "description": "Interest is the tax head applicable  on the total previous bill amount or balance pending from the day bill expiry date exceeds. Interest applicable after 30 days is 5% of pending balance or total previous bill amount respectively."
-    }
-  ]
-}

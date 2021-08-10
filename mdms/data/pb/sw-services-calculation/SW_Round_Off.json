@@ -1,9 +1,0 @@
-{
-  "tenantId": "pb",
-  "moduleName": "sw-services-calculation",
-  "SW_Round_Off": [
-    {
-      "description": "Sewerage round off refers to rounding off sewerage charge to one value greater than existing sewerage charge when decimal value is greater than 0.5 and one value less than existing sewerage charge when decimal value is less than 0.5."
-    }
-  ]
-}

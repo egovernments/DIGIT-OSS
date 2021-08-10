@@ -1,9 +1,0 @@
-{
-  "tenantId": "pb",
-  "moduleName": "sw-services-calculation",
-  "SW_CHARGE": [
-    {
-      "description": "The base sewerage charge calculated for particular billing period based on different units of measurement and calculation criteria."
-    }
-  ]
-}
