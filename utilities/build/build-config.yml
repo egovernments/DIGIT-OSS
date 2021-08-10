@@ -61,6 +61,7 @@ config:
         image-name: "egov-custom-consumer"
         dockerfile: "build/maven/Dockerfile"
 
+
   - name: "builds/utilities/certificate_signer"
     build:
       - work-dir: "certificate_signer"

@@ -1,0 +1,15 @@
+.input-otp-wrap {
+  @apply mb-lg;
+
+  input {
+    @apply border-2 border-solid border-input-border outline-none h-10 w-10 text-form-field text-text-primary mr-sm mb-sm text-center;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
