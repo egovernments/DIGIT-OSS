@@ -8,7 +8,7 @@
 # -
 # -
 config:
-  - name: "builds/municipal-services/egov-user-event"
+  - name: "builds/digit-impel-builds/municipal-services/egov-user-event"
     build:
       - work-dir: "egov-user-event"
         image-name: "egov-user-event"
@@ -16,7 +16,7 @@ config:
       - work-dir: "egov-user-event/src/main/resources/db"
         image-name: "egov-user-event-db"
 
-  - name: "builds/municipal-services/pt-calculator-v2"
+  - name: "builds/digit-impel-builds/municipal-services/pt-calculator-v2"
     build:
       - work-dir: "pt-calculator-v2"
         image-name: "pt-calculator-v2"
@@ -24,7 +24,7 @@ config:
       - work-dir: "pt-calculator-v2/src/main/resources/db"
         image-name: "pt-calculator-v2-db"
 
-  - name: "builds/municipal-services/pt-services-v2"
+  - name: "builds/digit-impel-builds/municipal-services/pt-services-v2"
     build:
       - work-dir: "pt-services-v2"
         image-name: "pt-services-v2"
@@ -32,7 +32,7 @@ config:
       - work-dir: "pt-services-v2/src/main/resources/db"
         image-name: "pt-services-v2-db"
 
-  - name: "builds/municipal-services/rainmaker-pgr"
+  - name: "builds/digit-impel-builds/municipal-services/rainmaker-pgr"
     build:
       - work-dir: "rainmaker-pgr"
         image-name: "rainmaker-pgr"
@@ -40,7 +40,7 @@ config:
       - work-dir: "rainmaker-pgr/src/main/resources/db"
         image-name: "rainmaker-pgr-db"
 
-  - name: "builds/municipal-services/pgr-services"
+  - name: "builds/digit-impel-builds/municipal-services/pgr-services"
     build:
       - work-dir: "pgr-services"
         image-name: "pgr-services"
@@ -48,7 +48,7 @@ config:
       - work-dir: "pgr-services/src/main/resources/db"
         image-name: "pgr-services-db"
 
-  - name: "builds/municipal-services/tl-calculator"
+  - name: "builds/digit-impel-builds/municipal-services/tl-calculator"
     build:
       - work-dir: "tl-calculator"
         image-name: "tl-calculator"
@@ -56,7 +56,7 @@ config:
       - work-dir: "tl-calculator/src/main/resources/db"
         image-name: "tl-calculator-db"
         
-  - name: "builds/municipal-services/tl-services"
+  - name: "builds/digit-impel-builds/municipal-services/tl-services"
     build:
       - work-dir: "tl-services"
         image-name: "tl-services"
@@ -64,14 +64,14 @@ config:
       - work-dir: "tl-services/src/main/resources/db"
         image-name: "tl-services-db"
 
-  - name: "builds/municipal-services/firenoc-services"
+  - name: "builds/digit-impel-builds/municipal-services/firenoc-services"
     build:
       - work-dir: "firenoc-services"
         image-name: "firenoc-services"
       - work-dir: "firenoc-services/migration"
         image-name: "firenoc-services-db"
 
-  - name: "builds/municipal-services/firenoc-calculator"
+  - name: "builds/digit-impel-builds/municipal-services/firenoc-calculator"
     build:
       - work-dir: "firenoc-calculator"
         image-name: "firenoc-calculator"
@@ -86,7 +86,7 @@ config:
       - work-dir: "ws-services/src/main/resources/db"
         image-name: "ws-services-db"
         
-  - name: "builds/municipal-services/property-services"
+  - name: "builds/digit-impel-builds/municipal-services/property-services"
     build:
       - work-dir: "property-services"
         image-name: "property-services"
@@ -94,7 +94,7 @@ config:
       - work-dir: "property-services/src/main/resources/db"
         image-name: "property-services-db"
 
-  - name: "builds/municipal-services/ws-calculator"
+  - name: "builds/digit-impel-builds/municipal-services/ws-calculator"
     build:
       - work-dir: "ws-calculator"
         image-name: "ws-calculator"
@@ -102,7 +102,7 @@ config:
       - work-dir: "ws-calculator/src/main/resources/db"
         image-name: "ws-calculator-db"
 
-  - name: "builds/municipal-services/sw-services"
+  - name: "builds/digit-impel-builds/municipal-services/sw-services"
     build:
       - work-dir: "sw-services"
         image-name: "sw-services"
@@ -110,7 +110,7 @@ config:
       - work-dir: "sw-services/src/main/resources/db"
         image-name: "sw-services-db"
 
-  - name: "builds/municipal-services/sw-calculator"
+  - name: "builds/digit-impel-builds/municipal-services/sw-calculator"
     build:
       - work-dir: "sw-calculator"
         image-name: "sw-calculator"
@@ -118,7 +118,7 @@ config:
       - work-dir: "sw-calculator/src/main/resources/db"
         image-name: "sw-calculator-db"     
 
-  - name: "builds/municipal-services/bpa-services"
+  - name: "builds/digit-impel-builds/municipal-services/bpa-services"
     build:
       - work-dir: "bpa-services"
         image-name: "bpa-services"
@@ -126,13 +126,13 @@ config:
       - work-dir: "bpa-services/src/main/resources/db"
         image-name: "bpa-services-db"         
 
-  - name: "builds/municipal-services/bpa-calculator"
+  - name: "builds/digit-impel-builds/municipal-services/bpa-calculator"
     build:
       - work-dir: "bpa-calculator"
         image-name: "bpa-calculator"
         dockerfile: "build/maven/Dockerfile"     
 
-  - name: "builds/municipal-services/land-services"
+  - name: "builds/digit-impel-builds/municipal-services/land-services"
     build:
       - work-dir: "land-services"
         image-name: "land-services"
@@ -140,7 +140,7 @@ config:
       - work-dir: "land-services/src/main/resources/db"
         image-name: "land-services-db"
 
-  - name: "builds/municipal-services/noc-services"
+  - name: "builds/digit-impel-builds/municipal-services/noc-services"
     build:
       - work-dir: "noc-services"
         image-name: "noc-services"
@@ -148,7 +148,7 @@ config:
       - work-dir: "noc-services/src/main/resources/db"
         image-name: "noc-services-db"
 
-  - name: "builds/municipal-services/echallan-services"
+  - name: "builds/digit-impel-builds/municipal-services/echallan-services"
     build:
       - work-dir: "echallan-services"
         image-name: "echallan-services"
@@ -156,13 +156,13 @@ config:
       - work-dir: "echallan-services/src/main/resources/db"
         image-name: "echallan-services-db"         
 
-  - name: "builds/municipal-services/echallan-calculator"
+  - name: "builds/digit-impel-builds/municipal-services/echallan-calculator"
     build:
       - work-dir: "echallan-calculator"
         image-name: "echallan-calculator"
         dockerfile: "build/maven/Dockerfile"  
         
-  - name: "builds/municipal-services/fsm"
+  - name: "builds/digit-impel-builds/municipal-services/fsm"
     build:
       - work-dir: "fsm"
         image-name: "fsm"
@@ -179,7 +179,7 @@ config:
       - work-dir: "vehicle/src/main/resources/db"
         image-name: "vehicle-db"
 
-  - name: "builds/municipal-services/vendor"
+  - name: "builds/digit-impel-builds/municipal-services/vendor"
     build:
       - work-dir: "vendor"
         image-name: "vendor"
@@ -187,7 +187,7 @@ config:
       - work-dir: "vendor/src/main/resources/db"
         image-name: "vendor-db"
 
-  - name: "builds/municipal-services/fsm-calculator"
+  - name: "builds/digit-impel-builds/municipal-services/fsm-calculator"
     build:
       - work-dir: "fsm-calculator"
         image-name: "fsm-calculator"
@@ -195,13 +195,13 @@ config:
       - work-dir: "fsm-calculator/src/main/resources/db"
         image-name: "fsm-calculator-db"
         
-  - name: "builds/municipal-services/turn-io-adapter"
+  - name: "builds/digit-impel-builds/municipal-services/turn-io-adapter"
     build:
       - work-dir: "turn-io-adapter"
         image-name: "turn-io-adapter"
         dockerfile: "build/maven/Dockerfile"
         
-  - name: "builds/municipal-services/inbox"
+  - name: "builds/digit-impel-builds/municipal-services/inbox"
     build:
       - work-dir: "inbox"
         image-name: "inbox"
