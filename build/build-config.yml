@@ -658,12 +658,13 @@ config:
   - name: builds/digit-dev/edcr/dcr-client/egov-dcr
     build:
       - work-dir: digit-dev/edcr/client/egov
-        image-name: egov-edcr
         dockerfile: digit-dev/edcr/client/Dockerfile
+        image-name: egov-edcr
         
   - name: builds/digit-dev/edcr/dcr-service/egov-dcr
     build:
       - work-dir: digit-dev/edcr/service/egov
+        dockerfile: digit-dev/edcr/service/Dockerfile
         image-name: egov-edcr
-        dockerfile: digit-dev/edcr/service/Dockerfile      
+              
 
