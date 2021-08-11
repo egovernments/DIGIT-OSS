@@ -243,8 +243,8 @@ public class InboxService {
 			if(!isSearchResultEmpty) {
 				businessObjects = fetchModuleObjects(moduleSearchCriteria, businessServiceName, criteria.getTenantId(), requestInfo, srvMap);
 			}
-			Map<String, Object> businessMap = StreamSupport.stream(businessObjects.spliterator(), false).collect(Collectors.toMap(s1 -> ((JSONObject) s1).get(businessIdParam).toString(),
-                    s1 -> s1));
+			Map<String, Object> businessMap =StreamSupport.stream(businessObjects.spliterator(), false).collect(Collectors.toMap(s1 -> ((JSONObject) s1).get(businessIdParam).toString(),
+                    s1 -> s1, (e1,e2)->e1, LinkedHashMap::new));
 			ArrayList businessIds = new ArrayList();
 			businessIds.addAll( businessMap.keySet());
 			processCriteria.setBusinessIds(businessIds);
