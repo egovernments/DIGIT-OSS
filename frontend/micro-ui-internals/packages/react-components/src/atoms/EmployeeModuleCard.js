@@ -3,7 +3,8 @@ import { ArrowRightInbox } from "./svgindex"
 import { Link } from "react-router-dom"
 
 const EmployeeModuleCard = ({Icon, moduleName, kpis = [], links = [] }) => {
-    return <div className="employeeCard card-home">
+    const checkLocation = window.location.href.includes("citizen");
+    return <div className="employeeCard card-home" style={checkLocation ? {margin: "0px 16px 24px 16px", padding: "0px"} : {}}>
             <div className="complaint-links-container">
                 <div className="header">
                     <span className="text">{moduleName}</span>

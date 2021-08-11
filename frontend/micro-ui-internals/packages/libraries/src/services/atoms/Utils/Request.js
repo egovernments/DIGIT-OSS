@@ -44,6 +44,8 @@ export const Request = async ({
   setTimeParam = true,
   userDownload = false,
   noRequestInfo = false,
+  multipartFormData = false,
+  multipartData = {}
 }) => {
   // console.log("params:", params);
   // console.log("in request", method);
@@ -95,6 +97,11 @@ export const Request = async ({
       return urlParams[key] ? urlParams[key] : path;
     })
     .join("/");
+  
+  if (multipartFormData) {
+    const multipartFormDataRes = await Axios({ method, url: _url, data: multipartData.data, params, headers: { "Content-Type": "multipart/form-data", "auth-token": Digit.UserService.getUser().access_token  } });
+    return multipartFormDataRes;
+  }
 
   const res = userDownload
     ? await Axios({ method, url: _url, data, params, headers, responseType: "arraybuffer" })

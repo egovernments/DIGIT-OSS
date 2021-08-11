@@ -38,6 +38,7 @@ import Hooks from "./hooks";
 import Utils from "./utils";
 import { subFormRegistry } from "./subFormRegistry";
 import ReceiptsService from "./services/elements/Receipts";
+import { EDCRService } from "./services/elements/EDCR";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -66,6 +67,7 @@ const initLibraries = () => {
   setupLibraries("ReceiptsService", ReceiptsService);
   setupLibraries("MCollectService", MCollectService);
   setupLibraries("PaymentService", PaymentService);
+  setupLibraries("EDCRService", EDCRService);
   setupLibraries("DateUtils", dateUtils);
   setupLibraries("WorkflowService", WorkflowService);
   setupLibraries("MDMSService", MdmsService);

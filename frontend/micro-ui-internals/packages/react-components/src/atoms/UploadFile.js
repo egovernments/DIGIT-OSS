@@ -62,6 +62,11 @@ const UploadFile = (props) => {
     props.onDelete();
   };
 
+  if (props.uploadMessage && inpRef.current.value) {
+    handleDelete(); 
+    setHasFile(false);
+  }
+
   useEffect(() => handleChange(), [props.message]);
 
   const showHint = props?.showHint || false;

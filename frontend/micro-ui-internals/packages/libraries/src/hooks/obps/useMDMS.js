@@ -6,9 +6,15 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
   const useDocumentMapping = () => {
     return useQuery('DOCUMENT_MAPPING', () => MdmsService.getDocumentTypes(tenantId, moduleCode, type), queryConfig);
   }
+  const _default = () => {
+    return useQuery([tenantId, moduleCode, type], () => MdmsService.getMultipleTypes(tenantId, moduleCode, type), config);
+  };
+
   switch (type) {
     case "DocumentTypes":
-      return useDocumentMapping()
+      return useDocumentMapping();
+    default:
+      return _default();
   }
 }
 
