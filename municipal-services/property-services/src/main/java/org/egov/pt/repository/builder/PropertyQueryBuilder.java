@@ -137,7 +137,7 @@ public class PropertyQueryBuilder {
 	 * @param preparedStmtList
 	 * @return
 	 */
-	public String getPropertySearchQuery(PropertyCriteria criteria, List<Object> preparedStmtList,Boolean onlyIds) {
+	public String getPropertySearchQuery(PropertyCriteria criteria, List<Object> preparedStmtList,Boolean isPlainSearch, Boolean onlyIds) {
 
 		Boolean isEmpty = CollectionUtils.isEmpty(criteria.getPropertyIds())
 					&& CollectionUtils.isEmpty(criteria.getAcknowledgementIds())
