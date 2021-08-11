@@ -82,9 +82,12 @@ class SessionManager {
                 let saveState = JSON.parse(JSON.stringify(state));      // deep copy
                 saveState = this.removeUserDataFromState(saveState);
                 let timeStamp = new Date().getTime();
-                chatStateRepository.updateState(userId, active, JSON.stringify(saveState), timeStamp);
-                let sessionId = chatStateRepository.getSessionId(userId);
-                telemetry.log(userId, 'transition', {destination: stateStrings[stateStrings.length-1], locale: locale, sessionId: sessionId, timestamp: timeStamp});
+                (async() => { 
+                    await chatStateRepository.updateState(userId, active, JSON.stringify(saveState), timeStamp);
+                    let sessionId = await chatStateRepository.getSessionId(userId);
+                    telemetry.log(userId, 'transition', {destination: stateStrings[stateStrings.length-1], locale: locale, sessionId: sessionId, timestamp: timeStamp});
+                })();
+                
             }
         });
 
