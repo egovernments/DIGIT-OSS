@@ -104,7 +104,7 @@ const FSMCard = () => {
 
   const propsForModuleCard = {
     Icon: <ShippingTruck />,
-    moduleName: "FSM",
+    moduleName: t("ES_TITLE_FAECAL_SLUDGE_MGMT"),
     kpis:[
       {
           count: total,
