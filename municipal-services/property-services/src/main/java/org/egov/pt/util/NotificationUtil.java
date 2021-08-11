@@ -249,8 +249,6 @@ public class NotificationUtil {
         body.put("url",url);
         StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
         builder.append(config.getUrlShortnerEndpoint());
-        log.info("THE URL IS xyz");
-        log.info("the body is "+body);
         String res = restTemplate.postForObject(builder.toString(), body, String.class);
 
         if(StringUtils.isEmpty(res)){

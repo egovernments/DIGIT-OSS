@@ -78,8 +78,7 @@ public class PaymentNotificationService {
     public void process(HashMap<String, Object> record, String topic){
 
 
-        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic())){
-        	System.out.println("Receipt topic detected");
+        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic())){        	
             processPaymentTopic(record, topic);
         }
 
@@ -177,11 +176,7 @@ public class PaymentNotificationService {
         String tenantId = paymentRequest.getPayment().getTenantId();
         String paymentMode = paymentRequest.getPayment().getPaymentMode();
         String transactionNumber = paymentRequest.getPayment().getTransactionNumber();
-        
-        //EXTRA
-        //JsonNode alternate_nos = paymentRequest.getPayment().getPaymentDetails().get(0).getBill().getAdditionalDetails().get("alternate");
-        //List <String> xyz = mapper.convertValue(alternate_nos, List.class);
-        
+                
         List<PaymentDetail> ptPaymentDetails = new LinkedList<>();
 
         paymentDetails.forEach(paymentDetail -> {
