@@ -17,7 +17,7 @@ class RemindersService {
       whatsAppBusinessNumber: envVariables.whatsAppBusinessNumber.slice(2),
     };
     for (let userId of userIdList) {
-      let chatState = await repoProvider.getActiveStateForUserId(userId);
+      let { chatState, sessionId } = await repoProvider.getActiveStateForUserId(userId);
       if(chatState.value =='start' || chatState.value.sevamenu == 'question')
         continue;
       else{

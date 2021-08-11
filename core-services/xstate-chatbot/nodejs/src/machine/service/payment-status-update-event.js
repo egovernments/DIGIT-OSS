@@ -63,7 +63,7 @@ class PaymentStatusUpdateEventFormatter{
     locale = locale[0];
     let user = await userService.getUserForMobileNumber(payment.mobileNumber, config.rootTenantId);
     let userId = user.userId;
-    let chatState = await chatStateRepository.getActiveStateForUserId(userId);
+    let { chatState, sessionId } = await chatStateRepository.getActiveStateForUserId(userId);
     if(chatState)
       locale = chatState.context.user.locale;
   
@@ -134,7 +134,7 @@ class PaymentStatusUpdateEventFormatter{
           chatState.context.bills.paidBy = 'OTHER'
 
         let active = !chatState.done;
-        await chatStateRepository.updateState(user.userId, active, JSON.stringify(chatState));
+        await chatStateRepository.updateState(user.userId, active, JSON.stringify(chatState), new Date().getTime());
 
 
         let waitMessage = [];
@@ -222,7 +222,7 @@ class PaymentStatusUpdateEventFormatter{
     let locale = config.supportedLocales.split(',');
     locale = locale[0];
     let payerUser = await userService.getUserForMobileNumber(request.Transaction.user.mobileNumber, config.rootTenantId);
-    let chatState = await chatStateRepository.getActiveStateForUserId(payerUser.userId);
+    let { chatState, sessionId } = await chatStateRepository.getActiveStateForUserId(payerUser.userId);
     if(chatState)
       locale = chatState.context.user.locale;
 

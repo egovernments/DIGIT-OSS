@@ -68,7 +68,7 @@ class PGRV1StatusUpdateEventFormatter{
                 let localeList = config.supportedLocales.split(',');
                 let locale = localeList[0];
                 let user = await userService.getUserForMobileNumber(mobileNumber, config.rootTenantId);
-                let chatState = await chatStateRepository.getActiveStateForUserId(user.userId);
+                let { chatState, sessionId } = await chatStateRepository.getActiveStateForUserId(user.userId);
                 if(chatState)
                     locale = chatState.context.user.locale;
                 let localeIndex = localeList.indexOf(locale);
