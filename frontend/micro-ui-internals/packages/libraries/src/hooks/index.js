@@ -116,6 +116,9 @@ import useReceiptsSearch from "./receipts/useReceiptsSearch";
 import useReceiptsMDMS from "./receipts/useReceiptsMDMS";
 import useReceiptsUpdate from "./receipts/useReceiptsUpdate";
 
+import useOBPSMDMS from "./obps/useMDMS";
+import useScrutinyDetails from "./obps/useScrutinyDetails";
+
 const pgr = {
   useComplaintDetails,
   useComplaintsList,
@@ -223,6 +226,11 @@ const receipts = {
   useReceiptsUpdate,
 };
 
+const obps = {
+  useMDMS: useOBPSMDMS,
+  useScrutinyDetails,
+};
+
 const Hooks = {
   useSessionStorage,
   useQueryParams,
@@ -255,7 +263,8 @@ const Hooks = {
   mcollect,
   hrms,
   tl,
-  receipts
+  receipts,
+  obps
 };
 
 export default Hooks;

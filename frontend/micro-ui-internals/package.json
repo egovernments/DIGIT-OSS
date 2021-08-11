@@ -32,6 +32,7 @@
     "dev:receipts": "cd packages/modules/receipts && yarn start",
     "dev:tl": "cd packages/modules/tl && yarn start",
     "dev:hrms": "cd packages/modules/hrms && yarn build",    
+    "dev:obps": "cd packages/modules/obps && yarn start",
     "dev:example": "cd example && yarn start",
     "build": "run-p build:**",
     "build:libraries": "cd packages/libraries && yarn build",
@@ -46,6 +47,7 @@
     "build:receipts": "cd packages/modules/receipts && yarn build",
     "build:tl": "cd packages/modules/tl && yarn build",
     "build:hrms": "cd packages/modules/hrms && yarn build",
+    "build:obps": "cd packages/modules/obps && yarn build",
     "deploy:jenkins": "./scripts/jenkins.sh"
   },
   "devDependencies": {

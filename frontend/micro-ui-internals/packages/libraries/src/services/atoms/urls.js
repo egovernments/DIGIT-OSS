@@ -100,6 +100,9 @@ const Urls = {
     payments: "/collection-services/payments",
     count: "/egov-hrms/employees/_count"
   },
+  obps: {
+    scrutinyDetails: "/edcr/rest/dcr/scrutinydetails"
+  }
 };
 
 export default Urls;
