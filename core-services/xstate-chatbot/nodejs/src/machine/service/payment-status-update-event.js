@@ -63,7 +63,7 @@ class PaymentStatusUpdateEventFormatter{
     locale = locale[0];
     let user = await userService.getUserForMobileNumber(payment.mobileNumber, config.rootTenantId);
     let userId = user.userId;
-    let { chatState, sessionId } = await chatStateRepository.getActiveStateForUserId(userId);
+    let chatState = await chatStateRepository.getActiveStateForUserId(userId);
     if(chatState)
       locale = chatState.context.user.locale;
   
@@ -222,7 +222,7 @@ class PaymentStatusUpdateEventFormatter{
     let locale = config.supportedLocales.split(',');
     locale = locale[0];
     let payerUser = await userService.getUserForMobileNumber(request.Transaction.user.mobileNumber, config.rootTenantId);
-    let { chatState, sessionId } = await chatStateRepository.getActiveStateForUserId(payerUser.userId);
+    let chatState = await chatStateRepository.getActiveStateForUserId(payerUser.userId);
     if(chatState)
       locale = chatState.context.user.locale;
 

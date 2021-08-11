@@ -17,7 +17,7 @@ class SessionManager {
         let userId = user.userId;
 
         await chatStateRepository.updateSessionId(userId, 1);
-        let { chatState, sessionId } = await chatStateRepository.getActiveStateForUserId(userId);
+        let chatState  = await chatStateRepository.getActiveStateForUserId(userId);
         telemetry.log(userId, 'from_user', reformattedMessage);
 
         // handle reset case
@@ -33,10 +33,10 @@ class SessionManager {
             chatState = this.createChatStateFor(user);
             let saveState = JSON.parse(JSON.stringify(chatState));
             saveState = this.removeUserDataFromState(saveState);
-            sessionId = uuid.v4();
+            let sessionId = uuid.v4();
             await chatStateRepository.insertNewState(userId, true, JSON.stringify(saveState), sessionId, new Date().getTime());
         } 
-        service = this.getChatServiceFor(chatState, reformattedMessage, sessionId);
+        service = this.getChatServiceFor(chatState, reformattedMessage);
         
         let event = (intention == 'reset')? 'USER_RESET' : 'USER_MESSAGE';
         service.send(event, reformattedMessage );
@@ -61,7 +61,7 @@ class SessionManager {
         return state;
     }
 
-    getChatServiceFor(chatStateJson, reformattedMessage, sessionId) {
+    getChatServiceFor(chatStateJson, reformattedMessage) {
         const context = chatStateJson.context;
         context.chatInterface = this;
         let locale = context.user.locale;
@@ -83,6 +83,7 @@ class SessionManager {
                 saveState = this.removeUserDataFromState(saveState);
                 let timeStamp = new Date().getTime();
                 chatStateRepository.updateState(userId, active, JSON.stringify(saveState), timeStamp);
+                let sessionId = chatStateRepository.getSessionId(userId);
                 telemetry.log(userId, 'transition', {destination: stateStrings[stateStrings.length-1], locale: locale, sessionId: sessionId, timestamp: timeStamp});
             }
         });

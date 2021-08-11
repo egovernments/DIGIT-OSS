@@ -15,12 +15,11 @@ class StateRepository {
     }
 
     async getActiveStateForUserId(userId) {
-        const query = 'SELECT (state), session_id FROM eg_chat_state_v2 WHERE user_id = $1 AND active = true';
+        const query = 'SELECT (state) FROM eg_chat_state_v2 WHERE user_id = $1 AND active = true';
         let result = await pool.query(query, [userId]);
         if(result.rowCount >= 1) {
             let state = result.rows[0].state;
-            let sessionid = result.rows[0].session_id;
-            return {state, sessionid};
+            return state;
         }
     }
 
@@ -40,6 +39,15 @@ class StateRepository {
         const query = 'UPDATE eg_chat_state_v2 as chat SET session_id = md5(random()::text || clock_timestamp()::text)::uuid, time_stamp = round(EXTRACT (EPOCH FROM now())::float*1000) WHERE user_id = $1 AND ((round(EXTRACT (EPOCH FROM now())::float*1000) - chat.time_stamp)/1000/60) > $2';
         let result = await pool.query(query, [userId, sessionTime]);
         return result;
+    }
+
+    async getSessionId(userId) {
+        const query = 'SELECT session_id FROM eg_chat_state_v2 WHERE user_id = $1 AND active = true';
+        let result = await pool.query(query, [userId]);
+        if(result.rowCount >= 1) {
+            let session_id = result.rows[0].session_id;
+            return session_id;
+        }
     }
 
 }
