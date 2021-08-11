@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
+import org.egov.pt.models.AlternateMobileNumber;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.enums.Status;
@@ -462,6 +463,64 @@ public class UserService {
 
 	private String getStateLevelTenant(String tenantId){
 		return tenantId.split("\\.")[0];
+	}
+	
+    public void createUserForAlternateNumber(PropertyRequest request){
+    
+        Property property = request.getProperty();
+		RequestInfo requestInfo = request.getRequestInfo();
+		Role role = getCitizenRole();
+		List<AlternateMobileNumber> alternates = property.getAlternateMobileNumberDetails();
+
+		for (AlternateMobileNumber alternateNumber : alternates) {
+			OwnerInfo ownerFromRequest = new OwnerInfo();
+			ownerFromRequest.setId(alternateNumber.getId());
+			ownerFromRequest.setUuid(alternateNumber.getUuid());
+			ownerFromRequest.setName(alternateNumber.getName());
+			ownerFromRequest.setMobileNumber(alternateNumber.getMobileNumber());
+
+			addUserDefaultFields(property.getTenantId(), role, ownerFromRequest);
+			UserDetailResponse userDetailResponse = userExists(ownerFromRequest, requestInfo);
+			List<OwnerInfo> existingUsersFromService = userDetailResponse.getUser();
+			Map<String, OwnerInfo> ownerMapFromSearch = existingUsersFromService.stream().collect(Collectors.toMap(OwnerInfo::getUuid, Function.identity()));
+
+			if (CollectionUtils.isEmpty(existingUsersFromService)) {
+				
+				ownerFromRequest.setUserName(UUID.randomUUID().toString());
+				userDetailResponse = createUser(requestInfo, ownerFromRequest);
+				
+			} 
+			
+			for (OwnerInfo existingUser : existingUsersFromService) {
+				if(existingUser.getMobileNumber().equals(ownerFromRequest.getMobileNumber())) {
+					userDetailResponse = updateExistingUser(property, requestInfo, role, ownerFromRequest, existingUser);
+					break;
+				}
+			}
+			
+			alternateNumber.setId(userDetailResponse.getUser().get(0).getId()+(int)(Math.random() * 1000));
+			alternateNumber.setUuid(userDetailResponse.getUser().get(0).getUuid());
+			
+			// Assigns value of fields from user got from userDetailResponse to owner object
+			setOwnerFields(ownerFromRequest, userDetailResponse, requestInfo);
+		}
+	}
+    
+    private UserDetailResponse updateExistingAlternateUser(Property property, RequestInfo requestInfo, Role role,
+			OwnerInfo ownerFromRequest, OwnerInfo ownerInfoFromSearch) {
+		
+		UserDetailResponse userDetailResponse;
+		
+		ownerFromRequest.setId(ownerInfoFromSearch.getId()+ (int)(Math.random() * 100) );
+		ownerFromRequest.setUuid(ownerInfoFromSearch.getUuid());
+		addUserDefaultFields(property.getTenantId(), role, ownerFromRequest);
+
+		StringBuilder uri = new StringBuilder(userHost).append(userContextPath).append(userUpdateEndpoint);
+		userDetailResponse = userCall(new CreateUserRequest(requestInfo, ownerFromRequest), uri);
+		if (userDetailResponse.getUser().get(0).getUuid() == null) {
+			throw new CustomException("INVALID USER RESPONSE", "The user updated has uuid as null");
+		}
+		return userDetailResponse;
 	}
 
 

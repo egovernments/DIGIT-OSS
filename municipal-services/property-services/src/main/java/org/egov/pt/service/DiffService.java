@@ -16,7 +16,6 @@ import org.egov.tracer.model.CustomException;
 import org.javers.core.Javers;
 import org.javers.core.JaversBuilder;
 import org.javers.core.diff.Diff;
-import org.javers.core.diff.ListCompareAlgorithm;
 import org.javers.core.diff.changetype.NewObject;
 import org.javers.core.diff.changetype.ValueChange;
 import org.javers.core.diff.custom.BigDecimalComparatorWithFixedEquals;
@@ -146,7 +145,6 @@ public class DiffService {
 
 			if (javersForMutation == null)
 				javersForMutation = JaversBuilder.javers()
-						.withListCompareAlgorithm(ListCompareAlgorithm.AS_SET)
 						.registerValue(BigDecimal.class, new BigDecimalComparatorWithFixedEquals())
 						.registerIgnoredClass(OwnerInfo.class)
 						.registerIgnoredClass(Document.class).build();
@@ -157,7 +155,6 @@ public class DiffService {
 		default:
 			if (javers == null)
 				javers = JaversBuilder.javers()
-						.withListCompareAlgorithm(ListCompareAlgorithm.AS_SET)
 						.registerValue(BigDecimal.class, new BigDecimalComparatorWithFixedEquals()).build();
 			javersLocal = javers;
 		}

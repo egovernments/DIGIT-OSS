@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+import org.apache.kafka.clients.admin.ConfigEntry.ConfigSource;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.OwnerInfo;
@@ -64,9 +66,6 @@ public class PropertyService {
 
 	@Autowired
 	private CalculationService calculatorService;
-
-	@Autowired
-	private FuzzySearchService fuzzySearchService;
 
 
 
@@ -286,12 +285,6 @@ public class PropertyService {
 			throw new CustomException("EG_PT_PROPERTY_AUDIT_ERROR", "Audit can only be provided for a single propertyId");
 		}
 
-
-		if(criteria.getDoorNo()!=null || criteria.getName()!=null || criteria.getOldPropertyId()!=null){
-			return fuzzySearchService.getProperties(requestInfo, criteria);
-		}
-
-
 		if (criteria.getMobileNumber() != null || criteria.getName() != null || criteria.getOwnerIds() != null) {
 
 			/* converts owner information to associated property ids */
@@ -354,4 +347,22 @@ public class PropertyService {
 		util.enrichOwner(userDetailResponse, properties, false);
 		return properties;
 	}
+
+	public Property addAlternateNumber(PropertyRequest request) {
+		
+		Property propertyFromSearch = propertyValidator.validateAlternateMobileNumberInformation(request);
+		userService.createUserForAlternateNumber(request);
+		
+		//enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
+		util.mergeAdditionalDetails(request, propertyFromSearch);
+		
+		producer.push(config.getUpdatePropertyTopic(), request);
+		
+		request.getProperty().setWorkflow(null);
+		
+		
+		return request.getProperty();
+	}
+	
+	
 }

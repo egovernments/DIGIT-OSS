@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.AlternateMobileNumber;
 import org.egov.pt.models.ConstructionDetail;
 import org.egov.pt.models.GeoLocation;
 import org.egov.pt.models.Institution;
@@ -562,15 +563,10 @@ public class PropertyValidator {
     public void validatePropertyCriteria(PropertyCriteria criteria,RequestInfo requestInfo) {
     	
 		List<String> allowedParams = null;
-
+		
 		User user = requestInfo.getUserInfo();
 		String userType = user.getType();
 		Boolean isUserCitizen = "CITIZEN".equalsIgnoreCase(userType);
-
-		// Safeguards against the possibility of inbox search being performed when inbox search has been disabled at service level
-		if(!configs.getIsInboxSearchAllowed() && criteria.getIsInboxSearch()){
-			throw new CustomException("EG_PT_INVALID_SEARCH", "Inbox search has been disabled for property service");
-		}
 		
 		if(propertyUtil.isPropertySearchOpen(user)) {
 			
@@ -585,12 +581,10 @@ public class PropertyValidator {
 				&& CollectionUtils.isEmpty(criteria.getOwnerIds()) 
 				&& CollectionUtils.isEmpty(criteria.getUuids())
 				&& null == criteria.getMobileNumber()
-				&& null == criteria.getName()
-				&& null == criteria.getDoorNo()
-				&& null == criteria.getOldPropertyId();
+				&& null == criteria.getName();
 		
 		if (isUserCitizen) {
-
+			
 			if (isCriteriaEmpty)
 				criteria.setMobileNumber(user.getMobileNumber());
 			
@@ -806,6 +800,54 @@ public class PropertyValidator {
 
 		if (!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);
+	}
+
+	public Property validateAlternateMobileNumberInformation(PropertyRequest request) {
+		
+		Map<String, String> errorMap = new HashMap<>();
+		Property property = request.getProperty();
+		validateIds(request, errorMap);	
+		
+		PropertyCriteria criteria = getPropertyCriteriaForSearch(request);
+        List<Property> propertiesFromSearchResponse = service.searchProperty(criteria, request.getRequestInfo());
+        boolean ifPropertyExists=PropertyExists(propertiesFromSearchResponse);
+		if (!ifPropertyExists) {
+			throw new CustomException("EG_PT_PROPERTY_NOT_FOUND", "The property to be updated does not exist in the system");
+		}
+		
+		if (CollectionUtils.isEmpty(property.getAlternateMobileNumberDetails())) {
+			throw new CustomException("EG_PT_ALTERNATE_NUMBERS_NOT_FOUND", "The alternate mobile number details are null");
+		}
+		
+		Property propertyFromSearch = propertiesFromSearchResponse.get(0);	
+		
+		List <AlternateMobileNumber> existingAlternates = propertyFromSearch.getAlternateMobileNumberDetails();
+		List <AlternateMobileNumber> newAlternates = property.getAlternateMobileNumberDetails();
+		List <OwnerInfo> owners = propertyFromSearch.getOwners();
+		
+		
+		if (!CollectionUtils.isEmpty(existingAlternates)) {
+			
+			for(AlternateMobileNumber existingEntry : existingAlternates) {
+				for(AlternateMobileNumber newEntry : newAlternates) {
+					if(existingEntry.getMobileNumber().equals(newEntry.getMobileNumber())) {
+						throw new CustomException("EG_PT_ALTERNATE_EXISTS", "The alternate mobile number already exists in the property");
+						}
+					}
+				}
+		}
+		
+		for(OwnerInfo owner : owners) {
+			for(AlternateMobileNumber newEntry : newAlternates) {
+				if(newEntry.getMobileNumber().equals(owner.getMobileNumber())) {
+					throw new CustomException("EG_PT_ALTERNATE_EXISTS", "The alternate mobile number belongs to an owner of the property");
+				}
+			}
+		}
+		
+		if(!property.getStatus().equals(Status.ACTIVE)) {throw new CustomException("EG_PT_ALTERNATE_INACTIVE","Alternate number details cannot be updated if status is not active");}
+		
+		return propertyFromSearch;
 	}
 
 }

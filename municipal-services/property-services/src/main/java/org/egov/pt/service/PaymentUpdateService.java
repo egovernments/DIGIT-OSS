@@ -66,7 +66,7 @@ public class PaymentUpdateService {
 
 			List<PaymentDetail> paymentDetails = paymentRequest.getPayment().getPaymentDetails();
 			String tenantId = paymentRequest.getPayment().getTenantId();
-
+			System.out.println("Entering the update flow");
 			for (PaymentDetail paymentDetail : paymentDetails) {
 				
 				Boolean isModuleMutation = paymentDetail.getBusinessService().equalsIgnoreCase(config.getMutationWfName());
@@ -90,7 +90,7 @@ public class PaymentUpdateService {
 	 * @param paymentDetail
 	 */
 	private void updateWorkflowForMutationPayment(RequestInfo requestInfo, String tenantId, PaymentDetail paymentDetail) {
-		
+		System.out.println("Entered update mode");
 		Bill bill  = paymentDetail.getBill();
 		
 		PropertyCriteria criteria = PropertyCriteria.builder()

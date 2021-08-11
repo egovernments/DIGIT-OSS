@@ -31,7 +31,7 @@ public class PropertyCriteria {
 
 	private Set<String> oldpropertyids;
 	
-	private Set<Status> status;
+	private Status status;
 
 	private String mobileNumber;
 
@@ -50,15 +50,6 @@ public class PropertyCriteria {
 	private Long toDate;
 	
 	private String locality;
-
-	private String doorNo;
-
-	private String oldPropertyId;
-
-	private Set<String> creationReason;
-
-	@Builder.Default
-	private Boolean isInboxSearch = false;
 	
 	
 	

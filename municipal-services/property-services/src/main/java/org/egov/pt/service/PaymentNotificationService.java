@@ -46,6 +46,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
@@ -78,6 +79,7 @@ public class PaymentNotificationService {
 
 
         if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic())){
+        	System.out.println("Receipt topic detected");
             processPaymentTopic(record, topic);
         }
 
@@ -175,7 +177,11 @@ public class PaymentNotificationService {
         String tenantId = paymentRequest.getPayment().getTenantId();
         String paymentMode = paymentRequest.getPayment().getPaymentMode();
         String transactionNumber = paymentRequest.getPayment().getTransactionNumber();
-
+        
+        //EXTRA
+        //JsonNode alternate_nos = paymentRequest.getPayment().getPaymentDetails().get(0).getBill().getAdditionalDetails().get("alternate");
+        //List <String> xyz = mapper.convertValue(alternate_nos, List.class);
+        
         List<PaymentDetail> ptPaymentDetails = new LinkedList<>();
 
         paymentDetails.forEach(paymentDetail -> {

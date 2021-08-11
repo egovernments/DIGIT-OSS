@@ -22,8 +22,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import static org.egov.pt.util.PTConstants.*;
 
+import lombok.extern.slf4j.Slf4j;
+
+import static org.egov.pt.util.PTConstants.*;
+@Slf4j
 @Service
 public class NotificationService {
 
@@ -44,7 +47,9 @@ public class NotificationService {
 		ProcessInstance wf = property.getWorkflow();
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
 		state = getStateFromWf(wf, configs.getIsMutationWorkflowEnabled());
+		System.out.println("THE STATE IS "+state);
 		String localisedState = getLocalisedState(wf.getState().getState(), completeMsgs);
+		System.out.println("THE LOCALISED STATE IS "+localisedState);
 
 		switch (state) {
 
@@ -284,7 +289,14 @@ public class NotificationService {
 			if (owner.getMobileNumber() != null)
 				mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
 		});
-
+		
+		log.info("Logging the alternate numbers");
+		property.getAlternateMobileNumberDetails().forEach(entry ->{
+				log.info("Name : "+entry.getName()+" Mobile Number : "+entry.getMobileNumber());
+				mobileNumberToOwner.put(entry.getMobileNumber(), entry.getName());
+				
+		});
+		
 		List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 		notifUtil.sendSMS(smsRequests);
 
