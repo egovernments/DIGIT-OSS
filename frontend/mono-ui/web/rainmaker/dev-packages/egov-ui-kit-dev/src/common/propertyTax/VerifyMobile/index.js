@@ -169,9 +169,9 @@ export default class ViewMobileDialog extends React.Component {
             onChange={(e) => this.handleChange(key, e.target.value)}></TextField>
         })}
 
-          <button type="button" style={{ width: "130px", height: "42px", background: "#FE7A51", color: "white", borderRadius: "2px" }} onClick={() => this.addNewNumber()} >ADD</button>
+          <button type="button" className={"button-verify-link"} onClick={() => this.addNewNumber()} >ADD</button>
         </div>
-        {errorMessage && <div>{errorMessage}</div>}
+        {errorMessage && <div className={type=="error"?"error-comp-second-num":"success-comp-second-num"}>{errorMessage}</div>}
       </Dialog>
     )
   }
