@@ -8,6 +8,8 @@ ENV NODE_OPTIONS "--max-old-space-size=1792"
 COPY ${WORK_DIR} .
 RUN ls -lah
 
+COPY frontend/micro-ui-internals/  frontend/micro-ui/web/digit-ui-internals 
+
 #RUN node web/envs.js
 RUN cd frontend/micro-ui/web/ \
     && node envs.js \
