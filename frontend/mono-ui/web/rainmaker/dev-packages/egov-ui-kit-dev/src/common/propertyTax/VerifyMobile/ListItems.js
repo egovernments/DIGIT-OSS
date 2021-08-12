@@ -104,6 +104,7 @@ export default class ListItems extends Component {
         const stateTenant = property.tenantId.split('.')[0];
         myHeaders.append("accept", "application/json, text/plain, */*");
         myHeaders.append("content-type", "application/x-www-form-urlencoded");
+        myHeaders.append("authorization", "Basic ZWdvdi11c2VyLWNsaWVudDo=");
         var urlencoded = new URLSearchParams();
         urlencoded.append("username", clickedNumberObject.mobileNumber);
         urlencoded.append("password", clickedNumberObject.enteredNumber);
