@@ -7,6 +7,7 @@ const sevaStateMachine =  require('../machine/seva'),
 const { State, interpret } = require('xstate');
 const dialog = require('../machine/util/dialog.js');
 const uuid = require('uuid');
+const config= require('../env-variables');
 
 class SessionManager {
 
@@ -16,7 +17,7 @@ class SessionManager {
         reformattedMessage.user = user;
         let userId = user.userId;
 
-        await chatStateRepository.updateSessionId(userId, 1);
+        await chatStateRepository.updateSessionId(userId, config.avgSessionTime);
         let chatState  = await chatStateRepository.getActiveStateForUserId(userId);
         telemetry.log(userId, 'from_user', reformattedMessage);
 

@@ -24,6 +24,7 @@ const envVariables = {
     dateFormat: process.env.DATEFORMAT || 'DD/MM/YYYY',
     timeZone: process.env.TIMEZONE || 'Asia/Kolkata',
     msgId: process.env.MSG_ID || '20170310130900',
+    avgSessionTime: process.env.AVG_SESSION_TIME || 30,
 
     postgresConfig: {
         dbHost: process.env.DB_HOST || 'localhost',
