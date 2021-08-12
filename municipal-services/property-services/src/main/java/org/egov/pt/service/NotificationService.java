@@ -23,7 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import static org.egov.pt.util.PTConstants.*;
+import lombok.extern.slf4j.Slf4j;
 
+import static org.egov.pt.util.PTConstants.*;
+@Slf4j
 @Service
 public class NotificationService {
 
@@ -284,7 +287,12 @@ public class NotificationService {
 			if (owner.getMobileNumber() != null)
 				mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
 		});
-
+		
+		property.getAlternateMobileNumberDetails().forEach(entry ->{
+				mobileNumberToOwner.put(entry.getMobileNumber(), entry.getName());
+				
+		});
+		
 		List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 		notifUtil.sendSMS(smsRequests);
 
