@@ -1,0 +1,36 @@
+.timeline-container {
+  @apply flex;
+  margin-bottom: 15px;
+  .timeline-checkpoint {
+    @apply relative flex-1;
+  }
+
+  .timeline-content {
+    @apply flex flex-col items-center;
+
+    span {
+      text-align: center;
+      color: white;
+    }
+
+    .secondary-color {
+      color: #0B0C0C;
+    }
+  }
+
+  .line {
+    @apply absolute;
+    top: 12px;
+    left: calc(50% + 8px);
+    right: calc(-50% + 8px);
+    border-top: 4px solid #D6D5D4;
+  }
+
+  .circle {
+    width: 24px;
+    height: 24px;
+    background-color: #F47738;
+    border-radius: 50%;
+    text-align: center;
+  }
+} 

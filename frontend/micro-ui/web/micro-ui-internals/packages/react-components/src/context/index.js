@@ -1,0 +1,1 @@
+const ComponentProvider = React.createContext();

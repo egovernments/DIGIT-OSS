@@ -1,0 +1,17 @@
+.telephone {
+  @apply flex items-baseline;
+  img,
+  svg {
+    height: 22px;
+    width: 20px;
+    @apply text-primary-main ml-sm items-center;
+  }
+
+  p {
+    @apply text-text-primary text-body-l pl-sm;
+  }
+}
+
+.call {
+  @apply flex text-text-secondary text-body-l;
+}
