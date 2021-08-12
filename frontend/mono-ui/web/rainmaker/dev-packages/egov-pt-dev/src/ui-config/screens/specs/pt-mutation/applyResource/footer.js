@@ -1,6 +1,6 @@
 import { convertDateToEpoch, dispatchMultipleFieldChangeAction, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { prepareFinalObject,handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { disableField, enableField, getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import compact from "lodash/compact";
 import get from "lodash/get";
@@ -122,7 +122,7 @@ const callBackForApply = async (state, dispatch) => {
   let consumerCode = getQueryArg(window.location.href, "consumerCode");
   let propertyPayload = get(
     state, "screenConfiguration.preparedFinalObject.Property");
-    consumerCode=consumerCode==null?propertyPayload.propertyId:consumerCode;
+  consumerCode = consumerCode == null ? propertyPayload.propertyId : consumerCode;
 
   if (process.env.REACT_APP_NAME === "Citizen" && propertyPayload && !propertyPayload.declaration) {
     const errorMessage = {
@@ -154,7 +154,7 @@ const callBackForApply = async (state, dispatch) => {
   propertyPayload.workflow = {
     "businessService": "PT.MUTATION",
     tenantId,
-    "action": getQueryArg(window.location.href, "action") === "edit"?"REOPEN":"OPEN",
+    "action": getQueryArg(window.location.href, "action") === "edit" ? "REOPEN" : "OPEN",
     "moduleName": "PT"
   },
     propertyPayload.owners.map(owner => {
@@ -253,7 +253,18 @@ const callBackForApply = async (state, dispatch) => {
         value: consumerCode
       }
     ];
-    propertyPayload.owners =propertyPayload.owners.filter(owner=>owner.isDeleted!==false);
+    propertyPayload.owners = propertyPayload.owners.filter(owner => owner.isDeleted !== false);
+    if (process.env.REACT_APP_NAME == "Citizen") {
+      let citizenLoggedIn = JSON.parse(localStorage.getItem("user-info"));
+      if (propertyPayload.owners.every(owner => owner.mobileNumber != citizenLoggedIn.mobileNumber)) {
+        propertyPayload.alternateMobileNumberDetails = [{
+          "id": null,
+          "uuid": null,
+          "name": citizenLoggedIn.name,
+          "mobileNumber": citizenLoggedIn.mobileNumber,
+        }]
+      }
+    }
     propertyPayload.creationReason = 'MUTATION';
     let payload = null;
     payload = await httpRequest(
@@ -418,10 +429,10 @@ const callBackForNext = async (state, dispatch) => {
       errorMsg ? isFormValid = false : {};
     }
     if (getQueryArg(window.location.href, "action") === "edit") {
-      dispatch(handleField('apply', "components.div.children.footer.children.payButton.children.submitButtonLabel",'props.labelKey',"PT_COMMON_BUTTON_RESUBMIT"))
+      dispatch(handleField('apply', "components.div.children.footer.children.payButton.children.submitButtonLabel", 'props.labelKey', "PT_COMMON_BUTTON_RESUBMIT"))
       onChangeTypeOfOwnership({ value: get(state.screenConfiguration.preparedFinalObject, 'Property.ownershipCategoryTemp', '') }, state, dispatch)
-    }else{
-      dispatch(handleField('apply', "components.div.children.footer.children.payButton.children.submitButtonLabel",'props.labelKey',"PT_COMMON_BUTTON_SUBMIT"))
+    } else {
+      dispatch(handleField('apply', "components.div.children.footer.children.payButton.children.submitButtonLabel", 'props.labelKey', "PT_COMMON_BUTTON_SUBMIT"))
     }
   }
 

@@ -1,6 +1,6 @@
 
 import { getCommonCard, getCommonContainer, getCommonHeader, getStepperObject } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import cloneDeep from "lodash/cloneDeep";
@@ -175,7 +175,9 @@ const getPropertyData = async (action, state, dispatch) => {
     const previousPropertyUuid = payload.Properties[0].additionalDetails && payload.Properties[0].additionalDetails.previousPropertyUuid;
     payload.Properties[0].additionalDetails = { previousPropertyUuid };
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
-
+    if (process.env.REACT_APP_NAME == "Citizen") {
+      dispatch(prepareFinalObject("Property.ownersTemp[0].mobileNumber", JSON.parse(localStorage.getItem("user-info")).mobileNumber));
+    }
     setCardVisibility(state, action, dispatch);
 
     dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));

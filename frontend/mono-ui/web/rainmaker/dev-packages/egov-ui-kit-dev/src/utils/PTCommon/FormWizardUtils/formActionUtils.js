@@ -135,6 +135,17 @@ export const createProperty = async (Properties, action, props, isModify, prepar
                 propertyPayload.creationReason = 'UPDATE'
             }
         }
+        if (process.env.REACT_APP_NAME == "Citizen") {
+            let citizenLoggedIn=JSON.parse(localStorage.getItem("user-info"));
+            if(propertyPayload.owners.every(owner=>owner.mobileNumber!=citizenLoggedIn.mobileNumber)){
+                propertyPayload.alternateMobileNumberDetails = [{
+                "id": null,
+                "uuid": null,
+                "name": citizenLoggedIn.name,
+                "mobileNumber": citizenLoggedIn.mobileNumber,
+              }]
+            }
+          }
 
         propertyPayload.additionalDetails ? { ...propertyPayload.additionalDetails, ...propertyAdditionalDetails } : { ...propertyAdditionalDetails };
         const propertyResponse = await httpRequest(
