@@ -65,8 +65,7 @@ public class PaymentUpdateService {
 			RequestInfo requestInfo = paymentRequest.getRequestInfo();
 
 			List<PaymentDetail> paymentDetails = paymentRequest.getPayment().getPaymentDetails();
-			String tenantId = paymentRequest.getPayment().getTenantId();
-
+			String tenantId = paymentRequest.getPayment().getTenantId();			
 			for (PaymentDetail paymentDetail : paymentDetails) {
 				
 				Boolean isModuleMutation = paymentDetail.getBusinessService().equalsIgnoreCase(config.getMutationWfName());
@@ -90,7 +89,6 @@ public class PaymentUpdateService {
 	 * @param paymentDetail
 	 */
 	private void updateWorkflowForMutationPayment(RequestInfo requestInfo, String tenantId, PaymentDetail paymentDetail) {
-		
 		Bill bill  = paymentDetail.getBill();
 		
 		PropertyCriteria criteria = PropertyCriteria.builder()
