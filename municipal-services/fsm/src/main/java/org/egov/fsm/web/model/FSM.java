@@ -153,4 +153,10 @@ public class FSM   {
   @JsonProperty("completedOn")
   private Long completedOn ;
 
+  @JsonProperty("applicationType")
+  private String applicationType ;
+  
+  @JsonProperty("oldApplicationNo")
+  private String oldApplicationNo ;
+
 }
