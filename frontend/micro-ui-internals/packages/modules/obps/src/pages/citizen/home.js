@@ -68,7 +68,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
             Icon: <BPAIcon className="fill-path-primary-main" />,
             links: [
                 {
-                    link: ``,
+                    link: `new-building-permit`,
                     i18nKey: t("BPA_PERMIT_NEW_CONSTRUCTION_LABEL"),
                 },
                 {

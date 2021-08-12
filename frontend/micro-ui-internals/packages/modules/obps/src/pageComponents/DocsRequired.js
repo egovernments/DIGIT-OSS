@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { Card, CardHeader, CardLabel, CardText, CitizenInfoLabel, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
-const DocsRequired = () => {
+const DocsRequired = ({ onSelect, onSkip }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = tenantId.split(".")[0];
@@ -21,7 +21,7 @@ const DocsRequired = () => {
           ))}
         </Fragment>
       }
-      <SubmitBar label={t(`CS_COMMON_NEXT`)} />
+      <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={onSelect} />
       <CitizenInfoLabel text={`Maximum file size allowed is 5MB.`} />
     </Card>
   );

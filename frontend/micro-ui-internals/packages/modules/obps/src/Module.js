@@ -6,6 +6,8 @@ import CitizenApp from "./pages/citizen";
 
 import BPACitizenHomeScreen from "./pages/citizen/home";
 import EDCRForm from "./pageComponents/EDCRForm";
+import BasicDetails from "./pageComponents/BasicDetails";
+import DocsRequired from "./pageComponents/DocsRequired";
 
 
 const OBPSModule = ({ stateCode, userType, tenants }) => {
@@ -48,7 +50,9 @@ const componentsToRegister = {
   OBPSModule,
   OBPSLinks,
   BPACitizenHomeScreen,
-  EDCRForm
+  EDCRForm,
+  BasicDetails,
+  DocsRequired
 }
 
 export const initOBPSComponents = () => {

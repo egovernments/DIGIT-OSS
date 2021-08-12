@@ -8,17 +8,17 @@ const actions = [
   'BPA_STEPPER_SUMMARY_HEADER',
 ]
 
-const Timeline = () => {
+const Timeline = ({ currentStep = 1 }) => {
   const { t } = useTranslation();
   return (
     <div className="timeline-container">
       {actions.map((action, index, arr) => (
         <div className="timeline-checkpoint" key={index}>
           <div className="timeline-content">
-            <span className="circle">{index + 1}</span>
+            <span className={`circle ${index <= currentStep - 1 && 'active'}`}>{index + 1}</span>
             <span className="secondary-color">{t(action)}</span>
           </div>
-          {index < arr.length - 1 && <span className="line"></span>}
+          {index < arr.length - 1 && <span className={`line ${index < currentStep - 1 && 'active'}`}></span>}
         </div>
       ))}
     </div>
