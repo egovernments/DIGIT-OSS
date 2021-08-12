@@ -38,6 +38,11 @@ body > div:nth-child(9) > div > div:nth-child(1) > div{
   font-weight: 500;
   background: none;
   border: none;
+  div{
+    color: $primary;
+    word-break: unset !important;
+    word-wrap: unset !important;
+  }
 }
 .button-verify:hover{
 cursor: pointer;
@@ -47,21 +52,32 @@ cursor: pointer;
   width: 130px;
   height: 42px;
   background: $primary;
-  color: white;
+ 
   border-radius: 2px;
   margin-left: 10px;
   border: none;
+  div{
+    color: white;
+    word-break: unset !important;
+    word-wrap: unset !important;
+  }
 }
 
 .text-verify-link{
   display: flex;
-    flex-direction: row;
+  flex-direction: row;
     height: 60px;
     padding: 20px;
     align-items: center;
     background: rgba(254, 122, 81, 0.12);
-    color: $primary;
+  
+    div{
+      color: $primary;
+      word-break: unset !important;
+      word-wrap: unset !important;
+    }
 }
+
 .verify-popup{
   margin: 10px;
 }
@@ -70,9 +86,22 @@ cursor: pointer;
   display: flex;
     justify-content: center;
     color: red;
+    background: rgba(254, 122, 81, 0.12);;
+    line-height: 40px;
+    div{
+      color:red;
+      word-break: unset !important;
+      word-wrap: unset !important;
+    }
 }
 .success-comp-second-num{
   display: flex;
   justify-content: center;
-  color: green;
+  background: rgb(173, 247, 173);
+    line-height: 40px;
+    div{
+      color: rgb(1, 92, 1);
+      word-break: unset !important;
+      word-wrap: unset !important;
+    }
 }

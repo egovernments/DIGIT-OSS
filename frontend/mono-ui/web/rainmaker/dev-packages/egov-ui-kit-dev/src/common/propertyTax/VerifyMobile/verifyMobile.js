@@ -1,19 +1,23 @@
-import Label from "egov-ui-kit/components/Label";
 import { httpRequest } from "egov-ui-kit/utils/api";
+import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
 import ViewMobileDialog from ".";
 import './index.css';
-import { VerifyIcon } from "./ListItems";
+import { SuccessIcon, VerifyIcon } from "./ListItems";
+
 
 const VerifyButton = (type, openDialog) => {
     switch (type) {
         case "VERIFY":
-            return <span><button className="button-verify" style={{ "float": "none" }} onClick={() => openDialog()}> <VerifyIcon /> VERIFY</button>
+            return <span><button className="button-verify" style={{ "float": "none" }} onClick={() => openDialog()}> <VerifyIcon /> <Label label="PT_SEC_VERIFY_BTN"></Label></button>
+            </span>;
+        case "VERIFIED":
+            return <span><button className="button-verify" style={{ "float": "none" }} onClick={() => openDialog()}> <SuccessIcon /> LINK</button>
             </span>;
         case "LINKNUM":
             return <div className="text-verify-link">
-                <Label label="Link and Verify citizen’s mobile no. to send notifications and updates on this property" fontSize="16px" labelStyle={{ color: "#FE7A51", fontWeight: '400' }} />
-                <button type="button" className={"button-verify-link"} onClick={() => openDialog()} >LINK MOBILE NO.</button>
+                <Label label="PT_SEC_LINK_NO_TEXT" fontSize="16px" labelStyle={{ color: "#FE7A51", fontWeight: '400' }} />
+                <button type="button" className={"button-verify-link"} onClick={() => openDialog()} ><Label label="PT_SEC_LINK_NO_BTN"></Label></button>
             </div>;
         case "VERIFIED":
             return <button onClick={() => openDialog()}>Verify Mobile</button>;
@@ -23,6 +27,7 @@ const VerifyButton = (type, openDialog) => {
             return <button onClick={() => openDialog()}>Verify Mobile</button>;
     }
 }
+
 export default class VerifyMobile extends React.Component {
     constructor(props) {
         super(props);
@@ -40,6 +45,7 @@ export default class VerifyMobile extends React.Component {
     componentDidUpdate = (prevProps, prevState, snapshot) => {
         const { propertyId = "", tenantId = "" } = this.props;
         const { propertyId: prevPropertyId = "", tenantId: prevTenantId = "" } = prevProps;
+
         if (propertyId != prevPropertyId || tenantId != prevTenantId) {
             this.loadProperty();
         }
@@ -71,6 +77,7 @@ export default class VerifyMobile extends React.Component {
                 })
             })
             this.setState({ propertyNumbers: propertyNumbers })
+
         }
     }
     toggleDialog = () => {
@@ -78,6 +85,7 @@ export default class VerifyMobile extends React.Component {
     }
 
     render() {
+
         const { property = {}, propertyNumbers = [] } = this.state;
         return property && property.status == "ACTIVE" && <div>
             {VerifyButton(this.props.type, this.toggleDialog)}
@@ -87,5 +95,6 @@ export default class VerifyMobile extends React.Component {
                 propertyNumbers={propertyNumbers}
                 closeDialog={() => this.toggleDialog()}></ViewMobileDialog>}
         </div>
+
     }
 }

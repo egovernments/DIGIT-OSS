@@ -1,15 +1,15 @@
 import { Dialog, TextField } from "components";
 import { getPattern } from "egov-ui-framework/ui-config/screens/specs/utils";
-import Label from "egov-ui-kit/components/Label";
 import { httpRequest } from "egov-ui-kit/utils/api";
+import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
 import "./index.css";
 import ListItems from "./ListItems.js";
 
 const getFields = () => {
   return {
-    "name": { type: "text", pattern: "", placeholder: "Enter Name", floatingLabelText: "Name", className: "textField", pattern: getPattern("Name"), style: { width: "40%", height: "76px" }, value: "", errorMessage: "", error: false, jsonpath: "name", invalid: "INVALID_INPUT" },
-    "mobileNumber": { type: "text", pattern: "", placeholder: "Enter Mobile no", floatingLabelText: "Mobile Number", className: "textField", pattern: getPattern("MobileNo"), style: { width: "40%", height: "76px" }, value: "", errorMessage: "", error: false, jsonpath: "mobileNumber", invalid: "INVALID_INPUT" },
+    "name": { type: "text", pattern: "", placeholder: "PT_FORM3_GUARDIAN_PLACEHOLDER", floatingLabelText: "CORE_COMMON_NAME", className: "textField", pattern: getPattern("Name"), style: { width: "40%", height: "76px" }, value: "", errorMessage: "", error: false, jsonpath: "name", invalid: "PT_ERR_INVALID_TEXT" },
+    "mobileNumber": { type: "text", pattern: "", placeholder: "PT_FORM3_MOBILE_NO_PLACEHOLDER", floatingLabelText: "CS_COMMON_MOBILE_NO", className: "textField", pattern: getPattern("MobileNo"), style: { width: "40%", height: "76px" }, value: "", errorMessage: "", error: false, jsonpath: "mobileNumber", invalid: "PT_ERR_INVALID_TEXT" },
   }
 }
 
@@ -45,85 +45,69 @@ export default class ViewMobileDialog extends React.Component {
     })
   }
   addNewNumber = async () => {
-    console.log("awaw", this.state);
 
-    let { property = {} } = this.props;
-    const newItem = this.state.fields;
+    try {
 
-    if (Object.values(newItem).some((item) => item.error)) {
+
+      let { property = {} } = this.props;
+      const newItem = this.state.fields;
+      if (Object.values(newItem).some((item) => item.value == "")) {
+        this.setMessage("PT_SEC_ENTER_NAME_NUMBER", "ERROR");
+        return;
+      } else if (Object.values(newItem).some((item) => item.error)) {
+        this.setMessage("PT_ERR_INVALID_TEXT", "ERROR");
+        return;
+      } else if (this.props.propertyNumbers.some(inp => inp.mobileNumber == this.state.fields.mobileNumber.value)) {
+        this.setMessage("PT_SEC_SAME_NUMBER", "ERROR");
+        return;
+      } else {
+        this.setMessage();
+      }
+
+      if (property) {
+        property.alternateMobileNumberDetails = [{
+          "id": null,
+          "uuid": null,
+          "name": newItem.name.value,
+          "mobileNumber": newItem.mobileNumber.value,
+        }]
+      } else {
+        /* This LOGIC CAN BE USED IN CASE ADDINGTO EXISTING ARRAY */
+        property.alternateMobileNumberDetails.push({
+          "id": null,
+          "uuid": null,
+          "name": newItem.name,
+          "mobileNumber": newItem.mobileNumber,
+        })
+      }
+      const propertyResponse = await httpRequest(`property-services/property/_addAlternateNumber`, "update", [], { "Property": property });
+      if (propertyResponse) {
+        this.setMessage("PT_SEC_NUMBER_LINKED", "SUCCESS", true)
+        this.props.loadProperty(true);
+      }
       this.setState({
-        error: {
-          errorMessage: "INVALID INPUT",
-          type: "ERROR"
-        }
+        fields: getFields()
       })
-      return;
-    } else {
-      this.setState({
-        error: {
-          errorMessage: "",
-          type: ""
-        }
-      })
+    } catch (e) {
+      this.setMessage(e.message, "ERROR")
     }
-    if (this.props.propertyNumbers.some(inp => inp.mobileNumber == this.state.fields.mobileNumber.value)) {
-      this.setState({
-        error: {
-          errorMessage: "SAME NUMBER EXISTS",
-          type: "ERROR"
-        }
-      })
-      return;
-    } else {
-      this.setState({
-        error: {
-          errorMessage: "",
-          type: ""
-        }
-      })
-    }
-
-    // let { owners = [], alternateMobileNumberDetails = [] } = property;
-    // if (owners.filter(owner => owner.mobileNumber == this.newItem.mobileNumber))
-
-
-
-
-
-
-
-    if (property) {
-      property.alternateMobileNumberDetails = [{
-        "id": null,
-        "uuid": null,
-        "name": newItem.name.value,
-        "mobileNumber": newItem.mobileNumber.value,
-      }]
-    } else {
-      property.alternateMobileNumberDetails.push({
-        "id": null,
-        "uuid": null,
-        "name": newItem.name,
-        "mobileNumber": newItem.mobileNumber,
-      })
-    }
-    const propertyResponse = await httpRequest(`property-services/property/_addAlternateNumber`, "update", [], { "Property": property });
-    if (propertyResponse) {
-      this.props.loadProperty(true);
-    }
-    this.setState({
-      fields: getFields()
-    })
   }
 
-  // handleInputSecond(e){
-  //   
-  //   this.setState({
-  //     currentItem:{
-  //       key:e.target.value,
-  //     }
-  //   })
-  // }
+
+  setMessage = (message = "", type = "", clear = false) => {
+    this.setState({
+      error: {
+        errorMessage: message,
+        type: type
+      }
+    });
+    if (clear) {
+      setTimeout(this.setMessage, 1000);
+    }
+  }
+
+
+
   render() {
     const { fields = {}, error = {} } = this.state;
     const { errorMessage = "", type = "" } = error;
@@ -131,7 +115,7 @@ export default class ViewMobileDialog extends React.Component {
       <Dialog
         open={this.props.open}
         isClose={true}
-        title={<Label label="Link Mobile No." fontSize="24px" labelStyle={{ padding: "2%", backgroundColor: "white" }} labelClassName="owner-history" />}
+        title={<Label label="PT_SEC_LINK_MOBILE_NO_HEADER" fontSize="24px" labelStyle={{ padding: "2%", backgroundColor: "white" }} labelClassName="owner-history" />}
         handleClose={this.props.closeDialog}
         titleStyle={{
           padding: "2%",
@@ -147,11 +131,11 @@ export default class ViewMobileDialog extends React.Component {
         }}
       >
 
-        <Label label="Property Owner’s Mobile No." fontSize="20px" labelClassName="owner-history" />
-        <ListItems items={this.state.items} property={this.props.property} propertyNumbers={this.props.propertyNumbers} />
-        <Label label="Add Alternate Mobile No." labelStyle={{ marginTop: "2%" }} fontSize="20px" labelClassName="owner-history" />
+        <Label label="PT_SEC_OWNER_NO" fontSize="20px" labelClassName="owner-history" />
+        <ListItems items={this.state.items} property={this.props.property} propertyNumbers={this.props.propertyNumbers} setMessage={this.setMessage} />
+        <Label label="PT_SEC_ADD_SEC_MOB" labelStyle={{ marginTop: "2%" }} fontSize="20px" labelClassName="owner-history" />
 
-        <Label label="This Mobile no. will be used to notify you about property tax dues and important dates" style={{ color: '#00000099' }} fontSize="14px" labelClassName="owner-history" />
+        <Label label="PT_SEC_ADD_SEC_MOB_INFO" style={{ color: '#00000099' }} fontSize="14px" labelClassName="owner-history" />
 
         <div style={{
           height: "100px",
@@ -169,9 +153,9 @@ export default class ViewMobileDialog extends React.Component {
             onChange={(e) => this.handleChange(key, e.target.value)}></TextField>
         })}
 
-          <button type="button" className={"button-verify-link"} onClick={() => this.addNewNumber()} >ADD</button>
+          <button type="button" className={"button-verify-link"} onClick={() => this.addNewNumber()} ><Label label="PT_SEC_ADD"></Label></button>
         </div>
-        {errorMessage && <div className={type=="error"?"error-comp-second-num":"success-comp-second-num"}>{errorMessage}</div>}
+        {errorMessage && <div className={type == "ERROR" ? "error-comp-second-num" : "success-comp-second-num"}><Label label={errorMessage}></Label></div>}
       </Dialog>
     )
   }
