@@ -177,6 +177,7 @@ const getPropertyData = async (action, state, dispatch) => {
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
     if (process.env.REACT_APP_NAME == "Citizen") {
       dispatch(prepareFinalObject("Property.ownersTemp[0].mobileNumber", JSON.parse(localStorage.getItem("user-info")).mobileNumber));
+      dispatch(prepareFinalObject("Property.institutionTemp.mobileNumber", JSON.parse(localStorage.getItem("user-info")).mobileNumber));
     }
     setCardVisibility(state, action, dispatch);
 
