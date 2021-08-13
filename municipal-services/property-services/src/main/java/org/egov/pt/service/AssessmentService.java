@@ -126,7 +126,7 @@ public class AssessmentService {
 				&& actualAssessment.getAdditionalDetails().get("isRollOver") != null
 				&& !actualAssessment.getAdditionalDetails().get("isRollOver").asBoolean())
 			demandValidator.validateAndfilterDemands(demands, actualAssessment.getPropertyId(),
-					actualAssessment.getTenantId());
+					actualAssessment.getTenantId(), request.getRequestInfo());
 
 		for (Demand demand : demands) {
 			try {
@@ -245,7 +245,7 @@ public class AssessmentService {
 		if (demands == null || demands.isEmpty())
 			throw new CustomException("NO_DEMAND", "No demand added for the property");
 		demandValidator.validateLegacyDemands(demands, actualAssessment.getPropertyId(),
-				actualAssessment.getTenantId());
+				actualAssessment.getTenantId(),requestInfo);
 		List<Assessment> assessmentsFromDB = repository.getAssessmentsFromDBByPropertyId(actualAssessment);
 		for (Demand demand : demands) {
 			if (demand.getId() == null) {
