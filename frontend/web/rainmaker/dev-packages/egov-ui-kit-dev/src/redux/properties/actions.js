@@ -876,8 +876,8 @@ const getBankname = async(payment) =>{
   const ifscCode = payment[0].ifscCode;
   let payload;
   if (ifscCode) {
+    try{
     payload = await axios.get(`https://ifsc.razorpay.com/${ifscCode}`,{ crossdomain: true });
-    console.log("===================>",payload);
     if (payload.data === "Not Found") {
       set(payment, `[0].bankName`, "");
       set(payment, `[0].branchName`, "");
@@ -886,6 +886,10 @@ const getBankname = async(payment) =>{
       const bankBranch = get(payload.data, "BRANCH");
       set(payment, `[0].bankName`, bankName);
       set(payment, `[0].branchName`, bankBranch);
+    }
+  }
+  catch (e) {
+    console.log(e);
     }
   }
   return payment;
