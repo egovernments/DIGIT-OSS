@@ -500,6 +500,7 @@ class FormWizard extends Component {
           "ownershipType",
           ["typeOfOwnership"]
         );
+        this.props.setFieldProperty("ownerInfo", "ownerMobile", "value", JSON.parse(localStorage.getItem("user-info")).mobileNumber));
         return (
           <div>
             <OwnershipTypeHOC disabled={disableOwner} />
