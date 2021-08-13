@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 const TextInput = (props) => {
-  const user_type = Digit.SessionStorage.get("userType");
+  const user_type = Digit.SessionStorage?.get("userType") || "CITIZEN";
   const [date, setDate] = useState();
   const data = props?.watch
     ? {

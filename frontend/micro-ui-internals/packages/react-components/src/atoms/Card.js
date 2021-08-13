@@ -3,9 +3,9 @@ import { useLocation } from "react-router-dom";
 
 const Card = ({ onClick, style, children, className, ReactRef, ...props }) => {
   const { pathname } = useLocation();
-  const classname = Digit.Hooks.fsm.useRouteSubscription(pathname);
-  const info = Digit.UserService.getUser()?.info;
-  const userType = info?.type;
+  const classname = Digit.Hooks?.fsm.useRouteSubscription(pathname) || "";
+  const info = Digit.UserService?.getUser()?.info || null;
+  const userType = info?.type || "CITIZEN";
   const isEmployee = classname === "employee" || userType === "EMPLOYEE";
   return (
     <div
