@@ -118,7 +118,7 @@ public class PaymentUpdateService {
 			property.setWorkflow(wfRequest.getProcessInstances().get(0));
 			property.getWorkflow().setState(state);
 			updateRequest.getProperty().setStatus(Status.fromValue(state.getApplicationStatus()));
-			producer.push(config.getUpdatePropertyTopic(), updateRequest);			
+			producer.push(tenantId, config.getUpdatePropertyTopic(), updateRequest);			
 			notifService.sendNotificationForMtPayment(updateRequest, bill.getTotalAmount());
 		});
 	}

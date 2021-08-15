@@ -230,7 +230,7 @@ public class MigrationService {
             migrationCount.setTenantid(propertyCriteria.getTenantId());
             migrationCount.setRecordCount(Long.valueOf(startBatch+batchSizeInput));
             PropertyMigrationCountRequest request = PropertyMigrationCountRequest.builder().requestInfo(requestInfo).migrationCount(migrationCount).build();
-            producer.push(config.getMigartionBatchCountTopic(), request);
+            producer.push("", config.getMigartionBatchCountTopic(), request);
 
             startBatch = startBatch+batchSizeInput;
             propertyCriteria.setOffset(Long.valueOf(startBatch));
@@ -565,7 +565,7 @@ public class MigrationService {
                     log.error("Error while migrating prperty data of " + property.getPropertyId(), e);
                 }
 
-                producer.push(config.getSavePropertyTopic(), request);
+                producer.push(tenantId, config.getSavePropertyTopic(), request);
                 properties.add(property);
 
 
@@ -921,7 +921,7 @@ public class MigrationService {
             errorMap.put(assessment.getAssessmentNumber(), String.valueOf(e));
         }
         //assessmentRequestList.add(request);
-        producer.push(config.getCreateAssessmentTopic(), request);
+        producer.push("", config.getCreateAssessmentTopic(), request);
     }
 
     public Map<String,String> addAssessmentPenaltyandRebate(Map<String,String> assessmentAdditionalDetail,PropertyDetail propertyDetail){
@@ -1079,7 +1079,7 @@ public class MigrationService {
 
     public void sendDataToAssessmentCreateTopic(List<AssessmentRequest> assessmentRequestList){
         for(AssessmentRequest assessmentRequest: assessmentRequestList)
-            producer.push(config.getCreateAssessmentTopic(), assessmentRequest);
+            producer.push("", config.getCreateAssessmentTopic(), assessmentRequest);
     }
 
     public Object propertyfetchResult(StringBuilder uri, Object request) {

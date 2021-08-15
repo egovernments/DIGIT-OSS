@@ -85,7 +85,7 @@ public class FileStoreConsumer {
             RequestInfo requestInfo = new RequestInfo();
             PropertyRequest propertyRequest = PropertyRequest.builder().requestInfo(requestInfo).property(property).build();
 
-            producer.push(config.getUpdateDocumentTopic(),propertyRequest);
+            producer.push(tenantId, config.getUpdateDocumentTopic(),propertyRequest);
 
             log.info("Updating document for: "+id);
         }
