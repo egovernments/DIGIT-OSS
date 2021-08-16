@@ -121,7 +121,11 @@ public class EgovUserApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(EgovUserApplication.class, args);
+        try{
+            SpringApplication.run(EgovUserApplication.class, args);
+        }catch (Exception e){
+            throw new CustomException("MISSING DEPENDENCY", "Encryption master data not found . Please check if proper data is added and restart the pod");
+        }
     }
 
 }
