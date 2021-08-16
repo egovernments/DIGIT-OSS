@@ -43,11 +43,11 @@ public class WorkflowRowMapper implements ResultSetExtractor<List<ProcessInstanc
                     lastModifiedTime = null;
                 }
 
-                Long sla = rs.getLong("sla");
+                /*Long sla = rs.getLong("sla");
                 if (rs.wasNull()) {
                     sla = null;
                 }
-
+*/
                 Long businessServiceSla = rs.getLong("businessservicesla");
                 if (rs.wasNull()) {
                     businessServiceSla = null;
@@ -70,15 +70,7 @@ public class WorkflowRowMapper implements ResultSetExtractor<List<ProcessInstanc
 
 
                 State state = State.builder()
-                        .tenantId(rs.getString("st_tenantId"))
-                        .uuid(rs.getString("st_uuid"))
-                        .state(rs.getString("state"))
-                        .sla(sla)
-                        .applicationStatus(rs.getString("applicationStatus"))
-                        .isStartState(rs.getBoolean("isStartState"))
-                        .isTerminateState(rs.getBoolean("isTerminateState"))
-                        .docUploadRequired(rs.getBoolean("docuploadrequired"))
-                        .businessServiceId(rs.getString("businessserviceid"))
+                        .uuid(rs.getString("pi_status"))
                         .build();
 
 
@@ -91,7 +83,6 @@ public class WorkflowRowMapper implements ResultSetExtractor<List<ProcessInstanc
                         .state(state)
                         .comment(rs.getString("comment"))
                         .assigner(assigner)
-                        .stateSla(sla)
                         .businesssServiceSla(businessServiceSla)
                         .previousStatus(rs.getString("previousStatus"))
                         .moduleName(rs.getString("moduleName"))
@@ -149,12 +140,12 @@ public class WorkflowRowMapper implements ResultSetExtractor<List<ProcessInstanc
             processInstance.addDocumentsItem(document);
         }
 
-        String actionUuid = rs.getString("ac_uuid");
-        /*
+        /*String actionUuid = rs.getString("ac_uuid");
+        *//*
          * null check added for action id to avoid adding empty action object in end state
          * 
          * also avoiding action related errors on end state
-         */
+         *//*
         if(null != actionUuid) {
         String roles = rs.getString("roles");
         Action action = Action.builder()
@@ -166,7 +157,8 @@ public class WorkflowRowMapper implements ResultSetExtractor<List<ProcessInstanc
                 .roles(StringUtils.isEmpty(roles) ? Arrays.asList() : Arrays.asList(roles.split(","))) 
                 .build();
         processInstance.getState().addActionsItem(action);
-        }
+        }*/
+
     }
 
 

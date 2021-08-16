@@ -28,7 +28,7 @@ public class BusinessMasterService {
 
     private WorkflowConfig config;
 
-    private EnrichmentService enrichmentService;
+    private BusinessServiceEnrichment enrichmentService;
 
     private BusinessServiceRepository repository;
 
@@ -37,7 +37,7 @@ public class BusinessMasterService {
     private CacheManager cacheManager;
 
     @Autowired
-    public BusinessMasterService(Producer producer, WorkflowConfig config, EnrichmentService enrichmentService,
+    public BusinessMasterService(Producer producer, WorkflowConfig config, BusinessServiceEnrichment enrichmentService,
                                  BusinessServiceRepository repository, MDMSService mdmsService, CacheManager cacheManager) {
         this.producer = producer;
         this.config = config;
