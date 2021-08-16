@@ -106,6 +106,9 @@ public class ProcessInstance   {
         @JsonProperty("rating")
         private Integer rating = null;
 
+        @JsonProperty("active")
+        private Boolean active = null;
+
 
         public ProcessInstance addDocumentsItem(Document documentsItem) {
             if (this.documents == null) {

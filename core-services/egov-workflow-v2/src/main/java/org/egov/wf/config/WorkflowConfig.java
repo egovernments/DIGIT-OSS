@@ -61,6 +61,9 @@ public class WorkflowConfig {
     @Value("${persister.update.businessservice.wf.topic}")
     private String updateBusinessServiceTopic;
 
+    @Value("${persister.update.active.wf.topic}")
+    private String updateActiveStatusTopic;
+
 
 
     //MDMS

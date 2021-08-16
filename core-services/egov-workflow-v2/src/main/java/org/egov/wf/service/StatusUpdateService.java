@@ -48,11 +48,34 @@ public class StatusUpdateService {
         });
         ProcessInstanceRequest processInstanceRequest = new ProcessInstanceRequest(requestInfo,processInstances);
         producer.push(config.getSaveTransitionTopic(),processInstanceRequest);
+        updatePreviousStateActiveFlag(requestInfo, processStateAndActions);
     }
 
 
+    /**
+     * Deactivates the previous workflow processInstances
+     * @param requestInfo
+     * @param processStateAndActions
+     */
+    private void updatePreviousStateActiveFlag(RequestInfo requestInfo,List<ProcessStateAndAction> processStateAndActions){
 
+        List<ProcessInstance> processInstancesForDeactivation = new LinkedList<>();
 
+        for(ProcessStateAndAction processStateAndAction : processStateAndActions){
+
+            ProcessInstance previousProcessInstance = processStateAndAction.getProcessInstanceFromDb();
+
+            if(previousProcessInstance != null){
+                previousProcessInstance.setActive(Boolean.FALSE);
+                processInstancesForDeactivation.add(previousProcessInstance);
+            }
+
+        }
+
+        ProcessInstanceRequest processInstanceRequest = new ProcessInstanceRequest(requestInfo,processInstancesForDeactivation);
+        producer.push(config.getUpdateActiveStatusTopic(),processInstanceRequest);
+
+    }
 
 
 
