@@ -8,6 +8,7 @@ import BPACitizenHomeScreen from "./pages/citizen/home";
 import EDCRForm from "./pageComponents/EDCRForm";
 import BasicDetails from "./pageComponents/BasicDetails";
 import DocsRequired from "./pageComponents/DocsRequired";
+import ScrutinyDetails from "./pageComponents/ScrutinyDetails";
 
 
 const OBPSModule = ({ stateCode, userType, tenants }) => {
@@ -52,7 +53,8 @@ const componentsToRegister = {
   BPACitizenHomeScreen,
   EDCRForm,
   BasicDetails,
-  DocsRequired
+  DocsRequired,
+  ScrutinyDetails
 }
 
 export const initOBPSComponents = () => {

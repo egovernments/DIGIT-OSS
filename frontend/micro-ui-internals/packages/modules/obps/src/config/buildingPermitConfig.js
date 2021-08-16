@@ -10,7 +10,21 @@ export const newConfig = [
       {
         route: "basic-details",
         component: "BasicDetails",
-      }
+      },
+      {
+        route: "scrutiny-details",
+        component: "ScrutinyDetails",
+        nextStep: "",
+        hideInEmployee: true,
+        key: "scrutinDetails",
+        texts: {
+          headerCaption: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
+          header: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
+          cardText: "",
+          submitBarLabel: "next",
+          skipAndContinueText: "",
+        },
+      },
     ]
   }
 ]

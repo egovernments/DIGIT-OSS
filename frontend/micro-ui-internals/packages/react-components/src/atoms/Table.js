@@ -40,6 +40,7 @@ const Table = ({
   onPageSizeChange,
   onLastPage,
   onFirstPage,
+  isPaginationRequired = true,
   sortParams = [],
 }) => {
   const {
@@ -161,7 +162,7 @@ const Table = ({
           })}
         </tbody>
       </table>
-      {
+      {isPaginationRequired && 
         <div className="pagination">
           {`${t("CS_COMMON_ROWS_PER_PAGE")} :`}
           <select
