@@ -1,7 +1,7 @@
 CREATE SEQUENCE seq_egbs_taxHeadMaster;
 CREATE SEQUENCE seq_egbs_taxHeadMastercode;
 
-CREATE TABLE public.egbs_taxheadmaster
+CREATE TABLE pb.egbs_taxheadmaster
 (
   id character varying(64) NOT NULL,
   tenantid character varying(128) NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE public.egbs_taxheadmaster
 
 CREATE SEQUENCE seq_egbs_glcodemaster;
 
-CREATE TABLE public.egbs_glcodemaster
+CREATE TABLE pb.egbs_glcodemaster
 (
   id character varying(64) NOT NULL,
   tenantid character varying(128) NOT NULL,

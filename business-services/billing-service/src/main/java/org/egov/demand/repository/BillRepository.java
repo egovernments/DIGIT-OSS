@@ -40,41 +40,42 @@ public class BillRepository {
 
 	@Autowired
 	private BillQueryBuilder billQueryBuilder;
-	
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-	
+
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
 	@Autowired
 	private Util util;
-	
+
 	@Autowired
 	private BillRowMapper searchBillRowMapper;
-	
+
 	@Autowired
 	private BusinessServiceDetailRepository businessServiceDetailRepository;
-	
+
 	public List<Bill> findBill(BillSearchCriteria billCriteria){
-		
+
 		List<Object> preparedStatementValues = new ArrayList<>();
 		String queryStr = billQueryBuilder.getBillQuery(billCriteria, preparedStatementValues);
+		queryStr = Util.replaceSchemaPlaceholder(queryStr, billCriteria.getTenantId());
 		log.debug("query:::"+queryStr+"  preparedStatementValues::"+preparedStatementValues);
-		
+
 		return jdbcTemplate.query(queryStr, preparedStatementValues.toArray(), searchBillRowMapper);
 	}
-	
+
 	@Transactional
 	public void saveBill(BillRequest billRequest){
-		
+
 		RequestInfo requestInfo = billRequest.getRequestInfo();
 		List<Bill> bills = billRequest.getBills();
-		
+
 		log.debug("saveBill requestInfo:"+requestInfo);
 		log.debug("saveBill bills:"+bills);
 		jdbcTemplate.batchUpdate(BillQueryBuilder.INSERT_BILL_QUERY, new BatchPreparedStatementSetter() {
-			
+
 			@Override
 			public void setValues(PreparedStatement ps, int index) throws SQLException {
 				Bill bill = bills.get(index);
@@ -82,9 +83,9 @@ public class BillRepository {
 				BillStatus status = BillStatus.ACTIVE;
 				if(!ObjectUtils.isEmpty(bill.getIsCancelled()) &&  bill.getIsCancelled() == true)
 					status = BillStatus.CANCELLED;
-				
+
 				AuditDetails auditDetails = bill.getAuditDetails();
-				
+
 				ps.setString(1, bill.getId());
 				ps.setString(2, bill.getTenantId());
 				ps.setString(3, bill.getPayerName());
@@ -100,7 +101,7 @@ public class BillRepository {
 				ps.setString(13, status.toString());
 				ps.setObject(14, util.getPGObject(bill.getAdditionalDetails()));
 			}
-			
+
 			@Override
 			public int getBatchSize() {
 				return bills.size();
@@ -108,26 +109,26 @@ public class BillRepository {
 		});
 		saveBillDetails(billRequest);
 	}
-	
+
 	public void saveBillDetails(BillRequest billRequest){
-		
+
 		List<Bill> bills = billRequest.getBills();
 		List<BillDetail> billDetails = new ArrayList<>();
 		List<BillAccountDetail> billAccountDetails = new ArrayList<>();
 		AuditDetails auditDetails = bills.get(0).getAuditDetails();
-		
+
 		for(Bill bill:bills){
 			List<BillDetail> tempBillDetails  = bill.getBillDetails();
 			billDetails.addAll(tempBillDetails);
-			
+
 			for(BillDetail billDetail : tempBillDetails){
 				billAccountDetails.addAll(billDetail.getBillAccountDetails());
 			}
 		}
 		log.debug("saveBillDeails tempBillDetails:"+billDetails);
 		jdbcTemplate.batchUpdate(BillQueryBuilder.INSERT_BILLDETAILS_QUERY, new BatchPreparedStatementSetter() {
-				
-			
+
+
 			@Override
 			public void setValues(PreparedStatement ps, int index) throws SQLException {
 				BillDetail billDetail = billDetails.get(index);
@@ -150,21 +151,21 @@ public class BillRepository {
 				// apportioning logic does not reside in billing service anymore 
 				ps.setBoolean(16, false);
 				ps.setObject(17, billDetail.getPartPaymentAllowed());
-				
+
 				String collectionModesNotAllowed = null != billDetail.getCollectionModesNotAllowed()
 						? StringUtils.join(billDetail.getCollectionModesNotAllowed(), ",")
 						: null;
 				ps.setString(18, collectionModesNotAllowed);
-				
+
 				ps.setString(19, auditDetails.getCreatedBy());
 				ps.setLong(20, auditDetails.getCreatedTime());
 				ps.setString(21, auditDetails.getLastModifiedBy());
 				ps.setLong(22, auditDetails.getLastModifiedTime());
 				ps.setBoolean(23, billDetail.getIsAdvanceAllowed());
 				ps.setLong(24, billDetail.getExpiryDate());
-				
+
 			}
-				
+
 			@Override
 			public int getBatchSize() {
 				return billDetails.size();
@@ -172,16 +173,16 @@ public class BillRepository {
 		});
 		saveBillAccountDetail(billAccountDetails, auditDetails);
 	}
-	
+
 	public void saveBillAccountDetail(List<BillAccountDetail> billAccountDetails, AuditDetails auditDetails){
 		log.debug("saveBillAccountDetail billAccountDetails:"+billAccountDetails);
 
 		jdbcTemplate.batchUpdate(BillQueryBuilder.INSERT_BILLACCOUNTDETAILS_QUERY, new BatchPreparedStatementSetter() {
-				
+
 			@Override
 			public void setValues(PreparedStatement ps, int index) throws SQLException {
 				BillAccountDetail billAccountDetail = billAccountDetails.get(index);
-				
+
 				ps.setString(1, billAccountDetail.getId());
 				ps.setString(2, billAccountDetail.getTenantId());
 				ps.setString(3, billAccountDetail.getBillDetail());
@@ -197,7 +198,7 @@ public class BillRepository {
 				ps.setLong(13, auditDetails.getLastModifiedTime());
 				ps.setString(14, billAccountDetail.getTaxHeadCode());
 			}
-				
+
 			@Override
 			public int getBatchSize() {
 				return billAccountDetails.size();
@@ -217,7 +218,7 @@ public class BillRepository {
 
 		BusinessServiceDetailCriteria businessCriteria = BusinessServiceDetailCriteria.builder()
 				.tenantId(inputBills.get(0).getTenantId()).build();
-		
+
 		Map<String, BusinessServiceDetail> businessServicesMap = businessServiceDetailRepository
 				.getBussinessServiceDetail(requestInfo, businessCriteria).stream()
 				.filter(BusinessServiceDetail::getCallBackForApportioning)

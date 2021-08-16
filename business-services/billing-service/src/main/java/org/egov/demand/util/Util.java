@@ -346,6 +346,11 @@ public class Util {
 		
 		return query.toString();
 	}
+	public static String replaceSchemaPlaceholder(String query, String tenantId){
+		String stateLevelTenant = tenantId.split("\\.")[0];
+		String finalQuery = query.replace(Constants.SCHEMA_PLACEHOLDER, stateLevelTenant);
+		return finalQuery;
+	}
 
 	private String createPlaceHolderForList(Set<String> ids) {
 		

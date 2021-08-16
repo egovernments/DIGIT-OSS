@@ -55,7 +55,7 @@ public class CollectionConfigQueryBuilder {
 
 
 	private static final String BASE_QUERY = "SELECT c.keyname as key, cv.value as value "
-			+ "FROM egcl_configuration c JOIN egcl_configurationvalues cv ON c.id = cv.keyid";
+			+ "FROM {{SCHEMA}}.egcl_configuration c JOIN {{SCHEMA}}.egcl_configurationvalues cv ON c.id = cv.keyid";
 
 	@SuppressWarnings("rawtypes")
 	public String getQuery(CollectionConfigGetRequest collectionConfigGetRequest, List preparedStatementValues) {
@@ -71,7 +71,7 @@ public class CollectionConfigQueryBuilder {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void addWhereClause(StringBuilder selectQuery, List preparedStatementValues,
-			CollectionConfigGetRequest collectionConfigGetRequest) {
+								CollectionConfigGetRequest collectionConfigGetRequest) {
 
 		if (collectionConfigGetRequest.getId() == null && collectionConfigGetRequest.getEffectiveFrom() == null
 				&& collectionConfigGetRequest.getName() == null && collectionConfigGetRequest.getTenantId() == null)
@@ -114,7 +114,7 @@ public class CollectionConfigQueryBuilder {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void addPagingClause(StringBuilder selectQuery, List preparedStatementValues,
-			CollectionConfigGetRequest collectionConfigGetRequest) {
+								 CollectionConfigGetRequest collectionConfigGetRequest) {
 		// handle limit(also called pageSize) here
 		selectQuery.append(" LIMIT ?");
 		long pageSize = 500l;
@@ -135,7 +135,7 @@ public class CollectionConfigQueryBuilder {
 	/**
 	 * This method is always called at the beginning of the method so that and
 	 * is prepended before the field's predicate is handled.
-	 * 
+	 *
 	 * @param appendAndClauseFlag
 	 * @param queryString
 	 * @return boolean indicates if the next predicate should append an "AND"

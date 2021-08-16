@@ -49,14 +49,14 @@ import org.springframework.stereotype.Component;
 public class BankAccountServiceQueryBuilder {
 
     public String insertBankAccountServiceDetailsQuery() {
-        return "INSERT INTO egcl_bankaccountservicemapping (id, businessdetails, bankaccount, bank, bankbranch, active, createdby, lastmodifiedby, createddate, lastmodifieddate, tenantid) values"
+        return "INSERT INTO {{SCHEMA}}.egcl_bankaccountservicemapping (id, businessdetails, bankaccount, bank, bankbranch, active, createdby, lastmodifiedby, createddate, lastmodifieddate, tenantid) values"
                 + "(nextval('seq_egcl_bankaccountservicemapping'), :businessdetails, :bankaccount, :bank, :bankbranch, :active, :createdby, :lastmodifiedby, :createddate, :lastmodifieddate, :tenantid)";
     }
 
     public String BankAccountServiceMappingSearchQuery(final BankAccountServiceMappingSearchCriteria searchCriteria,
-            final Map<String, Object> paramValues) {
+                                                       final Map<String, Object> paramValues) {
         StringBuilder searchQuery = new StringBuilder();
-        searchQuery.append("select * from egcl_bankaccountservicemapping where tenantid =:tenantId");
+        searchQuery.append("select * from {{SCHEMA}}.egcl_bankaccountservicemapping where tenantid =:tenantId");
         paramValues.put("tenantId", searchCriteria.getTenantId());
 
         if (searchCriteria.getBusinessDetails() != null && !searchCriteria.getBusinessDetails().isEmpty()) {
@@ -68,12 +68,12 @@ public class BankAccountServiceQueryBuilder {
             searchQuery.append(" and bankaccount =:bankaccount");
             paramValues.put("bankaccount", searchCriteria.getBankAccount());
         }
-        
+
         if (searchCriteria.getBank() != null) {
             searchQuery.append(" and bank =:bank");
             paramValues.put("bank", searchCriteria.getBank());
         }
-        
+
         if (searchCriteria.getBankBranch() != null) {
             searchQuery.append(" and bankBranch =:bankBranch");
             paramValues.put("bankBranch", searchCriteria.getBankBranch());

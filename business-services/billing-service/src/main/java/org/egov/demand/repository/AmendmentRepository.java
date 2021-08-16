@@ -66,6 +66,7 @@ public class AmendmentRepository {
 
 		MapSqlParameterSource searchParamMap = new MapSqlParameterSource();
 		String searchQuery = amendmentQueryBuilder.getSearchQuery(amendmentCriteria, searchParamMap);
+		searchQuery=Util.replaceSchemaPlaceholder(searchQuery, amendmentCriteria.getTenantId());
 		return namedJdbcTemplate.query(searchQuery, searchParamMap, amendmentRowMapper);
 	}
 

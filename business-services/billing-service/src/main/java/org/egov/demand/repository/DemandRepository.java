@@ -74,26 +74,28 @@ public class DemandRepository {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-	
+
 	@Autowired
 	private DemandQueryBuilder demandQueryBuilder;
-	
+
 	@Autowired
 	private DemandRowMapper demandRowMapper;
-	
+
 	@Autowired
 	private Util util;
-	
+
 	public List<Demand> getDemands(DemandCriteria demandCriteria) {
 
 		List<Object> preparedStatementValues = new ArrayList<>();
 		String searchDemandQuery = demandQueryBuilder.getDemandQuery(demandCriteria, preparedStatementValues);
+		searchDemandQuery=Util.replaceSchemaPlaceholder(searchDemandQuery, demandCriteria.getTenantId());
+		log.info(searchDemandQuery);
 		return jdbcTemplate.query(searchDemandQuery, preparedStatementValues.toArray(), demandRowMapper);
 	}
-	
+
 	/**
 	 * Fetches demand from DB based on a map of business code and set of consumer codes
-	 * 
+	 *
 	 * @param businessConsumercodeMap
 	 * @param tenantId
 	 * @return
@@ -103,6 +105,8 @@ public class DemandRepository {
 		List<Object> presparedStmtList = new ArrayList<>();
 		String sql = demandQueryBuilder.getDemandQueryForConsumerCodes(businessConsumercodeMap, presparedStmtList,
 				tenantId);
+		sql = Util.replaceSchemaPlaceholder(sql, tenantId);
+
 		return jdbcTemplate.query(sql, presparedStmtList.toArray(), demandRowMapper);
 	}
 
@@ -112,16 +116,16 @@ public class DemandRepository {
 		log.debug("DemandRepository save, the request object : " + demandRequest);
 		List<Demand> demands = demandRequest.getDemands();
 		List<DemandDetail> demandDetails = new ArrayList<>();
-		
+
 		for (Demand demand : demands) {
 			demandDetails.addAll(demand.getDemandDetails());
 		}
-		
+
 		insertBatch(demands, demandDetails);
 		log.debug("Demands saved >>>> ");
 		insertBatchForAudit(demands, demandDetails);
 	}
-	
+
 	@Transactional
 	public void update(DemandRequest demandRequest, PaymentBackUpdateAudit paymentBackUpdateAudit) {
 
@@ -135,10 +139,10 @@ public class DemandRepository {
 				.demandId(demands.stream().map(Demand::getId).collect(Collectors.toSet()))
 				.tenantId(demands.get(0).getTenantId()).build();
 		List<Demand> existingDemands = getDemands(demandCriteria);
-		
+
 		log.debug("repository demands "+existingDemands);
 		Map<String, String> existingDemandMap = existingDemands.stream().collect(
-						Collectors.toMap(Demand::getId, Demand::getId));
+				Collectors.toMap(Demand::getId, Demand::getId));
 		Map<String, String> existingDemandDetailMap = new HashMap<>();
 		for (Demand demand : existingDemands) {
 			for (DemandDetail demandDetail : demand.getDemandDetails())
@@ -157,26 +161,26 @@ public class DemandRepository {
 					oldDemandDetails.add(demandDetail);
 			}
 		}
-		
+
 		updateBatch(oldDemands, oldDemandDetails);
 		insertBatchForAudit(oldDemands, oldDemandDetails);
-		
+
 		if (!newDemands.isEmpty() || !newDemandDetails.isEmpty()) {
-			
+
 			insertBatch(newDemands, newDemandDetails);
 			insertBatchForAudit(newDemands, newDemandDetails);
 		}
-		
+
 		if (null != paymentBackUpdateAudit)
 			insertBackUpdateForPayment(paymentBackUpdateAudit);
 	}
 
 	public void insertBatch(List<Demand> newDemands, List<DemandDetail> newDemandDetails) {
-
-		jdbcTemplate.batchUpdate(DemandQueryBuilder.DEMAND_INSERT_QUERY, new BatchPreparedStatementSetter() {
+		String sqlDemand = Util.replaceSchemaPlaceholder(DemandQueryBuilder.DEMAND_INSERT_QUERY, newDemandDetails.get(0).getTenantId());
+		jdbcTemplate.batchUpdate(sqlDemand, new BatchPreparedStatementSetter() {
 			@Override
 			public void setValues(PreparedStatement ps, int rowNum) throws SQLException {
-				
+
 				Demand demand = newDemands.get(rowNum);
 				String status = demand.getStatus() != null ? demand.getStatus().toString() : null;
 				AuditDetails auditDetail = demand.getAuditDetails();
@@ -205,11 +209,11 @@ public class DemandRepository {
 				return newDemands.size();
 			}
 		});
-
-		jdbcTemplate.batchUpdate(DemandQueryBuilder.DEMAND_DETAIL_INSERT_QUERY, new BatchPreparedStatementSetter() {
+		String sqlDemandDetail = Util.replaceSchemaPlaceholder(DemandQueryBuilder.DEMAND_DETAIL_INSERT_QUERY, newDemandDetails.get(0).getTenantId());
+		jdbcTemplate.batchUpdate(sqlDemandDetail, new BatchPreparedStatementSetter() {
 			@Override
 			public void setValues(PreparedStatement ps, int rowNum) throws SQLException {
-				
+
 				DemandDetail demandDetail = newDemandDetails.get(rowNum);
 				AuditDetails auditDetail = demandDetail.getAuditDetails();
 				ps.setString(1, demandDetail.getId());
@@ -231,10 +235,10 @@ public class DemandRepository {
 			}
 		});
 	}
-	
-	public void updateBatch(List<Demand> oldDemands, List<DemandDetail> oldDemandDetails) {
 
-		jdbcTemplate.batchUpdate(DemandQueryBuilder.DEMAND_UPDATE_QUERY, new BatchPreparedStatementSetter() {
+	public void updateBatch(List<Demand> oldDemands, List<DemandDetail> oldDemandDetails) {
+		String sqlDemandUpdate = Util.replaceSchemaPlaceholder(DemandQueryBuilder.DEMAND_UPDATE_QUERY, oldDemandDetails.get(0).getTenantId());
+		jdbcTemplate.batchUpdate(sqlDemandUpdate, new BatchPreparedStatementSetter() {
 
 			@Override
 			public void setValues(PreparedStatement ps, int rowNum) throws SQLException {
@@ -258,7 +262,7 @@ public class DemandRepository {
 				ps.setObject(12, null);
 				ps.setString(13, demand.getId());
 				ps.setString(14, demand.getTenantId());
-				
+
 			}
 
 			@Override
@@ -266,8 +270,8 @@ public class DemandRepository {
 				return oldDemands.size();
 			}
 		});
-
-		jdbcTemplate.batchUpdate(DemandQueryBuilder.DEMAND_DETAIL_UPDATE_QUERY, new BatchPreparedStatementSetter() {
+		String sqlDemandDetailUpdate = Util.replaceSchemaPlaceholder(DemandQueryBuilder.DEMAND_DETAIL_UPDATE_QUERY, oldDemandDetails.get(0).getTenantId());
+		jdbcTemplate.batchUpdate(sqlDemandDetailUpdate, new BatchPreparedStatementSetter() {
 
 			@Override
 			public void setValues(PreparedStatement ps, int rowNum) throws SQLException {
@@ -290,17 +294,17 @@ public class DemandRepository {
 			}
 		});
 	}
-	
-	
+
+
 	/*
-	 * Audit 
+	 * Audit
 	 */
-	
+
 	@Transactional
 	public void insertBatchForAudit(List<Demand> demands, List<DemandDetail> demandDetails) {
+		String sqlDemandAudit = Util.replaceSchemaPlaceholder(DemandQueryBuilder.DEMAND_AUDIT_INSERT_QUERY, demandDetails.get(0).getTenantId());
+		jdbcTemplate.batchUpdate(sqlDemandAudit, new BatchPreparedStatementSetter() {
 
-		jdbcTemplate.batchUpdate(DemandQueryBuilder.DEMAND_AUDIT_INSERT_QUERY, new BatchPreparedStatementSetter() {
-			
 			@Override
 			public void setValues(PreparedStatement ps, int rowNum) throws SQLException {
 
@@ -331,8 +335,8 @@ public class DemandRepository {
 				return demands.size();
 			}
 		});
-
-		jdbcTemplate.batchUpdate(DemandQueryBuilder.DEMAND_DETAIL_AUDIT_INSERT_QUERY,
+		String sqlDemandDetailAudit = Util.replaceSchemaPlaceholder(DemandQueryBuilder.DEMAND_DETAIL_AUDIT_INSERT_QUERY, demandDetails.get(0).getTenantId());
+		jdbcTemplate.batchUpdate(sqlDemandDetailAudit,
 				new BatchPreparedStatementSetter() {
 					@Override
 					public void setValues(PreparedStatement ps, int rowNum) throws SQLException {
@@ -360,15 +364,15 @@ public class DemandRepository {
 
 	/**
 	 *  Persists back-update log from collection
-	 *  
+	 *
 	 *  in case of failure or success
-	 *  
+	 *
 	 * @param paymentBackUpdateAudit
 	 */
 	public void insertBackUpdateForPayment(PaymentBackUpdateAudit paymentBackUpdateAudit) {
 
 		jdbcTemplate.update(DemandQueryBuilder.PAYMENT_BACKUPDATE_AUDIT_INSERT_QUERY, new PreparedStatementSetter() {
-			
+
 			@Override
 			public void setValues(PreparedStatement ps) throws SQLException {
 
