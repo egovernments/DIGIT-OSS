@@ -8,7 +8,7 @@
 # -
 # -
 config:
-  - name: "builds/municipal-services/egov-user-event"
+  - name: "builds/digit-impel-builds/municipal-services/egov-user-event"
     build:
       - work-dir: "egov-user-event"
         image-name: "egov-user-event"
@@ -16,7 +16,7 @@ config:
       - work-dir: "egov-user-event/src/main/resources/db"
         image-name: "egov-user-event-db"
 
-  - name: "builds/municipal-services/pt-calculator-v2"
+  - name: "builds/digit-impel-builds/municipal-services/pt-calculator-v2"
     build:
       - work-dir: "pt-calculator-v2"
         image-name: "pt-calculator-v2"
@@ -86,7 +86,7 @@ config:
       - work-dir: "ws-services/src/main/resources/db"
         image-name: "ws-services-db"
         
-  - name: "builds/municipal-services/property-services"
+  - name: "builds/digit-impel-builds/municipal-services/property-services"
     build:
       - work-dir: "property-services"
         image-name: "property-services"
