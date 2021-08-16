@@ -4,7 +4,6 @@ package org.egov.pt;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-import org.cache2k.extra.spring.SpringCache2kCacheManager;
 import org.egov.pt.config.TenantKeyGenerator;
 import org.egov.tracer.config.TracerConfiguration;
 import org.springframework.beans.factory.annotation.Value;
