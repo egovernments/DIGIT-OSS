@@ -131,17 +131,6 @@ export const searchPropertyTable = {
       {labelName: "Guardian Name", labelKey: "PT_GUARDIAN_NAME"},
       {labelName: "Existing Property Id", labelKey: "PT_COMMON_COL_EXISTING_PROP_ID"},
       {labelName: "Address", labelKey: "PT_COMMON_COL_ADDRESS"},
-      {labelName: "Pending Amount", labelKey: "PT_AMOUNT_DUE"},
-      {
-        labelName: "Action",
-        labelKey: "PT_COMMON_TABLE_COL_ACTION_LABEL",
-        options: {
-          filter: false,
-          customBodyRender: (value, tableMeta) =>
-          (value.totalAmount > 0) ? getPayButton(tableMeta) : getMutationButton(tableMeta) ,
-
-        },
-      }, 
       {
         labelName: "Status",
         labelKey: "PT_COMMON_TABLE_COL_STATUS_LABEL",
@@ -231,6 +220,17 @@ export const searchApplicationTable = {
       },
       {labelName: "Application Type", labelKey: "PT_COMMON_TABLE_COL_APP_TYPE"},
       {labelName: "Owner Name", labelKey: "PT_COMMON_TABLE_COL_OWNER_NAME"},
+      {labelName: "Pending Amount", labelKey: "PT_MUTATION_PENDING_AMOUNT"},
+      {
+        labelName: "Action",
+        labelKey: "PT_COMMON_TABLE_COL_ACTION_LABEL",
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta) =>
+          (value.totalAmount > 0) ? getPayButton(tableMeta) : "" ,
+
+        },
+      },
       {labelName: "Address", labelKey: "PT_COMMON_COL_ADDRESS"},
       {
         labelName: "Status",
@@ -300,10 +300,10 @@ export const searchApplicationTable = {
 const onPropertyTabClick = (tableMeta) => {
   switch (tableMeta.rowData[5]) {
     case "INITIATED":
-      window.location.href = `apply?applicationNumber=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[8]}`;
+      window.location.href = `apply?applicationNumber=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}`;
       break;
     default:
-      navigate(propertyInformationScreenLink(tableMeta.rowData[0], tableMeta.rowData[8]));
+      navigate(propertyInformationScreenLink(tableMeta.rowData[0], tableMeta.rowData[6]));
       break;
   }
 };
@@ -326,25 +326,8 @@ const propertyIdClick = (item) => {
   navigate(propertyInformationScreenLink(item.propertyId,item.tenantId));
 }
 
-const navigate=(url)=>{
-  // store.dispatch(setRoute(url));
-  setRoute(url);
-}
-
-const propertyInformationScreenLink=(propertyId,tenantId)=>{
-  if(process.env.REACT_APP_NAME == "Citizen"){
-    return `/property-tax/my-properties/property/${propertyId}/${tenantId}`;
-  }else{
-    return `/property-tax/property/${propertyId}/${tenantId}`;
-  }
-}
-
-
 const payAmount = (tableMeta) => {
-  setRoute(`/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[8]}&businessService=PT`);
-};
-const mutaionLink = (tableMeta) => {
-  setRoute(`/pt-mutation/apply?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[8]}`);
+  setRoute(`/withoutAuth/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[7]}&businessService=PT`);
 };
 const getPayButton = (tableMeta) => {
   return (
@@ -357,13 +340,15 @@ const getPayButton = (tableMeta) => {
   )
 }
 
-const getMutationButton = (tableMeta) => {
-  return (
-    <a href="javascript:void(0)"
-      onClick={() => mutaionLink(tableMeta)}
-      style={{ color: "#FE7A51" }}
-    >
-      <LabelContainer labelKey="PT_SEARCH_OWNERSHIP_TRANSFER" labelName="Ownership Transfer" />
-    </a>
-  )
+const navigate=(url)=>{
+  // store.dispatch(setRoute(url));
+  setRoute(url);
+}
+
+const propertyInformationScreenLink=(propertyId,tenantId)=>{
+  if(process.env.REACT_APP_NAME == "Citizen"){
+    return `/property-tax/my-properties/property/${propertyId}/${tenantId}`;
+  }else{
+    return `/property-tax/property/${propertyId}/${tenantId}`;
+  }
 }
