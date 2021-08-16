@@ -59,7 +59,7 @@ class Inbox extends Component {
   }
 
   render() {
-    const { name, history, setRoute, menu, Loading, inboxLoading, inbox, loaded, mdmsGetLoading, errorMessage = "" ,error=false} = this.props;
+    const { name, history, setRoute, menu, Loading, inboxLoading, inbox, loaded, mdmsGetLoading, errorMessage = "", error = false } = this.props;
     const { hasWorkflow } = this.state;
     const a = menu ? menu.filter(item => item.url === "quickAction") : [];
     const downloadMenu = a.map((obj, index) => {
@@ -86,7 +86,7 @@ class Inbox extends Component {
       props: { variant: "outlined", style: { marginLeft: 5, marginRight: 15, marginTop: 10, backgroundColor: "#FE7A51", color: "#fff", border: "none", height: "40px", width: "200px" } },
       menu: downloadMenu
     }
-
+    let user = { ...JSON.parse(localStorage.getItem("user-info")), auth: localStorage.getItem("token") };
     return (
       <div>
         <div className="rainmaker-topHeader" style={{ marginTop: 15, justifyContent: "space-between" }}>
@@ -110,13 +110,13 @@ class Inbox extends Component {
             <Label label={"CS_INBOX_LOADING_MSG"} />
           </div>
         </div>}
-        {!hasWorkflow && !mdmsGetLoading && errorMessage != ""&&error && <div>
-            <div className="jk-spinner-wrapper">
-              <Label label={errorMessage} />
-            </div>
-          </div>}
+        {!hasWorkflow && !mdmsGetLoading && errorMessage != "" && error && <div>
+          <div className="jk-spinner-wrapper">
+            <Label label={errorMessage} />
+          </div>
+        </div>}
 
-          {hasWorkflow && <JkInbox auth={localStorage.getItem("token")}></JkInbox>}
+        {hasWorkflow && <JkInbox user={user}></JkInbox>}
         {/* {hasWorkflow && !inboxLoading && loaded && <TableData onPopupOpen={this.onPopupOpen} workflowData={inbox} />} */}
         <FilterDialog popupOpen={this.state.filterPopupOpen} popupClose={this.handleClose} />
       </div>
@@ -133,8 +133,8 @@ const mapStateToProps = (state) => {
   const { preparedFinalObject } = screenConfiguration;
   const { Loading = {} } = preparedFinalObject;
   const { isLoading } = Loading;
-  const { loading: mdmsGetLoading = false, errorMessage = "" ,error} = actionMenuFetch;
-  return { name, menu, Loading, isLoading, inboxLoading, inbox, loaded, mdmsGetLoading, errorMessage,error };
+  const { loading: mdmsGetLoading = false, errorMessage = "", error } = actionMenuFetch;
+  return { name, menu, Loading, isLoading, inboxLoading, inbox, loaded, mdmsGetLoading, errorMessage, error };
 };
 
 const mapDispatchToProps = (dispatch) => {
