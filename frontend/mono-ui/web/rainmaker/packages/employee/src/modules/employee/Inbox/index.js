@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import FilterDialog from "./components/FilterDialog";
 import TableData from "./components/TableData";
 import "./index.css";
+import JkInbox from "@jagankumar-egov/react-tour/components/Inbox";
 
 class Inbox extends Component {
   state = {
@@ -114,7 +115,9 @@ class Inbox extends Component {
               <Label label={errorMessage} />
             </div>
           </div>}
-        {hasWorkflow && !inboxLoading && loaded && <TableData onPopupOpen={this.onPopupOpen} workflowData={inbox} />}
+
+          {hasWorkflow && <JkInbox auth={localStorage.getItem("token")}></JkInbox>}
+        {/* {hasWorkflow && !inboxLoading && loaded && <TableData onPopupOpen={this.onPopupOpen} workflowData={inbox} />} */}
         <FilterDialog popupOpen={this.state.filterPopupOpen} popupClose={this.handleClose} />
       </div>
     );

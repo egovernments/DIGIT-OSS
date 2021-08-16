@@ -33,6 +33,7 @@
     "egov-wns": "1.6.0",
     "egov-workflow": "1.6.0",
     "html2canvas": "1.0.0-alpha.12",
+    "@jagankumar-egov/react-tour": "^0.1.8",
     "jsonpath": "1.0.0",
     "jspdf": "1.5.3",
     "jszip": "3.1.5",
