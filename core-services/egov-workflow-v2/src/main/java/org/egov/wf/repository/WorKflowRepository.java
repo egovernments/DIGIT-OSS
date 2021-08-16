@@ -120,6 +120,7 @@ public class WorKflowRepository {
     private List<String> getInboxSearchIds(ProcessInstanceSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getInboxIdQuery(criteria,preparedStmtList,true);
+        log.info("query for status search: "+query+" params: "+preparedStmtList);
         return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
     }
 
