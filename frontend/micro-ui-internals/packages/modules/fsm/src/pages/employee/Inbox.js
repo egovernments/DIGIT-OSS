@@ -6,6 +6,15 @@ import { Header } from "@egovernments/digit-ui-react-components";
 import DesktopInbox from "../../components/DesktopInbox";
 import MobileInbox from "../../components/MobileInbox";
 
+const countInboxRecords = (data, currentStatuses) => {
+  if (currentStatuses?.length > 0) {
+    return data?.statuses.reduce((acc, status) => {
+      return currentStatuses?.some(s => s?.code === status?.applicationstatus) ? acc + status?.count : acc;
+    }, 0)
+  }
+  return data?.totalCount;
+}
+
 const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const userInfo = Digit.UserService.getUser();
@@ -231,7 +240,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
             parentRoute={parentRoute}
             paginationParms={paginationParms}
             sortParams={sortParams}
-            totalRecords={isInbox ? Number(applications?.totalCount) : totalCount}
+            totalRecords={isInbox ? countInboxRecords(applications, searchParams?.applicationStatus) : totalCount}
           />
         </div>
       );
