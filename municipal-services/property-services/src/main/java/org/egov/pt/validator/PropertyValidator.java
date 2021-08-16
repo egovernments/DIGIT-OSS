@@ -582,11 +582,11 @@ public class PropertyValidator {
 		String userType = user.getType();
 		Boolean isUserCitizen = "CITIZEN".equalsIgnoreCase(userType);
 		
-		if(propertyUtil.isPropertySearchOpen(user)) {
-			
-			if(StringUtils.isEmpty(criteria.getLocality()))
-					throw new CustomException("EG_PT_INVALID_SEARCH"," locality is mandatory for open search");
-		}
+//		if(propertyUtil.isPropertySearchOpen(user)) {
+//			
+//			if(StringUtils.isEmpty(criteria.getLocality()))
+//					throw new CustomException("EG_PT_INVALID_SEARCH"," locality is mandatory for open search");
+//		}
 		
 		
 		Boolean isCriteriaEmpty = CollectionUtils.isEmpty(criteria.getOldpropertyids())
@@ -597,7 +597,8 @@ public class PropertyValidator {
 				&& null == criteria.getMobileNumber()
 				&& null == criteria.getName()
 				&& null == criteria.getLocality()
-				&& null == criteria.getDoorNo();
+				&& null == criteria.getDoorNo()
+				&& null == criteria.getOldPropertyId();
 		
 		if (isUserCitizen) {
 			
@@ -613,7 +614,7 @@ public class PropertyValidator {
 				throw new CustomException("EG_PT_INVALID_SEARCH"," TenantId is mandatory for search by " + userType);
 			
 			if(criteria.getTenantId() != null && isCriteriaEmpty)
-				throw new CustomException("EG_PT_INVALID_SEARCH"," Search is not allowed on empty Criteria, Atleast one criteria should be provided with tenantId for " + userType);
+				throw new CustomException("EG_PT_INVALID_SEARCH"," Search is not allowed on empty Criteria, Atleast one criteria should be provided with city name.");
 			
 			allowedParams = Arrays.asList(configs.getEmployeeSearchParams().split(","));
 		}

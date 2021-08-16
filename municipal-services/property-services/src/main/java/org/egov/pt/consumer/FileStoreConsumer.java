@@ -97,7 +97,7 @@ public class FileStoreConsumer {
 
         PropertyCriteria criteria = PropertyCriteria.builder().tenantId(tenantId).uuids(Collections.singleton(id)).build();
 
-        List<Property> properties = propertyRepository.getProperties(criteria, false);
+        List<Property> properties = propertyRepository.getProperties(criteria, false, false);
 
         if(CollectionUtils.isEmpty(properties))
             throw new CustomException("INVALID_ENTITYID","The entity id: "+id+" is not found for tenantId: "+tenantId);

@@ -12,10 +12,13 @@ import org.egov.common.contract.response.ResponseInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.oldProperty.OldPropertyCriteria;
+import org.egov.pt.repository.ElasticSearchRepository;
+import org.egov.pt.service.FuzzySearchService;
 import org.egov.pt.service.MigrationService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.util.ResponseInfoFactory;
 import org.egov.pt.validator.PropertyValidator;
+import org.egov.pt.web.contracts.FuzzySearchCriteria;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.PropertyResponse;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
@@ -45,6 +48,9 @@ public class PropertyController {
 	
 	@Autowired
     private PropertyValidator propertyValidator;
+
+    @Autowired
+    FuzzySearchService fuzzySearchService;
 
 	@PostMapping("/_create")
 	public ResponseEntity<PropertyResponse> create(@Valid @RequestBody PropertyRequest propertyRequest) {
@@ -118,5 +124,18 @@ public class PropertyController {
 //				.build();
 //		return new ResponseEntity<>(response, HttpStatus.OK);
 //	}
+
+
+
+    @PostMapping("/fuzzy/_search")
+    public ResponseEntity<PropertyResponse> fuzzySearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                                      @Valid @ModelAttribute PropertyCriteria fuzzySearchCriteria) {
+
+        List<Property> properties = fuzzySearchService.getProperties(requestInfoWrapper.getRequestInfo(), fuzzySearchCriteria);
+        PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
+                responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 }

@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.RequestInfo.RequestInfoBuilder;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Demand;
 import org.egov.pt.models.DemandDetail;
@@ -38,11 +40,11 @@ public class DemandValidator {
 		return new HashSet<>(list1).equals(new HashSet<>(list2));
 	}
 
-	public void validateAndfilterDemands(List<Demand> demands, String propertyId, String tenantId) {
+	public void validateAndfilterDemands(List<Demand> demands, String propertyId, String tenantId, RequestInfo requestInfo) {
 		Map<String, DemandDetail> demandDetailMap = new HashMap<>();
 		Map<String, String> errorMap = new HashMap<>();
 
-		List<Demand> dbDemands = fetchDBDemandsByConsumerCode(propertyId, tenantId);
+		List<Demand> dbDemands = fetchDBDemandsByConsumerCode(propertyId, tenantId, requestInfo);
 		if (dbDemands != null && !dbDemands.isEmpty()) {
 			throw new CustomException("DUPLICATE_DEMAND", "Demand already exists for the given property.");
 		}
@@ -67,7 +69,7 @@ public class DemandValidator {
 
 	}
 
-	public void validateLegacyDemands(List<Demand> demands, String propertyId, String tenantId) {
+	public void validateLegacyDemands(List<Demand> demands, String propertyId, String tenantId, RequestInfo requestInfo) {
 
 		List<String> demandIds = new ArrayList<>();
 		Map<String, String> errorMap = new HashMap<>();
@@ -84,7 +86,7 @@ public class DemandValidator {
 		if (!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);
 
-		List<Demand> dbDemands = fetchDBDemandsByConsumerCode(propertyId, tenantId);
+		List<Demand> dbDemands = fetchDBDemandsByConsumerCode(propertyId, tenantId, requestInfo);
 		List<String> dmdIdsFromDB = dbDemands.stream().map(Demand::getId).collect(Collectors.toList());
 
 		if (!listEqualsIgnoreOrder(dmdIdsFromDB, demandIds)) {
@@ -142,12 +144,12 @@ public class DemandValidator {
 		}
 	}
 
-	public List<Demand> fetchDBDemandsByConsumerCode(final String propertyId, final String tenantId) {
+	public List<Demand> fetchDBDemandsByConsumerCode(final String propertyId, final String tenantId, RequestInfo requestInfo) {
 		StringBuilder uri = new StringBuilder(config.getEgbsHost()).append(config.getEgbsSearchDemand())
 				.append("?tenantId=").append(tenantId).append("&consumerCode=").append(propertyId);
 		Object res;
 		try {
-			res = serviceRequestRepository.fetchResult(uri, new RequestInfoWrapper()).orElse(null);
+			res = serviceRequestRepository.fetchResult(uri, RequestInfoWrapper.builder().requestInfo(requestInfo).build()).orElse(null);
 		} catch (ServiceCallException e) {
 			throw e;
 		}

@@ -51,6 +51,8 @@ public class PropertyCriteria {
 	
 	private String locality;
 	
+	private String oldPropertyId;
+	
 	private String doorNo;
 
 	
