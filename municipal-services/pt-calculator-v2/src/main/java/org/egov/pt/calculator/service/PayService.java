@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.egov.pt.calculator.util.CalculatorConstants;
 import org.egov.pt.calculator.util.CalculatorUtils;
 import org.egov.pt.calculator.web.models.TaxHeadEstimate;
 import org.egov.pt.calculator.web.models.collections.Payment;
@@ -345,7 +346,7 @@ public class PayService {
 		BigDecimal interestAmt;
 		BigDecimal noOfDays = BigDecimal.valueOf((TimeUnit.MILLISECONDS.toDays(Math.abs(numberOfDaysInMillies))));
 		if(BigDecimal.ONE.compareTo(noOfDays) <= 0) noOfDays = noOfDays.add(BigDecimal.ONE);
-		interestAmt = mDService.calculateApplicables(applicableAmount, interestMap);
+		interestAmt = mDataService.calculateApplicables(applicableAmount, interestMap);
 		return interestAmt.multiply(noOfDays.divide(BigDecimal.valueOf(365), 6, 5));
 	}
 

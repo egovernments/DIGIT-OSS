@@ -257,7 +257,6 @@ public class DemandService {
 			// 	throw new CustomException(EMPTY_DEMAND_ERROR_CODE,
 			// 			"No demand found for the consumerCode: " + consumerCode);
 
-			for(Demand demand : demands){
 			if (demand.getStatus() != null
 					&& DEMAND_CANCELLED_STATUS.equalsIgnoreCase(demand.getStatus().toString()))
 				throw new CustomException(EG_PT_INVALID_DEMAND_ERROR,
@@ -268,7 +267,7 @@ public class DemandService {
 			roundOffDecimalForDemand(demand, requestInfoWrapper);
 
 			demandsToBeUpdated.add(demand);
-			}
+			
 		}
 
 

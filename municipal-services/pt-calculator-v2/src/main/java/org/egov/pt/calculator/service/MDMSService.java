@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
@@ -32,8 +31,6 @@ import static org.egov.pt.calculator.util.CalculatorConstants.PROPERTY_TAX_MODUL
 @Slf4j
 @Service
 public class MDMSService {
-
-	private static final Logger LOG = Logger.getLogger(MDMSService.class);
 
 	private PTCalculatorConfigs config;
 
@@ -93,7 +90,7 @@ public class MDMSService {
 			try {
 				mdmsResMap.putAll(JsonPath.read(mdmsData, modulepath));
 			} catch (Exception e) {
-				LOG.error("Error while fetching MDMS data", e);
+				log.error("Error while fetching MDMS data", e);
 			}
 		});
 		return mdmsResMap;

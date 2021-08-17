@@ -93,18 +93,4 @@ public class BillingSlabUtils {
 		return  MdmsCriteriaReq.builder().requestInfo(requestInfo).mdmsCriteria(mdmsCriteria).build();
 	}
 	
-	/**
-	 * Returns MutationBillingSlabRes fetched based on the given MutationBillingSlabReq
-	 *
-	 * @param billingSlabReq
-	 * @return MutationBillingSlabRes
-	 */
-	public MutationBillingSlabRes getMutationBillingSlabResponse(MutationBillingSlabReq billingSlabReq) {
-
-		return MutationBillingSlabRes.builder()
-				.responseInfo(factory.createResponseInfoFromRequestInfo(billingSlabReq.getRequestInfo(), true))
-				.billingSlab(billingSlabReq.getBillingSlab())
-				.build();
-	}
-	
 }

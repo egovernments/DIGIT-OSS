@@ -74,28 +74,28 @@ public class CalculationValidator {
 	 *
 	 * @param additionalDetails property additionalDetails
 	 */
-	public void validatePropertyForMutationCalculation (Map<String,Object> additionalDetails) {
-
-		Map<String, String> error = new HashMap<>();
-		if(additionalDetails == null){
-			error.put(PT_ADDITIONALNDETAILS_NULL,PT_ADDITIONALNDETAILS_NULL_MSG);
-			throw new CustomException(error);
-		}
-		if(!additionalDetails.containsKey(MARKET_VALUE) || additionalDetails.get(MARKET_VALUE)== null){
-			error.put(PT_MARKETVALUE_NULL,PT_MARKETVALUE_NULL_MSG);
-		}
-		else{
-			boolean numeric = true;
-			String marketValue = additionalDetails.get(MARKET_VALUE).toString();
-			numeric = marketValue.matches(NUMERIC_REGEX);
-			if(!numeric)
-				error.put(PT_MARKETVALUE_NULL,PT_MARKETVALUE_NULL_MSG);
-		}
-		if(!additionalDetails.containsKey(DOCUMENT_DATE) || additionalDetails.get(DOCUMENT_DATE) == null)
-			error.put(PT_DOCDATE_NULL,PT_DOCDATE_NULL_MSG);
-		if (!CollectionUtils.isEmpty(error))
-			throw new CustomException(error);
-	}
+//	public void validatePropertyForMutationCalculation (Map<String,Object> additionalDetails) {
+//
+//		Map<String, String> error = new HashMap<>();
+//		if(additionalDetails == null){
+//			error.put(PT_ADDITIONALNDETAILS_NULL,PT_ADDITIONALNDETAILS_NULL_MSG);
+//			throw new CustomException(error);
+//		}
+//		if(!additionalDetails.containsKey(MARKET_VALUE) || additionalDetails.get(MARKET_VALUE)== null){
+//			error.put(PT_MARKETVALUE_NULL,PT_MARKETVALUE_NULL_MSG);
+//		}
+//		else{
+//			boolean numeric = true;
+//			String marketValue = additionalDetails.get(MARKET_VALUE).toString();
+//			numeric = marketValue.matches(NUMERIC_REGEX);
+//			if(!numeric)
+//				error.put(PT_MARKETVALUE_NULL,PT_MARKETVALUE_NULL_MSG);
+//		}
+//		if(!additionalDetails.containsKey(DOCUMENT_DATE) || additionalDetails.get(DOCUMENT_DATE) == null)
+//			error.put(PT_DOCDATE_NULL,PT_DOCDATE_NULL_MSG);
+//		if (!CollectionUtils.isEmpty(error))
+//			throw new CustomException(error);
+//	}
 
 
 

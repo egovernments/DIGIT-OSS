@@ -277,9 +277,6 @@ public class OwnerInfo extends User  {
                         return null;
                 }
         }
-        
-        @JsonProperty("status")
-        private Status status;
 
 }
 

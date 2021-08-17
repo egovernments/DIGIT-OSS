@@ -59,6 +59,7 @@ import org.egov.pt.calculator.web.models.GetBillCriteria;
 import org.egov.pt.calculator.web.models.ReceiptSearchCriteria;
 import org.egov.pt.calculator.web.models.collections.Payment;
 import org.egov.pt.calculator.web.models.collections.PaymentDetail;
+import org.egov.pt.calculator.web.models.collections.PaymentSearchCriteria;
 import org.egov.pt.calculator.web.models.demand.*;
 import org.egov.pt.calculator.web.models.property.AuditDetails;
 import org.egov.pt.calculator.web.models.property.OwnerInfo;
@@ -743,7 +744,7 @@ public class CalculatorUtils {
 		}
 
 		return null;
-
+	}
     /**
      * Call PT-services to get Property object for the given applicationNumber and tenantID
      * @param requestInfo The RequestInfo of the incoming request

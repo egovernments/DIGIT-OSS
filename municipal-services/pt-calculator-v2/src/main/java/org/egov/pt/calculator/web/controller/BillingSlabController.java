@@ -34,9 +34,6 @@ public class BillingSlabController {
 	private MutationBillingSlabService mutationService;
 	
 	@Autowired
-	private MutationBillingSlabService mutationService;
-	
-	@Autowired
 	private BillingSlabValidator billingSlabValidator;
 	
 	@Autowired
