@@ -10,6 +10,7 @@ export const newConfig = [
       {
         route: "basic-details",
         component: "BasicDetails",
+        nextStep: "scrutiny-details" 
       },
       {
         route: "scrutiny-details",
@@ -28,7 +29,7 @@ export const newConfig = [
       {
         route: "location",
         component: "LocationDetails",
-        nextStep: "",
+        nextStep: "owner-details",
         hideInEmployee: true,
         key: "address",
         texts: {
@@ -39,6 +40,28 @@ export const newConfig = [
           skipAndContinueText: "",
         },
       },
+      {
+        route: "owner-details",
+        component: "OwnerDetails",
+        nextStep: "document-details",
+        key: "owners",
+        texts: {
+          headerCaption: "BPA_OWNER_AND_DOCUMENT_DETAILS_LABEL",
+          header: "BPA_APPLICANT_DETAILS_HEADER",
+          submitBarLabel: "CS_COMMON_NEXT"
+        }
+      },
+      {
+        route: "document-details",
+        component: "DocumentDetails",
+        nextStep: "",
+        key: "documents",
+        texts: {
+          headerCaption: "BPA_OWNER_AND_DOCUMENT_DETAILS_LABEL",
+          header: "BPA_DOCUMENT_DETAILS_LABEL",
+          submitBarLabel: "CS_COMMON_NEXT"
+        }
+      }
     ]
   }
 ]

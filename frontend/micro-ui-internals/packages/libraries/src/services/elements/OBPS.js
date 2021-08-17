@@ -9,5 +9,16 @@ export const OBPSService = {
       auth: true,
       userService: true,
       method: "POST"
-    }) 
+    }),
+  create: (details, tenantId) =>
+    Request({
+      url: Urls.obps.create,
+      data: details,
+      useCache: false,
+      setTimeParam: false,
+      userService: true,
+      method: "POST",
+      params: {},
+      auth: true,
+    }),
 }

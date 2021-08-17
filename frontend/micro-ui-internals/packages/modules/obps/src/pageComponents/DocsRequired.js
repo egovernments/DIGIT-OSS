@@ -1,12 +1,21 @@
 import React, { Fragment } from "react";
 import { Card, CardHeader, CardLabel, CardText, CitizenInfoLabel, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router-dom";
 
 const DocsRequired = ({ onSelect, onSkip }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = tenantId.split(".")[0];
+  const history = useHistory();
   const { data, isLoading } = Digit.Hooks.obps.useMDMS(state, "BPA", "DocumentTypes");
+  const goNext = () => {
+    if(history?.location?.state?.edcrNumber) {
+      onSelect("edcrNumber", history?.location?.state?.edcrNumber);
+    } else {
+      onSelect();
+    } 
+  }
   return (
     <Card>
       <CardHeader>{t(`OBPS_NEW_BUILDING_PERMIT`)}</CardHeader>
@@ -21,7 +30,7 @@ const DocsRequired = ({ onSelect, onSkip }) => {
           ))}
         </Fragment>
       }
-      <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={onSelect} />
+      <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={goNext} />
       <CitizenInfoLabel text={`Maximum file size allowed is 5MB.`} />
     </Card>
   );

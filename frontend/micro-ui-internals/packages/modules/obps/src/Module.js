@@ -9,6 +9,8 @@ import EDCRForm from "./pageComponents/EDCRForm";
 import BasicDetails from "./pageComponents/BasicDetails";
 import DocsRequired from "./pageComponents/DocsRequired";
 import ScrutinyDetails from "./pageComponents/ScrutinyDetails";
+import OwnerDetails from "./pageComponents/OwnerDetails";
+import DocumentDetails from "./pageComponents/DocumentDetails";
 import LocationDetails from "./pageComponents/LocationDetails";
 import GIS from "./pageComponents/GIS";
 
@@ -59,6 +61,8 @@ const componentsToRegister = {
   BasicDetails,
   DocsRequired,
   ScrutinyDetails,
+  OwnerDetails,
+  DocumentDetails,
   LocationDetails,
   GIS
 }

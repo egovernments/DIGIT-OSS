@@ -1,14 +1,12 @@
-import { Banner, Card, CardText, LinkButton, ActionBar, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
-import React, { useState, useEffect } from "react";
-import { useLocation, Link, useParams } from "react-router-dom";
+import { Banner, Card, CardText, LinkButton, SubmitBar } from "@egovernments/digit-ui-react-components";
+import React from "react";
+import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-// import getPTAcknowledgementData from "../utils/getTLAcknowledgementData";
-// import * as func from "../utils";
-
 
 const EDCRAcknowledgement = (props) => {
   const edcrData = props?.data?.[0];
   const { t } = useTranslation();
+  const history = useHistory();
 
   const printReciept = async () => {
     var win = window.open(edcrData.planReport, '_blank');
@@ -18,7 +16,11 @@ const EDCRAcknowledgement = (props) => {
   };
 
   const routeToBPAScreen = async () => {
-    // window.location.assign(`${window.location.origin}/digit-ui/employee/payment/collect/TL/${state?.data?.[0]?.applicationNumber}/${state?.data?.[0]?.tenantId}`);
+    history.push(
+      `/digit-ui/citizen/obps/new-building-permit/docs-required`,
+      { edcrNumber: edcrData?.edcrNumber }
+    );
+    // window.location.assign(`${window.location.origin}/digit-ui/citizen/obps/new-building-permit/docs-required`);
   }
 
   return (

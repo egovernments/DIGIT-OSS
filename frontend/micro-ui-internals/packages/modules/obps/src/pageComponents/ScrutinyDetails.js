@@ -122,7 +122,6 @@ const onRemove = (index, key) => {
 const onSkip = () => {
 }
 const goNext = () => {
-
     onSelect(config.key,{subOccupancy});
 }
 

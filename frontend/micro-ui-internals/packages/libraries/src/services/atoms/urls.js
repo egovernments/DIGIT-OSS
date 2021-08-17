@@ -101,7 +101,8 @@ const Urls = {
     count: "/egov-hrms/employees/_count"
   },
   obps: {
-    scrutinyDetails: "/edcr/rest/dcr/scrutinydetails"
+    scrutinyDetails: "/edcr/rest/dcr/scrutinydetails",
+    create: "/bpa-services/v1/bpa/_create"
   },
 
   edcr: {
