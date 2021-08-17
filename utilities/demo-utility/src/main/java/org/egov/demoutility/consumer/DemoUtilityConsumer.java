@@ -85,7 +85,7 @@ public class DemoUtilityConsumer {
 	@Autowired
 	ServiceCallRepository serviceCallRepository;
 
-	@Qualifier("getFreeMarkerConfiguration")
+	
 	@Autowired
 	freemarker.template.Configuration freemarkerConfiguration;
 
@@ -140,7 +140,7 @@ public class DemoUtilityConsumer {
 					if(j==1)
 					 username = demoUtilityRequest.getShortCode().toUpperCase() + "-" + UtilityConstants.TENANT_CODE + "-" + sequenceNo;
 					else
-						username = demoUtilityRequest.getShortCode().toUpperCase() + "-" + UtilityConstants.TENANT_CODE + "-" + (sequenceNo+(j-1));	
+						username = demoUtilityRequest.getShortCode().toUpperCase() + "-" + UtilityConstants.TENANT_CODE + "-" + (sequenceNo+j-1);	
 
 					String mobileNumber = generateMobileNo();
 
@@ -182,8 +182,8 @@ public class DemoUtilityConsumer {
 			processEmail(emailContent.toString(), demoUtilityRequest, requestInfo);
 
 		} catch (Exception e) {
-
-			log.error("error while creating employees", e.getMessage());
+        
+			log.error("error is ", e.getCause());
 
 		}
 
@@ -194,6 +194,7 @@ public class DemoUtilityConsumer {
 		StringBuffer content = new StringBuffer();
 
 		try {
+			freemarkerConfiguration.setClassForTemplateLoading(this.getClass(), "/templates");
 			content.append(FreeMarkerTemplateUtils
 					.processTemplateIntoString(freemarkerConfiguration.getTemplate("email-template.ftl"), employess));
 		} catch (Exception e) {

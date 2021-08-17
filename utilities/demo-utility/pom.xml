@@ -117,21 +117,7 @@
 	</repositories>
 
 	<build>
-	<resources>
-            <resource>
-                <directory>src/main/resources/</directory>
-                <includes>
-                    <include>templates/*.ftl</include>
-                    <include>application.properties</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/main/</directory>
-                <includes>
-                    <include>templates/*.ftl</include>
-                </includes>
-            </resource>
-            </resources>
+	
 		<plugins>
 			<!-- Package as an executable jar/war -->
 			 <plugin>
