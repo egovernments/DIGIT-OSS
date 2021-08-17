@@ -7,6 +7,7 @@ import java.util.Iterator;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.egov.collection.config.CollectionServiceConstants;
 
 public class Utils {
 
@@ -40,7 +41,11 @@ public class Utils {
 
         return mainNode;
     }
-    
+    public static String replaceSchemaPlaceholder(String query, String tenantId){
+        String stateLevelTenant = tenantId.split("\\.")[0];
+        String finalQuery = query.replace(CollectionServiceConstants.SCHEMA_PLACEHOLDER, stateLevelTenant);
+        return finalQuery;
+    }
 	public static boolean isPositiveInteger(BigDecimal bd) {
 		return bd.compareTo(BigDecimal.ZERO) >= 0
 				&& (bd.signum() == 0 || bd.scale() <= 0 || bd.stripTrailingZeros().scale() <= 0);

@@ -40,11 +40,11 @@ public class PaymentQueryBuilder {
             "py.lastModifiedBy as py_lastModifiedBy,py.lastmodifiedtime as py_lastmodifiedtime,py.additionalDetails as py_additionalDetails," +
             "pyd.id as pyd_id, pyd.tenantId as pyd_tenantId, pyd.manualreceiptnumber as manualreceiptnumber,pyd.manualreceiptdate as manualreceiptdate, pyd.createdBy as pyd_createdBy,pyd.createdtime as pyd_createdtime,pyd.lastModifiedBy as pyd_lastModifiedBy," +
             "pyd.lastmodifiedtime as pyd_lastmodifiedtime,pyd.additionalDetails as pyd_additionalDetails" +
-            " FROM egcl_payment py  " +
-            " INNER JOIN egcl_paymentdetail pyd ON pyd.paymentid = py.id ";
+            " FROM {{SCHEMA}}.egcl_payment py  " +
+            " INNER JOIN {{SCHEMA}}.egcl_paymentdetail pyd ON pyd.paymentid = py.id ";
     
-    public static final String SELECT_COUNT_PAYMENT_SQL = "SELECT count(distinct(py.id)) FROM egcl_payment py "
-    		+ "INNER JOIN egcl_paymentdetail pyd ON pyd.paymentid = py.id where pyd.businessservice= :businessservice and pyd.tenantid= :tenantid ";
+    public static final String SELECT_COUNT_PAYMENT_SQL = "SELECT count(distinct(py.id)) FROM {{SCHEMA}}.egcl_payment py "
+    		+ "INNER JOIN {{SCHEMA}}.egcl_paymentdetail pyd ON pyd.paymentid = py.id where pyd.businessservice= :businessservice and pyd.tenantid= :tenantid ";
 
     /*public static final String ID_QUERY = "SELECT DISTINCT py.id as id,py.transactiondate as date " +
             " FROM egcl_payment py  " +
@@ -53,11 +53,11 @@ public class PaymentQueryBuilder {
             " INNER JOIN egcl_billdetial bd ON bd.billid = bill.id " ;*/
 
     public static final String ID_QUERY = "WITH py_filtered as (" +
-            "select id from egcl_payment as py_inner {{WHERE_CLAUSE}} ) " +
+            "select id from {{SCHEMA}}.egcl_payment as py_inner {{WHERE_CLAUSE}} ) " +
             " SELECT py.id as id FROM py_filtered as py " +
-            " INNER JOIN egcl_paymentdetail as pyd ON pyd.paymentid = py.id and pyd.tenantid {{operator}} :tenantId " +
-            " INNER JOIN egcl_bill bill ON bill.id = pyd.billid " +
-            " INNER JOIN egcl_billdetial bd ON bd.billid = bill.id and bd.tenantid {{operator}} :tenantId; ";
+            " INNER JOIN {{SCHEMA}}.egcl_paymentdetail as pyd ON pyd.paymentid = py.id and pyd.tenantid {{operator}} :tenantId " +
+            " INNER JOIN {{SCHEMA}}.egcl_bill bill ON bill.id = pyd.billid " +
+            " INNER JOIN {{SCHEMA}}.egcl_billdetial bd ON bd.billid = bill.id and bd.tenantid {{operator}} :tenantId; ";
 
     private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY py_id) offset_ FROM " +
@@ -66,7 +66,7 @@ public class PaymentQueryBuilder {
             "WHERE offset_ > :offset AND offset_ <= :limit";
 
 
-    public static final String INSERT_PAYMENT_SQL = "INSERT INTO egcl_payment(" +
+    public static final String INSERT_PAYMENT_SQL = "INSERT INTO {{SCHEMA}}.egcl_payment(" +
             "            id, tenantid, totaldue, totalamountpaid, transactionnumber, transactiondate, " +
             "            paymentmode, instrumentdate, instrumentnumber,instrumentStatus, ifsccode, additionaldetails, " +
             "            paidby, mobilenumber, payername, payeraddress, payeremail, payerid, " +
@@ -77,7 +77,7 @@ public class PaymentQueryBuilder {
             "            :paymentstatus, :createdby, :createdtime, :lastmodifiedby, :lastmodifiedtime);";
 
 
-    public static final String INSERT_PAYMENTDETAIL_SQL = "INSERT INTO egcl_paymentdetail(" +
+    public static final String INSERT_PAYMENTDETAIL_SQL = "INSERT INTO {{SCHEMA}}.egcl_paymentdetail(" +
             "            id, tenantid, paymentid, due, amountpaid, receiptnumber, businessservice, " +
             "            billid, additionaldetails,receiptdate, receipttype, manualreceiptnumber, manualreceiptdate, createdby, createdtime, " +
             "            lastmodifiedby, lastmodifiedtime)" +
@@ -86,7 +86,7 @@ public class PaymentQueryBuilder {
             "            :lastmodifiedby, :lastmodifiedtime);";
 
 
-    public static final String INSERT_BILL_SQL = "INSERT INTO egcl_bill(" +
+    public static final String INSERT_BILL_SQL = "INSERT INTO {{SCHEMA}}.egcl_bill(" +
             "            id, status, iscancelled, additionaldetails, tenantid, collectionmodesnotallowed," +
             "            partpaymentallowed, isadvanceallowed, minimumamounttobepaid, " +
             "            businessservice, totalamount, consumercode, billnumber, billdate," +
@@ -97,7 +97,7 @@ public class PaymentQueryBuilder {
             "            :createdby, :createdtime, :lastmodifiedby, :lastmodifiedtime);";
 
 
-    public static final String INSERT_BILLDETAIL_SQL = "INSERT INTO egcl_billdetial(" +
+    public static final String INSERT_BILLDETAIL_SQL = "INSERT INTO {{SCHEMA}}.egcl_billdetial(" +
             "            id, tenantid, demandid, billid, amount, amountpaid, fromperiod," +
             "            toperiod, additionaldetails," +
             "            channel, voucherheader, boundary," +
@@ -112,7 +112,7 @@ public class PaymentQueryBuilder {
             "            :cancellationremarks);";
 
 
-    public static final String INSERT_BILLACCOUNTDETAIL_SQL = "INSERT INTO egcl_billaccountdetail(" +
+    public static final String INSERT_BILLACCOUNTDETAIL_SQL = "INSERT INTO {{SCHEMA}}.egcl_billaccountdetail(" +
             "            id, tenantid, billdetailid, demanddetailid, " +
             "            \"order\", amount, adjustedamount, isactualdemand, taxheadcode, additionaldetails)" +
             "            VALUES (:id, :tenantid, :billdetailid, :demanddetailid, " +
@@ -121,45 +121,45 @@ public class PaymentQueryBuilder {
 
     // Payment Status update queries
 
-    public static final String STATUS_UPDATE_PAYMENT_SQL = "UPDATE egcl_payment SET instrumentstatus=:instrumentstatus,additionaldetails=:additionaldetails," +
+    public static final String STATUS_UPDATE_PAYMENT_SQL = "UPDATE {{SCHEMA}}.egcl_payment SET instrumentstatus=:instrumentstatus,additionaldetails=:additionaldetails," +
             " paymentstatus=:paymentstatus, lastmodifiedby=:lastmodifiedby,lastmodifiedtime=:lastmodifiedtime" +
             " WHERE id=:id;";
 
-    public static final String STATUS_UPDATE_PAYMENTDETAIL_SQL = "UPDATE egcl_paymentdetail SET  additionaldetails=:additionaldetails, lastmodifiedby=:lastmodifiedby, lastmodifiedtime=:lastmodifiedtime " +
+    public static final String STATUS_UPDATE_PAYMENTDETAIL_SQL = "UPDATE {{SCHEMA}}.egcl_paymentdetail SET  additionaldetails=:additionaldetails, lastmodifiedby=:lastmodifiedby, lastmodifiedtime=:lastmodifiedtime " +
             " WHERE id=:id;";
 
-    public static final String STATUS_UPDATE_BILL_SQL = "UPDATE egcl_bill " +
+    public static final String STATUS_UPDATE_BILL_SQL = "UPDATE {{SCHEMA}}.egcl_bill " +
             "   SET  status= :status, iscancelled= :iscancelled, additionaldetails= :additionaldetails, lastmodifiedby= :lastmodifiedby, lastmodifiedtime=:lastmodifiedtime" +
             "   WHERE id=:id;";
 
-    public static final String COPY_PAYMENT_SQL = "INSERT INTO egcl_payment_audit SELECT * FROM egcl_payment WHERE id = :id;";
+    public static final String COPY_PAYMENT_SQL = "INSERT INTO {{SCHEMA}}.egcl_payment_audit SELECT * FROM egcl_payment WHERE id = :id;";
 
-    public static final String COPY_PAYMENTDETAIL_SQL = "INSERT INTO egcl_paymentdetail_audit SELECT id, tenantid, paymentid, due, amountpaid, receiptnumber, "
+    public static final String COPY_PAYMENTDETAIL_SQL = "INSERT INTO {{SCHEMA}}.egcl_paymentdetail_audit SELECT id, tenantid, paymentid, due, amountpaid, receiptnumber, "
     		+ "businessservice, billid, additionaldetails,  createdby, createdtime, lastmodifiedby, lastmodifiedtime, manualreceiptnumber, "
     		+ "manualreceiptdate, receiptdate, receipttype FROM egcl_paymentdetail WHERE id = :id ;";
 
-    public static final String COPY_BILL_SQL = "INSERT INTO egcl_bill_audit SELECT * FROM egcl_bill WHERE id = :id;";
+    public static final String COPY_BILL_SQL = "INSERT INTO {{SCHEMA}}.egcl_bill_audit SELECT * FROM egcl_bill WHERE id = :id;";
 
-    public static final String COPY_BILLDETAIL_SQL = "INSERT INTO egcl_billdetial_audit SELECT * FROM egcl_billdetial WHERE id = :id;";
+    public static final String COPY_BILLDETAIL_SQL = "INSERT INTO {{SCHEMA}}.egcl_billdetial_audit SELECT * FROM egcl_billdetial WHERE id = :id;";
 
-    public static final String FILESTOREID_UPDATE_PAYMENT_SQL = "UPDATE egcl_payment SET filestoreid=:filestoreid WHERE id=:id;";
+    public static final String FILESTOREID_UPDATE_PAYMENT_SQL = "UPDATE {{SCHEMA}}.egcl_payment SET filestoreid=:filestoreid WHERE id=:id;";
 
 
 
     // Payment update queries
 
-    public static final String UPDATE_PAYMENT_SQL = "UPDATE egcl_payment SET additionaldetails=:additionaldetails, paidby=:paidby, payername=:payername," +
+    public static final String UPDATE_PAYMENT_SQL = "UPDATE {{SCHEMA}}.egcl_payment SET additionaldetails=:additionaldetails, paidby=:paidby, payername=:payername," +
             " payeraddress=:payeraddress, payeremail=:payeremail, payerid=:payerid,paymentstatus=:paymentstatus, createdby=:createdby, createdtime=:createdtime," +
             " lastmodifiedby=:lastmodifiedby, lastmodifiedtime=:lastmodifiedtime WHERE id=:id ";
 
-    public static final String UPDATE_PAYMENTDETAIL_SQL ="UPDATE egcl_paymentdetail SET additionaldetails=:additionaldetails, createdby=:createdby," +
+    public static final String UPDATE_PAYMENTDETAIL_SQL ="UPDATE {{SCHEMA}}.egcl_paymentdetail SET additionaldetails=:additionaldetails, createdby=:createdby," +
             "createdtime=:createdtime, lastmodifiedby=:lastmodifiedby, lastmodifiedtime=:lastmodifiedtime" +
             "WHERE id=:id;";
 
-    public static final String UPDATE_BILL_SQL = "UPDATE egcl_bill SET additionaldetails=:additionaldetails,createdby=:createdby,createdtime=:createdtime, lastmodifiedby=:lastmodifiedby,\n" +
+    public static final String UPDATE_BILL_SQL = "UPDATE {{SCHEMA}}.egcl_bill SET additionaldetails=:additionaldetails,createdby=:createdby,createdtime=:createdtime, lastmodifiedby=:lastmodifiedby,\n" +
             "lastmodifiedtime=:lastmodifiedtime WHERE id=:id;";
 
-    public static final String UPDATE_BILLDETAIL_SQL = "UPDATE egcl_billdetial SET additionaldetails=:additionaldetails, voucherheader=:voucherheader," +
+    public static final String UPDATE_BILLDETAIL_SQL = "UPDATE {{SCHEMA}}.egcl_billdetial SET additionaldetails=:additionaldetails, voucherheader=:voucherheader," +
             " manualreceiptnumber=:manualreceiptnumber, manualreceiptdate=:manualreceiptdate, billdescription=:billdescription,displaymessage=:displaymessage," +
             "createdby=:createdby, createdtime=:createdtime, lastmodifiedby=:lastmodifiedby,lastmodifiedtime=:lastmodifiedtime WHERE id=:id ";
     
@@ -174,14 +174,14 @@ public class PaymentQueryBuilder {
 			+ "ad.billdetailid AS ad_billdetailid, ad.order AS ad_order, ad.amount AS ad_amount, ad.adjustedamount AS ad_adjustedamount, "
 			+ "ad.taxheadcode AS ad_taxheadcode, ad.demanddetailid as ad_demanddetailid, ad.isactualdemand AS ad_isactualdemand, b.additionaldetails as b_additionaldetails,  "
 			+ "bd.additionaldetails as bd_additionaldetails,  ad.additionaldetails as ad_additionaldetails "
-			+ "FROM egcl_bill b LEFT OUTER JOIN egcl_billdetial bd ON b.id = bd.billid AND b.tenantid = bd.tenantid "
-			+ "LEFT OUTER JOIN egcl_billaccountdetail ad ON bd.id = ad.billdetailid AND bd.tenantid = ad.tenantid "
+			+ "FROM {{SCHEMA}}.egcl_bill b LEFT OUTER JOIN {{SCHEMA}}.egcl_billdetial bd ON b.id = bd.billid AND b.tenantid = bd.tenantid "
+			+ "LEFT OUTER JOIN {{SCHEMA}}.egcl_billaccountdetail ad ON bd.id = ad.billdetailid AND bd.tenantid = ad.tenantid "
 			+ "WHERE b.id IN (:id);"; 
 
 
-	public static final String UPDATE_PAYMENT_BANKDETAIL_SQL = "UPDATE egcl_payment SET additionaldetails = jsonb_set(additionaldetails, '{bankDetails}', :additionaldetails, true) WHERE length(additionaldetails :: text) is not null and length(additionaldetails :: text) > 4  and jsonb_typeof( additionaldetails ::jsonb ) ='object' and ifsccode=:ifsccode ";
-	public static final String UPDATE_PAYMENT_BANKDETAIL_EMPTYADDTL_SQL = "UPDATE egcl_payment SET additionaldetails = :additionaldetails ::jsonb WHERE (length(additionaldetails :: text) is null or length(additionaldetails :: text) = 4) and ifsccode=:ifsccode ";
-	public static final String UPDATE_PAYMENT_BANKDETAIL_ARRAYADDTL_SQL = "UPDATE egcl_payment SET additionaldetails =  additionaldetails || :additionaldetails ::jsonb WHERE length(additionaldetails :: text) is not null and length(additionaldetails :: text) > 4  and jsonb_typeof(additionaldetails ::jsonb) ='array' and ifsccode=:ifsccode ";
+	public static final String UPDATE_PAYMENT_BANKDETAIL_SQL = "UPDATE {{SCHEMA}}.egcl_payment SET additionaldetails = jsonb_set(additionaldetails, '{bankDetails}', :additionaldetails, true) WHERE length(additionaldetails :: text) is not null and length(additionaldetails :: text) > 4  and jsonb_typeof( additionaldetails ::jsonb ) ='object' and ifsccode=:ifsccode ";
+	public static final String UPDATE_PAYMENT_BANKDETAIL_EMPTYADDTL_SQL = "UPDATE {{SCHEMA}}.egcl_payment SET additionaldetails = :additionaldetails ::jsonb WHERE (length(additionaldetails :: text) is null or length(additionaldetails :: text) = 4) and ifsccode=:ifsccode ";
+	public static final String UPDATE_PAYMENT_BANKDETAIL_ARRAYADDTL_SQL = "UPDATE {{SCHEMA}}.egcl_payment SET additionaldetails =  additionaldetails || :additionaldetails ::jsonb WHERE length(additionaldetails :: text) is not null and length(additionaldetails :: text) > 4  and jsonb_typeof(additionaldetails ::jsonb) ='array' and ifsccode=:ifsccode ";
 	
 	public static String getBillQuery() {
 		return BILL_BASE_QUERY;
@@ -505,7 +505,7 @@ public class PaymentQueryBuilder {
     private static void addPaymentDetailWhereClause(StringBuilder selectQuery, Map<String, Object> preparedStatementValues,
                                                     PaymentSearchCriteria searchCriteria){
 
-        StringBuilder paymentDetailQuery = new StringBuilder(" id in (select pyd.paymentid from egcl_paymentdetail as pyd ");
+        StringBuilder paymentDetailQuery = new StringBuilder(" id in (select pyd.paymentid from {{SCHEMA}}.egcl_paymentdetail as pyd ");
         Map<String, Object> paymentDetailPreparedStatementValues = new HashMap<>();
 
         if (!CollectionUtils.isEmpty(searchCriteria.getBusinessServices())) {
