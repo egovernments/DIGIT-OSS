@@ -4,8 +4,10 @@ package org.egov.wf.repository;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.wf.repository.querybuilder.WorkflowQueryBuilder;
 import org.egov.wf.repository.rowmapper.WorkflowRowMapper;
-import org.egov.wf.web.models.ProcessInstance;
-import org.egov.wf.web.models.ProcessInstanceSearchCriteria;
+import org.egov.wf.service.BusinessMasterService;
+import org.egov.wf.service.EnrichmentService;
+import org.egov.wf.util.WorkflowUtil;
+import org.egov.wf.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
@@ -13,9 +15,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 @Slf4j
@@ -27,13 +28,20 @@ public class WorKflowRepository {
 
     private WorkflowRowMapper rowMapper;
 
+    private BusinessMasterService businessMasterService;
 
     @Autowired
-    public WorKflowRepository(WorkflowQueryBuilder queryBuilder, JdbcTemplate jdbcTemplate, WorkflowRowMapper rowMapper) {
+    public WorKflowRepository(WorkflowQueryBuilder queryBuilder, JdbcTemplate jdbcTemplate, WorkflowRowMapper rowMapper,
+                              BusinessMasterService businessMasterService) {
         this.queryBuilder = queryBuilder;
         this.jdbcTemplate = jdbcTemplate;
         this.rowMapper = rowMapper;
+        this.businessMasterService = businessMasterService;
     }
+
+
+
+
 
 
     /**
@@ -52,7 +60,10 @@ public class WorKflowRepository {
         String query = queryBuilder.getProcessInstanceSearchQueryById(ids, preparedStmtList);
         log.debug("query for status search: "+query+" params: "+preparedStmtList);
 
-        return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+        List<ProcessInstance> result =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+        setStateFromBusinessService(result);
+
+        return result;
     }
 
 
@@ -75,7 +86,10 @@ public class WorKflowRepository {
 
         String query = queryBuilder.getProcessInstanceSearchQueryById(ids, preparedStmtList);
         log.debug("query for status search: "+query+" params: "+preparedStmtList);
-        return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+        List<ProcessInstance> result =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+        setStateFromBusinessService(result);
+
+        return result;
     }
 
 
@@ -158,4 +172,38 @@ public class WorKflowRepository {
 
         return escalatedApplicationsBusinessIds;
     }
+
+
+    public void setStateFromBusinessService(List<ProcessInstance> processInstances){
+
+        if(CollectionUtils.isEmpty(processInstances))
+            return;
+
+        String tenantId = processInstances.get(0).getTenantId();
+
+        Set<String> businessServiceCodes = processInstances.stream().map(ProcessInstance::getBusinessService).collect(Collectors.toSet());
+
+        BusinessServiceSearchCriteria businessServiceSearchCriteria = BusinessServiceSearchCriteria.builder()
+                .businessServices(new ArrayList<>(businessServiceCodes))
+                .tenantId(tenantId)
+                .build();
+
+        List<BusinessService> businessServices = businessMasterService.search(businessServiceSearchCriteria);
+
+        Map<String, State> idToStateMap = new HashMap<>();
+
+        businessServices.forEach(businessService -> {
+            businessService.getStates().forEach(state -> {
+                idToStateMap.put(state.getUuid(), state);
+            });
+        });
+
+        processInstances.forEach(processInstance -> {
+            processInstance.setState(idToStateMap.get(processInstance.getState().getUuid()));
+            processInstance.setStateSla(idToStateMap.get(processInstance.getState().getUuid()).getSla());
+        });
+
+    }
+
+
 }

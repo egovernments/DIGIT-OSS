@@ -38,15 +38,12 @@ public class EnrichmentService {
 
     private TransitionService transitionService;
 
-    private BusinessMasterService businessMasterService;
-
 
     @Autowired
-    public EnrichmentService(WorkflowUtil util, UserService userService,TransitionService transitionService, BusinessMasterService businessMasterService) {
+    public EnrichmentService(WorkflowUtil util, UserService userService,TransitionService transitionService) {
         this.util = util;
         this.userService = userService;
         this.transitionService = transitionService;
-        this.businessMasterService = businessMasterService;
     }
 
 
@@ -320,37 +317,6 @@ public class EnrichmentService {
         return autoEscalationEmployeesUuids;
     }
 
-
-    public void enrichStateFromBusinessService(List<ProcessInstance> processInstances){
-
-        if(CollectionUtils.isEmpty(processInstances))
-            return;
-
-        String tenantId = processInstances.get(0).getTenantId();
-
-        Set<String> businessServiceCodes = processInstances.stream().map(ProcessInstance::getBusinessService).collect(Collectors.toSet());
-
-        BusinessServiceSearchCriteria businessServiceSearchCriteria = BusinessServiceSearchCriteria.builder()
-                                                                        .businessServices(new ArrayList<>(businessServiceCodes))
-                                                                        .tenantId(tenantId)
-                                                                        .build();
-
-        List<BusinessService> businessServices = businessMasterService.search(businessServiceSearchCriteria);
-
-        Map<String, State> idToStateMap = new HashMap<>();
-
-        businessServices.forEach(businessService -> {
-            businessService.getStates().forEach(state -> {
-                idToStateMap.put(state.getUuid(), state);
-            });
-        });
-
-        processInstances.forEach(processInstance -> {
-            processInstance.setState(idToStateMap.get(processInstance.getState().getUuid()));
-            processInstance.setStateSla(idToStateMap.get(processInstance.getState().getUuid()).getSla());
-        });
-
-    }
 
     /*public Set<String> fetchStatesToIgnoreFromMdms(RequestInfo requestInfo, String tenantId) {
         Set<String> masterData = new HashSet<>();
