@@ -114,12 +114,16 @@ public class DemoUtilityConsumer {
 	public void createEmployee(DemoUtilityRequest demoUtilityRequest) throws JsonProcessingException {
 
 		try {
-			String authToken = getAccessToken(propertyConfiguration.getSuperUser(), propertyConfiguration.getPassword(),
+			Map tokenResponse = getAccessToken(propertyConfiguration.getSuperUser(), propertyConfiguration.getPassword(),
 					UtilityConstants.TENANTID_TOKEN);
+			
+			String authToken = (String) tokenResponse.get("access_token");
+			
+			org.egov.common.contract.request.User userInfo=(org.egov.common.contract.request.User)tokenResponse.get("UserRequest");
 
 			RequestInfo requestInfo = new RequestInfo();
 			requestInfo.setAuthToken(authToken);
-
+            requestInfo.setUserInfo(userInfo);
 			List<Employee> employeeList = new ArrayList<Employee>();
 
 			StringBuffer emailContent = new StringBuffer();
@@ -404,7 +408,7 @@ public class DemoUtilityConsumer {
 
 	}
 
-	public String getAccessToken(String superUsername, String superUserPassword, String tenantId) {
+	public Map getAccessToken(String superUsername, String superUserPassword, String tenantId) {
 
 		String access_token = null;
 		Object record = getAccess(superUsername, superUserPassword, tenantId);
@@ -415,7 +419,7 @@ public class DemoUtilityConsumer {
 			log.info("Access token: {}", access_token);
 		}
 
-		return access_token;
+		return tokenObject;
 
 	}
 
