@@ -63,7 +63,7 @@ public class UserTypeQueryBuilder {
             ".password, u.pwdexpirydate,  u.mobilenumber, u.altcontactnumber, u.emailid, u.createddate, u" +
             ".lastmodifieddate,  u.createdby, u.lastmodifiedby, u.active, u.name, u.gender, u.pan, u.aadhaarnumber, u" +
             ".type,  u.version, u.guardian, u.guardianrelation, u.signature, u.accountlocked, u.accountlockeddate, u" +
-            ".bloodgroup, u.photo, u.identificationmark,  u.tenantid, u.id, u.uuid, addr.id as addr_id, addr.type as " +
+            ".bloodgroup, u.photo, u.identificationmark,  u.tenantid, u.id, u.uuid,u.isverified, addr.id as addr_id, addr.type as " +
             "addr_type, addr .address as addr_address,  addr.city as addr_city, addr.pincode as addr_pincode, addr" +
             ".tenantid as " +
             "addr_tenantid, addr.userid as addr_userid, ur.role_code as role_code, ur.role_tenantid as role_tenantid \n" +
@@ -278,9 +278,9 @@ public class UserTypeQueryBuilder {
 
     public String getInsertUserQuery() {
         return "insert into eg_user (id,uuid,tenantid,salutation,dob,locale,username,password,pwdexpirydate,mobilenumber,altcontactnumber,emailid,active,name,gender,pan,aadhaarnumber,"
-                + "type,guardian,guardianrelation,signature,accountlocked,bloodgroup,photo,identificationmark,createddate,lastmodifieddate,createdby,lastmodifiedby) values (:id,:uuid,:tenantid,:salutation,"
+                + "type,guardian,guardianrelation,signature,accountlocked,bloodgroup,photo,identificationmark,createddate,lastmodifieddate,createdby,lastmodifiedby,isverified) values (:id,:uuid,:tenantid,:salutation,"
                 + ":dob,:locale,:username,:password,:pwdexpirydate,:mobilenumber,:altcontactnumber,:emailid,:active,:name,:gender,:pan,:aadhaarnumber,:type,:guardian,:guardianrelation,:signature,"
-                + ":accountlocked,:bloodgroup,:photo,:identificationmark,:createddate,:lastmodifieddate,:createdby,:lastmodifiedby) ";
+                + ":accountlocked,:bloodgroup,:photo,:identificationmark,:createddate,:lastmodifieddate,:createdby,:lastmodifiedby,:isVerified) ";
     }
 
     public String getUpdateUserQuery() {
@@ -288,7 +288,7 @@ public class UserTypeQueryBuilder {
                 + "type=:Type,guardian=:Guardian,guardianrelation=:GuardianRelation,signature=:Signature," +
                 "accountlocked=:AccountLocked, accountlockeddate=:AccountLockedDate, bloodgroup=:BloodGroup," +
                 "photo=:Photo, identificationmark=:IdentificationMark,lastmodifieddate=:LastModifiedDate," +
-                "lastmodifiedby=:LastModifiedBy where username=:username and tenantid=:tenantid and type=:type";
+                "lastmodifiedby=:LastModifiedBy, isverified=:isVerified where username=:username and tenantid=:tenantid and type=:type";
     }
 
 

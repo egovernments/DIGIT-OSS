@@ -21,7 +21,7 @@ public class UserRowMapper implements RowMapper<User> {
                 .emailId(rs.getString("emailid")).active(rs.getBoolean("active")).name(rs.getString("name")).lastModifiedBy(rs.getLong("lastmodifiedby")).lastModifiedDate(rs.getTimestamp("lastmodifieddate"))
                 .pan(rs.getString("pan")).aadhaarNumber(rs.getString("aadhaarnumber")).createdBy(rs.getLong("createdby")).createdDate(rs.getTimestamp("createddate"))
                 .guardian(rs.getString("guardian")).signature(rs.getString("signature"))
-                .accountLocked(rs.getBoolean("accountlocked")).photo(rs.getString("photo")).identificationMark(rs.getString("identificationmark")).uuid(rs.getString("uuid")).build();
+                .accountLocked(rs.getBoolean("accountlocked")).photo(rs.getString("photo")).identificationMark(rs.getString("identificationmark")).uuid(rs.getString("uuid")).verified(rs.getBoolean("isverified")).build();
 
         for (UserType type : UserType.values()) {
             if (type.toString().equals(rs.getString("type"))) {
@@ -35,6 +35,8 @@ public class UserRowMapper implements RowMapper<User> {
                 user.setBloodGroup(bloodGroup);
             }
         }
+        
+        user.setVerified(rs.getBoolean("isverified"));
 
         if (rs.getInt("gender") == 1) {
             user.setGender(Gender.FEMALE);

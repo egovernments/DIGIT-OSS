@@ -177,7 +177,9 @@ public class UserRepository {
         updateuserInputs.put("type", oldUser.getType().toString());
         updateuserInputs.put("tenantid", oldUser.getTenantId());
         updateuserInputs.put("AadhaarNumber", user.getAadhaarNumber());
-
+        
+        updateuserInputs.put("isVerified", user.isVerified());
+        
         if (isNull(user.getAccountLocked()))
             updateuserInputs.put("AccountLocked", oldUser.getAccountLocked());
         else
@@ -465,6 +467,8 @@ public class UserRepository {
         userInputs.put("emailid", entityUser.getEmailId());
         userInputs.put("active", entityUser.getActive());
         userInputs.put("name", entityUser.getName());
+        
+        userInputs.put("isVerified", entityUser.isVerified());
 
         if (Gender.FEMALE.equals(entityUser.getGender())) {
             userInputs.put("gender", 1);

@@ -52,7 +52,7 @@ public class UpdateRequest {
     private String otpReference;
     private Long lastModifiedBy;
     private String tenantId;
-
+    public Boolean verified;
     private Set<RoleRequest> roles;
 
     private String uuid;
@@ -98,6 +98,7 @@ public class UpdateRequest {
         this.roles = convertDomainRoleToContract(user.getRoles());
         this.fatherOrHusbandName = user.getGuardian();
         this.uuid = user.getUuid();
+        this.verified = user.isVerified();
         mapPermanentAddress(user);
         mapCorrespondenceAddress(user);
     }

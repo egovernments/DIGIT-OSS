@@ -89,6 +89,8 @@ public class UserRequest {
     @Size(max = 10)
     private String correspondencePinCode;
     private Boolean active;
+    
+    public Boolean verified;
 
     @SafeHtml
     @Size(max = 16)
@@ -173,6 +175,7 @@ public class UserRequest {
         this.fatherOrHusbandName = user.getGuardian();
         this.relationship = user.getGuardianRelation();
         this.uuid = user.getUuid();
+        this.verified=user.isVerified();
         mapPermanentAddress(user);
         mapCorrespondenceAddress(user);
     }
@@ -241,10 +244,18 @@ public class UserRequest {
                 .correspondenceAddress(toDomainCorrespondenceAddress())
                 .guardian(fatherOrHusbandName)
                 .guardianRelation(relationship)
+                .verified(isVerified())
                 .build();
     }
 
-    private Boolean isActive(boolean isCreate) {
+    private boolean isVerified() {
+    	if (this.verified == null) {
+            return false;
+        }
+        return this.verified;
+	}
+
+	private Boolean isActive(boolean isCreate) {
         if (this.active == null && isCreate) {
             return false;
         }

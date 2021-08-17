@@ -1,0 +1,3 @@
+ALTER TABLE eg_user
+  ADD COLUMN isverified BOOLEAN DEFAULT FALSE;
+  
