@@ -1,18 +1,22 @@
+import JkInbox from "@jagankumar-egov/react-tour/components/Inbox";
 import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getLocaleLabels, transformById } from "egov-ui-framework/ui-utils/commons";
 import ServiceList from "egov-ui-kit/common/common/ServiceList";
 import { fetchLocalizationLabel, resetFetchRecords } from "egov-ui-kit/redux/app/actions";
-import { getLocale, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, getLocalization, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import FilterDialog from "./components/FilterDialog";
-import TableData from "./components/TableData";
 import "./index.css";
-import JkInbox from "@jagankumar-egov/react-tour/components/Inbox";
 
+let localizationLabels = transformById(
+  JSON.parse(getLocalization(`localization_${getLocale()}`)),
+  "code"
+);
 class Inbox extends Component {
   state = {
     actionList: [],
@@ -116,7 +120,13 @@ class Inbox extends Component {
           </div>
         </div>}
 
-        {hasWorkflow && <JkInbox user={user}></JkInbox>}
+        {hasWorkflow && <JkInbox user={{ ...user, permanentCity: user.tenantId.split('.')[0] }} t={(key) => {
+          return getLocaleLabels("", key, localizationLabels);
+        }}
+          historyComp={<div onClick={() => { }} style={{ cursor: "pointer" }}>
+            <i class="material-icons">history</i>
+          </div>}>
+        </JkInbox>}
         {/* {hasWorkflow && !inboxLoading && loaded && <TableData onPopupOpen={this.onPopupOpen} workflowData={inbox} />} */}
         <FilterDialog popupOpen={this.state.filterPopupOpen} popupClose={this.handleClose} />
       </div>
