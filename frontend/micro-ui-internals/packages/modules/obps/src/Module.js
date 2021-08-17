@@ -9,6 +9,8 @@ import EDCRForm from "./pageComponents/EDCRForm";
 import BasicDetails from "./pageComponents/BasicDetails";
 import DocsRequired from "./pageComponents/DocsRequired";
 import ScrutinyDetails from "./pageComponents/ScrutinyDetails";
+import LocationDetails from "./pageComponents/LocationDetails";
+import GIS from "./pageComponents/GIS";
 
 
 const OBPSModule = ({ stateCode, userType, tenants }) => {
@@ -16,6 +18,8 @@ const OBPSModule = ({ stateCode, userType, tenants }) => {
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
+
+  Digit.SessionStorage.set("OBPS_TENANTS", tenants);
 
   if (isLoading) {
     return <Loader />;
@@ -54,7 +58,9 @@ const componentsToRegister = {
   EDCRForm,
   BasicDetails,
   DocsRequired,
-  ScrutinyDetails
+  ScrutinyDetails,
+  LocationDetails,
+  GIS
 }
 
 export const initOBPSComponents = () => {

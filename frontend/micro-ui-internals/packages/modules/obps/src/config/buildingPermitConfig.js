@@ -14,12 +14,26 @@ export const newConfig = [
       {
         route: "scrutiny-details",
         component: "ScrutinyDetails",
-        nextStep: "",
+        nextStep: "location",
         hideInEmployee: true,
         key: "scrutinDetails",
         texts: {
           headerCaption: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
           header: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
+          cardText: "",
+          submitBarLabel: "next",
+          skipAndContinueText: "",
+        },
+      },
+      {
+        route: "location",
+        component: "LocationDetails",
+        nextStep: "",
+        hideInEmployee: true,
+        key: "address",
+        texts: {
+          headerCaption: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
+          header: "BPA_NEW_TRADE_DETAILS_HEADER_DETAILS",
           cardText: "",
           submitBarLabel: "next",
           skipAndContinueText: "",

@@ -79,7 +79,6 @@ const tableHeader = [
 ]
 const selectOccupancy = (e, data) => {
   const index = subOccupancy.filter((ele) => ele.code == data.code);
-  console.log(index,"index");
     let res = null;
     if (index.length) {
       subOccupancy.splice(subOccupancy.indexOf(index[0]), 1);
@@ -87,7 +86,6 @@ const selectOccupancy = (e, data) => {
     } else {
       res = [{ ...data }, ...subOccupancy];
     }
-    console.log(res);
     setsubOccupancy(res);
 };
 
@@ -124,7 +122,8 @@ const onRemove = (index, key) => {
 const onSkip = () => {
 }
 const goNext = () => {
-    console.log("to do");
+
+    onSelect(config.key,{subOccupancy});
 }
 
 const clearall = () => {

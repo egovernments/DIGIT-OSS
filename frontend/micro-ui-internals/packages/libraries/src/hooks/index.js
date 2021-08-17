@@ -118,6 +118,7 @@ import useReceiptsUpdate from "./receipts/useReceiptsUpdate";
 
 import useOBPSMDMS from "./obps/useMDMS";
 import useScrutinyDetails from "./obps/useScrutinyDetails";
+import useTenantsOBPS from "./obps/useTenants";
 
 const pgr = {
   useComplaintDetails,
@@ -229,6 +230,7 @@ const receipts = {
 const obps = {
   useMDMS: useOBPSMDMS,
   useScrutinyDetails,
+  useTenants: useTenantsOBPS,
 };
 
 const Hooks = {
