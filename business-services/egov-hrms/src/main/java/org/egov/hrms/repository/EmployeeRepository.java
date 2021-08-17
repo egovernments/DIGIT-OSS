@@ -10,6 +10,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.hrms.utils.HRMSUtils;
 import org.egov.hrms.web.contract.EmployeeSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -36,6 +37,9 @@ public class EmployeeRepository {
 
 	@Autowired
 	private HRMSUtils hrmsUtils;
+
+	@Value("${state.level.tenant.id}")
+	public String stateLevelTenantId;
 	
 	/**
 	 * DB Repository that makes jdbc calls to the db and fetches employees.
@@ -59,13 +63,19 @@ public class EmployeeRepository {
 			}
 		}
 		String query = queryBuilder.getEmployeeSearchQuery(criteria, preparedStmtList);
+		String finalQuery = replaceSchemaPlaceholderWithTenantId(query, stateLevelTenantId);
+		//log.info(finalQuery);
 		try {
-			employees = jdbcTemplate.query(query, preparedStmtList.toArray(),rowMapper);
+			employees = jdbcTemplate.query(finalQuery, preparedStmtList.toArray(),rowMapper);
 		}catch(Exception e) {
 			log.error("Exception while making the db call: ",e);
 			log.error("query; "+query);
 		}
 		return employees;
+	}
+
+	private String replaceSchemaPlaceholderWithTenantId(String query, String stateLevelTenantId) {
+		return query.replace("{{SCHEMA}}", stateLevelTenantId);
 	}
 
 	private List<String> fetchEmployeesforAssignment(EmployeeSearchCriteria criteria, RequestInfo requestInfo) {
@@ -111,9 +121,10 @@ public class EmployeeRepository {
 		List<Object> preparedStmtList = new ArrayList<>();
 
 		String query = queryBuilder.getEmployeeCountQuery(tenantId, preparedStmtList);
-		log.info("query; "+query);
+		String finalQuery = replaceSchemaPlaceholderWithTenantId(query, stateLevelTenantId);
+		log.info("query; "+finalQuery);
 		try {
-			response=jdbcTemplate.query(query, preparedStmtList.toArray(),countRowMapper);
+			response=jdbcTemplate.query(finalQuery, preparedStmtList.toArray(),countRowMapper);
 		}catch(Exception e) {
 			log.error("Exception while making the db call: ",e);
 			log.error("query; "+query);

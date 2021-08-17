@@ -123,11 +123,20 @@ public class EmployeeService {
 			pwdMap.put(employee.getUuid(), employee.getUser().getPassword());
 			employee.getUser().setPassword(null);
 		});
-		hrmsProducer.push(propertiesManager.getSaveEmployeeTopic(), employeeRequest);
+		String hrmsCreateTopic = propertiesManager.getSaveEmployeeTopic();
+		hrmsProducer.push(getTenantSpecificTopic(hrmsCreateTopic), employeeRequest);
 		notificationService.sendNotification(employeeRequest, pwdMap);
 		return generateResponse(employeeRequest);
 	}
-	
+
+	private String getTenantSpecificTopic(String kafkaTopic) {
+		StringBuilder tenantSpecificTopic = new StringBuilder(propertiesManager.stateLevelTenantId);
+		tenantSpecificTopic.append("-");
+		tenantSpecificTopic.append(kafkaTopic);
+		//log.info(tenantSpecificTopic.toString());
+		return tenantSpecificTopic.toString();
+	}
+
 	/**
 	 * Searches employees on a given criteria.
 	 * 
@@ -337,7 +346,8 @@ public class EmployeeService {
 			enrichUpdateRequest(employee, requestInfo, existingEmployees);
 			updateUser(employee, requestInfo);
 		});
-		hrmsProducer.push(propertiesManager.getUpdateTopic(), employeeRequest);
+		String hrmsUpdateTopic = propertiesManager.getUpdateEmployeeTopic();
+		hrmsProducer.push(getTenantSpecificTopic(hrmsUpdateTopic), employeeRequest);
 		//notificationService.sendReactivationNotification(employeeRequest);
 		return generateResponse(employeeRequest);
 	}
