@@ -66,6 +66,9 @@ public class TradeLicenseService {
 
     @Value("${workflow.bpa.businessServiceCode.fallback_enabled}")
     private Boolean pickWFServiceNameFromTradeTypeOnly;
+    
+    @Value("${renewal.pending.interval}")
+    private long renewalPeriod;
 
     @Autowired
     public TradeLicenseService(WorkflowIntegrator wfIntegrator, EnrichmentService enrichmentService,
@@ -174,7 +177,7 @@ public class TradeLicenseService {
          else {
              licenses = getLicensesWithOwnerInfo(criteria,requestInfo);
          }
-       return licenses;
+         return licenses;       
     }
 
     public void checkEndStateAndAddBPARoles(TradeLicenseRequest tradeLicenseRequest) {

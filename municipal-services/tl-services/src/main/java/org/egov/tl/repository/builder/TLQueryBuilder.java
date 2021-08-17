@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.tl.config.TLConfiguration;
+import org.egov.tl.util.TLConstants;
 import org.egov.tl.web.models.*;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
@@ -38,6 +39,9 @@ public class TLQueryBuilder {
 
     @Value("${egov.receipt.businessserviceBPA}")
     private String businessServiceBPA;
+    
+    @Value("${renewal.pending.interval}")
+    private long renewalPeriod;
 
     private static final String QUERY = "SELECT tl.*,tld.*,tlunit.*,tlacc.*,tlowner.*," +
             "tladdress.*,tlapldoc.*,tlverdoc.*,tlownerdoc.*,tlinsti.*,tl.id as tl_id,tl.tenantid as tl_tenantId,tl.lastModifiedTime as " +
@@ -184,6 +188,17 @@ public class TLQueryBuilder {
                 addClauseIfRequired(preparedStmtList, builder);
                 builder.append("  tl.validTo <= ? ");
                 preparedStmtList.add(criteria.getValidTo());
+            }
+            
+            
+            if(criteria.getRenewalPending()!=null && criteria.getRenewalPending()) {            
+              addClauseIfRequired(preparedStmtList, builder);
+              builder.append("  tl.validTo <= ? ");
+              preparedStmtList.add(System.currentTimeMillis()+renewalPeriod); 
+              
+              addClauseIfRequired(preparedStmtList, builder);
+              builder.append("  tl.status = ? ");
+              preparedStmtList.add(TLConstants.STATUS_APPROVED); 
             }
 
             if(criteria.getLocality() != null) {

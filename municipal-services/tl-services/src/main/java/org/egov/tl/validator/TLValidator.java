@@ -169,11 +169,11 @@ public class TLValidator {
 //            }else{
 //                taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
 //            }
-            taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
+            taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);                        
             if(license.getValidTo()!=null && license.getValidTo()>taxPeriods.get(TLConstants.MDMS_ENDDATE)){
                 Date expiry = new Date(license.getValidTo());
                 throw new CustomException("INVALID TO DATE"," Validto cannot be greater than: "+expiry);
-            }
+            }            
             if(license.getLicenseType().toString().equalsIgnoreCase(TradeLicense.LicenseTypeEnum.TEMPORARY.toString())) {
                 Long startOfDay = getStartOfDay();
                 if (!config.getIsPreviousTLAllowed() && license.getValidFrom() != null
@@ -237,7 +237,15 @@ public class TLValidator {
                 
             }
         });
-        criteria.setTenantId(request.getLicenses().get(0).getTenantId());
+        
+        request.getLicenses().forEach(license->{
+        	if(license.getStatus().equalsIgnoreCase(TLConstants.STATUS_CANCELLED)) {
+        		throw new CustomException("LICENSE CANCELLED", "Licenses which are cancelled cannot be renewed");
+        	}
+        }       		        		
+        	);
+        
+        criteria.setTenantId(request.getLicenses().get(0).getTenantId());        
         criteria.setStatus(Collections.singletonList(TLConstants.STATUS_APPROVED));
         criteria.setBusinessService(request.getLicenses().get(0).getBusinessService());
         criteria.setLicenseNumbers(licenseNumbers);
