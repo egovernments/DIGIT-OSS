@@ -9,6 +9,10 @@ import Icon from "@material-ui/core/Icon";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import EstimateCardContainer from "../../ui-containers-local/EstimateCardContainer";
 import get from "lodash/get";
+import { ifUserRoleExists } from "egov-common/ui-config/screens/specs/utils";
+
+
+const roleExists = ifUserRoleExists("CITIZEN");
 
 const styles = {
   card: {
