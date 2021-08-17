@@ -85,7 +85,6 @@ public class PropertyRepository {
 
 	public List<Property> getPropertiesForBulkSearch(PropertyCriteria criteria, Boolean isPlainSearch) {
 		List<Object> preparedStmtList = new ArrayList<>();
-		Boolean isPlainSearch = true;
 		String query = queryBuilder.getPropertyQueryForBulkSearch(criteria, preparedStmtList, isPlainSearch);
 		return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 	}
