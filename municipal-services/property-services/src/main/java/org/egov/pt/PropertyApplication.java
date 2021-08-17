@@ -45,15 +45,6 @@ public class PropertyApplication {
         SpringApplication.run(PropertyApplication.class, args);
     }
 
-    @Bean
-    @Profile("!test")
-    public CacheManager cacheManager() {
-        return new SpringCache2kCacheManager()
-                .addCaches(b->b.name("cMDMSAttributeValues").expireAfterWrite(taxMasterDataCacheExpiry, TimeUnit.MINUTES).entryCapacity(50))
-                .addCaches(b->b.name("mdmsMaster").expireAfterWrite(taxMasterDataCacheExpiry, TimeUnit.MINUTES).entryCapacity(50));
-    }
-
-
     @Bean("tenantKeyGenerator")
     public KeyGenerator keyGenerator() {
         return new TenantKeyGenerator();
