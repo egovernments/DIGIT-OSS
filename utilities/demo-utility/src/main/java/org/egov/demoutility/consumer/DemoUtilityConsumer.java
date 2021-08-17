@@ -132,9 +132,9 @@ public class DemoUtilityConsumer {
 
 				for (int j = 1; j < 7; j++) {
 
-					long sequenceNo = queryBuilder.getSequence();
+					//long sequenceNo = queryBuilder.getSequence();
 
-					log.info(" sequence No is", sequenceNo);
+					//log.info(" sequence No is", sequenceNo);
 					String username=null;
 
 					
