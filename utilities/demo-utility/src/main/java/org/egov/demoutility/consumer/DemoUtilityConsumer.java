@@ -114,16 +114,20 @@ public class DemoUtilityConsumer {
 	public void createEmployee(DemoUtilityRequest demoUtilityRequest) throws JsonProcessingException {
 
 		try {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 			Map tokenResponse = getAccessToken(propertyConfiguration.getSuperUser(), propertyConfiguration.getPassword(),
 					UtilityConstants.TENANTID_TOKEN);
 			
 			String authToken = (String) tokenResponse.get("access_token");
 			
-			org.egov.common.contract.request.User userInfo=(org.egov.common.contract.request.User)tokenResponse.get("UserRequest");
+			org.egov.common.contract.request.User userInfo=mapper.convertValue(tokenResponse.get("UserRequest"),org.egov.common.contract.request.User.class);
 
 			RequestInfo requestInfo = new RequestInfo();
 			requestInfo.setAuthToken(authToken);
             requestInfo.setUserInfo(userInfo);
+            
 			List<Employee> employeeList = new ArrayList<Employee>();
 
 			StringBuffer emailContent = new StringBuffer();
@@ -165,9 +169,8 @@ public class DemoUtilityConsumer {
 			ObjectNode employeeResponse = (ObjectNode) serviceCallRepository.fetchResult(
 					propertyConfiguration.getHrmsHost() + propertyConfiguration.getHrmsCreateEndPoint(),
 					employeeRequest);
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+			
+			
 			EmployeeResponse employeeObj = mapper.treeToValue(employeeResponse, EmployeeResponse.class);
 
 			VendorRequest vendorRequest = createDso(demoUtilityRequest, authToken);
