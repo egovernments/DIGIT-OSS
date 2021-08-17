@@ -417,11 +417,15 @@ class ReceiptService {
       else{
         paymentUrl +='consumerCodes='+consumerCodes;
         let isOwner = false;
-        if(service === 'PT')
-          isOwner = await paymentStatusConsumer.getPTOwnerDetails(consumerCodes, tenantId, user.mobileNumber, user.authToken);
+        if(service === 'PT'){
+          let result = await paymentStatusConsumer.getPTOwnerDetails(consumerCodes, tenantId, user.mobileNumber, user.authToken);
+          isOwner = result.isMobileNumberPresent;
+        }
 
-        if(service === 'WS' || service === 'SW')
-          isOwner = await paymentStatusConsumer.getWnsOwnerDeatils(consumerCodes, tenantId, service, user.mobileNumber, user.authToken);
+        if(service === 'WS' || service === 'SW'){
+          let result = await paymentStatusConsumer.getWnsOwnerDeatils(consumerCodes, tenantId, service, user.mobileNumber, user.authToken);
+          isOwner = result.isMobileNumberPresent;
+        }
 
 
         if(!isOwner)

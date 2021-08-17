@@ -74,18 +74,23 @@ class PaymentStatusUpdateEventFormatter{
       let businessService = payment.paymentDetails[0].businessService;
       let consumerCode    = payment.paymentDetails[0].bill.consumerCode;
       let isOwner = true;
+      let ownerMobileNumberList = [];
       let key;
       if(businessService === 'TL')
         key = 'tradelicense-receipt';
 
       else if(businessService === 'PT'){
         key = 'property-receipt';
-        isOwner = await this.getPTOwnerDetails(consumerCode, payment.tenantId, payment.mobileNumber, user.authToken);
+        let result = await this.getPTOwnerDetails(consumerCode, payment.tenantId, payment.mobileNumber, user.authToken);
+        isOwner = result.isMobileNumberPresent;
+        ownerMobileNumberList = result.ownerMobileNumberList;
       }
       
       else if(businessService === 'WS' || businessService === 'SW'){
         key = 'ws-onetime-receipt';
-        isOwner = await this.getWnsOwnerDeatils(consumerCode, payment.tenantId, businessService, payment.mobileNumber, user.authToken);
+        let result = await this.getWnsOwnerDeatils(consumerCode, payment.tenantId, businessService, payment.mobileNumber, user.authToken);
+        isOwner = result.isMobileNumberPresent;
+        ownerMobileNumberList = result.ownerMobileNumberList;
       }
 
       else
@@ -177,6 +182,8 @@ class PaymentStatusUpdateEventFormatter{
           await valueFirst.sendMessageToUser(user, [registrationMessage], extraInfo);
         }
         telemetry.log(userId, 'payment', {message : {type: "whatsapp payment", status: "success", businessService: businessService, consumerCode: consumerCode,transactionNumber: payment.transactionNumber, locale: user.locale}});
+
+        await this.sendMessageToOtherOwner(ownerMobileNumberList, payment.mobileNumber, payment.payerName, businessService, consumerCode, payment.transactionNumber, user.locale);
       }
     }
 
@@ -226,12 +233,12 @@ class PaymentStatusUpdateEventFormatter{
     if(chatState)
       locale = chatState.context.user.locale;
 
-      let transactionNumber = request.Transaction.txnId;
-      let consumerCode = request.Transaction.consumerCode;
-      let businessService = request.Transaction.module;
-      /*
-      let tenantId = request.Transaction.tenantId;
-      let link = await this.getPaymentLink(consumerCode,tenantId,businessService,locale);*/
+    let transactionNumber = request.Transaction.txnId;
+    let consumerCode = request.Transaction.consumerCode;
+    let businessService = request.Transaction.module;
+    /*
+    let tenantId = request.Transaction.tenantId;
+    let link = await this.getPaymentLink(consumerCode,tenantId,businessService,locale);*/
 
     let user = {
       mobileNumber: request.Transaction.user.mobileNumber
@@ -307,6 +314,8 @@ class PaymentStatusUpdateEventFormatter{
     url = url + '&connectionNumber='+consumerCode;
     let response = await fetch(url,options);
     let searchResults;
+    let isOwner = false;
+    let mobileNumberList = [];
     
     if(response.status === 200) {
       searchResults = await response.json();
@@ -322,18 +331,31 @@ class PaymentStatusUpdateEventFormatter{
         propertyId = searchResults.SewerageConnections[0].propertyId;
       }
 
-      let isMobileNumberPresent = await this.getPTOwnerDetails(propertyId, tenantId, mobileNumber, authToken);
-      if(isMobileNumberPresent)
-        return true;
+      //let { isMobileNumberPresent, ownerMobileNumberList } = await this.getPTOwnerDetails(propertyId, tenantId, mobileNumber, authToken);
+      let data = await this.getPTOwnerDetails(propertyId, tenantId, mobileNumber, authToken);
+
+      /*if(isMobileNumberPresent)
+        return { isMobileNumberPresent, ownerMobileNumberList };*/
       
       if(connectionHolders != null){
         for(let connectionHolder of connectionHolders){
-          if(connectionHolder.mobileNumber === mobileNumber)
-            return true;
+          if(connectionHolder.mobileNumber === mobileNumber){
+            data.isMobileNumberPresent = true;
+          }
+          if(!ownerMobileNumberList.includes(connectionHolder.mobileNumber))
+            data.ownerMobileNumberList.push(connectionHolder.mobileNumber);
         }
       }
+      
+      isOwner = data.isMobileNumberPresent;
+      mobileNumberList = data.ownerMobileNumberList;
     }
-    return false;
+
+    var result = {
+      isMobileNumberPresent:isOwner,
+      ownerMobileNumberList:mobileNumberList
+    };
+    return result;
   }
 
   async getPTOwnerDetails(propertyId, tenantId, mobileNumber, authToken){
@@ -360,6 +382,7 @@ class PaymentStatusUpdateEventFormatter{
     url = url + '&propertyIds='+propertyId;
     let response = await fetch(url,options);
     let searchResults;
+    let ownerMobileNumberList=[];
     
     if(response.status === 200) {
       searchResults = await response.json();
@@ -368,9 +391,61 @@ class PaymentStatusUpdateEventFormatter{
       for(let owner of ownerList){
         if(owner.mobileNumber === mobileNumber)
           isMobileNumberPresent = true;
+
+        if(!ownerMobileNumberList.includes(owner.mobileNumber))
+          ownerMobileNumberList.push(owner.mobileNumber);
       }
+      
     }
-    return isMobileNumberPresent;
+    var result = {
+      isMobileNumberPresent:isMobileNumberPresent,
+      ownerMobileNumberList:ownerMobileNumberList
+    };
+    return result;
+  }
+
+  async sendMessageToOtherOwner(ownerMobileNumberList, payerMobileNumber, payerName, businessService, consumerCode, transactionNumber, locale){
+    if(ownerMobileNumberList.includes(payerMobileNumber))
+      ownerMobileNumberList = ownerMobileNumberList.filter(item => item !== payerMobileNumber)
+    
+    if(locale == null){
+      locale = config.supportedLocales.split(',');
+      locale = locale[0];
+    }
+      
+    
+    let template;
+    if(businessService == 'PT')
+      template = dialog.get_message(messageBundle.paymentSucess.propertyPayment,locale);
+    if(businessService == 'WS')
+      template = dialog.get_message(messageBundle.paymentSucess.waterPayment,locale);
+    if(businessService == 'SW')
+      template = dialog.get_message(messageBundle.paymentSucess.seweragePayment,locale);
+
+    template = template.replace('{{consumerCode}}', consumerCode);
+    template = template.replace('{{name}}', payerName);
+    template = template.replace('{{payerNumber}}', payerMobileNumber);
+    template = template.replace('{{transaction_number}}', transactionNumber);
+
+    let message = [];
+    var messageContent = {
+      output: template,
+      type: "text"
+    };
+    message.push(messageContent);
+
+
+
+    for(let mobileNumber of ownerMobileNumberList){
+      let user = {
+        mobileNumber: mobileNumber
+      };
+      let extraInfo = {
+        whatsAppBusinessNumber: config.whatsAppBusinessNumber.slice(2)
+      };
+      await valueFirst.sendMessageToUser(user, message, extraInfo);
+    }
+
   }
 
 }
@@ -378,7 +453,19 @@ class PaymentStatusUpdateEventFormatter{
 let messageBundle = {
   paymentSucess:{
     en_IN: "Bill Payment Successful ✅\n\nYour transaction number is {{transaction_number}}.\n\nYou can download the payment receipt from above.\n\n[Payment receipt in PDF format is attached with message]\n\nWe are happy to serve you 😃",
-    hi_IN: "धन्यवाद😃! आपने mSeva पंजाब के माध्यम से अपने बिल का सफलतापूर्वक भुगतान किया है। आपका ट्रांजेक्शन नंबर {{transaction_number}} है। \n\n कृपया अपने संदर्भ के लिए संलग्न रसीद प्राप्त करें।"
+    hi_IN: "धन्यवाद😃! आपने mSeva पंजाब के माध्यम से अपने बिल का सफलतापूर्वक भुगतान किया है। आपका ट्रांजेक्शन नंबर {{transaction_number}} है। \n\n कृपया अपने संदर्भ के लिए संलग्न रसीद प्राप्त करें।",
+    propertyPayment:{
+      en_IN: "Bill Payment Successful ✅\n\nThe property tax for {{consumerCode}} has been paid by *{{name}}* *{{payerNumber}}*\n\nThe transaction number is {{transaction_number}}.\n\nWe are happy to serve you.",
+      hi_IN: "बिल भुगतान सफल ✅\n\n{{consumerCode}} के लिए संपत्ति कर का भुगतान *{{name}}* *{{payerNumber}}* द्वारा किया गया है।\n\nआपका ट्रांजेक्शन नंबर {{transaction_number}} है।\n\nहम आपकी सेवा करके खुश हैं।"
+    },
+    waterPayment:{
+      en_IN: "Bill Payment Successful ✅\n\nThe water connection bill for {{consumerCode}} has been paid by *{{name}}* *{{payerNumber}}*\n\nThe transaction number is {{transaction_number}}.\n\nWe are happy to serve you.",
+      hi_IN: "बिल भुगतान सफल ✅\n\n{{consumerCode}} के लिए पानी कनेक्शन बिल का भुगतान *{{name}}* *{{payerNumber}}* द्वारा किया गया है।\n\nआपका ट्रांजेक्शन नंबर {{transaction_number}} है।\n\nहम आपकी सेवा करके खुश हैं।"
+    },
+    seweragePayment:{
+      en_IN: "Bill Payment Successful ✅\n\nThe sewerage connection bill for {{consumerCode}} has been paid by *{{name}}* *{{payerNumber}}*\n\nThe transaction number is {{transaction_number}}.\n\nWe are happy to serve you.",
+      hi_IN: "बिल भुगतान सफल ✅\n\n{{consumerCode}} के लिए सीवरेज कनेक्शन बिल का भुगतान *{{name}}* *{{payerNumber}}* द्वारा किया गया है।\n\nआपका ट्रांजेक्शन नंबर {{transaction_number}} है।\n\nहम आपकी सेवा करके खुश हैं।"
+    }
   },
   paymentFail:{
     en_IN: "Sorry 😥!  The Payment Transaction has failed due to authentication failure.\n\nYour transaction reference number is {{transaction_number}}.\n\nTo go back to the main menu, type and send mseva.",
