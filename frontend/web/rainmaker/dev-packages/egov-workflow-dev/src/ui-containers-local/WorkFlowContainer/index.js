@@ -323,7 +323,7 @@ class WorkFlowContainer extends React.Component {
       bservice = "TL";
       baseUrl =process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
     }
-    else if(moduleName ==="EDITRENEWAL"){
+    else if(moduleName ==="EDITRENEWAL" || moduleName ==="DIRECTRENEWAL"){
       bservice = "TL";
       baseUrl =process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
     }
