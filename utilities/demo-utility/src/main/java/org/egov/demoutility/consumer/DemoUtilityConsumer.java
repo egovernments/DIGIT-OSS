@@ -85,6 +85,7 @@ public class DemoUtilityConsumer {
 	@Autowired
 	ServiceCallRepository serviceCallRepository;
 
+	@Qualifier("getFreeMarkerConfiguration")
 	@Autowired
 	freemarker.template.Configuration freemarkerConfiguration;
 
