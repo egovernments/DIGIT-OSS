@@ -169,7 +169,7 @@ public class MigrationService {
 
    public long getTenantCount(String tenantid){
        String query = COUNT_QUERY.replace("{}",tenantid);
-       long count = jdbcTemplate.queryForObject(query, Integer.class);
+       long count = (long) jdbcTemplate.queryForObject(query, Integer.class);
        return count;
    }
     public List<String> getTenantList(){
