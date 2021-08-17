@@ -65,6 +65,7 @@ import * as comps from "@egovernments/digit-ui-react-components";
 import { subFormRegistry } from "@egovernments/digit-ui-libraries";
 
 import { pgrCustomizations, pgrComponents } from "./pgr";
+import { tlComponents } from "./tl";
 
 const userInfo = {
   CITIZEN,
@@ -134,6 +135,7 @@ const initTokens = (stateCode) => {
 const initDigitUI = () => {
   Digit.ComponentRegistryService.setupRegistry({
     ...pgrComponents,
+    ...tlComponents,
     PaymentModule,
     ...paymentConfigs,
     PaymentLinks,

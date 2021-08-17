@@ -87,7 +87,7 @@ export const newConfig = [
       },
       {
         route: "address",
-        component: "TLSelectAddress",
+        component: "TLNewSelectAddress",
         withoutLabel: true,
         texts: {
           headerCaption: "TL_LOCATION_CAPTION",
