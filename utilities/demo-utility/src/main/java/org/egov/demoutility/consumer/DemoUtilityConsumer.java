@@ -173,7 +173,7 @@ public class DemoUtilityConsumer {
 			
 			EmployeeResponse employeeObj = mapper.treeToValue(employeeResponse, EmployeeResponse.class);
 
-			VendorRequest vendorRequest = createDso(demoUtilityRequest, authToken);
+			VendorRequest vendorRequest = createDso(demoUtilityRequest, requestInfo);
 
 			ObjectNode vendorResponse = (ObjectNode) serviceCallRepository.fetchResult(
 					propertyConfiguration.getVendorHost() + propertyConfiguration.getVendorcreateEndpoint(),
@@ -266,10 +266,7 @@ public class DemoUtilityConsumer {
 
 	}
 
-	private VendorRequest createDso(DemoUtilityRequest demoUtilityRequest, String authToken) {
-
-		RequestInfo requestInfo = new RequestInfo();
-		requestInfo.setAuthToken(authToken);
+	private VendorRequest createDso(DemoUtilityRequest demoUtilityRequest, RequestInfo requestInfo) {
 
 		VendorRequest vendorRequest = new VendorRequest();
 		Vendor vendor = new Vendor();
