@@ -18,7 +18,7 @@ public class DemoQueryBuilder {
 
 	public long getSequence() {
 
-		String query = "SELECT NEXTVAL ('\"SEQ_EG_HRMS_EMP_CODE\"')";
+		String query = "SELECT NEXTVAL (\'SEQ_EG_HRMS_EMP_CODE\')";
 
 		List<Long> sequence = jdbcTemplate.query(query, new SingleColumnRowMapper<Long>());
 

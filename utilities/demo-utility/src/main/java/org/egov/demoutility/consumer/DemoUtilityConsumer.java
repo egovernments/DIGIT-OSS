@@ -137,10 +137,9 @@ public class DemoUtilityConsumer {
 					log.info(" sequence No is", sequenceNo);
 					String username=null;
 
-					if(j==1)
-					 username = demoUtilityRequest.getShortCode().toUpperCase() + "-" + UtilityConstants.TENANT_CODE + "-" + sequenceNo;
-					else
-						username = demoUtilityRequest.getShortCode().toUpperCase() + "-" + UtilityConstants.TENANT_CODE + "-" + (sequenceNo+j-1);	
+					
+					 username = demoUtilityRequest.getShortCode().toUpperCase() + "-" + UtilityConstants.TENANT_CODE + "-" + getRandomNumber();
+				
 
 					String mobileNumber = generateMobileNo();
 
