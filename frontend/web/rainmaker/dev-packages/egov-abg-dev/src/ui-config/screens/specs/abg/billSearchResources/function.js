@@ -1,13 +1,9 @@
-import get from "lodash/get";
-import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getGroupBillSearch } from "../../../../../ui-utils/commons";
-import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { validateFields } from "../../utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
+import { getGroupBillSearch } from "../../../../../ui-utils/commons";
+import { validateFields } from "../../utils";
+import { convertEpochToDate } from "../../utils/index";
 
 
 export const searchApiCall = async (state, dispatch) => {
@@ -69,10 +65,14 @@ export const searchApiCall = async (state, dispatch) => {
   } else {
     for (var key in searchScreenObject) {
       if (
-        searchScreenObject.hasOwnProperty(key) &&
+        searchScreenObject.hasOwnProperty(key) && searchScreenObject[key] &&
         searchScreenObject[key].trim() !== ""
       ) {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
+      }
+      if (searchScreenObject.hasOwnProperty(key) &&
+        searchScreenObject[key] =="") {
+          delete searchScreenObject[key];
       }
     }
     let serviceObject = get(
@@ -80,39 +80,60 @@ export const searchApiCall = async (state, dispatch) => {
       "searchScreenMdmsData.BillingService.BusinessService"
     ).filter(item => item.code === searchScreenObject.businesService);
 
-    searchScreenObject.url = serviceObject[0].billGineiURL;
+    searchScreenObject.url = serviceObject && serviceObject[0] && serviceObject[0].billGineiURL;
+    const isAdvancePayment = serviceObject && serviceObject[0] && serviceObject[0].isAdvanceAllowed;
+    if (!searchScreenObject.url) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Selected Service Category is Not Available for Search",
+            labelKey: "ABG_SEARCH_BILLGINEIURL_NOTFOUND"
+          },
+          "error"
+        )
+      );
+      return;
+    }
     searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Citizen" ? tenantId : getTenantId();
-    const responseFromAPI = await getGroupBillSearch(dispatch,searchScreenObject)
+    const responseFromAPI = await getGroupBillSearch(dispatch, searchScreenObject)
     const bills = (responseFromAPI && responseFromAPI.Bills) || [];
     const billTableData = bills.map(item => {
       return {
         billNumber: get(item, "billNumber"),
-        billId : get(item,"id"),
-        consumerCode : get(item, "consumerCode"),
+        billId: get(item, "id"),
+        consumerCode: get(item, "consumerCode"),
         consumerName: get(item, "payerName"),
         billDate: get(item, "billDate"),
         billAmount: get(item, "totalAmount"),
         status: get(item, "status"),
         action: getActionItem(get(item, "status")),
-        tenantId : get(item, "tenantId")
+        tenantId: get(item, "tenantId")
       };
     });
     dispatch(
       prepareFinalObject("searchScreenMdmsData.billSearchResponse", bills)
     );
-
+    const uiConfigs = get(state.screenConfiguration.preparedFinalObject, "searchScreenMdmsData.common-masters.uiCommonPay");
+    const configObject = uiConfigs.filter(item => item.code === searchScreenObject.businesService);
+    
     try {
       let data = billTableData.map(item => ({
-        [getTextToLocalMapping("Bill No.")]: item.billNumber || "-",
-        "Consumer Code" : item.consumerCode || "-",
-        [getTextToLocalMapping("Consumer Name")]: item.consumerName || "-",
-        [getTextToLocalMapping("Bill Date")]:
+        ['ABG_COMMON_TABLE_COL_BILL_NO']: item.billNumber || "-",
+        ["PAYMENT_COMMON_CONSUMER_CODE"]: item.consumerCode || "-",
+        ['ABG_COMMON_TABLE_COL_CONSUMER_NAME']: item.consumerName || "-",
+        ['ABG_COMMON_TABLE_COL_BILL_DATE']:
           convertEpochToDate(item.billDate) || "-",
-        [getTextToLocalMapping("Bill Amount(Rs)")]: item.billAmount || "-",
-        [getTextToLocalMapping("Status")]: item.status  || "-",
-        [getTextToLocalMapping("Action")]: item.action || "-",
-        tenantId: item.tenantId,
-        "Bill Id": item.billId,
+        ['ABG_COMMON_TABLE_COL_BILL_AMOUNT']: (item.billAmount || item.billAmount===0) ? item.billAmount : "-",
+        ['ABG_COMMON_TABLE_COL_STATUS']: item.status || "-",
+        ['ABG_COMMON_TABLE_COL_ACTION']: item.action || "-",
+        ["BUSINESS_SERVICE"]: searchScreenObject.businesService,
+        ["RECEIPT_KEY"]: get(configObject[0], "receiptKey"),
+        ["BILL_KEY"]: get(configObject[0], "billKey"),
+        ["TENANT_ID"]: item.tenantId,
+        ["BILL_ID"]: item.billId,
+        ["BILL_SEARCH_URL"]: searchScreenObject.url,
+        ["ADVANCE_PAYMENT"]: isAdvancePayment
       }));
       dispatch(
         handleField(
@@ -130,22 +151,12 @@ export const searchApiCall = async (state, dispatch) => {
           billTableData
         )
       );
-      // dispatch(
-      //   handleField(
-      //     "billSearch",
-      //     "components.div.children.searchResults",
-      //     "props.title",
-      //     "Search Results for Bill (" + data.length + ")"
-      //   )
-      // );
       dispatch(
         handleField(
-          "search",
+          "billSearch",
           "components.div.children.searchResults",
-          "props.title",
-          `${getTextToLocalMapping(
-            "Search Results for Bill"
-          )} (${data.length})`
+          "props.rows",
+          billTableData.length
         )
       );
 
@@ -169,13 +180,11 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
 };
 
 const getActionItem = (status) => {
-  switch(status){
-    case "ACTIVE" : return "PAY";
-    case "CANCELLED" : 
-    case "EXPIRED":  return "GENERATE NEW BILL"
-    case "PAID" : return "DOWNLOAD RECEIPT"
-    case "PARTIALLY_PAID" : return "PARTIALLY PAID"
-   }
+  switch (status) {
+    case "ACTIVE": return "PAY";
+    case "CANCELLED":
+    case "EXPIRED": return "GENERATE NEW BILL"
+    case "PAID": return "DOWNLOAD RECEIPT"
+    case "PARTIALLY_PAID": return "PARTIALLY PAID"
+  }
 }
-
-

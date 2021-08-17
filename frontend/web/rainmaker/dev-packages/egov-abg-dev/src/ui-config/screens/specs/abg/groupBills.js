@@ -1,18 +1,14 @@
-import {
-  getCommonHeader,
-  getBreak
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getBreak, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../ui-utils";
+import { getBoundaryData } from "../../../../ui-utils/commons";
 import {
   abgSearchCard,
-  mergeDownloadButton
+  mergeDownloadButton, resetFields
 } from "./groupBillResource/groupBillSearch";
-import { getBoundaryData } from "../../../../ui-utils/commons";
-import { resetFields } from "./groupBillResource/groupBillSearch";
 import { searchResults } from "./groupBillResource/searchResults";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "../../../../ui-utils";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import "./index.css";
 
 const tenantId = getTenantId();
 
@@ -49,6 +45,14 @@ const getMDMSData = async (action, state, dispatch) => {
           ]
         },
         {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "uiCommonPay"
+            }
+          ]
+        },
+        {
           moduleName: "tenant",
           masterDetails: [
             {
@@ -67,6 +71,7 @@ const getMDMSData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
+    payload.MdmsRes.BillingService.BusinessService = payload.MdmsRes.BillingService.BusinessService.filter(service => service.billGineiURL);
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
@@ -81,10 +86,9 @@ const abgSearchAndResult = {
   uiFramework: "material-ui",
   name: "groupBills",
   beforeInitScreen: (action, state, dispatch) => {
-    resetFields(state,dispatch);
+    resetFields(state, dispatch);
     getData(action, state, dispatch).then(responseAction => {
       const queryObj = [{ key: "tenantId", value: tenantId }];
-      dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
       getBoundaryData(action, state, dispatch, queryObj, tenantId);
     });
     return action;

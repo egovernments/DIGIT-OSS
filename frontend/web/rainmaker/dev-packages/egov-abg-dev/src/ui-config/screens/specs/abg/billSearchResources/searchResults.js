@@ -5,6 +5,7 @@ import {
   getTextToLocalMapping
 } from "../../utils";
 import { download, downloadBill } from "egov-common/ui-utils/commons";
+import {  getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -13,98 +14,116 @@ export const searchResults = {
   props: {
     columns: [
       {
-        name: getTextToLocalMapping("Bill No."),
+        labelName: "Bill No.",
+        labelKey: "ABG_COMMON_TABLE_COL_BILL_NO",
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
-            <div
+            <a href="javascript:void(0)"
               onClick={() => {
-                downloadBill(tableMeta.rowData[1], tableMeta.rowData[7]);
+                downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9],tableMeta.rowData[12]);
               }}
             >
-              <a>{value}</a>
-            </div>
+              {value}
+            </a>
           )
         }
       },
       {
-        name: "Consumer Code",
+        labelName: "Consumer Code",
+        labelKey: "PAYMENT_COMMON_CONSUMER_CODE",
         options: {
           display: false
         }
       },
-      getTextToLocalMapping("Consumer Name"),
-      getTextToLocalMapping("Bill Date"),
-      getTextToLocalMapping("Bill Amount(Rs)"),
       {
-        name : getTextToLocalMapping("Status"),
+        labelName: "Consumer Name",
+        labelKey: "ABG_COMMON_TABLE_COL_CONSUMER_NAME"
+      },
+      {
+        labelName: "Bill Date",
+        labelKey: "ABG_COMMON_TABLE_COL_BILL_DATE"
+      },
+      {
+        labelName: "Bill Amount(Rs)",
+        labelKey: "ABG_COMMON_TABLE_COL_BILL_AMOUNT"
+      },
+      {
+        labelName: "Status",
+        labelKey: "ABG_COMMON_TABLE_COL_STATUS",
         options:{
           filter: false,
           customBodyRender: value => (
             <span>
-               {getTextToLocalMapping(value.toUpperCase())}
+               {getLocaleLabels(value.toUpperCase(),value.toUpperCase())}
             </span>
           )
 
         }
       },
       {
-        name: getTextToLocalMapping("Action"),
+        labelName: "Action",
+        labelKey: "ABG_COMMON_TABLE_COL_ACTION",
         options: {
           filter: false,
-          customBodyRender: (value, tableMeta, updateValue) => (
-            <div
-              style={{
-                color: "#FE7A51",
-                cursor: "pointer"
-              }}
-              onClick={value => {
-                const appName =
-                  process.env.REACT_APP_NAME === "Citizen"
-                    ? "citizen"
-                    : "employee";
-                if (tableMeta.rowData[5] === "PAID") {
-                  const receiptQueryString = [
-                    { key: "billIds", value: tableMeta.rowData[8] },
-                    { key: "tenantId", value: tableMeta.rowData[7] }
-                  ];
-                  download(receiptQueryString);
-                } else {
-                  const url =
-                    process.env.NODE_ENV === "development"
-                      ? `/egov-common/pay?consumerCode=${
-                          tableMeta.rowData[1]
-                        }&tenantId=${tableMeta.rowData[7]}&businessService=${
-                          tableMeta.rowData[0].split("-")[0]
-                        }`
-                      : `/${appName}/egov-common/pay?consumerCode=${
-                          tableMeta.rowData[1]
-                        }&tenantId=${tableMeta.rowData[7]}&businessService=${
-                          tableMeta.rowData[0].split("-")[0]
-                        }`;
-                  document.location.href = `${document.location.origin}${url}`;
-                }
-              }}
-            >
-              {getTextToLocalMapping(value)}
-            </div>
-          )
+          customBodyRender: (value, tableMeta) => value === "PAY" ? (tableMeta.rowData[4] > 0 ? getActionButton(value, tableMeta):(tableMeta.rowData[4] <= 0 && tableMeta.rowData[13] ? getActionButton(value, tableMeta) : "")) : getActionButton(value, tableMeta)
         }
       },
       {
-        name: "tenantId",
+        labelKey: "BUSINESS_SERVICE",
+        labelName: "Business Service",
         options: {
           display: false
         }
       },
       {
-        name: "Bill Id",
+        labelKey: "RECEIPT_KEY",
+        labelName: "Receipt Key",
+        options: {
+          display: false
+        }
+      },
+      {
+        labelName: "Bill Key",
+        labelKey: "BILL_KEY",
+        options: {
+          display: false
+        }
+      },
+      {
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
+        options: {
+          display: false
+        }
+      },
+      {
+        labelName: "Bill Id",
+        labelKey: "BILL_ID",
+        options: {
+          display: false
+        }
+      },
+      {
+        labelName: "Bill Search Url",
+        labelKey: "BILL_SEARCH_URL",
+        options: {
+          display: false
+        }
+      },
+      {
+        labelName: "Advance Payment",
+        labelKey: "ADVANCE_PAYMENT",
         options: {
           display: false
         }
       }
     ],
-    title: getTextToLocalMapping("Search Results for Bill"),
+    title: {
+      labelName: "Search Results for Bill",
+      labelKey: "BILL_GENIE_SEARCH_TABLE_HEADER"
+    },
+    rows : "",
     options: {
       filter: false,
       download: false,
@@ -130,3 +149,43 @@ export const searchResults = {
     }
   }
 };
+
+const getActionButton = (value, tableMeta) => {
+  return (
+    <a href="javascript:void(0)"
+      style={{
+        color: "#FE7A51",
+        cursor: "pointer"
+      }}
+      onClick={value => {
+        const appName =
+          process.env.REACT_APP_NAME === "Citizen"
+            ? "citizen"
+            : "employee";
+        if (tableMeta.rowData[5] === "PAID") {
+          const receiptQueryString = [
+            { key: "billIds", value: tableMeta.rowData[11] },
+            { key: "tenantId", value: tableMeta.rowData[10] }
+          ];
+          download(receiptQueryString , "download" ,tableMeta.rowData[8]);
+        } else {
+          const url =
+            process.env.NODE_ENV === "development"
+              ? `/egov-common/pay?consumerCode=${
+                  tableMeta.rowData[1]
+                }&tenantId=${tableMeta.rowData[10]}&businessService=${
+                  tableMeta.rowData[7]
+                }`
+              : `/${appName}/egov-common/pay?consumerCode=${
+                  tableMeta.rowData[1]
+                }&tenantId=${tableMeta.rowData[10]}&businessService=${
+                  tableMeta.rowData[7]
+                }`;
+          document.location.href = `${document.location.origin}${url}`;
+        }
+      }}
+    >
+      {getLocaleLabels(value,value)}
+    </a>
+  )
+}

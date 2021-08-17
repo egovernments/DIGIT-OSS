@@ -1,21 +1,20 @@
-import {
-  getCommonCard,
-  getTextField,
-  getSelectField,
-  getCommonContainer,
-  getPattern,
-  getLabel,
-  getCommonHeader,
-  getCommonSubHeader
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonCard, getCommonContainer, getCommonHeader, getCommonSubHeader, getLabel, getPattern, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { searchApiCall } from "./function";
-import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 // const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
 // console.log("tenantId--- ", tenantId);
 const resetFields = (state, dispatch) => {
-  const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+  const tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+  dispatch(
+    handleField(
+      "billSearch",
+      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.ulb",
+      "props.value",
+      tenantId
+    )
+  );
   dispatch(
     handleField(
       "billSearch",
@@ -40,7 +39,31 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
-  dispatch(prepareFinalObject("searchScreen" , {tenantId: tenantId}))
+  dispatch(
+    handleField(
+      "billSearch",
+      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "billSearch",
+      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
+      "props.error",
+      false
+    )
+  );
+  dispatch(
+    handleField(
+      "billSearch",
+      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
+      "props.helperText",
+      ""
+    )
+  );
+  dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId ,businesService:""}));
 };
 
 export const billSearchCard = getCommonCard({
@@ -53,37 +76,62 @@ export const billSearchCard = getCommonCard({
     labelKey: "ABG_SEARCH_BILL_COMMON_SUB_HEADER"
   }),
   searchContainer: getCommonContainer({
-    ulb: getSelectField({
-      label: {
-        labelName: "ULB",
-        labelKey: "ABG_ULB_LABEL"
+    ulb: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-abg",
+      componentPath: "AutosuggestContainer",
+      props: {
+        label: {
+          labelName: "ULB",
+          labelKey: "ABG_ULB_LABEL"
+        },
+        labelPrefix: {
+          moduleName: "TENANT",
+          masterName: "TENANTS"
+        },
+        optionLabel: "name",
+        placeholder: {
+          labelName: "Select ULB",
+          labelKey: "ABG_ULB_PLACEHOLDER"
+        },
+        required: true,
+        labelsFromLocalisation: true,
+        // isClearable: true,
+        className: "autocomplete-dropdown",
+        sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+        jsonPath: "searchScreen.tenantId",
+        disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
       },
-      labelPrefix: {
-        moduleName: "TENANT",
-        masterName: "TENANTS"
-      },
-      optionLabel: "name",
-      placeholder: {
-        labelName: "Select ULB",
-        labelKey: "ABG_ULB_PLACEHOLDER"
-      },
-      sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
-      jsonPath: "searchScreen.tenantId",
       required: true,
-      disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+      jsonPath: "searchScreen.tenantId",
       gridDefination: {
         xs: 12,
         sm: 4
       }
-    }),
-    serviceCategory: getSelectField({
-      label: {
-        labelName: "Service Category",
-        labelKey: "ABG_SERVICE_CATEGORY_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Service Category",
-        labelKey: "ABG_SERVICE_CATEGORY_PLACEHOLDER"
+    },
+    serviceCategory: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-abg",
+      componentPath: "AutosuggestContainer",
+      props: {
+        label: {
+          labelName: "Service Category",
+          labelKey: "ABG_SERVICE_CATEGORY_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Service Category",
+          labelKey: "ABG_SERVICE_CATEGORY_PLACEHOLDER"
+        },
+        required: true,
+        labelsFromLocalisation: true,
+        className: "autocomplete-dropdown",
+        // isClearable: true,
+        jsonPath: "searchScreen.businesService",
+        localePrefix: {
+          moduleName: "BillingService",
+          masterName: "BusinessService"
+        },
+        sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
       },
       required: true,
       jsonPath: "searchScreen.businesService",
@@ -91,19 +139,15 @@ export const billSearchCard = getCommonCard({
         xs: 12,
         sm: 4
       },
-      localePrefix : {
-        moduleName : "BillingService",
-        masterName : "BusinessService"
-      },
-      sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
-      beforeFieldChange :(action, state, dispatch) => {
+
+      beforeFieldChange: (action, state, dispatch) => {
         const labelName = {
-          labelKey : `ABG_${action.value}_CONSUMER_CODE_LABEL`,
-          labelName : "Consumer Code"
+          labelKey: `ABG_${action.value}_CONSUMER_CODE_LABEL`,
+          labelName: "Consumer Code"
         }
         const placeHolder = {
-          labelKey : `ABG_${action.value}_CONSUMER_CODE_PLACEHOLDER`,
-          labelName : "Enter Consumer Code"
+          labelKey: `ABG_${action.value}_CONSUMER_CODE_PLACEHOLDER`,
+          labelName: "Enter Consumer Code"
         }
         dispatch(
           handleField(
@@ -122,7 +166,7 @@ export const billSearchCard = getCommonCard({
           )
         );
       }
-    }),
+    },
     consumerCode: getTextField({
       label: {
         labelName: "Consumer Code",

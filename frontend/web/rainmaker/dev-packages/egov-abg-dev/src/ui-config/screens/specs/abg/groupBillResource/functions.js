@@ -12,6 +12,7 @@ import {
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import isEmpty from "lodash/isEmpty"
+import { loadUlbLogo } from "../../utils/receiptTransformer";
 
 // const tenantId = getTenantId();
 const tenantId = getTenantId();
@@ -68,7 +69,7 @@ export const searchApiCall = async (state, dispatch) => {
         searchScreenObject.hasOwnProperty(key) &&
         searchScreenObject[key] === ""
       ) {
-        searchScreenObject[key];
+        delete searchScreenObject[key];
       }
     }
     let serviceObject = get(
@@ -76,8 +77,7 @@ export const searchApiCall = async (state, dispatch) => {
       "searchScreenMdmsData.BillingService.BusinessService"
     ).filter(item => item.code === searchScreenObject.businesService);
 
-    searchScreenObject.url = serviceObject[0].billGineiURL;
-    searchScreenObject.billActive=true;
+    searchScreenObject.url = serviceObject&&serviceObject[0]&&serviceObject[0].billGineiURL;
     searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
     const responseFromAPI = await getGroupBillSearch(dispatch,searchScreenObject);
     const bills = (responseFromAPI && responseFromAPI.Bills) || [];
@@ -99,13 +99,13 @@ export const searchApiCall = async (state, dispatch) => {
     }
     try {
       let data = response.map(item => ({
-        [getTextToLocalMapping("Bill No.")]: item.billNo || "-",
-        [getTextToLocalMapping("Consumer ID")]: item.consumerId || "-",
-        [getTextToLocalMapping("Owner Name")]: item.ownerName || "-",
-        [getTextToLocalMapping("Bill Date")]:
+        ["ABG_COMMON_TABLE_COL_BILL_NO"]: item.billNo || "-",
+        ["ABG_COMMON_TABLE_COL_CONSUMER_ID"]: item.consumerId || "-",
+        ["ABG_COMMON_TABLE_COL_OWN_NAME"]: item.ownerName || "-",
+        ["ABG_COMMON_TABLE_COL_BILL_DATE"]:
           convertEpochToDate(item.billDate) || "-",
-        [getTextToLocalMapping("Status")]: item.status && getTextToLocalMapping(item.status.toUpperCase())  || "-",
-        tenantId: item.tenantId
+        ["ABG_COMMON_TABLE_COL_STATUS"]: item.status && getTextToLocalMapping(item.status.toUpperCase())  || "-",
+        ["TENANT_ID"]: item.tenantId
       }));
 
       dispatch(
@@ -120,14 +120,15 @@ export const searchApiCall = async (state, dispatch) => {
         handleField(
           "groupBills",
           "components.div.children.searchResults",
-          "props.title",
-          `${getTextToLocalMapping(
-            "BILL_GENIE_GROUP_SEARCH_HEADER"
-          )} (${data.length})`
+          "props.rows",
+          data.length
         )
       );      
       showHideTable(true, dispatch);
-      if(!isEmpty(response)){showHideMergeButton(true, dispatch)};
+      if(!isEmpty(response)){
+        showHideMergeButton(true, dispatch);
+        loadUlbLogo(tenantId);
+      };
     } catch (error) {
       dispatch(toggleSnackbar(true, error.message, "error"));
       console.log(error);

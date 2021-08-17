@@ -9,6 +9,8 @@ import {
   getCommonCaption
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { httpRequest } from "../../../../ui-utils";
+import {  prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { set } from "lodash";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -147,6 +149,9 @@ export const ifUserRoleExists = role => {
 };
 
 export const convertEpochToDate = dateEpoch => {
+  if(dateEpoch == null || dateEpoch == undefined || dateEpoch == ''){
+    return "NA" ;
+  } 
   const dateFromApi = new Date(dateEpoch);
   let month = dateFromApi.getMonth() + 1;
   let day = dateFromApi.getDate();
@@ -433,5 +438,56 @@ export const getTextToLocalMapping = label => {
             "BILL_GENIE_GROUP_SEARCH_HEADER",
             localisationLabels
           ); 
+        default :
+        return getLocaleLabels(
+          "Search Results for Group Bills",
+          label,
+          localisationLabels
+        ); 
   }
+};
+
+
+export const setServiceCategory = (businessServiceData, dispatch) => {
+  let nestedServiceData = {};
+  businessServiceData.forEach(item => {
+    if (item.code && item.code.indexOf(".") > 0) {
+      if (nestedServiceData[item.code.split(".")[0]]) {
+        let child = get(
+          nestedServiceData,
+          `${item.code.split(".")[0]}.child`,
+          []
+        );
+        child.push(item);
+        set(nestedServiceData, `${item.code.split(".")[0]}.child`, child);
+      } else {
+        set(
+          nestedServiceData,
+          `${item.code.split(".")[0]}.code`,
+          item.code.split(".")[0]
+        );
+        set(nestedServiceData, `${item.code.split(".")[0]}.child[0]`, item);
+      }
+    } else {
+      set(nestedServiceData, `${item.code}`, item);
+    }
+  });
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.nestedServiceData",
+      nestedServiceData
+    )
+  );
+  let serviceCategories = Object.values(nestedServiceData).filter(
+    item => item.code
+  );
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.serviceCategories",
+      serviceCategories
+    )
+  );
+};
+export const checkValueForNA = value => {
+  return value == null || value == undefined || value == '' ? "NA" : value;
 };
