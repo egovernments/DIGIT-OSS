@@ -13,7 +13,7 @@ const NewBuildingPermit = () => {
   const history = useHistory();
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BUILDING_PERMIT", { edcrNumber: state?.edcrNumber });
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BUILDING_PERMIT", state?.edcrNumber ? { data: { scrutinyNumber: { edcrNumber: state?.edcrNumber }}} : {});
 
   const goNext = (skipStep) => {
     const currentPath = pathname.split("/").pop();
@@ -24,7 +24,7 @@ const NewBuildingPermit = () => {
   }
 
   const handleSelect = (key, data, skipStep) => {
-    setParams({ ...params, ...{ [key]: data }});
+    setParams({ ...params, ...{ [key]: { ...params[key], ...data }}});
     goNext(skipStep);
   };
   const handleSkip = () => {};

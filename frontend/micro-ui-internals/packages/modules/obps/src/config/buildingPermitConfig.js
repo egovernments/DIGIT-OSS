@@ -5,12 +5,20 @@ export const newConfig = [
       {
         route: "docs-required",
         component: "DocsRequired",
+        key: "data",
         nextStep: "basic-details"
       },
       {
         route: "basic-details",
         component: "BasicDetails",
-        nextStep: "scrutiny-details" 
+        key: "data",
+        nextStep: "plot-details",
+      },
+      {
+        route: "plot-details",
+        component: "PlotDetails",
+        key: "data",
+        nextStep: "scrutiny-details"
       },
       {
         route: "scrutiny-details",

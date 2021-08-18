@@ -2,6 +2,7 @@ import BrowserUtil from "./browser";
 import * as date from "./date";
 import * as dss from "./dss";
 import * as locale from "./locale";
+import * as obps from "./obps";
 import PDFUtil, { downloadReceipt } from "./pdf";
 
 const GetParamFromUrl = (key, fallback, search) => {
@@ -191,6 +192,7 @@ export default {
   pgrAccess,
   fsmAccess,
   dss,
+  obps,
   ptAccess,
   mCollectAccess,
   receiptsAccess,

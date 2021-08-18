@@ -3,12 +3,13 @@ import { Card, CardHeader, CardLabel, CardText, CitizenInfoLabel, Loader, Submit
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 
-const DocsRequired = ({ onSelect, onSkip }) => {
+const DocsRequired = ({ onSelect, onSkip, config }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = tenantId.split(".")[0];
   const history = useHistory();
   const { data, isLoading } = Digit.Hooks.obps.useMDMS(state, "BPA", "DocumentTypes");
+
   const goNext = () => {
     if(history?.location?.state?.edcrNumber) {
       onSelect("edcrNumber", history?.location?.state?.edcrNumber);
@@ -16,6 +17,13 @@ const DocsRequired = ({ onSelect, onSkip }) => {
       onSelect();
     } 
   }
+
+  if (isLoading) {
+    return (
+      <Loader />
+    )
+  }
+
   return (
     <Card>
       <CardHeader>{t(`OBPS_NEW_BUILDING_PERMIT`)}</CardHeader>
