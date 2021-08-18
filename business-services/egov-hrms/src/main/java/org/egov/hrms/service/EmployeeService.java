@@ -123,19 +123,13 @@ public class EmployeeService {
 			pwdMap.put(employee.getUuid(), employee.getUser().getPassword());
 			employee.getUser().setPassword(null);
 		});
+		String tenantId = employeeRequest.getEmployees().get(0).getTenantId();
 		String hrmsCreateTopic = propertiesManager.getSaveEmployeeTopic();
-		hrmsProducer.push(getTenantSpecificTopic(hrmsCreateTopic), employeeRequest);
+		hrmsProducer.push(hrmsUtils.getTenantSpecificTopic(hrmsCreateTopic, tenantId), employeeRequest);
 		notificationService.sendNotification(employeeRequest, pwdMap);
 		return generateResponse(employeeRequest);
 	}
 
-	private String getTenantSpecificTopic(String kafkaTopic) {
-		StringBuilder tenantSpecificTopic = new StringBuilder(propertiesManager.stateLevelTenantId);
-		tenantSpecificTopic.append("-");
-		tenantSpecificTopic.append(kafkaTopic);
-		//log.info(tenantSpecificTopic.toString());
-		return tenantSpecificTopic.toString();
-	}
 
 	/**
 	 * Searches employees on a given criteria.
@@ -340,14 +334,15 @@ public class EmployeeService {
 		for(Employee employee: employeeRequest.getEmployees()) {
 			uuidList.add(employee.getUuid());
 		}
-		EmployeeResponse existingEmployeeResponse = search(EmployeeSearchCriteria.builder().uuids(uuidList).build(),requestInfo);
+		String tenantId = employeeRequest.getEmployees().get(0).getTenantId();
+		EmployeeResponse existingEmployeeResponse = search(EmployeeSearchCriteria.builder().uuids(uuidList).tenantId(tenantId).build(),requestInfo);
 		List <Employee> existingEmployees = existingEmployeeResponse.getEmployees();
 		employeeRequest.getEmployees().stream().forEach(employee -> {
 			enrichUpdateRequest(employee, requestInfo, existingEmployees);
 			updateUser(employee, requestInfo);
 		});
 		String hrmsUpdateTopic = propertiesManager.getUpdateEmployeeTopic();
-		hrmsProducer.push(getTenantSpecificTopic(hrmsUpdateTopic), employeeRequest);
+		hrmsProducer.push(hrmsUtils.getTenantSpecificTopic(hrmsUpdateTopic, tenantId), employeeRequest);
 		//notificationService.sendReactivationNotification(employeeRequest);
 		return generateResponse(employeeRequest);
 	}

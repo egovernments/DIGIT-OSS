@@ -38,9 +38,6 @@ public class EmployeeRepository {
 	@Autowired
 	private HRMSUtils hrmsUtils;
 
-	@Value("${state.level.tenant.id}")
-	public String stateLevelTenantId;
-	
 	/**
 	 * DB Repository that makes jdbc calls to the db and fetches employees.
 	 * 
@@ -63,7 +60,8 @@ public class EmployeeRepository {
 			}
 		}
 		String query = queryBuilder.getEmployeeSearchQuery(criteria, preparedStmtList);
-		String finalQuery = replaceSchemaPlaceholderWithTenantId(query, stateLevelTenantId);
+		String tenantId = criteria.getTenantId();
+		String finalQuery = hrmsUtils.replaceSchemaPlaceholderWithTenantId(query, hrmsUtils.getStateLevelTenantId(tenantId));
 		//log.info(finalQuery);
 		try {
 			employees = jdbcTemplate.query(finalQuery, preparedStmtList.toArray(),rowMapper);
@@ -72,10 +70,6 @@ public class EmployeeRepository {
 			log.error("query; "+query);
 		}
 		return employees;
-	}
-
-	private String replaceSchemaPlaceholderWithTenantId(String query, String stateLevelTenantId) {
-		return query.replace("{{SCHEMA}}", stateLevelTenantId);
 	}
 
 	private List<String> fetchEmployeesforAssignment(EmployeeSearchCriteria criteria, RequestInfo requestInfo) {
@@ -121,7 +115,8 @@ public class EmployeeRepository {
 		List<Object> preparedStmtList = new ArrayList<>();
 
 		String query = queryBuilder.getEmployeeCountQuery(tenantId, preparedStmtList);
-		String finalQuery = replaceSchemaPlaceholderWithTenantId(query, stateLevelTenantId);
+
+		String finalQuery = hrmsUtils.replaceSchemaPlaceholderWithTenantId(query, hrmsUtils.getStateLevelTenantId(tenantId));
 		log.info("query; "+finalQuery);
 		try {
 			response=jdbcTemplate.query(finalQuery, preparedStmtList.toArray(),countRowMapper);
