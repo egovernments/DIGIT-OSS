@@ -1,0 +1,6 @@
+.PageBasedInputWrapper{
+    .SubmitBar{
+        z-index: 60;
+        @apply p-sm fixed w-full bottom-0 bg-white;
+    }
+}

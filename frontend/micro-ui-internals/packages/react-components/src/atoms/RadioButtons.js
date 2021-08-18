@@ -12,7 +12,7 @@ const RadioButtons = (props) => {
   }
 
   return (
-    <div style={props.style} className="radio-wrap">
+    <div style={props.style} className={`radio-wrap ${props?.additionalWrapperClass}`}>
       {props?.options?.map((option, ind) => {
         if (props?.optionsKey && !props?.isDependent) {
           return (

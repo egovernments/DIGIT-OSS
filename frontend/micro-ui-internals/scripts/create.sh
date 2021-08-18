@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./scripts/run.sh tl
+./scripts/run.sh

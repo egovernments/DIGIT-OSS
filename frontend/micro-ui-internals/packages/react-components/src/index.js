@@ -92,6 +92,7 @@ import SearchAction from "./molecules/SearchAction";
 import { SearchField, SearchForm } from "./molecules/SearchForm";
 import TextInputCard from "./molecules/TextInputCard";
 import TypeSelectCard from "./molecules/TypeSelectCard";
+import PageBasedInput from "./molecules/PageBasedInput";
 
 
 
@@ -202,6 +203,7 @@ export {
   Localities,
   SearchForm,
   SearchField,
+  PageBasedInput,
   // hoc
   FormComposer,
   ResponseComposer,
