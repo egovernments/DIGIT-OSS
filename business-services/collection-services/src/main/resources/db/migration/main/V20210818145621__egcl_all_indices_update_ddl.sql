@@ -1,0 +1,18 @@
+CREATE UNIQUE INDEX IF NOT EXISTS  pk_egcl_bankaccountservicemapping ON statea.egcl_bankaccountservicemapping USING btree (id);
+CREATE INDEX IF NOT EXISTS  idx_ins_transactionnumber_v1 ON statea.egcl_instrumentheader_v1 USING btree (transactionnumber);
+CREATE UNIQUE INDEX IF NOT EXISTS  pk_egcl_instrumenthead_v1 ON statea.egcl_instrumentheader_v1 USING btree (id);
+CREATE INDEX IF NOT EXISTS  idx_receiptdetails_v1_receiptheader ON statea.egcl_receiptdetails_v1 USING btree (receiptheader);
+CREATE UNIQUE INDEX IF NOT EXISTS  pk_egcl_receiptdetails_v1 ON statea.egcl_receiptdetails_v1 USING btree (id);
+CREATE INDEX IF NOT EXISTS  idx_rcpthd_v1_business ON statea.egcl_receiptheader_v1 USING btree (businessdetails);
+CREATE INDEX IF NOT EXISTS  idx_rcpthd_v1_consumercode ON statea.egcl_receiptheader_v1 USING btree (consumercode);
+CREATE INDEX IF NOT EXISTS  idx_rcpthd_v1_mreceiptnumber ON statea.egcl_receiptheader_v1 USING btree (manualreceiptnumber);
+CREATE INDEX IF NOT EXISTS  idx_rcpthd_v1_refno ON statea.egcl_receiptheader_v1 USING btree (referencenumber);
+CREATE INDEX IF NOT EXISTS  idx_rcpthd_v1_status ON statea.egcl_receiptheader_v1 USING btree (status);
+CREATE INDEX IF NOT EXISTS  idx_rcpthd_v1_transactionid ON statea.egcl_receiptheader_v1 USING btree (transactionid);
+CREATE UNIQUE INDEX IF NOT EXISTS  pk_egcl_receiptheader_v1 ON statea.egcl_receiptheader_v1 USING btree (id);
+CREATE INDEX IF NOT EXISTS  idx_receiptinstrument_v1_instrumentheader ON statea.egcl_receiptinstrument_v1 USING btree (instrumentheader);
+CREATE INDEX IF NOT EXISTS  idx_receiptinstrument_v1_receiptheader ON statea.egcl_receiptinstrument_v1 USING btree (receiptheader);
+CREATE UNIQUE INDEX IF NOT EXISTS  pk_egcl_remittance ON statea.egcl_remittance USING btree (id);
+CREATE UNIQUE INDEX IF NOT EXISTS  pk_egcl_remittancedetails ON statea.egcl_remittancedetails USING btree (id);
+CREATE UNIQUE INDEX IF NOT EXISTS  pk_egcl_remittanceinstrument ON statea.egcl_remittanceinstrument USING btree (id);
+CREATE UNIQUE INDEX IF NOT EXISTS  pk_egcl_remittancereceipt ON statea.egcl_remittancereceipt USING btree (id);
