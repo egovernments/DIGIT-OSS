@@ -569,17 +569,27 @@ class TableData extends Component {
 
   getBussinessServiceData() {
     let businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
-    businessServiceData = businessServiceData ? businessServiceData : this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);;
+    const list = ["NewTL","EDITRENEWAL","DIRECTRENEWAL","NewWS1","NewSW1","ModifySWConnection","ModifyWSConnection","BPA","BPA_LOW","BPA_OC","AIRPORT_NOC_OFFLINE","FIRE_NOC_SRV","PT.CREATE","PT.UPDATE","PT.MUTATION","PT.LEGACY","DEACTIVATE-PT.LEGACY","DEACTIVATE-PT.MUTATION","DEACTIVATE-PT.CREATEWITHWNS","FIRENOC","PGR"];
+    // businessServiceData = businessServiceData ? businessServiceData : this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }, { key: "businessServices", value: list }]);;
+    businessServiceData = this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }, { key: "businessServices", value: list }]);;
     return businessServiceData;
   }
   getMaxSLA() {
-    const businessServiceData = this.getBussinessServiceData();
-    let businessServiceSla = {}
-    businessServiceData && Array.isArray(businessServiceData) && businessServiceData.map(eachRow => {
-      businessServiceSla[eachRow.businessService.toUpperCase()] = this.convertMillisecondsToDays(eachRow.businessServiceSla);
-    })
-    this.setState({ businessServiceSla });
-    return businessServiceSla;
+    // const businessServiceData = this.getBussinessServiceData();
+    // let businessServiceSla = {}
+    // businessServiceData && Array.isArray(businessServiceData) && businessServiceData.map(eachRow => {
+    //   businessServiceSla[eachRow.businessService.toUpperCase()] = this.convertMillisecondsToDays(eachRow.businessServiceSla);
+    // })
+    // this.setState({ businessServiceSla });
+    // return businessServiceSla;
+    this.getBussinessServiceData().then((businessServiceData, err) => {
+      let businessServiceSla = {}
+      businessServiceData && Array.isArray(businessServiceData) && businessServiceData.map(eachRow => {
+        businessServiceSla[eachRow.businessService.toUpperCase()] = this.convertMillisecondsToDays(eachRow.businessServiceSla);
+      })
+      this.setState({ businessServiceSla });
+      return businessServiceSla;
+    }).catch((e) => { });
   }
   setBusinessServiceDataToLocalStorage = async (queryObject) => {
     const { toggleSnackbarAndSetText } = this.props;
