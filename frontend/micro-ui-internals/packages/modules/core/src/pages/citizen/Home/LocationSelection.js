@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { PageBasedInput, Loader, RadioButtons, CardHeader } from "@egovernments/digit-ui-react-components"
+import { PageBasedInput, Loader, RadioButtons, CardHeader, Dropdown } from "@egovernments/digit-ui-react-components"
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 
@@ -16,12 +16,16 @@ const LocationSelection = () => {
         submitBarLabel: t( "CS_COMMON_SUBMIT")
     }), [t])
 
+    function selectCity(city) {
+        setSelectedCity(city)
+    }
+
     const RadioButtonProps = useMemo(() => {
         return {
             options: cities,
             optionsKey: "i18nKey",
             additionalWrapperClass: "reverse-radio-selection-wrapper",
-            onSelect: (city) => setSelectedCity(city),
+            onSelect: selectCity,
             selectedOption: selectedCity
         }
     },[cities, t, selectedCity])
@@ -33,6 +37,14 @@ const LocationSelection = () => {
 
     return isLoading ? <loader/> : <PageBasedInput texts={texts} onSubmit={onSubmit}>
         <CardHeader>{t("CS_COMMON_CHOOSE_LOCATION")}</CardHeader>
+        <Dropdown
+            className="form-field"
+            selected={selectedCity}
+            option={cities}
+            select={selectCity}
+            optionKey="i18nKey"
+            t={t}
+          />
         <RadioButtons {...RadioButtonProps}/>
     </PageBasedInput>
 }
