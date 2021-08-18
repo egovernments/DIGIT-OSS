@@ -15,7 +15,6 @@
     "@egovernments/digit-ui-module-fsm": "^1.0.0",
     "@egovernments/digit-ui-module-pgr": "^1.0.0",
     "@egovernments/digit-ui-react-components": "^1.0.0",
-    "@egovernments/digit-ui-module-obps": "^1.0.0",
     "babel-loader": "8.1.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
