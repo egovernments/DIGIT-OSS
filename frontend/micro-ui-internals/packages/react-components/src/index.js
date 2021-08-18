@@ -59,6 +59,7 @@ import RoundedLabel from "./atoms/RoundedLabel";
 import SectionalDropdown from "./atoms/SectionalDropdown";
 import { LastRow, MediaRow, Row, StatusTable } from "./atoms/StatusTable";
 import SubmitBar from "./atoms/SubmitBar";
+import StandaloneSearchBar from "./atoms/StandaloneSearchBar";
 import {
   AnnouncementIcon, ArrowDown, ArrowLeft, ArrowRightInbox, Calender, CaseIcon, CitizenTruck, CloseSvg, ComplaintIcon, Details, DocumentSVG, DownloadIcon, DownwardArrow, DropIcon, Ellipsis, EmailIcon, FilterIcon, GetApp, HomeIcon,
   LanguageIcon,
@@ -169,6 +170,7 @@ export {
   EllipsisMenu,
   CitizenHomeCard,
   EmployeeModuleCard,
+  StandaloneSearchBar,
   // Icons
   GetApp,
   ArrowLeft,

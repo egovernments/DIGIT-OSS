@@ -66,6 +66,7 @@
 @import "./components/cardHeaderWithOptions.scss";
 @import "./components/TimeLine.scss";
 @import "./components/PageBasedInput.scss";
+@import "./components/StandaloneSearchBar.scss";
 
 @import "./pages/employee/index.scss";
 @import "./pages/employee/cardfix.scss";
@@ -78,6 +79,7 @@
 
 @import "./pages/citizen/payment/payment-type.scss";
 @import "./pages/citizen/container.scss";
+@import "./pages/citizen/HomePageWrapper.scss";
 
 .dark {
   @apply text-text-primary;
