@@ -18,7 +18,32 @@ export const newConfig = [
         route: "plot-details",
         component: "PlotDetails",
         key: "data",
-        nextStep: "scrutiny-details"
+        nextStep: "scrutiny-details",
+        texts: {
+          headerCaption: "BPA_SCRUTINY_DETAILS",
+          header: "BPA_PLOT_DETAILS_TITLE",
+          cardText: "",
+          submitBarLabel: "CS_COMMON_NEXT",
+          skipAndContinueText: "",
+        },
+        inputs: [
+          {
+            label: "BPA_BOUNDARY_HOLDING_NO_LABEL",
+            type: "text",
+            validation: {
+              required: true,
+            },
+            name: "holdingNumber"
+          },
+          {
+            label: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL",
+            type: "text",
+            validation: {
+              required: true
+            },
+            name: "registrationDetails"
+          }
+        ]
       },
       {
         route: "scrutiny-details",
