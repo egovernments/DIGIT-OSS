@@ -491,7 +491,7 @@ class TableData extends Component {
       };
 
       let row3 = { text: <Label label={get(item, 'assignes[0].name', 'NA')} color="#000000" /> };
-      let row4 = { text: Math.round(sla), badge: true, isEscalatedApplication: item.isEscalatedApplication  };
+      let row4 = { text: Math.round(sla), badge: true, isEscalatedApplication: item.isEscalatedApplication || item.escalated  };
       let row5 = { historyButton: true };
 
       let localityDropdown = { label: getLocaleLabels("", row1.text.props.label, localizationLabels), value: row1.text.props.label };
