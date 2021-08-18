@@ -65,11 +65,7 @@ public class HRMSUtils {
 	}
 
 	public String getTenantSpecificTopic(String kafkaTopic, String tenantId) {
-		StringBuilder tenantSpecificTopic = new StringBuilder("");
-		if(tenantId.contains("."))
-			tenantSpecificTopic.append(tenantId.split("\\.")[1]);
-		else
-			tenantSpecificTopic.append(tenantId);
+		StringBuilder tenantSpecificTopic = new StringBuilder(getStateLevelTenantId(tenantId));
 		tenantSpecificTopic.append("-");
 		tenantSpecificTopic.append(kafkaTopic);
 		log.info(tenantSpecificTopic.toString());
