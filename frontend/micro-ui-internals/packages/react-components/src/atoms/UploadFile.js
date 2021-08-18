@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, Fragment } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ButtonSelector from "./ButtonSelector";
 import { Close } from "./svgindex";
 import { useTranslation } from "react-i18next";
@@ -62,31 +62,17 @@ const UploadFile = (props) => {
     props.onDelete();
   };
 
-  if (props.uploadMessage && inpRef.current.value) {
-    handleDelete(); 
-    setHasFile(false);
-  }
-
   useEffect(() => handleChange(), [props.message]);
 
-  const showHint = props?.showHint || false;
-
   return (
-    <Fragment>
-      {showHint && <p className="cell-text">{t(props?.hintText)}</p>}
-      <div className={`upload-file ${props.disabled ? " disabled" : ""}`}>
-        <div>
-          <ButtonSelector
-            theme="border"
-            label={t("CS_COMMON_CHOOSE_FILE")}
-            style={{ ...(extraStyles ? extraStyles?.buttonStyles : {}), ...(props.disabled ? { display: "none" } : {}) }}
-            textStyles={props?.textStyles}
-            type={props.buttonType}
-          />
-          {!hasFile || props.error ? (
-            <h2 className="file-upload-status">{props.message}</h2>
-          ) : (
-            <div className="tag-container" style={extraStyles ? extraStyles?.tagContainerStyles : null}>
+    <div className="upload-file">
+      <div>
+        <ButtonSelector theme="border" label="Choose File" style={extraStyles ? extraStyles?.buttonStyles : null} textStyles={props?.textStyles} />
+        {!hasFile ? (
+          <h2 className="file-upload-status">{props.message}</h2>
+        ) : (
+          <div className="tag-container" style={extraStyles ? extraStyles?.tagContainerStyles : null}>
+            {!props.error ? (
               <div className="tag" style={extraStyles ? extraStyles?.tagStyles : null}>
                 <span className="text" style={extraStyles ? extraStyles?.textStyles : null}>
                   {inpRef.current.files[0]?.name?.slice(0, 20)}
@@ -95,21 +81,23 @@ const UploadFile = (props) => {
                   <Close className="close" />
                 </span>
               </div>
-            </div>
-          )}
-        </div>
-        <input
-          className={props.disabled ? "disabled" : ""}
-          style={extraStyles ? { ...extraStyles?.inputStyles, ...props?.inputStyles } : { ...props?.inputStyles }}
-          ref={inpRef}
-          type="file"
-          name="file"
-          accept={props.accept}
-          disabled={props.disabled}
-          onChange={(e) => props.onUpload(e)}
-        />
+            ) : (
+              <h2 className="file-upload-status" style={{ marginTop: "18px" }}>
+                {t(`PT_ACTION_NO_FILEUPLOADED`)}
+              </h2>
+            )}
+          </div>
+        )}
       </div>
-    </Fragment>
+      <input
+        style={extraStyles ? extraStyles?.inputStyles : null}
+        ref={inpRef}
+        type="file"
+        name="file"
+        accept={props.accept}
+        onChange={(e) => props.onUpload(e)}
+      />
+    </div>
   );
 };
 

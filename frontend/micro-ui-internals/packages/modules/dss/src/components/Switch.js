@@ -3,14 +3,14 @@ import FilterContext from "./FilterContext";
 
 const denominations = ["Cr", "Lac", "Unit"];
 
-const Switch = ({ onSelect, t }) => {
+const Switch = ({ onSelect }) => {
   const { value } = useContext(FilterContext);
   return (
     <>
-      <div>{t(`ES_DSS_DENOMINATION`)}</div>
+      <div>Denomination</div>
       <div className="switch-wrapper">
         {denominations.map((label, idx) => (
-          <div key={idx}>
+          <div>
             <input
               type="radio"
               id={label}
@@ -19,7 +19,7 @@ const Switch = ({ onSelect, t }) => {
               checked={label === value?.denomination}
               onClick={() => onSelect({ denomination: label })}
             />
-            <label className="cursorPointer" htmlFor={label}>{label}</label>
+            <label for={label}>{label}</label>
           </div>
         ))}
       </div>

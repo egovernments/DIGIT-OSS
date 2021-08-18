@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { FormComposer, Dropdown, Loader } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Dropdown } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 
 const Login = ({ config: propsConfig, t }) => {
-  const {data: cities, isLoading} = Digit.Hooks.useTenants();
+  const cities = Digit.Hooks.fsm.useTenants();
   const [user, setUser] = useState(null);
   const history = useHistory();
   const getUserType = () => Digit.UserService.getType();
@@ -72,7 +72,8 @@ const Login = ({ config: propsConfig, t }) => {
             component: (props, customProps) => (
               <Dropdown
                 option={cities}
-                optionKey="i18nKey"
+                optionKey="name"
+                id={city.name}
                 select={(d) => {
                   props.onChange(d);
                 }}
@@ -86,7 +87,7 @@ const Login = ({ config: propsConfig, t }) => {
     },
   ];
 
-  return isLoading ? <Loader /> : (
+  return (
     <FormComposer
       onSubmit={onLogin}
       noBoxShadow

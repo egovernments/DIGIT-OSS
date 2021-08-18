@@ -184,7 +184,7 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
         <CardLabel>{t("CS_COMMON_EMPLOYEE_COMMENTS")}</CardLabel>
         <TextArea name="comment" onChange={addComment} value={comments} />
         <CardLabel>{t("CS_ACTION_SUPPORTING_DOCUMENTS")}</CardLabel>
-        <CardLabelDesc>{t(`CS_UPLOAD_RESTRICTIONS`)}</CardLabelDesc>
+        <CardLabelDesc>{t(`TL_UPLOAD_RESTRICTIONS`)}</CardLabelDesc>
         <UploadFile
           accept=".jpg"
           onUpload={selectfile}

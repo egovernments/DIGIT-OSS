@@ -1,18 +1,8 @@
-import {
-  CardLabel,
-  CardLabelError,
-  CitizenInfoLabel,
-  Dropdown,
-  FormStep,
-  LabelFieldPair,
-  Loader,
-  RadioButtons,
-} from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { FormStep, RadioButtons, CardLabel, LabelFieldPair, Dropdown, Loader } from "@egovernments/digit-ui-react-components";
 import { stringReplaceAll } from "../utils";
 
-const PropertyType = ({ t, config, onSelect, userType, formData, setError, clearErrors, formState, onBlur }) => {
+const PropertyType = ({ t, config, onSelect, userType, formData }) => {
   const [BuildingType, setBuildingType] = useState(formData?.PropertyType);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
@@ -24,7 +14,6 @@ const PropertyType = ({ t, config, onSelect, userType, formData, setError, clear
   function getPropertyTypeMenu(proptype) {
     if (userType === "employee") {
       return proptype
-        ?.filter((e) => e.code === "VACANT" || e.code.split(".").length > 1)
         ?.map((item) => ({ i18nKey: "COMMON_PROPTYPE_" + stringReplaceAll(item?.code, ".", "_"), code: item?.code }))
         ?.sort((a, b) => a.i18nKey.split("_").pop().localeCompare(b.i18nKey.split("_").pop()));
     } else {
@@ -40,9 +29,6 @@ const PropertyType = ({ t, config, onSelect, userType, formData, setError, clear
     }
   }
 
-  const { pathname } = useLocation();
-  const presentInModifyApplication = pathname.includes("modify");
-
   const onSkip = () => onSelect();
 
   // const propertyOwnerShipCategory = Digit.Hooks.pt.useMDMS("pb", "PropertyTax", "OwnerShipCategory", {});
@@ -56,76 +42,53 @@ const PropertyType = ({ t, config, onSelect, userType, formData, setError, clear
   }
 
   useEffect(() => {
-    if (presentInModifyApplication && userType === "employee" && Menu) {
-      const original = formData?.originalData?.propertyType;
-      const defaultVal = getPropertyTypeMenu(proptype)?.filter((e) => e.code === original)[0];
-      setBuildingType(defaultVal);
-    }
-  }, [isLoading]);
-
-  useEffect(() => {
     if (userType === "employee") {
       goNext();
-      if (!BuildingType) setError(config.key, { type: "required", message: t("CORE_COMMON_REQUIRED_ERRMSG") });
-      else clearErrors(config.key);
     }
   }, [BuildingType]);
 
   const inputs = [
     {
-      label: "PT_ASSESMENT_INFO_TYPE_OF_BUILDING",
+      label: "ES_NEW_APPLICATION_PROPERTY_TYPE",
       type: "text",
       name: "propertyType",
       validation: {},
     },
   ];
-
   if (isLoading) {
     return <Loader />;
   }
-
   if (userType === "employee") {
     return inputs?.map((input, index) => {
       return (
-        <React.Fragment key={index}>
-          <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{t(input.label) + " *"}</CardLabel>
-            <Dropdown
-              className="form-field"
-              selected={getPropertyTypeMenu(proptype)?.length === 1 ? getPropertyTypeMenu(proptype)[0] : BuildingType}
-              disable={getPropertyTypeMenu(proptype)?.length === 1}
-              option={getPropertyTypeMenu(proptype)}
-              select={selectBuildingType}
-              optionKey="i18nKey"
-              onBlur={onBlur}
-              t={t}
-            />
-          </LabelFieldPair>
-          {formState.touched[config.key] ? (
-            <CardLabelError style={{ width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" }}>
-              {formState.errors?.[config.key]?.message}
-            </CardLabelError>
-          ) : null}
-        </React.Fragment>
+        <LabelFieldPair key={index}>
+          <CardLabel className="card-label-smaller">{t(input.label)}</CardLabel>
+          <Dropdown
+            className="form-field"
+            selected={getPropertyTypeMenu(proptype)?.length === 1 ? getPropertyTypeMenu(proptype)[0] : BuildingType}
+            disable={getPropertyTypeMenu(proptype)?.length === 1}
+            option={getPropertyTypeMenu(proptype)}
+            select={selectBuildingType}
+            optionKey="i18nKey"
+            t={t}
+          />
+        </LabelFieldPair>
       );
     });
   }
 
   return (
-    <React.Fragment>
-      <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!BuildingType}>
-        <RadioButtons
-          t={t}
-          optionsKey="i18nKey"
-          isMandatory={config.isMandatory}
-          //options={menu}
-          options={getPropertyTypeMenu(proptype) || {}}
-          selectedOption={BuildingType}
-          onSelect={selectBuildingType}
-        />
-      </FormStep>
-      {<CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("PT_PROPERTY_TYPE_INFO_MSG")} />}
-    </React.Fragment>
+    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!BuildingType}>
+      <RadioButtons
+        t={t}
+        optionsKey="i18nKey"
+        isMandatory={config.isMandatory}
+        //options={menu}
+        options={getPropertyTypeMenu(proptype) || {}}
+        selectedOption={BuildingType}
+        onSelect={selectBuildingType}
+      />
+    </FormStep>
   );
 };
 export default PropertyType;

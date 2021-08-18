@@ -1,5 +1,5 @@
-import { CardLabel, CitizenInfoLabel, FormStep, TextInput } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { FormStep, CardLabel, TextInput } from "@egovernments/digit-ui-react-components";
 
 const RentalDetails = ({ t, config, onSelect, value, userType, formData }) => {
   //let index = window.location.href.charAt(window.location.href.length - 1);
@@ -92,41 +92,38 @@ const RentalDetails = ({ t, config, onSelect, value, userType, formData }) => {
   //const onSkip = () => onSelect();
 
   return (
-    <React.Fragment>
-      <FormStep
-        config={((config.texts.headerCaption = getheaderCaption()), config)}
-        onSelect={goNext}
-        onSkip={onSkip}
-        forcedError={t(unitareaerror) || t(areanotzeroerror)}
+    <FormStep
+      config={((config.texts.headerCaption = getheaderCaption()), config)}
+      onSelect={goNext}
+      onSkip={onSkip}
+      forcedError={t(unitareaerror) || t(areanotzeroerror)}
+      t={t}
+      isDisabled={unitareaerror || areanotzeroerror || !RentArea || !AnnualRent}
+      showErrorBelowChildren={true}
+    >
+      <CardLabel>{`${t("PT_FLOOR_DETAILS_RENTED_AREA_LABEL")}`}</CardLabel>
+      <TextInput
         t={t}
-        isDisabled={unitareaerror || areanotzeroerror || !RentArea || !AnnualRent}
-        showErrorBelowChildren={true}
-      >
-        <CardLabel>{`${t("PT_FLOOR_DETAILS_RENTED_AREA_LABEL")}`}</CardLabel>
-        <TextInput
-          t={t}
-          isMandatory={false}
-          type={"number"}
-          optionKey="i18nKey"
-          name="RentArea"
-          value={RentArea}
-          onChange={setPropertyRentArea}
-          {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_RENT_AREA_ERROR_MESSAGE") })}
-        />
-        <CardLabel>{`${t("PT_FLOOR_DETAILS_ANNUAL_RENT_LABEL")}`}</CardLabel>
-        <TextInput
-          t={t}
-          isMandatory={false}
-          type={"number"}
-          optionKey="i18nKey"
-          name="AnnualRent"
-          value={AnnualRent}
-          onChange={setPropertyAnnualRent}
-          {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_BUILT_AREA_ERROR_MESSAGE") })}
-        />
-      </FormStep>
-      {<CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("PT_RENTAL_AREA_INFO_MSG")} />}
-    </React.Fragment>
+        isMandatory={false}
+        type={"number"}
+        optionKey="i18nKey"
+        name="RentArea"
+        value={RentArea}
+        onChange={setPropertyRentArea}
+        {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_RENT_AREA_ERROR_MESSAGE") })}
+      />
+      <CardLabel>{`${t("PT_FLOOR_DETAILS_ANNUAL_RENT_LABEL")}`}</CardLabel>
+      <TextInput
+        t={t}
+        isMandatory={false}
+        type={"number"}
+        optionKey="i18nKey"
+        name="AnnualRent"
+        value={AnnualRent}
+        onChange={setPropertyAnnualRent}
+        {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_BUILT_AREA_ERROR_MESSAGE") })}
+      />
+    </FormStep>
   );
 };
 

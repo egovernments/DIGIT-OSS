@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { RatingCard, CardLabelError } from "@egovernments/digit-ui-react-components";
+import { RatingCard } from "@egovernments/digit-ui-react-components";
 import { useParams, Redirect, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { updateComplaints } from "../../../redux/actions/index";
@@ -9,16 +9,15 @@ const SelectRating = ({ parentRoute }) => {
   const { t } = useTranslation();
   const { id } = useParams();
   const dispatch = useDispatch();
-  // console.log("parent route", parentRoute);
+  console.log("parent route", parentRoute);
   const history = useHistory();
 
   let tenantId = Digit.ULBService.getCurrentTenantId();
   const complaintDetails = Digit.Hooks.pgr.useComplaintDetails({ tenantId: tenantId, id: id }).complaintDetails;
   const updateComplaint = useCallback((complaintDetails) => dispatch(updateComplaints(complaintDetails)), [dispatch]);
-  const [submitError, setError] = useState(false)
-  
+
   function log(data) {
-    if (complaintDetails && data.rating > 0 ) {
+    if (complaintDetails) {
       complaintDetails.service.rating = data.rating;
       complaintDetails.service.additionalDetail = data.CS_FEEDBACK_WHAT_WAS_GOOD.join(",");
       complaintDetails.workflow = {
@@ -26,26 +25,22 @@ const SelectRating = ({ parentRoute }) => {
         comments: data.comments,
         verificationDocuments: [],
       };
-      // console.log("updtaed complaint details", complaintDetails);
+      console.log("updtaed complaint details", complaintDetails);
       updateComplaint({ service: complaintDetails.service, workflow: complaintDetails.workflow });
       history.push(`${parentRoute}/response`);
-    }
-    else{
-      setError(true)
     }
   }
 
   const config = {
     texts: {
       header: "CS_COMPLAINT_RATE_HELP_TEXT",
-      submitBarLabel: "CS_COMMONS_NEXT",
+      submitBarLabel: "PT_COMMONS_NEXT",
     },
     inputs: [
       {
         type: "rate",
         maxRating: 5,
         label: t("CS_COMPLAINT_RATE_TEXT"),
-        error: submitError ? <CardLabelError>{t("CS_FEEDBACK_ENTER_RATING_ERROR")}</CardLabelError> : null
       },
       {
         type: "checkbox",

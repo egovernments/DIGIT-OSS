@@ -93,7 +93,6 @@
 .citizen {
   .main {
     padding-top: 82px;
-    min-height: calc(100vh - 90px);
   }
 }
 
@@ -120,96 +119,6 @@
       }
     }
   }
-
-  .wrapperStyles {
-    margin-top: -5px;
-    padding-left: 20px;
-    padding-top: 10px;
-  
-    .containerStyles {
-      border: 1px solid #505A5F;
-      padding: 16px;
-      margin-bottom: 20px;
-    }
-  
-    &.leftBorder {
-      border-left: 2px solid rgba(0, 0, 0, 0.12);
-    }
-  }
-  
-  .rowContainerStyles {
-    @apply flex flex-col;
-  }
-  
-  .tableContainerStyles {
-    border: 1px solid #505A5F;
-    padding: 16px;
-    margin-bottom: 20px;
-  }
-  
-  .historyTables {
-    display: grid;
-    grid-template-rows: 100px 100px;
-    grid-template-columns: repeat(5, minmax(100px, 1fr)); 
-  }
-  
-  .historyContent {
-    margin: 0 10px;
-    position: relative;
-    padding-bottom: 5px;
-  }
-  
-  .historyCheckpoint {
-    background-color: #fe7a51;
-    border-radius: 100%;
-    width: 18px;
-    height: 18px;
-    display: inline-block;
-    position: relative;
-    left: -9px;
-    top: 4px;
-  
-    &.zIndex {
-      z-index: 10;
-    }
-  }
-  
-  .historyTableDateLabel {
-    color: rgba(0, 0, 0, 0.87);
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 17px;
-    text-align: left;
-    display: inline-block;
-    padding-top: 5px;
-  
-  }
-  
-  .bottomMargin {
-    margin-bottom: 0px;
-  }
-  
-  .historyTableDate {
-    color: rgba(0, 0, 0, 0.87);
-    font-size: 19px;
-    font-weight: 400;
-    line-height: 17px;
-    text-align: left;
-    display: inline-block;
-    padding-top: 10px;
-  }
-  
-  .historyHorizontalBar {
-    background-color: rgba(0, 0, 0, 0.12);
-    width: auto;
-    height: 2px;
-    margin-left: 16px
-  }
-
-  .smallText {
-    font-weight: 500;
-    font-size: 14px;
-  }
 }
 
 .citizen {
@@ -235,7 +144,7 @@
 @media (min-width: 640px) {
   .employee {
     .ground-container {
-      @apply block ml-md;
+      @apply block;
     }
     .breadcrumb {
       @apply mb-lg;
@@ -243,12 +152,6 @@
     }
     .card-home {
       width: 270px;
-      margin-right: 16px;
-      margin-bottom: 16px;
-    }
-    .card-home-hrms {
-      width: 405px;
-      padding: 0px;
       margin-right: 16px;
       margin-bottom: 16px;
     }
@@ -265,7 +168,6 @@
       width: 100%;
       padding-top: 80px;
       padding-left: 16px;
-      min-height: calc(100vh - 40px);
     }
 
     .center-container {
@@ -301,8 +203,4 @@
 
 .m-auto {
   margin: auto !important;
-}
-
-.mb-50{
-  margin-bottom: 50px;
 }

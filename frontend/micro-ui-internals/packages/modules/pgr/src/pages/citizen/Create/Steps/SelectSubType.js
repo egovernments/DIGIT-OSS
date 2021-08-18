@@ -26,7 +26,7 @@ const SelectSubType = ({ t, config, onSelect, value }) => {
 
   const configNew = {
     ...config.texts,
-    ...{ headerCaption: t(`SERVICEDEFS.${complaintType.key.toUpperCase()}`) },
+    ...{ headerCaption: complaintType.key },
     ...{ menu: menu },
     ...{ optionsKey: "name" },
     ...{ selected: selectedValue },
@@ -34,6 +34,6 @@ const SelectSubType = ({ t, config, onSelect, value }) => {
     ...{ onSave: goNext },
   };
 
-  return <TypeSelectCard {...configNew} disabled={Object.keys(subType).length === 0 || subType === null ? true : false} t={t} />;
+  return <TypeSelectCard {...configNew} t={t} />;
 };
 export default SelectSubType;

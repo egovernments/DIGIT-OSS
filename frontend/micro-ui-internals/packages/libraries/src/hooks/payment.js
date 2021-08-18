@@ -13,12 +13,10 @@ export const useFetchCitizenBillsForBuissnessService = ({ businessService, ...fi
     () => Digit.PaymentService.fetchBill(tenantId, { ...params }),
     {
       refetchOnMount: true,
-      // retry: (failureCount, error) => {
-      //   console.log("retried from hook");
-      //   if (error?.response?.data?.Errors?.[0]?.code === "EG_BS_BILL_NO_DEMANDS_FOUND") return false;
-      //   else return failureCount < 1;
-      // },
-      retry: false,
+      retry: (failureCount, error) => {
+        if (error?.response?.data?.Errors?.[0]?.code === "EG_BS_BILL_NO_DEMANDS_FOUND") return false;
+        else return failureCount < 3;
+      },
       ...config,
     }
   );
@@ -32,23 +30,16 @@ export const useFetchCitizenBillsForBuissnessService = ({ businessService, ...fi
   };
 };
 
-export const useFetchBillsForBuissnessService = ({ tenantId, businessService, ...filters }, config = {}) => {
+export const useFetchBillsForBuissnessService = ({ businessService, ...filters }, config = {}) => {
   const queryClient = useQueryClient();
-  let isPTAccessDone = sessionStorage.getItem("IsPTAccessDone");
+  const { tenantId } = Digit.UserService.getUser()?.info || {};
+
   const params = { businessService, ...filters };
 
-  const _tenantId = tenantId || Digit.UserService.getUser()?.info?.tenantId;
-
   const { isLoading, error, isError, data, status } = useQuery(
-    ["billsForBuisnessService", businessService, { ...filters }, config,isPTAccessDone],
-    () => Digit.PaymentService.fetchBill(_tenantId, params),
-    {
-      retry: (count, err) => {
-        console.log(err, "inside the payment hook");
-        return false;
-      },
-      ...config,
-    }
+    ["billsForBuisnessService", businessService, { ...filters }],
+    () => Digit.PaymentService.fetchBill(tenantId, params),
+    config
   );
   return {
     isLoading,
@@ -101,15 +92,4 @@ export const useDemandSearch = ({ consumerCode, businessService, tenantId }, con
   const queryFn = () => Digit.PaymentService.demandSearch(tenantId, consumerCode, businessService);
   const queryData = useQuery(["demand_search", { consumerCode, businessService, tenantId }], queryFn, { refetchOnMount: "always", ...config });
   return queryData;
-};
-
-export const useRecieptSearch = ({ tenantId, businessService, ...params }, config = {}) => {
-  return useQuery(
-    ["reciept_search", { tenantId, businessService, params }],
-    () => Digit.PaymentService.recieptSearch(tenantId, businessService, params),
-    {
-      refetchOnMount: false,
-      ...config,
-    }
-  );
 };

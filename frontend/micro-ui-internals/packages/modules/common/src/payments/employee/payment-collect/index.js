@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader, Toast, Card, Header } from "@egovernments/digit-ui-react-components";
+import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader, Toast } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams, useRouteMatch } from "react-router-dom";
 import { useQueryClient } from "react-query";
-import { useCashPaymentDetails } from "./ManualReciept";
 import { useCardPaymentDetails } from "./card";
-import { useChequeDetails } from "./cheque";
+import { useChequeDetails, ChequeDetailsComponent } from "./cheque";
 import isEqual from "lodash/isEqual";
-import { BillDetailsFormConfig } from "./Bill-details/billDetails";
+// import BillDetails, { BillDetailsFormConfig } from "./Bill-details/billDetails";
 
 export const CollectPayment = (props) => {
   // const { formData, addParams } = props;
-  const { workflow: ModuleWorkflow } = Digit.Hooks.useQueryParams();
-  console.log(ModuleWorkflow);
+  props.setLink("Collect Payment");
   const { t } = useTranslation();
   const history = useHistory();
   const queryClient = useQueryClient();
@@ -23,15 +21,9 @@ export const CollectPayment = (props) => {
   const { data: paymentdetails, isLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
   const bill = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
 
-  // const { isLoading: storeLoading, data: store } = Digit.Services.useStore({
-  //   stateCode: props.stateCode,
-  //   moduleCode: businessService.split(".")[0],
-  //   language: Digit.StoreData.getCurrentLanguage(),
-  // });
-
   const { cardConfig } = useCardPaymentDetails(props, t);
-  const { chequeConfig } = useChequeDetails(props, t);
-  const { cashConfig } = useCashPaymentDetails(props, t);
+  const { chequeConfig, date } = useChequeDetails(props, t);
+  const additionalCharges = getAdditionalCharge() || [];
 
   const [formState, setFormState] = useState({});
   const [toast, setToast] = useState(null);
@@ -51,123 +43,86 @@ export const CollectPayment = (props) => {
     CARD: cardConfig,
   };
 
-  useEffect(() => {
-    props.setLink(t("PAYMENT_COLLECT_LABEL"));
-  }, []);
-
   const getPaymentModes = () => defaultPaymentModes;
-  const paidByMenu = [
-    { code: "OWNER", name: t("COMMON_OWNER") },
-    { code: "OTHER", name: t("COMMON_OTHER") },
-  ];
+  const paidByMenu = [{ name: t("COMMON_OWNER") }, { name: t("COMMON_OTHER") }];
   const [selectedPaymentMode, setPaymentMode] = useState(formState?.selectedPaymentMode || getPaymentModes()[0]);
 
   const onSubmit = async (data) => {
+    console.log(data);
     bill.totalAmount = Math.round(bill.totalAmount);
-    data.paidBy = data.paidBy.code;
-
-    if (
-      BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? ModuleWorkflow : businessService] &&
-      !data?.amount?.paymentAllowed
-    ) {
-      let action =
-        data?.amount?.error === "CS_CANT_PAY_BELOW_MIN_AMOUNT"
-          ? t(data?.amount?.error) + "- " + data?.amount?.minAmountPayable
-          : t(data?.amount?.error);
-
-      setToast({
-        key: "error",
-        action,
-      });
-      return;
-    }
-
-    const { ManualRecieptDetails, paymentModeDetails, ...rest } = data;
-    const { errorObj, ...details } = paymentModeDetails || {};
-
+    data.paidBy = data.paidBy.name;
+    // console.log(data, bill.totalAmount);
     const recieptRequest = {
       Payment: {
+        ...data,
         mobileNumber: data.payerMobile,
         paymentDetails: [
           {
             businessService,
             billId: bill.id,
             totalDue: bill.totalAmount,
-            totalAmountPaid: data?.amount?.amount || bill.totalAmount,
+            totalAmountPaid: bill.totalAmount,
           },
         ],
         tenantId: bill.tenantId,
         totalDue: bill.totalAmount,
-        totalAmountPaid: data?.amount?.amount || bill.totalAmount,
-        paymentMode: data.paymentMode.code,
-        payerName: data.payerName,
-        paidBy: data.paidBy,
+        totalAmountPaid: bill.totalAmount,
       },
     };
 
-    if (data.ManualRecieptDetails.manualReceiptDate) {
-      recieptRequest.Payment.paymentDetails[0].manualReceiptDate = new Date(ManualRecieptDetails.manualReceiptDate).getTime();
-    }
-    if (data.ManualRecieptDetails.manualReceiptNumber) {
-      recieptRequest.Payment.paymentDetails[0].manualReceiptNumber = ManualRecieptDetails.manualReceiptNumber;
-    }
     recieptRequest.Payment.paymentMode = data?.paymentMode?.code;
-
-    if (data.paymentModeDetails) {
-      recieptRequest.Payment = { ...recieptRequest.Payment, ...details };
-      delete recieptRequest.Payment.paymentModeDetails;
-      if (data.paymentModeDetails.errorObj) {
-        const errors = data.paymentModeDetails.errorObj;
+    if (data.chequeDetails) {
+      recieptRequest.Payment = { ...recieptRequest.Payment, ...data.chequeDetails };
+      delete recieptRequest.Payment.chequeDetails;
+      if (data.chequeDetails.errorObj) {
+        const errors = data.chequeDetails.errorObj;
         const messages = Object.keys(errors)
           .map((e) => t(errors[e]))
           .join();
         if (messages) {
-          setToast({ key: "error", action: `${messages} ${t("ES_ERROR_REQUIRED")}` });
+          setToast({ key: "error", action: `${messages} ES_ERROR_REQUIRED` });
           setTimeout(() => setToast(null), 5000);
           return;
         }
       }
-      if (data.errorMsg) setToast({ key: "error", action: t(errorMsg) });
 
       recieptRequest.Payment.instrumentDate = new Date(recieptRequest?.Payment?.instrumentDate).getTime();
-      recieptRequest.Payment.transactionNumber = data.paymentModeDetails.transactionNumber;
+      recieptRequest.Payment.transactionNumber = "12345678";
     }
 
-    if (data?.paymentModeDetails?.transactionNumber) {
-      if (data.paymentModeDetails.transactionNumber !== data.paymentModeDetails.reTransanctionNumber && ["CARD"].includes(data.paymentMode.code)) {
+    if (data.transactionNumber) {
+      if (data.transactionNumber !== data.reTransanctionNumber) {
         setToast({ key: "error", action: t("ERR_TRASACTION_NUMBERS_DONT_MATCH") });
         setTimeout(() => setToast(null), 5000);
         return;
       }
-      delete recieptRequest.Payment.last4Digits;
-      delete recieptRequest.Payment.reTransanctionNumber;
-    }
-
-    if (
-      recieptRequest.Payment?.instrumentNumber?.length &&
-      recieptRequest.Payment?.instrumentNumber?.length < 6 &&
-      recieptRequest?.Payment?.paymentMode === "CHEQUE"
-    ) {
-      setToast({ key: "error", action: t("ERR_CHEQUE_NUMBER_LESS_THAN_6") });
-      setTimeout(() => setToast(null), 5000);
-      return;
     }
 
     try {
-      // console.log(recieptRequest);
       const resposne = await Digit.PaymentService.createReciept(tenantId, recieptRequest);
       queryClient.invalidateQueries();
-      history.push(
-        `${props.basePath}/success/${businessService}/${resposne?.Payments[0]?.paymentDetails[0]?.receiptNumber.replace(/\//g, "%2F")}/${
-          resposne?.Payments[0]?.paymentDetails[0]?.bill?.consumerCode
-        }`
-      );
+      history.push(`${props.basePath}/success/${businessService}/${resposne?.Payments[0]?.paymentDetails[0]?.receiptNumber.replace(/\//g, "%2F")}`);
     } catch (error) {
-      setToast({ key: "error", action: error?.response?.data?.Errors?.map((e) => t(e.code)) })?.join(" , ");
+      setToast({ key: "error", action: error?.response?.data?.Errors?.map((e) => e.message) })?.join(" , ");
       setTimeout(() => setToast(null), 5000);
       return;
     }
   };
+
+  function getAdditionalCharge() {
+    const billAccountDetails = bill?.billDetails
+      ?.map((billDetail) => {
+        return billDetail.billAccountDetails;
+      })
+      ?.flat();
+
+    return billAccountDetails?.map((billAccountDetail) => {
+      return {
+        label: t(billAccountDetail.taxHeadCode),
+        populators: <div style={{ marginBottom: 0, textAlign: "right" }}>₹ {billAccountDetail.amount}</div>,
+      };
+    });
+  }
 
   useEffect(() => {
     document?.getElementById("paymentInfo")?.scrollIntoView({ behavior: "smooth" });
@@ -176,11 +131,12 @@ export const CollectPayment = (props) => {
 
   const config = [
     {
-      head: !ModuleWorkflow && businessService !== "TL" ? t("COMMON_PAYMENT_HEAD") : "",
+      head: t("COMMON_PAYMENT_HEAD"),
       body: [
+        ...additionalCharges,
         {
           label: t("PAY_TOTAL_AMOUNT"),
-          populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}> {`₹ ${bill?.totalAmount}`} </CardSectionHeader>,
+          populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}> {`₹ ${bill.totalAmount}`} </CardSectionHeader>,
         },
       ],
     },
@@ -199,7 +155,7 @@ export const CollectPayment = (props) => {
                 {...customProps}
                 selected={props.value}
                 select={(d) => {
-                  if (d.name == paidByMenu[0].name) {
+                  if (isEqual(d, paidByMenu[0])) {
                     props.setValue("payerName", bill?.payerName);
                     props.setValue("payerMobile", bill?.mobileNumber);
                   } else {
@@ -223,7 +179,7 @@ export const CollectPayment = (props) => {
               required: true,
               pattern: /^[A-Za-z]/,
             },
-            error: t("PAYMENT_INVALID_NAME"),
+            error: "a valid name required",
             defaultValue: bill?.payerName || formState?.payerName || "",
             className: "payment-form-text-input-correction",
           },
@@ -238,7 +194,7 @@ export const CollectPayment = (props) => {
               required: true,
               pattern: /^[6-9]\d{9}$/,
             },
-            error: t("PAYMENT_INVALID_MOBILE"),
+            error: "a valid mobile no. required",
             className: "payment-form-text-input-correction",
             defaultValue: bill?.mobileNumber || formState?.payerMobile || "",
           },
@@ -280,20 +236,7 @@ export const CollectPayment = (props) => {
     payerMobile: bill?.mobileNumber || formState?.payerMobile || "",
   });
 
-  const getFormConfig = () => {
-    if (
-      BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? ModuleWorkflow : businessService] ||
-      ModuleWorkflow ||
-      businessService === "TL"
-    ) {
-      config.splice(0, 1);
-    }
-    let conf = config.concat(formConfigMap[formState?.paymentMode?.code] || []);
-    conf = conf?.concat(cashConfig);
-    return BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? ModuleWorkflow : businessService]
-      ? BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? ModuleWorkflow : businessService].concat(conf)
-      : conf;
-  };
+  const getFormConfig = () => config.concat(formConfigMap[formState?.paymentMode?.code] || []);
 
   if (isLoading) {
     return <Loader />;
@@ -301,17 +244,14 @@ export const CollectPayment = (props) => {
 
   return (
     <React.Fragment>
-      <Header>{t("PAYMENT_COLLECT")}</Header>
       <FormComposer
         cardStyle={{ paddingBottom: "100px" }}
-        //heading={t("PAYMENT_COLLECT")}
+        heading={t("PAYMENT_COLLECT")}
         label={t("PAYMENT_COLLECT_LABEL")}
         config={getFormConfig()}
         onSubmit={onSubmit}
         formState={formState}
         defaultValues={getDefaultValues()}
-        isDisabled={bill?.totalAmount ? !bill.totalAmount > 0 : true}
-        // isDisabled={BillDetailsFormConfig({ consumerCode }, t)[businessService] ? !}
         onFormValueChange={(setValue, formValue) => {
           if (!isEqual(formValue.paymentMode, selectedPaymentMode)) {
             setFormState(formValue);
@@ -319,13 +259,12 @@ export const CollectPayment = (props) => {
           }
         }}
       ></FormComposer>
-
+      {/* <ChequeDetailsComponent chequeDetails={{}} /> */}
       {toast && (
         <Toast
-          error={toast.key === "error"}
+          error={toast.key === "error" ? true : false}
           label={t(toast.key === "success" ? `ES_${businessService.split(".")[0].toLowerCase()}_${toast.action}_UPDATE_SUCCESS` : toast.action)}
           onClose={() => setToast(null)}
-          style={{ maxWidth: "670px" }}
         />
       )}
     </React.Fragment>

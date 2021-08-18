@@ -37,7 +37,7 @@ const FstpOperatorDetails = () => {
   const [showToast, setShowToast] = useState(null);
   const [wasteCollected, setWasteCollected] = useState(null);
   const [errors, setErrors] = useState({});
-  const [tripStartTime, setTripStartTime] = useState(null);
+  // const [tripTime, setTripTime] = useState(null);
   const [tripTime, setTripTime] = useState(() => {
     const today = new Date();
     const hour = (today.getHours() < 10 ? "0" : "") + today.getHours();
@@ -46,7 +46,7 @@ const FstpOperatorDetails = () => {
   });
 
   const { isLoading, isSuccess, data: vehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters, config });
-  const { isLoading: isSearchLoading, isIdle, data: { data: {table: tripDetails} = {} } = {} } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParams, null, {
+  const { isLoading: isSearchLoading, isIdle, data: { data: tripDetails } = {} } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParams, null, {
     enabled: !!isVehicleSearchCompleted,
   });
 
@@ -61,15 +61,10 @@ const FstpOperatorDetails = () => {
     }
   }, [isSuccess]);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = () => {
     const wasteCombined = tripDetails.reduce((acc, trip) => acc + trip.volume, 0);
     if (!wasteCollected || wasteCollected > wasteCombined || wasteCollected > vehicle.vehicle.tankCapacity) {
       setErrors({ wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" });
-      return;
-    }
-    if (tripStartTime === null) {
-      setErrors({ tripStartTime: "ES_FSTP_INVALID_START_TIME" });
       return;
     }
 
@@ -78,20 +73,11 @@ const FstpOperatorDetails = () => {
       return;
     }
 
-    if (tripStartTime === tripTime || tripStartTime > tripTime) {
-      setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
-      return;
-    }
-
     setErrors({});
 
     const d = new Date();
     const timeStamp = Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripTime)) / 1000;
-    const tripStartTimestamp = Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripStartTime)) / 1000;
-    vehicle.tripStartTime = tripStartTimestamp;
-    vehicle.fstpEntryTime = tripStartTimestamp;
     vehicle.tripEndTime = timeStamp;
-    vehicle.fstpExitTime = timeStamp;
     vehicle.volumeCarried = wasteCollected;
     const details = {
       vehicleTrip: vehicle,
@@ -143,7 +129,7 @@ const FstpOperatorDetails = () => {
     },
     {
       title: t("ES_INBOX_VEHICLE_NO"),
-      value: vehicle.vehicle?.registrationNumber,
+      value: vehicle.vehicle.registrationNumber,
     },
     {
       title: `${t("ES_VEHICLE CAPACITY")}`,
@@ -158,48 +144,26 @@ const FstpOperatorDetails = () => {
           {vehicleData.map((row, index) => (
             <Row key={row.title} label={row.title} text={row.value || "N/A"} last={false} />
           ))}
-          <CardLabelError>{t(errors.tripStartTime)}</CardLabelError>
-          <form onSubmit={handleSubmit}>
-            <Row
-              key={t("ES_VEHICLE_IN_TIME")}
-              label={`${t("ES_VEHICLE_IN_TIME")} * `}
-              rowContainerStyle={{ marginBottom: "32px" }}
-              text={
-                <div>
-                  <CustomTimePicker name="tripStartTime" onChange={setTripStartTime} value={tripStartTime} />
-                </div>
-              }
-            />
-            <CardLabelError>{t(errors.wasteRecieved)}</CardLabelError>
-            <Row
-              key={t("ES_VEHICLE_SEPTAGE_DUMPED")}
-              label={`${t("ES_VEHICLE_SEPTAGE_DUMPED")} * `}
-              text={
-                <div>
-                  <TextInput
-                    type="number"
-                    name="wasteRecieved"
-                    value={wasteCollected}
-                    onChange={handleChange}
-                    style={{ width: "100%", maxWidth: "200px" }}
-                  />
-                </div>
-              }
-            />
-            <CardLabelError>{t(errors.tripTime)}</CardLabelError>
-            <Row
-              key={t("ES_VEHICLE_OUT_TIME")}
-              label={`${t("ES_VEHICLE_OUT_TIME")} * `}
-              text={
-                <div>
-                  <CustomTimePicker name="tripTime" onChange={setTripTime} value={tripTime} />
-                </div>
-              }
-            />
-            <ActionBar>
-              <SubmitBar label={t("ES_COMMON_SUBMIT")} submit />
-            </ActionBar>
-          </form>
+          <CardLabelError>{t(errors.wasteRecieved)}</CardLabelError>
+          <Row
+            key={t("ES_VEHICLE_WASTE_RECIEVED")}
+            label={`${t("ES_VEHICLE_WASTE_RECIEVED")} * `}
+            text={
+              <div>
+                <TextInput name="wasteRecieved" value={wasteCollected} onChange={handleChange} style={{ width: "100%", maxWidth: "200px" }} />
+              </div>
+            }
+          />
+          <CardLabelError>{t(errors.tripTime)}</CardLabelError>
+          <Row
+            key={t("ES_COMMON_TIME")}
+            label={`${t("ES_COMMON_TIME")} * `}
+            text={
+              <div>
+                <CustomTimePicker name="tripTime" onChange={setTripTime} value={tripTime} />
+              </div>
+            }
+          />
           {/* <LabelFieldPair>
             <CardLabel>{t("ES_VEHICLE_WASTE_RECIEVED")}</CardLabel>
             <div className="field-container">
@@ -253,6 +217,9 @@ const FstpOperatorDetails = () => {
           onClose={closeToast}
         />
       )}
+      <ActionBar>
+        <SubmitBar label={t("ES_COMMON_SUBMIT")} submit onSubmit={handleSubmit} />
+      </ActionBar>
     </div>
   );
 };

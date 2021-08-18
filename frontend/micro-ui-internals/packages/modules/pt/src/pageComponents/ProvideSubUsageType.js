@@ -1,5 +1,6 @@
-import { CardLabel, CitizenInfoLabel, Dropdown, FormStep, LabelFieldPair, RadioOrSelect } from "@egovernments/digit-ui-react-components";
-import React, { useEffect, useState } from "react";
+import { CardLabel, FormStep, RadioOrSelect, LabelFieldPair, Dropdown } from "@egovernments/digit-ui-react-components";
+import React, { useState, useEffect } from "react";
+import { cardBodyStyle } from "../utils";
 
 const ProvideSubUsageType = ({ t, config, onSelect, userType, formData }) => {
   //let index = window.location.href.charAt(window.location.href.length - 1);
@@ -26,10 +27,10 @@ const ProvideSubUsageType = ({ t, config, onSelect, userType, formData }) => {
     if (userType === "employee") {
       return subusageoption
         ?.map((item) => {
-          const codeArr = item?.code.split(".");
-          if (codeArr[1] == formData?.usageCategoryMajor?.i18nKey.split("_")[3] && codeArr.length == 4) {
+          if (item?.code.split(".")[1] == formData?.usageCategoryMajor?.i18nKey.split("_")[3] && item?.code.split(".").length == 4) {
             return {
-              i18nKey: "COMMON_PROPSUBUSGTYPE_NONRESIDENTIAL_" + codeArr[1] + "_" + codeArr[codeArr.length - 1],
+              i18nKey:
+                "COMMON_PROPSUBUSGTYPE_NONRESIDENTIAL_" + item?.code.split(".")[1] + "_" + item?.code.split(".")[item?.code.split(".").length - 1],
             };
           }
           return { filter: true };
@@ -132,23 +133,14 @@ const ProvideSubUsageType = ({ t, config, onSelect, userType, formData }) => {
     }
   }
 
-  const [inputs, setInputs] = useState([]);
-
-  useEffect(() => {
-    if (userType === "employee") {
-      const arr = ["RESIDENTIAL", "NONRESIDENTIAL.OTHERS", "MIXED"];
-      if (!arr.includes(formData?.usageCategoryMajor?.code))
-        setInputs([
-          {
-            label: "PT_ASSESSMENT_FLOW_SUBUSAGE_HEADER",
-            type: "dropdown",
-            name: "subusagetype",
-            validation: {},
-          },
-        ]);
-      else setInputs([]);
-    }
-  }, [formData?.usageCategoryMajor?.code]);
+  const inputs = [
+    {
+      label: "PT_ASSESSMENT_FLOW_SUBUSAGE_HEADER",
+      type: "dropdown",
+      name: "subusagetype",
+      validation: {},
+    },
+  ];
 
   useEffect(() => {
     if (userType === "employee") {
@@ -157,7 +149,6 @@ const ProvideSubUsageType = ({ t, config, onSelect, userType, formData }) => {
   }, [SubUsageType]);
 
   if (userType === "employee") {
-    return null;
     return inputs?.map((input, index) => {
       return (
         <LabelFieldPair key={index}>
@@ -177,24 +168,21 @@ const ProvideSubUsageType = ({ t, config, onSelect, userType, formData }) => {
   }
 
   return (
-    <React.Fragment>
-      <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!SubUsageType}>
-        <CardLabel>{t("PT_SUB_USAGE_TYPE_LABEL")}</CardLabel>
-        <div className={"form-pt-dropdown-only"}>
-          {getSubUsagedata(subusageoption) && (
-            <RadioOrSelect
-              isMandatory={config.isMandatory}
-              selectedOption={SubUsageType}
-              options={data || {}}
-              t={t}
-              optionKey="i18nKey"
-              onSelect={selectSelfOccupied}
-            />
-          )}
-        </div>
-      </FormStep>
-      {<CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("PT_SUB_USAGE_TYPE_INFO_MSG")} />}
-    </React.Fragment>
+    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!SubUsageType}>
+      <CardLabel>{t("PT_SUB_USAGE_TYPE_LABEL")}</CardLabel>
+      <div style={{ ...cardBodyStyle, maxHeight: "calc(100vh - 26em)" }} className={"form-pt-dropdown-only"}>
+        {getSubUsagedata(subusageoption) && (
+          <RadioOrSelect
+            isMandatory={config.isMandatory}
+            selectedOption={SubUsageType}
+            options={data || {}}
+            t={t}
+            optionKey="i18nKey"
+            onSelect={selectSelfOccupied}
+          />
+        )}
+      </div>
+    </FormStep>
   );
 };
 

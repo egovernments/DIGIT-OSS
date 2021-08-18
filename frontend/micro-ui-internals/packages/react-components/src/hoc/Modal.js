@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import PopUp from "../atoms/PopUp";
 import HeaderBar from "../atoms/HeaderBar";
@@ -18,17 +18,7 @@ const Modal = ({
   setError,
   formId,
   isDisabled,
-  hideSubmit,
 }) => {
-  /**
-   * TODO: It needs to be done from the desgin changes
-   */
-  useEffect(() => {
-    document.body.style.overflowY = 'hidden';
-    return () =>{
-      document.body.style.overflowY = 'auto';
-    }
-  }, [])
   return (
     <PopUp>
       <div className="popup-module" style={popupStyles}>
@@ -36,8 +26,8 @@ const Modal = ({
         <div className="popup-module-main">
           {children}
           <div className="popup-module-action-bar">
-            {actionCancelLabel ? <ButtonSelector theme="border" label={actionCancelLabel} onSubmit={actionCancelOnSubmit} /> : null}
-            {!hideSubmit ? <ButtonSelector label={actionSaveLabel} onSubmit={actionSaveOnSubmit} formId={formId} isDisabled={isDisabled} /> : null}
+            <ButtonSelector theme="border" label={actionCancelLabel} onSubmit={actionCancelOnSubmit} />
+            <ButtonSelector label={actionSaveLabel} onSubmit={actionSaveOnSubmit} formId={formId} isDisabled={isDisabled} />
           </div>
         </div>
       </div>

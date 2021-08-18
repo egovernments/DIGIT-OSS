@@ -12,7 +12,6 @@ const RadioOrSelect = ({
   dropdownStyle = {},
   isDependent = false,
   disabled = false,
-  optionCardStyles,
 }) => {
   return (
     <React.Fragment>
@@ -36,7 +35,6 @@ const RadioOrSelect = ({
           select={onSelect}
           t={t}
           disable={disabled}
-          optionCardStyles={optionCardStyles}
         />
       )}
     </React.Fragment>

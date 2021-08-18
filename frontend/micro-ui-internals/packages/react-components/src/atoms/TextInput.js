@@ -47,15 +47,13 @@ const TextInput = (props) => {
             title={props.title}
             step={props.step}
             autoFocus={props.autoFocus}
-            onBlur={props.onBlur}
-            autoComplete="off"
           />
         ) : (
           <input
             type={props.type || "text"}
             name={props.name}
             id={props.id}
-            className={`${user_type ? "employee-card-input" : "citizen-card-input"} ${props.disable && "disabled"} focus-visible ${props.errorStyle && "employee-card-input-error"}`}
+            className={`${user_type ? "employee-card-input" : "citizen-card-input"} ${props.disable && "disabled"} focus-visible`}
             placeholder={props.placeholder}
             onChange={(event) => {
               if (props?.onChange) {
@@ -79,9 +77,6 @@ const TextInput = (props) => {
             title={props.title}
             step={props.step}
             autoFocus={props.autoFocus}
-            onBlur={props.onBlur}
-            onKeyPress={props.onKeyPress}
-            autoComplete="off"
           />
         )}
         {props.type === "date" && <DatePicker {...props} date={date} setDate={setDate} data={data} />}

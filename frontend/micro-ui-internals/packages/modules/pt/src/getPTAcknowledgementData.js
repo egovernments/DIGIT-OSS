@@ -14,74 +14,68 @@ import {
 const capitalize = (text) => text.substr(0, 1).toUpperCase() + text.substr(1);
 const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ");
 
-const getOwner = (application, t, customTitle) => {
-  console.log(customTitle, application, "inside owner details");
-  let owners = [];
-  if(customTitle.includes("TRANSFEROR"))
-  owners = [...(application?.owners.filter((owner) => owner.status == "INACTIVE") || [])];
-  else
-  owners = [...(application?.owners.filter((owner) => owner.status == "ACTIVE") || [])];
+const getOwner = (application, t) => {
+  application.owners = application?.owners.filter((owner) => owner.status == "ACTIVE") || [];
   if (application?.ownershipCategory == "INDIVIDUAL.SINGLEOWNER") {
     return {
-      title: t(customTitle || "PT_OWNERSHIP_INFO_SUB_HEADER"),
+      title: t("PT_OWNERSHIP_INFO_SUB_HEADER"),
       values: [
-        { title: t("PT_OWNERSHIP_INFO_NAME"), value: owners[0]?.name || t("CS_NA") },
-        { title: t("PT_OWNERSHIP_INFO_MOBILE_NO"), value: owners[0]?.mobileNumber || t("CS_NA") },
-        { title: t("PT_SEARCHPROPERTY_TABEL_GUARDIANNAME"), value: owners[0]?.fatherOrHusbandName || t("CS_NA") },
-        { title: t("PT_OWNERSHIP_INFO_GENDER"), value: t(owners[0]?.gender) || t("CS_NA") },
-        { title: t("PT_FORM3_OWNERSHIP_TYPE"), value: t(application?.ownershipCategory) || t("CS_NA") },
-        { title: t("PT_OWNERSHIP_INFO_EMAIL_ID"), value: owners[0]?.emailId || t("CS_NA") },
-        { title: t("PT_OWNERSHIP_INFO_USER_CATEGORY"), value: t(getPropertyOwnerTypeLocale(owners[0]?.ownerType)) || t("CS_NA") },
-        { title: t("PT_OWNERSHIP_INFO_CORR_ADDR"), value: owners[0]?.permanentAddress || t("CS_NA") },
+        { title: t("PT_OWNERSHIP_INFO_NAME"), value: application?.owners[0]?.name || "N/A" },
+        { title: t("PT_OWNERSHIP_INFO_MOBILE_NO"), value: application?.owners[0]?.mobileNumber || "N/A" },
+        { title: t("PT_SEARCHPROPERTY_TABEL_GUARDIANNAME"), value: application?.owners[0]?.fatherOrHusbandName || "N/A" },
+        { title: t("PT_OWNERSHIP_INFO_GENDER"), value:t( application?.owners[0]?.gender) || "N/A" },
+        { title: t("PT_FORM3_OWNERSHIP_TYPE"), value: t(application?.ownershipCategory) || "N/A" },
+        { title: t("PT_OWNERSHIP_INFO_EMAIL_ID"), value: application?.owners[0]?.emailId || "N/A" },
+        { title: t("PT_OWNERSHIP_INFO_USER_CATEGORY"), value: t(getPropertyOwnerTypeLocale(application?.owners[0]?.ownerType)) || "N/A" },
+        { title: t("PT_OWNERSHIP_INFO_CORR_ADDR"), value: application?.owners[0]?.permanentAddress || "N/A" },
       ],
     };
   } else if (application?.ownershipCategory.includes("INDIVIDUAL")) {
     let values = [];
-    owners.map((owner) => {
+    application.owners.map((owner) => {
       let doc = [
-        { title: t("PT_OWNERSHIP_INFO_NAME"), value: owner?.name || t("CS_NA") },
-        { title: t("PT_OWNERSHIP_INFO_MOBILE_NO"), value: owner?.mobileNumber || t("CS_NA") },
-        { title: t("PT_SEARCHPROPERTY_TABEL_GUARDIANNAME"), value: owner?.fatherOrHusbandName || t("CS_NA") },
-        { title: t("PT_OWNERSHIP_INFO_GENDER"), value: t(owner?.gender) || t("CS_NA") },
-        { title: t("PT_FORM3_OWNERSHIP_TYPE"), value: t(application?.ownershipCategory) || t("CS_NA") },
-        { title: t("PT_OWNERSHIP_INFO_EMAIL_ID"), value: owner?.emailId || t("CS_NA") },
-        { title: t("PT_OWNERSHIP_INFO_USER_CATEGORY"), value: t(getPropertyOwnerTypeLocale(owner?.ownerType)) || t("CS_NA") },
-        { title: t("PT_OWNERSHIP_INFO_CORR_ADDR"), value: owner?.permanentAddress || t("CS_NA") },
+        { title: t("PT_OWNERSHIP_INFO_NAME"), value: owner?.name || "N/A" },
+        { title: t("PT_OWNERSHIP_INFO_MOBILE_NO"), value: owner?.mobileNumber || "N/A" },
+        { title: t("PT_SEARCHPROPERTY_TABEL_GUARDIANNAME"), value: owner?.fatherOrHusbandName || "N/A" },
+        { title: t("PT_OWNERSHIP_INFO_GENDER"), value: owner?.gender || "N/A" },
+        { title: t("PT_FORM3_OWNERSHIP_TYPE"), value: t(application?.ownershipCategory) || "N/A" },
+        { title: t("PT_OWNERSHIP_INFO_EMAIL_ID"), value: owner?.emailId || "N/A" },
+        { title: t("PT_OWNERSHIP_INFO_USER_CATEGORY"), value: t(getPropertyOwnerTypeLocale(owner?.ownerType)) || "N/A" },
+        { title: t("PT_OWNERSHIP_INFO_CORR_ADDR"), value: owner?.permanentAddress || "N/A" },
       ];
       values.push(...doc);
     });
     return {
-      title: t(customTitle || "PT_OWNERSHIP_INFO_SUB_HEADER"),
+      title: t("PT_OWNERSHIP_INFO_SUB_HEADER"),
       values: values,
     };
   } else if (application?.ownershipCategory.includes("INSTITUTIONAL")) {
     return {
       title: t("PT_OWNERSHIP_INFO_SUB_HEADER"),
       values: [
-        { title: t("PT_COMMON_INSTITUTION_NAME"), value: application?.institution?.name || t("CS_NA") },
-        { title: t("PT_TYPE_OF_INSTITUTION"), value: application?.institution?.type || t("CS_NA") },
-        { title: t("PT_OWNER_NAME"), value: application?.institution?.nameOfAuthorizedPerson || t("CS_NA") },
-        { title: t("PT_COMMON_AUTHORISED_PERSON_DESIGNATION"), value: application?.institution?.designation || t("CS_NA") },
-        { title: t("PT_FORM3_MOBILE_NUMBER"), value: owners[0]?.mobileNumber || t("CS_NA") },
-        { title: t("PT_OWNERSHIP_INFO_TEL_PHONE_NO"), value: owners[0]?.altContactNumber || t("CS_NA") },
-        { title: t("PT_OWNERSHIP_INFO_CORR_ADDR"), value: owners[0]?.correspondenceAddress || t("CS_NA") },
-        { title: t("PT_FORM3_OWNERSHIP_TYPE"), value: t(application?.ownershipCategory) || t("CS_NA") },
+        { title: t("PT_COMMON_INSTITUTION_NAME"), value: application?.institution?.name || "N/A" },
+        { title: t("PT_TYPE_OF_INSTITUTION"), value: application?.institution?.type || "N/A" },
+        { title: t("PT_OWNER_NAME"), value: application?.institution?.nameOfAuthorizedPerson || "N/A" },
+        { title: t("PT_COMMON_AUTHORISED_PERSON_DESIGNATION"), value: application?.institution?.designation || "N/A" },
+        { title: t("PT_FORM3_MOBILE_NUMBER"), value: application?.owners[0]?.mobileNumber || "N/A" },
+        { title: t("PT_OWNERSHIP_INFO_TEL_PHONE_NO"), value: application?.owners[0]?.altContactNumber || "N/A" },
+        { title: t("PT_OWNERSHIP_INFO_CORR_ADDR"), value: application?.owners[0]?.correspondenceAddress || "N/A" },
+        { title: t("PT_FORM3_OWNERSHIP_TYPE"), value: t(application?.ownershipCategory) || "N/A" },
       ],
     };
   } else {
     return {
       title: t("PT_OWNERSHIP_INFO_SUB_HEADER"),
-      values: [{ title: t("PT_NO_OWNERS"), value: t("CS_NA") }],
+      values: [{ title: t("PT_NO_OWNERS"), value: "N/A" }],
     };
   }
 };
-
 const getAssessmentInfo = (application, t) => {
   let values = [
-    { title: t("PT_ASSESMENT_INFO_USAGE_TYPE"), value: t(getPropertyUsageTypeLocale(application?.usageCategory)) || t("CS_NA") },
-    { title: t("PT_ASSESMENT_INFO_TYPE_OF_BUILDING"), value: t(getPropertyTypeLocale(application?.propertyType)) || t("CS_NA") },
-    { title: t("PT_ASSESMENT_INFO_PLOT_SIZE"), value: t(application?.landArea) || t("CS_NA") },
-    { title: t("PT_ASSESMENT_INFO_NO_OF_FLOOR"), value: t(application?.noOfFloors) || t("CS_NA") },
+    { title: t("PT_ASSESMENT_INFO_USAGE_TYPE"), value: t(getPropertyUsageTypeLocale(application?.usageCategory)) || "N/A" },
+    { title: t("PT_ASSESMENT_INFO_TYPE_OF_BUILDING"), value: t(getPropertyTypeLocale(application?.propertyType)) || "N/A" },
+    { title: t("PT_ASSESMENT_INFO_PLOT_SIZE"), value: t(application?.landArea) || "N/A" },
+    { title: t("PT_ASSESMENT_INFO_NO_OF_FLOOR"), value: t(application?.noOfFloors) || "N/A" },
   ];
   application.units = application?.units?.filter((unit) => unit.active == true) || [];
   let flrno,
@@ -101,7 +95,7 @@ const getAssessmentInfo = (application, t) => {
       {
         title: t(""),
       },
-      { title: t("PT_UNIT")+" "+ i },
+      { title: t(`Unit${i}`) },
       {
         title: t(""),
       },
@@ -113,15 +107,15 @@ const getAssessmentInfo = (application, t) => {
       },
       {
         title: (flrno = unit?.floorNo) > -3 ? t("PT_ASSESSMENT_UNIT_USAGE_TYPE") : "",
-        value: (flrno = unit?.floorNo) > -3 ? t(getPropertySubUsageTypeLocale(unit?.usageCategory)) || t("CS_NA") : "",
+        value: (flrno = unit?.floorNo) > -3 ? t(getPropertySubUsageTypeLocale(unit?.usageCategory)) || "N/A" : "",
       },
       {
         title: (flrno = unit?.floorNo) > -3 ? t("PT_ASSESMENT_INFO_OCCUPLANCY") : "",
-        value: (flrno = unit?.floorNo) > -3 ? t(getPropertyOccupancyTypeLocale(unit?.occupancyType)) || t("CS_NA") : "",
+        value: (flrno = unit?.floorNo) > -3 ? t(getPropertyOccupancyTypeLocale(unit?.occupancyType)) || "N/A" : "",
       },
       {
         title: (flrno = unit?.floorNo) > -3 ? t("PT_FORM2_BUILT_AREA") : "",
-        value: (flrno = unit?.floorNo) > -3 ? t(unit?.constructionDetail?.builtUpArea) || t("CS_NA") : "",
+        value: (flrno = unit?.floorNo) > -3 ? t(unit?.constructionDetail?.builtUpArea) || "N/A" : "",
       },
       {
         title:
@@ -130,12 +124,7 @@ const getAssessmentInfo = (application, t) => {
               ? t("PT_FORM2_TOTAL_ANNUAL_RENT")
               : t("")
             : "",
-        value:
-          (flrno = unit?.floorNo) > -3
-            ? t(getPropertyOccupancyTypeLocale(unit?.occupancyType)) === "Rented"
-              ? (unit?.arv && `₹${t(unit?.arv)}`) || "NA"
-              : t("")
-            : "",
+        value: (flrno = unit?.floorNo) > -3 ? (t(getPropertyOccupancyTypeLocale(unit?.occupancyType)) === "Rented" ?  unit?.arv&&`₹${t(unit?.arv)}`||'NA' : t("")) : "",
       },
     ];
 
@@ -147,93 +136,9 @@ const getAssessmentInfo = (application, t) => {
   };
 };
 
-const getMutationDetails = (application, t) => {
-  return {
-    title: t("PT_MUTATION_DETAILS"),
-    values: [
-      {
-        title: t("PT_MUTATION_COURT_PENDING_OR_NOT"),
-        value: application?.additionalDetails?.isMutationInCourt
-          ? t(`PT_MUTATION_PENDING_${application?.additionalDetails.isMutationInCourt}`)
-          : t("CS_NA"),
-      },
-      { title: t("PT_MUTATION_COURT_CASE_DETAILS"), value: application?.additionalDetails?.caseDetails || t("CS_NA") },
-      { title: t("PT_MUTATION_STATE_ACQUISITION"), value: application?.additionalDetails?.isPropertyUnderGovtPossession ? t(`PT_MUTATION_STATE_ACQUISITION_${application?.additionalDetails?.isPropertyUnderGovtPossession}`) : t("CS_NA") },
-      { title: t("PT_MUTATION_GOVT_ACQUISITION_DETAILS"), value: application?.additionalDetails?.govtAcquisitionDetails || t("CS_NA") },
-    ],
-  };
-};
-
-const mutationRegistrationDetails = (application, t) => {
-  return {
-    title: t("PT_MUTATION_REGISTRATION_DETAILS"),
-    values: [
-      {
-        title: t("PT_MUTATION_TRANSFER_REASON"),
-        value: t(`PROPERTYTAX_REASONFORTRANSFER_${application?.additionalDetails?.reasonForTransfer.replaceAll(".", "_")}`),
-      },
-      { title: t("PT_MUTATION_MARKET_VALUE"), value: application?.additionalDetails?.marketValue || t("CS_NA") },
-      { title: t("PT_MUTATION_DOCUMENT_NO"), value: application?.additionalDetails?.documentNumber || t("CS_NA") },
-      { title: t("PT_MUTATION_DOCUMENT_VALUE"), value: application?.additionalDetails?.documentValue || t("CS_NA") },
-      {
-        title: t("PT_MUTATION_DOCUMENT_ISSUE_DATE"),
-        value: application?.additionalDetails?.documentDate ? new Date(application?.additionalDetails?.documentDate).toDateString() : t("CS_NA"),
-      },
-      {
-        title: t(""),
-      },
-      { title: t("PT_MUTATION_REMARKS"), value: application?.additionalDetails?.remarks || t("CS_NA") },
-    ],
-  };
-};
-
 const getPTAcknowledgementData = async (application, tenantInfo, t) => {
-  console.log(application, "inside acknowledgement data");
   const filesArray = application?.documents?.map((value) => value?.fileStoreId);
   const res = await Digit.UploadServices.Filefetch(filesArray, application?.tenantId.split(".")[0]);
-
-  if (application.creationReason === "MUTATION") {
-    return {
-      t: t,
-      tenantId: tenantInfo?.code,
-      name: `${t(tenantInfo?.i18nKey)} ${ulbCamel(t(`ULBGRADE_${tenantInfo?.city?.ulbGrade.toUpperCase().replace(" ", "_").replace(".", "_")}`))}`,
-      email: tenantInfo?.emailId,
-      phoneNumber: tenantInfo?.contactNumber,
-      heading: t("PT_ACKNOWLEDGEMENT"),
-      details: [
-        {
-          title: t("CS_TITLE_APPLICATION_DETAILS"),
-          values: [
-            { title: t("PT_APPLICATION_NO"), value: application?.acknowldgementNumber },
-            { title: t("PT_PROPERRTYID"), value: application?.propertyId },
-            {
-              title: t("CS_APPLICATION_DETAILS_APPLICATION_DATE"),
-              value: Digit.DateUtils.ConvertTimestampToDate(application?.auditDetails?.createdTime, "dd/MM/yyyy"),
-            },
-          ],
-        },
-        {
-          title: t("PT_PROPERTY_ADDRESS_SUB_HEADER"),
-          values: [
-            { title: t("PT_PROPERTY_ADDRESS_PINCODE"), value: application?.address?.pincode || t("CS_NA") },
-            { title: t("PT_PROPERTY_ADDRESS_CITY"), value: t(getCityLocale(application?.tenantId)) || t("CS_NA") },
-            {
-              title: t("PT_PROPERTY_ADDRESS_MOHALLA"),
-              value: t(`${getMohallaLocale(application?.address?.locality?.code, application?.tenantId)}`) || t("CS_NA"),
-            },
-            { title: t("PT_PROPERTY_ADDRESS_STREET_NAME"), value: application?.address?.street || t("CS_NA") },
-            { title: t("PT_PROPERTY_ADDRESS_HOUSE_NO"), value: application?.address?.doorNo || t("CS_NA") },
-            { title: t("PT_PROPERTY_ADDRESS_LANDMARK"), value: application?.address?.landmark || t("CS_NA") },
-          ],
-        },
-        getOwner(application, t, "PT_MUTATION_TRANSFEROR_DETAILS"),
-        getOwner(application, t, "PT_MUTATION_TRANSFEREE_DETAILS_HEADER"),
-        getMutationDetails(application, t),
-        mutationRegistrationDetails(application, t),
-      ],
-    };
-  }
-
   return {
     t: t,
     tenantId: tenantInfo?.code,
@@ -258,15 +163,15 @@ const getPTAcknowledgementData = async (application, tenantInfo, t) => {
       {
         title: t("PT_PROPERTY_ADDRESS_SUB_HEADER"),
         values: [
-          { title: t("PT_PROPERTY_ADDRESS_PINCODE"), value: application?.address?.pincode || t("CS_NA") },
-          { title: t("PT_PROPERTY_ADDRESS_CITY"), value: t(getCityLocale(application?.tenantId)) || t("CS_NA") },
+          { title: t("PT_PROPERTY_ADDRESS_PINCODE"), value: application?.address?.pincode || "N/A" },
+          { title: t("PT_PROPERTY_ADDRESS_CITY"), value: t(getCityLocale(application?.tenantId)) || "N/A" },
           {
             title: t("PT_PROPERTY_ADDRESS_MOHALLA"),
-            value: t(`${getMohallaLocale(application?.address?.locality?.code, application?.tenantId)}`) || t("CS_NA"),
+            value: t(`${getMohallaLocale(application?.address?.locality?.code, application?.tenantId)}`) || "N/A",
           },
-          { title: t("PT_PROPERTY_ADDRESS_STREET_NAME"), value: application?.address?.street || t("CS_NA") },
-          { title: t("PT_PROPERTY_ADDRESS_HOUSE_NO"), value: application?.address?.doorNo || t("CS_NA") },
-          application?.channel === "CITIZEN" ? { title: t("PT_PROPERTY_ADDRESS_LANDMARK"), value: application?.address?.landmark || t("CS_NA") }: {},
+          { title: t("PT_PROPERTY_ADDRESS_STREET_NAME"), value: application?.address?.street || "N/A" },
+          { title: t("PT_PROPERTY_ADDRESS_HOUSE_NO"), value: application?.address?.doorNo || "N/A" },
+          { title: t("PT_PROPERTY_ADDRESS_LANDMARK"), value: application?.address?.landmark || "N/A" },
         ],
       },
       {
@@ -276,8 +181,8 @@ const getPTAcknowledgementData = async (application, tenantInfo, t) => {
             ? application.documents.map((document, index) => {
                 let documentLink = pdfDownloadLink(res?.data, document?.fileStoreId);
                 return {
-                  title: t(document?.documentType || t("CS_NA")),
-                  value: pdfDocumentName(documentLink, index) || t("CS_NA"),
+                  title: t(document?.documentType || "N/A"),
+                  value: pdfDocumentName(documentLink, index) || "N/A",
                 };
               })
             : "NA",

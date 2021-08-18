@@ -21,7 +21,7 @@ export const LoginService = {
       method: "post",
       params,
       headers: {
-        authorization: "Basic ZWdvdi11c2VyLWNsaWVudDo=",
+        authorization: "Basic ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0",
         "Content-Type": "application/x-www-form-urlencoded",
       },
     };

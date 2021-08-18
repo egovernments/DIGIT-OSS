@@ -1,13 +1,13 @@
-import { Banner, Card, CardText, Loader, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
+import { Banner, Card, CardText, Loader, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
-import { Link, useParams } from "react-router-dom";
 
 export const SuccessfulPayment = (props) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const { eg_pg_txnid: egId, workflow: workflw } = Digit.Hooks.useQueryParams();
+  const { eg_pg_txnid: egId } = Digit.Hooks.useQueryParams();
   const [printing, setPrinting] = useState(false);
   const [allowFetchBill, setallowFetchBill] = useState(false);
   const { businessService: business_service, consumerCode, tenantId } = useParams();
@@ -20,31 +20,14 @@ export const SuccessfulPayment = (props) => {
 
   const { label } = Digit.Hooks.useApplicationsForBusinessServiceSearch({ businessService: business_service }, { enabled: false });
 
-  // const { data: demand } = Digit.Hooks.useDemandSearch(
-  //   { consumerCode, businessService: business_service },
-  //   { enabled: !isLoading, retry: false, staleTime: Infinity, refetchOnWindowFocus: false }
-  // );
+  const { data: demand } = Digit.Hooks.useDemandSearch(
+    { consumerCode, businessService: business_service },
+    { enabled: !isLoading, retry: false, staleTime: Infinity, refetchOnWindowFocus: false }
+  );
 
-  // const { data: billData, isLoading: isBillDataLoading } = Digit.Hooks.useFetchPayment(
-  //   { tenantId, consumerCode, businessService: business_service },
-  //   { enabled: allowFetchBill, retry: false, staleTime: Infinity, refetchOnWindowFocus: false }
-  // );
-
-  const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
-    {
-      tenantId,
-      businessService: business_service,
-      receiptNumbers: data?.payments?.Payments?.[0]?.paymentDetails[0].receiptNumber,
-    },
-    {
-      retry: false,
-      staleTime: Infinity,
-      refetchOnWindowFocus: false,
-      select: (dat) => {
-        return dat.Payments[0];
-      },
-      enabled: allowFetchBill,
-    }
+  const { data: billData, isLoading: isBillDataLoading } = Digit.Hooks.useFetchPayment(
+    { tenantId, consumerCode, businessService: business_service },
+    { enabled: allowFetchBill, retry: false, staleTime: Infinity, refetchOnWindowFocus: false }
   );
 
   const { data: generatePdfKey } = Digit.Hooks.useCommonMDMS(tenantId, "common-masters", "ReceiptKey", {
@@ -69,7 +52,7 @@ export const SuccessfulPayment = (props) => {
     }
   }, [data]);
 
-  if (isLoading || recieptDataLoading) {
+  if (isLoading) {
     return <Loader />;
   }
 
@@ -106,20 +89,8 @@ export const SuccessfulPayment = (props) => {
   }
 
   const paymentData = data?.payments?.Payments[0];
-  const amount = reciept_data?.paymentDetails?.[0]?.totalAmountPaid;
+  const amount = paymentData.totalAmountPaid;
   const transactionDate = paymentData.transactionDate;
-  const printCertificate = async () => {
-    //const tenantId = Digit.ULBService.getCurrentTenantId();
-    const state = tenantId;
-    const applicationDetails = await Digit.TLService.search({ applicationNumber: consumerCode, tenantId });
-    const generatePdfKeyForTL = "tlcertificate"
-
-    if (applicationDetails) {
-      let response = await Digit.PaymentService.generatePdf(state, { Licenses: applicationDetails?.Licenses }, generatePdfKeyForTL);
-      const fileStore = await Digit.PaymentService.printReciept(state, { fileStoreIds: response.filestoreIds[0] });
-      window.open(fileStore[response.filestoreIds[0]], "_blank");
-    }
-  }
 
   const printReciept = async () => {
     if (printing) return;
@@ -138,40 +109,15 @@ export const SuccessfulPayment = (props) => {
   };
 
   const getBillingPeriod = (billDetails) => {
-    const { taxPeriodFrom, taxPeriodTo, fromPeriod, toPeriod } = billDetails || {};
+    const { taxPeriodFrom, taxPeriodTo } = billDetails || {};
     if (taxPeriodFrom && taxPeriodTo) {
       let from = new Date(taxPeriodFrom).getFullYear().toString();
       let to = new Date(taxPeriodTo).getFullYear().toString();
       return "FY " + from + "-" + to;
-    } else if (fromPeriod && toPeriod) {
-      if (workflw === "mcollect") {
-        from =
-          new Date(fromPeriod).getDate().toString() +
-          " " +
-          Digit.Utils.date.monthNames[new Date(fromPeriod).getMonth() + 1].toString() +
-          " " +
-          new Date(fromPeriod).getFullYear().toString();
-        to =
-          new Date(toPeriod).getDate() +
-          " " +
-          Digit.Utils.date.monthNames[new Date(toPeriod).getMonth() + 1] +
-          " " +
-          new Date(toPeriod).getFullYear();
-        return from + " - " + to;
-      }
-      let from = new Date(fromPeriod).getFullYear().toString();
-      let to = new Date(toPeriod).getFullYear().toString();
-      return "FY " + from + "-" + to;
-
     } else return "N/A";
   };
 
-  let bannerText;
-  if (workflw) {
-    bannerText = `CITIZEN_SUCCESS_UC_PAYMENT_MESSAGE`;
-  } else {
-    bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_PAYMENT_MESSAGE`;
-  }
+  const bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_PAYMENT_MESSAGE`;
 
   // https://dev.digit.org/collection-services/payments/FSM.TRIP_CHARGES/_search?tenantId=pb.amritsar&consumerCodes=107-FSM-2021-02-18-063433
 
@@ -201,35 +147,42 @@ export const SuccessfulPayment = (props) => {
         successful={true}
       />
       <CardText>{t(`${bannerText}_DETAIL`)}</CardText>
+      {/* {generatePdfKey ? (
+        <div className="primary-label-btn d-grid" onClick={printReciept}>
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z" />
+          </svg>
+          
+        </div>
+      ) : null} */}
       <StatusTable>
         <Row rowContainerStyle={rowContainerStyle} last label={t(label)} text={applicationNo} />
         {/** TODO : move this key and value into the hook based on business Service */}
-        {(business_service === "PT" || workflw) && (
-          <Row
-            rowContainerStyle={rowContainerStyle}
-            last
-            label={t("CS_PAYMENT_BILLING_PERIOD")}
-            text={getBillingPeriod(reciept_data?.paymentDetails[0]?.bill?.billDetails[0])}
-          />
+        {business_service === "PT" && (
+          <Row rowContainerStyle={rowContainerStyle} last label={t("CS_PAYMENT_BILLING_PERIOD")} text={getBillingPeriod(demand?.Demands?.[0])} />
         )}
 
-        {(business_service === "PT" || workflw) && (
-          <Row
-            rowContainerStyle={rowContainerStyle}
-            last
-            label={t("CS_PAYMENT_AMOUNT_PENDING")}
-            text={reciept_data?.paymentDetails?.[0]?.totalDue - reciept_data?.paymentDetails?.[0]?.totalAmountPaid}
-          />
-        )}
+        {business_service === "PT" &&
+          (isBillDataLoading ? (
+            <Loader />
+          ) : (
+            <Row
+              rowContainerStyle={rowContainerStyle}
+              last
+              label={t("CS_PAYMENT_AMOUNT_PENDING")}
+              text={demand?.Demands?.some((e) => !e?.isPaymentCompleted) ? "₹ " + billData?.Bill[0]?.totalAmount : "₹ " + 0}
+            />
+          ))}
 
         <Row rowContainerStyle={rowContainerStyle} last label={t("CS_PAYMENT_TRANSANCTION_ID")} text={egId} />
         <Row
           rowContainerStyle={rowContainerStyle}
           last
           label={t(ommitRupeeSymbol ? "CS_PAYMENT_AMOUNT_PAID_WITHOUT_SYMBOL" : "CS_PAYMENT_AMOUNT_PAID")}
-          text={"₹ " + reciept_data?.paymentDetails?.[0]?.totalAmountPaid}
+          text={"₹ " + amount}
         />
-        {(business_service !== "PT" || workflw) && (
+        {business_service !== "PT" && (
           <Row
             rowContainerStyle={rowContainerStyle}
             last
@@ -238,35 +191,10 @@ export const SuccessfulPayment = (props) => {
           />
         )}
       </StatusTable>
-      <div style={{display:"flex"}}>
-      {business_service == "TL" ? (
-        <div className="primary-label-btn d-grid" style={{ marginLeft: "unset", marginRight: "20px", marginTop:"15px",marginBottom:"15px" }} onClick={printReciept}>
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#f47738">
-            <path d="M0 0h24v24H0V0z" fill="none" />
-            <path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z" />
-          </svg>
-          {t("TL_RECEIPT")}
-        </div>
-      ) : null}
-      {business_service == "TL" ? (
-        <div className="primary-label-btn d-grid" style={{ marginLeft: "unset", marginTop:"15px" }} onClick={printCertificate}>
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#f47738">
-            <path d="M0 0h24v24H0V0z" fill="none" />
-            <path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z" />
-          </svg>
-          {t("TL_CERTIFICATE")}
-        </div>
-      ) : null}
-      </div>
-      {!(business_service == "TL") && <SubmitBar onSubmit={printReciept} label={t("COMMON_DOWNLOAD_RECEIPT")} />}
-      {!(business_service == "TL") &&<div className="link" style={isMobile ? { marginTop: "8px", width: "100%", textAlign: "center" } : { marginTop: "8px" }}>
+      <SubmitBar onSubmit={printReciept} label={t("COMMON_DOWNLOAD_RECEIPT")} />
+      <div className="link" style={isMobile ? { marginTop: "8px", width: "100%", textAlign: "center" } : { marginTop: "8px" }}>
         <Link to={`/digit-ui/citizen`}>{t("CORE_COMMON_GO_TO_HOME")}</Link>
-      </div>}
-      {business_service == "TL" && 
-      <Link to={`/digit-ui/citizen`}>
-      <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
-      </Link>
-      }
+      </div>
     </Card>
   );
 };

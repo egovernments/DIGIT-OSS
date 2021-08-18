@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from "react-table";
-import { ArrowBack, ArrowForward, ArrowToFirst, ArrowToLast, SortDown, SortUp } from "./svgindex";
+import { useTable, useRowSelect, usePagination, useSortBy, useGlobalFilter, useControlledState } from "react-table";
+import { ArrowBack, ArrowForward, SortUp, SortDown } from "./svgindex";
 
 // const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
 //   const defaultRef = React.useRef();
@@ -17,7 +17,7 @@ import { ArrowBack, ArrowForward, ArrowToFirst, ArrowToLast, SortDown, SortUp } 
 //   );
 // });
 
-const noop = () => { };
+const noop = () => {};
 
 const Table = ({
   className = "table",
@@ -31,16 +31,11 @@ const Table = ({
   autoSort = false,
   initSortId = "",
   onSearch = false,
-  manualPagination = true,
   totalRecords,
   onNextPage,
   onPrevPage,
-  globalSearch,
   onSort = noop,
   onPageSizeChange,
-  onLastPage,
-  onFirstPage,
-  isPaginationRequired = true,
   sortParams = [],
 }) => {
   const {
@@ -64,9 +59,9 @@ const Table = ({
     {
       columns,
       data,
-      initialState: { pageIndex: currentPage, pageSize: pageSizeLimit, sortBy: autoSort ? [{ id: initSortId, desc: false }] : sortParams },
+      initialState: { pageIndex: currentPage, pageSize: pageSizeLimit, sortBy: autoSort ? [initSortId] : sortParams },
       pageCount: totalRecords > 0 ? Math.ceil(totalRecords / pageSizeLimit) : -1,
-      manualPagination: manualPagination,
+      manualPagination: true,
       disableMultiSort: false,
       disableSortBy: disableSort,
       manualSortBy: autoSort ? false : true,
@@ -74,11 +69,10 @@ const Table = ({
       autoResetSortBy: false,
       disableSortRemove: true,
       disableGlobalFilter: onSearch === false ? true : false,
-      globalFilter: globalSearch || "text",
       useControlledState: (state) => {
         return React.useMemo(() => ({
           ...state,
-          pageIndex: manualPagination ? currentPage : state.pageIndex,
+          pageIndex: currentPage,
         }));
       },
     },
@@ -120,7 +114,7 @@ const Table = ({
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())} style={{verticalAlign: "top"}} >
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render("Header")}
                   <span>{column.isSorted ? column.isSortedDesc ? <SortDown /> : <SortUp /> : ""}</span>
                 </th>
@@ -162,15 +156,10 @@ const Table = ({
           })}
         </tbody>
       </table>
-      {isPaginationRequired && 
+      {
         <div className="pagination">
           {`${t("CS_COMMON_ROWS_PER_PAGE")} :`}
-          <select
-            className="cp"
-            value={pageSize}
-            style={{ marginRight: "15px" }}
-            onChange={manualPagination ? onPageSizeChange : (e) => setPageSize(Number(e.target.value))}
-          >
+          <select className="cp" value={pageSize} style={{ marginRight: "15px" }} onChange={onPageSizeChange}>
             {[10, 20, 30, 40, 50].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
                 {pageSize}
@@ -185,12 +174,13 @@ const Table = ({
               {totalRecords ? `of ${totalRecords}` : ""}
             </span>{" "}
           </span>
-          {/* to go to first and last page we need to do a manual pagination , it can be updated later*/}
-          {canPreviousPage && manualPagination && onFirstPage && <ArrowToFirst onClick={() => (manualPagination && onFirstPage())} className={"cp"} />}
-          {canPreviousPage && <ArrowBack onClick={() => (manualPagination ? onPrevPage() : previousPage())} className={"cp"} />}
-          {rows.length == pageSizeLimit && canNextPage && <ArrowForward onClick={() => (manualPagination ? onNextPage() : nextPage())} className={"cp"} />}
-          {rows.length == pageSizeLimit && canNextPage && manualPagination && onLastPage && <ArrowToLast onClick={() => (manualPagination && onLastPage())} className={"cp"} />}
-          {/* to go to first and last page we need to do a manual pagination , it can be updated later*/}
+          {/* <button style={{ marginLeft: "20px", marginRight: "20px" }} onClick={() => previousPage()} disabled={!canPreviousPage}>
+          <span>
+
+          </span>
+        </button> */}
+          {canPreviousPage && <ArrowBack onClick={() => onPrevPage()} className={"cp"} />}
+          {canNextPage && <ArrowForward onClick={() => onNextPage()} className={"cp"} />}
         </div>
       }
     </React.Fragment>

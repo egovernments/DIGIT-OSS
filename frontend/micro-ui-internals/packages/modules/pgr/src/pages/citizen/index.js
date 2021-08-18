@@ -9,15 +9,13 @@ import { CreateComplaint } from "./Create";
 import { ComplaintsList } from "./ComplaintsList";
 import ComplaintDetailsPage from "./ComplaintDetails";
 import Response from "./Response";
-import { useTranslation } from "react-i18next";
 
 const App = () => {
-  const { t } = useTranslation();
   const { path, url, ...match } = useRouteMatch();
   const location = useLocation();
   return (
     <React.Fragment>
-      {!location.pathname.includes("/response") && <BackButton>{t("CS_COMMON_BACK")}</BackButton>}
+      {!location.pathname.includes("/response") && <BackButton>Back</BackButton>}
       <Switch>
         {/* <AppContainer> */}
         <PrivateRoute path={`${path}/create-complaint`} component={CreateComplaint} />

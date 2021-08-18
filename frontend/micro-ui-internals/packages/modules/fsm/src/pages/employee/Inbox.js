@@ -52,10 +52,10 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
       fromDate: searchParams?.fromDate ? new Date(searchParams?.fromDate).getTime() : undefined,
       toDate: searchParams?.toDate ? new Date(searchParams?.toDate).getTime() : undefined,
     },
+    null,
     {
       enabled: isInbox,
-    },
-    DSO ? true : false
+    }
   );
 
   const {
@@ -98,7 +98,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
   };
 
   const handleSort = useCallback((args) => {
-    if (args?.length === 0) return;
+    if (args.length === 0) return;
     setSortParams(args);
     // const [sortBy] = args;
     // setSortParams({ key: sortBy.id, sortOrder: sortBy.desc ? "DESC" : "ASC" });
@@ -110,7 +110,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
 
   const onSearch = (params = {}) => {
     if (isSearch) {
-      if (Object.keys(params)?.length === 0) {
+      if (Object.keys(params).length === 0) {
         setShouldSearch(false);
         queryClient.resetQueries("FSM_CITIZEN_SEARCH");
       } else {
@@ -185,11 +185,11 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
     }
   };
 
-  if (applications?.table?.length !== null) {
+  if (applications?.length !== null) {
     if (isMobile) {
       return (
         <MobileInbox
-          data={isInbox ? applications?.table : data}
+          data={isInbox ? applications : data}
           isLoading={isInbox ? isLoading || isIdle : isSearchLoading}
           isSearch={isSearch}
           searchFields={getSearchFields(userRoles)}
@@ -209,7 +209,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
           {!isSearch && (
             <Header>
               {t("ES_COMMON_INBOX")}
-              {Number(applications?.totalCount) ? <p className="inbox-count">{Number(applications?.totalCount)}</p> : null}
+              {Number(applications?.[0]?.totalCount) ? <p className="inbox-count">{Number(applications?.[0]?.totalCount)}</p> : null}
             </Header>
           )}
           <DesktopInbox
@@ -229,9 +229,9 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
             searchParams={searchParams}
             onPageSizeChange={handlePageSizeChange}
             parentRoute={parentRoute}
-            paginationParms={paginationParms}
+            searchParams={searchParams}
             sortParams={sortParams}
-            totalRecords={isInbox ? Number(applications?.totalCount) : totalCount}
+            totalRecords={isInbox ? Number(applications?.[0]?.totalCount) : totalCount}
           />
         </div>
       );

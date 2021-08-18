@@ -55,7 +55,7 @@ export const newConfig = [
       {
         type: "component",
         route: "street",
-        component: "PTSelectStreet",
+        component: "SelectStreet",
         key: "address",
         withoutLabel: true,
         texts: {
@@ -89,7 +89,7 @@ export const newConfig = [
         withoutLabel: true,
         texts: {
           headerCaption: "PT_PROPERTY_LOCATION_CAPTION",
-          header: "PT_PROOF_OF_ADDRESS_HEADER",
+          header: "Proof of Address",
           cardText: "",
           nextText: "PT_COMMONS_NEXT",
           submitBarLabel: "PT_COMMONS_NEXT",
@@ -422,7 +422,6 @@ export const newConfig = [
         },
         withoutLabel: true,
         nextStep: "special-owner-category",
-        hideInEmployee: true,
       },
       {
         type: "component",
@@ -438,7 +437,6 @@ export const newConfig = [
         key: "owners",
         withoutLabel: true,
         nextStep: "owner-address",
-        hideInEmployee: true,
       },
       {
         type: "component",
@@ -454,14 +452,12 @@ export const newConfig = [
         key: "owners",
         withoutLabel: true,
         nextStep: "special-owner-category-proof",
-        hideInEmployee: true,
       },
       {
         type: "component",
         component: "SelectAltContactNumber",
         key: "owners",
         withoutLabel: true,
-        hideInEmployee: true,
       },
       {
         type: "component",
@@ -544,13 +540,6 @@ export const newConfig = [
         //nextStep: "",
         nextStep: null,
         hideInEmployee: true,
-      },
-      {
-        type: "component",
-        component: "PTEmployeeOwnershipDetails",
-        key: "owners",
-        withoutLabel: true,
-        hideInCitizen: true,
       },
     ],
   },

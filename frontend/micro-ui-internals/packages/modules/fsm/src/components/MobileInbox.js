@@ -54,7 +54,7 @@ const MobileInbox = ({
 
   const fstpOperatorData = vehicleLog?.map((vehicle) => ({
     [t("ES_INBOX_VEHICLE_LOG")]: vehicle?.applicationNo,
-    [t("ES_INBOX_VEHICLE_NO")]: vehicle?.vehicle?.registrationNumber,
+    [t("ES_INBOX_VEHICLE_NO")]: vehicle?.vehicle.registrationNumber,
     [t("ES_INBOX_DSO_NAME")]: vehicle?.tripOwner.displayName,
     [t("ES_INBOX_WASTE_COLLECTED")]: vehicle?.tripDetails[0]?.volume,
   }));

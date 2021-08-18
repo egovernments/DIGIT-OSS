@@ -1,72 +1,51 @@
-import React, { useRef, useState } from "react";
+import React, { Fragment, useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { Card, DownloadIcon, TextInput, CardCaption, CardLabel, EllipsisMenu, SearchIconSvg, EmailIcon, WhatsappIcon } from "@egovernments/digit-ui-react-components";
+import {
+  Card,
+  CardSubHeader,
+  DownloadIcon,
+  TextInput,
+  CardCaption,
+  CardLabel,
+  Ellipsis,
+  SearchIconSvg,
+} from "@egovernments/digit-ui-react-components";
+import FilterContext from "./FilterContext";
+
+const renderUnits = (denomination) => {
+  switch (denomination) {
+    case "Unit":
+      return "";
+    case "Lac":
+      return "(In Lac)";
+    case "Cr":
+      return "(In Cr)";
+  }
+};
 
 const SearchImg = () => {
   return <SearchIconSvg className="signature-img" />;
 };
 
-const GenericChart = ({ header, subHeader, className, caption, children, showHeader = true, showSearch = false, showDownload = false, onChange }) => {
+const GenericChart = ({ header, className, caption, children, showSearch = false, showDownload = false, onChange }) => {
   const { t } = useTranslation();
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const [chartData, setChartData] = useState(null);
 
-  const chart = useRef();
-
-  const menuItems = [
-    {
-      code: "image",
-      i18nKey: t("ES_COMMON_DOWNLOAD_IMAGE"),
-      icon: <DownloadIcon />
-    },
-    {
-      code: "shareImage",
-      i18nKey: t("ES_DSS_SHARE_IMAGE"),
-      target: "mail",
-      icon: <EmailIcon />,
-    },
-    {
-      code: "shareImage",
-      i18nKey: t("ES_DSS_SHARE_IMAGE"),
-      target: "whatsapp",
-      icon: <WhatsappIcon />,
-    },
-  ];
-
-  function download(data) {
-    setTimeout(() => {
-      switch (data.code) {
-        case "pdf":
-          return Digit.Download.PDF(chart, t(header));
-        case "image":
-          return Digit.Download.Image(chart, t(header));
-        case "sharePdf":
-          return Digit.ShareFiles.PDF(tenantId, chart, t(header), data.target);
-        case "shareImage":
-          return Digit.ShareFiles.Image(tenantId, chart, t(header), data.target);
-      }
-    }, 500);
-  }
-
-  const handleExcelDownload = () => {
-    return Digit.Download.Excel(chartData, t(header));
-  }
+  const { value } = useContext(FilterContext);
 
   return (
-    <Card className={`chart-item ${className}`} ReactRef={chart}>
-      <div className={`chartHeader ${showSearch && "column-direction"}`}>
-        <div>
-          {showHeader && <CardLabel style={{ fontWeight: "bold" }}>{`${t(header)}`}</CardLabel>}
-          {subHeader && <p style={{ color: "#505A5F", fontWeight: 700 }}>{subHeader}</p>}
-        </div>
+    <Card className={`chart-item ${className}`}>
+      <div className="chartHeader">
+        <CardLabel style={{ fontWeight: "bold", wordBreak: "break-all" }}>{`${t(header)} ${renderUnits(value.denomination)}`}</CardLabel>
         <div className="sideContent">
           {showSearch && <TextInput className="searchInput" placeholder="Search" signature={true} signatureImg={<SearchImg />} onChange={onChange} />}
-          {showDownload && <DownloadIcon className="mrlg cursorPointer" onClick={handleExcelDownload} />}
-          <EllipsisMenu menuItems={menuItems} displayKey="i18nKey" onSelect={(data) => download(data)} />
+          {showDownload && <DownloadIcon className="mrlg" />}
+          <Ellipsis />
         </div>
       </div>
       {caption && <CardCaption>{caption}</CardCaption>}
-      {React.cloneElement(children, { setChartData })}
+      {/* <div className="chart-item"> */}
+      {children}
+      {/* </div> */}
     </Card>
   );
 };

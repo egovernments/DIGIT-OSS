@@ -148,7 +148,7 @@ const ComplaintDetailsPage = (props) => {
           <Card>
             <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
             <TextArea value={comment} onChange={(e) => setComment(e.target.value)} name="" />
-            <SubmitBar disabled={disableComment || comment.length < 1} onSubmit={submitComment} label={t("CS_PGR_SEND_COMMENT")} />
+            <SubmitBar disabled={disableComment || comment.length < 1} onSubmit={submitComment} label="Send" />
           </Card>
           {toast && (
             <Toast

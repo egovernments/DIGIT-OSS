@@ -47,10 +47,6 @@
   }
 }
 
-.docsDescription {
-  color: #0B0C0C !important;
-} 
-
 .field-container {
   @apply flex justify-center items-center;
 }
@@ -194,7 +190,7 @@
   }
 
   .employeeCard {
-    @apply mb-md mx-md !important;
+    @apply mb-md;
 
     &.filter {
       margin-left: auto;

@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import Status from "./Status";
 import AssignedTo from "./AssignedTo";
 
-const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, removeParam, ...props }) => {
+const Filter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props }) => {
   const { t } = useTranslation();
 
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
@@ -32,7 +32,9 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
     { statuses: [] }
   );
 
+  // const localities = useSelector((state) => state.common.revenue_localities[tenantId]);
   // console.log("find use query localities here", localities)
+  // debugger
   const selectLocality = (d) => {
     onFilterChange({ locality: [...searchParams?.locality, d] });
   };
@@ -49,7 +51,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
 
   return (
     <React.Fragment>
-      {((!DSO && !isFstpOperator && searchParams) || (mergedRoleDetails?.statuses?.length > 0)) && <div className="filter" style={{ marginTop: isFstpOperator ? "-0px" : "revert" }}>
+      <div className="filter" style={{ marginTop: isFstpOperator ? "-0px" : "revert" }}>
         <div className="filter-card">
           <div className="heading">
             <div className="filter-label">{t("ES_COMMON_FILTER_BY")}:</div>
@@ -69,7 +71,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
           </div>
           <div>
             {!DSO && !isFstpOperator && searchParams && (
-              <AssignedTo onFilterChange={onFilterChange} searchParams={searchParams} paginationParms={paginationParms} tenantId={tenantId} t={t} />
+              <AssignedTo onFilterChange={onFilterChange} searchParams={searchParams} tenantId={tenantId} t={t} />
             )}
             <div>
               {/* {GetSelectOptions(t("ES_INBOX_LOCALITY"), localities, selectedLocality, onSelectLocality, "code", onRemove, "locality", "name")} */}
@@ -87,7 +89,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
                   return (
                     <RemoveableTag
                       key={index}
-                      text={locality.i18nkey}
+                      text={locality.name}
                       onClick={() => {
                         onFilterChange({ locality: searchParams?.locality.filter((loc) => loc.code !== locality.code) });
                       }}
@@ -99,14 +101,13 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
           ) : null}
           <div>
             {isRoleStatusFetched && mergedRoleDetails ? (
-              <Status onAssignmentChange={onStatusChange} fsmfilters={searchParams} mergedRoleDetails={mergedRoleDetails} statusMap={props?.applications?.statuses} />
+              <Status onAssignmentChange={onStatusChange} fsmfilters={searchParams} mergedRoleDetails={mergedRoleDetails} />
             ) : (
               <Loader />
             )}
           </div>
         </div>
       </div>
-      }
       {props.type === "mobile" && (
         <ActionBar>
           <ApplyFilterBar

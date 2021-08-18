@@ -23,12 +23,7 @@ const Urls = {
   ChangePassword: "/user/password/nologin/_update",
   UserProfileUpdate: "/user/profile/_update",
   EmployeeSearch: "/egov-hrms/employees/_search",
-
-  InboxSearch: "/inbox/v1/_search",
-
   UserSearch: "/user/_search",
-
-  Shortener: "/egov-url-shortening/shortener",
 
   fsm: {
     search: "/fsm/v1/_search",
@@ -50,8 +45,6 @@ const Urls = {
     generate_pdf: "/pdf-service/v1/_create",
     create_citizen_reciept: "/pg-service/transaction/v1/_create",
     update_citizen_reciept: "/pg-service/transaction/v1/_update",
-    search_bill: "/billing-service/bill/v2/_search",
-    reciept_search: "/collection-services/payments/:buisnessService/_search",
   },
 
   pt: {
@@ -69,45 +62,6 @@ const Urls = {
     dashboardConfig: "/dashboard-analytics/dashboard/getDashboardConfig",
     getCharts: "/dashboard-analytics/dashboard/getChartV2",
   },
-
-  mcollect: {
-    search: "/echallan-services/eChallan/v1/_search",
-    create: "/echallan-services/eChallan/v1/_create?",
-    fetch_bill: "/billing-service/bill/v2/_fetchbill?",
-    search_bill: "/egov-searcher/bill-genie/mcollectbills/_get",
-    search_bill_pt: "/egov-searcher/bill-genie/billswithaddranduser/_get",
-    update: "/echallan-services/eChallan/v1/_update",
-    download_pdf: "/egov-pdf/download/UC/mcollect-challan",
-    receipt_download: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
-    count: "/echallan-services/eChallan/v1/_count"
-  },
-  hrms: {
-    search: "/egov-hrms/employees/_search",
-    count: "/egov-hrms/employees/_count",
-    create: "/egov-hrms/employees/_create",
-    update: "/egov-hrms/employees/_update",
-  },
-  tl: {
-    create: "/tl-services/v1/_create",
-    search: "/tl-services/v1/_search",
-    fetch_payment_details: "/billing-service/bill/v2/_fetchbill",
-    download_pdf: "/egov-pdf/download/TL/",
-    update:"/tl-services/v1/_update",
-    billingslab: "/tl-calculator/billingslab/_search"
-  },
-  receipts: {
-    receipt_download: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
-    payments: "/collection-services/payments",
-    count: "/egov-hrms/employees/_count"
-  },
-  obps: {
-    scrutinyDetails: "/edcr/rest/dcr/scrutinydetails",
-    create: "/bpa-services/v1/bpa/_create"
-  },
-
-  edcr: {
-    create: "/edcr/rest/dcr/scrutinize",
-  }
 };
 
 export default Urls;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TextInput, SearchIconSvg, DatePicker, CardLabelError } from "@egovernments/digit-ui-react-components";
+import { TextInput, SearchIconSvg, DatePicker } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 export const useChequeDetails = (props, t) => {
   const config = [
@@ -11,7 +11,7 @@ export const useChequeDetails = (props, t) => {
           withoutLabel: true,
           type: "custom",
           populators: {
-            name: "paymentModeDetails",
+            name: "chequeDetails",
             customProps: {},
             defaultValue: { instrumentNumber: "", instrumentDate: "", ifscCode: "", bankName: "", bankBranch: "" },
             component: (props, customProps) => <ChequeDetailsComponent onChange={props.onChange} chequeDetails={props.value} {...customProps} />,
@@ -31,7 +31,6 @@ export const ChequeDetailsComponent = (props) => {
   const [instrumentDate, setChequeDate] = useState(props.chequeDetails.instrumentDate);
   const [instrumentNumber, setChequeNo] = useState(props.chequeDetails.instrumentNumber);
   const [ifscCode, setIfsc] = useState(props.chequeDetails.ifscCode);
-  const [ifscCodeError, setIfscCodeError] = useState("");
   const [bankName, setBankName] = useState(props.chequeDetails.bankName);
   const [bankBranch, setBankBranch] = useState(props.chequeDetails.bankBranch?.replace("┬á", " "));
   useEffect(() => {
@@ -40,7 +39,7 @@ export const ChequeDetailsComponent = (props) => {
       if (!instrumentDate) errorObj.instrumentDate = "ES_COMMON_INSTRUMENT_DATE";
       if (!instrumentNumber) errorObj.instrumentNumber = "ES_COMMON_INSTR_NUMBER";
       if (!ifscCode) errorObj.ifscCode = "ES_COMMON_IFSC";
-      props.onChange({ instrumentDate, instrumentNumber, ifscCode, bankName, bankBranch, errorObj, transactionNumber: instrumentNumber });
+      props.onChange({ instrumentDate, instrumentNumber, ifscCode, bankName, bankBranch, errorObj });
     }
   }, [bankName, bankBranch, instrumentDate, instrumentNumber]);
 
@@ -51,16 +50,11 @@ export const ChequeDetailsComponent = (props) => {
         const { BANK, BRANCH } = await res.json();
         setBankName(BANK);
         setBankBranch(BRANCH?.replace("┬á", " "));
-      } else setIfscCodeError(t("CS_PAYMENT_INCORRECT_IFSC_CODE_ERROR"));
+      } else alert(t("CS_PAYMENT_INCORRECT_IFSC_CODE_ERROR"));
     } catch (er) {
-      setIfscCodeError(t("CS_PAYMENT_INCORRECT_IFSC_CODE_ERROR"));
+      alert(t("CS_PAYMENT_INCORRECT_IFSC_CODE_ERROR"));
     }
   };
-
-  const handleIFSCChange = (e) => {
-    setIfsc(e.target.value);
-    setIfscCodeError("");
-  }
 
   return (
     <React.Fragment>
@@ -74,9 +68,8 @@ export const ChequeDetailsComponent = (props) => {
               type="text"
               name="instrumentNumber"
               onChange={(e) => setChequeNo(e.target.value)}
-              required
-              // minlength="6"
-              // maxLength="6"
+              minlength="6"
+              maxLength="6"
             />
           </div>
         </div>
@@ -85,8 +78,22 @@ export const ChequeDetailsComponent = (props) => {
         <h2 className="card-label">{t("PAYMENT_CHEQUE_DATE_LABEL")} *</h2>
         <div className="field">
           <div className="field-container">
+            {/* <input
+              type="text"
+              value={getDatePrint()}
+              readOnly
+              className="employee-card-input"
+              style={{ width: "calc(100%-62px)", borderRight: "0" }}
+            />
+            <input
+              className="employee-card-input"
+              value={instrumentDate}
+              type="date"
+              style={{ width: "62px", borderLeft: "0px" }}
+              name="instrumentDate"
+              onChange={(e) => setChequeDate(e.target.value)}
+            /> */}
             <DatePicker
-              isRequired={true}
               date={instrumentDate}
               onChange={(d) => {
                 setChequeDate(d);
@@ -103,7 +110,7 @@ export const ChequeDetailsComponent = (props) => {
             <div className="field">
               <div>
                 <div className="cheque-date">
-                  <input value={ifscCode} type="text" onChange={handleIFSCChange} minlength="11" maxlength="11" required />
+                  <input value={ifscCode} type="text" onChange={(e) => setIfsc(e.target.value)} minlength="11" maxlength="11" />
                   <button type="button" onClick={setBankDetailsFromIFSC}>
                     <SearchIconSvg />
                   </button>
@@ -111,7 +118,6 @@ export const ChequeDetailsComponent = (props) => {
               </div>
             </div>
           </div>
-          {ifscCodeError && <CardLabelError style={{ width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" }}>{ifscCodeError}</CardLabelError>}
           <div className="label-field-pair">
             <h2 className="card-label">{t("PAYMENT_BANK_NAME_LABEL")}</h2>
             <div className="field">

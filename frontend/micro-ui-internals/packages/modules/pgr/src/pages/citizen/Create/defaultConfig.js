@@ -15,7 +15,7 @@ export const config = {
         headerCaption: "",
         header: "CS_ADDCOMPLAINT_COMPLAINT_TYPE_PLACEHOLDER",
         cardText: "CS_COMPLAINT_TYPE_TEXT",
-        submitBarLabel: "CS_COMMON_NEXT",
+        submitBarLabel: "PT_COMMONS_NEXT",
       },
       nextStep: "sub-type",
     },
@@ -24,7 +24,7 @@ export const config = {
       texts: {
         header: "CS_ADDCOMPLAINT_COMPLAINT_SUBTYPE_PLACEHOLDER",
         cardText: "CS_COMPLAINT_SUBTYPE_TEXT",
-        submitBarLabel: "CS_COMMON_NEXT",
+        submitBarLabel: "PT_COMMONS_NEXT",
       },
       nextStep: "map",
     },

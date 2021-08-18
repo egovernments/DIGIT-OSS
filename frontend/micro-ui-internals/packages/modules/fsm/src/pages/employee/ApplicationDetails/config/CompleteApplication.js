@@ -29,7 +29,7 @@ export const configCompleteApplication = ({ t, vehicle, applicationCreatedTime =
         },
         {
           label: t("ES_FSM_ACTION_WASTE_VOLUME_LABEL"),
-          type: "number",
+          type: "text",
           isMandatory: true,
           populators: {
             name: "wasteCollected",

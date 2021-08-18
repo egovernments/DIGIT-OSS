@@ -50,16 +50,16 @@ const PTWFApplicationTimeline = (props) => {
 
   const showNextActions = (nextActions) => {
     let nextAction = nextActions[0];
-    const next = nextActions.map((action) => action.action);
-    if (next.includes("PAY") || next.includes("EDIT")) {
-      let currentIndex = next.indexOf("EDIT") || next.indexOf("PAY");
-      currentIndex = currentIndex != -1 ? currentIndex : next.indexOf("PAY");
+    const next = nextActions.map(action => action.action);
+    if (next.includes('PAY') || next.includes('EDIT')) {
+      let currentIndex = next.indexOf('EDIT') || next.indexOf('PAY');
+      currentIndex=currentIndex!=-1?currentIndex:next.indexOf('PAY');
       nextAction = nextActions[currentIndex];
     }
     switch (nextAction?.action) {
       case "PAY":
         return (
-          <div style={{ marginTop: "1em", bottom: "0px", width: "100%", marginBottom: "1.2em" }}>
+          <div style={{ marginTop: "24px", position: "fixed", bottom: "0px", width: "100%", marginLeft: "-6%" }}>
             <Link
               to={{ pathname: `/digit-ui/citizen/payment/collect/${businessService}/${props.id}`, state: { tenantId: props.application.tenantId } }}
             >
@@ -69,18 +69,13 @@ const PTWFApplicationTimeline = (props) => {
         );
       case "EDIT":
         return (
-          <div style={{ marginTop: "1em", bottom: "0px", width: "100%", marginBottom: "1.2em" }}>
-            {businessService != "PT.MUTATION" && (
-              <Link
-                to={{
-                  pathname: `/digit-ui/citizen/pt/property/edit-application/action=edit-${businessService}/${props.id}`,
-                  state: { tenantId: props.application.tenantId },
-                }}
-              >
-                <SubmitBar label={t("CS_APPLICATION_DETAILS_EDIT")} />
-              </Link>
-            )}
-          </div>
+          <div style={{ marginTop: "24px", position: "fixed", bottom: "0px", width: "100%", marginLeft: "-6%" }}>
+          {businessService!='PT.MUTATION'&&<Link
+            to={{ pathname: `/digit-ui/citizen/pt/property/edit-application/action=edit-${businessService}/${props.id}`, state: { tenantId: props.application.tenantId } }}
+          >
+            <SubmitBar label={t("CS_APPLICATION_DETAILS_EDIT")} />
+          </Link>}
+        </div>
         );
       case "SUBMIT_FEEDBACK":
         return (
@@ -121,7 +116,7 @@ const PTWFApplicationTimeline = (props) => {
                       <CheckPoint
                         keyValue={index}
                         isCompleted={index === 0}
-                        label={checkpoint.state ? t(`WF_${businessService}_${checkpoint.state}`) : "NA"}
+                        label={t((checkpoint.state && `WF_${businessService}_${checkpoint.state}`) || "NA")}
                         customChild={getTimelineCaptions(checkpoint)}
                       />
                     </React.Fragment>

@@ -9,14 +9,13 @@ import {
   CardLabelDesc,
   CardSectionHeader,
   InfoBanner,
-  Loader,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
 import { useParams, useHistory, useLocation, Redirect } from "react-router-dom";
 
 export const SelectPaymentType = (props) => {
-  const { state = {} } = useLocation();
+  const { state } = useLocation();
   const userInfo = Digit.UserService.getUser();
 
   const { tenantId: __tenantId, authorization } = Digit.Hooks.useQueryParams();
@@ -30,12 +29,11 @@ export const SelectPaymentType = (props) => {
   const tenantId = state?.tenantId || __tenantId || Digit.ULBService.getCurrentTenantId();
   const stateTenant = tenantId.split(".")[0];
   const { control, handleSubmit } = useForm();
-  const { data: menu, isLoading } = Digit.Hooks.useCommonMDMS(stateTenant, "DIGIT-UI", "PaymentGateway");
-  const { data: paymentdetails, isLoading: paymentLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService }, {});
-
-  const { name, mobileNumber } = state;
+  const { data: menu } = Digit.Hooks.useCommonMDMS(stateTenant, "DIGIT-UI", "PaymentGateway");
+  const { data: paymentdetails } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
 
   const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
+  console.log({ billDetails, payment: paymentdetails?.Bill });
 
   const onSubmit = async (d) => {
     // console.log("find submitted data", d);
@@ -55,14 +53,12 @@ export const SelectPaymentType = (props) => {
           },
         ],
         user: {
-          name: userInfo?.info?.name || name,
-          mobileNumber: userInfo?.info?.mobileNumber || mobileNumber,
+          name: userInfo?.info?.name,
+          mobileNumber: userInfo?.info?.mobileNumber,
           tenantId: tenantId,
         },
         // success
-        callbackUrl: window.location.href.includes("mcollect")
-          ? `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${consumerCode}/${tenantId}?workflow=mcollect`
-          : `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${consumerCode}/${tenantId}`,
+        callbackUrl: `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${consumerCode}/${tenantId}`,
         additionalDetails: {
           isWhatsapp: false,
         },
@@ -93,13 +89,9 @@ export const SelectPaymentType = (props) => {
     return <Redirect to={`/digit-ui/citizen/login?from=${encodeURIComponent(pathname + search)}`} />;
   }
 
-  if (isLoading || paymentLoading) {
-    return <Loader />;
-  }
-
   return (
     <React.Fragment>
-      <BackButton>{t("CS_COMMON_BACK")}</BackButton>
+      <BackButton>Back</BackButton>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Header>{t("PAYMENT_CS_HEADER")}</Header>
         <Card>

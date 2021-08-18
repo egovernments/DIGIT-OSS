@@ -1,40 +1,42 @@
-import { BackButton, BreadCrumb, CitizenHomeCard, CitizenTruck, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useEffect, useState } from "react";
+import { Route, BrowserRouter as Router, Switch, useRouteMatch, useLocation, Link, useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { BackButton, BreadCrumb, Header, HomeLink, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { Link, Redirect, Switch, useLocation, useRouteMatch } from "react-router-dom";
-import FSMCard from "./components/FsmCard";
-import CheckSlum from "./pageComponents/CheckSlum";
-import SelectAddress from "./pageComponents/SelectAddress";
-import SelectChannel from "./pageComponents/SelectChannel";
-import SelectGeolocation from "./pageComponents/SelectGeolocation";
-import SelectLandmark from "./pageComponents/SelectLandmark";
-import SelectName from "./pageComponents/SelectName";
-import SelectPincode from "./pageComponents/SelectPincode";
-import SelectPitType from "./pageComponents/SelectPitType";
+
+import NewApplicationCitizen from "./pages/citizen/NewApplication/index";
+import SelectRating from "./pages/citizen/Rating/SelectRating";
+import { MyApplications } from "./pages/citizen/MyApplications";
+import ApplicationDetails from "./pages/citizen/ApplicationDetails";
+
+import { NewApplication } from "./pages/employee/NewApplication";
+import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails";
+import ApplicationAudit from "./pages/employee/ApplicationAudit";
+import Response from "./pages/Response";
+import EditApplication from "./pages/employee/EditApplication";
+import Inbox from "./pages/employee/Inbox";
+import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
+import DsoDashboard from "./pages/employee/DsoDashboard";
+
+import FstpInbox from "./pages/employee/FstpInbox";
+
 import SelectPropertySubtype from "./pageComponents/SelectPropertySubtype";
 import SelectPropertyType from "./pageComponents/SelectPropertyType";
-import SelectSlumName from "./pageComponents/SelectSlumName";
+import SelectAddress from "./pageComponents/SelectAddress";
 import SelectStreet from "./pageComponents/SelectStreet";
+import SelectLandmark from "./pageComponents/SelectLandmark";
+import SelectPincode from "./pageComponents/SelectPincode";
 import SelectTankSize from "./pageComponents/SelectTankSize";
+import SelectPitType from "./pageComponents/SelectPitType";
+import SelectGeolocation from "./pageComponents/SelectGeolocation";
+import SelectSlumName from "./pageComponents/SelectSlumName";
+import CheckSlum from "./pageComponents/CheckSlum";
+import SelectChannel from "./pageComponents/SelectChannel";
+import SelectName from "./pageComponents/SelectName";
 import SelectTripData from "./pageComponents/SelectTripData";
-import ApplicationDetails from "./pages/citizen/ApplicationDetails";
-import { MyApplications } from "./pages/citizen/MyApplications";
-import NewApplicationCitizen from "./pages/citizen/NewApplication/index";
+import FSMCard from "./components/FsmCard";
+import { Redirect } from "react-router-dom";
 import RateView from "./pages/citizen/Rating/RateView";
-import SelectRating from "./pages/citizen/Rating/SelectRating";
-import ApplicationAudit from "./pages/employee/ApplicationAudit";
-import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails";
-import DsoDashboard from "./pages/employee/DsoDashboard";
-import EditApplication from "./pages/employee/EditApplication";
-import FstpInbox from "./pages/employee/FstpInbox";
-import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
-import Inbox from "./pages/employee/Inbox";
-import { NewApplication } from "./pages/employee/NewApplication";
-import Response from "./pages/Response";
-
-
-
-
 
 const FsmBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -113,11 +115,9 @@ const EmployeeApp = ({ path, url, userType }) => {
 
 const CitizenApp = ({ path }) => {
   const location = useLocation();
-  const { t } = useTranslation();
-
   return (
     <React.Fragment>
-      {!location.pathname.includes("/new-application/response") && <BackButton>{t("CS_COMMON_BACK")}</BackButton>}
+      {!location.pathname.includes("/new-application/response") && <BackButton>Back</BackButton>}
       <Switch>
         <PrivateRoute
           path={`${path}/inbox`}
@@ -147,12 +147,15 @@ const CitizenApp = ({ path }) => {
 const FSMModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "FSM";
   const { path, url } = useRouteMatch();
-  const language = Digit.StoreData.getCurrentLanguage();
+  const state = useSelector((state) => state);
+  const language = state?.common?.selectedLanguage;
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
 
   if (isLoading) {
     return <Loader />;
   }
+
+  console.log("fsm", userType, path, state, store);
   Digit.SessionStorage.set("FSM_TENANTS", tenants);
 
   if (userType === "citizen") {
@@ -180,32 +183,32 @@ const FSMLinks = ({ matchPath, userType }) => {
   ];
 
   if (userType === "citizen") {
-    const links = [
-      {
-        link: `${matchPath}/new-application`,
-        i18nKey: t("CS_HOME_APPLY_FOR_DESLUDGING"),
-      },
-      {
-        link: `${matchPath}/my-applications`,
-        i18nKey: t("CS_HOME_MY_APPLICATIONS"),
-      },
-    ];
-
-    roleBasedLoginRoutes.map(({ role, from, loginLink, dashoardLink }) => {
-      if (Digit.UserService.hasAccess(role))
-        links.push({
-          link: from,
-          i18nKey: t(dashoardLink),
-        });
-      else
-        links.push({
-          link: `/digit-ui/citizen/login`,
-          state: { role: "FSM_DSO", from },
-          i18nKey: t(loginLink),
-        });
-    });
-
-    return <CitizenHomeCard header={t("CS_HOME_FSM_SERVICES")} links={links} Icon={CitizenTruck} />;
+    return (
+      <React.Fragment>
+        {/* TODO: change */}
+        <Header>{t("CS_HOME_FSM_SERVICES")}</Header>
+        <div className="d-grid">
+          <HomeLink to={`${matchPath}/new-application`}>{t("CS_HOME_APPLY_FOR_DESLUDGING")}</HomeLink>
+          <HomeLink to={`${matchPath}/my-applications`}>{t("CS_HOME_MY_APPLICATIONS")}</HomeLink>
+          {/* <HomeLink to={{ pathname: `/digit-ui/citizen/login`, state: { role: "FSM_DSO", from: "" } }}>{t("Login as DSO")}</HomeLink> */}
+          {roleBasedLoginRoutes.map(({ role, from, loginLink, dashoardLink }, index) => {
+            if (Digit.UserService.hasAccess(role)) {
+              return (
+                <HomeLink key={index} to={{ pathname: from }}>
+                  {t(dashoardLink)}
+                </HomeLink>
+              );
+            } else {
+              return (
+                <HomeLink key={index} to={{ pathname: `/digit-ui/citizen/login`, state: { role: "FSM_DSO", from } }}>
+                  {t(loginLink)}
+                </HomeLink>
+              );
+            }
+          })}
+        </div>
+      </React.Fragment>
+    );
   } else {
     return (
       <div className="employee-app-container">

@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, RadioOrSelect, RadioButtons, LabelFieldPair, CardLabel, Dropdown, Loader } from "@egovernments/digit-ui-react-components";
+import { FormStep, RadioOrSelect, RadioButtons, LabelFieldPair, CardLabel, Dropdown } from "@egovernments/digit-ui-react-components";
 import { cardBodyStyle } from "../utils";
 import { useLocation } from "react-router-dom";
 
-const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
-  const { pathname: url } = useLocation();
-  const editScreen = url.includes("/modify-application/");
-  const isMutation = url.includes("property-mutation");
-
-  let index = isMutation ? ownerIndex : window.location.href.charAt(window.location.href.length - 1);
+const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formData }) => {
+  let index = window.location.href.charAt(window.location.href.length - 1);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
   const isUpdateProperty = formData?.isUpdateProperty || false;
-  let isEditProperty = formData?.isEditProperty || false;
   const [ownerType, setOwnerType] = useState(
-    (formData.owners && formData.owners[index] && formData.owners[index]?.ownerType) || formData.owners?.ownerType || {}
+    (formData.owners && formData.owners[index] && formData.owners[index].ownerType) || formData.owners?.ownerType || {}
   );
   const { data: Menu, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerType");
   Menu ? Menu.sort((a, b) => a.name.localeCompare(b.name)) : "";
+  const { pathname: url } = useLocation();
+  const editScreen = url.includes("/modify-application/");
 
   const onSkip = () => onSelect();
 
@@ -46,8 +43,6 @@ const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formDat
     },
   ];
 
-  if (isLoading) return <Loader />;
-
   if (userType === "employee") {
     return inputs?.map((input, index) => {
       return (
@@ -71,7 +66,7 @@ const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formDat
 
   return (
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!ownerType}>
-      <div>
+      <div style={{ ...cardBodyStyle, maxHeight: "calc(100vh - 22em)" }}>
         <RadioButtons
           t={t}
           optionsKey="i18nKey"
@@ -81,7 +76,7 @@ const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formDat
           onSelect={setTypeOfOwner}
           labelKey="PROPERTYTAX_OWNERTYPE"
           isDependent={true}
-          disabled={isUpdateProperty || isEditProperty}
+          disabled={isUpdateProperty}
         />
       </div>
     </FormStep>

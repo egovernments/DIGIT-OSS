@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FormComposer, Toast } from "@egovernments/digit-ui-react-components";
 import { newConfig } from "../../../config/Create/config";
@@ -6,36 +6,41 @@ import { useHistory } from "react-router-dom";
 
 const NewApplication = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const tenants = Digit.Hooks.pt.useTenants();
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
   const defaultValues = {};
   const history = useHistory();
-  // delete
-  // const [_formData, setFormData,_clear] = Digit.Hooks.useSessionStorage("store-data",null);
-  const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
-  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", {});
 
-  useEffect(() => {
-    setMutationHappened(false);
-    clearSuccessData();
-  }, []);
-
-  const onFormValueChange = (setValue, formData, formState) => {
-    setSubmitValve(!Object.keys(formState.errors).length);
-    if (Object.keys(formState.errors).length === 1 && formState.errors?.units?.message === "arv") {
-      setSubmitValve(!formData?.units.some((unit) => unit.occupancyType === "RENTED" && !unit.arv));
-    }
-    if (formData?.ownershipCategory?.code?.includes("MULTIPLEOWNERS") && formData?.owners?.length < 2) {
-      setSubmitValve(false);
-    }
-    let pincode = formData?.address?.pincode;
-    if (pincode) {
-      if (!Digit.Utils.getPattern("Pincode").test(pincode)) setSubmitValve(false);
-      const foundValue = tenants?.find((obj) => obj.pincode?.find((item) => item.toString() === pincode));
-      if (!foundValue) {
+  const onFormValueChange = (setValue, formData) => {
+    if (
+      formData?.address?.city?.code &&
+      formData?.address?.locality?.code &&
+      formData?.PropertyType?.code &&
+      formData?.ownershipCategory?.code &&
+      formData?.owners?.name &&
+      formData?.owners?.mobileNumber &&
+      formData?.usageCategoryMajor?.code &&
+      formData?.usageCategoryMinor?.subuagecode &&
+      formData?.owners?.ownerType?.code &&
+      formData?.documents?.documents?.length === formData?.documents?.propertyTaxDocumentsLength &&
+      formData?.landarea
+    ) {
+      if (formData?.ownershipCategory?.code !== "INDIVIDUAL.SINGLEOWNER" && formData?.owners?.altContactNumber) {
+        const filteredUnitsArray = formData?.units?.filter(
+          (unit) => unit?.constructionDetail?.builtUpArea && unit?.floorNo && unit?.occupancyType && unit?.usageCategory
+        );
+        if (formData?.PropertyType?.code === "VACANT") {
+          setSubmitValve(true);
+        } else if (formData?.PropertyType?.code !== "VACANT" && filteredUnitsArray?.length >= formData?.noOfFloors?.code) {
+          setSubmitValve(true);
+        } else {
+          setSubmitValve(false);
+        }
+      } else {
         setSubmitValve(false);
       }
+    } else {
+      setSubmitValve(false);
     }
   };
 
@@ -45,95 +50,32 @@ const NewApplication = () => {
       address: {
         ...data?.address,
         city: data?.address?.city?.name,
-        locality: { code: data?.address?.locality?.code, area: data?.address?.locality?.area },
       },
-      usageCategory: data?.usageCategoryMajor.code,
-      usageCategoryMajor: data?.usageCategoryMajor?.code.split(".")[0],
-      usageCategoryMinor: data?.usageCategoryMajor?.code.split(".")[1] || null,
-      landArea: Number(data?.landarea),
-      superBuiltUpArea: Number(data?.landarea),
+      usageCategory: data?.usageCategoryMinor?.subuagecode ? data?.usageCategoryMinor?.subuagecode : data?.usageCategoryMajor?.code,
+      usageCategoryMinor: data?.usageCategoryMinor?.subuagecode,
+      usageCategoryMajor: data?.usageCategoryMajor?.code,
+      landArea: data?.landarea,
       propertyType: data?.PropertyType?.code,
-      noOfFloors: Number(data?.noOfFloors),
+      noOfFloors: Number(data?.noOfFloors?.code),
       ownershipCategory: data?.ownershipCategory?.code,
-      owners: data?.owners.map((owner) => {
-        let {
-          name,
-          mobileNumber,
-          designation,
-          altContactNumber,
-          emailId,
-          correspondenceAddress,
-          isCorrespondenceAddress,
-          ownerType,
-          fatherOrHusbandName,
-        } = owner;
-        let __owner;
-
-        if (!data?.ownershipCategory?.code.includes("INDIVIDUAL")) {
-          __owner = { name, mobileNumber, designation, altContactNumber, emailId, correspondenceAddress, isCorrespondenceAddress, ownerType };
-        } else {
-          __owner = {
-            name,
-            mobileNumber,
-            correspondenceAddress,
-            permanentAddress: data?.address?.locality?.name,
-            relationship: owner?.relationship.code,
-            fatherOrHusbandName,
-            gender: owner?.gender.code,
-            emailId,
-          };
-        }
-
-        if (!__owner.correspondenceAddress) __owner.correspondenceAddress = "";
-
-        const _owner = {
-          ...__owner,
-          ownerType: owner?.ownerType?.code,
-        };
-        if (_owner.ownerType !== "NONE") {
-          const { documentType, documentUid } = owner?.documents;
-          _owner.documents = [
-            { documentUid: documentUid, documentType: documentType.code, fileStoreId: documentUid },
-            data?.documents?.documents?.find((e) => e.documentType?.includes("OWNER.IDENTITYPROOF")),
-          ];
-        } else {
-          _owner.documents = [data?.documents?.documents?.find((e) => e.documentType?.includes("OWNER.IDENTITYPROOF"))];
-        }
-        return _owner;
-      }),
-
+      owners: [
+        {
+          ...data?.owners,
+          ownerType: data?.owners?.ownerType.code,
+          gender: data?.owners?.gender.code,
+          relationship: data?.owners?.relationship.code,
+        },
+      ],
       channel: "CFC_COUNTER", // required
       creationReason: "CREATE", // required
       source: "MUNICIPAL_RECORDS", // required
-      units: data?.PropertyType?.code !== "VACANT" ? data?.units : [],
+      superBuiltUpArea: null,
+      units: data?.units[0]?.usageCategory ? data?.units : [],
       documents: data?.documents?.documents,
       applicationStatus: "CREATE",
     };
 
-    if (!data?.ownershipCategory?.code.includes("INDIVIDUAL")) {
-      formData.institution = {
-        name: data.owners?.[0].institution.name,
-        type: data.owners?.[0].institution.type?.code?.split(".")[1],
-        designation: data.owners?.[0].designation,
-        nameOfAuthorizedPerson: data.owners?.[0].name,
-        tenantId: Digit.ULBService.getCurrentTenantId(),
-      };
-    }
-
-    // console.log(
-    //   data,
-    //   data?.documents?.documents?.find((e) => e.documentType?.includes("OWNER.IDENTITYPROOF")),
-    //   formData,
-    //   "hot fixes"
-    // );
-
-    // console.log(formData, "new application created");
-    // setFormData(formData)
-
-    history.replace("/digit-ui/employee/pt/response", { Property: formData }); //current wala
-
-    // history.push("/digit-ui/employee/pt/response", { Property: formData });
-    // history.push("/digit-ui/employee/pt/response", { Property: _formData });
+    history.push("/digit-ui/employee/pt/response", { Property: formData });
   };
   const configs = newConfig;
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dropdown, RadioButtons, ActionBar, RemoveableTag, RoundedLabel } from "@egovernments/digit-ui-react-components";
 import { ApplyFilterBar, CloseSvg } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
@@ -12,19 +12,9 @@ const Filter = (props) => {
   const { searchParams } = props;
   const { t } = useTranslation();
   const isAssignedToMe = searchParams?.filters?.wfFilters?.assignee && searchParams?.filters?.wfFilters?.assignee[0]?.code ? true : false;
-
-  const assignedToOptions = useMemo(
-    () => [
-      { code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") },
-      { code: "ASSIGNED_TO_ALL", name: t("ASSIGNED_TO_ALL") },
-    ],
-    [t]
+  const [selectAssigned, setSelectedAssigned] = useState(
+    isAssignedToMe ? { code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") } : { code: "ASSIGNED_TO_ALL", name: t("ASSIGNED_TO_ALL") }
   );
-
-  const [selectAssigned, setSelectedAssigned] = useState(isAssignedToMe ? assignedToOptions[0] : assignedToOptions[1]);
-
-  useEffect(() => setSelectedAssigned(isAssignedToMe ? assignedToOptions[0] : assignedToOptions[1]), [t]);
-
   const [selectedComplaintType, setSelectedComplaintType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
   const [pgrfilters, setPgrFilters] = useState(
@@ -42,8 +32,7 @@ const Filter = (props) => {
   );
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  // let localities = Digit.Hooks.pgr.useLocalities({ city: tenantId });
-  const { data: localities } = Digit.Hooks.useBoundaryLocalities(tenantId, "admin", {}, t);
+  let localities = Digit.Hooks.pgr.useLocalities({ city: tenantId });
   let serviceDefs = Digit.Hooks.pgr.useServiceDefs(tenantId, "PGR");
 
   const onRadioChange = (value) => {
@@ -60,9 +49,6 @@ const Filter = (props) => {
         let params = pgrfilters[property].map((prop) => prop.code).join();
         if (params) {
           pgrQuery[property] = params;
-        }
-        else{
-          delete pgrQuery?.[property]
         }
       }
     }
@@ -145,8 +131,6 @@ const Filter = (props) => {
     let wfRest = { assigned: [{ code: [] }] };
     setPgrFilters(pgrReset);
     setWfFilters(wfRest);
-    pgrQuery = {};
-    wfQuery = {};
     setSelectedAssigned("");
     setSelectedComplaintType(null);
     setSelectedLocality(null);
@@ -194,7 +178,15 @@ const Filter = (props) => {
             )}
           </div>
           <div>
-            <RadioButtons onSelect={onRadioChange} selectedOption={selectAssigned} optionsKey="name" options={assignedToOptions} />
+            <RadioButtons
+              onSelect={onRadioChange}
+              selectedOption={selectAssigned}
+              optionsKey="name"
+              options={[
+                { code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") },
+                { code: "ASSIGNED_TO_ALL", name: t("ASSIGNED_TO_ALL") },
+              ]}
+            />
             <div>
               {GetSelectOptions(
                 t("CS_COMPLAINT_DETAILS_COMPLAINT_SUBTYPE"),
@@ -206,7 +198,7 @@ const Filter = (props) => {
                 "serviceCode"
               )}
             </div>
-            <div>{GetSelectOptions(t("CS_PGR_LOCALITY"), localities, selectedLocality, onSelectLocality, "i18nkey", onRemove, "locality")}</div>
+            <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality")}</div>
             {<Status complaints={props.complaints} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />}
           </div>
         </div>

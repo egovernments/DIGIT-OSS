@@ -1,4 +1,5 @@
 import Axios from "axios";
+import { da } from "date-fns/locale";
 
 Axios.interceptors.response.use(
   (res) => res,
@@ -37,15 +38,10 @@ export const Request = async ({
   useCache = false,
   params = {},
   auth,
-  urlParams = {},
   userService,
-  locale = false,
+  reciept = false,
   authHeader = false,
   setTimeParam = true,
-  userDownload = false,
-  noRequestInfo = false,
-  multipartFormData = false,
-  multipartData = {}
 }) => {
   // console.log("params:", params);
   // console.log("in request", method);
@@ -54,28 +50,18 @@ export const Request = async ({
     data.RequestInfo = {
       apiId: "Rainmaker",
     };
-    if (noRequestInfo) {
-      delete data.RequestInfo;
-    }
     if (auth) {
       data.RequestInfo = { ...data.RequestInfo, ...requestInfo() };
     }
     if (userService) {
       data.RequestInfo = { ...data.RequestInfo, ...userServiceData() };
     }
-    if (locale) {
-      data.RequestInfo = { ...data.RequestInfo, msgId: `string|${Digit.StoreData.getCurrentLanguage()}` };
+    if (reciept) {
+      data.RequestInfo = { ...data.RequestInfo, msgId: "string|en_IN" };
     }
   }
 
-  const headers1 = {
-    "Content-Type": "application/json",
-    Accept: "application/pdf",
-  };
-
   if (authHeader) headers = { ...headers, ...authHeaders() };
-
-  if (userDownload) headers = { ...headers, ...headers1 };
 
   let key = "";
   if (useCache) {
@@ -90,25 +76,7 @@ export const Request = async ({
     params._ = Date.now();
   }
 
-  let _url = url
-    .split("/")
-    .map((path) => {
-      let key = path.split(":")?.[1];
-      return urlParams[key] ? urlParams[key] : path;
-    })
-    .join("/");
-  
-  if (multipartFormData) {
-    const multipartFormDataRes = await Axios({ method, url: _url, data: multipartData.data, params, headers: { "Content-Type": "multipart/form-data", "auth-token": Digit.UserService.getUser().access_token  } });
-    return multipartFormDataRes;
-  }
-
-  const res = userDownload
-    ? await Axios({ method, url: _url, data, params, headers, responseType: "arraybuffer" })
-    : await Axios({ method, url: _url, data, params, headers });
-
-  if (userDownload) return res;
-
+  const res = await Axios({ method, url, data, params, headers });
   const returnData = res?.data || res?.response?.data || {};
   if (useCache && res?.data && Object.keys(returnData).length !== 0) {
     window.Digit.RequestCache[key] = returnData;
@@ -150,7 +118,6 @@ export const ServiceRequest = async ({
     reqData = preHookRes.data;
   }
   const resData = await Request({ method, url, data: reqData, headers, useCache, params: reqParams, auth, userService });
-
   if (window[postHookName] && typeof window[postHookName] === "function") {
     return await window[postHookName](resData);
   }

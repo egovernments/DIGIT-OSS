@@ -29,7 +29,7 @@ const useEmployeeFilter = (tenantId, roles, complaintDetails) => {
         },
       ]);
     })();
-  }, [tenantId, roles, t, complaintDetails]);
+  }, [tenantId, roles]);
 
   return employeeDetails;
 };

@@ -1,26 +1,15 @@
 import React, { useState, useEffect } from "react";
-import {
-  FormStep,
-  RadioOrSelect,
-  RadioButtons,
-  LabelFieldPair,
-  Dropdown,
-  CardLabel,
-  CardLabelError,
-  Loader,
-} from "@egovernments/digit-ui-react-components";
+import { FormStep, RadioOrSelect, RadioButtons, LabelFieldPair, Dropdown, CardLabel } from "@egovernments/digit-ui-react-components";
 import { cardBodyStyle } from "../utils";
 import { useLocation } from "react-router-dom";
 
-const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlur, formState, setError, clearErrors }) => {
+const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
   const isUpdateProperty = formData?.isUpdateProperty || false;
-  let isEditProperty = formData?.isEditProperty || false;
   const [ownershipCategory, setOwnershipCategory] = useState(formData?.ownershipCategory);
-  const [loader, setLoader] = useState(true);
   const { data: SubOwnerShipCategoryOb, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "SubOwnerShipCategory");
-  const { data: OwnerShipCategoryOb, isLoading: ownerShipCatLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerShipCategory");
+  const { data: OwnerShipCategoryOb } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerShipCategory");
   const ownerShipdropDown = [];
   let subCategoriesInOwnersType = ["INDIVIDUAL"];
   let OwnerShipCategory = {};
@@ -36,15 +25,6 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
       setOwnershipCategory(preFilledPropertyType);
     }
   }, [formData?.ownershipCategory, SubOwnerShipCategoryOb]);
-
-  useEffect(() => {
-    if (userType === "employee" && editScreen && !isLoading && !ownerShipCatLoading && OwnerShipCategoryOb) {
-      const arr = getDropdwonForProperty(ownerShipdropDown);
-      const defaultValue = arr.filter((e) => e.code === formData?.originalData?.ownershipCategory)[0];
-      selectedValue(defaultValue);
-      setLoader(false);
-    }
-  }, [isLoading, ownerShipCatLoading, OwnerShipCategoryOb]);
 
   OwnerShipCategoryOb &&
     OwnerShipCategoryOb.length > 0 &&
@@ -69,19 +49,6 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
   }
 
   function getDropdwonForProperty(ownerShipdropDown) {
-    if (userType === "employee") {
-      const arr = ownerShipdropDown
-        ?.filter((e) => e.code.split(".").length <= 2)
-        ?.splice(0, 4)
-        ?.map((ownerShipDetails) => ({
-          ...ownerShipDetails,
-          i18nKey: `PT_OWNERSHIP_${
-            ownerShipDetails.value.split(".")[1] ? ownerShipDetails.value.split(".")[1] : ownerShipDetails.value.split(".")[0]
-          }`,
-        }));
-      return arr;
-    }
-
     return (
       ownerShipdropDown &&
       ownerShipdropDown.length &&
@@ -117,27 +84,30 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
   function goNext() {
     let index = window.location.href.charAt(window.location.href.length - 1);
     sessionStorage.setItem("ownershipCategory", ownershipCategory?.value);
-    onSelect(config.key, ownershipCategory, "", index, null, { routeKey: ownershipCategory?.value });
+    onSelect(config.key, ownershipCategory, "", index);
   }
 
   useEffect(() => {
     if (userType === "employee") {
-      if (!ownershipCategory) setError(config.key, { type: "required", message: t(`CORE_COMMON_REQUIRED_ERRMSG`) });
-      else clearErrors(config.key);
       goNext();
     }
   }, [ownershipCategory]);
 
-  if (userType === "employee" && editScreen && loader) {
-    return <Loader />;
-  }
+  const inputs = [
+    {
+      label: "PT_PROVIDE_OWNERSHIP_DETAILS",
+      type: "text",
+      name: "typeOfOwnership",
+      validation: {},
+    },
+  ];
 
   if (userType === "employee") {
-    return (
-      <React.Fragment>
-        <LabelFieldPair>
+    return inputs?.map((input, index) => {
+      return (
+        <LabelFieldPair key={index}>
           <CardLabel className="card-label-smaller" style={editScreen ? { color: "#B1B4B6" } : {}}>
-            {t("PT_PROVIDE_OWNERSHIP_DETAILS") + " *"}
+            {t(input.label)}
           </CardLabel>
           <Dropdown
             className="form-field"
@@ -146,22 +116,16 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
             option={getDropdwonForProperty(ownerShipdropDown)}
             select={selectedValue}
             optionKey="i18nKey"
-            onBlur={onBlur}
             t={t}
           />
         </LabelFieldPair>
-        {formState.touched?.[config.key] ? (
-          <CardLabelError style={{ width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" }}>
-            {formState.errors[config.key]?.message}
-          </CardLabelError>
-        ) : null}
-      </React.Fragment>
-    );
+      );
+    });
   }
 
   return (
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!ownershipCategory}>
-      <div>
+      <div style={cardBodyStyle}>
         <RadioButtons
           isMandatory={config.isMandatory}
           options={getDropdwonForProperty(ownerShipdropDown) || []}
@@ -171,7 +135,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
           value={ownershipCategory}
           labelKey="PT_OWNERSHIP"
           isDependent={true}
-          disabled={isUpdateProperty || isEditProperty}
+          disabled={isUpdateProperty}
         />
       </div>
     </FormStep>

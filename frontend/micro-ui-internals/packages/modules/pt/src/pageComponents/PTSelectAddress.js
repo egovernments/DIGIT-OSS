@@ -1,29 +1,21 @@
-import { CardLabel, CardLabelError, Dropdown, FormStep, LabelFieldPair, RadioOrSelect } from "@egovernments/digit-ui-react-components";
-import _ from "lodash";
+import { CardLabel, Dropdown, FormStep, LabelFieldPair, RadioOrSelect, RadioButtons } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { cardBodyStyle } from "../utils";
 
-const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, clearErrors, formState }) => {
+const PTSelectAddress = ({ t, config, onSelect, userType, formData }) => {
   const allCities = Digit.Hooks.pt.useTenants();
   let tenantId = Digit.ULBService.getCurrentTenantId();
-  const { pathname } = useLocation();
-  const presentInModifyApplication = pathname.includes("modify");
-
   let isEditProperty = formData?.isEditProperty || false;
-  if (presentInModifyApplication) isEditProperty = true;
   if (formData?.isUpdateProperty) isEditProperty = true;
   const { pincode, city } = formData?.address || "";
   const cities =
     userType === "employee"
       ? allCities.filter((city) => city.code === tenantId)
       : pincode
-        ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
-        : allCities;
+      ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
+      : allCities;
 
-  const [selectedCity, setSelectedCity] = useState(() => {
-    return formData?.address?.city || null;
-  });
+  const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city || null);
 
   const { data: fetchedLocalities } = Digit.Hooks.useBoundaryLocalities(
     selectedCity?.code,
@@ -37,14 +29,6 @@ const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, cl
   const [localities, setLocalities] = useState();
 
   const [selectedLocality, setSelectedLocality] = useState();
-
-  useEffect(() => {
-    if (userType === "employee" && presentInModifyApplication && localities?.length) {
-      const code = formData?.originalData?.address?.locality?.code;
-      const _locality = localities?.filter((e) => e.code === code)[0];
-      setValue("locality", _locality);
-    }
-  }, [localities]);
 
   useEffect(() => {
     if (cities) {
@@ -66,6 +50,10 @@ const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, cl
       if (formData?.address?.pincode) {
         filteredLocalityList = __localityList.filter((obj) => obj.pincode?.find((item) => item == formData.address.pincode));
         if (!formData?.address?.locality) setSelectedLocality();
+      }
+
+      if (userType === "employee") {
+        onSelect(config.key, { ...formData[config.key], city: selectedCity });
       }
       setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));
 
@@ -98,99 +86,50 @@ const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, cl
     onSelect(config.key, { city: selectedCity, locality: selectedLocality });
   }
 
-  const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue } = useForm();
-  const formValue = watch();
-  const { errors } = localFormState;
-  const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
-
-  useEffect(() => {
-    if (userType === "employee") {
-      let keys = Object.keys(formValue);
-      const part = {};
-      keys.forEach((key) => (part[key] = formData[config.key]?.[key]));
-      if (!_.isEqual(formValue, part)) onSelect(config.key, { ...formData[config.key], ...formValue });
-      for (let key in formValue) {
-        if (!formValue[key] && !localFormState?.errors[key]) {
-          setLocalError(key, { type: `${key.toUpperCase()}_REQUIRED`, message: t(`CORE_COMMON_REQUIRED_ERRMSG`) });
-        } else if (formValue[key] && localFormState.errors[key]) {
-          clearLocalErrors([key]);
-        }
-      }
-    }
-  }, [formValue]);
-
-  useEffect(() => {
-    if (userType === "employee") {
-      const errorsPresent = !!Object.keys(localFormState.errors).lengtha;
-      if (errorsPresent && !formState.errors?.[config.key]) setError(config.key, { type: "required" });
-      else if (!errorsPresent && formState.errors?.[config.key]) clearErrors(config.key);
-    }
-  }, [localFormState]);
-
   if (userType === "employee") {
     return (
       <div>
         <LabelFieldPair>
-          <CardLabel className="card-label-smaller">{t("MYCITY_CODE_LABEL") + " *"}</CardLabel>
-          <Controller
-            name={"city"}
-            defaultValue={cities?.length === 1 ? cities[0] : selectedCity}
-            control={control}
-            render={(props) => (
-              <Dropdown
-                className="form-field"
-                selected={props.value}
-                disable={isEditProperty ? isEditProperty : cities?.length === 1}
-                option={cities}
-                select={props.onChange}
-                optionKey="code"
-                onBlur={props.onBlur}
-                t={t}
-              />
-            )}
+          <CardLabel className="card-label-smaller">{t("MYCITY_CODE_LABEL")}</CardLabel>
+          <Dropdown
+            className="form-field"
+            selected={cities?.length === 1 ? cities[0] : selectedCity}
+            disable={isEditProperty ? isEditProperty : cities?.length === 1}
+            option={cities}
+            select={selectCity}
+            optionKey="code"
+            t={t}
           />
         </LabelFieldPair>
-        <CardLabelError style={errorStyle}>{localFormState.touched.city ? errors?.city?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel className="card-label-smaller">{t("PT_LOCALITY_LABEL") + " *"}</CardLabel>
-          <Controller
-            name="locality"
-            defaultValue={null}
-            control={control}
-            render={(props) => (
-              <Dropdown
-                className="form-field"
-                selected={props.value}
-                option={localities}
-                select={props.onChange}
-                onBlur={props.onBlur}
-                optionKey="i18nkey"
-                t={t}
-                disable={isEditProperty ? isEditProperty : false}
-              />
-            )}
+          <CardLabel className="card-label-smaller">{t("PT_LOCALITY_LABEL")}</CardLabel>
+          <Dropdown
+            className="form-field"
+            selected={selectedLocality}
+            option={localities}
+            select={selectLocality}
+            optionKey="i18nkey"
+            t={t}
+            disable={isEditProperty ? isEditProperty : false}
           />
         </LabelFieldPair>
-        <CardLabelError style={errorStyle}>{localFormState.touched.locality ? errors?.locality?.message : ""}</CardLabelError>
       </div>
     );
   }
   return (
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
-      <div>
+      <div style={{ ...cardBodyStyle, maxHeight: "calc(100vh - 26em)" }}>
         <CardLabel>{`${t("MYCITY_CODE_LABEL")} `}</CardLabel>
-        <span className={"form-pt-dropdown-only"}>
-          <RadioOrSelect
-            options={cities.sort((a, b) => a.name.localeCompare(b.name))}
-            selectedOption={selectedCity}
-            optionKey="code"
-            onSelect={selectCity}
-            t={t}
-            isDependent={true}
-            labelKey="TENANT_TENANTS"
-            disabled={isEditProperty}
-          />
-        </span>
+        <RadioOrSelect
+          options={cities.sort((a, b) => a.name.localeCompare(b.name))}
+          selectedOption={selectedCity}
+          optionKey="code"
+          onSelect={selectCity}
+          t={t}
+          isDependent={true}
+          labelKey="TENANT_TENANTS"
+          disabled={isEditProperty}
+        />
         {selectedCity && localities && <CardLabel>{`${t("PT_LOCALITY_LABEL")} `}</CardLabel>}
         {selectedCity && localities && (
           <span className={"form-pt-dropdown-only"}>
@@ -202,7 +141,7 @@ const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, cl
               optionKey="i18nkey"
               onSelect={selectLocality}
               t={t}
-              //isDependent={true}
+              isDependent={true}
               labelKey=""
               disabled={isEditProperty}
             />

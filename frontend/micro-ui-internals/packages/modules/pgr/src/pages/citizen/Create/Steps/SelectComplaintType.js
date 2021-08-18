@@ -29,7 +29,6 @@ const SelectComplaintType = ({ t, config, onSelect, value }) => {
       {...{ selectedOption: complaintType }}
       {...{ onSave: goNext }}
       {...{ t }}
-      disabled={Object.keys(complaintType).length === 0 || complaintType === null ? true : false}
     />
   );
 };

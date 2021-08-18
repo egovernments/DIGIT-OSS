@@ -1,11 +1,8 @@
-import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
 import { CardHeader, CardLabel, Dropdown, FormStep, TextInput } from "@egovernments/digit-ui-react-components";
+import React, { useState } from "react";
 import { cardBodyStyle } from "../utils";
+
 const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
-  const { pathname: url } = useLocation();
-  const editScreen = url.includes("/modify-application/");
-  const isMutation = url.includes("property-mutation");
   let index = 0;
   let validation = {};
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -17,7 +14,6 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
   const [altContactNumber, setAltContactNumber] = useState(formData.owners && formData.owners[index] && formData.owners[index].altContactNumber);
   const [emailId, setEmailId] = useState(formData.owners && formData.owners[index] && formData.owners[index].emailId);
   const isUpdateProperty = formData?.isUpdateProperty || false;
-  let isEditProperty = formData?.isEditProperty || false;
 
   function setInistitution(e) {
     setInistitutionName(e.target.value);
@@ -81,11 +77,10 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
       ownerDetails["mobileNumber"] = mobileNumber;
       ownerDetails["altContactNumber"] = altContactNumber;
       ownerDetails["emailId"] = emailId;
-      onSelect(config.key, isMutation ? [ownerDetails] : ownerDetails, false, index);
+      onSelect(config.key, ownerDetails, false, index);
     } else {
       let ownerStep = { ...ownerDetails, inistitutionName, inistitutetype, name, designation, mobileNumber, altContactNumber, emailId };
-      if (isMutation) onSelect(config.key, [ownerStep], false, index);
-      else onSelect(config.key, ownerStep, false, index);
+      onSelect(config.key, ownerStep, false, index);
     }
   };
 
@@ -96,7 +91,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
       onSelect={goNext}
       isDisabled={!inistitutionName || !inistitutetype || !name || !designation || !mobileNumber || !altContactNumber}
     >
-      <div>
+      <div style={cardBodyStyle}>
         <CardLabel>{`${t("PT_COMMON_INSTITUTION_NAME")}`}</CardLabel>
         <TextInput
           isMandatory={false}
@@ -105,7 +100,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           name="institutionName"
           onChange={setInistitution}
           value={inistitutionName}
-          disable={isUpdateProperty || isEditProperty}
+          disable={isUpdateProperty}
           {...(validation = {
             isRequired: true,
             pattern: "^[a-zA-Z-.`' ]*$",
@@ -120,7 +115,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           selected={inistitutetype}
           optionKey="code"
           select={setTypeOfInistituteName}
-          disabled={isUpdateProperty || isEditProperty}
+          disabled={isUpdateProperty}
         />
         <CardHeader>{t("PT_AUTH_PERSON_DETAILS")}</CardHeader>
         <CardLabel>{`${t("PT_OWNER_NAME")}`}</CardLabel>
@@ -131,7 +126,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           name="name"
           onChange={setInistituteName}
           value={name}
-          disable={isUpdateProperty || isEditProperty}
+          disable={isUpdateProperty}
           {...(validation = {
             isRequired: true,
             pattern: "^[a-zA-Z-.`' ]*$",
@@ -146,7 +141,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           name="designation"
           onChange={setDesignationName}
           value={designation}
-          disable={isUpdateProperty || isEditProperty}
+          disable={isUpdateProperty}
           {...(validation = {
             isRequired: true,
             pattern: "^[a-zA-Z-.`' ]*$",
@@ -162,7 +157,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           onChange={setMobileNo}
           value={mobileNumber}
           type={"tel"}
-          disable={isUpdateProperty || isEditProperty}
+          disable={isUpdateProperty}
           {...(validation = {
             isRequired: true,
             pattern: "[6-9]{1}[0-9]{9}",
@@ -179,7 +174,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           onChange={setAltContactNo}
           value={altContactNumber}
           type={"tel"}
-          disable={isUpdateProperty || isEditProperty}
+          disable={isUpdateProperty}
           {...(validation = {
             isRequired: true,
             pattern: "^[0-9]{11}$",
@@ -196,7 +191,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
           onChange={setEmail}
           type="email"
           value={emailId}
-          disable={isUpdateProperty || isEditProperty}
+          disable={isUpdateProperty}
           // {...(validation = {
           //   isRequired: true,
           //   type: "email",

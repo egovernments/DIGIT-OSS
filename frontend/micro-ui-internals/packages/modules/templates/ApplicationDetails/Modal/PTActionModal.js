@@ -2,7 +2,6 @@ import { Loader, Modal, FormComposer } from "@egovernments/digit-ui-react-compon
 import React, { useState, useEffect } from "react";
 
 import { configPTRejectApplication, configPTVerifyApplication, configPTApproverApplication, configPTAssessProperty } from "../config";
-import * as predefinedConfig from "../config";
 
 const Heading = (props) => {
   return <h1 className="heading-m">{props.label}</h1>;
@@ -23,15 +22,9 @@ const CloseBtn = (props) => {
   );
 };
 
-const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, applicationData, businessService, moduleCode }) => {
-  const { data: approverData, isLoading: PTALoading } = Digit.Hooks.useEmployeeSearch(
-    tenantId,
-    {
-      roles: action?.assigneeRoles?.map?.((e) => ({ code: e })),
-      isActive: true,
-    },
-    { enabled: !action?.isTerminateState }
-  );
+const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, applicationData, businessService }) => {
+  const { data: fieldInspectorData } = Digit.Hooks.useEmployeeSearch(tenantId, { roles: [{ code: "PT_FIELD_INSPECTOR" }], isActive: true });
+  const { data: approverData } = Digit.Hooks.useEmployeeSearch(tenantId, { roles: [{ code: "PT_APPROVER" }], isActive: true });
   const { isLoading: financialYearsLoading, data: financialYearsData } = Digit.Hooks.pt.useMDMS(
     tenantId,
     businessService,
@@ -39,7 +32,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     {},
     {
       details: {
-        tenantId: Digit.ULBService.getStateId(),
+        tenantId: "pb",
         moduleDetails: [{ moduleName: "egf-master", masterDetails: [{ name: "FinancialYear", filter: "[?(@.module == 'PT')]" }] }],
       },
     }
@@ -47,20 +40,25 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
 
   const [config, setConfig] = useState({});
   const [defaultValues, setDefaultValues] = useState({});
+  const [fieldInspectors, setFieldInspectors] = useState([]);
+  const [selectedFieldInspector, setSelectedFieldInspector] = useState({});
   const [approvers, setApprovers] = useState([]);
-  const [selectedApprover, setSelectedApprover] = useState(null);
+  const [selectedApprover, setSelectedApprover] = useState({});
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [error, setError] = useState(null);
   const [financialYears, setFinancialYears] = useState([]);
   const [selectedFinancialYear, setSelectedFinancialYear] = useState(null);
-  const [disableActionSubmit, setDisableActionSubmit] = useState(false);
 
   useEffect(() => {
     if (financialYearsData && financialYearsData["egf-master"]) {
       setFinancialYears(financialYearsData["egf-master"]?.["FinancialYear"]);
     }
   }, [financialYearsData]);
+
+  useEffect(() => {
+    setFieldInspectors(fieldInspectorData?.Employees?.map((employee) => ({ uuid: employee?.uuid, name: employee?.user?.name })));
+  }, [fieldInspectorData]);
 
   useEffect(() => {
     setApprovers(approverData?.Employees?.map((employee) => ({ uuid: employee?.uuid, name: employee?.user?.name })));
@@ -93,54 +91,71 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     })();
   }, [file]);
 
+  const businessServiceMap = {
+    REJECT: "PT.CREATE",
+    SENDBACKTOCITIZEN: "PT.CREATE",
+    VERIFY: "PT.CREATE",
+    FORWARD: "PT.CREATE",
+    APPROVE: "PT.CREATE",
+  };
+
   function submit(data) {
-    if (!action?.showFinancialYearsModal) {
-      let workflow = { action: action?.action, comments: data?.comments, businessService, moduleName: moduleCode };
-      workflow["assignes"] = action?.isTerminateState || !selectedApprover ? [] : [selectedApprover];
-      if (uploadedFile)
-        workflow["documents"] = [
-          {
-            documentType: action?.action + " DOC",
-            fileName: file?.name,
-            fileStoreId: uploadedFile,
-          },
-        ];
+    let workflow = { action: action, comments: data?.comments, businessService: businessServiceMap[action], moduleName: businessService };
+    if (action === "VERIFY") workflow["assignes"] = [selectedFieldInspector];
+    if (action === "FORWARD") workflow["assignes"] = [selectedApprover];
+    if (uploadedFile)
+      workflow["documents"] = [
+        {
+          documentType: "Document - 1",
+          fileName: file?.name,
+          fileStoreId: uploadedFile,
+        },
+      ];
 
-      submitAction({
-        Property: {
-          ...applicationData,
-          workflow,
-        },
-      });
-    } else {
-      submitAction({
-        customFunctionToExecute: action?.customFunctionToExecute,
-        Assessment: {
-          financialYear: selectedFinancialYear?.name,
-          propertyId: applicationData?.propertyId,
-          tenantId,
-          source: applicationData?.source,
-          channel: applicationData?.channel,
-          assessmentDate: Date.now(),
-        },
-      });
-    }
+    submitAction({
+      Property: {
+        ...applicationData,
+        workflow,
+      },
+      Assessment: {
+        financialYear: selectedFinancialYear?.name,
+        propertyId: applicationData?.propertyId,
+        tenantId,
+        source: applicationData?.source,
+        channel: applicationData?.channel,
+        assessmentDate: Date.now(),
+      },
+    });
   }
-
   useEffect(() => {
-    if (action) {
-      if (action?.showFinancialYearsModal) {
-        setConfig(
-          configPTAssessProperty({
+    switch (action) {
+      case "REJECT":
+      case "APPROVE":
+      case "SENDBACKTOCITIZEN":
+        return setConfig(
+          configPTRejectApplication({
             t,
             action,
-            financialYears,
-            selectedFinancialYear,
-            setSelectedFinancialYear,
+            selectFile,
+            uploadedFile,
+            setUploadedFile,
           })
         );
-      } else {
-        setConfig(
+      case "VERIFY":
+        return setConfig(
+          configPTVerifyApplication({
+            t,
+            action,
+            fieldInspectors,
+            selectedFieldInspector,
+            setSelectedFieldInspector,
+            selectFile,
+            uploadedFile,
+            setUploadedFile,
+          })
+        );
+      case "FORWARD":
+        return setConfig(
           configPTApproverApplication({
             t,
             action,
@@ -150,12 +165,23 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
             selectFile,
             uploadedFile,
             setUploadedFile,
-            businessService,
           })
         );
-      }
+      case "ASSESS_PROPERTY":
+        return setConfig(
+          configPTAssessProperty({
+            t,
+            action,
+            financialYears,
+            selectedFinancialYear,
+            setSelectedFinancialYear,
+          })
+        );
+      default:
+        console.log("default case");
+        break;
     }
-  }, [action, approvers, financialYears, selectedFinancialYear, uploadedFile]);
+  }, [action, fieldInspectors, approvers, financialYears, selectedFinancialYear, uploadedFile]);
 
   return action && config.form ? (
     <Modal
@@ -165,7 +191,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       actionCancelOnSubmit={closeModal}
       actionSaveLabel={t(config.label.submit)}
       actionSaveOnSubmit={() => {}}
-      isDisabled={!action.showFinancialYearsModal ? PTALoading || (action?.docUploadRequired && !uploadedFile) : !selectedFinancialYear}
       formId="modal-action"
     >
       {financialYearsLoading ? (
@@ -179,7 +204,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           onSubmit={submit}
           defaultValues={defaultValues}
           formId="modal-action"
-          // isDisabled={!action.showFinancialYearsModal ? PTALoading || (!action?.isTerminateState && !selectedApprover?.uuid) : !selectedFinancialYear}
         />
       )}
     </Modal>

@@ -21,6 +21,7 @@ const SectionalDropdown = (props) => {
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
 
+  console.log("props in dropdown", props.menuData, props.displayKey, props.t);
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);
@@ -36,6 +37,7 @@ const SectionalDropdown = (props) => {
 
   function onSelect(selectedOption) {
     props.select(selectedOption);
+    console.log("selected option", selectedOption);
     setSelectedOption(selectedOption);
     setDropdownStatus(false);
   }

@@ -21,7 +21,7 @@ body {
 }*/
 
 .h1 {
-  @apply font-rc text-heading-l text-text-primary font-bold mb-md ml-md;
+  @apply font-rc text-heading-xl text-text-primary font-bold mb-md ml-md;
 }
 
 .link-label {
@@ -97,7 +97,7 @@ body {
 
   .h1 {
     margin-left: 0;
-    @apply text-heading-l-dt;
+    @apply text-heading-xl-dt;
   }
 
   .link-label {
@@ -111,8 +111,4 @@ body {
   .back-btn2 {
     margin-left: 0;
   }
-}
-
-.body-container::-webkit-scrollbar {
-  display: none;
 }

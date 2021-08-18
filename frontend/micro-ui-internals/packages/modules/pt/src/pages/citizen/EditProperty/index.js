@@ -7,7 +7,7 @@ import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from 
 import { newConfig } from "../../../config/Create/config";
 import CheckPage from "../Create/CheckPage";
 import PTAcknowledgement from "../Create/PTAcknowledgement";
-import { checkArrayLength, stringReplaceAll,getSuperBuiltUpareafromob } from "../../../utils";
+import { checkArrayLength, stringReplaceAll } from "../../../utils";
 
 const getPropertyEditDetails = (data = {}) => {
   // converting owners details
@@ -70,9 +70,7 @@ const getPropertyEditDetails = (data = {}) => {
   data.address.city = { code: data?.tenantId };
   data.address.locality.i18nkey = data?.tenantId.replace(".", "_").toUpperCase() + "_" + "REVENUE" + "_" + data?.address?.locality?.code;
   let addressDocs = data?.documents?.filter((doc) => doc?.documentType?.includes("ADDRESSPROOF"));
-  if (checkArrayLength(addressDocs)) {
-    addressDocs[0].documentType = { code: addressDocs[0]?.documentType, i18nKey: stringReplaceAll(addressDocs[0]?.documentType, ".", "_") };
-  }
+  if(checkArrayLength(addressDocs)){addressDocs[0].documentType = { code: addressDocs[0]?.documentType, i18nKey: stringReplaceAll(addressDocs[0]?.documentType, ".", "_") };}
   if (data?.address?.documents) {
     data.address.documents["ProofOfAddress"] = addressDocs[0];
   } else {
@@ -243,7 +241,7 @@ const getPropertyEditDetails = (data = {}) => {
             };
       data.IsAnyPartOfThisFloorUnOccupied =
         unoccupiedtf == true ? { i18nKey: "PT_COMMON_YES", code: "UNOCCUPIED" } : { i18nKey: "PT_COMMON_NO", code: "UNOCCUPIED" };
-      data.floordetails = { plotSize: data?.landArea, builtUpArea: getSuperBuiltUpareafromob(data) };
+      data.floordetails = { plotSize: 1000, builtUpArea: data?.superBuiltUpArea };
       data["extraunitFPB"] = extraunitsFPB;
     } else if (data?.propertyType === "BUILTUP.INDEPENDENTPROPERTY") {
       let nooffloor = 0,
@@ -403,10 +401,10 @@ const EditProperty = ({ parentRoute }) => {
   const propertyIds = window.location.href.split("/").pop();
   let application = {};
   const updateProperty = window.location.href.includes("action=UPDATE");
-  const typeOfProperty = window.location.href.includes("UPDATE") ? true : false;
-  const ptProperty = JSON.parse(sessionStorage.getItem("pt-property")) || {};
-  const data = { Properties: [ptProperty] };
-  /* const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch(
+ const typeOfProperty= window.location.href.includes("UPDATE")?true:false
+  const ptProperty=JSON.parse(sessionStorage.getItem("pt-property"))||{};
+  const data= {Properties:[ptProperty]};
+/* const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch(
     { filters: typeOfProperty ? { propertyIds } : { acknowledgementIds } },
     {
       filters: typeOfProperty ? { propertyIds } : { acknowledgementIds },
@@ -415,14 +413,14 @@ const EditProperty = ({ parentRoute }) => {
   sessionStorage.setItem("isEditApplication", false);
 
   useEffect(() => {
-    application = data?.Properties && data.Properties[0] && data.Properties[0];
+    application = data?.Properties&&data.Properties[0]&&data.Properties[0];
     if (data && application) {
       application = data?.Properties[0];
       if (updateProperty) {
         application.isUpdateProperty = true;
         application.isEditProperty = false;
       } else {
-        application.isUpdateProperty = typeOfProperty;
+        application.isUpdateProperty =  typeOfProperty;
         application.isEditProperty = true;
       }
       sessionStorage.setItem("propertyInitialObject", JSON.stringify({ ...application }));
@@ -430,6 +428,7 @@ const EditProperty = ({ parentRoute }) => {
       setParams({ ...params, ...propertyEditDetails });
     }
   }, []);
+
 
   const goNext = (skipStep, index, isAddMultiple, key) => {
     let currentPath = pathname.split("/").pop(),
@@ -545,8 +544,8 @@ const EditProperty = ({ parentRoute }) => {
   const onSuccess = () => {
     clearParams();
     queryClient.invalidateQueries("PT_CREATE_PROPERTY");
-    sessionStorage.setItem("propertyInitialObject", JSON.stringify({}));
-    sessionStorage.setItem("pt-property", JSON.stringify({}));
+    sessionStorage.setItem("propertyInitialObject", JSON.stringify({ }));
+    sessionStorage.setItem("pt-property", JSON.stringify({ }));
   };
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));

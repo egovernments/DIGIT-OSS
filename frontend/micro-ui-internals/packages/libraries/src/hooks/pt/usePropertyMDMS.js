@@ -30,10 +30,6 @@ const usePropertyMDMS = (tenantId, moduleCode, type, config = {}) => {
     return useQuery("PT_MAP_CONFIG", () => MdmsService.getMapConfig(tenantId, moduleCode), config);
   };
 
-  const _default = () => {
-    return useQuery([tenantId, moduleCode, type], () => MdmsService.getMultipleTypes(tenantId, moduleCode, type), config);
-  };
-
   switch (type) {
     case "OwnerShipCategory":
       return usePropertyOwnerShipCategory();
@@ -53,8 +49,6 @@ const usePropertyMDMS = (tenantId, moduleCode, type, config = {}) => {
       return useFloorList();
     case "MapConfig":
       return useMapConfig();
-    default:
-      return _default();
   }
 };
 

@@ -16,7 +16,7 @@ const Rejected = ({ action, nextActions, rating, serviceRequestId, reopenDate, i
         if (action && action !== "COMMENT") {
           return (
             <Link key={index} to={`/digit-ui/citizen/pgr/${action.toLowerCase()}/${serviceRequestId}`}>
-              <ActionLinks>{t(`CS_COMMON_${action}`)}</ActionLinks>
+              <ActionLinks>{action}</ActionLinks>
             </Link>
           );
         }
@@ -39,7 +39,7 @@ const Rejected = ({ action, nextActions, rating, serviceRequestId, reopenDate, i
         if (action && action !== "COMMENT") {
           return (
             <Link key={index} to={`/digit-ui/citizen/pgr/${action.toLowerCase()}/${serviceRequestId}`}>
-              <ActionLinks>{t(`CS_COMMON_${action}`)}</ActionLinks>
+              <ActionLinks>{action}</ActionLinks>
             </Link>
           );
         }

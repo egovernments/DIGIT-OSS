@@ -1,5 +1,11 @@
 import { useQuery } from "react-query";
 
+/**
+ *
+ * @param {tenantId} optional
+ * @param {businessServive} neccessory
+ */
+
 const useApplicationStatusGeneral = ({ businessServices = [], tenantId }, config) => {
   tenantId = tenantId || Digit.ULBService.getCurrentTenantId();
 
@@ -7,7 +13,7 @@ const useApplicationStatusGeneral = ({ businessServices = [], tenantId }, config
   const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
 
   const fetch = async () =>
-    await Digit.WorkflowService.init(tenantId, businessServices.join()).then((res) => {
+    await Digit.WorkflowService.init(tenantId).then((res) => {
       const { BusinessServices: data } = res;
       return data;
     });
@@ -16,7 +22,7 @@ const useApplicationStatusGeneral = ({ businessServices = [], tenantId }, config
     let states = [];
     const filteredData = data.filter((e) => businessServices.includes(e.businessService));
     filteredData.forEach((service) => {
-      states = [...states, ...service.states.map((e) => ({ ...e, stateBusinessService: service.businessService }))];
+      states = [...states, ...service.states];
     });
 
     // console.log(JSON.stringify(data.filter((service) => service.business === "PT").map((e) => e.businessService)));
@@ -26,17 +32,15 @@ const useApplicationStatusGeneral = ({ businessServices = [], tenantId }, config
       return { ...state, roles };
     };
 
-    const roleStateMapArray = states?.map(addRoleToState).filter((e) => !!e.state);
+    const roleStateMapArray = states?.map(addRoleToState);
 
     const userRoleStates = roleStateMapArray.filter(({ roles }) => roles?.some((role) => userRoles.includes(role)));
-    const otherRoleStates = roleStateMapArray
-      .filter(({ roles }) => !roles?.some((role) => userRoles.includes(role)))
-      .map((e) => ({ ...e, nonActionableRole: true }));
+    const otherRoleStates = roleStateMapArray.filter(({ roles }) => !roles?.some((role) => userRoles.includes(role)));
 
     return { userRoleStates, otherRoleStates };
   };
 
-  const queryData = useQuery(["workflow_states", tenantId, ...businessServices], () => fetch(), { select, ...config });
+  const queryData = useQuery(["workflow_states", tenantId], () => fetch(), { select, ...config });
 
   return queryData;
 };

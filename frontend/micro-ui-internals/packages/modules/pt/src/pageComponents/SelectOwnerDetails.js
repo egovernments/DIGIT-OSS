@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, Menu, MobileNumber } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown } from "@egovernments/digit-ui-react-components";
 import { cardBodyStyle } from "../utils";
-import { useLocation, useRouteMatch } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
-  const { pathname: url } = useLocation();
-  const editScreen = url.includes("/modify-application/");
-  const mutationScreen = url.includes("/property-mutation/");
-
-  let index = mutationScreen ? ownerIndex : window.location.href.charAt(window.location.href.length - 1);
+const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
+  let index = window.location.href.charAt(window.location.href.length - 1);
   let validation = {};
   const [name, setName] = useState((formData.owners && formData.owners[index] && formData.owners[index].name) || formData?.owners?.name || "");
   const [email, setEmail] = useState((formData.owners && formData.owners[index] && formData.owners[index].email) || formData?.owners?.emailId || "");
@@ -23,18 +19,8 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
     (formData.owners && formData.owners[index] && formData.owners[index].relationship) || formData?.owners?.relationship || {}
   );
   const isUpdateProperty = formData?.isUpdateProperty || false;
-  let isEditProperty = formData?.isEditProperty || false;
-
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
-
-  const { data: Menu } = Digit.Hooks.pt.useGenderMDMS(stateId, "common-masters", "GenderType");
-
-  let menu = [];
-  Menu &&
-    Menu.map((genderDetails) => {
-      menu.push({ i18nKey: `PT_COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
-    });
+  const { pathname: url } = useLocation();
+  const editScreen = url.includes("/modify-application/");
 
   function setOwnerName(e) {
     setName(e.target.value);
@@ -45,7 +31,6 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
   function setGenderName(value) {
     setGender(value);
   }
-
   function setMobileNo(e) {
     setMobileNumber(e.target.value);
   }
@@ -63,23 +48,17 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
       ownerStep = { ...owner, name, gender, mobileNumber, fatherOrHusbandName, relationship, emailId: email };
       onSelect(config.key, { ...formData[config.key], ...ownerStep }, false, index);
     } else {
-      if (mutationScreen) {
-        ownerStep = { ...owner, name, gender, mobileNumber, fatherOrHusbandName, relationship };
-        onSelect("", ownerStep);
-        return;
-      }
       ownerStep = { ...owner, name, gender, mobileNumber, fatherOrHusbandName, relationship };
       onSelect(config.key, ownerStep, false, index);
     }
   };
 
   const onSkip = () => onSelect();
-  // As Ticket RAIN-2619 other option in gender and gaurdian will be enhance , dont uncomment it
+// As Ticket RAIN-2619 other option in gender and gaurdian will be enhance , dont uncomment it 
   const options = [
     { name: "Female", value: "FEMALE", code: "FEMALE" },
     { name: "Male", value: "MALE", code: "MALE" },
     { name: "Transgender", value: "TRANSGENDER", code: "TRANSGENDER" },
-    { name: "OTHERS", value: "OTHERS", code: "OTHERS" },
     // { name: "Other", value: "OTHER", code: "OTHER" },
   ];
 
@@ -177,7 +156,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
             className="form-field"
             selected={gender?.length === 1 ? gender[0] : gender}
             disable={gender?.length === 1 || editScreen}
-            option={menu}
+            option={options}
             select={setGenderName}
             optionKey="code"
             t={t}
@@ -211,7 +190,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
       t={t}
       isDisabled={!name || !mobileNumber || !gender || !relationship || !fatherOrHusbandName}
     >
-      <div>
+      <div style={cardBodyStyle}>
         <CardLabel>{`${t("PT_OWNER_NAME")}`}</CardLabel>
         <TextInput
           t={t}
@@ -221,7 +200,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
           name="name"
           value={name}
           onChange={setOwnerName}
-          disable={isUpdateProperty || isEditProperty}
+          disable={isUpdateProperty}
           {...(validation = {
             isRequired: true,
             pattern: "^[a-zA-Z-.`' ]*$",
@@ -232,7 +211,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
         <CardLabel>{`${t("PT_FORM3_GENDER")}`}</CardLabel>
         <RadioButtons
           t={t}
-          options={menu}
+          options={options}
           optionsKey="code"
           name="gender"
           value={gender}
@@ -240,15 +219,24 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
           onSelect={setGenderName}
           isDependent={true}
           labelKey="PT_COMMON_GENDER"
-          disabled={isUpdateProperty || isEditProperty}
+          disabled={isUpdateProperty}
         />
         <CardLabel>{`${t("PT_FORM3_MOBILE_NUMBER")}`}</CardLabel>
-        <MobileNumber
-          value={mobileNumber}
+        <TextInput
+          type={"text"}
+          t={t}
+          isMandatory={false}
+          optionKey="i18nKey"
           name="mobileNumber"
-          onChange={(value) => setMobileNo({ target: { value } })}
-          disable={isUpdateProperty || isEditProperty}
-          {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+          value={mobileNumber}
+          onChange={setMobileNo}
+          disable={isUpdateProperty}
+          {...(validation = {
+            isRequired: true,
+            pattern: "[6-9]{1}[0-9]{9}",
+            type: "tel",
+            title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
+          })}
         />
         <CardLabel>{`${t("PT_FORM3_GUARDIAN_NAME")}`}</CardLabel>
         <TextInput
@@ -259,7 +247,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
           name="fatherOrHusbandName"
           value={fatherOrHusbandName}
           onChange={setGuardiansName}
-          disable={isUpdateProperty || isEditProperty}
+          disable={isUpdateProperty}
           {...(validation = {
             isRequired: true,
             pattern: "^[a-zA-Z-.`' ]*$",
@@ -278,7 +266,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
           onSelect={setGuardianName}
           isDependent={true}
           labelKey="PT_RELATION"
-          disabled={isUpdateProperty || isEditProperty}
+          disabled={isUpdateProperty}
         />
       </div>
     </FormStep>

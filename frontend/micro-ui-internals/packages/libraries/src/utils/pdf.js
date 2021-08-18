@@ -1,39 +1,6 @@
-import { Fonts } from "./fonts";
 const pdfMake = require("pdfmake/build/pdfmake.js");
-// const pdfFonts = require("pdfmake/build/vfs_fonts.js");
-// pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
-pdfMake.vfs = Fonts;
-
-pdfMake.fonts = {
-  //   Roboto: {
-  //     normal: "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf",
-  //     bold: "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf"
-  //   },
-  Hind: {
-    normal: "Hind-Regular.ttf",
-    bold: "Hind-Bold.ttf",
-  },
-};
-
-const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
-  if (
-    window &&
-    window.mSewaApp &&
-    window.mSewaApp.isMsewaApp &&
-    window.mSewaApp.isMsewaApp() &&
-    window.mSewaApp.downloadBase64File &&
-    window.Digit.Utils.browser.isMobile()
-  ) {
-    // we are running under webview
-    receiptPDF.getBase64((data) => {
-      window.mSewaApp.downloadBase64File(data, filename);
-    });
-  } else {
-    // we are running in browser
-    receiptPDF.download(filename);
-  }
-};
+const pdfFonts = require("pdfmake/build/vfs_fonts.js");
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 function getBase64Image(tenantId) {
   try {
@@ -57,24 +24,24 @@ const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, headin
     email.length <= 15
       ? 190
       : email.length <= 20
-        ? 150
-        : email.length <= 25
-          ? 130
-          : email.length <= 30
-            ? 90
-            : email.length <= 35
-              ? 50
-              : email.length <= 40
-                ? 10
-                : email.length <= 45
-                  ? 0
-                  : email.length <= 50
-                    ? -20
-                    : email.length <= 55
-                      ? -70
-                      : email.length <= 60
-                        ? -100
-                        : -60;
+      ? 150
+      : email.length <= 25
+      ? 130
+      : email.length <= 30
+      ? 90
+      : email.length <= 35
+      ? 50
+      : email.length <= 40
+      ? 10
+      : email.length <= 45
+      ? 0
+      : email.length <= 50
+      ? -20
+      : email.length <= 55
+      ? -70
+      : email.length <= 60
+      ? -100
+      : -60;
 
   const dd = {
     pageMargins: [40, 80, 40, 30],
@@ -88,21 +55,18 @@ const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, headin
         {
           text: name,
           margin: [20, 25],
-          font: "Hind",
           fontSize: 14,
           bold: true,
         },
         {
           text: email,
           margin: [emailLeftMargin, 25, 0, 25],
-          font: "Hind",
           fontSize: 11,
           color: "#464747",
         },
         {
           text: phoneNumber,
           color: "#6f777c",
-          font: "Hind",
           fontSize: 11,
           margin: [-65, 45, 0, 25],
         },
@@ -112,15 +76,14 @@ const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, headin
     footer: function (currentPage, pageCount) {
       return {
         columns: [
-          { text: `${name} / ${heading}`, margin: [15, 0, 0, 0], fontSize: 11, color: "#6f777c", width: 400, font: "Hind" },
-          { text: `Page ${currentPage}`, alignment: "right", margin: [0, 0, 25, 0], fontSize: 11, color: "#6f777c", font: "Hind" },
+          { text: `${name} / ${heading}`, margin: [15, 0, 0, 0], fontSize: 11, color: "#6f777c", width: 400 },
+          { text: `Page ${currentPage}`, alignment: "right", margin: [0, 0, 25, 0], fontSize: 11, color: "#6f777c" },
         ],
       };
     },
     content: [
       {
         text: heading,
-        font: "Hind",
         fontSize: 24,
         bold: true,
         margin: [-25, 5, 0, 0],
@@ -128,18 +91,13 @@ const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, headin
       ...createContent(details, phoneNumber),
       {
         text: t("PDF_SYSTEM_GENERATED_ACKNOWLEDGEMENT"),
-        font: "Hind",
         fontSize: 11,
         color: "#6f777c",
         margin: [-25, 32],
       },
     ],
-    defaultStyle: {
-      font: "Hind",
-    },
   };
-  const generatedPDF = pdfMake.createPdf(dd);
-  downloadPDFFileUsingBase64(generatedPDF, "acknowledgement.pdf");
+  pdfMake.createPdf(dd).download();
 };
 
 export default { generate: jsPdfGenerator };
@@ -148,82 +106,77 @@ function createContent(details, phoneNumber) {
   const data = [];
 
   details.forEach((detail, index) => {
-    if (detail?.values?.length > 0) {
-      let column1 = [];
-      let column2 = [];
+    let column1 = [];
+    let column2 = [];
 
-      if ((index + 1) % 7 === 0) {
-        data.push({
-          text: "",
-          margin: [-25, 0, 0, 200],
-        });
-      }
-
+    if ((index + 1) % 7 === 0) {
       data.push({
-        text: `${detail.title}`,
-        font: "Hind",
-        fontSize: 18,
-        bold: true,
-        margin: [-25, 20, 0, 20],
-      });
-
-      const newArray = [];
-      let count = 0;
-      let arrayNumber = 0;
-
-      detail.values.forEach((value, index) => {
-        if (count <= 3) {
-          if (!newArray[arrayNumber]) {
-            newArray[arrayNumber] = [];
-          }
-          if (value) {
-            newArray[arrayNumber].push(value);
-          }
-          count++;
-        }
-        if (count === 4) {
-          count = 0;
-          arrayNumber++;
-        }
-      });
-
-      newArray.forEach((value) => {
-        if (value?.length === 2) {
-          createContentForDetailsWithLengthOfTwo(value, data, column1, column2, detail.values.length > 3 ? 10 : 0);
-        } else if (value?.length === 1 || value?.length === 3) {
-          createContentForDetailsWithLengthOfOneAndThree(value, data, column1, column2, detail.values.length > 3 ? 10 : 0);
-        } else {
-          value.forEach((value, index) => {
-            let margin = [-25, 0, 0, 5];
-            if (index === 1) margin = [15, 0, 0, 5];
-            if (index === 2) margin = [26, 0, 0, 5];
-            if (index === 3) margin = [30, 0, 0, 5];
-            column1.push({
-              text: value.title,
-              font: "Hind",
-              fontSize: 11,
-              bold: true,
-              margin,
-            });
-            if (index === 1) margin = [15, 0, 0, 10];
-            if (index === 2) margin = [26, 0, 0, 10];
-            if (index === 3) margin = [30, 0, 0, 10];
-            column2.push({
-              text: value.value,
-              font: "Hind",
-              fontSize: 9,
-              margin,
-              color: "#1a1a1a",
-              width: "25%",
-            });
-          });
-          data.push({ columns: column1 });
-          data.push({ columns: column2 });
-          column1 = [];
-          column2 = [];
-        }
+        text: "",
+        margin: [-25, 0, 0, 200],
       });
     }
+
+    data.push({
+      text: `${detail.title}`,
+      fontSize: 18,
+      bold: true,
+      margin: [-25, 20, 0, 20],
+    });
+
+    const newArray = [];
+    let count = 0;
+    let arrayNumber = 0;
+
+    detail.values.forEach((value, index) => {
+      if (count <= 3) {
+        if (!newArray[arrayNumber]) {
+          newArray[arrayNumber] = [];
+        }
+        if (value) {
+          newArray[arrayNumber].push(value);
+        }
+        count++;
+      }
+      if (count === 4) {
+        count = 0;
+        arrayNumber++;
+      }
+    });
+
+    newArray.forEach((value) => {
+      if (value?.length === 2) {
+        createContentForDetailsWithLengthOfTwo(value, data, column1, column2, detail.values.length > 3 ? 10 : 0);
+      } else if (value?.length === 1 || value?.length === 3) {
+        createContentForDetailsWithLengthOfOneAndThree(value, data, column1, column2, detail.values.length > 3 ? 10 : 0);
+      } else {
+        value.forEach((value, index) => {
+          let margin = [-25, 0, 0, 5];
+          if (index === 1) margin = [15, 0, 0, 5];
+          if (index === 2) margin = [26, 0, 0, 5];
+          if (index === 3) margin = [30, 0, 0, 5];
+          column1.push({
+            text: value.title,
+            fontSize: 11,
+            bold: true,
+            margin,
+          });
+          if (index === 1) margin = [15, 0, 0, 10];
+          if (index === 2) margin = [26, 0, 0, 10];
+          if (index === 3) margin = [30, 0, 0, 10];
+          column2.push({
+            text: value.value,
+            fontSize: 9,
+            margin,
+            color: "#1a1a1a",
+            width: "25%",
+          });
+        });
+        data.push({ columns: column1 });
+        data.push({ columns: column2 });
+        column1 = [];
+        column2 = [];
+      }
+    });
   });
 
   return data;
@@ -234,14 +187,12 @@ function createContentForDetailsWithLengthOfTwo(values, data, column1, column2, 
     if (index === 0) {
       column1.push({
         text: value.title,
-        font: "Hind",
         fontSize: 12,
         bold: true,
         margin: [-25, num - 10, -25, 0],
       });
       column2.push({
         text: value.value,
-        font: "Hind",
         fontSize: 9,
         margin: [-25, 5, 0, 0],
         color: "#1a1a1a",
@@ -250,14 +201,12 @@ function createContentForDetailsWithLengthOfTwo(values, data, column1, column2, 
     } else {
       column1.push({
         text: value.title,
-        font: "Hind",
         fontSize: 12,
         bold: true,
         margin: [-115, num - 10, -115, 0],
       });
       column2.push({
         text: value.value,
-        font: "Hind",
         fontSize: 9,
         margin: [15, 5, 0, 0],
         color: "#1a1a1a",
@@ -274,14 +223,12 @@ function createContentForDetailsWithLengthOfOneAndThree(values, data, column1, c
     if (index === 0) {
       column1.push({
         text: value.title,
-        font: "Hind",
         fontSize: 12,
         bold: true,
         margin: values.length > 1 ? [-25, -5, 0, 0] : [-25, 0, 0, 0],
       });
       column2.push({
         text: value.value,
-        font: "Hind",
         fontSize: 9,
         color: "#1a1a1a",
         margin: values.length > 1 ? [-25, 5, 0, 0] : [-25, 5, 0, 0],
@@ -290,14 +237,12 @@ function createContentForDetailsWithLengthOfOneAndThree(values, data, column1, c
     } else if (index === 2) {
       column1.push({
         text: value.title,
-        font: "Hind",
         fontSize: 12,
         bold: true,
         margin: [-60, -5, 0, 0],
       });
       column2.push({
         text: value.value,
-        font: "Hind",
         fontSize: 9,
         margin: [26, 5, 0, 0],
         color: "#1a1a1a",
@@ -306,14 +251,12 @@ function createContentForDetailsWithLengthOfOneAndThree(values, data, column1, c
     } else {
       column1.push({
         text: value.title,
-        font: "Hind",
         fontSize: 12,
         bold: true,
         margin: [-28, -5, 0, 0],
       });
       column2.push({
         text: value.value,
-        font: "Hind",
         fontSize: 9,
         margin: [15, 5, 0, 0],
         color: "#1a1a1a",
@@ -385,27 +328,3 @@ function createContentForDetailsWithLengthOfOneAndThree(values, data, column1, c
 // >
 //   Download PDF
 // </button>,
-
-const downloadPdf = (blob, fileName) => {
-  const link = document.createElement("a");
-  // create a blobURI pointing to our Blob
-  link.href = URL.createObjectURL(blob);
-  link.download = fileName;
-  // some browser needs the anchor to be in the doc
-  document.body.append(link);
-  link.click();
-  link.remove();
-  // in case the Blob uses a lot of memory
-  setTimeout(() => URL.revokeObjectURL(link.href), 7000);
-};
-
-/* Download Receipts */
-
-export const downloadReceipt = async (consumerCode, businessService, pdfKey = "consolidatedreceipt") => {
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const response = await Digit.ReceiptsService.receipt_download(businessService, consumerCode, tenantId, pdfKey);
-  const responseStatus = parseInt(response.status, 10);
-  if (responseStatus === 201 || responseStatus === 200) {
-    downloadPdf(new Blob([response.data], { type: "application/pdf" }), `consumer-${consumerCode}.pdf`);
-  }
-};

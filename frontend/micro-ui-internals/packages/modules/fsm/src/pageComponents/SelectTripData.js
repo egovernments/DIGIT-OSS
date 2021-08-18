@@ -18,7 +18,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   useEffect(() => {
     if (dsoData && vehicleData) {
       const allVehicles = dsoData.reduce((acc, curr) => {
-        return curr.vehicles ? [...acc, ...curr.vehicles.map((dsoVehicle) => dsoVehicle.type)] : acc;
+        return [...acc, ...curr.vehicles.map((dsoVehicle) => dsoVehicle.type)];
       }, []);
 
       const __vehicleMenu = allVehicles

@@ -1,31 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Dropdown, RadioButtons, ActionBar, RemoveableTag, CloseSvg, CheckBox, Localities, SubmitBar } from "@egovernments/digit-ui-react-components";
-import { useQueryClient } from "react-query";
+
 import { useTranslation } from "react-i18next";
 
 import Status from "./Status";
 import _ from "lodash";
 
-const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statusMap, moduleCode, ...props }) => {
+const Filter = ({ searchParams, onFilterChange, defaultSearchParams, ...props }) => {
   const { t } = useTranslation();
-  const client = useQueryClient();
 
-  const [_searchParams, setSearchParams] = useState(() => ({ ...searchParams, services: [] }));
-
-  const ApplicationTypeMenu = [
-    {
-      label: "ES_PT_NEW_PROPERTY",
-      value: "PT.CREATE",
-    },
-    {
-      label: "ES_PT_TRANSFER_OWNERSHIP",
-      value: "PT.MUTATION",
-    },
-    {
-      label: "ES_PT_UPDATE_PROPERTY",
-      value: "PT.UPDATE",
-    },
-  ];
+  const [_searchParams, setSearchParams] = useState(() => searchParams);
 
   const localParamChange = (filterParam) => {
     let keys_to_delete = filterParam.delete;
@@ -35,25 +19,26 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statusMap, 
     setSearchParams({ ..._new });
   };
 
-  const applyLocalFilters = () => {
-    if (_searchParams.services.length === 0) onFilterChange({ ..._searchParams, services: ApplicationTypeMenu.map((e) => e.value) });
-    else onFilterChange(_searchParams);
-  };
-
   const clearAll = () => {
-    setSearchParams({ ...defaultSearchParams, services: [] });
-    onFilterChange({ ...defaultSearchParams });
+    setSearchParams(defaultSearchParams);
+    onFilterChange(defaultSearchParams);
   };
+  const ApplicationTypeMenu = [
+    {
+      label: "ES_PT_NEW_PROPERTY",
+      value: "PT.CREATE",
+    },
+    {
+      label: "ES_PT_TRANSFER_OWNERSHIP",
+      value: "PT.MUTATION",
+    },
+  ];
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
   const onServiceSelect = (e, label) => {
-    if (e.target.checked) localParamChange({ services: Array.isArray(_searchParams.services) ? [..._searchParams.services, label] : [label] });
-    else
-      localParamChange({
-        services: _searchParams.services.filter((o) => o !== label),
-        applicationStatus: _searchParams.applicationStatus?.filter((e) => e.stateBusinessService !== label),
-      });
+    if (e.target.checked) localParamChange({ services: [..._searchParams.services, label] });
+    else localParamChange({ services: _searchParams.services.filter((o) => o !== label) });
   };
 
   const selectLocality = (d) => {
@@ -117,7 +102,7 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statusMap, 
                   return (
                     <RemoveableTag
                       key={index}
-                      text={t(locality.i18nkey)}
+                      text={locality.name}
                       onClick={() => {
                         localParamChange({ locality: _searchParams?.locality.filter((loc) => loc.code !== locality.code) });
                       }}
@@ -145,21 +130,20 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statusMap, 
             </div>
             <div>
               <Status
-                searchParams={_searchParams}
+                _searchParams={_searchParams}
                 businessServices={_searchParams.services}
-                statusMap={statusMap || client.getQueryData(`INBOX_STATUS_MAP_${moduleCode}`)}
-                moduleCode={moduleCode}
                 onAssignmentChange={(e, status) => {
                   if (e.target.checked) localParamChange({ applicationStatus: [..._searchParams?.applicationStatus, status] });
-                  else {
-                    let applicationStatus = _searchParams?.applicationStatus.filter((e) => e.state !== status.state);
-                    localParamChange({ applicationStatus });
-                  }
+                  else localParamChange({ applicationStatus: _searchParams?.applicationStatus.filter((e) => e.code !== status.code) });
                 }}
               />
             </div>
             <div>
-              <SubmitBar onSubmit={() => applyLocalFilters()} label={t("ES_COMMON_APPLY")} />
+              <SubmitBar
+                disabled={_.isEqual(_searchParams, searchParams)}
+                onSubmit={() => onFilterChange(_searchParams)}
+                label={t("ES_COMMON_APPLY")}
+              />
             </div>
           </div>
         </div>

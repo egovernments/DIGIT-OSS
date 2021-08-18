@@ -69,7 +69,7 @@ const DesktopInbox = ({
         },
       },
     ],
-    [t]
+    []
   );
 
   let result;

@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
 
-const useApplicationStatus = (select, isEnabled = true, statusMap=[]) => {
+const useApplicationStatus = (select, isEnabled = true) => {
   const { t } = useTranslation();
 
   const userInfo = Digit.UserService.getUser();
@@ -45,10 +45,9 @@ const useApplicationStatus = (select, isEnabled = true, statusMap=[]) => {
         return {
           name: t(`CS_COMMON_FSM_${state.applicationStatus}`),
           code: state.applicationStatus,
-          id: statusMap?.filter(e => e.applicationstatus === state.applicationStatus)?.[0]?.statusid,
           roles,
         };
-      })
+      });
     return response;
   };
 
@@ -58,7 +57,6 @@ const useApplicationStatus = (select, isEnabled = true, statusMap=[]) => {
       return {
         name: t(`CS_COMMON_FSM_${state.applicationStatus}`),
         code: state.applicationStatus,
-        id: statusMap?.filter(e => e.applicationstatus === state.applicationStatus)?.[0]?.statusid,
         roles,
       };
     });

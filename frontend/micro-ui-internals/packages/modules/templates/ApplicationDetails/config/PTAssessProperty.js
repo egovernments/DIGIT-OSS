@@ -4,8 +4,8 @@ import { RadioButtons } from "@egovernments/digit-ui-react-components";
 export const configPTAssessProperty = ({ t, action, financialYears, selectedFinancialYear, setSelectedFinancialYear }) => {
   return {
     label: {
-      heading: `WF_${action.action}_APPLICATION`,
-      submit: `WF_PT.CREATE_${action.action}`,
+      heading: `ES_PT_ACTION_TITLE_${action}`,
+      submit: `ES_PT_COMMON_${action}`,
       cancel: "ES_PT_COMMON_CANCEL",
     },
     form: [

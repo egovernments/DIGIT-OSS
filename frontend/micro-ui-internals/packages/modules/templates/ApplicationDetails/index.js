@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useQueryClient } from "react-query";
 
 import { Loader } from "@egovernments/digit-ui-react-components";
 
@@ -32,10 +31,8 @@ const ApplicationDetails = (props) => {
     workflowDetails,
     businessService,
     closeToast,
-    moduleCode,
-    timelineStatusPrefix,
-    forcedActionPrefix,
   } = props;
+
   useEffect(() => {
     if (showToast) {
       workflowDetails.revalidate();
@@ -43,24 +40,48 @@ const ApplicationDetails = (props) => {
   }, [showToast]);
 
   function onActionSelect(action) {
-    if (action) {
-      if (action?.redirectionUrll) {
-        window.location.assign(`${window.location.origin}/digit-ui/employee/payment/collect/${action?.redirectionUrll?.pathname}`);
-      } else if (!action?.redirectionUrl) {
-        setShowModal(true);
-      } else {
-        history.push({
-          pathname: action.redirectionUrl?.pathname,
-          state: { ...action.redirectionUrl?.state },
-        });
-      }
-    } else console.log("no action found");
-
     setSelectedAction(action);
     setDisplayMenu(false);
   }
 
-  const queryClient = useQueryClient();
+  useEffect(() => {
+    switch (selectedAction) {
+      case "DSO_ACCEPT":
+      case "ACCEPT":
+      case "ASSIGN":
+      case "GENERATE_DEMAND":
+      case "FSM_GENERATE_DEMAND":
+      case "REASSIGN":
+      case "COMPLETE":
+      case "COMPLETED":
+      case "CANCEL":
+      case "SENDBACK":
+      case "DSO_REJECT":
+      case "REJECT":
+      case "DECLINE":
+      case "REASSING":
+      case "SENDBACKTOCITIZEN":
+      case "VERIFY":
+      case "FORWARD":
+      case "APPROVE":
+      case "ASSESS_PROPERTY":
+        return setShowModal(true);
+      case "SUBMIT":
+      case "FSM_SUBMIT":
+        return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
+      case "PAY":
+      case "FSM_PAY":
+      case "ADDITIONAL_PAY_REQUEST":
+        return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
+      case "VIEW_DETAILS":
+        return history.push(`/digit-ui/employee/pt/property-details/${applicationNumber}`);
+      case "UPDATE":
+        return history.push(`/digit-ui/employee/pt/modify-application/${applicationNumber}`);
+      default:
+        console.log("default case");
+        break;
+    }
+  }, [selectedAction]);
 
   const closeModal = () => {
     setSelectedAction(null);
@@ -68,25 +89,26 @@ const ApplicationDetails = (props) => {
   };
 
   const submitAction = (data) => {
-    if (typeof data?.customFunctionToExecute === "function") {
-      data?.customFunctionToExecute({ ...data });
-    }
-
-    if (mutate) {
+    if (selectedAction === "ASSESS_PROPERTY") {
+      history.push({
+        pathname: `/digit-ui/employee/pt/assessment-details/${applicationNumber}`,
+        state: data,
+      });
+    } else {
       mutate(data, {
         onError: (error, variables) => {
-          setShowToast({ key: "error", error });
+          setShowToast({ key: "error", action: error });
           setTimeout(closeToast, 5000);
         },
         onSuccess: (data, variables) => {
           setShowToast({ key: "success", action: selectedAction });
           setTimeout(closeToast, 5000);
-          queryClient.clear();
-          queryClient.refetchQueries("APPLICATION_SEARCH");
+          // queryClient.invalidateQueries("FSM_CITIZEN_SEARCH");
+          // const inbox = queryClient.getQueryData("FUNCTION_RESET_INBOX");
+          // inbox?.revalidate();
         },
       });
     }
-
     closeModal();
   };
 
@@ -104,7 +126,6 @@ const ApplicationDetails = (props) => {
             isDataLoading={isDataLoading}
             applicationData={applicationData}
             businessService={businessService}
-            timelineStatusPrefix={timelineStatusPrefix}
           />
           {showModal ? (
             <ActionModal
@@ -118,8 +139,6 @@ const ApplicationDetails = (props) => {
               submitAction={submitAction}
               actionData={workflowDetails?.data?.timeline}
               businessService={businessService}
-              workflowDetails={workflowDetails}
-              moduleCode={moduleCode}
             />
           ) : null}
           <ApplicationDetailsToast t={t} showToast={showToast} closeToast={closeToast} businessService={businessService} />
@@ -129,7 +148,6 @@ const ApplicationDetails = (props) => {
             onActionSelect={onActionSelect}
             setDisplayMenu={setDisplayMenu}
             businessService={businessService}
-            forcedActionPrefix={forcedActionPrefix}
           />
         </React.Fragment>
       ) : (

@@ -102,7 +102,7 @@ const DesktopInbox = (props) => {
           },
           {
             Header: t("ES_INBOX_VEHICLE_NO"),
-            accessor: (row) => row.vehicle?.registrationNumber,
+            accessor: (row) => row.vehicle.registrationNumber,
           },
           {
             Header: t("ES_INBOX_DSO_NAME"),
@@ -167,7 +167,7 @@ const DesktopInbox = (props) => {
   let result;
   if (props.isLoading) {
     result = <Loader />;
-  } else if ((props.isSearch && !props.shouldSearch) || props?.data?.table?.length === 0) {
+  } else if ((props.isSearch && !props.shouldSearch) || props?.data?.length === 0) {
     result = (
       <Card style={{ marginTop: 20 }}>
         {/* TODO Change localization key */}
@@ -183,11 +183,11 @@ const DesktopInbox = (props) => {
         }
       </Card>
     );
-  } else if (props?.data?.table?.length > 0) {
+  } else if (props?.data?.length > 0) {
     result = (
       <ApplicationTable
         t={t}
-        data={props.data.table}
+        data={props.data}
         columns={columns}
         getCellProps={(cellInfo) => {
           return {
@@ -221,7 +221,7 @@ const DesktopInbox = (props) => {
         <div className="filters-container">
           <FSMLink parentRoute={props.parentRoute} />
           <div>
-            <Filter searchParams={props.searchParams} paginationParms={props.paginationParms} applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
+            <Filter searchParams={props.searchParams} applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
           </div>
         </div>
       )}

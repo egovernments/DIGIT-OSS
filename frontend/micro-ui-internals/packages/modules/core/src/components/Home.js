@@ -4,6 +4,7 @@ const CitizenHome = ({ modules }) => {
   const ComponentProvider = Digit.Contexts.ComponentProvider;
   const registry = useContext(ComponentProvider);
 
+  console.log(registry);
   const paymentModule = modules.filter(({ code }) => code === "Payment")[0];
   const moduleArr = modules.filter(({ code }) => code !== "Payment");
   const moduleArray = [paymentModule, ...moduleArr];
@@ -25,7 +26,7 @@ const CitizenHome = ({ modules }) => {
 const EmployeeHome = ({ modules }) => {
   return (
     <div className="employee-app-container">
-      <div className="ground-container moduleCardWrapper">
+      <div className="ground-container">
         {modules.map(({ code }, index) => {
           const Card = Digit.ComponentRegistryService.getComponent(`${code}Card`) || (() => <React.Fragment />);
           return <Card key={index} />;

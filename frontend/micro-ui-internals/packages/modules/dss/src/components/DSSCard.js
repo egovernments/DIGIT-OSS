@@ -14,7 +14,7 @@ const DSSCard = () => {
   const ADMIN = Digit.UserService.hasAccess("FSM_ADMIN") || Digit.UserService.hasAccess("EMPLOYEE ADMIN") || false;
   return (
     <>
-      {null ? (
+      {ADMIN ? (
         <div className="employeeCard card-home">
           <div className="complaint-links-container">
             <div className="header">
@@ -25,8 +25,8 @@ const DSSCard = () => {
             </div>
             <div className="body">
               <span className="link">
-                <Link to={`/digit-ui/employee/dss/dashboard/fsm`}>{t("ES_TITLE_DSS_OVERVIEW")}</Link>
-                {<ArrowRight to={`/digit-ui/employee/dss/dashboard/fsm`} />}
+                <Link to={`/digit-ui/employee/dss/dashboard`}>{t("ES_TITLE_DSS_OVERVIEW")}</Link>
+                {<ArrowRight to={`/digit-ui/employee/dss/dashboard`} />}
               </span>
             </div>
           </div>

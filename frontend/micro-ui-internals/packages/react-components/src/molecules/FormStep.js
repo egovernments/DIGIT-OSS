@@ -23,15 +23,14 @@ const FormStep = ({
   cardStyle = {},
   isMultipleAllow = false,
   showErrorBelowChildren = false,
-  childrenAtTheBottom = true,
 }) => {
   const { register, watch, errors, handleSubmit } = useForm({
     defaultValues: _defaultValues,
   });
 
-  // console.log("config", config);
+  console.log("config", config);
   const goNext = (data) => {
-    // console.log("data", data);
+    console.log("data", data);
     onSelect(data);
   };
 
@@ -81,10 +80,9 @@ const FormStep = ({
         {...{ onSkip: onSkip, onAdd: onAdd }}
         t={t}
       >
-        {!childrenAtTheBottom && children}
         {inputs}
         {forcedError && !showErrorBelowChildren && <CardLabelError>{t(forcedError)}</CardLabelError>}
-        {childrenAtTheBottom && children}
+        {children}
         {forcedError && showErrorBelowChildren && <CardLabelError>{t(forcedError)}</CardLabelError>}
       </InputCard>
     </form>

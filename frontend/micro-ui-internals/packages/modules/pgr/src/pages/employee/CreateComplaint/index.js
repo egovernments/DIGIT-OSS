@@ -12,6 +12,8 @@ export const CreateComplaint = ({ parentUrl }) => {
   const cities = Digit.Hooks.pgr.useTenants();
   const { t } = useTranslation();
 
+  // const localitiesObj = useSelector((state) => state.common.localities);
+
   const getCities = () => cities?.filter((e) => e.code === Digit.ULBService.getCurrentTenantId()) || [];
 
   const [complaintType, setComplaintType] = useState({});
@@ -77,7 +79,7 @@ export const CreateComplaint = ({ parentUrl }) => {
         // console.log("let me know if others is selected");
         setSubType({ name: "" });
         setComplaintType(value);
-        setSubTypeMenu([{ key: "Others", name: t("SERVICEDEFS.OTHERS") }]);
+        setSubTypeMenu([{ key: "Others", name: "Others" }]);
       } else {
         setSubType({ name: "" });
         setComplaintType(value);
@@ -108,6 +110,7 @@ export const CreateComplaint = ({ parentUrl }) => {
     const city = selectedCity.city.name;
     const district = selectedCity.city.name;
     const region = selectedCity.city.name;
+    const state = "Punjab";
     const localityCode = selectedLocality.code;
     const localityName = selectedLocality.name;
     const landmark = data.landmark;
@@ -115,7 +118,7 @@ export const CreateComplaint = ({ parentUrl }) => {
     const complaintType = key;
     const mobileNumber = data.mobileNumber;
     const name = data.name;
-    const formData = { ...data, cityCode, city, district, region, localityCode, localityName, landmark, complaintType, mobileNumber, name };
+    const formData = { ...data, cityCode, city, district, region, state, localityCode, localityName, landmark, complaintType, mobileNumber, name };
     await dispatch(createComplaint(formData));
     await client.refetchQueries(["fetchInboxData"]);
     history.push(parentUrl + "/response");

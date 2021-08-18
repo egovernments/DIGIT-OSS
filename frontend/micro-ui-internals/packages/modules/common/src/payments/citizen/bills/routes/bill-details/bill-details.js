@@ -10,9 +10,8 @@ const BillDetails = ({ paymentRules, businessService }) => {
   const history = useHistory();
   const { state, ...location } = useLocation();
   const { consumerCode } = useParams();
-  const { workflow: wrkflow, tenantId: _tenantId } = Digit.Hooks.useQueryParams();
   const [bill, setBill] = useState(state?.bill);
-  const tenantId = state?.tenantId || _tenantId || Digit.UserService.getUser().info?.tenantId;
+  const tenantId = state?.tenantId || Digit.UserService.getUser().info.tenantId;
   const { data, isLoading } = state?.bill ? { isLoading: false } : Digit.Hooks.useFetchPayment({ tenantId, businessService, consumerCode });
   const { minAmountPayable, isAdvanceAllowed } = paymentRules;
 
@@ -26,25 +25,10 @@ const BillDetails = ({ paymentRules, businessService }) => {
 
   const getBillingPeriod = () => {
     const { fromPeriod, toPeriod } = billDetails;
+
     if (fromPeriod && toPeriod) {
-      let from, to;
-      if (wrkflow === "mcollect") {
-        from =
-          new Date(fromPeriod).getDate().toString() +
-          " " +
-          Digit.Utils.date.monthNames[new Date(fromPeriod).getMonth() + 1].toString() +
-          " " +
-          new Date(fromPeriod).getFullYear().toString();
-        to =
-          new Date(toPeriod).getDate() +
-          " " +
-          Digit.Utils.date.monthNames[new Date(toPeriod).getMonth() + 1] +
-          " " +
-          new Date(toPeriod).getFullYear();
-        return from + " - " + to;
-      }
-      from = new Date(billDetails.fromPeriod).getFullYear().toString();
-      to = new Date(billDetails.toPeriod).getFullYear().toString();
+      let from = new Date(billDetails.fromPeriod).getFullYear().toString();
+      let to = new Date(billDetails.toPeriod).getFullYear().toString();
       return "FY " + from + "-" + to;
     } else return "N/A";
   };
@@ -81,21 +65,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
 
   const onSubmit = () => {
     let paymentAmount = paymentType === t("CS_PAYMENT_FULL_AMOUNT") ? getTotal() : amount;
-    if (window.location.href.includes("mcollect")) {
-      history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}?workflow=mcollect`, {
-        paymentAmount,
-        tenantId: billDetails.tenantId,
-      });
-    } else if (businessService === "PT") {
-      history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}`, {
-        paymentAmount,
-        tenantId: billDetails.tenantId,
-        name: bill.payerName,
-        mobileNumber: bill.mobileNumber,
-      });
-    } else {
-      history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}`, { paymentAmount, tenantId: billDetails.tenantId });
-    }
+    history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}`, { paymentAmount, tenantId: billDetails.tenantId });
   };
 
   const onChangeAmount = (value) => {
@@ -140,7 +110,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
             {paymentType !== t("CS_PAYMENT_FULL_AMOUNT") ? (
               <TextInput className="text-indent-xl" onChange={(e) => onChangeAmount(e.target.value)} value={amount} disable={getTotal() === 0} />
             ) : (
-              <TextInput className="text-indent-xl" value={getTotal()} onChange={() => {}} disable={true} />
+              <TextInput className="text-indent-xl" value={getTotal()} onChange={() => { }} disable={true} />
             )}
             {formError === "CS_CANT_PAY_BELOW_MIN_AMOUNT" ? (
               <span className="card-label-error">

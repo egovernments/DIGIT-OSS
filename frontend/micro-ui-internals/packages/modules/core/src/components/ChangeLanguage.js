@@ -1,19 +1,19 @@
 import { ActionBar, Button, Dropdown } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { CustomButton, Menu } from "@egovernments/digit-ui-react-components";
+import { useSelector } from "react-redux";
 
 const ChangeLanguage = (prop) => {
   const isDropdown = prop.dropdown || false;
-  const { data: storeData, isLoading } = Digit.Hooks.useStore.getInitData();
-  const { languages, stateInfo } = storeData || {};
-  const selectedLanguage = Digit.StoreData.getCurrentLanguage();
+  console.log({ isDropdown });
+  const commonState = useSelector((state) => state.common);
+  const { languages, selectedLanguage, stateInfo } = commonState;
   const [selected, setselected] = useState(selectedLanguage);
   const handleChangeLanguage = (language) => {
+    console.log("changing language", language);
     setselected(language.value);
     Digit.LocalizationService.changeLanguage(language.value, stateInfo.code);
   };
-
-  if (isLoading) return null;
 
   if (isDropdown) {
     return (

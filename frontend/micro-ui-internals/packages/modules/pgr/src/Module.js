@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import PGRCard from "./components/PGRCard";
 
 import getRootReducer from "./redux/reducers";
 import CitizenApp from "./pages/citizen";
 
 import EmployeeApp from "./EmployeeApp";
-import { ComplaintIcon, CitizenHomeCard, Loader } from "@egovernments/digit-ui-react-components";
+import { Header, HomeLink, Loader } from "@egovernments/digit-ui-react-components";
 import { PGR_CITIZEN_CREATE_COMPLAINT } from "./constants/Citizen";
 import { useTranslation } from "react-i18next";
 import { LOCALE } from "./constants/Localization";
@@ -13,7 +14,8 @@ export const PGRReducers = getRootReducer;
 
 const PGRModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "PGR";
-  const language = Digit.StoreData.getCurrentLanguage();
+  const state = useSelector((state) => state["pgr"]);
+  const language = state?.common?.selectedLanguage;
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
 
   if (isLoading) {
@@ -37,18 +39,17 @@ const PGRLinks = ({ matchPath }) => {
     clearParams();
   }, []);
 
-  const links = [
-    {
-      link: `${matchPath}/create-complaint/complaint-type`,
-      i18nKey: t("CS_COMMON_FILE_A_COMPLAINT"),
-    },
-    {
-      link: `${matchPath}/complaints`,
-      i18nKey: t(LOCALE.MY_COMPLAINTS),
-    },
-  ];
-
-  return <CitizenHomeCard header={t("CS_COMMON_HOME_COMPLAINTS")} links={links} Icon={ComplaintIcon} />;
+  return (
+    <React.Fragment>
+      <div>
+        <Header>Complaints</Header>
+        <div className="d-grid">
+          <HomeLink to={`${matchPath}/create-complaint/complaint-type`}>{t("CS_COMMON_FILE_A_COMPLAINT")}</HomeLink>
+          <HomeLink to={`${matchPath}/complaints`}>{t(LOCALE.MY_COMPLAINTS)}</HomeLink>
+        </div>
+      </div>
+    </React.Fragment>
+  );
 };
 
 const componentsToRegister = {

@@ -2,12 +2,8 @@ import React, { useEffect, useState } from "react";
 import { FormStep, TextInput, CheckBox, CardLabel, LabelFieldPair, TextArea } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 
-const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerIndex = 0 }) => {
-  const { pathname: url } = useLocation();
-  const editScreen = url.includes("/modify-application/");
-  const isMutation = url.includes("property-mutation");
-
-  let index = isMutation ? ownerIndex : window.location.href.charAt(window.location.href.length - 1);
+const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
+  let index = window.location.href.charAt(window.location.href.length - 1);
   const [permanentAddress, setPermanentAddress] = useState(
     (formData.owners && formData.owners[index] && formData.owners[index].permanentAddress) || formData?.owners?.permanentAddress || ""
   );
@@ -15,27 +11,26 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
     formData.owners && formData.owners[index] && formData.owners[index].isCorrespondenceAddress
   );
   const isUpdateProperty = formData?.isUpdateProperty || false;
-  let isEditProperty = formData?.isEditProperty || false;
+  const { pathname: url } = useLocation();
+  const editScreen = url.includes("/modify-application/");
 
   function setOwnerPermanentAddress(e) {
     setPermanentAddress(e.target.value);
   }
-
   function setCorrespondenceAddress(e) {
     if (e.target.checked == true) {
-      const address = isMutation ? formData?.searchResult?.property?.address : formData?.address;
       let obj = {
-        doorNo: address?.doorNo,
-        street: address?.street,
-        landmark: address?.landmark,
-        locality: address?.locality?.i18nkey,
-        city: address?.city?.code,
-        pincode: address?.pincode,
+        doorNo: formData?.address?.doorNo,
+        street: formData?.address?.street,
+        landmark: formData?.address?.landmark,
+        locality: formData?.address?.locality?.name,
+        city: formData?.address?.city?.name,
+        pincode: formData?.address?.pincode,
       };
       let addressDetails = "";
       for (const key in obj) {
         if (key == "pincode") addressDetails += obj[key] ? obj[key] : "";
-        else addressDetails += obj[key] ? t(obj[key]) + ", " : "";
+        else addressDetails += obj[key] ? obj[key] + ", " : "";
       }
       setPermanentAddress(addressDetails);
     } else {
@@ -51,8 +46,7 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
       let ownerDetails = formData.owners && formData.owners[index];
       ownerDetails["permanentAddress"] = permanentAddress;
       ownerDetails["isCorrespondenceAddress"] = isCorrespondenceAddress;
-      if (isMutation) onSelect(config.key, [ownerDetails], "", index);
-      else onSelect(config.key, ownerDetails, "", index);
+      onSelect(config.key, ownerDetails, "", index);
     }
   };
 
@@ -84,7 +78,7 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
         name="address"
         onChange={setOwnerPermanentAddress}
         value={permanentAddress}
-        disable={isUpdateProperty || isEditProperty}
+        disable={isUpdateProperty}
       />
       {/* <CardLabel>{t("PT_OWNER_S_ADDRESS")}</CardLabel> */}
       <CheckBox
@@ -93,7 +87,7 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
         value={isCorrespondenceAddress}
         checked={isCorrespondenceAddress || false}
         style={{ paddingTop: "10px" }}
-        disable={isUpdateProperty || isEditProperty}
+        disable={isUpdateProperty}
       />
     </FormStep>
   );

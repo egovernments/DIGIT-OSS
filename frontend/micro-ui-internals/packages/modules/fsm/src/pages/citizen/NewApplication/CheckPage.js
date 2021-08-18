@@ -106,7 +106,7 @@ const CheckPage = ({ onSubmit, value }) => {
         )}
       </StatusTable>
       {/* <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_TEXT")} /> */}
-      <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} />
+      <SubmitBar label="Submit" onSubmit={onSubmit} />
     </Card>
   );
 };

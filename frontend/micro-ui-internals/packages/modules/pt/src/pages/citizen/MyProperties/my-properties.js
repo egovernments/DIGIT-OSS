@@ -19,7 +19,9 @@ const MyProperty = ({ application }) => {
       <KeyNote
         keyValue={t("PT_COMMON_COL_ADDRESS")}
         note={
-          `${t(address?.locality.name)}, ${t(address?.city)},${t(address?.pincode) ? `${address.pincode}` : " "}` || "CS_APPLICATION_TYPE_PT"
+          `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
+            address?.landmark ? `${address?.landmark}, ` : ""
+          }${t(address?.locality.name)}, ${t(address?.city)},${t(address?.pincode) ? `${address.pincode}` : " "}` || "CS_APPLICATION_TYPE_PT"
         }
       />
       <KeyNote keyValue={t("PT_COMMON_TABLE_COL_STATUS_LABEL")} note={t("PT_COMMON_" + application.status)} />

@@ -1,4 +1,4 @@
-import { CardLabel, CitizenInfoLabel, FormStep, TextInput } from "@egovernments/digit-ui-react-components";
+import { CardLabel, FormStep, TextInput } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 
 const GroundFloorDetails = ({ t, config, onSelect, value, userType, formData }) => {
@@ -77,46 +77,43 @@ const GroundFloorDetails = ({ t, config, onSelect, value, userType, formData }) 
   };
 
   return (
-    <React.Fragment>
-      <FormStep
-        config={((config.texts.header = getheader()), config)}
-        header="ground"
-        onSelect={goNext}
-        onSkip={onSkip}
+    <FormStep
+      config={((config.texts.header = getheader()), config)}
+      header="ground"
+      onSelect={goNext}
+      onSkip={onSkip}
+      t={t}
+      forcedError={t(builtupplotsizeeroor) || t(areanotzeroerror)}
+      isDisabled={builtupplotsizeeroor || areanotzeroerror || (!builtUpArea && (!plotSize || !builtUpArea))}
+      showErrorBelowChildren={true}
+    >
+      {(index === "0" || isNaN(index)) && (
+        <div>
+          <CardLabel>{`${t("PT_FLOOR_DETAILS_PLOT_SIZE_LABEL")}`}</CardLabel>
+          <TextInput
+            t={t}
+            type={"number"}
+            isMandatory={false}
+            optionKey="i18nKey"
+            name="PlotSize"
+            value={plotSize}
+            onChange={setPropertyplotSize}
+            {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_PLOT_SIZE_ERROR_MESSAGE") })}
+          />
+        </div>
+      )}
+      <CardLabel>{`${t("PT_FLOOR_DETAILS_BUILT_UP_AREA_LABEL")}`}</CardLabel>
+      <TextInput
         t={t}
-        forcedError={t(builtupplotsizeeroor) || t(areanotzeroerror)}
-        isDisabled={builtupplotsizeeroor || areanotzeroerror || (!builtUpArea && (!plotSize || !builtUpArea))}
-        showErrorBelowChildren={true}
-      >
-        {(index === "0" || isNaN(index)) && (
-          <div>
-            <CardLabel>{`${t("PT_FLOOR_DETAILS_PLOT_SIZE_LABEL")}`}</CardLabel>
-            <TextInput
-              t={t}
-              type={"number"}
-              isMandatory={false}
-              optionKey="i18nKey"
-              name="PlotSize"
-              value={plotSize}
-              onChange={setPropertyplotSize}
-              {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_PLOT_SIZE_ERROR_MESSAGE") })}
-            />
-          </div>
-        )}
-        <CardLabel>{`${t("PT_FLOOR_DETAILS_BUILT_UP_AREA_LABEL")}`}</CardLabel>
-        <TextInput
-          t={t}
-          type={"number"}
-          isMandatory={false}
-          optionKey="i18nKey"
-          name="BuiltUpArea"
-          value={builtUpArea}
-          onChange={setPropertybuiltUpArea}
-          {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_BUILT_AREA_ERROR_MESSAGE") })}
-        />
-      </FormStep>
-      {<CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("PT_FLOOR_AREA_INFO_MSG")} />}
-    </React.Fragment>
+        type={"number"}
+        isMandatory={false}
+        optionKey="i18nKey"
+        name="BuiltUpArea"
+        value={builtUpArea}
+        onChange={setPropertybuiltUpArea}
+        {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_BUILT_AREA_ERROR_MESSAGE") })}
+      />
+    </FormStep>
   );
 };
 

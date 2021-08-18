@@ -79,7 +79,6 @@ export const LocalizationService = {
     const allModules = LocalizationStore.getAllList();
     const uniqueModules = allModules.filter((module) => !modules.includes(module));
     LocalizationService.getLocale({ modules: uniqueModules, locale, tenantId });
-    Digit.SessionStorage.set("locale", locale);
     i18next.changeLanguage(locale);
   },
   updateResources: (locale = "en_IN", messages) => {

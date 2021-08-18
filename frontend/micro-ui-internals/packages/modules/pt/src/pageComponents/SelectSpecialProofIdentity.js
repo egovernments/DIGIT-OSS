@@ -1,21 +1,14 @@
 import { CardLabel, CardLabelDesc, Dropdown, FormStep, UploadFile } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { stringReplaceAll } from "../utils";
 
-const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
-  const { pathname: url } = useLocation();
-  const editScreen = url.includes("/modify-application/");
-  const isMutation = url.includes("property-mutation");
-
-  let index = isMutation ? ownerIndex : window.location.href.charAt(window.location.href.length - 1);
-
-  const [uploadedFile, setUploadedFile] = useState(() => formData?.owners[index]?.documents?.specialProofIdentity?.fileStoreId || null);
+const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData }) => {
+  let index = window.location.href.charAt(window.location.href.length - 1);
+  const [uploadedFile, setUploadedFile] = useState(formData?.owners[index]?.documents?.specialProofIdentity?.fileStoreId || null);
   const [file, setFile] = useState(formData?.owners[index]?.documents?.specialProofIdentity);
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const isUpdateProperty = formData?.isUpdateProperty || false;
-  let isEditProperty = formData?.isEditProperty || false;
   const [dropdownValue, setDropdownValue] = useState(formData?.owners[index]?.documents?.specialProofIdentity?.documentType);
   let dropdownData = [];
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -28,9 +21,10 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, o
     dropdownData.forEach((data) => {
       data.i18nKey = stringReplaceAll(data.code, ".", "_");
     });
-    dropdownData = dropdownData?.filter((dropdown) => dropdown.parentValue.includes(formData?.owners[index]?.ownerType?.code));
-    if (dropdownData.length == 1 && dropdownValue != dropdownData[0]) {
-      setTypeOfDropdownValue(dropdownData[0]);
+
+    dropdownData = dropdownData?.filter(dropdown => dropdown.parentValue.includes(formData?.owners[index]?.ownerType?.code));
+    if (dropdownData.length == 1 && dropdownValue!=dropdownData[0]) {
+      setTypeOfDropdownValue(dropdownData[0])
     }
   }
 
@@ -49,7 +43,7 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, o
     if (ownerDetails && ownerDetails.documents) {
       ownerDetails.documents["specialProofIdentity"] = fileDetails;
     } else {
-      ownerDetails["documents"] = {};
+      ownerDetails["documents"] = [];
       ownerDetails.documents["specialProofIdentity"] = fileDetails;
     }
     onSelect(config.key, ownerDetails, "", index);
@@ -71,7 +65,7 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, o
           setError(t("PT_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
         } else {
           try {
-            const response = await Digit.UploadServices.Filestorage("property-upload", file, Digit.ULBService.getStateId());
+            const response = await Digit.UploadServices.Filestorage("property-upload", file, "pb");
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
             } else {
@@ -99,7 +93,7 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, o
         optionKey="i18nKey"
         select={setTypeOfDropdownValue}
         placeholder={t(`PT_MUTATION_SELECT_DOC_LABEL`)}
-        disable={isUpdateProperty || isEditProperty}
+        disable={isUpdateProperty}
       />
       <UploadFile
         extraStyleName={"propertyCreate"}

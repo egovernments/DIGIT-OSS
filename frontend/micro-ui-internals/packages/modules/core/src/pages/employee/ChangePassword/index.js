@@ -22,6 +22,7 @@ const EmployeeChangePassword = () => {
     )
   );
 
+  console.log({ params });
   return (
     <Switch>
       <AppContainer>

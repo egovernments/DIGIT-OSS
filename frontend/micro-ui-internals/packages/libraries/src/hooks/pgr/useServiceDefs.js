@@ -16,7 +16,7 @@ const useServiceDefs = (tenantId, moduleCode) => {
       // console.log("find serviceDefs here", serviceDefsWithKeys);
       setLocalMenu(serviceDefsWithKeys);
     })();
-  }, [t, tenantId, moduleCode]);
+  }, []);
 
   return localMenu;
 };

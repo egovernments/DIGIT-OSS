@@ -15,17 +15,11 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
     return useQuery("RECEIPT_KEY", () => MdmsService.getReceiptKey(tenantId, moduleCode, type), config);
   };
 
-  const useFSTPPlantInfo = () => {
-    return useQuery("FSTP_PLANTINFO", () => MdmsService.getFSTPPlantInfo(tenantId, moduleCode, type), config);
-  };
-
   switch (type) {
     case "PaymentGateway":
       return usePaymentGateway();
     case "ReceiptKey":
       return useReceiptKey();
-    case "FSTPPlantInfo":
-      return useFSTPPlantInfo();
   }
 };
 

@@ -7,7 +7,7 @@ const ApplicationUpdateActions = async (applicationData, tenantId) => {
     // console.log("find me here", response)
     return response;
   } catch (error) {
-    // console.log("find error here", error?.response);
+    // console.log("find error here", error?.response?.data?.Errors)
     throw new Error(error?.response?.data?.Errors[0].message);
   }
 };

@@ -1,9 +1,10 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Header, Loader } from "@egovernments/digit-ui-react-components";
+import { CardLabel, Header, Loader, Poll } from "@egovernments/digit-ui-react-components";
 import Layout from "../components/Layout";
 
 const Overview = () => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
   const moduleCode = "home";
   const { data: response, isLoading } = Digit.Hooks.dss.useDashboardConfig(moduleCode);

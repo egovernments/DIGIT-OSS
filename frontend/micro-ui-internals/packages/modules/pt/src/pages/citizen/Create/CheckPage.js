@@ -90,7 +90,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
   return (
     <Card>
       <CardHeader>{t("PT_CHECK_CHECK_YOUR_ANSWERS")}</CardHeader>
-      <div>
+      <div style={{ ...cardBodyStyle, maxHeight: "calc(100vh - 15em)" }}>
         <CardText>{t("PT_CHECK_CHECK_YOUR_ANSWERS_TEXT")}</CardText>
         <CardSubHeader>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
         <StatusTable>
@@ -318,7 +318,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
           )}
         </StatusTable>
         {!isPropertyVacant(PropertyType?.i18nKey) && isPropertyFlatorPartofBuilding(PropertyType?.i18nKey) && (
-          <CardSubHeader>{`${t(Floorno?.i18nKey)} ${t("PT_DETAILS_HEADER")}`}</CardSubHeader>
+          <CardSubHeader>{`${t(Floorno?.i18nKey)} Details`}</CardSubHeader>
         )}
         {!isPropertyVacant(PropertyType?.i18nKey) && isPropertyFlatorPartofBuilding(PropertyType?.i18nKey) && (
           <StatusTable>
@@ -531,11 +531,10 @@ const CheckPage = ({ onSubmit, value = {} }) => {
         <CheckBox
           label={t("PT_FINAL_DECLARATION_MESSAGE")}
           onChange={setdeclarationhandler}
-          styles={{ height: "auto" }}
           //disabled={!agree}
         />
       </div>
-      <SubmitBar label={t("PT_COMMON_BUTTON_SUBMIT")} onSubmit={onSubmit} disabled={!agree} />
+      <SubmitBar label="Submit" onSubmit={onSubmit} disabled={!agree} />
     </Card>
   );
 };

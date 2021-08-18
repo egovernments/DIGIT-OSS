@@ -21,7 +21,7 @@ export const MyProperties = () => {
   let filter1 = !isNaN(parseInt(filter))
     ? { limit: "50", sortOrder: "ASC", sortBy: "createdTime", offset: off }
     : { limit: "4", sortOrder: "ASC", sortBy: "createdTime", offset: "0" };
-  const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch({ filters: filter1,searchedFrom:"myPropertyCitizen" }, { filters: filter1 });
+  const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch({ filters: filter1 }, { filters: filter1 });
 
   if (isLoading) {
     return <Loader />;
@@ -32,7 +32,7 @@ export const MyProperties = () => {
   return (
     <React.Fragment>
       <Header>{`${t("PT_MY_PROPERTIES_HEADER")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>
-      <div>
+      <div style={{ ...propertyCardBodyStyle, maxHeight: "calc(100vh - 14em)" }}>
         {applicationsList?.length > 0 &&
           applicationsList.map((application, index) => (
             <div key={index}>

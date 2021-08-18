@@ -38,8 +38,3 @@
     @apply block bg-primary-main h-5 w-5 rounded-full absolute top-10 left-10;
   }
 }
-.reverse-radio-selection-wrapper{
-  div{
-    @apply flex flex-row-reverse place-content-between items-center;    ;
-  }
-}

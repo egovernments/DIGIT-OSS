@@ -4,7 +4,7 @@ import { ArrowDown } from "./svgindex";
 
 const TextField = (props) => {
   const [value, setValue] = useState(props.selectedVal ? props.selectedVal : "");
-  // const wrapperRef = useRef(null);
+  const wrapperRef = useRef(null);
   // Digit.Hooks.useClickOutside(wrapperRef, () => props.setOutsideClicked(true));
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const TextField = (props) => {
 
   return (
     <input
-      ref={props.inputRef}
+      ref={wrapperRef}
       className={`employee-select-wrap--elipses ${props.disable && "disabled"}`}
       type="text"
       value={value}
@@ -39,10 +39,7 @@ const TextField = (props) => {
       onChange={inputChange}
       onClick={props.onClick}
       onFocus={broadcastToOpen}
-      onBlur={(e) => {
-        broadcastToClose();
-        props?.onBlur?.(e);
-      }}
+      onBlur={broadcastToClose}
       readOnly={props.disable}
       autoFocus={props.autoFocus}
       placeholder={props.placeholder}
@@ -91,7 +88,6 @@ const Dropdown = (props) => {
         document.addEventListener("mousedown", handleClick, false);
       }
       setDropdownStatus(!current);
-      props?.onBlur?.();
     }
   }
 
@@ -140,7 +136,7 @@ const Dropdown = (props) => {
         </div>
       )}
       {!hasCustomSelector && (
-        <div className={`${dropdownStatus ? "select-active" : "select"} ${props.disable && "disabled"}`} style={props.errorStyle ? {border: "1px solid red"}: {}}>
+        <div className={`${dropdownStatus ? "select-active" : "select"} ${props.disable && "disabled"}`}>
           <TextField
             autoComplete={props.autoComplete}
             setFilter={setFilter}
@@ -162,8 +158,6 @@ const Dropdown = (props) => {
             freeze={props.freeze ? true : false}
             autoFocus={props.autoFocus}
             placeholder={props.placeholder}
-            onBlur={props?.onBlur}
-            inputRef={props.ref}
             // setOutsideClicked={setOutsideClicked}
           />
           <ArrowDown onClick={dropdownSwitch} className="cp" disable={props.disable} />
@@ -172,11 +166,7 @@ const Dropdown = (props) => {
       {/* {console.log("dropdownStatus::::::::::::::>", dropdownStatus)} */}
       {dropdownStatus ? (
         props.optionKey ? (
-          <div
-            className={`${hasCustomSelector ? "margin-top-10 display: table" : ""} options-card`}
-            style={{ ...props.optionCardStyles }}
-            ref={optionRef}
-          >
+          <div className={`${hasCustomSelector ? "margin-top-10 display: table" : ""} options-card`} style={{ ...props.style }} ref={optionRef}>
             {props.option &&
               props.option
                 .filter((option) => t(option[props.optionKey]).toUpperCase().indexOf(filterVal.toUpperCase()) > -1)
@@ -193,7 +183,7 @@ const Dropdown = (props) => {
                 })}
           </div>
         ) : (
-          <div className="options-card" style={props.optionCardStyles} ref={optionRef}>
+          <div className="options-card" style={props.optionCardStyles}>
             {props.option
               .filter((option) => option.toUpperCase().indexOf(filterVal.toUpperCase()) > -1)
               .map((option, index) => {

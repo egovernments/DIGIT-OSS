@@ -1,9 +1,8 @@
+import PDFUtil from "./pdf";
 import BrowserUtil from "./browser";
+import * as locale from "./locale";
 import * as date from "./date";
 import * as dss from "./dss";
-import * as locale from "./locale";
-import * as obps from "./obps";
-import PDFUtil, { downloadReceipt } from "./pdf";
 
 const GetParamFromUrl = (key, fallback, search) => {
   if (typeof window !== "undefined") {
@@ -12,73 +11,6 @@ const GetParamFromUrl = (key, fallback, search) => {
     return params.has(key) ? params.get(key) : fallback;
   }
   return fallback;
-};
-
-const getPattern = type => {
-  switch (type) {
-    case "Name":
-      return /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i;
-    case "SearchOwnerName":
-      return /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{3,50}$/i;
-    case "MobileNo":
-      return /^[6789][0-9]{9}$/i;
-    case "Amount":
-      return /^[0-9]{0,8}$/i;
-    case "NonZeroAmount":
-      return /^[1-9][0-9]{0,7}$/i;
-    case "DecimalNumber":
-      return /^\d{0,8}(\.\d{1,2})?$/i;
-    case "Email":
-      return /^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
-    case "Address":
-      return /^[^\$\"<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,500}$/i;
-    case "PAN":
-      return /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/i;
-    case "TradeName":
-      return /^[-@.\/#&+\w\s]*$/
-    case "Date":
-      return /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/i;
-    case "UOMValue":
-      return /^(0)*[1-9][0-9]{0,5}$/i;
-    case "OperationalArea":
-      return /^(0)*[1-9][0-9]{0,6}$/i;
-    case "NoOfEmp":
-      return /^(0)*[1-9][0-9]{0,6}$/i;
-    case "GSTNo":
-      return /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d[Z]{1}[A-Z\d]{1}$/i;
-    case "DoorHouseNo":
-      return /^[^\$\"'<>?~`!@$%^={}\[\]*:;“”‘’]{1,50}$/i;
-    case "BuildingStreet":
-      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,64}$/i;
-    case "Pincode":
-      return /^[1-9][0-9]{5}$/i;
-    case "Landline":
-      return /^[0-9]{11}$/i;
-    case "PropertyID":
-      return /^[a-zA-z0-9\s\\/\-]$/i;
-    case "ElectricityConnNo":
-      return /^.{1,15}$/i;
-    case "DocumentNo":
-      return /^[0-9]{1,15}$/i;
-    case "eventName":
-      return /^[^\$\"<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”]{1,65}$/i;
-    case "eventDescription":
-      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
-    case "cancelChallan":
-      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
-    case "FireNOCNo":
-      return /^[a-zA-Z0-9-]*$/i;
-    case "consumerNo":
-      return /^[a-zA-Z0-9/-]*$/i;
-    case "AadharNo":
-      return /^([0-9]){12}$/;
-    case "ChequeNo":
-      return /^(?!0{6})[0-9]{6}$/;
-    case "Comments":
-      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
-    case "OldLicenceNo":
-      return /^[a-zA-Z0-9-/]{0,64}$/;
-  }
 };
 
 const getStaticMapUrl = (latitude, longitude) => {
@@ -143,45 +75,8 @@ const ptAccess = () => {
   return PT_ACCESS.length > 0;
 };
 
-const tlAccess = () => {
-  const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
-  const tlRoles = ["TL_CEMP", "TL_APPROVER", "TL_FIELD_INSPECTOR", "TL_DOC_VERIFIER"];
-
-  const TL_ACCESS = userRoles.filter((role) => tlRoles.includes(role));
-
-  return TL_ACCESS.length > 0;
-};
-
-const mCollectAccess = () => {
-  const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
-  const mCollectRoles = ["UC_EMP"];
-
-  const MCOLLECT_ACCESS = userRoles.filter((role) => mCollectRoles.includes(role));
-
-  return MCOLLECT_ACCESS.length > 0;
-};
-
-
-const receiptsAccess = () => {
-  const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
-  const receiptsRoles = ["CR_PT"];
-  const RECEIPTS_ACCESS = userRoles.filter((role) => receiptsRoles.includes(role));
-  return RECEIPTS_ACCESS.length > 0;
-}
-const hrmsRoles = ["HRMS_ADMIN"];
-const hrmsAccess = () => {
-  const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
-  const HRMS_ACCESS = userRoles.filter((role) => hrmsRoles.includes(role));
-  return HRMS_ACCESS.length > 0;
-};
-
 export default {
   pdf: PDFUtil,
-  downloadReceipt,
   browser: BrowserUtil,
   locale,
   date,
@@ -192,12 +87,5 @@ export default {
   pgrAccess,
   fsmAccess,
   dss,
-  obps,
   ptAccess,
-  mCollectAccess,
-  receiptsAccess,
-  hrmsAccess,
-  getPattern,
-  hrmsRoles,
-  tlAccess
 };

@@ -2,8 +2,8 @@ import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import ReactPostprocessor from "i18next-react-postprocessor";
 
-const i18nextConfig = () => ({
-  lng: Digit.StoreData.getCurrentLanguage(),
+const i18nextConfig = {
+  lng: "en_IN",
   fallbackLng: "en_IN",
   debug: false,
   ns: ["translations"],
@@ -29,7 +29,7 @@ const i18nextConfig = () => ({
       },
     },
   },
-});
+};
 
 function replaceLiterals(text = "", dynamicValues = {}) {
   let returnText = text;
@@ -55,7 +55,7 @@ export const initI18n = (callback) => {
     .use(new ReactPostprocessor())
     .use(templatePostprocessor)
     .use(initReactI18next)
-    .init(i18nextConfig(), () => {
+    .init(i18nextConfig, () => {
       window.i18next = i18next;
       callback();
     });

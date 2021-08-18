@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Switch, Route, useRouteMatch, useLocation } from "react-router-dom";
+
 import { ActionBar, Menu, SubmitBar, BreadCrumb } from "@egovernments/digit-ui-react-components";
-import { useTranslation } from "react-i18next";
 import { ComplaintDetails } from "./ComplaintDetails";
 import { CreateComplaint } from "./CreateComplaint";
 import Inbox from "./Inbox";
@@ -12,27 +12,25 @@ const Complaint = () => {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [popup, setPopup] = useState(false);
   const match = useRouteMatch();
-  const { t } = useTranslation();
-
   const breadcrumConfig = {
     home: {
-      content: t("CS_COMMON_HOME"),
+      content: "Home",
       path: Employee.Home,
     },
     inbox: {
-      content: t("CS_COMMON_INBOX"),
+      content: "Inbox",
       path: match.url + Employee.Inbox,
     },
     createComplaint: {
-      content: t("CS_PGR_CREATE_COMPLAINT"),
+      content: "Create Complaint",
       path: match.url + Employee.CreateComplaint,
     },
     complaintDetails: {
-      content: t("CS_PGR_COMPLAINT_DETAILS"),
+      content: "Complaint Detail",
       path: match.url + Employee.ComplaintDetails + ":id",
     },
     response: {
-      content: t("CS_PGR_RESPONSE"),
+      content: "Response",
       path: match.url + Employee.Response,
     },
   };

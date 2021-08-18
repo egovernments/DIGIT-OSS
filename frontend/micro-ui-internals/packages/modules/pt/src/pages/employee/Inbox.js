@@ -6,9 +6,8 @@ import DesktopInbox from "../../components/DesktopInbox";
 import MobileInbox from "../../components/MobileInbox";
 
 const Inbox = ({
-  useNewInboxAPI,
   parentRoute,
-  moduleCode = "PT",
+  businessService = "PT",
   initialStates = {},
   filterComponent,
   isInbox,
@@ -19,43 +18,40 @@ const Inbox = ({
   searchConfig,
   middlewaresWf,
   middlewareSearch,
-  EmptyResultInboxComp,
 }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
   const { t } = useTranslation();
-  const [enableSarch, setEnableSearch] = useState(() => (isInbox ? {} : { enabled: false }));
-  const [TableConfig, setTableConfig] = useState(() => Digit.ComponentRegistryService?.getComponent("PTInboxTableConfig"));
-  // const [getSearchFi]
   const [pageOffset, setPageOffset] = useState(initialStates.pageOffset || 0);
   const [pageSize, setPageSize] = useState(initialStates.pageSize || 10);
   const [sortParams, setSortParams] = useState(initialStates.sortParams || [{ id: "createdTime", desc: false }]);
-  const [searchParams, setSearchParams] = useState(initialStates.searchParams || {});
+
+  const [searchParams, setSearchParams] = useState(() => {
+    return initialStates.searchParams || {};
+  });
 
   let isMobile = window.Digit.Utils.browser.isMobile();
   let paginationParams = isMobile
     ? { limit: 100, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" }
     : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" };
 
-  const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = useNewInboxAPI
-    ? Digit.Hooks.useNewInboxGeneral({
-        tenantId,
-        ModuleCode: moduleCode,
-        filters: { ...searchParams, ...paginationParams, sortParams },
-      })
-    : Digit.Hooks.useInboxGeneral({
-        tenantId,
-        businessService: moduleCode,
-        isInbox,
-        filters: { ...searchParams, ...paginationParams, sortParams },
-        rawWfHandler,
-        rawSearchHandler,
-        combineResponse,
-        wfConfig,
-        searchConfig: { ...enableSarch, ...searchConfig },
-        middlewaresWf,
-        middlewareSearch,
-      });
+  const { isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.useInboxGeneral({
+    tenantId,
+    businessService,
+    isInbox,
+    filters: { ...searchParams, ...paginationParams, sortParams },
+    rawWfHandler,
+    rawSearchHandler,
+    combineResponse,
+    wfConfig,
+    searchConfig,
+    middlewaresWf,
+    middlewareSearch,
+  });
+
+  useEffect(() => {
+    console.log("data from the hook", hookLoading, rest, data);
+  }, [hookLoading, rest]);
 
   useEffect(() => {
     setPageOffset(0);
@@ -71,11 +67,11 @@ const Inbox = ({
 
   const handleFilterChange = (filterParam) => {
     let keys_to_delete = filterParam.delete;
+    console.log(keys_to_delete);
     let _new = { ...searchParams, ...filterParam };
     if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
     delete filterParam.delete;
     setSearchParams({ ..._new });
-    setEnableSearch({ enabled: true });
   };
 
   const handleSort = useCallback((args) => {
@@ -104,8 +100,6 @@ const Inbox = ({
           linkPrefix={`${parentRoute}/application-details/`}
           tableConfig={rest?.tableConfig}
           filterComponent={filterComponent}
-          EmptyResultInboxComp={EmptyResultInboxComp}
-          useNewInboxAPI={useNewInboxAPI}
         />
         // <div></div>
       );
@@ -114,9 +108,9 @@ const Inbox = ({
         <div>
           {isInbox && <Header>{t("ES_COMMON_INBOX")}</Header>}
           <DesktopInbox
-            moduleCode={moduleCode}
+            businessService={businessService}
             data={data}
-            tableConfig={TableConfig(t)["PT"]}
+            tableConfig={rest?.tableConfig}
             isLoading={hookLoading}
             defaultSearchParams={initialStates.searchParams}
             isSearch={!isInbox}
@@ -135,8 +129,6 @@ const Inbox = ({
             sortParams={sortParams}
             totalRecords={Number(data?.[0]?.totalCount)}
             filterComponent={filterComponent}
-            EmptyResultInboxComp={EmptyResultInboxComp}
-            useNewInboxAPI={useNewInboxAPI}
           />
         </div>
       );

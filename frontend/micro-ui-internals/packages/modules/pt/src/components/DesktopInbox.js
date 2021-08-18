@@ -1,44 +1,40 @@
-import { Card, Loader } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import ApplicationTable from "./inbox/ApplicationTable";
+
+import { Card, Loader } from "@egovernments/digit-ui-react-components";
 import InboxLinks from "./inbox/InboxLink";
+import ApplicationTable from "./inbox/ApplicationTable";
 import SearchApplication from "./inbox/search";
 
 const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
-  const { data, useNewInboxAPI } = props;
+  const { data } = props;
   const { t } = useTranslation();
   const [FilterComponent, setComp] = useState(() => Digit.ComponentRegistryService?.getComponent(filterComponent));
-  const [EmptyInboxComp, setEmptyInboxComp] = useState(() => {
-    const com = Digit.ComponentRegistryService?.getComponent(props.EmptyResultInboxComp);
-    return com;
-  });
 
-  const [clearSearchCalled, setClearSearchCalled] = useState(false);
+  // searchData, workFlowData
 
   const columns = React.useMemo(() => (props.isSearch ? tableConfig.searchColumns(props) : tableConfig.inboxColumns(props) || []), []);
+
+  useEffect(() => {
+    console.log(data, columns, "inside desktop inbox....");
+  }, [data, columns]);
 
   let result;
   if (props.isLoading) {
     result = <Loader />;
-  } else if (clearSearchCalled) {
-    result = null;
-  } else if (!data || data?.length === 0 || (useNewInboxAPI && data?.[0].dataEmpty)) {
-    result =
-      (EmptyInboxComp && <EmptyInboxComp data={data} />) ||
-      (data?.length === 0 || (useNewInboxAPI && data?.[0].dataEmpty) ? (
-        <Card style={{ marginTop: 20 }}>
-          {t("CS_MYAPPLICATIONS_NO_APPLICATION")
-            .split("\\n")
-            .map((text, index) => (
-              <p key={index} style={{ textAlign: "center" }}>
-                {text}
-              </p>
-            ))}
-        </Card>
-      ) : (
-        <Loader />
-      ));
+  } else if (data?.length === 0) {
+    result = (
+      <Card style={{ marginTop: 20 }}>
+        {/* TODO Change localization key */}
+        {t("CS_MYAPPLICATIONS_NO_APPLICATION")
+          .split("\\n")
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
+          ))}
+      </Card>
+    );
   } else if (data?.length > 0) {
     result = (
       <ApplicationTable
@@ -72,7 +68,7 @@ const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
     <div className="inbox-container">
       {!props.isSearch && (
         <div className="filters-container">
-          <InboxLinks parentRoute={props.parentRoute} businessService={props.moduleCode} />
+          <InboxLinks parentRoute={props.parentRoute} businessService={props.businessService} />
           <div>
             {
               <FilterComponent
@@ -80,26 +76,27 @@ const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
                 onFilterChange={props.onFilterChange}
                 searchParams={props.searchParams}
                 type="desktop"
-                useNewInboxAPI={useNewInboxAPI}
-                statusMap={useNewInboxAPI ? data?.[0].statusMap : null}
-                moduleCode={props.moduleCode}
               />
             }
+            {/* <Filter
+              businessService={props.businessService}
+              searchParams={props.searchParams}
+              applications={props.data}
+              onFilterChange={props.onFilterChange}
+              translatePrefix={props.translatePrefix}
+              type="desktop"
+            /> */}
           </div>
         </div>
       )}
       <div style={{ flex: 1 }}>
         <SearchApplication
           defaultSearchParams={props.defaultSearchParams}
-          onSearch={(d) => {
-            props.onSearch(d);
-            setClearSearchCalled(false);
-          }}
+          onSearch={props.onSearch}
           type="desktop"
           searchFields={props.searchFields}
           isInboxPage={!props?.isSearch}
           searchParams={props.searchParams}
-          clearSearch={() => setClearSearchCalled(true)}
         />
         <div className="result" style={{ marginLeft: !props?.isSearch ? "24px" : "", flex: 1 }}>
           {result}

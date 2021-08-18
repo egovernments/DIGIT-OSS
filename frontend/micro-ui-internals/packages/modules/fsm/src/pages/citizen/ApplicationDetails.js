@@ -24,10 +24,13 @@ const ApplicationDetails = () => {
 
   const { data: paymentsHistory } = Digit.Hooks.fsm.usePaymentHistory(tenantId, id);
 
-  const { data: storeData } = Digit.Hooks.useStore.getInitData();
-  const { tenants } = storeData || {};
+  const coreData = Digit.Hooks.useCoreData();
 
   const [showOptions, setShowOptions] = useState(false);
+
+  useEffect(() => {
+    console.log(application?.pdfData, errorApplication);
+  }, [application, errorApplication]);
 
   if (isLoading || !application) {
     return <Loader />;
@@ -37,14 +40,16 @@ const ApplicationDetails = () => {
     history.goBack();
   }
 
+  const tenantInfo = coreData.tenants.find((tenant) => tenant.code === application?.tenantId);
+
   const handleDownloadPdf = async () => {
-    const tenantInfo = tenants.find((tenant) => tenant.code === application?.tenantId);
     const data = getPDFData({ ...application?.pdfData }, tenantInfo, t);
     Digit.Utils.pdf.generate(data);
     setShowOptions(false);
   };
 
   const downloadPaymentReceipt = async () => {
+    // console.log("print payment receipt", paymentsHistory)
     const receiptFile = { filestoreIds: [paymentsHistory.Payments[0]?.fileStoreId] };
 
     if (!receiptFile?.fileStoreIds?.[0]) {
@@ -80,15 +85,8 @@ const ApplicationDetails = () => {
 
   return (
     <React.Fragment>
-      <div className="cardHeaderWithOptions">
-        <Header>{t("CS_FSM_APPLICATION_DETAIL_TITLE_APPLICATION_DETAILS")}</Header>
-        <MultiLink
-          className="multilinkWrapper"
-          onHeadClick={() => setShowOptions(!showOptions)}
-          displayOptions={showOptions}
-          options={dowloadOptions}
-        />
-      </div>
+      <MultiLink onHeadClick={() => setShowOptions(!showOptions)} displayOptions={showOptions} options={dowloadOptions} />
+      <Header>{t("CS_FSM_APPLICATION_DETAIL_TITLE_APPLICATION_DETAILS")}</Header>
       <Card style={{ position: "relative" }}>
         {application?.applicationDetails?.map(({ title, value, child, caption, map }, index) => {
           return (

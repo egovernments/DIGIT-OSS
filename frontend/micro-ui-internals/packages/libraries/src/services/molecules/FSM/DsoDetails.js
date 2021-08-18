@@ -13,10 +13,10 @@ const DsoDetails = async (tenantId, filters = {}) => {
     ownerId: dso.ownerId,
     id: dso.id,
     vehicles: dso.vehicles
-      ?.filter((vehicle) => vehicle.status === "ACTIVE")
-      ?.map((vehicle) => ({
+      .filter((vehicle) => vehicle.status === "ACTIVE")
+      .map((vehicle) => ({
         id: vehicle.id,
-        registrationNumber: vehicle?.registrationNumber,
+        registrationNumber: vehicle.registrationNumber,
         type: vehicle.type,
         i18nKey: `FSM_VEHICLE_TYPE_${vehicle.type}`,
         capacity: vehicle.tankCapacity,

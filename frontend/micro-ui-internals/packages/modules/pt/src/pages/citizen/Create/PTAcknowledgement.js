@@ -26,7 +26,7 @@ const BannerPicker = (props) => {
     <Banner
       message={GetActionMessage(props)}
       applicationNumber={props.data?.Properties[0].acknowldgementNumber}
-      info={props.isSuccess ? props.t("PT_APPLICATION_NO") : ""}
+      info={props.isSuccess?props.t("PT_APPLICATION_NO"):''}
       successful={props.isSuccess}
     />
   );
@@ -34,37 +34,31 @@ const BannerPicker = (props) => {
 
 const PTAcknowledgement = ({ data, onSuccess }) => {
   const { t } = useTranslation();
-  const isPropertyMutation = window.location.href.includes("property-mutation");
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const mutation = Digit.Hooks.pt.usePropertyAPI(
     data?.address?.city ? data.address?.city?.code : tenantId,
-    !window.location.href.includes("edit-application") && !isPropertyMutation
+    !window.location.href.includes("edit-application")
   );
-  const { data: storeData } = Digit.Hooks.useStore.getInitData();
-  const { tenants } = storeData || {};
+  const coreData = Digit.Hooks.useCoreData();
 
   useEffect(() => {
     try {
-      let tenantId = isPropertyMutation ? data.Property?.address.tenantId : data?.address?.city ? data.address?.city?.code : tenantId;
+      let tenantId = data?.address?.city ? data.address?.city?.code : tenantId;
       data.tenantId = tenantId;
-      let formdata = !window.location.href.includes("edit-application")
-        ? isPropertyMutation
-          ? data
-          : convertToProperty(data)
-        : convertToUpdateProperty(data);
+      let formdata = !window.location.href.includes("edit-application") ? convertToProperty(data) : convertToUpdateProperty(data);
       formdata.Property.tenantId = formdata?.Property?.tenantId || tenantId;
       mutation.mutate(formdata, {
         onSuccess,
       });
     } catch (err) {
-      console.log(err, "inside ack");
+      console.log(err);
     }
   }, []);
 
   const handleDownloadPdf = async () => {
     const { Properties = [] } = mutation.data;
     const Property = (Properties && Properties[0]) || {};
-    const tenantInfo = tenants.find((tenant) => tenant.code === Property.tenantId);
+    const tenantInfo = coreData.tenants.find((tenant) => tenant.code === Property.tenantId);
     const data = await getPTAcknowledgementData({ ...Property }, tenantInfo, t);
     Digit.Utils.pdf.generate(data);
   };

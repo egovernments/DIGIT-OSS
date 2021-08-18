@@ -7,26 +7,11 @@ export const PaymentService = {
       url: Urls.payment.fetch_bill,
       useCache: false,
       method: "POST",
-      auth: false,
-      userService: false,
-      params: { tenantId, ...filters },
-    })
-      .then((d) => {
-        return d;
-      })
-      .catch((err) => {
-        if (err?.response?.data?.Errors?.[0]?.code === "EG_BS_BILL_NO_DEMANDS_FOUND") return { Bill: [] };
-        else throw err;
-      }),
-  searchBill: (tenantId, filters = {}) =>
-    Request({
-      url: Urls.payment.search_bill,
-      useCache: false,
-      method: "POST",
       auth: true,
       userService: true,
       params: { tenantId, ...filters },
     }),
+
   createReciept: (tenantId, details = {}) =>
     Request({
       url: Urls.payment.create_reciept,
@@ -34,7 +19,7 @@ export const PaymentService = {
       method: "POST",
       auth: true,
       userService: true,
-      locale: true,
+      reciept: true,
       params: { tenantId },
       data: { ...details },
     }),
@@ -56,7 +41,6 @@ export const PaymentService = {
       method: "POST",
       auth: true,
       userService: true,
-      locale: true,
       params: { tenantId, key },
       data: data,
     }),
@@ -76,8 +60,8 @@ export const PaymentService = {
       url: Urls.payment.create_citizen_reciept,
       useCache: false,
       method: "POST",
-      auth: false,
-      userService: false,
+      auth: true,
+      userService: true,
       params: { tenantId },
       data: { ...details },
     }),
@@ -100,15 +84,5 @@ export const PaymentService = {
       auth: true,
       userService: true,
       params: { tenantId, consumerCode, businessService },
-    }),
-
-  recieptSearch: (tenantId, businessService, params) =>
-    Request({
-      url: Urls.payment.reciept_search,
-      urlParams: { buisnessService: businessService },
-      method: "POST",
-      // do not change this directly add a param if needed
-      auth: true,
-      params: { tenantId, ...params },
     }),
 };

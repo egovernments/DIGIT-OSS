@@ -1,18 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 
 const BillSumary = ({ billAccountDetails, total, businessService, arrears }) => {
   const { t } = useTranslation();
-  const { workflow: ModuleWorkflow } = Digit.Hooks.useQueryParams();
 
-  useEffect(() => {
-    ModuleWorkflow === "mcollect" && billAccountDetails && billAccountDetails.map((ob) => {
-      if(ob.taxHeadCode.includes("CGST"))
-        ob.order = 3;
-      else if(ob.taxHeadCode.includes("SGST"))
-        ob.order = 4;
-    })
-  },[billAccountDetails])
   return (
     <React.Fragment>
       <div className="bill-summary">

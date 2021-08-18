@@ -10,19 +10,11 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
     return useQuery("PT_PROPERTY_TAX_DOCUMENTS", () => MdmsService.getDataByCriteria(tenantId, payload, moduleCode));
   };
 
-  /*const useGenderDetails = () => {
-    return useQuery("PT_GENDER_DETAILS", () => MdmsService.getGenderTypeDetails(tenantId, type, filter), config);
-  };*/
-
   switch (type) {
     case "FINANCIAL_YEARLS":
       return useFinancialYears();
     case "PROPERTY_TAX_DOCUMENTS":
       return usePropertyTaxDocuments();
-
-    /*case "GenderType":
-      return useGenderDetails();*/
-    
     default:
       return useQuery(type, () => MdmsService.getDataByCriteria(tenantId, getGeneralCriteria(tenantId, moduleCode, type), moduleCode), config);
   }

@@ -1,11 +1,9 @@
-import React, { Fragment, useContext, useState } from "react";
-import { useTranslation } from "react-i18next";
+import React, { Fragment, useState } from "react";
 import CustomAreaChart from "./CustomAreaChart";
 import CustomBarChart from "./CustomBarChart";
 import CustomHorizontalBarChart from "./CustomHorizontalBarChart";
 import CustomPieChart from "./CustomPieChart";
 import CustomTable from "./CustomTable";
-import FilterContext from "./FilterContext";
 import GenericChart from "./GenericChart";
 import MetricChart from "./MetricChart";
 import Summary from "./Summary";
@@ -13,33 +11,20 @@ import Summary from "./Summary";
 let index = 1;
 
 const Layout = ({ rowData }) => {
-  const { t } = useTranslation();
-  const { value } = useContext(FilterContext);
-  const [searchQuery, onSearch] = useState("");
+  const [searchQuery, onSearch] = useState();
 
-  const renderChart = (chart, title) => {
+  const renderChart = (chart, key) => {
     switch (chart.chartType) {
       case "table":
-        return <CustomTable data={chart} onSearch={searchQuery} title={title} />;
+        return <CustomTable data={chart} key={key} onSearch={searchQuery} />;
       case "donut":
-        return <CustomPieChart data={chart} title={title} />;
+        return <CustomPieChart data={chart} key={key} />;
       case "line":
-        return <CustomAreaChart data={chart} title={title} />;
+        return <CustomAreaChart data={chart} />;
       case "horizontalBar":
-        return (
-          <CustomHorizontalBarChart
-            data={chart}
-            xAxisType="number"
-            yAxisType="category"
-            layout="vertical"
-            yDataKey="name"
-            xDataKey=""
-            showDrillDown={true}
-            title={title}
-          />
-        );
+        return <CustomHorizontalBarChart data={chart} />;
       case "bar":
-        return <CustomHorizontalBarChart data={chart} title={title} yAxisLabel={`${t("DSS_WASTE_RECIEVED")} ${t(`DSS_WASTE_UNIT`)}`} />;
+        return <CustomHorizontalBarChart data={chart} />;
     }
   };
 
@@ -47,19 +32,13 @@ const Layout = ({ rowData }) => {
     switch (visualizer.vizType) {
       case "metric-collection":
         return (
-          <GenericChart header={visualizer.name} className="metricsTable" key={key}>
+          <GenericChart header={visualizer.name} className="metricsTable">
             <MetricChart data={visualizer} />
           </GenericChart>
         );
       case "chart":
-        if (
-          value?.filters?.tenantId?.length === 0 &&
-          (visualizer?.charts?.[0].id === "fsmTopDsoByPerformance" || visualizer?.charts?.[0].id === "fsmBottomDsoByPerformance")
-        )
-          return null;
         return (
           <GenericChart
-            key={key}
             header={visualizer.name}
             showDownload={visualizer?.charts?.[0].chartType === "table"}
             showSearch={visualizer?.charts?.[0].chartType === "table"}
@@ -67,28 +46,18 @@ const Layout = ({ rowData }) => {
             onChange={(e) => onSearch(e.target.value)}
           >
             {/* {visualizer.charts.map((chart, key) => renderChart(chart, key))} */}
-            {renderChart(visualizer?.charts?.[0], visualizer.name)}
+            {renderChart(visualizer?.charts?.[0])}
           </GenericChart>
         );
       case "performing-metric":
-        if (
-          value?.filters?.tenantId?.length > 0 &&
-          (visualizer?.charts?.[0].id === "fsmTopUlbByPerformance" || visualizer?.charts?.[0].id === "fsmBottomUlbByPerformance")
-        )
-          return null;
         return (
-          <GenericChart header={visualizer.name} subHeader={`(${t(`DSS_SLA_ACHIEVED`)})`} key={key}>
-            <CustomBarChart
-              data={visualizer?.charts?.[0]}
-              fillColor={index++ % 2 ? "#00703C" : "#D4351C"}
-              title={visualizer.name}
-              showDrillDown={true}
-            />
+          <GenericChart header={visualizer.name}>
+            <CustomBarChart data={visualizer?.charts?.[0]} fillColor={index++ % 2 ? "#00703C" : "#D4351C"} />
           </GenericChart>
         );
       case "collection":
       case "module":
-        return <Summary key={key} ttile={visualizer.name} data={visualizer} key={key} />;
+        return <Summary key={key} ttile={visualizer.name} data={visualizer} />;
     }
   };
   return <div className="chart-row">{rowData.vizArray.map((chart, key) => renderVisualizer(chart, key))}</div>;

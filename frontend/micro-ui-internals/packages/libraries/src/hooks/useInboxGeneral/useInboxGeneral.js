@@ -2,10 +2,10 @@ import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "react-query";
 import { FSMService } from "../../services/elements/FSM";
 import { PTService } from "../../services/elements/PT";
-
+import { TableConfig } from "./tableConfig";
 import { filterFunctions } from "./filterFn";
 import { getSearchFields } from "./searchFields";
-import { TLService } from "../../services/elements/TL";
+import { useEffect } from "react";
 
 const inboxConfig = (tenantId, filters) => ({
   PT: {
@@ -23,14 +23,6 @@ const inboxConfig = (tenantId, filters) => ({
     businessIdAliasForSearch: "applicationNo",
     fetchFilters: filterFunctions.FSM,
     _searchFn: () => FSMService.search(tenantId, filters),
-  },
-  TL: {
-    services: ["TL"],
-    searchResponseKey: "items",
-    businessIdsParamForSearch: "businessId",
-    businessIdAliasForSearch: "businessId",
-    fetchFilters: filterFunctions.TL,
-    _searchFn: () => TLService.search(tenantId, filters),
   },
 });
 
@@ -51,7 +43,6 @@ const defaultCatchSearch = (Err) => {
     )
   )
     return [];
-  console.log(Err?.response?.data, " this is error");
   throw Err;
 };
 
@@ -76,7 +67,7 @@ const callMiddlewares = async (data, middlewares) => {
     } else return data;
   };
   let ret = await _next(data);
-  return ret || [];
+  return ret;
 };
 
 const useInboxGeneral = ({
@@ -100,7 +91,7 @@ const useInboxGeneral = ({
 
   let { workflowFilters, searchFilters } = fetchFilters(filters);
 
-  const { data: processInstances, isFetching: wfFetching, isFetched, isSuccess: wfSuccess } = useQuery(
+  const { data: processInstances, isLoading: wfFetching, isSuccess: wfSuccess } = useQuery(
     ["WORKFLOW_INBOX", businessService, workflowFilters],
     () =>
       Digit.WorkflowService.getAllApplication(tenantId, { businessServices: services.join(), ...workflowFilters })
@@ -118,7 +109,7 @@ const useInboxGeneral = ({
   const applicationNoFromWF = processInstances?.map((e) => e.businessId).join() || "";
 
   if (isInbox && applicationNoFromWF && !searchFilters[businessIdAliasForSearch])
-    searchFilters = { [businessIdsParamForSearch]: applicationNoFromWF, ...searchFilters };
+    searchFilters = { ...searchFilters, [businessIdsParamForSearch]: applicationNoFromWF };
 
   const { _searchFn } = inboxConfig(tenantId, { ...searchFilters })[businessService];
 
@@ -130,20 +121,17 @@ const useInboxGeneral = ({
     return { ...object, [item?.["businessId"]]: item };
   }, {});
 
-  const allowSearch = isInbox ? isFetched && wfSuccess && !!searchFilters[businessIdsParamForSearch] : true;
-
   const searchResult = useQuery(
     ["SEARCH_INBOX", businessService, searchFilters, workflowFilters, isInbox],
-    () => {
-      if (allowSearch)
-        return _searchFn()
-          .then((d) => rawSearchHandler(d, searchResponseKey, businessIdAliasForSearch))
-          .then((data) => callMiddlewares(data[searchResponseKey], middlewareSearch))
-          .catch(catchSearch);
-    },
+    () =>
+      _searchFn()
+        .then((d) => rawSearchHandler(d, searchResponseKey, businessIdAliasForSearch))
+        .then((data) => callMiddlewares(data[searchResponseKey], middlewareSearch))
+        .catch(catchSearch),
     {
-      enabled: allowSearch,
+      enabled: !isInbox || (!wfFetching && wfSuccess),
       select: (d) => {
+        console.log(d.length + " records fetched", "inside select");
         return d.map((searchResult) => ({
           totalCount: d.totalCount,
           ...combineResponse(searchResult, processInstanceBuisnessIdMap?.[searchResult?.[businessIdAliasForSearch]]),
@@ -166,7 +154,7 @@ const useInboxGeneral = ({
     searchResponseKey,
     businessIdsParamForSearch,
     businessIdAliasForSearch,
-
+    tableConfig: TableConfig(t)[businessService],
     searchFields: getSearchFields(isInbox)[businessService],
     wfFetching,
   };

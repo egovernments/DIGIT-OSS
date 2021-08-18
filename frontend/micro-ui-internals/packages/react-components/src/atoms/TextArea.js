@@ -16,8 +16,7 @@ const TextArea = (props) => {
         props?.className ? props?.className : ""
       }`}
       minLength={props.minLength}
-      maxLength={props.maxLength} 
-      autoComplete="off"
+      maxLength={props.maxLength}
     ></textarea>
   );
 };

@@ -1,33 +1,19 @@
-import { Loader } from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
-import { useParams, useHistory, useRouteMatch, useLocation } from "react-router-dom";
+import { useParams, useHistory, useRouteMatch } from "react-router-dom";
 import Routes from "./routes";
 // import { myBillMap } from "./myBillsKeysMap";
 
-export const MyBills = ({ stateCode }) => {
+export const MyBills = ({ ...props }) => {
   const { businessService } = useParams();
-  const { tenantId: _tenantId } = Digit.Hooks.useQueryParams();
-
-  const { isLoading: storeLoading, data: store } = Digit.Services.useStore({
-    stateCode,
-    moduleCode: businessService,
-    language: Digit.StoreData.getCurrentLanguage(),
-  });
 
   const history = useHistory();
   const { url } = useRouteMatch();
-  const location = useLocation();
 
-  const { tenantId } = Digit.UserService.getUser()?.info || location?.state || { tenantId: _tenantId } || {};
+  const { isLoading, data } = Digit.Hooks.useFetchCitizenBillsForBuissnessService({ businessService });
+  const { tenantId } = Digit.UserService.getUser()?.info || {};
 
-  if (!tenantId && !location?.state?.fromSearchResults) {
-    history.replace(`/digit-ui/citizen/login`, { from: url });
-  }
+  if (!tenantId) history.push(`/digit-ui/citizen/login`, { from: url });
 
-  const { isLoading, data } = Digit.Hooks.useFetchCitizenBillsForBuissnessService(
-    { businessService },
-    { refetchOnMount: true, enabled: !location?.state?.fromSearchResults }
-  );
   const { isLoading: mdmsLoading, data: mdmsBillingData } = Digit.Hooks.useGetPaymentRulesForBusinessServices(tenantId);
 
   const billsList = data?.Bill || [];
@@ -45,10 +31,6 @@ export const MyBills = ({ stateCode }) => {
   };
 
   const getProps = () => ({ billsList, paymentRules: getPaymentRestrictionDetails(), businessService });
-
-  if (mdmsLoading) {
-    return <Loader />;
-  }
 
   return (
     <React.Fragment>

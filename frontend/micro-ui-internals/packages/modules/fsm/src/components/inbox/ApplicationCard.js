@@ -27,24 +27,6 @@ export const ApplicationCard = ({
   const [params, setParams] = useState(searchParams);
   const [_sortparams, setSortParams] = useState(sortParams);
 
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const state = tenantId.split(".")[0];
-  const { data: roleStatuses, isFetched: isRoleStatusFetched } = Digit.Hooks.fsm.useMDMS(state, "DIGIT-UI", "RoleStatusMapping");
-
-  const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
-
-  const userRoleDetails = roleStatuses?.filter((roleDetails) => userRoles.filter((role) => role === roleDetails.userRole)[0]);
-
-  const mergedRoleDetails = userRoleDetails?.reduce(
-    (merged, details) => ({
-      fixed: details?.fixed && merged?.fixed,
-      statuses: [...merged?.statuses, ...details?.statuses].filter((item, pos, self) => self.indexOf(item) == pos),
-      zeroCheck: details?.zeroCheck || merged?.zeroCheck,
-    }),
-    { statuses: [] }
-  );
-
   const selectParams = (param) => {
     setParams((o) => ({ ...o, ...param }));
   };
@@ -79,7 +61,7 @@ export const ApplicationCard = ({
     onSort(d);
   };
 
-  if (isLoading || !isRoleStatusFetched) {
+  if (isLoading) {
     return <Loader />;
   }
 
@@ -118,7 +100,7 @@ export const ApplicationCard = ({
             }}
           />
         )}
-        {!isSearch && onFilterChange && ((!DSO && !isFstpOperator && searchParams) || (mergedRoleDetails?.statuses?.length > 0)) && (
+        {!isSearch && onFilterChange && (
           <FilterAction
             text="FILTER"
             handleActionClick={() => {

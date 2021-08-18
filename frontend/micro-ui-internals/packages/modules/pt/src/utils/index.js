@@ -50,6 +50,7 @@ export const getCityLocale = (value = "") => {
   return convertToLocale(convertedValue, `TENANT_TENANTS`);
 };
 
+
 export const getPropertyOwnerTypeLocale = (value = "") => {
   return convertToLocale(value, "PROPERTYTAX_OWNERTYPE");
 };
@@ -67,13 +68,13 @@ export const shouldHideBackButton = (config = []) => {
 
 /*   style to keep the body height fixed across screens */
 export const cardBodyStyle = {
-  // maxHeight: "calc(100vh - 20em)",
-  // overflowY: "auto",
+  maxHeight: "calc(100vh - 20em)",
+  overflowY: "auto",
 };
 
 export const propertyCardBodyStyle = {
-  // maxHeight: "calc(100vh - 10em)",
-  // overflowY: "auto",
+  maxHeight: "calc(100vh - 10em)",
+  overflowY: "auto",
 };
 
 export const setAddressDetails = (data) => {
@@ -253,14 +254,6 @@ export const getSuperBuiltUparea = (data) => {
   }
   return builtUpArea;
 };
-
-export const getSuperBuiltUpareafromob = (data) => {
-  let builtuparea = 0;
-  data?.units.map((unit)=>{
-    builtuparea = builtuparea + unit?.constructionDetail?.builtUpArea;
-  })
-  return builtuparea;
-}
 
 export const getnumberoffloors = (data) => {
   let unitlenght = data?.units?.length;
@@ -737,36 +730,19 @@ export const convertToUpdateProperty = (data = {}) => {
       creationReason: getCreationReason(data),
       source: "MUNICIPAL_RECORDS",
       channel: "CITIZEN",
-      workflow: getWorkflow(data),
+      workflow: getWorkflow(data)
     },
   };
 
   let propertyInitialObject = JSON.parse(sessionStorage.getItem("propertyInitialObject"));
   if (checkArrayLength(propertyInitialObject?.units) && checkIsAnArray(formdata.Property?.units) && data?.isEditProperty) {
-    propertyInitialObject.units = propertyInitialObject.units.filter((unit) => unit.active);
-    let oldUnits = propertyInitialObject.units.map((unit) => {
-      return { ...unit, active: false };
-    });
-    formdata.Property?.units.push(...oldUnits);
+    propertyInitialObject.units = propertyInitialObject.units.filter(unit => unit.active);
+    let oldUnits = propertyInitialObject.units.map(unit => {
+      return { ...unit, active: false }
+    })
+    formdata.Property?.units.push(...oldUnits)
   }
-  /* if (
-    checkArrayLength(propertyInitialObject?.owners) &&
-    checkIsAnArray(formdata.Property?.owners) &&
-    data?.isEditProperty &&
-    data.isUpdateProperty == false
-  ) {
-    propertyInitialObject.owners = propertyInitialObject.owners.filter((owner) => owner.status === "ACTIVE");
-    let oldOwners = propertyInitialObject.owners.map((owner) => {
-      return { ...owner, status: "INACTIVE" };
-    });
-    formdata.Property?.owners.push(...oldOwners);
-  } else {
-    formdata.Property.owners = [...propertyInitialObject.owners];
-  } */
 
-  if (checkArrayLength(propertyInitialObject?.owners) && checkIsAnArray(formdata.Property?.owners)) {
-    formdata.Property.owners = [...propertyInitialObject.owners];
-  }
   if (propertyInitialObject?.auditDetails) {
     formdata.Property["auditDetails"] = { ...propertyInitialObject.auditDetails };
   }
@@ -865,14 +841,17 @@ export const checkArrayLength = (obj = [], length = 0) => {
   return checkIsAnArray(obj) && obj.length > length ? true : false;
 };
 
+
 export const getWorkflow = (data = {}) => {
   return {
     action: data?.isEditProperty ? "REOPEN" : "OPEN",
     businessService: `PT.${getCreationReason(data)}`,
     moduleName: "PT",
-  };
-};
+  }
+
+}
+
 
 export const getCreationReason = (data = {}) => {
   return data?.isUpdateProperty ? "UPDATE" : "CREATE";
-};
+}

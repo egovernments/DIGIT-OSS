@@ -1,4 +1,4 @@
-import { Header, CitizenHomeCard, PTIcon } from "@egovernments/digit-ui-react-components";
+import { Header, HomeLink } from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
@@ -18,7 +18,6 @@ import ProvideSubUsageTypeOfRentedArea from "./pageComponents/ProvideSubUsageTyp
 import PTWFApplicationTimeline from "./pageComponents/PTWFApplicationTimeline";
 import PTSelectAddress from "./pageComponents/PTSelectAddress";
 import PTSelectGeolocation from "./pageComponents/PTSelectGeolocation";
-import PTSelectStreet from "./pageComponents/PTSelectStreet";
 import PTSelectPincode from "./pageComponents/PTSelectPincode";
 import RentalDetails from "./pageComponents/RentalDetails";
 import SelectInistitutionOwnerDetails from "./pageComponents/SelectInistitutionOwnerDetails";
@@ -32,10 +31,7 @@ import Units from "./pageComponents/Units";
 import SelectAltContactNumber from "./pageComponents/SelectAltContactNumber";
 import SelectDocuments from "./pageComponents/SelectDocuments";
 import UnOccupiedArea from "./pageComponents/UnOccupiedArea";
-import PTEmployeeOwnershipDetails from "./pageComponents/OwnerDetailsEmployee";
 import CitizenApp from "./pages/citizen";
-import SearchPropertyCitizen from "./pages/citizen/SearchProperty/searchProperty";
-import SearchResultCitizen from "./pages/citizen/SearchResults";
 
 import PropertyInformation from "./pages/citizen/MyProperties/propertyInformation";
 import PTWFCaption from "./pageComponents/PTWFCaption";
@@ -43,27 +39,15 @@ import PTWFReason from "./pageComponents/PTWFReason";
 import ProvideFloorNo from "./pageComponents/ProvideFloorNo";
 import propertyOwnerHistory from "./pages/citizen/MyProperties/propertyOwnerHistory";
 import TransferDetails from "./pages/citizen/MyProperties/propertyOwnerHistory";
-import TransfererDetails from "./pageComponents/Mutate/TransfererDetails";
-import OwnerMutate from "./pageComponents/Mutate/Owner";
-import PTComments from "./pageComponents/Mutate/Comments";
-import IsMutationPending from "./pageComponents/Mutate/IsMutationPending";
-import UnderStateAquire from "./pageComponents/Mutate/underStateAquire";
-import PropertyMarketValue from "./pageComponents/Mutate/PropertyMarketValue";
-import PTReasonForTransfer from "./pageComponents/Mutate/ReasonForTransfer";
-import PTRegistrationDocument from "./pageComponents/Mutate/RegistrationDocument";
-import TransferProof from "./pageComponents/Mutate/transferReasonDocument";
 
 import EmployeeApp from "./pages/employee";
 import PTCard from "./components/PTCard";
 import InboxFilter from "./components/inbox/NewInboxFilter";
-import EmptyResultInbox from "./components/empty-result";
-import { TableConfig } from "./config/inbox-table-config";
 
 const componentsToRegister = {
   PropertyTax,
   PTSelectPincode,
   PTSelectAddress,
-  PTSelectStreet,
   Proof,
   SelectOwnerShipDetails,
   SelectOwnerDetails,
@@ -96,18 +80,6 @@ const componentsToRegister = {
   Units,
   SelectAltContactNumber,
   SelectDocuments,
-  PTEmployeeOwnershipDetails,
-  SearchPropertyCitizen,
-  SearchResultCitizen,
-  TransfererDetails,
-  OwnerMutate,
-  PTComments,
-  IsMutationPending,
-  PropertyMarketValue,
-  PTReasonForTransfer,
-  PTRegistrationDocument,
-  UnderStateAquire,
-  TransferProof,
 };
 
 const addComponentsToRegistry = () => {
@@ -116,12 +88,8 @@ const addComponentsToRegistry = () => {
   });
 };
 
-export const PTModule = ({ stateCode, userType, tenants }) => {
+export const PTModule = ({ userType, tenants }) => {
   const { path, url } = useRouteMatch();
-
-  const moduleCode = "PT";
-  const language = Digit.StoreData.getCurrentLanguage();
-  const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
 
   addComponentsToRegistry();
 
@@ -140,34 +108,16 @@ export const PTLinks = ({ matchPath, userType }) => {
     clearParams();
   }, []);
 
-  const links = [
-    {
-      link: `${matchPath}/property/citizen-search`,
-      i18nKey: t("PT_SEARCH_AND_PAY"),
-    },
-    {
-      link: `/digit-ui/citizen/payment/my-bills/PT`,
-      i18nKey: t("CS_TITLE_MY_BILLS"),
-    },
-    {
-      link: `${matchPath}/property/new-application`,
-      i18nKey: t("PT_CREATE_PROPERTY"),
-    },
-    {
-      link: `${matchPath}/property/my-properties`,
-      i18nKey: t("PT_MY_PROPERTIES"),
-    },
-    {
-      link: `${matchPath}/property/my-applications`,
-      i18nKey: t("PT_MY_APPLICATION"),
-    },
-    {
-      link: `${matchPath}/property/property-mutation`,
-      i18nKey: t("PT_PROPERTY_MUTATION"),
-    },
-  ];
-
-  return <CitizenHomeCard header={t("ACTION_TEST_PROPERTY_TAX")} links={links} Icon={() => <PTIcon className="fill-path-primary-main" />} />;
+  return (
+    <React.Fragment>
+      <Header>{t("ACTION_TEST_PROPERTY_TAX")}</Header>
+      <div className="d-grid">
+        <HomeLink to={`${matchPath}/property/new-application`}>{t("PT_CREATE_PROPERTY")}</HomeLink>
+        <HomeLink to={`${matchPath}/property/my-properties`}>{t("PT_MY_PROPERTIES")}</HomeLink>
+        <HomeLink to={`${matchPath}/property/my-applications`}>{t("PT_MY_APPLICATION")}</HomeLink>
+      </div>
+    </React.Fragment>
+  );
 };
 
 export const PTComponents = {
@@ -175,6 +125,4 @@ export const PTComponents = {
   PTModule,
   PTLinks,
   PT_INBOX_FILTER: (props) => <InboxFilter {...props} />,
-  PTEmptyResultInbox: EmptyResultInbox,
-  PTInboxTableConfig: TableConfig,
 };

@@ -1,5 +1,5 @@
 import { PTService } from "../../elements/PT";
-import { getPropertyTypeLocale, getPropertySubtypeLocale } from "../../../utils/pt";
+import { getPropertyTypeLocale, getPropertySubtypeLocale } from "../../../utils/fsm";
 
 export const PTSearch = {
   all: async (tenantId, filters = {}) => {
@@ -10,215 +10,99 @@ export const PTSearch = {
     const response = await PTService.search({ tenantId, filters });
     return response.Properties[0];
   },
-  transformPropertyToApplicationDetails: ({ property: response, t }) => {
-    return [
+  applicationDetails: async (t, tenantId, propertyIds, userType) => {
+    const filter = { propertyIds };
+    const response = await PTSearch.application(tenantId, filter);
+
+    const employeeResponse = [
       {
-        title: "PT_PROPERTY_ADDRESS_SUB_HEADER",
-        asSectionHeader: true,
+        title: "ES_APPLICATION_DETAILS_PROPERTY_ADDRESS",
         values: [
-          { title: "PT_PROPERTY_ADDRESS_PINCODE", value: response?.address?.pincode },
-          { title: "PT_PROPERTY_ADDRESS_CITY", value: response?.address?.city },
+          { title: "ES_APPLICATION_DETAILS_LOCATION_PINCODE", value: response?.address?.pincode },
+          { title: "ES_APPLICATION_DETAILS_LOCATION_CITY", value: response?.address?.city },
           {
-            title: "PT_PROPERTY_ADDRESS_MOHALLA",
+            title: "ES_APPLICATION_DETAILS_LOCATION_LOCALITY",
             value: `${response?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${response?.address?.locality?.code}`,
           },
-          { title: "PT_PROPERTY_ADDRESS_STREET_NAME", value: response?.address?.street },
-          { title: "PT_PROPERTY_ADDRESS_HOUSE_NO", value: response?.address?.doorNo },
+          { title: "ES_APPLICATION_DETAILS_LOCATION_STREET_NAME", value: response?.address?.street },
+          { title: "ES_APPLICATION_DETAILS_LOCATION_BUILDING_NUMBER", value: response?.address?.buildingName },
         ],
       },
       {
-        title: "PT_ASSESMENT_INFO_SUB_HEADER",
+        title: "ES_APPLICATION_DETAILS_PROPERTY_ASSESSMENT_DETAILS",
         values: [
-          { title: "PT_ASSESMENT_INFO_TYPE_OF_BUILDING", value: getPropertyTypeLocale(response?.propertyType) },
-          { title: "PT_ASSESMENT_INFO_USAGE_TYPE", value: getPropertySubtypeLocale(response?.usageCategory) },
-          { title: "PT_ASSESMENT_INFO_PLOT_SIZE", value: response?.landArea },
-          { title: "PT_ASSESMENT_INFO_NO_OF_FLOOR", value: response?.noOfFloors },
+          { title: "ES_APPLICATION_DETAILS_PROPERTY_USAGE_TYPE", value: getPropertyTypeLocale(response?.propertyType) },
+          { title: "ES_APPLICATION_DETAILS_PROPERTY_TYPE", value: getPropertySubtypeLocale(response?.usageCategory) },
+          { title: "ES_APPLICATION_DETAILS_PROPERTY_PLOT_SIZE", value: response?.superBuiltUpArea },
+          { title: "ES_APPLICATION_DETAILS_PROPERTY_NO_OF_FLOORS", value: response?.noOfFloors },
         ],
         additionalDetails: {
-          floors: response?.units
-            ?.filter((e) => e.active)
-            ?.sort?.((a, b) => a.floorNo - b.floorNo)
-            ?.map((unit, index) => {
-              let floorName = `PROPERTYTAX_FLOOR_${unit.floorNo}`;
-              const values = [
-                {
-                  title: "PT_ASSESSMENT_UNIT_USAGE_TYPE",
-                  value: `PROPERTYTAX_BILLING_SLAB_${
-                    unit?.usageCategory != "RESIDENTIAL" ? unit?.usageCategory?.split(".")[1] : unit?.usageCategory
-                  }`,
-                },
-                {
-                  title: "PT_ASSESMENT_INFO_OCCUPLANCY",
-                  value: unit?.occupancyType,
-                },
-                {
-                  title: "PT_FORM2_BUILT_AREA",
-                  value: unit?.constructionDetail?.builtUpArea,
-                },
-              ];
+          floors: response?.units?.map((unit, index) => {
+            let floorName = "ES_APPLICATION_DETAILS_GROUND_FLOOR";
+            if (unit?.floorNo === 1) floorName = "ES_APPLICATION_DETAILS_FIRST_FLOOR";
+            if (unit?.floorNo === 2) floorName = "ES_APPLICATION_DETAILS_SECOND_FLOOR";
+            if (unit?.floorNo === 3) floorName = "ES_APPLICATION_DETAILS_THIRD_FLOOR";
 
-              if (unit.occupancyType === "RENTED") values.push({ title: "PT_FORM2_TOTAL_ANNUAL_RENT", value: unit.arv });
+            const values = [
+              {
+                title: "ES_APPLICATION_DETAILS_UNIT_USAGE_TYPE",
+                value: unit?.usageCategory,
+              },
+              {
+                title: "ES_APPLICATION_DETAILS_UNIT_OCCUPANCY_TYPE",
+                value: unit?.occupancyType,
+              },
+              {
+                title: "ES_APPLICATION_DETAILS_UNIT_BUILD_UP_AREA",
+                value: unit?.constructionDetail?.builtUpArea,
+              },
+            ];
 
-              return {
-                title: floorName,
-                values: [
-                  {
-                    title: `${t("ES_APPLICATION_DETAILS_UNIT")} ${index + 1}`,
-                    values,
-                  },
-                ],
-              };
-            }),
-        },
-      },
-      {
-        title: "PT_OWNERSHIP_INFO_SUB_HEADER",
-        additionalDetails: {
-          owners: response?.owners?.map((owner, index) => {
             return {
-              status: owner.status,
-              title: "ES_OWNER",
+              title: floorName,
               values: [
-                { title: "PT_OWNERSHIP_INFO_NAME", value: owner?.name },
-                { title: "PT_OWNERSHIP_INFO_GENDER", value: owner?.gender },
-                { title: "PT_OWNERSHIP_INFO_MOBILE_NO", value: owner?.mobileNumber },
-                { title: "PT_OWNERSHIP_INFO_USER_CATEGORY", value: `COMMON_MASTERS_OWNERTYPE_${owner?.ownerType}` || "NA" },
-                { title: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", value: owner?.fatherOrHusbandName },
-                { title: "PT_FORM3_OWNERSHIP_TYPE", value: response?.ownershipCategory },
-                { title: "PT_OWNERSHIP_INFO_EMAIL_ID", value: owner?.emailId },
-                { title: "PT_OWNERSHIP_INFO_CORR_ADDR", value: owner?.correspondenceAddress },
+                {
+                  title: `${t("ES_APPLICATION_DETAILS_UNIT")} ${index}`,
+                  values,
+                },
               ],
             };
           }),
+        },
+      },
+      {
+        title: "ES_APPLICATION_DETAILS_PROPERTY_OWNERSHIP_DETAILS",
+        values: [
+          { title: "ES_APPLICATION_DETAILS_OWNER_NAME", value: response?.owners[0]?.name },
+          { title: "ES_APPLICATION_DETAILS_GENDER", value: response?.owners[0]?.gender },
+          { title: "ES_APPLICATION_DETAILS_MOBILE_NUMBER", value: response?.owners[0]?.mobileNumber },
+          { title: "ES_APPLICATION_DETAILS_SPECIAL_CATEGORY", value: response?.specialCategory || "NA" },
+          { title: "ES_APPLICATION_DETAILS_GUARDIAN_NAME", value: response?.owners[0]?.name },
+          { title: "ES_APPLICATION_DETAILS_OWNERSHIP_TYPE", value: response?.ownershipCategory },
+          { title: "ES_APPLICATION_DETAILS_EMAIL", value: response?.owners[0]?.emailId },
+          { title: "ES_APPLICATION_DETAILS_CORRESPONDENCE_ADDRESS", value: response?.owners[0]?.permanentAddress },
+        ],
+        additionalDetails: {
           documents: [
             {
-              title: "PT_COMMON_DOCS",
-              values: response?.documents
-                // ?.filter((e) => e.status === "ACTIVE")
-                ?.map((document) => {
-                  return {
-                    title: `PT_${document?.documentType.replace(".", "_")}`,
-                    documentType: document?.documentType,
-                    documentUid: document?.documentUid,
-                    fileStoreId: document?.fileStoreId,
-                    status: document.status,
-                  };
-                }),
+              title: "ES_APPLICATION_DETAILS_DOCUMENTS",
+              values: response?.documents?.map((document) => ({
+                title: "ES_APPLICATION_DETAILS_ADDRESS_PROOF",
+                documentType: document?.documentType,
+                documentUid: document?.documentUid,
+                fileStoreId: document?.fileStoreId,
+              })),
             },
           ],
         },
       },
     ];
-  },
-  applicationDetails: async (t, tenantId, propertyIds, userType, args) => {
-    const filter = { propertyIds, ...args };
-    const response = await PTSearch.application(tenantId, filter);
-    // console.log(response, "from hook");
 
     return {
       tenantId: response.tenantId,
-      applicationDetails: PTSearch.transformPropertyToApplicationDetails({ property: response, t }),
+      applicationDetails: employeeResponse,
       additionalDetails: response?.additionalDetails,
       applicationData: response,
-      transformToAppDetailsForEmployee: PTSearch.transformPropertyToApplicationDetails,
     };
   },
 };
-
-// const employeeResponse = [
-//   {
-//     title: "PT_PROPERTY_ADDRESS_SUB_HEADER",
-//     asSectionHeader: true,
-//     values: [
-//       { title: "PT_PROPERTY_ADDRESS_PINCODE", value: response?.address?.pincode },
-//       { title: "PT_PROPERTY_ADDRESS_CITY", value: response?.address?.city },
-//       {
-//         title: "PT_PROPERTY_ADDRESS_MOHALLA",
-//         value: `${response?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${response?.address?.locality?.code}`,
-//       },
-//       { title: "PT_PROPERTY_ADDRESS_STREET_NAME", value: response?.address?.street },
-//       { title: "PT_PROPERTY_ADDRESS_HOUSE_NO", value: response?.address?.doorNo },
-//     ],
-//   },
-//   {
-//     title: "PT_ASSESMENT_INFO_SUB_HEADER",
-//     values: [
-//       { title: "PT_ASSESMENT_INFO_TYPE_OF_BUILDING", value: getPropertyTypeLocale(response?.propertyType) },
-//       { title: "PT_ASSESMENT_INFO_USAGE_TYPE", value: getPropertySubtypeLocale(response?.usageCategory) },
-//       { title: "PT_ASSESMENT_INFO_PLOT_SIZE", value: response?.landArea },
-//       { title: "PT_ASSESMENT_INFO_NO_OF_FLOOR", value: response?.noOfFloors },
-//     ],
-//     additionalDetails: {
-//       floors: response?.units
-//         ?.sort?.((a, b) => a.floorNo - b.floorNo)
-//         ?.map((unit, index) => {
-//           let floorName = `PROPERTYTAX_FLOOR_${unit.floorNo}`;
-//           const values = [
-//             {
-//               title: "PT_ASSESSMENT_UNIT_USAGE_TYPE",
-//               value: `PROPERTYTAX_BILLING_SLAB_${
-//                 unit?.usageCategory != "RESIDENTIAL" ? unit?.usageCategory?.split(".")[1] : unit?.usageCategory
-//               }`,
-//             },
-//             {
-//               title: "PT_ASSESMENT_INFO_OCCUPLANCY",
-//               value: unit?.occupancyType,
-//             },
-//             {
-//               title: "PT_FORM2_BUILT_AREA",
-//               value: unit?.constructionDetail?.builtUpArea,
-//             },
-//           ];
-
-//           if (unit.occupancyType === "RENTED") values.push({ title: "PT_FORM2_TOTAL_ANNUAL_RENT", value: unit.arv });
-
-//           return {
-//             title: floorName,
-//             values: [
-//               {
-//                 title: `${t("ES_APPLICATION_DETAILS_UNIT")} ${index + 1}`,
-//                 values,
-//               },
-//             ],
-//           };
-//         }),
-//     },
-//   },
-//   {
-//     title: "PT_OWNERSHIP_INFO_SUB_HEADER",
-//     additionalDetails: {
-//       owners: response?.owners?.map((owner, index) => {
-//         return {
-//           status: owner.status,
-//           title: "ES_OWNER",
-//           values: [
-//             { title: "PT_OWNERSHIP_INFO_NAME", value: owner?.name },
-//             { title: "PT_OWNERSHIP_INFO_GENDER", value: owner?.gender },
-//             { title: "PT_OWNERSHIP_INFO_MOBILE_NO", value: owner?.mobileNumber },
-//             { title: "PT_OWNERSHIP_INFO_USER_CATEGORY", value: `COMMON_MASTERS_OWNERTYPE_${owner?.ownerType}` || "NA" },
-//             { title: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", value: owner?.fatherOrHusbandName },
-//             { title: "PT_FORM3_OWNERSHIP_TYPE", value: response?.ownershipCategory },
-//             { title: "PT_OWNERSHIP_INFO_EMAIL_ID", value: owner?.emailId },
-//             { title: "PT_OWNERSHIP_INFO_CORR_ADDR", value: owner?.permanentAddress },
-//           ],
-//         };
-//       }),
-//       documents: [
-//         {
-//           title: "PT_COMMON_DOCS",
-//           values: response?.documents
-//             // ?.filter((e) => e.status === "ACTIVE")
-//             ?.map((document) => {
-//               return {
-//                 title: `PT_${document?.documentType.replace(".", "_")}`,
-//                 documentType: document?.documentType,
-//                 documentUid: document?.documentUid,
-//                 fileStoreId: document?.fileStoreId,
-//                 status: document.status,
-//               };
-//             }),
-//         },
-//       ],
-//     },
-//   },
-// ];

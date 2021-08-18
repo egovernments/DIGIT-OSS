@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Loader, ShippingTruck, EmployeeModuleCard } from "@egovernments/digit-ui-react-components";
+import { DashboardBox, Loader, ShippingTruck } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 
@@ -13,47 +13,82 @@ const svgIcon = (
 const DsoDashboard = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
+
+  const [info, setInfo] = useState({});
   const [total, setTotal] = useState("-");
   const [loader, setLoader] = useState(true);
   const [isDsoLoaded, setIsDsoLoaded] = useState(false);
-
+  const [progressStatusCode, setProgressStatusCode] = useState(null);
+  const [pendingApprovalStatusCode, setPendingApprCode] = useState(null);
 
   // fetch Status codes for DSO_ACTIONS
 
+  const { data: statusCodes, isFetching: statusFetching } = Digit.Hooks.fsm.useApplicationStatus(null, isDsoLoaded);
+  useEffect(() => {
+    if (statusCodes) {
+      const [pendingApproval, inProgress] = statusCodes.filter((e) => e.roles?.includes("FSM_DSO"));
+      console.log("here", inProgress, pendingApproval);
+      setProgressStatusCode(inProgress);
+      setPendingApprCode(pendingApproval);
+    }
+  }, [statusCodes]);
+
   const filters = {
-    limit:10,
-    offset:0,
     uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
     sortBy: "createdTime",
     sortOrder: "DESC",
     total: true,
   };
 
-  const { data:vendorDetails, isFetching: vendorDetailsFetching } = Digit.Hooks.fsm.useVendorDetail();
+  const { data, isFetching: vendorDetailsFetching } = Digit.Hooks.fsm.useVendorDetail();
 
   useEffect(() => {
-    if (vendorDetails?.vendor) {
-      const { vendor } = vendorDetails;
+    if (data?.vendor) {
+      const { vendor } = data;
       Digit.UserService.setExtraRoleDetails(vendor[0]);
       setIsDsoLoaded(true);
     }
-  }, [vendorDetails]);
+  }, [data]);
 
-  const { data: inbox, isFetching: inboxFetching } = Digit.Hooks.fsm.useInbox(tenantId, { ...filters }, {
+  const { data: pendingApprovalArray, isFetching: pendingApprovalRefetching } = Digit.Hooks.fsm.useInbox(
+    tenantId,
+    { ...filters, applicationStatus: [pendingApprovalStatusCode] },
+    null,
+    {
+      enabled: typeof pendingApprovalStatusCode === "object" && isDsoLoaded && !statusFetching,
+    }
+  );
+
+  const { data: pendingCompletionArray, isFetching: pendingCompletionRefetching } = Digit.Hooks.fsm.useInbox(
+    tenantId,
+    { ...filters, applicationStatus: [progressStatusCode] },
+    null,
+    {
+      enabled: typeof progressStatusCode === "object" && isDsoLoaded && !statusFetching,
+    }
+  );
+
+  useEffect(() => {
+    if (pendingApprovalArray && pendingCompletionArray) {
+      const infoObj = {
+        [t("ES_COMPLETION_PENDING")]: pendingCompletionArray?.[0]?.totalCount || 0,
+        [t("ES_VEHICLE_ASSIGNMENT_PENDING")]: pendingApprovalArray?.[0]?.totalCount || 0,
+      };
+
+      setInfo(infoObj);
+    }
+  }, [pendingApprovalArray, pendingCompletionArray, progressStatusCode, pendingApprovalStatusCode]);
+
+  const { data: inbox, isFetching: inboxFetching } = Digit.Hooks.fsm.useInbox(tenantId, { ...filters }, null, {
     enabled: isDsoLoaded,
-  }, true );
-  const info = useMemo( () => ({
-    [t("ES_COMPLETION_PENDING")]: inbox?.statuses.filter(e => e.applicationstatus === "DSO_INPROGRESS")[0]?.count || 0,
-    [t("ES_VEHICLE_ASSIGNMENT_PENDING")]: inbox?.statuses.filter(e => e.applicationstatus === "PENDING_DSO_APPROVAL")[0]?.count || 0,
-  }),[inbox?.totalCount]);
-
+  });
 
   const links = useMemo(
     () => [
       {
-        link: "/digit-ui/citizen/fsm/inbox",
-        label: t("ES_TITLE_INBOX"),
-        count: total,
+        pathname: "/digit-ui/citizen/fsm/inbox",
+        label: "ES_TITLE_INBOX",
+        total: total,
       },
     ],
     [total]
@@ -61,7 +96,7 @@ const DsoDashboard = () => {
 
   useEffect(() => {
     if (inbox) {
-      const total = inbox?.totalCount || 0;
+      const total = inbox?.[0]?.totalCount || 0;
       setTotal(total);
       if (Object.keys(info).length) setLoader(false);
     }
@@ -70,27 +105,9 @@ const DsoDashboard = () => {
   if (loader) {
     return <Loader />;
   }
-  const propsForModuleCard = {
-    Icon: <ShippingTruck />,
-    moduleName: t("ES_TITLE_FAECAL_SLUDGE_MGMT"),
-    kpis:[
-      {
-          count: inbox?.statuses.filter(e => e.applicationstatus === "DSO_INPROGRESS")[0]?.count || 0,
-          label: t("ES_COMPLETION_PENDING"),
-          link: `/digit-ui/citizen/fsm/inbox`
-      },
-      {
-          count: inbox?.statuses.filter(e => e.applicationstatus === "PENDING_DSO_APPROVAL")[0]?.count || 0,
-          label: t("ES_VEHICLE_ASSIGNMENT_PENDING"),
-          link: `/digit-ui/citizen/fsm/inbox`
-      }  
-    ],
-    links,
-
-  }
   return (
-    <div className="ground-container moduleCardWrapper">
-      <EmployeeModuleCard {...propsForModuleCard} />
+    <div>
+      <DashboardBox t={t} svgIcon={<ShippingTruck />} header={t("ES_TITLE_FAECAL_SLUDGE_MGMT")} info={info} links={links} />
     </div>
   );
 };

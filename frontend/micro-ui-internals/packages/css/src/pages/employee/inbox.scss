@@ -2,21 +2,16 @@
   @apply bg-white;
   border-radius: 4px;
   .header {
-    @apply flex items-center border-b border-border justify-between;
+    @apply flex items-center border-b border-border;
 
     .logo {
-      width: 56px;
-      height: 56px;
       @apply bg-focus;
       padding: 12px;
       border-radius: 4px;
-      svg {
-        @apply w-8 h-8;
-      }
     }
 
     .text {
-      @apply pl-md text-heading-m font-bold;
+      @apply pl-md font-bold;
     }
   }
 
@@ -31,20 +26,12 @@
     }
 
     .inbox-total {
-      padding: 4px;
-      display: table;
-      @apply whitespace-normal text-center text-white w-8 h-8 bg-primary-main rounded-full ml-xs ;
-    }
-  }
-
-  .links-wrapper {
-    @apply pl-md py-sm text-text-btn;
-    .link {
-      padding: 0 !important;
-      padding-bottom: 4px !important;
-      svg {
-        @apply ml-sm;
-      }
+      @apply text-center text-white;
+      background-color: #000;
+      border-radius: 12px;
+      margin-left: 5px;
+      padding-left: 3px;
+      padding-right: 3px;
     }
   }
 }
@@ -154,7 +141,7 @@
       }
 
       .text {
-        @apply pl-md text-heading-m-dt font-bold;
+        @apply pl-md font-bold;
       }
     }
 
@@ -166,26 +153,6 @@
       .link {
         @apply p-sm text-primary-main;
       }
-    }
-  }
-
-  .inboxLinks {
-    margin: 0 !important;
-    padding: 0 !important;
-    .header {
-      border: none;
-      @apply justify-start;
-      .logo {
-        @apply bg-white;
-        svg {
-          path {
-            fill: #f47738;
-          }
-        }
-      }
-    }
-    .body {
-      margin-left: 0;
     }
   }
 
@@ -226,62 +193,9 @@
         }
 
         .complaint-input-container {
-          /* display: inline-block !important; */
-          display: grid;
-          grid-template-columns: 33.33% 33.33% 33.33%;
-
-          &.for-pt {
-            &.for-search {
-              grid-template-columns: 25% 25% 25% 25%;
-
-              .input-fields:nth-child(3n) {
-                @apply mr-md !important;
-              }
-
-              .input-fields:nth-child(4n) {
-                margin-right: 0 !important;
-              }
-
-              .search-submit-wrapper {
-                grid-column: 4/5;
-                /* margin-top: 56px;*/
-                max-width: unset;
-                margin-left: unset;
-              }
-            }
-          }
-
-          .search-submit-wrapper {
-            grid-column: 3/4;
-            margin-left: 50%;
-            max-width: 50%;
-            grid-column: 3/4;
-            @apply flex flex-col justify-center text-center;
-
-            .submit-bar-search {
-              margin-top: unset;
-              width: 100%;
-              margin-bottom: 20px;
-              margin-left: unset;
-              max-width: 100%;
-              width: 100%;
-            }
-          }
-
-          .input-fields {
-            /*width: calc(50% - 16px);*/
-
-            @apply inline-block mr-md !important;
-
-            .inbox-search-form-error {
-              padding-top: 0;
-              margin-top: 0;
-              @apply absolute;
-            }
-          }
-
-          .input-fields:nth-child(3n) {
-            margin-right: 0 !important;
+          display: flex !important;
+          * {
+            @apply flex-1;
           }
 
           .complaint-input {
@@ -302,27 +216,13 @@
             @apply ml-sm;
           }
         }
-
-        .search-action-wrapper {
-          width: 33%;
-          margin-top: 28px;
-          @apply inline-block align-middle text-center;
-          button {
-            margin: 0;
-            width: 100%;
-            max-width: 300px !important;
-          }
-        }
-      }
-
-      .search-complaint-container-for-search {
       }
     }
   }
 }
 
 .cell-text {
-  color: #505a5f;
+  color: #505A5F;
 }
 
 .sla-cell-error {
@@ -344,12 +244,6 @@
   color: "#505A5F";
 }
 
-.search-error-label {
+.search-error-label{
   @apply font-bold text-legend text-error mb-sm !important;
-}
-
-.inbox-action-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
 }

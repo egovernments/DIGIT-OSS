@@ -10,23 +10,21 @@ export const configPTApproverApplication = ({
   selectFile,
   uploadedFile,
   setUploadedFile,
-  assigneeLabel,
-  businessService,
 }) => {
   return {
     label: {
-      heading: `WF_${action?.action}_APPLICATION`,
-      submit: `WF_${businessService}_${action?.action}`,
+      heading: `ES_PT_ACTION_TITLE_${action}`,
+      submit: `ES_PT_COMMON_${action}`,
       cancel: "ES_PT_COMMON_CANCEL",
     },
     form: [
       {
         body: [
           {
-            label: action.isTerminateState ? null : t(assigneeLabel || `WF_ROLE_${action.assigneeRoles?.[0]}`),
-            // isMandatory: !action.isTerminateState,
+            label: t("ES_PT_FIELD_INSPECTORS"),
+            isMandatory: true,
             type: "dropdown",
-            populators: action.isTerminateState ? null : (
+            populators: (
               <Dropdown
                 option={approvers}
                 autoComplete="off"
@@ -45,15 +43,14 @@ export const configPTApproverApplication = ({
             },
           },
           {
-            label: `${t("ES_PT_ATTACH_FILE")}${action.docUploadRequired ? " *" : ""}`,
+            label: t("ES_PT_UPLOAD_FILE"),
             populators: (
               <UploadFile
+                // accept=".jpg"
                 onUpload={selectFile}
                 onDelete={() => {
                   setUploadedFile(null);
                 }}
-                showHint={true}
-                hintText={t("PT_ATTACH_RESTRICTIONS_SIZE")}
                 message={uploadedFile ? `1 ${t(`ES_PT_ACTION_FILEUPLOADED`)}` : t(`ES_PT_ACTION_NO_FILEUPLOADED`)}
               />
             ),

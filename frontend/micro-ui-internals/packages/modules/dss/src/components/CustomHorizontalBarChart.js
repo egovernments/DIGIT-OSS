@@ -1,36 +1,28 @@
-import React, { useContext, useMemo, Fragment } from "react";
+import React, { useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { startOfMonth, endOfMonth, getTime } from "date-fns";
 import { Loader, ResponseComposer } from "@egovernments/digit-ui-react-components";
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis, Text } from "recharts";
+import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import FilterContext from "./FilterContext";
-import { useHistory } from "react-router-dom";
 
-const barColors = ["#048BD0", "#FBC02D", "#8E29BF"];
+const barColors = ["#61A0FF", "#ECC478", "#ECC478"];
 
-const CustomHorizontalBarChart = ({
-  data,
-  xAxisType = "category",
-  yAxisType = "number",
-  xDataKey = "name",
-  yDataKey = "",
-  xAxisLabel = "",
-  yAxisLabel = "",
-  layout = "horizontal",
-  title,
-  showDrillDown = false,
-}) => {
+const CustomHorizontalBarChart = ({ data }) => {
   const { id } = data;
   const { t } = useTranslation();
-  const history = useHistory();
   const { value } = useContext(FilterContext);
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const requestDate = {
+    startDate: value?.range?.startDate.getTime(),
+    endDate: value?.range?.endDate.getTime(),
+    interval: "month",
+    title: "",
+  };
   const { isLoading, data: response } = Digit.Hooks.dss.useGetChart({
     key: id,
     type: "metric",
     tenantId,
-    requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
-    filters: value?.filters,
+    requestDate,
   });
 
   const constructChartData = (data) => {
@@ -50,78 +42,36 @@ const CustomHorizontalBarChart = ({
     });
   };
 
-  const goToDrillDownCharts = () => {
-    history.push(`/digit-ui/employee/dss/drilldown?chart=${response?.responseData?.drillDownChartId}&ulb=${value?.filters?.tenantId}&title=${title}`);
-  };
-
-  const tooltipFormatter = (value, name) => {
-    if (id === "fsmMonthlyWasteCal") {
-      return [`${Math.round((value + Number.EPSILON) * 100) / 100} ${t("DSS_KL")}`, name];
-    }
-    return [Math.round((value + Number.EPSILON) * 100) / 100, name];
-  };
-
   const chartData = useMemo(() => constructChartData(response?.responseData?.data), [response]);
 
-  const renderLegend = (value) => <span style={{ fontSize: "14px", color: "#505A5F" }}>{value}</span>;
-
-  const tickFormatter = (value) => {
-    if (typeof value === "string") {
-      return value.replace("-", ", ");
-    }
-    return value;
-  };
+  const renderLegend = (value) => <span>{value}</span>;
 
   if (isLoading) {
     return <Loader />;
   }
 
-  // if (chartData?.length === 0) {
-  //   return null;
-  // }
-
   const bars = response?.responseData?.data?.map((bar) => bar?.headerName);
 
   return (
-    <Fragment>
-      <ResponsiveContainer width="99%" height={300}>
-        {chartData?.length === 0 ? (
-          <div className="no-data">
-            <p>{t("DSS_NO_DATA")}</p>
-          </div>
-        ) : (
-          <BarChart width="100%" height="100%" layout={layout} data={chartData} barGap={14} barSize={15}>
-            <CartesianGrid />
-            <YAxis
-              dataKey={yDataKey}
-              type={yAxisType}
-              tick={{ fontSize: "14px", fill: "#505A5F" }}
-              label={{
-                value: yAxisLabel,
-                angle: -90,
-                position: "insideLeft",
-                dy: 50,
-                fontSize: "14px",
-                fill: "#505A5F",
-              }}
-              unit={id === "fsmCapacityUtilization" ? "%" : ""}
-              // tick={{ fontSize: "14px", fill: "#505A5F" }}
-            />
-            <XAxis dataKey={xDataKey} type={xAxisType} tick={{ fontSize: "14px", fill: "#505A5F" }} tickFormatter={tickFormatter} />
-            {bars?.map((bar, id) => (
-              <Bar key={id} dataKey={bar} fill={barColors[id]} stackId={id > 1 ? 1 : id} />
-            ))}
-            <Legend formatter={renderLegend} iconType="circle" />
-            <Tooltip cursor={false} formatter={tooltipFormatter} />
-          </BarChart>
-        )}
-      </ResponsiveContainer>
-      {showDrillDown && (
-        <p className="showMore" onClick={goToDrillDownCharts}>
-          {t("DSS_SHOW_MORE")}
-        </p>
-      )}
-    </Fragment>
+    <ResponsiveContainer width="99%" height={300}>
+      <BarChart
+        width="100%"
+        height="100%"
+        // layout="vertical"
+        data={chartData}
+        barGap={14}
+        barSize={15}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <YAxis />
+        <XAxis dataKey="name" type="category" />
+        {bars.map((bar, id) => (
+          <Bar key={id} dataKey={bar} fill={barColors[id]} />
+        ))}
+        <Legend formatter={renderLegend} />
+        {/* <Tooltip /> */}
+      </BarChart>
+    </ResponsiveContainer>
   );
 };
 

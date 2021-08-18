@@ -31,9 +31,9 @@ const MenuItem = ({ item }) => {
   return <Item />;
 };
 
-const NavBar = ({ open, profileItem, menuItems, onClose, Footer }) => {
+const NavBar = ({ open, profileItem, menuItems, onClose }) => {
   const node = useRef();
-  Digit.Hooks.useClickOutside(node, open ? onClose : null, open);
+  Digit.Hooks.useClickOutside(node, open ? onClose : null);
 
   return (
     <React.Fragment>
@@ -80,7 +80,6 @@ const NavBar = ({ open, profileItem, menuItems, onClose, Footer }) => {
               </div>
             ))}
           </div>
-          <div className="side-bar-footer">{Footer}</div>
         </div>
       </div>
     </React.Fragment>
