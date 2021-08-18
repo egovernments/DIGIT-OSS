@@ -3,23 +3,26 @@ import React, { useEffect, useState, useMemo } from "react";
 import { render } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
+import Timeline from "../components/Timeline";
 
 const ScrutinyDetails = ({ onSelect, userType, formData,config }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const [subOccupancy, setsubOccupancy] = useState([]);
+  const [subOccupancyObject, setsubOccupancyObject] = useState(formData?.subOccupancy || {});
   const [subOccupancyOption, setsubOccupancyOption] = useState([]);
   const [floorData, setfloorData] = useState([]);
   let scrutinyNumber=`DCR82021WY7QW`;
   let tenantId="pb.amritsar";
-  const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId,{edcrNumber:"DCR82021WY7QW"}, {
+  const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId,formData?.data?.scrutinyNumber, {
     enabled: true
   })
   console.log(data,"data from api");
 
-  useEffect(() => {
-      let floors = [];
-    data?.planDetail?.blocks?.[0].building.floors.map((ob) => {
+
+  function getFloorData(block){
+    let floors = [];
+    block?.building?.floors.map((ob) => {
         floors.push({
             Floor:t(`BPA_FLOOR_NAME_${ob.number}`),
             Level:ob.number,
@@ -30,8 +33,8 @@ const ScrutinyDetails = ({ onSelect, userType, formData,config }) => {
             key:t(`BPA_FLOOR_NAME_${ob.number}`),
         });
     });
-    setfloorData(floors);
-  },[data])
+    return floors;
+  }
 
   function getsuboptions(){
     let suboccoption = [];
@@ -77,24 +80,30 @@ const tableHeader = [
         id:"CarpetArea",
     }
 ]
-const selectOccupancy = (e, data) => {
-  const index = subOccupancy.filter((ele) => ele.code == data.code);
+const selectOccupancy = (e, data,num) => {
+  let blocks = subOccupancyObject;
+  const index = subOccupancyObject[`Block_${num}`]?subOccupancyObject[`Block_${num}`].filter((ele) => ele.code == data.code):[];
+  let subOccupancy1=subOccupancyObject[`Block_${num}`]?subOccupancyObject[`Block_${num}`]:[];
     let res = null;
     if (index.length) {
-      subOccupancy.splice(subOccupancy.indexOf(index[0]), 1);
-      res = [...subOccupancy];
+      subOccupancy1.splice(subOccupancy1.indexOf(index[0]), 1);
+      res = [...subOccupancy1];
     } else {
-      res = [{ ...data }, ...subOccupancy];
+      res = [{ ...data }, ...subOccupancy1];
     }
+    blocks[`Block_${num}`]=res;
     setsubOccupancy(res);
+    setsubOccupancyObject(blocks);
 };
 
-const onRemove = (index, key) => {
-    let afterRemove = subOccupancy.filter((value, i) => {
+const onRemove = (index, key,num) => {
+    let afterRemove = subOccupancyObject[`Block_${num}`].filter((value, i) => {
       return i !== index;
     });
    setsubOccupancy(afterRemove);
-
+   let temp = subOccupancyObject;
+   temp[`Block_${num}`]=afterRemove;
+   setsubOccupancyObject(temp);
   };
 
 
@@ -122,17 +131,21 @@ const onRemove = (index, key) => {
 const onSkip = () => {
 }
 const goNext = () => {
-    onSelect(config.key,{subOccupancy});
+  onSelect(config.key,subOccupancyObject);
 }
 
-const clearall = () => {
+const clearall = (num) => {
     let res = [];
+    let temp = subOccupancyObject;
+    temp[`Block_${num}`]=res;
     setsubOccupancy(res);
+    setsubOccupancyObject(temp);
 }
 
 
   return (
     <React.Fragment>
+    <Timeline />
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={false}>
       <CardSubHeader>{t("BPA_EDCR_DETAILS")}</CardSubHeader>
       <StatusTable  style={{border:"none"}}>
@@ -154,24 +167,30 @@ const clearall = () => {
       <Row label="BPA_APPLICATION_HIGH_FROM_GROUND" text={data?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight}></Row>
       </StatusTable>
       <CardSubHeader>{t("BPA_OCC_SUBOCC_HEADER")}</CardSubHeader>
+      {data?.planDetail?.blocks.map((block,index)=>(
+      <div key={index}>
+      <CardSubHeader>{t("Block")} {index+1}</CardSubHeader>
       <CardSectionHeader className="card-label-smaller">{t("BPA_SUB_OCCUPANCY_LABEL")}</CardSectionHeader>
       <MultiSelectDropdown
+              BlockNumber={block.number}
               className="form-field"
               isMandatory={true}
               defaultUnit="Selected"
-              selected={subOccupancy}
+              selected={subOccupancyObject[`Block_${block.number}`]}
+              //selected={subOccupancy}
               options={getsuboptions()}
               onSelect={selectOccupancy}
+              isOBPSMultiple={true}
               optionsKey="name"
               t={t}
             />
         <div className="tag-container">
-               {subOccupancy.length > 0 &&
-                subOccupancy.map((value, index) => (
-                  <RemoveableTag key={index} text={`${t(value["name"])}`} onClick={() => onRemove(index,value)} />
+               {subOccupancyObject[`Block_${block.number}`] && subOccupancyObject[`Block_${block.number}`].length > 0 &&
+                subOccupancyObject[`Block_${block.number}`].map((value, index) => (
+                  <RemoveableTag key={index} text={`${t(value["name"])}`} onClick={() => onRemove(index,value,block.number)} />
                 ))}
         </div>
-        {subOccupancy && <LinkButton label={"Clear All"} onClick={clearall}/>}
+        {subOccupancyObject[`Block_${block.number}`] && <LinkButton label={"Clear All"} onClick={() => clearall(block.number)}/>}
       <div style={{overflow:"scroll"}}>
       <Table
         className="customTable"
@@ -184,7 +203,7 @@ const clearall = () => {
         initSortId="S N "
         //onSearch={onSearch}
         //data={[{Floor:"ground floor",Level:1,Occupancy:"self",BuildupArea:440,FloorArea:400,CarpetArea:380,key:"ground floor"},{Floor:"first floor",Level:1,Occupancy:"self",BuildupArea:450,FloorArea:410,CarpetArea:390,key:"first floor"},{Floor:"second floor",Level:1,Occupancy:"self",BuildupArea:400,FloorArea:350,CarpetArea:300,key:"second floor"}]}
-        data={floorData}
+        data={getFloorData(block)}
         columns={tableColumns}
         getCellProps={(cellInfo) => {
           return {
@@ -192,7 +211,9 @@ const clearall = () => {
           };
         }}
       />
+      <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       </div>
+      </div>))}
       <CardSubHeader>{t("BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL")}</CardSubHeader>
       <StatusTable  style={{border:"none"}}>
       <Row label="BPA_APPLICATION_DEMOLITION_AREA_LABEL" text={data?.planDetail?.planInformation?.demolitionArea}></Row>

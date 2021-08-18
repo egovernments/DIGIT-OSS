@@ -25,7 +25,7 @@ export const newConfig = [
         component: "ScrutinyDetails",
         nextStep: "location",
         hideInEmployee: true,
-        key: "scrutinDetails",
+        key: "subOccupancy",
         texts: {
           headerCaption: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
           header: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
