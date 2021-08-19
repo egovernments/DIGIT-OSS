@@ -67,7 +67,7 @@ public class EmployeeRepository {
 			employees = jdbcTemplate.query(finalQuery, preparedStmtList.toArray(),rowMapper);
 		}catch(Exception e) {
 			log.error("Exception while making the db call: ",e);
-			log.error("query; "+query);
+			log.error("query; "+ finalQuery);
 		}
 		return employees;
 	}
@@ -122,7 +122,7 @@ public class EmployeeRepository {
 			response=jdbcTemplate.query(finalQuery, preparedStmtList.toArray(),countRowMapper);
 		}catch(Exception e) {
 			log.error("Exception while making the db call: ",e);
-			log.error("query; "+query);
+			log.error("query; "+ finalQuery);
 		}
 		return response;
 	}
