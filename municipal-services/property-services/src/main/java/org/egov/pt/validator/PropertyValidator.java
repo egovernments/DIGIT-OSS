@@ -156,31 +156,39 @@ public class PropertyValidator {
         if(request.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
             validateAssessees(request,propertyFromSearch, errorMap);
 
-		if (configs.getIsWorkflowEnabled() && request.getProperty().getWorkflow() == null)
-			throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for update process");
-
+        Boolean isstateUpdatable =  false;
+        
 		// third variable is needed only for mutation
 		List<String> fieldsUpdated = diffService.getUpdatedFields(property, propertyFromSearch, "");
 		
-		
-		Boolean isstateUpdatable =  false;
-		/*
-		 *  update and mutation open state are same currently
-		 *  
-		 *  creation reason will change for begining of a workflow 
-		 */
-		if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
-				&& propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
-			fieldsUpdated.remove("creationReason");
-			isstateUpdatable = true;
+		if (configs.getIsWorkflowEnabled()) {
+
+			if (request.getProperty().getWorkflow() == null)
+				throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for update process");
+			
+			/*
+			 * update and mutation open state are same currently - Creation reason will change for begining of a workflow
+			 */
+			if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
+					&& propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
+				fieldsUpdated.remove("creationReason");
+				isstateUpdatable = true;
+
+			} else {
+
+				State currentState = workflowService.getCurrentState(request.getRequestInfo(), property.getTenantId(),
+						property.getAcknowldgementNumber());
+				BusinessService businessService = workflowService.getBusinessService(property.getTenantId(),
+						property.getWorkflow().getBusinessService(), request.getRequestInfo());
+				isstateUpdatable = workflowService.isStateUpdatable(currentState.getState(), businessService);
+			}
 
 		} else {
-
-			State currentState = workflowService.getCurrentState(request.getRequestInfo(), property.getTenantId(),
-					property.getAcknowldgementNumber());
-			BusinessService businessService = workflowService.getBusinessService(property.getTenantId(),
-					property.getWorkflow().getBusinessService(), request.getRequestInfo());
-			isstateUpdatable = workflowService.isStateUpdatable(currentState.getState(), businessService);
+			/*
+			 * Creation reason will always change if worklfow is disabled
+			 */
+			isstateUpdatable = true;
+			fieldsUpdated.remove("creationReason");
 		}
 
 		// third variable is needed only for mutation
@@ -198,9 +206,6 @@ public class PropertyValidator {
          */
 		List<String> searchOwnerUuids = propertyFromSearch.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toList());
 		List<String> uuidsNotFound = new ArrayList<>();
-//
-//		if(!property.getWorkflow().getBusinessService().equalsIgnoreCase(configs.getUpdatePTWfName()))
-//			errorMap.put("EG_PT_UPDATE_PROPERTY_WF_ERROR", "Invalid Workflow name for update, please provide the proper workflow information");
 
 		if (!CollectionUtils.isEmpty(uuidsNotFound))
 			errorMap.put("EG_PT_UPDATE_OWNER_UUID_ERROR", "Invalid owners found in request : " + uuidsNotFound);
@@ -297,9 +302,6 @@ public class PropertyValidator {
     private void validateFields(PropertyRequest request, Map<String, String> errorMap) {
 
     	Property property = request.getProperty();
-    	
-//    	if(configs.getIsWorkflowEnabled() && null == property.getWorkflow())
-//    		errorMap.put("EG_PR_WF_NOT_NULL", "Wokflow is enabled for create please provide the necessary info in workflow field in property");
    	
 		if (property.getAddress().getGeoLocation() == null)
 			property.getAddress().setGeoLocation(new GeoLocation());
@@ -666,21 +668,24 @@ public class PropertyValidator {
 				throw new CustomException("EG_PT_MUTATION_UNPAID_ERROR", "Property has to be completely paid for before initiating the mutation process");
 		}
 		
-		if (configs.getIsMutationWorkflowEnabled() && request.getProperty().getWorkflow() == null)
-			throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for mutation process");
-		
 		List<String> fieldsUpdated = diffService.getUpdatedFields(property, propertyFromSearch, PTConstants.MUTATION_PROCESS_CONSTANT);
-		// only editable field in mutation other than owners, additinal details.
+		// only editable field in mutation other than owners, additional details.
 		fieldsUpdated.remove("ownershipCategory");
 		
-		if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
-				&& propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
+		if (configs.getIsMutationWorkflowEnabled()) {
+			if (request.getProperty().getWorkflow() == null)
+				throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for mutation process");
+
+			if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
+					&& propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
+				fieldsUpdated.remove("creationReason");
+			}
+		}else {
+			/*
+			 * if workflow is diabled then creationreason will change for every request
+			 */
 			fieldsUpdated.remove("creationReason");
 		}
-		
-//		Boolean isstateUpdatable = workflowService
-//				.getCurrentState(request.getRequestInfo(), property.getTenantId(), property.getAcknowldgementNumber())
-//				.getIsStateUpdatable();
 
 		if (!CollectionUtils.isEmpty(fieldsUpdated))
 			throw new CustomException("EG_PT_MUTATION_ERROR",
