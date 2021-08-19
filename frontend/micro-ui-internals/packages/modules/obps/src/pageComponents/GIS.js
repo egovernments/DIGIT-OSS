@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { LocationSearchCard, LinkButton, Card } from "@egovernments/digit-ui-react-components";
 
-const GIS = ({ t, config, onSelect, formData = {},handleRemove,selectPincode }) => {
+const GIS = ({ t, config, onSelect, formData = {},handleRemove,onSave }) => {
   const [pincode, setPincode] = useState(formData?.address?.pincode || "");
   const [geoLocation, setGeoLocation] = useState(formData?.address?.geoLocation || {});
   const tenants = Digit.Hooks.tl.useTenants();
@@ -52,7 +52,8 @@ const GIS = ({ t, config, onSelect, formData = {},handleRemove,selectPincode }) 
       t={t}
       position={geoLocation}
       //onSave={() => onSelect("address", { geoLocation, pincode })}
-      onSave={() => selectPincode(pincode)}
+      //onSave={() => selectPincode(pincode)}
+      onSave={() => onSave(geoLocation,pincode)}
       onChange={(code, location) => onChange(code, location)}
       disabled={pincode === ""}
       forcedError={t(pincodeServicability)}

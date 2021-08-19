@@ -124,6 +124,36 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         console.log("Error Loged", error);
     }, [error]);
 
+    function getusageCategoryAPI(arr){
+        let usageCat = ""
+        arr.map((ob,i) => {
+            usageCat = usageCat + (i !==0?",":"") + ob.code;
+        });
+        return usageCat;
+    }
+
+    function getUnitsForAPI(ob){
+        let units=[];
+        let result = Object.entries(ob);
+        result.map((unit,index)=>{
+            units.push({
+                blockIndex:index,
+                floorNo:unit[0].split("_")[1],
+                unitType:"Block",
+                usageCategory:getusageCategoryAPI(unit[1]),
+            });
+        })
+        return units;
+    }
+
+    function getBlockIds(arr){
+        let blockId = {};
+        arr.map((ob,ind)=>{
+            blockId[`Block_${ob.floorNo}`]=ob.id;
+        });
+        return blockId;
+    }
+
     const goNext = () => {
         setError(null);
         if (ismultiple == true && fields.length == 1) {
@@ -147,7 +177,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     })
                 });
                 let payload = {};
-                payload.edcrNumber = formData?.scrutinyNumber?.edcrNumber;
+                payload.edcrNumber = formData?.edcrNumber?.edcrNumber ? formData?.edcrNumber?.edcrNumber :formData?.data?.scrutinyNumber?.edcrNumber;
                 payload.riskType = formData?.data?.riskType;
                 payload.applicationType = formData?.data?.applicationType;
                 payload.serviceType = formData?.data?.serviceType;
@@ -161,7 +191,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 // Additonal details
                 payload.additionalDetails = {};
                 if (formData?.data?.holdingNumber) payload.additionalDetails.holdingNo = formData?.data?.holdingNumber;
-                if (formData?.data?.registrationDetails) payload.additionalDetails.registrationDetails = formData?.data?.payload.additionalDetails.registrationDetails;
+                if (formData?.data?.registrationDetails) payload.additionalDetails.registrationDetails = formData?.data?.registrationDetails;
 
                 //For LandInfo
                 payload.landInfo = {};
@@ -172,13 +202,14 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 if (formData?.address?.pincode) payload.landInfo.address.pincode = formData?.address?.pincode;
                 if (formData?.address?.Landmark) payload.landInfo.address.landmark = formData?.address?.Landmark;
                 if (formData?.address?.street) payload.landInfo.address.street = formData?.address?.street;
+                if (formData?.address?.geoLocation) payload.landInfo.address.geoLocation = formData?.address?.geoLocation;
 
                 payload.landInfo.owners = conversionOwners;
                 payload.landInfo.ownershipCategory = ownershipCategory.code;
                 payload.landInfo.tenantId = "pb.amritsar";
 
                 //for units
-                payload.landInfo.unit = [];
+                payload.landInfo.unit = getUnitsForAPI(formData?.subOccupancy);
 
                 // create BPA call
                 Digit.OBPSService.create({ BPA: payload }, tenantId)
@@ -187,12 +218,14 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                             result?.BPA?.[0]?.landInfo?.owners?.forEach(owner => {
                                 owner.gender = { code: owner.gender, active: true, i18nKey: `COMMON_GENDER_${owner.gender}` }
                             });
-                            result.BPA[0].landInfo.owners = { ...owner, owners: dummyData?.landInfo?.owners, ownershipCategory: ownershipCategory };
-                            result.BPA[0].landInfo.address = dummyData?.landInfo?.address;
-                            result.BPA[0].landInfo.address.city = formData.address.city;
-                            result.BPA[0].landInfo.address.locality = formData.address.locality;
+                            result.BPA[0].owners = { ...owner, owners: result?.BPA?.[0]?.landInfo?.owners, ownershipCategory: ownershipCategory };
+                            result.BPA[0].address = result?.BPA?.[0]?.landInfo?.address;
+                            result.BPA[0].address.city = formData.address.city;
+                            result.BPA[0].address.locality = formData.address.locality;
                             result.BPA[0].data = formData.data;
-
+                            result.BPA[0].BlockIds = getBlockIds(result.BPA[0].landInfo.unit);
+                            result.BPA[0].subOccupancy= formData?.subOccupancy;
+                            
                             //1, units
                             onSelect("", result.BPA[0], "", true);
                         }

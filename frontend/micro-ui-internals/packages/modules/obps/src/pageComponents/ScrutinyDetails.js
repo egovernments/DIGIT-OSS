@@ -9,7 +9,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData,config }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const [subOccupancy, setsubOccupancy] = useState([]);
-  const [subOccupancyObject, setsubOccupancyObject] = useState(formData?.subOccupancy || {});
+  const [subOccupancyObject, setsubOccupancyObject] = useState(formData?.subOccupancy || formData?.landInfo?.unit || {});
   const [subOccupancyOption, setsubOccupancyOption] = useState([]);
   const [floorData, setfloorData] = useState([]);
   let scrutinyNumber=`DCR82021WY7QW`;

@@ -12,7 +12,7 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
 
   const goNext = () => {
     if(history?.location?.state?.edcrNumber) {
-      onSelect("edcrNumber", history?.location?.state?.edcrNumber);
+      onSelect("edcrNumber", {edcrNumber: history?.location?.state?.edcrNumber});
     } else {
       onSelect();
     } 

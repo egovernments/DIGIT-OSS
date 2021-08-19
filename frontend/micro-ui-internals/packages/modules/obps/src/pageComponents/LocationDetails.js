@@ -14,6 +14,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
     const stateId = tenantId.split(".")[0];
     const [isOpen, setIsOpen] = useState(false);
     const [pincode, setPincode] = useState(currPincode || formData?.address?.pincode || "");
+    const [geoLocation, setgeoLocation] = useState(formData?.address?.geolocation || "")
     const [tenantIdData, setTenantIdData] = useState(formData?.Scrutiny?.[0]?.tenantIdData);
     const [selectedCity, setSelectedCity] = useState(() => currCity || formData?.address?.city || null);
     const [street, setStreet] = useState(formData?.address?.street || "");
@@ -102,10 +103,15 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
         address.locality= selectedLocality;
         address.street = street;
         address.landmark = landmark;
+        address.geoLocation = geoLocation;
         onSelect(config.key,address);
     };
 
 
+    function onSave(geoLocation,pincode){
+      selectPincode(pincode);
+      setgeoLocation(geoLocation);
+    }
     function selectPincode(e) {
         formData.address["pincode"] = (typeof e=== 'object' && e !==null)?e.target.value:e;
         setPincode((typeof e=== 'object' && e !==null)?e.target.value:e);
@@ -157,6 +163,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
                 optionKey="i18nKey"
                 t={t}
                 name="gis"
+                value={geoLocation}
             />
             <LinkButton
             label={
@@ -172,7 +179,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
               onClick={(e) => handleGIS()}
            />
             </div>
-           {isOpen && <GIS t={t} onSelect={onSelect} formData={formData} handleRemove={handleRemove} selectPincode={selectPincode}/>}
+           {isOpen && <GIS t={t} onSelect={onSelect} formData={formData} handleRemove={handleRemove} onSave={onSave}/>}
            <CardLabel>{`${t("BPA_DETAILS_PIN_LABEL")}`}</CardLabel>
            {!isOpen && <TextInput
                 isMandatory={false}
