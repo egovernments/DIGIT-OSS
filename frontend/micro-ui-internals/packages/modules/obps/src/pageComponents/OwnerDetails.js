@@ -130,11 +130,80 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
             setError("TL_ERROR_MULTIPLE_OWNER");
         }
         else {
-            debugger;
             let owner = formData.owners;
             let ownerStep;
             ownerStep = { ...owner, owners: fields, ownershipCategory: ownershipCategory };
-            onSelect(config.key, ownerStep);
+
+            if (!formData?.id) {
+                //for owners conversion
+                let conversionOwners = [];
+                ownerStep?.owners?.map(owner => {
+                    conversionOwners.push({
+                        name: owner.name,
+                        mobileNumber: owner.mobileNumber,
+                        isPrimaryOwner: owner.isPrimaryOwner,
+                        gender: owner.gender.code,
+                        fatherOrHusbandName: "NAME"
+                    })
+                });
+                let payload = {};
+                payload.edcrNumber = formData?.scrutinyNumber?.edcrNumber;
+                payload.riskType = formData?.data?.riskType;
+                payload.applicationType = formData?.data?.applicationType;
+                payload.serviceType = formData?.data?.serviceType;
+
+                //todo, will change in future
+                payload.tenantId = "pb.amritsar";
+                payload.workflow = { action: "INITIATE" };
+                payload.accountId = "ac368477-4067-44d2-915a-e2e044941afc";
+                payload.documents = null;
+
+                // Additonal details
+                payload.additionalDetails = {};
+                if (formData?.data?.holdingNumber) payload.additionalDetails.holdingNo = formData?.data?.holdingNumber;
+                if (formData?.data?.registrationDetails) payload.additionalDetails.registrationDetails = formData?.data?.payload.additionalDetails.registrationDetails;
+
+                //For LandInfo
+                payload.landInfo = {};
+                //For Address
+                payload.landInfo.address = {};
+                if (formData?.address?.city?.code) payload.landInfo.address.city = formData?.address?.city?.code;
+                if (formData?.address?.locality?.code) payload.landInfo.address.locality = { code: formData?.address?.locality?.code };
+                if (formData?.address?.pincode) payload.landInfo.address.pincode = formData?.address?.pincode;
+                if (formData?.address?.Landmark) payload.landInfo.address.landmark = formData?.address?.Landmark;
+                if (formData?.address?.street) payload.landInfo.address.street = formData?.address?.street;
+
+                payload.landInfo.owners = conversionOwners;
+                payload.landInfo.ownershipCategory = ownershipCategory.code;
+                payload.landInfo.tenantId = "pb.amritsar";
+
+                //for units
+                payload.landInfo.unit = [];
+
+                // create BPA call
+                Digit.OBPSService.create({ BPA: payload }, tenantId)
+                    .then((result, err) => {
+                        if (result?.BPA?.length > 0) {
+                            result?.BPA?.[0]?.landInfo?.owners?.forEach(owner => {
+                                owner.gender = { code: owner.gender, active: true, i18nKey: `COMMON_GENDER_${owner.gender}` }
+                            });
+                            result.BPA[0].landInfo.owners = { ...owner, owners: dummyData?.landInfo?.owners, ownershipCategory: ownershipCategory };
+                            result.BPA[0].landInfo.address = dummyData?.landInfo?.address;
+                            result.BPA[0].landInfo.address.city = formData.address.city;
+                            result.BPA[0].landInfo.address.locality = formData.address.locality;
+                            result.BPA[0].data = formData.data;
+
+                            //1, units
+                            onSelect("", result.BPA[0], "", true);
+                        }
+                    })
+                    .catch((e) => {
+                        // setShowToast({ key: "error" });
+                        // setError(e?.response?.data?.Errors[0]?.message || null);
+                    });
+            } else {
+                onSelect(config.key, ownerStep);
+            }
         }
     };
 

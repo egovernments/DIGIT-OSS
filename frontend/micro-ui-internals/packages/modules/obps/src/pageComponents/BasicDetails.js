@@ -11,7 +11,8 @@ const BasicDetails = ({ formData, onSelect, config }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = tenantId.split(".")[0];
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(state, "BPA", ["RiskTypeComputation"]);
-  const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId, scrutinyNumber, {
+  //TODO will change this is future
+  const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails("pb.amritsar", scrutinyNumber, {
     enabled: formData?.data?.scrutinyNumber ? true : false
   })
 
@@ -22,7 +23,7 @@ const BasicDetails = ({ formData, onSelect, config }) => {
   }
 
   const handleSubmit = (event) => {
-    onSelect(config?.key, { scrutinyNumber, applicantName: data?.planDetail?.planInformation?.applicantName, appliicantType: data?.appliactionType, serviceType: data?.applicationSubType, applicationDate: data?.applicationDate, riskType: Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, data?.planDetail?.plot?.area, data?.planDetail?.blocks)  })
+    onSelect(config?.key, { scrutinyNumber, applicantName: data?.planDetail?.planInformation?.applicantName, applicationType: data?.appliactionType, serviceType: data?.applicationSubType, applicationDate: data?.applicationDate, riskType: Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, data?.planDetail?.plot?.area, data?.planDetail?.blocks)  })
   }
 
   if (isMdmsLoading) {

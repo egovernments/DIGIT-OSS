@@ -17,7 +17,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
     const [tenantIdData, setTenantIdData] = useState(formData?.Scrutiny?.[0]?.tenantIdData);
     const [selectedCity, setSelectedCity] = useState(() => currCity || formData?.address?.city || null);
     const [street, setStreet] = useState(formData?.address?.street || "");
-    const [Landmark, setLandmark] = useState(formData?.address?.Landmark || "");
+    const [landmark, setLandmark] = useState(formData?.address?.landmark || "");
     //const { isLoading, data: citymodules } = Digit.Hooks.obps.useMDMS(stateId, "tenant", ["citymodule"]);
     let [cities, setcitiesopetions] = useState(allCities);
     let validation = {};
@@ -101,7 +101,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
         address.city = selectedCity;
         address.locality= selectedLocality;
         address.street = street;
-        address.Landmark = Landmark;
+        address.landmark = landmark;
         onSelect(config.key,address);
     };
 
@@ -227,9 +227,9 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
                 isMandatory={false}
                 optionKey="i18nKey"
                 t={t}
-                name="Landmark"
+                name="landmark"
                 onChange={selectLandmark}
-                value={Landmark}
+                value={landmark}
                 // {...(validation = {
                 //     isRequired: true,
                 //     pattern: getPattern("Name"),

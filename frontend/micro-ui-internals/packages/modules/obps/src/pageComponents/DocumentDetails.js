@@ -44,7 +44,12 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
 
     }, [!bpaDocsLoading, !commonDocsLoading]);
 
-    const handleSubmit = () => { };
+    const handleSubmit = () => {
+        let document = formData.documents;
+        let documentStep;
+        documentStep = { ...document, documents: documents };
+        onSelect(config.key, documentStep);
+     };
     const onSkip = () => onSelect();
     function onAdd() { }
 
@@ -115,7 +120,7 @@ function SelectDocument({
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const [selectedDocument, setSelectedDocument] = useState(
         filteredDocument
-            ? { ...filteredDocument, active: filteredDocument?.status === "ACTIVE", code: filteredDocument?.documentType }
+            ? { ...filteredDocument, active: true, code: filteredDocument?.documentType, i18nKey: filteredDocument?.documentType }
             : doc?.dropdownData?.length === 1
                 ? doc?.dropdownData[0]
                 : {}

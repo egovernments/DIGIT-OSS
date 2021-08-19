@@ -23,8 +23,9 @@ const NewBuildingPermit = () => {
 
   }
 
-  const handleSelect = (key, data, skipStep) => {
-    setParams({ ...params, ...{ [key]: { ...params[key], ...data }}});
+  const handleSelect = (key, data, skipStep, isFromCreateApi) => {
+    if (isFromCreateApi) setParams(data);
+    else setParams({ ...params, ...{ [key]: { ...params[key], ...data }}});
     goNext(skipStep);
   };
   const handleSkip = () => {};
