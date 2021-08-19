@@ -6,6 +6,7 @@ import Login from "../pages/citizen/Login";
 import EmployeeLogin from "../pages/employee/Login/index";
 import ChangePassword from "../pages/employee/ChangePassword/index";
 import ForgotPassword from "../pages/employee/ForgotPassword/index";
+import LanguageSelection from "../pages/employee/LanguageSelection";
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));

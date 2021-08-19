@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { FormComposer, Dropdown, CardSubHeader, CardLabel, TextInput, CardLabelDesc } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Dropdown, CardSubHeader, CardLabel, TextInput, CardLabelDesc, CardText, Toast } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
+import Background from "../../../components/Background";
+import Header from "../../../components/Header";
+import SelectOtp from "../../citizen/Login/SelectOtp";
 
 const ChangePasswordComponent = ({ config: propsConfig, t }) => {
   const [user, setUser] = useState(null);
   const { mobile_number: mobileNumber, tenantId } = Digit.Hooks.useQueryParams();
   const history = useHistory();
+  const [otp, setOtp] = useState("");
+  const [isOtpValid, setIsOtpValid] = useState(true);
+  const [showToast, setShowToast] = useState(null);
   const getUserType = () => Digit.UserService.getType();
-  let otpReference = "";
   useEffect(() => {
     if (!user) {
       return;
@@ -17,6 +22,10 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
     const redirectPath = location.state?.from || "/digit-ui/employee";
     history.replace(redirectPath);
   }, [user]);
+
+  const closeToast = () => {
+    setShowToast(null);
+  };
 
   const onResendOTP = async () => {
     const requestData = {
@@ -29,22 +38,22 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
     };
     try {
       await Digit.UserService.sendOtp(requestData, tenantId);
-      alert("OTP resend successfull");
+      setShowToast(t("ES_OTP_RESEND"));
     } catch (err) {
-      console.log({ err });
-      alert(err?.response?.data?.error_description || "Invalid login credentials!");
+      setShowToast(err?.response?.data?.error_description || t("ES_INVALID_LOGIN_CREDENTIALS"));
     }
+    setTimeout(closeToast, 5000);
   };
 
   const onChangePassword = async (data) => {
     try {
       if (data.newPassword !== data.confirmPassword) {
-        return alert(t("ERR_PASSWORD_DO_NOT_MATCH"));
+        return setShowToast(t("ERR_PASSWORD_DO_NOT_MATCH"));
       }
 
       const requestData = {
         ...data,
-        otpReference,
+        otpReference: otp,
         tenantId,
         type: getUserType().toUpperCase(),
       };
@@ -52,12 +61,9 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
       console.log({ response });
       navigateToLogin();
     } catch (err) {
-      alert(err?.response?.data?.Errors[0]?.message || "Something went wrong!");
+      setShowToast(err?.response?.data?.error?.fields?.[0]?.message || t("ES_SOMETHING_WRONG"));
+      setTimeout(closeToast, 5000);
     }
-  };
-
-  const updateOtp = (data) => {
-    otpReference = data.target.value || "";
   };
 
   const navigateToLogin = () => {
@@ -97,29 +103,40 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
   ];
 
   return (
-    <FormComposer
-      onSubmit={onChangePassword}
-      noBoxShadow
-      inline
-      submitInForm
-      config={config}
-      label={propsConfig.texts.submitButtonLabel}
-      cardStyle={{ maxWidth: "400px", margin: "auto" }}
-    >
-      <CardSubHeader style={{ textAlign: "center" }}> {propsConfig.texts.header} </CardSubHeader>
-      <div>
-        <CardLabel style={{ marginBottom: "8px" }}>{t("CORE_OTP_SENT_MESSAGE")}</CardLabel>
-        <CardLabelDesc style={{ marginBottom: "0px" }}> {mobileNumber} </CardLabelDesc>
-        <CardLabelDesc style={{ marginBottom: "8px" }}> {t("CORE_EMPLOYEE_OTP_CHECK_MESSAGE")}</CardLabelDesc>
-      </div>
-      <CardLabel style={{ marginBottom: "8px" }}>{t("CORE_OTP_OTP")} *</CardLabel>
-      <TextInput className="field" name={otpReference} isRequired={true} onChange={updateOtp} type={"text"} style={{ marginBottom: "10px" }} />
-      <div className="flex-right">
-        <div className="primary-label-btn" onClick={onResendOTP}>
-          {t("CORE_OTP_RESEND")}
+    <Background>
+      <FormComposer
+        onSubmit={onChangePassword}
+        noBoxShadow
+        inline
+        submitInForm
+        config={config}
+        label={propsConfig.texts.submitButtonLabel}
+        cardStyle={{ maxWidth: "400px", margin: "auto" }}
+      >
+        <Header />
+        <CardSubHeader style={{ textAlign: "center" }}> {propsConfig.texts.header} </CardSubHeader>
+        <CardText>{`${t(`CS_LOGIN_OTP_TEXT`)} ${mobileNumber}`}</CardText>
+        <SelectOtp t={t} userType="employee" otp={otp} onOtpChange={setOtp} error={isOtpValid} onResend={onResendOTP} />
+        {/* <div>
+          <CardLabel style={{ marginBottom: "8px" }}>{t("CORE_OTP_SENT_MESSAGE")}</CardLabel>
+          <CardLabelDesc style={{ marginBottom: "0px" }}> {mobileNumber} </CardLabelDesc>
+          <CardLabelDesc style={{ marginBottom: "8px" }}> {t("CORE_EMPLOYEE_OTP_CHECK_MESSAGE")}</CardLabelDesc>
         </div>
-      </div>
-    </FormComposer>
+        <CardLabel style={{ marginBottom: "8px" }}>{t("CORE_OTP_OTP")} *</CardLabel>
+        <TextInput className="field" name={otpReference} isRequired={true} onChange={updateOtp} type={"text"} style={{ marginBottom: "10px" }} />
+        <div className="flex-right">
+          <div className="primary-label-btn" onClick={onResendOTP}>
+            {t("CORE_OTP_RESEND")}
+          </div>
+        </div> */}
+      </FormComposer>
+      {showToast && <Toast
+        error={true}
+        label={t(showToast)}
+        onClose={closeToast}
+      />
+      }
+    </Background>
   );
 };
 

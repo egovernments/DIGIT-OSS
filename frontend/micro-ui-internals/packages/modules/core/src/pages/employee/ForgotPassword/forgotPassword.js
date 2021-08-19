@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { FormComposer, Dropdown } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Dropdown, Toast, Loader } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
+import Background from "../../../components/Background";
+import Header from "../../../components/Header";
 
 const ForgotPassword = ({ config: propsConfig, t }) => {
-  const cities = Digit.Hooks.fsm.useTenants();
+  const { data: cities, isLoading } = Digit.Hooks.useTenants();
   const [user, setUser] = useState(null);
   const history = useHistory();
+  const [showToast, setShowToast] = useState(null);
   const getUserType = () => Digit.UserService.getType();
 
   useEffect(() => {
@@ -17,6 +20,10 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
     const redirectPath = location.state?.from || "/digit-ui/employee";
     history.replace(redirectPath);
   }, [user]);
+
+  const closeToast = () => {
+    setShowToast(null);
+  };
 
   const onForgotPassword = async (data) => {
     if (!data.city) {
@@ -33,10 +40,10 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
     };
     try {
       await Digit.UserService.sendOtp(requestData, data.city.code);
-      history.push(`/digit-ui/employee/change-password?mobile_number=${data.mobileNumber}&tenantId=${data.city.code}`);
+      history.push(`/digit-ui/employee/user/change-password?mobile_number=${data.mobileNumber}&tenantId=${data.city.code}`);
     } catch (err) {
-      console.log({ err });
-      alert(err?.response?.data?.error_description || "Invalid login credentials!");
+      setShowToast(err?.response?.data?.error?.fields?.[0]?.message || "Invalid login credentials!");
+      setTimeout(closeToast, 5000);
     }
   };
 
@@ -44,7 +51,6 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
     history.replace("/digit-ui/employee/login");
   };
 
-  console.log({ propsConfig });
   const [userId, city] = propsConfig.inputs;
   const config = [
     {
@@ -54,6 +60,7 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
           type: userId.type,
           populators: {
             name: userId.name,
+            componentInFront: "+91"
           },
           isMandatory: true,
         },
@@ -81,20 +88,37 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
     },
   ];
 
+  if (isLoading) {
+    return (
+      <Loader />
+    )
+  }
+
   return (
-    <FormComposer
-      onSubmit={onForgotPassword}
-      noBoxShadow
-      inline
-      submitInForm
-      config={config}
-      label={propsConfig.texts.submitButtonLabel}
-      secondaryActionLabel={propsConfig.texts.secondaryButtonLabel}
-      onSecondayActionClick={navigateToLogin}
-      heading={propsConfig.texts.header}
-      headingStyle={{ textAlign: "center" }}
-      cardStyle={{ maxWidth: "400px", margin: "auto" }}
-    />
+    <Background>
+      <FormComposer
+        onSubmit={onForgotPassword}
+        noBoxShadow
+        inline
+        submitInForm
+        config={config}
+        label={propsConfig.texts.submitButtonLabel}
+        secondaryActionLabel={propsConfig.texts.secondaryButtonLabel}
+        onSecondayActionClick={navigateToLogin}
+        heading={propsConfig.texts.header}
+        description={propsConfig.texts.description}
+        headingStyle={{ textAlign: "center" }}
+        cardStyle={{ maxWidth: "400px", margin: "auto" }}
+      >
+        <Header />
+      </FormComposer>
+      {showToast && <Toast
+        error={true}
+        label={t(showToast)}
+        onClose={closeToast}
+      />
+      }
+    </Background>
   );
 };
 

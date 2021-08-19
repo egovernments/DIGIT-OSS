@@ -24,11 +24,9 @@ const EmployeeLogin = () => {
 
   return (
     <Switch>
-      <AppContainer>
-        <Route path={`${path}`} exact>
-          <LoginComponent config={loginParams[0]} t={t} />
-        </Route>
-      </AppContainer>
+      <Route path={`${path}`} exact>
+        <LoginComponent config={loginParams[0]} t={t} />
+      </Route>
     </Switch>
   );
 };

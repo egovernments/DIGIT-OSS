@@ -25,11 +25,9 @@ const EmployeeForgotPassword = () => {
   console.log({ params });
   return (
     <Switch>
-      <AppContainer>
-        <Route path={`${path}`} exact>
-          <ForgotPasswordComponent config={params[0]} t={t} />
-        </Route>
-      </AppContainer>
+      <Route path={`${path}`} exact>
+        <ForgotPasswordComponent config={params[0]} t={t} />
+      </Route>
     </Switch>
   );
 };
