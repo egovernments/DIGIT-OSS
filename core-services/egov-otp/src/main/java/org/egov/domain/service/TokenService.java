@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class TokenService {
-
+	
     private TokenRepository tokenRepository;
 
     private OtpConfiguration otpConfiguration;
@@ -50,7 +50,7 @@ public class TokenService {
         /*
          * using only IN in central instance since OTP is for only citizen
          */
-        if(tenantId.contains("\\."))
+        if(tenantId.contains("."))
         	tenantId = tenantId.split("\\.")[0];
         
         Token token = Token.builder().uuid(UUID.randomUUID().toString()).tenantId(tenantId)
