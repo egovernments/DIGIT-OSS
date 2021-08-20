@@ -183,7 +183,7 @@ class PaymentStatusUpdateEventFormatter{
         }
         telemetry.log(userId, 'payment', {message : {type: "whatsapp payment", status: "success", businessService: businessService, consumerCode: consumerCode,transactionNumber: payment.transactionNumber, locale: user.locale}});
 
-        await this.sendMessageToOtherOwner(ownerMobileNumberList, payment.mobileNumber, payment.payerName, businessService, consumerCode, payment.transactionNumber, user.locale);
+        await this.sendMessageToOtherOwner(ownerMobileNumberList, payment.mobileNumber, payment.payerName, businessService, consumerCode, payment.transactionNumber, user.locale, responseBody.filestoreIds[0]);
       }
     }
 
@@ -404,7 +404,7 @@ class PaymentStatusUpdateEventFormatter{
     return result;
   }
 
-  async sendMessageToOtherOwner(ownerMobileNumberList, payerMobileNumber, payerName, businessService, consumerCode, transactionNumber, locale){
+  async sendMessageToOtherOwner(ownerMobileNumberList, payerMobileNumber, payerName, businessService, consumerCode, transactionNumber, locale, filestoreId){
     if(ownerMobileNumberList.includes(payerMobileNumber))
       ownerMobileNumberList = ownerMobileNumberList.filter(item => item !== payerMobileNumber)
     
@@ -434,14 +434,20 @@ class PaymentStatusUpdateEventFormatter{
     };
     message.push(messageContent);
 
+    var pdfContent = {
+          output: filestoreId,
+          type: "pdf"
+        };
+    message.push(pdfContent);
 
+    let extraInfo = {
+      whatsAppBusinessNumber: config.whatsAppBusinessNumber.slice(2),
+      fileName: consumerCode
+    };
 
     for(let mobileNumber of ownerMobileNumberList){
       let user = {
         mobileNumber: mobileNumber
-      };
-      let extraInfo = {
-        whatsAppBusinessNumber: config.whatsAppBusinessNumber.slice(2)
       };
       await valueFirst.sendMessageToUser(user, message, extraInfo);
     }
@@ -452,31 +458,31 @@ class PaymentStatusUpdateEventFormatter{
 
 let messageBundle = {
   paymentSucess:{
-    en_IN: "Bill Payment Successful ✅\n\nYour transaction number is {{transaction_number}}.\n\nYou can download the payment receipt from above.\n\n[Payment receipt in PDF format is attached with message]\n\nWe are happy to serve you 😃",
-    hi_IN: "धन्यवाद😃! आपने mSeva पंजाब के माध्यम से अपने बिल का सफलतापूर्वक भुगतान किया है। आपका ट्रांजेक्शन नंबर {{transaction_number}} है। \n\n कृपया अपने संदर्भ के लिए संलग्न रसीद प्राप्त करें।",
+    en_IN: "Bill Payment Successful ✅\n\nYour transaction number is *{{transaction_number}}*.\n\nYou can download the payment receipt from above.\n\n[Payment receipt in PDF format is attached with message]\n\nWe are happy to serve you 😃",
+    hi_IN: "धन्यवाद😃! आपने mSeva पंजाब के माध्यम से अपने बिल का सफलतापूर्वक भुगतान किया है। आपका ट्रांजेक्शन नंबर *{{transaction_number}}* है। \n\n कृपया अपने संदर्भ के लिए संलग्न रसीद प्राप्त करें। 😃",
     propertyPayment:{
-      en_IN: "Bill Payment Successful ✅\n\nThe property tax for {{consumerCode}} has been paid by *{{name}}* *{{payerNumber}}*\n\nThe transaction number is {{transaction_number}}.\n\nWe are happy to serve you.",
-      hi_IN: "बिल भुगतान सफल ✅\n\n{{consumerCode}} के लिए संपत्ति कर का भुगतान *{{name}}* *{{payerNumber}}* द्वारा किया गया है।\n\nआपका ट्रांजेक्शन नंबर {{transaction_number}} है।\n\nहम आपकी सेवा करके खुश हैं।"
+      en_IN: "Bill Payment Successful ✅\n\nThe property tax for *{{consumerCode}}* has been paid by *{{name}}* *{{payerNumber}}*\n\nThe transaction number is *{{transaction_number}}*.\n\nWe are happy to serve you 😃",
+      hi_IN: "बिल भुगतान सफल ✅\n\n*{{consumerCode}}* के लिए संपत्ति कर का भुगतान *{{name}}* *{{payerNumber}}* द्वारा किया गया है।\n\nआपका ट्रांजेक्शन नंबर *{{transaction_number}}* है।\n\nहम आपकी सेवा करके खुश हैं। 😃"
     },
     waterPayment:{
-      en_IN: "Bill Payment Successful ✅\n\nThe water connection bill for {{consumerCode}} has been paid by *{{name}}* *{{payerNumber}}*\n\nThe transaction number is {{transaction_number}}.\n\nWe are happy to serve you.",
-      hi_IN: "बिल भुगतान सफल ✅\n\n{{consumerCode}} के लिए पानी कनेक्शन बिल का भुगतान *{{name}}* *{{payerNumber}}* द्वारा किया गया है।\n\nआपका ट्रांजेक्शन नंबर {{transaction_number}} है।\n\nहम आपकी सेवा करके खुश हैं।"
+      en_IN: "Bill Payment Successful ✅\n\nThe water connection bill for *{{consumerCode}}* has been paid by *{{name}}* *{{payerNumber}}*\n\nThe transaction number is *{{transaction_number}}*.\n\nWe are happy to serve you 😃",
+      hi_IN: "बिल भुगतान सफल ✅\n\n*{{consumerCode}}* के लिए पानी कनेक्शन बिल का भुगतान *{{name}}* *{{payerNumber}}* द्वारा किया गया है।\n\nआपका ट्रांजेक्शन नंबर *{{transaction_number}}* है।\n\nहम आपकी सेवा करके खुश हैं। 😃"
     },
     seweragePayment:{
-      en_IN: "Bill Payment Successful ✅\n\nThe sewerage connection bill for {{consumerCode}} has been paid by *{{name}}* *{{payerNumber}}*\n\nThe transaction number is {{transaction_number}}.\n\nWe are happy to serve you.",
-      hi_IN: "बिल भुगतान सफल ✅\n\n{{consumerCode}} के लिए सीवरेज कनेक्शन बिल का भुगतान *{{name}}* *{{payerNumber}}* द्वारा किया गया है।\n\nआपका ट्रांजेक्शन नंबर {{transaction_number}} है।\n\nहम आपकी सेवा करके खुश हैं।"
+      en_IN: "Bill Payment Successful ✅\n\nThe sewerage connection bill for *{{consumerCode}}* has been paid by *{{name}}* *{{payerNumber}}*\n\nThe transaction number is *{{transaction_number}}*.\n\nWe are happy to serve you 😃",
+      hi_IN: "बिल भुगतान सफल ✅\n\n*{{consumerCode}}* के लिए सीवरेज कनेक्शन बिल का भुगतान *{{name}}* *{{payerNumber}}* द्वारा किया गया है।\n\nआपका ट्रांजेक्शन नंबर *{{transaction_number}}* है।\n\nहम आपकी सेवा करके खुश हैं। 😃"
     }
   },
   paymentFail:{
-    en_IN: "Sorry 😥!  The Payment Transaction has failed due to authentication failure.\n\nYour transaction reference number is {{transaction_number}}.\n\nTo go back to the main menu, type and send mseva.",
-    hi_IN: "क्षमा करें 😥! प्रमाणीकरण विफलता के कारण भुगतान लेनदेन विफल हो गया है। आपका लेन-देन संदर्भ संख्या {{transaction_number}} है।\n\nमुख्य मेनू पर वापस जाने के लिए, टाइप करें और mseva भेजें।"
+    en_IN: "Sorry 😥!  The Payment Transaction has failed due to authentication failure.\n\nYour transaction reference number is *{{transaction_number}}*.\n\nTo go back to the main menu, type and send mseva.",
+    hi_IN: "क्षमा करें 😥! प्रमाणीकरण विफलता के कारण भुगतान लेनदेन विफल हो गया है। आपका लेन-देन संदर्भ संख्या *{{transaction_number}}* है।\n\nमुख्य मेनू पर वापस जाने के लिए, टाइप करें और mseva भेजें।"
   },
   wait:{
     en_IN: "Please wait while your receipt is being generated.",
     hi_IN: "कृपया प्रतीक्षा करें जब तक कि आपकी रसीद उत्पन्न न हो जाए।"
   },
   registration:{
-    en_IN: 'If you want to receive {{service}} bill alerts for {{consumerCode}} on this mobile number type and send *1*\n\nElse type and send *2*',
+    en_IN: 'If you want to receive {{service}} bill alerts for *{{consumerCode}}* on this mobile number type and send *1*\n\nElse type and send *2*',
     hi_IN: 'यदि आप इस मोबाइल नंबर प्रकार पर {{उपभोक्ता कोड}} के लिए बिल अलर्ट प्राप्त करना चाहते हैं और भेजें *1*\n\nअन्यथा टाइप करें और *2* भेजें'
   },
   endStatement:{

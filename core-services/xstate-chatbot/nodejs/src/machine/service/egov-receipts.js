@@ -258,51 +258,53 @@ class ReceiptService {
         }
       }
 
-      let service = Payments['Payments'][0].businessService;
-      var businessServiceList = ['WS','SW'];
-      let consumerCodeToLocalityMapping;
-    
-      if(businessServiceList.includes(service))
-        consumerCodeToLocalityMapping = await this.getApplicationNumber(Payments['Payments'], service, authToken, locale);
-    
-      else
-        consumerCodeToLocalityMapping = await this.getLocality(lookup, authToken, service,locale);
-
-      var tenantIdList=[];
-      var stateLevelCode = "TENANT_TENANTS_"+config.rootTenantId.toUpperCase();
-      tenantIdList.push(stateLevelCode);
-
-      for(var i=0; i<Payments['Payments'].length;i++){
-        if(!(Object.keys(consumerCodeToLocalityMapping).length === 0) && consumerCodeToLocalityMapping[Payments['Payments'][i].id])
-          Payments['Payments'][i].locality = consumerCodeToLocalityMapping[Payments['Payments'][i].id];
-        
-        let tenantId = Payments['Payments'][i].city;
-        tenantId = "TENANT_TENANTS_" + tenantId.toUpperCase().replace('.','_');
-
-        if(!tenantIdList.includes(tenantId))
-          tenantIdList.push(tenantId);
-      }
+      if(!isMultipleRecords){
+        let service = Payments['Payments'][0].businessService;
+        var businessServiceList = ['WS','SW'];
+        let consumerCodeToLocalityMapping;
       
-      let localisedMessages = await localisationService.getMessagesForCodesAndTenantId(tenantIdList, config.rootTenantId);
-
-      for(var i=0; i<Payments['Payments'].length;i++){
-        let tenantId = Payments['Payments'][i].city;
-        tenantId = "TENANT_TENANTS_" + tenantId.toUpperCase().replace('.','_');
-
-        if(!Payments['Payments'][i].locality){
-          if(localisedMessages[tenantId][locale])
-            Payments['Payments'][i].locality = localisedMessages[tenantId][locale];
+        if(businessServiceList.includes(service))
+          consumerCodeToLocalityMapping = await this.getApplicationNumber(Payments['Payments'], service, authToken, locale);
+      
+        else
+          consumerCodeToLocalityMapping = await this.getLocality(lookup, authToken, service,locale);
+  
+        var tenantIdList=[];
+        var stateLevelCode = "TENANT_TENANTS_"+config.rootTenantId.toUpperCase();
+        tenantIdList.push(stateLevelCode);
+  
+        for(var i=0; i<Payments['Payments'].length;i++){
+          if(!(Object.keys(consumerCodeToLocalityMapping).length === 0) && consumerCodeToLocalityMapping[Payments['Payments'][i].id])
+            Payments['Payments'][i].locality = consumerCodeToLocalityMapping[Payments['Payments'][i].id];
           
-          if(localisedMessages[stateLevelCode][locale])
-            Payments['Payments'][i].city = localisedMessages[stateLevelCode][locale];
-
-        }
-
-        else{
-          if(localisedMessages[tenantId][locale])
-            Payments['Payments'][i].city = localisedMessages[tenantId][locale]; 
+          let tenantId = Payments['Payments'][i].city;
+          tenantId = "TENANT_TENANTS_" + tenantId.toUpperCase().replace('.','_');
+  
+          if(!tenantIdList.includes(tenantId))
+            tenantIdList.push(tenantId);
         }
         
+        let localisedMessages = await localisationService.getMessagesForCodesAndTenantId(tenantIdList, config.rootTenantId);
+  
+        for(var i=0; i<Payments['Payments'].length;i++){
+          let tenantId = Payments['Payments'][i].city;
+          tenantId = "TENANT_TENANTS_" + tenantId.toUpperCase().replace('.','_');
+  
+          if(!Payments['Payments'][i].locality){
+            if(localisedMessages[tenantId][locale])
+              Payments['Payments'][i].locality = localisedMessages[tenantId][locale];
+            
+            if(localisedMessages[stateLevelCode][locale])
+              Payments['Payments'][i].city = localisedMessages[stateLevelCode][locale];
+  
+          }
+  
+          else{
+            if(localisedMessages[tenantId][locale])
+              Payments['Payments'][i].city = localisedMessages[tenantId][locale]; 
+          }
+        }
+
       }
       
       return Payments['Payments'];

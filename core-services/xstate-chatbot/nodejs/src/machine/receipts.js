@@ -146,7 +146,7 @@ const receipts = {
               ],
               onError: {
                 actions: assign((context, event) => {
-                  let message = messages.receiptSlip.error;
+                  let message = dialog.get_message(messages.receiptSlip.error,context.user.locale);
                   //context.chatInterface.toUser(context.user, message);
                   dialog.sendMessage(context, message, true);
                 }),
@@ -495,7 +495,7 @@ const receipts = {
               ],
               onError: {
                 actions: assign((context, event) => {
-                  let message = messages.receiptSearchResults.error;
+                  let message = dialog.get_message(messages.receiptSearchResults.error,context.user.locale);
                   dialog.sendMessage(context, message , true);
                 }),
                 always : [
@@ -709,7 +709,7 @@ const receipts = {
               ],
               onError: {
                 actions: assign((context, event) => {
-                  let message = messages.multipleRecordReceipt.error;
+                  let message = dialog.get_message(messages.multipleRecordReceipt.error,context.user.locale);
                   dialog.sendMessage(context, message , true);
                 }),
                 always : [
