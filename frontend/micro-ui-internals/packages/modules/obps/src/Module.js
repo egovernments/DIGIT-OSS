@@ -12,6 +12,7 @@ import PlotDetails from "./pageComponents/PlotDetails";
 import ScrutinyDetails from "./pageComponents/ScrutinyDetails";
 import OwnerDetails from "./pageComponents/OwnerDetails";
 import DocumentDetails from "./pageComponents/DocumentDetails";
+import NOCDetails from "./pageComponents/NOCDetails";
 import LocationDetails from "./pageComponents/LocationDetails";
 import GIS from "./pageComponents/GIS";
 
@@ -65,6 +66,7 @@ const componentsToRegister = {
   ScrutinyDetails,
   OwnerDetails,
   DocumentDetails,
+  NOCDetails,
   LocationDetails,
   GIS
 }

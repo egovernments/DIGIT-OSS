@@ -86,7 +86,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
             return <CitizenHomeCard header={data.title} links={data.links} Icon={() => data.Icon} />;
         }
     });
-
+    sessionStorage.setItem("isPermitApplication", true);
     return homeScreen;
     // return <CitizenHomeCard header={t("ACTION_TEST_BPA_STAKE_HOLDER_HOME")} links={links} Icon={() => <BPAIcon className="fill-path-primary-main" />} />;
 };

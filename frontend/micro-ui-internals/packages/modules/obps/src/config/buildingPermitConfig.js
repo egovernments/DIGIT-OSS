@@ -87,11 +87,22 @@ export const newConfig = [
       {
         route: "document-details",
         component: "DocumentDetails",
-        nextStep: "",
+        nextStep: "noc-details",
         key: "documents",
         texts: {
           headerCaption: "BPA_OWNER_AND_DOCUMENT_DETAILS_LABEL",
           header: "BPA_DOCUMENT_DETAILS_LABEL",
+          submitBarLabel: "CS_COMMON_NEXT"
+        }
+      },
+      {
+        route: "noc-details",
+        component: "NOCDetails",
+        nextStep: "",
+        key: "nocDocuments",
+        texts: {
+          headerCaption: "BPA_NOC_DETAILS_SUMMARY",
+          header: "",
           submitBarLabel: "CS_COMMON_NEXT"
         }
       }

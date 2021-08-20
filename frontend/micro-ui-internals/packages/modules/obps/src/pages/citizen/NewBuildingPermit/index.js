@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch, useLocation, useHistory, Switch, Route, Redirect } from "react-router-dom";
 import { newConfig } from "../../../config/buildingPermitConfig";
@@ -36,6 +36,13 @@ const NewBuildingPermit = () => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
   config.indexRoute = "docs-required";
+
+  useEffect(() => {
+    if(sessionStorage.getItem("isPermitApplication") && sessionStorage.getItem("isPermitApplication") == "true") {
+      clearParams();
+      sessionStorage.setItem("isPermitApplication", false);
+    }
+  }, []);
 
   return (
     <Switch>

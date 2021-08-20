@@ -134,15 +134,17 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
 
     function getUnitsForAPI(ob){
         let units=[];
-        let result = Object.entries(ob);
-        result.map((unit,index)=>{
-            units.push({
-                blockIndex:index,
-                floorNo:unit[0].split("_")[1],
-                unitType:"Block",
-                usageCategory:getusageCategoryAPI(unit[1]),
-            });
-        })
+        if(ob) {
+            let result = Object.entries(ob);
+            result.map((unit,index)=>{
+                units.push({
+                    blockIndex:index,
+                    floorNo:unit[0].split("_")[1],
+                    unitType:"Block",
+                    usageCategory:getusageCategoryAPI(unit[1]),
+                });
+            })
+        }
         return units;
     }
 

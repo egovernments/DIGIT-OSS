@@ -21,4 +21,12 @@ export const OBPSService = {
       params: {},
       auth: true,
     }),
+  NOCSearch: (tenantId, sourceRefId) =>
+    Request({
+      url: Urls.obps.nocSearch,
+      params: { tenantId, ...sourceRefId },
+      auth: true,
+      userService: true,
+      method: "POST"
+    })
 }

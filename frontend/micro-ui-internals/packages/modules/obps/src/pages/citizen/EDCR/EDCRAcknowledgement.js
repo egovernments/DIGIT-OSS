@@ -4,6 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const EDCRAcknowledgement = (props) => {
+  sessionStorage.setItem("isPermitApplication", true);
   const edcrData = props?.data?.[0];
   const { t } = useTranslation();
   const history = useHistory();
