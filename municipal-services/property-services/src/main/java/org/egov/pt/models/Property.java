@@ -53,6 +53,10 @@ public class Property extends PropertyInfo {
 	@JsonProperty("owners")
 	@Valid
 	private List<OwnerInfo> owners;
+	
+	@JsonProperty("alternateMobileNumberDetails")
+	@Valid
+	private List<AlternateMobileNumber> alternateMobileNumberDetails;
 
 	@JsonProperty("institution")
 	private Institution institution;
@@ -157,6 +161,16 @@ public class Property extends PropertyInfo {
 
 		if (null != documentsItem)
 			this.documents.add(documentsItem);
+		return this;
+	}
+	
+	public Property addAlternateItem(AlternateMobileNumber alternateItem) {
+		if (this.alternateMobileNumberDetails == null) {
+			this.alternateMobileNumberDetails = new ArrayList<>();
+		}
+
+		if (null != alternateItem)
+			this.alternateMobileNumberDetails.add(alternateItem);
 		return this;
 	}
 }
