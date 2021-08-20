@@ -58,20 +58,6 @@ public class TokenServiceTest {
     }
 
     @Test
-    public void test_should_save_new_token_with_given_identity_and_tenant() {
-        final Token savedToken = Token.builder().build();
-        final TokenRequest tokenRequest = mock(TokenRequest.class);
-        final ValidateRequest validateRequest = mock(ValidateRequest.class);
-        when(tokenRepository.save(any(Token.class))).thenReturn(savedToken);
-
-        final Tokens tokens = mock(Tokens.class);
-        lenient().when(tokenRepository.findByIdentityAndTenantId(validateRequest)).thenReturn(tokens);
-        final Token actualToken = tokenService.create(tokenRequest);
-
-        assertEquals(savedToken, actualToken);
-    }
-
-    @Test
     @Ignore
     public void test_should_validate_token_request() {
         final TokenRequest tokenRequest = mock(TokenRequest.class);
