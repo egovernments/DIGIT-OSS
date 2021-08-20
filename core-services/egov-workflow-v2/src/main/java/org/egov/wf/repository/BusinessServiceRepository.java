@@ -1,6 +1,7 @@
 package org.egov.wf.repository;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.Role;
 import org.egov.tracer.model.CustomException;
 import org.egov.wf.config.WorkflowConfig;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -49,42 +51,27 @@ public class BusinessServiceRepository {
 
     public List<BusinessService> getBusinessServices(BusinessServiceSearchCriteria criteria){
         String query;
+        String tenantId = criteria.getTenantId();
+        criteria.setTenantId(null);
+        List<Object> preparedStmtList = new ArrayList<>();
+        query = queryBuilder.getBusinessServices(criteria, preparedStmtList);
+        List<BusinessService> searchResults = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 
-        List<String> stateLevelBusinessServices = new LinkedList<>();
-        List<String> tenantBusinessServices = new LinkedList<>();
+        if(CollectionUtils.isEmpty(searchResults))
+            return new LinkedList<>();
 
-        Map<String, Boolean> stateLevelMapping = mdmsService.getStateLevelMapping();
+        List<String> tenantHierarchy = getTenantHierarchy(tenantId);
+        List<BusinessService> businessServices = new LinkedList<>();
 
-        if(!CollectionUtils.isEmpty(criteria.getBusinessServices())){
+        for(String t : tenantHierarchy){
+             businessServices = searchResults.stream().filter(e -> e.getTenantId().equalsIgnoreCase(t))
+                    .collect(Collectors.toList());
 
-            criteria.getBusinessServices().forEach(businessService -> {
-                if(stateLevelMapping.get(businessService)==null || stateLevelMapping.get(businessService))
-                    stateLevelBusinessServices.add(businessService);
-                else
-                    tenantBusinessServices.add(businessService);
-            });
+            if(!CollectionUtils.isEmpty(businessServices))
+                break;
         }
 
-        List<BusinessService> searchResults = new LinkedList<>();
-
-        if(!CollectionUtils.isEmpty(stateLevelBusinessServices)){
-            BusinessServiceSearchCriteria stateLevelCriteria = new BusinessServiceSearchCriteria();
-            stateLevelCriteria.setTenantId(criteria.getTenantId().split("\\.")[0]);
-            stateLevelCriteria.setBusinessServices(stateLevelBusinessServices);
-            List<Object> stateLevelPreparedStmtList = new ArrayList<>();
-            query = queryBuilder.getBusinessServices(stateLevelCriteria, stateLevelPreparedStmtList);
-            searchResults.addAll(jdbcTemplate.query(query, stateLevelPreparedStmtList.toArray(), rowMapper));
-        }
-        if(!CollectionUtils.isEmpty(tenantBusinessServices)){
-            BusinessServiceSearchCriteria tenantLevelCriteria = new BusinessServiceSearchCriteria();
-            tenantLevelCriteria.setTenantId(criteria.getTenantId());
-            tenantLevelCriteria.setBusinessServices(tenantBusinessServices);
-            List<Object> tenantLevelPreparedStmtList = new ArrayList<>();
-            query = queryBuilder.getBusinessServices(tenantLevelCriteria, tenantLevelPreparedStmtList);
-            searchResults.addAll(jdbcTemplate.query(query, tenantLevelPreparedStmtList.toArray(), rowMapper));
-        }
-
-        return searchResults;
+        return businessServices;
     }
 
 
@@ -197,6 +184,23 @@ public class BusinessServiceRepository {
         }
 
         return filteredBusinessService;
+    }
+
+
+    private List<String> getTenantHierarchy(String tenantId){
+
+        String NAMESPACE_SEPARATOR = ".";
+        Integer tenantDepth = StringUtils.countMatches(tenantId, NAMESPACE_SEPARATOR);
+        ArrayList<String> tenantHierarchy = new ArrayList<>();
+        tenantHierarchy.add(tenantId);
+        for (int index = tenantDepth; index >= 1; index--) {
+            String tenant = tenantId.substring(0,
+                    StringUtils.ordinalIndexOf(tenantId, NAMESPACE_SEPARATOR, index));
+            tenantHierarchy.add(tenant);
+        }
+
+        return tenantHierarchy;
+
     }
 
 
