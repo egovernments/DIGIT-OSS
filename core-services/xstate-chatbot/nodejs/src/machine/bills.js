@@ -366,7 +366,7 @@ const bills = {
         openSearch:{
           onEntry: assign((context, event) => {
             (async() => {
-              context.slots.bills.openSearchLink = await billService.getOpenSearchLink(context.service);
+              context.slots.bills.openSearchLink = await billService.getOpenSearchLink(context.service,context.user.name,context.user.mobileNumber);
               let { services, messageBundle } = billService.getSupportedServicesAndMessageBundle();
               let billServiceName = dialog.get_message(messageBundle[context.service],context.user.locale);
               let message = dialog.get_message(messages.openSearch, context.user.locale);
