@@ -10,8 +10,8 @@ const BasicDetails = ({ formData, onSelect, config }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = tenantId.split(".")[0];
-  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(state, "BPA", ["RiskTypeComputation"]);
   //TODO will change this is future
+  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(state, "BPA", ["RiskTypeComputation"]);
   const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails("pb.amritsar", scrutinyNumber, {
     enabled: formData?.data?.scrutinyNumber ? true : false
   })
@@ -33,13 +33,15 @@ const BasicDetails = ({ formData, onSelect, config }) => {
   return (
     <div>
       <Timeline />
-      <Label>{t(`OBPS_SEARCH_EDCR_NUMBER`)}</Label>
-      <TextInput className="searchInput"
-        onKeyPress={handleKeyPress}
-        onChange={event => setScrutinyNumber({ edcrNumber: event.target.value })} value={scrutinyNumber?.edcrNumber} signature={true} signatureImg={<SearchIconSvg className="signature-img" onClick={() => refetch()} /> }
-        disable={isDisabled}
-        style={{ marginBottom: "10px" }}
-      />
+      <div className="obps-search">
+        <Label>{t(`OBPS_SEARCH_EDCR_NUMBER`)}</Label>
+        <TextInput className="searchInput"
+          onKeyPress={handleKeyPress}
+          onChange={event => setScrutinyNumber({ edcrNumber: event.target.value })} value={scrutinyNumber?.edcrNumber} signature={true} signatureImg={<SearchIconSvg className="signature-img" onClick={() => refetch()} /> }
+          disable={isDisabled}
+          style={{ marginBottom: "10px" }}
+        />
+      </div>
       {data && <Card>
         <CardCaption>{t(`BPA_SCRUTINY_DETAILS`)}</CardCaption>
         <CardHeader>{t(`BPA_BASIC_DETAILS_TITLE`)}</CardHeader>

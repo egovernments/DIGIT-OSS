@@ -3,7 +3,7 @@ export const calculateRiskType = (riskTypes, plotArea, blocks) => {
     return Math.max(acc, block.building.buildingHeight)
   }, Number.NEGATIVE_INFINITY);
 
-  const risk = riskTypes.find(riskType => {
+  const risk = riskTypes?.find(riskType => {
     if (riskType.riskType === "HIGH" && plotArea > riskType?.fromPlotArea && buildingHeight >= riskType?.fromBuildingHeight) {
       return true;
     }

@@ -8,7 +8,7 @@ const PlotDetails = ({ formData, onSelect, config }) => {
   const [holdingNumber, setHoldingNumber] = useState("");
   const [registrationDetails, setRegistrationDetails] = useState("");
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { data, isLoading } = Digit.Hooks.obps.useScrutinyDetails(tenantId, formData?.data?.scrutinyNumber)
+  const { data, isLoading } = Digit.Hooks.obps.useScrutinyDetails("pb.amritsar", formData?.data?.scrutinyNumber)
   
   const handleSubmit = (data) => {
     onSelect(config?.key, { ...data });
@@ -23,9 +23,9 @@ const PlotDetails = ({ formData, onSelect, config }) => {
       <Timeline />
       <FormStep config={config} onSelect={handleSubmit} childrenAtTheBottom={false} t={t} _defaultValues={formData?.data}>
         <StatusTable>
-          <Row label={t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)} text={data?.planDetail?.planInformation?.plotArea} />
-          <Row label={t(`BPA_BOUNDARY_PLOT_NO_LABEL`)} text={data?.planDetail?.planInformation?.plotNo} />
-          <Row label={t(`BPA_BOUNDARY_KHATA_NO_LABEL`)} text={data?.planDetail?.planInformation?.khataNo}/>
+          <Row className="border-none" label={t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)} text={data?.planDetail?.planInformation?.plotArea} />
+          <Row className="border-none" label={t(`BPA_BOUNDARY_PLOT_NO_LABEL`)} text={data?.planDetail?.planInformation?.plotNo} />
+          <Row className="border-none" label={t(`BPA_BOUNDARY_KHATA_NO_LABEL`)} text={data?.planDetail?.planInformation?.khataNo}/>
         </StatusTable>
       </FormStep>
     </div>
