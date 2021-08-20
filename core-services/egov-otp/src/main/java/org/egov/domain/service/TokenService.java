@@ -39,6 +39,7 @@ public class TokenService {
     public Token create(TokenRequest tokenRequest) {
         tokenRequest.validate();
 
+        String tenantId = tokenRequest.getTenantId();
         String originalOtp = randomNumeric(otpConfiguration.getOtpLength());
         String encryptedOtp = originalOtp;
 
@@ -46,7 +47,13 @@ public class TokenService {
             encryptedOtp = passwordEncoder.encode(originalOtp);
         }
 
-        Token token = Token.builder().uuid(UUID.randomUUID().toString()).tenantId(tokenRequest.getTenantId())
+        /*
+         * using only IN in central instance since OTP is for only citizen
+         */
+        if(tenantId.contains("\\."))
+        	tenantId = tenantId.split("\\.")[0];
+        
+        Token token = Token.builder().uuid(UUID.randomUUID().toString()).tenantId(tenantId)
                 .identity(tokenRequest.getIdentity()).number(encryptedOtp)
                 .timeToLiveInSeconds(otpConfiguration.getTtl()).build();
         token = tokenRepository.save(token);
