@@ -63,12 +63,18 @@ public class BusinessServiceRepository {
         List<String> tenantHierarchy = getTenantHierarchy(tenantId);
         List<BusinessService> businessServices = new LinkedList<>();
 
-        for(String t : tenantHierarchy){
-             businessServices = searchResults.stream().filter(e -> e.getTenantId().equalsIgnoreCase(t))
-                    .collect(Collectors.toList());
+        List<String> businessServicesCodesFound = new LinkedList<>();
 
-            if(!CollectionUtils.isEmpty(businessServices))
-                break;
+        for(String t : tenantHierarchy){
+
+            for (BusinessService businessService : searchResults){
+
+                if(businessService.getTenantId().equalsIgnoreCase(t) && !businessServicesCodesFound.contains(businessService.getBusinessService())){
+                    businessServicesCodesFound.add(businessService.getBusinessService());
+                    businessServices.add(businessService);
+                }
+
+            }
         }
 
         return businessServices;
