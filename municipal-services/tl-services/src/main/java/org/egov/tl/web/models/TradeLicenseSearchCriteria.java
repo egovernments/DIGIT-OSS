@@ -78,6 +78,9 @@ public class TradeLicenseSearchCriteria {
 
     @JsonIgnore
     private List<String> ownerIds;
+    
+    @JsonProperty("RenewalPending")
+    private Boolean RenewalPending;
 
 
     public boolean isEmpty() {

@@ -174,7 +174,7 @@ public class TradeLicenseService {
          else {
              licenses = getLicensesWithOwnerInfo(criteria,requestInfo);
          }
-       return licenses;
+         return licenses;       
     }
 
     public void checkEndStateAndAddBPARoles(TradeLicenseRequest tradeLicenseRequest) {

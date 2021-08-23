@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 import static org.egov.tl.util.TLConstants.businessService_BPA;
 import static org.egov.tl.util.TLConstants.businessService_TL;
+import static org.egov.tl.util.TLConstants.APPLICATION_TYPE_RENEWAL;
 
 @Component
 public class TLValidator {
@@ -169,11 +170,11 @@ public class TLValidator {
 //            }else{
 //                taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
 //            }
-            taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
+            taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);                
             if(license.getValidTo()!=null && license.getValidTo()>taxPeriods.get(TLConstants.MDMS_ENDDATE)){
                 Date expiry = new Date(license.getValidTo());
                 throw new CustomException("INVALID TO DATE"," Validto cannot be greater than: "+expiry);
-            }
+            }            
             if(license.getLicenseType().toString().equalsIgnoreCase(TradeLicense.LicenseTypeEnum.TEMPORARY.toString())) {
                 Long startOfDay = getStartOfDay();
                 if (!config.getIsPreviousTLAllowed() && license.getValidFrom() != null
@@ -237,11 +238,29 @@ public class TLValidator {
                 
             }
         });
-        criteria.setTenantId(request.getLicenses().get(0).getTenantId());
+        
+        request.getLicenses().forEach(license->{
+        	if(license.getStatus().equalsIgnoreCase(TLConstants.STATUS_CANCELLED)) {
+        		throw new CustomException("LICENSE CANCELLED", "Licenses which are cancelled cannot be renewed");
+        	}
+        }       		        		
+        	);
+        
+        request.getLicenses().forEach(license->{
+        	if(license.getStatus().equalsIgnoreCase(TLConstants.STATUS_MANUALLYEXPIRED)) {
+        		throw new CustomException("LICENSE MANUALLY EXPIRED", "Licenses which are manually expired cannot be renewed");
+        	}
+        }       		        		
+        	);
+        
+        criteria.setTenantId(request.getLicenses().get(0).getTenantId());        
         criteria.setStatus(Collections.singletonList(TLConstants.STATUS_APPROVED));
         criteria.setBusinessService(request.getLicenses().get(0).getBusinessService());
         criteria.setLicenseNumbers(licenseNumbers);
         List<TradeLicense> searchResult = tlRepository.getLicenses(criteria);
+        
+        validateFinancialYear(request,searchResult);
+        
         Map<String , TradeLicense> licenseMap = new HashMap<>();
         searchResult.forEach(license -> {
             licenseMap.put(license.getLicenseNumber() , license);
@@ -282,7 +301,24 @@ public class TLValidator {
     }
 
 
-    /**
+    private void validateFinancialYear(TradeLicenseRequest request, List<TradeLicense> searchResult) {
+		List <TradeLicense> licenses =request.getLicenses();
+		
+		for(TradeLicense license : licenses) {
+			for(TradeLicense searchedLicense : searchResult) {
+				if(license.getLicenseNumber().toString().equals(searchedLicense.getLicenseNumber().toString())) {
+					if(searchedLicense.getApplicationType().toString().equalsIgnoreCase(APPLICATION_TYPE_RENEWAL)) {
+						if(license.getFinancialYear().toString().equalsIgnoreCase(searchedLicense.getFinancialYear().toString())) {
+							throw new CustomException("RENEWAL ERROR","There is an active renewal application created already for the given license number");
+						}
+					}
+				}
+			}
+		}
+		
+	}
+
+	/**
      *  Validates the update request
      * @param request The input TradeLicenseRequest Object
      */

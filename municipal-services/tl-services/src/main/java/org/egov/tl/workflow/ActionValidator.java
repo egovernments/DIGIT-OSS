@@ -2,6 +2,7 @@ package org.egov.tl.workflow;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
+import org.egov.common.contract.request.User;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.util.TLConstants;
 import org.egov.tl.web.models.TradeLicense;
@@ -98,13 +99,46 @@ public class ActionValidator {
      */
     public void validateUpdateRequest(TradeLicenseRequest request,BusinessService businessService){
         validateDocumentsForUpdate(request);
+        validateManualExpiration(request);
        // validateRole(request);
        // validateAction(request);
         validatePayAction(request);
         validateIds(request,businessService);
     }
 
-    private void validatePayAction(TradeLicenseRequest request){
+    private void validateManualExpiration(TradeLicenseRequest request) {
+    	
+    	RequestInfo requestInfo = request.getRequestInfo();
+        Boolean isCitizen = false;
+        
+        User user = requestInfo.getUserInfo();
+        List<Role> roles = user.getRoles();
+        
+        for(Role role : roles) {
+        	if (role.getCode().toString().equalsIgnoreCase("CITIZEN")) {
+        		isCitizen = true;
+        		break;
+        	}
+        }
+    	    	    	
+    	Map<String,String> errorMap = new HashMap<>();
+    	
+    	List<TradeLicense> licenses = request.getLicenses();
+    	
+        for(TradeLicense license : licenses) {
+        	if(license.getAction().toString().equalsIgnoreCase(ACTION_MANUALLYEXPIRE)) {
+        		if(isCitizen) {
+        			errorMap.put("INVALID_ACTION","Citizen can not manually expire a license");
+        		}
+        	}
+        }
+         
+            if(!errorMap.isEmpty())
+                throw new CustomException(errorMap);       
+		
+	}
+
+	private void validatePayAction(TradeLicenseRequest request){
         Map<String,String> errorMap = new HashMap<>();
         if(config.getIsExternalWorkFlowEnabled()){
             request.getLicenses().forEach(license -> {
