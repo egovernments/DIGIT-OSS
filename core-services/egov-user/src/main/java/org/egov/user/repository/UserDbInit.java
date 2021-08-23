@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import static org.egov.user.config.UserServiceConstants.*;
+
 @Slf4j
 @Component
 public class UserDbInit {
@@ -50,23 +52,23 @@ public class UserDbInit {
     @PostConstruct
     private void initSeedUser() {
         if (createDefaultUser) {
-            Role urole = Role.builder().code(serviceDefault.get("rolecode"))
-                    .name(serviceDefault.get("rolename"))
-                    .tenantId(serviceDefault.get("tenantid"))
+            Role urole = Role.builder().code(serviceDefault.get(ROLE_CODE))
+                    .name(serviceDefault.get(ROLE_NAME))
+                    .tenantId(serviceDefault.get(TENANT_ID))
                     .build();
             Set<Role> roleSet = new HashSet<Role>();
             roleSet.add(urole);
             UserType type = UserType.EMPLOYEE;
             User user = User.builder()
-                    .mobileNumber(serviceDefault.get("mobilenumber"))
-                    .tenantId(serviceDefault.get("tenantid"))
+                    .mobileNumber(serviceDefault.get(MOBILE_NUMBER))
+                    .tenantId(serviceDefault.get(TENANT_ID))
                     .uuid(UUID.randomUUID().toString())
-                    .name(serviceDefault.get("name"))
-                    .otpReference(serviceDefault.get("otpreference"))
+                    .name(serviceDefault.get(NAME))
+                    .otpReference(serviceDefault.get(OTP_REFERENCE))
                     .active(defaultActiveIndicator)
                     .type(type)
-                    .username(serviceDefault.get("username"))
-                    .password(serviceDefault.get("password"))
+                    .username(serviceDefault.get(USER_NAME))
+                    .password(serviceDefault.get(PASSWORD))
                     .roles(roleSet)
                     .build();
             user.validateNewUser(createUserValidateName);

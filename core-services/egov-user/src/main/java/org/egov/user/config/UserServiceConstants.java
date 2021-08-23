@@ -61,5 +61,13 @@ public class UserServiceConstants {
     public static final String PATTERN_CITY = "^[a-zA-Z. ]*$";
     public static final String PATTERN_TENANT = "^[a-zA-Z. ]*$";
     public static final String PATTERN_PINCODE = "^[1-9][0-9]{5}$";
+    public static final String ROLE_CODE = "rolecode";
+    public static final String ROLE_NAME = "rolename";
+    public static final String TENANT_ID = "tenantid";
+    public static final String MOBILE_NUMBER = "mobilenumber";
+    public static final String NAME = "name";
+    public static final String USER_NAME = "username";
+    public static final String PASSWORD = "password";
+    public static final String OTP_REFERENCE = "otpreference";
 }
 
