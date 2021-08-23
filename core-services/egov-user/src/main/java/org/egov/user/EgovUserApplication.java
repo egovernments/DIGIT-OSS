@@ -21,10 +21,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.egov.tracer.config.TracerConfiguration;
 import org.egov.tracer.model.CustomException;
 import org.egov.user.security.CustomAuthenticationKeyGenerator;
+import org.springframework.beans.BeanInstantiationException;
+import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.UnsatisfiedDependencyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerException;
+import org.springframework.context.ApplicationContextException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -123,7 +128,7 @@ public class EgovUserApplication {
     public static void main(String[] args) {
         try{
             SpringApplication.run(EgovUserApplication.class, args);
-        }catch (Exception e){
+        }catch (ApplicationContextException e){
             throw new CustomException("MISSING DEPENDENCY", "Encryption master data not found . Please check if proper data is added and restart the pod");
         }
     }
