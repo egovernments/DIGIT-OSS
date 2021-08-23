@@ -20,52 +20,23 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
 @Component
 public class UserDbInit {
-    @Value("${user.service.default.username}")
-    private String defaultUsername;
+    @Value("#{${user.service.default}}")
+    private Map<String, String> serviceDefault;
 
-    @Value("${user.service.default.password}")
-    private String defaultPassword;
-
-    @Value("${user.service.default.name}")
-    private String defaultName;
-
-    @Value("${user.service.default.mobilenumber}")
-    private String defaultMobileNumber;
-
-    @Value("${user.service.default.tenantid}")
-    private String defaultTenantId;
-
-    @Value("${user.service.default.otpreference}")
-    private String defaultOtpReference;
-
-    @Value("${user.service.default.city}")
-    private String defaultCity;
-
-    @Value("${user.service.default.pincode}")
-    private String defaultPinCode;
-
-    @Value("${user.service.default.role}")
-    private String defaultRole;
-
-    @Value("${user.service.default.rolecode}")
-    private String defaultRoleCode;
-
-    @Value("${user.service.default.rolename}")
-    private String defaultRoleName;
-
-    @Value("${user.service.default.active}")
+    @Value("${user.default.active}")
     private boolean defaultActiveIndicator;
 
     @Value("${create.user.validate.name}")
     private boolean createUserValidateName;
 
-    @Value("${user.service.default.user.creation}")
+    @Value("${user.default.user.creation}")
     private boolean createDefaultUser;
 
     @Autowired
@@ -79,23 +50,23 @@ public class UserDbInit {
     @PostConstruct
     private void initSeedUser() {
         if (createDefaultUser) {
-            Role urole = Role.builder().code(defaultRoleCode)
-                    .name(defaultRoleName)
-                    .tenantId(defaultTenantId)
+            Role urole = Role.builder().code(serviceDefault.get("rolecode"))
+                    .name(serviceDefault.get("rolename"))
+                    .tenantId(serviceDefault.get("tenantid"))
                     .build();
             Set<Role> roleSet = new HashSet<Role>();
             roleSet.add(urole);
             UserType type = UserType.EMPLOYEE;
             User user = User.builder()
-                    .mobileNumber(defaultMobileNumber)
-                    .tenantId(defaultTenantId)
+                    .mobileNumber(serviceDefault.get("mobilenumber"))
+                    .tenantId(serviceDefault.get("tenantid"))
                     .uuid(UUID.randomUUID().toString())
-                    .name(defaultName)
-                    .otpReference(defaultOtpReference)
+                    .name(serviceDefault.get("name"))
+                    .otpReference(serviceDefault.get("otpreference"))
                     .active(defaultActiveIndicator)
                     .type(type)
-                    .username(defaultUsername)
-                    .password(defaultPassword)
+                    .username(serviceDefault.get("username"))
+                    .password(serviceDefault.get("password"))
                     .roles(roleSet)
                     .build();
             user.validateNewUser(createUserValidateName);
