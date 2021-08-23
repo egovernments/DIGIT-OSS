@@ -28,5 +28,27 @@ export const OBPSService = {
       auth: true,
       userService: true,
       method: "POST"
-    })
+    }),
+  update: (details, tenantId) =>
+    Request({
+      url: Urls.obps.update,
+      data: details,
+      useCache: false,
+      setTimeParam: false,
+      userService: true,
+      method: "POST",
+      params: {},
+      auth: true,
+    }),
+    updateNOC: (details, tenantId) =>
+    Request({
+      url: Urls.obps.updateNOC,
+      data: details,
+      useCache: false,
+      setTimeParam: false,
+      userService: true,
+      method: "POST",
+      params: {},
+      auth: true,
+    }),
 }

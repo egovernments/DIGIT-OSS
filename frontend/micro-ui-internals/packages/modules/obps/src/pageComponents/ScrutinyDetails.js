@@ -13,7 +13,9 @@ const ScrutinyDetails = ({ onSelect, userType, formData,config }) => {
   const [subOccupancyOption, setsubOccupancyOption] = useState([]);
   const [floorData, setfloorData] = useState([]);
   let scrutinyNumber=`DCR82021WY7QW`;
-  let tenantId="pb.amritsar";
+  let user = Digit.UserService.getUser();
+  const tenantId = user.info.permanentCity;
+  //let tenantId="pb.amritsar";
   const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId,formData?.data?.scrutinyNumber, {
     enabled: true
   })
@@ -146,26 +148,27 @@ const clearall = (num) => {
   return (
     <React.Fragment>
     <Timeline />
-    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={false}>
+    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!subOccupancyObject}>
       <CardSubHeader>{t("BPA_EDCR_DETAILS")}</CardSubHeader>
       <StatusTable  style={{border:"none"}}>
-      <Row style={{border:"none"}} label="BPA_EDCR_NO_LABEL" text={data?.edcrNumber}></Row>
-      <Row 
+      <Row className="border-none" style={{border:"none"}} label="BPA_EDCR_NO_LABEL" text={data?.edcrNumber}></Row>
+      <Row className="border-none" 
       label="BPA_UPLOADED_PLAN_DIAGRAM" 
       text={<ActionButton label="BPA_UPLOADED_PLAN" jumpTo={data?.updatedDxfFile} />}>
       </Row>
-      <Row
+      <Row className="border-none" 
       label="BPA_SCRUNTINY_REPORT_OUTPUT" 
       text={<ActionButton label="BPA_SCRUTINY_REPORT_PDF" jumpTo={data?.planReport} />}>
       </Row>
       </StatusTable>
-      <hr style={{borderWidth:"0",color:"gray",height:"2px"}}></hr>
+      <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_BUILDING_EXTRACT_HEADER")}</CardSubHeader>
       <StatusTable  style={{border:"none"}}>
-      <Row label="BPA_BUILTUP_AREA_HEADER" text={data?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea}></Row>
-      <Row label="BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL" text={data?.planDetail?.blocks?.[0]?.building?.totalFloors}></Row>
-      <Row label="BPA_APPLICATION_HIGH_FROM_GROUND" text={data?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight}></Row>
+      <Row className="border-none" label="BPA_BUILTUP_AREA_HEADER" text={data?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea}></Row>
+      <Row className="border-none" label="BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL" text={data?.planDetail?.blocks?.[0]?.building?.totalFloors}></Row>
+      <Row className="border-none" label="BPA_APPLICATION_HIGH_FROM_GROUND" text={data?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight}></Row>
       </StatusTable>
+      <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_OCC_SUBOCC_HEADER")}</CardSubHeader>
       {data?.planDetail?.blocks.map((block,index)=>(
       <div key={index}>

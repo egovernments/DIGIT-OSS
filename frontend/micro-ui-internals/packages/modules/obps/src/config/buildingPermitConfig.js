@@ -98,7 +98,7 @@ export const newConfig = [
       {
         route: "noc-details",
         component: "NOCDetails",
-        nextStep: "",
+        nextStep: null,
         key: "nocDocuments",
         texts: {
           headerCaption: "BPA_NOC_DETAILS_SUMMARY",

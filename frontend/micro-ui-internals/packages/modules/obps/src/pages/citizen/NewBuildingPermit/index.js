@@ -1,12 +1,16 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useQueryClient } from "react-query";
 import { useRouteMatch, useLocation, useHistory, Switch, Route, Redirect } from "react-router-dom";
 import { newConfig } from "../../../config/buildingPermitConfig";
+import CheckPage from "./CheckPage";
+import OBPSAcknowledgement from "./OBPSAcknowledgement";
 // import DocsRequired from "../../components/DocsRequired";
 // import BasicDetails from "../../components/BasicDetails";
 
 
 const NewBuildingPermit = () => {
+  const queryClient = useQueryClient();
   const { t } = useTranslation();
   const { path, url } = useRouteMatch();
   const { pathname, state } = useLocation();
@@ -19,9 +23,20 @@ const NewBuildingPermit = () => {
     const currentPath = pathname.split("/").pop();
     const { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
     let redirectWithHistory = history.push;
+    if (nextStep === null) {
+      return redirectWithHistory(`${path}/check`);
+    }
     redirectWithHistory(`${path}/${nextStep}`);
 
   }
+
+  const onSuccess = () => {
+    //clearParams();
+    queryClient.invalidateQueries("PT_CREATE_PROPERTY");
+  };
+  const createApplication = async () => {
+    history.push(`${path}/acknowledgement`);
+  };
 
   const handleSelect = (key, data, skipStep, isFromCreateApi) => {
     if (isFromCreateApi) setParams(data);
@@ -55,6 +70,12 @@ const NewBuildingPermit = () => {
           </Route>
         );
       })}
+      <Route path={`${path}/check`}>
+        <CheckPage onSubmit={createApplication} value={params} />
+      </Route>
+      <Route path={`${path}/acknowledgement`}>
+        <OBPSAcknowledgement data={params} onSuccess={onSuccess} />
+      </Route>
       <Route>
         <Redirect to={`${path}/${config.indexRoute}`} />
       </Route>

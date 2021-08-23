@@ -120,6 +120,8 @@ import useOBPSMDMS from "./obps/useMDMS";
 import useScrutinyDetails from "./obps/useScrutinyDetails";
 import useTenantsOBPS from "./obps/useTenants";
 import useNocDetails from "./obps/useNocDetails";
+import useOBPSDocumentSearch from "./obps/useOBPSDocumentSearch";
+import useObpsAPI from "./obps/useObpsAPI";
 
 const pgr = {
   useComplaintDetails,
@@ -232,7 +234,9 @@ const obps = {
   useMDMS: useOBPSMDMS,
   useScrutinyDetails,
   useTenants: useTenantsOBPS,
-  useNocDetails: useNocDetails
+  useNocDetails: useNocDetails,
+  useOBPSDocumentSearch,
+  useObpsAPI,
 };
 
 const Hooks = {

@@ -88,7 +88,7 @@ const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setForm
     const handleSubmit = () => {
         let nocDocument = formData.nocDocuments;
         let nocDocumentStep;
-        nocDocumentStep = { ...nocDocument, nocDocuments: nocDocuments, NocDetails: nocDatils };
+        nocDocumentStep = { ...nocDocument, nocDocuments: nocDocuments, NocDetails: nocDatils,nocTaxDocuments:nocTaxDocuments  };
         onSelect(config.key, nocDocumentStep);
     };
     const onSkip = () => onSelect();
