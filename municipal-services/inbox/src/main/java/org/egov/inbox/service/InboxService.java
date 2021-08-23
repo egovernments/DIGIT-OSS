@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.inbox.config.InboxConfiguration;
 import org.egov.inbox.repository.ServiceRequestRepository;
+import org.egov.inbox.util.BpaConstants;
 import org.egov.inbox.util.ErrorConstants;
 import org.egov.inbox.util.TLConstants;
 import org.egov.inbox.web.model.Inbox;
@@ -46,6 +47,7 @@ import org.springframework.web.client.RestTemplate;
 
 import static org.egov.inbox.util.PTConstants.*;
 import static org.egov.inbox.util.TLConstants.TL;
+import static org.egov.inbox.util.BpaConstants.BPA;
 
 @Slf4j
 @Service
@@ -64,6 +66,9 @@ public class InboxService {
 
 	@Autowired
 	private TLInboxFilterService tlInboxFilterService;
+	
+	@Autowired
+	private BPAInboxFilterService bpaInboxFilterService;
 
 	@Autowired
 	public InboxService(InboxConfiguration config, ServiceRequestRepository serviceRequestRepository,
@@ -160,6 +165,20 @@ public class InboxService {
 					moduleSearchCriteria.put(APPLICATION_NUMBER_PARAM, applicationNumbers);
 					businessKeys.addAll(applicationNumbers);
 					moduleSearchCriteria.remove(TLConstants.STATUS_PARAM);
+					moduleSearchCriteria.remove(LOCALITY_PARAM);
+					moduleSearchCriteria.remove(OFFSET_PARAM);
+				}else{
+					isSearchResultEmpty = true;
+				}
+			}
+			
+			if(processCriteria != null && !ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(BPA)) {
+				totalCount = bpaInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
+				List<String> applicationNumbers = bpaInboxFilterService.fetchApplicationNumbersFromSearcher(criteria, StatusIdNameMap, requestInfo);
+				if(!CollectionUtils.isEmpty(applicationNumbers)) {
+					moduleSearchCriteria.put(APPLICATION_NUMBER_PARAM, applicationNumbers);
+					businessKeys.addAll(applicationNumbers);
+					moduleSearchCriteria.remove(BpaConstants.STATUS_PARAM);
 					moduleSearchCriteria.remove(LOCALITY_PARAM);
 					moduleSearchCriteria.remove(OFFSET_PARAM);
 				}else{
