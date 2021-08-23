@@ -59,11 +59,12 @@ import RoundedLabel from "./atoms/RoundedLabel";
 import SectionalDropdown from "./atoms/SectionalDropdown";
 import { LastRow, MediaRow, Row, StatusTable } from "./atoms/StatusTable";
 import SubmitBar from "./atoms/SubmitBar";
+import StandaloneSearchBar from "./atoms/StandaloneSearchBar";
 import {
   AnnouncementIcon, ArrowDown, ArrowLeft, ArrowRightInbox, Calender, CaseIcon, CitizenTruck, CloseSvg, ComplaintIcon, Details, DocumentSVG, DownloadIcon, DownwardArrow, DropIcon, Ellipsis, EmailIcon, FilterIcon, GetApp, HomeIcon,
   LanguageIcon,
   LogoutIcon, Person, PersonIcon, Poll, PrintIcon, PropertyHouse, PTIcon, ReceiptIcon, RefreshIcon, RupeeIcon, SearchIconSvg, ShareIcon, ShippingTruck, SortDown,
-  SortUp, UpwardArrow, WhatsappIcon, OBPSIcon, EDCRIcon, BPAIcon, BPAHomeIcon
+  SortUp, UpwardArrow, WhatsappIcon, OBPSIcon, EDCRIcon, BPAIcon, BPAHomeIcon,DocumentIcon, HelpIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -73,6 +74,9 @@ import Toast from "./atoms/Toast";
 import TopBar from "./atoms/TopBar";
 import UploadFile from "./atoms/UploadFile";
 import UploadImages from "./atoms/UploadImages";
+import CardBasedOptions from "./atoms/CardBasedOptions";
+import WhatsNewCard from "./atoms/WhatsNewCard";
+
 import { FormComposer } from "./hoc/FormComposer";
 import Modal from "./hoc/Modal";
 import ResponseComposer from "./hoc/ResponseComposer";
@@ -169,6 +173,9 @@ export {
   EllipsisMenu,
   CitizenHomeCard,
   EmployeeModuleCard,
+  StandaloneSearchBar,
+  CardBasedOptions,
+  WhatsNewCard,
   // Icons
   GetApp,
   ArrowLeft,
@@ -191,6 +198,8 @@ export {
   MultiSelectDropdown,
   CaseIcon,
   PTIcon,
+  DocumentIcon,
+  HelpIcon,
   // Molecule
   InputCard,
   FormStep,

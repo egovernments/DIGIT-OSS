@@ -110,7 +110,13 @@ const Urls = {
 
   edcr: {
     create: "/edcr/rest/dcr/scrutinize",
+  },
+
+  events:{
+    search: "/egov-user-event/v1/events/_search",
+
   }
+
 };
 
 export default Urls;

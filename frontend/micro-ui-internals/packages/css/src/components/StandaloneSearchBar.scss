@@ -1,0 +1,10 @@
+.StandaloneSearchBar{
+    @apply bg-white flex rounded-3xl px-md py-sm w-full;
+    svg{
+        fill: #505A5F;
+        @apply mr-md;
+    }
+    input{
+        @apply w-full mr-md outline-none;
+    }
+}

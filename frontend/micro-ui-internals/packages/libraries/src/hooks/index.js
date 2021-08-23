@@ -22,6 +22,7 @@ import useModuleTenants from "./useModuleTenants";
 import useStore from "./useStore";
 import { useTenants } from "./useTenants"
 import useInbox from "./useInbox"
+import useEvents from "./events";
 import useNewInboxGeneral from "./useInboxGeneral/useNewInbox";
 
 import useComplaintDetails from "./pgr/useComplaintDetails";
@@ -261,6 +262,7 @@ const Hooks = {
   useModuleTenants,
   useRecieptSearch,
   useNewInboxGeneral,
+  useEvents,
   useStore,
   useTenants,
   useInbox: useTLInbox,

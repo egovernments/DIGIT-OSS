@@ -38,7 +38,7 @@ const Home = ({stateInfo, userDetails, CITIZEN, cityDetails, mobileView, handleU
             handleUserDropdownSelection={handleUserDropdownSelection}
             logoUrl={logoUrl}
         />
-        <div className={`main center-container mb-50`}>
+        <div className={`main center-container mb-25`}>
             <Switch>
                 <Route exact path={path}>
                     <CitizenHome />

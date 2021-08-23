@@ -136,6 +136,12 @@ const StarEmpty = ({ className, onClick, styles }) => (
     />
   </svg>
 );
+
+const DocumentIcon = () => <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M16 0H2C0.9 0 0 0.9 0 2V16C0 17.1 0.9 18 2 18H16C17.1 18 18 17.1 18 16V2C18 0.9 17.1 0 16 0ZM11 14H4V12H11V14ZM14 10H4V8H14V10ZM14 6H4V4H14V6Z" fill="#F47738"/>
+</svg>
+
+
 //TODO: URGENT REMOVE THIS!!!!!!!!!!
 const DocumentSVG = ({ className }) => (
   <svg width="196" height="196" viewBox="0 0 196 196" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -557,6 +563,10 @@ const BPAHomeIcon = ({className}) => (<svg width="34" height="30" viewBox="0 0 3
 <path fill-rule="evenodd" clip-rule="evenodd" d="M30.3333 0H3.66659C1.83325 0 0.333252 1.5 0.333252 3.33333V26.6667C0.333252 28.5 1.83325 30 3.66659 30H30.3333C32.1666 30 33.6666 28.5 33.6666 26.6667V3.33333C33.6666 1.5 32.1666 0 30.3333 0ZM13.6666 23.3333H5.33325V20H13.6666V23.3333ZM13.6666 16.6667H5.33325V13.3333H13.6666V16.6667ZM13.6666 10H5.33325V6.66667H13.6666V10ZM21.6999 20L16.9999 15.2667L19.3499 12.9167L21.6999 15.2833L26.9833 10L29.3499 12.3667L21.6999 20Z" fill="white"/>
 </svg>);
 
+const HelpIcon = () => <svg width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 0H2C0.9 0 0 0.9 0 2V16C0 17.1 0.9 18 2 18H22C23.1 18 23.99 17.1 23.99 16L24 2C24 0.9 23.1 0 22 0ZM8 3C9.66 3 11 4.34 11 6C11 7.66 9.66 9 8 9C6.34 9 5 7.66 5 6C5 4.34 6.34 3 8 3ZM14 15H2V14C2 12 6 10.9 8 10.9C10 10.9 14 12 14 14V15ZM17.85 11H19.49L21 13L19.01 14.99C17.7 14.01 16.73 12.61 16.28 11C16.1 10.36 16 9.69 16 9C16 8.31 16.1 7.64 16.28 7C16.73 5.38 17.7 3.99 19.01 3.01L21 5L19.49 7H17.85C17.63 7.63 17.5 8.3 17.5 9C17.5 9.7 17.63 10.37 17.85 11Z" fill="#F47738"/>
+</svg>
+
 export {
   AnnouncementIcon,
   ReceiptIcon,
@@ -605,6 +615,7 @@ export {
   Person,
   WhatsappIcon,
   EmailIcon,
+  DocumentIcon,
   DocumentSVG,
   ArrowToFirst,
   ArrowToLast,
@@ -615,5 +626,6 @@ export {
   CitizenTruck,
   EDCRIcon,
   BPAIcon,
-  BPAHomeIcon
+  BPAHomeIcon,
+  HelpIcon
 };
