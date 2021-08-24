@@ -20,7 +20,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class LandBoundaryService {
 
 	private ServiceRequestRepository serviceRequestRepository;
@@ -47,14 +50,17 @@ public class LandBoundaryService {
 	 */
 	@SuppressWarnings("rawtypes")
 	public void getAreaType(LandInfoRequest request, String hierarchyTypeCode) {
-
+		log.info("LAND info Request:::::"+request.toString());
 		String tenantId = request.getLandInfo().getTenantId();
-
+		log.info("LAND INFO toString():::"+request.getLandInfo().toString());
+		log.info("tenantID::"+tenantId);
 		LinkedList<String> localities = new LinkedList<>();
 
 		if (request.getLandInfo().getAddress() == null || request.getLandInfo().getAddress().getLocality() == null)
 			throw new CustomException(LandConstants.INVALID_ADDRESS, "The address or locality cannot be null");
+		log.info("LAND ADDRESS:::"+request.getLandInfo().getAddress().toString());
 		localities.add(request.getLandInfo().getAddress().getLocality().getCode());
+		log.info("Locality Code::::"+request.getLandInfo().getAddress().getLocality().getCode());
 
 		StringBuilder uri = new StringBuilder(config.getLocationHost());
 		uri.append(config.getLocationContextPath()).append(config.getLocationEndpoint());
@@ -75,11 +81,17 @@ public class LandBoundaryService {
 		if (CollectionUtils.isEmpty(responseMap))
 			throw new CustomException(LandConstants.BOUNDARY_ERROR, "The response from location service is empty or null");
 		String jsonString = new JSONObject(responseMap).toString();
+		log.info("JSON String::::"+jsonString);
 
 		Map<String, String> propertyIdToJsonPath = getJsonpath(request);
+		
+		for(Map.Entry<String, String> props :propertyIdToJsonPath.entrySet())
+			log.info("propertyIdToJsonPath::KEY"+props.getKey()+"::Values::"+props.getValue());
+		
 
 		DocumentContext context = JsonPath.parse(jsonString);
-
+		log.info("Context STring"+context.jsonString());
+		log.info("LAND info ID:::"+request.getLandInfo().getId());
 		List<String> boundaryObject = context.read(propertyIdToJsonPath.get(request.getLandInfo().getId()));
 
 		if (boundaryObject != null && CollectionUtils.isEmpty((boundaryObject)))
@@ -104,7 +116,7 @@ public class LandBoundaryService {
 	private Map<String, String> getJsonpath(LandInfoRequest request) {
 		Map<String, String> idToJsonPath = new LinkedHashMap<>();
 		String jsonpath = "$..boundary[?(@.code==\"{}\")]";
-
+		log.info("Landinfo:::"+request.getLandInfo().getId()+":::Locality"+request.getLandInfo().getAddress().getLocality().getCode());
 		idToJsonPath.put(request.getLandInfo().getId(),
 				jsonpath.replace("{}", request.getLandInfo().getAddress().getLocality().getCode()));
 

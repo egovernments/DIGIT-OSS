@@ -131,9 +131,11 @@ public class LandEnrichmentService {
 
 	public List<LandInfo> enrichLandInfoSearch(List<LandInfo> landInfos, LandSearchCriteria criteria,
 			RequestInfo requestInfo) {
-
+		log.info("requestInfo:::--->>"+requestInfo.toString());
+		log.info(criteria.toString());
 		List<LandInfoRequest> landInfors = new ArrayList<LandInfoRequest>();
 		landInfos.forEach(bpa -> {
+			log.info(requestInfo.toString()+"bpa------>>>>>:::"+bpa.toString());
 			landInfors.add(new LandInfoRequest(requestInfo, bpa));
 		});
 		if (criteria.getLimit() == null || !criteria.getLimit().equals(-1)) {
