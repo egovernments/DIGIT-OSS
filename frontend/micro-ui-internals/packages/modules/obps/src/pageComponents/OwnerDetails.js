@@ -184,10 +184,11 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 payload.applicationType = formData?.data?.applicationType;
                 payload.serviceType = formData?.data?.serviceType;
 
-                //todo, will change in future
-                payload.tenantId = "pb.amritsar";
+                const userInfo = Digit.UserService.getUser();
+                const accountId = userInfo?.info?.uuid;
+                payload.tenantId = formData?.address?.city?.code;
                 payload.workflow = { action: "INITIATE" };
-                payload.accountId = "ac368477-4067-44d2-915a-e2e044941afc";
+                payload.accountId = accountId;
                 payload.documents = null;
 
                 // Additonal details
@@ -208,7 +209,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
 
                 payload.landInfo.owners = conversionOwners;
                 payload.landInfo.ownershipCategory = ownershipCategory.code;
-                payload.landInfo.tenantId = "pb.amritsar";
+                payload.landInfo.tenantId = formData?.address?.city?.code;
 
                 //for units
                 payload.landInfo.unit = getUnitsForAPI(formData?.subOccupancy);

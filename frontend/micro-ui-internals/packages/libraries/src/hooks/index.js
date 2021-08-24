@@ -123,6 +123,7 @@ import useTenantsOBPS from "./obps/useTenants";
 import useNocDetails from "./obps/useNocDetails";
 import useOBPSDocumentSearch from "./obps/useOBPSDocumentSearch";
 import useObpsAPI from "./obps/useObpsAPI";
+import useBPADetails from "./obps/useBPADetails"
 
 const pgr = {
   useComplaintDetails,
@@ -238,6 +239,7 @@ const obps = {
   useNocDetails: useNocDetails,
   useOBPSDocumentSearch,
   useObpsAPI,
+  useBPADetails
 };
 
 const Hooks = {

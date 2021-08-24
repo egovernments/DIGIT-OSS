@@ -9,4 +9,8 @@ export const Search = {
     const response = await OBPSService.NOCSearch(tenantId, params);
     return response?.Noc;
   },
+  BPADetails: async (tenantId, params) => {
+    const response = await OBPSService.BPASearch(tenantId, params);
+    return response?.BPA;
+  }
 } 

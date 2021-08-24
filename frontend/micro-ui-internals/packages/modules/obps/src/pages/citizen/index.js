@@ -4,6 +4,7 @@ import { Switch, useLocation } from "react-router-dom";
 import { PrivateRoute, BackButton } from "@egovernments/digit-ui-react-components";
 import NewBuildingPermit from "./NewBuildingPermit";
 import CreateEDCR from "./EDCR";
+import CreateOCEDCR from "./OCEDCR";
 import BPACitizenHomeScreen from "./home"; 
 
 const App = ({ path }) => {
@@ -16,6 +17,7 @@ const App = ({ path }) => {
       <Switch>
       <PrivateRoute path={`${path}/home`} component={BPACitizenHomeScreen} />
         <PrivateRoute path={`${path}/edcrscrutiny/apply`} component={CreateEDCR} />   
+        <PrivateRoute path={`${path}/edcrscrutiny/oc-apply`} component={CreateOCEDCR} />   
         <PrivateRoute
           path={`${path}/new-building-permit`}
           component={() => <NewBuildingPermit />}

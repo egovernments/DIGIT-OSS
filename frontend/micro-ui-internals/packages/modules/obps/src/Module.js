@@ -15,7 +15,7 @@ import DocumentDetails from "./pageComponents/DocumentDetails";
 import NOCDetails from "./pageComponents/NOCDetails";
 import LocationDetails from "./pageComponents/LocationDetails";
 import GIS from "./pageComponents/GIS";
-
+import OCEDCRDocsRequired from "./pageComponents/OCEDCRDocsRequired";
 
 const OBPSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "bpa";
@@ -68,7 +68,8 @@ const componentsToRegister = {
   DocumentDetails,
   NOCDetails,
   LocationDetails,
-  GIS
+  GIS,
+  OCEDCRDocsRequired,
 }
 
 export const initOBPSComponents = () => {
