@@ -6,10 +6,13 @@ import { getSearchResults } from "../../../../ui-utils/commons";
 import { convertDateToEpoch, getTextToLocalMapping, validateFields } from "../utils/index";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
+import { ComponentJsonPath, fetchBill, getPropertyWithBillAmount } from "../pt-mutation/searchApplicationResource/applicationSearchUtils";
+
+
 import {
   enableField,disableField
  } from "egov-ui-framework/ui-utils/commons";
-export const propertySearch = async (state, dispatch) => {
+export const propertyApplicationSearch = async (state, dispatch) => {
   searchApiCall(state, dispatch, 0)
 }
 
@@ -21,48 +24,48 @@ const removeValidation = (state, dispatch, index) => {
  
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
       "props.error",
       false
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
       "props.error",
       false
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
       "props.error",
       false
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
       "props.error",
       false
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
       "props.error",
       false
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
       "props.error",
       false
     )
@@ -71,48 +74,48 @@ const removeValidation = (state, dispatch, index) => {
 
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
       "isFieldValid",
       true
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
       "isFieldValid",
       true
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
       "isFieldValid",
       true
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
       "isFieldValid",
       true
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
       "isFieldValid",
       true
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
       "isFieldValid",
       true
     )
@@ -141,14 +144,13 @@ const searchApiApplicationCall = async (state, dispatch, index) => {
   showHideTable(false, dispatch, 0);
  showHideTable(false, dispatch, 1);
 
- let searchScreenObject = get(
+ let pASearchScreenObject = get(
    state.screenConfiguration.preparedFinalObject,
-   "searchScreen",
+   "pASearchScreen",
    {}
  );
-
-
- if ((!searchScreenObject.tenantId) && index == 0) {
+ 
+ if (!pASearchScreenObject.tenantId) {
    dispatch(
      toggleSnackbar(
        true,
@@ -161,24 +163,44 @@ const searchApiApplicationCall = async (state, dispatch, index) => {
    );
    return;
 
- }
+ } 
+
  let queryObject = [
-   {
+    {
      key: "tenantId",
-     value: searchScreenObject.tenantId
-   }
+     value: pASearchScreenObject.tenantId
+   } 
  ];
- if (index == 1 && process.env.REACT_APP_NAME == "Citizen") {
+
+
+ let tenants = state.common.cities && state.common.cities;
+
+  let filterTenant ;
+
+ if (process.env.REACT_APP_NAME === "Citizen")
+ {
+    filterTenant = tenants && tenants.filter(m=>m.key===pASearchScreenObject.tenantId);
+ }
+ else
+ {
+    filterTenant = tenants && tenants.filter(m=>m.key===getTenantId());
+ }
+
+
+let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
+
+
+/*  if (index == 1 && process.env.REACT_APP_NAME == "Citizen") {
    queryObject = [];
  }
 
 
  
- let form1 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails", state, dispatch, "propertySearch");
- let form2 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails", state, dispatch, "propertySearch");
- // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails"
- // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails"
- // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo"
+ let form1 = validateFields("components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails", state, dispatch, "propertyApplicationSearch");
+ let form2 = validateFields("components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails", state, dispatch, "propertyApplicationSearch");
+ // "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails"
+ // "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails"
+ // "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo"
  
  
  
@@ -186,80 +208,80 @@ const searchApiApplicationCall = async (state, dispatch, index) => {
    "components.div.children.captureMutationDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchProperty.children.searchPropertyDetails.children.ulbCityContainer.children",
    state,
    dispatch,
-   "propertySearch"
+   "propertyApplicationSearch"
  );
 
  const isownerCityRowValid = validateFields(
-   "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
+   "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
    state,
    dispatch,
-   "propertySearch"
+   "propertyApplicationSearch"
  );
  const isownerLocalityRowValid = validateFields(
-  "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.locality",
+  "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.locality",
   state,
   dispatch,
-  "propertySearch"
-) || searchScreenObject.locality == "";
+  "propertyApplicationSearch"
+) || pASearchScreenObject.locality == "";
 const isownerDoorNoRowValid = validateFields(
-  "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.doorNo",
+  "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.doorNo",
   state,
   dispatch,
-  "propertySearch"
-) || searchScreenObject.doorNo == "";
+  "propertyApplicationSearch"
+) || pASearchScreenObject.doorNo == "";
 const isownerNameRowValid = validateFields(
-  "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
+  "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
   state,
   dispatch,
-  "propertySearch"
-) || searchScreenObject.name == "";
+  "propertyApplicationSearch"
+) || pASearchScreenObject.name == "";
 
  const isownerMobNoRowValid = validateFields(
-   "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
+   "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
    state,
    dispatch,
-   "propertySearch"
- ) || searchScreenObject.mobileNumber == '';
+   "propertyApplicationSearch"
+ ) || pASearchScreenObject.mobileNumber == '';
 
  const ispropertyTaxUniqueIdRowValid = validateFields(
-   "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
+   "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
    state,
    dispatch,
-   "propertySearch"
- ) || searchScreenObject.ids == '';
+   "propertyApplicationSearch"
+ ) || pASearchScreenObject.ids == '';
 
  const isexistingPropertyIdRowValid = validateFields(
-   "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
+   "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
    state,
    dispatch,
-   "propertySearch"
- ) || searchScreenObject.oldPropertyId == '';
+   "propertyApplicationSearch"
+ ) || pASearchScreenObject.oldPropertyId == '';
  const ispropertyTaxApplicationNoRowValid = validateFields(
-   "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
+   "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
    state,
    dispatch,
-   "propertySearch"
- ) || searchScreenObject.acknowledgementIds == '';
+   "propertyApplicationSearch"
+ ) || pASearchScreenObject.acknowledgementIds == '';
  const ispropertyTaxApplicationOwnerNoRowValid = validateFields(
-   "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
+   "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
    state,
    dispatch,
-   "propertySearch"
- ) || searchScreenObject.mobileNumber == '';
+   "propertyApplicationSearch"
+ ) || pASearchScreenObject.mobileNumber == '';
  const ispropertyTaxApplicationPidRowValid = validateFields(
-   "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
+   "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
    state,
    dispatch,
-   "propertySearch"
- ) || searchScreenObject.ids == '';
+   "propertyApplicationSearch"
+ ) || pASearchScreenObject.ids == '';
 
  let formValid = false;
  if (index == 0) {
-   if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldPropertyId != '' || (searchScreenObject.locality && searchScreenObject.doorNo  )|| searchScreenObject.name != '' || searchScreenObject.doorNo != '' ) {
+   if (pASearchScreenObject.ids != '' || pASearchScreenObject.mobileNumber != '' || pASearchScreenObject.oldPropertyId != '' || (pASearchScreenObject.locality && pASearchScreenObject.doorNo  )|| pASearchScreenObject.name != '' || pASearchScreenObject.doorNo != '' ) {
      formValid = true;
    }
  } else {
-   if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.acknowledgementIds != '') {
+   if (pASearchScreenObject.ids != '' || pASearchScreenObject.mobileNumber != '' || pASearchScreenObject.acknowledgementIds != '') {
      formValid = true;
    }
  }
@@ -315,14 +337,14 @@ const isownerNameRowValid = validateFields(
      )
    );
    return;
- }
+ } */
 
 
  if (
-   Object.keys(searchScreenObject).length == 0 || Object.keys(searchScreenObject).length == 1 ||
-   (Object.values(searchScreenObject).every(x => x === ""))
+   Object.keys(pASearchScreenObject).length == 0 || Object.keys(pASearchScreenObject).length == 1 ||
+   (Object.values(pASearchScreenObject).every(x => x === ""))
  ) {
-   dispatch(
+  /*  dispatch(
      toggleSnackbar(
        true,
        {
@@ -332,13 +354,13 @@ const isownerNameRowValid = validateFields(
        "error"
      )
    );
-   return;
+   return; */
  }
  //   else if (
- //     (searchScreenObject["fromDate"] === undefined ||
- //       searchScreenObject["fromDate"].length === 0) &&
- //     searchScreenObject["toDate"] !== undefined &&
- //     searchScreenObject["toDate"].length !== 0
+ //     (pASearchScreenObject["fromDate"] === undefined ||
+ //       pASearchScreenObject["fromDate"].length === 0) &&
+ //     pASearchScreenObject["toDate"] !== undefined &&
+ //     pASearchScreenObject["toDate"].length !== 0
  //   ) {
  //     dispatch(
  //       toggleSnackbar(
@@ -353,60 +375,106 @@ const isownerNameRowValid = validateFields(
    removeValidation(state, dispatch, index);
 
    //  showHideProgress(true, dispatch);
-   for (var key in searchScreenObject) {
+   for (var key in pASearchScreenObject) {
      if (
-       searchScreenObject.hasOwnProperty(key) &&
-       searchScreenObject[key].trim() !== ""
+       pASearchScreenObject.hasOwnProperty(key) &&
+       pASearchScreenObject[key].trim() !== ""
      ) {
        if (key === "fromDate") {
          queryObject.push({
            key: key,
-           value: convertDateToEpoch(searchScreenObject[key], "daystart")
+           value: convertDateToEpoch(pASearchScreenObject[key], "daystart")
          });
        } else if (key === "tenantId") {
          // queryObject.push({
          //   key: key,
-         //   value: convertDateToEpoch(searchScreenObject[key], "dayend")
+         //   value: convertDateToEpoch(pASearchScreenObject[key], "dayend")
          // });
 
        }
        else if (key === "ids") {
-         queryObject.push({
-           key: "propertyIds",
-           value: searchScreenObject[key].trim()
-         });
-       }
+        queryObject.push({
+          key: "propertyIds",
+          value: tenantUniqueId && "PT-"+tenantUniqueId+"-"+pASearchScreenObject[key].trim()
+        });
+      }
 
        else if (key === "toDate") {
          queryObject.push({
            key: key,
-           value: convertDateToEpoch(searchScreenObject[key], "dayend")
+           value: convertDateToEpoch(pASearchScreenObject[key], "dayend")
          });
        }
        // else if (key === "status") {
        //   queryObject.push({
        //     key: "action",
-       //     value: searchScreenObject[key].trim()
+       //     value: pASearchScreenObject[key].trim()
        //   });
        // }
        else {
-         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
+         queryObject.push({ key: key, value: pASearchScreenObject[key].trim() });
        }
      }
    }
    try {
-     disableField('propertySearch',"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
-     disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+     disableField('propertyApplicationSearch',"components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+     disableField('propertyApplicationSearch', "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
    // const response = await getSearchResults(queryObject);
 
      // const response = searchSampleResponse();
       /* Fuzzy serach seperate API implementation */
-      /* const response = (searchScreenObject['doorNo'] || searchScreenObject['name']) && index == 0 ? await getSearchResults(queryObject, {}, "/property-services/property/fuzzy/_search") : await getSearchResults(queryObject); */
-      const response = (searchScreenObject['doorNo'] || searchScreenObject['name']) && index == 0 ? await getSearchResults(queryObject, {}, "/property-services/property/fuzzy/_search") : await getSearchResults(queryObject);
+      /* const response = (pASearchScreenObject['doorNo'] || pASearchScreenObject['name']) && index == 0 ? await getSearchResults(queryObject, {}, "/property-services/property/fuzzy/_search") : await getSearchResults(queryObject); */
+      const response = await getSearchResults(queryObject);
 
-    //  const response =  await getSearchResults(queryObject);
 
-     let propertyData = response.Properties.map(item => ({
+
+      let propidobj = queryObject && queryObject.find(o => o.key === "propertyIds");
+
+      //let filtedResponse = response.find( o => o.creationReason==="PT.MUTATION");
+
+
+
+
+
+
+      const billResponse = await fetchBill(dispatch, response, pASearchScreenObject.tenantId, "PT.MUTATION");
+
+      const finalResponse = getPropertyWithBillAmount(response, billResponse);      //  const response =  await getSearchResults(queryObject);
+
+
+      let PropertiesData = finalResponse.Properties
+
+      let propertyResponse ;
+
+      if(propidobj)
+      {
+        propertyResponse= PropertiesData.filter( o => o.creationReason==="MUTATION");
+       
+      }
+      else
+      {
+        propertyResponse = PropertiesData;
+      }
+
+      let applicationData = propertyResponse.map(item => ({
+        ["PT_COMMON_TABLE_COL_APP_NO"]:
+          item || "-",
+        ["PT_COMMON_TABLE_COL_PT_ID"]: item || "-",
+        ["PT_COMMON_TABLE_COL_APP_TYPE"]:
+          item.creationReason ? <LabelContainer labelName={"PT." + item.creationReason} labelKey={"PT." + item.creationReason} /> : "NA",
+        ["PT_COMMON_TABLE_COL_OWNER_NAME"]:
+          item.owners[getIndexofActive(item)].name || "-",
+        ["PT_COMMON_COL_ADDRESS"]:
+          getAddress(item) || "-",
+        ["PT_AMOUNT_DUE"]: (item.totalAmount || item.totalAmount===0) ? item.totalAmount : "0",
+        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount },
+        ["TENANT_ID"]: item.tenantId,
+        ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
+        temporary: item
+      }));
+     
+
+      let propertyData = propertyResponse.map(item => ({
        ["PT_COMMON_TABLE_COL_PT_ID"]:
          item.propertyId || "-",
        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[getIndexofActive(item)].name || "-",
@@ -420,25 +488,12 @@ const isownerNameRowValid = validateFields(
        ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-"
      }));
 
-     let applicationData = response.Properties.map(item => ({
-       ["PT_COMMON_TABLE_COL_APP_NO"]:
-         item || "-",
-       ["PT_COMMON_TABLE_COL_PT_ID"]: item || "-",
-       ["PT_COMMON_TABLE_COL_APP_TYPE"]:
-         item.creationReason ? <LabelContainer labelName={"PT." + item.creationReason} labelKey={"PT." + item.creationReason} /> : "NA",
-       ["PT_COMMON_TABLE_COL_OWNER_NAME"]:
-         item.owners[getIndexofActive(item)].name || "-",
-       ["PT_COMMON_COL_ADDRESS"]:
-         getAddress(item) || "-",
-       ["TENANT_ID"]: item.tenantId,
-       ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
-       temporary: item
-     }));
-     enableField('propertySearch',"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
-     enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+
+     enableField('propertyApplicationSearch',"components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+     enableField('propertyApplicationSearch', "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
      dispatch(
        handleField(
-         "propertySearch",
+         "propertyApplicationSearch",
          "components.div.children.searchPropertyTable",
          "props.data",
          propertyData
@@ -446,7 +501,7 @@ const isownerNameRowValid = validateFields(
      );
      dispatch(
        handleField(
-         "propertySearch",
+         "propertyApplicationSearch",
          "components.div.children.searchPropertyTable",
          "props.rows",
          response.Properties.length
@@ -454,7 +509,7 @@ const isownerNameRowValid = validateFields(
      );
      dispatch(
        handleField(
-         "propertySearch",
+         "propertyApplicationSearch",
          "components.div.children.searchApplicationTable",
          "props.data",
          applicationData
@@ -462,18 +517,18 @@ const isownerNameRowValid = validateFields(
      );
      dispatch(
        handleField(
-         "propertySearch",
+         "propertyApplicationSearch",
          "components.div.children.searchApplicationTable",
          "props.rows",
-         response.Properties.length
+         propertyResponse.length
        )
      );
      //showHideProgress(false, dispatch);
      showHideTable(true, dispatch, index);
    } catch (error) {
      //showHideProgress(false, dispatch);
-     enableField('propertySearch',"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
-     enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+     enableField('propertyApplicationSearch',"components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+     enableField('propertyApplicationSearch', "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
      dispatch(
        toggleSnackbar(
          true,
@@ -489,9 +544,9 @@ const searchApiCall = async (state, dispatch, index) => {
    showHideTable(false, dispatch, 0);
   showHideTable(false, dispatch, 1);
 
-  let searchScreenObject = get(
+  let pASearchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
-    "searchScreen",
+    "pASearchScreen",
     {}
   );
 
@@ -501,7 +556,7 @@ const searchApiCall = async (state, dispatch, index) => {
 
   if (process.env.REACT_APP_NAME === "Citizen")
   {
-     filterTenant = tenants && tenants.filter(m=>m.key===searchScreenObject.tenantId);
+     filterTenant = tenants && tenants.filter(m=>m.key===pASearchScreenObject.tenantId);
   }
   else
   {
@@ -512,7 +567,7 @@ const searchApiCall = async (state, dispatch, index) => {
  let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
 
 
-/*  if (!searchScreenObject.locality) {
+/*  if (!pASearchScreenObject.locality) {
   dispatch(
     toggleSnackbar(
       true,
@@ -526,7 +581,7 @@ const searchApiCall = async (state, dispatch, index) => {
   return;
 
 }  */
-  if ((!searchScreenObject.tenantId) && index == 0) {
+  if ((!pASearchScreenObject.tenantId) && index == 0) {
     dispatch(
       toggleSnackbar(
         true,
@@ -543,22 +598,22 @@ const searchApiCall = async (state, dispatch, index) => {
   let queryObject = [
     {
       key: "tenantId",
-      value: searchScreenObject.tenantId
+      value: pASearchScreenObject.tenantId
     }
   ];
   if (index == 1 && process.env.REACT_APP_NAME == "Citizen") {
     queryObject = [];
   }
-  let form1 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children", state, dispatch, "propertySearch");
+  let form1 = validateFields("components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children", state, dispatch, "propertyApplicationSearch");
  
 
   let formValid = false;
   if (index == 0) {
-    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldPropertyId != ''|| searchScreenObject.name != '' || searchScreenObject.doorNo != '') {
+    if (pASearchScreenObject.ids != '' || pASearchScreenObject.mobileNumber != '' || pASearchScreenObject.oldPropertyId != ''|| pASearchScreenObject.name != '' || pASearchScreenObject.doorNo != '') {
       formValid = true;
     }
   } else {
-    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.acknowledgementIds != '') {
+    if (pASearchScreenObject.ids != '' || pASearchScreenObject.mobileNumber != '' || pASearchScreenObject.acknowledgementIds != '') {
       formValid = true;
     }
   }
@@ -575,44 +630,44 @@ const searchApiCall = async (state, dispatch, index) => {
     );
     return;
   }
-  // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails"
-  // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails"
-  // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo"
+  // "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails"
+  // "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails"
+  // "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo"
   const isSearchBoxFirstRowValid = validateFields(
-  "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchProperty.children.searchPropertyDetails.children.ulbCityContainer.children",
+  "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchProperty.children.searchPropertyDetails.children.ulbCityContainer.children",
     state,
     dispatch,
-    "propertySearch"
+    "propertyApplicationSearch"
   );
 
   const isownerCityRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
+    "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
     state,
     dispatch,
-    "propertySearch"
+    "propertyApplicationSearch"
   );
 
 
   const isownerMobNoRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
+    "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
     state,
     dispatch,
-    "propertySearch"
-  ) || searchScreenObject.mobileNumber == '';
+    "propertyApplicationSearch"
+  ) || pASearchScreenObject.mobileNumber == '';
 
   const ispropertyTaxUniqueIdRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
+    "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
     state,
     dispatch,
-    "propertySearch"
-  ) || searchScreenObject.ids == '';
+    "propertyApplicationSearch"
+  ) || pASearchScreenObject.ids == '';
 
   const isexistingPropertyIdRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
+    "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
     state,
     dispatch,
-    "propertySearch"
-  ) || searchScreenObject.oldPropertyId == '';
+    "propertyApplicationSearch"
+  ) || pASearchScreenObject.oldPropertyId == '';
   
 
 
@@ -660,8 +715,8 @@ const searchApiCall = async (state, dispatch, index) => {
 
 
   if (
-    Object.keys(searchScreenObject).length == 0 || Object.keys(searchScreenObject).length == 1 ||
-    (Object.values(searchScreenObject).every(x => x === ""))
+    Object.keys(pASearchScreenObject).length == 0 || Object.keys(pASearchScreenObject).length == 1 ||
+    (Object.values(pASearchScreenObject).every(x => x === ""))
   ) {
     dispatch(
       toggleSnackbar(
@@ -676,10 +731,10 @@ const searchApiCall = async (state, dispatch, index) => {
     return;
   }
   //   else if (
-  //     (searchScreenObject["fromDate"] === undefined ||
-  //       searchScreenObject["fromDate"].length === 0) &&
-  //     searchScreenObject["toDate"] !== undefined &&
-  //     searchScreenObject["toDate"].length !== 0
+  //     (pASearchScreenObject["fromDate"] === undefined ||
+  //       pASearchScreenObject["fromDate"].length === 0) &&
+  //     pASearchScreenObject["toDate"] !== undefined &&
+  //     pASearchScreenObject["toDate"].length !== 0
   //   ) {
   //     dispatch(
   //       toggleSnackbar(
@@ -694,51 +749,53 @@ const searchApiCall = async (state, dispatch, index) => {
     removeValidation(state, dispatch, index);
 
     //  showHideProgress(true, dispatch);
-    for (var key in searchScreenObject) {
+    for (var key in pASearchScreenObject) {
       if (
-        searchScreenObject.hasOwnProperty(key) &&
-        searchScreenObject[key].trim() !== ""
+        pASearchScreenObject.hasOwnProperty(key) &&
+        pASearchScreenObject[key].trim() !== ""
       ) {
         if (key === "fromDate") {
           queryObject.push({
             key: key,
-            value: convertDateToEpoch(searchScreenObject[key], "daystart")
+            value: convertDateToEpoch(pASearchScreenObject[key], "daystart")
           });
         } else if (key === "tenantId") {
           // queryObject.push({
           //   key: key,
-          //   value: convertDateToEpoch(searchScreenObject[key], "dayend")
+          //   value: convertDateToEpoch(pASearchScreenObject[key], "dayend")
           // });
 
         }
         else if (key === "ids") {
           queryObject.push({
             key: "propertyIds",
-            value: "PT-"+tenantUniqueId+"-"+searchScreenObject[key].trim()
+            value: "PT-"+tenantUniqueId+"-"+pASearchScreenObject[key].trim()
           });
         }
 
         else if (key === "toDate") {
           queryObject.push({
             key: key,
-            value: convertDateToEpoch(searchScreenObject[key], "dayend")
+            value: convertDateToEpoch(pASearchScreenObject[key], "dayend")
           });
         }
         // else if (key === "status") {
         //   queryObject.push({
         //     key: "action",
-        //     value: searchScreenObject[key].trim()
+        //     value: pASearchScreenObject[key].trim()
         //   });
         // }
         else {
-          queryObject.push({ key: key, value: searchScreenObject[key].trim() });
+          queryObject.push({ key: key, value: pASearchScreenObject[key].trim() });
         }
       }
     }
     try {
-      disableField('propertySearch',"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
-      disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
-     const response = await getSearchResults(queryObject);
+      disableField('propertyApplicationSearch',"components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+      disableField('propertyApplicationSearch', "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+     
+
+      const response = await getSearchResults(queryObject);
 
       // const response = searchSampleResponse();
 
@@ -770,11 +827,11 @@ const searchApiCall = async (state, dispatch, index) => {
         ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
         temporary: item
       }));
-      enableField('propertySearch',"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
-      enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+      enableField('propertyApplicationSearch',"components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+      enableField('propertyApplicationSearch', "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
       dispatch(
         handleField(
-          "propertySearch",
+          "propertyApplicationSearch",
           "components.div.children.searchPropertyTable",
           "props.data",
           propertyData
@@ -782,7 +839,7 @@ const searchApiCall = async (state, dispatch, index) => {
       );
       dispatch(
         handleField(
-          "propertySearch",
+          "propertyApplicationSearch",
           "components.div.children.searchPropertyTable",
           "props.rows",
           response.Properties.length
@@ -790,7 +847,7 @@ const searchApiCall = async (state, dispatch, index) => {
       );
       dispatch(
         handleField(
-          "propertySearch",
+          "propertyApplicationSearch",
           "components.div.children.searchApplicationTable",
           "props.data",
           applicationData
@@ -798,7 +855,7 @@ const searchApiCall = async (state, dispatch, index) => {
       );
       dispatch(
         handleField(
-          "propertySearch",
+          "propertyApplicationSearch",
           "components.div.children.searchApplicationTable",
           "props.rows",
           response.Properties.length
@@ -808,8 +865,8 @@ const searchApiCall = async (state, dispatch, index) => {
       showHideTable(true, dispatch, index);
     } catch (error) {
       //showHideProgress(false, dispatch);
-      enableField('propertySearch',"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
-      enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+      enableField('propertyApplicationSearch',"components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+      enableField('propertyApplicationSearch', "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
       dispatch(
         toggleSnackbar(
           true,
@@ -825,7 +882,7 @@ const showHideTable = (booleanHideOrShow, dispatch, index) => {
   if (index == 0) {
     dispatch(
       handleField(
-        "propertySearch",
+        "propertyApplicationSearch",
         "components.div.children.searchPropertyTable",
         "visible",
         booleanHideOrShow
@@ -835,7 +892,7 @@ const showHideTable = (booleanHideOrShow, dispatch, index) => {
   else {
     dispatch(
       handleField(
-        "propertySearch",
+        "propertyApplicationSearch",
         "components.div.children.searchApplicationTable",
         "visible",
         booleanHideOrShow

@@ -131,6 +131,17 @@ export const searchPropertyTable = {
       {labelName: "Guardian Name", labelKey: "PT_GUARDIAN_NAME"},
       {labelName: "Existing Property Id", labelKey: "PT_COMMON_COL_EXISTING_PROP_ID"},
       {labelName: "Address", labelKey: "PT_COMMON_COL_ADDRESS"},
+      {labelName: "Pending Amount", labelKey: "PT_AMOUNT_DUE"},
+      {
+        labelName: "Action",
+        labelKey: "PT_COMMON_TABLE_COL_ACTION_LABEL",
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta) =>
+          (value.totalAmount > 0) ? getPayButton(tableMeta) : getMutationButton(tableMeta) ,
+
+        },
+      }, 
       {
         labelName: "Status",
         labelKey: "PT_COMMON_TABLE_COL_STATUS_LABEL",
@@ -289,10 +300,10 @@ export const searchApplicationTable = {
 const onPropertyTabClick = (tableMeta) => {
   switch (tableMeta.rowData[5]) {
     case "INITIATED":
-      window.location.href = `apply?applicationNumber=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}`;
+      window.location.href = `apply?applicationNumber=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[8]}`;
       break;
     default:
-      navigate(propertyInformationScreenLink(tableMeta.rowData[0], tableMeta.rowData[6]));
+      navigate(propertyInformationScreenLink(tableMeta.rowData[0], tableMeta.rowData[8]));
       break;
   }
 };
@@ -326,4 +337,33 @@ const propertyInformationScreenLink=(propertyId,tenantId)=>{
   }else{
     return `/property-tax/property/${propertyId}/${tenantId}`;
   }
+}
+
+
+const payAmount = (tableMeta) => {
+  setRoute(`/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[8]}&businessService=PT`);
+};
+const mutaionLink = (tableMeta) => {
+  setRoute(`/pt-mutation/apply?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[8]}`);
+};
+const getPayButton = (tableMeta) => {
+  return (
+    <a href="javascript:void(0)"
+      onClick={() => payAmount(tableMeta)}
+      style={{ color: "#FE7A51" }}
+    >
+      <LabelContainer labelKey="PT_TOTALDUES_PAY" labelName="PAY" />
+    </a>
+  )
+}
+
+const getMutationButton = (tableMeta) => {
+  return (
+    <a href="javascript:void(0)"
+      onClick={() => mutaionLink(tableMeta)}
+      style={{ color: "#FE7A51" }}
+    >
+      <LabelContainer labelKey="PT_SEARCH_OWNERSHIP_TRANSFER" labelName="Ownership Transfer" />
+    </a>
+  )
 }

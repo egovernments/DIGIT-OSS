@@ -1,20 +1,14 @@
+import { downloadMultipleBill } from "egov-common/ui-utils/commons";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
+import isEmpty from "lodash/isEmpty";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import store from "../../../../ui-redux/store";
 import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import {
-  loadPtBillData,
-  loadMdmsData
+  loadMdmsData, loadPtBillData,
+  loadUlbLogo
 } from "./receiptTransformer";
-import isEmpty from "lodash/isEmpty";
-import get from "lodash/get";
-import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { loadUlbLogo,getULBURL } from "egov-ui-framework/ui-config/screens/specs/utils";
-
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -161,8 +155,8 @@ const stylesForBills = {
 
 // For mutliple bills
 const getMutlipleBillsData = transformedDataArray => {
-  let multipleBillData = transformedDataArray.map((transformedData,index) => {
-    return getPdfContent(transformedData,transformedDataArray.length,index);
+  let multipleBillData = transformedDataArray.map((transformedData, index) => {
+    return getPdfContent(transformedData, transformedDataArray.length, index);
 
   });
   let finalMultipleBillData = {
@@ -174,40 +168,78 @@ const getMutlipleBillsData = transformedDataArray => {
 //generateMutlipleBills PDF
 export const generateMultipleBill = async (state, dispatch, type) => {
   dispatch(toggleSpinner());
-  const allBills = get(
+  let allBills = get(
     state.screenConfiguration,
     "preparedFinalObject.searchScreenMdmsData.billSearchResponse",
     []
   );
-  const tenant = getTenantId();
-  const ulbLogo=getULBURL(state,tenant)
-  loadUlbLogo(getULBURL);
-  await loadMdmsData(tenant);
-  // data1 is for ULB logo from loadUlbLogo
-  let data1 = get(
-    state.screenConfiguration.preparedFinalObject,
-    "base64UlbLogo",
-    {}
+  const commonPayDetails = get(
+    state.screenConfiguration,
+    "preparedFinalObject.searchScreenMdmsData.common-masters.uiCommonPay",
+    []
+  );
+  const businessService = get(
+    state.screenConfiguration,
+    "preparedFinalObject.searchCriteria.businesService",
+    ''
   );
 
-  // data2 is for corporation Name from loadMdmsData
-  let data2 = get(
-    state.screenConfiguration.preparedFinalObject,
-    "mdmsDataForReceipt",
-    {}
-  );
-  let transformedData = allBills.map(item => {
-    const billData = loadPtBillData(item);
-    return {
-      ...billData,
-      ulbLogo: data1,
-      ...data2
-    };
+  let billkey = ''
+  const index = commonPayDetails && commonPayDetails.findIndex((item) => {
+    return item.code == businessService;
   });
-  const multipleBills = getMutlipleBillsData(transformedData);
-  pdfMake.createPdf(multipleBills).open();
+  if (index > -1) {
+    billkey = get(commonPayDetails[index], 'billKey', '');
+  } else {
+    const details = commonPayDetails && commonPayDetails.filter(item => item.code === "DEFAULT");
+    billkey = get(details, 'billKey', '');
+  }
+  allBills = allBills.filter(bill => bill.status === 'ACTIVE');
+  allBills && allBills.length > 0 && await downloadMultipleBill(allBills, billkey);
+  /* 
+  To Download Files based on Filestoreid logic
+  
+  let filestoreids=[];
+  let bills=[];
+  allBills.map(bill=>{
+    if(bill.status==='ACTIVE'){
+      if(bill.fileStoreId==null){
+        bills.push(bill);
+      }else{
+        filestoreids.push(bill.fileStoreId)
+    }
+    }
+  })
+  bills&&bills.length>0&&await downloadMultipleBill(bills,billkey);
+  filestoreids&&filestoreids.length>0&&downloadMultipleFileFromFilestoreIds(filestoreids,'download'); */
   dispatch(toggleSpinner());
 };
+/* await loadMdmsData(tenant);
+// data1 is for ULB logo from loadUlbLogo
+let data1 = get(
+  state.screenConfiguration.preparedFinalObject,
+  "base64UlbLogo",
+  {}
+);
+
+// data2 is for corporation Name from loadMdmsData
+let data2 = get(
+  state.screenConfiguration.preparedFinalObject,
+  "mdmsDataForReceipt",
+  {}
+);
+let transformedData = allBills.map(item => {
+  const billData = loadPtBillData(item);
+  return {
+    ...billData,
+    ulbLogo: data1,
+    ...data2
+  };
+});
+const multipleBills = getMutlipleBillsData(transformedData);
+pdfMake.createPdf(multipleBills).open();
+dispatch(toggleSpinner());
+}; */
 
 /************************************************SingleBill***********************************************************************/
 
@@ -215,12 +247,11 @@ export const generateMultipleBill = async (state, dispatch, type) => {
 
 const getSingleBillData = transformedData => {
   let singleBillData = {
-    content:getPdfContent(transformedData,1,0),
+    content: getPdfContent(transformedData, 1, 0),
     styles: stylesForBills
   };
   return singleBillData;
 };
-
 
 export const generateSingleBill = async billNo => {
   const state = store.getState();
@@ -238,8 +269,7 @@ export const generateSingleBill = async billNo => {
     return;
   }
   const tenant = get(data, "tenantId");
-  const ulbLogo=getULBURL(state,tenant);
-  loadUlbLogo(ulbLogo);
+  loadUlbLogo(tenant);
   let transformedData = await loadPtBillData(data);
   await loadMdmsData(tenant);
 
@@ -295,7 +325,7 @@ export const getTaxHeadtable = taxHeads => {
   return taxtableData;
 };
 
-const getTaxHeadHeaders = (taxHeads) =>{
+const getTaxHeadHeaders = (taxHeads) => {
   const headers = Object.keys(taxHeads).map((item, index) => {
     return {
       text: item,
@@ -306,7 +336,7 @@ const getTaxHeadHeaders = (taxHeads) =>{
   return headers
 }
 
-const getTaxHeadValues = (taxHeads) =>{
+const getTaxHeadValues = (taxHeads) => {
   const values = Object.values(taxHeads).map((item, index) => {
     return {
       text: item,
@@ -318,7 +348,7 @@ const getTaxHeadValues = (taxHeads) =>{
 }
 
 
-const getPdfContent = (transformedData,length,index) =>{
+const getPdfContent = (transformedData, length, index) => {
   return [
     {
       style: "noc-head",
@@ -327,9 +357,9 @@ const getPdfContent = (transformedData,length,index) =>{
         body: [
           [
             {
-              // image: transformedData.ulbLogo,
-              // width: 50,
-              // height: 61.25
+              image: transformedData.ulbLogo,
+              width: 50,
+              height: 61.25
             },
             {
               stack: [
@@ -562,10 +592,10 @@ const getPdfContent = (transformedData,length,index) =>{
           [
             {
               table: {
-                widths: ["10%", "14%", "13%", "14%", "10%", "9%", "9%", "10%","12%"],
+                widths: ["10%", "14%", "13%", "14%", "10%", "9%", "9%", "10%", "12%"],
                 body: [
-                    getTaxHeadHeaders(transformedData.taxHeads),
-                    getTaxHeadValues(transformedData.taxHeads)
+                  getTaxHeadHeaders(transformedData.taxHeads),
+                  getTaxHeadValues(transformedData.taxHeads)
                 ]
               },
               border: [true, false, true, true]
@@ -731,22 +761,22 @@ const getPdfContent = (transformedData,length,index) =>{
       table: {
         widths: ["25%", "75%"],
         body: [
-      [
-        {
-          text: "Name & Address",
-          border: [false, false, false, false],
+          [
+            {
+              text: "Name & Address",
+              border: [false, false, false, false],
 
-          style: "receipt-table-value"
-        },
-        {
-          text: transformedData.payerAddress,
-          border: [false, false, false, false],
+              style: "receipt-table-value"
+            },
+            {
+              text: transformedData.payerAddress,
+              border: [false, false, false, false],
 
-          style: "receipt-table"
-        }
+              style: "receipt-table"
+            }
+          ]
         ]
-      ]
-    }
+      }
     },
     {
       text: "Receiver’s Signature & Mobile No. ",

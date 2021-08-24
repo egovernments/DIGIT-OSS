@@ -169,6 +169,9 @@ const commonApplicantInformation = () => {
           {
             code: "FATHER"
           },
+          { 
+            code: "MOTHER" 
+          },
           {
             code: "HUSBAND"
           }

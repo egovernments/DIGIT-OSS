@@ -21,7 +21,7 @@ class PendingAmountDialog extends Component {
 
   navigateToCommonPay = (envURL) => {
     this.props.closeDialogue();
-    this.props.history.push(`${envURL}?consumerCode=${this.props.consumerCode}&tenantId=${this.props.tenantId}`);
+    this.props.history.push(`${envURL}?consumerCode=${this.props.consumerCode}&tenantId=${this.props.tenantId}&businessService=PT`);
   }
 
   dialogContent = (amount)=>{

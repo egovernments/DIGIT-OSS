@@ -9,6 +9,10 @@ import Icon from "@material-ui/core/Icon";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import EstimateCardContainer from "../../ui-containers-local/EstimateCardContainer";
 import get from "lodash/get";
+import { ifUserRoleExists } from "egov-common/ui-config/screens/specs/utils";
+
+
+const roleExists = ifUserRoleExists("CITIZEN");
 
 const styles = {
   card: {
@@ -201,6 +205,23 @@ function FeesEstimateCard(props) {
             </Grid>
           </Grid>
         </div>
+        { roleExists && estimate.businesService === 'PT'? 
+                (  <Grid item xs={12} className={classes.message} >
+                
+              <Typography variant="body2">  <LabelContainer
+                    labelName="If the amount seems to be incorrect, please reach out to the <contact no> or <email id>"
+                    labelKey="pt.amount.message"
+                    dynamicArray={[estimate.contactNumber, estimate.email]}
+                  /></Typography>
+                  <br></br>
+                  <Typography variant="body2">  <LabelContainer
+                    labelName="There might be an issue with PNB Bank cards, please use an alternative if possible."
+                    labelKey="NOC_PAYMENT_CAP_PMT_DISCLAIMER"
+                  /></Typography>
+                 
+                
+            </Grid> ):"" }             
+
       </Grid>
       <Grid xs={12} sm={5}>
         <Typography

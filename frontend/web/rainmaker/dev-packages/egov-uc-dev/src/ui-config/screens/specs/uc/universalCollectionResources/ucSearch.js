@@ -37,6 +37,22 @@ const resetFields = (state, dispatch) => {
         ""
       )
     );
+   dispatch(
+    handleField(
+      "search",
+      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.serviceType",
+      "props.error",
+      false
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.serviceType",
+      "props.helperText",
+      ""
+    )
+  );
   dispatch(
     handleField(
       "search",
@@ -109,7 +125,7 @@ export const UCSearchCard = getCommonCard({
           moduleName: "BillingService"
         },
         required: true,
-        isClearable: true,
+        // isClearable: true,
         labelsFromLocalisation: true,
         sourceJsonPath: "applyScreenMdmsData.serviceCategories",
         jsonPath: "ucSearchScreen.businessServices",

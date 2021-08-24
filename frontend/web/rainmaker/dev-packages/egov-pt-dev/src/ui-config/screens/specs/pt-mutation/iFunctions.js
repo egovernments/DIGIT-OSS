@@ -5,6 +5,7 @@ import get from "lodash/get";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { convertDateToEpoch, getTextToLocalMapping, validateFields } from "../utils/index";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { ComponentJsonPath, fetchBill, getPropertyWithBillAmount } from "../pt-mutation/searchResource/searchUtils";
 
 import {
   enableField,disableField
@@ -127,12 +128,24 @@ const getAddress = (item) => {
 }
 const getIndexofActive = (item) => {
 
-  for(let i=0;i<item.owners.length;i++)
+
+  if(item && item.status=="INWORKFLOW")
   {
-    if(item.owners[i].status=='ACTIVE')
-    return i;
+    for(let i=0;i<item.owners.length;i++)
+    {
+      if(item.owners[i].status=='INACTIVE')
+      return i;
+    }
   }
-  return 0;
+  else if(item && item.status=="ACTIVE")
+  {
+    for(let i=0;i<item.owners.length;i++)
+    {
+      if(item.owners[i].status=='ACTIVE')
+      return i;
+    }
+  }
+
 }
 
 
@@ -253,18 +266,54 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
       disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
      const response = await getSearchResults(queryObject);
 
+     if(!response.Properties.length)
+     {     
+       const { cities } = state.common;
+
+
+     let tenantInfo = cities && cities.filter(e => e.key === searchScreenObject.tenantId );  
+
+
+     let contactNumber = get(tenantInfo && tenantInfo.length>0 && tenantInfo[0], "contactNumber");  
+
+
+     let email =  get(tenantInfo && tenantInfo.length>0 && tenantInfo[0], "emailId");  
+
+
+       dispatch(
+         toggleSnackbar(
+           true,
+           {
+             labelName: "Please fill valid fields to search",
+             labelKey:"PT_NOT_FOUND_MESSAGE",
+             dynamicArray: [contactNumber, email],
+           },
+           "error"
+         )
+       );
+     }
+
+     const billResponse = await fetchBill(dispatch, response, searchScreenObject.tenantId, "PT");
+
+
+      const finalResponse = getPropertyWithBillAmount(response, billResponse);  
+
+      
+
       // const response = searchSampleResponse();
 
-      let propertyData = response.Properties.map(item => ({
+      let propertyData = finalResponse.Properties.map(item => ({
         ["PT_COMMON_TABLE_COL_PT_ID"]:
           item.propertyId || "-",
-        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[getIndexofActive(item)].name || "-",
+        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
         ["PT_GUARDIAN_NAME"]:
-          item.owners[getIndexofActive(item)].fatherOrHusbandName || "-",
+          item.owners[0].fatherOrHusbandName || "-",
         ["PT_COMMON_COL_EXISTING_PROP_ID"]:
           item.oldPropertyId || "-",
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
+        ["PT_AMOUNT_DUE"]: (item.totalAmount) ? item.totalAmount : "0",
+        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount },
         ["TENANT_ID"]: item.tenantId,
         ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-"
       }));

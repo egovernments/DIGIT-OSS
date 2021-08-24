@@ -13,6 +13,12 @@ const ApplicationNoContainer = Loadable({
   loading: () => <Loading />
 });
 
+
+const ApplicationContainer = Loadable({
+  loader: () => import("./applicationNumber"),
+  loading: () => <Loading />
+});
+
 const Checkbox = Loadable({
   loader: () => import("./Checkbox"),
   loading: () => <Loading />
@@ -45,6 +51,7 @@ const DownloadIcon = Loadable({
 export {
   TestAtoms,
   ApplicationNoContainer,
+  ApplicationContainer,
   Checkbox,
   MapLocation,
   AutoSuggest,

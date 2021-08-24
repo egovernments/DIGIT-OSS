@@ -31,6 +31,12 @@ export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
   stepsData
 );
+const showComponent = (dispatch, componentJsonPath, display, oldStyle = {}) => {
+  let displayProps = display ? { ...oldStyle, display: 'block' } : { ...oldStyle, display: "none" };
+  dispatch(
+    handleField("apply", componentJsonPath, "props.style", displayProps)
+  );
+};
 
 const applicationNumberContainer = () => {
   const applicationNumber = getQueryArg(
@@ -187,6 +193,7 @@ const getPropertyData = async (action, state, dispatch) => {
     if(payload){
 
       let oldMobileNumber = get(state, "screenConfiguration.preparedFinalObject.PropertyOldNumber");
+      console.log("oldmob",oldMobileNumber)
       let owners = get(state, "screenConfiguration.preparedFinalObject.Property.owners");
       let phoneno = /^[6-9][0-9]{9}$/; 
       let flag=false
@@ -199,20 +206,12 @@ const getPropertyData = async (action, state, dispatch) => {
         }
 
       })
+      let oldMobileNumberCardpath ="components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.oldMobileNumberCard"
      //  console.log("flag after",flag)
         if(!flag)
         {
-          set(
-            action.screenConfig,
-            "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.oldMobileNumberCard",
-            { visibility: "hidden" }
-          );
+          showComponent(dispatch, oldMobileNumberCardpath, false);
           
-          set(
-            action.screenConfig,
-            "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.transferorMobileCard",
-            { visibility: "hidden" }
-          );
         }
     }
     

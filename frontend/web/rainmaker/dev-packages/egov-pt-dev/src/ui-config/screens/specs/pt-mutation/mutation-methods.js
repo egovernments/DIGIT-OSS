@@ -9,7 +9,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { propertySearch, applicationSearch } from "./functions";
+import { propertyApplicationSearch, applicationSearch } from "./functions";
 import { getTenantId, getUserInfo,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
@@ -21,28 +21,28 @@ import { getMohallaData } from "egov-ui-kit/utils/commons";
 
 export const ComponentJsonPath = {
   ulbCity:
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
+    "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
   locality:
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.locality",
+    "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.locality",
   ownerName:
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
+    "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
   ownerMobNo:
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
+    "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
   propertyID:
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyID",
+    "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyID",
     ownerName:
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
+    "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
     doorNo:
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.doorNo",
+    "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.doorNo",
    
   };
 const applyMohallaData = (mohallaData, tenantId, dispatch) => {
   dispatch(
-    prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData)
+    prepareFinalObject("pASearchScreenMdmsData.tenant.localities", mohallaData)
   );
   dispatch(
     handleField(
-      "propertySearch",
+      "propertyApplicationSearch",
       ComponentJsonPath.locality,
       "props.data",
       mohallaData
@@ -50,37 +50,37 @@ const applyMohallaData = (mohallaData, tenantId, dispatch) => {
     )
   );
   dispatch(
-    handleField("propertySearch", ComponentJsonPath.locality, "props.value", "")
+    handleField("propertyApplicationSearch", ComponentJsonPath.locality, "props.value", "")
   );
   dispatch(
-    handleField("propertySearch", ComponentJsonPath.locality, "props.error", false)
+    handleField("propertyApplicationSearch", ComponentJsonPath.locality, "props.error", false)
   );
   dispatch(
-    handleField("propertySearch", ComponentJsonPath.locality, "isFieldValid", true)
+    handleField("propertyApplicationSearch", ComponentJsonPath.locality, "isFieldValid", true)
   );
   dispatch(
-    handleField("propertySearch", ComponentJsonPath.locality, "props.errorMessage", "")
+    handleField("propertyApplicationSearch", ComponentJsonPath.locality, "props.errorMessage", "")
   );
   dispatch(
-    handleField("propertySearch", ComponentJsonPath.locality, "props.helperText", "")
+    handleField("propertyApplicationSearch", ComponentJsonPath.locality, "props.helperText", "")
   );
   dispatch(
-    handleField("propertySearch", ComponentJsonPath.ulbCity, "props.helperText", "")
+    handleField("propertyApplicationSearch", ComponentJsonPath.ulbCity, "props.helperText", "")
   );
   dispatch(
-    handleField("propertySearch", ComponentJsonPath.ulbCity, "props.error", false)
+    handleField("propertyApplicationSearch", ComponentJsonPath.ulbCity, "props.error", false)
   );
   dispatch(
-    handleField("propertySearch", ComponentJsonPath.ulbCity, "props.isFieldValid", true)
+    handleField("propertyApplicationSearch", ComponentJsonPath.ulbCity, "props.isFieldValid", true)
   );
-  dispatch(prepareFinalObject("searchScreen.locality", ""));
+  dispatch(prepareFinalObject("pASearchScreen.locality", ""));
   const mohallaLocalePrefix = {
     moduleName: tenantId,
     masterName: "REVENUE",
   };
   dispatch(
     handleField(
-      "propertySearch",
+      "propertyApplicationSearch",
       ComponentJsonPath.locality,
       "props.localePrefix",
       mohallaLocalePrefix
@@ -95,111 +95,111 @@ export const resetFields = (state, dispatch) => {
   if (process.env.REACT_APP_NAME == "Citizen") {
     dispatch(
       handleField(
-        "propertySearch",
-        "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
+        "propertyApplicationSearch",
+        "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
         "props.value",
         ""
       )
     );
 
     dispatch(prepareFinalObject(
-      "searchScreen.tenantId",
+      "pASearchScreen.tenantId",
       ''
     ))
   }
 
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
       "props.value",
       ""
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
       "props.value",
       ""
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
       "props.value",
       ""
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
       "props.value",
       ""
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
       "props.value",
       ""
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
       "props.value",
       ""
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.mohalla",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.mohalla",
       "props.value",
       ""
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.houseNumber",
+      "propertyApplicationSearch",
+      "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.houseNumber",
       "props.value",
       ""
     )
   );
   
   dispatch(prepareFinalObject(
-    "searchScreen.acknowledgementIds",
+    "pASearchScreen.acknowledgementIds",
     ''
   ))
   dispatch(prepareFinalObject(
-    "searchScreen.ids",
+    "pASearchScreen.ids",
     ''
   ))
   dispatch(prepareFinalObject(
-    "searchScreen.mobileNumber",
+    "pASearchScreen.mobileNumber",
     ''
   ))
   dispatch(prepareFinalObject(
-    "searchScreen.oldPropertyId",
+    "pASearchScreen.oldPropertyId",
     ''
   ))
   dispatch(prepareFinalObject(
-    "searchScreen.locality",
+    "pASearchScreen.locality",
     ''
   ))
   dispatch(prepareFinalObject(
-    "searchScreen.doorNo",
+    "pASearchScreen.doorNo",
     ''
   ))
   dispatch(
     handleField(
-      "propertySearch",
+      "propertyApplicationSearch",
       ComponentJsonPath.ownerName,
       "props.value",
       ""
@@ -207,7 +207,7 @@ export const resetFields = (state, dispatch) => {
   );
   dispatch(
     handleField(
-      "propertySearch",
+      "propertyApplicationSearch",
       ComponentJsonPath.ownerName,
       "props.error",
       false
@@ -215,7 +215,7 @@ export const resetFields = (state, dispatch) => {
   );
   dispatch(
     handleField(
-      "propertySearch",
+      "propertyApplicationSearch",
       ComponentJsonPath.ownerName,
       "props.helperText",
       ""
@@ -223,20 +223,20 @@ export const resetFields = (state, dispatch) => {
   );
   dispatch(
     handleField(
-      "propertySearch",
+      "propertyApplicationSearch",
       ComponentJsonPath.ownerName,
       "props.errorMessage",
       ""
     )
   );
   dispatch(prepareFinalObject(
-    "searchScreen.name",
+    "pASearchScreen.name",
     ''
   ))
 
   dispatch(
     handleField(
-      "propertySearch",
+      "propertyApplicationSearch",
       ComponentJsonPath.doorNo,
       "props.value",
       ""
@@ -244,7 +244,7 @@ export const resetFields = (state, dispatch) => {
   );
   dispatch(
     handleField(
-      "propertySearch",
+      "propertyApplicationSearch",
       ComponentJsonPath.doorNo,
       "props.error",
       false
@@ -252,7 +252,7 @@ export const resetFields = (state, dispatch) => {
   );
   dispatch(
     handleField(
-      "propertySearch",
+      "propertyApplicationSearch",
       ComponentJsonPath.doorNo,
       "props.helperText",
       ""
@@ -260,14 +260,14 @@ export const resetFields = (state, dispatch) => {
   );
   dispatch(
     handleField(
-      "propertySearch",
+      "propertyApplicationSearch",
       ComponentJsonPath.doorNo,
       "props.errorMessage",
       ""
     )
   );
   dispatch(prepareFinalObject(
-    "searchScreen.doorNo",
+    "pASearchScreen.doorNo",
     ''
   ))
 
@@ -278,39 +278,39 @@ export const citizenResetFields = (state, dispatch) => {
   
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
+      "propertyApplicationSearch",
+      "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.appNumberContainer.children.propertyTaxApplicationNo",
       "props.value",
       ""
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
+      "propertyApplicationSearch",
+      "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
       "props.value",
       ""
     )
   );
   dispatch(
     handleField(
-      "propertySearch",
-      "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
+      "propertyApplicationSearch",
+      "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.ulbCity",
       "props.value",
       ""
     )
   );  
   
   dispatch(prepareFinalObject(
-    "searchScreen.acknowledgementIds",
+    "pASearchScreen.acknowledgementIds",
     ''
   ))
   dispatch(prepareFinalObject(
-    "searchScreen.ids",
+    "pASearchScreen.ids",
     ''
   ))
   dispatch(prepareFinalObject(
-    "searchScreen.mobileNumber",
+    "pASearchScreen.mobileNumber",
     ''
   ))
 
@@ -358,8 +358,8 @@ export const searchPropertyDetails = getCommonCard({
         moduleName: "TENANT",
         masterName: "TENANTS"
       },
-      jsonPath: "searchScreen.tenantId",
-      sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+      jsonPath: "pASearchScreen.tenantId",
+      sourceJsonPath: "pASearchScreenMdmsData.tenant.tenants",
       required: true,
       props: {
         required: true,
@@ -377,8 +377,8 @@ export const searchPropertyDetails = getCommonCard({
 
       dispatch(
         handleField(
-            "propertySearch",
-            "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
+            "propertyApplicationSearch",
+            "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
             "label",
             ""
         )
@@ -413,7 +413,7 @@ export const searchPropertyDetails = getCommonCard({
             let enableButton = enabledCities && enabledCities.includes(action.value);
           dispatch(
               handleField(
-                  "propertySearch",
+                  "propertyApplicationSearch",
                   "components.div.children.headerDiv.children.newApplicationButton",
                   "visible",
                   enableButton
@@ -432,8 +432,8 @@ export const searchPropertyDetails = getCommonCard({
 
          dispatch(
           handleField(
-              "propertySearch",
-              "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
+              "propertyApplicationSearch",
+              "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
               "label",
               tenantUniqueId
           )
@@ -451,8 +451,8 @@ export const searchPropertyDetails = getCommonCard({
 
          dispatch(
           handleField(
-              "propertySearch",
-              "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
+              "propertyApplicationSearch",
+              "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
               "label",
               tenantUniqueId
           )
@@ -485,13 +485,13 @@ export const searchPropertyDetails = getCommonCard({
           };
           dispatch(
             handleField(
-              "propertySearch",
-              "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.mohalla",
+              "propertyApplicationSearch",
+              "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.mohalla",
               "props.localePrefix",
               mohallaLocalePrefix
             )
           );
-            dispatch(prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData))
+            dispatch(prepareFinalObject("pASearchScreenMdmsData.tenant.localities", mohallaData))
         }
       }
       
@@ -519,7 +519,7 @@ export const searchPropertyDetails = getCommonCard({
       },
       required: false,
       pattern: getPattern("MobileNo"),
-      jsonPath: "searchScreen.mobileNumber",
+      jsonPath: "pASearchScreen.mobileNumber",
       errorMessage: "ERR_INVALID_MOBILE_NUMBER"
     }),
     ownerName: getTextField({
@@ -534,7 +534,7 @@ export const searchPropertyDetails = getCommonCard({
       pattern: getPattern("SearchOwnerName"),
       errorMessage: "Invalid Name",
       helperText:"PT_MIN_3CHAR",
-      jsonPath: "searchScreen.name",
+      jsonPath: "pASearchScreen.name",
       props: {
         className: "applicant-details-error"
       },
@@ -545,23 +545,23 @@ export const searchPropertyDetails = getCommonCard({
       afterFieldChange: async (action, state, dispatch) => {
         if (action.value.match(/^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{3,50}$/i)||action.value.length==0) {
           dispatch(
-            handleField("propertySearch", ComponentJsonPath.ownerName, "props.error", false)
+            handleField("propertyApplicationSearch", ComponentJsonPath.ownerName, "props.error", false)
           );
           dispatch(
-            handleField("propertySearch", ComponentJsonPath.ownerName, "isFieldValid", true)
+            handleField("propertyApplicationSearch", ComponentJsonPath.ownerName, "isFieldValid", true)
           );
           dispatch(
-            handleField("propertySearch", ComponentJsonPath.ownerName, "props.errorMessage", "")
+            handleField("propertyApplicationSearch", ComponentJsonPath.ownerName, "props.errorMessage", "")
           );
           }else{
           dispatch(
-            handleField("propertySearch", ComponentJsonPath.ownerName, "props.error", true)
+            handleField("propertyApplicationSearch", ComponentJsonPath.ownerName, "props.error", true)
           );
           dispatch(
-            handleField("propertySearch", ComponentJsonPath.ownerName, "isFieldValid", false)
+            handleField("propertyApplicationSearch", ComponentJsonPath.ownerName, "isFieldValid", false)
           );
           dispatch(
-            handleField("propertySearch", ComponentJsonPath.ownerName, "props.errorMessage",action.value.length<3? getLocaleLabels("PT_ERR_MIN3CHAR","PT_ERR_MIN3CHAR"):getLocaleLabels("PT_ERR_INVALID_TEXT","PT_ERR_INVALID_TEXT"))
+            handleField("propertyApplicationSearch", ComponentJsonPath.ownerName, "props.errorMessage",action.value.length<3? getLocaleLabels("PT_ERR_MIN3CHAR","PT_ERR_MIN3CHAR"):getLocaleLabels("PT_ERR_INVALID_TEXT","PT_ERR_INVALID_TEXT"))
           );
         }
       }
@@ -588,7 +588,7 @@ export const searchPropertyDetails = getCommonCard({
       //pattern: /^[0-9]*$/i,
       pattern: getPattern("NewPropertyID"),
       errorMessage: "ERR_SIX_INVALID_PROPERTY_ID",
-      jsonPath: "searchScreen.ids"  
+      jsonPath: "pASearchScreen.ids"  
     }),
 /*   mohalla: {
       uiFramework: "custom-containers-local",
@@ -609,8 +609,8 @@ export const searchPropertyDetails = getCommonCard({
           moduleName:getTenantId(),
           masterName: "REVENUE"
         },
-        jsonPath: "searchScreen.locality",
-        sourceJsonPath: "searchScreenMdmsData.tenant.localities",
+        jsonPath: "pASearchScreen.locality",
+        sourceJsonPath: "pASearchScreenMdmsData.tenant.localities",
         labelsFromLocalisation: true,
         required: true,
         isClearable: true,
@@ -620,8 +620,8 @@ export const searchPropertyDetails = getCommonCard({
         }
       },
       // required: true,
-      jsonPath: "searchScreen.locality",
-      sourceJsonPath: "searchScreenMdmsData.tenant.localities",
+      jsonPath: "pASearchScreen.locality",
+      sourceJsonPath: "pASearchScreenMdmsData.tenant.localities",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -641,8 +641,8 @@ export const searchPropertyDetails = getCommonCard({
           masterName: "REVENUE"
         },   
         errorMessage: "ERR_REQUIRED_FILED",    
-        jsonPath: "searchScreen.locality",
-        sourceJsonPath: "searchScreenMdmsData.tenant.localities",
+        jsonPath: "pASearchScreen.locality",
+        sourceJsonPath: "pASearchScreenMdmsData.tenant.localities",
         //required: true,
         props: {
           //required: true,
@@ -671,7 +671,7 @@ export const searchPropertyDetails = getCommonCard({
       required: false,
       pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
       errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "searchScreen.oldPropertyId"
+      jsonPath: "pASearchScreen.oldPropertyId"
     })
   }),
   doorNo: getTextField({
@@ -685,7 +685,7 @@ export const searchPropertyDetails = getCommonCard({
     },
     pattern: getPattern("DoorHouseNo"),
     errorMessage: "Invalid No",
-    jsonPath: "searchScreen.doorNo",
+    jsonPath: "pASearchScreen.doorNo",
     props: {
       className: "applicant-details-error"
     },
@@ -751,7 +751,7 @@ export const searchPropertyDetails = getCommonCard({
         },
         onClickDefination: {
           action: "condition",
-          callBack: propertySearch
+          callBack: propertyApplicationSearch
         }
       }
     })
@@ -787,7 +787,7 @@ export const searchApplicationDetails = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_APPLICATION_NO",
-      jsonPath: "searchScreen.acknowledgementIds"
+      jsonPath: "pASearchScreen.acknowledgementIds"
     }),
     ownerMobNoProp: getTextField({
       label: {
@@ -810,7 +810,7 @@ export const searchApplicationDetails = getCommonCard({
       },
       required: false,
       pattern: getPattern("MobileNo"),
-      jsonPath: "searchScreen.mobileNumber",
+      jsonPath: "pASearchScreen.mobileNumber",
       errorMessage: "ERR_INVALID_MOBILE_NUMBER"
     }),
     applicationPropertyTaxUniqueId: getTextField({
@@ -830,7 +830,7 @@ export const searchApplicationDetails = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "searchScreen.ids"
+      jsonPath: "pASearchScreen.ids"
     }),
   }),
   button: getCommonContainer({
