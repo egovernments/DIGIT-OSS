@@ -48,7 +48,7 @@ public class PropertyQueryBuilder {
 
 	private static String ownerDocSelectValues = " owndoc.id as owndocid, owndoc.tenantid as owndoctenantid, owndoc.entityid as owndocentityId, owndoc.documenttype as owndoctype, owndoc.filestoreid as owndocfilestore, owndoc.documentuid as owndocuid, owndoc.status as owndocstatus, ";
 	
-	private static String UnitSelectValues = "unit.id as unitid, unit.tenantid as unittenantid, unit.propertyid as unitpid, floorno, unittype, unit.usagecategory as unitusagecategory, occupancytype, occupancydate, carpetarea, builtuparea, plintharea, unit.superbuiltuparea as unitspba, arv, constructiontype, constructiondate, dimensions, unit.active as isunitactive, unit.createdby as unitcreatedby, unit.createdtime as unitcreatedtime, unit.lastmodifiedby as unitlastmodifiedby, unit.lastmodifiedtime as unitlastmodifiedtime ";
+	private static String UnitSelectValues = "unit.id as unitid, unit.tenantid as unittenantid, unit.propertyid as unitpid, floorno, unittype, unit.usagecategory as unitusagecategory, occupancytype, occupancydate, carpetarea, builtuparea, plintharea, unit.superbuiltuparea as unitspba, arv, constructiontype, constructiondate, dimensions, unit.active as isunitactive, unit.createdby as unitcreatedby, unit.createdtime as unitcreatedtime, unit.lastmodifiedby as unitlastmodifiedby, unit.lastmodifiedtime as unitlastmodifiedtime, unit.additionaldetails as unitadditionaldetails ";
 
 	private static final String QUERY = SELECT 
 			
@@ -78,11 +78,27 @@ public class PropertyQueryBuilder {
 			
 			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 			
-			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid "
+			+	LEFT_JOIN  +  " EG_PT_UNIT unit               ON property.id =  unit.propertyid and unit.active = 't'"
 			
-			+ " WHERE ";
+			+ " WHERE  ";
 	
+	private static final String ID_QUERY = SELECT
 
+			+   " distinct property.id FROM EG_PT_PROPERTY property "
+
+			+   INNER_JOIN + " EG_PT_ADDRESS address         ON property.id = address.propertyid "
+
+			+   LEFT_JOIN  +  " EG_PT_INSTITUTION institution ON property.id = institution.propertyid "
+
+			+   LEFT_JOIN  +  " EG_PT_DOCUMENT pdoc           ON property.id = pdoc.entityid "
+
+			+   INNER_JOIN +  " EG_PT_OWNER owner             ON property.id = owner.propertyid and owner.status='ACTIVE' "
+
+			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
+
+			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid and unit.active = 't' "
+	
+	        + " WHERE  ";
 
 	private final String paginationWrapper = "SELECT * FROM "
 			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY plastmodifiedtime DESC, pid) offset_ FROM " + "({})" + " result) result_offset "
@@ -116,19 +132,28 @@ public class PropertyQueryBuilder {
 	 * @param preparedStmtList
 	 * @return
 	 */
-	public String getPropertySearchQuery(PropertyCriteria criteria, List<Object> preparedStmtList,Boolean isPlainSearch) {
+	public String getPropertySearchQuery(PropertyCriteria criteria, List<Object> preparedStmtList,Boolean isPlainSearch, Boolean onlyIds) {
 
 		Boolean isEmpty = CollectionUtils.isEmpty(criteria.getPropertyIds())
 					&& CollectionUtils.isEmpty(criteria.getAcknowledgementIds())
 					&& CollectionUtils.isEmpty(criteria.getOldpropertyids())
 					&& CollectionUtils.isEmpty(criteria.getUuids())
 					&& null == criteria.getMobileNumber()
-					&& null == criteria.getName();
+					&& null == criteria.getName()
+					&& null == criteria.getLocality()
+					&& null == criteria.getDoorNo()
+					&& null == criteria.getOldPropertyId();
 		
 		if(isEmpty)
 			throw new CustomException("EG_PT_SEARCH_ERROR"," No criteria given for the property search");
 		
-		StringBuilder builder = new StringBuilder(QUERY);
+		StringBuilder builder;
+
+		if(onlyIds)
+			builder = new StringBuilder(ID_QUERY);
+		else
+			builder = new StringBuilder(QUERY);
+
 		Boolean appendAndQuery = false;
 		if(isPlainSearch)
 		{
@@ -145,8 +170,8 @@ public class PropertyQueryBuilder {
 			if(criteria.getTenantId()!=null)
 			{
 				addClauseIfRequired(preparedStmtList,builder);
-				builder.append("property.tenantid=?");
-				preparedStmtList.add(criteria.getTenantId());
+			builder.append(" property.tenantid=?");
+			preparedStmtList.add(criteria.getTenantId());
 			}
 		}
 		if (criteria.getFromDate() != null)
@@ -178,8 +203,17 @@ public class PropertyQueryBuilder {
 			appendAndQuery= true;
 		}
 		
-		if (null != criteria.getLocality()) {
+		if (null != criteria.getLocality() && null != criteria.getDoorNo()) {
 
+			if(appendAndQuery)
+				builder.append(AND_QUERY);
+			builder.append("address.locality = ?");
+			builder.append(AND_QUERY);
+			builder.append("address.doorno = ?");
+			preparedStmtList.add(criteria.getLocality());
+			preparedStmtList.add(criteria.getDoorNo());
+			appendAndQuery= true;
+		}else if(null != criteria.getLocality()){
 			if(appendAndQuery)
 				builder.append(AND_QUERY);
 			builder.append("address.locality = ?");
@@ -228,6 +262,10 @@ public class PropertyQueryBuilder {
 		}
 
 		String withClauseQuery = WITH_CLAUSE_QUERY.replace(REPLACE_STRING, builder);
+
+		if (onlyIds)
+			return builder.toString();
+		else
 		return addPaginationWrapper(withClauseQuery, preparedStmtList, criteria);
 	}
 
@@ -257,8 +295,8 @@ public class PropertyQueryBuilder {
 			if(criteria.getTenantId()!=null)
 			{
 				addClauseIfRequired(preparedStmtList,builder);
-				builder.append("property.tenantid=?");
-				preparedStmtList.add(criteria.getTenantId());
+			builder.append(" property.tenantid=?");
+			preparedStmtList.add(criteria.getTenantId());
 			}
 		}
 		if (criteria.getFromDate() != null)
@@ -316,7 +354,7 @@ public class PropertyQueryBuilder {
 		StringBuilder builder = new StringBuilder();
 		int length = ids.size();
 		for (int i = 0; i < length; i++) {
-			builder.append(" ?");
+			builder.append("?");
 			if (i != length - 1)
 				builder.append(",");
 		}

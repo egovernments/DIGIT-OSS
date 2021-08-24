@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.egov.pt.calculator.service.DemandService;
 import org.egov.pt.calculator.service.EstimationService;
 import org.egov.pt.calculator.service.PayService;
+import org.egov.pt.calculator.service.RegistryService;
 import org.egov.pt.calculator.web.models.Calculation;
 import org.egov.pt.calculator.web.models.CalculationReq;
 import org.egov.pt.calculator.web.models.CalculationRes;
@@ -34,6 +35,9 @@ public class CalculatorController {
 
 	@Autowired
 	private EstimationService calculatorService;
+	
+	@Autowired
+	private RegistryService registryService;
 	
 	@Autowired
 	private PayService payService;

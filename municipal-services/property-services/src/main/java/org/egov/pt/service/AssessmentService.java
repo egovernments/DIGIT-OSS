@@ -2,6 +2,10 @@ package org.egov.pt.service;
 
 import static org.egov.pt.util.PTConstants.ASSESSMENT_BUSINESSSERVICE;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,6 +16,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.AssessmentSearchCriteria;
+import org.egov.pt.models.Demand;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.BusinessService;
@@ -21,12 +26,20 @@ import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.AssessmentRepository;
 import org.egov.pt.util.AssessmentUtils;
 import org.egov.pt.validator.AssessmentValidator;
+import org.egov.pt.validator.DemandValidator;
 import org.egov.pt.web.contracts.AssessmentRequest;
+import org.egov.pt.web.contracts.DemandRequest;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class AssessmentService {
 
 	private AssessmentValidator validator;
@@ -66,6 +79,13 @@ public class AssessmentService {
 		this.calculationService = calculationService;
 	}
 
+	@Autowired
+	private ObjectMapper mapper;
+
+	@Autowired
+	private DemandValidator demandValidator;
+
+
 	/**
 	 * Method to create an assessment asynchronously.
 	 *
@@ -90,6 +110,58 @@ public class AssessmentService {
 		producer.push(props.getCreateAssessmentTopic(), request);
 
 		return request.getAssessment();
+	}
+
+	public Assessment createLegacyAssessments(AssessmentRequest request) {
+		Property property = utils.getPropertyForAssessment(request);
+		validator.validateAssessmentCreate(request, property);
+		List<AssessmentRequest> legacyAssessments = new ArrayList<>();
+		Assessment actualAssessment = request.getAssessment();
+		DemandRequest demandRequest = mapper.convertValue(actualAssessment.getAdditionalDetails(), DemandRequest.class);
+		
+		List<Demand> demands = demandRequest.getDemands();
+		if (demands == null || demands.isEmpty())
+			throw new CustomException("No_DEMAND", "No demand added for the property");
+		if (actualAssessment.getAdditionalDetails() != null
+				&& actualAssessment.getAdditionalDetails().get("isRollOver") != null
+				&& !actualAssessment.getAdditionalDetails().get("isRollOver").asBoolean())
+			demandValidator.validateAndfilterDemands(demands, actualAssessment.getPropertyId(),
+					actualAssessment.getTenantId(), request.getRequestInfo());
+
+		for (Demand demand : demands) {
+			try {
+				Assessment assessment = mapper.readValue(mapper.writeValueAsString(actualAssessment), Assessment.class);
+				AssessmentRequest assessmentRequest = enrichLegacyAssessment(assessment, demand.getTaxPeriodFrom(),
+						request.getRequestInfo());
+				assessmentEnrichmentService.enrichAssessmentCreate(assessmentRequest);
+				legacyAssessments.add(assessmentRequest);
+			} catch (Exception ex) {
+				throw new CustomException("JSON_DATA_PARSE_EXCEPTION", "Exception in parsing request.");
+			}
+		}
+
+		calculationService.saveDemands(demands, request.getRequestInfo());
+		publishLegacyAssessmentRequests(legacyAssessments, props.getCreateAssessmentTopic());
+
+		return actualAssessment;
+	}
+
+	private void publishLegacyAssessmentRequests(List<AssessmentRequest> legacyAssessments, final String kafkaTopic) {
+
+		for (AssessmentRequest assessmentRequest : legacyAssessments) {
+			producer.push(kafkaTopic, assessmentRequest);
+		}
+	}
+	
+	private AssessmentRequest enrichLegacyAssessment(Assessment assessment, Long fromDate, RequestInfo requestInfo) {
+		assessment.setAdditionalDetails(null);
+		assessment.setFinancialYear(getFinancialYear(fromDate));
+		return AssessmentRequest.builder().requestInfo(requestInfo).assessment(assessment).build();
+	}
+
+	private String getFinancialYear(Long fromDate) {
+		LocalDate ld = Instant.ofEpochMilli(fromDate).atZone(ZoneId.systemDefault()).toLocalDate();
+		return String.valueOf(ld.getYear()).concat("-").concat(String.valueOf(ld.getYear() + 1).substring(2, 4));
 	}
 
 
@@ -160,6 +232,53 @@ public class AssessmentService {
 			producer.push(props.getUpdateAssessmentTopic(), request);
 		}
 		return request.getAssessment();
+	}
+
+	public Assessment updateLegacyAssessments(AssessmentRequest request) {
+		List<AssessmentRequest> newAssessments = new ArrayList<>();
+		List<AssessmentRequest> oldAssessments = new ArrayList<>();
+		Property property = utils.getPropertyForAssessment(request);
+		Assessment actualAssessment = request.getAssessment();
+		RequestInfo requestInfo = request.getRequestInfo();
+		DemandRequest demandRequest = mapper.convertValue(actualAssessment.getAdditionalDetails(), DemandRequest.class);
+		List<Demand> demands = demandRequest.getDemands();
+		if (demands == null || demands.isEmpty())
+			throw new CustomException("NO_DEMAND", "No demand added for the property");
+		demandValidator.validateLegacyDemands(demands, actualAssessment.getPropertyId(),
+				actualAssessment.getTenantId(),requestInfo);
+		List<Assessment> assessmentsFromDB = repository.getAssessmentsFromDBByPropertyId(actualAssessment);
+		for (Demand demand : demands) {
+			if (demand.getId() == null) {
+				try {
+					Assessment assessment = mapper.readValue(mapper.writeValueAsString(actualAssessment),
+							Assessment.class);
+					log.info("Assessment: "+assessment);
+					AssessmentRequest assessmentRequest = enrichLegacyAssessment(assessment, demand.getTaxPeriodFrom(),
+							requestInfo);
+					assessmentEnrichmentService.enrichAssessmentCreate(assessmentRequest);
+					log.info("Assessment Request: "+assessmentRequest);
+					newAssessments.add(assessmentRequest);
+					log.info("New Assessments: "+newAssessments);
+				} catch (Exception ex) {
+					throw new CustomException("JSON_DATA_PARSE_EXCEPTION", "Exception in parsing request");
+				}
+			}
+
+		}
+		for (Assessment assessment : assessmentsFromDB) {
+			AssessmentRequest assessmentRequest = AssessmentRequest.builder().requestInfo(requestInfo)
+					.assessment(assessment).build();
+			log.info("Assessment Request: "+assessmentRequest);
+			assessmentEnrichmentService.enrichAssessmentUpdate(assessmentRequest, property);
+			oldAssessments.add(assessmentRequest);
+			log.info("Old Assessments : "+ oldAssessments);
+
+		}
+		calculationService.updateDemands(demands, request.getRequestInfo());
+		publishLegacyAssessmentRequests(newAssessments, props.getCreateAssessmentTopic());
+		publishLegacyAssessmentRequests(oldAssessments, props.getUpdateAssessmentTopic());
+
+		return actualAssessment;
 	}
 
 	public List<Assessment> searchAssessments(AssessmentSearchCriteria criteria){

@@ -1,6 +1,7 @@
 package org.egov.pt.consumer;
 
-
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.egov.pt.config.PropertyConfiguration;
@@ -47,7 +48,21 @@ public class NotificationConsumer {
 			if (topic.equalsIgnoreCase(configs.getCreateAssessmentTopic()) || topic.equalsIgnoreCase(configs.getUpdateAssessmentTopic())) {
 
 				AssessmentRequest request = mapper.convertValue(record, AssessmentRequest.class);
-				assessmentNotificationService.process(topic, request);
+				int month;
+				int year;
+				Calendar cal = Calendar.getInstance ();
+				cal.setTime (new Date() );  //current date
+				
+				//calendar will start from 0-11 [0=jan, 11=dec]
+				month = cal.get ( Calendar.MONTH );
+				int advance = ( month < 3 ) ? -1 : 1;
+				year = cal.get ( Calendar.YEAR ) + advance;  //current date to or from financial year
+				  
+				String astYear[]=request.getAssessment().getFinancialYear().split("-"); //assessment year splitting from and to year eg., 2019-20 to astYear[0]= 2019 and astYear[1]=20 
+				if(Integer.parseInt(astYear[0])<= year && year <= Integer.parseInt(astYear[0])+1){   //comparing assessment financial year with current financial year
+				 assessmentNotificationService.process(topic, request);
+				}
+				
 			} else if (topic.equalsIgnoreCase(configs.getSavePropertyTopic()) || topic.equalsIgnoreCase(configs.getUpdatePropertyTopic())) {
 
 				PropertyRequest request = mapper.convertValue(record, PropertyRequest.class);

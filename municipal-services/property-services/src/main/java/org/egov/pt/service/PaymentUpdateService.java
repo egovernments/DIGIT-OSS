@@ -90,7 +90,7 @@ public class PaymentUpdateService {
 	 * @param paymentDetail
 	 */
 	private void updateWorkflowForMutationPayment(RequestInfo requestInfo, String tenantId, PaymentDetail paymentDetail) {
-		
+		System.out.println("~~~~~~~~~~~ updateWorkflowForMutationPayment ~~~~~~~~~~");
 		Bill bill  = paymentDetail.getBill();
 		
 		PropertyCriteria criteria = PropertyCriteria.builder()
@@ -104,8 +104,8 @@ public class PaymentUpdateService {
 			throw new CustomException("INVALID RECEIPT",
 					"No Properties found for the comsumerCode " + criteria.getPropertyIds());
 
-		Role role = Role.builder().code("SYSTEM_PAYMENT").build();
-		requestInfo.getUserInfo().getRoles().add(role);
+//		Role role = Role.builder().code("SYSTEM_PAYMENT").build();
+//		requestInfo.getUserInfo().getRoles().add(role);
 		
 		properties.forEach( property -> {
 			
@@ -114,7 +114,11 @@ public class PaymentUpdateService {
 			
 			ProcessInstanceRequest wfRequest = util.getProcessInstanceForMutationPayment(updateRequest);
 			
+			if(wfRequest.getProcessInstances()!=null && wfRequest.getProcessInstances().get(0)!=null && wfRequest.getProcessInstances().get(0).getAction()!=null)
+				System.out.println("~~~~~~~~~~~ payment workflow request = "+wfRequest.getProcessInstances().get(0).getAction());
+			
 			State state = wfIntegrator.callWorkFlow(wfRequest);
+			System.out.println("~~~~~~~~~~~ updateWorkflowForMutationPayment ~~~~~~~~~~");
 			property.setWorkflow(wfRequest.getProcessInstances().get(0));
 			property.getWorkflow().setState(state);
 			updateRequest.getProperty().setStatus(Status.fromValue(state.getApplicationStatus()));

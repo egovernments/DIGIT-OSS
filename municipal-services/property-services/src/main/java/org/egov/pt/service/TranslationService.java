@@ -1,12 +1,12 @@
 package org.egov.pt.service;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.Property;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.egov.pt.util.PTConstants.*;
@@ -97,8 +98,18 @@ public class TranslationService {
         propertyDetail.put("propertyType", propertyType);
         propertyDetail.put("propertySubType", propertySubType);
         propertyDetail.put("assessmentNumber", assessment.getAssessmentNumber());
-        propertyDetail.put("assessmentDate", assessment.getAssessmentDate());
+        propertyDetail.put("assessmentDate", assessment.getAssessmentDate());        
+        propertyDetail.put("source", assessment.getSource().toString());
+        propertyDetail.put("additionalDetails", property.getAdditionalDetails());
 
+        JsonNode additionalDetails = property.getAdditionalDetails();
+        String constructionYear = null;
+		if (additionalDetails != null) {
+			constructionYear = additionalDetails.get("constructionYear") == null ? null
+					: additionalDetails.get("constructionYear").asText();
+		}
+		long constructionDate = constructionYear == null ? 0 : Instant.parse(constructionYear).toEpochMilli();
+		
         if(assessment.getAdditionalDetails()!=null){
 
             try{
@@ -141,22 +152,63 @@ public class TranslationService {
                 unitMap.put("unitArea", unit.getConstructionDetail().getBuiltUpArea());
                 unitMap.put("arv", unit.getArv());
                 unitMap.put("occupancyType", unit.getOccupancyType());
+                unitMap.put("constructionType", unit.getConstructionDetail().getConstructionType());
+
 
                 String[] masterData = unit.getUsageCategory().split("\\.");
 
                 if(masterData.length >= 1)
                     unitMap.put("usageCategoryMajor", masterData[0]);
 
-                if(masterData.length >= 2)
+                if(masterData.length >= 2){
                     unitMap.put("usageCategoryMinor", masterData[1]);
+                    unitMap.put("usageCategorySubMinor", masterData[1]);
+                }   
 
                 if(masterData.length >= 3)
                     unitMap.put("usageCategorySubMinor", masterData[2]);
 
                 if(masterData.length >= 4)
                     unitMap.put("usageCategoryDetail",masterData[3]);
+                
+                Map<String, Object> unitAdditionalMap = new HashMap<>();
+                
+				JsonNode unitAdditionalDetails = unit.getAdditionalDetails();
+				if (unitAdditionalDetails != null) {
+					if (unitAdditionalDetails.get("innerDimensionsKnown") != null) {
+						boolean innerDimensionKnownValue = unitAdditionalDetails.get("innerDimensionsKnown")
+								.asBoolean();
+						unitAdditionalMap.put("innerDimensionsKnown", innerDimensionKnownValue);
 
-                unitMap.put("additionalDetails", unit.getAdditionalDetails());
+						if (innerDimensionKnownValue) {
+
+							if (unitAdditionalDetails.get("bathroomArea") != null) {
+								unitAdditionalMap.put("bathroomArea",
+										new BigDecimal(unitAdditionalDetails.get("bathroomArea").asText()));
+							}
+
+							if (unitAdditionalDetails.get("garageArea") != null) {
+								unitAdditionalMap.put("garageArea",
+										new BigDecimal(unitAdditionalDetails.get("garageArea").asText()));
+							}
+
+							if (unitAdditionalDetails.get("commonArea") != null) {
+								unitAdditionalMap.put("commonArea",
+										new BigDecimal(unitAdditionalDetails.get("commonArea").asText()));
+							}
+
+							if (unitAdditionalDetails.get("roomsArea") != null) {
+								unitAdditionalMap.put("roomsArea",
+										new BigDecimal(unitAdditionalDetails.get("roomsArea").asText()));
+							}
+
+						}
+					}
+
+				}
+				
+                unitAdditionalMap.put("constructionDate",constructionDate);
+                unitMap.put("additionalDetails", unitAdditionalMap);
                 units.add(unitMap);
 
             });

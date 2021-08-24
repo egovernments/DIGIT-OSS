@@ -1,28 +1,81 @@
 package org.egov.pt.service;
 
+import static org.egov.pt.util.PTConstants.ACTION_PAY;
+import static org.egov.pt.util.PTConstants.CREATED_STRING;
+import static org.egov.pt.util.PTConstants.CREATE_PROCESS_CONSTANT;
+import static org.egov.pt.util.PTConstants.CREATE_STRING;
+import static org.egov.pt.util.PTConstants.MT_NO_WORKFLOW;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_AMOUNT;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_APPID;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_CONSUMERCODE;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_MUTATION_LINK;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_OWNERNAME;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PAY_LINK;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PROPERTYID;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PROPERTY_LINK;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_STATUS;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_TENANTID;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_UPDATED_CREATED_REPLACE;
+import static org.egov.pt.util.PTConstants.UPDATED_STRING;
+import static org.egov.pt.util.PTConstants.UPDATE_NO_WORKFLOW;
+import static org.egov.pt.util.PTConstants.UPDATE_STRING;
+import static org.egov.pt.util.PTConstants.WF_MT_STATUS_APPROVED_CODE;
+import static org.egov.pt.util.PTConstants.WF_MT_STATUS_CHANGE_CODE;
+import static org.egov.pt.util.PTConstants.WF_MT_STATUS_OPEN_CODE;
+import static org.egov.pt.util.PTConstants.WF_MT_STATUS_PAID_CODE;
+import static org.egov.pt.util.PTConstants.WF_MT_STATUS_PAYMENT_PENDING_CODE;
+import static org.egov.pt.util.PTConstants.WF_NO_WORKFLOW;
+import static org.egov.pt.util.PTConstants.WF_STATUS_APPROVED;
+import static org.egov.pt.util.PTConstants.WF_STATUS_DOCVERIFIED;
+import static org.egov.pt.util.PTConstants.WF_STATUS_DOCVERIFIED_LOCALE;
+import static org.egov.pt.util.PTConstants.WF_STATUS_FIELDVERIFIED;
+import static org.egov.pt.util.PTConstants.WF_STATUS_FIELDVERIFIED_LOCALE;
+import static org.egov.pt.util.PTConstants.WF_STATUS_OPEN;
+import static org.egov.pt.util.PTConstants.WF_STATUS_OPEN_LOCALE;
+import static org.egov.pt.util.PTConstants.WF_STATUS_PAID;
+import static org.egov.pt.util.PTConstants.WF_STATUS_PAYMENT_PENDING;
+import static org.egov.pt.util.PTConstants.WF_STATUS_REJECTED;
+import static org.egov.pt.util.PTConstants.WF_STATUS_REJECTED_LOCALE;
+import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_APPROVED_CODE;
+import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_CHANGE_CODE;
+import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_OPEN_CODE;
+import static org.egov.pt.util.PTConstants.PT_CORRECTION_PENDING;
+
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.mdms.model.MasterDetail;
+import org.egov.mdms.model.MdmsCriteria;
+import org.egov.mdms.model.MdmsCriteriaReq;
+import org.egov.mdms.model.ModuleDetail;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
-import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.event.Event;
 import org.egov.pt.models.event.EventRequest;
 import org.egov.pt.models.workflow.Action;
 import org.egov.pt.models.workflow.ProcessInstance;
+import org.egov.pt.repository.ServiceRequestRepository;
+import org.egov.pt.util.ErrorConstants;
 import org.egov.pt.util.NotificationUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.SMSRequest;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import static org.egov.pt.util.PTConstants.*;
+import com.jayway.jsonpath.JsonPath;
 
 @Service
 public class NotificationService {
@@ -35,9 +88,21 @@ public class NotificationService {
 
 	@Value("${notification.url}")
 	private String notificationURL;
+	
+	@Value("${update.notification.sms.enabled}")
+    private boolean isUpdateSmsEnabled;
+
+    @Value("${egov.mdms.host}")
+    private String mdmsHost;
+
+    @Value("${egov.mdms.search.endpoint}")
+    private String mdmsEndpoint;
+
+    @Autowired
+    private ServiceRequestRepository serviceRequestRepository;
 
 	public void sendNotificationForMutation(PropertyRequest propertyRequest) {
-
+		if(isUpdateSmsEnabled) {
 		String msg = null;
 		String state = null;
 		Property property = propertyRequest.getProperty();
@@ -78,6 +143,7 @@ public class NotificationService {
 			msg = replaceCommonValues(property, msg, localisedState);
 			prepareMsgAndSend(propertyRequest, msg, state);
 		}
+		}
 	}
 
 	public void sendNotificationForMtPayment(PropertyRequest propertyRequest, BigDecimal Amount) {
@@ -88,20 +154,26 @@ public class NotificationService {
 			String msg = getMsgForMutation(property, CompleteMsgs, WF_MT_STATUS_PAID_CODE, NOTIFICATION_MUTATION_LINK)
 						.replace(NOTIFICATION_AMOUNT, Amount.toPlainString());
 			msg = replaceCommonValues(property, msg, "");		
-			prepareMsgAndSend(propertyRequest, msg,"");
+			prepareMsgAndSend(propertyRequest, msg, "");
 	}
 	
 	public void sendNotificationForUpdate(PropertyRequest propertyRequest) {
+		
+		if (isUpdateSmsEnabled) {
+
+            List<List<String>> tenants = getUpdateSmsEnabledCities();	                
+    	if (!tenants.get(0).contains(propertyRequest.getProperty().getTenantId())) {
+        String citizenMobileNumber = propertyRequest.getRequestInfo().getUserInfo().getMobileNumber();	
 
 		Property property = propertyRequest.getProperty();
 		ProcessInstance wf = property.getWorkflow();
 		String createOrUpdate = null;
 		String msg = null;
 		
-		Boolean isCreate =  CreationReason.CREATE.equals(property.getCreationReason());
-		String state = getStateFromWf(wf, configs.getIsWorkflowEnabled());
+		Boolean isCreate =  wf != null ? CREATE_PROCESS_CONSTANT.equalsIgnoreCase(wf.getNotificationAction()) : false;
+		String state = wf.getId() != null ? getStateFromWf(wf, configs.getIsWorkflowEnabled()) : WF_NO_WORKFLOW;
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
-		String localisedState = getLocalisedState(wf.getState().getState(), completeMsgs);
+		String localisedState = state != WF_NO_WORKFLOW ? getLocalisedState(wf.getState().getState(), completeMsgs) : "";
 		switch (state) {
 
 		case WF_NO_WORKFLOW:
@@ -127,7 +199,9 @@ public class NotificationService {
 
 		
 		msg = replaceCommonValues(property, msg, localisedState);
-		prepareMsgAndSend(propertyRequest, msg,state);
+		prepareMsgAndSend(propertyRequest, msg, state);
+    }
+	}
 	}
 
 
@@ -148,8 +222,10 @@ public class NotificationService {
 					  .replace(NOTIFICATION_TENANTID, property.getTenantId())));
 		
 		return notifUtil.getMessageTemplate(msgCode, completeMsgs)
-				.replace(NOTIFICATION_PROPERTY_LINK, url)
-				.replace(NOTIFICATION_UPDATED_CREATED_REPLACE, createUpdateReplaceString);
+						.replace(NOTIFICATION_OWNERNAME,property.getOwners().get(0).getName())
+						.replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
+						.replace(NOTIFICATION_UPDATED_CREATED_REPLACE, createUpdateReplaceString)
+						.replace(NOTIFICATION_PROPERTY_LINK, url);
 	}
 	
 	
@@ -293,6 +369,25 @@ public class NotificationService {
 			isActionReq = true;
 
 		List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
-		notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
+				notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
 	}
+	
+	private List<List<String>> getUpdateSmsEnabledCities() {
+
+        StringBuilder uri = new StringBuilder(mdmsHost).append(mdmsEndpoint);
+        List<MasterDetail> masterDetails = new ArrayList<>();
+        masterDetails.add(MasterDetail.builder().name("citywiseconfig").build());
+        List<ModuleDetail> moduleDetails = new ArrayList<>();
+        moduleDetails.add(ModuleDetail.builder().moduleName("tenant").masterDetails(masterDetails).build());
+        MdmsCriteria mdmsCriteria = MdmsCriteria.builder().tenantId("uk").moduleDetails(moduleDetails).build();
+        MdmsCriteriaReq req = MdmsCriteriaReq.builder().requestInfo(new RequestInfo()).mdmsCriteria(mdmsCriteria).build();
+
+        try {
+            Optional<Object> result = serviceRequestRepository.fetchResult(uri, req);
+            return JsonPath.read(result.get(),"$.MdmsRes.tenant.citywiseconfig[?(@.config=='ptSendUpdateSMS')].enabledCities");
+        } catch (Exception e) {
+            throw new CustomException(ErrorConstants.INVALID_TENANT_ID_MDMS_KEY,
+                    ErrorConstants.INVALID_TENANT_ID_MDMS_MSG);
+        }
+    }
 }

@@ -61,6 +61,13 @@ public class PropertyConfiguration {
     @Value("${persister.migration.batch.count.topic}")
     private String migartionBatchCountTopic;
 
+    @Value("${persister.migration.property.topic}")
+    private String migratePropertyTopic;
+
+	/*
+	 * @Value("${kafka.partition.count}") private Integer partitionCount;
+	 */
+    
     //USER
     @Value("${egov.user.host}")
     private String userHost;
@@ -129,12 +136,11 @@ public class PropertyConfiguration {
     @Value("${egov.notif.view.mutation}")
     private String viewMutationLink;
     
-
     @Value("${egov.usr.events.view.history.link}")
     private String userEventViewPropertyLink;
     
     @Value("${egov.usr.events.view.mutation.history.link}")
-    private String userEventViewMutationLink;    
+    private String userEventViewMutationLink;  
     
     //Property Search Params
     @Value("${citizen.allowed.search.params}")
@@ -166,34 +172,33 @@ public class PropertyConfiguration {
     private String localizationSearchEndpoint;
 
     //USER EVENTS
-	@Value("${egov.ui.app.host}")
-	private String uiAppHost;
-    
-	@Value("${egov.usr.events.create.topic}")
-	private String saveUserEventsTopic;
-		
-	@Value("${egov.usr.events.pay.link}")
-	private String payLink;
-	
-	@Value("${egov.usr.events.pay.code}")
-	private String payCode;
-	
-	@Value("${egov.user.event.notification.enabled}")
-	private Boolean isUserEventsNotificationEnabled;
+    //USER EVENTS
+   	@Value("${egov.ui.app.host}")
+   	private String uiAppHost;
+       
+   	@Value("${egov.usr.events.create.topic}")
+   	private String saveUserEventsTopic;
+   		
+   	@Value("${egov.usr.events.pay.link}")
+   	private String payLink;
+   	
+   	@Value("${egov.usr.events.pay.code}")
+   	private String payCode;
+   	
+   	@Value("${egov.user.event.notification.enabled}")
+   	private Boolean isUserEventsNotificationEnabled;
 
     @Value("${egov.msg.download.receipt.link}")
     private String receiptDownloadLink;
-	
 	//Assessments V2
 	@Value("${egov.pt.assessment.create.topic}")
 	private String createAssessmentTopic;
 	
 	@Value("${egov.pt.assessment.update.topic}")
 	private String updateAssessmentTopic;
-
-    @Value("${egov.msg.pay.link}")
-    private String payLinkSMS;
 	
+	@Value("${egov.msg.pay.link}")
+    private String payLinkSMS;
 
     // Workflow
 	
@@ -316,4 +321,47 @@ public class PropertyConfiguration {
 
     @Value("${state.level.tenant.id}")
     private String stateLevelTenantId;
+    
+	@Value("${egov.calculation.demand.create.endpoint}")
+	private String createDemandEndpoint;
+	
+	@Value("${egov.calculation.demand.update.endpoint}")
+	private String updateDemandEndpoint;
+	
+	@Value("${egbs.demand.search.endpoint}")
+	private String egbsSearchDemand;
+	
+	@Value("${egov.property.skippayment.status}")
+	private String skipPaymentStatuses;
+	
+	@Value("${egov.calculation.mutation.checkapplicablefees.endpoint}")
+    private String mutationApplicableFeesEndpoint;
+	
+
+
+    // ES Config
+
+    @Value("${elasticsearch.host}")
+    private String esHost;
+
+    @Value("${property.es.index}")
+    private String esPTIndex;
+
+    @Value("${elasticsearch.search.endpoint}")
+    private String esSearchEndpoint;
+
+    @Value("${pt.search.name.fuziness}")
+    private String nameFuziness;
+
+    @Value("${pt.search.doorno.fuziness}")
+    private String doorNoFuziness;
+
+    @Value("${pt.search.oldpropertyid.fuziness}")
+    private String oldPropertyIdFuziness;
+
+    @Value("${pt.fuzzy.searh.is.wildcard}")
+    private Boolean isSearchWildcardBased;
+
+
+
 }

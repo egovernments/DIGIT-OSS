@@ -61,8 +61,8 @@ public class UserService {
      * Creates user of the owners of property if it is not created already
      * @param request PropertyRequest received for creating properties
      */
-    public void createUser(PropertyRequest request){
-    	
+  public void createUser(PropertyRequest request){
+  	
         Property property = request.getProperty();
 		RequestInfo requestInfo = request.getRequestInfo();
 		Role role = getCitizenRole();
@@ -381,6 +381,7 @@ public class UserService {
         owner.setLastModifiedBy(requestInfo.getUserInfo().getUuid());
         owner.setLastModifiedDate(System.currentTimeMillis());
         owner.setActive(userDetailResponse.getUser().get(0).getActive());
+        owner.setOwnerInfoUuid(UUID.randomUUID().toString());
     }
 
 

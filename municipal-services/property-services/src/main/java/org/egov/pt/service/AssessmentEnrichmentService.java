@@ -31,7 +31,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class AssessmentEnrichmentService {
 
 
@@ -110,13 +113,17 @@ public class AssessmentEnrichmentService {
                 enrichPropertyFromAssessment(property, request.getAssessment());
             }
         }
+		log.info("Assessment Request: "+assessment);
+		log.info("Assessment Documents: "+assessment.getDocuments() + CollectionUtils.isEmpty(assessment.getDocuments()));
         if(!CollectionUtils.isEmpty(assessment.getDocuments())) {
             for(Document doc: assessment.getDocuments()) {
+            	if(doc!=null){
                 if(StringUtils.isEmpty(doc.getId())) {
                     doc.setId(String.valueOf(UUID.randomUUID()));
                     doc.setAuditDetails(auditDetails);
                     doc.setStatus(Status.ACTIVE);
                 }
+            }
             }
         }
         assessment.getAuditDetails().setLastModifiedBy(auditDetails.getLastModifiedBy());

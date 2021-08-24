@@ -1,5 +1,6 @@
 package org.egov.pt.validator;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -27,6 +29,7 @@ import org.egov.pt.models.workflow.State;
 import org.egov.pt.service.DiffService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.service.WorkflowService;
+import org.egov.pt.util.ErrorConstants;
 import  org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -137,11 +140,11 @@ public class PropertyValidator {
 					errorMap.put("EG_PT_UNIT_BUILTUPAREA_ERROR", "BuiltUpArea cannot be lesser than minimum value of : "
 							+ configs.getMinUnitArea() + " " + configs.getLandAreaUnit());
 
-				if (consDtl.getCarpetArea() != null && !property.getPropertyType().contains(PTConstants.PT_TYPE_VACANT)
-						&& consDtl.getCarpetArea().compareTo(consDtl.getBuiltUpArea()) >= 0)
-					errorMap.put("UNIT INFO ERROR ", "Carpet area cannot be greater or equal than builtUp area");
-			}
+			if (consDtl.getCarpetArea() != null && !property.getPropertyType().contains(PTConstants.PT_TYPE_VACANT)
+					&& consDtl.getCarpetArea().compareTo(consDtl.getBuiltUpArea()) >= 0)
+				errorMap.put("UNIT INFO ERROR ", "Carpet area cannot be greater or equal than builtUp area");
 		}
+	}
 	}
 
 	/**
@@ -156,12 +159,13 @@ public class PropertyValidator {
         if(request.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
             validateAssessees(request,propertyFromSearch, errorMap);
 
-		if (configs.getIsWorkflowEnabled() && request.getProperty().getWorkflow() == null)
+		if (configs.getIsWorkflowEnabled() && request.getProperty().getWorkflow() == null && !"LEGACY_RECORD".equals(request.getProperty().getSource().toString()))
 			throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for update process");
 
 		// third variable is needed only for mutation
 		List<String> fieldsUpdated = diffService.getUpdatedFields(property, propertyFromSearch, "");
 		
+		log.info("Fields updated:"+fieldsUpdated.toString());
 		
 		Boolean isstateUpdatable =  false;
 		/*
@@ -169,6 +173,7 @@ public class PropertyValidator {
 		 *  
 		 *  creation reason will change for begining of a workflow 
 		 */
+		if(null != property.getWorkflow()){
 		if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
 				&& propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
 			fieldsUpdated.remove("creationReason");
@@ -182,17 +187,19 @@ public class PropertyValidator {
 					property.getWorkflow().getBusinessService(), request.getRequestInfo());
 			isstateUpdatable = workflowService.isStateUpdatable(currentState.getState(), businessService);
 		}
-
+		
 		// third variable is needed only for mutation
 		List<String> objectsAdded = diffService.getObjectsAdded(property, propertyFromSearch, "");
 		objectsAdded.removeAll(Arrays.asList("TextNode", "Role", "NullNode", "LongNode", "JsonNodeFactory", "IntNode",
 				"ProcessInstance"));
 
+		log.info("Objects added:"+objectsAdded.toString());
+		
 		if (!isstateUpdatable && (!CollectionUtils.isEmpty(objectsAdded) || !CollectionUtils.isEmpty(fieldsUpdated)))
 			throw new CustomException("EG_PT_WF_UPDATE_ERROR",
 					"The current state of workflow does not allow changes to property");
 		
-	    
+		}
         /*
          * Blocking owner changes in update flow
          */
@@ -205,9 +212,12 @@ public class PropertyValidator {
 		if (!CollectionUtils.isEmpty(uuidsNotFound))
 			errorMap.put("EG_PT_UPDATE_OWNER_UUID_ERROR", "Invalid owners found in request : " + uuidsNotFound);
 
-		if(searchOwnerUuids.size() != request.getProperty().getOwners().size())
-			errorMap.put("EG_PT_UPDATE_OWNER_SIZE_ERROR", "Update request cannot change owner Information please use mutation process");
-		
+		if (!"LEGACY_RECORD".equalsIgnoreCase(request.getProperty().getSource().toString())) {
+			if (searchOwnerUuids.size() != request.getProperty().getOwners().size())
+				errorMap.put("EG_PT_UPDATE_OWNER_SIZE_ERROR",
+						"Update request cannot change owner Information please use mutation process");
+		}
+
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
     }
@@ -356,8 +366,10 @@ public class PropertyValidator {
 			errorMap.put("Invalid PROPERTYTYPE", "The PropertyType '" + property.getPropertyType() + "' does not exists");
 		}
 
-		if (property.getOwnershipCategory() != null && !codes.get(PTConstants.MDMS_PT_OWNERSHIPCATEGORY).contains(property.getOwnershipCategory())) {
-			errorMap.put("Invalid OWNERSHIPCATEGORY", "The OwnershipCategory '" + property.getOwnershipCategory() + "' does not exists");
+		String ownershipCategory = property.getOwnershipCategory();
+		String[] ownerSplit = ownershipCategory.split("\\.", 2);
+		if (ownershipCategory != null && !codes.get(PTConstants.MDMS_PT_OWNERSHIPCATEGORY).contains(ownerSplit[1])) {
+			errorMap.put("Invalid OWNERSHIPCATEGORY", "The OwnershipCategory '" + ownershipCategory + "' does not exists");
 		}
 
 		if (property.getUsageCategory() != null && !codes.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(property.getUsageCategory())) {
@@ -366,9 +378,11 @@ public class PropertyValidator {
 		
 		if (!CollectionUtils.isEmpty(property.getUnits()))
 			for (Unit unit : property.getUnits()) {
-
+				String usageCategory = property.getUsageCategory();
+				String[] usageSplit = usageCategory.split("\\.", 2);
 				if (ObjectUtils.isEmpty(unit.getUsageCategory()) || unit.getUsageCategory() != null
-						&& !codes.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(unit.getUsageCategory())) {
+						&& ((!codes.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(unit.getUsageCategory())) &&
+								(!codes.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(usageSplit[0])))) {
 					errorMap.put("INVALID USAGE CATEGORY ", "The Usage CATEGORY '" + unit.getUsageCategory()
 							+ "' does not exists for unit of index : " + property.getUnits().indexOf(unit));
 				}
@@ -562,16 +576,17 @@ public class PropertyValidator {
     public void validatePropertyCriteria(PropertyCriteria criteria,RequestInfo requestInfo) {
     	
 		List<String> allowedParams = null;
-		
+		log.info("Request Info :  "+requestInfo);
 		User user = requestInfo.getUserInfo();
+		log.info("User Info: "+ requestInfo.getUserInfo());
 		String userType = user.getType();
 		Boolean isUserCitizen = "CITIZEN".equalsIgnoreCase(userType);
 		
-		if(propertyUtil.isPropertySearchOpen(user)) {
-			
-			if(StringUtils.isEmpty(criteria.getLocality()))
-					throw new CustomException("EG_PT_INVALID_SEARCH"," locality is mandatory for open search");
-		}
+//		if(propertyUtil.isPropertySearchOpen(user)) {
+//			
+//			if(StringUtils.isEmpty(criteria.getLocality()))
+//					throw new CustomException("EG_PT_INVALID_SEARCH"," locality is mandatory for open search");
+//		}
 		
 		
 		Boolean isCriteriaEmpty = CollectionUtils.isEmpty(criteria.getOldpropertyids())
@@ -580,7 +595,10 @@ public class PropertyValidator {
 				&& CollectionUtils.isEmpty(criteria.getOwnerIds()) 
 				&& CollectionUtils.isEmpty(criteria.getUuids())
 				&& null == criteria.getMobileNumber()
-				&& null == criteria.getName();
+				&& null == criteria.getName()
+				&& null == criteria.getLocality()
+				&& null == criteria.getDoorNo()
+				&& null == criteria.getOldPropertyId();
 		
 		if (isUserCitizen) {
 			
@@ -596,7 +614,7 @@ public class PropertyValidator {
 				throw new CustomException("EG_PT_INVALID_SEARCH"," TenantId is mandatory for search by " + userType);
 			
 			if(criteria.getTenantId() != null && isCriteriaEmpty)
-				throw new CustomException("EG_PT_INVALID_SEARCH"," Search is not allowed on empty Criteria, Atleast one criteria should be provided with tenantId for " + userType);
+				throw new CustomException("EG_PT_INVALID_SEARCH"," Search is not allowed on empty Criteria, Atleast one criteria should be provided with city name.");
 			
 			allowedParams = Arrays.asList(configs.getEmployeeSearchParams().split(","));
 		}
@@ -684,11 +702,14 @@ public class PropertyValidator {
 		try {
 			
 			reasonForTransfer = (String) additionalDetails.get("reasonForTransfer");
-			docNo = (String) additionalDetails.get("documentNumber");
-			docDate = Long.valueOf(String.valueOf(additionalDetails.get("documentDate")));
-			docVal = Double.valueOf(String.valueOf(additionalDetails.get("documentValue")));
-			marketVal = Double.valueOf(String.valueOf(additionalDetails.get("marketValue")));
-
+// 			docNo = (String) additionalDetails.get("documentNumber");
+// 			docDate = Long.valueOf(String.valueOf(additionalDetails.get("documentDate")));
+// 			if (additionalDetails.get("documentValue") != null) {
+// 				docVal = Double.valueOf(String.valueOf(additionalDetails.get("documentValue")));
+// 			}
+// 			if (additionalDetails.get("marketValue") != null) {
+// 				marketVal = Double.valueOf(String.valueOf(additionalDetails.get("marketValue")));
+// 			}
 		} catch (PathNotFoundException e) {
 			throw new CustomException("EG_PT_MUTATION_FIELDS_ERROR", "Mandatory fields Missing for mutation, please provide the following information in additionalDetails : "
 							+ "reasonForTransfer, documentNumber, documentDate, documentValue and marketValue");
@@ -754,7 +775,7 @@ public class PropertyValidator {
 				errorMap.put("EG_PT_MUTATION_OWNER_REMOVAL_ERROR", "Single owner of a property cannot be deactivated or removed in a mutation request");
 		}
 		
-		if (StringUtils.isEmpty(reasonForTransfer) || StringUtils.isEmpty(docNo) || ObjectUtils.isEmpty(docDate) || ObjectUtils.isEmpty(docVal) || ObjectUtils.isEmpty(marketVal)) {
+		if (StringUtils.isEmpty(reasonForTransfer)) {
 				throw new CustomException("EG_PT_MUTATION_FIELDS_ERROR", "mandatory fields Missing for mutation, please provide the following information : "
 							+ "reasonForTransfer, documentNumber, documentDate, documentValue and marketValue");
 		}
@@ -789,16 +810,60 @@ public class PropertyValidator {
 
 		if (isDocsEmpty || !isTransferDocPresent) {
 
-			errorMap.put("EG_PT_MT_DOCS_ERROR",
-					"Mandatory documents mising for the muation reason : " + reasonForTransfer);
+			//errorMap.put("EG_PT_MT_DOCS_ERROR",
+			//		"Mandatory documents mising for the muation reason : " + reasonForTransfer);
 		}
 
 		if (propertyFromSearch.getStatus().equals(Status.INWORKFLOW)
 				&& property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState()))
 			errorMap.put("EG_PT_MUTATION_WF_ACTION_ERROR", "Invalid action, OPEN action cannot be applied on an active workflow ");
 
+		validateSkipPaymentAction(request);
+
 		if (!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);
 	}
 
+	/**
+	 * Verfies if atleast one owner in mutation request is modified
+	 * 
+	 * @param propertyFromSearch
+	 * @param errorMap
+	 * @param property
+	 * @return
+	 */
+	private Boolean isAtleastOneOwnerModified(Property propertyFromSearch, Map<String, String> errorMap, Property property) {
+		
+		Map<String, OwnerInfo> ownerIdMapFromSearch = propertyFromSearch.getOwners().stream().collect(Collectors.toMap(OwnerInfo::getOwnerInfoUuid, Function.identity()));
+
+		for (OwnerInfo ownerFromRequest : property.getOwners()) {
+
+			OwnerInfo OwnerFromSearch = ownerIdMapFromSearch.get(ownerFromRequest.getOwnerInfoUuid());
+
+			if (OwnerFromSearch == null) {
+
+				errorMap.put("EG_PT_MUTATION_OWNER_ERROR", "Owner with invalid id found in the property request object : " + ownerFromRequest.getOwnerInfoUuid());
+			}
+			if (!ownerFromRequest.mutationEquals(OwnerFromSearch))
+				return true;
+		}
+
+		return false;
+	}
+
+	private void validateSkipPaymentAction(PropertyRequest propertyRequest) {
+		Property property = propertyRequest.getProperty();
+		if (property.getWorkflow().getAction() != null
+				&& (property.getWorkflow().getAction().equalsIgnoreCase(PTConstants.ACTION_SKIP_PAY) 
+						|| property.getWorkflow().getAction().equalsIgnoreCase(PTConstants.ACTION_FINAL_SKIP_PAY))) {
+			System.out.println("~~~~~~~~~~ Inside skip payment for action = "+ property.getWorkflow().getAction());
+			BigDecimal balanceAmount = propertyUtil.getBalanceAmount(propertyRequest);
+			if ((balanceAmount.compareTo(BigDecimal.ZERO) > 0)) {
+				System.out.println("~~~~~~~ Demand is present, skipping not possible, demand ="+balanceAmount);
+				throw new CustomException(ErrorConstants.INVALID_ACTION,
+						"Payment can't be skipped once demand is generated.");
+			}
+		}
+	}
+	
 }

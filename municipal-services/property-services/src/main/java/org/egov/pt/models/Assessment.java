@@ -86,7 +86,9 @@ public class Assessment {
 
 		MOBILEAPP("MOBILEAPP"),
 
-		FIELD_SURVEY("FIELD_SURVEY");
+		FIELD_SURVEY("FIELD_SURVEY"),
+		
+		LEGACY_RECORD("LEGACY_RECORD");
 
 		private String value;
 

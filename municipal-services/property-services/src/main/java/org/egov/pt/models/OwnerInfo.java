@@ -27,10 +27,10 @@ import lombok.Setter;
 
 public class OwnerInfo extends User {
 
-
+	
 	@JsonProperty("ownerInfoUuid")
 	private String ownerInfoUuid;
-
+	
 	@JsonProperty("gender")
 	private String gender;
 
@@ -52,7 +52,7 @@ public class OwnerInfo extends User {
 
 	@JsonProperty("institutionId")
 	private String institutionId;
-
+	
 	@JsonProperty("status")
 	private Status status;
 
@@ -73,7 +73,7 @@ public class OwnerInfo extends User {
 
 	/**
 	 * Populates Owner fields from the given User object
-	 *
+	 * 
 	 * @param user User object obtained from user service
 	 */
 	public void addUserDetail(User user) {
@@ -113,15 +113,15 @@ public class OwnerInfo extends User {
 
 	@Builder()
 	public OwnerInfo(Long id, String uuid, String userName, String password, String salutation, String name,
-					 String gender, String mobileNumber, String emailId, String altContactNumber, String pan,
-					 String aadhaarNumber, String permanentAddress, String permanentCity, String permanentPincode,
-					 String correspondenceCity, String correspondencePincode, String correspondenceAddress, Boolean active,
-					 Long dob, Long pwdExpiryDate, String locale, String type, String signature, Boolean accountLocked,
-					 List<Role> roles, String fatherOrHusbandName, String bloodGroup, String identificationMark, String photo,
-					 String createdBy, Long createdDate, String lastModifiedBy, Long lastModifiedDate, String tenantId,
-					 String ownerInfoUuid, String mobileNumber2, String gender2, String fatherOrHusbandName2,
-					 String correspondenceAddress2, Boolean isPrimaryOwner, Double ownerShipPercentage, String ownerType,
-					 String institutionId, Status status, List<Document> documents, Relationship relationship) {
+			String gender, String mobileNumber, String emailId, String altContactNumber, String pan,
+			String aadhaarNumber, String permanentAddress, String permanentCity, String permanentPincode,
+			String correspondenceCity, String correspondencePincode, String correspondenceAddress, Boolean active,
+			Long dob, Long pwdExpiryDate, String locale, String type, String signature, Boolean accountLocked,
+			List<Role> roles, String fatherOrHusbandName, String bloodGroup, String identificationMark, String photo,
+			String createdBy, Long createdDate, String lastModifiedBy, Long lastModifiedDate, String tenantId,
+			String ownerInfoUuid, String mobileNumber2, String gender2, String fatherOrHusbandName2,
+			String correspondenceAddress2, Boolean isPrimaryOwner, Double ownerShipPercentage, String ownerType,
+			String institutionId, Status status, List<Document> documents, Relationship relationship) {
 		super(id, uuid, userName, password, salutation, name, gender, mobileNumber, emailId, altContactNumber, pan,
 				aadhaarNumber, permanentAddress, permanentCity, permanentPincode, correspondenceCity,
 				correspondencePincode, correspondenceAddress, active, dob, pwdExpiryDate, locale, type, signature,
@@ -140,8 +140,8 @@ public class OwnerInfo extends User {
 		this.documents = documents;
 		this.relationship = relationship;
 	}
-
-
+	
+	
 	public OwnerInfo(OwnerInfo ownerInfo) {
 
 		super(ownerInfo.getId(), ownerInfo.getUuid(), ownerInfo.getUserName(), ownerInfo.getPassword(), ownerInfo.getSalutation(),
@@ -167,20 +167,20 @@ public class OwnerInfo extends User {
 	}
 
 	private List<Document> copyDocuments(List<Document> documents) {
-
+		
 		if(CollectionUtils.isEmpty(documents))
 			return null;
-
+		
 		List<Document> newDocs = new ArrayList<>();
 		documents.forEach(doc -> {
 			newDocs.add(doc.toBuilder().build());
 		});
 		return newDocs;
 	}
-
+	
 	public boolean mutationEquals(OwnerInfo otherOwner) {
-
-
+		
+		
 		if (this == otherOwner)
 			return true;
 
@@ -213,33 +213,33 @@ public class OwnerInfo extends User {
 				return false;
 		} else if (!ownerShipPercentage.equals(otherOwner.ownerShipPercentage))
 			return false;
-
+		
 		if (ownerType == null) {
 			if (otherOwner.ownerType != null)
 				return false;
 		} else if (!ownerType.equals(otherOwner.ownerType))
 			return false;
-
+		
 		if (relationship != otherOwner.relationship)
 			return false;
-
+		
 		if (status != otherOwner.status)
 			return false;
-
-
+		
+		
 		if (this.getName() == null) {
 			if (otherOwner.getName() != null)
 				return false;
 		} else if (!this.getName().equals(otherOwner.getName()))
 			return false;
-
+		
 		if (this.getMobileNumber() == null) {
 			if (otherOwner.getMobileNumber() != null)
 				return false;
 		} else if (!this.getMobileNumber().equals(otherOwner.getMobileNumber()))
 			return false;
-
-
+		
+		
 		return true;
 	}
 

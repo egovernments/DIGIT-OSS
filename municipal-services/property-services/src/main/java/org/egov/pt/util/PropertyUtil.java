@@ -5,11 +5,14 @@ import static org.egov.pt.util.PTConstants.BILL_AMOUNT_PATH;
 import static org.egov.pt.util.PTConstants.BILL_NO_DEMAND_ERROR_CODE;
 import static org.egov.pt.util.PTConstants.BILL_NO_PAYABLE_DEMAND_ERROR_CODE;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -26,6 +29,7 @@ import org.egov.pt.models.workflow.ProcessInstanceRequest;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
+import org.egov.tracer.model.CustomException;
 import org.egov.tracer.model.ServiceCallException;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,21 +45,21 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class PropertyUtil extends CommonUtils {
-
+	
 	@Autowired
 	private PropertyConfiguration configs;
-
+	
 	@Autowired
 	private ServiceRequestRepository restRepo;
-
+	
 	@Autowired
 	private ObjectMapper mapper;
-
-	/**
+	
+    /**
 	 * Populates the owner fields inside of property objects from the response by user api
-	 *
+	 * 
 	 * Ignoring if now user is not found in user response, no error will be thrown
-	 *
+	 * 
 	 * @param userDetailResponse response from user api which contains list of user
 	 *                           which are used to populate owners in properties
 	 * @param properties         List of property whose owner's are to be populated
@@ -87,7 +91,7 @@ public class PropertyUtil extends CommonUtils {
 			});
 		});
 	}
-
+	
 	/**
 	 * nullifying the PII's for open search
 	 * @param info
@@ -101,16 +105,16 @@ public class PropertyUtil extends CommonUtils {
 		info.setGender(null);
 		info.setAltContactNumber(null);
 		info.setPwdExpiryDate(null);
-
+		
 		return info;
 	}
 
 
 	public ProcessInstanceRequest getProcessInstanceForMutationPayment(PropertyRequest propertyRequest) {
 
-		Property property = propertyRequest.getProperty();
-
-		ProcessInstance process = ProcessInstance.builder()
+			Property property = propertyRequest.getProperty();
+			
+			ProcessInstance process = ProcessInstance.builder()
 				.businessService(configs.getMutationWfName())
 				.businessId(property.getAcknowldgementNumber())
 				.comment("Payment for property processed")
@@ -119,54 +123,55 @@ public class PropertyUtil extends CommonUtils {
 				.action(PTConstants.ACTION_PAY)
 				.build();
 
-		return ProcessInstanceRequest.builder()
-				.requestInfo(propertyRequest.getRequestInfo())
-				.processInstances(Arrays.asList(process))
-				.build();
+			System.out.println("~~~~~~~~~~~~~ getProcessInstanceForMutationPayment ~~~~~~~~~~~~");
+			return ProcessInstanceRequest.builder()
+					.requestInfo(propertyRequest.getRequestInfo())
+					.processInstances(Arrays.asList(process))
+					.build();
 	}
-
+	
 	public ProcessInstanceRequest getWfForPropertyRegistry(PropertyRequest request, CreationReason creationReasonForWorkflow) {
-
+		
 		Property property = request.getProperty();
 		ProcessInstance wf = null != property.getWorkflow() ? property.getWorkflow() : new ProcessInstance();
-
+	
 		wf.setBusinessId(property.getAcknowldgementNumber());
 		wf.setTenantId(property.getTenantId());
-
+	
 		switch (creationReasonForWorkflow) {
-
-			case CREATE :
+		
+		case CREATE :
 				if(property.getSource().equals(Source.WATER_CHARGES)){
-					JSONObject response=getWnsPTworkflowConfig(request);
-					wf.setBusinessService(response.get("businessService").toString());
-					wf.setModuleName(configs.getPropertyModuleName());
-					wf.setAction(response.get("initialAction").toString());
+//					JSONObject response=getWnsPTworkflowConfig(request);
+//					wf.setBusinessService(response.get("businessService").toString());
+//					wf.setModuleName(configs.getPropertyModuleName());
+//					wf.setAction(response.get("initialAction").toString());
 				}
 				else{
-					wf.setBusinessService(configs.getCreatePTWfName());
-					wf.setModuleName(configs.getPropertyModuleName());
-					wf.setAction("OPEN");
+			wf.setBusinessService(configs.getCreatePTWfName());
+			wf.setModuleName(configs.getPropertyModuleName());
+			wf.setAction("OPEN");
 				}
-				break;
+			break;
+			
+		case LEGACY_ENTRY :
+			
+			wf.setBusinessService(configs.getLegacyPTWfName());
+			wf.setModuleName(configs.getPropertyModuleName());
+			wf.setAction("OPEN");
+			break;
+			
 
-			case LEGACY_ENTRY :
+		case UPDATE :
+			break;
 
-				wf.setBusinessService(configs.getLegacyPTWfName());
-				wf.setModuleName(configs.getPropertyModuleName());
-				wf.setAction("OPEN");
-				break;
-
-
-			case UPDATE :
-				break;
-
-			case MUTATION :
-				break;
-
-			default:
-				break;
+		case MUTATION :
+			break;
+			
+		default:
+			break;
 		}
-
+		
 		property.setWorkflow(wf);
 		return ProcessInstanceRequest.builder()
 				.processInstances(Arrays.asList(wf))
@@ -175,7 +180,7 @@ public class PropertyUtil extends CommonUtils {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param request
 	 * @param propertyFromSearch
 	 */
@@ -211,17 +216,17 @@ public class PropertyUtil extends CommonUtils {
 		property.getOwners().forEach(owner -> owner.setMobileNumber(null));
 	}
 
-	/**
-	 * Utility method to fetch bill for validation of payment
-	 *
-	 * @param propertyId
-	 * @param tenantId
-	 * @param request
-	 */
+/**
+ * Utility method to fetch bill for validation of payment
+ * 
+ * @param propertyId
+ * @param tenantId
+ * @param request
+ */
 	public Boolean isBillUnpaid(String propertyId, String tenantId, RequestInfo request) {
 
 		Object res = null;
-
+		
 		StringBuilder uri = new StringBuilder(configs.getEgbsHost())
 				.append(configs.getEgbsFetchBill())
 				.append("?tenantId=").append(tenantId)
@@ -231,11 +236,11 @@ public class PropertyUtil extends CommonUtils {
 		try {
 			res = restRepo.fetchResult(uri, new RequestInfoWrapper(request)).get();
 		} catch (ServiceCallException e) {
-
+			
 			if(!(e.getError().contains(BILL_NO_DEMAND_ERROR_CODE) || e.getError().contains(BILL_NO_PAYABLE_DEMAND_ERROR_CODE)))
 				throw e;
 		}
-
+		
 		if (res != null) {
 			JsonNode node = mapper.convertValue(res, JsonNode.class);
 			Double amount = node.at(BILL_AMOUNT_PATH).asDouble();
@@ -247,7 +252,7 @@ public class PropertyUtil extends CommonUtils {
 
 	/**
 	 * Public method to infer whether the search is for open or authenticated user
-	 *
+	 * 
 	 * @param userInfo
 	 * @return
 	 */
@@ -256,7 +261,7 @@ public class PropertyUtil extends CommonUtils {
 		return userInfo.getType().equalsIgnoreCase("SYSTEM")
 				&& userInfo.getRoles().stream().map(Role::getCode).collect(Collectors.toSet()).contains("ANONYMOUS");
 	}
-
+	
 	public List<OwnerInfo> getCopyOfOwners(List<OwnerInfo> owners) {
 
 		List<OwnerInfo> copyOwners = new ArrayList<>();
@@ -266,18 +271,47 @@ public class PropertyUtil extends CommonUtils {
 		});
 		return copyOwners;
 	}
-
-	public JSONObject getWnsPTworkflowConfig(PropertyRequest request){
-		List<String> masterName = Arrays.asList( "PTWorkflow");
-		Map<String, List<String>> codes = getAttributeValues(configs.getStateLevelTenantId(), PTConstants.MDMS_PT_MOD_NAME,masterName , "$.*",PTConstants.JSONPATH_CODES, request.getRequestInfo());
-		JSONObject obj = new JSONObject(codes);
-		JSONArray configArray = obj.getJSONArray("PTWorkflow");
-		JSONObject response = new JSONObject();
-		for(int i=0;i<configArray.length();i++){
-			if(configArray.getJSONObject(i).getBoolean("enable"))
-				response=configArray.getJSONObject(i);
+	
+	public BigDecimal getBalanceAmount(PropertyRequest propertyRequest) {
+		Property property = propertyRequest.getProperty();
+		RequestInfo requestInfo = propertyRequest.getRequestInfo();
+		Optional<Object> fetchResult = restRepo.fetchResult(getBillUriForMutation(property), new RequestInfoWrapper(requestInfo));
+		LinkedHashMap responseMap = (LinkedHashMap) fetchResult.get();
+		JSONObject jsonObject = new JSONObject(responseMap);
+		double balance = 0.0;
+		try {
+			JSONArray demandArray = (JSONArray) jsonObject.get("Demands");
+			if (demandArray != null && demandArray.length() > 0) {
+				JSONObject firstElement = (JSONObject) demandArray.get(0);
+				if (firstElement != null) {
+					JSONArray demandDetails = (JSONArray) firstElement.get("demandDetails");
+					if (demandDetails != null) {
+						for (int i = 0; i < demandDetails.length(); i++) {
+							JSONObject object = (JSONObject) demandDetails.get(i);
+							Double taxAmt = Double.valueOf((object.get("taxAmount").toString()));
+							Double collAmt = Double.valueOf((object.get("collectionAmount").toString()));
+							balance = balance + (taxAmt-collAmt);
+						}
+					}
+				}
+			}
+			return BigDecimal.valueOf(balance);
+		} catch (Exception e) {
+			throw new CustomException("PARSING ERROR",
+					"Failed to parse the response using jsonPath: " + PTConstants.BILL_AMOUNT);
 		}
-		return response;
+	}
+
+	public StringBuilder getBillUriForMutation(Property property) {
+		StringBuilder builder = new StringBuilder(configs.getEgbsHost());
+		builder.append(configs.getEgbsSearchDemand());
+		builder.append("?tenantId=");
+		builder.append(property.getTenantId());
+		builder.append("&consumerCode=");
+		builder.append(property.getAcknowldgementNumber());
+		builder.append("&businessService=");
+		builder.append("PT.MUTATION");
+		return builder;
 	}
 
 
