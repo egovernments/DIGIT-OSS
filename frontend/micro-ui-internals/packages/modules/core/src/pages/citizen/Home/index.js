@@ -42,7 +42,7 @@ const Home = () => {
                 onClick: () => history.push("/digit-ui/citizen/tl/tradelicence/my-application")
             },
             {
-                name: t("ACTION_TEST_WATER_"), 
+                name: t("ACTION_TEST_WATER_AND_SEWERAGE"), 
                 Icon: <DropIcon/>,
                 onClick: () => history.push("/digit-ui/citizen/all-services")
             }
