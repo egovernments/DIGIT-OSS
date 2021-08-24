@@ -48,7 +48,7 @@ config:
       - work-dir: "pgr-services/src/main/resources/db"
         image-name: "pgr-services-db"
 
-  - name: "builds/municipal-services/tl-calculator"
+  - name: "builds/digit-impel-builds/municipal-services/tl-calculator"
     build:
       - work-dir: "tl-calculator"
         image-name: "tl-calculator"
@@ -56,7 +56,7 @@ config:
       - work-dir: "tl-calculator/src/main/resources/db"
         image-name: "tl-calculator-db"
         
-  - name: "builds/municipal-services/tl-services"
+  - name: "builds/digit-impel-builds/municipal-services/tl-services"
     build:
       - work-dir: "tl-services"
         image-name: "tl-services"

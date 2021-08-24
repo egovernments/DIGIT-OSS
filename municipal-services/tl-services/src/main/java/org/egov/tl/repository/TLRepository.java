@@ -136,18 +136,18 @@ public class TLRepository {
         sortChildObjectsById(licenses);
         return licenses;
     }
-
+    
     public List<String> fetchTradeLicenseIds(TradeLicenseSearchCriteria criteria){
 
-        List<Object> preparedStmtList = new ArrayList<>();
-        preparedStmtList.add(criteria.getOffset());
-        preparedStmtList.add(criteria.getLimit());
+		List<Object> preparedStmtList = new ArrayList<>();
+		preparedStmtList.add(criteria.getOffset());
+		preparedStmtList.add(criteria.getLimit());
 
-        return jdbcTemplate.query("SELECT id from eg_tl_tradelicense ORDER BY createdtime offset " +
-                        " ? " +
-                        "limit ? ",
-                preparedStmtList.toArray(),
-                new SingleColumnRowMapper<>(String.class));
-    }
+		return jdbcTemplate.query("SELECT id from eg_tl_tradelicense ORDER BY createdtime offset " +
+						" ? " +
+						"limit ? ",
+				preparedStmtList.toArray(),
+				new SingleColumnRowMapper<>(String.class));
+	}
 
 }

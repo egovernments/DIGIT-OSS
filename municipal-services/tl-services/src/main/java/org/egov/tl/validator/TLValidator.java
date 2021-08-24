@@ -66,7 +66,7 @@ public class TLValidator {
     public void validateCreate(TradeLicenseRequest request, Object mdmsData) {
         List<TradeLicense> licenses = request.getLicenses();
         String businessService = request.getLicenses().isEmpty()?null:request.getLicenses().get(0).getBusinessService();
-        if(licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+        if(licenses.get(0).getApplicationType() != null && licenses.get(0).getLicenseNumber() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
             validateRenewal(request);
         }
         if (businessService == null)
@@ -111,7 +111,7 @@ public class TLValidator {
                 errorMap.put("NULL_SUBOWNERSHIPCATEGORY", " SubOwnership Category cannot be null");
             if ((license.getTradeLicenseDetail().getAddress().getLocality() == null)||(license.getTradeLicenseDetail().getAddress().getLocality().getCode() == null))
                 errorMap.put("NULL_LOCALITY", " Locality cannot be null");
-
+           
             if (!errorMap.isEmpty())
                 throw new CustomException(errorMap);
         });
@@ -286,7 +286,7 @@ public class TLValidator {
             throw new CustomException("INVALID UPDATE", "The license to be updated is not in database");
         validateAllIds(searchResult, licenses);
         String businessService = request.getLicenses().isEmpty()?null:licenses.get(0).getBusinessService();
-        if(licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+        if(licenses.get(0).getApplicationType() != null && licenses.get(0).getLicenseNumber() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
             validateRenewal(request);
         }        
         if (businessService == null)
@@ -602,7 +602,7 @@ public class TLValidator {
         if(criteria.getMobileNumber()!=null && !allowedParams.contains("mobileNumber"))
         {
             if(!isInterServiceCall || !requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" ))
-                throw new CustomException("INVALID SEARCH","Search on mobileNumber is not allowed");
+            throw new CustomException("INVALID SEARCH","Search on mobileNumber is not allowed");
         }
 
         if(criteria.getLicenseNumbers()!=null && !allowedParams.contains("licenseNumbers"))
@@ -627,6 +627,12 @@ public class TLValidator {
     private void validateDuplicateDocuments(TradeLicenseRequest request){
         List<String> documentFileStoreIds = new LinkedList();
         request.getLicenses().forEach(license -> {
+            
+//              if(license.getTradeLicenseDetail().getApplicationDocuments()==null) {
+//         		throw new CustomException("NO_DOCUMENT_PRESENT","No document present "); 
+//         	 }
+            
+            
             if(license.getTradeLicenseDetail().getApplicationDocuments()!=null){
                 license.getTradeLicenseDetail().getApplicationDocuments().forEach(
                         document -> {
