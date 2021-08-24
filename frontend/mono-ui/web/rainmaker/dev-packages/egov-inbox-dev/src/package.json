@@ -10,17 +10,6 @@
   "description": "\"# react-tour\"",
   "main": "index.js",
   "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ejagankumar/react-tour.git"
-  },
-  "keywords": [
-    "sampleapp"
-  ],
   "author": "jagankumar-egov",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ejagankumar/react-tour/issues"
-  },
-  "homepage": "https://github.com/ejagankumar/react-tour#readme"
+  "license": "MIT"
 }
