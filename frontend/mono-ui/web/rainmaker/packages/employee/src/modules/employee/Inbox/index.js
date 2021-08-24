@@ -190,7 +190,8 @@ const mapDispatchToProps = (dispatch) => {
     setRoute: url => dispatch(setRoute(url)),
     fetchLocalizationLabel: (locale, tenantId, module) => dispatch(fetchLocalizationLabel(locale, tenantId, module)),
     setRequiredDocumentFlag: () => dispatch(prepareFinalObject("isRequiredDocuments", true)),
-    resetFetchRecords: () => dispatch(resetFetchRecords())
+    resetFetchRecords: () => dispatch(resetFetchRecords()),
+    prepareFinalObject: (path, value) => dispatch(prepareFinalObject(path, value)),
   };
 }
 
