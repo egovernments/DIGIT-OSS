@@ -187,11 +187,12 @@ const callBackForPay = async (state, dispatch) => {
   set(
     finalReceiptData,
     "Bill[0].mobileNumber",
-    get(
-      state.screenConfiguration,
-      "preparedFinalObject.Demands[0].mobileNumber",
-      ""
-    )
+    // // get(
+    // //   state.screenConfiguration,
+    // //   "preparedFinalObject.Demands[0].mobileNumber",
+    // //   ""
+    // )
+        ""
   );
 
   //Add comments
