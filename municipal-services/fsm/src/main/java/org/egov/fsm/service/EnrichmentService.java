@@ -106,7 +106,7 @@ public class EnrichmentService {
 		}
 		
 		if(fsmRequest.getWorkflow() == null) {
-			String action =  fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE) ? FSMConstants.WF_ACTION_APPLY : FSMConstants.WF_ACTION_CREATE; 
+		String action =  (fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE))||(fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.SYSTEM)) ? FSMConstants.WF_ACTION_APPLY : FSMConstants.WF_ACTION_CREATE; 
 			fsmRequest.setWorkflow( Workflow.builder().action(action).build());
 		}
 		
