@@ -129,9 +129,10 @@ public class DemoUtilityConsumer {
             requestInfo.setUserInfo(userInfo);
             
 			List<Employee> employeeList = new ArrayList<Employee>();
+			Map<String,Object> applicantData=new HashMap<String,Object>();
+			applicantData.put("applicantName",demoUtilityRequest.getApplicantName() );
 
-			StringBuffer emailContent = new StringBuffer();
-			emailContent.append(UtilityConstants.EMAIL_STRATING_CONTENT);
+			StringBuffer emailContent = getInitalContent(applicantData);
 
 			for (int i = 0; i < demoUtilityRequest.getSetOfUsers(); i++) {
 
@@ -193,6 +194,19 @@ public class DemoUtilityConsumer {
 
 		}
 
+	}
+	
+	
+	private StringBuffer getInitalContent(Map<String,Object> applicantData ) {
+		StringBuffer content = new StringBuffer();
+
+		try {
+			content.append(FreeMarkerTemplateUtils
+					.processTemplateIntoString(freemarkerConfiguration.getTemplate("basic-template.ftl"), applicantData));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return content;	
 	}
 
 	private StringBuffer getContent(Map<String, Object> employess) {

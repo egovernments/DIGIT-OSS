@@ -71,9 +71,9 @@ public class UtilityConstants {
 
 	public static final String SUBJECT = "DIGIT USER CREDTINALS";
 	
-	public static StringBuffer EMAIL_STRATING_CONTENT=new StringBuffer("<html><head><style type=\"text/css\" media=\"screen\">table { border-collapse:collapse;border:1px solid;}  table td {border:1px solid #000000;}</style></head><body><h4> Hi, <br> <br> Thanks for registering for digit demo. Please find the below details for accessing modules.<br><br> URL: <u>https://staging.digit.org/employee</u> <br> <br> Default password for all users is : eGov@123 </h4>\r\n");
+	public static StringBuffer EMAIL_STRATING_CONTENT=new StringBuffer("<html><head><style type=\"text/css\" media=\"screen\">table { border-collapse:collapse;border:1px solid;}  table td {border:1px solid #000000;}</style></head><body><h4 style=\"color:#500050\"> Hi, <br> <br>Thanks for taking the time out to fill in the details required to generate user credentials for using the demo instance. Please find the role-based login credentials for individual modules in the table below<br>The default password for all users is: eGov@123<br></h4>\r\n");
 	
-	public static String EMAIL_REGARDS="<p style=\"margin-right:100px\">Regards <br>Egov Foundation</p>";
+	public static String EMAIL_REGARDS="<p style=\"margin-right:100px;color:#500050\">Employee login URL - <U>https://staging.digit.org/employee</U> <br> <br> The DSO role for the FSM module uses your registered mobile number. <br> Best Wishes, <br>eGov Team</p>";
 	
 	public static StringBuffer EMAIL_ENDING_CONTENT=new StringBuffer("</body></html>");
 	
