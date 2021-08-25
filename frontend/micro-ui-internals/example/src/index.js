@@ -16,6 +16,7 @@ import { initTLComponents } from "@egovernments/digit-ui-module-tl";
 import { PaymentModule, PaymentLinks, paymentConfigs } from "@egovernments/digit-ui-module-common";
 import { HRMSModule } from "@egovernments/digit-ui-module-hrms";
 import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
+import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 // import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
 // import { Body, TopBar } from "@egovernments/digit-ui-react-components";
@@ -156,6 +157,7 @@ const initDigitUI = () => {
   initTLComponents();
   initReceiptsComponents();
   initOBPSComponents();
+  initEngagementComponents();
 
   const moduleReducers = (initData) => ({
     pgr: PGRReducers(initData),
