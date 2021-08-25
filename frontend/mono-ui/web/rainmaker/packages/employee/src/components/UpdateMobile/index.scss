@@ -1,0 +1,126 @@
+
+$primary:#FE7A51;
+$secondary:#000000DE;
+
+// body > div:nth-child(9) > div > div:nth-child(1) > div{
+//   max-width: 50vw !important;
+//   overflow-y: scroll;
+// }
+.pt-update-popup{
+   max-width: 50vw !important;
+   overflow-y: scroll;
+}
+
+
+.list{
+  color: #000000DE!important;
+  width: 100%;
+  margin: 3px auto;
+  height: 50px;
+  background-color: #FAFAFA;
+  border: 1px solid #E0E0E0;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  div{
+    width: 24%;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 30px;
+    letter-spacing: 1.111111044883728px;
+    text-align: left;
+    color:$secondary;
+  }
+}
+
+.button-verify{
+  color: $primary;
+  float: right;
+  font-weight: 500;
+  background: none;
+  border: none;
+  div{
+    color: $primary;
+    word-break: unset !important;
+    word-wrap: unset !important;
+  }
+}
+.button-verify:hover{
+cursor: pointer;
+}
+
+.button-verify-link{
+  width: 130px;
+  height: 42px;
+  background: $primary;
+ 
+  border-radius: 2px;
+
+  border: none;
+  div{
+    color: white;
+    word-break: unset !important;
+    word-wrap: unset !important;
+  }
+}
+
+.text-verify-link{
+  display: flex;
+  flex-direction: row;
+    height: 60px;
+    padding: 20px;
+    align-items: center;
+    background: rgba(254, 122, 81, 0.12);
+  
+    div{
+      color: $primary;
+      word-break: unset !important;
+      word-wrap: unset !important;
+    }
+}
+
+.verify-popup{
+  margin: 10px;
+}
+
+.error-comp-second-num{
+  display: flex;
+    justify-content: center;
+    color: red;
+    background: rgba(254, 122, 81, 0.12);;
+    line-height: 40px;
+    div{
+      color:red;
+      word-break: unset !important;
+      word-wrap: unset !important;
+    }
+}
+.success-comp-second-num{
+  display: flex;
+  justify-content: center;
+  background: rgb(173, 247, 173);
+    line-height: 40px;
+    div{
+      color: rgb(1, 92, 1);
+      word-break: unset !important;
+      word-wrap: unset !important;
+    }
+}
+.pt-update-static-content{
+  display: flex;
+  justify-content: space-between;
+}
+
+.pt-update-popup-holder{
+  margin: 10px;
+}
+.pt-update-send-otp-container{
+  display: flex;
+  align-items: center;
+}
+.pt-update-verify-container{
+  width: 100%;
+}
