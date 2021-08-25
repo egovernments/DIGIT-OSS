@@ -199,6 +199,11 @@ public class TLQueryBuilder {
               addClauseIfRequired(preparedStmtList, builder);
               builder.append("  tl.status = ? ");
               preparedStmtList.add(TLConstants.STATUS_APPROVED); 
+              
+              addClauseIfRequired(preparedStmtList, builder);
+              builder.append(" tl.licensenumber NOT IN (SELECT licensenumber from eg_tl_tradelicense WHERE UPPER(applicationtype) = ?) ");
+              preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL); 
+              
             }
 
             if(criteria.getLocality() != null) {
