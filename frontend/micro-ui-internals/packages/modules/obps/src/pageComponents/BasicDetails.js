@@ -12,7 +12,7 @@ const BasicDetails = ({ formData, onSelect, config }) => {
   const state = tenantId.split(".")[0];
   //TODO will change this is future
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(state, "BPA", ["RiskTypeComputation"]);
-  const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails("pb.amritsar", scrutinyNumber, {
+  const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId, scrutinyNumber, {
     enabled: formData?.data?.scrutinyNumber ? true : false
   })
 
