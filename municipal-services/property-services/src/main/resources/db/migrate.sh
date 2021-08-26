@@ -1,6 +1,6 @@
 #!/bin/sh
 baseurl=$DB_URL
-echo "the baseurl : $SCHEMA_TABLE"
+echo "the baseurl : $DB_URL"
 schemasetter="?currentSchema="
 schemas=$SCHEMA_NAME
 echo "the schemas : $schemas"
