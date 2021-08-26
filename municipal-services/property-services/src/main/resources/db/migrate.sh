@@ -2,6 +2,7 @@
 baseurl=$DB_URL
 schemasetter="?currentSchema="
 schemas=$SCHEMA_NAME
+echo "the schema name : $schemas"
 for schemaname in ${schemas//,/ }
 do
     dbUrl = ${baseurl}${schemasetter}${schemaname}
