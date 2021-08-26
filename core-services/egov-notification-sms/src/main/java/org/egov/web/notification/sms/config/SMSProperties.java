@@ -10,7 +10,7 @@ import java.util.regex.*;
 @Configuration
 @Data
 public class SMSProperties {
-
+	
     @Value("${sms.provider.class}")
     public String gatewayToUse;
 
@@ -33,13 +33,13 @@ public class SMSProperties {
     public String password;
 
     @Value("${sms.senderid}")
-    public String senderid;
+	public String senderid;
 
-    @Value("${sms.sender.secure.key}")
-    public String secureKey;
-
-    @Value("#{${sms.config.map}}")
-    Map<String, String> configMap;
+	@Value("${sms.sender.secure.key}")
+	public String secureKey;
+	
+	@Value("#{${sms.config.map}}")
+	Map<String, String> configMap;
 
     @Value("#{${sms.extra.config.map}}")
     Map<String, String> extraConfigMap;

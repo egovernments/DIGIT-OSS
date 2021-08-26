@@ -71,8 +71,8 @@ public class SmsNotificationListener {
                     if (!StringUtils.isEmpty(expiredSmsTopic))
                         kafkaTemplate.send(expiredSmsTopic, request);
                 } else {
-                    smsService.sendSMS(request.toDomain());
-                }
+        smsService.sendSMS(request.toDomain());
+    }
             } else {
                 smsService.sendSMS(request.toDomain());
             }

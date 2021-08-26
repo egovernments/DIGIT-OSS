@@ -1,5 +1,8 @@
 package org.egov.web.notification.sms.consumer.contract;
 
+import org.egov.web.notification.sms.models.Priority;
+import org.egov.web.notification.sms.models.Sms;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
