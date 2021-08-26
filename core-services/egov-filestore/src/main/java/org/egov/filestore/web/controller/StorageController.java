@@ -3,13 +3,19 @@ package org.egov.filestore.web.controller;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.tika.Tika;
+import org.egov.filestore.config.FileStoreConfig;
 import org.egov.filestore.domain.model.FileInfo;
 import org.egov.filestore.domain.service.StorageService;
 import org.egov.filestore.utils.StorageUtil;
@@ -18,6 +24,7 @@ import org.egov.filestore.web.contract.FileStoreResponse;
 import org.egov.filestore.web.contract.GetFilesByTagResponse;
 import org.egov.filestore.web.contract.ResponseFactory;
 import org.egov.filestore.web.contract.StorageResponse;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -32,21 +39,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
 @RequestMapping("/v1/files")
+@Slf4j
 public class StorageController {
 
 	private StorageService storageService;
 	private ResponseFactory responseFactory;
 	private StorageUtil storageUtil;
-	
+	private FileStoreConfig fileStoreConfig;
+
 	@Autowired
-	public StorageController(StorageService storageService, ResponseFactory responseFactory,
-			StorageUtil storageUtil) {
+	public StorageController(StorageService storageService, ResponseFactory responseFactory, FileStoreConfig fileStoreConfig) {
 		this.storageService = storageService;
 		this.responseFactory = responseFactory;
 		this.storageUtil = storageUtil;
-		//this.fileStoreConfig = fileStoreConfig;
+		this.fileStoreConfig = fileStoreConfig;
 	}
 
 	@GetMapping("/id")

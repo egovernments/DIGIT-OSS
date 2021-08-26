@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
 
 import org.egov.filestore.config.FileStoreConfig;
 import org.egov.tracer.model.CustomException;

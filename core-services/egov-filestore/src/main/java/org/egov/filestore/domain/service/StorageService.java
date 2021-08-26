@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -39,6 +40,29 @@ public class StorageService {
 	private CloudFileMgrUtils util;
 	
 	private FileStoreConfig configs;
+	@Value("${is.bucket.fixed}")
+	private Boolean isBucketFixed;
+
+	@Value("${fixed.bucketname}")
+	private String fixedBucketName;
+
+	@Value("${isS3Enabled}")
+	private Boolean isS3Enabled;
+
+	@Value("${isNfsStorageEnabled}")
+	private Boolean isNfsStorageEnabled;
+
+	@Value("${isAzureStorageEnabled}")
+	private Boolean isAzureStorageEnabled;
+
+	@Value("${source.disk}")
+	private String diskStorage;
+
+	@Value("${source.s3}")
+	private String awsS3Source;
+
+	@Value("${source.azure.blob}")
+	private String azureBlobSource;
 
 	@Autowired
 	private CloudFilesManager cloudFilesManager;
@@ -80,7 +104,7 @@ public class StorageService {
 	}
 
 	public List<String> save(List<MultipartFile> filesToStore, String module, String tag, String tenantId, RequestInfo requestInfo) {
-
+		validateFilesToUpload(filesToStore, module, tag, tenantId);
 		log.info(UPLOAD_MESSAGE, module, tag, filesToStore.size());
 		List<Artifact> artifacts = mapFilesToArtifact(filesToStore, module, tag, tenantId);
 		return this.artifactRepository.save(artifacts, requestInfo);
@@ -147,7 +171,7 @@ public class StorageService {
 	private String getFolderName(String module, String tenantId) {
 
 		Calendar calendar = Calendar.getInstance();
-		return minioConfig.getBucketName() + "/" + getFolderName(module, tenantId, calendar);
+		return getBucketName(tenantId, calendar) + "/" + getFolderName(module, tenantId, calendar);
 	}
 
 	public Resource retrieve(String fileStoreId, String tenantId) throws IOException {
@@ -159,19 +183,43 @@ public class StorageService {
 	}
 
 	public Map<String, String> getUrls(String tenantId, List<String> fileStoreIds) {
+
 		Map<String, String> urlMap = getUrlMap(
 				artifactRepository.getByTenantIdAndFileStoreIdList(tenantId, fileStoreIds));
+		if (isNfsStorageEnabled) {
+			for (String s : urlMap.keySet())
+				urlMap.put(s, urlMap.get(s).concat("&tenantId=").concat(tenantId));
+		}
 		return urlMap;
 	}
 
 	private Map<String, String> getUrlMap(List<org.egov.filestore.persistence.entity.Artifact> artifactList) {
-		return cloudFilesManager.getFiles(artifactList);
+		String src = null;
+		if (isAzureStorageEnabled)
+			src = azureBlobSource;
+		if (isS3Enabled)
+			src = awsS3Source;
+		if (isNfsStorageEnabled)
+			src = diskStorage;
+		final String source = src;
+
+		Map<String, String> mapOfIdAndFile = artifactList.stream()
+				.filter(a -> (null != a.getFileSource() && a.getFileSource().equals(source)))
+				.collect(Collectors.toMap(org.egov.filestore.persistence.entity.Artifact::getFileStoreId,
+						org.egov.filestore.persistence.entity.Artifact::getFileName));
+		return cloudFilesManager.getFiles(mapOfIdAndFile);
 	}
 
 	private String getFolderName(String module, String tenantId, Calendar calendar) {
-		return tenantId + "/" + module + "/" + calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH)
+		return tenantId + "/" + calendar.get(Calendar.YEAR) + "/" + calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH)
 				+ "/" + calendar.get(Calendar.DATE) + "/";
 	}
 
-	
+	private String getBucketName(String tenantId, Calendar calendar) {
+		// FIXME TODO add config filter logic to create bucket name for qa
+		if (isBucketFixed)
+			return fixedBucketName;
+		else
+			return tenantId.split("\\.")[0] + calendar.get(Calendar.YEAR);
+	}
 }
