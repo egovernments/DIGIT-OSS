@@ -53,7 +53,7 @@ public class WorkflowService {
 			StringBuilder url = new StringBuilder(config.getWorkflowHost());
 			url.append(config.getProcessCountPath());
 			criteria.setIsProcessCountCall(true);
-			url = this.buildWorkflowUrl(criteria, url, Boolean.TRUE);
+			url = this.buildWorkflowUrl(criteria, url, Boolean.FALSE);
 
 			RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 			Object result = serviceRequestRepository.fetchIntResult(url, requestInfoWrapper);
