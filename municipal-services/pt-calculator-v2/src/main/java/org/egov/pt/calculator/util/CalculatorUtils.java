@@ -1,9 +1,11 @@
 package org.egov.pt.calculator.util;
 
+import static java.util.Objects.isNull;
 import static org.egov.pt.calculator.util.CalculatorConstants.ALLOWED_RECEIPT_STATUS;
 import static org.egov.pt.calculator.util.CalculatorConstants.ASSESSMENTNUMBER_FIELD_SEARCH;
 import static org.egov.pt.calculator.util.CalculatorConstants.BUSINESSSERVICE_FIELD_FOR_SEARCH_URL;
 import static org.egov.pt.calculator.util.CalculatorConstants.CONSUMER_CODE_SEARCH_FIELD_NAME;
+import static org.egov.pt.calculator.util.CalculatorConstants.CONSUMER_CODE_SEARCH_FIELD_NAME_PAYMENT;
 import static org.egov.pt.calculator.util.CalculatorConstants.DEMAND_END_DATE_PARAM;
 import static org.egov.pt.calculator.util.CalculatorConstants.DEMAND_ID_SEARCH_FIELD_NAME;
 import static org.egov.pt.calculator.util.CalculatorConstants.DEMAND_START_DATE_PARAM;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +59,7 @@ import org.egov.pt.calculator.web.models.GetBillCriteria;
 import org.egov.pt.calculator.web.models.ReceiptSearchCriteria;
 import org.egov.pt.calculator.web.models.collections.Payment;
 import org.egov.pt.calculator.web.models.collections.PaymentDetail;
+import org.egov.pt.calculator.web.models.collections.PaymentSearchCriteria;
 import org.egov.pt.calculator.web.models.demand.*;
 import org.egov.pt.calculator.web.models.property.AuditDetails;
 import org.egov.pt.calculator.web.models.property.OwnerInfo;
@@ -69,7 +73,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import lombok.Getter;
 
@@ -151,26 +157,26 @@ public class CalculatorUtils {
     /**
      * Methods provides all the usage category master for property tax module
      */
-    public MdmsCriteriaReq getPropertyModuleRequest(RequestInfo requestInfo, String tenantId) {
+	public MdmsCriteriaReq getPropertyModuleRequest(RequestInfo requestInfo, String tenantId) {
 
-        List<MasterDetail> details = new ArrayList<>();
+		List<MasterDetail> details = new ArrayList<>();
 
-        details.add(MasterDetail.builder().name(CalculatorConstants.USAGE_MAJOR_MASTER).build());
-        details.add(MasterDetail.builder().name(CalculatorConstants.USAGE_MINOR_MASTER).build());
-        details.add(MasterDetail.builder().name(CalculatorConstants.USAGE_SUB_MINOR_MASTER).build());
-        details.add(MasterDetail.builder().name(CalculatorConstants.USAGE_DETAIL_MASTER).build());
-        details.add(MasterDetail.builder().name(CalculatorConstants.OWNER_TYPE_MASTER).build());
+		details.add(MasterDetail.builder().name(CalculatorConstants.USAGE_MAJOR_MASTER).build());
+		details.add(MasterDetail.builder().name(CalculatorConstants.USAGE_MINOR_MASTER).build());
+		details.add(MasterDetail.builder().name(CalculatorConstants.USAGE_SUB_MINOR_MASTER).build());
+		details.add(MasterDetail.builder().name(CalculatorConstants.ROAD_TYPE).build());
+		details.add(MasterDetail.builder().name(CalculatorConstants.TAX_RATE).build());
         details.add(MasterDetail.builder().name(CalculatorConstants.REBATE_MASTER).build());
-        details.add(MasterDetail.builder().name(CalculatorConstants.PENANLTY_MASTER).build());
-        details.add(MasterDetail.builder().name(CalculatorConstants.FIRE_CESS_MASTER).build());
-        details.add(MasterDetail.builder().name(CalculatorConstants.CANCER_CESS_MASTER).build());
-        details.add(MasterDetail.builder().name(CalculatorConstants.INTEREST_MASTER).build());
-        ModuleDetail mdDtl = ModuleDetail.builder().masterDetails(details)
-                .moduleName(CalculatorConstants.PROPERTY_TAX_MODULE).build();
-        MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(Arrays.asList(mdDtl)).tenantId(tenantId)
-                .build();
-        return MdmsCriteriaReq.builder().requestInfo(requestInfo).mdmsCriteria(mdmsCriteria).build();
-    }
+        details.add(MasterDetail.builder().name(CalculatorConstants.PROMOTIONAL_REBATE_MASTER).build());
+		details.add(MasterDetail.builder().name(CalculatorConstants.PENANLTY_MASTER).build());
+		details.add(MasterDetail.builder().name(CalculatorConstants.DEPRECIATION_APPRECIATION).build());
+		details.add(MasterDetail.builder().name(CalculatorConstants.INTEREST_MASTER).build());
+		ModuleDetail mdDtl = ModuleDetail.builder().masterDetails(details)
+				.moduleName(CalculatorConstants.PROPERTY_TAX_MODULE).build();
+		MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(Arrays.asList(mdDtl)).tenantId(tenantId)
+				.build();
+		return MdmsCriteriaReq.builder().requestInfo(requestInfo).mdmsCriteria(mdmsCriteria).build();
+	}
 
     /**
      * Returns the url for mdms search endpoint
@@ -255,6 +261,25 @@ public class CalculatorUtils {
                 .append(ALLOWED_RECEIPT_STATUS);
     }
 
+
+    /**
+     * Returns the Receipt search Url with tenantId, cosumerCode,service name and tax period
+     * parameters
+     *
+     * @param criteria
+     * @return
+     */
+    public StringBuilder getPaymentSearchUrl(PaymentSearchCriteria criteria) {
+
+
+        return new StringBuilder().append(configurations.getCollectionServiceHost())
+                .append(configurations.getPaymentSearchEndpoint()).append(URL_PARAMS_SEPARATER)
+                .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(criteria.getTenantId())
+                .append(SEPARATER).append(CONSUMER_CODE_SEARCH_FIELD_NAME_PAYMENT)
+                .append(criteria.getConsumerCodes())
+                .append(CalculatorConstants.SEPARATER).append(STATUS_FIELD_FOR_SEARCH_URL)
+                .append(ALLOWED_RECEIPT_STATUS);
+    }
 
     /**
      * method to create demandsearch url with demand criteria
@@ -645,8 +670,8 @@ public class CalculatorUtils {
     public Demand getLatestDemandForCurrentFinancialYear(RequestInfo requestInfo, CalculationCriteria calculationCriteria) {
 
         DemandSearchCriteria criteria = new DemandSearchCriteria();
-        criteria.setFromDate(calculationCriteria.getFromDate());
-        criteria.setToDate(calculationCriteria.getToDate());
+        criteria.setFromDate(calculationCriteria.getFromDate() == null ? 0 : calculationCriteria.getFromDate());
+        criteria.setToDate(calculationCriteria.getToDate()== null ? 0 : calculationCriteria.getToDate());
         criteria.setTenantId(calculationCriteria.getTenantId());
         criteria.setPropertyId(calculationCriteria.getProperty().getPropertyId());
 
@@ -708,8 +733,18 @@ public class CalculatorUtils {
 
         return calculationReq;
     }
+    
+	public BigDecimal getInterestRateForTaxperiod(String financialYear, List<Object> interestMasterList) {
 
+		for (Object object : interestMasterList){
+			Map<String, Object> interestMap =  (Map<String, Object>) object;
+			if( ((String) interestMap.get(CalculatorConstants.FY_FIELD_NAME)).equals(financialYear) ){
+				return BigDecimal.valueOf(((Number) interestMap.get(CalculatorConstants.RATE_FIELD_NAME)).doubleValue());
+			}
+		}
 
+		return null;
+	}
     /**
      * Call PT-services to get Property object for the given applicationNumber and tenantID
      * @param requestInfo The RequestInfo of the incoming request
@@ -752,34 +787,63 @@ public class CalculatorUtils {
         url.append("applicationNumber=");
         url.append("{2}");
         return url.toString();
-    }
+	}
+	
+	 public User getCommonContractUser(OwnerInfo owner){
+	        org.egov.common.contract.request.User user = new org.egov.common.contract.request.User();
+	        user.setTenantId(owner.getTenantId());
+	        user.setId(owner.getId());
+	        user.setName(owner.getName());
+	        user.setType(owner.getType());
+	        user.setMobileNumber(owner.getMobileNumber());
+	        user.setEmailId(owner.getEmailId());
+	        user.setRoles(addRoles(owner.getRoles()));
+	        user.setUuid(owner.getUuid());
 
-    public User getCommonContractUser(OwnerInfo owner){
-        org.egov.common.contract.request.User user = new org.egov.common.contract.request.User();
-        user.setTenantId(owner.getTenantId());
-        user.setId(owner.getId());
-        user.setName(owner.getName());
-        user.setType(owner.getType());
-        user.setMobileNumber(owner.getMobileNumber());
-        user.setEmailId(owner.getEmailId());
-        user.setRoles(addRoles(owner.getRoles()));
-        user.setUuid(owner.getUuid());
+	        return user;
+	    }
 
-        return user;
-    }
+	  private List<Role> addRoles(List<org.egov.common.contract.request.Role> Roles){
+	        LinkedList<Role> addroles = new LinkedList<>();
+	        Roles.forEach(role -> {
+	            Role addrole = new Role();
+	            addrole.setId(role.getId());
+	            addrole.setName(role.getName());
+	            addrole.setCode(role.getCode());
+	            addroles.add(addrole);
+	        });
+	        return addroles;
+	    }
 
-    private List<Role> addRoles(List<org.egov.common.contract.request.Role> Roles){
-        LinkedList<Role> addroles = new LinkedList<>();
-        Roles.forEach(role -> {
-            Role addrole = new Role();
-            addrole.setId(role.getId());
-            addrole.setName(role.getName());
-            addrole.setCode(role.getCode());
-            addroles.add(addrole);
-        });
-        return addroles;
-    }
 
+	    public static JsonNode jsonMerge(JsonNode mainNode, JsonNode updateNode) {
+
+	        if(isNull(mainNode) || mainNode.isNull())
+	            return updateNode;
+	        if (isNull(updateNode) || updateNode.isNull())
+	            return mainNode;
+
+	        Iterator<String> fieldNames = updateNode.fieldNames();
+	        while (fieldNames.hasNext()) {
+
+	            String fieldName = fieldNames.next();
+	            JsonNode jsonNode = mainNode.get(fieldName);
+	            // if field exists and is an embedded object
+	            if (jsonNode != null && jsonNode.isObject()) {
+	                jsonMerge(jsonNode, updateNode.get(fieldName));
+	            }
+	            else {
+	                if (mainNode instanceof ObjectNode) {
+	                    // Overwrite field
+	                    JsonNode value = updateNode.get(fieldName);
+	                    ((ObjectNode) mainNode).put(fieldName, value);
+	                }
+	            }
+
+	        }
+
+	        return mainNode;
+	    }
     public Boolean isTaxPeriodAvaialble(Payment payment, TaxPeriod taxPeriod) {
         Boolean isTaxPeriodPresent = false;
         if (payment == null)

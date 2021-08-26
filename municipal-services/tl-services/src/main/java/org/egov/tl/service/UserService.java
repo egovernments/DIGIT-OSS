@@ -83,19 +83,19 @@ public class UserService{
                 }
                 if (owner.getUuid() == null) {
                     addUserDefaultFields(tradeLicense.getTenantId(), role, owner, businessService);
-                    //  UserDetailResponse userDetailResponse = userExists(owner,requestInfo);
-                    StringBuilder uri = new StringBuilder(config.getUserHost())
-                            .append(config.getUserContextPath())
-                            .append(config.getUserCreateEndpoint());
+                      //  UserDetailResponse userDetailResponse = userExists(owner,requestInfo);
+                         StringBuilder uri = new StringBuilder(config.getUserHost())
+                                    .append(config.getUserContextPath())
+                                    .append(config.getUserCreateEndpoint());
                     setUserName(owner,businessService);
 
-                    UserDetailResponse userDetailResponse = userCall(new CreateUserRequest(requestInfo, owner), uri);
-                    if (userDetailResponse.getUser().get(0).getUuid() == null) {
-                        throw new CustomException("INVALID USER RESPONSE", "The user created has uuid as null");
+                           UserDetailResponse userDetailResponse = userCall(new CreateUserRequest(requestInfo,owner),uri);
+                            if(userDetailResponse.getUser().get(0).getUuid()==null){
+                                throw new CustomException("INVALID USER RESPONSE","The user created has uuid as null");
+                            }
+                            log.info("owner created --> "+userDetailResponse.getUser().get(0).getUuid());
+                        setOwnerFields(owner,userDetailResponse,requestInfo);
                     }
-                    log.info("owner created --> " + userDetailResponse.getUser().get(0).getUuid());
-                    setOwnerFields(owner, userDetailResponse, requestInfo);
-                }
                  else {
                     UserDetailResponse userDetailResponse = userExists(owner,requestInfo);
                     if(userDetailResponse.getUser().isEmpty())
@@ -207,13 +207,13 @@ public class UserService{
      * @param owner The owner to whom the username is to assigned
      */
     private void setUserName(OwnerInfo owner,String businessService){
-        String username = UUID.randomUUID().toString();
+            String username = UUID.randomUUID().toString();
         switch (businessService) {
             case businessService_BPA:
                 username = owner.getMobileNumber();
                 break;
         }
-        owner.setUserName(username);
+            owner.setUserName(username);
     }
 
 

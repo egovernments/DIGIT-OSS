@@ -27,13 +27,13 @@ public class BillingSlabSearchCriteria {
 	@JsonProperty("propertyType")
 	public String propertyType;
 	
-	@JsonProperty("propertySubType")
-	public String propertySubType;
-	
-	@JsonProperty("usageCategoryMajor")
-	public String usageCategoryMajor;
-	
-	@JsonProperty("usageCategoryMinor")
-	public String usageCategoryMinor;
+	@JsonProperty("ward")
+	private String ward;
+
+	@JsonProperty("mohalla")
+	private String mohalla;
+
+	@JsonProperty("roadtype")
+	private String roadType;
 	
 }

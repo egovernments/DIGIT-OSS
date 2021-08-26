@@ -19,7 +19,7 @@ public class Configurations {
 	
 	@Value("${kafka.topics.billing-slab.update.service}")
 	public String billingSlabUpdatePersisterTopic;
-
+	
 	@Value("${kafka.topics.mutation-billing-slab.save.service}")
 	public String mutationbillingSlabSavePersisterTopic;
 
@@ -136,7 +136,5 @@ public class Configurations {
 	
 	@Value("${pt.mutation.minpayable.amount}")
 	private BigDecimal ptMutationMinPayable;
-	
-
 
 }

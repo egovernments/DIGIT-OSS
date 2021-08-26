@@ -107,14 +107,14 @@ public class PropertyQueryBuilder {
 	
 
 	public String getPropertyLikeQuery(PropertyCriteria criteria, List<Object> preparedStmtList) {
-		StringBuilder builder = new StringBuilder(LIKE_QUERY);
-
+		StringBuilder builder = new StringBuilder(LIKE_QUERY);	
+		
 		Set<String> ids = criteria.getIds();
 		if (!CollectionUtils.isEmpty(ids)) {
 
 			builder.append(" pt.propertyid IN (").append(createQuery(ids)).append(")");
 			addToPreparedStatement(preparedStmtList, ids);
-		}
+			}
 
 
 		/*builder.append("AND pt.propertyid LIKE ?");
@@ -124,8 +124,8 @@ public class PropertyQueryBuilder {
 		//return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
 		return addPaginationClause(builder, preparedStmtList, criteria);
 
-	}
-
+		}
+		
 	private static String addPaginationClause(StringBuilder selectQuery, List<Object> preparedStmtList,
 											  PropertyCriteria criteria) {
 

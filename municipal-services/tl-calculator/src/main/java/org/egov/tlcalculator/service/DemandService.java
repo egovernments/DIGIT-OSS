@@ -184,13 +184,13 @@ public class DemandService {
                         taxPeriodTo = license.getValidTo();
                         break;
                     }else{
-                        Map<String, Long> taxPeriods = mdmsService.getTaxPeriods(requestInfo, license, mdmsData);
+             Map<String,Long> taxPeriods = mdmsService.getTaxPeriods(requestInfo,license,mdmsData);
                         taxPeriodFrom = taxPeriods.get(TLCalculatorConstants.MDMS_STARTDATE);
                         taxPeriodTo = taxPeriods.get(TLCalculatorConstants.MDMS_ENDDATE);
                         break;
                     }
             }
-            addRoundOffTaxHead(calculation.getTenantId(), demandDetails);
+             addRoundOffTaxHead(calculation.getTenantId(),demandDetails);
             List<String> combinedBillingSlabs = new LinkedList<>();
             if (calculation.getTradeTypeBillingIds() != null && !CollectionUtils.isEmpty(calculation.getTradeTypeBillingIds().getBillingSlabIds()))
                 combinedBillingSlabs.addAll(calculation.getTradeTypeBillingIds().getBillingSlabIds());

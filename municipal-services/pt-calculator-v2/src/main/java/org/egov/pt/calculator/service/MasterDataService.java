@@ -9,13 +9,14 @@ import java.util.stream.Collectors;
 
 import com.jayway.jsonpath.JsonPath;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.mdms.model.MasterDetail;
+import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.MdmsResponse;
+import org.egov.mdms.model.ModuleDetail;
 import org.egov.pt.calculator.repository.Repository;
 import org.egov.pt.calculator.util.CalculatorConstants;
 import org.egov.pt.calculator.util.CalculatorUtils;
-import org.egov.pt.calculator.util.Configurations;
-import org.egov.pt.calculator.web.models.CalculationCriteria;
 import org.egov.pt.calculator.web.models.CalculationReq;
 import org.egov.pt.calculator.web.models.demand.TaxHeadMaster;
 import org.egov.pt.calculator.web.models.demand.TaxHeadMasterResponse;
@@ -24,6 +25,7 @@ import org.egov.pt.calculator.web.models.demand.TaxPeriodResponse;
 import org.egov.pt.calculator.web.models.property.RequestInfoWrapper;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,9 +45,6 @@ public class MasterDataService {
 	
 	@Autowired
 	private CalculatorUtils calculatorUtils;
-
-	@Autowired
-	private Configurations config;
 	
 	/**
 	 * Fetches Financial Year from Mdms Api
@@ -55,7 +54,8 @@ public class MasterDataService {
 	 * @param tenantId
 	 * @return
 	 */
-	@SuppressWarnings("unchecked") 
+	@SuppressWarnings("unchecked")
+	@Cacheable(value = "financialYear", key = "{#assessmentYear, #tenantId}", sync = true)
 	public Map<String, Object> getFinancialYear(RequestInfo requestInfo, String assessmentYear, String tenantId) {
 
 		MdmsCriteriaReq mdmsCriteriaReq = calculatorUtils.getFinancialYearRequest(requestInfo, assessmentYear, tenantId);
@@ -76,8 +76,10 @@ public class MasterDataService {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
+	@Cacheable(value = "financialYears", key = "{#assessmentYears, #tenantId}", sync = true)
 	public Map<String,Map<String, Object>> getFinancialYear(String tenantId,RequestInfo requestInfo,Set<String> assessmentYears) {
-		MdmsCriteriaReq mdmsCriteriaReq = calculatorUtils.getFinancialYearRequest(requestInfo, assessmentYears, tenantId);
+		String tenant = tenantId.split("\\.")[0];
+		MdmsCriteriaReq mdmsCriteriaReq = calculatorUtils.getFinancialYearRequest(requestInfo, assessmentYears, tenant);
 		StringBuilder url = calculatorUtils.getMdmsSearchUrl();
 		Object res = repository.fetchResult(url, mdmsCriteriaReq);
 		Map<String,Map<String, Object>> financialYearMap = new HashMap<>();
@@ -101,6 +103,7 @@ public class MasterDataService {
 	 * @param tenantId
 	 * @return
 	 */
+	@Cacheable(value = "taxHeadMaster", key = "{#tenantId}", sync = true)
 	public List<TaxHeadMaster> getTaxHeadMasterMap(RequestInfo requestInfo, String tenantId) {
 
 		StringBuilder uri = calculatorUtils.getTaxHeadSearchUrl(tenantId);
@@ -116,6 +119,7 @@ public class MasterDataService {
 	 * @param tenantId
 	 * @return
 	 */
+	@Cacheable(value = "taxPeriod", key = "{#tenantId}", sync = true)
 	public List<TaxPeriod> getTaxPeriodList(RequestInfo requestInfo, String tenantId) {
 
 		StringBuilder uri = calculatorUtils.getTaxPeriodSearchUrl(tenantId);
@@ -134,8 +138,7 @@ public class MasterDataService {
 	public void setPropertyMasterValues(RequestInfo requestInfo, String tenantId,
 			Map<String, Map<String, List<Object>>> propertyBasedExemptionMasterMap, Map<String, JSONArray> timeBasedExemptionMasterMap) {
 
-		MdmsResponse response = mapper.convertValue(repository.fetchResult(calculatorUtils.getMdmsSearchUrl(),
-				calculatorUtils.getPropertyModuleRequest(requestInfo, tenantId)), MdmsResponse.class);
+		MdmsResponse response = getMDMSResponse(calculatorUtils.getMdmsSearchUrl(), calculatorUtils.getPropertyModuleRequest(requestInfo, tenantId));
 		Map<String, JSONArray> res = response.getMdmsRes().get(CalculatorConstants.PROPERTY_TAX_MODULE);
 		for (Entry<String, JSONArray> entry : res.entrySet()) {
 
@@ -149,7 +152,13 @@ public class MasterDataService {
 			timeBasedExemptionMasterMap.put(entry.getKey(), entry.getValue());
 		}
 	}
-	
+
+	@Cacheable(value = "mdmsCache", sync = true)
+	private MdmsResponse getMDMSResponse(StringBuilder mdmsSearchUrl, MdmsCriteriaReq propertyModuleRequest) {
+		return mapper.convertValue(repository.fetchResult(mdmsSearchUrl,
+				propertyModuleRequest), MdmsResponse.class);
+	}
+
 	/**
 	 * Parses the master which has an exemption in them
 	 * @param entry
@@ -333,4 +342,28 @@ public class MasterDataService {
 		return masterMap;
 	}
 	
+	public Map<String, List<String>> getRebateAndInterestDisabledCities(String tenantId) {
+		Map<String, List<String>> tenantConfigMap = new HashMap<>();
+		String tenant = tenantId.split("\\.")[0];
+		StringBuilder mdmsUrl = new StringBuilder(calculatorUtils.getMdmsSearchUrl());
+		List<MasterDetail> masterDetails = new ArrayList<>();
+		masterDetails.add(MasterDetail.builder().name(MDMS_CITYWISE_CONFIG_KEY).build());
+		List<ModuleDetail> moduleDetails = new ArrayList<>();
+		moduleDetails.add(ModuleDetail.builder().moduleName(MODULE_TENANT).masterDetails(masterDetails).build());
+		MdmsCriteria mdmsCriteria = MdmsCriteria.builder().tenantId(tenant).moduleDetails(moduleDetails).build();
+		MdmsCriteriaReq mdmsCriteriaReq = MdmsCriteriaReq.builder().requestInfo(new RequestInfo())
+				.mdmsCriteria(mdmsCriteria).build();
+
+		try {
+			Object result = repository.fetchResult(mdmsUrl, mdmsCriteriaReq);
+			List<List<String>> rebateDisabledCities = JsonPath.read(result, MDMS_REBATE_CINFIG_PATH);
+			List<List<String>> interestDisabledCities = JsonPath.read(result, MDMS_REBATE_CINFIG_PATH);
+			tenantConfigMap.put(REBATE_DISABLED_CITIES, rebateDisabledCities.get(0));
+			tenantConfigMap.put(INTEREST_DISABLED_CITIES, interestDisabledCities.get(0));
+			return tenantConfigMap;
+		} catch (Exception e) {
+			throw new CustomException(INVALID_TENANT_ID_MDMS_KEY, INVALID_TENANT_ID_MDMS_MSG);
+		}
+	}
+
 }

@@ -150,13 +150,13 @@ public class TLConstants {
     public static final String MDMS_STARTDATE  = "startingDate";
 
     public static final String MDMS_ENDDATE  = "endingDate";
-    
+
     //TL types
 
     public static final String APPLICATION_TYPE_RENEWAL = "RENEWAL";
 
     public static final String APPLICATION_TYPE_NEW = "NEW";
-    
+
     // error constants
 
     public static final String INVALID_TENANT_ID_MDMS_KEY = "INVALID TENANTID";
@@ -253,7 +253,7 @@ public class TLConstants {
     public static final String VARIABLE_CREATEDTIME = "createdTime";
 
     public static final String VARIABLE_LASTMODIFIEDTIME = "lastModifiedTime";
-
+    
     public static final String VARIABLE_LASTMODIFIEDDATE = "lastModifiedDate";
 
     public static final String VARIABLE_COMMENT = "comment";

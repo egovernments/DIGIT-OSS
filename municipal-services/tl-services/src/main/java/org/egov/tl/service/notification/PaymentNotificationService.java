@@ -115,8 +115,8 @@ public class PaymentNotificationService {
                             util.sendSMS(smsRequests, config.getIsTLSMSEnabled());
                         }
                         else{
-                            String localizationMessages = util.getLocalizationMessages(license.getTenantId(), requestInfo);
-                            List<SMSRequest> smsRequests = getSMSRequests(license, valMap, localizationMessages);
+                String localizationMessages = util.getLocalizationMessages(license.getTenantId(),requestInfo);
+                List<SMSRequest> smsRequests = getSMSRequests(license,valMap,localizationMessages);
                             util.sendSMS(smsRequests, config.getIsTLSMSEnabled());
                         }
 
