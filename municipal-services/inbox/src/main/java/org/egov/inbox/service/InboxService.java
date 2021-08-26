@@ -20,6 +20,7 @@ import org.egov.inbox.config.InboxConfiguration;
 import org.egov.inbox.repository.ServiceRequestRepository;
 import org.egov.inbox.util.BpaConstants;
 import org.egov.inbox.util.ErrorConstants;
+import org.egov.inbox.util.FSMConstants;
 import org.egov.inbox.util.TLConstants;
 import org.egov.inbox.web.model.Inbox;
 import org.egov.inbox.web.model.InboxResponse;
@@ -69,6 +70,10 @@ public class InboxService {
 	
 	@Autowired
 	private BPAInboxFilterService bpaInboxFilterService;
+	
+	@Autowired
+	
+	private FSMInboxFilterService fsmInboxFilter;
 
 	@Autowired
 	public InboxService(InboxConfiguration config, ServiceRequestRepository serviceRequestRepository,
@@ -172,6 +177,9 @@ public class InboxService {
 				}
 			}
 			
+			if(!ObjectUtils.isEmpty(processCriteria.getBusinessService()) && processCriteria.getBusinessService().get(0).equals(FSMConstants.FSM_MODULE)) {
+				totalCount = fsmInboxFilter.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
+			  }
 			if(processCriteria != null && !ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(BPA)) {
 				totalCount = bpaInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
 				List<String> applicationNumbers = bpaInboxFilterService.fetchApplicationNumbersFromSearcher(criteria, StatusIdNameMap, requestInfo);
