@@ -150,9 +150,9 @@ public class BusinessServiceRepository {
         String query = queryBuilder.getBusinessServices(new BusinessServiceSearchCriteria(), preparedStmtList);
 
         List<BusinessService> businessServices = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
-        List<BusinessService> filterBusinessServices = filterBusinessServices((businessServices));
+    //    List<BusinessService> filterBusinessServices = filterBusinessServices((businessServices));
 
-        return filterBusinessServices;
+        return businessServices;
     }
 
 

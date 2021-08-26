@@ -42,7 +42,7 @@ public class MDMSService {
     }
 
 
-    @Bean
+    //@Bean
     public void stateLevelMapping(){
         Map<String, Boolean> stateLevelMapping = new HashMap<>();
 

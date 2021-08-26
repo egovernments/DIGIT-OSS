@@ -264,7 +264,7 @@ public class WorkflowUtil {
             Boolean isStatelevelRolePresent = false;
 
             for (String tenantId : tenantIds) {
-                if (tenantId.equalsIgnoreCase(config.getStateLevelTenantId())){
+                if (isTenantStateLevel(tenantId)){
                     isStatelevelRolePresent = true;
                     break;
                 }
@@ -294,7 +294,7 @@ public class WorkflowUtil {
                  * applications having tenantId either pb.amritsar or pb.jalandhar and status in the list statuses
                  *
                  */
-                if(!isStatelevelRolePresent && tenantKey.equalsIgnoreCase(config.getStateLevelTenantId())){
+                if(!isStatelevelRolePresent && isTenantStateLevel(tenantKey)){
                     for (String tenantId : tenantIds){
                         tenantSpecificStatuses.addAll(statuses.stream().map(s -> tenantId+":"+s).collect(Collectors.toList()));
                     }
@@ -464,6 +464,14 @@ public class WorkflowUtil {
 
     }
 
+
+    private Boolean isTenantStateLevel(String tenantId){
+
+        if(tenantId.split("\\.").length == 2)
+            return true;
+        else return false;
+
+    }
 
 
 
