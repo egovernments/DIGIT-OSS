@@ -79,8 +79,7 @@ public class PropertyQueryBuilder {
 			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 			
 			+	LEFT_JOIN  +  " EG_PT_UNIT unit               ON property.id =  unit.propertyid and unit.active = 't'"
-			
-			+ " WHERE  ";
+			;
 	
 	private static final String ID_QUERY = SELECT
 
@@ -96,9 +95,7 @@ public class PropertyQueryBuilder {
 
 			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 
-			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid and unit.active = 't' "
-	
-	        + " WHERE  ";
+			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid and unit.active = 't' ";
 
 	private final String paginationWrapper = "SELECT * FROM "
 			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY plastmodifiedtime DESC, pid) offset_ FROM " + "({})" + " result) result_offset "
@@ -359,7 +356,7 @@ public class PropertyQueryBuilder {
 		if (values.isEmpty())
 			queryString.append(" WHERE ");
 		else {
-			queryString.append(" AND");
+			queryString.append(" AND ");
 		}
 	}
 
