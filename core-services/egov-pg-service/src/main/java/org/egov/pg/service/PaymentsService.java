@@ -43,7 +43,7 @@ public class PaymentsService {
 		payment.setInstrumentNumber(request.getTransaction().getTxnId());
 		payment.setTransactionNumber(request.getTransaction().getTxnId());
 		payment.setAdditionalDetails((JsonNode) request.getTransaction().getAdditionalDetails());
-
+		
 		CollectionPaymentRequest paymentRequest = CollectionPaymentRequest.builder()
 				.requestInfo(request.getRequestInfo()).payment(payment).build();
 		String uri = props.getCollectionServiceHost() + props.getPaymentCreatePath();
