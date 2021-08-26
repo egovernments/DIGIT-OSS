@@ -18,7 +18,7 @@
 <td>Roles</td>
 </tr>
 <tr>
-<td>OBPS</td>
+<td>Building Plan Approval</td>
 <td>Counter operator</td>
 <td> Document verifier <br>
 Airport NOC user <br>
@@ -37,7 +37,7 @@ NOC verifier
 <td></td>
 </tr>
 <tr>
-<td>TL</td>
+<td>Trade License</td>
 <td>Counter operator</td>
 <td>Document verifier</td>
 <td>
@@ -68,7 +68,7 @@ Approver
 </tr>
 
 <tr>
-<td>PGR</td>
+<td>Complaints</td>
 <td>CSR</td>
 <td>GRO</td>
 <td>
@@ -83,7 +83,7 @@ LME
 <td></td>
 </tr>
 <tr>
-<td>W & S</td>
+<td>Water & Sewarage</td>
 <td>Counter operator</td>
 <td>Document verifier</td>
 <td>
@@ -117,17 +117,7 @@ FSM Report viewer <br>
 FSM DSS &nbsp;</td>
 </tr>
 <tr>
-<td>HRMS</td>
-<td></td>
-<td></td>
-<td>
-</td>
-<td>
-</td>
-<td>
-</td>
-<td>Super User</td>
-</tr>
+
 <tr>
 <td>Finance</td>
 <td>Receipt creator</td>
@@ -149,7 +139,7 @@ Collection remitter
 Finance report viewer &nbsp;</td>
 </tr>
 <tr>
-<td>PT</td>
+<td>Property Tax</td>
 <td>Counter operator</td>
 <td>Document verifier 
 </td>
