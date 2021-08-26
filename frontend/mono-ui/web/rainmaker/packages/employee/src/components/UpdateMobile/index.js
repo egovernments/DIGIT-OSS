@@ -1,8 +1,10 @@
 import { Dialog, TextField } from "components";
 import { getPattern } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
+import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
+import { getLocaleLabels, handleFileUpload } from "egov-ui-framework/ui-utils/commons.js";
 import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
+import Counter from "./counter";
 import "./index.css";
 
 const getFields = () => {
@@ -13,6 +15,36 @@ const getFields = () => {
   }
 }
 
+const getDocuments = () => {
+  return [
+    {
+      active: true,
+      code: "OWNER.DULYSIGNED",
+      description: "OWNER.DULYSIGNED_DESCRIPTION",
+      documentType: "DULYSIGNED",
+      dropdownData: [],
+      hasDropdown: false,
+      required: false,
+      inputProps: {
+        accept: "image/*, .pdf, .png, .jpeg",
+      },
+      maxFileSize: 5000,
+    },
+    {
+      active: true,
+      code: "OWNER.IDENTITYPROOF",
+      description: "OWNER.IDENTITYPROOF_DESCRIPTION",
+      documentType: "IDENTITYPROOF",
+      dropdownData: [],
+      hasDropdown: false,
+      required: false,
+      inputProps: {
+        accept: "image/*, .pdf, .png, .jpeg",
+      },
+      maxFileSize: 5000,
+    }
+  ]
+}
 
 export default class ViewMobileDialog extends React.Component {
   constructor(props) {
@@ -20,6 +52,12 @@ export default class ViewMobileDialog extends React.Component {
     this.state = {
       fields: getFields(),
       register: false,
+      documentsUploaded: [],
+      documents: getDocuments(),
+      clickedElement: 0,
+      verifyButton: true,
+      fileUploadingStatus: "",
+      otpButton: false,
       error: {
         errorMessage: "",
         type: ""
@@ -91,7 +129,7 @@ export default class ViewMobileDialog extends React.Component {
         const newFields = { ...this.state.fields };
         newFields.mobileNumber.disabled = true;
         newFields.otp.disabled = false;
-        this.setState({ fields: { ...newFields } })
+        this.setState({ fields: { ...newFields }, otpButton: true, verifyButton: false })
         this.setMessage("PT_SEC_OTP_SENT_SUCEESS", "SUCCESS", true)
       })
       .catch(error => this.setMessage("PT_SEC_OTP_SENT_FAILURE", "ERROR", true));
@@ -179,7 +217,7 @@ export default class ViewMobileDialog extends React.Component {
     fetch(`${window.location.origin}/user/oauth/token`, requestOptions)
       .then(response => response.text())
       .then(result => {
-        if (result.error && result.error== "invalid_request") {
+        if (result.error && result.error == "invalid_request") {
           this.setMessage(result.error, "ERROR", false);
         } else {
           this.setMessage("PT_SEC_USER_CREATED_SUCCESS", "SUCCESS", true);
@@ -221,7 +259,7 @@ export default class ViewMobileDialog extends React.Component {
           const newFields = { ...this.state.fields };
           newFields.mobileNumber.disabled = true;
           newFields.otp.disabled = false;
-          this.setState({ fields: { ...newFields } })
+          this.setState({ fields: { ...newFields }, otpButton: true, verifyButton: false });
           this.setMessage("PT_SEC_OTP_SENT_SUCEESS", "SUCCESS", true);
         }
       })
@@ -272,7 +310,6 @@ export default class ViewMobileDialog extends React.Component {
     }
   }
 
-
   setMessage = (message = "", type = "", clear = false) => {
     this.setState({
       error: {
@@ -284,12 +321,19 @@ export default class ViewMobileDialog extends React.Component {
       setTimeout(this.setMessage, 1000);
     }
   }
+  setDocFileDetails = (ind, file, fileStoreId) => {
+    ind = this.state.clickedElement != "IDENTITYPROOF" ? 0 : 1;
 
-
+    const documents = this.state.documents;
+    documents[ind].fileName = file.name;
+    documents[ind].fileStoreId = fileStoreId;
+    this.setState({ documents: documents });
+    this.setState({ fileUploadingStatus: "uploaded" });
+  }
 
   render() {
     const { propertyNumbers = {} } = this.props;
-    const { fields = {}, error = {} } = this.state;
+    const { fields = {}, error = {}, documents, fileUploadingStatus } = this.state;
     const { errorMessage = "", type = "" } = error;
     let key = "mobileNumber";
     let key1 = "otp";
@@ -315,14 +359,17 @@ export default class ViewMobileDialog extends React.Component {
         }}
       >
         <div className="pt-update-popup-holder">
+          {fileUploadingStatus == "uploading" &&
+            <div><LoadingIndicator></LoadingIndicator>
+            </div>}
           <span className="pt-update-static-content">
             <span>
-              <Label label="PTUPNO_OWNER_NAME" labelStyle={{ color: 'rgba(0, 0, 0, 0.604138)', fontSize: "12px" }}></Label>
-              <Label label={propertyNumbers && propertyNumbers.name}></Label>
+              <Label label="PTUPNO_OWNER_NAME" labelStyle={{ color: 'rgba(0, 0, 0, 0.604138)', fontSize: "14px" }}></Label>
+              <Label label={propertyNumbers && propertyNumbers.name} labelStyle={{ color: 'rgba(0, 0, 0, 0.875)', fontSize: "16px" }} ></Label>
             </span>
             <span style={{ marginRight: '15%' }}>
-              <Label label="PTUPNO_CURR_NO" labelStyle={{ color: 'rgba(0, 0, 0, 0.873302)', fontSize: "16px" }}></Label>
-              <Label label={propertyNumbers && propertyNumbers.mobileNumber}></Label>
+              <Label label="PTUPNO_CURR_NO" labelStyle={{ color: 'rgba(0, 0, 0, 0.873302)', fontSize: "14px" }}></Label>
+              <Label label={propertyNumbers && propertyNumbers.mobileNumber} labelStyle={{ color: 'rgba(0, 0, 0, 0.875)', fontSize: "16px" }} ></Label>
             </span>
           </span>
           <div>
@@ -341,14 +388,42 @@ export default class ViewMobileDialog extends React.Component {
               value={fields[key].value}
               onChange={(e) => this.handleChange(key, e.target.value)}></TextField>
             </span>
-            <div className="pt-update-send-otp-container">
-              <button type="button" style={{ marginRight: "5%" }} className={"button-verify-link"} onClick={() => this.validateAndSendOtp()} ><Label label="PTUPNO_SENDOTP"></Label></button>
-              <Label label="CORE_ANOTHER_OTP" labelStyle={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: "14px" }}></Label>
-              25
-              <Label label="CS_RESEND_SECONDS" labelStyle={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: "14px" }}></Label>
-            </div>
+            {process.env.REACT_APP_NAME !== "Citizen" && <div>
+              {documents.map((document, ind) => {
+                return (<div>
+                  <Label label={document.code} labelStyle={{ color: '#000000DF', fontSize: "16px" }} />
+                  <Label label="PT_ATTACH_RESTRICTIONS_SIZE" />
+                  <div className={"pt-document-upload-holder"}>
+                    <div class="pt-update-button-wrap">
+                      <label class="pt-update-upload-button" for={document.documentType} >{getLocaleLabels("EVENTS_UPLOAD_FILE", "EVENTS_UPLOAD_FILE")}</label>
+                      <input id={document.documentType} accept={document.inputProps.accept} type="file" onChange={(e) => handleFileUpload(e, (...props) => { let i = ind; this.setDocFileDetails(i, ...props); }, { inputProps: document.inputProps, maxFileSize: document.maxFileSize, moduleName: "PT" }, () => {
+                        this.setState({ fileUploadingStatus: "uploading", clickedElement: document.documentType });
+                      })}
+                        onClick={event => {
+                          event.target.value = null;
+                        }} />
+                    </div>
+                    {document.fileName && <Label className="pt-uploaded-document-label" label={document.fileName} />}
+                  </div>
+
+                  {/* <button type="button" className={"button-upload-link"} onClick={(e) => handleFileUpload(e, this.setDocFileDetails, { inputProps: document.inputProps, maxFileSize: document.maxFileSize, moduleName: "PT" }, () => {
+                    this.setState({ fileUploadingStatus: "uploading" });
+                  })} ><Label label="EVENTS_UPLOAD_FILE"></Label></button> */}
+
+                </div>)
+              })}
+            </div>}
+            {process.env.REACT_APP_NAME !== "Citizen" && <div className="pt-update-verify-container" style={{ marginTop: '25px' }}>
+              <button type="button" disabled={this.state.verifyButton} style={{ width: '100%' }} className={"button-verify-link"} onClick={() => this.validateAndCreate()} ><Label label="PTUPNO_VER_NO"></Label></button>
+            </div>}
+            {process.env.REACT_APP_NAME === "Citizen" && <div className="pt-update-send-otp-container">
+              <button type="button" disabled={this.state.otpButton} style={{ marginRight: "5%" }} className={"button-verify-link"} onClick={() => this.validateAndSendOtp()} ><Label label="PTUPNO_SENDOTP"></Label></button>
+              {this.state.otpButton && <React.Fragment><Label label="CORE_ANOTHER_OTP" labelStyle={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: "14px" }}></Label>
+                <Counter updateState={() => this.setState({ otpButton: false })} otpButton={this.state.otpButton} />
+                <Label label="CS_RESEND_SECONDS" labelStyle={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: "14px" }}></Label></React.Fragment>}
+            </div>}
           </div>
-          <div className="pt-update-verify-container">
+          {process.env.REACT_APP_NAME === "Citizen" && <div className="pt-update-verify-container">
             <span style={{
               height: "100px",
               display: "flex",
@@ -363,13 +438,11 @@ export default class ViewMobileDialog extends React.Component {
               value={fields[key1].value}
               disabled={fields[key1].disabled}
               onChange={(e) => this.handleChange(key1, e.target.value)}></TextField>
-
             </span>
-            <button type="button" style={{ width: '100%' }} className={"button-verify-link"} onClick={() => this.validateAndCreate()} ><Label label="PTUPNO_VERUPD_NO"></Label></button>
-          </div>
+            <button type="button" disabled={this.state.verifyButton} style={{ width: '100%' }} className={"button-verify-link"} onClick={() => this.validateAndCreate()} ><Label label="PTUPNO_VERUPD_NO"></Label></button>
+          </div>}
         </div>
         {errorMessage && <div className={type == "ERROR" ? "error-comp-second-num" : "success-comp-second-num"}><Label label={errorMessage}></Label></div>}
-
       </Dialog>
     )
   }
