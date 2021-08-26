@@ -87,7 +87,7 @@ const getStaticMapUrl = (latitude, longitude) => {
 };
 
 const detectDsoRoute = (pathname) => {
-  const employeePages = ["search", "inbox", "dso-dashboard", "dso-application-details"];
+  const employeePages = ["search", "inbox", "dso-dashboard", "dso-application-details", "user"];
 
   return employeePages.some((url) => pathname.split("/").includes(url));
 };
@@ -104,17 +104,17 @@ const routeSubscription = (pathname) => {
 
 const pgrAccess = () => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
   const pgrRoles = ["PGR_LME", "PGR-ADMIN", "CSR", "CEMP", "FEMP", "DGRO", "ULB Operator", "GRO", "GO", "RO", "GA"];
 
-  const PGR_ACCESS = userRoles.filter((role) => pgrRoles.includes(role));
+  const PGR_ACCESS = userRoles?.filter((role) => pgrRoles.includes(role));
 
-  return PGR_ACCESS.length > 0;
+  return PGR_ACCESS?.length > 0;
 };
 
 const fsmAccess = () => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
   const fsmRoles = [
     "FSM_CREATOR_EMP",
     "FSM_EDITOR_EMP",
@@ -128,55 +128,55 @@ const fsmAccess = () => {
     "FSM_COLLECTOR",
   ];
 
-  const FSM_ACCESS = userRoles.filter((role) => fsmRoles.includes(role));
+  const FSM_ACCESS = userRoles?.filter((role) => fsmRoles.includes(role));
 
-  return FSM_ACCESS.length > 0;
+  return FSM_ACCESS?.length > 0;
 };
 
 const ptAccess = () => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
   const ptRoles = ["PT_APPROVER", "PT_CEMP", "PT_DOC_VERIFIER", "PT_FIELD_INSPECTOR"];
 
-  const PT_ACCESS = userRoles.filter((role) => ptRoles.includes(role));
+  const PT_ACCESS = userRoles?.filter((role) => ptRoles.includes(role));
 
-  return PT_ACCESS.length > 0;
+  return PT_ACCESS?.length > 0;
 };
 
 const tlAccess = () => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
   const tlRoles = ["TL_CEMP", "TL_APPROVER", "TL_FIELD_INSPECTOR", "TL_DOC_VERIFIER"];
 
-  const TL_ACCESS = userRoles.filter((role) => tlRoles.includes(role));
+  const TL_ACCESS = userRoles?.filter((role) => tlRoles.includes(role));
 
-  return TL_ACCESS.length > 0;
+  return TL_ACCESS?.length > 0;
 };
 
 const mCollectAccess = () => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
   const mCollectRoles = ["UC_EMP"];
 
-  const MCOLLECT_ACCESS = userRoles.filter((role) => mCollectRoles.includes(role));
+  const MCOLLECT_ACCESS = userRoles?.filter((role) => mCollectRoles.includes(role));
 
-  return MCOLLECT_ACCESS.length > 0;
+  return MCOLLECT_ACCESS?.length > 0;
 };
 
 
 const receiptsAccess = () => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
   const receiptsRoles = ["CR_PT"];
-  const RECEIPTS_ACCESS = userRoles.filter((role) => receiptsRoles.includes(role));
-  return RECEIPTS_ACCESS.length > 0;
+  const RECEIPTS_ACCESS = userRoles?.filter((role) => receiptsRoles.includes(role));
+  return RECEIPTS_ACCESS?.length > 0;
 }
 const hrmsRoles = ["HRMS_ADMIN"];
 const hrmsAccess = () => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
-  const HRMS_ACCESS = userRoles.filter((role) => hrmsRoles.includes(role));
-  return HRMS_ACCESS.length > 0;
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
+  const HRMS_ACCESS = userRoles?.filter((role) => hrmsRoles.includes(role));
+  return HRMS_ACCESS?.length > 0;
 };
 
 export default {

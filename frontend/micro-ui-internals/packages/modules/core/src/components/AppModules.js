@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
+import { Route, Switch, useRouteMatch, Redirect, useLocation } from "react-router-dom";
 
 import { AppHome } from "./Home";
 import Login from "../pages/citizen/Login";
@@ -15,6 +15,12 @@ const getTenants = (codes, tenants) => {
 export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
   const ComponentProvider = Digit.Contexts.ComponentProvider;
   const { path } = useRouteMatch();
+  const location = useLocation();
+
+  const user = Digit.UserService.getUser();
+  if (!user) {
+    return <Redirect to={{ pathname: "/digit-ui/employee/user/login", state: { from: location.pathname + location.search } }} />;
+  }
 
   const appRoutes = modules.map(({ code, tenants }, index) => {
     const Module = Digit.ComponentRegistryService.getComponent(`${code}Module`);

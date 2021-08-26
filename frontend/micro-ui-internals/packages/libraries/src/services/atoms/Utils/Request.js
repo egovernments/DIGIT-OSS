@@ -8,7 +8,7 @@ Axios.interceptors.response.use(
       for (const error of err.response.data.Errors) {
         if (error.message.includes("InvalidAccessTokenException")) {
           window.location.href =
-            (isEmployee ? "/employee/user/login" : "/digit-ui/citizen/login") +
+            (isEmployee ? "/digit-ui/employee/user/login" : "/digit-ui/citizen/login") +
             `?from=${encodeURIComponent(window.location.pathname + window.location.search)}`;
         }
       }
