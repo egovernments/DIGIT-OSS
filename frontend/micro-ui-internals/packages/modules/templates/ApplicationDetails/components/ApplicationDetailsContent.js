@@ -25,6 +25,7 @@ import TLTradeAccessories from "./TLTradeAccessories";
 function ApplicationDetailsContent({ applicationDetails, workflowDetails, isDataLoading, applicationData, businessService, timelineStatusPrefix }) {
   const { t } = useTranslation();
 
+
   const getTimelineCaptions = (checkpoint) => {
     if (checkpoint.state === "OPEN" || checkpoint.status === "INITIATED") {
       const caption = {
@@ -35,8 +36,10 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
     } else {
       const caption = {
         date: Digit.DateUtils?.ConvertTimestampToDate(applicationData?.auditDetails?.lastModifiedTime),
-        name: checkpoint?.assigner?.name,
-        mobileNumber: checkpoint?.assigner?.mobileNumber,
+        // name: checkpoint?.assigner?.name,
+        name: checkpoint?.assignes?.[0]?.name,
+        // mobileNumber: checkpoint?.assigner?.mobileNumber,
+        mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
       };
       return <TLCaption data={caption} />;
     }
