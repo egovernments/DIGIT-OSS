@@ -4,6 +4,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.wf.config.WorkflowConfig;
 import org.egov.wf.repository.BusinessServiceRepository;
 import org.egov.wf.repository.WorKflowRepository;
+import org.egov.wf.util.WorkflowConstants;
 import org.egov.wf.util.WorkflowUtil;
 import org.egov.wf.validator.WorkflowValidator;
 import org.egov.wf.web.models.*;
@@ -143,7 +144,7 @@ public class WorkflowService {
     
     public List statusCount(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
         List result;
-        if(criteria.isNull()){
+        if(criteria.isNull() && !criteria.getBusinessService().equalsIgnoreCase(WorkflowConstants.FSM_MODULE)){
         	enrichSearchCriteriaFromUser(requestInfo, criteria);
             result = workflowRepository.getInboxStatusCount(criteria);
         }
