@@ -114,6 +114,9 @@ export const getLocalityData = async (module = "", applicationNos = []) => {
       "referenceNumber": applicationNos
     }
   }).then(resp => {
+    if(!resp||!resp.Localities){
+      return {};
+    }
     let localityData = {};
     resp.Localities.map(locality => {
       localityData[locality.referencenumber] = locality.locality;

@@ -200,13 +200,13 @@ function App() {
         "tenantId": "pb.amritsar",
         "permanentCity": "pb"
     }
-    userObject.auth = '84bdf696-25cb-490c-aa29-57ba1311d054';
+    userObject.auth = '957333c5-79a9-43ac-83d3-4acde0d92dd7';
     localStorage.setItem("Employee.token", userObject.auth);
 
     return (
 
         <div >
-            <Inbox user={userObject} t={(key) => { console.log(key); return key }} historyClick={(e) => console.log("history", e)} historyComp={<span>HH</span>}></Inbox>
+            <Inbox user={userObject} t={(key) => { console.log(key); return key }} historyClick={(e) => console.log("history", e)} historyComp={<span>HH</span>} esclatedComp={<span>I</span>}></Inbox>
         </div>
     );
 }

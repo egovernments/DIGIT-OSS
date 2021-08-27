@@ -37,8 +37,19 @@
     100% {
       transform: rotate(360deg); } }
   
-
-
+.jk-inbox-search-label{
+  display: flex;
+    align-items: center;
+}
+.jk-inbox-eslcated-mark{
+  width: 24px;
+}
+.jk-inbox-sla-wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+    width: 100%;
+}
 .inbox-row-holder{
   display: flex;
     justify-content: space-around;
@@ -256,6 +267,9 @@ select{
 .jk-pagination-holder{
   justify-content: unset;
 }
-
+.jk-inbox-sla-wrapper{
+  display: inline-flex;
+  width: 100%;
+}
 }
 

@@ -12,7 +12,7 @@ import "./index.css";
 const styles = (theme) => ({
   webRoot: {
     flexGrow: 1,
-    width: "10%",
+    width: "9em",
     padding: "1%"
   },
   webRoot1: {

@@ -12,7 +12,7 @@ const { Initdata,
     sortOrder, getEsclationRecords } = inboxHelperFunction
 
 const WfTable = (props) => {
-    const { user = {}, historyComp = null, historyClick } = props;
+    const { user = {}, historyComp = null, historyClick ,esclatedComp=null } = props;
     let { t: newT = (key) => key } = props;
     const t = (key) => newT(key && typeof key == "string" && key.toUpperCase());
     localStorage.setItem("inb-uuid", user.uuid);
@@ -161,7 +161,11 @@ const WfTable = (props) => {
     return (
         <React.Fragment>
             <div style={{ margin: "10px" }}>
-                <TableFilterWrapper data={data} count={count} setEsclationData={setEsclationData} esclationData={esclationData} inboxConfig={inboxConfig} setData={setData} t={t} historyComp={historyComp} uuid={user.uuid} applicationStates={applicationStates} localities={localities} loadedAll={loadedAll} setLoadAll={setLoadAll} setBusinessServices={setBusinessServices} header={Object.keys(sortOrder).reduce((prev, curr) => {
+                <TableFilterWrapper data={[...data,...esclationData.data]} count={count} setEsclationData={setEsclationData}
+                 esclationData={esclationData} inboxConfig={inboxConfig} setData={setData} t={t}
+                  historyComp={historyComp} 
+                  esclatedComp={esclatedComp}
+                uuid={user.uuid} applicationStates={applicationStates} localities={localities} loadedAll={loadedAll} setLoadAll={setLoadAll} setBusinessServices={setBusinessServices} header={Object.keys(sortOrder).reduce((prev, curr) => {
                     prev[curr] = curr;
                     return { ...prev }
                 }, {})} businessServices={businessServices} isLoading={isLoading} historyClick={historyClick} localityData={localityData} paginationConfig={paginationConfig} sortOrder={sortOrder}></TableFilterWrapper>

@@ -27,8 +27,13 @@ const Row = React.memo((props) => {
                             {t(key)}
                         </span> :
                         <span style={{ textAlign: "right" }}>
-                            {isSLA ? (<span style={{ backgroundColor: props.other.color }} className={"inbox-cell-badge-primary"}>
-                                {props[key]}
+                            {isSLA ? (<span className={"jk-inbox-sla-wrapper"}>
+                                <span style={{ backgroundColor: props.other.color }} className={"inbox-cell-badge-primary"}>
+                                    {props[key]}
+                                </span>
+                                {props.Esclated && <span className="jk-inbox-eslcated-mark">{props.esclatedComp}</span>}
+                                {!props.Esclated && <span className="jk-inbox-eslcated-mark">{""}</span>}
+                                <span className="jk-inbox-pointer" onClick={() => props.historyClick(id)}>{props.historyComp}</span>
                             </span>)
                                 : t(props[key]) || t("COMMON_NA")}
                         </span>
@@ -55,13 +60,12 @@ const Row = React.memo((props) => {
                         }
                     }
                     return (<span style={{ width: `${props.sortOrder[key].width}%` }} key={index} className={`row-${key}${props.isHeader ? '-head inbox-row-header-ele' : ""} ${slaHeader && "jk-inbox-pointer"} inbox-row-element }`} onClick={clickFunction}>
-                        {isSLA ? (<span style={{
-                            display: "flex",
-                            flexDirection: "row"
-                        }}>
+                        {isSLA ? (<span className={"jk-inbox-sla-wrapper"}>
                             <span style={{ backgroundColor: props.other.color }} className={"inbox-cell-badge-primary"}>
                                 {props[key]}
                             </span>
+                            {props.Esclated && <span className="jk-inbox-eslcated-mark">{props.esclatedComp}</span>}
+                            {!props.Esclated && <span className="jk-inbox-eslcated-mark">{""}</span>}
                             <span className="jk-inbox-pointer" onClick={() => props.historyClick(id)}>{props.historyComp}</span>
                         </span>) : t(props[key]) || t("COMMON_NA")}
                         {slaHeader && <span className="jk-inbox-pointer" >{props.sort ? <SortDown /> : <SortUp />}</span>}

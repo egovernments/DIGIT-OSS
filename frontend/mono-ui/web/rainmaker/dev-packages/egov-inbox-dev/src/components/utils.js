@@ -1,4 +1,4 @@
-import { wfSearch } from "./API/api";
+import { wfEsclationSearch, wfSearch } from "./API/api";
 
 export const mobileCheck = () => {
     let check = false;
@@ -55,6 +55,7 @@ export const formatWFSearch = (data, wfSlaConfig = {},
         "WF_INBOX_HEADER_CURRENT_OWNER": data.assignes && data.assignes[0] && data.assignes[0].name || "NA",
         "WF_INBOX_HEADER_SLA_DAYS_REMAINING": sla,
         "AppliedOn": new Date(data.auditDetails.createdTime).toLocaleDateString('id-ID'),
+        "Esclated": data.escalated,
         "other": {
             'BusinessService': data.businessService,
             "State": data.state.state,
@@ -64,6 +65,8 @@ export const formatWFSearch = (data, wfSlaConfig = {},
         }
     }
 }
+export const formatWFEsclatedSearch = (data, wfSlaConfig = {},
+    wfBusinessConfig = {}) => ({ ...formatWFSearch(data, wfSlaConfig, wfBusinessConfig), Esclated: true })
 
 export const getWfLink = (inboxConfig = {}, no, service) => {
     let defaultUrl = inboxConfig[service].redirectConfig.DEFAULT || '';

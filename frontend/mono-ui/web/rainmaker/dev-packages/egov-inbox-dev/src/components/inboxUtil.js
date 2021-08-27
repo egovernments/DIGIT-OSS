@@ -1,13 +1,13 @@
 import { getLocalityData, wfEsclationSearch, wfSearch, workflowSearchCount } from "./API/api"
-import { formatWFSearch } from "./utils"
+import { formatWFEsclatedSearch, formatWFSearch } from "./utils"
 
 const sortOrder = {
-    'CS_INBOX_MODULE_FILTER': { order: 1, width: 80 },
+    'CS_INBOX_MODULE_FILTER': { order: 1, width: 70 },
     "WF_INBOX_HEADER_APPLICATION_NO": { order: 0, width: 100 },
     "WF_INBOX_HEADER_STATUS": { order: 2, width: 80 },
     "WF_INBOX_HEADER_LOCALITY": { order: 3, width: 90 },
-    "WF_INBOX_HEADER_CURRENT_OWNER": { order: 4, width: 60 },
-    "WF_INBOX_HEADER_SLA_DAYS_REMAINING": { order: 5, width: 40 },
+    "WF_INBOX_HEADER_CURRENT_OWNER": { order: 4, width: 40 },
+    "WF_INBOX_HEADER_SLA_DAYS_REMAINING": { order: 5, width: 70 },
     // "AppliedOn": 5,
 }
 
@@ -103,7 +103,7 @@ const getEsclationRecords = (props) => {
                 businessIds.push(data.businessId);
                 service=data.businessService;
                 status[`WF_${data.businessService.toUpperCase()}_${data.state.state}`] = data.state.state;
-                return formatWFSearch(data, props.wfSlaConfig,
+                return formatWFEsclatedSearch(data, props.wfSlaConfig,
                     props.wfBusinessConfig);
             })
         }
@@ -113,7 +113,7 @@ const getEsclationRecords = (props) => {
             if (status) {
                 props.setApplicationStates(state => { return { ...state, ...status } });
             }
-            if (props.localityModule && businessIds.length > 0) {
+            if (props.localityModule && props.localityModule[service] && businessIds.length > 0) {
                 loadLocalityData(props.localityModule[service], businessIds, props.setLocalityData, props.setSetLocalities);
             }
 

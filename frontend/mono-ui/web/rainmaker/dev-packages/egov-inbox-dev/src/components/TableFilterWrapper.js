@@ -110,7 +110,7 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
     return <React.Fragment>
         <div style={{ display: "flex", flexDirection: "row-reverse" }}>
             <input id="inbox-search" type="text" onChange={(e) => setSearchText(e.target.value)} value={searchText} placeholder={t("INBOX_ENTER_BID")} />
-            <label for="inbox-search">     {t("CS_INBOX_SEARCH")}</label>
+            <label for="inbox-search" className="jk-inbox-search-label">     {t("CS_INBOX_SEARCH")}</label>
         </div>
         <div className="inbox-filter-wrapper">
             <FilterDropdown t={t} header={"CS_INBOX_MODULE_FILTER"} data={businessServices.map(service => { return { key: `CS_COMMON_INBOX_${service}`, value: service } })} name="businessService" value={filters.service} id="businessService" onChangeFunction={(e) => setFiltersDispatch({ type: 'service', value: e.target.value })} />
