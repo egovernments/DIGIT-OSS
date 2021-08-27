@@ -13,10 +13,10 @@
   <version>0.0.3-SNAPSHOT</version>
   <distributionManagement>
     <repository>
-      <id>repo.egovernments.org</id>
-      <name>eGov ERP Releases Repository</name>
-      <url>https://nexus-repo.egovernments.org/nexus/content/repositories/releases/</url>
-    </repository>
+			<id>repo.egovernments.org</id>
+			<name>eGov DIGIT Releases Repository</name>
+			<url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
+		</repository>
     <snapshotRepository>
       <id>repo.egovernments.org</id>
       <name>eGov ERP Snapshots Repository</name>
@@ -99,10 +99,10 @@
       <url>https://nexus-repo.egovernments.org/nexus/content/repositories/snapshots/</url>
     </repository>
     <repository>
-      <id>repo.egovernments.org</id>
-      <name>eGov ERP Releases Repository</name>
-      <url>https://nexus-repo.egovernments.org/nexus/content/repositories/releases/</url>
-    </repository>
+			<id>repo.egovernments.org</id>
+			<name>eGov DIGIT Releases Repository</name>
+			<url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
+		</repository>
   </repositories>
   <build>
     <plugins>
