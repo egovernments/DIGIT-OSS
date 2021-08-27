@@ -21,7 +21,7 @@ export default class WarningPopup extends React.Component {
 
     return (
       <Dialog
-        className="pt-update-popup"
+        className="pt-warning-popup"
         open={this.props.open}
         isClose={true}
         title={<Label label="PTUPNO_INVALIDNO_HEADER" fontSize="24px" labelStyle={{ padding: "2%", backgroundColor: "white", paddingLeft: '4%' }} labelClassName="owner-history" />}
@@ -37,17 +37,17 @@ export default class WarningPopup extends React.Component {
         }}
         bodyStyle={{
           padding: "0% 2% 2% 2%",
-          backgroundColor: "white"
+          backgroundColor: "white",
         }}
       >
-        <div className="pt-update-popup-holder">
+        <div className="pt-update-popup-holder" style={{ paddingTop: "10px" }}>
 
           <Label label="PTUPNO_INVALIDNO_DESC" labelStyle={{ color: 'rgba(0, 0, 0, 0.873302)', fontSize: "14px" }}></Label>
 
-          {<div className="pt-update-verify-container">
+          {<div className="pt-warning-button-container">
 
-            <button type="button" style={{ width: '100%' }} className={"button-verify-link"} onClick={() => console.log("asdasda")} ><Label label="PTUPNO_INVALIDNO_UPDATE"></Label></button>
-            <button type="button" style={{ width: '100%' }} className={"button-verify-link"} onClick={() => console.log("asdasda")} ><Label label="PTUPNO_INVALIDNO_SKIP"></Label></button>
+            <button type="button" style={{ width: '48%' }} className={"button-warning-secondary"} onClick={() => { this.props.updateNum(); }} ><Label label="PTUPNO_INVALIDNO_UPDATE"></Label></button>
+            <button type="button" style={{ width: '48%' }} className={"button-verify-link"} onClick={() => this.props.closeDialog()} ><Label label="PTUPNO_INVALIDNO_SKIP"></Label></button>
           </div>}
         </div>
         {errorMessage && <div className={type == "ERROR" ? "error-comp-second-num" : "success-comp-second-num"}><Label label={errorMessage}></Label></div>}

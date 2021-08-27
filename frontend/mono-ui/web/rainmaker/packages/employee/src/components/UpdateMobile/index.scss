@@ -9,8 +9,15 @@ $secondary:#000000DE;
 .pt-update-popup{
    max-width: 55vw  !important;
    overflow-y: scroll;
-   left: 20%;
+   left: 20% !important;
 }
+
+.pt-warning-popup{
+  max-width: 35vw  !important;
+  overflow-y: scroll;
+  left: 30% !important;
+}
+
 
 .pt-document-upload-holder{
   display: flex;
@@ -153,8 +160,22 @@ cursor: pointer;
 .pt-update-popup{
   max-width: 100%!important;
 }
+.pt-warning-popup{
+  max-width: 80%!important;
 }
+}
+.pt-update-popup {
+div{
+  div{
+  
+    // width: 50%;
+   
+    // transform: translate(25%, 10%);
+  }
+}
+ 
 
+}
 
 
 .pt-update-button-wrap input[type="file"] {
@@ -181,4 +202,25 @@ cursor: pointer;
 color : $primary;
 border: 1px solid $primary;
 
+}
+.pt-warning-button-container{
+  margin-top: 15%;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.button-warning-secondary{
+  width: 130px;
+  height: 42px;
+  background: white;
+ 
+  border-radius: 2px;
+
+  border: 1px solid $primary;
+  div{
+    color: $primary;
+    word-break: unset !important;
+    word-wrap: unset !important;
+  }
 }

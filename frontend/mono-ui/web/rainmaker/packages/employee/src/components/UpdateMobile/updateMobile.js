@@ -46,7 +46,7 @@ export default class UpdateMobile extends React.Component {
             propertyId: "",
             tenantId: "",
             property: {},
-            invalidNumber:false,
+            invalidNumber: false,
             propertyNumbers: {}
         }
     }
@@ -63,7 +63,7 @@ export default class UpdateMobile extends React.Component {
     }
 
     loadProperty = async () => {
-        const { propertyId = "", tenantId = "", number ,updateNumberConfig} = this.props;
+        const { propertyId = "", tenantId = "", number, updateNumberConfig } = this.props;
         let queryParams = [{ key: "propertyIds", value: propertyId },
         { key: "tenantId", value: tenantId }]
         if (propertyId !== "" && tenantId !== "") {
@@ -73,14 +73,14 @@ export default class UpdateMobile extends React.Component {
             let propertyNumbers = {};
             owners && owners.filter(owner => owner.status == "ACTIVE");
             owners && owners.map(owner => {
-                if(process.env.REACT_APP_NAME !== "Citizen"){
-                    if((number==updateNumberConfig.invalidNumber)||!number.match(updateNumberConfig['invalidPattern'])){
-                        this.setState({invalidNumber:true});
+                if (process.env.REACT_APP_NAME !== "Citizen") {
+                    if ((number == updateNumberConfig.invalidNumber) || !number.match(updateNumberConfig['invalidPattern'])) {
+                        this.setState({ invalidNumber: true });
                     }
                 }
                 if (owner.mobileNumber == number) {
-                    if(((number==updateNumberConfig.invalidNumber)||!number.match(updateNumberConfig['invalidPattern'])&&number==JSON.parse(getUserInfo()).mobileNumber)){
-                        this.setState({invalidNumber:true});
+                    if (((number == updateNumberConfig.invalidNumber) || !number.match(updateNumberConfig['invalidPattern']) && number == JSON.parse(getUserInfo()).mobileNumber)) {
+                        this.setState({ invalidNumber: true });
                     }
                     propertyNumbers = {
                         "id": owner.id,
@@ -113,7 +113,9 @@ export default class UpdateMobile extends React.Component {
 
         const { property = {}, propertyNumbers = {} } = this.state;
         return property && <div>
-            {this.state.invalidNumber&&<WarningPopup open={this.state.invalidNumber?true:false} closeDialog={() => this.setState({invalidNumber:false})}></WarningPopup>}
+            {this.state.invalidNumber && <WarningPopup open={this.state.invalidNumber ? true : false} closeDialog={() => this.setState({ invalidNumber: false })}
+                updateNum={() => { this.setState({ invalidNumber: false }); this.toggleDialog(); }}>
+            </WarningPopup>}
             {this.canShowEditOption() && VerifyButton(this.props.type, this.toggleDialog)}
             {this.state.open && <ViewMobileDialog open={this.state.open}
                 documents={this.props.updateNumberConfig.documents}
@@ -121,7 +123,7 @@ export default class UpdateMobile extends React.Component {
                 property={property}
                 propertyNumbers={propertyNumbers}
                 closeDialog={() => this.toggleDialog()}></ViewMobileDialog>}
-                <button onClick={() => this.setState({invalidNumber:true})} >to open warning </button>
+            {/* <button onClick={() => this.setState({ invalidNumber: true })} >to open warning </button> */}
         </div>
 
     }
