@@ -74,7 +74,7 @@ export const fetchLocalizationLabel = (locale, module, tenantId, isFromModule) =
       if((moduleName && storedModuleList.includes(moduleName) === false) || isFromModule || isCommonScreen){
         const payload1 = await httpRequest(LOCALATION.GET.URL, LOCALATION.GET.ACTION, [
           { key: "module", value: localeModule },
-          { key: "locale", value: locale },
+          { key: "locale", value: locale ? locale : "en_IN" },
           { key: "tenantId", value: commonConfig.tenantId },
         ]);
         resultArray = [...payload1.messages];
@@ -87,7 +87,7 @@ export const fetchLocalizationLabel = (locale, module, tenantId, isFromModule) =
         const payload2 = module
           ? await httpRequest(LOCALATION.GET.URL, LOCALATION.GET.ACTION, [
               { key: "module", value: `rainmaker-${module}` },
-              { key: "locale", value: locale },
+              { key: "locale", value: locale ? locale : "en_IN" },
               { key: "tenantId", value: tenantId ? tenantId : commonConfig.tenantId },
             ])
           : [];

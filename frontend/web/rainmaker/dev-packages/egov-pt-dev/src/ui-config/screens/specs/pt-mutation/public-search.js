@@ -2,7 +2,8 @@ import commonConfig from "config/common.js";
 import { getBreak, getCommonHeader, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, getRequiredDocData } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId,getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import {  getModuleName } from "egov-ui-kit/utils/commons";
+import { getLocale, getTenantId, setModule } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 import { resetFields } from "./publicMutationMethods";
 import iSearchTabs from "./propertySearch-tabs";
@@ -50,7 +51,7 @@ const getMDMSData = async (action, dispatch) => {
      },
   ]
 
-  getRequiredDocData(action, dispatch, documentModuleDetails);
+  //getRequiredDocData(action, dispatch, documentModuleDetails);
 
   let tenantId =
     process.env.REACT_APP_NAME === "Citizen" ? commonConfig.tenantId : getTenantId();
@@ -124,7 +125,12 @@ const screenConfig = {
 
   beforeInitScreen: (action, state, dispatch) => {
     resetFields(state, dispatch);
-    dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
+  /*   setModule(getModuleName());
+    let locale = "en_IN";
+    let module = getModuleName();
+    let tenantId =
+    process.env.REACT_APP_NAME === "Citizen" ? commonConfig.tenantId : getTenantId();
+ */   // dispatch(fetchLocalizationLabel(locale, module,  tenantId ));
     getMDMSData(action, dispatch);
 
     set(
