@@ -722,6 +722,23 @@ const getDocumentTypesCriteria = (tenantId, moduleCode, type) => ({
   }
 })
 
+const getTradeTypeRoleCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "TradeTypetoRoleMapping"
+          }
+        ]
+      }
+    ]
+  }
+})
+
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
     name: obj.localname,
@@ -1334,6 +1351,9 @@ export const MdmsService = {
 
   getDocumentTypes: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getDocumentTypesCriteria(tenantId, moduleCode, type), moduleCode);
-  }
+  },
   
+  getTradeTypeRoleTypes: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getTradeTypeRoleCriteria(tenantId, moduleCode, type), moduleCode);
+  }
 };

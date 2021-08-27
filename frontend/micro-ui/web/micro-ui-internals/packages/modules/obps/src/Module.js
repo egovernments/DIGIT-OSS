@@ -14,8 +14,12 @@ import OwnerDetails from "./pageComponents/OwnerDetails";
 import DocumentDetails from "./pageComponents/DocumentDetails";
 import NOCDetails from "./pageComponents/NOCDetails";
 import LocationDetails from "./pageComponents/LocationDetails";
+import StakeholderDocsRequired  from "./pageComponents/StakeholderDocsRequired";
 import GIS from "./pageComponents/GIS";
 import OCEDCRDocsRequired from "./pageComponents/OCEDCRDocsRequired";
+import LicenseType from "./pageComponents/LicenseType";
+import LicenseDetails from "./pageComponents/LicenseDetails";
+
 
 const OBPSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "bpa";
@@ -70,6 +74,9 @@ const componentsToRegister = {
   LocationDetails,
   GIS,
   OCEDCRDocsRequired,
+  StakeholderDocsRequired,
+  LicenseType,
+  LicenseDetails
 }
 
 export const initOBPSComponents = () => {

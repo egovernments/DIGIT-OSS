@@ -6,6 +6,7 @@ import NewBuildingPermit from "./NewBuildingPermit";
 import CreateEDCR from "./EDCR";
 import CreateOCEDCR from "./OCEDCR";
 import BPACitizenHomeScreen from "./home"; 
+import StakeholderRegistration from "./StakeholderRegistration";
 
 const App = ({ path }) => {
   const location = useLocation()
@@ -21,7 +22,8 @@ const App = ({ path }) => {
         <PrivateRoute
           path={`${path}/new-building-permit`}
           component={() => <NewBuildingPermit />}
-        />      
+        />  
+        <PrivateRoute path={`${path}/stakeholder/apply`} component={StakeholderRegistration} />       
       </Switch>
     </React.Fragment>
   )

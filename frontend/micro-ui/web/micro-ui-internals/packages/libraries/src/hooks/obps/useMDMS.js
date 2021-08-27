@@ -6,6 +6,9 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
   const useDocumentMapping = () => {
     return useQuery('DOCUMENT_MAPPING', () => MdmsService.getDocumentTypes(tenantId, moduleCode, type), queryConfig);
   }
+  const useTradeTypetoRoleMapping = () => {
+    return useQuery('ROLE_DOCUMENT_MAPPING', () => MdmsService.getTradeTypeRoleTypes(tenantId, moduleCode, type), queryConfig);
+  }
   const _default = () => {
     return useQuery([tenantId, moduleCode, type], () => MdmsService.getMultipleTypes(tenantId, moduleCode, type), config);
   };
@@ -13,6 +16,8 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
   switch (type) {
     case "DocumentTypes":
       return useDocumentMapping();
+    case "TradeTypetoRoleMapping":
+      return useTradeTypetoRoleMapping();
     default:
       return _default();
   }
