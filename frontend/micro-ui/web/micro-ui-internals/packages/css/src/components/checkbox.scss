@@ -1,0 +1,53 @@
+.checkbox-wrap {
+  @apply flex mb-md relative items-baseline;
+
+  input {
+    width: 38px;
+    height: 38px;
+    @apply opacity-0 absolute top-0 left-0 z-10;
+  }
+
+  .input-emp {
+    @extend input;
+    width: 24px;
+    height: 24px;
+  }
+
+  .custom-checkbox {
+    width: 38px;
+    height: 38px;
+    @apply absolute top-0 left-0 border border-solid border-input-border z-0;
+
+    img {
+      @apply opacity-0;
+    }
+
+    svg {
+      @apply opacity-0;
+    }
+  }
+
+  .custom-checkbox-emp {
+    @extend .custom-checkbox;
+    width: 24px;
+    height: 24px;
+  }
+
+  input:checked ~ .custom-checkbox,
+  input:hover ~ .custom-checkbox {
+    @apply border-2 border-primary-main;
+  }
+
+  input:checked ~ .custom-checkbox img {
+    @apply opacity-100;
+  }
+
+  input:checked ~ .custom-checkbox svg {
+    @apply opacity-100;
+  }
+
+  .label {
+    margin-left: 56px;
+    @apply text-form-field text-text-primary;
+  }
+}

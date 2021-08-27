@@ -3,12 +3,12 @@
   "version": "1.3.0",
   "private": true,
   "workspaces": [
-    "digit-ui-internals/packages/*",
-    "digit-ui-internals/packages/modules/*"
+    "micro-ui-internals/packages/*",
+    "micro-ui-internals/packages/modules/*"
   ],
   "homepage": "/digit-ui",
   "dependencies": {
-    "@egovernments/digit-ui-css": "^1.0.0",
+    "@egovernments/digit-ui-css": "^1.3.0",
     "@egovernments/digit-ui-libraries": "^1.3.0",
     "@egovernments/digit-ui-module-common": "^1.3.0",
     "@egovernments/digit-ui-module-core": "^1.3.0",
