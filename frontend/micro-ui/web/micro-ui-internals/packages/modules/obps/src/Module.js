@@ -23,6 +23,7 @@ import OCUploadPlanDiagram from "./pageComponents/OCUploadPlanDiagram";
 import LicenseType from "./pageComponents/LicenseType";
 import LicenseDetails from "./pageComponents/LicenseDetails";
 
+
 const OBPSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "bpa";
   const { path, url } = useRouteMatch();
