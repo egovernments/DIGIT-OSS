@@ -3,9 +3,8 @@ import { httpRequest } from "egov-ui-kit/utils/api";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
-import ViewMobileDialog from ".";
 import './index.css';
-import { SuccessIcon } from "./ListItems";
+import UpdateMobileDialog from "./updateMobileDialog";
 import WarningPopup from "./warningPopup";
 
 const editIconStyle = {
@@ -22,17 +21,8 @@ const VerifyButton = (type, openDialog) => {
             return <span><button className="button-verify" style={{ "float": "none", display: "flex" }} onClick={() => openDialog()}> <Icon style={editIconStyle} action="image" name="edit" /> <Label label="PT_EDIT"></Label></button>
             </span>;
         case "VERIFIED":
-            return <span><button className="button-verify" style={{ "float": "none" }} onClick={() => openDialog()}> <SuccessIcon /> LINK</button>
+            return <span><button className="button-verify" style={{ "float": "none" }} onClick={() => openDialog()}>  LINK</button>
             </span>;
-        case "LINKNUM":
-            return <div className="text-verify-link">
-                <Label label="PT_SEC_LINK_NO_TEXT" fontSize="16px" labelStyle={{ color: "#FE7A51", fontWeight: '400' }} />
-                <button type="button" className={"button-verify-link"} onClick={() => openDialog()} ><Label label="PT_SEC_LINK_NO_BTN"></Label></button>
-            </div>;
-        case "VERIFIED":
-            return <button onClick={() => openDialog()}>Verify Mobile</button>;
-        case "SIMPLEBUTTON":
-            return <button onClick={() => openDialog()}>Verify Mobile</button>;
         default:
             return <button onClick={() => openDialog()}>Verify Mobile</button>;
     }
@@ -113,16 +103,20 @@ export default class UpdateMobile extends React.Component {
 
         const { property = {}, propertyNumbers = {} } = this.state;
         return property && <div>
-            {this.state.invalidNumber && <WarningPopup open={this.state.invalidNumber ? true : false} closeDialog={() => this.setState({ invalidNumber: false })}
-                updateNum={() => { this.setState({ invalidNumber: false }); this.toggleDialog(); }}>
-            </WarningPopup>}
             {this.canShowEditOption() && VerifyButton(this.props.type, this.toggleDialog)}
-            {this.state.open && <ViewMobileDialog open={this.state.open}
+            {this.state.open && <UpdateMobileDialog
+                open={this.state.open}
                 documents={this.props.updateNumberConfig.documents}
                 loadProperty={this.loadProperty}
                 property={property}
                 propertyNumbers={propertyNumbers}
-                closeDialog={() => this.toggleDialog()}></ViewMobileDialog>}
+                closeDialog={() => this.toggleDialog()}>
+            </UpdateMobileDialog>}
+            {this.state.invalidNumber && <WarningPopup
+                open={this.state.invalidNumber ? true : false}
+                closeDialog={() => this.setState({ invalidNumber: false })}
+                updateNum={() => { this.setState({ invalidNumber: false }); this.toggleDialog(); }}>
+            </WarningPopup>}
             {/* <button onClick={() => this.setState({ invalidNumber: true })} >to open warning </button> */}
         </div>
 

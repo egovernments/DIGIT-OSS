@@ -15,45 +15,14 @@ const getFields = () => {
   }
 }
 
-const getDocuments = () => {
-  return [
-    {
-      active: true,
-      code: "OWNER.DULYSIGNED",
-      description: "OWNER.DULYSIGNED_DESCRIPTION",
-      documentType: "DULYSIGNED",
-      dropdownData: [],
-      hasDropdown: false,
-      required: false,
-      inputProps: {
-        accept: "image/*, .pdf, .png, .jpeg",
-      },
-      maxFileSize: 5000,
-    },
-    {
-      active: true,
-      code: "OWNER.IDENTITYPROOF",
-      description: "OWNER.IDENTITYPROOF_DESCRIPTION",
-      documentType: "IDENTITYPROOF",
-      dropdownData: [],
-      hasDropdown: false,
-      required: false,
-      inputProps: {
-        accept: "image/*, .pdf, .png, .jpeg",
-      },
-      maxFileSize: 5000,
-    }
-  ]
-}
-
-export default class ViewMobileDialog extends React.Component {
+export default class UpdateMobileDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       fields: getFields(),
       register: false,
       documentsUploaded: [],
-      documents:[],
+      documents: [],
       // documents: getDocuments(),
       clickedElement: 0,
       verifyButton: true,
@@ -66,9 +35,8 @@ export default class ViewMobileDialog extends React.Component {
     }
   }
   static getDerivedStateFromProps(props, state) {
- 
-    return { ...state,documents:props.documents };
- }
+    return { ...state, documents: props.documents };
+  }
 
 
   handleChange = (id, value) => {
@@ -96,12 +64,9 @@ export default class ViewMobileDialog extends React.Component {
     const { tenantId = "" } = property;
     const tenant = tenantId.split('.')[0];
     const { name = "" } = propertyNumbers;
-
     var myHeaders = new Headers();
-
     myHeaders.append("accept", "application/json, text/plain, */*");
     myHeaders.append("content-type", "application/json;charset=UTF-8");
-
     var raw = {
       "RequestInfo": {
         "apiId": "Rainmaker",
@@ -411,11 +376,6 @@ export default class ViewMobileDialog extends React.Component {
                     </div>
                     {document.fileName && <Label className="pt-uploaded-document-label" label={document.fileName} />}
                   </div>
-
-                  {/* <button type="button" className={"button-upload-link"} onClick={(e) => handleFileUpload(e, this.setDocFileDetails, { inputProps: document.inputProps, maxFileSize: document.maxFileSize, moduleName: "PT" }, () => {
-                    this.setState({ fileUploadingStatus: "uploading" });
-                  })} ><Label label="EVENTS_UPLOAD_FILE"></Label></button> */}
-
                 </div>)
               })}
             </div>}
