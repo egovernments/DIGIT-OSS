@@ -9,7 +9,7 @@ import ForgotPassword from "../pages/employee/ForgotPassword/index";
 import LanguageSelection from "../pages/employee/LanguageSelection";
 
 const getTenants = (codes, tenants) => {
-  return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
+  return tenants.filter((tenant) => codes?.map?.((item) => item.code).includes(tenant.code));
 };
 
 export const AppModules = ({ stateCode, userType, modules, appTenants }) => {

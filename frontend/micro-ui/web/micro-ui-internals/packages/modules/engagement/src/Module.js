@@ -3,6 +3,16 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Redirect, Switch, useLocation, useRouteMatch } from "react-router-dom";
 
+import Documents from "./pages/employee/documents"
+
+import EngagementCard from "./components/EngagementCard"
+import EngagementDocSelectULB from "./components/EngagementDocsULB"
+import EnagementDocName from "./components/engagement-doc-name"
+import EngagementDocCategory from "./components/engagement-doc-category"
+import EngagementDocDescription from "./components/engagement-doc-description"
+import EngagementDocUploadDocument from "./components/engagement-doc-documents"
+
+
 const EmployeeApp = ({ path, url, userType }) => {
   const location = useLocation();
 
@@ -10,7 +20,8 @@ const EmployeeApp = ({ path, url, userType }) => {
     <Switch>
       <React.Fragment>
         <div className="ground-container">
-          <PrivateRoute exact path={`${path}/`} component={() => <div>Engagement</div>} />
+            <PrivateRoute exact path={`${path}/docs`} component={()=><Documents {...{path}} />} />
+            <Redirect to={`${path}/docs`} />
         </div>
       </React.Fragment>
     </Switch>
@@ -69,7 +80,13 @@ const EngagementLinks = ({ matchPath, userType }) => {
 };
 
 const componentsToRegister = {
-    EngagementModule
+    EngagementModule,
+    EngagementCard,
+    EngagementDocSelectULB,
+    EnagementDocName,
+    EngagementDocCategory,
+    EngagementDocDescription,
+    EngagementDocUploadDocument,
 };
 
 export const initEngagementComponents = () => {

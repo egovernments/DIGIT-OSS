@@ -29,6 +29,7 @@ export const FormComposer = (props) => {
     props.getFormAccessors && props.getFormAccessors({ setValue, getValues });
   }, []);
 
+
   function onSubmit(data) {
     props.onSubmit(data);
   }
@@ -113,6 +114,26 @@ export const FormComposer = (props) => {
             control={control}
           />
         );
+
+        case "form":
+        return (
+          <form>
+              <Component
+                userType={"employee"}
+                t={t}
+                setValue={setValue}
+                onSelect={setValue}
+                config={config}
+                data={formData}
+                formData={formData}
+                register={register}
+                errors={errors}
+                setError={setError}
+                clearErrors={clearErrors}
+                formState={formState}
+                control={control}
+              />
+          </form>)
       default:
         return populators?.dependency !== false ? populators : null;
     }
@@ -121,6 +142,7 @@ export const FormComposer = (props) => {
   const formFields = useMemo(
     () =>
       props.config?.map((section, index, array) => {
+        console.log(section,"inside formcomoser")
         return (
           <React.Fragment key={index}>
             {section.head && <CardSectionHeader id={section.headId}>{t(section.head)}</CardSectionHeader>}
