@@ -215,6 +215,8 @@ class OwnerInfo extends Component {
             masterDetails: [
               {
                 name: "MutationDocuments",
+              },{
+                name:"UpdateNumber"
               }
             ],
           },
@@ -227,6 +229,7 @@ class OwnerInfo extends Component {
       const payload = await httpRequest(MDMS.GET.URL, MDMS.GET.ACTION, [], requestBody);
       const mdmsMutationDocuments = get(payload, 'MdmsRes.PropertyTax.MutationDocuments', []);
       this.props.prepareFinalObject('mdmsMutationDocuments', mdmsMutationDocuments);
+      this.props.prepareFinalObject('updateNumberConfig', get(payload, 'MdmsRes.PropertyTax.UpdateNumber[0]', {}));
       let documentUIChildren = {}
       if (mdmsMutationDocuments && mdmsMutationDocuments.length > 0) {
         documentUIChildren = getRequiredDocuments(mdmsMutationDocuments)
@@ -358,7 +361,7 @@ class OwnerInfo extends Component {
 
 
   render() {
-    const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, totalBillAmountDue, waterDetails, sewerDetails, mdmsMutationDocuments, OldProperty } = this.props;
+    const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, totalBillAmountDue, waterDetails, sewerDetails, mdmsMutationDocuments, OldProperty ,updateNumberConfig} = this.props;
     let ownerInfo = [];
     let multipleOwner = false;
     const header = "PT_OWNERSHIP_INFO_SUB_HEADER";
@@ -424,8 +427,9 @@ class OwnerInfo extends Component {
                         )}
                         {ownerItem && <PropertyInfoCard items={ownerItem.items} additionalKey={{
                           key: getTranslatedLabel("PT_OWNERSHIP_INFO_MOBILE_NO", localizationLabelsData), tenantId: properties.tenantId,
-                          propertyId: properties.propertyId
-                        }} ownerInfo={ownerInfo} header={header} editIcon={editIcon}></PropertyInfoCard>}
+                          propertyId: properties.propertyId,
+                          updateNumberConfig:updateNumberConfig
+                        }} ownerInfo={ownerInfo} header={header} showEditNumber={viewHistory || ownershipTransfer}  editIcon={editIcon}></PropertyInfoCard>}
                       </div>
                     );
                   })}
@@ -484,8 +488,13 @@ const mapStateToProps = state => {
     "mdmsMutationDocuments",
     []
   );
+  const updateNumberConfig = get(
+    preparedFinalObject,
+    "updateNumberConfig",
+    []
+  );
 
-  return { mdmsMutationDocuments };
+  return { mdmsMutationDocuments,updateNumberConfig };
 };
 
 const mapDispatchToProps = dispatch => {

@@ -7,7 +7,7 @@ import "./index.css";
 
 class PropertyInfoCard extends Component {
   render() {
-    const { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items = [], subSection = [], hideSubsectionLabel = false, additionalKey = "" } = this.props;
+    const { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items = [], subSection = [], hideSubsectionLabel = false, additionalKey = {} ,showEditNumber=false} = this.props;
 
     const isModify = getQueryArg(window.location.href, "mode") == 'WORKFLOWEDIT';
     return (
@@ -52,12 +52,12 @@ class PropertyInfoCard extends Component {
                             {isModify && <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <OldValueLabelContainer value={item.value} jsonPath={item.jsonPath} oldValue={item.oldValue} />
                             </div>}
-                            {additionalKey && additionalKey.key && additionalKey.key == item.key && <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                            {showEditNumber&&additionalKey && additionalKey.key && additionalKey.key == item.key && <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <UpdateMobile
-                                tenantId={additionalKey.tenantId}
-                                propertyId={additionalKey.propertyId}
                                 number={item.value}
-                                type={"UPDATE"} >
+                                type={"UPDATE"} 
+                                {...additionalKey}
+                                >
                               </UpdateMobile>
                             </div>}
                           </div>

@@ -53,7 +53,8 @@ export default class ViewMobileDialog extends React.Component {
       fields: getFields(),
       register: false,
       documentsUploaded: [],
-      documents: getDocuments(),
+      documents:[],
+      // documents: getDocuments(),
       clickedElement: 0,
       verifyButton: true,
       fileUploadingStatus: "",
@@ -64,6 +65,11 @@ export default class ViewMobileDialog extends React.Component {
       }
     }
   }
+  static getDerivedStateFromProps(props, state) {
+ 
+    return { ...state,documents:props.documents };
+ }
+
 
   handleChange = (id, value) => {
     const { fields = {} } = this.state;

@@ -1,10 +1,13 @@
 import { Icon } from "egov-ui-kit/components";
 import { httpRequest } from "egov-ui-kit/utils/api";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
 import ViewMobileDialog from ".";
 import './index.css';
 import { SuccessIcon } from "./ListItems";
+import WarningPopup from "./warningPopup";
+
 const editIconStyle = {
     fill: "#767676",
     width: 19,
@@ -16,7 +19,7 @@ const editIconStyle = {
 const VerifyButton = (type, openDialog) => {
     switch (type) {
         case "UPDATE":
-            return <span><button className="button-verify" style={{ "float": "none",display:"flex" }} onClick={() => openDialog()}> <Icon style={editIconStyle} action="image" name="edit" /> <Label label="PT_EDIT"></Label></button>
+            return <span><button className="button-verify" style={{ "float": "none", display: "flex" }} onClick={() => openDialog()}> <Icon style={editIconStyle} action="image" name="edit" /> <Label label="PT_EDIT"></Label></button>
             </span>;
         case "VERIFIED":
             return <span><button className="button-verify" style={{ "float": "none" }} onClick={() => openDialog()}> <SuccessIcon /> LINK</button>
@@ -43,6 +46,7 @@ export default class UpdateMobile extends React.Component {
             propertyId: "",
             tenantId: "",
             property: {},
+            invalidNumber:false,
             propertyNumbers: {}
         }
     }
@@ -59,7 +63,7 @@ export default class UpdateMobile extends React.Component {
     }
 
     loadProperty = async () => {
-        const { propertyId = "", tenantId = "", number } = this.props;
+        const { propertyId = "", tenantId = "", number ,updateNumberConfig} = this.props;
         let queryParams = [{ key: "propertyIds", value: propertyId },
         { key: "tenantId", value: tenantId }]
         if (propertyId !== "" && tenantId !== "") {
@@ -69,7 +73,15 @@ export default class UpdateMobile extends React.Component {
             let propertyNumbers = {};
             owners && owners.filter(owner => owner.status == "ACTIVE");
             owners && owners.map(owner => {
+                if(process.env.REACT_APP_NAME !== "Citizen"){
+                    if((number==updateNumberConfig.invalidNumber)||!number.match(updateNumberConfig['invalidPattern'])){
+                        this.setState({invalidNumber:true});
+                    }
+                }
                 if (owner.mobileNumber == number) {
+                    if(((number==updateNumberConfig.invalidNumber)||!number.match(updateNumberConfig['invalidPattern'])&&number==JSON.parse(getUserInfo()).mobileNumber)){
+                        this.setState({invalidNumber:true});
+                    }
                     propertyNumbers = {
                         "id": owner.id,
                         "uuid": owner.uuid,
@@ -85,17 +97,31 @@ export default class UpdateMobile extends React.Component {
     toggleDialog = () => {
         this.setState({ open: !this.state.open });
     }
+    canShowEditOption = () => {
+        if (process.env.REACT_APP_NAME === "Citizen") {
+            let userInfo = JSON.parse(getUserInfo()) || {};
+            if (userInfo.mobileNumber && userInfo.mobileNumber == this.props.number) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
 
     render() {
 
         const { property = {}, propertyNumbers = {} } = this.state;
-        return property && property.status == "ACTIVE" && <div>
-            {VerifyButton(this.props.type, this.toggleDialog)}
+        return property && <div>
+            {this.state.invalidNumber&&<WarningPopup open={this.state.invalidNumber?true:false} closeDialog={() => this.setState({invalidNumber:false})}></WarningPopup>}
+            {this.canShowEditOption() && VerifyButton(this.props.type, this.toggleDialog)}
             {this.state.open && <ViewMobileDialog open={this.state.open}
+                documents={this.props.updateNumberConfig.documents}
                 loadProperty={this.loadProperty}
                 property={property}
                 propertyNumbers={propertyNumbers}
                 closeDialog={() => this.toggleDialog()}></ViewMobileDialog>}
+                <button onClick={() => this.setState({invalidNumber:true})} >to open warning </button>
         </div>
 
     }
