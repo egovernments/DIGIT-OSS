@@ -73,7 +73,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
                 },
                 {
                     link: ``,
-                    i18nKey: t("BPA_OC_FOR_NEW_BUILDING_CONSTRUCTION_LABEL"),
+                    i18nKey: t("BPA_OC_NEW_BUILDING_CONSTRUCTION_LABEL"),
                 }
             ]
         }

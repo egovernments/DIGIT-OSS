@@ -21,7 +21,7 @@ const OCEDCRDocsRequired = ({ onSelect, onSkip, config }) => {
   return (
     <Fragment>
       <Card>
-        <CardHeader>{t(`BPA_OC_FOR_NEW_BUILDING_CONSTRUCTION_LABEL`)}</CardHeader>
+        <CardHeader>{t(`BPA_OC_NEW_BUILDING_CONSTRUCTION_LABEL`)}</CardHeader>
         <CitizenInfoLabel text={t(`OBPS_OCEDCR_DOCS_REQUIRED_TIME`)} showInfo={false} />
         <CardText style={{ color: "#0B0C0C", marginTop: "12px" }}>{t(`OBPS_OCEDCR_BUILDING_PERMIT_DESCRIPTION`)}</CardText>
         <Fragment>

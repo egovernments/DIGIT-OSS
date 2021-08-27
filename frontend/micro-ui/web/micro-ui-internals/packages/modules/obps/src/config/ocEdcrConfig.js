@@ -6,8 +6,36 @@ export const newConfig = [
                 route: "docs-required",
                 component: "OCEDCRDocsRequired",
                 key: "data",
-                nextStep: "",
-            }
+                nextStep: "home",
+            },
+            {
+                route: "home",
+                component: "OCeDCRScrutiny",
+                nextStep: "upload-diagram",
+                hideInEmployee: true,
+                key: "ScrutinyDetails",
+                texts: {
+                    headerCaption: "",
+                    header: "",
+                    cardText: "",
+                    submitBarLabel: "",
+                    skipText: "",
+                },
+            },
+            {
+                route: "upload-diagram",
+                component: "OCUploadPlanDiagram",
+                nextStep: null,
+                hideInEmployee: true,
+                key: "uploadData",
+                texts: {
+                    headerCaption: "BPA_OC_NEW_BUILDING_CONSTRUCTION_LABEL",
+                    header: "BPA_UPLOAD_OC_PLAN_DIAGRAM_LABEL",
+                    cardText: "",
+                    submitBarLabel: "BPA_COMMON_BUTTON_SUBMIT",
+                    skipText: "",
+                },
+            },
         ],
     }
 ];
