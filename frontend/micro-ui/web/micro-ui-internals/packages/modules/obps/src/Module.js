@@ -49,7 +49,7 @@ const OBPSLinks = ({ matchPath, userType }) => {
       i18nKey: t("BPA_CITIZEN_HOME_VIEW_APP_BY_CITIZEN_LABEL"),
     },
     {
-      link: `${matchPath}/tradelicence/renewal-list`,
+      link: `${matchPath}/stakeholder/apply/stakeholder-docs-required`,
       i18nKey: t("BPA_CITIZEN_HOME_REGISTER_ARCHITECT_BUILDER_LABEL"),
     },
     {

@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import { newConfig } from "../../../config/ocEdcrConfig";
-import { uuidv4 } from "../../../utils";
-// import EDCRAcknowledgement from "./EDCRAcknowledgement";
+import { uuidv4, convertDateToEpoch } from "../../../utils";
+import EDCRAcknowledgement from "./EDCRAcknowledgement";
 
 const CreateOCEDCR = ({ parentRoute }) => {
   const queryClient = useQueryClient();
@@ -14,63 +14,71 @@ const CreateOCEDCR = ({ parentRoute }) => {
   const { path, url } = useRouteMatch();
   const history = useHistory();
   let config = [];
-  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("EDCR_CREATE", {});
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("OC_EDCR_CREATE", {});
   const [isShowToast, setIsShowToast] = useState(null);
 
-  // function handleSelect(key, data, skipStep, index) {
-  //   const loggedInuserInfo = Digit.UserService.getUser();
-  //   const userInfo = { id: loggedInuserInfo?.info?.uuid, tenantId: loggedInuserInfo?.info?.tenantId };
-  //   let edcrRequest = {
-  //     transactionNumber: "",
-  //     edcrNumber: "",
-  //     planFile: null,
-  //     tenantId: "",
-  //     RequestInfo: {
-  //       apiId: "",
-  //       ver: "",
-  //       ts: "",
-  //       action: "",
-  //       did: "",
-  //       authToken: "",
-  //       key: "",
-  //       msgId: "",
-  //       correlationId: "",
-  //       userInfo: userInfo
-  //     }
-  //   };
+  function createOCEdcr(key, uploadData, skipStep, isFromCreateApi) {
+    const data = params;
+    const loggedInuserInfo = Digit.UserService.getUser();
+    const userInfo = { id: loggedInuserInfo?.info?.uuid, tenantId: loggedInuserInfo?.info?.tenantId };
+    let edcrRequest = {
+      transactionNumber: "",
+      edcrNumber: "",
+      planFile: null,
+      tenantId: "",
+      RequestInfo: {
+        apiId: "",
+        ver: "",
+        ts: "",
+        action: "",
+        did: "",
+        authToken: "",
+        key: "",
+        msgId: "",
+        correlationId: "",
+        userInfo: userInfo
+      }
+    };
 
-  //   const applicantName = data?.applicantName;
-  //   const file = data?.file;
-  //   const tenantId = data?.tenantId?.code;
-  //   const transactionNumber = uuidv4();
-  //   const appliactionType = "BUILDING_PLAN_SCRUTINY";
-  //   const applicationSubType = "NEW_CONSTRUCTION";
+    const transactionNumber = uuidv4();
+    const edcrNumber = data?.ScrutinyDetails?.edcrNumber;
+    const tenantId = data?.ScrutinyDetails?.tenantId;
+    const applicantName = data?.ScrutinyDetails?.applicantName;
+    const appliactionType = "BUILDING_OC_PLAN_SCRUTINY";
+    const applicationSubType = "NEW_CONSTRUCTION";
+    const permitDate = convertDateToEpoch(data?.ScrutinyDetails?.ocPermitdate);
+    const permitNumber = data?.ScrutinyDetails?.ocPermitNumber;
+    const comparisonEdcrNumber = data?.ScrutinyDetails?.edcrNumber;
+    const file = uploadData?.file;
 
-  //   edcrRequest = { ...edcrRequest, tenantId };
-  //   edcrRequest = { ...edcrRequest, transactionNumber };
-  //   edcrRequest = { ...edcrRequest, applicantName };
-  //   edcrRequest = { ...edcrRequest, appliactionType };
-  //   edcrRequest = { ...edcrRequest, applicationSubType };
+    edcrRequest = { ...edcrRequest, transactionNumber };
+    edcrRequest = { ...edcrRequest, edcrNumber };
+    edcrRequest = { ...edcrRequest, tenantId };
+    edcrRequest = { ...edcrRequest, applicantName };
+    edcrRequest = { ...edcrRequest, appliactionType };
+    edcrRequest = { ...edcrRequest, applicationSubType };
+    edcrRequest = { ...edcrRequest, permitDate };
+    edcrRequest = { ...edcrRequest, permitNumber };
+    edcrRequest = { ...edcrRequest, comparisonEdcrNumber };
 
-  //   let bodyFormData = new FormData();
-  //   bodyFormData.append("edcrRequest", JSON.stringify(edcrRequest));
-  //   bodyFormData.append("planFile", file);
+    let bodyFormData = new FormData();
+    bodyFormData.append("edcrRequest", JSON.stringify(edcrRequest));
+    bodyFormData.append("planFile", file);
 
-  //   Digit.EDCRService.create({ data: bodyFormData }, tenantId)
-  //     .then((result, err) => {
-  //       if (result?.data?.edcrDetail) {
-  //         setParams(result?.data?.edcrDetail);
-  //         history.replace(
-  //           `/digit-ui/citizen/obps/edcrscrutiny/apply/acknowledgement`, ///${result?.data?.edcrDetail?.[0]?.edcrNumber}
-  //           { data: result?.data?.edcrDetail }
-  //         );
-  //       }
-  //     })
-  //     .catch((e) => {
-  //       setIsShowToast({ key: true, label: e?.response?.data?.errorCode })
-  //     });
-
-  // }
+    Digit.EDCRService.create({ data: bodyFormData }, tenantId)
+      .then((result, err) => {
+        if (result?.data?.edcrDetail) {
+          setParams(result?.data?.edcrDetail);
+          history.replace(
+            `/digit-ui/citizen/obps/edcrscrutiny/oc-apply/acknowledgement`,
+            { data: result?.data?.edcrDetail }
+          );
+        }
+      })
+      .catch((e) => {
+        setIsShowToast({ key: true, label: e?.response?.data?.errorCode })
+      });
+  }
 
   const goNext = (skipStep) => {
     const currentPath = pathname.split("/").pop();
@@ -80,14 +88,12 @@ const CreateOCEDCR = ({ parentRoute }) => {
       return redirectWithHistory(`${path}/check`);
     }
     redirectWithHistory(`${path}/${nextStep}`);
-
   }
 
   const handleSelect = (key, data, skipStep, isFromCreateApi) => {
-    debugger;
-    if (isFromCreateApi) setParams(data);
-    else setParams({ ...params, ...{ [key]: { ...params[key], ...data }}});
-    if(!skipStep) goNext(skipStep);
+    if (isFromCreateApi) createOCEdcr(key, data);
+    else setParams({ ...params, ...{ [key]: { ...params[key], ...data } } });
+    if (!skipStep) goNext(skipStep);
   };
 
   const handleSkip = () => { };
@@ -100,14 +106,7 @@ const CreateOCEDCR = ({ parentRoute }) => {
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-  config.forEach(data => {
-    if(data?.component == "OCeDCRScrutiny" && params?.ScrutinyDetails?.edcrNumber) {
-      data.texts.submitBarLabel = "CS_COMMON_NEXT";
-    } else if(data?.component == "OCeDCRScrutiny" && !params?.ScrutinyDetails?.edcrNumber) {
-      data.texts.submitBarLabel = "";
-    }
-  })
-  config.indexRoute = "home";
+  config.indexRoute = "docs-required";
 
   return (
     <Switch>
@@ -121,7 +120,7 @@ const CreateOCEDCR = ({ parentRoute }) => {
         );
       })}
       <Route path={`${match.path}/acknowledgement`}>
-        {/* <EDCRAcknowledgement data={params} onSuccess={onSuccess} /> */}
+        <EDCRAcknowledgement data={params} onSuccess={onSuccess} />
       </Route>
       <Route>
         <Redirect to={`${match.path}/${config.indexRoute}`} />
