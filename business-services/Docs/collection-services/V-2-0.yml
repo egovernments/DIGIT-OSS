@@ -1,0 +1,681 @@
+swagger: "2.0"
+info:
+  version: 1.0.1
+  title: Collection System  
+  description: Collection Management System serves as revenue collection platform for all the billing systems through cash, cheque, dd, swipe machine. 
+  contact:
+    name: eGovernments Foundation
+    email: contact@egovernments.org
+
+schemes:
+  - https
+basePath: '/payments'
+x-common-path: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml'
+
+paths: 
+  /_search:
+    post:
+      summary: Searches the Payment based on search criteria
+      description: API to search payments based on search parameters like consumerCode, mobileNumber, transactionNumber etc. 
+      parameters:
+        - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo"
+        - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+        - $ref: "#/parameters/pageSize"
+        - $ref: "#/parameters/pageNumber"
+        - $ref: "#/parameters/sortReceipt"
+        - name: ids
+          in: query
+          required: false
+          description: Payment Ids.
+          type: array
+          items:
+            type: string
+        - name: consumerCodes
+          in: query
+          required: false
+          description: Consumer Code .
+          type: array
+          items:
+            type: string
+        - name: receiptNumbers
+          in: query
+          required: false
+          description: List of receipt numbers.
+          type: array
+          items:
+            type: string
+        - name: fromDate
+          in: query
+          description: Transaction date, here search will happen as Transaction date is greater or equal to given fromDate.
+          required: false
+          type: integer
+          format: int64
+        - name: toDate
+          in: query
+          description: Transaction date, here search will happen as Transaction date is lesser or equal to given toDate.
+          required: false
+          type: integer
+          format: int64
+        - name: status
+          in: query
+          description: Search based on the status of the Payment.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: instrumentStatus
+          in: query
+          description: Search based on the status of the instrument.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: paymentModes
+          in: query
+          description: Search based on the Payment type such as cash, cheque, dd etc.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: payerIds
+          in: query
+          required: false
+          description: The ids of the payer
+          type: array
+          items:
+            type: string
+        - name: transactionNumber
+          in: query
+          required: false
+          description: Unique tansaction number for multiple receipts created in one transaction.
+          type: string
+          minLength: 0
+          maxLength: 64
+        - name: mobileNumber
+          in: query
+          required: false
+          description: Unique tansaction number for multiple receipts created in one transaction.
+          type: string
+          minLength: 0
+          maxLength: 64
+        - name: billIds
+          in: query
+          required: false
+          description: List of bill ids to search receipts.Business details code is mandatory for searching with this criteria.
+          type: array
+          items:
+            type: string
+
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PaymentResponse'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      tags:
+        - Payment
+
+
+
+  /_create:
+    post:
+      summary: Records the payment in the system
+      description: This API generates a transaction number and persists the payment details. The payment information is then pushed to queue for further processing.
+      parameters:
+        - name: PaymentRequest
+          in: body
+          description: Creates payment for list of bill
+          required: true
+          schema:
+            $ref: '#/definitions/PaymentRequest'
+      tags:
+        - Payment
+      responses:
+        '201':
+          description: Payment created sucessfully.
+          schema:
+            $ref: '#/definitions/PaymentResponse'
+        '400':
+          description: Invalid input.
+
+  /_validate:
+    post:
+      summary: Validates the PaymentRequest
+      description: |
+       The API runs the following set of validations on the payment request.
+       1. Bill is present and is in valid state
+       2. Amount paid is positive integer
+       3. Zero amount payment is allowed only if bill amount is zero
+       4. Payment mode is allowed
+       5. Partial Payment is allowed based on the businessService
+       6. Advance payment is allowed based on the businessService
+      parameters:
+        - name: PaymentRequest
+          in: body
+          description: The request to be validated
+          required: true
+          schema:
+            $ref: '#/definitions/PaymentRequest'
+      tags:
+        - Payment
+      responses:
+        '201':
+          description: Payment info validated sucessfully.
+          schema:
+            $ref: '#/definitions/PaymentResponse'
+        '400':
+          description: Invalid input.
+
+  /_workflow:
+    post:
+      summary: Performs workflow actions on the payment
+      description: | 
+       The API can perform the following operations:  
+       1. Cancellation of receipts in open state.
+       2. Remittance of instruments such as Cash, Cheque, DD .
+       3. Dishonoring of instruments such as Cheque, DD.
+      parameters:
+        - name: PaymentWorkflowRequest
+          in: body
+          description: The workflow request
+          required: true
+          schema:
+            $ref: '#/definitions/PaymentWorkflowRequest'
+      tags:
+        - Payment
+      responses:
+        '201':
+          description: Payment status updated sucessfully.
+          schema:
+            $ref: '#/definitions/PaymentResponse'
+        '400':
+          description: Invalid input.
+
+
+definitions:
+  PaymentRequest:
+    type: object
+    description: Payment Request with Request Info.
+    properties:
+      requestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      Payment:
+        $ref: '#/definitions/Payment'
+
+  PaymentResponse:
+    type: object
+    description: Receipt Request with Request Info.
+    properties:
+      responseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      Payment:
+        $ref: '#/definitions/Payment'
+
+
+  PaymentWorkflowRequest:
+    type: object
+    description: Payment Workflow Request with Request Info.
+    properties:
+      requestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      Payment:
+        $ref: '#/definitions/PaymentWorkflow'
+
+
+  Bill:
+    type: object
+    properties:
+      paidBy:
+        type: string
+        description: Name of the Person who is making payment.
+      mobileNumber:
+        type: string
+        description: The mobileNumber of person who is paying
+        format: varchar
+      payerName:
+        type: string
+        description: The owner of the bill
+        format: varchar
+      payerAddress:
+        type: string
+        description: The address of the owner of the bill
+        format: varchar
+      payerEmail:
+        type: string
+        description: The email id of the owner of the bill
+        format: varchar
+      payerId:
+        type: string
+        description: The system user id of the owner of the bill
+        format: varchar
+      status:
+        type: string
+        description: status of the bill.
+        enum:
+          - ACTIVE
+          - CANCELLED
+          - PAID
+          - EXPIRED
+      reasonForCancellation:
+        type: string
+        description: The reason for cancellation of bill
+        format: varchar
+      isCancelled:
+        type: boolean
+        description: Boolean indicating if the bill is cancelled
+        format: varchar
+      additionalDetails:
+        type: object
+        description: Additional fields can be captured here
+      collectionModesNotAllowed:
+        type: array
+        description: The list of collection modes that are not allowed
+        items: 
+          type: string
+      partPaymentAllowed:
+        type: boolean
+        description: Boolean flag indicating if partial payment is allowed to be collected
+      isAdvanceAllowed:
+        type: boolean
+        description: Flag indicating if advance can be collected 
+      minimumAmountToBePaid:
+        type: number
+        description: The minumun amount that can be paid against the bill
+        format: double
+      businessService:
+        type: string
+        description: The businessService of the entity for which the bill is generated
+        format: varchar
+      totalAmount:
+        type: number
+        description: The total amount to be paid for the bill
+        format: double
+      consumerCode:
+        type: string
+        description: The consumer code for which bill is generated
+        format: varchar
+      billNumber:
+        type: string
+        description: The bill number generated by system
+        format: varchar
+      billDate:
+        type: number
+        description: The date on which bill is generated
+        format: int64
+      billDetails:
+        type: array
+        items:
+          $ref: '#/definitions/BillDetail'
+
+
+  BillDetail:
+    type: object
+    properties:
+      id:
+        type: string
+        description: uuid of the billDetail.
+      tenantId:
+        type: string
+        description: tenantId of the billDetail.
+      demandId:
+        type: string
+        description: The id of the corresponding demand .
+      billId:
+        type: string
+        description: The id of the parent bill.
+      amount:
+        type: number
+        format: double
+        description: Amount to be paid for the bill detail.
+      amountPaid:
+        type: number
+        format: double
+        description: Amount paid by the citizen.
+      fromPeriod:
+        type: number
+        format: int64
+        description: start date of the taxperiod
+      toPeriod:
+        type: number
+        format: int64
+        description: end date of the taxperiod
+      receiptDate:
+        type: string
+        format: date
+        description: Receipt Date.
+      receiptType:
+        description: Type of Receipt.
+        items:
+          type: string
+          enum:
+           - ADHOC
+           - BILLBASED
+           - CHALLAN
+      channel:
+        type: string
+        description: To be used by third party applications, to send the channel name.
+      voucherHeader:
+        description: Voucher header  need to refer from Finanicals.
+      boundary:
+        description: Boundary need to refer from Core services.
+        items:
+          type: string
+      manualReceiptNumber:
+        type: string
+        description: Manual Receipt Number for legacy reciepts.
+      manualReceiptDate:
+        type: number
+        description: Manual Receipt date for legacy reciepts.
+      collectionType:
+        type: string
+        description: collectionType of the payment.
+      billDescription:
+        type: string
+        description: Description of the bill.
+      expiryDate:
+        type: number
+        description: Expiry date in epoch
+        format: int64
+      displayMessage:
+        type: string
+      cancellationRemarks:
+        type: string
+        description: Remarks related to cancellation of payment
+      billAccountDetails:
+        type: array
+        items:
+          $ref: '#/definitions/BillAccountDetail'
+          
+  BillAccountDetail:
+    type: object
+    properties:
+      id:
+        type: string
+        description: uuid of the billAccountDetail.
+      tenantId:
+        type: string
+        description: tenantId of the billAccountDetail.
+      billDetailId:
+        type: string
+        description: uuid of the parent billDetail.
+      demandDetailId:
+        type: string
+        description: uuid of the demand for which the parent billDetail is created.
+      order:
+        type: integer
+        description: Priority of the account detail.
+      amount:
+        type: number
+        description: Amount to be paid for the bill account detail
+        format: double
+      adjustedAmount:
+        type: number
+        description: The amount paid against the bill account detail
+        format: double
+      taxHeadCode:
+        type: string
+        description: The taxHeadCode of the bill account detail
+      additionalDetails:
+        type: object
+        description: Additional fields can be captured in this object as map
+      purpose:
+        type: string
+        description: purpose of the bill account detail.
+        enum:
+          - ARREAR
+          - CURRENT
+          - ADVANCE
+          - EXEMPTION
+          - ARREAR_LATEPAYMENT_CHARGES
+          - CURRENT_LATEPAYMENT_CHARGES
+          - CHEQUE_BOUNCE_PENALTY
+          - REBATE
+          - OTHERS
+      auditDetails:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+    
+
+
+
+  Payment:
+    type: object
+    properties:
+      tenantId:
+        type: string
+        description: Unique id of tenant.
+        format: varchar
+        maxLength: 64
+      id:
+        type: string
+        description: Unique id of tenant.
+        format: varchar
+        maxLength: 64
+      totalDue:
+        type: number
+        description: Total amount due.
+      totalAmountPaid:
+        type: number
+        description: Unique id of tenant.
+        format: double
+      transactionNumber:
+        type: string
+        description: Transaction number of the payment
+        format: varchar
+        maxLength: 128
+      transactionDate:
+        type: number
+        description: The date of payment in epoch
+        format: int64
+      paymentMode:
+        type: string
+        description: Mode of payment used.
+        format: varchar
+        enum:
+         - CASH
+         - CHEQUE
+         - DD
+         - ONLINE
+         - CARD
+      instrumentDate:
+        type: number
+        description: The instrument date
+        format: int64
+      instrumentNumber:
+        type: string
+        description: The number of the instrument like dd number,cheque number etc.
+        format: varchar
+        maxLength: 128
+      instrumentStatus:
+        type: string
+        description: The status of the instrument
+        format: varchar
+        enum:
+          - APPROVED
+          - APPROVALPENDING
+          - TOBESUBMITTED
+          - REMITTED
+          - REJECTED
+          - CANCELLED
+          - DISHONOURED
+      ifscCode:
+        type: string
+        description: IFSC code of the bank to which payment is made
+        format: varchar
+        maxLength: 64
+      additionalDetails:
+        type: object
+        description: Any additional fields can be captured here as a map
+      paymentDetails:
+        type: array
+        items:
+          $ref: '#/definitions/PaymentDetail'
+        description: Payment details of each bill
+      paidBy:
+        type: string
+        description: The person who is paying the bill
+        format: varchar
+        maxLength: 128
+      mobileNumber:
+        type: string
+        description: The mobileNumber of person who is paying
+        format: varchar
+        maxLength: 64
+      payerName:
+        type: string
+        description: The owner of the bill
+        format: varchar
+        maxLength: 128
+      payerAddress:
+        type: string
+        description: The address of the owner of the bill
+        format: varchar
+        maxLength: 1024
+      payerEmail:
+        type: string
+        description: The email id of the owner of the bill
+        format: varchar
+        maxLength: 64
+      payerId:
+        type: string
+        description: The system user id of the owner of the bill
+        format: varchar
+        maxLength: 64
+      paymentStatus:
+        type: string
+        description: Unique id of tenant.
+        enum:
+          - NEW
+          - DEPOSITED
+          - CANCELLED
+          - DISHONOURED
+          - RECONCILED
+      auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+    required:
+      - tenantId
+      - totalAmountPaid
+      - paymentMode
+      - paidBy
+      - mobileNumber
+      - paymentDetails
+      
+
+  PaymentDetail:
+    type: object
+    description: The payment details of each bill
+    properties:
+      id: 
+        type: string
+        description: id of the payment detail
+        maxLength: 64
+      tenantId: 
+        type: string
+        description: tenantId of the payment detail
+        maxLength: 64
+      totalDue: 
+        type: number
+        description: The total amount to be paid for the bill corresponding to the payment detail
+        format: double
+      totalAmountPaid: 
+        type: number
+        description: The amount that is being paid
+        format: double
+      manualReceiptNumber: 
+        type: string
+        description: Receipt number entered manually for legacy data.
+        maxLength: 64
+      receiptNumber: 
+        type: string
+        description: The receipt number generated for the payment against the bill
+        maxLength: 64
+      receiptType: 
+        type: string
+        description: The receipt type generated for the payment against the bill
+      receiptDate: 
+        type: integer
+        description: The epoch receipt date generated for the payment against the bill
+      businessService: 
+        type: string
+        description: The code of the businessService to which the bill belongs
+      billId: 
+        type: string
+        description: The id of the bill for which the payment is made
+        maxLength: 64
+      bill: 
+          $ref: '#/definitions/Bill'
+      additionalDetails: 
+        type: integer
+        description: Any additional fields can be captured here as a map
+      auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+    required:
+      - billId
+      - totalAmountPaid
+      
+
+
+  PaymentWorkflow:
+    type: object
+    description: Workflow object for payment
+    properties: 
+      paymentId: 
+        type: string
+        description: id of the payment on which to take action .
+      action: 
+        type: string
+        description: the action to be taken on the payment
+        enum:
+          - CANCEL
+          - DISHONOUR
+          - REMIT
+      tenantId: 
+        type: string
+        description: tenantId of the payment
+      reason:
+        type: string
+        description: reason for taking the action.
+      additionalDetails: 
+        type: integer
+        description: Any additional fields can be captured here as a map
+    required:
+      - paymentId
+      - action
+      - tenantId
+
+parameters:
+  pageSize:
+    name: pageSize
+    in: query
+    description: Number of records returned.
+    type: integer
+    minimum: 0
+    exclusiveMinimum: true
+    maximum: 100
+    exclusiveMaximum: false
+    multipleOf: 10
+    default: 20
+  pageNumber:
+    name: pageNumber
+    in: query
+    description: Page number
+    type: integer
+    default: 1
+  sortReceipt:
+    name: sort
+    in: query
+    description: Receipt results will be sorted by receiptnumber ascending by default.
+    type: array
+    uniqueItems: true
+    minItems: 1
+    maxItems: 3
+    collectionFormat: pipes
+    items:
+      type: string
+      pattern: '[-+](receiptNumber|receiptDate)'
+    default:
+      - +receiptNumber

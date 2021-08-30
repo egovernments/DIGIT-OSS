@@ -1,0 +1,39 @@
+    "chartOfAccountDetails": [
+        {
+            "id": "4ff38860184f4f348fa9b9a9ebb25c53",
+            "chartOfAccount": {
+                "id": "830bf3dc60504244babfe228bdf80bac"
+            },
+            "accountDetailType": {
+                "id": "e647d2406902400cbf3cee71a4befb35"
+            },
+            "tenantId": "default"
+        },
+        {
+            "id": "9bea76ae70e04164a1f98df7b996ba0f",
+            "chartOfAccount": {
+                "id": "830bf3dc60504244babfe228bdf80bac"
+            },
+            "accountDetailType": {
+                "id": "e647d2406902400cbf3cee71a4befb35"
+            },
+            "tenantId": "default"
+        },
+        {
+            "id": "cabf5df544af4253a1cc26aa80e57270",
+            "chartOfAccount": {
+                "id": "830bf3dc60504244babfe228bdf80bac"
+            },
+            "accountDetailType": {
+                "id": "e647d2406902400cbf3cee71a4befb35"
+            },
+            "tenantId": "default"
+        }
+    ],
+    "page": {
+        "totalResults": 3,
+        "totalPages": 1,
+        "pageSize": 500,
+        "currentPage": 0,
+        "offset": 0
+    }

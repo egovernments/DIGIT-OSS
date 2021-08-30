@@ -1,0 +1,158 @@
+.ack-header {
+    display: flex !important;
+    min-height: 106px !important;
+	align-items: center !important; 
+	width: 100%;
+}
+  
+.ack-body {
+  	margin-left: 16px !important;
+  	width: fit-content !important;
+	flex: none !important;
+	overflow-wrap: break-word;
+}
+  .ack-icon {
+    width: 72px !important;
+    height: 72px !important;
+	background-color: #39cb74 !important; }
+	
+.ack-icon-failure {
+   width: 72px !important;
+   height: 72px !important;
+   background-color: #d32f2f !important; }
+  
+  .ack-sub-body {
+    margin-top: 8px !important;
+    margin-bottom: 0px !important;
+    color: rgba(0, 0, 0, 0.6) !important;
+   }
+  
+  .ack-text {
+	text-align: right !important;
+    justify-content: center !important;
+	flex: 1 1 0% !important;
+	margin-left: 16px !important;
+}
+  
+  .MuiAvatar-root-195 {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    font-size: 1.25rem;
+    align-items: center;
+    flex-shrink: 0;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    user-select: none;
+    border-radius: 50%;
+    justify-content: center; }
+  
+  .MuiAvatar-colorDefault-196 {
+    color: #F4F7FB;
+    background-color: #bdbdbd; }
+  
+  .MuiTypography-headline-13 {
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 24px;
+    font-weight: 400;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    line-height: 1.35417em; }
+  
+  .MuiTypography-root-8 {
+    margin: 0;
+    display: block; }
+  
+  .MuiGrid-container-98 {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box; }
+  
+  .MuiCardContent-root-97 {
+    padding-top: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px; }
+    @media only screen and (max-width: 768px) {
+      .ack-body {
+        margin-left: 16px !important;
+        width: fit-content !important;
+		flex: none !important;
+		max-width: 35%;
+    	overflow-wrap: break-word;
+	 }
+      .ack-text {
+		margin-left: 16px !important;
+		text-align: right !important;
+		justify-content: center !important;
+		flex: 1 1 0% !important;
+		max-width: 35%;
+		overflow-wrap: break-word;
+	 }
+	 .ack-icon-failure,.ack-icon {
+		width: 60px !important;
+ 		height: 60px !important;
+	 }
+    }
+    .mainContainer{
+      display: inline-flex;
+      /* justify-content: space-evenly; */
+      margin-top: 20px;
+    }
+    .printDownloadButton{
+       display: flex;
+       position: absolute;
+       right: 12px;
+    }
+   .ptHeader{
+     padding-left: 20px;
+     width: 630px;
+   }
+   .ptCards{
+    margin-right:12px;
+    margin-left:20px;
+  }
+
+
+  @media only screen and (max-width: 768px) {
+   .button-container{
+     right:0px !important;
+   }
+   .first-button{
+     min-width: -webkit-fill-available;
+   }
+   .mainContainer {
+     margin-top: 25% !important;
+     display: block !important;
+     overflow-x: hidden;
+     div:nth-child(1){
+       div{
+         span{
+           //line-height: 2 !important;
+           margin-left: 1px;
+         }
+       }
+     }
+   }
+   .printDownloadButton{
+     padding-left: 0px !important;
+     position: initial;
+     div{
+       div{
+         button{
+          width: 165px !important;
+  
+          height: 42px;
+         }
+       }
+     }
+
+     
+   }
+   .ptMsg{
+     div{
+       font-size: 16px !important;
+     }
+   }
+  }

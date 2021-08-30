@@ -1,0 +1,55 @@
+{ 
+    "NAMECORRECTION": [
+        "No information to be captured"
+    ],
+    "SALEDEED": [
+        "documentNumber",
+        "documentIssueDateField"
+    ],
+    "SALEPOWEROFATTORNEY": [
+        "documentNumber",
+        "documentIssueDateField",
+        "powerOfAttorneyRegNo",
+        "powerOfAttorneyRegDate"
+        
+    ],
+    "REGISTEREDWILLDEED": [
+        "documentNumber",
+        "documentIssueDateField"
+    ],
+    "UNREGISTEREDWILLDEED": [
+        "NameAndAddressOfWitnesses", 
+        "DateOfWritingWill"
+    ],
+    "PROPERTYAUCTION": [
+        "NameOfAuctionAuthority",
+        "AuctionDate",
+        "AuctionRegistrationnumber",
+        "AuctionRegistrationDate"
+    ],
+    "PARTITIONDEED": [
+        "documentNumber",
+        "documentIssueDateField"
+    ],
+    "GIFTDEED": [
+        "documentNumber",
+        "documentIssueDateField"
+    ],
+    "SUCCESSIONORDEATHCERTIFICATE": [
+        "SerialNumber",
+        "IssuingAuthority",  
+        "IssuingDate"
+    ],
+    "PATTACERTIFICATE": [
+        "documentNumber",
+        "documentIssueDateField"
+    ],
+    "COURTDECREE": [
+        "CourtName",
+        "DecreeNo",
+        "DecreeDate",
+        "IsThereAnyStayOrderOnCourtDecreeByUpperCourt",
+        "DetailsOfUpperCourtStayOrder"
+    ]
+
+}

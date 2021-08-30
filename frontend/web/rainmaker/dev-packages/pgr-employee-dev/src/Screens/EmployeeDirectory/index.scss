@@ -1,0 +1,20 @@
+.employee-directory-main-card .assign-complaint-main-card {
+  margin: 0px;
+  padding: 12px 17px;
+}
+
+// .employee-directory-main-card {
+//   padding: 0px !important;
+// }
+
+@media only screen and (max-width: 768px) {
+  .employee-directory-main-card {
+    padding: 80px 8px 60px 8px !important;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .employee-directory-main-card {
+    padding: 0px 8px 60px 8px !important;
+  }
+}

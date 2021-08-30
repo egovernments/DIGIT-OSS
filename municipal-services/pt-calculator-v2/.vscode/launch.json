@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-PropertyCalculatorApplication<pt-calculator-v2>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "org.egov.pt.calculator.PropertyCalculatorApplication",
+            "projectName": "pt-calculator-v2",
+            "args": ""
+        }
+    ]
+}

@@ -1,0 +1,120 @@
+/* body{
+    background: linear-gradient(rgba(255,255,255,.5), 
+    rgba(255,255,255,.5));
+} */
+/* .common-background{
+    background: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url("/assets/Punjab-bg-QA.jpg"));
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+} */
+
+.common-background{
+    background-size: cover!important;
+}
+@media only screen and (max-width: 750px) {
+    .header-logo 
+    {
+        width : 80% !important;
+    } 
+    .common-background {
+        background-size: cover!important;
+        height: 1300px !important;
+    }
+    #buttonlink
+    {
+        margin-top : 15px;
+        width:120px !important;
+
+    }
+    #buttonlink2
+    {
+        width:120px !important;
+
+    }
+    .rlink
+    {
+      text-align: left !important;
+      margin-left: 33px !important;
+      margin-right: 20px !important;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+   
+    .header-logo-right
+    {
+        width: 50px !important;
+        height: 50px !important;
+        margin-left: 21px !important;
+    } 
+    .header-logo-left
+    {
+        margin-right: 8px !important;
+    margin-left: -16px !important;
+    height: 89%;
+    width: 53%;
+    margin-top: -1px !important;
+     } 
+    .common-background {
+        background-size: cover!important;
+        height: 1300px !important;
+    }
+    .firstcard
+    {
+        border-radius: 0px;
+    height: 450px !important;
+    }
+    #buttonlink
+    {
+        margin-top : 34px;
+        width:120px !important;
+    
+    }
+    #buttonlink2
+    {
+        width:120px !important;
+
+    }
+    .rlink
+    {
+      text-align: left !important;
+      margin-left: 33px !important;
+      margin-right: 20px !important;
+    }
+}
+
+
+.common-grid
+{
+    padding: 16px 30px !important;
+}
+
+
+@media only screen and (max-width:1280px){
+
+    .common-background
+    {       
+        background-size: cover;
+        height: 110% ;
+
+    }
+
+}
+
+@media only screen and (min-width: 320px) and (max-width: 330px)
+
+{
+
+    .firstcard
+    {
+        border-radius: 0px;
+    height: 487px !important;
+    }
+    .csButton
+    {
+        margin-top: 63px;
+    }
+
+
+}

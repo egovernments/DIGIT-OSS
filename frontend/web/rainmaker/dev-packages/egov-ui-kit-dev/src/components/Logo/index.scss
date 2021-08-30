@@ -1,0 +1,16 @@
+.mseva-logo-style {
+  width: 70px !important;
+  display: initial !important;
+}
+
+.mseva-image-container,
+.mseva-text-container {
+  height: 26px;
+  align-items: center;
+  padding: 0 5px;
+  display: flex;
+}
+
+.mseva-image-container {
+  border-right: 1px solid #484848;
+}

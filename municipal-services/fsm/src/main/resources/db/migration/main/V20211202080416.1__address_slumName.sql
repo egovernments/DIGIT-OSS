@@ -1,0 +1,2 @@
+ALTER TABLE eg_fsm_address ADD COLUMN IF NOT EXISTS slumname character varying(64) DEFAULT NULL;
+ALTER TABLE eg_fsm_address_auditlog ADD COLUMN IF NOT EXISTS slumname character varying(64) DEFAULT NULL;

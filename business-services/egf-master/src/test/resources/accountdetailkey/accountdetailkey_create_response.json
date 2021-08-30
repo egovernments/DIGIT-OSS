@@ -1,0 +1,13 @@
+"accountDetailKeys": 
+	   [
+		   	{
+		   	    "id":"1",
+			    "key":"1",
+			    "accountDetailType":{
+				    "id":"1",
+				    "tenantId":"default"
+			    },
+		   		"tenantId":"default"
+		   	}
+	   	
+	   ]

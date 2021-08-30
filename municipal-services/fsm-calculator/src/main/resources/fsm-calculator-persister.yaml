@@ -1,0 +1,69 @@
+serviceMaps:
+ serviceName: fsm-calculator
+ mappings:
+ - version: 1.0
+   description: Persists FSM-CALCULATOR Application details in eg_billing_slab  table
+   fromTopic: save-fsm-billing-slab
+   isTransaction: true
+   queryMaps:
+
+       - query: INSERT INTO eg_billing_slab(id,tenantid,capacityfrom,capacityto,propertytype,slum,price,status,createdby,lastmodifiedby,createdtime,lastmodifiedtime) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);
+         basePath: billingSlab
+         jsonMaps:
+          - jsonPath: $.billingSlab.id
+
+          - jsonPath: $.billingSlab.tenantId
+          
+          - jsonPath: $.billingSlab.capacityFrom
+          
+          - jsonPath: $.billingSlab.capacityTo
+          
+          - jsonPath: $.billingSlab.propertyType
+          
+          - jsonPath: $.billingSlab.slum
+
+          - jsonPath: $.billingSlab.price
+          
+          - jsonPath: $.billingSlab.status
+          
+          - jsonPath: $.billingSlab.auditDetails.createdBy
+
+          - jsonPath: $.billingSlab.auditDetails.lastModifiedBy
+
+          - jsonPath: $.billingSlab.auditDetails.createdTime
+
+          - jsonPath: $.billingSlab.auditDetails.lastModifiedTime
+              
+ - version: 1.0
+   description: updates FSM-CALCULATOR Application details in eg_billing_slab  table
+   fromTopic: update-fsm-billing-slab
+   isTransaction: true
+   queryMaps: 
+   
+       - query: INSERT INTO eg_billing_slab_auditlog SELECT * FROM public.eg_billing_slab WHERE id =?
+         basePath:  billingSlab
+         jsonMaps: 
+            - jsonPath: $.billingSlab.id
+             
+       - query: UPDATE eg_billing_slab SET tenantid=?, capacityfrom=?, capacityto=?, propertytype=?, slum=?, price=?, status=?, lastmodifiedby=?, lastmodifiedtime=? where id=? 
+         basePath: billingSlab
+         jsonMaps:    
+                - jsonPath: $.billingSlab.tenantId
+                
+                - jsonPath: $.billingSlab.capacityFrom         
+                                              
+                - jsonPath: $.billingSlab.capacityTo
+                
+                - jsonPath: $.billingSlab.propertyType
+                
+                - jsonPath: $.billingSlab.slum
+                
+                - jsonPath: $.billingSlab.price
+                
+                - jsonPath: $.billingSlab.status
+      
+                - jsonPath: $.billingSlab.auditDetails.lastModifiedBy
+      
+                - jsonPath: $.billingSlab.auditDetails.lastModifiedTime
+                
+                - jsonPath: $.billingSlab.id

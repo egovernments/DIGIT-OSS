@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "40515d63-4040-4dd8-89af-d7314f7002bc",
+		"name": "pt-services-v2-dev",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "pt-services-v2/property/_create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"ver\": \".01\",\n    \"ts\": \"\",\n    \"action\": \"_create\",\n    \"did\": \"1\",\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"authToken\": \"b21b9896-79d8-42a6-9b5e-404d7e1d269e\"\n  },\n   \"Properties\":  [\n   {\n        \"propertyDetails\": [\n          { \n          \t\"additionalDetails\":{\n          \t  \"height\":100,\n          \t  \"type\":\"temporary\"\n          },\n            \"financialYear\": \"2018-19\",\n            \"usageCategoryMinor\": \"COMMERCIAL\",\n            \"units\": [\n              {\n                \"floorNo\": \"0\",\n                \"usageCategoryMinor\": \"COMMERCIAL\",\n                \"usageCategoryMajor\": \"NONRESIDENTIAL\",\n                \"usageCategoryDetail\": \"ACRESTAURANT\",\n                \"usageCategorySubMinor\": \"FOODJOINTS\",\n                \"occupancyType\": \"SELFOCCUPIED\",\n                \"unitArea\": 100\n              },\n              {\n                \"floorNo\": \"1\",\n                \"usageCategoryMinor\": \"COMMERCIAL\",\n                \"usageCategoryMajor\": \"NONRESIDENTIAL\",\n                \"usageCategoryDetail\": \"ACRESTAURANT\",\n                \"usageCategorySubMinor\": \"FOODJOINTS\",\n                \"occupancyType\": \"SELFOCCUPIED\",\n                \"unitArea\": 100\n              }\n            ],\n            \"usageCategoryMajor\": \"NONRESIDENTIAL\",\n            \"propertySubType\": \"INDEPENDENTPROPERTY\",\n            \"propertyType\": \"BUILTUP\",\n            \"noOfFloors\": 2,\n            \"buildUpArea\": null,\n            \"landArea\": \"1000\",\n            \"subOwnershipCategory\": \"SINGLEOWNER\",\n            \"ownershipCategory\": \"INDIVIDUAL\",\n            \"owners\": [\n              {\n                \"name\": \"as\",\n                \"mobileNumber\": \"9999999999\",\n                \"fatherOrHusbandName\": \"asd\",\n                \"emailId\": null,\n                \"permanentAddress\": null,\n                \"relationship\": \"father\",\n                \"ownerType\": \"NONE\",\n                \"gender\": \"Male\"\n              }\n            ]\n          }\n        ],\n        \"tenantId\": \"pb.amritsar\",\n        \"address\": {\n          \"city\": \"Amritsar\",\n          \"locality\": {\n            \"code\": \"SUN04\",\n            \"area\": \"Area1\"\n          }\n        }\n      }\n  ]\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/pt-services-v2/property/_create",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"pt-services-v2",
+						"property",
+						"_create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pt search",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"ver\": \".01\",\n    \"ts\": \"\",\n    \"action\": \"_create\",\n    \"did\": \"1\",\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"authToken\": \"ce0e010c-658f-49ea-96c8-28f44bb2b956\"\n  }\n\t\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/pt-services-v2/property/_search?ids=PT-107-001834&tenantId=pb.amritsar",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"pt-services-v2",
+						"property",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "accountId",
+							"value": "530968f3-76b3-4fd1-b09d-9e22eb1f85df",
+							"disabled": true
+						},
+						{
+							"key": "ids",
+							"value": "PT-107-001834"
+						},
+						{
+							"key": "mobileNumber",
+							"value": "9004376134",
+							"disabled": true
+						},
+						{
+							"key": "tenantId",
+							"value": "pb.amritsar"
+						},
+						{
+							"key": "oldpropertyids",
+							"value": "oldPropertyId",
+							"disabled": true
+						},
+						{
+							"key": "propertyDetailids",
+							"value": "AS-2018-09-03-001745",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pt update",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"action\": \"\",\n    \"did\": 1,\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"ts\": \"\",\n    \"ver\": \".01\",\n    \"authToken\": \"0337820a-420a-4daa-8cf1-1f6db293d238\"\n  },\n    \"Properties\": [\n        {\n            \"auditDetails\": {\n                \"createdBy\": \"530968f3-76b3-4fd1-b09d-9e22eb1f85df\",\n                \"lastModifiedBy\": \"530968f3-76b3-4fd1-b09d-9e22eb1f85df\",\n                \"createdTime\": 1535464498929,\n                \"lastModifiedTime\": 1535464498929\n            },\n            \"creationReason\": null,\n            \"occupancyDate\": 0,\n            \"propertyDetails\": [\n                {\n                    \"institution\": null,\n                    \"tenantId\": \"pb.amritsar\",\n                    \"citizenInfo\": {\n                        \"isPrimaryOwner\": null,\n                        \"ownerShipPercentage\": null,\n                        \"ownerType\": null,\n                        \"institutionId\": null,\n                        \"documents\": null,\n                        \"relationship\": null,\n                        \"id\": 23349,\n                        \"uuid\": \"530968f3-76b3-4fd1-b09d-9e22eb1f85df\",\n                        \"userName\": \"9404052047\",\n                        \"password\": null,\n                        \"salutation\": null,\n                        \"name\": \"Aniket Talele\",\n                        \"gender\": null,\n                        \"mobileNumber\": \"9404052047\",\n                        \"emailId\": \"\",\n                        \"altContactNumber\": null,\n                        \"pan\": null,\n                        \"aadhaarNumber\": null,\n                        \"permanentAddress\": null,\n                        \"permanentCity\": null,\n                        \"permanentPinCode\": null,\n                        \"correspondenceCity\": null,\n                        \"correspondencePinCode\": null,\n                        \"correspondenceAddress\": null,\n                        \"active\": null,\n                        \"dob\": null,\n                        \"pwdExpiryDate\": null,\n                        \"locale\": null,\n                        \"type\": \"CITIZEN\",\n                        \"signature\": null,\n                        \"accountLocked\": null,\n                        \"roles\": [\n                            {\n                                \"id\": 281,\n                                \"name\": \"Citizen\",\n                                \"code\": \"CITIZEN\",\n                                \"description\": null,\n                                \"createdBy\": null,\n                                \"createdDate\": null,\n                                \"lastModifiedBy\": null,\n                                \"lastModifiedDate\": null,\n                                \"tenantId\": null\n                            }\n                        ],\n                        \"fatherOrHusbandName\": null,\n                        \"bloodGroup\": null,\n                        \"identificationMark\": null,\n                        \"photo\": null,\n                        \"createdBy\": null,\n                        \"createdDate\": null,\n                        \"lastModifiedBy\": null,\n                        \"lastModifiedDate\": null,\n                        \"otpReference\": null,\n                        \"tenantId\": \"pb\"\n                    },\n                    \"source\": null,\n                    \"usage\": null,\n                    \"noOfFloors\": 1,\n                    \"landArea\": 2000,\n                    \"buildUpArea\": 0,\n                    \"units\": [\n                        {\n                            \"id\": \"19d8acaf-867c-41ef-9adf-f8aaf1add5a5\",\n                            \"tenantId\": \"pb.amritsar\",\n                            \"floorNo\": \"0\",\n                            \"unitType\": null,\n                            \"unitArea\": 100,\n                            \"usageCategoryMajor\": \"RESIDENTIAL\",\n                            \"usageCategoryMinor\": null,\n                            \"usageCategorySubMinor\": null,\n                            \"usageCategoryDetail\": null,\n                            \"occupancyType\": \"SELFOCCUPIED\",\n                            \"occupancyDate\": 0,\n                            \"constructionType\": null,\n                            \"constructionSubType\": null,\n                            \"arv\": null\n                        }\n                    ],\n                    \"documents\": null,\n                    \"additionalDetails\": {\n                        \"type\": \"jsonb\",\n                        \"value\": \"null\"\n                    },\n                    \"financialYear\": \"2017-18\",\n                    \"propertyType\": \"BUILTUP\",\n                    \"propertySubType\": \"INDEPENDENTPROPERTY\",\n                    \"assessmentNumber\": \"AS-2018-08-28-001416\",\n                    \"assessmentDate\": 1535464498949,\n                    \"usageCategoryMajor\": \"RESIDENTIAL\",\n                    \"ownershipCategory\": \"INDIVIDUAL\",\n                    \"subOwnershipCategory\": \"MULTIPLEOWNERS\",\n                    \"adhocExemption\": null,\n                    \"adhocPenalty\": null,\n                    \"adhocExemptionReason\": null,\n                    \"adhocPenaltyReason\": null,\n                    \"owners\": [\n                        {\n                            \"isPrimaryOwner\": false,\n                            \"ownerShipPercentage\": 0,\n                            \"ownerType\": \"NONE\",\n                            \"institutionId\": null,\n                            \"documents\": null,\n                            \"relationship\": null,\n                            \"id\": null,\n                            \"uuid\": \"be216c54-5db5-4c93-ab18-53dd1a1bc1f0\",\n                            \"userName\": \"745c72cb-99e6-460e-9707-3ed4784d554a\",\n                            \"password\": null,\n                            \"salutation\": null,\n                            \"name\": \"Three\",\n                            \"gender\": \"MALE\",\n                            \"mobileNumber\": \"9686987977\",\n                            \"emailId\": null,\n                            \"altContactNumber\": null,\n                            \"pan\": null,\n                            \"aadhaarNumber\": null,\n                            \"permanentAddress\": null,\n                            \"permanentCity\": null,\n                            \"permanentPinCode\": null,\n                            \"correspondenceCity\": null,\n                            \"correspondencePinCode\": null,\n                            \"correspondenceAddress\": null,\n                            \"active\": true,\n                            \"dob\": null,\n                            \"pwdExpiryDate\": 1543240499000,\n                            \"locale\": null,\n                            \"type\": \"CITIZEN\",\n                            \"signature\": null,\n                            \"accountLocked\": false,\n                            \"roles\": [\n                                {\n                                    \"id\": 281,\n                                    \"name\": \"Citizen\",\n                                    \"code\": \"CITIZEN\",\n                                    \"description\": null,\n                                    \"createdBy\": null,\n                                    \"createdDate\": null,\n                                    \"lastModifiedBy\": null,\n                                    \"lastModifiedDate\": null,\n                                    \"tenantId\": null\n                                }\n                            ],\n                            \"fatherOrHusbandName\": \"Father 3\",\n                            \"bloodGroup\": null,\n                            \"identificationMark\": null,\n                            \"photo\": null,\n                            \"createdBy\": \"23349\",\n                            \"createdDate\": 1535464499000,\n                            \"lastModifiedBy\": \"23349\",\n                            \"lastModifiedDate\": 1535464499000,\n                            \"otpReference\": null,\n                            \"tenantId\": \"pb\"\n                        },\n                        {\n                            \"isPrimaryOwner\": false,\n                            \"ownerShipPercentage\": 0,\n                            \"ownerType\": \"NONE\",\n                            \"institutionId\": null,\n                            \"documents\": null,\n                            \"relationship\": null,\n                            \"id\": null,\n                            \"uuid\": \"26bfbd38-80f9-4b37-8cf2-2d28d80a776a\",\n                            \"userName\": \"95d5d7a4-6118-426f-9b2f-6946d2cadb9a\",\n                            \"password\": null,\n                            \"salutation\": null,\n                            \"name\": \"One\",\n                            \"gender\": null,\n                            \"mobileNumber\": \"9686987977\",\n                            \"emailId\": null,\n                            \"altContactNumber\": null,\n                            \"pan\": null,\n                            \"aadhaarNumber\": null,\n                            \"permanentAddress\": null,\n                            \"permanentCity\": null,\n                            \"permanentPinCode\": null,\n                            \"correspondenceCity\": null,\n                            \"correspondencePinCode\": null,\n                            \"correspondenceAddress\": null,\n                            \"active\": true,\n                            \"dob\": null,\n                            \"pwdExpiryDate\": 1543240499000,\n                            \"locale\": null,\n                            \"type\": \"CITIZEN\",\n                            \"signature\": null,\n                            \"accountLocked\": false,\n                            \"roles\": [\n                                {\n                                    \"id\": 281,\n                                    \"name\": \"Citizen\",\n                                    \"code\": \"CITIZEN\",\n                                    \"description\": null,\n                                    \"createdBy\": null,\n                                    \"createdDate\": null,\n                                    \"lastModifiedBy\": null,\n                                    \"lastModifiedDate\": null,\n                                    \"tenantId\": null\n                                }\n                            ],\n                            \"fatherOrHusbandName\": \"Father 1\",\n                            \"bloodGroup\": null,\n                            \"identificationMark\": null,\n                            \"photo\": null,\n                            \"createdBy\": \"23349\",\n                            \"createdDate\": 1535464499000,\n                            \"lastModifiedBy\": \"23349\",\n                            \"lastModifiedDate\": 1535464499000,\n                            \"otpReference\": null,\n                            \"tenantId\": \"pb\"\n                        },\n                        {\n                            \"isPrimaryOwner\": false,\n                            \"ownerShipPercentage\": 0,\n                            \"ownerType\": \"NONE\",\n                            \"institutionId\": null,\n                            \"documents\": null,\n                            \"relationship\": null,\n                            \"id\": null,\n                            \"uuid\": \"85606046-bd9a-4225-b208-1f051d752b92\",\n                            \"userName\": \"5a555c0a-7957-4662-b632-11d7251c9657\",\n                            \"password\": null,\n                            \"salutation\": null,\n                            \"name\": \"Two\",\n                            \"gender\": \"FEMALE\",\n                            \"mobileNumber\": \"9686987977\",\n                            \"emailId\": null,\n                            \"altContactNumber\": null,\n                            \"pan\": null,\n                            \"aadhaarNumber\": null,\n                            \"permanentAddress\": null,\n                            \"permanentCity\": null,\n                            \"permanentPinCode\": null,\n                            \"correspondenceCity\": null,\n                            \"correspondencePinCode\": null,\n                            \"correspondenceAddress\": null,\n                            \"active\": true,\n                            \"dob\": null,\n                            \"pwdExpiryDate\": 1543240499000,\n                            \"locale\": null,\n                            \"type\": \"CITIZEN\",\n                            \"signature\": null,\n                            \"accountLocked\": false,\n                            \"roles\": [\n                                {\n                                    \"id\": 281,\n                                    \"name\": \"Citizen\",\n                                    \"code\": \"CITIZEN\",\n                                    \"description\": null,\n                                    \"createdBy\": null,\n                                    \"createdDate\": null,\n                                    \"lastModifiedBy\": null,\n                                    \"lastModifiedDate\": null,\n                                    \"tenantId\": null\n                                }\n                            ],\n                            \"fatherOrHusbandName\": \"Father 2\",\n                            \"bloodGroup\": null,\n                            \"identificationMark\": null,\n                            \"photo\": null,\n                            \"createdBy\": \"23349\",\n                            \"createdDate\": 1535464499000,\n                            \"lastModifiedBy\": \"23349\",\n                            \"lastModifiedDate\": 1535464499000,\n                            \"otpReference\": null,\n                            \"tenantId\": \"pb\"\n                        }\n                    ],\n                    \"auditDetails\": {\n                        \"createdBy\": \"530968f3-76b3-4fd1-b09d-9e22eb1f85df\",\n                        \"lastModifiedBy\": \"530968f3-76b3-4fd1-b09d-9e22eb1f85df\",\n                        \"createdTime\": 1535464498929,\n                        \"lastModifiedTime\": 1535464498929\n                    },\n                    \"calculation\": null,\n                    \"channel\": null\n                }\n            ],\n            \"propertyId\": \"PT-107-001323\",\n            \"tenantId\": \"pb.amritsar\",\n            \"acknowldgementNumber\": \"PB-AC-2018-08-28-001333\",\n            \"oldPropertyId\": null,\n            \"status\": \"ACTIVE\",\n            \"address\": {\n                \"id\": \"f8772061-313c-4243-8fe4-d652237a8d4b\",\n                \"tenantId\": \"pb.amritsar\",\n                \"latitude\": 0,\n                \"longitude\": 0,\n                \"addressId\": null,\n                \"addressNumber\": null,\n                \"type\": null,\n                \"addressLine1\": null,\n                \"addressLine2\": null,\n                \"landmark\": null,\n                \"doorNo\": \"456\",\n                \"city\": \"Amritsar\",\n                \"pincode\": null,\n                \"detail\": null,\n                \"buildingName\": null,\n                \"street\": null,\n                \"locality\": {\n                    \"code\": \"SUN04\",\n                    \"name\": \"Ajit Nagar - Area1\",\n                    \"label\": \"Locality\",\n                    \"latitude\": null,\n                    \"longitude\": null,\n                    \"area\": \"Area1\",\n                    \"children\": [],\n                    \"materializedPath\": null\n                }\n            }\n        }\n    ]\n\t\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/pt-services-v2/property/_update",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"pt-services-v2",
+						"property",
+						"_update"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,562 @@
+{
+  "_comment": "TODO:  denormalize the role & visualisations",
+  "roles" : [
+    {
+      "roleId": 6,
+      "roleName" : "R1",
+      "isSuper" : "",
+      "orgId": "",
+      "dashboards": [
+        {
+          "name": "My Dashboard",
+          "id": "home",
+          "isActive": "",
+          "style" : "tabbed",
+          "visualizations": [
+            {
+              "row": 1,
+              "name": "Revenue",
+              "vizArray": [
+                {
+                  "id": 11,
+                  "name": "",
+                  "dimensions": {
+                    "height": 350,
+                    "width": 5
+                  },
+                  "vizType": "metric-collection",
+                  "charts": [
+                    {
+                      "id": "totalCollection",
+                      "name": "Total Collection",
+                      "code": "",
+                      "chartType": "metric",
+                      "filter": "",
+                      "headers": []
+                    },
+                    {
+                      "id": "targetCollection",
+                      "name": "Target Collection",
+                      "code": "",
+                      "chartType": "metric",
+                      "filter": "",
+                      "headers": []
+                    },
+                    {
+                      "id": "targetAchieved",
+                      "name": "Target Achieved",
+                      "code": "",
+                      "chartType": "metric",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                },
+                {
+                  "id": 12,
+                  "name": "Total Cumulative Collection",
+                  "dimensions": {
+                    "height": 350,
+                    "width": 7
+                  },
+                  "vizType": "chart",
+                  "charts": [
+                    {
+                      "id": "cumulativeCollection",
+                      "name": "Weekly",
+                      "code": "",
+                      "chartType": "line",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "row": 2,
+              "name": "Revenue",
+              "vizArray": [
+                {
+                  "id": 21,
+                  "name": "Top Performing ULBs",
+                  "dimensions": {
+                    "height": 250,
+                    "width": 4
+                  },
+                  "vizType": "performing-metric",
+                  "charts": [
+                    {
+                      "id": "topPerformingUlbs",
+                      "name": "Top Performing ULBs",
+                      "code": "",
+                      "chartType": "bar",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                },
+                {
+                  "id": 22,
+                  "name": "Bottom Performing ULBs",
+                  "dimensions": {
+                    "height": 250,
+                    "width": 4
+                  },
+                  "vizType": "performing-metric",
+                  "charts": [
+                    {
+                      "id": "bottomPerformingUlbs",
+                      "name": "Bottom Performing ULBs",
+                      "code": "",
+                      "chartType": "bar",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                },
+                {
+                  "id": 23,
+                  "name": "Total Cumulative Collection: Department Wise",
+                  "dimensions": {
+                    "height": 250,
+                    "width": 4
+                  },
+                  "vizType": "chart",
+                  "charts": [
+                    {
+                      "id": "totalCollectionDeptWise",
+                      "name": "Total Cumulative Collection: Department Wise",
+                      "code": "",
+                      "chartType": "pie",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "row": 3,
+              "name": "Service",
+              "vizArray": [
+                {
+                  "id": 31,
+                  "name": "",
+                  "dimensions": {
+                    "height": 450,
+                    "width": 5
+                  },
+                  "vizType": "metric-collection",
+                  "charts": [
+                    {
+                      "id": "totalApplication",
+                      "name": "Total Application",
+                      "code": "",
+                      "chartType": "metric",
+                      "filter": "",
+                      "headers": []
+                    },
+                    {
+                      "id": "closedApplication",
+                      "name": "Closed Application",
+                      "code": "",
+                      "chartType": "metric",
+                      "filter": "",
+                      "headers": []
+                    },
+                    {
+                      "id": "",
+                      "name": "SLA Achieved",
+                      "code": "",
+                      "chartType": "metric",
+                      "filter": "",
+                      "headers": []
+                    },
+                    {
+                      "id": "citizenRegistered",
+                      "name": "Citizen Registered",
+                      "code": "",
+                      "chartType": "metric",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                },
+                {
+                  "id": 32,
+                  "name": "Total Application & Closed Application",
+                  "dimensions": {
+                    "height": 450,
+                    "width": 7
+                  },
+                  "vizType": "chart",
+                  "charts": [
+                    {
+                      "id": "totalApplication&ClosedApplication",
+                      "name": "",
+                      "code": "",
+                      "chartType": "line",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "row": 4,
+              "name": "Service",
+              "vizArray": [
+                {
+                  "id": 41,
+                  "name": "Top Performing ULBs",
+                  "dimensions": {
+                    "height": 250,
+                    "width": 4
+                  },
+                  "vizType": "performing-metric",
+                  "charts": [
+                    {
+                      "id": "topPerformingUlbsCompletionRate",
+                      "name": "Top Performing ULBs",
+                      "code": "",
+                      "chartType": "bar",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                },
+                {
+                  "id": 42,
+                  "name": "Bottom Performing ULBs",
+                  "dimensions": {
+                    "height": 250,
+                    "width": 4
+                  },
+                  "vizType": "performing-metric",
+                  "charts": [
+                    {
+                      "id": "bottomPerformingUlbsCompletionRate",
+                      "name": "Bottom Performing ULBs",
+                      "code": "",
+                      "chartType": "bar",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                },
+                {
+                  "id": 43,
+                  "name": "Total Applications: Department Wise",
+                  "dimensions": {
+                    "height": 250,
+                    "width": 4
+                  },
+                  "vizType": "chart",
+                  "charts": [
+                    {
+                      "id": "totalApplicationDeptWise",
+                      "name": "Total Cumulative Collection: Department Wise",
+                      "code": "",
+                      "chartType": "pie",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Property Tax",
+          "id": "propertyTax",
+          "isActive":"",
+          "style" : "linear",
+          "visualizations": [
+            {
+              "row": 1,
+              "name": "Revenue",
+              "vizArray": [
+                {
+                  "id": 11,
+                  "name": "",
+                  "dimensions": {
+                    "height": 350,
+                    "width": 5
+                  },
+                  "vizType": "metric-collection",
+                  "charts": [
+                    {
+                      "id": "totalCollection",
+                      "name": "Total Collection",
+                      "code": "",
+                      "chartType": "metric",
+                      "filter": "",
+                      "headers": []
+                    },
+                    {
+                      "id": "targetCollection",
+                      "name": "Target Collection",
+                      "code": "",
+                      "chartType": "metric",
+                      "filter": "",
+                      "headers": []
+                    },
+                    {
+                      "id": "targetAchieved",
+                      "name": "Target Achieved",
+                      "code": "",
+                      "chartType": "metric",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                },
+                {
+                  "id": 12,
+                  "name": "Total Cumulative Collection",
+                  "dimensions": {
+                    "height": 350,
+                    "width": 7
+                  },
+                  "vizType": "chart",
+                  "charts": [
+                    {
+                      "id": "cumulativeCollection",
+                      "name": "Monthly",
+                      "code": "",
+                      "chartType": "line",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "row": 2,
+              "name": "Revenue",
+              "vizArray": [
+                {
+                  "id": 21,
+                  "name": "Top 3 Performing ULBs",
+                  "dimensions": {
+                    "height": 250,
+                    "width": 4
+                  },
+                  "vizType": "performing-metric",
+                  "charts": [
+                    {
+                      "id": "topPerformingUlbs",
+                      "name": "Top 3 Performing ULBs",
+                      "code": "",
+                      "chartType": "bar",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                },
+                {
+                  "id": 22,
+                  "name": "Bottom 3 Performing ULBs",
+                  "dimensions": {
+                    "height": 250,
+                    "width": 4
+                  },
+                  "vizType": "performing-metric",
+                  "charts": [
+                    {
+                      "id": "bottomPerformingUlbs",
+                      "name": "Bottom 3 Performing ULBs",
+                      "code": "",
+                      "chartType": "bar",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                },
+                {
+                  "id": 23,
+                  "name": "Collection by Usage type",
+                  "dimensions": {
+                    "height": 250,
+                    "width": 4
+                  },
+                  "vizType": "chart",
+                  "charts": [
+                    {
+                      "id": "collectionByUsageType",
+                      "name": "Collection by Usage type",
+                      "code": "",
+                      "chartType": "pie",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "row": 3,
+              "name": "Revenue",
+              "vizArray": [
+                {
+                  "id": 31,
+                  "name": "",
+                  "dimensions": {
+                    "height": 350,
+                    "width": 12
+                  },
+                  "vizType": "chart",
+                  "charts": [
+                    {
+                      "id": "demandCollectionIndexBoundaryRevenue",
+                      "name": "Demand & Collection Index",
+                      "code": "",
+                      "chartType": "table",
+                      "filter": "",
+                      "headers": []
+                    },
+                    {
+                      "id": "demandCollectionIndexUsageRevenue",
+                      "name": "Demand & Collection Index",
+                      "code": "",
+                      "chartType": "table",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "row": 4,
+              "name": "Service",
+              "vizArray": [
+                {
+                  "id": 41,
+                  "name": "",
+                  "dimensions": {
+                    "height": 350,
+                    "width": 5
+                  },
+                  "vizType": "metric-collection",
+                  "charts": [
+                    {
+                      "id": "propertiesAssessed",
+                      "name": "Total Properties Assessed",
+                      "code": "",
+                      "chartType": "metric",
+                      "filter": "",
+                      "headers": []
+                    },
+                    {
+                      "id": "propertiesAssessed",
+                      "name": "Total Assessments",
+                      "code": "",
+                      "chartType": "metric",
+                      "filter": "",
+                      "headers": []
+                    },
+                    {
+                      "id": "activeUlbs",
+                      "name": "Total Active ULBs",
+                      "code": "",
+                      "chartType": "metric",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                },
+                {
+                  "id": 42,
+                  "name": "Total Properties Assessed",
+                  "dimensions": {
+                    "height": 350,
+                    "width": 7
+                  },
+                  "vizType": "chart",
+                  "charts": [
+                    {
+                      "id": "cumulativePropertiesAssessed",
+                      "name": "Monthly",
+                      "code": "",
+                      "chartType": "line",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "row": 5,
+              "name": "Service",
+              "vizArray": [
+                {
+                  "id": 21,
+                  "name": "Top 3 Performing ULBs",
+                  "dimensions": {
+                    "height": 250,
+                    "width": 4
+                  },
+                  "vizType": "performing-metric",
+                  "charts": [
+                    {
+                      "id": "topPerformingUlbsCompletionRate",
+                      "name": "Top 3 Performing ULBs",
+                      "code": "",
+                      "chartType": "bar",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                },
+                {
+                  "id": 22,
+                  "name": "Bottom 3 Performing ULBs",
+                  "dimensions": {
+                    "height": 250,
+                    "width": 4
+                  },
+                  "vizType": "performing-metric",
+                  "charts": [
+                    {
+                      "id": "bottomPerformingUlbsCompletionRate",
+                      "name": "Bottom 3 Performing ULBs",
+                      "code": "",
+                      "chartType": "bar",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                },
+                {
+                  "id": 23,
+                  "name": "Properties by Usage type",
+                  "dimensions": {
+                    "height": 250,
+                    "width": 4
+                  },
+                  "vizType": "chart",
+                  "charts": [
+                    {
+                      "id": "propertiesByUsageType",
+                      "name": "Properties by Usage type",
+                      "code": "",
+                      "chartType": "pie",
+                      "filter": "",
+                      "headers": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

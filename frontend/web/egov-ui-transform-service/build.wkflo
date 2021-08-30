@@ -1,0 +1,11 @@
+def build(path, ci_image) {
+    stage("Build") {
+        docker.image("node:8.12-alpine").inside {
+            sh "cd ${path}/rainmaker && cd packages/egov-ui-transform-service && cp -r *  ../../../egov-ui-transform-service/ && ls -al ../../../egov-ui-transform-service/";
+        }
+    }
+}
+
+return this;
+
+

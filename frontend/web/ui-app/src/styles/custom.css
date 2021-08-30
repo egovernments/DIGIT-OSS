@@ -1,0 +1,36 @@
+html, body {
+  height: 100%;
+}
+
+.mainWrapper {
+   min-height:89.2%;
+   height: auto !important;
+   margin: 0 auto -67px;
+}
+
+.pushFooter {
+   padding-bottom: 71px;
+}
+.App, #root {
+  height: 100%
+}
+
+@media (max-width:768px) {
+
+  .mainWrapper {
+     min-height:auto;
+     height: auto !important;
+     margin: 0 auto;
+  }
+
+  .pushFooter {
+     padding-bottom: 71px;
+  }
+
+  .Footer {
+    position: fixed;
+    bottom: 0;
+    z-index: 9;
+  }
+
+}

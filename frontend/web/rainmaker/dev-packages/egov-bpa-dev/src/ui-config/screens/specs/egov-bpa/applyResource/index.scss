@@ -1,0 +1,29 @@
+#material-ui-header {
+  display: flex !important;
+  // justify-content: space-between !important;
+}
+.bpa-searchpview #material-ui-header #material-ui-rightContainer {
+  width: 50% !important;
+  }
+.bpa-searchpview #material-ui-header #material-ui-leftContainer {
+  width: 50% !important;
+  }
+#custom-atoms-titlebar2 {
+    display: block !important;
+  }
+#custom-atoms-titlebar2 div:nth-child(0) {
+    padding: 10px 0 !important
+  }
+@media only screen and (min-width: 768px){
+  .apply-wizard-footer {
+    z-index: 100 !important;
+   }
+  }
+#custom-containers-remarks,
+#custom-containers-landRegDetails {
+  line-height: 2rem !important;
+  padding: 2px !important;
+}
+
+div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
+  font-size: 12px !important; }
