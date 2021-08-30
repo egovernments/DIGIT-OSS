@@ -83,7 +83,7 @@ LME
 <td></td>
 </tr>
 <tr>
-<td>Water & Sewarage</td>
+<td>Water & Sewerage</td>
 <td>Counter operator</td>
 <td>Document verifier</td>
 <td>
