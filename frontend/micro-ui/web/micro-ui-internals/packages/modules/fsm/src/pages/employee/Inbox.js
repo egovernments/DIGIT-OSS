@@ -51,7 +51,6 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
       ...paginationParms,
       fromDate: searchParams?.fromDate ? new Date(searchParams?.fromDate).getTime() : undefined,
       toDate: searchParams?.toDate ? new Date(searchParams?.toDate).getTime() : undefined,
-      ...(DSO ? { applicationStatus: [{ id: "PENDING_DSO_APPROVAL" }, {id: "DSO_INPROGRESS"} ]} : {})
     },
     {
       enabled: isInbox,

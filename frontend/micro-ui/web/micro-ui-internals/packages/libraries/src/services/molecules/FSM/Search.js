@@ -76,13 +76,11 @@ export const Search = {
     const slumName = slumLabel ? slumLabel.i18nKey : "N/A";
 
     const state = tenantId.split(".")[0];
-    const vehicleData = await FSMService.vehiclesSearch(tenantId, { type: response?.vehicleType, registrationNumber: vehicle?.registrationNumber })
-    // const vehicleMenu = await MdmsService.getVehicleType(state, "Vehicle", "VehicleType");
-    // const _vehicle = vehicleMenu?.find((vehicle) => response?.vehicleType === vehicle?.code);
+    const vehicleMenu = await MdmsService.getVehicleType(state, "Vehicle", "VehicleType");
+    const _vehicle = vehicleMenu?.find((vehicle) => response?.vehicleType === vehicle?.code);
     
-    // console.log(_vehicle, 'dsfdsfsdf');
-    const vehicleMake = t(`COMMON_MASTER_VEHICLE_${vehicleData?.vehicle?.[0]?.type}`);
-    const vehicleCapacity = vehicleData?.vehicle?.[0]?.tankCapacity;
+    const vehicleMake = _vehicle?.i18nKey;
+    const vehicleCapacity = _vehicle?.capacity;
 
     const demandDetails = await PaymentService.demandSearch(tenantId, applicationNos, "FSM.TRIP_CHARGES");
     // console.log("find demand detail here", demandDetails)
