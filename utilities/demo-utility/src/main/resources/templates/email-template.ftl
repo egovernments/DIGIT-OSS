@@ -1,6 +1,6 @@
 <table>
 <tr>
-<td><b>Username</b></td>
+<td><b>Username &#8594;</span></b></td>
 <td><b>${employee1}</b></td>
 <td><b>${employee2}</b></td>
 <td><b>${employee3}</b></td>
@@ -9,13 +9,13 @@
 <td><b>${employee6}</b></td>
 </tr>
 <tr>
-<td>Application</td>
-<td>Roles</td>
-<td>Roles</td>
-<td>Roles</td>
-<td>Roles</td>
-<td>Roles</td>
-<td>Roles</td>
+<td><b>Application &#8595;</b></td>
+<td><b>Roles  &#8595;</span><b></td>
+<td><b>Roles  &#8595;<b></td>
+<td><b>Roles  &#8595; <b></td>
+<td><b>Roles  &#8595;<b></td>
+<td><b>Roles  &#8595;<b></td>
+<td><b>Roles  &#8595;<b></td>
 </tr>
 <tr>
 <td>Building Plan Approval</td>
@@ -52,7 +52,7 @@ Approver
 <td>State Admin</td>
 </tr>
 <tr>
-<td>FIRE NOC</td>
+<td>Fire NOC</td>
 <td>Counter operator</td>
 <td>Document verifier</td>
 <td>

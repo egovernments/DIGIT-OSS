@@ -69,11 +69,12 @@ public class UtilityConstants {
 
 	public static final String TENANT_CODE = "107";
 
-	public static final String SUBJECT = "DIGIT USER CREDTINALS";
+	public static final String SUBJECT = "User Credentials for DIGIT Instance";
 	
 	public static StringBuffer EMAIL_STRATING_CONTENT=new StringBuffer("<html><head><style type=\"text/css\" media=\"screen\">table { border-collapse:collapse;border:1px solid;}  table td {border:1px solid #000000;}</style></head><body><h4 style=\"color:#500050\"> Hi, <br> <br>Thanks for taking the time out to fill in the details required to generate user credentials for using the demo instance. Please find the role-based login credentials for individual modules in the table below<br>The default password for all users is: eGov@123<br></h4>\r\n");
 	
-	public static String EMAIL_REGARDS="<li style=\"margin-right:100px;\">Employee login URL - <U>https://staging.digit.org/employee</U> <br> <br> The DSO role for the FSM module uses your registered mobile number. <br> Best Wishes, <br>eGov Team</li>";
+	public static String EMAIL_REGARDS="<p style=\"margin-right:50px;\">Note: Use your mobile number submitted in Access DIGIT Credentials form to access DSO role for FSM Application <br>"
+			+ " Login url for DSO role is - <U> https://staging.digit.org/digit-ui/citizen/login </U>  <br> <br> Thank you, <br>eGov Team</p>";
 	
 	public static StringBuffer EMAIL_ENDING_CONTENT=new StringBuffer("</body></html>");
 	
