@@ -5,7 +5,7 @@ import Row from './Row';
 import { mobileCheck, transformLocality } from './utils';
 
 
-const Table = ({ data, header, localityData, sortOrder, t, historyComp, setSortOrder, inboxConfig, historyClick, sort,esclatedComp, isLoading }) => {
+const Table = ({ data, header, localityData, sortOrder, t, historyComp, setSortOrder, inboxConfig, historyClick, sort, esclatedComp, isLoading }) => {
     let isMobile = mobileCheck()
     return (<React.Fragment>
         {!isMobile && <Row {...header} sortOrder={sortOrder} t={t} isHeader={true} sort={sort} setSortOrder={setSortOrder}></Row>}

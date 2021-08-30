@@ -1,4 +1,4 @@
-import { wfEsclationSearch, wfSearch } from "./API/api";
+import { wfSearch } from "./API/api";
 
 export const mobileCheck = () => {
     let check = false;
@@ -21,7 +21,7 @@ export const convertMillisecondsToDays = (milliseconds) => {
 }
 
 export const getSlaColorAndType = (sla, businessService, wfSlaConfig, wfBusinessConfig) => {
-    const { MAX_SLA = 0 } = wfBusinessConfig[businessService] || {};
+    const { MAX_SLA = 0 } = wfBusinessConfig[businessService] || { };
     let slaColorType = { esclated: false, nearingEsclation: false, noneType: true, color: '#4CAF50' };
     if (wfSlaConfig) {
         if ((MAX_SLA - (MAX_SLA * wfSlaConfig.slotPercentage / 100) <= sla) && sla <= MAX_SLA) {
@@ -42,8 +42,8 @@ export const getSlaColorAndType = (sla, businessService, wfSlaConfig, wfBusiness
     return slaColorType;
 };
 
-export const formatWFSearch = (data, wfSlaConfig = {},
-    wfBusinessConfig = {}) => {
+export const formatWFSearch = (data, wfSlaConfig = { },
+    wfBusinessConfig = { }) => {
     const sla = data.businesssServiceSla && convertMillisecondsToDays(data.businesssServiceSla);
     const slaColorAndType = getSlaColorAndType(sla, data.businessService, wfSlaConfig, wfBusinessConfig);
     return {
@@ -65,10 +65,10 @@ export const formatWFSearch = (data, wfSlaConfig = {},
         }
     }
 }
-export const formatWFEsclatedSearch = (data, wfSlaConfig = {},
-    wfBusinessConfig = {}) => ({ ...formatWFSearch(data, wfSlaConfig, wfBusinessConfig), Esclated: true })
+export const formatWFEsclatedSearch = (data, wfSlaConfig = { },
+    wfBusinessConfig = { }) => ({ ...formatWFSearch(data, wfSlaConfig, wfBusinessConfig), Esclated: true })
 
-export const getWfLink = (inboxConfig = {}, no, service) => {
+export const getWfLink = (inboxConfig = { }, no, service) => {
     let defaultUrl = inboxConfig[service].redirectConfig.DEFAULT || '';
     defaultUrl = defaultUrl.replace("^WFBID^", no);
     defaultUrl = defaultUrl.replace("^WFTNID^", localStorage.getItem("inb-tenantId"));
@@ -113,7 +113,7 @@ export const loadCompleteRecord = ({ limit = 100, offset = 0, setLoadedAll, setL
     });
 }
 
-export const getLimitAndOffset = (countObject = {}) => {
+export const getLimitAndOffset = (countObject = { }) => {
     const { totalCount = 0, loadedCount = 0 } = countObject;
     let limit = 0;
     let offset = 100;

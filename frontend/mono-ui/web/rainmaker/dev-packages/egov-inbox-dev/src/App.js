@@ -6,201 +6,26 @@ function App() {
 
 
     let userObject = {
-        "id": 24226,
-        "uuid": "11b0e02b-0145-4de2-bc42-c97b96264807",
-        "userName": "amr001",
-        "name": "leela",
-        "mobileNumber": "9814424443",
-        "emailId": "leela@llgmail.com",
+        "id": 12012,
+        "uuid": "3eba8064-d37d-4dc9-9991-96859d30beaf",
+        "userName": "QAPTCE",
+        "name": "Prakash",
+        "mobileNumber": "9999999991",
+        "emailId": null,
         "locale": null,
         "type": "EMPLOYEE",
         "roles": [
             {
-                "name": "Grievance Routing Officer",
-                "code": "GRO",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "NoC counter employee",
-                "code": "NOC_CEMP",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "autoescalation emp",
-                "code": "AUTO_ESCALATE",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "WS Document Verifier",
-                "code": "WS_DOC_VERIFIER",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "FSM Employee Report Viewer",
-                "code": "FSM_REPORT_VIEWER",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "BPA Field Inspector",
-                "code": "BPA_FIELD_INSPECTOR",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "TL Field Inspector",
-                "code": "TL_FIELD_INSPECTOR",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "TL Approver",
-                "code": "TL_APPROVER",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "BPA Services Approver",
-                "code": "BPA_APPROVER",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "Field Employee",
-                "code": "FEMP",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "Counter Employee",
-                "code": "CEMP",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "WS Counter Employee",
-                "code": "WS_CEMP",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "BPAREG Approver",
-                "code": "BPAREG_APPROVER",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "WS Field Inspector",
-                "code": "WS_FIELD_INSPECTOR",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "Collection Operator",
-                "code": "COLL_OPERATOR",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "TL doc verifier",
-                "code": "TL_DOC_VERIFIER",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "CSC Collection Operator",
-                "code": "CSC_COLL_OPERATOR",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "Employee",
-                "code": "EMPLOYEE",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "FSM Desluding Operator",
-                "code": "FSM_DSO",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "TL Counter Employee",
-                "code": "TL_CEMP",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "TL Creator",
-                "code": "TL_CREATOR",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "BPAREG doc verifier",
-                "code": "BPAREG_DOC_VERIFIER",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "NoC counter Approver",
-                "code": "NOC_APPROVER",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "Customer Support Representative",
-                "code": "CSR",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "HRMS Admin",
-                "code": "HRMS_ADMIN",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "Super User",
-                "code": "SUPERUSER",
-                "tenantId": "pb"
-            },
-            {
-                "name": "Universal Collection Employee",
-                "code": "UC_EMP",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "BPA Services verifier",
-                "code": "BPA_VERIFIER",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "WS Approver",
-                "code": "WS_APPROVER",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "NoC Field Inpector",
-                "code": "NOC_FIELD_INSPECTOR",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "PT Counter Approver",
-                "code": "PT_APPROVER",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "NOC Department Approver",
-                "code": "NOC_DEPT_APPROVER",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "Super User",
-                "code": "SUPERUSER",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "Grievance Officer",
-                "code": "GO",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "WS Clerk",
-                "code": "WS_CLERK",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "NoC Doc Verifier",
-                "code": "NOC_DOC_VERIFIER",
+                "name": "PT Counter Employee",
+                "code": "PT_CEMP",
                 "tenantId": "pb.amritsar"
             }
         ],
         "active": true,
         "tenantId": "pb.amritsar",
-        "permanentCity": "pb"
+        "permanentCity": 'pb'
     }
-    userObject.auth = '957333c5-79a9-43ac-83d3-4acde0d92dd7';
+    userObject.auth = "15966eb0-92b3-4c16-b304-70470270958b";
     localStorage.setItem("Employee.token", userObject.auth);
 
     return (

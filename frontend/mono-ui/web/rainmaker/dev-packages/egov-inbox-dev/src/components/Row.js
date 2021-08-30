@@ -7,7 +7,7 @@ const { SortDown,
     SortUp } = svgIcons;
 
 const Row = React.memo((props) => {
-    const { sortOrder = {}, BusinessId: id, t, inboxConfig = {} } = props;
+    const { sortOrder = { }, BusinessId: id, t, inboxConfig = { } } = props;
     let keys = Object.keys(sortOrder);
     keys.sort((x, y) => sortOrder[x].order - sortOrder[y].order);
 

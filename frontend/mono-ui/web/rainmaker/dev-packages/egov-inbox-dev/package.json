@@ -2,7 +2,7 @@
   "name": "egov-inbox-dev",
   "version": "0.1.2",
   "private": false,
-  "proxy": "https://dev.digit.org/",
+  "proxy": "https://qa.digit.org/",
   "licence":"MIT",
   "dependencies": {
     "react": "^17.0.2",
