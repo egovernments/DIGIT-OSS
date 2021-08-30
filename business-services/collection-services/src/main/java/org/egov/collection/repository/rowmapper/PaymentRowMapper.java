@@ -173,7 +173,6 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                     .manualReceiptNumber(manualReceiptNo)
                     .receiptType(receiptType)
                     .additionalDetails(getJsonValue(obj))
-
                     .auditDetails(auditDetails)
                     .build();
 
@@ -185,7 +184,6 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                     .lastModifiedBy("bill_lastmodifiedby")
                     .lastModifiedTime(rs.getLong("bill_lastModifiedTime"))
                     .build();*/
-
             /*List<String> collectionModesAllowedList = new LinkedList<>();
             if(null != rs.getString("collectionmodesnotallowed")) {
                 String[] collectionModesAllowed = rs.getString("collectionmodesnotallowed").split(",");
@@ -251,7 +249,6 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
 
 
     }
-
 
     private JsonNode getJsonValue(PGobject pGobject){
         try {

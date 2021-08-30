@@ -129,7 +129,6 @@ public class PaymentQueryBuilder {
     public static final String FILESTOREID_UPDATE_PAYMENT_SQL = "UPDATE egcl_payment SET filestoreid=:filestoreid WHERE id=:id;";
 
 
-
     // Payment update queries
 
     public static final String UPDATE_PAYMENT_SQL = "UPDATE egcl_payment SET additionaldetails=:additionaldetails, paidby=:paidby, payername=:payername," +
