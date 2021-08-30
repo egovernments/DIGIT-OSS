@@ -43,6 +43,9 @@ export const FormComposer = (props) => {
   }, [formData]);
 
   const fieldSelector = (type, populators, isMandatory, disable = false, component, config) => {
+
+    const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
+    
     switch (type) {
       case "text":
       case "date":
@@ -89,7 +92,6 @@ export const FormComposer = (props) => {
           />
         );
       case "component":
-        const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Controller
             render={(props) => (
