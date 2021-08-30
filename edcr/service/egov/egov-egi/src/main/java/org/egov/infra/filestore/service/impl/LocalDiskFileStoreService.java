@@ -121,7 +121,12 @@ public class LocalDiskFileStoreService implements FileStoreService {
     @Override
     public FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName,
             boolean closeStream) {
-        try {
+        return storeCommon(fileStream, fileName, mimeType, moduleName, closeStream);
+    }
+
+	private FileStoreMapper storeCommon(InputStream fileStream, String fileName, String mimeType, String moduleName,
+			boolean closeStream) {
+		try {
             fileName = normalizeString(fileName);
             moduleName = normalizeString(moduleName);
             FileStoreMapper fileMapper = new FileStoreMapper(randomUUID().toString(), fileName);
@@ -135,7 +140,7 @@ public class LocalDiskFileStoreService implements FileStoreService {
             LOG.error(String.format("Error occurred while storing files at %s/%s/%s", this.fileStoreBaseDir, getCityCode(), moduleName), e);
         }
         return null;
-    }
+	}
 
     @Override
     public File fetch(FileStoreMapper fileMapper, String moduleName) {
@@ -198,4 +203,22 @@ public class LocalDiskFileStoreService implements FileStoreService {
     private Path getFilePath(Path fileDirPath, String fileStoreId) {
         return Paths.get(fileDirPath + separator + fileStoreId);
     }
+
+	@Override
+	public FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName,
+			String tenantId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName,
+			String tenantId, boolean closeStream) {
+		return storeCommon(fileStream, fileName, mimeType, moduleName, closeStream);
+	}
+
+	@Override
+	public File fetch(String fileStoreId, String moduleName, String tenantId) {
+		return fetchAsPath(fileStoreId, moduleName).toFile();
+	}
 }
