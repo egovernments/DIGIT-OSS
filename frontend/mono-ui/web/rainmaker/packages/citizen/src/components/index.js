@@ -40,8 +40,10 @@ import SingleCheckbox from "egov-ui-kit/components/SingleCheckbox";
 import ToolTipUi from "egov-ui-kit/components/Tooltip";
 import TableUi from "egov-ui-kit/components/Tables";
 import FloatingButton from "egov-ui-kit/components/FloatingButton";
+import UpdateMobile from 'egov-ui-kit/common/propertyTax/UpdateMobile/updateMobile';
 
 export {
+  UpdateMobile,
   Label,
   Image,
   TextField,

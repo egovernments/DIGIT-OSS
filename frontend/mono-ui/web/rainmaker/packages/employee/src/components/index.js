@@ -39,7 +39,7 @@ import Toast from "egov-ui-kit/components/Toast";
 import ToolTipUi from "egov-ui-kit/components/Tooltip";
 import UploadDrawer from "egov-ui-kit/components/UploadDrawer";
 import CommonShareContainer from "./CommonShareContainer";
-import UpdateMobile from './UpdateMobile/updateMobile';
+import UpdateMobile from 'egov-ui-kit/common/propertyTax/UpdateMobile/updateMobile';
 
 export {
   UpdateMobile,
