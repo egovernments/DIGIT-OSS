@@ -104,11 +104,11 @@ public class FSMInboxFilterService {
             if(!ObjectUtils.isEmpty(processCriteria.getAssignee())){
                 searchCriteria.put(ASSIGNEE_PARAM, processCriteria.getAssignee());
             }
-            if(!ObjectUtils.isEmpty(processCriteria.getStatus())){
+            if(!ObjectUtils.isEmpty(processCriteria.getStatus()) && !requestInfo.getUserInfo().getRoles().get(0).getCode().equals(FSMConstants.FSM_DSO)){
                 searchCriteria.put(STATUS_PARAM, processCriteria.getStatus());
             }else{
                 if(StatusIdNameMap.values().size() > 0) {
-                    if(CollectionUtils.isEmpty(processCriteria.getStatus())) {
+                    if(CollectionUtils.isEmpty(processCriteria.getStatus()) || (!(requestInfo.getUserInfo().getRoles().get(0).getCode().equals(FSMConstants.FSM_DSO)))) {
                         searchCriteria.put(STATUS_PARAM, StatusIdNameMap.keySet());
                     }
                 }
