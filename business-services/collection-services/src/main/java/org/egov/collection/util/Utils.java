@@ -42,7 +42,10 @@ public class Utils {
         return mainNode;
     }
     public static String replaceSchemaPlaceholder(String query, String tenantId){
-        String stateLevelTenant = tenantId.split("\\.")[1];
+        String stateLevelTenant = tenantId;
+        if(stateLevelTenant.contains("\\.")) {
+            stateLevelTenant = tenantId.split("\\.")[1];
+        }
         String finalQuery = query.replace(CollectionServiceConstants.SCHEMA_PLACEHOLDER, stateLevelTenant);
         return finalQuery;
     }
