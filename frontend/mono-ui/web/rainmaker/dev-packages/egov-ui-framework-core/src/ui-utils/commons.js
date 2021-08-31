@@ -139,7 +139,7 @@ export const transformById = (payload, id) => {
       };
 
       return result;
-    }, {})
+    }, { })
   );
 };
 
@@ -233,7 +233,7 @@ const getAllFileStoreIds = async ProcessInstances => {
         result[eachInstance.id] = fileStoreIdArr.join(",");
       }
       return result;
-    }, {})
+    }, { })
   );
 };
 
@@ -384,7 +384,7 @@ export const acceptedFiles = acceptedExt => {
   return acceptedFileTypes;
 };
 
-export const handleFileUpload = (event, handleDocument, props,afterFileSelected) => {
+export const handleFileUpload = (event, handleDocument, props, afterFileSelected, ifError) => {
   const S3_BUCKET = {
     endPoint: "filestore/v1/files"
   };
@@ -406,23 +406,27 @@ export const handleFileUpload = (event, handleDocument, props,afterFileSelected)
         uploadDocument = false;
       }
       if (uploadDocument) {
-        afterFileSelected&&typeof afterFileSelected=='function'&&afterFileSelected()
-        if (file.type.match(/^image\//)) {
-          const fileStoreId = await uploadFile(
-            S3_BUCKET.endPoint,
-            moduleName,
-            file,
-            commonConfig.tenantId
-          );
-          handleDocument(file, fileStoreId);
-        } else {
-          const fileStoreId = await uploadFile(
-            S3_BUCKET.endPoint,
-            moduleName,
-            file,
-            commonConfig.tenantId
-          );
-          handleDocument(file, fileStoreId);
+        afterFileSelected && typeof afterFileSelected == 'function' && afterFileSelected();
+        try {
+          if (file.type.match(/^image\//)) {
+            const fileStoreId = await uploadFile(
+              S3_BUCKET.endPoint,
+              moduleName,
+              file,
+              commonConfig.tenantId
+            );
+            handleDocument(file, fileStoreId);
+          } else {
+            const fileStoreId = await uploadFile(
+              S3_BUCKET.endPoint,
+              moduleName,
+              file,
+              commonConfig.tenantId
+            );
+            handleDocument(file, fileStoreId);
+          }
+        } catch (e) {
+          ifError && typeof ifError == 'function' && ifError();
         }
       }
     });
@@ -431,7 +435,7 @@ export const handleFileUpload = (event, handleDocument, props,afterFileSelected)
 
 //localizations
 export const getTransformedLocale = label => {
-  if(typeof label === "number") return label;
+  if (typeof label === "number") return label;
   return label && label.toUpperCase().replace(/[.:-\s\/]/g, "_");
 };
 
@@ -555,7 +559,7 @@ export const validateFields = (
   const fields = get(
     state.screenConfiguration.screenConfig[screen],
     objectJsonPath,
-    {}
+    { }
   );
   let isFormValid = true;
   for (var variable in fields) {
@@ -616,7 +620,7 @@ export const getUserDataFromUuid = async bodyObject => {
     return response;
   } catch (error) {
     console.log(error);
-    return {};
+    return { };
   }
 };
 
@@ -704,7 +708,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
     process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity || commonConfig.tenantId : getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: moduleDetails[0].moduleName === "ws-services-masters" || moduleDetails[0].moduleName ===  "PropertyTax" ? commonConfig.tenantId : tenantId,
+      tenantId: moduleDetails[0].moduleName === "ws-services-masters" || moduleDetails[0].moduleName === "PropertyTax" ? commonConfig.tenantId : tenantId,
       moduleDetails: moduleDetails
     }
   };
@@ -746,15 +750,15 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
     case "FireNoc":
       return (state, dispatch) => {
         dispatch(prepareFinalObject("FireNOCs", []));
-        dispatch(prepareFinalObject("DynamicMdms", {}));
-        dispatch(prepareFinalObject("documentsUploadRedux", {}));
+        dispatch(prepareFinalObject("DynamicMdms", { }));
+        dispatch(prepareFinalObject("documentsUploadRedux", { }));
         const applyUrl =
           process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/fire-noc/apply` : `/fire-noc/apply`;
         dispatch(setRoute(applyUrl));
       };
     case "PropertyTax":
       return (state, dispatch) => {
-        dispatch(prepareFinalObject("documentsUploadRedux", {}));
+        dispatch(prepareFinalObject("documentsUploadRedux", { }));
         const applyUrl = `/property-tax/assessment-form`;
         dispatch(setRoute(applyUrl));
       };
@@ -762,8 +766,8 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
       return (state, dispatch) => {
         dispatch(prepareFinalObject("WaterConnection", []));
         dispatch(prepareFinalObject("SewerageConnection", []));
-        dispatch(prepareFinalObject("applyScreen", {}));
-        dispatch(prepareFinalObject("searchScreen", {}));
+        dispatch(prepareFinalObject("applyScreen", { }));
+        dispatch(prepareFinalObject("searchScreen", { }));
         const applyUrl = process.env.REACT_APP_NAME === "Citizen" ? `/wns/apply` : `/wns/apply`
         dispatch(setRoute(applyUrl));
       };
@@ -772,7 +776,7 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
         return (state, dispatch) => {
           dispatch(prepareFinalObject("Licenses", []));
           dispatch(prepareFinalObject("LicensesTemp", []));
-          dispatch(prepareFinalObject("DynamicMdms", {}));
+          dispatch(prepareFinalObject("DynamicMdms", { }));
           const applyUrl = `/tradelicence/apply?tenantId=${tenant}`;
           dispatch(
             handleField("search", "components.adhocDialog", "props.open", false)
@@ -850,11 +854,11 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
 };
 export const getTransformData = (object, getPath, transerPath) => {
   let data = get(object, getPath);
-  let transformedData = {};
+  let transformedData = { };
   var formTreeBase = (transformedData, row) => {
     const splitList = row.code.split(".");
     splitList.map(function (value, i) {
-      transformedData = (i == splitList.length - 1) ? transformedData[value] = row : transformedData[value] || (transformedData[value] = {});
+      transformedData = (i == splitList.length - 1) ? transformedData[value] = row : transformedData[value] || (transformedData[value] = { });
     });
   }
   data.map(a => {

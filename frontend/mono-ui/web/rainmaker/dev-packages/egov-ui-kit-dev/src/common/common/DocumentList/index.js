@@ -138,11 +138,11 @@ class DocumentList extends Component {
   initDocumentData() {
     const {
       ptDocumentsList,
-      documentsUploadRedux = {},
+      documentsUploadRedux = { },
       prepareFinalObject
     } = this.props;
     let index = 0;
-    let docsUploaded = {};
+    let docsUploaded = { };
     ptDocumentsList.forEach(docType => {
       docType.cards &&
         docType.cards.forEach(card => {
@@ -193,13 +193,13 @@ class DocumentList extends Component {
                   : false
               };
               if (card.dropdown && card.dropdown.value) {
-                docsUploaded[index]['dropdown'] = {}
+                docsUploaded[index]['dropdown'] = { }
                 docsUploaded[index]['dropdown']['value'] = card.dropdown.value;
               }
             }
             if (card.dropdown && card.dropdown.value) {
-              docsUploaded[index] = docsUploaded[index] ? docsUploaded[index] : {};
-              docsUploaded[index]['dropdown'] = docsUploaded[index]['dropdown'] ? docsUploaded[index]['dropdown'] : {};
+              docsUploaded[index] = docsUploaded[index] ? docsUploaded[index] : { };
+              docsUploaded[index]['dropdown'] = docsUploaded[index]['dropdown'] ? docsUploaded[index]['dropdown'] : { };
               docsUploaded[index]['dropdown']['value'] = card.dropdown.value;
               docsUploaded[index]['documentType'] = docType.code;
               docsUploaded[index]['documentCode'] = card.name;
@@ -232,7 +232,7 @@ class DocumentList extends Component {
   }
 
   getDocumentsUploaded = (documentsUploadRedux, docsUploaded) => {
-    let docObj = {};
+    let docObj = { };
     docObj = { ...documentsUploadRedux, ...docsUploaded };
     if (Object.keys(docsUploaded).length > 0) {
       Object.keys(docObj).map(key => {
@@ -363,7 +363,7 @@ class DocumentList extends Component {
             id={`jk-document-id-${key}`}
             classes={this.props.classes}
             handleFileUpload={e =>
-              handleFileUpload(e, this.handleDocument, this.props, this.showLoading)
+              handleFileUpload(e, this.handleDocument, this.props, this.showLoading, this.hideLoading)
             }
             uploaded={
               documentsUploadRedux[key] && documentsUploadRedux[key].documents
@@ -446,7 +446,7 @@ const mapStateToProps = state => {
   const documentsUploadRedux = get(
     screenConfiguration.preparedFinalObject,
     "documentsUploadRedux",
-    {}
+    { }
   );
   Object.keys(documentsUploadRedux).map(key => {
     let documentCode = documentsUploadRedux[key] && documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value || '';
