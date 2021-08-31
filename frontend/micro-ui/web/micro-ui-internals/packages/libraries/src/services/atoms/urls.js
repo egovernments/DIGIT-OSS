@@ -117,6 +117,11 @@ const Urls = {
   events:{
     search: "/egov-user-event/v1/events/_search",
 
+  },
+
+  engagement:{
+    search: "/egov-document-upload/document/_search",
+    create: "/egov-document-upload/document/_create"
   }
 
 };

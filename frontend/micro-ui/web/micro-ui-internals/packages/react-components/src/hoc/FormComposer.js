@@ -144,7 +144,6 @@ export const FormComposer = (props) => {
   const formFields = useMemo(
     () =>
       props.config?.map((section, index, array) => {
-        console.log(section,"inside formcomoser")
         return (
           <React.Fragment key={index}>
             {section.head && <CardSectionHeader id={section.headId}>{t(section.head)}</CardSectionHeader>}

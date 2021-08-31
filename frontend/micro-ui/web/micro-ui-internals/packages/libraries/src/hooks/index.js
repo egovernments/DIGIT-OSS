@@ -125,6 +125,9 @@ import useOBPSDocumentSearch from "./obps/useOBPSDocumentSearch";
 import useObpsAPI from "./obps/useObpsAPI";
 import useBPADetails from "./obps/useBPADetails"
 
+import {useEngagementMDMS} from "./engagement/useMdms"
+
+
 const pgr = {
   useComplaintDetails,
   useComplaintsList,
@@ -242,6 +245,10 @@ const obps = {
   useBPADetails
 };
 
+const engagement = {
+  useMDMS: useEngagementMDMS,
+}
+
 const Hooks = {
   useSessionStorage,
   useQueryParams,
@@ -276,7 +283,8 @@ const Hooks = {
   hrms,
   tl,
   receipts,
-  obps
+  obps,
+  engagement
 };
 
 export default Hooks;

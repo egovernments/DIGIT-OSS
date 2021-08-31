@@ -112,8 +112,8 @@ const Dropdown = (props) => {
   }
 
   function onSelect(val) {
-    //console.log(val, "curent", selectedOption, "old");
-    if (val !== selectedOption) {
+    // console.log(val, "curent", selectedOption, "old");
+    if (val !== selectedOption || props.allowMultiselect) {
       props.select(val);
       setSelectedOption(val);
       setDropdownStatus(false);

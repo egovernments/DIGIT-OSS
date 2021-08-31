@@ -5,14 +5,18 @@ import { documentsFormConfig } from "./config"
 
 
 const Documents = () => {
+
    const { t } = useTranslation()
-   console.log(documentsFormConfig,"documents form config")
+
+   const onSubmit = (data) => {
+       console.log(">>>>>>>>>>>",data)
+   }
 
    return <FormComposer
             heading={t("ES_ENGAGEMENT_DOCUMENTS")}
             label={t("ES_COMMON_APPLICATION_SUBMIT")}
             config={documentsFormConfig}
-            onSubmit={(v)=>{console.log(v)}}
+            onSubmit={onSubmit}
             fieldStyle={{}}
             onFormValueChange={(a,b)=>{console.log(b)}}
         />

@@ -1,7 +1,7 @@
 import { BackButton, BreadCrumb, CitizenHomeCard, CitizenTruck, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, Redirect, Switch, useLocation, useRouteMatch } from "react-router-dom";
+import { Link, Redirect, Switch, useLocation, useRouteMatch,Route } from "react-router-dom";
 
 import Documents from "./pages/employee/documents"
 
@@ -20,7 +20,7 @@ const EmployeeApp = ({ path, url, userType }) => {
     <Switch>
       <React.Fragment>
         <div className="ground-container">
-            <PrivateRoute exact path={`${path}/docs`} component={()=><Documents {...{path}} />} />
+            <Route exact path={`${path}/docs`} component={()=><Documents {...{path}} />} />
             <Redirect to={`${path}/docs`} />
         </div>
       </React.Fragment>
