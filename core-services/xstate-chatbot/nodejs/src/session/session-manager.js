@@ -86,7 +86,7 @@ class SessionManager {
                 (async() => { 
                     await chatStateRepository.updateState(userId, active, JSON.stringify(saveState), timeStamp);
                     let sessionId = await chatStateRepository.getSessionId(userId);
-                    telemetry.log(userId, 'transition', {destination: stateStrings[stateStrings.length-1], locale: locale, sessionId: sessionId, timestamp: timeStamp});
+                    telemetry.log(userId, 'transition', {input: reformattedMessage.message.input, destination: stateStrings[stateStrings.length-1], locale: locale, sessionId: sessionId, timestamp: timeStamp, extraInfo: reformattedMessage.extraInfo});
                 })();
                 
             }
@@ -112,7 +112,7 @@ class SessionManager {
 
 let grammer = {
     reset: [
-        {intention: 'reset', recognize: ['Hi', 'hi', 'mseva', 'seva', 'सेवा']},
+        {intention: 'reset', recognize: ['Hello', 'hello', 'Hi', 'hi', 'mseva', 'seva', 'सेवा']},
     ]
 }
 

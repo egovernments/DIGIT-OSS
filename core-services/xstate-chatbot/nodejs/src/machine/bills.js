@@ -366,7 +366,7 @@ const bills = {
         openSearch:{
           onEntry: assign((context, event) => {
             (async() => {
-              context.slots.bills.openSearchLink = await billService.getOpenSearchLink(context.service);
+              context.slots.bills.openSearchLink = await billService.getOpenSearchLink(context.service,context.user.name,context.user.mobileNumber);
               let { services, messageBundle } = billService.getSupportedServicesAndMessageBundle();
               let billServiceName = dialog.get_message(messageBundle[context.service],context.user.locale);
               let message = dialog.get_message(messages.openSearch, context.user.locale);
@@ -856,7 +856,7 @@ let messages = {
     }
   },
   openSearch: {
-    en_IN: "Click on the link below to search and pay your {{billserviceName}} bill -\n{{link}}\n\nThe image below shows you how to search and pay {{billserviceName}} bill using this link. 👇.",
+    en_IN: "Click on the link below to search and pay your {{billserviceName}} bill -\n'{{link}}'\n\nThe image below shows you how to search and pay {{billserviceName}} bill using this link. 👇.",
     hi_IN: "आप नीचे दिए गए लिंक पर क्लिक करके {{billserviceName}} खोज और भुगतान कर सकते हैं👇\n\n{{link}}\n\nइस लिंक से {{billserviceName}} खोजने और भुगतान करने के चरणों को समझने के लिए कृपया नीचे दी गई छवि देखें।"
   },
   newNumberregistration:{
