@@ -13,6 +13,7 @@ import {
   localStorageSet,
   localStorageGet,
   clearUserDetails,
+  convertUserForSingleInstance,
 } from "../../utils/localStorageUtils";
 
 // temp fix
@@ -28,8 +29,9 @@ const fixUserDob = (user = {}) => {
 };
 
 export const userProfileUpdated = (payload = {}) => {
-  const user = fixUserDob(payload.user[0]);
+  let user = fixUserDob(payload.user[0]);
   setUserInfo(JSON.stringify(user));
+  user=convertUserForSingleInstance(user);
   localStorage.setItem("citizen.userRequestObject",JSON.stringify(user));
   return { type: authType.USER_PROFILE_UPDATED, user };
 };
