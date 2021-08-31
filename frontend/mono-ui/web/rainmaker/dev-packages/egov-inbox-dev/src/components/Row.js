@@ -24,22 +24,25 @@ const Row = React.memo((props) => {
                     const isSLA = key == "WF_INBOX_HEADER_SLA_DAYS_REMAINING" && !props.isHeader ? true : false;
                     return (<span style={{ padding: '15px' }} key={index} className={`row-${key}`}>
                         <span style={{ textAlign: "left" }}>
-                            {t(key)}
-                        </span> :
-                        <span style={{ textAlign: "right" }}>
+                            {isSLA ? "SLA" : t(key)}
+                        </span> {' : '}
+                        <span style={{ textAlign: "right", color: "rgba(0, 0, 0, 0.97)" }}>
                             {isSLA ? (<span className={"jk-inbox-sla-wrapper"}>
                                 <span style={{ backgroundColor: props.other.color }} className={"inbox-cell-badge-primary"}>
                                     {props[key]}
                                 </span>
                                 {props.Esclated && <span className="jk-inbox-eslcated-mark">{props.esclatedComp}</span>}
-                                {!props.Esclated && <span className="jk-inbox-eslcated-mark">{""}</span>}
-                                <span className="jk-inbox-pointer" onClick={() => props.historyClick(id)}>{props.historyComp}</span>
+                                {!props.Esclated && <span className="jk-inbox-eslcated-mark">{" "}</span>}
+
                             </span>)
                                 : t(props[key]) || t("COMMON_NA")}
                         </span>
                     </span>)
                 })
             }
+            {<span style={{ padding: '5px 15px 5px 15px;' }} key={7} className={`row-${7}`}> <span style={{ textAlign: "left" }}>
+                {t('CS_COMMON_VIEW_HISTORY_LINK')} :
+            </span> <span className="jk-inbox-pointer" onClick={() => props.historyClick(id)}>{props.historyComp}</span></span>}
         </div>
     }
     return (
