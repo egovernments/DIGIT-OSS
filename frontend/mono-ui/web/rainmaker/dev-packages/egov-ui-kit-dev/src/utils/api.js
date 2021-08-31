@@ -212,9 +212,7 @@ export const loginRequest = async (username = null, password = null, refreshToke
     const response = await loginInstance.post("/user/oauth/token", params);
     const responseStatus = parseInt(response.status, 10);
     if (responseStatus === 200 || responseStatus === 201) {
-      if(response&&response.data&&response.data.UserRequest){
-        response.data.UserRequest=convertUserForSingleInstance(response.data.UserRequest);
-      }
+      response.data.UserRequest=convertUserForSingleInstance(response.data.UserRequest);
       localStorage.setItem("citizen.userRequestObject",JSON.stringify(response.data.UserRequest));
       return response.data;
     }
