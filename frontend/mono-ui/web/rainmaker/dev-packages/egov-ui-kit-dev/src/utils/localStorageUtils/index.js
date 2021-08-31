@@ -60,11 +60,14 @@ export const setTenantId = (tenantId) => {
 
 /* TO CONVERT USER TO CENTRAL INSTANCE */
 export const convertUserForSingleInstance=(user={})=>{
-  let tenantId=user.permanentCity;
-  localStorage.setItem("Citizen.tenant-id",tenantId);
-  localStorage.setItem("tenant-id",tenantId);
-  localStorage.setItem("Employee.tenant-id",tenantId);
-  user.tenantId=tenantId;
+  if(user.permanentCity!=null){
+    let tenantId=user.permanentCity;
+    localStorage.setItem("Citizen.tenant-id",tenantId);
+    localStorage.setItem("tenant-id",tenantId);
+    localStorage.setItem("Employee.tenant-id",tenantId);
+    user.tenantId=tenantId;
+  }
+  
   return {...user}
 }
 
