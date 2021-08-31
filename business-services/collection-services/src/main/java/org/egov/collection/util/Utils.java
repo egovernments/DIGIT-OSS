@@ -54,7 +54,7 @@ public class Utils {
 		
 		String finalQuery = null;
 		String stateLevelTenant = tenantId;
-		if (stateLevelTenant.contains("\\.")) {
+		if (stateLevelTenant.contains(".")) {
 			stateLevelTenant = stateLevelTenant.split("\\.")[1];
 			finalQuery = query.replace(CollectionServiceConstants.SCHEMA_PLACEHOLDER, stateLevelTenant);
 		} else {
