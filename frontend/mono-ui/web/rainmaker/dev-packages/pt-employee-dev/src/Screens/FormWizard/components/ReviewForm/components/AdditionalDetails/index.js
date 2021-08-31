@@ -18,7 +18,7 @@ const styles = {
     height: "16px"
   },
   selectedLabelStyle: {
-    color: "#fe7a51"
+    color: "mediumpurple"
   },
   radioButtonLabelStyle: {
     lineHeight: 1,

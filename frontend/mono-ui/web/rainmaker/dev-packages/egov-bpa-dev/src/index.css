@@ -66,7 +66,7 @@ body {
   text-align: left; }
 
 .mihy-primary-button {
-  background-color: #fe7a51;
+  background-color: mediumpurple;
   border-radius: 2px;
   box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.24), 0 0 8px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12);
   width: 200px;

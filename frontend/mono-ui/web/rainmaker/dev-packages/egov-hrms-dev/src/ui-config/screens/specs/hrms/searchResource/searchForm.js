@@ -251,8 +251,8 @@ export const searchForm = getCommonCard({
         props: {
           variant: "outlined",
           style: {
-            color: "#FE7A51",
-            borderColor: "#FE7A51",
+            color: "mediumpurple",
+            borderColor: "mediumpurple",
             //   borderRadius: "2px",
             // width: "220px",
             height: "48px",

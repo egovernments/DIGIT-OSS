@@ -41,7 +41,7 @@ class ActionButton extends React.Component {
             return (
                 <Tooltip title= {text ? text : "info"} classes={{ tooltip: classes.lightTooltip }} placement="top">
                     <div style={{marginRight: '2px'}}>
-                        <Button disabled={disabled} variant="contained" onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${classes.actionButton1} ${clas}`} onClick={this.handleClick.bind(this)} style={{color: 'white', backgroundColor: '#fe7a51', fontSize:this.props.fontSize ? this.props.fontSize : ''}}>
+                        <Button disabled={disabled} variant="contained" onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${classes.actionButton1} ${clas}`} onClick={this.handleClick.bind(this)} style={{color: 'white', backgroundColor: 'mediumpurple', fontSize:this.props.fontSize ? this.props.fontSize : ''}}>
                             {text}
                         </Button>
                     </div>
@@ -55,7 +55,7 @@ class ActionButton extends React.Component {
                         <RefreshIcon
                         disabled={disabled} onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${clas}`} onClick={this.handleClick.bind(this)} 
                         style={{
-                            color:this.state.buttonHovered ? '#FE7A51': "#00000099", 
+                            color:this.state.buttonHovered ? 'mediumpurple': "#00000099", 
                             fontSize:"32px"}}/>
                             // this.props.fontSize ? this.props.fontSize : ''}}/>
                         :<Button disabled={disabled} onMouseLeave={()=>{this.setState({buttonHovered: false})}} onMouseEnter={()=>{this.setState({buttonHovered: true})}} className={`${classes.actionButton1} ${clas}`} onClick={this.handleClick.bind(this)} style={{color:this.state.buttonHovered ? 'white': "#96989a", fontSize:this.props.fontSize ? this.props.fontSize : ''}}>

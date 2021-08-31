@@ -85,7 +85,7 @@ const downloadprintMenu = (
             rightIcon: "arrow_drop_down",
             props: {
               variant: "outlined",
-              style: { height: "60px", color: "#FE7A51", marginRight: "5px" },
+              style: { height: "60px", color: "mediumpurple", marginRight: "5px" },
               className: "tl-download-button",
             },
             menu: downloadMenu,
@@ -102,7 +102,7 @@ const downloadprintMenu = (
             rightIcon: "arrow_drop_down",
             props: {
               variant: "outlined",
-              style: { height: "60px", color: "#FE7A51" },
+              style: { height: "60px", color: "mediumpurple" },
               className: "tl-print-button",
             },
             menu: printMenu,

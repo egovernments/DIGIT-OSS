@@ -204,8 +204,8 @@ export const NOCApplication = getCommonCard({
         props: {
           variant: "outlined",
           style: {
-            color: "#FE7A51",
-            borderColor: "#FE7A51",
+            color: "mediumpurple",
+            borderColor: "mediumpurple",
             width: "220px",
             height: "48px",
             margin: "8px",

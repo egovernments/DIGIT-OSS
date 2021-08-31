@@ -4,7 +4,7 @@ const styles = theme => ({
         fontFamily: 'Roboto',
         fontSize: '16px',
         fontWeight: '500',
-        color: '#fe7a51',
+        color: 'mediumpurple',
         margin: '12px !important'
     },
     title: {

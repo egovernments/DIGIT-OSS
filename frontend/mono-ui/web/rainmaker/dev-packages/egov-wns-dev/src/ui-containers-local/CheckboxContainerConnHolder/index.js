@@ -12,9 +12,9 @@ import { toggleConnHolderDetails } from "../CheckboxContainer/toggleFeilds"
 
 const styles = {
   root: {
-    color: "#FE7A51",
+    color: "mediumpurple",
     "&$checked": {
-      color: "#FE7A51"
+      color: "mediumpurple"
     }
   },
   checked: {}

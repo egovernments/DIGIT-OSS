@@ -14,9 +14,9 @@ body {
 
 .bx--progress .bx--progress-step--complete
 {
-  background-color: "#FE7A51"
+  background-color: "mediumpurple"
 }
 
 .bx--progress .bx--progress-step--current{
-  background-color: "#FE7A51"
+  background-color: "mediumpurple"
 }

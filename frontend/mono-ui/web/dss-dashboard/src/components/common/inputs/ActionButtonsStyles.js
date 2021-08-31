@@ -272,7 +272,7 @@ const actionButtonStyles = theme => ({
         textTransform: 'uppercase',
         marginTop: 20,
         '&:hover': {
-            backgroundColor: '#FE7A51',
+            backgroundColor: 'mediumpurple',
             color: variables.whiteColor
         }
 

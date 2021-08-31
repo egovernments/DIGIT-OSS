@@ -1,8 +1,8 @@
 const themeObject = {
   palette: {
     primary: {
-      main: "#FE7A51",
-      dark: "#DB6844",
+      main: "mediumpurple",
+      dark: "#7059AB",
       contrastText: "#fff",
     },
     secondary: {
