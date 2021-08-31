@@ -522,7 +522,44 @@ public class UserService {
 		}
 		return userDetailResponse;
 	}
+    
+    /*
+		Method to update user mobile number
+	*/
+    
+	public void updateUserMobileNumber(PropertyRequest request,Map <String, String> uuidToMobileNumber) {
+		
+		Property property = request.getProperty();
+		RequestInfo requestInfo = request.getRequestInfo();
 
+		property.getOwners().forEach(owner -> {
 
+			UserDetailResponse userDetailResponse = searchedSingleUserExists(owner, requestInfo);
+			StringBuilder uri = new StringBuilder(userHost);
+			 
+				owner.setId(userDetailResponse.getUser().get(0).getId());
+				uri = uri.append(userContextPath).append(userUpdateEndpoint);
+			
+			userDetailResponse = userCall(new CreateUserRequest(requestInfo, owner), uri);
+			setOwnerFields(owner, userDetailResponse, requestInfo);
+		});
+				
+	}
+	
+	/*
+	 	Method to check if the searched user exists
+	*/
+
+	private UserDetailResponse searchedSingleUserExists(OwnerInfo owner, RequestInfo requestInfo) {
+		
+		UserSearchRequest userSearchRequest = getBaseUserSearchRequest(owner.getTenantId(), requestInfo);
+		userSearchRequest.setUserType(owner.getType());
+		Set <String> uuids = new HashSet<String>();
+		uuids.add(owner.getUuid());
+		userSearchRequest.setUuid(uuids);
+		
+        StringBuilder uri = new StringBuilder(userHost).append(userSearchEndpoint);
+        return userCall(userSearchRequest,uri);
+	}
 
 }
