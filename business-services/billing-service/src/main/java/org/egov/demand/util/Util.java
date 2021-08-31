@@ -346,7 +346,28 @@ public class Util {
 		
 		return query.toString();
 	}
-
+	
+	/**
+	 * Method to fetch the state name from the tenantId
+	 * 
+	 * @param query
+	 * @param tenantId
+	 * @return
+	 */
+	public static String replaceSchemaPlaceholder(String query, String tenantId){
+		
+		String finalQuery = null;
+		String stateLevelTenant = tenantId;
+		if (stateLevelTenant.contains("\\.")) {
+			stateLevelTenant = stateLevelTenant.split("\\.")[1];
+			finalQuery = query.replace(Constants.SCHEMA_PLACEHOLDER, stateLevelTenant);
+		} else {
+			stateLevelTenant = "";
+			finalQuery = query.replace(Constants.SCHEMA_PLACEHOLDER.concat("."), stateLevelTenant);
+		}
+		return finalQuery;
+	}
+	
 	private String createPlaceHolderForList(Set<String> ids) {
 		
 		StringBuilder builder = new StringBuilder();

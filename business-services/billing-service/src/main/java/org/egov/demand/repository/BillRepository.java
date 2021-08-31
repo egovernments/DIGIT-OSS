@@ -60,6 +60,7 @@ public class BillRepository {
 		
 		List<Object> preparedStatementValues = new ArrayList<>();
 		String queryStr = billQueryBuilder.getBillQuery(billCriteria, preparedStatementValues);
+		queryStr = Util.replaceSchemaPlaceholder(queryStr, billCriteria.getTenantId());
 		log.debug("query:::"+queryStr+"  preparedStatementValues::"+preparedStatementValues);
 		
 		return jdbcTemplate.query(queryStr, preparedStatementValues.toArray(), searchBillRowMapper);

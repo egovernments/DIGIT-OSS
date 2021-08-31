@@ -55,7 +55,7 @@ public class CollectionConfigQueryBuilder {
 
 
 	private static final String BASE_QUERY = "SELECT c.keyname as key, cv.value as value "
-			+ "FROM egcl_configuration c JOIN egcl_configurationvalues cv ON c.id = cv.keyid";
+			+ "FROM {{SCHEMA}}.egcl_configuration c JOIN egcl_configurationvalues cv ON c.id = cv.keyid";
 
 	@SuppressWarnings("rawtypes")
 	public String getQuery(CollectionConfigGetRequest collectionConfigGetRequest, List preparedStatementValues) {

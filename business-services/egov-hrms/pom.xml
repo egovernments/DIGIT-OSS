@@ -94,11 +94,11 @@
   </dependencies>
   <repositories>
     <repository>
-    <repository>
 			<id>repo.egovernments.org</id>
 			<name>eGov DIGIT Releases Repository</name>
 			<url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
     </repository>
+    <repository>
       <id>repo.egovernments.org</id>
       <name>eGov ERP Releases Repository</name>
       <url>https://nexus-repo.egovernments.org/nexus/content/repositories/releases/</url>

@@ -8,17 +8,17 @@ import org.springframework.util.CollectionUtils;
 @Component
 public class AmendmentQueryBuilder {
 	
-	public static final String AMENDMENT_UPDATE_QUERY = "UPDATE egbs_amendment SET status=:status, amendeddemandid=:amendeddemandid,"
+	public static final String AMENDMENT_UPDATE_QUERY = "UPDATE {{SCHEMA}}.egbs_amendment SET status=:status, amendeddemandid=:amendeddemandid,"
 			+ " lastmodifiedby=:lastmodifiedby,lastmodifiedtime=:lastmodifiedtime, additionaldetails=:additionaldetails "
 			+ " WHERE tenantid=:tenantid AND amendmentid=:amendmentid;";
 	
-	public static final String AMENDMENT_INSERT_QUERY = "INSERT INTO egbs_amendment (id, tenantid, amendmentid, businessservice,"
+	public static final String AMENDMENT_INSERT_QUERY = "INSERT INTO {{SCHEMA}}.egbs_amendment (id, tenantid, amendmentid, businessservice,"
 			+ " consumercode, amendmentreason, reasondocumentnumber, status, effectivetill, effectivefrom,"
 			+ " amendeddemandid, createdby, createdtime, lastmodifiedby, lastmodifiedtime, additionaldetails) "
 			+ "	VALUES (:id, :tenantid, :amendmentid, :businessservice, :consumercode, :amendmentreason, :reasondocumentnumber, :status,"
 			+ " :effectivetill, :effectivefrom, :amendeddemandid, :createdby, :createdtime, :lastmodifiedby, :lastmodifiedtime, :additionaldetails);";
 
-	public static final String AMENDMENT_TAXDETAIL_INSERT_QUERY = "INSERT INTO egbs_amendment_taxdetail(id, amendmentid, taxheadcode, taxamount)"
+	public static final String AMENDMENT_TAXDETAIL_INSERT_QUERY = "INSERT INTO {{SCHEMA}}.egbs_amendment_taxdetail(id, amendmentid, taxheadcode, taxamount)"
 			+ " VALUES (:id, :amendmentid, :taxheadcode, :taxamount);";
 
 	public static final String DOCUMET_INSERT_QUERY = "INSERT INTO egbs_document(id, amendmentid, documenttype, filestoreid, documentuid, status)"
@@ -29,10 +29,10 @@ public class AmendmentQueryBuilder {
 			+ " effectivefrom, amendeddemandid, createdby, createdtime, lastmodifiedby, lastmodifiedtime, additionaldetails,"
 			+ " amdl.id as detailid, amdl.amendmentid as detailamendmentid, taxheadcode, taxamount, doc.id as docid,"
 			+ " doc.amendmentid as docamendmentid, documentType, fileStoreid, documentuid, doc.status as docstatus "
-			+ " FROM egbs_amendment amendment "
+			+ " FROM {{SCHEMA}}.egbs_amendment amendment "
 			+ " INNER JOIN "
-			+ " egbs_amendment_taxdetail amdl ON amendment.id = amdl.amendmentid " 
-			+ "	INNER JOIN egbs_document doc ON amendment.id = doc.amendmentid WHERE ";
+			+ " {{SCHEMA}}.egbs_amendment_taxdetail amdl ON amendment.id = amdl.amendmentid "
+			+ "	INNER JOIN {{SCHEMA}}.egbs_document doc ON amendment.id = doc.amendmentid WHERE ";
 
 	
 	public String getSearchQuery(AmendmentCriteria amendmentCriteria, MapSqlParameterSource searchParamMap) {
