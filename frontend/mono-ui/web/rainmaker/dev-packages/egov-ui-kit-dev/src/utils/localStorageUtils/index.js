@@ -52,22 +52,10 @@ export const setTenantId = (tenantId) => {
       const userObj=getUserSearchedResponse();
       let user=userObj&&userObj.user&&userObj.user[0] || {};
       user={...user,tenantId:tenantId};
-      user=convertUserForSingleInstance(user);
       localStorage.setItem("citizen.userRequestObject",JSON.stringify({...user}));
       setUserInfo(JSON.stringify({...user}));
    }
 };
-
-/* TO CONVERT USER TO CENTRAL INSTANCE */
-export const convertUserForSingleInstance=(user={})=>{
-  let tenantId=user.permanentCity;
-  localStorage.setItem("Citizen.tenant-id",tenantId);
-  localStorage.setItem("tenant-id",tenantId);
-  localStorage.setItem("Employee.tenant-id",tenantId);
-  user.tenantId=tenantId;
-  return {...user}
-}
-
 export const setLocale = (locale) => {
   localStorageSet("locale", locale);
   localStorage.setItem("locale", locale);
