@@ -38,6 +38,7 @@ const styles = (theme) => ({
     justifyContent: "center",
     display: "flex",
     cursor: "pointer",
+    whiteSpace: "nowrap"
   },
   icon: {
     color: "#fe7a51",
