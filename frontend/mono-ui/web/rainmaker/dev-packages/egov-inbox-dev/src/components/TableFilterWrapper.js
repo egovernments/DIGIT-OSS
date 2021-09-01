@@ -161,24 +161,24 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
             </div>
         </div>
         <div style={{ backgroundColor: "white" }}>
-            <div style={{ display: "flex", height: '45px', alignItems: "center" }}>
-                <span className={`assigned-inbox ${filters.assigned_to_all && "jk-selected-header"}`} onClick={() => {
+            <div className={"jk-inbox-tab-header-holder"}>
+                <span className={`assigned-inbox inb-all-tab ${filters.assigned_to_all && "jk-selected-header"}`} onClick={() => {
                     setFiltersDispatch({ type: 'assigned_to_all' })
                 }}>
                     {t("COMMON_INBOX_TAB_ALL")}
                 </span>
-                <span className={`assigned-inbox ${filters.assigned_to_me && "jk-selected-header"}`} onClick={() => {
+                <span className={`assigned-inbox inb-me-tab ${filters.assigned_to_me && "jk-selected-header"}`} onClick={() => {
                     setFiltersDispatch({ type: 'assigned_to_me' })
                 }}>
                     {t("COMMON_INBOX_TAB_ASSIGNED_TO_ME")}
                 </span>
-                <span className={`assigned-inbox ${filters.esclated && "jk-selected-header"}`} onClick={() => {
+                <span className={`assigned-inbox inb-esc-tab ${filters.esclated && "jk-selected-header"}`} onClick={() => {
                     !esclationData.loaded && !esclationData.load && setEsclationData({ loaded: false, load: true, data: [] });
                     setFiltersDispatch({ type: 'esclated' })
                 }}>
                     {t("COMMON_INBOX_TAB_ESCALATED")}
                 </span>
-                {isMobile && <span className="jk-inbox-pointer" onClick={() => setSortOrder(state => !state)} >{sort ? <SortDown /> : <SortUp />}</span>}
+                {isMobile && <span className="jk-inbox-pointer jk-sort-ico" onClick={() => setSortOrder(state => !state)} >{sort ? <SortDown /> : <SortUp />}</span>}
             </div>
             <TablePaginationWrapper sort={sort} data={[...filteredData.sort((x, y) => sort ? x.other.sla - y.other.sla : y.other.sla - x.other.sla)]} t={t} setSortOrder={setSortOrder} localityData={localityData}{...rest}></TablePaginationWrapper>
         </div>
