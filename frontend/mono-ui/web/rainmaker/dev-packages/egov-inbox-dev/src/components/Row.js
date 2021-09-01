@@ -26,7 +26,7 @@ const Row = React.memo((props) => {
                         <span style={{ textAlign: "left" }}>
                             {isSLA ? "SLA" : t(key)}
                         </span> {' : '}
-                        <span style={{ textAlign: "right", color: "rgba(0, 0, 0, 0.97)" }}>
+                        <span style={isSLA?{ textAlign: "right", color: "rgba(0, 0, 0, 0.97)" ,display: "inline-block"}:{ textAlign: "right", color: "rgba(0, 0, 0, 0.97)" }}>
                             {isSLA ? (<span className={"jk-inbox-sla-wrapper"}>
                                 <span style={{ backgroundColor: props.other.color }} className={"inbox-cell-badge-primary"}>
                                     {props[key]}
