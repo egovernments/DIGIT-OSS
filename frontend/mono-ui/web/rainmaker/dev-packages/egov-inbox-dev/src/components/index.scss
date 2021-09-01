@@ -259,6 +259,10 @@ select{
 }
 
 @media only screen and (max-width: 768px) {
+  .history-wrapper-sm{
+    padding: 5px 15px;
+    display: flex;
+  }
   .jk-inbox-first-element{
     flex-direction: column;
   }
@@ -277,7 +281,7 @@ select{
   justify-content: unset;
 }
 .jk-inbox-sla-wrapper{
-  display: inline-flex;
+  display: contents;
   width: 100%;
 }
 }

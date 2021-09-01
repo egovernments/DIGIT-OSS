@@ -40,8 +40,8 @@ const Row = React.memo((props) => {
                     </span>)
                 })
             }
-            {<span style={{ padding: '5px 15px 5px 15px;' }} key={7} className={`row-${7}`}> <span style={{ textAlign: "left" }}>
-                {t('CS_COMMON_VIEW_HISTORY_LINK')} :
+            {<span key={7} className={`row-7 history-wrapper-sm`}> <span style={{ textAlign: "left" }}>
+                {t('CS_COMMON_VIEW_HISTORY_LINK')} {' ' }
             </span> <span className="jk-inbox-pointer" onClick={() => props.historyClick(id)}>{props.historyComp}</span></span>}
         </div>
     }
