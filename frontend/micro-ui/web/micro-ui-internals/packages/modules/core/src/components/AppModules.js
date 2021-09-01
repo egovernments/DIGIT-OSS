@@ -32,14 +32,16 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
   });
 
   return (
-    <Switch>
-      {appRoutes}
-      <Route path={`${path}/login`}><EmployeeLogin /></Route>
-      <Route path={`${path}/forgot-password`}><ForgotPassword /></Route>
-      <Route path={`${path}/change-password`}> <ChangePassword /></Route>
-      <Route>
-        <AppHome userType={userType} modules={modules} />
-      </Route>
-    </Switch>
+    <div class="ground-container">
+      <Switch>
+        {appRoutes}
+        <Route path={`${path}/login`}><EmployeeLogin /></Route>
+        <Route path={`${path}/forgot-password`}><ForgotPassword /></Route>
+        <Route path={`${path}/change-password`}> <ChangePassword /></Route>
+        <Route>
+          <AppHome userType={userType} modules={modules} />
+        </Route>
+      </Switch>
+    </div>
   );
 };

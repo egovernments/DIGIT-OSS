@@ -129,7 +129,7 @@ export const StoreService = {
     initData.modules.push({
       module:"Engagement",
       code:"Engagement",
-      tenants:[]
+      tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
     })
 
 

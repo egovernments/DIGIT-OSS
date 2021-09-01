@@ -11,20 +11,25 @@ import EnagementDocName from "./components/engagement-doc-name"
 import EngagementDocCategory from "./components/engagement-doc-category"
 import EngagementDocDescription from "./components/engagement-doc-description"
 import EngagementDocUploadDocument from "./components/engagement-doc-documents"
+import NewEvent from "./pages/employee/Events/NewEvent";
+import Response from "./pages/employee/Events/NewEvent/Response";
+import Inbox from "./pages/employee/Events/Inbox";
+import EventForm from "./components/Events/EventForm";
+import SelectEventGeolocation from "./components/Events/SelectGeoLocation";
 
-
-const EmployeeApp = ({ path, url, userType }) => {
+const EmployeeApp = ({ path, url, userType, tenants }) => {
   const location = useLocation();
 
   return (
-    <Switch>
-      <React.Fragment>
-        <div className="ground-container">
-            <Route exact path={`${path}/docs`} component={()=><Documents {...{path}} />} />
-            <Redirect to={`${path}/docs`} />
-        </div>
-      </React.Fragment>
-    </Switch>
+    <div className="ground-container">
+      <Switch>
+        <Route exact path={`${path}/docs`} component={()=><Documents {...{path}} />} />
+        <Route path={`${path}/event/inbox`}><Inbox tenants={tenants} /></Route>
+        <Route path={`${path}/event/new-event`}><NewEvent /></Route>
+        <Route path={`${path}/event/response`} component={(props) => <Response {...props} />} />
+        <Redirect to={`${path}/docs`} />
+      </Switch>
+    </div>
   );
 };
 
@@ -42,7 +47,7 @@ const EngagementModule = ({ stateCode, userType, tenants }) => {
   if (userType === "citizen") {
     return null
   } else {
-    return <EmployeeApp path={path} url={url} userType={userType} />;
+    return <EmployeeApp path={path} url={url} userType={userType} tenants={tenants} />;
   }
 };
 
@@ -87,6 +92,8 @@ const componentsToRegister = {
     EngagementDocCategory,
     EngagementDocDescription,
     EngagementDocUploadDocument,
+    EventForm,
+    SelectEventGeolocation
 };
 
 export const initEngagementComponents = () => {

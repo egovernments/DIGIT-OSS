@@ -114,8 +114,9 @@ const Urls = {
     create: "/edcr/rest/dcr/scrutinize",
   },
 
-  events:{
+  events: {
     search: "/egov-user-event/v1/events/_search",
+    create: "/egov-user-event/v1/events/_create"
 
   },
 

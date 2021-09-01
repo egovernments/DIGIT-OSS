@@ -51,10 +51,11 @@ export const FormComposer = (props) => {
       case "date":
       case "number":
       case "password":
+      case "time":
         // if (populators.defaultValue) setTimeout(setValue(populators?.name, populators.defaultValue));
         return (
           <div className="field-container">
-            {populators.componentInFront ? (
+            {populators?.componentInFront ? (
               <span className={`component-in-front ${disable && "disabled"}`}>{populators.componentInFront}</span>
             ) : null}
             <TextInput

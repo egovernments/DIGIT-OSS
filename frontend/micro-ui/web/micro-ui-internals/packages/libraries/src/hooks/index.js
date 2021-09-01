@@ -23,6 +23,7 @@ import useStore from "./useStore";
 import { useTenants } from "./useTenants"
 import useInbox from "./useInbox"
 import useEvents from "./events";
+import useCreateEvent from "./events/useCreateEvent";
 import useNewInboxGeneral from "./useInboxGeneral/useNewInbox";
 
 import useComplaintDetails from "./pgr/useComplaintDetails";
@@ -125,6 +126,7 @@ import useOBPSDocumentSearch from "./obps/useOBPSDocumentSearch";
 import useObpsAPI from "./obps/useObpsAPI";
 import useBPADetails from "./obps/useBPADetails"
 
+import useEventInbox from "./events/useEventInbox";
 import {useEngagementMDMS} from "./engagement/useMdms"
 
 
@@ -245,6 +247,10 @@ const obps = {
   useBPADetails
 };
 
+const events = {
+  useInbox: useEventInbox,
+  useCreateEvent
+}
 const engagement = {
   useMDMS: useEngagementMDMS,
 }
@@ -284,6 +290,7 @@ const Hooks = {
   tl,
   receipts,
   obps,
+  events,
   engagement
 };
 
