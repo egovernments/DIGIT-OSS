@@ -73,7 +73,7 @@ public class UtilityConstants {
 	
 	public static StringBuffer EMAIL_STRATING_CONTENT=new StringBuffer("<html><head><style type=\"text/css\" media=\"screen\">table { border-collapse:collapse;border:1px solid;}  table td {border:1px solid #000000;}</style></head><body><h4 style=\"color:#500050\"> Hi, <br> <br>Thanks for taking the time out to fill in the details required to generate user credentials for using the demo instance. Please find the role-based login credentials for individual modules in the table below<br>The default password for all users is: eGov@123<br></h4>\r\n");
 	
-	public static String EMAIL_REGARDS="<p style=\"margin-right:50px;\">Note: Use your mobile number submitted in Access DIGIT Credentials form to access DSO role for FSM Application <br>"
+	public static String EMAIL_REGARDS="<p style=\"margin-right:50px;\">Note: Use your mobile number submitted in Access DIGIT Credentials form to access DSO role for Faecal Sludge Management Application <br>"
 			+ " Login url for DSO role is - <U> https://staging.digit.org/digit-ui/citizen/login </U>  <br> <br> Thank you, <br>eGov Team</p>";
 	
 	public static StringBuffer EMAIL_ENDING_CONTENT=new StringBuffer("</body></html>");
