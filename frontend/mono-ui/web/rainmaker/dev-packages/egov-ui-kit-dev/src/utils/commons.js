@@ -56,7 +56,7 @@ export const transformById = (payload, id) => {
       }
 
       return result;
-    }, {})
+    }, { })
   );
 };
 
@@ -74,7 +74,7 @@ export const getSingleCodeObject = (dataKey, tempObj, MDMSdata, keys) => {
 }
 
 export const getCategoryObject = (categoryCode, MDMSdata, dataKey, key, parentKey, parentKeyValue) => {
-  let tempObj = {}
+  let tempObj = { }
   tempObj[categoryCode] = MDMSdata[dataKey][key];
   tempObj[categoryCode].code = categoryCode;
   tempObj[categoryCode][parentKey] = parentKeyValue;
@@ -102,7 +102,7 @@ export const getTransformedDropdown = (MDMSdata, dataKeys) => {
   dataKeys.forEach(dataKey => {
     if (MDMSdata && MDMSdata.hasOwnProperty(dataKey)) {
       let keys = MDMSdata[dataKey] && Object.keys(MDMSdata[dataKey]);
-      let tempObj = {};
+      let tempObj = { };
       if (keys && keys.length > 0) {
         if (dataKey !== "UsageCategory") {
           MDMSdata[dataKey] = getSingleCodeObject(dataKey, tempObj, MDMSdata, keys);
@@ -269,7 +269,7 @@ const getCurrLocation = () => {
   return new Promise((resolve) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        const currLoc = {};
+        const currLoc = { };
         currLoc.lat = position.coords.latitude.toFixed(6);
         currLoc.lng = position.coords.longitude.toFixed(6);
         resolve(currLoc);
@@ -285,7 +285,7 @@ export const getCurrentAddress = async () => {
     return axios.get(url).then((res) => {
       if (res.data.status === "OK") {
         if (res.data.results[0]) {
-          var currAddress = {};
+          var currAddress = { };
           currAddress.lat = currLoc.lat;
           currAddress.lng = currLoc.lng;
           currAddress.address = res.data.results[0].formatted_address;
@@ -348,7 +348,7 @@ export const prepareFormData = (form) => {
       value = ((form.files && form.files[fieldKey]) || []).map((fieldFile) => fieldFile.fileStoreId);
     }
     return set(formData, jsonPath, value);
-  }, {});
+  }, { });
 };
 
 export const getUlbGradeLabel = (ulbGrade) => {
@@ -576,7 +576,7 @@ export const transformComplaintForComponent = (complaints, role, employeeById, c
       complaintStatus: complaintDetail.status && getTransformedStatus(complaintDetail.status),
       rawStatus: complaintDetail.status && complaintDetail.status,
       address: complaintDetail.address ? complaintDetail.address : "",
-      addressDetail: complaintDetail.addressDetail ? complaintDetail.addressDetail : {},
+      addressDetail: complaintDetail.addressDetail ? complaintDetail.addressDetail : { },
       reassign: complaintDetail.status === "reassignrequested" ? true : false,
       reassignRequestedBy:
         complaintDetail.status === "reassignrequested"
@@ -639,8 +639,8 @@ export const fetchDropdownData = async (dispatch, dataFetchConfig, formKey, fiel
   const { url, action, requestBody, queryParams, hierarchyType } = dataFetchConfig;
   try {
     if (url) {
-      let localizationLabels = {};
-      if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+      let localizationLabels = { };
+      if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || { };
       const payloadSpec = await httpRequest(url, action, queryParams || [], requestBody);
       const dropdownData = boundary
         ? // ? jp.query(payloadSpec, dataFetchConfig.dataPath)
@@ -653,7 +653,7 @@ export const fetchDropdownData = async (dispatch, dataFetchConfig, formKey, fiel
         dropdownData &&
         dropdownData.length > 0 &&
         dropdownData.reduce((ddData, item) => {
-          let option = {};
+          let option = { };
           if (fieldKey === "mohalla" && item.code) {
             const mohallaCode = `${queryParams[0].value.toUpperCase().replace(/[.]/g, "_")}_${hierarchyType}_${item.code
               .toUpperCase()
@@ -799,7 +799,7 @@ const setDocuments = (fileUrl) => {
 
 export const getTransformedNotifications = async (notifications) => {
   let data = [];
-  let fileStoreIdArray = {};
+  let fileStoreIdArray = { };
   let fieStoreIdString = [];
   for (var i = 0; i < notifications.length; i++) {
     let item = notifications[i];
@@ -1090,7 +1090,7 @@ export const searchConsumer = async (items, queryObject) => {
     "_search",
     queryObject
   );
-  let consumerDetails =  payload && payload.WaterConnection ? payload.WaterConnection : payload.SewerageConnections;
+  let consumerDetails = payload && payload.WaterConnection ? payload.WaterConnection : payload.SewerageConnections;
   return consumerDetails;
 }
 
@@ -1126,10 +1126,10 @@ export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessSer
 
 
 
-export const getPaymentSearchAPI = (businessService='')=>{
-  if(businessService=='-1'){
+export const getPaymentSearchAPI = (businessService = '') => {
+  if (businessService == '-1') {
     return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
-  }else if (process.env.REACT_APP_NAME === "Citizen") {
+  } else if (process.env.REACT_APP_NAME === "Citizen") {
     return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
   }
   return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
@@ -1139,9 +1139,21 @@ export const getFetchBillAPI = () => {
   return `${FETCHBILL.GET.URL}`
 }
 
+/* TO CONVERT USER TO CENTRAL INSTANCE */
+export const convertUserForSingleInstance = (user = { }) => {
+  let tenantId = user.permanentCity;
+  localStorage.setItem("Citizen.tenant-id", tenantId);
+  localStorage.setItem("tenant-id", tenantId);
+  user.tenantId = tenantId;
+  return { ...user }
+}
 
 
-export const getUserSearchedResponse =()=>{
-  const userObject=JSON.parse(localStorage.getItem("citizen.userRequestObject"))||{};
-  return {user:[userObject]};
+
+export const getUserSearchedResponse = () => {
+  let userObject = JSON.parse(localStorage.getItem("citizen.userRequestObject")) || { };
+  if (process.env.REACT_APP_NAME == "Citizen") {
+    userObject = convertUserForSingleInstance(userObject);
+  }
+  return { user: [userObject] };
 }
