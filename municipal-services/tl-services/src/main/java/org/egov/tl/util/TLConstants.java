@@ -176,7 +176,7 @@ public class TLConstants {
 
     public static final String ACTION_EXPIRE  = "EXPIRE";
     
-    public static final String ACTION_MANUALLYEXPIRE = "MANUALLYEXPIRE";
+    public static final String ACTION_MANUALLYEXPIRE = "MANUALEXPIRE";
 
     public static final String STATUS_INITIATED = "INITIATED";
 
@@ -194,7 +194,7 @@ public class TLConstants {
     
     public static final String STATUS_EXPIRED="EXPIRED";
     
-    public static final String STATUS_MANUALLYEXPIRED = "MANUALLYEXPIRED";
+    public static final String STATUS_MANUALLYEXPIRED = "MANUALEXPIRED";
 
     public static final String BILL_AMOUNT_JSONPATH = "$.Bill[0].totalAmount";
 

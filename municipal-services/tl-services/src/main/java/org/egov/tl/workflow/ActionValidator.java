@@ -112,13 +112,9 @@ public class ActionValidator {
         Boolean isCitizen = false;
         
         User user = requestInfo.getUserInfo();
-        List<Role> roles = user.getRoles();
         
-        for(Role role : roles) {
-        	if (role.getCode().toString().equalsIgnoreCase("CITIZEN")) {
-        		isCitizen = true;
-        		break;
-        	}
+        if (user.getType().toString().equalsIgnoreCase("CITIZEN")) {
+        	isCitizen = true;
         }
     	    	    	
     	Map<String,String> errorMap = new HashMap<>();
