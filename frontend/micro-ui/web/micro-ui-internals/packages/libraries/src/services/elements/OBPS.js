@@ -68,4 +68,15 @@ export const OBPSService = {
       method: "POST",
       data: details,
     }),
+    BPAREGCreate: (details, tenantId) =>
+    Request({
+      url: Urls.obps.bpaRegCreate,
+      data: details,
+      useCache: false,
+      setTimeParam: false,
+      userService: true,
+      method: "POST",
+      params: {},
+      auth: true,
+    }),
 }

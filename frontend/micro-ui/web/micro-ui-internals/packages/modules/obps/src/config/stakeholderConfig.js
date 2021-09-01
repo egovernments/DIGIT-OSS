@@ -35,11 +35,55 @@ export const newConfig = [
             cardText: "",
             submitBarLabel: "CS_COMMONS_NEXT",
           },
-          nextStep: "stakeholder-docs-required",
+          nextStep: "Permanent-address",
           key: "LicneseDetails",
           withoutLabel: true,
           hideInEmployee: true,
         },
+        {
+            type: "component",
+            route: "Permanent-address",
+            isMandatory: true,
+            component: "PermanentAddress",
+            texts: {
+              headerCaption: "BPA_NEW_ADDRESS_HEADER_DETAILS",
+              header: "BPA_LICENSEE_PERMANENT_LABEL",
+              cardText: "BPA_LICENSEE_PERMANENT_TEXT",
+              submitBarLabel: "CS_COMMONS_NEXT",
+            },
+            nextStep: "correspondence-address",
+            key: "LicneseDetails",
+            withoutLabel: true,
+            hideInEmployee: true,
+          },
+        {
+            type: "component",
+            route: "correspondence-address",
+            isMandatory: true,
+            component: "CorrospondenceAddress",
+            texts: {
+              headerCaption: "BPA_NEW_ADDRESS_HEADER_DETAILS",
+              header: "BPA_LICENSEE_CORRESPONDENCE_LABEL",
+              cardText: "BPA_LICENSEE_CORRESPONDENCE_TEXT",
+              submitBarLabel: "CS_COMMONS_NEXT",
+            },
+            nextStep: "stakeholder-document-details",
+            key: "LicneseDetails",
+            withoutLabel: true,
+            hideInEmployee: true,
+        },
+        {
+            route: "stakeholder-document-details",
+            component: "StakeholderDocuments",
+            nextStep: "stakeholder-docs-required",
+            key: "documents",
+            texts: {
+              headerCaption: "BPA_DOC_DETAILS_SUMMARY",
+              header: "BPA_LICENSEE_DOCUMENT_DETAILS_HEADER",
+              submitBarLabel: "CS_COMMON_NEXT"
+            }
+        },
+
 
       ]
     }

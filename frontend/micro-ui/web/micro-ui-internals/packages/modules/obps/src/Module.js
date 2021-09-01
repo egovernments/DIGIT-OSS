@@ -22,6 +22,9 @@ import OCUploadPlanDiagram from "./pageComponents/OCUploadPlanDiagram";
 
 import LicenseType from "./pageComponents/LicenseType";
 import LicenseDetails from "./pageComponents/LicenseDetails";
+import CorrospondenceAddress from "./pageComponents/CorrospondenceAddress";
+import PermanentAddress from "./pageComponents/PermanentAddress";
+import StakeholderDocuments from "./pageComponents/StakeholderDocuments";
 
 const OBPSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "bpa";
@@ -80,7 +83,10 @@ const componentsToRegister = {
   OCUploadPlanDiagram,
   StakeholderDocsRequired,
   LicenseType,
-  LicenseDetails
+  LicenseDetails,
+  CorrospondenceAddress,
+  PermanentAddress,
+  StakeholderDocuments
 }
 
 export const initOBPSComponents = () => {

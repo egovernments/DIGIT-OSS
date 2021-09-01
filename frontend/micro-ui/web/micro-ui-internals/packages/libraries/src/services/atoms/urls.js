@@ -107,7 +107,8 @@ const Urls = {
     updateNOC:"/noc-services/v1/noc/_update",
     update:"/bpa-services/v1/bpa/_update",
     bpaSearch: "/bpa-services/v1/bpa/_search",
-    bpaRegSearch: "/tl-services/v1/BPAREG/_search"
+    bpaRegSearch: "/tl-services/v1/BPAREG/_search",
+    bpaRegCreate: "/tl-services/v1/BPAREG/_create",
   },
 
   edcr: {

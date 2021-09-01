@@ -10,7 +10,6 @@ const StakeholderDocsRequired = ({ onSelect, onSkip, config }) => {
   const history = useHistory();
   const { data, isLoading } = Digit.Hooks.obps.useMDMS(state, "StakeholderRegistraition", "TradeTypetoRoleMapping");
 
-
   if (isLoading) {
     return (
       <Loader />

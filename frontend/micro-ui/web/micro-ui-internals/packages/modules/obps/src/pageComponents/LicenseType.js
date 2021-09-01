@@ -16,7 +16,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
       let found=false;
       data?.StakeholderRegistraition?.TradeTypetoRoleMapping.map((ob) => {
         found = list.some(el => el.i18nKey.includes(ob.tradeType.split(".")[0]));
-        if(!found)list.push({role:ob.role,i18nKey:`TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`})
+        if(!found)list.push({role:ob.role,i18nKey:`TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, tradeType:ob.tradeType})
       } );
       return list;
   }
