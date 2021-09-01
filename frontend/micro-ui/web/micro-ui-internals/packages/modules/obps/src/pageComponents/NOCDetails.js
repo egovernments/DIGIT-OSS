@@ -88,7 +88,7 @@ const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setForm
     const handleSubmit = () => {
         let nocDocument = formData.nocDocuments;
         let nocDocumentStep;
-        nocDocumentStep = { ...nocDocument, nocDocuments: nocDocuments, NocDetails: nocDatils,nocTaxDocuments:nocTaxDocuments  };
+        nocDocumentStep = { ...nocDocument, nocDocuments: nocDocuments, NocDetails: nocDatils, nocTaxDocuments: nocTaxDocuments };
         onSelect(config.key, nocDocumentStep);
     };
     const onSkip = () => onSelect();
@@ -222,6 +222,7 @@ function SelectDocument({
                 </div>
             </div>
             <UploadFile
+                id={"noc-doc"}
                 extraStyleName={"propertyCreate"}
                 accept=".jpg,.png,.pdf"
                 onUpload={selectfile}

@@ -73,6 +73,7 @@ const SelectDocuments = ({ t, config, onSelect, userType, formData, setError: se
             document={document}
             action={action}
             t={t}
+            id={`pt-document-${index}`}
             error={error}
             setError={setError}
             setDocuments={setDocuments}
@@ -104,6 +105,7 @@ function SelectDocument({
   config,
   formState,
   fromRawData,
+  id,
 }) {
   const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0];
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -344,6 +346,7 @@ function SelectDocument({
             onDelete={() => {
               setUploadedFile(null);
             }}
+            id={id}
             message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
             textStyles={{ width: "100%" }}
             inputStyles={{ width: "280px" }}

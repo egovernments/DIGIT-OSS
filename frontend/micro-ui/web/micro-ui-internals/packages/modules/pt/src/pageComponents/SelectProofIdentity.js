@@ -154,6 +154,7 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData, ownerInd
         placeholder={t(`PT_MUTATION_SELECT_DOC_LABEL`)}
       />
       <UploadFile
+      id={"pt-doc"}
         extraStyleName={"propertyCreate"}
         accept=".jpg,.png,.pdf"
         onUpload={selectfile}

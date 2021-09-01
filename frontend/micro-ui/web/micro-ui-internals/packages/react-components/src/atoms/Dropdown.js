@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
+import React, { useEffect, useRef, useState } from "react";
 import { ArrowDown } from "./svgindex";
 
 const TextField = (props) => {
@@ -28,6 +28,19 @@ const TextField = (props) => {
   function broadcastToClose() {
     props.dropdownDisplay(false);
   }
+  const keyChange = (e) => {
+    if (e.key == "ArrowDown") {
+      props.setOptionIndex(state =>state+1== props.addProps.length?0:state+1);
+      e.preventDefault();
+    } else if (e.key == "ArrowUp") {
+      props.setOptionIndex(state =>  state!==0? state - 1: props.addProps.length-1);
+      e.preventDefault();
+    }else if(e.key=="Enter"){
+      props.addProps.selectOption(props.addProps.currentIndex);
+    } 
+
+  }
+
 
   return (
     <input
@@ -35,7 +48,6 @@ const TextField = (props) => {
       className={`employee-select-wrap--elipses ${props.disable && "disabled"}`}
       type="text"
       value={value}
-      autoComplete={props.autoComplete || "on"}
       onChange={inputChange}
       onClick={props.onClick}
       onFocus={broadcastToOpen}
@@ -43,9 +55,11 @@ const TextField = (props) => {
         broadcastToClose();
         props?.onBlur?.(e);
       }}
+      onKeyDown={keyChange}
       readOnly={props.disable}
       autoFocus={props.autoFocus}
       placeholder={props.placeholder}
+      autoComplete={"off"}
     />
   );
 };
@@ -60,6 +74,7 @@ const Dropdown = (props) => {
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
   const [forceSet, setforceSet] = useState(0);
+  const [optionIndex, setOptionIndex] = useState(-1);
   const optionRef = useRef(null);
   const hasCustomSelector = props.customSelector ? true : false;
   const t = props.t || translateDummy;
@@ -127,7 +142,13 @@ const Dropdown = (props) => {
     setFilterVal(val);
   }
 
-  return (
+let filteredOption= props.option&&props.option.filter((option) => t(option[props.optionKey]).toUpperCase().indexOf(filterVal.toUpperCase()) > -1) || [];
+function selectOption(ind){
+  onSelect(filteredOption[ind]);
+}
+
+
+return (
     <div
       className={`${user_type === "employee" ? "employee-select-wrap" : "select-wrap"} ${props?.className ? props?.className : ""}`}
       style={{ ...props.style }}
@@ -140,31 +161,34 @@ const Dropdown = (props) => {
         </div>
       )}
       {!hasCustomSelector && (
-        <div className={`${dropdownStatus ? "select-active" : "select"} ${props.disable && "disabled"}`} style={props.errorStyle ? {border: "1px solid red"}: {}}>
+        <div className={`${dropdownStatus ? "select-active" : "select"} ${props.disable && "disabled"}`} style={props.errorStyle ? { border: "1px solid red" } : { }}>
           <TextField
             autoComplete={props.autoComplete}
             setFilter={setFilter}
             forceSet={forceSet}
+            setOptionIndex={setOptionIndex}
             keepNull={props.keepNull}
             selectedVal={
               selectedOption
                 ? props.t
                   ? props.t(props.optionKey ? selectedOption[props.optionKey] : selectedOption)
                   : props.optionKey
-                  ? selectedOption[props.optionKey]
-                  : selectedOption
+                    ? selectedOption[props.optionKey]
+                    : selectedOption
                 : null
             }
             filterVal={filterVal}
+            addProps={{length:filteredOption.length,currentIndex:optionIndex,selectOption:selectOption}}
             // onClick={dropdownOn}
             dropdownDisplay={dropdownOn}
+            handleClick={handleClick}
             disable={props.disable}
             freeze={props.freeze ? true : false}
             autoFocus={props.autoFocus}
             placeholder={props.placeholder}
             onBlur={props?.onBlur}
             inputRef={props.ref}
-            // setOutsideClicked={setOutsideClicked}
+          // setOutsideClicked={setOutsideClicked}
           />
           <ArrowDown onClick={dropdownSwitch} className="cp" disable={props.disable} />
         </div>
@@ -177,15 +201,17 @@ const Dropdown = (props) => {
             style={{ ...props.optionCardStyles }}
             ref={optionRef}
           >
-            {props.option &&
-              props.option
-                .filter((option) => t(option[props.optionKey]).toUpperCase().indexOf(filterVal.toUpperCase()) > -1)
+            {filteredOption &&
+              filteredOption
                 .map((option, index) => {
                   if (props.t) {
                     // console.log(props.t(option[props.optionKey]));
                   }
                   return (
-                    <div className="cp profile-dropdown--item display: flex" key={index} onClick={() => onSelect(option)}>
+                    <div className={`cp profile-dropdown--item display: flex `} style={index === optionIndex ? {
+                      opacity: 1,
+                      backgroundColor: "rgba(238, 238, 238, var(--bg-opacity))"
+                    } : { }} key={index} onClick={() => onSelect(option)}>
                       {option.icon && <span className="icon"> {option.icon} </span>}
                       {<span> {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</span>}
                     </div>
@@ -198,7 +224,10 @@ const Dropdown = (props) => {
               .filter((option) => option.toUpperCase().indexOf(filterVal.toUpperCase()) > -1)
               .map((option, index) => {
                 return (
-                  <p key={index} onClick={() => onSelect(option)}>
+                  <p key={index} style={index === optionIndex ? {
+                    opacity: 1,
+                    backgroundColor: "rgba(238, 238, 238, var(--bg-opacity))"
+                  } : { }} onClick={() => onSelect(option)}>
                     {option}
                   </p>
                 );

@@ -85,8 +85,8 @@ function SelectDocument({
     filteredDocument
       ? { ...filteredDocument, active: filteredDocument?.status === "ACTIVE", code: filteredDocument?.documentType }
       : doc?.dropdownData?.length === 1
-      ? doc?.dropdownData[0]
-      : {}
+        ? doc?.dropdownData[0]
+        : { }
   );
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
@@ -241,6 +241,7 @@ function SelectDocument({
         <CardLabel className="card-label-smaller"></CardLabel>
         <div className="field">
           <UploadFile
+            id={"tl-doc"}
             onUpload={selectfile}
             onDelete={() => {
               setUploadedFile(null);

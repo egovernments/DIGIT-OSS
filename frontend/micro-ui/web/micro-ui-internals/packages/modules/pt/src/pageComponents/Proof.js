@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { FormStep, UploadFile, CardLabelDesc, Dropdown, CardLabel } from "@egovernments/digit-ui-react-components";
-import { stringReplaceAll } from "../utils";
+import { CardLabel, CardLabelDesc, Dropdown, FormStep, UploadFile } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { stringReplaceAll } from "../utils";
 
 const Proof = ({ t, config, onSelect, userType, formData }) => {
   //let index = window.location.href.charAt(window.location.href.length - 1);
@@ -22,7 +22,7 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
   let dropdownData = [];
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
-  const { data: Documentsob = {} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Documents");
+  const { data: Documentsob = { } } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Documents");
   const docs = Documentsob?.PropertyTax?.Documents;
   const proofOfAddress = Array.isArray(docs) && docs.filter((doc) => doc.code.includes("ADDRESSPROOF"));
   if (proofOfAddress.length > 0) {
@@ -41,7 +41,7 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
     let fileDetails = file;
     if (fileDetails) fileDetails.documentType = dropdownValue;
     if (fileDetails) fileDetails.fileStoreId = fileStoreId ? fileStoreId : null;
-    let address = !isMutation ? formData?.address : {};
+    let address = !isMutation ? formData?.address : { };
     if (address && address.documents) {
       address.documents["ProofOfAddress"] = fileDetails;
     } else {
@@ -95,6 +95,7 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
         placeholder={t(`PT_MUTATION_SELECT_DOC_LABEL`)}
       />
       <UploadFile
+        id={"pt-doc"}
         extraStyleName={"propertyCreate"}
         accept=".jpg,.png,.pdf"
         onUpload={selectfile}

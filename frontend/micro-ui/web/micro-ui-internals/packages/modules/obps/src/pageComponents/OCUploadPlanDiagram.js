@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
 import {
-    FormStep,
-    UploadFile,
-    CardLabel
+    CardLabel, FormStep,
+    UploadFile
 } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
 
 const OCUploadPlanDiagram = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner, isShowToast }) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -30,7 +29,7 @@ const OCUploadPlanDiagram = ({ t, config, onSelect, userType, formData, ownerInd
     function onAdd() { };
 
     const handleSubmit = () => {
-        const data = {};
+        const data = { };
         data.file = file;
         onSelect(config.key, data, true, true);
     };
@@ -47,6 +46,7 @@ const OCUploadPlanDiagram = ({ t, config, onSelect, userType, formData, ownerInd
         >
             <CardLabel>{`${t("BPA_OC_PLAN_DIAGRAM_DXF")}*`}</CardLabel>
             <UploadFile
+                id={"oc-doc"}
                 extraStyleName={"propertyCreate"}
                 accept=".dxf"
                 onUpload={selectfile}

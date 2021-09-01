@@ -78,8 +78,8 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
   const useEmployeeData = Digit.Hooks.pgr.useEmployeeFilter(tenantId, roles[0]?.roles, complaintDetails);
   const employeeData = useEmployeeData
     ? useEmployeeData.map((departmentData) => {
-        return { heading: departmentData.department, options: departmentData.employees };
-      })
+      return { heading: departmentData.department, options: departmentData.employees };
+    })
     : null;
 
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -143,10 +143,10 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
             selectedAction === "ASSIGN" || selectedAction === "REASSIGN"
               ? t("CS_ACTION_ASSIGN")
               : selectedAction === "REJECT"
-              ? t("CS_ACTION_REJECT")
-              : selectedAction === "REOPEN"
-              ? t("CS_COMMON_REOPEN")
-              : t("CS_COMMON_RESOLVE")
+                ? t("CS_ACTION_REJECT")
+                : selectedAction === "REOPEN"
+                  ? t("CS_COMMON_REOPEN")
+                  : t("CS_COMMON_RESOLVE")
           }
         />
       }
@@ -157,10 +157,10 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
         selectedAction === "ASSIGN" || selectedAction === "REASSIGN"
           ? t("CS_COMMON_ASSIGN")
           : selectedAction === "REJECT"
-          ? t("CS_COMMON_REJECT")
-          : selectedAction === "REOPEN"
-          ? t("CS_COMMON_REOPEN")
-          : t("CS_COMMON_RESOLVE")
+            ? t("CS_COMMON_REJECT")
+            : selectedAction === "REOPEN"
+              ? t("CS_COMMON_REOPEN")
+              : t("CS_COMMON_RESOLVE")
       }
       actionSaveOnSubmit={() => {
         onAssign(selectedEmployee, comments, uploadedFile);
@@ -186,6 +186,7 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
         <CardLabel>{t("CS_ACTION_SUPPORTING_DOCUMENTS")}</CardLabel>
         <CardLabelDesc>{t(`CS_UPLOAD_RESTRICTIONS`)}</CardLabelDesc>
         <UploadFile
+          id={"pgr-doc"}
           accept=".jpg"
           onUpload={selectfile}
           onDelete={() => {

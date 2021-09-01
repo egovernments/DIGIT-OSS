@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { FormStep, UploadFile, CardLabelDesc, Dropdown, CardLabel, TextInput, RadioOrSelect, Loader, Toast } from "@egovernments/digit-ui-react-components";
+import { CardLabel, Dropdown, FormStep, Loader, TextInput, Toast, UploadFile } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { getPattern, stringReplaceAll } from "../utils";
 
@@ -16,7 +16,7 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
     const [uploadMessage, setUploadMessage] = useState("");
     const [showToast, setShowToast] = useState(null);
 
-    let validation = {};
+    let validation = { };
 
 
     function setApplicantName(e) {
@@ -64,7 +64,7 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
     }
 
     const handleSubmit = () => {
-        const data = {};
+        const data = { };
         data.tenantId = tenantIdData;
         data.applicantName = name;
         data.file = file;
@@ -111,6 +111,7 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
             />
             <CardLabel>{`${t("EDCR_BUILDINGPLAN")}*`}</CardLabel>
             <UploadFile
+                id={"edcr-doc"}
                 extraStyleName={"propertyCreate"}
                 accept=".dxf"
                 onUpload={selectfile}

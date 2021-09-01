@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { FormStep, UploadFile, CardLabelDesc, Dropdown, CardLabel } from "@egovernments/digit-ui-react-components";
-import { stringReplaceAll } from "../../utils";
+import { CardLabel, CardLabelDesc, Dropdown, FormStep, UploadFile } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { stringReplaceAll } from "../../utils";
 
 const TransferProof = ({ t, config, onSelect, userType, formData }) => {
   //let index = window.location.href.charAt(window.location.href.length - 1);
@@ -83,6 +83,7 @@ const TransferProof = ({ t, config, onSelect, userType, formData }) => {
         placeholder={t(`PT_MUTATION_SELECT_DOC_LABEL`)}
       />
       <UploadFile
+        id={"ptm-doc"}
         extraStyleName={"propertyCreate"}
         accept=".jpg,.png,.pdf"
         onUpload={selectfile}

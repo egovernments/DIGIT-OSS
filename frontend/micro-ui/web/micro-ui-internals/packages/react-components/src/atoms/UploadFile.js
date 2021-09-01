@@ -3,6 +3,10 @@ import ButtonSelector from "./ButtonSelector";
 import { Close } from "./svgindex";
 import { useTranslation } from "react-i18next";
 
+const getRandomId=()=>{
+  return Math.floor((Math.random()||1) * 139) ;
+}
+
 const getCitizenStyles = (value) => {
   let citizenStyles = {};
   if (value == "propertyCreate") {
@@ -103,6 +107,7 @@ const UploadFile = (props) => {
           style={extraStyles ? { ...extraStyles?.inputStyles, ...props?.inputStyles } : { ...props?.inputStyles }}
           ref={inpRef}
           type="file"
+          id={props.id||`document-${getRandomId()}`}
           name="file"
           accept={props.accept}
           disabled={props.disabled}

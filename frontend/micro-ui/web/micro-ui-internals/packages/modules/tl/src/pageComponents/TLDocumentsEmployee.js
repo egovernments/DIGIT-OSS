@@ -17,7 +17,7 @@ const TLDocumentsEmployee = ({ t, config, onSelect, userType, formData, setError
   if (isEditScreen) action = "update";
 
   const { isLoading, data: documentsData } = Digit.Hooks.pt.usePropertyMDMS(stateId, "TradeLicense", ["documentObj"]);
-  
+
   const ckeckingLocation = window.location.href.includes("renew-application-details");
 
 
@@ -27,7 +27,7 @@ const TLDocumentsEmployee = ({ t, config, onSelect, userType, formData, setError
   let finalTlDocumentsList = [];
   if (tlDocumentsList && tlDocumentsList.length > 0) {
     tlDocumentsList.map(data => {
-      if ((!ckeckingLocation || previousLicenseDetails?.action == "SENDBACKTOCITIZEN" ) && data?.applicationType?.includes("NEW")) {
+      if ((!ckeckingLocation || previousLicenseDetails?.action == "SENDBACKTOCITIZEN") && data?.applicationType?.includes("NEW")) {
         finalTlDocumentsList.push(data);
       } else if (ckeckingLocation && previousLicenseDetails?.action != "SENDBACKTOCITIZEN" && data?.applicationType?.includes("RENEWAL")) {
         finalTlDocumentsList.push(data);
@@ -56,6 +56,7 @@ const TLDocumentsEmployee = ({ t, config, onSelect, userType, formData, setError
             document={document}
             action={action}
             t={t}
+            id={`tl-doc-${index}`}
             error={error}
             setError={setError}
             setDocuments={setDocuments}
@@ -87,7 +88,8 @@ function SelectDocument({
   config,
   formState,
   fromRawData,
-  key
+  key,
+  id
 }) {
   const filteredDocument = documents?.filter((item) => item?.documentType);
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -135,7 +137,7 @@ function SelectDocument({
         }
 
         const filteredDocumentsByFileStoreId = filteredDocumentsByDocumentType?.filter((item) => item?.fileStoreId !== uploadedFile);
-        if(selectedDocument?.id){
+        if (selectedDocument?.id) {
           return [
             ...filteredDocumentsByFileStoreId,
             {
@@ -198,10 +200,10 @@ function SelectDocument({
   }, [file]);
 
   useEffect(() => {
-    if(doc && formData?.documents?.documents?.length > 0) {
-      for(let i = 0; i < formData?.documents?.documents?.length; i++) {
-        if(doc?.documentType === formData?.documents?.documents?.[i]?.documentType) {
-          setSelectedDocument({ documentType: formData?.documents?.documents?.[i]?.documentType, id:formData?.documents?.documents?.[i]?.id});
+    if (doc && formData?.documents?.documents?.length > 0) {
+      for (let i = 0; i < formData?.documents?.documents?.length; i++) {
+        if (doc?.documentType === formData?.documents?.documents?.[i]?.documentType) {
+          setSelectedDocument({ documentType: formData?.documents?.documents?.[i]?.documentType, id: formData?.documents?.documents?.[i]?.id });
           setUploadedFile(formData?.documents?.documents?.[i]?.fileStoreId);
         }
       }
@@ -211,12 +213,13 @@ function SelectDocument({
     <div style={{ marginBottom: "24px" }}>
       <LabelFieldPair>
         <CardLabel className="card-label-smaller">
-          {doc?.documentType != "OLDLICENCENO" ? 
-          `${t(`TL_NEW_${doc?.documentType.replaceAll(".", "_")}`)} * :` : 
-          `${t(`TL_NEW_${doc?.documentType.replaceAll(".", "_")}`)} :`}
+          {doc?.documentType != "OLDLICENCENO" ?
+            `${t(`TL_NEW_${doc?.documentType.replaceAll(".", "_")}`)} * :` :
+            `${t(`TL_NEW_${doc?.documentType.replaceAll(".", "_")}`)} :`}
         </CardLabel>
         <div className="field">
           <UploadFile
+            id={id}
             onUpload={(e) => { selectfile(e, doc?.documentType.replaceAll(".", "_")) }}
             onDelete={() => {
               setUploadedFile(null);
@@ -226,7 +229,7 @@ function SelectDocument({
             inputStyles={{ width: "280px" }}
             // disabled={enabledActions?.[action].disableUpload || !selectedDocument?.code}
             buttonType="button"
-            accept= {doc?.documentType === "OWNERPHOTO" ? "image/*,.jpg,.png" : "image/*,.jpg,.png,.pdf"}   
+            accept={doc?.documentType === "OWNERPHOTO" ? "image/*,.jpg,.png" : "image/*,.jpg,.png,.pdf"}
           />
         </div>
       </LabelFieldPair>

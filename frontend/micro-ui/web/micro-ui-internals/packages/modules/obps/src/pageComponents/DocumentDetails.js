@@ -193,6 +193,7 @@ function SelectDocument({
                 select={handleSelectDocument}
             />
             <UploadFile
+                id={"obps-doc"}
                 extraStyleName={"propertyCreate"}
                 accept=".jpg,.png,.pdf"
                 onUpload={selectfile}
