@@ -6,6 +6,8 @@ import { FormComposer } from "../../components/FormComposer";
 import { sortDropdownNames } from "./Utils/Sortbyname";
 import { stringReplaceAll } from "../../utils/index";
 import { useParams, useHistory, useRouteMatch } from "react-router-dom";
+import { useForm } from "react-hook-form";
+
 const CreateChallen = ({ ChallanData }) => {
   const childRef = useRef();
   const history = useHistory();
@@ -39,12 +41,33 @@ const CreateChallen = ({ ChallanData }) => {
     t
   );
 
+
+  const getPattern = (type) => {
+    switch (type) {
+      case "name":
+        return /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i;
+      case "mobileNumber":
+        return /^[6789][0-9]{9}$/i;
+      case "doorNo":
+          return /^[^\$\"'<>?~`!@$%^={}\[\]*:;“”‘’]{1,50}$/i;
+      case "buildingName":
+      case "street":
+          return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,64}$/i;
+      case "pincode":
+          return /^[1-9][0-9]{5}$/i;
+      default:
+        return /^(0|[1-9][0-9]*)$/i; 
+    }
+  }
+
+
   const handlePincode = (event) => {
     const { value } = event.target;
     setPincode(value);
     if (!value) {
       setPincodeNotValid(false);
     }
+    handleData(event);
   };
 
   const isPincodeValid = () => !pincodeNotValid;
@@ -106,8 +129,13 @@ const CreateChallen = ({ ChallanData }) => {
   const selectCity = async (city) => {
     return;
   };
+  const [canSubmits, setSubmitsValve] = useState(true);
+  const [totalFormData, setTotalFormData] = useState({});
 
-  if (isEdit == true && fetchBillData && ChallanData[0]) {
+  const { register, handleSubmit, setError, formState: { errors }, clearErrors } = useForm();
+
+
+  if (isEdit == true && fetchBillData && ChallanData[0] && JSON.parse(sessionStorage.getItem("isHookRecall"))) {
     defaultval = {
       name: ChallanData[0].citizen.name,
       mobileNumber: ChallanData[0].citizen.mobileNumber,
@@ -219,6 +247,30 @@ const CreateChallen = ({ ChallanData }) => {
   }, [tenantId]);
 
   useEffect(() => {
+    // if((ChallanData?.length > 0 && isEdit) || isEdit) {
+      const configDetails = setconfig();
+      const isMandatoryArray = [];
+      let flag = true;
+      configDetails?.map(data => {
+        data?.body?.map(details => {
+          if(details.isMandatory && details.type == "text") isMandatoryArray.push(details.name);
+        })
+      });
+      if(isEdit && !Object.keys(errors).length) {
+        setSubmitsValve(false)
+      } else if (!isEdit) {
+        isMandatoryArray?.map(data => {
+          if(flag && totalFormData[data] && totalFormData[data] != "" && selectedCategory && selectedCategoryType && fromDate != "" && toDate != "" && selectedLocality != null && !Object.keys(errors).length) { setSubmitsValve(false); }
+          else { setSubmitsValve(true); flag = false;}
+        })
+      } else {
+        setSubmitsValve(true)
+      }
+    // }
+  }, [totalFormData, selectedCategory, selectedCategoryType, selectedLocality, fromDate, toDate]);
+
+
+  useEffect(() => {
     if (selectedCategory && selectedCategoryType && fromDate != "" && toDate != "" && selectedLocality != null) {
       setSubmitValve(true);
     } else {
@@ -242,6 +294,25 @@ const CreateChallen = ({ ChallanData }) => {
       setPincodeNotValid(true);
     }
   }, [pincode]);
+
+  const handleData = (event) => {
+    sessionStorage.setItem("isHookRecall", false);
+    // if((ChallanData?.length > 0 && isEdit) || isEdit) {
+      const { value, name } = event.target;
+      setTotalFormData({ ...totalFormData, [event.target.name]: event.target.value });
+      if (!value || getPattern(name).test(value)) {
+        clearErrors(name, {
+              type: "manual",
+              message: "Dont Forget Your Username Should Be Cool!",
+            });
+      } else {
+        setError(name, {
+          type: "manual12",
+          message: "Dont Forget Your Username Should Be Cool!",
+        });
+      }
+    // }
+  }
 
   const onSubmit = (data) => {
     TaxHeadMasterFields.map((ele) => {
@@ -345,6 +416,7 @@ const CreateChallen = ({ ChallanData }) => {
             label: t("UC_CONS_NAME_LABEL"),
             isMandatory: true,
             type: "text",
+            name: "name",
             populators: {
               name: "name",
               disable: isEdit,
@@ -352,6 +424,7 @@ const CreateChallen = ({ ChallanData }) => {
                 required: true,
                 pattern: /^[A-Za-z]/,
               },
+              onChange: handleData,
               error: t("CS_ADDCOMPLAINT_NAME_ERROR"),
             },
           },
@@ -359,6 +432,7 @@ const CreateChallen = ({ ChallanData }) => {
             label: t("UC_MOBILE_NUMBER"),
             isMandatory: true,
             type: "text",
+            name: "mobileNumber",
             populators: {
               name: "mobileNumber",
               disable: isEdit,
@@ -366,6 +440,7 @@ const CreateChallen = ({ ChallanData }) => {
                 required: true,
                 pattern: /^[6-9]\d{9}$/,
               },
+              onChange: handleData,
               componentInFront: <div className="employee-card-input employee-card-input--front">+91</div>,
               error: t("CORE_COMMON_MOBILE_ERROR"),
             },
@@ -373,30 +448,40 @@ const CreateChallen = ({ ChallanData }) => {
           {
             label: t("UC_DOOR_NO_LABEL"),
             type: "text",
+            name: "doorNo",
             populators: {
               name: "doorNo",
               disable: isEdit,
+              error: t("UC_COMMON_FIELD_ERROR"),
+              onChange: handleData
             },
           },
           {
             label: t("UC_BLDG_NAME_LABEL"),
             type: "text",
+            name: "buildingName",
             populators: {
               name: "buildingName",
               disable: isEdit,
             },
+            error: t("UC_COMMON_FIELD_ERROR"),
+            onChange: handleData
           },
           {
             label: t("UC_SRT_NAME_LABEL"),
             type: "text",
+            name: "street",
             populators: {
               name: "street",
               disable: isEdit,
             },
+            error: t("UC_COMMON_FIELD_ERROR"),
+            onChange: handleData
           },
           {
             label: t("UC_PINCODE_LABEL"),
             type: "text",
+            name: "pincode",
             populators: {
               name: "pincode",
               disable: isEdit,
@@ -518,15 +603,17 @@ const CreateChallen = ({ ChallanData }) => {
     if (TaxHeadMasterFields.length > 0 && config.length > 0) {
       const tempConfig = config;
       if ((config[1].head == "Service Details") | (config[1].head == t("SERVICEDETAILS"))) {
-        const temp = TaxHeadMasterFields.map((ele) => ({
+        const temp = TaxHeadMasterFields.map((ele, index) => ({
           label: t(ele.name.split(".").join("_")),
           isMandatory: ele.isRequired,
           type: "text",
+          name: ele.code.split(".").join("_"),
           populators: {
             name: ele.code.split(".").join("_"),
             validation: { required: ele.isRequired, pattern: /^(0|[1-9][0-9]*)$/ },
             error: t("UC_COMMON_FIELD_ERROR"),
             componentInFront: <div className="employee-card-input employee-card-input--front">₹</div>,
+            onChange: handleData,
           },
         }));
         if (temp.length > 0) {
@@ -547,8 +634,9 @@ const CreateChallen = ({ ChallanData }) => {
         config={setconfig()}
         onSubmit={onSubmit}
         setFormData={defaultval}
-        isDisabled={!canSubmit}
+        isDisabled={canSubmits}
         label={isEdit ? t("UC_UPDATE_CHALLAN") : t("UC_ECHALLAN")}
+        errors={errors}
       />
       {showToast && <Toast error={showToast.key} label={t(showToast.label)} onClose={() => setShowToast(null)} />}
     </div>
