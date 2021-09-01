@@ -2,14 +2,31 @@ import Urls from "../atoms/urls";
 import { Request } from "../atoms/Utils/Request";
 
 const Events = {
-    Search: ({tenantId, data, filters = {}}) => Request({
-        url: Urls.events.search,
+    Search: ({tenantId, filter= {}}) => {
+        return Request({
+            url: Urls.events.search,
+            useCache: false,
+            method: "POST",
+            auth: true,
+            userService: false,
+            params: { tenantId, ...filter },
+        })
+    },
+    ClearNotification: ({tenantId}) => Request({
+        url: Urls.events.update,
         useCache: false,
         method: "POST",
         auth: true,
         userService: false,
-        data: data,
         params: { tenantId, ...filters },
+    }),
+    NotificationCount: ({tenantId}) => Request({
+        url: Urls.events.count,
+        useCache: false,
+        method: "POST",
+        auth: true,
+        userService: false,
+        params: { tenantId },
     }),
     Create: (data) =>
       Request({

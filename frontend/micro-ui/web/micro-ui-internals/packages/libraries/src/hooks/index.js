@@ -22,7 +22,7 @@ import useModuleTenants from "./useModuleTenants";
 import useStore from "./useStore";
 import { useTenants } from "./useTenants"
 import useInbox from "./useInbox"
-import useEvents from "./events";
+import { useEvents, useClearNotifications, useNotificationCount } from "./events";
 import useCreateEvent from "./events/useCreateEvent";
 import useNewInboxGeneral from "./useInboxGeneral/useNewInbox";
 
@@ -278,6 +278,8 @@ const Hooks = {
   useRecieptSearch,
   useNewInboxGeneral,
   useEvents,
+  useClearNotifications,
+  useNotificationCount,
   useStore,
   useTenants,
   useInbox: useTLInbox,

@@ -1,6 +1,7 @@
 import React from "react";
 import { Dropdown, TopBar as TopBarComponent, Hamburger } from "@egovernments/digit-ui-react-components";
 import ChangeLanguage from "../ChangeLanguage";
+import { useHistory  } from "react-router-dom"
 
 const TextToImg = (props) => (
   <span className="user-img-txt" onClick={props.toggleMenu} title={props.name}>
@@ -22,6 +23,14 @@ const TopBar = ({
     handleUserDropdownSelection,
     logoUrl,
   } ) => {
+    
+    const CitizenHomePageTenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code
+
+    let history = useHistory();
+    
+    const { data:{ unreadCount: unreadNotificationCount } = {}, isSuccess: notificationCountLoaded } = Digit.Hooks.useNotificationCount({tenantId:CitizenHomePageTenantId}, {
+      enabled: !!Digit.UserService?.getUser()?.access_token
+    })
   
     const updateSidebar = () => {
       if (!Digit.clikOusideFired) {
@@ -30,6 +39,10 @@ const TopBar = ({
         Digit.clikOusideFired = false;
       }
     };
+
+    function onNotificationIconClick(){
+      history.push("/digit-ui/citizen/engagement/notifications")
+    }
   
     if (CITIZEN) {
       return (
@@ -40,6 +53,10 @@ const TopBar = ({
           logoUrl={stateInfo?.logoUrlWhite}
           onLogout={handleLogout}
           userDetails={userDetails}
+          notificationCount={unreadNotificationCount}
+          notificationCountLoaded={notificationCountLoaded}
+          cityOfCitizenShownBesideLogo={t(CitizenHomePageTenantId)}
+          onNotificationIconClick={onNotificationIconClick}
         />
       );
     }

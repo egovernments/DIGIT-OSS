@@ -1,4 +1,4 @@
-import { BackButton, BreadCrumb, CitizenHomeCard, CitizenTruck, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
+import { Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Redirect, Switch, useLocation, useRouteMatch,Route } from "react-router-dom";
@@ -16,6 +16,11 @@ import Response from "./pages/employee/Events/NewEvent/Response";
 import Inbox from "./pages/employee/Events/Inbox";
 import EventForm from "./components/Events/EventForm";
 import SelectEventGeolocation from "./components/Events/SelectGeoLocation";
+
+import NotificationsAndWhatsNew from "./pages/citizen/NotificationsAndWhatsNew"
+import EventsListOnGround from "./pages/citizen/EventsListOnGround"
+import CitizenApp from "./pages/citizen"
+import EventDetails from "./pages/citizen/EventsListOnGround/EventDetails"
 
 const EmployeeApp = ({ path, url, userType, tenants }) => {
   const location = useLocation();
@@ -45,7 +50,7 @@ const EngagementModule = ({ stateCode, userType, tenants }) => {
   Digit.SessionStorage.set("ENGAGEMENT_TENANTS", tenants);
 
   if (userType === "citizen") {
-    return null
+    return <CitizenApp path={path} url={url} userType={userType}/>
   } else {
     return <EmployeeApp path={path} url={url} userType={userType} tenants={tenants} />;
   }
@@ -92,6 +97,9 @@ const componentsToRegister = {
     EngagementDocCategory,
     EngagementDocDescription,
     EngagementDocUploadDocument,
+    NotificationsAndWhatsNew,
+    EventsListOnGround,
+    EventDetails,
     EventForm,
     SelectEventGeolocation
 };

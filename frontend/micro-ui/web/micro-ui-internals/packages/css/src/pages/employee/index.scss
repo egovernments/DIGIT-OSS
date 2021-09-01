@@ -236,6 +236,21 @@
   }
 }
 
+.RightMostTopBarOptions{
+  @apply inline-block float-right;
+  .EventNotificationWrapper{
+    @apply relative cursor-pointer;
+    span{
+      top: -10px;
+      right: -10px;
+      @apply absolute bg-error h-5 w-5 rounded-full text-center;
+      p{
+        line-height: 20px;
+      }
+    }
+  }
+}
+
 @media (min-width: 640px) {
   .employee {
     .ground-container {

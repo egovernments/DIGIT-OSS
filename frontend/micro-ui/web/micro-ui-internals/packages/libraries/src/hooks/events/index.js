@@ -1,17 +1,71 @@
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 
-const useEvents = ({tenantId, config}) => useQuery(
-    ["EVENTS_NOTIFICATION_SEARCH", tenantId],
-    () => Digit.EventsServices.Search({tenantId}) , 
+const tsToDate = (ts) => {
+    const plus0 = num => `0${num.toString()}`.slice(-2)
+    const d = new Date(ts)
+    const month = d.toLocaleString("default", {month: 'short'}).toUpperCase()
+    const date = plus0(d.getDate())
+    const hour = plus0(d.getHours())
+    const minute = plus0(d.getMinutes())
+
+    return {
+        month,
+        date,
+        hour,
+        minute
+    }
+}
+
+const isEqual = (from, to) => from === to ? from : `${from} - ${to}` 
+
+const timeStampBreakdown = (fromTS, toTS) => {
+    const fromDateTime = tsToDate(fromTS)
+    const toDateTime = tsToDate(toTS)
+    return {
+        onGroundEventMonth: isEqual(fromDateTime.month, toDateTime.month),
+        onGroundEventDate: isEqual(fromDateTime.date, toDateTime.date),
+        onGroundEventTimeRange: `${fromDateTime.hour}:${fromDateTime.minute} - ${toDateTime.hour}:${toDateTime.minute}`
+    }
+}
+
+const filterAllEvents = (data, variant) => data
+// .filter(e => e.status === "ACTIVE")
+.map((e => ({
+        ...e,
+        timePastAfterEventCreation: Math.round((new Date().getTime() - e?.auditDetails?.createdTime)/86400000),
+        timeApproxiamationInUnits: "CS_SLA_DAY",
+        eventNotificationText: e?.description,
+        header: e?.name,
+        actions: e?.actions?.actionUrls,
+        ...variant === "events" ? timeStampBreakdown(e?.eventDetails?.fromDate, e?.eventDetails?.toDate) : {},
+    })))
+
+const variantBasedFilter = (variant, data) =>{
+    switch(variant){
+        case "whats-new":
+            return filterAllEvents(data.events, variant).filter( i => i?.actions?.length )
+        case "events":
+            return filterAllEvents(data.events, variant)
+        default:
+            return filterAllEvents(data.events, variant)
+    }
+}
+
+const useEvents = ({tenantId, variant, config={}}) => useQuery(
+    ["EVENTS_SEARCH", tenantId, variant],
+    () => Digit.EventsServices.Search({tenantId, ...variant === "events" ? {filter: {eventTypes: "EVENTSONGROUND"}} : {} }), 
     { 
-        select: (data) => data.events.filter(e => e.status === "ACTIVE").map((e => ({
-            ...e,
-            timePastAfterEventCreation: Math.round((new Date().getTime() - e?.auditDetails?.createdTime)/86400000),
-            timeApproxiamationInUnits: "CS_SLA_DAY",
-            eventNotificationText: e?.description,
-            header: `ACTION_TEST_${e?.name}`
-        }))),
+        select: (data) => variantBasedFilter(variant, data),
         ...config
     } )
 
-export default useEvents
+const useClearNotifications = () => useMutation(({tenantId}) => Digit.EventsServices.ClearNotification({tenantId}))
+
+const useNotificationCount = ({tenantId, config={}}) => useQuery(
+    ["NOTIFICATION_COUNT", tenantId],
+    () => Digit.EventsServices.NotificationCount({tenantId}),
+    {
+        ...config
+    })
+
+export { useEvents, useClearNotifications, useNotificationCount }

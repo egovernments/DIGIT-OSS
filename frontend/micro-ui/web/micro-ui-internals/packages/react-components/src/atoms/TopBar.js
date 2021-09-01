@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Hamburger from "./Hamburger";
+import { NotificationBell } from "./svgindex";
 
-const TopBar = ({ img, isMobile, logoUrl, onLogout, toggleSidebar, ulb, userDetails }) => {
+const TopBar = ({ img, isMobile, logoUrl, onLogout, toggleSidebar, ulb, userDetails, notificationCount, notificationCountLoaded, cityOfCitizenShownBesideLogo, onNotificationIconClick }) => {
 
   return (
     <div className="navbar">
@@ -10,11 +11,18 @@ const TopBar = ({ img, isMobile, logoUrl, onLogout, toggleSidebar, ulb, userDeta
         {isMobile && <Hamburger handleClick={toggleSidebar} />}
         <img
           className="city"
-          id="topbar-logo"
+          id="topbar-logo" 
           crossOrigin="anonymous"
           src={img || "https://cdn.jsdelivr.net/npm/@egovernments/digit-ui-css@1.0.7/img/m_seva_white_logo.png"}
           alt="mSeva"
         />
+        <h3>{cityOfCitizenShownBesideLogo}</h3>
+        <div className="RightMostTopBarOptions">
+          <div className="EventNotificationWrapper" onClick={onNotificationIconClick}>
+            { notificationCountLoaded && notificationCount ? <span><p>{notificationCount}</p></span> : null }
+            <NotificationBell />
+          </div>
+        </div>
       </div>
     </div>
   );

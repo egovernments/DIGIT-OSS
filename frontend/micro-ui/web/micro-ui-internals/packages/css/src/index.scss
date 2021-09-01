@@ -69,6 +69,9 @@
 @import "./components/StandaloneSearchBar.scss";
 @import "./components/CardBasedOptions.scss";
 @import "./components/WhatsNewCard.scss";
+@import "./components/SearchOnRadioButton.scss";
+@import "./components/EventCalendarView.scss";
+@import "./components/OnGroundEventCard.scss";
 
 @import "./pages/employee/index.scss";
 @import "./pages/employee/cardfix.scss";
@@ -82,6 +85,8 @@
 @import "./pages/citizen/payment/payment-type.scss";
 @import "./pages/citizen/container.scss";
 @import "./pages/citizen/HomePageWrapper.scss";
+@import "./pages/citizen/CitizenEngagementNotificationWrapper.scss";
+@import "./pages/citizen/Events.scss";
 
 .dark {
   @apply text-text-primary;

@@ -127,10 +127,10 @@ export const StoreService = {
     });
 
     initData.modules.push({
-      module:"Engagement",
-      code:"Engagement",
+      module: "Engagement",
+      code: "Engagement",
       tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    })
+    });
 
 
     await LocalizationService.getLocale({

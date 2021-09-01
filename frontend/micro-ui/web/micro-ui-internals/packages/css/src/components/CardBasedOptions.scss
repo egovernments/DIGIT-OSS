@@ -14,6 +14,7 @@
     .mainContent{
         @apply flex justify-evenly;
         .CardBasedOptionsMainChildOption{
+            width: 25%;
             @apply text-center;
             .ChildOptionImageWrapper{
                 margin: auto !important;

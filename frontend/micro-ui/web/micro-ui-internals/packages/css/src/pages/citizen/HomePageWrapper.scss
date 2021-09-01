@@ -36,6 +36,8 @@
     .HomePageWrapper{
         .BannerWithSearch{
             margin-bottom: 56px;
+            min-width: 100vw;
+            margin-left: calc( -15vw - 16px );
             img{
                 height: 25vw;
             }

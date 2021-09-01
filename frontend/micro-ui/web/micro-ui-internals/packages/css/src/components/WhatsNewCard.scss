@@ -5,6 +5,9 @@
         @apply text-body-l text-text-primary mb-xs;
     }
     p{
-        @apply text-form-field text-text-secondary mb-xs;
+        @apply text-form-field text-text-secondary mb-sm;
+    }
+    a{
+        @apply block text-form-field text-primary-main mb-sm
     }
 }

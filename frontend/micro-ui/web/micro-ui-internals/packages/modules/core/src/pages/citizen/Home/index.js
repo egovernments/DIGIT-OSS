@@ -11,9 +11,9 @@ const Home = () => {
     const { data: { stateInfo } = {}, isLoading } = Digit.Hooks.useStore.getInitData()
 
     const { data: EventsData, isLoading: EventsDataLoading } = Digit.Hooks.useEvents({tenantId})
-    if(!Digit.UserService?.getUser()){
-        history.push(`/digit-ui/citizen/login?from=${encodeURIComponent(window.location.pathname + window.location.search)}`)
-    }
+    // if(!Digit.UserService?.getUser()?.access_token){
+    //     history.push(`/digit-ui/citizen/login?from=${encodeURIComponent(window.location.pathname + window.location.search)}`)
+    // }
 
     if(!tenantId){
         history.push(`/digit-ui/citizen/select-language`)
@@ -61,7 +61,8 @@ const Home = () => {
             },
             {
                 name: t("EVENTS_EVENTS_HEADER"),
-                Icon: <Calender/>
+                Icon: <Calender/>,
+                onClick: () => history.push("/digit-ui/citizen/engagement/events")
             },
             {
                 name: t("CS_COMMON_DOCUMENTS"),
@@ -88,13 +89,13 @@ const Home = () => {
             <CardBasedOptions {...allInfoAndUpdatesProps} />
         </div>
 
-        {EventsDataLoading ? <Loader /> : <div className="WhatsNewSection">
+        {Digit.UserService?.getUser()?.access_token ? EventsDataLoading ? <Loader /> : <div className="WhatsNewSection">
             <div className="headSection">
                 <h2>{t("DASHBOARD_WHATS_NEW_LABEL")}</h2>
-                <p>{t("DASHBOARD_VIEW_ALL_LABEL")}</p>
+                <p onClick={() => history.push("/digit-ui/citizen/engagement/whats-new")}>{t("DASHBOARD_VIEW_ALL_LABEL")}</p>
             </div>
             <WhatsNewCard {...EventsData?.[0]} />
-        </div>}
+        </div> : null}
 
     </div>
 }
