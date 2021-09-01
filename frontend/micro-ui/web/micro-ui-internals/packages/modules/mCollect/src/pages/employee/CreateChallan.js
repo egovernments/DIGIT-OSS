@@ -123,7 +123,8 @@ const CreateChallen = ({ ChallanData }) => {
   const [pincodeNotValid, setPincodeNotValid] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  // const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
   const [pincode, setPincode] = useState("");
   const [selectedCity, setSelectedCity] = useState(getCities()[0] ? getCities()[0] : null);
   const selectCity = async (city) => {
