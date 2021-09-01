@@ -10,7 +10,6 @@ $secondary:#000000DE;
 
 .pt-warning-popup{
   max-width: 35vw  !important;
-  overflow-y: scroll;
   left: 30% !important;
 }
 
@@ -109,6 +108,7 @@ cursor: pointer;
   margin: 10px;
 }
 .pt-update-send-otp-container{
+  margin-top: 10px;
   display: flex;
   align-items: center;
 }
@@ -165,6 +165,7 @@ border: 1px solid $primary;
 
 }
 .pt-warning-button-container{
+  padding: 10px;
   margin-top: 15%;
   display: flex;
   justify-content: space-between;

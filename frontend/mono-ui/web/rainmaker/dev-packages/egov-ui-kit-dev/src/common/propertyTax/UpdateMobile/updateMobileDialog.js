@@ -403,7 +403,7 @@ export default class UpdateMobileDialog extends React.Component {
               value={fields[key].value}
               onChange={(e) => this.handleChange(key, e.target.value)}></TextField>
             </span>
-            {process.env.REACT_APP_NAME !== "Citizen" && <div>
+            {process.env.REACT_APP_NAME !== "Citizen" && <div style={{marginTop: '10px'}}>
               {documents.map((document, ind) => {
                 return (<div>
                   <Label label={document.code} labelStyle={{ color: '#000000DF', fontSize: "16px" }} />
@@ -449,7 +449,7 @@ export default class UpdateMobileDialog extends React.Component {
               disabled={fields[key1].disabled}
               onChange={(e) => this.handleChange(key1, e.target.value)}></TextField>
             </span>
-            <button type="button" disabled={this.state.verifyButton} style={{ width: '100%' }} className={"button-verify-link"} onClick={() => this.validateAndCreate()} ><Label label="PTUPNO_VERUPD_NO"></Label></button>
+            <button type="button" disabled={this.state.verifyButton} style={{ width: '100%',marginTop:"10px" }} className={"button-verify-link"} onClick={() => this.validateAndCreate()} ><Label label="PTUPNO_VERUPD_NO"></Label></button>
           </div>}
         </div>
         {errorMessage && <div className={type == "ERROR" ? "error-comp-second-num" : "success-comp-second-num"}><Label label={errorMessage}></Label></div>}
