@@ -210,8 +210,8 @@ export const fetchActionItems = (role, ts) => {
         const { app } = state;
         const { inbox } = app;
         const { loaded = false, loading = false } = inbox || {};
-        // loaded == false && loading == false && dispatch(fetchInboxRecordsCount());
-        // loaded == false && loading == false && dispatch(fetchRecords());
+        loaded == false && loading == false && dispatch(fetchInboxRecordsCount());
+        loaded == false && loading == false && dispatch(fetchRecords());
       }
       dispatch(setActionItems(payload.actions));
     } catch (error) {
