@@ -28,12 +28,14 @@
 }
 
 .service-label-cont .label-text {
+
   word-break: inherit;
-  word-wrap: inherit;
-overflow: hidden;
-  white-space: pre-wrap;
-  word-break: break-all;
-  height: 25px;
+    word-wrap: inherit;
+    overflow: visible;
+    white-space: pre-line;
+    letter-spacing: 0.5px;
+    word-break: break-all;
+    line-height: 15px!important;
 }
 
 @media only screen and (min-width: 768px) {

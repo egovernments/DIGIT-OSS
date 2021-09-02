@@ -11,7 +11,7 @@ import { getRequestInfo } from "./updateMobile";
 const getFields = () => {
   return {
     "name": { type: "text", pattern: "", placeholder: "PT_FORM3_GUARDIAN_PLACEHOLDER", floatingLabelText: "CORE_COMMON_NAME", className: "textField", pattern: getPattern("Name"), style: { width: "40%", height: "76px" }, value: "", errorMessage: "", error: false, jsonpath: "name", invalid: "PT_ERR_INVALID_TEXT", disabled: true },
-    "mobileNumber": { type: "text", pattern: "", placeholder: "PT_FORM3_MOBILE_NO_PLACEHOLDER", floatingLabelText: "CS_COMMON_MOBILE_NO", className: "textField", pattern: getPattern("MobileNo"), style: { width: "100%", height: "76px" }, value: "", errorMessage: "", error: false, jsonpath: "mobileNumber", invalid: "PT_ERR_INVALID_TEXT", disabled: false },
+    "mobileNumber": { type: "text", pattern: "", placeholder: "PT_FORM3_MOBILE_NO_PLACEHOLDER", floatingLabelText: "CS_COMMON_MOBILE_NO", className: "mobileno-field-pt", pattern: getPattern("MobileNo"), style: { width: "100%", height: "76px" }, value: "", errorMessage: "", error: false, jsonpath: "mobileNumber", invalid: "PT_ERR_INVALID_TEXT", disabled: false },
     "otp": { type: "text", pattern: "", placeholder: "CS_LOGIN_OTP_TEXT", floatingLabelText: "CORE_OTP_OTP", className: "textField", pattern: getPattern("ChequeNo"), style: { width: "100%", height: "76px" }, value: "", errorMessage: "", error: false, jsonpath: "otp", invalid: "CS_INVALID_OTP", disabled: true },
   }
 }
