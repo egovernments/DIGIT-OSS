@@ -15,7 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import jdk.internal.org.jline.utils.Log;
+import lombok.extern.slf4j.Slf4j;
+
 @Repository
+@Slf4j
 public class BPARepository {
 
 	@Autowired
@@ -79,6 +83,9 @@ public class BPARepository {
 	public List<BPA> getBPAData(BPASearchCriteria criteria, List<String> edcrNos) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getBPASearchQuery(criteria, preparedStmtList, edcrNos);
+		log.info("query::::"+query);
+		log.info("preparedStmtList.toArray()::"+preparedStmtList.toArray());
+		log.info("preparedStmtList.toArray().toString()::"+preparedStmtList.toArray().toString());
 		List<BPA> BPAData = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 		return BPAData;
 	}
