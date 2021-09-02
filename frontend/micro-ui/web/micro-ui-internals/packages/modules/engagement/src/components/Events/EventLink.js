@@ -8,7 +8,7 @@ const EventLink = () => {
   const links = [
     {
       text: t("ES_TITLE_NEW_EVENTS"),
-      link: "/digit-ui/employee/event/new-event",
+      link: "/digit-ui/employee/engagement/event/new-event",
     }
   ]
 

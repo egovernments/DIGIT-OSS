@@ -2,10 +2,11 @@ import Urls from "../atoms/urls";
 import { Request } from "../atoms/Utils/Request";
 
 const Events = {
-    Search: ({tenantId, filter= {}}) => {
+    Search: ({tenantId, data, filter= {}}) => {
         return Request({
             url: Urls.events.search,
             useCache: false,
+            data: data,
             method: "POST",
             auth: true,
             userService: false,
