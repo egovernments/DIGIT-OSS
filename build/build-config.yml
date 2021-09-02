@@ -607,9 +607,17 @@ config:
     build:
       - work-dir: "utilities/demo-utility"
         image-name: "demo-utility"
-        dockerfile: "build/maven/Dockerfile"      
+        dockerfile: "build/maven/Dockerfile"
+  - name: "builds/core-services/egov-document-uploader"
+    build:
+      - work-dir: "egov-document-uploader"
+        image-name: "egov-document-uploader"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-document-uploader/src/main/resources/db"
+        image-name: "egov-document-uploader-db"
 
-# Frontend
+
+  # Frontend
 
   - name: builds/digit-dev/frontend/mono-ui/citizen
     build:
