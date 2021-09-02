@@ -196,8 +196,10 @@ public class BPAService {
 	 * @return List of bpa for the given criteria
 	 */
 	public List<BPA> search(BPASearchCriteria criteria, RequestInfo requestInfo) {
+	    log.info("----->>>> Calling Search------");
 		List<BPA> bpas = new LinkedList<>();
 		bpaValidator.validateSearch(requestInfo, criteria);
+		log.info("----->>>> After validation------");
 		LandSearchCriteria landcriteria = new LandSearchCriteria();
 		landcriteria.setTenantId(criteria.getTenantId());
 		List<String> edcrNos = null;
@@ -308,7 +310,7 @@ public class BPAService {
 	 */
 	private List<BPA> getBPAFromMobileNumber(BPASearchCriteria criteria,LandSearchCriteria landcriteria, RequestInfo requestInfo){
 		List<BPA> bpas =null;
-		log.debug("Call with mobile number to Land::" + criteria.getMobileNumber());
+		log.info("Call with mobile number to Land::" + criteria.getMobileNumber());
 		landcriteria.setMobileNumber(criteria.getMobileNumber());
 		ArrayList<LandInfo> landInfo = landService.searchLandInfoToBPA(requestInfo, landcriteria);
 		ArrayList<String> landId = new ArrayList<String>();

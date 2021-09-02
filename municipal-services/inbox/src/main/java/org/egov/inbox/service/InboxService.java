@@ -175,6 +175,7 @@ public class InboxService {
 			if(processCriteria != null && !ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(BPA)) {
 				totalCount = bpaInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
 				List<String> applicationNumbers = bpaInboxFilterService.fetchApplicationNumbersFromSearcher(criteria, StatusIdNameMap, requestInfo);
+				log.info("--->>totalCount"+totalCount+"Application Numbers Count:::applicationNumbers.size()"+applicationNumbers.size());
 				if(!CollectionUtils.isEmpty(applicationNumbers)) {
 					moduleSearchCriteria.put(APPLICATION_NUMBER_PARAM, applicationNumbers);
 					businessKeys.addAll(applicationNumbers);

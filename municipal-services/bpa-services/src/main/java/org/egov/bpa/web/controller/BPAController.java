@@ -30,8 +30,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/v1/bpa")
+@Slf4j
 public class BPAController {
 
 	@Autowired
@@ -70,7 +73,7 @@ public class BPAController {
 	@PostMapping(value = "/_search")
 	public ResponseEntity<BPAResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute BPASearchCriteria criteria) {
-
+	        log.info(criteria.toString());
 		List<BPA> bpas = bpaService.search(criteria, requestInfoWrapper.getRequestInfo());
 
 		BPAResponse response = BPAResponse.builder().BPA(bpas).responseInfo(
