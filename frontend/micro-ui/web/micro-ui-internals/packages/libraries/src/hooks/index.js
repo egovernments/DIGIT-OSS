@@ -124,7 +124,8 @@ import useTenantsOBPS from "./obps/useTenants";
 import useNocDetails from "./obps/useNocDetails";
 import useOBPSDocumentSearch from "./obps/useOBPSDocumentSearch";
 import useObpsAPI from "./obps/useObpsAPI";
-import useBPADetails from "./obps/useBPADetails"
+import useBPADetails from "./obps/useBPADetails";
+import useBPASearch from "./obps/useBPASearch";
 
 import useEventInbox from "./events/useEventInbox";
 import {useEngagementMDMS} from "./engagement/useMdms"
@@ -244,7 +245,8 @@ const obps = {
   useNocDetails: useNocDetails,
   useOBPSDocumentSearch,
   useObpsAPI,
-  useBPADetails
+  useBPADetails,
+  useBPASearch
 };
 
 const events = {
