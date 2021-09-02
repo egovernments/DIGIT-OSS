@@ -260,3 +260,11 @@ config:
         image-name: "xstate-chatbot"
       - work-dir: "xstate-chatbot/nodejs/db"
         image-name: "xstate-chatbot-db"
+
+  - name: "builds/core-services/egov-document-uploader"
+    build:
+      - work-dir: "egov-document-uploader"
+        image-name: "egov-document-uploader"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-document-uploader/src/main/resources/db"
+        image-name: "egov-document-uploader-db"
