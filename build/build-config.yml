@@ -223,6 +223,14 @@ config:
       - work-dir: "core-services/egov-workflow-v2/src/main/resources/db"
         image-name: "egov-workflow-v2-db"
 
+  - name: "builds/digit-dev/core-services/egov-document-uploader"
+    build:
+      - work-dir: "core-services/egov-document-uploader"
+        image-name: "egov-document-uploader"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "core-services/egov-document-uploader/src/main/resources/db"
+        image-name: "egov-document-uploader-db"
+
   - name: "builds/digit-dev/core-services/report"
     build:
       - work-dir: "core-services/report"
@@ -608,14 +616,6 @@ config:
       - work-dir: "utilities/demo-utility"
         image-name: "demo-utility"
         dockerfile: "build/maven/Dockerfile"
-  - name: "builds/core-services/egov-document-uploader"
-    build:
-      - work-dir: "egov-document-uploader"
-        image-name: "egov-document-uploader"
-        dockerfile: "build/maven/Dockerfile"
-      - work-dir: "egov-document-uploader/src/main/resources/db"
-        image-name: "egov-document-uploader-db"
-
 
   # Frontend
 
