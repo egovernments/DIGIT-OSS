@@ -22,8 +22,7 @@
 <td>Counter operator</td>
 <td> Document verifier,Airport NOC user,Stakeholder registration document verifier</td>
 <td>
-Field inspector <br>
-Fire NOC user
+Field inspector, Fire NOC user
 </td>
 <td>
 Approver,Stakeholder registration approver 
