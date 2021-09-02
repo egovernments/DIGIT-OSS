@@ -2,7 +2,7 @@ package org.egov.inbox.util;
 
 public class BpaConstants {
 
-	public static final String BPA = "BPA";
+	public static final String BPA = "bpa-services";
 	public static final String MOBILE_NUMBER_PARAM = "mobileNumber";
 	public static final String BUSINESS_SERVICE_PARAM = "businessservice";
 	public static final String TENANT_ID_PARAM = "tenantId";
