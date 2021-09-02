@@ -7,20 +7,20 @@ import { convertEpochToDateDMY, stringReplaceAll } from "../utils";
 const SearchLicense = ({tenantId, t, onSubmit, data }) => {
   let applications = {};
   let validation = {};
-    const applicationsList = data;
-    let newapplicationlist = [];
-    if (applicationsList && applicationsList.length > 0) {
-        applicationsList.filter((response) => response.licenseNumber).map((ob) => {
-            if (applications[ob.licenseNumber]) {
-                if (applications[ob.licenseNumber].applicationDate < ob.applicationDate)
-                    applications[ob.licenseNumber] = ob
-            }
-            else
-                applications[ob.licenseNumber] = ob;
-        })
-        newapplicationlist = Object.values(applications);
-        newapplicationlist = newapplicationlist ? newapplicationlist.filter(ele => ele.financialYear != "2021-22" && (ele.status == "EXPIRED" || ele.status == "APPROVED")) : [];
-    }
+  //   const applicationsList = data;
+  //   let newapplicationlist = [];
+  //   if (applicationsList && applicationsList.length > 0) {
+  //       applicationsList.filter((response) => response.licenseNumber).map((ob) => {
+  //           if (applications[ob.licenseNumber]) {
+  //               if (applications[ob.licenseNumber].applicationDate < ob.applicationDate)
+  //                   applications[ob.licenseNumber] = ob
+  //           }
+  //           else
+  //               applications[ob.licenseNumber] = ob;
+  //       })
+  //       newapplicationlist = Object.values(applications);
+  //       newapplicationlist = newapplicationlist ? newapplicationlist.filter(ele => ele.financialYear != "2021-22" && (ele.status == "EXPIRED" || ele.status == "APPROVED")) : [];
+  //   }
 
     const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
         defaultValues: {
@@ -28,7 +28,8 @@ const SearchLicense = ({tenantId, t, onSubmit, data }) => {
             limit: 10,
             sortBy: "commencementDate",
             sortOrder: "DESC",
-            status: "APPROVED"
+            status: "APPROVED",
+            RenewalPending: true
         }
     })
     useEffect(() => {
@@ -37,6 +38,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data }) => {
       register("sortBy", "commencementDate")
       register("sortOrder", "DESC")
       register("status", "APPROVED")
+      register("RenewalPending", true)
     },[register])
 
     const GetCell = (value) => <span className="cell-text">{value}</span>;
@@ -157,7 +159,8 @@ const SearchLicense = ({tenantId, t, onSubmit, data }) => {
                       limit: 10,
                       sortBy: "commencementDate",
                       sortOrder: "DESC",
-                      status: "APPROVED"
+                      status: "APPROVED",
+                      RenewalPending: true
                   });
                   previousPage ();
                   }
@@ -177,7 +180,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data }) => {
         </Card>
         : <Table
             t={t}
-            data={newapplicationlist}
+            data={data} //{newapplicationlist}
             columns={columns}
             getCellProps={(cellInfo) => {
             return {
