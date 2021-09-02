@@ -13,14 +13,17 @@ import static org.egov.inbox.util.TLConstants.USERID_PARAM;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.inbox.repository.ServiceRequestRepository;
 import org.egov.inbox.util.FSMConstants;
 import org.egov.inbox.web.model.InboxSearchCriteria;
 import org.egov.inbox.web.model.workflow.ProcessInstanceSearchCriteria;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -51,6 +54,7 @@ public class FSMInboxFilterService {
 
     @Value("${egov.searcher.fsm.count.path}")
     private String fsmInboxSearcherCountEndpoint;
+    
 
     @Autowired
     private RestTemplate restTemplate;
@@ -59,12 +63,13 @@ public class FSMInboxFilterService {
     private ServiceRequestRepository serviceRequestRepository;
 
 	
-	public Integer fetchApplicationCountFromSearcher(InboxSearchCriteria criteria, HashMap<String, String> StatusIdNameMap, RequestInfo requestInfo){
+	public Integer fetchApplicationCountFromSearcher(InboxSearchCriteria criteria, HashMap<String, String> StatusIdNameMap, RequestInfo requestInfo,String dsoId){
         Integer totalCount = 0;
         HashMap moduleSearchCriteria = criteria.getModuleSearchCriteria();
         ProcessInstanceSearchCriteria processCriteria = criteria.getProcessSearchCriteria();
         Boolean isSearchResultEmpty = false;
         Boolean isMobileNumberPresent = false;
+       
         List<String> userUUIDs = new ArrayList<>();
         if(moduleSearchCriteria.containsKey(MOBILE_NUMBER_PARAM)){
             isMobileNumberPresent = true;
@@ -79,6 +84,8 @@ public class FSMInboxFilterService {
                 return 0;
             }
         }
+        
+       
 
         if(!isSearchResultEmpty){
             Object result = null;
@@ -98,6 +105,10 @@ public class FSMInboxFilterService {
            
             if(moduleSearchCriteria.containsKey(FSMConstants.APPLICATION_NUMBER)) {
                 searchCriteria.put(FSMConstants.APPLICATION_NUMBER_PARAM, moduleSearchCriteria.get(FSMConstants.APPLICATION_NUMBER));
+            }
+            
+            if(dsoId!=null) {
+            	 searchCriteria.put(FSMConstants.DSO_ID,dsoId);
             }
 
             // Accomodating process search criteria in searcher request
@@ -152,5 +163,6 @@ public class FSMInboxFilterService {
         }
         return userUuids;
     }
+    
 
 }

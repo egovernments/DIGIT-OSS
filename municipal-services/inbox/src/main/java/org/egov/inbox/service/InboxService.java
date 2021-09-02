@@ -47,6 +47,9 @@ import com.google.gson.JsonObject;
 import org.springframework.web.client.RestTemplate;
 
 import static org.egov.inbox.util.PTConstants.*;
+import static org.egov.inbox.util.TLConstants.REQUESTINFO_PARAM;
+import static org.egov.inbox.util.TLConstants.SEARCH_CRITERIA_PARAM;
+import static org.egov.inbox.util.TLConstants.TENANT_ID_PARAM;
 import static org.egov.inbox.util.TLConstants.TL;
 import static org.egov.inbox.util.BpaConstants.BPA;
 import static org.egov.inbox.util.BpaConstants.APPLICATION_NUMBER_PARAM;
@@ -78,6 +81,11 @@ public class InboxService {
 	@Autowired
 	
 	private FSMInboxFilterService fsmInboxFilter;
+	
+	@Autowired
+	private RestTemplate restTemplate;
+	
+	 
 
 	@Autowired
 	public InboxService(InboxConfiguration config, ServiceRequestRepository serviceRequestRepository,
@@ -100,6 +108,23 @@ public class InboxService {
 		if(!CollectionUtils.isEmpty(processCriteria.getStatus()))
 			inputStatuses = new ArrayList<>(processCriteria.getStatus());
 		StringBuilder assigneeUuid = new StringBuilder();
+		 String dsoId=null;
+		 if(requestInfo.getUserInfo().getRoles().get(0).getCode().equals(FSMConstants.FSM_DSO)) {
+        	 Map<String, Object> searcherRequestForDSO = new HashMap<>();
+        	 Map<String, Object> searchCriteriaForDSO = new HashMap<>();
+        	 searchCriteriaForDSO.put(TENANT_ID_PARAM, criteria.getTenantId());
+        	 searchCriteriaForDSO.put(FSMConstants.OWNER_ID, requestInfo.getUserInfo().getUuid());
+        	 searcherRequestForDSO.put(REQUESTINFO_PARAM, requestInfo);
+        	 searcherRequestForDSO.put(SEARCH_CRITERIA_PARAM, searchCriteriaForDSO);
+        	  StringBuilder uri = new StringBuilder();
+              uri.append(config.getSearcherHost()).append(config.getFsmInboxDSoIDEndpoint());
+
+            
+           Object   resultForDsoId = restTemplate.postForObject(uri.toString(), searcherRequestForDSO, Map.class);
+
+           dsoId = JsonPath.read(resultForDsoId, "$.vendor[0].id");     
+              
+		}
 		if(!ObjectUtils.isEmpty(processCriteria.getAssignee())){
 			assigneeUuid = assigneeUuid.append(processCriteria.getAssignee());
 		}
@@ -182,7 +207,8 @@ public class InboxService {
 			}
 			
 			if(!ObjectUtils.isEmpty(processCriteria.getBusinessService()) && processCriteria.getBusinessService().get(0).equals(FSMConstants.FSM_MODULE)) {
-				totalCount = fsmInboxFilter.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
+					
+				totalCount = fsmInboxFilter.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo,dsoId);
 			  }
 			if(processCriteria != null && !ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(BPA)) {
 				totalCount = bpaInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
