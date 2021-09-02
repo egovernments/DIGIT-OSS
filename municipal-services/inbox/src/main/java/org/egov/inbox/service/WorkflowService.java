@@ -79,7 +79,9 @@ public class WorkflowService {
 			url.append(config.getProcessStatusCountPath());
 			criteria.setIsProcessCountCall(true);
 			url = this.buildWorkflowUrl(criteria, url, Boolean.FALSE);
-
+            if(requestInfo.getUserInfo().getRoles().get(0).getCode().equals(FSMConstants.FSM_DSO)) {
+            	url.append("&assignee=").append( requestInfo.getUserInfo().getUuid());
+            }
 			RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 			if(finalResponse == null) {
 				finalResponse = (List<HashMap<String, Object>>) serviceRequestRepository.fetchListResult(url, requestInfoWrapper);
@@ -95,7 +97,9 @@ public class WorkflowService {
 		StringBuilder url = new StringBuilder(config.getWorkflowHost());
 		url.append( config.getProcessSearchPath());
 		url = this.buildWorkflowUrl(criteria, url, Boolean.FALSE);
-		
+		 if(requestInfo.getUserInfo().getRoles().get(0).getCode().equals(FSMConstants.FSM_DSO)) {
+         	url.append("&assignee=").append( requestInfo.getUserInfo().getUuid());
+         }
 		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 		Object result = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
 		ProcessInstanceResponse resposne =null;
