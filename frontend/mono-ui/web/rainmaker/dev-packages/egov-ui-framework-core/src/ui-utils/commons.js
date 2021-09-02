@@ -239,7 +239,7 @@ const getAllFileStoreIds = async ProcessInstances => {
 
 
 export const getFileUrl = (linkText = "") => {
-  const linkList = linkText.split(",");
+  const linkList = linkText && typeof linkText=="string" && linkText.split(",") || [];
   let fileURL = '';
   linkList && linkList.map(link => {
     if (!link.includes('large') && !link.includes('medium') && !link.includes('small')) {
