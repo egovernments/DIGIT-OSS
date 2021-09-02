@@ -33,8 +33,9 @@ export default class WarningPopup extends React.Component {
        
           <div style={{padding:'10px'}}><Label label="PTUPNO_INVALIDNO_DESC" labelStyle={{ color: 'rgba(0, 0, 0, 0.873302)', fontSize: "14px" }}></Label></div>
           <div className="pt-warning-button-container">
-            <button type="button" style={{ width: '48%' }} className={"button-warning-secondary"} onClick={() => { this.props.updateNum(); }} ><Label label="PTUPNO_INVALIDNO_UPDATE"></Label></button>
-            <button type="button" style={{ width: '48%' }} className={"button-verify-link"} onClick={() => this.props.closeDialog()} ><Label label="PTUPNO_INVALIDNO_SKIP"></Label></button>
+          <button type="button" style={{ width: '48%' }} className={"button-warning-secondary"} onClick={() => this.props.closeDialog()} ><Label label="PTUPNO_INVALIDNO_SKIP"></Label></button>
+          <button type="button" style={{ width: '48%' }} className={"button-verify-link"} onClick={() => { this.props.updateNum(); }} ><Label label="PTUPNO_INVALIDNO_UPDATE"></Label></button>
+            
           </div>
     
       </Dialog>

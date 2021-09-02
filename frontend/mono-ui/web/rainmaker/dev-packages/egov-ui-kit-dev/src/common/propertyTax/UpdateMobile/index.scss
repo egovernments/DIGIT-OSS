@@ -4,7 +4,6 @@ $secondary:#000000DE;
 
 .pt-update-popup{
    max-width: 55vw  !important;
-   overflow-y: scroll;
    left: 20% !important;
 }
 
@@ -130,9 +129,14 @@ cursor: pointer;
     word-wrap: unset !important;
   }
 }
+
+.jk-update-send-disabled{
+  background: #F2F2F2;
+}
 @media only screen and (max-width: 768px){
 .pt-update-popup{
   max-width: 100%!important;
+  left: 0% !important;
 }
 .pt-warning-popup{
   max-width: 80%!important;

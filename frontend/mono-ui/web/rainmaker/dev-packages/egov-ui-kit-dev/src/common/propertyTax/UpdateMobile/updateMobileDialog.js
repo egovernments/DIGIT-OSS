@@ -1,4 +1,4 @@
-import { Dialog, TextField } from "components";
+import { Dialog, TextField ,MobileNumberField } from "components";
 import { getPattern } from "egov-ui-framework/ui-config/screens/specs/utils";
 import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
 import { getLocaleLabels, handleFileUpload } from "egov-ui-framework/ui-utils/commons.js";
@@ -184,10 +184,10 @@ export default class UpdateMobileDialog extends React.Component {
         if (result && result.Errors) {
           this.setMessage(result.Errors[0].code, "ERROR", false);
         } else {
-          this.setMessage("PT_SEC_USER_CREATED_SUCCESS", "SUCCESS", true);
+          this.setMessage("PT_MOBILE_NUM_UPDATED_SUCCESS", "SUCCESS", true);
           setTimeout(() => {
             window.location.reload();
-          }, 1000);
+          }, 2500);
         }
       })
       .catch(error => { console.log('error', error); this.hideLoading(); });
@@ -325,7 +325,7 @@ export default class UpdateMobileDialog extends React.Component {
       }
     });
     if (clear) {
-      setTimeout(this.setMessage, 1000);
+      setTimeout(this.setMessage, 2000);
     }
   }
   setDocFileDetails = (ind, file, fileStoreId) => {
@@ -384,7 +384,7 @@ export default class UpdateMobileDialog extends React.Component {
             </span>
             <span style={{ marginRight: '15%' }}>
               <Label label="PTUPNO_CURR_NO" labelStyle={{ color: 'rgba(0, 0, 0, 0.873302)', fontSize: "14px" }}></Label>
-              <Label label={propertyNumbers && propertyNumbers.mobileNumber} labelStyle={{ color: 'rgba(0, 0, 0, 0.875)', fontSize: "16px" }} ></Label>
+              <Label label={propertyNumbers && propertyNumbers.mobileNumber&& `+91 ${propertyNumbers.mobileNumber}`} labelStyle={{ color: 'rgba(0, 0, 0, 0.875)', fontSize: "16px" }} ></Label>
             </span>
           </span>
           <div>
@@ -392,7 +392,7 @@ export default class UpdateMobileDialog extends React.Component {
               height: "100px",
               display: "flex",
               alignItems: "center"
-            }}> <TextField type={fields[key].type}
+            }}> <MobileNumberField type={fields[key].type}
               placeholder={getLocaleLabels(fields[key].placeholder, fields[key].placeholder)}
               floatingLabelText={getLocaleLabels(fields[key].floatingLabelText, fields[key].floatingLabelText)}
               className={fields[key].className}/*  */
@@ -401,7 +401,7 @@ export default class UpdateMobileDialog extends React.Component {
               style={fields[key].style}
               disabled={fields[key].disabled}
               value={fields[key].value}
-              onChange={(e) => this.handleChange(key, e.target.value)}></TextField>
+              onChange={(e) => this.handleChange(key, e.target.value)}></MobileNumberField>
             </span>
             {process.env.REACT_APP_NAME !== "Citizen" && <div style={{marginTop: '10px'}}>
               {documents.map((document, ind) => {
@@ -427,13 +427,13 @@ export default class UpdateMobileDialog extends React.Component {
               <button type="button" style={{ width: '100%' }} className={"button-verify-link"} onClick={() => this.validateAndSendOtp()} ><Label label="PTUPNO_VER_NO"></Label></button>
             </div>}
             {process.env.REACT_APP_NAME === "Citizen" && <div className="pt-update-send-otp-container">
-              <button type="button" disabled={this.state.otpButton} style={{ marginRight: "5%" }} className={"button-verify-link"} onClick={() => this.validateAndSendOtp()} ><Label label="PTUPNO_SENDOTP"></Label></button>
+              <button type="button" disabled={this.state.otpButton} style={{ marginRight: "5%" }} className={`button-verify-link ${this.state.otpButton&&'jk-update-send-disabled'}`} onClick={() => this.validateAndSendOtp()} ><Label label="PTUPNO_SENDOTP"></Label></button>
               {this.state.otpButton && <React.Fragment><Label label="CORE_ANOTHER_OTP" labelStyle={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: "14px" }}></Label>
                 <Counter updateState={() => this.setState({ otpButton: false })} otpButton={this.state.otpButton} />
                 <Label label="CS_RESEND_SECONDS" labelStyle={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: "14px" }}></Label></React.Fragment>}
             </div>}
           </div>
-          {process.env.REACT_APP_NAME === "Citizen" && <div className="pt-update-verify-container">
+          {process.env.REACT_APP_NAME === "Citizen" && !this.state.verifyButton&&<div className="pt-update-verify-container">
             <span style={{
               height: "100px",
               display: "flex",
