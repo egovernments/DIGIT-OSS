@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { PageBasedInput, Loader, RadioButtons, CardHeader, Dropdown, SearchOnRadioButtons } from "@egovernments/digit-ui-react-components"
+import { PageBasedInput, Loader, RadioButtons, CardHeader, Dropdown, SearchOnRadioButtons, CardLabelError } from "@egovernments/digit-ui-react-components"
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 
@@ -9,7 +9,8 @@ const LocationSelection = () => {
     
     const {data: cities, isLoading} = Digit.Hooks.useTenants();
 
-     const [selectedCity, setSelectedCity ] = useState(() => Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY"))
+    const [selectedCity, setSelectedCity ] = useState(() => Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY"))
+    const [showError, setShowError] = useState(false)
 
     const texts = useMemo(() => ({
         header: t("CS_COMMON_CHOOSE_LOCATION"),
@@ -18,6 +19,7 @@ const LocationSelection = () => {
 
     function selectCity(city) {
         setSelectedCity(city)
+        setShowError(false)
     }
 
     const RadioButtonProps = useMemo(() => {
@@ -31,13 +33,20 @@ const LocationSelection = () => {
     },[cities, t, selectedCity])
 
     function onSubmit(){
-        Digit.SessionStorage.set("CITIZEN.COMMON.HOME.CITY",selectedCity)
-        history.push("/digit-ui/citizen")
+
+        if(selectedCity){
+            Digit.SessionStorage.set("CITIZEN.COMMON.HOME.CITY",selectedCity)
+            history.push("/digit-ui/citizen")
+        }
+        else{
+            setShowError(true)
+        }
     }
 
     return isLoading ? <loader/> : <PageBasedInput texts={texts} onSubmit={onSubmit}>
         <CardHeader>{t("CS_COMMON_CHOOSE_LOCATION")}</CardHeader>
         <SearchOnRadioButtons {...RadioButtonProps} placeholder={t("COMMON_TABLE_SEARCH")} />
+        {showError ? <CardLabelError>{t("CS_COMMON_LOCATION_SELECTION_ERROR")}</CardLabelError> : null}
     </PageBasedInput>
 }
 

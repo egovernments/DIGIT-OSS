@@ -32,6 +32,30 @@
     }
 }
 
+.moduleLinkHomePage{
+    margin-top: -25px;
+    img{
+        height: 33vw;
+        filter: grayscale(100%);
+        @apply w-full object-cover;
+    }
+    h1{
+        position: absolute;
+        top: 100px;
+        left: 21px;
+        @apply text-heading-xl text-white font-bold;
+    }
+}
+
+.moduleLinkHomePageModuleLinks{
+    @apply mt-md;
+    .CitizenHomeCard{
+        .header{
+            @apply hidden;
+        }
+    }
+}
+
 @screen dt{
     .HomePageWrapper{
         .BannerWithSearch{

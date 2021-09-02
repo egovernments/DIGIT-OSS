@@ -29,22 +29,22 @@ const Home = () => {
             {
                 name:  t("ES_PGR_HEADER_COMPLAINT"), 
                 Icon: <ComplaintIcon/>,
-                onClick: () => history.push("/digit-ui/citizen/pgr/complaints")
+                onClick: () => history.push("/digit-ui/citizen/pgr-home")
             },
             {
                 name: t("MODULE_PT"), 
                 Icon: <PTIcon className="fill-path-primary-main" />,
-                onClick: () => history.push("/digit-ui/citizen/pt/property/my-properties")
+                onClick: () => history.push("/digit-ui/citizen/pt-home")
             },
             {
                 name: t("MODULE_TL"), 
                 Icon: <CaseIcon className="fill-path-primary-main" />,
-                onClick: () => history.push("/digit-ui/citizen/tl/tradelicence/my-application")
+                onClick: () => history.push("/digit-ui/citizen/tl-home")
             },
             {
                 name: t("ACTION_TEST_WATER_AND_SEWERAGE"), 
                 Icon: <DropIcon/>,
-                onClick: () => history.push("/digit-ui/citizen/all-services")
+                onClick: () => history.push("/digit-ui/citizen")
             }
         ]
     }

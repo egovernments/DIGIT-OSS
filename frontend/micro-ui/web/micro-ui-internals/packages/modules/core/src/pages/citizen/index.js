@@ -20,12 +20,23 @@ const Home = ({stateInfo, userDetails, CITIZEN, cityDetails, mobileView, handleU
 
     const appRoutes = modules.map(({ code, tenants }, index) => {
         const Module = Digit.ComponentRegistryService.getComponent(`${code}Module`);
-        return (
-          <Route key={index} path={`${path}/${code.toLowerCase()}`}>
-            <Module stateCode={stateCode} moduleCode={code} userType="citizen" tenants={getTenants(tenants, appTenants)} />
-          </Route>
-        );
+        return <Route key={index} path={`${path}/${code.toLowerCase()}`}>
+                <Module stateCode={stateCode} moduleCode={code} userType="citizen" tenants={getTenants(tenants, appTenants)} />
+            </Route>
     });
+
+    const ModuleLevelLinkHomePages = modules.map(({ code }, index) => {
+        let Links = Digit.ComponentRegistryService.getComponent(`${code}Links`) || (() => <React.Fragment />);
+        return <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
+                <div className="moduleLinkHomePage">
+                    <img src={stateInfo?.bannerUrl}/>
+                    <h1>{t("MODULE_"+code.toUpperCase())}</h1>
+                </div>
+                <div className="moduleLinkHomePageModuleLinks">
+                    <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />
+                </div>
+            </Route>  
+    })
 
     return <div className={classname}>
         <TopBarSideBar
@@ -63,6 +74,8 @@ const Home = ({stateInfo, userDetails, CITIZEN, cityDetails, mobileView, handleU
                 </Route>
         
                 {appRoutes}
+
+                {ModuleLevelLinkHomePages}
 
             </Switch>
         </div>
