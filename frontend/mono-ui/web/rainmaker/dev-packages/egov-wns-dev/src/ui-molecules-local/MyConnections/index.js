@@ -177,7 +177,7 @@ class MyConnections extends React.Component {
                         </Grid>
                         <Grid item md={8} xs={6}>
                           <Label
-                            labelName={item.due ? item.due : "0"} onClick={() => this.getViewBillDetails(item)}
+                            labelName={item.due ? item.due : "0"} onClick={() => item.due && this.getViewBillDetails(item)}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />
