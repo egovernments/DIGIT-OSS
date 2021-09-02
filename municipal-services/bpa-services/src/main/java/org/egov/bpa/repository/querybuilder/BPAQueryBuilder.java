@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import jdk.internal.org.jline.utils.Log;
-
 @Component
 public class BPAQueryBuilder {
 
@@ -187,8 +185,6 @@ public class BPAQueryBuilder {
             preparedStmtList.add(limit + offset);
         }
         
-        Log.info("finalQuery::::::::::::"+finalQuery);
-
         return finalQuery;
 
     }
