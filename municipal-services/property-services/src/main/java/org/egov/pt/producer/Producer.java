@@ -14,7 +14,7 @@ public class Producer {
 	private CustomKafkaTemplate<String, Object> kafkaTemplate;
 
 	public void push(String tenantId, String topic, Object value) {
-		String[] tenants = tenantId.split(".");
+		String[] tenants = tenantId.split("\\.");
 		String updatedTopic = topic;
 		if (tenants.length > 1)
 			updatedTopic = tenants[1].concat("-").concat(topic);
