@@ -100,6 +100,12 @@ public class WorkflowQueryBuilder {
             builder.append(" and pi.status  IN (").append(createQuery(statuses)).append(")");
             addToPreparedStatement(preparedStmtList, statuses);
         }
+        
+        if(!StringUtils.isEmpty(criteria.getAssignee())) {
+        	
+        	builder.append(" AND asg.assignee=? ");
+        	 preparedStmtList.add(criteria.getAssignee());
+        }
 
         return builder.toString();
 
