@@ -48,7 +48,7 @@ const OBPSLinks = ({ matchPath, userType }) => {
 
   const links = [
     {
-      link: `${matchPath}/tradelicence/new-application`,
+      link: `${matchPath}/my-applications`,
       i18nKey: t("BPA_CITIZEN_HOME_VIEW_APP_BY_CITIZEN_LABEL"),
     },
     {
