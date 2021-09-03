@@ -1353,30 +1353,76 @@ export const getMeterReadingData = async (dispatch) => {
 
 export const getPastPaymentsForWater = async (dispatch) => {
     dispatch(toggleSpinner());
-    let queryObject = [
+
+    let queryObjectForWS = [
+        {
+            key: "mobileNumber",
+            value: JSON.parse(getUserInfo()).mobileNumber
+        },
         {
             key: "tenantId",
             value: getTenantIdCommon()
         },
         {
-            key: "businessService",
-            value: "WS"
-        },
-        {
-            key: "uuid",
-            value: JSON.parse(getUserInfo()).uuid.toString()
-        },
+            key: "searchType",
+            value: "CONNECTION"
+        }
     ];
+
+    // let queryObject = [
+    //     {
+    //         key: "tenantId",
+    //         value: getTenantIdCommon()
+    //     },
+    //     // {
+    //     //     key: "businessService",
+    //     //     value: "WS"
+    //     // },
+    //     {
+    //         key: "uuid",
+    //         value: JSON.parse(getUserInfo()).uuid.toString()
+    //     },
+    // ];
     try {
+
+        const responseOfWS = await httpRequest(
+            "post",
+            "/ws-services/wc/_search",
+            "_search",
+            queryObjectForWS
+        );
+        const consumerCodesList = [];
+        if(responseOfWS && responseOfWS.WaterConnection) {
+            responseOfWS.WaterConnection.map(data => {
+                if(data.connectionNo)consumerCodesList.push(data.connectionNo);
+            });
+        }
+
+        let uniqueConsumberCodes = consumerCodesList.filter((item, i, ar) => ar.indexOf(item) === i);
+
+        let queryObject = [
+            {
+                key: "tenantId",
+                value: getTenantIdCommon()
+            },
+            {
+                key: "consumerCodes",
+                value: uniqueConsumberCodes.join(',')
+            }
+        ];
+
         const response = await httpRequest(
             "post",
-            getPaymentSearchAPI("WS"),
+            getPaymentSearchAPI("WS", true),
             "_search",
             queryObject
         );
         dispatch(toggleSpinner());
         if (response && response.Payments) {
-            dispatch(prepareFinalObject("pastPaymentsForWater", response.Payments));
+            const userNumber = Number(JSON.parse(getUserInfo()).mobileNumber);
+            const filteredArray = response.Payments.filter(data => data.mobileNumber == userNumber);
+            // dispatch(prepareFinalObject("pastPaymentsForWater", response.Payments));
+            dispatch(prepareFinalObject("pastPaymentsForWater", filteredArray));
         }
         return findAndReplace(response, null, "NA");;
     } catch (error) {
@@ -1392,30 +1438,72 @@ export const getPastPaymentsForWater = async (dispatch) => {
 
 export const getPastPaymentsForSewerage = async (dispatch) => {
     dispatch(toggleSpinner());
-    let queryObject = [
+    // let queryObject = [
+    //     {
+    //         key: "tenantId",
+    //         value: getTenantIdCommon()
+    //     },
+    //     // {
+    //     //     key: "businessService",
+    //     //     value: "SW"
+    //     // },
+    //     {
+    //         key: "uuid",
+    //         value: JSON.parse(getUserInfo()).uuid.toString()
+    //     }
+    // ];
+    let queryObjectForSW = [
+        {
+            key: "mobileNumber",
+            value: JSON.parse(getUserInfo()).mobileNumber
+        },
         {
             key: "tenantId",
             value: getTenantIdCommon()
         },
         {
-            key: "businessService",
-            value: "SW"
-        },
-        {
-            key: "uuid",
-            value: JSON.parse(getUserInfo()).uuid.toString()
+            key: "searchType",
+            value: "CONNECTION"
         }
     ];
     try {
+        const responseOfSW = await httpRequest(
+            "post",
+            "/sw-services/swc/_search",
+            "_search",
+            queryObjectForSW
+        );
+        const consumerCodesList = [];
+        if(responseOfSW && responseOfSW.SewerageConnections) {
+            responseOfSW.SewerageConnections.map(data => {
+                if(data.connectionNo)consumerCodesList.push(data.connectionNo);
+            });
+        }
+
+        let uniqueConsumberCodes = consumerCodesList.filter((item, i, ar) => ar.indexOf(item) === i);
+
+        let queryObject = [
+            {
+                key: "tenantId",
+                value: getTenantIdCommon()
+            },
+            {
+                key: "consumerCodes",
+                value: uniqueConsumberCodes.join(',')
+            }
+        ];
         const response = await httpRequest(
             "post",
-            getPaymentSearchAPI("SW"),
+            getPaymentSearchAPI("SW", true),
             "_search",
             queryObject
         );
         dispatch(toggleSpinner());
         if (response && response.Payments) {
-            dispatch(prepareFinalObject("pastPaymentsForSewerage", response.Payments));
+            const userNumber = Number(JSON.parse(getUserInfo()).mobileNumber);
+            const filteredArray = response.Payments.filter(data => data.mobileNumber == userNumber)
+            // dispatch(prepareFinalObject("pastPaymentsForSewerage", response.Payments));
+            dispatch(prepareFinalObject("pastPaymentsForSewerage", filteredArray));
         }
         return findAndReplace(response, null, "NA");;
     } catch (error) {
