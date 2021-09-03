@@ -150,7 +150,7 @@ public class PropertyService {
 		Boolean isNumberDifferent = false;
 		
 		for(OwnerInfo owner : ownersFromRequest) {
-			if(!uuidToMobileNumber.get(owner.getUuid()).equals(owner.getMobileNumber())) {
+			if(uuidToMobileNumber.containsKey(owner.getUuid()) && !uuidToMobileNumber.get(owner.getUuid()).equals(owner.getMobileNumber())) {
 				isNumberDifferent = true;
 				break;
 			}
