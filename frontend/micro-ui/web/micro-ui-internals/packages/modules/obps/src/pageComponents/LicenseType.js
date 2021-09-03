@@ -1,6 +1,7 @@
 import { CardLabel, FormStep, RadioOrSelect, TextInput } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { stringReplaceAll } from "../utils";
+import Timeline from "../components/Timeline";
 
 const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   let index = window.location.href.split("/").pop();
@@ -38,6 +39,8 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     onSelect(config.key, {LicenseType,ArchitectNo});
   }
   return (
+    <div>
+    <Timeline currentStep={1} />
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!LicenseType}>
       <CardLabel>{t("BPA_LICENSE_TYPE_LABEL")}</CardLabel>
       <div className={"form-pt-dropdown-only"}>
@@ -64,6 +67,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
         />
         </div>}
     </FormStep>
+    </div>
   );
 };
 

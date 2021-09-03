@@ -79,4 +79,31 @@ export const OBPSService = {
       params: {},
       auth: true,
     }),
+    BPAREGGetBill: (tenantId, filters = {}) =>
+    Request({
+      url: Urls.obps.bpaRegGetBill,
+      useCache: false,
+      method: "POST",
+      auth: false,
+      userService: false,
+      params: { tenantId, ...filters },
+    })
+      .then((d) => {
+        return d;
+      })
+      .catch((err) => {
+        if (err?.response?.data?.Errors?.[0]?.code === "EG_BS_BILL_NO_DEMANDS_FOUND") return { Bill: [] };
+        else throw err;
+      }),
+  BPAREGupdate: (details, tenantId) =>
+    Request({
+      url: Urls.obps.bpaRegUpdate,
+      data: details,
+      useCache: false,
+      setTimeParam: false,
+      userService: true,
+      method: "POST",
+      params: {},
+      auth: true,
+    }),
 }

@@ -68,8 +68,9 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                 count = count + 1;
             }
         });
-        if ((count == "0" || count == 0) && documents.length > 0) setEnableSubmit(false);
-        else setEnableSubmit(true);
+        if(bpaTaxDocuments.length == documents.length+1 && bpaTaxDocuments.length!==0) setEnableSubmit(false);
+        // if ((count == "0" || count == 0) && documents.length > 0) setEnableSubmit(false);
+        // else setEnableSubmit(true);
     }, [documents, checkRequiredFields])
 
     // if (bpaDocsLoading) {
@@ -78,14 +79,14 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
 
     return (
         <div>
-            <Timeline currentStep={2} />
+            <Timeline currentStep={3} />
             {!isLoading ?
                 <FormStep
                     t={t}
                     config={config}
                     onSelect={handleSubmit}
                     onSkip={onSkip}
-                    isDisabled={false}
+                    isDisabled={enableSubmit}
                     onAdd={onAdd}
                 >
                     {bpaTaxDocuments?.map((document, index) => {

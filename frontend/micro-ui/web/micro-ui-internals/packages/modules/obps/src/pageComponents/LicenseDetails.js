@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, Menu, MobileNumber, Card } from "@egovernments/digit-ui-react-components";
 import { useLocation, useRouteMatch } from "react-router-dom";
+import Timeline from "../components/Timeline";
 
 const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   const { pathname: url } = useLocation();
@@ -53,6 +54,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const onSkip = () => onSelect();
 
   return (
+    <div>
+    <Timeline currentStep={1} />
     <FormStep
       config={config}
       onSelect={goNext}
@@ -120,9 +123,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           name="PanNumber"
           value={PanNumber}
           onChange={selectPanNumber}
+          {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
         />
       </div>
     </FormStep>
+    </div>
   );
 };
 

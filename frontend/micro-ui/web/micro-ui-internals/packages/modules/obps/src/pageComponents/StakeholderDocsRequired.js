@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Card, CardHeader, CardLabel, CardText, CitizenInfoLabel, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -9,6 +9,12 @@ const StakeholderDocsRequired = ({ onSelect, onSkip, config }) => {
   const state = tenantId.split(".")[0];
   const history = useHistory();
   const { data, isLoading } = Digit.Hooks.obps.useMDMS(state, "StakeholderRegistraition", "TradeTypetoRoleMapping");
+
+  useEffect(()=>{
+    if(tenantId)
+    Digit.LocalizationService.getLocale({modules: [`rainmaker-bpareg`], locale: Digit.StoreData.getCurrentLanguage(), tenantId: `${tenantId}`});
+  },[tenantId])
+  
 
   if (isLoading) {
     return (

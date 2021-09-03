@@ -1,5 +1,6 @@
 import { CardLabel, CheckBox, CitizenInfoLabel, FormStep, Loader, TextInput } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
+import Timeline from "../components/Timeline";
 
 const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData }) => {
   let validation = {};
@@ -81,6 +82,7 @@ function selectChecked(e){
 
   return (
     <React.Fragment>
+      <Timeline currentStep={2} />
       <FormStep
         config={config}
         onSelect={goNext}
@@ -89,13 +91,13 @@ function selectChecked(e){
         //isDisabled={!TradeName}
       >
         <CheckBox
-        label={t("same as permanent address?")}
+        label={t("BPA_SAME_AS_PERMANENT_ADDRESS")}
         onChange={(e) => selectChecked(e)}
         //value={field.isPrimaryOwner}
         checked={isAddressSame}
-        //style={{ paddingTop: "10px" }}
+        style={{ paddingBottom: "10px", paddingTop:"10px" }}
          />
-        <CardLabel>{`${t("Correspondence Address")}`}</CardLabel>
+        <CardLabel>{`${t("BPA_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL")}`}</CardLabel>
         <TextInput
           t={t}
           isMandatory={false}

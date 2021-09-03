@@ -126,6 +126,9 @@ import useOBPSDocumentSearch from "./obps/useOBPSDocumentSearch";
 import useObpsAPI from "./obps/useObpsAPI";
 import useBPADetails from "./obps/useBPADetails";
 import useBPASearch from "./obps/useBPASearch";
+import { useBPAREGgetbill } from "./obps/useBPAREGgetbill";
+import useStakeholderAPI from "./obps/useStakeholderAPI";
+
 import useBPAREGSearch from "./obps/useBPAREGSearch";
 import useEventInbox from "./events/useEventInbox";
 import {useEngagementMDMS} from "./engagement/useMdms"
@@ -247,6 +250,8 @@ const obps = {
   useObpsAPI,
   useBPADetails,
   useBPASearch,
+  useBPAREGgetbill,
+  useStakeholderAPI,
   useBPAREGSearch
 };
 

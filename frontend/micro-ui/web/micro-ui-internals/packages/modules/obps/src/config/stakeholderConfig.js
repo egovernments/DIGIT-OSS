@@ -75,7 +75,7 @@ export const newConfig = [
         {
             route: "stakeholder-document-details",
             component: "StakeholderDocuments",
-            nextStep: "stakeholder-docs-required",
+            nextStep: null,
             key: "documents",
             texts: {
               headerCaption: "BPA_DOC_DETAILS_SUMMARY",

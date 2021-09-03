@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { useRouteMatch, useLocation, useHistory, Switch, Route, Redirect } from "react-router-dom";
 import { newConfig } from "../../../config/stakeholderConfig";
-//import CheckPage from "./CheckPage";
-//import OBPSAcknowledgement from "./OBPSAcknowledgement";
+import CheckPage from "./CheckPage";
+import StakeholderAcknowledgement from "./StakeholderAcknowledgement";
 
 
 const StakeholderRegistration = () => {
@@ -68,6 +68,15 @@ const StakeholderRegistration = () => {
           </Route>
         );
       })}
+       <Route path={`${path}/check`}>
+          <CheckPage onSubmit={createApplication} value={params} />
+        </Route>
+        <Route path={`${path}/acknowledgement`}>
+        <StakeholderAcknowledgement data={params} onSuccess={onSuccess} />
+      </Route>
+      <Route>
+        <Redirect to={`${path}/${config.indexRoute}`} />
+      </Route>
     </Switch>
   );
 };

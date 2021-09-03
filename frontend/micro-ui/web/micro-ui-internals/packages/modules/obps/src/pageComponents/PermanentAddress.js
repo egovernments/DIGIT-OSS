@@ -1,5 +1,6 @@
 import { CardLabel, CheckBox, CitizenInfoLabel, FormStep, Loader, TextInput } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
+import Timeline from "../components/Timeline";
 
 const PermanentAddress = ({ t, config, onSelect, value, userType, formData }) => {
   let validation = {};
@@ -26,6 +27,7 @@ const PermanentAddress = ({ t, config, onSelect, value, userType, formData }) =>
 
   return (
     <React.Fragment>
+      <Timeline currentStep={2} />
       <FormStep
         config={config}
         onSelect={goNext}
@@ -33,7 +35,7 @@ const PermanentAddress = ({ t, config, onSelect, value, userType, formData }) =>
         t={t}
         //isDisabled={!TradeName}
       >
-        <CardLabel>{`${t("Permanent Address")}`}</CardLabel>
+        <CardLabel>{`${t("BPA_PERMANANT_ADDRESS_LABEL")}`}</CardLabel>
         <TextInput
           t={t}
           isMandatory={false}

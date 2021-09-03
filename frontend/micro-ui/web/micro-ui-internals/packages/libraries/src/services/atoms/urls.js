@@ -109,6 +109,8 @@ const Urls = {
     bpaSearch: "/bpa-services/v1/bpa/_search",
     bpaRegSearch: "/tl-services/v1/BPAREG/_search",
     bpaRegCreate: "/tl-services/v1/BPAREG/_create",
+    bpaRegGetBill: "/tl-calculator/v1/BPAREG/_getbill",
+    bpaRegUpdate: "/tl-services/v1/BPAREG/_update",
   },
 
   edcr: {

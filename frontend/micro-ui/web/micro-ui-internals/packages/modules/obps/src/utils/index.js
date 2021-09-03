@@ -122,6 +122,30 @@ export const convertToBPAObject = (data) => {
   return formData;
 }
 
+export const getapplicationdocstakeholder = (initial) => {
+let convertedDoc = [];
+initial.documents?.documents.map((ob) => {
+  convertedDoc.push({
+    "fileStoreId":ob.fileStoreId,
+    "fileStore":ob.fileStoreId,
+    "fileName":"",
+    "fileUrl":"",
+    "documentType":ob.documentType,
+    "tenantId": initial?.result?.Licenses[0]?.tenantId,
+  })
+});
+return convertedDoc;
+}
+
+export const convertToStakeholderObject = (data) => {
+  let formData = {
+    "Licenses":[
+      {...data?.result?.Licenses[0], action:"APPLY", tradeLicenseDetail:{...data?.result?.Licenses[0]?.tradeLicenseDetail,applicationDocuments:getapplicationdocstakeholder(data)}}
+    ]
+  }
+  return formData;
+}
+
 export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
   //example input format : "2018-10-02"
   try {
