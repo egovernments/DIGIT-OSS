@@ -1141,7 +1141,7 @@ export const getFetchBillAPI = () => {
 
 /* TO CONVERT USER TO CENTRAL INSTANCE */
 export const convertUserForSingleInstance = (user = { }) => {
-  let tenantId = user.permanentCity;
+  let tenantId = commonConfig.tenantId;
   localStorage.setItem("Citizen.tenant-id", tenantId);
   localStorage.setItem("tenant-id", tenantId);
   user.tenantId = tenantId;
