@@ -69,7 +69,7 @@ export const getTooltip = (children, toolTipProps) => {
   };
 };
 
-export const getCheckbox = (content, jsonPath, props = {}) => {
+export const getCheckbox = (content, jsonPath, props = { }) => {
   return {
     uiFramework: "custom-containers-local",
     moduleName: "egov-tradelicence",
@@ -185,8 +185,8 @@ export const getApplicationNoContainer = number => {
 
 export const getContainerWithElement = ({
   children,
-  props = {},
-  gridDefination = {}
+  props = { },
+  gridDefination = { }
 }) => {
   return {
     uiFramework: "custom-atoms",
@@ -208,7 +208,7 @@ export const transformById = (payload, id) => {
       };
 
       return result;
-    }, {})
+    }, { })
   );
 };
 
@@ -337,7 +337,7 @@ export const getSubHeaderLabel = queryValue => {
       labelKey: "TL_REJECTION_CHECKLIST_REJ_CHECKLIST"
     });
   } else if (queryValue === "cancel") {
-    return {};
+    return { };
   } else {
     return getCommonSubHeader({
       labelName: "Approve Checklist",
@@ -443,7 +443,7 @@ export const getButtonVisibility = (status, button) => {
 
 export const commonTransform = (object, path) => {
   let data = get(object, path);
-  let transformedData = {};
+  let transformedData = { };
   data.map(a => {
     const splitList = a.code.split(".");
     let ipath = "";
@@ -458,7 +458,7 @@ export const commonTransform = (object, path) => {
           set(
             transformedData,
             ipath === "" ? splitList[i] : ipath + "." + splitList[i],
-            i < splitList.length - 2 ? {} : []
+            i < splitList.length - 2 ? { } : []
           );
         }
       } else {
@@ -493,7 +493,7 @@ export const getSearchResults = async queryObject => {
     return response;
   } catch (error) {
     console.log(error);
-    return {};
+    return { };
   }
 };
 
@@ -577,7 +577,7 @@ export const getReceiptData = async queryObject => {
     return response;
   } catch (error) {
     console.log(error);
-    return {};
+    return { };
   }
 };
 
@@ -601,7 +601,7 @@ export const getMapLocator = textSchema => {
     uiFramework: "custom-molecules-local",
     moduleName: "egov-tradelicence",
     componentPath: "MapLocator",
-    props: {}
+    props: { }
   };
 };
 
@@ -660,7 +660,7 @@ export const getMdmsData = async queryObject => {
     return response;
   } catch (error) {
     console.log(error);
-    return {};
+    return { };
   }
 };
 
@@ -696,7 +696,7 @@ export const getDetailsFromProperty = async (state, dispatch) => {
         `/pt-services-v2/property/_search?tenantId=${tenantId}&ids=${propertyId}`,
         "_search",
         [],
-        {}
+        { }
       );
       if (
         payload &&
@@ -916,7 +916,7 @@ export const getUserDataFromUuid = async bodyObject => {
     return response;
   } catch (error) {
     console.log(error);
-    return {};
+    return { };
   }
 };
 
@@ -1027,7 +1027,7 @@ const getBillingSlabData = async (
   accessories
 ) => {
   const { accesssoryBillingSlabIds, tradeTypeBillingSlabIds } =
-    billingSlabIds || {};
+    billingSlabIds || { };
   if (accesssoryBillingSlabIds || tradeTypeBillingSlabIds) {
     const accessoryUnit =
       accesssoryBillingSlabIds &&
@@ -1158,7 +1158,7 @@ export const createEstimateData = async (
   LicenseData,
   jsonPath,
   dispatch,
-  href = {},
+  href = { },
   isgetBill = false
 ) => {
   const applicationNo =
@@ -1200,8 +1200,8 @@ export const createEstimateData = async (
   //     : payload.billResponse &&
   //       getEstimateData(payload.billResponse.Bill, false, LicenseData)
   //   : [];
-  let payload = {};
-  let estimateData = {};
+  let payload = { };
+  let estimateData = { };
   if (isgetBill) {
     payload = await getBill(queryObjForGetBill);
     estimateData =
@@ -1263,7 +1263,7 @@ export const validateFields = (
   const fields = get(
     state.screenConfiguration.screenConfig[screen],
     objectJsonPath,
-    {}
+    { }
   );
   let isFormValid = true;
   for (var variable in fields) {
@@ -1687,7 +1687,7 @@ export const prepareBPAREGDocumentDetailsUploadRedux = async (state, dispatch) =
   if (docs && docs.length > 0) {
     docs.forEach(section => {
       section.cards.forEach(doc => {
-        let docObj = {};
+        let docObj = { };
         docObj.documentType = section.code;
         docObj.documentCode = doc.code;
         docObj.isDocumentRequired = doc.required;
@@ -1703,7 +1703,7 @@ export const prepareBPAREGDocumentDetailsUploadRedux = async (state, dispatch) =
 
   if (uploadedDocs && uploadedDocs.length > 0) {
     let fileStoreIds = jp.query(uploadedDocs, "$.*.fileStoreId");
-    let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : { };
     uploadedDocs.forEach(upDoc => {
       bpaDocs.forEach(bpaDoc => {
         let bpaDetailsDoc = (upDoc.documentType).split('.')[0] + "." + (upDoc.documentType).split('.')[1];
@@ -1719,7 +1719,7 @@ export const prepareBPAREGDocumentDetailsUploadRedux = async (state, dispatch) =
                 .slice(13)
             )) ||
             `Document - ${index + 1}`;
-          bpaDoc.dropDownValues = {};
+          bpaDoc.dropDownValues = { };
           bpaDoc.dropDownValues.value = upDoc.documentType;
           bpaDoc.documents = [
             {
@@ -1760,17 +1760,17 @@ export const getDocList = async (state, dispatch) => {
   if (docTyps && docTyps.length > 0) {
     const bpaDocuments = docTyps;
     let documentsContract = [];
-    let tempDoc = {};
+    let tempDoc = { };
 
     bpaDocuments.forEach(doc => {
-      let card = {};
+      let card = { };
       card["code"] = doc.code.split(".")[0];
       card["title"] = doc.code.split(".")[0];
       card["cards"] = [];
       tempDoc[doc.code.split(".")[0]] = card;
     });
     bpaDocuments.forEach(doc => {
-      let card = {};
+      let card = { };
       card["name"] = doc.code;
       card["code"] = doc.code;
       card["required"] = doc.required ? true : false;
@@ -1947,7 +1947,7 @@ export const getDialogButton = (name, key, screenKey) => {
     componentPath: "Button",
     props: {
       color: "primary",
-      style: {}
+      style: { }
     },
     children: {
       previousButtonLabel: getLabel({
@@ -1971,7 +1971,7 @@ const getAllBillingSlabs = async tenantId => {
     `/tl-calculator/billingslab/_search?tenantId=${tenantId}`,
     "_search",
     [],
-    {}
+    { }
   );
   return payload;
 };
@@ -2092,7 +2092,7 @@ export const setFilteredTradeTypes = (
       const mdmsTTTransformed = mdmsTradeTypes.reduce((acc, item) => {
         item.code && (acc[item.code] = item);
         return acc;
-      }, {});
+      }, { });
       let tradeTypeList = [];
       tradeTypeBSlab.length > 0 &&
         tradeTypeBSlab.forEach(item => {
@@ -2334,7 +2334,7 @@ export const fillOldLicenseData = async (state, dispatch) => {
   dispatch(
     initScreen(
       "apply",
-      get(state.screenConfiguration, "screenConfig.apply", {})
+      get(state.screenConfiguration, "screenConfig.apply", { })
     )
   );
 };
@@ -2664,7 +2664,7 @@ export const getCommonGrayCard = children => {
   };
 };
 
-export const getLabelOnlyValue = (value, props = {}) => {
+export const getLabelOnlyValue = (value, props = { }) => {
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
@@ -3004,7 +3004,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
       scrutinyNo +
       "&tenantId=" + tenantId,
-      {}
+      { }
     );
     let queryObject = [
       {
@@ -3087,7 +3087,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
             );
             currOwnersArr = scrutinyData[0];
             dispatch(prepareFinalObject(`scrutinyDetails`, currOwnersArr));
-            let occupancyObj = get(currOwnersArr, "planDetail.occupancies[0].typeHelper.type", {});
+            let occupancyObj = get(currOwnersArr, "planDetail.occupancies[0].typeHelper.type", { });
             dispatch(prepareFinalObject("BPA.OccupanciesList", [occupancyObj]));
             dispatch(prepareFinalObject("scrutinyDetails.planDetail.planInformation.occupancies", occupancyObj.code));
             // await riskType(state, dispatch);
@@ -3788,7 +3788,7 @@ export const getBpaMapLocator = textSchema => {
     uiFramework: "custom-molecules-local",
     moduleName: "egov-bpa",
     componentPath: "MapLocator",
-    props: {}
+    props: { }
   };
 };
 
@@ -3824,7 +3824,7 @@ export const geBpatDetailsFromProperty = async (state, dispatch) => {
         `/pt-services-v2/property/_search?tenantId=${tenantId}&ids=${propertyId}`,
         "_search",
         [],
-        {}
+        { }
       );
       if (
         payload &&
@@ -3939,7 +3939,7 @@ export const getMdmsDataForBpa = async queryObject => {
     return response;
   } catch (error) {
     console.log(error);
-    return {};
+    return { };
   }
 };
 
@@ -4021,7 +4021,7 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
 }
 
 const prepareapprovalQstns = async (state, dispatch, action, checkListConditions, appWfState) => {
-  let bpaAppDetails = get(state.screenConfiguration.preparedFinalObject, "BPA", {});
+  let bpaAppDetails = get(state.screenConfiguration.preparedFinalObject, "BPA", { });
   let approvalQuastions = [];
   checkListConditions.forEach(wfDoc => {
     if (wfDoc.WFState == appWfState && wfDoc.RiskType === bpaAppDetails.riskType && wfDoc.ServiceType === bpaAppDetails.serviceType && wfDoc.applicationType === bpaAppDetails.applicationType) {
@@ -4058,7 +4058,7 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
     []
   )
 
-  let bpaAppDetails = get(state.screenConfiguration.preparedFinalObject, "BPA", {});
+  let bpaAppDetails = get(state.screenConfiguration.preparedFinalObject, "BPA", { });
 
   let fieldInfo = []
   fieldInfoDocs.forEach(wfDoc => {
@@ -4078,9 +4078,9 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
 
   if (applyFieldinspectionQstns && applyFieldinspectionQstns.length > 0) {
     checklistSelect = [
-      { code: applyFieldinspectionQstns[0].fieldType.split("/")[0], label: `BPA_ADD_HOC_CHARGES_POPUP_BUTTON_${applyFieldinspectionQstns[0].fieldType.split("/")[0]}`},
-      { code: applyFieldinspectionQstns[0].fieldType.split("/")[1], label: `BPA_ADD_HOC_CHARGES_POPUP_BUTTON_${applyFieldinspectionQstns[0].fieldType.split("/")[1]}`},
-      { code: applyFieldinspectionQstns[0].fieldType.split("/")[2], label: `BPA_ADD_HOC_CHARGES_POPUP_BUTTON_${applyFieldinspectionQstns[0].fieldType.split("/")[2]}`}
+      { code: applyFieldinspectionQstns[0].fieldType.split("/")[0], label: `BPA_ADD_HOC_CHARGES_POPUP_BUTTON_${applyFieldinspectionQstns[0].fieldType.split("/")[0]}` },
+      { code: applyFieldinspectionQstns[0].fieldType.split("/")[1], label: `BPA_ADD_HOC_CHARGES_POPUP_BUTTON_${applyFieldinspectionQstns[0].fieldType.split("/")[1]}` },
+      { code: applyFieldinspectionQstns[0].fieldType.split("/")[2], label: `BPA_ADD_HOC_CHARGES_POPUP_BUTTON_${applyFieldinspectionQstns[0].fieldType.split("/")[2]}` }
     ];
 
     const FieldinspectionQstns = applyFieldinspectionQstns.map(v => ({
@@ -4115,22 +4115,22 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
     });
     const bpaDocuments = docList;
     let documentsContract = [];
-    let tempDoc = {};
+    let tempDoc = { };
 
     bpaDocuments.forEach(doc => {
-      let card = {};
+      let card = { };
       card["code"] = doc.code.split(".")[0];
       card["title"] = doc.code.split(".")[0];
       card["cards"] = [];
       tempDoc[doc.code.split(".")[0]] = card;
     });
     bpaDocuments.forEach(doc => {
-      let card = {};
+      let card = { };
       card["name"] = doc.code;
       card["code"] = doc.code;
       card["required"] = doc.required ? true : false;
       if (doc.hasDropdown && doc.dropDownValues) {
-        let dropDownValues = {};
+        let dropDownValues = { };
         dropDownValues.label = "BPA_SELECT_DOCS_LABEL";
         dropDownValues.required = doc.required ? true : false;
         dropDownValues.menu = doc.dropDownValues.filter(item => {
@@ -4157,7 +4157,7 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
 const documentMaping = async (state, dispatch, action, documentsPreview) => {
   let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
   let fileUrls =
-    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : { };
   let documentsPreviews = documentsPreview.map((doc, index) => {
     doc["link"] =
       (fileUrls &&
@@ -4185,7 +4185,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
   let BPA = get(
     state,
     "screenConfiguration.preparedFinalObject.BPA",
-    {}
+    { }
   );
 
   let applicantDocuments = jp.query(
@@ -4232,10 +4232,10 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
   }
   let fileStoreIds = jp.query(allDocuments, "$.*.fileStoreId");
   let fileUrls =
-    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : { };
   allDocuments.map((doc, index) => {
     uploadedAppDocuments.push(doc);
-    let obj = {};
+    let obj = { };
     obj.title = getTransformedLocale(doc.documentType);
     obj.fileStoreId = doc.fileStoreId;
     obj.linkText = "View";
@@ -4300,7 +4300,7 @@ const getRequiredMdmsCards = (state, dispatch) => {
   const bpaDetails = get(
     state.screenConfiguration.preparedFinalObject,
     "BPA",
-    {}
+    { }
   );
 
   let documentMapping = get(
@@ -4422,11 +4422,11 @@ export const prepareNocDocumentsView = async (state, dispatch) => {
   var uploadedAppDocuments = [];
   let fileStoreIds = jp.query(allDocuments, "$.*..fileStoreId");
   let fileUrls =
-    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : { };
   allDocuments.map((doc) => {
     doc.map((docs, index) => {
       uploadedAppDocuments.push(docs);
-      let obj = {};
+      let obj = { };
 
       obj.title = getTransformedLocale(docs.documentType);
       obj.fileStoreId = docs.fileStoreId;
@@ -4476,16 +4476,16 @@ export const prepareNocFinalCards = async (state, dispatch, isVisibleTrue) => {
   let nocAppDetails = get(
     state,
     "screenConfiguration.preparedFinalObject.Noc",
-    {}
+    { }
   );
 
   let nocDocumentsContract = get(
     state,
     "screenConfiguration.preparedFinalObject.nocBPADocumentsContract",
-    {}
+    { }
   );
 
-  let nocDocuments = {};
+  let nocDocuments = { };
   var uploadedAppDocuments = [];
   let requiredDocTypesFromMdms = [],
     nocDocsFromMdms = [];
@@ -4502,14 +4502,14 @@ export const prepareNocFinalCards = async (state, dispatch, isVisibleTrue) => {
   console.log('nocDocsFromMdms', nocDocsFromMdms);
 
   let documentsList = [],
-    finalDoc = {},
+    finalDoc = { },
     finalNocDocs = [];
   for (let item in nocDocuments) {
     let documents = nocDocuments[item];
     if (documents && documents.length > 0) {
 
       documents.forEach(doc => {
-        let card = {};
+        let card = { };
         card["code"] = doc.documentType.split(".")[0];
         card["title"] = doc.documentType.split(".")[0];
         card["cards"] = [];
@@ -4532,13 +4532,13 @@ export const prepareNocFinalCards = async (state, dispatch, isVisibleTrue) => {
   }
 
   documentsList.forEach(doc => {
-    let card = {};
+    let card = { };
     card["name"] = doc.documentType;
     card["code"] = doc.documentType;
     card["nocType"] = doc.nocType;
     card["required"] = doc.required ? true : false;
     if (doc.hasDropdown && doc.dropDownValues) {
-      let dropDownValues = {};
+      let dropDownValues = { };
       dropDownValues.label = "BPA_SELECT_DOCS_LABEL";
       dropDownValues.required = doc.required;
       dropDownValues.menu = doc.dropDownValues.filter(item => {
@@ -4655,7 +4655,7 @@ const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocum
   let documentCards = get(
     state,
     "screenConfiguration.preparedFinalObject.nocBPADocumentsContract",
-    {}
+    { }
   );
   let cardReadOnly = getEditableUserRoleforNoc(state, isVisibleTrue);
   console.log(cardReadOnly);
@@ -4728,7 +4728,7 @@ const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMd
   let bpaDetails = get(
     state.screenConfiguration.preparedFinalObject,
     "BPA",
-    {}
+    { }
   );
   let cardReadOnly = false;
   if (bpaDetails.status == "INPROGRESS") {
@@ -4819,7 +4819,7 @@ export const prepareDocsInEmployee = (state, dispatch, action, appState, uploade
   let bpaAppDetails = get(
     state,
     "screenConfiguration.preparedFinalObject.BPA",
-    {}
+    { }
   );
 
   let documents = [];
@@ -4856,25 +4856,25 @@ export const prepareDocsInEmployee = (state, dispatch, action, appState, uploade
   }
   const bpaDocuments = documentsList;
   let documentsContract = [];
-  let tempDoc = {};
+  let tempDoc = { };
 
   if (bpaDocuments && bpaDocuments.length > 0) {
     bpaDocuments.forEach(doc => {
-      let card = {};
+      let card = { };
       card["code"] = doc.code.split(".")[0];
       card["title"] = doc.code.split(".")[0];
       card["cards"] = [];
       tempDoc[doc.code.split(".")[0]] = card;
     });
     bpaDocuments.forEach(doc => {
-      let card = {};
+      let card = { };
       card["name"] = doc.code;
       card["code"] = doc.code;
       card["required"] = doc.required ? true : false;
       card["allow"] = (doc.allow && JSON.parse(doc.allow)) ? true : false;
       card["orderNumber"] = get(doc, "order");
       if (doc.hasDropdown && doc.dropDownValues) {
-        let dropDownValues = {};
+        let dropDownValues = { };
         dropDownValues.label = "BPA_SELECT_DOCS_LABEL";
         dropDownValues.required = doc.required;
         dropDownValues.menu = doc.dropDownValues.filter(item => {
@@ -4996,14 +4996,14 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
   const bpaDetails = get(
     state.screenConfiguration.preparedFinalObject,
     "BPA",
-    {}
+    { }
   );
   let uploadedDocs = bpaDetails.documents;
 
   if (docs && docs.length > 0) {
     docs.forEach(section => {
       section.cards.forEach(doc => {
-        let docObj = {};
+        let docObj = { };
         docObj.documentType = section.code;
         docObj.documentCode = doc.code;
         if (uploadedDocs && uploadedDocs.length > 0) {
@@ -5019,7 +5019,7 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
   }
   if (uploadedDocs && uploadedDocs.length > 0) {
     let fileStoreIds = jp.query(uploadedDocs, "$.*.fileStoreId");
-    let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : { };
     uploadedDocs.forEach(upDoc => {
       bpaDocs.forEach(bpaDoc => {
         let bpaDetailsDoc;
@@ -5036,7 +5036,7 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
                 .slice(13)
             )) ||
             `Document - ${index + 1}`;
-          bpaDoc.dropDownValues = {};
+          bpaDoc.dropDownValues = { };
           bpaDoc.dropDownValues.value = upDoc.documentType;
           if (bpaDoc.previewdocuments) {
             bpaDoc.previewdocuments.push(
@@ -5071,7 +5071,7 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
       })
     })
     let previewStoreIds = jp.query(bpaDocs, "$..[*].*.fileStoreId");
-    let previewFileUrls = previewStoreIds.length > 0 ? await getFileUrlFromAPI(previewStoreIds) : {};
+    let previewFileUrls = previewStoreIds.length > 0 ? await getFileUrlFromAPI(previewStoreIds) : { };
 
     bpaDocs.forEach(doc => {
 
@@ -5284,7 +5284,7 @@ export const setProposedBuildingData = async (state, dispatch, action, value) =>
     BPA = get(
       state,
       "screenConfiguration.preparedFinalObject.BPA",
-      {}
+      { }
     );
   } else {
     response = get(
@@ -5300,7 +5300,7 @@ export const setProposedBuildingData = async (state, dispatch, action, value) =>
     BPA = get(
       state,
       "screenConfiguration.preparedFinalObject.BPA",
-      {}
+      { }
     );
   }
 
@@ -5363,7 +5363,7 @@ export const getConditionsInPermitList = async (action, state, dispatch) => {
   let additionalDetails = get(
     state,
     "screenConfiguration.preparedFinalObject.BPA.additionalDetails",
-    {}
+    { }
   );
 
   let permitDetails = [], finalPermitList = [];
@@ -5395,7 +5395,7 @@ export const getLicenseDetails = async (state, dispatch) => {
   const queryObject = [
     {
       key: "tenantId",
-      value: tenantId.split('.')[0]
+      value: commonConfig.tenantId
     },
     {
       key: "id",
@@ -5422,7 +5422,7 @@ export const getLicenseDetails = async (state, dispatch) => {
     }
   } catch (error) {
     console.log(error);
-    return {};
+    return { };
   }
 };
 
@@ -5444,17 +5444,17 @@ export const deviationValidation = (action, state, dispatch) => {
 
   let ocScrutinyDetails = get(
     state.screenConfiguration.preparedFinalObject,
-    "ocScrutinyDetails", {}
+    "ocScrutinyDetails", { }
   );
   let scrutinyDetails = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails", {}
+    "scrutinyDetails", { }
   );
-  let ocEDCRDetails = {};
+  let ocEDCRDetails = { };
   ocEDCRDetails.edcrDetail = [];
   ocEDCRDetails.edcrDetail[0] = ocScrutinyDetails;
 
-  let eDCRDetails = {};
+  let eDCRDetails = { };
   eDCRDetails.edcrDetail = [];
   eDCRDetails.edcrDetail[0] = scrutinyDetails;
 
@@ -5657,7 +5657,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
       "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
       scrutinyNo +
       "&tenantId=" + tenantId,
-      {}
+      { }
     );
 
     //get permit details for oc edcr using permitNumber
@@ -5718,7 +5718,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
       "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
       bpaDetails.edcrNumber +
       "&tenantId=" + tenantId,
-      {}
+      { }
     );
 
     if (get(ocpayload, "edcrDetail[0].tenantId") !== get(edcrPayload, "edcrDetail[0].tenantId")) {//check city using tenantId- is this correct
@@ -5777,7 +5777,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     dispatch(prepareFinalObject("scrutinyDetails", get(edcrPayload, "edcrDetail[0]")));
     deviationValidation(action, state, dispatch);
     dispatch(prepareFinalObject("bpaDetails", bpaDetails));
-    dispatch(prepareFinalObject(`BPA.landInfo`, get(bpaDetails, "landInfo", {})));
+    dispatch(prepareFinalObject(`BPA.landInfo`, get(bpaDetails, "landInfo", { })));
     setProposedBuildingData(state, dispatch, action, "ocApply");
     let SHLicenseDetails = await getLicenseDetails(state, dispatch);
     dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));

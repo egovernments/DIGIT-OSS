@@ -6,6 +6,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
 import Counter from "./counter";
 import "./index.css";
+import commonConfig from "config/common.js";
 import { getRequestInfo } from "./updateMobile";
 
 const getFields = () => {
@@ -60,7 +61,7 @@ export default class UpdateMobileDialog extends React.Component {
     const { mobileNumber } = this.state.fields;
     const { property = { }, propertyNumbers = { } } = this.props;
     const { tenantId = "" } = property;
-    const tenant = tenantId.split('.')[0];
+    const tenant = commonConfig.tenantId;
     const { name = "" } = propertyNumbers;
     var myHeaders = new Headers();
     myHeaders.append("accept", "application/json, text/plain, */*");
@@ -99,7 +100,7 @@ export default class UpdateMobileDialog extends React.Component {
     const { mobileNumber, otp } = this.state.fields;
     const { property = { }, propertyNumbers = { } } = this.props;
     const { tenantId = "" } = property;
-    const tenant = tenantId.split('.')[0];
+    const tenant = commonConfig.tenantId;
     const { name = "" } = propertyNumbers;
     var myHeaders = new Headers();
 
@@ -198,7 +199,7 @@ export default class UpdateMobileDialog extends React.Component {
     const { mobileNumber, otp } = this.state.fields;
     const { property = { } } = this.props;
     const { tenantId = "" } = property;
-    const tenant = tenantId.split('.')[0];
+    const tenant = commonConfig.tenantId;
     var myHeaders = new Headers();
     myHeaders.append("accept", "application/json, text/plain, */*");
     myHeaders.append("authorization", "Basic ZWdvdi11c2VyLWNsaWVudDo=");
@@ -237,7 +238,7 @@ export default class UpdateMobileDialog extends React.Component {
     const { mobileNumber } = this.state.fields;
     const { property = { } } = this.props;
     const { tenantId = "" } = property;
-    const tenant = tenantId.split('.')[0];
+    const tenant = commonConfig.tenantId;
     var myHeaders = new Headers();
 
     myHeaders.append("accept", "application/json, text/plain, */*");
