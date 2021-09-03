@@ -1,28 +1,22 @@
-import { getSearchResults } from "../../../../../ui-utils/commons";
+import commonConfig from "config/common.js";
 import {
   handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,
+  prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getSearchResults } from "../../../../../ui-utils/commons";
+
 
 export const fetchData = async (action, state, dispatch) => {
 
 
-  
-    
-  const response = await getSearchResults();
-  //const mdmsRes = await getMdmsData(dispatch);
-  //   let tenants =
-  //     mdmsRes &&
-  //     mdmsRes.MdmsRes &&
-  //     mdmsRes.MdmsRes.tenant.citymodule.find(item => {
-  //       if (item.code === "TL") return true;
-  //     });
-  //   dispatch(
-  //     prepareFinalObject(
-  //       "applyScreenMdmsData.common-masters.citiesByModule.TL",
-  //       tenants
-  //     )
-  //   );
+
+
+  const response = await getSearchResults([
+    {
+      key: "tenantId",
+      value: commonConfig.tenantId
+    }]);
+
   try {
     if (response && response.Properties && response.Properties.length > 0) {
       dispatch(prepareFinalObject("searchResults", response.Properties));
