@@ -1,17 +1,15 @@
+import commonConfig from "config/common.js";
 import {
-  getCommonHeader,
-  getBreak,
+  getBreak, getCommonHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  prepareFinalObject
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
+import { httpRequest } from "../../../../ui-utils/api";
 import { nocApplication, resetFields } from "./searchResource/nocApplication";
 import { searchResults } from "./searchResource/searchResults";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import {
-  prepareFinalObject,
-  handleScreenConfigurationFieldChange as handleField
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "../../../../ui-utils/api";
-import get from "lodash/get";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const header = getCommonHeader({
   labelName: "NOC Application",
@@ -36,7 +34,7 @@ export const getNOCMdmsData = async (action, state, dispatch, mdmsBody) => {
 const getMdmsData = async (action, state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getTenantId().split('.')[0],
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "NOC",
