@@ -205,7 +205,7 @@ public class PropertyRepository {
 
 		// fetching property id from owner table and enriching criteria
 		ownerIds.addAll(userDetailResponse.getUser().stream().map(User::getUuid).collect(Collectors.toSet()));
-		List<String> propertyIds = getPropertyIds(ownerIds, criteria.getTenantId());
+		List<String> propertyIds = getPropertyIds(ownerIds, userTenant);
 
 		// returning empty list if no property id found for user criteria
 		if (CollectionUtils.isEmpty(propertyIds)) {
