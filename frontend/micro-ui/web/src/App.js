@@ -13,6 +13,7 @@ import { TLModule, TLLinks,initTLComponents } from "@egovernments/digit-ui-modul
 import { initReceiptsComponents, ReceiptsModule } from "@egovernments/digit-ui-module-receipts";
 import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
+import customisedComponent from "./customisations";
 
 initLibraries();
 
@@ -29,7 +30,8 @@ window.Digit.ComponentRegistryService.setupRegistry({
   HRMSModule,
   TLModule,
   TLLinks,
-  ReceiptsModule
+  ReceiptsModule,
+  ...customisedComponent
 });
 
 initPGRComponents();
