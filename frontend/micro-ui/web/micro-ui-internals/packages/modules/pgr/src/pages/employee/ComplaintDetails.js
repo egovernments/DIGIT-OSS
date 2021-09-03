@@ -60,14 +60,20 @@ const CloseBtn = (props) => {
   );
 };
 
-const TLCaption = ({ data }) => {
-  const { t } = useTranslation();
+const TLCaption = ({ data, comments }) => {
+  const { t } = useTranslation()
   return (
     <div>
-      {data.date && <p>{data.date}</p>}
-      <p>{data.name}</p>
-      <p>{data.mobileNumber}</p>
-      {data.source && <p>{t("ES_COMMON_FILED_VIA_" + data.source.toUpperCase())}</p>}
+      {data?.date && <p>{data?.date}</p>}
+      <p>{data?.name}</p>
+      <p>{data?.mobileNumber}</p>
+      {data?.source && <p>{t("ES_COMMON_FILED_VIA_" + data?.source.toUpperCase())}</p>}
+      {comments?.map( e => 
+        <div className="TLComments">
+          <h3>{t("WF_COMMON_COMMENTS")}</h3>
+          <p>{e}</p>
+        </div>
+      )}
     </div>
   );
 };
@@ -338,9 +344,9 @@ export const ComplaintDetails = (props) => {
         mobileNumber: complaintDetails.audit.citizen.mobileNumber,
         source: complaintDetails.audit.source,
       };
-      return <TLCaption data={caption} />;
+      return <TLCaption data={caption} comments={checkpoint?.comment}/>;
     }
-    return checkpoint.caption && checkpoint.caption.length !== 0 ? <TLCaption data={checkpoint.caption[0]} /> : null;
+    return (checkpoint.caption && checkpoint.caption.length !== 0) || checkpoint.comment.length > 0 ? <TLCaption data={checkpoint?.caption?.[0]} comments={checkpoint?.comment} /> : null;
   };
 
   return (

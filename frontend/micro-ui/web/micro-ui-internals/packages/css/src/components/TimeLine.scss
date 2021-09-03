@@ -41,3 +41,25 @@
     border-color: #F47738;
   }
 } 
+
+.TLComments{
+  max-width: 360px;
+  @apply mb-sm p-sm bg-grey-light;
+  h3{
+    @apply font-bold text-caption-m;
+  }
+  p{
+    @apply text-body-l;
+  }
+}
+
+@screen dt{
+  .TLComments{
+    h3{
+      @apply text-caption-m-dt;
+    }
+    p{
+      @apply text-body-l-dt;
+    }
+  }
+}

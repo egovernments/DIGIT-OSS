@@ -2,6 +2,28 @@ import Urls from "../atoms/urls";
 import { Request } from "../atoms/Utils/Request";
 import cloneDeep from "lodash/cloneDeep";
 
+const makeCommentsSubsidariesOfPreviousActions = (wf) => {
+  const TimelineMap = new Map();
+  wf.forEach(
+    (eventHappened) => {
+      if( eventHappened.action === "COMMENT" ){
+        const commentAccumulator = TimelineMap.get("tlCommentStack") || []
+        TimelineMap.set("tlCommentStack", [...commentAccumulator, eventHappened])
+      }
+      else{
+        const eventAccumulator = TimelineMap.get("tlActions") || []
+        const commentAccumulator = TimelineMap.get("tlCommentStack") || []
+        // eventHappened.wfComments = commentAccumulator;
+        eventHappened.wfComments = commentAccumulator
+        TimelineMap.set("tlActions", [...eventAccumulator, eventHappened])
+      }
+    } 
+      
+  )
+  const response = TimelineMap.get("tlActions")
+  return response
+}
+
 export const WorkflowService = {
   init: (stateCode, businessServices) => {
     return Request({
@@ -65,8 +87,8 @@ export const WorkflowService = {
       }));
 
       if (processInstances.length > 0) {
-        const timeline = processInstances
-          .filter((e) => e.action !== "COMMENT")
+        const timeline = makeCommentsSubsidariesOfPreviousActions(processInstances)
+          // .filter((e) => e.action !== "COMMENT")
           .map((instance, ind) => {
             const checkPoint = {
               performedAction: instance.action,
@@ -74,7 +96,7 @@ export const WorkflowService = {
               state: instance.state.state,
               assigner: instance?.assigner,
               rating: instance?.rating,
-              comment: instance?.comment,
+              comment: instance?.wfComments.map(e => e?.comment),
               documents: instance?.documents,
               assignes:instance.assignes,
               caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
