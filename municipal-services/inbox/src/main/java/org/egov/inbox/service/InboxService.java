@@ -56,6 +56,7 @@ import static org.egov.inbox.util.BpaConstants.APPLICATION_NUMBER_PARAM;
 import static org.egov.inbox.util.BpaConstants.STATUS_PARAM;
 import static org.egov.inbox.util.BpaConstants.LOCALITY_PARAM;
 import static org.egov.inbox.util.BpaConstants.OFFSET_PARAM;
+import static org.egov.inbox.util.BpaConstants.MOBILE_NUMBER_PARAM;
 
 @Slf4j
 @Service
@@ -217,6 +218,7 @@ public class InboxService {
 					moduleSearchCriteria.put(APPLICATION_NUMBER_PARAM, applicationNumbers);
 					businessKeys.addAll(applicationNumbers);
 					moduleSearchCriteria.remove(STATUS_PARAM);
+					moduleSearchCriteria.remove(MOBILE_NUMBER_PARAM);
 					moduleSearchCriteria.remove(LOCALITY_PARAM);
 					moduleSearchCriteria.remove(OFFSET_PARAM);
 				}else{
