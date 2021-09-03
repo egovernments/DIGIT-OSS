@@ -135,7 +135,9 @@ const CreateProperty = ({ parentRoute }) => {
   if (isLoading) {
     return <Loader />;
   }
-  newConfig.forEach((obj) => {
+
+  /* use newConfig instead of commonFields for local development in case needed */
+  commonFields.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
   config.indexRoute = "info";
