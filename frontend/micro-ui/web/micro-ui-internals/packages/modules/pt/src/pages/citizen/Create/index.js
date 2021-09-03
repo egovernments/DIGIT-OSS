@@ -1,3 +1,4 @@
+import { Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
@@ -12,9 +13,10 @@ const CreateProperty = ({ parentRoute }) => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const history = useHistory();
+  const stateId = Digit.ULBService.getStateId();
   let config = [];
-  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("PT_CREATE_PROPERTY", {});
-
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("PT_CREATE_PROPERTY", { });
+  const { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(stateId, "PropertyTax", "CommonFieldsConfig");
   const goNext = (skipStep, index, isAddMultiple, key) => {
     let currentPath = pathname.split("/").pop(),
       lastchar = currentPath.charAt(currentPath.length - 1),
@@ -36,7 +38,7 @@ const CreateProperty = ({ parentRoute }) => {
     if (!isNaN(lastchar)) {
       isMultiple = true;
     }
-    let { nextStep = {} } = config.find((routeObj) => routeObj.route === currentPath);
+    let { nextStep = { } } = config.find((routeObj) => routeObj.route === currentPath);
     if (typeof nextStep == "object" && nextStep != null && isMultiple != false) {
       if (nextStep[sessionStorage.getItem("ownershipCategory")]) {
         nextStep = `${nextStep[sessionStorage.getItem("ownershipCategory")]}/${index}`;
@@ -123,13 +125,16 @@ const CreateProperty = ({ parentRoute }) => {
     goNext(skipStep, index, isAddMultiple, key);
   }
 
-  const handleSkip = () => {};
-  const handleMultiple = () => {};
+  const handleSkip = () => { };
+  const handleMultiple = () => { };
 
   const onSuccess = () => {
     clearParams();
     queryClient.invalidateQueries("PT_CREATE_PROPERTY");
   };
+  if (isLoading) {
+    return <Loader />;
+  }
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
