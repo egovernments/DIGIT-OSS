@@ -8,6 +8,7 @@ import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.repository.builder.AssessmentQueryBuilder;
 import org.egov.pt.repository.rowmapper.AssessmentRowMapper;
+import org.egov.pt.util.PropertyUtil;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
@@ -31,11 +32,15 @@ public class AssessmentRepository {
 	@Autowired
 	private AssessmentRowMapper rowMapper;
 	
+	@Autowired
+	private PropertyUtil util;
+	
 	
 	public List<Assessment> getAssessments(AssessmentSearchCriteria criteria){
 		Map<String, Object> preparedStatementValues = new HashMap<>();
 		List<Assessment> assessments = new ArrayList<>();
 		String query = queryBuilder.getSearchQuery(criteria, preparedStatementValues);
+		query = util.replaceSchemaPlaceholder(query, criteria.getTenantId());
 		log.info("Query: "+query);
 		log.debug("preparedStatementValues: "+preparedStatementValues);
 		assessments = namedParameterJdbcTemplate.query(query, preparedStatementValues, rowMapper);
@@ -54,9 +59,8 @@ public class AssessmentRepository {
 		preparedStatementValues.put("offset", criteria.getOffset());
 		preparedStatementValues.put("limit", criteria.getLimit());
 		builder.append(orderbyClause);
-		return namedParameterJdbcTemplate.query(builder.toString(),
-				preparedStatementValues,
-				new SingleColumnRowMapper<>(String.class));
+		String query = util.replaceSchemaPlaceholder(builder.toString(), criteria.getTenantId());
+		return namedParameterJdbcTemplate.query(query, preparedStatementValues, new SingleColumnRowMapper<>(String.class));
 	}
 
 	public List<Assessment> getAssessmentPlainSearch(AssessmentSearchCriteria criteria) {

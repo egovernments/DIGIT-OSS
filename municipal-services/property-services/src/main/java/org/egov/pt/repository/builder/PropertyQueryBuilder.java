@@ -1,17 +1,16 @@
 package org.egov.pt.repository.builder;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.time.Instant;
+
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.PropertyCriteria;
-import org.egov.pt.models.enums.Status;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 
 @Component
 public class PropertyQueryBuilder {
@@ -24,9 +23,9 @@ public class PropertyQueryBuilder {
 	private static final String LEFT_JOIN  =  "LEFT OUTER JOIN";
 	private static final String AND_QUERY = " AND ";
 	
-	private static String PROEPRTY_AUDIT_QUERY = "select property from eg_pt_property_audit where propertyid=?";
+	private static String PROEPRTY_AUDIT_QUERY = "select property from {schema}.eg_pt_property_audit where propertyid=?";
 
-	private static String PROEPRTY_ID_QUERY = "select propertyid from eg_pt_property where id in (select propertyid from eg_pt_owner where userid IN {replace})";
+	private static String PROEPRTY_ID_QUERY = "select propertyid from {schema}.eg_pt_property where id in (select propertyid from {schema}.eg_pt_owner where userid IN {replace})";
 
 	private static String REPLACE_STRING = "{replace}";
 	
@@ -68,35 +67,35 @@ public class PropertyQueryBuilder {
 			
 			+   UnitSelectValues
 			
-			+   " FROM EG_PT_PROPERTY property " 
+			+   " FROM {schema}.eg_pt_PROPERTY property " 
 			
-			+   INNER_JOIN +  " EG_PT_ADDRESS address         ON property.id = address.propertyid " 
+			+   INNER_JOIN +  " {schema}.eg_pt_ADDRESS address         ON property.id = address.propertyid " 
 			
-			+   LEFT_JOIN  +  " EG_PT_INSTITUTION institution ON property.id = institution.propertyid " 
+			+   LEFT_JOIN  +  " {schema}.eg_pt_INSTITUTION institution ON property.id = institution.propertyid " 
 			
-			+   LEFT_JOIN  +  " EG_PT_DOCUMENT pdoc           ON property.id = pdoc.entityid "
+			+   LEFT_JOIN  +  " {schema}.eg_pt_DOCUMENT pdoc           ON property.id = pdoc.entityid "
 			
-			+   INNER_JOIN +  " EG_PT_OWNER owner             ON property.id = owner.propertyid " 
+			+   INNER_JOIN +  " {schema}.eg_pt_OWNER owner             ON property.id = owner.propertyid " 
 			
-			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
+			+   LEFT_JOIN  +  " {schema}.eg_pt_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 			
-			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid ";
+			+	LEFT_JOIN  +  " {schema}.eg_pt_UNIT unit		          ON property.id =  unit.propertyid ";
 
 	private static final String ID_QUERY = SELECT
 
-			+   " property.id FROM EG_PT_PROPERTY property "
+			+   " property.id FROM {schema}.eg_pt_PROPERTY property "
 
-			+   INNER_JOIN +  " EG_PT_ADDRESS address         ON property.id = address.propertyid "
+			+   INNER_JOIN +  " {schema}.eg_pt_ADDRESS address         ON property.id = address.propertyid "
 
-			+   LEFT_JOIN  +  " EG_PT_INSTITUTION institution ON property.id = institution.propertyid "
+			+   LEFT_JOIN  +  " {schema}.eg_pt_INSTITUTION institution ON property.id = institution.propertyid "
 
-			+   LEFT_JOIN  +  " EG_PT_DOCUMENT pdoc           ON property.id = pdoc.entityid "
+			+   LEFT_JOIN  +  " {schema}.eg_pt_DOCUMENT pdoc           ON property.id = pdoc.entityid "
 
-			+   INNER_JOIN +  " EG_PT_OWNER owner             ON property.id = owner.propertyid "
+			+   INNER_JOIN +  " {schema}.eg_pt_OWNER owner             ON property.id = owner.propertyid "
 
-			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
+			+   LEFT_JOIN  +  " {schema}.eg_pt_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 
-			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid ";
+			+	LEFT_JOIN  +  " {schema}.eg_pt_UNIT unit		          ON property.id =  unit.propertyid ";
 	
 
 

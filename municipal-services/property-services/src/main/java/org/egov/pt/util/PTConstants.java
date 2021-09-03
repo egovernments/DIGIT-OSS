@@ -11,6 +11,8 @@ public class PTConstants {
 
     public static final String PT_TYPE_VACANT = "VACANT";
     
+    public static String SCHEMA_REPLACE_STRING = "{schema}";
+    
     public static final String PT_TYPE_SHAREDPROPERTY = "SHAREDPROPERTY";
     
     public static final String PT_TYPE_BUILTUP = "BUILTUP";

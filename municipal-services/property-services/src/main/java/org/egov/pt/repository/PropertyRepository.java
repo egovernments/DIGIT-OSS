@@ -56,6 +56,7 @@ public class PropertyRepository {
 
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getPropertyIdsQuery(ownerIds, tenantId, preparedStmtList);
+		query = util.replaceSchemaPlaceholder(query, tenantId);
 		return jdbcTemplate.queryForList(query, preparedStmtList.toArray(), String.class);
 	}
 
@@ -63,6 +64,7 @@ public class PropertyRepository {
 
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getPropertySearchQuery(criteria, preparedStmtList, isPlainSearch, false);
+		query = util.replaceSchemaPlaceholder(query, criteria.getTenantId());
 		if (isApiOpen)
 			return jdbcTemplate.query(query, preparedStmtList.toArray(), openRowMapper);
 		else
@@ -73,12 +75,14 @@ public class PropertyRepository {
 
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getPropertySearchQuery(criteria, preparedStmtList, false, true);
+		query = util.replaceSchemaPlaceholder(query, criteria.getTenantId());
 		return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>());
 	}
 
 	public List<Property> getPropertiesForBulkSearch(PropertyCriteria criteria, Boolean isPlainSearch) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getPropertyQueryForBulkSearch(criteria, preparedStmtList, isPlainSearch);
+		query = util.replaceSchemaPlaceholder(query, criteria.getTenantId());
 		return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 	}
 
@@ -96,7 +100,7 @@ public class PropertyRepository {
 	public List<String> fetchIds(PropertyCriteria criteria, Boolean isPlainSearch) {
 		
 		List<Object> preparedStmtList = new ArrayList<>();
-		String basequery = "select id from eg_pt_property";
+		String basequery = "select id from {schema}.eg_pt_property";
 		StringBuilder builder = new StringBuilder(basequery);
 		if(isPlainSearch)
 		{
@@ -119,7 +123,8 @@ public class PropertyRepository {
 		builder.append(orderbyClause);
 		preparedStmtList.add(criteria.getOffset());
 		preparedStmtList.add(criteria.getLimit());
-		return jdbcTemplate.query(builder.toString(), preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
+		String query = util.replaceSchemaPlaceholder(builder.toString(), criteria.getTenantId());
+		return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
 	}
 	/**
 	 * Returns list of properties based on the given propertyCriteria with owner
@@ -158,6 +163,7 @@ public class PropertyRepository {
 	private List<Property> getPropertyAudit(PropertyCriteria criteria) {
 
 		String query = queryBuilder.getpropertyAuditQuery();
+		query = util.replaceSchemaPlaceholder(query, criteria.getTenantId());
 		return jdbcTemplate.query(query, criteria.getPropertyIds().toArray(), auditRowMapper);
 	}
 
@@ -199,7 +205,7 @@ public class PropertyRepository {
 
 		// fetching property id from owner table and enriching criteria
 		ownerIds.addAll(userDetailResponse.getUser().stream().map(User::getUuid).collect(Collectors.toSet()));
-		List<String> propertyIds = getPropertyIds(ownerIds, userTenant);
+		List<String> propertyIds = getPropertyIds(ownerIds, criteria.getTenantId());
 
 		// returning empty list if no property id found for user criteria
 		if (CollectionUtils.isEmpty(propertyIds)) {
