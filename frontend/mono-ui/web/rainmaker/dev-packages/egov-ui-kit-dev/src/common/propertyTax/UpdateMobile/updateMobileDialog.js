@@ -1,4 +1,5 @@
-import { Dialog, TextField ,MobileNumberField } from "components";
+import { Dialog, MobileNumberField, TextField } from "components";
+import commonConfig from "config/common.js";
 import { getPattern } from "egov-ui-framework/ui-config/screens/specs/utils";
 import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
 import { getLocaleLabels, handleFileUpload } from "egov-ui-framework/ui-utils/commons.js";
@@ -60,7 +61,7 @@ export default class UpdateMobileDialog extends React.Component {
     const { mobileNumber } = this.state.fields;
     const { property = { }, propertyNumbers = { } } = this.props;
     const { tenantId = "" } = property;
-    const tenant = tenantId.split('.')[0];
+    const tenant = commonConfig.tenantId;
     const { name = "" } = propertyNumbers;
     var myHeaders = new Headers();
     myHeaders.append("accept", "application/json, text/plain, */*");
@@ -99,7 +100,7 @@ export default class UpdateMobileDialog extends React.Component {
     const { mobileNumber, otp } = this.state.fields;
     const { property = { }, propertyNumbers = { } } = this.props;
     const { tenantId = "" } = property;
-    const tenant = tenantId.split('.')[0];
+    const tenant = commonConfig.tenantId;
     const { name = "" } = propertyNumbers;
     var myHeaders = new Headers();
 
@@ -198,7 +199,7 @@ export default class UpdateMobileDialog extends React.Component {
     const { mobileNumber, otp } = this.state.fields;
     const { property = { } } = this.props;
     const { tenantId = "" } = property;
-    const tenant = tenantId.split('.')[0];
+    const tenant = commonConfig.tenantId;
     var myHeaders = new Headers();
     myHeaders.append("accept", "application/json, text/plain, */*");
     myHeaders.append("authorization", "Basic ZWdvdi11c2VyLWNsaWVudDo=");
@@ -237,7 +238,7 @@ export default class UpdateMobileDialog extends React.Component {
     const { mobileNumber } = this.state.fields;
     const { property = { } } = this.props;
     const { tenantId = "" } = property;
-    const tenant = tenantId.split('.')[0];
+    const tenant = commonConfig.tenantId;
     var myHeaders = new Headers();
 
     myHeaders.append("accept", "application/json, text/plain, */*");
@@ -384,7 +385,7 @@ export default class UpdateMobileDialog extends React.Component {
             </span>
             <span style={{ marginRight: '15%' }}>
               <Label label="PTUPNO_CURR_NO" labelStyle={{ color: 'rgba(0, 0, 0, 0.873302)', fontSize: "14px" }}></Label>
-              <Label label={propertyNumbers && propertyNumbers.mobileNumber&& `+91 ${propertyNumbers.mobileNumber}`} labelStyle={{ color: 'rgba(0, 0, 0, 0.875)', fontSize: "16px" }} ></Label>
+              <Label label={propertyNumbers && propertyNumbers.mobileNumber && `+91 ${propertyNumbers.mobileNumber}`} labelStyle={{ color: 'rgba(0, 0, 0, 0.875)', fontSize: "16px" }} ></Label>
             </span>
           </span>
           <div>
@@ -403,7 +404,7 @@ export default class UpdateMobileDialog extends React.Component {
               value={fields[key].value}
               onChange={(e) => this.handleChange(key, e.target.value)}></MobileNumberField>
             </span>
-            {process.env.REACT_APP_NAME !== "Citizen" && <div style={{marginTop: '10px'}}>
+            {process.env.REACT_APP_NAME !== "Citizen" && <div style={{ marginTop: '10px' }}>
               {documents.map((document, ind) => {
                 return (<div>
                   <Label label={document.code} labelStyle={{ color: '#000000DF', fontSize: "16px" }} />
@@ -427,13 +428,13 @@ export default class UpdateMobileDialog extends React.Component {
               <button type="button" style={{ width: '100%' }} className={"button-verify-link"} onClick={() => this.validateAndSendOtp()} ><Label label="PTUPNO_VER_NO"></Label></button>
             </div>}
             {process.env.REACT_APP_NAME === "Citizen" && <div className="pt-update-send-otp-container">
-              <button type="button" disabled={this.state.otpButton} style={{ marginRight: "5%" }} className={`button-verify-link ${this.state.otpButton&&'jk-update-send-disabled'}`} onClick={() => this.validateAndSendOtp()} ><Label label="PTUPNO_SENDOTP"></Label></button>
+              <button type="button" disabled={this.state.otpButton} style={{ marginRight: "5%" }} className={`button-verify-link ${this.state.otpButton && 'jk-update-send-disabled'}`} onClick={() => this.validateAndSendOtp()} ><Label label="PTUPNO_SENDOTP"></Label></button>
               {this.state.otpButton && <React.Fragment><Label label="CORE_ANOTHER_OTP" labelStyle={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: "14px" }}></Label>
                 <Counter updateState={() => this.setState({ otpButton: false })} otpButton={this.state.otpButton} />
                 <Label label="CS_RESEND_SECONDS" labelStyle={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: "14px" }}></Label></React.Fragment>}
             </div>}
           </div>
-          {process.env.REACT_APP_NAME === "Citizen" && !this.state.verifyButton&&<div className="pt-update-verify-container">
+          {process.env.REACT_APP_NAME === "Citizen" && !this.state.verifyButton && <div className="pt-update-verify-container">
             <span style={{
               height: "100px",
               display: "flex",
@@ -449,7 +450,7 @@ export default class UpdateMobileDialog extends React.Component {
               disabled={fields[key1].disabled}
               onChange={(e) => this.handleChange(key1, e.target.value)}></TextField>
             </span>
-            <button type="button" disabled={this.state.verifyButton} style={{ width: '100%',marginTop:"10px" }} className={"button-verify-link"} onClick={() => this.validateAndCreate()} ><Label label="PTUPNO_VERUPD_NO"></Label></button>
+            <button type="button" disabled={this.state.verifyButton} style={{ width: '100%', marginTop: "10px" }} className={"button-verify-link"} onClick={() => this.validateAndCreate()} ><Label label="PTUPNO_VERUPD_NO"></Label></button>
           </div>}
         </div>
         {errorMessage && <div className={type == "ERROR" ? "error-comp-second-num" : "success-comp-second-num"}><Label label={errorMessage}></Label></div>}
