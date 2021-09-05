@@ -197,7 +197,7 @@ public class InboxService {
 				totalCount = tlInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
 				List<String> applicationNumbers = tlInboxFilterService.fetchApplicationNumbersFromSearcher(criteria, StatusIdNameMap, requestInfo);
 				if(!CollectionUtils.isEmpty(applicationNumbers)) {
-					moduleSearchCriteria.put(APPLICATION_NUMBER_PARAM, applicationNumbers);
+					moduleSearchCriteria.put(TLConstants.APPLICATION_NUMBER_PARAM, applicationNumbers);
 					businessKeys.addAll(applicationNumbers);
 					moduleSearchCriteria.remove(TLConstants.STATUS_PARAM);
 					moduleSearchCriteria.remove(LOCALITY_PARAM);
