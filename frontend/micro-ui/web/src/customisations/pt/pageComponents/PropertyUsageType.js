@@ -4,6 +4,8 @@ import {
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
+var Digit = window.Digit || {};
+
 const PropertyUsageType = ({ t, config, onSelect, userType, formData, formState, setError, clearErrors, onBlur }) => {
   const [usageCategoryMajor, setPropertyPurpose] = useState(
     formData?.usageCategoryMajor && formData?.usageCategoryMajor?.code === "NONRESIDENTIAL.OTHERS"
