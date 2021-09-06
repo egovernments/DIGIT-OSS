@@ -1,5 +1,5 @@
 import { CardLabel, CitizenInfoLabel, Dropdown, FormStep, LabelFieldPair, TextInput } from "@egovernments/digit-ui-react-components";
-import { default as React, default as React, useState } from "react";
+import { default as React,useState } from "react";
 
 const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => {
 
