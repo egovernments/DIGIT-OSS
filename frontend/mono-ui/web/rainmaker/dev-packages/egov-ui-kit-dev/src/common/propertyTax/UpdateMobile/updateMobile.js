@@ -128,7 +128,7 @@ export default class UpdateMobile extends React.Component {
                 propertyNumbers={propertyNumbers}
                 closeDialog={() => this.toggleDialog()}>
             </UpdateMobileDialog>}
-            {this.state.invalidNumber && <WarningPopup
+            {this.state.invalidNumber && this.canShowEditOption()  && <WarningPopup
                 open={this.state.invalidNumber ? true : false}
                 closeDialog={() => this.setState({ invalidNumber: false })}
                 updateNum={() => { this.setState({ invalidNumber: false }); this.toggleDialog(); }}>
