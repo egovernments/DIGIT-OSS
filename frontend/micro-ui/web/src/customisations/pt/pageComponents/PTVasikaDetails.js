@@ -1,5 +1,5 @@
-import { CardLabel, CitizenInfoLabel, Dropdown, FormStep, LabelFieldPair, TextInput } from "@egovernments/digit-ui-react-components";
-import { default as React,useState } from "react";
+import { CardLabel, CitizenInfoLabel, FormStep, LabelFieldPair, TextInput } from "@egovernments/digit-ui-react-components";
+import React, { useState } from "react";
 
 const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => {
 
@@ -35,7 +35,7 @@ const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => 
                 type: "tel",
                 title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
               })}
-  
+
             />
           </div>
         </LabelFieldPair>
@@ -55,7 +55,7 @@ const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => 
                 type: "tel",
                 title: t("PT_NAME_ERROR_MESSAGE"),
               })}
-            
+
             />
           </div>
         </LabelFieldPair>
