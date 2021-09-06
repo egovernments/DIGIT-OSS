@@ -4,7 +4,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-const PropertyUsageType = ({ t, config, onSelect, userType, formData, formState, setError, clearErrors, onBlur }) => {
+const TLUsageType = ({ t, config, onSelect, userType, formData, formState, setError, clearErrors, onBlur }) => {
   const [usageCategoryMajor, setPropertyPurpose] = useState(
     formData?.usageCategoryMajor && formData?.usageCategoryMajor?.code === "NONRESIDENTIAL.OTHERS"
       ? { code: `${formData?.usageCategoryMajor?.code}`, i18nKey: `PROPERTYTAX_BILLING_SLAB_OTHERS` }
@@ -132,4 +132,4 @@ const PropertyUsageType = ({ t, config, onSelect, userType, formData, formState,
   );
 };
 
-export default PropertyUsageType;
+export default TLUsageType;

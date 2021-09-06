@@ -1,6 +1,7 @@
+import TLUsageType from "./pageComponents/PropertyUsageType";
 
-import PropertyUsageType from "./components/PropertyUsageType";
+
 
 export const tlComponents = {
-  TLPropertyUsageType: PropertyUsageType,
+  TLPropertyUsageType: TLUsageType,
 };
