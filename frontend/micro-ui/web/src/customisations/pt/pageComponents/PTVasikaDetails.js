@@ -1,5 +1,5 @@
-import { CardLabel, CitizenInfoLabel, FormStep, TextInput } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import { CardLabel, CitizenInfoLabel, Dropdown, FormStep, LabelFieldPair, TextInput } from "@egovernments/digit-ui-react-components";
+import { default as React, default as React, useState } from "react";
 
 const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => {
 
@@ -15,6 +15,53 @@ const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => 
     onSkip()
   };
 
+
+  if (userType === "employee") {
+    return (
+      <div>
+        <LabelFieldPair>
+          <CardLabel >{`${t("PT_FORM3_MOBILE_NUMBER")}`}</CardLabel>
+          <div className="field">
+            <TextInput
+              type={"text"}
+              t={t}
+              isMandatory={false}
+              name="mobileNumber"
+              value={val}
+              onChange={setValue}
+              {...(validation = {
+                isRequired: true,
+                pattern: "[6-9]{1}[0-9]{9}",
+                type: "tel",
+                title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
+              })}
+  
+            />
+          </div>
+        </LabelFieldPair>
+        <LabelFieldPair>
+          <CardLabel >{`${t("PT_OWNER_NAME")}`}</CardLabel>
+          <div className="field">
+            <TextInput
+              t={t}
+              type={"text"}
+              isMandatory={false}
+              name="name"
+              value={other}
+              onChange={setOther}
+              {...(validation = {
+                isRequired: true,
+                pattern: "^[a-zA-Z-.`' ]*$",
+                type: "tel",
+                title: t("PT_NAME_ERROR_MESSAGE"),
+              })}
+            
+            />
+          </div>
+        </LabelFieldPair>
+      </div>
+    );
+  }
   return (
     <React.Fragment>
       <FormStep
