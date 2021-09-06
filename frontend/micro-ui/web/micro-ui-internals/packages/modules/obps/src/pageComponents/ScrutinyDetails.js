@@ -21,7 +21,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData,config }) => {
   })
   console.log(data,"data from api");
 
-
+ 
   function getFloorData(block){
     let floors = [];
     block?.building?.floors.map((ob) => {
@@ -148,25 +148,25 @@ const clearall = (num) => {
   return (
     <React.Fragment>
     <Timeline />
-    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!subOccupancyObject}>
+    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={Object.keys(subOccupancyObject).length === 0}>
       <CardSubHeader>{t("BPA_EDCR_DETAILS")}</CardSubHeader>
       <StatusTable  style={{border:"none"}}>
-      <Row className="border-none" style={{border:"none"}} label="BPA_EDCR_NO_LABEL" text={data?.edcrNumber}></Row>
+      <Row className="border-none" style={{border:"none"}} label={t("BPA_EDCR_NO_LABEL")} text={data?.edcrNumber}></Row>
       <Row className="border-none" 
-      label="BPA_UPLOADED_PLAN_DIAGRAM" 
-      text={<ActionButton label="BPA_UPLOADED_PLAN" jumpTo={data?.updatedDxfFile} />}>
+      label={t("BPA_UPLOADED_PLAN_DIAGRAM")} 
+      text={<ActionButton label={t("BPA_UPLOADED_PLAN")} jumpTo={data?.updatedDxfFile} />}>
       </Row>
       <Row className="border-none" 
-      label="BPA_SCRUNTINY_REPORT_OUTPUT" 
-      text={<ActionButton label="BPA_SCRUTINY_REPORT_PDF" jumpTo={data?.planReport} />}>
+      label={t("BPA_SCRUNTINY_REPORT_OUTPUT")} 
+      text={<ActionButton label={t("BPA_SCRUTINY_REPORT_PDF")} jumpTo={data?.planReport} />}>
       </Row>
       </StatusTable>
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_BUILDING_EXTRACT_HEADER")}</CardSubHeader>
       <StatusTable  style={{border:"none"}}>
-      <Row className="border-none" label="BPA_BUILTUP_AREA_HEADER" text={data?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea}></Row>
-      <Row className="border-none" label="BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL" text={data?.planDetail?.blocks?.[0]?.building?.totalFloors}></Row>
-      <Row className="border-none" label="BPA_APPLICATION_HIGH_FROM_GROUND" text={data?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight}></Row>
+      <Row className="border-none" label={t("BPA_BUILTUP_AREA_HEADER")} text={data?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea}></Row>
+      <Row className="border-none" label={t("BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL")} text={data?.planDetail?.blocks?.[0]?.building?.totalFloors}></Row>
+      <Row className="border-none" label={t("BPA_APPLICATION_HIGH_FROM_GROUND")} text={data?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight}></Row>
       </StatusTable>
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_OCC_SUBOCC_HEADER")}</CardSubHeader>
@@ -219,7 +219,7 @@ const clearall = (num) => {
       </div>))}
       <CardSubHeader>{t("BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL")}</CardSubHeader>
       <StatusTable  style={{border:"none"}}>
-      <Row label="BPA_APPLICATION_DEMOLITION_AREA_LABEL" text={data?.planDetail?.planInformation?.demolitionArea}></Row>
+      <Row label={t("BPA_APPLICATION_DEMOLITION_AREA_LABEL")} text={data?.planDetail?.planInformation?.demolitionArea}></Row>
       </StatusTable>
       </FormStep>
       </React.Fragment>

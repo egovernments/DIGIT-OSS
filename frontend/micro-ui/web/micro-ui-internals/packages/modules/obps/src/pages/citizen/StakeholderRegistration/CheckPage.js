@@ -38,7 +38,7 @@ import {
 
     return (
     <React.Fragment>
-    <Timeline currentStep={4} />
+    <Timeline currentStep={4} flow="STAKEHOLDER" />
     <Header>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
     <Card>
     <CardHeader>{t(`BPA_LICENSE_DET_CAPTION`)}</CardHeader>
@@ -147,7 +147,7 @@ import {
       <StatusTable>
       {paymentDetails?.billResponse?.Bill[0]?.billDetails[0]?.billAccountDetails.map((bill,index)=>(
         <div key={index}>
-          <Row className="border-none" label={`${bill.taxHeadCode}`} text={`₹ ${bill?.amount}`} />
+          <Row className="border-none" label={t(`${bill.taxHeadCode}`)} text={`₹ ${bill?.amount}`} />
         </div>
       ))}
        </StatusTable>

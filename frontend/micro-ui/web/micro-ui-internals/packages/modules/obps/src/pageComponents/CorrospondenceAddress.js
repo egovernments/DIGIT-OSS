@@ -82,7 +82,7 @@ function selectChecked(e){
 
   return (
     <React.Fragment>
-      <Timeline currentStep={2} />
+      <Timeline currentStep={2} flow="STAKEHOLDER" />
       <FormStep
         config={config}
         onSelect={goNext}

@@ -27,7 +27,7 @@ const PermanentAddress = ({ t, config, onSelect, value, userType, formData }) =>
 
   return (
     <React.Fragment>
-      <Timeline currentStep={2} />
+      <Timeline currentStep={2} flow="STAKEHOLDER" />
       <FormStep
         config={config}
         onSelect={goNext}

@@ -79,7 +79,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
 
     return (
         <div>
-            <Timeline currentStep={3} />
+            <Timeline currentStep={3} flow="STAKEHOLDER" />
             {!isLoading ?
                 <FormStep
                     t={t}

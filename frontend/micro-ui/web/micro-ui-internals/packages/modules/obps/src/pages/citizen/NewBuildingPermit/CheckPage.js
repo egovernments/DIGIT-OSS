@@ -154,9 +154,9 @@ import {
     <CardHeader>{t("BPA_STEPPER_SCRUTINY_DETAILS_HEADER")}</CardHeader>
     <CardSubHeader>{t("BPA_EDCR_DETAILS")}</CardSubHeader>
     <StatusTable  style={{border:"none"}}>
-      <Row className="border-none" label="BPA_EDCR_NO_LABEL" text={data?.scrutinyNumber?.edcrNumber}></Row>
+      <Row className="border-none" label={t("BPA_EDCR_NO_LABEL")} text={data?.scrutinyNumber?.edcrNumber}></Row>
       <Row className="border-none"
-      label="BPA_UPLOADED_PLAN_DIAGRAM">
+      label={t("BPA_UPLOADED_PLAN_DIAGRAM")}>
       </Row>
       <LinkButton
         label={
@@ -173,7 +173,7 @@ import {
        />
        <p style={{ marginTop: "8px",textAlign:"Left" }}>{t(`Uploaded Plan.DXF`)}</p>
       <Row className="border-none"
-      label="BPA_SCRUNTINY_REPORT_OUTPUT" >
+      label={t("BPA_SCRUNTINY_REPORT_OUTPUT")} >
       </Row>
       <LinkButton
         label={
@@ -193,15 +193,15 @@ import {
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_BUILDING_EXTRACT_HEADER")}</CardSubHeader>
       <StatusTable  /* style={{border:"none"}} */>
-      <Row className="border-none" label="BPA_BUILTUP_AREA_HEADER" text={datafromAPI?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea}></Row>
-      <Row className="border-none" label="BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL" text={datafromAPI?.planDetail?.blocks?.[0]?.building?.totalFloors}></Row>
-      <Row className="border-none" label="BPA_APPLICATION_HIGH_FROM_GROUND" text={datafromAPI?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight}></Row>
+      <Row className="border-none" label={t("BPA_BUILTUP_AREA_HEADER")} text={datafromAPI?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea}></Row>
+      <Row className="border-none" label={t("BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL")} text={datafromAPI?.planDetail?.blocks?.[0]?.building?.totalFloors}></Row>
+      <Row className="border-none" label={t("BPA_APPLICATION_HIGH_FROM_GROUND")} text={datafromAPI?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight}></Row>
       </StatusTable>
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_OCC_SUBOCC_HEADER")}</CardSubHeader>
       {datafromAPI?.planDetail?.blocks.map((block,index)=>(
       <div key={index}>
-      <CardSubHeader>{t("Block")} {index+1}</CardSubHeader>
+      <CardSubHeader>{t("BPA_BLOCK_SUBHEADER")} {index+1}</CardSubHeader>
       <CardSectionHeader className="card-label-smaller">{t("BPA_SUB_OCCUPANCY_LABEL")}</CardSectionHeader>
       <div style={{overflow:"scroll"}}>
       <Table
@@ -228,7 +228,7 @@ import {
       </div>))}
       <CardSubHeader>{t("BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL")}</CardSubHeader>
       <StatusTable  style={{border:"none"}}>
-      <Row className="border-none" label="BPA_APPLICATION_DEMOLITION_AREA_LABEL" text={datafromAPI?.planDetail?.planInformation?.demolitionArea}></Row>
+      <Row className="border-none" label={t("BPA_APPLICATION_DEMOLITION_AREA_LABEL")} text={datafromAPI?.planDetail?.planInformation?.demolitionArea}></Row>
       </StatusTable>
       </Card>
       <Card>
@@ -247,11 +247,11 @@ import {
               onClick={() => routeTo(`${routeLink}/location`)}
            />
       <StatusTable>
-          <Row className="border-none" label={`BPA_DETAILS_PIN_LABEL`} text={address?.pincode} />
-          <Row className="border-none" label={`BPA_CITY_LABEL`} text={address?.city?.name} />
-          <Row className="border-none" label={`BPA_LOC_MOHALLA_LABEL`} text={address?.locality?.name} />
-          <Row className="border-none" label={`BPA_DETAILS_SRT_NAME_LABEL`} text={address?.street} />
-          <Row className="border-none" label={`ES_NEW_APPLICATION_LOCATION_LANDMARK`} text={address?.landmark} />
+          <Row className="border-none" label={t(`BPA_DETAILS_PIN_LABEL`)} text={address?.pincode} />
+          <Row className="border-none" label={t(`BPA_CITY_LABEL`)} text={address?.city?.name} />
+          <Row className="border-none" label={t(`BPA_LOC_MOHALLA_LABEL`)} text={address?.locality?.name} />
+          <Row className="border-none" label={t(`BPA_DETAILS_SRT_NAME_LABEL`)} text={address?.street} />
+          <Row className="border-none" label={t(`ES_NEW_APPLICATION_LOCATION_LANDMARK`)} text={address?.landmark} />
       </StatusTable>
       </Card>
       <Card>
@@ -273,9 +273,9 @@ import {
         <div key={index}>
         {owners.owners.length > 1 && <CardSubHeader>{t("COMMON_OWNER")} {index+1}</CardSubHeader>}
         <StatusTable>
-        <Row className="border-none" label={`CORE_COMMON_NAME`} text={ob?.name} />
-        <Row className="border-none" label={`BPA_APPLICANT_GENDER_LABEL`} text={t(ob?.gender?.i18nKey)} />
-        <Row className="border-none" label={`CORE_COMMON_MOBILE_NUMBER`} text={ob?.mobileNumber} /> 
+        <Row className="border-none" label={t(`CORE_COMMON_NAME`)} text={ob?.name} />
+        <Row className="border-none" label={t(`BPA_APPLICANT_GENDER_LABEL`)} text={t(ob?.gender?.i18nKey)} />
+        <Row className="border-none" label={t(`CORE_COMMON_MOBILE_NUMBER`)} text={ob?.mobileNumber} /> 
         </StatusTable>
         </div>))}
       </Card>
@@ -319,7 +319,7 @@ import {
         <div key={index}>
         <CardSectionHeader>{t(`BPA_${noc?.nocType}_HEADER`)}</CardSectionHeader>
         <StatusTable>
-        <Row className="border-none" label={`BPA_${noc?.nocType}_LABEL`} text={noc?.applicationNo} />
+        <Row className="border-none" label={t(`BPA_${noc?.nocType}_LABEL`)} text={noc?.applicationNo} />
         <OBPSDocument value={value} Code="NOC" index={index}/> 
         </StatusTable>
         </div>
@@ -329,7 +329,7 @@ import {
       <StatusTable>
       {paymentDetails?.Bill[0]?.billDetails[0]?.billAccountDetails.map((bill,index)=>(
         <div key={index}>
-          <Row className="border-none" label={`${bill.taxHeadCode}`} text={`₹ ${bill?.amount}`} />
+          <Row className="border-none" label={t(`${bill.taxHeadCode}`)} text={`₹ ${bill?.amount}`} />
         </div>
       ))}
        </StatusTable>

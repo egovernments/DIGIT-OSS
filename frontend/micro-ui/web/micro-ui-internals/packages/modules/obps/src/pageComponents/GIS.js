@@ -4,7 +4,7 @@ import { LocationSearchCard, LinkButton, Card } from "@egovernments/digit-ui-rea
 const GIS = ({ t, config, onSelect, formData = {},handleRemove,onSave }) => {
   const [pincode, setPincode] = useState(formData?.address?.pincode || "");
   const [geoLocation, setGeoLocation] = useState(formData?.address?.geoLocation || {});
-  const tenants = Digit.Hooks.tl.useTenants();
+  const tenants = Digit.Hooks.obps.useTenants();
   const [pincodeServicability, setPincodeServicability] = useState(null);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
@@ -13,7 +13,7 @@ const GIS = ({ t, config, onSelect, formData = {},handleRemove,onSave }) => {
     setPincodeServicability(null);
     const foundValue = tenants?.find((obj) => obj.pincode?.find((item) => item == code));
     if (!foundValue) {
-      setPincodeServicability("BP_COMMON_PINCODE_NOT_SERVICABLE");
+      setPincodeServicability("BPA_COMMON_PINCODE_NOT_SERVICABLE");
       setPincode("");
       setGeoLocation({});
     } else {

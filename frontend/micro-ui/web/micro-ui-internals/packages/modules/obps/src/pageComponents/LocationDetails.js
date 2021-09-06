@@ -147,11 +147,13 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   }
 
   return (
-    <FormStep
+    <div>
+      {isOpen && <GIS t={t} onSelect={onSelect} formData={formData} handleRemove={handleRemove} onSave={onSave} />}   
+    {!isOpen && <FormStep
       t={t}
       config={config}
       onSelect={handleSubmit}
-      isDisabled={!pincode || !selectedCity || !selectedLocality}
+      isDisabled={!selectedCity || !selectedLocality || !street || !landmark}
       isMultipleAllow={true}
     >
       <CardLabel>{`${t("BPA_GIS_LABEL")}`}</CardLabel>
@@ -178,7 +180,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
           onClick={(e) => handleGIS()}
         />
       </div>
-      {isOpen && <GIS t={t} onSelect={onSelect} formData={formData} handleRemove={handleRemove} onSave={onSave} />}
+      {/* {isOpen && <GIS t={t} onSelect={onSelect} formData={formData} handleRemove={handleRemove} onSave={onSave} />} */}
       <CardLabel>{`${t("BPA_DETAILS_PIN_LABEL")}`}</CardLabel>
       {!isOpen && <TextInput
         isMandatory={false}
@@ -242,7 +244,8 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
       //     title: t("BPA_INVALID_NAME"),
       // })}
       />}
-    </FormStep>
+    </FormStep>}
+    </div>
   );
 };
 

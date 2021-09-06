@@ -1,28 +1,28 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-let isStakeholderFlow = window.location.href.includes("stakeholder");
 let actions = [];
 
-if(isStakeholderFlow)
-{
-  actions = [
+const getAction = (flow) => {
+ switch(flow){
+   case "STAKEHOLDER": actions = [
     'BPA_LICENSE_DET_CAPTION',
     'BPA_NEW_ADDRESS_HEADER_DETAILS',
     'BPA_DOC_DETAILS_SUMMARY',
     'BPA_STEPPER_SUMMARY_HEADER',
-  ]
+    ]
+      break;
+    default: actions = [
+      'BPA_STEPPER_SCRUTINY_DETAILS_HEADER',
+      'BPA_OWNER_AND_DOCUMENT_DETAILS_LABEL',
+      'BPA_NOC_DETAILS_SUMMARY',
+      'BPA_STEPPER_SUMMARY_HEADER',
+    ]
+ }
 }
-else{
-actions = [
-  'BPA_STEPPER_SCRUTINY_DETAILS_HEADER',
-  'BPA_OWNER_AND_DOCUMENT_DETAILS_LABEL',
-  'BPA_NOC_DETAILS_SUMMARY',
-  'BPA_STEPPER_SUMMARY_HEADER',
-]
-}
-const Timeline = ({ currentStep = 1 }) => {
+const Timeline = ({ currentStep = 1, flow="" }) => {
   const { t } = useTranslation();
+  getAction(flow);
   return (
     <div className="timeline-container">
       {actions.map((action, index, arr) => (

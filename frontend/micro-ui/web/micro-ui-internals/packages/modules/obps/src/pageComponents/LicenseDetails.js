@@ -55,7 +55,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   return (
     <div>
-    <Timeline currentStep={1} />
+    <Timeline currentStep={1} flow="STAKEHOLDER" />
     <FormStep
       config={config}
       onSelect={goNext}
