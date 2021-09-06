@@ -7,6 +7,7 @@ import CitizenHome from "./Home";
 import LanguageSelection from "./Home/LanguageSelection";
 import LocationSelection from "./Home/LocationSelection";
 import Login from "./Login";
+import { BackButton } from "@egovernments/digit-ui-react-components";
 
 
 const getTenants = (codes, tenants) => {
@@ -30,6 +31,7 @@ const Home = ({stateInfo, userDetails, CITIZEN, cityDetails, mobileView, handleU
         return <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
                 <div className="moduleLinkHomePage">
                     <img src={stateInfo?.bannerUrl}/>
+                    <BackButton className="moduleLinkHomePageBackButton"/>
                     <h1>{t("MODULE_"+code.toUpperCase())}</h1>
                 </div>
                 <div className="moduleLinkHomePageModuleLinks">

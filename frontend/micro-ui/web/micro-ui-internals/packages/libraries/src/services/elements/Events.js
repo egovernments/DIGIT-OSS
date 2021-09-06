@@ -19,7 +19,7 @@ const Events = {
         method: "POST",
         auth: true,
         userService: false,
-        params: { tenantId, ...filters },
+        params: { tenantId },
     }),
     NotificationCount: ({tenantId}) => Request({
         url: Urls.events.count,

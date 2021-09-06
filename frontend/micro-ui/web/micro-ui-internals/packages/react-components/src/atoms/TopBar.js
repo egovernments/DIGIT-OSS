@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 import Hamburger from "./Hamburger";
 import { NotificationBell } from "./svgindex";
 
-const TopBar = ({ img, isMobile, logoUrl, onLogout, toggleSidebar, ulb, userDetails, notificationCount, notificationCountLoaded, cityOfCitizenShownBesideLogo, onNotificationIconClick }) => {
-
+const TopBar = ({ img, isMobile, logoUrl, onLogout, toggleSidebar, ulb, userDetails, notificationCount, notificationCountLoaded, cityOfCitizenShownBesideLogo, onNotificationIconClick, hideNotificationIconOnSomeUrlsWhenNotLoggedIn }) => {
   return (
     <div className="navbar">
       <div className="center-container">
@@ -18,10 +17,10 @@ const TopBar = ({ img, isMobile, logoUrl, onLogout, toggleSidebar, ulb, userDeta
         />
         <h3>{cityOfCitizenShownBesideLogo}</h3>
         <div className="RightMostTopBarOptions">
-          <div className="EventNotificationWrapper" onClick={onNotificationIconClick}>
+          {!hideNotificationIconOnSomeUrlsWhenNotLoggedIn ? <div className="EventNotificationWrapper" onClick={onNotificationIconClick}>
             { notificationCountLoaded && notificationCount ? <span><p>{notificationCount}</p></span> : null }
             <NotificationBell />
-          </div>
+          </div> : null}
         </div>
       </div>
     </div>

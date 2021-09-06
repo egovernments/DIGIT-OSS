@@ -18,7 +18,8 @@ const EventDetails = () => {
     }
 
     function onGroundEventCardPropsForEventDetails (DataParamsInEvent){
-        return { eventCategory: DataParamsInEvent?.eventCategory, showEventCatergory: true, name: DataParamsInEvent?.name }
+      const { eventCategory, name, onGroundEventDate, onGroundEventMonth, onGroundEventTimeRange } = DataParamsInEvent
+        return { eventCategory: t(eventCategory), showEventCatergory: true, name, onGroundEventDate, onGroundEventMonth, onGroundEventTimeRange }
     }
 
     const FilteredEventForThisPage = useMemo( () => !EventsDataLoading ? EventsData?.filter( i => i.id === EventId)[0] : null, [EventsDataLoading, EventsData])
@@ -34,7 +35,10 @@ const EventDetails = () => {
                 <MapMarker/>
                 <div>
                     <p>{FilteredEventForThisPage?.eventDetails?.address}</p>
-                    <a className="direction" target="_blank" href={`https://www.google.com/maps/search/?api=1&query=${FilteredEventForThisPage?.eventDetails?.latitude}%2C${FilteredEventForThisPage?.eventDetails?.longitude}`} >{t("CS_COMMON_GET_DIRECTIONS")}</a>
+                    {FilteredEventForThisPage?.eventDetails?.latitude && FilteredEventForThisPage?.eventDetails?.longitude ? 
+                      <a className="direction" target="_blank" href={`https://www.google.com/maps/search/?api=1&query=${FilteredEventForThisPage?.eventDetails?.latitude}%2C${FilteredEventForThisPage?.eventDetails?.longitude}`} >{t("CS_COMMON_GET_DIRECTIONS")}</a>
+                      :
+                      null}
                 </div>
             </span>
           </div>

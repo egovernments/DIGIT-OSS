@@ -29,15 +29,16 @@ const timeStampBreakdown = (fromTS, toTS) => {
 }
 
 const filterAllEvents = (data, variant) => data
-// .filter(e => e.status === "ACTIVE")
+.filter(e => e.status === "ACTIVE")
 .map((e => ({
         ...e,
         timePastAfterEventCreation: Math.round((new Date().getTime() - e?.auditDetails?.createdTime)/86400000),
         timeApproxiamationInUnits: "CS_SLA_DAY",
         eventNotificationText: e?.description,
         header: e?.name,
+        eventType: e?.eventType,
         actions: e?.actions?.actionUrls,
-        ...variant === "events" ? timeStampBreakdown(e?.eventDetails?.fromDate, e?.eventDetails?.toDate) : {},
+        ...variant === "events" || e?.eventType === "EVENTSONGROUND" ? timeStampBreakdown(e?.eventDetails?.fromDate, e?.eventDetails?.toDate) : {},
     })))
 
 const variantBasedFilter = (variant, data) =>{

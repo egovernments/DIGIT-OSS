@@ -1,11 +1,12 @@
-import { Header, Loader, WhatsNewCard } from "@egovernments/digit-ui-react-components"
+import { Header, Loader, WhatsNewCard, OnGroundEventCard } from "@egovernments/digit-ui-react-components"
 import React, {useEffect} from "react"
 import { useTranslation } from "react-i18next"
-import { Redirect, useLocation } from "react-router-dom"
+import { Redirect, useLocation, useHistory } from "react-router-dom"
 
 const NotificationsAndWhatsNew = ({variant, parentRoute}) => {
     const { t } = useTranslation()
     const location = useLocation();
+    const history = useHistory()
 
     const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code
     const { data:{ unreadCount: preVisitUnseenNotificationCount } = {}, isSuccess: preVisitUnseenNotificationCountLoaded } = Digit.Hooks.useNotificationCount({tenantId}, {
@@ -43,10 +44,14 @@ const NotificationsAndWhatsNew = ({variant, parentRoute}) => {
                 return <Redirect to={{ pathname: `/digit-ui/citizen`, state: { from: location.pathname + location.search } }} />
         }
     }
+    
+    function onEventCardClick(id){
+        history.push(parentRoute+'/events/details/'+id)
+    }
 
     return <div className="CitizenEngagementNotificationWrapper">
             <VariantWiseRender/>
-            {EventsData.length ? EventsData.map( DataParamsInEvent => <WhatsNewCard {...DataParamsInEvent} />) : (
+            {EventsData.length ? EventsData.map( DataParamsInEvent => DataParamsInEvent?.eventType === "EVENTSONGROUND" ?  <OnGroundEventCard onClick={onEventCardClick} {...DataParamsInEvent} /> : <WhatsNewCard {...DataParamsInEvent} />) : (
                 <Card>
                     <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
                 </Card>)

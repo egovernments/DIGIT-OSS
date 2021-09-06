@@ -6,6 +6,7 @@ const PageBasedInput = ({children, texts, onSubmit}) => {
     return <div className="PageBasedInputWrapper">
         <Card>
             {children}
+            <SubmitBar className="SubmitBarInCardInDesktopView" label={texts.submitBarLabel} onSubmit={onSubmit} />
         </Card>
         <div className="SubmitBar">
             <SubmitBar label={texts.submitBarLabel} onSubmit={onSubmit} />

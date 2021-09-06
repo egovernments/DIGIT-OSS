@@ -45,6 +45,14 @@
         left: 21px;
         @apply text-heading-xl text-white font-bold;
     }
+    .moduleLinkHomePageBackButton{
+        border: none;
+        top: 76px;
+        svg{
+            fill: #ffffff;
+        }
+        @apply absolute text-white text-heading-s ml-md;
+    }
 }
 
 .moduleLinkHomePageModuleLinks{
@@ -62,9 +70,30 @@
             margin-bottom: 56px;
             min-width: 100vw;
             margin-left: calc( -15vw - 16px );
-            img{
-                height: 25vw;
+            .Search{
+                width: calc(70% - 32px);
+                left: calc( 15% + 25px );
+                margin: 0;
             }
+            img{
+                height: 20vw;
+            }
+        }
+    }
+    .moduleLinkHomePage{
+        img{
+            min-width: 100vw;
+            margin-left: calc( -15vw - 16px );
+            height: 20vw;
+        }
+        h1{
+            top: calc( 10vw + 40px );
+            left: calc( 15% + 14px );
+            @apply ml-lg;
+        }
+        .moduleLinkHomePageBackButton{
+            top: calc( 10vw + 16px );
+            @apply ml-md;
         }
     }
 }

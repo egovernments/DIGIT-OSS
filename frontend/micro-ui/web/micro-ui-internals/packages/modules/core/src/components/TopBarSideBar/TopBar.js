@@ -1,7 +1,7 @@
 import React from "react";
 import { Dropdown, TopBar as TopBarComponent, Hamburger } from "@egovernments/digit-ui-react-components";
 import ChangeLanguage from "../ChangeLanguage";
-import { useHistory  } from "react-router-dom"
+import { useHistory, useLocation  } from "react-router-dom"
 
 const TextToImg = (props) => (
   <span className="user-img-txt" onClick={props.toggleMenu} title={props.name}>
@@ -27,6 +27,7 @@ const TopBar = ({
     const CitizenHomePageTenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code
 
     let history = useHistory();
+    const { pathname } = useLocation();
     
     const { data:{ unreadCount: unreadNotificationCount } = {}, isSuccess: notificationCountLoaded } = Digit.Hooks.useNotificationCount({tenantId:CitizenHomePageTenantId}, {
       enabled: !!Digit.UserService?.getUser()?.access_token
@@ -43,7 +44,10 @@ const TopBar = ({
     function onNotificationIconClick(){
       history.push("/digit-ui/citizen/engagement/notifications")
     }
-  
+
+    const urlsToDisableNotificationIcon = (pathname) => !!Digit.UserService?.getUser()?.access_token ? false :  ["/digit-ui/citizen/select-language", "/digit-ui/citizen/select-location"].includes(pathname)
+    
+
     if (CITIZEN) {
       return (
         <TopBarComponent
@@ -57,6 +61,7 @@ const TopBar = ({
           notificationCountLoaded={notificationCountLoaded}
           cityOfCitizenShownBesideLogo={t(CitizenHomePageTenantId)}
           onNotificationIconClick={onNotificationIconClick}
+          hideNotificationIconOnSomeUrlsWhenNotLoggedIn={urlsToDisableNotificationIcon(pathname)}
         />
       );
     }
