@@ -7,8 +7,8 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   let index = window.location.href.split("/").pop();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
-  const [LicenseType, setLicenseType] = useState(formData?.LicenseType || "");
-  const [ArchitectNo, setArchitectNo] = useState(formData?.ArchitectNo || null);
+  const [LicenseType, setLicenseType] = useState(formData?.LicneseType?.LicenseType || formData?.formData?.LicneseType?.LicenseType || "");
+  const [ArchitectNo, setArchitectNo] = useState(formData?.LicneseType?.ArchitectNo || formData?.formData?.LicneseType?.ArchitectNo || null);
 
   const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateId, "StakeholderRegistraition", "TradeTypetoRoleMapping");
 
@@ -36,7 +36,14 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   }
 
   function goNext() {
+    if(!(formData?.result && formData?.result?.Licenses[0]?.id))
     onSelect(config.key, {LicenseType,ArchitectNo});
+    else
+    {
+      let data = formData?.formData;
+      data.LicneseType.LicenseType = LicenseType;
+      onSelect("",formData)
+    }
   }
   return (
     <div>

@@ -109,9 +109,14 @@ const OBPSAcknowledgement = ({ data, onSuccess }) => {
         )}
       </StatusTable> */}
       {/* {mutation1.isSuccess && <SubmitBar label={t("PT_DOWNLOAD_ACK_FORM")} onSubmit={handleDownloadPdf} />} */}
-      {mutation1.isSuccess && <SubmitBar label={t("MAKE PAYMENT")} />}
-      <Link to={`/digit-ui/citizen`}>
+      {/* {mutation1.isSuccess && <SubmitBar label={t("MAKE PAYMENT")} />} */}
+      {/* <Link to={`/digit-ui/citizen`}>
         <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
+      </Link> */}
+      <Link to={{
+        pathname: `/digit-ui/citizen`,
+      }}>
+        <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
     </Card>
   );

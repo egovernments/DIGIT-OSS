@@ -29,7 +29,7 @@ const StakeholderRegistration = () => {
   }
 
   const onSuccess = () => {
-    //clearParams();
+    clearParams();
     queryClient.invalidateQueries("PT_CREATE_PROPERTY");
   };
   const createApplication = async () => {

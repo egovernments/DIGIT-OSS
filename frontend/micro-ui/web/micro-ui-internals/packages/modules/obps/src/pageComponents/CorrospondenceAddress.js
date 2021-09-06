@@ -5,15 +5,15 @@ import Timeline from "../components/Timeline";
 const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData }) => {
   let validation = {};
   const onSkip = () => onSelect();
-  const [Correspondenceaddress, setCorrespondenceaddress] = useState(formData.LicneseDetails?.Correspondenceaddress || "");
-  const [isAddressSame, setisAddressSame] = useState(formData.LicneseDetails?.isAddressSame || false);
+  const [Correspondenceaddress, setCorrespondenceaddress] = useState(formData?.Correspondenceaddress|| formData?.formData?.Correspondenceaddress || "");
+  const [isAddressSame, setisAddressSame] = useState(formData?.isAddressSame || formData?.formData?.isAddressSame || false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
 
 function selectChecked(e){
     if(isAddressSame == false){
       setisAddressSame(true);
-      setCorrespondenceaddress(formData?.LicneseDetails?.PermanentAddress); }
+      setCorrespondenceaddress(formData?.LicneseDetails?.PermanentAddress? formData?.LicneseDetails?.PermanentAddress : formData?.formData?.LicneseDetails?.PermanentAddress ); }
       else{
         Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
         setisAddressSame(false);
@@ -25,6 +25,8 @@ function selectChecked(e){
   }
 
   const goNext = () => {
+
+    if(!(formData?.result && formData?.result?.Licenses[0]?.id)){
 
     let payload = {
         "Licenses": [
@@ -65,7 +67,7 @@ function selectChecked(e){
     
     Digit.OBPSService.BPAREGCreate(payload, tenantId)
                     .then((result, err) => {
-                            let data = {result:result, formData:formData, Correspondenceaddress:Correspondenceaddress}
+                            let data = {result:result, formData:formData, Correspondenceaddress:Correspondenceaddress, isAddressSame:isAddressSame}
                             //1, units
                             onSelect("", data, "", true);
                         
@@ -74,8 +76,13 @@ function selectChecked(e){
                         // setShowToast({ key: "error" });
                         // setError(e?.response?.data?.Errors[0]?.message || null);
                     });
-
-
+    }
+    else
+    {
+      formData.Correspondenceaddress = Correspondenceaddress;
+      formData.isAddressSame = isAddressSame;
+      onSelect("",formData,"",true);
+    }
     // sessionStorage.setItem("CurrentFinancialYear", FY);
     // onSelect(config.key, { TradeName });
   };

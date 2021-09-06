@@ -5,7 +5,7 @@ import Timeline from "../components/Timeline";
 const PermanentAddress = ({ t, config, onSelect, value, userType, formData }) => {
   let validation = {};
   const onSkip = () => onSelect();
-  const [PermanentAddress, setPermanentAddress] = useState(formData.LicneseDetails?.PermanentAddress);
+  const [PermanentAddress, setPermanentAddress] = useState(formData?.LicneseDetails?.PermanentAddress || formData?.formData?.LicneseDetails?.PermanentAddress);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
   //const isEdit = window.location.href.includes("/edit-application/") || window.location.href.includes("renew-trade");
@@ -22,7 +22,14 @@ const PermanentAddress = ({ t, config, onSelect, value, userType, formData }) =>
   const goNext = () => {
 
     // sessionStorage.setItem("CurrentFinancialYear", FY);
+    if(!(formData?.result && formData?.result?.Licenses[0]?.id))
      onSelect(config.key, { PermanentAddress:PermanentAddress });
+    else
+    {
+      let data = formData?.formData;
+      data.LicneseDetails.PermanentAddress = PermanentAddress;
+      onSelect("",formData)
+    }
   };
 
   return (
@@ -33,9 +40,9 @@ const PermanentAddress = ({ t, config, onSelect, value, userType, formData }) =>
         onSelect={goNext}
         onSkip={onSkip}
         t={t}
-        //isDisabled={!TradeName}
+        isDisabled={!PermanentAddress}
       >
-        <CardLabel>{`${t("BPA_PERMANANT_ADDRESS_LABEL")}`}</CardLabel>
+        <CardLabel>{`${t("BPA_PERMANANT_ADDRESS_LABEL")}*`}</CardLabel>
         <TextInput
           t={t}
           isMandatory={false}

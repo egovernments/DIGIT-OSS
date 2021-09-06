@@ -20,6 +20,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
 
 
     const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateId, "StakeholderRegistraition", "TradeTypetoRoleMapping");
+    
 
     useEffect(() => {
         let filtredBpaDocs = [];
@@ -68,9 +69,9 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                 count = count + 1;
             }
         });
-        if(bpaTaxDocuments.length == documents.length+1 && bpaTaxDocuments.length!==0) setEnableSubmit(false);
-        // if ((count == "0" || count == 0) && documents.length > 0) setEnableSubmit(false);
-        // else setEnableSubmit(true);
+        //if(bpaTaxDocuments.length == documents.length+1 && bpaTaxDocuments.length!==0) setEnableSubmit(false);
+        if ((count == "0" || count == 0) && documents.length > 0) setEnableSubmit(false);
+        else setEnableSubmit(true);
     }, [documents, checkRequiredFields])
 
     // if (bpaDocsLoading) {
@@ -138,21 +139,24 @@ function SelectDocument({
     }
 
     useEffect(() => {
-        if(uploadedFile === null){
-            let arr = documents? documents : [];
-            let filteredresult = arr.filter((item) => item.documentType !== doc.code);
-            setDocuments(filteredresult);
-        }
-        if(uploadedFile){
-        let arr = documents? documents : [];
-        let found  = documents? documents.some(ob => ob.documentType === doc.code) : false;
-        if(!found){arr.push({documentType:doc.code,fileStoreId: uploadedFile,documentUid: uploadedFile});
-        setDocuments(arr);}
-        else {
-         let arr1 = arr.map(el => el.documentType === doc.code?{...el, fileStoreId: uploadedFile,documentUid: uploadedFile} : el);
-         setDocuments(arr1);
-        }
-    }        
+
+        setDocuments((prev) => {
+            const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== doc?.code);
+
+            if (uploadedFile?.length === 0 || uploadedFile === null) {
+                return filteredDocumentsByDocumentType;
+            }
+
+            const filteredDocumentsByFileStoreId = filteredDocumentsByDocumentType?.filter((item) => item?.fileStoreId !== uploadedFile);
+            return [
+                ...filteredDocumentsByFileStoreId,
+                {
+                    documentType: doc?.code,
+                    fileStoreId: uploadedFile,
+                    documentUid: uploadedFile,
+                },
+            ];
+        });       
     }, [uploadedFile,file]);
 
 

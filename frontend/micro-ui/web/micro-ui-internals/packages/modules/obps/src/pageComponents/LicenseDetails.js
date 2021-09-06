@@ -7,14 +7,14 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
   let validation = {};
-  const [name, setName] = useState(userInfo?.info?.name || formData?.LicneseDetails?.name || "");
-  const [email, setEmail] = useState( formData?.LicneseDetails?.emailId || "");
-  const [gender, setGender] = useState(formData?.LicneseDetails?.gender);
+  const [name, setName] = useState(userInfo?.info?.name || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
+  const [email, setEmail] = useState( formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
+  const [gender, setGender] = useState(formData?.LicneseDetails?.gender || formData?.formData?.LicneseDetails?.gender);
   const [mobileNumber, setMobileNumber] = useState(userInfo?.info?.mobileNumber || 
-    formData?.LicneseDetails?.mobileNumber || ""
+    formData?.LicneseDetails?.mobileNumber|| formData?.formData?.LicneseDetails?.mobileNumber || ""
   );
   const [PanNumber, setPanNumber] = useState(
-    formData?.LicneseDetails?.PanNumber || ""
+    formData?.LicneseDetails?.PanNumber || formData?.formData?.LicneseDetails?.PanNumber || ""
   );
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
@@ -46,8 +46,22 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
 
   const goNext = () => {
-    let licenseDet = {name:name, mobileNumber:mobileNumber,gender:gender,email:email,PanNumber:PanNumber}
-    onSelect(config.key,licenseDet);
+    
+    if(!(formData?.result && formData?.result?.Licenses[0]?.id))
+    {
+      let licenseDet = {name:name, mobileNumber:mobileNumber,gender:gender,email:email,PanNumber:PanNumber}
+      onSelect(config.key,licenseDet);
+    }
+    else
+    {
+      let data = formData?.formData;
+      data.LicneseDetails.name = name;
+      data.LicneseDetails.mobileNumber = mobileNumber;
+      data.LicneseDetails.gender = gender;
+      data.LicneseDetails.email = email;
+      data.LicneseDetails.PanNumber = PanNumber;
+      onSelect("",formData)
+    }
 
   };
 
@@ -61,7 +75,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       onSelect={goNext}
       onSkip={onSkip}
       t={t}
-      isDisabled={!name || !mobileNumber || !gender || !PanNumber}
+      isDisabled={!name || !mobileNumber || !gender }
     >
       <div>
         <CardLabel>{`${t("BPA_APPLICANT_NAME_LABEL")}`}</CardLabel>
