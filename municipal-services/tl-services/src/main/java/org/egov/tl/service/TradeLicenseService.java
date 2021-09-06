@@ -200,6 +200,11 @@ public class TradeLicenseService {
             return Collections.emptyList();
         }
         enrichmentService.enrichTLCriteriaWithOwnerids(criteria,userDetailResponse);
+        
+        if(criteria.getOnlyMobileNumber()!=null && criteria.getOnlyMobileNumber() ) {
+        	criteria.setTenantId(null);
+        }
+        
         licenses = repository.getLicenses(criteria);
 
         if(licenses.size()==0){
@@ -207,7 +212,14 @@ public class TradeLicenseService {
         }
 
         // Add tradeLicenseId of all licenses owned by the user
+        Boolean isRenewalPending = (criteria.getRenewalPending()!=null && criteria.getRenewalPending()==true);
+        
         criteria=enrichmentService.getTradeLicenseCriteriaFromIds(licenses);
+        
+        if(isRenewalPending) {
+        	criteria.setRenewalPending(true);
+        }
+        
         //Get all tradeLicenses with ownerInfo enriched from user service
         licenses = getLicensesWithOwnerInfo(criteria,requestInfo);
         return licenses;

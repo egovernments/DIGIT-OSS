@@ -106,30 +106,9 @@ public class TLQueryBuilder {
                 addBusinessServiceClause(criteria,preparedStmtList,builder);
                 builder.append(" AND tlowner.active = ? )");
                 preparedStmtList.add(true);
-            }
-            
-            
-            if(criteria.getRenewalPending()!=null && criteria.getRenewalPending()) {            
-                addClauseIfRequired(preparedStmtList, builder);
-                builder.append("  tl.validTo <= ? ");
-                preparedStmtList.add(System.currentTimeMillis()+renewalPeriod); 
-                
-                addClauseIfRequired(preparedStmtList, builder);
-                builder.append("  tl.status = ? ");
-                preparedStmtList.add(TLConstants.STATUS_APPROVED); 
-                
-                addClauseIfRequired(preparedStmtList, builder);
-                builder.append(" (tl.licensenumber NOT IN (SELECT licensenumber from eg_tl_tradelicense WHERE UPPER(applicationtype) = ? AND licensenumber IS NOT NULL)  OR (");    
-                builder.append(" tl.applicationtype = ? and ? > tl.financialyear AND tl.licensenumber NOT IN (select t1.licensenumber from eg_tl_tradelicense t1,eg_tl_tradelicense t2 where t1.licensenumber=t2.licensenumber and t1.applicationtype= ? and t2.applicationtype= ? and t1.status<>t2.status)))");
-                preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL); 
-                preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL);
-                preparedStmtList.add(Integer.toString(Calendar.getInstance().get(Calendar.YEAR)));
-                preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL);
-                preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL);
-                
-              }
-            
+            }            
         }
+        
         else {
 
             if (criteria.getTenantId() != null) {
