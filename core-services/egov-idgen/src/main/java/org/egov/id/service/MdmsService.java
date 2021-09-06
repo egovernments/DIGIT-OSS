@@ -3,6 +3,7 @@ package org.egov.id.service;
 import java.io.IOException;
 import java.util.*;
 
+import org.apache.commons.lang3.StringUtils;
 import org.egov.id.model.IdRequest;
 import org.egov.id.model.RequestInfo;
 import org.egov.mdms.model.MasterDetail;
@@ -61,7 +62,7 @@ public class MdmsService {
      */
 
     public String getCity(RequestInfo requestInfo, IdRequest idRequest) {
-        Map<String, String> getCity = doMdmsServiceCall(requestInfo, idRequest);
+        Map<String, String> getCity = doMdmsServiceCall(requestInfo, idRequest.getIdName(), idRequest.getTenantId());
         String cityCode = null;
         try {
             if (getCity != null) {
@@ -88,17 +89,27 @@ public class MdmsService {
      */
 
     public String getIdFormat(RequestInfo requestInfo, IdRequest idRequest) {
-        Map<String, String> getIdFormat = doMdmsServiceCall(requestInfo, idRequest);
+
+        List<String> tenantHierarchy = getTenantHierarchy(idRequest.getTenantId());
         String idFormat = null;
-        try {
-            if (getIdFormat != null) {
-                idFormat = getIdFormat.get(formatMaster);
-            }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            log.error("Error while fetching id format", e);
-            throw new CustomException("PARSING ERROR", "Failed to get formatid from MDMS");
+
+        for (String tenantId : tenantHierarchy){
+            Map<String, String> getIdFormat = doMdmsServiceCall(requestInfo, idRequest.getIdName(), tenantId);
+
+                if (getIdFormat != null) {
+
+                    idFormat = getIdFormat.get(formatMaster);
+
+                    if(!StringUtils.isEmpty(idFormat))
+                        break;
+
+                }
         }
+        
+        if(idFormat == null){
+            throw new CustomException("FORMAT ERROR", "Failed to get formatid from MDMS");
+        }
+
         return idFormat;
     }
 
@@ -108,11 +119,7 @@ public class MdmsService {
      * @param requestInfo
      * @return MAP
      */
-    private Map<String, String> doMdmsServiceCall(RequestInfo requestInfo, IdRequest idRequest) {
-
-
-        String idname = idRequest.getIdName();
-        String tenantId = idRequest.getTenantId();
+    private Map<String, String> doMdmsServiceCall(RequestInfo requestInfo, String idname, String tenantId) {
 
         String idFormatFromMdms = null;
         String cityCodeFromMdms = null;
@@ -170,6 +177,22 @@ public class MdmsService {
         mdmsCallMap.put(tenantMaster, cityCodeFromMdms);
 
         return mdmsCallMap;
+    }
+
+    private List<String> getTenantHierarchy(String tenantId){
+
+        String NAMESPACE_SEPARATOR = ".";
+        Integer tenantDepth = StringUtils.countMatches(tenantId, NAMESPACE_SEPARATOR);
+        ArrayList<String> tenantHierarchy = new ArrayList<>();
+        tenantHierarchy.add(tenantId);
+        for (int index = tenantDepth; index >= 1; index--) {
+            String tenant = tenantId.substring(0,
+                    StringUtils.ordinalIndexOf(tenantId, NAMESPACE_SEPARATOR, index));
+            tenantHierarchy.add(tenant);
+        }
+
+        return tenantHierarchy;
+
     }
 
 }
