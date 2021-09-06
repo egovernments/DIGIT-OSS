@@ -795,13 +795,31 @@ const pgr =  {
             onDone: {
               target: '#endstate',
               actions: assign((context, event) => {
+                let templateList;
                 let complaintDetails = event.data;
-                let message = dialog.get_message(messages.fileComplaint.persistComplaint, context.user.locale);
-                message = message.replace('{{complaintNumber}}', complaintDetails.complaintNumber);
-                message = message.replace('{{complaintLink}}', complaintDetails.complaintLink);
-                let closingStatement = dialog.get_message(messages.fileComplaint.closingStatement, context.user.locale);
-                message = message + closingStatement;
-                dialog.sendMessage(context, message);
+                let localeList = config.supportedLocales.split(',');
+                let localeIndex = localeList.indexOf(context.user.locale);
+                templateList =  config.valueFirstWhatsAppProvider.valuefirstNotificationLodgeCompliantTemplateid.split(',');
+                
+                if(templateList[localeIndex])
+                  context.extraInfo.templateId = templateList[localeIndex];
+                else
+                  context.extraInfo.templateId = templateList[0];
+
+                let params=[];
+                params.push(complaintDetails.complaintNumber);
+
+                let urlComponemt = complaintDetails.complaintLink.split('/');
+                let bttnUrlComponent = urlComponemt[urlComponemt.length -1];
+
+                var templateContent = {
+                  output: context.extraInfo.templateId,
+                  type: "template",
+                  params: params,
+                  bttnUrlComponent: bttnUrlComponent
+                };
+
+                dialog.sendMessage(context, templateContent, true);
               })
             }
           }
@@ -821,19 +839,41 @@ const pgr =  {
             },
             actions: assign((context, event) => {
               (async() => {   
+                let templateList;
+                let localeList = config.supportedLocales.split(',');
+                let localeIndex = localeList.indexOf(context.user.locale);
+                templateList =  config.valueFirstWhatsAppProvider.valuefirstNotificationTrackCompliantTemplateid.split(',');
+                
+                if(templateList[localeIndex])
+                  context.extraInfo.templateId = templateList[localeIndex];
+                else
+                  context.extraInfo.templateId = templateList[0];
+
+
                 let complaints = event.data;
                 var preamble =  dialog.get_message(messages.trackComplaint.results.preamble, context.user.locale);
                 dialog.sendMessage(context, preamble, true);
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 for(let i = 0; i < complaints.length; i++) {
-                  let template = dialog.get_message(messages.trackComplaint.results.complaintTemplate, context.user.locale);
+                  let params=[];
                   let complaint = complaints[i];
-                  template = template.replace('{{complaintType}}',complaint.complaintType);
-                  template = template.replace('{{filedDate}}', complaint.filedDate);
-                  template = template.replace('{{complaintStatus}}', complaint.complaintStatus);
-                  template = template.replace('{{complaintLink}}', complaint.complaintLink);
 
-                  dialog.sendMessage(context, template, true);
+                  params.push(complaint.complaintType);
+                  params.push(complaint.complaintNumber);
+                  params.push(complaint.filedDate);
+                  params.push(complaint.complaintStatus);
+
+                  let urlComponemt = complaint.complaintLink.split('/');
+                  let bttnUrlComponent = urlComponemt[urlComponemt.length -1];
+
+                  var templateContent = {
+                    output: context.extraInfo.templateId,
+                    type: "template",
+                    params: params,
+                    bttnUrlComponent: bttnUrlComponent
+                  };
+
+                  dialog.sendMessage(context, templateContent, true);
                 }
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 var closingStatement = dialog.get_message(messages.trackComplaint.results.closingStatement, context.user.locale);
