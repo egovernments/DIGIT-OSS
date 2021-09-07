@@ -9,7 +9,7 @@ This repository contains source code for web implementation of the new Digit UI 
 1. Run **yarn start** to start the local server
 
 #### Updating modules
-To update the modules run *install-dep.sh* script this will pull all the updates from *digit-ui-internals* repository
+To update the modules run *install-dep.sh* script this will pull all the updates from *micro-ui-internals* subfolder
 
 #### Reference Docs
 
