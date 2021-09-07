@@ -21,7 +21,7 @@ import {
     else if(value.businessService === "BPA")
     BusinessService="BPA.NC_APP_FEE";
 
-    const { data, address, owners, nocDocuments} = value;
+    const { data, address, owners, nocDocuments, documents} = value;
     const { data:datafromAPI, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId,value?.data?.scrutinyNumber, {
         enabled: true
       })
@@ -294,11 +294,20 @@ import {
               style={{ width: "100px", display:"inline" }}
               onClick={() => routeTo(`${routeLink}/document-details`)}
            />
-        <CardSubHeader>{t("BPA_APP_DET_LABEL")}</CardSubHeader>
+        {/* <CardSubHeader>{t("BPA_APP_DET_LABEL")}</CardSubHeader>
         <OBPSDocument value={value} Code="APPL"/>
         <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
         <CardSubHeader>{t("BPA_BUILDING_PLAN_DIAG")}</CardSubHeader>
-        <OBPSDocument value={value} Code="BPD"/>
+        <OBPSDocument value={value} Code="BPD"/> */}
+        {documents?.documents.map((doc, index) => (
+          <div key={index}>
+          <CardSectionHeader>{t(doc?.documentType)}</CardSectionHeader>
+          <StatusTable>
+          <OBPSDocument value={value} Code={doc?.documentType} index={index}/> 
+          <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
+          </StatusTable>
+          </div>
+        ))}
       </Card>
       <Card>
       <CardHeader>{t("BPA_NOC_DETAILS_SUMMARY")}</CardHeader>
