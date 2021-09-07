@@ -79,7 +79,7 @@
     "build-js": "react-scripts build",
     "build": "run-s && yarn cache clean && yarn config set ignore-engines true && build-css build-js",
     "prettier": "prettier --write \"src/**/*.js\"",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=node",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "egov-ui-kit-components": "babel src/components --out-dir src/egov-ui-kit/components --copy-files",
