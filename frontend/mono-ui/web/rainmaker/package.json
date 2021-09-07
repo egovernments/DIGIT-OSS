@@ -11,7 +11,7 @@
     "dev:citizen": "yarn run build-css-citizen && cd packages/citizen && yarn start",
     "dev:employee": "yarn run build-css-employee && cd packages/employee && set PORT=3006 && yarn start",
     "prod:citizen": "yarn run go_citizen && cd packages/citizen && yarn run build",
-    "prod:employee": "sudo npm install n -g && cd packages/employee && yarn run build",
+    "prod:employee": "npm install n -g && cd packages/employee && yarn run build",
     "dev:employee-mcs": "cd dev-packages/egov-uc-dev &&  yarn start",
     "prod:employee-mcs": "yarn run go_employee_mcs && cd dev-packages/egov-uc-dev && yarn build",
     "transpile-citizen-modules": "run-p pgr-citizen pt-citizen egov-firenoc egov-abg",
