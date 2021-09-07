@@ -109,7 +109,7 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
                     title: t("BPA_INVALID_NAME"),
                 })}
             />
-            <CardLabel>{`${t("EDCR_BUILDINGPLAN")}*`}</CardLabel>
+            <CardLabel>{`${t("BPA_PLAN_DIAGRAM_LABEL")}*`}</CardLabel>
             <UploadFile
                 id={"edcr-doc"}
                 extraStyleName={"propertyCreate"}

@@ -19,7 +19,7 @@ import {
     if(value.businessService === "BPA_LOW")
     BusinessService="BPA.LOW_RISK_PERMIT_FEE";
     else if(value.businessService === "BPA")
-    BusinessService="BPA.NC_SAN_FEE";
+    BusinessService="BPA.NC_APP_FEE";
 
     const { data, address, owners, nocDocuments} = value;
     const { data:datafromAPI, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId,value?.data?.scrutinyNumber, {
@@ -335,7 +335,7 @@ import {
        </StatusTable>
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardHeader>{t("BPA_COMMON_TOTAL_AMT")}</CardHeader> 
-      <CardHeader>₹ {paymentDetails?.Bill?.[0]?.billDetails[0]?.amount}</CardHeader> 
+      <CardHeader>₹ {paymentDetails?.Bill?.[0]?.billDetails[0]?.amount || "0"}</CardHeader> 
       <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} />
       </Card>
     </React.Fragment>
