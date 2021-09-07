@@ -5,21 +5,25 @@ import { commonApiPost } from "egov-ui-kit/utils/api";
 import { translate } from "./commons/common";
 import $ from "jquery";
 import _ from "lodash";
-import "datatables-buttons";
-import "datatables";
-import "datatables.net";
-import "datatables.net-buttons";
-import "datatables.net-dt";
-import "datatables.net-buttons-bs";
-import "datatables.net-responsive";
-import "datatables.net-responsive-dt";
+// "datatables": "1.10.18",
+// "datatables-buttons": "1.0.3",
+// "datatables.net-buttons": "1.5.4",
+// "datatables.net-buttons-bs": "1.5.3",
+// import "datatables-buttons";
+// import "datatables";
+// import "datatables.net";
+// import "datatables.net-buttons";
+// import "datatables.net-dt";
+// import "datatables.net-buttons-bs";
+// import "datatables.net-responsive";
+// import "datatables.net-responsive-dt";
 import JSZip from "jszip/dist/jszip";
 import get from "lodash/get";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import "datatables.net-buttons/js/buttons.html5.js"; // HTML 5 file export
-import "datatables.net-buttons/js/buttons.flash.js"; // Flash file export
-import "datatables.net-buttons/js/buttons.colVis.min.js";
+// import "datatables.net-buttons/js/buttons.html5.js"; // HTML 5 file export
+// import "datatables.net-buttons/js/buttons.flash.js"; // Flash file export
+// import "datatables.net-buttons/js/buttons.colVis.min.js";
 import { getResultUrl } from "./commons/url";
 import Label from "egov-ui-kit/utils/translationNode";
 import commonConfig from "config/common.js";
