@@ -317,7 +317,7 @@ public class NotificationService {
 		Boolean isCreate =  CreationReason.CREATE.equals(property.getCreationReason());
 		
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
-		String localisedState = getLocalisedState(WF_STATUS_FIELDVERIFIED_LOCALE, completeMsgs);
+		String localisedState = getLocalisedState(WF_STATUS_FIELDVERIFIED, completeMsgs);
 		
 		createOrUpdate = isCreate ? CREATE_STRING : UPDATE_STRING;
 		msg = getMsgForMobileNumberUpdate(property, WF_UPDATE_STATUS_CHANGE_CODE, completeMsgs, createOrUpdate);
