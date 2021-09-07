@@ -77,7 +77,7 @@
     "start-js": "react-scripts start",
     "start": "run-p watch-css start-js",
     "build-js": "react-scripts build",
-    "build": "run-s && yarn cache clean && build-css build-js",
+    "build": "run-s && yarn cache clean && yarn config set ignore-engines true && build-css build-js",
     "prettier": "prettier --write \"src/**/*.js\"",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
