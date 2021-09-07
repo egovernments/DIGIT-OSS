@@ -154,7 +154,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
       t={t}
       config={config}
       onSelect={handleSubmit}
-      isDisabled={!selectedCity || !selectedLocality || !street || !landmark}
+      isDisabled={!selectedCity || !selectedLocality }
       isMultipleAllow={true}
     >
       <CardLabel>{`${t("BPA_GIS_LABEL")}`}</CardLabel>
