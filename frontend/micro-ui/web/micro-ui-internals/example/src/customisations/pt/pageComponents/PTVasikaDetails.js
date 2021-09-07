@@ -28,7 +28,7 @@ const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => 
               isMandatory={false}
               name="mobileNumber"
               value={val}
-              onChange={setValue}
+              onChange={(e)=>setValue(e?.target?.value)}
               {...(validation = {
                 isRequired: true,
                 pattern: "[6-9]{1}[0-9]{9}",
@@ -48,7 +48,7 @@ const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => 
               isMandatory={false}
               name="name"
               value={other}
-              onChange={setOther}
+              onChange={(e)=>setOther(e?.target?.value)}
               {...(validation = {
                 isRequired: true,
                 pattern: "^[a-zA-Z-.`' ]*$",
@@ -74,7 +74,7 @@ const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => 
       >
 
         <div>
-          <CardLabel>{`${t("PT_FLOOR_DETAILS_PLOT_SIZE_LABEL")}`}</CardLabel>
+          <CardLabel>{`${t("PT_VASIKA_NO_LABEL")}`}</CardLabel>
           <TextInput
             t={t}
             type={"number"}
@@ -82,11 +82,11 @@ const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => 
             optionKey="i18nKey"
             name="PlotSize"
             value={val}
-            onChange={setValue}
+            onChange={(e)=>setValue(e?.target?.value)}
 
           />
         </div>
-        <CardLabel>{`${t("PT_FLOOR_DETAILS_BUILT_UP_AREA_LABEL")}`}</CardLabel>
+        <CardLabel>{`${t("PT_VASIKA_AREA_LABEL")}`}</CardLabel>
         <TextInput
           t={t}
           type={"number"}
@@ -94,10 +94,10 @@ const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => 
           optionKey="i18nKey"
           name="BuiltUpArea"
           value={other}
-          onChange={setOther}
+          onChange={(e)=>setOther(e?.target?.value)}
         />
       </FormStep>
-      {<CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("PT_FLOOR_AREA_INFO_MSG")} />}
+      {<CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("PT_VASIKA_DETAILS_INFO")} />}
     </React.Fragment>
   );
 };
