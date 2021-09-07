@@ -13,7 +13,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   const stateId = Digit.ULBService.getStateId();
   const [isOpen, setIsOpen] = useState(false);
   const [pincode, setPincode] = useState(currPincode || formData?.address?.pincode || "");
-  const [geoLocation, setgeoLocation] = useState(formData?.address?.geolocation || "")
+  const [geoLocation, setgeoLocation] = useState(formData?.address?.geoLocation || "")
   const [tenantIdData, setTenantIdData] = useState(formData?.Scrutiny?.[0]?.tenantIdData);
   const [selectedCity, setSelectedCity] = useState(() => currCity || formData?.address?.city || null);
   const [street, setStreet] = useState(formData?.address?.street || "");
@@ -97,6 +97,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
 
   const handleSubmit = () => {
     const address = { }
+    address.geoLocation = geoLocation;
     address.pincode = pincode;
     address.city = selectedCity;
     address.locality = selectedLocality;
