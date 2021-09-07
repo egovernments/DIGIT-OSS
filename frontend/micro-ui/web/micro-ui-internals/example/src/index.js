@@ -18,6 +18,8 @@ import { HRMSModule } from "@egovernments/digit-ui-module-hrms";
 import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
+import {initCustomisationComponents} from "./customisations";
+
 // import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
 // import { Body, TopBar } from "@egovernments/digit-ui-react-components";
 import "@egovernments/digit-ui-css/example/index.css";
@@ -149,6 +151,7 @@ const initDigitUI = () => {
     // TLLinks,
   });
 
+  initCustomisationComponents();
   initFSMComponents();
   initPGRComponents();
   initDSSComponents();
