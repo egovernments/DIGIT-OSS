@@ -42,7 +42,8 @@ function OBPSDocument({ value = {},Code,index }) {
             return (
               <a target="_" href={documentLink} style={{ minWidth: "100px",marginRight:"10px" }} key={index}>
                 <PDFSvg width={85} height={100} style={{ background: "#f6f6f6", padding: "8px" }} />
-                <p style={{ marginTop: "8px",textAlign:"center" }}>{`${t(`ES_COMMON_DOC_DOCUMENT`)} - ${index + 1}`}</p>
+                {/* <p style={{ marginTop: "8px",textAlign:"center" }}>{`${t(`ES_COMMON_DOC_DOCUMENT`)} - ${index + 1}`}</p> */}
+                <p style={{ marginTop: "8px",textAlign:"center" }}>{document.fileName}</p>
               </a>
             );
           })}

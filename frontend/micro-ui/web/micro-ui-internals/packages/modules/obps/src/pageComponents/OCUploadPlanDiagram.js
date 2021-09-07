@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 
 const OCUploadPlanDiagram = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner, isShowToast }) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const stateId = tenantId.split(".")[0];
+    const stateId = Digit.ULBService.getStateId();
     const [uploadedFile, setUploadedFile] = useState(() => formData?.uploadData?.file || null);
     const [file, setFile] = useState(formData?.uploadData?.file);
     const [uploadMessage, setUploadMessage] = useState("");

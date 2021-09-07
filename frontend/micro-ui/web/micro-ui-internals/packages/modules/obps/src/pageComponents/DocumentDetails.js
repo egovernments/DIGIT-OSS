@@ -11,7 +11,7 @@ import Timeline from "../components/Timeline";
 
 const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const stateId = tenantId.split(".")[0];
+    const stateId = Digit.ULBService.getStateId();
     const [documents, setDocuments] = useState(formData?.documents?.documents || []);
     const [error, setError] = useState(null);
     const [bpaTaxDocuments, setBpaTaxDocuments] = useState([]);
@@ -150,6 +150,7 @@ function SelectDocument({
                         documentType: selectedDocument?.code,
                         fileStoreId: uploadedFile,
                         documentUid: uploadedFile,
+                        fileName: file?.name || "",
                     },
                 ];
             });

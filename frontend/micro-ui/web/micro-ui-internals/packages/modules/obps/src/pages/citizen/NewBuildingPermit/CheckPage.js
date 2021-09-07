@@ -143,11 +143,11 @@ import {
               onClick={() => routeTo(`${routeLink}/plot-details`)}
            />
     <StatusTable>
-          <Row className="border-none" label={t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.plotArea} />
-          <Row className="border-none" label={t(`BPA_BOUNDARY_PLOT_NO_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.plotNo} />
-          <Row className="border-none" label={t(`BPA_BOUNDARY_KHATA_NO_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.khataNo}/>
-          <Row className="border-none" label={t(`Holding Number`)} text={data?.holdingNumber} />
-          <Row className="border-none" label={t(`Land Registration details`)} text={data?.registrationDetails} />
+          <Row className="border-none" label={t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.plotArea || t("CS_NA")} />
+          <Row className="border-none" label={t(`BPA_BOUNDARY_PLOT_NO_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.plotNo || t("CS_NA")} />
+          <Row className="border-none" label={t(`BPA_BOUNDARY_KHATA_NO_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.khataNo || t("CS_NA")}/>
+          <Row className="border-none" label={t(`Holding Number`)} text={data?.holdingNumber || t("CS_NA")} />
+          <Row className="border-none" label={t(`Land Registration details`)} text={data?.registrationDetails || t("CS_NA")} />
     </StatusTable>
     </Card>
     <Card>
@@ -247,11 +247,11 @@ import {
               onClick={() => routeTo(`${routeLink}/location`)}
            />
       <StatusTable>
-          <Row className="border-none" label={t(`BPA_DETAILS_PIN_LABEL`)} text={address?.pincode} />
-          <Row className="border-none" label={t(`BPA_CITY_LABEL`)} text={address?.city?.name} />
-          <Row className="border-none" label={t(`BPA_LOC_MOHALLA_LABEL`)} text={address?.locality?.name} />
-          <Row className="border-none" label={t(`BPA_DETAILS_SRT_NAME_LABEL`)} text={address?.street} />
-          <Row className="border-none" label={t(`ES_NEW_APPLICATION_LOCATION_LANDMARK`)} text={address?.landmark} />
+          <Row className="border-none" label={t(`BPA_DETAILS_PIN_LABEL`)} text={address?.pincode || t("CS_NA")} />
+          <Row className="border-none" label={t(`BPA_CITY_LABEL`)} text={address?.city?.name || t("CS_NA")} />
+          <Row className="border-none" label={t(`BPA_LOC_MOHALLA_LABEL`)} text={address?.locality?.name || t("CS_NA")} />
+          <Row className="border-none" label={t(`BPA_DETAILS_SRT_NAME_LABEL`)} text={address?.street || t("CS_NA")} />
+          <Row className="border-none" label={t(`ES_NEW_APPLICATION_LOCATION_LANDMARK`)} text={address?.Landmark || t("CS_NA")} />
       </StatusTable>
       </Card>
       <Card>

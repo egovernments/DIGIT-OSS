@@ -13,7 +13,7 @@ import Timeline from "../components/Timeline";
 
 const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const stateId = tenantId.split(".")[0];
+    const stateId = Digit.ULBService.getStateId();
     const [nocDocuments, setNocDocuments] = useState(formData?.nocDocuments?.nocDocuments || []);
     const [error, setError] = useState(null);
     const [nocTaxDocuments, setNocTaxDocuments] = useState([]);
@@ -181,6 +181,7 @@ function SelectDocument({
                         documentType: selectedDocument?.code,
                         fileStoreId: uploadedFile,
                         documentUid: uploadedFile,
+                        fileName: file?.name || "",
                     },
                 ];
             });

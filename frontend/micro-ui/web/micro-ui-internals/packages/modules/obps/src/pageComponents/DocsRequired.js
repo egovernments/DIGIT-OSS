@@ -6,7 +6,7 @@ import { useHistory } from "react-router-dom";
 const DocsRequired = ({ onSelect, onSkip, config }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const state = tenantId.split(".")[0];
+  const state = Digit.ULBService.getStateId();
   const history = useHistory();
   const { data, isLoading } = Digit.Hooks.obps.useMDMS(state, "BPA", "DocumentTypes");
 
@@ -41,7 +41,7 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
         }
         <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={goNext} />
       </Card>
-      <CitizenInfoLabel text={t(`OBPS_DOCS_FILE_SIZE`)} />
+      <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t(`OBPS_DOCS_FILE_SIZE`)} />
     </Fragment>
   );
 };

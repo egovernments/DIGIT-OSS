@@ -80,7 +80,7 @@ import {
           <Row className="border-none" label={t(`BPA_APPLICANT_GENDER_LABEL`)} text={t(formData?.LicneseDetails?.gender.i18nKey)}/>
           <Row className="border-none" label={t(`BPA_OWNER_MOBILE_NO_LABEL`)} text={formData?.LicneseDetails?.mobileNumber}/>
           <Row className="border-none" label={t(`BPA_APPLICANT_EMAIL_LABEL`)} text={formData?.LicneseDetails?.email}/>
-          <Row className="border-none" label={t(`BPA_APPLICANT_PAN_NO`)} text={formData?.LicneseDetails?.PanNumber}/>
+          <Row className="border-none" label={t(`BPA_APPLICANT_PAN_NO`)} text={formData?.LicneseDetails?.PanNumber || t("CS_NA")}/>
         </StatusTable>
     </Card>
     <Card>
@@ -147,7 +147,7 @@ import {
       <StatusTable>
       {paymentDetails?.billResponse?.Bill[0]?.billDetails[0]?.billAccountDetails.map((bill,index)=>(
         <div key={index}>
-          <Row className="border-none" label={t(`${bill.taxHeadCode}`)} text={`₹ ${bill?.amount}`} />
+          <Row className="border-none" label={t(`${bill.taxHeadCode}`)} text={`₹ ${bill?.amount}`|| t("CS_NA")} />
         </div>
       ))}
        </StatusTable>

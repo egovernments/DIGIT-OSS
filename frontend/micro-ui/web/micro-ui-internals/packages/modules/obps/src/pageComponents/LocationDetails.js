@@ -10,14 +10,14 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   const allCities = Digit.Hooks.obps.useTenants();
   const { pathname: url } = useLocation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const [isOpen, setIsOpen] = useState(false);
   const [pincode, setPincode] = useState(currPincode || formData?.address?.pincode || "");
   const [geoLocation, setgeoLocation] = useState(formData?.address?.geolocation || "")
   const [tenantIdData, setTenantIdData] = useState(formData?.Scrutiny?.[0]?.tenantIdData);
   const [selectedCity, setSelectedCity] = useState(() => currCity || formData?.address?.city || null);
   const [street, setStreet] = useState(formData?.address?.street || "");
-  const [landmark, setLandmark] = useState(formData?.address?.landmark || "");
+  const [landmark, setLandmark] = useState(formData?.address?.Landmark || "");
   //const { isLoading, data: citymodules } = Digit.Hooks.obps.useMDMS(stateId, "tenant", ["citymodule"]);
   let [cities, setcitiesopetions] = useState(allCities);
   let validation = { };
@@ -101,7 +101,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
     address.city = selectedCity;
     address.locality = selectedLocality;
     address.street = street;
-    address.landmark = landmark;
+    address.Landmark = landmark;
     address.geoLocation = geoLocation;
     onSelect(config.key, address);
   };
@@ -110,6 +110,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   function onSave(geoLocation, pincode) {
     selectPincode(pincode);
     setgeoLocation(geoLocation);
+    setIsOpen(false);
   }
   function selectPincode(e) {
     formData.address["pincode"] = (typeof e === 'object' && e !== null) ? e.target.value : e;
@@ -164,7 +165,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
           optionKey="i18nKey"
           t={t}
           name="gis"
-          value={geoLocation}
+          value={geoLocation?`${geoLocation.latitude},${geoLocation.longitude}`:""}
         />
         <LinkButton
           label={

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, Menu, MobileNumber, Card } from "@egovernments/digit-ui-react-components";
+import { FormStep,Loader, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, Menu, MobileNumber, Card } from "@egovernments/digit-ui-react-components";
 import { useLocation, useRouteMatch } from "react-router-dom";
 import Timeline from "../components/Timeline";
 
@@ -17,15 +17,17 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     formData?.LicneseDetails?.PanNumber || formData?.formData?.LicneseDetails?.PanNumber || ""
   );
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
 
-  const { data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
+  const { isLoading,data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
 
   let menu = [];
   genderTypeData &&
-  genderTypeData["common-masters"].GenderType.map((genderDetails) => {
+  genderTypeData["common-masters"].GenderType.filter(data => data.active).map((genderDetails) => {
       menu.push({ i18nKey: `COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
     });
+  
+    if (isLoading) return <Loader />;
 
   function SelectName(e) {
     setName(e.target.value);

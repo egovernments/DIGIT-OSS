@@ -7,7 +7,7 @@ const PermanentAddress = ({ t, config, onSelect, value, userType, formData }) =>
   const onSkip = () => onSelect();
   const [PermanentAddress, setPermanentAddress] = useState(formData?.LicneseDetails?.PermanentAddress || formData?.formData?.LicneseDetails?.PermanentAddress);
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   //const isEdit = window.location.href.includes("/edit-application/") || window.location.href.includes("renew-trade");
   //const { isLoading, data: fydata = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "egf-master", "FinancialYear");
 
