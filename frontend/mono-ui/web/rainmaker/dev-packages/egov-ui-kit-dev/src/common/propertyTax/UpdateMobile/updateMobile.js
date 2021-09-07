@@ -15,7 +15,7 @@ const editIconStyle = {
     fill: "#fe7a51",
 };
 
-export const getRequestInfo=(auth=null)=>({
+export const getRequestInfo = (auth = null) => ({
     "RequestInfo": {
         "apiId": "Rainmaker",
         "ver": ".01",
@@ -25,7 +25,7 @@ export const getRequestInfo=(auth=null)=>({
         "key": "",
         "msgId": `20170310130900|${localStorage.getItem("locale")}`,
         "authToken": auth
-      }
+    }
 })
 
 const VerifyButton = (type, openDialog) => {
@@ -104,21 +104,24 @@ export default class UpdateMobile extends React.Component {
     }
 
     canShowEditOption = () => {
-        if (process.env.REACT_APP_NAME === "Citizen") {
-            let userInfo = JSON.parse(getUserInfo()) || {};
-            if (userInfo.mobileNumber && userInfo.mobileNumber == this.props.number) {
-                return true;
-            } else {
-                return false;
+        if (window.location.href.includes('/property-tax/property') || window.location.href.includes('/property-tax/my-properties/property')) {
+            if (process.env.REACT_APP_NAME === "Citizen") {
+                let userInfo = JSON.parse(getUserInfo()) || {};
+                if (userInfo.mobileNumber && userInfo.mobileNumber == this.props.number) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
+            return true;
         }
-        return true;
+        return false;
     }
 
     render() {
 
         const { property = {}, propertyNumbers = {} } = this.state;
-        return property && property.status=="ACTIVE" && <div>
+        return property && property.status == "ACTIVE" && <div>
             {this.canShowEditOption() && VerifyButton(this.props.type, this.toggleDialog)}
             {this.state.open && <UpdateMobileDialog
                 open={this.state.open}
@@ -128,7 +131,7 @@ export default class UpdateMobile extends React.Component {
                 propertyNumbers={propertyNumbers}
                 closeDialog={() => this.toggleDialog()}>
             </UpdateMobileDialog>}
-            {this.state.invalidNumber && this.canShowEditOption()  && <WarningPopup
+            {this.state.invalidNumber && this.canShowEditOption() && <WarningPopup
                 open={this.state.invalidNumber ? true : false}
                 closeDialog={() => this.setState({ invalidNumber: false })}
                 updateNum={() => { this.setState({ invalidNumber: false }); this.toggleDialog(); }}>
