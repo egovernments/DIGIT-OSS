@@ -17,7 +17,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   const [tenantIdData, setTenantIdData] = useState(formData?.Scrutiny?.[0]?.tenantIdData);
   const [selectedCity, setSelectedCity] = useState(() => currCity || formData?.address?.city || null);
   const [street, setStreet] = useState(formData?.address?.street || "");
-  const [landmark, setLandmark] = useState(formData?.address?.Landmark || "");
+  const [landmark, setLandmark] = useState(formData?.address?.landmark || formData?.address?.Landmark || "");
   //const { isLoading, data: citymodules } = Digit.Hooks.obps.useMDMS(stateId, "tenant", ["citymodule"]);
   let [cities, setcitiesopetions] = useState(allCities);
   let validation = { };

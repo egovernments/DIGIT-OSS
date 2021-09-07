@@ -21,7 +21,7 @@ import {
     else if(value.businessService === "BPA")
     BusinessService="BPA.NC_APP_FEE";
 
-    const { data, address, owners, nocDocuments, documents} = value;
+    const { data, address, owners, nocDocuments, documents, additionalDetails} = value;
     const { data:datafromAPI, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId,value?.data?.scrutinyNumber, {
         enabled: true
       })
@@ -38,7 +38,7 @@ import {
         }
       );
 
-      let routeLink = `/digit-ui/citizen/obps/new-building-permit`;
+      let routeLink = `/digit-ui/citizen/obps/bpa/${additionalDetails?.applicationType.toLowerCase()}/${additionalDetails?.serviceType.toLowerCase()}`;
 
       const tableHeader = [
         {
@@ -251,7 +251,7 @@ import {
           <Row className="border-none" label={t(`BPA_CITY_LABEL`)} text={address?.city?.name || t("CS_NA")} />
           <Row className="border-none" label={t(`BPA_LOC_MOHALLA_LABEL`)} text={address?.locality?.name || t("CS_NA")} />
           <Row className="border-none" label={t(`BPA_DETAILS_SRT_NAME_LABEL`)} text={address?.street || t("CS_NA")} />
-          <Row className="border-none" label={t(`ES_NEW_APPLICATION_LOCATION_LANDMARK`)} text={address?.Landmark || t("CS_NA")} />
+          <Row className="border-none" label={t(`ES_NEW_APPLICATION_LOCATION_LANDMARK`)} text={address?.landmark || t("CS_NA")} />
       </StatusTable>
       </Card>
       <Card>
