@@ -10,17 +10,18 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateCode = tenantId.split(".")[0];
     const [stakeHolderRoles, setStakeholderRoles] = useState(false);
-    const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateCode, "StakeholderRegistraition", "TradeTypetoRoleMapping");
+    const { data:stakeHolderDetails, isLoading:stakeHolderDetailsLoading } = Digit.Hooks.obps.useMDMS(stateCode, "StakeholderRegistraition", "TradeTypetoRoleMapping");
     const moduleCode = "bpareg";
     const language = Digit.StoreData.getCurrentLanguage();
+    const [bpaLinks, setBpaLinks] = useState([]);
     const { data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
     const { t } = useTranslation();
     const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BPA_HOME_CREATE", {});
 
     useEffect(() => {
-        if (!isLoading) {
+        if (!stakeHolderDetailsLoading) {
             let roles = [];
-            data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.map(type => {
+            stakeHolderDetails?.StakeholderRegistraition?.TradeTypetoRoleMapping?.map(type => {
                 type?.role?.map(role => {roles.push(role);});
             });
             const uniqueRoles = roles.filter((item, i, ar) => ar.indexOf(item) === i);
@@ -38,13 +39,44 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
                 setStakeholderRoles(true);
             }
         }
-    }, [isLoading]);
+    }, [stakeHolderDetailsLoading]);
+
+    const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", "DocumentTypes");
+    
+
+    useEffect(() => {
+        if (!isLoading && data?.length > 0) {
+            let unique = [], distinct = [], uniqueData = [], uniqueLinks = [];
+            for( let i = 0; i < data.length; i++ ){
+              if( !unique[data[i].applicationType] && !unique[data[i].ServiceType]){
+                distinct.push(data[i].applicationType);
+                unique[data[i].applicationType] = data[i];
+              }
+            }
+            Object.values(unique).map(indData => {
+                uniqueLinks.push({
+                    link: `bpa/${indData?.applicationType?.toLowerCase()}/${indData?.ServiceType?.toLowerCase()}/docs-required`,
+                    i18nKey: t(`BPA_HOME_${indData?.applicationType}_${indData?.ServiceType}_LABEL`),
+                    state: { docs: indData }
+                });
+                uniqueData.push({
+                    key: indData?.applicationType?.replaceAll('_', ''),
+                    applicationType: indData?.applicationType,
+                    serviceType: indData?.ServiceType,
+                    docs: indData?.docTypes
+                });  
+            })
+            sessionStorage.setItem("BPALINKSDATA", uniqueData);
+            setBpaLinks(uniqueLinks);
+        }
+    }, [!isLoading]);
+
 
     useEffect(() => {
         clearParams();
     }, []);
 
-    if (isLoading || !stakeHolderRoles) { return ( <Loader /> ); }
+    if (stakeHolderDetailsLoading || !stakeHolderRoles) { return ( <Loader /> ); }
 
     const homeDetails = [
         {
@@ -85,16 +117,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
         {
             title: t("ACTION_TEST_BPA_STAKE_HOLDER_HOME"),
             Icon: <BPAIcon className="fill-path-primary-main" />,
-            links: [
-                {
-                    link: `new-building-permit`,
-                    i18nKey: t("BPA_PERMIT_NEW_CONSTRUCTION_LABEL"),
-                },
-                {
-                    link: ``,
-                    i18nKey: t("BPA_OC_NEW_BUILDING_CONSTRUCTION_LABEL"),
-                }
-            ]
+            links: bpaLinks
         }
     ]
 

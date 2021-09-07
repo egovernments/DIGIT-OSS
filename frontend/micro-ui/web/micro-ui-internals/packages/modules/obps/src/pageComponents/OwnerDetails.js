@@ -159,7 +159,8 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     const goNext = () => {
         setError(null);
         if (ismultiple == true && fields.length == 1) {
-            setError("TL_ERROR_MULTIPLE_OWNER");
+            window.scrollTo(0,0);
+            setError("BPA_ERROR_MULTIPLE_OWNER");
         }
         else {
             let owner = formData.owners;

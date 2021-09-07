@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Card, CardHeader, CardLabel, CardText, CitizenInfoLabel, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -6,9 +6,10 @@ import { useHistory } from "react-router-dom";
 const DocsRequired = ({ onSelect, onSkip, config }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const state = Digit.ULBService.getStateId();
+  const stateCode = Digit.ULBService.getStateId();
   const history = useHistory();
-  const { data, isLoading } = Digit.Hooks.obps.useMDMS(state, "BPA", "DocumentTypes");
+  const [docsList, setDocsList] = useState([]);
+  const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", "DocumentTypes");
 
   const goNext = () => {
     if(history?.location?.state?.edcrNumber) {
@@ -17,6 +18,28 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
       onSelect();
     } 
   }
+
+  useEffect(() => {
+    if (!isLoading) {
+      const rest = window.location.href.substring(0, window.location.href.lastIndexOf("/"));
+      const serviceType = rest.split('/').pop();
+      const applicationTypeUrl = rest.substring(0, rest.lastIndexOf("/"));
+      const applicationType = applicationTypeUrl.split('/').pop();
+      let unique = [], distinct = [], uniqueData = [], uniqueList = [];
+      for (let i = 0; i < data.length; i++) {
+        if (!unique[data[i].applicationType] && !unique[data[i].ServiceType]) {
+          distinct.push(data[i].applicationType);
+          unique[data[i].applicationType] = data[i];
+        }
+      }
+      Object.values(unique).map(indData => {
+        if (indData?.applicationType == applicationType?.toUpperCase() && indData?.ServiceType == serviceType?.toUpperCase()) {
+          uniqueList.push(indData?.docTypes);
+        }
+        setDocsList(uniqueList);
+      })
+    }
+  }, [!isLoading]);
 
   if (isLoading) {
     return (
@@ -34,7 +57,7 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
         {isLoading ?
           <Loader /> :
           <Fragment>
-            {data?.[0]?.docTypes?.map((doc, index) => (
+            {docsList?.[0]?.map((doc, index) => (
               <CardLabel style={{ fontWeight: 700 }} key={index}>{`${index + 1}. ${t(doc?.code.replace('.', '_'))}`}</CardLabel>
             ))}
           </Fragment>

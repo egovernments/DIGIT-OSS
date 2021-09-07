@@ -9,9 +9,14 @@ import BPACitizenHomeScreen from "./home";
 import StakeholderRegistration from "./StakeholderRegistration";
 import MyApplication from "./MyApplication";
 
+
 const App = ({ path }) => {
   const location = useLocation()
   const { t } = useTranslation();
+  const rest = window.location.href.substring(0, window.location.href.lastIndexOf("/"));
+  const serviceType = rest.split('/').pop();
+  const applicationTypeUrl = rest.substring(0, rest.lastIndexOf("/"));
+  const applicationType = applicationTypeUrl.split('/').pop();
 
   return (
     <React.Fragment>
@@ -21,8 +26,8 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/edcrscrutiny/apply`} component={CreateEDCR} />   
         <PrivateRoute path={`${path}/edcrscrutiny/oc-apply`} component={CreateOCEDCR} />   
         <PrivateRoute
-          path={`${path}/new-building-permit`}
-          component={() => <NewBuildingPermit />}
+          path={`${path}/bpa/${applicationType}/${serviceType}`}
+          component={NewBuildingPermit}
         />  
         <PrivateRoute path={`${path}/stakeholder/apply`} component={StakeholderRegistration} />       
         <PrivateRoute path={`${path}/my-applications`} component={MyApplication} />

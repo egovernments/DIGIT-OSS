@@ -18,7 +18,7 @@ const EDCRAcknowledgement = (props) => {
 
   const routeToBPAScreen = async () => {
     history.push(
-      `/digit-ui/citizen/obps/new-building-permit/docs-required`,
+      `/digit-ui/citizen/obps/bpa/${edcrData?.appliactionType?.toLowerCase()}/${edcrData?.applicationSubType?.toLowerCase()}/docs-required`,
       { edcrNumber: edcrData?.edcrNumber }
     );
     // window.location.assign(`${window.location.origin}/digit-ui/citizen/obps/new-building-permit/docs-required`);
