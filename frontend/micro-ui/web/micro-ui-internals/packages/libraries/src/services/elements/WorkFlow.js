@@ -96,8 +96,8 @@ export const WorkflowService = {
               state: instance.state.state,
               assigner: instance?.assigner,
               rating: instance?.rating,
-              comment: instance?.wfComments.map(e => e?.comment),
-              documents: instance?.documents,
+              wfComment: instance?.wfComments.map(e => e?.comment),
+              wfDocuments: instance?.documents,
               assignes:instance.assignes,
               caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
               auditDetails: {

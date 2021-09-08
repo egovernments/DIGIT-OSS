@@ -344,9 +344,9 @@ export const ComplaintDetails = (props) => {
         mobileNumber: complaintDetails.audit.citizen.mobileNumber,
         source: complaintDetails.audit.source,
       };
-      return <TLCaption data={caption} comments={checkpoint?.comment}/>;
+      return <TLCaption data={caption} comments={checkpoint?.wfComment}/>;
     }
-    return (checkpoint.caption && checkpoint.caption.length !== 0) || checkpoint.comment.length > 0 ? <TLCaption data={checkpoint?.caption?.[0]} comments={checkpoint?.comment} /> : null;
+    return (checkpoint.caption && checkpoint.caption.length !== 0) || checkpoint.wfComment.length > 0 ? <TLCaption data={checkpoint?.caption?.[0]} comments={checkpoint?.wfComment} /> : null;
   };
 
   return (
