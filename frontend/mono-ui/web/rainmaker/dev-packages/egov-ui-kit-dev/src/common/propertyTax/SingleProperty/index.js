@@ -7,7 +7,7 @@ import "./index.css";
 class SingleProperty extends React.Component {
   onCardClick = (item) => {
     const { route: propertyId, tenantId } = item;
-    this.props.history.push(`/property-tax/my-properties/property/${encodeURIComponent(propertyId)}/${tenantId}`);
+    window.location.href=`/citizen/property-tax/my-properties/property/${encodeURIComponent(propertyId)}/${tenantId}`;
   };
 
   render() {

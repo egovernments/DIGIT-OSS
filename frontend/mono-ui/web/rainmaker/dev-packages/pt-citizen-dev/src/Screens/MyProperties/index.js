@@ -94,11 +94,10 @@ class MyProperties extends Component {
 
   onListItemClick = item => {
     const { route: propertyId, tenantId } = item;
-    this.props.history.push(
-      `/property-tax/my-properties/property/${encodeURIComponent(
-        propertyId
-      )}/${tenantId}`
-    );
+   window.location.href= `/citizen/property-tax/my-properties/property/${encodeURIComponent(
+      propertyId
+    )}/${tenantId}`;
+  
   };
 
   render() {
