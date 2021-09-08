@@ -250,7 +250,7 @@ public class PropertyService {
 		}
 		
 		userService.updateUserMobileNumber(request, uuidToMobileNumber);
-		notifService.sendNotificationForMobileNumberUpdate(request, propertyFromSearch);						
+		notifService.sendNotificationForMobileNumberUpdate(request, propertyFromSearch,uuidToMobileNumber);		
 	}
 
 	/**

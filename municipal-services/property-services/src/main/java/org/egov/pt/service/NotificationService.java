@@ -232,6 +232,10 @@ public class NotificationService {
 			
 		case WF_STATUS_OPEN:
 			return notifUtil.getMessageTemplate(WF_STATUS_OPEN_LOCALE, completeMsgs);
+			
+		case PT_UPDATE_OWNER_NUMBER:
+			return notifUtil.getMessageTemplate(PT_UPDATE_OWNER_NUMBER, completeMsgs);
+			
 		}
 		return state;
 	}
@@ -308,22 +312,14 @@ public class NotificationService {
 	 Method to send notification while updating owner mobile number	 
 	*/
 
-	public void sendNotificationForMobileNumberUpdate(PropertyRequest propertyRequest, Property propertyFromSearch) {
+	public void sendNotificationForMobileNumberUpdate(PropertyRequest propertyRequest, Property propertyFromSearch, Map<String, String> uuidToMobileNumber) {
+		
 		Property property = propertyRequest.getProperty();
-		ProcessInstance wf = property.getWorkflow();
-		String createOrUpdate = null;
 		String msg = null;
 		
-		Boolean isCreate =  CreationReason.CREATE.equals(property.getCreationReason());
-		
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
-		String localisedState = getLocalisedState(WF_STATUS_FIELDVERIFIED, completeMsgs);
-		
-		createOrUpdate = isCreate ? CREATE_STRING : UPDATE_STRING;
-		msg = getMsgForMobileNumberUpdate(property, WF_UPDATE_STATUS_CHANGE_CODE, completeMsgs, createOrUpdate);
-		
-		msg = replaceCommonValues(property, msg, localisedState);
-		prepareMsgAndSendToBothNumbers(propertyRequest, propertyFromSearch, msg);
+		msg = getMsgForMobileNumberUpdate(PT_UPDATE_OWNER_NUMBER, completeMsgs);
+		prepareMsgAndSendToBothNumbers(propertyRequest, propertyFromSearch, msg,uuidToMobileNumber);
 		
 	}
 	
@@ -331,13 +327,9 @@ public class NotificationService {
 	 Method to get the message template for owner mobile number update notification
 	*/
 	
-	private String getMsgForMobileNumberUpdate(Property property, String msgCode, String completeMsgs, String createUpdateReplaceString) {
-	
-		String url = configs.getUiAppHost().concat(configs.getViewPropertyLink().replace(NOTIFICATION_PROPERTYID, property.getPropertyId()).replace(NOTIFICATION_TENANTID, property.getTenantId()));
+	private String getMsgForMobileNumberUpdate(String msgCode, String completeMsgs) {
 		
-		return notifUtil.getMessageTemplate(msgCode, completeMsgs)
-				.replace(NOTIFICATION_PROPERTY_LINK, url)
-				.replace(NOTIFICATION_UPDATED_CREATED_REPLACE, createUpdateReplaceString);
+		return notifUtil.getMessageTemplate(msgCode, completeMsgs);
 	}
 	
 	/*
@@ -345,29 +337,32 @@ public class NotificationService {
 	*/
 
 	private void prepareMsgAndSendToBothNumbers(PropertyRequest request, Property propertyFromSearch,
-			String msg) {
+			String msg, Map<String, String> uuidToMobileNumber) {
 		
 		Property property = request.getProperty();
 		RequestInfo requestInfo = request.getRequestInfo();
-		Map<String, String> mobileNumberToOwner = new HashMap<>();
-
-		property.getOwners().forEach(owner -> {
-			if (owner.getMobileNumber() != null)
-				mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
-		});
 		
-		propertyFromSearch.getOwners().forEach(owner -> {
-			if (owner.getMobileNumber() != null)
-				mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
+		property.getOwners().forEach(owner -> {
+			
+			if(uuidToMobileNumber.containsKey(owner.getUuid()) && uuidToMobileNumber.get(owner.getUuid())!=owner.getMobileNumber()) {
+				
+				String customizedMsg = msg.replace(PT_OWNER_NAME,owner.getName()).replace(PT_OLD_MOBILENUMBER, uuidToMobileNumber.get(owner.getUuid())).replace(PT_NEW_MOBILENUMBER, owner.getMobileNumber());
+				Map<String, String> mobileNumberToOwner = new HashMap<>();
+				
+				mobileNumberToOwner.put(uuidToMobileNumber.get(owner.getUuid()), owner.getName());
+				mobileNumberToOwner.put(owner.getMobileNumber(),owner.getName());
+				
+				List<SMSRequest> smsRequests = notifUtil.createSMSRequest(customizedMsg, mobileNumberToOwner);
+				notifUtil.sendSMS(smsRequests);
+
+				Boolean isActionReq = false;		
+
+				List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
+				notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
+				
+			}
 		});
-
-		List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
-		notifUtil.sendSMS(smsRequests);
-
-		Boolean isActionReq = false;		
-
-		List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
-		notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
 		
 	}
+
 }
