@@ -2,6 +2,7 @@ import { CardLabel, FormStep, LinkButton, RadioOrSelect, TextInput } from "@egov
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import GIS from "./GIS";
+import Timeline from "../components/Timeline";
 
 const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner, isShowToast }) => {
   let currCity = JSON.parse(sessionStorage.getItem("currentCity")) || { };
@@ -11,6 +12,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   const { pathname: url } = useLocation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
+  const [Pinerror, setPinerror] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [pincode, setPincode] = useState(currPincode || formData?.address?.pincode || "");
   const [geoLocation, setgeoLocation] = useState(formData?.address?.geolocation || "")
@@ -32,6 +34,8 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
             ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
             : allCities;
       setcitiesopetions(cities);
+      if(cities && cities.length==0)
+      setPinerror("BPA_PIN_NOT_VALID_ERROR");
     }
 
   }, [pincode]);
@@ -113,6 +117,11 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
     setIsOpen(false);
   }
   function selectPincode(e) {
+    setPinerror(null);
+    if(!(((typeof e === 'object' && e !== null) ? e.target.value : e).match(/^[1-9][0-9]{5}$/)))
+    {
+      setPinerror("BPA_PIN_NOT_VALID_ERROR");
+    }
     formData.address["pincode"] = (typeof e === 'object' && e !== null) ? e.target.value : e;
     setPincode((typeof e === 'object' && e !== null) ? e.target.value : e);
     sessionStorage.setItem("currentPincode", (typeof e === 'object' && e !== null) ? e.target.value : e);
@@ -125,6 +134,18 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
 
   function selectStreet(e) {
     setStreet(e.target.value)
+  }
+
+  function selectGeolocation(e) {
+    formData.address["geoLocation"] = (typeof e === 'object' && e !== null) ? e.target.value : e;
+    setgeoLocation((typeof e === 'object' && e !== null) ? e.target.value : e);
+    sessionStorage.setItem("currentPincode", "");
+    sessionStorage.setItem("currentCity", JSON.stringify({ }));
+    sessionStorage.setItem("currLocality", JSON.stringify({ }));
+    setPincode("");
+    setSelectedLocality(null);
+    setLocalities(null);
+    setSelectedCity(null);
   }
 
   function selectLandmark(e) {
@@ -149,6 +170,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
 
   return (
     <div>
+      {!isOpen && <Timeline />}
       {isOpen && <GIS t={t} onSelect={onSelect} formData={formData} handleRemove={handleRemove} onSave={onSave} />}   
     {!isOpen && <FormStep
       t={t}
@@ -156,6 +178,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
       onSelect={handleSubmit}
       isDisabled={!selectedCity || !selectedLocality }
       isMultipleAllow={true}
+      forcedError={t(Pinerror)}
     >
       <CardLabel>{`${t("BPA_GIS_LABEL")}`}</CardLabel>
       <div style={{/* position:"relative",height:"100px",width:"200px" */ }}>
@@ -165,7 +188,8 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
           optionKey="i18nKey"
           t={t}
           name="gis"
-          value={geoLocation?`${geoLocation.latitude},${geoLocation.longitude}`:""}
+          value={geoLocation && geoLocation.latitude && geoLocation.longitude?`${geoLocation.latitude},${geoLocation.longitude}`:""}
+          onChange={selectGeolocation}
         />
         <LinkButton
           label={
@@ -192,7 +216,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
         onChange={selectPincode}
         value={pincode}
       />}
-      <CardLabel>{`${t("BPA_CITY_LABEL")}`}</CardLabel>
+      <CardLabel>{`${t("BPA_CITY_LABEL")}*`}</CardLabel>
       {!isOpen && <RadioOrSelect
         options={cities.sort((a, b) => a.name.localeCompare(b.name))}
         selectedOption={selectedCity}
@@ -205,7 +229,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
       />}
       {!isOpen && selectedCity && localities && (
         <span className={"form-pt-dropdown-only"}>
-          <CardLabel>{`${t("BPA_LOC_MOHALLA_LABEL")}`}</CardLabel>
+          <CardLabel>{`${t("BPA_LOC_MOHALLA_LABEL")}*`}</CardLabel>
           <RadioOrSelect
             dropdownStyle={{ paddingBottom: "20px" }}
             isMandatory={config.isMandatory}

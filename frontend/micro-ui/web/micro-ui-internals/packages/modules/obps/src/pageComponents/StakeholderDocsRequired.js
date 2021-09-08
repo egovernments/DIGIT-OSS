@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react";
-import { Card, CardHeader, CardLabel, CardText, CitizenInfoLabel, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Card, CardHeader, CardLabel, CardSubHeader, CardText, CitizenInfoLabel, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 
@@ -26,13 +26,16 @@ const StakeholderDocsRequired = ({ onSelect, onSkip, config }) => {
     <Fragment>
       <Card>
         <CardHeader>{t(`BPA_NEW_BUILDING_HEADER`)}</CardHeader>
-        <CitizenInfoLabel text={t(`OBPS_DOCS_REQUIRED_TIME`)} showInfo={false} />
+        <CitizenInfoLabel text={t(`BPA_DOCS_REQUIRED_TIME`)} showInfo={false} />
         <CardText style={{ color: "#0B0C0C", marginTop: "12px" }}>{t(`BPA_NEW_BUILDING_PERMIT_DESCRIPTION`)}</CardText>
         {isLoading ?
           <Loader /> :
           <Fragment>
             {data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.[0]?.docTypes?.map((doc, index) => (
-              <CardLabel style={{ fontWeight: 700 }} key={index}>{`${index + 1}. ${t(doc?.code.replace('.', '_'))}`}</CardLabel>
+              <div key={index}>
+              <CardSubHeader>{`${index + 1}. `}</CardSubHeader>
+              <CardLabel style={{ fontWeight: 700, marginTop:"-33px", marginLeft:"20px" }}>{`${t(doc?.code.replace('.', '_'))}`}</CardLabel>
+              </div>
             ))}
           </Fragment>
         }

@@ -57,11 +57,11 @@ import {
            />
         <StatusTable>
           <Row className="border-none" label={t(`BPA_LICENSE_TYPE_LABEL`)} text={t(formData?.LicneseType?.LicenseType?.i18nKey)} />
-          {formData?.LicneseType?.LicneseType?.i18nKey.includes("ARCHITECT") && <Row className="border-none" label={t(`BPA_COUNCIL_NUMBER`)} text={formData?.LicneseType?.ArchitectNo}/>}
+          {formData?.LicneseType?.LicenseType?.i18nKey.includes("ARCHITECT") && <Row className="border-none" label={t(`BPA_COUNCIL_NUMBER`)} text={formData?.LicneseType?.ArchitectNo}/>}
         </StatusTable>
     </Card>
     <Card>
-    <CardHeader>{t(`BPA_STEPPER_SCRUTINY_DETAILS_HEADER`)}</CardHeader>
+    <CardHeader>{t(`BPA_LICENSE_DET_CAPTION`)}</CardHeader>
     <LinkButton
             label={
             <div>

@@ -1,4 +1,4 @@
-import { CardLabel, CheckBox, CitizenInfoLabel, FormStep, Loader, TextInput } from "@egovernments/digit-ui-react-components";
+import { CardLabel, CheckBox, CitizenInfoLabel, FormStep, Loader, TextInput, TextArea } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import Timeline from "../components/Timeline";
 
@@ -43,17 +43,15 @@ const PermanentAddress = ({ t, config, onSelect, value, userType, formData }) =>
         isDisabled={!PermanentAddress}
       >
         <CardLabel>{`${t("BPA_PERMANANT_ADDRESS_LABEL")}*`}</CardLabel>
-        <TextInput
-          t={t}
-          isMandatory={false}
-          type={"text"}
-          optionKey="i18nKey"
-          name="PermanentAddress"
-          value={PermanentAddress}
-          onChange={selectPermanentAddress}
-          //disable={isEdit}
-          //{...(validation = { pattern: "^[a-zA-Z-.`' ]*$", isRequired: true, type: "text", title: t("TL_INVALID_TRADE_NAME") })}
-        />
+        <TextArea
+        t={t}
+        isMandatory={false}
+        type={"text"}
+        optionKey="i18nKey"
+        name="PermanentAddress"
+        onChange={selectPermanentAddress}
+        value={PermanentAddress}
+      />
       </FormStep>
     </React.Fragment>
   );

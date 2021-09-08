@@ -1,4 +1,4 @@
-import { CardLabel, CheckBox, CitizenInfoLabel, FormStep, Loader, TextInput, Toast } from "@egovernments/digit-ui-react-components";
+import { CardLabel, CheckBox, CitizenInfoLabel, FormStep, Loader, TextInput, Toast, TextArea } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import Timeline from "../components/Timeline";
 
@@ -108,17 +108,16 @@ function selectChecked(e){
         style={{ paddingBottom: "10px", paddingTop:"10px" }}
          />
         <CardLabel>{`${t("BPA_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL")}`}</CardLabel>
-        <TextInput
-          t={t}
-          isMandatory={false}
-          type={"text"}
-          optionKey="i18nKey"
-          name="Correspondenceaddress"
-          value={Correspondenceaddress}
-          onChange={selectCorrespondenceaddress}
-          //disable={isEdit}
-          //{...(validation = { pattern: "^[a-zA-Z-.`' ]*$", isRequired: true, type: "text", title: t("TL_INVALID_TRADE_NAME") })}
-        />
+         <TextArea
+        t={t}
+        isMandatory={false}
+        type={"text"}
+        optionKey="i18nKey"
+        name="Correspondenceaddress"
+        onChange={selectCorrespondenceaddress}
+        value={Correspondenceaddress}
+        disable={isAddressSame}
+      />
       </FormStep>
       <div style={{ disabled: "true", height: "30px", width: "100%", fontSize: "14px" }}></div>
         {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} onClose={() => { setShowToast(null); setError(null); }} />}

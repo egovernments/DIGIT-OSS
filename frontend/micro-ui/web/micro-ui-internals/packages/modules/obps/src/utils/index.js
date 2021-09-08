@@ -45,7 +45,7 @@ export const convertToNocObject = (data,datafromflow) => {
                   "documentType": noc?.documentType,
                   "additionalDetails": {
                   }})
-  })
+  }) || [];
   formData.Noc.documents = doc;
   return formData;
 }

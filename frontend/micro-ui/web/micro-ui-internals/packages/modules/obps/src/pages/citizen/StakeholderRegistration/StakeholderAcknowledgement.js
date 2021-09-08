@@ -70,7 +70,7 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
   ) : (
     <Card>
       <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
-      {mutation.isSuccess && <CardText>{t("CS_FILE_OBPS_RESPONSE")}</CardText>}
+      {mutation.isSuccess && <CardText>{t("CS_FILE_STAKEHOLDER_RESPONSE")}</CardText>}
       {!mutation.isSuccess && <CardText>{t("CS_FILE_PROPERTY_FAILED_RESPONSE")}</CardText>}
       {mutation.isSuccess && <Link to={{
         pathname: `/digit-ui/citizen/payment/collect/${mutation.data.Licenses[0].businessService}/${mutation.data.Licenses[0].applicationNumber}`,

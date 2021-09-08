@@ -148,7 +148,7 @@ const clearall = (num) => {
   return (
     <React.Fragment>
     <Timeline />
-    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={Object.keys(subOccupancyObject).length === 0}>
+    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} /* isDisabled={Object.keys(subOccupancyObject).length === 0} */>
       <CardSubHeader>{t("BPA_EDCR_DETAILS")}</CardSubHeader>
       <StatusTable  style={{border:"none"}}>
       <Row className="border-none" style={{border:"none"}} label={t("BPA_EDCR_NO_LABEL")} text={data?.edcrNumber}></Row>
@@ -166,14 +166,14 @@ const clearall = (num) => {
       <StatusTable  style={{border:"none"}}>
       <Row className="border-none" label={t("BPA_BUILTUP_AREA_HEADER")} text={data?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea}></Row>
       <Row className="border-none" label={t("BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL")} text={data?.planDetail?.blocks?.[0]?.building?.totalFloors}></Row>
-      <Row className="border-none" label={t("BPA_APPLICATION_HIGH_FROM_GROUND")} text={`${data?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight} mtrs`}></Row>
+      <Row className="border-none" label={t("BPA_HEIGHT_FROM_GROUND_LEVEL")} text={`${data?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight} mtrs`}></Row>
       </StatusTable>
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_OCC_SUBOCC_HEADER")}</CardSubHeader>
       {data?.planDetail?.blocks.map((block,index)=>(
       <div key={index}>
-      <CardSubHeader>{t("Block")} {index+1}</CardSubHeader>
-      <CardSectionHeader className="card-label-smaller">{t("BPA_SUB_OCCUPANCY_LABEL")}</CardSectionHeader>
+      <CardSubHeader>{t("BPA_BLOCK_SUBHEADER")} {index+1}</CardSubHeader>
+      <CardSectionHeader style={{fontWeight: "normal"}} className="card-label-smaller">{t("BPA_SUB_OCCUPANCY_LABEL")}</CardSectionHeader>
       <MultiSelectDropdown
               BlockNumber={block.number}
               className="form-field"
@@ -193,7 +193,7 @@ const clearall = (num) => {
                   <RemoveableTag key={index} text={`${t(value["name"])}`} onClick={() => onRemove(index,value,block.number)} />
                 ))}
         </div>
-        {subOccupancyObject[`Block_${block.number}`] && <LinkButton label={"Clear All"} onClick={() => clearall(block.number)}/>}
+        {(subOccupancyObject[`Block_${block.number}`] && subOccupancyObject[`Block_${block.number}`].length>0 ) && <LinkButton style={{textAlign:"left"}} label={"Clear All"} onClick={() => clearall(block.number)}/>}
       <div style={{overflow:"scroll"}}>
       <Table
         className="customTable"

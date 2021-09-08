@@ -21,12 +21,18 @@ import {
     else if(value.businessService === "BPA")
     BusinessService="BPA.NC_APP_FEE";
 
-    const { data, address, owners, nocDocuments, documents, additionalDetails} = value;
+    const { data, address, owners, nocDocuments, documents, additionalDetails, subOccupancy} = value;
     const { data:datafromAPI, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId,value?.data?.scrutinyNumber, {
         enabled: true
       })
     let consumerCode=value?.applicationNo;
     const fetchBillParams = { consumerCode };
+
+    function getdate(date) {
+      let newdate = Date.parse(date);
+      return `${new Date(newdate).getDate().toString() + "/" + (new Date(newdate).getMonth() + 1).toString() + "/" + new Date(newdate).getFullYear().toString()
+        }`;
+    }
 
 
 
@@ -110,6 +116,14 @@ import {
         location.href=jumpTo;
     }
 
+    function getBlockSubOccupancy(index){
+      let subOccupancyString = "";
+      subOccupancy[`Block_${index+1}`].map((ob) => {
+        subOccupancyString += `${t(ob.i18nKey)}, `;
+      })
+      return subOccupancyString;
+    }
+
 
     return (
     <React.Fragment>
@@ -118,7 +132,7 @@ import {
     <Card>
     <CardHeader>{t(`BPA_BASIC_DETAILS_TITLE`)}</CardHeader>
         <StatusTable>
-          <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APP_DATE_LABEL`)} text={data?.applicationDate} />
+          <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APP_DATE_LABEL`)} text={getdate(data?.applicationDate)} />
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL`)} text={t(`WF_BPA_${data?.applicationType}`)}/>
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL`)} text={t(data?.serviceType)} />
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_OCCUPANCY_LABEL`)} text={data?.occupancyType}/>
@@ -202,7 +216,10 @@ import {
       {datafromAPI?.planDetail?.blocks.map((block,index)=>(
       <div key={index}>
       <CardSubHeader>{t("BPA_BLOCK_SUBHEADER")} {index+1}</CardSubHeader>
-      <CardSectionHeader className="card-label-smaller">{t("BPA_SUB_OCCUPANCY_LABEL")}</CardSectionHeader>
+      {/* <CardSectionHeader className="card-label-smaller">{t("BPA_SUB_OCCUPANCY_LABEL")}</CardSectionHeader> */}
+      <StatusTable >
+      <Row className="border-none" label={t("BPA_SUB_OCCUPANCY_LABEL")} text={getBlockSubOccupancy(index)}></Row>
+      </StatusTable>
       <div style={{overflow:"scroll"}}>
       <Table
         className="customTable"
@@ -324,7 +341,7 @@ import {
               style={{ width: "100px", display:"inline" }}
               onClick={() => routeTo(`${routeLink}/noc-details`)}
            />
-      {nocDocuments?.NocDetails.map((noc, index) => (
+      {nocDocuments && nocDocuments?.NocDetails.map((noc, index) => (
         <div key={index}>
         <CardSectionHeader>{t(`BPA_${noc?.nocType}_HEADER`)}</CardSectionHeader>
         <StatusTable>
