@@ -49,6 +49,8 @@ export default class UpdateMobile extends React.Component {
             tenantId: "",
             property: {},
             skipped:false,
+            loading:false,
+            loaded:false,
             invalidNumber: false,
             propertyNumbers: {}
         }
@@ -63,16 +65,33 @@ export default class UpdateMobile extends React.Component {
         const { propertyId: prevPropertyId = "", tenantId: prevTenantId = "" } = prevProps;
 
         /* if (propertyId != prevPropertyId || tenantId != prevTenantId) { */
-            this.loadProperty();
+            !this.state.loading&&!this.state.loaded&&this.loadProperty();
         // }
     }
 
+    getProperty=async (queryParams,propertyId)=>{
+       if(window&&window.propertyResponse&&window.propertyResponse[propertyId]){
+           return window.propertyResponse[propertyId];
+       }else{
+        let property=await httpRequest(`property-services/property/_search`, "search", queryParams, {});
+        window.propertyResponse=window.propertyResponse||{};
+        window.propertyResponse[propertyId]=property;
+        return window.propertyResponse[propertyId];
+       }        
+    }
+    componentWillUnmount=()=>{
+        this.setState({loading:false,
+            loaded:false});
+        window.propertyResponse={};
+    }
+
     loadProperty = async () => {
+        this.setState({loading:true});
         const { propertyId = "", tenantId = "", number, updateNumberConfig } = this.props;
         let queryParams = [{ key: "propertyIds", value: propertyId },
         { key: "tenantId", value: tenantId }]
         if (propertyId !== "" && tenantId !== "") {
-            const propertyResponse = await httpRequest(`property-services/property/_search`, "search", queryParams, {});
+            const propertyResponse = await this.getProperty(queryParams, propertyId);
             this.setState({ property: propertyResponse.Properties[0] });
             const { owners = [] } = propertyResponse.Properties[0];
             let propertyNumbers = {};
@@ -96,7 +115,8 @@ export default class UpdateMobile extends React.Component {
                     };
                 }
             })
-            this.setState({ propertyNumbers: propertyNumbers })
+            this.setState({ propertyNumbers: propertyNumbers ,loading:false,
+                loaded:true})
         }
     }
 
