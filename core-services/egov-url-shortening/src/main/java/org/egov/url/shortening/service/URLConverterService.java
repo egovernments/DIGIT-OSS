@@ -130,7 +130,7 @@ public class URLConverterService {
             params.put(name, value);
         }
         String channel = params.get("channel");
-        if(channel.equalsIgnoreCase("whatsapp")){
+        if(channel.equalsIgnoreCase("whatsapp") || channel.equalsIgnoreCase("sms")){
             HashMap <String,Object> data = new HashMap<String, Object>();
             StringBuilder shortenedUrl = new StringBuilder();
 
@@ -173,6 +173,9 @@ public class URLConverterService {
             }
             else if(tag.equalsIgnoreCase("wnsOpenSearch")){
                 data.put("tag", "Water and Sewerage Open Search");
+            }
+            else if(tag.equalsIgnoreCase("smsOnboarding")){
+                data.put("tag", "SMS Onboarding");
             }
             else{
                 data.put("tag", "Unidentified link");
