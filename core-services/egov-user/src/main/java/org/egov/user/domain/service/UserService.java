@@ -634,5 +634,23 @@ public class UserService {
         }
     }
 
+    public void createDefaultUser(User user) {
+        user.setUuid(UUID.randomUUID().toString());
+        user.validateNewUser(createUserValidateName);
+        conditionallyValidateOtp(user);
+        /* encrypt here */
+        user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
+        validateUserUniqueness(user);
+        if (isEmpty(user.getPassword())) {
+            user.setPassword(UUID.randomUUID().toString());
+        } else {
+            validatePassword(user.getPassword());
+        }
+        user.setPassword(encryptPwd(user.getPassword()));
+        user.setDefaultPasswordExpiry(defaultPasswordExpiryInDays);
+        user.setTenantId(getStateLevelTenantForCitizen(user.getTenantId(), user.getType()));
+        User persistedNewUser = persistNewUser(user);
+
+    }
 
 }

@@ -71,12 +71,12 @@ public class UserDbInit {
                     .password(serviceDefault.get(PASSWORD))
                     .roles(roleSet)
                     .build();
-            user.validateNewUser(createUserValidateName);
-            user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
+            user.setMobileValidationMandatory(true);
+            user.setOtpValidationMandatory(false);
             if (userRepository.isUserPresent(user.getUsername(), user.getTenantId(), user.getType())) {
                 log.info("EG_SYSTEM_USER_ALREADY_EXISTS: " + "System user already exists");
             } else {
-                userRepository.create(user);
+                userService.createDefaultUser(user);
             }
         }
     }
