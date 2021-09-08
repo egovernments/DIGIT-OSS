@@ -48,6 +48,7 @@ export default class UpdateMobile extends React.Component {
             propertyId: "",
             tenantId: "",
             property: {},
+            skipped:false,
             invalidNumber: false,
             propertyNumbers: {}
         }
@@ -61,9 +62,9 @@ export default class UpdateMobile extends React.Component {
         const { propertyId = "", tenantId = "" } = this.props;
         const { propertyId: prevPropertyId = "", tenantId: prevTenantId = "" } = prevProps;
 
-        if (propertyId != prevPropertyId || tenantId != prevTenantId) {
+        /* if (propertyId != prevPropertyId || tenantId != prevTenantId) { */
             this.loadProperty();
-        }
+        // }
     }
 
     loadProperty = async () => {
@@ -79,12 +80,12 @@ export default class UpdateMobile extends React.Component {
             owners && owners.map(owner => {
                 if (process.env.REACT_APP_NAME !== "Citizen") {
                     if ((number == updateNumberConfig.invalidNumber) || !number.match(updateNumberConfig['invalidPattern'])) {
-                        this.setState({ invalidNumber: true });
+                        !this.state.skipped&&this.setState({ invalidNumber: true });
                     }
                 }
                 if (owner.mobileNumber == number) {
                     if (((number == updateNumberConfig.invalidNumber) || !number.match(updateNumberConfig['invalidPattern']) && number == JSON.parse(getUserInfo()).mobileNumber)) {
-                        this.setState({ invalidNumber: true });
+                        !this.state.skipped&&this.setState({ invalidNumber: true });
                     }
                     propertyNumbers = {
                         "id": owner.id,
@@ -133,7 +134,7 @@ export default class UpdateMobile extends React.Component {
             </UpdateMobileDialog>}
             {this.state.invalidNumber && this.canShowEditOption() && <WarningPopup
                 open={this.state.invalidNumber ? true : false}
-                closeDialog={() => this.setState({ invalidNumber: false })}
+                closeDialog={() => this.setState({ invalidNumber: false , skipped:true })}
                 updateNum={() => { this.setState({ invalidNumber: false }); this.toggleDialog(); }}>
             </WarningPopup>}
         </div>
