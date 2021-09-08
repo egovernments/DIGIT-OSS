@@ -50,9 +50,10 @@ import static org.egov.inbox.util.PTConstants.*;
 import static org.egov.inbox.util.TLConstants.REQUESTINFO_PARAM;
 import static org.egov.inbox.util.TLConstants.SEARCH_CRITERIA_PARAM;
 import static org.egov.inbox.util.TLConstants.TENANT_ID_PARAM;
+import static org.egov.inbox.util.TLConstants.APPLICATION_NUMBER_PARAM;
 import static org.egov.inbox.util.TLConstants.TL;
 import static org.egov.inbox.util.BpaConstants.BPA;
-import static org.egov.inbox.util.BpaConstants.APPLICATION_NUMBER_PARAM;
+import static org.egov.inbox.util.BpaConstants.BPA_APPLICATION_NUMBER_PARAM;
 import static org.egov.inbox.util.BpaConstants.STATUS_PARAM;
 import static org.egov.inbox.util.BpaConstants.LOCALITY_PARAM;
 import static org.egov.inbox.util.BpaConstants.OFFSET_PARAM;
@@ -215,7 +216,7 @@ public class InboxService {
 				totalCount = bpaInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
 				List<String> applicationNumbers = bpaInboxFilterService.fetchApplicationNumbersFromSearcher(criteria, StatusIdNameMap, requestInfo);
 				if(!CollectionUtils.isEmpty(applicationNumbers)) {
-					moduleSearchCriteria.put(APPLICATION_NUMBER_PARAM, applicationNumbers);
+					moduleSearchCriteria.put(BPA_APPLICATION_NUMBER_PARAM, applicationNumbers);
 					businessKeys.addAll(applicationNumbers);
 					moduleSearchCriteria.remove(STATUS_PARAM);
 					moduleSearchCriteria.remove(MOBILE_NUMBER_PARAM);
