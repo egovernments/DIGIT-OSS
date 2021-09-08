@@ -856,7 +856,7 @@ let messages = {
     }
   },
   openSearch: {
-    en_IN: "Click on the link below to search and pay your {{billserviceName}} bill -\n'{{link}}'\n\nThe image below shows you how to search and pay {{billserviceName}} bill using this link. 👇.",
+    en_IN: "Click on the link below to search and pay your {{billserviceName}} bill -\n{{link}}\n\nThe image below shows you how to search and pay {{billserviceName}} bill using this link. 👇.",
     hi_IN: "आप नीचे दिए गए लिंक पर क्लिक करके {{billserviceName}} खोज और भुगतान कर सकते हैं👇\n\n{{link}}\n\nइस लिंक से {{billserviceName}} खोजने और भुगतान करने के चरणों को समझने के लिए कृपया नीचे दी गई छवि देखें।"
   },
   newNumberregistration:{

@@ -77,7 +77,8 @@ class SessionManager {
         service.onTransition( state => {
             if(state.changed) {
                 let userId = state.context.user.userId;
-                let stateStrings = state.toStrings()
+                let stateStrings = state.toStrings();
+                let sourceStrings = state.history.toStrings();
 
                 let active = !state.done && !state.forcedClose;
                 let saveState = JSON.parse(JSON.stringify(state));      // deep copy
@@ -86,7 +87,7 @@ class SessionManager {
                 (async() => { 
                     await chatStateRepository.updateState(userId, active, JSON.stringify(saveState), timeStamp);
                     let sessionId = await chatStateRepository.getSessionId(userId);
-                    telemetry.log(userId, 'transition', {input: reformattedMessage.message.input, destination: stateStrings[stateStrings.length-1], locale: locale, sessionId: sessionId, timestamp: timeStamp, extraInfo: reformattedMessage.extraInfo});
+                    telemetry.log(userId, 'transition', {input: reformattedMessage.message.input, source: sourceStrings[sourceStrings.length-1], destination: stateStrings[stateStrings.length-1], locale: locale, sessionId: sessionId, timestamp: timeStamp, extraInfo: reformattedMessage.extraInfo});
                 })();
                 
             }
