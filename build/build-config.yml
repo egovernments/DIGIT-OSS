@@ -231,6 +231,14 @@ config:
       - work-dir: "core-services/egov-document-uploader/src/main/resources/db"
         image-name: "egov-document-uploader-db"
 
+  - name: "builds/digit-dev/core-services/egov-survey-services"
+    build:
+      - work-dir: "core-services/egov-survey-services"
+        image-name: "egov-survey-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "core-services/egov-survey-services/src/main/resources/db"
+        image-name: "egov-survey-services-db"
+
   - name: "builds/digit-dev/core-services/report"
     build:
       - work-dir: "core-services/report"
