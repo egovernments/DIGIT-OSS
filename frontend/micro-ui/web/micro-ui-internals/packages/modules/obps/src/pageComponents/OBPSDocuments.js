@@ -9,19 +9,20 @@ const PDFSvg = ({ width = 20, height = 20, style }) => (
   </svg>
 );
 
-function OBPSDocument({ value = {},Code,index }) {
+function OBPSDocument({ value = {},Code,index, isNOC = false }) {
   const { t } = useTranslation();
   const { isLoading, isError, error, data } = Digit.Hooks.obps.useOBPSDocumentSearch(
     {
       value,
     },
-    { value }, Code, index
+    { value }, Code, index, isNOC
   );
   let documents = [];
 
-  if(Code == "NOC"){
-    value?.nocDocuments?.nocDocuments.length>0 && documents.push(value?.nocDocuments?.nocDocuments[index]);
-    console.log(documents,"docss");
+  if(isNOC){
+    value?.nocDocuments?.nocDocuments.length>0 && value?.nocDocuments?.nocDocuments.filter((ob) => ob.documentType.includes(Code)).map((ob) => {
+      documents.push(ob);
+    });
   }
   else{
   value?.documents?.documents.filter(doc => doc.documentType.includes(Code)).map((ob)=>{

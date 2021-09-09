@@ -118,7 +118,7 @@ import {
 
     function getBlockSubOccupancy(index){
       let subOccupancyString = "";
-      subOccupancy[`Block_${index+1}`].map((ob) => {
+      subOccupancy[`Block_${index+1}`] && subOccupancy[`Block_${index+1}`].map((ob) => {
         subOccupancyString += `${t(ob.i18nKey)}, `;
       })
       return subOccupancyString;
@@ -346,7 +346,7 @@ import {
         <CardSectionHeader>{t(`BPA_${noc?.nocType}_HEADER`)}</CardSectionHeader>
         <StatusTable>
         <Row className="border-none" label={t(`BPA_${noc?.nocType}_LABEL`)} text={noc?.applicationNo} />
-        <OBPSDocument value={value} Code="NOC" index={index}/> 
+        <OBPSDocument value={value} Code={noc?.nocType?.split("_")[0]} index={index} isNOC={true}/> 
         </StatusTable>
         </div>
       ))}
