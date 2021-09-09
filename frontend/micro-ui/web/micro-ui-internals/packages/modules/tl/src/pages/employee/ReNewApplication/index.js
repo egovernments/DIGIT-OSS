@@ -282,6 +282,7 @@ const ReNewApplication = (props) => {
             let licenses = result?.Licenses?.[0];
             licenses.action = "APPLY";
             Digit.TLService.update({ Licenses: [licenses] }, tenantId).then((response) => {
+              Digit.SessionStorage.set("EditRenewalApplastModifiedTime", response?.Licenses[0]?.auditDetails?.lastModifiedTime);
               if (response?.Licenses?.length > 0) {
                 history.replace(
                   `/digit-ui/employee/tl/response`,

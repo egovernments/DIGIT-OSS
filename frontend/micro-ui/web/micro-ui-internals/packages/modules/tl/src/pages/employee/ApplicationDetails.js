@@ -31,11 +31,14 @@ const ApplicationDetails = () => {
     mutate,
   } = Digit.Hooks.tl.useApplicationActions(tenantId);
 
+  let EditRenewalApplastModifiedTime = Digit.SessionStorage.get("EditRenewalApplastModifiedTime");
+
   let workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: applicationDetails?.tenantId || tenantId,
     id: applicationDetails?.applicationData?.applicationNumber,
     moduleCode: businessService,
     role: "TL_CEMP",
+    config:{EditRenewalApplastModifiedTime:EditRenewalApplastModifiedTime},
   });
 
   const closeToast = () => {
@@ -47,7 +50,7 @@ const ApplicationDetails = () => {
       let financialYear = cloneDeep(applicationDetails?.applicationData?.financialYear);
       const financialYearDate = financialYear?.split('-')[1];
       const finalFinancialYear = `20${Number(financialYearDate)}-${Number(financialYearDate)+1}`
-      const isAllowedToNextYear = applicationDetails?.numOfApplications?.filter(data => data.financialYear == finalFinancialYear);
+      const isAllowedToNextYear = applicationDetails?.numOfApplications?.filter(data => (data.financialYear == finalFinancialYear && data?.status !== "REJECTED"));
       if (isAllowedToNextYear?.length > 0) setAllowedToNextYear(false);
       if (!isAllowedToNextYear || isAllowedToNextYear?.length == 0) setAllowedToNextYear(true);
       setNumberOfApplications(applicationDetails?.numOfApplications);
