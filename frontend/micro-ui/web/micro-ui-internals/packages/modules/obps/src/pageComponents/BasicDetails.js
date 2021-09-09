@@ -89,7 +89,7 @@ const BasicDetails = ({ formData, onSelect, config }) => {
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_OCCUPANCY_LABEL`)} text={basicData?.planDetail?.planInformation?.occupancy}/>
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_RISK_TYPE_LABEL`)} text={t(`WF_BPA_${Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, basicData?.planDetail?.plot?.area, basicData?.planDetail?.blocks)}`)} />
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL`)} text={basicData?.planDetail?.planInformation?.applicantName} />
-          <Row className="border-none" label={t(`BPA_BASIC_DETAILS_SPECIAL_CATEGORY_LABEL`)} text={'None'}/>
+          {/* <Row className="border-none" label={t(`BPA_BASIC_DETAILS_SPECIAL_CATEGORY_LABEL`)} text={'None'}/> */}
         </StatusTable>
         <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={handleSubmit} />
       </Card>

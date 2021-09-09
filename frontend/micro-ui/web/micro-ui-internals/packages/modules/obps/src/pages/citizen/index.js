@@ -20,7 +20,7 @@ const App = ({ path }) => {
 
   return (
     <React.Fragment>
-      {!location.pathname.includes("response") && <BackButton>{t("CS_COMMON_BACK")}</BackButton>}
+      {!location.pathname.includes("response") && <BackButton style={{border: "none"}}>{t("CS_COMMON_BACK")}</BackButton>}
       <Switch>
       <PrivateRoute path={`${path}/home`} component={BPACitizenHomeScreen} />
         <PrivateRoute path={`${path}/edcrscrutiny/apply`} component={CreateEDCR} />   
