@@ -20,8 +20,8 @@ import useInboxGeneral from "./useInboxGeneral/useInboxGeneral";
 import useApplicationStatusGeneral from "./useStatusGeneral";
 import useModuleTenants from "./useModuleTenants";
 import useStore from "./useStore";
-import { useTenants } from "./useTenants"
-import useInbox from "./useInbox"
+import { useTenants } from "./useTenants";
+import useInbox from "./useInbox";
 import { useEvents, useClearNotifications, useNotificationCount } from "./events";
 import useCreateEvent from "./events/useCreateEvent";
 import useNewInboxGeneral from "./useInboxGeneral/useNewInbox";
@@ -113,7 +113,6 @@ import useHRMSUpdate from "./hrms/useHRMSUpdate";
 import useHRMSCount from "./hrms/useHRMSCount";
 import useHRMSGenderMDMS from "./hrms/useHRMSGender";
 
-
 import useReceiptsSearch from "./receipts/useReceiptsSearch";
 import useReceiptsMDMS from "./receipts/useReceiptsMDMS";
 import useReceiptsUpdate from "./receipts/useReceiptsUpdate";
@@ -131,8 +130,11 @@ import useStakeholderAPI from "./obps/useStakeholderAPI";
 
 import useBPAREGSearch from "./obps/useBPAREGSearch";
 import useEventInbox from "./events/useEventInbox";
-import {useEngagementMDMS} from "./engagement/useMdms"
-
+import { useEngagementMDMS } from "./engagement/useMdms";
+import useDocSearch from "./engagement/useSearch";
+import useDocCreate from "./engagement/useCreate";
+import useDocUpdate from "./engagement/useUpdate";
+import useDocDelete from "./engagement/useDelete";
 
 const pgr = {
   useComplaintDetails,
@@ -149,7 +151,7 @@ const pgr = {
   useComplaintSubType,
   usePropertyMDMS,
   useComplaintStatusCount,
-  useTradeLicenseBillingslab
+  useTradeLicenseBillingslab,
 };
 
 const fsm = {
@@ -205,7 +207,7 @@ const mcollect = {
   useMCollectSearch,
   useMcollectSearchBill,
   usemcollectTenants,
-  useMCollectCount
+  useMCollectCount,
 };
 
 const hrms = {
@@ -214,7 +216,7 @@ const hrms = {
   useHRMSCreate,
   useHRMSUpdate,
   useHRMSCount,
-  useHRMSGenderMDMS
+  useHRMSGenderMDMS,
 };
 const tl = {
   useTenants: useTenantsTL,
@@ -226,13 +228,13 @@ const tl = {
   useTradeLicenseSearch,
   useTLGenderMDMS,
   useTradeLicenseBillingslab,
-  useInbox:useTLInbox,
+  useInbox: useTLInbox,
   useMDMS: useTLMDMS,
   useSearch: useTLSearch,
   useApplicationDetail: useTLApplicationDetail,
   useApplicationActions: useTLApplicationActions,
   useFetchBill: useTLFetchBill,
-  useTLApplicationDetails
+  useTLApplicationDetails,
 };
 
 const receipts = {
@@ -252,16 +254,20 @@ const obps = {
   useBPASearch,
   useBPAREGgetbill,
   useStakeholderAPI,
-  useBPAREGSearch
+  useBPAREGSearch,
 };
 
 const events = {
   useInbox: useEventInbox,
-  useCreateEvent
-}
+  useCreateEvent,
+};
 const engagement = {
   useMDMS: useEngagementMDMS,
-}
+  useDocCreate,
+  useDocSearch,
+  useDocDelete,
+  useDocUpdate,
+};
 
 const Hooks = {
   useSessionStorage,
@@ -301,7 +307,7 @@ const Hooks = {
   receipts,
   obps,
   events,
-  engagement
+  engagement,
 };
 
 export default Hooks;

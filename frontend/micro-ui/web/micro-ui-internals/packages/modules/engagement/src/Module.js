@@ -1,26 +1,30 @@
 import { Loader, PrivateRoute, BreadCrumb } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, Redirect, Switch, useLocation, useRouteMatch,Route } from "react-router-dom";
+import { Link, Redirect, Switch, useLocation, useRouteMatch, Route } from "react-router-dom";
 
-import Documents from "./pages/employee/documents"
+import Documents from "./pages/employee/documents/documents-create";
 
-import EngagementCard from "./components/EngagementCard"
-import EngagementDocSelectULB from "./components/EngagementDocsULB"
-import EnagementDocName from "./components/engagement-doc-name"
-import EngagementDocCategory from "./components/engagement-doc-category"
-import EngagementDocDescription from "./components/engagement-doc-description"
-import EngagementDocUploadDocument from "./components/engagement-doc-documents"
+import EngagementCard from "./components/EngagementCard";
+import EngagementDocSelectULB from "./components/EngagementDocsULB";
+import EnagementDocName from "./components/engagement-doc-name";
+import EngagementDocCategory from "./components/engagement-doc-category";
+import EngagementDocDescription from "./components/engagement-doc-description";
+import EngagementDocUploadDocument from "./components/engagement-doc-documents";
 import NewEvent from "./pages/employee/Events/NewEvent";
 import Response from "./pages/employee/Events/NewEvent/Response";
 import Inbox from "./pages/employee/Events/Inbox";
 import EventForm from "./components/Events/EventForm";
 import SelectEventGeolocation from "./components/Events/SelectGeoLocation";
 
-import NotificationsAndWhatsNew from "./pages/citizen/NotificationsAndWhatsNew"
-import EventsListOnGround from "./pages/citizen/EventsListOnGround"
-import CitizenApp from "./pages/citizen"
-import EventDetails from "./pages/citizen/EventsListOnGround/EventDetails"
+import NotificationsAndWhatsNew from "./pages/citizen/NotificationsAndWhatsNew";
+import EventsListOnGround from "./pages/citizen/EventsListOnGround";
+import CitizenApp from "./pages/citizen";
+import EventDetails from "./pages/citizen/EventsListOnGround/EventDetails";
+import DocumentResponse from "./pages/employee/documents/response";
+import DocUpdate from "./pages/employee/documents/doc-update";
+import DocUpdateResponse from "./pages/employee/documents/update-response";
+import DocDeleteResponse from "./pages/employee/documents/delete-response";
 
 const EventsBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -52,11 +56,20 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
     <div className="ground-container">
       <EventsBreadCrumb location={location} />
       <Switch>
-        <Route exact path={`${path}/docs`} component={()=><Documents {...{path}} />} />
-        <Route path={`${path}/event/inbox`}><Inbox tenants={tenants} /></Route>
-        <Route path={`${path}/event/new-event`}><NewEvent /></Route>
+        <Route exact path={`${path}/docs`} component={() => <Documents {...{ path }} />} />
+        <Route path={`${path}/event/inbox`}>
+          <Inbox tenants={tenants} />
+        </Route>
+        <Route path={`${path}/event/new-event`}>
+          <NewEvent />
+        </Route>
         <Route path={`${path}/event/response`} component={(props) => <Response {...props} />} />
-        <Redirect to={`${path}/docs`} />
+        <Route path={`${path}/documents/response`} component={(props) => <DocumentResponse {...props} />} />
+        <Route path={`${path}/documents/update`} component={(props) => <DocUpdate {...props} />} />
+        <Route path={`${path}/documents/update-response`} component={(props) => <DocUpdateResponse {...props} />} />
+        <Route path={`${path}/documents/delete-response`} component={(props) => <DocDeleteResponse {...props} />} />
+        {/* documents/update-response */}
+        {/* <Redirect to={`${path}/docs`} /> */}
       </Switch>
     </div>
   );
@@ -74,7 +87,7 @@ const EngagementModule = ({ stateCode, userType, tenants }) => {
   Digit.SessionStorage.set("ENGAGEMENT_TENANTS", tenants);
 
   if (userType === "citizen") {
-    return <CitizenApp path={path} url={url} userType={userType}/>
+    return <CitizenApp path={path} url={url} userType={userType} />;
   } else {
     return <EmployeeApp path={path} url={url} userType={userType} tenants={tenants} />;
   }
@@ -83,7 +96,7 @@ const EngagementModule = ({ stateCode, userType, tenants }) => {
 const EngagementLinks = ({ matchPath, userType }) => {
   const { t } = useTranslation();
   if (userType === "citizen") {
-    return null
+    return null;
   } else {
     return (
       <div className="employee-app-container">
@@ -114,18 +127,18 @@ const EngagementLinks = ({ matchPath, userType }) => {
 };
 
 const componentsToRegister = {
-    EngagementModule,
-    EngagementCard,
-    EngagementDocSelectULB,
-    EnagementDocName,
-    EngagementDocCategory,
-    EngagementDocDescription,
-    EngagementDocUploadDocument,
-    NotificationsAndWhatsNew,
-    EventsListOnGround,
-    EventDetails,
-    EventForm,
-    SelectEventGeolocation
+  EngagementModule,
+  EngagementCard,
+  EngagementDocSelectULB,
+  EnagementDocName,
+  EngagementDocCategory,
+  EngagementDocDescription,
+  EngagementDocUploadDocument,
+  NotificationsAndWhatsNew,
+  EventsListOnGround,
+  EventDetails,
+  EventForm,
+  SelectEventGeolocation,
 };
 
 export const initEngagementComponents = () => {

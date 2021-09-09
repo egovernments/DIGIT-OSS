@@ -1,24 +1,41 @@
 import Urls from "../atoms/urls";
 import { Request } from "../atoms/Utils/Request";
 
-export const FSMService = {
-  search: (tenantId, filters = {}) =>
+export const Engagement = {
+  search: (filters = {}) =>
     Request({
       url: Urls.engagement.search,
       useCache: false,
       method: "POST",
       auth: true,
       userService: false,
-      params: { tenantId, ...filters },
+      params: { ...filters },
     }),
-  create: (tenantId, details) =>
+  create: (details) =>
     Request({
       url: Urls.engagement.create,
       data: details,
       useCache: true,
       userService: true,
       method: "POST",
-      params: { tenantId },
+      auth: true,
+    }),
+  delete: (details) =>
+    Request({
+      url: Urls.engagement.delete,
+      data: details,
+      useCache: true,
+      userService: true,
+      method: "POST",
+      auth: true,
+    }),
+  update: (details) =>
+    Request({
+      url: Urls.engagement.update,
+      data: details,
+      useCache: true,
+      userService: true,
+      method: "POST",
       auth: true,
     }),
 };
