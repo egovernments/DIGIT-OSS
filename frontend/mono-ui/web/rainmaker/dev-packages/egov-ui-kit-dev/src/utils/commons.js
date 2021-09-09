@@ -1145,3 +1145,11 @@ export const getUserSearchedResponse =()=>{
   const userObject=JSON.parse(localStorage.getItem("citizen.userRequestObject"))||{};
   return {user:[userObject]};
 }
+
+export const getResultUrl = (moduleName,reportName) => {
+  let reportResultUrl = `/report/${moduleName}/${reportName}/_get`;
+  return reportResultUrl;
+}
+export const translate=(locale_text)=> {
+  return locale_text;
+}
