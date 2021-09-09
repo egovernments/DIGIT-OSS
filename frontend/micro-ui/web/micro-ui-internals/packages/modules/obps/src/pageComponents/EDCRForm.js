@@ -84,7 +84,7 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
             onAdd={onAdd}
             isMultipleAllow={true}
         >
-            <CardLabel>{`${t("EDCR_SCRUTINY_CITY")}*`}</CardLabel>
+            <CardLabel>{`${t("EDCR_SCRUTINY_CITY")} *`}</CardLabel>
             <Dropdown
                 t={t}
                 isMandatory={false}
@@ -94,7 +94,7 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
                 select={setTypeOfTenantID}
                 uploadMessage={uploadMessage}
             />
-            <CardLabel>{`${t("EDCR_SCRUTINY_NAME_LABEL")}*`}</CardLabel>
+            <CardLabel>{`${t("EDCR_SCRUTINY_NAME_LABEL")} *`}</CardLabel>
             <TextInput
                 isMandatory={false}
                 optionKey="i18nKey"
@@ -109,7 +109,7 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
                     title: t("BPA_INVALID_NAME"),
                 })}
             />
-            <CardLabel>{`${t("BPA_PLAN_DIAGRAM_LABEL")}*`}</CardLabel>
+            <CardLabel>{`${t("BPA_PLAN_DIAGRAM_LABEL")} *`}</CardLabel>
             <UploadFile
                 id={"edcr-doc"}
                 extraStyleName={"propertyCreate"}

@@ -202,7 +202,7 @@ function SelectDocument({
                     setUploadedFile(null);
                     setCheckRequiredFields(true);
                 }}
-                message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+                message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`ES_NO_FILE_SELECTED_LABEL`)}
                 error={error}
             />
         </div>

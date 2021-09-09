@@ -31,7 +31,7 @@ export const newConfig = [
             label: "BPA_BOUNDARY_HOLDING_NO_LABEL",
             type: "text",
             validation: {
-              required: true,
+              // required: true,
             },
             name: "holdingNumber"
           },
@@ -39,7 +39,7 @@ export const newConfig = [
             label: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL",
             type: "text",
             validation: {
-              required: true
+              // required: true
             },
             name: "registrationDetails"
           }

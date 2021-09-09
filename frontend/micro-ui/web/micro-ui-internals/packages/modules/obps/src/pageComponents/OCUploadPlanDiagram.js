@@ -44,7 +44,7 @@ const OCUploadPlanDiagram = ({ t, config, onSelect, userType, formData, ownerInd
             onAdd={onAdd}
             isMultipleAllow={true}
         >
-            <CardLabel>{`${t("BPA_OC_PLAN_DIAGRAM_DXF")}*`}</CardLabel>
+            <CardLabel>{`${t("BPA_OC_PLAN_DIAGRAM_DXF")} *`}</CardLabel>
             <UploadFile
                 id={"oc-doc"}
                 extraStyleName={"propertyCreate"}

@@ -109,7 +109,7 @@ const OCeDCRScrutiny = ({ t, config, onSelect, userType, formData, ownerIndex = 
                 <CardCaption>{`${t("BPA_OC_NEW_BUILDING_CONSTRUCTION_LABEL")}`}</CardCaption>
                 <CardHeader>{`${t("BPA_OC_EDCR_SCRUTINY_LABEL")}`}</CardHeader>
                 <CardText>{`${t("BPA_PROVIDE_BPN_AND_BPD_APP_LABEL")}`}</CardText>
-                <CardLabel>{`${t("EDCR_BUILDING_PERMIT_NUM_LABEL")}*`}</CardLabel>
+                <CardLabel>{`${t("EDCR_BUILDING_PERMIT_NUM_LABEL")} *`}</CardLabel>
                 <TextInput
                     isMandatory={false}
                     optionKey="i18nKey"
@@ -123,7 +123,7 @@ const OCeDCRScrutiny = ({ t, config, onSelect, userType, formData, ownerIndex = 
                         title: t("BPA_INVALID_NAME"),
                     })}
                 />
-                <CardLabel>{`${t("EDCR_BUILDING_PERMIT_DATE_LABEL")}*`}</CardLabel>
+                <CardLabel>{`${t("EDCR_BUILDING_PERMIT_DATE_LABEL")} *`}</CardLabel>
                 <DatePicker
                     date={permitDate}
                     name="permitDate"

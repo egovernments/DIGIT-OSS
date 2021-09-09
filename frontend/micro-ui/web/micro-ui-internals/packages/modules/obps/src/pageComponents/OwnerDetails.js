@@ -251,12 +251,13 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     // }
 
     return (
-        <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext || !ownershipCategory} forcedError={t(error)}>
-            <Timeline currentStep={2} />
+        <div>
+        <Timeline currentStep={2} />
+        <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext || !ownershipCategory} forcedError={t(error)}>   
             {!isLoading ?
                 <div>
                     <div>
-                        <CardLabel>{`${t("BPA_TYPE_OF_OWNER_LABEL")}`}</CardLabel>
+                        <CardLabel>{`${t("BPA_TYPE_OF_OWNER_LABEL")} *`}</CardLabel>
                         <RadioButtons
                             isMandatory={config.isMandatory}
                             options={ownershipCategoryList}
@@ -272,7 +273,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                         return (
                             <div key={`${field}-${index}`}>
                                 <div style={{ border: "solid", borderRadius: "5px", padding: "10px", paddingTop: "20px", marginTop: "10px", borderColor: "#f3f3f3", background: "#FAFAFA" }}>
-                                    <CardLabel style={ismultiple ? { marginBottom: "-15px" } : {}}>{`${t("CORE_COMMON_NAME")}`}</CardLabel>
+                                    <CardLabel style={ismultiple ? { marginBottom: "-15px" } : {}}>{`${t("CORE_COMMON_NAME")} *`}</CardLabel>
                                     {ismultiple && <LinkButton
                                         label={
                                             <div >
@@ -302,7 +303,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                                             title: t("TL_NAME_ERROR_MESSAGE"),
                                         })}
                                     />
-                                    <CardLabel>{`${t("BPA_APPLICANT_GENDER_LABEL")}`}</CardLabel>
+                                    <CardLabel>{`${t("BPA_APPLICANT_GENDER_LABEL")} *`}</CardLabel>
                                     <RadioButtons
                                         t={t}
                                         options={genderList}
@@ -314,7 +315,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                                         isDependent={true}
                                         labelKey="COMMON_GENDER"
                                     />
-                                    <CardLabel>{`${t("CORE_COMMON_MOBILE_NUMBER")}`}</CardLabel>
+                                    <CardLabel>{`${t("CORE_COMMON_MOBILE_NUMBER")} *`}</CardLabel>
                                     <div className="field-container">
                                         <span className="employee-card-input employee-card-input--front" style={{ marginTop: "-1px" }}>
                                             +91
@@ -361,6 +362,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 </div> : <Loader />
             }
         </FormStep>
+        </div>
     );
 };
 

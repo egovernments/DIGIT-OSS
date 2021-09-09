@@ -93,23 +93,23 @@ const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setForm
     };
     const onSkip = () => onSelect();
     function onAdd() { }
-
-    useEffect(() => {
-        let count = 0;
-        nocTaxDocuments.map(doc => {
-            let isRequired = false;
-            nocDocuments.map(data => {
-                if (doc.required && doc.code == `${data.documentType.split('.')[0]}.${data.documentType.split('.')[1]}`) {
-                    isRequired = true;
-                }
-            });
-            if (!isRequired && doc.required) {
-                count = count + 1;
-            }
-        });
-        if ((count == "0" || count == 0) && nocDocuments.length > 0) setEnableSubmit(false);
-        else setEnableSubmit(true);
-    }, [nocDocuments, checkRequiredFields])
+    
+    // useEffect(() => {
+    //     let count = 0;
+    //     nocTaxDocuments.map(doc => {
+    //         let isRequired = false;
+    //         nocDocuments.map(data => {
+    //             if (doc.required && doc.code == `${data.documentType.split('.')[0]}.${data.documentType.split('.')[1]}`) {
+    //                 isRequired = true;
+    //             }
+    //         });
+    //         if (!isRequired && doc.required) {
+    //             count = count + 1;
+    //         }
+    //     });
+    //     if ((count == "0" || count == 0) && nocDocuments.length > 0) setEnableSubmit(false);
+    //     else setEnableSubmit(true);
+    // }, [nocDocuments, checkRequiredFields])
 
     return (
         <div>
@@ -120,7 +120,7 @@ const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setForm
                     config={config}
                     onSelect={handleSubmit}
                     onSkip={onSkip}
-                    isDisabled={enableSubmit}
+                    // isDisabled={enableSubmit}
                     onAdd={onAdd}
                 >
                     {nocTaxDocuments?.map((document, index) => {
@@ -231,7 +231,7 @@ function SelectDocument({
                     setUploadedFile(null);
                     setCheckRequiredFields(true);
                 }}
-                message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+                message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`ES_NO_FILE_SELECTED_LABEL`)}
                 error={error}
             />
         </div>
