@@ -37,7 +37,7 @@ const VerifyButton = (type, openDialog) => {
             return <span><button className="button-verify" style={{ "float": "none" }} onClick={() => openDialog()}>  LINK</button>
             </span>;
         default:
-            return <button onClick={() => openDialog()}>Verify Mobile</button>;
+            return <span></span>;
     }
 }
 export default class UpdateMobile extends React.Component {
@@ -48,9 +48,9 @@ export default class UpdateMobile extends React.Component {
             propertyId: "",
             tenantId: "",
             property: {},
-            skipped:false,
-            loading:false,
-            loaded:false,
+            skipped: false,
+            loading: false,
+            loaded: false,
             invalidNumber: false,
             propertyNumbers: {}
         }
@@ -65,46 +65,73 @@ export default class UpdateMobile extends React.Component {
         const { propertyId: prevPropertyId = "", tenantId: prevTenantId = "" } = prevProps;
 
         /* if (propertyId != prevPropertyId || tenantId != prevTenantId) { */
-            !this.state.loading&&!this.state.loaded&&this.loadProperty();
+        !this.state.loading && !this.state.loaded && this.loadProperty();
         // }
+
+        if (this.props.type == "WARNING" && this.props.showWarning == true && prevProps.showWarning == false) {
+
+            let { owners = [] } = this.state.property;
+            let propertyNumbers = {};
+            owners = owners && owners.filter(owner => owner.status == "ACTIVE");
+            owners && owners.map(owner => {
+
+                if (owner.mobileNumber == this.props.number) {
+
+                    propertyNumbers = {
+                        "id": owner.id,
+                        "uuid": owner.uuid,
+                        "name": owner.name,
+                        "mobileNumber": owner.mobileNumber,
+                        "type": "owner"
+                    };
+                }
+            })
+            this.setState({
+                invalidNumber: true,
+                propertyNumbers: propertyNumbers, loading: false,
+                loaded: true
+            })
+        }
     }
 
-    getProperty=async (queryParams,propertyId)=>{
-       if(window&&window.propertyResponse&&window.propertyResponse[propertyId]){
-           return window.propertyResponse[propertyId];
-       }else{
-        let property=await httpRequest(`property-services/property/_search`, "search", queryParams, {});
-        window.propertyResponse=window.propertyResponse||{};
-        window.propertyResponse[propertyId]=property;
-        return window.propertyResponse[propertyId];
-       }        
+    getProperty = async (queryParams, propertyId) => {
+        if (window && window.propertyResponse && window.propertyResponse[propertyId]) {
+            return window.propertyResponse[propertyId];
+        } else {
+            let property = await httpRequest(`property-services/property/_search`, "search", queryParams, {});
+            window.propertyResponse = window.propertyResponse || {};
+            window.propertyResponse[propertyId] = property;
+            return window.propertyResponse[propertyId];
+        }
     }
-    componentWillUnmount=()=>{
-        this.setState({loading:false,
-            loaded:false});
-        window.propertyResponse={};
+    componentWillUnmount = () => {
+        this.setState({
+            loading: false,
+            loaded: false
+        });
+        window.propertyResponse = {};
     }
 
     loadProperty = async () => {
-        this.setState({loading:true});
+        this.setState({ loading: true });
         const { propertyId = "", tenantId = "", number, updateNumberConfig } = this.props;
         let queryParams = [{ key: "propertyIds", value: propertyId },
         { key: "tenantId", value: tenantId }]
         if (propertyId !== "" && tenantId !== "") {
             const propertyResponse = await this.getProperty(queryParams, propertyId);
             this.setState({ property: propertyResponse.Properties[0] });
-            const { owners = [] } = propertyResponse.Properties[0];
+            let { owners = [] } = propertyResponse.Properties[0];
             let propertyNumbers = {};
-            owners && owners.filter(owner => owner.status == "ACTIVE");
+            owners = owners && owners.filter(owner => owner.status == "ACTIVE");
             owners && owners.map(owner => {
                 if (process.env.REACT_APP_NAME !== "Citizen") {
                     if ((number == updateNumberConfig.invalidNumber) || !number.match(updateNumberConfig['invalidPattern'])) {
-                        !this.state.skipped&&this.setState({ invalidNumber: true });
+                        /* !this.state.skipped&&this.setState({ invalidNumber: true }); */
                     }
                 }
                 if (owner.mobileNumber == number) {
                     if (((number == updateNumberConfig.invalidNumber) || !number.match(updateNumberConfig['invalidPattern']) && number == JSON.parse(getUserInfo()).mobileNumber)) {
-                        !this.state.skipped&&this.setState({ invalidNumber: true });
+                        /* !this.state.skipped&&this.setState({ invalidNumber: true }); */
                     }
                     propertyNumbers = {
                         "id": owner.id,
@@ -115,8 +142,10 @@ export default class UpdateMobile extends React.Component {
                     };
                 }
             })
-            this.setState({ propertyNumbers: propertyNumbers ,loading:false,
-                loaded:true})
+            this.setState({
+                propertyNumbers: propertyNumbers, loading: false,
+                loaded: true
+            })
         }
     }
 
@@ -140,7 +169,7 @@ export default class UpdateMobile extends React.Component {
     }
 
     render() {
-
+        const { propertyId = "", tenantId = "", closeDue } = this.props;
         const { property = {}, propertyNumbers = {} } = this.state;
         return property && property.status == "ACTIVE" && <div>
             {this.canShowEditOption() && VerifyButton(this.props.type, this.toggleDialog)}
@@ -150,11 +179,14 @@ export default class UpdateMobile extends React.Component {
                 loadProperty={this.loadProperty}
                 property={property}
                 propertyNumbers={propertyNumbers}
-                closeDialog={() => this.toggleDialog()}>
+                closeDialog={() => { this.toggleDialog(); closeDue && closeDue(); }}>
             </UpdateMobileDialog>}
             {this.state.invalidNumber && this.canShowEditOption() && <WarningPopup
+                propertyId={propertyId}
+                tenantId={tenantId}
+                closeDue={closeDue}
                 open={this.state.invalidNumber ? true : false}
-                closeDialog={() => this.setState({ invalidNumber: false , skipped:true })}
+                closeDialog={() => { this.setState({ invalidNumber: false, skipped: true }); closeDue && closeDue(); }}
                 updateNum={() => { this.setState({ invalidNumber: false }); this.toggleDialog(); }}>
             </WarningPopup>}
         </div>

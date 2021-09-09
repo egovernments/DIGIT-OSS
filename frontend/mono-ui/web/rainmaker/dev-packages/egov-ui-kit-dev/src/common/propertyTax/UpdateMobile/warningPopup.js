@@ -1,4 +1,5 @@
 import { Dialog } from "components";
+import { routeToCommonPay } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
 import "./index.css";
@@ -9,6 +10,7 @@ export default class WarningPopup extends React.Component {
   }
 
   render() {
+    const { propertyId = "", tenantId = "" } = this.props;
     return (
       <Dialog
         className="pt-warning-popup"
@@ -30,14 +32,18 @@ export default class WarningPopup extends React.Component {
           backgroundColor: "white",
         }}
       >
-       
-          <div style={{padding:'10px'}}><Label label="PTUPNO_INVALIDNO_DESC" labelStyle={{ color: 'rgba(0, 0, 0, 0.873302)', fontSize: "14px" }}></Label></div>
-          <div className="pt-warning-button-container">
-          <button type="button" style={{ width: '48%' }} className={"button-warning-secondary"} onClick={() => this.props.closeDialog()} ><Label label="PTUPNO_INVALIDNO_SKIP"></Label></button>
+
+        <div style={{ padding: '10px' }}><Label label="PTUPNO_INVALIDNO_DESC" labelStyle={{ color: 'rgba(0, 0, 0, 0.873302)', fontSize: "14px" }}></Label></div>
+        <div className="pt-warning-button-container">
+          <button type="button" style={{ width: '48%' }} className={"button-warning-secondary"} onClick={() => {
+            this.props.closeDialog();
+            this.props.closeDue();
+            routeToCommonPay(propertyId, tenantId);
+          }} ><Label label="PTUPNO_INVALIDNO_SKIP"></Label></button>
           <button type="button" style={{ width: '48%' }} className={"button-verify-link"} onClick={() => { this.props.updateNum(); }} ><Label label="PTUPNO_INVALIDNO_UPDATE"></Label></button>
-            
-          </div>
-    
+
+        </div>
+
       </Dialog>
     )
   }
