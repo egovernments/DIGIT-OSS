@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { TickMark } from "@egovernments/digit-ui-react-components";
 
 let actions = [];
 
@@ -28,7 +29,7 @@ const Timeline = ({ currentStep = 1, flow="" }) => {
       {actions.map((action, index, arr) => (
         <div className="timeline-checkpoint" key={index}>
           <div className="timeline-content">
-            <span className={`circle ${index <= currentStep - 1 && 'active'}`}>{index + 1}</span>
+            <span className={`circle ${index <= currentStep - 1 && 'active'}`}>{index < currentStep - 1 ? <TickMark /> : index + 1}</span>
             <span className="secondary-color">{t(action)}</span>
           </div>
           {index < arr.length - 1 && <span className={`line ${index < currentStep - 1 && 'active'}`}></span>}

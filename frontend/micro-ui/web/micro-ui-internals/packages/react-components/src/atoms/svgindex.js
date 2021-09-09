@@ -586,6 +586,11 @@ const Clock = () => <svg width="16" height="16" viewBox="0 0 16 16" fill="none" 
   <path fill-rule="evenodd" clip-rule="evenodd" d="M7.992 0C3.576 0 0 3.584 0 8C0 12.416 3.576 16 7.992 16C12.416 16 16 12.416 16 8C16 3.584 12.416 0 7.992 0ZM7.99994 14.4C4.46393 14.4 1.59993 11.536 1.59993 7.99999C1.59993 4.46399 4.46393 1.59999 7.99994 1.59999C11.5359 1.59999 14.3999 4.46399 14.3999 7.99999C14.3999 11.536 11.5359 14.4 7.99994 14.4ZM7.20003 4H8.40003V8.2L12 10.336L11.4 11.32L7.20003 8.8V4Z" fill="#505A5F"/>
 </svg>
 
+const TickMark = () => (
+  <svg style={{ display: "inline-block", margin: "auto" }} width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4.75012 8.1275L1.62262 5L0.557617 6.0575L4.75012 10.25L13.7501 1.25L12.6926 0.192505L4.75012 8.1275Z" fill="white"/>
+  </svg>
+);
 
 export {
   AnnouncementIcon,
@@ -651,5 +656,6 @@ export {
   NotificationBell,
   MapMarker,
   Clock,
-  EventCalendar
+  EventCalendar,
+  TickMark
 };
