@@ -160,7 +160,7 @@ export const FormComposer = (props) => {
                     )}
 
                     {errors && errors[field.populators?.name] && Object.keys(errors[field.populators?.name]).length ? (
-                      <CardLabelError>{field.populators.error}</CardLabelError>
+                      <CardLabelError>{t(field.populators.error)}</CardLabelError>
                     ) : null}
                     <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
                       {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
@@ -195,7 +195,7 @@ export const FormComposer = (props) => {
                   </LabelFieldPair>
                   {field?.populators?.name && errors && errors[field?.populators?.name] && Object.keys(errors[field?.populators?.name]).length ? (
                     <CardLabelError style={{ width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" }}>
-                      {field?.populators?.error}
+                      {t(field?.populators?.error)}
                     </CardLabelError>
                   ) : null}
                 </Fragment>

@@ -1,4 +1,4 @@
-import { Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
+import { Loader, PrivateRoute, BreadCrumb } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Redirect, Switch, useLocation, useRouteMatch,Route } from "react-router-dom";
@@ -22,11 +22,35 @@ import EventsListOnGround from "./pages/citizen/EventsListOnGround"
 import CitizenApp from "./pages/citizen"
 import EventDetails from "./pages/citizen/EventsListOnGround/EventDetails"
 
+const EventsBreadCrumb = ({ location }) => {
+  const { t } = useTranslation();
+  const crumbs = [
+    {
+      path: "/digit-ui/employee",
+      content: t("ES_COMMON_HOME"),
+      show: true,
+    },
+    {
+      path: "/digit-ui/employee/engagement/event/inbox",
+      content: t("ES_EVENT_INBOX"),
+      show: location.pathname.includes("event/inbox") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/event/new-event",
+      content: t("ES_EVENT_NEW_EVENT"),
+      show: location.pathname.includes("event/new-event") ? true : false,
+    },
+  ];
+
+  return <BreadCrumb crumbs={crumbs} />;
+};
+
 const EmployeeApp = ({ path, url, userType, tenants }) => {
   const location = useLocation();
 
   return (
     <div className="ground-container">
+      <EventsBreadCrumb location={location} />
       <Switch>
         <Route exact path={`${path}/docs`} component={()=><Documents {...{path}} />} />
         <Route path={`${path}/event/inbox`}><Inbox tenants={tenants} /></Route>

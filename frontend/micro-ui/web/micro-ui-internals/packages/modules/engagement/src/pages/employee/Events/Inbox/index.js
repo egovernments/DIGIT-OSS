@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { format } from "date-fns";
 import { Header } from "@egovernments/digit-ui-react-components";
 import DesktopInbox from "../../../../components/Events/DesktopInbox";
-
+import MobileInbox from "../../../../components/Events/MobileInbox";
 const Inbox = ({ tenants }) => {
   const { t } = useTranslation()
   Digit.SessionStorage.set("ENGAGEMENT_TENANTS", tenants);
@@ -10,7 +11,12 @@ const Inbox = ({ tenants }) => {
   const [pageSize, setPageSize] = useState(10);
   const [pageOffset, setPageOffset] = useState(0);
   const [searchParams, setSearchParams] = Digit.Hooks.useSessionStorage("EVENTS_SEARCH", {
-    eventStatus: []
+    eventStatus: [],
+    range: {
+      startDate: new Date(),
+      endDate: new Date(),
+      title: `${format(new Date(), "MMM d, yy")} - ${format(new Date(), "MMM d, yy")}`,
+    }
   });
   let isMobile = window.Digit.Utils.browser.isMobile();
   const { data, isLoading } = Digit.Hooks.events.useInbox(tenantId, {
@@ -31,12 +37,12 @@ const Inbox = ({ tenants }) => {
   }
 
   const globalSearch = (rows, columnIds) => {
-    console.log(columnIds, rows, 'global search')
     // return rows;
     return rows?.filter(row =>
       (searchParams?.eventStatus?.length > 0 ? searchParams?.eventStatus?.includes(row.original?.status) : true) &&
-      (searchParams?.message ? row.original?.name?.startsWith(searchParams?.message) : true) &&
-      (searchParams?.ulb?.code ? row.original.tenantId === searchParams?.ulb?.code : true))
+      (searchParams?.eventName ? row.original?.name?.startsWith(searchParams?.eventName) : true) &&
+      (searchParams?.ulb?.code ? row.original.tenantId === searchParams?.ulb?.code : true) &&
+      (searchParams?.eventCategory ? row.original.eventCategory === searchParams?.eventCategory?.code : true))
   }
 
   const getSearchFields = () => {
@@ -47,19 +53,25 @@ const Inbox = ({ tenants }) => {
         type: "ulb",
       },
       {
-        label: t("EVENTS_DATERANGE_LABEL"),
-        name: "dateRange"
-      },
-      {
-        label: t("EVENTS_MESSAGE_LABEL"),
-        name: "message"
-      },
+        label: t("EVENTS_NAME_LABEL"),
+        name: "eventName"
+      }
     ]
   }
 
   if (isMobile) {
-    return null;
-  }
+    return (
+      <MobileInbox
+        data={data}
+        searchParams={searchParams}
+        searchFields={getSearchFields()}
+        t={t}
+        onFilterChange={handleFilterChange}
+        onSearch={onSearch}
+        isLoading={isLoading}
+      />
+    )
+  } 
 
   return (
     <div>

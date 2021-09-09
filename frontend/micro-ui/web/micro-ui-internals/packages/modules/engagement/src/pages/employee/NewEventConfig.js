@@ -3,7 +3,7 @@ export const config = [
     head: "",
     body: [
       {
-        type: "component",
+        type: "form",
         withoutLabel: true,
         component: "EventForm",
         nextStep: "",
@@ -13,68 +13,80 @@ export const config = [
       {
         type: "text",
         label: "EVENTS_DESCRIPTION_LABEL",
+        isMandatory: true,
         populators: {
           name: "description",
           className: "fullWidth",
           validation: {
             required: true,
-          }
-        }
+          },
+          error: 'EVENTS_DESCRIPTION_ERROR_REQUIRED',
+        },
       },
       {
         type: "date",
         label: "EVENTS_FROM_DATE_LABEL",
+        isMandatory: true,
         populators: {
           name: "fromDate",
           className: "fullWidth",
           validation: {
             required: true,
-          }
-        }
+          },
+          error: "EVENTS_FROM_DATE_ERROR_REQUIRED",
+        },
       },
       {
         type: "date",
         label: "EVENTS_TO_DATE_LABEL",
+        isMandatory: true,
         populators: {
           name: "toDate",
           className: "fullWidth",
           validation: {
             required: true,
-          }
-        }
+          },
+          error: "EVENTS_TO_DATE_ERROR_REQUIRED",
+        },
       },
       {
         type: "time",
         label: "EVENTS_FROM_TIME_LABEL",
+        isMandatory: true,
         populators: {
           name: "fromTime",
           className: "fullWidth",
           validation: {
             required: true,
-          }
-        }
+          },
+          error: "EVENTS_FROM_TIME_ERROR_REQUIRED",
+        },
       },
       {
         type: "time",
         label: "EVENTS_TO_TIME_LABEL",
+        isMandatory: true,
         populators: {
           name: "toTime",
           className: "fullWidth",
           validation: {
             required: true,
-          }
-        }
+          },
+          error: "EVENTS_TO_TIME_ERROR_REQUIRED",
+        },
       },
       {
         type: "text",
         label: "EVENTS_ADDRESS_LABEL",
+        isMandatory: true,
         populators: {
           name: "address",
           className: "fullWidth",
           validation: {
             required: true,
-          }
-        }
+          },
+          error: "EVENTS_ADDRESS_ERROR_REQUIRED",
+        },
       },
       {
         type: "component",
@@ -89,19 +101,18 @@ export const config = [
           name: "organizer",
           className: "fullWidth",
           validation: {
-            required: true,
-          }
+            pattern: /^[A-Za-z ]*$/,
+          },
+          error: "EVENTS_ORGANIZER_ERROR",
         }
       },
       {
-        type: "text",
+        type: "number",
         label: "EVENTS_ENTRY_FEE_INR_LABEL",
         populators: {
           name: "fees",
           className: "fullWidth",
-          validation: {
-            required: true,
-          }
+          error: "EVENTS_ENTRY_ERROR_REQUIRED",
         }
       },
     ]

@@ -15,10 +15,10 @@ const NewEvents = () => {
         {
           source: "WEBAPP",
           eventType: "EVENTSONGROUND",
-          tenantId: data?.eventData?.tenantId,
+          tenantId: data?.tenantId?.code,
           description: data?.description,
-          name: data?.eventData?.name,
-          eventcategory: data?.eventData?.eventCategory,
+          name: data?.name,
+          eventcategory: data?.eventCategory?.code,
           eventDetails: {
             fromDate: new Date(`${fromDate} ${fromTime}`).getTime(),
             toDate: new Date(`${toDate} ${toTime}`).getTime(),
@@ -31,7 +31,6 @@ const NewEvents = () => {
         }
       ]
     }
-    console.log(details, data, 'details');
     history.push("/digit-ui/employee/engagement/event/response", details)
   }
 

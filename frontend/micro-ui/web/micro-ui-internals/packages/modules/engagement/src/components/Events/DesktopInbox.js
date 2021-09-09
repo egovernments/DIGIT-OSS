@@ -38,11 +38,10 @@ const DesktopInbox = ({ isLoading, data, t, onSearch, globalSearch, searchFields
         Header: t("EVENTS_END_DATE_LABEL"),
         accessor: (row) => row?.eventDetails?.toDate ? GetCell(format(new Date(row?.eventDetails?.toDate), "dd/MM/yyyy")) : "",
       },
-      // {
-      //   Header: t("EVENTS_POSTEDBY_LABEL"),
-      //   accessor: row => GetCell(row?.postedBy || "")
-
-      // },
+      {
+        Header: t("EVENTS_POSTEDBY_LABEL"),
+        accessor: row => GetCell(row?.user?.name || "")
+      },
       {
         Header: t("EVENTS_STATUS_LABEL"),
         accessor: row => GetStatusCell(t(row?.status)),

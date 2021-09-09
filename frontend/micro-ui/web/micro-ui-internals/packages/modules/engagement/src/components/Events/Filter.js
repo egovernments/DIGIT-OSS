@@ -1,22 +1,40 @@
-import React from "react";
-import { ActionBar, RemoveableTag, CloseSvg, Loader, Localities, ApplyFilterBar } from "@egovernments/digit-ui-react-components";
+import React, { useState } from "react";
+import { ActionBar, RemoveableTag, CloseSvg, Loader, DateRange, Localities, ApplyFilterBar, SubmitBar, Dropdown, RefreshIcon } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import Status from "./Status";
 
 const Filter = ({ type = "desktop", onClose, onSearch, onFilterChange, searchParams }) => {
   const { t } = useTranslation();
+  const [localSearchParams, setLocalSearchParams] = useState(() => ({ ...searchParams }));
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const state = tenantId?.split('.')[0];
+  const { isLoading, data } = Digit.Hooks.useCommonMDMS(state, "mseva", ["EventCategories"]);
+
   const clearAll = () => {
-    // onFilterChange({ applicationStatus: [], locality: [], uuid: { code: "ASSIGNED_TO_ME", name: "Assigned to Me" } });
+    onFilterChange({ eventCategory: null, eventStatus: [] });
     onClose?.();
   };
 
+  const applyLocalFilters = () => {
+    onFilterChange(localSearchParams);
+    onClose?.();
+  };
+  const handleChange = (data) => {
+    setLocalSearchParams({ ...localSearchParams, ...data });
+  };
   const onStatusChange = (e, type) => {
-    if (e.target.checked) onFilterChange({ eventStatus: [...(searchParams?.eventStatus || []),  type] })
-    else onFilterChange({ eventStatus: searchParams?.eventStatus?.filter(status => status !== type) })
+    if (e.target.checked) handleChange({ eventStatus: [...(localSearchParams?.eventStatus || []),  type] })
+    else handleChange({ eventStatus: localSearchParams?.eventStatus?.filter(status => status !== type) })
+  }
+
+  if (isLoading) {
+    return (
+      <Loader />
+    );
   }
 
   return (
-    <div className="filter" style={{ marginTop: "revert" }}>
+    <div className="filter">
       <div className="filter-card">
         <div className="heading">
           <div className="filter-label">{t("ES_COMMON_FILTER_BY")}:</div>
@@ -25,7 +43,7 @@ const Filter = ({ type = "desktop", onClose, onSearch, onFilterChange, searchPar
           </div>
           {type === "desktop" && (
             <span className="clear-search" onClick={clearAll}>
-              {t("ES_COMMON_CLEAR_ALL")}
+              <RefreshIcon />
             </span>
           )}
           {type === "mobile" && (
@@ -34,8 +52,14 @@ const Filter = ({ type = "desktop", onClose, onSearch, onFilterChange, searchPar
             </span>
           )}
         </div>
+        <div className="filter-label">{`${t(`EVENTS_CATEGORY_LABEL`)}`}</div>
+        <Dropdown option={data?.mseva?.EventCategories} optionKey="code" t={t} select={val => handleChange({ eventCategory: val })} />
+        {/* <DateRange t={t} values={searchParams?.range} onFilterChange={onFilterChange} labelClass="filter-label" /> */}
         <div>
-          <Status onAssignmentChange={onStatusChange} searchParams={searchParams} />
+          <Status onAssignmentChange={onStatusChange} searchParams={localSearchParams} />
+        </div>
+        <div>
+          <SubmitBar style={{ width: '100%' }} onSubmit={() => applyLocalFilters()} label={t("ES_COMMON_APPLY")} />
         </div>
       </div>
     </div>

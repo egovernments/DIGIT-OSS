@@ -13,15 +13,17 @@ const EventLink = () => {
   ]
 
   const GetLogo = () => (
-    <div className="header">
-      <EventCalendar />
+    <div className="header" style={{ justifyContent: "flex-start" }}>
+      <span className="logo" style={{ backgroundColor: "#fff" }}>
+        <EventCalendar />
+      </span>
       {" "}
       <span className="text">{t("EVENTS_EVENTS_HEADER")}</span>
     </div>
   );
 
   return (
-    <Card style={{ paddingRight: 0, marginTop: 0 }} className="employeeCard filter">
+    <Card className="employeeCard filter inboxLinks">
       <div className="complaint-links-container">
         {GetLogo()}
         <div className="body">
