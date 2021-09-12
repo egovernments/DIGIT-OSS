@@ -544,6 +544,13 @@ public class EnrichmentService {
         }
         UserDetailResponse userDetailResponse = userService.getUser(searchCriteria,requestInfo);
         enrichOwner(userDetailResponse,licenses);
+        
+        for(TradeLicense license : licenses) {
+        	if(license.getValidTo()<System.currentTimeMillis()) {
+        		license.setStatus(STATUS_EXPIRED);
+        	}
+        }
+        
         return licenses;
     }
 

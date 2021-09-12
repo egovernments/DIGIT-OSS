@@ -96,17 +96,18 @@ public class ActionValidator {
     /**
      * Validates the update request
      * @param request The tradeLciense update request
+     * @param searchResult The tradelicense search result
      */
-    public void validateUpdateRequest(TradeLicenseRequest request,BusinessService businessService){
+    public void validateUpdateRequest(TradeLicenseRequest request,BusinessService businessService, List<TradeLicense> searchResult){
         validateDocumentsForUpdate(request);
-        validateManualExpiration(request);
+        validateManualExpiration(request,searchResult);
        // validateRole(request);
        // validateAction(request);
         validatePayAction(request);
         validateIds(request,businessService);
     }
 
-    private void validateManualExpiration(TradeLicenseRequest request) {
+    private void validateManualExpiration(TradeLicenseRequest request, List <TradeLicense> searchResult) {
     	
     	RequestInfo requestInfo = request.getRequestInfo();
         Boolean isCitizen = false;
@@ -125,6 +126,23 @@ public class ActionValidator {
         	if(license.getAction().toString().equalsIgnoreCase(ACTION_MANUALLYEXPIRE)) {
         		if(isCitizen) {
         			errorMap.put("INVALID_ACTION","Citizen can not manually expire a license");
+        		}
+        	}
+        }
+                
+        for (TradeLicense license : licenses) {
+        	for(TradeLicense searchedLicense : searchResult) {
+        		if(license.getLicenseNumber()!=null && searchedLicense.getLicenseNumber()!=null && license.getLicenseNumber().equalsIgnoreCase(searchedLicense.getLicenseNumber())) {
+        			if(license.getApplicationType()!=null && license.getApplicationType().toString().equalsIgnoreCase(APPLICATION_TYPE_RENEWAL)) {
+        				if(searchedLicense.getFinancialYear()!=null && license.getFinancialYear()!=null && searchedLicense.getFinancialYear().compareToIgnoreCase(license.getFinancialYear())>0) {
+        					if(license.getAction()!=null && license.getAction().toString().equalsIgnoreCase(ACTION_MANUALLYEXPIRE)) {
+        						if(license.getApplicationNumber()!=null && searchedLicense.getApplicationNumber()!=null && !license.getApplicationNumber().equalsIgnoreCase(searchedLicense.getApplicationNumber())) {
+        							errorMap.put("INVALID_ACTION","Cannot manually expire a license while later renewal applications are in the workflow");
+        						}
+        					}
+        					
+        				}
+        			}
         		}
         	}
         }

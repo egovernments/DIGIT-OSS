@@ -247,8 +247,8 @@ public class TLValidator {
         	);
         
         request.getLicenses().forEach(license->{
-        	if(license.getStatus().equalsIgnoreCase(TLConstants.STATUS_MANUALLYEXPIRED)) {
-        		throw new CustomException("LICENSE MANUALLY EXPIRED", "Licenses which are manually expired cannot be renewed");
+        	if(license.getStatus().equalsIgnoreCase(TLConstants.STATUS_MANUALLYEXPIRED) && license.getValidTo()!=null && license.getValidTo()>System.currentTimeMillis()) {
+        		throw new CustomException("LICENSE MANUALLY EXPIRED", "Licenses which are manually expired before the renewal date cannot be renewed");
         	}
         }       		        		
         	);

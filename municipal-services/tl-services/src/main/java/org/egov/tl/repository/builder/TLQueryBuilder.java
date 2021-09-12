@@ -198,8 +198,8 @@ public class TLQueryBuilder {
               preparedStmtList.add(System.currentTimeMillis()+renewalPeriod); 
               
               addClauseIfRequired(preparedStmtList, builder);
-              builder.append("  tl.status = ? ");
-              preparedStmtList.add(TLConstants.STATUS_APPROVED); 
+              //builder.append("  tl.status = ? ");
+              //preparedStmtList.add(TLConstants.STATUS_APPROVED); 
               
               addClauseIfRequired(preparedStmtList, builder);
               builder.append(" (tl.licensenumber NOT IN (SELECT licensenumber from eg_tl_tradelicense WHERE UPPER(applicationtype) = ? AND licensenumber IS NOT NULL)  OR (");    
