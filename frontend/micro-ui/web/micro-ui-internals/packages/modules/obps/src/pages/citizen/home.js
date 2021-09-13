@@ -14,10 +14,12 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
     const moduleCode = "bpareg";
     const language = Digit.StoreData.getCurrentLanguage();
     const [bpaLinks, setBpaLinks] = useState([]);
+    const state = Digit.ULBService.getStateId();
     const { data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
     const { t } = useTranslation();
     const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BPA_HOME_CREATE", {});
-
+    const { data:homePageUrlLinks , isLoading: homePageUrlLinksLoading } = Digit.Hooks.obps.useMDMS(state, "BPA", ["homePageUrlLinks"]);
+    
     useEffect(() => {
         if (!stakeHolderDetailsLoading) {
             let roles = [];
@@ -41,35 +43,20 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
         }
     }, [stakeHolderDetailsLoading]);
 
-    const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", "DocumentTypes");
-    
-
     useEffect(() => {
-        if (!isLoading && data?.length > 0) {
-            let unique = [], distinct = [], uniqueData = [], uniqueLinks = [];
-            for( let i = 0; i < data.length; i++ ){
-              if( !unique[data[i].applicationType] && !unique[data[i].ServiceType]){
-                distinct.push(data[i].applicationType);
-                unique[data[i].applicationType] = data[i];
-              }
-            }
-            Object.values(unique).map(indData => {
+        if (!homePageUrlLinksLoading && homePageUrlLinks?.BPA?.homePageUrlLinks?.length > 0) {
+            let uniqueLinks = [];
+            homePageUrlLinks?.BPA?.homePageUrlLinks?.map(linkData => {
                 uniqueLinks.push({
-                    link: `bpa/${indData?.applicationType?.toLowerCase()}/${indData?.ServiceType?.toLowerCase()}/docs-required`,
-                    i18nKey: t(`BPA_HOME_${indData?.applicationType}_${indData?.ServiceType}_LABEL`),
-                    state: { docs: indData }
+                    link: `${linkData?.flow?.toLowerCase()}/${linkData?.applicationType?.toLowerCase()}/${linkData?.serviceType?.toLowerCase()}/docs-required`,
+                    i18nKey: t(`BPA_HOME_${linkData?.applicationType}_${linkData?.serviceType}_LABEL`),
+                    state: { linkData },
+                    linkState: true
                 });
-                uniqueData.push({
-                    key: indData?.applicationType?.replaceAll('_', ''),
-                    applicationType: indData?.applicationType,
-                    serviceType: indData?.ServiceType,
-                    docs: indData?.docTypes
-                });  
-            })
-            sessionStorage.setItem("BPALINKSDATA", uniqueData);
+            });
             setBpaLinks(uniqueLinks);
         }
-    }, [!isLoading]);
+    }, [!homePageUrlLinksLoading]);
 
 
     useEffect(() => {

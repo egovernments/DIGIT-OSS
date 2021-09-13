@@ -25,7 +25,6 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
     enabled: approvalNo && data?.permitNumber ? true : false
   }, scrutinyNumber);
 
-  console.log(data, bpaData, "iqweoywqoiyqiueyqwiuyiuwqet");
 
   useEffect(() => {
     if(bpaData) {

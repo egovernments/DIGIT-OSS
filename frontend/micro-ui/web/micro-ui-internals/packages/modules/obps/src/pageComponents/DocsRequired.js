@@ -1,32 +1,49 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Card, CardHeader, CardLabel, CardText, CitizenInfoLabel, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 const DocsRequired = ({ onSelect, onSkip, config }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateCode = Digit.ULBService.getStateId();
   const history = useHistory();
+  const { applicationType: applicationType, serviceType: serviceType } = useParams();
   const [docsList, setDocsList] = useState([]);
+  const [uiFlow, setUiFlow] = useState([]);
   const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", "DocumentTypes");
-  const checkingUrl = window.location.href.includes("building_oc_plan_scrutiny");
+  const checkingUrl = window.location.href.includes("ocbpa");
+
+  const { data:homePageUrlLinks , isLoading: homePageUrlLinksLoading } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["homePageUrlLinks"]);
+
 
   const goNext = () => {
-    if(history?.location?.state?.edcrNumber) {
-      onSelect("edcrNumber", {edcrNumber: history?.location?.state?.edcrNumber});
-    } else {
-      onSelect();
-    } 
+    onSelect("uiFlow", uiFlow);
   }
 
   useEffect(() => {
+    if (!homePageUrlLinksLoading) {
+      const windowUrl = window.location.href.split('/');
+      const serviceType = windowUrl[windowUrl.length - 2];
+      const applicationType = windowUrl[windowUrl.length - 3];
+      homePageUrlLinks?.BPA?.homePageUrlLinks?.map(linkData => {
+        if(applicationType?.toUpperCase() === linkData?.applicationType && serviceType?.toUpperCase() === linkData?.serviceType) {
+          setUiFlow({
+            flow: linkData?.flow,
+            applicationType: linkData?.applicationType,
+            serviceType: linkData?.serviceType
+          });
+        }
+      });
+    }
+  }, [!homePageUrlLinksLoading]);
+
+  useEffect(() => {
     if (!isLoading) {
-      const rest = window.location.href.substring(0, window.location.href.lastIndexOf("/"));
-      const serviceType = rest.split('/').pop();
-      const applicationTypeUrl = rest.substring(0, rest.lastIndexOf("/"));
-      const applicationType = applicationTypeUrl.split('/').pop();
       let unique = [], distinct = [], uniqueData = [], uniqueList = [];
+      const windowUrl = window.location.href.split('/');
+      const serviceType = windowUrl[windowUrl.length - 2];
+      const applicationType = windowUrl[windowUrl.length - 3];
       for (let i = 0; i < data.length; i++) {
         if (!unique[data[i].applicationType] && !unique[data[i].ServiceType]) {
           distinct.push(data[i].applicationType);

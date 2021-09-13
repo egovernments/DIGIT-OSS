@@ -19,7 +19,7 @@ const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setForm
     const [nocTaxDocuments, setNocTaxDocuments] = useState([]);
     const [enableSubmit, setEnableSubmit] = useState(true)
     const [checkRequiredFields, setCheckRequiredFields] = useState(false);
-    const checkingUrl = window.location.href.includes("building_oc_plan_scrutiny");
+    const checkingFlow = formData?.uiFlow?.flow;
 
     const [sourceRefId, setSourceRefId] = useState(formData?.applicationNo);
     const [nocDatils, setNocDetails] = useState([]);
@@ -114,7 +114,7 @@ const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setForm
 
     return (
         <div>
-            <Timeline currentStep={3} flow= {checkingUrl ? "OCBPA" : ""}/>
+            <Timeline currentStep={3} flow= {checkingFlow === "OCBPA" ? "OCBPA" : ""}/>
             {!nocDocsLoading ?
                 <FormStep
                     t={t}

@@ -26,7 +26,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData,config }) => {
   let scrutinyNumber=`DCR82021WY7QW`;
   let user = Digit.UserService.getUser();
   const tenantId = user.info.permanentCity;
-  const checkingUrl = window.location.href.includes("building_oc_plan_scrutiny");
+  const checkingFlow = formData?.uiFlow?.flow;
   const [showToast, setShowToast] = useState(null);
   //let tenantId="pb.amritsar";
   const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId,formData?.data?.scrutinyNumber, {
@@ -129,6 +129,11 @@ const onRemove = (index, key,num) => {
     }
   }
 
+  const closeToast = () => {
+    setShowToast(null);
+  };
+
+
   const tableColumns = useMemo(
     () => {
       
@@ -146,7 +151,7 @@ const onRemove = (index, key,num) => {
 const onSkip = () => {
 }
   const goNext = () => {
-    if (checkingUrl) {
+    if (checkingFlow === "OCBPA") {
       if (!formData?.id) {
         let payload = {};
         payload.edcrNumber = formData?.edcrNumber?.edcrNumber ? formData?.edcrNumber?.edcrNumber : formData?.data?.scrutinyNumber?.edcrNumber;
@@ -174,6 +179,7 @@ const onSkip = () => {
           .then((result, err) => {
             if (result?.BPA?.length > 0) {
               result.BPA[0].data = formData.data;
+              result.BPA[0].uiFlow = formData?.uiFlow
               onSelect("", result.BPA[0], "", true);
             }
           })
@@ -212,11 +218,11 @@ const clearall = (num) => {
 
   return (
     <React.Fragment>
-    <Timeline currentStep={checkingUrl ? 2 : 1} flow= {checkingUrl ? "OCBPA" : ""}/>
+    <Timeline currentStep={checkingFlow === "OCBPA" ? 2 : 1} flow= {checkingFlow === "OCBPA" ? "OCBPA" : ""}/>
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} /* isDisabled={Object.keys(subOccupancyObject).length === 0} */>
       <CardSubHeader>{t("BPA_EDCR_DETAILS")}</CardSubHeader>
       <StatusTable  style={{border:"none"}}>
-      <Row className="border-none" style={{border:"none"}} label={checkingUrl ? t("BPA_OC_EDCR_NO_LABEL") : t("BPA_EDCR_NO_LABEL")} text={data?.edcrNumber}></Row>
+      <Row className="border-none" style={{border:"none"}} label={checkingFlow === "OCBPA" ? t("BPA_OC_EDCR_NO_LABEL") : t("BPA_EDCR_NO_LABEL")} text={data?.edcrNumber}></Row>
       <Row className="border-none" 
       label={t("BPA_UPLOADED_PLAN_DIAGRAM")} 
       text={<ActionButton label={t("BPA_UPLOADED_PLAN")} jumpTo={data?.updatedDxfFile} />}>
@@ -238,8 +244,8 @@ const clearall = (num) => {
       {data?.planDetail?.blocks.map((block,index)=>(
       <div key={index}>
       <CardSubHeader>{t("BPA_BLOCK_SUBHEADER")} {index+1}</CardSubHeader>
-      { !checkingUrl ? <CardSectionHeader style={{fontWeight: "normal"}} className="card-label-smaller">{t("BPA_SUB_OCCUPANCY_LABEL")}</CardSectionHeader> : null }
-      { !checkingUrl ? <MultiSelectDropdown
+      { !checkingFlow === "OCBPA" ? <CardSectionHeader style={{fontWeight: "normal"}} className="card-label-smaller">{t("BPA_SUB_OCCUPANCY_LABEL")}</CardSectionHeader> : null }
+      { !checkingFlow === "OCBPA" ? <MultiSelectDropdown
               BlockNumber={block.number}
               className="form-field"
               isMandatory={true}
@@ -252,15 +258,15 @@ const clearall = (num) => {
               optionsKey="name"
               t={t}
             /> : null }
-        { !checkingUrl ? <div className="tag-container">
+        { !checkingFlow === "OCBPA" ? <div className="tag-container">
                {subOccupancyObject[`Block_${block.number}`] && subOccupancyObject[`Block_${block.number}`].length > 0 &&
                 subOccupancyObject[`Block_${block.number}`].map((value, index) => (
                   <RemoveableTag key={index} text={`${t(value["name"])}`} onClick={() => onRemove(index,value,block.number)} />
                 ))}
         </div> : null }
-        { !checkingUrl ? (subOccupancyObject[`Block_${block.number}`] && subOccupancyObject[`Block_${block.number}`].length>0 ) && <LinkButton style={{textAlign:"left"}} label={"Clear All"} onClick={() => clearall(block.number)}/>: null}
+        { !checkingFlow === "OCBPA" ? (subOccupancyObject[`Block_${block.number}`] && subOccupancyObject[`Block_${block.number}`].length>0 ) && <LinkButton style={{textAlign:"left"}} label={"Clear All"} onClick={() => clearall(block.number)}/>: null}
       <div style={{overflow:"scroll"}}>
-      { checkingUrl ? <StatusTable>
+      { checkingFlow === "OCBPA" ? <StatusTable>
         <Row className="border-none" label={`${t("BPA_SUB_OCCUPANCY_LABEL")}:`} text={getSubOccupancyValues(index)}></Row>
       </StatusTable>: null }
       <Table

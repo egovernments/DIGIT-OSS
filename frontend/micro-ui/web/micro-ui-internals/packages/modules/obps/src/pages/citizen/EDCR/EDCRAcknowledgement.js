@@ -1,5 +1,5 @@
 import { Banner, Card, CardText, LinkButton, SubmitBar } from "@egovernments/digit-ui-react-components";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -8,6 +8,24 @@ const EDCRAcknowledgement = (props) => {
   const edcrData = props?.data?.[0];
   const { t } = useTranslation();
   const history = useHistory();
+  const [bpaLinks, setBpaLinks] = useState({});
+  const state = Digit.ULBService.getStateId();
+  const { data:homePageUrlLinks , isLoading: homePageUrlLinksLoading } = Digit.Hooks.obps.useMDMS(state, "BPA", ["homePageUrlLinks"]);
+
+  useEffect(() => {
+    if (!homePageUrlLinksLoading && homePageUrlLinks?.BPA?.homePageUrlLinks?.length > 0) {
+        let uniqueLinks = [];
+        homePageUrlLinks?.BPA?.homePageUrlLinks?.map(linkData => {
+            if(linkData?.applicationType === edcrData?.appliactionType && linkData?.serviceType === edcrData?.applicationSubType){
+              setBpaLinks({
+                linkData: linkData,
+                edcrNumber: edcrData?.edcrNumber
+              });
+            }
+        });
+    }
+}, [!homePageUrlLinksLoading]);
+
 
   const printReciept = async () => {
     var win = window.open(edcrData.planReport, '_blank');
@@ -44,9 +62,9 @@ const EDCRAcknowledgement = (props) => {
             </svg>
             {t("EDCR_DOWNLOAD_SCRUTINY_REPORT_LABEL")}
           </div>
-          <div onClick={routeToBPAScreen} style={{ padding: "0px 8px" }}>
+          <Link to={{pathname: `/digit-ui/citizen/obps/${bpaLinks?.linkData?.flow?.toLowerCase()}/${edcrData?.appliactionType?.toLowerCase()}/${edcrData?.applicationSubType?.toLowerCase()}/docs-required`, state: bpaLinks}} >
             <SubmitBar label={t("BPA_APPLY_FOR_BPA_LABEL")} />
-          </div>
+          </Link>
           <Link to={`/digit-ui/citizen`} >
             <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
           </Link>

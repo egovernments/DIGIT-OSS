@@ -6,6 +6,12 @@ import { newConfig } from "../../../config/ocbuildingPermitConfig";
 import CheckPage from "./CheckPage";
 import OBPSAcknowledgement from "./OBPSAcknowledgement";
 
+const getPath = (path, params) => {
+  params && Object.keys(params).map(key => {
+    path = path.replace(`:${key}`, params[key]);
+  })
+  return path;
+}
 
 const OCBuildingPermit = () => {
   const queryClient = useQueryClient();
@@ -13,6 +19,7 @@ const OCBuildingPermit = () => {
   const { path, url } = useRouteMatch();
   const { pathname, state } = useLocation();
   const history = useHistory();
+  const match = useRouteMatch();
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BUILDING_PERMIT", state?.edcrNumber ? { data: { scrutinyNumber: { edcrNumber: state?.edcrNumber } } } : {});
@@ -22,9 +29,9 @@ const OCBuildingPermit = () => {
     const { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
     let redirectWithHistory = history.push;
     if (nextStep === null) {
-      return redirectWithHistory(`${path}/check`);
+      return redirectWithHistory(`${getPath(match.path, match.params)}/check`);
     }
-    redirectWithHistory(`${path}/${nextStep}`);
+    redirectWithHistory(`${getPath(match.path, match.params)}/${nextStep}`);
 
   }
 
@@ -33,7 +40,7 @@ const OCBuildingPermit = () => {
     queryClient.invalidateQueries("PT_CREATE_PROPERTY");
   };
   const createApplication = async () => {
-    history.push(`${path}/acknowledgement`);
+    history.push(`${getPath(match.path, match.params)}/acknowledgement`);
   };
 
   const handleSelect = (key, data, skipStep, isFromCreateApi) => {
@@ -62,19 +69,19 @@ const OCBuildingPermit = () => {
         const { component, texts, inputs, key } = routeObj;
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
-          <Route path={`${path}/${routeObj.route}`} key={index}>
+          <Route path={`${getPath(match.path, match.params)}/${routeObj.route}`} key={index}>
             <Component config={{ texts, inputs, key }} onSelect={handleSelect} onSkip={handleSkip} t={t} formData={params} />
           </Route>
         );
       })}
-      <Route path={`${path}/check`}>
+      <Route path={`${getPath(match.path, match.params)}/check`}>
         <CheckPage onSubmit={createApplication} value={params} />
       </Route>
-      <Route path={`${path}/acknowledgement`}>
+      <Route path={`${getPath(match.path, match.params)}/acknowledgement`}>
         <OBPSAcknowledgement data={params} onSuccess={onSuccess} />
       </Route>
       <Route>
-        <Redirect to={`${path}/${config.indexRoute}`} />
+        <Redirect to={`${getPath(match.path, match.params)}/${config.indexRoute}`} />
       </Route>
     </Switch>
   );

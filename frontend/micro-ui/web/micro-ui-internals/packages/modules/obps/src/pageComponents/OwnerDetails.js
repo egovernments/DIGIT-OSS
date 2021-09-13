@@ -229,6 +229,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                             result.BPA[0].data = formData.data;
                             result.BPA[0].BlockIds = getBlockIds(result.BPA[0].landInfo.unit);
                             result.BPA[0].subOccupancy= formData?.subOccupancy;
+                            result.BPA[0].uiFlow = formData?.uiFlow
                             
                             //1, units
                             onSelect("", result.BPA[0], "", true);
