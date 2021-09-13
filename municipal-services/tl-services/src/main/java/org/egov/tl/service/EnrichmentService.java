@@ -545,8 +545,14 @@ public class EnrichmentService {
         UserDetailResponse userDetailResponse = userService.getUser(searchCriteria,requestInfo);
         enrichOwner(userDetailResponse,licenses);
         
+        List <String> statuses = new ArrayList<String>();
+        
+        statuses.add(STATUS_REJECTED);
+        statuses.add(STATUS_CANCELLED);
+        statuses.add(STATUS_MANUALLYEXPIRED);
+        
         for(TradeLicense license : licenses) {
-        	if(license.getValidTo()<System.currentTimeMillis()) {
+        	if(license.getValidTo()<System.currentTimeMillis() && !statuses.contains(license.getStatus())) {
         		license.setStatus(STATUS_EXPIRED);
         	}
         }
