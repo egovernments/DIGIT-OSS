@@ -197,7 +197,7 @@ public class TLQueryBuilder {
               builder.append("  tl.validTo <= ? ");
               preparedStmtList.add(System.currentTimeMillis()+renewalPeriod); 
               
-              addClauseIfRequired(preparedStmtList, builder);
+              //addClauseIfRequired(preparedStmtList, builder);
               //builder.append("  tl.status = ? ");
               //preparedStmtList.add(TLConstants.STATUS_APPROVED); 
               
