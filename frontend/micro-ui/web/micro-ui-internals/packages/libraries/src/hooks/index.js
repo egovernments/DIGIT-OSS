@@ -128,6 +128,7 @@ import useBPASearch from "./obps/useBPASearch";
 import { useBPAREGgetbill } from "./obps/useBPAREGgetbill";
 import useStakeholderAPI from "./obps/useStakeholderAPI";
 import useOCEdcrSearch from "./obps/useOCEdcrSearch";
+import useLicenseDetails from "./obps/useLicenseDetails";
 
 import useBPAREGSearch from "./obps/useBPAREGSearch";
 import useEventInbox from "./events/useEventInbox";
@@ -256,7 +257,8 @@ const obps = {
   useBPAREGgetbill,
   useStakeholderAPI,
   useBPAREGSearch,
-  useOCEdcrSearch
+  useOCEdcrSearch,
+  useLicenseDetails
 };
 
 const events = {

@@ -114,4 +114,47 @@ export const OBPSService = {
       params: {},
       auth:  window.location.href.includes("openlink") ? false : true,
     }),
+  LicenseDetails: async (tenantId, params) => {
+    const response = await OBPSService.BPAREGSearch(tenantId, {}, params);
+    if (!response?.Licenses?.length) {
+      return;
+    }
+
+    const [License] = response?.Licenses;
+    const details = [{
+      title: "BPA_LICENSE_DET_CAPTION",
+      asSectionHeader: true,
+      values: [
+        { title: "BPA_LICENSE_TYPE_LABEL", value: License?.licenseType },
+      ]
+    }, {
+      title: "BPA_LICENSE_DET_CAPTION",
+      asSectionHeader: true,
+      values: [
+        { title: "BPA_APPLICANT_NAME_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.name },
+        { title: "BPA_APPLICANT_GENDER_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.gender },
+        { title: "BPA_OWNER_MOBILE_NO_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.mobileNumber },
+        { title: "BPA_APPLICANT_EMAIL_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.emailId  },
+        { title: "BPA_APPLICANT_PAN_NO", value: License?.tradeLicenseDetail?.owners?.[0]?.pan || "CS_NA" }
+      ]
+    }, {
+      title: "BPA_LICENSEE_PERMANENT_LABEL",
+      asSectionHeader: true,
+      values: [
+        { title: "BPA_LICENSEE_PERMANENT_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.permanentAddress || "CS_NA" }
+      ]
+    }, {
+      title: "BPA_LICENSEE_CORRESPONDENCE_LABEL",
+      asSectionHeader: true,
+      values: [
+        { title: "BPA_LICENSEE_CORRESPONDENCE_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.correspondenceAddress }
+      ]
+    },
+  ]
+    return {
+      applicationData: License,
+      applicationDetails: details,
+      tenantId: License?.tenantId,
+    }
+  }
 }
