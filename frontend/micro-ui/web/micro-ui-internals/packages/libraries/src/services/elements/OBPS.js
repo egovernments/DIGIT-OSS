@@ -82,10 +82,10 @@ export const OBPSService = {
       data: details,
       useCache: false,
       setTimeParam: false,
-      userService: true,
+      userService: window.location.href.includes("openlink")? false : true,
       method: "POST",
       params: {},
-      auth: true,
+      auth: window.location.href.includes("openlink") ? false : true,
     }),
     BPAREGGetBill: (tenantId, filters = {}) =>
     Request({
@@ -109,9 +109,9 @@ export const OBPSService = {
       data: details,
       useCache: false,
       setTimeParam: false,
-      userService: true,
+      userService:  window.location.href.includes("openlink") ? false : true,
       method: "POST",
       params: {},
-      auth: true,
+      auth:  window.location.href.includes("openlink") ? false : true,
     }),
 }

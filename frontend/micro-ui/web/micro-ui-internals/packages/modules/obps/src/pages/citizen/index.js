@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Switch, useLocation } from "react-router-dom";
+import { Switch, useLocation, Route } from "react-router-dom";
 import { PrivateRoute, BackButton } from "@egovernments/digit-ui-react-components";
 import NewBuildingPermit from "./NewBuildingPermit";
 import CreateEDCR from "./EDCR";
@@ -33,7 +33,8 @@ const App = ({ path }) => {
           path={`${path}/bpa/${applicationType}/${serviceType}`}
           component={NewBuildingPermit}
         />   */}
-        <PrivateRoute path={`${path}/stakeholder/apply`} component={StakeholderRegistration} />       
+        <PrivateRoute path={`${path}/stakeholder/apply`} component={StakeholderRegistration} />     
+        <Route path={`${path}/openlink/stakeholder/apply`} component={StakeholderRegistration} />    
         <PrivateRoute path={`${path}/my-applications`} component={MyApplication} />
         <PrivateRoute path={`${path}/stakeholder/:id`} component={ApplicationDetails} />
       </Switch>

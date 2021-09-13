@@ -19,6 +19,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
 
+  let isOpenLinkFlow = window.location.href.includes("openlink");
+
   const { isLoading,data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
 
   let menu = [];
@@ -89,7 +91,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           name="name"
           value={name}
           onChange={SelectName}
-          disable={name?true:false}
+          disable={name && !isOpenLinkFlow?true:false}
           {...(validation = {
             isRequired: true,
             pattern: "^[a-zA-Z-.`' ]*$",
@@ -115,7 +117,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           value={mobileNumber}
           name="mobileNumber"
           onChange={(value) => setMobileNo({ target: { value } })}
-          disable={mobileNumber?true:false}
+          disable={mobileNumber && !isOpenLinkFlow?true:false}
           {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
         />
         <CardLabel>{t("BPA_APPLICANT_EMAIL_LABEL")}</CardLabel>

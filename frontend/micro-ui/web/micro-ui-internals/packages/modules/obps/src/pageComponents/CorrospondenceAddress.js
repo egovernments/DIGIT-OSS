@@ -51,6 +51,9 @@ function selectChecked(e){
                             "tradeType": formData?.LicneseType?.LicenseType?.tradeType,
                         }
                     ],
+                    "additionalDetail": {
+                      "counsilForArchNo": formData?.LicneseType?.ArchitectNo,
+                    },
                     "address": {
                         "city": "",
                         "landmark": "",
