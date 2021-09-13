@@ -8,6 +8,7 @@ import CreateOCEDCR from "./OCEDCR";
 import BPACitizenHomeScreen from "./home"; 
 import StakeholderRegistration from "./StakeholderRegistration";
 import MyApplication from "./MyApplication";
+import ApplicationDetails from "./ApplicationDetail";
 
 
 const App = ({ path }) => {
@@ -31,6 +32,7 @@ const App = ({ path }) => {
         />  
         <PrivateRoute path={`${path}/stakeholder/apply`} component={StakeholderRegistration} />       
         <PrivateRoute path={`${path}/my-applications`} component={MyApplication} />
+        <PrivateRoute path={`${path}/stakeholder/:id`} component={ApplicationDetails} />
       </Switch>
     </React.Fragment>
   )

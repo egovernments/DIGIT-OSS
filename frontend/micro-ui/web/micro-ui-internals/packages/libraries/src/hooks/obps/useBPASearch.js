@@ -24,11 +24,10 @@ const combineResponse = (applications, workflowData) => {
   }))
 }
 
-const useBPASearch = (tenantId, filters, config = {}) => {
-  return useQuery([tenantId, filters], async () => {
+const useBPASearch = (tenantId, filters = {}, config = {}) => {
+  return useQuery(['BPA_SEARCH', tenantId, filters], async () => {
     const userInfo = Digit.UserService.getUser();
-    const response = await OBPSService.BPASearch(tenantId, { ...filters, requestor: userInfo?.mobileNumber });
-    console.log(response);
+    const response = await OBPSService.BPASearch(tenantId, { ...filters, requestor: userInfo?.info?.mobileNumber });
     const businessIds = response?.BPA.map(application => application.applicationNo);
     const workflowRes = await Digit.WorkflowService.getAllApplication('pb.amritsar', { businessIds: businessIds.join()  });
     return combineResponse(response?.BPA, workflowRes?.ProcessInstances);

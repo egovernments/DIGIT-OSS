@@ -25,6 +25,7 @@ import LicenseDetails from "./pageComponents/LicenseDetails";
 import CorrospondenceAddress from "./pageComponents/CorrospondenceAddress";
 import PermanentAddress from "./pageComponents/PermanentAddress";
 import StakeholderDocuments from "./pageComponents/StakeholderDocuments";
+import EmployeeApp from "./pages/employee";
 
 const OBPSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "bpa";
@@ -41,6 +42,8 @@ const OBPSModule = ({ stateCode, userType, tenants }) => {
   if (userType === "citizen") {
     return <CitizenApp path={path} stateCode={stateCode} />;
   }
+
+  return <EmployeeApp path={path} stateCode={stateCode} />
 }
 
 const OBPSLinks = ({ matchPath, userType }) => {
