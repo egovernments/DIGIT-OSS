@@ -335,7 +335,10 @@ public class PropertyQueryBuilder {
 
 		StringBuilder propertyIdQuery = new StringBuilder(PROEPRTY_ID_QUERY.replace(REPLACE_STRING, query));
 
-		if(tenantId.equalsIgnoreCase(config.getStateLevelTenantId())){
+		int tenantLevel = tenantId.split("\\.").length;
+		
+		if(tenantLevel <= config.getStateLevelTenantIdLength()){
+			
 			propertyIdQuery.append(AND_QUERY);
 			propertyIdQuery.append(" tenantId LIKE ? ");
 			preparedStmtList.add(tenantId + '%');

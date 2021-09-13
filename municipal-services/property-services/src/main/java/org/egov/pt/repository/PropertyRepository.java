@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
@@ -25,8 +26,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
-import com.google.common.collect.Sets;
 import org.springframework.util.ObjectUtils;
+
+import com.google.common.collect.Sets;
 
 @Repository
 public class PropertyRepository {

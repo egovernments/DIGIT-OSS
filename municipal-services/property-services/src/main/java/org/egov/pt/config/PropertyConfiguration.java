@@ -1,7 +1,11 @@
 package org.egov.pt.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.*;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.TimeZone;
+
+import javax.annotation.PostConstruct;
+
 import org.egov.tracer.config.TracerConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,11 +14,12 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.TimeZone;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 @Import({TracerConfiguration.class})
@@ -345,5 +350,13 @@ public class PropertyConfiguration {
 
     @Value("${inbox.property.search.allowed}")
     private Boolean isInboxSearchAllowed;
-
+    
+    // central-instance configs
+    
+    @Value("${state.level.tenantid.length}")
+    private Integer stateLevelTenantIdLength;
+    
+    @Value("${is.environment.central.instance}")
+    private Boolean isEnvironmentCentralInstance;
+    
 }
