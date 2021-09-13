@@ -1,4 +1,15 @@
-import { FormStep,MultiSelectDropdown, Table, RadioButtons, Card, CardHeader, Loader, MultiLink, Row, SubmitBar, Header, CardSubHeader, StatusTable, CardLabel,LinkButton, CardSectionHeader,RemoveableTag } from "@egovernments/digit-ui-react-components";
+import { 
+  FormStep,
+  MultiSelectDropdown, 
+  Table, 
+  Row, 
+  CardSubHeader, 
+  StatusTable, 
+  LinkButton, 
+  CardSectionHeader,
+  RemoveableTag,
+  Toast
+ } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState, useMemo } from "react";
 import { render } from "react-dom";
 import { useTranslation } from "react-i18next";
@@ -15,6 +26,8 @@ const ScrutinyDetails = ({ onSelect, userType, formData,config }) => {
   let scrutinyNumber=`DCR82021WY7QW`;
   let user = Digit.UserService.getUser();
   const tenantId = user.info.permanentCity;
+  const checkingUrl = window.location.href.includes("building_oc_plan_scrutiny");
+  const [showToast, setShowToast] = useState(null);
   //let tenantId="pb.amritsar";
   const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId,formData?.data?.scrutinyNumber, {
     enabled: true
@@ -132,9 +145,48 @@ const onRemove = (index, key,num) => {
 
 const onSkip = () => {
 }
-const goNext = () => {
-  onSelect(config.key,subOccupancyObject);
-}
+  const goNext = () => {
+    if (checkingUrl) {
+      if (!formData?.id) {
+        let payload = {};
+        payload.edcrNumber = formData?.edcrNumber?.edcrNumber ? formData?.edcrNumber?.edcrNumber : formData?.data?.scrutinyNumber?.edcrNumber;
+        payload.riskType = formData?.data?.riskType;
+        payload.applicationType = formData?.data?.applicationType;
+        payload.serviceType = formData?.data?.serviceType;
+
+        const userInfo = Digit.UserService.getUser();
+        const accountId = userInfo?.info?.uuid;
+        payload.tenantId = formData?.data?.bpaData?.bpaApprovalResponse?.[0]?.landInfo?.tenantId;
+        payload.workflow = { action: "INITIATE" };
+        payload.accountId = accountId;
+        payload.documents = null;
+
+        // Additonal details
+        payload.additionalDetails = {};
+        if (formData?.data?.holdingNumber) payload.additionalDetails.holdingNo = formData?.data?.holdingNumber;
+        if (formData?.data?.registrationDetails) payload.additionalDetails.registrationDetails = formData?.data?.registrationDetails;
+
+        //For LandInfo
+        payload.landInfo = formData?.data?.bpaData?.bpaApprovalResponse?.[0].landInfo || {};
+
+        // create BPA call
+        Digit.OBPSService.create({ BPA: payload }, tenantId)
+          .then((result, err) => {
+            if (result?.BPA?.length > 0) {
+              result.BPA[0].data = formData.data;
+              onSelect("", result.BPA[0], "", true);
+            }
+          })
+          .catch((e) => {
+            setShowToast({key: "true", message: e?.response?.data?.Errors[0]?.message || null});
+          });
+      } else {
+        onSelect("", formData, "", true);
+      }
+    } else {
+      onSelect(config.key, subOccupancyObject);
+    }
+  }
 
 const clearall = (num) => {
     let res = [];
@@ -144,14 +196,27 @@ const clearall = (num) => {
     setsubOccupancyObject(temp);
 }
 
+  function getSubOccupancyValues(index) {
+    let values = formData?.data?.bpaData?.bpaApprovalResponse?.[0]?.landInfo?.unit;
+    let returnValue = "";
+    if (values?.length > 0) {
+      let splitArray = values[index]?.usageCategory?.split(',');
+      if (splitArray?.length) {
+        const returnValueArray = splitArray.map(data => data ? `${t(`BPA_SUBOCCUPANCYTYPE_${data}`)}` : "NA");
+        returnValue = returnValueArray.join(',')
+      }
+    }
+    return returnValue ? returnValue : "NA";
+  }
+
 
   return (
     <React.Fragment>
-    <Timeline />
+    <Timeline currentStep={checkingUrl ? 2 : 1} flow= {checkingUrl ? "OCBPA" : ""}/>
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} /* isDisabled={Object.keys(subOccupancyObject).length === 0} */>
       <CardSubHeader>{t("BPA_EDCR_DETAILS")}</CardSubHeader>
       <StatusTable  style={{border:"none"}}>
-      <Row className="border-none" style={{border:"none"}} label={t("BPA_EDCR_NO_LABEL")} text={data?.edcrNumber}></Row>
+      <Row className="border-none" style={{border:"none"}} label={checkingUrl ? t("BPA_OC_EDCR_NO_LABEL") : t("BPA_EDCR_NO_LABEL")} text={data?.edcrNumber}></Row>
       <Row className="border-none" 
       label={t("BPA_UPLOADED_PLAN_DIAGRAM")} 
       text={<ActionButton label={t("BPA_UPLOADED_PLAN")} jumpTo={data?.updatedDxfFile} />}>
@@ -173,8 +238,8 @@ const clearall = (num) => {
       {data?.planDetail?.blocks.map((block,index)=>(
       <div key={index}>
       <CardSubHeader>{t("BPA_BLOCK_SUBHEADER")} {index+1}</CardSubHeader>
-      <CardSectionHeader style={{fontWeight: "normal"}} className="card-label-smaller">{t("BPA_SUB_OCCUPANCY_LABEL")}</CardSectionHeader>
-      <MultiSelectDropdown
+      { !checkingUrl ? <CardSectionHeader style={{fontWeight: "normal"}} className="card-label-smaller">{t("BPA_SUB_OCCUPANCY_LABEL")}</CardSectionHeader> : null }
+      { !checkingUrl ? <MultiSelectDropdown
               BlockNumber={block.number}
               className="form-field"
               isMandatory={true}
@@ -186,15 +251,18 @@ const clearall = (num) => {
               isOBPSMultiple={true}
               optionsKey="name"
               t={t}
-            />
-        <div className="tag-container">
+            /> : null }
+        { !checkingUrl ? <div className="tag-container">
                {subOccupancyObject[`Block_${block.number}`] && subOccupancyObject[`Block_${block.number}`].length > 0 &&
                 subOccupancyObject[`Block_${block.number}`].map((value, index) => (
                   <RemoveableTag key={index} text={`${t(value["name"])}`} onClick={() => onRemove(index,value,block.number)} />
                 ))}
-        </div>
-        {(subOccupancyObject[`Block_${block.number}`] && subOccupancyObject[`Block_${block.number}`].length>0 ) && <LinkButton style={{textAlign:"left"}} label={"Clear All"} onClick={() => clearall(block.number)}/>}
+        </div> : null }
+        { !checkingUrl ? (subOccupancyObject[`Block_${block.number}`] && subOccupancyObject[`Block_${block.number}`].length>0 ) && <LinkButton style={{textAlign:"left"}} label={"Clear All"} onClick={() => clearall(block.number)}/>: null}
       <div style={{overflow:"scroll"}}>
+      { checkingUrl ? <StatusTable>
+        <Row className="border-none" label={`${t("BPA_SUB_OCCUPANCY_LABEL")}:`} text={getSubOccupancyValues(index)}></Row>
+      </StatusTable>: null }
       <Table
         className="customTable"
         t={t}
@@ -222,6 +290,13 @@ const clearall = (num) => {
       <Row label={t("BPA_APPLICATION_DEMOLITION_AREA_LABEL")} text={data?.planDetail?.planInformation?.demolitionArea?`${data?.planDetail?.planInformation?.demolitionArea} sq.mtrs`:t("CS_NA")}></Row>
       </StatusTable>
       </FormStep>
+      {showToast && <Toast
+        error={true}
+        label={t(showToast?.message)}
+        isDleteBtn={true}
+        onClose={closeToast}
+      />
+      }
       </React.Fragment>
       
   );

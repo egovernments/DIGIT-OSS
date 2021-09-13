@@ -17,6 +17,7 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
     const [bpaTaxDocuments, setBpaTaxDocuments] = useState([]);
     const [enableSubmit, setEnableSubmit] = useState(true)
     const [checkRequiredFields, setCheckRequiredFields] = useState(false);
+    const checkingUrl = window.location.href.includes("building_oc_plan_scrutiny");
 
     const { isLoading: bpaDocsLoading, data: bpaDocs } = Digit.Hooks.obps.useMDMS(stateId, "BPA", ["DocTypeMapping"]);
     const { isLoading: commonDocsLoading, data: commonDocs } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["DocumentType"]);
@@ -76,7 +77,7 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
 
     return (
         <div>
-            <Timeline currentStep={2} />
+            <Timeline currentStep={checkingUrl ? 3 : 2} flow= {checkingUrl ? "OCBPA" : ""}/>
             {!bpaDocsLoading ?
                 <FormStep
                     t={t}

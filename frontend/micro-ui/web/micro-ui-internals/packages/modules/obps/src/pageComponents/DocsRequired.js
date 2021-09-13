@@ -10,6 +10,7 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
   const history = useHistory();
   const [docsList, setDocsList] = useState([]);
   const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", "DocumentTypes");
+  const checkingUrl = window.location.href.includes("building_oc_plan_scrutiny");
 
   const goNext = () => {
     if(history?.location?.state?.edcrNumber) {
@@ -50,7 +51,7 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
   return (
     <Fragment>
       <Card>
-        <CardHeader>{t(`OBPS_NEW_BUILDING_PERMIT`)}</CardHeader>
+        <CardHeader>{checkingUrl ? t(`BPA_OOCUPANCY_CERTIFICATE_APP_LABEL`) : t(`OBPS_NEW_BUILDING_PERMIT`)}</CardHeader>
         {/* TODO: Change text styles */}
         <CitizenInfoLabel text={t(`OBPS_DOCS_REQUIRED_TIME`)} showInfo={false} />
         <CardText style={{ color: "#0B0C0C", marginTop: "12px" }}>{t(`OBPS_NEW_BUILDING_PERMIT_DESCRIPTION`)}</CardText>
@@ -58,7 +59,12 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
           <Loader /> :
           <Fragment>
             {docsList?.[0]?.map((doc, index) => (
-              <CardLabel style={{ fontWeight: 700 }} key={index}>{`${index + 1}. ${t(doc?.code.replace('.', '_'))}`}</CardLabel>
+              <CardLabel style={{ fontWeight: 700 }} key={index}>
+                <div style={{ display: "flex" }}>
+                  <div>{`${index + 1}.`}&nbsp;</div>
+                  <div>{` ${t(doc?.code.replace('.', '_'))}`}</div>
+                </div>
+              </CardLabel>
             ))}
           </Fragment>
         }

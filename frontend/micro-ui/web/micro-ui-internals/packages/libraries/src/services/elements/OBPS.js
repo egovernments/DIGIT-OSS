@@ -10,6 +10,14 @@ export const OBPSService = {
       userService: true,
       method: "POST"
     }),
+  comparisionReport: (tenantId, params) =>
+    Request({
+      url: Urls.obps.comparisionReport,
+      params: { tenantId, ...params },
+      auth: true,
+      userService: true,
+      method: "POST"
+    }),
   create: (details, tenantId) =>
     Request({
       url: Urls.obps.create,

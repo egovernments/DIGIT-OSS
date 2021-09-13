@@ -19,6 +19,7 @@ import GIS from "./pageComponents/GIS";
 import OCEDCRDocsRequired from "./pageComponents/OCEDCRDocsRequired";
 import OCeDCRScrutiny from "./pageComponents/OCeDCRScrutiny";
 import OCUploadPlanDiagram from "./pageComponents/OCUploadPlanDiagram";
+import OCBasicDetails from "./pageComponents/OCBasicDetails";
 
 import LicenseType from "./pageComponents/LicenseType";
 import LicenseDetails from "./pageComponents/LicenseDetails";
@@ -89,7 +90,8 @@ const componentsToRegister = {
   LicenseDetails,
   CorrospondenceAddress,
   PermanentAddress,
-  StakeholderDocuments
+  StakeholderDocuments,
+  OCBasicDetails
 }
 
 export const initOBPSComponents = () => {

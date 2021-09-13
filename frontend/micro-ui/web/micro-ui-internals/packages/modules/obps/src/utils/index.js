@@ -80,15 +80,20 @@ export const getunitforBPA = (units) => {
   return unit;
 }
 
-export const convertToBPAObject = (data) => {
+export const convertToBPAObject = (data, isOCBPA = false) => {
 
-  data.landInfo.owners.map((owner,index) => {
-    data.landInfo.owners[index].gender=owner?.gender?.code;
-  });
+  if(isOCBPA) {
+    data.landInfo = data.landInfo
+  } else {
+    data.landInfo.owners.map((owner,index) => {
+      data.landInfo.owners[index].gender=owner?.gender?.code;
+    });
+  
+    data.landInfo.address.city=data?.landInfo?.address?.city?.code;
+  
+    data.landInfo.unit=getunitforBPA(data?.landInfo?.unit);
+  }
 
-  data.landInfo.address.city=data?.landInfo?.address?.city?.code;
-
-  data.landInfo.unit=getunitforBPA(data?.landInfo?.unit);
   let formData={
     "BPA":{
         "id": data?.id,

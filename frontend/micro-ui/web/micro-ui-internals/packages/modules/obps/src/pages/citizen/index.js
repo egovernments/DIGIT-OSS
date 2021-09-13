@@ -9,6 +9,7 @@ import BPACitizenHomeScreen from "./home";
 import StakeholderRegistration from "./StakeholderRegistration";
 import MyApplication from "./MyApplication";
 import ApplicationDetails from "./ApplicationDetail";
+import OCBuildingPermit from "./OCBuildingPermit";
 
 
 const App = ({ path }) => {
@@ -26,10 +27,12 @@ const App = ({ path }) => {
       <PrivateRoute path={`${path}/home`} component={BPACitizenHomeScreen} />
         <PrivateRoute path={`${path}/edcrscrutiny/apply`} component={CreateEDCR} />   
         <PrivateRoute path={`${path}/edcrscrutiny/oc-apply`} component={CreateOCEDCR} />   
-        <PrivateRoute
+        <PrivateRoute path={`${path}/bpa/building_plan_scrutiny/new_construction`} component={NewBuildingPermit} />   
+        <PrivateRoute path={`${path}/bpa/building_oc_plan_scrutiny/new_construction`} component={OCBuildingPermit} />   
+        {/* <PrivateRoute
           path={`${path}/bpa/${applicationType}/${serviceType}`}
           component={NewBuildingPermit}
-        />  
+        />   */}
         <PrivateRoute path={`${path}/stakeholder/apply`} component={StakeholderRegistration} />       
         <PrivateRoute path={`${path}/my-applications`} component={MyApplication} />
         <PrivateRoute path={`${path}/stakeholder/:id`} component={ApplicationDetails} />

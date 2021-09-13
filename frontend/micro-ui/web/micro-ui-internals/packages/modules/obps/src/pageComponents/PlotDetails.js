@@ -8,7 +8,9 @@ const PlotDetails = ({ formData, onSelect, config }) => {
   const [holdingNumber, setHoldingNumber] = useState("");
   const [registrationDetails, setRegistrationDetails] = useState("");
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { data, isLoading } = Digit.Hooks.obps.useScrutinyDetails("pb.amritsar", formData?.data?.scrutinyNumber)
+  const checkingUrl = window.location.href.includes("building_oc_plan_scrutiny");
+  const state = Digit.ULBService.getStateId();
+  const { data, isLoading } = Digit.Hooks.obps.useScrutinyDetails(state, formData?.data?.scrutinyNumber)
   
   const handleSubmit = (data) => {
     onSelect(config?.key, { ...data });
@@ -20,7 +22,7 @@ const PlotDetails = ({ formData, onSelect, config }) => {
 
   return (
     <div>
-      <Timeline />
+      <Timeline flow= {checkingUrl ? "OCBPA" : ""}/>
       <FormStep config={config} onSelect={handleSubmit} childrenAtTheBottom={false} t={t} _defaultValues={formData?.data}>
         <StatusTable>
           <Row className="border-none" label={t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)} text={data?.planDetail?.planInformation?.plotArea} />

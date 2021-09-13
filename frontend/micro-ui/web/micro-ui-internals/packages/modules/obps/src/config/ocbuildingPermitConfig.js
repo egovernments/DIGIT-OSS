@@ -10,7 +10,7 @@ export const newConfig = [
       },
       {
         route: "basic-details",
-        component: "BasicDetails",
+        component: "OCBasicDetails",
         key: "data",
         nextStep: "plot-details",
       },
@@ -30,17 +30,13 @@ export const newConfig = [
           {
             label: "BPA_BOUNDARY_HOLDING_NO_LABEL",
             type: "text",
-            validation: {
-              // required: true,
-            },
+            validation: {},
             name: "holdingNumber"
           },
           {
             label: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL",
             type: "textarea",
-            validation: {
-              // required: true
-            },
+            validation: {},
             name: "registrationDetails"
           }
         ]
@@ -48,7 +44,7 @@ export const newConfig = [
       {
         route: "scrutiny-details",
         component: "ScrutinyDetails",
-        nextStep: "location",
+        nextStep: "document-details",
         hideInEmployee: true,
         key: "subOccupancy",
         texts: {
@@ -58,31 +54,6 @@ export const newConfig = [
           submitBarLabel: "CS_COMMON_NEXT",
           skipAndContinueText: "",
         },
-      },
-      {
-        route: "location",
-        component: "LocationDetails",
-        nextStep: "owner-details",
-        hideInEmployee: true,
-        key: "address",
-        texts: {
-          headerCaption: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
-          header: "BPA_NEW_TRADE_DETAILS_HEADER_DETAILS",
-          cardText: "",
-          submitBarLabel: "CS_COMMON_NEXT",
-          skipAndContinueText: "",
-        },
-      },
-      {
-        route: "owner-details",
-        component: "OwnerDetails",
-        nextStep: "document-details",
-        key: "owners",
-        texts: {
-          headerCaption: "BPA_OWNER_AND_DOCUMENT_DETAILS_LABEL",
-          header: "BPA_APPLICANT_DETAILS_HEADER",
-          submitBarLabel: "CS_COMMON_NEXT"
-        }
       },
       {
         route: "document-details",
