@@ -15,6 +15,8 @@ import org.egov.pgr.web.models.pgrV1.ServiceResponse;
 import org.egov.pgr.web.models.workflow.*;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -26,10 +28,17 @@ import static org.egov.pgr.util.PGRConstants.IMAGE_DOCUMENT_TYPE;
 import static org.egov.pgr.util.PGRConstants.PGR_BUSINESSSERVICE;
 import static org.egov.pgr.util.PGRConstants.PGR_MODULENAME;
 
+@ConditionalOnProperty(
+        value="migration.enabled",
+        havingValue = "true",
+        matchIfMissing = false)
 @Component
 @Slf4j
 public class MigrationService {
 
+
+    @Value("${pgr.statelevel.tenantid}")
+    private String statelevelTenantIdForMigration;
 
     @Autowired
     private MigrationUtils migrationUtils;
@@ -74,8 +83,8 @@ public class MigrationService {
 
     @PostConstruct
     private void setStatusToUUIDMap(){
-        this.statusToUUIDMap = migrationUtils.getStatusToUUIDMap(config.getTenantId());
-        this.serviceCodeToSLA = migrationUtils.getServiceCodeToSLAMap(config.getTenantId());
+        this.statusToUUIDMap = migrationUtils.getStatusToUUIDMap(statelevelTenantIdForMigration);
+        this.serviceCodeToSLA = migrationUtils.getServiceCodeToSLAMap(statelevelTenantIdForMigration);
     }
 
 
