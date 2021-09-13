@@ -101,13 +101,56 @@ public class ActionValidator {
     public void validateUpdateRequest(TradeLicenseRequest request,BusinessService businessService, List<TradeLicense> searchResult){
         validateDocumentsForUpdate(request);
         validateManualExpiration(request,searchResult);
+        validateCancellation(request, searchResult);
        // validateRole(request);
        // validateAction(request);
         validatePayAction(request);
         validateIds(request,businessService);
     }
 
-    private void validateManualExpiration(TradeLicenseRequest request, List <TradeLicense> searchResult) {
+    private void validateCancellation(TradeLicenseRequest request, List<TradeLicense> searchResult) {
+    	
+    	List<TradeLicense> licenses = request.getLicenses();
+    	
+    	Map<String,String> errorMap = new HashMap<>();
+		
+    	for (TradeLicense license : licenses) {
+        	List <TradeLicense> existingApplications = new ArrayList<TradeLicense>();
+        	
+        	for(TradeLicense searchedLicense : searchResult) {
+        		if(searchedLicense.getLicenseNumber().equalsIgnoreCase(license.getLicenseNumber())) {
+        			existingApplications.add(searchedLicense);
+        		}
+        	}
+        	
+        	existingApplications.sort((TradeLicense t1, TradeLicense t2) -> t2.getFinancialYear().compareTo(t1.getFinancialYear()));
+        	
+        	Boolean licenseFound = false;
+        	
+        	for(int i=0; i<existingApplications.size(); i++) {
+        		
+        		if(licenseFound) {
+        			break;
+        		}
+        		
+        		if(!existingApplications.get(i).getApplicationNumber().equalsIgnoreCase(license.getApplicationNumber()) && !existingApplications.get(i).getStatus().equalsIgnoreCase(STATUS_CANCELLED) ) {
+        			errorMap.put("INVALID_ACTION","Cannot cancel an application when later applications are in the workflow");
+        		}
+        		
+        		else if(existingApplications.get(i).getApplicationNumber().equalsIgnoreCase(license.getApplicationNumber())) {
+        			licenseFound = true;
+        		}
+        	}
+        	
+        }
+    	
+    	if(!errorMap.isEmpty()) {
+            throw new CustomException(errorMap);   
+    	}
+		
+	}
+
+	private void validateManualExpiration(TradeLicenseRequest request, List <TradeLicense> searchResult) {
     	
     	RequestInfo requestInfo = request.getRequestInfo();
         Boolean isCitizen = false;
@@ -129,24 +172,7 @@ public class ActionValidator {
         		}
         	}
         }
-                
-        for (TradeLicense license : licenses) {
-        	for(TradeLicense searchedLicense : searchResult) {
-        		if(license.getLicenseNumber()!=null && searchedLicense.getLicenseNumber()!=null && license.getLicenseNumber().equalsIgnoreCase(searchedLicense.getLicenseNumber())) {
-        			if(license.getApplicationType()!=null && license.getApplicationType().toString().equalsIgnoreCase(APPLICATION_TYPE_RENEWAL)) {
-        				if(searchedLicense.getFinancialYear()!=null && license.getFinancialYear()!=null && searchedLicense.getFinancialYear().compareToIgnoreCase(license.getFinancialYear())>0) {
-        					if(license.getAction()!=null && license.getAction().toString().equalsIgnoreCase(ACTION_MANUALLYEXPIRE)) {
-        						if(license.getApplicationNumber()!=null && searchedLicense.getApplicationNumber()!=null && !license.getApplicationNumber().equalsIgnoreCase(searchedLicense.getApplicationNumber())) {
-        							errorMap.put("INVALID_ACTION","Cannot manually expire a license while later renewal applications are in the workflow");
-        						}
-        					}
-        					
-        				}
-        			}
-        		}
-        	}
-        }
-         
+
             if(!errorMap.isEmpty())
                 throw new CustomException(errorMap);       
 		
