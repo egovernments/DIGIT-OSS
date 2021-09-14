@@ -7,7 +7,7 @@
     "@progress/kendo-react-conversational-ui": "3.17.0",
     "@progress/kendo-react-intl": "3.17.0",
     "@xstate/inspect": "^0.1.1",
-    "axios": "^0.21.1",
+    "axios": "^0.21.3",
     "marked": "^1.2.0",
     "pg-native": "^3.0.0",
     "prop-types": "^15.7.2",
