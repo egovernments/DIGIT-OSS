@@ -16,7 +16,7 @@ import Response from "./pages/employee/Events/NewEvent/Response";
 import Inbox from "./pages/employee/Events/Inbox";
 import EventForm from "./components/Events/EventForm";
 import SelectEventGeolocation from "./components/Events/SelectGeoLocation";
-
+import SelectToDate from "./components/Events/SelectToDate";
 import NotificationsAndWhatsNew from "./pages/citizen/NotificationsAndWhatsNew";
 import EventsListOnGround from "./pages/citizen/EventsListOnGround";
 import CitizenApp from "./pages/citizen";
@@ -144,6 +144,7 @@ const componentsToRegister = {
   EventDetails,
   EventForm,
   SelectEventGeolocation,
+  SelectToDate
 };
 
 export const initEngagementComponents = () => {

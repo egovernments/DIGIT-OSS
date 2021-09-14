@@ -1,0 +1,33 @@
+import React, { Fragment } from "react";
+import { TextInput, CardLabel, LabelFieldPair, Dropdown, Loader, LocationSearch, CardLabelError } from "@egovernments/digit-ui-react-components";
+import { Controller } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { isValid } from 'date-fns';
+
+const SelectToDate = ({ onSelect, config, formData, register, control, errors }) => {
+  const { t } = useTranslation();
+  const isValidDate = (date) => {
+    console.log(isValid(new Date(formData?.fromDate)), isValid(new Date(date)), new Date(formData?.fromDate) < new Date(date));
+    if (!isValid(new Date(formData?.fromDate)) || !isValid(new Date(date))) return false;
+    return new Date(formData?.fromDate) <= new Date(date);
+  }
+  return (
+    <Fragment>
+      <LabelFieldPair>
+        <CardLabel className="card-label-smaller">{`${t(`EVENTS_TO_DATE_LABEL`)} *`}</CardLabel>
+        <div className="field">
+          <Controller
+            control={control}
+            name="toDate"
+            rules={{ required: true, validate: { isValidDate: isValidDate }}}
+            render={({ onChange, value }) => <TextInput type="date" isRequired={true} onChange={onChange} value={value} />}
+          />
+          {errors && errors?.toDate && errors?.toDate?.type === "required" && <CardLabelError>{t(`EVENTS_TO_DATE_ERROR_REQUIRED`)}</CardLabelError>}
+          {errors && errors?.toDate && errors?.toDate?.type === "isValidDate" && <CardLabelError>{t(`EVENTS_TO_DATE_ERROR_INVALID`)}</CardLabelError>}
+        </div>
+      </LabelFieldPair>
+    </Fragment>
+  )
+};
+
+export default SelectToDate;

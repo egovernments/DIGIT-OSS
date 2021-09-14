@@ -38,17 +38,11 @@ export const config = [
         },
       },
       {
-        type: "date",
-        label: "EVENTS_TO_DATE_LABEL",
-        isMandatory: true,
-        populators: {
-          name: "toDate",
-          className: "fullWidth",
-          validation: {
-            required: true,
-          },
-          error: "EVENTS_TO_DATE_ERROR_REQUIRED",
-        },
+        type: "form",
+        key: "SelectToDate",
+        withoutLabel: true,
+        component: "SelectToDate",
+        key: "toDate",
       },
       {
         type: "time",

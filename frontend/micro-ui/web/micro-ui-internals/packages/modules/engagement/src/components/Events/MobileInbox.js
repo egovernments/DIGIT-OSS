@@ -1,5 +1,5 @@
 import React from "react";
-import { format } from "date-fns";
+import { format, isValid } from "date-fns";
 import ApplicationCard from "./ApplicationCard";
 import EventLink from "./EventLink";
 
@@ -10,9 +10,11 @@ const MobileInbox = ({ data, t, searchFields, searchParams, onFilterChange, onSe
     return data?.
     filter(event =>
       (searchParams?.eventStatus?.length > 0 ? searchParams?.eventStatus?.includes(event.status) : true) &&
-      (searchParams?.eventName ? event.name?.startsWith(searchParams?.eventName) : true) &&
+      (searchParams?.eventName ? event.name?.toUpperCase().startsWith(searchParams?.eventName?.toUpperCase()) : true) &&
       (searchParams?.ulb?.code ? event.tenantId === searchParams?.ulb?.code : true) &&
-      (searchParams?.eventCategory ? event.eventCategory === searchParams?.eventCategory?.code : true))
+      (searchParams?.eventCategory ? event.eventCategory === searchParams?.eventCategory?.code : true) &&
+      (isValid(searchParams?.range?.startDate) ? event.eventDetails?.fromDate >= new Date(searchParams?.range?.startDate).getTime() : true) &&
+      (isValid(searchParams?.range?.endDate) ? event.eventDetails?.toDate <= new Date(searchParams?.range?.endDate).getTime() : true))
     .map((event) => {
       return {
         [t("EVENTS_EVENT_NAME_LABEL")]: event?.name,
