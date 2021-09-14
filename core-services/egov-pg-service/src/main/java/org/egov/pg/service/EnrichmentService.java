@@ -102,6 +102,7 @@ public class EnrichmentService {
         newTxn.setConsumerCode(currentTxnStatus.getConsumerCode());
         newTxn.setTxnStatusMsg(currentTxnStatus.getTxnStatusMsg());
         newTxn.setReceipt(currentTxnStatus.getReceipt());
+        newTxn.setModule(currentTxnStatus.getModule());
 
     }
 
