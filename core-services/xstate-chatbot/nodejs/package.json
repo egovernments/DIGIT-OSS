@@ -10,7 +10,7 @@
     "license": "ISC",
     "dependencies": {
         "JSONPath": "^0.11.2",
-        "axios": "^0.18.1",
+        "axios": "^0.21.3",
         "body-parser": "^1.18.3",
         "express": "^4.16.4",
         "express-cluster": "0.0.5",
