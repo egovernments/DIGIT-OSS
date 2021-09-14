@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { format } from "date-fns";
+import { format, isValid } from "date-fns";
 import { Header } from "@egovernments/digit-ui-react-components";
 import DesktopInbox from "../../../../components/Events/DesktopInbox";
 import MobileInbox from "../../../../components/Events/MobileInbox";
@@ -10,12 +10,12 @@ const Inbox = ({ tenants }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [pageSize, setPageSize] = useState(10);
   const [pageOffset, setPageOffset] = useState(0);
-  const [searchParams, setSearchParams] = Digit.Hooks.useSessionStorage("EVENTS_SEARCH", {
+  const [searchParams, setSearchParams] = useState({
     eventStatus: [],
     range: {
-      startDate: new Date(),
-      endDate: new Date(),
-      title: `${format(new Date(), "MMM d, yy")} - ${format(new Date(), "MMM d, yy")}`,
+      startDate: null,
+      endDate: new Date(""),
+      title: ""
     }
   });
   let isMobile = window.Digit.Utils.browser.isMobile();
@@ -40,9 +40,11 @@ const Inbox = ({ tenants }) => {
     // return rows;
     return rows?.filter(row =>
       (searchParams?.eventStatus?.length > 0 ? searchParams?.eventStatus?.includes(row.original?.status) : true) &&
-      (searchParams?.eventName ? row.original?.name?.startsWith(searchParams?.eventName) : true) &&
+      (searchParams?.eventName ? row.original?.name?.toUpperCase().startsWith(searchParams?.eventName.toUpperCase()) : true) &&
       (searchParams?.ulb?.code ? row.original.tenantId === searchParams?.ulb?.code : true) &&
-      (searchParams?.eventCategory ? row.original.eventCategory === searchParams?.eventCategory?.code : true))
+      (searchParams?.eventCategory ? row.original.eventCategory === searchParams?.eventCategory?.code : true) &&
+      (isValid(searchParams?.range?.startDate) ? row.original.eventDetails?.fromDate >= new Date(searchParams?.range?.startDate).getTime() : true) &&
+      (isValid(searchParams?.range?.endDate) ? row.original.eventDetails?.toDate <= new Date(searchParams?.range?.endDate).getTime() : true))
   }
 
   const getSearchFields = () => {

@@ -191,6 +191,7 @@ export const FormComposer = (props) => {
                     )}
                     <div style={field.withoutLabel ? { width: "100%", ...props?.fieldStyle } : {}} className="field">
                       {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
+                      {field?.description && <CardText style={{ fontSize: "14px", marginTop: "-24px" }}>{t(field?.description)}</CardText>}
                     </div>
                   </LabelFieldPair>
                   {field?.populators?.name && errors && errors[field?.populators?.name] && Object.keys(errors[field?.populators?.name]).length ? (

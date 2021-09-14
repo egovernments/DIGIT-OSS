@@ -1,4 +1,4 @@
-import { Banner, Card, Loader, CardText, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Banner, Card, Loader, CardText, SubmitBar, ActionBar } from "@egovernments/digit-ui-react-components";
 import { useQueryClient } from "react-query";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -45,9 +45,11 @@ const Response = (props) => {
         isLoading={mutation.isIdle || mutation.isLoading}
       />
       <CardText>{t(`ENGAGEMENT_EVENT_CREATED_MESSAGE`)}</CardText>
-      <Link to={"/digit-ui/employee"}>
-        <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
-      </Link>
+      <ActionBar>
+        <Link to={"/digit-ui/employee"}>
+          <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
+        </Link>
+      </ActionBar>
     </Card>
   )
 }

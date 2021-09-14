@@ -14,6 +14,7 @@ export const config = [
         type: "text",
         label: "EVENTS_DESCRIPTION_LABEL",
         isMandatory: true,
+        description: "EVENTS_DESCRIPTION_TEXT",
         populators: {
           name: "description",
           className: "fullWidth",

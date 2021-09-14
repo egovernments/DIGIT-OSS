@@ -40,10 +40,15 @@ const EventsBreadCrumb = ({ location }) => {
       show: location.pathname.includes("event/inbox") ? true : false,
     },
     {
-      path: "/digit-ui/employee/event/new-event",
+      path: "/digit-ui/employee/event/inbox/new-event",
       content: t("ES_EVENT_NEW_EVENT"),
-      show: location.pathname.includes("event/new-event") ? true : false,
+      show: location.pathname.includes("event/inbox/new-event") ? true : false,
     },
+    {
+      path: "/digit-ui/employee/event/response",
+      content: t("ES_EVENT_NEW_EVENT_RESPONSE"),
+      show: location.pathname.includes("event/response") ? true : false,
+    }
   ];
 
   return <BreadCrumb crumbs={crumbs} />;
@@ -57,10 +62,10 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
       <EventsBreadCrumb location={location} />
       <Switch>
         <Route exact path={`${path}/docs`} component={() => <Documents {...{ path }} />} />
-        <Route path={`${path}/event/inbox`}>
+        <Route path={`${path}/event/inbox`} exact>
           <Inbox tenants={tenants} />
         </Route>
-        <Route path={`${path}/event/new-event`}>
+        <Route path={`${path}/event/inbox/new-event`}>
           <NewEvent />
         </Route>
         <Route path={`${path}/event/response`} component={(props) => <Response {...props} />} />

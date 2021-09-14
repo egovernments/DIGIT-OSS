@@ -3,6 +3,8 @@ import { format } from "date-fns";
 import ApplicationCard from "./ApplicationCard";
 import EventLink from "./EventLink";
 
+const GetStatusCell = (value) => value === "Active" ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span> 
+
 const MobileInbox = ({ data, t, searchFields, searchParams, onFilterChange, onSearch, isLoading }) => {
   const getData = () => {
     return data?.
@@ -18,7 +20,7 @@ const MobileInbox = ({ data, t, searchFields, searchParams, onFilterChange, onSe
         [t("EVENTS_START_DATE_LABEL")]: format(new Date(event?.eventDetails?.fromDate), 'dd/MM/yyyy'),
         [t("EVENTS_END_DATE_LABEL")]: format(new Date(event?.eventDetails?.toDate), 'dd/MM/yyyy'),
         [t("EVENTS_POSTEDBY_LABEL")]: event?.user?.name,
-        [t("EVENTS_STATUS_LABEL")]: t(event?.status)
+        [t("EVENTS_STATUS_LABEL")]: GetStatusCell(t(event?.status))
       }
     })
   }

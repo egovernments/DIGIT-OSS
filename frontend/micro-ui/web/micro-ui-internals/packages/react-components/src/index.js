@@ -24,6 +24,7 @@ import CitizenInfoLabel from "./atoms/CitizenInfoLabel";
 import { CheckPoint, ConnectingCheckPoints } from "./atoms/ConnectingCheckPoints";
 import CustomButton from "./atoms/CustomButton";
 import DatePicker from "./atoms/DatePicker";
+import DateRange from "./molecules/DateRange";
 import DateWrap from "./atoms/DateWrap";
 import DisplayPhotos from "./atoms/DisplayPhotos";
 import Dropdown from "./atoms/Dropdown";
@@ -255,5 +256,6 @@ export {
   EventCalendar,
   TickMark,
   PDFSvg,
+  DateRange
 };
 

@@ -11,7 +11,8 @@ const Filter = ({ type = "desktop", onClose, onSearch, onFilterChange, searchPar
   const { isLoading, data } = Digit.Hooks.useCommonMDMS(state, "mseva", ["EventCategories"]);
 
   const clearAll = () => {
-    onFilterChange({ eventCategory: null, eventStatus: [] });
+    setLocalSearchParams({ eventCategory: null, eventStatus: [], range: { startDate: null, endDate: new Date(""), title: "" } })
+    onFilterChange({ eventCategory: null, eventStatus: [], range: { startDate: null, endDate: new Date(""), title: "" } });
     onClose?.();
   };
 
@@ -53,8 +54,8 @@ const Filter = ({ type = "desktop", onClose, onSearch, onFilterChange, searchPar
           )}
         </div>
         <div className="filter-label">{`${t(`EVENTS_CATEGORY_LABEL`)}`}</div>
-        <Dropdown option={data?.mseva?.EventCategories} optionKey="code" t={t} select={val => handleChange({ eventCategory: val })} />
-        {/* <DateRange t={t} values={searchParams?.range} onFilterChange={onFilterChange} labelClass="filter-label" /> */}
+        <Dropdown option={data?.mseva?.EventCategories} optionKey="code" t={t} selected={localSearchParams?.eventCategory} select={val => handleChange({ eventCategory: val })} />
+        <DateRange t={t} values={localSearchParams?.range} onFilterChange={handleChange} labelClass="filter-label" />
         <div>
           <Status onAssignmentChange={onStatusChange} searchParams={localSearchParams} />
         </div>
