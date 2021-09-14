@@ -157,7 +157,7 @@ import {
               onClick={() => routeTo(`${routeLink}/plot-details`)}
            />
     <StatusTable>
-          <Row className="border-none" label={t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.plotArea || t("CS_NA")} />
+          <Row className="border-none" textStyle={{marginLeft:"9px"}} label={t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.plotArea || t("CS_NA")} />
           <Row className="border-none" label={t(`BPA_BOUNDARY_PLOT_NO_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.plotNo || t("CS_NA")} />
           <Row className="border-none" label={t(`BPA_BOUNDARY_KHATA_NO_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.khataNo || t("CS_NA")}/>
           <Row className="border-none" label={t(`Holding Number`)} text={data?.holdingNumber || t("CS_NA")} />
@@ -166,12 +166,10 @@ import {
     </Card>
     <Card>
     <CardHeader>{t("BPA_STEPPER_SCRUTINY_DETAILS_HEADER")}</CardHeader>
-    <CardSubHeader>{t("BPA_EDCR_DETAILS")}</CardSubHeader>
+    <CardSubHeader>{t("BPA_EDCR_DETAILS")}:</CardSubHeader>
     <StatusTable  style={{border:"none"}}>
       <Row className="border-none" label={t("BPA_EDCR_NO_LABEL")} text={data?.scrutinyNumber?.edcrNumber}></Row>
-      <Row className="border-none"
-      label={t("BPA_UPLOADED_PLAN_DIAGRAM")}>
-      </Row>
+      <CardSubHeader>{t("BPA_UPLOADED_PLAN_DIAGRAM")}:</CardSubHeader>
       <LinkButton
         label={
         <div>
@@ -186,9 +184,7 @@ import {
           onClick={() => routeTo(datafromAPI?.updatedDxfFile)}
        />
        <p style={{ marginTop: "8px",textAlign:"Left" }}>{t(`Uploaded Plan.DXF`)}</p>
-      <Row className="border-none"
-      label={t("BPA_SCRUNTINY_REPORT_OUTPUT")} >
-      </Row>
+      <CardSubHeader>{t("BPA_SCRUNTINY_REPORT_OUTPUT")}:</CardSubHeader>
       <LinkButton
         label={
         <div>
@@ -212,13 +208,13 @@ import {
       <Row className="border-none" label={t("BPA_APPLICATION_HIGH_FROM_GROUND")} text={`${datafromAPI?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight} mtrs`}></Row>
       </StatusTable>
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
-      <CardSubHeader>{t("BPA_OCC_SUBOCC_HEADER")}</CardSubHeader>
+      <CardSubHeader>{t("BPA_OCC_SUBOCC_HEADER")}:</CardSubHeader>
       {datafromAPI?.planDetail?.blocks.map((block,index)=>(
       <div key={index}>
       <CardSubHeader>{t("BPA_BLOCK_SUBHEADER")} {index+1}</CardSubHeader>
       {/* <CardSectionHeader className="card-label-smaller">{t("BPA_SUB_OCCUPANCY_LABEL")}</CardSectionHeader> */}
       <StatusTable >
-      <Row className="border-none" label={t("BPA_SUB_OCCUPANCY_LABEL")} text={getBlockSubOccupancy(index)}></Row>
+      <Row className="border-none" label={t("BPA_SUB_OCCUPANCY_LABEL")} text={getBlockSubOccupancy(index) === ""?t("CS_NA"):getBlockSubOccupancy(index)}></Row>
       </StatusTable>
       <div style={{overflow:"scroll"}}>
       <Table
@@ -243,7 +239,7 @@ import {
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       </div>
       </div>))}
-      <CardSubHeader>{t("BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL")}</CardSubHeader>
+      <CardSubHeader>{t("BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL")}:</CardSubHeader>
       <StatusTable  style={{border:"none"}}>
       <Row className="border-none" label={t("BPA_APPLICATION_DEMOLITION_AREA_LABEL")} text={datafromAPI?.planDetail?.planInformation?.demolitionArea ? `${datafromAPI?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : t("CS_NA")}></Row>
       </StatusTable>
@@ -264,7 +260,7 @@ import {
               onClick={() => routeTo(`${routeLink}/location`)}
            />
       <StatusTable>
-          <Row className="border-none" label={t(`BPA_DETAILS_PIN_LABEL`)} text={address?.pincode || t("CS_NA")} />
+          <Row className="border-none" textStyle={{marginLeft:"9px"}} label={t(`BPA_DETAILS_PIN_LABEL`)} text={address?.pincode || t("CS_NA")} />
           <Row className="border-none" label={t(`BPA_CITY_LABEL`)} text={address?.city?.name || t("CS_NA")} />
           <Row className="border-none" label={t(`BPA_LOC_MOHALLA_LABEL`)} text={address?.locality?.name || t("CS_NA")} />
           <Row className="border-none" label={t(`BPA_DETAILS_SRT_NAME_LABEL`)} text={address?.street || t("CS_NA")} />
@@ -290,7 +286,7 @@ import {
         <div key={index}>
         {owners.owners.length > 1 && <CardSubHeader>{t("COMMON_OWNER")} {index+1}</CardSubHeader>}
         <StatusTable>
-        <Row className="border-none" label={t(`CORE_COMMON_NAME`)} text={ob?.name} />
+        <Row className="border-none" textStyle={index==0 && owners.owners.length == 1 ?{marginLeft:"9px"}:{}} label={t(`CORE_COMMON_NAME`)} text={ob?.name} />
         <Row className="border-none" label={t(`BPA_APPLICANT_GENDER_LABEL`)} text={t(ob?.gender?.i18nKey)} />
         <Row className="border-none" label={t(`CORE_COMMON_MOBILE_NUMBER`)} text={ob?.mobileNumber} /> 
         </StatusTable>
@@ -343,26 +339,27 @@ import {
            />
       {nocDocuments && nocDocuments?.NocDetails.map((noc, index) => (
         <div key={index}>
-        <CardSectionHeader>{t(`BPA_${noc?.nocType}_HEADER`)}</CardSectionHeader>
+        <CardSectionHeader>{t(`BPA_${noc?.nocType}_HEADER`)}:</CardSectionHeader>
         <StatusTable>
-        <Row className="border-none" label={t(`BPA_${noc?.nocType}_LABEL`)} text={noc?.applicationNo} />
+        <Row className="border-none" label={t(`BPA_${noc?.nocType}_LABEL`)} textStyle={{marginLeft:"10px"}} text={noc?.applicationNo} />
         <OBPSDocument value={value} Code={noc?.nocType?.split("_")[0]} index={index} isNOC={true}/> 
         </StatusTable>
         </div>
       ))}
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
-      <CardSubHeader>{t("BPA_SUMMARY_FEE_EST")}</CardSubHeader> 
+      <CardSubHeader>{t("BPA_SUMMARY_FEE_EST")}:</CardSubHeader> 
       <StatusTable>
       {paymentDetails?.Bill[0]?.billDetails[0]?.billAccountDetails.map((bill,index)=>(
         <div key={index}>
           <Row className="border-none" label={t(`${bill.taxHeadCode}`)} text={`₹ ${bill?.amount}`} />
         </div>
       ))}
+       <Row className="border-none" label={t(`BPA_COMMON_TOTAL_AMT`)} text={`₹ ${paymentDetails?.Bill?.[0]?.billDetails[0]?.amount || "0"}`} />
        </StatusTable>
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardHeader>{t("BPA_COMMON_TOTAL_AMT")}</CardHeader> 
       <CardHeader>₹ {paymentDetails?.Bill?.[0]?.billDetails[0]?.amount || "0"}</CardHeader> 
-      <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} />
+      <SubmitBar label={t("BPA_SEND_TO_CITIZEN_LABEL")} onSubmit={onSubmit} />
       </Card>
     </React.Fragment>
     );

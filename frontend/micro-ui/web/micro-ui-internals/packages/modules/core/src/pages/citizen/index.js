@@ -81,7 +81,7 @@ const Home = ({stateInfo, userDetails, CITIZEN, cityDetails, mobileView, handleU
 
             </Switch>
         </div>
-        <div className="citizen-home-footer">
+        <div className="citizen-home-footer" style={window.location.href.includes("citizen/obps")?{zIndex:"-1"}:{}}>
             <img
                 src={`${sourceUrl}/digit-footer.png`}
                 style={{ height: "1.2em", cursor: "pointer" }}
