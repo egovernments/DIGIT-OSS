@@ -9,7 +9,7 @@ const ReceiptCancelModal = ({ t, action, tenantId, closeModal, submitAction, app
   const [Reasons, setReasons] = useState([]);
   const [selectedReason, selecteReason] = useState("");
   const tenantIds = Digit.ULBService.getCurrentTenantId() || '';
-  const tenant = tenantIds.split && tenantIds.split('.')[0] || '';
+  const tenant = Digit.ULBService.getStateId();
   const { isLoading, isError, errors, data, ...rest } = Digit.Hooks.receipts.useReceiptsMDMS(
     tenant,
     "CancelReceiptReason"

@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "react-query";
 const useOBPSDocumentSearch = ({ application }, config = {}, Code, index) => {
   const client = useQueryClient();
   const tenantId = application?.tenantId || Digit.ULBService.getCurrentTenantId();
-  const tenant = tenantId.split(".")[0];
+  const tenant = Digit.ULBService.getStateId();
   let newDocs = [];
   if(Code === "NOC"){
     newDocs.push(config?.value?.nocDocuments?.nocDocuments[index]);

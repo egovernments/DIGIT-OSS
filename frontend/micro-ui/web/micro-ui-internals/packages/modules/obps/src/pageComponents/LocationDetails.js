@@ -11,7 +11,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
     const allCities = Digit.Hooks.obps.useTenants();
     const { pathname: url } = useLocation();
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const stateId = tenantId.split(".")[0];
+    const stateId = Digit.ULBService.getStateId();
     const [isOpen, setIsOpen] = useState(false);
     const [pincode, setPincode] = useState(currPincode || formData?.address?.pincode || "");
     const [geoLocation, setgeoLocation] = useState(formData?.address?.geolocation || "")

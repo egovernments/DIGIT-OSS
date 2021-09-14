@@ -29,7 +29,7 @@ export const SuccessfulPayment = (props) => {
 
   const printCertificate = async () => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const state = tenantId?.split(".")[0];
+    const state = Digit.ULBService.getStateId();
     const applicationDetails = await Digit.TLService.search({ applicationNumber: consumerCode, tenantId });
     const generatePdfKeyForTL = "tlcertificate";
 
@@ -41,7 +41,7 @@ export const SuccessfulPayment = (props) => {
   };
   const printReciept = async () => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const state = tenantId?.split(".")[0];
+    const state = Digit.ULBService.getStateId();
     const payments = await Digit.PaymentService.getReciept(tenantId, businessService, { receiptNumbers: receiptNumber });
     let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
 

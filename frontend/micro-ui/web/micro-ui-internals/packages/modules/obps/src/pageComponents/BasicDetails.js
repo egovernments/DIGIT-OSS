@@ -9,7 +9,7 @@ const BasicDetails = ({ formData, onSelect, config }) => {
   const [isDisabled, setIsDisabled] = useState(formData?.data?.scrutinyNumber ? true : false);
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const state = tenantId.split(".")[0];
+  const state = Digit.ULBService.getStateId();
   //TODO will change this is future
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(state, "BPA", ["RiskTypeComputation"]);
   const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId, scrutinyNumber, {

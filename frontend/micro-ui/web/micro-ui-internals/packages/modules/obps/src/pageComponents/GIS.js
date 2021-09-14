@@ -7,7 +7,7 @@ const GIS = ({ t, config, onSelect, formData = {},handleRemove,onSave }) => {
   const tenants = Digit.Hooks.tl.useTenants();
   const [pincodeServicability, setPincodeServicability] = useState(null);
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const onSkip = () => onSelect();
   const onChange = (code, location) => {
     setPincodeServicability(null);

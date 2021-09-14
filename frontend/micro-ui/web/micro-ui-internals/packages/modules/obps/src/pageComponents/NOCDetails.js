@@ -13,7 +13,7 @@ import Timeline from "../components/Timeline";
 
 const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const stateId = tenantId.split(".")[0];
+    const stateId = Digit.ULBService.getStateId();
     const [nocDocuments, setNocDocuments] = useState(formData?.nocDocuments?.nocDocuments || []);
     const [error, setError] = useState(null);
     const [nocTaxDocuments, setNocTaxDocuments] = useState([]);
@@ -197,7 +197,7 @@ function SelectDocument({
                 } else {
                     try {
                         setUploadedFile(null);
-                        const response = await Digit.UploadServices.Filestorage("PT", file, tenantId?.split(".")[0]);
+                        const response = await Digit.UploadServices.Filestorage("PT", file, Digit.ULBService.getStateId());
                         if (response?.data?.files?.length > 0) {
                             setUploadedFile(response?.data?.files[0]?.fileStoreId);
                         } else {

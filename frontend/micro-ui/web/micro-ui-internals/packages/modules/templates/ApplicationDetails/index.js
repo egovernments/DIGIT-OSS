@@ -13,7 +13,7 @@ import ApplicationDetailsActionBar from "./components/ApplicationDetailsActionBa
 
 const ApplicationDetails = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const state = tenantId.split(".")[0];
+  const state = Digit.ULBService.getStateId();
   const { t } = useTranslation();
   const history = useHistory();
   let { id: applicationNumber } = useParams();

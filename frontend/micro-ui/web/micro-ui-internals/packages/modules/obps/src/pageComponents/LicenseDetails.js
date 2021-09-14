@@ -16,7 +16,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     formData?.LicneseDetails?.PanNumber || ""
   );
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
 
   const { data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
 

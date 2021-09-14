@@ -8,7 +8,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     let isedittrade = window.location.href.includes("edit-application");
     let isrenewtrade = window.location.href.includes("renew-trade");
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const stateId = tenantId.split(".")[0];
+    const stateId = Digit.ULBService.getStateId();
     const [canmovenext, setCanmovenext] = useState(isedittrade || isrenewtrade ? false : true);
     const [ownershipCategoryList, setOwnershipCategoryList] = useState([]);
     const [genderList, setGenderList] = useState([]);

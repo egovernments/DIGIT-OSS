@@ -28,7 +28,7 @@ export const SelectPaymentType = (props) => {
   // const menu = ["AXIS"];
   const { consumerCode, businessService } = useParams();
   const tenantId = state?.tenantId || __tenantId || Digit.ULBService.getCurrentTenantId();
-  const stateTenant = tenantId.split(".")[0];
+  const stateTenant = Digit.ULBService.getStateId();
   const { control, handleSubmit } = useForm();
   const { data: menu, isLoading } = Digit.Hooks.useCommonMDMS(stateTenant, "DIGIT-UI", "PaymentGateway");
   const { data: paymentdetails, isLoading: paymentLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService }, {});

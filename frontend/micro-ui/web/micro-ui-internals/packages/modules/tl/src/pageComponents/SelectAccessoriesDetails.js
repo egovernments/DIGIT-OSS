@@ -25,7 +25,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
   const { pathname: url } = useLocation();
   const editScreen = url.includes("/modify-application/");
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
 
   const { isLoading, data: Data = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "AccessoryCategory");
   const [ accessories, SetAccessories] = useState([]);

@@ -5,7 +5,7 @@ import { stringReplaceAll } from "../utils";
 const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   let index = window.location.href.split("/").pop();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const [LicenseType, setLicenseType] = useState(formData?.LicenseType || "");
   const [ArchitectNo, setArchitectNo] = useState(formData?.ArchitectNo || null);
 

@@ -36,7 +36,7 @@ const SelectULB = ({userType,t,onSelect,setValue,config,data,formData,register,e
 
   const uploadFile = async () => {
       try {
-        const response = await Digit.UploadServices.Filestorage("engagement", file, tenantId?.split(".")[0]);
+        const response = await Digit.UploadServices.Filestorage("engagement", file, Digit.ULBService.getStateId());
         if (response?.data?.files?.length > 0) {
           setFileStoreId(response?.data?.files[0]?.fileStoreId);
         } else {

@@ -14,7 +14,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
     }
 
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const stateCode = tenantId.split(".")[0];
+    const stateCode = Digit.ULBService.getStateId();
     const moduleCode = "bpareg";
     const language = Digit.StoreData.getCurrentLanguage();
     const { data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });

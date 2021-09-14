@@ -6,7 +6,7 @@ import { getPattern, stringReplaceAll } from "../utils";
 const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner, isShowToast }) => {
     const { pathname: url } = useLocation();
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const stateId = tenantId.split(".")[0];
+    const stateId = Digit.ULBService.getStateId();
     const [citymoduleList, setCitymoduleList] = useState([]);
     const [name, setName] = useState(formData?.Scrutiny?.[0]?.applicantName);
     const [tenantIdData, setTenantIdData] = useState(formData?.Scrutiny?.[0]?.tenantIdData);
