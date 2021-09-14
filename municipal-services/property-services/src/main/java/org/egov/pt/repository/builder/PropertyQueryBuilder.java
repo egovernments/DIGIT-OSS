@@ -11,6 +11,7 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 @Component
 public class PropertyQueryBuilder {
@@ -163,7 +164,7 @@ public class PropertyQueryBuilder {
 				addToPreparedStatement(preparedStmtList, tenantIds);
 			}
 		} else if (tenantId != null) {
-			appendTenantIdToQuery(preparedStmtList, tenantId, builder);
+			appendTenantIdToQuery(preparedStmtList, tenantId, builder, "property");
 		}
 
 		if (criteria.getFromDate() != null)
@@ -252,17 +253,21 @@ public class PropertyQueryBuilder {
 			return addPaginationWrapper(withClauseQuery, preparedStmtList, criteria);
 	}
 
-	private void appendTenantIdToQuery(List<Object> preparedStmtList, String tenantId, StringBuilder builder) {
+	private void appendTenantIdToQuery(List<Object> preparedStmtList, String tenantId, StringBuilder builder, String tableName) {
 
 		int tenantLevel = tenantId.split("\\.").length;
 		if (tenantLevel <= config.getStateLevelTenantIdLength()) {
 
 			builder.append(AND_QUERY);
+			if (!StringUtils.isEmpty(tableName))
+				builder.append(tableName).append(".");
 			builder.append(" tenantId LIKE ? ");
 			preparedStmtList.add(tenantId + '%');
 		} else {
-			
+
 			builder.append(AND_QUERY);
+			if (!StringUtils.isEmpty(tableName))
+				builder.append(tableName).append(".");
 			builder.append(" tenantId= ? ");
 			preparedStmtList.add(tenantId);
 		}
@@ -287,7 +292,7 @@ public class PropertyQueryBuilder {
 				addToPreparedStatement(preparedStmtList, tenantIds);
 			}
 		} else if (criteria.getTenantId() != null) {
-			appendTenantIdToQuery(preparedStmtList, criteria.getTenantId(), builder);
+			appendTenantIdToQuery(preparedStmtList, criteria.getTenantId(), builder, "property");
 		}
 
 		if (criteria.getFromDate() != null) {
@@ -330,7 +335,7 @@ public class PropertyQueryBuilder {
 		query.append(")");
 
 		StringBuilder propertyIdQuery = new StringBuilder(PROEPRTY_ID_QUERY.replace(REPLACE_STRING, query));
-		appendTenantIdToQuery(preparedStmtList, tenantId, propertyIdQuery);
+		appendTenantIdToQuery(preparedStmtList, tenantId, propertyIdQuery, "");
 		return propertyIdQuery.toString();
 	}
 
