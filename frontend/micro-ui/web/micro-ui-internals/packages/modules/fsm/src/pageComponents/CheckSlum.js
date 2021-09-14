@@ -3,7 +3,7 @@ import { FormStep, RadioOrSelect } from "@egovernments/digit-ui-react-components
 
 const CheckSlum = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId?.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
 
   const [slumArea, setSlumArea] = useState(formData?.address?.slumArea);
 

@@ -69,7 +69,7 @@ const Response = (props) => {
   // console.log("find payment Roles here", paymentAccess)
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { state } = props.location;
 
   const mutation = state.key === "update" ? Digit.Hooks.fsm.useApplicationActions(tenantId) : Digit.Hooks.fsm.useDesludging(tenantId);

@@ -8,7 +8,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
     const userInfo = Digit.UserService.getUser();
     const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const stateCode = tenantId.split(".")[0];
+    const stateCode = Digit.ULBService.getStateId();
     const [stakeHolderRoles, setStakeholderRoles] = useState(false);
     const { data:stakeHolderDetails, isLoading:stakeHolderDetailsLoading } = Digit.Hooks.obps.useMDMS(stateCode, "StakeholderRegistraition", "TradeTypetoRoleMapping");
     const moduleCode = "bpareg";

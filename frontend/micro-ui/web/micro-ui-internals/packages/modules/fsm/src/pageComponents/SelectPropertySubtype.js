@@ -6,7 +6,7 @@ const SelectPropertySubtype = ({ config, onSelect, t, userType, formData }) => {
 
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { isLoading: propertySubtypesDataLoading, data: propertySubtypesData } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PropertySubtype", {
     select,
   });

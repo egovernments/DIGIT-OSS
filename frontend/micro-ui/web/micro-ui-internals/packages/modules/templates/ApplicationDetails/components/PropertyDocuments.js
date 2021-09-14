@@ -26,7 +26,7 @@ function PropertyDocuments({ documents }) {
   useEffect(() => {
     if(filesArray?.length)
    { 
-     Digit.UploadServices.Filefetch(filesArray, tenantId.split(".")[0]).then((res) => {
+     Digit.UploadServices.Filefetch(filesArray, Digit.ULBService.getStateId()).then((res) => {
       setPdfFiles(res?.data);
      });
     }

@@ -10,7 +10,7 @@ const SelectOwnershipProof = ({ t, config, onSelect, userType, formData }) => {
   const [dropdownValue, setDropdownValue] = useState(formData?.owners?.documents?.ProofOfOwnership?.documentType || null);
   //let dropdownData = [];
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { data: Documentsob = { } } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Documents");
   const docs = Documentsob?.PropertyTax?.Documents;
   const proofOfOwnership = Array.isArray(docs) && docs.filter((doc) => doc.code.includes("ADDRESSPROOF"));

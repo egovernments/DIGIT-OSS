@@ -5,7 +5,7 @@ const ProvideSubUsageType = ({ t, config, onSelect, userType, formData }) => {
   //let index = window.location.href.charAt(window.location.href.length - 1);
   let index = window.location.href.split("/").pop();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   //const [SubUsageType, setSelfOccupied] = useState(formData?.ProvideSubUsageType);
   let SubUsageType, setSelfOccupied;
   if (!isNaN(index)) {
