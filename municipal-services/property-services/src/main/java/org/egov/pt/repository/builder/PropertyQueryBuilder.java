@@ -22,7 +22,6 @@ public class PropertyQueryBuilder {
 	private static final String SELECT = "SELECT ";
 	private static final String INNER_JOIN = "INNER JOIN";
 	private static final String LEFT_JOIN  =  "LEFT OUTER JOIN";
-	private static final String AND_QUERY = " AND ";
 	
 	private static String PROEPRTY_AUDIT_QUERY = "select property from {schema}.eg_pt_property_audit where propertyid=?";
 
@@ -258,14 +257,14 @@ public class PropertyQueryBuilder {
 		int tenantLevel = tenantId.split("\\.").length;
 		if (tenantLevel <= config.getStateLevelTenantIdLength()) {
 
-			builder.append(AND_QUERY);
+			addClauseIfRequired(preparedStmtList, builder);
 			if (!StringUtils.isEmpty(tableName))
 				builder.append(tableName).append(".");
 			builder.append(" tenantId LIKE ? ");
 			preparedStmtList.add(tenantId + '%');
 		} else {
 
-			builder.append(AND_QUERY);
+			addClauseIfRequired(preparedStmtList, builder);
 			if (!StringUtils.isEmpty(tableName))
 				builder.append(tableName).append(".");
 			builder.append(" tenantId= ? ");
