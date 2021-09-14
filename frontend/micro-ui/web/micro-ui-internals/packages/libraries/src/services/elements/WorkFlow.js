@@ -50,7 +50,9 @@ export const WorkflowService = {
     // console.log(Digit);
     const workflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
     const applicationProcessInstance = cloneDeep(workflow?.ProcessInstances);
-    const businessServiceResponse = (await Digit.WorkflowService.init(tenantId, moduleCode))?.BusinessServices[0]?.states;
+    const getLocationDetails = window.location.href.includes("obps/stakeholder");
+    const moduleCodeData = getLocationDetails ? applicationProcessInstance?.[0]?.businessService : moduleCode;
+    const businessServiceResponse = (await Digit.WorkflowService.init(tenantId, moduleCodeData))?.BusinessServices[0]?.states;
     if (workflow && workflow.ProcessInstances) {
       const processInstances = workflow.ProcessInstances;
       const nextStates = processInstances[0]?.nextActions.map((action) => ({ action: action?.action, nextState: action.nextState }));

@@ -28,12 +28,29 @@ const ApplicationDetail = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = tenantId?.split('.')[0]
   const [appDetails, setAppDetails] = useState({});
+  const [showToast, setShowToast] = useState(null);
+
   const { isLoading, data: applicationDetails } = Digit.Hooks.obps.useLicenseDetails(state, { applicationNumber: id, tenantId: state }, {});
+  
+  const {
+    isLoading: updatingApplication,
+    isError: updateApplicationError,
+    data: updateResponse,
+    error: updateError,
+    mutate,
+  } = Digit.Hooks.obps.useBPAREGApplicationActions(tenantId);
+
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
-    tenantId: tenantId,
+    tenantId: tenantId?.split('.')[0],
     id: id,
-    moduleCode: "OBPS",
+    moduleCode: "BPAREG",
   });
+
+  const closeToast = () => {
+    setShowToast(null);
+  };
+
+
   useEffect(() => {
     if (applicationDetails) {
       const fileStoresIds = applicationDetails?.applicationData?.tradeLicenseDetail?.applicationDocuments.map(document => document?.fileStoreId);
@@ -55,9 +72,13 @@ const ApplicationDetail = () => {
         isLoading={isLoading}
         isDataLoading={isLoading}
         applicationData={appDetails?.applicationData}
+        mutate={mutate}
         workflowDetails={workflowDetails}
-        businessService={"OBPS"}
-        moduleCode="OBPS"
+        businessService={workflowDetails?.data?.applicationBusinessService ? workflowDetails?.data?.applicationBusinessService : applicationDetails?.applicationData?.businessService}
+        moduleCode="BPAREG"
+        showToast={showToast}
+        setShowToast={setShowToast}
+        closeToast={closeToast}
         timelineStatusPrefix={"WF_NEWTL_"}
       />
     </div>
