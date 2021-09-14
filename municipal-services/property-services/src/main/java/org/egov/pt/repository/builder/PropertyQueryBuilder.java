@@ -146,6 +146,7 @@ public class PropertyQueryBuilder {
 		if(isEmpty)
 			throw new CustomException("EG_PT_SEARCH_ERROR"," No criteria given for the property search");
 
+		String tenantId = criteria.getTenantId();
 		StringBuilder builder;
 
 		if(onlyIds)
@@ -153,26 +154,18 @@ public class PropertyQueryBuilder {
 		else
 			builder = new StringBuilder(QUERY);
 
-		Boolean appendAndQuery = false;
-		if(isPlainSearch)
-		{
+		if (isPlainSearch) {
+
 			Set<String> tenantIds = criteria.getTenantIds();
-			if(!CollectionUtils.isEmpty(tenantIds))
-			{
-				addClauseIfRequired(preparedStmtList,builder);
+			if (!CollectionUtils.isEmpty(tenantIds)) {
+				addClauseIfRequired(preparedStmtList, builder);
 				builder.append("property.tenantid IN (").append(createQuery(tenantIds)).append(")");
-				addToPreparedStatement(preparedStmtList,tenantIds);
+				addToPreparedStatement(preparedStmtList, tenantIds);
 			}
+		} else if (tenantId != null) {
+			appendTenantIdToQuery(preparedStmtList, tenantId, builder);
 		}
-		else
-		{
-			if(criteria.getTenantId()!=null)
-			{
-				addClauseIfRequired(preparedStmtList,builder);
-				builder.append("property.tenantid=?");
-				preparedStmtList.add(criteria.getTenantId());
-			}
-		}
+
 		if (criteria.getFromDate() != null)
 		{
 			addClauseIfRequired(preparedStmtList,builder);
@@ -259,6 +252,22 @@ public class PropertyQueryBuilder {
 			return addPaginationWrapper(withClauseQuery, preparedStmtList, criteria);
 	}
 
+	private void appendTenantIdToQuery(List<Object> preparedStmtList, String tenantId, StringBuilder builder) {
+
+		int tenantLevel = tenantId.split("\\.").length;
+		if (tenantLevel <= config.getStateLevelTenantIdLength()) {
+
+			builder.append(AND_QUERY);
+			builder.append(" tenantId LIKE ? ");
+			preparedStmtList.add(tenantId + '%');
+		} else {
+			
+			builder.append(AND_QUERY);
+			builder.append(" tenantId= ? ");
+			preparedStmtList.add(tenantId);
+		}
+	}
+
 
 	public String getPropertyQueryForBulkSearch(PropertyCriteria criteria, List<Object> preparedStmtList,Boolean isPlainSearch) {
 
@@ -269,44 +278,31 @@ public class PropertyQueryBuilder {
 			throw new CustomException("EG_PT_SEARCH_ERROR"," No propertyid or uuid given for the property Bulk search");
 
 		StringBuilder builder = new StringBuilder(QUERY);
-		Boolean appendAndQuery = false;
-		if(isPlainSearch)
-		{
+		
+		if (isPlainSearch) {
 			Set<String> tenantIds = criteria.getTenantIds();
-			if(!CollectionUtils.isEmpty(tenantIds))
-			{
-				addClauseIfRequired(preparedStmtList,builder);
+			if (!CollectionUtils.isEmpty(tenantIds)) {
+				addClauseIfRequired(preparedStmtList, builder);
 				builder.append("property.tenantid IN (").append(createQuery(tenantIds)).append(")");
-				addToPreparedStatement(preparedStmtList,tenantIds);
+				addToPreparedStatement(preparedStmtList, tenantIds);
 			}
+		} else if (criteria.getTenantId() != null) {
+			appendTenantIdToQuery(preparedStmtList, criteria.getTenantId(), builder);
 		}
-		else
-		{
-			if(criteria.getTenantId()!=null)
-			{
-				addClauseIfRequired(preparedStmtList,builder);
-				builder.append("property.tenantid=?");
-				preparedStmtList.add(criteria.getTenantId());
-			}
-		}
-		if (criteria.getFromDate() != null)
-		{
-			addClauseIfRequired(preparedStmtList,builder);
-			// If user does NOT specify toDate, take today's date as the toDate by default
+
+		if (criteria.getFromDate() != null) {
+			
+			addClauseIfRequired(preparedStmtList, builder);
+			/*
+			 * If user does NOT specify toDate, take today's date as the toDate by default
+			 */
 			if (criteria.getToDate() == null)
-			{
 				criteria.setToDate(Instant.now().toEpochMilli());
-			}
 			builder.append("property.createdTime BETWEEN ? AND ?");
 			preparedStmtList.add(criteria.getFromDate());
 			preparedStmtList.add(criteria.getToDate());
-		}
-		else
-		{
-			if(criteria.getToDate()!=null)
-			{
-				throw new CustomException("INVALID SEARCH", "From Date should be mentioned first");
-			}
+		} else if (criteria.getToDate() != null) {
+			throw new CustomException("INVALID SEARCH", "From Date should be mentioned first");
 		}
 
 		Set<String> propertyIds = criteria.getPropertyIds();
@@ -334,21 +330,7 @@ public class PropertyQueryBuilder {
 		query.append(")");
 
 		StringBuilder propertyIdQuery = new StringBuilder(PROEPRTY_ID_QUERY.replace(REPLACE_STRING, query));
-
-		int tenantLevel = tenantId.split("\\.").length;
-		
-		if(tenantLevel <= config.getStateLevelTenantIdLength()){
-			
-			propertyIdQuery.append(AND_QUERY);
-			propertyIdQuery.append(" tenantId LIKE ? ");
-			preparedStmtList.add(tenantId + '%');
-		}
-		else{
-			propertyIdQuery.append(AND_QUERY);
-			propertyIdQuery.append(" tenantId= ? ");
-			preparedStmtList.add(tenantId);
-		}
-
+		appendTenantIdToQuery(preparedStmtList, tenantId, propertyIdQuery);
 		return propertyIdQuery.toString();
 	}
 
