@@ -105,7 +105,8 @@ export const httpRequest = async (
   ignoreTenantId = false,
   isGetMethod = false
 ) => {
-  const tenantId = getTenantId() || commonConfig.tenantId;
+  /* const tenantId = getTenantId() || commonConfig.tenantId; */
+  const tenantId = commonConfig.tenantId;
   let apiError = "Api Error";
 
   if (headers)
