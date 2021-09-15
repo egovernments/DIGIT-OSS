@@ -46,6 +46,7 @@ public class SurveyRowMapper implements ResultSetExtractor<List<SurveyEntity>>{
                         .endDate(rs.getLong("sendDate"))
                         .postedBy(rs.getString("spostedby"))
                         .collectCitizenInfo(rs.getBoolean("scollectCitizenInfo"))
+                        .active(rs.getBoolean("sactive"))
                         .auditDetails(auditdetails)
                         .build();
             }

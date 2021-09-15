@@ -16,7 +16,7 @@ public class SurveyQueryBuilder {
     private static final String LEFT_JOIN  =  " LEFT OUTER JOIN ";
     private static final String AND_QUERY = " AND ";
 
-    private static final String SURVEY_SELECT_VALUES = " survey.uuid as suuid, survey.tenantid as stenantid, survey.title as stitle, survey.description as sdescription, survey.status as sstatus, survey.startdate as sstartdate, survey.enddate as senddate, survey.collectcitizeninfo as scollectcitizeninfo, survey.postedby as spostedby, survey.createdby as screatedby, survey.lastmodifiedby as slastmodifiedby, survey.createdtime as screatedtime, survey.lastmodifiedtime as slastmodifiedtime ";
+    private static final String SURVEY_SELECT_VALUES = " survey.uuid as suuid, survey.tenantid as stenantid, survey.title as stitle, survey.description as sdescription, survey.status as sstatus, survey.startdate as sstartdate, survey.enddate as senddate, survey.collectcitizeninfo as scollectcitizeninfo, survey.active as sactive, survey.postedby as spostedby, survey.createdby as screatedby, survey.lastmodifiedby as slastmodifiedby, survey.createdtime as screatedtime, survey.lastmodifiedtime as slastmodifiedtime ";
 
     private static final String QUESTION_SELECT_VALUES = " question.uuid as quuid, question.surveyid as qsurveyid, question.questionstatement as qstatement, question.options as qoptions, question.status as qstatus, question.type as qtype, question.required as qrequired, question.createdby as qcreatedby, question.lastmodifiedby as qlastmodifiedby, question.createdtime as qcreatedtime, question.lastmodifiedtime as qlastmodifiedtime ";
 
@@ -54,6 +54,10 @@ public class SurveyQueryBuilder {
             query.append(" survey.uuid = ? ");
             preparedStmtList.add(criteria.getUuid());
         }
+        // Fetch surveys which have NOT been soft deleted
+        addClauseIfRequired(query, preparedStmtList);
+        query.append(" survey.active = ? ");
+        preparedStmtList.add(Boolean.TRUE);
 
         return query.toString();
     }

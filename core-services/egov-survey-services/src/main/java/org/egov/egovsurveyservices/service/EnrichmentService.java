@@ -21,7 +21,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import static org.egov.egovsurveyservices.utils.SurveyServiceConstants.INACTIVE;
+import static org.egov.egovsurveyservices.utils.SurveyServiceConstants.*;
 
 
 @Service
@@ -30,8 +30,8 @@ public class EnrichmentService {
 
     public void enrichSurveyEntity(SurveyRequest surveyRequest) {
         SurveyEntity surveyEntity = surveyRequest.getSurveyEntity();
-        surveyEntity.setUuid(UUID.randomUUID().toString());
-        surveyEntity.setStatus(INACTIVE);
+        surveyEntity.setStatus(ACTIVE);
+        surveyEntity.setActive(Boolean.TRUE);
         surveyEntity.setAuditDetails(AuditDetails.builder()
                 .createdBy(surveyRequest.getRequestInfo().getUserInfo().getUuid())
                 .lastModifiedBy(surveyRequest.getRequestInfo().getUserInfo().getUuid())

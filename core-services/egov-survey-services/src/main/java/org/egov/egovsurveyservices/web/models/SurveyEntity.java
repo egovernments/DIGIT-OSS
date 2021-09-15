@@ -55,6 +55,9 @@ public class SurveyEntity {
     @JsonProperty("tenantId")
     private String tenantId;
 
+    @JsonProperty("active")
+    private Boolean active;
+
     @JsonProperty("answersCount")
     private Long answersCount;
 

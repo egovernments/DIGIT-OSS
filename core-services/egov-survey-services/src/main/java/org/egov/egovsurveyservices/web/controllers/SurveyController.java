@@ -77,7 +77,9 @@ public class SurveyController {
     @RequestMapping(value="/survey/response/_results", method = RequestMethod.POST)
     public ResponseEntity<AnswerResponse> responseSubmit(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
                                             @Valid @ModelAttribute SurveyResultsSearchCriteria criteria) {
+        ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true);
         AnswerResponse response = surveyService.fetchSurveyResults(requestInfoWrapper.getRequestInfo(), criteria);
+        response.setResponseInfo(responseInfo);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
