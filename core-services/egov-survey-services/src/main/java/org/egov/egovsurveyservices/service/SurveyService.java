@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.egovsurveyservices.producer.Producer;
 import org.egov.egovsurveyservices.repository.SurveyRepository;
+import org.egov.egovsurveyservices.utils.SurveyUtil;
 import org.egov.egovsurveyservices.validators.SurveyValidator;
 import org.egov.egovsurveyservices.web.models.*;
 import org.egov.tracer.model.CustomException;
@@ -34,6 +35,9 @@ public class SurveyService {
     @Autowired
     private SurveyRepository surveyRepository;
 
+    @Autowired
+    private SurveyUtil surveyUtil;
+
     public SurveyEntity createSurvey(SurveyRequest surveyRequest) {
 
         SurveyEntity surveyEntity = surveyRequest.getSurveyEntity();
@@ -45,15 +49,18 @@ public class SurveyService {
         // Validate survey uniqueness.
         surveyValidator.validateSurveyUniqueness(surveyEntity);
 
-        // Enrich survey entity
-        enrichmentService.enrichSurveyEntity(surveyRequest);
-
         // Persist survey if it passes all validations
         List<String> listOfTenantIds = new ArrayList<>(surveyEntity.getTenantIds());
-        listOfTenantIds.forEach(tenantId ->{
-            surveyEntity.setTenantId(tenantId);
+        Integer countOfSurveyEntities = listOfTenantIds.size();
+        List<String> listOfSurveyIds = surveyUtil.getIdList(surveyRequest.getRequestInfo(), listOfTenantIds.get(0), "ss.surveyid", "SY-[cy:yyyy-MM-dd]-[SEQ_EG_DOC_ID]", countOfSurveyEntities);
+        log.info(listOfSurveyIds.toString());
+        for(int i = 0; i < countOfSurveyEntities; i++){
+            surveyEntity.setUuid(listOfSurveyIds.get(i));
+            surveyEntity.setTenantId(listOfTenantIds.get(i));
+            // Enrich survey entity
+            enrichmentService.enrichSurveyEntity(surveyRequest);
             producer.push("save-ss-survey", surveyRequest);
-        });
+        }
 
         return surveyEntity;
     }
@@ -75,9 +82,12 @@ public class SurveyService {
 
         // 1. Validate whether userType is citizen or not
         surveyValidator.validateUserTypeForAnsweringSurvey(requestInfo);
-        // 2. Validate if citizen has already responded or not
+        // 2. Validate if survey for which citizen is responding exists
+        if(CollectionUtils.isEmpty(surveyRepository.fetchSurveys(SurveySearchCriteria.builder().uuid(answerEntity.getSurveyId()).build())))
+            throw new CustomException("EG_SY_DOES_NOT_EXIST_ERR", "The survey for which citizen responded does not exist");
+        // 3. Validate if citizen has already responded or not
         surveyValidator.validateWhetherCitizenAlreadyResponded(answerEntity, requestInfo.getUserInfo().getUuid());
-        // 3. Validate answers
+        // 4. Validate answers
         surveyValidator.validateAnswers(answerEntity);
         
         Boolean isAnonymousSurvey = fetchSurveyAnonymitySetting(answerEntity.getSurveyId());
@@ -139,6 +149,8 @@ public class SurveyService {
         surveyValidator.validateSurveyExistence(surveyEntity);
         // Validate whether usertype employee is trying to delete survey.
         surveyValidator.validateUserType(surveyRequest.getRequestInfo());
+
+        surveyEntity.setActive(Boolean.FALSE);
 
         producer.push("delete-ss-survey", surveyRequest);
 

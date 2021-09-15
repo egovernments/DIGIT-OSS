@@ -76,7 +76,7 @@ public class SurveyValidator {
             if(ObjectUtils.isEmpty(question.getQuestionStatement()))
                 throw new CustomException("EG_SY_QUESTION_STMT_NOT_PROVIDED_ERR", "Question statement was not provided for uuid - " + question.getUuid());
             // Options should NOT be provided for open ended question types
-            if(!question.getType().toString().equals("MULTIPLE_ANSWER_TYPE") || !question.getType().toString().equals("CHECKBOX_ANSWER_TYPE")) {
+            if(!question.getType().toString().equals("MULTIPLE_ANSWER_TYPE") && !question.getType().toString().equals("CHECKBOX_ANSWER_TYPE")) {
                 if (!CollectionUtils.isEmpty(question.getOptions()))
                     throw new CustomException("EG_SY_OPTIONS_ERR", "Options should not be provided for open ended question types");
             }
