@@ -470,14 +470,15 @@ public class UserService {
         Property property = request.getProperty();
 		RequestInfo requestInfo = request.getRequestInfo();
 		Role role = getCitizenRole();
-		List<AlternateMobileNumber> alternates = property.getAlternateMobileNumberDetails();
 
-		for (AlternateMobileNumber alternateNumber : alternates) {
+		List <OwnerInfo> owners = property.getOwners();
+
+		for (OwnerInfo owner: owners) {
 			OwnerInfo ownerFromRequest = new OwnerInfo();
-			ownerFromRequest.setId(alternateNumber.getId());
-			ownerFromRequest.setUuid(alternateNumber.getUuid());
-			ownerFromRequest.setName(alternateNumber.getName());
-			ownerFromRequest.setMobileNumber(alternateNumber.getMobileNumber());
+
+			ownerFromRequest.setUuid(owner.getUuid());
+			ownerFromRequest.setName(owner.getName());
+			ownerFromRequest.setMobileNumber(owner.getMobileNumber());
 
 			addUserDefaultFields(property.getTenantId(), role, ownerFromRequest);
 			UserDetailResponse userDetailResponse = userExists(ownerFromRequest, requestInfo);
@@ -485,22 +486,19 @@ public class UserService {
 			Map<String, OwnerInfo> ownerMapFromSearch = existingUsersFromService.stream().collect(Collectors.toMap(OwnerInfo::getUuid, Function.identity()));
 
 			if (CollectionUtils.isEmpty(existingUsersFromService)) {
-				
-				ownerFromRequest.setUserName(alternateNumber.getMobileNumber());
-				userDetailResponse = createUser(requestInfo, ownerFromRequest);
+
+				throw new CustomException("USER DOES NOT EXIST", "The owner to be updated does not exist");
 				
 			} 
 			
 			for (OwnerInfo existingUser : existingUsersFromService) {
-				if(existingUser.getMobileNumber().equals(ownerFromRequest.getMobileNumber())) {
+				if(existingUser.getUuid().equals(ownerFromRequest.getUuid())) {
+					ownerFromRequest.setAlternatemobilenumber(owner.getAlternatemobilenumber());
 					userDetailResponse = updateExistingUser(property, requestInfo, role, ownerFromRequest, existingUser);
 					break;
 				}
 			}
-			
-			alternateNumber.setId(userDetailResponse.getUser().get(0).getId()+(int)(Math.random() * 1000));
-			alternateNumber.setUuid(userDetailResponse.getUser().get(0).getUuid());
-			
+
 			// Assigns value of fields from user got from userDetailResponse to owner object
 			setOwnerFields(ownerFromRequest, userDetailResponse, requestInfo);
 		}

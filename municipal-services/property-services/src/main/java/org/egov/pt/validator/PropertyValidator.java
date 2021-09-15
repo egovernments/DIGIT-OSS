@@ -835,33 +835,39 @@ public class PropertyValidator {
 		if (!ifPropertyExists) {
 			throw new CustomException("EG_PT_PROPERTY_NOT_FOUND", "The property to be updated does not exist in the system");
 		}
+
+		List <String> alternateNumbersinRequest = new ArrayList<String>();
+		for(OwnerInfo owner : property.getOwners()) {
+			if(owner.getAlternatemobilenumber()!=null) {
+				alternateNumbersinRequest.add(owner.getAlternatemobilenumber());
+			}
+		}
 		
-		if (CollectionUtils.isEmpty(property.getAlternateMobileNumberDetails())) {
+		if(alternateNumbersinRequest.isEmpty()) {
 			throw new CustomException("EG_PT_ALTERNATE_NUMBERS_NOT_FOUND", "The alternate mobile number details are null");
 		}
 		
 		Property propertyFromSearch = propertiesFromSearchResponse.get(0);	
+
+		Map<String, String> uuidToAlternate = new HashMap<String,String>(); 
 		
-		List <AlternateMobileNumber> existingAlternates = propertyFromSearch.getAlternateMobileNumberDetails();
-		List <AlternateMobileNumber> newAlternates = property.getAlternateMobileNumberDetails();
-		List <OwnerInfo> owners = propertyFromSearch.getOwners();
-		
-		
-		if (!CollectionUtils.isEmpty(existingAlternates)) {
-			
-			for(AlternateMobileNumber existingEntry : existingAlternates) {
-				for(AlternateMobileNumber newEntry : newAlternates) {
-					if(existingEntry.getMobileNumber().equals(newEntry.getMobileNumber())) {
-						throw new CustomException("EG_PT_ALTERNATE_EXISTS", "The alternate mobile number already exists in the property");
-						}
-					}
-				}
+		for(OwnerInfo owner : propertyFromSearch.getOwners()) {
+			uuidToAlternate.put(owner.getUuid(), owner.getAlternatemobilenumber());
 		}
 		
-		for(OwnerInfo owner : owners) {
-			for(AlternateMobileNumber newEntry : newAlternates) {
-				if(newEntry.getMobileNumber().equals(owner.getMobileNumber())) {
-					throw new CustomException("EG_PT_ALTERNATE_EXISTS", "The alternate mobile number belongs to an owner of the property");
+		for(OwnerInfo owner : property.getOwners()) {
+			if(!uuidToAlternate.containsKey(owner.getUuid())) {
+				throw new CustomException("EG_PT_OWNER_DOES_NOT_EXIST", "New owner can not be added while updating alternate mobile number details");
+			}
+			
+			else {
+				
+				if(uuidToAlternate.get(owner.getUuid())!=null && uuidToAlternate.get(owner.getUuid()).equals(owner.getAlternatemobilenumber())) {
+					throw new CustomException("EG_PT_ALTERNATE_EXISTS", "The alternate mobile number already exists for the owner");
+				}
+				
+				if(owner.getMobileNumber().equals(owner.getAlternatemobilenumber())) {
+					throw new CustomException("EG_PT_ALTERNATE_EXISTS", "The alternate mobile number should not be same as primary number");
 				}
 			}
 		}
