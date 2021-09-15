@@ -45,7 +45,7 @@ export const FormComposer = (props) => {
   const fieldSelector = (type, populators, isMandatory, disable = false, component, config) => {
 
     const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
-    
+
     switch (type) {
       case "text":
       case "date":
@@ -118,24 +118,24 @@ export const FormComposer = (props) => {
           />
         );
 
-        case "form":
+      case "form":
         return (
           <form>
-              <Component
-                userType={"employee"}
-                t={t}
-                setValue={setValue}
-                onSelect={setValue}
-                config={config}
-                data={formData}
-                formData={formData}
-                register={register}
-                errors={errors}
-                setError={setError}
-                clearErrors={clearErrors}
-                formState={formState}
-                control={control}
-              />
+            <Component
+              userType={"employee"}
+              t={t}
+              setValue={setValue}
+              onSelect={setValue}
+              config={config}
+              data={formData}
+              formData={formData}
+              register={register}
+              errors={errors}
+              setError={setError}
+              clearErrors={clearErrors}
+              formState={formState}
+              control={control}
+            />
           </form>)
       default:
         return populators?.dependency !== false ? populators : null;
@@ -226,7 +226,7 @@ export const FormComposer = (props) => {
         {props.text && <CardText>{props.text}</CardText>}
         {formFields}
         {props.childrenAtTheBottom && props.children}
-        {props.submitInForm && <SubmitBar label={t(props.label)} submit="submit" className="w-full" />}
+        {props.submitInForm && <SubmitBar label={t(props.label)} submit={props.btnType === "button" ? null : "submit"} className="w-full" />}
         {props.secondaryActionLabel && (
           <div className="primary-label-btn" style={{ margin: "20px auto 0 auto" }} onClick={onSecondayActionClick}>
             {props.secondaryActionLabel}
@@ -234,7 +234,7 @@ export const FormComposer = (props) => {
         )}
         {!props.submitInForm && props.label && (
           <ActionBar>
-            <SubmitBar label={t(props.label)} submit="submit" disabled={isDisabled} />
+            <SubmitBar label={t(props.label)} submit={props.btnType === "button" ? null : "submit"}  disabled={isDisabled} />
           </ActionBar>
         )}
       </Card>

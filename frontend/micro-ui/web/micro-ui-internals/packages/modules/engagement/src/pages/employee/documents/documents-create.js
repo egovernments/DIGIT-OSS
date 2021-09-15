@@ -45,6 +45,7 @@ const Documents = () => {
       fieldStyle={{}}
       onFormValueChange={onFormValueChange}
       isDisabled={!canSubmit}
+      btnType={"button"}
     />
   );
 };

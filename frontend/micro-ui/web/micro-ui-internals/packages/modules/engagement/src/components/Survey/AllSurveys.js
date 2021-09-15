@@ -1,8 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom';
 
-const allSurveys = () => {
+const AllSurveys = () => {
     const { t } = useTranslation();
     const history = useHistory();
     return (
@@ -17,4 +17,4 @@ const allSurveys = () => {
     )
 }
 
-export default allSurveys
+export default AllSurveys;

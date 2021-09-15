@@ -3,25 +3,33 @@ import { Card, EventCalendar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const EventLink = () => {
+const EventLink = ({title, links, icon='calender'}) => {
   const { t } = useTranslation();
-  const links = [
-    {
-      text: t("ES_TITLE_NEW_EVENTS"),
-      link: "/digit-ui/employee/engagement/event/inbox/new-event",
-    }
-  ]
+ 
+  const GetLogo = () =>{ 
+  if(icon ==="calender"){
+    return(
+      <div className="header" style={{ justifyContent: "flex-start" }}>
+        <span className="logo" style={{ backgroundColor: "#fff" }}>
+          <EventCalendar />
+        </span>
+        {" "}
+        <span className="text">{t("EVENTS_EVENTS_HEADER")}</span>
+      </div>
+    );
+  }
 
-  const GetLogo = () => (
+  if(icon ==='survey'){
     <div className="header" style={{ justifyContent: "flex-start" }}>
-      <span className="logo" style={{ backgroundColor: "#fff" }}>
-        <EventCalendar />
-      </span>
-      {" "}
-      <span className="text">{t("EVENTS_EVENTS_HEADER")}</span>
-    </div>
-  );
-
+    <span className="logo" style={{ backgroundColor: "#fff" }}>
+      {/* <EventCalendar /> */}
+    </span>
+    {" "}
+    <span className="text">{t("SURVEYS_SURVEYS_HEADER")}</span>
+  </div>
+  }
+  
+  }
   return (
     <Card className="employeeCard filter inboxLinks">
       <div className="complaint-links-container">

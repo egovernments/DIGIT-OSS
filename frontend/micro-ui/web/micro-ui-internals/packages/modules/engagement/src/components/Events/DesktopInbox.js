@@ -10,7 +10,7 @@ const GetCell = (value) => <span className="">{value}</span>;
 
 const GetStatusCell = (value) => value === "Active" ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span> 
 
-const DesktopInbox = ({ isLoading, data, t, onSearch, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords }) => {
+const DesktopInbox = ({ isLoading, data, t, title, iconName, links, onSearch, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords }) => {
   const columns = React.useMemo(() => {
     return [
       {
@@ -77,7 +77,7 @@ const DesktopInbox = ({ isLoading, data, t, onSearch, globalSearch, searchFields
   return (
     <div className="inbox-container">
       <div className="filters-container">
-        <EventLink />
+        <EventLink title={title} icon={iconName} links={links} />
         <div>
           <Filter onFilterChange={onFilterChange} searchParams={searchParams} />
         </div>
