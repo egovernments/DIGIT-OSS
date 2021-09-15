@@ -25,6 +25,8 @@ import DocumentResponse from "./pages/employee/documents/response";
 import DocUpdate from "./pages/employee/documents/doc-update";
 import DocUpdateResponse from "./pages/employee/documents/update-response";
 import DocDeleteResponse from "./pages/employee/documents/delete-response";
+import CitizenSurveys from './pages/employee/surveys/CitizenSurveys';
+import CreateNewSurvey from './pages/employee/surveys/createNewSurvey';
 
 const EventsBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -73,6 +75,8 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
         <Route path={`${path}/documents/update`} component={(props) => <DocUpdate {...props} />} />
         <Route path={`${path}/documents/update-response`} component={(props) => <DocUpdateResponse {...props} />} />
         <Route path={`${path}/documents/delete-response`} component={(props) => <DocDeleteResponse {...props} />} />
+        <Route path={`${path}/surveys`} component={() => <CitizenSurveys/>}/>
+        <Route path={`${path}/surveys/create`} component={() => <CreateNewSurvey/>}/>
         {/* documents/update-response */}
         {/* <Redirect to={`${path}/docs`} /> */}
       </Switch>

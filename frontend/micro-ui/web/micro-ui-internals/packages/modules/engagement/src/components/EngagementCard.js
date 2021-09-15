@@ -19,6 +19,11 @@ const EngagementCard = () => {
     links: [
       {
         count: "-",
+        label: t("ES_TITLE_SURVEYS"),
+        link: `/digit-ui/employee/engagement/surveys`
+      },
+      {
+        count: "-",
         label: t("ES_TITLE_DOCS"),
         link: `/digit-ui/employee/engagement/docs`,
       },
