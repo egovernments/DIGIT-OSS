@@ -100,8 +100,7 @@ public class ActionRepository {
 	private String actionMaster;
 	@Value("${mdms.actionstest.path}")
 	private String actionTestPath;
-	@Value("${central.tenant.heirarchy}")
-	private Boolean isCentralTenant;
+
 
 	
 
@@ -555,9 +554,7 @@ public List<Action> getAllMDMSActions(ActionRequest actionRequest) throws JSONEx
 			MdmsCriteria actionmc = new MdmsCriteria();
 			 if(tenantid.contains(".")){
 				 String[] stateid = tenantid.split("\\.");
-				 if(!isCentralTenant)
-				 	actionmc.setTenantId(stateid[0]);
-				 else actionmc.setTenantId(stateid[0]+'.'+stateid[1]);
+				 actionmc.setTenantId(stateid[0]+'.'+stateid[1]);
 				 
 			 } else {
 				 actionmc.setTenantId(tenantid);
