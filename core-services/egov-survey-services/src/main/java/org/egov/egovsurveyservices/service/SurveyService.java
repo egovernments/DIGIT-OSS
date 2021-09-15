@@ -151,6 +151,7 @@ public class SurveyService {
         surveyValidator.validateUserType(surveyRequest.getRequestInfo());
 
         surveyEntity.setActive(Boolean.FALSE);
+        surveyEntity.setStatus(INACTIVE);
 
         producer.push("delete-ss-survey", surveyRequest);
 
