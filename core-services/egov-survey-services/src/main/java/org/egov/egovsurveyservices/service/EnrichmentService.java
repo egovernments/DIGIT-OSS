@@ -8,9 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
-import org.egov.egovsurveyservices.web.models.AuditDetails;
-import org.egov.egovsurveyservices.web.models.SurveyEntity;
-import org.egov.egovsurveyservices.web.models.SurveyRequest;
+import org.egov.egovsurveyservices.web.models.*;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -54,4 +52,22 @@ public class EnrichmentService {
         });
     }
 
+    public void enrichAnswerEntity(AnswerRequest answerRequest, Boolean isAnonymousSurvey) {
+        RequestInfo requestInfo = answerRequest.getRequestInfo();
+        AnswerEntity answerEntity = answerRequest.getAnswerEntity();
+        answerEntity.getAnswers().forEach(answer -> {
+            answer.setUuid(UUID.randomUUID().toString());
+            answer.setCitizenId(requestInfo.getUserInfo().getUuid());
+            answer.setAuditDetails(AuditDetails.builder()
+                    .createdBy(requestInfo.getUserInfo().getUuid())
+                    .lastModifiedBy(requestInfo.getUserInfo().getUuid())
+                    .createdTime(System.currentTimeMillis())
+                    .lastModifiedTime(System.currentTimeMillis())
+                    .build());
+            if(!isAnonymousSurvey){
+                answer.setEmailId(requestInfo.getUserInfo().getEmailId());
+                answer.setMobileNumber(requestInfo.getUserInfo().getMobileNumber());
+            }
+        });
+    }
 }

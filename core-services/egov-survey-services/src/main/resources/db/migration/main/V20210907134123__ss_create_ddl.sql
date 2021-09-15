@@ -21,6 +21,7 @@ CREATE TABLE eg_ss_question(
     surveyid character varying(128),
     questionStatement character varying(140),
     options character varying(2048),
+    type character varying(128),
     status character varying(128),
     required boolean,
     createdBy character varying(64),
@@ -34,8 +35,8 @@ CREATE TABLE eg_ss_question(
 CREATE TABLE eg_ss_answer(
     uuid character varying(128),
     questionid character varying(128),
+    surveyid character varying(128),
     answer character varying(2048),
-    status character varying(128),
     createdBy character varying(64),
     lastModifiedBy character varying(64),
     createdTime bigint,

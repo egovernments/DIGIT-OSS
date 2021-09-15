@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -53,5 +54,18 @@ public class SurveyEntity {
 
     @JsonProperty("tenantId")
     private String tenantId;
+
+    @JsonProperty("answersCount")
+    private Long answersCount;
+
+    public SurveyEntity addQuestionsItem(Question questionItem) {
+        if (this.questions == null) {
+            this.questions = new ArrayList<>();
+        }
+
+        if (null != questionItem)
+            this.questions.add(questionItem);
+        return this;
+    }
 
 }

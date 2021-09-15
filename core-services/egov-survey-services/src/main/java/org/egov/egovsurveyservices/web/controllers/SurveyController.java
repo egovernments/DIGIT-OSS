@@ -44,18 +44,41 @@ public class SurveyController {
     public ResponseEntity<SurveyResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
                                                    @Valid @ModelAttribute SurveySearchCriteria criteria) {
         //log.info(criteria.toString());
-        List<SurveyEntity> surveys = surveyService.searchSurveys(requestInfoWrapper.getRequestInfo(), criteria);
+        List<SurveyEntity> surveys = surveyService.searchSurveys(criteria);
         SurveyResponse response  = SurveyResponse.builder().surveyEntities(surveys).build();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @RequestMapping(value="/survey/_submit", method = RequestMethod.POST)
-    public ResponseEntity<SurveyResponse> search(@Valid @RequestBody AnswerRequest answerRequest) {
-        //log.info(criteria.toString());
-        //List<SurveyEntity> surveys = surveyService.searchSurveys(requestInfoWrapper.getRequestInfo(), criteria);
-        log.info(answerRequest.getAnswerEntity().toString());
-        SurveyResponse response  = SurveyResponse.builder().build();
-        return new ResponseEntity<>(response,HttpStatus.OK);
+    @RequestMapping(value="/survey/_update", method = RequestMethod.POST)
+    public ResponseEntity<SurveyResponse> update(@RequestBody @Valid SurveyRequest surveyRequest) {
+        //log.info(documentRequest.getDocumentEntity().toString());
+        SurveyEntity surveyEntity = surveyService.updateSurvey(surveyRequest);
+        ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(surveyRequest.getRequestInfo(), true);
+        SurveyResponse response = SurveyResponse.builder().surveyEntities(Collections.singletonList(surveyEntity)).responseInfo(responseInfo).build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/survey/_delete", method = RequestMethod.POST)
+    public ResponseEntity<?> delete(@RequestBody @Valid SurveyRequest surveyRequest) {
+        //log.info(documentRequest.getDocumentEntity().toString());
+        surveyService.deleteSurvey(surveyRequest);
+        ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(surveyRequest.getRequestInfo(), true);
+        return new ResponseEntity<>(responseInfo, HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/survey/response/_submit", method = RequestMethod.POST)
+    public ResponseEntity<AnswerResponse> responseSubmit(@Valid @RequestBody AnswerRequest answerRequest) {
+        surveyService.submitResponse(answerRequest);
+        ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(answerRequest.getRequestInfo(), true);
+        AnswerResponse response = AnswerResponse.builder().responseInfo(responseInfo).answers(answerRequest.getAnswerEntity().getAnswers()).build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/survey/response/_results", method = RequestMethod.POST)
+    public ResponseEntity<AnswerResponse> responseSubmit(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                            @Valid @ModelAttribute SurveyResultsSearchCriteria criteria) {
+        AnswerResponse response = surveyService.fetchSurveyResults(requestInfoWrapper.getRequestInfo(), criteria);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
