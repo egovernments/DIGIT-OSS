@@ -7,7 +7,7 @@ import store from "../ui-redux/store";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getAccessToken,
-  getLocale
+  getLocale,
   getTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
