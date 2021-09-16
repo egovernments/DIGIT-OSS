@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Redirect, Switch, useLocation, useRouteMatch, Route } from "react-router-dom";
 
-import Documents from "./pages/employee/documents/documents-create";
 
 import EngagementCard from "./components/EngagementCard";
 import EngagementDocSelectULB from "./components/EngagementDocsULB";
@@ -21,6 +20,7 @@ import NotificationsAndWhatsNew from "./pages/citizen/NotificationsAndWhatsNew";
 import EventsListOnGround from "./pages/citizen/EventsListOnGround";
 import CitizenApp from "./pages/citizen";
 import EventDetails from "./pages/citizen/EventsListOnGround/EventDetails";
+import DocumenetCreate from "./pages/employee/documents/documents-create";
 import DocumentResponse from "./pages/employee/documents/response";
 import DocUpdate from "./pages/employee/documents/doc-update";
 import DocUpdateResponse from "./pages/employee/documents/update-response";
@@ -61,7 +61,7 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
     <div className="ground-container">
       <EventsBreadCrumb location={location} />
       <Switch>
-        <Route exact path={`${path}/docs`} component={() => <Documents {...{ path }} />} />
+      <Route exact path={`${path}/documents/create`} component={() => <DocumenetCreate {...{ path }} />} />
         <Route path={`${path}/event/inbox`} exact>
           <Inbox tenants={tenants} />
         </Route>

@@ -147,8 +147,8 @@ const Table = ({
                         getCellProps(cell),
                       ])}
                     >
-                      {cell.column.link ? (
-                        <a style={{ color: "#1D70B8" }} href={cell.column.to}>
+                      {cell.attachment_link  ? (
+                        <a style={{ color: "#1D70B8" }} href={cell.attachment_link }>
                           {cell.render("Cell")}
                         </a>
                       ) : (
