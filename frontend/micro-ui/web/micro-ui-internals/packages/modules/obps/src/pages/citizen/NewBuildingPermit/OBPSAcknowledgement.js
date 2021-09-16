@@ -7,11 +7,11 @@ import {convertToNocObject,convertToBPAObject} from "../../../utils/index";
 const GetActionMessage = (props) => {
   const { t } = useTranslation();
   if (props.isSuccess) {
-    return !window.location.href.includes("edit-application") ? t("CS_BPA_APPLICATION_SUCCESS") : t("CS_PROPERTY_UPDATE_APPLICATION_SUCCESS");
+    return !window.location.href.includes("editApplication") ? t("CS_BPA_APPLICATION_SUCCESS") : t("CS_PROPERTY_UPDATE_APPLICATION_SUCCESS");
   } else if (props.isLoading) {
-    return !window.location.href.includes("edit-application") ? t("CS_BPA_APPLICATION_PENDING") : t("CS_PROPERTY_UPDATE_APPLICATION_PENDING");
+    return !window.location.href.includes("editApplication") ? t("CS_BPA_APPLICATION_PENDING") : t("CS_PROPERTY_UPDATE_APPLICATION_PENDING");
   } else if (!props.isSuccess) {
-    return !window.location.href.includes("edit-application") ? t("CS_BPA_APPLICATION_FAILED") : t("CS_PROPERTY_UPDATE_APPLICATION_FAILED");
+    return !window.location.href.includes("editApplication") ? t("CS_BPA_APPLICATION_FAILED") : t("CS_PROPERTY_UPDATE_APPLICATION_FAILED");
   }
 };
 
@@ -48,8 +48,8 @@ const OBPSAcknowledgement = ({ data, onSuccess }) => {
 
   useEffect(() => {
     try {
-      let tenantId = data?.address?.city ? data.address?.city?.code : tenantId;
-      data.tenantId = tenantId;
+      let tenantid = data?.address?.city ? data.address?.city?.code : tenantId;
+      data.tenantId = tenantid;
       let formdata ={};
       data?.nocDocuments?.NocDetails.map((noc) => {
         formdata = convertToNocObject(noc,data);

@@ -44,7 +44,9 @@ import {
         }
       );
 
-      let routeLink = `/digit-ui/citizen/obps/bpa/${additionalDetails?.applicationType.toLowerCase()}/${additionalDetails?.serviceType.toLowerCase()}`;
+      let isEditApplication = window.location.href.includes("editApplication");
+
+      let routeLink = !isEditApplication?`/digit-ui/citizen/obps/bpa/${additionalDetails?.applicationType.toLowerCase()}/${additionalDetails?.serviceType.toLowerCase()}`:`/digit-ui/citizen/obps/editApplication/bpa/${value?.tenantId}/${value?.applicationNo}`;
 
       const tableHeader = [
         {

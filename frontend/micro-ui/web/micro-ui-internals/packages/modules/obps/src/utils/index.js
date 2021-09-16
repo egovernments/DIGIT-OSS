@@ -43,8 +43,10 @@ export const convertToNocObject = (data,datafromflow) => {
                   "link": "",
                   "title": noc?.documentType,
                   "documentType": noc?.documentType,
+                  "id":noc?.id,
                   "additionalDetails": {
                   }})
+                  
   }) || [];
   formData.Noc.documents = doc;
   return formData;
@@ -53,6 +55,19 @@ export const convertToNocObject = (data,datafromflow) => {
 export const getDocumentforBPA = (docs) => {
 let document = [];
   docs && docs.map((ob) =>{
+    if(ob.id){
+      document.push({
+        "documentType": ob.documentType,
+        "fileStoreId": ob.fileStoreId,
+        "fileStore": ob.fileStoreId,
+        "fileName": "",
+        "fileUrl": "",
+        "additionalDetails": {
+        },
+        "id":ob.id,
+      })
+    }
+    else{
     document.push({
       "documentType": ob.documentType,
       "fileStoreId": ob.fileStoreId,
@@ -60,10 +75,46 @@ let document = [];
       "fileName": "",
       "fileUrl": "",
       "additionalDetails": {
-      }
+      },
     })
+  }
   });
   return document;
+}
+
+function getusageCategoryAPI(arr){
+  let usageCat = ""
+  arr.map((ob,i) => {
+      usageCat = usageCat + (i !==0?",":"") + ob.code;
+  });
+  return usageCat;
+}
+
+export const getBPAUnit = (data) =>{
+  let units=[];
+  let ob = data?.subOccupancy;
+  if(ob) {
+    let result = Object.entries(ob);
+  data?.landInfo?.unit.map((oldUnit,ind) => {
+    result.map((newunit,index)=>{
+      if(oldUnit.id && oldUnit.floorNo === newunit[0].split("_")[1])
+      {
+        units.push({...oldUnit,  usageCategory:getusageCategoryAPI(newunit[1])})
+      }
+      else{
+        units.push({
+            blockIndex:index,
+            floorNo:newunit[0].split("_")[1],
+            unitType:"Block",
+            usageCategory:getusageCategoryAPI(newunit[1]),
+        });
+      }
+    })
+  })   
+  }
+
+  return units;
+
 }
 
 export const getunitforBPA = (units) => {
@@ -78,6 +129,59 @@ export const getunitforBPA = (units) => {
     })
   })
   return unit;
+}
+
+export const getBPAOwners = (data) => {
+  let bpaownerarray = [];
+  data.landInfo.owners.map((oldowner) => {
+    data?.owners?.owners.map((newowner) => {
+      oldowner.gender = oldowner.gender.code?oldowner.gender.code:oldowner.gender;
+      newowner.gender = newowner.gender.code ?newowner.gender.code:newowner.gender;
+      if(oldowner.id === newowner.id)
+      {
+        if((oldowner.name !== newowner.name) || (oldowner.gender !== newowner.gender.code) || (oldowner.mobileNumber !== newowner.mobilenumber))
+        {
+        if (oldowner.name !== newowner.name)
+        {
+          oldowner.name = newowner.name;
+        }
+        if(oldowner.gender !== newowner.gender)
+        {
+          oldowner.gender = newowner.gender;
+        }
+        if(oldowner.mobileNumber !== newowner.mobilenumber)
+        {
+          oldowner.mobileNumber = newowner.mobileNumber;
+        }
+        let found = bpaownerarray.length > 0 ?bpaownerarray.some(el => el.id === oldowner.id):false;
+          if(!found)bpaownerarray.push(oldowner);
+      }
+        else
+        {
+          let found = bpaownerarray.length > 0 ? bpaownerarray.some(el => el.id === oldowner.id):false;
+          if(!found)bpaownerarray.push(oldowner);
+        }
+      }
+    })
+  })
+  data.landInfo.owners.map((oldowner) => {
+    let found = bpaownerarray.length > 0 ? bpaownerarray.some(el => el.id === oldowner.id):false;
+    if(!found)bpaownerarray.push({...oldowner,active:false});   
+  })
+  data?.owners?.owners.map((ob) => {
+    if(!ob.id)
+    {
+      bpaownerarray.push({
+              mobileNumber: ob.mobileNumber,
+              name: ob.name,
+              fatherOrHusbandName: "",
+              relationship: "",
+              dob: null,
+              gender: ob.gender.code,
+            });
+    }
+  })
+  return bpaownerarray;
 }
 
 export const convertToBPAObject = (data, isOCBPA = false) => {
@@ -104,12 +208,12 @@ export const convertToBPAObject = (data, isOCBPA = false) => {
         "riskType": data?.riskType,
         "businessService":data?.businessService,
         "landId": data?.landId,
-        "tenantId": data?.tenantId,
+        "tenantId": data?.tenantId || data?.address?.tenantId,
         "approvalDate": data?.approvalDate,
         "applicationDate": data?.applicationDate,
         "status": "INITIATED",
         "documents": getDocumentforBPA(data?.documents?.documents),
-        "landInfo": data?.landInfo,
+        "landInfo": {...data?.landInfo, owners:getBPAOwners(data), unit:getBPAUnit(data)},
         "workflow": {
           "action": "SEND_TO_CITIZEN",
           "assignes": null,
@@ -117,7 +221,7 @@ export const convertToBPAObject = (data, isOCBPA = false) => {
           "varificationDocuments": null
       },
       "auditDetails": data?.auditDetails,
-    "additionalDetails": null,
+    "additionalDetails": data?.additionalDetails,
     "applicationType": "BUILDING_PLAN_SCRUTINY",
     "serviceType": "NEW_CONSTRUCTION",
     "occupancyType": "A"
