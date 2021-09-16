@@ -79,7 +79,7 @@ func getZuulRoutes(s *v1.ServiceList) (r *[]Route) {
 			if val, ok := s.Annotations[sAnnotation]; ok {
 				path := fmt.Sprintf("%s", val)
 				serviceName := s.Name
-				serviceNameSpace = s.Namespace
+				serviceNameSpace := s.Namespace
 				replacedPath, ok := alternateRouteMap[path]
 				internalGatewayHost, _ := os.LookupEnv("INTERNAL_GATEWAY_HOST")
 				internalGatewayNameSpace, _ := os.LookupEnv("INTERNAL_GATEWAY_NAMESPACE")
