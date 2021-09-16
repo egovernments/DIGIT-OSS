@@ -28,7 +28,7 @@ public class Producer {
 				updatedTopic = tenants[1].concat("-").concat(topic);
 		}
 
-		kafkaTemplate.send(topic, value);
+		kafkaTemplate.send(updatedTopic, value);
 	}
 
 }
