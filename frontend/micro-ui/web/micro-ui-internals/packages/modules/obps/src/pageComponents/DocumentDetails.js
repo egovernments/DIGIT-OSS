@@ -152,6 +152,7 @@ function SelectDocument({
                         fileStoreId: uploadedFile,
                         documentUid: uploadedFile,
                         fileName: file?.name || "",
+                        id:documents? documents.find(x => x.documentType === selectedDocument?.code)?.id:undefined,
                     },
                 ];
             });

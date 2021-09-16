@@ -34,7 +34,7 @@ class PropertyInfoCard extends Component {
                     if (item) {
                       return (
                         <div>
-                          <div className="col-sm-3 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
+                          <div className="col-sm-3 col-xs-12" style={{  marginTop: 5 }}>
                             <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <Label
                                 labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
@@ -48,11 +48,7 @@ class PropertyInfoCard extends Component {
                                 label={item.value ? item.value : "NA"}
                                 fontSize="16px"
                               />
-                            </div>
-                            {isModify && <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
-                              <OldValueLabelContainer value={item.value} jsonPath={item.jsonPath} oldValue={item.oldValue} />
-                            </div>}
-                            {showEditNumber&&additionalKey && additionalKey.key && additionalKey.key == item.key && <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                              {showEditNumber&&additionalKey && additionalKey.key && (additionalKey.key == item.key || (additionalKey.key1 == "item.key" && item.value !="NA")) && <div style={{ padding: "5px 0px 0px 0px" }}>
                               <UpdateMobile
                                 number={item.value}
                                 type={"UPDATE"} 
@@ -60,6 +56,11 @@ class PropertyInfoCard extends Component {
                                 >
                               </UpdateMobile>
                             </div>}
+                            </div>
+                            {isModify && <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                              <OldValueLabelContainer value={item.value} jsonPath={item.jsonPath} oldValue={item.oldValue} />
+                            </div>}
+                            
                           </div>
                         </div>
                       );

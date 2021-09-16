@@ -244,8 +244,8 @@ const clearall = (num) => {
       {data?.planDetail?.blocks.map((block,index)=>(
       <div key={index}>
       <CardSubHeader>{t("BPA_BLOCK_SUBHEADER")} {index+1}</CardSubHeader>
-      { !checkingFlow === "OCBPA" ? <CardSectionHeader style={{fontWeight: "normal"}} className="card-label-smaller">{t("BPA_SUB_OCCUPANCY_LABEL")}</CardSectionHeader> : null }
-      { !checkingFlow === "OCBPA" ? <MultiSelectDropdown
+      { !(checkingFlow === "OCBPA") ? <CardSectionHeader style={{fontWeight: "normal"}} className="card-label-smaller">{t("BPA_SUB_OCCUPANCY_LABEL")}</CardSectionHeader> : null }
+      {!(checkingFlow === "OCBPA") ? <MultiSelectDropdown
               BlockNumber={block.number}
               className="form-field"
               isMandatory={true}
@@ -257,14 +257,14 @@ const clearall = (num) => {
               isOBPSMultiple={true}
               optionsKey="name"
               t={t}
-            /> : null }
-        { !checkingFlow === "OCBPA" ? <div className="tag-container">
+            /> :null}
+        { !(checkingFlow === "OCBPA") ? <div className="tag-container">
                {subOccupancyObject[`Block_${block.number}`] && subOccupancyObject[`Block_${block.number}`].length > 0 &&
                 subOccupancyObject[`Block_${block.number}`].map((value, index) => (
                   <RemoveableTag key={index} text={`${t(value["name"])}`} onClick={() => onRemove(index,value,block.number)} />
                 ))}
         </div> : null }
-        { !checkingFlow === "OCBPA" ? (subOccupancyObject[`Block_${block.number}`] && subOccupancyObject[`Block_${block.number}`].length>0 ) && <LinkButton style={{textAlign:"left"}} label={"Clear All"} onClick={() => clearall(block.number)}/>: null}
+        { !(checkingFlow === "OCBPA") ? (subOccupancyObject[`Block_${block.number}`] && subOccupancyObject[`Block_${block.number}`].length>0 ) && <LinkButton style={{textAlign:"left"}} label={"Clear All"} onClick={() => clearall(block.number)}/>: null}
       <div style={{overflow:"scroll"}}>
       { checkingFlow === "OCBPA" ? <StatusTable>
         <Row className="border-none" label={`${t("BPA_SUB_OCCUPANCY_LABEL")}:`} text={getSubOccupancyValues(index)}></Row>

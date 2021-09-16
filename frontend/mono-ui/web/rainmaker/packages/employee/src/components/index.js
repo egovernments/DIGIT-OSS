@@ -40,9 +40,13 @@ import ToolTipUi from "egov-ui-kit/components/Tooltip";
 import UploadDrawer from "egov-ui-kit/components/UploadDrawer";
 import CommonShareContainer from "./CommonShareContainer";
 import UpdateMobile from 'egov-ui-kit/common/propertyTax/UpdateMobile/updateMobile';
-// import UpdateMobile from './UpdateMobile/updateMobile';
+import VerifyMobile  from 'egov-ui-kit/common/propertyTax/AlternateMobile';
+import WarningPopup  from 'egov-ui-kit/common/propertyTax/AlternateMobile/warningPopup';
+
 
 export {
+  WarningPopup,
+  VerifyMobile,
   UpdateMobile,
   Label,
   Image,

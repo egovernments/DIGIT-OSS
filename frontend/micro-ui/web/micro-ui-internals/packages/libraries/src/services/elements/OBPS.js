@@ -1,5 +1,6 @@
 import { Request } from "../atoms/Utils/Request"
 import Urls from "../atoms/urls";
+import { format } from "date-fns";
 
 export const OBPSService = {
   scrutinyDetails: (tenantId, params) =>
@@ -155,6 +156,150 @@ export const OBPSService = {
       applicationData: License,
       applicationDetails: details,
       tenantId: License?.tenantId,
+    }
+  },
+  BPADetailsPage: async (tenantId, filters) => {
+    const response = await OBPSService.BPASearch(tenantId, filters);
+    if (!response?.BPA?.length) {
+      return;
+    }
+    const [BPA] = response?.BPA;
+    const edcrResponse = await OBPSService.scrutinyDetails(BPA?.tenantId, { edcrNumber: BPA?.edcrNumber });
+    const [edcr] = edcrResponse?.edcrDetail;
+    const nocResponse = await OBPSService.NOCSearch(BPA?.tenantId, { sourceRefId: BPA?.applicationNo });
+    const noc = nocResponse?.Noc;
+
+    const nocDetails = noc
+      ?.map((nocDetails, index) => ({
+        title: index === 0 ? "BPA_NOC_DETAILS_SUMMARY" : "",
+        values: [
+          {
+            title: `BPA_${nocDetails?.nocType}_LABEL`,
+            value: nocDetails?.applicationNo,
+          },
+          {
+            title: `BPA_NOC_STATUS`,
+            value: nocDetails?.applicationStatus,
+          },
+          {
+            title: "BPA_NOC_SUBMISSION_DATE",
+            value: "", //format(new Date(nocDetails?.auditDetaills?.createdTime), 'dd/MM/yyyy')
+          },
+        ],
+        additionalDetails: {
+          documents: [
+            {
+              title: "BPA_DOCUMENT_DETAILS_LABEL",
+              values: nocDetails?.documents?.map((doc) => ({
+                title: "",
+                documentType: doc?.documentType,
+                documentUid: doc?.documentUid,
+                fileStoreId: doc?.fileStoreId,
+              })),
+            },
+          ],
+        },
+      }));
+    const details = [
+      {
+        title: "BPA_BASIC_DETAILS_TITLE",
+        asSectionHeader: true,
+        values: [
+          { title: "BPA_BASIC_DETAILS_APP_DATE_LABEL", value: BPA?.applicationDate ? format(new Date(basicData?.applicationDate), 'dd/MM/yyyy') : '' },
+          { title: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL", value: `WF_BPA_${edcr?.appliactionType}` },
+          { title: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL", value: edcr?.applicationSubType },
+          { title: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL", value: edcr?.planDetail?.planInformation?.occupancy },
+          { title: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL", value: "" },
+          { title: "BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL", value: edcr?.planDetail?.planInformation?.applicantName },
+        ]
+      },
+      {
+        title: "BPA_PLOT_DETAILS_TITLE",
+        asSectionHeader: true,
+        values: [
+          { title: "BPA_BOUNDARY_PLOT_AREA_LABEL", value: edcr?.planDetail?.planInformation?.plotArea },
+          { title: "BPA_BOUNDARY_PLOT_NO_LABEL", value: edcr?.planDetail?.planInformation?.plotNo },
+          { title: "BPA_BOUNDARY_KHATA_NO_LABEL", value: edcr?.planDetail?.planInformation?.khataNo },
+          { title: "BPA_BOUNDARY_HOLDING_NO_LABEL", value: "" },
+          { title: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL", value: "" }
+        ]
+      },
+      {
+        title: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
+        asSectionHeader: true,
+        values: [
+          { title: "BPA_EDCR_NO_LABEL", value: BPA?.edcrNumber },
+        ],
+        additionalDetails: {
+          scruntinyDetails: [
+            { title: "BPA_UPLOADED_PLAN_DIAGRAM", value: edcr?.updatedDxfFile },
+            { title: "BPA_SCRUNTINY_REPORT_OUTPUT", value: edcr?.planReport },
+          ]
+        }
+      },
+      {
+        title: "BPA_BUILDING_EXTRACT_HEADER",
+        asSectionHeader: true,
+        values: [
+          { title: "BPA_BUILTUP_AREA_HEADER", value: edcr?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea },
+          { title: "BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL", value: edcr?.planDetail?.blocks?.[0]?.building?.totalFloors },
+          { title: "BPA_APPLICATION_HIGH_FROM_GROUND", value: edcr?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeigh }
+        ]
+      },
+      {
+        title: "BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL",
+        asSectionHeader: true,
+        values: [
+          { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr?.planDetail?.planInformation?.demolitionArea ? `${edcr?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : "" }
+        ]
+      },
+      {
+        title: "BPA_NEW_TRADE_DETAILS_HEADER_DETAILS",
+        asSectionHeader: true,
+        values: [
+          { title: "BPA_DETAILS_PIN_LABEL", value: BPA?.landInfo?.address?.pincode },
+          { title: "BPA_CITY_LABEL", value: BPA?.landInfo?.address?.city },
+          { title: "BPA_LOC_MOHALLA_LABEL", value: BPA?.landInfo?.address?.locality?.name },
+          { title: "BPA_DETAILS_SRT_NAME_LABEL", value: BPA?.landInfo?.address?.street },
+          { title: "ES_NEW_APPLICATION_LOCATION_LANDMARK", value: BPA?.landInfo?.address?.landmark }
+        ]
+      },
+      {
+        title: "BPA_APPLICANT_DETAILS_HEADER",
+        asSectionHeader: true,
+        values: [
+          { title: "CORE_COMMON_NAME", value: BPA?.landInfo?.owners?.[0]?.name },
+          { title: "BPA_APPLICANT_GENDER_LABEL", value: BPA?.landInfo?.owners?.[0]?.gender },
+          { title: "CORE_COMMON_MOBILE_NUMBER`", value: BPA?.landInfo?.owners?.[0]?.mobileNumber },
+        ]
+      },
+      {
+        title: "BPA_DOCUMENT_DETAILS_LABEL",
+        asSectionHeader: true,
+        additionalDetails: {
+          documents: [{
+            title: "",
+            values: BPA?.documents?.map(doc => ({
+              title: "",
+              documentType: doc?.documentType,
+              documentUid: doc?.documentUid,
+              fileStoreId: doc?.fileStoreId,
+            }))
+          }]
+        },
+      },
+      ...nocDetails,
+      // {
+      //   title: "BPA_NOC_DETAILS_SUMMARY",
+      //   asSectionHeader: true,
+      //   values: nocDetails
+      // },
+    ]
+
+    return {
+      applicationData: BPA,
+      applicationDetails: details,
+      tenantId: BPA?.tenantId
     }
   }
 }
