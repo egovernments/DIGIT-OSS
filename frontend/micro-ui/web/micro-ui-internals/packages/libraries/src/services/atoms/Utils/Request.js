@@ -103,6 +103,12 @@ export const Request = async ({
     return multipartFormDataRes;
   }
 
+  /* Fix for central instance to send tenantID in all query params  */
+  const tenantInfo = Digit.SessionStorage.get("userType") === "citizen" ? Digit.ULBService.getStateId():Digit.ULBService.getCurrentTenantId() || Digit.ULBService.getStateId() ;
+  if (!params["tenantId"]) {
+   params["tenantId"]=tenantInfo;
+  }
+
   const res = userDownload
     ? await Axios({ method, url: _url, data, params, headers, responseType: "arraybuffer" })
     : await Axios({ method, url: _url, data, params, headers });
