@@ -140,6 +140,8 @@ import useDocCreate from "./engagement/useCreate";
 import useDocUpdate from "./engagement/useUpdate";
 import useDocDelete from "./engagement/useDelete";
 
+import useNOCDetails from "./noc/useNOCDetails";
+
 const pgr = {
   useComplaintDetails,
   useComplaintsList,
@@ -277,6 +279,10 @@ const engagement = {
   useDocUpdate,
 };
 
+const noc = {
+  useNOCDetails
+}
+
 const Hooks = {
   useSessionStorage,
   useQueryParams,
@@ -316,6 +322,7 @@ const Hooks = {
   obps,
   events,
   engagement,
+  noc
 };
 
 export default Hooks;

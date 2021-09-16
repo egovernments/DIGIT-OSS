@@ -48,6 +48,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
 
   // console.log(applicationDetails?.applicationDetails, "inside app details content");
   const checkLocation = window.location.href.includes("employee/tl");
+  const isNocLocation = window.location.href.includes("noc/application-overview");
   return (
     <Card style={{ position: "relative" }}>
       {applicationDetails?.applicationDetails?.map((detail, index) => (
@@ -58,7 +59,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
             ) : (
               <React.Fragment>
                 <CardSectionHeader style={(index == 0 && checkLocation) ? { marginBottom: "16px" } : { marginBottom: "16px", marginTop: "32px" }}>
-                  {t(detail.title)}
+                  {isNocLocation ? `${t(detail.title)}:` : t(detail.title)}
                   {detail?.Component ? <detail.Component /> : null}
                 </CardSectionHeader>
               </React.Fragment>
@@ -72,7 +73,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
                 return (
                   <Row
                     key={t(value.title)}
-                    label={t(value.title)}
+                    label={isNocLocation ? `${t(value.title)}:` : t(value.title)}
                     text={t(value.value) || "N/A"}
                     last={index === detail?.values?.length - 1}
                     caption={value.caption}

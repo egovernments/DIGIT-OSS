@@ -131,6 +131,10 @@ const Urls = {
     delete: "/egov-document-uploader/egov-du/document/_delete",
     update: "/egov-document-uploader/egov-du/document/_update",
   },
+
+  noc: {
+    nocSearch: "/noc-services/v1/noc/_search"
+  },
 };
 
 export default Urls;

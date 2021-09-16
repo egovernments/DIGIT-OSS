@@ -41,6 +41,7 @@ import { subFormRegistry } from "./subFormRegistry";
 import ReceiptsService from "./services/elements/Receipts";
 import { EDCRService } from "./services/elements/EDCR";
 import { OBPSService } from "./services/elements/OBPS";
+import { NOCService } from "./services/elements/NOC";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -89,6 +90,8 @@ const initLibraries = () => {
   setupLibraries("Customizations", {});
   setupLibraries("Utils", Utils);
   setupLibraries("Download", Download);
+
+  setupLibraries("NOCService", NOCService);
 
   return new Promise((resolve) => {
     initI18n(resolve);
