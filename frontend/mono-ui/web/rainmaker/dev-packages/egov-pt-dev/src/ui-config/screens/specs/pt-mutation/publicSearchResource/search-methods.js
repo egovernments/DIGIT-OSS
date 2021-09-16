@@ -110,6 +110,8 @@ const searchApiCall = async (state, dispatch) => {
   } else {
     removeValidation(state, dispatch);
     const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
+    const warningEnabled = get(state, "screenConfiguration.preparedFinalObject.searchScreenMdmsData.PropertyTax.UpdateNumber[0].warningEnabled",false);
+    const UpdateNumber = get(state, "screenConfiguration.preparedFinalObject.searchScreenMdmsData.PropertyTax.UpdateNumber",{});
     const querryObject = getPayload(searchScreenObject);
     try {
       const response = await getSearchResults(querryObject);
@@ -121,7 +123,7 @@ const searchApiCall = async (state, dispatch) => {
         ["PT_COMMON_COL_ADDRESS"]: getAddress(item) || "-",
         ["PT_COMMON_TABLE_PROPERTY_STATUS"]: item.status || "-",
         ["PT_AMOUNT_DUE"]: (item.totalAmount || item.totalAmount===0) ? item.totalAmount : "-",
-        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount, isAdvancePaymentAllowed },
+        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount, isAdvancePaymentAllowed ,warningEnabled,UpdateNumber,isInvalidNum:item.owners.some(own=>own.status=="ACTIVE"&&(own.mobileNumber==UpdateNumber.invalidNumber|| !own.mobileNumber.match(UpdateNumber['invalidPattern'])))},
         ["TENANT_ID"]: item.tenantId || "-",
         ["ADVANCE_PAYMENT"]: isAdvancePaymentAllowed
       }));

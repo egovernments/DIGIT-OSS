@@ -31,7 +31,7 @@ export const getRequestInfo = (auth = null) => ({
 const VerifyButton = (type, openDialog) => {
     switch (type) {
         case "UPDATE":
-            return <span><button className="button-verify" style={{ "float": "none", display: "flex" }} onClick={() => openDialog()}> <Icon style={editIconStyle} action="image" name="edit" /> <Label label="PT_EDIT"></Label></button>
+            return <span><button className="button-verify" style={{ "float": "none", "display": "flex", "height":"20px" }} onClick={() => openDialog()}> <Icon style={editIconStyle} action="image" name="edit" /> <Label label="PT_EDIT"></Label></button>
             </span>;
         case "VERIFIED":
             return <span><button className="button-verify" style={{ "float": "none" }} onClick={() => openDialog()}>  LINK</button>

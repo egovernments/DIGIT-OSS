@@ -41,8 +41,12 @@ import ToolTipUi from "egov-ui-kit/components/Tooltip";
 import TableUi from "egov-ui-kit/components/Tables";
 import FloatingButton from "egov-ui-kit/components/FloatingButton";
 import UpdateMobile from 'egov-ui-kit/common/propertyTax/UpdateMobile/updateMobile';
+import VerifyMobile  from 'egov-ui-kit/common/propertyTax/AlternateMobile';
+import WarningPopup  from 'egov-ui-kit/common/propertyTax/AlternateMobile/warningPopup';
 
 export {
+  WarningPopup,
+  VerifyMobile,
   UpdateMobile,
   Label,
   Image,
