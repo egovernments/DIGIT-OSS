@@ -41,7 +41,7 @@ public class UserUtils {
     }
 
 
-    @Cacheable(value = "systemUser" , sync = true)
+   // @Cacheable(value = "systemUser" , sync = true)
     public User fetchSystemUser(){
 
         UserSearchRequest userSearchRequest =new UserSearchRequest();
