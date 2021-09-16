@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
+import org.egov.pt.models.enums.Status.*;
 
 @Component
 public class PropertyQueryBuilder {
@@ -255,6 +256,16 @@ public class PropertyQueryBuilder {
 			builder.append("property.oldpropertyid IN (").append(createQuery(oldpropertyids)).append(")");
 			addToPreparedStatement(preparedStmtList, oldpropertyids);
 		}
+		
+		/* 
+		 * Condition to evaluate if owner is active.
+		 * Inactive owners should never be shown in results
+		*/
+		
+		addClauseIfRequired(preparedStmtList,builder);
+		builder.append("owner.status = ?");
+		preparedStmtList.add(Status.ACTIVE.toString());
+		
 
 		String withClauseQuery = WITH_CLAUSE_QUERY.replace(REPLACE_STRING, builder);
 		if (onlyIds)
