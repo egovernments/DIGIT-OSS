@@ -8,7 +8,7 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
     defaultValues: searchParams,
   });
   const mobileView = innerWidth <= 640;
-  const ulb = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
+  const ulb = Digit.SessionStorage.get("ENGAGEMENT_TENANTS") ||[{code:"pb.amritsar"},{code:"pb.pb.jalandhar"}];
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const userUlbs = ulb.filter(ulb => ulb?.code === tenantId)
   
@@ -106,7 +106,11 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
               {/* )} */}
 
               {type === "desktop" && !mobileView && (
-                <div style={{ maxWidth: "unset", marginLeft: "unset", marginTop: "55px"}} className="search-submit-wrapper">
+                <div style={{ maxWidth: "unset", marginLeft: "unset", 
+                //marginTop: "55px"
+                display:"flex",
+                flexDirection:"row-reverse"
+                }} className="search-submit-wrapper">
                   <SubmitBar
                     className="submit-bar-search"
                     label={t("ES_COMMON_SEARCH")}

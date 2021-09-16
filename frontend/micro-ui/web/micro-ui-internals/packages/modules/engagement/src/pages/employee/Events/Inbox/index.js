@@ -61,6 +61,13 @@ const Inbox = ({ tenants }) => {
     ]
   }
 
+  const links = [
+    {
+      text: t("ES_TITLE_NEW_EVENTS"),
+      link: "/digit-ui/employee/engagement/event/inbox/new-event",
+    }
+  ]
+
   if (isMobile) {
     return (
       <MobileInbox
@@ -71,6 +78,9 @@ const Inbox = ({ tenants }) => {
         onFilterChange={handleFilterChange}
         onSearch={onSearch}
         isLoading={isLoading}
+        title = {"EVENTS_EVENTS_HEADER"}
+        iconName={"calender"}
+        links={links}
       />
     )
   } 
@@ -91,6 +101,10 @@ const Inbox = ({ tenants }) => {
         onFilterChange={handleFilterChange}
         pageSizeLimit={pageSize}
         totalRecords={data?.length}
+        title = {"EVENTS_EVENTS_HEADER"}
+        iconName={"calender"}
+        links={links}
+
       />
     </div>
   );
