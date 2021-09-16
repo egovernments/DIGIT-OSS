@@ -11,6 +11,7 @@ import {
   getLocale,
   getUserInfo
 } from "egov-ui-kit/utils/localStorageUtils";
+import commonConfig from "config/common.js";
 
 const instance = axios.create({
   baseURL: window.location.origin,
@@ -101,6 +102,15 @@ export const httpRequest = async (
       headers
     });
 
+  /* Fix for central instance to send tenantID in all query params  */
+  const tenantId = process.env.REACT_APP_NAME === "Citizen" ? commonConfig.tenantId:getTenantId() || commonConfig.tenantId ;
+  if (!some(queryObject, ["key", "tenantId"])) {
+    queryObject &&
+      queryObject.push({
+        key: "tenantId",
+        value: tenantId,
+      });
+  }
   endPoint = addQueryArg(endPoint, queryObject);
   var response;
   try {
