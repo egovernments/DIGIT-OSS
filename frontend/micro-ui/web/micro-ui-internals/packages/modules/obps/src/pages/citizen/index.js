@@ -11,6 +11,7 @@ import StakeholderRegistration from "./StakeholderRegistration";
 import MyApplication from "./MyApplication";
 import ApplicationDetails from "./ApplicationDetail";
 import OCBuildingPermit from "./OCBuildingPermit";
+import BpaApplicationDetail from "./BpaApplicationDetail";
 import BPASendToArchitect from "./BPASendToArchitect";
 import OCSendToArchitect from "./OCSendToArchitect";
 
@@ -31,6 +32,7 @@ const App = ({ path }) => {
             <Route path={`${path}/openlink/stakeholder/apply`} component={StakeholderRegistration} /> 
             <PrivateRoute path={`${path}/my-applications`} component={MyApplication} />
             <PrivateRoute path={`${path}/stakeholder/:id`} component={ApplicationDetails} />
+            <PrivateRoute path={`${path}/bpa/:id`} component={BpaApplicationDetail} />
             <PrivateRoute path={`${path}/editApplication/bpa/:tenantId/:applicationNo`} component={BPASendToArchitect} />
             <PrivateRoute path={`${path}/editApplication/ocbpa/:tenantId/:applicationNo`} component={OCSendToArchitect} />
           </Switch>

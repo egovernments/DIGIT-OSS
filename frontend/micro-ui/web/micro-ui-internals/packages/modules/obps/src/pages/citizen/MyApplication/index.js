@@ -30,7 +30,7 @@ const MyApplication = () => {
           }
           <KeyNote keyValue={t("BPA_COMMON_NAME_LABEL")} note={application?.tradeLicenseDetail?.owners?.[0]?.name} />
           <KeyNote keyValue={t("TL_COMMON_TABLE_COL_STATUS")} note={t(`WF_ARCHITECT_${application?.status}`)} />
-          <Link to={{ pathname: ``, state: { tenantId: '' } }}>
+          <Link to={{ pathname: `/digit-ui/citizen/obps/stakeholder/${application?.applicationNumber}`, state: { tenantId: '' } }}>
             <SubmitBar label={t("TL_VIEW_DETAILS")} />
           </Link>
         </Card>
@@ -42,7 +42,7 @@ const MyApplication = () => {
           <KeyNote keyValue={t("BPA_COMMON_SERVICE")} note={t(`BPA_SERVICETYPE_NEW_CONSTRUCTION`)} />
           <KeyNote keyValue={t("TL_COMMON_TABLE_COL_STATUS")} note={t(`WF_BPA_${application?.state}`)} />
           <KeyNote keyValue={t("BPA_COMMON_SLA")} note={application?.sla} />
-          <Link to={{ pathname: ``, state: { tenantId: '' } }}>
+          <Link to={{ pathname: `/digit-ui/citizen/obps/bpa/${application?.applicationNo}`, state: { tenantId: '' } }}>
             <SubmitBar label={t("TL_VIEW_DETAILS")} />
           </Link>
         </Card>

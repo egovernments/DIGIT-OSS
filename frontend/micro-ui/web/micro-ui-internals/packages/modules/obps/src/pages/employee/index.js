@@ -3,6 +3,7 @@ import React, { Fragment } from "react";
 import { Switch, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import ApplicationDetail from "./ApplicationDetail";
+import BpaApplicationDetail from "./BpaApplicationDetails";
 
 const EmployeeApp = ({ path }) => {
   const location = useLocation()
@@ -12,6 +13,7 @@ const EmployeeApp = ({ path }) => {
     <Fragment>
       <Switch>
         <PrivateRoute path={`${path}/stakeholder/:id`} component={ApplicationDetail} />
+        <PrivateRoute path={`${path}/bpa/:id`} component={BpaApplicationDetail} />
       </Switch>
     </Fragment>
   )
