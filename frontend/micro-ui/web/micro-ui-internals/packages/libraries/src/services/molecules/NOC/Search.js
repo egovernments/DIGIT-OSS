@@ -48,9 +48,9 @@ export const NOCSearch = {
       asSectionHeader: true,
       values: [
         { title: "NOC_APP_NO_LABEL", value: bpaResponse?.[0]?.applicationNo || "NA" },
-        { title: "NOC_MODULE_SOURCE_LABEL", value: response?.source || "NA" },
-        { title: "NOC_APPLICATION_TYPE_LABEL", value: edcrResponse?.appliactionType || "NA" },
-        { title: "NOC_SERVICE_TYPE_LABEL", value: edcrResponse?.applicationSubType || "NA" }
+        { title: "NOC_MODULE_SOURCE_LABEL", value: t(response?.source) || "NA" },
+        { title: "NOC_APPLICATION_TYPE_LABEL", value: t(edcrResponse?.appliactionType) || "NA" },
+        { title: "NOC_SERVICE_TYPE_LABEL", value: t(edcrResponse?.applicationSubType) || "NA" }
       ]
     };
 
