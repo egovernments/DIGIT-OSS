@@ -20,7 +20,7 @@ const EngagementCard = () => {
       {
         count: "-",
         label: t("ES_TITLE_DOCS"),
-        link: `/digit-ui/employee/engagement/documents/create`,
+        link: `/digit-ui/employee/engagement/document_notification`,
       },
       {
         count: "-",

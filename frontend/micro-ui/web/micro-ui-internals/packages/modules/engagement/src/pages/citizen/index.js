@@ -2,6 +2,8 @@ import React from "react"
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation } from "react-router-dom";
 import { BackButton, PrivateRoute } from "@egovernments/digit-ui-react-components";
+import DocumentList from "./Documents/DocumentList";
+import NoticesAndCirculars from "./Documents/NoticesAndCirculars";
 
 const CitizenApp = ({ path, url, userType}) => {
     const location = useLocation();
@@ -30,9 +32,10 @@ const CitizenApp = ({ path, url, userType}) => {
             path={`${path}/events/details/:id`}
             component={() => <EventDetails parentRoute={path} />}
           />
+          <PrivateRoute path={`${path}/docs`} component={() => <DocumentList {...{ path }} />} />
+          <PrivateRoute path={`${path}/notice_and_circulars`} component={() => <NoticesAndCirculars {...{ path }} />} />
         </Switch>
       </React.Fragment>
     );
 };
-
 export default CitizenApp

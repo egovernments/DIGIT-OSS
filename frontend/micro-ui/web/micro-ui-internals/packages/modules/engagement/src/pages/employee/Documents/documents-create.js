@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Header, LabelFieldPair, CardLabel, TextInput, Dropdown, FormComposer } from "@egovernments/digit-ui-react-components";
+import { FormComposer } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { documentsFormConfig } from "../../../config/doc-create";
 import { useHistory } from "react-router-dom";

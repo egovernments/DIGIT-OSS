@@ -62,8 +62,8 @@ import { LastRow, MediaRow, Row, StatusTable } from "./atoms/StatusTable";
 import SubmitBar from "./atoms/SubmitBar";
 import StandaloneSearchBar from "./atoms/StandaloneSearchBar";
 import {
-  AnnouncementIcon, ArrowDown, ArrowLeft, ArrowRightInbox, Calender, CaseIcon, CitizenTruck, CloseSvg, ComplaintIcon, Details, DocumentSVG, DownloadIcon, DownwardArrow, DropIcon, Ellipsis, EmailIcon, FilterIcon, GetApp, HomeIcon,
-  LanguageIcon,
+  AnnouncementIcon, ArrowDown, ArrowLeft, ArrowRightInbox, Calender, CaseIcon, CitizenTruck, CloseSvg, ComplaintIcon, Details, DocumentSVG, DownloadIcon, DownloadImgIcon, DownwardArrow, DropIcon, Ellipsis, EmailIcon, FilterIcon, GetApp, HomeIcon,
+  PrevIcon, ViewsIcon, LanguageIcon,
   LogoutIcon, Person, PersonIcon, Poll, PrintIcon, PropertyHouse, PTIcon, ReceiptIcon, RefreshIcon, RupeeIcon, SearchIconSvg, ShareIcon, ShippingTruck, SortDown,
   SortUp, UpwardArrow, WhatsappIcon, OBPSIcon, EDCRIcon, BPAIcon, BPAHomeIcon,DocumentIcon, PDFSvg, HelpIcon, TickMark, NotificationBell, MapMarker, Clock, EventCalendar
 } from "./atoms/svgindex";
@@ -226,6 +226,9 @@ export {
   Modal,
   UpwardArrow,
   DownwardArrow,
+  DownloadImgIcon,
+  ViewsIcon,
+  PrevIcon,
   DownloadIcon,
   Ellipsis,
   RefreshIcon,
