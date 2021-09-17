@@ -28,19 +28,29 @@ const TextField = (props) => {
   function broadcastToClose() {
     props.dropdownDisplay(false);
   }
+
+  /* Custom function to scroll and select in the dropdowns while using key up and down */
   const keyChange = (e) => {
     if (e.key == "ArrowDown") {
       props.setOptionIndex(state =>state+1== props.addProps.length?0:state+1);
+      if(props.addProps.currentIndex+1== props.addProps.length){
+        e?.target?.parentElement?.parentElement?.children?.namedItem("jk-dropdown-unique")?.scrollTo?.(0,0)
+      }else{
+        props?.addProps?.currentIndex>2&& e?.target?.parentElement?.parentElement?.children?.namedItem("jk-dropdown-unique")?.scrollBy?.(0,45)
+      }
       e.preventDefault();
     } else if (e.key == "ArrowUp") {
       props.setOptionIndex(state =>  state!==0? state - 1: props.addProps.length-1);
+        if(props.addProps.currentIndex==0){
+        e?.target?.parentElement?.parentElement?.children?.namedItem("jk-dropdown-unique")?.scrollTo?.(100000,100000)
+      }else{
+        props?.addProps?.currentIndex>2&& e?.target?.parentElement?.parentElement?.children?.namedItem("jk-dropdown-unique")?.scrollBy?.(0,-45)
+      }
       e.preventDefault();
     }else if(e.key=="Enter"){
       props.addProps.selectOption(props.addProps.currentIndex);
     } 
-
   }
-
 
   return (
     <input
@@ -62,7 +72,7 @@ const TextField = (props) => {
       autoComplete={"off"}
     />
   );
-};
+}; 
 
 const translateDummy = (text) => {
   return text;
@@ -197,6 +207,7 @@ return (
       {dropdownStatus ? (
         props.optionKey ? (
           <div
+          id="jk-dropdown-unique"
             className={`${hasCustomSelector ? "margin-top-10 display: table" : ""} options-card`}
             style={{ ...props.optionCardStyles }}
             ref={optionRef}
@@ -219,7 +230,7 @@ return (
                 })}
           </div>
         ) : (
-          <div className="options-card" style={props.optionCardStyles} ref={optionRef}>
+          <div className="options-card" style={props.optionCardStyles} id="jk-dropdown-unique" ref={optionRef}>
             {props.option
               .filter((option) => option.toUpperCase().indexOf(filterVal.toUpperCase()) > -1)
               .map((option, index) => {

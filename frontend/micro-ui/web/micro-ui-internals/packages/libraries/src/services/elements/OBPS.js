@@ -280,7 +280,7 @@ export const OBPSService = {
           documents: [{
             title: "",
             values: BPA?.documents?.map(doc => ({
-              title: "",
+              title: doc?.documentType?.replaceAll('.', '_'),
               documentType: doc?.documentType,
               documentUid: doc?.documentUid,
               fileStoreId: doc?.fileStoreId,
