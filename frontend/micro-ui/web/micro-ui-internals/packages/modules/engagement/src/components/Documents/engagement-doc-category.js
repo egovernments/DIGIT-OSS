@@ -9,16 +9,16 @@ const SelectCategory = ({ userType, t, setValue, onSelect, config, data, formDat
     return [];
   });
 
+  const currrentUlb = Digit.ULBService.getCurrentUlb() || "pb.amritsar" ;
   const { data: categoryData, isLoading } = Digit.Hooks.engagement.useMDMS(stateId, "DocumentUploader", ["UlbLevelCategories"], {
     select: (d) => {
-      const data = d?.DocumentUploader?.UlbLevelCategories?.filter?.((e) => ulbs?.includes(e.ulb)).reduce(
-        (acc, el) => [...acc, ...el.categoryList],
-        []
-      );
-      return data;
+      console.log({currrentUlb})
+      const data = d?.DocumentUploader?.UlbLevelCategories?.filter?.((e) => e.ulb === currrentUlb.code);
+      return data[0].categoryList.map((name)=>({name}));
     },
   });
 
+  console.log({categoryData})
   useEffect(() => {
     setUlbs(formData?.ULB?.map((e) => e.code));
   }, [formData?.ULB]);
@@ -32,7 +32,7 @@ const SelectCategory = ({ userType, t, setValue, onSelect, config, data, formDat
           control={control}
           render={(props) => (
             <div className="field">
-              <Dropdown option={categoryData} select={props.onChange} selected={props.value} t={t} />
+              <Dropdown option={categoryData} select={props.onChange} selected={props.value} t={t} optionKey="name" />
             </div>
           )}
         />

@@ -16,8 +16,11 @@ import {
   } from "@egovernments/digit-ui-react-components";
   import React from "react";
   import { useTranslation } from "react-i18next";
+  import {Link} from 'react-router-dom';
   import DocumentNotificationTable from "../../../components/Documents/DocumentNotificationTable";
   
+
+
   const DocumentNotification = () => {
     const { t } = useTranslation();
     const cityDataNew = [
@@ -126,7 +129,7 @@ import {
                 <DocumentIcon />
                 <CardSectionHeader>Documents</CardSectionHeader>
               </div>
-              <LinkButton label={<p className="new_document_para_color">New Document</p>} />
+              <Link to={`/digit-ui/employee/engagement/documents/create`}>{t('NEW_DOCUMENT_TEXT')}</Link>
             </div>
           </div>
           <div className="form_section">
