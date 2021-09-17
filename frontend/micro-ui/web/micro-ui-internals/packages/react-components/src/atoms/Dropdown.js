@@ -209,7 +209,7 @@ return (
           <div
           id="jk-dropdown-unique"
             className={`${hasCustomSelector ? "margin-top-10 display: table" : ""} options-card`}
-            style={{ ...props.optionCardStyles }}
+            style={{ ...props.optionCardStyles ,overflow:"scroll",height:'350px'}}
             ref={optionRef}
           >
             {filteredOption &&
@@ -230,7 +230,7 @@ return (
                 })}
           </div>
         ) : (
-          <div className="options-card" style={props.optionCardStyles} id="jk-dropdown-unique" ref={optionRef}>
+          <div className="options-card" style={{...props.optionCardStyles,overflow:"scroll",height:'350px'}} id="jk-dropdown-unique" ref={optionRef}>
             {props.option
               .filter((option) => option.toUpperCase().indexOf(filterVal.toUpperCase()) > -1)
               .map((option, index) => {
