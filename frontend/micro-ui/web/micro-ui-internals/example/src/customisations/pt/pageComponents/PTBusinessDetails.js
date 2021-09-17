@@ -1,17 +1,15 @@
 import { CardLabel, CitizenInfoLabel, FormStep, LabelFieldPair, TextInput,CardLabelError } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 var validation ={};
-const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => {
+const PTBusinessDetails = ({ t, config, onSelect, value, userType, formData }) => {
 
 
   const [
     val, setValue
-  ] = useState(formData?.[config.key]?.vasikaNo||"");
-  const [
-    other, setOther
-  ] = useState(formData?.[config.key]?.vasikaArea||"");
+  ] = useState(formData?.[config.key]?.businessDetails||"");
+
   const goNext = () => {
-    onSelect(config.key, {vasikaNo:val,vasikaArea:other});
+    onSelect(config.key, {businessDetails:val});
   };
 
 
@@ -48,10 +46,10 @@ const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => 
       >
 
         <div>
-          <CardLabel>{`${t("PT_VASIKA_NO_LABEL")}`}</CardLabel>
+          <CardLabel>{`${t("PT_VASIKA_BUS_DETAILS_LABEL")}`}</CardLabel>
           <TextInput
             t={t}
-            type={"number"}
+            type={"text"}
             isMandatory={false}
             optionKey="i18nKey"
             name="PlotSize"
@@ -60,20 +58,11 @@ const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => 
 
           />
         </div>
-        <CardLabel>{`${t("PT_VASIKA_AREA_LABEL")}`}</CardLabel>
-        <TextInput
-          t={t}
-          type={"text"}
-          isMandatory={false}
-          optionKey="i18nKey"
-          name="BuiltUpArea"
-          value={other}
-          onChange={(e)=>setOther(e?.target?.value)}
-        />
+        
       </FormStep>
       {<CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("PT_VASIKA_DETAILS_INFO")} />}
     </React.Fragment>
   );
 };
 
-export default PTVasikaDetails;
+export default PTBusinessDetails;

@@ -17,6 +17,7 @@ import { PaymentModule, PaymentLinks, paymentConfigs } from "@egovernments/digit
 import { HRMSModule } from "@egovernments/digit-ui-module-hrms";
 import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
+
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 import {initCustomisationComponents} from "./customisations";
 
@@ -69,7 +70,9 @@ import { subFormRegistry } from "@egovernments/digit-ui-libraries";
 
 import { pgrCustomizations, pgrComponents } from "./pgr";
 
+
 var Digit = window.Digit || {} ;
+
 
 const userInfo = {
   CITIZEN,
@@ -109,9 +112,11 @@ const userInfo = {
 const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "MCollect", "HRMS", "TL", "Receipts", "OBPS", "Engagement"];
 
 const initTokens = (stateCode) => {
+
   const userType = "CITIZEN";
 
   const token = window.sessionStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
+
 
   // console.log(token);
 
@@ -153,7 +158,7 @@ const initDigitUI = () => {
     // TLLinks,
   });
 
-  initCustomisationComponents();
+  
   initFSMComponents();
   initPGRComponents();
   initDSSComponents();
@@ -163,6 +168,9 @@ const initDigitUI = () => {
   initReceiptsComponents();
   initOBPSComponents();
   initEngagementComponents();
+
+
+initCustomisationComponents();
 
   const moduleReducers = (initData) => ({
     pgr: PGRReducers(initData),

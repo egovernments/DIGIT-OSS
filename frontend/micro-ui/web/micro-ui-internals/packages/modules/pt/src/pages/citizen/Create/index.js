@@ -5,6 +5,7 @@ import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import CheckPage from "./CheckPage";
 import PTAcknowledgement from "./PTAcknowledgement";
+// import { newConfig } from "../../../config/Create/config";
 
 const CreateProperty = ({ parentRoute }) => {
   const queryClient = useQueryClient();
@@ -15,7 +16,7 @@ const CreateProperty = ({ parentRoute }) => {
   const stateId = Digit.ULBService.getStateId();
   let config = [];
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("PT_CREATE_PROPERTY", { });
-  const { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(stateId, "PropertyTax", "CommonFieldsConfig");
+  let { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(stateId, "PropertyTax", "CommonFieldsConfig");
   const goNext = (skipStep, index, isAddMultiple, key) => {
     let currentPath = pathname.split("/").pop(),
       lastchar = currentPath.charAt(currentPath.length - 1),
@@ -135,6 +136,7 @@ const CreateProperty = ({ parentRoute }) => {
     return <Loader />;
   }
 
+// commonFields=newConfig;
   /* use newConfig instead of commonFields for local development in case needed */
   commonFields.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
