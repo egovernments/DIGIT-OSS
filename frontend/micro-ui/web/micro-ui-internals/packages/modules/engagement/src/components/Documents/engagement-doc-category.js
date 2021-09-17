@@ -12,13 +12,13 @@ const SelectCategory = ({ userType, t, setValue, onSelect, config, data, formDat
   const currrentUlb = Digit.ULBService.getCurrentUlb() || "pb.amritsar" ;
   const { data: categoryData, isLoading } = Digit.Hooks.engagement.useMDMS(stateId, "DocumentUploader", ["UlbLevelCategories"], {
     select: (d) => {
-      console.log({currrentUlb})
+     
       const data = d?.DocumentUploader?.UlbLevelCategories?.filter?.((e) => e.ulb === currrentUlb.code);
       return data[0].categoryList.map((name)=>({name}));
     },
   });
 
-  console.log({categoryData})
+ 
   useEffect(() => {
     setUlbs(formData?.ULB?.map((e) => e.code));
   }, [formData?.ULB]);

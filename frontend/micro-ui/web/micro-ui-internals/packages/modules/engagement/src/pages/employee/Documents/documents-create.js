@@ -12,7 +12,6 @@ const Documents = () => {
   const onFormValueChange = (setValue, formData, formState) => {
     if (
       formData?.documentName &&
-      formData?.description &&
       formData?.docCategory &&
       (formData?.document.filestoreId || formData?.document.documentLink) &&
       formData?.ULB?.length
