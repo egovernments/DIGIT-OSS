@@ -21,4 +21,4 @@ ENV WORK_DIR=/var/web/storybook
 RUN mkdir -p ${WORK_DIR}
 
 COPY --from=build /app/frontend/micro-ui/web/micro-ui-internals/packages/react-components/dist-storybook ${WORK_DIR}/
-COPY --from=build /app/docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/frontend/micro-ui/web/micro-ui-internals/packages/react-components/docker/nginx.conf /etc/nginx/conf.d/default.conf
