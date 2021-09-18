@@ -12,7 +12,7 @@ RUN echo "here ${PWD} rn"\
     && cd frontend/micro-ui/web/micro-ui-internals/packages/react-components/ \
     && echo "running yarn install and build-storybook here ${PWD}"\
     && node envs.js \
-    && yarn install --production \
+    && yarn install \
     && yarn build-storybook
 
 FROM nginx:mainline-alpine
