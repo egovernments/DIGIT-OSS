@@ -9,6 +9,7 @@ COPY ${WORK_DIR} .
 
 #RUN node web/envs.js
 RUN echo "running yarn install and build-storybook here ${PWD}"\
+    && ls \
     # && node envs.js \
     && yarn install --production \
     && yarn build-storybook
