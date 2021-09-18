@@ -673,6 +673,13 @@ config:
       - work-dir: .
         dockerfile: frontend/micro-ui/web/docker/Dockerfile
         image-name: digit-ui
+
+  - name: builds/digit-dev/frontend/micro-ui/storybook
+    build:
+    - work-dir: .
+      dockerfile: frontend/micro-ui/web/micro-ui-internals/packages/react-components/docker/Dockerfile
+      image-name: storybook
+
   
   #EDCR
   
