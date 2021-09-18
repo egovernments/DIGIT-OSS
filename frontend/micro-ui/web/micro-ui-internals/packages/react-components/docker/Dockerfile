@@ -9,8 +9,9 @@ COPY ${WORK_DIR} .
 
 #RUN node web/envs.js
 RUN cd frontend/micro-ui/web/micro-ui-internals/packages/react-components/ \
+    && echo "running yarn install and build-storybook" \
     && node envs.js \
-    && yarn install \
+    && yarn install --production \
     && yarn build-storybook
 
 FROM nginx:mainline-alpine
