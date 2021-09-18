@@ -8,9 +8,10 @@ ENV NODE_OPTIONS "--max-old-space-size=1792"
 COPY ${WORK_DIR} .
 
 #RUN node web/envs.js
-RUN echo "running yarn install and build-storybook here ${PWD}"\
-    && ls \
-    # && node envs.js \
+RUN echo "here ${PWD} rn"\
+    && cd frontend/micro-ui/web/micro-ui-internals/packages/react-components/ \
+    && echo "running yarn install and build-storybook here ${PWD}"\
+    && node envs.js \
     && yarn install --production \
     && yarn build-storybook
 
