@@ -121,13 +121,13 @@ import {
     return (
       <div>
         <BreadCrumb crumbs={crumbs} />
-        <Header>{t('Documents')}</Header>
+        <Header>{t('DOCUMENTS_DOCUMENT_HEADER')}</Header>
         <div className="document_notification_first_grid">
           <div className="new_document_section">
             <div className="new_document_card">
               <div className="new_document_section_flex">
                 <DocumentIcon />
-                <CardSectionHeader>{t('Documents')}</CardSectionHeader>
+                <CardSectionHeader>{t('DOCUMENTS_DOCUMENT_CARD_SECTION_HEADER')}</CardSectionHeader>
               </div>
               <Link to={`/digit-ui/employee/engagement/documents/create`}>{t('NEW_DOCUMENT_TEXT')}</Link>
             </div>
@@ -136,21 +136,21 @@ import {
             <div className="new_document_card">  
               <div className="document_notification_second_grid">
                 <div>
-                  <Label>{t('ULB')}</Label>
+                  <Label>{t('LABEL_FOR_ULB')}</Label>
                   <Dropdown option={cityDataNew} optionKey="city" />
                 </div>
                 <div>
-                  <Label>{t('Document_Name')}</Label>
+                  <Label>{t('LABEL_FOR_DOCUMENT_NAME')}</Label>
                   <TextInput type="text" />
                 </div>
                 <div>
-                  <Label>{t('Posted_By')}</Label>
+                  <Label>{t('LABEL_FOR_POSTED_BY')}</Label>
                   <TextInput type="text" />
                 </div>
               </div>
               <div className="document_notification_clear_search_btn">
                 <div className="document_notification_clear_search_btn_align">
-                  <LinkButton label={<p className="new_document_clear_search_alignment">{t('Clear_ Search')}</p>} />
+                  <LinkButton label={<p className="new_document_clear_search_alignment">{t('CLEAR_SEARCH_LINK')}</p>} />
                   <ButtonSelector label="Search" />
                 </div>
               </div>
@@ -164,12 +164,12 @@ import {
                 <div className="document_notification_filter_header">
                   <div className="document_notification_filter_icon">
                     <FilterIcon />
-                    <CardCaption>{t('Filters')}</CardCaption>
+                    <CardCaption>{t('FILTERS_FILTER_CARD_CAPTION')}</CardCaption>
                   </div>
                   <RefreshIcon />
                 </div>
               <div className="filter_section_document_categories">
-                  <CardLabel>{t('Document_Category')}</CardLabel>
+                  <CardLabel>{t('DOCUMENTS_CATEGORY_CARD_LABEL')}</CardLabel>
                   <Dropdown option={FilterData} optionKey="data" />
                   <ButtonSelector label="Apply" className="back_selector_btn_full" />
               </div>
