@@ -121,13 +121,13 @@ import {
     return (
       <div>
         <BreadCrumb crumbs={crumbs} />
-        <Header>Documents</Header>
+        <Header>{t('Documents')}</Header>
         <div className="document_notification_first_grid">
           <div className="new_document_section">
             <div className="new_document_card">
               <div className="new_document_section_flex">
                 <DocumentIcon />
-                <CardSectionHeader>Documents</CardSectionHeader>
+                <CardSectionHeader>{t('Documents')}</CardSectionHeader>
               </div>
               <Link to={`/digit-ui/employee/engagement/documents/create`}>{t('NEW_DOCUMENT_TEXT')}</Link>
             </div>
@@ -136,21 +136,21 @@ import {
             <div className="new_document_card">  
               <div className="document_notification_second_grid">
                 <div>
-                  <Label>ULB</Label>
+                  <Label>{t('ULB')}</Label>
                   <Dropdown option={cityDataNew} optionKey="city" />
                 </div>
                 <div>
-                  <Label>Document Name</Label>
+                  <Label>{t('Document_Name')}</Label>
                   <TextInput type="text" />
                 </div>
                 <div>
-                  <Label>Posted by</Label>
+                  <Label>{t('Posted_By')}</Label>
                   <TextInput type="text" />
                 </div>
               </div>
               <div className="document_notification_clear_search_btn">
                 <div className="document_notification_clear_search_btn_align">
-                  <LinkButton label={<p className="new_document_clear_search_alignment">Clear Search</p>} />
+                  <LinkButton label={<p className="new_document_clear_search_alignment">{t('Clear_ Search')}</p>} />
                   <ButtonSelector label="Search" />
                 </div>
               </div>
@@ -164,12 +164,12 @@ import {
                 <div className="document_notification_filter_header">
                   <div className="document_notification_filter_icon">
                     <FilterIcon />
-                    <CardCaption>Filters</CardCaption>
+                    <CardCaption>{t('Filters')}</CardCaption>
                   </div>
                   <RefreshIcon />
                 </div>
               <div className="filter_section_document_categories">
-                  <CardLabel>Document Category</CardLabel>
+                  <CardLabel>{t('Document_Category')}</CardLabel>
                   <Dropdown option={FilterData} optionKey="data" />
                   <ButtonSelector label="Apply" className="back_selector_btn_full" />
               </div>
