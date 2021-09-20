@@ -1,0 +1,75 @@
+{
+  "id": 12588,
+  "uuid": "a56bae11-e18b-4dd3-b70f-b29f2abb1edf",
+  "userName": "EMP-BPA",
+  "name": "SR DV FI",
+  "mobileNumber": "9999999445",
+  "emailId": null,
+  "locale": null,
+  "type": "EMPLOYEE",
+  "roles": [
+    {
+      "name": "BPAREG doc verifier",
+      "code": "BPAREG_DOC_VERIFIER",
+      "tenantId": "pb"
+    },
+    {
+      "name": "Employee",
+      "code": "EMPLOYEE",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "BPAREG Employee",
+      "code": "BPAREG_EMPLOYEE",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "BPAREG Approver",
+      "code": "BPAREG_APPROVER",
+      "tenantId": "pb"
+    },
+    {
+      "name": "BPA Services verifier",
+      "code": "BPA_VERIFIER",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "State Administrator",
+      "code": "STADMIN",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "QA Automation",
+      "code": "QA_AUTOMATION",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "Super User",
+      "code": "SUPERUSER",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "BPAREG Approver",
+      "code": "BPAREG_APPROVER",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "Employee",
+      "code": "EMPLOYEE",
+      "tenantId": "pb"
+    },
+    {
+      "name": "BPAREG doc verifier",
+      "code": "BPAREG_DOC_VERIFIER",
+      "tenantId": "pb.amritsar"
+    },
+    {
+      "name": "BPA NOC Verifier",
+      "code": "BPA_NOC_VERIFIER",
+      "tenantId": "pb.amritsar"
+    }
+  ],
+  "active": true,
+  "tenantId": "pb.amritsar",
+  "permanentCity": null
+}

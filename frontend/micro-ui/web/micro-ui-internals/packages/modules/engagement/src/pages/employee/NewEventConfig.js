@@ -20,6 +20,7 @@ export const config = [
           className: "fullWidth",
           validation: {
             required: true,
+            maxLength: 500,
           },
           error: 'EVENTS_DESCRIPTION_ERROR_REQUIRED',
         },
@@ -34,7 +35,7 @@ export const config = [
           validation: {
             required: true,
           },
-          error: "EVENTS_FROM_DATE_ERROR_REQUIRED",
+          error: "EVENTS_FROM_DATE_ERROR_INVALID",
         },
       },
       {

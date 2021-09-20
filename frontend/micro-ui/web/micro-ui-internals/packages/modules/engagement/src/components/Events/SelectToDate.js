@@ -2,14 +2,19 @@ import React, { Fragment } from "react";
 import { TextInput, CardLabel, LabelFieldPair, Dropdown, Loader, LocationSearch, CardLabelError } from "@egovernments/digit-ui-react-components";
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { isValid } from 'date-fns';
+import { isValid, format, startOfToday } from 'date-fns';
 
-const SelectToDate = ({ onSelect, config, formData, register, control, errors }) => {
+const SelectToDate = ({ onSelect, config, formData, register, control, errors, setError }) => {
   const { t } = useTranslation();
   const isValidDate = (date) => {
     console.log(isValid(new Date(formData?.fromDate)), isValid(new Date(date)), new Date(formData?.fromDate) < new Date(date));
     if (!isValid(new Date(formData?.fromDate)) || !isValid(new Date(date))) return false;
-    return new Date(formData?.fromDate) <= new Date(date);
+    if (new Date(formData?.fromDate) < startOfToday()) {
+      setError('fromDate', { type: 'isValidFromDate' }, { shouldFocus: true });
+      return false;
+    }
+    if (new Date(date) < startOfToday()) return false;
+    return new Date(`${formData?.fromDate} ${formData?.fromTime}`) <= new Date(`${date} ${formData?.toTime}`);
   }
   return (
     <Fragment>
