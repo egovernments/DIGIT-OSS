@@ -5,11 +5,11 @@ import { useForm, Controller } from "react-hook-form";
 const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, register, errors, setError, clearErrors, formState, control }) => {
   const { data: ulbArray, isLoading } = Digit.Hooks.useTenants();
 
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-
   return (
     <React.Fragment>
-      <LabelFieldPair>
+      <LabelFieldPair 
+      style={{alignItems:'start'}}
+      >
         <CardLabel style={{ fontWeight: "bold" }}>{t("ES_COMMON_ULB") + " *"}</CardLabel>
         <div className="field">
           <Controller
@@ -19,11 +19,12 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
               <Dropdown
                 allowMultiselect={true}
                 optionKey={"i18nKey"}
-                option={ulbArray?.filter((e) => tenantId === e.code)}
+                option={ulbArray}
                 select={(e) => {
                   props.onChange([...(formData?.[config?.key]?.filter?.((f) => e.code != f.code) || []), e]);
                 }}
                 keepNull={true}
+                selected={ulbArray?.length === 1 ? ulbArray[0] : null}
                 t={t}
               />
             )}
@@ -33,7 +34,7 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
               return (
                 <RemoveableTag
                   key={index}
-                  text={t(ulb.i18nKey)}
+                  text={t(ulb?.i18nKey)}
                   onClick={() =>
                     setValue(
                       config.key,

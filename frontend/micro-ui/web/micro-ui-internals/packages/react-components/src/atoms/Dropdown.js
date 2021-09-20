@@ -209,7 +209,9 @@ return (
           <div
           id="jk-dropdown-unique"
             className={`${hasCustomSelector ? "margin-top-10 display: table" : ""} options-card`}
-            style={{ ...props.optionCardStyles ,overflow:"scroll",maxHeight:'350px'}}
+
+            style={{ ...props.optionCardStyles ,overflow:"scroll"}}
+
             ref={optionRef}
           >
             {filteredOption &&

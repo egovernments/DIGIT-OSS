@@ -1,6 +1,6 @@
 import { Loader } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+
 
 import UpdateDocComp from "./docments-update";
 

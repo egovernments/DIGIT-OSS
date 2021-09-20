@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Header, LabelFieldPair, CardLabel, TextInput, Dropdown, FormComposer } from "@egovernments/digit-ui-react-components";
+import { FormComposer } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { documentsFormConfig } from "../../../config/doc-create";
 import { useHistory } from "react-router-dom";
@@ -12,7 +12,6 @@ const Documents = () => {
   const onFormValueChange = (setValue, formData, formState) => {
     if (
       formData?.documentName &&
-      formData?.description &&
       formData?.docCategory &&
       (formData?.document.filestoreId || formData?.document.documentLink) &&
       formData?.ULB?.length

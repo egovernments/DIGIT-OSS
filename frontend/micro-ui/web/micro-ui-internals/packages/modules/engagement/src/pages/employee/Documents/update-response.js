@@ -1,4 +1,4 @@
-import { Banner, Card, Loader, CardText } from "@egovernments/digit-ui-react-components";
+import { Banner, Card, Loader } from "@egovernments/digit-ui-react-components";
 import { useQueryClient } from "react-query";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,7 +12,7 @@ const BannerPicker = (props) => {
   const { t } = useTranslation();
   return (
     <Banner
-      message={props.isSuccess ? t(`ENGAGEMENT_DOC_DELETED`) : t("ENGAGEMENT_DOC_DELETE_FAILURE")}
+      message={props.isSuccess ? t(`ENGAGEMENT_DOC_UPDATED`) : t("ENGAGEMENT_DOC_UPDATE_FAILURE")}
       applicationNumber={getMessage(props.mutation)}
       info={props.isSuccess ? t("ENGAGEMENT_DOCUMENT_ID") : ""}
       successful={props.isSuccess}
@@ -24,7 +24,7 @@ const Response = (props) => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const mutation = Digit.Hooks.engagement.useDocDelete();
+  const mutation = Digit.Hooks.engagement.useDocUpdate();
   const { state } = props.location;
 
   useEffect(() => {

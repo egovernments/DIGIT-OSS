@@ -3,14 +3,13 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Redirect, Switch, useLocation, useRouteMatch, Route } from "react-router-dom";
 
-import Documents from "./pages/employee/documents/documents-create";
 
 import EngagementCard from "./components/EngagementCard";
-import EngagementDocSelectULB from "./components/EngagementDocsULB";
-import EnagementDocName from "./components/engagement-doc-name";
-import EngagementDocCategory from "./components/engagement-doc-category";
-import EngagementDocDescription from "./components/engagement-doc-description";
-import EngagementDocUploadDocument from "./components/engagement-doc-documents";
+import EngagementDocSelectULB from "./components/Documents/EngagementDocsULB";
+import EnagementDocName from "./components/Documents/engagement-doc-name";
+import EngagementDocCategory from "./components/Documents/engagement-doc-category";
+import EngagementDocDescription from "./components/Documents/engagement-doc-description";
+import EngagementDocUploadDocument from "./components/Documents/engagement-doc-documents";
 import NewEvent from "./pages/employee/Events/NewEvent";
 import Response from "./pages/employee/Events/NewEvent/Response";
 import Inbox from "./pages/employee/Events/Inbox";
@@ -21,10 +20,12 @@ import NotificationsAndWhatsNew from "./pages/citizen/NotificationsAndWhatsNew";
 import EventsListOnGround from "./pages/citizen/EventsListOnGround";
 import CitizenApp from "./pages/citizen";
 import EventDetails from "./pages/citizen/EventsListOnGround/EventDetails";
-import DocumentResponse from "./pages/employee/documents/response";
-import DocUpdate from "./pages/employee/documents/doc-update";
-import DocUpdateResponse from "./pages/employee/documents/update-response";
-import DocDeleteResponse from "./pages/employee/documents/delete-response";
+import DocumenetCreate from "./pages/employee/Documents/documents-create";
+import DocumentResponse from "./pages/employee/Documents/response";
+import DocUpdate from "./pages/employee/Documents/doc-update";
+import DocUpdateResponse from "./pages/employee/Documents/update-response";
+import DocDeleteResponse from "./pages/employee/Documents/delete-response";
+import DocumentNotification from "./pages/employee/Documents/documentNotification";
 
 const EventsBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -61,7 +62,7 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
     <div className="ground-container">
       <EventsBreadCrumb location={location} />
       <Switch>
-        <Route exact path={`${path}/docs`} component={() => <Documents {...{ path }} />} />
+      <Route exact path={`${path}/documents/create`} component={() => <DocumenetCreate {...{ path }} />} />
         <Route path={`${path}/event/inbox`} exact>
           <Inbox tenants={tenants} />
         </Route>
@@ -73,6 +74,7 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
         <Route path={`${path}/documents/update`} component={(props) => <DocUpdate {...props} />} />
         <Route path={`${path}/documents/update-response`} component={(props) => <DocUpdateResponse {...props} />} />
         <Route path={`${path}/documents/delete-response`} component={(props) => <DocDeleteResponse {...props} />} />
+        <Route path={`${path}/document_notification`} component={(props) => <DocumentNotification {...props} />} />
         {/* documents/update-response */}
         {/* <Redirect to={`${path}/docs`} /> */}
       </Switch>
