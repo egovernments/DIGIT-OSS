@@ -21,6 +21,7 @@ import org.apache.commons.io.*;
 import org.egov.infra.mdms.utils.MDMSConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
@@ -54,6 +55,9 @@ public class MDMSApplicationRunnerImpl {
     private static Map<String, Map<String, Object>> masterConfigMap = new HashMap<>();
 
     ObjectMapper objectMapper = new ObjectMapper();
+
+    @Autowired
+    private CacheManager cacheManager;
 
     @PostConstruct
     public void run() {
@@ -201,6 +205,12 @@ public class MDMSApplicationRunnerImpl {
 
     public static Map<String, Map<String, Object>> getMasterConfigMap() {
         return masterConfigMap;
+    }
+
+    @PostConstruct
+    public void evictAllCaches() {
+        cacheManager.getCacheNames().stream()
+                .forEach(cacheName -> cacheManager.getCache(cacheName).clear());
     }
 
 }
