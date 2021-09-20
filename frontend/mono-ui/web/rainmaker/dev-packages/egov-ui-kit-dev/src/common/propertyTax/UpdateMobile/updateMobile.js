@@ -61,7 +61,7 @@ export default class UpdateMobile extends React.Component {
     }
 
     componentDidUpdate = (prevProps, prevState, snapshot) => {
-        const { propertyId = "", tenantId = "" } = this.props;
+        const { propertyId = "", tenantId = "",isAlternate } = this.props;
         const { propertyId: prevPropertyId = "", tenantId: prevTenantId = "" } = prevProps;
 
         /* if (propertyId != prevPropertyId || tenantId != prevTenantId) { */
@@ -75,13 +75,14 @@ export default class UpdateMobile extends React.Component {
             owners = owners && owners.filter(owner => owner.status == "ACTIVE");
             owners && owners.map(owner => {
 
-                if (owner.mobileNumber == this.props.number) {
+                let numb = isAlternate?owner.alternatemobilenumber: owner.mobileNumber;
+                if ( numb == this.props.number) {
 
                     propertyNumbers = {
                         "id": owner.id,
                         "uuid": owner.uuid,
                         "name": owner.name,
-                        "mobileNumber": owner.mobileNumber,
+                        "mobileNumber": numb,
                         "type": "owner"
                     };
                 }
@@ -114,7 +115,7 @@ export default class UpdateMobile extends React.Component {
 
     loadProperty = async () => {
         this.setState({ loading: true });
-        const { propertyId = "", tenantId = "", number, updateNumberConfig } = this.props;
+        const { propertyId = "", tenantId = "", number, updateNumberConfig ,isAlternate} = this.props;
         let queryParams = [{ key: "propertyIds", value: propertyId },
         { key: "tenantId", value: tenantId }]
         if (propertyId !== "" && tenantId !== "") {
@@ -124,12 +125,13 @@ export default class UpdateMobile extends React.Component {
             let propertyNumbers = {};
             owners = owners && owners.filter(owner => owner.status == "ACTIVE");
             owners && owners.map(owner => {
+                let numb = isAlternate?owner.alternatemobilenumber: owner.mobileNumber;
                 if (process.env.REACT_APP_NAME !== "Citizen") {
                     if ((number == updateNumberConfig.invalidNumber) || !number.match(updateNumberConfig['invalidPattern'])) {
                         /* !this.state.skipped&&this.setState({ invalidNumber: true }); */
                     }
                 }
-                if (owner.mobileNumber == number) {
+                if (numb == number) {
                     if (((number == updateNumberConfig.invalidNumber) || !number.match(updateNumberConfig['invalidPattern']) && number == JSON.parse(getUserInfo()).mobileNumber)) {
                         /* !this.state.skipped&&this.setState({ invalidNumber: true }); */
                     }
@@ -137,7 +139,7 @@ export default class UpdateMobile extends React.Component {
                         "id": owner.id,
                         "uuid": owner.uuid,
                         "name": owner.name,
-                        "mobileNumber": owner.mobileNumber,
+                        "mobileNumber": numb,
                         "type": "owner"
                     };
                 }
@@ -154,10 +156,13 @@ export default class UpdateMobile extends React.Component {
     }
 
     canShowEditOption = () => {
+        const {isAlternate}=this.props;
         if (window.location.href.includes('/property-tax/property') || window.location.href.includes('/property-tax/my-properties/property')) {
             if (process.env.REACT_APP_NAME === "Citizen") {
                 let userInfo = JSON.parse(getUserInfo()) || {};
-                if (userInfo.mobileNumber && userInfo.mobileNumber == this.props.number) {
+                if (userInfo.mobileNumber && userInfo.mobileNumber == this.props.number && !isAlternate) {
+                    return true;
+                } else if (userInfo.alternatemobilenumber && userInfo.alternatemobilenumber == this.props.number && isAlternate) {
                     return true;
                 } else {
                     return false;
@@ -169,12 +174,13 @@ export default class UpdateMobile extends React.Component {
     }
 
     render() {
-        const { propertyId = "", tenantId = "", closeDue } = this.props;
+        const { propertyId = "", tenantId = "", closeDue,isAlternate=false } = this.props;
         const { property = {}, propertyNumbers = {} } = this.state;
         return property && property.status == "ACTIVE" && <div>
             {this.canShowEditOption() && VerifyButton(this.props.type, this.toggleDialog)}
             {this.state.open && <UpdateMobileDialog
                 open={this.state.open}
+                isAlternate={isAlternate}
                 documents={this.props.updateNumberConfig.documents}
                 loadProperty={this.loadProperty}
                 property={property}

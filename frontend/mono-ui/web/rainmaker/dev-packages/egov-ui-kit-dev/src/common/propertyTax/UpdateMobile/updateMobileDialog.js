@@ -140,13 +140,18 @@ export default class UpdateMobileDialog extends React.Component {
 
   updateProperty = () => {
     var myHeaders = new Headers();
-    let { property, propertyNumbers } = this.props;
+    let { property, propertyNumbers ,isAlternate} = this.props;
     const { mobileNumber } = this.state.fields;
 
     if (property && property.owners && property.owners.length > 0) {
       property.owners.map(owner => {
         if (owner.uuid == propertyNumbers.uuid) {
-          owner.mobileNumber = mobileNumber.value;
+          if(isAlternate){
+            owner.alternatemobilenumber = mobileNumber.value;
+          }else{
+            owner.mobileNumber = mobileNumber.value;
+          }
+          
           property.creationReason = "UPDATE";
           let documents = this.state.documents.filter(document => document.uploaded) || [];
           if (property.documents) {
@@ -177,7 +182,7 @@ export default class UpdateMobileDialog extends React.Component {
       redirect: 'follow'
     };
     this.showLoading();
-    fetch(`${window.location.origin}/property-services/property/_update?`, requestOptions)
+    fetch(`${window.location.origin}/property-services/property/${isAlternate?"_addAlternateNumber":"_update"}?`, requestOptions)
       .then(response => response.text())
       .then(resp => JSON.parse(resp))
       .then(result => {
