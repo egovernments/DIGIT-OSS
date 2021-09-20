@@ -187,7 +187,8 @@ export const OBPSService = {
           },
         ],
         additionalDetails: {
-          documents: [
+          data: nocDetails,
+          noc: [
             {
               title: "BPA_DOCUMENT_DETAILS_LABEL",
               values: nocDetails?.documents?.map((doc) => ({
@@ -277,7 +278,7 @@ export const OBPSService = {
         title: "BPA_DOCUMENT_DETAILS_LABEL",
         asSectionHeader: true,
         additionalDetails: {
-          documents: [{
+          obpsDocuments: [{
             title: "",
             values: BPA?.documents?.map(doc => ({
               title: doc?.documentType?.replaceAll('.', '_'),
