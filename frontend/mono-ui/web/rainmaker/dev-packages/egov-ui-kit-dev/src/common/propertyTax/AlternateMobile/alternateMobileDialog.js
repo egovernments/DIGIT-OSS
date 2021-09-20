@@ -387,7 +387,7 @@ export default class AlternateMobileDialog extends React.Component {
         className="pt-update-popup"
         open={this.props.open}
         isClose={true}
-        title={<Label label="PTUPNO_HEADER" fontSize="24px" labelStyle={{ padding: "2%", backgroundColor: "white", paddingLeft: '4%' }} labelClassName="owner-history" />}
+        title={<Label label="PTALTNO_HEADER" fontSize="24px" labelStyle={{ padding: "2%", backgroundColor: "white", paddingLeft: '4%' }} labelClassName="owner-history" />}
         handleClose={this.props.closeDialog}
         titleStyle={{
           padding: "2%",
