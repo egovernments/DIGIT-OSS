@@ -10,6 +10,7 @@ import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.tracer.model.CustomException;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -87,6 +88,7 @@ public class MDMSService {
         return responseMap;
     }
 
+    @Cacheable(value = "mdmsData" , sync = true)
     private JSONArray getMasterData(Map<String, Map<String, JSONArray>> stateLevel,
                                     Map<String, Map<String, JSONArray>> ulbLevel, String moduleName, String masterName, String tenantId) throws Exception {
 
