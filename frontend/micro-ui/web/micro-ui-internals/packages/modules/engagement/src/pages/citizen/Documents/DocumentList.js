@@ -9,10 +9,12 @@ import {
   } from "@egovernments/digit-ui-react-components";
   import React,{useState} from "react";
   import { Link } from "react-router-dom";
+  import { useTranslation } from "react-i18next";
   
   
   const Accordion = ({ title, children }) => {
     const [isOpen, setOpen] = React.useState(false);
+
     return (
       <div className="accordion-wrapper">
         <div className={`accordion-title ${isOpen ? "open" : ""}`} onClick={() => setOpen(!isOpen)}>
@@ -27,6 +29,7 @@ import {
   };
   
   const DocumentList = () => {
+    const { t } = useTranslation(); 
     const onSubmit = () => {
       console.log("onsubmit");
     };
@@ -51,7 +54,7 @@ import {
       <AppContainer>
         <div>
         </div>
-        <Header>Documents</Header>
+        <Header>{t('DOCUMENTS_DOCUMENT_HEADER')}</Header>
         <Card>
           <div className="StandaloneSearchBar document_list_searchbar">
             <input type="text" placeholder="Search Documents" />
