@@ -189,4 +189,13 @@ public class PGRConfiguration {
     private Long businessLevelSla;
 
 
+    // central-instance configs
+
+    @Value("${state.level.tenantid.length}")
+    private Integer stateLevelTenantIdLength;
+
+    @Value("${is.environment.central.instance}")
+    private Boolean isEnvironmentCentralInstance;
+
+
 }

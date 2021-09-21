@@ -3,6 +3,7 @@ package org.egov.pgr.repository;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.pgr.repository.rowmapper.PGRQueryBuilder;
 import org.egov.pgr.repository.rowmapper.PGRRowMapper;
+import org.egov.pgr.util.PGRUtils;
 import org.egov.pgr.web.models.ServiceWrapper;
 import org.egov.pgr.web.models.RequestSearchCriteria;
 import org.egov.pgr.web.models.Service;
@@ -28,12 +29,18 @@ public class PGRRepository {
 
     private JdbcTemplate jdbcTemplate;
 
+    private PGRUtils utils;
+
+
     @Autowired
-    public PGRRepository(PGRQueryBuilder queryBuilder, PGRRowMapper rowMapper, JdbcTemplate jdbcTemplate) {
+    public PGRRepository(PGRQueryBuilder queryBuilder, PGRRowMapper rowMapper, JdbcTemplate jdbcTemplate, PGRUtils utils) {
         this.queryBuilder = queryBuilder;
         this.rowMapper = rowMapper;
         this.jdbcTemplate = jdbcTemplate;
+        this.utils = utils;
     }
+
+
 
 
     /**
@@ -60,8 +67,11 @@ public class PGRRepository {
      * @return
      */
     public List<Service> getServices(RequestSearchCriteria criteria) {
+
+        String tenantId = criteria.getTenantId();
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getPGRSearchQuery(criteria, preparedStmtList);
+        query = utils.replaceSchemaPlaceholder(query, tenantId);
         List<Service> services =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         return services;
     }
@@ -72,8 +82,11 @@ public class PGRRepository {
      * @return
      */
     public Integer getCount(RequestSearchCriteria criteria) {
+
+        String tenantId = criteria.getTenantId();
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getCountQuery(criteria, preparedStmtList);
+        query = utils.replaceSchemaPlaceholder(query, tenantId);
         Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
         return count;
     }

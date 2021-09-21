@@ -81,4 +81,9 @@ public class PGRConstants {
     public static final String MDMS_DATA_SLA_KEYWORD = "slaHours";
 
 
+
+    public static String SCHEMA_REPLACE_STRING = "{schema}";
+
+
+
 }

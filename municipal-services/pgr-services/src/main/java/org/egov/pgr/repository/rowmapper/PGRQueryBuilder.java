@@ -25,7 +25,7 @@ public class PGRQueryBuilder {
 
 
     private static final String QUERY = "select ser.*,ads.*," + QUERY_ALIAS+
-                                        " from eg_pgr_service_v2 ser INNER JOIN eg_pgr_address_v2 ads" +
+                                        " from {schema}.eg_pgr_service_v2 ser INNER JOIN {schema}.eg_pgr_address_v2 ads" +
                                         " ON ads.parentId = ser.id ";
 
     private static final String COUNT_WRAPPER = "select count(*) from ({INTERNAL_QUERY}) as count";
