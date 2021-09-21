@@ -111,7 +111,7 @@ const commonApplicantInformation = () => {
           md: 6
         }
       }),
-      mobileNumber: getTextField({
+      alterMobileNo: getTextField({
         label: {
           labelName: "Mobile No.",
           labelKey: "PT_FORM3_ALT_MOBILE_NO"
@@ -546,6 +546,28 @@ const institutionInformation = () => {
           required: true,
           pattern: getPattern("MobileNo"),
           jsonPath: "Property.institutionTemp.mobileNumber"
+        }), alterMobileNo: getTextField({
+          label: {
+            labelName: "Mobile No.",
+            labelKey: "PT_FORM3_ALT_MOBILE_NO"
+          },
+          placeholder: {
+            labelName: "Enter Mobile No.",
+            labelKey: "PT_FORM3_ALT_MOBILE_NO_PLACEHOLDER"
+          },
+          required: false,
+          props: {
+            className: "applicant-details-error"
+          },
+          pattern: getPattern("MobileNo"),
+          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          jsonPath:
+            "Property.ownersTemp[0].alternatemobilenumber",
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            md: 6
+          }
         }),
         authorisedLandline: getTextField({
           label: {
