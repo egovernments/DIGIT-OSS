@@ -192,6 +192,8 @@ public class MigrationService {
 
         for (Service serviceV1 : servicesV1) {
 
+            String tenantId = serviceV1.getTenantId();
+
             List<ActionInfo> actionInfos = idToActionMap.get(serviceV1.getServiceRequestId());
 
             Map<String, Long> actionUuidToSlaMap = getActionUUidToSLAMap(actionInfos, serviceV1.getServiceCode());
@@ -211,8 +213,8 @@ public class MigrationService {
             ServiceRequest serviceRequest = ServiceRequest.builder().service(service).build();
             //log.info("Pushing service request: " + serviceRequest);
             /*#################### TEMPORARY FOR TESTING, REMOVE THE COMMENTS*/
-               producer.push(config.getBatchCreateTopic(),serviceRequest);
-               producer.push(config.getBatchWorkflowSaveTopic(),processInstanceRequest);
+               producer.push(tenantId,config.getBatchCreateTopic(),serviceRequest);
+               producer.push(tenantId,config.getBatchWorkflowSaveTopic(),processInstanceRequest);
 
             // Temporary for testing
             services.add(service);

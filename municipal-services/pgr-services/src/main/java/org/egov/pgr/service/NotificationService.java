@@ -56,6 +56,8 @@ public class NotificationService {
 
     public void process(ServiceRequest request, String topic) {
         try {
+
+            String tenantId = request.getService().getTenantId();
             String applicationStatus = request.getService().getApplicationStatus();
 
             if (!(NOTIFICATION_ENABLE_FOR_STATUS.contains(request.getWorkflow().getAction()+"_"+applicationStatus))) {
@@ -72,7 +74,7 @@ public class NotificationService {
                 if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
                     EventRequest eventRequest = enrichEventRequest(request,finalMessage);
                     if (eventRequest != null) {
-                        notificationUtil.sendEventNotification(eventRequest);
+                        notificationUtil.sendEventNotification(tenantId,eventRequest);
                     }
                 }
 
@@ -80,7 +82,7 @@ public class NotificationService {
                     List<SMSRequest> smsRequests = new ArrayList<>();
                     smsRequests = enrichSmsRequest(mobileNumber,finalMessage);
                     if (!CollectionUtils.isEmpty(smsRequests)) {
-                        notificationUtil.sendSMS(smsRequests);
+                        notificationUtil.sendSMS(tenantId,smsRequests);
                     }
                 }
 
