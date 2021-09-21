@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
-import { newConfig } from "../../../config/config";
+// import { newConfig } from "../../../config/config";
 import CheckPage from "./CheckPage";
 import TLAcknowledgement from "./TLAcknowledgement";
 
@@ -15,12 +15,18 @@ const CreateTradeLicence = ({ parentRoute }) => {
   let config = [];
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("PT_CREATE_TRADE", {});
 
+  const stateId = Digit.ULBService.getStateId();
+  const { data: newConfig, isLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(stateId, {});
+
   const goNext = (skipStep, index, isAddMultiple, key) => {
     let currentPath = pathname.split("/").pop(),
       nextPage;
     let { nextStep = {} } = config.find((routeObj) => routeObj.route === currentPath);
     if (typeof nextStep == "object" && nextStep != null) {
-      if (nextStep[sessionStorage.getItem("isAccessories")] && (nextStep[sessionStorage.getItem("isAccessories")]==="accessories-details" || nextStep[sessionStorage.getItem("isAccessories")]==="map")) {
+      if (
+        nextStep[sessionStorage.getItem("isAccessories")] &&
+        (nextStep[sessionStorage.getItem("isAccessories")] === "accessories-details" || nextStep[sessionStorage.getItem("isAccessories")] === "map")
+      ) {
         nextStep = `${nextStep[sessionStorage.getItem("isAccessories")]}`;
       } else if (nextStep[sessionStorage.getItem("StructureType")]) {
         nextStep = `${nextStep[sessionStorage.getItem("StructureType")]}`;
@@ -49,14 +55,14 @@ const CreateTradeLicence = ({ parentRoute }) => {
     goNext(skipStep, index, isAddMultiple, key);
   }
 
-  const handleSkip = () => { };
-  const handleMultiple = () => { };
+  const handleSkip = () => {};
+  const handleMultiple = () => {};
 
   const onSuccess = () => {
     sessionStorage.removeItem("CurrentFinancialYear");
     queryClient.invalidateQueries("TL_CREATE_TRADE");
   };
-  newConfig.forEach((obj) => {
+  newConfig?.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
   config.indexRoute = "info";

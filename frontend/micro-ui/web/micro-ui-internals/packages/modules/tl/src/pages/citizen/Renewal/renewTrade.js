@@ -3,86 +3,103 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
-import { newConfig } from "../../../config/config";
+// import { newConfig } from "../../../config/config";
 import { getCommencementDataFormat } from "../../../utils/index";
 import CheckPage from "../Create/CheckPage";
 import TLAcknowledgement from "../Create/TLAcknowledgement";
 const getPath = (path, params) => {
-  params && Object.keys(params).map(key => {
-    path = path.replace(`:${key}`, params[key]);
-  })
+  params &&
+    Object.keys(params).map((key) => {
+      path = path.replace(`:${key}`, params[key]);
+    });
   return path;
-}
+};
 
 const getTradeEditDetails = (data) => {
   const gettradeaccessories = (tradeacceserioies) => {
     let acc = [];
-    tradeacceserioies && tradeacceserioies.map((ob) => {
-      acc.push({
-        accessory: { code: `${ob.accessoryCategory}`, i18nKey: `TRADELICENSE_ACCESSORIESCATEGORY_${ob.accessoryCategory.replaceAll("-", "_")}` },
-        accessorycount: ob.count,
-        unit: `${ob.uom}`,
-        uom: `${ob.uomValue}`,
-        id : ob.id,
-      })
-    })
+    tradeacceserioies &&
+      tradeacceserioies.map((ob) => {
+        acc.push({
+          accessory: { code: `${ob.accessoryCategory}`, i18nKey: `TRADELICENSE_ACCESSORIESCATEGORY_${ob.accessoryCategory.replaceAll("-", "_")}` },
+          accessorycount: ob.count,
+          unit: `${ob.uom}`,
+          uom: `${ob.uomValue}`,
+          id: ob.id,
+        });
+      });
     return acc;
-  }
+  };
 
   const gettradeunits = (tradeunits) => {
     let units = [];
-    tradeunits && tradeunits.map((ob) => {
-      units.push({
-        tradecategory: { i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, code: `${ob.tradeType.split(".")[0]}` },
-        tradesubtype: { i18nKey: `TL_${ob.tradeType}`, code: `${ob.tradeType}` },
-        tradetype: { i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[1]}`, code: `${ob.tradeType.split(".")[1]}` },
-        unit: ob.uom,
-        uom: ob.uomValue,
-        id : ob.id,
+    tradeunits &&
+      tradeunits.map((ob) => {
+        units.push({
+          tradecategory: { i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, code: `${ob.tradeType.split(".")[0]}` },
+          tradesubtype: { i18nKey: `TL_${ob.tradeType}`, code: `${ob.tradeType}` },
+          tradetype: { i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[1]}`, code: `${ob.tradeType.split(".")[1]}` },
+          unit: ob.uom,
+          uom: ob.uomValue,
+          id: ob.id,
+        });
       });
-    })
     return units;
   };
 
   const gettradedocuments = (docs) => {
     let documents = [];
-    docs && docs.map((ob) => {
-      if (ob.documentType.includes("OWNERPHOTO")) {
-        documents["OwnerPhotoProof"] = ob;
-      }
-      else if (ob.documentType.includes("OWNERIDPROOF")) {
-        documents["ProofOfIdentity"] = ob;
-      }
-      else if (ob.documentType.includes("OWNERSHIPPROOF")) {
-        documents["ProofOfOwnership"] = ob;
-      }
-    })
+    docs &&
+      docs.map((ob) => {
+        if (ob.documentType.includes("OWNERPHOTO")) {
+          documents["OwnerPhotoProof"] = ob;
+        } else if (ob.documentType.includes("OWNERIDPROOF")) {
+          documents["ProofOfIdentity"] = ob;
+        } else if (ob.documentType.includes("OWNERSHIPPROOF")) {
+          documents["ProofOfOwnership"] = ob;
+        }
+      });
     return documents;
-  }
+  };
 
   const gettradeowners = (owner) => {
     let ownerarray = [];
-    owner && owner.map((ob) => {
-      ownerarray.push({
-        gender: { code: `${ob.gender}`, name: `${!ob?.gender.includes("FEMALE") ? "Male" : "Female"}`, value: `${!ob?.gender.includes("FEMALE") ? "Male" : "Female"}`, i18nKey:`TL_GENDER_${ob.gender}` },
-        isprimaryowner: false,
-        name: ob.name,
-        mobilenumber: ob.mobileNumber,
-        permanentAddress: ob.permanentAddress,
-        id: ob.id,
-      })
-    })
+    owner &&
+      owner.map((ob) => {
+        ownerarray.push({
+          gender: {
+            code: `${ob.gender}`,
+            name: `${!ob?.gender.includes("FEMALE") ? "Male" : "Female"}`,
+            value: `${!ob?.gender.includes("FEMALE") ? "Male" : "Female"}`,
+            i18nKey: `TL_GENDER_${ob.gender}`,
+          },
+          isprimaryowner: false,
+          name: ob.name,
+          mobilenumber: ob.mobileNumber,
+          permanentAddress: ob.permanentAddress,
+          id: ob.id,
+        });
+      });
     return ownerarray;
-  }
+  };
   data.TradeDetails = {
-    BuildingType: { code: `${data?.tradeLicenseDetail?.structureType}`, i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${data.tradeLicenseDetail?.structureType.replaceAll(".", "_")}` },
+    BuildingType: {
+      code: `${data?.tradeLicenseDetail?.structureType}`,
+      i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${data.tradeLicenseDetail?.structureType.replaceAll(".", "_")}`,
+    },
     CommencementDate: getCommencementDataFormat(data?.commencementDate),
-    StructureType: { code: `${data.tradeLicenseDetail?.structureType.split(".")[0]}`, i18nKey: `${data.tradeLicenseDetail?.structureType.includes("IMMOVABLE") ? "TL_COMMON_YES" : "TL_COMMON_NO"}` },
+    StructureType: {
+      code: `${data.tradeLicenseDetail?.structureType.split(".")[0]}`,
+      i18nKey: `${data.tradeLicenseDetail?.structureType.includes("IMMOVABLE") ? "TL_COMMON_YES" : "TL_COMMON_NO"}`,
+    },
     TradeName: data?.tradeName,
     accessories: gettradeaccessories(data?.tradeLicenseDetail?.accessories),
-    isAccessories: gettradeaccessories(data?.tradeLicenseDetail?.accessories).length > 0 ? { code: `ACCESSORY`, i18nKey: "TL_COMMON_YES" } : { code: `NONACCESSORY`, i18nKey: "TL_COMMON_NO" },
+    isAccessories:
+      gettradeaccessories(data?.tradeLicenseDetail?.accessories).length > 0
+        ? { code: `ACCESSORY`, i18nKey: "TL_COMMON_YES" }
+        : { code: `NONACCESSORY`, i18nKey: "TL_COMMON_NO" },
     units: gettradeunits(data?.tradeLicenseDetail?.tradeUnits),
-  }
+  };
   data.address = {};
   if (data?.tradeLicenseDetail?.address?.geoLocation?.latitude && data?.tradeLicenseDetail?.address?.geoLocation?.longitude) {
     data.address.geoLocation = {
@@ -106,10 +123,14 @@ const getTradeEditDetails = (data) => {
     owners: gettradeowners(data?.tradeLicenseDetail?.owners),
     permanentAddress: data?.tradeLicenseDetail?.owners[0].permanentAddress,
     isCorrespondenceAddress: false,
-  }
-  data.ownershipCategory = { code: `${data?.tradeLicenseDetail?.subOwnerShipCategory}`, i18nKey: `PT_OWNERSHIP_${data?.tradeLicenseDetail?.subOwnerShipCategory.split(".")[1]}`, value: `${data?.tradeLicenseDetail?.subOwnerShipCategory}` };
+  };
+  data.ownershipCategory = {
+    code: `${data?.tradeLicenseDetail?.subOwnerShipCategory}`,
+    i18nKey: `PT_OWNERSHIP_${data?.tradeLicenseDetail?.subOwnerShipCategory.split(".")[1]}`,
+    value: `${data?.tradeLicenseDetail?.subOwnerShipCategory}`,
+  };
   return data;
-}
+};
 
 const RenewTrade = ({ parentRoute }) => {
   const queryClient = useQueryClient();
@@ -128,6 +149,9 @@ const RenewTrade = ({ parentRoute }) => {
 
   const editProperty = window.location.href.includes("edit");
   const tlTrade = JSON.parse(sessionStorage.getItem("tl-trade")) || {};
+
+  const stateId = Digit.ULBService.getStateId();
+  const { data: newConfig, isLoading: configLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(stateId, {});
 
   useEffect(() => {
     application = data?.Licenses && data.Licenses[0] && data.Licenses[0];
@@ -175,16 +199,16 @@ const RenewTrade = ({ parentRoute }) => {
     setParams({ ...params, ...{ [key]: { ...params[key], ...data } } });
     goNext(skipStep, index, isAddMultiple, key);
   }
-  const handleSkip = () => { };
-  const handleMultiple = () => { };
+  const handleSkip = () => {};
+  const handleMultiple = () => {};
   const onSuccess = () => {
     queryClient.invalidateQueries("TL_RENEW_TRADE");
   };
-  newConfig.forEach((obj) => {
+  newConfig?.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
   config.indexRoute = "check";
-  if (isLoading) {
+  if (isLoading || configLoading) {
     return <Loader />;
   }
 
