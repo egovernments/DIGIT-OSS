@@ -27,7 +27,7 @@ public class AssessmentQueryBuilder {
 			+ "doc.id as doc_id, doc.entityid as doc_entityid, doc.documentType as doc_documenttype, doc.fileStoreId as doc_filestoreid, doc.documentuid as doc_documentuid, "
 			+ "doc.status as doc_status, doc.tenantid as doc_tenantid, "
 			+ "doc.createdby as doc_createdby, doc.createdtime as doc_createdtime, doc.lastmodifiedby as doc_lastmodifiedby, doc.lastmodifiedtime as doc_lastmodifiedtime " 
-			+ "FROM eg_pt_asmt_assessment asmt LEFT OUTER JOIN eg_pt_asmt_unitusage us ON asmt.id = us.assessmentId LEFT OUTER JOIN eg_pt_asmt_document doc ON asmt.id = doc.entityid ";
+			+ "FROM {schema}.eg_pt_asmt_assessment asmt LEFT OUTER JOIN {schema}.eg_pt_asmt_unitusage us ON asmt.id = us.assessmentId LEFT OUTER JOIN {schema}.eg_pt_asmt_document doc ON asmt.id = doc.entityid ";
 	
 	
 	private final String paginationWrapper = "SELECT * FROM "
