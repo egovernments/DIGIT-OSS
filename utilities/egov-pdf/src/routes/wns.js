@@ -646,9 +646,11 @@ router.post(
             for(let i=0;i<consolidatedResult.Bill.length;i++){
               let consumerCode = consolidatedResult.Bill[i].consumerCode;
               let data = propertyDetails[consumerCode];
-              consolidatedResult.Bill[i].propertyUniqueId = data.propertyUniqueId;
-              consolidatedResult.Bill[i].propertyAddress = data.propertyAddress;
-              consolidatedResult.Bill[i].locality = data.locality;
+              if(data){
+                consolidatedResult.Bill[i].propertyUniqueId = data.propertyUniqueId;
+                consolidatedResult.Bill[i].propertyAddress = data.propertyAddress;
+                consolidatedResult.Bill[i].locality = data.locality;
+              }
             }
             var billArray = { Bill: consolidatedResult.Bill };
             pdfResponse = await create_pdf(
