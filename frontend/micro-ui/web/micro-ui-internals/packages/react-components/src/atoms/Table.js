@@ -138,7 +138,14 @@ const Table = ({
                   return (
                     <td
                       // style={{ padding: "20px 18px", fontSize: "16px", borderTop: "1px solid grey", textAlign: "left", verticalAlign: "middle" }}
-                      {...cell.getCellProps()}
+                      {...cell.getCellProps([
+                        // {
+                        //   className: cell.column.className,
+                        //   style: cell.column.style,
+                        // },
+                        // getColumnProps(cell.column),
+                        getCellProps(cell),
+                      ])}
                     >
                       {cell.attachment_link ? (
                         <a style={{ color: "#1D70B8" }} href={cell.attachment_link}>
