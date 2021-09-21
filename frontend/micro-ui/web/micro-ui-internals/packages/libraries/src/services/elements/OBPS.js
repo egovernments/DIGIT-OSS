@@ -1,6 +1,7 @@
 import { Request } from "../atoms/Utils/Request"
 import Urls from "../atoms/urls";
 import { format } from "date-fns";
+import { MdmsService } from "./MDMS";
 
 export const OBPSService = {
   scrutinyDetails: (tenantId, params) =>
@@ -166,6 +167,9 @@ export const OBPSService = {
     const [BPA] = response?.BPA;
     const edcrResponse = await OBPSService.scrutinyDetails(BPA?.tenantId, { edcrNumber: BPA?.edcrNumber });
     const [edcr] = edcrResponse?.edcrDetail;
+    const mdmsRes = await MdmsService.getMultipleTypes(tenantId, "BPA", ["RiskTypeComputation"]);
+    const riskType = Digit.Utils.obps.calculateRiskType(mdmsRes?.BPA?.RiskTypeComputation, edcr?.planDetail?.plot?.area, edcr?.planDetail?.blocks);
+    BPA.riskType = riskType;
     const nocResponse = await OBPSService.NOCSearch(BPA?.tenantId, { sourceRefId: BPA?.applicationNo });
     const noc = nocResponse?.Noc;
 
