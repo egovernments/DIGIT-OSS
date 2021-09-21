@@ -133,6 +133,7 @@ import useBPAREGApplicationActions from "./obps/useBPAREGApplicationActions";
 import useBPADetailsPage from "./obps/useBPADetailsPage";
 
 import useBPAREGSearch from "./obps/useBPAREGSearch";
+import useEmpBPAREGSearch from "./obps/useEmpBPAREGSearch";
 import useEventInbox from "./events/useEventInbox";
 import { useEngagementMDMS } from "./engagement/useMdms";
 import useDocSearch from "./engagement/useSearch";
@@ -264,7 +265,8 @@ const obps = {
   useOCEdcrSearch,
   useLicenseDetails,
   useBPAREGApplicationActions,
-  useBPADetailsPage
+  useBPADetailsPage,
+  useEmpBPAREGSearch
 };
 
 const events = {

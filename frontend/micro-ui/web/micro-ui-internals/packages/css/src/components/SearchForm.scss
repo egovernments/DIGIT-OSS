@@ -16,4 +16,18 @@
             @apply cursor-pointer text-link text-focus w-full inline-block ;
         }
     }
+
+    .submit-obps{
+        margin-left: 650px;
+        right: 36px;
+        margin-top: 22px;
+        @apply inline align-middle text-center !important;
+        button{
+            margin: 0;
+            @apply inline-block w-full !important;
+        }
+        p{
+            @apply cursor-pointer text-link text-focus w-full inline-block ;
+        }
+    }
 }
