@@ -293,24 +293,33 @@ async function search_amendment(tenantId, amendmentId, serviceId, requestinfo) {
 }
 
 async function getPropertyDeatils(requestinfo,tenantId,propertyIds,connectionnoToPropertyMap){
-  var resProperty;
+  var resProperty = [];
 
   try {
-    resProperty = await search_property_by_id(
-                  propertyIds.toString(),
-                  tenantId,
-                  requestinfo,
-                  true);
+    let size = propertyIds.length;
+    for(var i =0; i<size; i+=50){
+      var propertyResponse = await search_property_by_id(
+                              propertyIds.slice(i, i+50).toString(),
+                              tenantId,
+                              requestinfo,
+                              true);
+      resProperty.push(propertyResponse.data.Properties)
+    }
   } catch (ex) {
       if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(res, "Failed to query details of the property", 500);
       }
 
   
-  var properties = resProperty.data;
+  var properties = [];
+  for(let data of resProperty){
+    
+    properties = properties.concat(data);
+  }
+  
   var propertyDeatils = {}; 
 
-  for(let property of properties.Properties){
+  for(let property of properties){
     var propertyAddress="";
     var locality;
     var address = property.address;
@@ -362,6 +371,19 @@ async function create_pdf(tenantId, key, data, requestinfo) {
   });
 }
 
+async function create_pdf_and_upload(tenantId, key, data, requestinfo) {
+  return await axios({
+    //responseType: "stream",
+    method: "post",
+    url: url.resolve(config.host.pdf, config.paths.pdf_create_upload),
+    data: Object.assign(requestinfo, data),
+    params: {
+      tenantId: tenantId,
+      key: key,
+    },
+  });
+}
+
 function checkIfCitizen(requestinfo) {
   if (requestinfo.RequestInfo.userInfo.type == "CITIZEN") {
     return true;
@@ -372,6 +394,7 @@ function checkIfCitizen(requestinfo) {
 
 module.exports = {
   create_pdf,
+  create_pdf_and_upload,
   search_epass,
   search_mdms,
   search_user,
