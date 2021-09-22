@@ -1,24 +1,15 @@
 package org.egov.tl.repository.builder;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Arrays;
+import java.util.List;
+
 import org.egov.tl.config.TLConfiguration;
-import org.egov.tl.web.models.*;
-import org.egov.tracer.model.CustomException;
-import org.postgresql.util.PGobject;
+import org.egov.tl.web.models.TradeLicenseSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-
-@Slf4j
 @Component
 public class TLQueryBuilder {
 
@@ -52,25 +43,25 @@ public class TLQueryBuilder {
             "tlownerdoc.userid as docuserid,tlownerdoc.tradeLicenseDetailId as doctradelicensedetailid,tlownerdoc.id as ownerdocid,"+
             "tlownerdoc.documenttype as ownerdocType,tlownerdoc.filestoreid as ownerfileStoreId,tlownerdoc.documentuid as ownerdocuid,tlownerdoc.active as ownerdocactive," +
             " tlinsti.id as instiid,tlinsti.name as authorisedpersonname,tlinsti.type as institutiontype,tlinsti.tenantid as institenantId,tlinsti.active as instiactive, "+
-            " tlinsti.instituionname as instiinstituionname, tlinsti.contactno as insticontactno, tlinsti.organisationregistrationno as instiorganisationregistrationno, tlinsti.address as instiaddress FROM eg_tl_tradelicense tl"
+            " tlinsti.instituionname as instiinstituionname, tlinsti.contactno as insticontactno, tlinsti.organisationregistrationno as instiorganisationregistrationno, tlinsti.address as instiaddress FROM {schema}.eg_tl_tradelicense tl"
             +INNER_JOIN_STRING
-            +"eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id"
+            +"{schema}.eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id"
             +INNER_JOIN_STRING
-            +"eg_tl_address tladdress ON tladdress.tradelicensedetailid = tld.id"
+            +"{schema}.eg_tl_address tladdress ON tladdress.tradelicensedetailid = tld.id"
             +INNER_JOIN_STRING
-            +"eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id"
+            +"{schema}.eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id"
             +INNER_JOIN_STRING
-            +"eg_tl_tradeunit tlunit ON tlunit.tradelicensedetailid = tld.id"
+            +"{schema}.eg_tl_tradeunit tlunit ON tlunit.tradelicensedetailid = tld.id"
             +LEFT_OUTER_JOIN_STRING
-            +"eg_tl_accessory tlacc ON tlacc.tradelicensedetailid = tld.id"
+            +"{schema}.eg_tl_accessory tlacc ON tlacc.tradelicensedetailid = tld.id"
             +LEFT_OUTER_JOIN_STRING
-            +"eg_tl_document_owner tlownerdoc ON tlownerdoc.userid = tlowner.id"
+            +"{schema}.eg_tl_document_owner tlownerdoc ON tlownerdoc.userid = tlowner.id"
             +LEFT_OUTER_JOIN_STRING
-            +"eg_tl_applicationdocument tlapldoc ON tlapldoc.tradelicensedetailid = tld.id"
+            +"{schema}.eg_tl_applicationdocument tlapldoc ON tlapldoc.tradelicensedetailid = tld.id"
             +LEFT_OUTER_JOIN_STRING
-            +"eg_tl_verificationdocument tlverdoc ON tlverdoc.tradelicensedetailid = tld.id"
+            +"{schema}.eg_tl_verificationdocument tlverdoc ON tlverdoc.tradelicensedetailid = tld.id"
             +LEFT_OUTER_JOIN_STRING
-            +"eg_tl_institution tlinsti ON tlinsti.tradelicensedetailid = tld.id ";
+            +"{schema}.eg_tl_institution tlinsti ON tlinsti.tradelicensedetailid = tld.id ";
 
 
       private final String paginationWrapper = "SELECT * FROM " +

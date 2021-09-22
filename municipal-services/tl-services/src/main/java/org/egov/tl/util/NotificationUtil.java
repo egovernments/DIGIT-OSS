@@ -1,14 +1,46 @@
 package org.egov.tl.util;
 
-import com.jayway.jsonpath.JsonPath;
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.tl.util.TLConstants.ACTION_CANCEL_CANCELLED;
+import static org.egov.tl.util.TLConstants.ACTION_FORWARD_CITIZENACTIONREQUIRED;
+import static org.egov.tl.util.TLConstants.ACTION_SENDBACKTOCITIZEN_FIELDINSPECTION;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_APPLIED;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_APPROVED;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_FIELDINSPECTION;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_INITIATED;
+import static org.egov.tl.util.TLConstants.ACTION_STATUS_REJECTED;
+import static org.egov.tl.util.TLConstants.APPLICATION_TYPE_RENEWAL;
+import static org.egov.tl.util.TLConstants.BILL_AMOUNT_JSONPATH;
+import static org.egov.tl.util.TLConstants.DEFAULT_OBJECT_MODIFIED_MSG;
+import static org.egov.tl.util.TLConstants.DEFAULT_OBJECT_RENEWAL_MODIFIED_MSG;
+import static org.egov.tl.util.TLConstants.NOTIFICATION_CODES;
+import static org.egov.tl.util.TLConstants.NOTIFICATION_LOCALE;
+import static org.egov.tl.util.TLConstants.NOTIF_EXPIRY_DATE_KEY;
+import static org.egov.tl.util.TLConstants.NOTIF_OWNER_NAME_KEY;
+import static org.egov.tl.util.TLConstants.NOTIF_TRADE_LICENSENUMBER_KEY;
+import static org.egov.tl.util.TLConstants.NOTIF_TRADE_NAME_KEY;
+import static org.egov.tl.util.TLConstants.PAYMENT_LINK_PLACEHOLDER;
+import static org.egov.tl.util.TLConstants.TRADE_LICENSE_MODULE_CODE;
+import static org.egov.tl.util.TLConstants.businessService_TL;
+
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.utils.URIBuilder;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.ServiceRequestRepository;
-import org.egov.tl.web.models.*;
+import org.egov.tl.web.models.Difference;
+import org.egov.tl.web.models.EventRequest;
+import org.egov.tl.web.models.RequestInfoWrapper;
+import org.egov.tl.web.models.SMSRequest;
+import org.egov.tl.web.models.TradeLicense;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +48,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.jayway.jsonpath.JsonPath;
 
-import static org.egov.tl.util.TLConstants.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -393,7 +423,7 @@ public class NotificationUtil {
 			if (CollectionUtils.isEmpty(smsRequestList))
 				log.info("Messages from localization couldn't be fetched!");
 			for (SMSRequest smsRequest : smsRequestList) {
-				producer.push(config.getSmsNotifTopic(), smsRequest);
+				producer.push("", config.getSmsNotifTopic(), smsRequest);
 				log.info("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
 			}
 		}
@@ -534,7 +564,7 @@ public class NotificationUtil {
 	 * @param request
 	 */
 	public void sendEventNotification(EventRequest request) {
-		producer.push(config.getSaveUserEventsTopic(), request);
+		producer.push("", config.getSaveUserEventsTopic(), request);
 	}
 
 

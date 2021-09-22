@@ -307,5 +307,13 @@ public class TLConfiguration {
 
     @Value("${id.timezone}")
     private String egovAppTimeZone;
+    
+    // central-instance configs
+    
+    @Value("${state.level.tenantid.length}")
+    private Integer stateLevelTenantIdLength;
+    
+    @Value("${is.environment.central.instance}")
+    private Boolean isEnvironmentCentralInstance;
 
 }
