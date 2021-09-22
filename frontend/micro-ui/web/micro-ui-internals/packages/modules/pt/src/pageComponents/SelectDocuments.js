@@ -238,7 +238,7 @@ function SelectDocument({
   if (filterCondition) {
     const { filterValue, jsonPath, onArray, arrayAttribute, formDataPath, formArrayAttrPath } = filterCondition;
     if (action === "create") {
-      const value = formDataPath.reduce((acc, key) => {
+      const value = formDataPath?.reduce((acc, key) => {
         if (key.charAt(0).toUpperCase() + key.slice(1) === "PropertyType") return acc["PropertyType"];
         return acc?.[key];
       }, formData);
@@ -261,7 +261,7 @@ function SelectDocument({
       const a = fromRawData ? jsonPath : jsonPath?.split("Properties[0].propertyDetails[0].")[1];
       const keyArr = a?.split(".")?.map((e) => (e.includes("[") ? e.split("[")[1]?.split("]")[0] : e));
       const value = keyArr.reduce((acc, curr) => acc[curr], formData?.originalData);
-      const formDataValue = formDataPath.reduce((acc, key) => {
+      const formDataValue = formDataPath?.reduce((acc, key) => {
         if (key.charAt(0).toUpperCase() + key.slice(1) === "PropertyType") return acc["PropertyType"];
         return acc?.[key];
       }, formData);
@@ -298,7 +298,7 @@ function SelectDocument({
         }
       } else {
         const arr = formDataPath;
-        const value = arr.reduce((acc, key) => acc?.[key], formData);
+        const value = arr?.reduce((acc, key) => acc?.[key], formData);
         const attrForFormArray = formArrayAttrPath;
         if (value) {
           if (!onArray) {
