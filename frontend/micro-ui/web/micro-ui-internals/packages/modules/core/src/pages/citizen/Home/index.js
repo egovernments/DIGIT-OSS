@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { StandaloneSearchBar, Loader, CardBasedOptions, ComplaintIcon, PTIcon, CaseIcon, DropIcon, HomeIcon, Calender, DocumentIcon, HelpIcon, WhatsNewCard } from "@egovernments/digit-ui-react-components"
+import { StandaloneSearchBar, Loader, CardBasedOptions, ComplaintIcon, PTIcon, CaseIcon, DropIcon, HomeIcon, Calender, DocumentIcon, HelpIcon, WhatsNewCard, OBPSIcon } from "@egovernments/digit-ui-react-components"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom";
 
@@ -45,6 +45,11 @@ const Home = () => {
                 name: t("ACTION_TEST_WATER_AND_SEWERAGE"), 
                 Icon: <DropIcon/>,
                 onClick: () => history.push("/digit-ui/citizen")
+            },
+            {
+                name: t("CS_COMMON_INBOX_BPA"), 
+                Icon: <OBPSIcon />,
+                onClick: () => history.push("/digit-ui/citizen/obps-home")
             }
         ]
     }
