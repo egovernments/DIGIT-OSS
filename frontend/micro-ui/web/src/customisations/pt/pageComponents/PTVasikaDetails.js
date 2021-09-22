@@ -1,65 +1,39 @@
-import { CardLabel, CitizenInfoLabel, FormStep, LabelFieldPair, TextInput } from "@egovernments/digit-ui-react-components";
+import { CardLabel, CitizenInfoLabel, FormStep, LabelFieldPair, TextInput,CardLabelError } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 var validation ={};
 const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => {
 
-  const onSkip = () => onSelect();
 
   const [
     val, setValue
-  ] = useState("")
+  ] = useState(formData?.[config.key]?.vasikaNo||"");
   const [
     other, setOther
-  ] = useState("")
+  ] = useState(formData?.[config.key]?.vasikaArea||"");
   const goNext = () => {
-    onSkip()
+    onSelect(config.key, {vasikaNo:val,vasikaArea:other});
   };
 
 
   if (userType === "employee") {
     return (
-      <div>
-        <LabelFieldPair>
-          <CardLabel >{`${t("PT_FORM3_MOBILE_NUMBER")}`}</CardLabel>
-          <div className="field">
-            <TextInput
-              type={"text"}
-              t={t}
-              isMandatory={false}
-              name="mobileNumber"
-              value={val}
-              onChange={(e)=>setValue(e?.target?.value)}
-              {...(validation = {
-                isRequired: true,
-                pattern: "[6-9]{1}[0-9]{9}",
-                type: "tel",
-                title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
-              })}
-
-            />
-          </div>
-        </LabelFieldPair>
-        <LabelFieldPair>
-          <CardLabel >{`${t("PT_OWNER_NAME")}`}</CardLabel>
-          <div className="field">
-            <TextInput
-              t={t}
-              type={"text"}
-              isMandatory={false}
-              name="name"
-              value={other}
-              onChange={(e)=>setOther(e?.target?.value)}
-              {...(validation = {
-                isRequired: true,
-                pattern: "^[a-zA-Z-.`' ]*$",
-                type: "tel",
-                title: t("PT_NAME_ERROR_MESSAGE"),
-              })}
-
-            />
-          </div>
-        </LabelFieldPair>
-      </div>
+        <React.Fragment>
+          <LabelFieldPair >
+            <CardLabel className="card-label-smaller">{t("PT_VASIKA_NO_LABEL") }</CardLabel>
+            <div className="field">
+              <TextInput
+               t={t}
+            type={"number"}
+            isMandatory={false}
+            name="PlotSize"
+                value={val}
+                onChange={(e)=>setValue(e?.target?.value)}
+                // autoFocus={presentInModifyApplication}
+              />
+            </div>
+          </LabelFieldPair>
+        
+        </React.Fragment>
     );
   }
   return (
@@ -68,7 +42,7 @@ const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => 
         config={config}
         header="ground"
         onSelect={goNext}
-        onSkip={onSkip}
+        onSkip={goNext}
         t={t}
         showErrorBelowChildren={true}
       >
@@ -89,7 +63,7 @@ const PTVasikaDetails = ({ t, config, onSelect, value, userType, formData }) => 
         <CardLabel>{`${t("PT_VASIKA_AREA_LABEL")}`}</CardLabel>
         <TextInput
           t={t}
-          type={"number"}
+          type={"text"}
           isMandatory={false}
           optionKey="i18nKey"
           name="BuiltUpArea"

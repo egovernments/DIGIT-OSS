@@ -19,7 +19,7 @@ import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 
 import { DigitUI } from "@egovernments/digit-ui-module-core";
-import {initCustomisationComponents} from "./customisations";
+// import {initCustomisationComponents} from "./customisations";
 
 // import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
 // import { Body, TopBar } from "@egovernments/digit-ui-react-components";
@@ -170,7 +170,7 @@ const initDigitUI = () => {
   initEngagementComponents();
 
 
-initCustomisationComponents();
+// initCustomisationComponents();
 
   const moduleReducers = (initData) => ({
     pgr: PGRReducers(initData),

@@ -33,7 +33,7 @@ window.Digit.ComponentRegistryService.setupRegistry({
   ReceiptsModule
 });
 
-initCustomisationComponents();
+
 initPGRComponents();
 initFSMComponents();
 initDSSComponents();
@@ -43,6 +43,8 @@ initTLComponents();
 initReceiptsComponents();
 initOBPSComponents();
 initEngagementComponents();
+
+initCustomisationComponents();
 
 const moduleReducers = (initData) => ({
   pgr: PGRReducers(initData),
