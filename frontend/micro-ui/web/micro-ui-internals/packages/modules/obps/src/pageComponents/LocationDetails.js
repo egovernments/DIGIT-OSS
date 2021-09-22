@@ -20,6 +20,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   const [selectedCity, setSelectedCity] = useState(() => currCity || formData?.address?.city || null);
   const [street, setStreet] = useState(formData?.address?.street || "");
   const [landmark, setLandmark] = useState(formData?.address?.landmark || formData?.address?.Landmark || "");
+  const [placeName, setplaceName] = useState(formData?.address?.placeName || "");
   //const { isLoading, data: citymodules } = Digit.Hooks.obps.useMDMS(stateId, "tenant", ["citymodule"]);
   let [cities, setcitiesopetions] = useState(allCities);
   let validation = { };
@@ -111,9 +112,10 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   };
 
 
-  function onSave(geoLocation, pincode) {
+  function onSave(geoLocation, pincode, placeName) {
     selectPincode(pincode);
     setgeoLocation(geoLocation);
+    setplaceName(placeName);
     setIsOpen(false);
   }
   function selectPincode(e) {
@@ -188,7 +190,8 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
           optionKey="i18nKey"
           t={t}
           name="gis"
-          value={geoLocation && geoLocation.latitude && geoLocation.longitude?`${geoLocation.latitude},${geoLocation.longitude}`:""}
+          //value={geoLocation && geoLocation.latitude && geoLocation.longitude?`${geoLocation.latitude},${geoLocation.longitude}`:""}
+          value={placeName}
           onChange={selectGeolocation}
         />
         <LinkButton
