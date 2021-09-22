@@ -65,7 +65,7 @@ import {
   AnnouncementIcon, ArrowDown, ArrowLeft, ArrowRightInbox, Calender, CaseIcon, CitizenTruck, CloseSvg, ComplaintIcon, Details, DocumentSVG, DownloadIcon, DownloadImgIcon, DownwardArrow, DropIcon, Ellipsis, EmailIcon, FilterIcon, GetApp, HomeIcon,
   PrevIcon, ViewsIcon, LanguageIcon,
   LogoutIcon, Person, PersonIcon, Poll, PrintIcon, PropertyHouse, PTIcon, ReceiptIcon, RefreshIcon, RupeeIcon, SearchIconSvg, ShareIcon, ShippingTruck, SortDown,
-  SortUp, UpwardArrow, WhatsappIcon, OBPSIcon, EDCRIcon, BPAIcon, BPAHomeIcon,DocumentIcon, PDFSvg, HelpIcon, TickMark, NotificationBell, MapMarker, Clock, EventCalendar
+  SortUp, UpwardArrow, WhatsappIcon, OBPSIcon, EDCRIcon, BPAIcon, BPAHomeIcon,DocumentIcon, PDFSvg, HelpIcon, TickMark, NotificationBell, MapMarker, Clock, EventCalendar, ImageIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -204,6 +204,7 @@ export {
   DocumentIcon,
   HelpIcon,
   NotificationBell,
+  ImageIcon,
   // Molecule
   InputCard,
   FormStep,

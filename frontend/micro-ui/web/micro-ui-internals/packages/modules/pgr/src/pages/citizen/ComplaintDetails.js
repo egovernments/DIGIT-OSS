@@ -20,17 +20,17 @@ import {
 
 import TimeLine from "../../components/TimeLine";
 
-const WorkflowComponent = ({ complaintDetails, id, getWorkFlow }) => {
+const WorkflowComponent = ({ complaintDetails, id, getWorkFlow, zoomImage }) => {
   const tenantId = complaintDetails.service.tenantId;
   const workFlowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: tenantId, id, moduleCode: "PGR" });
   useEffect(() => {
     getWorkFlow(workFlowDetails.data);
   }, [workFlowDetails.data]);
-
+  
   useEffect(() => {
     workFlowDetails.revalidate();
   }, []);
-
+  
   return (
     !workFlowDetails.isLoading && (
       <TimeLine
@@ -39,6 +39,7 @@ const WorkflowComponent = ({ complaintDetails, id, getWorkFlow }) => {
         serviceRequestId={id}
         complaintWorkflow={complaintDetails.workflow}
         rating={complaintDetails.audit.rating}
+        zoomImage={zoomImage}
       />
     )
   );
@@ -76,7 +77,7 @@ const ComplaintDetailsPage = (props) => {
 
   function zoomImage(imageSource, index) {
     // console.log("index", index, imageSource,complaintDetails.images[index-1],"|||", complaintDetails.images )
-    setImageZoom(complaintDetails.images[index - 1]);
+    setImageZoom(imageSource.fullImage[index - 1]);
   }
 
   function onCloseImageZoom() {
@@ -144,7 +145,7 @@ const ComplaintDetailsPage = (props) => {
             ) : null}
             {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
           </Card>
-          <Card>{complaintDetails?.service && <WorkflowComponent getWorkFlow={onWorkFlowChange} complaintDetails={complaintDetails} id={id} />}</Card>
+          <Card>{complaintDetails?.service && <WorkflowComponent getWorkFlow={onWorkFlowChange} complaintDetails={complaintDetails} id={id} zoomImage={zoomImage} />}</Card>
           <Card>
             <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
             <TextArea value={comment} onChange={(e) => setComment(e.target.value)} name="" />

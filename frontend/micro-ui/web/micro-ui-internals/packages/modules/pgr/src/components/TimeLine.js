@@ -1,5 +1,5 @@
-import { Card, CardSubHeader, CheckPoint, ConnectingCheckPoints, GreyOutText, Loader, TelePhone } from "@egovernments/digit-ui-react-components";
-import React, { useEffect } from "react";
+import { Card, CardSubHeader, CheckPoint, ConnectingCheckPoints, GreyOutText, Loader, DisplayPhotos } from "@egovernments/digit-ui-react-components";
+import React, {Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../constants/Localization";
 import PendingAtLME from "./timelineInstances/pendingAtLme";
@@ -10,7 +10,7 @@ import Resolved from "./timelineInstances/resolved";
 import Rejected from "./timelineInstances/rejected";
 import StarRated from "./timelineInstances/StarRated";
 
-const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating }) => {
+const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating, zoomImage }) => {
   const { t } = useTranslation();
   // let GetComplaintInstance = ({}) => {
 
@@ -40,23 +40,39 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
 
   // console.log("find timeline here", timeline);
 
-  const getCheckPoint = ({ status, caption, auditDetails, timeLineActions, index, array, performedAction }) => {
+  const getCommentsInCustomChildComponent = ({comment, thumbnailsToShow}) => {
+    debugger
+    return <>
+    {comment ? <div>{comment?.map( e => 
+      <div className="TLComments">
+        <h3>{t("WF_COMMON_COMMENTS")}</h3>
+        <p>{e}</p>
+      </div>
+    )}</div> : null}
+    {thumbnailsToShow?.thumbs?.length > 0 ? <div className="TLComments">
+      <h3>{t("CS_COMMON_DOCUMENTS")}</h3>
+      <DisplayPhotos srcs={thumbnailsToShow.thumbs} onClick={(src, index) => zoomImage(thumbnailsToShow, index)} />
+    </div> : null}
+    </>
+  }
+
+  const getCheckPoint = ({ status, caption, auditDetails, timeLineActions, index, array, performedAction, comment, thumbnailsToShow }) => {
     // console.log("find getChechPoint data here", status, index)
     const isCurrent = 0 === index;
     switch (status) {
       case "PENDINGFORREASSIGNMENT":
-        return <CheckPoint isCompleted={isCurrent} key={index} label={t(`CS_COMMON_PENDINGFORASSIGNMENT`)} />;
+        return <CheckPoint isCompleted={isCurrent} key={index} label={t(`CS_COMMON_PENDINGFORASSIGNMENT`)} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow})} />;
 
       case "PENDINGFORASSIGNMENT":
-        return <PendingForAssignment key={index} isCompleted={isCurrent} text={t("CS_COMMON_PENDINGFORASSIGNMENT")} />;
+        return <PendingForAssignment key={index} isCompleted={isCurrent} text={t("CS_COMMON_PENDINGFORASSIGNMENT")} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow})} />;
 
       case "PENDINGFORASSIGNMENT_AFTERREOPEN":
-        return <PendingForAssignment isCompleted={isCurrent} key={index} text={t(`CS_COMMON_PENDINGFORASSIGNMENT`)} />;
+        return <PendingForAssignment isCompleted={isCurrent} key={index} text={t(`CS_COMMON_PENDINGFORASSIGNMENT`)} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow})} />;
 
       case "PENDINGATLME":
         let { name, mobileNumber } = caption && caption.length > 0 ? caption[0] : { name: "", mobileNumber: "" };
         const assignedTo = `${t("CS_COMMON_COMPLAINT_ASSIGNED_TO")}`;
-        return <PendingAtLME isCompleted={isCurrent} key={index} name={name} mobile={mobileNumber} text={assignedTo} />;
+        return <PendingAtLME isCompleted={isCurrent} key={index} name={name} mobile={mobileNumber} text={assignedTo} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow})} />;
 
       case "RESOLVED":
         return (
@@ -68,6 +84,7 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
             rating={index <= 1 && rating}
             serviceRequestId={serviceRequestId}
             reopenDate={Digit.DateUtils.ConvertTimestampToDate(auditDetails.lastModifiedTime)}
+            customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow})}
           />
         );
       case "REJECTED":
@@ -80,10 +97,11 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
             rating={index <= 1 && rating}
             serviceRequestId={serviceRequestId}
             reopenDate={Digit.DateUtils.ConvertTimestampToDate(auditDetails.lastModifiedTime)}
+            customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow})}
           />
         );
       case "CLOSEDAFTERRESOLUTION":
-        return <CheckPoint isCompleted={isCurrent} key={index} label={t("CS_COMMON_CLOSEDAFTERRESOLUTION")} />;
+        return <CheckPoint isCompleted={isCurrent} key={index} label={t("CS_COMMON_CLOSEDAFTERRESOLUTION")} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow})} />;
 
       // case "RESOLVE":
       // return (
@@ -96,10 +114,10 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
       //   />
       // );
       case "COMPLAINT_FILED":
-        return <CheckPoint isCompleted={isCurrent} key={index} label={t("CS_COMMON_COMPLAINT_FILED")} info={auditDetails.created} />;
+        return <CheckPoint isCompleted={isCurrent} key={index} label={t("CS_COMMON_COMPLAINT_FILED")} info={auditDetails.created} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow})} />;
 
       default:
-        return <CheckPoint isCompleted={isCurrent} key={index} label={t(`CS_COMMON_${status}`)} />;
+        return <CheckPoint isCompleted={isCurrent} key={index} label={t(`CS_COMMON_${status}`)} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow})} />;
     }
   };
 
@@ -108,8 +126,8 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
       <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader>
       {timeline && timeline.length > 0 ? (
         <ConnectingCheckPoints>
-          {timeline.map(({ status, caption, auditDetails, timeLineActions, performedAction }, index, array) => {
-            return getCheckPoint({ status, caption, auditDetails, timeLineActions, index, array, performedAction });
+          {timeline.map(({ status, caption, auditDetails, timeLineActions, performedAction, wfComment: comment, thumbnailsToShow }, index, array) => {
+            return getCheckPoint({ status, caption, auditDetails, timeLineActions, index, array, performedAction, comment, thumbnailsToShow });
           })}
         </ConnectingCheckPoints>
       ) : (
