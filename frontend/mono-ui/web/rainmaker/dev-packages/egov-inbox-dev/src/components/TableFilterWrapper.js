@@ -75,14 +75,14 @@ const initialState = {
 const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid, loadedAll, localities = [], localityData, t, esclationData, setEsclationData, applicationStates, setBusinessServices, wfSlaConfig, wfBusinessConfig, data, ...rest }) => {
     let isMobile = mobileCheck()
     const [searchText, setSearchText] = useState("");
-    const [searchRecord, setSearchRecord] = useState({ });
+    const [searchRecord, setSearchRecord] = useState([]);
     const [filters, setFiltersDispatch] = useReducer(reducer, initialState);
     const [sort, setSortOrder] = useState(true);
     const [filteredData, setFilteredData] = useState(data || []);
     useEffect(() => {
         if (searchText != "") {
             const timer = setTimeout(() => {
-                wfSearch([{ key: "businessIds", value: searchText }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(resp => resp && resp.ProcessInstances && resp.ProcessInstances[0] && formatWFSearch(resp.ProcessInstances[0], wfSlaConfig, wfBusinessConfig)).then(response => setSearchRecord(response ? response : { }))
+                wfSearch([{ key: "businessIds", value: searchText }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(resp => resp && resp.ProcessInstances && resp.ProcessInstances.map(wfRecord=>formatWFSearch(wfRecord, wfSlaConfig, wfBusinessConfig)) ).then(response => setSearchRecord(response ? response : { }));
             }, 1000)
             return () => {
                 clearTimeout(timer);
@@ -93,9 +93,9 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
 
 
     useEffect(() => {
-        if (Object.keys(searchRecord).length != 0 && searchText != "") {
-            setFilteredData([searchRecord]);
-        } else if (searchText != "" && Object.keys(searchRecord).length == 0) {
+        if (searchRecord.length != 0 && searchText != "") {
+            setFilteredData([...searchRecord]);
+        } else if (searchText != "" && searchRecord.length == 0) {
             setFilteredData([]);
         } else if (filters.esclated) {
             setFilteredData([...esclationData.data]);
@@ -138,7 +138,7 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
             }}>
                 {t("WF_TOTAL_TASK")}
                 <span className="inbox-task-font">
-                    {filters.selected_none ? count : filteredData.length}
+                    {filters.selected_none&&searchText===""  ? count : filteredData.length}
                 </span>
 
             </div>

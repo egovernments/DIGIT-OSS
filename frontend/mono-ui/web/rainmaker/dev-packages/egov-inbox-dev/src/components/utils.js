@@ -21,7 +21,7 @@ export const convertMillisecondsToDays = (milliseconds) => {
 }
 
 export const getSlaColorAndType = (sla, businessService, wfSlaConfig, wfBusinessConfig) => {
-    const { MAX_SLA = 0 } = wfBusinessConfig[businessService] || { };
+    const { MAX_SLA = 0 } = wfBusinessConfig[businessService] || {};
     let slaColorType = { esclated: false, nearingEsclation: false, noneType: true, color: '#4CAF50' };
     if (wfSlaConfig) {
         if ((MAX_SLA - (MAX_SLA * wfSlaConfig.slotPercentage / 100) <= sla) && sla <= MAX_SLA) {
@@ -42,8 +42,8 @@ export const getSlaColorAndType = (sla, businessService, wfSlaConfig, wfBusiness
     return slaColorType;
 };
 
-export const formatWFSearch = (data, wfSlaConfig = { },
-    wfBusinessConfig = { }) => {
+export const formatWFSearch = (data, wfSlaConfig = {},
+    wfBusinessConfig = {}) => {
     const sla = data.businesssServiceSla && convertMillisecondsToDays(data.businesssServiceSla);
     const slaColorAndType = getSlaColorAndType(sla, data.businessService, wfSlaConfig, wfBusinessConfig);
     return {
@@ -65,10 +65,10 @@ export const formatWFSearch = (data, wfSlaConfig = { },
         }
     }
 }
-export const formatWFEsclatedSearch = (data, wfSlaConfig = { },
-    wfBusinessConfig = { }) => ({ ...formatWFSearch(data, wfSlaConfig, wfBusinessConfig), Esclated: true })
+export const formatWFEsclatedSearch = (data, wfSlaConfig = {},
+    wfBusinessConfig = {}) => ({ ...formatWFSearch(data, wfSlaConfig, wfBusinessConfig), Esclated: true })
 
-export const getWfLink = (inboxConfig = { }, no, service) => {
+export const getWfLink = (inboxConfig = {}, no, service) => {
     let defaultUrl = inboxConfig[service].redirectConfig.DEFAULT || '';
     defaultUrl = defaultUrl.replace("^WFBID^", no);
     defaultUrl = defaultUrl.replace("^WFTNID^", localStorage.getItem("inb-tenantId"));
@@ -113,7 +113,7 @@ export const loadCompleteRecord = ({ limit = 100, offset = 0, setLoadedAll, setL
     });
 }
 
-export const getLimitAndOffset = (countObject = { }) => {
+export const getLimitAndOffset = (countObject = {}) => {
     const { totalCount = 0, loadedCount = 0 } = countObject;
     let limit = 0;
     let offset = 100;
@@ -136,4 +136,46 @@ export const transformLocality = (locality) => {
 
 export const asyncForEach = (array, cb) => {
     array.forEach((ele) => setTimeout(cb.call(ele), 0))
+}
+
+
+export const fetchLocalisation = async () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+        "RequestInfo": {
+            "apiId": "emp",
+            "ver": "1.0",
+            "ts": "10-03-2017 00:00:00",
+            "action": "create",
+            "did": "1",
+            "key": "abcdkey",
+            "msgId": "20170310130900",
+            "requesterId": "jagan",
+            "authToken": "0849501b-e1e0-42b9-8bc6-970a2018ba8f",
+            "userInfo": {
+                "id": 1
+            }
+        }
+    });
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    let localisationResponse = await fetch(`${window.location.origin}/localization/messages/v1/_search?locale=en_IN&tenantId=pb&module=rainmaker-common`, requestOptions)
+        .then(response => response.text())
+        .then(result => JSON.parse(result))
+        .then(result => result.messages)
+        .catch(error => console.log('error', error));
+
+    let transformedData = localisationResponse.reduce((curr, acm) => {
+        curr[acm.code] = acm.message
+        return { ...curr };
+    }, {})
+    localStorage.setItem("inbox-localisationData", JSON.stringify(transformedData));
 }

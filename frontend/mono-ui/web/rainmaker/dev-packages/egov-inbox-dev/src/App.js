@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Inbox from './components/Inbox';
+import { fetchLocalisation } from './components/utils';
 
 function App() {
-
+const [localisationData, setData] = useState(JSON.parse(localStorage.getItem("inbox-localisationData"))||{})
 
     let userObject = {
         "id": 12012,
@@ -25,13 +26,19 @@ function App() {
         "tenantId": "pb.amritsar",
         "permanentCity": 'pb'
     }
-    userObject.auth = "15966eb0-92b3-4c16-b304-70470270958b";
+    userObject.auth = "0dc013c4-5397-4102-91a5-cabe8ebdbaba";
     localStorage.setItem("Employee.token", userObject.auth);
+
+    useEffect(() => {
+        localisationData&&Object.keys(localisationData).length==0&&fetchLocalisation();
+        return () => {
+        }
+    }, [])
 
     return (
 
         <div >
-            <Inbox user={userObject} t={(key) => { console.log(key); return key }} historyClick={(e) => console.log("history", e)} historyComp={<span>HH</span>} esclatedComp={<span>I</span>}></Inbox>
+            <Inbox user={userObject} t={(key) => localisationData&&localisationData[key]?localisationData[key]:key  } historyClick={(e) => console.log("history", e)} historyComp={<span>HH</span>} esclatedComp={<span>I</span>}></Inbox>
         </div>
     );
 }
