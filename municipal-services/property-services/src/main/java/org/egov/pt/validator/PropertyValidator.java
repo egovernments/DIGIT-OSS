@@ -849,22 +849,35 @@ public class PropertyValidator {
 		
 		Property propertyFromSearch = propertiesFromSearchResponse.get(0);	
 
-		Map<String, String> uuidToAlternate = new HashMap<String,String>(); 
+		Map<String, String> userToAlternateNumberMap = new HashMap<String,String>(); 
 		
 		for(OwnerInfo owner : propertyFromSearch.getOwners()) {
-			uuidToAlternate.put(owner.getUuid(), owner.getAlternatemobilenumber());
+			userToAlternateNumberMap.put(owner.getUuid(), owner.getAlternatemobilenumber());
+		}
+		
+		boolean isAlternateNumberSame = true;
+		
+		for(OwnerInfo owner : property.getOwners()) {
+			if(userToAlternateNumberMap.get(owner.getUuid())!=null && userToAlternateNumberMap.get(owner.getUuid()).equals(owner.getAlternatemobilenumber()) ) {
+					isAlternateNumberSame = true;
+			}
+			
+			else {
+				isAlternateNumberSame=false;
+				break;
+			}
+		}
+		
+		if(isAlternateNumberSame) {
+			throw new CustomException("EG_PT_ALTERNATE_EXISTS", "The alternate mobile number already exists for the owner");
 		}
 		
 		for(OwnerInfo owner : property.getOwners()) {
-			if(!uuidToAlternate.containsKey(owner.getUuid())) {
+			if(!userToAlternateNumberMap.containsKey(owner.getUuid())) {
 				throw new CustomException("EG_PT_OWNER_DOES_NOT_EXIST", "New owner can not be added while updating alternate mobile number details");
 			}
 			
 			else {
-				
-				if(uuidToAlternate.get(owner.getUuid())!=null && uuidToAlternate.get(owner.getUuid()).equals(owner.getAlternatemobilenumber())) {
-					throw new CustomException("EG_PT_ALTERNATE_EXISTS", "The alternate mobile number already exists for the owner");
-				}
 				
 				if(owner.getMobileNumber().equals(owner.getAlternatemobilenumber())) {
 					throw new CustomException("EG_PT_ALTERNATE_EXISTS", "The alternate mobile number should not be same as primary number");
