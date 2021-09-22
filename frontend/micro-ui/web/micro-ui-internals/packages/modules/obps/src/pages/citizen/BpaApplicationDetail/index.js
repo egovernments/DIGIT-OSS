@@ -79,10 +79,10 @@ const BpaApplicationDetail = () => {
               {detail?.values?.map((value) => (
                 <Row className="border-none" label={t(value?.title)} text={t(value?.value) || t("CS_NA")} />
               ))}
-              {detail?.additionalDetails?.documents?.[0]?.values && (
+              {detail?.additionalDetails?.obpsDocuments?.[0]?.values && (
                 <Fragment>
-                  <Row className="border-none" label={t(detail?.additionalDetails?.documents?.[0].title)} />
-                  <DocumentDetails documents={detail?.additionalDetails?.documents?.[0]?.values} />
+                  <Row className="border-none" label={t(detail?.additionalDetails?.obpsDocuments?.[0].title)} />
+                  <DocumentDetails documents={detail?.additionalDetails?.obpsDocuments?.[0]?.values} />
                 </Fragment>
               )}
               {detail?.additionalDetails?.scruntinyDetails &&

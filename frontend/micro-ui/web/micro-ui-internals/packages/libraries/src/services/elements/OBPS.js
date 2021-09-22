@@ -233,7 +233,7 @@ export const OBPSService = {
         title: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
         asSectionHeader: true,
         values: [
-          { title: "BPA_EDCR_NO_LABEL", value: BPA?.edcrNumber },
+          { title: BPA?.businessService !== "BPA_OC" ? "BPA_EDCR_NO_LABEL" : "BPA_OC_EDCR_NO_LABEL", value: BPA?.edcrNumber },
         ],
         additionalDetails: {
           scruntinyDetails: [
@@ -258,7 +258,7 @@ export const OBPSService = {
           { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr?.planDetail?.planInformation?.demolitionArea ? `${edcr?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : "" }
         ]
       },
-      {
+      BPA?.businessService !== "BPA_OC" && {
         title: "BPA_NEW_TRADE_DETAILS_HEADER_DETAILS",
         asSectionHeader: true,
         values: [
@@ -269,7 +269,7 @@ export const OBPSService = {
           { title: "ES_NEW_APPLICATION_LOCATION_LANDMARK", value: BPA?.landInfo?.address?.landmark }
         ]
       },
-      {
+      BPA?.businessService !== "BPA_OC" && {
         title: "BPA_APPLICANT_DETAILS_HEADER",
         asSectionHeader: true,
         values: [
@@ -301,9 +301,11 @@ export const OBPSService = {
       // },
     ]
 
+    const bpaFilterDetails = details?.filter(data => data);
+
     return {
       applicationData: BPA,
-      applicationDetails: details,
+      applicationDetails: bpaFilterDetails,
       tenantId: BPA?.tenantId
     }
   }
