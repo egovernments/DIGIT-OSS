@@ -7,7 +7,7 @@ import {
   getEpochForDate, sortByEpoch
 } from "../../utils";
 
-const billDownload = async (consumerCode, tenantId, billKey, searchURL, service) => {
+export const billDownload = async (consumerCode, tenantId, billKey, searchURL, service) => {
   if (billKey == "ws-bill") {
     downloadWNSBillFromConsumer(consumerCode, tenantId, service);
   } else {
