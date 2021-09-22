@@ -36,12 +36,12 @@ public class SurveyQueryBuilder {
         }
         if(!ObjectUtils.isEmpty(criteria.getTitle())){
             addClauseIfRequired(query, preparedStmtList);
-            query.append(" survey.title LIKE ? ");
+            query.append(" survey.title ILIKE ? ");
             preparedStmtList.add("%" + criteria.getTitle() + "%");
         }
         if(!ObjectUtils.isEmpty(criteria.getPostedBy())){
             addClauseIfRequired(query, preparedStmtList);
-            query.append(" survey.postedby LIKE ? ");
+            query.append(" survey.postedby ILIKE ? ");
             preparedStmtList.add("%" + criteria.getPostedBy() + "%");
         }
         if(!ObjectUtils.isEmpty(criteria.getStatus())){
