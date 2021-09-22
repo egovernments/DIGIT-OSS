@@ -121,7 +121,11 @@ public class WorkflowService {
         return processInstances;
 
     }
-
+    public Integer getUserBasedProcessInstancesCount(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
+        Integer count;
+        count = workflowRepository.getProcessInstancesForUserInboxCount(criteria);
+        return count;
+    }
 
     /**
      * Removes duplicate businessId which got created due to simultaneous request
@@ -244,5 +248,11 @@ public class WorkflowService {
             }
         }
         return escalatedApplications;
+    }
+
+    public Integer countEscalatedApplications(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
+        Integer count;
+        count = workflowRepository.getEscalatedApplicationsCount(criteria);
+        return count;
     }
 }

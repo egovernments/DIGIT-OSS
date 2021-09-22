@@ -78,6 +78,12 @@ public class WorKflowRepository {
         return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
     }
 
+    public Integer getProcessInstancesForUserInboxCount(ProcessInstanceSearchCriteria criteria) {
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getInboxIdCount(criteria, (ArrayList<Object>) preparedStmtList);
+        Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
+        return count;
+    }
 
     /**
      * Returns the count based on the search criteria
@@ -156,5 +162,12 @@ public class WorKflowRepository {
         // 3rd step is to do a simple search on these business ids(DONE IN WORKFLOW SERVICE)
 
         return escalatedApplicationsBusinessIds;
+    }
+
+    public Integer getEscalatedApplicationsCount(ProcessInstanceSearchCriteria criteria) {
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getEscalatedApplicationsCount(criteria, (ArrayList<Object>) preparedStmtList);
+        Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
+        return count;
     }
 }

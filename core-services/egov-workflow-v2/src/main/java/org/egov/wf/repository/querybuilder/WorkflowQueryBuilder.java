@@ -57,7 +57,8 @@ public class WorkflowQueryBuilder {
     private final String LATEST_RECORD = " pi.lastmodifiedTime  IN  (SELECT max(lastmodifiedTime) from eg_wf_processinstance_v2 GROUP BY businessid) ";
 
     private static final String COUNT_WRAPPER = "select count(DISTINCT wf_id) from ({INTERNAL_QUERY}) as count";
-
+    private static final String COUNT_WRAPPER_ESCALATED = "select count(DISTINCT businessid) from ({INTERNAL_QUERY}) as count";
+    private static final String COUNT_WRAPPER_INBOX = " select count(DISTINCT id) from ({INTERNAL_QUERY}) as count" ;
 
 
     private String getProcessInstanceSearchQueryWithoutPagination(ProcessInstanceSearchCriteria criteria, List<Object> preparedStmtList){
@@ -263,6 +264,16 @@ public class WorkflowQueryBuilder {
     }
 
 
+    private String addCountWrapperForInboxIdQuery(String query){
+        String countQuery = COUNT_WRAPPER_INBOX.replace("{INTERNAL_QUERY}", query);
+        return countQuery;
+    }
+
+    public String getInboxIdCount(ProcessInstanceSearchCriteria criteria, ArrayList<Object> preparedStmtList) {
+        String finalQuery = getInboxIdQuery(criteria,preparedStmtList,false);
+        String countQuery = addCountWrapperForInboxIdQuery(finalQuery);
+        return countQuery;
+    }
 
     public String getInboxIdQuery(ProcessInstanceSearchCriteria criteria, List<Object> preparedStmtList, Boolean isPaginationRequired){
 
@@ -435,6 +446,17 @@ public class WorkflowQueryBuilder {
         }
 
         return query.toString();
+    }
+
+    private String addCountWrapperForEscalatedApplications(String query){
+        String countQuery = COUNT_WRAPPER_ESCALATED.replace("{INTERNAL_QUERY}", query);
+        return countQuery;
+    }
+
+    public String getEscalatedApplicationsCount(ProcessInstanceSearchCriteria criteria, ArrayList<Object> preparedStmtList) {
+        String finalQuery = getAutoEscalatedApplicationsBusinessIdsQuery(criteria,preparedStmtList);
+        String countQuery = addCountWrapperForEscalatedApplications(finalQuery);
+        return countQuery;
     }
 
     public String getAutoEscalatedApplicationsBusinessIdsQuery(ProcessInstanceSearchCriteria criteria, ArrayList<Object> preparedStmtList) {
