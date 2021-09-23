@@ -437,9 +437,10 @@ export default class AlternateMobileDialog extends React.Component {
                   <Counter updateState={() => this.setState({ secOtpButton: false })} otpButton={this.state.secOtpButton} />
                   <Label label="CS_RESEND_SECONDS" labelStyle={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: "14px" }}></Label></React.Fragment>}
               </div>}
-              <span style={{ display: "flex", marginTop: "10px", marginBottom: '10px' }}>           <Label label="PT_ALT_DIDNT_RECEIVE_OTP" labelStyle={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: "14px" }}></Label>
+              <span style={{ display: "flex", marginTop: "10px", marginBottom: '10px' ,flexDirection: "column"}}>           <Label label="PT_ALT_DIDNT_RECEIVE_OTP" labelStyle={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: "14px" }}></Label>
                 <Label label="PT_ALT_CONTACT_ULB" labelStyle={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: "14px" }}></Label>
               </span>
+              <Label label="PT_ALT_CARRY_DOCS" labelStyle={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: "14px" }}></Label>
               {documents.map(doc => {
                 return <Label label={`ALT_${doc.code}`} labelStyle={{ color: 'rgba(0, 0, 0, 0.6)', fontSize: "14px" }}></Label>
               })}

@@ -8,7 +8,7 @@ class LinkComponent extends Component {
 
 
   render() {
-    const { warningPopup, prepareFinalObject } = this.props;
+    const { warningPopup, prepareFinalObject,showPopup } = this.props;
     return (showPopup ?<WarningPopup
       open={showPopup}
       link={warningPopup.link}
