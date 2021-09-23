@@ -1,14 +1,13 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { cancelSignal, wfSearch } from './API/api';
-import { FilterDropdown } from './Components';
+import { FilterDropdown, svgIcons } from './Components';
 import TablePaginationWrapper from './TablePaginationWrapper';
 import { formatWFSearch, mobileCheck, transformLocality } from './utils';
-import { svgIcons } from './Components';
 
 
 const { SortDown,
     SortUp } = svgIcons;
-    
+
 const checkFilterCondition = (element, filters, localityData, uuid) => {
     let condition = false;
     if (filters.selected_none) {
@@ -73,17 +72,17 @@ const initialState = {
     selected_none: true
 };
 
-const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid, loadedAll, localities = [], localityData, t, esclationData, setEsclationData, applicationStates, setBusinessServices, data, ...rest }) => {
+const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid, loadedAll, localities = [], localityData, t, esclationData, setEsclationData, applicationStates, setBusinessServices, wfSlaConfig, wfBusinessConfig, data, ...rest }) => {
     let isMobile = mobileCheck()
     const [searchText, setSearchText] = useState("");
-    const [searchRecord, setSearchRecord] = useState({});
+    const [searchRecord, setSearchRecord] = useState({ });
     const [filters, setFiltersDispatch] = useReducer(reducer, initialState);
     const [sort, setSortOrder] = useState(true);
     const [filteredData, setFilteredData] = useState(data || []);
     useEffect(() => {
         if (searchText != "") {
             const timer = setTimeout(() => {
-                wfSearch([{ key: "businessIds", value: searchText }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(resp => resp && resp.ProcessInstances && resp.ProcessInstances[0] && formatWFSearch(resp.ProcessInstances[0])).then(response => setSearchRecord(response ? response : {}))
+                wfSearch([{ key: "businessIds", value: searchText }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(resp => resp && resp.ProcessInstances && resp.ProcessInstances[0] && formatWFSearch(resp.ProcessInstances[0], wfSlaConfig, wfBusinessConfig)).then(response => setSearchRecord(response ? response : { }))
             }, 1000)
             return () => {
                 clearTimeout(timer);
@@ -96,6 +95,8 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
     useEffect(() => {
         if (Object.keys(searchRecord).length != 0 && searchText != "") {
             setFilteredData([searchRecord]);
+        } else if (searchText != "" && Object.keys(searchRecord).length == 0) {
+            setFilteredData([]);
         } else if (filters.esclated) {
             setFilteredData([...esclationData.data]);
         } else if (filters.selected_none) {
@@ -108,9 +109,14 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
 
     }, [filters, data, searchRecord, esclationData])
     return <React.Fragment>
-        <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+        <div className="jk-inbox-first-element">
+            <div>
+          <h4>  {t("WF_MY_WORKLIST")}</h4>
+                </div>
+                <div className="jk-inbox-search-holder">
+                <label for="inbox-search" className="jk-inbox-search-label">     {t("CS_INBOX_SEARCH")}</label>
             <input id="inbox-search" type="text" onChange={(e) => setSearchText(e.target.value)} value={searchText} placeholder={t("INBOX_ENTER_BID")} />
-            <label for="inbox-search">     {t("CS_INBOX_SEARCH")}</label>
+          </div>
         </div>
         <div className="inbox-filter-wrapper">
             <FilterDropdown t={t} header={"CS_INBOX_MODULE_FILTER"} data={businessServices.map(service => { return { key: `CS_COMMON_INBOX_${service}`, value: service } })} name="businessService" value={filters.service} id="businessService" onChangeFunction={(e) => setFiltersDispatch({ type: 'service', value: e.target.value })} />
@@ -127,7 +133,7 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
             </div>
         </div>
         <div className="inbox-taskboard-holder">
-            <div className="inbox-taskboard-card inbox-task-total" style={!filters.total_records ? { border: 'none' } : {}} onClick={() => {
+            <div className="inbox-taskboard-card inbox-task-total" style={!filters.total_records ? { border: 'none' } : { }} onClick={() => {
                 setFiltersDispatch({ type: 'total_records' })
             }}>
                 {t("WF_TOTAL_TASK")}
@@ -136,7 +142,7 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
                 </span>
 
             </div>
-            <div className="inbox-taskboard-card inbox-task-nearing-sla" style={!filters.nearing_sla_records ? { border: "none" } : {}} onClick={() => {
+            <div className="inbox-taskboard-card inbox-task-nearing-sla" style={!filters.nearing_sla_records ? { border: "none" } : { }} onClick={() => {
                 setFiltersDispatch({ type: 'nearing_sla_records' })
             }}>
                 {t("WF_TOTAL_NEARING_SLA")}
@@ -145,7 +151,7 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
                 </span>
 
             </div>
-            <div className="inbox-taskboard-card inbox-task-esclated-sla" style={!filters.sla_breached ? { border: "none" } : {}} onClick={() => {
+            <div className="inbox-taskboard-card inbox-task-esclated-sla" style={!filters.sla_breached ? { border: "none" } : { }} onClick={() => {
                 setFiltersDispatch({ type: 'sla_breached' })
             }} >
                 {t("WF_ESCALATED_SLA")}
@@ -155,26 +161,26 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
             </div>
         </div>
         <div style={{ backgroundColor: "white" }}>
-            <div style={{ display: "flex", height: '45px', alignItems: "center" }}>
-                <span className={`assigned-inbox ${filters.assigned_to_all&&"jk-selected-header"}`} onClick={() => {
+            <div className={"jk-inbox-tab-header-holder"}>
+                <span className={`assigned-inbox inb-all-tab ${filters.assigned_to_all && "jk-selected-header"}`} onClick={() => {
                     setFiltersDispatch({ type: 'assigned_to_all' })
                 }}>
                     {t("COMMON_INBOX_TAB_ALL")}
                 </span>
-                <span className={`assigned-inbox ${filters.assigned_to_me&&"jk-selected-header"}`} onClick={() => {
+                <span className={`assigned-inbox inb-me-tab ${filters.assigned_to_me && "jk-selected-header"}`} onClick={() => {
                     setFiltersDispatch({ type: 'assigned_to_me' })
                 }}>
                     {t("COMMON_INBOX_TAB_ASSIGNED_TO_ME")}
                 </span>
-                <span className={`assigned-inbox ${filters.esclated&&"jk-selected-header"}`} onClick={() => {
+                <span className={`assigned-inbox inb-esc-tab ${filters.esclated && "jk-selected-header"}`} onClick={() => {
                     !esclationData.loaded && !esclationData.load && setEsclationData({ loaded: false, load: true, data: [] });
                     setFiltersDispatch({ type: 'esclated' })
                 }}>
                     {t("COMMON_INBOX_TAB_ESCALATED")}
                 </span>
-               {isMobile&& <span className="jk-inbox-pointer" onClick={()=>setSortOrder(state => !state)} >{sort ? <SortDown /> : <SortUp />}</span>}
+                {isMobile && <span className="jk-inbox-pointer jk-sort-ico" onClick={() => setSortOrder(state => !state)} >{sort ? <SortDown /> : <SortUp />}</span>}
             </div>
-            <TablePaginationWrapper  sort={sort} data={[...filteredData.sort((x, y) => sort ? x.other.sla - y.other.sla : y.other.sla - x.other.sla)]} t={t} setSortOrder={setSortOrder} localityData={localityData}{...rest}></TablePaginationWrapper>
+            <TablePaginationWrapper sort={sort} data={[...filteredData.sort((x, y) => sort ? x.other.sla - y.other.sla : y.other.sla - x.other.sla)]} t={t} setSortOrder={setSortOrder} localityData={localityData}{...rest}></TablePaginationWrapper>
         </div>
     </React.Fragment>
 }

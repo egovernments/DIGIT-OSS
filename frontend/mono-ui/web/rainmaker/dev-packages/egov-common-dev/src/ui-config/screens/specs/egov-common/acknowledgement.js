@@ -163,6 +163,11 @@ const getAcknowledgementCard = (
             },
             number: receiptNumber,
           }),
+          linkComponent: {
+            uiFramework: "custom-atoms-local",
+            componentPath: "LinkComponent",
+            moduleName: "egov-common",
+          },
         },
       },
       paymentFooter: paymentFooter(

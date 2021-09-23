@@ -10,8 +10,9 @@ export const getSignal = () => {
   return getController().signal;
 }
 export const cancelSignal = () => {
-  return getController().abort();
-}
+   getController().abort();
+   controller=new AbortController();
+  }
 
 export const httpRequest = async (apiURL, body) => {
   var myHeaders = new Headers();
@@ -114,6 +115,9 @@ export const getLocalityData = async (module = "", applicationNos = []) => {
       "referenceNumber": applicationNos
     }
   }).then(resp => {
+    if(!resp||!resp.Localities){
+      return {};
+    }
     let localityData = {};
     resp.Localities.map(locality => {
       localityData[locality.referencenumber] = locality.locality;

@@ -132,7 +132,7 @@ public class FSMRepository {
 	public List<String> getPeriodicEligiableApplicationList(String tenantId,Long timeLimit) {
 		
 	StringBuilder baseQuery=new StringBuilder(FSMQueryBuilder.GET_PERIODIC_ELGIABLE_APPLICATIONS);
-	baseQuery.append("where tenantid=? and createdtime<? and applicationstatus=?");
+	baseQuery.append("where tenantid=? and lastmodifiedtime<? and applicationstatus=?");
 	List<Object> preparedStmtList=new ArrayList<>();
 	preparedStmtList.add(tenantId);
 	preparedStmtList.add(new Date().getTime()- timeLimit);

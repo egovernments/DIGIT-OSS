@@ -152,8 +152,8 @@ public class BPAInboxFilterService {
 		if (moduleSearchCriteria.containsKey(APPROVAL_NUMBER_PARAM)) {
 			searchCriteria.put(APPROVAL_NUMBER_PARAM, moduleSearchCriteria.get(APPROVAL_NUMBER_PARAM));
 		}
-		if (moduleSearchCriteria.containsKey(APPLICATION_NUMBER_PARAM)) {
-			searchCriteria.put(APPLICATION_NUMBER_PARAM, moduleSearchCriteria.get(APPLICATION_NUMBER_PARAM));
+		if (moduleSearchCriteria.containsKey(BPA_APPLICATION_NUMBER_PARAM)) {
+			searchCriteria.put(BPA_APPLICATION_NUMBER_PARAM, moduleSearchCriteria.get(BPA_APPLICATION_NUMBER_PARAM));
 		}
 
 		// Accommodating process search criteria in searcher request

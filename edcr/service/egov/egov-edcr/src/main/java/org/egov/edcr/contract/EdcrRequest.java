@@ -81,6 +81,12 @@ public class EdcrRequest {
     private String applicationSubType;
 
     private String comparisonEdcrNumber;
+    
+    private String status;
+    
+    private Date fromDate;
+    
+    private Date toDate;
 
     public RequestInfo getRequestInfo() {
         return requestInfo;
@@ -169,5 +175,29 @@ public class EdcrRequest {
     public void setComparisonEdcrNumber(String comparisonEdcrNumber) {
         this.comparisonEdcrNumber = comparisonEdcrNumber;
     }
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Date getFromDate() {
+		return fromDate;
+	}
+
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
+	}
+
+	public Date getToDate() {
+		return toDate;
+	}
+
+	public void setToDate(Date toDate) {
+		this.toDate = toDate;
+	}
 
 }

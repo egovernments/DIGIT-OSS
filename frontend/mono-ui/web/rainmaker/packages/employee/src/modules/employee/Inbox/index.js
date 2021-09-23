@@ -1,4 +1,6 @@
 // import JkInbox from "@jagankumar-egov/react-tour/components/Inbox";
+import Tooltip from '@material-ui/core/Tooltip';
+import commonConfig from "config/common.js";
 import JkInbox from "egov-inbox/components/Inbox";
 import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
@@ -84,7 +86,17 @@ class Inbox extends Component {
   onHistoryClick = async (moduleNumber) => {
     const { prepareFinalObject } = this.props;
     const processInstances = await this.getProcessIntanceData(moduleNumber);
-    
+    let exclamationMarkIndex;
+    if (processInstances && processInstances.length > 0) {
+      processInstances.map((data, index) => {
+        if (data.assigner && data.assigner.roles && data.assigner.roles.length > 0) {
+          data.assigner.roles.map(role => {
+            if (role.code === "AUTO_ESCALATE") return exclamationMarkIndex = index - 1;
+          })
+        }
+      });
+      if (exclamationMarkIndex) processInstances[exclamationMarkIndex].isExclamationMark = true;
+    }
     if (processInstances && processInstances.length > 0) {
       await addWflowFileUrl(processInstances, prepareFinalObject);
       this.setState({
@@ -154,14 +166,19 @@ class Inbox extends Component {
           </div>
         </div>}
 
-        {hasWorkflow && <JkInbox user={{ ...user, permanentCity: user.tenantId.split('.')[0] }}
+        {hasWorkflow && <JkInbox user={{ ...user, permanentCity: commonConfig.tenantId }}
           historyClick={this.onHistoryClick}
           t={(key) => {
             return getLocaleLabels("", key, localizationLabels);
           }}
           historyComp={<div onClick={() => { }} style={{ cursor: "pointer" }}>
             <i class="material-icons">history</i>
-          </div>}>
+          </div>}
+          esclatedComp={<Tooltip title={getLocaleLabels("COMMON_INBOX_TAB_ESCALATED", "COMMON_INBOX_TAB_ESCALATED", localizationLabels)} placement="top">
+            <span> <i class="material-icons" style={{ color: "rgb(244, 67, 54)" }}>error</i> </span>
+          </Tooltip>}
+        >
+
         </JkInbox>}
         {/* {hasWorkflow && !inboxLoading && loaded && <TableData onPopupOpen={this.onPopupOpen} workflowData={inbox} />} */}
         <FilterDialog popupOpen={this.state.filterPopupOpen} popupClose={this.handleClose} />
@@ -174,11 +191,11 @@ class Inbox extends Component {
 const mapStateToProps = (state) => {
   const { auth, app, screenConfiguration } = state;
   const { menu, inbox, actionMenuFetch } = app;
-  const { loading: inboxLoading, loaded } = inbox || {};
+  const { loading: inboxLoading, loaded } = inbox || { };
   const { userInfo } = auth;
   const name = auth && userInfo.name;
   const { preparedFinalObject } = screenConfiguration;
-  const { Loading = {}, workflow } = preparedFinalObject;
+  const { Loading = { }, workflow } = preparedFinalObject;
   const { isLoading } = Loading;
   const { ProcessInstances } = workflow || [];
   const { loading: mdmsGetLoading = false, errorMessage = "", error } = actionMenuFetch;
@@ -190,7 +207,8 @@ const mapDispatchToProps = (dispatch) => {
     setRoute: url => dispatch(setRoute(url)),
     fetchLocalizationLabel: (locale, tenantId, module) => dispatch(fetchLocalizationLabel(locale, tenantId, module)),
     setRequiredDocumentFlag: () => dispatch(prepareFinalObject("isRequiredDocuments", true)),
-    resetFetchRecords: () => dispatch(resetFetchRecords())
+    resetFetchRecords: () => dispatch(resetFetchRecords()),
+    prepareFinalObject: (path, value) => dispatch(prepareFinalObject(path, value)),
   };
 }
 

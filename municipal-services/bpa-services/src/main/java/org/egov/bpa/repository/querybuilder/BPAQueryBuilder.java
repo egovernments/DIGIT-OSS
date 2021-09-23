@@ -184,7 +184,7 @@ public class BPAQueryBuilder {
             preparedStmtList.add(offset);
             preparedStmtList.add(limit + offset);
         }
-        
+
         return finalQuery;
 
     }

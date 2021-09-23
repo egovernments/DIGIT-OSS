@@ -12,6 +12,7 @@ import { HRMSModule ,initHRMSComponents  } from "@egovernments/digit-ui-module-h
 import { TLModule, TLLinks,initTLComponents } from "@egovernments/digit-ui-module-tl";
 import { initReceiptsComponents, ReceiptsModule } from "@egovernments/digit-ui-module-receipts";
 import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
+import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 
 initLibraries();
 
@@ -39,6 +40,7 @@ initHRMSComponents()
 initTLComponents();
 initReceiptsComponents();
 initOBPSComponents();
+initEngagementComponents();
 
 const moduleReducers = (initData) => ({
   pgr: PGRReducers(initData),

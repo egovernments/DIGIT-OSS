@@ -7,6 +7,7 @@ import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { TENANT } from "egov-ui-kit/utils/endPoints";
 import { getAccessToken, getTenantId, getUserInfo, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import { searchAndDownloadPdf, searchAndPrintPdf } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import Label from "egov-ui-kit/utils/translationNode";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
@@ -15,6 +16,7 @@ import React from "react";
 import { FETCHBILL, PAYMENTSEARCH } from "./endPoints";
 import { routeTo } from "./PTCommon/FormWizardUtils/formActionUtils";
 import { getPropertyInfoScreenUrl } from "./PTCommon/FormWizardUtils/formUtils";
+import { httpRequest as httpRequestNew } from "egov-ui-framework/ui-utils/api";
 
 export const statusToMessageMapping = {
   rejected: "Rejected",
@@ -1090,7 +1092,7 @@ export const searchConsumer = async (items, queryObject) => {
     "_search",
     queryObject
   );
-  let consumerDetails =  payload && payload.WaterConnection ? payload.WaterConnection : payload.SewerageConnections;
+  let consumerDetails = payload && payload.WaterConnection ? payload.WaterConnection : payload.SewerageConnections;
   return consumerDetails;
 }
 
@@ -1126,10 +1128,10 @@ export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessSer
 
 
 
-export const getPaymentSearchAPI = (businessService='')=>{
-  if(businessService=='-1'){
+export const getPaymentSearchAPI = (businessService = '', isCitizenbusinessService = false) => {
+  if (businessService == '-1') {
     return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
-  }else if (process.env.REACT_APP_NAME === "Citizen") {
+  } else if (process.env.REACT_APP_NAME === "Citizen" && !isCitizenbusinessService) {
     return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
   }
   return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
@@ -1141,7 +1143,49 @@ export const getFetchBillAPI = () => {
 
 
 
-export const getUserSearchedResponse =()=>{
-  const userObject=JSON.parse(localStorage.getItem("citizen.userRequestObject"))||{};
-  return {user:[userObject]};
+export const getUserSearchedResponse = () => {
+  const userObject = JSON.parse(localStorage.getItem("citizen.userRequestObject")) || {};
+  return { user: [userObject] };
 }
+
+export const getResultUrl = (moduleName, reportName) => {
+  let reportResultUrl = `/report/${moduleName}/${reportName}/_get`;
+  return reportResultUrl;
+}
+export const translate = (locale_text) => {
+  return locale_text;
+}
+
+export const downloadWNSBill = (queryObj, fileName) => {
+  searchAndDownloadPdf('/egov-pdf/download/WNS/wnsbill', queryObj, fileName)
+}
+
+export const printWNSBill = (queryObj) => {
+  searchAndPrintPdf('/egov-pdf/download/WNS/wnsbill', queryObj)
+}
+
+const wnsBill = (consumerCode, tenantId, service) => {
+  const query = [
+    { key: "applicationNumber", value: consumerCode },
+    { key: "tenantId", value: tenantId },
+    { key: "bussinessService", value: service }
+  ]
+  downloadWNSBill(query, `${service}-BILL-${consumerCode}.pdf`);
+}
+
+export const downloadWNSBillFromConsumer = async (consumerCode, tenantId, service) => {
+  let serviceURL = service == "WS" ? 'ws-services/wc/_search' : "sw-services/swc/_search";
+  let response = await httpRequestNew(
+    "post",
+    `${serviceURL}?tenantId=${tenantId}&isConnectionSearch=true&connectionNumber=${consumerCode}`,
+    "_search",
+    [],
+    {}
+  );
+  if (response && response.WaterConnection && response.WaterConnection.length > 0) {
+    wnsBill(response.WaterConnection[0].applicationNo, tenantId, service);
+  } else if (response && response.SewerageConnections && response.SewerageConnections.length > 0) {
+    wnsBill(response.SewerageConnections[0].applicationNo, tenantId, service);
+  }
+}
+

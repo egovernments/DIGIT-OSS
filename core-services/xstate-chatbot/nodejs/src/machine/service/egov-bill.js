@@ -610,13 +610,16 @@ class BillService {
     return messageBundle;  
   }
 
-  async getOpenSearchLink(service){
+  async getOpenSearchLink(service, name, mobileNumber){
     var UIHost = config.egovServices.externalHost;
     var paymentPath;
     if(service=='WS')
       paymentPath = config.egovServices.wsOpenSearch;
     else
       paymentPath = config.egovServices.ptOpenSearch;
+
+    paymentPath = paymentPath.replace(/\$name/g,name);
+    paymentPath = paymentPath.replace(/\$mobileNumber/g,mobileNumber);
 
     var finalPath = UIHost + paymentPath;
     var link =  await this.getShortenedURL(finalPath);

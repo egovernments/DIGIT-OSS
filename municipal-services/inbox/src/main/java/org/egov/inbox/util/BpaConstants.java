@@ -16,7 +16,7 @@ public class BpaConstants {
 	public static final String SEARCH_CRITERIA_PARAM = "searchCriteria";
 	public static final String USERID_PARAM = "userid";
 	public static final String APPROVAL_NUMBER_PARAM = "approvalNo";
-	public static final String APPLICATION_NUMBER_PARAM = "applicationNo";
+	public static final String BPA_APPLICATION_NUMBER_PARAM = "applicationNo";
 	public static final String SORT_ORDER_PARAM = "sortOrder";
 	public static final String DESC_PARAM = "DESC";
 	public static final String CITIZEN = "CITIZEN";

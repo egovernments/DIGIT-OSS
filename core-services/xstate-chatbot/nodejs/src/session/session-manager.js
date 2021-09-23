@@ -77,7 +77,8 @@ class SessionManager {
         service.onTransition( state => {
             if(state.changed) {
                 let userId = state.context.user.userId;
-                let stateStrings = state.toStrings()
+                let stateStrings = state.toStrings();
+                let sourceStrings = state.history.toStrings();
 
                 let active = !state.done && !state.forcedClose;
                 let saveState = JSON.parse(JSON.stringify(state));      // deep copy
@@ -86,7 +87,7 @@ class SessionManager {
                 (async() => { 
                     await chatStateRepository.updateState(userId, active, JSON.stringify(saveState), timeStamp);
                     let sessionId = await chatStateRepository.getSessionId(userId);
-                    telemetry.log(userId, 'transition', {destination: stateStrings[stateStrings.length-1], locale: locale, sessionId: sessionId, timestamp: timeStamp});
+                    telemetry.log(userId, 'transition', {input: reformattedMessage.message.input, source: sourceStrings[sourceStrings.length-1], destination: stateStrings[stateStrings.length-1], locale: locale, sessionId: sessionId, timestamp: timeStamp, extraInfo: reformattedMessage.extraInfo});
                 })();
                 
             }
@@ -112,7 +113,7 @@ class SessionManager {
 
 let grammer = {
     reset: [
-        {intention: 'reset', recognize: ['Hi', 'hi', 'mseva', 'seva', 'सेवा']},
+        {intention: 'reset', recognize: ['Hello', 'hello', 'Hi', 'hi', 'mseva', 'seva', 'सेवा']},
     ]
 }
 

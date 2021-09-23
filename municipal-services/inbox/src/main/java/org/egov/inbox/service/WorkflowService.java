@@ -13,6 +13,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.inbox.config.InboxConfiguration;
 import org.egov.inbox.repository.ServiceRequestRepository;
 import org.egov.inbox.util.ErrorConstants;
+import org.egov.inbox.util.FSMConstants;
 import org.egov.inbox.web.model.RequestInfoWrapper;
 import org.egov.inbox.web.model.workflow.BusinessService;
 import org.egov.inbox.web.model.workflow.BusinessServiceResponse;
@@ -53,7 +54,7 @@ public class WorkflowService {
 			StringBuilder url = new StringBuilder(config.getWorkflowHost());
 			url.append(config.getProcessCountPath());
 			criteria.setIsProcessCountCall(true);
-			url = this.buildWorkflowUrl(criteria, url, Boolean.TRUE);
+			url = this.buildWorkflowUrl(criteria, url, Boolean.FALSE);
 
 			RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 			Object result = serviceRequestRepository.fetchIntResult(url, requestInfoWrapper);
@@ -78,7 +79,9 @@ public class WorkflowService {
 			url.append(config.getProcessStatusCountPath());
 			criteria.setIsProcessCountCall(true);
 			url = this.buildWorkflowUrl(criteria, url, Boolean.FALSE);
-
+            if(requestInfo.getUserInfo().getRoles().get(0).getCode().equals(FSMConstants.FSM_DSO)) {
+            	url.append("&assignee=").append( requestInfo.getUserInfo().getUuid());
+            }
 			RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 			if(finalResponse == null) {
 				finalResponse = (List<HashMap<String, Object>>) serviceRequestRepository.fetchListResult(url, requestInfoWrapper);
@@ -94,7 +97,9 @@ public class WorkflowService {
 		StringBuilder url = new StringBuilder(config.getWorkflowHost());
 		url.append( config.getProcessSearchPath());
 		url = this.buildWorkflowUrl(criteria, url, Boolean.FALSE);
-		
+		 if(requestInfo.getUserInfo().getRoles().get(0).getCode().equals(FSMConstants.FSM_DSO)) {
+         	url.append("&assignee=").append( requestInfo.getUserInfo().getUuid());
+         }
 		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 		Object result = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
 		ProcessInstanceResponse resposne =null;
@@ -212,13 +217,16 @@ public class WorkflowService {
         HashMap<String,String> actionableStatuses = new HashMap<>();
         
         for(Map.Entry<String,List<String>> entry : tenantIdToUserRolesMap.entrySet()){
-            if(entry.getKey().equals(criteria.getTenantId())){
+        	
+        	String statelevelTenantId=entry.getKey().split("\\.")[0];
+        	
+            if(entry.getKey().equals(criteria.getTenantId()) || (entry.getValue().contains(FSMConstants.FSM_DSO) && entry.getKey().equals(statelevelTenantId)) ){
                 List<BusinessService> businessServicesByTenantId = new ArrayList();
-//                if(config.getIsStateLevel()){
-//                    businessServicesByTenantId = tenantIdToBuisnessSevicesMap.get(entry.getKey().split("\\.")[0]);
-//                }else{
+                if(entry.getKey().split("\\.").length==1){
+                    businessServicesByTenantId = tenantIdToBuisnessSevicesMap.get(criteria.getTenantId());
+              }else{
                     businessServicesByTenantId = tenantIdToBuisnessSevicesMap.get(entry.getKey());
-//                }
+              }
                 if(businessServicesByTenantId != null ) {
                 	 businessServicesByTenantId.forEach(service -> {
                          List<State> states = service.getStates();

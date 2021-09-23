@@ -1,12 +1,11 @@
 import axios from "axios";
-import { fetchFromLocalStorage, addQueryArg, getDateInEpoch, isPublicSearch } from "./commons";
+import commonConfig from "config/common.js";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import store from "../ui-redux/store";
 import {
-  getAccessToken,
-  getTenantId,
-  getLocale
+  getAccessToken, getLocale, getTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
+import store from "../ui-redux/store";
+import { addQueryArg, isPublicSearch } from "./commons";
 
 const instance = axios.create({
   baseURL: window.location.origin,
@@ -28,9 +27,9 @@ const wrapRequestBody = (requestBody, action) => {
     requesterId: "",
     authToken: authToken
   };
-  if(isPublicSearch()) delete RequestInfo.authToken;
+  if (isPublicSearch()) delete RequestInfo.authToken;
   return Object.assign(
-    {},
+    { },
     {
       RequestInfo
     },
@@ -43,7 +42,7 @@ export const httpRequest = async (
   endPoint,
   action,
   queryObject = [],
-  requestBody = {},
+  requestBody = { },
   headers = []
 ) => {
   store.dispatch(toggleSpinner());
@@ -136,8 +135,8 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
   store.dispatch(toggleSpinner());
   const tenantId = getTenantId()
     ? ulbLevel
-      ? getTenantId().split(".")[0]
-      : getTenantId().split(".")[0]
+      ? commonConfig.tenantId
+      : commonConfig.tenantId
     : "";
   const uploadInstance = axios.create({
     baseURL: window.location.origin,

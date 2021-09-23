@@ -119,7 +119,7 @@ public class FSMService {
 
 		wfIntegrator.callWorkFlow(fsmRequest);
 		repository.save(fsmRequest);
-		if (requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE)) {
+		if (requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE) || requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.SYSTEM)) {
 			calculationService.addCalculation(fsmRequest, FSMConstants.APPLICATION_FEE);
 		}
 

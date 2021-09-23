@@ -1,9 +1,19 @@
 import { download, downloadBill } from "egov-common/ui-utils/commons";
 import { getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { downloadWNSBillFromConsumer } from "egov-ui-kit/utils/commons";
 import React from "react";
 import {
+
   getEpochForDate, sortByEpoch
 } from "../../utils";
+
+const billDownload = async (consumerCode, tenantId, billKey, searchURL, service) => {
+  if (billKey == "ws-bill") {
+    downloadWNSBillFromConsumer(consumerCode, tenantId, service);
+  } else {
+    downloadBill(consumerCode, tenantId, billKey, searchURL);
+  }
+}
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -19,7 +29,7 @@ export const searchResults = {
           customBodyRender: (value, tableMeta, updateValue) => (
             <a href="javascript:void(0)"
               onClick={() => {
-                downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9], tableMeta.rowData[12]);
+                billDownload(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9], tableMeta.rowData[12], tableMeta.rowData[7]);
               }}
             >
               {value}

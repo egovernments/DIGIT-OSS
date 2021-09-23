@@ -202,6 +202,7 @@ public class BPAService {
 		log.info("----->>>> After validation------");
 		LandSearchCriteria landcriteria = new LandSearchCriteria();
 		landcriteria.setTenantId(criteria.getTenantId());
+		landcriteria.setLocality(criteria.getLocality());
 		List<String> edcrNos = null;
 		if (criteria.getMobileNumber() != null) {
 			bpas= this.getBPAFromMobileNumber(criteria, landcriteria, requestInfo);

@@ -12,7 +12,7 @@ const { Initdata,
     sortOrder, getEsclationRecords } = inboxHelperFunction
 
 const WfTable = (props) => {
-    const { user = {}, historyComp = null, historyClick } = props;
+    const { user = { }, historyComp = null, historyClick, esclatedComp = null } = props;
     let { t: newT = (key) => key } = props;
     const t = (key) => newT(key && typeof key == "string" && key.toUpperCase());
     localStorage.setItem("inb-uuid", user.uuid);
@@ -21,18 +21,18 @@ const WfTable = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState([]);
     const [esclationData, setEsclationData] = useState({ loaded: false, load: false, data: [] });
-    const [localityData, setLocalityData] = useState({});
+    const [localityData, setLocalityData] = useState({ });
     const [count, setCount] = useState(0);
-    const [serviceCount, setServiceCount] = useState({});
-    const [wfSlaConfig, setWfSlaConfig] = useState({});
+    const [serviceCount, setServiceCount] = useState({ });
+    const [wfSlaConfig, setWfSlaConfig] = useState({ });
     const [canLoadAll, setLoadAll] = useState(false);
     const [loadedAll, setLoadedAll] = useState(false);
     const [businessServices, setBusinessServices] = useState([]);
-    const [localitySearcher, setLocalitySearcher] = useState({});
-    const [wfBusinessConfig, setWfBusinessConfig] = useState({});
-    const [applicationStates, setApplicationStates] = useState({});
-    const [paginationConfig, setPaginationConfig] = useState({});
-    const [inboxConfig, setInboxConfig] = useState({});
+    const [localitySearcher, setLocalitySearcher] = useState({ });
+    const [wfBusinessConfig, setWfBusinessConfig] = useState({ });
+    const [applicationStates, setApplicationStates] = useState({ });
+    const [paginationConfig, setPaginationConfig] = useState({ });
+    const [inboxConfig, setInboxConfig] = useState({ });
     const [localities, setSetLocalities] = useState([]);
 
     useEffect(() => {
@@ -83,11 +83,11 @@ const WfTable = (props) => {
             setInboxConfig(response.MdmsRes["common-masters"].CommonInboxConfig.reduce((prev, curr) => {
                 prev[curr.BusinessService] = curr;
                 return { ...prev };
-            }, {}));
+            }, { }));
             setLocalitySearcher(response.MdmsRes["common-masters"].CommonInboxConfig.filter(config => config.locality).reduce((prev, curr) => {
                 prev[curr.BusinessService] = curr.localityModule;
                 return { ...prev };
-            }, {}))
+            }, { }))
             let businessServices = response.MdmsRes["common-masters"].CommonInboxConfig.filter(config => config.active) || [];
             if (user.tenantId) {
                 businessServices = businessServices.filter(service => checkUserRole(service.roles, props.user.roles.map(role => role.code)))
@@ -99,13 +99,13 @@ const WfTable = (props) => {
         return () => {
             setData([]);
             setBusinessServices([]);
-            setLocalityData({});
+            setLocalityData({ });
             setCount(0);
-            setServiceCount({});
-            setPaginationConfig({});
-            setWfSlaConfig({});
-            setInboxConfig({});
-            setLocalitySearcher({});
+            setServiceCount({ });
+            setPaginationConfig({ });
+            setWfSlaConfig({ });
+            setInboxConfig({ });
+            setLocalitySearcher({ });
         }
 
     }, [])
@@ -113,21 +113,21 @@ const WfTable = (props) => {
     useEffect(() => {
         if (businessServices && businessServices.length > 0) {
             wfBusinessSearch([{ key: "tenantId", value: user.tenantId }, { key: "businessServices", value: businessServices.join(',') }]).then(resp => {
-               if(resp){
-                let wfService = resp.BusinessServices.reduce((prev, curr) => {
-                    curr.MAX_SLA = convertMillisecondsToDays(curr.businessServiceSla);
-                    prev[curr.businessService] = curr;
-                    return { ...prev }
-                }, {})
-                return wfService;
-            }
+                if (resp) {
+                    let wfService = resp.BusinessServices.reduce((prev, curr) => {
+                        curr.MAX_SLA = convertMillisecondsToDays(curr.businessServiceSla);
+                        prev[curr.businessService] = curr;
+                        return { ...prev }
+                    }, { })
+                    return wfService;
+                }
             }).then(updatedResp => {
-                updatedResp&&setWfBusinessConfig(state => {
+                updatedResp && setWfBusinessConfig(state => {
                     return {
                         ...state, ...updatedResp
                     }
                 })
-                updatedResp&& businessServices.map((service) => {
+                updatedResp && businessServices.map((service) => {
                     setIsLoading(true);
                     Initdata({
                         businessService: service, setCount: setCount,
@@ -161,10 +161,35 @@ const WfTable = (props) => {
     return (
         <React.Fragment>
             <div style={{ margin: "10px" }}>
-                <TableFilterWrapper data={data} count={count} setEsclationData={setEsclationData} esclationData={esclationData} inboxConfig={inboxConfig} setData={setData} t={t} historyComp={historyComp} uuid={user.uuid} applicationStates={applicationStates} localities={localities} loadedAll={loadedAll} setLoadAll={setLoadAll} setBusinessServices={setBusinessServices} header={Object.keys(sortOrder).reduce((prev, curr) => {
-                    prev[curr] = curr;
-                    return { ...prev }
-                }, {})} businessServices={businessServices} isLoading={isLoading} historyClick={historyClick} localityData={localityData} paginationConfig={paginationConfig} sortOrder={sortOrder}></TableFilterWrapper>
+                <TableFilterWrapper data={[...data, ...esclationData.data]}
+                    count={count}
+                    esclationData={esclationData}
+                    inboxConfig={inboxConfig}
+                    t={t}
+                    historyComp={historyComp}
+                    esclatedComp={esclatedComp}
+                    uuid={user.uuid}
+                    applicationStates={applicationStates}
+                    localities={localities}
+                    loadedAll={loadedAll}
+                    header={Object.keys(sortOrder).reduce((prev, curr) => {
+                        prev[curr] = curr;
+                        return { ...prev }
+                    }, { })}
+                    businessServices={businessServices}
+                    isLoading={isLoading}
+                    localityData={localityData}
+                    paginationConfig={paginationConfig}
+                    sortOrder={sortOrder}
+                    setBusinessServices={setBusinessServices}
+                    historyClick={historyClick}
+                    setLoadAll={setLoadAll}
+                    setEsclationData={setEsclationData}
+                    setData={setData}
+                    wfSlaConfig={wfSlaConfig}
+                    wfBusinessConfig={wfBusinessConfig}
+                >
+                </TableFilterWrapper>
             </div>
         </React.Fragment>
     )

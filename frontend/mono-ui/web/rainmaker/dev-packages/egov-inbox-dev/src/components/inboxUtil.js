@@ -1,13 +1,13 @@
 import { getLocalityData, wfEsclationSearch, wfSearch, workflowSearchCount } from "./API/api"
-import { formatWFSearch } from "./utils"
+import { formatWFEsclatedSearch, formatWFSearch } from "./utils"
 
 const sortOrder = {
-    'CS_INBOX_MODULE_FILTER': { order: 1, width: 80 },
+    'CS_INBOX_MODULE_FILTER': { order: 1, width: 70 },
     "WF_INBOX_HEADER_APPLICATION_NO": { order: 0, width: 100 },
     "WF_INBOX_HEADER_STATUS": { order: 2, width: 80 },
     "WF_INBOX_HEADER_LOCALITY": { order: 3, width: 90 },
-    "WF_INBOX_HEADER_CURRENT_OWNER": { order: 4, width: 60 },
-    "WF_INBOX_HEADER_SLA_DAYS_REMAINING": { order: 5, width: 40 },
+    "WF_INBOX_HEADER_CURRENT_OWNER": { order: 4, width: 40 },
+    "WF_INBOX_HEADER_SLA_DAYS_REMAINING": { order: 5, width: 70 },
     // "AppliedOn": 5,
 }
 
@@ -18,7 +18,7 @@ const loadLocalityData = async (localityService, businessIds, setLocalityData, s
         let localities = Object.values(response).reduce((prev, curr) => {
             prev[curr] = curr;
             return { ...prev }
-        }, {})
+        }, { })
         setSetLocalities(state => { return { ...state, ...localities } })
     })
 }
@@ -28,7 +28,7 @@ const Initdata = (props) => {
 
     try {
         let businessIds = [];
-        let status = {};
+        let status = { };
         wfSearch([{ key: "tenantId", value: localStorage.getItem("inb-tenantId") }, { key: "offset", value: props.offset || 0 }, { key: "limit", value: props.limit || "10" }, { key: "businessService", value: props.businessService }]).then(resp => {
             props.setServiceCount((state) => {
                 if (state[props.businessService]) {
@@ -69,7 +69,7 @@ const Initdata = (props) => {
 
         if (!props.loadAllData) {
             workflowSearchCount(props.businessService).then(resp => {
-                resp&&typeof resp=="number"&&props.setServiceCount((state) => {
+                resp && typeof resp == "number" && props.setServiceCount((state) => {
                     if (state[props.businessService]) {
                         state[props.businessService] = { ...state[props.businessService], totalCount: resp };
                     } else {
@@ -77,7 +77,7 @@ const Initdata = (props) => {
                     }
                     return { ...state }
                 });
-                resp&&typeof resp=="number"&& props.setCount((state) => state + resp)
+                resp && typeof resp == "number" && props.setCount((state) => state + resp)
             }).catch(err => {
                 props.setIsLoading(false);
                 console.error(err)
@@ -95,15 +95,15 @@ const Initdata = (props) => {
 const getEsclationRecords = (props) => {
 
     try {
-        let service='';
+        let service = '';
         let businessIds = [];
-        let status = {};
+        let status = { };
         wfEsclationSearch([{ key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(resp => {
             return resp.ProcessInstances.map(data => {
                 businessIds.push(data.businessId);
-                service=data.businessService;
+                service = data.businessService;
                 status[`WF_${data.businessService.toUpperCase()}_${data.state.state}`] = data.state.state;
-                return formatWFSearch(data, props.wfSlaConfig,
+                return formatWFEsclatedSearch(data, props.wfSlaConfig,
                     props.wfBusinessConfig);
             })
         }
@@ -113,7 +113,7 @@ const getEsclationRecords = (props) => {
             if (status) {
                 props.setApplicationStates(state => { return { ...state, ...status } });
             }
-            if (props.localityModule && businessIds.length > 0) {
+            if (props.localityModule && props.localityModule[service] && businessIds.length > 0) {
                 loadLocalityData(props.localityModule[service], businessIds, props.setLocalityData, props.setSetLocalities);
             }
 
