@@ -132,7 +132,7 @@ const OCeDCRScrutiny = ({ t, config, onSelect, userType, formData, ownerIndex = 
                 <div onClick={getSearchResults}>
                     <SubmitBar label={t("ACTION_TEST_BPA_STAKE_HOLDER_SEARCH")} disabled={!permitNumber || !permitDate}/>
                 </div>
-                <div style={{ disabled: "true", height: "30px", width: "100%", fontSize: "14px" }}></div>
+                {/* <div style={{ disabled: "true", height: "30px", width: "100%", fontSize: "14px" }}></div> */}
                 {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} onClose={() => { setShowToast(null); setError(null); }} />}
             </FormStep>
             {permitEdcrData?.edcrNumber ?
@@ -182,17 +182,17 @@ const OCeDCRScrutiny = ({ t, config, onSelect, userType, formData, ownerIndex = 
                     <h1 style={{ fontSize: "18px", lineHeight: "21px", fontWeight: "700", padding: "16px 0px" }}>{`${t("BPA_UPLOADED_PLAN_DIAGRAM_LABEL")} :`}</h1>
                     <a target="_" href={permitEdcrData?.updatedDxfFile} style={{ minWidth: "160px", marginRight: "20px" }} key={permitEdcrData?.updatedDxfFile}>
                         <PDFSvg width={140} height={140} style={{ background: "#f6f6f6", padding: "8px" }} />
-                        <p style={{ marginTop: "8px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#505A5F" }}>{t("Uploaded Plan.DXF")}</p>
+                        <p style={{ marginTop: "8px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#505A5F" }}>{t("BPA_UPLOADED_PLAN_DXF")}</p>
                     </a>
                     <h1 style={{ fontSize: "18px", lineHeight: "21px", fontWeight: "700", padding: "16px 0px" }}>{`${t("BPA_SCRUTINY_REPORT_OUTPUT_LABEL")} :`}</h1>
                     <a target="_" href={permitEdcrData?.planReport} style={{ minWidth: "160px", marginRight: "20px" }} key={permitEdcrData?.planReport}>
                         <PDFSvg width={140} height={140} style={{ background: "#f6f6f6", padding: "8px" }} />
-                        <p style={{ marginTop: "8px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#505A5F" }}>{t("Scrutiny Report.PDF")}</p>
+                        <p style={{ marginTop: "8px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#505A5F" }}>{t("BPA_SCRUTINY_REPORT_PDF")}</p>
                     </a>
                     <div onClick={routeToNextPage}>
                         <SubmitBar label={t("BPA_PROCEED_OC_SCRUTINY_LABEL")} />
                     </div>
-                    <div style={{ disabled: "true", height: "30px", width: "100%", fontSize: "14px" }}></div>
+                    {/* <div style={{ disabled: "true", height: "30px", width: "100%", fontSize: "14px" }}></div> */}
                 </FormStep> : null
             }
         </div>
