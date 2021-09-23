@@ -88,12 +88,12 @@
       <artifactId>validation-api</artifactId>
     </dependency>
   </dependencies>
-  <repositories> 
- 		<repository>
-			<id>repo.egovernments.org</id>
-			<name>eGov DIGIT Releases Repository</name>
-			<url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
-		</repository>
+  <repositories>
+    <repository>
+      <id>repo.digit.org</id>
+      <name>eGov DIGIT Releases Repository</name>
+      <url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
+    </repository>
     <repository>
       <id>repo.egovernments.org</id>
       <name>eGov ERP Releases Repository</name>
