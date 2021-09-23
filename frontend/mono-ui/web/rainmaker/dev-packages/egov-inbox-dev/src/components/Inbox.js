@@ -187,6 +187,7 @@ const WfTable = (props) => {
                     setEsclationData={setEsclationData}
                     setData={setData}
                     wfSlaConfig={wfSlaConfig}
+                    setIsLoading={setIsLoading}
                     wfBusinessConfig={wfBusinessConfig}
                 >
                 </TableFilterWrapper>

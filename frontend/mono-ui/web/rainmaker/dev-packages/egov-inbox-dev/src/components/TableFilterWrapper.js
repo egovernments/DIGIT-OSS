@@ -4,6 +4,9 @@ import { FilterDropdown, svgIcons } from './Components';
 import TablePaginationWrapper from './TablePaginationWrapper';
 import { formatWFSearch, mobileCheck, transformLocality } from './utils';
 
+const checkStringValid=(str="")=>{
+    return str.match(new RegExp(/^([a-zA-Z0-9-]){4,25}$/))?true:false;
+}
 
 const { SortDown,
     SortUp } = svgIcons;
@@ -72,7 +75,7 @@ const initialState = {
     selected_none: true
 };
 
-const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid, loadedAll, localities = [], localityData, t, esclationData, setEsclationData, applicationStates, setBusinessServices, wfSlaConfig, wfBusinessConfig, data, ...rest }) => {
+const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid, loadedAll, localities = [], localityData, t, esclationData, setEsclationData, applicationStates, setIsLoading,setBusinessServices, wfSlaConfig,isLoading, wfBusinessConfig, data, ...rest }) => {
     let isMobile = mobileCheck()
     const [searchText, setSearchText] = useState("");
     const [searchRecord, setSearchRecord] = useState([]);
@@ -80,9 +83,10 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
     const [sort, setSortOrder] = useState(true);
     const [filteredData, setFilteredData] = useState(data || []);
     useEffect(() => {
-        if (searchText != "") {
+        if (checkStringValid(searchText)) {
+            setIsLoading(true);
             const timer = setTimeout(() => {
-                wfSearch([{ key: "businessIds", value: searchText }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(resp => resp && resp.ProcessInstances && resp.ProcessInstances.map(wfRecord=>formatWFSearch(wfRecord, wfSlaConfig, wfBusinessConfig)) ).then(response => setSearchRecord(response ? response : { }));
+                wfSearch([{ key: "businessIds", value: searchText }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(resp => resp && resp.ProcessInstances && resp.ProcessInstances.filter(wfrec=>businessServices.includes(wfrec.businessService)).map(wfRecord=>formatWFSearch(wfRecord, wfSlaConfig, wfBusinessConfig))).then(response => setSearchRecord(response ? response : [])).then(e=>setIsLoading(false));
             }, 1000)
             return () => {
                 clearTimeout(timer);
@@ -93,9 +97,9 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
 
 
     useEffect(() => {
-        if (searchRecord.length != 0 && searchText != "") {
+        if (searchRecord.length != 0 && checkStringValid(searchText)) {
             setFilteredData([...searchRecord]);
-        } else if (searchText != "" && searchRecord.length == 0) {
+        } else if (checkStringValid(searchText) && searchRecord.length == 0) {
             setFilteredData([]);
         } else if (filters.esclated) {
             setFilteredData([...esclationData.data]);
@@ -115,7 +119,8 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
                 </div>
                 <div className="jk-inbox-search-holder">
                 <label for="inbox-search" className="jk-inbox-search-label">     {t("CS_INBOX_SEARCH")}</label>
-            <input id="inbox-search" type="text" onChange={(e) => setSearchText(e.target.value)} value={searchText} placeholder={t("INBOX_ENTER_BID")} />
+            <input id="inbox-search" disabled={isLoading} type="text" onChange={(e) => setSearchText(e.target.value)} value={searchText} placeholder={t("INBOX_ENTER_BID")} />
+            {searchText.length!==0&&!checkStringValid(searchText)&&<span >{t("ERR_INVALID_APPLICATION_NO")}</span>}
           </div>
         </div>
         <div className="inbox-filter-wrapper">
@@ -180,7 +185,7 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
                 </span>
                 {isMobile && <span className="jk-inbox-pointer jk-sort-ico" onClick={() => setSortOrder(state => !state)} >{sort ? <SortDown /> : <SortUp />}</span>}
             </div>
-            <TablePaginationWrapper sort={sort} data={[...filteredData.sort((x, y) => sort ? x.other.sla - y.other.sla : y.other.sla - x.other.sla)]} t={t} setSortOrder={setSortOrder} localityData={localityData}{...rest}></TablePaginationWrapper>
+            <TablePaginationWrapper sort={sort} data={[...filteredData.sort((x, y) => sort ? x.other.sla - y.other.sla : y.other.sla - x.other.sla)]} t={t} setSortOrder={setSortOrder} isLoading={isLoading} localityData={localityData}{...rest}></TablePaginationWrapper>
         </div>
     </React.Fragment>
 }
