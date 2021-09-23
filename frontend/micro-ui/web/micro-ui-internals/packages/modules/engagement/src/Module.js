@@ -25,7 +25,7 @@ import DocumentResponse from "./pages/employee/Documents/response";
 import DocUpdate from "./pages/employee/Documents/doc-update";
 import DocUpdateResponse from "./pages/employee/Documents/update-response";
 import DocDeleteResponse from "./pages/employee/Documents/delete-response";
-import DocumentNotification from "./pages/employee/Documents/documentNotification";
+import DocumentNotification from "./pages/employee/Documents/Inbox";
 
 const EventsBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -74,7 +74,7 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
         <Route path={`${path}/documents/update`} component={(props) => <DocUpdate {...props} />} />
         <Route path={`${path}/documents/update-response`} component={(props) => <DocUpdateResponse {...props} />} />
         <Route path={`${path}/documents/delete-response`} component={(props) => <DocDeleteResponse {...props} />} />
-        <Route path={`${path}/document_notification`} component={(props) => <DocumentNotification {...props} />} />
+        <Route path={`${path}/document_notification`} component={(props) => <DocumentNotification tenants={tenants}/>} />
         {/* documents/update-response */}
         {/* <Redirect to={`${path}/docs`} /> */}
       </Switch>

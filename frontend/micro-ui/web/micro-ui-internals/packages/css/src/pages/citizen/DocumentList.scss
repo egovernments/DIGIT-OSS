@@ -122,6 +122,7 @@
       align-items: center;
     }
   }
+  
   .new_document_clear_search_alignment{
     @apply mb-md mr-lg;
   }
@@ -133,6 +134,10 @@
     & .card-caption {
       @apply ml-lg ;
     }
+  }
+
+  .document-table-docs-columns{
+    @apply flex items-center gap-5;  
   }
   .filter_section_main {
     padding-bottom: 300px;

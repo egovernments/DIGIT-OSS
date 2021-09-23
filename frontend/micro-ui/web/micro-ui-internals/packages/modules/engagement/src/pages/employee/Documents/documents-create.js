@@ -26,7 +26,7 @@ const Documents = () => {
     const DocumentEntity = {
       name: data.documentName,
       description: data.description,
-      category: data.docCategory,
+      category: data.docCategory?.name,
       filestoreId: data.document.filestoreId,
       documentLink: data.document.documentLink,
       tenantIds: data.ULB.map((e) => e.code),

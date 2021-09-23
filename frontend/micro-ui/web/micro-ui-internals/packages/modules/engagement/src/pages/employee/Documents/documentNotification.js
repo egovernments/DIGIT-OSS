@@ -14,86 +14,47 @@ import {
   CardLabel,
   Card,
   DownloadImgIcon,
- 
+  Loader
 
 } from "@egovernments/digit-ui-react-components";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from 'react-router-dom';
-import DocumentNotificationTable from "../../../components/Documents/DocumentNotificationTable";
+
+const crumbs = [
+  {
+    path: "/digit-ui/employee",
+    content: "employee",
+    show: true,
+  },
+  {
+    path: "/digit-ui/employee/engagement",
+    content: "engagement",
+    show: true,
+  },
+  {
+    path: "/digit-ui/employee/engagement",
+    content: "Document_Notification",
+    show: true,
+  },
+];
 
 
-const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
-const getDocumentCell = (value) => <span> <DownloadImgIcon/> <a className="link" href={value} target="_blank">View</a></span>
 const DocumentNotification = () => {
   const { t } = useTranslation();
-  const isLoading = false
-  const cityDataNew = [
-    {
-      city: "Lucknow",
-    },
-    {
-      city: "Kanpur",
-    },
-    {
-      city: "Aligarh",
-    },
-  ];
+  const { data: ulbArray, isLoading: isLoadingUlbs } = Digit.Hooks.useTenants();
+  const [selectedCategory, setSelectedCategory] = useState({})
+  const [selectedUlb, setSelectedUlb] = useState({});
+  const stateId = Digit.ULBService.getStateId();
+  const currrentUlb = Digit.ULBService.getCurrentUlb() || "pb.amritsar";
+  const { data: categoryData, isLoading: isLoadingDocCategories } = Digit.Hooks.engagement.useMDMS(stateId, "DocumentUploader", ["UlbLevelCategories"], {
+    select: (d) => {
 
-  const FilterData = [
-    {
-      data: 'All',
+      const data = d?.DocumentUploader?.UlbLevelCategories?.filter?.((e) => e.ulb === currrentUlb.code);
+      return data[0].categoryList.map((name) => ({ name }));
     },
-    {
-      data: 'Yesterday',
-    },
-    {
-      data: 'Today',
-    },
-    {
-      data: 'tomorrow'
-    }
+  });
 
-  ]
-
-  const crumbs = [
-    {
-      path: "/digit-ui/employee",
-      content: "employee",
-      show: true,
-    },
-    {
-      path: "/digit-ui/employee/engagement",
-      content: "engagement",
-      show: true,
-    },
-    {
-      path: "/digit-ui/employee/engagement",
-      content: "Document_Notification",
-      show: true,
-    },
-  ];
-
-  const columns = React.useMemo(() => [
-    {
-      Header: t('CE_TABLE_DOCUMENT_NAME'),
-      accessor: (row) => GetCell(row.document_name)
-
-    },
-    {
-      Header: t('DOCUMENTS_CATEGORY_CARD_LABEL'),
-      accessor: (row) => GetCell(row.document_category)
-    },
-    {
-      Header: t('CE_TABLE_DOCUMENT_LINK'),
-      accessor: (row) => getDocumentCell(row.attachment_link)
-    },
-    {
-      Header: t('CE_TABLE_DOCUMENT_POSTED_BY'),
-      accessor: (row) => GetCell(row.posted_by)
-    },
-
-  ], [])
 
   const tableData = React.useMemo(() => [
     {
@@ -123,45 +84,9 @@ const DocumentNotification = () => {
     },
   ], [])
 
-  let result;
-  if (isLoading) {
-    result = <Loader />;
-  } else if (tableData?.length === 0) {
-    result = (
-      <Card style={{ marginTop: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        {t("CE_DOCUMENTS_NOT_FOUND")}<br />
-        <Link className="link" to={`/digit-ui/employee/engagement/documents/create`}>{t('NEW_DOCUMENT_TEXT')}</Link>
-      </Card>
-    );
-  } else if (tableData?.length > 0) {
-    result = (
-      <DocumentNotificationTable
-        t={t}
-        data={tableData}
-        columns={columns}
-        getCellProps={(cellInfo) => {
-          return {
-            style: {
-              minWidth: cellInfo.column.Header === t("CE_TABLE_DOCUMENT_NAME") ? "240px" : "",
-              padding: "20px 18px",
-              fontSize: "16px",
-            },
-          };
-        }}
-      //  onPageSizeChange={props.onPageSizeChange}
-      //   currentPage={props.currentPage}
-      //   onNextPage={props.onNextPage}
-      //onPrevPage={props.onPrevPage}
-      //     pageSizeLimit={props.pageSizeLimit}
-      //     onSort={props.onSort}
-      //     disableSort={props.disableSort}
-      //     onPageSizeChange={props.onPageSizeChange}
-      //    sortParams={props.sortParams}
-      //    totalRecords={props.totalRecords}
-      />
-    );
-  }
 
+
+  console.log({ stateId, currrentUlb, categoryData, ulbArray })
 
   return (
     <div>
@@ -182,7 +107,17 @@ const DocumentNotification = () => {
             <div className="document_notification_second_grid">
               <div>
                 <Label>{t('LABEL_FOR_ULB')}</Label>
-                <Dropdown option={cityDataNew} optionKey="city" />
+                <Dropdown
+                  allowMultiselect={true}
+                  optionKey={"i18nKey"}
+                  option={ulbArray}
+                  select={(e) => {
+                    setSelectedUlb(e)
+                  }}
+                  keepNull={true}
+                  selected={selectedUlb}
+                  t={t}
+                />
               </div>
               <div>
                 <Label>{t('LABEL_FOR_DOCUMENT_NAME')}</Label>
@@ -215,7 +150,17 @@ const DocumentNotification = () => {
               </div>
               <div className="filter_section_document_categories">
                 <CardLabel>{t('DOCUMENTS_CATEGORY_CARD_LABEL')}</CardLabel>
-                <Dropdown option={FilterData} optionKey="data" />
+                <Dropdown
+                  allowMultiselect={true}
+                  optionKey={"name"}
+                  option={categoryData}
+                  select={(e) => {
+                    setSelectedCategory(e)
+                  }}
+                  keepNull={true}
+                  selected={selectedCategory}
+                  t={t}
+                />
                 <ButtonSelector label="Apply" className="back_selector_btn_full" />
               </div>
             </div>
@@ -223,7 +168,7 @@ const DocumentNotification = () => {
         </div>
         <div className="document_notification_table_section">
           <div className="new_document_card_table">
-            {result}
+
           </div>
         </div>
       </div>

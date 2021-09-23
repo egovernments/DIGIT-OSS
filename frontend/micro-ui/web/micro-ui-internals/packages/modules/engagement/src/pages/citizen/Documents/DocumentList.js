@@ -36,9 +36,9 @@ import {
    // const [documentsCategories, setDocumentCategories] = useState([]);
     const stateId = Digit.ULBService.getStateId();
     const currrentUlb = Digit.ULBService.getCurrentUlb() || "pb.amritsar" ;
-    const { data: categoryData, isLoading } = Digit.Hooks.engagement.useMDMS(stateId, "DocumentUploader", "UlbLevelCategories", {
+    const { data: categoryData, isLoading } = Digit.Hooks.engagement.useMDMS(stateId, "DocumentUploader", ["UlbLevelCategories"], {
       select: (d) => {
-        const data = d?.DocumentUploader?.UlbLevelCategories?.filter?.((e) => e.ulb === currrentUlb);
+        const data = d?.DocumentUploader?.UlbLevelCategories?.filter?.((e) => e.ulb === currrentUlb.code);
         return data[0].categoryList;
       },
     });
@@ -46,7 +46,7 @@ import {
     if(isLoading){
       return <Loader />
     }
-    console.log(categoryData, "This is category DAta")
+
     return (
       <AppContainer>
         <div>
