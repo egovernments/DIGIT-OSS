@@ -84,8 +84,9 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
     const [filteredData, setFilteredData] = useState(data || []);
     useEffect(() => {
         if (checkStringValid(searchText)) {
-            setIsLoading(true);
+            
             const timer = setTimeout(() => {
+                setIsLoading(true);
                 wfSearch([{ key: "businessIds", value: searchText }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(resp => resp && resp.ProcessInstances && resp.ProcessInstances.filter(wfrec=>businessServices.includes(wfrec.businessService)).map(wfRecord=>formatWFSearch(wfRecord, wfSlaConfig, wfBusinessConfig))).then(response => setSearchRecord(response ? response : [])).then(e=>setIsLoading(false));
             }, 1000)
             return () => {
@@ -119,8 +120,8 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
                 </div>
                 <div className="jk-inbox-search-holder">
                 <label for="inbox-search" className="jk-inbox-search-label">     {t("CS_INBOX_SEARCH")}</label>
-            <input id="inbox-search" disabled={isLoading} type="text" onChange={(e) => setSearchText(e.target.value)} value={searchText} placeholder={t("INBOX_ENTER_BID")} />
-            {searchText.length!==0&&!checkStringValid(searchText)&&<span >{t("ERR_INVALID_APPLICATION_NO")}</span>}
+            <input id="inbox-search" disabled={isLoading} style={{borderColor:searchText.length!==0&&!checkStringValid(searchText)?"red":"black"}} type="text" onChange={(e) => setSearchText(e.target.value)} value={searchText} placeholder={t("INBOX_ENTER_BID")} />
+            {searchText.length!==0&&!checkStringValid(searchText)&&<span style={{color:"red"}} >{t("ERR_INVALID_APPID")}</span>}
           </div>
         </div>
         <div className="inbox-filter-wrapper">
