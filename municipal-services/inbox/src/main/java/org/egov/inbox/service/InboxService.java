@@ -156,6 +156,7 @@ public class InboxService {
                     tenantAndApplnNumbersMap.put(tenant, l);
                 }
             }
+            processCriteria.setStatus(null);
             for(Map.Entry<String, List<String>> t : tenantAndApplnNumbersMap.entrySet()) {
                 processCriteria.setTenantId(t.getKey());
                 processCriteria.setBusinessIds(t.getValue());
