@@ -31,233 +31,294 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class BPAInboxFilterService {
 
-	@Value("${egov.user.host}")
-	private String userHost;
+    @Value("${egov.user.host}")
+    private String userHost;
 
-	@Value("${egov.user.search.path}")
-	private String userSearchEndpoint;
+    @Value("${egov.user.search.path}")
+    private String userSearchEndpoint;
 
-	@Value("${egov.searcher.host}")
-	private String searcherHost;
+    @Value("${egov.searcher.host}")
+    private String searcherHost;
 
-	@Value("${egov.searcher.bpa.search.path}")
-	private String bpaInboxSearcherEndpoint;
+    @Value("${egov.searcher.bpa.search.path}")
+    private String bpaInboxSearcherEndpoint;
 
-	@Value("${egov.searcher.bpa.search.desc.path}")
-	private String bpaInboxSearcherDescEndpoint;
+    @Value("${egov.searcher.bpa.search.desc.path}")
+    private String bpaInboxSearcherDescEndpoint;
 
-	@Value("${egov.searcher.bpa.count.path}")
-	private String bpaInboxSearcherCountEndpoint;
+    @Value("${egov.searcher.bpa.count.path}")
+    private String bpaInboxSearcherCountEndpoint;
 
-	@Value("${egov.searcher.bpa.citizen.search.path}")
-	private String bpaCitizenInboxSearcherEndpoint;
+    @Value("${egov.searcher.bpa.citizen.search.path}")
+    private String bpaCitizenInboxSearcherEndpoint;
 
-	@Value("${egov.searcher.bpa.citizen.search.desc.path}")
-	private String bpaCitizenInboxSearcherDescEndpoint;
+    @Value("${egov.searcher.bpa.citizen.search.desc.path}")
+    private String bpaCitizenInboxSearcherDescEndpoint;
 
-	@Value("${egov.searcher.bpa.citizen.count.path}")
-	private String bpaCitizenInboxSearcherCountEndpoint;
+    @Value("${egov.searcher.bpa.citizen.count.path}")
+    private String bpaCitizenInboxSearcherCountEndpoint;
 
-	@Autowired
-	private RestTemplate restTemplate;
+    @Value("${egov.searcher.bpa.tenant.wise.applnno.path}")
+    private String bpaStakeholderInboxTenantWiseApplnNosEndpoint;
 
-	@Autowired
-	private ServiceRequestRepository serviceRequestRepository;
+    @Value("${egov.searcher.bpa.citizen.tenant.wise.applnno.path}")
+    private String bpaCitizenInboxTenantWiseApplnNosEndpoint;
 
-	public List<String> fetchApplicationNumbersFromSearcher(InboxSearchCriteria criteria,
-			HashMap<String, String> StatusIdNameMap, RequestInfo requestInfo) {
-		List<String> applicationNumbers = new ArrayList<>();
-		HashMap<String, Object> moduleSearchCriteria = criteria.getModuleSearchCriteria();
-		ProcessInstanceSearchCriteria processCriteria = criteria.getProcessSearchCriteria();
-		Boolean isSearchResultEmpty = false;
-		Boolean isMobileNumberPresent = false;
-		List<String> userUUIDs = new ArrayList<>();
-		List<String> citizenRoles = Collections.emptyList();
-		if (moduleSearchCriteria.containsKey(MOBILE_NUMBER_PARAM)) {
-			isMobileNumberPresent = true;
-		}
-		if (isMobileNumberPresent) {
-			String tenantId = criteria.getTenantId();
-			String mobileNumber = String.valueOf(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM));
-			Map<String, List<String>> userDetails = fetchUserUUID(mobileNumber, requestInfo, tenantId);
-			userUUIDs = userDetails.get(USER_UUID);
-			citizenRoles = userDetails.get(USER_ROLES);
-			Boolean isUserPresentForGivenMobileNumber = CollectionUtils.isEmpty(userUUIDs) ? false : true;
-			isSearchResultEmpty = !isMobileNumberPresent || !isUserPresentForGivenMobileNumber;
-			if (isSearchResultEmpty) {
-				return new ArrayList<>();
-			}
-		}
+    @Autowired
+    private RestTemplate restTemplate;
 
-		if (!isSearchResultEmpty) {
-			Object result = null;
+    @Autowired
+    private ServiceRequestRepository serviceRequestRepository;
 
-			Map<String, Object> searcherRequest = new HashMap<>();
-			Map<String, Object> searchCriteria = getSearchCriteria(criteria, StatusIdNameMap, requestInfo,
-					moduleSearchCriteria, processCriteria, userUUIDs);
-			// Paginating searcher results
-			searchCriteria.put(OFFSET_PARAM, criteria.getOffset());
-			searchCriteria.put(NO_OF_RECORDS_PARAM, criteria.getLimit());
-			moduleSearchCriteria.put(LIMIT_PARAM, criteria.getLimit());
+    public List<String> fetchApplicationNumbersFromSearcher(InboxSearchCriteria criteria,
+            HashMap<String, String> StatusIdNameMap, RequestInfo requestInfo) {
+        List<String> applicationNumbers = new ArrayList<>();
+        HashMap<String, Object> moduleSearchCriteria = criteria.getModuleSearchCriteria();
+        ProcessInstanceSearchCriteria processCriteria = criteria.getProcessSearchCriteria();
+        Boolean isSearchResultEmpty = false;
+        Boolean isMobileNumberPresent = false;
+        List<String> userUUIDs = new ArrayList<>();
+        List<String> citizenRoles = Collections.emptyList();
+        if (moduleSearchCriteria.containsKey(MOBILE_NUMBER_PARAM)) {
+            isMobileNumberPresent = true;
+        }
+        if (isMobileNumberPresent) {
+            String tenantId = criteria.getTenantId();
+            String mobileNumber = String.valueOf(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM));
+            Map<String, List<String>> userDetails = fetchUserUUID(mobileNumber, requestInfo, tenantId);
+            userUUIDs = userDetails.get(USER_UUID);
+            citizenRoles = userDetails.get(USER_ROLES);
+            Boolean isUserPresentForGivenMobileNumber = CollectionUtils.isEmpty(userUUIDs) ? false : true;
+            isSearchResultEmpty = !isMobileNumberPresent || !isUserPresentForGivenMobileNumber;
+            if (isSearchResultEmpty) {
+                return new ArrayList<>();
+            }
+        }
 
-			searcherRequest.put(REQUESTINFO_PARAM, requestInfo);
-			searcherRequest.put(SEARCH_CRITERIA_PARAM, searchCriteria);
-			
-			if (citizenHasStakeholderRoles(requestInfo, citizenRoles)) {
-				StringBuilder uri = new StringBuilder();
-				if (moduleSearchCriteria.containsKey(SORT_ORDER_PARAM)
-						&& moduleSearchCriteria.get(SORT_ORDER_PARAM).equals(DESC_PARAM))
-					uri.append(searcherHost).append(bpaInboxSearcherDescEndpoint);
-				else
-					uri.append(searcherHost).append(bpaInboxSearcherEndpoint);
+        if (!isSearchResultEmpty) {
+            Object result = null;
 
-				result = restTemplate.postForObject(uri.toString(), searcherRequest, Map.class);
+            Map<String, Object> searcherRequest = new HashMap<>();
+            Map<String, Object> searchCriteria = getSearchCriteria(criteria, StatusIdNameMap, requestInfo,
+                    moduleSearchCriteria, processCriteria, userUUIDs);
+            // Paginating searcher results
+            searchCriteria.put(OFFSET_PARAM, criteria.getOffset());
+            searchCriteria.put(NO_OF_RECORDS_PARAM, criteria.getLimit());
+            moduleSearchCriteria.put(LIMIT_PARAM, criteria.getLimit());
 
-				applicationNumbers = JsonPath.read(result, "$.BPAs.*.applicationno");
-			} else {
-				StringBuilder citizenUri = new StringBuilder();
+            searcherRequest.put(REQUESTINFO_PARAM, requestInfo);
+            searcherRequest.put(SEARCH_CRITERIA_PARAM, searchCriteria);
 
-				if (moduleSearchCriteria.containsKey(SORT_ORDER_PARAM)
-						&& moduleSearchCriteria.get(SORT_ORDER_PARAM).equals(DESC_PARAM))
-					citizenUri.append(searcherHost).append(bpaCitizenInboxSearcherDescEndpoint);
-				else
-					citizenUri.append(searcherHost).append(bpaCitizenInboxSearcherEndpoint);
+            if (citizenHasStakeholderRoles(requestInfo, citizenRoles)) {
+                StringBuilder uri = new StringBuilder();
+                if (moduleSearchCriteria.containsKey(SORT_ORDER_PARAM)
+                        && moduleSearchCriteria.get(SORT_ORDER_PARAM).equals(DESC_PARAM))
+                    uri.append(searcherHost).append(bpaInboxSearcherDescEndpoint);
+                else
+                    uri.append(searcherHost).append(bpaInboxSearcherEndpoint);
 
-				result = restTemplate.postForObject(citizenUri.toString(), searcherRequest, Map.class);
+                result = restTemplate.postForObject(uri.toString(), searcherRequest, Map.class);
 
-				List<String> citizenApplicationsNumbers = JsonPath.read(result, "$.BPAs.*.applicationno");
+                applicationNumbers = JsonPath.read(result, "$.BPAs.*.applicationno");
+            } else {
+                StringBuilder citizenUri = new StringBuilder();
 
-				applicationNumbers.addAll(citizenApplicationsNumbers);
-			}
+                if (moduleSearchCriteria.containsKey(SORT_ORDER_PARAM)
+                        && moduleSearchCriteria.get(SORT_ORDER_PARAM).equals(DESC_PARAM))
+                    citizenUri.append(searcherHost).append(bpaCitizenInboxSearcherDescEndpoint);
+                else
+                    citizenUri.append(searcherHost).append(bpaCitizenInboxSearcherEndpoint);
 
-		}
-		return applicationNumbers;
-	}
+                result = restTemplate.postForObject(citizenUri.toString(), searcherRequest, Map.class);
 
-	private Map<String, Object> getSearchCriteria(InboxSearchCriteria criteria, HashMap<String, String> StatusIdNameMap,
-			RequestInfo requestInfo, HashMap<String, Object> moduleSearchCriteria,
-			ProcessInstanceSearchCriteria processCriteria, List<String> userUUIDs) {
-		Map<String, Object> searchCriteria = new HashMap<>();
+                List<String> citizenApplicationsNumbers = JsonPath.read(result, "$.BPAs.*.applicationno");
 
-		searchCriteria.put(TENANT_ID_PARAM, criteria.getTenantId());
-		searchCriteria.put(BUSINESS_SERVICE_PARAM, processCriteria.getBusinessService());
+                applicationNumbers.addAll(citizenApplicationsNumbers);
+            }
 
-		// Accommodating module search criteria in searcher request
-		if (moduleSearchCriteria.containsKey(MOBILE_NUMBER_PARAM) && !CollectionUtils.isEmpty(userUUIDs)) {
-			searchCriteria.put(USERID_PARAM, userUUIDs);
-		}
-		if (moduleSearchCriteria.containsKey(LOCALITY_PARAM)) {
-			searchCriteria.put(LOCALITY_PARAM, moduleSearchCriteria.get(LOCALITY_PARAM));
-		}
-		if (moduleSearchCriteria.containsKey(APPROVAL_NUMBER_PARAM)) {
-			searchCriteria.put(APPROVAL_NUMBER_PARAM, moduleSearchCriteria.get(APPROVAL_NUMBER_PARAM));
-		}
-		if (moduleSearchCriteria.containsKey(BPA_APPLICATION_NUMBER_PARAM)) {
-			searchCriteria.put(BPA_APPLICATION_NUMBER_PARAM, moduleSearchCriteria.get(BPA_APPLICATION_NUMBER_PARAM));
-		}
+        }
+        return applicationNumbers;
+    }
 
-		// Accommodating process search criteria in searcher request
-		if (!ObjectUtils.isEmpty(processCriteria.getAssignee())) {
-			searchCriteria.put(ASSIGNEE_PARAM, processCriteria.getAssignee());
-		}
-		if (!ObjectUtils.isEmpty(processCriteria.getStatus())) {
-			searchCriteria.put(STATUS_PARAM, processCriteria.getStatus());
-		} else {
-			if (StatusIdNameMap.values().size() > 0) {
-				if (CollectionUtils.isEmpty(processCriteria.getStatus())) {
-					searchCriteria.put(STATUS_PARAM, StatusIdNameMap.keySet());
-				}
-			}
-		}
-		return searchCriteria;
-	}
+    private Map<String, Object> getSearchCriteria(InboxSearchCriteria criteria, HashMap<String, String> StatusIdNameMap,
+            RequestInfo requestInfo, HashMap<String, Object> moduleSearchCriteria,
+            ProcessInstanceSearchCriteria processCriteria, List<String> userUUIDs) {
+        Map<String, Object> searchCriteria = new HashMap<>();
 
-	public Integer fetchApplicationCountFromSearcher(InboxSearchCriteria criteria,
-			HashMap<String, String> StatusIdNameMap, RequestInfo requestInfo) {
-		Integer totalCount = 0;
-		HashMap<String, Object> moduleSearchCriteria = criteria.getModuleSearchCriteria();
-		ProcessInstanceSearchCriteria processCriteria = criteria.getProcessSearchCriteria();
-		Boolean isSearchResultEmpty = false;
-		Boolean isMobileNumberPresent = false;
-		List<String> userUUIDs = new ArrayList<>();
-		if (moduleSearchCriteria.containsKey(MOBILE_NUMBER_PARAM)) {
-			isMobileNumberPresent = true;
-		}
-		List<String> citizenRoles = Collections.emptyList();
-		if (isMobileNumberPresent) {
-			String tenantId = criteria.getTenantId();
-			String mobileNumber = String.valueOf(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM));
-			Map<String, List<String>> userDetails = fetchUserUUID(mobileNumber, requestInfo, tenantId);
-			userUUIDs = userDetails.get(USER_UUID);
-			citizenRoles = userDetails.get(USER_ROLES);
-			Boolean isUserPresentForGivenMobileNumber = CollectionUtils.isEmpty(userUUIDs) ? false : true;
-			isSearchResultEmpty = !isMobileNumberPresent || !isUserPresentForGivenMobileNumber;
-			if (isSearchResultEmpty) {
-				return 0;
-			}
-		}
+        searchCriteria.put(TENANT_ID_PARAM, criteria.getTenantId());
+        searchCriteria.put(BUSINESS_SERVICE_PARAM, processCriteria.getBusinessService());
 
-		if (!isSearchResultEmpty) {
-			Object result = null;
+        // Accommodating module search criteria in searcher request
+        if (moduleSearchCriteria != null && moduleSearchCriteria.containsKey(MOBILE_NUMBER_PARAM) && !CollectionUtils.isEmpty(userUUIDs)) {
+            searchCriteria.put(USERID_PARAM, userUUIDs);
+        }
+        if (moduleSearchCriteria != null && moduleSearchCriteria.containsKey(LOCALITY_PARAM)) {
+            searchCriteria.put(LOCALITY_PARAM, moduleSearchCriteria.get(LOCALITY_PARAM));
+        }
+        if (moduleSearchCriteria != null && moduleSearchCriteria.containsKey(APPROVAL_NUMBER_PARAM)) {
+            searchCriteria.put(APPROVAL_NUMBER_PARAM, moduleSearchCriteria.get(APPROVAL_NUMBER_PARAM));
+        }
+        if (moduleSearchCriteria != null && moduleSearchCriteria.containsKey(BPA_APPLICATION_NUMBER_PARAM)) {
+            searchCriteria.put(BPA_APPLICATION_NUMBER_PARAM, moduleSearchCriteria.get(BPA_APPLICATION_NUMBER_PARAM));
+        }
 
-			Map<String, Object> searcherRequest = new HashMap<>();
-			Map<String, Object> searchCriteria = getSearchCriteria(criteria, StatusIdNameMap, requestInfo,
-					moduleSearchCriteria, processCriteria, userUUIDs);
-			searcherRequest.put(REQUESTINFO_PARAM, requestInfo);
-			searcherRequest.put(SEARCH_CRITERIA_PARAM, searchCriteria);
-			if (citizenHasStakeholderRoles(requestInfo, citizenRoles)) {
-				StringBuilder uri = new StringBuilder();
-				uri.append(searcherHost).append(bpaInboxSearcherCountEndpoint);
+        // Accommodating process search criteria in searcher request
+        if (!ObjectUtils.isEmpty(processCriteria.getAssignee())) {
+            searchCriteria.put(ASSIGNEE_PARAM, processCriteria.getAssignee());
+        }
+        if (!ObjectUtils.isEmpty(processCriteria.getStatus())) {
+            searchCriteria.put(STATUS_PARAM, processCriteria.getStatus());
+        } else {
+            if (StatusIdNameMap != null && StatusIdNameMap.values().size() > 0) {
+                if (CollectionUtils.isEmpty(processCriteria.getStatus())) {
+                    searchCriteria.put(STATUS_PARAM, StatusIdNameMap.keySet());
+                }
+            }
+        }
+        return searchCriteria;
+    }
 
-				result = restTemplate.postForObject(uri.toString(), searcherRequest, Map.class);
+    public Integer fetchApplicationCountFromSearcher(InboxSearchCriteria criteria,
+            HashMap<String, String> StatusIdNameMap, RequestInfo requestInfo) {
+        Integer totalCount = 0;
+        HashMap<String, Object> moduleSearchCriteria = criteria.getModuleSearchCriteria();
+        ProcessInstanceSearchCriteria processCriteria = criteria.getProcessSearchCriteria();
+        Boolean isSearchResultEmpty = false;
+        Boolean isMobileNumberPresent = false;
+        List<String> userUUIDs = new ArrayList<>();
+        if (moduleSearchCriteria.containsKey(MOBILE_NUMBER_PARAM)) {
+            isMobileNumberPresent = true;
+        }
+        List<String> citizenRoles = Collections.emptyList();
+        if (isMobileNumberPresent) {
+            String tenantId = criteria.getTenantId();
+            String mobileNumber = String.valueOf(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM));
+            Map<String, List<String>> userDetails = fetchUserUUID(mobileNumber, requestInfo, tenantId);
+            userUUIDs = userDetails.get(USER_UUID);
+            citizenRoles = userDetails.get(USER_ROLES);
+            Boolean isUserPresentForGivenMobileNumber = CollectionUtils.isEmpty(userUUIDs) ? false : true;
+            isSearchResultEmpty = !isMobileNumberPresent || !isUserPresentForGivenMobileNumber;
+            if (isSearchResultEmpty) {
+                return 0;
+            }
+        }
 
-				double count = JsonPath.read(result, "$.TotalCount[0].count");
-				totalCount = (int) count;
-			} else {
-				StringBuilder citizenUri = new StringBuilder();
-				citizenUri.append(searcherHost).append(bpaCitizenInboxSearcherCountEndpoint);
+        if (!isSearchResultEmpty) {
+            Object result = null;
 
-				Object citizenResult = restTemplate.postForObject(citizenUri.toString(), searcherRequest, Map.class);
+            Map<String, Object> searcherRequest = new HashMap<>();
+            Map<String, Object> searchCriteria = getSearchCriteria(criteria, StatusIdNameMap, requestInfo,
+                    moduleSearchCriteria, processCriteria, userUUIDs);
+            searcherRequest.put(REQUESTINFO_PARAM, requestInfo);
+            searcherRequest.put(SEARCH_CRITERIA_PARAM, searchCriteria);
+            if (citizenHasStakeholderRoles(requestInfo, citizenRoles)) {
+                StringBuilder uri = new StringBuilder();
+                uri.append(searcherHost).append(bpaInboxSearcherCountEndpoint);
 
-				double citizenCount = JsonPath.read(citizenResult, "$.TotalCount[0].count");
-				totalCount = totalCount + (int) citizenCount;
-			}
-		}
-		return totalCount;
-	}
+                result = restTemplate.postForObject(uri.toString(), searcherRequest, Map.class);
 
-	private Map<String, List<String>> fetchUserUUID(String mobileNumber, RequestInfo requestInfo, String tenantId) {
-		Map<String, List<String>> userDetails = new ConcurrentHashMap<>();
-		StringBuilder uri = new StringBuilder();
-		uri.append(userHost).append(userSearchEndpoint);
-		Map<String, Object> userSearchRequest = new HashMap<>();
-		userSearchRequest.put("RequestInfo", requestInfo);
-		userSearchRequest.put("tenantId", tenantId);
-		userSearchRequest.put("userType", CITIZEN);
-		userSearchRequest.put("mobileNumber", mobileNumber);
-		try {
-			Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest);
-			if (null != user) {
-				// log.info(user.toString());
-				userDetails.put(USER_UUID, JsonPath.read(user, "$.user.*.uuid"));
-				userDetails.put(USER_ROLES, new ArrayList<>(new HashSet<>(JsonPath.read(user, "$.user.*.roles.*.code"))));
-			} else {
-				log.error("Service returned null while fetching user for mobile number - " + mobileNumber);
-			}
-		} catch (Exception e) {
-			log.error("Exception while fetching user for mobile number - " + mobileNumber);
-			log.error("Exception trace: ", e);
-		}
-		return userDetails;
-	}
+                double count = JsonPath.read(result, "$.TotalCount[0].count");
+                totalCount = (int) count;
+            } else {
+                StringBuilder citizenUri = new StringBuilder();
+                citizenUri.append(searcherHost).append(bpaCitizenInboxSearcherCountEndpoint);
 
-	private boolean citizenHasStakeholderRoles(RequestInfo requestInfo, List<String> citizenRoles) {
-		if(citizenRoles.isEmpty())
-			citizenRoles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode)
-				.collect(Collectors.toList());
-		if (!citizenRoles.isEmpty() && citizenRoles.size() > 1 && citizenRoles.contains(CITIZEN))
-			return true;
-		return false;
-	}
+                Object citizenResult = restTemplate.postForObject(citizenUri.toString(), searcherRequest, Map.class);
+
+                double citizenCount = JsonPath.read(citizenResult, "$.TotalCount[0].count");
+                totalCount = totalCount + (int) citizenCount;
+            }
+        }
+        return totalCount;
+    }
+
+    private Map<String, List<String>> fetchUserUUID(String mobileNumber, RequestInfo requestInfo, String tenantId) {
+        Map<String, List<String>> userDetails = new ConcurrentHashMap<>();
+        StringBuilder uri = new StringBuilder();
+        uri.append(userHost).append(userSearchEndpoint);
+        Map<String, Object> userSearchRequest = new HashMap<>();
+        userSearchRequest.put("RequestInfo", requestInfo);
+        userSearchRequest.put("tenantId", tenantId);
+        userSearchRequest.put("userType", CITIZEN);
+        userSearchRequest.put("mobileNumber", mobileNumber);
+        try {
+            Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest);
+            if (null != user) {
+                // log.info(user.toString());
+                userDetails.put(USER_UUID, JsonPath.read(user, "$.user.*.uuid"));
+                userDetails.put(USER_ROLES, new ArrayList<>(new HashSet<>(JsonPath.read(user, "$.user.*.roles.*.code"))));
+            } else {
+                log.error("Service returned null while fetching user for mobile number - " + mobileNumber);
+            }
+        } catch (Exception e) {
+            log.error("Exception while fetching user for mobile number - " + mobileNumber);
+            log.error("Exception trace: ", e);
+        }
+        return userDetails;
+    }
+
+    private boolean citizenHasStakeholderRoles(RequestInfo requestInfo, List<String> citizenRoles) {
+        if (citizenRoles.isEmpty())
+            citizenRoles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode)
+                    .collect(Collectors.toList());
+        if (!citizenRoles.isEmpty() && citizenRoles.size() > 1 && citizenRoles.contains(CITIZEN))
+            return true;
+        return false;
+    }
+
+    public List<Map<String, String>> fetchTenantWiseApplicationNumbersForCitizenInboxFromSearcher(InboxSearchCriteria criteria,
+            HashMap<String, String> StatusIdNameMap, RequestInfo requestInfo) {
+        List<Map<String, String>> tenantWiseApplns = new ArrayList<Map<String, String>>();
+        HashMap<String, Object> moduleSearchCriteria = criteria.getModuleSearchCriteria();
+        ProcessInstanceSearchCriteria processCriteria = criteria.getProcessSearchCriteria();
+        Boolean isSearchResultEmpty = false;
+        Boolean isMobileNumberPresent = true;
+        List<String> userUUIDs = new ArrayList<>();
+        List<String> citizenRoles = new ArrayList<>();
+        if ((moduleSearchCriteria == null || moduleSearchCriteria.isEmpty()) || (moduleSearchCriteria != null && !moduleSearchCriteria.containsKey(MOBILE_NUMBER_PARAM))) {
+            moduleSearchCriteria = new HashMap<>();
+            moduleSearchCriteria.put(MOBILE_NUMBER_PARAM, requestInfo.getUserInfo().getMobileNumber());
+        } 
+        if (isMobileNumberPresent) {
+            String tenantId = criteria.getTenantId();
+            String mobileNumber = String.valueOf(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM));
+            Map<String, List<String>> userDetails = fetchUserUUID(mobileNumber, requestInfo, tenantId);
+            userUUIDs = userDetails.get(USER_UUID);
+            citizenRoles = userDetails.get(USER_ROLES);
+            Boolean isUserPresentForGivenMobileNumber = CollectionUtils.isEmpty(userUUIDs) ? false : true;
+            isSearchResultEmpty = !isMobileNumberPresent || !isUserPresentForGivenMobileNumber;
+            if (isSearchResultEmpty) {
+                userUUIDs.add(requestInfo.getUserInfo().getUuid());
+                List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
+                citizenRoles.addAll(roles);
+            }
+        } /*
+           * else { userUUIDs.add(requestInfo.getUserInfo().getUuid());
+           * citizenRoles.addAll(requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList())); }
+           */
+
+        if (!isSearchResultEmpty) {
+            Object result = null;
+
+            Map<String, Object> searcherRequest = new HashMap<>();
+            Map<String, Object> searchCriteria = getSearchCriteria(criteria, StatusIdNameMap, requestInfo,
+                    moduleSearchCriteria, processCriteria, userUUIDs);
+
+            searcherRequest.put(REQUESTINFO_PARAM, requestInfo);
+            searcherRequest.put(SEARCH_CRITERIA_PARAM, searchCriteria);
+            if (citizenHasStakeholderRoles(requestInfo, citizenRoles)) {
+                StringBuilder uri = new StringBuilder();
+                uri.append(searcherHost).append(bpaStakeholderInboxTenantWiseApplnNosEndpoint);
+                result = restTemplate.postForObject(uri.toString(), searcherRequest, Map.class);
+                tenantWiseApplns = JsonPath.read(result, "$.BPA.*");
+            } else {
+                StringBuilder citizenUri = new StringBuilder();
+                citizenUri.append(searcherHost).append(bpaCitizenInboxTenantWiseApplnNosEndpoint);
+                result = restTemplate.postForObject(citizenUri.toString(), searcherRequest, Map.class);
+                tenantWiseApplns = JsonPath.read(result, "$.BPA.*");
+            }
+        }
+        return tenantWiseApplns;
+    }
 
 }
