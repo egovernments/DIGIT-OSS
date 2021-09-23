@@ -10,7 +10,7 @@ const Home = () => {
     const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code
     const { data: { stateInfo } = {}, isLoading } = Digit.Hooks.useStore.getInitData()
 
-    const { data: EventsData, isLoading: EventsDataLoading } = Digit.Hooks.useEvents({tenantId})
+    const { data: EventsData, isLoading: EventsDataLoading } = Digit.Hooks.useEvents({tenantId, variant: "whats-new"})
     // if(!Digit.UserService?.getUser()?.access_token){
     //     history.push(`/digit-ui/citizen/login?from=${encodeURIComponent(window.location.pathname + window.location.search)}`)
     // }

@@ -9,9 +9,9 @@ const EventsListOnGround = ({variant, parentRoute}) => {
     const history = useHistory();
 
     const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code
-    const { data:{ unreadCount: preVisitUnseenEventsCount } = {}, isSuccess: preVisitUnseenEventsCountLoaded } = Digit.Hooks.useNotificationCount({tenantId}, {
+    const { data:{ unreadCount: preVisitUnseenEventsCount } = {}, isSuccess: preVisitUnseenEventsCountLoaded } = Digit.Hooks.useNotificationCount({tenantId, config:{
         enabled: !!Digit.UserService?.getUser()?.access_token,
-      })
+      }})
 
     const { data: EventsData, isLoading: EventsDataLoading } = Digit.Hooks.useEvents({tenantId, variant})
       
@@ -26,7 +26,7 @@ const EventsListOnGround = ({variant, parentRoute}) => {
     }
     
     return <div className="CitizenEngagementNotificationWrapper">
-         <Header>{t("CS_HEADER_EVENTS")}</Header>
+        <Header>{`${t("CS_HEADER_EVENTS")}(${EventsData?.length})`}</Header>
         {EventsData.length ? EventsData.map( DataParamsInEvent => <OnGroundEventCard onClick={onEventCardClick} {...DataParamsInEvent} />) : (<Card>
             <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
         </Card>)}
