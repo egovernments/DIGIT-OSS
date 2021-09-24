@@ -711,6 +711,13 @@ export const createAndSave = async (
     // var util = require('util');
     // fs.writeFileSync('./data.txt', util.inspect(JSON.stringify(formatconfig)) , 'utf-8');
     //function to download pdf automatically
+    let locale = requestInfo.msgId.split('|')[1];
+    if(!locale)
+      locale = envVariables.DEFAULT_LOCALISATION_LOCALE;
+
+    if(defaultFontMapping[locale] != 'default')
+      formatconfig.defaultStyle.font = defaultFontMapping[locale];
+
     createPdfBinary(
       key,
       formatConfigByFile,
