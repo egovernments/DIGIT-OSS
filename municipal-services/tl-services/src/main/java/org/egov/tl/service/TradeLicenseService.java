@@ -3,6 +3,8 @@ package org.egov.tl.service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
@@ -377,5 +379,82 @@ public class TradeLicenseService {
 
 
     }
+
+
+
+
+
+	public int countLicenses(@Valid TradeLicenseSearchCriteria criteria, RequestInfo requestInfo, String serviceFromPath,
+			HttpHeaders headers) {
+		// TODO Auto-generated method stub
+		int licenseCount;
+        // allow mobileNumber based search by citizen if interserviceCall
+        boolean isInterServiceCall = isInterServiceCall(headers);
+        tlValidator.validateSearch(requestInfo,criteria,serviceFromPath, isInterServiceCall);
+        criteria.setBusinessService(serviceFromPath);
+        enrichmentService.enrichSearchCriteriaWithAccountId(requestInfo,criteria);
+         if(criteria.getMobileNumber()!=null || criteria.getOwnerName() != null){
+             licenseCount = getLicensesCountFromMobileNumber(criteria,requestInfo);
+         }
+         else {
+             licenseCount = getLicensesCountWithOwnerInfo(criteria,requestInfo);
+         }
+         return 0;
+		
+		
+	}
+
+
+
+
+
+	private int getLicensesCountFromMobileNumber(@Valid TradeLicenseSearchCriteria criteria,
+			RequestInfo requestInfo) {
+		// TODO Auto-generated method stub
+		List<TradeLicense> licenses = new LinkedList<>();
+        UserDetailResponse userDetailResponse = userService.getUser(criteria,requestInfo);
+        // If user not found with given user fields return empty list
+        if(userDetailResponse.getUser().size()==0){
+            return 0;
+        }
+        enrichmentService.enrichTLCriteriaWithOwnerids(criteria,userDetailResponse);
+        
+        if(criteria.getOnlyMobileNumber()!=null && criteria.getOnlyMobileNumber() ) {
+        	criteria.setTenantId(null);
+        }
+        
+        licenses = repository.getLicenses(criteria);
+
+        if(licenses.size()==0){
+            return 0;
+        }
+
+        // Add tradeLicenseId of all licenses owned by the user
+        Boolean isRenewalPending = (criteria.getRenewalPending()!=null && criteria.getRenewalPending()==true);
+        
+        criteria=enrichmentService.getTradeLicenseCriteriaFromIds(licenses);
+        
+        if(isRenewalPending) {
+        	criteria.setRenewalPending(true);
+        }
+        
+        //Get all tradeLicenses with ownerInfo enriched from user service
+        int licenseCount = getLicensesCountWithOwnerInfo(criteria,requestInfo);
+        return licenseCount;
+	}
+
+
+
+
+
+	private int getLicensesCountWithOwnerInfo(@Valid TradeLicenseSearchCriteria criteria, RequestInfo requestInfo) {
+		int licenseCount = repository.getLicenseCount(criteria);
+        //if(licenses.isEmpty())
+        //    return 0;
+        //licenses = enrichmentService.enrichTradeLicenseSearch(licenses,criteria,requestInfo);
+        return licenseCount;
+		// TODO Auto-generated method stub
+		
+	}
 
 }

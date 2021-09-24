@@ -16,6 +16,8 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
+import javax.validation.Valid;
+
 import static org.egov.tl.util.TLConstants.ACTION_ADHOC;
 
 
@@ -149,5 +151,17 @@ public class TLRepository {
                 preparedStmtList.toArray(),
                 new SingleColumnRowMapper<>(String.class));
     }
+
+
+	public int getLicenseCount(@Valid TradeLicenseSearchCriteria criteria) {
+		List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getTLCountQuery(criteria, preparedStmtList);
+        List<TradeLicense> licenseCount =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+        //sortChildObjectsById(licenses);
+        return licenseCount.size();
+		
+		// TODO Auto-generated method stub
+		
+	}
 
 }
