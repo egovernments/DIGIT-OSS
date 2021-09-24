@@ -9,8 +9,9 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
     const mobileView = innerWidth <= 640;
     const ulb = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const userUlbs = ulb.filter(ulb => ulb?.code === tenantId)
-
+    // const userUlbs = ulb.filter(ulb => ulb?.code === tenantId)
+    const { data: ulbArray, isLoading } = Digit.Hooks.useTenants();
+    //console.log('userUlbs', { userUlbs })
     const getFields = (input) => {
         switch (input.type) {
             case "ulb":
@@ -18,7 +19,7 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
                     <Controller
                         render={props => (
                             <Dropdown
-                                option={userUlbs}
+                                option={ulbArray}
                                 optionKey={"i18nKey"}
                                 selected={props.value}
                                 select={props.onChange}
@@ -54,8 +55,8 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
     }
 
     const clearSearch = () => {
-        reset({ ulb: null, eventName: '' });
-        onSearch({ ulb: null, eventName: '' })
+        reset({ name: '', ulbs: { code: "" }, postedBy: "" });
+        onSearch({ name: '', ulbs: { code: "" }, postedBy: "" })
     };
 
     const clearAll = (mobileView) => {
@@ -112,10 +113,10 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
                                     label={t("ES_COMMON_SEARCH")}
                                     // disabled={!!Object.keys(formState.errors).length || formValueEmpty()}
                                     submit
-                                />                    
+                                />
                             </div>
                         )}
-                        {type === "desktop" && !mobileView &&(
+                        {type === "desktop" && !mobileView && (
                             <div className="document-clear-all">{clearAll()}</div>)
                         }
                     </div>

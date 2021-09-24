@@ -49,7 +49,23 @@ const EventsBreadCrumb = ({ location }) => {
       path: "/digit-ui/employee/event/response",
       content: t("ES_EVENT_NEW_EVENT_RESPONSE"),
       show: location.pathname.includes("event/response") ? true : false,
-    }
+    },
+    {
+      path: "/digit-ui/employee/engagement/documents/notification",
+      content: t('DOCUMENTS_DOCUMENT_HEADER'),
+      show: location.pathname.includes("/documents/notification") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/documents/create",
+      content: t("NEW_DOCUMENT_TEXT"),
+      show: location.pathname.includes("/documents/create") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/documents/response",
+      content: t("DOCUMENTS_DOCUMENT_HEADER"),
+      show: location.pathname.includes("/documents/response") ? true : false,
+    },
+
   ];
 
   return <BreadCrumb crumbs={crumbs} />;
@@ -74,7 +90,7 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
         <Route path={`${path}/documents/update`} component={(props) => <DocUpdate {...props} />} />
         <Route path={`${path}/documents/update-response`} component={(props) => <DocUpdateResponse {...props} />} />
         <Route path={`${path}/documents/delete-response`} component={(props) => <DocDeleteResponse {...props} />} />
-        <Route path={`${path}/document_notification`} component={(props) => <DocumentNotification tenants={tenants}/>} />
+        <Route path={`${path}/documents/notification`} component={(props) => <DocumentNotification tenants={tenants}/>} />
         {/* documents/update-response */}
         {/* <Redirect to={`${path}/docs`} /> */}
       </Switch>

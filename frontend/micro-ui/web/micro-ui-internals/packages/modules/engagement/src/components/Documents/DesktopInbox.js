@@ -8,13 +8,13 @@ import Search from "./Search";
 import Filter from "./Filter";
 
 const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
-const getDocumentCell = (value) => <span className="document-table-docs-columns"><a className="link" href={value} target="_blank">View</a></span>
+const getDocumentCell = (value="", link ,t) => <span className="document-table-docs-columns"><a className="link" href={link} target="_blank" rel="noreferrer">{value.length? value : t('CE_DOCUMENT_VIEW_LINK')}</a></span>
 
 const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, links, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords }) => {
   const columns = React.useMemo(() => [
     {
       Header: t('CE_TABLE_DOCUMENT_NAME'),
-      accessor: (row) => GetCell(row?.name)
+      accessor: (row) => getDocumentCell(row?.name, row?.documentLink, t)
     },
     {
       Header: t('DOCUMENTS_CATEGORY_CARD_LABEL'),
@@ -22,7 +22,7 @@ const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, l
     },
     {
       Header: t('CE_TABLE_DOCUMENT_LINK'),
-      accessor: (row) => getDocumentCell(row.documentLink)
+      accessor: (row) => getDocumentCell("",row.documentLink,t)
     },
     {
       Header: t('CE_TABLE_DOCUMENT_POSTED_BY'),

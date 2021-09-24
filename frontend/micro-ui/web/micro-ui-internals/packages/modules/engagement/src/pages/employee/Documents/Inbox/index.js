@@ -4,7 +4,6 @@ import { format, isValid } from "date-fns";
 import DesktopInbox from "../../../../components/Documents/DesktopInbox";
 import MobileInbox from "../../../../components/Documents/MobileInbox";
 
-
 const Inbox = ({ tenants }) => {
     const { t } = useTranslation()
     Digit.SessionStorage.set("ENGAGEMENT_TENANTS", tenants);
@@ -39,7 +38,9 @@ const Inbox = ({ tenants }) => {
     });
      
     const onSearch = (params) => {
-        setSearchParams((prevSearchParams) => ({ ...prevSearchParams, ...params }));
+        const tenantIds = params?.ulbs?.code;
+        const {name, postedBy} = params;
+        setSearchParams((prevSearchParams) => ({ ...prevSearchParams, name, postedBy, tenantIds }));
     }
 
     const handleFilterChange = (data) => {
@@ -59,7 +60,7 @@ const Inbox = ({ tenants }) => {
         return [
             {
                 label: t('LABEL_FOR_ULB'),
-                name: "ulb",
+                name: "ulbs",
                 type: "ulb",
             },
             {
