@@ -399,7 +399,7 @@ public class TradeLicenseService {
          else {
              licenseCount = getLicensesCountWithOwnerInfo(criteria,requestInfo);
          }
-         return 0;
+         return licenseCount;
 		
 		
 	}
