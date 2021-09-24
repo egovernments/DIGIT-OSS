@@ -105,6 +105,7 @@ public class ActionService {
 		boolean isAuthorized = false;
 
 		for(String tenantId : listOfMdmsTenantIdsToCheck) {
+			log.info("Checking for: " + tenantId);
 			if(isAuthorizedOnGivenTenantLevel(authorizeRequest, tenantId)){
 				isAuthorized = true;
 				break;
@@ -149,7 +150,7 @@ public class ActionService {
 
 		boolean isAuthorized = uris.contains(uriToBeAuthorized) || containsRegexUri(regexUris, uriToBeAuthorized);
 
-		log.info("Request tenant ids:  " + authorizeRequest.getTenantIds());
+		//log.info("Request tenant ids:  " + authorizeRequest.getTenantIds());
 		log.info("Role {} has access to requested URI {} : {}", applicableRoles, uriToBeAuthorized,
 				isAuthorized);
 
