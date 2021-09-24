@@ -72,7 +72,7 @@ public class TLRepository {
     public List<TradeLicense> getLicenses(TradeLicenseSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getTLSearchQuery(criteria, preparedStmtList);
-        utils.replaceSchemaPlaceholder(query, criteria.getTenantId());
+        query = utils.replaceSchemaPlaceholder(query, criteria.getTenantId());
         List<TradeLicense> licenses =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         sortChildObjectsById(licenses);
         return licenses;
@@ -147,6 +147,7 @@ public class TLRepository {
     public List<TradeLicense> getPlainLicenseSearch(TradeLicenseSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getTLPlainSearchQuery(criteria, preparedStmtList);
+        query= utils.replaceSchemaPlaceholder(query, criteria.getTenantId());
         log.info("Query: " + query);
         List<TradeLicense> licenses =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         sortChildObjectsById(licenses);
