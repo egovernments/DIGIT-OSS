@@ -111,7 +111,7 @@ const searchApiCall = async (state, dispatch) => {
     removeValidation(state, dispatch);
     const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
     const warningEnabled = get(state, "screenConfiguration.preparedFinalObject.searchScreenMdmsData.PropertyTax.UpdateNumber[0].warningEnabled",false);
-    const UpdateNumber = get(state, "screenConfiguration.preparedFinalObject.searchScreenMdmsData.PropertyTax.UpdateNumber",{});
+    const UpdateNumber = get(state, "screenConfiguration.preparedFinalObject.searchScreenMdmsData.PropertyTax.UpdateNumber[0]",{});
     const querryObject = getPayload(searchScreenObject);
     try {
       const response = await getSearchResults(querryObject);
