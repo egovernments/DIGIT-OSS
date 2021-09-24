@@ -47,17 +47,17 @@ public class WsQueryBuilder {
 			+ " plumber.name as plumber_name, plumber.licenseno, roadcuttingInfo.id as roadcutting_id, roadcuttingInfo.roadtype as roadcutting_roadtype, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea,"
 			+ " roadcuttingInfo.active as roadcutting_active, plumber.mobilenumber as plumber_mobileNumber, plumber.gender as plumber_gender, plumber.fatherorhusbandname, plumber.correspondenceaddress,"
 			+ " plumber.relationship, " + holderSelectValues
-			+ " FROM eg_ws_connection conn "
+			+ " FROM {schema}.eg_ws_connection conn "
 			+  INNER_JOIN_STRING 
-			+" eg_ws_service wc ON wc.connection_id = conn.id"
+			+" {schema}.eg_ws_service wc ON wc.connection_id = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_applicationdocument document ON document.wsid = conn.id" 
+			+ "{schema}.eg_ws_applicationdocument document ON document.wsid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_plumberinfo plumber ON plumber.wsid = conn.id"
+			+ "{schema}.eg_ws_plumberinfo plumber ON plumber.wsid = conn.id"
 		    +  LEFT_OUTER_JOIN_STRING
-		    + "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
+		    + "{schema}.eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id" ;
+			+ "{schema}.eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id" ;
 
 	private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_id) offset_ FROM " +
@@ -128,15 +128,10 @@ public class WsQueryBuilder {
 
 		if (!StringUtils.isEmpty(criteria.getTenantId())) {
 			addClauseIfRequired(preparedStatement, query);
-			if(criteria.getTenantId().equalsIgnoreCase(config.getStateLevelTenantId())){
-				query.append(" conn.tenantid LIKE ? ");
-				preparedStatement.add(criteria.getTenantId() + '%');
-			}
-			else{
-				query.append(" conn.tenantid = ? ");
-				preparedStatement.add(criteria.getTenantId());
-			}
+			query.append(" conn.tenantid = ? ");
+			preparedStatement.add(criteria.getTenantId());
 		}
+
 		if (!StringUtils.isEmpty(criteria.getPropertyId()) && StringUtils.isEmpty(criteria.getMobileNumber())) {
 			if(propertyIdsPresent)
 				query.append(")");

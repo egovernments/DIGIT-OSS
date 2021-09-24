@@ -112,39 +112,39 @@ public class WSConfiguration {
 	@Value("${egov.user.host}")
 	private String userHost;
 
-    	@Value("${egov.user.context.path}")
-    	private String userContextPath;
+	@Value("${egov.user.context.path}")
+	private String userContextPath;
 
-    	@Value("${egov.user.search.path}")
-    	private String userSearchEndpoint;
+	@Value("${egov.user.search.path}")
+	private String userSearchEndpoint;
     
-    	// water connection Calculator
-    	@Value("${egov.ws.calculation.host}")
-    	private String calculatorHost;
+	// water connection Calculator
+	@Value("${egov.ws.calculation.host}")
+	private String calculatorHost;
 
-    	@Value("${egov.ws.calculation.endpoint}")
-    	private String calculateEndpoint;
+	@Value("${egov.ws.calculation.endpoint}")
+	private String calculateEndpoint;
     
-    	@Value("${egov.receipt.businessservice.topic}")
-    	private String receiptBusinessservice;
+	@Value("${egov.receipt.businessservice.topic}")
+	private String receiptBusinessservice;
     
-    	@Value("${ws.meterreading.create.topic}")
-    	private String createMeterReading;
+	@Value("${ws.meterreading.create.topic}")
+	private String createMeterReading;
     
-    	@Value("${ws.meterreading.create.endpoint}")
-    	private String createMeterReadingEndpoint;
+	@Value("${ws.meterreading.create.endpoint}")
+	private String createMeterReadingEndpoint;
     
-    	@Value("${ws.mseva.app.link}")
-    	private String mSevaAppLink;
+	@Value("${ws.mseva.app.link}")
+	private String mSevaAppLink;
     
-    	@Value("${ws.view.history.link}")
-    	private String viewHistoryLink;
+	@Value("${ws.view.history.link}")
+	private String viewHistoryLink;
     
-    	@Value("${ws.connectiondetails.link}")
-    	private String connectionDetailsLink;
-    
-    	@Value("${ws.application.pay.link}")
-    	private String applicationPayLink;
+	@Value("${ws.connectiondetails.link}")
+	private String connectionDetailsLink;
+
+	@Value("${ws.application.pay.link}")
+	private String applicationPayLink;
 	
 	@Value("${egov.msg.download.receipt.link}")
 	private String receiptDownloadLink;
@@ -155,29 +155,29 @@ public class WSConfiguration {
 	@Value("${egov.usr.events.pay.link}")
 	private String userEventApplicationPayLink;
     
-    	@Value("${egov.ws.estimate.endpoint}")
-    	private String estimationEndpoint;
+	@Value("${egov.ws.estimate.endpoint}")
+	private String estimationEndpoint;
 
 	@Value("${egov.collectiom.payment.search}")
 	private String paymentSearch;
     
-    	@Value("${ws.pdfservice.link}")
-    	private String pdfServiceLink;
+	@Value("${ws.pdfservice.link}")
+	private String pdfServiceLink;
     
-    	@Value("${ws.fileStore.link}")
-    	private String fileStoreLink;
+	@Value("${ws.fileStore.link}")
+	private String fileStoreLink;
     
-    	@Value("${egov.shortener.url}")
-    	private String shortenerURL;
+	@Value("${egov.shortener.url}")
+	private String shortenerURL;
     
-    	@Value("${egov.pdfservice.host}")
-    	private String pdfServiceHost;
+	@Value("${egov.pdfservice.host}")
+	private String pdfServiceHost;
     
-    	@Value("${egov.filestore.host}")
-    	private String fileStoreHost;
+	@Value("${egov.filestore.host}")
+	private String fileStoreHost;
     
-    	@Value("${ws.editnotification.topic}")
-    	private String editNotificationTopic;
+	@Value("${ws.editnotification.topic}")
+	private String editNotificationTopic;
     
 	@Value("${ws.consume.filestoreids.topic}")
 	private String fileStoreIdsTopic;
@@ -197,6 +197,11 @@ public class WSConfiguration {
 	@Value("${egov.collection.host}")
 	private String collectionHost;
 
-	@Value("${state.level.tenant.id}")
-	private String stateLevelTenantId;
+	// central-instance configs
+
+	@Value("${state.level.tenantid.length}")
+	private Integer stateLevelTenantIdLength;
+
+	@Value("${is.environment.central.instance}")
+	private Boolean isEnvironmentCentralInstance;
 }

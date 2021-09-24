@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.egov.tracer.model.CustomException;
+import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.service.MeterInfoValidator;
 import org.egov.waterconnection.service.PropertyValidator;
 import org.egov.waterconnection.service.WaterFieldValidator;
+import org.egov.waterconnection.web.models.SearchCriteria;
 import org.egov.waterconnection.web.models.ValidatorResult;
 import org.egov.waterconnection.web.models.WaterConnection;
 import org.egov.waterconnection.web.models.WaterConnectionRequest;
@@ -34,6 +36,8 @@ public class WaterConnectionValidator {
 	@Autowired
 	private MeterInfoValidator meterInfoValidator;
 
+	@Autowired
+	private WSConfiguration configs;
 
 	/**Used strategy pattern for avoiding multiple if else condition
 	 * 
@@ -130,5 +134,13 @@ public class WaterConnectionValidator {
 		if (reqType == WCConstants.UPDATE_APPLICATION) {
 			request.getWaterConnection().setConnectionNo(searchResult.getConnectionNo());
 		}
+	}
+
+	public void validateSearch(SearchCriteria criteria){
+		if(configs.getIsEnvironmentCentralInstance() && criteria.getTenantId() == null)
+			throw new CustomException("EG_WS_INVALID_SEARCH"," TenantId is mandatory for search ");
+		else if(configs.getIsEnvironmentCentralInstance() && criteria.getTenantId().split("\\.").length < configs.getStateLevelTenantIdLength())
+			throw new CustomException("EG_WS_INVALID_SEARCH"," TenantId should be mandatorily " + configs.getStateLevelTenantIdLength() + " levels for search");
+
 	}
 }

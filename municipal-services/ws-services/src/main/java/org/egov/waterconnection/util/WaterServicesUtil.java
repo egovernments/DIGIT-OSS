@@ -11,6 +11,7 @@ import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
+import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.web.models.AuditDetails;
 import org.egov.waterconnection.web.models.Property;
 import org.egov.waterconnection.web.models.PropertyCriteria;
@@ -299,6 +300,25 @@ public class WaterServicesUtil {
 	public StringBuilder getcollectionURL() {
 		StringBuilder builder = new StringBuilder();
 		return builder.append(config.getCollectionHost()).append(config.getPaymentSearch());
+	}
+
+	/**
+	 * Method to fetch the state name from the tenantId
+	 *
+	 * @param query
+	 * @param tenantId
+	 * @return
+	 */
+	public String replaceSchemaPlaceholder(String query, String tenantId) {
+
+		String finalQuery = null;
+		if (tenantId.contains(".")) {
+			String schemaName = tenantId.split("\\.")[1];
+			finalQuery = query.replace(WCConstants.SCHEMA_REPLACE_STRING, schemaName);
+		} else {
+			finalQuery = query.replace(WCConstants.SCHEMA_REPLACE_STRING.concat("."), "");
+		}
+		return finalQuery;
 	}
 
 }

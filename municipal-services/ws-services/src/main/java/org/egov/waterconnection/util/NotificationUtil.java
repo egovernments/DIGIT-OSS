@@ -108,7 +108,7 @@ public class NotificationUtil {
 				return;
 			}
 			for (SMSRequest smsRequest : smsRequestList) {
-				producer.push(config.getSmsNotifTopic(), smsRequest);
+				producer.push("",config.getSmsNotifTopic(), smsRequest);
 				log.info("Messages: " + smsRequest.getMessage());
 			}
 		}
@@ -165,7 +165,7 @@ public class NotificationUtil {
 	 */
 	public void sendEventNotification(EventRequest request) {
 		log.info("Event: " + request.toString());
-		producer.push(config.getSaveUserEventsTopic(), request);
+		producer.push("",config.getSaveUserEventsTopic(), request);
 	}
 	
 
