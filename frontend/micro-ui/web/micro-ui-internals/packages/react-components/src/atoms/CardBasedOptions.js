@@ -7,13 +7,13 @@ const Option = ({name, Icon, onClick, className }) => {
     </div>
 }
 
-const CardBasedOptions = ({header, sideOption, options}) => {
+const CardBasedOptions = ({header, sideOption, options, styles={}}) => {
     return <div className="CardBasedOptions">
         <div className="headContent">
             <h2>{header}</h2>
             <p onClick={sideOption.onClick}>{sideOption.name}</p>
         </div>
-        <div className="mainContent">
+        <div className="mainContent" style={styles}>
             {options.map( (props, index) => 
                 <Option key={index} {...props} />
             )}

@@ -51,7 +51,8 @@ const Home = () => {
                 Icon: <OBPSIcon />,
                 onClick: () => history.push("/digit-ui/citizen/obps-home")
             }
-        ]
+        ],
+        styles: { display: "flex", flexWrap: "wrap",  justifyContent: "flex-start", width: "100%"}
     }
     const allInfoAndUpdatesProps = {
         header: t("CS_COMMON_DASHBOARD_INFO_UPDATES"),
@@ -78,7 +79,8 @@ const Home = () => {
                 name: t("CS_COMMON_HELP"),
                 Icon: <HelpIcon/>
             }
-        ]
+        ],
+        styles: { display: "flex", flexWrap: "wrap",  justifyContent: "flex-start", width: "100%"}
     }
 
     return isLoading ? <Loader/> : <div className="HomePageWrapper">
