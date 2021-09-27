@@ -28,7 +28,7 @@ const MobileInbox = ({
   const { t } = useTranslation();
   const getData = () => {
     if (isSearch) {
-      return data?.map(({ applicationNo, applicationStatus, propertyUsage, tenantId, address, citizen }) => ({
+      return data?.table?.map(({ applicationNo, applicationStatus, propertyUsage, tenantId, address, citizen }) => ({
         [t("ES_INBOX_APPLICATION_NO")]: applicationNo,
         [t("ES_APPLICATION_DETAILS_APPLICANT_NAME")]: GetCell(citizen?.name || ""),
         [t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO")]: GetCell(citizen?.mobileNumber || ""),

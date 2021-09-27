@@ -10,7 +10,7 @@ const MyApplication = ({ application }) => {
     <Card>
       <KeyNote keyValue={t("CS_FSM_APPLICATION_APPLICATION_NO")} note={application.applicationNo} />
       <KeyNote keyValue={t("CS_FSM_APPLICATION_SERVICE_CATEGORY")} note={application.serviceCategory || t("CS_TITLE_FSM")} />
-      <KeyNote keyValue={t("CS_FSM_APPLICATION_TYPE")} note={application.applicationType || t("CS_FSM_APPLICATION_TYPE_DESLUDGING")} />
+      <KeyNote keyValue={t("CS_FSM_APPLICATION_TYPE")} note={t(`CS_FSM_APPLICATION_TYPE_${application.applicationType?.toUpperCase().replace(" ", "_")}`) || t("CS_FSM_APPLICATION_TYPE_DESLUDGING")} />
       <KeyNote keyValue={t("CS_FSM_APPLICATION_DETAIL_STATUS")} note={t("CS_COMMON_" + application.applicationStatus)} />
       <Link to={{ pathname: `/digit-ui/citizen/fsm/application-details/${application.applicationNo}`, state: { tenantId: application.tenantId } }}>
         <SubmitBar label={t("CS_COMMON_VIEW")} />

@@ -53,10 +53,10 @@ const ApplicationLinks = ({ linkPrefix }) => {
 
   const GetLogo = () => (
     <div className="header">
+      <span className="text">{t("ES_TITLE_FAECAL_SLUDGE_MGMT")}</span>
       <span className="logo">
         <ShippingTruck />
       </span>{" "}
-      <span className="text">{t("ES_TITLE_FAECAL_SLUDGE_MGMT")}</span>
     </div>
   );
 

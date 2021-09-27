@@ -4,6 +4,10 @@
       @apply ml-sm
     }
 }
+
+.employee .citizen-home-footer {
+  @apply fixed bottom-0;
+}
 .fill-path-primary-main{
   path{
     fill: #F47738;

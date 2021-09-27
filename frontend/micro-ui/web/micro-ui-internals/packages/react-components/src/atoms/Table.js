@@ -180,8 +180,12 @@ const Table = ({
             <span>
               {currentPage * pageSizeLimit + 1}
               {"-"}
-              {(currentPage + 1) * pageSizeLimit > totalRecords ? totalRecords : (currentPage + 1) * pageSizeLimit}{" "}
-              {totalRecords ? `of ${totalRecords}` : ""}
+              {manualPagination ?
+                (currentPage + 1) * pageSizeLimit > totalRecords ? totalRecords : (currentPage + 1) * pageSizeLimit :
+                (pageIndex + 1) * pageSizeLimit > rows.length ? rows.length : (pageIndex + 1) * pageSizeLimit
+              }{" "}
+              {/* {(pageIndex + 1) * pageSizeLimit > rows.length ? rows.length : (pageIndex + 1) * pageSizeLimit}{" "} */}
+              {totalRecords ? `of ${manualPagination ? totalRecords : rows.length}` : ""}
             </span>{" "}
           </span>
           {/* to go to first and last page we need to do a manual pagination , it can be updated later*/}
