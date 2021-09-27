@@ -101,17 +101,17 @@ public class BusinessServiceRepository {
         List<BusinessService> businessServices = getAllBusinessService();
 
         for(BusinessService businessService : businessServices){
-
+            log.info("businessService tostring--->>>"+businessService.toString());
             String tenantId = businessService.getTenantId();
 
             for(State state : businessService.getStates()){
 
                 String uuid = state.getUuid();
-
+                log.info("state tostring--->>>"+state.toString());
                 if(!CollectionUtils.isEmpty(state.getActions())){
 
                     for(Action action : state.getActions()){
-
+                        log.info("action tostring--->>>"+action.toString());
                         List<String> roles = action.getRoles();
 
                         if(!CollectionUtils.isEmpty(roles)){
@@ -128,8 +128,10 @@ public class BusinessServiceRepository {
                                 if(tenantToStatusMap.containsKey(tenantId))
                                     statuses = tenantToStatusMap.get(tenantId);
                                 else statuses = new LinkedList<>();
-
+                                
                                 statuses.add(uuid);
+                                log.info("status UUID"+uuid);
+                                log.info("tenant---->>>"+tenantId+"ROles--->>"+role);
 
                                 tenantToStatusMap.put(tenantId, statuses);
                                 roleTenantAndStatusMapping.put(role, tenantToStatusMap);

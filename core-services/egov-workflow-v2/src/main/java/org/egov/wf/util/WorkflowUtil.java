@@ -1,21 +1,35 @@
 package org.egov.wf.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
 import org.egov.wf.config.WorkflowConfig;
 import org.egov.wf.repository.BusinessServiceRepository;
-import org.egov.wf.web.models.*;
+import org.egov.wf.web.models.Action;
+import org.egov.wf.web.models.AuditDetails;
+import org.egov.wf.web.models.BusinessService;
+import org.egov.wf.web.models.ProcessInstanceSearchCriteria;
+import org.egov.wf.web.models.ProcessStateAndAction;
+import org.egov.wf.web.models.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.extern.slf4j.Slf4j;
 
 
 @Component
+@Slf4j
 public class WorkflowUtil {
 
     private ObjectMapper mapper;
@@ -254,7 +268,7 @@ public class WorkflowUtil {
              */
             String role = entry.getKey();
             List<String> tenantIds = entry.getValue();
-
+            log.info("tenantIds List---->>>"+tenantIds.stream().collect(Collectors.joining(",")));
 
             if(!roleTenantAndStatusMapping.containsKey(role))
                 continue;
@@ -270,13 +284,15 @@ public class WorkflowUtil {
                 }
             }
 
-
+            log.info("isStatelevelRolePresent=====>>"+isStatelevelRolePresent);
             Map<String,List<String>> tenantToStatuses = roleTenantAndStatusMapping.get(role);
 
             for (Map.Entry<String, List<String>> tenantEntry : tenantToStatuses.entrySet()){
 
                 String tenantKey = tenantEntry.getKey();
                 List<String> statuses = tenantEntry.getValue();
+                log.info("tenantKey==>>"+tenantKey);
+                log.info("statuses---->>>"+statuses.stream().collect(Collectors.joining(",")));
 
                 /**
                  * Handles Use Case 1:
