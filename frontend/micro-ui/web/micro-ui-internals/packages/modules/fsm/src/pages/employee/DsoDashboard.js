@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DashboardBox, Loader, ShippingTruck } from "@egovernments/digit-ui-react-components";
+import { Loader, ShippingTruck, EmployeeModuleCard } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 
@@ -51,9 +51,9 @@ const DsoDashboard = () => {
   const links = useMemo(
     () => [
       {
-        pathname: "/digit-ui/citizen/fsm/inbox",
-        label: "ES_TITLE_INBOX",
-        total: total,
+        link: "/digit-ui/citizen/fsm/inbox",
+        label: t("ES_TITLE_INBOX"),
+        count: total,
       },
     ],
     [total]
@@ -70,9 +70,27 @@ const DsoDashboard = () => {
   if (loader) {
     return <Loader />;
   }
+  const propsForModuleCard = {
+    Icon: <ShippingTruck />,
+    moduleName: t("ES_TITLE_FAECAL_SLUDGE_MGMT"),
+    kpis:[
+      {
+          count: inbox?.statuses.filter(e => e.applicationstatus === "DSO_INPROGRESS")[0]?.count || 0,
+          label: t("ES_COMPLETION_PENDING"),
+          link: `/digit-ui/citizen/fsm/inbox`
+      },
+      {
+          count: inbox?.statuses.filter(e => e.applicationstatus === "PENDING_DSO_APPROVAL")[0]?.count || 0,
+          label: t("ES_VEHICLE_ASSIGNMENT_PENDING"),
+          link: `/digit-ui/citizen/fsm/inbox`
+      }  
+    ],
+    links,
+
+  }
   return (
-    <div>
-      <DashboardBox t={t} svgIcon={<ShippingTruck />} header={t("ES_TITLE_FAECAL_SLUDGE_MGMT")} info={info} links={links} />
+    <div className="ground-container moduleCardWrapper">
+      <EmployeeModuleCard {...propsForModuleCard} />
     </div>
   );
 };

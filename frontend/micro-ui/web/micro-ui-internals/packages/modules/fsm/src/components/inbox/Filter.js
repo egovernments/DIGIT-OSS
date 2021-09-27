@@ -49,7 +49,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
 
   return (
     <React.Fragment>
-      <div className="filter" style={{ marginTop: isFstpOperator ? "-0px" : "revert" }}>
+      {((!DSO && !isFstpOperator && searchParams) || (mergedRoleDetails?.statuses?.length > 0)) && <div className="filter" style={{ marginTop: isFstpOperator ? "-0px" : "revert" }}>
         <div className="filter-card">
           <div className="heading">
             <div className="filter-label">{t("ES_COMMON_FILTER_BY")}:</div>
@@ -106,6 +106,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
           </div>
         </div>
       </div>
+      }
       {props.type === "mobile" && (
         <ActionBar>
           <ApplyFilterBar
