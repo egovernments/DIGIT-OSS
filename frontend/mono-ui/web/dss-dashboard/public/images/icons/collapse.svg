@@ -20,6 +20,6 @@
             <use fill="#FFF" xlink:href="#b"/>
         </g>
         <path d="M14 12h18v18H14z"/>
-        <path fill="#FE7A51" fill-rule="nonzero" d="M25.557 24.443L22.123 21l3.434-3.442L24.5 16.5 20 21l4.5 4.5z"/>
+        <path fill="mediumpurple" fill-rule="nonzero" d="M25.557 24.443L22.123 21l3.434-3.442L24.5 16.5 20 21l4.5 4.5z"/>
     </g>
 </svg>

@@ -48,7 +48,7 @@ class TextFieldUi extends React.Component {
         InputProps={{ classes: { input: classes.inputStyles } }}
         InputLabelProps={{
           shrink: true
-          // style: { color: "#FE7A51" },
+          // style: { color: "mediumpurple" },
           // classes: { root: classes.inputStyles }
         }}
         underlineShow={false}

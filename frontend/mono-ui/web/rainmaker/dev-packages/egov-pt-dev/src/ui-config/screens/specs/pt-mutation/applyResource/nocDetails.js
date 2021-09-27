@@ -165,7 +165,7 @@ export const nocDetails = getCommonCard({
         iconObj: {
           iconName: "search",
           position: "end",
-          color: "#FE7A51",
+          color: "mediumpurple",
           onClickDefination: {
             action: "condition",
             callBack: (state, dispatch, fieldInfo) => {

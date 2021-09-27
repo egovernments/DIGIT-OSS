@@ -145,7 +145,7 @@ class PropertyTaxDetails extends React.Component {
                       labelStyle={{
                         fontSize: "20px",
                         fontWeight: 500,
-                        color: "#fe7a51"
+                        color: "mediumpurple"
                       }}
                       label={`${parseInt(totalAmount)}`}
                     />
@@ -163,7 +163,7 @@ class PropertyTaxDetails extends React.Component {
                       buttonLabel={true}
                       bold={true}
                       fontSize="12px"
-                      color="rgb(254, 122, 81)"
+                      color="mediumpurple"
                     />
                   }
                   primary={true}
@@ -190,7 +190,7 @@ class PropertyTaxDetails extends React.Component {
                       buttonLabel={true}
                       bold={true}
                       fontSize="12px"
-                      color="rgb(254, 122, 81)"
+                      color="mediumpurple"
                     />
                   }
                   primary={true}
@@ -214,7 +214,7 @@ class PropertyTaxDetails extends React.Component {
                     style={{
                       height: 22,
                       borderRadius: 2,
-                      color: "#fe7a51"
+                      color: "mediumpurple"
                     }}
                     onClick={() => addRebateBox(true)}
                   />
@@ -279,7 +279,7 @@ class PropertyTaxDetails extends React.Component {
                 className="pt-tax-calc-details-btn"
                 onClick={this.toggleExpander}
               >
-                <Label label="PT_VIEW_DETAILS" color="#FE7A51" />
+                <Label label="PT_VIEW_DETAILS" color="mediumpurple" />
               </div>
             </div>
           }
