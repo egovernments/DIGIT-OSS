@@ -11,7 +11,7 @@ const tabItemContainerStyle = {
 
 const inkBarStyle = {
   zIndex: 1101,
-  backgroundColor: "mediumpurple",
+  backgroundColor: "rgb(68,214,44)",
   height: 4,
   position: "fixed",
   bottom: "inherit",

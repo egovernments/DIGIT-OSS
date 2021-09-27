@@ -249,7 +249,7 @@ class SingleApplication extends React.Component {
                         labelKey={(item.status === "APPROVED" || item.status === "EXPIRED") && moduleName === "TL" ? "TL_VIEW_DETAILS_RENEWAL" : "TL_VIEW_DETAILS"}
                         textTransform={"uppercase"}
                         style={{
-                          color: "mediumpurple",
+                          color: "rgb(68,214,44)",
                           fontSize: 14,
                           textTransform: "uppercase"
                         }}

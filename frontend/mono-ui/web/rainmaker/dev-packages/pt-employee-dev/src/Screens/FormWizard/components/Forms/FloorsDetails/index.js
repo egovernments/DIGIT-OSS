@@ -134,9 +134,9 @@ class FloorDetails extends React.Component {
           );
         })}
         {!disabled && (
-          <div className="pt-add-owner-btn" onClick={() => handleAddUnit(floorId)} style={{ color: "mediumpurple", float: "right", cursor: "pointer" }}>
-            <Label label="+" color="mediumpurple" containerStyle={{ marginRight: 5 }} />
-            <Label label="PT_ADD_UNIT" color="mediumpurple" />
+          <div className="pt-add-owner-btn" onClick={() => handleAddUnit(floorId)} style={{ color: "rgb(68,214,44)", float: "right", cursor: "pointer" }}>
+            <Label label="+" color="rgb(68,214,44)" containerStyle={{ marginRight: 5 }} />
+            <Label label="PT_ADD_UNIT" color="rgb(68,214,44)" />
             <ToolTipUi id={"form-wizard-tooltip"} title={"PT_FLOOR_DETAILS_ADD_ONE_MORE_UNIT_INFO"} style={{ fontSize: 24 }} />
           </div>
         )}

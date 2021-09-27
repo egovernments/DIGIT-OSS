@@ -6,14 +6,14 @@ const defaultIconStyle = {
   width: 19,
   height: 20,
   marginRight: 8,
-  fill: "mediumpurple",
+  fill: "rgb(68,214,44)",
 };
 
 const EditIcon = ({ onIconClick }) => {
   return (
     <div className="rainmaker-displayInline" onClick={onIconClick} style={{ cursor: "pointer", marginRight: 5 }}>
       <Icon style={defaultIconStyle} action="image" name="edit" />
-      <Label label="PT_EDIT_TEXT" color="mediumpurple" fontSize="16px" />
+      <Label label="PT_EDIT_TEXT" color="rgb(68,214,44)" fontSize="16px" />
     </div>
   );
 };

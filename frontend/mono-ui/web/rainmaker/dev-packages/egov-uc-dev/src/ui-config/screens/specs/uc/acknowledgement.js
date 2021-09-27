@@ -71,7 +71,7 @@ const downloadprintMenu = (state, dispatch, applicationNumber, tenantId) => {
             props: {
               variant: "outlined",
               style: {
-                height: "60px", color: "mediumpurple",
+                height: "60px", color: "rgb(68,214,44)",
                 marginRight: "5px"
               },
               className: "uc-download-button"
@@ -90,7 +90,7 @@ const downloadprintMenu = (state, dispatch, applicationNumber, tenantId) => {
             rightIcon: "arrow_drop_down",
             props: {
               variant: "outlined",
-              style: { height: "60px", color: "mediumpurple" },
+              style: { height: "60px", color: "rgb(68,214,44)" },
               className: "uc-print-button"
             },
             menu: printMenu

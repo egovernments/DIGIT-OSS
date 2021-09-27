@@ -335,11 +335,11 @@ class Property extends Component {
               label={
                 <Label buttonLabel={true}
                   label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="16px"
-                  color="mediumpurple" />
+                  color="rgb(68,214,44)" />
               }
               onClick={() => this.onEditPropertyClick()}
-              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "mediumpurple" }}
-              buttonStyle={{ border: "1px solid mediumpurple" }}
+              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "rgb(68,214,44)" }}
+              buttonStyle={{ border: "1px solid rgb(68,214,44)" }}
               style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
             />
             <Button

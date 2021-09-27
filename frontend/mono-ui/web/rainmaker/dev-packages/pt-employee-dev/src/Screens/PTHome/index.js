@@ -15,7 +15,7 @@ import "./index.css";
 const iconStyle = {
   width: "45px",
   height: "45px",
-  color: "mediumpurple"
+  color: "rgb(68,214,44)"
 };
 
 const listIconStyle = {
@@ -53,7 +53,7 @@ class PTHome extends Component {
   }
 
   iconStyle = {
-    color: "mediumpurple",
+    color: "rgb(68,214,44)",
     height: 30,
     width: 30,
     overflow: "visible"

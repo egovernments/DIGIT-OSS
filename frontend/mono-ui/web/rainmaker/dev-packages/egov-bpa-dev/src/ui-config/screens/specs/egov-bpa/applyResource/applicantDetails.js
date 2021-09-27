@@ -61,7 +61,7 @@ const commonApplicantInformation = () => {
         iconObj: {
           iconName: "search",
           position: "end",
-          color: "mediumpurple",
+          color: "rgb(68,214,44)",
           onClickDefination: {
             action: "condition",
             callBack: (state, dispatch, fieldInfo) => {

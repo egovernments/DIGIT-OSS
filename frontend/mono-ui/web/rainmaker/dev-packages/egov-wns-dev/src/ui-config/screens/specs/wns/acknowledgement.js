@@ -696,7 +696,7 @@ export const downloadPrintContainer = (
               label: { labelName: "DOWNLOAD", labelKey: "WS_COMMON_BUTTON_DOWNLOAD" },
               leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color: "mediumpurple", maxWidth: "95%", marginRight: "-15px" }, className: "tl-download-button" },
+              props: { variant: "outlined", style: { height: "60px", color: "rgb(68,214,44)", maxWidth: "95%", marginRight: "-15px" }, className: "tl-download-button" },
               menu: downloadMenu
             }
           }
@@ -710,7 +710,7 @@ export const downloadPrintContainer = (
               label: { labelName: "PRINT", labelKey: "WS_COMMON_BUTTON_PRINT" },
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color: "mediumpurple", maxWidth: "85%" }, className: "tl-print-button" },
+              props: { variant: "outlined", style: { height: "60px", color: "rgb(68,214,44)", maxWidth: "85%" }, className: "tl-print-button" },
               menu: printMenu
             }
           }

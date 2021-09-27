@@ -68,7 +68,7 @@ const styles = {
   underlineStyle: {
     position: "absolute",
     bottom: -1,
-    borderBottom: "2px solid mediumpurple",
+    borderBottom: "2px solid rgb(68,214,44)",
     width: "100%"
   },
   dividerStyle : {

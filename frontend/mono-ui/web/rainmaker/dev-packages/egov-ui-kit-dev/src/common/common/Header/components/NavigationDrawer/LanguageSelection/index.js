@@ -20,11 +20,11 @@ class LanguageSelection extends Component {
       color: "#ffffff",
     },
     selectedStyle: {
-      backgroundColor: "mediumpurple",
-      border: "1px solid mediumpurple",
+      backgroundColor: "rgb(68,214,44)",
+      border: "1px solid rgb(68,214,44)",
     },
     defaultStyle: {
-      border: "1px solid mediumpurple",
+      border: "1px solid rgb(68,214,44)",
       borderRadius: "1px",
       marginRight: "4.65%",
       height: "30px",

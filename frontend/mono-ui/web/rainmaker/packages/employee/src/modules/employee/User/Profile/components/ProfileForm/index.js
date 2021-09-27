@@ -21,7 +21,7 @@ const ProfileForm = ({ form, handleFieldChange, onClickAddPic, img, profilePic }
             <TextField {...fields.email} onChange={(e, value) => handleFieldChange("email", value)} />
             <Link to="/user/change-password">
               <div style={{ marginTop: "24px", marginBottom: "24px" }}>
-                <Label className="change-password-label-style" label={"CORE_COMMON_CHANGE_PASSWORD"} color="mediumpurple" />
+                <Label className="change-password-label-style" label={"CORE_COMMON_CHANGE_PASSWORD"} color="rgb(68,214,44)" />
               </div>
             </Link>
           </div>

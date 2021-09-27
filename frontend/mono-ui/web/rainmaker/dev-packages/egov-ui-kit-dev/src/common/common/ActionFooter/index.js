@@ -9,9 +9,9 @@ const ActionFooter = ({ label1, label2, primaryAction, secondaryAction }) => {
       <div className="col-xs-12" style={{ float: "right", padding: 0 }}>
         {label1 && (
           <Button
-            label={<Label buttonLabel={true} label={label1} color= "mediumpurple" />}
-            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "mediumpurple" }}
-            buttonStyle={{ border: "1px solid mediumpurple" }}
+            label={<Label buttonLabel={true} label={label1} color= "rgb(68,214,44)" />}
+            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "rgb(68,214,44)" }}
+            buttonStyle={{ border: "1px solid rgb(68,214,44)" }}
             style={{ marginRight: 45, maxWidth: "30%" }}
             onClick={secondaryAction}
 
@@ -20,7 +20,7 @@ const ActionFooter = ({ label1, label2, primaryAction, secondaryAction }) => {
         <Button
           label={<Label buttonLabel={true} label={label2} />}
           style={{ maxWidth: "30%" }}
-          backgroundColor="mediumpurple"
+          backgroundColor="rgb(68,214,44)"
           labelStyle={{ letterSpacing: 0.7, color: "#fff" }}
           buttonStyle={{ border: 0 }}
           onClick={primaryAction}

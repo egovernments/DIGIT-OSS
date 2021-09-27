@@ -19,7 +19,7 @@ const theme = createMuiTheme({
         color: '#39CB74!important',
       },
       active: {
-        color: 'mediumpurple!important',
+        color: 'rgb(68,214,44)!important',
       },
     },
   },
@@ -100,7 +100,7 @@ const WizardComponent = ({
                   backLabel
                 }
                 label={backLabel}
-                color="mediumpurple" />
+                color="rgb(68,214,44)" />
             }
             onClick={() => {
               (selected - 1 === -1
@@ -110,24 +110,24 @@ const WizardComponent = ({
               //   ? ((selected != 4)? (history.push("/property-tax")):(downloadReceipt()))
               //   : (onTabClick(selected - 1)));
             }}
-            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "mediumpurple" }}
-            buttonStyle={{ border: "1px solid mediumpurple" }}
+            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "rgb(68,214,44)" }}
+            buttonStyle={{ border: "1px solid rgb(68,214,44)" }}
             style={{ marginRight: 45, width: "30%" }}
           />}
           {selected == 5 && <Button
-            label={<Label buttonLabel={true} label={backLabel} color="mediumpurple" />}
+            label={<Label buttonLabel={true} label={backLabel} color="rgb(68,214,44)" />}
             onClick={() => {
               downloadAcknowledgementForm();
             }}
-            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "mediumpurple" }}
-            buttonStyle={{ border: "1px solid mediumpurple" }}
+            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "rgb(68,214,44)" }}
+            buttonStyle={{ border: "1px solid rgb(68,214,44)" }}
             style={{ marginRight: 45, width: "30%" }}
           />}
 
           <Button
             label={<Label buttonLabel={true} label={nextLabel} color="#fff" />}
             style={{ width: "30%" }}
-            backgroundColor="mediumpurple"
+            backgroundColor="rgb(68,214,44)"
             labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fff" }}
             buttonStyle={{ border: 0 }}
             onClick={

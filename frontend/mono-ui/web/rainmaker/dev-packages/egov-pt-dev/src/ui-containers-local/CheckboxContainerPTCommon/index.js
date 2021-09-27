@@ -14,9 +14,9 @@ import get from 'lodash/get';
 
 const styles = {
   root: {
-    color: "mediumpurple",
+    color: "rgb(68,214,44)",
     "&$checked": {
-      color: "mediumpurple"
+      color: "rgb(68,214,44)"
     }
   },
   formControl: {

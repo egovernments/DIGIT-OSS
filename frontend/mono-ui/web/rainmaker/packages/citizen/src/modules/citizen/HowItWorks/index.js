@@ -15,7 +15,7 @@ const statusCommonIconStyle = {
   ...timelineIconCommonStyle,
   backgroundColor: "#ffffff",
   boxShadow: "0 2px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12)",
-  border: "solid 1px mediumpurple",
+  border: "solid 1px rgb(68,214,44)",
 };
 
 const HowItWorks = (props) => {

@@ -132,7 +132,7 @@ export const billGenSearchCard = getCommonCard({
           variant: "contained",
           style: {
             color: "white",
-            backgroundColor: "mediumpurple",
+            backgroundColor: "rgb(68,214,44)",
             borderRadius: "2px",
             width: window.innerWidth > 480 ? "80%" : "100%",
             height: "48px"

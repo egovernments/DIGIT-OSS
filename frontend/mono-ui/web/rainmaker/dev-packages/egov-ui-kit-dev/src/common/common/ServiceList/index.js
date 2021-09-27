@@ -41,7 +41,7 @@ const styles = (theme) => ({
     whiteSpace: "nowrap"
   },
   icon: {
-    color: "mediumpurple",
+    color: "rgb(68,214,44)",
   },
   item: {
     padding: 8,

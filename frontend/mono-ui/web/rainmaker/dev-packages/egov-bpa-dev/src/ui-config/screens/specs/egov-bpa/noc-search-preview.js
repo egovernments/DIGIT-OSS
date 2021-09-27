@@ -108,8 +108,8 @@ const applicationOverview = getCommonContainer({
       props: {
         variant: "outlined",
         style: {
-          color: "mediumpurple",
-          border: "mediumpurple solid 1px",
+          color: "rgb(68,214,44)",
+          border: "rgb(68,214,44) solid 1px",
           borderRadius: "2px"
         }
       },

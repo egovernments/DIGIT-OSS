@@ -159,7 +159,7 @@ const styles = theme => ({
         }
     },
     selectedDay: {
-        backgroundColor: "mediumpurple",
+        backgroundColor: "rgb(68,214,44)",
         borderRadius: '50%',
         '& span': {
             fontFamily: 'Roboto',

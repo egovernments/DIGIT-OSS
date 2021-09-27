@@ -44,7 +44,7 @@ export const searchResults = {
             <Link to={onRowClick(rowData)}>
               <span
                 style={{
-                  color: "mediumpurple"
+                  color: "rgb(68,214,44)"
                 }}
               >
                 {rowData[get(textToLocalMapping, "Job ID No.")]}

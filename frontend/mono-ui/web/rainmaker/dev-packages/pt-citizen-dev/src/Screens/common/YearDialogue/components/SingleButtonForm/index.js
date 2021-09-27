@@ -15,8 +15,8 @@ const SingleButtonForm = ({ label, form, handleFieldChange, history, resetFormWi
       }}
       className="year-range-button"
       label={label}
-      labelColor="mediumpurple"
-      buttonStyle={{ borderRadius: "50px", border: "1px solid mediumpurple" }}
+      labelColor="rgb(68,214,44)"
+      buttonStyle={{ borderRadius: "50px", border: "1px solid rgb(68,214,44)" }}
     />
   );
 };

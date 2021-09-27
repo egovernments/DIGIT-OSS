@@ -109,7 +109,7 @@ class EdcrSingleApplication extends React.Component {
                             labelKey={"EDCR_DOWNLOAD_BUILDING_PLAN"}
                             textTransform={"uppercase"}
                             style={{
-                              color: "mediumpurple",
+                              color: "rgb(68,214,44)",
                               fontSize: 14,
                               textTransform: "uppercase"
                             }}
@@ -126,7 +126,7 @@ class EdcrSingleApplication extends React.Component {
                               labelKey={"EDCR_DOWNLOAD_REPORT"}
                               textTransform={"uppercase"}
                               style={{
-                                color: "mediumpurple",
+                                color: "rgb(68,214,44)",
                                 fontSize: 14,
                                 textTransform: "uppercase"
                               }}

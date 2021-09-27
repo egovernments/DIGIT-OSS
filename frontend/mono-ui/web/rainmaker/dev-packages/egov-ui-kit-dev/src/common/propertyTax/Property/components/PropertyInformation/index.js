@@ -15,7 +15,7 @@ const editIconStyle = {
   width: 19,
   height: 20,
   marginRight: 8,
-  fill: "mediumpurple",
+  fill: "rgb(68,214,44)",
 };
 
 const ReceiptItems = ({ items, propertyTaxAssessmentID, history, tenantId, onButtonClick }) => {
@@ -68,7 +68,7 @@ const ReceiptItems = ({ items, propertyTaxAssessmentID, history, tenantId, onBut
                         style={{ cursor: "pointer", marginRight: 5 }}
                       >
                         <Icon style={editIconStyle} action="image" name="edit" />
-                        <Label label="EDIT" color="mediumpurple" fontSize="16px" />
+                        <Label label="EDIT" color="rgb(68,214,44)" fontSize="16px" />
                       </div>
                     )} */}
                 </div>

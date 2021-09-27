@@ -30,7 +30,7 @@ const styles = theme => ({
         display: 'flex',
         cursor: 'pointer'
     },
-    btn1: { borderRadius: '2px', height: 'fit-content', backgroundColor: "mediumpurple", color: "white" },
+    btn1: { borderRadius: '2px', height: 'fit-content', backgroundColor: "rgb(68,214,44)", color: "white" },
     actions: {
         display: 'flex',
         margin: '12px !important'

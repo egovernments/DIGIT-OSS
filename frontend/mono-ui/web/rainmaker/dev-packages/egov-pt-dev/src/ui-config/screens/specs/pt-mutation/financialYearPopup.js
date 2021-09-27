@@ -140,9 +140,9 @@ import {
             props: {
               variant: "text",
               style: {
-                color: "mediumpurple",
+                color: "rgb(68,214,44)",
                 border: "1px solid rgb(255, 255, 255)",
-              //  borderColor: "mediumpurple",
+              //  borderColor: "rgb(68,214,44)",
               //  width: "50px",
               //  height: "48px",
               //  margin: "8px",
@@ -174,7 +174,7 @@ import {
                // margin: "8px",
                border: "1px solid rgb(255, 255, 255)",
                 backgroundColor: "#FFF",
-                color: "mediumpurple",
+                color: "rgb(68,214,44)",
                // borderRadius: "2px",
                // width: "50px",
                // height: "48px"

@@ -4,7 +4,7 @@ const theme = {
     backgroundColor: "#fff",
     palette: {
         primary1Color: "#00bcd1",
-        primary2Color: "mediumpurple",
+        primary2Color: "rgb(68,214,44)",
         textColor: "#5f5c62",
         canvasColor: "#F7F7F7",
         borderColor: "#e6e6e6",
@@ -14,7 +14,7 @@ const theme = {
         // fontFamily:variable
     },
     raisedButton: {
-        primaryColor: "mediumpurple",
+        primaryColor: "rgb(68,214,44)",
     },
     textField: {
         backgroundColor: "#ffffff",
@@ -28,7 +28,7 @@ const theme = {
     },
     bottomNavigation: {
         backgroundColor: "#ffffff",
-        selectedColor: "mediumpurple",
+        selectedColor: "rgb(68,214,44)",
     },
     stepper: {
         connectorLineColor: "#f5a623",

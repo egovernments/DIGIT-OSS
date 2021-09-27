@@ -132,7 +132,7 @@ const PaymentStatus = ({
           >
             <Label
               label="PT_DOWNLOAD_RECEIPT"
-              color="mediumpurple"
+              color="rgb(68,214,44)"
               labelStyle={{
                 textAlign: "center",
                 fontWeight: 500,

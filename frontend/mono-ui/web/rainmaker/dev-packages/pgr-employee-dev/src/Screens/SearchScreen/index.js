@@ -245,7 +245,7 @@ class SearchScreen extends Component {
                       />
                     }
                     style={{ marginRight: 28, width: "36%" }}
-                    backgroundColor="mediumpurple"
+                    backgroundColor="rgb(68,214,44)"
                     labelStyle={{
                       letterSpacing: 0.7,
                       padding: 0,
@@ -258,16 +258,16 @@ class SearchScreen extends Component {
                     label={
                       <Label
                         buttonLabel={true}
-                        color="mediumpurple"
+                        color="rgb(68,214,44)"
                         label="ES_MYCOMPLAINTS_CLEAR_SEARCH_BUTTON"
                       />
                     }
                     labelStyle={{
                       letterSpacing: 0.7,
                       padding: 0,
-                      color: "mediumpurple"
+                      color: "rgb(68,214,44)"
                     }}
-                    buttonStyle={{ border: "1px solid mediumpurple" }}
+                    buttonStyle={{ border: "1px solid rgb(68,214,44)" }}
                     style={{ width: "36%" }}
                     onClick={() => this.clearSearch()}
                   />

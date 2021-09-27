@@ -31,7 +31,7 @@ export const getOwnerMobNoField = getTextField({
   // iconObj: {
   //   iconName: "search",
   //   position: "end",
-  //   color: "mediumpurple",
+  //   color: "rgb(68,214,44)",
   //   onClickDefination: {
   //     action: "condition",
   //     callBack: (state, dispatch, fieldInfo) => {
@@ -191,7 +191,7 @@ export const OwnerInfoCard = {
           // iconObj: {
           //   iconName: "search",
           //   position: "end",
-          //   color: "mediumpurple",
+          //   color: "rgb(68,214,44)",
           //   onClickDefination: {
           //     action: "condition",
           //     callBack: (state, dispatch, fieldInfo) => {
@@ -447,7 +447,7 @@ export const ownerInfoInstitutional = {
         // iconObj: {
         //   iconName: "search",
         //   position: "end",
-        //   color: "mediumpurple",
+        //   color: "rgb(68,214,44)",
         //   onClickDefination: {
         //     action: "condition",
         //     callBack: (state, dispatch, fieldInfo) => {

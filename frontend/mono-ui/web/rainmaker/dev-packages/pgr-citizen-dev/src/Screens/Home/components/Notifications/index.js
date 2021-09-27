@@ -47,7 +47,7 @@ const Updates = ({ updates, history }) => {
                 labelStyle={{ width: "100%", wordWrap: "break-word" }}
               />
               <Icon
-                style={{ color: "mediumpurple" }}
+                style={{ color: "rgb(68,214,44)" }}
                 action="social"
                 name="notifications-none"
               />

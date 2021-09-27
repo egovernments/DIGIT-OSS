@@ -10,8 +10,8 @@ const selectedLabelStyle = {
 };
 
 const selectedStyle = {
-  backgroundColor: "mediumpurple",
-  border: "1px solid mediumpurple",
+  backgroundColor: "rgb(68,214,44)",
+  border: "1px solid rgb(68,214,44)",
 };
 
 const defaultStyle = {
