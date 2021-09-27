@@ -73,7 +73,7 @@ const SelectULB = ({userType,t,onSelect,setValue,config,data,formData,register,e
         <LabelFieldPair style={{margin:"25px"}}>
           <CardLabel></CardLabel>
           <div style={{textAlign:"center" }} className="field links-wrapper">
-            <span style={{color:"rgb(142, 111, 204)"}} className="link">{"(" + t("CS_COMMON_OR") + ")"}</span>
+            <span style={{color:"rgb(68,214,44)"}} className="link">{"(" + t("CS_COMMON_OR") + ")"}</span>
           </div>
         </LabelFieldPair>
 

@@ -94,13 +94,13 @@ const StarFilled = ({ className, id, onClick, styles, percentage = 100 }) => (
     style={styles}
     onClick={onClick}
     viewBox="0 0 24 24"
-    fill="rgb(142, 111, 204)"
+    fill="rgb(68,214,44)"
     width="48px"
     height="48px"
   >
     <linearGradient id={id} x1="0" x2="1" y1="0" y2="0">
-      <stop offset="0%" stopColor="rgb(142, 111, 204)" stopOpacity={1}></stop>
-      <stop offset={`${percentage}%`} stopColor="rgb(142, 111, 204)" stopOpacity={1}></stop>
+      <stop offset="0%" stopColor="rgb(68,214,44)" stopOpacity={1}></stop>
+      <stop offset={`${percentage}%`} stopColor="rgb(68,214,44)" stopOpacity={1}></stop>
       <stop offset={`${percentage}%`} stopColor="white" stopOpacity={0}></stop>
     </linearGradient>
     <g>
@@ -111,7 +111,7 @@ const StarFilled = ({ className, id, onClick, styles, percentage = 100 }) => (
       <path
         d="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-0.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21L12,17.27z"
         fill={`url(#${id})`}
-        stroke="rgb(142, 111, 204)"
+        stroke="rgb(68,214,44)"
         strokeWidth={1}
       />
     </g>
@@ -122,7 +122,7 @@ const StarEmpty = ({ className, onClick, styles }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    fill="rgb(142, 111, 204)"
+    fill="rgb(68,214,44)"
     className={className}
     style={styles}
     width="48px"
@@ -138,7 +138,7 @@ const StarEmpty = ({ className, onClick, styles }) => (
 );
 
 const DocumentIcon = () => <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M16 0H2C0.9 0 0 0.9 0 2V16C0 17.1 0.9 18 2 18H16C17.1 18 18 17.1 18 16V2C18 0.9 17.1 0 16 0ZM11 14H4V12H11V14ZM14 10H4V8H14V10ZM14 6H4V4H14V6Z" fill="rgb(142, 111, 204)"/>
+  <path d="M16 0H2C0.9 0 0 0.9 0 2V16C0 17.1 0.9 18 2 18H16C17.1 18 18 17.1 18 16V2C18 0.9 17.1 0 16 0ZM11 14H4V12H11V14ZM14 10H4V8H14V10ZM14 6H4V4H14V6Z" fill="rgb(68,214,44)"/>
 </svg>
 
 
@@ -172,14 +172,14 @@ const DocumentSVG = ({ className }) => (
 );
 
 const SearchIconSvg = ({ className, onClick }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(142, 111, 204)" className={className} width="24px" height="24px" onClick={onClick}>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(68,214,44)" className={className} width="24px" height="24px" onClick={onClick}>
     <path d="M0 0h24v24H0z" fill="none" />
     <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
   </svg>
 );
 
 const CheckSvg = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(142, 111, 204)" className={className}>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(68,214,44)" className={className}>
     <path d="M0 0h24v24H0z" fill="none" />
     <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
   </svg>
@@ -200,14 +200,14 @@ const Calender = ({ className, onClick }) => (
 );
 
 const Phone = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="rgb(142, 111, 204)" viewBox="0 0 24 24" className={className}>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="rgb(68,214,44)" viewBox="0 0 24 24" className={className}>
     <path d="M0 0h24v24H0z" fill="none" />
     <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
   </svg>
 );
 
 const FilterSvg = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="rgb(142, 111, 204)" width="24" height="24" viewBox="0 0 24 24" className={className}>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="rgb(68,214,44)" width="24" height="24" viewBox="0 0 24 24" className={className}>
     <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z" />
   </svg>
 );
@@ -226,7 +226,7 @@ const Feedback = ({ className }) => (
 
 // Download Icon
 const GetApp = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="rgb(142, 111, 204)" className={className}>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="rgb(68,214,44)" className={className}>
     <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
   </svg>
 );
@@ -292,7 +292,7 @@ const SortUp = (style) => (
 
 const ArrowRightInbox = ({ style }) => (
   <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg" style={style}>
-    <path d="M13 0L11.59 1.41L16.17 6H0V8H16.17L11.58 12.59L13 14L20 7L13 0Z" fill="rgb(142, 111, 204)" />
+    <path d="M13 0L11.59 1.41L16.17 6H0V8H16.17L11.58 12.59L13 14L20 7L13 0Z" fill="rgb(68,214,44)" />
   </svg>
 );
 
@@ -351,7 +351,7 @@ const DownloadIcon = ({ styles, className, onClick }) => (
 );
 
 const PrimaryDownlaodIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="rgb(142, 111, 204)">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="rgb(68,214,44)">
     <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
   </svg>
 );
@@ -370,7 +370,7 @@ const Poll = () => (
     <path d="M0 6C0 2.68629 2.68629 0 6 0H34C37.3137 0 40 2.68629 40 6V34C40 37.3137 37.3137 40 34 40H6C2.68629 40 0 37.3137 0 34V6Z" fill="white" />
     <path
       d="M31.6667 5H8.33333C6.5 5 5 6.5 5 8.33333V31.6667C5 33.5 6.5 35 8.33333 35H31.6667C33.5 35 35 33.5 35 31.6667V8.33333C35 6.5 33.5 5 31.6667 5ZM15 28.3333H11.6667V16.6667H15V28.3333ZM21.6667 28.3333H18.3333V11.6667H21.6667V28.3333ZM28.3333 28.3333H25V21.6667H28.3333V28.3333Z"
-      fill="rgb(142, 111, 204)"
+      fill="rgb(68,214,44)"
     />
   </svg>
 );
@@ -450,7 +450,7 @@ const ShareIcon = ({ styles, className }) => (
 
 const RupeeIcon = ({ className }) => (
   <svg width="48" className={className} height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="48" height="48" rx="6" fill="rgb(142, 111, 204)" />
+    <rect width="48" height="48" rx="6" fill="rgb(68,214,44)" />
   </svg>
 );
 
@@ -458,7 +458,7 @@ const ComplaintIcon = ({ className }) => (
   <svg width="48" height="48" className={className} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M42.6667 0.666748H5.33335C2.76669 0.666748 0.69002 2.76675 0.69002 5.33342L0.666687 47.3334L10 38.0001H42.6667C45.2334 38.0001 47.3334 35.9001 47.3334 33.3334V5.33342C47.3334 2.76675 45.2334 0.666748 42.6667 0.666748ZM26.3334 21.6667H21.6667V7.66675H26.3334V21.6667ZM26.3334 31.0001H21.6667V26.3334H26.3334V31.0001Z"
-      fill="rgb(142, 111, 204)"
+      fill="rgb(68,214,44)"
     />
   </svg>
 );
@@ -467,7 +467,7 @@ const DropIcon = ({ className }) => (
   <svg width="28" height="34" viewBox="0 0 28 34" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M23.4333 10.3332L14 0.916504L4.56663 10.3332C1.96663 12.9332 0.666626 16.3998 0.666626 19.7332C0.666626 23.0665 1.96663 26.5832 4.56663 29.1832C7.16663 31.7832 10.5833 33.0998 14 33.0998C17.4166 33.0998 20.8333 31.7832 23.4333 29.1832C26.0333 26.5832 27.3333 23.0665 27.3333 19.7332C27.3333 16.3998 26.0333 12.9332 23.4333 10.3332ZM3.99996 20.3332C4.01663 16.9998 5.03329 14.8832 6.93329 12.9998L14 5.78317L21.0666 13.0832C22.9666 14.9498 23.9833 16.9998 24 20.3332H3.99996Z"
-      fill="rgb(142, 111, 204)"
+      fill="rgb(68,214,44)"
     />
   </svg>
 );
@@ -493,7 +493,7 @@ const WhatsappIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M0.0566406 24L1.74364 17.837C0.702641 16.033 0.155641 13.988 0.156641 11.891C0.159641 5.335 5.49464 0 12.0496 0C15.2306 0.001 18.2166 1.24 20.4626 3.488C22.7076 5.736 23.9436 8.724 23.9426 11.902C23.9396 18.459 18.6046 23.794 12.0496 23.794C10.0596 23.793 8.09864 23.294 6.36164 22.346L0.0566406 24ZM6.65364 20.193C8.32964 21.188 9.92964 21.784 12.0456 21.785C17.4936 21.785 21.9316 17.351 21.9346 11.9C21.9366 6.438 17.5196 2.01 12.0536 2.008C6.60164 2.008 2.16664 6.442 2.16464 11.892C2.16364 14.117 2.81564 15.783 3.91064 17.526L2.91164 21.174L6.65364 20.193ZM18.0406 14.729C17.9666 14.605 17.7686 14.531 17.4706 14.382C17.1736 14.233 15.7126 13.514 15.4396 13.415C15.1676 13.316 14.9696 13.266 14.7706 13.564C14.5726 13.861 14.0026 14.531 13.8296 14.729C13.6566 14.927 13.4826 14.952 13.1856 14.803C12.8886 14.654 11.9306 14.341 10.7956 13.328C9.91264 12.54 9.31564 11.567 9.14264 11.269C8.96964 10.972 9.12464 10.811 9.27264 10.663C9.40664 10.53 9.56964 10.316 9.71864 10.142C9.86964 9.97 9.91864 9.846 10.0186 9.647C10.1176 9.449 10.0686 9.275 9.99364 9.126C9.91864 8.978 9.32464 7.515 9.07764 6.92C8.83564 6.341 8.59064 6.419 8.40864 6.41L7.83864 6.4C7.64064 6.4 7.31864 6.474 7.04664 6.772C6.77464 7.07 6.00664 7.788 6.00664 9.251C6.00664 10.714 7.07164 12.127 7.21964 12.325C7.36864 12.523 9.31464 15.525 12.2956 16.812C13.0046 17.118 13.5586 17.301 13.9896 17.438C14.7016 17.664 15.3496 17.632 15.8616 17.556C16.4326 17.471 17.6196 16.837 17.8676 16.143C18.1156 15.448 18.1156 14.853 18.0406 14.729Z"
-      fill="rgb(142, 111, 204)"
+      fill="rgb(68,214,44)"
     />
   </svg>
 );
@@ -502,7 +502,7 @@ const EmailIcon = () => (
   <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M18 0H2C0.9 0 0.00999999 0.9 0.00999999 2L0 14C0 15.1 0.9 16 2 16H18C19.1 16 20 15.1 20 14V2C20 0.9 19.1 0 18 0ZM18 4L10 9L2 4V2L10 7L18 2V4Z"
-      fill="rgb(142, 111, 204)"
+      fill="rgb(68,214,44)"
     />
   </svg>
 );
@@ -524,7 +524,7 @@ const ReceiptIcon = () => <svg xmlns="http://www.w3.org/2000/svg" height="24" vi
 </svg>
 
 const AnnouncementIcon = () => <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M24.6665 0.666016H3.33317C1.8665 0.666016 0.679837 1.86602 0.679837 3.33268L0.666504 27.3327L5.99984 21.9993H24.6665C26.1332 21.9993 27.3332 20.7993 27.3332 19.3327V3.33268C27.3332 1.86602 26.1332 0.666016 24.6665 0.666016ZM15.3332 12.666H12.6665V4.66602H15.3332V12.666ZM15.3332 17.9993H12.6665V15.3327H15.3332V17.9993Z" fill="rgb(142, 111, 204)" />
+  <path d="M24.6665 0.666016H3.33317C1.8665 0.666016 0.679837 1.86602 0.679837 3.33268L0.666504 27.3327L5.99984 21.9993H24.6665C26.1332 21.9993 27.3332 20.7993 27.3332 19.3327V3.33268C27.3332 1.86602 26.1332 0.666016 24.6665 0.666016ZM15.3332 12.666H12.6665V4.66602H15.3332V12.666ZM15.3332 17.9993H12.6665V15.3327H15.3332V17.9993Z" fill="rgb(68,214,44)" />
 </svg>
 
 const PTIcon = ({ className }) => <svg width="34" height="30" viewBox="0 0 34 30" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -533,14 +533,14 @@ const PTIcon = ({ className }) => <svg width="34" height="30" viewBox="0 0 34 30
 
 const OBPSIcon = () => (
   <svg width="34" height="30" viewBox="0 0 34 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M30.3333 0H3.66659C1.83325 0 0.333252 1.5 0.333252 3.33333V26.6667C0.333252 28.5 1.83325 30 3.66659 30H30.3333C32.1666 30 33.6666 28.5 33.6666 26.6667V3.33333C33.6666 1.5 32.1666 0 30.3333 0ZM13.6666 23.3333H5.33325V20H13.6666V23.3333ZM13.6666 16.6667H5.33325V13.3333H13.6666V16.6667ZM13.6666 10H5.33325V6.66667H13.6666V10ZM21.6999 20L16.9999 15.2667L19.3499 12.9167L21.6999 15.2833L26.9833 10L29.3499 12.3667L21.6999 20Z" fill="rgb(142, 111, 204)"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M30.3333 0H3.66659C1.83325 0 0.333252 1.5 0.333252 3.33333V26.6667C0.333252 28.5 1.83325 30 3.66659 30H30.3333C32.1666 30 33.6666 28.5 33.6666 26.6667V3.33333C33.6666 1.5 32.1666 0 30.3333 0ZM13.6666 23.3333H5.33325V20H13.6666V23.3333ZM13.6666 16.6667H5.33325V13.3333H13.6666V16.6667ZM13.6666 10H5.33325V6.66667H13.6666V10ZM21.6999 20L16.9999 15.2667L19.3499 12.9167L21.6999 15.2833L26.9833 10L29.3499 12.3667L21.6999 20Z" fill="rgb(68,214,44)"/>
   </svg>
 );
 
 const CitizenTruck = ({ className }) => (
   <svg width="40" height="40" viewBox="0 0 23 19" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
-      fill={"rgb(142, 111, 204)"}
+      fill={"rgb(68,214,44)"}
       d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"
     />
   </svg>);
@@ -548,15 +548,15 @@ const CitizenTruck = ({ className }) => (
 
 const EDCRIcon = ({className}) => (
   <svg width="30" height="32" viewBox="0 0 30 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M20 15.3333V5.33333L15 0.333334L10 5.33333V8.66667H0V32H30V15.3333H20ZM6.66667 28.6667H3.33333V25.3333H6.66667V28.6667ZM6.66667 22H3.33333V18.6667H6.66667V22ZM6.66667 15.3333H3.33333V12H6.66667V15.3333ZM16.6667 28.6667H13.3333V25.3333H16.6667V28.6667ZM16.6667 22H13.3333V18.6667H16.6667V22ZM16.6667 15.3333H13.3333V12H16.6667V15.3333ZM16.6667 8.66667H13.3333V5.33333H16.6667V8.66667ZM26.6667 28.6667H23.3333V25.3333H26.6667V28.6667ZM26.6667 22H23.3333V18.6667H26.6667V22Z" fill="rgb(142, 111, 204)"/>
+<path d="M20 15.3333V5.33333L15 0.333334L10 5.33333V8.66667H0V32H30V15.3333H20ZM6.66667 28.6667H3.33333V25.3333H6.66667V28.6667ZM6.66667 22H3.33333V18.6667H6.66667V22ZM6.66667 15.3333H3.33333V12H6.66667V15.3333ZM16.6667 28.6667H13.3333V25.3333H16.6667V28.6667ZM16.6667 22H13.3333V18.6667H16.6667V22ZM16.6667 15.3333H13.3333V12H16.6667V15.3333ZM16.6667 8.66667H13.3333V5.33333H16.6667V8.66667ZM26.6667 28.6667H23.3333V25.3333H26.6667V28.6667ZM26.6667 22H23.3333V18.6667H26.6667V22Z" fill="rgb(68,214,44)"/>
 </svg>);
 
 const BPAIcon = ({className}) => (<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M23.3333 29.0333H3.33333V8.66667H15V5.33334H3.33333C1.5 5.33334 0 6.83334 0 8.66667V28.6667C0 30.5 1.5 32 3.33333 32H23.3333C25.1667 32 26.6667 30.5 26.6667 28.6667V17H23.3333V29.0333Z" fill="rgb(142, 111, 204)"/>
-<path d="M26.6667 0.333336H23.3333V5.33334H18.3333C18.35 5.35 18.3333 8.66667 18.3333 8.66667H23.3333V13.65C23.35 13.6667 26.6667 13.65 26.6667 13.65V8.66667H31.6667V5.33334H26.6667V0.333336Z" fill="rgb(142, 111, 204)"/>
-<path d="M20 12H6.66666V15.3333H20V12Z" fill="rgb(142, 111, 204)"/>
-<path d="M6.66666 17V20.3333H20V17H15H6.66666Z" fill="rgb(142, 111, 204)"/>
-<path d="M20 22H6.66666V25.3333H20V22Z" fill="rgb(142, 111, 204)"/>
+<path d="M23.3333 29.0333H3.33333V8.66667H15V5.33334H3.33333C1.5 5.33334 0 6.83334 0 8.66667V28.6667C0 30.5 1.5 32 3.33333 32H23.3333C25.1667 32 26.6667 30.5 26.6667 28.6667V17H23.3333V29.0333Z" fill="rgb(68,214,44)"/>
+<path d="M26.6667 0.333336H23.3333V5.33334H18.3333C18.35 5.35 18.3333 8.66667 18.3333 8.66667H23.3333V13.65C23.35 13.6667 26.6667 13.65 26.6667 13.65V8.66667H31.6667V5.33334H26.6667V0.333336Z" fill="rgb(68,214,44)"/>
+<path d="M20 12H6.66666V15.3333H20V12Z" fill="rgb(68,214,44)"/>
+<path d="M6.66666 17V20.3333H20V17H15H6.66666Z" fill="rgb(68,214,44)"/>
+<path d="M20 22H6.66666V25.3333H20V22Z" fill="rgb(68,214,44)"/>
 </svg>);
 
 const BPAHomeIcon = ({className}) => (<svg width="34" height="30" viewBox="0 0 34 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -564,7 +564,7 @@ const BPAHomeIcon = ({className}) => (<svg width="34" height="30" viewBox="0 0 3
 </svg>);
 
 const HelpIcon = () => <svg width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M22 0H2C0.9 0 0 0.9 0 2V16C0 17.1 0.9 18 2 18H22C23.1 18 23.99 17.1 23.99 16L24 2C24 0.9 23.1 0 22 0ZM8 3C9.66 3 11 4.34 11 6C11 7.66 9.66 9 8 9C6.34 9 5 7.66 5 6C5 4.34 6.34 3 8 3ZM14 15H2V14C2 12 6 10.9 8 10.9C10 10.9 14 12 14 14V15ZM17.85 11H19.49L21 13L19.01 14.99C17.7 14.01 16.73 12.61 16.28 11C16.1 10.36 16 9.69 16 9C16 8.31 16.1 7.64 16.28 7C16.73 5.38 17.7 3.99 19.01 3.01L21 5L19.49 7H17.85C17.63 7.63 17.5 8.3 17.5 9C17.5 9.7 17.63 10.37 17.85 11Z" fill="rgb(142, 111, 204)"/>
+  <path d="M22 0H2C0.9 0 0 0.9 0 2V16C0 17.1 0.9 18 2 18H22C23.1 18 23.99 17.1 23.99 16L24 2C24 0.9 23.1 0 22 0ZM8 3C9.66 3 11 4.34 11 6C11 7.66 9.66 9 8 9C6.34 9 5 7.66 5 6C5 4.34 6.34 3 8 3ZM14 15H2V14C2 12 6 10.9 8 10.9C10 10.9 14 12 14 14V15ZM17.85 11H19.49L21 13L19.01 14.99C17.7 14.01 16.73 12.61 16.28 11C16.1 10.36 16 9.69 16 9C16 8.31 16.1 7.64 16.28 7C16.73 5.38 17.7 3.99 19.01 3.01L21 5L19.49 7H17.85C17.63 7.63 17.5 8.3 17.5 9C17.5 9.7 17.63 10.37 17.85 11Z" fill="rgb(68,214,44)"/>
 </svg>
 
 export {
