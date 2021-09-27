@@ -82,12 +82,14 @@ public class TLQueryBuilder {
               "({})" +
               " result) result_offset " +
               "WHERE offset_ > ? AND offset_ <= ?";
+      
+      private final String countWrapper = "SELECT COUNT(*) FROM ({INTERNAL_QUERY}) as license_count";
 
 
 
 
 
-    public String getTLSearchQuery(TradeLicenseSearchCriteria criteria, List<Object> preparedStmtList) {
+    public String getTLSearchQuery(TradeLicenseSearchCriteria criteria, List<Object> preparedStmtList, boolean isCount) {
 
         StringBuilder builder = new StringBuilder(QUERY);
 
@@ -240,11 +242,24 @@ public class TLQueryBuilder {
 
        // enrichCriteriaForUpdateSearch(builder,preparedStmtList,criteria);
 
-        return addPaginationWrapper(builder.toString(),preparedStmtList,criteria);
+        if(!isCount) {
+        	return addPaginationWrapper(builder.toString(),preparedStmtList,criteria);
+        }
+        
+        else {
+        	return addCountWrapper(builder.toString());
+        }
     }
 
 
-    private void addBusinessServiceClause(TradeLicenseSearchCriteria criteria,List<Object> preparedStmtList,StringBuilder builder){
+    private String addCountWrapper(String query) {
+		
+    	String finalQuery = countWrapper.replace("{INTERNAL_QUERY}",query );
+		return finalQuery;
+	}
+
+
+	private void addBusinessServiceClause(TradeLicenseSearchCriteria criteria,List<Object> preparedStmtList,StringBuilder builder){
         if ((criteria.getBusinessService() == null) || (businessServiceTL.equals(criteria.getBusinessService()))) {
             addClauseIfRequired(preparedStmtList, builder);
             builder.append(" (tl.businessservice=? or tl.businessservice isnull) ");
