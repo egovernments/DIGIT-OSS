@@ -104,7 +104,7 @@ public class NotificationUtil {
 			if (CollectionUtils.isEmpty(smsRequestList))
 				log.info("Messages from localization couldn't be fetched!");
 			for (SMSRequest smsRequest : smsRequestList) {
-				producer.push(config.getSmsNotifTopic(), smsRequest);
+				producer.push("",config.getSmsNotifTopic(), smsRequest);
 				StringBuilder builder = new StringBuilder();
 				builder.append(" Messages: ")
 						.append(smsRequest.getMessage());
@@ -153,7 +153,7 @@ public class NotificationUtil {
 	 * @param request - Event Request Object
 	 */
 	public void sendEventNotification(EventRequest request) {
-		producer.push(config.getSaveUserEventsTopic(), request);
+		producer.push("",config.getSaveUserEventsTopic(), request);
 	}
 	
 	/**

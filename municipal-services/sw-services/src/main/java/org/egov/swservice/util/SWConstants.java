@@ -223,4 +223,6 @@ public class SWConstants {
 
 	public static final String PENDING_APPROVAL_FOR_CONNECTION_CODE ="PENDING_APPROVAL_FOR_CONNECTION";
 
+	public static String SCHEMA_REPLACE_STRING = "{schema}";
+
 }

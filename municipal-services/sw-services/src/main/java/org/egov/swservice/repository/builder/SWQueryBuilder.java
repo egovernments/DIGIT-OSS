@@ -44,17 +44,17 @@ public class SWQueryBuilder {
 			+ " conn.locality, conn.isoldapplication, conn.roadtype, document.id as doc_Id, document.documenttype, document.filestoreid, document.active as doc_active, plumber.id as plumber_id, plumber.name as plumber_name, plumber.licenseno,"
 			+ " roadcuttingInfo.id as roadcutting_id, roadcuttingInfo.roadtype as roadcutting_roadtype, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea, roadcuttingInfo.active as roadcutting_active,"
 			+ " plumber.mobilenumber as plumber_mobileNumber, plumber.gender as plumber_gender, plumber.fatherorhusbandname, plumber.correspondenceaddress, plumber.relationship, " + holderSelectValues +
-			" FROM eg_sw_connection conn "
+			" FROM {schema}.eg_sw_connection conn "
 	+  INNER_JOIN_STRING 
-	+" eg_sw_service sc ON sc.connection_id = conn.id"
+	+" {schema}.eg_sw_service sc ON sc.connection_id = conn.id"
 	+  LEFT_OUTER_JOIN_STRING
-	+ "eg_sw_applicationdocument document ON document.swid = conn.id" 
+	+ "{schema}.eg_sw_applicationdocument document ON document.swid = conn.id"
 	+  LEFT_OUTER_JOIN_STRING
-	+ "eg_sw_plumberinfo plumber ON plumber.swid = conn.id"
+	+ "{schema}.eg_sw_plumberinfo plumber ON plumber.swid = conn.id"
 	+ LEFT_OUTER_JOIN_STRING
-    + "eg_sw_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
+    + "{schema}.eg_sw_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
 	+ LEFT_OUTER_JOIN_STRING
-	+ "eg_sw_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.swid = conn.id";
+	+ "{schema}.eg_sw_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.swid = conn.id";
 
 	private final String paginationWrapper = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_id) offset_ FROM " +
@@ -117,14 +117,8 @@ public class SWQueryBuilder {
 		
 		if (!StringUtils.isEmpty(criteria.getTenantId())) {
 			addClauseIfRequired(preparedStatement, query);
-			if(criteria.getTenantId().equalsIgnoreCase(config.getStateLevelTenantId())){
-				query.append(" conn.tenantid LIKE ? ");
-				preparedStatement.add(criteria.getTenantId() + '%');
-			}
-			else{
-				query.append(" conn.tenantid = ? ");
-				preparedStatement.add(criteria.getTenantId());
-			}
+			query.append(" conn.tenantid = ? ");
+			preparedStatement.add(criteria.getTenantId());
 		}
 
 		if (!StringUtils.isEmpty(criteria.getPropertyId()) && StringUtils.isEmpty(criteria.getMobileNumber())) {

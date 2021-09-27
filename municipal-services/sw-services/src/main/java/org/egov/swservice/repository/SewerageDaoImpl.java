@@ -10,6 +10,7 @@ import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
 import org.egov.swservice.config.SWConfiguration;
 import org.egov.swservice.repository.rowmapper.OpenSewerageRowMapper;
+import org.egov.swservice.util.SewerageServicesUtil;
 import org.egov.swservice.web.models.SearchCriteria;
 import org.egov.swservice.web.models.SewerageConnection;
 import org.egov.swservice.web.models.SewerageConnectionRequest;
@@ -46,6 +47,9 @@ public class SewerageDaoImpl implements SewerageDao {
 	@Autowired
 	private SWConfiguration swConfiguration;
 
+	@Autowired
+	private SewerageServicesUtil utils;
+
 	@Value("${egov.sewarageservice.createconnection.topic}")
 	private String createSewarageConnection;
 
@@ -54,7 +58,7 @@ public class SewerageDaoImpl implements SewerageDao {
 
 	@Override
 	public void saveSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest) {
-		sewarageConnectionProducer.push(createSewarageConnection, sewerageConnectionRequest);
+		sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),createSewarageConnection, sewerageConnectionRequest);
 	}
 
 	@Override
@@ -63,6 +67,8 @@ public class SewerageDaoImpl implements SewerageDao {
 		String query = swQueryBuilder.getSearchQueryString(criteria, preparedStatement, requestInfo);
 		if (query == null)
 			return Collections.emptyList();
+
+		utils.replaceSchemaPlaceholder(query, criteria.getTenantId());
 		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
 		List<SewerageConnection> sewerageConnectionList = new ArrayList<>();
 		if(isOpenSearch)
@@ -87,9 +93,9 @@ public class SewerageDaoImpl implements SewerageDao {
 	public void updateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest,
 			boolean isStateUpdatable) {
 		if (isStateUpdatable) {
-			sewarageConnectionProducer.push(updateSewarageConnection, sewerageConnectionRequest);
+			sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),updateSewarageConnection, sewerageConnectionRequest);
 		} else {
-			sewarageConnectionProducer.push(swConfiguration.getWorkFlowUpdateTopic(), sewerageConnectionRequest);
+			sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),swConfiguration.getWorkFlowUpdateTopic(), sewerageConnectionRequest);
 		}
 	}
 
@@ -101,7 +107,7 @@ public class SewerageDaoImpl implements SewerageDao {
 	public void pushForEditNotification(SewerageConnectionRequest sewerageConnectionRequest) {
 		if (!SWConstants.EDIT_NOTIFICATION_STATE
 				.contains(sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())) {
-			sewarageConnectionProducer.push(swConfiguration.getEditNotificationTopic(), sewerageConnectionRequest);
+			sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),swConfiguration.getEditNotificationTopic(), sewerageConnectionRequest);
 		}
 	}
 
@@ -111,7 +117,7 @@ public class SewerageDaoImpl implements SewerageDao {
 	 * @param sewerageConnectionRequest - Sewerage Connection Request Object
 	 */
 	public void enrichFileStoreIds(SewerageConnectionRequest sewerageConnectionRequest) {
-		sewarageConnectionProducer.push(swConfiguration.getFileStoreIdsTopic(), sewerageConnectionRequest);
+		sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),swConfiguration.getFileStoreIdsTopic(), sewerageConnectionRequest);
 	}
 
 	/**
@@ -120,7 +126,7 @@ public class SewerageDaoImpl implements SewerageDao {
 	 * @param sewerageConnectionRequest - Sewerage Connection Request Object
 	 */
 	public void saveFileStoreIds(SewerageConnectionRequest sewerageConnectionRequest) {
-		sewarageConnectionProducer.push(swConfiguration.getSaveFileStoreIdsTopic(), sewerageConnectionRequest);
+		sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),swConfiguration.getSaveFileStoreIdsTopic(), sewerageConnectionRequest);
 	}
 
 }
