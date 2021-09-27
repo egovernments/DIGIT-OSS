@@ -1,10 +1,11 @@
 import { CardHeader, Header, Toast, Card, StatusTable, Row, Loader, Menu, PDFSvg, SubmitBar, LinkButton, ActionBar, CheckBox } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { useTranslation } from "react-i18next";
 import BPAApplicationTimeline from "./BPAApplicationTimeline";
 import DocumentDetails from "../../../components/DocumentDetails";
+
 
 const BpaApplicationDetail = () => {
   const { id } = useParams();
@@ -16,6 +17,7 @@ const BpaApplicationDetail = () => {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [appDetails, setAppDetails] = useState({});
+  const history = useHistory();
   const { data, isLoading } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: id });
   const mutation = Digit.Hooks.obps.useObpsAPI(data?.applicationData?.tenantId, false);
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
@@ -60,6 +62,9 @@ const BpaApplicationDetail = () => {
   }
 
   function onActionSelect(action) {
+    if(action === "FORWARD") {
+      history.replace(`/digit-ui/citizen/obps/sendbacktocitizen/bpa/${data?.applicationData?.tenantId}/${data?.applicationData?.applicationNo}/check`, { data: data?.applicationData });
+    }
     setSelectedAction(action);
     setDisplayMenu(false);
   }

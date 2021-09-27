@@ -171,7 +171,7 @@ const DocumentSVG = ({className}) => <svg xmlns = "http://www.w3.org/2000/svg" c
 < path d = "M8 16h8v2H8zm0-4h8v2H8zm6-10H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z" />
 </svg>
 
-const PDFSvg = ({className}) => <svg style={style} xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} viewBox="0 0 34 34" fill="gray">
+const PDFSvg = ({className, width = 100, height = 100, style }) => <svg style={style} xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} viewBox="0 0 34 34" fill="gray">
 <path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm10 5.5h1v-3h-1v3z" />
 </svg>
 

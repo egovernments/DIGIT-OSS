@@ -1,20 +1,19 @@
 import {
     Card, CardHeader, CardSubHeader, CardText,
-    CitizenInfoLabel, Header, LinkButton, Row, StatusTable, SubmitBar, Table, CardSectionHeader
+    CitizenInfoLabel, Header, LinkButton, Row, StatusTable, SubmitBar, Table, CardSectionHeader, EditIcon, PDFSvg
   } from "@egovernments/digit-ui-react-components";
   import React,{ useMemo }  from "react";
   import { useTranslation } from "react-i18next";
   import { useHistory, useRouteMatch } from "react-router-dom";
   import Timeline from "../../../components/Timeline";
   import OBPSDocument from "../../../pageComponents/OBPSDocuments";
-  
+
   const CheckPage = ({ onSubmit, value }) => {
     const { t } = useTranslation();
     const history = useHistory();
     const match = useRouteMatch();
     let user = Digit.UserService.getUser();
     const tenantId = user.info.permanentCity;
-    //let tenantId="pb.amritsar";
     let BusinessService;
     if(value.businessService === "BPA_LOW")
     BusinessService="BPA.LOW_RISK_PERMIT_FEE";
@@ -44,9 +43,11 @@ import {
         }
       );
 
-      let isEditApplication = window.location.href.includes("editApplication");
-
-      let routeLink = !isEditApplication?`/digit-ui/citizen/obps/bpa/${additionalDetails?.applicationType.toLowerCase()}/${additionalDetails?.serviceType.toLowerCase()}`:`/digit-ui/citizen/obps/editApplication/bpa/${value?.tenantId}/${value?.applicationNo}`;
+      const isEditApplication = window.location.href.includes("editApplication");
+      const sendbacktocitizenApp = window.location.href.includes("sendbacktocitizen");
+      let routeLink = `/digit-ui/citizen/obps/bpa/${additionalDetails?.applicationType.toLowerCase()}/${additionalDetails?.serviceType.toLowerCase()}`;
+      if (isEditApplication) routeLink = `/digit-ui/citizen/obps/editApplication/bpa/${value?.tenantId}/${value?.applicationNo}`;
+      if( sendbacktocitizenApp ) routeLink = `/digit-ui/citizen/obps/sendbacktocitizen/bpa/${value?.tenantId}/${value?.applicationNo}`;
 
       const tableHeader = [
         {
@@ -172,31 +173,13 @@ import {
       <Row className="border-none" label={t("BPA_EDCR_NO_LABEL")} text={data?.scrutinyNumber?.edcrNumber}></Row>
       <CardSubHeader>{t("BPA_UPLOADED_PLAN_DIAGRAM")}:</CardSubHeader>
       <LinkButton
-        label={
-        <div>
-        <span>
-        <svg style={{background: "#f6f6f6", padding: "8px" }} xmlns="http://www.w3.org/2000/svg" width={85} height={100} viewBox="0 0 20 20" fill="gray">
-        <path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm10 5.5h1v-3h-1v3z" />
-        </svg>
-        </span>
-        </div>
-        }
-          //style={{ width: "100px", display:"inline" }}
+        label={ <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="80px" height="75px" /> }
           onClick={() => routeTo(datafromAPI?.updatedDxfFile)}
        />
        <p style={{ marginTop: "8px",textAlign:"Left" }}>{t(`Uploaded Plan.DXF`)}</p>
       <CardSubHeader>{t("BPA_SCRUNTINY_REPORT_OUTPUT")}:</CardSubHeader>
       <LinkButton
-        label={
-        <div>
-        <span>
-        <svg style={{background: "#f6f6f6", padding: "8px" }}  xmlns="http://www.w3.org/2000/svg" width={85} height={100} viewBox="0 0 20 20" fill="gray">
-        <path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm10 5.5h1v-3h-1v3z" />
-        </svg>
-        </span>
-        </div>
-        }
-          //style={{ width: "100px", display:"inline" }}
+        label={ <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="80px" height="75px" /> }
           onClick={() => routeTo(datafromAPI?.planReport)}
        />
        <p style={{ marginTop: "8px",textAlign:"Left" }}>{t(`Scrutiny Report.PDF`)}</p>
@@ -247,19 +230,11 @@ import {
       </Card>
       <Card>
       <CardHeader>{t("BPA_NEW_TRADE_DETAILS_HEADER_DETAILS")}</CardHeader>
-      <LinkButton
-            label={
-            <div>
-            <span>
-            <svg style={{marginTop:"-10px",float:"right", position:"relative",bottom:"32px"  }}  width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9.126 5.125L11.063 3.188L14.81 6.935L12.873 8.873L9.126 5.125ZM17.71 2.63L15.37 0.289999C15.1826 0.103748 14.9292 -0.000793457 14.665 -0.000793457C14.4008 -0.000793457 14.1474 0.103748 13.96 0.289999L12.13 2.12L15.88 5.87L17.71 4C17.8844 3.81454 17.9815 3.56956 17.9815 3.315C17.9815 3.06044 17.8844 2.81546 17.71 2.63ZM5.63 8.63L0 14.25V18H3.75L9.38 12.38L12.873 8.873L9.126 5.125L5.63 8.63Z" fill="#F47738"/>
-            </svg>
-            </span>
-            </div>
-            }
-              style={{ width: "100px", display:"inline" }}
-              onClick={() => routeTo(`${routeLink}/location`)}
-           />
+          <LinkButton
+            label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
+            style={{ width: "100px", display: "inline" }}
+            onClick={() => routeTo(`${routeLink}/location`)}
+          />
       <StatusTable>
           <Row className="border-none" textStyle={{marginLeft:"9px"}} label={t(`BPA_DETAILS_PIN_LABEL`)} text={address?.pincode || t("CS_NA")} />
           <Row className="border-none" label={t(`BPA_CITY_LABEL`)} text={address?.city?.name || t("CS_NA")} />
@@ -270,19 +245,11 @@ import {
       </Card>
       <Card>
         <CardHeader>{t("BPA_APPLICANT_DETAILS_HEADER")}</CardHeader>
-        <LinkButton
-            label={
-            <div>
-            <span>
-            <svg style={{marginTop:"-10px",float:"right", position:"relative",bottom:"32px"  }}  width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9.126 5.125L11.063 3.188L14.81 6.935L12.873 8.873L9.126 5.125ZM17.71 2.63L15.37 0.289999C15.1826 0.103748 14.9292 -0.000793457 14.665 -0.000793457C14.4008 -0.000793457 14.1474 0.103748 13.96 0.289999L12.13 2.12L15.88 5.87L17.71 4C17.8844 3.81454 17.9815 3.56956 17.9815 3.315C17.9815 3.06044 17.8844 2.81546 17.71 2.63ZM5.63 8.63L0 14.25V18H3.75L9.38 12.38L12.873 8.873L9.126 5.125L5.63 8.63Z" fill="#F47738"/>
-            </svg>
-            </span>
-            </div>
-            }
-              style={{ width: "100px", display:"inline" }}
-              onClick={() => routeTo(`${routeLink}/owner-details`)}
-           />
+          <LinkButton
+            label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
+            style={{ width: "100px", display: "inline" }}
+            onClick={() => routeTo(`${routeLink}/owner-details`)}
+          />
         {owners?.owners && owners?.owners.map((ob,index) =>(
         <div key={index}>
         {owners.owners.length > 1 && <CardSubHeader>{t("COMMON_OWNER")} {index+1}</CardSubHeader>}
@@ -295,24 +262,11 @@ import {
       </Card>
       <Card>
         <CardHeader>{t("BPA_DOCUMENT_DETAILS_LABEL")}</CardHeader>
-        <LinkButton
-            label={
-            <div>
-            <span>
-            <svg style={{marginTop:"-10px",float:"right", position:"relative",bottom:"32px"  }}  width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9.126 5.125L11.063 3.188L14.81 6.935L12.873 8.873L9.126 5.125ZM17.71 2.63L15.37 0.289999C15.1826 0.103748 14.9292 -0.000793457 14.665 -0.000793457C14.4008 -0.000793457 14.1474 0.103748 13.96 0.289999L12.13 2.12L15.88 5.87L17.71 4C17.8844 3.81454 17.9815 3.56956 17.9815 3.315C17.9815 3.06044 17.8844 2.81546 17.71 2.63ZM5.63 8.63L0 14.25V18H3.75L9.38 12.38L12.873 8.873L9.126 5.125L5.63 8.63Z" fill="#F47738"/>
-            </svg>
-            </span>
-            </div>
-            }
-              style={{ width: "100px", display:"inline" }}
-              onClick={() => routeTo(`${routeLink}/document-details`)}
-           />
-        {/* <CardSubHeader>{t("BPA_APP_DET_LABEL")}</CardSubHeader>
-        <OBPSDocument value={value} Code="APPL"/>
-        <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
-        <CardSubHeader>{t("BPA_BUILDING_PLAN_DIAG")}</CardSubHeader>
-        <OBPSDocument value={value} Code="BPD"/> */}
+          <LinkButton
+            label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
+            style={{ width: "100px", display: "inline" }}
+            onClick={() => routeTo(`${routeLink}/document-details`)}
+          />
         {documents?.documents.map((doc, index) => (
           <div key={index}>
           <CardSectionHeader>{t(doc?.documentType)}</CardSectionHeader>
@@ -325,19 +279,11 @@ import {
       </Card>
       <Card>
       <CardHeader>{t("BPA_NOC_DETAILS_SUMMARY")}</CardHeader>
-      <LinkButton
-            label={
-            <div>
-            <span>
-            <svg style={{marginTop:"-10px",float:"right", position:"relative",bottom:"32px"  }}  width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9.126 5.125L11.063 3.188L14.81 6.935L12.873 8.873L9.126 5.125ZM17.71 2.63L15.37 0.289999C15.1826 0.103748 14.9292 -0.000793457 14.665 -0.000793457C14.4008 -0.000793457 14.1474 0.103748 13.96 0.289999L12.13 2.12L15.88 5.87L17.71 4C17.8844 3.81454 17.9815 3.56956 17.9815 3.315C17.9815 3.06044 17.8844 2.81546 17.71 2.63ZM5.63 8.63L0 14.25V18H3.75L9.38 12.38L12.873 8.873L9.126 5.125L5.63 8.63Z" fill="#F47738"/>
-            </svg>
-            </span>
-            </div>
-            }
-              style={{ width: "100px", display:"inline" }}
-              onClick={() => routeTo(`${routeLink}/noc-details`)}
-           />
+          <LinkButton
+            label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
+            style={{ width: "100px", display: "inline" }}
+            onClick={() => routeTo(`${routeLink}/noc-details`)}
+          />
       {nocDocuments && nocDocuments?.NocDetails.map((noc, index) => (
         <div key={index}>
         <CardSectionHeader>{t(`BPA_${noc?.nocType}_HEADER`)}:</CardSectionHeader>
