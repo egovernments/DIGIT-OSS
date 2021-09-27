@@ -83,11 +83,11 @@ export const searchPropertyTable = {
 
 const payAmount = (tableMeta) => {
   const data=tableMeta.rowData[5]||{};
-  if(data.warningEnabled&&data.isInvalidNum){
-    store.dispatch(prepareFinalObject("pt-warning-popup", { link: `/withoutAuth/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}&businessService=PT`, UpdateNumber: data.UpdateNumber, showPopup: true }));
-  }else{
+  // if(data.warningEnabled&&data.isInvalidNum){
+  //   store.dispatch(prepareFinalObject("pt-warning-popup", { link: `/withoutAuth/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}&businessService=PT`, UpdateNumber: data.UpdateNumber, showPopup: true }));
+  // }else{
     setRoute(`/withoutAuth/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}&businessService=PT`);
-  }  
+  // }  
 };
 
 const getPayButton = (tableMeta) => {
