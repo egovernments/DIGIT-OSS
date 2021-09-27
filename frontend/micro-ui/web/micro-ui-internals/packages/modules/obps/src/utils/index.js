@@ -13,6 +13,11 @@ export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   return str;
 };
 
+export const sortDropdownNames = (options, optionkey, locilizationkey) => {
+  return options.sort((a, b) => locilizationkey(a[optionkey]).localeCompare(locilizationkey(b[optionkey])));
+};
+
+
 export const uuidv4 = () => {
   return require("uuid/v4")();
 };
@@ -254,6 +259,19 @@ export const convertToStakeholderObject = (data) => {
   }
   return formData;
 }
+
+export const getUniqueItemsFromArray = (data, identifier) => {
+  const uniqueArray = [];
+  const map = new Map();
+  for (const item of data) {
+    if (!map.has(item[identifier])) {
+      map.set(item[identifier], true); // set any value to Map
+      uniqueArray.push(item);
+    }
+  }
+  return uniqueArray;
+};
+
 
 export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
   //example input format : "2018-10-02"

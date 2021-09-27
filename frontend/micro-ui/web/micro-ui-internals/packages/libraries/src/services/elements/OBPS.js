@@ -205,7 +205,46 @@ export const OBPSService = {
           ],
         },
       }));
+      let inspectionReport = [];
+      let checklist = [];
+      BPA?.additionalDetails?.fieldinspection_pending.map((ob,ind) => {
+        checklist = [];
+        inspectionReport.push({
+        title: "BPA_FI_REPORT",
+        asSectionHeader: true,
+        values: [
+          { title: "BPA_FI_DATE_LABEL", value: ob.date },
+          { title: "BPA_FI_TIME_LABEL", value: ob.time },
+        ]
+      });
+      ob.questions.map((q,index) => {
+        checklist.push({title: q.question, value: q.value});
+      checklist.push({ title: "BPA_ENTER_REMARKS", value: q.remarks});
+    })
+      inspectionReport.push(
+        {
+          title: "BPA_CHECK_LIST_DETAILS",
+          asSectionHeader: true,
+          values: checklist,
+        });
+      inspectionReport.push({
+        title: "BPA_DOCUMENT_DETAILS_LABEL",
+        asSectionHeader: true,
+        additionalDetails: {
+          obpsDocuments: [{
+            title: "",
+            values: ob?.docs?.map(doc => ({
+              title: doc?.documentType?.replaceAll('.', '_'),
+              documentType: doc?.documentType,
+              documentUid: doc?.fileStore,
+              fileStoreId: doc?.fileStoreId,
+            }))
+          }]
+        }})
+      })
+
     const details = [
+      ...inspectionReport,
       {
         title: "BPA_BASIC_DETAILS_TITLE",
         asSectionHeader: true,
