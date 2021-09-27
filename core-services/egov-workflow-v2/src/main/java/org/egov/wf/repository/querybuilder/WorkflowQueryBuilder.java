@@ -1,12 +1,14 @@
 package org.egov.wf.repository.querybuilder;
 
 import org.apache.commons.lang3.StringUtils;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.wf.config.WorkflowConfig;
 import org.egov.wf.web.models.ProcessInstanceSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,6 +62,15 @@ public class WorkflowQueryBuilder {
     private static final String COUNT_WRAPPER_ESCALATED = "select count(DISTINCT businessid) from ({INTERNAL_QUERY}) as count";
     private static final String COUNT_WRAPPER_INBOX = " select count(DISTINCT id) from ({INTERNAL_QUERY}) as count" ;
 
+    private static final String BASE_QUERY = "select businessId from (" +
+            "  SELECT *,RANK () OVER (PARTITION BY businessId ORDER BY createdtime  DESC) rank_number " +
+            " FROM eg_wf_processinstance_v2 ";
+
+    private static final String RANK_WRAPPER = "SELECT wf.* , assg.assignee AS asg, " +
+            " DENSE_RANK() OVER(PARTITION BY wf.businessid ORDER BY wf.createdtime DESC) outer_rank " +
+            " FROM eg_wf_processinstance_v2 wf LEFT OUTER JOIN eg_wf_assignee_v2 assg ON wf.id = assg.processinstanceid WHERE wf.businessid IN ({BASE_QUERY})";
+
+    private static final String FINAL_ESCALATED_QUERY ="SELECT businessid from ( {RANKED_QUERY} ) final WHERE outer_rank = 2 ";
 
     private String getProcessInstanceSearchQueryWithoutPagination(ProcessInstanceSearchCriteria criteria, List<Object> preparedStmtList){
 
@@ -453,14 +464,32 @@ public class WorkflowQueryBuilder {
         return countQuery;
     }
 
-    public String getEscalatedApplicationsCount(ProcessInstanceSearchCriteria criteria, ArrayList<Object> preparedStmtList) {
-        String finalQuery = getAutoEscalatedApplicationsBusinessIdsQuery(criteria,preparedStmtList);
+    public String getEscalatedApplicationsCount(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria, ArrayList<Object> preparedStmtList) {
+        String finalQuery = getAutoEscalatedApplicationsFinalQuery(requestInfo,criteria,preparedStmtList);
         String countQuery = addCountWrapperForEscalatedApplications(finalQuery);
         return countQuery;
     }
 
+    public String getAutoEscalatedApplicationsFinalQuery(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria, ArrayList<Object> preparedStmtList) {
+        String autoEscalatedApplicationsRankedQuery = getAutoEscalatedApplicationsRankedQuery(criteria,preparedStmtList);
+        String query = FINAL_ESCALATED_QUERY.replace("{RANKED_QUERY}", autoEscalatedApplicationsRankedQuery);
+        StringBuilder builder = new StringBuilder(query);
+
+        if(!isNull(requestInfo.getUserInfo().getUuid())){
+            builder.append(" AND asg = ? ");
+            preparedStmtList.add(requestInfo.getUserInfo().getUuid());
+        }
+        return builder.toString();
+    }
+
+    public String getAutoEscalatedApplicationsRankedQuery(ProcessInstanceSearchCriteria criteria, ArrayList<Object> preparedStmtList) {
+        String autoEscalatedApplicationsBusinessIdsQuery = getAutoEscalatedApplicationsBusinessIdsQuery(criteria,preparedStmtList);
+        String query = RANK_WRAPPER.replace("{BASE_QUERY}", autoEscalatedApplicationsBusinessIdsQuery);
+        return query;
+    }
+
     public String getAutoEscalatedApplicationsBusinessIdsQuery(ProcessInstanceSearchCriteria criteria, ArrayList<Object> preparedStmtList) {
-        StringBuilder query = new StringBuilder("SELECT DISTINCT businessid FROM eg_wf_processinstance_v2 ");
+        StringBuilder query = new StringBuilder(BASE_QUERY);
 
         if(!isNull(criteria.getTenantId())){
             addClauseIfRequired(query, preparedStmtList);
@@ -468,25 +497,33 @@ public class WorkflowQueryBuilder {
             preparedStmtList.add(criteria.getTenantId());
         }
 
-        List<String> businessIds = criteria.getBusinessIds();
-        if(!CollectionUtils.isEmpty(criteria.getBusinessIds())){
-            addClauseIfRequired(query, preparedStmtList);
-            query.append(" businessid IN ( ").append(createQuery(businessIds)).append(" )");
-            addToPreparedStatement(preparedStmtList, businessIds);
-        }
+//        List<String> businessIds = criteria.getBusinessIds();
+//        if(!CollectionUtils.isEmpty(criteria.getBusinessIds())){
+//            addClauseIfRequired(query, preparedStmtList);
+//            query.append(" businessid IN ( ").append(createQuery(businessIds)).append(" )");
+//            addToPreparedStatement(preparedStmtList, businessIds);
+//        }
 
-        List<String> uuidsOfAutoEscalationEmployees = criteria.getMultipleAssignees();
-        if(!CollectionUtils.isEmpty(uuidsOfAutoEscalationEmployees)){
-            addClauseIfRequired(query, preparedStmtList);
-            query.append(" createdby IN ( ").append(createQuery(uuidsOfAutoEscalationEmployees)).append(" )");
-            addToPreparedStatement(preparedStmtList, uuidsOfAutoEscalationEmployees);
-        }
+//        List<String> uuidsOfAutoEscalationEmployees = criteria.getMultipleAssignees();
+//        if(!CollectionUtils.isEmpty(uuidsOfAutoEscalationEmployees)){
+//            addClauseIfRequired(query, preparedStmtList);
+//            query.append(" createdby IN ( ").append(createQuery(uuidsOfAutoEscalationEmployees)).append(" )");
+//            addToPreparedStatement(preparedStmtList, uuidsOfAutoEscalationEmployees);
+//        }
 
         if(!isNull(criteria.getBusinessService())){
             addClauseIfRequired(query, preparedStmtList);
             query.append(" businessservice = ? ");
             preparedStmtList.add(criteria.getBusinessService());
         }
+
+        query.append( ") wf  WHERE rank_number = 1 AND wf.escalated = true ");
+
+            if(!ObjectUtils.isEmpty(criteria.getIsEscalatedCount())) {
+                if (!criteria.getIsEscalatedCount()) {
+                addPagination(query,preparedStmtList,criteria);
+                }
+            }
 
         return query.toString();
     }

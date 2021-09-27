@@ -2,6 +2,7 @@ package org.egov.wf.repository;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.wf.repository.querybuilder.WorkflowQueryBuilder;
 import org.egov.wf.repository.rowmapper.WorkflowRowMapper;
 import org.egov.wf.web.models.ProcessInstance;
@@ -138,7 +139,7 @@ public class WorKflowRepository {
     }
 
 
-    public List<String> fetchEscalatedApplicationsBusinessIdsFromDb(ProcessInstanceSearchCriteria criteria) {
+    public List<String> fetchEscalatedApplicationsBusinessIdsFromDb(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria) {
         ArrayList<Object> preparedStmtList = new ArrayList<>();
 
         // 1st step is to fetch businessIds based on the assignee and the module.
@@ -155,7 +156,8 @@ public class WorKflowRepository {
 
         criteria.setBusinessIds(inboxApplicationsBusinessIds);
          */
-        String query = queryBuilder.getAutoEscalatedApplicationsBusinessIdsQuery(criteria, preparedStmtList);
+        String query = queryBuilder.getAutoEscalatedApplicationsFinalQuery(requestInfo,criteria, preparedStmtList);
+        log.info(query);
         List<String> escalatedApplicationsBusinessIds = jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
         preparedStmtList.clear();
         log.info(escalatedApplicationsBusinessIds.toString());
@@ -164,9 +166,9 @@ public class WorKflowRepository {
         return escalatedApplicationsBusinessIds;
     }
 
-    public Integer getEscalatedApplicationsCount(ProcessInstanceSearchCriteria criteria) {
+    public Integer getEscalatedApplicationsCount(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getEscalatedApplicationsCount(criteria, (ArrayList<Object>) preparedStmtList);
+        String query = queryBuilder.getEscalatedApplicationsCount(requestInfo,criteria, (ArrayList<Object>) preparedStmtList);
         Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
         return count;
     }
