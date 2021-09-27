@@ -154,11 +154,11 @@ const styles = theme => ({
         lineHeight: 'normal',
         letterSpacing: 'normal',
         color: 'white',
-        backgroundColor: 'mediumpurple',
+        backgroundColor: '#fe7a51',
         cursor: 'pointer',
         '&:hover': {
             boxShadow: theme.shadows[5],
-            backgroundColor: 'mediumpurple',
+            backgroundColor: '#FE7A51',
             color: variables.whiteColor
         }
     },

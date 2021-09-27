@@ -20,7 +20,7 @@ const styles = (theme) => ({
     cursor: "pointer",
   },
   icon: {
-    color: "mediumpurple",
+    color: "#fe7a51",
   },
   item: {
     padding: 8,

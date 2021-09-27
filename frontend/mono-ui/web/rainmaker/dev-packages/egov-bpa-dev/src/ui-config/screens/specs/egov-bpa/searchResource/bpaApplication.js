@@ -139,8 +139,8 @@ export const BPAApplication = getCommonCard({
         props: {
           variant: "outlined",
           style: {
-            color: "mediumpurple",
-            borderColor: "mediumpurple",
+            color: "#FE7A51",
+            borderColor: "#FE7A51",
             width: "220px",
             height: "48px",
             margin: "8px",

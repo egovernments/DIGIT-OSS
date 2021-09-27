@@ -12,9 +12,9 @@ import get from "lodash/get";
 
 const styles = {
   root: {
-    color: "mediumpurple",
+    color: "#FE7A51",
     "&$checked": {
-      color: "mediumpurple"
+      color: "#FE7A51"
     }
   },
   checked: {}

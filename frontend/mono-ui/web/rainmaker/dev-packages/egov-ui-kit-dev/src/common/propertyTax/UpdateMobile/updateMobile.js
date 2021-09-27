@@ -12,7 +12,7 @@ const editIconStyle = {
     width: 19,
     height: 20,
     marginRight: 8,
-    fill: "mediumpurple",
+    fill: "#fe7a51",
 };
 
 export const getRequestInfo=(auth=null)=>({

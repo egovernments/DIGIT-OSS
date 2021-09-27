@@ -11,7 +11,7 @@ const customIconStyles = {
   margin: 0,
   top: 10,
   left: 12,
-  fill: "mediumpurple",
+  fill: "#fe7a51",
 };
 
 class ComplaintType extends Component {
@@ -58,7 +58,7 @@ class ComplaintType extends Component {
     const { displayKey, id, icon } = item;
     listItem.primaryText = <Label label={displayKey} />;
     listItem.id = id;
-    listItem.leftIcon = <Icon style={customIconStyles} action="custom" name={icon} color="mediumpurple" />;
+    listItem.leftIcon = <Icon style={customIconStyles} action="custom" name={icon} color="#fe7a51" />;
     return listItem;
   };
 

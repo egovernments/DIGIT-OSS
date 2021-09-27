@@ -597,7 +597,7 @@ export const tradeDetails = getCommonCard({
     //   iconObj: {
     //     iconName: "search",
     //     position: "end",
-    //     color: "mediumpurple",
+    //     color: "#FE7A51",
     //     onClickDefination: {
     //       action: "condition",
     //       callBack: (state, dispatch) => {

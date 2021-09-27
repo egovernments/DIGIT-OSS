@@ -231,7 +231,7 @@ class DateRange extends React.Component {
 
         classes={{ paper: classes.root }}
       >
-        <DialogTitle style={{ fontFamily: 'Roboto', fontSize: '10px', color: 'mediumpurple' }}>
+        <DialogTitle style={{ fontFamily: 'Roboto', fontSize: '10px', color: '#fe7a51' }}>
           {this.state.title}
         </DialogTitle>
         <DialogContent dividers className={"dss-date-time-filter"}>

@@ -26,7 +26,7 @@ const style = {
     left: 0,
     right: 0,
     transform: "none",
-    color: "mediumpurple"
+    color: "#FE7A51"
   }
 };
 

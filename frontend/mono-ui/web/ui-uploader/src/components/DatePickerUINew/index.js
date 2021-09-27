@@ -51,7 +51,7 @@ class DatePickerUi extends React.Component {
         InputProps={{ classes: { input: classes.inputStyles } }}
         InputLabelProps={{
           shrink: true
-          // style: { color: "mediumpurple" },
+          // style: { color: "#FE7A51" },
           // classes: { root: classes.inputStyles }
         }}
         // defaultValue="2017-05-24"

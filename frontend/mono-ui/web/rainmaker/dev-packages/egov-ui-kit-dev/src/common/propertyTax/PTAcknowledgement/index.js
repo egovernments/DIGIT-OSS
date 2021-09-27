@@ -430,7 +430,7 @@ class PTAcknowledgement extends React.Component {
                   },
                   leftIcon: "cloud_download",
                   rightIcon: "arrow_drop_down",
-                  props: { variant: "outlined", style: { marginLeft: 10, color: "mediumpurple" } },
+                  props: { variant: "outlined", style: { marginLeft: 10, color: "#FE7A51" } },
                   menu: downloadButton.menu,
                 }}
               />
@@ -444,7 +444,7 @@ class PTAcknowledgement extends React.Component {
                   },
                   leftIcon: "print",
                   rightIcon: "arrow_drop_down",
-                  props: { variant: "outlined", style: { marginLeft: 10, color: "mediumpurple" } },
+                  props: { variant: "outlined", style: { marginLeft: 10, color: "#FE7A51" } },
                   menu: printButton.menu,
                 }}
               />

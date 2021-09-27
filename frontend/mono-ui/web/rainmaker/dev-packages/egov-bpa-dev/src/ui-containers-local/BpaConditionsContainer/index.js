@@ -14,9 +14,9 @@ import Checkbox from "@material-ui/core/Checkbox";
 
 const styles = {
   root: {
-    color: "mediumpurple",
+    color: "#FE7A51",
     "&$checked": {
-      color: "mediumpurple"
+      color: "#FE7A51"
     }
   },
   checked: {},

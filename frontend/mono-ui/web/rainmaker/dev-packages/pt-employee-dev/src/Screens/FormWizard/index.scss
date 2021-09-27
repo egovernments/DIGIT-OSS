@@ -113,7 +113,7 @@ input[type="radio"]:before {
   cursor: pointer;
   display: flex;
   justify-content: flex-end;
-  color: mediumpurple;
+  color: #fe7a51;
 }
 
 .grayout {
@@ -271,7 +271,7 @@ input[type="radio"]:before {
       font-weight: 500;
       line-height: normal;
       letter-spacing: 0.6px;
-      color: mediumpurple;
+      color: #fe7a51;
     }
   }
   .payment-modes {
@@ -424,18 +424,18 @@ input[type="radio"]:before {
 }
 
 input[type="radio"]:checked {
-  border: 1px solid mediumpurple;
+  border: 1px solid #fe7a51;
 }
 
 input[type="radio"]:checked:before {
-  background: mediumpurple;
+  background: #fe7a51;
 }
 
 .propertyAddress,
 .ifsc-field {
   .textfield-text div {
     width: 60px;
-    color: mediumpurple !important;
+    color: #fe7a51 !important;
     margin-right: 12px !important;
   }
 }
@@ -451,7 +451,7 @@ input[type="radio"]:checked:before {
 .checkbox-container > div > div > div {
   margin-right: 4px !important;
   div > svg:nth-of-type(2) {
-    fill: mediumpurple !important;
+    fill: #fe7a51 !important;
   }
 }
 
@@ -476,7 +476,7 @@ div[class^="MuiPaper-root"],
   [class*="MuiStepIcon-active"] {
     circle,
     path {
-      color: mediumpurple;
+      color: #fe7a51;
     }
   }
  

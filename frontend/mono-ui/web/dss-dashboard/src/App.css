@@ -185,7 +185,7 @@ h6 span {
 }
 
 .badge-primary {
-    background-color: mediumpurple !important;
+    background-color: #fe7a51 !important;
 }
 
 .badge {
@@ -210,7 +210,7 @@ h6 span {
 .sidebar>div>ul>li>a.active {
     background-color: #ffefeb !important;
     margin: 15px -15px -0px -15px;
-    border-left: 3px solid mediumpurple;
+    border-left: 3px solid #fe7a51;
 }
 
 .fa-menu {
@@ -348,7 +348,7 @@ h6 span {
     width: 60px !important;
     height: 32px !important;
     border-radius: 15px !important;
-    background-color: mediumpurple !important;
+    background-color: #fe7a51 !important;
     /* #17c1f4; */
     color: white !important;
     margin-left: -3px !important;
@@ -422,9 +422,9 @@ h6 span {
 }
 
 .MuiToggleButton-root.Mui-selected {
-    color: mediumpurple !important;
+    color: #fe7a51 !important;
     background-color: #f0f0f0 !important;
-    border-bottom: 1px solid mediumpurple !important;
+    border-bottom: 1px solid #fe7a51 !important;
     border-radius: 0;
 }
 

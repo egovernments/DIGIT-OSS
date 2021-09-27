@@ -40,11 +40,11 @@ input[type="radio"]:before {
 }
 
 input[type="radio"]:checked {
-  border: 1px solid mediumpurple;
+  border: 1px solid #fe7a51;
 }
 
 input[type="radio"]:checked:before {
-  background: mediumpurple;
+  background: #fe7a51;
 }
 
 input[type="checkbox"]:focus, input[type="radio"]:focus {

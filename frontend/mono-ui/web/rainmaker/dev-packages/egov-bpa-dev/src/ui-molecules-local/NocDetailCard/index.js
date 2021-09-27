@@ -73,7 +73,7 @@ const styles = {
   underlineStyle: {
     position: "absolute",
     bottom: -1,
-    borderBottom: "2px solid mediumpurple",
+    borderBottom: "2px solid #FE7A51",
     width: "100%"
   },
   dividerStyle : {

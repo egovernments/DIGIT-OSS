@@ -12,7 +12,7 @@ const LogoutDialog = ({ logout, closeLogoutDialog, logoutPopupOpen, oktext, canc
     <Button
       id="logout-no-button"
       className="logout-no-button"
-      label={<Label buttonLabel={true} label={canceltext} color="mediumpurple" />}
+      label={<Label buttonLabel={true} label={canceltext} color="#FE7A51" />}
       backgroundColor={"#fff"}
       onClick={closeLogoutDialog}
       style={{ boxShadow: "none" }}
@@ -20,7 +20,7 @@ const LogoutDialog = ({ logout, closeLogoutDialog, logoutPopupOpen, oktext, canc
     <Button
       id="logout-yes-button"
       className="logout-yes-button"
-      label={<Label buttonLabel={true} label={oktext} color="mediumpurple" />}
+      label={<Label buttonLabel={true} label={oktext} color="#FE7A51" />}
       backgroundColor={"#fff"}
       onClick={logout}
       style={{ boxShadow: "none" }}

@@ -20,9 +20,9 @@ import "./index.scss";
 
 const styles = {
   root: {
-    color: "mediumpurple",
+    color: "#FE7A51",
     "&$checked": {
-      color: "mediumpurple"
+      color: "#FE7A51"
     }
   },
   checked: {}

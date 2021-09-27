@@ -10,7 +10,7 @@ const BreadCrumbs = ({ url, history, label }) => {
   return (
     <div className="rainmaker-displayInline" style={{ paddingLeft: 15 }}>
       <Link to="home">
-        <Icon action="action" name="home" color="mediumpurple" />
+        <Icon action="action" name="home" color="#fe7a51" />
       </Link>
       <div className="rainmaker-displayInline">
         <div style={style}> ❯ </div>

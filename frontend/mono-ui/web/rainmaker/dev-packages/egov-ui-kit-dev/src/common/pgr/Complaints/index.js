@@ -106,7 +106,7 @@ const getStatusAndChangeColor = (status, assignee) => {
   switch (status) {
     case "CS_COMMON_OPEN_UCASE":
       statusObj.style = {
-        // color: "mediumpurple",
+        // color: "#f89a3f",
         color: "#ffffff",
       };
       statusObj.message = (

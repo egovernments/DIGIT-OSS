@@ -140,7 +140,7 @@ import {
             variant: "contained",
             style: {
               color: "white",
-              backgroundColor: "mediumpurple",
+              backgroundColor: "#FE7A51",
               borderRadius: "2px",
               width: window.innerWidth > 480 ? "80%" : "100%",
               height: "48px"

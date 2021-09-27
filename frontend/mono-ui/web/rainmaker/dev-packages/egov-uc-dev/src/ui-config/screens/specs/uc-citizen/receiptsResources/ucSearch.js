@@ -256,9 +256,9 @@ export const UCSearchCard = getCommonCard({
       props: {
         variant: "outlined",
         style: {
-          color: "mediumpurple",
-          // backgroundColor: "mediumpurple",
-          border: "mediumpurple solid 1px",
+          color: "#FE7A51",
+          // backgroundColor: "#FE7A51",
+          border: "#FE7A51 solid 1px",
           borderRadius: "2px",
           width: window.innerWidth > 480 ? "80%" : "100%",
           height: "48px"

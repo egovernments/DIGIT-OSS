@@ -35,7 +35,7 @@ const styles = theme => ({
         fontFamily: 'Roboto',
         fontSize: '16px',
         fontWeight: '500',
-        color: 'mediumpurple',
+        color: '#fe7a51',
         padding: '0px 12px 12px 12px !important'
     },
     title: {

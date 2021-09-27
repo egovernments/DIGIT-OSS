@@ -226,8 +226,8 @@ import {
           color: "primary",
           style: {
             width: window.innerWidth > 480 ? "80%" : "100%",
-            color: "mediumpurple",
-          border: "mediumpurple solid 1px",
+            color: "#FE7A51",
+          border: "#FE7A51 solid 1px",
           borderRadius: "2px",
           height: "48px",
           margin:"5px"
