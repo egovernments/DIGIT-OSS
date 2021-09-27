@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import { cancelSignal, wfSearch } from './API/api';
+import { cancelSignal, wfSearch, wfEsclationSearch } from './API/api';
 import { FilterDropdown, svgIcons } from './Components';
 import TablePaginationWrapper from './TablePaginationWrapper';
 import { formatWFSearch, mobileCheck, transformLocality } from './utils';
@@ -87,7 +87,12 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
             
             const timer = setTimeout(() => {
                 setIsLoading(true);
-                wfSearch([{ key: "businessIds", value: searchText }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(resp => resp && resp.ProcessInstances && resp.ProcessInstances.filter(wfrec=>businessServices.includes(wfrec.businessService)).map(wfRecord=>formatWFSearch(wfRecord, wfSlaConfig, wfBusinessConfig))).then(response => setSearchRecord(response ? response : [])).then(e=>setIsLoading(false));
+                if(filters.esclated){
+                    wfSearch([{ key: "businessIds", value: searchText }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(resp => resp && resp.ProcessInstances && wfEsclationSearch([{ key: "businessIds", value: resp.ProcessInstances.map(res=>res.businessId).join(',') }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }])).then(resp => resp && resp.ProcessInstances && resp.ProcessInstances.filter(wfrec=>businessServices.includes(wfrec.businessService)).map(wfRecord=>formatWFSearch(wfRecord, wfSlaConfig, wfBusinessConfig))).then(response => setSearchRecord(response ? response : [])).then(e=>setIsLoading(false));
+                }else{
+                    wfSearch([{ key: "businessIds", value: searchText }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(resp => resp && resp.ProcessInstances && resp.ProcessInstances.filter(wfrec=>businessServices.includes(wfrec.businessService)).map(wfRecord=>formatWFSearch(wfRecord, wfSlaConfig, wfBusinessConfig))).then(response => setSearchRecord(response ? response : [])).then(e=>setIsLoading(false));
+                }
+                
             }, 1000)
             return () => {
                 clearTimeout(timer);
@@ -99,16 +104,20 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
 
     useEffect(() => {
         if (searchRecord.length != 0 && checkStringValid(searchText)) {
-            setFilteredData([...searchRecord]);
+            let newData = searchRecord.filter(element => checkFilterCondition(element, filters, localityData, uuid));
+            setFilteredData(newData);
+            // setFilteredData([...searchRecord]);
         } else if (checkStringValid(searchText) && searchRecord.length == 0) {
             setFilteredData([]);
         } else if (filters.esclated) {
-            setFilteredData([...esclationData.data]);
+            let newData = esclationData.data.filter(element => checkFilterCondition(element, filters, localityData, uuid));
+            setFilteredData(newData);
+            // setFilteredData([...esclationData.data]);
         } else if (filters.selected_none) {
             setFilteredData(data);
         } else {
             !loadedAll && setLoadAll(true); //dev
-            let newData = data.filter(element => checkFilterCondition(element, filters, localityData, uuid))
+            let newData = data.filter(element => checkFilterCondition(element, filters, localityData, uuid));
             setFilteredData(newData);
         }
 

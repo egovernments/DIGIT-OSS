@@ -298,6 +298,9 @@ export default class AlternateMobileDialog extends React.Component {
       } else if (Object.values(newItem).some((item) => item.error)) {
         this.setMessage("PT_ERR_INVALID_TEXT", "ERROR");
         return;
+      } else if (Object.values(newItem).some((item) => item.value == "9999999999")) {
+        this.setMessage("PT_ERR_INVALID_TEXT", "ERROR");
+        return;
       } else if (this.props.propertyNumbers.mobileNumber == this.state.fields.mobileNumber.value) {
         this.setMessage("PT_SEC_SAME_NUMBER", "ERROR");
         return;
