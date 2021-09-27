@@ -228,6 +228,7 @@ public class BillRepositoryV2 {
 		
 		List<Object> preparedStmtList = new ArrayList<>();
 		String queryStr = billQueryBuilder.getBillStatusUpdateQuery(updateBillCriteria, preparedStmtList);
+		queryStr = Util.replaceSchemaPlaceholder(queryStr, updateBillCriteria.getTenantId());
 		return jdbcTemplate.update(queryStr, preparedStmtList.toArray());
 	}
 	
