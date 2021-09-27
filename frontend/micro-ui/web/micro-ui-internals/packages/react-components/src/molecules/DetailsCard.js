@@ -55,7 +55,7 @@ const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, sele
         return (
           <div
             key={itemIndex}
-            style={{ border: selectedItems?.includes(object[keyForSelected]) ? "2px solid rgb(142, 111, 204)" : "2px solid #fff" }}
+            style={{ border: selectedItems?.includes(object[keyForSelected]) ? "2px solid #f47738" : "2px solid #fff" }}
             className="details-container"
             onClick={() => handleSelect(object)}
           >

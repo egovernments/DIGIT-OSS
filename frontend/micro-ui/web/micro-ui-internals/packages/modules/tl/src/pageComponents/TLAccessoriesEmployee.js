@@ -105,7 +105,7 @@ const TLAccessoriesEmployee = ({ config, onSelect, userType, formData, setError,
             {accessoriesList.map((accessor, index) => (
                 <AccessoriersForm key={accessor.key} index={index} accessor={accessor} {...commonProps} />
             ))}
-            <LinkButton label={`${t("TL_NEW_TRADE_DETAILS_NEW_ACCESSORIES")}`} onClick={addAccessories} style={{ color: "rgb(142, 111, 204)", width: "fit-content" }} />
+            <LinkButton label={`${t("TL_NEW_TRADE_DETAILS_NEW_ACCESSORIES")}`} onClick={addAccessories} style={{ color: "#F47738", width: "fit-content" }} />
 
         </React.Fragment>
     );

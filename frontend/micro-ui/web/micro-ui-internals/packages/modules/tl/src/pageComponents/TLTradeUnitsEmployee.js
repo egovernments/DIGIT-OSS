@@ -101,7 +101,7 @@ const TLTradeUnitsEmployee = ({ config, onSelect, userType, formData, setError, 
             {units.map((unit, index) => (
                 <TradeUnitForm key={unit.key} index={index} unit={unit} {...commonProps} />
             ))}
-            <LinkButton label={t("TL_ADD_TRADE_UNIT")} onClick={addNewUnits} style={{ color: "rgb(142, 111, 204)", width: "fit-content" }} />
+            <LinkButton label={t("TL_ADD_TRADE_UNIT")} onClick={addNewUnits} style={{ color: "#F47738", width: "fit-content" }} />
         </React.Fragment>
     );
 };
