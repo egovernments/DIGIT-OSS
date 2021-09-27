@@ -57,6 +57,11 @@ class PropertyInfoCard extends Component {
                                 >
                               </UpdateMobile>
                             </div>}
+                            {showEditNumber&&additionalKey && (additionalKey.key2 == item.key || (additionalKey.key3 == item.key )) && <div style={{ padding: "5px 0px 0px 0px" }}>
+                             <div style={{margin:'2px' , height:"25px"}}>
+                               {" "}
+                               </div>
+                            </div>}
                             </div>
                             {isModify && <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <OldValueLabelContainer value={item.value} jsonPath={item.jsonPath} oldValue={item.oldValue} />
