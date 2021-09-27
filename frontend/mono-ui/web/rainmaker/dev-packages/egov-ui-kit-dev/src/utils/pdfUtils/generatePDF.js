@@ -35,6 +35,18 @@ const font = {
         bold: 'Roboto-Regular.ttf',
         italics: 'Roboto-Regular.ttf',
         bolditalics: 'Roboto-Regular.ttf',
+    },
+    pn_IN: {
+        normal: 'BalooPaaji2-Regular.ttf',
+        bold: 'BalooPaaji2-Bold.ttf',
+        italics: 'Roboto-Regular.ttf',
+        bolditalics: 'Roboto-Regular.ttf',
+    },
+    od_IN: {
+        normal: 'BalooBhaina2-Regular.ttf',
+        bold: 'BalooBhaina2-Bold.ttf',
+        italics: 'Roboto-Regular.ttf',
+        bolditalics: 'Roboto-Regular.ttf',
     }
 };
 pdfMake.vfs = vfs;
