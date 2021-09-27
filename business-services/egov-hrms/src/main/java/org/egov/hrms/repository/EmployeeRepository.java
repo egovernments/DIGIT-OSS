@@ -10,6 +10,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.hrms.utils.HRMSUtils;
 import org.egov.hrms.web.contract.EmployeeSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.egov.hrms.model.Employee;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 @Repository
 @Slf4j
@@ -36,7 +38,7 @@ public class EmployeeRepository {
 
 	@Autowired
 	private HRMSUtils hrmsUtils;
-	
+
 	/**
 	 * DB Repository that makes jdbc calls to the db and fetches employees.
 	 * 
@@ -59,11 +61,21 @@ public class EmployeeRepository {
 			}
 		}
 		String query = queryBuilder.getEmployeeSearchQuery(criteria, preparedStmtList);
+		String tenantId = !ObjectUtils.isEmpty(criteria.getTenantId()) ? criteria.getTenantId() : criteria.getCentralInstanceTenantId();
+
+		String finalQuery = "";
+
+		if(!tenantId.contains("."))
+			finalQuery = query.replace("{{SCHEMA}}.", "");
+		else
+			finalQuery = hrmsUtils.replaceSchemaPlaceholderWithTenantId(query, hrmsUtils.getStateLevelTenantId(tenantId));
+
+		//log.info(finalQuery);
 		try {
-			employees = jdbcTemplate.query(query, preparedStmtList.toArray(),rowMapper);
+			employees = jdbcTemplate.query(finalQuery, preparedStmtList.toArray(),rowMapper);
 		}catch(Exception e) {
 			log.error("Exception while making the db call: ",e);
-			log.error("query; "+query);
+			log.error("query; "+ finalQuery);
 		}
 		return employees;
 	}
@@ -111,12 +123,21 @@ public class EmployeeRepository {
 		List<Object> preparedStmtList = new ArrayList<>();
 
 		String query = queryBuilder.getEmployeeCountQuery(tenantId, preparedStmtList);
-		log.info("query; "+query);
+		String finalQuery = "";
+
+		if(!tenantId.contains("."))
+			finalQuery = query.replace("{{SCHEMA}}.", "");
+		else
+			finalQuery = hrmsUtils.replaceSchemaPlaceholderWithTenantId(query, hrmsUtils.getStateLevelTenantId(tenantId));
+
+
+
+		log.info("query; "+finalQuery);
 		try {
-			response=jdbcTemplate.query(query, preparedStmtList.toArray(),countRowMapper);
+			response=jdbcTemplate.query(finalQuery, preparedStmtList.toArray(),countRowMapper);
 		}catch(Exception e) {
 			log.error("Exception while making the db call: ",e);
-			log.error("query; "+query);
+			log.error("query; "+ finalQuery);
 		}
 		return response;
 	}

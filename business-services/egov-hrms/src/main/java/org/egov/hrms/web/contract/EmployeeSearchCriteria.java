@@ -2,6 +2,7 @@ package org.egov.hrms.web.contract;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
@@ -55,6 +56,9 @@ public class EmployeeSearchCriteria {
 	public Integer offset;
 	
 	public Integer limit;
+
+	@JsonIgnore
+	private String centralInstanceTenantId;
 	
 	
 	public boolean isCriteriaEmpty(EmployeeSearchCriteria criteria) {

@@ -123,11 +123,14 @@ public class EmployeeService {
 			pwdMap.put(employee.getUuid(), employee.getUser().getPassword());
 			employee.getUser().setPassword(null);
 		});
-		hrmsProducer.push(propertiesManager.getSaveEmployeeTopic(), employeeRequest);
+		String tenantId = employeeRequest.getEmployees().get(0).getTenantId();
+		String hrmsCreateTopic = propertiesManager.getSaveEmployeeTopic();
+		hrmsProducer.push(hrmsUtils.getTenantSpecificTopic(hrmsCreateTopic, tenantId), employeeRequest);
 		notificationService.sendNotification(employeeRequest, pwdMap);
 		return generateResponse(employeeRequest);
 	}
-	
+
+
 	/**
 	 * Searches employees on a given criteria.
 	 * 
@@ -185,9 +188,13 @@ public class EmployeeService {
 					criteria.setUuids(userUUIDs);
 			}
 		}
+
+		criteria.setCentralInstanceTenantId(criteria.getTenantId());
+
 		if(userChecked)
 			criteria.setTenantId(null);
-        List <Employee> employees = new ArrayList<>();
+
+		List <Employee> employees = new ArrayList<>();
         if(!((!CollectionUtils.isEmpty(criteria.getRoles()) || !CollectionUtils.isEmpty(criteria.getNames()) || !StringUtils.isEmpty(criteria.getPhone())) && CollectionUtils.isEmpty(criteria.getUuids())))
             employees = repository.fetchEmployees(criteria, requestInfo);
         List<String> uuids = employees.stream().map(Employee :: getUuid).collect(Collectors.toList());
@@ -331,13 +338,15 @@ public class EmployeeService {
 		for(Employee employee: employeeRequest.getEmployees()) {
 			uuidList.add(employee.getUuid());
 		}
-		EmployeeResponse existingEmployeeResponse = search(EmployeeSearchCriteria.builder().uuids(uuidList).build(),requestInfo);
+		String tenantId = employeeRequest.getEmployees().get(0).getTenantId();
+		EmployeeResponse existingEmployeeResponse = search(EmployeeSearchCriteria.builder().uuids(uuidList).tenantId(tenantId).build(),requestInfo);
 		List <Employee> existingEmployees = existingEmployeeResponse.getEmployees();
 		employeeRequest.getEmployees().stream().forEach(employee -> {
 			enrichUpdateRequest(employee, requestInfo, existingEmployees);
 			updateUser(employee, requestInfo);
 		});
-		hrmsProducer.push(propertiesManager.getUpdateTopic(), employeeRequest);
+		String hrmsUpdateTopic = propertiesManager.getUpdateEmployeeTopic();
+		hrmsProducer.push(hrmsUtils.getTenantSpecificTopic(hrmsUpdateTopic, tenantId), employeeRequest);
 		//notificationService.sendReactivationNotification(employeeRequest);
 		return generateResponse(employeeRequest);
 	}
