@@ -5,6 +5,7 @@ import { useQueryClient } from "react-query";
 import { useTranslation } from "react-i18next";
 import BPAApplicationTimeline from "./BPAApplicationTimeline";
 import DocumentDetails from "../../../components/DocumentDetails";
+import ActionModal from "./Modal";
 
 
 const BpaApplicationDetail = () => {
@@ -15,6 +16,7 @@ const BpaApplicationDetail = () => {
   const [showToast, setShowToast] = useState(null);
   const [isTocAccepted, setIsTocAccepted] = useState(false); 
   const [displayMenu, setDisplayMenu] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [appDetails, setAppDetails] = useState({});
   const history = useHistory();
@@ -34,18 +36,7 @@ const BpaApplicationDetail = () => {
     switch (selectedAction) {
       case "APPROVE":
       case "SEND_TO_ARCHITECT":
-        mutation.mutate({ BPA: { ...data?.applicationData, workflow }}, {
-          onError: (error, variables) => {
-            // console.log("find error here",error)
-            setShowToast({ key: "error", action: error });
-            setTimeout(closeToast, 5000);
-          },
-          onSuccess: (data, variables) => {
-            setShowToast({ key: "success", action: selectedAction });
-            setTimeout(closeToast, 5000);
-            queryClient.invalidateQueries("BPA_DETAILS_PAGE");
-          },  
-        })
+        setShowModal(true);
     }
   }, [selectedAction]);
 
@@ -61,12 +52,36 @@ const BpaApplicationDetail = () => {
 
   }
 
+  const closeModal = () => {
+    setSelectedAction(null);
+    setShowModal(false);
+  };
+
   function onActionSelect(action) {
     if(action === "FORWARD") {
       history.replace(`/digit-ui/citizen/obps/sendbacktocitizen/bpa/${data?.applicationData?.tenantId}/${data?.applicationData?.applicationNo}/check`, { data: data?.applicationData });
     }
     setSelectedAction(action);
     setDisplayMenu(false);
+  }
+
+  const submitAction = (workflow) => {
+    mutation.mutate(
+      { BPA: { ...data?.applicationData, workflow } },
+      {
+        onError: (error, variables) => {
+          // console.log("find error here",error)
+          setShowToast({ key: "error", action: error });
+          setTimeout(closeToast, 5000);
+        },
+        onSuccess: (data, variables) => {
+          setShowToast({ key: "success", action: selectedAction });
+          setTimeout(closeToast, 5000);
+          queryClient.invalidateQueries("BPA_DETAILS_PAGE");
+          queryClient.invalidateQueries("workFlowDetails");
+        },
+      }
+    );
   }
 
   if (isLoading) {
@@ -99,23 +114,17 @@ const BpaApplicationDetail = () => {
                   </Fragment>
                 ))}
             </StatusTable>
-            {showToast && (
-              <Toast
-                error={showToast.key === "error" ? true : false}
-                label={t(showToast.key === "success" ? `ES_OBPS_${showToast.action}_UPDATE_SUCCESS` : showToast.action)}
-                onClose={closeToast}
-              />
-            )}
             {index === arr.length - 1 && (
               <Fragment>
                 <BPAApplicationTimeline application={data?.applicationData} id={id} />
-                {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && <CheckBox
-                  styles={{ margin: "20px 0 40px" }}
-                  checked={isTocAccepted}
-                  label={t(`BPA_TERMS_AND_CONDITIONS`)}
-                  onChange={() => setIsTocAccepted(!isTocAccepted)}
-                />
-                }
+                {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
+                  <CheckBox
+                    styles={{ margin: "20px 0 40px" }}
+                    checked={isTocAccepted}
+                    label={t(`BPA_TERMS_AND_CONDITIONS`)}
+                    onChange={() => setIsTocAccepted(!isTocAccepted)}
+                  />
+                )}
                 {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
                   <div style={{ position: "relative" }}>
                     {displayMenu && workflowDetails?.data?.nextActions ? (
@@ -135,8 +144,27 @@ const BpaApplicationDetail = () => {
           </Card>
         );
       })}
+      {showModal ? (
+        <ActionModal
+          t={t}
+          action={selectedAction}
+          tenantId={tenantId}
+          // state={state}
+          id={id}
+          closeModal={closeModal}
+          submitAction={submitAction}
+          actionData={workflowDetails?.data?.timeline}
+        />
+      ) : null}
+      {showToast && (
+        <Toast
+          error={showToast.key === "error" ? true : false}
+          label={t(showToast.key === "success" ? `ES_OBPS_${showToast.action}_UPDATE_SUCCESS` : showToast.action)}
+          onClose={closeToast}
+        />
+      )}
     </Fragment>
-  )
+  );
 };
 
 export default BpaApplicationDetail;
