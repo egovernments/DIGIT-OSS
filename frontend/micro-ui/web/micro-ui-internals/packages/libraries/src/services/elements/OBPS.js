@@ -249,7 +249,7 @@ export const OBPSService = {
         title: "BPA_BASIC_DETAILS_TITLE",
         asSectionHeader: true,
         values: [
-          { title: "BPA_BASIC_DETAILS_APP_DATE_LABEL", value: BPA?.applicationDate ? format(new Date(basicData?.applicationDate), 'dd/MM/yyyy') : '' },
+          { title: "BPA_BASIC_DETAILS_APP_DATE_LABEL", value: BPA?.applicationDate ? format(new Date(BPA?.applicationDate), 'dd/MM/yyyy') : '' },
           { title: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL", value: `WF_BPA_${edcr?.appliactionType}` },
           { title: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL", value: edcr?.applicationSubType },
           { title: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL", value: edcr?.planDetail?.planInformation?.occupancy },

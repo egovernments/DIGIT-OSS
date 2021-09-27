@@ -20,12 +20,12 @@ function OBPSDocument({ value = {},Code,index, isNOC = false }) {
   let documents = [];
 
   if(isNOC){
-    value?.nocDocuments?.nocDocuments.length>0 && value?.nocDocuments?.nocDocuments.filter((ob) => ob.documentType.includes(Code)).map((ob) => {
+    value?.nocDocuments?.nocDocuments.length>0 && value?.nocDocuments?.nocDocuments.filter((ob) => ob?.documentType?.includes(Code)).map((ob) => {
       documents.push(ob);
     });
   }
   else{
-  value?.documents?.documents.filter(doc => doc.documentType.includes(Code)).map((ob)=>{
+  value?.documents?.documents.filter(doc => doc?.documentType?.includes(Code)).map((ob)=>{
     documents.push(ob);
   })
 }

@@ -6,12 +6,12 @@ const useOBPSDocumentSearch = ({ application }, config = {}, Code, index, isNOC=
   const tenant = Digit.ULBService.getStateId();
   let newDocs = [];
   if(isNOC){
-    config?.value?.nocDocuments?.nocDocuments.length>0 && config?.value?.nocDocuments?.nocDocuments.filter((ob) => ob.documentType.includes(Code)).map((ob) => {
+    config?.value?.nocDocuments?.nocDocuments.length>0 && config?.value?.nocDocuments?.nocDocuments.filter((ob) => ob?.documentType?.includes(Code)).map((ob) => {
       newDocs.push();
     });
   }
   else{
-  config?.value?.documents?.documents.filter(doc => doc.documentType.includes(Code)).map((ob)=>{
+  config?.value?.documents?.documents.filter(doc => doc?.documentType?.includes(Code)).map((ob)=>{
     newDocs.push(ob);
   })
 }
