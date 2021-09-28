@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { format, isValid } from "date-fns";
+import { Header } from "@egovernments/digit-ui-react-components";
 import DesktopInbox from "../../../../components/Documents/DesktopInbox";
 import MobileInbox from "../../../../components/Documents/MobileInbox";
 
@@ -19,27 +19,29 @@ const Inbox = ({ tenants }) => {
         offset: pageOffset,
         select: (data) => {
             return data?.Documents?.map((
-                {   uuid,
+                { uuid,
                     name,
                     category,
                     documentLink,
+                    description,
                     postedBy,
-                    //tenantId
+                    tenantId
                 }
             ) => ({
-                id:uuid,
+                id: uuid,
                 name,
                 category,
                 documentLink,
                 postedBy,
-                //tenantId
+                tenantId,
+                description
             }))
         }
     });
-     
+
     const onSearch = (params) => {
         const tenantIds = params?.ulbs?.code;
-        const {name, postedBy} = params;
+        const { name, postedBy } = params;
         setSearchParams((prevSearchParams) => ({ ...prevSearchParams, name, postedBy, tenantIds }));
     }
 
@@ -68,7 +70,7 @@ const Inbox = ({ tenants }) => {
     const links = [
         {
             text: t('NEW_DOCUMENT_TEXT'),
-            link: "/digit-ui/employee/engagement/documents/create",
+            link: "/digit-ui/employee/engagement/documents/inbox/new-doc",
         }
     ]
 
@@ -95,6 +97,9 @@ const Inbox = ({ tenants }) => {
 
     return (
         <div>
+            <Header>
+                {t("DOCUMENTS_DOCUMENT_HEADER")}
+            </Header>
             <DesktopInbox
                 t={t}
                 isLoading={isLoading}

@@ -10,7 +10,6 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
     return filtered;
   },[tenantId, ulbArray])
 
-  debugger
   return (
     <React.Fragment>
       <LabelFieldPair 

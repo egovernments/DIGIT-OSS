@@ -55,8 +55,9 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
     }
 
     const clearSearch = () => {
-        reset({ name: '', ulbs: { code: "" }, postedBy: "" });
-        onSearch({ name: '', ulbs: { code: "" }, postedBy: "" })
+        console.log('called', tenantId)
+        reset({ name: '', ulbs: { code: tenantId.code }, postedBy: "" });
+        onSearch({ name: '', ulbs: { code: tenantId.code }, postedBy: "" })
     };
 
     const clearAll = (mobileView) => {

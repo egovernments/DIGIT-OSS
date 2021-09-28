@@ -33,7 +33,7 @@ const ApplicationCard = ({
     result = (
       <Card style={{ marginTop: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         {t("CE_DOCUMENTS_NOT_FOUND")}<br />
-        <Link className="link" to={`/digit-ui/employee/engagement/documents/create`}>{t('NEW_DOCUMENT_TEXT')}</Link>
+        <Link className="link" to={`/digit-ui/employee/engagement/documents/inbox/new-doc`}>{t('NEW_DOCUMENT_TEXT')}</Link>
       </Card>
     );
   }

@@ -27,7 +27,7 @@ import DocUpdateResponse from "./pages/employee/Documents/update-response";
 import DocDeleteResponse from "./pages/employee/Documents/delete-response";
 import DocumentNotification from "./pages/employee/Documents/Inbox";
 import DocumentList from './pages/citizen/Documents/DocumentList';
-//import DocumentDetails from "./components/Documents/DocumentDetails";
+import DocumentDetails from "./components/Documents/DocumentDetails";
  
 const EventsBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -54,18 +54,23 @@ const EventsBreadCrumb = ({ location }) => {
     },
     {
       path: "/digit-ui/employee/engagement/documents/inbox",
-      content: t('DOCUMENTS_DOCUMENT_HEADER'),
-      show: location.pathname.includes("/documents/notification") ? true : false,
+      content: t("ES_EVENT_INBOX"),
+      show: location.pathname.includes("/documents/inbox") ? true : false,
     },
     {
-      path: "/digit-ui/employee/engagement/documents/inbox/new",
+      path: "/digit-ui/employee/engagement/documents/inbox/new-doc",
       content: t("NEW_DOCUMENT_TEXT"),
-      show: location.pathname.includes("/documents/create") ? true : false,
+      show: location.pathname.includes("/documents/inbox/new-doc") ? true : false,
     },
     {
       path: "/digit-ui/employee/engagement/documents/new/response",
       content: t("DOCUMENTS_DOCUMENT_HEADER"),
       show: location.pathname.includes("/documents/response") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/documents/inbox/details/:id",
+      content: t("DOCUMENTS_DOCUMENT_HEADER"),
+      show: location.pathname.includes("/documents/inbox/details") ? true : false,
     },
 
   ];
@@ -80,7 +85,7 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
     <div className="ground-container">
       <EventsBreadCrumb location={location} />
       <Switch>
-        <Route exact path={`${path}/documents/create`} component={() => <DocumenetCreate {...{ path }} />} />
+        <Route exact path={`${path}/documents/inbox/new-doc`} component={() => <DocumenetCreate {...{ path }} />} />
         <Route path={`${path}/event/inbox`} exact>
           <Inbox tenants={tenants} />
         </Route>
@@ -88,12 +93,12 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
           <NewEvent />
         </Route>
         <Route path={`${path}/event/response`} component={(props) => <Response {...props} />} />
+        <Route path={`${path}/documents/inbox/details/:id`} component={(props) => <DocumentDetails {...props} />} />
         <Route path={`${path}/documents/response`} component={(props) => <DocumentResponse {...props} />} />
         <Route path={`${path}/documents/update`} component={(props) => <DocUpdate {...props} />} />
         <Route path={`${path}/documents/update-response`} component={(props) => <DocUpdateResponse {...props} />} />
         <Route path={`${path}/documents/delete-response`} component={(props) => <DocDeleteResponse {...props} />} />
-        <Route path={`${path}/documents/notification`} component={(props) => <DocumentNotification tenants={tenants} />} />
-       {/*  <Route path={`${path}/documents/details/:id`} component={(props) => <DocumentDetails {...props} />} /> */}
+        <Route path={`${path}/documents/inbox`} component={(props) => <DocumentNotification tenants={tenants} />} />
         {/* documents/update-response */}
         {/* <Redirect to={`${path}/docs`} /> */}
       </Switch>

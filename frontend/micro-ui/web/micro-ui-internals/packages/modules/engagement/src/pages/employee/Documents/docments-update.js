@@ -33,7 +33,9 @@ const Documents = (props) => {
       name: data.documentName,
       description: data.description,
       category: data.docCategory,
-      filestoreId: data.document.filestoreId,
+      filestoreId: data.document.filestoreId.fileStoreId,
+      fileSize: data.document.filestoreId.fileSize,
+      fileType: data.document.filestoreId.fileType,
       documentLink: data.document.documentLink,
       tenantIds: data.ULB.map((e) => e.code),
     };

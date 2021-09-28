@@ -86,20 +86,35 @@
     }
   }
 
-  .documentDetails_wrapper{
-    display:flex;
-    flex-direction: column;
-    gap:20px;
-    align-items: flex-start;
-
+  .documentDetails{
+    &_wrapper{
+      @apply flex flex-col gap-10 items-start ;
+    }
+    &_row{
+      @apply flex gap-20 ;
+    }
+    &_title{
+      @apply w-48 font-bold ;
+    }
+    &_description{
+      @apply max-w-lg ;
+      text-overflow: clip;
+    }
+    &_pdf{
+      @apply flex flex-col gap-5 ;
+    }
+    &_subheader{
+      @apply font-bold ;
+      font-size: large;
+    }
   }
 
   .documentDetails_row{
-
+   
   }
 
   .documentDetails_pdf{
-
+    @apply flex gap-10
   }
 
   .grid_section{
