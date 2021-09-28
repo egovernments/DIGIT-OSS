@@ -59,7 +59,7 @@ export const WorkflowService = {
     // console.log(Digit);
     const workflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
     const applicationProcessInstance = cloneDeep(workflow?.ProcessInstances);
-    const getLocationDetails = window.location.href.includes("obps/stakeholder") || window.location.href.includes("noc/application-overview");
+    const getLocationDetails = window.location.href.includes("/obps/") || window.location.href.includes("noc/application-overview");
     const moduleCodeData = getLocationDetails ? applicationProcessInstance?.[0]?.businessService : moduleCode;
     const businessServiceResponse = (await Digit.WorkflowService.init(tenantId, moduleCodeData))?.BusinessServices[0]?.states;
     if (workflow && workflow.ProcessInstances) {
@@ -73,7 +73,7 @@ export const WorkflowService = {
       /* To check state is updatable and provide edit option*/
       const currentState = businessServiceResponse?.find((state) => state.uuid === processInstances[0]?.state.uuid);
       if (currentState && currentState?.isStateUpdatable) {
-        if (moduleCode === "FSM" || moduleCode === "FSM_VEHICLE_TRIP" || moduleCode === "PGR") null;
+        if (moduleCode === "FSM" || moduleCode === "FSM_VEHICLE_TRIP" || moduleCode === "PGR" || moduleCode === "OBPS") null;
         else nextActions.push({ action: "EDIT", state: currentState });
       }
 

@@ -20,12 +20,13 @@ const BpaApplicationDetail = () => {
   const [selectedAction, setSelectedAction] = useState(null);
   const [appDetails, setAppDetails] = useState({});
   const history = useHistory();
+  let isFromSendBack = false;
   const { data, isLoading } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: id });
   const mutation = Digit.Hooks.obps.useObpsAPI(data?.applicationData?.tenantId, false);
-  const workflowDetails = Digit.Hooks.useWorkflowDetails({
+  let workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: data?.applicationData?.tenantId,
     id: id,
-    moduleCode: "BPA",
+    moduleCode: "OBPS",
     config: {
       enabled: !!data
     }
@@ -59,7 +60,7 @@ const BpaApplicationDetail = () => {
 
   function onActionSelect(action) {
     if(action === "FORWARD") {
-      history.replace(`/digit-ui/citizen/obps/sendbacktocitizen/bpa/${data?.applicationData?.tenantId}/${data?.applicationData?.applicationNo}/check`, { data: data?.applicationData });
+      history.replace(`/digit-ui/citizen/obps/sendbacktocitizen/ocbpa/${data?.applicationData?.tenantId}/${data?.applicationData?.applicationNo}/check`, { data: data?.applicationData, edcrDetails: data?.edcrDetails });
     }
     setSelectedAction(action);
     setDisplayMenu(false);
@@ -82,6 +83,28 @@ const BpaApplicationDetail = () => {
         },
       }
     );
+  }
+
+  if (workflowDetails?.data?.processInstances?.[0]?.action === "SEND_BACK_TO_CITIZEN") {
+      if(isTocAccepted) setIsTocAccepted(true);
+      isFromSendBack = true;
+      const userInfo = Digit.UserService.getUser();
+      const rolearray = userInfo?.info?.roles;
+      if(rolearray?.length !== 1) {
+        workflowDetails = {
+          ...workflowDetails,
+          data: {
+            ...workflowDetails?.data,
+            actionState: {
+              nextActions: [],
+            },
+          },
+          data: {
+            ...workflowDetails?.data,
+            nextActions: []
+          }
+        };
+      }
   }
 
   if (isLoading) {
@@ -117,7 +140,7 @@ const BpaApplicationDetail = () => {
             {index === arr.length - 1 && (
               <Fragment>
                 <BPAApplicationTimeline application={data?.applicationData} id={id} />
-                {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
+                {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && !isFromSendBack && (
                   <CheckBox
                     styles={{ margin: "20px 0 40px" }}
                     checked={isTocAccepted}
@@ -136,7 +159,7 @@ const BpaApplicationDetail = () => {
                         onSelect={onActionSelect}
                       />
                     ) : null}
-                    <SubmitBar disabled={!isTocAccepted} label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+                    <SubmitBar disabled={isFromSendBack ? !isFromSendBack : !isTocAccepted} label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
                   </div>
                 )}
               </Fragment>

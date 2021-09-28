@@ -4,7 +4,7 @@ import React from 'react';
 export const configAcceptApplication = ({ t, action, selectFile, uploadedFile, error, isCommentRequired = true }) => {
   return {
     label: {
-      heading: `ES_FSM_ACTION_TITLE_${action}`,
+      heading: `ES_BPA_ACTION_TITLE_${action}`,
       submit: `CS_COMMON_${action}`,
       cancel: "CS_COMMON_CLOSE",
     },

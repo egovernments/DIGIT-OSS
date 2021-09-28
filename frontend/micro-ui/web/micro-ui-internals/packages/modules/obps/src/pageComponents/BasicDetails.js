@@ -53,7 +53,7 @@ const BasicDetails = ({ formData, onSelect, config }) => {
   }
 
   const handleSubmit = (event) => {
-    onSelect(config?.key, { scrutinyNumber, applicantName: data?.planDetail?.planInformation?.applicantName, occupancyType:data?.planDetail?.planInformation?.occupancy, applicationType: data?.appliactionType, serviceType: data?.applicationSubType, applicationDate: data?.applicationDate, riskType: Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, data?.planDetail?.plot?.area, data?.planDetail?.blocks)  })
+    onSelect(config?.key, { scrutinyNumber, applicantName: data?.planDetail?.planInformation?.applicantName, occupancyType:data?.planDetail?.planInformation?.occupancy, applicationType: data?.appliactionType, serviceType: data?.applicationSubType, applicationDate: data?.applicationDate, riskType: Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, data?.planDetail?.plot?.area, data?.planDetail?.blocks), edcrDetails: data  })
   }
 
   if (isMdmsLoading) {

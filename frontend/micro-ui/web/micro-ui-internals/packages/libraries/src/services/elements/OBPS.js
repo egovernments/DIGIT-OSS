@@ -207,7 +207,7 @@ export const OBPSService = {
       }));
       let inspectionReport = [];
       let checklist = [];
-      BPA?.additionalDetails?.fieldinspection_pending.map((ob,ind) => {
+      BPA?.additionalDetails?.fieldinspection_pending?.map((ob,ind) => {
         checklist = [];
         inspectionReport.push({
         title: "BPA_FI_REPORT",
@@ -217,7 +217,7 @@ export const OBPSService = {
           { title: "BPA_FI_TIME_LABEL", value: ob.time },
         ]
       });
-      ob.questions.map((q,index) => {
+      ob?.questions?.map((q,index) => {
         checklist.push({title: q.question, value: q.value});
       checklist.push({ title: "BPA_ENTER_REMARKS", value: q.remarks});
     })
@@ -345,7 +345,8 @@ export const OBPSService = {
     return {
       applicationData: BPA,
       applicationDetails: bpaFilterDetails,
-      tenantId: BPA?.tenantId
+      tenantId: BPA?.tenantId,
+      edcrDetails: edcr
     }
   }
 }

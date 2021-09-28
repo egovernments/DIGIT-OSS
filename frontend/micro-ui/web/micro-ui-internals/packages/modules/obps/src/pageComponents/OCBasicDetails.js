@@ -126,7 +126,8 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
           applicationDate: data?.applicationDate, 
           riskType: Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, 
           data?.planDetail?.plot?.area, data?.planDetail?.blocks),
-          bpaData: bpaData
+          bpaData: bpaData,
+          edcrDetails: data
         }
       )
     }

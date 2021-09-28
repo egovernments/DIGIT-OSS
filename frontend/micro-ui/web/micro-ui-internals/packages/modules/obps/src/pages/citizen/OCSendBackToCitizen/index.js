@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
-import { newConfig } from "../../../config/buildingPermitConfig";
-import CheckPage from "../OCSendBackToCitizen";
-import Acknowledgement from "../OCSendBackToCitizen";
+import { newConfig } from "../../../config/ocbuildingPermitConfig";
+import CheckPage from "./CheckPage";
+import Acknowledgement from "./Acknowledgement";
 import { getBPAEditDetails, getPath } from "../../../utils";
 
-const BPASendBackToCitizen = ({ parentRoute }) => {
+const OCSendBackToCitizen = ({ parentRoute }) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const match = useRouteMatch();
@@ -20,7 +20,7 @@ const BPASendBackToCitizen = ({ parentRoute }) => {
 
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BUILDING_PERMIT_EDITFLOW", {});
 
-  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["RiskTypeComputation"]);
+  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["RiskTypeComputation", "homePageUrlLinks"]);
 
   const { data: bpaData, isLoading: isBpaSearchLoading } = Digit.Hooks.obps.useBPASearch(tenantId, { applicationNo: applicationNo });
 
@@ -64,8 +64,9 @@ const BPASendBackToCitizen = ({ parentRoute }) => {
   const onSuccess = () => {
     queryClient.invalidateQueries("PT_CREATE_PROPERTY");
   };
+
   const createApplication = async () => {
-    history.push(`${getPath(match.path, match.params)}/acknowledgement`);
+    // history.push(`${getPath(match.path, match.params)}/acknowledgement`);
   };
 
   const handleSelect = (key, data, skipStep, isFromCreateApi) => {
@@ -102,7 +103,7 @@ const BPASendBackToCitizen = ({ parentRoute }) => {
         <CheckPage onSubmit={createApplication} value={params} />
       </Route>
       <Route path={`${getPath(match.path, match.params)}/acknowledgement`}>
-        <OBPSAcknowledgement data={params} onSuccess={onSuccess} />
+        <Acknowledgement data={params} onSuccess={onSuccess} />
       </Route>
       <Route>
         <Redirect to={`${getPath(match.path, match.params)}/${config.indexRoute}`} />
@@ -111,4 +112,4 @@ const BPASendBackToCitizen = ({ parentRoute }) => {
   );
 };
 
-export default BPASendBackToCitizen;
+export default OCSendBackToCitizen;

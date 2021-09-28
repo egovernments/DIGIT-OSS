@@ -36,15 +36,19 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action }) => {
     switch (action) {
       case "APPROVE": {
         setConfig(
-          configAcceptApplication({ t, action, selectFile, uploadedFile, error })
+          configAcceptApplication({ t, action, selectFile, uploadedFile, error, isCommentRequired: false })
         )
         break;
       }
       case "SEND_TO_ARCHITECT":
         setConfig(
+          configAcceptApplication({ t, action, selectFile, uploadedFile, error })
+        );
+        break;
+      default:
+        setConfig(
           configAcceptApplication({ t, action, selectFile, uploadedFile, error, isCommentRequired: false })
         )
-        break;
     }
   }, [action, uploadedFile]);
 
@@ -57,7 +61,7 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action }) => {
             } else {
                 try {
                     setUploadedFile(null);
-                    const response = await Digit.UploadServices.Filestorage("PT", file, Digit.ULBService.getStateId());
+                    const response = await Digit.UploadServices.Filestorage("BPA", file, Digit.ULBService.getStateId());
                     if (response?.data?.files?.length > 0) {
                         setUploadedFile(response?.data?.files[0]?.fileStoreId);
                     } else {

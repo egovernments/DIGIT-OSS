@@ -191,8 +191,8 @@ export const getBPAOwners = (data) => {
   return bpaownerarray;
 }
 
-export const convertToBPAObject = (data, isOCBPA = false) => {
-
+export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = false) => {
+  
   if(isOCBPA) {
     data.landInfo = data.landInfo
   } else {
@@ -218,9 +218,10 @@ export const convertToBPAObject = (data, isOCBPA = false) => {
         "tenantId": data?.tenantId || data?.address?.tenantId,
         "approvalDate": data?.approvalDate,
         "applicationDate": data?.applicationDate,
-        "status": "INITIATED",
+        "status": isSendBackTOCitizen ? data.status : (data.status ? data.status : "INITIATED"),
         "documents": getDocumentforBPA(data?.documents?.documents),
         "landInfo": {...data?.landInfo, owners:getBPAOwners(data), unit:getBPAUnit(data)},
+        "assignee": isSendBackTOCitizen ? data.assignee : [],
         "workflow": {
           "action": "SEND_TO_CITIZEN",
           "assignes": null,
@@ -333,6 +334,7 @@ export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t
     registrationDetails: data?.additionalDetails?.registrationDetails,
     riskType: Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks),
     serviceType: data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType,
+    edcrDetails: APIScrutinyDetails
   }
   data.documents = {
     documents: data?.documents
@@ -362,8 +364,17 @@ export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t
 
   data.riskType = Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks)
   data.subOccupancy = getBlocksforFlow(data?.landInfo?.unit);
+
+  let bpaFlow = "BPA";
+  mdmsData?.BPA?.homePageUrlLinks?.map(linkData => {
+    if(APIScrutinyDetails?.appliactionType === linkData?.applicationType && APIScrutinyDetails?.applicationSubType === linkData?.serviceType) {
+      bpaFlow = linkData?.flow
+    }
+  });
+
+
   data.uiFlow = {
-    flow: data?.businessService.split(".")[0],
+    flow: bpaFlow ? bpaFlow : data?.businessService.split(".")[0],
     applicationType: data?.additionalDetails?.applicationType || APIScrutinyDetails?.appliactionType,
     serviceType: data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType
   }
