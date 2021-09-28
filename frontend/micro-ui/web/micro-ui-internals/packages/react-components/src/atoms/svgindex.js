@@ -680,7 +680,6 @@ export {
   ImageIcon,
   TickMark,
   PDFSvg,
-  PDFDocumentIcon,
   EditIcon,
   SearchIcon
 };
