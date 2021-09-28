@@ -478,8 +478,6 @@ public class WorkflowUtil {
     }
 
 
-
-
     /**
      * Method to fetch the state name from the tenantId
      *

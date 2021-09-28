@@ -13,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
-
-import static java.util.Objects.isNull;
-
 import java.util.*;
 
 
@@ -160,7 +157,10 @@ public class WorkflowService {
     
     public List statusCount(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
         List result;
-        if(criteria.isNull() && !isNull(criteria.getBusinessService()) && !criteria.getBusinessService().equalsIgnoreCase(WorkflowConstants.FSM_MODULE)){
+        if(ObjectUtils.isEmpty(criteria.getTenantId()))
+            throw new CustomException("EG_WF_CRITERIA_ERR", "TenantId is mandatory for status count workflow call");
+
+        if(criteria.isNull()){
         	enrichSearchCriteriaFromUser(requestInfo, criteria);
             result = workflowRepository.getInboxStatusCount(criteria);
         }
@@ -218,6 +218,10 @@ public class WorkflowService {
         List<ProcessInstance> escalatedApplications = new ArrayList<>();
         criteria.setIsEscalatedCount(false);
 
+        if(ObjectUtils.isEmpty(criteria.getTenantId()))
+            throw new CustomException("EG_WF_CRITERIA_ERR", "TenantId is mandatory for escalated applications search");
+
+        Set<String> autoEscalationEmployeesUuids = enrichmentService.enrichUuidsOfAutoEscalationEmployees(requestInfo, criteria);
         //Set<String> statesToIgnore = enrichmentService.fetchStatesToIgnoreFromMdms(requestInfo, criteria.getTenantId());
         escalatedApplicationsBusinessIds = workflowRepository.fetchEscalatedApplicationsBusinessIdsFromDb(requestInfo,criteria);
         if(CollectionUtils.isEmpty(escalatedApplicationsBusinessIds)){

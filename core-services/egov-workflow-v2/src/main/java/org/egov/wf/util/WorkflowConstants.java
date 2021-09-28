@@ -48,4 +48,6 @@ public class WorkflowConstants {
 
     public static String SCHEMA_REPLACE_STRING = "{SCHEMA}";
 
+    public static String SCHEMA_REPLACE_STRING = "{SCHEMA}";
+
 }
