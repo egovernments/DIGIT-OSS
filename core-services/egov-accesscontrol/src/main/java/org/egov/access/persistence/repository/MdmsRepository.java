@@ -96,7 +96,7 @@ public class MdmsRepository {
         HttpEntity<MdmsCriteriaReq> request = new HttpEntity<>(mcq, headers);
 
         @SuppressWarnings("unchecked")
-        Map<String, Map<String, List>> response = (Map<String, Map<String, List>>) restTemplate.postForObject(url, mcq,
+        Map<String, Map<String, List>> response = (Map<String, Map<String, List>>) restTemplate.postForObject(url, request,
                 Map.class).get("MdmsRes");
 
         if(isNull(response.get(roleActionModule)) || isNull(response.get(roleActionModule).get(roleActionMaster))
