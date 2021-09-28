@@ -4,6 +4,8 @@ import { Header } from "@egovernments/digit-ui-react-components";
 import DesktopInbox from "../../../../components/Documents/DesktopInbox";
 import MobileInbox from "../../../../components/Documents/MobileInbox";
 
+
+
 const Inbox = ({ tenants }) => {
     const { t } = useTranslation()
     Digit.SessionStorage.set("ENGAGEMENT_TENANTS", tenants);
@@ -13,6 +15,7 @@ const Inbox = ({ tenants }) => {
     const [searchParams, setSearchParams] = useState({
         tenantIds: tenantId,
     });
+   
     let isMobile = window.Digit.Utils.browser.isMobile();
     const { data: documentsList, isLoading } = Digit.Hooks.engagement.useDocSearch(searchParams, {
         limit: pageSize,
@@ -25,7 +28,8 @@ const Inbox = ({ tenants }) => {
                     documentLink,
                     description,
                     postedBy,
-                    tenantId
+                    tenantId,
+                    auditDetails
                 }
             ) => ({
                 id: uuid,
@@ -34,13 +38,14 @@ const Inbox = ({ tenants }) => {
                 documentLink,
                 postedBy,
                 tenantId,
+                lastModifiedDate: auditDetails?.lastModifiedTime,
                 description
             }))
         }
     });
 
     const onSearch = (params) => {
-        const tenantIds = params?.ulbs?.code;
+        const tenantIds = params?.ulbs?.code?.length ? params?.ulbs?.code : tenantId
         const { name, postedBy } = params;
         setSearchParams((prevSearchParams) => ({ ...prevSearchParams, name, postedBy, tenantIds }));
     }
@@ -48,6 +53,10 @@ const Inbox = ({ tenants }) => {
     const handleFilterChange = (data) => {
         setSearchParams((prevSearchParams) => ({ ...prevSearchParams, ...data }));
     }
+
+    useEffect(() => {
+        setSearchParams((prevSearchParams) => ({ ...prevSearchParams, tenantIds: tenantId }))
+    }, [])
 
     const getSearchFields = () => {
         return [
@@ -66,17 +75,13 @@ const Inbox = ({ tenants }) => {
             }
         ]
     }
-
+    
     const links = [
         {
             text: t('NEW_DOCUMENT_TEXT'),
             link: "/digit-ui/employee/engagement/documents/inbox/new-doc",
         }
     ]
-
-    useEffect(() => {
-        setSearchParams((prevSearchParams) => ({ ...prevSearchParams, tenantIds: tenantId }))
-    }, [])
 
     if (isMobile) {
         return (
@@ -115,6 +120,8 @@ const Inbox = ({ tenants }) => {
                 title={"DOCUMENTS_DOCUMENT_HEADER"}
                 iconName={"document"}
                 links={links}
+                //onSort={handleSortBy}
+                //sortParams={sortParams}
             />
         </div>
     );

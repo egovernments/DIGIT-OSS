@@ -7,6 +7,8 @@ import DocumentNotificationTable from "./DocumentNotificationTable";
 import Search from "./Search";
 import Filter from "./Filter";
 
+
+
 const getDocumentDetailsPath = (document) => {
   return {
     pathname: `inbox/details/${document.id}`,
@@ -19,11 +21,11 @@ const GetCell = (value) => <span className="cell-text styled-cell">{value}</span
 const getDocumentDetails = (value = "", link, t) => <span className="document-table-docs-columns"><Link className="link" to={link} >{value.length ? value : t('CE_DOCUMENT_TITLE')}</Link></span>
 const getDocumentCell = (link, t) => <span className="document-table-docs-columns"><a className="link" href={link} target="_blank" rel="noreferrer">{t('CE_DOCUMENT_VIEW_LINK')}</a></span>
 
-const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, links, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords }) => {
+const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, links, onSort, sortParams, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords }) => {
   const columns = React.useMemo(() => [
     {
       Header: t('CE_TABLE_DOCUMENT_NAME'),
-      accessor: (row) => getDocumentDetails(row?.name, getDocumentDetailsPath(row), t)
+      accessor: (row) => getDocumentDetails(row?.name, getDocumentDetailsPath(row), t),
     },
     {
       Header: t('DOCUMENTS_CATEGORY_CARD_LABEL'),
@@ -56,6 +58,8 @@ const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, l
         t={t}
         data={data}
         columns={columns}
+        onSort={onSort}
+        sortParams={sortParams}
         globalSearch={globalSearch}
         onSearch={searchParams}
         pageSizeLimit={pageSizeLimit}

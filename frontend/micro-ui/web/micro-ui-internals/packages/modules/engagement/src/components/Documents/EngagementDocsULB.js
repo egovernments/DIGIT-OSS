@@ -20,7 +20,7 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
           <Controller
             name={config.key}
             control={control}
-            defaultValue={selectedTenat}
+            defaultValue={selectedTenat?.[0]}
             render={(props) => (
               <Dropdown
                 allowMultiselect={true}

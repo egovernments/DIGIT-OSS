@@ -30,7 +30,6 @@ const DesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, links, gl
       {
         Header: t("EVENTS_EVENT_CATEGORY_LABEL"),
         accessor: (row) => {
-          console.log('events row', row) 
          return GetCell(row?.eventCategory ? t(`MSEVA_EVENTCATEGORIES_${row?.eventCategory}`) : "")
         }
         },
@@ -54,7 +53,7 @@ const DesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, links, gl
   })
 
   let result;
-  console.log('event table data', {data})
+ 
   if (isLoading) {
     result = <Loader />
   } else if (data?.length > 0) {

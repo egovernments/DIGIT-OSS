@@ -12,11 +12,17 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
     // const userUlbs = ulb.filter(ulb => ulb?.code === tenantId)
     const { data: ulbArray, isLoading } = Digit.Hooks.useTenants();
     //console.log('userUlbs', { userUlbs })
+    const selectedTenat = React.useMemo(()=>{
+        const filtered = ulbArray?.filter((item)=> item.code===tenantId)
+        return filtered;
+      },[tenantId, ulbArray])
+
     const getFields = (input) => {
         switch (input.type) {
             case "ulb":
                 return (
                     <Controller
+                        defaultValue={selectedTenat?.[0]}
                         render={props => (
                             <Dropdown
                                 option={ulbArray}
@@ -28,7 +34,7 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
                         )}
                         name={input.name}
                         control={control}
-                        defaultValue={null}
+                        
                     />
                 )
             default:
