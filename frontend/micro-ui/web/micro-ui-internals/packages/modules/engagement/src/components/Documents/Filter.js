@@ -8,7 +8,7 @@ const Filter = ({ type = "desktop", onClose, onSearch, onFilterChange, searchPar
     const [localSearchParams, setLocalSearchParams] = useState(() => ({ ...searchParams }));
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateId = tenantId?.split('.')[0];
-    const currrentUlb = Digit.ULBService.getCurrentUlb() || "pb.amritsar";
+    const currrentUlb = Digit.ULBService.getCurrentUlb();
     const { data: categoryData, isLoading } = Digit.Hooks.engagement.useMDMS(stateId, "DocumentUploader", ["UlbLevelCategories"], {
         select: (d) => {
             const data = d?.DocumentUploader?.UlbLevelCategories?.filter?.((e) => e.ulb === currrentUlb.code);

@@ -47,15 +47,6 @@ const Inbox = ({ tenants }) => {
         setSearchParams((prevSearchParams) => ({ ...prevSearchParams, ...data }));
     }
 
-    const globalSearch = (rows, columnIds) => {
-        // return rows;
-        return rows?.filter(row =>
-            (searchParams?.tenantIds?.length > 0 ? searchParams?.tenantIds?.includes(row.tenantId) : true) &&
-            (searchParams?.name ? row.name?.toUpperCase().startsWith(searchParams?.name?.toUpperCase()) : true) &&
-            (searchParams?.postedBy ? row.postedBy?.trim()?.toLowerCase() === searchParams?.postedBy?.trim()?.toLowerCase() : true) &&
-            (searchParams?.category ? row.category === searchParams?.category : true))
-    }
-
     const getSearchFields = () => {
         return [
             {

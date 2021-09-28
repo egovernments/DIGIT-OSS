@@ -22,13 +22,15 @@ const Documents = () => {
     }
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = (data) => {  
     const DocumentEntity = {
       name: data.documentName,
       description: data.description,
       category: data.docCategory?.name,
-      filestoreId: data.document.filestoreId,
+      filestoreId: data.document.filestoreId.fileStoreId,
       documentLink: data.document.documentLink,
+      fileSize: data.document.filestoreId.fileSize,
+      fileType: data.document.filestoreId.fileType,
       tenantIds: data.ULB.map((e) => e.code),
     };
 

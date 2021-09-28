@@ -45,7 +45,7 @@ const Documents = (props) => {
   };
 
   const onActionSelect = (action) => {
-    console.log(action, "actions on action select");
+    /* console.log(action, "actions on action select"); */
     setMenu(false);
     if (action === "UPDATE") update(formData);
     else if (action === "DELETE") _delete();

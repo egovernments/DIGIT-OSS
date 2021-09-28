@@ -53,11 +53,11 @@
     margin-top: 50px;
   }
   .notice_and_circular_main{
-    width: 100%;
-    display: flex;
+    @apply flex gap-10 bg-white my-sm px-md pt-md pb-lg shadow-card;
+    border-radius: 4px;   
   }
   .notice_and_circular_content{
-    padding-left: 30px;
+    
   }
   .notice_and_circular_heading_mb{
     display: flex;
@@ -84,6 +84,22 @@
     & .download_views_padding{
       padding-left: 30px;
     }
+  }
+
+  .documentDetails_wrapper{
+    display:flex;
+    flex-direction: column;
+    gap:20px;
+    align-items: flex-start;
+
+  }
+
+  .documentDetails_row{
+
+  }
+
+  .documentDetails_pdf{
+
   }
 
   .grid_section{

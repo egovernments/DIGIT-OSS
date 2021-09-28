@@ -26,7 +26,9 @@ import DocUpdate from "./pages/employee/Documents/doc-update";
 import DocUpdateResponse from "./pages/employee/Documents/update-response";
 import DocDeleteResponse from "./pages/employee/Documents/delete-response";
 import DocumentNotification from "./pages/employee/Documents/Inbox";
-
+import DocumentList from './pages/citizen/Documents/DocumentList';
+//import DocumentDetails from "./components/Documents/DocumentDetails";
+ 
 const EventsBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
   const crumbs = [
@@ -51,17 +53,17 @@ const EventsBreadCrumb = ({ location }) => {
       show: location.pathname.includes("event/response") ? true : false,
     },
     {
-      path: "/digit-ui/employee/engagement/documents/notification",
+      path: "/digit-ui/employee/engagement/documents/inbox",
       content: t('DOCUMENTS_DOCUMENT_HEADER'),
       show: location.pathname.includes("/documents/notification") ? true : false,
     },
     {
-      path: "/digit-ui/employee/engagement/documents/create",
+      path: "/digit-ui/employee/engagement/documents/inbox/new",
       content: t("NEW_DOCUMENT_TEXT"),
       show: location.pathname.includes("/documents/create") ? true : false,
     },
     {
-      path: "/digit-ui/employee/engagement/documents/response",
+      path: "/digit-ui/employee/engagement/documents/new/response",
       content: t("DOCUMENTS_DOCUMENT_HEADER"),
       show: location.pathname.includes("/documents/response") ? true : false,
     },
@@ -78,7 +80,7 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
     <div className="ground-container">
       <EventsBreadCrumb location={location} />
       <Switch>
-      <Route exact path={`${path}/documents/create`} component={() => <DocumenetCreate {...{ path }} />} />
+        <Route exact path={`${path}/documents/create`} component={() => <DocumenetCreate {...{ path }} />} />
         <Route path={`${path}/event/inbox`} exact>
           <Inbox tenants={tenants} />
         </Route>
@@ -90,7 +92,8 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
         <Route path={`${path}/documents/update`} component={(props) => <DocUpdate {...props} />} />
         <Route path={`${path}/documents/update-response`} component={(props) => <DocUpdateResponse {...props} />} />
         <Route path={`${path}/documents/delete-response`} component={(props) => <DocDeleteResponse {...props} />} />
-        <Route path={`${path}/documents/notification`} component={(props) => <DocumentNotification tenants={tenants}/>} />
+        <Route path={`${path}/documents/notification`} component={(props) => <DocumentNotification tenants={tenants} />} />
+       {/*  <Route path={`${path}/documents/details/:id`} component={(props) => <DocumentDetails {...props} />} /> */}
         {/* documents/update-response */}
         {/* <Redirect to={`${path}/docs`} /> */}
       </Switch>
@@ -161,6 +164,7 @@ const componentsToRegister = {
   EventsListOnGround,
   EventDetails,
   EventForm,
+  DocumentList,
   SelectEventGeolocation,
   SelectToDate
 };

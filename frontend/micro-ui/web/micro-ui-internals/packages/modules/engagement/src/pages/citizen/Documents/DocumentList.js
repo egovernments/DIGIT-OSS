@@ -1,80 +1,101 @@
 import {
-    AppContainer,
-    BackButton,
-    Card,
-    Header,
-    SearchIconSvg,
-    PrevIcon,
-    Loader
-  } from "@egovernments/digit-ui-react-components";
-  import React,{useState} from "react";
-  import { Link } from "react-router-dom";
-  
-  
-  const Accordion = ({ title, children }) => {
-    const [isOpen, setOpen] = React.useState(false);
-    return (
-      <div className="accordion-wrapper">
-        <div className={`accordion-title ${isOpen ? "open" : ""}`} onClick={() => setOpen(!isOpen)}>
-          {title}
-          <PrevIcon />
-        </div>
-        <div className={`accordion-item ${!isOpen ? "collapsed" : ""}`}>
-          <div className="accordion-content">{children}</div>
-        </div>
-      </div>
-    );
-  };
-  
-  const DocumentList = () => {
-    const onSubmit = () => {
-      console.log("onsubmit");
-    };
-    const handleSubmit = () => {
-      console.log("handleSubmit");
-    };
-   // const [documentsCategories, setDocumentCategories] = useState([]);
-    const stateId = Digit.ULBService.getStateId();
-    const currrentUlb = Digit.ULBService.getCurrentUlb() || "pb.amritsar" ;
-    const { data: categoryData, isLoading } = Digit.Hooks.engagement.useMDMS(stateId, "DocumentUploader", ["UlbLevelCategories"], {
-      select: (d) => {
-        const data = d?.DocumentUploader?.UlbLevelCategories?.filter?.((e) => e.ulb === currrentUlb.code);
-        return data[0].categoryList;
-      },
-    });
-  
-    if(isLoading){
-      return <Loader />
-    }
+  AppContainer,
+  BackButton,
+  Card,
+  CardCaption,
+  Header,
+  Loader,
+} from "@egovernments/digit-ui-react-components";
+import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next"
+import DocumentCard from "../../../components/Documents/DocumentCard";
+import Searchbar from "../../../components/Documents/Searchbar";
 
-    return (
-      <AppContainer>
-        <div>
-        </div>
-        <Header>Documents</Header>
-        <Card>
-          <div className="StandaloneSearchBar document_list_searchbar">
-            <input type="text" placeholder="Search Documents" />
-            <SearchIconSvg />
-          </div>
-          <hr style={{color: '#ccc'}} />
-          {/* Accordion */}
-          <div className="wrapper">
-            {categoryData && categoryData.map((title, index) => {
-              return (
-                <Link to="#">
-                <Accordion title={title} key={index}>
-                  {/* <p>{data.info}</p> */}
-                </Accordion>
-                </Link>
-              );
-            })}
-          </div>
-          {/* Accordion */}
-        </Card>
-      </AppContainer>
-    );
-  };
-  
-  export default DocumentList;
-  
+const DocumentList = ({ match }) => {
+  const { t } = useTranslation()
+  const { category } = match.params || 'CATEGORY_CITIZEN_CHARTER';
+  const tenantIds = Digit.SessionStorage.get("Employee.tenantId")
+  const [searchValue, setSearchValue] = useState();
+
+
+  const { data: filteredDocs, isLoading: isLoadingDocs, } = Digit.Hooks.engagement.useDocSearch({ name: searchValue, category, tenantIds }, {
+    //limit: pageSize,
+    //offset: pageOffset,
+    select: (data) => {
+      return data?.Documents?.map((
+        { uuid,
+          name,
+          category,
+          documentLink,
+          description,
+          auditDetails,
+          fileSize
+        }
+      ) => ({
+        docId: uuid,
+        name,
+        category,
+        description,
+        documentLink,
+        lastModifiedDate: auditDetails?.lastModifiedTime,
+        fileSize
+      }))
+    }
+  });
+
+  const handleKeyPress = async (event) => {
+    if (event.key === "Enter") {
+      if (searchValue.length) {
+        setSearchValue("");
+      }
+    }
+  }
+
+
+  const handleSearch = async (event) => {
+    if (searchValue.length) {
+      setSearchValue("");   
+    }
+  }
+
+
+  if (isLoadingDocs) {
+    <Loader />
+  }
+
+  return (
+    <AppContainer>
+      <Header>{t(`${category}`)}</Header>
+      <div
+      >
+
+  <Searchbar
+    searchValue={searchValue}
+    handleKeyPress={handleKeyPress}
+    handleSearch={handleSearch}
+    onChange={setSearchValue}
+    t={t}
+  />
+     </div>
+  {
+    filteredDocs &&
+    filteredDocs.length ? filteredDocs.map(({ name, lastModifiedDate, description, documentLink, fileSize }, index) => (
+      <DocumentCard
+        key={index}
+        documentTitle={name}
+        documentSize={fileSize} 
+        lastModifiedData={lastModifiedDate}
+        description={description}
+        documentLink={documentLink}
+        t={t}
+      />
+    )) :
+    <Card>
+      <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
+    </Card>
+  }
+    </AppContainer >
+  );
+};
+
+export default DocumentList;

@@ -1,10 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Card, Header, LabelFieldPair, CardLabel, TextInput, Dropdown, FormComposer, RemoveableTag } from "@egovernments/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
 
 const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, register, errors, setError, clearErrors, formState, control }) => {
   const { data: ulbArray, isLoading } = Digit.Hooks.useTenants();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const selectedTenat = useMemo(()=>{
+    const filtered = ulbArray?.filter((item)=> item.code===tenantId)
+    return filtered;
+  },[tenantId, ulbArray])
 
+  debugger
   return (
     <React.Fragment>
       <LabelFieldPair 
@@ -15,6 +21,7 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
           <Controller
             name={config.key}
             control={control}
+            defaultValue={selectedTenat}
             render={(props) => (
               <Dropdown
                 allowMultiselect={true}
@@ -24,7 +31,8 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
                   props.onChange([...(formData?.[config?.key]?.filter?.((f) => e.code != f.code) || []), e]);
                 }}
                 keepNull={true}
-                selected={ulbArray?.length === 1 ? ulbArray[0] : null}
+                selected={props.value}
+                disable={ulbArray?.length === 1}
                 t={t}
               />
             )}

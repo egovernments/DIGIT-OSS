@@ -158,9 +158,10 @@ const ViewsIcon = () => (
   </svg>
 );
 
-const DocumentIcon = () => <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+const DocumentIcon = () => <svg width="100" height="100" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
   <path d="M16 0H2C0.9 0 0 0.9 0 2V16C0 17.1 0.9 18 2 18H16C17.1 18 18 17.1 18 16V2C18 0.9 17.1 0 16 0ZM11 14H4V12H11V14ZM14 10H4V8H14V10ZM14 6H4V4H14V6Z" fill="#F47738"/>
 </svg>
+
 
 const ImageIcon = () => <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
     <path d="M0 0h24v24H0V0z" fill="none"/>
@@ -679,6 +680,7 @@ export {
   ImageIcon,
   TickMark,
   PDFSvg,
+  PDFDocumentIcon,
   EditIcon,
   SearchIcon
 };
