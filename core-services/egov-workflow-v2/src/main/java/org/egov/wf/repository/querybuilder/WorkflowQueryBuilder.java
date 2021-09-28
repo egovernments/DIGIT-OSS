@@ -7,13 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
 @Component
+@Slf4j
 public class WorkflowQueryBuilder {
 
     private WorkflowConfig config;
@@ -257,8 +261,11 @@ public class WorkflowQueryBuilder {
         List<String> statuses = criteria.getStatus();
         List<String> tenantSpecificStatus = criteria.getTenantSpecifiStatus();
         StringBuilder with_query_builder = new StringBuilder(with_query);
-
+        log.info("--config.getAssignedOnly()"+config.getAssignedOnly());
+        log.info("--CollectionUtils.isEmpty(tenantSpecificStatus)"+!CollectionUtils.isEmpty(tenantSpecificStatus));
+        log.info("criteria.getTenantId()----->>>>>"+criteria.getTenantId());
         if(!config.getAssignedOnly() && !CollectionUtils.isEmpty(tenantSpecificStatus)){
+            log.info("----tenantSpecificStatus--->>>>"+tenantSpecificStatus.stream().collect(Collectors.joining(",")));
             String clause = " AND ((id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?)" +
                     " AND pi_outer.tenantid = ? ) {{OR_CLUASE_PLACEHOLDER}} )";
 
