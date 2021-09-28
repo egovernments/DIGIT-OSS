@@ -55,6 +55,9 @@ public class ProcessInstanceSearchCriteria {
 
     @JsonIgnore
     private List<String> statesToIgnore;
+    
+    @JsonIgnore
+    private List<String> statusesIrrespectiveOfTenant;
 
 
 

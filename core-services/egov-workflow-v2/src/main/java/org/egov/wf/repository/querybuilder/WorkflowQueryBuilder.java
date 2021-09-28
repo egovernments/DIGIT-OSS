@@ -274,6 +274,11 @@ public class WorkflowQueryBuilder {
             preparedStmtList.add(criteria.getAssignee());
             preparedStmtList.add(criteria.getTenantId());
         }
+        List<String> statusesIrrespectiveOfTenant = criteria.getStatusesIrrespectiveOfTenant();
+        if (CollectionUtils.isEmpty(tenantSpecificStatus) && !CollectionUtils.isEmpty(statusesIrrespectiveOfTenant)) {
+            with_query_builder.append(" and pi_outer.status IN (").append(createQuery(statusesIrrespectiveOfTenant)).append(")");
+            addToPreparedStatement(preparedStmtList, statusesIrrespectiveOfTenant);
+        }
 
         if(!StringUtils.isEmpty(criteria.getBusinessService())){
             with_query_builder.append(" AND pi_outer.businessservice =? ");
