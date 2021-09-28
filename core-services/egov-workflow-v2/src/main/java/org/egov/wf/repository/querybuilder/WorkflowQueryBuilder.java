@@ -32,14 +32,14 @@ public class WorkflowQueryBuilder {
             + "       doc.lastModifiedTime as doc_lastModifiedTime,doc.createdTime as doc_createdTime,doc.createdBy as doc_createdBy,"
             + "       doc.lastModifiedBy as doc_lastModifiedBy,doc.tenantid as doc_tenantid,doc.id as doc_id,asg.assignee as assigneeuuid,"
             + "       st.uuid as st_uuid,st.tenantId as st_tenantId, ac.uuid as ac_uuid,ac.tenantId as ac_tenantId,ac.action as ac_action"
-            + "       FROM eg_wf_processinstance_v2 pi  " + LEFT_OUTER_JOIN
-            + "       eg_wf_assignee_v2 asg ON asg.processinstanceid = pi.id " + LEFT_OUTER_JOIN
-            + "      eg_wf_document_v2 doc  ON doc.processinstanceid = pi.id " + INNER_JOIN
-            + "       eg_wf_state_v2 st ON st.uuid = pi.status" + LEFT_OUTER_JOIN
-            + "       eg_wf_action_v2 ac ON ac.currentState = st.uuid AND ac.active=TRUE " + "       WHERE ";
+            + "       FROM {SCHEMA}.eg_wf_processinstance_v2 pi  " + LEFT_OUTER_JOIN
+            + "       {SCHEMA}.eg_wf_assignee_v2 asg ON asg.processinstanceid = pi.id " + LEFT_OUTER_JOIN
+            + "       {SCHEMA}.eg_wf_document_v2 doc  ON doc.processinstanceid = pi.id " + INNER_JOIN
+            + "       {SCHEMA}.eg_wf_state_v2 st ON st.uuid = pi.status" + LEFT_OUTER_JOIN
+            + "       {SCHEMA}.eg_wf_action_v2 ac ON ac.currentState = st.uuid AND ac.active=TRUE " + "       WHERE ";
 
 
-    private static final String WITH_CLAUSE = " select id from eg_wf_processinstance_v2 pi_outer WHERE " ;
+    private static final String WITH_CLAUSE = " select id from {SCHEMA}.eg_wf_processinstance_v2 pi_outer WHERE " ;
 
     private static final String STATUS_COUNT_WRAPPER = "select  count(DISTINCT wf_id),cq.applicationStatus,cq.PI_STATUS as statusId from ({INTERNAL_QUERY}) as cq GROUP BY cq.applicationStatus,cq.PI_STATUS";
 

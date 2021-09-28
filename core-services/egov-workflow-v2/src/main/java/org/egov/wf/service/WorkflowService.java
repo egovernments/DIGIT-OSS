@@ -1,6 +1,7 @@
 package org.egov.wf.service;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.tracer.model.CustomException;
 import org.egov.wf.config.WorkflowConfig;
 import org.egov.wf.repository.BusinessServiceRepository;
 import org.egov.wf.repository.WorKflowRepository;
@@ -10,6 +11,7 @@ import org.egov.wf.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.*;
 
@@ -74,6 +76,10 @@ public class WorkflowService {
      */
     public List<ProcessInstance> search(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
         List<ProcessInstance> processInstances;
+
+        if(ObjectUtils.isEmpty(criteria.getTenantId()))
+            throw new CustomException("EG_WF_CRITERIA_ERR", "TenantId is mandatory for searching workflow");
+
         if(criteria.isNull())
             processInstances = getUserBasedProcessInstances(requestInfo, criteria);
         else processInstances = workflowRepository.getProcessInstances(criteria);
@@ -90,6 +96,10 @@ public class WorkflowService {
 
     public Integer count(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
         Integer count;
+
+        if(ObjectUtils.isEmpty(criteria.getTenantId()))
+            throw new CustomException("EG_WF_CRITERIA_ERR", "TenantId is mandatory for count workflow call");
+
         if(criteria.isNull()){
             enrichSearchCriteriaFromUser(requestInfo, criteria);
             count = workflowRepository.getInboxCount(criteria);
@@ -143,6 +153,10 @@ public class WorkflowService {
     
     public List statusCount(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
         List result;
+
+        if(ObjectUtils.isEmpty(criteria.getTenantId()))
+            throw new CustomException("EG_WF_CRITERIA_ERR", "TenantId is mandatory for status count workflow call");
+
         if(criteria.isNull()){
         	enrichSearchCriteriaFromUser(requestInfo, criteria);
             result = workflowRepository.getInboxStatusCount(criteria);
@@ -199,6 +213,10 @@ public class WorkflowService {
     public List<ProcessInstance> escalatedApplicationsSearch(RequestInfo requestInfo, ProcessInstanceSearchCriteria criteria) {
         List<String> escalatedApplicationsBusinessIds;
         List<ProcessInstance> escalatedApplications = new ArrayList<>();
+
+        if(ObjectUtils.isEmpty(criteria.getTenantId()))
+            throw new CustomException("EG_WF_CRITERIA_ERR", "TenantId is mandatory for escalated applications search");
+
         Set<String> autoEscalationEmployeesUuids = enrichmentService.enrichUuidsOfAutoEscalationEmployees(requestInfo, criteria);
         //Set<String> statesToIgnore = enrichmentService.fetchStatesToIgnoreFromMdms(requestInfo, criteria.getTenantId());
         escalatedApplicationsBusinessIds = workflowRepository.fetchEscalatedApplicationsBusinessIdsFromDb(criteria);
