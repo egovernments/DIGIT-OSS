@@ -52,6 +52,7 @@ const Urls = {
     update_citizen_reciept: "/pg-service/transaction/v1/_update",
     search_bill: "/billing-service/bill/v2/_search",
     reciept_search: "/collection-services/payments/:buisnessService/_search",
+    obps_Reciept_Search: "/collection-services/payments/_search",
   },
 
   pt: {

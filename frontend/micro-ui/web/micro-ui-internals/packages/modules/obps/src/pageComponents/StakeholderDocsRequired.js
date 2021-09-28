@@ -33,8 +33,8 @@ const StakeholderDocsRequired = ({ onSelect, onSkip, config }) => {
           <Fragment>
             {data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.[0]?.docTypes?.map((doc, index) => (
               <div key={index}>
-              <CardSubHeader>{`${index + 1}. `}</CardSubHeader>
-              <CardLabel style={{ fontWeight: 700, marginTop:"-33px", marginLeft:"20px" }}>{`${t(doc?.code.replace('.', '_'))}`}</CardLabel>
+              <CardLabel style={{fontWeight:700}}>{`${index + 1}. `}</CardLabel>
+              <CardLabel style={{ fontWeight: 700, marginTop:"-39px", marginLeft:"20px" }}>{`${t(doc?.code.replace('.', '_'))}`}</CardLabel>
               </div>
             ))}
           </Fragment>
