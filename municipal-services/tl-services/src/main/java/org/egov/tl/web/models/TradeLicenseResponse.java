@@ -37,6 +37,9 @@ public class TradeLicenseResponse   {
         @JsonProperty("Licenses")
         @Valid
         private List<TradeLicense> licenses = null;
+        
+        @JsonProperty("Count")
+        private int count;
 
 
         public TradeLicenseResponse addLicensesItem(TradeLicense licensesItem) {

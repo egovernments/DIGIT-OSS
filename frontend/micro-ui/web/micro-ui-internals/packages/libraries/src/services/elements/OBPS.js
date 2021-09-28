@@ -1,6 +1,7 @@
 import { Request } from "../atoms/Utils/Request"
 import Urls from "../atoms/urls";
 import { format } from "date-fns";
+import { MdmsService } from "./MDMS";
 
 export const OBPSService = {
   scrutinyDetails: (tenantId, params) =>
@@ -166,6 +167,9 @@ export const OBPSService = {
     const [BPA] = response?.BPA;
     const edcrResponse = await OBPSService.scrutinyDetails(BPA?.tenantId, { edcrNumber: BPA?.edcrNumber });
     const [edcr] = edcrResponse?.edcrDetail;
+    const mdmsRes = await MdmsService.getMultipleTypes(tenantId, "BPA", ["RiskTypeComputation"]);
+    const riskType = Digit.Utils.obps.calculateRiskType(mdmsRes?.BPA?.RiskTypeComputation, edcr?.planDetail?.plot?.area, edcr?.planDetail?.blocks);
+    BPA.riskType = riskType;
     const nocResponse = await OBPSService.NOCSearch(BPA?.tenantId, { sourceRefId: BPA?.applicationNo });
     const noc = nocResponse?.Noc;
 
@@ -201,12 +205,51 @@ export const OBPSService = {
           ],
         },
       }));
+      let inspectionReport = [];
+      let checklist = [];
+      BPA?.additionalDetails?.fieldinspection_pending.map((ob,ind) => {
+        checklist = [];
+        inspectionReport.push({
+        title: "BPA_FI_REPORT",
+        asSectionHeader: true,
+        values: [
+          { title: "BPA_FI_DATE_LABEL", value: ob.date },
+          { title: "BPA_FI_TIME_LABEL", value: ob.time },
+        ]
+      });
+      ob.questions.map((q,index) => {
+        checklist.push({title: q.question, value: q.value});
+      checklist.push({ title: "BPA_ENTER_REMARKS", value: q.remarks});
+    })
+      inspectionReport.push(
+        {
+          title: "BPA_CHECK_LIST_DETAILS",
+          asSectionHeader: true,
+          values: checklist,
+        });
+      inspectionReport.push({
+        title: "BPA_DOCUMENT_DETAILS_LABEL",
+        asSectionHeader: true,
+        additionalDetails: {
+          obpsDocuments: [{
+            title: "",
+            values: ob?.docs?.map(doc => ({
+              title: doc?.documentType?.replaceAll('.', '_'),
+              documentType: doc?.documentType,
+              documentUid: doc?.fileStore,
+              fileStoreId: doc?.fileStoreId,
+            }))
+          }]
+        }})
+      })
+
     const details = [
+      ...inspectionReport,
       {
         title: "BPA_BASIC_DETAILS_TITLE",
         asSectionHeader: true,
         values: [
-          { title: "BPA_BASIC_DETAILS_APP_DATE_LABEL", value: BPA?.applicationDate ? format(new Date(basicData?.applicationDate), 'dd/MM/yyyy') : '' },
+          { title: "BPA_BASIC_DETAILS_APP_DATE_LABEL", value: BPA?.applicationDate ? format(new Date(BPA?.applicationDate), 'dd/MM/yyyy') : '' },
           { title: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL", value: `WF_BPA_${edcr?.appliactionType}` },
           { title: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL", value: edcr?.applicationSubType },
           { title: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL", value: edcr?.planDetail?.planInformation?.occupancy },
@@ -229,7 +272,7 @@ export const OBPSService = {
         title: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
         asSectionHeader: true,
         values: [
-          { title: "BPA_EDCR_NO_LABEL", value: BPA?.edcrNumber },
+          { title: BPA?.businessService !== "BPA_OC" ? "BPA_EDCR_NO_LABEL" : "BPA_OC_EDCR_NO_LABEL", value: BPA?.edcrNumber },
         ],
         additionalDetails: {
           scruntinyDetails: [
@@ -254,7 +297,7 @@ export const OBPSService = {
           { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr?.planDetail?.planInformation?.demolitionArea ? `${edcr?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : "" }
         ]
       },
-      {
+      BPA?.businessService !== "BPA_OC" && {
         title: "BPA_NEW_TRADE_DETAILS_HEADER_DETAILS",
         asSectionHeader: true,
         values: [
@@ -265,7 +308,7 @@ export const OBPSService = {
           { title: "ES_NEW_APPLICATION_LOCATION_LANDMARK", value: BPA?.landInfo?.address?.landmark }
         ]
       },
-      {
+      BPA?.businessService !== "BPA_OC" && {
         title: "BPA_APPLICANT_DETAILS_HEADER",
         asSectionHeader: true,
         values: [
@@ -297,9 +340,11 @@ export const OBPSService = {
       // },
     ]
 
+    const bpaFilterDetails = details?.filter(data => data);
+
     return {
       applicationData: BPA,
-      applicationDetails: details,
+      applicationDetails: bpaFilterDetails,
       tenantId: BPA?.tenantId
     }
   }

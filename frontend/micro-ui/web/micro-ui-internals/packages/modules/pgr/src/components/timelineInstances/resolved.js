@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import Reopen from "./reopen";
 //const GetTranslatedAction = (action, t) => t(`CS_COMMON_${action}`);
 
-const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate, isCompleted }) => {
+const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate, isCompleted, customChild }) => {
   const { t } = useTranslation();
 
   if (action === "RESOLVE") {
@@ -31,7 +31,7 @@ const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate, i
       />
     );
   } else if (action === "REOPEN") {
-    return <CheckPoint isCompleted={isCompleted} label={t(`CS_COMMON_COMPLAINT_REOPENED`)} info={reopenDate} />;
+    return <CheckPoint isCompleted={isCompleted} label={t(`CS_COMMON_COMPLAINT_REOPENED`)} info={reopenDate} customChild={customChild} />;
   } else {
     let actions =
       nextActions &&
@@ -44,7 +44,7 @@ const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate, i
           );
         }
       });
-    return <CheckPoint isCompleted={isCompleted} label={t(`CS_COMMON_COMPLAINT_RESOLVED`)} customChild={<div>{actions}</div>} />;
+    return <CheckPoint isCompleted={isCompleted} label={t(`CS_COMMON_COMPLAINT_RESOLVED`)} customChild={<div>{actions}{customChild}</div>} />;
   }
 };
 

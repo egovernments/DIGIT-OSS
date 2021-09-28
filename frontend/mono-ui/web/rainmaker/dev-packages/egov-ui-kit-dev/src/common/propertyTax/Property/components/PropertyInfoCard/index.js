@@ -48,13 +48,19 @@ class PropertyInfoCard extends Component {
                                 label={item.value ? item.value : "NA"}
                                 fontSize="16px"
                               />
-                              {showEditNumber&&additionalKey && additionalKey.key && (additionalKey.key == item.key || (additionalKey.key1 == "item.key" && item.value !="NA")) && <div style={{ padding: "5px 0px 0px 0px" }}>
+                              {showEditNumber&&additionalKey && additionalKey.key && (additionalKey.key == item.key || (additionalKey.key1 == item.key && item.value !="NA")) && <div style={{ padding: "5px 0px 0px 0px" }}>
                               <UpdateMobile
                                 number={item.value}
                                 type={"UPDATE"} 
+                                isAlternate={additionalKey.key1 == item.key}
                                 {...additionalKey}
                                 >
                               </UpdateMobile>
+                            </div>}
+                            {showEditNumber&&additionalKey && (additionalKey.key2 == item.key || (additionalKey.key3 == item.key )) && <div style={{ padding: "5px 0px 0px 0px" }}>
+                             <div style={{margin:'2px' , height:"25px"}}>
+                               {" "}
+                               </div>
                             </div>}
                             </div>
                             {isModify && <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>

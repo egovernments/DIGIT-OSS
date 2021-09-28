@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
@@ -17,7 +18,7 @@ public class ProcessInstanceSearchCriteria {
     private List<String> status;
 
     @JsonProperty("businessIds")
-    private List<String> businessIds;
+    private List<@Size(min=4) String> businessIds;
 
     @JsonProperty("assignee")
     private String  assignee;
@@ -55,6 +56,9 @@ public class ProcessInstanceSearchCriteria {
 
     @JsonIgnore
     private List<String> statesToIgnore;
+
+    @JsonIgnore
+    private Boolean isEscalatedCount;
 
 
 

@@ -2,6 +2,8 @@ export const getPattern = type => {
   switch (type) {
     case "Name":
       return /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i;
+    case "MobileNo":
+      return /^[6-9]{1}[0-9]{9}$/i;
   }
 };
 
@@ -12,6 +14,11 @@ export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   }
   return str;
 };
+
+export const sortDropdownNames = (options, optionkey, locilizationkey) => {
+  return options.sort((a, b) => locilizationkey(a[optionkey]).localeCompare(locilizationkey(b[optionkey])));
+};
+
 
 export const uuidv4 = () => {
   return require("uuid/v4")();
@@ -255,6 +262,19 @@ export const convertToStakeholderObject = (data) => {
   return formData;
 }
 
+export const getUniqueItemsFromArray = (data, identifier) => {
+  const uniqueArray = [];
+  const map = new Map();
+  for (const item of data) {
+    if (!map.has(item[identifier])) {
+      map.set(item[identifier], true); // set any value to Map
+      uniqueArray.push(item);
+    }
+  }
+  return uniqueArray;
+};
+
+
 export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
   //example input format : "2018-10-02"
   try {
@@ -268,5 +288,103 @@ export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
     return DateObj.getTime();
   } catch (e) {
     return dateString;
+  }
+};
+
+export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t) => {
+
+  const getBlockIds = (unit) => {
+    let blocks = {};
+    unit && unit.map((ob, index) => {
+      blocks[`Block_${index + 1}`] = ob.id;
+    });
+    return blocks;
+  }
+
+  const getBlocksforFlow = (unit) => {
+    let arr = [];
+    let subBlocks = [];
+    let subOcc = {};
+    unit && unit.map((un, index) => {
+      arr = un?.usageCategory.split(",");
+      subBlocks = [];
+      arr && arr.map((ob, ind) => {
+        subBlocks.push({
+          code: ob,
+          i18nKey: `BPA_SUBOCCUPANCYTYPE_${ob.replaceAll(".", "_")}`,
+          name: t(`BPA_SUBOCCUPANCYTYPE_${ob.replaceAll(".", "_")}`),
+        })
+      })
+      subOcc[`Block_${index + 1}`] = subBlocks;
+    });
+
+    return subOcc;
+
+  }
+
+  data.BlockIds = getBlockIds(data?.landInfo?.unit);
+  data.address = data?.landInfo?.address;
+  data.data = {
+    applicantName: APIScrutinyDetails?.planDetail?.planInformation?.applicantName,
+    applicationDate: APIScrutinyDetails?.applicationDate,
+    applicationType: APIScrutinyDetails?.appliactionType,
+    holdingNumber: data?.additionalDetails?.holdingNo,
+    occupancyType: APIScrutinyDetails?.planDetail?.planInformation?.occupancy,
+    registrationDetails: data?.additionalDetails?.registrationDetails,
+    riskType: Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks),
+    serviceType: data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType,
+  }
+  data.documents = {
+    documents: data?.documents
+  }
+
+  data.nocDocuments = {
+    NocDetails: nocdata,
+    nocDocuments: nocdata.map(a => a?.documents?.[0] || {}),
+  }
+
+  data?.landInfo.owners.map((owner, ind) => {
+    owner.gender = {
+      active: true,
+      code: owner.gender,
+      i18nKey: `COMMON_GENDER_${owner.gender}`,
+    }
+  })
+
+  data.owners = {
+    owners: data?.landInfo?.owners,
+    ownershipCategory: {
+      active: true,
+      code: data?.landInfo?.ownershipCategory,
+      i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${data?.landInfo?.ownershipCategory.replaceAll(".", "_")}`,
+    }
+  }
+
+  data.riskType = Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks)
+  data.subOccupancy = getBlocksforFlow(data?.landInfo?.unit);
+  data.uiFlow = {
+    flow: data?.businessService.split(".")[0],
+    applicationType: data?.additionalDetails?.applicationType || APIScrutinyDetails?.appliactionType,
+    serviceType: data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType
+  }
+  return data;
+}
+
+export const getPath = (path, params) => {
+  params && Object.keys(params).map(key => {
+    path = path.replace(`:${key}`, params[key]);
+  })
+  return path;
+}
+
+export const convertDateTimeToEpoch = dateTimeString => {
+  //example input format : "26-07-2018 17:43:21"
+  try {
+    const parts = dateTimeString.match(
+      /(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2})/
+    );
+    return Date.UTC(+parts[3], parts[2] - 1, +parts[1], +parts[4], +parts[5]);
+  } catch (e) {
+    return dateTimeString;
   }
 };

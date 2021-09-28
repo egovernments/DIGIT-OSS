@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { StandaloneSearchBar, Loader, CardBasedOptions, ComplaintIcon, PTIcon, CaseIcon, DropIcon, HomeIcon, Calender, DocumentIcon, HelpIcon, WhatsNewCard } from "@egovernments/digit-ui-react-components"
+import { StandaloneSearchBar, Loader, CardBasedOptions, ComplaintIcon, PTIcon, CaseIcon, DropIcon, HomeIcon, Calender, DocumentIcon, HelpIcon, WhatsNewCard, OBPSIcon } from "@egovernments/digit-ui-react-components"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom";
 
@@ -10,7 +10,7 @@ const Home = () => {
     const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code
     const { data: { stateInfo } = {}, isLoading } = Digit.Hooks.useStore.getInitData()
 
-    const { data: EventsData, isLoading: EventsDataLoading } = Digit.Hooks.useEvents({tenantId})
+    const { data: EventsData, isLoading: EventsDataLoading } = Digit.Hooks.useEvents({tenantId, variant: "whats-new"})
     // if(!Digit.UserService?.getUser()?.access_token){
     //     history.push(`/digit-ui/citizen/login?from=${encodeURIComponent(window.location.pathname + window.location.search)}`)
     // }
@@ -45,8 +45,14 @@ const Home = () => {
                 name: t("ACTION_TEST_WATER_AND_SEWERAGE"), 
                 Icon: <DropIcon/>,
                 onClick: () => history.push("/digit-ui/citizen")
+            },
+            {
+                name: t("CS_COMMON_INBOX_BPA"), 
+                Icon: <OBPSIcon />,
+                onClick: () => history.push("/digit-ui/citizen/obps-home")
             }
-        ]
+        ],
+        styles: { display: "flex", flexWrap: "wrap",  justifyContent: "flex-start", width: "100%"}
     }
     const allInfoAndUpdatesProps = {
         header: t("CS_COMMON_DASHBOARD_INFO_UPDATES"),
@@ -73,7 +79,8 @@ const Home = () => {
                 name: t("CS_COMMON_HELP"),
                 Icon: <HelpIcon/>
             }
-        ]
+        ],
+        styles: { display: "flex", flexWrap: "wrap",  justifyContent: "flex-start", width: "100%"}
     }
 
     return isLoading ? <Loader/> : <div className="HomePageWrapper">

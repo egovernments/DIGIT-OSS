@@ -13,6 +13,16 @@ const Toast = (props) => {
     );
   }
 
+  if (props.warning) {
+    return (
+      <div className="toast-success" style={{ backgroundColor: "#EA8A3B", ...props.style }}>
+        <RoundedCheck />
+        <h2>{props.label}</h2>
+        { props.isDleteBtn ? <DeleteBtn fill="none" className="toast-close-btn" onClick={props.onClose} /> : null }
+      </div>
+    );
+  }
+
   return (
     <div className="toast-success" style={{ ...props.style }}>
       <RoundedCheck />

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, CheckBox, LinkButton, Loader } from "@egovernments/digit-ui-react-components";
-import { stringReplaceAll } from "../utils";
+import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, CheckBox, LinkButton, Loader, Toast, SearchIcon } from "@egovernments/digit-ui-react-components";
+import { stringReplaceAll, getPattern, convertDateTimeToEpoch, convertDateToEpoch } from "../utils";
 import Timeline from "../components/Timeline";
+import cloneDeep from "lodash/cloneDeep";
 
 const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     let validation = {};
@@ -17,6 +18,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     const [isPrimaryOwner, setisPrimaryOwner] = useState(false);
     const [gender, setGender] = useState(formData?.owners?.gender);
     const [mobileNumber, setMobileNumber] = useState(formData?.owners?.mobileNumber || "");
+    const [showToast, setShowToast] = useState(null);
     const ismultiple = ownershipCategory?.code.includes("MULTIPLEOWNERS") ? true : false;
     const [fields, setFeilds] = useState(
         (formData?.owners && formData?.owners?.owners) || [{ name: "", gender: "", mobileNumber: null, isPrimaryOwner: true }]
@@ -156,6 +158,52 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         return blockId;
     }
 
+    const closeToast = () => {
+        setShowToast(null);
+      };
+
+    const getOwnerDetails = async (indexValue, eData) => {
+        const ownersCopy = cloneDeep(fields);
+        const ownerNo = ownersCopy?.[indexValue]?.mobileNumber || "";
+
+        if (!ownerNo.match(getPattern("MobileNo"))) {
+            setShowToast({ key: "true", error: true, message: "ERR_MOBILE_NUMBER_INCORRECT" });
+            return;
+        }
+
+        if (ownerNo === ownersCopy?.[indexValue]?.userName) {
+            setShowToast({ key: "true", error: true, message: "ERR_OWNER_ALREADY_ADDED_TOGGLE_MSG" });
+            return;
+        }
+
+        const matchingOwnerIndex = ownersCopy.findIndex(item => item.userName === ownerNo);
+
+        if (matchingOwnerIndex > -1) {
+            setShowToast({ key: "true", error: true, message: "ERR_OWNER_ALREADY_ADDED" });
+            return;
+        } else {
+            const usersResponse = await Digit.UserService.userSearch("pb", { userName: fields?.[indexValue]?.mobileNumber }, {});
+            if (usersResponse?.user?.length === 0) {
+                setShowToast({ key: "true", warning: true, message: "ERR_MOBILE_NUMBER_NOT_REGISTERED" });
+                return;
+            } else {
+                const userData = usersResponse?.user?.[0];
+                userData.gender = { code: userData.gender, active: true, i18nKey: `COMMON_GENDER_${userData.gender}` };
+                if(userData?.dob) userData.dob = convertDateToEpoch(userData?.dob);
+                if (userData?.createdDate) {
+                    userData.createdDate = convertDateTimeToEpoch(userData?.createdDate);
+                    userData.lastModifiedDate = convertDateTimeToEpoch(userData?.lastModifiedDate);
+                    userData.pwdExpiryDate = convertDateTimeToEpoch(userData?.pwdExpiryDate);
+                  }
+
+                let values = [...ownersCopy];
+                if (values[indexValue]) { values[indexValue] = userData; values[indexValue].isPrimaryOwner = fields[indexValue]?.isPrimaryOwner || false; }
+                setFeilds(values);
+                setCanmovenext(true);
+            }
+        }
+    }
+
     const goNext = () => {
         setError(null);
         if (ismultiple == true && fields.length == 1) {
@@ -172,6 +220,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 let conversionOwners = [];
                 ownerStep?.owners?.map(owner => {
                     conversionOwners.push({
+                        ...owner,
                         name: owner.name,
                         mobileNumber: owner.mobileNumber,
                         isPrimaryOwner: owner.isPrimaryOwner,
@@ -230,14 +279,11 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                             result.BPA[0].BlockIds = getBlockIds(result.BPA[0].landInfo.unit);
                             result.BPA[0].subOccupancy= formData?.subOccupancy;
                             result.BPA[0].uiFlow = formData?.uiFlow
-                            
-                            //1, units
                             onSelect("", result.BPA[0], "", true);
                         }
                     })
                     .catch((e) => {
-                        // setShowToast({ key: "error" });
-                        // setError(e?.response?.data?.Errors[0]?.message || null);
+                        setShowToast({ key: "true", error: true, message: e?.response?.data?.Errors[0]?.message });
                     });
             } else {
                 onSelect(config.key, ownerStep);
@@ -274,7 +320,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                         return (
                             <div key={`${field}-${index}`}>
                                 <div style={{ border: "solid", borderRadius: "5px", padding: "10px", paddingTop: "20px", marginTop: "10px", borderColor: "#f3f3f3", background: "#FAFAFA" }}>
-                                    <CardLabel style={ismultiple ? { marginBottom: "-15px" } : {}}>{`${t("CORE_COMMON_NAME")} *`}</CardLabel>
+                                    <CardLabel style={ismultiple ? { marginBottom: "-15px" } : {}}>{`${t("CORE_COMMON_MOBILE_NUMBER")} *`}</CardLabel>
                                     {ismultiple && <LinkButton
                                         label={
                                             <div >
@@ -288,8 +334,31 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                                         style={{ width: "100px", display: "inline", background: "black" }}
                                         onClick={(e) => handleRemove(index)}
                                     />}
+                                    <div style={{ marginTop: "30px" }}>
+                                        <div className="field-container">
+                                            <div style={{ position: "absolute", zIndex: "100", left: "45px", marginTop: "-23px" }}>+91</div>
+                                            <TextInput
+                                                style={{ background: "#FAFAFA", padding: "0px 35px" }}
+                                                type={"text"}
+                                                t={t}
+                                                isMandatory={false}
+                                                optionKey="i18nKey"
+                                                name="mobileNumber"
+                                                value={field.mobileNumber}
+                                                onChange={(e) => setMobileNo(index, e)}
+                                                {...(validation = {
+                                                    isRequired: true,
+                                                    pattern: "[6-9]{1}[0-9]{9}",
+                                                    type: "tel",
+                                                    title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
+                                                })}
+                                            />
+                                            <div style={{ position: "absolute", zIndex: "100", right: "45px", marginTop: "-23px" }} onClick={(e) => getOwnerDetails(index, e)}> <SearchIcon /> </div>
+                                        </div>
+                                    </div>
+                                    <CardLabel>{`${t("CORE_COMMON_NAME")} *`}</CardLabel>
                                     <TextInput
-                                        style={ismultiple ? { background: "#FAFAFA" } : {}}
+                                        style={{ background: "#FAFAFA" }}
                                         t={t}
                                         type={"text"}
                                         isMandatory={false}
@@ -316,28 +385,6 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                                         isDependent={true}
                                         labelKey="COMMON_GENDER"
                                     />
-                                    <CardLabel>{`${t("CORE_COMMON_MOBILE_NUMBER")} *`}</CardLabel>
-                                    <div className="field-container">
-                                        <span className="employee-card-input employee-card-input--front" style={{ marginTop: "-1px" }}>
-                                            +91
-                                        </span>
-                                        <TextInput
-                                            style={ismultiple ? { background: "#FAFAFA" } : {}}
-                                            type={"text"}
-                                            t={t}
-                                            isMandatory={false}
-                                            optionKey="i18nKey"
-                                            name="mobileNumber"
-                                            value={field.mobileNumber}
-                                            onChange={(e) => setMobileNo(index, e)}
-                                            {...(validation = {
-                                                isRequired: true,
-                                                pattern: "[6-9]{1}[0-9]{9}",
-                                                type: "tel",
-                                                title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
-                                            })}
-                                        />
-                                    </div>
                                     {ismultiple && (
                                         <CheckBox
                                             label={t("BPA_IS_PRIMARY_OWNER_LABEL")}
@@ -363,6 +410,14 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 </div> : <Loader />
             }
         </FormStep>
+            {showToast && <Toast
+                error={showToast?.error}
+                warning={showToast?.warning}
+                label={t(showToast?.message)}
+                isDleteBtn={true}
+                onClose={closeToast}
+            />
+            }
         </div>
     );
 };

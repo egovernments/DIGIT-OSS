@@ -119,7 +119,6 @@ const ApplicationOverview = () => {
   }, [nocDatils, nocDocumentTypeMaping, commonDocMaping]);
 
   useEffect(() => {
-    debugger;
     let acc = [];
     nocDatils?.[0]?.documents?.forEach((element, index, array) => {
       acc.push(element?.fileStoreId)

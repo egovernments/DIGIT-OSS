@@ -176,6 +176,25 @@ public class TradeLicenseService {
          }
          return licenses;       
     }
+    
+    public int countLicenses(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo, String serviceFromPath, HttpHeaders headers){
+    	
+    	enrichmentService.enrichSearchCriteriaWithAccountId(requestInfo,criteria);
+    	
+    	if(criteria.getMobileNumber()!=null || criteria.getOwnerName() != null) {
+
+    		boolean isEmpty = enrichWithUserDetails(criteria, requestInfo);
+    		
+    		if(isEmpty) {
+    			return 0;
+    		}
+    	}
+
+    	int licenseCount = repository.getLicenseCount(criteria);
+    	
+    	return licenseCount;
+    }
+    
 
     public void checkEndStateAndAddBPARoles(TradeLicenseRequest tradeLicenseRequest) {
         List<String> endstates = tradeUtil.getBPAEndState(tradeLicenseRequest);
@@ -193,31 +212,13 @@ public class TradeLicenseService {
     }
 
     public List<TradeLicense> getLicensesFromMobileNumber(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo){
+    	
         List<TradeLicense> licenses = new LinkedList<>();
-        UserDetailResponse userDetailResponse = userService.getUser(criteria,requestInfo);
-        // If user not found with given user fields return empty list
-        if(userDetailResponse.getUser().size()==0){
-            return Collections.emptyList();
-        }
-        enrichmentService.enrichTLCriteriaWithOwnerids(criteria,userDetailResponse);
         
-        if(criteria.getOnlyMobileNumber()!=null && criteria.getOnlyMobileNumber() ) {
-        	criteria.setTenantId(null);
-        }
+        boolean isEmpty = enrichWithUserDetails(criteria,requestInfo);
         
-        licenses = repository.getLicenses(criteria);
-
-        if(licenses.size()==0){
-            return Collections.emptyList();
-        }
-
-        // Add tradeLicenseId of all licenses owned by the user
-        Boolean isRenewalPending = (criteria.getRenewalPending()!=null && criteria.getRenewalPending()==true);
-        
-        criteria=enrichmentService.getTradeLicenseCriteriaFromIds(licenses);
-        
-        if(isRenewalPending) {
-        	criteria.setRenewalPending(true);
+        if(isEmpty) {
+        	return Collections.emptyList();
         }
         
         //Get all tradeLicenses with ownerInfo enriched from user service
@@ -376,6 +377,36 @@ public class TradeLicenseService {
         tlBatchService.getLicensesAndPerformAction(serviceName, jobname, requestInfo);
 
 
+    }
+    
+    public boolean enrichWithUserDetails(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo) {
+    	List<TradeLicense> licenses = new LinkedList<>();
+        UserDetailResponse userDetailResponse = userService.getUser(criteria,requestInfo);
+
+        if(userDetailResponse.getUser().size()==0){
+            return true;
+        }
+        enrichmentService.enrichTLCriteriaWithOwnerids(criteria,userDetailResponse);
+        
+        if(criteria.getOnlyMobileNumber()!=null && criteria.getOnlyMobileNumber() ) {
+        	criteria.setTenantId(null);
+        }
+        
+        licenses = repository.getLicenses(criteria);
+
+        if(licenses.size()==0){
+        	return true;
+        }
+
+        Boolean isRenewalPending = (criteria.getRenewalPending()!=null && criteria.getRenewalPending()==true);
+        
+        criteria=enrichmentService.getTradeLicenseCriteriaFromIds(licenses);
+        
+        if(isRenewalPending) {
+        	criteria.setRenewalPending(true);
+        }
+        
+        return false;
     }
 
 }

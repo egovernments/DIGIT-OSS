@@ -5,7 +5,7 @@ import EventLink from "./EventLink";
 
 const GetStatusCell = (value) => value === "Active" ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span> 
 
-const MobileInbox = ({ data, t, searchFields, searchParams, onFilterChange, onSearch, isLoading }) => {
+const MobileInbox = ({ data, t, title, iconName, links, searchFields, searchParams, onFilterChange, onSearch, isLoading }) => {
   const getData = () => {
     return data?.
     filter(event =>
@@ -31,7 +31,7 @@ const MobileInbox = ({ data, t, searchFields, searchParams, onFilterChange, onSe
       <div className="inbox-container">
         <div className="filters-container">
           {/* {!isFstpOperator && !isSearch && <ApplicationLinks linkPrefix={parentRoute} isMobile={true} />} */}
-          <EventLink />
+          <EventLink title={title} icon={iconName} links={links} />
           <ApplicationCard
             t={t}
             data={getData()}

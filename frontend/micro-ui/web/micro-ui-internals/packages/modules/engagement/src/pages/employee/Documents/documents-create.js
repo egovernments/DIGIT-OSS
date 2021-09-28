@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FormComposer } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Header } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { documentsFormConfig } from "../../../config/doc-create";
 import { useHistory } from "react-router-dom";
@@ -22,13 +22,15 @@ const Documents = () => {
     }
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = (data) => {  
     const DocumentEntity = {
       name: data.documentName,
       description: data.description,
-      category: data.docCategory,
-      filestoreId: data.document.filestoreId,
+      category: data.docCategory?.name,
       documentLink: data.document.documentLink,
+      filestoreId: data.document.filestoreId.fileStoreId,
+      fileSize: data.document.filestoreId.fileSize,
+      fileType: data.document.filestoreId.fileType,
       tenantIds: data.ULB.map((e) => e.code),
     };
 
@@ -36,15 +38,18 @@ const Documents = () => {
   };
 
   return (
+    <div>
+     <Header>{t("ES_ENGAGEMENT_DOCUMENTS")}</Header>
     <FormComposer
-      heading={t("ES_ENGAGEMENT_DOCUMENTS")}
-      label={t("ES_COMMON_APPLICATION_SUBMIT")}
-      config={documentsFormConfig}
-      onSubmit={onSubmit}
-      fieldStyle={{}}
-      onFormValueChange={onFormValueChange}
-      isDisabled={!canSubmit}
-    />
+     // heading={t("ES_ENGAGEMENT_DOCUMENTS")}
+     label={t("ES_COMMON_APPLICATION_SUBMIT")}
+     config={documentsFormConfig}
+     onSubmit={onSubmit}
+     fieldStyle={{}}
+     onFormValueChange={onFormValueChange}
+     isDisabled={!canSubmit}
+     />
+    </div>
   );
 };
 

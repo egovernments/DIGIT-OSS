@@ -53,11 +53,11 @@
     margin-top: 50px;
   }
   .notice_and_circular_main{
-    width: 100%;
-    display: flex;
+    @apply flex gap-10 bg-white my-sm px-md pt-md pb-lg shadow-card;
+    border-radius: 4px;   
   }
   .notice_and_circular_content{
-    padding-left: 30px;
+    
   }
   .notice_and_circular_heading_mb{
     display: flex;
@@ -84,6 +84,37 @@
     & .download_views_padding{
       padding-left: 30px;
     }
+  }
+
+  .documentDetails{
+    &_wrapper{
+      @apply flex flex-col gap-10 items-start ;
+    }
+    &_row{
+      @apply flex gap-20 ;
+    }
+    &_title{
+      @apply w-48 font-bold ;
+    }
+    &_description{
+      @apply max-w-lg ;
+      text-overflow: clip;
+    }
+    &_pdf{
+      @apply flex flex-col gap-5 ;
+    }
+    &_subheader{
+      @apply font-bold ;
+      font-size: large;
+    }
+  }
+
+  .documentDetails_row{
+   
+  }
+
+  .documentDetails_pdf{
+    @apply flex gap-10
   }
 
   .grid_section{
@@ -122,6 +153,7 @@
       align-items: center;
     }
   }
+  
   .new_document_clear_search_alignment{
     @apply mb-md mr-lg;
   }
@@ -133,6 +165,10 @@
     & .card-caption {
       @apply ml-lg ;
     }
+  }
+
+  .document-table-docs-columns{
+    @apply flex items-center gap-5;  
   }
   .filter_section_main {
     padding-bottom: 300px;

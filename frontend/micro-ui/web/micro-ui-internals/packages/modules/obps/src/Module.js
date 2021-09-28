@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
-import { Loader, CitizenHomeCard, OBPSIcon } from "@egovernments/digit-ui-react-components";
+import { Loader, CitizenHomeCard, OBPSIcon, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
 import CitizenApp from "./pages/citizen";
 
 import BPACitizenHomeScreen from "./pages/citizen/home";
@@ -27,6 +27,7 @@ import CorrospondenceAddress from "./pageComponents/CorrospondenceAddress";
 import PermanentAddress from "./pageComponents/PermanentAddress";
 import StakeholderDocuments from "./pageComponents/StakeholderDocuments";
 import EmployeeApp from "./pages/employee";
+import InspectionReport from "./pageComponents/InspectionReport";
 
 const OBPSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "bpa";
@@ -57,7 +58,7 @@ const OBPSLinks = ({ matchPath, userType }) => {
     },
     {
       link: `${matchPath}/stakeholder/apply/stakeholder-docs-required`,
-      i18nKey: t("BPA_CITIZEN_HOME_REGISTER_ARCHITECT_BUILDER_LABEL"),
+      i18nKey: t("BPA_CITIZEN_HOME_STAKEHOLDER_LOGIN_LABEL"),
     },
     {
       link: `${matchPath}/home`,
@@ -65,7 +66,12 @@ const OBPSLinks = ({ matchPath, userType }) => {
     },
   ];
 
-  return <CitizenHomeCard header={t("ACTION_TEST_BUILDING_PLAN_APPROVAL")} links={links} Icon={() => <OBPSIcon />} />;
+  return (
+    <div>
+      <CitizenHomeCard header={t("ACTION_TEST_BUILDING_PLAN_APPROVAL")} links={links} Icon={() => <OBPSIcon />} />
+      <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)} style={{margin: "0px 16px"}} />
+    </div>
+  );
 } 
 
 const componentsToRegister = {
@@ -91,7 +97,8 @@ const componentsToRegister = {
   CorrospondenceAddress,
   PermanentAddress,
   StakeholderDocuments,
-  OCBasicDetails
+  OCBasicDetails,
+  InspectionReport
 }
 
 export const initOBPSComponents = () => {

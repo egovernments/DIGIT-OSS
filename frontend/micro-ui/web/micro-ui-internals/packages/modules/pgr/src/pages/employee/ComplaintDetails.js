@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useParams } from "react-router-dom";
 import {
   BreakLine,
@@ -276,7 +276,7 @@ export const ComplaintDetails = (props) => {
   }
 
   function zoomImage(imageSource, index) {
-    setImageZoom(complaintDetails.images[index - 1]);
+    setImageZoom(imageSource.fullImage[index - 1]);
   }
 
   function onCloseImageZoom() {
@@ -337,6 +337,7 @@ export const ComplaintDetails = (props) => {
 
   const getTimelineCaptions = (checkpoint) => {
     // console.log("tl", checkpoint);
+    const {wfComment: comment, thumbnailsToShow} = checkpoint;
     if (checkpoint.status === "COMPLAINT_FILED" && complaintDetails?.audit) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(complaintDetails.audit.details.createdTime),
@@ -346,8 +347,20 @@ export const ComplaintDetails = (props) => {
       };
       return <TLCaption data={caption} comments={checkpoint?.wfComment}/>;
     }
-    return (checkpoint.caption && checkpoint.caption.length !== 0) || checkpoint.wfComment.length > 0 ? <TLCaption data={checkpoint?.caption?.[0]} comments={checkpoint?.wfComment} /> : null;
-  };
+    // return (checkpoint.caption && checkpoint.caption.length !== 0) || checkpoint?.wfComment?.length > 0 ? <TLCaption data={checkpoint?.caption?.[0]} comments={checkpoint?.wfComment} /> : null;
+    return <>
+      {comment ? <div>{comment?.map( e => 
+        <div className="TLComments">
+          <h3>{t("WF_COMMON_COMMENTS")}</h3>
+          <p>{e}</p>
+        </div>
+      )}</div> : null}
+      {thumbnailsToShow?.thumbs?.length > 0 ? <div className="TLComments">
+        <h3>{t("CS_COMMON_DOCUMENTS")}</h3>
+        <DisplayPhotos srcs={thumbnailsToShow.thumbs} onClick={(src, index) => zoomImage(thumbnailsToShow,index)} />
+      </div> : null}
+    </>
+  }
 
   return (
     <React.Fragment>

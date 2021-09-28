@@ -13,14 +13,7 @@ export const newConfig = [
                 component: "OCeDCRScrutiny",
                 nextStep: "upload-diagram",
                 hideInEmployee: true,
-                key: "ScrutinyDetails",
-                texts: {
-                    headerCaption: "",
-                    header: "",
-                    cardText: "",
-                    submitBarLabel: "",
-                    skipText: "",
-                },
+                key: "ScrutinyDetails"
             },
             {
                 route: "upload-diagram",

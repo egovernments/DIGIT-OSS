@@ -1,17 +1,30 @@
-import { Table } from '@egovernments/digit-ui-react-components'
-import React from 'react'
+import React from "react";
+import { Table } from "@egovernments/digit-ui-react-components";
 
-const DocumentNotificationTable = ({t,columns, data}) => {
-  
-    return (
-        <div className="employee_document_inbox_table_main">
-            <Table
-            t={t}
-            columns={columns}
-            data={data}
-            />
-        </div>
-    )
+const DocumentNotificationTable = ({
+  t,
+  data,
+  columns,
+  globalSearch,
+  onSearch,
+  getCellProps,
+  pageSizeLimit,
+  totalRecords
+}) => {
+  return (
+    <Table
+      t={t}
+      data={data}
+      columns={columns}
+      onSearch={onSearch}
+      globalSearch={globalSearch}
+      manualGlobalFilter={true}
+      manualPagination={false}
+      pageSizeLimit={pageSizeLimit}
+      getCellProps={getCellProps}
+      totalRecords={totalRecords}
+    />
+  )
 }
 
-export default DocumentNotificationTable
+export default DocumentNotificationTable;

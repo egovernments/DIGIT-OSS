@@ -24,7 +24,7 @@ const Filter = ({ type = "desktop", onClose, onSearch, onFilterChange, searchPar
     setLocalSearchParams({ ...localSearchParams, ...data });
   };
   const onStatusChange = (e, type) => {
-    if (e.target.checked) handleChange({ eventStatus: [...(localSearchParams?.eventStatus || []),  type] })
+    if (e.target.checked) handleChange({ eventStatus: [...(localSearchParams?.eventStatus || []), type] })
     else handleChange({ eventStatus: localSearchParams?.eventStatus?.filter(status => status !== type) })
   }
 
@@ -33,7 +33,8 @@ const Filter = ({ type = "desktop", onClose, onSearch, onFilterChange, searchPar
       <Loader />
     );
   }
-
+  console.log('eventCategories', data?.mseva?.EventCategories);
+  console.log('localsearch Params', localSearchParams?.eventCategory)
   return (
     <div className="filter">
       <div className="filter-card">

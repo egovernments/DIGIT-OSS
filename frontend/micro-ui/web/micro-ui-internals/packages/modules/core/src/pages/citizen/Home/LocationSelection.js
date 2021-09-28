@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react"
-import { PageBasedInput, Loader, RadioButtons, CardHeader, Dropdown, SearchOnRadioButtons, CardLabelError } from "@egovernments/digit-ui-react-components"
+import React, { Fragment, useMemo, useState } from "react"
+import { PageBasedInput, Loader, RadioButtons, CardHeader, BackButton, SearchOnRadioButtons, CardLabelError } from "@egovernments/digit-ui-react-components"
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 
@@ -43,11 +43,15 @@ const LocationSelection = () => {
         }
     }
 
-    return isLoading ? <loader/> : <PageBasedInput texts={texts} onSubmit={onSubmit}>
+    return isLoading ? <loader/> : 
+    <>
+    <BackButton />
+    <PageBasedInput texts={texts} onSubmit={onSubmit}>
         <CardHeader>{t("CS_COMMON_CHOOSE_LOCATION")}</CardHeader>
         <SearchOnRadioButtons {...RadioButtonProps} placeholder={t("COMMON_TABLE_SEARCH")} />
         {showError ? <CardLabelError>{t("CS_COMMON_LOCATION_SELECTION_ERROR")}</CardLabelError> : null}
     </PageBasedInput>
+    </>
 }
 
 export default LocationSelection

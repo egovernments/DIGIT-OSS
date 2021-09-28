@@ -63,7 +63,6 @@ export default class AlternateMobile extends React.Component {
     componentDidMount = async () => {
         this.loadProperty();
         let resp = await this.getMDMS();
-        console.log(resp);
         this.setState({ documents: get(resp, "MdmsRes.PropertyTax.UpdateNumber[0].documents", []) });
     }
 

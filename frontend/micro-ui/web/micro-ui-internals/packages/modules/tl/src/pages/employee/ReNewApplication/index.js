@@ -3,9 +3,7 @@ import cloneDeep from "lodash/cloneDeep";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-import { newConfig } from "../../../config/config";
 import { convertDateToEpoch, convertEpochToDate, stringReplaceAll } from "../../../utils";
-
 
 const ReNewApplication = (props) => {
   const applicationData = cloneDeep(props?.location?.state?.applicationData) || {};
@@ -13,6 +11,7 @@ const ReNewApplication = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
+  const { data: newConfig, isLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(tenantId?.split?.(".")?.[0], {});
 
   const history = useHistory();
   // delete
@@ -24,23 +23,35 @@ const ReNewApplication = (props) => {
   const [error, setError] = useState(null);
 
   let financialYear = cloneDeep(applicationData?.financialYear);
-  let financialYearDate = applicationData?.financialYear?.split('-')[1];
-  let finalFinancialYear = `20${Number(financialYearDate)}-${Number(financialYearDate) + 1}`
+  let financialYearDate = applicationData?.financialYear?.split("-")[1];
+  let finalFinancialYear = `20${Number(financialYearDate)}-${Number(financialYearDate) + 1}`;
   if (window.location.href.includes("edit-application-details")) finalFinancialYear = financialYear;
 
   const tradeDetails = [
     {
       tradeName: applicationData?.tradeName,
-      financialYear: { code: finalFinancialYear, i18nKey: `FY${finalFinancialYear}`, id: finalFinancialYear?.split('-')[0] },
+      financialYear: { code: finalFinancialYear, i18nKey: `FY${finalFinancialYear}`, id: finalFinancialYear?.split("-")[0] },
       licenseType: "",
-      structureType: { i18nKey: t(`COMMON_MASTERS_STRUCTURETYPE_${stringReplaceAll(applicationData?.tradeLicenseDetail?.structureType?.split('.')[0]?.toUpperCase(), ".", "_")}`), code: applicationData?.tradeLicenseDetail?.structureType?.split('.')[0] },
-      structureSubType: { i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${stringReplaceAll(applicationData?.tradeLicenseDetail?.structureType?.toUpperCase(), ".", "_")}`, code: applicationData?.tradeLicenseDetail?.structureType },
+      structureType: {
+        i18nKey: t(
+          `COMMON_MASTERS_STRUCTURETYPE_${stringReplaceAll(
+            applicationData?.tradeLicenseDetail?.structureType?.split(".")[0]?.toUpperCase(),
+            ".",
+            "_"
+          )}`
+        ),
+        code: applicationData?.tradeLicenseDetail?.structureType?.split(".")[0],
+      },
+      structureSubType: {
+        i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${stringReplaceAll(applicationData?.tradeLicenseDetail?.structureType?.toUpperCase(), ".", "_")}`,
+        code: applicationData?.tradeLicenseDetail?.structureType,
+      },
       commencementDate: convertEpochToDate(applicationData?.commencementDate),
       gstNo: applicationData?.tradeLicenseDetail?.additionalDetail?.gstNo || "",
       operationalArea: applicationData?.tradeLicenseDetail?.operationalArea || "",
       noOfEmployees: applicationData?.tradeLicenseDetail?.noOfEmployees || "",
-      key: Date.now()
-    }
+      key: Date.now(),
+    },
   ];
 
   if (applicationData?.tradeLicenseDetail?.tradeUnits?.length > 0) {
@@ -50,13 +61,16 @@ const ReNewApplication = (props) => {
       let tradeType3 = cloneDeep(data?.tradeType);
 
       let code1 = typeof data?.tradeType == "string" && stringReplaceAll(tradeType3, "-", "_");
-      if (typeof data?.tradeType == "string") data.tradeCategory = { code: tradeType1?.split('.')[0], i18nKey: `TRADELICENSE_TRADETYPE_${tradeType1?.split('.')[0]}` };
-      if (typeof data?.tradeType == "string") data.tradeSubType = { code: tradeType3, i18nKey: t(`TRADELICENSE_TRADETYPE_${stringReplaceAll(code1, ".", "_")}`), uom: data?.uom || "" };
-      if (typeof data?.tradeType == "string") data.tradeType = { code: tradeType2?.split('.')[1], i18nKey: `TRADELICENSE_TRADETYPE_${tradeType2?.split('.')[1]}` };
+      if (typeof data?.tradeType == "string")
+        data.tradeCategory = { code: tradeType1?.split(".")[0], i18nKey: `TRADELICENSE_TRADETYPE_${tradeType1?.split(".")[0]}` };
+      if (typeof data?.tradeType == "string")
+        data.tradeSubType = { code: tradeType3, i18nKey: t(`TRADELICENSE_TRADETYPE_${stringReplaceAll(code1, ".", "_")}`), uom: data?.uom || "" };
+      if (typeof data?.tradeType == "string")
+        data.tradeType = { code: tradeType2?.split(".")[1], i18nKey: `TRADELICENSE_TRADETYPE_${tradeType2?.split(".")[1]}` };
       data.uom = data?.uom;
       data.uomValue = data?.uomValue;
-      data.key = (Date.now() + ((index + 1) * 20))
-    })
+      data.key = Date.now() + (index + 1) * 20;
+    });
   }
 
   if (applicationData?.tradeLicenseDetail?.accessories?.length > 0) {
@@ -64,30 +78,38 @@ const ReNewApplication = (props) => {
       let accessory1 = cloneDeep(data?.accessoryCategory);
       let accessory2 = cloneDeep(data?.accessoryCategory);
 
-      if (typeof data?.accessoryCategory == "string") data.accessoryCategory = { code: accessory1, i18nKey: `TRADELICENSE_ACCESSORIESCATEGORY_${stringReplaceAll(accessory1, "-", "_")}`, uom: data?.uom };
+      if (typeof data?.accessoryCategory == "string")
+        data.accessoryCategory = {
+          code: accessory1,
+          i18nKey: `TRADELICENSE_ACCESSORIESCATEGORY_${stringReplaceAll(accessory1, "-", "_")}`,
+          uom: data?.uom,
+        };
       data.uom = data?.uom;
       data.uomValue = data?.uomValue || "";
       data.count = data?.count || "";
-      data.key = (Date.now() + ((index + 1) * 20))
-    })
+      data.key = Date.now() + (index + 1) * 20;
+    });
   }
 
-  applicationData.tradeLicenseDetail.address.locality = { ...applicationData.tradeLicenseDetail.address.locality, ...{ i18nkey: applicationData.tradeLicenseDetail.address.locality?.name } };
+  applicationData.tradeLicenseDetail.address.locality = {
+    ...applicationData.tradeLicenseDetail.address.locality,
+    ...{ i18nkey: applicationData.tradeLicenseDetail.address.locality?.name },
+  };
 
   const ownershipCategory = {
     code: applicationData?.tradeLicenseDetail?.subOwnerShipCategory,
-    i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(applicationData?.tradeLicenseDetail?.subOwnerShipCategory, ".", "_")}`
-  }
+    i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(applicationData?.tradeLicenseDetail?.subOwnerShipCategory, ".", "_")}`,
+  };
 
   if (applicationData?.tradeLicenseDetail?.owners?.length > 0) {
     applicationData?.tradeLicenseDetail?.owners?.forEach((data, index) => {
       if (typeof data?.gender == "string") data.gender = { code: data?.gender, i18nKey: `TL_GENDER_${data?.gender}` };
       // if (typeof data?.relationship == "string") data.relationship = { code: data?.relationship, i18nKey: `COMMON_RELATION_${data?.relationship}` };
-      if (typeof data?.ownerType == "string") data.ownerType = { code: data?.ownerType, i18nKey: data?.ownerType }
+      if (typeof data?.ownerType == "string") data.ownerType = { code: data?.ownerType, i18nKey: data?.ownerType };
       // if (!data?.fatherOrHusbandName) data.fatherOrHusbandName = "";
       if (!data?.emailId) data.emailId = "";
       if (!data?.permanentAddress) data.permanentAddress = "";
-      data.key = (Date.now() + ((index + 1) * 20))
+      data.key = Date.now() + (index + 1) * 20;
     });
   }
 
@@ -106,7 +128,6 @@ const ReNewApplication = (props) => {
     // applicationData: cloneDeep(props?.location?.state?.applicationData)
   };
 
-
   const closeToast = () => {
     setShowToast(null);
     setError(null);
@@ -122,7 +143,6 @@ const ReNewApplication = (props) => {
   };
 
   const onSubmit = (data) => {
-
     let EDITRENEWAL = data?.tradedetils1?.checkForRenewal;
     let sendBackToCitizen = false;
     if (data?.tradedetils1?.action == "SENDBACKTOCITIZEN") {
@@ -130,17 +150,16 @@ const ReNewApplication = (props) => {
       sendBackToCitizen = true;
     }
 
-
     if (data?.owners?.length > 0) {
-      data?.owners.forEach(data => {
+      data?.owners.forEach((data) => {
         data.gender = data?.gender?.code;
         // data.relationship = data?.relationship?.code;
         data.ownerType = data?.ownerType?.code;
-      })
-    };
+      });
+    }
 
     for (let i = 0; i < data?.tradedetils1?.tradeLicenseDetail?.owners?.length; i++) {
-      let filteredArray = data?.owners?.filter(owner => owner.id === data?.tradedetils1?.tradeLicenseDetail?.owners[i]?.id);
+      let filteredArray = data?.owners?.filter((owner) => owner.id === data?.tradedetils1?.tradeLicenseDetail?.owners[i]?.id);
       if (filteredArray?.length == 0) {
         let removedOwner = data?.tradedetils1?.tradeLicenseDetail?.owners[i];
         removedOwner.active = false;
@@ -151,15 +170,15 @@ const ReNewApplication = (props) => {
     }
 
     if (data?.tradeUnits?.length > 0) {
-      data?.tradeUnits.forEach(data => {
-        data.tradeType = data?.tradeSubType?.code || null,
-          data.uom = data?.tradeSubType?.uom || null,
-          data.uomValue = Number(data?.uomValue) || null
+      data?.tradeUnits.forEach((data) => {
+        (data.tradeType = data?.tradeSubType?.code || null),
+          (data.uom = data?.tradeSubType?.uom || null),
+          (data.uomValue = Number(data?.uomValue) || null);
       });
-    };
+    }
 
     for (let i = 0; i < data?.tradedetils1?.tradeLicenseDetail?.tradeUnits?.length; i++) {
-      let filteredArray = data?.tradeUnits?.filter(unit => unit.id === data?.tradedetils1?.tradeLicenseDetail?.tradeUnits[i]?.id);
+      let filteredArray = data?.tradeUnits?.filter((unit) => unit.id === data?.tradedetils1?.tradeLicenseDetail?.tradeUnits[i]?.id);
       if (filteredArray?.length == 0) {
         let removedUnit = data?.tradedetils1?.tradeLicenseDetail?.tradeUnits[i];
         removedUnit.active = false;
@@ -171,20 +190,19 @@ const ReNewApplication = (props) => {
     let accessoriesFlag = false;
     if (data?.accessories?.length > 0) {
       if (data?.accessories?.length === 1 && !data?.accessories?.[0]?.accessoryCategory?.code) accessoriesFlag = true;
-      data?.accessories?.forEach(data => {
+      data?.accessories?.forEach((data) => {
         const accessoryCategory1 = cloneDeep(data?.accessoryCategory);
         const accessoryCategory2 = cloneDeep(data?.accessoryCategory);
-        data.accessoryCategory = accessoryCategory1?.code || null,
-          data.uom = accessoryCategory2?.uom || null,
-          data.count = Number(data?.count) || null,
-          data.uomValue = Number(data?.uomValue) || null
+        (data.accessoryCategory = accessoryCategory1?.code || null),
+          (data.uom = accessoryCategory2?.uom || null),
+          (data.count = Number(data?.count) || null),
+          (data.uomValue = Number(data?.uomValue) || null);
       });
-    };
+    }
     if (accessoriesFlag) data.accessories = null;
 
-
     for (let i = 0; i < data?.tradedetils1?.tradeLicenseDetail?.accessories?.length; i++) {
-      let filteredArrayAcc = data?.accessories?.filter(unit => unit.id === data?.tradedetils1?.tradeLicenseDetail?.accessories[i]?.id);
+      let filteredArrayAcc = data?.accessories?.filter((unit) => unit.id === data?.tradedetils1?.tradeLicenseDetail?.accessories[i]?.id);
       if (filteredArrayAcc?.length == 0) {
         let removedUnitAcc = data?.tradedetils1?.tradeLicenseDetail?.accessories[i];
         removedUnitAcc.active = false;
@@ -198,13 +216,13 @@ const ReNewApplication = (props) => {
     }
     data.address.city = data?.address?.city?.code || null;
 
-    if (data?.tradedetils1?.tradeLicenseDetail.address.doorNo !==data?.address?.doorNo) {
+    if (data?.tradedetils1?.tradeLicenseDetail.address.doorNo !== data?.address?.doorNo) {
       EDITRENEWAL = true;
     }
-    if (data?.tradedetils1?.tradeLicenseDetail.address.street !==data?.address?.street) {
+    if (data?.tradedetils1?.tradeLicenseDetail.address.street !== data?.address?.street) {
       EDITRENEWAL = true;
     }
-    
+
     let applicationDocuments = data?.documents?.documents || [];
     let commencementDate = convertDateToEpoch(data?.tradedetils?.["0"]?.commencementDate);
     let financialYear = data?.tradedetils?.["0"]?.financialYear?.code;
@@ -219,10 +237,10 @@ const ReNewApplication = (props) => {
     if (!EDITRENEWAL || sendBackToCitizen) {
       let formData = cloneDeep(data.tradedetils1);
 
-      formData.action = sendBackToCitizen ? "RESUBMIT" : "INITIATE",
-        formData.applicationType = sendBackToCitizen ? data?.tradedetils1?.applicationType : "RENEWAL",
-        formData.workflowCode = sendBackToCitizen ? data?.tradedetils1?.workflowCode : "DIRECTRENEWAL",
-        formData.commencementDate = commencementDate;
+      (formData.action = sendBackToCitizen ? "RESUBMIT" : "INITIATE"),
+        (formData.applicationType = sendBackToCitizen ? data?.tradedetils1?.applicationType : "RENEWAL"),
+        (formData.workflowCode = sendBackToCitizen ? data?.tradedetils1?.workflowCode : "DIRECTRENEWAL"),
+        (formData.commencementDate = commencementDate);
       formData.financialYear = financialYear;
       formData.licenseType = licenseType;
       formData.tenantId = tenantId;
@@ -241,10 +259,7 @@ const ReNewApplication = (props) => {
         .then((result, err) => {
           if (result?.Licenses?.length > 0) {
             if (result?.Licenses?.length > 0) {
-              history.replace(
-                `/digit-ui/employee/tl/response`,
-                { data: result?.Licenses }
-              );
+              history.replace(`/digit-ui/employee/tl/response`, { data: result?.Licenses });
             }
           }
         })
@@ -252,14 +267,13 @@ const ReNewApplication = (props) => {
           setShowToast({ key: "error" });
           setError(e?.response?.data?.Errors[0]?.message || null);
         });
-
     } else {
       let formData = cloneDeep(data.tradedetils1);
 
-      formData.action = "INITIATE",
-        formData.applicationType = "RENEWAL",
-        formData.workflowCode = "EDITRENEWAL",
-        formData.commencementDate = commencementDate;
+      (formData.action = "INITIATE"),
+        (formData.applicationType = "RENEWAL"),
+        (formData.workflowCode = "EDITRENEWAL"),
+        (formData.commencementDate = commencementDate);
       formData.financialYear = financialYear;
       formData.licenseType = licenseType;
       formData.tenantId = tenantId;
@@ -281,18 +295,17 @@ const ReNewApplication = (props) => {
           if (result?.Licenses?.length > 0) {
             let licenses = result?.Licenses?.[0];
             licenses.action = "APPLY";
-            Digit.TLService.update({ Licenses: [licenses] }, tenantId).then((response) => {
-              Digit.SessionStorage.set("EditRenewalApplastModifiedTime", response?.Licenses[0]?.auditDetails?.lastModifiedTime);
-              if (response?.Licenses?.length > 0) {
-                history.replace(
-                  `/digit-ui/employee/tl/response`,
-                  { data: response?.Licenses }
-                );
-              }
-            }).catch((e) => {
-              setShowToast({ key: "error" });
-              setError(e?.response?.data?.Errors[0]?.message || null);
-            });
+            Digit.TLService.update({ Licenses: [licenses] }, tenantId)
+              .then((response) => {
+                Digit.SessionStorage.set("EditRenewalApplastModifiedTime", response?.Licenses[0]?.auditDetails?.lastModifiedTime);
+                if (response?.Licenses?.length > 0) {
+                  history.replace(`/digit-ui/employee/tl/response`, { data: response?.Licenses });
+                }
+              })
+              .catch((e) => {
+                setShowToast({ key: "error" });
+                setError(e?.response?.data?.Errors[0]?.message || null);
+              });
           }
         })
         .catch((e) => {
@@ -303,27 +316,30 @@ const ReNewApplication = (props) => {
   };
 
   let configs = [];
-  newConfig.map(conf => {
+  newConfig?.map((conf) => {
     if (conf.head !== "ES_NEW_APPLICATION_PROPERTY_ASSESSMENT") {
       configs.push(conf);
     }
   });
 
-
   function checkHead(head) {
     if (head === "ES_NEW_APPLICATION_LOCATION_DETAILS") {
-      return "TL_CHECK_ADDRESS"
+      return "TL_CHECK_ADDRESS";
     } else if (head === "ES_NEW_APPLICATION_OWNERSHIP_DETAILS") {
-      return "TL_OWNERSHIP_DETAILS_HEADER"
+      return "TL_OWNERSHIP_DETAILS_HEADER";
     } else {
-      return head
+      return head;
     }
   }
 
   return (
     <div>
       <div style={{ marginLeft: "15px" }}>
-        <Header>{window.location.href.includes("employee/tl/edit-application-details") ? t("ES_TITLE_RE_NEW_TRADE_LICESE_APPLICATION") : t("ES_TITLE_RENEW_TRADE_LICESE_APPLICATION")}</Header>
+        <Header>
+          {window.location.href.includes("employee/tl/edit-application-details")
+            ? t("ES_TITLE_RE_NEW_TRADE_LICESE_APPLICATION")
+            : t("ES_TITLE_RENEW_TRADE_LICESE_APPLICATION")}
+        </Header>
       </div>
       <FormComposer
         heading={""}
@@ -333,9 +349,9 @@ const ReNewApplication = (props) => {
           return {
             ...config,
             body: config.body.filter((a) => {
-              return !a.hideInEmployee
+              return !a.hideInEmployee;
             }),
-            head: checkHead(config.head)
+            head: checkHead(config.head),
           };
         })}
         fieldStyle={{ marginRight: 0 }}

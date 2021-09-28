@@ -68,6 +68,7 @@ body {
 }
 
 .back-btn2 {
+  cursor: pointer;
   width: fit-content;
   @apply flex border-solid border-b border-text-primary font-rc text-text-primary text-text-btn ml-sm mb-md;
 

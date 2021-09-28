@@ -6,19 +6,22 @@ const GIS = ({ t, config, onSelect, formData = {},handleRemove,onSave }) => {
   const [geoLocation, setGeoLocation] = useState(formData?.address?.geoLocation || {});
   const tenants = Digit.Hooks.obps.useTenants();
   const [pincodeServicability, setPincodeServicability] = useState(null);
+  const [placeName, setPlaceName] = useState("");
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const onSkip = () => onSelect();
-  const onChange = (code, location) => {
+  const onChange = (code, location, place) => {
     setPincodeServicability(null);
     const foundValue = tenants?.find((obj) => obj.pincode?.find((item) => item == code));
     if (!foundValue) {
       setPincodeServicability("BPA_COMMON_PINCODE_NOT_SERVICABLE");
       setPincode("");
       setGeoLocation({});
+      setPlaceName("");
     } else {
       setPincode(code);
       setGeoLocation(location);
+      setPlaceName(place);
     }
   };
 
@@ -53,10 +56,11 @@ const GIS = ({ t, config, onSelect, formData = {},handleRemove,onSave }) => {
       position={geoLocation}
       //onSave={() => onSelect("address", { geoLocation, pincode })}
       //onSave={() => selectPincode(pincode)}
-      onSave={() => onSave(geoLocation,pincode)}
-      onChange={(code, location) => onChange(code, location)}
+      onSave={() => onSave(geoLocation,pincode,placeName)}
+      onChange={(code, location, place) => onChange(code, location, place)}
       disabled={pincode === ""}
       forcedError={t(pincodeServicability)}
+      isPlaceRequired={true}
     />
     </div>
     </div>
