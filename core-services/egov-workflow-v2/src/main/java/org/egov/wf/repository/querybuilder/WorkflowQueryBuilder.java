@@ -262,10 +262,9 @@ public class WorkflowQueryBuilder {
         List<String> tenantSpecificStatus = criteria.getTenantSpecifiStatus();
         StringBuilder with_query_builder = new StringBuilder(with_query);
         log.info("--config.getAssignedOnly()"+config.getAssignedOnly());
-        log.info("--CollectionUtils.isEmpty(tenantSpecificStatus)"+!CollectionUtils.isEmpty(tenantSpecificStatus));
+        log.info("--CollectionUtils.isEmpty(tenantSpecificStatus)"+CollectionUtils.isEmpty(tenantSpecificStatus));
         log.info("criteria.getTenantId()----->>>>>"+criteria.getTenantId());
         if(!config.getAssignedOnly() && !CollectionUtils.isEmpty(tenantSpecificStatus)){
-            log.info("----tenantSpecificStatus--->>>>"+tenantSpecificStatus.stream().collect(Collectors.joining(",")));
             String clause = " AND ((id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?)" +
                     " AND pi_outer.tenantid = ? ) {{OR_CLUASE_PLACEHOLDER}} )";
 
@@ -281,8 +280,18 @@ public class WorkflowQueryBuilder {
             preparedStmtList.add(criteria.getAssignee());
             preparedStmtList.add(criteria.getTenantId());
         }
-
+        
+        log.info("criteria.getAssignee()----->>>>>"+criteria.getAssignee());
+        
+        List<String> statusesIrrespectiveOfTenant = criteria.getStatusesIrrespectiveOfTenant();
+        if (!CollectionUtils.isEmpty(statusesIrrespectiveOfTenant)) {
+            log.info("----statusesIrrespectiveOfTenant--->>>>"+statusesIrrespectiveOfTenant.stream().collect(Collectors.joining(",")));
+            with_query_builder.append(" and pi_outer.status IN (").append(createQuery(statusesIrrespectiveOfTenant)).append(")");
+            addToPreparedStatement(preparedStmtList, statusesIrrespectiveOfTenant);
+        }
+        
         if(!StringUtils.isEmpty(criteria.getBusinessService())){
+            log.info("criteria.getBusinessService()----->>>>>"+criteria.getBusinessService());
             with_query_builder.append(" AND pi_outer.businessservice =? ");
             preparedStmtList.add(criteria.getBusinessService());
         }
