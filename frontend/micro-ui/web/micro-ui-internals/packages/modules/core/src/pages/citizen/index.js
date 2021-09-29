@@ -41,7 +41,8 @@ const Home = ({stateInfo, userDetails, CITIZEN, cityDetails, mobileView, handleU
         <div className={`main center-container mb-25`}>
             <Switch>
                 <Route exact path={path}>
-                    <CitizenHome />
+                    {/* <CitizenHome /> */}
+                    <AppHome userType="citizen" modules={modules} />
                 </Route>
 
                 <Route exact path={`${path}/select-language`}>
