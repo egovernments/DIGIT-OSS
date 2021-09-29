@@ -24,6 +24,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   //const { isLoading, data: citymodules } = Digit.Hooks.obps.useMDMS(stateId, "tenant", ["citymodule"]);
   let [cities, setcitiesopetions] = useState(allCities);
   let validation = { };
+  let cityCode = formData?.data?.edcrDetails?.tenantId;
   formData = { address: { ...formData?.address } };
 
   useEffect(() => {
@@ -42,6 +43,16 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   }, [pincode]);
 
 
+  useEffect(() =>{
+
+    cities.map((city,index) => {
+      if(city.code === cityCode)
+      {
+        setSelectedCity(city);
+        sessionStorage.setItem("currentCity", JSON.stringify(city));
+      }
+    })
+  },[cities, formData?.data])
 
   useEffect(() => {
     if (cities) {

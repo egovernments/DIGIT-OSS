@@ -32,7 +32,7 @@ export const newConfig = [
           texts: {
             headerCaption: "BPA_LICENSE_DET_CAPTION",
             header: "BPA_LICENSE_DET_CAPTION",
-            cardText: "",
+            cardText: "BPA_LICENSE_DETAILS_TEXT",
             submitBarLabel: "CS_COMMON_NEXT",
           },
           nextStep: "Permanent-address",

@@ -21,6 +21,19 @@ import {
     BusinessService="BPA.NC_APP_FEE";
 
     const { data, address, owners, nocDocuments, documents, additionalDetails, subOccupancy} = value;
+    let val;
+    var i;
+    let improvedDoc = [...documents.documents];
+    improvedDoc.map((ob) => { ob["isNotDuplicate"] = true; })
+    improvedDoc.map((ob,index) => {
+      val = ob.documentType;
+      if(ob.isNotDuplicate == true)
+      for(i=index+1; i<improvedDoc.length;i++)
+      {
+        if(val === improvedDoc[i].documentType)
+        improvedDoc[i].isNotDuplicate=false;
+      }
+    })
     const { data:datafromAPI, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId,value?.data?.scrutinyNumber, {
         enabled: true
       })
@@ -267,13 +280,14 @@ import {
             style={{ width: "100px", display: "inline" }}
             onClick={() => routeTo(`${routeLink}/document-details`)}
           />
-        {documents?.documents.map((doc, index) => (
+        {improvedDoc.map((doc, index) => (
           <div key={index}>
-          <CardSectionHeader>{t(doc?.documentType)}</CardSectionHeader>
+         {doc.isNotDuplicate && <div><CardSectionHeader>{t(doc?.documentType)}</CardSectionHeader>
           <StatusTable>
           <OBPSDocument value={value} Code={doc?.documentType} index={index}/> 
           <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
           </StatusTable>
+          </div>}
           </div>
         ))}
       </Card>

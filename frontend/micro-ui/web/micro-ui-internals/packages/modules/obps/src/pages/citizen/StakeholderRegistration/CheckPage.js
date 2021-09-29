@@ -101,7 +101,7 @@ import {
     <Row className="border-none" text={t(formData?.LicneseDetails?.PermanentAddress)} />
     </Card>
     <Card>
-    <CardHeader>{t(`BPA_LICENSEE_CORRESPONDENCE_LABEL`)}</CardHeader>
+    <CardHeader>{t(`BPA_COMMUNICATION_ADDRESS_HEADER_DETAILS`)}</CardHeader>
     <LinkButton
             label={
             <div>
