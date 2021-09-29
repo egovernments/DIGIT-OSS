@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, CheckBox, LinkButton, Loader, Toast, SearchIcon } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, CheckBox, LinkButton, Loader, Toast, SearchIcon, DeleteIcon } from "@egovernments/digit-ui-react-components";
 import { stringReplaceAll, getPattern, convertDateTimeToEpoch, convertDateToEpoch } from "../utils";
 import Timeline from "../components/Timeline";
 import cloneDeep from "lodash/cloneDeep";
@@ -35,6 +35,11 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
             }
         })
     }, [fields])
+
+    useEffect(() => {
+        const values = cloneDeep(fields);
+        if (ownershipCategory && !ismultiple && values?.length > 1) setFeilds([values[0]]);
+    }, [ownershipCategory])
 
     const { isLoading, data: ownerShipCategories } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["OwnerShipCategory"]);
     const { data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
@@ -321,17 +326,9 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                         return (
                             <div key={`${field}-${index}`}>
                                 <div style={{ border: "solid", borderRadius: "5px", padding: "10px", paddingTop: "20px", marginTop: "10px", borderColor: "#f3f3f3", background: "#FAFAFA" }}>
-                                    <CardLabel style={ismultiple ? { marginBottom: "-15px" } : {}}>{`${t("CORE_COMMON_MOBILE_NUMBER")} *`}</CardLabel>
+                                    <CardLabel style={{ marginBottom: "-15px" }}>{`${t("CORE_COMMON_MOBILE_NUMBER")} *`}</CardLabel>
                                     {ismultiple && <LinkButton
-                                        label={
-                                            <div >
-                                                <span>
-                                                    <svg style={{ float: "right", position: "relative", bottom: "5px" }} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M1 16C1 17.1 1.9 18 3 18H11C12.1 18 13 17.1 13 16V4H1V16ZM14 1H10.5L9.5 0H4.5L3.5 1H0V3H14V1Z" fill={!(fields.length == 1) ? "#494848" : "#FAFAFA"} />
-                                                    </svg>
-                                                </span>
-                                            </div>
-                                        }
+                                        label={ <DeleteIcon style={{ float: "right", position: "relative", bottom: "5px" }} fill={!(fields.length == 1) ? "#494848" : "#FAFAFA"}/>}
                                         style={{ width: "100px", display: "inline", background: "black" }}
                                         onClick={(e) => handleRemove(index)}
                                     />}
