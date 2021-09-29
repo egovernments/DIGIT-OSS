@@ -22,5 +22,6 @@ public class BpaConstants {
 	public static final String CITIZEN = "CITIZEN";
 	public static final String USER_ROLES = "userRoles";
 	public static final String USER_UUID = "userUUID";
+	public static final String BPAREG = "BPAREG";
 
 }

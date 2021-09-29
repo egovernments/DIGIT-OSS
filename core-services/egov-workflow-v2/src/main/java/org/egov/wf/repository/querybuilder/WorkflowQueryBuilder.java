@@ -1,5 +1,10 @@
 package org.egov.wf.repository.querybuilder;
 
+import static java.util.Objects.isNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.wf.config.WorkflowConfig;
@@ -9,12 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import static java.util.Objects.isNull;
 
 @Component
 public class WorkflowQueryBuilder {
@@ -317,6 +316,12 @@ public class WorkflowQueryBuilder {
         if(!StringUtils.isEmpty(criteria.getBusinessService())){
             with_query_builder.append(" AND pi_outer.businessservice =? ");
             preparedStmtList.add(criteria.getBusinessService());
+        }
+        
+        List<String> statusesIrrespectiveOfTenant = criteria.getStatusesIrrespectiveOfTenant();
+        if (CollectionUtils.isEmpty(tenantSpecificStatus) && !CollectionUtils.isEmpty(statusesIrrespectiveOfTenant)) {
+            with_query_builder.append(" and pi_outer.status IN (").append(createQuery(statusesIrrespectiveOfTenant)).append(")");
+            addToPreparedStatement(preparedStmtList, statusesIrrespectiveOfTenant);
         }
 
         with_query_builder.append(" ORDER BY pi_outer.lastModifiedTime DESC ");

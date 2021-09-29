@@ -59,6 +59,9 @@ public class ProcessInstanceSearchCriteria {
 
     @JsonIgnore
     private Boolean isEscalatedCount;
+    
+    @JsonIgnore
+    private List<String> statusesIrrespectiveOfTenant;
 
 
 
