@@ -106,6 +106,7 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
         <Route path={`${path}/event/:id`}>
           <EmployeeEventDetails />
         </Route>
+        <Route path={`${path}/documents/inbox/details/:id`} component={(props) => <DocumentDetails {...props} />} />
         <Route path={`${path}/documents/response`} component={(props) => <DocumentResponse {...props} />} />
         <Route path={`${path}/documents/update`} component={(props) => <DocUpdate {...props} />} />
         <Route path={`${path}/documents/update-response`} component={(props) => <DocUpdateResponse {...props} />} />

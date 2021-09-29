@@ -11,7 +11,7 @@ import Filter from "./Filter";
 
 const getDocumentDetailsPath = (document) => {
   return {
-    pathname: `inbox/details/${document.id}`,
+    pathname: `inbox/details/${document.name}`,
     state: { details: document }
   }
 
