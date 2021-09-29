@@ -17,14 +17,14 @@
             @apply text-center;
             .ChildOptionImageWrapper{
                 margin: auto !important;
-                background: rgba(244, 119, 56, 0.12);
+                background: #9370db;
                 mix-blend-mode: normal;
                 padding-top: 14px;
                 @apply h-12 w-12 rounded-full cursor-pointer;
                 svg{
                     height: 20px;
                     width: 20px;
-                    fill: #F47738;
+                    fill: #9370db;
                     margin: auto;
                 }
             }

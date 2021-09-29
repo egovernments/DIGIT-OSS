@@ -3125,7 +3125,7 @@ img, video {
     .topbar .right svg {
       display: inline; }
     .topbar .right .user-img-txt {
-      background: #f47738;
+      background: #9370db;
       padding: 10px 15px;
       border-radius: 50%;
       color: #fff;
@@ -3333,8 +3333,8 @@ img, video {
     .filters-wrapper .switch-wrapper .radio-switch {
       display: none; }
       .filters-wrapper .switch-wrapper .radio-switch:checked ~ label {
-        border-color: #f47738;
-        color: #f47738; }
+        border-color: #9370db;
+        color: #9370db; }
     .filters-wrapper .switch-wrapper label {
       border: 1px solid;
       padding: 6px 10px;
@@ -3380,7 +3380,7 @@ img, video {
   .clearText {
     display: block;
     text-align: right;
-    color: #f47738;
+    color: #9370db;
     margin-top: 20px;
     margin-left: 10px; } }
 
@@ -3530,7 +3530,7 @@ img, video {
 .showMore {
   text-align: right;
   cursor: pointer;
-  color: #f47738; }
+  color: #9370db; }
 
 @media print {
   .page-break {
@@ -4051,8 +4051,8 @@ img, video {
     border-radius: 50%;
     text-align: center; }
   .timeline-container .active {
-    background-color: #f47738;
-    border-color: #f47738; }
+    background-color: #9370db;
+    border-color: #9370db; }
 
 .PageBasedInputWrapper .SubmitBar {
   z-index: 60;
@@ -4129,7 +4129,7 @@ img, video {
       text-align: center; }
       .CardBasedOptions .mainContent .CardBasedOptionsMainChildOption .ChildOptionImageWrapper {
         margin: auto !important;
-        background: rgba(244, 119, 56, 0.12);
+        background: #9370db;
         mix-blend-mode: normal;
         padding-top: 14px;
         height: 3rem;
@@ -4139,7 +4139,7 @@ img, video {
         .CardBasedOptions .mainContent .CardBasedOptionsMainChildOption .ChildOptionImageWrapper svg {
           height: 20px;
           width: 20px;
-          fill: #f47738;
+          fill: #9370db;
           margin: auto; }
 
 @media (min-width: 780px) {
@@ -4218,7 +4218,7 @@ img, video {
     float: right;
     margin-top: 12px; }
     .employee .topbar .right .user-img-txt {
-      background: #f47738;
+      background: #9370db;
       padding: 10px 15px;
       border-radius: 50%;
       color: #fff;
@@ -4268,7 +4268,7 @@ img, video {
     padding: 0 20px;
     margin-bottom: 32px; }
     .citizen .sidebar .actions.active, .employee .sidebar .actions.active {
-      border-right: 4px solid #f47738;
+      border-right: 4px solid #9370db;
       padding-right: 16px; }
 
 .citizen .wrapperStyles, .employee .wrapperStyles {
@@ -4370,26 +4370,6 @@ img, video {
     --text-opacity:1;
     color: #c8602b;
     color: rgba(200, 96, 43, var(--text-opacity)); }
-
-.RightMostTopBarOptions {
-  display: inline-block;
-  float: right; }
-  .RightMostTopBarOptions .EventNotificationWrapper {
-    position: relative;
-    cursor: pointer; }
-    .RightMostTopBarOptions .EventNotificationWrapper span {
-      top: -10px;
-      right: -10px;
-      position: absolute;
-      --bg-opacity:1;
-      background-color: #d4351c;
-      background-color: rgba(212, 53, 28, var(--bg-opacity));
-      height: 1.25rem;
-      width: 1.25rem;
-      border-radius: 9999px;
-      text-align: center; }
-      .RightMostTopBarOptions .EventNotificationWrapper span p {
-        line-height: 20px; }
 
 @media (min-width: 640px) {
   .employee .ground-container {
@@ -4858,7 +4838,7 @@ img, video {
         background-color: #fff;
         background-color: rgba(255, 255, 255, var(--bg-opacity)); }
         .inboxLinks .header .logo svg path {
-          fill: #f47738; }
+          fill: #9370db; }
     .inboxLinks .body {
       margin-left: 0; }
   .inbox-container {
@@ -5085,7 +5065,7 @@ img, video {
     margin-left: 8px; }
 
 .fill-path-primary-main path {
-  fill: #f47738; }
+  fill: #9370db; }
 
 .obps-search {
   margin: 8px; }
@@ -5160,7 +5140,7 @@ img, video {
     color: #1d70b8; }
 
 .clear-search-label {
-  color: #f47738;
+  color: #9370db;
   cursor: pointer; }
 
 .search-submit-bar {
@@ -5178,7 +5158,7 @@ img, video {
   -ms-flex-align: center;
   align-items: center; }
   .application-details-link-button .download-button {
-    color: #f47738;
+    color: #9370db;
     margin-left: 8px; }
 
 .response-download-button {
@@ -5187,11 +5167,11 @@ img, video {
   display: flex;
   margin-bottom: 8px; }
   .response-download-button .download-button {
-    color: #f47738;
+    color: #9370db;
     margin-left: 8px; }
 
 .check-page-link-button {
-  color: #f47738 !important; }
+  color: #9370db !important; }
 
 .pt-application-download-btn {
   display: -webkit-box;
@@ -5218,14 +5198,14 @@ img, video {
   display: flex;
   grid-gap: 10px;
   gap: 10px;
-  color: #f47738;
+  color: #9370db;
   cursor: pointer;
   font-weight: 500;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content; }
   .primary-label-btn svg {
-    fill: #f47738; }
+    fill: #9370db; }
 
 .primaryColor {
   color: #0b0c0c !important; }
