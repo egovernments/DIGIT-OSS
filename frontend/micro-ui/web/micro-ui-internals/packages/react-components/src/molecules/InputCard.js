@@ -27,8 +27,8 @@ const InputCard = ({
   return (
     <Card style={cardStyle}>
       {texts.headerCaption && <CardCaption>{t(texts.headerCaption)}</CardCaption>}
-      <CardHeader>{t(texts.header)}</CardHeader>
-      <CardText>{t(texts.cardText)}</CardText>
+      {texts?.header && <CardHeader>{t(texts.header)}</CardHeader>}
+      {texts?.cardText && <CardText>{t(texts.cardText)}</CardText>}
       {children}
       {texts.submitBarLabel ?  <SubmitBar disabled={isDisable} submit={submit} label={t(texts.submitBarLabel)} onSubmit={onNext} /> : null }
       {texts.skipText ? <LinkButton label={t(texts.skipText)} onClick={onSkip} /> : null}

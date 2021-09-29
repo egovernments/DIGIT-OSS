@@ -10,7 +10,7 @@ const Home = () => {
     const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code
     const { data: { stateInfo } = {}, isLoading } = Digit.Hooks.useStore.getInitData()
 
-    const { data: EventsData, isLoading: EventsDataLoading } = Digit.Hooks.useEvents({tenantId})
+    const { data: EventsData, isLoading: EventsDataLoading } = Digit.Hooks.useEvents({tenantId, variant: "whats-new"})
     // if(!Digit.UserService?.getUser()?.access_token){
     //     history.push(`/digit-ui/citizen/login?from=${encodeURIComponent(window.location.pathname + window.location.search)}`)
     // }
@@ -51,7 +51,8 @@ const Home = () => {
                 Icon: <OBPSIcon />,
                 onClick: () => history.push("/digit-ui/citizen/obps-home")
             }
-        ]
+        ],
+        styles: { display: "flex", flexWrap: "wrap",  justifyContent: "flex-start", width: "100%"}
     }
     const allInfoAndUpdatesProps = {
         header: t("CS_COMMON_DASHBOARD_INFO_UPDATES"),
@@ -78,7 +79,8 @@ const Home = () => {
                 name: t("CS_COMMON_HELP"),
                 Icon: <HelpIcon/>
             }
-        ]
+        ],
+        styles: { display: "flex", flexWrap: "wrap",  justifyContent: "flex-start", width: "100%"}
     }
 
     return isLoading ? <Loader/> : <div className="HomePageWrapper">

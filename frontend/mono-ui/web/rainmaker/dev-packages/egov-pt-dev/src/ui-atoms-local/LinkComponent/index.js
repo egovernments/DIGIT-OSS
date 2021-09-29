@@ -8,7 +8,7 @@ class LinkComponent extends Component {
 
 
   render() {
-    const { warningPopup, prepareFinalObject } = this.props;
+    const { warningPopup, prepareFinalObject,showPopup } = this.props;
     return (showPopup ?<WarningPopup
       open={showPopup}
       link={warningPopup.link}
@@ -19,9 +19,12 @@ class LinkComponent extends Component {
 }
 
 const mapStateToProps = (state, ownprops) => {
-
-  let warningPopup = get(state.screenConfiguration.preparedFinalObject, "pt-warning-popup", {});
-  let showPopup = get(state.screenConfiguration.preparedFinalObject, "pt-warning-popup.showPopup", {});
+  
+  const {screenConfiguration}=state;
+  const {preparedFinalObject}=screenConfiguration;
+  const warningPopup=preparedFinalObject['pt-warning-popup'] || {};
+  const {showPopup}=warningPopup;
+  
 
   return { warningPopup,showPopup };
 };

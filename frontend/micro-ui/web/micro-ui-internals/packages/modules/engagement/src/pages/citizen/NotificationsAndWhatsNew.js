@@ -1,5 +1,5 @@
 import { Header, Loader, WhatsNewCard, OnGroundEventCard } from "@egovernments/digit-ui-react-components"
-import React, {useEffect} from "react"
+import React, { useEffect, useCallback } from "react"
 import { useTranslation } from "react-i18next"
 import { Redirect, useLocation, useHistory } from "react-router-dom"
 
@@ -9,11 +9,15 @@ const NotificationsAndWhatsNew = ({variant, parentRoute}) => {
     const history = useHistory()
 
     const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code
-    const { data:{ unreadCount: preVisitUnseenNotificationCount } = {}, isSuccess: preVisitUnseenNotificationCountLoaded } = Digit.Hooks.useNotificationCount({tenantId}, {
+    const { data:{ unreadCount: preVisitUnseenNotificationCount } = {}, isSuccess: preVisitUnseenNotificationCountLoaded, refetch } = Digit.Hooks.useNotificationCount({tenantId, config:{
         enabled: !!Digit.UserService?.getUser()?.access_token,
-      })
+      }})
 
     const { mutate, isSuccess } = Digit.Hooks.useClearNotifications()
+
+    useEffect(() => {
+        isSuccess ? refetch() : false
+    }, [isSuccess])
 
     useEffect(() => preVisitUnseenNotificationCount && tenantId ? mutate({tenantId}) : null ,[tenantId, preVisitUnseenNotificationCount])
 

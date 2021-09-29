@@ -9,7 +9,9 @@ const DocumentNotificationTable = ({
   onSearch,
   getCellProps,
   pageSizeLimit,
-  totalRecords
+  totalRecords,
+  onSort,
+  sortParams
 }) => {
   return (
     <Table
@@ -23,6 +25,8 @@ const DocumentNotificationTable = ({
       pageSizeLimit={pageSizeLimit}
       getCellProps={getCellProps}
       totalRecords={totalRecords}
+      onSort={onSort}
+      sortParams={sortParams}
     />
   )
 }

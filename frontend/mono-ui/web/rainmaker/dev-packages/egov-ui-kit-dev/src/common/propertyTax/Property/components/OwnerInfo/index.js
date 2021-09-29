@@ -433,6 +433,8 @@ class OwnerInfo extends Component {
                         {ownerItem && <PropertyInfoCard items={ownerItem.items} additionalKey={{
                           key: getTranslatedLabel("PT_OWNERSHIP_INFO_MOBILE_NO", localizationLabelsData), tenantId: properties.tenantId,
                           key1: getTranslatedLabel("PT_FORM3_ALT_MOBILE_NO", localizationLabelsData), 
+                          key2: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData), 
+                          key3: getTranslatedLabel("PT_OWNERSHIP_INFO_EMAIL_ID", localizationLabelsData), 
                           propertyId: properties.propertyId,
                           updateNumberConfig:updateNumberConfig
                         }} ownerInfo={ownerInfo} header={header} showEditNumber={viewHistory || ownershipTransfer}  editIcon={editIcon}></PropertyInfoCard>}

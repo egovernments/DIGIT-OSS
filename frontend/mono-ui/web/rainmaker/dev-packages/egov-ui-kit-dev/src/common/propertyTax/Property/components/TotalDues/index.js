@@ -29,7 +29,8 @@ const labelStyle = {
 class TotalDues extends React.Component {
   state = {
     url: "", invalidNumber: "",
-    showWarning: false
+    showWarning: false,
+    isAlternate:false
   };
   onClickAction = async (consumerCode, tenantId) => {
     this.setState({
@@ -48,12 +49,18 @@ class TotalDues extends React.Component {
     owners && owners.map(owner => {
       if (process.env.REACT_APP_NAME !== "Citizen") {
         if ((owner.mobileNumber == updateNumberConfig.invalidNumber) || !owner.mobileNumber.match(updateNumberConfig['invalidPattern'])) {
-          this.setState({ showWarning: true, invalidNumber: owner.mobileNumber });
-          returnValue = false
+          this.setState({ showWarning: true, invalidNumber: owner.mobileNumber,isAlternate:false });
+          returnValue = false;
+        }else if(owner.alternatemobilenumber && ((owner.alternatemobilenumber == updateNumberConfig.invalidNumber) || !owner.alternatemobilenumber.match(updateNumberConfig['invalidPattern']))) {
+          this.setState({ showWarning: true, invalidNumber: owner.alternatemobilenumber,isAlternate:true });
+          returnValue = false;
         }
       } else {
         if (((owner.mobileNumber == updateNumberConfig.invalidNumber) || !owner.mobileNumber.match(updateNumberConfig['invalidPattern']) && owner.mobileNumber == JSON.parse(getUserInfo()).mobileNumber)) {
-          this.setState({ showWarning: true, invalidNumber: owner.mobileNumber });
+          this.setState({ showWarning: true, invalidNumber: owner.mobileNumber,isAlternate:false  });
+          returnValue = false;
+        }else if (owner.alternatemobilenumber !=null && ((owner.alternatemobilenumber == updateNumberConfig.invalidNumber) || !owner.alternatemobilenumber.match(updateNumberConfig['invalidPattern']) && owner.alternatemobilenumber == JSON.parse(getUserInfo()).mobileNumber)) {
+          this.setState({ showWarning: true, invalidNumber: owner.alternatemobilenumber ,isAlternate:true });
           returnValue = false;
         }
       }
@@ -111,6 +118,7 @@ class TotalDues extends React.Component {
             tenantId={properties.tenantId}
             propertyId={properties.propertyId}
             updateNumberConfig={updateNumberConfig}
+            isAlternate={this.state.isAlternate}
           >
           </UpdateMobile>
         </div>

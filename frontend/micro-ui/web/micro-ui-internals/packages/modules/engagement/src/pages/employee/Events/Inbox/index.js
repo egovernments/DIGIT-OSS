@@ -4,7 +4,8 @@ import { format, isValid } from "date-fns";
 import { Header } from "@egovernments/digit-ui-react-components";
 import DesktopInbox from "../../../../components/Events/DesktopInbox";
 import MobileInbox from "../../../../components/Events/MobileInbox";
-const Inbox = ({ tenants }) => {
+
+const Inbox = ({ tenants, parentRoute }) => {
   const { t } = useTranslation()
   Digit.SessionStorage.set("ENGAGEMENT_TENANTS", tenants);
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -61,6 +62,13 @@ const Inbox = ({ tenants }) => {
     ]
   }
 
+  const links = [
+    {
+      text: t("ES_TITLE_NEW_EVENTS"),
+      link: "/digit-ui/employee/engagement/event/inbox/new-event",
+    }
+  ]
+
   if (isMobile) {
     return (
       <MobileInbox
@@ -71,6 +79,9 @@ const Inbox = ({ tenants }) => {
         onFilterChange={handleFilterChange}
         onSearch={onSearch}
         isLoading={isLoading}
+        title = {"EVENTS_EVENTS_HEADER"}
+        iconName={"calender"}
+        links={links}
       />
     )
   } 
@@ -84,6 +95,8 @@ const Inbox = ({ tenants }) => {
       <DesktopInbox
         t={t}
         data={data}
+        links={links}
+        parentRoute={parentRoute}
         searchParams={searchParams}
         onSearch={onSearch}
         globalSearch={globalSearch}
@@ -91,6 +104,9 @@ const Inbox = ({ tenants }) => {
         onFilterChange={handleFilterChange}
         pageSizeLimit={pageSize}
         totalRecords={data?.length}
+        title = {"EVENTS_EVENTS_HEADER"}
+        iconName={"calender"}
+        links={links}
       />
     </div>
   );

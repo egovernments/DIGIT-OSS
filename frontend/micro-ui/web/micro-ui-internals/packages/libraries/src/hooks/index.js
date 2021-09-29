@@ -134,6 +134,7 @@ import useBPADetailsPage from "./obps/useBPADetailsPage";
 
 import useBPAREGSearch from "./obps/useBPAREGSearch";
 import useEventInbox from "./events/useEventInbox";
+import useEventDetails from "./events/useEventDetails";
 import { useEngagementMDMS } from "./engagement/useMdms";
 import useDocSearch from "./engagement/useSearch";
 import useDocCreate from "./engagement/useCreate";
@@ -270,7 +271,9 @@ const obps = {
 const events = {
   useInbox: useEventInbox,
   useCreateEvent,
+  useEventDetails,
 };
+
 const engagement = {
   useMDMS: useEngagementMDMS,
   useDocCreate,

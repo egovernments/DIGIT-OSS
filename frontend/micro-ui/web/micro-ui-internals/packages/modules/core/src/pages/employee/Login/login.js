@@ -19,6 +19,7 @@ const Login = ({ config: propsConfig, t }) => {
       return;
     }
     Digit.UserService.setUser(user);
+    Digit.UserService.setType('employee');
     const redirectPath = location.state?.from || "/digit-ui/employee";
     history.replace(redirectPath);
   }, [user]);
@@ -30,7 +31,7 @@ const Login = ({ config: propsConfig, t }) => {
     }
     const requestData = {
       ...data,
-      userType: getUserType(),
+      userType: 'employee',
     };
     requestData.tenantId = data.city.code;
     delete requestData.city;

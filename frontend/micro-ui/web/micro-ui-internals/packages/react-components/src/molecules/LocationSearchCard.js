@@ -25,11 +25,17 @@ const LocationSearchCard = ({
   cardBodyStyle = {},
   isPTDefault,
   PTdefaultcoord,
+  isPlaceRequired,
 }) => {
   let isDisabled = false || disabled;
   const onLocationChange = (val, location) => {
     isDisabled = val ? false : true;
     onChange(val, location);
+  };
+
+  const onLocationChangewithPlace = (val, location, place) => {
+    isDisabled = val ? false : true;
+    onChange(val, location, place);
   };
 
   return (
@@ -42,7 +48,7 @@ const LocationSearchCard = ({
           {cardText}
         </CardText>
 
-        <LocationSearch onChange={onLocationChange} position={position} isPTDefault={isPTDefault} PTdefaultcoord={PTdefaultcoord} />
+        <LocationSearch onChange={isPlaceRequired?onLocationChangewithPlace:onLocationChange} position={position} isPTDefault={isPTDefault} PTdefaultcoord={PTdefaultcoord} isPlaceRequired={isPlaceRequired} />
         {forcedError && <CardLabelError>{t(forcedError)}</CardLabelError>}
       </div>
       <SubmitBar label={nextText} onSubmit={onSave} disabled={isDisabled} />
@@ -62,6 +68,7 @@ LocationSearchCard.propTypes = {
   position: PropTypes.any,
   isPTDefault: PropTypes.any,
   PTdefaultcoord: PropTypes.any,
+  isPlaceRequired: PropTypes.any,
 };
 
 LocationSearchCard.defaultProps = {
@@ -75,6 +82,7 @@ LocationSearchCard.defaultProps = {
   position: undefined,
   isPTDefault: false,
   PTdefaultcoord: {},
+  isPlaceRequired: false,
 };
 
 export default LocationSearchCard;

@@ -24,6 +24,7 @@ const SelectToDate = ({ onSelect, config, formData, register, control, errors, s
           <Controller
             control={control}
             name="toDate"
+            defaultValue={formData?.toDate}
             rules={{ required: true, validate: { isValidDate: isValidDate }}}
             render={({ onChange, value }) => <TextInput type="date" isRequired={true} onChange={onChange} value={value} />}
           />

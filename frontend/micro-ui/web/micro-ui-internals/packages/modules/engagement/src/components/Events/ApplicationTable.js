@@ -9,7 +9,8 @@ const ApplicationTable = ({
   onSearch,
   getCellProps,
   pageSizeLimit,
-  totalRecords
+  totalRecords,
+
 }) => {
   return (
     <Table
@@ -23,6 +24,7 @@ const ApplicationTable = ({
       pageSizeLimit={pageSizeLimit}
       getCellProps={getCellProps}
       totalRecords={totalRecords}
+
     />
   )
 }

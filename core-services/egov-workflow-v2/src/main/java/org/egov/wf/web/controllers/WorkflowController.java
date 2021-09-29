@@ -65,9 +65,9 @@ public class WorkflowController {
         @RequestMapping(value="/process/_search", method = RequestMethod.POST)
         public ResponseEntity<ProcessInstanceResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
                                                               @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) {
-                List<ProcessInstance> processInstances = workflowService.search(requestInfoWrapper.getRequestInfo(),criteria);
-                ProcessInstanceResponse response  = ProcessInstanceResponse.builder().processInstances(processInstances)
-                        .build();
+        List<ProcessInstance> processInstances = workflowService.search(requestInfoWrapper.getRequestInfo(),criteria);
+        Integer count = workflowService.getUserBasedProcessInstancesCount(requestInfoWrapper.getRequestInfo(),criteria);
+            ProcessInstanceResponse response  = ProcessInstanceResponse.builder().processInstances(processInstances).totalCount(count).build();
                 return new ResponseEntity<>(response,HttpStatus.OK);
         }
 
@@ -88,7 +88,8 @@ public class WorkflowController {
     public ResponseEntity<ProcessInstanceResponse> searchEscalatedApplications(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
                                                           @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) {
         List<ProcessInstance> processInstances = workflowService.escalatedApplicationsSearch(requestInfoWrapper.getRequestInfo(),criteria);
-        ProcessInstanceResponse response  = ProcessInstanceResponse.builder().processInstances(processInstances)
+        Integer count = workflowService.countEscalatedApplications(requestInfoWrapper.getRequestInfo(),criteria);
+        ProcessInstanceResponse response  = ProcessInstanceResponse.builder().processInstances(processInstances).totalCount(count)
                 .build();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }

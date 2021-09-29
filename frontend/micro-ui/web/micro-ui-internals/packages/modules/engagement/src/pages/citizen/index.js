@@ -2,8 +2,7 @@ import React from "react"
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation } from "react-router-dom";
 import { BackButton, PrivateRoute } from "@egovernments/digit-ui-react-components";
-import DocumentList from "./Documents/DocumentList";
-import NoticesAndCirculars from "./Documents/NoticesAndCirculars";
+import DocumentCategories from "./Documents/DocumentCategories";
 
 const CitizenApp = ({ path, url, userType}) => {
     const location = useLocation();
@@ -11,6 +10,8 @@ const CitizenApp = ({ path, url, userType}) => {
     const NotificationsOrWhatsNew = Digit.ComponentRegistryService.getComponent("NotificationsAndWhatsNew")
     const Events = Digit.ComponentRegistryService.getComponent("EventsListOnGround")
     const EventDetails = Digit.ComponentRegistryService.getComponent("EventDetails")
+    const Documents = Digit.ComponentRegistryService.getComponent("DocumentList")
+
     return (
       <React.Fragment>
         <BackButton>{t("CS_COMMON_BACK")}</BackButton>
@@ -32,8 +33,8 @@ const CitizenApp = ({ path, url, userType}) => {
             path={`${path}/events/details/:id`}
             component={() => <EventDetails parentRoute={path} />}
           />
-          <PrivateRoute path={`${path}/docs`} component={() => <DocumentList {...{ path }} />} />
-          <PrivateRoute path={`${path}/notice_and_circulars`} component={() => <NoticesAndCirculars {...{ path }} />} />
+          <PrivateRoute path={`${path}/docs`} component={() => <DocumentCategories t={t} {...{ path }} />} />
+          <PrivateRoute path={`${path}/documents/list/:category`} component={(props) => <Documents {...props} />} />
         </Switch>
       </React.Fragment>
     );

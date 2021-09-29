@@ -76,7 +76,7 @@ import {
               onClick={() => routeTo(`${routeLink}/license-details`)}
            />
         <StatusTable>
-          <Row className="border-none" label={t(`BPA_APPLICANT_NAME_LABEL`)} text={t(formData?.LicneseDetails?.name)} />
+          <Row className="border-none" label={t(`BPA_APPLICANT_NAME_LABEL`)} textStyle={{marginLeft:"9px"}} text={t(formData?.LicneseDetails?.name)} />
           <Row className="border-none" label={t(`BPA_APPLICANT_GENDER_LABEL`)} text={t(formData?.LicneseDetails?.gender.i18nKey)}/>
           <Row className="border-none" label={t(`BPA_OWNER_MOBILE_NO_LABEL`)} text={formData?.LicneseDetails?.mobileNumber}/>
           <Row className="border-none" label={t(`BPA_APPLICANT_EMAIL_LABEL`)} text={formData?.LicneseDetails?.email || t("CS_NA")}/>

@@ -33,7 +33,9 @@ const Documents = (props) => {
       name: data.documentName,
       description: data.description,
       category: data.docCategory,
-      filestoreId: data.document.filestoreId,
+      filestoreId: data.document.filestoreId.fileStoreId,
+      fileSize: data.document.filestoreId.fileSize,
+      fileType: data.document.filestoreId.fileType,
       documentLink: data.document.documentLink,
       tenantIds: data.ULB.map((e) => e.code),
     };
@@ -45,7 +47,7 @@ const Documents = (props) => {
   };
 
   const onActionSelect = (action) => {
-    console.log(action, "actions on action select");
+    /* console.log(action, "actions on action select"); */
     setMenu(false);
     if (action === "UPDATE") update(formData);
     else if (action === "DELETE") _delete();

@@ -29,9 +29,15 @@ const TopBar = ({
     let history = useHistory();
     const { pathname } = useLocation();
     
-    const { data:{ unreadCount: unreadNotificationCount } = {}, isSuccess: notificationCountLoaded } = Digit.Hooks.useNotificationCount({tenantId:CitizenHomePageTenantId}, {
-      enabled: !!Digit.UserService?.getUser()?.access_token
-    })
+    const conditionsToDisableNotificationCountTrigger = () => {
+      if(Digit.UserService?.getUser()?.info?.type === "EMPLOYEE") return false
+      if(!!Digit.UserService?.getUser()?.access_token) return false
+      return true
+    }
+
+    const { data:{ unreadCount: unreadNotificationCount } = {}, isSuccess: notificationCountLoaded } = Digit.Hooks.useNotificationCount({tenantId:CitizenHomePageTenantId, config:{
+      enabled: conditionsToDisableNotificationCountTrigger()
+    }})
   
     const updateSidebar = () => {
       if (!Digit.clikOusideFired) {

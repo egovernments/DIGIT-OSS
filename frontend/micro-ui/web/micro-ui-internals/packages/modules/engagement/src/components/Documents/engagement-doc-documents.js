@@ -2,8 +2,23 @@ import { CardLabel, LabelFieldPair, TextInput, UploadFile } from "@egovernments/
 import React, { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 
+
+export const getFileSize = (size) => {
+  if (size === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(size) / Math.log(k));
+  return (
+    parseFloat((size / Math.pow(k, i)).toFixed(2)) +
+    ' ' +
+    sizes[i]
+  );
+};
+
 const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, register, errors, setError, clearErrors, formState, control }) => {
   const [fileStoreId, setFileStoreId] = useState(() => formData?.[config.key]?.filestoreId);
+  const [fileSize, setFileSize] = useState('');
+  const [fileType, setFileType] = useState('');
   const [file, setFile] = useState();
   const [urlDisabled, setUrlDisabled] = useState(false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -17,6 +32,10 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
 
   const selectFile = (e, props) => {
     setFile(e.target.files[0]);
+    const size = e?.target?.files[0].size;
+    const type = e?.target?.files[0].type;
+    setFileSize(size);
+    setFileType(type);
     setProps(props);
   };
 
@@ -27,7 +46,7 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
   useEffect(() => {
     if (fileStoreId) disableUrlField();
     else setUrlDisabled(false);
-    controllerProps?.onChange?.(fileStoreId);
+    controllerProps?.onChange?.({fileStoreId, fileSize , fileType});
   }, [fileStoreId, controllerProps]);
 
   useEffect(() => {
@@ -37,7 +56,7 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
 
   const uploadFile = async () => {
     try {
-      const response = await Digit.UploadServices.Filestorage("engagement", file,Digit.ULBService.getStateId());
+      const response = await Digit.UploadServices.Filestorage("engagement", file, Digit.ULBService.getStateId());
       if (response?.data?.files?.length > 0) {
         setFileStoreId(response?.data?.files[0]?.fileStoreId);
       } else {
@@ -62,6 +81,7 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
                 onUpload={(d) => selectFile(d, props)}
                 onDelete={() => {
                   setFileStoreId(null);
+                  setFileSize(0);
                 }}
                 showHintBelow={true}
                 hintText={t("DOCUMENTS_ATTACH_RESTRICTIONS_SIZE")}
@@ -71,6 +91,7 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
               />
             )}
           />
+          {fileSize ? `${getFileSize(fileSize)}`:null}
         </div>
       </LabelFieldPair>
 

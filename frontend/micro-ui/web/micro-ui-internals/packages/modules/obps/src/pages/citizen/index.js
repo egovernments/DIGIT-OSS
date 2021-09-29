@@ -14,7 +14,8 @@ import OCBuildingPermit from "./OCBuildingPermit";
 import BpaApplicationDetail from "./BpaApplicationDetail";
 import BPASendToArchitect from "./BPASendToArchitect";
 import OCSendToArchitect from "./OCSendToArchitect";
-
+import BPASendBackToCitizen from "./BPASendBackToCitizen";
+import OCSendBackToCitizen from "./OCSendBackToCitizen";
 
 const App = ({ path }) => {
   const location = useLocation()
@@ -35,6 +36,8 @@ const App = ({ path }) => {
             <PrivateRoute path={`${path}/bpa/:id`} component={BpaApplicationDetail} />
             <PrivateRoute path={`${path}/editApplication/bpa/:tenantId/:applicationNo`} component={BPASendToArchitect} />
             <PrivateRoute path={`${path}/editApplication/ocbpa/:tenantId/:applicationNo`} component={OCSendToArchitect} />
+            <PrivateRoute path={`${path}/sendbacktocitizen/bpa/:tenantId/:applicationNo`} component={BPASendBackToCitizen} />
+            <PrivateRoute path={`${path}/sendbacktocitizen/ocbpa/:tenantId/:applicationNo`} component={OCSendBackToCitizen} />
           </Switch>
         </React.Fragment>
   )

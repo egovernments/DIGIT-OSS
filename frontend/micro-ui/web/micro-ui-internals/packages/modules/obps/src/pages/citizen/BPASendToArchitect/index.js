@@ -64,7 +64,7 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t) => {
 
   data.nocDocuments = {
     NocDetails:nocdata,
-    nocDocuments:nocdata.map(a => a.documents[0]),
+    nocDocuments:nocdata.map(a => a?.documents?.[0] || {}),
   }
 
   data?.landInfo.owners.map((owner,ind) => {

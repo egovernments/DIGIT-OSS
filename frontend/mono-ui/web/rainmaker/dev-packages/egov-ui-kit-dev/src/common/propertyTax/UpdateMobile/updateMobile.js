@@ -156,13 +156,11 @@ export default class UpdateMobile extends React.Component {
     }
 
     canShowEditOption = () => {
-        const {isAlternate}=this.props;
+        // const {isAlternate}=this.props;
         if (window.location.href.includes('/property-tax/property') || window.location.href.includes('/property-tax/my-properties/property')) {
             if (process.env.REACT_APP_NAME === "Citizen") {
                 let userInfo = JSON.parse(getUserInfo()) || {};
-                if (userInfo.mobileNumber && userInfo.mobileNumber == this.props.number && !isAlternate) {
-                    return true;
-                } else if (userInfo.alternatemobilenumber && userInfo.alternatemobilenumber == this.props.number && isAlternate) {
+                if (userInfo.mobileNumber && userInfo.mobileNumber == this.props.number ) {
                     return true;
                 } else {
                     return false;

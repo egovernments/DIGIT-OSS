@@ -1,5 +1,6 @@
 import React from "react";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
 import { Loader } from "@egovernments/digit-ui-react-components";
 import ApplicationTable from "./ApplicationTable";
 import Search from "./Search";
@@ -10,17 +11,18 @@ const GetCell = (value) => <span className="">{value}</span>;
 
 const GetStatusCell = (value) => value === "Active" ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span> 
 
-const DesktopInbox = ({ isLoading, data, t, onSearch, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords }) => {
+const DesktopInbox = ({ isLoading, data, t, onSearch, parentRoute, title, iconName, links, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords }) => {
   const columns = React.useMemo(() => {
     return [
       {
         Header: t("EVENTS_EVENT_NAME_LABEL"),
         accessor: "name",
         Cell: ({ row }) => {
+         
           return (
             <div>
               <span className="link">
-                {row.original["name"]}
+                <Link to={`${parentRoute}/event/${row.original.id}`}>{row.original["name"]}</Link>
               </span>
             </div>
           );
@@ -28,8 +30,10 @@ const DesktopInbox = ({ isLoading, data, t, onSearch, globalSearch, searchFields
       },
       {
         Header: t("EVENTS_EVENT_CATEGORY_LABEL"),
-        accessor: (row) => GetCell(row?.eventCategory ? t(`MSEVA_EVENTCATEGORIES_${row?.eventCategory}`) : ""),
-      },
+        accessor: (row) => {
+         return GetCell(row?.eventCategory ? t(`MSEVA_EVENTCATEGORIES_${row?.eventCategory}`) : "")
+        }
+        },
       {
         Header: t("EVENTS_START_DATE_LABEL"),
         accessor: (row) => row?.eventDetails?.fromDate ? GetCell(format(new Date(row?.eventDetails?.fromDate), 'dd/MM/yyyy')) : "",
@@ -50,7 +54,7 @@ const DesktopInbox = ({ isLoading, data, t, onSearch, globalSearch, searchFields
   })
 
   let result;
-
+ 
   if (isLoading) {
     result = <Loader />
   } else if (data?.length > 0) {
@@ -77,7 +81,7 @@ const DesktopInbox = ({ isLoading, data, t, onSearch, globalSearch, searchFields
   return (
     <div className="inbox-container">
       <div className="filters-container">
-        <EventLink />
+      <EventLink title={title} icon={iconName} links={links} />
         <div>
           <Filter onFilterChange={onFilterChange} searchParams={searchParams} />
         </div>

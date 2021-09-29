@@ -205,12 +205,51 @@ export const OBPSService = {
           ],
         },
       }));
+      let inspectionReport = [];
+      let checklist = [];
+      BPA?.additionalDetails?.fieldinspection_pending?.map((ob,ind) => {
+        checklist = [];
+        inspectionReport.push({
+        title: "BPA_FI_REPORT",
+        asSectionHeader: true,
+        values: [
+          { title: "BPA_FI_DATE_LABEL", value: ob.date },
+          { title: "BPA_FI_TIME_LABEL", value: ob.time },
+        ]
+      });
+      ob?.questions?.map((q,index) => {
+        checklist.push({title: q.question, value: q.value});
+      checklist.push({ title: "BPA_ENTER_REMARKS", value: q.remarks});
+    })
+      inspectionReport.push(
+        {
+          title: "BPA_CHECK_LIST_DETAILS",
+          asSectionHeader: true,
+          values: checklist,
+        });
+      inspectionReport.push({
+        title: "BPA_DOCUMENT_DETAILS_LABEL",
+        asSectionHeader: true,
+        additionalDetails: {
+          obpsDocuments: [{
+            title: "",
+            values: ob?.docs?.map(doc => ({
+              title: doc?.documentType?.replaceAll('.', '_'),
+              documentType: doc?.documentType,
+              documentUid: doc?.fileStore,
+              fileStoreId: doc?.fileStoreId,
+            }))
+          }]
+        }})
+      })
+
     const details = [
+      ...inspectionReport,
       {
         title: "BPA_BASIC_DETAILS_TITLE",
         asSectionHeader: true,
         values: [
-          { title: "BPA_BASIC_DETAILS_APP_DATE_LABEL", value: BPA?.applicationDate ? format(new Date(basicData?.applicationDate), 'dd/MM/yyyy') : '' },
+          { title: "BPA_BASIC_DETAILS_APP_DATE_LABEL", value: BPA?.applicationDate ? format(new Date(BPA?.applicationDate), 'dd/MM/yyyy') : '' },
           { title: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL", value: `WF_BPA_${edcr?.appliactionType}` },
           { title: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL", value: edcr?.applicationSubType },
           { title: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL", value: edcr?.planDetail?.planInformation?.occupancy },
@@ -306,7 +345,8 @@ export const OBPSService = {
     return {
       applicationData: BPA,
       applicationDetails: bpaFilterDetails,
-      tenantId: BPA?.tenantId
+      tenantId: BPA?.tenantId,
+      edcrDetails: edcr
     }
   }
 }

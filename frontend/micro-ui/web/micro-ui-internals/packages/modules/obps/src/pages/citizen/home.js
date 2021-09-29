@@ -93,11 +93,11 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
             links: [
                 {
                     link: `edcrscrutiny/apply`,
-                    i18nKey: t("BPA_SCRUTINY_TITLE"),
+                    i18nKey: t("BPA_PLAN_SCRUTINY_FOR_NEW_CONSTRUCTION_LABEL"),
                 },
                 {
                     link: `edcrscrutiny/oc-apply`,
-                    i18nKey: t("BPA_HOME_BUILDING_PLAN_SCRUTINY_OC_LABEL"),
+                    i18nKey: t("BPA_OC_PLAN_SCRUTINY_FOR_NEW_CONSTRUCTION_LABEL"),
                 }
             ]
         },

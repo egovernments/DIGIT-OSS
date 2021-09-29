@@ -722,6 +722,7 @@ const getDocumentTypesCriteria = (tenantId, moduleCode, type) => ({
   }
 })
 
+
 const getTradeTypeRoleCriteria = (tenantId, moduleCode, type) => ({
   type,
   details: {
@@ -1004,6 +1005,8 @@ const GetFSTPPlantInfo = (MdmsRes) => MdmsRes["FSM"].FSTPPlantInfo;
 
 const GetDocumentsTypes = (MdmsRes) => MdmsRes["BPA"].DocTypeMapping;
 
+const GetChecklist = (MdmsRes) => MdmsRes["BPA"].CheckList;
+
 const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
   switch (type) {
     case "citymodule":
@@ -1082,6 +1085,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return HRGenderType(MdmsRes);
     case "DocumentTypes":
       return GetDocumentsTypes(MdmsRes);
+    case "CheckList":
+      return GetChecklist(MdmsRes);
     default:
       return MdmsRes;
   }
