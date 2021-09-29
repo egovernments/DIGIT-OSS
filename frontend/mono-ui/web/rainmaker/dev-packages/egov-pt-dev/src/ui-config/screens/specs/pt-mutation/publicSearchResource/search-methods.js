@@ -114,6 +114,7 @@ const searchApiCall = async (state, dispatch) => {
     const UpdateNumber = get(state, "screenConfiguration.preparedFinalObject.searchScreenMdmsData.PropertyTax.UpdateNumber[0]",{});
     const querryObject = getPayload(searchScreenObject);
     try {
+      localStorage.setItem("pt-searched-locality",searchScreenObject.locality);
       const response = await getSearchResults(querryObject);
       const billResponse = await fetchBill(dispatch, response, searchScreenObject.tenantId, "PT");
       const finalResponse = getPropertyWithBillAmount(response, billResponse);

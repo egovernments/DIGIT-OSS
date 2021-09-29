@@ -133,13 +133,13 @@ export default class AlternateMobileDialog extends React.Component {
         if (result.error && result.error.fields[0] && result.error.fields[0].code == "OTP.VALIDATION_UNSUCCESSFUL") {
           this.setMessage(result.error.fields[0].code, "ERROR", false);
         } else {
-          this.updateProperty();
+          this.updateProperty(result.access_token);
         }
       })
       .catch(error => { console.log('error', error); this.hideLoading(); });
   }
 
-  updateProperty = () => {
+  updateProperty = (auth=false) => {
     var myHeaders = new Headers();
     let { property, propertyNumbers } = this.props;
     const { mobileNumber } = this.state.fields;
@@ -156,7 +156,7 @@ export default class AlternateMobileDialog extends React.Component {
     myHeaders.append("accept", "application/json, text/plain, */*");
     myHeaders.append("content-type", "application/json;charset=UTF-8");
     var raw = {
-      ...getRequestInfo(localStorage.getItem("token")),
+      ...getRequestInfo(auth?auth:localStorage.getItem("token")),
       "Property": { ...property }
     };
 
@@ -210,6 +210,7 @@ export default class AlternateMobileDialog extends React.Component {
     this.showLoading();
     fetch(`${window.location.origin}/user/oauth/token`, requestOptions)
       .then(response => response.text())
+      .then(response => JSON.parse(response))
       .then(result => {
         this.hideLoading();
         if (result.error && result.error == "invalid_request") {
@@ -217,9 +218,10 @@ export default class AlternateMobileDialog extends React.Component {
         } else if (mobNum) {
           const newFields = { ...this.state.fields };
           newFields.otp.value = "";
+          this.props.setProperty(result&&result.access_token);
           this.setState({ fields: { ...newFields }, phase: 1 });
         } else {
-          this.updateProperty();
+          this.updateProperty(result.access_token);
         }
       })
       .catch(error => { console.log('error', error); this.hideLoading(); });

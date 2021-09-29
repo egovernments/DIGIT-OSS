@@ -91,11 +91,28 @@ export default class AlternateMobile extends React.Component {
         }
     }
 
-    getProperty = async (queryParams, propertyId) => {
-        if (window && window.propertyResponse && window.propertyResponse[propertyId]) {
+    getProperty = async (queryParams, propertyId,cache=false) => {
+        if (window && window.propertyResponse && window.propertyResponse[propertyId] && !cache) {
             return window.propertyResponse[propertyId];
         } else {
-            let property = await httpRequest(`property-services/property/_search`, "search", queryParams, {});
+            let customRequestInfo ={};
+if(window.location.pathname.includes('withoutAuth')){
+    customRequestInfo={
+        apiId: "Rainmaker",
+        ver: ".01",
+        ts: "",
+        action: action,
+        did: "1",
+        key: "",
+        authToken:cache?cache:null
+      };
+      if(!cache){
+        queryParams.push({ key: "locality", value: localStorage.getItem("pt-searched-locality") });
+      }
+    
+}
+    
+            let property = await httpRequest(`property-services/property/_search`, "search", queryParams, {},[],customRequestInfo);
             window.propertyResponse = window.propertyResponse || {};
             window.propertyResponse[propertyId] = property;
             return window.propertyResponse[propertyId];
@@ -104,6 +121,15 @@ export default class AlternateMobile extends React.Component {
 
     componentWillUnmount = () => {
         window.propertyResponse = {};
+    }
+
+    setProperty =async (auth=false)=>{
+
+        const { propertyId = "", tenantId = "" } = this.props;
+        let queryParams = [{ key: "propertyIds", value: propertyId },
+        { key: "tenantId", value: tenantId }]
+        const propertyResponse = await this.getProperty(queryParams, propertyId,auth);
+        this.setState({ property: propertyResponse.Properties[0] });
     }
 
     loadProperty = async () => {
@@ -139,6 +165,7 @@ export default class AlternateMobile extends React.Component {
             {open && <AlternateMobileDialog
                 open={open}
                 documents={documents}
+                setProperty={this.setProperty}
                 propertyNumbers={propertyNumbers}
                 property={property}
                 closeDialog={() => { this.toggleDialog(); }}

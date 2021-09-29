@@ -174,7 +174,7 @@ const InstitutionAuthority = ({ form, formKey, handleFieldChange, cardTitle, for
             <div className="name-address">
               <Field fieldKey="name" field={fields["name"]} handleFieldChange={handleFieldChange} disabled={disabled} />
               <Field fieldKey="mobile" field={fields["mobile"]} handleFieldChange={handleFieldChange} disabled={disabled} />
-              <Field fieldKey="mobile" field={fields["mobile"]} handleFieldChange={handleFieldChange} disabled={disabled} />
+              <Field fieldKey="alterMobile" field={fields["alterMobile"]} handleFieldChange={handleFieldChange} disabled={disabled} />
               <Field fieldKey="email" field={fields["email"]} handleFieldChange={handleFieldChange} disabled={disabled} />
             </div>
             <div className="address">
