@@ -5,7 +5,7 @@ import { Header } from "@egovernments/digit-ui-react-components";
 import DesktopInbox from "../../../../components/Events/DesktopInbox";
 import MobileInbox from "../../../../components/Events/MobileInbox";
 
-const Inbox = ({ tenants }) => {
+const Inbox = ({ tenants, parentRoute }) => {
   const { t } = useTranslation()
   Digit.SessionStorage.set("ENGAGEMENT_TENANTS", tenants);
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -96,6 +96,7 @@ const Inbox = ({ tenants }) => {
         t={t}
         data={data}
         links={links}
+        parentRoute={parentRoute}
         searchParams={searchParams}
         onSearch={onSearch}
         globalSearch={globalSearch}

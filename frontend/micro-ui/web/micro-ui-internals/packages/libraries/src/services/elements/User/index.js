@@ -21,6 +21,10 @@ export const UserService = {
   getType: () => {
     return Storage.get("userType") || "citizen";
   },
+  setType: (userType) => {
+    Storage.set("userType", userType);
+    Storage.set("user_type", userType);
+  },
   getUser: () => {
     return Digit.SessionStorage.get("User");
   },

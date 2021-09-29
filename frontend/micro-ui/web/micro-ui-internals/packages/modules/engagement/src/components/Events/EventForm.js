@@ -48,7 +48,8 @@ const EventForm = ({ onSelect, config, formData, register, control, errors }) =>
         <CardLabel className="card-label-smaller">{`${t(`EVENTS_NAME_LABEL`)} *`}</CardLabel>
         <div className="field">
           <Controller
-            render={({ onChange, ref }) => <TextInput type="text" name="name" onChange={onChange} inputRef={ref} />}
+            defaultValue={formData?.name}
+            render={({ onChange, ref, value }) => <TextInput value={value} type="text" name="name" onChange={onChange} inputRef={ref} />}
             name="name"
             rules={{ required: true }}
             control={control}
@@ -62,9 +63,9 @@ const EventForm = ({ onSelect, config, formData, register, control, errors }) =>
           <Controller
             name="eventCategory"
             control={control}
-            defaultValue={null}
+            defaultValue={formData?.category ? data?.mseva?.EventCategories.filter(category => category.code === formData?.category)?.[0] : null}
             rules={{ required: true }}
-            render={({ onChange, ref }) => <Dropdown inputRef={ref} option={data?.mseva?.EventCategories} optionKey="code" t={t} select={onChange} />}
+            render={({ onChange, ref, value }) => <Dropdown inputRef={ref} option={data?.mseva?.EventCategories} optionKey="code" t={t} select={onChange} selected={value} />}
           />
           {errors && errors['eventCategory'] && <CardLabelError>{t(`EVENTS_CATEGORY_ERROR_REQUIRED`)}</CardLabelError>}
         </div>

@@ -11,6 +11,7 @@ import EngagementDocCategory from "./components/Documents/engagement-doc-categor
 import EngagementDocDescription from "./components/Documents/engagement-doc-description";
 import EngagementDocUploadDocument from "./components/Documents/engagement-doc-documents";
 import NewEvent from "./pages/employee/Events/NewEvent";
+import EditEvent from "./pages/employee/Events/EditEvent";
 import Response from "./pages/employee/Events/NewEvent/Response";
 import Inbox from "./pages/employee/Events/Inbox";
 import EventForm from "./components/Events/EventForm";
@@ -18,6 +19,7 @@ import SelectEventGeolocation from "./components/Events/SelectGeoLocation";
 import SelectToDate from "./components/Events/SelectToDate";
 import NotificationsAndWhatsNew from "./pages/citizen/NotificationsAndWhatsNew";
 import EventsListOnGround from "./pages/citizen/EventsListOnGround";
+import EmployeeEventDetails from "./pages/employee/Events/EventDetails";
 import CitizenApp from "./pages/citizen";
 import EventDetails from "./pages/citizen/EventsListOnGround/EventDetails";
 import DocumenetCreate from "./pages/employee/Documents/documents-create";
@@ -46,6 +48,11 @@ const EventsBreadCrumb = ({ location }) => {
       path: "/digit-ui/employee/event/inbox/new-event",
       content: t("ES_EVENT_NEW_EVENT"),
       show: location.pathname.includes("event/inbox/new-event") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/event/edit-event",
+      content: t("ES_EVENT_EDIT_EVENT"),
+      show: location.pathname.includes("event/edit-event") ? true : false,
     },
     {
       path: "/digit-ui/employee/event/response",
@@ -87,13 +94,18 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
       <Switch>
         <Route exact path={`${path}/documents/inbox/new-doc`} component={() => <DocumenetCreate {...{ path }} />} />
         <Route path={`${path}/event/inbox`} exact>
-          <Inbox tenants={tenants} />
+          <Inbox tenants={tenants} parentRoute={path} />
         </Route>
+        <Route path={`${path}/event/response`} component={(props) => <Response {...props} />} />
         <Route path={`${path}/event/inbox/new-event`}>
           <NewEvent />
         </Route>
-        <Route path={`${path}/event/response`} component={(props) => <Response {...props} />} />
-        <Route path={`${path}/documents/inbox/details/:id`} component={(props) => <DocumentDetails {...props} />} />
+        <Route path={`${path}/event/edit-event/:id`}>
+          <EditEvent />
+        </Route>
+        <Route path={`${path}/event/:id`}>
+          <EmployeeEventDetails />
+        </Route>
         <Route path={`${path}/documents/response`} component={(props) => <DocumentResponse {...props} />} />
         <Route path={`${path}/documents/update`} component={(props) => <DocUpdate {...props} />} />
         <Route path={`${path}/documents/update-response`} component={(props) => <DocUpdateResponse {...props} />} />

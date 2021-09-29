@@ -47,6 +47,7 @@ import QA_FSM_FSTP from "./userInfo/QAFSTPO.json";
 import QA_CECOLL from "./userInfo/qa-cecoll.json";
 import QACREDITOR from "./userInfo/QACREDITOR.json";
 import QACREATOR from "./userInfo/QACREATOR.json";
+import QABPA from "./userInfo/QABPA.json";
 
 import QAFSTP from "./userInfo/fstp.json";
 import QAADMIN from "./userInfo/QAADMIN.json";
@@ -101,6 +102,7 @@ const userInfo = {
   QAPTFI,
   QAPTA,
   QAPGRCSR,
+  QABPA
 };
 
 const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "MCollect", "HRMS", "TL", "Receipts", "OBPS", "Engagement", "NOC"];

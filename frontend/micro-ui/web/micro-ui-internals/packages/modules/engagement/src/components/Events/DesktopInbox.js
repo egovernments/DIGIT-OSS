@@ -1,5 +1,6 @@
 import React from "react";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
 import { Loader } from "@egovernments/digit-ui-react-components";
 import ApplicationTable from "./ApplicationTable";
 import Search from "./Search";
@@ -10,7 +11,7 @@ const GetCell = (value) => <span className="">{value}</span>;
 
 const GetStatusCell = (value) => value === "Active" ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span> 
 
-const DesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, links, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords }) => {
+const DesktopInbox = ({ isLoading, data, t, onSearch, parentRoute, title, iconName, links, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords }) => {
   const columns = React.useMemo(() => {
     return [
       {
@@ -21,7 +22,7 @@ const DesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, links, gl
           return (
             <div>
               <span className="link">
-                {row.original["name"]}
+                <Link to={`${parentRoute}/event/${row.original.id}`}>{row.original["name"]}</Link>
               </span>
             </div>
           );
