@@ -73,9 +73,10 @@ public class BPAController {
 
 		List<BPA> bpas = bpaService.search(criteria, requestInfoWrapper.getRequestInfo());
 
-		BPAResponse response = BPAResponse.builder().BPA(bpas).responseInfo(
-				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
-				.build();
+		int count = bpaService.getBPACount(criteria, requestInfoWrapper.getRequestInfo());
+                BPAResponse response = BPAResponse.builder().BPA(bpas).responseInfo(
+                                responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true)).count(count)
+                                .build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

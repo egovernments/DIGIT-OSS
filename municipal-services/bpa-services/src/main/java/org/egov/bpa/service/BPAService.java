@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -654,4 +655,56 @@ public class BPAService {
 		}
 		document.save(fileName);
 	}
+	
+        public int getBPACount(BPASearchCriteria criteria, RequestInfo requestInfo) {
+
+            LandSearchCriteria landcriteria = new LandSearchCriteria();
+            landcriteria.setTenantId(criteria.getTenantId());
+            landcriteria.setLocality(criteria.getLocality());
+            List<String> edcrNos = null;
+            if (criteria.getMobileNumber() != null) {
+                landcriteria.setMobileNumber(criteria.getMobileNumber());
+                ArrayList<LandInfo> landInfo = landService.searchLandInfoToBPA(requestInfo, landcriteria);
+                ArrayList<String> landId = new ArrayList<String>();
+                if (landInfo.size() > 0) {
+                    landInfo.forEach(land -> {
+                        landId.add(land.getId());
+                    });
+                    criteria.setLandId(landId);
+                }
+                log.info("--->>>>LandIds when search with mobile number"+landId.stream().collect(Collectors.joining(",")));
+            } else {
+                List<String> roles = new ArrayList<>();
+                for (Role role : requestInfo.getUserInfo().getRoles()) {
+                    roles.add(role.getCode());
+                }
+                if ((criteria.tenantIdOnly() || criteria.isEmpty()) && roles.contains(BPAConstants.CITIZEN)) {
+                    UserSearchRequest userSearchRequest = new UserSearchRequest();
+                    if (criteria.getTenantId() != null) {
+                        userSearchRequest.setTenantId(criteria.getTenantId());
+                    }
+                    List<String> uuids = new ArrayList<String>();
+                    if (requestInfo.getUserInfo() != null && !StringUtils.isEmpty(requestInfo.getUserInfo().getUuid())) {
+                        uuids.add(requestInfo.getUserInfo().getUuid());
+                        criteria.setOwnerIds(uuids);
+                        criteria.setCreatedBy(uuids);
+                    }
+                    UserDetailResponse userInfo = userService.getUser(criteria, requestInfo);
+                    if (userInfo != null) {
+                        landcriteria.setMobileNumber(userInfo.getUser().get(0).getMobileNumber());
+                    }
+                    ArrayList<LandInfo> landInfos = landService.searchLandInfoToBPA(requestInfo, landcriteria);
+                    ArrayList<String> landIds = new ArrayList<String>();
+                    if (landInfos.size() > 0) {
+                        landInfos.forEach(land -> {
+                            landIds.add(land.getId());
+                        });
+                        criteria.setLandId(landIds);
+                    }
+                }
+            }
+            log.info("BPA search criteria for count"+criteria.toString());
+            return repository.getBPACount(criteria, edcrNos);
+
+        }
 }

@@ -15,7 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import jdk.internal.org.jline.utils.Log;
+import lombok.extern.slf4j.Slf4j;
+
 @Repository
+@Slf4j
 public class BPARepository {
 
 	@Autowired
@@ -69,18 +73,35 @@ public class BPARepository {
 
 	}
 
-	/**
-	 * BPA search in database
-	 *
-	 * @param criteria
-	 *            The BPA Search criteria
-	 * @return List of BPA from search
-	 */
-	public List<BPA> getBPAData(BPASearchCriteria criteria, List<String> edcrNos) {
-		List<Object> preparedStmtList = new ArrayList<>();
-		String query = queryBuilder.getBPASearchQuery(criteria, preparedStmtList, edcrNos);
-		List<BPA> BPAData = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
-		return BPAData;
-	}
+        /**
+         * BPA search in database
+         *
+         * @param criteria
+         *            The BPA Search criteria
+         * @return List of BPA from search
+         */
+        public List<BPA> getBPAData(BPASearchCriteria criteria, List<String> edcrNos) {
+                List<Object> preparedStmtList = new ArrayList<>();
+                String query = queryBuilder.getBPASearchQuery(criteria, preparedStmtList, edcrNos, false);
+                log.info("Applications query=--->>>"+query);
+                log.info("Search criteria for fetching applications--->>>"+criteria.toString());
+                List<BPA> BPAData = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+                return BPAData;
+        }
+        
+        /**
+         * BPA search count in database
+         *
+         * @param criteria
+         *            The BPA Search criteria
+         * @return count of BPA from search
+         */
+        public int getBPACount(BPASearchCriteria criteria, List<String> edcrNos) {
+                List<Object> preparedStmtList = new ArrayList<>();
+                String query = queryBuilder.getBPASearchQuery(criteria, preparedStmtList, edcrNos, true);
+                log.info("Count query=--->>>"+query);
+                int count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
+                return count;
+        }
 
 }
