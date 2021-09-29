@@ -29,6 +29,7 @@ import DocUpdateResponse from "./pages/employee/Documents/update-response";
 import DocDeleteResponse from "./pages/employee/Documents/delete-response";
 import DocumentNotification from "./pages/employee/Documents/Inbox";
 import DocumentList from './pages/citizen/Documents/DocumentList';
+import SurveyList from "./pages/citizen/CitizenSurvey/SurveyList"
 import DocumentDetails from "./components/Documents/DocumentDetails";
  
 const EventsBreadCrumb = ({ location }) => {
@@ -184,7 +185,8 @@ const componentsToRegister = {
   EventForm,
   DocumentList,
   SelectEventGeolocation,
-  SelectToDate
+  SelectToDate,
+  SurveyList
 };
 
 export const initEngagementComponents = () => {
