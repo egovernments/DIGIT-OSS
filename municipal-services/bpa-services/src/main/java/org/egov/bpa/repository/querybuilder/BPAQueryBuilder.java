@@ -29,7 +29,7 @@ public class BPAQueryBuilder {
             + "(SELECT *, DENSE_RANK() OVER (ORDER BY bpa_lastModifiedTime DESC) offset_ FROM " + "({})"
             + " result) result_offset " + "WHERE offset_ > ? AND offset_ <= ?";
     
-    private final String countWrapper = "SELECT COUNT(DISTINCT(id)) FROM ({INTERNAL_QUERY}) as bpa_count";
+    private final String countWrapper = "SELECT COUNT(DISTINCT(bpa_id)) FROM ({INTERNAL_QUERY}) as bpa_count";
 
     /**
      * To give the Search query based on the requirements.
