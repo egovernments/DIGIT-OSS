@@ -253,12 +253,17 @@ public class TLValidator {
         }       		        		
         	);
         
-        criteria.setTenantId(request.getLicenses().get(0).getTenantId());        
-        criteria.setStatus(Collections.singletonList(TLConstants.STATUS_APPROVED));
+        criteria.setTenantId(request.getLicenses().get(0).getTenantId());
+        
+        List<String> statuses = new ArrayList<String>();
+        statuses.add(TLConstants.STATUS_APPROVED);
+        statuses.add(TLConstants.STATUS_MANUALLYEXPIRED);
+
+        criteria.setStatus(statuses);
         criteria.setBusinessService(request.getLicenses().get(0).getBusinessService());
         criteria.setLicenseNumbers(licenseNumbers);
         List<TradeLicense> searchResult = tlRepository.getLicenses(criteria);
-        
+
         validateFinancialYear(request,searchResult);
         
         Map<String , TradeLicense> licenseMap = new HashMap<>();
