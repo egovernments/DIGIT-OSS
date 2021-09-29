@@ -703,8 +703,9 @@ public class BPAService {
                     }
                 }
             }
-            log.info("BPA search criteria for count"+criteria.toString());
-            return repository.getBPACount(criteria, edcrNos);
+            int count = repository.getBPACount(criteria, edcrNos);
+            log.info("Count at BPAService---->>>>"+count);
+            return count;
 
         }
 }

@@ -85,6 +85,7 @@ public class BPARepository {
                 log.info("Applications query=--->>>"+query);
                 log.info("Search criteria for fetching applications--->>>"+criteria.toString());
                 List<BPA> BPAData = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+                log.info("applications size---->>>"+BPAData.size());
                 return BPAData;
         }
         
@@ -99,7 +100,9 @@ public class BPARepository {
                 List<Object> preparedStmtList = new ArrayList<>();
                 String query = queryBuilder.getBPASearchQuery(criteria, preparedStmtList, edcrNos, true);
                 log.info("Count query=--->>>"+query);
+                log.info("Search criteria for fetching count--->>>"+criteria.toString());
                 int count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
+                log.info("Count---->>>>"+count);
                 return count;
         }
 

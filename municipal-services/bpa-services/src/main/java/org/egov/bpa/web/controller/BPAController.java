@@ -74,6 +74,7 @@ public class BPAController {
 		List<BPA> bpas = bpaService.search(criteria, requestInfoWrapper.getRequestInfo());
 
 		int count = bpaService.getBPACount(criteria, requestInfoWrapper.getRequestInfo());
+		System.out.println("Count at COntroller--->>"+count);
                 BPAResponse response = BPAResponse.builder().BPA(bpas).responseInfo(
                                 responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true)).count(count)
                                 .build();
