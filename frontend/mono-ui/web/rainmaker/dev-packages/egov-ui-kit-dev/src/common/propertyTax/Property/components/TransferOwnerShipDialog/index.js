@@ -101,9 +101,9 @@ const TransferOwnerShipDialog = (props) => {
 
           <div className="transfer-ownership-dialog-footer" style={{ marginTop: 10 }}>
             <Button
-              label={<Label buttonLabel={true} label="PT_PRINT" fontSize="16px" color="rgb(68,214,44)" padding="0" lineHeight="25px !important" labelClassName="footer-button-label" />}
-              buttonStyle={{ border: "1px solid rgb(68,214,44)", padding: 0 }}
-              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "rgb(68,214,44)" }}
+              label={<Label buttonLabel={true} label="PT_PRINT" fontSize="16px" color="rgb(44,51,125)" padding="0" lineHeight="25px !important" labelClassName="footer-button-label" />}
+              buttonStyle={{ border: "1px solid rgb(44,51,125)", padding: 0 }}
+              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "rgb(44,51,125)" }}
               className="footer-button"
               onClick={() => { printDiv() }}
             />
@@ -111,7 +111,7 @@ const TransferOwnerShipDialog = (props) => {
               label={<Label buttonLabel={true} label="PT_TRANFER_OWNERSHIP" fontSize="16px" lineHeight="25px !important" labelClassName="footer-button-label" />}
               primary={true}
               className="footer-button"
-              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "rgb(68,214,44)",lineHeight:"20px" }}
+              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "rgb(44,51,125)",lineHeight:"20px" }}
               buttonStyle={{ padding: 0 }}
               onClick={() => { navigateToRouteUrl(routeUrl) }}
             />

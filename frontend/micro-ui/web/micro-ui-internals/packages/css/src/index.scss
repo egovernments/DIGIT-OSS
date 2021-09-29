@@ -105,7 +105,7 @@
 }
 
 .clear-search-label {
-  color: #f47738;
+  color: rgb(44,51,125);
   cursor: pointer;
 }
 
@@ -118,7 +118,7 @@
   @apply flex justify-between items-center;
 
   .download-button {
-    color: #f47738;
+    color: rgb(44,51,125);
     margin-left: 8px;
   }
 }
@@ -127,13 +127,13 @@
   @apply flex mb-sm;
 
   .download-button {
-    color: #f47738;
+    color: rgb(44,51,125);
     margin-left: 8px;
   }
 }
 
 .check-page-link-button {
-  color: #f47738 !important;
+  color: rgb(44,51,125) !important;
 }
 
 .pt-application-download-btn {
@@ -156,10 +156,10 @@
   gap: 10px;
 
   svg {
-    fill: #f47738;
+    fill: rgb(44,51,125);
   }
 
-  color: #f47738;
+  color: rgb(44,51,125);
 
   cursor: pointer;
   font-weight: 500;

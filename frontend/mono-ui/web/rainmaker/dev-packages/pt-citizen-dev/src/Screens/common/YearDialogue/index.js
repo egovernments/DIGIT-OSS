@@ -88,11 +88,11 @@ class YearDialog extends Component {
               <Button
                 label={<Label label="PT_CANCEL" buttonLabel={true} color="black" />}
                 onClick={() => { closeDialogue() }}
-                labelColor="rgb(68,214,44)"
+                labelColor="rgb(44,51,125)"
                 buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }}></Button>
               <Button
                 label={<Label label="PT_OK" buttonLabel={true} color="black" />}
-                labelColor="rgb(68,214,44)"
+                labelColor="rgb(44,51,125)"
                 buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }} onClick={() => {
                   if (this.state.selectedYear !== '') {
                     this.resetForm();

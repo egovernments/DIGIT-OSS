@@ -5,13 +5,13 @@ import { Link } from "react-router-dom";
 import "./index.css";
 
 const style = { marginLeft: 10, marginTop: 2, cursor: "pointer" };
-const selStyle = { color: "rgb(68,214,44)" };
+const selStyle = { color: "rgb(44,51,125)" };
 
 const BreadCrumbs = ({ url, history }) => {
   return (
     <div className="rainmaker-displayInline" style={{ paddingLeft: 15 }}>
       <Link to="/property-tax">
-        <Icon action="action" name="home" color="rgb(68,214,44)" />
+        <Icon action="action" name="home" color="rgb(44,51,125)" />
       </Link>
       {url &&
         url.map((item, index) => {

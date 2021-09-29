@@ -465,7 +465,7 @@ const rightdiv = {
           label: {labelName : "DOWNLOAD" , labelKey :"BPA_DOWNLOAD"},
            leftIcon: "cloud_download",
           rightIcon: "arrow_drop_down",
-          props: { variant: "outlined", style: { height: "60px", color : "rgb(68,214,44)" }, className: "tl-download-button" },
+          props: { variant: "outlined", style: { height: "60px", color : "rgb(44,51,125)" }, className: "tl-download-button" },
           // menu: downloadMenu
         }
       }
@@ -479,7 +479,7 @@ const rightdiv = {
           label: {labelName : "PRINT" , labelKey :"BPA_PRINT"},
           leftIcon: "print",
           rightIcon: "arrow_drop_down",
-          props: { variant: "outlined", style: { height: "60px", color : "rgb(68,214,44)" }, className: "tl-print-button" },
+          props: { variant: "outlined", style: { height: "60px", color : "rgb(44,51,125)" }, className: "tl-print-button" },
           // menu: printMenu
         }
       }

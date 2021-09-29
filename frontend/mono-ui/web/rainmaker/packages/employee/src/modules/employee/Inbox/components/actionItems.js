@@ -39,7 +39,7 @@ const onModuleCardClick = (route, setRoute) => {
 const iconStyle = {
   width: "48px",
   height: "46.02px",
-  color: "rgb(68,214,44)",
+  color: "rgb(44,51,125)",
 };
 
 export const Boxboard = ({ data, setRoute }) => {

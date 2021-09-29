@@ -102,7 +102,7 @@ class ApplicationHistory extends Component {
                                             
                                         }}
                                     >
-                                        <Label buttonLabel={true} label='PT_VIEW_DETAILS' color="rgb(68,214,44)" fontSize="16px" height="40px" labelStyle={labelStyle} />
+                                        <Label buttonLabel={true} label='PT_VIEW_DETAILS' color="rgb(44,51,125)" fontSize="16px" height="40px" labelStyle={labelStyle} />
                                     </a>
                                 </div>
         

@@ -311,8 +311,8 @@ export const abgSearchCard = getCommonCard({
         props: {
           variant: "outlined",
           style: {
-            color: "rgb(68,214,44)",
-            border: "rgb(68,214,44) solid 1px",
+            color: "rgb(44,51,125)",
+            border: "rgb(44,51,125) solid 1px",
             borderRadius: "2px",
             width: window.innerWidth > 480 ? "80%" : "100%",
             height: "48px"
@@ -340,7 +340,7 @@ export const abgSearchCard = getCommonCard({
           variant: "contained",
           style: {
             color: "white",
-            backgroundColor: "rgb(68,214,44)",
+            backgroundColor: "rgb(44,51,125)",
             borderRadius: "2px",
             width: window.innerWidth > 480 ? "80%" : "100%",
             height: "48px"
@@ -393,7 +393,7 @@ export const mergeDownloadButton = {
             variant: "outlined", 
             style: { 
               height: "60px", 
-              backgroundColor: "rgb(68,214,44)",
+              backgroundColor: "rgb(44,51,125)",
               color: "#ffffff", 
               marginRight: 10,
               width: "368px"

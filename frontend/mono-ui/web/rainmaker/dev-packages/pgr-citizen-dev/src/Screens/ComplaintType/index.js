@@ -52,7 +52,7 @@ class ComplaintType extends Component {
     const { displayKey, id, icon } = item;
     listItem.primaryText = <Label label={displayKey} />;
     listItem.id = id;
-    listItem.leftIcon = <Icon style={customIconStyles} action="custom" name={icon} color="rgb(68,214,44)" />;
+    listItem.leftIcon = <Icon style={customIconStyles} action="custom" name={icon} color="rgb(44,51,125)" />;
     return listItem;
   };
 

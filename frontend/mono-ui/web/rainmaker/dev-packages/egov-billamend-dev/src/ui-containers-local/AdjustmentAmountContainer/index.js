@@ -26,7 +26,7 @@ const styles = (theme) => ({
       textAlign: "right",
     },
     "&:after": {
-      border: "2px solid #00BD45 !important",
+      border: "2px solid rgb(44,51,125) !important",
       height: "40px !important",
       borderRadius: "5px !important",
       padding: "0.5rem",

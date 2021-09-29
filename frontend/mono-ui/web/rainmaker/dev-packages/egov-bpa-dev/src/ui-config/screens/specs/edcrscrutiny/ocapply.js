@@ -162,7 +162,7 @@ const buildingInfoCard = getCommonCard({
         iconObj: {
           iconName: "search",
           position: "end",
-          color: "rgb(68,214,44)",
+          color: "rgb(44,51,125)",
           onClickDefination: {
             action: "condition",
             callBack: (state, dispatch, fieldInfo) => {
@@ -315,8 +315,8 @@ const buildingInfoCard = getCommonCard({
         props: {
           variant: "outlined",
           style: {
-            color: "rgb(68,214,44)",
-            border: "rgb(68,214,44) solid 1px",
+            color: "rgb(44,51,125)",
+            border: "rgb(44,51,125) solid 1px",
             borderRadius: "2px",
             width: window.innerWidth > 480 ? "80%" : "100%",
             height: "48px"
@@ -344,7 +344,7 @@ const buildingInfoCard = getCommonCard({
           variant: "contained",
           style: {
             color: "white",
-            backgroundColor: "rgb(68,214,44)",
+            backgroundColor: "rgb(44,51,125)",
             borderRadius: "2px",
             width: window.innerWidth > 480 ? "80%" : "100%",
             height: "48px"

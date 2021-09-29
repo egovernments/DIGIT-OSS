@@ -4,7 +4,7 @@ const theme = {
   backgroundColor: "#fff",
   palette: {
     primary1Color: "#00bcd1",
-    primary2Color: "rgb(68,214,44)",
+    primary2Color: "rgb(44,51,125)",
     textColor: "#5f5c62",
     canvasColor: "#F7F7F7",
     borderColor: "#e6e6e6",
@@ -13,7 +13,7 @@ const theme = {
     height: 48,
   },
   raisedButton: {
-    primaryColor: "rgb(68,214,44)",
+    primaryColor: "rgb(44,51,125)",
   },
   textField: {
     backgroundColor: "#ffffff",
@@ -27,20 +27,20 @@ const theme = {
   },
   bottomNavigation: {
     backgroundColor: "#ffffff",
-    selectedColor: "rgb(68,214,44)",
+    selectedColor: "rgb(44,51,125)",
   },
   stepper: {
     backgroundColor: 'transparent',
-    hoverBackgroundColor: "rgb(68,214,44)",
-    iconColor: "rgb(68,214,44)",
+    hoverBackgroundColor: "rgb(44,51,125)",
+    iconColor: "rgb(44,51,125)",
     hoveredIconColor: "red",
     inactiveIconColor: "red",
-    textColor: "rgb(68,214,44)",
-    disabledTextColor: "rgb(68,214,44)",
+    textColor: "rgb(44,51,125)",
+    disabledTextColor: "rgb(44,51,125)",
     connectorLineColor: "red",
   },
   radioButton: {
-    background: "rgb(68,214,44)",
+    background: "rgb(44,51,125)",
   },
 };
 

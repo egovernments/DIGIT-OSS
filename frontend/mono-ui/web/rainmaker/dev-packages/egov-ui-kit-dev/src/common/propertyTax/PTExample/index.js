@@ -29,7 +29,7 @@ class PTExample extends Component {
                     // href={require("./PT_Corporation_Notification.pdf")}
                     target="_blank"
                   >
-                    <Label label="PT_HERE_LABEL" color="rgb(68,214,44)" />
+                    <Label label="PT_HERE_LABEL" color="rgb(44,51,125)" />
                   </a>
                   <Label
                     label="PT_CORPORATION_LABEL"
@@ -40,7 +40,7 @@ class PTExample extends Component {
                     // href={require("./PT_Council_Notification.pdf")}
                     target="_blank"
                   >
-                    <Label label="PT_HERE_LABEL" color="rgb(68,214,44)" />
+                    <Label label="PT_HERE_LABEL" color="rgb(44,51,125)" />
                   </a>
                   <Label label="PT_COUNCIL_LABEL" />
                 </div>

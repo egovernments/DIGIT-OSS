@@ -11,7 +11,7 @@ module.exports = {
     colors: {
       primary: {
         light: "#F18F5E",
-        main: "rgb(68,214,44)",
+        main: "rgb(44,51,125)",
         dark: "#C8602B",
       },
       secondary: "#22394D",
@@ -25,7 +25,7 @@ module.exports = {
       },
       border: "#D6D5D4",
       "input-border": "#464646",
-      focus: "rgb(68,214,44)",
+      focus: "rgb(44,51,125)",
       error: "#D4351C",
       success: "#00703C",
       black: "#000000",
@@ -90,7 +90,7 @@ module.exports = {
     },
     boxShadow: {
       card: "0 1px 2px 0 rgba(0, 0, 0, 0.16)",
-      radiobtn: "0 0 0 5px rgb(68,214,44)",
+      radiobtn: "0 0 0 5px rgb(44,51,125)",
     },
     inset: {
       0: 0,

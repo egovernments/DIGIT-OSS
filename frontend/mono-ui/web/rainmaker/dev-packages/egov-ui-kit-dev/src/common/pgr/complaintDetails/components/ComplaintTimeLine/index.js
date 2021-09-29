@@ -38,7 +38,7 @@ const statusCommonIconStyle = {
   ...timelineIconCommonStyle,
   backgroundColor: "#ffffff",
   boxShadow: "0 2px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12)",
-  border: "solid 1px rgb(68,214,44)",
+  border: "solid 1px rgb(44,51,125)",
 };
 
 const statusResolvedIconStyle = {
@@ -66,7 +66,7 @@ const callIconStyle = {
 
 const connectorStyle = {
   display: "block",
-  border: "solid 1px rgb(68,214,44)",
+  border: "solid 1px rgb(44,51,125)",
   minHeight: "28px",
 };
 
@@ -74,12 +74,12 @@ const StatusIcon = ({ status }) => {
   switch (status) {
     case "open":
     case "pending":
-      return <Icon action="custom" name="file-plus" style={statusCommonIconStyle} color={"rgb(68,214,44)"} />;
+      return <Icon action="custom" name="file-plus" style={statusCommonIconStyle} color={"rgb(44,51,125)"} />;
     case "reassignrequested":
-      return <Icon action="custom" name="reassign-request" style={statusCommonIconStyle} color={"rgb(68,214,44)"} />;
+      return <Icon action="custom" name="reassign-request" style={statusCommonIconStyle} color={"rgb(44,51,125)"} />;
     case "assigned":
     case "re-assign":
-      return <Icon action="custom" name="file-send" style={statusCommonIconStyle} color={"rgb(68,214,44)"} />;
+      return <Icon action="custom" name="file-send" style={statusCommonIconStyle} color={"rgb(44,51,125)"} />;
     case "rejected":
       return <Icon action="content" name="clear" style={statusRejectedIconStyle} color={"#FFFFFF"} />;
     case "resolved":
@@ -547,7 +547,7 @@ class ComplaintTimeLine extends Component {
                 <TimeLine
                   stepperProps={{
                     orientation: "vertical",
-                    borderLeft: "1px solid rgb(68,214,44)",
+                    borderLeft: "1px solid rgb(44,51,125)",
                   }}
                   steps={steps}
                 />

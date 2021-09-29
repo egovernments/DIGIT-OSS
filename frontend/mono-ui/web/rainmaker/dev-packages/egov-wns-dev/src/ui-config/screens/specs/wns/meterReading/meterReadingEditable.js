@@ -740,8 +740,8 @@ export const meterReadingEditable =
                         props: {
                             variant: "outlined",
                             style: {
-                                color: "rgb(68,214,44)",
-                                borderColor: "rgb(68,214,44)",
+                                color: "rgb(44,51,125)",
+                                borderColor: "rgb(44,51,125)",
                                 width: "150px",
                                 height: "40px",
                                 margin: "15px 0px",

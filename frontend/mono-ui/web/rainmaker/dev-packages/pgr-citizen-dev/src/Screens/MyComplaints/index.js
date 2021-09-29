@@ -76,7 +76,7 @@ class MyComplaints extends Component {
                 history.push("/add-complaint");
               }}
               className="floating-button"
-              backgroundColor={"rgb(68,214,44)"}
+              backgroundColor={"rgb(44,51,125)"}
             >
               <Icon action="content" name="add" />
             </FloatingButton>

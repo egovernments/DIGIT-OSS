@@ -21,7 +21,7 @@ const buttonStyle = {
   height: "35px",
   backgroundColor: "rgb(242, 242, 242)",
   boxShadow: "none",
-  border: "1px solid rgb(68,214,44)",
+  border: "1px solid rgb(44,51,125)",
   borderRadius: "2px",
   outline: "none",
   alignItems: "right",

@@ -145,7 +145,7 @@ const downloadprintMenu = (state, dispatch, status) => {
             label: { labelName: "Download", labelKey: "BILL_DOWNLOAD" },
             leftIcon: "cloud_download",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { height: "60px", color: "rgb(68,214,44)", marginRight: "5px" }, className: "tl-download-button" },
+            props: { variant: "outlined", style: { height: "60px", color: "rgb(44,51,125)", marginRight: "5px" }, className: "tl-download-button" },
             menu: downloadMenu
           }
         }
@@ -158,7 +158,7 @@ const downloadprintMenu = (state, dispatch, status) => {
             label: { labelName: "PRINT", labelKey: "BILL_PRINT" },
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { height: "60px", color: "rgb(68,214,44)" }, className: "tl-print-button" },
+            props: { variant: "outlined", style: { height: "60px", color: "rgb(44,51,125)" }, className: "tl-print-button" },
             menu: printMenu
           }
         }

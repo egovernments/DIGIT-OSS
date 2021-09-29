@@ -240,7 +240,7 @@ ReactStars.defaultProps = {
   char: "★",
   size: 15,
   color1: "#b3b3b3",
-  color2: "rgb(68,214,44)",
+  color2: "rgb(44,51,125)",
 
   onChange: () => {},
 };

@@ -546,7 +546,7 @@ class AllComplaints extends Component {
                       />
                     }
                     style={{ marginRight: 28, width: "36%" }}
-                    backgroundColor="rgb(68,214,44)"
+                    backgroundColor="rgb(44,51,125)"
                     labelStyle={{
                       letterSpacing: 0.7,
                       padding: 0,
@@ -559,16 +559,16 @@ class AllComplaints extends Component {
                     label={
                       <Label
                         buttonLabel={true}
-                        color="rgb(68,214,44)"
+                        color="rgb(44,51,125)"
                         label="ES_MYCOMPLAINTS_CLEAR_SEARCH_BUTTON"
                       />
                     }
                     labelStyle={{
                       letterSpacing: 0.7,
                       padding: 0,
-                      color: "rgb(68,214,44)",
+                      color: "rgb(44,51,125)",
                     }}
-                    buttonStyle={{ border: "1px solid rgb(68,214,44)" }}
+                    buttonStyle={{ border: "1px solid rgb(44,51,125)" }}
                     style={{ width: "36%" }}
                     onClick={() => this.clearSearch()}
                   />
@@ -597,7 +597,7 @@ class AllComplaints extends Component {
               history.push("/create-complaint");
             }}
             className="floating-button"
-            backgroundColor="rgb(68,214,44)"
+            backgroundColor="rgb(44,51,125)"
           >
             <Icon action="content" name="add" />
           </FloatingActionButton>
@@ -696,7 +696,7 @@ class AllComplaints extends Component {
                       />
                     }
                     style={{ marginRight: 28, width: "36%" }}
-                    backgroundColor="rgb(68,214,44)"
+                    backgroundColor="rgb(44,51,125)"
                     labelStyle={{
                       letterSpacing: 0.7,
                       padding: 0,
@@ -709,16 +709,16 @@ class AllComplaints extends Component {
                     label={
                       <Label
                         buttonLabel={true}
-                        color="rgb(68,214,44)"
+                        color="rgb(44,51,125)"
                         label="ES_MYCOMPLAINTS_CLEAR_SEARCH_BUTTON"
                       />
                     }
                     labelStyle={{
                       letterSpacing: 0.7,
                       padding: 0,
-                      color: "rgb(68,214,44)",
+                      color: "rgb(44,51,125)",
                     }}
-                    buttonStyle={{ border: "1px solid rgb(68,214,44)" }}
+                    buttonStyle={{ border: "1px solid rgb(44,51,125)" }}
                     style={{ width: "36%" }}
                     onClick={() => this.clearSearch()}
                   />

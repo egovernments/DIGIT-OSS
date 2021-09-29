@@ -9,7 +9,7 @@ import { withStyles } from "@material-ui/core/styles";
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
-    color: "rgb(68,214,44)"
+    color: "rgb(44,51,125)"
   },
   leftIcon: {
     marginRight: theme.spacing.unit
@@ -91,7 +91,7 @@ class TastStatusContainer extends React.Component {
                         <LabelContainer
                           labelName="VIEW HISTORY"
                           labelKey="TL_VIEW_HISTORY"
-                          color="rgb(68,214,44)"
+                          color="rgb(44,51,125)"
                         />
                       </Button>
                     </Grid>

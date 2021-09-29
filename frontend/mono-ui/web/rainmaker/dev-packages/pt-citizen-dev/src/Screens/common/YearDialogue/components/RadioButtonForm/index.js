@@ -20,8 +20,8 @@ const RadioButtonForm = ({ label, form, handleFieldChange, selectedYear, handleR
     //   }}
     //   className="year-range-button"
     //   label={label}
-    //   labelColor="rgb(68,214,44)"
-    //   buttonStyle={{ borderRadius: "50px", border: "1px solid rgb(68,214,44)" }}
+    //   labelColor="rgb(44,51,125)"
+    //   buttonStyle={{ borderRadius: "50px", border: "1px solid rgb(44,51,125)" }}
     // />
     <div className="property-amount-radio">
       <div className="amt-radio" style={{ padding: '5px' }}>

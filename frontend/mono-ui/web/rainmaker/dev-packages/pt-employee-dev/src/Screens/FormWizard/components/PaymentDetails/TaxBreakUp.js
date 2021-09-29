@@ -135,7 +135,7 @@ const AdditionalDetails = ({
                   labelStyle={{
                     fontSize: "20px",
                     fontWeight: 500,
-                    color: "rgb(68,214,44)"
+                    color: "rgb(44,51,125)"
                   }}
                   label={
                     totalAmount
@@ -218,7 +218,7 @@ const AdditionalDetails = ({
         closeIcon={
           <div>
             <div className="pt-tax-calc-details-btn">
-              <Label label="PT_VIEW_DETAILS" color="rgb(68,214,44)" />
+              <Label label="PT_VIEW_DETAILS" color="rgb(44,51,125)" />
             </div>
           </div>
         }

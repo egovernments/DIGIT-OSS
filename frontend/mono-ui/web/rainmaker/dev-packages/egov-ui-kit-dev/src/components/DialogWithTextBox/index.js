@@ -23,7 +23,7 @@ const styles = {
     height: "16px",
   },
   selectedLabelStyle: {
-    color: "rgb(68,214,44)",
+    color: "rgb(44,51,125)",
   },
   radioButtonLabelStyle: {
     fontSize: "16px",
@@ -67,7 +67,7 @@ class DialogWithTextField extends Component {
           <Button
             id="logout-no-button"
             className="logout-no-button"
-            label={<Label buttonLabel={true} label={"CORE_LOGOUTPOPUP_CANCEL"} color="rgb(68,214,44)" />}
+            label={<Label buttonLabel={true} label={"CORE_LOGOUTPOPUP_CANCEL"} color="rgb(44,51,125)" />}
             backgroundColor={"#fff"}
             onClick={closeDialog}
             style={{ boxShadow: "none" }}
@@ -75,7 +75,7 @@ class DialogWithTextField extends Component {
           <Button
             id="logout-yes-button"
             className="logout-yes-button"
-            label={<Label buttonLabel={true} label={"CORE_POPUP_SEND"} color="rgb(68,214,44)" />}
+            label={<Label buttonLabel={true} label={"CORE_POPUP_SEND"} color="rgb(44,51,125)" />}
             backgroundColor={"#fff"}
             onClick={() => {
               onSend(this.state.valueTyped);

@@ -12,7 +12,7 @@ class ActionButton extends Component {
       lineHeight: "48px",
     };
     const button1Style = {
-      border: "1px solid rgb(68,214,44)",
+      border: "1px solid rgb(44,51,125)",
       marginRight: 16,
     };
     const button2Style = {};
@@ -20,7 +20,7 @@ class ActionButton extends Component {
       <div className="complaint-details-action-buttons">
         {btnOneLabel && (
           <Button
-            label={<Label buttonLabel={true} label={btnOneLabel} color="rgb(68,214,44)" />}
+            label={<Label buttonLabel={true} label={btnOneLabel} color="rgb(44,51,125)" />}
             onClick={btnOneOnClick}
             className="action-button-one"
             id="actionOne"
@@ -38,7 +38,7 @@ class ActionButton extends Component {
           id="actionTwo"
           labelStyle={{ padding: 0 }}
           overlayStyle={{ display: "flex", alignItems: "center", justifyContent: "center", height: "inherit" }}
-          backgroundColor="rgb(68,214,44)"
+          backgroundColor="rgb(44,51,125)"
           buttonStyle={{ ...defaultButtonStyle, ...button2Style }}
         />
       </div>

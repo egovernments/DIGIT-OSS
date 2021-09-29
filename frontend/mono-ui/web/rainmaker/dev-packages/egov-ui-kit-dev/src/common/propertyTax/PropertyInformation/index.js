@@ -103,7 +103,7 @@ class Property extends Component {
             history.push(`/property-tax/my-properties/property/view-assessments/${propertyId}`);
           }}
         >
-          <Label label="VIEW ALL ASSESSMENTS" fontSize="16px" color="rgb(68,214,44)" bold={true} />
+          <Label label="VIEW ALL ASSESSMENTS" fontSize="16px" color="rgb(44,51,125)" bold={true} />
         </div>
       ),
     };

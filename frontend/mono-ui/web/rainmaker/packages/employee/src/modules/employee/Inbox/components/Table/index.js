@@ -351,7 +351,7 @@ class InboxData extends React.Component {
                             return (
                               <TableCell className={classNames}>
                                 <div onClick={() => getModuleLink(item, row, index)} className="inbox-cell-text">
-                                  {<a style={{ color: "rgb(68,214,44)" }}>{item.text} </a>}
+                                  {<a style={{ color: "rgb(44,51,125)" }}>{item.text} </a>}
                                 </div>
                                 <div className="inbox-cell-subtext">
                                   {<Label label={`CS_COMMON_INBOX_${item.subtext.toUpperCase()}`} color="#000000" />}
@@ -439,7 +439,7 @@ class InboxData extends React.Component {
                       textChildren={
                         <div>
                           <div className="head" onClick={() => getModuleLink(row[0], row, 0)}>
-                            <a style={{ color: "rgb(68,214,44)" }}>{row[0].text}</a>
+                            <a style={{ color: "rgb(44,51,125)" }}>{row[0].text}</a>
                           </div>
                           <div className="head">
                             <Label label={`CS_COMMON_INBOX_${row[0].subtext.toUpperCase()}`} color="#000000" />

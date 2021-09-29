@@ -12,7 +12,7 @@ const buttonStyle = {
   float: 'right',
   backgroundColor: "rgb(242, 242, 242)",
   boxShadow: "none",
-  border: "1px solid rgb(68,214,44)",
+  border: "1px solid rgb(44,51,125)",
   borderRadius: "2px",
   outline: "none",
   alignItems: "right",
@@ -24,7 +24,7 @@ export const TotalDuesButton = ({ labelText, onClickAction, primary }) => {
       onClick={() => {
         onClickAction();
       }}
-      label={<Label buttonLabel={true} label={labelText} color={primary ? 'rgb(255, 255, 255)' : 'rgb(68,214,44)'} fontSize="16px" labelStyle={labelStyle} />}
+      label={<Label buttonLabel={true} label={labelText} color={primary ? 'rgb(255, 255, 255)' : 'rgb(44,51,125)'} fontSize="16px" labelStyle={labelStyle} />}
       primary={primary ? primary : false}
       buttonStyle={primary ? {} : buttonStyle}
       style={{ lineHeight: "auto", minWidth: "inherit" }}

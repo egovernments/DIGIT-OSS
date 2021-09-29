@@ -26,7 +26,7 @@ const style = {
     left: 0,
     right: 0,
     transform: "none",
-    color: "rgb(68,214,44)"
+    color: "rgb(44,51,125)"
   }
 };
 

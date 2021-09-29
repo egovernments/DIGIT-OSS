@@ -15,7 +15,7 @@ const styles = {
 const clickHereStyles = {
   cursor: "pointer",
   textDecoration: "none",
-  color: "rgb(68,214,44)"
+  color: "rgb(44,51,125)"
 }
 class AddLinkForProperty extends React.Component {
   render() {
