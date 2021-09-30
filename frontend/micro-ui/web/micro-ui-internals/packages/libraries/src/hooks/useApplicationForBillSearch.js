@@ -43,6 +43,11 @@ const refObj = (tenantId, filters) => {
       key: "consumerCode",
       label: "REFERENCE_NO",
     },
+    BPAREG: {
+      searchFn: () => tlApplications(tenantId, filters),
+      key: "consumerCode",
+      label: "REFERENCE_NO",
+    },
   };
 };
 
@@ -54,6 +59,9 @@ export const useApplicationsForBusinessServiceSearch = ({ tenantId, businessServ
   }
   if (window.location.href.includes("TL")) {
     _key = "TL";
+  } 
+  if (window.location.href.includes("BPAREG")) {
+    _key = businessService
   }
   /* key from application ie being used as consumer code in bill */
   const { searchFn, key, label } = refObj(tenantId, filters)[_key];
