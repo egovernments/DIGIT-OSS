@@ -7,6 +7,7 @@ import { set } from "lodash";
 import pdfMake from "pdfmake/build/pdfmake";
 import { downloadPdfFile } from "../api";
 import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
+import {getLocale} from "../localStorageUtils"
 import logoNotFound from './logoNotFound.png';
 import pdfFonts from "./vfs_fonts";
 
@@ -23,7 +24,7 @@ import pdfFonts from "./vfs_fonts";
 
 const vfs = { ...pdfFonts.vfs }
 const font = {
-    Camby: {
+    HI_IN: {
         normal: 'Cambay-Regular.ttf',
         bold: 'Cambay-Regular.ttf',
         italics: 'Roboto-Regular.ttf',
@@ -36,13 +37,19 @@ const font = {
         italics: 'Roboto-Regular.ttf',
         bolditalics: 'Roboto-Regular.ttf',
     },
-    pn_IN: {
+    EN_IN: {
+        normal: 'Roboto-Regular.ttf',
+        bold: 'Roboto-Regular.ttf',
+        italics: 'Roboto-Regular.ttf',
+        bolditalics: 'Roboto-Regular.ttf',
+    },
+    PN_IN: {
         normal: 'BalooPaaji2-Regular.ttf',
         bold: 'BalooPaaji2-Bold.ttf',
         italics: 'Roboto-Regular.ttf',
         bolditalics: 'Roboto-Regular.ttf',
     },
-    od_IN: {
+    OD_IN: {
         normal: 'BalooBhaina2-Regular.ttf',
         bold: 'BalooBhaina2-Bold.ttf',
         italics: 'Roboto-Regular.ttf',
@@ -536,10 +543,11 @@ export const generatePDF = (logo, applicationData = {}, fileName, isCustomforBil
     let borderKey = [true, true, false, true];
     let borderValue = [false, true, true, true];
     let receiptTableWidth = ["*", "*", "*", "*"];
-
+let locale=getLocale()||'en_IN';
+locale = locale.toUpperCase()
     data = {
         defaultStyle: {
-            font: "Camby"
+            font: locale
         },
         content: [
 
