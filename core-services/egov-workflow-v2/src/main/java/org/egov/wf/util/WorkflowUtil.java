@@ -474,7 +474,6 @@ public class WorkflowUtil {
         if(tenantId.split("\\.").length == 2)
             return true;
         else return false;
-
     }
 
 
