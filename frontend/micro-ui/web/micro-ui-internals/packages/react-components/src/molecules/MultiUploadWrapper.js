@@ -1,7 +1,7 @@
-import React, { useReducer } from "react"
+import React, { useEffect, useReducer } from "react"
 import UploadFile from "../atoms/UploadFile"
 
-const MultiUploadWrapper = ({module="PGR", tenantId="pb"}) => {
+const MultiUploadWrapper = ({module="PGR", tenantId="pb", getFormState}) => {
 
     const FILES_UPLOADED = "FILES_UPLOADED"
     const TARGET_FILE_REMOVAL = "TARGET_FILE_REMOVAL"
@@ -34,6 +34,8 @@ const MultiUploadWrapper = ({module="PGR", tenantId="pb"}) => {
         const {data: {files: fileStoreIds} = {}} = await Digit.UploadServices.MultipleFilesStorage(module, e.target.files, tenantId)
         return dispatch({type: FILES_UPLOADED ,payload: {files: e.target.files, fileStoreIds}})
     }
+
+    useEffect(() => getFormState(state),[state])
 
     const [ state, dispatch ] = useReducer(uploadReducer, new Map())
 
