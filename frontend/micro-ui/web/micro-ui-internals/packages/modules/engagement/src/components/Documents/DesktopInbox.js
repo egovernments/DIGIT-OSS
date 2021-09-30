@@ -11,15 +11,39 @@ import Filter from "./Filter";
 
 const getDocumentDetailsPath = (document) => {
   return {
-    pathname: `inbox/details/${document.id}`,
+    pathname: `inbox/details/${document.name}`,
     state: { details: document }
   }
 
 }
 
+const getFileUrl = async (fileStoreId) => {
+  try {
+    const response = await Digit.UploadServices.Filefetch([fileStoreId], Digit.ULBService.getStateId());
+    if (response?.data?.fileStoreIds?.length > 0) {
+      const url = response.data.fileStoreIds[0]?.url
+      if(url.includes('.jpg') || url.includes('.png')){
+        const arr = url.split(',');
+        return arr[1];
+      }
+      return response.data.fileStoreIds[0]?.url;
+    }
+  } catch (err) {
+    console.error("Failed to Fetch from filestore", err);
+  }
+}
+
+export const openDocument = async (filestoreId, name) => {
+  const w = window.open('', '_blank');
+  const url = await getFileUrl(filestoreId)
+  w.location = url;
+  w.document.title = name;
+}
+
 const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
 const getDocumentDetails = (value = "", link, t) => <span className="document-table-docs-columns"><Link className="link" to={link} >{value.length ? value : t('CE_DOCUMENT_TITLE')}</Link></span>
-const getDocumentCell = (link, t) => <span className="document-table-docs-columns"><a className="link" href={link} target="_blank" rel="noreferrer">{t('CE_DOCUMENT_VIEW_LINK')}</a></span>
+const getDocumentCell = (link, t, name = "mSeva") => <span className="document-table-docs-columns" ><span className="link" onClick={() => openDocument(link, name)} >{t('CE_DOCUMENT_VIEW_LINK')}</span></span>
+
 
 const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, links, onSort, sortParams, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords }) => {
   const columns = React.useMemo(() => [
@@ -33,7 +57,7 @@ const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, l
     },
     {
       Header: t('CE_TABLE_DOCUMENT_LINK'),
-      accessor: (row) => getDocumentCell(row.documentLink, t)
+      accessor: (row) => getDocumentCell(row.filestoreId, t, row?.name)
     },
     {
       Header: t('CE_TABLE_DOCUMENT_POSTED_BY'),

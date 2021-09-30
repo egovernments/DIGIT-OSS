@@ -29,6 +29,7 @@ import DocUpdateResponse from "./pages/employee/Documents/update-response";
 import DocDeleteResponse from "./pages/employee/Documents/delete-response";
 import DocumentNotification from "./pages/employee/Documents/Inbox";
 import DocumentList from './pages/citizen/Documents/DocumentList';
+import SurveyList from "./pages/citizen/CitizenSurvey/SurveyList"
 import DocumentDetails from "./components/Documents/DocumentDetails";
  
 const EventsBreadCrumb = ({ location }) => {
@@ -70,13 +71,13 @@ const EventsBreadCrumb = ({ location }) => {
       show: location.pathname.includes("/documents/inbox/new-doc") ? true : false,
     },
     {
-      path: "/digit-ui/employee/engagement/documents/new/response",
-      content: t("DOCUMENTS_DOCUMENT_HEADER"),
+      path: "/digit-ui/employee/engagement/documents/response",
+      content: t("ES_EVENT_NEW_EVENT_RESPONSE"),
       show: location.pathname.includes("/documents/response") ? true : false,
     },
     {
       path: "/digit-ui/employee/engagement/documents/inbox/details/:id",
-      content: t("DOCUMENTS_DOCUMENT_HEADER"),
+      content: t("CE_DOCUMENT_DETAILS"),
       show: location.pathname.includes("/documents/inbox/details") ? true : false,
     },
 
@@ -106,6 +107,7 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
         <Route path={`${path}/event/:id`}>
           <EmployeeEventDetails />
         </Route>
+        <Route path={`${path}/documents/inbox/details/:id`} component={(props) => <DocumentDetails {...props} />} />
         <Route path={`${path}/documents/response`} component={(props) => <DocumentResponse {...props} />} />
         <Route path={`${path}/documents/update`} component={(props) => <DocUpdate {...props} />} />
         <Route path={`${path}/documents/update-response`} component={(props) => <DocUpdateResponse {...props} />} />
@@ -183,7 +185,8 @@ const componentsToRegister = {
   EventForm,
   DocumentList,
   SelectEventGeolocation,
-  SelectToDate
+  SelectToDate,
+  SurveyList
 };
 
 export const initEngagementComponents = () => {

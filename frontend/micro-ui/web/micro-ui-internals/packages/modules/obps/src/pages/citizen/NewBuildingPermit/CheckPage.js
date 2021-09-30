@@ -21,6 +21,19 @@ import {
     BusinessService="BPA.NC_APP_FEE";
 
     const { data, address, owners, nocDocuments, documents, additionalDetails, subOccupancy} = value;
+    let val;
+    var i;
+    let improvedDoc = [...documents.documents];
+    improvedDoc.map((ob) => { ob["isNotDuplicate"] = true; })
+    improvedDoc.map((ob,index) => {
+      val = ob.documentType;
+      if(ob.isNotDuplicate == true)
+      for(i=index+1; i<improvedDoc.length;i++)
+      {
+        if(val === improvedDoc[i].documentType)
+        improvedDoc[i].isNotDuplicate=false;
+      }
+    })
     const { data:datafromAPI, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId,value?.data?.scrutinyNumber, {
         enabled: true
       })
@@ -132,7 +145,7 @@ import {
     <React.Fragment>
     <Timeline currentStep={4} />
     <Header>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
-    <Card>
+    <Card style={{paddingRight:"16px"}}>
     <CardHeader>{t(`BPA_BASIC_DETAILS_TITLE`)}</CardHeader>
         <StatusTable>
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APP_DATE_LABEL`)} text={getdate(data?.applicationDate)} />
@@ -143,7 +156,7 @@ import {
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL`)} text={data?.applicantName} />
         </StatusTable>
     </Card>
-    <Card>
+    <Card style={{paddingRight:"16px"}}>
     <CardHeader>{t("BPA_PLOT_DETAILS_TITLE")}</CardHeader>
     <LinkButton
             label={
@@ -166,7 +179,7 @@ import {
           <Row className="border-none" label={t(`Land Registration details`)} text={data?.registrationDetails || t("CS_NA")} />
     </StatusTable>
     </Card>
-    <Card>
+    <Card style={{paddingRight:"16px"}}>
     <CardHeader>{t("BPA_STEPPER_SCRUTINY_DETAILS_HEADER")}</CardHeader>
     <CardSubHeader>{t("BPA_EDCR_DETAILS")}:</CardSubHeader>
     <StatusTable  style={{border:"none"}}>
@@ -228,7 +241,7 @@ import {
       <Row className="border-none" label={t("BPA_APPLICATION_DEMOLITION_AREA_LABEL")} text={datafromAPI?.planDetail?.planInformation?.demolitionArea ? `${datafromAPI?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : t("CS_NA")}></Row>
       </StatusTable>
       </Card>
-      <Card>
+      <Card style={{paddingRight:"16px"}}>
       <CardHeader>{t("BPA_NEW_TRADE_DETAILS_HEADER_DETAILS")}</CardHeader>
           <LinkButton
             label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
@@ -243,7 +256,7 @@ import {
           <Row className="border-none" label={t(`ES_NEW_APPLICATION_LOCATION_LANDMARK`)} text={address?.landmark || t("CS_NA")} />
       </StatusTable>
       </Card>
-      <Card>
+      <Card style={{paddingRight:"16px"}}>
         <CardHeader>{t("BPA_APPLICANT_DETAILS_HEADER")}</CardHeader>
           <LinkButton
             label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
@@ -260,24 +273,25 @@ import {
         </StatusTable>
         </div>))}
       </Card>
-      <Card>
+      <Card style={{paddingRight:"16px"}}>
         <CardHeader>{t("BPA_DOCUMENT_DETAILS_LABEL")}</CardHeader>
           <LinkButton
             label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
             style={{ width: "100px", display: "inline" }}
             onClick={() => routeTo(`${routeLink}/document-details`)}
           />
-        {documents?.documents.map((doc, index) => (
+        {improvedDoc.map((doc, index) => (
           <div key={index}>
-          <CardSectionHeader>{t(doc?.documentType)}</CardSectionHeader>
+         {doc.isNotDuplicate && <div><CardSectionHeader>{t(doc?.documentType)}</CardSectionHeader>
           <StatusTable>
           <OBPSDocument value={value} Code={doc?.documentType} index={index}/> 
           <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
           </StatusTable>
+          </div>}
           </div>
         ))}
       </Card>
-      <Card>
+      <Card style={{paddingRight:"16px"}}>
       <CardHeader>{t("BPA_NOC_DETAILS_SUMMARY")}</CardHeader>
           <LinkButton
             label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}

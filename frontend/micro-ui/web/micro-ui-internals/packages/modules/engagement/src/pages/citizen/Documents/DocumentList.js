@@ -15,12 +15,14 @@ const DocumentList = ({ match }) => {
   const { t } = useTranslation()
   const { category } = match.params || 'CATEGORY_CITIZEN_CHARTER';
   const tenantIds = Digit.SessionStorage.get("Employee.tenantId")
+  const [pageSize, setPageSize] = useState(10);
+  const [pageOffset, setPageOffset] = useState(0);
   const [searchValue, setSearchValue] = useState();
 
 
   const { data: filteredDocs, isLoading: isLoadingDocs, } = Digit.Hooks.engagement.useDocSearch({ name: searchValue, category, tenantIds }, {
-    //limit: pageSize,
-    //offset: pageOffset,
+    limit: pageSize,
+    offset: pageOffset,
     select: (data) => {
       return data?.Documents?.map((
         { uuid,
@@ -54,7 +56,7 @@ const DocumentList = ({ match }) => {
 
   const handleSearch = async (event) => {
     if (searchValue.length) {
-      setSearchValue("");   
+      setSearchValue("");
     }
   }
 
@@ -69,31 +71,31 @@ const DocumentList = ({ match }) => {
       <div
       >
 
-  <Searchbar
-    searchValue={searchValue}
-    handleKeyPress={handleKeyPress}
-    handleSearch={handleSearch}
-    onChange={setSearchValue}
-    t={t}
-  />
-     </div>
-  {
-    filteredDocs &&
-    filteredDocs.length ? filteredDocs.map(({ name, lastModifiedDate, description, documentLink, fileSize }, index) => (
-      <DocumentCard
-        key={index}
-        documentTitle={name}
-        documentSize={fileSize} 
-        lastModifiedData={lastModifiedDate}
-        description={description}
-        documentLink={documentLink}
-        t={t}
-      />
-    )) :
-    <Card>
-      <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
-    </Card>
-  }
+        <Searchbar
+          searchValue={searchValue}
+          handleKeyPress={handleKeyPress}
+          handleSearch={handleSearch}
+          onChange={setSearchValue}
+          t={t}
+        />
+      </div>
+      {
+        filteredDocs &&
+          filteredDocs.length ? filteredDocs.map(({ name, lastModifiedDate, description, documentLink, fileSize }, index) => (
+            <DocumentCard
+              key={index}
+              documentTitle={name}
+              documentSize={fileSize}
+              lastModifiedData={lastModifiedDate}
+              description={description}
+              documentLink={documentLink}
+              t={t}
+            />
+          )) :
+          <Card>
+            <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
+          </Card>
+      }
     </AppContainer >
   );
 };

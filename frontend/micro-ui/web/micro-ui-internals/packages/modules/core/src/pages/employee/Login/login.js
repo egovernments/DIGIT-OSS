@@ -12,7 +12,8 @@ const Login = ({ config: propsConfig, t }) => {
   const [user, setUser] = useState(null);
   const [showToast, setShowToast] = useState(null);
   const history = useHistory();
-  const getUserType = () => Digit.UserService.getType();
+  const getUserType = () => "EMPLOYEE" || Digit.UserService.getType();
+
 
   useEffect(() => {
     if (!user) {
@@ -110,6 +111,7 @@ const Login = ({ config: propsConfig, t }) => {
         heading={propsConfig.texts.header}
         headingStyle={{ textAlign: "center" }}
         cardStyle={{ margin: "auto", minWidth: "400px" }}
+        className = "loginFormStyleEmployee"
       >
         <Header />
       </FormComposer>

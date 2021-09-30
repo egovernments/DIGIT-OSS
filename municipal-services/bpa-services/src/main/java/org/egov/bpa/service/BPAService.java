@@ -258,6 +258,9 @@ public class BPAService {
 		}
 		log.debug("Call with multiple to Land::" + landcriteria.getTenantId() + landcriteria.getMobileNumber());
 		ArrayList<LandInfo> landInfos = landService.searchLandInfoToBPA(requestInfo, landcriteria);
+		// With given mobile number if no record exists then return empty response
+		if(landInfos.isEmpty())
+		    return Collections.emptyList();
 		ArrayList<String> landIds = new ArrayList<String>();
 		if (landInfos.size() > 0) {
 			landInfos.forEach(land -> {
@@ -312,6 +315,9 @@ public class BPAService {
 		log.debug("Call with mobile number to Land::" + criteria.getMobileNumber());
 		landcriteria.setMobileNumber(criteria.getMobileNumber());
 		ArrayList<LandInfo> landInfo = landService.searchLandInfoToBPA(requestInfo, landcriteria);
+		// With given mobile number if no record exists then return empty response
+		if(landInfo.isEmpty())
+		    return Collections.emptyList();
 		ArrayList<String> landId = new ArrayList<String>();
 		if (landInfo.size() > 0) {
 			landInfo.forEach(land -> {
@@ -654,4 +660,62 @@ public class BPAService {
 		}
 		document.save(fileName);
 	}
+	
+	public int getBPACount(BPASearchCriteria criteria, RequestInfo requestInfo) {
+	    
+
+            LandSearchCriteria landcriteria = new LandSearchCriteria();
+            landcriteria.setTenantId(criteria.getTenantId());
+            landcriteria.setLocality(criteria.getLocality());
+            List<String> edcrNos = null;
+            if (criteria.getMobileNumber() != null) {
+                landcriteria.setMobileNumber(criteria.getMobileNumber());
+                ArrayList<LandInfo> landInfo = landService.searchLandInfoToBPA(requestInfo, landcriteria);
+                // With given mobile number if no record exists then return count as 0
+                if(landInfo.isEmpty())
+                    return 0;
+                ArrayList<String> landId = new ArrayList<String>();
+                if (landInfo.size() > 0) {
+                        landInfo.forEach(land -> {
+                                landId.add(land.getId());
+                        });
+                        criteria.setLandId(landId);
+                } 
+            } else {
+                List<String> roles = new ArrayList<>();
+                for (Role role : requestInfo.getUserInfo().getRoles()) {
+                        roles.add(role.getCode());
+                }
+                if ((criteria.tenantIdOnly() || criteria.isEmpty()) && roles.contains(BPAConstants.CITIZEN)) {
+                    UserSearchRequest userSearchRequest = new UserSearchRequest();
+                    if (criteria.getTenantId() != null) {
+                            userSearchRequest.setTenantId(criteria.getTenantId());
+                    }
+                    List<String> uuids = new ArrayList<String>();
+                    if (requestInfo.getUserInfo() != null && !StringUtils.isEmpty(requestInfo.getUserInfo().getUuid())) {
+                            uuids.add(requestInfo.getUserInfo().getUuid());
+                            criteria.setOwnerIds(uuids);
+                            criteria.setCreatedBy(uuids);
+                    }
+                    UserDetailResponse userInfo = userService.getUser(criteria, requestInfo);
+                    if (userInfo != null) {
+                            landcriteria.setMobileNumber(userInfo.getUser().get(0).getMobileNumber());
+                    }
+                    ArrayList<LandInfo> landInfos = landService.searchLandInfoToBPA(requestInfo, landcriteria);
+                    // With given mobile number if no record exists then return count as 0
+                    if(landInfos.isEmpty())
+                        return 0;
+                    ArrayList<String> landIds = new ArrayList<String>();
+                    if (landInfos.size() > 0) {
+                            landInfos.forEach(land -> {
+                                    landIds.add(land.getId());
+                            });
+                            criteria.setLandId(landIds);
+                    }
+                }
+            }
+            return repository.getBPACount(criteria, edcrNos);
+        
+	}
+	
 }

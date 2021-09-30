@@ -112,6 +112,7 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
         config={config}
         label={propsConfig.texts.submitButtonLabel}
         cardStyle={{ maxWidth: "400px", margin: "auto" }}
+        className ="employeeChangePassword"
       >
         <Header />
         <CardSubHeader style={{ textAlign: "center" }}> {propsConfig.texts.header} </CardSubHeader>

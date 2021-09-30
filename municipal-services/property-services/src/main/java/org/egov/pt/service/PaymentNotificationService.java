@@ -546,7 +546,7 @@ public class PaymentNotificationService {
                 }
 
                 String actionLink = propertyConfiguration.getPayLink().replace("$mobile", mobile)
-                        .replace("$consumerCode", property.getPropertyId())
+                        .replace("propertyId", property.getPropertyId())
                         .replace("$tenantId", property.getTenantId())
                         .replace("$businessService" , businessService);
 
@@ -575,7 +575,7 @@ public class PaymentNotificationService {
         StringBuilder builder = new StringBuilder(propertyConfiguration.getUiAppHost());
         builder.append(propertyConfiguration.getPayLink());
         String url = builder.toString();
-        url = url.replace("$consumerCode", valMap.get("propertyId"));
+        url = url.replace("$propertyId", valMap.get("propertyId"));
         url = url.replace("$tenantId", valMap.get("tenantId"));
         url = url.replace("$businessService",PT_BUSINESSSERVICE);
 

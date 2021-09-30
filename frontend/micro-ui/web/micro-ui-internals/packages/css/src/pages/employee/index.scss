@@ -1,3 +1,4 @@
+@import "./login.scss";
 /* TODO: convert using tailwind */
 .employee {
   .breadcrumb {
@@ -230,7 +231,7 @@
 }
 
 .link {
-  @apply text-primary-main;
+  @apply text-primary-main cursor-pointer ;
 
   :hover {
     @apply text-primary-dark;

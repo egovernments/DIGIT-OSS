@@ -83,7 +83,7 @@ public class TLQueryBuilder {
               " result) result_offset " +
               "WHERE offset_ > ? AND offset_ <= ?";
       
-      private final String countWrapper = "SELECT COUNT(*) FROM ({INTERNAL_QUERY}) as license_count";
+      private final String countWrapper = "SELECT COUNT(DISTINCT(tl_id)) FROM ({INTERNAL_QUERY}) as license_count";
 
 
 

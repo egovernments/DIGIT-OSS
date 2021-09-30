@@ -194,9 +194,9 @@ public class NotificationService {
 	 */
 	private String getPayUrl(Property property) {
 		return notifUtil.getShortenedUrl( 
-				 configs.getUiAppHost().concat(configs.getPayLink()
-				.replace(NOTIFICATION_CONSUMERCODE, property.getAcknowldgementNumber())
-				.replace(NOTIFICATION_TENANTID, property.getTenantId())));
+				 configs.getUiAppHost().concat(configs.getPayLink().replace(EVENT_PAY_BUSINESSSERVICE,MUTATION_BUSINESSSERVICE)
+				.replace(EVENT_PAY_PROPERTYID, property.getAcknowldgementNumber())
+				.replace(EVENT_PAY_TENANTID, property.getTenantId())));
 	}
 
 

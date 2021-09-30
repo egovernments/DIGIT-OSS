@@ -121,6 +121,7 @@ import useOBPSMDMS from "./obps/useMDMS";
 import useScrutinyDetails from "./obps/useScrutinyDetails";
 import useTenantsOBPS from "./obps/useTenants";
 import useNocDetails from "./obps/useNocDetails";
+import useNOCApplicationActions from "./noc/useNOCApplicationActions";
 import useOBPSDocumentSearch from "./obps/useOBPSDocumentSearch";
 import useObpsAPI from "./obps/useObpsAPI";
 import useBPADetails from "./obps/useBPADetails";
@@ -283,7 +284,8 @@ const engagement = {
 };
 
 const noc = {
-  useNOCDetails
+  useNOCDetails,
+  useNOCApplicationActions
 }
 
 const Hooks = {

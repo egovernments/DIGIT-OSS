@@ -1,5 +1,5 @@
 import React from "react";
-import { Close } from "../atoms/svgindex";
+import { Close } from "./svgindex";
 
 const RemoveableTag = ({ text, onClick }) => (
   <div className="tag">

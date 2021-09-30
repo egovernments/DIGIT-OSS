@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, Fragment } from "react";
 import ButtonSelector from "./ButtonSelector";
 import { Close } from "./svgindex";
 import { useTranslation } from "react-i18next";
+import RemoveableTag from "./RemoveableTag";
 
 const getRandomId = () => {
   return Math.floor((Math.random() || 1) * 139);
@@ -87,6 +88,12 @@ const UploadFile = (props) => {
             textStyles={props?.textStyles}
             type={props.buttonType}
           />
+            {props?.uploadedFiles ? [...props?.uploadedFiles?.keys()]?.map((file, index) => {
+              const fileDetailsData = props?.uploadedFiles?.get(file)
+              return <div className="tag-container">
+                <RemoveableTag key={index} text={file} onClick={(e) => props?.removeTargetedFile(fileDetailsData, e)} />
+              </div>
+            }) : null}
           {!hasFile || props.error ? (
             <h2 className="file-upload-status">{props.message}</h2>
           ) : (
@@ -103,12 +110,13 @@ const UploadFile = (props) => {
           )}
         </div>
         <input
-          className={props.disabled ? "disabled" : ""}
+          className={props.disabled ? "disabled" : "" + "input-mirror-selector-button"}
           style={extraStyles ? { ...extraStyles?.inputStyles, ...props?.inputStyles } : { ...props?.inputStyles }}
           ref={inpRef}
           type="file"
           id={props.id || `document-${getRandomId()}`}
           name="file"
+          multiple={props.multiple}
           accept={props.accept}
           disabled={props.disabled}
           onChange={(e) => props.onUpload(e)}

@@ -304,7 +304,7 @@ public class NotificationUtil {
 
                if(msg.contains(ASMT_USER_EVENT_PAY)){
                    actionLink = config.getPayLink().replace("$mobile", mobileNumber)
-                           .replace("$consumerCode", property.getPropertyId())
+                           .replace("$propertyId", property.getPropertyId())
                            .replace("$tenantId", property.getTenantId())
                            .replace("$businessService" , PT_BUSINESSSERVICE);
 

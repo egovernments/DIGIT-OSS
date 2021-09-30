@@ -61,12 +61,17 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t) => {
   data.documents = {
     documents:data?.documents
   }
+  let nocDocs = [];
+  nocdata.map((a,index) => {
+    a.documents.map((b,index) => {
+      nocDocs.push(b);
+    })
+  })
 
   data.nocDocuments = {
     NocDetails:nocdata,
-    nocDocuments:nocdata.map(a => a?.documents?.[0] || {}),
+    nocDocuments:nocDocs,
   }
-
   data?.landInfo.owners.map((owner,ind) => {
     owner.gender = {
       active:true,

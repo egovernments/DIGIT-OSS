@@ -11,6 +11,7 @@ const CitizenApp = ({ path, url, userType}) => {
     const Events = Digit.ComponentRegistryService.getComponent("EventsListOnGround")
     const EventDetails = Digit.ComponentRegistryService.getComponent("EventDetails")
     const Documents = Digit.ComponentRegistryService.getComponent("DocumentList")
+    const SurveyList = Digit.ComponentRegistryService.getComponent("SurveyList")
 
     return (
       <React.Fragment>
@@ -35,6 +36,7 @@ const CitizenApp = ({ path, url, userType}) => {
           />
           <PrivateRoute path={`${path}/docs`} component={() => <DocumentCategories t={t} {...{ path }} />} />
           <PrivateRoute path={`${path}/documents/list/:category`} component={(props) => <Documents {...props} />} />
+          <PrivateRoute path={`${path}/SurveyList`} component={(props) => <SurveyList {...props} />} />
         </Switch>
       </React.Fragment>
     );

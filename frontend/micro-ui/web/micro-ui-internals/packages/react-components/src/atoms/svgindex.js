@@ -609,6 +609,12 @@ const SearchIcon = ({ className }) => (
   </svg>
 );
 
+const DeleteIcon = ({ style, fill }) => (
+  <svg style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M1 16C1 17.1 1.9 18 3 18H11C12.1 18 13 17.1 13 16V4H1V16ZM14 1H10.5L9.5 0H4.5L3.5 1H0V3H14V1Z" fill={fill} />
+  </svg>
+);
+
 export {
   AnnouncementIcon,
   ReceiptIcon,
@@ -681,5 +687,6 @@ export {
   TickMark,
   PDFSvg,
   EditIcon,
-  SearchIcon
+  SearchIcon,
+  DeleteIcon
 };

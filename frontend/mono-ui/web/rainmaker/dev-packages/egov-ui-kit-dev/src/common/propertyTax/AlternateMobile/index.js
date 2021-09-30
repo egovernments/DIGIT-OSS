@@ -101,7 +101,7 @@ if(window.location.pathname.includes('withoutAuth')){
         apiId: "Rainmaker",
         ver: ".01",
         ts: "",
-        action: action,
+        action: "_search",
         did: "1",
         key: "",
         authToken:cache?cache:null
@@ -146,7 +146,7 @@ if(window.location.pathname.includes('withoutAuth')){
                 "id": newOwner.id,
                 "uuid": newOwner.uuid,
                 "name": newOwner.name,
-                "mobileNumber": newOwner.mobileNumber,
+                "mobileNumber": window.location.pathname.includes('withoutAuth')?localStorage.getItem('pay-bill-mobile'): newOwner.mobileNumber,
                 "type": "owner"
             };
             /* this.setState({ propertyNumbers: propertyNumbers, showWarning: true }); */

@@ -27,7 +27,8 @@ const LanguageSelection = () => {
       <Card className="bannerCard" >
         <div className="bannerHeader">
           <img className="bannerLogo" src={stateInfo?.logoUrl} />
-          <p>{stateInfo?.name}</p>
+          
+          <p>{t(stateInfo?.name)}</p>
         </div>
         <div className="language-selector" style={{ justifyContent: "space-between", marginBottom: "24px" }}>
           {languages.map((language, index) => (

@@ -49,7 +49,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     <div>
     <Timeline currentStep={1} flow="STAKEHOLDER" />
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") ? !LicenseType || !ArchitectNo:!LicenseType}>
-      <CardLabel>{t("BPA_LICENSE_TYPE_LABEL")}</CardLabel>
+      <CardLabel>{t("BPA_LICENSE_TYPE_QUES")}</CardLabel>
       <div className={"form-pt-dropdown-only"}>
         {data && (
           <RadioOrSelect

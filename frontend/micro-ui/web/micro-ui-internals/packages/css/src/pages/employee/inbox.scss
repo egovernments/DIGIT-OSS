@@ -33,7 +33,7 @@
     .inbox-total {
       padding: 4px;
       display: table;
-      @apply whitespace-normal text-center text-white w-8 h-8 bg-primary-main rounded-full ml-xs ;
+      @apply whitespace-normal text-center text-white w-8 h-8 bg-primary-main rounded-full ml-xs;
     }
   }
 
@@ -365,4 +365,23 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
+}
+.complaint-links-container .header .removeHeight {
+  line-height: 28px;
+}
+
+@screen dt {
+  .complaint-links-container .header .removeBorderRadiusLogo {
+    border-radius: 2px !important;
+  }
+}
+@screen dt {
+  .customEmployeeCard {
+    width: 288px !important;
+    height: 263px !important;
+  }
+}
+.employeeTotalLink{
+  color: #505A5F;
+  font-size: 16px;
 }

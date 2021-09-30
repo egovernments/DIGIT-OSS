@@ -109,6 +109,7 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
         description={propsConfig.texts.description}
         headingStyle={{ textAlign: "center" }}
         cardStyle={{ maxWidth: "400px", margin: "auto" }}
+        className ="employeeForgotPassword"
       >
         <Header />
       </FormComposer>

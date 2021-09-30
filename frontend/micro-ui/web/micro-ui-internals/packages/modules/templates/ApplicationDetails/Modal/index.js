@@ -4,6 +4,7 @@ import PTActionModal from "./PTActionModal";
 import TLActionModal from "./TLActionModal";
 import BPAREGActionModal from "./BPAREGActionModal";
 import BPAActionModal from "./BPAActionModal";
+import NOCActionModal from "./NOCActionModal";
 
 const ActionModal = (props) => {
   if (props?.businessService.includes("PT")) {
@@ -20,6 +21,10 @@ const ActionModal = (props) => {
 
   if (props?.moduleCode.includes("BPA")) {
     return <BPAActionModal {...props} />;
+  }
+
+  if (props?.moduleCode.includes("NOC")) {
+    return <NOCActionModal {...props} />;
   }
   // return <FSMActionModal {...props} />;
 };

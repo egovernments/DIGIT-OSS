@@ -328,6 +328,12 @@ public class PTConstants {
 
     public static final String ES_DATA_PROPERTYID_PATH = "$.propertyId";
 
+    //EVENT PAY
+    public static final String EVENT_PAY_TENANTID = "$tenantId";
+
+    public static final String EVENT_PAY_BUSINESSSERVICE = "$businessService";
+
+    public static final String EVENT_PAY_PROPERTYID = "$propertyId";
 
 }
 

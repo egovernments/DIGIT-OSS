@@ -60,6 +60,7 @@ import static org.egov.inbox.util.BpaConstants.STATUS_PARAM;
 import static org.egov.inbox.util.BpaConstants.LOCALITY_PARAM;
 import static org.egov.inbox.util.BpaConstants.OFFSET_PARAM;
 import static org.egov.inbox.util.BpaConstants.MOBILE_NUMBER_PARAM;
+import static org.egov.inbox.util.BpaConstants.BPAREG;
 
 @Slf4j
 @Service
@@ -233,7 +234,8 @@ public class InboxService {
                     isSearchResultEmpty = true;
                 }
             }
-            if (!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(TL)) {
+            if (!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(TL)
+                    || processCriteria.getModuleName().equals(BPAREG)) {
                 totalCount = tlInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
                 List<String> applicationNumbers = tlInboxFilterService.fetchApplicationNumbersFromSearcher(criteria,
                         StatusIdNameMap, requestInfo);

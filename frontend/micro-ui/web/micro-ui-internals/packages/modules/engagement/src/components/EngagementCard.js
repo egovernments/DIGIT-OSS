@@ -10,11 +10,15 @@ const EngagementCard = () => {
     Icon: <PropertyHouse />,
     moduleName: t("ES_TITLE_CITIZEN_ENGAGEMENT"),
     kpis: [
-      //   {
-      //     count: "-",
-      //     label: t("ES_TITLE_DOCS"),
-      //     link: `/digit-ui/employee/pt/inbox`,
-      //   },
+        {
+          count: "-",
+          label: t("TOTAL_DOCUMENTS"),
+          link: `/digit-ui/employee/pt/inbox`,
+        },
+        {
+          label: t("TOTAL_EVENTS"),
+          link: `/digit-ui/employee/fsm/inbox`
+      }  
     ],
     links: [
       {
