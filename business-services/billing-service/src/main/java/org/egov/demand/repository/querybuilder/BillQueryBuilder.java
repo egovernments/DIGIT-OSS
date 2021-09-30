@@ -3,6 +3,7 @@ package org.egov.demand.repository.querybuilder;
 import java.util.Collection;
 import java.util.List;
 
+import org.egov.demand.config.ApplicationProperties;
 import org.egov.demand.model.BillSearchCriteria;
 import org.egov.demand.model.BillV2.BillStatus;
 import org.egov.demand.model.UpdateBillCriteria;
@@ -13,6 +14,9 @@ import org.springframework.util.CollectionUtils;
 
 @Component
 public class BillQueryBuilder {
+	
+	@Autowired
+	private ApplicationProperties configs;
 	
 	@Autowired
 	private Util util;
@@ -70,7 +74,8 @@ public class BillQueryBuilder {
 		StringBuilder billQuery = new StringBuilder(BILL_BASE_QUERY);
 		String tenantId = billSearchCriteria.getTenantId();
 		String[] tenantIdChunks = tenantId.split("\\.");
-		if(tenantIdChunks.length == 1){
+		
+		if(tenantIdChunks.length <= configs.getStateLevelTenantIdLength()){
 			billQuery.append(" WHERE b.tenantid LIKE ? ");
 			preparedStatementValues.add(billSearchCriteria.getTenantId() + '%');
 		}else{

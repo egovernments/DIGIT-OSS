@@ -31,6 +31,9 @@ public class CollectionService_v1 {
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    
+    @Autowired
+    private CollectionQueryBuilder_v1 collectionQueryBuilder_v1;
 
     @Autowired
     private CollectionResultSetExtractor_v1 collectionResultSetExtractor;
@@ -68,7 +71,7 @@ public class CollectionService_v1 {
 
     public List<Receipt_v1> fetchReceipts(ReceiptSearchCriteria_v1 receiptSearchCriteria){
         Map<String, Object> preparedStatementValues = new HashMap<>();
-        String query = CollectionQueryBuilder_v1.getReceiptSearchQuery(receiptSearchCriteria, preparedStatementValues);
+        String query = collectionQueryBuilder_v1.getReceiptSearchQuery(receiptSearchCriteria, preparedStatementValues);
         log.debug(query);
         List<Receipt_v1> receipts = namedParameterJdbcTemplate.query(query, preparedStatementValues,
                 collectionResultSetExtractor);

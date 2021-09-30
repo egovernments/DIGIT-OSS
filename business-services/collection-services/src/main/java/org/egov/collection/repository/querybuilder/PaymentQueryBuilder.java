@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class PaymentQueryBuilder {
 
     @Autowired
-    private ApplicationProperties config;
+    private ApplicationProperties configs;
 
     public static final String SELECT_PAYMENT_SQL = "SELECT py.*,pyd.*," +
             "py.id as py_id,py.tenantId as py_tenantId,py.totalAmountPaid as py_totalAmountPaid,py.createdBy as py_createdBy,py.createdtime as py_createdtime," +
@@ -341,7 +341,7 @@ public class PaymentQueryBuilder {
     }
 
 
-    public static String getPaymentSearchQueryForPlainSearch(PaymentSearchCriteria searchCriteria,
+    public String getPaymentSearchQueryForPlainSearch(PaymentSearchCriteria searchCriteria,
                                                              Map<String, Object> preparedStatementValues) {
         StringBuilder selectQuery = new StringBuilder(SELECT_PAYMENT_SQL);
 
@@ -378,12 +378,12 @@ public class PaymentQueryBuilder {
     }
 
 
-    private static void addWhereClause(StringBuilder selectQuery, Map<String, Object> preparedStatementValues,
+    private void addWhereClause(StringBuilder selectQuery, Map<String, Object> preparedStatementValues,
                                        PaymentSearchCriteria searchCriteria) {
 
         if (StringUtils.isNotBlank(searchCriteria.getTenantId())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            if(searchCriteria.getTenantId().split("\\.").length > 1) {
+            if(searchCriteria.getTenantId().split("\\.").length > configs.getStateLevelTenantIdLength()) {
                 selectQuery.append(" py_inner.tenantId =:tenantId");
                 preparedStatementValues.put("tenantId", searchCriteria.getTenantId());
             }
@@ -555,16 +555,16 @@ public class PaymentQueryBuilder {
      * @return Query with pagination
      */
     private void addPagination(StringBuilder query,Map<String, Object> preparedStatementValues,PaymentSearchCriteria criteria){
-        int limit = config.getDefaultLimit();
+        int limit = configs.getDefaultLimit();
         int offset = 0;
         query.append(" OFFSET :offset ");
         query.append(" LIMIT :limit ");
 
-        if(criteria.getLimit()!=null && criteria.getLimit()<=config.getMaxSearchLimit())
+        if(criteria.getLimit()!=null && criteria.getLimit()<= configs.getMaxSearchLimit())
             limit = criteria.getLimit();
 
-        if(criteria.getLimit()!=null && criteria.getLimit()>config.getMaxSearchLimit())
-            limit = config.getMaxSearchLimit();
+        if(criteria.getLimit()!=null && criteria.getLimit()> configs.getMaxSearchLimit())
+            limit = configs.getMaxSearchLimit();
 
         if(criteria.getOffset()!=null)
             offset = criteria.getOffset();
@@ -720,12 +720,12 @@ public class PaymentQueryBuilder {
 
     }
 
-    private static void addWhereClauseForPlainSearch(StringBuilder selectQuery, Map<String, Object> preparedStatementValues,
+    private void addWhereClauseForPlainSearch(StringBuilder selectQuery, Map<String, Object> preparedStatementValues,
                                        PaymentSearchCriteria searchCriteria) {
 
         if (StringUtils.isNotBlank(searchCriteria.getTenantId())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            if(searchCriteria.getTenantId().split("\\.").length > 1) {
+            if(searchCriteria.getTenantId().split("\\.").length > configs.getStateLevelTenantIdLength()) {
                 selectQuery.append(" py.tenantId =:tenantId");
                 preparedStatementValues.put("tenantId", searchCriteria.getTenantId());
             }

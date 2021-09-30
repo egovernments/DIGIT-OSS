@@ -193,4 +193,9 @@ public class ApplicationProperties {
     @Value("${amendment.id.format.name}")
     private String amendmentIdFormatName;
     
+    // central-instance configs
+    
+    @Value("${state.level.tenantid.length}")
+    private Integer stateLevelTenantIdLength;
+    
 }

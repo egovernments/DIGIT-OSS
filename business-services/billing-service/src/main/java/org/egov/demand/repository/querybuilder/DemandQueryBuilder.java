@@ -45,7 +45,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.egov.demand.config.ApplicationProperties;
 import org.egov.demand.model.DemandCriteria;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -54,6 +56,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class DemandQueryBuilder {
+	
+	@Autowired
+	private ApplicationProperties configs;
 	
 
 	public static final String PAYMENT_BACKUPDATE_AUDIT_INSERT_QUERY = "INSERT INTO {{SCHEMA}}.egbs_payment_backupdate_audit (paymentid, isbackupdatesuccess, isreceiptcancellation, errorMessage)"
@@ -160,10 +165,10 @@ public class DemandQueryBuilder {
 		String tenantId = demandCriteria.getTenantId();
 		String[] tenantIdChunks = tenantId.split("\\.");
 		
-		if(tenantIdChunks.length == 1){
+		if (tenantIdChunks.length <= configs.getStateLevelTenantIdLength()) {
 			demandQuery.append(" dmd.tenantid LIKE ? ");
 			preparedStatementValues.add(demandCriteria.getTenantId() + '%');
-		}else{
+		} else {
 			demandQuery.append(" dmd.tenantid = ? ");
 			preparedStatementValues.add(demandCriteria.getTenantId());
 		}
