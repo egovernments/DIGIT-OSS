@@ -509,6 +509,18 @@ public class WorkflowQueryBuilder {
 //            addToPreparedStatement(preparedStmtList, businessIds);
 //        }
 
+        List<String> businessIds = criteria.getBusinessIds();
+        if (!CollectionUtils.isEmpty(businessIds)) {
+            if(isFuzzyEnabled) {
+                query.append(" and businessId LIKE ANY(ARRAY[ ").append(createQuery(businessIds)).append("])");
+                addToPreparedStatementForFuzzySearch(preparedStmtList, businessIds);
+            }
+            else {
+                query.append(" and businessId IN ( ").append(createQuery(businessIds)).append(")");
+                addToPreparedStatement(preparedStmtList, businessIds);
+            }
+        }
+
 //        List<String> uuidsOfAutoEscalationEmployees = criteria.getMultipleAssignees();
 //        if(!CollectionUtils.isEmpty(uuidsOfAutoEscalationEmployees)){
 //            addClauseIfRequired(query, preparedStmtList);
