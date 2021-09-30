@@ -8,6 +8,7 @@ import { configPTAssessProperty } from "./PTAssessProperty";
 import { configTLApproverApplication } from "./TLApproverApplication";
 import { configBPAREGApproverApplication } from "./BPAREGApproverApplication";
 import { configBPAApproverApplication } from "./BPAApproverApplication";
+import { configNOCApproverApplication } from "./NOCApproverApplication";
 
 export {
   configAssignDso,
@@ -19,5 +20,6 @@ export {
   configPTAssessProperty,
   configTLApproverApplication,
   configBPAREGApproverApplication,
-  configBPAApproverApplication
+  configBPAApproverApplication,
+  configNOCApproverApplication
 };

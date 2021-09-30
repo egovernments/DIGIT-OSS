@@ -51,13 +51,17 @@ const ApplicationOverview = () => {
     data: updateResponse,
     error: updateError,
     mutate,
-  } = Digit.Hooks.obps.useBPAREGApplicationActions(tenantId);
+  } = Digit.Hooks.noc.useNOCApplicationActions(tenantId);
+
 
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: tenantId,
     id: id,
     moduleCode: "NOC",
   });
+
+  if(workflowDetails && workflowDetails.data && !workflowDetails.isLoading)
+  workflowDetails.data.actionState.nextActions = [...workflowDetails?.data?.nextActions];
 
   const closeToast = () => {
     setShowToast(null);
@@ -74,6 +78,10 @@ const ApplicationOverview = () => {
   useEffect(() => {
     setCommonDocMaping(commonDocs?.["common-masters"]?.DocumentType);
   }, [commonDocs]);
+
+  useEffect(() => {
+    sessionStorage.setItem("NewNOCDocs",JSON.stringify(nocDocuments));
+  },[nocDocuments]);
 
   useEffect(() => {
     if (nocDatils?.length && nocDocumentTypeMaping?.length) {
@@ -211,7 +219,7 @@ const ApplicationOverview = () => {
         mutate={mutate}
         workflowDetails={workflowDetails}
         businessService={workflowDetails?.data?.applicationBusinessService ? workflowDetails?.data?.applicationBusinessService : applicationDetails?.applicationData?.businessService}
-        moduleCode="BPAREG"
+        moduleCode="NOC"
         showToast={showToast}
         setShowToast={setShowToast}
         closeToast={closeToast}
@@ -239,19 +247,19 @@ function SelectDocument({
   const handleSelectDocument = (value) => setSelectedDocument(value);
 
   function selectfile(e) {
-    setFile(e.target.files[0]);
+    e && setFile(e.file);
   }
 
   useEffect(() => {
     if (selectedDocument?.code) {
       setNocDocuments((prev) => {
-        const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
+        //const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
 
         if (uploadedFile?.length === 0 || uploadedFile === null) {
-          return filteredDocumentsByDocumentType;
+          return prev;
         }
 
-        const filteredDocumentsByFileStoreId = filteredDocumentsByDocumentType?.filter((item) => item?.fileStoreId !== uploadedFile);
+        const filteredDocumentsByFileStoreId = prev?.filter((item) => item?.fileStoreId !== uploadedFile);
         return [
           ...filteredDocumentsByFileStoreId,
           {
@@ -290,17 +298,25 @@ function SelectDocument({
     })();
   }, [file]);
 
+  const getData =(state) => {
+    let data = Object.fromEntries(state);
+    let newArr = Object.values(data);
+    selectfile(newArr[newArr.length-1]);
+  }
+
   return (
     <div >
-      <UploadFile
-        id={"noc-doc"}
-        extraStyleName={"propertyCreate"}
-        accept=".jpg,.png,.pdf"
-        onUpload={selectfile}
-        onDelete={() => { setUploadedFile(null); }}
-        message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`ES_NO_FILE_SELECTED_LABEL`)}
-        error={error}
-      />
+      {/* <UploadFile
+            onUpload={(e) => onUploadMultipleFiles(e)}
+            removeTargetedFile={(fileDetailsData) => dispatch({type: TARGET_FILE_REMOVAL ,payload: fileDetailsData})} 
+            uploadedFiles={state}
+            multiple={true}
+        /> */}
+      <MultiUploadWrapper
+                    module="NOC"
+                    tenantId={tenantId}
+                    getFormState={e => getData(e)}
+                    />
     </div>
   );
 }
