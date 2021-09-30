@@ -22,12 +22,12 @@ const EngagementCard = () => {
     ],
     links: [
       {
-        count: "29",
+        count: "-",
         label: t("ES_TITLE_DOCS"),
         link: `/digit-ui/employee/engagement/documents/inbox`,
       },
       {
-        count: "18",
+        count: "-",
         label: t("ES_TITLE_EVENT_INBOX"),
         link: `/digit-ui/employee/engagement/event/inbox`,
       },

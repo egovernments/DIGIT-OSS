@@ -21,14 +21,19 @@ const getFileUrl = async (fileStoreId) => {
   try {
     const response = await Digit.UploadServices.Filefetch([fileStoreId], Digit.ULBService.getStateId());
     if (response?.data?.fileStoreIds?.length > 0) {
+      const url = response.data.fileStoreIds[0]?.url
+      if(url.includes('.jpg') || url.includes('.png')){
+        const arr = url.split(',');
+        return arr[1];
+      }
       return response.data.fileStoreIds[0]?.url;
     }
   } catch (err) {
-    console.error("Modal -> err ", err);
+    console.error("Failed to Fetch from filestore", err);
   }
 }
 
-const openDocument = async (filestoreId, name) => {
+export const openDocument = async (filestoreId, name) => {
   const w = window.open('', '_blank');
   const url = await getFileUrl(filestoreId)
   w.location = url;

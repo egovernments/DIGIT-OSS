@@ -71,8 +71,8 @@ const EventsBreadCrumb = ({ location }) => {
       show: location.pathname.includes("/documents/inbox/new-doc") ? true : false,
     },
     {
-      path: "/digit-ui/employee/engagement/documents/new/response",
-      content: t("DOCUMENTS_DOCUMENT_HEADER"),
+      path: "/digit-ui/employee/engagement/documents/response",
+      content: t("ES_EVENT_NEW_EVENT_RESPONSE"),
       show: location.pathname.includes("/documents/response") ? true : false,
     },
     {
