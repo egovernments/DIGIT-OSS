@@ -15,12 +15,12 @@ const DocumentList = ({ match }) => {
   const { t } = useTranslation()
   const { category } = match.params || 'CATEGORY_CITIZEN_CHARTER';
   const tenantIds = Digit.SessionStorage.get("Employee.tenantId")
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
   const [pageOffset, setPageOffset] = useState(0);
   const [searchValue, setSearchValue] = useState();
 
 
-  const { data: filteredDocs, isLoading: isLoadingDocs, } = Digit.Hooks.engagement.useDocSearch({ name: searchValue, category, tenantIds }, {
+  const { data: filteredDocs, isLoading: isLoadingDocs, } = Digit.Hooks.engagement.useDocSearch({ name: searchValue, category, tenantIds, limit:pageSize }, {
     limit: pageSize,
     offset: pageOffset,
     select: (data) => {

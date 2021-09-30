@@ -61,7 +61,6 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
     }
 
     const clearSearch = () => {
-        console.log('called', tenantId)
         reset({ name: '', ulbs: { code: tenantId.code }, postedBy: "" });
         onSearch({ name: '', ulbs: { code: tenantId.code }, postedBy: "" })
     };

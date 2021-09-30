@@ -10,6 +10,9 @@ const DocumentNotificationTable = ({
   getCellProps,
   pageSizeLimit,
   totalRecords,
+  onNextPage,
+  onPrevPage,
+  onPageSizeChange,
   onSort,
   sortParams
 }) => {
@@ -22,7 +25,10 @@ const DocumentNotificationTable = ({
       globalSearch={globalSearch}
       manualGlobalFilter={true}
       manualPagination={false}
+      onNextPage={onNextPage}
+      onPrevPage={onPrevPage}
       pageSizeLimit={pageSizeLimit}
+      onPageSizeChange={onPageSizeChange}
       getCellProps={getCellProps}
       totalRecords={totalRecords}
       onSort={onSort}

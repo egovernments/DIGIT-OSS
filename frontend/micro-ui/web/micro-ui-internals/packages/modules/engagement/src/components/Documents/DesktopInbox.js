@@ -22,7 +22,7 @@ const getFileUrl = async (fileStoreId) => {
     const response = await Digit.UploadServices.Filefetch([fileStoreId], Digit.ULBService.getStateId());
     if (response?.data?.fileStoreIds?.length > 0) {
       const url = response.data.fileStoreIds[0]?.url
-      if(url.includes('.jpg') || url.includes('.png')){
+      if (url.includes('.jpg') || url.includes('.png')) {
         const arr = url.split(',');
         return arr[1];
       }
@@ -45,7 +45,7 @@ const getDocumentDetails = (value = "", link, t) => <span className="document-ta
 const getDocumentCell = (link, t, name = "mSeva") => <span className="document-table-docs-columns" ><span className="link" onClick={() => openDocument(link, name)} >{t('CE_DOCUMENT_VIEW_LINK')}</span></span>
 
 
-const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, links, onSort, sortParams, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords }) => {
+const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, links, onSort, sortParams, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords, onNextPage, onPrevPage, onPageSizeChange }) => {
   const columns = React.useMemo(() => [
     {
       Header: t('CE_TABLE_DOCUMENT_NAME'),
@@ -88,6 +88,9 @@ const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, l
         onSearch={searchParams}
         pageSizeLimit={pageSizeLimit}
         totalRecords={totalRecords}
+        onNextPage={onNextPage}
+        onPrevPage={onPrevPage}
+        onPageSizeChange={onPageSizeChange}
         getCellProps={(cellInfo) => {
           return {
             style: {

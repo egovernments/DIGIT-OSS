@@ -10,39 +10,21 @@ const Inbox = ({ tenants }) => {
     const { t } = useTranslation()
     Digit.SessionStorage.set("ENGAGEMENT_TENANTS", tenants);
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(20);
     const [pageOffset, setPageOffset] = useState(0);
     const [searchParams, setSearchParams] = useState({
         tenantIds: tenantId,
+        offset:pageOffset,
+        limit:pageSize
     });
-   
+
+
     let isMobile = window.Digit.Utils.browser.isMobile();
     const { data: documentsList, isLoading } = Digit.Hooks.engagement.useDocSearch(searchParams, {
         limit: pageSize,
         offset: pageOffset,
         select: (data) => {
-            return data?.Documents?.map((
-                { uuid,
-                    name,
-                    category,
-                    documentLink,
-                    description,
-                    postedBy,
-                    tenantId,
-                    auditDetails,
-                    filestoreId,
-                }
-            ) => ({
-                id: uuid,
-                name,
-                category,
-                documentLink,
-                postedBy,
-                tenantId,
-                lastModifiedDate: auditDetails?.lastModifiedTime,
-                description,
-                filestoreId
-            }))
+            return data?.Documents;
         }
     });
 
@@ -55,6 +37,19 @@ const Inbox = ({ tenants }) => {
     const handleFilterChange = (data) => {
         setSearchParams((prevSearchParams) => ({ ...prevSearchParams, ...data }));
     }
+
+    const fetchNextPage = () => {
+        setPageOffset((prevState) => prevState + pageSize);
+      };
+    
+      const fetchPrevPage = () => {
+        setPageOffset((prevState) => prevState - pageSize);
+      };
+    
+      const handlePageSizeChange = (e) => {
+        console.log(Number(e.target.value))  
+        setPageSize(Number(e.target.value));
+      };
 
     useEffect(() => {
         setSearchParams((prevSearchParams) => ({ ...prevSearchParams, tenantIds: tenantId }))
@@ -77,7 +72,7 @@ const Inbox = ({ tenants }) => {
             }
         ]
     }
-    
+
     const links = [
         {
             text: t('NEW_DOCUMENT_TEXT'),
@@ -122,8 +117,11 @@ const Inbox = ({ tenants }) => {
                 title={"DOCUMENTS_DOCUMENT_HEADER"}
                 iconName={"document"}
                 links={links}
-                //onSort={handleSortBy}
-                //sortParams={sortParams}
+                onNextPage={fetchNextPage}
+                onPrevPage={fetchPrevPage}
+                onPageSizeChange={handlePageSizeChange}
+            //onSort={handleSortBy}
+            //sortParams={sortParams}
             />
         </div>
     );
