@@ -17,7 +17,7 @@ const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ")
 const getOwner = (application, t, customTitle) => {
   console.log(customTitle, application, "inside owner details");
   let owners = [];
-  if(customTitle.includes("TRANSFEROR"))
+  if(customTitle&&customTitle.includes("TRANSFEROR"))
   owners = [...(application?.owners.filter((owner) => owner.status == "INACTIVE") || [])];
   else
   owners = [...(application?.owners.filter((owner) => owner.status == "ACTIVE") || [])];

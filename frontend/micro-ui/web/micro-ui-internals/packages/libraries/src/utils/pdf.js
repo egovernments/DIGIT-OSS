@@ -156,6 +156,7 @@ const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, headin
       font: "Hind",
     },
   };
+  pdfMake.vfs = Fonts;
   let locale = Digit.SessionStorage.get("locale") || "en_IN";
   let Hind = pdfFonts[locale]|| pdfFonts["Hind"];
   pdfMake.fonts ={Hind:{...Hind}};
