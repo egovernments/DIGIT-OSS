@@ -218,7 +218,7 @@ export const FormComposer = (props) => {
   const isDisabled = props.isDisabled || false;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} id={props.formId}>
+    <form onSubmit={handleSubmit(onSubmit)} id={props.formId} className={props.className}>
       <Card style={getCardStyles()}>
         {!props.childrenAtTheBottom && props.children}
         {props.heading && <CardSubHeader style={{ ...props.headingStyle }}> {props.heading} </CardSubHeader>}

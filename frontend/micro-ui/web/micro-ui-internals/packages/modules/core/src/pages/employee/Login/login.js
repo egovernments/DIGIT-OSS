@@ -111,6 +111,7 @@ const Login = ({ config: propsConfig, t }) => {
         heading={propsConfig.texts.header}
         headingStyle={{ textAlign: "center" }}
         cardStyle={{ margin: "auto", minWidth: "400px" }}
+        className = "loginFormStyleEmployee"
       >
         <Header />
       </FormComposer>

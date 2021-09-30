@@ -1,0 +1,41 @@
+.loginFormStyleEmployee {
+  .employeeCard {
+    .submit-bar {
+      @apply w-full;
+    }
+  }
+}
+.employeeForgotPassword .employeeCard .field .field-container .component-in-front {
+  margin-top: 0;
+  border: 1px solid;
+  border-right: none;
+}
+.employeeForgotPassword .employee-card-input {
+  margin-bottom: 0px;
+  border-left: none;
+}
+.employeeForgotPassword .field-container {
+  margin: 10px 0;
+}
+.employeeForgotPassword {
+  .submit-bar {
+    @apply w-full;
+  }
+}
+.employeeChangePassword .submit-bar{
+  width: 100% !important;
+}
+.employeeChangePassword .card-text {
+  text-align: center;
+}
+.employeeChangePassword .input-otp-wrap {
+  text-align: center;
+}
+.submit-bar {
+  .submit-bar {
+    @apply w-full;
+  }
+}
+.loginFormStyleEmployee .bannerHeader p, .employeeForgotPassword .bannerHeader p, .employeeChangePassword .bannerHeader p{
+  font-size: 19px;
+}
