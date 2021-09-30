@@ -7,7 +7,8 @@ import {
   StatusTable,
   Row,
   UploadFile,
-  PDFSvg
+  PDFSvg,
+  MultiUploadWrapper
 } from "@egovernments/digit-ui-react-components";
 import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDetails";
 import { convertEpochToDate } from "../../../utils";
@@ -74,6 +75,11 @@ const ApplicationOverview = () => {
   useEffect(() => {
     setCommonDocMaping(commonDocs?.["common-masters"]?.DocumentType);
   }, [commonDocs]);
+
+  useEffect(() => {
+    console.log(nocDocuments,"nocdocuments");
+    debugger;
+  },[nocDocuments]);
 
   useEffect(() => {
     if (nocDatils?.length && nocDocumentTypeMaping?.length) {
@@ -300,7 +306,18 @@ function SelectDocument({
         onDelete={() => { setUploadedFile(null); }}
         message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`ES_NO_FILE_SELECTED_LABEL`)}
         error={error}
+        multiple={true}
       />
+      {/* <UploadFile
+            onUpload={(e) => onUploadMultipleFiles(e)}
+            removeTargetedFile={(fileDetailsData) => dispatch({type: TARGET_FILE_REMOVAL ,payload: fileDetailsData})} 
+            uploadedFiles={state}
+            multiple={true}
+        /> */}
+      {/* <MultiUploadWrapper
+                    module="NOC"
+                    tenantId={tenantId}
+                    /> */}
     </div>
   );
 }
