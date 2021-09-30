@@ -24,9 +24,9 @@ public class BusinessServiceQueryBuilder {
              " ac.lastModifiedTime as ac_lastModifiedTime,ac.createdTime as ac_createdTime," +
              "ac.createdBy as ac_createdBy,ac.lastModifiedBy as ac_lastModifiedBy," +
              "ac.uuid as ac_uuid,ac.tenantId as ac_tenantId,ac.active as ac_active "  +
-             " FROM eg_wf_businessService_v2 bs " +
-            INNER_JOIN + " eg_wf_state_v2 st ON st.businessServiceId = bs.uuid " +
-            LEFT_OUTER_JOIN  + " eg_wf_action_v2 ac ON ac.currentState = st.uuid AND ac.active=TRUE ";
+             " FROM {SCHEMA}.eg_wf_businessService_v2 bs " +
+            INNER_JOIN + " {SCHEMA}.eg_wf_state_v2 st ON st.businessServiceId = bs.uuid " +
+            LEFT_OUTER_JOIN  + " {SCHEMA}.eg_wf_action_v2 ac ON ac.currentState = st.uuid AND ac.active=TRUE ";
 
 
 
