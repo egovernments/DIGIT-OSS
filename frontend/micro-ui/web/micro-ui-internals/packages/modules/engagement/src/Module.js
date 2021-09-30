@@ -77,7 +77,7 @@ const EventsBreadCrumb = ({ location }) => {
     },
     {
       path: "/digit-ui/employee/engagement/documents/inbox/details/:id",
-      content: t("DOCUMENTS_DOCUMENT_HEADER"),
+      content: t("CE_DOCUMENT_DETAILS"),
       show: location.pathname.includes("/documents/inbox/details") ? true : false,
     },
 
