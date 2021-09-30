@@ -8,6 +8,7 @@ import org.egov.wf.config.WorkflowConfig;
 import org.egov.wf.repository.querybuilder.BusinessServiceQueryBuilder;
 import org.egov.wf.repository.rowmapper.BusinessServiceRowMapper;
 import org.egov.wf.service.MDMSService;
+import org.egov.wf.util.CommonUtil;
 import org.egov.wf.util.WorkflowUtil;
 import org.egov.wf.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +35,12 @@ public class BusinessServiceRepository {
 
     private MDMSService mdmsService;
 
-    private WorkflowUtil util;
+    private CommonUtil util;
 
 
     @Autowired
     public BusinessServiceRepository(BusinessServiceQueryBuilder queryBuilder, JdbcTemplate jdbcTemplate,
-                                     BusinessServiceRowMapper rowMapper, WorkflowConfig config, MDMSService mdmsService, WorkflowUtil util) {
+                                     BusinessServiceRowMapper rowMapper, WorkflowConfig config, MDMSService mdmsService, CommonUtil util) {
         this.queryBuilder = queryBuilder;
         this.jdbcTemplate = jdbcTemplate;
         this.rowMapper = rowMapper;

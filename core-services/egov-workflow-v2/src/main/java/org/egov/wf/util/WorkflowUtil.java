@@ -496,12 +496,4 @@ public class WorkflowUtil {
         return finalQuery;
     }
 
-
-
-
-
-
-
-
-
 }
