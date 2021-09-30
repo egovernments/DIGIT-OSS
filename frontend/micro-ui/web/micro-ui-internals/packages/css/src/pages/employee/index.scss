@@ -230,7 +230,7 @@
 }
 
 .link {
-  @apply text-primary-main;
+  @apply text-primary-main cursor-pointer ;
 
   :hover {
     @apply text-primary-dark;

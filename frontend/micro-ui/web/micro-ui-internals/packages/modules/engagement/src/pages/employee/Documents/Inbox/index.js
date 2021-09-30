@@ -29,7 +29,8 @@ const Inbox = ({ tenants }) => {
                     description,
                     postedBy,
                     tenantId,
-                    auditDetails
+                    auditDetails,
+                    filestoreId,
                 }
             ) => ({
                 id: uuid,
@@ -39,7 +40,8 @@ const Inbox = ({ tenants }) => {
                 postedBy,
                 tenantId,
                 lastModifiedDate: auditDetails?.lastModifiedTime,
-                description
+                description,
+                filestoreId
             }))
         }
     });
