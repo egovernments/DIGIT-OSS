@@ -16,6 +16,7 @@ import BPASendToArchitect from "./BPASendToArchitect";
 import OCSendToArchitect from "./OCSendToArchitect";
 import BPASendBackToCitizen from "./BPASendBackToCitizen";
 import OCSendBackToCitizen from "./OCSendBackToCitizen";
+import MultiUploadWrapper from "./MultiUploadWrapper"
 
 const App = ({ path }) => {
   const location = useLocation()
@@ -24,6 +25,7 @@ const App = ({ path }) => {
         <React.Fragment>
           {!location.pathname.includes("response") && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
           <Switch>
+            <PrivateRoute path={`${path}/multi-upload-test`} component={() => <MultiUploadWrapper />} />
             <PrivateRoute path={`${path}/home`} component={BPACitizenHomeScreen} />
             <PrivateRoute path={`${path}/edcrscrutiny/apply`} component={CreateEDCR} />
             <PrivateRoute path={`${path}/edcrscrutiny/oc-apply`} component={CreateOCEDCR} />

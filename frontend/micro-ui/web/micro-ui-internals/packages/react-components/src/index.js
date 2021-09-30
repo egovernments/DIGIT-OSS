@@ -93,7 +93,7 @@ import LocationSearchCard from "./molecules/LocationSearchCard";
 import PitDimension from "./molecules/PitDimension";
 import RadioOrSelect from "./molecules/RadioOrSelect";
 import RatingCard from "./molecules/RatingCard";
-import RemoveableTag from "./molecules/RemoveableTag";
+import RemoveableTag from "./atoms/RemoveableTag";
 import SearchAction from "./molecules/SearchAction";
 import { SearchField, SearchForm } from "./molecules/SearchForm";
 import TextInputCard from "./molecules/TextInputCard";
@@ -101,6 +101,7 @@ import TypeSelectCard from "./molecules/TypeSelectCard";
 import PageBasedInput from "./molecules/PageBasedInput";
 import SearchOnRadioButtons from "./molecules/SearchOnRadioButtons";
 import OnGroundEventCard from "./molecules/OnGroundEventCard";
+import MultiUploadWrapper from "./molecules/MultiUploadWrapper";
 
 export {
   Body,
@@ -220,6 +221,7 @@ export {
   PageBasedInput,
   SearchOnRadioButtons,
   OnGroundEventCard,
+  MultiUploadWrapper,
   // hoc
   FormComposer,
   ResponseComposer,
