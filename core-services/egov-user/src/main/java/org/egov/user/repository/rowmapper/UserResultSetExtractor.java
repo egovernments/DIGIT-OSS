@@ -2,6 +2,8 @@ package org.egov.user.repository.rowmapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.user.domain.model.Address;
+import org.egov.user.domain.model.AuditAlternateNumber;
+import org.egov.user.domain.model.AuditMobileNumber;
 import org.egov.user.domain.model.Role;
 import org.egov.user.domain.model.User;
 import org.egov.user.domain.model.enums.*;
@@ -90,6 +92,10 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
 
             Role role = populateRole(rs);
             Address address = populateAddress(rs, user);
+            
+            populateAuditHistory(rs,user);
+            
+            populateAlternateAudit(rs,user);
 
             if (!isNull(role))
                 user.addRolesItem(role);
@@ -102,7 +108,79 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
         return new ArrayList<>(usersMap.values());
     }
 
-    private Role populateRole(ResultSet rs) throws SQLException {
+    private void populateAlternateAudit(ResultSet rs, User user) throws SQLException{
+		// TODO Auto-generated method stub
+    	if(user.getAuditAlternatetrail()==null) {
+    		Set<AuditAlternateNumber> list = new HashSet<AuditAlternateNumber>();
+    		user.setAuditAlternatetrail(list);
+    	}
+    	
+    	Set <AuditAlternateNumber> auditHistory = user.getAuditAlternatetrail();
+    	
+    	if(rs.getString("aud_alt_uuid")!=null) {
+    		
+    		AuditAlternateNumber trail = AuditAlternateNumber.builder().uuid(rs.getString("aud_alt_uuid")).createdby(rs.getString("aud_alt_createdby")).createdtime(rs.getTimestamp("aud_alt_createdtime")).
+    				lastmodifiedby(rs.getString("aud_alt_lastmodifiedby")).lastmodifiedtime(rs.getTimestamp("aud_alt_lastmodifiedtime")).mobilenumber(rs.getString("aud_alt_mobilenumber")).build();
+    	
+    		boolean isExists = false;
+    		
+    		for (AuditAlternateNumber existing : auditHistory) {
+    			
+    			if (existing.equals(trail)) {
+    				isExists=true;
+    				break;
+    			}
+    		}
+    		
+    		if(!isExists) {
+    			auditHistory.add(trail);
+    		}
+    		
+    		user.setAuditAlternatetrail(auditHistory);
+    	
+    	}
+    	
+    	
+    	
+		
+	}
+
+	private void populateAuditHistory(ResultSet rs, User user) throws SQLException {
+		// TODO Auto-generated method stub
+    	if(user.getAudittrail()==null) {
+    		Set<AuditMobileNumber> list = new HashSet<AuditMobileNumber>();
+    		user.setAudittrail(list);
+    	}
+    	
+    	Set <AuditMobileNumber> auditHistory = user.getAudittrail();
+    	
+    	if(rs.getString("aud_uuid")!=null) {
+    		
+    		AuditMobileNumber trail = AuditMobileNumber.builder().uuid(rs.getString("aud_uuid")).createdby(rs.getString("aud_createdby")).createdtime(rs.getTimestamp("aud_createdtime")).
+    				lastmodifiedby(rs.getString("aud_lastmodifiedby")).lastmodifiedtime(rs.getTimestamp("aud_lastmodifiedtime")).mobilenumber(rs.getString("aud_mobilenumber")).build();
+    	
+    		boolean isExists = false;
+    		
+    		for (AuditMobileNumber existing : auditHistory) {
+    			
+    			if (existing.equals(trail)) {
+    				isExists=true;
+    				break;
+    			}
+    		}
+    		
+    		if(!isExists) {
+    			auditHistory.add(trail);
+    		}
+    		
+    		user.setAudittrail(auditHistory);
+    	
+    	}
+    	
+		
+	}
+
+	private Role populateRole(ResultSet rs) throws SQLException {
         String code = rs.getString("role_code");
         if (code == null) {
             return null;

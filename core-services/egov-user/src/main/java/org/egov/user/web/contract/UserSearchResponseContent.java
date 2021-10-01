@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.egov.user.domain.model.Address;
+import org.egov.user.domain.model.AuditAlternateNumber;
+import org.egov.user.domain.model.AuditMobileNumber;
 import org.egov.user.domain.model.Role;
 import org.egov.user.domain.model.User;
 import org.egov.user.domain.model.enums.GuardianRelation;
@@ -58,6 +60,8 @@ public class UserSearchResponseContent {
     private String tenantId;
     private Set<RoleRequest> roles;
     private String uuid;
+    private Set<AuditMobileNumber> audittrail;
+    private Set<AuditAlternateNumber> auditAlternatetrail;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private Date createdDate;
@@ -102,6 +106,8 @@ public class UserSearchResponseContent {
         this.uuid = user.getUuid();
         this.addresses = user.getAddresses();
         this.alternatemobilenumber=user.getAlternateMobileNumber();
+        this.audittrail=user.getAudittrail();
+        this.auditAlternatetrail=user.getAuditAlternatetrail();
         mapPermanentAddress(user);
         mapCorrespondenceAddress(user);
     }

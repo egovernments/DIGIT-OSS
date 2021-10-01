@@ -66,9 +66,11 @@ public class UserTypeQueryBuilder {
             ".bloodgroup, userdata.photo, userdata.identificationmark,  userdata.tenantid, userdata.id, userdata.uuid, userdata.alternatemobilenumber, addr.id as addr_id, addr.type as " +
             "addr_type, addr .address as addr_address,  addr.city as addr_city, addr.pincode as addr_pincode, addr" +
             ".tenantid as " +
-            "addr_tenantid, addr.userid as addr_userid, ur.role_code as role_code, ur.role_tenantid as role_tenantid \n" +
+            "addr_tenantid, addr.userid as addr_userid, ur.role_code as role_code, ur.role_tenantid as role_tenantid,aud.uuid as aud_uuid, aud.createdby as aud_createdby, aud.createdtime as aud_createdtime, "+
+            "aud.lastmodifiedby as aud_lastmodifiedby, aud.lastmodifiedtime as aud_lastmodifiedtime, aud.mobilenumber as aud_mobilenumber, " +
+            "aud_alt.uuid as aud_alt_uuid, aud_alt.createdby as aud_alt_createdby, aud_alt.createdtime as aud_alt_createdtime, aud_alt.lastmodifiedby as aud_alt_lastmodifiedby, aud_alt.lastmodifiedtime as aud_alt_lastmodifiedtime, aud_alt.mobilenumber as aud_alt_mobilenumber \n"+
             "\tFROM eg_user userdata LEFT OUTER JOIN eg_user_address addr ON userdata.id = addr.userid AND userdata.tenantid = addr" +
-            ".tenantid LEFT OUTER JOIN eg_userrole_v1 ur ON userdata.id = ur.user_id AND userdata.tenantid = ur.user_tenantid  ";
+            ".tenantid LEFT OUTER JOIN eg_userrole_v1 ur ON userdata.id = ur.user_id AND userdata.tenantid = ur.user_tenantid LEFT OUTER JOIN eg_user_audit aud ON userdata.uuid = aud.uuid LEFT OUTER JOIN eg_user_alternate_audit aud_alt ON userdata.uuid=aud_alt.uuid";
 
     private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY id) offset_ FROM " +

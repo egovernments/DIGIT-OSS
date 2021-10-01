@@ -40,18 +40,22 @@ public class UserRepository {
     private UserTypeQueryBuilder userTypeQueryBuilder;
     private RoleRepository roleRepository;
     private UserResultSetExtractor userResultSetExtractor;
+    private AuditRepository auditRepository;
+    private AlternateNumberRepository alternateNumberRepository;
 
     @Autowired
     UserRepository(RoleRepository roleRepository, UserTypeQueryBuilder userTypeQueryBuilder,
                    AddressRepository addressRepository, UserResultSetExtractor userResultSetExtractor,
                    JdbcTemplate jdbcTemplate,
-                   NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+                   NamedParameterJdbcTemplate namedParameterJdbcTemplate,AuditRepository auditRepository,AlternateNumberRepository alternateNumberRepository) {
         this.addressRepository = addressRepository;
         this.roleRepository = roleRepository;
         this.userTypeQueryBuilder = userTypeQueryBuilder;
         this.userResultSetExtractor = userResultSetExtractor;
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        this.auditRepository = auditRepository;
+        this.alternateNumberRepository = alternateNumberRepository;
     }
 
     /**
@@ -159,16 +163,24 @@ public class UserRepository {
                 savedUser.getTenantId());
         savedUser.setPermanentAddress(savedPermanentAddress);
         savedUser.setCorrespondenceAddress(savedCorrespondenceAddress);
+        
+        //saveAuditDetails(savedUser);
+        
         return savedUser;
     }
 
-    /**
+    public void saveAuditDetails(User user) {
+		auditRepository.create(user,user);
+		
+	}
+
+	/**
      * api will update the user details.
      *
      * @param user
      * @return
      */
-    public void update(final User user, User oldUser) {
+    public void update(User dummyUser, final User user, User oldUser, boolean isNumberUpdated) {
 
 
         Map<String, Object> updateuserInputs = new HashMap<>();
@@ -295,6 +307,16 @@ public class UserRepository {
         }
         if (user.getPermanentAndCorrespondenceAddresses() != null) {
             addressRepository.update(user.getPermanentAndCorrespondenceAddresses(), user.getId(), user.getTenantId());
+        }
+        
+        if(isNumberUpdated) {
+        
+        auditRepository.update(dummyUser, user,oldUser);
+        
+        }
+        
+        if(user.getAlternateMobileNumber()!=null) {
+        	alternateNumberRepository.update(user,oldUser);
         }
     }
 
@@ -577,5 +599,10 @@ public class UserRepository {
     private String getStateLevelTenant(String tenantId) {
         return tenantId.split("\\.")[0];
     }
+
+	public void saveAlternateAuditDetails(User user) {
+		alternateNumberRepository.create(user);
+		
+	}
 
 }

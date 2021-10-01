@@ -3,6 +3,7 @@ package org.egov.pt.models.user;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -10,6 +11,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.egov.common.contract.request.Role;
+import org.egov.pt.models.AuditAlternateNumber;
+import org.egov.pt.models.AuditMobileNumber;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.javers.core.metamodel.annotation.DiffIgnore;
 import org.springframework.validation.annotation.Validated;
@@ -204,6 +207,12 @@ public class User   {
         @SafeHtml
         @JsonProperty("alternatemobilenumber")
         private String alternatemobilenumber;
+        
+        @JsonProperty("audittrail")
+        private List<AuditMobileNumber> audittrail;
+        
+        @JsonProperty("auditAlternatetrail")
+        private List<AuditAlternateNumber> auditAlternatetrail;
 
 
         public User addRolesItem(Role rolesItem) {

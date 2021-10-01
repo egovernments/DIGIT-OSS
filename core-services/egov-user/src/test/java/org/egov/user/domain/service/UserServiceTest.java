@@ -250,7 +250,7 @@ public class UserServiceTest {
         User domainUser = validDomainUser(false);
         User user = User.builder().build();
         final User expectedUser = User.builder().build();
-        Mockito.doNothing().when(userRepository).update(any(org.egov.user.domain.model.User.class), any(User.class));
+        Mockito.doNothing().when(userRepository).update(any(User.class),any(org.egov.user.domain.model.User.class), any(User.class),true);
         when(userRepository.findAll(any(UserSearchCriteria.class))).thenReturn(Collections.singletonList(user));
         when(userService.getUniqueUser(anyString(), anyString(), any(UserType.class))).thenReturn
                 (expectedUser);
@@ -264,10 +264,10 @@ public class UserServiceTest {
     public void test_should_validate_user_on_update() {
         org.egov.user.domain.model.User domainUser = User.builder().uuid("xyz").build();
         User user = User.builder().build();
-        Mockito.doNothing().when(userRepository).update(any(org.egov.user.domain.model.User.class), any(org.egov.user
+        Mockito.doNothing().when(userRepository).update(any(org.egov.user.domain.model.User.class),any(org.egov.user.domain.model.User.class), any(org.egov.user
                 .domain
                 .model.User
-                .class));
+                .class),true);
         when(userRepository.findAll(any(UserSearchCriteria.class))).thenReturn(Collections.singletonList(user));
         userService.updateWithoutOtpValidation(domainUser, any());
         verify(domainUser).validateUserModification();
@@ -316,7 +316,7 @@ public class UserServiceTest {
 
         userService.partialUpdate(user, any());
 
-        verify(userRepository).update(user, user);
+        verify(userRepository).update(user,user, user,true);
     }
 
     @Test(expected = UserProfileUpdateDeniedException.class)
@@ -427,7 +427,7 @@ public class UserServiceTest {
         userService.updatePasswordForLoggedInUser(updatePasswordRequest);
 
 //		verify(domainUser).updatePassword(updatePasswordRequest.getNewPassword());
-        verify(userRepository).update(domainUser, domainUser);
+        verify(userRepository).update(domainUser,domainUser, domainUser,false);
     }
 
     @Test
@@ -577,7 +577,7 @@ public class UserServiceTest {
         when(encryptionDecryptionUtil.encryptObject(domainUser, "User", User.class)).thenReturn(domainUser);
         userService.updatePasswordForNonLoggedInUser(request, getValidRequestInfo());
 
-        verify(userRepository).update(domainUser, domainUser);
+        verify(userRepository).update(domainUser,domainUser, domainUser,false);
     }
 
     private org.egov.user.domain.model.User validDomainUser(boolean otpValidationMandatory) {

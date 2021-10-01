@@ -215,6 +215,9 @@ public class UserService {
         user.setUuid(UUID.randomUUID().toString());
         user.validateNewUser(createUserValidateName);
         conditionallyValidateOtp(user);
+        
+        User dummyUser = user;
+        
         /* encrypt here */
         user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
         validateUserUniqueness(user);
@@ -227,6 +230,14 @@ public class UserService {
         user.setDefaultPasswordExpiry(defaultPasswordExpiryInDays);
         user.setTenantId(getStateLevelTenantForCitizen(user.getTenantId(), user.getType()));
         User persistedNewUser = persistNewUser(user);
+        
+        dummyUser.setUuid(persistedNewUser.getUuid());
+        userRepository.saveAuditDetails(dummyUser);
+        
+        if(user.getAlternateMobileNumber()!=null) {
+        	userRepository.saveAlternateAuditDetails(user);
+        }
+        
         return encryptionDecryptionUtil.decryptObject(persistedNewUser, "User", User.class, requestInfo);
 
         /* decrypt here  because encrypted data coming from DB*/
@@ -355,8 +366,11 @@ public class UserService {
         validatePassword(user.getPassword());
         user.setPassword(encryptPwd(user.getPassword()));
         /* encrypt */
+        
+        User dummyUser = user;
+        
         user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
-        userRepository.update(user, existingUser);
+        userRepository.update(dummyUser, user, existingUser,true);
 
         // If user is being unlocked via update, reset failed login attempts
         if (user.getAccountLocked() != null && !user.getAccountLocked() && existingUser.getAccountLocked())
@@ -406,13 +420,15 @@ public class UserService {
      */
     public User partialUpdate(User user, RequestInfo requestInfo) {
         /* encrypt here */
+    	User dummyUser = user;
+    	
         user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
 
         final User existingUser = getUserByUuid(user.getUuid());
         validateProfileUpdateIsDoneByTheSameLoggedInUser(user);
         user.nullifySensitiveFields();
         validatePassword(user.getPassword());
-        userRepository.update(user, existingUser);
+        userRepository.update(dummyUser, user, existingUser,true);
         User updatedUser = getUserByUuid(user.getUuid());
         /* decrypt here */
 
@@ -440,7 +456,7 @@ public class UserService {
         validateExistingPassword(user, updatePasswordRequest.getExistingPassword());
         validatePassword(updatePasswordRequest.getNewPassword());
         user.updatePassword(encryptPwd(updatePasswordRequest.getNewPassword()));
-        userRepository.update(user, user);
+        userRepository.update(user,user, user,false);
     }
 
     /**
@@ -470,7 +486,7 @@ public class UserService {
         /* encrypt here */
         /* encrypted value is stored in DB*/
         user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
-        userRepository.update(user, user);
+        userRepository.update(user,user, user,false);
     }
 
 

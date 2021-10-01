@@ -27,6 +27,7 @@ import javax.validation.constraints.Size;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -84,6 +85,8 @@ public class User {
     private boolean otpValidationMandatory;
     private boolean mobileValidationMandatory = true;
     private String alternateMobileNumber;
+    private Set<AuditMobileNumber> audittrail;
+    private Set<AuditAlternateNumber> auditAlternatetrail;
 
     public User addAddressItem(Address addressItem) {
         if (this.addresses == null) {
