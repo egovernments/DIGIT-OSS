@@ -28,6 +28,11 @@ const timeStampBreakdown = (fromTS, toTS) => {
     }
 }
 
+const getTransformedLocale = label => {
+    if (typeof label === "number") return label;
+    return label && label.toUpperCase().replace(/[.:-\s\/]/g, "_");
+};
+
 const filterAllEvents = (data, variant) => data
 .filter(e => e.status === "ACTIVE")
 .map((e => ({
@@ -35,7 +40,7 @@ const filterAllEvents = (data, variant) => data
         timePastAfterEventCreation: Math.round((new Date().getTime() - e?.auditDetails?.createdTime)/86400000),
         timeApproxiamationInUnits: "CS_SLA_DAY",
         eventNotificationText: e?.description,
-        header: e?.name,
+        header: getTransformedLocale(e?.name),
         eventType: e?.eventType,
         actions: e?.actions?.actionUrls,
         ...variant === "events" || e?.eventType === "EVENTSONGROUND" ? timeStampBreakdown(e?.eventDetails?.fromDate, e?.eventDetails?.toDate) : {},

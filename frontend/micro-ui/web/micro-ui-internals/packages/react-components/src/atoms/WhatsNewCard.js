@@ -7,7 +7,7 @@ const WhatsNewCard = ({header, actions, eventNotificationText, timePastAfterEven
     return <div className="WhatsNewCard">
         <h2>{t(header)}</h2>
         <p>{eventNotificationText}</p>
-        {actions?.map(i => <a href={i?.actionUrl}>{t(i?.code)}</a>)}
+        {actions?.map(i => <a href={i?.actionUrl}>{`${t(`CS_COMMON_${i?.code}`)}`}</a>)}
         <p>{timePastAfterEventCreation + ` ${t(timeApproxiamationInUnits)}`}</p>
     </div>
 }
