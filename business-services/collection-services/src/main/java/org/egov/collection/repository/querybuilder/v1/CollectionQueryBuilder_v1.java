@@ -11,7 +11,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.v1.ReceiptSearchCriteria_v1;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CollectionQueryBuilder_v1 {
 	
 	@Autowired
