@@ -48,6 +48,7 @@ const DatePicker = (props) => {
           defaultValue={props.defaultValue}
           min={props.min}
           max={props.max}
+          required={props.isRequired || false}
         />
       </React.Fragment>
     </div>
