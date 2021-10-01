@@ -306,11 +306,27 @@ public class WorkflowQueryBuilder {
             String statusWhereCluse = getStatusRelatedWhereClause(statuses, tenantSpecificStatus, preparedStmtList);
             clause = clause.replace("{{OR_CLUASE_PLACEHOLDER}}", statusWhereCluse);
             with_query_builder.append(clause);
-        }
+        } 
         else {
-            with_query_builder.append(" AND id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?) AND pi_outer.tenantid = ? ");
-            preparedStmtList.add(criteria.getAssignee());
-            preparedStmtList.add(criteria.getTenantId());
+            if(criteria.getModuleName().equals("BPAREG")) {
+                List<String> statusesIrrespectiveOfTenant = criteria.getStatusesIrrespectiveOfTenant();
+                if (CollectionUtils.isEmpty(tenantSpecificStatus) && !CollectionUtils.isEmpty(statusesIrrespectiveOfTenant)) {
+                    String clause = " AND ((id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?)" +
+                            " AND pi_outer.tenantid = ? ) {{OR_CLUASE_PLACEHOLDER}} )";
+
+                    preparedStmtList.add(criteria.getAssignee());
+                    preparedStmtList.add(criteria.getTenantId());
+
+                    StringBuilder statusQuery = new StringBuilder(" OR pi_outer.status IN (").append(createQuery(statusesIrrespectiveOfTenant)).append(")");
+                    addToPreparedStatement(preparedStmtList, statusesIrrespectiveOfTenant);
+                    clause = clause.replace("{{OR_CLUASE_PLACEHOLDER}}", statusQuery.toString());
+                    with_query_builder.append(clause);
+                }
+            } else {
+                with_query_builder.append(" AND id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?) AND pi_outer.tenantid = ? ");
+                preparedStmtList.add(criteria.getAssignee());
+                preparedStmtList.add(criteria.getTenantId());
+            }
         }
 
         if(!StringUtils.isEmpty(criteria.getBusinessService())){
@@ -318,11 +334,6 @@ public class WorkflowQueryBuilder {
             preparedStmtList.add(criteria.getBusinessService());
         }
         
-        List<String> statusesIrrespectiveOfTenant = criteria.getStatusesIrrespectiveOfTenant();
-        if (CollectionUtils.isEmpty(tenantSpecificStatus) && !CollectionUtils.isEmpty(statusesIrrespectiveOfTenant)) {
-            with_query_builder.append(" and pi_outer.status IN (").append(createQuery(statusesIrrespectiveOfTenant)).append(")");
-            addToPreparedStatement(preparedStmtList, statusesIrrespectiveOfTenant);
-        }
 
         with_query_builder.append(" ORDER BY pi_outer.lastModifiedTime DESC ");
 
