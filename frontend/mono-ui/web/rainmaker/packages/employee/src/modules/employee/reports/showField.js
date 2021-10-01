@@ -66,6 +66,7 @@ export default class ShowField extends Component {
               value={this.props.value}
               id={obj.label.split(".").join("-")}
               fullWidth={true}
+              hintText={getLocaleLabels(`${obj.label}_PLACE`, `${obj.label}_PLACE`)}
               disabled={obj.disabled ? true : false}
               floatingLabelFixed={true}
               floatingLabelText={
