@@ -1,41 +1,34 @@
 package org.egov.collection.producer;
 
 
-import org.egov.collection.config.CollectionServiceConstants;
+import org.egov.collection.config.ApplicationProperties;
 import org.egov.tracer.kafka.CustomKafkaTemplate;
-import org.egov.tracer.model.CustomException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
-public class CollectionProducer {
+import lombok.extern.slf4j.Slf4j;
 
-	public static final Logger logger = LoggerFactory.getLogger(CollectionProducer.class);
+@Service
+@Slf4j
+public class CollectionProducer {
 
 	@Autowired
     private CustomKafkaTemplate<String, Object> kafkaTemplate;
-/*
-    public void producer(String topicName, String key, Object value) {
-        try {
-            kafkaTemplate.send(topicName, key, value);
-        } catch (Exception e) {
-            logger.error("Pushing to Queue FAILED! ", e.getMessage());
-            throw new CustomException("COLLECTIONS_KAFKA_PUSH_FAILED", CollectionServiceConstants
-                    .KAFKA_PUSH_EXCEPTION_DESC);
-        }
-    	
-    }
- */
-    public void producer(String topicName, Object value) {
-        try {
-            kafkaTemplate.send(topicName, value);
-        } catch (Exception e) {
-            logger.error("Pushing to Queue FAILED! ", e.getMessage());
-            throw new CustomException("COLLECTIONS_KAFKA_PUSH_FAILED", CollectionServiceConstants
-                    .KAFKA_PUSH_EXCEPTION_DESC);
-        }
+	
+	@Autowired
+	private ApplicationProperties configs;
+	
 
-    }
+	public void push(String tenantId, String topic, Object value) {
+
+		String updatedTopic = topic;
+		if (configs.getIsEnvironmentCentralInstance()) {
+
+			String[] tenants = tenantId.split("\\.");
+			if (tenants.length > 1)
+				updatedTopic = tenants[1].concat("-").concat(topic);
+		}
+		log.info("The Kafka topic for the tenantId : " + tenantId + " is : " + updatedTopic);
+		kafkaTemplate.send(updatedTopic, value);
+	}
 }

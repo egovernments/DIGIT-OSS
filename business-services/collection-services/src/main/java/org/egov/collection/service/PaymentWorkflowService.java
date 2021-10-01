@@ -3,14 +3,19 @@ package org.egov.collection.service;
 
 import static java.util.Collections.reverseOrder;
 import static java.util.Collections.singleton;
-import static org.egov.collection.config.CollectionServiceConstants.*;
 import static org.egov.collection.config.CollectionServiceConstants.KEY_FILESTOREID;
+import static org.egov.collection.config.CollectionServiceConstants.KEY_ID;
 import static org.egov.collection.util.Utils.jsonMerge;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import com.jayway.jsonpath.JsonPath;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.Payment;
@@ -30,9 +35,12 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.springframework.web.client.RestTemplate;
+import com.jayway.jsonpath.JsonPath;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -161,7 +169,7 @@ public class PaymentWorkflowService {
         paymentRepository.updateStatus(validatedPayments);
 
         validatedPayments.forEach(payment -> {
-            collectionProducer.producer(applicationProperties.getCancelPaymentTopicName(), new PaymentRequest(requestInfo, payment));
+            collectionProducer.push(tenantId, applicationProperties.getCancelPaymentTopicName(), new PaymentRequest(requestInfo, payment));
         });
 
 
@@ -215,7 +223,7 @@ public class PaymentWorkflowService {
         paymentRepository.updateStatus(validatedPayments);
 
         validatedPayments.forEach(payment -> {
-            collectionProducer.producer(applicationProperties.getCancelPaymentTopicName(), new PaymentRequest(requestInfo, payment));
+            collectionProducer.push(tenantId, applicationProperties.getCancelPaymentTopicName(), new PaymentRequest(requestInfo, payment));
         });
 
         return validatedPayments;
@@ -249,10 +257,10 @@ public class PaymentWorkflowService {
             JsonNode additionalDetails = workflowRequestByPaymentId.get(payment.getId())
                     .getAdditionalDetails();
 
-            payment.getPaymentDetails().forEach(paymentDetail -> {
-                paymentDetail.getBill().setAdditionalDetails(jsonMerge(paymentDetail.getBill().getAdditionalDetails(),
-                    workflowRequestByPaymentId.get(payment.getId()).getAdditionalDetails()));
-            });
+			payment.getPaymentDetails().forEach(paymentDetail -> {
+				paymentDetail.getBill().setAdditionalDetails(
+						jsonMerge(paymentDetail.getBill().getAdditionalDetails(), additionalDetails));
+			});
 
 
             updateAuditDetails(payment, requestInfo);
@@ -264,7 +272,7 @@ public class PaymentWorkflowService {
         paymentRepository.updateStatus(validatedPayments);
 
         validatedPayments.forEach(payment -> {
-            collectionProducer.producer(applicationProperties.getCancelPaymentTopicName(), new PaymentRequest(requestInfo, payment));
+            collectionProducer.push(tenantId, applicationProperties.getCancelPaymentTopicName(), new PaymentRequest(requestInfo, payment));
         });
         return validatedPayments;
     }

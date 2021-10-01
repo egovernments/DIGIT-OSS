@@ -148,11 +148,11 @@ public class ApplicationProperties {
 	
 	// V2
 	
-	@Value("${kafka.topics.receipt.update.demand.v2}")
-	private String updateDemandFromReceiptV2;
+	@Value("${kafka.topics.payment.create}")
+	private String paymentCreateTopic;
 	
-	@Value("${kafka.topics.receipt.cancel.name.v2}")
-	private String receiptCancellationTopicV2;
+	@Value("${kafka.topics.payment.cancel}")
+	private String paymentCancelTopic;
 	
     @Value("${search.pagesize.default}")
     private String commonSearchDefaultLimit;
@@ -197,5 +197,9 @@ public class ApplicationProperties {
     
     @Value("${state.level.tenantid.length}")
     private Integer stateLevelTenantIdLength;
+    
+    @Value("${is.environment.central.instance}")
+    private Boolean isEnvironmentCentralInstance;
+
     
 }

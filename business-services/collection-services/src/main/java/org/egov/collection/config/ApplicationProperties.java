@@ -265,5 +265,9 @@ public class ApplicationProperties {
     
     @Value("${state.level.tenantid.length}")
     private Integer stateLevelTenantIdLength;
+    
+    @Value("${is.environment.central.instance}")
+    private Boolean isEnvironmentCentralInstance;
+
 
 }
