@@ -27,7 +27,8 @@ export const searchApiResponse = async (request, next = {}) => {
     FireNOCs: []
   };
   const queryObj = JSON.parse(JSON.stringify(request.query));
-  console.log("request", request.query);
+  console.log("\nrequestObject", JSON.stringify(request));
+  console.log("\nrequest", request.query);
   console.log("Query object:"+JSON.stringify(queryObj));
   let errors = validateFireNOCSearchModel(queryObj);
   if (errors.length > 0) {
