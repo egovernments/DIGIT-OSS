@@ -215,6 +215,8 @@ public class PTConstants {
 
     public static final String NOTIFICATION_OWNERNAME = "{OWNER_NAME}";
 
+    public static final String NOTIFICATION_EMAIL = "{EMAIL_ID}";
+
     public static final String NOTIFICATION_STATUS = "{STATUS}";
     
     public static final String NOTIFICATION_UPDATED_CREATED_REPLACE = "{updated/created}";
@@ -328,7 +330,25 @@ public class PTConstants {
 
     public static final String ES_DATA_PROPERTYID_PATH = "$.propertyId";
 
-    //EVENT PAY
+    public static final String CHANNEL_NAME_SMS = "SMS";
+
+    public static final String CHANNEL_NAME_EVENT = "EVENT";
+
+    public static final String CHANNEL_NAME_EMAIL = "EMAIL";
+
+    public static final String MODULE = "module";
+
+    public static final String ACTION = "action";
+
+    public static final String CHANNEL_LIST = "channelList";
+
+    public static final String CHANNEL = "Channel";
+
+    public static final String LOCALIZATION_CODES_JSONPATH = "$.messages.*.code";
+  
+    public static final String LOCALIZATION_MSGS_JSONPATH = "$.messages.*.message";
+
+  //EVENT PAY
     public static final String EVENT_PAY_TENANTID = "$tenantId";
 
     public static final String EVENT_PAY_BUSINESSSERVICE = "$businessService";
