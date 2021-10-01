@@ -308,7 +308,7 @@ public class WorkflowQueryBuilder {
             with_query_builder.append(clause);
         } 
         else {
-            if(criteria.getModuleName().equals("BPAREG")) {
+            if(!isNull(criteria.getModuleName()) && criteria.getModuleName().equals("BPAREG")) {
                 List<String> statusesIrrespectiveOfTenant = criteria.getStatusesIrrespectiveOfTenant();
                 if (CollectionUtils.isEmpty(tenantSpecificStatus) && !CollectionUtils.isEmpty(statusesIrrespectiveOfTenant)) {
                     String clause = " AND ((id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?)" +
