@@ -240,7 +240,7 @@ public class WorkflowUtil {
      */
     public void enrichStatusesInSearchCriteria(RequestInfo requestInfo, ProcessInstanceSearchCriteria criteria){
 
-        Map<String, Map<String,List<String>>> roleTenantAndStatusMapping = businessServiceRepository.getRoleTenantAndStatusMapping();
+        Map<String, Map<String,List<String>>> roleTenantAndStatusMapping = businessServiceRepository.getRoleTenantAndStatusMapping(criteria.getTenantId());
         Map<String,List<String>> roleToTenantIdMap = getRoleToTenantId(requestInfo);
 
         List<String> tenantSpecificStatuses = new LinkedList<>();

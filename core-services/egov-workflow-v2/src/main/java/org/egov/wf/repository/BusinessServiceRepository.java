@@ -92,12 +92,12 @@ public class BusinessServiceRepository {
      * @return
      */
     @Cacheable(value = "roleTenantAndStatusesMapping")
-    public Map<String,Map<String,List<String>>> getRoleTenantAndStatusMapping(){
+    public Map<String,Map<String,List<String>>> getRoleTenantAndStatusMapping(String tntId){
 
 
         Map<String, Map<String,List<String>>> roleTenantAndStatusMapping = new HashMap();
 
-        List<BusinessService> businessServices = getAllBusinessService();
+        List<BusinessService> businessServices = getAllBusinessService(tntId);
 
         for(BusinessService businessService : businessServices){
 
@@ -150,11 +150,11 @@ public class BusinessServiceRepository {
      * Returns all the avialable businessServices
      * @return
      */
-    private List<BusinessService> getAllBusinessService(){
+    private List<BusinessService> getAllBusinessService(String tenantId){
 
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getBusinessServices(new BusinessServiceSearchCriteria(), preparedStmtList);
-
+        query = util.replaceSchemaPlaceholder(query, tenantId);
         List<BusinessService> businessServices = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
     //    List<BusinessService> filterBusinessServices = filterBusinessServices((businessServices));
 
