@@ -12,6 +12,8 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
   const [docsList, setDocsList] = useState([]);
   const [uiFlow, setUiFlow] = useState([]);
   const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", "DocumentTypes");
+  const { isLoading: commonDocsLoading, data: commonDocs } = Digit.Hooks.obps.useMDMS(stateCode, "common-masters", ["DocumentType"]);
+
   const checkingUrl = window.location.href.includes("ocbpa");
 
   const { data:homePageUrlLinks , isLoading: homePageUrlLinksLoading } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["homePageUrlLinks"]);
@@ -54,6 +56,17 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
         if (indData?.applicationType == applicationType?.toUpperCase() && indData?.ServiceType == serviceType?.toUpperCase()) {
           uniqueList.push(indData?.docTypes);
         }
+        uniqueList?.[0]?.forEach(doc => {
+          let code = doc.code; doc.dropdownData = [];
+          commonDocs?.["common-masters"]?.DocumentType?.forEach(value => {
+            let values = value.code.slice(0, code.length);
+            if (code === values) {
+              doc.hasDropdown = true;
+              value.i18nKey = value.code;
+              doc.dropdownData.push(value);
+            }
+          });
+        });
         setDocsList(uniqueList);
       })
     }
@@ -76,12 +89,17 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
           <Loader /> :
           <Fragment>
             {docsList?.[0]?.map((doc, index) => (
-              <CardLabel style={{ fontWeight: 700 }} key={index}>
-                <div style={{ display: "flex" }}>
-                  <div>{`${index + 1}.`}&nbsp;</div>
-                  <div>{` ${t(doc?.code.replace('.', '_'))}`}</div>
+              <div>
+                <div style={{ fontWeight: 700, marginBottom: "8px" }} key={index}>
+                  <div style={{ display: "flex" }}>
+                    <div>{`${index + 1}.`}&nbsp;</div>
+                    <div>{` ${t(doc?.code.replace('.', '_'))}`}</div>
+                  </div>
                 </div>
-              </CardLabel>
+                <div style={{marginBottom: "16px"}}>
+                  {doc?.dropdownData?.map((value, index) => doc?.dropdownData?.length !== index + 1 ? <span>{`${t(value?.i18nKey)}, `}</span> : <span>{`${t(value?.i18nKey)}`}</span> )}
+                </div>
+              </div>
             ))}
           </Fragment>
         }
