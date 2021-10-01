@@ -16,8 +16,7 @@ export const httpRequest = async ({
     instance.defaults = Object.assign(instance.defaults, {
       headers
     });
-  console.log("\nheaders-->"+JSON.stringify(headers)+"\n");
-  console.log("\instance.defaults-->"+JSON.stringify(instance.defaults)+"\n");
+  console.log("\ninstance.defaults-->"+JSON.stringify(instance.defaults)+"\n");
   endPoint = addQueryArg(endPoint, queryObject);
   try {
     // console.log("test");

@@ -1,15 +1,18 @@
 import envVariables from "../envVariables";
 import { httpRequest } from "../utils/api";
 
-export const searchUser = async (requestInfo, userSearchReqCriteria) => {
+export const searchUser = async (requestInfo, userSearchReqCriteria, header) => {
   let requestBody = { RequestInfo: requestInfo, ...userSearchReqCriteria };
+  let headers = [];
+  headers.push(header);
 
   var userSearchResponse = await httpRequest({
     hostURL: envVariables.EGOV_USER_HOST,
     endPoint: `${envVariables.EGOV_USER_CONTEXT_PATH}${
       envVariables.EGOV_USER_SEARCH_ENDPOINT
     }`,
-    requestBody
+    requestBody,
+    headers
   });
   //console.log("User search response: "+JSON.stringify(userSearchResponse));
 

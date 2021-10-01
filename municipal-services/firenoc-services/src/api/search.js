@@ -27,9 +27,8 @@ export const searchApiResponse = async (request, next = {}) => {
     FireNOCs: []
   };
   const queryObj = JSON.parse(JSON.stringify(request.query));
-  const reqObj = JSON.parse(JSON.stringify(request.headers));
+  var header = JSON.parse(JSON.stringify(request.headers));
 
-  console.log("\nrequestObject", JSON.stringify(reqObj));
   console.log("\nrequest", request.query);
   console.log("Query object:"+JSON.stringify(queryObj));
   let errors = validateFireNOCSearchModel(queryObj);
@@ -83,7 +82,8 @@ export const searchApiResponse = async (request, next = {}) => {
     // console.log("mobile number");
     let userSearchResponse = await searchByMobileNumber(
       queryObj.mobileNumber,
-      envVariables.EGOV_DEFAULT_STATE_ID
+      envVariables.EGOV_DEFAULT_STATE_ID,
+      header
     );
     // console.log(userSearchResponse);
     let searchUserUUID = get(userSearchResponse, "user.0.uuid");
@@ -184,7 +184,8 @@ export const searchApiResponse = async (request, next = {}) => {
         ? await mergeSearchResults(
             dbResponse.rows,
             request.query,
-            request.body.RequestInfo
+            request.body.RequestInfo,
+            header
           )
         : [];
   }
