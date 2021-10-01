@@ -36,7 +36,7 @@ export const UserService = {
     if (userType === "citizen") {
       window.location.replace("/digit-ui/citizen");
     } else {
-      window.location.replace("/employee");
+      window.location.replace("/digit-ui/employee/user/login");
     }
   },
   sendOtp: (details, stateCode) =>
