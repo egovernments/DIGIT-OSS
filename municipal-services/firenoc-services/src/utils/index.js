@@ -31,27 +31,34 @@ export const requestInfoToResponseInfo = (requestinfo, success) => {
   return ResponseInfo;
 };
 
-export const addIDGenId = async (requestInfo, idRequests) => {
+export const addIDGenId = async (requestInfo, idRequests, header) => {
   let requestBody = {
     RequestInfo: requestInfo,
     idRequests
   };
+  let headers = [];
+  headers.push(header);
   // console.log(JSON.stringify(requestBody));
   let idGenResponse = await httpRequest({
     hostURL: envVariables.EGOV_IDGEN_HOST,
     endPoint: `${envVariables.EGOV_IDGEN_CONTEXT_PATH}${
       envVariables.EGOV_IDGEN_GENERATE_ENPOINT
     }`,
-    requestBody
+    requestBody,
+    headers
   });
   // console.log("idgenresponse",idGenResponse);
   return get(idGenResponse, "idResponses[0].id");
 };
 
-export const getLocationDetails = async (requestInfo, tenantId) => {
+export const getLocationDetails = async (requestInfo, tenantId, header) => {
   let requestBody = {
     RequestInfo: requestInfo
   };
+
+  let headers = [];
+  headers.push(header);
+
   // console.log(JSON.stringify(requestBody));
   let locationResponse = await httpRequest({
     hostURL: envVariables.EGOV_LOCATION_HOST,
@@ -62,13 +69,14 @@ export const getLocationDetails = async (requestInfo, tenantId) => {
     }&boundaryType=${
       envVariables.EGOV_LOCATION_BOUNDARY_TYPE_CODE
     }&tenantId=${tenantId}`,
-    requestBody
+    requestBody,
+    headers
   });
   // console.log("idgenresponse",locationResponse);
   return locationResponse;
 };
 
-export const createWorkFlow = async body => {
+export const createWorkFlow = async (body, header) => {
   //wfDocuments and comment should rework after that
   let processInstances = body.FireNOCs.map(fireNOC => {
     return {
@@ -94,11 +102,15 @@ export const createWorkFlow = async body => {
     RequestInfo: body.RequestInfo,
     ProcessInstances: processInstances
   };
+
+  let headers = [];
+  headers.push(header);
   //console.log("Workflow requestBody", JSON.stringify(requestBody));
   let workflowResponse = await httpRequest({
     hostURL: envVariables.EGOV_WORKFLOW_HOST,
     endPoint: envVariables.EGOV_WORKFLOW_TRANSITION_ENDPOINT,
-    requestBody
+    requestBody,
+    headers
   });
   // console.log("workflowResponse", JSON.stringify(workflowResponse));
   return workflowResponse;

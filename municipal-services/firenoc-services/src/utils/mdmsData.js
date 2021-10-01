@@ -1,7 +1,10 @@
 import { httpRequest } from "./api";
 import envVariables from "../envVariables";
 
-export default async (requestInfo = {},tenantId) => {
+export default async (requestInfo = {},tenantId, header) => {
+  let headers = [];
+  headers.push(header);
+
   var requestBody = {
     RequestInfo: requestInfo,
     MdmsCriteria: {
@@ -33,7 +36,8 @@ export default async (requestInfo = {},tenantId) => {
     endPoint: `${envVariables.EGOV_MDMS_CONTEXT_PATH}${
       envVariables.EGOV_MDMS_SEARCH_ENPOINT
     }`,
-    requestBody
+    requestBody,
+    headers
   });
   return mdmsResponse;
 };

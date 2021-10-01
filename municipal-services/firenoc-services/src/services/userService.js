@@ -23,15 +23,19 @@ export const searchUser = async (requestInfo, userSearchReqCriteria, header) => 
   return userSearchResponse;
 };
 
-export const createUser = async (requestInfo, user) => {
+export const createUser = async (requestInfo, user, header) => {
   let requestBody = { RequestInfo: requestInfo, user: user };
   user.dob=dobConvetion(user.dob);
+  let headers = [];
+  headers.push(header);
+
   var userCreateResponse = await httpRequest({
     hostURL: envVariables.EGOV_USER_HOST,
     endPoint: `${envVariables.EGOV_USER_CONTEXT_PATH}${
       envVariables.EGOV_USER_CREATE_ENDPOINT
     }`,
-    requestBody
+    requestBody,
+    headers
   });
 
   var dobFormat = "dd/MM/yyyy";
@@ -40,17 +44,21 @@ export const createUser = async (requestInfo, user) => {
   return userCreateResponse;
 };
 
-export const updateUser = async (requestInfo, user) => {
+export const updateUser = async (requestInfo, user, header) => {
   // console.log(user);
   user.dob=dobConvetion(user.dob);
   // console.info(user.dob);
   let requestBody = { RequestInfo: requestInfo, user: user };
+  let headers = [];
+  headers.push(header);
+
   var userUpdateResponse = await httpRequest({
     hostURL: envVariables.EGOV_USER_HOST,
     endPoint: `${envVariables.EGOV_USER_CONTEXT_PATH}${
       envVariables.EGOV_USER_UPDATE_ENDPOINT
     }`,
-    requestBody
+    requestBody,
+    headers
   });
 
   var dobFormat = "yyyy-MM-dd";

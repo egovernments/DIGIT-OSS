@@ -18,8 +18,8 @@ export default ({ config }) => {
   let api = Router();
   api.post(
     "/_create",
-    asyncHandler(async ({ body }, res, next) => {
-      let response = await createApiResponse({ body }, res, next);
+    asyncHandler(async (request, res, next) => {
+      let response = await createApiResponse(request, res, next);
       if(response.Errors)
         res.status(400);
       res.json(response);
@@ -27,17 +27,20 @@ export default ({ config }) => {
   );
   return api;
 };
-export const createApiResponse = async ({ body }, res, next) => {
+export const createApiResponse = async (request, res, next) => {
+  var body = JSON.parse(JSON.stringify(request.body));
+  var header = JSON.parse(JSON.stringify(request.headers));
   console.log("Update Body: "+JSON.stringify(body));
 
   let payloads = [];
   //getting mdms data
-  let mdms = await mdmsData(body.RequestInfo, body.FireNOCs[0].tenantId);
+  let mdms = await mdmsData(body.RequestInfo, body.FireNOCs[0].tenantId, header);
 
   //location data
   let locationResponse = await getLocationDetails(
     body.RequestInfo,
-    body.FireNOCs[0].tenantId
+    body.FireNOCs[0].tenantId,
+    header
   );
 
   set(
@@ -60,16 +63,16 @@ export const createApiResponse = async ({ body }, res, next) => {
   }
 
   // console.log(JSON.stringify(mdms));
-  body = await addUUIDAndAuditDetails(body, "_create");
+  body = await addUUIDAndAuditDetails(body, "_create", header);
   console.log("Created Body:  "+JSON.stringify(body));
-  let workflowResponse = await createWorkFlow(body);
+  let workflowResponse = await createWorkFlow(body, header);
   // console.log(JSON.stringify(workflowResponse));
 
   //need to implement notification
   //calculate call
   let { FireNOCs, RequestInfo } = body;
   for (var i = 0; i < FireNOCs.length; i++) {
-    let firenocResponse = await calculate(FireNOCs[i], RequestInfo);
+    let firenocResponse = await calculate(FireNOCs[i], RequestInfo, header);
   }
   body.FireNOCs = updateStatus(FireNOCs, workflowResponse);
   payloads.push({
