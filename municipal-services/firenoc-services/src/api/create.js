@@ -28,6 +28,8 @@ export default ({ config }) => {
   return api;
 };
 export const createApiResponse = async ({ body }, res, next) => {
+  console.log("Update Body: "+JSON.stringify(body));
+
   let payloads = [];
   //getting mdms data
   let mdms = await mdmsData(body.RequestInfo, body.FireNOCs[0].tenantId);
