@@ -12,6 +12,7 @@ export const httpRequest = async ({
 }) => {
   let instance = httpClient(hostURL);
   let errorReponse = {};
+  console.log("\nheaders-->"+JSON.stringify(headers)+"\n");
   if (headers)
     instance.defaults = Object.assign(instance.defaults, {
       headers
