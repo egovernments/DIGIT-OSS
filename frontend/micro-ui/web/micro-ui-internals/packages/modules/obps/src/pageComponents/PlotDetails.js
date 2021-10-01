@@ -16,6 +16,8 @@ const PlotDetails = ({ formData, onSelect, config }) => {
     onSelect(config?.key, { ...data });
   }
 
+  const onSkip = () => onSelect();
+
   if (isLoading) {
     return <Loader />;
   }
@@ -23,7 +25,7 @@ const PlotDetails = ({ formData, onSelect, config }) => {
   return (
     <div>
       <Timeline flow= {checkingFlow === "OCBPA" ? "OCBPA" : ""}/>
-      <FormStep config={config} onSelect={handleSubmit} childrenAtTheBottom={false} t={t} _defaultValues={formData?.data}>
+      <FormStep config={config} onSelect={handleSubmit} childrenAtTheBottom={false} t={t} _defaultValues={formData?.data} onSkip={onSkip}>
         <StatusTable>
           <Row className="border-none" label={t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)} text={data?.planDetail?.planInformation?.plotArea} />
           <Row className="border-none" label={t(`BPA_BOUNDARY_PLOT_NO_LABEL`)} text={data?.planDetail?.planInformation?.plotNo} />

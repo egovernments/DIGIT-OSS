@@ -148,8 +148,8 @@ const onRemove = (index, key,num) => {
           
     });
 
-const onSkip = () => {
-}
+  const onSkip = () => onSelect();
+
   const goNext = () => {
     if (checkingFlow === "OCBPA") {
       if (!formData?.id) {

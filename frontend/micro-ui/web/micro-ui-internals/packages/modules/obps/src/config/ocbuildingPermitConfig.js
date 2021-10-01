@@ -24,7 +24,7 @@ export const newConfig = [
           header: "BPA_PLOT_DETAILS_TITLE",
           cardText: "",
           submitBarLabel: "CS_COMMON_NEXT",
-          skipAndContinueText: "",
+          skipText: "CORE_COMMON_SKIP_CONTINUE",
         },
         inputs: [
           {
@@ -74,7 +74,8 @@ export const newConfig = [
         texts: {
           headerCaption: "BPA_NOC_DETAILS_SUMMARY",
           header: "",
-          submitBarLabel: "CS_COMMON_NEXT"
+          submitBarLabel: "CS_COMMON_NEXT",
+          skipText: "CORE_COMMON_SKIP_CONTINUE",
         }
       }
     ]

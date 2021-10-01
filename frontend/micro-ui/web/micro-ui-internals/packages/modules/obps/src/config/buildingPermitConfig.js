@@ -24,7 +24,7 @@ export const newConfig = [
           header: "BPA_PLOT_DETAILS_TITLE",
           cardText: "",
           submitBarLabel: "CS_COMMON_NEXT",
-          skipAndContinueText: "",
+          skipText: "CORE_COMMON_SKIP_CONTINUE",
         },
         inputs: [
           {
@@ -56,7 +56,7 @@ export const newConfig = [
           header: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
           cardText: "",
           submitBarLabel: "CS_COMMON_NEXT",
-          skipAndContinueText: "",
+          skipText:"CORE_COMMON_SKIP_CONTINUE",
         },
       },
       {
@@ -92,7 +92,7 @@ export const newConfig = [
         texts: {
           headerCaption: "BPA_OWNER_AND_DOCUMENT_DETAILS_LABEL",
           header: "BPA_DOCUMENT_DETAILS_LABEL",
-          submitBarLabel: "CS_COMMON_NEXT"
+          submitBarLabel: "CS_COMMON_NEXT",
         }
       },
       {
@@ -103,7 +103,8 @@ export const newConfig = [
         texts: {
           headerCaption: "BPA_NOC_DETAILS_SUMMARY",
           header: "",
-          submitBarLabel: "CS_COMMON_NEXT"
+          submitBarLabel: "CS_COMMON_NEXT",
+          skipText: "CORE_COMMON_SKIP_CONTINUE",
         }
       }
     ]

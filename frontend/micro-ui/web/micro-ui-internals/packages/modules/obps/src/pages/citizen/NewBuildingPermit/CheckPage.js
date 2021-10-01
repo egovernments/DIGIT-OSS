@@ -134,7 +134,7 @@ import {
 
     function getBlockSubOccupancy(index){
       let subOccupancyString = "";
-      subOccupancy[`Block_${index+1}`] && subOccupancy[`Block_${index+1}`].map((ob) => {
+      subOccupancy && subOccupancy[`Block_${index+1}`] && subOccupancy[`Block_${index+1}`].map((ob) => {
         subOccupancyString += `${t(ob.i18nKey)}, `;
       })
       return subOccupancyString;
