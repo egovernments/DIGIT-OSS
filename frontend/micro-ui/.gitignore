@@ -3,6 +3,9 @@
 .env
 .eslintcache
 
+# yarn
+.yarn
+
 # dependencies
 node_modules
 /.pnp
