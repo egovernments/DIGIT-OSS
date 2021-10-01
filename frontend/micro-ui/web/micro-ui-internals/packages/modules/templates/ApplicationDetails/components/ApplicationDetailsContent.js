@@ -75,7 +75,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
                   <Row
                     key={t(value.title)}
                     label={isNocLocation ? `${t(value.title)}:` : t(value.title)}
-                    text={t(value.value) || "N/A"}
+                    text={value?.skip ? value.value : (t(value.value) || "N/A")}
                     last={index === detail?.values?.length - 1}
                     caption={value.caption}
                     className="border-none"

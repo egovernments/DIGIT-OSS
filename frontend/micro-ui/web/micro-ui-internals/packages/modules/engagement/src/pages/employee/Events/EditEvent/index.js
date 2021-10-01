@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
+import { format } from 'date-fns';
 import { FormComposer, Header, Loader } from "@egovernments/digit-ui-react-components";
 import { config } from "../../NewEventConfig";
 
@@ -17,18 +18,21 @@ const EditEvents = () => {
     select: (data) => data?.events?.[0]
   });
 
-  const onSubmit = (data) => {
-    const { fromDate, toDate, fromTime, toTime, address, organizer, fees, geoLocation } = data;
+  const onSubmit = (formData) => {
+    const { fromDate, toDate, fromTime, toTime, address, organizer, fees, geoLocation } = formData;
     const details = {
       events: [
         {
+          ...data,
           source: "WEBAPP",
+          status: "ACTIVE",
           eventType: "EVENTSONGROUND",
-          tenantId: data?.tenantId?.code,
-          description: data?.description,
-          name: data?.name,
-          eventcategory: data?.eventCategory?.code,
+          tenantId: formData?.tenantId?.code,
+          description: formData?.description,
+          name: formData?.name,
+          eventcategory: formData?.eventCategory?.code,
           eventDetails: {
+            ...data?.eventDetails,
             fromDate: new Date(`${fromDate} ${fromTime}`).getTime(),
             toDate: new Date(`${toDate} ${toTime}`).getTime(),
             fromTime,
@@ -40,7 +44,7 @@ const EditEvents = () => {
         }
       ]
     }
-    history.push("/digit-ui/employee/engagement/event/response", details)
+    history.push("/digit-ui/employee/engagement/event/response?update=true", details)
   }
 
   if (isLoading) {
@@ -51,15 +55,15 @@ const EditEvents = () => {
 
   const defaultValues = {
     name: data?.name,
-    // fromDate: '30-10-2021',
-    // toDate: '30-09-2021',
+    fromDate: format(new Date(data?.eventDetails?.fromDate), 'yyyy-MM-dd'),
+    toDate: format(new Date(data?.eventDetails?.toDate), 'yyyy-MM-dd'),
     organizer: data?.eventDetails?.organizer,
     fees: data?.eventDetails?.fees,
     description: data?.description,
     address: data?.eventDetails?.address,
     category: data?.eventCategory,
-    fromTime: (new Date(data?.eventDetails?.fromDate*1000)+'').slice(17,22),
-    toTime: (new Date(data?.eventDetails?.toDate*1000)+'').slice(17,22),
+    fromTime: format(new Date(data?.eventDetails?.fromDate), 'hh:mm'),
+    toTime: format(new Date(data?.eventDetails?.toDate), 'hh:mm'),
   }
 
   return (

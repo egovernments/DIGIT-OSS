@@ -35,6 +35,7 @@ export const config = [
           validation: {
             required: true,
           },
+          shouldUpdate: true,
           error: "EVENTS_FROM_DATE_ERROR_INVALID",
         },
       },

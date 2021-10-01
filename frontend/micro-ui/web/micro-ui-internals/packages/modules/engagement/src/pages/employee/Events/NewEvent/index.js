@@ -9,7 +9,7 @@ const NewEvents = () => {
   const history = useHistory();
 
   const onSubmit = (data) => {
-    const { fromDate, toDate, fromTime, toTime, address, organizer, fees, geoLocation } = data;
+    const { fromDate, toDate, fromTime, toTime, address, organizer, fees, geoLocation = {} } = data;
     const details = {
       events: [
         {
@@ -27,6 +27,7 @@ const NewEvents = () => {
             address,
             organizer,
             fees,
+            ...geoLocation
           }
         }
       ]
