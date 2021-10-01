@@ -19,11 +19,37 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
     const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BPA_HOME_CREATE", {});
     const { data: homePageUrlLinks, isLoading: homePageUrlLinksLoading } = Digit.Hooks.obps.useMDMS(state, "BPA", ["homePageUrlLinks"]);
     const [showToast, setShowToast] = useState(null);
+    const [totalCount, setTotalCount] = useState("-");
 
     const closeToast = () => {
         window.location.replace("/digit-ui/citizen/all-services");
         setShowToast(null);
     };
+
+    const inboxSearchParams = { limit: 10, offset: 0, mobileNumber: userInfo?.info?.mobileNumber }
+    const { isLoading: bpaLoading, data: bpaInboxData } = Digit.Hooks.obps.useBPAInbox({
+        tenantId: stateCode,
+        moduleName: "bpa-services",
+        businessService: ["BPA_LOW", "BPA", "BPA_OC"],
+        filters: { ...inboxSearchParams },
+        config: {}
+    });
+
+    const { isLoading: bparegLoading, data: bpareginboxData } = Digit.Hooks.obps.useBPAInbox({
+        tenantId: stateCode,
+        moduleName: "BPAREG",
+        businessService: ["ARCHITECT", "BUILDER", "ENGINEER", "STRUCTURALENGINEER"],
+        filters: { ...inboxSearchParams },
+        config: {}
+    });
+
+    useEffect(() => {
+        if(!bpaLoading && !bparegLoading) {
+            const totalCountofBoth = bpaInboxData?.totalCount || 0 + bpareginboxData?.totalCount || 0;
+            setTotalCount(totalCountofBoth);
+        } 
+    }, [bpaInboxData, bpareginboxData]);
+
 
 
     useEffect(() => {
@@ -71,7 +97,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
 
     if (showToast) return (<Toast error={true} label={t(showToast?.message)} isDleteBtn={true} onClose={closeToast} />);
 
-    if (stakeHolderDetailsLoading || !stakeHolderRoles) { return (<Loader />); }
+    if (stakeHolderDetailsLoading || !stakeHolderRoles || bpaLoading || bparegLoading) { return (<Loader />); }
 
     const homeDetails = [
         {
@@ -80,11 +106,11 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
             name: "employeeCard",
             kpis: [
                 {
-                    count: 0, //isLoading ? "-" : data?.ChallanCount?.totalChallan,
+                    count: !bpaLoading && !bparegLoading ? totalCount : "-",
                     label: t("BPA_PDF_TOTAL")
                 },
                 {
-                    count: 0, //isLoading ? "-" : data?.ChallanCount?.totalChallan,
+                    count: "-",
                     label: t("TOTAL_NEARING_SLA")
                 }
             ],
