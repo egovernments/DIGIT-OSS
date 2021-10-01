@@ -26,6 +26,9 @@ const LocationSearchCard = ({
   isPTDefault,
   PTdefaultcoord,
   isPlaceRequired,
+  handleRemove,
+  Webview=false,
+  isPopUp=false,
 }) => {
   let isDisabled = false || disabled;
   const onLocationChange = (val, location) => {
@@ -42,6 +45,19 @@ const LocationSearchCard = ({
     <Card>
       <CardHeader>{header}</CardHeader>
       <div style={cardBodyStyle}>
+      {isPopUp && <LinkButton
+            label={
+            <div>
+            <span>
+            <svg style={{float:"right", position:"relative",bottom:"32px",marginTop:Webview?"-20px":"-18px",marginRight:Webview?"-280px":"-5px",marginLeft:Webview?"5px":"" }} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 1.41L12.59 0L7 5.59L1.41 0L0 1.41L5.59 7L0 12.59L1.41 14L7 8.41L12.59 14L14 12.59L8.41 7L14 1.41Z" fill="#0B0C0C"/>
+            </svg>
+            </span>
+            </div>
+            }
+              style={{width: "100px", display:"inline"}}
+              onClick={(e) => handleRemove()}
+           />}
         <CardText>
           {/* Click and hold to drop the pin to complaint location. If you are not
         able to pin the location you can skip the continue for next step. */}
@@ -83,6 +99,9 @@ LocationSearchCard.defaultProps = {
   isPTDefault: false,
   PTdefaultcoord: {},
   isPlaceRequired: false,
+  handleRemove: () => {},
+  Webview:false,
+  isPopUp:false,
 };
 
 export default LocationSearchCard;
