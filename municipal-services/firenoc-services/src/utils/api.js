@@ -12,11 +12,12 @@ export const httpRequest = async ({
 }) => {
   let instance = httpClient(hostURL);
   let errorReponse = {};
-  console.log("\nheaders-->"+JSON.stringify(headers)+"\n");
   if (headers)
     instance.defaults = Object.assign(instance.defaults, {
       headers
     });
+  console.log("\nheaders-->"+JSON.stringify(headers)+"\n");
+  console.log("\instance.defaults-->"+JSON.stringify(instance.defaults)+"\n");
   endPoint = addQueryArg(endPoint, queryObject);
   try {
     // console.log("test");
