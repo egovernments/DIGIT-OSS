@@ -209,10 +209,12 @@ public class User   {
         private String alternatemobilenumber;
         
         @JsonProperty("audittrail")
-        private List<AuditMobileNumber> audittrail;
+        @Valid
+        private List<Object> audittrail;
         
         @JsonProperty("auditAlternatetrail")
-        private List<AuditAlternateNumber> auditAlternatetrail;
+        @Valid
+        private List<Object> auditAlternatetrail;
 
 
         public User addRolesItem(Role rolesItem) {

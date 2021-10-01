@@ -60,6 +60,7 @@ public class UserSearchResponseContent {
     private String tenantId;
     private Set<RoleRequest> roles;
     private String uuid;
+    
     private Set<AuditMobileNumber> audittrail;
     private Set<AuditAlternateNumber> auditAlternatetrail;
 
@@ -112,7 +113,11 @@ public class UserSearchResponseContent {
         mapCorrespondenceAddress(user);
     }
 
-    private void mapCorrespondenceAddress(User user) {
+    
+
+	
+
+	private void mapCorrespondenceAddress(User user) {
         if (user.getCorrespondenceAddress() != null) {
             this.correspondenceAddress = user.getCorrespondenceAddress().getAddress();
             this.correspondenceCity = user.getCorrespondenceAddress().getCity();
