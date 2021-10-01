@@ -430,6 +430,16 @@ public class PropertyService {
 		Property propertyFromSearch = propertyValidator.validateAlternateMobileNumberInformation(request);
 		userService.createUserForAlternateNumber(request);
 		
+		Map <String, String> uuidToMobileNumber = new HashMap <String, String>();
+		List <OwnerInfo> owners = propertyFromSearch.getOwners();
+		
+		for(OwnerInfo owner : owners) {
+			
+			uuidToMobileNumber.put(owner.getUuid(), owner.getAlternatemobilenumber());
+		}
+		
+		notifService.sendNotificationForAlternateNumberUpdate(request, propertyFromSearch,uuidToMobileNumber);	
+		
 		//enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
 		util.mergeAdditionalDetails(request, propertyFromSearch);
 		

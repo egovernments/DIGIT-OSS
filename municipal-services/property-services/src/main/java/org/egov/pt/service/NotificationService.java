@@ -483,4 +483,46 @@ public class NotificationService {
 		
 	}
 
+	public void sendNotificationForAlternateNumberUpdate(PropertyRequest request, Property propertyFromSearch,
+			Map<String, String> uuidToMobileNumber) {
+		
+		Property property = request.getProperty();
+		String msg = null;
+		
+		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), request.getRequestInfo());
+		msg = getMsgForMobileNumberUpdate(PT_UPDATE_ALTERNATE_NUMBER, completeMsgs);
+		prepareMsgAndSendToAlternateNumber(request, propertyFromSearch, msg,uuidToMobileNumber);
+		
+	}
+
+	private void prepareMsgAndSendToAlternateNumber(PropertyRequest request, Property propertyFromSearch, String msg,
+			Map<String, String> uuidToMobileNumber) {
+		
+		Property property = request.getProperty();
+		RequestInfo requestInfo = request.getRequestInfo();
+		
+		property.getOwners().forEach(owner -> {
+			
+			if(uuidToMobileNumber.containsKey(owner.getUuid()) && ( (uuidToMobileNumber.get(owner.getUuid())!=null && owner.getAlternatemobilenumber()!=null && uuidToMobileNumber.get(owner.getUuid())!=owner.getAlternatemobilenumber()) || (uuidToMobileNumber.get(owner.getUuid())==null)  )) {
+				
+				String customizedMsg = msg.replace(PT_OWNER_NAME,owner.getName()).replace(PT_ALTERNATE_NUMBER, owner.getAlternatemobilenumber());
+				Map<String, String> mobileNumberToOwner = new HashMap<>();
+				
+				mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
+				
+				
+				List<SMSRequest> smsRequests = notifUtil.createSMSRequest(customizedMsg, mobileNumberToOwner);
+				notifUtil.sendSMS(smsRequests);
+
+				Boolean isActionReq = false;		
+
+				List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
+				notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
+				
+			}
+		});
+		
+		
+	}
+
 }

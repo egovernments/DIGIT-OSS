@@ -183,6 +183,8 @@ public class PTConstants {
 	
 	public static final String PT_UPDATE_OWNER_NUMBER = "PT_UPDATE_OWNER_NUMBER";
 	
+	public static final String PT_UPDATE_ALTERNATE_NUMBER = "PT_UPDATE_ALTERNATE_NUMBER";
+	
 	/* update */
 	public static final String WF_UPDATE_STATUS_OPEN_CODE  = "PT_NOTIF_WF_OPEN";
 	
@@ -237,6 +239,8 @@ public class PTConstants {
     public static final String NOTIFICATION_PROPERTYID = "{PROPERTYID}";
     
     public static final String PT_OWNER_NAME = "{ownername}";
+    
+    public static final String PT_ALTERNATE_NUMBER = "{alternatenumber}";
     
     public static final String PT_OLD_MOBILENUMBER = "{oldmobilenumber}";
     
