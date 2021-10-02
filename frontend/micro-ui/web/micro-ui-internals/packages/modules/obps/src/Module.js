@@ -30,7 +30,7 @@ import EmployeeApp from "./pages/employee";
 import InspectionReport from "./pageComponents/InspectionReport";
 
 const OBPSModule = ({ stateCode, userType, tenants }) => {
-  const moduleCode = "bpa";
+  const moduleCode = ["bpa", "bpareg"]; //"bpa";
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });

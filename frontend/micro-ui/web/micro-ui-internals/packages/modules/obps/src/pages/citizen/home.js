@@ -10,11 +10,11 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
     const stateCode = Digit.ULBService.getStateId();
     const [stakeHolderRoles, setStakeholderRoles] = useState(false);
     const { data: stakeHolderDetails, isLoading: stakeHolderDetailsLoading } = Digit.Hooks.obps.useMDMS(stateCode, "StakeholderRegistraition", "TradeTypetoRoleMapping");
-    const moduleCode = "bpareg";
-    const language = Digit.StoreData.getCurrentLanguage();
+    // const moduleCode = "bpareg";
+    // const language = Digit.StoreData.getCurrentLanguage();
     const [bpaLinks, setBpaLinks] = useState([]);
     const state = Digit.ULBService.getStateId();
-    const { data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
+    // const { data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
     const { t } = useTranslation();
     const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BPA_HOME_CREATE", {});
     const { data: homePageUrlLinks, isLoading: homePageUrlLinksLoading } = Digit.Hooks.obps.useMDMS(state, "BPA", ["homePageUrlLinks"]);

@@ -123,33 +123,41 @@ export const OBPSService = {
     }
 
     const [License] = response?.Licenses;
-    const details = [{
+    const details = [
+      License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType.includes("ARCHITECT") ? {
       title: "BPA_LICENSE_DET_CAPTION",
       asSectionHeader: true,
       values: [
-        { title: "BPA_LICENSE_TYPE_LABEL", value: License?.licenseType },
+        { title: "BPA_LICENSE_TYPE_LABEL", value: `TRADELICENSE_TRADETYPE_${License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0]}` || "NA" },
+        { title: "BPA_COUNCIL_OF_ARCH_NO_LABEL", value: License?.tradeLicenseDetail?.additionalDetail?.counsilForArchNo || "NA" }
       ]
-    }, {
+    } : {
       title: "BPA_LICENSE_DET_CAPTION",
       asSectionHeader: true,
       values: [
-        { title: "BPA_APPLICANT_NAME_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.name },
-        { title: "BPA_APPLICANT_GENDER_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.gender },
-        { title: "BPA_OWNER_MOBILE_NO_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.mobileNumber },
-        { title: "BPA_APPLICANT_EMAIL_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.emailId  },
-        { title: "BPA_APPLICANT_PAN_NO", value: License?.tradeLicenseDetail?.owners?.[0]?.pan || "CS_NA" }
+        { title: "BPA_LICENSE_TYPE_LABEL", value: `TRADELICENSE_TRADETYPE_${License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0]}` || "NA"  }
       ]
     }, {
-      title: "BPA_LICENSEE_PERMANENT_LABEL",
+      title: "BPA_LICENSEE_DETAILS_HEADER_OWNER_INFO",
       asSectionHeader: true,
       values: [
-        { title: "BPA_LICENSEE_PERMANENT_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.permanentAddress || "CS_NA" }
+        { title: "BPA_APPLICANT_NAME_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.name || "NA"  },
+        { title: "BPA_APPLICANT_GENDER_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.gender || "NA"  },
+        { title: "BPA_OWNER_MOBILE_NO_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.mobileNumber || "NA"  },
+        { title: "BPA_APPLICANT_EMAIL_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.emailId || "NA"   },
+        { title: "BPA_APPLICANT_PAN_NO", value: License?.tradeLicenseDetail?.owners?.[0]?.pan || "NA" }
       ]
     }, {
-      title: "BPA_LICENSEE_CORRESPONDENCE_LABEL",
+      title: "BPA_PERMANANT_ADDRESS_LABEL",
       asSectionHeader: true,
       values: [
-        { title: "BPA_LICENSEE_CORRESPONDENCE_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.correspondenceAddress }
+        { title: "BPA_PERMANANT_ADDRESS_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.permanentAddress || "NA" }
+      ]
+    }, {
+      title: "BPA_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL",
+      asSectionHeader: true,
+      values: [
+        { title: "BPA_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.correspondenceAddress || "NA"  }
       ]
     },
   ]

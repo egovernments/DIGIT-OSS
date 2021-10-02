@@ -158,8 +158,10 @@ export const StoreService = {
   },
   defaultData: async (stateCode, moduleCode, language) => {
     console.log(moduleCode, stateCode);
+    let moduleCodes = [];
+    if(typeof moduleCode !== "string") moduleCode.forEach(code => { moduleCodes.push(`rainmaker-${code.toLowerCase()}`) });
     const LocalePromise = LocalizationService.getLocale({
-      modules: [`rainmaker-${moduleCode.toLowerCase()}`],
+      modules: typeof moduleCode == "string" ? [`rainmaker-${moduleCode.toLowerCase()}`] : moduleCodes,
       locale: language,
       tenantId: stateCode,
     });

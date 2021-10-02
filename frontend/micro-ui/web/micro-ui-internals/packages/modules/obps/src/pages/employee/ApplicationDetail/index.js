@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Header, Card, CardSectionHeader, PDFSvg, Loader, StatusTable, Row, ActionBar, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Header, Card, CardSectionHeader, PDFSvg, Loader, StatusTable, Row, ActionBar, SubmitBar, CardLabel } from "@egovernments/digit-ui-react-components";
 import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDetails";
 
 const DocumentDetails = ({ t, data, documents }) => {
@@ -9,13 +9,13 @@ const DocumentDetails = ({ t, data, documents }) => {
     <Fragment>
       {data?.map((document, index) => (
         <Fragment>
-          <div>
-            <CardSectionHeader>{t(`BPA_DOCUMENT_${document?.documentType}`)}</CardSectionHeader>
+          <div style={{maxWidth: "940px", padding: "8px", borderRadius: "4px", border: "1px solid #D6D5D4", background: "#FAFAFA", marginBottom: "32px"}}>
+            <div style={{fontSize: "16px", fontWeight: 700}}>{t(`BPA_${document?.documentType}`)}</div>
             <a target="_" href={documents[document.fileStoreId]?.split(",")[0]}>
               <PDFSvg />
             </a>
+            <span> {decodeURIComponent( documents[document.fileStoreId].split(",")[0].split("?")[0].split("/").pop().slice(13))} </span>
           </div>
-          <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
         </Fragment>
       ))}
     </Fragment>
@@ -29,7 +29,10 @@ const ApplicationDetail = () => {
   const state = tenantId?.split('.')[0]
   const [appDetails, setAppDetails] = useState({});
   const [showToast, setShowToast] = useState(null);
-
+  const stateCode = Digit.ULBService.getStateId();
+  const language = Digit.StoreData.getCurrentLanguage();
+  const moduleCode = ["bpareg", "bpa", "common"];
+  const { data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
   const { isLoading, data: applicationDetails } = Digit.Hooks.obps.useLicenseDetails(state, { applicationNumber: id, tenantId: state }, {});
   
   const {
@@ -57,7 +60,7 @@ const ApplicationDetail = () => {
       Digit.UploadServices.Filefetch(fileStoresIds, tenantId.split(".")[0])
         .then(res => {
           const { applicationDetails: details } = applicationDetails;
-          setAppDetails({ ...applicationDetails, applicationDetails: [...details, { title: "BPA_DOC_DETAILS_SUMMARY", belowComponent: () => <DocumentDetails t={t} data={applicationDetails?.applicationData?.tradeLicenseDetail?.applicationDocuments} documents={res?.data}  /> }] })
+          setAppDetails({ ...applicationDetails, applicationDetails: [...details, { title: "CE_DOCUMENT_DETAILS", belowComponent: () => <DocumentDetails t={t} data={applicationDetails?.applicationData?.tradeLicenseDetail?.applicationDocuments} documents={res?.data}  /> }] })
         })
     }
   }, [applicationDetails]);
@@ -65,7 +68,7 @@ const ApplicationDetail = () => {
   return (
     <div >
       <div style={{marginLeft: "15px"}}>
-        <Header>{t("ES_TITLE_APPLICATION_DETAILS")}</Header>
+        <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
       </div>
       <ApplicationDetailsTemplate
         applicationDetails={appDetails}
