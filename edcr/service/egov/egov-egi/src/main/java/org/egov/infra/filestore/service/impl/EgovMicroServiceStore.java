@@ -114,11 +114,11 @@ public class EgovMicroServiceStore implements FileStoreService {
     public FileStoreMapper store(InputStream sourceFileStream, String fileName, String mimeType, String moduleName) {
         return store(sourceFileStream, fileName, mimeType, moduleName, true);
     }
-    
+
     @Override
-	public FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName, String tenantId) {
-    	return store(fileStream, fileName, mimeType, moduleName, tenantId, true);
-	}
+    public FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName, String tenantId) {
+        return store(fileStream, fileName, mimeType, moduleName, tenantId, true);
+    }
 
     @Override
     public FileStoreMapper store(File file, String fileName, String mimeType, String moduleName, boolean deleteFile) {
@@ -201,7 +201,7 @@ public class EgovMicroServiceStore implements FileStoreService {
         return null;
 
     }
-    
+
     @Override
     public FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName,
             String tenantId, boolean closeStream) {
@@ -308,14 +308,13 @@ public class EgovMicroServiceStore implements FileStoreService {
         return Paths.get(fileDirPath + separator + fileStoreId);
     }
 
-	@Override
-	public File fetch(String fileStoreId, String moduleName, String tenantId) {
+    @Override
+    public File fetch(String fileStoreId, String moduleName, String tenantId) {
         fileStoreId = normalizeString(fileStoreId);
         moduleName = normalizeString(moduleName);
         String tenant = StringUtils.isEmpty(tenantId) ? ApplicationThreadLocals.getTenantID() : tenantId;
         String urls = url + "/id?tenantId=" + tenant + "&fileStoreId=" + fileStoreId;
-        if (LOG.isDebugEnabled())
-            LOG.debug(String.format("fetch file fron url   %s   ", urls));
+        LOG.info(String.format("fetch file from url   %s   ", urls));
 
         RequestCallback requestCallback = request -> request.getHeaders()
                 .setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM, MediaType.ALL));
@@ -328,5 +327,5 @@ public class EgovMicroServiceStore implements FileStoreService {
 
         LOG.debug("fetch completed....   ");
         return path.toFile();
-	}
+    }
 }
