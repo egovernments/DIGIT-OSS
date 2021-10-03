@@ -61,6 +61,8 @@ import static org.egov.inbox.util.BpaConstants.LOCALITY_PARAM;
 import static org.egov.inbox.util.BpaConstants.OFFSET_PARAM;
 import static org.egov.inbox.util.BpaConstants.MOBILE_NUMBER_PARAM;
 import static org.egov.inbox.util.BpaConstants.BPAREG;
+import static org.egov.inbox.util.NocConstants.NOC_APPLICATION_NUMBER_PARAM;
+import static org.egov.inbox.util.NocConstants.NOC;
 
 @Slf4j
 @Service
@@ -84,8 +86,10 @@ public class InboxService {
     private BPAInboxFilterService bpaInboxFilterService;
 
     @Autowired
-
     private FSMInboxFilterService fsmInboxFilter;
+    
+    @Autowired
+    private NOCInboxFilterService nocInboxFilterService;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -271,6 +275,23 @@ public class InboxService {
                     isSearchResultEmpty = true;
                 }
             }
+            
+            if (processCriteria != null && !ObjectUtils.isEmpty(processCriteria.getModuleName())
+                    && processCriteria.getModuleName().equals(NOC)) {
+                totalCount = nocInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
+                List<String> applicationNumbers = nocInboxFilterService.fetchApplicationNumbersFromSearcher(criteria, StatusIdNameMap, requestInfo);
+                if (!CollectionUtils.isEmpty(applicationNumbers)) {
+                    moduleSearchCriteria.put(NOC_APPLICATION_NUMBER_PARAM, applicationNumbers);
+                    businessKeys.addAll(applicationNumbers);
+                    moduleSearchCriteria.remove(STATUS_PARAM);
+                    moduleSearchCriteria.remove(MOBILE_NUMBER_PARAM);
+                    moduleSearchCriteria.remove(LOCALITY_PARAM);
+                    moduleSearchCriteria.remove(OFFSET_PARAM);
+                } else {
+                    isSearchResultEmpty = true;
+                }
+            }
+            
             /*
              * if(!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(PT)){ Boolean
              * isMobileNumberPresent = false; if(moduleSearchCriteria.containsKey(MOBILE_NUMBER_PARAM)){ isMobileNumberPresent =

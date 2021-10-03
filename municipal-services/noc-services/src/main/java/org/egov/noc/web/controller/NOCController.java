@@ -92,9 +92,9 @@ public class NOCController {
 			@Valid @ModelAttribute NocSearchCriteria criteria) {
 
 		List<Noc> nocList = nocService.search(criteria, requestInfoWrapper.getRequestInfo());
-
+		Integer count = nocService.getNocCount(criteria, requestInfoWrapper.getRequestInfo());
 		NocResponse response = NocResponse.builder().noc(nocList).responseInfo(
-				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true)).count(count)
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
