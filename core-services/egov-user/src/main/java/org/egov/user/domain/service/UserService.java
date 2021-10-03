@@ -231,7 +231,9 @@ public class UserService {
         user.setTenantId(getStateLevelTenantForCitizen(user.getTenantId(), user.getType()));
         User persistedNewUser = persistNewUser(user);
         
-        dummyUser.setUuid(persistedNewUser.getUuid());
+        if(persistedNewUser!=null && persistedNewUser.getUuid()!=null) {
+        	dummyUser.setUuid(persistedNewUser.getUuid());
+        }
         userRepository.saveAuditDetails(dummyUser);
         
         if(user.getAlternateMobileNumber()!=null) {

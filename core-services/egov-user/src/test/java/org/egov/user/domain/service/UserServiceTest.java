@@ -267,7 +267,7 @@ public class UserServiceTest {
         Mockito.doNothing().when(userRepository).update(any(org.egov.user.domain.model.User.class),any(org.egov.user.domain.model.User.class), any(org.egov.user
                 .domain
                 .model.User
-                .class),true);
+                .class),eq(false));
         when(userRepository.findAll(any(UserSearchCriteria.class))).thenReturn(Collections.singletonList(user));
         userService.updateWithoutOtpValidation(domainUser, any());
         verify(domainUser).validateUserModification();
