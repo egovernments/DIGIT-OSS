@@ -164,8 +164,6 @@ public class UserRepository {
         savedUser.setPermanentAddress(savedPermanentAddress);
         savedUser.setCorrespondenceAddress(savedCorrespondenceAddress);
         
-        //saveAuditDetails(savedUser);
-        
         return savedUser;
     }
 

@@ -43,7 +43,6 @@ public class AlternateNumberRepository {
     }
 
 	public void update(User user, User existingUser) {
-		// TODO Auto-generated method stub
 		if (existingUser.getAlternateMobileNumber()!=null &&  user.getAlternateMobileNumber()!=null && existingUser.getAlternateMobileNumber().equalsIgnoreCase(user.getAlternateMobileNumber())) {
     		return;
     	}

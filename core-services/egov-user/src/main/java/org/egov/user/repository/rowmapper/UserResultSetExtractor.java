@@ -109,7 +109,6 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
     }
 
     private void populateAlternateAudit(ResultSet rs, User user) throws SQLException{
-		// TODO Auto-generated method stub
     	if(user.getAuditAlternatetrail()==null) {
     		Set<AuditAlternateNumber> list = new HashSet<AuditAlternateNumber>();
     		user.setAuditAlternatetrail(list);
@@ -146,7 +145,6 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
 	}
 
 	private void populateAuditHistory(ResultSet rs, User user) throws SQLException {
-		// TODO Auto-generated method stub
     	if(user.getAudittrail()==null) {
     		Set<AuditMobileNumber> list = new HashSet<AuditMobileNumber>();
     		user.setAudittrail(list);

@@ -113,10 +113,6 @@ public class UserSearchResponseContent {
         mapCorrespondenceAddress(user);
     }
 
-    
-
-	
-
 	private void mapCorrespondenceAddress(User user) {
         if (user.getCorrespondenceAddress() != null) {
             this.correspondenceAddress = user.getCorrespondenceAddress().getAddress();
