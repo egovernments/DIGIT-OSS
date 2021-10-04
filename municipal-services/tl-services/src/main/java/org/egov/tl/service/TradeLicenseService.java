@@ -299,7 +299,7 @@ public class TradeLicenseService {
             }
             BusinessService businessService = workflowService.getBusinessService(tradeLicenseRequest.getLicenses().get(0).getTenantId(), tradeLicenseRequest.getRequestInfo(), businessServiceName);
             List<TradeLicense> searchResult = getLicensesWithOwnerInfo(tradeLicenseRequest);
-            actionValidator.validateUpdateRequest(tradeLicenseRequest, businessService);
+            actionValidator.validateUpdateRequest(tradeLicenseRequest, businessService,searchResult);
             enrichmentService.enrichTLUpdateRequest(tradeLicenseRequest, businessService);
             tlValidator.validateUpdate(tradeLicenseRequest, searchResult, mdmsData);
             switch(businessServicefromPath)

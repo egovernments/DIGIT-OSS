@@ -97,16 +97,56 @@ public class ActionValidator {
      * Validates the update request
      * @param request The tradeLciense update request
      */
-    public void validateUpdateRequest(TradeLicenseRequest request,BusinessService businessService){
+    public void validateUpdateRequest(TradeLicenseRequest request,BusinessService businessService,List<TradeLicense> searchResult){
         validateDocumentsForUpdate(request);
         validateManualExpiration(request);
+        validateCancellation(request, searchResult);
        // validateRole(request);
        // validateAction(request);
         validatePayAction(request);
         validateIds(request,businessService);
     }
 
-    private void validateManualExpiration(TradeLicenseRequest request) {
+    private void validateCancellation(TradeLicenseRequest request, List<TradeLicense> searchResult) {
+		
+    	List<TradeLicense> licenses = request.getLicenses();
+
+    	Map<String,String> errorMap = new HashMap<>();
+
+    	for (TradeLicense license : licenses) {
+        	List <TradeLicense> existingApplications = new ArrayList<TradeLicense>();
+
+        	for(TradeLicense searchedLicense : searchResult) {
+        		if(searchedLicense.getLicenseNumber().equalsIgnoreCase(license.getLicenseNumber())) {
+        			existingApplications.add(searchedLicense);
+        		}
+        	}
+
+        	existingApplications.sort((TradeLicense t1, TradeLicense t2) -> t2.getFinancialYear().compareTo(t1.getFinancialYear()));
+
+        	boolean licenseFound = false;
+
+        	for(int i=0; i<existingApplications.size(); i++) {
+
+        		if(!existingApplications.get(i).getApplicationNumber().equalsIgnoreCase(license.getApplicationNumber()) && !existingApplications.get(i).getStatus().equalsIgnoreCase(STATUS_CANCELLED) ) {
+        			errorMap.put("INVALID_ACTION","Cannot cancel an application when later applications are in the workflow");
+        		}
+
+        		else if(existingApplications.get(i).getApplicationNumber().equalsIgnoreCase(license.getApplicationNumber())) {
+        			licenseFound = true;
+        			break;
+        		}
+        	}
+
+        }
+
+    	if(!errorMap.isEmpty()) {
+            throw new CustomException(errorMap);   
+    	}
+		
+	}
+
+	private void validateManualExpiration(TradeLicenseRequest request) {
     	
     	RequestInfo requestInfo = request.getRequestInfo();
         Boolean isCitizen = false;
