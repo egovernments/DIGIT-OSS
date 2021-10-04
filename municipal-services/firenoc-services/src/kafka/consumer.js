@@ -5,6 +5,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { searchApiResponse } from "../api/search";
 import { updateApiResponse } from "../api/update";
+import { getUpdatedTopic } from "../utils/index";
 // import { httpRequest } from "../api";
 
 var options = {
@@ -47,14 +48,18 @@ consumerGroup.on("message", function(message) {
   let events = [];
   let { RequestInfo } = value;
 
-  const sendEventNotificaiton = () => {
+  const sendEventNotificaiton = (tenantId) => {
     let requestPayload = {
       // RequestInfo,
       events
     };
 
+    let kafkaTopic = envVariables.KAFKA_TOPICS_EVENT_NOTIFICATION;
+    if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE)
+      kafkaTopic = getUpdatedTopic(tenantId, kafkaTopic);
+
     payloads.push({
-      topic: envVariables.KAFKA_TOPICS_EVENT_NOTIFICATION,
+      topic: kafkaTopic,
       messages: JSON.stringify(requestPayload)
     });
     // httpRequest({
@@ -155,8 +160,13 @@ consumerGroup.on("message", function(message) {
         //   break;
         default:
       }
+
+      let kafkaTopic = envVariables.KAFKA_TOPICS_NOTIFICATION;
+      if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE)
+        kafkaTopic = getUpdatedTopic(tenantId, kafkaTopic);
+
       payloads.push({
-        topic,
+        kafkaTopic,
         messages: JSON.stringify(smsRequest)
       });
       // console.log("smsRequest",smsRequest);
@@ -175,7 +185,7 @@ consumerGroup.on("message", function(message) {
     }
     // console.log("events",events);
     if (events.length > 0) {
-      sendEventNotificaiton();
+      sendEventNotificaiton(tenantId);
     }
   };
   const FireNOCPaymentStatus = async value => {
