@@ -22,7 +22,7 @@ const DesktopInbox = ({ isLoading, data, t, onSearch, parentRoute, title, iconNa
           return (
             <div>
               <span className="link">
-                <Link to={`${parentRoute}/event/${row.original.id}`}>{row.original["name"]}</Link>
+                <Link to={`${parentRoute}/event/inbox/event-details/${row.original.id}`}>{row.original["name"]}</Link>
               </span>
             </div>
           );

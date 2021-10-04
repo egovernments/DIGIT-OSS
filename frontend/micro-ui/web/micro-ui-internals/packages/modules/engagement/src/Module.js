@@ -51,6 +51,11 @@ const EventsBreadCrumb = ({ location }) => {
       show: location.pathname.includes("event/inbox/new-event") ? true : false,
     },
     {
+      path: "/digit-ui/employee/event/inbox/event-details",
+      content: t("ES_EVENT_EVENT_DETAILS"),
+      show: location.pathname.includes("event-details") ? true : false,
+    },
+    {
       path: "/digit-ui/employee/engagement/event/edit-event",
       content: t("ES_EVENT_EDIT_EVENT"),
       show: location.pathname.includes("event/edit-event") ? true : false,
@@ -104,7 +109,7 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
         <Route path={`${path}/event/edit-event/:id`}>
           <EditEvent />
         </Route>
-        <Route path={`${path}/event/:id`}>
+        <Route path={`${path}/event/inbox/event-details/:id`}>
           <EmployeeEventDetails />
         </Route>
         <Route path={`${path}/documents/inbox/details/:id`} component={(props) => <DocumentDetails {...props} />} />
