@@ -513,7 +513,7 @@ public class EnrichmentService {
         if(criteria.tenantIdOnly() && requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN")){
             criteria.setAccountId(requestInfo.getUserInfo().getUuid());
             criteria.setMobileNumber(requestInfo.getUserInfo().getUserName());
-            criteria.setTenantId(requestInfo.getUserInfo().getTenantId());
+           // criteria.setTenantId(requestInfo.getUserInfo().getTenantId());
         }
 
     }

@@ -79,6 +79,21 @@ public class TLRepository {
     }
 
     /**
+     * Searhces license in databse
+     *
+     * @param criteria The tradeLicense Search criteria
+     * @return List of TradeLicense from seach
+     */
+    public List<TradeLicense> getLicenses(TradeLicenseSearchCriteria criteria,String tenantId) {
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getTLSearchQuery(criteria, preparedStmtList);
+        query = utils.replaceSchemaPlaceholder(query, tenantId);
+        List<TradeLicense> licenses =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+        sortChildObjectsById(licenses);
+        return licenses;
+    }
+
+    /**
      * Pushes the request on save topic
      *
      * @param tradeLicenseRequest The tradeLciense create request
