@@ -27,7 +27,7 @@ class LanguageSelection extends Component {
 
     return (
       <Banner className="language-selection" bannerUrl={bannerUrl} logoUrl={logoUrl}>
-        <LanguageSelectionForm items={languages} value={value} onLanguageSelect={onLanguageSelect} onClick={onClick} />
+        <LanguageSelectionForm logoUrl={logoUrl} items={languages} value={value} onLanguageSelect={onLanguageSelect} onClick={onClick} />
       </Banner>
     );
   }

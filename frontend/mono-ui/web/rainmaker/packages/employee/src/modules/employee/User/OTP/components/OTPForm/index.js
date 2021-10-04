@@ -4,7 +4,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import logo from "egov-ui-kit/assets/images/logo_black.png"
 import "./index.css";
 
-const OTPForm = ({ handleFieldChange, toggleSnackbarAndSetText, form, resendOTP, phoneNumber }) => {
+const OTPForm = ({ handleFieldChange, toggleSnackbarAndSetText, form, resendOTP, phoneNumber,logoUrl }) => {
   const fields = form.fields || {};
   const submit = form.submit;
   const { newPassword, confirmnewpassword } = fields || {};
@@ -16,7 +16,7 @@ const OTPForm = ({ handleFieldChange, toggleSnackbarAndSetText, form, resendOTP,
         <div>
           <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
             <div style={{ marginBottom: "24px" }}>
-              <Image className="mseva-logo" source={`${logo}`} />
+              <Image className="mseva-logo" source={`${logoUrl}`} />
             </div >
           <div style={{marginLeft:"7px", marginBottom: "24px" }}>
           <Label bold={true}  fontSize= "23px" label="|" />
