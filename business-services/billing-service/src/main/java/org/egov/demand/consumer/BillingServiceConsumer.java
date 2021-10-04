@@ -148,7 +148,7 @@ public class BillingServiceConsumer {
 			/*
 			 * setting tenantid value in mdc for tracer to read while making http calls
 			 */
-			MDC.put(Constants.TENANTID_HEADER_STRING, billReq.getBills().get(0).getTenantId());
+			MDC.put(Constants.TENANTID_MDC_STRING, billReq.getBills().get(0).getTenantId());
 			receiptServiceV2.updateDemandFromReceipt(billReq, isReceiptCancellation);
 			
 		} catch (JsonProcessingException | IllegalArgumentException e) {

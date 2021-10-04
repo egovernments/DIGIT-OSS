@@ -174,5 +174,5 @@ public class Constants {
 
 	public static final String SCHEMA_PLACEHOLDER = "{{SCHEMA}}";
 
-	public static final String TENANTID_HEADER_STRING = "tenantId";
+	public static final String TENANTID_MDC_STRING = "TENANTID";
 }
