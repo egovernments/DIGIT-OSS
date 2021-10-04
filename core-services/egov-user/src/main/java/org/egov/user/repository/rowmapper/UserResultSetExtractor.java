@@ -111,12 +111,12 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
     }
 
     private void populateAlternateAudit(ResultSet rs, User user) throws SQLException{
-    	if(user.getAuditAlternatetrail()==null) {
+    	if(user.getAlternateAudittrail()==null) {
     		Set<AuditAlternateNumber> list = new HashSet<AuditAlternateNumber>();
-    		user.setAuditAlternatetrail(list);
+    		user.setAlternateAudittrail(list);
     	}
     	
-    	Set <AuditAlternateNumber> auditHistory = user.getAuditAlternatetrail();
+    	Set <AuditAlternateNumber> auditHistory = user.getAlternateAudittrail();
     	
     	if(rs.getString("aud_alt_uuid")!=null) {
     		
@@ -139,7 +139,7 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
     			auditHistory.add(trail);
     		}
     		
-    		user.setAuditAlternatetrail(auditHistory);
+    		user.setAlternateAudittrail(auditHistory);
     	
     	}
     	

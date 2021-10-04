@@ -108,7 +108,7 @@ public class UserSearchResponseContent {
         this.addresses = user.getAddresses();
         this.alternatemobilenumber=user.getAlternateMobileNumber();
         this.audittrail=user.getAudittrail();
-        this.auditAlternatetrail=user.getAuditAlternatetrail();
+        this.auditAlternatetrail=user.getAlternateAudittrail();
         mapPermanentAddress(user);
         mapCorrespondenceAddress(user);
     }

@@ -85,7 +85,7 @@ public class User {
     private boolean mobileValidationMandatory = true;
     private String alternateMobileNumber;
     private Set<AuditMobileNumber> audittrail;
-    private Set<AuditAlternateNumber> auditAlternatetrail;
+    private Set<AuditAlternateNumber> alternateAudittrail;
 
     public User addAddressItem(Address addressItem) {
         if (this.addresses == null) {

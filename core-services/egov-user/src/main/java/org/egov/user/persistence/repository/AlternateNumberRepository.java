@@ -49,7 +49,7 @@ public class AlternateNumberRepository {
     		return;
     	}
     	
-    	Set <AuditAlternateNumber> existingAudit = existingUser.getAuditAlternatetrail();
+    	Set <AuditAlternateNumber> existingAudit = existingUser.getAlternateAudittrail();
     	List <AuditAlternateNumber> auditlist = new ArrayList<AuditAlternateNumber>();
     	
     	for(AuditAlternateNumber entry : existingAudit) {
