@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Header, Card, CardSectionHeader, PDFSvg, Loader, StatusTable, Row, ActionBar, SubmitBar, CardLabel } from "@egovernments/digit-ui-react-components";
 import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDetails";
 
-const DocumentDetails = ({ t, data, documents }) => {
+const DocumentDetails = ({ t, data, documents, paymentDetails }) => {
   return (
     <Fragment>
       {data?.map((document, index) => (
@@ -18,6 +18,13 @@ const DocumentDetails = ({ t, data, documents }) => {
           </div>
         </Fragment>
       ))}
+      <div>
+        <CardSectionHeader>{`${t("BPA_FEE_DETAILS_LABEL")}`}</CardSectionHeader>
+        <StatusTable>
+          <Row className="border-none"  key={`${t(`BPAREG_FEES`)}:`} label={`${t(`BPAREG_FEES`)}:`} text={paymentDetails?.Payments?.[0]?.totalAmountPaid} />
+          <Row className="border-none"  key={`${t(`BPA_STATUS_LABEL`)}:`} label={`${t(`PAID`)}:`} text={paymentDetails?.Payments?.[0]?.totalAmountPaid ? (t("WF_BPA_PAID")) : "NA"} textStyle={paymentDetails?.Payments?.[0]?.totalAmountPaid ? {color: "green"}: {}} />
+        </StatusTable>
+      </div>
     </Fragment>
   );
 }
@@ -34,7 +41,16 @@ const ApplicationDetail = () => {
   const moduleCode = ["bpareg", "bpa", "common"];
   const { data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
   const { isLoading, data: applicationDetails } = Digit.Hooks.obps.useLicenseDetails(state, { applicationNumber: id, tenantId: state }, {});
-  
+  const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
+    {
+      tenantId: stateCode,
+      businessService: "BPAREG",
+      consumerCodes: id,
+      isEmployee: true
+    },
+    {}
+  );
+
   const {
     isLoading: updatingApplication,
     isError: updateApplicationError,
@@ -60,10 +76,10 @@ const ApplicationDetail = () => {
       Digit.UploadServices.Filefetch(fileStoresIds, tenantId.split(".")[0])
         .then(res => {
           const { applicationDetails: details } = applicationDetails;
-          setAppDetails({ ...applicationDetails, applicationDetails: [...details, { title: "CE_DOCUMENT_DETAILS", belowComponent: () => <DocumentDetails t={t} data={applicationDetails?.applicationData?.tradeLicenseDetail?.applicationDocuments} documents={res?.data}  /> }] })
+          setAppDetails({ ...applicationDetails, applicationDetails: [...details, { title: "CE_DOCUMENT_DETAILS", belowComponent: () => <DocumentDetails t={t} data={applicationDetails?.applicationData?.tradeLicenseDetail?.applicationDocuments} documents={res?.data} paymentDetails={reciept_data} /> }] })
         })
     }
-  }, [applicationDetails]);
+  }, [applicationDetails, reciept_data]);
 
   return (
     <div >
