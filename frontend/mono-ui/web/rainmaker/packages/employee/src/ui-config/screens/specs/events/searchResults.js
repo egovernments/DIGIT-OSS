@@ -8,6 +8,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import React from "react";
 import { getEpochForDate, getEventsByType, sortByEpoch } from "../utils";
+import {routeTo} from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils"
 
 export const searchApiCall = async (state, dispatch) => {
   dispatch(handleField("search", "components.div.children.searchResults", "visible", false));
@@ -64,7 +65,7 @@ export const searchApiCall = async (state, dispatch) => {
 };
 
 const onRowClick = (rowData) => {
-  window.location.href = `create?uuid=${rowData[7]}&tenantId=${rowData[6]}`;
+  routeTo(`create?uuid=${rowData[7]}&tenantId=${rowData[6]}`);
 };
 
 export const searchResults = () => {
