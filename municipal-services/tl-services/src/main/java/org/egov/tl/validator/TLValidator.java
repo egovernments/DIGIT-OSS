@@ -570,8 +570,8 @@ public class TLValidator {
                 && !criteria.tenantIdOnly() && criteria.getTenantId()==null)
             throw new CustomException("INVALID SEARCH","TenantId is mandatory in search");
 
-        if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
-            throw new CustomException("INVALID SEARCH","Search only on tenantId is not allowed");
+        /*if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
+            throw new CustomException("INVALID SEARCH","Search only on tenantId is not allowed");*/
 
         String allowedParamStr = null;
 
