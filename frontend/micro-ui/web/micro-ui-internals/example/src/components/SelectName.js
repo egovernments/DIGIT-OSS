@@ -1,3 +1,4 @@
+import React from "react";
 import { FormStep } from "@egovernments/digit-ui-react-components";
 
 const SelectName = ({ config, onSelect, onSkip, t }) => {

@@ -36,6 +36,8 @@ import PTEmployeeOwnershipDetails from "./pageComponents/OwnerDetailsEmployee";
 import CitizenApp from "./pages/citizen";
 import SearchPropertyCitizen from "./pages/citizen/SearchProperty/searchProperty";
 import SearchResultCitizen from "./pages/citizen/SearchResults";
+import PTCheckPage from "./pages/citizen/Create/CheckPage";
+import PTAcknowledgement from "./pages/citizen/Create/PTAcknowledgement";
 
 import PropertyInformation from "./pages/citizen/MyProperties/propertyInformation";
 import PTWFCaption from "./pageComponents/PTWFCaption";
@@ -60,6 +62,8 @@ import EmptyResultInbox from "./components/empty-result";
 import { TableConfig } from "./config/inbox-table-config";
 
 const componentsToRegister = {
+  PTCheckPage,
+  PTAcknowledgement,
   PropertyTax,
   PTSelectPincode,
   PTSelectAddress,

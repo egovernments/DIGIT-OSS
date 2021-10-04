@@ -1,15 +1,14 @@
 // import React from "react";
-import React, { useState, useEffect } from "react";
-
+import { Loader } from "@egovernments/digit-ui-react-components";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
-import { newConfig } from "../../../config/Create/config";
-import CheckPage from "../Create/CheckPage";
-import PTAcknowledgement from "../Create/PTAcknowledgement";
+// import { newConfig } from "../../../config/Create/config";
+
 import { checkArrayLength, stringReplaceAll,getSuperBuiltUpareafromob } from "../../../utils";
 
-const getPropertyEditDetails = (data = {}) => {
+const getPropertyEditDetails = (data = { }) => {
   // converting owners details
 
   if (data?.ownershipCategory === "INSTITUTIONALPRIVATE" || data?.ownershipCategory === "INSTITUTIONALGOVERNMENT") {
@@ -64,7 +63,7 @@ const getPropertyEditDetails = (data = {}) => {
       longitude: data?.address?.geoLocation?.longitude,
     };
   } else {
-    data.address.geoLocation = {};
+    data.address.geoLocation = { };
   }
   data.address.pincode = data?.address?.pincode;
   data.address.city = { code: data?.tenantId };
@@ -139,13 +138,13 @@ const getPropertyEditDetails = (data = {}) => {
           ? selfoccupiedtf == true
             ? { i18nKey: "PT_PARTIALLY_RENTED_OUT", code: "RENTED" }
             : {
-                i18nKey: "PT_FULLY_RENTED_OUT",
-                code: "RENTED",
-              }
+              i18nKey: "PT_FULLY_RENTED_OUT",
+              code: "RENTED",
+            }
           : {
-              i18nKey: "PT_YES_IT_IS_SELFOCCUPIED",
-              code: "SELFOCCUPIED",
-            };
+            i18nKey: "PT_YES_IT_IS_SELFOCCUPIED",
+            code: "SELFOCCUPIED",
+          };
     }
     ob["IsAnyPartOfThisFloorUnOccupied"] =
       unoccupiedtf == true ? { i18nKey: "PT_COMMON_YES", code: "UNOCCUPIED" } : { i18nKey: "PT_COMMON_NO", code: "UNOCCUPIED" };
@@ -234,13 +233,13 @@ const getPropertyEditDetails = (data = {}) => {
           ? selfoccupiedtf == true
             ? { i18nKey: "PT_PARTIALLY_RENTED_OUT", code: "RENTED" }
             : {
-                i18nKey: "PT_FULLY_RENTED_OUT",
-                code: "RENTED",
-              }
+              i18nKey: "PT_FULLY_RENTED_OUT",
+              code: "RENTED",
+            }
           : {
-              i18nKey: "PT_YES_IT_IS_SELFOCCUPIED",
-              code: "SELFOCCUPIED",
-            };
+            i18nKey: "PT_YES_IT_IS_SELFOCCUPIED",
+            code: "SELFOCCUPIED",
+          };
       data.IsAnyPartOfThisFloorUnOccupied =
         unoccupiedtf == true ? { i18nKey: "PT_COMMON_YES", code: "UNOCCUPIED" } : { i18nKey: "PT_COMMON_NO", code: "UNOCCUPIED" };
       data.floordetails = { plotSize: data?.landArea, builtUpArea: getSuperBuiltUpareafromob(data) };
@@ -274,7 +273,7 @@ const getPropertyEditDetails = (data = {}) => {
         ? { i18nKey: "PT_ONE_BASEMENT_OPTION" }
         : { i18nKey: "PT_NO_BASEMENT_OPTION" }; */
       let unitedit = [];
-      let ob = {};
+      let ob = { };
       let flooradded = [];
       let flrno;
       let extraunits = [];
@@ -299,7 +298,7 @@ const getPropertyEditDetails = (data = {}) => {
 
       data?.units &&
         data?.units.map((unit, index) => {
-          ob = {};
+          ob = { };
           totbuiltarea = 0;
           let selfoccupiedtf = false,
             rentedtf = false,
@@ -313,16 +312,16 @@ const getPropertyEditDetails = (data = {}) => {
           } else {
             extraunits.push(unit);
           }
-          if (ob == {}) {
+          if (ob == { }) {
             extraunits.push(unit);
           }
           //console.log(ob);
-          !flooradded.includes(unit.floorNo) && ob.builtUpArea > 0 && unit.floorNo > -1 && unit.floorNo < 3 && ob.selfOccupied !== "" && ob != {}
+          !flooradded.includes(unit.floorNo) && ob.builtUpArea > 0 && unit.floorNo > -1 && unit.floorNo < 3 && ob.selfOccupied !== "" && ob != { }
             ? unitedit.push(ob)
             : console.log("");
-          unit.floorNo == -1 && ob != {} && ob.selfOccupied !== "" && ob.builtUpArea > 0 ? (unitedit["-1"] = ob) : console.log("");
+          unit.floorNo == -1 && ob != { } && ob.selfOccupied !== "" && ob.builtUpArea > 0 ? (unitedit["-1"] = ob) : console.log("");
           if (unitedit["-1"] && unit.floorNo == -2 && !extraunits.includes(unit)) {
-            unit.floorNo == -2 && ob != {} && ob.selfOccupied !== "" && ob.builtUpArea > 0 ? (unitedit["-2"] = ob) : console.log("");
+            unit.floorNo == -2 && ob != { } && ob.selfOccupied !== "" && ob.builtUpArea > 0 ? (unitedit["-2"] = ob) : console.log("");
           } else if (!unitedit["-1"] && unit.floorNo == -2 && !extraunits.includes(unit)) {
             extraunits.push(unit);
           }
@@ -334,13 +333,13 @@ const getPropertyEditDetails = (data = {}) => {
         unitedit.length == 3
           ? { i18nKey: "PT_GROUND_PLUS_TWO_OPTION", code: 2 }
           : unitedit.length == 2
-          ? { i18nKey: "PT_GROUND_PLUS_ONE_OPTION", code: 1 }
-          : { i18nKey: "PT_GROUND_FLOOR_OPTION", code: 0 };
+            ? { i18nKey: "PT_GROUND_PLUS_ONE_OPTION", code: 1 }
+            : { i18nKey: "PT_GROUND_FLOOR_OPTION", code: 0 };
       data.noOofBasements = unitedit["-2"]
         ? { i18nKey: "PT_TWO_BASEMENT_OPTION" }
         : unitedit["-1"]
-        ? { i18nKey: "PT_ONE_BASEMENT_OPTION" }
-        : { i18nKey: "PT_NO_BASEMENT_OPTION" };
+          ? { i18nKey: "PT_ONE_BASEMENT_OPTION" }
+          : { i18nKey: "PT_NO_BASEMENT_OPTION" };
 
       data.units = unitedit;
       data.units = data?.units.concat(extraunits);
@@ -397,14 +396,16 @@ const EditProperty = ({ parentRoute }) => {
   const { pathname } = useLocation();
   const history = useHistory();
   let config = [];
-  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("PT_CREATE_PROPERTY", {});
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("PT_CREATE_PROPERTY", { });
+  const stateId = Digit.ULBService.getStateId();
+  const { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(stateId, "PropertyTax", "CommonFieldsConfig");
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const acknowledgementIds = window.location.href.split("/").pop();
   const propertyIds = window.location.href.split("/").pop();
-  let application = {};
+  let application = { };
   const updateProperty = window.location.href.includes("action=UPDATE");
   const typeOfProperty = window.location.href.includes("UPDATE") ? true : false;
-  const ptProperty = JSON.parse(sessionStorage.getItem("pt-property")) || {};
+  const ptProperty = JSON.parse(sessionStorage.getItem("pt-property")) || { };
   const data = { Properties: [ptProperty] };
   /* const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch(
     { filters: typeOfProperty ? { propertyIds } : { acknowledgementIds } },
@@ -452,7 +453,7 @@ const EditProperty = ({ parentRoute }) => {
     if (!isNaN(lastchar)) {
       isMultiple = true;
     }
-    let { nextStep = {} } = config.find((routeObj) => routeObj.route === currentPath);
+    let { nextStep = { } } = config.find((routeObj) => routeObj.route === currentPath);
     if (typeof nextStep == "object" && nextStep != null && isMultiple != false) {
       if (nextStep[sessionStorage.getItem("ownershipCategory")]) {
         nextStep = `${nextStep[sessionStorage.getItem("ownershipCategory")]}/${index}`;
@@ -539,19 +540,28 @@ const EditProperty = ({ parentRoute }) => {
     goNext(skipStep, index, isAddMultiple, key);
   }
 
-  const handleSkip = () => {};
-  const handleMultiple = () => {};
+  const handleSkip = () => { };
+  const handleMultiple = () => { };
 
   const onSuccess = () => {
     clearParams();
     queryClient.invalidateQueries("PT_CREATE_PROPERTY");
-    sessionStorage.setItem("propertyInitialObject", JSON.stringify({}));
-    sessionStorage.setItem("pt-property", JSON.stringify({}));
+    sessionStorage.setItem("propertyInitialObject", JSON.stringify({ }));
+    sessionStorage.setItem("pt-property", JSON.stringify({ }));
   };
-  newConfig.forEach((obj) => {
+
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  /* use newConfig instead of commonFields for local development in case needed */
+  commonFields.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
   config.indexRoute = `isResidential`;
+  const  CheckPage = Digit?.ComponentRegistryService?.getComponent('PTCheckPage');
+  const PTAcknowledgement = Digit?.ComponentRegistryService?.getComponent('PTAcknowledgement');
 
   return (
     <Switch>

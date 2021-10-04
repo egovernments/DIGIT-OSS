@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import { newConfigMutate } from "../../../config/Mutate/config";
-import PTAcknowledgement from "../Create/PTAcknowledgement";
 
 import { useTranslation } from "react-i18next";
 
@@ -148,6 +147,7 @@ const MutationCitizen = (props) => {
 
   const handleSkip = () => {};
   config.indexRoute = "search-property";
+  const PTAcknowledgement = Digit?.ComponentRegistryService?.getComponent('PTAcknowledgement');
   return (
     <React.Fragment>
       <Switch>

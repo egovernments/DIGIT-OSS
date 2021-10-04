@@ -1,7 +1,6 @@
+import { FormComposer, Loader } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FormComposer, Toast } from "@egovernments/digit-ui-react-components";
-import { newConfig } from "../../../config/Create/config";
 import { useHistory } from "react-router-dom";
 
 const NewApplication = () => {
@@ -9,13 +8,13 @@ const NewApplication = () => {
   const tenants = Digit.Hooks.pt.useTenants();
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
-  const defaultValues = {};
+  const defaultValues = { };
   const history = useHistory();
   // delete
   // const [_formData, setFormData,_clear] = Digit.Hooks.useSessionStorage("store-data",null);
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
-  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", {});
-
+  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", { });
+  const { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "PropertyTax", "CommonFieldsConfig");
   useEffect(() => {
     setMutationHappened(false);
     clearSuccessData();
@@ -135,7 +134,13 @@ const NewApplication = () => {
     // history.push("/digit-ui/employee/pt/response", { Property: formData });
     // history.push("/digit-ui/employee/pt/response", { Property: _formData });
   };
-  const configs = newConfig;
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  /* use newConfig instead of commonFields for local development in case needed */
+
+  const configs = commonFields;
 
   return (
     <FormComposer

@@ -1,10 +1,10 @@
+import { Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
-import { newConfig } from "../../../config/Create/config";
-import CheckPage from "./CheckPage";
-import PTAcknowledgement from "./PTAcknowledgement";
+// import { newConfig } from "../../../config/Create/config";
+
 
 const CreateProperty = ({ parentRoute }) => {
   const queryClient = useQueryClient();
@@ -12,9 +12,10 @@ const CreateProperty = ({ parentRoute }) => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const history = useHistory();
+  const stateId = Digit.ULBService.getStateId();
   let config = [];
-  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("PT_CREATE_PROPERTY", {});
-
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("PT_CREATE_PROPERTY", { });
+  let { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(stateId, "PropertyTax", "CommonFieldsConfig");
   const goNext = (skipStep, index, isAddMultiple, key) => {
     let currentPath = pathname.split("/").pop(),
       lastchar = currentPath.charAt(currentPath.length - 1),
@@ -36,7 +37,7 @@ const CreateProperty = ({ parentRoute }) => {
     if (!isNaN(lastchar)) {
       isMultiple = true;
     }
-    let { nextStep = {} } = config.find((routeObj) => routeObj.route === currentPath);
+    let { nextStep = { } } = config.find((routeObj) => routeObj.route === currentPath);
     if (typeof nextStep == "object" && nextStep != null && isMultiple != false) {
       if (nextStep[sessionStorage.getItem("ownershipCategory")]) {
         nextStep = `${nextStep[sessionStorage.getItem("ownershipCategory")]}/${index}`;
@@ -123,18 +124,25 @@ const CreateProperty = ({ parentRoute }) => {
     goNext(skipStep, index, isAddMultiple, key);
   }
 
-  const handleSkip = () => {};
-  const handleMultiple = () => {};
+  const handleSkip = () => { };
+  const handleMultiple = () => { };
 
   const onSuccess = () => {
     clearParams();
     queryClient.invalidateQueries("PT_CREATE_PROPERTY");
   };
-  newConfig.forEach((obj) => {
+  if (isLoading) {
+    return <Loader />;
+  }
+
+// commonFields=newConfig;
+  /* use newConfig instead of commonFields for local development in case needed */
+  commonFields.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
   config.indexRoute = "info";
-
+  const  CheckPage = Digit?.ComponentRegistryService?.getComponent('PTCheckPage');
+  const PTAcknowledgement = Digit?.ComponentRegistryService?.getComponent('PTAcknowledgement');
   return (
     <Switch>
       {config.map((routeObj, index) => {

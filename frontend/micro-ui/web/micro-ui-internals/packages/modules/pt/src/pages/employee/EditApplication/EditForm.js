@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, useLocation } from "react-router-dom";
 import { FormComposer, Loader } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { newConfig } from "../../../config/Create/config";
-import _ from "lodash";
+import { useHistory, useLocation } from "react-router-dom";
 
 const EditForm = ({ applicationData }) => {
   const { t } = useTranslation();
@@ -11,7 +9,8 @@ const EditForm = ({ applicationData }) => {
   const { state } = useLocation();
   const [canSubmit, setSubmitValve] = useState(false);
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
-  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", {});
+  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", { });
+  const { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "PropertyTax", "CommonFieldsConfig");
 
   useEffect(() => {
     setMutationHappened(false);
@@ -52,18 +51,24 @@ const EditForm = ({ applicationData }) => {
         let newDoc = data?.documents?.documents?.find((e) => e.documentType.includes(dt[0] + "." + dt[1]));
         return { ...old, ...newDoc };
       }),
-      units: [...(applicationData?.units?.map((old) => ({ ...old, active: false })) || []), ...(data?.units?.map(unit=>{return {...unit,active:true}}) || [])],
+      units: [...(applicationData?.units?.map((old) => ({ ...old, active: false })) || []), ...(data?.units?.map(unit => { return { ...unit, active: true } }) || [])],
       workflow: state.workflow,
       applicationStatus: "UPDATE",
     };
-    if(state?.workflow?.action==="OPEN"){
-      formData.units=formData.units.filter(unit=>unit.active);
+    if (state?.workflow?.action === "OPEN") {
+      formData.units = formData.units.filter(unit => unit.active);
     }
     // console.log(formData, "in submit");
     history.push("/digit-ui/employee/pt/response", { Property: formData, key: "UPDATE", action: "SUBMIT" });
   };
 
-  const configs = newConfig;
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  /* use newConfig instead of commonFields for local development in case needed */
+
+  const configs = commonFields;
 
   return (
     <FormComposer
