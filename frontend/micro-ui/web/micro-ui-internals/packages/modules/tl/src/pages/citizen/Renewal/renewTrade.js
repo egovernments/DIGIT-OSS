@@ -5,8 +5,7 @@ import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
 // import { newConfig } from "../../../config/config";
 import { getCommencementDataFormat } from "../../../utils/index";
-import CheckPage from "../Create/CheckPage";
-import TLAcknowledgement from "../Create/TLAcknowledgement";
+
 const getPath = (path, params) => {
   params &&
     Object.keys(params).map((key) => {
@@ -211,7 +210,8 @@ const RenewTrade = ({ parentRoute }) => {
   if (isLoading || configLoading) {
     return <Loader />;
   }
-
+  const CheckPage = Digit?.ComponentRegistryService?.getComponent('TLCheckPage') ;
+  const TLAcknowledgement = Digit?.ComponentRegistryService?.getComponent('TLAcknowledgement');
   return (
     <Switch>
       {config.map((routeObj, index) => {

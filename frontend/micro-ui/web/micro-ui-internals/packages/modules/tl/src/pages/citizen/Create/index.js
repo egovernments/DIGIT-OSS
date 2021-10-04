@@ -67,6 +67,8 @@ const CreateTradeLicence = ({ parentRoute }) => {
   });
   config.indexRoute = "info";
 
+  const CheckPage = Digit?.ComponentRegistryService?.getComponent('TLCheckPage') ;
+  const TLAcknowledgement = Digit?.ComponentRegistryService?.getComponent('TLAcknowledgement');
   return (
     <Switch>
       {config.map((routeObj, index) => {

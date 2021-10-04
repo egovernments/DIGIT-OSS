@@ -13,6 +13,7 @@ import { TLModule, TLLinks,initTLComponents } from "@egovernments/digit-ui-modul
 import { initReceiptsComponents, ReceiptsModule } from "@egovernments/digit-ui-module-receipts";
 import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
+import {initCustomisationComponents} from "./customisations";
 
 initLibraries();
 
@@ -32,6 +33,7 @@ window.Digit.ComponentRegistryService.setupRegistry({
   ReceiptsModule
 });
 
+
 initPGRComponents();
 initFSMComponents();
 initDSSComponents();
@@ -41,6 +43,8 @@ initTLComponents();
 initReceiptsComponents();
 initOBPSComponents();
 initEngagementComponents();
+
+initCustomisationComponents();
 
 const moduleReducers = (initData) => ({
   pgr: PGRReducers(initData),

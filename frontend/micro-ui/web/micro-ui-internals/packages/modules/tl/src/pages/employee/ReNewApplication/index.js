@@ -254,7 +254,8 @@ const ReNewApplication = (props) => {
       if (data?.owners?.length > 0) formData.tradeLicenseDetail.owners = data?.owners;
       if (structureType) formData.tradeLicenseDetail.structureType = structureType;
       if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
-
+      /* use customiseCreateFormData hook to make some chnages to the licence object */
+      formData = Digit?.Customizations?.TL?.customiseSendbackFormData ? Digit?.Customizations?.TL?.customiseSendbackFormData(data, formData) : formData;
       Digit.TLService.update({ Licenses: [formData] }, tenantId)
         .then((result, err) => {
           if (result?.Licenses?.length > 0) {
@@ -289,7 +290,8 @@ const ReNewApplication = (props) => {
       if (structureType) formData.tradeLicenseDetail.structureType = structureType;
       if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
       if (applicationDocuments) formData.tradeLicenseDetail.applicationDocuments = applicationDocuments;
-
+      /* use customiseCreateFormData hook to make some chnages to the licence object */
+      formData = Digit?.Customizations?.TL?.customiseRenewalCreateFormData ? Digit?.Customizations?.TL?.customiseRenewalCreateFormData(data, formData) : formData;
       Digit.TLService.update({ Licenses: [formData] }, tenantId)
         .then((result, err) => {
           if (result?.Licenses?.length > 0) {
