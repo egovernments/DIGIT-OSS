@@ -1,7 +1,6 @@
 package org.egov.demand.consumer;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +26,6 @@ import org.egov.demand.web.contract.Receipt;
 import org.egov.demand.web.contract.ReceiptRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -46,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 public class BillingServiceConsumer {
 
 	@Autowired
-	private ApplicationProperties appProps;
+	private ApplicationProperties applicationProperties;
 
 	@Autowired
 	private DemandService demandService;
@@ -68,25 +65,11 @@ public class BillingServiceConsumer {
 	
 	@Autowired
 	private Util util;
-	
-	@Value("${egov.state.list}")
-	private List<String> stateList;
-	
-	@Bean
-	public String[] getTopics() {
 
-		List<String> allStateApendableTopics = Arrays.asList(appProps.getPaymentCreateTopic(), appProps.getPaymentCancelTopic());
-		List<String> topics = new ArrayList<>();
-		topics.addAll(allStateApendableTopics);
-		for (String state : stateList) {
-			allStateApendableTopics.forEach(topic -> {
-				topics.add(state.concat("-").concat(topic));
-			});
-		}
-		return topics.toArray(new String[]{});
-	}
-	
-	@KafkaListener(topics = "#{@getTopics}")
+
+	@KafkaListener(topics = { "${kafka.topics.receipt.update.collecteReceipt}", "${kafka.topics.save.bill}",
+			"${kafka.topics.save.demand}", "${kafka.topics.update.demand}", "${kafka.topics.receipt.update.demand}",
+			"${kafka.topics.receipt.cancel.name}", "${kafka.topics.payment.create}", "${kafka.topics.payment.cancel}" })
 	public void processMessage(Map<String, Object> consumerRecord, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 
 		log.debug("key:" + topic + ":" + "value:" + consumerRecord);
@@ -94,25 +77,25 @@ public class BillingServiceConsumer {
 		/*
 		 * save demand topic
 		 */
-		if (appProps.getCreateDemandTopic().equals(topic))
+		if (applicationProperties.getCreateDemandTopic().equals(topic))
 			demandService.save(objectMapper.convertValue(consumerRecord, DemandRequest.class));
 		
 		/*
 		 * update demand topic
 		 */
-		else if (appProps.getUpdateDemandTopic().equals(topic))
+		else if (applicationProperties.getUpdateDemandTopic().equals(topic))
 			demandService.update(objectMapper.convertValue(consumerRecord, DemandRequest.class), null);
 		
 		/*
 		 * save bill
 		 */
-		else if (topic.equals(appProps.getCreateBillTopic()))
+		else if (topic.equals(applicationProperties.getCreateBillTopic()))
 			billRepository.saveBill(objectMapper.convertValue(consumerRecord, BillRequest.class));
 
 		/*
 		 * update demand from receipt
 		 */
-		else if (appProps.getUpdateDemandFromReceipt().equals(topic)) {
+		else if (applicationProperties.getUpdateDemandFromReceipt().equals(topic)) {
 
 			CollectionReceiptRequest collectionReceiptRequest = objectMapper.convertValue(consumerRecord,
 					CollectionReceiptRequest.class);
@@ -129,7 +112,7 @@ public class BillingServiceConsumer {
 		/*
 		 * update demand for receipt cancellation
 		 */
-		else if (appProps.getReceiptCancellationTopic().equals(topic)) {
+		else if (applicationProperties.getReceiptCancellationTopic().equals(topic)) {
 			receiptService.updateDemandFromReceipt(objectMapper.convertValue(consumerRecord, ReceiptRequest.class),
 					StatusEnum.CANCELLED, true);
 		}
@@ -137,7 +120,7 @@ public class BillingServiceConsumer {
 		/*
 		 * update demand from receipt
 		 */
-		else if (topic.contains(appProps.getPaymentCreateTopic())) {
+		else if (applicationProperties.getPaymentCreateTopic().equals(topic)) {
 
 			Boolean isReceiptCancellation = false;
 			updateDemandsFromPayment(consumerRecord, isReceiptCancellation);
@@ -146,7 +129,7 @@ public class BillingServiceConsumer {
 		/*
 		 * update demand for receipt cancellation
 		 */
-		else if (topic.contains(appProps.getPaymentCancelTopic())) {
+		else if (applicationProperties.getPaymentCancelTopic().equals(topic)) {
 
 			Boolean isReceiptCancellation = true;
 			updateDemandsFromPayment(consumerRecord, isReceiptCancellation);

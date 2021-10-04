@@ -74,7 +74,7 @@ public class CollectionNotificationConsumer{
                 HashMap<String, Object> request = new HashMap<>();
                 request.put("mobileNumber", mobNo);
                 request.put("message", message);
-                producer.push(payment.getTenantId(), applicationProperties.getSmsTopic(), request);
+                producer.push(applicationProperties.getSmsTopic(), request);
             } else {
                 log.error("Message not configured! No notification will be sent.");
             }

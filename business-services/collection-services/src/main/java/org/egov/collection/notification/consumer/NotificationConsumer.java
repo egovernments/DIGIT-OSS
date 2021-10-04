@@ -134,7 +134,7 @@ public class NotificationConsumer {
 						request.put("mobileNumber", phNo);
 						request.put("message", message);
 
-						producer.push(receipt.getTenantId(), smsTopic, request);
+						producer.push(smsTopic, request);
 					} else {
 						log.error("No message configured! Notification will not be sent.");
 					}
