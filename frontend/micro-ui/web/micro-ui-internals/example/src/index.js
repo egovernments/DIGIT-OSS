@@ -16,6 +16,8 @@ import { initTLComponents } from "@egovernments/digit-ui-module-tl";
 import { PaymentModule, PaymentLinks, paymentConfigs } from "@egovernments/digit-ui-module-common";
 import { HRMSModule } from "@egovernments/digit-ui-module-hrms";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
+// import {initCustomisationComponents} from "./customisations";
+
 // import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
 // import { Body, TopBar } from "@egovernments/digit-ui-react-components";
 import "@egovernments/digit-ui-css/example/index.css";
@@ -64,6 +66,9 @@ import * as comps from "@egovernments/digit-ui-react-components";
 import { subFormRegistry } from "@egovernments/digit-ui-libraries";
 
 import { pgrCustomizations, pgrComponents } from "./pgr";
+
+
+var Digit = window.Digit || {};
 
 const userInfo = {
   CITIZEN,
@@ -154,12 +159,14 @@ const initDigitUI = () => {
   initHRMSComponents();
   initTLComponents();
   initReceiptsComponents();
+// initCustomisationComponents();
 
-  const moduleReducers = (initData) => ({
+const moduleReducers = (initData) => ({
     pgr: PGRReducers(initData),
   });
 
-  window.Digit.Customizations = { PGR: pgrCustomizations };
+  window.Digit.Customizations = { PGR: pgrCustomizations ,TL:{customiseCreateFormData:(formData,licenceObject)=>licenceObject,
+    customiseRenewalCreateFormData:(formData,licenceObject)=>licenceObject,customiseSendbackFormData:(formData,licenceObject)=>licenceObject}};
 
   const stateCode = window?.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || "pb";
   initTokens(stateCode);

@@ -960,7 +960,7 @@ const GetMCollectApplicationStatus = (MdmsRes) =>
 const getDssDashboard = () => MdmsRes["dss-dashboard"]["dashboard-config"];
 
 const GetRoleStatusMapping = (MdmsRes) => MdmsRes["DIGIT-UI"].RoleStatusMapping;
-const GetCommonFields = (MdmsRes) => MdmsRes["FSM"].CommonFieldsConfig;
+const GetCommonFields = (MdmsRes,moduleCode) => moduleCode.toUpperCase()==="PROPERTYTAX"?MdmsRes["PropertyTax"].CommonFieldsConfig:MdmsRes["FSM"].CommonFieldsConfig;
 
 const GetPreFields = (MdmsRes) => MdmsRes["FSM"].PreFieldsConfig;
 
@@ -1021,7 +1021,7 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
     case "RoleStatusMapping":
       return GetRoleStatusMapping(MdmsRes);
     case "CommonFieldsConfig":
-      return GetCommonFields(MdmsRes);
+      return GetCommonFields(MdmsRes,moduleCode);
     case "PreFieldsConfig":
       return GetPreFields(MdmsRes);
     case "PostFieldsConfig":

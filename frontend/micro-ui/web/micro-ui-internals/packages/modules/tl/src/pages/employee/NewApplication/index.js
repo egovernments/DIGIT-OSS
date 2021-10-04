@@ -128,7 +128,8 @@ const NewApplication = () => {
     if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
    
     // setFormData(formData)
-
+    /* use customiseCreateFormData hook to make some chnages to the licence object */
+    formData=Digit?.Customizations?.TL?.customiseCreateFormData?Digit?.Customizations?.TL?.customiseCreateFormData(data,formData):formData;
     Digit.TLService.create({ Licenses: [formData] }, tenantId)
       .then((result, err) => {
         if (result?.Licenses?.length > 0) {
