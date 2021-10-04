@@ -141,6 +141,7 @@ public class BillingServiceConsumer {
 	private void updateDemandsFromPayment(Map<String, Object> consumerRecord, Boolean isReceiptCancellation) {
 		
 		BillRequestV2 billReq = BillRequestV2.builder().build();
+		String tenantId = "";
 		
 		try {
 
@@ -148,6 +149,7 @@ public class BillingServiceConsumer {
 			/*
 			 * setting tenantid value in mdc for tracer to read while making http calls
 			 */
+			tenantId = billReq.getBills().get(0).getTenantId();
 			MDC.put(Constants.TENANTID_MDC_STRING, billReq.getBills().get(0).getTenantId());
 			receiptServiceV2.updateDemandFromReceipt(billReq, isReceiptCancellation);
 			
@@ -156,14 +158,14 @@ public class BillingServiceConsumer {
 			/*
 			 * Adding random uuid in primary when jsonmapping exception occurs
 			 */
-			updatePaymentBackUpdateForFailure(consumerRecord.toString(), UUID.randomUUID().toString() + " : " + e.getClass().getName(), isReceiptCancellation);
+			updatePaymentBackUpdateForFailure(tenantId, consumerRecord.toString(), UUID.randomUUID().toString() + " : " + e.getClass().getName(), isReceiptCancellation);
 			log.info("EGBS_PAYMENT_SERIALIZE_ERROR",e.getClass().getName() + " : " + e.getMessage());
 			
 		} catch (Exception e ) {
 
 			String paymentId = util.getValueFromAdditionalDetailsForKey(
 					billReq.getBills().get(0).getAdditionalDetails(), Constants.PAYMENT_ID_KEY);
-			updatePaymentBackUpdateForFailure(e.getMessage(), paymentId, isReceiptCancellation);
+			updatePaymentBackUpdateForFailure(tenantId, e.getMessage(), paymentId, isReceiptCancellation);
 			log.info("EGBS_PAYMENT_BACKUPDATE_ERROR",e.getClass().getName() + " : " + e.getMessage());
 			
 		}
@@ -193,7 +195,7 @@ public class BillingServiceConsumer {
 		 * additionaldetail info from bill is not needed, so setting new value
 		 */
 		bills.get(0).setAdditionalDetails(util.setValuesAndGetAdditionalDetails(null, Constants.PAYMENT_ID_KEY, paymentId));
-		validatePaymentForDuplicateUpdates(isReceiptCancelled, paymentId);
+		validatePaymentForDuplicateUpdates(bills.get(0).getTenantId(), isReceiptCancelled, paymentId);
 
 		for (int i = 0; i < bills.size(); i++) {
 			
@@ -219,12 +221,13 @@ public class BillingServiceConsumer {
 	 * @param isReceiptCancelled
 	 * @param paymentId
 	 */
-	private void validatePaymentForDuplicateUpdates(boolean isReceiptCancelled, String paymentId) {
+	private void validatePaymentForDuplicateUpdates(String tenantId, boolean isReceiptCancelled, String paymentId) {
 
 		PaymentBackUpdateAudit backUpdateAuditCriteria = PaymentBackUpdateAudit.builder()
 				.isReceiptCancellation(isReceiptCancelled)
 				.paymentId(paymentId)
 				.isBackUpdateSucces(true)
+				.tenantId(tenantId)
 				.build();
 
 		String paymentIdFromDb = demandRepository
@@ -244,13 +247,14 @@ public class BillingServiceConsumer {
 	 * @param paymentBackUpdateAudit
 	 * @throws Exception 
 	 */
-	private void updatePaymentBackUpdateForFailure (String errorMsg, String paymentId, Boolean isReceiptCancellation) {
+	private void updatePaymentBackUpdateForFailure (String tenantId, String errorMsg, String paymentId, Boolean isReceiptCancellation) {
 
 		PaymentBackUpdateAudit paymentBackUpdateAudit = PaymentBackUpdateAudit.builder()
 				.isReceiptCancellation(isReceiptCancellation)
 				.isBackUpdateSucces(false)
 				.errorMessage(errorMsg)
 				.paymentId(paymentId)
+				.tenantId(tenantId)
 				.build();
 
 		demandRepository.insertBackUpdateForPayment(paymentBackUpdateAudit);

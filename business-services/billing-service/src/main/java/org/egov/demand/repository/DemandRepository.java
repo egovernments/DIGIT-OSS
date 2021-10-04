@@ -369,8 +369,10 @@ public class DemandRepository {
 	 */
 	public void insertBackUpdateForPayment(PaymentBackUpdateAudit paymentBackUpdateAudit) {
 
-		jdbcTemplate.update(DemandQueryBuilder.PAYMENT_BACKUPDATE_AUDIT_INSERT_QUERY, new PreparedStatementSetter() {
-			
+		String paymentBackUpdateQuery = Util.replaceSchemaPlaceholder(
+				DemandQueryBuilder.PAYMENT_BACKUPDATE_AUDIT_INSERT_QUERY, paymentBackUpdateAudit.getTenantId());
+		jdbcTemplate.update(paymentBackUpdateQuery, new PreparedStatementSetter() {
+
 			@Override
 			public void setValues(PreparedStatement ps) throws SQLException {
 
@@ -390,10 +392,11 @@ public class DemandRepository {
 				backUpdateAudit.getPaymentId(),
 				backUpdateAudit.getIsBackUpdateSucces(),
 				backUpdateAudit.getIsReceiptCancellation() };
-
+		
+		String query = Util.replaceSchemaPlaceholder(DemandQueryBuilder.PAYMENT_BACKUPDATE_AUDIT_SEARCH_QUERY,
+				backUpdateAudit.getTenantId());
 		try {
-			paymentId = jdbcTemplate.queryForObject(
-					DemandQueryBuilder.PAYMENT_BACKUPDATE_AUDIT_SEARCH_QUERY, preparedStatementValues, 	String.class);
+			paymentId = jdbcTemplate.queryForObject(query, preparedStatementValues, String.class);
 		} catch (DataAccessException e) {
 			log.info("No data found for incoming receipt in backupdate log");
 		}
