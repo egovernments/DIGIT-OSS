@@ -73,6 +73,8 @@
 @import "./components/EventCalendarView.scss";
 @import "./components/OnGroundEventCard.scss";
 
+@import "./components/hoc/index.scss";
+
 @import "./pages/employee/index.scss";
 @import "./pages/employee/cardfix.scss";
 @import "./pages/employee/popupmodule.scss";
@@ -89,6 +91,34 @@
 @import "./pages/citizen/Events.scss";
 @import "./pages/citizen/DocumentList.scss";
 @import "./pages/citizen/SurveyList.scss";
+
+.rm-mb {
+  margin-bottom: unset !important;
+}
+
+.w-fullwidth{
+  @apply w-full;
+}
+
+.desktop-only{
+  @apply hidden;
+}
+
+@screen dt {
+  .desktop-only{
+    @apply block;
+  } 
+}
+
+.mobile-only{
+  @apply block;
+}
+
+@screen dt {
+  .mobile-only{
+    @apply hidden;
+  } 
+}
 
 .dark {
   @apply text-text-primary;

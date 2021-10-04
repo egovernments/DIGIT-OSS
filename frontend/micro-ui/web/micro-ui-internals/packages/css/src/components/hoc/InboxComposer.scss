@@ -1,0 +1,10 @@
+.InboxComposerWrapper{
+    
+}
+
+@screen dt{
+    .InboxComposerWrapper{
+        grid-template-columns: calc( 25% - 32px ) auto;
+        @apply grid gap-x-8 gap-y-6;
+    }
+}

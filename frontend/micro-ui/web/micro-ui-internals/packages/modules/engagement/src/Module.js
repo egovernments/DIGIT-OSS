@@ -14,6 +14,7 @@ import NewEvent from "./pages/employee/Events/NewEvent";
 import EditEvent from "./pages/employee/Events/EditEvent";
 import Response from "./pages/employee/Events/NewEvent/Response";
 import Inbox from "./pages/employee/Events/Inbox";
+import Messages from "./pages/employee/Messages";
 import EventForm from "./components/Events/EventForm";
 import SelectEventGeolocation from "./components/Events/SelectGeoLocation";
 import SelectToDate from "./components/Events/SelectToDate";
@@ -118,6 +119,7 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
         <Route path={`${path}/documents/update-response`} component={(props) => <DocUpdateResponse {...props} />} />
         <Route path={`${path}/documents/delete-response`} component={(props) => <DocDeleteResponse {...props} />} />
         <Route path={`${path}/documents/inbox`} component={(props) => <DocumentNotification tenants={tenants} />} />
+        <Route path={`${path}/messages`} component={(props) => <Messages {...props} />} />
         {/* documents/update-response */}
         {/* <Redirect to={`${path}/docs`} /> */}
       </Switch>

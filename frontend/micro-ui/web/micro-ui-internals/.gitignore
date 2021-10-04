@@ -8,6 +8,10 @@ locales/
 build/
 packages/**/dist/
 
+# yarn #
+.yarn
+.yarnrc.yml
+
 ### Node ###
 # Logs
 logs

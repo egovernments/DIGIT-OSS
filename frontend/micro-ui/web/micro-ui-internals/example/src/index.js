@@ -172,7 +172,6 @@ const initDigitUI = () => {
 
   const stateCode = window?.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || "pb";
   initTokens(stateCode);
-  
   // eslint-disable-next-line
   const registry = Digit.ComponentRegistryService.getRegistry();
   console.log(registry);
