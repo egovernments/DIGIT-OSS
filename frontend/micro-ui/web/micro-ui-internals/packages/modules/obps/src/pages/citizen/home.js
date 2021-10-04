@@ -104,14 +104,11 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
             Icon: <BPAHomeIcon />,
             moduleName: t("ACTION_TEST_BPA_STAKE_HOLDER_HOME"),
             name: "employeeCard",
+            isCitizen: true,
             kpis: [
                 {
                     count: !bpaLoading && !bparegLoading ? totalCount : "-",
                     label: t("BPA_PDF_TOTAL")
-                },
-                {
-                    count: "-",
-                    label: t("TOTAL_NEARING_SLA")
                 }
             ],
             links: [

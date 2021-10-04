@@ -3,9 +3,8 @@ import { ArrowRightInbox } from "./svgindex"
 import { Link } from "react-router-dom"
 
 
-const EmployeeModuleCard = ({Icon, moduleName, kpis = [], links = [] }) => {
-    const checkLocation = window.location.href.includes("citizen");
-    return <div className="employeeCard card-home customEmployeeCard" style={checkLocation ? {margin: "0px 16px 24px 16px", padding: "0px"} : {}}>
+const EmployeeModuleCard = ({Icon, moduleName, kpis = [], links = [], isCitizen = false }) => {
+    return <div className="employeeCard card-home customEmployeeCard" style={isCitizen ? {margin: "0px 16px 24px 16px", padding: "0px"} : {}}>
             <div className="complaint-links-container">
                 <div className="header">
                     <span className="text removeHeight">{moduleName}</span>
@@ -27,9 +26,9 @@ const EmployeeModuleCard = ({Icon, moduleName, kpis = [], links = [] }) => {
                     <div className="links-wrapper">
                         {links.map(({count, label, link}) => <span className="link">
                             <Link to={link}>{label}</Link>
-                            {count ? 
+                            {(count || isCitizen) ? 
                             <>
-                                <span className="inbox-total">{count || "-"}</span> 
+                                <span className={isCitizen ? "" : "inbox-total"}>{isCitizen ? "" : count || "-"}</span> 
                                     <Link to={link}>
                                         <ArrowRightInbox />
                                     </Link>
