@@ -503,7 +503,7 @@ public class NotificationService {
 		
 		property.getOwners().forEach(owner -> {
 			
-			if(owner.getAlternatemobilenumber()!=null && uuidToMobileNumber.containsKey(owner.getUuid()) && ( (uuidToMobileNumber.get(owner.getUuid())!=null && owner.getAlternatemobilenumber()!=null && uuidToMobileNumber.get(owner.getUuid())!=owner.getAlternatemobilenumber()) || (uuidToMobileNumber.get(owner.getUuid())==null)  )) {
+			if(owner.getAlternatemobilenumber()!=null &&  (uuidToMobileNumber.get(owner.getUuid())==null || uuidToMobileNumber.get(owner.getUuid())!=owner.getAlternatemobilenumber())) {
 				
 				String customizedMsg = msg.replace(PT_OWNER_NAME,owner.getName()).replace(PT_ALTERNATE_NUMBER, owner.getAlternatemobilenumber());
 				Map<String, String> mobileNumberToOwner = new HashMap<>();
