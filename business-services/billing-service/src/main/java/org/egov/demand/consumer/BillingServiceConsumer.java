@@ -25,6 +25,7 @@ import org.egov.demand.web.contract.DemandRequest;
 import org.egov.demand.web.contract.Receipt;
 import org.egov.demand.web.contract.ReceiptRequest;
 import org.egov.tracer.model.CustomException;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -144,6 +145,10 @@ public class BillingServiceConsumer {
 		try {
 
 			setBillRequestFromPayment(consumerRecord, billReq, isReceiptCancellation);
+			/*
+			 * setting tenantid value in mdc for tracer to read while making http calls
+			 */
+			MDC.put(Constants.TENANTID_HEADER_STRING, billReq.getBills().get(0).getTenantId());
 			receiptServiceV2.updateDemandFromReceipt(billReq, isReceiptCancellation);
 			
 		} catch (JsonProcessingException | IllegalArgumentException e) {

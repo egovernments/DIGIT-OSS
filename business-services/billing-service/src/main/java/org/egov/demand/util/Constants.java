@@ -173,4 +173,6 @@ public class Constants {
 	public static final String COUNT_REPLACE_CANCEL_BILL_MSG = "{count}";
 
 	public static final String SCHEMA_PLACEHOLDER = "{{SCHEMA}}";
+
+	public static final String TENANTID_HEADER_STRING = "tenantId";
 }
