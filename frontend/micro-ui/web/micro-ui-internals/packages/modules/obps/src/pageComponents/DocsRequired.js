@@ -83,7 +83,7 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
       <Card>
         <CardHeader>{checkingUrl ? t(`BPA_OOCUPANCY_CERTIFICATE_APP_LABEL`) : t(`OBPS_NEW_BUILDING_PERMIT`)}</CardHeader>
         {/* TODO: Change text styles */}
-        <CitizenInfoLabel text={t(`OBPS_DOCS_REQUIRED_TIME`)} showInfo={false} />
+        <CitizenInfoLabel style={{margin:"0px"}} textStyle={{color:"#0B0C0C"}} text={t(`OBPS_DOCS_REQUIRED_TIME`)} showInfo={false} />
         <CardText style={{ color: "#0B0C0C", marginTop: "12px" }}>{t(`OBPS_NEW_BUILDING_PERMIT_DESCRIPTION`)}</CardText>
         {isLoading ?
           <Loader /> :

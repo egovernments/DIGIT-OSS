@@ -1,7 +1,7 @@
 import React from "react";
 import { InfoBannerIcon } from "./svgindex";
 
-const CitizenInfoLabel = ({ info, text, style, showInfo = true }) => {
+const CitizenInfoLabel = ({ info, text, style, textStyle, showInfo = true }) => {
   return (
     <div className="info-banner-wrap" style={style}>
       {showInfo && <div>
@@ -9,7 +9,7 @@ const CitizenInfoLabel = ({ info, text, style, showInfo = true }) => {
         <h2>{info}</h2>
       </div>
       }
-      <p>{text}</p>
+      <p style={textStyle}>{text}</p>
     </div>
   );
 };
