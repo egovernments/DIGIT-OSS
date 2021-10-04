@@ -762,9 +762,6 @@ public class PropertyValidator {
 		if (!statusSet.contains(Status.ACTIVE))
 			errorMap.put("EG_PT_MUTATION_ALL_OWNER_INACTIVE_ERROR", "At the least one owner object should be ACTIVE");
 
-		if (!CollectionUtils.isEmpty(uuidsNotFound))
-			errorMap.put("EG_PT_UPDATE_OWNER_ERROR", "Invalid owners found in request : " + uuidsNotFound);
-
 		if (!propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 			
 
