@@ -16,6 +16,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 
+// POJO for Alternate number audit object
+
 public class AuditAlternateNumber {
 	
 	private String uuid;

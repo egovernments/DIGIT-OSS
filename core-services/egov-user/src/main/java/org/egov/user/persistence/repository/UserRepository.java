@@ -179,6 +179,8 @@ public class UserRepository {
      * @return
      */
     public void update(User dummyUser, final User user, User oldUser, boolean isNumberUpdated) {
+    	
+    	// new boolean argument added, to check whether mobile numbers are being updated, and if updations are required in audit tables.
 
 
         Map<String, Object> updateuserInputs = new HashMap<>();

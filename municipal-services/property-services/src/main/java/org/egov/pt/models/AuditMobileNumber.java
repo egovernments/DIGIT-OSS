@@ -18,6 +18,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
+//POJO for audit primary mobile numbers object
+
 public class AuditMobileNumber {
 	
 	@JsonProperty("uuid")

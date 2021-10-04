@@ -10,6 +10,8 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 
+// POJO for Audit primary mobile number object
+
 public class AuditMobileNumber {
 	
 	private String uuid;

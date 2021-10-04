@@ -216,6 +216,11 @@ public class UserService {
         user.validateNewUser(createUserValidateName);
         conditionallyValidateOtp(user);
         
+        /* Creating a dummy user, as there is issue in encryption/ decryption of primary/ alternate mobile numbers,
+           while saving the record in the audit tables. The dummy user's mobile numbers are not encrypted. The dummy user is used just for saving the
+            audit details. Other flows remain exactly the same.
+         */
+        
         User dummyUser = user;
         
         /* encrypt here */
@@ -370,6 +375,10 @@ public class UserService {
         /* encrypt */
         
         User dummyUser = user;
+        
+        /*Argument added to update function in user repository, to check whether mobile numbers are updated, and whether we need to
+          update the audit tables.
+        */
         
         user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
         userRepository.update(dummyUser, user, existingUser,true);

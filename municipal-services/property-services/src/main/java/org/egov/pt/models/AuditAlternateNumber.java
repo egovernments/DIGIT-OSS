@@ -18,6 +18,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
+// POJO for audit alternate number object
+
 public class AuditAlternateNumber {
 	
 	@JsonProperty("uuid")

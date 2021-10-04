@@ -93,8 +93,10 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
             Role role = populateRole(rs);
             Address address = populateAddress(rs, user);
             
+            // UPDATE THE AUDIT MOBILE NUMBERS TABLE
             populateAuditHistory(rs,user);
             
+            // UPDATE THE AUDIT ALTERNATE NUMBERS TABLE.
             populateAlternateAudit(rs,user);
 
             if (!isNull(role))
@@ -122,6 +124,8 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
     				lastmodifiedby(rs.getString("aud_alt_lastmodifiedby")).lastmodifiedtime(rs.getTimestamp("aud_alt_lastmodifiedtime")).mobilenumber(rs.getString("aud_alt_mobilenumber")).build();
     	
     		boolean isExists = false;
+    		
+    		// AVOID DUPLICATE ENTRIES IN THE AUDIT TABLE.
     		
     		for (AuditAlternateNumber existing : auditHistory) {
     			
@@ -158,6 +162,8 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
     				lastmodifiedby(rs.getString("aud_lastmodifiedby")).lastmodifiedtime(rs.getTimestamp("aud_lastmodifiedtime")).mobilenumber(rs.getString("aud_mobilenumber")).build();
     	
     		boolean isExists = false;
+    		
+    		// AVOID DUPLICATE ENTRIES
     		
     		for (AuditMobileNumber existing : auditHistory) {
     			
