@@ -7,13 +7,12 @@ import { isValid, format, startOfToday } from 'date-fns';
 const SelectToDate = ({ onSelect, config, formData, register, control, errors, setError }) => {
   const { t } = useTranslation();
   const isValidDate = (date) => {
-    console.log(isValid(new Date(formData?.fromDate)), isValid(new Date(date)), new Date(formData?.fromDate) < new Date(date));
     if (!isValid(new Date(formData?.fromDate)) || !isValid(new Date(date))) return false;
-    if (new Date(formData?.fromDate) < startOfToday()) {
+    if (new Date(`${formData?.fromDate} ${formData?.fromTime}`) < new Date()) {
       setError('fromDate', { type: 'isValidFromDate' }, { shouldFocus: true });
       return false;
     }
-    if (new Date(date) < startOfToday()) return false;
+    if (new Date(`${date} ${formData?.toTime}`) < new Date()) return false;
     return new Date(`${formData?.fromDate} ${formData?.fromTime}`) <= new Date(`${date} ${formData?.toTime}`);
   }
   return (

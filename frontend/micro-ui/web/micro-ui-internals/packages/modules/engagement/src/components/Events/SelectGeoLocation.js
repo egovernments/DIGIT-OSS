@@ -12,7 +12,7 @@ const SelectGeolocation = ({ onSelect, config, formData }) => {
       <LabelFieldPair>
         <CardLabel className="card-label-smaller">{`${t(`EVENTS_GEOLOCATION_LABEL`)}`}</CardLabel>
         <div className="field">
-          <LocationSearch position={formData?.geoLocation} onChange={onChange} />
+          <LocationSearch position={{ latitude: formData?.geoLocation?.latitude, longitude: formData?.geoLocation?.longitude }} onChange={onChange} />
         </div>
       </LabelFieldPair>
     </Fragment>
