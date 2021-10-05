@@ -169,7 +169,7 @@ public class PaymentWorkflowService {
         paymentRepository.updateStatus(validatedPayments);
 
         validatedPayments.forEach(payment -> {
-            collectionProducer.push(applicationProperties.getCancelPaymentTopicName(), new PaymentRequest(requestInfo, payment));
+            collectionProducer.push(tenantId, applicationProperties.getCancelPaymentTopicName(), new PaymentRequest(requestInfo, payment));
         });
 
 
@@ -223,7 +223,7 @@ public class PaymentWorkflowService {
         paymentRepository.updateStatus(validatedPayments);
 
         validatedPayments.forEach(payment -> {
-            collectionProducer.push(applicationProperties.getCancelPaymentTopicName(), new PaymentRequest(requestInfo, payment));
+            collectionProducer.push(tenantId, applicationProperties.getCancelPaymentTopicName(), new PaymentRequest(requestInfo, payment));
         });
 
         return validatedPayments;
@@ -272,7 +272,7 @@ public class PaymentWorkflowService {
         paymentRepository.updateStatus(validatedPayments);
 
         validatedPayments.forEach(payment -> {
-            collectionProducer.push(applicationProperties.getCancelPaymentTopicName(), new PaymentRequest(requestInfo, payment));
+            collectionProducer.push(tenantId, applicationProperties.getCancelPaymentTopicName(), new PaymentRequest(requestInfo, payment));
         });
         return validatedPayments;
     }
