@@ -293,10 +293,30 @@ public class NotificationService {
         List<Event> events = new ArrayList<>();
         List<String> toUsers = new ArrayList<>();
         toUsers.add(mapOfPhoneNoAndUUIDs.get(mobileNumber));
+
+        Action action = null;
+        if(request.getWorkflow().getAction().equals("RESOLVE")) {
+
+            List<ActionItem> items = new ArrayList<>();
+            String rateLink = "";
+            String reopenLink = "";
+            String rateUrl = config.getRateLink();
+            String reopenUrl = config.getReopenLink();
+            rateLink = rateUrl.replace("{application-id}", request.getService().getServiceRequestId());
+            reopenLink = reopenUrl.replace("{application-id}", request.getService().getServiceRequestId());
+            rateLink = config.getUiAppHost() + rateLink;
+            reopenLink = config.getUiAppHost() + reopenLink;
+            ActionItem rateItem = ActionItem.builder().actionUrl(rateLink).code(config.getRateCode()).build();
+            ActionItem reopenItem = ActionItem.builder().actionUrl(reopenLink).code(config.getReopenCode()).build();
+            items.add(rateItem);
+            items.add(reopenItem);
+
+            action = Action.builder().actionUrls(items).build();
+        }
         Recepient recepient = Recepient.builder().toUsers(toUsers).toRoles(null).build();
         events.add(Event.builder().tenantId(tenantId).description(finalMessage).eventType(USREVENTS_EVENT_TYPE)
                 .name(USREVENTS_EVENT_NAME).postedBy(USREVENTS_EVENT_POSTEDBY)
-                .source(Source.WEBAPP).recepient(recepient).eventDetails(null).build());
+                .source(Source.WEBAPP).recepient(recepient).actions(action).eventDetails(null).build());
 
         if (!CollectionUtils.isEmpty(events)) {
             return EventRequest.builder().requestInfo(request.getRequestInfo()).events(events).build();
