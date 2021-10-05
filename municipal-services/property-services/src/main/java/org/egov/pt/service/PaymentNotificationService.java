@@ -1,16 +1,5 @@
 package org.egov.pt.service;
 
-import static org.egov.pt.util.PTConstants.MUTATION_BUSINESSSERVICE;
-import static org.egov.pt.util.PTConstants.MUTATION_PROCESS_CONSTANT;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_OLDPROPERTYID_ABSENT;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_FAIL;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_OFFLINE;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_ONLINE;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_PARTIAL_OFFLINE;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_PARTIAL_ONLINE;
-import static org.egov.pt.util.PTConstants.ONLINE_PAYMENT_MODE;
-import static org.egov.pt.util.PTConstants.PT_BUSINESSSERVICE;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,6 +31,7 @@ import org.egov.pt.util.NotificationUtil;
 import org.egov.pt.util.PTConstants;
 import org.egov.pt.web.contracts.SMSRequest;
 import org.egov.tracer.model.CustomException;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -50,6 +40,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static org.egov.pt.util.PTConstants.*;
 
 @Slf4j
 @Service
@@ -98,6 +90,9 @@ public class PaymentNotificationService {
         RequestInfo requestInfo = transactionRequest.getRequestInfo();
         Transaction transaction = transactionRequest.getTransaction();
         String tenantId = transaction.getTenantId();
+
+        // Adding in MDC so that tracer can add it in header
+        MDC.put(TENANTID_MDC_STRING, tenantId);
 
         if(transaction.getTxnStatus().equals(Transaction.TxnStatusEnum.FAILURE)){
 
@@ -175,6 +170,9 @@ public class PaymentNotificationService {
         String tenantId = paymentRequest.getPayment().getTenantId();
         String paymentMode = paymentRequest.getPayment().getPaymentMode();
         String transactionNumber = paymentRequest.getPayment().getTransactionNumber();
+
+        // Adding in MDC so that tracer can add it in header
+        MDC.put(TENANTID_MDC_STRING, tenantId);
 
         List<PaymentDetail> ptPaymentDetails = new LinkedList<>();
 
