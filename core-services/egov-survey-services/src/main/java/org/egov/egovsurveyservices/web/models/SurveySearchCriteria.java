@@ -27,7 +27,16 @@ public class SurveySearchCriteria {
     @JsonProperty("status")
     private String status;
 
+    @JsonProperty("offset")
+    private Integer offset;
+
+    @JsonProperty("limit")
+    private Integer limit;
+
     @JsonIgnore
     private String uuid;
+
+    @JsonIgnore
+    private Boolean isCountCall = false;
 
 }

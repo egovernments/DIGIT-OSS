@@ -1,7 +1,9 @@
 package org.egov.egovsurveyservices.repository.querybuilder;
 
+import org.egov.egovsurveyservices.config.ApplicationProperties;
 import org.egov.egovsurveyservices.web.models.SurveyResultsSearchCriteria;
 import org.egov.egovsurveyservices.web.models.SurveySearchCriteria;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -11,10 +13,14 @@ import java.util.List;
 @Component
 public class SurveyQueryBuilder {
 
+    @Autowired
+    private ApplicationProperties config;
+
     private static final String SELECT = " SELECT ";
     private static final String INNER_JOIN = " INNER JOIN ";
     private static final String LEFT_JOIN  =  " LEFT OUTER JOIN ";
     private static final String AND_QUERY = " AND ";
+    private final String ORDERBY_CREATEDTIME = " ORDER BY survey.createdtime DESC ";
 
     private static final String SURVEY_SELECT_VALUES = " survey.uuid as suuid, survey.tenantid as stenantid, survey.title as stitle, survey.description as sdescription, survey.status as sstatus, survey.startdate as sstartdate, survey.enddate as senddate, survey.collectcitizeninfo as scollectcitizeninfo, survey.active as sactive, survey.postedby as spostedby, survey.createdby as screatedby, survey.lastmodifiedby as slastmodifiedby, survey.createdtime as screatedtime, survey.lastmodifiedtime as slastmodifiedtime ";
 
@@ -58,6 +64,14 @@ public class SurveyQueryBuilder {
         addClauseIfRequired(query, preparedStmtList);
         query.append(" survey.active = ? ");
         preparedStmtList.add(Boolean.TRUE);
+
+        // order surveys based on their createdtime in latest first manner
+        query.append(ORDERBY_CREATEDTIME);
+
+        // Pagination to limit results, do not paginate query in case of count call.
+        if(!criteria.getIsCountCall())
+            addPagination(query, preparedStmtList, criteria);
+
 
         return query.toString();
     }
@@ -131,4 +145,25 @@ public class SurveyQueryBuilder {
         }
         return query.toString();
     }
+
+    private void addPagination(StringBuilder query,List<Object> preparedStmtList,SurveySearchCriteria criteria){
+        int limit = config.getDefaultLimit();
+        int offset = config.getDefaultOffset();
+        query.append(" OFFSET ? ");
+        query.append(" LIMIT ? ");
+
+        if(criteria.getLimit()!=null && criteria.getLimit()<=config.getMaxSearchLimit())
+            limit = criteria.getLimit();
+
+        if(criteria.getLimit()!=null && criteria.getLimit()>config.getMaxSearchLimit())
+            limit = config.getMaxSearchLimit();
+
+        if(criteria.getOffset()!=null)
+            offset = criteria.getOffset();
+
+        preparedStmtList.add(offset);
+        preparedStmtList.add(limit);
+
+    }
+
 }
