@@ -28,7 +28,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data }) => {
             limit: 10,
             sortBy: "commencementDate",
             sortOrder: "DESC",
-            status: "APPROVED",
+            status: "",
             RenewalPending: true
         }
     })
@@ -37,7 +37,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data }) => {
       register("limit", 10)
       register("sortBy", "commencementDate")
       register("sortOrder", "DESC")
-      register("status", "APPROVED")
+      register("status", "")
       register("RenewalPending", true)
     },[register])
 
@@ -51,7 +51,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data }) => {
             return (
               <div>
                 <span className="link">
-                  <Link to={`/digit-ui/employee/tl/application-details/${row.original["applicationNumber"]}`}>
+                  <Link to={`/digit-ui/employee/tl/application-details/${row.original["applicationNumber"]}?renewalPending=true`}>
                     {row.original["licenseNumber"]}
                   </Link>
                 </span>
@@ -159,7 +159,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data }) => {
                       limit: 10,
                       sortBy: "commencementDate",
                       sortOrder: "DESC",
-                      status: "APPROVED",
+                      status: "",
                       RenewalPending: true
                   });
                   previousPage ();

@@ -17,6 +17,7 @@ const ApplicationDetails = () => {
   const [numberOfApplications, setNumberOfApplications] = useState([]);
   const [allowedToNextYear, setAllowedToNextYear] = useState(false);
   sessionStorage.setItem("applicationNumber", applicationNumber)
+  const { renewalPending: renewalPending } = Digit.Hooks.useQueryParams();
 
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.tl.useApplicationDetail(t, tenantId, applicationNumber);
   
@@ -93,7 +94,7 @@ const ApplicationDetails = () => {
   const duration = validTo - currentDate;
   const renewalPeriod = TradeRenewalDate?.TradeLicense?.TradeRenewal?.[0]?.renewalPeriod;
 
-  if (rolecheck && (applicationDetails?.applicationData?.status === "APPROVED" || applicationDetails?.applicationData?.status === "EXPIRED") && duration <= renewalPeriod) {
+  if (rolecheck && (applicationDetails?.applicationData?.status === "APPROVED" || applicationDetails?.applicationData?.status === "EXPIRED" || (applicationDetails?.applicationData?.status === "MANUALEXPIRED" && renewalPending==="true")) && duration <= renewalPeriod) {
     if(workflowDetails?.data && allowedToNextYear) {
       if(!workflowDetails?.data?.actionState) {
         workflowDetails.data.actionState = {};
