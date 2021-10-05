@@ -18,6 +18,7 @@ import org.egov.tl.web.models.collection.PaymentDetail;
 import org.egov.tl.web.models.collection.PaymentRequest;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -101,6 +102,9 @@ public class PaymentNotificationService {
                 return;
             Map<String, Object> info = documentContext.read("$.RequestInfo");
             RequestInfo requestInfo = mapper.convertValue(info, RequestInfo.class);
+
+            // Adding in MDC so that tracer can add it in header
+            MDC.put(TENANTID_MDC_STRING, valMap.get(tenantIdKey));
 
             if(valMap.get(businessServiceKey).equalsIgnoreCase(config.getBusinessServiceTL())||valMap.get(businessServiceKey).equalsIgnoreCase(config.getBusinessServiceBPA())){
                 TradeLicense license = getTradeLicenseFromConsumerCode(valMap.get(tenantIdKey),valMap.get(consumerCodeKey),
