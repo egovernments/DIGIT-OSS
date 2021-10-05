@@ -39,7 +39,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
   const [error, setError] = useState(null);
   const [isOtpValid, setIsOtpValid] = useState(true);
   const [tokens, setTokens] = useState(null);
-  const [params, setParmas] = useState({});
+  const [params, setParmas] = useState(isUserRegistered?{}:location?.state?.data);
   const [errorTO, setErrorTO] = useState(null);
   const searchParams = Digit.Hooks.useQueryParams();
 
@@ -108,7 +108,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
         history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams), role: location.state?.role });
         return;
       } else {
-        history.replace(`/digit-ui/citizen/register/name`, { from: getFromLocation(location.state, searchParams) });
+        history.push(`/digit-ui/citizen/register/name`, { from: getFromLocation(location.state, searchParams), data:data });
       }
       if (location.state?.role) {
         setError("User not registered.");
@@ -127,9 +127,14 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
       ...params,
       tenantId: stateCode,
       userType: getUserType(),
+      ...name
     };
     setParmas({ ...params, ...name });
-    history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams) });
+    const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
+    if(res){
+      history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams) });
+    }
+    
   };
 
   const selectOtp = async () => {
