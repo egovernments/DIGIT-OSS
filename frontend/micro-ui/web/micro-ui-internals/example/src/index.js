@@ -20,7 +20,7 @@ import { initEngagementComponents } from "@egovernments/digit-ui-module-engageme
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 // import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
 // import { Body, TopBar } from "@egovernments/digit-ui-react-components";
-import "@egovernments/digit-ui-css/example/index.css";
+import "@jagankumar-egov/digit-ui-css/example/index.css";
 
 import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
@@ -67,6 +67,8 @@ import { subFormRegistry } from "@egovernments/digit-ui-libraries";
 
 import { pgrCustomizations, pgrComponents } from "./pgr";
 
+var Digit = window?.Digit ||{};
+
 const userInfo = {
   CITIZEN,
   EMPLOYEE,
@@ -105,7 +107,7 @@ const userInfo = {
 const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "MCollect", "HRMS", "TL", "Receipts", "OBPS", "Engagement"];
 
 const initTokens = (stateCode) => {
-  const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
+  const userType =  window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
   const token = window.sessionStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
 
@@ -165,7 +167,7 @@ const initDigitUI = () => {
 
   window.Digit.Customizations = { PGR: pgrCustomizations };
 
-  const stateCode = window?.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || "pb";
+  const stateCode = window?.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || "pg";
   initTokens(stateCode);
 
   const registry = Digit.ComponentRegistryService.getRegistry();
