@@ -4,6 +4,7 @@ import { Switch, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import ApplicationDetail from "./ApplicationDetail";
 import BpaApplicationDetail from "./BpaApplicationDetails";
+import Search from "./Search";
 
 const EmployeeApp = ({ path }) => {
   const location = useLocation()
@@ -14,6 +15,7 @@ const EmployeeApp = ({ path }) => {
       <Switch>
         <PrivateRoute path={`${path}/stakeholder/:id`} component={ApplicationDetail} />
         <PrivateRoute path={`${path}/bpa/:id`} component={BpaApplicationDetail} />
+        <PrivateRoute path={`${path}/search/application`} component={(props) => <Search {...props} parentRoute={path} />} />
       </Switch>
     </Fragment>
   )

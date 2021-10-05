@@ -27,6 +27,7 @@ import CorrospondenceAddress from "./pageComponents/CorrospondenceAddress";
 import PermanentAddress from "./pageComponents/PermanentAddress";
 import StakeholderDocuments from "./pageComponents/StakeholderDocuments";
 import EmployeeApp from "./pages/employee";
+import OBPSSearchApplication from "./components/SearchApplication";
 import InspectionReport from "./pageComponents/InspectionReport";
 
 const OBPSModule = ({ stateCode, userType, tenants }) => {
@@ -98,6 +99,7 @@ const componentsToRegister = {
   PermanentAddress,
   StakeholderDocuments,
   OCBasicDetails,
+  OBPSSearchApplication,
   InspectionReport
 }
 
