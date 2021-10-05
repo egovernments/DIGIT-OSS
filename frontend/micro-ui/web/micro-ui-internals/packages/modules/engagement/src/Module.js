@@ -1,5 +1,5 @@
 import { Loader, PrivateRoute, BreadCrumb } from "@egovernments/digit-ui-react-components";
-import React, { useEffect, useState } from "react";
+import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Redirect, Switch, useLocation, useRouteMatch, Route } from "react-router-dom";
 
@@ -112,7 +112,8 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
   const location = useLocation();
 
   return (
-    <div className="ground-container">
+    // <div className="ground-container">
+    <>
       <EventsBreadCrumb location={location} />
       <Switch>
        
@@ -140,7 +141,8 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
         {/* documents/update-response */}
         {/* <Redirect to={`${path}/docs`} /> */}
       </Switch>
-    </div>
+      </>
+    // </div>
   );
 };
 

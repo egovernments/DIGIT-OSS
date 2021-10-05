@@ -1,14 +1,16 @@
-import React, {Fragment} from "react"
+import React, {Fragment, useState} from "react"
 import { InboxComposer, CaseIcon, SearchField, TextInput, FilterFormField, Loader } from "@egovernments/digit-ui-react-components";
-import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import { format } from "date-fns";
 
 const Inbox = () => {
     
     const { t } = useTranslation()
 
     const tenantId = Digit.ULBService.getCurrentTenantId();
-
+    const [ searchPayloadInboxTable, setSearchPayload ] = useState()
+    const [ filterPayloadInboxTable, setFilterPayload ] = useState()
     const { data: inboxData, isLoading: inboxLoading } = Digit.Hooks.events.useInbox(tenantId, {
         // limit: pageSize,
         // offset: pageOffset,
@@ -17,22 +19,6 @@ const Inbox = () => {
       {
         select: (data) => data?.events
       });
-
-    const { register: registerSearchFormField, control: controlSearchForm , handleSubmit: handleSearchFormSubmit, setValue: setSearchFormValue, getValues: gerSearchFormValue, reset: resetSearchForm } = useForm({
-        defaultValues: {
-            offset: 0,
-            limit: 10,
-            sortBy: "postingDate",
-            sortOrder: "DESC",
-        }
-    })
-    
-    const { register: registerFilterFormField, control: controlFilterForm , handleSubmit: handleFilterFormSubmit, setValue: setFilterFormValue, getValues: gerFilterFormValue, reset: resetFilterForm } = useForm({
-        defaultValues: {
-            status: ["ACTIVE","INACTIVE"],
-            eventTypes: "BROADCAST",            
-        }
-    })
     
     const PropsForInboxLinks = {
         logoIcon: <CaseIcon />,
@@ -45,16 +31,24 @@ const Inbox = () => {
           }]
     }
 
-    const SearchFormFields = () => {
+    const SearchFormFields = ({registerRef}) => {
         return <>
             <SearchField>
                 <label>{t("EVENTS_ULB_LABEL")}</label>
-                <TextInput name="ULB" inputRef={registerSearchFormField({})} />
+                <TextInput name="ulb" inputRef={registerRef({})} />
+            </SearchField>
+            <SearchField>
+                <label>{t("EVENTS_ULB_LABEL")}</label>
+                <TextInput name="ulb2" inputRef={registerRef({})} />
+            </SearchField>
+            <SearchField>
+                <label>{t("EVENTS_MESSAGE_LABEL")}</label>
+                <TextInput name="message" inputRef={registerRef({})} />
             </SearchField>
         </>
     }
 
-    const FilterFormFields = () => {
+    const FilterFormFields = ({registerRef}) => {
         return <>
             <FilterFormField>
                 <p>{t("ES_COMMON_SEARCH")}</p>
@@ -69,59 +63,48 @@ const Inbox = () => {
         </>
     }
 
-    const resetSearchFormDefaultValues = { 
-        licenseNumbers: "", 
-        mobileNumber: "", 
-        fromDate: "",
-        toDate: "",
-        offset: 0,
-        limit: 10,
-        sortBy: "commencementDate",
-        sortOrder: "DESC",
-        status: "APPROVED",
-        RenewalPending: true
+    const searchFormDefaultValues = {
+      // message: "AAAA"
     }
 
-    const resetFilterFormDefaultValues = {
+    const filterFormDefaultValues = {
         status: ["ACTIVE","INACTIVE"],
         eventTypes: "BROADCAST",  
     }
 
     const onSearchFormSubmit = (data) => {
+        setSearchPayload(data)
         console.log("find search form data here", data)
+        
     }
     
     const onFilterFormSubmit = (data) => {
         console.log("find search form data here", data)
     }
 
-    const propsForSearchForm = { SearchFormFields, onSearchFormSubmit, handleSearchFormSubmit, resetSearchForm, resetSearchFormDefaultValues }
+    const propsForSearchForm = { SearchFormFields, onSearchFormSubmit, searchFormDefaultValues }
 
-    const propsForFilterForm = { FilterFormFields, onFilterFormSubmit, handleFilterFormSubmit, resetFilterForm, resetFilterFormDefaultValues }
+    const propsForFilterForm = { FilterFormFields, onFilterFormSubmit, filterFormDefaultValues }
 
     const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
-
+    const GetStatusCell = (value) => value === "Active" ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span> 
+    
     const tableColumnConfig = React.useMemo(() => {
           return [
             {
-              Header: t("EVENTS_EVENT_NAME_LABEL"),
-              accessor: "name",
+              Header: t("EVENTS_MESSAGE_LABEL"),
+              accessor: "message",
               Cell: ({ row }) => {
-               
                 return (
                   <div>
-                    <span className="link">
-                      <Link to={`${parentRoute}/event/${row.original.id}`}>{row.original["name"]}</Link>
-                    </span>
+                    <span className="link">{row.original["description"]}</span>
                   </div>
                 );
               },
             },
             {
-              Header: t("EVENTS_EVENT_CATEGORY_LABEL"),
-              accessor: (row) => {
-               return GetCell(row?.eventCategory ? t(`MSEVA_EVENTCATEGORIES_${row?.eventCategory}`) : "")
-              }
+              Header: t("EVENTS_POSTING_DATE_LABEL"),
+              accessor: (row) => row?.auditDetails?.createdTime ? GetCell(format(new Date(row?.auditDetails?.createdTime), 'dd/MM/yyyy')) : ""
               },
             {
               Header: t("EVENTS_START_DATE_LABEL"),
@@ -142,7 +125,33 @@ const Inbox = () => {
           ]
         })
 
-    return inboxLoading ? <Loader/> : <InboxComposer {...{PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, sourceData: inboxData, tableColumnConfig}}>
+        const propsForInboxTable = {
+          getCellProps: (cellInfo) => {
+            return {
+                style: {
+                minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
+                padding: "20px 18px",
+                fontSize: "16px"
+            }}},
+            disableSort: false,
+            autoSort:true,
+            manualPagination:false,
+            // initSortId="S N "
+            // onPageSizeChange:onPageSizeChange,
+            // currentPage: getValues("offset")/getValues("limit"),
+            // onNextPage: nextPage,
+            // onPrevPage: previousPage,
+            pageSizeLimit: 10,
+            // onSort: onSort,
+            // sortParams: [{id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false}],
+            totalRecords: 100,
+            // onSearch: "",
+            // searchQueryForTable,
+            data: inboxData,
+            columns: tableColumnConfig
+        }
+
+    return inboxLoading ? <Loader/> : <InboxComposer {...{PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable}}>
         {/* <InboxPageLinks /> */}
         {/* <InboxSearchFields />
         <InboxFilterFields />

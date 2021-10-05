@@ -6,11 +6,20 @@ import { FilterForm, FilterFormField } from "../molecules/FilterForm"
 import SubmitBar from "../atoms/SubmitBar"
 import { useTranslation } from "react-i18next"
 import Card from "../atoms/Card"
+import { useForm, Controller } from "react-hook-form";
 
-const InboxComposer = ({isMobile=false, PropsForInboxLinks, SearchFormFields, handleSearchFormSubmit, onSearchFormSubmit, resetSearchForm, resetFilterForm, FilterFormFields, sourceData, tableColumnConfig }) => {
+
+const InboxComposer = ({isMobile=false, PropsForInboxLinks, SearchFormFields, searchFormDefaultValues, onSearchFormSubmit, FilterFormFields, filterFormDefaultValues, propsForInboxTable }) => {
     const { t } = useTranslation()
-    
     const [ showMobileFilterFormPopup, setMobileFilterFormPopup ] = useState(false)
+
+    const { register: registerSearchFormField, control: controlSearchForm , handleSubmit: handleSearchFormSubmit, setValue: setSearchFormValue, getValues: getSearchFormValue, reset: resetSearchForm } = useForm({
+        defaultValues: {...searchFormDefaultValues}
+    })
+    
+    const { register: registerFilterFormField, control: controlFilterForm , handleSubmit: handleFilterFormSubmit, setValue: setFilterFormValue, getValues: getFilterFormValue, reset: resetFilterForm } = useForm({
+        defaultValues: {...filterFormDefaultValues}
+    })
 
     if (isMobile) {
         return <div className="InboxComposerWrapper">
@@ -23,11 +32,11 @@ const InboxComposer = ({isMobile=false, PropsForInboxLinks, SearchFormFields, ha
     return <div className="InboxComposerWrapper">
         <InboxLinks {...PropsForInboxLinks} />
         <SearchForm onSubmit={onSearchFormSubmit} handleSubmit={handleSearchFormSubmit} id="search-form" className="rm-mb" >
-            <SearchFormFields/>
+            <SearchFormFields registerRef={registerSearchFormField}/>
             <SearchField className="submit">
                 <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
                 <p onClick={() => {
-                    resetSearchForm(resetSearchFormDefaultValues);
+                    // resetSearchForm(resetSearchFormDefaultValues);
                     previousPage ();
                   }}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
             </SearchField>
@@ -35,9 +44,9 @@ const InboxComposer = ({isMobile=false, PropsForInboxLinks, SearchFormFields, ha
         <FilterForm clearAll={resetFilterForm}>
             <FilterFormFields/>
         </FilterForm>
-        {sourceData?.display ? <Card style={{ marginTop: 20 }}>
+        {propsForInboxTable?.sourceData?.display ? <Card style={{ marginTop: 20 }}>
             {
-            t(sourceData.display)
+            t(propsForInboxTable?.sourceData?.display)
                 .split("\\n")
                 .map((text, index) => (
                 <p key={index} style={{ textAlign: "center" }}>
@@ -48,26 +57,9 @@ const InboxComposer = ({isMobile=false, PropsForInboxLinks, SearchFormFields, ha
         </Card>
         : <Table
             t={t}
-            data={sourceData}
-            columns={tableColumnConfig}
-            getCellProps={(cellInfo) => {
-            return {
-                style: {
-                minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
-                padding: "20px 18px",
-                fontSize: "16px"
-            },
-            };
-            }}
-            // onPageSizeChange={onPageSizeChange}
-            // currentPage={getValues("offset")/getValues("limit")}
-            // onNextPage={nextPage}
-            // onPrevPage={previousPage}
-            // pageSizeLimit={getValues("limit")}
-            // onSort={onSort}
-            // disableSort={false}
-            // sortParams={[{id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false}]}
-            // totalRecords={100}
+            // data={sourceData}
+            // columns={tableColumnConfig}
+            {...propsForInboxTable}
         />}
     </div>
 }

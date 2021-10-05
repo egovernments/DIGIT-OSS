@@ -10,6 +10,7 @@ yarn.lock
 
 # dependencies
 node_modules
+.yarn
 /.pnp
 .pnp.js
 

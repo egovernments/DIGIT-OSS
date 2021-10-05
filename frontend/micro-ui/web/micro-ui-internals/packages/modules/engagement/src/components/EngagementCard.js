@@ -31,6 +31,11 @@ const EngagementCard = () => {
         label: t("ES_TITLE_EVENT_INBOX"),
         link: `/digit-ui/employee/engagement/event/inbox`,
       },
+      {
+        count: "-",
+        label: t("ACTION_TEST_PUBLIC_MESSAGE_BROADCAST"),
+        link: `/digit-ui/employee/engagement/messages/inbox`,
+      },
     ],
   };
 
