@@ -22,6 +22,9 @@ public class SurveyResponse {
     @JsonProperty("ResponseInfo")
     private ResponseInfo responseInfo = null;
 
+    @JsonProperty("TotalCount")
+    private Integer totalCount;
+
     @JsonProperty("Surveys")
     @Valid
     private List<SurveyEntity> surveyEntities = null;

@@ -185,4 +185,8 @@ public class SurveyService {
                                                 .build();
         return response;
     }
+
+    public Integer countTotalSurveys(SurveySearchCriteria criteria) {
+        return surveyRepository.fetchTotalSurveyCount(criteria);
+    }
 }
