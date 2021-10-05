@@ -282,6 +282,9 @@ public class TLConstants {
 
     public static final String PAYMENT_LINK_PLACEHOLDER="{PAYMENT_LINK}";
 
+    public static final String TENANTID_MDC_STRING = "TENANTID";
+
+
     public TLConstants() {}
 
 
