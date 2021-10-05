@@ -271,9 +271,7 @@ public class TLQueryBuilder {
         builder.append("  tl.financialyear = ? ) ) )");
         preparedStmtList.add(Integer.toString(Calendar.getInstance().get(Calendar.YEAR)));
 		
-		
 	}
-
 
 	private String addCountWrapper(String query) {
 		
