@@ -24,6 +24,7 @@ import EmployeeEventDetails from "./pages/employee/Events/EventDetails";
 import CitizenApp from "./pages/citizen";
 import EventDetails from "./pages/citizen/EventsListOnGround/EventDetails";
 import DocumenetCreate from "./pages/employee/Documents/documents-create";
+import DocumentUpdate from './pages/employee/Documents/docments-update';
 import DocumentResponse from "./pages/employee/Documents/response";
 import DocUpdate from "./pages/employee/Documents/doc-update";
 import DocUpdateResponse from "./pages/employee/Documents/update-response";
@@ -82,9 +83,24 @@ const EventsBreadCrumb = ({ location }) => {
       show: location.pathname.includes("/documents/response") ? true : false,
     },
     {
+      path: "/digit-ui/employee/engagement/documents/delete-response",
+      content: t("ES_EVENT_NEW_EVENT_RESPONSE"),
+      show: location.pathname.includes("/documents/delete-response") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/documents/update-response",
+      content: t("ES_EVENT_NEW_EVENT_RESPONSE"),
+      show: location.pathname.includes("/documents/update-response") ? true : false,
+    },
+    {
       path: "/digit-ui/employee/engagement/documents/inbox/details/:id",
       content: t("CE_DOCUMENT_DETAILS"),
       show: location.pathname.includes("/documents/inbox/details") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/documents/inbox/update",
+      content: t("DOCUMENTS_EDIT_HEADER"),
+      show: location.pathname.includes("/documents/inbox/update") ? true : false,
     },
 
   ];
@@ -99,7 +115,7 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
     <div className="ground-container">
       <EventsBreadCrumb location={location} />
       <Switch>
-        <Route exact path={`${path}/documents/inbox/new-doc`} component={() => <DocumenetCreate {...{ path }} />} />
+       
         <Route path={`${path}/event/inbox`} exact>
           <Inbox tenants={tenants} parentRoute={path} />
         </Route>
@@ -113,9 +129,10 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
         <Route path={`${path}/event/inbox/event-details/:id`}>
           <EmployeeEventDetails />
         </Route>
+        <Route exact path={`${path}/documents/inbox/update`} component={(props) => <DocumentUpdate {...props} />} />
+        <Route exact path={`${path}/documents/inbox/new-doc`} component={() => <DocumenetCreate {...{ path }} />} />
         <Route path={`${path}/documents/inbox/details/:id`} component={(props) => <DocumentDetails {...props} />} />
         <Route path={`${path}/documents/response`} component={(props) => <DocumentResponse {...props} />} />
-        <Route path={`${path}/documents/update`} component={(props) => <DocUpdate {...props} />} />
         <Route path={`${path}/documents/update-response`} component={(props) => <DocUpdateResponse {...props} />} />
         <Route path={`${path}/documents/delete-response`} component={(props) => <DocDeleteResponse {...props} />} />
         <Route path={`${path}/documents/inbox`} component={(props) => <DocumentNotification tenants={tenants} />} />
@@ -139,7 +156,7 @@ const EngagementModule = ({ stateCode, userType, tenants }) => {
   Digit.SessionStorage.set("ENGAGEMENT_TENANTS", tenants);
 
   if (userType === "citizen") {
-    return <CitizenApp path={path} url={url} userType={userType} />;
+    return <CitizenApp path={path} url={url} userType={userType} tenants={tenants} />;
   } else {
     return <EmployeeApp path={path} url={url} userType={userType} tenants={tenants} />;
   }

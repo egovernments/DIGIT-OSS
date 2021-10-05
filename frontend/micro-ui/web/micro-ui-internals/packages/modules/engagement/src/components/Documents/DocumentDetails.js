@@ -1,6 +1,7 @@
 import { Header, ActionBar, SubmitBar, PDFSvg, Menu } from '@egovernments/digit-ui-react-components';
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
+import Confirmation from '../Modal/Confirmation';
 import { openDocument } from './DesktopInbox';
 
 const Actions = ['EDIT_DOCUMENT', 'DELETE']
@@ -13,28 +14,90 @@ const DocumentDetails = ({ location, match, history, }) => {
     const { t } = useTranslation();
     const { details } = location?.state;
     const [displayMenu, setDisplayMenu] = React.useState(false);
+    const [showModal, setShowModal] = useState(false);
+
+    const { data: ulbArray, isLoading: loading } = Digit.Hooks.useTenants();
+    const currrentUlb = Digit.ULBService.getCurrentUlb();
+    const stateId = Digit.ULBService.getStateId();
+    const { data: categoryOptions, isLoading } = Digit.Hooks.engagement.useMDMS(stateId, "DocumentUploader", ["UlbLevelCategories"], {
+        select: (d) => {
+            const data = d?.DocumentUploader?.UlbLevelCategories?.filter?.((e) => e.ulb === currrentUlb.code);
+            return data[0].categoryList.map((name) => ({ name }));
+        },
+    });
+
+
     function onActionSelect(action) {
         setDisplayMenu(false);
+
         if (action?.includes('EDIT')) {
-          // history.push(`/digit-ui/employee/engagement/documents/update`) //navigate to update form
+            const DocumentEntity = {
+                tenantIds: details?.tenantId,
+                documentName: details?.name,
+                docCategory: categoryOptions?.filter((item) => item.name === details?.category)?.[0],
+                document: {
+                    filestoreId: { fileStoreId: details?.filestoreId },
+                    documentLink: details?.documentLink
+                },
+                ULB: ulbArray.filter((e) => e.code === details?.tenantId),
+                ...details
+            }
+            history.push({
+                pathname: `/digit-ui/employee/engagement/documents/inbox/update`,
+                state: { DocumentEntity }
+            }) //navigate to update form
         }
+
         if (action?.includes('DELETE')) {
-         //  history.push(`/digit-ui/employee/engagement/delete-response`) //delete this doc and navigate to list
+            /*  const DocumentEntity = {
+                 ...details
+             }
+          history.push({
+             pathname:`/digit-ui/employee/engagement/documents/delete-response`,
+             state:{DocumentEntity}   
+         }) */
+            setShowModal(true)
         }
+    }
+
+    function onModalSubmit() {
+        setShowModal(false)
+        const DocumentEntity = {
+            ...details
+        }
+        history.push({
+            pathname: `/digit-ui/employee/engagement/documents/delete-response`,
+            state: { DocumentEntity }
+        })
+    }
+
+    function onModalCancel() {
+        setShowModal(false)
     }
 
     return (
         <div>
+            {showModal ? <Confirmation
+                t={t}
+                docName={details?.name}
+                closeModal={() => setShowModal(!showModal)}
+                actionCancelLabel={'CS_COMMON_CANCEL'}
+                actionCancelOnSubmit={onModalCancel}
+                actionSaveLabel={'ES_COMMON_Y_DEL'}
+                actionSaveOnSubmit={onModalSubmit}
+            />
+
+                : null}
             <Header>{t(`CE_DOCUMENT_DETAILS`)}</Header>
             <div className="notice_and_circular_main">
                 <div className="documentDetails_wrapper">
-                    <div className="documentDetails_row"><p className="documentDetails_title">{`${t('ULB')}:`}</p> <p>{getUlbName(details.tenantId)}</p> </div>
+                    <div className="documentDetails_row"><p className="documentDetails_title">{`${t('ULB')}:`}</p> <p>{getUlbName(details?.tenantId)}</p> </div>
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t('DOCUMENT_NAME')}:`}</p> <p>{details?.name}</p> </div>
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t('DOCUMENT_CATEGORY')}:`}</p> <p>{t(details?.category)}</p> </div>
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t('DCOUMENT_DESCRIPTION')}:`}</p> <p className="documentDetails__description">{details?.description?.length ? details?.description : 'NA'}</p> </div>
                     <div className="documentDetails_pdf">
                         <span className="documentDetails_subheader">{`${t('Document')}`}</span>
-                        <div style={{ width: '100px' }} onClick={() => openDocument(details?.filestoreId, details?.name)}>
+                        <div style={{ width: '100px' }} onClick={() => openDocument(details?.filestoreId ? details?.filestoreId : details?.documentLink, details?.name)}>
                             <PDFSvg />
                         </div>
 
@@ -43,8 +106,8 @@ const DocumentDetails = ({ location, match, history, }) => {
             </div>
             <ActionBar>
                 {displayMenu ? (
-                    <Menu 
-                        style={{width:'240px'}}
+                    <Menu
+                        style={{ width: '240px' }}
                         localeKeyPrefix={"ES_CE"}
                         options={Actions}
                         t={t}

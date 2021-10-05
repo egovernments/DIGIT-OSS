@@ -11,10 +11,11 @@ import { useTranslation } from "react-i18next"
 import DocumentCard from "../../../components/Documents/DocumentCard";
 import Searchbar from "../../../components/Documents/Searchbar";
 
-const DocumentList = ({ match }) => {
+const DocumentList = ({ match, tenants }) => {
   const { t } = useTranslation()
   const { category } = match.params || 'CATEGORY_CITIZEN_CHARTER';
-  const tenantIds = Digit.SessionStorage.get("Employee.tenantId")
+  console.log('tenants', {tenants})
+  const tenantIds = Digit.SessionStorage.get("Employee.tenantId") || Digit.SessionStorage.get("ENGAGEMENT_TENANTS")
   const [pageSize, setPageSize] = useState(20);
   const [pageOffset, setPageOffset] = useState(0);
   const [searchValue, setSearchValue] = useState();

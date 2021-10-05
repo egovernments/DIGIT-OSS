@@ -1,77 +1,63 @@
-import React, { useState } from "react";
-import { Card, Header, LabelFieldPair, CardLabel, TextInput, Dropdown, FormComposer, Menu, ActionBar } from "@egovernments/digit-ui-react-components";
+import React, { useState, useCallback } from "react";
+import { Card, Header, LabelFieldPair, CardLabel, TextInput, Dropdown, FormComposer, SubmitBar, ActionBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { documentsFormConfig } from "../../../config/doc-create";
 import { useHistory } from "react-router-dom";
+import Confirmation from "../../../components/Modal/Confirmation";
 
 const Documents = (props) => {
   const { t } = useTranslation();
   const history = useHistory();
-
   const [canSubmit, setSubmitValve] = useState(false);
-  const [formData, setData] = useState(() => props.defaultValues);
-  const [showMenu, setMenu] = useState(false);
+ 
 
-  const onFormValueChange = (setValue, formData, formState) => {
-    //console.log(formData, ">>>>>>");
-    if (
-      formData?.documentName &&
-      formData?.description &&
-      formData?.docCategory &&
-      (formData?.document.filestoreId || formData?.document.documentLink) &&
-      formData?.ULB?.length
-    ) {
-      setSubmitValve(true);
-    } else {
-      setSubmitValve(false);
-    }
-  };
+  const onFormValueChange = useCallback(
+    (setValue, updatedFormData, formState) => {
+      if (
+        updatedFormData?.documentName &&
+        updatedFormData?.description &&
+        updatedFormData?.docCategory &&
+        (updatedFormData?.document.filestoreId || updatedFormData?.document.documentLink) &&
+        updatedFormData?.ULB?.length
+      ) {
+        setSubmitValve(true);
+      } else {
+        setSubmitValve(false);
+      }
+    },
+    [],
+  )
 
   const update = (data) => {
     const DocumentEntity = {
-      ...props.defaultValues?.originalData,
+      ...props.location?.state?.DocumentEntity,
       name: data.documentName,
-      description: data.description,
-      category: data.docCategory,
-      filestoreId: data.document.filestoreId.fileStoreId,
-      fileSize: data.document.filestoreId.fileSize,
-      fileType: data.document.filestoreId.fileType,
-      documentLink: data.document.documentLink,
+      description: data?.description,
+      category: data.docCategory?.name,
+      filestoreId: data.document?.filestoreId?.fileStoreId,
+      fileSize: data.document?.filestoreId?.fileSize,
+      fileType: data.document?.filestoreId?.fileType,
+      documentLink: data.document?.documentLink,
       tenantIds: data.ULB.map((e) => e.code),
     };
     history.push("/digit-ui/employee/engagement/documents/update-response", { DocumentEntity });
-  };
-
-  const _delete = () => {
-    history.push("/digit-ui/employee/engagement/documents/delete-response", { DocumentEntity: props.defaultValues?.originalData });
-  };
-
-  const onActionSelect = (action) => {
-    /* console.log(action, "actions on action select"); */
-    setMenu(false);
-    if (action === "UPDATE") update(formData);
-    else if (action === "DELETE") _delete();
   };
 
   return (
     <React.Fragment>
       <Header>{t("ES_ENGAGEMENT_EDIT_DOC")}</Header>
       <FormComposer
-        heading={t("ES_ENGAGEMENT_DOCUMENTS")}
-        label={t("ES_COMMON_ACTION")}
+        label={t("ES_COMMON_UPDATE")}     
         config={documentsFormConfig}
         onSubmit={(data) => {
-          setMenu(!showMenu);
-          setData(data);
+          update(data);
         }}
         fieldStyle={{}}
         onFormValueChange={onFormValueChange}
-        defaultValues={props.defaultValues}
+        defaultValues={props.location.state?.DocumentEntity}
         isDisabled={!canSubmit}
       />
-      <ActionBar>
-        {showMenu ? <Menu localeKeyPrefix="ES_DOCS" options={["DELETE", "UPDATE"]} onSelect={onActionSelect} /> : <React.Fragment />}
-      </ActionBar>
+     
     </React.Fragment>
   );
 };

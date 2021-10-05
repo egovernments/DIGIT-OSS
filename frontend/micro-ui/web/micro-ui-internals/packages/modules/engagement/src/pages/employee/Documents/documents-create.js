@@ -25,12 +25,12 @@ const Documents = () => {
   const onSubmit = (data) => {  
     const DocumentEntity = {
       name: data.documentName,
-      description: data.description,
+      description: data?.description,
       category: data.docCategory?.name,
-      documentLink: data.document.documentLink,
-      filestoreId: data.document.filestoreId.fileStoreId,
-      fileSize: data.document.filestoreId.fileSize,
-      fileType: data.document.filestoreId.fileType,
+      documentLink: data.document?.documentLink,
+      filestoreId: data.document?.filestoreId?.fileStoreId,
+      fileSize: data.document?.filestoreId?.fileSize,
+      fileType: data.document?.filestoreId?.fileType,
       tenantIds: data.ULB.map((e) => e.code),
     };
 

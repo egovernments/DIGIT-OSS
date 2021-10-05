@@ -4,7 +4,8 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 const getMessage = (mutation) => {
-  if (mutation.isSuccess) return mutation.data?.Documents?.[0]?.uuid;
+  debugger
+  if (mutation.isSuccess)  return mutation.data?.Documents?.uuid;
   return "";
 };
 
@@ -13,7 +14,7 @@ const BannerPicker = (props) => {
   return (
     <Banner
       message={props.isSuccess ? t(`ENGAGEMENT_DOC_DELETED`) : t("ENGAGEMENT_DOC_DELETE_FAILURE")}
-      applicationNumber={getMessage(props.mutation)}
+      applicationNumber={props.mutation?.isSuccess ? props.uuid:''}
       info={props.isSuccess ? t("ENGAGEMENT_DOCUMENT_ID") : ""}
       successful={props.isSuccess}
     />
@@ -26,7 +27,7 @@ const Response = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const mutation = Digit.Hooks.engagement.useDocDelete();
   const { state } = props.location;
-
+  
   useEffect(() => {
     const onSuccess = () => {
       queryClient.clear();
@@ -43,7 +44,7 @@ const Response = (props) => {
 
   return (
     <Card>
-      <BannerPicker t={t} data={mutation.data} mutation={mutation} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
+      <BannerPicker t={t} data={mutation.data} mutation={mutation} uuid={state?.DocumentEntity?.uuid} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
     </Card>
   );
 };

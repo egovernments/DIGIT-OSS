@@ -4,7 +4,7 @@ import { Switch, useLocation } from "react-router-dom";
 import { BackButton, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import DocumentCategories from "./Documents/DocumentCategories";
 
-const CitizenApp = ({ path, url, userType}) => {
+const CitizenApp = ({ path, url, userType, tenants}) => {
     const location = useLocation();
     const { t } = useTranslation();
     const NotificationsOrWhatsNew = Digit.ComponentRegistryService.getComponent("NotificationsAndWhatsNew")
@@ -35,7 +35,7 @@ const CitizenApp = ({ path, url, userType}) => {
             component={() => <EventDetails parentRoute={path} />}
           />
           <PrivateRoute path={`${path}/docs`} component={() => <DocumentCategories t={t} {...{ path }} />} />
-          <PrivateRoute path={`${path}/documents/list/:category`} component={(props) => <Documents {...props} />} />
+          <PrivateRoute path={`${path}/documents/list/:category`} component={(props) => <Documents {...props} tenants={tenants} />} />
           <PrivateRoute path={`${path}/SurveyList`} component={(props) => <SurveyList {...props} />} />
         </Switch>
       </React.Fragment>

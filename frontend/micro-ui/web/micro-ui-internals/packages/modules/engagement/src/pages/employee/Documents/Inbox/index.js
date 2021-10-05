@@ -10,19 +10,17 @@ const Inbox = ({ tenants }) => {
     const { t } = useTranslation()
     Digit.SessionStorage.set("ENGAGEMENT_TENANTS", tenants);
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const [pageSize, setPageSize] = useState(20);
+    const [pageSize, setPageSize] = useState(10);
     const [pageOffset, setPageOffset] = useState(0);
+    const [records, setRecords] = useState(50);
     const [searchParams, setSearchParams] = useState({
         tenantIds: tenantId,
         offset:pageOffset,
-        limit:pageSize
+        limit:records
     });
-
 
     let isMobile = window.Digit.Utils.browser.isMobile();
     const { data: documentsList, isLoading } = Digit.Hooks.engagement.useDocSearch(searchParams, {
-        limit: pageSize,
-        offset: pageOffset,
         select: (data) => {
             return data?.Documents;
         }
@@ -39,6 +37,7 @@ const Inbox = ({ tenants }) => {
     }
 
     const fetchNextPage = () => {
+        if(pageOffset > 50) setRecords((prevRecords) => prevRecords + pageSize)
         setPageOffset((prevState) => prevState + pageSize);
       };
     

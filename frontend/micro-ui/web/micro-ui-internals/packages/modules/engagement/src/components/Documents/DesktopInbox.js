@@ -42,7 +42,7 @@ export const openDocument = async (filestoreId, name) => {
 
 const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
 const getDocumentDetails = (value = "", link, t) => <span className="document-table-docs-columns"><Link className="link" to={link} >{value.length ? value : t('CE_DOCUMENT_TITLE')}</Link></span>
-const getDocumentCell = (link, t, name = "mSeva") => <span className="document-table-docs-columns" ><span className="link" onClick={() => openDocument(link, name)} >{t('CE_DOCUMENT_VIEW_LINK')}</span></span>
+const getDocumentCell = (name = "mSeva",link,t) => <span className="document-table-docs-columns" ><span className="link" onClick={() => openDocument(link, name)} >{t('CE_DOCUMENT_VIEW_LINK')}</span></span>
 
 
 const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, links, onSort, sortParams, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords, onNextPage, onPrevPage, onPageSizeChange }) => {
@@ -57,7 +57,7 @@ const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, l
     },
     {
       Header: t('CE_TABLE_DOCUMENT_LINK'),
-      accessor: (row) => getDocumentCell(row.filestoreId, t, row?.name)
+      accessor: (row) => getDocumentCell(row?.name, row.filestoreId ? row.filestoreId : row.documentLink, t)
     },
     {
       Header: t('CE_TABLE_DOCUMENT_POSTED_BY'),
