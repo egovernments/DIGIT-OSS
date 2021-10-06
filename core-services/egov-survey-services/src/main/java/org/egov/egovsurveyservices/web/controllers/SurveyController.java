@@ -46,7 +46,7 @@ public class SurveyController {
         //log.info(criteria.toString());
         List<SurveyEntity> surveys = surveyService.searchSurveys(criteria);
         Integer totalCount = surveyService.countTotalSurveys(criteria);
-        SurveyResponse response  = SurveyResponse.builder().surveyEntities(surveys).build();
+        SurveyResponse response  = SurveyResponse.builder().surveyEntities(surveys).totalCount(totalCount).build();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
