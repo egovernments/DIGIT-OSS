@@ -12,10 +12,13 @@ export const httpRequest = async ({
 }) => {
   let instance = httpClient(hostURL);
   let errorReponse = {};
-  if (headers)
+  if (headers){
+    headers[0]['tenantid']=headers[0].tenantid
     instance.defaults = Object.assign(instance.defaults, {
       headers
     });
+  }
+    
   endPoint = addQueryArg(endPoint, queryObject);
   console.log("\ninstance.defaults"+JSON.stringify(instance.defaults)+"\n");
   try {
