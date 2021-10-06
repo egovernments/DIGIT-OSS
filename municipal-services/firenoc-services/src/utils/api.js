@@ -17,6 +17,7 @@ export const httpRequest = async ({
       headers
     });
   endPoint = addQueryArg(endPoint, queryObject);
+  console.log("\ninstance.defaults"+JSON.stringify(instance.defaults)+"\n");
   try {
     // console.log("test");
     const response = await instance.post(endPoint, requestBody);
