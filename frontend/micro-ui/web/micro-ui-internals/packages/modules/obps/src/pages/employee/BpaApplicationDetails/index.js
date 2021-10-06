@@ -11,10 +11,6 @@ const BpaApplicationDetail = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [showToast, setShowToast] = useState(null);
-  const [appDetails, setAppDetails] = useState({});
-
-  let inspectionData = JSON.parse(sessionStorage.getItem("INSPECTION_DATA"));
-
   const [canSubmit, setSubmitValve] = useState(false);
   const defaultValues = {};
   const history = useHistory();
@@ -22,11 +18,17 @@ const BpaApplicationDetail = () => {
   const [_formData, setFormData, _clear] = Digit.Hooks.useSessionStorage("store-data", null);
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", {});
-
   const [error, setError] = useState(null);
-
   const stateId = Digit.ULBService.getStateId();
-  //const { data: newConfig, isLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(stateId, {});
+
+  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateId, "BPA", ["RiskTypeComputation"]);
+
+  const { data = {}, isLoading } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: id });
+
+
+  let risType = "";
+  sessionStorage.setItem("bpaApplicationDetails", true);
+
 
   function checkHead(head) {
     if (head === "ES_NEW_APPLICATION_LOCATION_DETAILS") {
@@ -60,19 +62,32 @@ const BpaApplicationDetail = () => {
     moduleCode: "BPA",
   });
 
-  if(workflowDetails && workflowDetails.data && !workflowDetails.isLoading)
-  workflowDetails.data.actionState = {...workflowDetails.data};
+  if (workflowDetails && workflowDetails.data && !workflowDetails.isLoading)
+    workflowDetails.data.actionState = { ...workflowDetails.data };
 
-  const { data = {}, isLoading } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: id });
+  if (mdmsData?.BPA?.RiskTypeComputation && data?.edcrDetails) {
+    risType = Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, data?.edcrDetails?.planDetail?.plot?.area, data?.edcrDetails?.planDetail?.blocks);
+    data?.applicationDetails?.map(detail => {
+      if (detail?.isInsert) {
+        detail.values?.forEach(value => {
+          if (value?.isInsert) value.value = `WF_BPA_${risType}`
+        })
+      }
+    })
+  }
+
+
   return (
     <Fragment>
+      <div style={{ marginLeft: "15px" }}>
+        <Header>{t("BPA_TASK_DETAILS_HEADER")}</Header>
+      </div>
       {data?.applicationData?.status === "FIELDINSPECTION_INPROGRESS" && <div style={{ marginLeft: "15px" }}>
         <Header>{t("Inspection Report")}</Header>
       </div>}
       {data?.applicationData?.status === "FIELDINSPECTION_INPROGRESS" && <FormComposer
         heading={t("")}
         isDisabled={!canSubmit}
-        //label={t("ES_COMMON_APPLICATION_SUBMIT")}
         config={configs.map((config) => {
           return {
             ...config,
@@ -83,15 +98,11 @@ const BpaApplicationDetail = () => {
           };
         })}
         fieldStyle={{ marginRight: 0 }}
-        //onSubmit={onSubmit}
         submitInForm={false}
         defaultValues={defaultValues}
         onFormValueChange={onFormValueChange}
         breaklineStyle={{ border: "0px" }}
       />}
-      <div>
-        <Header>{t("ES_TITLE_APPLICATION_DETAILS")}</Header>
-      </div>
       <ApplicationDetailsTemplate
         applicationDetails={data}
         isLoading={isLoading}
@@ -99,6 +110,7 @@ const BpaApplicationDetail = () => {
         workflowDetails={workflowDetails}
         businessService={workflowDetails?.data?.applicationBusinessService ? workflowDetails?.data?.applicationBusinessService : data?.applicationData?.businessService}
         moduleCode="BPA"
+        timelineStatusPrefix={`WF_${workflowDetails?.data?.applicationBusinessService ? workflowDetails?.data?.applicationBusinessService : data?.applicationData?.businessService}_`}
       />
     </Fragment>
   )

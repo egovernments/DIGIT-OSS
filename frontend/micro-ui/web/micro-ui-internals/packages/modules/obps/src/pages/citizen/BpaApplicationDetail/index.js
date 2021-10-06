@@ -20,6 +20,7 @@ const BpaApplicationDetail = () => {
   const [selectedAction, setSelectedAction] = useState(null);
   const [appDetails, setAppDetails] = useState({});
   const history = useHistory();
+  sessionStorage.setItem("bpaApplicationDetails", false);
   let isFromSendBack = false;
   const { data, isLoading } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: id });
   const mutation = Digit.Hooks.obps.useObpsAPI(data?.applicationData?.tenantId, false);

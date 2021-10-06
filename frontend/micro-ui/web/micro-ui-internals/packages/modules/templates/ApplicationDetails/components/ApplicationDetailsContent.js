@@ -23,6 +23,7 @@ import TLTradeUnits from "./TLTradeUnits";
 import TLTradeAccessories from "./TLTradeAccessories";
 import ScruntinyDetails from "./ScruntinyDetails";
 import NOCDocuments from "./NOCDocuments";
+import SubOccupancyTable from "./SubOccupancyTable";
 
 function ApplicationDetailsContent({ applicationDetails, workflowDetails, isDataLoading, applicationData, businessService, timelineStatusPrefix }) {
   const { t } = useTranslation();
@@ -48,8 +49,9 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
   };
 
   // console.log(applicationDetails?.applicationDetails, "inside app details content");
-  const checkLocation = window.location.href.includes("employee/tl");
+  const checkLocation = window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps");
   const isNocLocation = window.location.href.includes("noc/application-overview");
+  const isBPALocation = window.location.href.includes("employee/obps");
   return (
     <Card style={{ position: "relative" }}>
       {applicationDetails?.applicationDetails?.map((detail, index) => (
@@ -74,7 +76,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
                 return (
                   <Row
                     key={t(value.title)}
-                    label={isNocLocation ? `${t(value.title)}:` : t(value.title)}
+                    label={(isNocLocation || isBPALocation) ? `${t(value.title)}:` : t(value.title)}
                     text={value?.skip ? value.value : (t(value.value) || "N/A")}
                     last={index === detail?.values?.length - 1}
                     caption={value.caption}
@@ -95,7 +97,9 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
           {detail?.additionalDetails?.accessories && <TLTradeAccessories units={detail?.additionalDetails?.accessories} />}
           {detail?.additionalDetails?.obpsDocuments && <NOCDocuments applicationData={applicationDetails?.applicationData} t={t} isNoc={false} docs={detail.additionalDetails.obpsDocuments} noc={detail.additionalDetails?.data} />}
           {detail?.additionalDetails?.noc && <NOCDocuments t={t} isNoc={true} docs={detail.additionalDetails.noc} noc={detail.additionalDetails?.data} />}
-          {detail?.additionalDetails?.scruntinyDetails && <ScruntinyDetails scrutiny={detail?.additionalDetails?.scruntinyDetails} />}
+          {detail?.additionalDetails?.scruntinyDetails && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
+          {detail?.additionalDetails?.buildingExtractionDetails && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
+          {detail?.additionalDetails?.subOccupancyTableDetails && <SubOccupancyTable edcrDetails={detail?.additionalDetails} />}
           {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
           {detail?.additionalDetails?.taxHeadEstimatesCalculation && (
             <PropertyEstimates taxHeadEstimatesCalculation={detail?.additionalDetails?.taxHeadEstimatesCalculation} />

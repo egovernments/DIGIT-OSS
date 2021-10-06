@@ -251,7 +251,7 @@ export const OBPSService = {
         }})
       })
 
-    const details = [
+    const detailsOfBPA = [
       ...inspectionReport,
       {
         title: "BPA_BASIC_DETAILS_TITLE",
@@ -346,9 +346,145 @@ export const OBPSService = {
       //   asSectionHeader: true,
       //   values: nocDetails
       // },
-    ]
+    ];
 
-    const bpaFilterDetails = details?.filter(data => data);
+    let details = [];
+
+    const basicDetails = {
+      title: "BPA_BASIC_DETAILS_TITLE",
+      asSectionHeader: true,
+      isInsert: true,
+      values: [
+        { title: "BPA_BASIC_DETAILS_APP_DATE_LABEL", value: BPA?.applicationDate ? format(new Date(BPA?.applicationDate), 'dd/MM/yyyy') : '' },
+        { title: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL", value: `WF_BPA_${edcr?.appliactionType}` },
+        { title: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL", value: edcr?.applicationSubType },
+        { title: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL", value: edcr?.planDetail?.planInformation?.occupancy },
+        { title: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL", value: "", isInsert: true, },
+        { title: "BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL", value: edcr?.planDetail?.planInformation?.applicantName },
+      ]
+    };
+
+    const plotDetails =  {
+      title: "BPA_PLOT_DETAILS_TITLE",
+      asSectionHeader: true,
+      values: [
+        { title: "BPA_BOUNDARY_PLOT_AREA_LABEL", value: edcr?.planDetail?.planInformation?.plotArea || "NA"  },
+        { title: "BPA_PLOT_NUMBER_LABEL", value: edcr?.planDetail?.planInformation?.plotNo || "NA"  },
+        { title: "BPA_KHATHA_NUMBER_LABEL", value: edcr?.planDetail?.planInformation?.khataNo || "NA"  },
+        { title: "BPA_HOLDING_NUMBER_LABEL", value: BPA?.additionalDetails.holdingNo || "NA"  },
+        { title: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL", value: BPA?.additionalDetails.registrationDetails || "NA" }
+      ]
+    };
+
+    const scrutinyDetails = {
+      title: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
+      additionalDetails: {
+        values: [
+          { title: "BPA_EDCR_DETAILS", value: " " },
+          { title: BPA?.businessService !== "BPA_OC" ? "BPA_EDCR_NO_LABEL" : "BPA_OC_EDCR_NO_LABEL", value: BPA?.edcrNumber || "NA" },
+        ],
+        scruntinyDetails: [
+          { title: "BPA_UPLOADED_PLAN_DIAGRAM", value: edcr?.updatedDxfFile, text: "BPA_UPLOADED_PLAN_DXF" },
+          { title: "BPA_SCRUNTINY_REPORT_OUTPUT", value: edcr?.planReport, text: "BPA_SCRUTINY_REPORT_PDF" },
+        ]
+      }
+    };
+
+    const buildingExtractionDetails = {
+      title: "",
+      additionalDetails: {
+        values: [
+          { title: "BPA_BUILDING_EXTRACT_HEADER", value : " "},
+          { title: "BPA_BUILTUP_AREA_HEADER", value: edcr?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea || "NA"},
+          { title: "BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL", value: edcr?.planDetail?.blocks?.[0]?.building?.totalFloors || "NA" },
+          { title: "BPA_APPLICATION_HIGH_FROM_GROUND", value: edcr?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeigh || "NA" }
+        ],
+        scruntinyDetails: []
+      }
+    };
+
+    const demolitionAreaDetails = {
+      title: "",
+      additionalDetails: {
+        values: [
+          { title: "BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL", value : " "},
+          { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr?.planDetail?.planInformation?.demolitionArea ? `${edcr?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : "" } 
+        ],
+        scruntinyDetails: []
+      }
+    };
+
+    const subOccupancyTableDetails = {
+      title: "",
+      additionalDetails: {
+        values: [
+          { title: "BPA_OCC_SUBOCC_HEADER", value : " "} 
+        ],
+        subOccupancyTableDetails: [
+          { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr }
+        ]
+      }
+    }
+
+    const addressDetails = {
+      title: "BPA_NEW_TRADE_DETAILS_HEADER_DETAILS",
+      asSectionHeader: true,
+      values: [
+        { title: "BPA_DETAILS_PIN_LABEL", value: BPA?.landInfo?.address?.pincode },
+        { title: "BPA_CITY_LABEL", value: BPA?.landInfo?.address?.city },
+        { title: "BPA_LOC_MOHALLA_LABEL", value: BPA?.landInfo?.address?.locality?.name },
+        { title: "BPA_DETAILS_SRT_NAME_LABEL", value: BPA?.landInfo?.address?.street },
+        { title: "ES_NEW_APPLICATION_LOCATION_LANDMARK", value: BPA?.landInfo?.address?.landmark }
+      ]
+    };
+
+
+    const checkOwnerLength = BPA?.landInfo?.owners?.length || 1;
+    const ownerDetails = {
+      title: "BPA_APPLICANT_DETAILS_HEADER",
+      additionalDetails: {
+        owners: BPA?.landInfo?.owners?.map((owner, index) => {
+          return {
+            title: (Number(checkOwnerLength) > 1)  ? "COMMON_OWNER" : "",
+            values: [
+              { title: "CORE_COMMON_NAME", value: owner?.name },
+              { title: "BPA_APPLICANT_GENDER_LABEL", value: owner?.gender },
+              { title: "CORE_COMMON_MOBILE_NUMBER", value: owner?.mobileNumber },
+            ],
+          };
+        })
+      },
+    };
+
+    const documentDetails =  {
+      title: "BPA_DOCUMENT_DETAILS_LABEL",
+      asSectionHeader: true,
+      additionalDetails: {
+        obpsDocuments: [{
+          title: "",
+          values: BPA?.documents?.map(doc => ({
+            title: doc?.documentType?.replaceAll('.', '_'),
+            documentType: doc?.documentType,
+            documentUid: doc?.documentUid,
+            fileStoreId: doc?.fileStoreId,
+          }))
+        }]
+      },
+    };
+
+    // if(inspectionReport) details.push(inspectionReport);\
+    if(BPA?.businessService !== "BPA_OC") {
+      details = [...details, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, ...nocDetails ]
+    } else {
+      details = [...details, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails, documentDetails, ...nocDetails ]
+    }
+    
+    const isEmployee = sessionStorage.getItem("bpaApplicationDetails") === "true" || true ? true : false;
+
+    let bpaFilterDetails = detailsOfBPA?.filter(data => data);
+    if (isEmployee) {
+      bpaFilterDetails = details?.filter(data => data);
+    }
 
     return {
       applicationData: BPA,
