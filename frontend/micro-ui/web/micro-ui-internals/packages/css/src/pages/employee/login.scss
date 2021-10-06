@@ -10,6 +10,12 @@
   border: 1px solid;
   border-right: none;
 }
+@media screen and (max-width : 768px){
+  .employeeForgotPassword .employeeCard .field .field-container .component-in-front{
+    padding : 7px;
+  }
+}
+
 .employeeForgotPassword .employee-card-input {
   margin-bottom: 0px;
   border-left: none;
@@ -38,4 +44,7 @@
 }
 .loginFormStyleEmployee .bannerHeader p, .employeeForgotPassword .bannerHeader p, .employeeChangePassword .bannerHeader p{
   font-size: 19px;
+}
+.employeeCard .card-sub-header{
+  font-size: 24px;
 }
