@@ -47,7 +47,7 @@ export const addIDGenId = async (requestInfo, idRequests, header) => {
     requestBody,
     headers
   });
-  // console.log("idgenresponse",idGenResponse);
+  console.log("idgenresponse",idGenResponse);
   return get(idGenResponse, "idResponses[0].id");
 };
 
