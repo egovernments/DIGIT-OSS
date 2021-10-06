@@ -7,16 +7,16 @@ export const httpRequest = async ({
   endPoint,
   queryObject = [],
   requestBody = {},
-  headers = [],
+  headerBody = [],
   customRequestInfo = {}
 }) => {
   let instance = httpClient(hostURL);
   let errorReponse = {};
-  if (headers){
-    headers[0]['tenantId']=headers[0].tenantid
-    let header = headers[0];
+  if (headerBody){
+    headerBody[0]['tenantId']=headerBody[0].tenantid
+    let headers = headerBody[0];
     instance.defaults = Object.assign(instance.defaults, {
-      header
+      headers
     });
   }
     
