@@ -59,7 +59,10 @@ public class ProcessInstanceSearchCriteria {
 
     @JsonIgnore
     private Boolean isEscalatedCount;
-    
+
+    @JsonIgnore
+    private Boolean isAssignedToMeCount;
+
     @JsonIgnore
     private List<String> statusesIrrespectiveOfTenant;
 

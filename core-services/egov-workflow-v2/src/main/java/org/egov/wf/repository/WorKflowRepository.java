@@ -81,6 +81,7 @@ public class WorKflowRepository {
 
     public Integer getProcessInstancesForUserInboxCount(ProcessInstanceSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
+        criteria.setIsAssignedToMeCount(true);
         String query = queryBuilder.getInboxIdCount(criteria, (ArrayList<Object>) preparedStmtList);
         Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
         return count;
@@ -126,6 +127,7 @@ public class WorKflowRepository {
 
     private List<String> getInboxSearchIds(ProcessInstanceSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
+        criteria.setIsAssignedToMeCount(false);
         String query = queryBuilder.getInboxIdQuery(criteria,preparedStmtList,true);
         return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
     }

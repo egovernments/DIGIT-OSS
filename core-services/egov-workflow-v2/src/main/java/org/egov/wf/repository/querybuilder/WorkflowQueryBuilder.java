@@ -296,7 +296,13 @@ public class WorkflowQueryBuilder {
         List<String> tenantSpecificStatus = criteria.getTenantSpecifiStatus();
         StringBuilder with_query_builder = new StringBuilder(with_query);
 
-        if(!config.getAssignedOnly() && !CollectionUtils.isEmpty(tenantSpecificStatus)){
+        if(criteria.getIsAssignedToMeCount()!=null && criteria.getIsAssignedToMeCount())
+        {
+            with_query_builder.append(" AND id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?) AND pi_outer.tenantid = ? ");
+            preparedStmtList.add(criteria.getAssignee());
+            preparedStmtList.add(criteria.getTenantId());
+        }
+       else if(!config.getAssignedOnly() && !CollectionUtils.isEmpty(tenantSpecificStatus)){
             String clause = " AND ((id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?)" +
                     " AND pi_outer.tenantid = ? ) {{OR_CLUASE_PLACEHOLDER}} )";
 
