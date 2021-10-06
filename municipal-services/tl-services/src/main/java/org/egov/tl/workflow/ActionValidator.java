@@ -129,7 +129,7 @@ public class ActionValidator {
 
         	for(int i=0; i<existingApplications.size(); i++) {
 
-        		if(!existingApplications.get(i).getApplicationNumber().equalsIgnoreCase(license.getApplicationNumber()) && !existingApplications.get(i).getStatus().equalsIgnoreCase(STATUS_CANCELLED) && license.getFinancialYear().compareTo(existingApplications.get(0).getFinancialYear())<0) {
+        		if(!existingApplications.get(i).getApplicationNumber().equalsIgnoreCase(license.getApplicationNumber()) && !existingApplications.get(i).getStatus().equalsIgnoreCase(STATUS_CANCELLED) && license.getFinancialYear().compareTo(existingApplications.get(i).getFinancialYear())<0) {
         			errorMap.put("INVALID_ACTION","Cannot cancel an application when later applications are in the workflow");
         			break;
         		}
