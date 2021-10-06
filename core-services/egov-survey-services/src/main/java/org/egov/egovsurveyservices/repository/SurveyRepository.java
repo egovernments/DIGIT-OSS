@@ -94,7 +94,7 @@ public class SurveyRepository {
 
         // Omit pagination in case of count
         criteria.setIsCountCall(Boolean.TRUE);
-        String query = surveyQueryBuilder.getSurveySearchQuery(criteria, preparedStmtList);
+        String query = surveyQueryBuilder.getSurveyCountQuery(criteria, preparedStmtList);
         criteria.setIsCountCall(Boolean.FALSE);
 
         log.info("query for search: " + query + " params: " + preparedStmtList);
