@@ -107,7 +107,7 @@ export const httpRequest = async (
 ) => {
   /* const tenantId = getTenantId() || commonConfig.tenantId; */
   /* Fix for central instance to send tenantID in all query params  */
-  const tenantId = process.env.REACT_APP_NAME === "Citizen" ? commonConfig.tenantId:getTenantId() || commonConfig.tenantId ;
+  const tenantId = process.env.REACT_APP_NAME === "Citizen" ? commonConfig.tenantId:(endPoint&&endPoint.includes("mdms")?commonConfig.tenantId:getTenantId()) || commonConfig.tenantId ;
   let apiError = "Api Error";
 
   if (headers)

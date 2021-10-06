@@ -6,6 +6,7 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 import store from "../ui-redux/store";
 import { addQueryArg, isPublicSearch } from "./commons";
+import some from "lodash/some";
 
 const instance = axios.create({
   baseURL: window.location.origin,
@@ -54,7 +55,7 @@ export const httpRequest = async (
     });
   
   /* Fix for central instance to send tenantID in all query params  */
-  const tenantId = process.env.REACT_APP_NAME === "Citizen" ? commonConfig.tenantId:getTenantId() || commonConfig.tenantId ;
+  const tenantId = process.env.REACT_APP_NAME === "Citizen" ? commonConfig.tenantId:(endPoint&&endPoint.includes("mdms")?commonConfig.tenantId:getTenantId()) || commonConfig.tenantId ;
   if (!some(queryObject, ["key", "tenantId"])) {
     queryObject &&
       queryObject.push({
