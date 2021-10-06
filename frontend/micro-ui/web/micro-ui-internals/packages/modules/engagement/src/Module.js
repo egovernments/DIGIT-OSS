@@ -24,7 +24,7 @@ import EmployeeEventDetails from "./pages/employee/Events/EventDetails";
 import CitizenApp from "./pages/citizen";
 import EventDetails from "./pages/citizen/EventsListOnGround/EventDetails";
 import DocumenetCreate from "./pages/employee/Documents/documents-create";
-import DocumentUpdate from './pages/employee/Documents/docments-update';
+import DocumentUpdate from './pages/employee/Documents/documents-update';
 import DocumentResponse from "./pages/employee/Documents/response";
 import DocUpdate from "./pages/employee/Documents/doc-update";
 import DocUpdateResponse from "./pages/employee/Documents/update-response";

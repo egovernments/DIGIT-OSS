@@ -15,7 +15,7 @@ const DocumentList = ({ match, tenants }) => {
   const { t } = useTranslation()
   const { category } = match.params || 'CATEGORY_CITIZEN_CHARTER';
   console.log('tenants', {tenants})
-  const tenantIds = Digit.SessionStorage.get("Employee.tenantId") || Digit.SessionStorage.get("ENGAGEMENT_TENANTS")
+  const tenantIds = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
   const [pageSize, setPageSize] = useState(20);
   const [pageOffset, setPageOffset] = useState(0);
   const [searchValue, setSearchValue] = useState();

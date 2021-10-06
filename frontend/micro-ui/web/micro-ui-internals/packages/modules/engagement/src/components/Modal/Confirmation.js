@@ -23,7 +23,7 @@ const CloseBtn = (props) => {
 
 const ConfirmationQuestion = ({ t, title }) => (
     <div className="confirmation_box">
-        {`${t('CONFIRM_DELETE_MSG')} `}{` `}  <b> {` ${title}`} {` document`}</b>
+        {`${t('CONFIRM_DELETE_MSG')} `} <b>{` ${title}`}</b>
     </div>
 );
 

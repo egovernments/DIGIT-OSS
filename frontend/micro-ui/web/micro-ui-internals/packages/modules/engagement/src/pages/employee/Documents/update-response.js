@@ -1,7 +1,8 @@
-import { Banner, Card, Loader } from "@egovernments/digit-ui-react-components";
+import { Banner, Card, Loader, ActionBar, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useQueryClient } from "react-query";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 const getMessage = (mutation) => {
   if (mutation.isSuccess) return mutation.data?.Documents?.[0]?.uuid;
@@ -42,9 +43,17 @@ const Response = (props) => {
   }
 
   return (
-    <Card>
-      <BannerPicker t={t} data={mutation.data} mutation={mutation} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
-    </Card>
+    <div>
+
+      <Card>
+        <BannerPicker t={t} data={mutation.data} mutation={mutation} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
+      </Card>
+      <ActionBar>
+        <Link to={"/digit-ui/employee"}>
+          <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
+        </Link>
+      </ActionBar>
+    </div>
   );
 };
 

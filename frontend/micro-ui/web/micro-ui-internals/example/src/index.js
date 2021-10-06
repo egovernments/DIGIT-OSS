@@ -113,13 +113,13 @@ const initTokens = (stateCode) => {
   const token = window.sessionStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
 
   // console.log(token);
-
+ 
   const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
-
+ 
   const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || stateCode;
 
   const employeeInfo = window.localStorage.getItem("Employee.user-info") || userInfo[userType];
-  const employeeTenantId = window.localStorage.getItem("Employee.tenant-id") || "pb.amritsar";
+  const employeeTenantId = window.localStorage.getItem("Employee.tenant-id");
 
   const userTypeInfo = userType === "CITIZEN" || userType === "QACT" ? "citizen" : "employee";
   window.Digit.SessionStorage.set("user_type", userTypeInfo);
@@ -132,7 +132,8 @@ const initTokens = (stateCode) => {
   }
 
   window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
-  window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
+ 
+ if(employeeTenantId && employeeTenantId.length) window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
 };
 
 const initDigitUI = () => {

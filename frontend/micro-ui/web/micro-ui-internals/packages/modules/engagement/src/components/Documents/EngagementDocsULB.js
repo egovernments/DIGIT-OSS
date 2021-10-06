@@ -4,12 +4,14 @@ import { useForm, Controller } from "react-hook-form";
 
 const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, register, errors, setError, clearErrors, formState, control }) => {
   const { data: ulbArray, isLoading } = Digit.Hooks.useTenants();
+  const ulb = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const selectedTenat = useMemo(()=>{
-    const filtered = ulbArray?.filter((item)=> item.code===tenantId)
+    const filtered = ulb?.filter((item)=> item.code===tenantId)
     return filtered;
-  },[tenantId, ulbArray])
+  },[tenantId, ulb])
 
+  
   return (
     <React.Fragment>
       <LabelFieldPair 
@@ -21,17 +23,19 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
             name={config.key}
             control={control}
             defaultValue={selectedTenat?.[0]}
+            rules={{ required: true }}
             render={(props) => (
               <Dropdown
                 allowMultiselect={true}
                 optionKey={"i18nKey"}
                 option={ulbArray}
                 select={(e) => {
-                  props.onChange([...(formData?.[config?.key]?.filter?.((f) => e.code != f.code) || []), e]);
+                  props.onChange([...(formData?.[config?.key]?.filter?.((f) => e.code != f?.code) || []), e]);
                 }}
                 keepNull={true}
                 selected={props.value}
-                disable={ulbArray?.length === 1}
+                
+                disable={formData?.[config.key]?.length === 1}
                 t={t}
               />
             )}
@@ -52,6 +56,7 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
               );
             })}
           </div>
+          {errors && errors['ULB'] && <CardLabelError>{t(`EVENTS_TENANT_ERROR_REQUIRED`)}</CardLabelError>}
         </div>
       </LabelFieldPair>
     </React.Fragment>

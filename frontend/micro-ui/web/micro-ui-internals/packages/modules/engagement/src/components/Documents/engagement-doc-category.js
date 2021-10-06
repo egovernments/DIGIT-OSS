@@ -20,7 +20,7 @@ const SelectCategory = ({ userType, t, setValue, onSelect, config, data, formDat
 
  
   useEffect(() => {
-    setUlbs(formData?.ULB?.map((e) => e.code));
+    setUlbs(formData?.ULB?.map((e) => e?.code));
   }, [formData?.ULB]);
 
   return (

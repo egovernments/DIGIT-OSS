@@ -2,7 +2,7 @@ import { Loader } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 
 
-import UpdateDocComp from "./docments-update";
+import UpdateDocComp from "./documents-update";
 
 const UpdateDocument = () => {
   const qp = Digit.Hooks.useQueryParams();

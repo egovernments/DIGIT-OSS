@@ -3,14 +3,30 @@ import { Card, Header, LabelFieldPair, CardLabel, TextInput, Dropdown, FormCompo
 import { useTranslation } from "react-i18next";
 import { documentsFormConfig } from "../../../config/doc-create";
 import { useHistory } from "react-router-dom";
-import Confirmation from "../../../components/Modal/Confirmation";
+
 
 const Documents = (props) => {
   const { t } = useTranslation();
   const history = useHistory();
   const [canSubmit, setSubmitValve] = useState(false);
- 
 
+  const preventSubmission = (e) => {
+    e.stopPropogation()
+    console.log('e', { e })
+    if (e.code === 'Enter') {
+      return;
+    }
+  }
+
+  /*   useEffect(()=>{
+      window.addEventListener('keypress', preventSubmission)
+      
+      return () =>{
+       window.removeEventListener('keypress', preventSubmission) 
+      }
+    
+    })
+   */
   const onFormValueChange = useCallback(
     (setValue, updatedFormData, formState) => {
       if (
@@ -47,7 +63,7 @@ const Documents = (props) => {
     <React.Fragment>
       <Header>{t("ES_ENGAGEMENT_EDIT_DOC")}</Header>
       <FormComposer
-        label={t("ES_COMMON_UPDATE")}     
+        label={t("ES_COMMON_UPDATE")}
         config={documentsFormConfig}
         onSubmit={(data) => {
           update(data);
@@ -57,7 +73,7 @@ const Documents = (props) => {
         defaultValues={props.location.state?.DocumentEntity}
         isDisabled={!canSubmit}
       />
-     
+
     </React.Fragment>
   );
 };
