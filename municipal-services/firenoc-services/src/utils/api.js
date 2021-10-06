@@ -14,8 +14,9 @@ export const httpRequest = async ({
   let errorReponse = {};
   if (headers){
     headers[0]['tenantId']=headers[0].tenantid
+    let header = headers[0];
     instance.defaults = Object.assign(instance.defaults, {
-      headers
+      header
     });
   }
     
