@@ -32,12 +32,14 @@ public class NotificationService {
 
     public void smsNotification(TransactionRequest transactionRequest, String topic){
 
+        String tenantId = transactionRequest.getTransaction().getTenantId();
+
         if (appProperties.getIsSMSEnable() != null && appProperties.getIsSMSEnable()
                 && transactionRequest.getRequestInfo().getUserInfo() !=null
                 && transactionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("SYSTEM")) {
             List<SMSRequest> smsRequests = getSmsRequest(transactionRequest, topic);
             if (!CollectionUtils.isEmpty(smsRequests)) {
-                notificationUtil.sendSMS(smsRequests);
+                notificationUtil.sendSMS(smsRequests, tenantId);
             }
         }
 

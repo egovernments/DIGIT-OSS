@@ -67,6 +67,8 @@ public class TransactionService {
      * @return Redirect URI to the gateway for the particular transaction
      */
     public Transaction initiateTransaction(TransactionRequest transactionRequest) {
+
+        String tenantId = transactionRequest.getTransaction().getTenantId();
         validator.validateCreateTxn(transactionRequest);
 
         // Enrich transaction by generating txnid, audit details, default status
@@ -92,9 +94,9 @@ public class TransactionService {
         }
 
         // Persist transaction and transaction dump objects
-        producer.push(appProperties.getSaveTxnTopic(), new org.egov.pg.models.TransactionRequest
+        producer.push(tenantId, appProperties.getSaveTxnTopic(), new org.egov.pg.models.TransactionRequest
                 (requestInfo, transaction));
-        producer.push(appProperties.getSaveTxnDumpTopic(), new TransactionDumpRequest(requestInfo, dump));
+        producer.push(tenantId, appProperties.getSaveTxnDumpTopic(), new TransactionDumpRequest(requestInfo, dump));
 
         return transaction;
     }
@@ -135,6 +137,7 @@ public class TransactionService {
     public List<Transaction> updateTransaction(RequestInfo requestInfo, Map<String, String> requestParams) {
 
         Transaction currentTxnStatus = validator.validateUpdateTxn(requestParams);
+        String tenantId = currentTxnStatus.getTenantId();
 
         log.debug(currentTxnStatus.toString());
         log.debug(requestParams.toString());
@@ -163,8 +166,8 @@ public class TransactionService {
                 .auditDetails(newTxn.getAuditDetails())
                 .build();
 
-        producer.push(appProperties.getUpdateTxnTopic(), new org.egov.pg.models.TransactionRequest(requestInfo, newTxn));
-        producer.push(appProperties.getUpdateTxnDumpTopic(), new TransactionDumpRequest(requestInfo, dump));
+        producer.push(tenantId, appProperties.getUpdateTxnTopic(), new org.egov.pg.models.TransactionRequest(requestInfo, newTxn));
+        producer.push(tenantId, appProperties.getUpdateTxnDumpTopic(), new TransactionDumpRequest(requestInfo, dump));
 
         return Collections.singletonList(newTxn);
     }
