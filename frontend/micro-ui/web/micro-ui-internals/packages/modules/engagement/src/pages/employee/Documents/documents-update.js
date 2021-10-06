@@ -56,6 +56,8 @@ const Documents = (props) => {
       documentLink: data.document?.documentLink,
       tenantIds: data.ULB.map((e) => e.code),
     };
+
+    delete DocumentEntity.ULB;
     history.push("/digit-ui/employee/engagement/documents/update-response", { DocumentEntity });
   };
 

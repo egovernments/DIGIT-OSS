@@ -39,23 +39,16 @@ const DocumentDetails = ({ location, match, history, }) => {
                     filestoreId: { fileStoreId: details?.filestoreId },
                     documentLink: details?.documentLink
                 },
-                ULB: ulbArray.filter((e) => e.code === details?.tenantId),
+               ULB: ulbArray.filter((e) => e.code === details?.tenantId),
                 ...details
             }
             history.push({
                 pathname: `/digit-ui/employee/engagement/documents/inbox/update`,
                 state: { DocumentEntity }
-            }) //navigate to update form
+            })
         }
 
         if (action?.includes('DELETE')) {
-            /*  const DocumentEntity = {
-                 ...details
-             }
-          history.push({
-             pathname:`/digit-ui/employee/engagement/documents/delete-response`,
-             state:{DocumentEntity}   
-         }) */
             setShowModal(true)
         }
     }

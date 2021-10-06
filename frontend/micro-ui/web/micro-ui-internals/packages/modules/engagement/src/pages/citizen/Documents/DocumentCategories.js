@@ -13,13 +13,13 @@ import { Link, useHistory } from "react-router-dom";
 import Searchbar from "../../../components/Documents/Searchbar";
 
 
-const Accordion = ({ t, title, onClick, children }) => {
+const Accordion = ({ t, title, count, onClick, children }) => {
   const [isOpen, setOpen] = React.useState(false);
 
   return (
     <div className="accordion-wrapper" onClick={() => onClick(title)}>
       <div className={`accordion-title ${isOpen ? "open" : ""}`} onClick={() => setOpen(!isOpen)}>
-        {t(title)}
+        {`${t(title)} (${count})`}
         <PrevIcon />
       </div>
       <div className={`accordion-item ${!isOpen ? "collapsed" : ""}`}>
@@ -36,14 +36,11 @@ const DocumentCategories = ({ t, parentRoute }) => {
   const history = useHistory();
   const [searchValue, setSearchValue] = useState('');
 
-  // const [documentsCategories, setDocumentCategories] = useState([]);
-  const stateId = Digit.ULBService.getStateId();
-  const currrentUlb = Digit.ULBService.getCurrentUlb() || { code: "pb.amritsar" };
-  const { data: categoryData, isLoading } = Digit.Hooks.engagement.useMDMS(stateId, "DocumentUploader", ["UlbLevelCategories"], {
-    select: (d) => {
-      const data = d?.DocumentUploader?.UlbLevelCategories?.filter?.((e) => e.ulb === currrentUlb.code);
-      return data[0].categoryList;
-    },
+  const tenantIds = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+  const { data: categoriesWithCount , isLoading, } = Digit.Hooks.engagement.useDocSearch({ tenantIds }, {
+    select: (data) => {
+      return data?.statusCount;
+    } 
   });
 
   if (!Digit.UserService?.getUser()?.access_token) {
@@ -74,21 +71,21 @@ const DocumentCategories = ({ t, parentRoute }) => {
       </div>
       <Header>{t('DOCUMENTS_DOCUMENT_HEADER')}</Header>
       <Card>
-          <Searchbar
-            searchValue={searchValue}
-            handleKeyPress={handleKeyPress}
-            handleSearch={handleSearch}
-            onChange={setSearchValue}
-            t={t}
-          />
+        <Searchbar
+          searchValue={searchValue}
+          handleKeyPress={handleKeyPress}
+          handleSearch={handleSearch}
+          onChange={setSearchValue}
+          t={t}
+        />
         <hr style={{ color: '#ccc' }} />
         {/* Accordion */}
         <div className="wrapper">
-          {categoryData && categoryData?.length ?
-            categoryData.map((title, index) => {
+          {categoriesWithCount && categoriesWithCount?.length ?
+            categoriesWithCount.map(({category, count}, index) => {
               return (
                 <Link key={index} to="#">
-                  <Accordion t={t} title={title} key={index} onClick={showDocuments}>
+                  <Accordion t={t} title={category} count={count} key={index} onClick={showDocuments}>
                     {/* <p>{data.info}</p> */}
                   </Accordion>
                 </Link>
