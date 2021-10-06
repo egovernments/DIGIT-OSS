@@ -26,7 +26,7 @@ public class SurveyQueryBuilder {
 
     private static final String QUESTION_SELECT_VALUES = " question.uuid as quuid, question.surveyid as qsurveyid, question.questionstatement as qstatement, question.options as qoptions, question.status as qstatus, question.type as qtype, question.required as qrequired, question.createdby as qcreatedby, question.lastmodifiedby as qlastmodifiedby, question.createdtime as qcreatedtime, question.lastmodifiedtime as qlastmodifiedtime ";
 
-    public static final String SURVEY_COUNT_WRAPPER = " SELECT COUNT(suuid) FROM ({INTERNAL_QUERY}) AS count ";
+    public static final String SURVEY_COUNT_WRAPPER = " SELECT COUNT(DISTINCT suuid) FROM ({INTERNAL_QUERY}) AS count ";
 
     public String getSurveySearchQuery(SurveySearchCriteria criteria, List<Object> preparedStmtList){
         StringBuilder query = new StringBuilder(SELECT);
