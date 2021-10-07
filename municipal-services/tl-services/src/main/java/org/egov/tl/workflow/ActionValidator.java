@@ -115,9 +115,7 @@ public class ActionValidator {
 
     	for (TradeLicense license : licenses) {
     		
-    		if((license.getAction()!=null && license.getAction()!=TLConstants.ACTION_CANCEL) || license.getAction()==null) {
-    			continue;
-    		}
+    		if(license.getAction()!= null && license.getAction().equalsIgnoreCase(ACTION_CANCEL)) {
     		
         	List <TradeLicense> existingApplications = new ArrayList<TradeLicense>();
 
@@ -128,14 +126,15 @@ public class ActionValidator {
         	}
 
         	for(int i=0; i<existingApplications.size(); i++) {
-
-        		if(!existingApplications.get(i).getApplicationNumber().equalsIgnoreCase(license.getApplicationNumber()) && !existingApplications.get(i).getStatus().equalsIgnoreCase(STATUS_CANCELLED) && license.getFinancialYear().compareTo(existingApplications.get(i).getFinancialYear())<0) {
+        		
+        		if(!existingApplications.get(i).getApplicationNumber().equalsIgnoreCase(license.getApplicationNumber()) && !existingApplications.get(i).getStatus().equalsIgnoreCase(STATUS_CANCELLED) && license.getFinancialYear().compareTo(existingApplications.get(i).getFinancialYear())<0) {        			
         			errorMap.put("INVALID_ACTION","Cannot cancel an application when later applications are in the workflow");
         			break;
         		}
         	}
 
         }
+    	}
 
     	if(!errorMap.isEmpty()) {
             throw new CustomException(errorMap);   
