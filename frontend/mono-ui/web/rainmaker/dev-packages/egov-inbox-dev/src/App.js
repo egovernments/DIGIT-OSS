@@ -6,29 +6,24 @@ import { fetchLocalisation } from './components/utils';
 function App() {
     const [localisationData, setData] = useState(JSON.parse(localStorage.getItem("inbox-localisationData")) || {})
 
-    let userObject = {
-        "id": 32296,
-        "uuid": "3f2729f7-a6cf-4ff6-97e9-6796586e67fc",
-        "userName": "LME_D1",
-        "name": "Street light LME",
-        "mobileNumber": "9879878979",
+    let userObject ={
+        "id": 32563,
+        "uuid": "8d1dfdc5-13e8-4800-89f9-de284089da9c",
+        "userName": "QASV",
+        "name": "Supervisor",
+        "mobileNumber": "7899898989",
         "emailId": null,
         "locale": null,
         "type": "EMPLOYEE",
         "roles": [
             {
-                "name": "PGR Last Mile Employee",
-                "code": "PGR_LME",
+                "name": "TL Counter Employee",
+                "code": "TL_CEMP",
                 "tenantId": "pb.amritsar"
             },
             {
-                "name": "TL Field Inspector",
-                "code": "TL_FIELD_INSPECTOR",
-                "tenantId": "pb.amritsar"
-            },
-            {
-                "name": "Employee",
-                "code": "EMPLOYEE",
+                "name": "Auto Escalation Supervisor",
+                "code": "SUPERVISOR",
                 "tenantId": "pb.amritsar"
             },
             {
@@ -41,7 +36,7 @@ function App() {
         "tenantId": "pb.amritsar",
         "permanentCity": "pb"
     };
-    userObject.auth = "e657abb3-65b6-4429-9da2-653bfd158269";
+    userObject.auth = "73ff17e9-1b47-4207-a91c-bf09c951b72b";
     localStorage.setItem("Employee.token", userObject.auth);
 
     useEffect(() => {

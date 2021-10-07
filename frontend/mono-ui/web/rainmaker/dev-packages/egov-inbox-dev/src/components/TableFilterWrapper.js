@@ -180,18 +180,18 @@ const TableFilterWrapper = ({ businessServices, countData, setData, setLoadAll, 
                 <span className={`assigned-inbox inb-all-tab ${filters.assigned_to_all && "jk-selected-header"}`} onClick={() => {
                     setFiltersDispatch({ type: 'assigned_to_all' })
                 }}>
-                    {t("COMMON_INBOX_TAB_ALL")} {` ( ${countData.all} )`}
+                    {t("COMMON_INBOX_TAB_ALL")} <span style={{display:"inline-block"}}>{` ( ${countData.all} )`}</span>
                 </span>
                 <span className={`assigned-inbox inb-me-tab ${filters.assigned_to_me && "jk-selected-header"}`} onClick={() => {
                     setFiltersDispatch({ type: 'assigned_to_me' })
                 }}>
-                    {t("COMMON_INBOX_TAB_ASSIGNED_TO_ME")} {` ( ${countData.assignedToMe} )`}
+                    {t("COMMON_INBOX_TAB_ASSIGNED_TO_ME")} <span style={{display:"inline-block"}}>{` ( ${countData.assignedToMe} )`}</span>
                 </span>
                 <span className={`assigned-inbox inb-esc-tab ${filters.esclated && "jk-selected-header"}`} onClick={() => {
                     !esclationData.loaded && !esclationData.load && setEsclationData({ loaded: false, load: true, data: [] });
                     setFiltersDispatch({ type: 'esclated' })
                 }}>
-                    {t("COMMON_INBOX_TAB_ESCALATED")} {` ( ${countData.esclated} )`}
+                    {t("COMMON_INBOX_TAB_ESCALATED")}<span style={{display:"inline-block"}}> {` ( ${countData.esclated} )`}</span>
                 </span>
                 {isMobile && <span className="jk-inbox-pointer jk-sort-ico" onClick={() => setSortOrder(state => !state)} >{sort ? <SortDown /> : <SortUp />}</span>}
             </div>

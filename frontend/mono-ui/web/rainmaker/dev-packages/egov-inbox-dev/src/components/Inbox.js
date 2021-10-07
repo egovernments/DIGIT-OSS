@@ -173,7 +173,8 @@ const WfTable = (props) => {
     return (
         <React.Fragment>
             <div style={{ margin: "10px" }}>
-                <TableFilterWrapper data={[...data, ...esclationData.data]}
+            {/* data={[...data, ...esclationData.data]    to get mix of all tab application and esclated application */}
+                <TableFilterWrapper data={[...data]}
                     count={count}
                     countData={countData}
                     esclationData={esclationData}
