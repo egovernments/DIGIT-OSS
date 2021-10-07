@@ -37,6 +37,7 @@ export const mdmsData = async (requestInfo = {}, tenantId, header) => {
   header['tenantId']=header.tenantid;
   let headers = header;
 
+  console.log("\nMDMS-->"+JSON.stringify(headers)+"\n");
   var mdmsResponse = await httpRequest({
     hostURL: envVariables.EGOV_MDMS_HOST,
     endPoint: `${envVariables.EGOV_MDMS_SEARCH_ENDPOINT}`,
