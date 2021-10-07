@@ -34,4 +34,7 @@ public class ApplicationProperties {
     @Value("${egov.ss.max.limit}")
     private Integer maxSearchLimit;
 
+    @Value("${ss.notification.action.code}")
+    private String surveyActionCode;
+
 }
