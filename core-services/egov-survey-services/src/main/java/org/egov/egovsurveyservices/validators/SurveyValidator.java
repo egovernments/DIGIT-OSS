@@ -47,7 +47,7 @@ public class SurveyValidator {
             throw new CustomException("EG_SY_DUPLICATE_SURVEY_ERR", "This survey entity already exists.");
     }
 
-    public void validateSurveyExistence(SurveyEntity surveyEntity) {
+    public SurveyEntity validateSurveyExistence(SurveyEntity surveyEntity) {
         if(ObjectUtils.isEmpty(surveyEntity.getUuid()))
             throw new CustomException("EG_SY_UUID_NOT_PROVIDED_ERR", "Providing survey uuid is mandatory for updating and deleting surveys");
 
@@ -56,8 +56,12 @@ public class SurveyValidator {
                 .isCountCall(Boolean.FALSE)
                 .build();
 
-        if(CollectionUtils.isEmpty(surveyService.searchSurveys(criteria)))
+        List<SurveyEntity> surveyEntities = surveyService.searchSurveys(criteria);
+
+        if(CollectionUtils.isEmpty(surveyEntities))
             throw new CustomException("EG_SURVEY_DOES_NOT_EXIST_ERR", "The survey entity provided in update request does not exist.");
+
+        return surveyEntities.get(0);
     }
 
     public void validateQuestions(SurveyEntity surveyEntity) {

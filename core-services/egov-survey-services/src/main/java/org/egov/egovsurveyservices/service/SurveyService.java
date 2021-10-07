@@ -122,12 +122,18 @@ public class SurveyService {
         SurveyEntity surveyEntity = surveyRequest.getSurveyEntity();
         RequestInfo requestInfo = surveyRequest.getRequestInfo();
         // Validate survey existence
-        surveyValidator.validateSurveyExistence(surveyEntity);
+        SurveyEntity existingSurveyEntity = surveyValidator.validateSurveyExistence(surveyEntity);
         // Validate whether usertype employee is trying to update survey.
         surveyValidator.validateUserType(surveyRequest.getRequestInfo());
         // Validate question types.
         surveyValidator.validateQuestions(surveyEntity);
+
         // Enrich update request
+        surveyEntity.setAuditDetails(existingSurveyEntity.getAuditDetails());
+        surveyEntity.getQuestions().forEach(question -> {
+            question.setAuditDetails(existingSurveyEntity.getQuestions().get(0).getAuditDetails());
+        });
+
         surveyEntity.setPostedBy(requestInfo.getUserInfo().getName());
         surveyEntity.getAuditDetails().setLastModifiedBy(requestInfo.getUserInfo().getUuid());
         surveyEntity.getAuditDetails().setLastModifiedTime(System.currentTimeMillis());
