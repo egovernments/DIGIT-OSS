@@ -241,7 +241,7 @@ consumerGroup.on("message", function(message) {
             }
 
             const updateBody = { RequestInfo, FireNOCs };
-            const updateRequest = { body: updateBody };
+            const updateRequest = { body: updateBody,headers };
             console.log("update Request: "+JSON.stringify(updateRequest));
             const updateResponse = await updateApiResponse(updateRequest, false);
             console.log("update Response: "+JSON.stringify(updateResponse));
