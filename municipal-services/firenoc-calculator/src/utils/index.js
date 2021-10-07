@@ -85,9 +85,9 @@ export const replaceSchemaPlaceholder = (query, tenantId) => {
   let finalQuery = null;
 	if (tenantId.includes('.')) {
 		let schemaName = tenantId.split('.')[1];
-		finalQuery = query.replaceAll("{schema}", schemaName);
+		finalQuery = query.replace(/{schema}/g, schemaName);
 	} else {
-			finalQuery = query.replaceAll("{schema}".concat("."), "");
+			finalQuery = query.replace(/{schema}/g.concat("."), "");
 	}
 	return finalQuery;
 };
