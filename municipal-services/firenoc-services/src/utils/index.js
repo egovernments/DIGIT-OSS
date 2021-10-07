@@ -137,7 +137,7 @@ export const addQueryArg = (url, queries = []) => {
 export const getUpdatedTopic = (tenantId, topic) => {
   let tenants = tenantId.split('.');
   if(tenants.length > 1)
-    topic = tenants[1] + "_" + topic;
+    topic = tenants[1] + "-" + topic;
   console.log("The Kafka topic for the tenantId : " + tenantId + " is : " + topic);
   return topic;
 };
