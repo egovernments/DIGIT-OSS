@@ -6,8 +6,8 @@ export const calculate = async (firenoc, requestInfo, header) => {
   const CalulationCriteria = [];
   CalulationCriteria.push({ fireNOC: firenoc, tenantId });
 
-  let headers = [];
-  headers.push(header);
+  header['tenantId']=header.tenantid;
+  let headers = header;
 
   const requestBody = {
     RequestInfo: requestInfo,

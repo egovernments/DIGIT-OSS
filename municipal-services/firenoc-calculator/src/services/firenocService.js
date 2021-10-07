@@ -4,8 +4,8 @@ import envVariables from "../envVariables";
 
 export const getFireNoc = async (requestInfo, applciationNumber, tenantId, header) => {
   try {
-    let headers = [];
-    headers.push(header);
+    header['tenantId']=header.tenantid;
+    let headers = header;
 
     const uri = generateFireNOCSearchURL(tenantId, applciationNumber);
     let requestBody = { RequestInfo: requestInfo };

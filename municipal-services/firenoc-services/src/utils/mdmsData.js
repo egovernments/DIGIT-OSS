@@ -2,8 +2,8 @@ import { httpRequest } from "./api";
 import envVariables from "../envVariables";
 
 export default async (requestInfo = {},tenantId, header) => {
-  let headers = [];
-  headers.push(header);
+  header['tenantId']=header.tenantid;
+  let headers = header;
 
   var requestBody = {
     RequestInfo: requestInfo,

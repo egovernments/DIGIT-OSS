@@ -79,8 +79,8 @@ const createDemand = async (requestInfo, calculations, mdms, header) => {
     Demands: demands
   };
 
-  let headers = [];
-  headers.push(header);
+  header['tenantId']=header.tenantid;
+  let headers = header;
 
   var demandCreateResponse = await httpRequest({
     hostURL: envVariables.EGOV_BILLINGSERVICE_HOST,
@@ -137,8 +137,8 @@ const updateDemand = async (requestInfo, calculations, demandsSearch, mdms, head
     Demands: demands
   };
 
-  let headers = [];
-  headers.push(header);
+  header['tenantId']=header.tenantid;
+  let headers = header;
 
   var demandUpdateResponse = await httpRequest({
     hostURL: envVariables.EGOV_BILLINGSERVICE_HOST,
@@ -154,8 +154,8 @@ const searchDemand = async (requestInfo, tenantId, consumercodeList, header) => 
   uri = uri.replace("{2}", envVariables.BUSINESSSERVICE);
   uri = uri.replace("{3}", consumercodeList.join(","));
   let requestBody = { RequestInfo: requestInfo };
-  let headers = [];
-  headers.push(header);
+  header['tenantId']=header.tenantid;
+  let headers = header;
 
   var demandsSearch = null;
   demandsSearch = await httpRequest({
@@ -175,8 +175,8 @@ export const generateBill = async (requestInfo, billCriteria, header) => {
   if (demandsSearch.Demands && demandsSearch.Demands.length > 0) {
     let uri = generateGetBillURL(tenantId, consumerCode);
     let requestBody = { RequestInfo: requestInfo };
-    let headers = [];
-    headers.push(header);
+    header['tenantId']=header.tenantid;
+    let headers = header;
 
     var billResponse = await httpRequest({
       hostURL: envVariables.EGOV_BILLINGSERVICE_HOST,

@@ -3,8 +3,8 @@ import { httpRequest } from "../utils/api";
 
 export const searchUser = async (requestInfo, userSearchReqCriteria, header) => {
   let requestBody = { RequestInfo: requestInfo, ...userSearchReqCriteria };
-  let headers = [];
-  headers.push(header);
+  header['tenantId']=header.tenantid;
+  let headers = header;
 
   var userSearchResponse = await httpRequest({
     hostURL: envVariables.EGOV_USER_HOST,
@@ -25,8 +25,8 @@ export const searchUser = async (requestInfo, userSearchReqCriteria, header) => 
 
 export const createUser = async (requestInfo, user, header) => {
   let requestBody = { RequestInfo: requestInfo, user: user };
-  let headers = [];
-  headers.push(header);
+  header['tenantId']=header.tenantid;
+  let headers = header;
 
   user.dob=dobConvetion(user.dob);
   var userCreateResponse = await httpRequest({
@@ -46,8 +46,8 @@ export const createUser = async (requestInfo, user, header) => {
 
 export const updateUser = async (requestInfo, user, header) => {
   // console.log(user);
-  let headers = [];
-  headers.push(header);
+  header['tenantId']=header.tenantid;
+  let headers = header;
 
   user.dob=dobConvetion(user.dob);
   // console.info(user.dob);
