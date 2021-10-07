@@ -10,32 +10,14 @@ const Documents = (props) => {
   const history = useHistory();
   const [canSubmit, setSubmitValve] = useState(false);
 
-  const preventSubmission = (e) => {
-    e.stopPropogation()
-    console.log('e', { e })
-    if (e.code === 'Enter') {
-      return;
-    }
-  }
-
-  /*   useEffect(()=>{
-      window.addEventListener('keypress', preventSubmission)
-      
-      return () =>{
-       window.removeEventListener('keypress', preventSubmission) 
-      }
-    
-    })
-   */
   const onFormValueChange = useCallback(
     (setValue, updatedFormData, formState) => {
       if (
         updatedFormData?.documentName &&
-        updatedFormData?.description &&
         updatedFormData?.docCategory &&
-        (updatedFormData?.document.filestoreId || updatedFormData?.document.documentLink) &&
-        updatedFormData?.ULB?.length
-      ) {
+      (updatedFormData?.document.filestoreId || updatedFormData?.document.documentLink) &&
+      updatedFormData?.ULB?.length
+    ) {
         setSubmitValve(true);
       } else {
         setSubmitValve(false);
@@ -48,14 +30,13 @@ const Documents = (props) => {
     const DocumentEntity = {
       ...props.location?.state?.DocumentEntity,
       name: data.documentName,
-      description: data?.description,
+      description: data?.description.length ? data.description :"NA",
       category: data.docCategory?.name,
       filestoreId: data.document?.filestoreId?.fileStoreId,
       fileSize: data.document?.filestoreId?.fileSize,
       fileType: data.document?.filestoreId?.fileType,
       documentLink: data.document?.documentLink,
       tenantId: data.ULB.map((e) => e.code)?.[0],
-      
     };
 
     delete DocumentEntity.ULB;

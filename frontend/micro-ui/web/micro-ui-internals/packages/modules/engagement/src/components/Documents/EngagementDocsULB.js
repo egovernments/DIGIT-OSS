@@ -51,12 +51,13 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
                 <RemoveableTag
                   key={index}
                   text={t(ulb?.i18nKey)}
-                  onClick={() =>
+                  onClick={() =>{
+                  if(isInEditFormMode) return;             
                     setValue(
                       config.key,
                       formData?.[config.key]?.filter((e) => e.i18nKey != ulb.i18nKey)
                     )
-                  }
+            }}
                 />
               );
             })}

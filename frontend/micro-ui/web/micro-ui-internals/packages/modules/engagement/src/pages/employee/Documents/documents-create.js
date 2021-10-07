@@ -25,7 +25,7 @@ const Documents = () => {
   const onSubmit = (data) => {  
     const DocumentEntity = {
       name: data.documentName,
-      description: data?.description,
+      description: data?.description.length ? data.description :"NA",
       category: data.docCategory?.name,
       documentLink: data.document?.documentLink,
       filestoreId: data.document?.filestoreId?.fileStoreId,
