@@ -185,13 +185,13 @@ public class PaymentRepository {
                     billSource.add(getParamtersForBillStatusUpdate(paymentDetail.getBill()));
                 }
             }
-
-            namedParameterJdbcTemplate.batchUpdate(COPY_PAYMENT_SQL, paymentSource.toArray(new MapSqlParameterSource[0]));
-            namedParameterJdbcTemplate.batchUpdate(COPY_PAYMENTDETAIL_SQL, paymentDetailSource.toArray(new MapSqlParameterSource[0]));
-            namedParameterJdbcTemplate.batchUpdate(COPY_BILL_SQL, billSource.toArray(new MapSqlParameterSource[0]));
-            namedParameterJdbcTemplate.batchUpdate(STATUS_UPDATE_PAYMENT_SQL, paymentSource.toArray(new MapSqlParameterSource[0]));
-            namedParameterJdbcTemplate.batchUpdate(STATUS_UPDATE_PAYMENTDETAIL_SQL, paymentDetailSource.toArray(new MapSqlParameterSource[0]));
-            namedParameterJdbcTemplate.batchUpdate(STATUS_UPDATE_BILL_SQL, billSource.toArray(new MapSqlParameterSource[0]));
+            String tenantId = payments.get(0).getTenantId();
+            namedParameterJdbcTemplate.batchUpdate(Utils.replaceSchemaPlaceholder(COPY_PAYMENT_SQL,tenantId), paymentSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(Utils.replaceSchemaPlaceholder(COPY_PAYMENTDETAIL_SQL,tenantId), paymentDetailSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(Utils.replaceSchemaPlaceholder(COPY_BILL_SQL,tenantId), billSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(Utils.replaceSchemaPlaceholder(STATUS_UPDATE_PAYMENT_SQL,tenantId), paymentSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(Utils.replaceSchemaPlaceholder(STATUS_UPDATE_PAYMENTDETAIL_SQL,tenantId), paymentDetailSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(Utils.replaceSchemaPlaceholder(STATUS_UPDATE_BILL_SQL,tenantId), billSource.toArray(new MapSqlParameterSource[0]));
         }
         catch(Exception e){
             log.error("Failed to persist cancel Receipt to database", e);

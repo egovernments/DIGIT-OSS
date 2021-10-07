@@ -132,11 +132,11 @@ public class PaymentQueryBuilder {
             "   SET  status= :status, iscancelled= :iscancelled, additionaldetails= :additionaldetails, lastmodifiedby= :lastmodifiedby, lastmodifiedtime=:lastmodifiedtime" +
             "   WHERE id=:id;";
 
-    public static final String COPY_PAYMENT_SQL = "INSERT INTO {{SCHEMA}}.egcl_payment_audit SELECT * FROM egcl_payment WHERE id = :id;";
+    public static final String COPY_PAYMENT_SQL = "INSERT INTO {{SCHEMA}}.egcl_payment_audit SELECT * FROM {{SCHEMA}}.egcl_payment WHERE id = :id;";
 
     public static final String COPY_PAYMENTDETAIL_SQL = "INSERT INTO {{SCHEMA}}.egcl_paymentdetail_audit SELECT id, tenantid, paymentid, due, amountpaid, receiptnumber, "
     		+ "businessservice, billid, additionaldetails,  createdby, createdtime, lastmodifiedby, lastmodifiedtime, manualreceiptnumber, "
-    		+ "manualreceiptdate, receiptdate, receipttype FROM egcl_paymentdetail WHERE id = :id ;";
+    		+ "manualreceiptdate, receiptdate, receipttype FROM {{SCHEMA}}.egcl_paymentdetail WHERE id = :id ;";
 
     public static final String COPY_BILL_SQL = "INSERT INTO {{SCHEMA}}.egcl_bill_audit SELECT * FROM egcl_bill WHERE id = :id;";
 
@@ -542,7 +542,7 @@ public class PaymentQueryBuilder {
                                            PaymentSearchCriteria searchCriteria){
         if (!CollectionUtils.isEmpty(searchCriteria.getConsumerCodes())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            selectQuery.append(" id in (select paymentid from egcl_paymentdetail as pyd where pyd.billid in ( select id from egcl_bill as bill where bill.consumercode in (:consumerCodes)) )" );
+            selectQuery.append(" id in (select paymentid from {{SCHEMA}}.egcl_paymentdetail as pyd where pyd.billid in ( select id from {{SCHEMA}}.egcl_bill as bill where bill.consumercode in (:consumerCodes)) )" );
             preparedStatementValues.put("consumerCodes", searchCriteria.getConsumerCodes());
         }
     }
