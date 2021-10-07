@@ -153,6 +153,14 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     return documentList;
   }
 
+  const getPendingApprovals = () => {
+    const approvals = Digit.SessionStorage.get("OBPS_APPROVAL_CHECKS");
+    const newApprovals = Digit.SessionStorage.get("OBPS_NEW_APPROVALS");
+    let result = approvals.reduce((acc, approval) => approval?.checked ? acc.push(approval?.label) && acc : acc, []);
+    result = result.concat(newApprovals.map(approval => approval?.label));
+    return result;
+  }
+
 
   const onSuccess = () => {
     //clearParams();
@@ -165,7 +173,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     applicationData = {
       ...applicationData,
       documents: getDocuments(applicationData),
-      additionalDetails: {...applicationData?.additionalDetails, fieldinspection_pending:getfeildInspection()},
+      additionalDetails: {...applicationData?.additionalDetails, fieldinspection_pending:getfeildInspection(), pendingapproval: getPendingApprovals() },
        workflow:{
         action: action?.action,
         comment: data?.comments,

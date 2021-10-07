@@ -1,9 +1,16 @@
 import { CheckBox, LinkButton, TextInput } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const PermissionCheck = ({ permissions, t }) => {
-  const [approvalChecks, setApprovalChecks] = useState(() => permissions?.map(permission => ({ label: permission, checked: false })))
-  const [newApprovals,  setNewApprovals] = useState([]);
+  const [approvalChecks, setApprovalChecks, clearApprovals] = Digit.Hooks.useSessionStorage("OBPS_APPROVAL_CHECKS", permissions?.map(permission => ({ label: permission, checked: false }))); //useState(() => permissions?.map(permission => ({ label: permission, checked: false })))
+  const [newApprovals,  setNewApprovals, clearNewApprovals] = Digit.Hooks.useSessionStorage('OBPS_NEW_APPROVALS', []);
+
+  useEffect(() => {
+    return () => {
+      Digit.SessionStorage.del("OBPS_NEW_APPROVALS");
+      Digit.SessionStorage.del("OBPS_APPROVAL_CHECKS");
+    }
+  }, [])
 
   const handleAdd = () => {
     setNewApprovals([...newApprovals, { label: '' }]);
@@ -22,13 +29,30 @@ const PermissionCheck = ({ permissions, t }) => {
     })
   }
 
+  const handleCheck = (event, label, index) => {
+    const isChecked = event.target.checked;
+    setApprovalChecks(() => {
+      return approvalChecks?.map((approval, id) => {
+        if (index === id) {
+          return {
+            ...approval,
+            checked: isChecked
+          }
+        }
+        return approval;
+      })
+    })
+  }
+
   return (
     <div>
-      {approvalChecks?.map(permission => (
+      {approvalChecks?.map((permission, index) => (
         <CheckBox
+          key={index}
           styles={{ margin: "20px 0 40px" }}
           label={permission?.label}
           checked={permission?.checked}
+          onChange={(event => handleCheck(event, permission?.label, index))}
         />
       ))}
       {newApprovals?.map((approval, index) => (
