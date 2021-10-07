@@ -116,7 +116,9 @@
   }
 
   .documentDetails_row{
-   
+    justify-content: space-between;
+    grid-gap: 0 !important;
+    gap: 0 !important;
   }
 
   .documentDetails_pdf{

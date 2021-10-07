@@ -1,26 +1,29 @@
 import React from "react";
+import { Link } from 'react-router-dom'
 import ApplicationCard from "./ApplicationCard";
 import EventLink from "../Events/EventLink";
+import { openDocument } from "./DesktopInbox";
 
-const GetStatusCell = (value) => value === "Active" ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span> 
 
 const MobileInbox = ({ data, t, title, iconName, links, searchFields, searchParams, onFilterChange, onSearch, isLoading }) => {
   const getData = () => {
     return data?.
-    filter(document =>
-      (searchParams?.tenantIds?.length > 0 ? searchParams?.tenantIds?.includes(document.tenantId) : true) &&
-      (searchParams?.name ? document.name?.toUpperCase().startsWith(searchParams?.name?.toUpperCase()) : true) &&
-      (searchParams?.postedBy ? document.postedBy?.trim()?.toLowerCase() === searchParams?.postedBy?.trim()?.toLowerCase() : true) &&
-      (searchParams?.category ? document.category === searchParams?.category : true))
-    .map((document) => {
-      return {
-        [t("CE_TABLE_DOCUMENT_NAME")]: document?.name,
-        [t("DOCUMENTS_CATEGORY_CARD_LABEL")]: t(`${document?.category}`),
-        [t("CE_TABLE_DOCUMENT_LINK")]: document?.documentLink,
-        [t("CE_TABLE_DOCUMENT_POSTED_BY")]: document?.postedBy
-      }
-    })
+      filter(document =>
+        (searchParams?.tenantIds?.length > 0 ? searchParams?.tenantIds?.includes(document.tenantId) : true) &&
+        (searchParams?.name ? document.name?.toUpperCase().startsWith(searchParams?.name?.toUpperCase()) : true) &&
+        (searchParams?.postedBy ? document.postedBy?.trim()?.toLowerCase() === searchParams?.postedBy?.trim()?.toLowerCase() : true) &&
+        (searchParams?.category ? document.category === searchParams?.category : true))
+      .map((document) => {
+        return {
+          [t("CE_TABLE_DOCUMENT_NAME")]: document?.name,
+          [t("DOCUMENTS_CATEGORY_CARD_LABEL")]: t(`${document?.category}`),
+          [t("CE_TABLE_DOCUMENT_LINK")]: <div className="link" onClick={(ev)=> {ev.stopPropagation(); openDocument(document?.filestoreId ? document.filestoreId : document?.documentLink)}}>{t('CE_DOCUMENT_VIEW_LINK')}</div>,
+          [t("CE_TABLE_DOCUMENT_POSTED_BY")]: document?.postedBy
+        }
+      })
   }
+
+
   return (
     <div style={{ padding: 0 }}>
       <div className="inbox-container">
@@ -39,9 +42,10 @@ const MobileInbox = ({ data, t, title, iconName, links, searchFields, searchPara
             // onSort={onSort}
             searchParams={searchParams}
             searchFields={searchFields}
-            // linkPrefix={linkPrefix}
-            // removeParam={removeParam}
-            // sortParams={sortParams}
+            responseData={data}
+          // linkPrefix={linkPrefix}
+          // removeParam={removeParam}
+          // sortParams={sortParams}
           />
         </div>
       </div>

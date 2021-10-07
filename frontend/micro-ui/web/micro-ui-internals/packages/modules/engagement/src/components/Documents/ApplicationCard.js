@@ -4,7 +4,13 @@ import Filter from "./Filter";
 import Search from "./Search";
 import { useHistory, Link } from "react-router-dom";
 
-
+const areEqual = (stringA, stringB) => {
+  if (!stringA || !stringB) return false;
+  if (stringA?.trim()?.toLowerCase() === stringB?.trim()?.toLowerCase()) {
+    return true;
+  }
+  return false;
+}
 
 const ApplicationCard = ({
   searchFields,
@@ -33,15 +39,12 @@ const ApplicationCard = ({
     setParams(searchParams);
   };
 
-  const redirectToDetailsPage = (data) =>{
-    
-    const details = responseData?.find((item)=>(item.postedBy === data["Posted By"] && item.name === data["Document Name"] && item.category === data["Document Category"]));
-    console.log('red', {data, details})
-    if(details){
-      history.push( `/digit-ui/employee/engagement/documents/inbox/details/${details?.name}`,{ details })
-
-    }
+  const redirectToDetailsPage = (data) => {
+    const details = responseData?.find((item) => (areEqual(item.postedBy, data["Posted By"]) && areEqual(item.name, data["Document Name"])));
+    if (details) {
+      history.push(`/digit-ui/employee/engagement/documents/inbox/details/${details?.name}`, { details })
   }
+}
 
   let result;
   if (data?.length === 0) {
@@ -53,7 +56,7 @@ const ApplicationCard = ({
     );
   }
   else if (data && data?.length > 0) {
-    result = <DetailsCard data={data} handleSelect={()=>{}} handleDetailCardClick={redirectToDetailsPage}/>
+    result = <DetailsCard data={data} handleSelect={() => { }} handleDetailCardClick={redirectToDetailsPage} />
   }
   return (
     <React.Fragment>

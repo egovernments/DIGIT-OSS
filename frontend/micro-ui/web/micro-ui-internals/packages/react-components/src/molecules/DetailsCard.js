@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const Details = ({ label, name }) => {
+const Details = ({ label, name, onClick }) => {
   return (
-    <div className="detail">
+    <div className="detail" onClick={onClick}>
       <span className="label">
         <h2>{label}</h2>
       </span>
@@ -13,7 +13,7 @@ const Details = ({ label, name }) => {
   );
 };
 
-const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, selectedItems, keyForSelected }) => {
+const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, selectedItems, keyForSelected, handleDetailCardClick }) => {
   if (linkPrefix && serviceRequestIdKey) {
     return (
       <div>
@@ -60,7 +60,7 @@ const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, sele
             onClick={() => handleSelect(object)}
           >
             {Object.keys(object).map((name, index) => {
-              return <Details label={name} name={object[name]} key={index} />;
+              return <Details label={name} name={object[name]} key={index} onClick={()=> handleDetailCardClick(object)}/>;
             })}
           </div>
         );
