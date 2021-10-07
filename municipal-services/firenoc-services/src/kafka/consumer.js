@@ -38,7 +38,7 @@ console.log("Consumer ");
 
 consumerGroup.on("message", function(message) {
   console.log("consumer-topic", message.topic);
-  // console.log("consumer-value", JSON.parse(message.value));
+  console.log("consumer-value", JSON.parse(message.value));
   const value = JSON.parse(message.value);
 
   let payloads = [];
