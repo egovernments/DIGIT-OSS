@@ -26,5 +26,5 @@ export const httpRequest = async ({
     errorReponse = error.response;
     throw errorReponse;
   }
-  // console.log("error from api utils:", errorReponse);
+  console.log("error from api utils:", errorReponse);
 };
