@@ -210,9 +210,12 @@ consumerGroup.on("message", function(message) {
               tenantId,
               applicationNumber
             };
+            let headers = {
+              tenantid:tenantId
+            };
             console.log("query"+JSON.stringify(query));
             const body = { RequestInfo };
-            const searchRequest = { body, query };
+            const searchRequest = { body, query, headers };
             const searchResponse = await searchApiResponse(searchRequest);
             console.log("search response: "+JSON.stringify(searchResponse));
             const { FireNOCs } = searchResponse;
