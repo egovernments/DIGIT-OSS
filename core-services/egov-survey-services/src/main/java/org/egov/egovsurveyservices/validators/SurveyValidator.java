@@ -40,6 +40,7 @@ public class SurveyValidator {
         SurveySearchCriteria criteria = SurveySearchCriteria.builder()
                 .tenantIds(surveyEntity.getTenantIds())
                 .title(surveyEntity.getTitle())
+                .isCountCall(Boolean.FALSE)
                 .build();
 
         if(!CollectionUtils.isEmpty(surveyService.searchSurveys(criteria)))
@@ -52,6 +53,7 @@ public class SurveyValidator {
 
         SurveySearchCriteria criteria = SurveySearchCriteria.builder()
                 .uuid(surveyEntity.getUuid())
+                .isCountCall(Boolean.FALSE)
                 .build();
 
         if(CollectionUtils.isEmpty(surveyService.searchSurveys(criteria)))
