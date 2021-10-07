@@ -194,22 +194,22 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         : null,
     };
 
-    try{
-      mutation1.mutate({BPA:applicationData}, {
-        onSuccess,
-      });
-    }
-    catch (err) {
-      console.log(err, "inside ack");
-    }
-    // submitAction({
-    //   Licenses: [applicationData],
-    // });
+    // try{
+    //   mutation1.mutate({BPA:applicationData}, {
+    //     onSuccess,
+    //   });
+    // }
+    // catch (err) {
+    //   console.log(err, "inside ack");
+    // }
+    submitAction({
+      BPA:applicationData
+    });
   }
 
-  useEffect(()=>{
-    console.log("success");
-  },[mutation1.isSuccess])
+  // useEffect(()=>{
+  //   console.log("success");
+  // },[mutation1.isSuccess])
 
   useEffect(() => {
     if (action) {
@@ -224,6 +224,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           uploadedFile,
           setUploadedFile,
           businessService,
+          assigneeLabel: "WF_ASSIGNEE_NAME_LABEL"
         })
       );
     }

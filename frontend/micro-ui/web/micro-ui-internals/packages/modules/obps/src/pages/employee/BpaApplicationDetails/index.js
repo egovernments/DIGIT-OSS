@@ -26,6 +26,15 @@ const BpaApplicationDetail = () => {
   const { data = {}, isLoading } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: id });
 
 
+  const {
+    isLoading: updatingApplication,
+    isError: updateApplicationError,
+    data: updateResponse,
+    error: updateError,
+    mutate,
+  } = Digit.Hooks.obps.useApplicationActions(tenantId);
+
+
   let risType = "";
   sessionStorage.setItem("bpaApplicationDetails", true);
 
@@ -107,9 +116,14 @@ const BpaApplicationDetail = () => {
         applicationDetails={data}
         isLoading={isLoading}
         isDataLoading={isLoading}
+        applicationData={data?.applicationData}
+        mutate={mutate}
         workflowDetails={workflowDetails}
         businessService={workflowDetails?.data?.applicationBusinessService ? workflowDetails?.data?.applicationBusinessService : data?.applicationData?.businessService}
         moduleCode="BPA"
+        showToast={showToast}
+        setShowToast={setShowToast}
+        closeToast={closeToast}
         timelineStatusPrefix={`WF_${workflowDetails?.data?.applicationBusinessService ? workflowDetails?.data?.applicationBusinessService : data?.applicationData?.businessService}_`}
       />
     </Fragment>
