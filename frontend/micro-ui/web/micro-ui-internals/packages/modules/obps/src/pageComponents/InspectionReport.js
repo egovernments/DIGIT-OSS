@@ -292,7 +292,7 @@ const InspectionReportForm = (_props) => {
               />
             </div>
             </LabelFieldPair>
-            {/* <LabelFieldPair>
+            <LabelFieldPair>
             <CardLabel>{t("ES_COMMON_TIME")}</CardLabel>
             <div className="field">
             <Controller
@@ -301,19 +301,17 @@ const InspectionReportForm = (_props) => {
                 //defaultValue={tradedetail?.commencementDate}
                 control={control}
                 render={(props) => (
-              <TimePicker
-                //className="time-picker"
-                name="InspectionTime"
-                //onChange={props.onChange}
-                //value={props.value}
-                locale="en-US"
-                format="hh:mm a"
-                clearIcon={null}
-                />
+                    <TextInput
+                    name="InspectionTime"
+                    type="time"
+                    value={props.value} 
+                    onChange={props.onChange}
+                    //className="custom-time-picker"
+                     />
                 )}
-                />
+            />
               </div>
-          </LabelFieldPair> */}
+          </LabelFieldPair>
           <CardSectionHeader>{t("BPA_CHECK_LIST_DETAILS")}</CardSectionHeader>
           {questionList && questionList.map((ob,ind) => (
               <div key={ind} style={{ border: "1px solid #D6D5D4", padding: "16px", marginTop: "8px", background: "#FAFAFA" } }>

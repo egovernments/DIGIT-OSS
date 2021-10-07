@@ -494,6 +494,30 @@ export const OBPSService = {
     
 
     // if(inspectionReport) details.push(inspectionReport);\
+    let val;
+    var i;
+    inspectionReport && inspectionReport.map((ob,index) => {
+      if(ob.title.includes("FI_REPORT"))
+      details = [...details, {title:ob.title,additionalDetails:{inspectionReport:[],values:ob.values}} ];
+      else if(ob.title.includes("CHECK_LIST"))
+      details = [...details, {title:ob.title,additionalDetails:{isChecklist:true,inspectionReport:[],values:ob.values}}]
+      else
+      {
+        let improvedDoc = [...inspectionReport[2].additionalDetails.obpsDocuments?.[0]?.values];
+        improvedDoc.map((ob) => { ob["isNotDuplicate"] = true; })
+        improvedDoc.map((ob,index) => {
+        val = ob.documentType;
+          if(ob.isNotDuplicate == true)
+          for(i=index+1; i<improvedDoc.length;i++)
+          {
+            if(val === improvedDoc[i].documentType)
+            improvedDoc[i].isNotDuplicate=false;
+          }
+      });
+      details = [...details,{title:ob.title,additionalDetails:{FIdocuments:[],values:improvedDoc}} ]
+      }
+    })
+
     if(BPA?.businessService !== "BPA_OC") {
       details = [...details, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, ...nocDetails, approvalChecksDetails ]
     } else {
@@ -503,9 +527,8 @@ export const OBPSService = {
     const isEmployee = sessionStorage.getItem("bpaApplicationDetails") === "true" || true ? true : false;
 
     let bpaFilterDetails = detailsOfBPA?.filter(data => data);
-    if (isEmployee) {
-      bpaFilterDetails = details?.filter(data => data);
-    }
+        bpaFilterDetails = details?.filter(data => data);
+    
 
     return {
       applicationData: BPA,

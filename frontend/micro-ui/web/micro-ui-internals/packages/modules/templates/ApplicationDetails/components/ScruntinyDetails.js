@@ -6,7 +6,7 @@ const ScruntinyDetails = ({ scrutinyDetails }) => {
   const { t } = useTranslation();
   return (
     <Fragment>
-      <div style={{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "600px", minWidth: "280px" }}>
+      <div style={{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: scrutinyDetails?.isChecklist ?"1200px":"600px", minWidth: "280px" }}>
         <StatusTable>
           <div>
             {scrutinyDetails?.values?.map((value, index) => {

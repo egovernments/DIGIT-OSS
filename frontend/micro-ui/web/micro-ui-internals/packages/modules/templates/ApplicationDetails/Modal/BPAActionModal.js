@@ -136,7 +136,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         docs: getInspectionDocs(ob.Documents),
         date: ob.InspectionDate,
         questions: getQuestion(ob),
-        time: "10:00",
+        time: ob?.InspectionTime,
       })
     })
     let fieldinspection_pending = [ ...inspectionOb];

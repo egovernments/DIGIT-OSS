@@ -20,12 +20,16 @@ function OBPSDocument({ value = {},Code,index, isNOC = false }) {
   let documents = [];
 
   if(isNOC){
-    value?.nocDocuments?.nocDocuments.length>0 && value?.nocDocuments?.nocDocuments.filter((ob) => ob?.documentType?.includes(Code)).map((ob) => {
+    value?.nocDocuments ? value?.nocDocuments?.nocDocuments.length>0 && value?.nocDocuments?.nocDocuments.filter((ob) => ob?.documentType?.includes(Code)).map((ob) => {
+      documents.push(ob);
+    }) : value?.length>0 && value?.filter((ob) => ob?.documentType?.includes(Code)).map((ob) => {
       documents.push(ob);
     });
   }
   else{
-  value?.documents?.documents.filter(doc => doc?.documentType?.includes(Code)).map((ob)=>{
+  value?.documents ? value?.documents?.documents.filter(doc => doc?.documentType?.includes(Code)).map((ob)=>{
+    documents.push(ob);
+  }) : value.filter(doc => doc?.documentType?.includes(Code)).map((ob)=>{
     documents.push(ob);
   })
 }
@@ -45,7 +49,7 @@ function OBPSDocument({ value = {},Code,index, isNOC = false }) {
               <a target="_" href={documentLink} style={{ minWidth: "100px",marginRight:"10px" }} key={index}>
                 <PDFSvg width={85} height={100} style={{ background: "#f6f6f6", padding: "8px" }} />
                 {/* <p style={{ marginTop: "8px",textAlign:"center" }}>{`${t(`ES_COMMON_DOC_DOCUMENT`)} - ${index + 1}`}</p> */}
-                <p style={{ marginTop: "8px",textAlign:"center" }}>{document?.fileName}</p>
+                <p style={{ marginTop: "8px",textAlign:"center" }}>{document?.fileName ? document?.fileName :`${t(`ES_COMMON_DOC_DOCUMENT`)} - ${index + 1}`}</p>
               </a>
             );
           })}

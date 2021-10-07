@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CardLabel, LabelFieldPair, Dropdown, UploadFile, Toast, Loader } from "@egovernments/digit-ui-react-components";
+import { CardLabel, LabelFieldPair, Dropdown, UploadFile, Toast, Loader, MultiUploadWrapper } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 
 const OBPSDocumentsEmp = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState, index: indexx, setFieldReports, documentList }) => {
@@ -101,14 +101,28 @@ function SelectDocument({
   const [selectedDocument, setSelectedDocument] = useState("");
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
+  const [isHidden, setHidden] = useState(false);
+  const [newArray, setnewArray ] = useState([]);
 
   function selectfile(e, key) {
-    e.target.files[0].documentType = key;
-    setSelectedDocument({ documentType: key });
-    setFile(e.target.files[0]);
+    e && setSelectedDocument({ documentType: key });
+    e && setFile(e.file);
   }
 
-  const [isHidden, setHidden] = useState(false);
+  function getData(e, key) {
+    let data = Object.fromEntries(e);
+    let newArr = Object.values(data);
+    setnewArray(newArr);
+    if(documents && newArr && documents.filter(ob => ob.documentType === key).length > newArr.length)
+    {
+      setDocuments(documents.filter(ob => ob.documentType !== key));
+    }
+
+    newArr && newArr.map((ob) => {
+      ob.file.documentType = key;
+      selectfile(ob,key);
+    })
+  }
 
   const addError = () => {
     let type = formState.errors?.[config.key]?.type;
@@ -133,15 +147,13 @@ function SelectDocument({
   };
 
   useEffect(() => {
-    if (selectedDocument?.documentType) {
+    if (selectedDocument?.documentType && (( documents.filter((ob) => ob.documentType === selectedDocument?.documentType)).length == 0 || ((newArray.filter((ob) => ob?.file?.documentType === selectedDocument?.documentType)).length) !== (documents.filter((ob) => ob.documentType === selectedDocument?.documentType)).length)) {
       setDocuments((prev) => {
-        const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.documentType);
-
-        if (uploadedFile?.length === 0 || uploadedFile === null) {
-          return filteredDocumentsByDocumentType;
+        //const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.documentType);
+        if (uploadedFile?.length === 0 || uploadedFile === null ) {
+          return prev;
         }
-
-        const filteredDocumentsByFileStoreId = filteredDocumentsByDocumentType?.filter((item) => item?.fileStoreId !== uploadedFile);
+        const filteredDocumentsByFileStoreId = prev?.filter((item) => item?.fileStoreId !== uploadedFile );
         if (selectedDocument?.id) {
           return [
             ...filteredDocumentsByFileStoreId,
@@ -223,7 +235,7 @@ function SelectDocument({
             `${t(`${doc?.documentType.replaceAll(".", "_")}`)} :`}
         </CardLabel>
         <div className="field">
-          <UploadFile
+          {/* <UploadFile
             id={id}
             onUpload={(e) => { selectfile(e, doc?.documentType.replaceAll(".", "_")) }}
             onDelete={() => {
@@ -235,6 +247,11 @@ function SelectDocument({
             // disabled={enabledActions?.[action].disableUpload || !selectedDocument?.code}
             buttonType="button"
             accept={doc?.documentType === "OWNERPHOTO" ? "image/*,.jpg,.png" : "image/*,.jpg,.png,.pdf"}
+          /> */}
+          <MultiUploadWrapper
+            module="BPA"
+            tenantId={tenantId}
+            getFormState={e => getData(e,doc?.documentType.replaceAll(".", "_"))}
           />
         </div>
       </LabelFieldPair>

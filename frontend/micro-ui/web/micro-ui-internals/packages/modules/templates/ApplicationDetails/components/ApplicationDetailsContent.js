@@ -24,6 +24,7 @@ import TLTradeAccessories from "./TLTradeAccessories";
 import ScruntinyDetails from "./ScruntinyDetails";
 import NOCDocuments from "./NOCDocuments";
 import SubOccupancyTable from "./SubOccupancyTable";
+import OBPSDocument from "../../../obps/src/pageComponents/OBPSDocuments";
 import PermissionCheck from "./PermissionCheck";
 
 function ApplicationDetailsContent({ applicationDetails, workflowDetails, isDataLoading, applicationData, businessService, timelineStatusPrefix }) {
@@ -92,6 +93,18 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
             </StatusTable>
           </div>
           {detail?.belowComponent && <detail.belowComponent />}
+          {detail?.additionalDetails?.inspectionReport && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
+          {detail?.additionalDetails?.FIdocuments && detail?.additionalDetails?.values?.map((doc,index) => (
+            <div key={index}>
+            {doc.isNotDuplicate && <div> 
+             <StatusTable>
+             <Row label={t(doc?.documentType)}></Row>
+             <OBPSDocument value={detail?.additionalDetails?.values} Code={doc?.documentType} index={index}/> 
+             <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
+             </StatusTable>
+             </div>}
+             </div>
+          )) }
           {detail?.additionalDetails?.floors && <PropertyFloors floors={detail?.additionalDetails?.floors} />}
           {detail?.additionalDetails?.owners && <PropertyOwners owners={detail?.additionalDetails?.owners} />}
           {detail?.additionalDetails?.units && <TLTradeUnits units={detail?.additionalDetails?.units} />}

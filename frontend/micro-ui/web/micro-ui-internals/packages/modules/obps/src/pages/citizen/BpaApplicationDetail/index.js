@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 import BPAApplicationTimeline from "./BPAApplicationTimeline";
 import DocumentDetails from "../../../components/DocumentDetails";
 import ActionModal from "./Modal";
+import OBPSDocument from "../../../pageComponents/OBPSDocuments";
+import SubOccupancyTable from "../../../../../templates/ApplicationDetails/components/SubOccupancyTable";
 
 
 const BpaApplicationDetail = () => {
@@ -117,12 +119,52 @@ const BpaApplicationDetail = () => {
       <Header>{t("ES_TITLE_APPLICATION_DETAILS")}</Header>
       {data?.applicationDetails?.map((detail, index, arr) => {
         return (
-          <Card key={index}>
+          <Card key={index} style={detail?.title === ""?{marginTop:"-8px"}:{}}>
             <CardHeader>{t(detail?.title)}</CardHeader>
             <StatusTable>
-              {detail?.values?.map((value) => (
+              {!(detail?.additionalDetails?.noc) && detail?.values?.map((value) => (
                 <Row className="border-none" label={t(value?.title)} text={t(value?.value) || t("CS_NA")} />
               ))}
+              {detail?.additionalDetails?.owners && detail?.additionalDetails?.owners.map((owner,index) => (
+                <div key={index}>
+                <Row className="border-none" label={`${t("Owner")} - ${index+1}`} />
+                {owner?.values.map((value) =>(
+                  <Row className="border-none" label={t(value?.title)} text={t(value?.value) || t("CS_NA")} />
+                ))}
+                </div>
+              ))}
+              {!(detail?.additionalDetails?.FIdocuments) && !(detail?.additionalDetails?.subOccupancyTableDetails) && detail?.additionalDetails?.values?.map((value) => (
+                <Row className="border-none" label={t(value?.title)} text={t(value?.value) || t("CS_NA")} />
+              ))}
+              {detail?.additionalDetails?.FIdocuments && detail?.additionalDetails?.values?.map((doc,index) => (
+              <div key={index}>
+                {doc.isNotDuplicate && <div> 
+                <StatusTable>
+                <Row label={t(doc?.documentType)}></Row>
+                <OBPSDocument value={detail?.additionalDetails?.values} Code={doc?.documentType} index={index}/> 
+                <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
+                </StatusTable>
+                </div>}
+             </div>
+          )) }
+              {detail?.additionalDetails?.subOccupancyTableDetails && <SubOccupancyTable edcrDetails={detail?.additionalDetails} />}
+        {detail?.additionalDetails?.noc && detail?.additionalDetails?.noc.map((nocob, ind) => (
+        <div key={ind}>
+        <StatusTable>
+        <Row className="border-none" label={t(`BPA_${nocob?.values?.[0]?.documentType.replaceAll(".","_")}_HEADER`)}></Row>
+        <Row className="border-none" label={t(`${detail?.values?.[0]?.title}`)} textStyle={{marginLeft:"10px"}} text={detail?.values?.[0]?.value} />
+        <Row className="border-none" label={t(`${nocob?.title}`)}></Row>
+        </StatusTable>
+        {nocob?.values.map((noc,index)=> (
+        <div key={index}>
+        <StatusTable>
+        <OBPSDocument value={nocob?.values} Code={noc?.documentType?.split("_")[0]} index={index} isNOC={true}/> 
+        </StatusTable>
+        </div>
+        ))
+        }
+        </div>
+      ))}
               {detail?.additionalDetails?.obpsDocuments?.[0]?.values && (
                 <Fragment>
                   <Row className="border-none" label={t(detail?.additionalDetails?.obpsDocuments?.[0].title)} />

@@ -18,7 +18,7 @@ const MultiUploadWrapper = ({module="PGR", tenantId="pb", getFormState, requestS
         mutatedState.delete(payload.file.name)
         return mutatedState
     }
-    
+
     const uploadReducer = (state, action) => {
         switch(action.type){
             case FILES_UPLOADED:
