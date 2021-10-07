@@ -45,8 +45,13 @@ const EngagementCard = () => {
       },
     ],
   };
-  
-   return <EmployeeModuleCard {...propsForModuleCard} />;
-  };
+
+  const userRoles = Digit.SessionStorage.get('User')?.info?.roles
+  const isEmployee = userRoles.find((role)=> role.code === 'EMPLOYEE');
+
+  if(isEmployee) result = <EmployeeModuleCard {...propsForModuleCard} />;
+
+  return result;
+};
 
 export default EngagementCard;

@@ -2,19 +2,24 @@ import React, { useState, useEffect } from "react";
 import { Card, DetailsCard, Loader, PopUp, SearchAction, FilterAction } from "@egovernments/digit-ui-react-components";
 import Filter from "./Filter";
 import Search from "./Search";
+import { useHistory, Link } from "react-router-dom";
+
+
+
 const ApplicationCard = ({
   searchFields,
   searchParams,
   onFilterChange,
   onSearch,
   t,
-  data
+  data,
+  responseData,
 }) => {
   const [type, setType] = useState("");
   const [popup, setPopup] = useState(false);
   const [params, setParams] = useState(searchParams);
   const tenantId = Digit.ULBService.getCurrentTenantId();
-
+  const history = useHistory()
   useEffect(() => {
     if (type) setPopup(true);
   }, [type]);
@@ -28,6 +33,16 @@ const ApplicationCard = ({
     setParams(searchParams);
   };
 
+  const redirectToDetailsPage = (data) =>{
+    
+    const details = responseData?.find((item)=>(item.postedBy === data["Posted By"] && item.name === data["Document Name"] && item.category === data["Document Category"]));
+    console.log('red', {data, details})
+    if(details){
+      history.push( `/digit-ui/employee/engagement/documents/inbox/details/${details?.name}`,{ details })
+
+    }
+  }
+
   let result;
   if (data?.length === 0) {
     result = (
@@ -38,7 +53,7 @@ const ApplicationCard = ({
     );
   }
   else if (data && data?.length > 0) {
-    result = <DetailsCard data={data} />
+    result = <DetailsCard data={data} handleSelect={()=>{}} handleDetailCardClick={redirectToDetailsPage}/>
   }
   return (
     <React.Fragment>

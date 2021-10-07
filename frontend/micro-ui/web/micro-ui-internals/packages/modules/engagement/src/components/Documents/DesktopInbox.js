@@ -17,7 +17,7 @@ const getDocumentDetailsPath = (document) => {
 
 }
 
-const getFileUrl = async (fileStoreId) => {
+export const getFileUrl = async (fileStoreId) => {
   try {
     const response = await Digit.UploadServices.Filefetch([fileStoreId], Digit.ULBService.getStateId());
     if (response?.data?.fileStoreIds?.length > 0) {

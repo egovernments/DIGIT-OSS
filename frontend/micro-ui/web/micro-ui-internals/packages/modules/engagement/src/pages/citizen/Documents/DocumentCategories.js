@@ -17,7 +17,7 @@ const Accordion = ({ t, title, count, onClick, children }) => {
   const [isOpen, setOpen] = React.useState(false);
 
   return (
-    <div className="accordion-wrapper" onClick={() => onClick(title)}>
+    <div className="accordion-wrapper" onClick={() => onClick(title,count)}>
       <div className={`accordion-title ${isOpen ? "open" : ""}`} onClick={() => setOpen(!isOpen)}>
         {`${t(title)} (${count})`}
         <PrevIcon />
@@ -47,8 +47,8 @@ const DocumentCategories = ({ t, parentRoute }) => {
     return <Redirect to={{ pathname: `/digit-ui/citizen/login`, state: { from: location.pathname + location.search } }} />
   }
 
-  const showDocuments = (category) => {
-    history.push(`documents/list/${category}`)
+  const showDocuments = (category, count) => {
+    history.push(`documents/list/${category}/${count}`)
   }
 
   const handleKeyPress = (event) => {

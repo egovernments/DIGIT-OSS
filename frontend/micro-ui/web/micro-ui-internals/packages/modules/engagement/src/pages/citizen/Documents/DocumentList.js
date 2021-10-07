@@ -11,17 +11,16 @@ import { useTranslation } from "react-i18next"
 import DocumentCard from "../../../components/Documents/DocumentCard";
 import Searchbar from "../../../components/Documents/Searchbar";
 
-const DocumentList = ({ match, tenants }) => {
+const DocumentList = ({ match}) => {
   const { t } = useTranslation()
-  const { category } = match.params || 'CATEGORY_CITIZEN_CHARTER';
-  console.log('tenants', {tenants})
+  const { category, count } = match.params;
   const tenantIds = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
   const [pageSize, setPageSize] = useState(20);
   const [pageOffset, setPageOffset] = useState(0);
   const [searchValue, setSearchValue] = useState();
 
 
-  const { data: filteredDocs, isLoading: isLoadingDocs, } = Digit.Hooks.engagement.useDocSearch({ name: searchValue, category, tenantIds, limit:pageSize }, {
+  const { data: filteredDocs, isLoading: isLoadingDocs, } = Digit.Hooks.engagement.useDocSearch({ name: searchValue, category, tenantIds, limit: pageSize }, {
     limit: pageSize,
     offset: pageOffset,
     select: (data) => {
@@ -32,7 +31,8 @@ const DocumentList = ({ match, tenants }) => {
           documentLink,
           description,
           auditDetails,
-          fileSize
+          fileSize,
+          filestoreId,
         }
       ) => ({
         docId: uuid,
@@ -41,7 +41,8 @@ const DocumentList = ({ match, tenants }) => {
         description,
         documentLink,
         lastModifiedDate: auditDetails?.lastModifiedTime,
-        fileSize
+        fileSize,
+        filestoreId
       }))
     }
   });
@@ -68,7 +69,7 @@ const DocumentList = ({ match, tenants }) => {
 
   return (
     <AppContainer>
-      <Header>{t(`${category}`)}</Header>
+      <Header>{`${t(`${category}`)} (${count ? count : "-"})`}</Header>
       <div
       >
 
@@ -82,7 +83,7 @@ const DocumentList = ({ match, tenants }) => {
       </div>
       {
         filteredDocs &&
-          filteredDocs.length ? filteredDocs.map(({ name, lastModifiedDate, description, documentLink, fileSize }, index) => (
+          filteredDocs.length ? filteredDocs.map(({ name, lastModifiedDate, description, documentLink, fileSize, filestoreId }, index) => (
             <DocumentCard
               key={index}
               documentTitle={name}
@@ -90,6 +91,7 @@ const DocumentList = ({ match, tenants }) => {
               lastModifiedData={lastModifiedDate}
               description={description}
               documentLink={documentLink}
+              filestoreId={filestoreId}
               t={t}
             />
           )) :

@@ -54,7 +54,8 @@ const Documents = (props) => {
       fileSize: data.document?.filestoreId?.fileSize,
       fileType: data.document?.filestoreId?.fileType,
       documentLink: data.document?.documentLink,
-      tenantIds: data.ULB.map((e) => e.code),
+      tenantId: data.ULB.map((e) => e.code)?.[0],
+      
     };
 
     delete DocumentEntity.ULB;

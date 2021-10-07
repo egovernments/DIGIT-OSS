@@ -53,8 +53,12 @@
     margin-top: 50px;
   }
   .notice_and_circular_main{
-    @apply flex gap-10 bg-white my-sm px-md pt-md pb-lg shadow-card;
+    @apply flex bg-white my-sm px-md pt-md pb-lg shadow-card;
     border-radius: 4px;   
+  }
+
+  .gap-ten{
+    @apply gap-10;
   }
   .notice_and_circular_content{
     
@@ -63,6 +67,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 270px;
+    padding: 2px;
   }
   .notice_and_circular_heading_mb .card-caption{
     padding-left: 30px;
@@ -201,11 +207,11 @@
   
 
   .confirmation_box{
-    height:100px;
+    height:130px;
     display: flex;
     align-items: center;
     padding-left:8px;
-
-    display:flex;
     gap:10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }

@@ -10,7 +10,6 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
     const filtered = ulb?.filter((item)=> item.code===tenantId)
     return filtered;
   },[tenantId, ulb])
-
   
   return (
     <React.Fragment>
@@ -33,9 +32,8 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
                   props.onChange([...(formData?.[config?.key]?.filter?.((f) => e.code != f?.code) || []), e]);
                 }}
                 keepNull={true}
-                selected={props.value}
-                
-                disable={formData?.[config.key]?.length === 1}
+                selected={props.value}    
+                disable={ulb?.length === 1}
                 t={t}
               />
             )}
@@ -56,7 +54,7 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
               );
             })}
           </div>
-          {errors && errors['ULB'] && <CardLabelError>{t(`EVENTS_TENANT_ERROR_REQUIRED`)}</CardLabelError>}
+          {errors && errors[config.key] && <CardLabelError>{t(`EVENTS_TENANT_ERROR_REQUIRED`)}</CardLabelError>}
         </div>
       </LabelFieldPair>
     </React.Fragment>

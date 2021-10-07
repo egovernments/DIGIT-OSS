@@ -35,7 +35,7 @@ const CitizenApp = ({ path, url, userType, tenants}) => {
             component={() => <EventDetails parentRoute={path} />}
           />
           <PrivateRoute path={`${path}/docs`} component={() => <DocumentCategories t={t} {...{ path }} />} />
-          <PrivateRoute path={`${path}/documents/list/:category`} component={(props) => <Documents {...props} tenants={tenants} />} />
+          <PrivateRoute path={`${path}/documents/list/:category/:count`} component={(props) => <Documents {...props} />} />
           <PrivateRoute path={`${path}/SurveyList`} component={(props) => <SurveyList {...props} />} />
         </Switch>
       </React.Fragment>

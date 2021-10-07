@@ -12,10 +12,17 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import { format } from 'date-fns';
 import { getFileSize } from './engagement-doc-documents';
+import { getFileUrl, openDocument } from './DesktopInbox';
 
-const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, description, documentLink, t }) => {
+const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, description, filestoreId, documentLink, t }) => {
+  let isMobile = window.Digit.Utils.browser.isMobile();
+ const downloadDocument = async () =>{
+  const fileUrl = await getFileUrl(filestoreId);
+  return <a href={fileUrl} download={documentTitle}>Download</a>
+ }
+
   return (
-    <div className="notice_and_circular_main">
+    <div className={`notice_and_circular_main ${!isMobile ? 'gap-ten' : "" }`}>
 
       <div className="notice_and_circular_image" style={{ width: '100px' }}>
       <PDFSvg height={100} width={100}/>
@@ -37,7 +44,7 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
           <LinkButton
 
             label={
-              <div className="views">
+              <div className="views" onClick={() => openDocument(filestoreId ? filestoreId : documentLink, documentTitle)}>
                 <ViewsIcon />
                 <p>{t(`CE_DOCUMENT_VIEW_LINK`)}</p>
               </div>
@@ -45,7 +52,7 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
           />
           <LinkButton
             label={
-              <div className="views download_views_padding">
+              <div className="views download_views_padding" onClick={() => downloadDocument()} >
                 <DownloadImgIcon />
                 <p>{t(`CE_DOCUMENT_DOWNLOAD_LINK`)}</p>
               </div>

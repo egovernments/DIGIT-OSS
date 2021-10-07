@@ -82,7 +82,7 @@ const DocumentDetails = ({ location, match, history, }) => {
 
                 : null}
             <Header>{t(`CE_DOCUMENT_DETAILS`)}</Header>
-            <div className="notice_and_circular_main">
+            <div className="notice_and_circular_main gap-ten">
                 <div className="documentDetails_wrapper">
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t('ULB')}:`}</p> <p>{getUlbName(details?.tenantId)}</p> </div>
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t('DOCUMENT_NAME')}:`}</p> <p>{details?.name}</p> </div>
