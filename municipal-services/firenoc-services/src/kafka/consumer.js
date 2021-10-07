@@ -77,6 +77,7 @@ consumerGroup.on("message", function(message) {
   };
 
   const sendFireNOCSMSRequest = FireNOCs => {
+    let tenantId = get(FireNOCs[0], "tenantId");
     for (let i = 0; i < FireNOCs.length; i++) {
       smsRequest["mobileNumber"] = get(
         FireNOCs[i],
