@@ -55,7 +55,7 @@ consumerGroup.on("message", function(message) {
     };
 
     let topic = envVariables.KAFKA_TOPICS_EVENT_NOTIFICATION;
-    if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE)
+    if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE)
       topic = getUpdatedTopic(tenantId, kafkaTopic);
 
     payloads.push({
@@ -163,7 +163,7 @@ consumerGroup.on("message", function(message) {
       }
 
       let topic = envVariables.KAFKA_TOPICS_NOTIFICATION;
-      if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE)
+      if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE)
         topic = getUpdatedTopic(tenantId, kafkaTopic);
 
       payloads.push({

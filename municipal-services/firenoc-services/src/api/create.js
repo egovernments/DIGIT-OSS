@@ -77,7 +77,7 @@ export const createApiResponse = async (request, res, next) => {
   
   let topic = envVariables.KAFKA_TOPICS_FIRENOC_CREATE;
   let tenantId = body.FireNOCs[0].tenantId;
-  if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE){
+  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
     topic = getUpdatedTopic(tenantId, topic);
     console.log("\n 1 topic-->"+topic+"\n");
   }
