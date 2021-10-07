@@ -195,9 +195,12 @@ consumerGroup.on("message", function(message) {
       const { Payment, RequestInfo } = value;
       let tenantId = get(Payment, "tenantId");
       const { paymentDetails } = Payment;
+      console.log("paymentDetails.length"+paymentDetails.length);
       if (paymentDetails) {
         for (var index = 0; index < paymentDetails.length; index++) {
           let businessService = get(paymentDetails[index], "businessService");
+          console.log("businessService"+businessService);
+
           if (businessService === envVariables.BUSINESS_SERVICE) {
             let applicationNumber = get(
               paymentDetails[index],
@@ -207,6 +210,7 @@ consumerGroup.on("message", function(message) {
               tenantId,
               applicationNumber
             };
+            console.log("query"+JSON.stringify(query));
             const body = { RequestInfo };
             const searchRequest = { body, query };
             const searchResponse = await searchApiResponse(searchRequest);
