@@ -1,5 +1,6 @@
 import { requestInfoToResponseInfo, upadteForAuditDetails } from "../utils";
 import { validateBillingSlabSearch } from "../utils/modelValidation";
+import { replaceSchemaPlaceholder } from "../utils/index";
 
 const search = async (req, res, pool, next) => {
   console.log("search");
@@ -34,7 +35,8 @@ const search = async (req, res, pool, next) => {
 export default search;
 
 export const searchService = async (reqestCriteria, searchResponse, pool) => {
-  const querystring = generateQuery(reqestCriteria);
+  var querystring = generateQuery(reqestCriteria);
+  querystring = replaceSchemaPlaceholder(querystring, reqestCriteria.tenantId)
   console.log("\nquerystring-->"+querystring+"\n");
   let billingSlabs = [];
   billingSlabs = await pool
