@@ -25,8 +25,7 @@ const loadLocalityData = async (localityService, businessIds, setLocalityData, s
 
 const loadAssignedToMeCount = (setCountData) => {
     try {
-
-        wfSearch([{ key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(response => setCountData(state => ({ ...state, assignedToMe: response?.totalCount }))).catch(err => {
+        wfSearch([{ key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(response => setCountData(state => ({ ...state, assignedToMe: response.totalCount }))).catch(err => {
             console.error(err)
         })
     }
