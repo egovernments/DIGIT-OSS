@@ -4,9 +4,9 @@ import Inbox from './components/Inbox';
 import { fetchLocalisation } from './components/utils';
 
 function App() {
-const [localisationData, setData] = useState(JSON.parse(localStorage.getItem("inbox-localisationData"))||{})
+    const [localisationData, setData] = useState(JSON.parse(localStorage.getItem("inbox-localisationData")) || {})
 
-    let userObject ={
+    let userObject = {
         "id": 32296,
         "uuid": "3f2729f7-a6cf-4ff6-97e9-6796586e67fc",
         "userName": "LME_D1",
@@ -41,11 +41,11 @@ const [localisationData, setData] = useState(JSON.parse(localStorage.getItem("in
         "tenantId": "pb.amritsar",
         "permanentCity": "pb"
     };
-    userObject.auth = "846bc255-2d42-4ddd-8fb3-a6448c4b3afa";
+    userObject.auth = "e657abb3-65b6-4429-9da2-653bfd158269";
     localStorage.setItem("Employee.token", userObject.auth);
 
     useEffect(() => {
-        localisationData&&Object.keys(localisationData).length==0&&fetchLocalisation();
+        localisationData && Object.keys(localisationData).length == 0 && fetchLocalisation();
         return () => {
         }
     }, [])
@@ -53,7 +53,7 @@ const [localisationData, setData] = useState(JSON.parse(localStorage.getItem("in
     return (
 
         <div >
-            <Inbox user={userObject} t={(key) => localisationData&&localisationData[key]?localisationData[key]:key  } historyClick={(e) => console.log("history", e)} historyComp={<span>HH</span>} esclatedComp={<span>I</span>}></Inbox>
+            <Inbox user={userObject} t={(key) => localisationData && localisationData[key] ? localisationData[key] : key} historyClick={(e) => console.log("history", e)} historyComp={<span>HH</span>} esclatedComp={<span>I</span>}></Inbox>
         </div>
     );
 }

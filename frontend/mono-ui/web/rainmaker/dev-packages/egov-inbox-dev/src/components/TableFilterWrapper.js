@@ -1,11 +1,11 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import { cancelSignal, wfSearch, wfEsclationSearch } from './API/api';
+import { cancelSignal, wfEsclationSearch, wfSearch } from './API/api';
 import { FilterDropdown, svgIcons } from './Components';
 import TablePaginationWrapper from './TablePaginationWrapper';
 import { formatWFSearch, mobileCheck, transformLocality } from './utils';
 
-const checkStringValid=(str="")=>{
-    return str.match(new RegExp(/^([a-zA-Z0-9-]){4,25}$/))?true:false;
+const checkStringValid = (str = "") => {
+    return str.match(new RegExp(/^([a-zA-Z0-9-]){4,25}$/)) ? true : false;
 }
 
 const { SortDown,
@@ -75,7 +75,7 @@ const initialState = {
     selected_none: true
 };
 
-const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid, loadedAll, localities = [], localityData, t, esclationData, setEsclationData, applicationStates, setIsLoading,setBusinessServices, wfSlaConfig,isLoading, wfBusinessConfig, data, ...rest }) => {
+const TableFilterWrapper = ({ businessServices, countData, setData, setLoadAll, count, uuid, loadedAll, localities = [], localityData, t, esclationData, setEsclationData, applicationStates, setIsLoading, setBusinessServices, wfSlaConfig, isLoading, wfBusinessConfig, data, ...rest }) => {
     let isMobile = mobileCheck()
     const [searchText, setSearchText] = useState("");
     const [searchRecord, setSearchRecord] = useState([]);
@@ -84,15 +84,15 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
     const [filteredData, setFilteredData] = useState(data || []);
     useEffect(() => {
         if (checkStringValid(searchText)) {
-            
+
             const timer = setTimeout(() => {
                 setIsLoading(true);
-                if(filters.esclated){
-                    wfSearch([{ key: "businessIds", value: searchText }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(resp => resp && resp.ProcessInstances && wfEsclationSearch([{ key: "businessIds", value: resp.ProcessInstances.map(res=>res.businessId).join(',') }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }])).then(resp => resp && resp.ProcessInstances && resp.ProcessInstances.filter(wfrec=>businessServices.includes(wfrec.businessService)).map(wfRecord=>formatWFSearch(wfRecord, wfSlaConfig, wfBusinessConfig))).then(response => setSearchRecord(response ? response : [])).then(e=>setIsLoading(false));
-                }else{
-                    wfSearch([{ key: "businessIds", value: searchText }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(resp => resp && resp.ProcessInstances && resp.ProcessInstances.filter(wfrec=>businessServices.includes(wfrec.businessService)).map(wfRecord=>formatWFSearch(wfRecord, wfSlaConfig, wfBusinessConfig))).then(response => setSearchRecord(response ? response : [])).then(e=>setIsLoading(false));
+                if (filters.esclated) {
+                    wfSearch([{ key: "businessIds", value: searchText }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(resp => resp && resp.ProcessInstances && wfEsclationSearch([{ key: "businessIds", value: resp.ProcessInstances.map(res => res.businessId).join(',') }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }])).then(resp => resp && resp.ProcessInstances && resp.ProcessInstances.filter(wfrec => businessServices.includes(wfrec.businessService)).map(wfRecord => formatWFSearch(wfRecord, wfSlaConfig, wfBusinessConfig))).then(response => setSearchRecord(response ? response : [])).then(e => setIsLoading(false));
+                } else {
+                    wfSearch([{ key: "businessIds", value: searchText }, { key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(resp => resp && resp.ProcessInstances && resp.ProcessInstances.filter(wfrec => businessServices.includes(wfrec.businessService)).map(wfRecord => formatWFSearch(wfRecord, wfSlaConfig, wfBusinessConfig))).then(response => setSearchRecord(response ? response : [])).then(e => setIsLoading(false));
                 }
-                
+
             }, 1000)
             return () => {
                 clearTimeout(timer);
@@ -125,13 +125,13 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
     return <React.Fragment>
         <div className="jk-inbox-first-element">
             <div>
-          <h4>  {t("WF_MY_WORKLIST")}</h4>
-                </div>
-                <div className="jk-inbox-search-holder">
+                <h4>  {t("WF_MY_WORKLIST")}</h4>
+            </div>
+            <div className="jk-inbox-search-holder">
                 <label for="inbox-search" className="jk-inbox-search-label">     {t("CS_INBOX_SEARCH")}</label>
-            <input id="inbox-search" disabled={isLoading} style={{borderColor:searchText.length!==0&&!checkStringValid(searchText)?"red":"black"}} type="text" onChange={(e) => setSearchText(e.target.value)} value={searchText} placeholder={t("INBOX_ENTER_BID")} />
-            {searchText.length!==0&&!checkStringValid(searchText)&&<span style={{color:"red"}} >{t("ERR_INVALID_APPID")}</span>}
-          </div>
+                <input id="inbox-search" disabled={isLoading} style={{ borderColor: searchText.length !== 0 && !checkStringValid(searchText) ? "red" : "black" }} type="text" onChange={(e) => setSearchText(e.target.value)} value={searchText} placeholder={t("INBOX_ENTER_BID")} />
+                {searchText.length !== 0 && !checkStringValid(searchText) && <span style={{ color: "red" }} >{t("ERR_INVALID_APPID")}</span>}
+            </div>
         </div>
         <div className="inbox-filter-wrapper">
             <FilterDropdown t={t} header={"CS_INBOX_MODULE_FILTER"} data={businessServices.map(service => { return { key: `CS_COMMON_INBOX_${service}`, value: service } })} name="businessService" value={filters.service} id="businessService" onChangeFunction={(e) => setFiltersDispatch({ type: 'service', value: e.target.value })} />
@@ -148,16 +148,16 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
             </div>
         </div>
         <div className="inbox-taskboard-holder">
-            <div className="inbox-taskboard-card inbox-task-total" style={!filters.total_records ? { border: 'none' } : { }} onClick={() => {
+            <div className="inbox-taskboard-card inbox-task-total" style={!filters.total_records ? { border: 'none' } : {}} onClick={() => {
                 setFiltersDispatch({ type: 'total_records' })
             }}>
                 {t("WF_TOTAL_TASK")}
                 <span className="inbox-task-font">
-                    {filters.selected_none&&searchText===""  ? count : filteredData.length}
+                    {filters.selected_none && searchText === "" ? count : filteredData.length}
                 </span>
 
             </div>
-            <div className="inbox-taskboard-card inbox-task-nearing-sla" style={!filters.nearing_sla_records ? { border: "none" } : { }} onClick={() => {
+            <div className="inbox-taskboard-card inbox-task-nearing-sla" style={!filters.nearing_sla_records ? { border: "none" } : {}} onClick={() => {
                 setFiltersDispatch({ type: 'nearing_sla_records' })
             }}>
                 {t("WF_TOTAL_NEARING_SLA")}
@@ -166,7 +166,7 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
                 </span>
 
             </div>
-            <div className="inbox-taskboard-card inbox-task-esclated-sla" style={!filters.sla_breached ? { border: "none" } : { }} onClick={() => {
+            <div className="inbox-taskboard-card inbox-task-esclated-sla" style={!filters.sla_breached ? { border: "none" } : {}} onClick={() => {
                 setFiltersDispatch({ type: 'sla_breached' })
             }} >
                 {t("WF_ESCALATED_SLA")}
@@ -180,18 +180,18 @@ const TableFilterWrapper = ({ businessServices, setData, setLoadAll, count, uuid
                 <span className={`assigned-inbox inb-all-tab ${filters.assigned_to_all && "jk-selected-header"}`} onClick={() => {
                     setFiltersDispatch({ type: 'assigned_to_all' })
                 }}>
-                    {t("COMMON_INBOX_TAB_ALL")}
+                    {t("COMMON_INBOX_TAB_ALL")} {` ( ${countData.all} )`}
                 </span>
                 <span className={`assigned-inbox inb-me-tab ${filters.assigned_to_me && "jk-selected-header"}`} onClick={() => {
                     setFiltersDispatch({ type: 'assigned_to_me' })
                 }}>
-                    {t("COMMON_INBOX_TAB_ASSIGNED_TO_ME")}
+                    {t("COMMON_INBOX_TAB_ASSIGNED_TO_ME")} {` ( ${countData.assignedToMe} )`}
                 </span>
                 <span className={`assigned-inbox inb-esc-tab ${filters.esclated && "jk-selected-header"}`} onClick={() => {
                     !esclationData.loaded && !esclationData.load && setEsclationData({ loaded: false, load: true, data: [] });
                     setFiltersDispatch({ type: 'esclated' })
                 }}>
-                    {t("COMMON_INBOX_TAB_ESCALATED")}
+                    {t("COMMON_INBOX_TAB_ESCALATED")} {` ( ${countData.esclated} )`}
                 </span>
                 {isMobile && <span className="jk-inbox-pointer jk-sort-ico" onClick={() => setSortOrder(state => !state)} >{sort ? <SortDown /> : <SortUp />}</span>}
             </div>
