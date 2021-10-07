@@ -38,11 +38,11 @@ console.log("Consumer ");
 
 consumerGroup.on("message", function(message) {
   console.log("consumer-topic", message.topic);
-  console.log("consumer-value", JSON.parse(message.value));
+  //console.log("consumer-value", JSON.parse(message.value));
   const value = JSON.parse(message.value);
 
   let payloads = [];
-  const topic = envVariables.KAFKA_TOPICS_NOTIFICATION;
+  //const topic = envVariables.KAFKA_TOPICS_NOTIFICATION;
   let smsRequest = {};
   let fireNOCRequest = {};
   let events = [];
@@ -54,12 +54,12 @@ consumerGroup.on("message", function(message) {
       events
     };
 
-    let kafkaTopic = envVariables.KAFKA_TOPICS_EVENT_NOTIFICATION;
+    let topic = envVariables.KAFKA_TOPICS_EVENT_NOTIFICATION;
     if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE)
-      kafkaTopic = getUpdatedTopic(tenantId, kafkaTopic);
+      topic = getUpdatedTopic(tenantId, kafkaTopic);
 
     payloads.push({
-      topic: kafkaTopic,
+      topic: topic,
       messages: JSON.stringify(requestPayload)
     });
     // httpRequest({
@@ -162,12 +162,12 @@ consumerGroup.on("message", function(message) {
         default:
       }
 
-      let kafkaTopic = envVariables.KAFKA_TOPICS_NOTIFICATION;
+      let topic = envVariables.KAFKA_TOPICS_NOTIFICATION;
       if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE)
-        kafkaTopic = getUpdatedTopic(tenantId, kafkaTopic);
+        topic = getUpdatedTopic(tenantId, kafkaTopic);
 
       payloads.push({
-        kafkaTopic,
+        topic: topic,
         messages: JSON.stringify(smsRequest)
       });
       // console.log("smsRequest",smsRequest);
