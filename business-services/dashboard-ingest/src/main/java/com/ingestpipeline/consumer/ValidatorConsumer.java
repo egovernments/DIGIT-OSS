@@ -35,7 +35,7 @@ public class ValidatorConsumer implements KafkaConsumer {
 	@Value("${kafka.topic.error.data}")
 	String errorTopic;
     
-    @KafkaListener(id = INTENT, groupId = INTENT, topics = "${kafka.topic.ingest.data}", containerFactory = Constants.BeanContainerFactory.INCOMING_KAFKA_LISTENER)
+    @KafkaListener(id = INTENT, groupId = INTENT, topics = "${kafka.transaction.ingest.topic}", containerFactory = Constants.BeanContainerFactory.INCOMING_KAFKA_LISTENER)
     public void processMessage(Map consumerRecord,
 							   @Header(KafkaHeaders.RECEIVED_TOPIC) final String topic) {
     	LOGGER.info("##KafkaMessageAlert## Message Received at Validator Consumer : key:" + topic + ":" + "value:" + consumerRecord.size());

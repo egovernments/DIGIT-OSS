@@ -32,12 +32,6 @@ public class ApplicationProperties {
     @Value("${kafka.transaction.transformation.key}")
     private String transactionTransformationKey;
     
-    @Value("${kafka.transaction.enrichment.topic}")
-    private String transactionEnrichmentTopic;
-    
-    @Value("${kafka.transaction.enrichment.key}")
-    private String transactionEnrichmentKey;
-    
     @Value("${schema.transaction.validation}")
     private String transactionValidationSchema;
     
@@ -144,19 +138,5 @@ public class ApplicationProperties {
 		this.transactionTransformationKey = transactionTransformationKey;
 	}
 
-	public String getTransactionEnrichmentTopic() {
-		return transactionEnrichmentTopic;
-	}
 
-	public void setTransactionEnrichmentTopic(String transactionEnrichmentTopic) {
-		this.transactionEnrichmentTopic = transactionEnrichmentTopic;
-	}
-
-	public String getTransactionEnrichmentKey() {
-		return transactionEnrichmentKey;
-	}
-
-	public void setTransactionEnrichmentKey(String transactionEnrichmentKey) {
-		this.transactionEnrichmentKey = transactionEnrichmentKey;
-	}
 }
