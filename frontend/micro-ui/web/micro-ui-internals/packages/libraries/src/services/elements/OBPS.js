@@ -175,7 +175,7 @@ export const OBPSService = {
     const [BPA] = response?.BPA;
     const edcrResponse = await OBPSService.scrutinyDetails(BPA?.tenantId, { edcrNumber: BPA?.edcrNumber });
     const [edcr] = edcrResponse?.edcrDetail;
-    const mdmsRes = await MdmsService.getMultipleTypes(tenantId, "BPA", ["RiskTypeComputation"]);
+    const mdmsRes = await MdmsService.getMultipleTypes(tenantId, "BPA", ["RiskTypeComputation", "CheckList"]);
     const riskType = Digit.Utils.obps.calculateRiskType(mdmsRes?.BPA?.RiskTypeComputation, edcr?.planDetail?.plot?.area, edcr?.planDetail?.blocks);
     BPA.riskType = riskType;
     const nocResponse = await OBPSService.NOCSearch(BPA?.tenantId, { sourceRefId: BPA?.applicationNo });
@@ -472,9 +472,30 @@ export const OBPSService = {
       },
     };
 
+
+    let approvalChecks = [];
+    let approvalChecksDetails = {}
+    if (BPA?.status === "APPROVAL_INPROGRESS") {
+      mdmsRes?.BPA?.CheckList.forEach(checklist => {
+        if (checklist?.RiskType === riskType && checklist?.applicationType === edcr?.appliactionType && checklist?.ServiceType === edcr?.applicationSubType && checklist?.WFState === "PENDINGAPPROVAL" && checklist?.conditions?.length > 0) {
+          approvalChecks.push(...checklist?.conditions)
+        }
+      })
+      
+      approvalChecksDetails = {
+        title: "BPA_PERMIT_CONDITIONS",
+        asSectionHeader: true,
+        additionalDetails: {
+          permissions: approvalChecks
+        }
+      }
+    }
+
+    
+
     // if(inspectionReport) details.push(inspectionReport);\
     if(BPA?.businessService !== "BPA_OC") {
-      details = [...details, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, ...nocDetails ]
+      details = [...details, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, ...nocDetails, approvalChecksDetails ]
     } else {
       details = [...details, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails, documentDetails, ...nocDetails ]
     }

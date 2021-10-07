@@ -34,14 +34,13 @@ const MultiUploadWrapper = ({module="PGR", tenantId="pb", getFormState, requestS
         const {data: {files: fileStoreIds} = {}} = await Digit.UploadServices.MultipleFilesStorage(module, e.target.files, tenantId)
         return dispatch({type: FILES_UPLOADED ,payload: {files: e.target.files, fileStoreIds}})
     }
+    const [ state, dispatch ] = useReducer(uploadReducer, new Map())
 
     useEffect(() => getFormState(state),[state])
 
     useEffect(()=> {
         requestSpecifcFileRemoval ? dispatch({type: TARGET_FILE_REMOVAL ,payload: requestSpecifcFileRemoval}) : null
     },[requestSpecifcFileRemoval])
-
-    const [ state, dispatch ] = useReducer(uploadReducer, new Map())
 
     return <UploadFile
             onUpload={(e) => onUploadMultipleFiles(e)}

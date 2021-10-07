@@ -6,6 +6,7 @@ import {
   Toast,
   Loader,
   FormStep,
+  MultiUploadWrapper,
   StatusTable,
   Row
 } from "@egovernments/digit-ui-react-components";
@@ -30,7 +31,7 @@ function SelectDocument({
   const handleSelectDocument = (value) => setSelectedDocument(value);
 
   function selectfile(e) {
-      setFile(e.target.files[0]);
+    e && setFile(e.file);
   }
 
   useEffect(() => {
@@ -80,10 +81,21 @@ function SelectDocument({
       })();
   }, [file]);
 
+  const getData =(state) => {
+    let data = Object.fromEntries(state);
+    let newArr = Object.values(data);
+    selectfile(newArr[newArr.length-1]);
+  }
+
   return (
       <div style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", display: "flex" }}>
         <CardLabel>{doc?.required ? `${t("TL_BUTTON_UPLOAD FILE")}*:` : `${t("TL_BUTTON_UPLOAD FILE")}:`}</CardLabel>
-        <UploadFile
+        <MultiUploadWrapper
+          module="NOC"
+          tenantId={tenantId}
+          getFormState={e => getData(e)}
+        />
+        {/* <UploadFile
             id={"noc-doc"}
             extraStyleName={"propertyCreate"}
             accept=".jpg,.png,.pdf"
@@ -94,7 +106,7 @@ function SelectDocument({
             }}
             message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`ES_NO_FILE_SELECTED_LABEL`)}
             error={error}
-        />
+        /> */}
       </div>
   );
 }
@@ -127,10 +139,10 @@ const NOCDocuments = ({ t, noc, docs, isNoc, applicationData }) => {
     if (filteredData?.[0]?.docTypes?.[0]) {
       filteredData[0].docTypes[0].nocType = filteredData[0].nocType;
       filteredData[0].docTypes[0].additionalDetails = {
-          submissionDetails: noc.additionalDetails,
-          applicationStatus: noc.applicationStatus,
-          appNumberLink: noc.applicationNo,
-          nocNo: noc.nocNo
+          submissionDetails: noc?.additionalDetails,
+          applicationStatus: noc?.applicationStatus,
+          appNumberLink: noc?.applicationNo,
+          nocNo: noc?.nocNo
       }
       documents.push(filteredData[0].docTypes[0]);
     }
@@ -141,7 +153,7 @@ const NOCDocuments = ({ t, noc, docs, isNoc, applicationData }) => {
         let nocType = doc.nocType;
         doc.dropdownData = [];
         commonDocMaping?.forEach((value) => {
-          let values = value.code.slice(0, code.length);
+          let values = value.code.slice(0, code?.length);
           if (code === values) {
             doc.hasDropdown = true;
             doc.dropdownData.push(value);
@@ -156,7 +168,7 @@ const NOCDocuments = ({ t, noc, docs, isNoc, applicationData }) => {
   return (
     <div>
       <PropertyDocuments documents={docs} />
-      {nocTaxDocuments?.map((document, index) => {
+      {applicationData?.status === 'NOC_VERIFICATION_INPROGRESS' && nocTaxDocuments?.map((document, index) => {
         return (
           <SelectDocument
             key={index}
