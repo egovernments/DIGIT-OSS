@@ -20,7 +20,7 @@ public class DigressionConsumer implements KafkaConsumer {
 	private DigressService digressService; 
 	
 	@Override
-	@KafkaListener(topics = { Constants.KafkaTopics.VALID_DATA }, containerFactory = Constants.BeanContainerFactory.INCOMING_KAFKA_LISTENER)
+	@KafkaListener(topics = "${kafka.topic.valid.data}" , containerFactory = Constants.BeanContainerFactory.INCOMING_KAFKA_LISTENER)
 	public void processMessage(Map incomingData,
 							   @Header(KafkaHeaders.RECEIVED_TOPIC) final String topic) {
 		LOGGER.info("##KafkaMessageAlert in digress## : key:" + topic + ":" + "value:" + incomingData.size());
