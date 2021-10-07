@@ -109,7 +109,7 @@ const getEsclationRecords = (props) => {
         let businessIds = [];
         let status = {};
         wfEsclationSearch([{ key: "tenantId", value: localStorage.getItem("inb-tenantId") }]).then(resp => {
-            props.setCountData(state => ({ ...state, esclated: resp?.totalCount }));
+            props.setCountData(state => ({ ...state, esclated: resp.totalCount }));
             return resp.ProcessInstances.map(data => {
                 businessIds.push(data.businessId);
                 service = data.businessService;
