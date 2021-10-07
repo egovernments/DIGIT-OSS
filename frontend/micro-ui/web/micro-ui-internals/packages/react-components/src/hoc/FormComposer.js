@@ -45,7 +45,7 @@ export const FormComposer = (props) => {
   const fieldSelector = (type, populators, isMandatory, disable = false, component, config) => {
 
     const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
-    
+
     switch (type) {
       case "text":
       case "date":
@@ -118,24 +118,24 @@ export const FormComposer = (props) => {
           />
         );
 
-        case "form":
+      case "form":
         return (
           <form>
-              <Component
-                userType={"employee"}
-                t={t}
-                setValue={setValue}
-                onSelect={setValue}
-                config={config}
-                data={formData}
-                formData={formData}
-                register={register}
-                errors={errors}
-                setError={setError}
-                clearErrors={clearErrors}
-                formState={formState}
-                control={control}
-              />
+            <Component
+              userType={"employee"}
+              t={t}
+              setValue={setValue}
+              onSelect={setValue}
+              config={config}
+              data={formData}
+              formData={formData}
+              register={register}
+              errors={errors}
+              setError={setError}
+              clearErrors={clearErrors}
+              formState={formState}
+              control={control}
+            />
           </form>)
       default:
         return populators?.dependency !== false ? populators : null;
@@ -216,9 +216,9 @@ export const FormComposer = (props) => {
   };
 
   const isDisabled = props.isDisabled || false;
-
+  const checkKeyDown = (e) => { const keyCode = e.keyCode ? e.keyCode : e.key ? e.key : e.which; if (keyCode === 13) { e.preventDefault() }; };
   return (
-    <form onSubmit={handleSubmit(onSubmit)} id={props.formId} className={props.className}>
+    <form onSubmit={handleSubmit(onSubmit)} onKeyDown={(e) => checkKeyDown(e)} id={props.formId} className={props.className}>
       <Card style={getCardStyles()}>
         {!props.childrenAtTheBottom && props.children}
         {props.heading && <CardSubHeader style={{ ...props.headingStyle }}> {props.heading} </CardSubHeader>}

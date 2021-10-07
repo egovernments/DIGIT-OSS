@@ -59,6 +59,8 @@ const Documents = (props) => {
     };
 
     delete DocumentEntity.ULB;
+    delete DocumentEntity.docCategory;
+    delete DocumentEntity.documentName;
     history.push("/digit-ui/employee/engagement/documents/update-response", { DocumentEntity });
   };
 

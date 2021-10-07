@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import { Card, Header, LabelFieldPair, CardLabel, TextInput, Dropdown, FormComposer, RemoveableTag } from "@egovernments/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
+import { useLocation } from "react-router-dom";
 
 const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, register, errors, setError, clearErrors, formState, control }) => {
   const { data: ulbArray, isLoading } = Digit.Hooks.useTenants();
@@ -10,6 +11,12 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
     const filtered = ulb?.filter((item)=> item.code===tenantId)
     return filtered;
   },[tenantId, ulb])
+  
+  const location = useLocation()
+  const isInEditFormMode = useMemo(()=>{
+    if(location.pathname.includes('documents/inbox/update')) return true;
+    return false;
+  },[location.pathname])
   
   return (
     <React.Fragment>
@@ -33,7 +40,7 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
                 }}
                 keepNull={true}
                 selected={props.value}    
-                disable={ulb?.length === 1}
+                disable={isInEditFormMode ? true : false}
                 t={t}
               />
             )}
