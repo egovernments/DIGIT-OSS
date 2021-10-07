@@ -39,7 +39,7 @@ public class NotificationService {
         link.append(applicationProperties.getNotificationEndpoint());
         String customizedLink = getCustomSurveyViewLink(link.toString(), request.getSurveyEntity());
         String messageTemplate = fetchContentFromLocalization(request.getRequestInfo(), tenantId, "rainmaker-common", "SS_SURVEY_NOTIFICATION_TEMPLATE");
-        messageTemplate = messageTemplate.replace("<survey_title>", request.getSurveyEntity().getTitle());
+        messageTemplate = messageTemplate.replace("{survey_title}", request.getSurveyEntity().getTitle());
 
         Action action = null;
 
