@@ -191,7 +191,7 @@ consumerGroup.on("message", function(message) {
   };
   const FireNOCPaymentStatus = async value => {
     try {
-      //console.log("Consumer Payment data"+JSON.stringify(value));
+      console.log("Consumer Payment data"+JSON.stringify(value));
       const { Payment, RequestInfo } = value;
       let tenantId = get(Payment, "tenantId");
       const { paymentDetails } = Payment;
@@ -210,7 +210,7 @@ consumerGroup.on("message", function(message) {
             const body = { RequestInfo };
             const searchRequest = { body, query };
             const searchResponse = await searchApiResponse(searchRequest);
-            //console.log("search response: "+JSON.stringify(searchResponse));
+            console.log("search response: "+JSON.stringify(searchResponse));
             const { FireNOCs } = searchResponse;
             if (!FireNOCs.length) {
               throw "FIRENOC Search error";
@@ -235,9 +235,9 @@ consumerGroup.on("message", function(message) {
 
             const updateBody = { RequestInfo, FireNOCs };
             const updateRequest = { body: updateBody };
-            //console.log("update Request: "+JSON.stringify(updateRequest));
+            console.log("update Request: "+JSON.stringify(updateRequest));
             const updateResponse = await updateApiResponse(updateRequest, false);
-            //console.log("update Response: "+JSON.stringify(updateResponse));
+            console.log("update Response: "+JSON.stringify(updateResponse));
           }
         }
       }
