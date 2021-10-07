@@ -111,7 +111,7 @@ const Login = ({ config: propsConfig, t }) => {
         onSecondayActionClick={onForgotPassword}
         heading={propsConfig.texts.header}
         headingStyle={{ textAlign: "center" }}
-        cardStyle={{ margin: "auto", minWidth: "400px" }}
+        cardStyle={{ margin: "auto", minWidth: "408px" }}
         className = "loginFormStyleEmployee"
       >
         <Header />
