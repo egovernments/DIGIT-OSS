@@ -143,6 +143,16 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     return fieldinspection_pending;
   }
 
+  const getDocuments = (applicationData) => {
+    let documentsformdata = JSON.parse(sessionStorage.getItem("BPA_DOCUMENTS"));
+    let documentList = [];
+    documentsformdata.map(doc => {
+      if(doc?.uploadedDocuments?.[0]?.values?.length > 0) documentList = [...documentList, ...doc?.uploadedDocuments?.[0]?.values];
+      if(doc?.newUploadedDocs?.length > 0) documentList = [...documentList, ...doc?.newUploadedDocs]
+    });
+    return documentList;
+  }
+
 
   const onSuccess = () => {
     //clearParams();
@@ -154,6 +164,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     let workflow = { action: action?.action, comments: data?.comments, businessService, moduleName: moduleCode };
     applicationData = {
       ...applicationData,
+      documents: getDocuments(applicationData),
       additionalDetails: {...applicationData?.additionalDetails, fieldinspection_pending:getfeildInspection()},
        workflow:{
         action: action?.action,

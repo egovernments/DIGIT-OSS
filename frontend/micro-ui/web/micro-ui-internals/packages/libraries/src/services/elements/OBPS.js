@@ -467,6 +467,7 @@ export const OBPSService = {
             documentType: doc?.documentType,
             documentUid: doc?.documentUid,
             fileStoreId: doc?.fileStoreId,
+            id: doc?.id
           }))
         }]
       },
@@ -490,8 +491,6 @@ export const OBPSService = {
         }
       }
     }
-
-    
 
     // if(inspectionReport) details.push(inspectionReport);\
     let val;

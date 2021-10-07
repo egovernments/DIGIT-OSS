@@ -41,7 +41,6 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
   // console.log("find timeline here", timeline);
 
   const getCommentsInCustomChildComponent = ({comment, thumbnailsToShow}) => {
-    debugger
     return <>
     {comment ? <div>{comment?.map( e => 
       <div className="TLComments">

@@ -26,6 +26,7 @@ import NOCDocuments from "./NOCDocuments";
 import SubOccupancyTable from "./SubOccupancyTable";
 import OBPSDocument from "../../../obps/src/pageComponents/OBPSDocuments";
 import PermissionCheck from "./PermissionCheck";
+import BPADocuments from "./BPADocuments";
 
 function ApplicationDetailsContent({ applicationDetails, workflowDetails, isDataLoading, applicationData, businessService, timelineStatusPrefix }) {
   const { t } = useTranslation();
@@ -109,8 +110,8 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
           {detail?.additionalDetails?.owners && <PropertyOwners owners={detail?.additionalDetails?.owners} />}
           {detail?.additionalDetails?.units && <TLTradeUnits units={detail?.additionalDetails?.units} />}
           {detail?.additionalDetails?.accessories && <TLTradeAccessories units={detail?.additionalDetails?.accessories} />}
-          {detail?.additionalDetails?.obpsDocuments && <NOCDocuments applicationData={applicationDetails?.applicationData} t={t} isNoc={false} docs={detail.additionalDetails.obpsDocuments} noc={detail.additionalDetails?.data} />}
           {detail?.additionalDetails?.permissions && <PermissionCheck applicationData={applicationDetails?.applicationData} t={t} permissions={detail?.additionalDetails?.permissions} />}
+          {detail?.additionalDetails?.obpsDocuments && <BPADocuments t={t} applicationData={applicationDetails?.applicationData} docs={detail.additionalDetails.obpsDocuments} bpaActionsDetails={workflowDetails} />}
           {detail?.additionalDetails?.noc && <NOCDocuments t={t} isNoc={true} docs={detail.additionalDetails.noc} noc={detail.additionalDetails?.data} />}
           {detail?.additionalDetails?.scruntinyDetails && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
           {detail?.additionalDetails?.buildingExtractionDetails && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
