@@ -16,6 +16,7 @@ import Response from "./pages/employee/Events/NewEvent/Response";
 import Inbox from "./pages/employee/Events/Inbox";
 import Messages from "./pages/employee/Messages";
 import EventForm from "./components/Events/EventForm";
+import MessageForm from "./components/Messages/MessageForm";
 import SelectEventGeolocation from "./components/Events/SelectGeoLocation";
 import SelectToDate from "./components/Events/SelectToDate";
 import NotificationsAndWhatsNew from "./pages/citizen/NotificationsAndWhatsNew";
@@ -137,7 +138,7 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
         <Route path={`${path}/documents/update-response`} component={(props) => <DocUpdateResponse {...props} />} />
         <Route path={`${path}/documents/delete-response`} component={(props) => <DocDeleteResponse {...props} />} />
         <Route path={`${path}/documents/inbox`} component={(props) => <DocumentNotification tenants={tenants} />} />
-        <Route path={`${path}/messages`} component={(props) => <Messages {...props} />} />
+        <Route path={`${path}/messages`} component={(props) => <Messages {...props} tenants={tenants} parentRoute={path} />} />
         {/* documents/update-response */}
         {/* <Redirect to={`${path}/docs`} /> */}
       </Switch>
@@ -209,6 +210,7 @@ const componentsToRegister = {
   EventsListOnGround,
   EventDetails,
   EventForm,
+  MessageForm,
   DocumentList,
   SelectEventGeolocation,
   SelectToDate,

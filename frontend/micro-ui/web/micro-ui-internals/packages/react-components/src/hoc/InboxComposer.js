@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, Fragment } from "react"
 import InboxLinks from "../atoms/InboxLinks"
 import Table from "../atoms/Table"
 import { SearchField, SearchForm } from "../molecules/SearchForm"
@@ -36,24 +36,23 @@ const InboxComposer = ({isMobile=false, PropsForInboxLinks, SearchFormFields, se
             <SearchField className="submit">
                 <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
                 <p onClick={() => {
-                    // resetSearchForm(resetSearchFormDefaultValues);
-                    previousPage ();
+                    resetSearchForm(resetSearchFormDefaultValues);
+                    // previousPage();
                   }}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
             </SearchField>
         </SearchForm>
         <FilterForm clearAll={resetFilterForm}>
             <FilterFormFields/>
         </FilterForm>
+        <div>
         {propsForInboxTable?.sourceData?.display ? <Card style={{ marginTop: 20 }}>
-            {
-            t(propsForInboxTable?.sourceData?.display)
+            {t(propsForInboxTable?.sourceData?.display)
                 .split("\\n")
                 .map((text, index) => (
                 <p key={index} style={{ textAlign: "center" }}>
                     {text}
                 </p>
-                ))
-            }
+                ))}
         </Card>
         : <Table
             t={t}
@@ -61,6 +60,7 @@ const InboxComposer = ({isMobile=false, PropsForInboxLinks, SearchFormFields, se
             // columns={tableColumnConfig}
             {...propsForInboxTable}
         />}
+        </div>
     </div>
 }
 

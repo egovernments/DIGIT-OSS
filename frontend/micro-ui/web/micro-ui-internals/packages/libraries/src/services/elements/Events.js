@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import Urls from "../atoms/urls";
 import { Request } from "../atoms/Utils/Request";
 
@@ -53,35 +52,9 @@ const Events = {
       if (eventRes?.events?.length < 1) return;
       const [event] = eventRes?.events;
       console.log(eventRes, 'eventRes');
-      const details = [{
-        title: "",
-        asSectionHeader: true,
-        values: [
-          { title: "EVENTS_ULB_LABEL", value: event?.tenantId },
-          { title: "EVENTS_NAME_LABEL", value: event?.name },
-          { title: "EVENTS_CATEGORY_LABEL", value: event?.eventCategory },
-          { title: "EVENTS_DESCRIPTION_LABEL", value: event?.description },
-          { title: "EVENTS_FROM_DATE_LABEL", value: format(new Date(event?.eventDetails?.fromDate), 'dd/MM/yyyy') },
-          { title: "EVENTS_TO_DATE_LABEL", value: format(new Date(event?.eventDetails?.toDate), 'dd/MM/yyyy') },
-          { title: "EVENTS_FROM_TIME_LABEL", value: format(new Date(event?.eventDetails?.fromDate), 'hh:mm'), skip: true },
-          { title: "EVENTS_TO_TIME_LABEL", value: format(new Date(event?.eventDetails?.toDate), 'hh:mm'), skip: true },
-          { title: "EVENTS_ADDRESS_LABEL", value: event?.eventDetails?.address },
-          { title: "EVENTS_MAP_LABEL",
-            map: true,
-            value: event?.eventDetails?.latitude && event?.eventDetails?.longitude ?
-              Digit.Utils.getStaticMapUrl(event?.eventDetails?.latitude, event?.eventDetails?.longitude) :
-              'N/A' 
-          },
-          { title: "EVENTS_ORGANIZER_NAME_LABEL", value: event?.eventDetails?.organizer },
-          { title: "EVENTS_ENTRY_FEE_INR_LABEL", value: event?.eventDetails?.fees },
-        ]
-      }]
-
-      return {
-        applicationData: event,
-        applicationDetails: details,
-        tenantId: tenantId
-      }
+      const fileStoresIds = event?.eventDetails?.documents?.map(document => document?.fileStoreId);
+      const uploadedFilesData = fileStoresIds.length > 0 ? await Digit.UploadServices.Filefetch(fileStoresIds, tenantId) : null
+      return {...event, uploadedFilesData}
     }
 }
 
