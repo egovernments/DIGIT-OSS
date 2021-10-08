@@ -34,11 +34,11 @@ export const searchApiResponse = async (request, next = {}) => {
   console.log("Query object:"+JSON.stringify(queryObj));
   let errors = validateFireNOCSearchModel(queryObj);
 
-  if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE && queryObj.tenantId == null){
+  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE && queryObj.tenantId == null){
     let error = {"FIRE_NOC_INVALID_SEARCH":" TenantId is mandatory for search "};
     errors.push(error);
   }
-  else if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE && queryObj.tenantId.split('.').length < envVariables.STATE_LEVEL_TENANTID_LENGTH){
+  else if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE && queryObj.tenantId.split('.').length < envVariables.STATE_LEVEL_TENANTID_LENGTH){
     let error = {"FIRE_NOC_INVALID_SEARCH":" TenantId should be mandatorily " + envVariables.STATE_LEVEL_TENANTID_LENGTH + " levels for search"};
     errors.push(error);
   }

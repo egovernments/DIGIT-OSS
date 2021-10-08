@@ -137,7 +137,7 @@ export const addQueryArg = (url, queries = []) => {
 export const getUpdatedTopic = (tenantId, topic) => {
   let tenants = tenantId.split('.');
   if(tenants.length > 1)
-    topic = tenants[1] + "_" + topic;
+    topic = tenants[1] + "-" + topic;
   console.log("The Kafka topic for the tenantId : " + tenantId + " is : " + topic);
   return topic;
 };
@@ -146,9 +146,9 @@ export const replaceSchemaPlaceholder = (query, tenantId) => {
   let finalQuery = null;
 	if (tenantId.includes('.')) {
 		let schemaName = tenantId.split('.')[1];
-		finalQuery = query.replaceAll("{schema}", schemaName);
+		finalQuery = query.replace(/{schema}/g, schemaName);
 	} else {
-			finalQuery = query.replaceAll("{schema}".concat("."), "");
+			finalQuery = query.replace(/{schema}./g, "");
 	}
 	return finalQuery;
 };

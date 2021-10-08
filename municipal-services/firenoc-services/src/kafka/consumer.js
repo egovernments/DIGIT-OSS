@@ -42,7 +42,7 @@ consumerGroup.on("message", function(message) {
   const value = JSON.parse(message.value);
 
   let payloads = [];
-  const topic = envVariables.KAFKA_TOPICS_NOTIFICATION;
+  //const topic = envVariables.KAFKA_TOPICS_NOTIFICATION;
   let smsRequest = {};
   let fireNOCRequest = {};
   let events = [];
@@ -54,12 +54,12 @@ consumerGroup.on("message", function(message) {
       events
     };
 
-    let kafkaTopic = envVariables.KAFKA_TOPICS_EVENT_NOTIFICATION;
-    if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE)
-      kafkaTopic = getUpdatedTopic(tenantId, kafkaTopic);
+    let topic = envVariables.KAFKA_TOPICS_EVENT_NOTIFICATION;
+    if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE)
+      topic = getUpdatedTopic(tenantId, kafkaTopic);
 
     payloads.push({
-      topic: kafkaTopic,
+      topic: topic,
       messages: JSON.stringify(requestPayload)
     });
     // httpRequest({
@@ -77,6 +77,7 @@ consumerGroup.on("message", function(message) {
   };
 
   const sendFireNOCSMSRequest = FireNOCs => {
+    let tenantId = get(FireNOCs[0], "tenantId");
     for (let i = 0; i < FireNOCs.length; i++) {
       smsRequest["mobileNumber"] = get(
         FireNOCs[i],
@@ -161,12 +162,12 @@ consumerGroup.on("message", function(message) {
         default:
       }
 
-      let kafkaTopic = envVariables.KAFKA_TOPICS_NOTIFICATION;
-      if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE)
-        kafkaTopic = getUpdatedTopic(tenantId, kafkaTopic);
+      let topic = envVariables.KAFKA_TOPICS_NOTIFICATION;
+      if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE)
+        topic = getUpdatedTopic(tenantId, kafkaTopic);
 
       payloads.push({
-        kafkaTopic,
+        topic: topic,
         messages: JSON.stringify(smsRequest)
       });
       // console.log("smsRequest",smsRequest);
@@ -206,8 +207,11 @@ consumerGroup.on("message", function(message) {
               tenantId,
               applicationNumber
             };
+            let headers = {
+              tenantid:tenantId
+            };
             const body = { RequestInfo };
-            const searchRequest = { body, query };
+            const searchRequest = { body, query, headers };
             const searchResponse = await searchApiResponse(searchRequest);
             //console.log("search response: "+JSON.stringify(searchResponse));
             const { FireNOCs } = searchResponse;
@@ -233,7 +237,7 @@ consumerGroup.on("message", function(message) {
             }
 
             const updateBody = { RequestInfo, FireNOCs };
-            const updateRequest = { body: updateBody };
+            const updateRequest = { body: updateBody,headers };
             //console.log("update Request: "+JSON.stringify(updateRequest));
             const updateResponse = await updateApiResponse(updateRequest, false);
             //console.log("update Response: "+JSON.stringify(updateResponse));
