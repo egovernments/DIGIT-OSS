@@ -21,10 +21,9 @@ function SelectDocument({
   nocDocuments,
   setCheckRequiredFields
 }) {
-
   const filteredDocument = nocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0];
-  const tenantId = Digit.ULBService.getCurrentTenantId(doc);
-  const [selectedDocument, setSelectedDocument] = useState(doc?.dropdownData?.[0]);
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const [selectedDocument, setSelectedDocument] = useState();
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
 
@@ -35,9 +34,9 @@ function SelectDocument({
   }
 
   useEffect(() => {
-      if (selectedDocument?.code) {
+      if (doc?.dropdownData?.[0]?.code) {
           setNocDocuments((prev) => {
-              const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
+              const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== doc?.dropdownData?.[0]?.code);
 
               if (uploadedFile?.length === 0 || uploadedFile === null) {
                   return filteredDocumentsByDocumentType;
@@ -47,7 +46,7 @@ function SelectDocument({
               return [
                   ...filteredDocumentsByFileStoreId,
                   {
-                      documentType: selectedDocument?.code,
+                      documentType: doc?.dropdownData?.[0].code,
                       fileStoreId: uploadedFile,
                       documentUid: uploadedFile,
                       fileName: file?.name || "",
@@ -55,7 +54,7 @@ function SelectDocument({
               ];
           });
       }
-  }, [uploadedFile, selectedDocument]);
+  }, [uploadedFile]);
 
 
   useEffect(() => {
@@ -118,7 +117,7 @@ const NOCDocuments = ({ t, noc, docs, isNoc, applicationData }) => {
   const { isLoading: commonDocsLoading, data: commonDocs } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["DocumentType"]);
   const [commonDocMaping, setCommonDocMaping] = useState([]);
   const [nocTaxDocuments, setNocTaxDocuments] = useState([]);
-  const [nocDocuments, setNocDocuments] = useState([]);
+  const [nocDocuments, setNocDocuments] = Digit.Hooks.useSessionStorage(noc?.nocType, []);
   const [error, setError] = useState(null);
 
   useEffect(() => {

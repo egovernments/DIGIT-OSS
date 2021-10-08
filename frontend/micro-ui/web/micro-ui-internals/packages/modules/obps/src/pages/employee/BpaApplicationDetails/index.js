@@ -34,7 +34,10 @@ const BpaApplicationDetail = () => {
     mutate,
   } = Digit.Hooks.obps.useApplicationActions(tenantId);
 
-
+  const nocMutation = Digit.Hooks.obps.useObpsAPI(
+    tenantId,
+    true
+  );
   let risType = "";
   sessionStorage.setItem("bpaApplicationDetails", true);
 
@@ -117,6 +120,7 @@ const BpaApplicationDetail = () => {
         isLoading={isLoading}
         isDataLoading={isLoading}
         applicationData={data?.applicationData}
+        nocMutation={nocMutation}
         mutate={mutate}
         workflowDetails={workflowDetails}
         businessService={workflowDetails?.data?.applicationBusinessService ? workflowDetails?.data?.applicationBusinessService : data?.applicationData?.businessService}

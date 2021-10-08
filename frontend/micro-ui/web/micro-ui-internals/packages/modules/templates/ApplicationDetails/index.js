@@ -29,6 +29,7 @@ const ApplicationDetails = (props) => {
     isDataLoading,
     applicationData,
     mutate,
+    nocMutation,
     workflowDetails,
     businessService,
     closeToast,
@@ -67,11 +68,22 @@ const ApplicationDetails = (props) => {
     setShowModal(false);
   };
 
-  const submitAction = (data) => {
+  const submitAction = async (data, nocData = false) => {
     if (typeof data?.customFunctionToExecute === "function") {
       data?.customFunctionToExecute({ ...data });
     }
-
+    if (nocData !== false && nocMutation) {
+      const nocPrmomises = nocData?.map(noc => {
+        return nocMutation?.mutateAsync(noc)
+      })
+      try {
+        await Promise.all(nocPrmomises)
+      }
+      catch (err) {
+        closeModal();
+        return;
+      }
+    }
     if (mutate) {
       mutate(data, {
         onError: (error, variables) => {
@@ -113,6 +125,7 @@ const ApplicationDetails = (props) => {
               tenantId={tenantId}
               state={state}
               id={applicationNumber}
+              applicationDetails={applicationDetails}
               applicationData={applicationDetails?.applicationData}
               closeModal={closeModal}
               submitAction={submitAction}

@@ -24,7 +24,7 @@ const CloseBtn = (props) => {
   );
 };
 
-const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, applicationData, businessService, moduleCode }) => {
+const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, applicationDetails, applicationData, businessService, moduleCode }) => {
     const mutation1 = Digit.Hooks.obps.useObpsAPI(
       applicationData?.landInfo?.address?.city ? applicationData?.landInfo?.address?.city : tenantId,
       false
@@ -156,8 +156,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const getPendingApprovals = () => {
     const approvals = Digit.SessionStorage.get("OBPS_APPROVAL_CHECKS");
     const newApprovals = Digit.SessionStorage.get("OBPS_NEW_APPROVALS");
-    let result = approvals.reduce((acc, approval) => approval?.checked ? acc.push(approval?.label) && acc : acc, []);
-    result = result.concat(newApprovals.map(approval => approval?.label));
+    let result = approvals?.reduce((acc, approval) => approval?.checked ? acc.push(approval?.label) && acc : acc, []);
+    result = result?.concat(newApprovals.map(approval => approval?.label));
     return result;
   }
 
@@ -202,6 +202,18 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         : null,
     };
 
+    const nocDetails = applicationDetails?.nocData?.map(noc => {
+      const uploadedDocuments = Digit.SessionStorage.get(noc?.nocType) || [];
+      return {
+        Noc: {
+          ...noc,
+          documents: [
+            ...noc?.documents,
+            ...uploadedDocuments
+          ]
+        }
+      }
+    })
     // try{
     //   mutation1.mutate({BPA:applicationData}, {
     //     onSuccess,
@@ -212,7 +224,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     // }
     submitAction({
       BPA:applicationData
-    });
+    }, nocDetails);
   }
 
   // useEffect(()=>{
