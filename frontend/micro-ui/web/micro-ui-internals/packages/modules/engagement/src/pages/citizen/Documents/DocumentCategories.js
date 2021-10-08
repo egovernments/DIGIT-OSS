@@ -11,13 +11,14 @@ import {
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Searchbar from "../../../components/Documents/Searchbar";
-
+import DocumentCard from "../../../components/Documents/DocumentCard";
+import { useDebounce } from "../../../hooks/useDebounce";
 
 const Accordion = ({ t, title, count, onClick, children }) => {
   const [isOpen, setOpen] = React.useState(false);
 
   return (
-    <div className="accordion-wrapper" onClick={() => onClick(title,count)}>
+    <div className="accordion-wrapper" onClick={() => onClick(title, count)}>
       <div className={`accordion-title ${isOpen ? "open" : ""}`} onClick={() => setOpen(!isOpen)}>
         {`${t(title)} (${count})`}
         <PrevIcon />
@@ -35,12 +36,14 @@ const DocumentCategories = ({ t, parentRoute }) => {
 
   const history = useHistory();
   const [searchValue, setSearchValue] = useState('');
-
   const tenantIds = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
-  const { data: categoriesWithCount , isLoading, } = Digit.Hooks.engagement.useDocSearch({ tenantIds }, {
+
+  const debouncedSearchQuery = useDebounce(searchValue, 700);
+
+  const { data, isLoading, } = Digit.Hooks.engagement.useDocSearch({ name: debouncedSearchQuery, tenantIds }, {
     select: (data) => {
-      return data?.statusCount;
-    } 
+      return data;
+    }
   });
 
   if (!Digit.UserService?.getUser()?.access_token) {
@@ -62,9 +65,9 @@ const DocumentCategories = ({ t, parentRoute }) => {
     setSearchValue("");
   }
 
-  if (isLoading) {
-    return <Loader />
-  }
+  /*  if (isLoading) {
+     return <Loader />
+   } */
   return (
     <AppContainer>
       <div>
@@ -79,23 +82,37 @@ const DocumentCategories = ({ t, parentRoute }) => {
           t={t}
         />
         <hr style={{ color: '#ccc' }} />
-        {/* Accordion */}
-        <div className="wrapper">
-          {categoriesWithCount && categoriesWithCount?.length ?
-            categoriesWithCount.map(({category, count}, index) => {
-              return (
-                <Link key={index} to="#">
-                  <Accordion t={t} title={category} count={count} key={index} onClick={showDocuments}>
-                    {/* <p>{data.info}</p> */}
-                  </Accordion>
-                </Link>
-              );
-            }) :
-            (<Card>
-              <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
-            </Card>)}
-        </div>
-        {/* Accordion */}
+        {!isLoading ? (
+          <div className="wrapper">
+            {searchValue.length && data?.Documents?.length ?
+              data?.Documents?.map(({ name, auditDetails, description, documentLink, fileSize, filestoreId }, index) => (
+                <DocumentCard
+                  key={index}
+                  documentTitle={name}
+                  documentSize={fileSize}
+                  lastModifiedData={auditDetails?.lastModifiedTime}
+                  description={description}
+                  documentLink={documentLink}
+                  filestoreId={filestoreId}
+                  t={t}
+                />
+              ))
+              : data?.statusCount && data?.statusCount?.length ?
+                data?.statusCount?.map(({ category, count }, index) => {
+                  return (
+                    <Link key={index} to="#">
+                      <Accordion t={t} title={category} count={count} key={index} onClick={showDocuments}>
+                        {/* <p>{data.info}</p> */}
+                      </Accordion>
+                    </Link>
+                  );
+                }) :
+                (<Card>
+                  <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
+                </Card>)}
+          </div>
+        ) : <Loader />
+        }
       </Card>
     </AppContainer>
   );

@@ -50,7 +50,7 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
           {documentSize ? <CardCaption>{getFileSize(documentSize)}</CardCaption> : null}
         </div>
         <div className="notice_and_circular_caption">
-          <CardCaption>{`${t(`CE_DCOUMENT_UPLOADED_ON`)} ${format(lastModifiedData, "eo MMMM yyyy")}`}</CardCaption>
+          <CardCaption>{`${t(`CE_DCOUMENT_UPLOADED_ON`)} ${lastModifiedData ? format(lastModifiedData, "eo MMMM yyyy"):"-"}`}</CardCaption>
         </div>
         <div className="notice_and_circular_text">
           <CardText>

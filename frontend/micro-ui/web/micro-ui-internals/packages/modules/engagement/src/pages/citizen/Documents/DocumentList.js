@@ -10,6 +10,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next"
 import DocumentCard from "../../../components/Documents/DocumentCard";
 import Searchbar from "../../../components/Documents/Searchbar";
+import { useDebounce } from "../../../hooks/useDebounce";
 
 const DocumentList = ({ match}) => {
   const { t } = useTranslation()
@@ -19,10 +20,8 @@ const DocumentList = ({ match}) => {
   const [pageOffset, setPageOffset] = useState(0);
   const [searchValue, setSearchValue] = useState();
 
-
-  const { data: filteredDocs, isLoading: isLoadingDocs, } = Digit.Hooks.engagement.useDocSearch({ name: searchValue, category, tenantIds, limit: pageSize }, {
-    limit: pageSize,
-    offset: pageOffset,
+  const debouncedSearchQuery = useDebounce(searchValue, 700);
+  const { data: filteredDocs, isLoading: isLoadingDocs, } = Digit.Hooks.engagement.useDocSearch({ name: debouncedSearchQuery, category, tenantIds, limit: pageSize }, {
     select: (data) => {
       return data?.Documents?.map((
         { uuid,
