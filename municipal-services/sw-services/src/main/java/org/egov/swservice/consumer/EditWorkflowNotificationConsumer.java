@@ -6,6 +6,7 @@ import org.egov.swservice.web.models.SewerageConnection;
 import org.egov.swservice.web.models.SewerageConnectionRequest;
 import org.egov.swservice.service.DiffService;
 import org.egov.swservice.service.SewerageServiceImpl;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static org.egov.swservice.util.SWConstants.TENANTID_MDC_STRING;
 
 @Slf4j
 @Service
@@ -40,8 +43,12 @@ public class EditWorkflowNotificationConsumer {
 		try {
 			SewerageConnectionRequest sewerageConnectionRequest = mapper.convertValue(record,
 					SewerageConnectionRequest.class);
+			String tenantId = sewerageConnectionRequest.getSewerageConnection().getTenantId();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(TENANTID_MDC_STRING, tenantId);
 			SewerageConnection searchResult = sewarageServiceImpl.getConnectionForUpdateRequest(
-					sewerageConnectionRequest.getSewerageConnection().getId(),
+					sewerageConnectionRequest.getSewerageConnection().getTenantId(),sewerageConnectionRequest.getSewerageConnection().getId(),
 					sewerageConnectionRequest.getRequestInfo());
 			diffService.checkDifferenceAndSendEditNotification(sewerageConnectionRequest, searchResult);
 		} catch (Exception ex) {

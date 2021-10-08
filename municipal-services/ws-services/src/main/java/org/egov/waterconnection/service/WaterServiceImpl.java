@@ -163,7 +163,7 @@ public class WaterServiceImpl implements WaterService {
 		validateProperty.validatePropertyFields(property,waterConnectionRequest.getRequestInfo());
 		BusinessService businessService = workflowService.getBusinessService(waterConnectionRequest.getWaterConnection().getTenantId(), 
 				waterConnectionRequest.getRequestInfo(), config.getBusinessServiceValue());
-		WaterConnection searchResult = getConnectionForUpdateRequest(waterConnectionRequest.getWaterConnection().getId(), waterConnectionRequest.getRequestInfo());
+		WaterConnection searchResult = getConnectionForUpdateRequest(waterConnectionRequest.getWaterConnection().getTenantId(),waterConnectionRequest.getWaterConnection().getId(), waterConnectionRequest.getRequestInfo());
 		String previousApplicationStatus = workflowService.getApplicationStatus(waterConnectionRequest.getRequestInfo(),
 				waterConnectionRequest.getWaterConnection().getApplicationNo(),
 				waterConnectionRequest.getWaterConnection().getTenantId(),
@@ -195,10 +195,11 @@ public class WaterServiceImpl implements WaterService {
 	 * @param requestInfo
 	 * @return water connection
 	 */
-	public WaterConnection getConnectionForUpdateRequest(String id, RequestInfo requestInfo) {
+	public WaterConnection getConnectionForUpdateRequest(String tenantId, String id, RequestInfo requestInfo) {
 		Set<String> ids = new HashSet<>(Arrays.asList(id));
 		SearchCriteria criteria = new SearchCriteria();
 		criteria.setIds(ids);
+		criteria.setTenantId(tenantId);
 		List<WaterConnection> connections = getWaterConnectionsList(criteria, requestInfo);
 		if (CollectionUtils.isEmpty(connections)) {
 			StringBuilder builder = new StringBuilder();
@@ -222,7 +223,8 @@ public class WaterServiceImpl implements WaterService {
 				waterConnectionRequest.getWaterConnection().getTenantId(), waterConnectionRequest.getRequestInfo(),
 				config.getModifyWSBusinessServiceName());
 		WaterConnection searchResult = getConnectionForUpdateRequest(
-				waterConnectionRequest.getWaterConnection().getId(), waterConnectionRequest.getRequestInfo());
+				waterConnectionRequest.getWaterConnection().getTenantId(),waterConnectionRequest.getWaterConnection().getId(),
+				waterConnectionRequest.getRequestInfo());
 		Property property = validateProperty.getOrValidateProperty(waterConnectionRequest);
 		validateProperty.validatePropertyFields(property,waterConnectionRequest.getRequestInfo());
 		String previousApplicationStatus = workflowService.getApplicationStatus(waterConnectionRequest.getRequestInfo(),

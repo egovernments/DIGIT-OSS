@@ -68,7 +68,7 @@ public class SewerageDaoImpl implements SewerageDao {
 		if (query == null)
 			return Collections.emptyList();
 
-		utils.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		query = utils.replaceSchemaPlaceholder(query, criteria.getTenantId());
 		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
 		List<SewerageConnection> sewerageConnectionList = new ArrayList<>();
 		if(isOpenSearch)

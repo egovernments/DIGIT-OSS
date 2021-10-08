@@ -225,4 +225,6 @@ public class SWConstants {
 
 	public static String SCHEMA_REPLACE_STRING = "{schema}";
 
+	public static final String TENANTID_MDC_STRING = "TENANTID";
+
 }

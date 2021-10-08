@@ -70,10 +70,10 @@ public class WaterDaoImpl implements WaterDao {
 		List<WaterConnection> waterConnectionList = new ArrayList<>();
 		List<Object> preparedStatement = new ArrayList<>();
 		String query = wsQueryBuilder.getSearchQueryString(criteria, preparedStatement, requestInfo);
-		utils.replaceSchemaPlaceholder(query, criteria.getTenantId());
-		
 		if (query == null)
 			return Collections.emptyList();
+		query = utils.replaceSchemaPlaceholder(query, criteria.getTenantId());
+
 		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
 		
 		if(isOpenSearch)
