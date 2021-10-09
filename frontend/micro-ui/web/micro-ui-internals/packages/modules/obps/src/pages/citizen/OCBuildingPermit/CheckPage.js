@@ -31,7 +31,21 @@ const CheckPage = ({ onSubmit, value }) => {
   else if (value.businessService === "BPA_OC")
     BusinessService = "BPA.NC_OC_APP_FEE"
 
-  const { data, address, owners, nocDocuments, documents, additionalDetails } = value;
+  const { data, address, owners, nocDocuments, documents, additionalDetails,PrevStateDocuments,PrevStateNocDocuments } = value;
+  let isEditApplication = window.location.href.includes("editApplication");
+  let val;
+  var i;
+  let improvedDoc =isEditApplication?[...PrevStateDocuments , ...documents.documents]: [...documents.documents];
+  improvedDoc.map((ob) => { ob["isNotDuplicate"] = true; })
+  improvedDoc.map((ob,index) => {
+    val = ob.documentType;
+    if(ob.isNotDuplicate == true)
+    for(i=index+1; i<improvedDoc.length;i++)
+    {
+      if(val === improvedDoc[i].documentType)
+      improvedDoc[i].isNotDuplicate=false;
+    }
+  })
   const { data: datafromAPI, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId, value?.data?.scrutinyNumber, {
     enabled: true
   })
@@ -48,7 +62,6 @@ const CheckPage = ({ onSubmit, value }) => {
     }
   );
 
-  let isEditApplication = window.location.href.includes("editApplication");
 
   let routeLink = !isEditApplication?`/digit-ui/citizen/obps/bpa/${additionalDetails?.applicationType.toLowerCase()}/${additionalDetails?.serviceType.toLowerCase()}`:`/digit-ui/citizen/obps/editApplication/ocbpa/${value?.tenantId}/${value?.applicationNo}`;
 
@@ -263,13 +276,14 @@ const CheckPage = ({ onSubmit, value }) => {
           style={{ width: "100px", display: "inline" }}
           onClick={() => routeTo(`${routeLink}/document-details`)}
         />
-        {documents?.documents.map((doc, index) => (
+        {improvedDoc.map((doc, index) => (
           <div key={index}>
-            <CardSectionHeader>{`${t(doc?.documentType)}:`}</CardSectionHeader>
+            {doc.isNotDuplicate && <div><CardSectionHeader>{`${t(doc?.documentType)}:`}</CardSectionHeader>
             <StatusTable>
-              <OBPSDocument value={value} Code={doc?.documentType} index={index} />
+              <OBPSDocument value={isEditApplication?[...PrevStateDocuments,...documents.documents]:value} Code={doc?.documentType} index={index} />
               <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
             </StatusTable>
+          </div>}
           </div>
         ))}
       </Card>
@@ -288,12 +302,12 @@ const CheckPage = ({ onSubmit, value }) => {
           style={{ width: "100px", display: "inline" }}
           onClick={() => routeTo(`${routeLink}/noc-details`)}
         />
-        {nocDocuments?.NocDetails.map((noc, index) => (
+        {nocDocuments && nocDocuments?.NocDetails.map((noc, index) => (
           <div key={index}>
             <CardSectionHeader>{`${t(`BPA_${noc?.nocType}_HEADER`)}:`}</CardSectionHeader>
             <StatusTable>
               <Row className="border-none" label={t(`BPA_${noc?.nocType}_LABEL`)} text={noc?.applicationNo} />
-              <OBPSDocument value={value} Code="NOC" index={index} />
+              <OBPSDocument value={isEditApplication?[...PrevStateNocDocuments,...nocDocuments.nocDocuments]:value} Code="NOC" index={index} />
             </StatusTable>
           </div>
         ))}

@@ -20,10 +20,11 @@ import {
     else if(value.businessService === "BPA")
     BusinessService="BPA.NC_APP_FEE";
 
-    const { data, address, owners, nocDocuments, documents, additionalDetails, subOccupancy} = value;
+    const { data, address, owners, nocDocuments, documents, additionalDetails, subOccupancy,PrevStateDocuments,PrevStateNocDocuments } = value;
+    const isEditApplication = window.location.href.includes("editApplication");
     let val;
     var i;
-    let improvedDoc = [...documents.documents];
+    let improvedDoc =isEditApplication?[...PrevStateDocuments , ...documents.documents]: [...documents.documents];
     improvedDoc.map((ob) => { ob["isNotDuplicate"] = true; })
     improvedDoc.map((ob,index) => {
       val = ob.documentType;
@@ -56,7 +57,6 @@ import {
         }
       );
 
-      const isEditApplication = window.location.href.includes("editApplication");
       const sendbacktocitizenApp = window.location.href.includes("sendbacktocitizen");
       let routeLink = `/digit-ui/citizen/obps/bpa/${additionalDetails?.applicationType.toLowerCase()}/${additionalDetails?.serviceType.toLowerCase()}`;
       if (isEditApplication) routeLink = `/digit-ui/citizen/obps/editApplication/bpa/${value?.tenantId}/${value?.applicationNo}`;
@@ -284,7 +284,7 @@ import {
           <div key={index}>
          {doc.isNotDuplicate && <div><CardSectionHeader>{t(doc?.documentType)}</CardSectionHeader>
           <StatusTable>
-          <OBPSDocument value={value} Code={doc?.documentType} index={index}/> 
+          <OBPSDocument value={isEditApplication?[...PrevStateDocuments,...documents.documents]:value} Code={doc?.documentType} index={index}/> 
           <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
           </StatusTable>
           </div>}
@@ -303,7 +303,7 @@ import {
         <CardSectionHeader>{t(`BPA_${noc?.nocType}_HEADER`)}:</CardSectionHeader>
         <StatusTable>
         <Row className="border-none" label={t(`BPA_${noc?.nocType}_LABEL`)} textStyle={{marginLeft:"10px"}} text={noc?.applicationNo} />
-        <OBPSDocument value={value} Code={noc?.nocType?.split("_")[0]} index={index} isNOC={true}/> 
+        <OBPSDocument value={isEditApplication?[...PrevStateNocDocuments,...nocDocuments.nocDocuments]: value} Code={noc?.nocType?.split("_")[0]} index={index} isNOC={true}/> 
         </StatusTable>
         </div>
       ))}

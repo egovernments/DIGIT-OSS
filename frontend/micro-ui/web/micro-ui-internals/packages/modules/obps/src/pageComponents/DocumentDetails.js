@@ -5,9 +5,11 @@ import {
     UploadFile,
     Toast,
     Loader,
-    FormStep
+    FormStep,
+    MultiUploadWrapper
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
+import PropertyDocuments from "../../../templates/ApplicationDetails/components/PropertyDocuments";
 
 const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -17,6 +19,7 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
     const [bpaTaxDocuments, setBpaTaxDocuments] = useState([]);
     const [enableSubmit, setEnableSubmit] = useState(true)
     const [checkRequiredFields, setCheckRequiredFields] = useState(false);
+    const [PrevStateDocuments, setPrevStateDocuments] = useState(formData?.PrevStateDocuments || []);
     const checkingFlow = formData?.uiFlow?.flow;
 
     const { isLoading: bpaDocsLoading, data: bpaDocs } = Digit.Hooks.obps.useMDMS(stateId, "BPA", ["DocTypeMapping"]);
@@ -29,7 +32,7 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
         }
         let documentsList = [];
         filtredBpaDocs?.[0]?.docTypes?.forEach(doc => {
-            let code = doc.code; doc.dropdownData = [];
+            let code = doc.code; doc.dropdownData = []; doc.uploadedDocuments = [];
             commonDocs?.["common-masters"]?.DocumentType?.forEach(value => {
                 let values = value.code.slice(0, code.length);
                 if (code === values) {
@@ -38,6 +41,14 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
                     doc.dropdownData.push(value);
                 }
             });
+            
+            doc.uploadedDocuments[0] = {};
+            doc.uploadedDocuments[0].values = [];
+            PrevStateDocuments.map(upDocs => {
+                if (code === `${upDocs?.documentType?.split('.')[0]}.${upDocs?.documentType?.split('.')[1]}`) {
+                    doc.uploadedDocuments[0].values.push(upDocs)
+                }
+            })
             documentsList.push(doc);
         });
 
@@ -84,7 +95,7 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
                     config={config}
                     onSelect={handleSubmit}
                     onSkip={onSkip}
-                    isDisabled={enableSubmit}
+                    isDisabled={window.location.href.includes("editApplication")?false:enableSubmit}
                     onAdd={onAdd}
                 >
                     {bpaTaxDocuments?.map((document, index) => {
@@ -98,6 +109,8 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
                                 setDocuments={setDocuments}
                                 documents={documents}
                                 setCheckRequiredFields={setCheckRequiredFields}
+                                formData={formData}
+                                PrevStateDocuments={PrevStateDocuments}
                             />
                         );
                     })}
@@ -114,10 +127,12 @@ function SelectDocument({
     error,
     setError,
     documents,
-    setCheckRequiredFields
+    setCheckRequiredFields,
+    formData,
+    PrevStateDocuments
 }) {
 
-    const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0];
+    const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0] || PrevStateDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0];
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const [selectedDocument, setSelectedDocument] = useState(
         filteredDocument
@@ -127,31 +142,88 @@ function SelectDocument({
                 : {}
     );
     const [file, setFile] = useState(null);
-    const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
+    const [uploadedFile, setUploadedFile] = useState(() => documents?.filter((item) => item?.documentType?.includes(doc?.code))[0]?.fileStoreId || null);
+    const [newArray, setnewArray ] = useState([]);
+    const [uploadedfileArray, setuploadedfileArray] = useState([]);
+    const [fileArray, setfileArray] = useState([] || formData?.documents?.documents.filter((ob) => ob.documentType === selectedDocument.code) );
 
     const handleSelectDocument = (value) => setSelectedDocument(value);
 
-    function selectfile(e) {
-        setFile(e.target.files[0]);
+    function selectfile(e, key) {
+        e && setFile(e.file);
+        e && setfileArray([...fileArray,e.file]);
+    }
+
+    function getData(e) {
+        let key = selectedDocument.code;
+        let data,newArr;
+        if(e)
+        {   data = Object.fromEntries(e);
+            newArr = Object.values(data);
+        }
+        else
+        {newArr = formData?.documents?.documents.filter((ob) => ob.documentType === selectedDocument.code);}
+    
+        setnewArray(newArr);
+        if(documents && newArr && documents.filter(ob => ob.documentType === key).length > newArr.length)
+        {
+          setDocuments(documents.filter(ob => ob.documentType !== key));
+        }
+    
+        newArr && newArr.map((ob) => {
+          ob.file.documentType = key;
+          selectfile(ob,key);
+        })
+      }
+
+    function setcodeafterupload(){
+        if (selectedDocument?.code) {
+            setDocuments((prev) => {
+                //const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
+
+                if (uploadedFile?.length === 0 || uploadedFile === null) {
+                    return prev;
+                }
+
+                const filteredDocumentsByFileStoreId = prev?.filter((item) => item?.fileStoreId !== uploadedFile);
+                let newfiles = [];
+                uploadedfileArray && uploadedfileArray.map((docc, index) => {
+                    newfiles.push({
+                        documentType: selectedDocument?.code,
+                            fileStoreId: docc,
+                            documentUid: docc,
+                            fileName: fileArray[index]?.name || "",
+                            id:documents? documents.find(x => x.documentType === selectedDocument?.code)?.id:undefined,
+                    })
+                })
+                
+                return [
+                    ...filteredDocumentsByFileStoreId,
+                    ...newfiles,
+                ];
+            });
+            setuploadedfileArray([]);
+        }
     }
 
     useEffect(() => {
+        uploadedfileArray.length>0 && setcodeafterupload();
         if (selectedDocument?.code) {
             setDocuments((prev) => {
-                const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
+                //const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
 
                 if (uploadedFile?.length === 0 || uploadedFile === null) {
-                    return filteredDocumentsByDocumentType;
+                    return prev;
                 }
 
-                const filteredDocumentsByFileStoreId = filteredDocumentsByDocumentType?.filter((item) => item?.fileStoreId !== uploadedFile);
+                const filteredDocumentsByFileStoreId = prev?.filter((item) => item?.fileStoreId !== uploadedFile);
                 return [
                     ...filteredDocumentsByFileStoreId,
                     {
                         documentType: selectedDocument?.code,
                         fileStoreId: uploadedFile,
                         documentUid: uploadedFile,
-                        fileName: file?.name || "",
+                        fileName: file?.name || "document",
                         id:documents? documents.find(x => x.documentType === selectedDocument?.code)?.id:undefined,
                     },
                 ];
@@ -159,11 +231,16 @@ function SelectDocument({
         }
     }, [uploadedFile, selectedDocument]);
 
+    useEffect(() => {
+        if(!selectedDocument.code && uploadedFile!== null)
+        setuploadedfileArray([...uploadedfileArray,uploadedFile])
+    },[uploadedFile]);
+
 
     useEffect(() => {
         (async () => {
             setError(null);
-            if (file) {
+            if (file && !file.fileStoreId) {
                 if (file.size >= 5242880) {
                     setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
                 } else {
@@ -187,6 +264,7 @@ function SelectDocument({
     return (
         <div style={{ marginBottom: "24px" }}>
             <CardLabel>{doc?.required ? `${t(doc?.code)} *` : `${t(doc?.code)}`}</CardLabel>
+            {doc?.uploadedDocuments?.length && <PropertyDocuments documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
             <Dropdown
                 t={t}
                 isMandatory={false}
@@ -195,7 +273,7 @@ function SelectDocument({
                 optionKey="i18nKey"
                 select={handleSelectDocument}
             />
-            <UploadFile
+            {/* <UploadFile
                 id={"obps-doc"}
                 extraStyleName={"propertyCreate"}
                 accept=".jpg,.png,.pdf"
@@ -206,7 +284,13 @@ function SelectDocument({
                 }}
                 message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`ES_NO_FILE_SELECTED_LABEL`)}
                 error={error}
-            />
+            /> */}
+            <MultiUploadWrapper
+            module="BPA"
+            tenantId={tenantId}
+            getFormState={e => getData(e)}
+            setuploadedstate={formData?.documents?.documents.filter((ob) => ob.documentType === selectedDocument.code)}
+          />
         </div>
     );
 

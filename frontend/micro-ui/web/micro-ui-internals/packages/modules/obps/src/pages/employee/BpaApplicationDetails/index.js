@@ -95,7 +95,7 @@ const BpaApplicationDetail = () => {
         <Header>{t("BPA_TASK_DETAILS_HEADER")}</Header>
       </div>
       {data?.applicationData?.status === "FIELDINSPECTION_INPROGRESS" && <div style={{ marginLeft: "15px" }}>
-        <Header>{t("Inspection Report")}</Header>
+        <Header>{t("BPA_FI_REPORT")}</Header>
       </div>}
       {data?.applicationData?.status === "FIELDINSPECTION_INPROGRESS" && <FormComposer
         heading={t("")}

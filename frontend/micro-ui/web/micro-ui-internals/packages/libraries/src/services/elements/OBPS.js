@@ -495,14 +495,14 @@ export const OBPSService = {
     // if(inspectionReport) details.push(inspectionReport);\
     let val;
     var i;
-    inspectionReport && inspectionReport.map((ob,index) => {
+    inspectionReport && BPA?.additionalDetails?.fieldinspection_pending?.[0]?.questions.length>0 && inspectionReport.map((ob,index) => {
       if(ob.title.includes("FI_REPORT"))
       details = [...details, {title:ob.title,additionalDetails:{inspectionReport:[],values:ob.values}} ];
       else if(ob.title.includes("CHECK_LIST"))
       details = [...details, {title:ob.title,additionalDetails:{isChecklist:true,inspectionReport:[],values:ob.values}}]
       else
       {
-        let improvedDoc = [...inspectionReport[2].additionalDetails.obpsDocuments?.[0]?.values];
+        let improvedDoc = [...ob.additionalDetails.obpsDocuments?.[0]?.values];
         improvedDoc.map((ob) => { ob["isNotDuplicate"] = true; })
         improvedDoc.map((ob,index) => {
         val = ob.documentType;

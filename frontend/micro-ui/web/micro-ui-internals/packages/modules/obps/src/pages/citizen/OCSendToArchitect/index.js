@@ -58,13 +58,16 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t,OCData) =
     riskType: Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks),
     serviceType:data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType,
   }
+
+  data["PrevStateDocuments"] = data?.documents;
   data.documents = {
-    documents:data?.documents
+    documents:[]
   }
 
+  data["PrevStateNocDocuments"]=nocdata.map(a => a.documents[0]);
   data.nocDocuments = {
     NocDetails:nocdata,
-    nocDocuments:nocdata.map(a => a.documents[0]),
+    nocDocuments:[],
   }
 
   data.riskType = Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks)
@@ -122,7 +125,7 @@ const OCSendToArchitect = ({ parentRoute }) => {
 
   useEffect(() => {
      application = bpaData ? bpaData[0]:{};
-     if (bpaData && application && data1 && mdmsData && nocdata && OCData) {
+     if (data1 && OCData) {
       application = bpaData[0];
        if (editApplication) {
          application.isEditApplication = true;
@@ -191,7 +194,7 @@ const OCSendToArchitect = ({ parentRoute }) => {
         <OBPSAcknowledgement data={params} onSuccess={onSuccess} />
       </Route>
       <Route>
-        <Redirect to={`${getPath(match.path, match.params)}/${config.indexRoute}`} />
+        {data1 && OCData && <Redirect to={`${getPath(match.path, match.params)}/${config.indexRoute}`} />}
       </Route>
     </Switch>
   );
