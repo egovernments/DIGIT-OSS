@@ -151,6 +151,12 @@ const FstpOperatorDetails = () => {
     },
   ];
 
+  const handleTimeChange = (value, cb) => {
+    if (typeof value === 'string') {
+      cb(value);
+    }
+  }
+
   return (
     <div>
       <Card>
@@ -166,7 +172,7 @@ const FstpOperatorDetails = () => {
               rowContainerStyle={{ marginBottom: "32px" }}
               text={
                 <div>
-                  <CustomTimePicker name="tripStartTime" onChange={setTripStartTime} value={tripStartTime} />
+                  <CustomTimePicker name="tripStartTime" onChange={val => handleTimeChange(val, setTripStartTime)} value={tripStartTime} />
                 </div>
               }
             />
@@ -192,7 +198,7 @@ const FstpOperatorDetails = () => {
               label={`${t("ES_VEHICLE_OUT_TIME")} * `}
               text={
                 <div>
-                  <CustomTimePicker name="tripTime" onChange={setTripTime} value={tripTime} />
+                  <CustomTimePicker name="tripTime" onChange={val => handleTimeChange(val, setTripTime)} value={tripTime} />
                 </div>
               }
             />
