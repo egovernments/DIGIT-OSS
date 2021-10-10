@@ -17,7 +17,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     const [bpaTaxDocuments, setBpaTaxDocuments] = useState([]);
     const [enableSubmit, setEnableSubmit] = useState(true)
     const [checkRequiredFields, setCheckRequiredFields] = useState(false);
-
+    const isCitizenUrl = Digit.Utils.browser.isMobile()?true:false;
 
     const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateId, "StakeholderRegistraition", "TradeTypetoRoleMapping");
     
@@ -101,6 +101,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                                 setDocuments={setDocuments}
                                 documents={documents}
                                 setCheckRequiredFields={setCheckRequiredFields}
+                                isCitizenUrl={isCitizenUrl}
                             />
                         );
                     })}
@@ -117,7 +118,8 @@ function SelectDocument({
     error,
     setError,
     documents,
-    setCheckRequiredFields
+    setCheckRequiredFields,
+    isCitizenUrl
 }) {
 
     const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0];
@@ -206,6 +208,7 @@ function SelectDocument({
                 }}
                 message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
                 error={error}
+                Multistyle={isCitizenUrl?{marginTop:"-15px",position:"absolute"}:{marginTop:"-24px",width:"190%"}}
             />
         </div>
     );

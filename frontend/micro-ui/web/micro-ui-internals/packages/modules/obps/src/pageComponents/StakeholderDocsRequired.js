@@ -26,7 +26,7 @@ const StakeholderDocsRequired = ({ onSelect, onSkip, config }) => {
     <Fragment>
       <Card>
         <CardHeader>{t(`BPA_NEW_BUILDING_HEADER`)}</CardHeader>
-        <CitizenInfoLabel style={{margin:"0px"}} textStyle={{color:"#0B0C0C"}} text={t(`BPA_DOCS_REQUIRED_TIME`)} showInfo={false} />
+        <CitizenInfoLabel style={{margin:"0px",textAlign:"center"}} textStyle={{color:"#0B0C0C"}} text={t(`BPA_DOCS_REQUIRED_TIME`)} showInfo={false} />
         <CardText style={{ color: "#0B0C0C", marginTop: "12px" }}>{t(`BPA_NEW_BUILDING_PERMIT_DESCRIPTION`)}</CardText>
         {isLoading ?
           <Loader /> :

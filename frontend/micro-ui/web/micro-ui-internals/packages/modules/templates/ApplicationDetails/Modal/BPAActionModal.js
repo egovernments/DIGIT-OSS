@@ -208,8 +208,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         Noc: {
           ...noc,
           documents: [
-            ...noc?.documents,
-            ...uploadedDocuments
+            ...(noc?.documents?noc?.documents:[]),
+            ...(uploadedDocuments?uploadedDocuments:[])
           ]
         }
       }

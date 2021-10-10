@@ -55,7 +55,7 @@ export const convertToNocObject = (data,datafromflow) => {
                   }})
                   
   }) || [] : [];
-  doc = [...doc,...(datafromflow?.PrevStateNocDocuments.filter((n) => n.documentType.includes(data.nocType.split("_")[0])))];
+  doc = [...doc,...(datafromflow?.PrevStateNocDocuments? datafromflow?.PrevStateNocDocuments.filter((n) => n.documentType.includes(data.nocType.split("_")[0])):[])];
   formData.Noc.documents = doc;
   return formData;
 }
@@ -87,7 +87,7 @@ let document = [];
     })
   }
   });
-  document = [...document, ...PrevStateDocs];
+  document = [...document, ...(PrevStateDocs?PrevStateDocs:[])];
   return document;
 }
 
