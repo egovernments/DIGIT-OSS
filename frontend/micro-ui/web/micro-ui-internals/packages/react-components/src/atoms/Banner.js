@@ -9,7 +9,7 @@ const Successful = (props) => {
   const user_type = Digit.SessionStorage.get("userType");
 
   return (
-    <div className={user_type === "citizen" ? "success-wrap" : "emp-success-wrap"} style={props.style ? props.style : {}}>
+    <div className={user_type === "citizen" ? "success-wrap" : "emp-success-wrap"} style={props?.props?.style ? props?.props?.style : {}}>
       <header>{props.props.message}</header>
       <div>
         {/* <img src={success} alt="successfull submition"/> */}
@@ -26,7 +26,7 @@ const Error = (props) => {
   const user_type = Digit.SessionStorage.get("userType");
 
   return (
-    <div className={user_type === "citizen" ? "error-wrap" : "emp-error-wrap"} style={props.style ? props.style : {}}>
+    <div className={user_type === "citizen" ? "error-wrap" : "emp-error-wrap"} style={props?.props?.style ? props?.props?.style : {}}>
       <header>{props.props.message}</header>
       <ErrorSvg />
       {/* <img src={error} alt="error while submition"/> */}

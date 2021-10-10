@@ -10,6 +10,7 @@ const EDCRAcknowledgement = (props) => {
   const history = useHistory();
   const [bpaLinks, setBpaLinks] = useState({});
   const state = Digit.ULBService.getStateId();
+  const isMobile = window.Digit.Utils.browser.isMobile();
   const { data:homePageUrlLinks , isLoading: homePageUrlLinksLoading } = Digit.Hooks.obps.useMDMS(state, "BPA", ["homePageUrlLinks"]);
 
   useEffect(() => {
@@ -53,7 +54,7 @@ const EDCRAcknowledgement = (props) => {
             successful={true}
             infoStyles = {{fontSize: "18px", lineHeight: "21px", fontWeight: "bold", textAlign: "center", padding: "0px 15px"}}
             applicationNumberStyles = {{fontSize: "24px", lineHeight: "28px", fontWeight: "bold", marginTop: "10px"}}
-            style={{ padding: "10px" }}
+            style={isMobile ? { padding: "10px" }: {width: "100%", padding: "10px"}}
           />
           <CardText style={{ padding: "0px 8px", marginBottom: "10px" }}>{`${t("PDF_STATIC_LABEL_CONSOLIDATED_BILL_CONSUMER_ID_TL")} - ${edcrData?.applicationNumber}`}</CardText>
           <div className="primary-label-btn d-grid" style={{ marginLeft: "unset", marginBottom: "10px", padding: "0px 8px" }} onClick={printReciept}>
@@ -66,13 +67,13 @@ const EDCRAcknowledgement = (props) => {
             <Link to={{pathname: `/digit-ui/citizen/obps/${bpaLinks?.linkData?.flow?.toLowerCase()}/${edcrData?.appliactionType?.toLowerCase()}/${edcrData?.applicationSubType?.toLowerCase()}/docs-required`, state: bpaLinks}} >
               <SubmitBar label={t("BPA_APPLY_FOR_BPA_LABEL")} />
             </Link>
-          </div>
-          <CardText  style={{display:"flex", justifyContent: "center", marginBottom: "0px"}}>{t("BPA_FOR_NEW_CONSTRUCTION_LABEL")}</CardText>
-          <div style={{marginTop: "12px", paddingBottom: "10px"}}>
-            <Link to={`/digit-ui/citizen`} >
-              <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
-            </Link>
-          </div>
+            <CardText  style={isMobile ? {display:"flex", justifyContent: "center", marginBottom: "0px"} : {}}>{t("BPA_FOR_NEW_CONSTRUCTION_LABEL")}</CardText>
+            <div style={{marginTop: "12px", paddingBottom: "10px"}}>
+              <Link to={`/digit-ui/citizen`} >
+                <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
+              </Link>
+            </div>
+          </div>    
         </Card> :
         <Card style={{ padding: "0px" }}>
           <Banner

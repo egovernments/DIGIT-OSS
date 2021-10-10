@@ -14,7 +14,7 @@ export const configBPAApproverApplication = ({
   businessService,
 }) => {
   let isRejectOrRevocate = false
-  if(action?.action == "REVOCATE" || action?.action == "REJECT") {
+  if(action?.action == "REVOCATE" || action?.action == "REJECT" || action.action == "SKIP_PAYMENT") {
     isRejectOrRevocate = true;
   }
   
