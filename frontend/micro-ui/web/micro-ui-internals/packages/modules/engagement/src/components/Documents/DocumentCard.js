@@ -17,7 +17,7 @@ import { getFileUrl, openUploadedDocument, openDocumentLink } from './DesktopInb
 const downloadDocument = async (filestoreId, title) => {
   if (!filestoreId || !filestoreId.length) { alert('No Document exists!'); return; }
   const fileUrl = await getFileUrl(filestoreId);
-  if(fileUrl){
+  if (fileUrl) {
     const anchorTag = document.createElement('a');
     anchorTag.href = fileUrl;
     anchorTag.download = title;
@@ -43,7 +43,7 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
           {documentSize ? <CardCaption>{getFileSize(documentSize)}</CardCaption> : null}
         </div>
         <div className="notice_and_circular_caption">
-          <CardCaption>{`${t(`CE_DCOUMENT_UPLOADED_ON`)} ${lastModifiedData ? format(lastModifiedData, "eo MMMM yyyy"):"-"}`}</CardCaption>
+          <CardCaption>{`${t(`CE_DCOUMENT_UPLOADED_ON`)} ${lastModifiedData ? format(lastModifiedData, "eo MMMM yyyy") : "-"}`}</CardCaption>
         </div>
         <div className="notice_and_circular_text">
           <CardText>
@@ -74,7 +74,7 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
           }
           <LinkButton
             label={
-              <div className="views download_views_padding" onClick={() => downloadDocument(filestoreId ? filestoreId : null, documentTitle)} >
+              <div className="views download_views_padding" onClick={() => openUploadedDocument(filestoreId ? filestoreId : documentLink, documentTitle)} >
                 <DownloadImgIcon />
                 <p>{t(`CE_DOCUMENT_DOWNLOAD_LINK`)}</p>
               </div>
