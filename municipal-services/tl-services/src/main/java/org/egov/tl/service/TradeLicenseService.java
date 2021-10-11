@@ -238,6 +238,25 @@ public class TradeLicenseService {
         if(licenses.isEmpty())
             return Collections.emptyList();
         licenses = enrichmentService.enrichTradeLicenseSearch(licenses,criteria,requestInfo);
+        
+        if(criteria.getRenewalPending()!=null && criteria.getRenewalPending()==true) {
+        	List <TradeLicense> duplicateLicenses = new ArrayList<TradeLicense>();
+        	
+        	for(TradeLicense license : licenses) {
+        		for(TradeLicense duplicateLicense : licenses) {
+        			if (!license.getApplicationNumber().equalsIgnoreCase(duplicateLicense.getApplicationNumber()) && license.getLicenseNumber().equalsIgnoreCase(duplicateLicense.getLicenseNumber()) &&  duplicateLicense.getFinancialYear().compareTo(license.getFinancialYear())<0 ) {
+        				duplicateLicenses.add(duplicateLicense);
+        			}
+        		}
+        	}
+        	
+        	for (TradeLicense duplicateLicense : duplicateLicenses) {
+        		licenses.removeIf(t->t.getApplicationNumber().equalsIgnoreCase(duplicateLicense.getApplicationNumber()));
+        	}
+        	
+        	
+        }
+        
         return licenses;
     }
 
