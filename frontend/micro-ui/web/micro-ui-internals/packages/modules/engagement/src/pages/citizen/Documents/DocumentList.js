@@ -69,39 +69,45 @@ const DocumentList = ({ match }) => {
   return (
     <AppContainer>
       <Header>{`${t(`${category}`)} (${count ? count : "-"})`}</Header>
-      <Card>
-        <div
-        >
+      <div
+      >
 
-          <Searchbar
-            searchValue={searchValue}
-            handleKeyPress={handleKeyPress}
-            handleSearch={handleSearch}
-            onChange={setSearchValue}
-            t={t}
-          />
-        </div>
-        {
-          filteredDocs &&
-            filteredDocs.length ? filteredDocs.map(({ name, lastModifiedDate, description, documentLink, fileSize, filestoreId }, index) => (
-              <DocumentCard
-                key={index}
-                documentTitle={name}
-                documentSize={fileSize}
-                lastModifiedData={lastModifiedDate}
-                description={description}
-                documentLink={documentLink}
-                filestoreId={filestoreId}
-                t={t}
-              />
-            )) :
-            <Card>
-              <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
-            </Card>
-        }
-      </Card>
+        <Searchbar
+          searchValue={searchValue}
+          handleKeyPress={handleKeyPress}
+          handleSearch={handleSearch}
+          onChange={setSearchValue}
+          t={t}
+        />
+      </div>
+      {
+        filteredDocs &&
+          filteredDocs.length ? renderDocsList(filteredDocs, t) :
+          <Card>
+            <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
+          </Card>
+      }
     </AppContainer >
   );
 };
 
 export default DocumentList;
+
+export const renderDocsList = (documents, t) => (
+
+
+  documents.map(({ name, lastModifiedDate, description, documentLink, fileSize, filestoreId }, index) => (
+    <DocumentCard
+      key={index}
+      documentTitle={name}
+      documentSize={fileSize}
+      lastModifiedData={lastModifiedDate}
+      description={description}
+      documentLink={documentLink}
+      filestoreId={filestoreId}
+      t={t}
+    />
+  ))
+
+
+)

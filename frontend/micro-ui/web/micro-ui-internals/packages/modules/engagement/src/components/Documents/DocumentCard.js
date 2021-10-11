@@ -16,14 +16,16 @@ import { getFileUrl, openUploadedDocument, openDocumentLink } from './DesktopInb
 
 const downloadDocument = async (filestoreId, title) => {
   if (!filestoreId || !filestoreId.length) { alert('No Document exists!'); return; }
+
   const fileUrl = await getFileUrl(filestoreId);
   if (fileUrl) {
-    const anchorTag = document.createElement('a');
+   /*  const anchorTag = document.createElement('a');
     anchorTag.href = fileUrl;
     anchorTag.download = title;
     document.body.appendChild(anchorTag);
     anchorTag.click();
-    document.body.removeChild(anchorTag);
+    document.body.removeChild(anchorTag); */
+    window.open(fileUrl,"_blank")
   }
 }
 
@@ -51,7 +53,7 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
           </CardText>
         </div>
         <div className="view_download_main">
-          <LinkButton
+          {filestoreId && filestoreId.length ? <LinkButton
 
             label={
               <div className="views" onClick={() => openUploadedDocument(filestoreId ? filestoreId : null, documentTitle)}>
@@ -59,8 +61,8 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
                 <p>{t(`CE_DOCUMENT_VIEW_LINK`)}</p>
               </div>
             }
-          />
-
+          /> : null
+          }
           {documentLink && documentLink.length ?
             (<LinkButton
 
@@ -72,14 +74,17 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
               }
             />) : null
           }
-          <LinkButton
-            label={
-              <div className="views download_views_padding" onClick={() => openUploadedDocument(filestoreId ? filestoreId : documentLink, documentTitle)} >
-                <DownloadImgIcon />
-                <p>{t(`CE_DOCUMENT_DOWNLOAD_LINK`)}</p>
-              </div>
-            }
-          />
+          {filestoreId && filestoreId.length ?
+            <LinkButton 
+              label={
+                <div className="views download_views_padding" >
+                  <DownloadImgIcon />
+                  <p>{t(`CE_DOCUMENT_DOWNLOAD_LINK`)}</p>
+                </div>
+              }
+              onClick={() => downloadDocument(filestoreId ? filestoreId : null, documentTitle)}
+            /> : null
+          }
         </div>
       </div>
 
