@@ -140,7 +140,7 @@ async function search_water(applicationNumber, tenantId, requestinfo, allowCitiz
   }
   return await axios({
     method: "post",
-    url: url.resolve(config.host.wns, config.paths.water_search),
+    url: url.resolve(config.host.waterHost, config.paths.water_search),
     data: requestinfo,
     headers: headers,
     params,
@@ -159,7 +159,7 @@ async function search_sewerage(applicationNumber, tenantId, requestinfo, allowCi
   }
   return await axios({
     method: "post",
-    url: url.resolve(config.host.wns, config.paths.sewerage_search),
+    url: url.resolve(config.host.sewerageHost, config.paths.sewerage_search),
     data: requestinfo,
     headers: headers,
     params,
