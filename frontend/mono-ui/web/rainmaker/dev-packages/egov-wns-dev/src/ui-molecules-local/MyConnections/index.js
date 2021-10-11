@@ -55,6 +55,25 @@ class MyConnections extends React.Component {
       <div className="application-card">
         {myConnectionResults && myConnectionResults.length > 0 ? (
           myConnectionResults.map(item => {
+
+            let formatAddress = "";
+            if (item.property && item.property.address) {
+              let obj = {
+                doorNo: item.property.address.doorNo,
+                buildingName: item.property.address.buildingName,
+                street: item.property.address.street,
+                landmark: item.property.address.landmark,
+                locality: item.property.address.locality.name,
+                city: item.property.address.city,
+                pincode: item.property.address.pincode,
+              };
+              let finalAddress = "";
+              for (const key in obj) {
+                finalAddress += (obj[key] && obj[key] != "NA") ? obj[key] + ", " : "";
+              }
+              formatAddress = `${finalAddress.slice(0, -2)}.`
+            } 
+
             return (
               <div>
                 <Card className={classes.card}>
@@ -158,7 +177,7 @@ class MyConnections extends React.Component {
                         <Grid item md={8} xs={6}>
                           {(item.property && item.property.address && item.property.address.street) ?
                             (<Label
-                              labelName={item.property.address.street}
+                              labelName={formatAddress}
                               fontSize={14}
                               style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                             />) :
