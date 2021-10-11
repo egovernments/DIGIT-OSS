@@ -22,6 +22,7 @@ router.post(
     var receiptKey = req.query.pdfKey;
     var requestinfo = req.body;
     var headers = JSON.parse(JSON.stringify(req.headers));
+    headers['tenantId']=headers.tenantid;
 
     if (requestinfo == undefined) {
       return renderError(res, "requestinfo can not be null", 400);
