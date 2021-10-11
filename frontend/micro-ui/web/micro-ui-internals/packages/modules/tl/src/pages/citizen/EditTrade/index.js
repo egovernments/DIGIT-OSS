@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
-// import { newConfig } from "../../../config/config";
+import { newConfig as newConfigTL } from "../../../config/config";
 import { getCommencementDataFormat } from "../../../utils/index";
 
 const getPath = (path, params) => {
@@ -144,7 +144,7 @@ const EditTrade = ({ parentRoute }) => {
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("TL_EDIT_TRADE", {});
 
   const stateId = Digit.ULBService.getStateId();
-  const { data: newConfig, isLoading: configLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(stateId, {});
+  let { data: newConfig, isLoading: configLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(stateId, {});
 
   let filter1 = {};
 
@@ -205,6 +205,7 @@ const EditTrade = ({ parentRoute }) => {
   const onSuccess = () => {
     queryClient.invalidateQueries("TL_EDIT_TRADE");
   };
+  newConfig=newConfig?newConfig:newConfigTL;
   newConfig?.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });

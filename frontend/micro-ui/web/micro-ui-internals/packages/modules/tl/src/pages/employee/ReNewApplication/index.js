@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { convertDateToEpoch, convertEpochToDate, stringReplaceAll } from "../../../utils";
+import { newConfig as newConfigTL } from "../../../config/config";
 
 const ReNewApplication = (props) => {
   const applicationData = cloneDeep(props?.location?.state?.applicationData) || {};
@@ -11,7 +12,7 @@ const ReNewApplication = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
-  const { data: newConfig, isLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(tenantId?.split?.(".")?.[0], {});
+  let { data: newConfig, isLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(tenantId?.split?.(".")?.[0], {});
 
   const history = useHistory();
   // delete
@@ -318,6 +319,7 @@ const ReNewApplication = (props) => {
   };
 
   let configs = [];
+  newConfig=newConfig?newConfig:newConfigTL;
   newConfig?.map((conf) => {
     if (conf.head !== "ES_NEW_APPLICATION_PROPERTY_ASSESSMENT") {
       configs.push(conf);
