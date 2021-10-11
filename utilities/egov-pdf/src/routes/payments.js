@@ -21,6 +21,8 @@ router.post(
     var bussinessService = req.query.bussinessService;
     var receiptKey = req.query.pdfKey;
     var requestinfo = req.body;
+    var headers = JSON.parse(JSON.stringify(req.headers));
+
     if (requestinfo == undefined) {
       return renderError(res, "requestinfo can not be null", 400);
     }
@@ -33,7 +35,7 @@ router.post(
     }
     try {
       try {
-        resProperty = await search_payment(consumerCode, tenantId, requestinfo, bussinessService);
+        resProperty = await search_payment(consumerCode, tenantId, requestinfo, bussinessService, headers);
       } catch (ex) {
         
         if (ex.response && ex.response.data) console.log(ex.response.data);
@@ -48,7 +50,8 @@ router.post(
             tenantId,
             pdfkey,
             payments,
-            requestinfo
+            requestinfo,
+            headers
           );
         } catch (ex) {
           

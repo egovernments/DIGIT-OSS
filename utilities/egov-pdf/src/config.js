@@ -34,7 +34,11 @@ module.exports = {
     wns_one_time_receipt:
     process.env.WNS_ONE_TIME_RECEIPT || "ws-onetime-receipt",
     wns_bill:
-    process.env.WNS_BILL || "ws-bill"
+    process.env.WNS_BILL || "ws-bill",
+    STATE_LEVEL_TENANTID_LENGTH: 
+    process.env.STATE_LEVEL_TENANTID_LENGTH || 2,
+    IS_ENVVIRONMENT_CENTRAL_INSTANCE: 
+    process.env.IS_ENVVIRONMENT_CENTRAL_INSTANCE || true,
   },
   app: {
     port: parseInt(process.env.APP_PORT) || 8080,

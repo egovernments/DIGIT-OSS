@@ -25,6 +25,8 @@ router.post(
     var tenantId = req.query.tenantId;
     var uuid = req.query.uuid;
     var requestinfo = req.body;
+    var headers = JSON.parse(JSON.stringify(req.headers));
+
     if (requestinfo == undefined) {
       return renderError(res, "requestinfo can not be null", 400);
     }
@@ -38,7 +40,7 @@ router.post(
 
     try {
       try {
-        resProperty = await search_property(uuid, tenantId, requestinfo);
+        resProperty = await search_property(uuid, tenantId, requestinfo, false, headers);
       } catch (ex) {
         
         if (ex.response && ex.response.data) console.log(ex.response.data);
@@ -63,7 +65,8 @@ router.post(
           var workflowResponse = await search_workflow(
             applicationNumber,
             tenantId,
-            requestinfo
+            requestinfo,
+            headers
           );
           var status = workflowResponse.data.ProcessInstances[0].state.state;
           if (status != "APPROVED")
@@ -88,7 +91,8 @@ router.post(
             tenantId,
             pdfkey,
             properties,
-            requestinfo
+            requestinfo,
+            headers
           );
         } catch (ex) {
           
@@ -123,6 +127,8 @@ router.post(
     var tenantId = req.query.tenantId;
     var uuid = req.query.uuid;
     var requestinfo = req.body;
+    var headers = JSON.parse(JSON.stringify(req.headers));
+
     if (requestinfo == undefined) {
       return renderError(res, "requestinfo can not be null", 400);
     }
@@ -135,7 +141,7 @@ router.post(
     }
     try {
       try {
-        resProperty = await search_property(uuid, tenantId, requestinfo, true);
+        resProperty = await search_property(uuid, tenantId, requestinfo, true, headers);
       } catch (ex) {
         
         if (ex.response && ex.response.data) console.log(ex.response.data);
@@ -150,7 +156,7 @@ router.post(
         var propertyid = properties.Properties[0].propertyId;
         var billresponse;
         try {
-          billresponse = await search_bill(propertyid, tenantId, requestinfo);
+          billresponse = await search_bill(propertyid, tenantId, requestinfo, headers);
         } catch (ex) {
           
           if (ex.response && ex.response.data) console.log(ex.response.data);
@@ -166,7 +172,8 @@ router.post(
               tenantId,
               pdfkey,
               billArray,
-              requestinfo
+              requestinfo,
+              headers
             );
           } catch (ex) {
             
@@ -204,6 +211,8 @@ router.post(
     var tenantId = req.query.tenantId;
     var uuid = req.query.uuid;
     var requestinfo = req.body;
+    var headers = JSON.parse(JSON.stringify(req.headers));
+
     if (requestinfo == undefined) {
       return renderError(res, "requestinfo can not be null", 400);
     }
@@ -216,7 +225,7 @@ router.post(
     }
     try {
       try {
-        resProperty = await search_property(uuid, tenantId, requestinfo);
+        resProperty = await search_property(uuid, tenantId, requestinfo, false, headers);
       } catch (ex) {
         
         if (ex.response && ex.response.data) console.log(ex.response.data);
@@ -236,7 +245,8 @@ router.post(
             propertyid,
             tenantId,
             requestinfo,
-            bussinessService
+            bussinessService,
+            headers
           );
         } catch (ex) {
           
@@ -252,7 +262,8 @@ router.post(
               tenantId,
               pdfkey,
               payments,
-              requestinfo
+              requestinfo,
+              headers
             );
           } catch (ex) {
             

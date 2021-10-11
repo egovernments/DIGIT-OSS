@@ -24,6 +24,8 @@ var {
       var tenantId = req.query.tenantId;
       var challanNo = req.query.challanNo;
       var requestinfo = req.body;
+      var headers = JSON.parse(JSON.stringify(req.headers));
+
       if (requestinfo == undefined) {
         return renderError(res, "requestinfo can not be null", 400);
       }
@@ -39,7 +41,8 @@ var {
           echallanDtls = await search_echallan(
             tenantId,
             challanNo,
-            requestinfo
+            requestinfo,
+            headers
           );
         } catch (ex) {
           console.log("error",ex.stack);
@@ -81,7 +84,8 @@ var {
               tenantId,
               challanNo,
               businessService,
-              requestinfo
+              requestinfo,
+              headers
             );
           } catch (ex) {
             
@@ -114,7 +118,8 @@ var {
                 tenantId,
                 pdfkey,
                 finalObj,
-                requestinfo
+                requestinfo,
+                headers
               );
             } catch (ex) {
              // 
@@ -159,6 +164,8 @@ var {
       var tenantId = req.query.tenantId;
       var consumerCode = req.query.consumerCode;
       var requestinfo = req.body;
+      var headers = JSON.parse(JSON.stringify(req.headers));
+
       if (requestinfo == undefined) {
         return renderError(res, "requestinfo can not be null", 400);
       }
@@ -174,7 +181,8 @@ var {
         try {
           echallanDtls = await search_bill_genie(
             inpData,
-            requestinfo
+            requestinfo,
+            headers
           );
         } catch (ex) {
           console.log("error",ex.stack);
@@ -205,7 +213,8 @@ var {
                 tenantId,
                 pdfkey,
                 finalObj,
-                requestinfo
+                requestinfo,
+                headers
               );
             } catch (ex) {
               
