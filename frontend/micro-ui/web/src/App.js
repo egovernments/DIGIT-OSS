@@ -11,7 +11,7 @@ import { initLibraries } from "@egovernments/digit-ui-libraries";
 import { HRMSModule ,initHRMSComponents  } from "@egovernments/digit-ui-module-hrms";
 import { TLModule, TLLinks,initTLComponents } from "@egovernments/digit-ui-module-tl";
 import { initReceiptsComponents, ReceiptsModule } from "@egovernments/digit-ui-module-receipts";
-import {initCustomisationComponents} from "./customisations";
+import {initCustomisationComponents} from "./Customisations";
 
 initLibraries();
 

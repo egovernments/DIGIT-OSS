@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
-// import { newConfig } from "../../../config/Create/config";
+import { newConfig } from "../../../config/Create/config";
 
 import { checkArrayLength, stringReplaceAll,getSuperBuiltUpareafromob } from "../../../utils";
 
@@ -398,7 +398,7 @@ const EditProperty = ({ parentRoute }) => {
   let config = [];
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("PT_CREATE_PROPERTY", { });
   const stateId = Digit.ULBService.getStateId();
-  const { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(stateId, "PropertyTax", "CommonFieldsConfig");
+  let { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(stateId, "PropertyTax", "CommonFieldsConfig");
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const acknowledgementIds = window.location.href.split("/").pop();
   const propertyIds = window.location.href.split("/").pop();
@@ -556,6 +556,7 @@ const EditProperty = ({ parentRoute }) => {
   }
 
   /* use newConfig instead of commonFields for local development in case needed */
+  commonFields=commonFields?commonFields:newConfig;
   commonFields.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });

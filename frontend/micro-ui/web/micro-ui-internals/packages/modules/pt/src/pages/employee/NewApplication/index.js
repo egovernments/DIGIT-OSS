@@ -2,6 +2,7 @@ import { FormComposer, Loader } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
+import { newConfig } from "../../../config/Create/config";
 
 const NewApplication = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -140,7 +141,7 @@ const NewApplication = () => {
 
   /* use newConfig instead of commonFields for local development in case needed */
 
-  const configs = commonFields;
+  const configs = commonFields?commonFields:newConfig;
 
   return (
     <FormComposer
