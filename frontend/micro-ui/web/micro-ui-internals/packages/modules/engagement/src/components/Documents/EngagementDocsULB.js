@@ -40,7 +40,7 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
                 }}
                 keepNull={true}
                 selected={props.value}    
-                disable={isInEditFormMode ? true : false}
+                disable={ulb?.length === 1}
                 t={t}
               />
             )}
@@ -52,7 +52,7 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
                   key={index}
                   text={t(ulb?.i18nKey)}
                   onClick={() =>{
-                  if(isInEditFormMode) return;             
+                 // if(isInEditFormMode) return;             
                     setValue(
                       config.key,
                       formData?.[config.key]?.filter((e) => e.i18nKey != ulb.i18nKey)

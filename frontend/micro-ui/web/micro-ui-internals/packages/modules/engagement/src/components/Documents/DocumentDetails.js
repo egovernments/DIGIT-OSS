@@ -2,7 +2,7 @@ import { Header, ActionBar, SubmitBar, PDFSvg, Menu } from '@egovernments/digit-
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import Confirmation from '../Modal/Confirmation';
-import { openDocument } from './DesktopInbox';
+import {  openUploadedDocument, openDocumentLink } from './DesktopInbox';
 
 const Actions = ['EDIT_DOCUMENT', 'DELETE']
 const getUlbName = (tenantId) => {
@@ -90,7 +90,7 @@ const DocumentDetails = ({ location, match, history, }) => {
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t('DCOUMENT_DESCRIPTION')}:`}</p> <p className="documentDetails__description">{details?.description?.length ? details?.description : 'NA'}</p> </div>
                     <div className="documentDetails_pdf">
                         <span className="documentDetails_subheader">{`${t('Document')}`}</span>
-                        <div style={{ width: '100px' }} onClick={() => openDocument(details?.filestoreId ? details?.filestoreId : details?.documentLink, details?.name)}>
+                        <div style={{ width: '100px' }} onClick={() => openUploadedDocument(details?.filestoreId ? details?.filestoreId : details?.documentLink, details?.name)}>
                             <PDFSvg />
                         </div>
 

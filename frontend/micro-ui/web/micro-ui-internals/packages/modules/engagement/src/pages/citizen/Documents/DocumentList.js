@@ -12,7 +12,7 @@ import DocumentCard from "../../../components/Documents/DocumentCard";
 import Searchbar from "../../../components/Documents/Searchbar";
 import { useDebounce } from "../../../hooks/useDebounce";
 
-const DocumentList = ({ match}) => {
+const DocumentList = ({ match }) => {
   const { t } = useTranslation()
   const { category, count } = match.params;
   const tenantIds = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
@@ -69,35 +69,37 @@ const DocumentList = ({ match}) => {
   return (
     <AppContainer>
       <Header>{`${t(`${category}`)} (${count ? count : "-"})`}</Header>
-      <div
-      >
+      <Card>
+        <div
+        >
 
-        <Searchbar
-          searchValue={searchValue}
-          handleKeyPress={handleKeyPress}
-          handleSearch={handleSearch}
-          onChange={setSearchValue}
-          t={t}
-        />
-      </div>
-      {
-        filteredDocs &&
-          filteredDocs.length ? filteredDocs.map(({ name, lastModifiedDate, description, documentLink, fileSize, filestoreId }, index) => (
-            <DocumentCard
-              key={index}
-              documentTitle={name}
-              documentSize={fileSize}
-              lastModifiedData={lastModifiedDate}
-              description={description}
-              documentLink={documentLink}
-              filestoreId={filestoreId}
-              t={t}
-            />
-          )) :
-          <Card>
-            <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
-          </Card>
-      }
+          <Searchbar
+            searchValue={searchValue}
+            handleKeyPress={handleKeyPress}
+            handleSearch={handleSearch}
+            onChange={setSearchValue}
+            t={t}
+          />
+        </div>
+        {
+          filteredDocs &&
+            filteredDocs.length ? filteredDocs.map(({ name, lastModifiedDate, description, documentLink, fileSize, filestoreId }, index) => (
+              <DocumentCard
+                key={index}
+                documentTitle={name}
+                documentSize={fileSize}
+                lastModifiedData={lastModifiedDate}
+                description={description}
+                documentLink={documentLink}
+                filestoreId={filestoreId}
+                t={t}
+              />
+            )) :
+            <Card>
+              <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
+            </Card>
+        }
+      </Card>
     </AppContainer >
   );
 };

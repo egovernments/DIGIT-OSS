@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from 'react-router-dom'
 import ApplicationCard from "./ApplicationCard";
 import EventLink from "../Events/EventLink";
-import { openDocument } from "./DesktopInbox";
+import { openUploadedDocument } from "./DesktopInbox";
 
 
 const MobileInbox = ({ data, t, title, iconName, links, searchFields, searchParams, onFilterChange, onSearch, isLoading }) => {
@@ -17,7 +17,7 @@ const MobileInbox = ({ data, t, title, iconName, links, searchFields, searchPara
         return {
           [t("CE_TABLE_DOCUMENT_NAME")]: document?.name,
           [t("DOCUMENTS_CATEGORY_CARD_LABEL")]: t(`${document?.category}`),
-          [t("CE_TABLE_DOCUMENT_LINK")]: <div className="link" onClick={(ev)=> {ev.stopPropagation(); openDocument(document?.filestoreId ? document.filestoreId : document?.documentLink)}}>{t('CE_DOCUMENT_VIEW_LINK')}</div>,
+          [t("CE_TABLE_DOCUMENT_LINK")]: <div className="link" onClick={(ev)=> {ev.stopPropagation(); openUploadedDocument(document?.filestoreId ? document.filestoreId : document?.documentLink)}}>{t('CE_DOCUMENT_VIEW_LINK')}</div>,
           [t("CE_TABLE_DOCUMENT_POSTED_BY")]: document?.postedBy
         }
       })
