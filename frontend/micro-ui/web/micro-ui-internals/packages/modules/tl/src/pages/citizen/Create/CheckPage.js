@@ -60,7 +60,7 @@ const CheckPage = ({ onSubmit, value }) => {
         />
         <Row
           label={t("TL_STRUCTURE_SUB_TYPE")}
-          text={t( TradeDetails?.StructureType.code !=="IMMOVABLE" ? TradeDetails?.VehicleType.i18nKey : TradeDetails?.BuildingType.i18nKey)}
+          text={t( TradeDetails?.StructureType.code !=="IMMOVABLE" ? TradeDetails?.VehicleType?.i18nKey : TradeDetails?.BuildingType?.i18nKey)}
           actionButton={
             <ActionButton
               jumpTo={
@@ -83,17 +83,17 @@ const CheckPage = ({ onSubmit, value }) => {
             </CardSubHeader>
             <Row
               label={t("TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL")}
-              text={t(unit?.tradecategory.i18nKey)}
+              text={t(unit?.tradecategory?.i18nKey)}
               actionButton={<ActionButton jumpTo={`${routeLink}/units-details`} />}
             />
             <Row
               label={t("TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL")}
-              text={t(unit?.tradetype.i18nKey)}
+              text={t(unit?.tradetype?.i18nKey)}
               actionButton={<ActionButton jumpTo={`${routeLink}/units-details`} />}
             />
             <Row
               label={t("TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL")}
-              text={t(unit?.tradesubtype.i18nKey)}
+              text={t(unit?.tradesubtype?.i18nKey)}
               actionButton={<ActionButton jumpTo={`${routeLink}/units-details`} />}
             />
             <Row
@@ -116,7 +116,7 @@ const CheckPage = ({ onSubmit, value }) => {
               </CardSubHeader>
               <Row
                 label={t("TL_TRADE_ACC_HEADER")}
-                text={t(acc?.accessory.i18nKey)}
+                text={t(acc?.accessory?.i18nKey)}
                 actionButton={<ActionButton jumpTo={`${routeLink}/accessories-details`} />}
               />
               <Row
