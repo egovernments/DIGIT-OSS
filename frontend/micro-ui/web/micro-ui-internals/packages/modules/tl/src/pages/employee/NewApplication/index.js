@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FormComposer, Toast, Header } from "@egovernments/digit-ui-react-components";
-// import { newConfig } from "../../../config/config";
+import { newConfig as newConfigTL } from "../../../config/config";
 import { useHistory } from "react-router-dom";
 import { convertDateToEpoch } from "../../../utils";
 import cloneDeep from "lodash/cloneDeep";
@@ -21,7 +21,7 @@ const NewApplication = () => {
   const [error, setError] = useState(null);
 
   const stateId = Digit.ULBService.getStateId();
-  const { data: newConfig, isLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(stateId, {});
+  let { data: newConfig, isLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(stateId, {});
 
   const closeToast = () => {
     setShowToast(null);
@@ -160,6 +160,7 @@ const NewApplication = () => {
   };
   // let configs = newConfig;
   let configs = [];
+  newConfig=newConfig?newConfig:newConfigTL;
   newConfig?.map((conf) => {
     if (conf.head !== "ES_NEW_APPLICATION_PROPERTY_ASSESSMENT" && conf.head) {
       configs.push(conf);

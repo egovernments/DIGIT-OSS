@@ -205,7 +205,7 @@ export const newConfig =[
                     "nextStep": {
                         "yes": "rental-details",
                         "no": "provide-sub-usage-type",
-                        "vacant": "vasika-details"
+                        "vacant": "map"
                     },
                     "hideInEmployee": true
                 },
@@ -348,7 +348,7 @@ export const newConfig =[
                     "key": "units",
                     "withoutLabel": true,
                     "nextStep": {
-                        "PT_COMMON_NO": "vasika-details",
+                        "PT_COMMON_NO": "map",
                         "PT_COMMON_YES": "un-occupied-area"
                     },
                     "hideInEmployee": true
@@ -366,58 +366,8 @@ export const newConfig =[
                     },
                     "key": "units",
                     "withoutLabel": true,
-                    "nextStep": "vasika-details",
+                    "nextStep": "map",
                     "hideInEmployee": true
-                }
-            ]
-        },
-        {
-            "head": "ES_NEW_APPLICATION_PROPERTY_VASIKA_DETAILS",
-            "body": [
-                    {
-                    "route": "vasika-details",
-                    "component": "PTVasikaDetail",
-                    "withoutLabel": true,
-                    "texts": {
-                        "headerCaption": "PT_PROPERTY_VASIKA_CAPTION",
-                        "header": "PT_VASIKA_HEADER",
-                        "cardText": "PT_VASIKA_TEXT",
-                        "submitBarLabel": "PT_COMMON_NEXT",
-                                "skipAndContinueText": "CORE_COMMON_SKIP_CONTINUE"
-                    },
-                    "key": "vasikadetails",
-                    "nextStep": "allotment-details",                    
-                    "type": "component"
-                },
-                 {
-                   "route": "allotment-details",
-                     "component": "PTAllotmentDetails",
-                    "withoutLabel": true,
-                    "texts": {
-                        "headerCaption": "PT_PROPERTY_VASIKA_CAPTION",
-                        "header": "PT_ALLOTMENT_HEADER",
-                        "cardText": "PT_ALLOTMENT_TEXT",
-                        "submitBarLabel": "PT_COMMON_NEXT",
-                                "skipAndContinueText": "CORE_COMMON_SKIP_CONTINUE"
-                    },
-                    "key": "vasikadetails",
-                      "nextStep": "business-details",                  
-                    "type": "component"
-                },
-                 {
-                    "route": "business-details",
-                    "component": "PTBusinessDetails",
-                    "withoutLabel": true,
-                    "texts": {
-                        "headerCaption": "PT_PROPERTY_VASIKA_CAPTION",
-                        "header": "PT_BUSINESS_HEADER",
-                        "cardText": "PT_BUSINESS_TEXT",
-                        "submitBarLabel": "PT_COMMON_NEXT",
-                        "skipAndContinueText": "CORE_COMMON_SKIP_CONTINUE"
-                    },
-                    "key": "vasikadetails",
-                    "nextStep": "map",                    
-                    "type": "component"
                 }
             ]
         },

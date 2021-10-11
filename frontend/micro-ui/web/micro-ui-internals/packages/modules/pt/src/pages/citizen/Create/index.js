@@ -3,7 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
-// import { newConfig } from "../../../config/Create/config";
+import { newConfig } from "../../../config/Create/config";
 
 
 const CreateProperty = ({ parentRoute }) => {
@@ -137,6 +137,7 @@ const CreateProperty = ({ parentRoute }) => {
 
 // commonFields=newConfig;
   /* use newConfig instead of commonFields for local development in case needed */
+  commonFields=commonFields?commonFields:newConfig;
   commonFields.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
