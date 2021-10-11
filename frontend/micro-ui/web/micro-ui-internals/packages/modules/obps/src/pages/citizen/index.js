@@ -16,6 +16,7 @@ import BPASendToArchitect from "./BPASendToArchitect";
 import OCSendToArchitect from "./OCSendToArchitect";
 import BPASendBackToCitizen from "./BPASendBackToCitizen";
 import OCSendBackToCitizen from "./OCSendBackToCitizen";
+import Inbox from "./ArchitectInbox";
 
 const App = ({ path }) => {
   const location = useLocation()
@@ -24,7 +25,7 @@ const App = ({ path }) => {
         <React.Fragment>
           {!location.pathname.includes("response") && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
           <Switch>
-\            <PrivateRoute path={`${path}/home`} component={BPACitizenHomeScreen} />
+            <PrivateRoute path={`${path}/home`} component={BPACitizenHomeScreen} />
             <PrivateRoute path={`${path}/edcrscrutiny/apply`} component={CreateEDCR} />
             <PrivateRoute path={`${path}/edcrscrutiny/oc-apply`} component={CreateOCEDCR} />
             <PrivateRoute path={`${path}/bpa/:applicationType/:serviceType`} component={NewBuildingPermit} />
@@ -32,6 +33,7 @@ const App = ({ path }) => {
             <PrivateRoute path={`${path}/stakeholder/apply`} component={StakeholderRegistration} />
             <Route path={`${path}/openlink/stakeholder/apply`} component={StakeholderRegistration} /> 
             <PrivateRoute path={`${path}/my-applications`} component={MyApplication} />
+            <PrivateRoute path={`${path}/bpa/inbox`} component={Inbox} />
             <PrivateRoute path={`${path}/stakeholder/:id`} component={ApplicationDetails} />
             <PrivateRoute path={`${path}/bpa/:id`} component={BpaApplicationDetail} />
             <PrivateRoute path={`${path}/editApplication/bpa/:tenantId/:applicationNo`} component={BPASendToArchitect} />
