@@ -175,7 +175,7 @@ class MyConnections extends React.Component {
                           />
                         </Grid>
                         <Grid item md={8} xs={6}>
-                          {(item.property && item.property.address && item.property.address.street) ?
+                          {(item.property && item.property.address) ?
                             (<Label
                               labelName={formatAddress}
                               fontSize={14}
