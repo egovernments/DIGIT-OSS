@@ -12,17 +12,10 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import { format } from 'date-fns';
 import { getFileSize } from './engagement-doc-documents';
-import { getFileUrl, openDocument } from './DesktopInbox';
+import { getFileUrl, openUploadedDocument, openDocumentLink } from './DesktopInbox';
 
-
-
-const openDocumentLink = (link, title) => {
-  const w = window.open('', '_blank');
-  w.location = link;
-  w.document.title = title;
-}
-
-/* const downloadDocument = async (filestoreId, title) => {
+const downloadDocument = async (filestoreId, title) => {
+  if (!filestoreId || !filestoreId.length) { alert('No Document exists!'); return; }
   const fileUrl = await getFileUrl(filestoreId);
   if(fileUrl){
     const anchorTag = document.createElement('a');
@@ -32,7 +25,7 @@ const openDocumentLink = (link, title) => {
     anchorTag.click();
     document.body.removeChild(anchorTag);
   }
-} */
+}
 
 const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, description, filestoreId, documentLink, t }) => {
   let isMobile = window.Digit.Utils.browser.isMobile();
@@ -61,7 +54,7 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
           <LinkButton
 
             label={
-              <div className="views" onClick={() => openDocument(filestoreId ? filestoreId : documentLink, documentTitle)}>
+              <div className="views" onClick={() => openUploadedDocument(filestoreId ? filestoreId : null, documentTitle)}>
                 <ViewsIcon />
                 <p>{t(`CE_DOCUMENT_VIEW_LINK`)}</p>
               </div>
@@ -81,7 +74,7 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
           }
           <LinkButton
             label={
-              <div className="views download_views_padding" onClick={() => openDocument(filestoreId ? filestoreId : documentLink, documentTitle)} >
+              <div className="views download_views_padding" onClick={() => downloadDocument(filestoreId ? filestoreId : null, documentTitle)} >
                 <DownloadImgIcon />
                 <p>{t(`CE_DOCUMENT_DOWNLOAD_LINK`)}</p>
               </div>
