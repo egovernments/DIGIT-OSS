@@ -164,7 +164,7 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
   const requestBody = prepareForm(requestParams);
 
   try {
-    const response = await uploadInstance.post(endPoint, requestBody);
+    const response = await uploadInstance.post(`${endPoint}?tenantId=${commonConfig.tenantId}`, requestBody);
     const responseStatus = parseInt(response.status, 10);
     let fileStoreIds = [];
     store.dispatch(toggleSpinner());
