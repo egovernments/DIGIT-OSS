@@ -111,7 +111,7 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
         submitInForm
         config={config}
         label={propsConfig.texts.submitButtonLabel}
-        cardStyle={{ maxWidth: "400px", margin: "auto" }}
+        cardStyle={{ maxWidth: "408px", margin: "auto" }}
         className ="employeeChangePassword"
       >
         <Header />
