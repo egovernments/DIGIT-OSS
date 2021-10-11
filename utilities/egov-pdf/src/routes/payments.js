@@ -39,7 +39,7 @@ router.post(
       } catch (ex) {
         
         if (ex.response && ex.response.data) console.log(ex.response.data);
-        return renderError(res, "Failed to query details of the payment", 500);
+        return renderError(res, "1. Failed to query details of the payment", 500);
       }
       var payments = resProperty.data;
       if (payments && payments.Payments && payments.Payments.length > 0) {
@@ -56,7 +56,7 @@ router.post(
         } catch (ex) {
           
           if (ex.response && ex.response.data) console.log(ex.response.data);
-          return renderError(res, "Failed to generate PDF for payment", 500);
+          return renderError(res, "2. Failed to generate PDF for payment", 500);
         }
 
         var filename = `${pdfkey}_${new Date().getTime()}`;
@@ -75,7 +75,7 @@ router.post(
         );
       }
     } catch (ex) {
-      return renderError(res, "Failed to query details of the payment", 500);
+      return renderError(res, "3. Failed to query details of the payment", 500);
     }
   })
 );

@@ -87,6 +87,7 @@ async function search_payment(consumerCodes, tenantId, requestinfo, bussinessSer
     var userName = requestinfo.RequestInfo.userInfo.userName;
     params["mobileNumber"] = mobileNumber || userName;
   }
+  console.log("\nheaders-->"+JSON.stringify(headers)+"\n");
   return await axios({
     method: "post",
     url: url.resolve(config.host.payments, searchEndpoint),
