@@ -8,7 +8,14 @@ const EventForm = ({ onSelect, config, formData, register, control, errors }) =>
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = tenantId?.split('.')[0];
   const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
-  const userUlbs = ulbs.filter(ulb => ulb?.code === tenantId)
+  const userInfo = Digit.UserService.getUser().info;
+  const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code));
+  const getDefaultUlb = () => {
+    if (formData?.defaultTenantId) {
+      return ulbs?.find(ulb => ulb?.code === formData?.defaultTenantId);
+    }
+    return userUlbs?.length === 1 ? userUlbs?.[0] : null
+  }
   const { isLoading, data } = Digit.Hooks.useCommonMDMS(state, "mseva", ["EventCategories"]);
 
   const onChange = (event) => {
@@ -36,7 +43,7 @@ const EventForm = ({ onSelect, config, formData, register, control, errors }) =>
         <div className="field">
           <Controller
             control={control}
-            defaultValue={userUlbs?.length === 1 ? userUlbs?.[0] : null}
+            defaultValue={getDefaultUlb()}
             name="tenantId"
             rules={{ required: true }}
             render={({ onChange, value }) => <Dropdown option={userUlbs} selected={value} disable={userUlbs?.length === 1} optionKey="code" t={t} select={onChange} />}

@@ -56,6 +56,7 @@ const EditEvents = () => {
   }
 
   const defaultValues = {
+    defaultTenantId: data?.tenantId,
     name: data?.name,
     fromDate: format(new Date(data?.eventDetails?.fromDate), 'yyyy-MM-dd'),
     toDate: format(new Date(data?.eventDetails?.toDate), 'yyyy-MM-dd'),
