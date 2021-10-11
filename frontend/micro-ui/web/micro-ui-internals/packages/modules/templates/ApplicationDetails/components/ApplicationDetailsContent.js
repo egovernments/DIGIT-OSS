@@ -72,7 +72,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
             )}
             {/* TODO, Later will move to classes */}
             <StatusTable style={checkLocation ? { position: "relative", marginTop: "19px" } : {}}>
-              {detail?.values?.map((value, index) => {
+              {detail?.title && !(detail?.title.includes("NOC" )) && detail?.values?.map((value, index) => {
                 if (value.map === true && value.value !== "N/A") {
                   return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
                 }
@@ -112,7 +112,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
           {detail?.additionalDetails?.accessories && <TLTradeAccessories units={detail?.additionalDetails?.accessories} />}
           {detail?.additionalDetails?.permissions && <PermissionCheck applicationData={applicationDetails?.applicationData} t={t} permissions={detail?.additionalDetails?.permissions} />}
           {detail?.additionalDetails?.obpsDocuments && <BPADocuments t={t} applicationData={applicationDetails?.applicationData} docs={detail.additionalDetails.obpsDocuments} bpaActionsDetails={workflowDetails} />}
-          {detail?.additionalDetails?.noc && <NOCDocuments t={t} isNoc={true} applicationData={applicationDetails?.applicationData} docs={detail.additionalDetails.noc} noc={detail.additionalDetails?.data} />}
+          {detail?.additionalDetails?.noc && <NOCDocuments t={t} isNoc={true} NOCdata = {detail.values} applicationData={applicationDetails?.applicationData} docs={detail.additionalDetails.noc} noc={detail.additionalDetails?.data} />}
           {detail?.additionalDetails?.scruntinyDetails && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
           {detail?.additionalDetails?.buildingExtractionDetails && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
           {detail?.additionalDetails?.subOccupancyTableDetails && <SubOccupancyTable edcrDetails={detail?.additionalDetails} />}

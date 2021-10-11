@@ -264,7 +264,6 @@ function SelectDocument({
     return (
         <div style={{ marginBottom: "24px" }}>
             <CardLabel>{doc?.required ? `${t(doc?.code)} *` : `${t(doc?.code)}`}</CardLabel>
-            {doc?.uploadedDocuments?.length && <PropertyDocuments documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
             <Dropdown
                 t={t}
                 isMandatory={false}
@@ -291,6 +290,7 @@ function SelectDocument({
             getFormState={e => getData(e)}
             setuploadedstate={formData?.documents?.documents.filter((ob) => ob.documentType === selectedDocument.code)}
           />
+        {doc?.uploadedDocuments?.length && <PropertyDocuments documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
         </div>
     );
 

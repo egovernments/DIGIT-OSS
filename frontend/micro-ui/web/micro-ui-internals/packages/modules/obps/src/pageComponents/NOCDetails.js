@@ -218,7 +218,7 @@ function SelectDocument({
                 return [
                     ...filteredDocumentsByFileStoreId,
                     {
-                        documentType: selectedDocument?.documentType,
+                        documentType: doc?.dropdownData?.[0]?.code,
                         fileStoreId: uploadedFile.fileStoreId,
                         documentUid: uploadedFile.fileStoreId,
                         fileName: uploadedFile?.fileName || "",
