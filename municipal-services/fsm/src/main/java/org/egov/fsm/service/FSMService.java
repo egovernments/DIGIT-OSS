@@ -247,8 +247,7 @@ public class FSMService {
 	private void handleDSOAccept(FSMRequest fsmRequest, FSM oldFSM) {
 		FSM fsm = fsmRequest.getFsm();
 		org.egov.common.contract.request.User dsoUser = fsmRequest.getRequestInfo().getUserInfo();
-		Vendor vendor = dsoService.getVendor(oldFSM.getDsoId(), fsm.getTenantId(), dsoUser.getUuid(), null, null,
-				fsmRequest.getRequestInfo());
+		
 		String dsoOwnerId = null;
 		Boolean isDso = util.isRoleAvailale(dsoUser, FSMConstants.ROLE_FSM_DSO, fsmRequest.getRequestInfo().getUserInfo().getTenantId().split("\\.")[0]);
 		if(isDso) {
