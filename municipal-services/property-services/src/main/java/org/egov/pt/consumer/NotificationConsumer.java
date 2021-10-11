@@ -39,10 +39,7 @@ public class NotificationConsumer {
 	@Autowired
 	private NotificationService notifService;
 	
-    @KafkaListener(topics = {"${egov.pt.assessment.create.topic}",
-    						 "${egov.pt.assessment.update.topic}",
-    						 "${persister.update.property.topic}",
-    						 "${persister.save.property.topic}"})
+    @KafkaListener(topics = "${pt.kafka.notification.topic.pattern}")
     public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 
 		try {
