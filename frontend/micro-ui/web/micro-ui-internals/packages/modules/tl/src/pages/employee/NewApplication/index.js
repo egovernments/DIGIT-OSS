@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FormComposer, Toast, Header } from "@egovernments/digit-ui-react-components";
-import { newConfig } from "../../../config/config";
+// import { newConfig } from "../../../config/config";
 import { useHistory } from "react-router-dom";
 import { convertDateToEpoch } from "../../../utils";
 import cloneDeep from "lodash/cloneDeep";
-
 
 const NewApplication = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -14,13 +13,15 @@ const NewApplication = () => {
   const defaultValues = {};
   const history = useHistory();
   // delete
-  const [_formData, setFormData,_clear] = Digit.Hooks.useSessionStorage("store-data",null);
+  const [_formData, setFormData, _clear] = Digit.Hooks.useSessionStorage("store-data", null);
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", {});
 
   const [showToast, setShowToast] = useState(null);
   const [error, setError] = useState(null);
 
+  const stateId = Digit.ULBService.getStateId();
+  const { data: newConfig, isLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(stateId, {});
 
   const closeToast = () => {
     setShowToast(null);
@@ -37,31 +38,30 @@ const NewApplication = () => {
   };
 
   const onSubmit = (data) => {
-
     let accessories = [];
     if (data?.accessories?.length > 0) {
-      data?.accessories.map(data => {
+      data?.accessories.map((data) => {
         if (data?.accessoryCategory?.code) {
           accessories.push({
             accessoryCategory: data?.accessoryCategory?.code || null,
             uom: data?.accessoryCategory?.uom || null,
             count: Number(data?.count) || null,
-            uomValue: Number(data?.uomValue) || null
+            uomValue: Number(data?.uomValue) || null,
           });
-        } 
+        }
       });
-    };
+    }
 
     let tradeUnits = [];
     if (data?.tradeUnits?.length > 0) {
-      data?.tradeUnits.map(data => {
+      data?.tradeUnits.map((data) => {
         tradeUnits.push({
           tradeType: data?.tradeSubType?.code || null,
           uom: data?.tradeSubType?.uom || null,
-          uomValue: Number(data?.uomValue) || null
+          uomValue: Number(data?.uomValue) || null,
         });
       });
-    };
+    }
 
     let address = {};
     if (data?.address) {
@@ -74,7 +74,7 @@ const NewApplication = () => {
 
     let owners = [];
     if (data?.owners?.length > 0) {
-      data?.owners.map(data => {
+      data?.owners.map((data) => {
         let obj = {};
         if (data?.dob) obj.dob = convertDateToEpoch(data?.dob);
         // if (data?.fatherOrHusbandName) obj.fatherOrHusbandName = data?.fatherOrHusbandName;
@@ -86,8 +86,8 @@ const NewApplication = () => {
         if (data?.emailId) obj.emailId = data?.emailId;
         if (data?.ownerType?.code) obj.ownerType = data?.ownerType?.code;
         owners.push(obj);
-      })
-    };
+      });
+    }
 
     let applicationDocuments = data?.documents?.documents || [];
     let commencementDate = convertDateToEpoch(data?.tradedetils?.["0"]?.commencementDate);
@@ -111,9 +111,9 @@ const NewApplication = () => {
       tradeName,
       wfDocuments: [],
       tradeLicenseDetail: {
-        channel:"COUNTER",
-        additionalDetail: {}
-      }
+        channel: "COUNTER",
+        additionalDetail: {},
+      },
     };
 
     if (gstNo) formData.tradeLicenseDetail.additionalDetail.gstNo = gstNo;
@@ -126,7 +126,7 @@ const NewApplication = () => {
     if (address) formData.tradeLicenseDetail.address = address;
     if (structureType) formData.tradeLicenseDetail.structureType = structureType;
     if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
-   
+
     // setFormData(formData)
     /* use customiseCreateFormData hook to make some chnages to the licence object */
     formData=Digit?.Customizations?.TL?.customiseCreateFormData?Digit?.Customizations?.TL?.customiseCreateFormData(data,formData):formData;
@@ -137,17 +137,16 @@ const NewApplication = () => {
           licenses.tradeLicenseDetail.applicationDocuments = applicationDocuments;
           licenses.wfDocuments = [];
           licenses.action = "APPLY";
-          Digit.TLService.update({ Licenses: [licenses] }, tenantId).then((response) => {
-            if (response?.Licenses?.length > 0) {
-              history.replace(
-                `/digit-ui/employee/tl/response`,
-                { data: response?.Licenses }
-              );
-            }
-          }).catch((e) => {
-            setShowToast({ key: "error" });
-            setError(e?.response?.data?.Errors[0]?.message || null);
-          });
+          Digit.TLService.update({ Licenses: [licenses] }, tenantId)
+            .then((response) => {
+              if (response?.Licenses?.length > 0) {
+                history.replace(`/digit-ui/employee/tl/response`, { data: response?.Licenses });
+              }
+            })
+            .catch((e) => {
+              setShowToast({ key: "error" });
+              setError(e?.response?.data?.Errors[0]?.message || null);
+            });
         }
       })
       .catch((e) => {
@@ -155,34 +154,31 @@ const NewApplication = () => {
         setError(e?.response?.data?.Errors[0]?.message || null);
       });
 
-
-
     // history.replace("/digit-ui/employee/tl/response", { Licenses: [formData], documents: applicationDocuments });
     // history.push("/digit-ui/employee/pt/response", { Property: formData });
     // history.push("/digit-ui/employee/pt/response", { Property: _formData });
   };
   // let configs = newConfig;
   let configs = [];
-  newConfig.map(conf => {
+  newConfig?.map((conf) => {
     if (conf.head !== "ES_NEW_APPLICATION_PROPERTY_ASSESSMENT" && conf.head) {
       configs.push(conf);
     }
   });
 
-
   function checkHead(head) {
     if (head === "ES_NEW_APPLICATION_LOCATION_DETAILS") {
-      return "TL_CHECK_ADDRESS"
-    } else if(head === "ES_NEW_APPLICATION_OWNERSHIP_DETAILS") {
-      return "TL_OWNERSHIP_DETAILS_HEADER"
+      return "TL_CHECK_ADDRESS";
+    } else if (head === "ES_NEW_APPLICATION_OWNERSHIP_DETAILS") {
+      return "TL_OWNERSHIP_DETAILS_HEADER";
     } else {
-      return head
+      return head;
     }
   }
 
   return (
     <div>
-      <div style={{marginLeft: "15px"}}>
+      <div style={{ marginLeft: "15px" }}>
         <Header>{t("ES_TITLE_NEW_TRADE_LICESE_APPLICATION")}</Header>
       </div>
       <FormComposer
@@ -193,9 +189,9 @@ const NewApplication = () => {
           return {
             ...config,
             body: config.body.filter((a) => {
-              return !a.hideInEmployee
+              return !a.hideInEmployee;
             }),
-            head: checkHead(config.head)
+            head: checkHead(config.head),
           };
         })}
         fieldStyle={{ marginRight: 0 }}
@@ -206,7 +202,6 @@ const NewApplication = () => {
       />
       {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} onClose={closeToast} />}
     </div>
-
   );
 };
 
