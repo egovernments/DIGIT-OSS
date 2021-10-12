@@ -2,12 +2,12 @@ import React from "react"
 import useInbox from "../useInbox"
 import { InboxGeneral } from "../../services/elements/InboxService";
 import { Search } from "../../services/molecules/OBPS/Search";
-import { useQuery } from "react-query"
+import { useQuery } from "react-query";
 
-const useBPAInbox = ({ tenantId, filters, config={} }) => {
-    const { filterForm, searchForm , tableForm } = filters
+const useArchitectInbox = ({ tenantId, filters, withEDCRData = true, config={} }) => {
+    const { filterForm = {}, searchForm = {}, tableForm = {}} = filters
     const { moduleName, businessService, applicationStatus, locality, assignee } = filterForm
-    const { mobileNumber, applicationNumber } = searchForm
+    const { mobileNumber, applicationNo, applicationType, serviceType } = searchForm
     const { sortBy, limit, offset, sortOrder } = tableForm
     // const USER_UUID = Digit.UserService.getUser()?.info?.uuid;
     
@@ -21,7 +21,9 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
 		moduleSearchCriteria: {
             assignee,
             ...(mobileNumber ? {mobileNumber}: {}),
-            ...(applicationNumber ? {applicationNumber} : {}),
+            ...(applicationType ? { applicationType } : {}),
+            ...(serviceType ? { serviceType } : {}),
+            ...(applicationNo ? {applicationNo} : {}),
             ...(sortOrder ? {sortOrder} : {}),
             ...(locality?.length > 0 ? {locality: locality.map((item) => item.code.split("_").pop()).join(",")} : {}),
         },
@@ -35,19 +37,20 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
       ["INBOX_DATA",tenantId, ...Object.keys(_filters)?.map( e => _filters?.[e] )],
       async () => {
         const data = await InboxGeneral.Search({inbox: {..._filters}});
-        const promises = data?.items?.map(application => {
-          const filters = { edcrNumber: application?.businessObject?.edcrNumber }
-          return Search.scrutinyDetails('pb.amritsar', filters);
-        });
-        const edcrData = await Promise.all(promises);
-        data.items = data?.items?.map(application => ({
-          ...application,
-          edcr: {
-            ...edcrData?.find(edcr => edcr?.edcrNumber === application?.businessObject?.edcrNumber) || {}
-          }
+        if (withEDCRData === true) {
+          const promises = data?.items?.map(application => {
+            const filters = { edcrNumber: application?.businessObject?.edcrNumber }
+            return Search.scrutinyDetails('pb.amritsar', filters);
+          });
+          const edcrData = await Promise.all(promises);
+          data.items = data?.items?.map(application => ({
+            ...application,
+            edcr: {
+              ...edcrData?.find(edcr => edcr?.edcrNumber === application?.businessObject?.edcrNumber) || {}
+            }
             
-        }));
-        console.log(data, 'edcrData');
+          }));
+        }
         return data;
       },
       {
@@ -70,4 +73,4 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
     )
 }
 
-export default useBPAInbox
+export default useArchitectInbox;

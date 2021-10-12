@@ -114,7 +114,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
             links: [
                 {
                     label: t("ES_COMMON_INBOX"),
-                    link: ``
+                    link: `/digit-ui/citizen/obps/bpa/inbox`
                 }
             ]
         },

@@ -7,6 +7,7 @@ import Filter from "./Filter";
 const ApplicationCard = ({
   searchFields,
   searchParams,
+  statusMap,
   sortParams = {},
   onSort,
   onFilterChange,
@@ -101,6 +102,7 @@ const ApplicationCard = ({
                   onSearch={onSearch}
                   type="mobile"
                   searchParams={searchParams}
+                  statuses={statusMap}
                   // removeParam={removeParam}
                 />
               }

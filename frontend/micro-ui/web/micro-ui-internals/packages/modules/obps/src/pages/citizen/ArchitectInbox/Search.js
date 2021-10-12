@@ -23,6 +23,13 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
     }
   }
 
+  const onSubmitInput = (data) => {
+    onSearch(data);
+    if (type === "mobile") {
+      onClose();
+    }
+  }
+
   const clearSearch = () => {
     reset({});
     onSearch({})
@@ -38,7 +45,7 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
   };
 
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmitInput)}>
       <div className="search-container" style={{ width: "auto", marginLeft: isInboxPage ? "24px" : "revert" }}>
         <div className="search-complaint-container">
           {(type === "mobile" || mobileView) && (
@@ -67,6 +74,7 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
                 ) : null}
               </div>
             ))}
+            {type === "desktop" && <SubmitBar style={{ marginTop: "56px" }} className="submit-bar-search" label={t("ES_COMMON_SEARCH")} submit />}
           </div>
         </div>
       </div>

@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 const SortBy = (props) => {
   const { t } = useTranslation();
   const [selectedOption, setSelectedOption] = useState(() => {
-    return props.sortParams?.[0]?.desc
+    return props.sortParams?.[0]?.sortOrder === "DESC"
       ? { code: "DESC", name: t("ES_INBOX_DATE_LATEST_FIRST") }
       : { code: "ASC", name: t("ES_INBOX_DATE_LATEST_LAST") };
   });
@@ -13,8 +13,9 @@ const SortBy = (props) => {
   function clearAll() {}
 
   function onSort(option) {
-    // props.onSort([{ id: "createdTime", desc: option.code === "DESC" ? true : false }]);
-    // props.onClose();
+    setSelectedOption({ id: "createdTime", sortOrder: option.code === "DESC" ? "DESC" : "ASC" })
+    props.onSort([{ id: "createdTime", sortOrder: option.code === "DESC" ? "DESC" : "ASC" }]);
+    props.onClose();
   }
 
   return (
@@ -50,7 +51,7 @@ const SortBy = (props) => {
           </div>
         </div>
       </div>
-      <ActionBar>
+      {/* <ActionBar>
         {props.type === "mobile" && (
           <ApplyFilterBar
             labelLink={t("CS_COMMON_CLEAR_ALL")}
@@ -59,7 +60,7 @@ const SortBy = (props) => {
             // onSubmit={props.onSort([selectedOption])}
           />
         )}
-      </ActionBar>
+      </ActionBar> */}
     </React.Fragment>
   )
 }

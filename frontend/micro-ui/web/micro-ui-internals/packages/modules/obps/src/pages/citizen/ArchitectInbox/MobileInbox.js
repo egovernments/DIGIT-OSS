@@ -1,7 +1,7 @@
 import React from "react";
 import ApplicationCard from "./ApplicationCard";
 
-const MobileInbox = ({ data, t, title, iconName, links, searchFields, searchParams, onFilterChange, onSearch, isLoading }) => {
+const MobileInbox = ({ data, t, title, iconName, links, searchFields, searchParams, onFilterChange, sortParams, onSearch, onSort, isLoading }) => {
   // return null;
   const getData = () => {
     return data?.table?.map(row => ({
@@ -22,18 +22,19 @@ const MobileInbox = ({ data, t, title, iconName, links, searchFields, searchPara
           <ApplicationCard
             t={t}
             data={getData()}
+            statusMap={data?.statuses}
             onFilterChange={onFilterChange}
             // serviceRequestIdKey={isFstpOperator ? t("ES_INBOX_VEHICLE_LOG") : DSO ? t("ES_INBOX_APPLICATION_NO") : t("ES_INBOX_APPLICATION_NO")}
             // isFstpOperator={isFstpOperator}
             isLoading={isLoading}
             // isSearch={isSearch}
             onSearch={onSearch}
-            // onSort={onSort}
+            onSort={onSort}
             searchParams={searchParams}
             searchFields={searchFields}
             // linkPrefix={linkPrefix}
             // removeParam={removeParam}
-            // sortParams={sortParams}
+            sortParams={sortParams}
           />
         </div>
       </div>

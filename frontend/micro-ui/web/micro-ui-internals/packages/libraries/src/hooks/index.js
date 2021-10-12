@@ -135,7 +135,7 @@ import useBPAREGApplicationActions from "./obps/useBPAREGApplicationActions";
 import useBPADetailsPage from "./obps/useBPADetailsPage";
 import useBPAInbox from "./obps/useBPAInbox";
 import useBPAApplicationActions from "./obps/useApplicationActions"
-
+import useArchitectInbox from "./obps/useArchitectInbox";
 import useBPAREGSearch from "./obps/useBPAREGSearch";
 import useEmpBPAREGSearch from "./obps/useEmpBPAREGSearch";
 import useEventInbox from "./events/useEventInbox";
@@ -273,6 +273,7 @@ const obps = {
   useBPADetailsPage,
   useEmpBPAREGSearch,
   useBPAInbox,
+  useArchitectInbox,
   useApplicationActions: useBPAApplicationActions
 };
 
