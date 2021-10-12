@@ -16,6 +16,7 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
   const getUserType = () => Digit.UserService.getType();
   useEffect(() => {
     if (!user) {
+      Digit.UserService.setType('employee');
       return;
     }
     Digit.UserService.setUser(user);
@@ -36,6 +37,7 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
         tenantId,
       },
     };
+
     try {
       await Digit.UserService.sendOtp(requestData, tenantId);
       setShowToast(t("ES_OTP_RESEND"));
@@ -50,7 +52,6 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
       if (data.newPassword !== data.confirmPassword) {
         return setShowToast(t("ERR_PASSWORD_DO_NOT_MATCH"));
       }
-
       const requestData = {
         ...data,
         otpReference: otp,
@@ -59,6 +60,7 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
       };
       
       const response = await Digit.UserService.changePassword(requestData, tenantId);
+      console.log({response})
       navigateToLogin();
     } catch (err) {
       setShowToast(err?.response?.data?.error?.fields?.[0]?.message || t("ES_SOMETHING_WRONG"));

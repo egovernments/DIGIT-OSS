@@ -14,6 +14,7 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
 
   useEffect(() => {
     if (!user) {
+      Digit.UserService.setType('employee');
       return;
     }
     Digit.UserService.setUser(user);
@@ -32,7 +33,7 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
     }
     const requestData = {
       otp: {
-        ...data,
+        mobileNumber: data.mobileNumber,
         userType: getUserType().toUpperCase(),
         type: "passwordreset",
         tenantId: data.city.code,

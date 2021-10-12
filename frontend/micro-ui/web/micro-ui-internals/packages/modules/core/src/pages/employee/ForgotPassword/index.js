@@ -22,7 +22,6 @@ const EmployeeForgotPassword = () => {
     )
   );
 
-  console.log({ params });
   return (
     <Switch>
       <Route path={`${path}`} exact>
