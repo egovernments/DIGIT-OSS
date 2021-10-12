@@ -27,19 +27,27 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
     };
 
     const inboxSearchParams = { limit: 10, offset: 0, mobileNumber: userInfo?.info?.mobileNumber }
-    const { isLoading: bpaLoading, data: bpaInboxData } = Digit.Hooks.obps.useBPAInbox({
+    const { isLoading: bpaLoading, data: bpaInboxData } = Digit.Hooks.obps.useArchitectInbox({
         tenantId: stateCode,
-        moduleName: "bpa-services",
-        businessService: ["BPA_LOW", "BPA", "BPA_OC"],
-        filters: { ...inboxSearchParams },
+        filters: {
+            ...inboxSearchParams,
+            moduleName: "bpa-services",
+            businessService: ["BPA_LOW", "BPA", "BPA_OC"],
+        },
+        withEDCRData : true, 
+        isTotalCount: true,
         config: {}
     });
 
-    const { isLoading: bparegLoading, data: bpareginboxData } = Digit.Hooks.obps.useBPAInbox({
+    const { isLoading: bparegLoading, data: bpareginboxData } = Digit.Hooks.obps.useArchitectInbox({
         tenantId: stateCode,
-        moduleName: "BPAREG",
-        businessService: ["ARCHITECT", "BUILDER", "ENGINEER", "STRUCTURALENGINEER"],
-        filters: { ...inboxSearchParams },
+        filters: {
+            ...inboxSearchParams,
+            moduleName: "BPAREG",
+            businessService: ["ARCHITECT", "BUILDER", "ENGINEER", "STRUCTURALENGINEER"],
+        },
+        withEDCRData : true, 
+        isTotalCount: true,
         config: {}
     });
 

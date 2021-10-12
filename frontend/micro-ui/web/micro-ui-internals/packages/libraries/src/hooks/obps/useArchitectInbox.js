@@ -4,7 +4,8 @@ import { InboxGeneral } from "../../services/elements/InboxService";
 import { Search } from "../../services/molecules/OBPS/Search";
 import { useQuery } from "react-query";
 
-const useArchitectInbox = ({ tenantId, filters, withEDCRData = true, config={} }) => {
+const useArchitectInbox = ({ tenantId, filters, withEDCRData = true, isTotalCount = false, config={} }) => {
+  if (!isTotalCount) {
     const { filterForm = {}, searchForm = {}, tableForm = {}} = filters
     const { moduleName, businessService, applicationStatus, locality, assignee } = filterForm
     const { mobileNumber, applicationNo, applicationType, serviceType } = searchForm
@@ -71,6 +72,34 @@ const useArchitectInbox = ({ tenantId, filters, withEDCRData = true, config={} }
         ...config 
       }
     )
+  } else {
+    const { mobileNumber, limit, offset, moduleName, businessService } = filters;
+    const _filters = {
+      tenantId,
+      processSearchCriteria: {
+        moduleName: moduleName ? moduleName : "bpa-services",
+        businessService: businessService?.length > 0 ? businessService : ["BPA_LOW", "BPA", "BPA_OC"],
+      },
+      moduleSearchCriteria: {
+        ...(mobileNumber ? { mobileNumber } : {}),
+      },
+      limit,
+      offset
+    }
+    return useQuery(
+      ["INBOX_DATA", tenantId, ...Object.keys(_filters)?.map(e => _filters?.[e])],
+      async () => {
+        const data = await InboxGeneral.Search({ inbox: { ..._filters } });
+        return data;
+      },
+      {
+        select: (data) => ({
+          totalCount: data.totalCount
+        }),
+        ...config
+      }
+    )
+  }
 }
 
 export default useArchitectInbox;
