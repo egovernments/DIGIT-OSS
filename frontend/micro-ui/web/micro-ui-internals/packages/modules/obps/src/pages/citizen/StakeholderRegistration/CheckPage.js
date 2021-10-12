@@ -41,6 +41,11 @@ import {
     <Timeline currentStep={4} flow="STAKEHOLDER" />
     <Header>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
     <Card>
+        <StatusTable>
+          <Row className="border-none" label={t(`BPA_APPLICATION_NUMBER_LABEL`)} text={result?.Licenses?.[0]?.applicationNumber?result?.Licenses?.[0]?.applicationNumber:""} />
+        </StatusTable>
+    </Card>
+    <Card>
     <CardHeader>{t(`BPA_LICENSE_DET_CAPTION`)}</CardHeader>
     <LinkButton
             label={

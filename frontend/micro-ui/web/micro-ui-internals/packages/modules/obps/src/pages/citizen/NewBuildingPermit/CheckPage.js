@@ -20,7 +20,7 @@ import {
     else if(value.businessService === "BPA")
     BusinessService="BPA.NC_APP_FEE";
 
-    const { data, address, owners, nocDocuments, documents, additionalDetails, subOccupancy,PrevStateDocuments,PrevStateNocDocuments } = value;
+    const { data, address, owners, nocDocuments, documents, additionalDetails, subOccupancy,PrevStateDocuments,PrevStateNocDocuments,applicationNo } = value;
     const isEditApplication = window.location.href.includes("editApplication");
     let val;
     var i;
@@ -145,6 +145,11 @@ import {
     <React.Fragment>
     <Timeline currentStep={4} />
     <Header>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
+    <Card style={{paddingRight:"16px"}}>
+        <StatusTable>
+          <Row className="border-none" label={t(`BPA_APPLICATION_NUMBER_LABEL`)} text={applicationNo?applicationNo:""} />
+        </StatusTable>
+    </Card>
     <Card style={{paddingRight:"16px"}}>
     <CardHeader>{t(`BPA_BASIC_DETAILS_TITLE`)}</CardHeader>
         <StatusTable>

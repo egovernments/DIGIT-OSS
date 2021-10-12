@@ -95,7 +95,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
           </div>
           {detail?.belowComponent && <detail.belowComponent />}
           {detail?.additionalDetails?.inspectionReport && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
-          {detail?.additionalDetails?.FIdocuments && detail?.additionalDetails?.values?.map((doc,index) => (
+          {/* {detail?.additionalDetails?.FIdocuments && detail?.additionalDetails?.values?.map((doc,index) => (
             <div key={index}>
             {doc.isNotDuplicate && <div> 
              <StatusTable>
@@ -105,7 +105,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
              </StatusTable>
              </div>}
              </div>
-          )) }
+          )) } */}
           {detail?.additionalDetails?.floors && <PropertyFloors floors={detail?.additionalDetails?.floors} />}
           {detail?.additionalDetails?.owners && <PropertyOwners owners={detail?.additionalDetails?.owners} />}
           {detail?.additionalDetails?.units && <TLTradeUnits units={detail?.additionalDetails?.units} />}

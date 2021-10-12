@@ -6,7 +6,8 @@ import {
     Toast,
     Loader,
     FormStep,
-    MultiUploadWrapper
+    MultiUploadWrapper,
+    CitizenInfoLabel
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
 import PropertyDocuments from "../../../templates/ApplicationDetails/components/PropertyDocuments";
@@ -115,7 +116,8 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
                         );
                     })}
                     {error && <Toast label={error} onClose={() => setError(null)} error />}
-                </FormStep> : <Loader />}
+                </FormStep>: <Loader />}
+                <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={`${t("BPA_APPLICATION_NUMBER_LABEL")} ${formData?.applicationNo} ${t("BPA_DOCS_INFORMATION")}`} />
         </div>
     );
 }

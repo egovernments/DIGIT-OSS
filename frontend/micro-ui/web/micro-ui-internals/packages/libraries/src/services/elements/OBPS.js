@@ -514,11 +514,12 @@ export const OBPSService = {
     // if(inspectionReport) details.push(inspectionReport);\
     let val;
     var i;
+    let FieldInspectionData = [];
     inspectionReport && BPA?.additionalDetails?.fieldinspection_pending?.[0]?.questions.length>0 && inspectionReport.map((ob,index) => {
       if(ob.title.includes("FI_REPORT"))
-      details = [...details, {title:ob.title,additionalDetails:{inspectionReport:[],values:ob.values}} ];
+      FieldInspectionData = [...FieldInspectionData, {title:ob.title,additionalDetails:{inspectionReport:[],values:ob.values}} ];
       else if(ob.title.includes("CHECK_LIST"))
-      details = [...details, {title:ob.title,additionalDetails:{isChecklist:true,inspectionReport:[],values:ob.values}}]
+      FieldInspectionData = [...FieldInspectionData, {title:ob.title,additionalDetails:{isChecklist:true,inspectionReport:[],values:ob.values}}]
       else
       {
         let improvedDoc = [...ob.additionalDetails.obpsDocuments?.[0]?.values];
@@ -532,14 +533,14 @@ export const OBPSService = {
             improvedDoc[i].isNotDuplicate=false;
           }
       });
-      details = [...details,{title:ob.title,additionalDetails:{FIdocuments:[],values:improvedDoc}} ]
+      FieldInspectionData = [...FieldInspectionData,{title:ob.title,additionalDetails:{FIdocuments:[],"documents":[{values:improvedDoc}]}} ]
       }
     })
 
     if(BPA?.businessService !== "BPA_OC") {
-      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, ...nocDetails, approvalChecksDetails ]
+      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, ...FieldInspectionData, approvalChecksDetails, ...nocDetails]
     } else {
-      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails, documentDetails, ...nocDetails ]
+      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails, documentDetails,...FieldInspectionData, ...nocDetails ]
     }
     
     const isEmployee = sessionStorage.getItem("bpaApplicationDetails") === "true" || true ? true : false;
