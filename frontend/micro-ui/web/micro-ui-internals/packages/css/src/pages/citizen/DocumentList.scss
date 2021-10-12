@@ -239,3 +239,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.Docs_CardWrapper{
+  @apply bg-white m-sm px-md pt-md pb-lg shadow-card;
+  border-radius: 4px;
+}

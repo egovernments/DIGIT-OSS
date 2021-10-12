@@ -19,13 +19,14 @@ const downloadDocument = async (filestoreId, title) => {
 
   const fileUrl = await getFileUrl(filestoreId);
   if (fileUrl) {
-   /*  const anchorTag = document.createElement('a');
+    const anchorTag = document.createElement('a');
     anchorTag.href = fileUrl;
-    anchorTag.download = title;
+    if (anchorTag.download !== undefined) {
+      anchorTag.download = fileUrl.substr(fileUrl.lastIndexOf('/') + 1);
+    }
     document.body.appendChild(anchorTag);
     anchorTag.click();
-    document.body.removeChild(anchorTag); */
-    window.open(fileUrl,"_blank")
+    document.body.removeChild(anchorTag);
   }
 }
 
@@ -75,7 +76,7 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
             />) : null
           }
           {filestoreId && filestoreId.length ?
-            <LinkButton 
+            <LinkButton
               label={
                 <div className="views download_views_padding" >
                   <DownloadImgIcon />

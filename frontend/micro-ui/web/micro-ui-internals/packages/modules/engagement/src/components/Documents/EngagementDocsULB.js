@@ -4,24 +4,32 @@ import { useForm, Controller } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 
 const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, register, errors, setError, clearErrors, formState, control }) => {
-  const { data: ulbArray, isLoading } = Digit.Hooks.useTenants();
-  const ulb = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
+  const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const selectedTenat = useMemo(()=>{
-    const filtered = ulb?.filter((item)=> item.code===tenantId)
-    return filtered;
-  },[tenantId, ulb])
-  
+  const selectedTenat = useMemo(() => {
+    if (formData?.defaultTenantId) {
+      return ulbs?.find(ulb => ulb?.code === formData?.defaultTenantId);
+    }
+    if (tenantId && ulbs) {
+      const filtered = ulbs?.filter((item) => item.code === tenantId)
+      return filtered;
+    }
+    return userUlbs?.length === 1 ? userUlbs?.[0] : null
+  }, [tenantId, ulbs])
+
+  const userInfo = Digit.UserService.getUser().info;
+  const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code));
+ 
   const location = useLocation()
-  const isInEditFormMode = useMemo(()=>{
-    if(location.pathname.includes('documents/inbox/update')) return true;
+  const isInEditFormMode = useMemo(() => {
+    if (location.pathname.includes('documents/inbox/update')) return true;
     return false;
-  },[location.pathname])
-  
+  }, [location.pathname])
+
   return (
     <React.Fragment>
-      <LabelFieldPair 
-      style={{alignItems:'start'}}
+      <LabelFieldPair
+        style={{ alignItems: 'start' }}
       >
         <CardLabel style={{ fontWeight: "bold" }}>{t("ES_COMMON_ULB") + " *"}</CardLabel>
         <div className="field">
@@ -34,13 +42,13 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
               <Dropdown
                 allowMultiselect={true}
                 optionKey={"i18nKey"}
-                option={ulbArray}
+                option={userUlbs}
                 select={(e) => {
                   props.onChange([...(formData?.[config?.key]?.filter?.((f) => e.code != f?.code) || []), e]);
                 }}
                 keepNull={true}
-                selected={props.value}    
-                disable={ulb?.length === 1}
+                selected={props.value}
+                disable={ulbs?.length === 1}
                 t={t}
               />
             )}
@@ -51,13 +59,13 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
                 <RemoveableTag
                   key={index}
                   text={t(ulb?.i18nKey)}
-                  onClick={() =>{
-                 // if(isInEditFormMode) return;             
+                  onClick={() => {
+                    // if(isInEditFormMode) return;             
                     setValue(
                       config.key,
                       formData?.[config.key]?.filter((e) => e.i18nKey != ulb.i18nKey)
                     )
-            }}
+                  }}
                 />
               );
             })}
