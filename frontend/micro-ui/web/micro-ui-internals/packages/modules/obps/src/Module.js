@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
 import { Loader, CitizenHomeCard, OBPSIcon, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
 import CitizenApp from "./pages/citizen";
+import Inbox from "./pages/employee/Inbox"
 
 import BPACitizenHomeScreen from "./pages/citizen/home";
 import EDCRForm from "./pageComponents/EDCRForm";
@@ -100,7 +101,8 @@ const componentsToRegister = {
   StakeholderDocuments,
   OCBasicDetails,
   OBPSSearchApplication,
-  InspectionReport
+  InspectionReport,
+  BPAInbox: Inbox
 }
 
 export const initOBPSComponents = () => {

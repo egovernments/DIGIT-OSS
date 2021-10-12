@@ -5,10 +5,9 @@ import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from 
 // import { newConfig } from "../../../config/config";
 
 
-const CheckPage = Digit.ComponentRegistryService.getComponent('TLCheckPage') ;
-const TLAcknowledgement = Digit.ComponentRegistryService.getComponent('TLAcknowledgement');
-
 const CreateTradeLicence = ({ parentRoute }) => {
+  const TLAcknowledgement = Digit.ComponentRegistryService.getComponent('TLAcknowledgement');
+  const CheckPage = Digit.ComponentRegistryService.getComponent('TLCheckPage') ;
   const queryClient = useQueryClient();
   const match = useRouteMatch();
   const { t } = useTranslation();
