@@ -44,7 +44,7 @@ public class NotificationUtil {
     public StringBuilder getUri(String tenantId, RequestInfo requestInfo, String module) {
 
         if (config.getIsLocalizationStateLevel())
-            tenantId = tenantId.split("\\.")[0];
+            tenantId = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
 
         String locale = NOTIFICATION_LOCALE;
         if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
