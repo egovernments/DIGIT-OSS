@@ -6,7 +6,6 @@ import {
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 
-
 export const fetchData = async (action, state, dispatch) => {
     let finalResponse = [];
     let queryObject = [
