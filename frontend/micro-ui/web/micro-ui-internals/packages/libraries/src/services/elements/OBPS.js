@@ -124,6 +124,12 @@ export const OBPSService = {
 
     const [License] = response?.Licenses;
     const details = [
+      {
+        title: " ",
+        values: [
+          { title: "BPA_APPLICATION_NUMBER_LABEL", value: License?.applicationNumber || "NA"  }
+        ]
+      },
       License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType.includes("ARCHITECT") ? {
       title: "BPA_LICENSE_DET_CAPTION",
       asSectionHeader: true,
@@ -353,6 +359,16 @@ export const OBPSService = {
 
     let details = [];
 
+    const applicationDetailsInfo = {
+      title: " ",
+      values: [
+        { title: "BPA_APPLICATION_NUMBER_LABEL", value: BPA?.applicationNo || "NA" },
+        { title: "BPA_PERMIT_NUMBER_LABEL", value: BPA?.approvalNo || "NA"  },
+        { title: "BPA_PERMIT_VALIDITY", value: BPA?.additionalDetails?.validityDate ? `${format(new Date(BPA?.applicationDate), 'dd/MM/yyyy')} - ${format(new Date(BPA?.additionalDetails?.validityDate), 'dd/MM/yyyy')}` : "NA"  }
+      ]
+    };
+
+
     const basicDetails = {
       title: "BPA_BASIC_DETAILS_TITLE",
       asSectionHeader: true,
@@ -521,9 +537,9 @@ export const OBPSService = {
     })
 
     if(BPA?.businessService !== "BPA_OC") {
-      details = [...details, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, ...nocDetails, approvalChecksDetails ]
+      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, ...nocDetails, approvalChecksDetails ]
     } else {
-      details = [...details, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails, documentDetails, ...nocDetails ]
+      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails, documentDetails, ...nocDetails ]
     }
     
     const isEmployee = sessionStorage.getItem("bpaApplicationDetails") === "true" || true ? true : false;

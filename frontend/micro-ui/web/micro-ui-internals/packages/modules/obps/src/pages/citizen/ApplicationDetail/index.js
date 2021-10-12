@@ -29,6 +29,11 @@ const ApplicationDetails = () => {
       <Header>{t("ES_TITLE_APPLICATION_DETAILS")}</Header>
       <div>
         <Card>
+          <StatusTable>
+            <Row className="border-none" label={t(`BPA_APPLICATION_NUMBER_LABEL`)} text={License?.applicationNumber || "NA"} />
+          </StatusTable>
+        </Card>
+        <Card>
           <CardHeader>{t(`BPA_LICENSE_DET_CAPTION`)}</CardHeader>
           <StatusTable>
             <Row className="border-none" label={t(`BPA_LICENSE_TYPE_LABEL`)} text={t(License?.licenseType)} />
