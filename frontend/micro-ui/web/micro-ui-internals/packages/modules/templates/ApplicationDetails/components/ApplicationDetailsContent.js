@@ -10,6 +10,7 @@ import {
   CardSectionHeader,
   ConnectingCheckPoints,
   CheckPoint,
+  CardText,
   Rating,
   ActionLinks,
 } from "@egovernments/digit-ui-react-components";
@@ -30,7 +31,6 @@ import BPADocuments from "./BPADocuments";
 
 function ApplicationDetailsContent({ applicationDetails, workflowDetails, isDataLoading, applicationData, businessService, timelineStatusPrefix }) {
   const { t } = useTranslation();
-
 
   const getTimelineCaptions = (checkpoint) => {
     if (checkpoint.state === "OPEN" || checkpoint.status === "INITIATED") {
@@ -106,6 +106,15 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
              </div>}
              </div>
           )) } */}
+          {detail?.additionalDetails?.permitcondn && <div>
+          <div style={{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "600px", minWidth: "280px"} }>
+          {detail.additionalDetails?.values.map((ob,ind) => (
+            <div key={ind}>
+            <CardText style={{fontSize:"16px",color:"#0B0C0C"}}>{ind +1}. {ob.value}</CardText>
+            </div>
+          ))}
+          </div>
+          </div>}
           {detail?.additionalDetails?.floors && <PropertyFloors floors={detail?.additionalDetails?.floors} />}
           {detail?.additionalDetails?.owners && <PropertyOwners owners={detail?.additionalDetails?.owners} />}
           {detail?.additionalDetails?.units && <TLTradeUnits units={detail?.additionalDetails?.units} />}

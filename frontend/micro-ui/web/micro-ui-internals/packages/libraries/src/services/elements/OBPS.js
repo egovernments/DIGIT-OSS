@@ -238,9 +238,10 @@ export const OBPSService = {
     })
       inspectionReport.push(
         {
-          title: "BPA_CHECK_LIST_DETAILS",
+          title: "",
           asSectionHeader: true,
           values: checklist,
+          checklist:true,
         });
       inspectionReport.push({
         title: "BPA_DOCUMENT_DETAILS_LABEL",
@@ -511,14 +512,23 @@ export const OBPSService = {
       }
     }
 
+    let pendingapprovalvalue = {};
+   if(BPA?.additionalDetails?.pendingapproval && BPA?.additionalDetails?.pendingapproval.length>0){
+     let value=[];
+     BPA?.additionalDetails?.pendingapproval.map((ob,index) => {
+       value.push({title:"",value:ob});
+     })
+     pendingapprovalvalue = {title:"BPA_PERMIT_CONDITIONS",additionalDetails:{values:value,permitcondn:[]}}
+   }
+
     // if(inspectionReport) details.push(inspectionReport);\
     let val;
     var i;
     let FieldInspectionData = [];
     inspectionReport && BPA?.additionalDetails?.fieldinspection_pending?.[0]?.questions.length>0 && inspectionReport.map((ob,index) => {
       if(ob.title.includes("FI_REPORT"))
-      FieldInspectionData = [...FieldInspectionData, {title:ob.title,additionalDetails:{inspectionReport:[],values:ob.values}} ];
-      else if(ob.title.includes("CHECK_LIST"))
+      FieldInspectionData = [...FieldInspectionData, {title:ob.title,values:ob.values,asSectionHeader: true} ];
+      else if(ob?.checklist && ob?.checklist == true)
       FieldInspectionData = [...FieldInspectionData, {title:ob.title,additionalDetails:{isChecklist:true,inspectionReport:[],values:ob.values}}]
       else
       {
@@ -538,9 +548,9 @@ export const OBPSService = {
     })
 
     if(BPA?.businessService !== "BPA_OC") {
-      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, ...FieldInspectionData, approvalChecksDetails, ...nocDetails]
+      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, ...FieldInspectionData, approvalChecksDetails,pendingapprovalvalue, ...nocDetails]
     } else {
-      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails, documentDetails,...FieldInspectionData, ...nocDetails ]
+      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails, documentDetails,...FieldInspectionData,pendingapprovalvalue, ...nocDetails ]
     }
     
     const isEmployee = sessionStorage.getItem("bpaApplicationDetails") === "true" || true ? true : false;
