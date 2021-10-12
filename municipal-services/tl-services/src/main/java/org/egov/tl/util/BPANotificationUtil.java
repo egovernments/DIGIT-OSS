@@ -34,7 +34,7 @@ public class BPANotificationUtil {
     @Value("${egov.ui.app.host}")
     private String egovhost;
 
-    @Value("${egov.common.pay.endpoint}")
+    @Value("${egov.common.pay.bpareg.endpoint}")
     private String commonPayEndpoint;
 
     @Value("${egov.citizen.home.endpoint}")
