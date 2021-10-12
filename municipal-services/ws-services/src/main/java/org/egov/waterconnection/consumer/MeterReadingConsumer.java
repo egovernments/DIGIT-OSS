@@ -44,7 +44,7 @@ public class MeterReadingConsumer {
 
 			// Adding in MDC so that tracer can add it in header
 			MDC.put(TENANTID_MDC_STRING, tenantId);
-
+			System.out.println("\nwaterConnectionRequest-->"+waterConnectionRequest.toString()+"\n");
 			if (!StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionType())
 					&& WCConstants.METERED_CONNECTION
 							.equalsIgnoreCase(waterConnectionRequest.getWaterConnection().getConnectionType())) {
