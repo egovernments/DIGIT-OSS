@@ -1,10 +1,11 @@
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
+import commonConfig from "config/common";
 
 export const fetchData = async (action, state, dispatch) => {
-  let tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : get(state,"auth.userInfo.permanentCity","pb");
+  let tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : commonConfig.tenantId;
   let queryObject = [
     { key: "tenantId", value: tenantId }
   ];
