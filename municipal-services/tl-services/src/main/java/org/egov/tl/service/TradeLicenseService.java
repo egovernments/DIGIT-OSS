@@ -30,6 +30,8 @@ import static org.egov.tracer.http.HttpUtils.isInterServiceCall;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
+import com.jayway.jsonpath.JsonPath;
+
 @Service
 @Slf4j
 public class TradeLicenseService {
@@ -173,6 +175,36 @@ public class TradeLicenseService {
          }
          else {
              licenses = getLicensesWithOwnerInfo(criteria,requestInfo);
+         }
+         
+         if(criteria.getRenewalPending()!=null && criteria.getRenewalPending()== true && !licenses.isEmpty()) {
+        	 
+        	 String currentFinancialYear = "";
+        	 
+        	 TradeLicenseRequest tradeLicenseRequest = new TradeLicenseRequest();
+             tradeLicenseRequest.setRequestInfo(requestInfo);
+             tradeLicenseRequest.setLicenses(licenses);
+             
+             Object mdmsData = util.mDMSCall(tradeLicenseRequest);
+             String jsonPath = TLConstants.MDMS_CURRENT_FINANCIAL_YEAR.replace("{}","TL");
+             List<Map<String,Object>> jsonOutput =  JsonPath.read(mdmsData, jsonPath);
+             
+             for (int i=0; i<jsonOutput.size();i++) {
+            	 Object startingDate = jsonOutput.get(i).get(TLConstants.MDMS_STARTDATE);
+            	 Object endingDate = jsonOutput.get(i).get(TLConstants.MDMS_ENDDATE);
+            	 Long startTime = (Long)startingDate;
+            	 Long endTime = (Long)endingDate;
+            	 
+            	 if(System.currentTimeMillis()>=startTime && System.currentTimeMillis()<=endTime) {
+            		 currentFinancialYear = jsonOutput.get(i).get(TLConstants.MDMS_FIN_YEAR_RANGE).toString();
+            		 break;
+            	 }
+            	 
+             }
+             
+             String checker = currentFinancialYear;
+             licenses.removeIf(t->t.getStatus().toString().equalsIgnoreCase(TLConstants.STATUS_REJECTED) && !t.getFinancialYear().toString().equalsIgnoreCase(checker));
+             
          }
          return licenses;       
     }

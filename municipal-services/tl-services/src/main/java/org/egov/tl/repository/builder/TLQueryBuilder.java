@@ -265,12 +265,9 @@ public class TLQueryBuilder {
         builder.append(" ( tl.status = ?  ");
         preparedStmtList.add(TLConstants.STATUS_REJECTED);
         addClauseIfRequired(preparedStmtList, builder);
-        builder.append("  tl.applicationtype = ? ");
+        builder.append("  tl.applicationtype = ? ) ) )");
         preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL);
-        addClauseIfRequired(preparedStmtList, builder);
-        builder.append("  tl.financialyear = ? ) ) )");
-        preparedStmtList.add(Integer.toString(Calendar.getInstance().get(Calendar.YEAR)));
-		
+
 	}
 
 	private String addCountWrapper(String query) {
