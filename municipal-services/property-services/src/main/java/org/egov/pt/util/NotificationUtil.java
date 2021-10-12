@@ -180,13 +180,13 @@ public class NotificationUtil {
      * @param smsRequestList
      *            The list of SMSRequest to be sent
      */
-    public void sendSMS(List<SMSRequest> smsRequestList) {
+    public void sendSMS(List<SMSRequest> smsRequestList, String tenantId) {
     	
         if (config.getIsSMSNotificationEnabled()) {
             if (CollectionUtils.isEmpty(smsRequestList))
                 log.info("Messages from localization couldn't be fetched!");
             for (SMSRequest smsRequest : smsRequestList) {
-                producer.push("", config.getSmsNotifTopic(), smsRequest);
+                producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
                 log.info("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
             }
         }

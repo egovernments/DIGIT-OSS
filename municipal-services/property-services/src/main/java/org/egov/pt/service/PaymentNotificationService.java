@@ -135,7 +135,7 @@ public class PaymentNotificationService {
 			}
             
 
-            util.sendSMS(smsRequests);
+            util.sendSMS(smsRequests, tenantId);
 
             List<Event> events = new LinkedList<>();
             if(null == propertyConfiguration.getIsUserEventsNotificationEnabled() || propertyConfiguration.getIsUserEventsNotificationEnabled()) {
@@ -239,7 +239,7 @@ public class PaymentNotificationService {
             }
         }
 
-        util.sendSMS(smsRequests);
+        util.sendSMS(smsRequests, tenantId);
 
         if(!CollectionUtils.isEmpty(events))
             util.sendEventNotification(new EventRequest(requestInfo,events));

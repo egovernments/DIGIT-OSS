@@ -63,7 +63,7 @@ public class AssessmentNotificationService {
         Property property = properties.get(0);
 
         List<SMSRequest> smsRequests = enrichSMSRequest(topicName, assessmentRequest, property);
-        util.sendSMS(smsRequests);
+        util.sendSMS(smsRequests, tenantId);
 
         Boolean isActionReq = false;
         if(topicName.equalsIgnoreCase(config.getCreateAssessmentTopic()) && assessment.getWorkflow() == null)

@@ -286,7 +286,7 @@ public class NotificationService {
 		});
 
 		List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
-		notifUtil.sendSMS(smsRequests);
+		notifUtil.sendSMS(smsRequests, property.getTenantId());
 
 		Boolean isActionReq = false;
 		if(state.equalsIgnoreCase(PT_CORRECTION_PENDING))
