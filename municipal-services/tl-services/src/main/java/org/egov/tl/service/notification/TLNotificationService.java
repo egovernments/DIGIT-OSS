@@ -59,7 +59,7 @@ public class TLNotificationService {
 					if(config.getIsTLSMSEnabled()) {
 						enrichSMSRequest(request,smsRequestsTL);
 						if(!CollectionUtils.isEmpty(smsRequestsTL))
-							util.sendSMS(smsRequestsTL,true);
+							util.sendSMS(smsRequestsTL,true, request.getLicenses().get(0).getTenantId());
 					}
 				}
 				if(null != config.getIsUserEventsNotificationEnabledForTL()) {
@@ -77,7 +77,7 @@ public class TLNotificationService {
 					if (config.getIsBPASMSEnabled()) {
 						enrichSMSRequest(request, smsRequestsBPA);
 						if (!CollectionUtils.isEmpty(smsRequestsBPA))
-							util.sendSMS(smsRequestsBPA, true);
+							util.sendSMS(smsRequestsBPA, true, request.getLicenses().get(0).getTenantId());
 					}
 				}
 				if(null != config.getIsUserEventsNotificationEnabledForBPA()) {

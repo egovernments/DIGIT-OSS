@@ -116,12 +116,12 @@ public class PaymentNotificationService {
                         if(applicationType.equals(APPLICATION_TYPE_RENEWAL)){
                             String localizationMessages = tlRenewalNotificationUtil.getLocalizationMessages(license.getTenantId(), requestInfo);
                             List<SMSRequest> smsRequests = getSMSRequests(license, valMap, localizationMessages);
-                            util.sendSMS(smsRequests, config.getIsTLSMSEnabled());
+                            util.sendSMS(smsRequests, config.getIsTLSMSEnabled(), valMap.get(tenantIdKey));
                         }
                         else{
                             String localizationMessages = util.getLocalizationMessages(license.getTenantId(), requestInfo);
                             List<SMSRequest> smsRequests = getSMSRequests(license, valMap, localizationMessages);
-                            util.sendSMS(smsRequests, config.getIsTLSMSEnabled());
+                            util.sendSMS(smsRequests, config.getIsTLSMSEnabled(), valMap.get(tenantIdKey));
                         }
 
                         break;
@@ -139,7 +139,7 @@ public class PaymentNotificationService {
                         });
                         List<SMSRequest> smsList = new ArrayList<>();
                         smsList.addAll(util.createSMSRequest(message, mobileNumberToOwner));
-                        util.sendSMS(smsList, config.getIsBPASMSEnabled());
+                        util.sendSMS(smsList, config.getIsBPASMSEnabled(), valMap.get(tenantIdKey));
 
                         if(null != config.getIsUserEventsNotificationEnabledForBPA()) {
                             if(config.getIsUserEventsNotificationEnabledForBPA()) {

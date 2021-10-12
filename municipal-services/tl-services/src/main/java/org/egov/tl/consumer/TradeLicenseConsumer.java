@@ -33,7 +33,7 @@ public class TradeLicenseConsumer {
         this.tradeLicenseService = tradeLicenseService;
     }
 
-    @KafkaListener(topics = {"${persister.update.tradelicense.topic}","${persister.save.tradelicense.topic}","${persister.update.tradelicense.workflow.topic}"})
+    @KafkaListener(topicPattern = "${tl.kafka.notification.topic.pattern}")
     public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         ObjectMapper mapper = new ObjectMapper();
         TradeLicenseRequest tradeLicenseRequest = new TradeLicenseRequest();

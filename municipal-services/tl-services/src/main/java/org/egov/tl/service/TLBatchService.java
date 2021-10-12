@@ -144,7 +144,7 @@ public class TLBatchService {
             }
         }
 
-        util.sendSMS(smsRequests, config.getIsReminderEnabled());
+        util.sendSMS(smsRequests, config.getIsReminderEnabled(), tenantId);
 
     }
 
