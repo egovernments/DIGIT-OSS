@@ -26,7 +26,7 @@ export const getFileStoreIds = (
   var queryparams = [];
   var next = 1;
   var jobidPresent = false;
-  searchquery = "SELECT * FROM egov_pdf_gen WHERE";
+  searchquery = "SELECT * FROM {schema}.egov_pdf_gen WHERE";
 
   if (jobid != undefined && jobid.length > 0) {
     searchquery += ` jobid = ANY ($${next++})`;
@@ -53,7 +53,9 @@ export const getFileStoreIds = (
       queryparams.push(ifTrue);
     }
   }
-  searchquery = `SELECT pdf_1.* FROM egov_pdf_gen pdf_1 INNER JOIN (SELECT entityid, max(endtime) as MaxEndTime from (`+searchquery+`) as pdf_2 group by entityid) pdf_3 ON pdf_1.entityid = pdf_3.entityid AND pdf_1.endtime = pdf_3.MaxEndTime`;
+  searchquery = `SELECT pdf_1.* FROM {schema}.egov_pdf_gen pdf_1 INNER JOIN (SELECT entityid, max(endtime) as MaxEndTime from (`+searchquery+`) as pdf_2 group by entityid) pdf_3 ON pdf_1.entityid = pdf_3.entityid AND pdf_1.endtime = pdf_3.MaxEndTime`;
+  searchquery = replaceSchemaPlaceholder(searchquery, tenantId);
+  
   pool.query(searchquery, queryparams, (error, results) => {
     if (error) {
       logger.error(error.stack || error);
@@ -103,6 +105,10 @@ export const insertStoreIds = (
   var payloads = [];
   var endtime = new Date().getTime();
   var id = uuidv4();
+
+  if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE)
+    createJobKafkaTopic = getUpdatedTopic(tenantId, createJobKafkaTopic);
+
   payloads.push({
     topic: createJobKafkaTopic,
     messages: JSON.stringify({ jobs: dbInsertRecords })
@@ -129,4 +135,23 @@ export const insertStoreIds = (
       });
     }
   });
+};
+
+export const getUpdatedTopic = (tenantId, topic) => {
+  let tenants = tenantId.split('.');
+  if(tenants.length > 1)
+    topic = tenants[1] + "-" + topic;
+  console.log("The Kafka topic for the tenantId : " + tenantId + " is : " + topic);
+  return topic;
+};
+
+export const replaceSchemaPlaceholder = (query, tenantId) => {
+  let finalQuery = null;
+	if (tenantId.includes('.')) {
+		let schemaName = tenantId.split('.')[1];
+		finalQuery = query.replace(/{schema}/g, schemaName);
+	} else {
+			finalQuery = query.replace(/{schema}./g, "");
+	}
+	return finalQuery;
 };

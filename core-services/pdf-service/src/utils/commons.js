@@ -28,7 +28,8 @@ export const getTransformedLocale = (label) => {
 export const findLocalisation = async (
   requestInfo,
   moduleList,
-  codeList
+  codeList,
+  header
 ) => {
   let locale = requestInfo.msgId;
   if (null != locale) {
@@ -58,14 +59,9 @@ export const findLocalisation = async (
   request.messageSearchCriteria.module = moduleList.toString();
   request.messageSearchCriteria.codes = codeList.toString().split(",");
 
-  let headers = {
-    headers:{
-      "content-type": "application/json;charset=UTF-8",
-      accept: "application/json, text/plain, */*"
-    }
-  };
+  let headers = { header };
 
-  let responseBody = await axios.post(url,request,headers)
+  let responseBody = await axios.post(url,request, headers)
   .catch((error) => {throw error.response.data });
   
   return responseBody.data;
