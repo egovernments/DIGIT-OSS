@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static org.egov.waterconnection.constants.WCConstants.STATUS_APPROVED;
 import static org.egov.waterconnection.constants.WCConstants.TENANTID_MDC_STRING;
 
 @Service
@@ -44,10 +45,12 @@ public class MeterReadingConsumer {
 
 			// Adding in MDC so that tracer can add it in header
 			MDC.put(TENANTID_MDC_STRING, tenantId);
+			System.out.println("\ntopic-->"+topic+"\n");
 			System.out.println("\nwaterConnectionRequest-->"+waterConnectionRequest.toString()+"\n");
 			if (!StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionType())
 					&& WCConstants.METERED_CONNECTION
-							.equalsIgnoreCase(waterConnectionRequest.getWaterConnection().getConnectionType())) {
+							.equalsIgnoreCase(waterConnectionRequest.getWaterConnection().getConnectionType())
+					&& waterConnectionRequest.getWaterConnection().getApplicationStatus().equalsIgnoreCase(STATUS_APPROVED)) {
 				meterReadingService.process(waterConnectionRequest, topic);
 			}
 		} catch (Exception ex) {
