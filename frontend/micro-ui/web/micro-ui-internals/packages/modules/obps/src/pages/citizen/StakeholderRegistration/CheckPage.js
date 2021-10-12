@@ -13,7 +13,7 @@ import {
     const history = useHistory();
     const match = useRouteMatch();
     let user = Digit.UserService.getUser()
-    const tenantId = user ? user.info.permanentCity : Digit.ULBService.getCurrentTenantId();
+    const tenantId = user &&  user?.info && user?.info?.permanentCity ? user?.info?.permanentCity : Digit.ULBService.getCurrentTenantId();
 
     const { result, formData, documents} = value;
     let consumerCode=value?.result?.Licenses[0].applicationNumber;
@@ -84,7 +84,9 @@ import {
         </StatusTable>
     </Card>
     <Card>
+    <div style={{marginRight:"24px"}}>
     <CardHeader>{t(`BPA_LICENSEE_PERMANENT_LABEL`)}</CardHeader>
+    </div>
     <LinkButton
             label={
             <div>
@@ -101,7 +103,9 @@ import {
     <Row className="border-none" text={t(formData?.LicneseDetails?.PermanentAddress)} />
     </Card>
     <Card>
+    <div style={{marginRight:"24px"}}>
     <CardHeader>{t(`BPA_COMMUNICATION_ADDRESS_HEADER_DETAILS`)}</CardHeader>
+    </div>
     <LinkButton
             label={
             <div>

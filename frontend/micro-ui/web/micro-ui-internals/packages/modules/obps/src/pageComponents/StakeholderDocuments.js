@@ -208,7 +208,7 @@ function SelectDocument({
                 }}
                 message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
                 error={error}
-                Multistyle={isCitizenUrl?{marginTop:"-15px",position:"absolute"}:{marginTop:"-24px",width:"190%"}}
+                Multistyle={isCitizenUrl?{marginTop:"-15px",position:"absolute"}:{marginTop:"-15px",position:"absolute"}}
             />
         </div>
     );
