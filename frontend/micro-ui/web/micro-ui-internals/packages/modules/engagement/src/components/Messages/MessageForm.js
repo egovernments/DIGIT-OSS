@@ -56,7 +56,7 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`EVENTS_TITLE_LABEL`)} *`}</CardLabel>
+        <CardLabel className="card-label-smaller">{`${t(`PUBLIC_BRDCST_TITLE_LABEL`)} *`}</CardLabel>
         <div className="field">
           <Controller
             defaultValue={formData?.name}

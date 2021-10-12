@@ -65,7 +65,7 @@ const MessageDetails = () => {
         values: [
           { title: "EVENTS_ULB_LABEL", value: data?.tenantId },
           { title: "EVENTS_NAME_LABEL", value: data?.name },
-          { title: "EVENTS_DESCRIPTION_LABEL", value: data?.description },
+          { title: "PUBLIC_BRDCST_TITLE_LABEL", value: data?.description },
           { title: "EVENTS_FROM_DATE_LABEL", value: format(new Date(data?.eventDetails?.fromDate), 'dd/MM/yyyy') },
           { title: "EVENTS_TO_DATE_LABEL", value: format(new Date(data?.eventDetails?.toDate), 'dd/MM/yyyy') },
           { title: "CS_COMMON_DOCUMENTS", belowComponent: () => <DocumentDetails t={t} data={data?.eventDetails?.documents} documents={data?.uploadedFilesData?.data} /> }
@@ -122,7 +122,7 @@ const MessageDetails = () => {
       <ActionBar>
         {displayMenu ? (
           <Menu
-            localeKeyPrefix={"ES_EVENT"}
+            localeKeyPrefix={"ES_PUBLIC_BRDCST"}
             options={['EDIT', 'DELETE']}
             t={t}
             onSelect={onActionSelect}
@@ -132,15 +132,15 @@ const MessageDetails = () => {
       </ActionBar>
       {showModal &&
         <Modal
-        headerBarMain={<Heading label={t('ES_EVENT_DELETE_POPUP_HEADER')} />}
+        headerBarMain={<Heading label={t('PUBLIC_BRDCST_DELETE_POPUP_HEADER')} />}
         headerBarEnd={<CloseBtn onClick={() => setShowModal(false)} />}
         actionCancelLabel={t("CS_COMMON_CANCEL")}
         actionCancelOnSubmit={() => setShowModal(false)}
-        actionSaveLabel={t('ES_EVENT_DELETE')}
+        actionSaveLabel={t('PUBLIC_BRDCST_DELETE')}
         actionSaveOnSubmit={handleDelete}
         >
           <Card style={{ boxShadow: "none" }}>
-            <CardText>{t(`ES_EVENT_DELETE_TEXT`)}</CardText>
+            <CardText>{t(`PUBLIC_BRDCST_DELETE_TEXT`)}</CardText>
           </Card>
         </Modal>
       }

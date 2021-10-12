@@ -50,13 +50,13 @@ const Response = (props) => {
       <Card>
         <BannerPicker
           t={t}
-          message={searchParams?.update ? 'ENGAGEMENT_EVENT_UPDATED' : 'ENGAGEMENT_EVENT_DELETED'}
+          message={searchParams?.update ? 'ENGAGEMENT_PUBLIC_BRDCST_UPDATED' : 'ENGAGEMENT_PUBLIC_BRDCST_DELETED'}
           data={updateEventMutation.data}
           isSuccess={updateEventMutation.isSuccess}
           isLoading={updateEventMutation.isIdle || updateEventMutation.isLoading}
         />
         <CardText>
-          {searchParams?.update ? t(`ENGAGEMENT_EVENT_UPDATED_MESSAGES`) : t(`ENGAGEMENT_EVENT_DELETED_MESSAGES`)}
+          {searchParams?.update ? t(`ENGAGEMENT_PUBLIC_BRDCST_MESSAGES`) : t(`ENGAGEMENT_PUBLIC_BRDCST_MESSAGES`)}
         </CardText>
         <ActionBar>
           <Link to={"/digit-ui/employee"}>
@@ -74,7 +74,7 @@ const Response = (props) => {
     <Card>
       <BannerPicker
         t={t}
-        message={`ENGAGEMENT_EVENT_CREATED`}
+        message={`ENGAGEMENT_PUBLIC_BRDCST_CREATED`}
         data={mutation.data}
         isSuccess={mutation.isSuccess}
         isLoading={mutation.isIdle || mutation.isLoading}
