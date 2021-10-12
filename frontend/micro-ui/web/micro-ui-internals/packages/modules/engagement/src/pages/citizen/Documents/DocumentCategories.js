@@ -99,12 +99,7 @@ const DocumentCategories = ({ t, parentRoute }) => {
               : data?.statusCount && data?.statusCount?.length ?
                 data?.statusCount?.map(({ category, count }, index) => {
                   return (
-                    <Link key={index} to="#">
-                      <Accordion t={t} title={category} count={count} key={index} onClick={showDocuments}>
-                        {/* <p>{data.info}</p> */}
-                      </Accordion>
-                    </Link>
-                  );
+                    <Accordion t={t} title={category} count={count} key={index} onClick={showDocuments} />);
                 }) :
                 (<Card>
                   <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
