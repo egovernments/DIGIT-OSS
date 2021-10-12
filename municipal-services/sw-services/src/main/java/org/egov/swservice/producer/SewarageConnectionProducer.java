@@ -6,6 +6,8 @@ import org.egov.tracer.kafka.CustomKafkaTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static org.egov.swservice.util.SWConstants.TOPICS_TO_AVOID;
+
 
 @Service
 @Slf4j

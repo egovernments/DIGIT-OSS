@@ -98,6 +98,10 @@ public class SewerageServicesUtil {
 			propertyCriteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
 			propertyCriteria.setLocality(addDetail.get(localityCode).toString());
 		}
+		if (sewerageConnectionRequest.getRequestInfo().getUserInfo() != null
+				&& "CITIZEN".equalsIgnoreCase(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType())) {
+			propertyCriteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
+		}
 		Object result = serviceRequestRepository.fetchResult(
 				getPropertyURL(propertyCriteria),
 				RequestInfoWrapper.builder().requestInfo(sewerageConnectionRequest.getRequestInfo()).build());

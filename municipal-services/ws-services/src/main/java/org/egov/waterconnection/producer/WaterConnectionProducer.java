@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 
+import static org.egov.waterconnection.constants.WCConstants.TOPICS_TO_AVOID;
+
 @Service
 @Slf4j
 public class WaterConnectionProducer {

@@ -215,7 +215,8 @@ public class SewerageServiceImpl implements SewerageService {
 	 */
 	private List<SewerageConnection> getAllSewerageApplications(SewerageConnectionRequest sewerageConnectionRequest) {
 		SearchCriteria criteria = SearchCriteria.builder()
-				.connectionNumber(sewerageConnectionRequest.getSewerageConnection().getConnectionNo()).build();
+				.connectionNumber(sewerageConnectionRequest.getSewerageConnection().getConnectionNo())
+				.tenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId()).build();
 		return search(criteria, sewerageConnectionRequest.getRequestInfo());
 	}
 

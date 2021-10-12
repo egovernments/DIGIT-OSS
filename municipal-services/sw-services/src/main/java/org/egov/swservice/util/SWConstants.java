@@ -227,4 +227,7 @@ public class SWConstants {
 
 	public static final String TENANTID_MDC_STRING = "TENANTID";
 
+	public static final List<String> TOPICS_TO_AVOID = Collections.unmodifiableList(Arrays.asList("editnotificationsewerage", "sw-filestoreids-process"));
+
+
 }

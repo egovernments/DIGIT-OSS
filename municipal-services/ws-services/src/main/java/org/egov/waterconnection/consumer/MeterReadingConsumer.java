@@ -35,7 +35,7 @@ public class MeterReadingConsumer {
 	 * @param record
 	 * @param topic
 	 */
-	@KafkaListener(topics = { "${ws.meterreading.create.topic}" })
+	@KafkaListener(topicPattern = "${ws.kafka.meter.reading.topic.pattern}")
 	public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
 			log.info("Received request to add Meter Reading on topic - " + topic);
