@@ -70,49 +70,49 @@ const DocumentCategories = ({ t, parentRoute }) => {
    } */
   return (
     <AppContainer>
-      <div>
-      </div>
+
       <Header>{t('DOCUMENTS_DOCUMENT_HEADER')}</Header>
+      {/* <div className="DocsCardWrapper"> */}
       <Card>
-        <Searchbar
-          searchValue={searchValue}
-          handleKeyPress={handleKeyPress}
-          handleSearch={handleSearch}
-          onChange={setSearchValue}
-          t={t}
-        />
-        <hr style={{ color: '#ccc' }} />
-        {!isLoading ? (
-          <div className="wrapper">
-            {searchValue.length && data?.Documents?.length ?
-              data?.Documents?.map(({ name, auditDetails, description, documentLink, fileSize, filestoreId }, index) => (
-                <DocumentCard
-                  key={index}
-                  documentTitle={name}
-                  documentSize={fileSize}
-                  lastModifiedData={auditDetails?.lastModifiedTime}
-                  description={description}
-                  documentLink={documentLink}
-                  filestoreId={filestoreId}
-                  t={t}
-                />
-              ))
-              : data?.statusCount && data?.statusCount?.length ?
-                data?.statusCount?.map(({ category, count }, index) => {
-                  return (
-                    <Link key={index} to="#">
-                      <Accordion t={t} title={category} count={count} key={index} onClick={showDocuments}>
-                        {/* <p>{data.info}</p> */}
-                      </Accordion>
-                    </Link>
-                  );
-                }) :
-                (<Card>
-                  <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
-                </Card>)}
-          </div>
-        ) : <Loader />
-        }
+      <Searchbar
+      searchValue={searchValue}
+      handleKeyPress={handleKeyPress}
+      handleSearch={handleSearch}
+      onChange={setSearchValue}
+      t={t}
+      />
+      <hr style={{ color: '#ccc' }} />
+    {!isLoading?(
+      <div className="wrapper">
+    {searchValue.length && data?.Documents?.length?
+      data?.Documents?.map(({ name, auditDetails, description, documentLink, fileSize, filestoreId }, index) => (
+      <DocumentCard
+      key={index}
+      documentTitle={name}
+      documentSize={fileSize}
+      lastModifiedData={auditDetails?.lastModifiedTime}
+      description={description}
+      documentLink={documentLink}
+      filestoreId={filestoreId}
+      t={t}
+      />
+    ))
+      : data?.statusCount && data?.statusCount?.length?
+      data?.statusCount?.map(({ category, count }, index) => {
+      return (
+      <Link key={index} to="#">
+      <Accordion t={t} title={category} count={count} key={index} onClick={showDocuments}>
+    {/* <p>{data.info}</p> */}
+      </Accordion>
+      </Link>
+    );
+    }):
+      (<Card>
+      <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
+      </Card>)}
+      </div>
+    ): <Loader />
+    }
       </Card>
     </AppContainer>
   );

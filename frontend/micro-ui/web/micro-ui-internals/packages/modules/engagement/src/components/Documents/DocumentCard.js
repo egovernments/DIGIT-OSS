@@ -12,27 +12,22 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import { format } from 'date-fns';
 import { getFileSize } from './engagement-doc-documents';
-import { getFileUrl, openDocument } from './DesktopInbox';
+import { getFileUrl, openUploadedDocument, openDocumentLink } from './DesktopInbox';
 
+const downloadDocument = async (filestoreId, title) => {
+  if (!filestoreId || !filestoreId.length) { alert('No Document exists!'); return; }
 
-
-const openDocumentLink = (link, title) => {
-  const w = window.open('', '_blank');
-  w.location = link;
-  w.document.title = title;
-}
-
-/* const downloadDocument = async (filestoreId, title) => {
   const fileUrl = await getFileUrl(filestoreId);
-  if(fileUrl){
-    const anchorTag = document.createElement('a');
+  if (fileUrl) {
+   /*  const anchorTag = document.createElement('a');
     anchorTag.href = fileUrl;
     anchorTag.download = title;
     document.body.appendChild(anchorTag);
     anchorTag.click();
-    document.body.removeChild(anchorTag);
+    document.body.removeChild(anchorTag); */
+    window.open(fileUrl,"_blank")
   }
-} */
+}
 
 const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, description, filestoreId, documentLink, t }) => {
   let isMobile = window.Digit.Utils.browser.isMobile();
@@ -50,7 +45,7 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
           {documentSize ? <CardCaption>{getFileSize(documentSize)}</CardCaption> : null}
         </div>
         <div className="notice_and_circular_caption">
-          <CardCaption>{`${t(`CE_DCOUMENT_UPLOADED_ON`)} ${lastModifiedData ? format(lastModifiedData, "eo MMMM yyyy"):"-"}`}</CardCaption>
+          <CardCaption>{`${t(`CE_DCOUMENT_UPLOADED_ON`)} ${lastModifiedData ? format(lastModifiedData, "eo MMMM yyyy") : "-"}`}</CardCaption>
         </div>
         <div className="notice_and_circular_text">
           <CardText>
@@ -58,16 +53,16 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
           </CardText>
         </div>
         <div className="view_download_main">
-          <LinkButton
+          {filestoreId && filestoreId.length ? <LinkButton
 
             label={
-              <div className="views" onClick={() => openDocument(filestoreId ? filestoreId : documentLink, documentTitle)}>
+              <div className="views" onClick={() => openUploadedDocument(filestoreId ? filestoreId : null, documentTitle)}>
                 <ViewsIcon />
                 <p>{t(`CE_DOCUMENT_VIEW_LINK`)}</p>
               </div>
             }
-          />
-
+          /> : null
+          }
           {documentLink && documentLink.length ?
             (<LinkButton
 
@@ -79,14 +74,17 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
               }
             />) : null
           }
-          <LinkButton
-            label={
-              <div className="views download_views_padding" onClick={() => openDocument(filestoreId ? filestoreId : documentLink, documentTitle)} >
-                <DownloadImgIcon />
-                <p>{t(`CE_DOCUMENT_DOWNLOAD_LINK`)}</p>
-              </div>
-            }
-          />
+          {filestoreId && filestoreId.length ?
+            <LinkButton 
+              label={
+                <div className="views download_views_padding" >
+                  <DownloadImgIcon />
+                  <p>{t(`CE_DOCUMENT_DOWNLOAD_LINK`)}</p>
+                </div>
+              }
+              onClick={() => downloadDocument(filestoreId ? filestoreId : null, documentTitle)}
+            /> : null
+          }
         </div>
       </div>
 

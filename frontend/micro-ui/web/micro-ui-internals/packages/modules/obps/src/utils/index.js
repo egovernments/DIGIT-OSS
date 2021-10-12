@@ -41,7 +41,7 @@ export const pdfDownloadLink = (documents = {}, fileStoreId = "", format = "") =
 export const convertToNocObject = (data,datafromflow) => {
 
   let formData = {Noc: data};
-  let doc = datafromflow?.nocDocuments?.nocDocuments.filter((n) => n.documentType.includes(data.nocType.split("_")[0])).map((noc) => {
+  let doc = datafromflow?.nocDocuments?.nocDocuments.length>0 ? datafromflow?.nocDocuments?.nocDocuments.filter((n) => n.documentType.includes(data.nocType.split("_")[0])).map((noc) => {
     return ( {    "fileName": noc?.fileName || "",
                   "name": noc?.name || "",
                   "fileStoreId": noc?.fileStoreId,
@@ -54,12 +54,13 @@ export const convertToNocObject = (data,datafromflow) => {
                   "additionalDetails": {
                   }})
                   
-  }) || [];
+  }) || [] : [];
+  doc = [...doc,...(datafromflow?.PrevStateNocDocuments? datafromflow?.PrevStateNocDocuments.filter((n) => n.documentType.includes(data.nocType.split("_")[0])):[])];
   formData.Noc.documents = doc;
   return formData;
 }
 
-export const getDocumentforBPA = (docs) => {
+export const getDocumentforBPA = (docs, PrevStateDocs) => {
 let document = [];
   docs && docs.map((ob) =>{
     if(ob.id){
@@ -86,6 +87,7 @@ let document = [];
     })
   }
   });
+  document = [...document, ...(PrevStateDocs?PrevStateDocs:[])];
   return document;
 }
 
@@ -219,7 +221,7 @@ export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = 
         "approvalDate": data?.approvalDate,
         "applicationDate": data?.applicationDate,
         "status": isSendBackTOCitizen ? data.status : (data.status ? data.status : "INITIATED"),
-        "documents": getDocumentforBPA(data?.documents?.documents),
+        "documents": getDocumentforBPA(data?.documents?.documents, data?.PrevStateDocuments),
         "landInfo": {...data?.landInfo, owners:getBPAOwners(data), unit:getBPAUnit(data)},
         "assignee": isSendBackTOCitizen ? data.assignee : [],
         "workflow": {
@@ -428,3 +430,15 @@ export const convertEpochToDate = (dateEpoch) => {
     return null;
   }
 };
+
+export const getBusinessServices = (businessService, status) => {
+  let billBusinessService = "BPA.NC_APP_FEE";
+  if (businessService === "BPA_LOW") {
+    billBusinessService = "BPA.LOW_RISK_PERMIT_FEE"
+  } else if (businessService === "BPA") {
+    billBusinessService = ((status == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
+  } else if (businessService === "BPA_OC") {
+    billBusinessService = ((status == "PENDING_APPL_FEE") ? "BPA.NC_OC_APP_FEE" : "BPA.NC_OC_SAN_FEE");
+  }
+  return billBusinessService
+}

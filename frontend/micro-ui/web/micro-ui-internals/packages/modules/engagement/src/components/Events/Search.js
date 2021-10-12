@@ -10,7 +10,8 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
   const mobileView = innerWidth <= 640;
   const ulb = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const userUlbs = ulb.filter(ulb => ulb?.code === tenantId)
+  const userInfo = Digit.UserService.getUser().info;
+  const userUlbs = ulb.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code))
   
   const getFields = (input) => {
     switch(input.type) {

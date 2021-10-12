@@ -53,7 +53,7 @@ const Events = {
       const [event] = eventRes?.events;
       console.log(eventRes, 'eventRes');
       const fileStoresIds = event?.eventDetails?.documents?.map(document => document?.fileStoreId);
-      const uploadedFilesData = fileStoresIds.length > 0 ? await Digit.UploadServices.Filefetch(fileStoresIds, tenantId) : null
+      const uploadedFilesData = fileStoresIds?.length > 0 ? await Digit.UploadServices.Filefetch(fileStoresIds, tenantId) : null
       return {...event, uploadedFilesData}
     }
 }

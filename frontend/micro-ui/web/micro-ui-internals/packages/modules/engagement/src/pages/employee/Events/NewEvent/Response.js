@@ -79,13 +79,14 @@ const Response = (props) => {
         isSuccess={mutation.isSuccess}
         isLoading={mutation.isIdle || mutation.isLoading}
       />
-      <CardText>{t(`ENGAGEMENT_EVENT_CREATED_MESSAGES`, {
+      <CardText>
+        {mutation.isSuccess ? t(`ENGAGEMENT_EVENT_CREATED_MESSAGES`, {
         eventName: mutation?.data?.events?.[0]?.name,
         fromDate: Digit.DateUtils.ConvertTimestampToDate(mutation?.data?.events?.[0]?.eventDetails?.fromDate),
         toDate: Digit.DateUtils.ConvertTimestampToDate(mutation?.data?.events?.[0]?.eventDetails?.toDate),
-        fromTime: format(new Date(mutation?.data?.events?.[0]?.eventDetails?.fromDate), 'hh:mm'),
-        toTime: format(new Date(mutation?.data?.events?.[0]?.eventDetails?.toDate), 'hh:mm'),
-      })}
+        fromTime: mutation.isSuccess ? format(new Date(mutation?.data?.events?.[0]?.eventDetails?.fromDate), 'hh:mm') : null,
+        toTime: mutation.isSuccess ? format(new Date(mutation?.data?.events?.[0]?.eventDetails?.toDate), 'hh:mm') : null,
+      }) : t(`ENGAGEMENT_EVENT_FAILED_MESSAGES`)}
       </CardText>
       <ActionBar>
         <Link to={"/digit-ui/employee"}>

@@ -103,7 +103,7 @@ const UploadFile = (props) => {
                   {inpRef.current.files[0]?.name?.slice(0, 20)}
                 </span>
                 <span onClick={() => handleDelete()}>
-                  <Close className="close" />
+                  <Close style={props.Multistyle} className="close" />
                 </span>
               </div>
             </div>

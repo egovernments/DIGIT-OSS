@@ -238,8 +238,8 @@ public class InboxService {
                     isSearchResultEmpty = true;
                 }
             }
-            if (!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(TL)
-                    || processCriteria.getModuleName().equals(BPAREG)) {
+            if (!ObjectUtils.isEmpty(processCriteria.getModuleName()) && ( processCriteria.getModuleName().equals(TL)
+                    || processCriteria.getModuleName().equals(BPAREG))) {
                 totalCount = tlInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
                 List<String> applicationNumbers = tlInboxFilterService.fetchApplicationNumbersFromSearcher(criteria,
                         StatusIdNameMap, requestInfo);

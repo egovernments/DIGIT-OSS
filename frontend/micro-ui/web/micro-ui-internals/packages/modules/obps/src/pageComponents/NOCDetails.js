@@ -7,9 +7,12 @@ import {
     Loader,
     FormStep,
     StatusTable,
+    MultiUploadWrapper,
     Row
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
+import PropertyDocuments from "../../../templates/ApplicationDetails/components/PropertyDocuments";
+
 
 const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -19,6 +22,7 @@ const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setForm
     const [nocTaxDocuments, setNocTaxDocuments] = useState([]);
     const [enableSubmit, setEnableSubmit] = useState(true)
     const [checkRequiredFields, setCheckRequiredFields] = useState(false);
+    const [PrevStateNocDocuments, setPrevStateNocDocuments] = useState(formData?.PrevStateNocDocuments || []);
     const checkingFlow = formData?.uiFlow?.flow;
 
     const [sourceRefId, setSourceRefId] = useState(formData?.applicationNo);
@@ -66,13 +70,21 @@ const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setForm
                     let code = doc.documentType;
                     let nocType = doc.nocType;
                     doc.dropdownData = [];
-                    commonDocMaping.forEach(value => {
+                    doc.uploadedDocuments = [];
+                    commonDocMaping && commonDocMaping.forEach(value => {
                         let values = value.code.slice(0, code.length);
                         if (code === values) {
                             doc.hasDropdown = true;
                             doc.dropdownData.push(value);
                         }
                     });
+                    doc.uploadedDocuments[0] = {};
+                    doc.uploadedDocuments[0].values = [];
+                    PrevStateNocDocuments.map(upDocs => {
+                        if (code === `${upDocs?.documentType?.split('.')[0]}.${upDocs?.documentType?.split('.')[1]}`) {
+                        doc.uploadedDocuments[0].values.push(upDocs)
+                    }
+            })
                     documentsList.push(doc);
                 })
             }
@@ -135,6 +147,8 @@ const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setForm
                                 setNocDocuments={setNocDocuments}
                                 nocDocuments={nocDocuments}
                                 setCheckRequiredFields={setCheckRequiredFields}
+                                formData={formData}
+                                PrevStateNocDocuments={PrevStateNocDocuments}
                             />
                         );
                     })}
@@ -151,38 +165,63 @@ function SelectDocument({
     error,
     setError,
     nocDocuments,
-    setCheckRequiredFields
+    setCheckRequiredFields,
+    formData,
+    PrevStateNocDocuments
 }) {
 
-    const filteredDocument = nocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0];
+    const filteredDocument = nocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0] || PrevStateNocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0];
     const tenantId = Digit.ULBService.getCurrentTenantId(doc);
     const [selectedDocument, setSelectedDocument] = useState(doc?.dropdownData?.[0]);
     const [file, setFile] = useState(null);
-    const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
+    const [uploadedFile, setUploadedFile] = useState(() => ({fileStoreId: nocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0]?.fileStoreId,fileName:""}) || null);
+    const [newArray, setnewArray ] = useState([]);
 
     const handleSelectDocument = (value) => setSelectedDocument(value);
 
-    function selectfile(e) {
-        setFile(e.target.files[0]);
+
+    function selectfile(e, key) {
+        e && setSelectedDocument({ documentType: key });
+        e && setFile(e.file);
     }
 
-    useEffect(() => {
-        if (selectedDocument?.code) {
-            setNocDocuments((prev) => {
-                const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
+    function getData(e, key) {
+       let data,newArr;
+        if(e)
+        {   data = Object.fromEntries(e);
+            newArr = Object.values(data);
+        }
+        else
+        {newArr = formData?.nocDocuments?.nocDocuments.filter((ob) => ob.documentType === selectedDocument.documentType);}
+        setnewArray(newArr);
+        if(nocDocuments && newArr && nocDocuments.filter(ob => ob.documentType === key).length > newArr.length)
+        {
+            setNocDocuments(nocDocuments.filter(ob => ob.documentType !== key));
+        }
+    
+        newArr && newArr.map((ob) => {
+          ob.file.documentType = key;
+          selectfile(ob,key);
+        })
+      }
 
-                if (uploadedFile?.length === 0 || uploadedFile === null) {
-                    return filteredDocumentsByDocumentType;
+    useEffect(() => {
+        if (selectedDocument?.documentType && (( nocDocuments.filter((ob) => ob.documentType === selectedDocument?.documentType)).length == 0 || ((newArray.filter((ob) => ob?.file?.documentType === selectedDocument?.documentType)).length) !== (nocDocuments.filter((ob) => ob.documentType === selectedDocument?.documentType)).length)) {
+            setNocDocuments((prev) => {
+                //const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
+
+                if (uploadedFile === null || uploadedFile?.fileStoreId === undefined || uploadedFile?.fileStoreId === null) {
+                    return prev;
                 }
 
-                const filteredDocumentsByFileStoreId = filteredDocumentsByDocumentType?.filter((item) => item?.fileStoreId !== uploadedFile);
+                const filteredDocumentsByFileStoreId = prev?.filter((item) => item?.fileStoreId !== uploadedFile.fileStoreId);
                 return [
                     ...filteredDocumentsByFileStoreId,
                     {
-                        documentType: selectedDocument?.code,
-                        fileStoreId: uploadedFile,
-                        documentUid: uploadedFile,
-                        fileName: file?.name || "",
+                        documentType: doc?.dropdownData?.[0]?.code,
+                        fileStoreId: uploadedFile.fileStoreId,
+                        documentUid: uploadedFile.fileStoreId,
+                        fileName: uploadedFile?.fileName || "",
                     },
                 ];
             });
@@ -193,7 +232,7 @@ function SelectDocument({
     useEffect(() => {
         (async () => {
             setError(null);
-            if (file) {
+            if (file && !file.fileStoreId) {
                 if (file.size >= 5242880) {
                     setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
                 } else {
@@ -201,7 +240,7 @@ function SelectDocument({
                         setUploadedFile(null);
                         const response = await Digit.UploadServices.Filestorage("PT", file, Digit.ULBService.getStateId());
                         if (response?.data?.files?.length > 0) {
-                            setUploadedFile(response?.data?.files[0]?.fileStoreId);
+                            setUploadedFile({fileStoreId: response?.data?.files[0]?.fileStoreId, fileName:file.name});
                         } else {
                             setError(t("CS_FILE_UPLOAD_ERROR"));
                         }
@@ -223,7 +262,8 @@ function SelectDocument({
                     <h1>{doc?.additionalDetails?.appNumberLink}</h1>
                 </div>
             </div>
-            <UploadFile
+            {doc?.uploadedDocuments?.length && <PropertyDocuments documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
+            {/* <UploadFile
                 id={"noc-doc"}
                 extraStyleName={"propertyCreate"}
                 accept=".jpg,.png,.pdf"
@@ -234,7 +274,13 @@ function SelectDocument({
                 }}
                 message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`ES_NO_FILE_SELECTED_LABEL`)}
                 error={error}
-            />
+            /> */}
+            <MultiUploadWrapper
+            module="BPA"
+            tenantId={tenantId}
+            getFormState={e => getData(e,doc?.documentType.replaceAll(".", "_"))}
+            setuploadedstate={formData?.nocDocuments?.nocDocuments.filter((ob) => ob.documentType === doc?.documentType.replaceAll(".", "_"))}
+          />
         </div>
     );
 }

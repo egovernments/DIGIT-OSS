@@ -125,12 +125,14 @@ const InspectionReport = ({ config, onSelect, userType, formData, setError, form
     }
 
     return (
+        <div>
         <React.Fragment>
             {FieldReports && FieldReports.map((unit, index) => (
                 <InspectionReportForm key={unit.key} index={index} unit={unit} {...commonProps} />
             ))}
-            <LinkButton label={t("TL_ADD_TRADE_UNIT")} onClick={addNewFieldReport} style={{ color: "#F47738", width: "fit-content" }} />
         </React.Fragment>
+        <LinkButton label={t("BPA_ADD_FIELD_INSPECTION")} onClick={addNewFieldReport} style={{ color: "#F47738", width: "fit-content" }} />
+        </div>
     );
 };
 
@@ -271,7 +273,7 @@ const InspectionReportForm = (_props) => {
                             </div>
                         </div>
                     ) : null}
-                    <CardSectionHeader>{`${t("Inspection Report")}`} {index+1}</CardSectionHeader>
+                    <CardSectionHeader>{`${t("BPA_FI_REPORT")}`} {index+1}</CardSectionHeader>
                     <LabelFieldPair>
             <CardLabel className="card-label-smaller">{`${t("BPA_FI_DATE_LABEL")} * :`}</CardLabel>
             <div className="field">
@@ -293,7 +295,7 @@ const InspectionReportForm = (_props) => {
             </div>
             </LabelFieldPair>
             <LabelFieldPair>
-            <CardLabel>{t("ES_COMMON_TIME")}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("ES_COMMON_TIME")} * :`}</CardLabel>
             <div className="field">
             <Controller
                 name="InspectionTime"
@@ -314,9 +316,9 @@ const InspectionReportForm = (_props) => {
           </LabelFieldPair>
           <CardSectionHeader>{t("BPA_CHECK_LIST_DETAILS")}</CardSectionHeader>
           {questionList && questionList.map((ob,ind) => (
-              <div key={ind} style={{ border: "1px solid #D6D5D4", padding: "16px", marginTop: "8px", background: "#FAFAFA" } }>
+              <div key={ind} style={{ border: "1px solid #D6D5D4", padding: "16px", marginTop: "8px", background: "#FAFAFA", maxWidth:"600px", minWidth:"280px" } }>
                   <LabelFieldPair>
-                        <CardLabel className="card-label-smaller">{`${t(ob.question)} * :`}</CardLabel>
+                        <CardLabel style={{marginRight:"30px"}} className="card-label-smaller">{`${t(ob.question)} * :`}</CardLabel>
                         <Controller
                             control={control}
                             name={`question_${ind}`}
@@ -344,7 +346,7 @@ const InspectionReportForm = (_props) => {
                         />
                     </LabelFieldPair>
                     <LabelFieldPair>
-                        <CardLabel className="card-label-smaller">{t("BPA_ENTER_REMARKS")}</CardLabel>
+                        <CardLabel style={{marginRight:"30px"}} className="card-label-smaller">{t("BPA_ENTER_REMARKS")}</CardLabel>
                         <div className="field">
                             <Controller
                                 control={control}

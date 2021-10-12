@@ -8,7 +8,8 @@ import {
   FormStep,
   MultiUploadWrapper,
   StatusTable,
-  Row
+  Row,
+  CardSectionHeader
 } from "@egovernments/digit-ui-react-components";
 import PropertyDocuments from "./PropertyDocuments";
 
@@ -87,7 +88,7 @@ function SelectDocument({
   }
 
   return (
-      <div style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", display: "flex" }}>
+      <div style={{/*  border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", display: "flex" */ display:"flex"}}>
         <CardLabel>{doc?.required ? `${t("TL_BUTTON_UPLOAD FILE")}*:` : `${t("TL_BUTTON_UPLOAD FILE")}:`}</CardLabel>
         <MultiUploadWrapper
           module="NOC"
@@ -109,7 +110,7 @@ function SelectDocument({
       </div>
   );
 }
-const NOCDocuments = ({ t, noc, docs, isNoc, applicationData }) => {
+const NOCDocuments = ({ t, noc, docs, isNoc, applicationData,NOCdata }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const { isLoading: nocDocsLoading, data: nocDocs } = Digit.Hooks.obps.useMDMS(stateId, "NOC", ["DocumentTypeMapping"], { enabled: isNoc });
@@ -165,7 +166,13 @@ const NOCDocuments = ({ t, noc, docs, isNoc, applicationData }) => {
   }, [nocDocs, commonDocMaping]);
 
   return (
-    <div>
+    <div style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px",/*  display: "flex" */ }}>
+      <StatusTable>
+      <Row label={t(`BPA_${noc?.nocType}_HEADER`)} />
+      {NOCdata && NOCdata.map((noc,index) => (
+        <Row label={t(noc?.title)} text={t(noc?.value)} />
+      ))}
+      </StatusTable>
       <PropertyDocuments documents={docs} />
       {applicationData?.status === 'NOC_VERIFICATION_INPROGRESS' && nocTaxDocuments?.map((document, index) => {
         return (

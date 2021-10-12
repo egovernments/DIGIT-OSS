@@ -4,7 +4,9 @@ import { useTranslation } from "react-i18next";
 import { FormComposer, Header, Card, CardSectionHeader, PDFSvg, Loader, StatusTable, Row, ActionBar, SubmitBar } from "@egovernments/digit-ui-react-components";
 import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDetails";
 import { newConfig } from "../../../config/InspectionReportConfig";
-
+import get from "lodash/get";
+import orderBy from "lodash/orderBy";
+import { getBusinessServices } from "../../../utils";
 
 const BpaApplicationDetail = () => {
   const { id } = useParams();
@@ -68,7 +70,7 @@ const BpaApplicationDetail = () => {
   };
   let configs = newConfig;
 
-  const workflowDetails = Digit.Hooks.useWorkflowDetails({
+  let workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: tenantId,
     id: id,
     moduleCode: "BPA",
@@ -88,6 +90,31 @@ const BpaApplicationDetail = () => {
     })
   }
 
+  const userInfo = Digit.UserService.getUser();
+  const rolearray = userInfo?.info?.roles.filter(item => {
+    if ((item.code == "CEMP" && item.tenantId === tenantId) || item.code == "CITIZEN") return true;
+  });
+
+  if (workflowDetails?.data?.processInstances?.length > 0) {
+    let filteredActions = [];
+    filteredActions = get(workflowDetails?.data?.processInstances[0], "nextActions", [])?.filter(
+      item => item.action != "ADHOC"
+    );
+    let actions = orderBy(filteredActions, ["action"], ["desc"]);
+    if ((!actions || actions?.length == 0) && workflowDetails?.data?.actionState) workflowDetails.data.actionState.nextActions = [];
+  }
+
+  if (rolearray) {
+    workflowDetails?.data?.nextActions?.forEach(action => {
+      if (action?.action === "PAY") {
+        action.redirectionUrll =  {
+          pathname: `${getBusinessServices(data?.applicationData?.businessService, data?.applicationData?.status)}/${data?.applicationData?.applicationNo}/${tenantId}`,
+          state: tenantId
+        }
+      }
+    })
+  };
+
 
   return (
     <Fragment>
@@ -95,7 +122,7 @@ const BpaApplicationDetail = () => {
         <Header>{t("BPA_TASK_DETAILS_HEADER")}</Header>
       </div>
       {data?.applicationData?.status === "FIELDINSPECTION_INPROGRESS" && <div style={{ marginLeft: "15px" }}>
-        <Header>{t("Inspection Report")}</Header>
+        <Header>{t("BPA_FI_REPORT")}</Header>
       </div>}
       {data?.applicationData?.status === "FIELDINSPECTION_INPROGRESS" && <FormComposer
         heading={t("")}

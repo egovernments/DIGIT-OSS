@@ -9,7 +9,7 @@ import {
 import PropertyDocuments from "./PropertyDocuments";
 
 const BPADocuments = ({ t, formData, applicationData, docs, bpaActionsDetails }) => {
-    const applicationStatus = bpaActionsDetails?.data?.actionState?.actionState?.actionState?.applicationStatus || "";
+    const applicationStatus = applicationData?.status || "";
     const actions = bpaActionsDetails?.data?.actionState?.actionState?.actionState?.actions || [];
     const stateId = Digit.ULBService.getStateId();
     const [documents, setDocuments] = useState(formData?.documents?.documents || []);

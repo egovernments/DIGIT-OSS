@@ -108,7 +108,7 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
         heading={propsConfig.texts.header}
         description={propsConfig.texts.description}
         headingStyle={{ textAlign: "center" }}
-        cardStyle={{ maxWidth: "400px", margin: "auto" }}
+        cardStyle={{ maxWidth: "408px", margin: "auto" }}
         className ="employeeForgotPassword"
       >
         <Header />

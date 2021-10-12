@@ -4,6 +4,9 @@ import { useTranslation } from "react-i18next";
 import { EmployeeModuleCard, PropertyHouse } from "@egovernments/digit-ui-react-components";
 
 const EngagementCard = () => {
+  const userRoles = Digit.SessionStorage.get('User')?.info?.roles
+  const isEmployee = userRoles.find((role)=> role.code === 'EMPLOYEE');
+  if(!isEmployee) return null;
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data: count , isLoading, } = Digit.Hooks.engagement.useDocSearch({ tenantIds:tenantId }, {
     select: (data) => {
@@ -46,8 +49,7 @@ const EngagementCard = () => {
     ],
   };
 
-  const userRoles = Digit.SessionStorage.get('User')?.info?.roles
-  const isEmployee = userRoles.find((role)=> role.code === 'EMPLOYEE');
+
 
   if(isEmployee) result = <EmployeeModuleCard {...propsForModuleCard} />;
 

@@ -133,10 +133,10 @@ const BpaApplicationDetail = () => {
                 ))}
                 </div>
               ))}
-              {!(detail?.additionalDetails?.FIdocuments) && !(detail?.additionalDetails?.subOccupancyTableDetails) && detail?.additionalDetails?.values?.map((value) => (
+              {!(detail?.additionalDetails?.FIdocuments) && !(detail?.additionalDetails?.subOccupancyTableDetails) && detail?.additionalDetails?.values && detail?.additionalDetails?.values?.map((value) => (
                 <Row className="border-none" label={t(value?.title)} text={t(value?.value) || t("CS_NA")} />
               ))}
-              {detail?.additionalDetails?.FIdocuments && detail?.additionalDetails?.values?.map((doc,index) => (
+              {detail?.additionalDetails?.FIdocuments && detail?.additionalDetails?.values && detail?.additionalDetails?.values?.map((doc,index) => (
               <div key={index}>
                 {doc.isNotDuplicate && <div> 
                 <StatusTable>
@@ -155,7 +155,7 @@ const BpaApplicationDetail = () => {
         <Row className="border-none" label={t(`${detail?.values?.[0]?.title}`)} textStyle={{marginLeft:"10px"}} text={detail?.values?.[0]?.value} />
         <Row className="border-none" label={t(`${nocob?.title}`)}></Row>
         </StatusTable>
-        {nocob?.values.map((noc,index)=> (
+        {nocob?.values && nocob?.values.map((noc,index)=> (
         <div key={index}>
         <StatusTable>
         <OBPSDocument value={nocob?.values} Code={noc?.documentType?.split("_")[0]} index={index} isNOC={true}/> 

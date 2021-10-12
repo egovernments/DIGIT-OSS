@@ -57,8 +57,8 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
         tenantId,
         type: getUserType().toUpperCase(),
       };
+      
       const response = await Digit.UserService.changePassword(requestData, tenantId);
-      console.log({ response });
       navigateToLogin();
     } catch (err) {
       setShowToast(err?.response?.data?.error?.fields?.[0]?.message || t("ES_SOMETHING_WRONG"));
@@ -111,7 +111,7 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
         submitInForm
         config={config}
         label={propsConfig.texts.submitButtonLabel}
-        cardStyle={{ maxWidth: "400px", margin: "auto" }}
+        cardStyle={{ maxWidth: "408px", margin: "auto" }}
         className ="employeeChangePassword"
       >
         <Header />

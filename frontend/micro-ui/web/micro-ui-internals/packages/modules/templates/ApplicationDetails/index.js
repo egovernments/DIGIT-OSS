@@ -77,7 +77,10 @@ const ApplicationDetails = (props) => {
         return nocMutation?.mutateAsync(noc)
       })
       try {
-        await Promise.all(nocPrmomises)
+        const values = await Promise.all(nocPrmomises);
+        values && values.map((ob) => {
+          Digit.SessionStorage.del(ob?.Noc?.[0]?.nocType);
+        })
       }
       catch (err) {
         closeModal();

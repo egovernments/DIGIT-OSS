@@ -33,16 +33,28 @@ export const getFileUrl = async (fileStoreId) => {
   }
 }
 
-export const openDocument = async (filestoreId, name) => {
+export const openUploadedDocument = async (filestoreId, name) => {
+  if (!filestoreId || !filestoreId.length) { alert('No Document exists!'); return; }
   const w = window.open('', '_blank');
   const url = await getFileUrl(filestoreId)
   w.location = url;
   w.document.title = name;
 }
 
+export const openDocumentLink = (docLink, title) => {
+  if (!docLink || !docLink.length) { alert('No Document Link exists!'); return; }
+  const w = window.open("", '_blank');
+  w.location = docLink;
+  w.document.title = title;
+}
+
 const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
 const getDocumentDetails = (value = "", link, t) => <span className="document-table-docs-columns"><Link className="link" to={link} >{value.length ? value : t('CE_DOCUMENT_TITLE')}</Link></span>
-const getDocumentCell = (name = "mSeva",link,t) => <span className="document-table-docs-columns" ><span className="link" onClick={() => openDocument(link, name)} >{t('CE_DOCUMENT_VIEW_LINK')}</span></span>
+const getDocumentCell = (name = "mSeva", link, docLink, t) => (
+  <span className="document-table-docs-columns" >
+    {link?.length ? <span className="link" onClick={() => openUploadedDocument(link, name)} > {t('CE_DOCUMENT_VIEW_LINK')} </span> : null}
+    {docLink.length ? <span className="link" onClick={() => openDocumentLink(docLink, name)}> {t('CE_DOCUMENT_OPEN_LINK')} </span> : null}
+  </span>);
 
 
 const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, links, onSort, sortParams, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords, onNextPage, onPrevPage, onPageSizeChange }) => {
@@ -57,7 +69,7 @@ const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, l
     },
     {
       Header: t('CE_TABLE_DOCUMENT_LINK'),
-      accessor: (row) => getDocumentCell(row?.name, row.filestoreId ? row.filestoreId : row.documentLink, t)
+      accessor: (row) => getDocumentCell(row?.name, row.filestoreId, row.documentLink, t)
     },
     {
       Header: t('CE_TABLE_DOCUMENT_POSTED_BY'),

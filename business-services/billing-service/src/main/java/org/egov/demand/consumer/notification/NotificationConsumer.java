@@ -135,9 +135,9 @@ public class NotificationConsumer {
 
 		if (!StringUtils.isEmpty(content)) {
 
-			content = content.replace("<OWNER_NAME>", bill.getPayerName());
-			content = content.replace("<BILLING_PERIOD>", getPeriod(detail.getFromPeriod(), detail.getToPeriod()));
-			content = content.replace("<REASON_FOR_CANCELLATION>", bill.getAdditionalDetails().toString());
+			content = content.replace("{OWNER_NAME}", bill.getPayerName());
+			content = content.replace("{BILLING_PERIOD}", getPeriod(detail.getFromPeriod(), detail.getToPeriod()));
+			content = content.replace("{REASON_FOR_CANCELLATION}", bill.getAdditionalDetails().toString());
 
 		}
 		return content;

@@ -247,8 +247,16 @@ public class FSMService {
 	private void handleDSOAccept(FSMRequest fsmRequest, FSM oldFSM) {
 		FSM fsm = fsmRequest.getFsm();
 		org.egov.common.contract.request.User dsoUser = fsmRequest.getRequestInfo().getUserInfo();
-		Vendor vendor = dsoService.getVendor(oldFSM.getDsoId(), fsm.getTenantId(), dsoUser.getUuid(), null, null,
-				fsmRequest.getRequestInfo());
+		
+		String dsoOwnerId = null;
+		Boolean isDso = util.isRoleAvailale(dsoUser, FSMConstants.ROLE_FSM_DSO, fsmRequest.getRequestInfo().getUserInfo().getTenantId().split("\\.")[0]);
+		if(isDso) {
+			dsoOwnerId = dsoUser.getUuid();
+		}else if(!util.isRoleAvailale(dsoUser, FSMConstants.FSM_EDITOR_EMP, fsmRequest.getRequestInfo().getUserInfo().getTenantId())){
+			throw new CustomException(FSMErrorConstants.INVALID_VEHICLE_ASSIGN_ACTION," only Employee with FSM_EDITOR role and/or  assigned DSO can take this action. ");
+		}
+
+		Vendor vendor = dsoService.getVendor(oldFSM.getDsoId(),fsm.getTenantId(), dsoOwnerId,null,null, fsmRequest.getRequestInfo());
 		if (vendor == null) {
 			throw new CustomException(FSMErrorConstants.INVALID_DSO,
 					" DSO is invalid, cannot take an action, Application is not assigned to current logged in user !");

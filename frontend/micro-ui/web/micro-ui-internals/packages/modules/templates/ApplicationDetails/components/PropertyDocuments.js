@@ -18,7 +18,7 @@ function PropertyDocuments({ documents, svgStyles = {} }) {
     let acc = [];
     documents?.forEach((element, index, array) => {
       // console.log(element, array, "inside property documents");
-      acc = [...acc, ...element.values];
+      acc = [...acc, ...(element.values?element.values:[])];
     });
     setFilesArray(acc?.map((value) => value?.fileStoreId));
   }, [documents]);
