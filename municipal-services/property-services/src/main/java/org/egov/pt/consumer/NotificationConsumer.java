@@ -44,7 +44,7 @@ public class NotificationConsumer {
 
 		try {
 
-			if (topic.equalsIgnoreCase(configs.getCreateAssessmentTopic()) || topic.equalsIgnoreCase(configs.getUpdateAssessmentTopic())) {
+			if (topic.contains(configs.getCreateAssessmentTopic()) || topic.contains(configs.getUpdateAssessmentTopic())) {
 
 				AssessmentRequest request = mapper.convertValue(record, AssessmentRequest.class);
 
@@ -55,7 +55,7 @@ public class NotificationConsumer {
 
 				assessmentNotificationService.process(topic, request);
 
-			} else if (topic.equalsIgnoreCase(configs.getSavePropertyTopic()) || topic.equalsIgnoreCase(configs.getUpdatePropertyTopic())) {
+			} else if (topic.contains(configs.getSavePropertyTopic()) || topic.contains(configs.getUpdatePropertyTopic())) {
 
 				PropertyRequest request = mapper.convertValue(record, PropertyRequest.class);
 				String tenantId = request.getProperty().getTenantId();
@@ -63,7 +63,7 @@ public class NotificationConsumer {
 				// Adding in MDC so that tracer can add it in header
 				MDC.put(TENANTID_MDC_STRING, tenantId);
 				
-				if (PTConstants.MUTATION_PROCESS_CONSTANT.equalsIgnoreCase(request.getProperty().getCreationReason().toString())) {
+				if (PTConstants.MUTATION_PROCESS_CONSTANT.contains(request.getProperty().getCreationReason().toString())) {
 
 					notifService.sendNotificationForMutation(request);
 				} else {
