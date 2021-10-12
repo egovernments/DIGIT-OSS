@@ -1,5 +1,5 @@
 import React, {Fragment, useCallback, useMemo, useReducer, useState} from "react"
-import { InboxComposer, CaseIcon, SearchField, TextInput, FilterFormField, Loader, RadioButtons, Localities, RemoveableTag, Dropdown } from "@egovernments/digit-ui-react-components";
+import { InboxComposer, CaseIcon, SearchField, TextInput, FilterFormField, Loader, RadioButtons, Localities, RemoveableTag, Dropdown, CheckBox } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
@@ -18,9 +18,6 @@ const Inbox = ({parentRoute}) => {
 
     const filterFormDefaultValues = {
       moduleName: "noc-services",
-      businessService: [
-        {code: "NOC", name:t("NOC")}
-      ],
       applicationStatus: "",
       locality: [],
       assignee: "ASSIGNED_TO_ALL"
@@ -47,7 +44,7 @@ const Inbox = ({parentRoute}) => {
           console.warn("dispatched action has nothing to reduce")
       }
     }
-    const formInitValue = Digit.SessionStorage.get("OBPS.INBOX") || {
+    const formInitValue = Digit.SessionStorage.get("NOC.INBOX") || {
       filterForm: filterFormDefaultValues,
       searchForm: searchFormDefaultValues,
       tableForm: tableOrderFormDefaultValues
@@ -56,8 +53,7 @@ const Inbox = ({parentRoute}) => {
     const onPageSizeChange = (e) => {
       dispatch({action: "mutateTableForm", data: {...formState.tableForm , limit: e.target.value}})
     }
-    const { isLoading: isInboxLoading, data: {table , statuses, totalCount} = {} } = Digit.Hooks.obps.useBPAInbox({
-        // tenantId, moduleName, businessService, filters, config 
+    const { isLoading: isInboxLoading, data: {table , statuses, totalCount} = {} } = Digit.Hooks.noc.useInbox({
         tenantId,
         filters: { ...formState }
     });
@@ -89,12 +85,6 @@ const Inbox = ({parentRoute}) => {
       { code: "ASSIGNED_TO_ALL", name: `${t("ES_INBOX_ASSIGNED_TO_ALL")}` },
     ];
 
-    const availableBusinessService = [
-      {code: "BPA_LOW", name:t("BPA_LOW")},
-      {code: "BPA", name:t("BPA")},
-      {code: "BPA_OC", name:t("BPA_OC")}
-    ]
-
     const FilterFormFields = useCallback(({registerRef, controlFilterForm}) => {
         return <>
             <FilterFormField>
@@ -113,40 +103,6 @@ const Inbox = ({parentRoute}) => {
                 />}
               />
             </FilterFormField>
-            {/* <FilterFormField>
-              <Controller
-                  name="businessService"
-                  defaultValue={availableBusinessService.filter(o => formState?.filterForm?.businessService?.includes(o.code))}
-                  control={controlFilterForm}
-                  render={({ref, onChange, value}) => {
-                    const [ businessService, setBusinessService] = useState(()=> value || [])
-                    const renderRemovableTokens = useMemo(()=>businessService?.map((locality, index) => {
-                      // debugger
-                      return (
-                        <RemoveableTag
-                          key={index}
-                          text={locality.name}
-                          onClick={() => {
-                            setBusinessService(businessService?.filter((loc) => loc.code !== locality.code) )
-                            onChange(businessService?.filter((loc) => loc.code !== locality.code))
-                          }}
-                        />
-                      );
-                    }),[businessService])
-                    return <>
-                      <div className="filter-label">{t("BPA_SEARCH_APPLICATION_TYPE_LABEL")}</div>
-                      <Dropdown inputRef={ref} option={availableBusinessService} optionKey="name" t={t} select={ (e) => {
-                          setBusinessService([e, ...businessService])
-                          onChange([e, ...businessService])
-                        }} selected={value} />
-                      <div className="tag-container">
-                        {renderRemovableTokens}
-                      </div>
-                    </>
-                  }
-                }
-                />
-            </FilterFormField> */}
             <FilterFormField>
               <Controller
                   name="locality"
@@ -181,18 +137,31 @@ const Inbox = ({parentRoute}) => {
                 }
                 />
             </FilterFormField>
-            {/* <FilterFormField>
-                <p>{t("ES_COMMON_SEARCH")}</p>
-            </FilterFormField> */}
-            {/* <CheckBox
-                key={index + "service"}
-                label={t(`CS_COMMON_INBOX_${e.businessservice.toUpperCase()}`)+" - "+t(`WF_NEWTL_${e.applicationstatus}`)+" "+`(${e.count})`}
-                value={e.statusid}
-                checked={checked}
-                onChange={(event) => onServiceSelect(event, e.statusid)}
-            /> */}
+            <FilterFormField>
+              <Controller
+                name="applicationStatus"
+                defaultValue={formState?.filterForm?.applicationStatus}
+                control={controlFilterForm}
+                render={(props) => {
+                  const [selectedStatuses, setSelectedStatuses] = useState(()=> props?.value || [])
+                  function changeItemCheckStatus(value){
+                    props.onChange(value)
+                    setSelectedStatuses(value)
+                  }
+                  const renderStatusCheckBoxes = useMemo(()=>statuses?.map( status => {
+                    return <CheckBox
+                      onChange={(e) => e.target.checked ? changeItemCheckStatus([...props.value, status?.statusid]) : changeItemCheckStatus(props.value?.filter( id => id !== status?.statusid)) }
+                      checked={selectedStatuses?.includes(status?.statusid)}
+                      label={t(`${status.businessservice}_${status.applicationstatus}`)}
+                    />}),[selectedStatuses])
+                  return <>
+                    {isInboxLoading ? <Loader /> : <>{renderStatusCheckBoxes}</>}
+                  </>
+                }}
+              />
+            </FilterFormField>
         </>
-    },[])
+    },[statuses])
 
 
     const onSearchFormSubmit = (data) => {
@@ -273,22 +242,14 @@ const Inbox = ({parentRoute}) => {
             onNextPage: () => dispatch({action: "mutateTableForm", data: {...formState.tableForm , offset: (parseInt(formState.tableForm?.offset) + parseInt(formState.tableForm?.limit)) }}),
             onPrevPage: () => dispatch({action: "mutateTableForm", data: {...formState.tableForm , offset: (parseInt(formState.tableForm?.offset) - parseInt(formState.tableForm?.limit)) }}),
             pageSizeLimit: formState.tableForm?.limit,
-            // onSort: onSort,
-            // sortParams: [{id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false}],
             totalRecords: totalCount,
             onSearch: formState?.searchForm?.message,
-            // globalSearch: {searchForItemsInTable},
-            // searchQueryForTable,
             data: table,
             columns: tableColumnConfig
           }
         },[table, tableColumnConfig]) 
 
     return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable}}>
-        {/* <InboxPageLinks /> */}
-        {/* <InboxSearchFields />
-        <InboxFilterFields />
-        <InboxTable /> */}
     </InboxComposer>
 }
 

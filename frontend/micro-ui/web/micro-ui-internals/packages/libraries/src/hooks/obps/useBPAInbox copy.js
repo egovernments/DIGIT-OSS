@@ -10,20 +10,20 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
     const { mobileNumber, applicationNumber } = searchForm
     const { sortBy, limit, offset, sortOrder } = tableForm
     // const USER_UUID = Digit.UserService.getUser()?.info?.uuid;
-    // debugger
+    
     const _filters = {
         tenantId,
-        processSearchCriteria: {
-          moduleName: businessService?.code === "BPA"? "bpa-services" : "BPAREG", 
-          businessService: businessService?.code === "BPA" ? ["BPA_LOW", "BPA", "BPA_OC"] :  ["ARCHITECT","BUILDER","ENGINEER","STRUCTURALENGINEER"],
-          ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
+		processSearchCriteria: {
+            moduleName: moduleName ? moduleName : "bpa-services",
+			businessService: businessService?.length > 0 ? businessService.map( o => o.code) : ["BPA_LOW", "BPA", "BPA_OC"],
+            ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
         },
-        moduleSearchCriteria: {
-          assignee,
-          ...(mobileNumber ? {mobileNumber}: {}),
-          ...(applicationNumber ? {applicationNumber} : {}),
-          ...(sortOrder ? {sortOrder} : {}),
-          ...(locality?.length > 0 ? {locality: locality.map((item) => item.code.split("_").pop()).join(",")} : {}),
+		moduleSearchCriteria: {
+            assignee,
+            ...(mobileNumber ? {mobileNumber}: {}),
+            ...(applicationNumber ? {applicationNumber} : {}),
+            ...(sortOrder ? {sortOrder} : {}),
+            ...(locality?.length > 0 ? {locality: locality.map((item) => item.code.split("_").pop()).join(",")} : {}),
         },
         sortBy,
         limit,
@@ -31,7 +31,26 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
         sortOrder
     }
 
-    return useInbox({tenantId, filters: _filters, config:{
+    return useQuery(
+      ["INBOX_DATA",tenantId, ...Object.keys(_filters)?.map( e => filters?.[e] )],
+      async () => {
+        const data = await InboxGeneral.Search({inbox: {..._filters}});
+        const promises = data?.items?.map(application => {
+          const filters = { edcrNumber: application?.businessObject?.edcrNumber }
+          return Search.scrutinyDetails('pb.amritsar', filters);
+        });
+        const edcrData = await Promise.all(promises);
+        data.items = data?.items?.map(application => ({
+          ...application,
+          edcr: {
+            ...edcrData?.find(edcr => edcr?.edcrNumber === application?.businessObject?.edcrNumber) || {}
+          }
+            
+        }));
+        console.log(data, 'edcrData');
+        return data;
+      },
+      {
         select: (data) =>({
           statuses: data.statusMap,
           table: data?.items.map( application => ({
@@ -41,13 +60,14 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
               locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
               status: application.businessObject.status,
               owner: application.ProcessInstance?.assigner?.name,
+              edcr: application?.edcr,
               sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
           })),
           totalCount: data.totalCount
         }), 
         ...config 
       }
-    })
+    )
 }
 
 export default useBPAInbox

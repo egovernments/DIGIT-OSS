@@ -1,5 +1,5 @@
 import React, {Fragment, useCallback, useMemo, useReducer, useState} from "react"
-import { InboxComposer, CaseIcon, SearchField, TextInput, FilterFormField, Loader, RadioButtons, Localities, RemoveableTag, Dropdown } from "@egovernments/digit-ui-react-components";
+import { InboxComposer, CaseIcon, SearchField, TextInput, FilterFormField, Loader, RadioButtons, Localities, RemoveableTag, Dropdown, CheckBox } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
@@ -18,11 +18,7 @@ const Inbox = ({parentRoute}) => {
 
     const filterFormDefaultValues = {
       moduleName: "bpa-services",
-      businessService: [
-        {code: "BPA_LOW", name:t("BPA_LOW")},
-        {code: "BPA", name:t("BPA")},
-        {code: "BPA_OC", name:t("BPA_OC")}
-      ],
+      businessService: {code: "BPA", name:t("BPA")},
       applicationStatus: "",
       locality: [],
       assignee: "ASSIGNED_TO_ALL"
@@ -63,6 +59,7 @@ const Inbox = ({parentRoute}) => {
         tenantId,
         filters: { ...formState }
     });
+
     const PropsForInboxLinks = {
         logoIcon: <CaseIcon />,
         headerText: "CS_COMMON_OBPS",
@@ -92,9 +89,8 @@ const Inbox = ({parentRoute}) => {
     ];
 
     const availableBusinessService = [
-      {code: "BPA_LOW", name:t("BPA_LOW")},
       {code: "BPA", name:t("BPA")},
-      {code: "BPA_OC", name:t("BPA_OC")}
+      {code: "STAKEHOLDER", name:t("STAKEHOLDER")},
     ]
 
     const FilterFormFields = useCallback(({registerRef, controlFilterForm}) => {
@@ -118,29 +114,28 @@ const Inbox = ({parentRoute}) => {
             <FilterFormField>
               <Controller
                   name="businessService"
-                  defaultValue={availableBusinessService.filter(o => formState?.filterForm?.businessService?.includes(o.code))}
+                  defaultValue={formState?.filterForm?.businessService}
                   control={controlFilterForm}
                   render={({ref, onChange, value}) => {
                     const [ businessService, setBusinessService] = useState(()=> value || [])
-                    const renderRemovableTokens = useMemo(()=>businessService?.map((locality, index) => {
+                    const renderRemovableTokens = useMemo(()=>{
                       // debugger
                       return (
                         <RemoveableTag
-                          key={index}
-                          text={locality.name}
+                          text={businessService.name}
                           onClick={() => {
-                            setBusinessService(businessService?.filter((loc) => loc.code !== locality.code) )
-                            onChange(businessService?.filter((loc) => loc.code !== locality.code))
+                            setBusinessService()
+                            onChange()
                           }}
                         />
-                      );
-                    }),[businessService])
+                      )
+                    },[businessService])
                     return <>
                       <div className="filter-label">{t("BPA_SEARCH_APPLICATION_TYPE_LABEL")}</div>
                       {/* <Dropdown option={localities} keepNull={true} selected={null} select={selectLocality} optionKey={"name"} /> */}
                       <Dropdown inputRef={ref} option={availableBusinessService} optionKey="name" t={t} select={ (e) => {
-                          setBusinessService([e, ...businessService])
-                          onChange([e, ...businessService])
+                          setBusinessService(e)
+                          onChange(e)
                         }} selected={value} />
                       <div className="tag-container">
                         {renderRemovableTokens}
@@ -184,6 +179,29 @@ const Inbox = ({parentRoute}) => {
                 }
                 />
             </FilterFormField>
+            <FilterFormField>
+              <Controller
+                name="applicationStatus"
+                defaultValue={formState?.filterForm?.applicationStatus}
+                control={controlFilterForm}
+                render={(props) => {
+                  const [selectedStatuses, setSelectedStatuses] = useState(()=> props?.value || [])
+                  function changeItemCheckStatus(value){
+                    props.onChange(value)
+                    setSelectedStatuses(value)
+                  }
+                  const renderStatusCheckBoxes = useMemo(()=>statuses?.map( status => {
+                    return <CheckBox
+                      onChange={(e) => e.target.checked ? changeItemCheckStatus([...props.value, status?.statusid]) : changeItemCheckStatus(props.value?.filter( id => id !== status?.statusid)) }
+                      checked={selectedStatuses?.includes(status?.statusid)}
+                      label={t(status.applicationstatus)}
+                    />}),[selectedStatuses])
+                  return <>
+                    {isInboxLoading ? <Loader /> : <>{renderStatusCheckBoxes}</>}
+                  </>
+                }}
+              />
+            </FilterFormField>
             {/* <FilterFormField>
                 <p>{t("ES_COMMON_SEARCH")}</p>
             </FilterFormField> */}
@@ -195,7 +213,7 @@ const Inbox = ({parentRoute}) => {
                 onChange={(event) => onServiceSelect(event, e.statusid)}
             /> */}
         </>
-    },[])
+    },[statuses])
 
 
     const onSearchFormSubmit = (data) => {

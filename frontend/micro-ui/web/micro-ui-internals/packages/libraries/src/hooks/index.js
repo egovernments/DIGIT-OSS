@@ -147,6 +147,7 @@ import useDocUpdate from "./engagement/useUpdate";
 import useDocDelete from "./engagement/useDelete";
 
 import useNOCDetails from "./noc/useNOCDetails";
+import useNOCInbox from "./noc/useInbox"
 
 const pgr = {
   useComplaintDetails,
@@ -294,7 +295,8 @@ const engagement = {
 
 const noc = {
   useNOCDetails,
-  useNOCApplicationActions
+  useNOCApplicationActions,
+  useInbox: useNOCInbox
 }
 
 const Hooks = {

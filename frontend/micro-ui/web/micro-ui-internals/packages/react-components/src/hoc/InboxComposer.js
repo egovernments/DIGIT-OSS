@@ -47,8 +47,8 @@ const InboxComposer = ({isMobile=false, isInboxLoading, PropsForInboxLinks, Sear
             {/* <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="filter-form"/> */}
         </FilterForm>
         { isInboxLoading ? <Loader/> : <div>
-        {propsForInboxTable?.data?.length<1 ? <Card style={{ marginTop: 20 }}>
-            Nothin bro nothin
+        {propsForInboxTable?.data?.length<1 ? <Card className="margin-unset text-align-center">
+            {t("CS_MYAPPLICATIONS_NO_APPLICATION")}
         </Card>
         : <Table
             t={t}

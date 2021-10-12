@@ -1,10 +1,6 @@
-import React from "react"
 import useInbox from "../useInbox"
-import { InboxGeneral } from "../../services/elements/InboxService";
-import { Search } from "../../services/molecules/OBPS/Search";
-import { useQuery } from "react-query"
 
-const useBPAInbox = ({ tenantId, filters, config={} }) => {
+const useNOCInbox = ({ tenantId, filters, config={} }) => {
     const { filterForm, searchForm , tableForm } = filters
     const { moduleName, businessService, applicationStatus, locality, assignee } = filterForm
     const { mobileNumber, applicationNumber } = searchForm
@@ -14,8 +10,8 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
     const _filters = {
         tenantId,
         processSearchCriteria: {
-          moduleName: businessService?.code === "BPA"? "bpa-services" : "BPAREG", 
-          businessService: businessService?.code === "BPA" ? ["BPA_LOW", "BPA", "BPA_OC"] :  ["ARCHITECT","BUILDER","ENGINEER","STRUCTURALENGINEER"],
+          moduleName: "noc-services", 
+          businessService: ["FIRE_NOC_SRV","FIRE_NOC_OFFLINE","AIRPORT_NOC_OFFLINE","AIRPORT_NOC_SRV"],
           ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
         },
         moduleSearchCriteria: {
@@ -36,10 +32,10 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
           statuses: data.statusMap,
           table: data?.items.map( application => ({
               applicationId: application.businessObject.applicationNo,
-              date: application.businessObject.applicationDate,
+              date: parseInt(application.businessObject?.additionalDetails?.SubmittedOn),
               businessService: application?.ProcessInstance?.businessService,
-              locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
-              status: application.businessObject.status,
+              locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}`,
+              status: application.businessObject.applicationStatus,
               owner: application.ProcessInstance?.assigner?.name,
               sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
           })),
@@ -50,4 +46,4 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
     })
 }
 
-export default useBPAInbox
+export default useNOCInbox
