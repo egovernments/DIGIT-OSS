@@ -36,7 +36,7 @@ public class MeterReadingConsumer {
 	 * @param record
 	 * @param topic
 	 */
-	@KafkaListener(topicPattern = "${ws.kafka.consumer.topic.pattern}")
+	@KafkaListener(topics = { "${ws.meterreading.create.topic}" })
 	public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
 			log.info("Received request to add Meter Reading on topic - " + topic);
@@ -45,12 +45,9 @@ public class MeterReadingConsumer {
 
 			// Adding in MDC so that tracer can add it in header
 			MDC.put(TENANTID_MDC_STRING, tenantId);
-			System.out.println("\ntopic-->"+topic+"\n");
-			System.out.println("\nwaterConnectionRequest-->"+waterConnectionRequest.toString()+"\n");
 			if (!StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionType())
 					&& WCConstants.METERED_CONNECTION
-							.equalsIgnoreCase(waterConnectionRequest.getWaterConnection().getConnectionType())
-					&& waterConnectionRequest.getWaterConnection().getApplicationStatus().equalsIgnoreCase(STATUS_APPROVED)) {
+					.equalsIgnoreCase(waterConnectionRequest.getWaterConnection().getConnectionType())) {
 				meterReadingService.process(waterConnectionRequest, topic);
 			}
 		} catch (Exception ex) {

@@ -26,7 +26,7 @@ public class SewarageConnectionProducer {
 	public void push(String tenantId, String topic, Object value) {
 
 		String updatedTopic = topic;
-		if (configs.getIsEnvironmentCentralInstance()) {
+		if (configs.getIsEnvironmentCentralInstance() && !TOPICS_TO_AVOID.contains(topic) ) {
 
 			String[] tenants = tenantId.split("\\.");
 			if (tenants.length > 1)

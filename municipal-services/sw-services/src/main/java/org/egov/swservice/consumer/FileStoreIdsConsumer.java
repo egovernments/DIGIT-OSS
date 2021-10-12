@@ -33,7 +33,7 @@ public class FileStoreIdsConsumer {
 	 * @param record - Received record from Kafka
 	 * @param topic - Received Topic Name
 	 */
-	@KafkaListener(topicPattern = "${sw.kafka.consumer.topic.pattern}")
+	@KafkaListener(topics = { "${sw.consume.filestoreids.topic}" })
 	public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
 			SewerageConnectionRequest sewerageConnectionRequest = mapper.convertValue(record,

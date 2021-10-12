@@ -34,7 +34,7 @@ public class FileStoreIdsConsumer {
 	 * @param record Received Topic Record in HashMap format
 	 * @param topic Name of the Topic
 	 */
-	@KafkaListener(topicPattern = "${ws.kafka.consumer.topic.pattern}")
+	@KafkaListener(topics = { "${ws.consume.filestoreids.topic}" })
 	public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
 			WaterConnectionRequest waterConnectionRequest = mapper.convertValue(record, WaterConnectionRequest.class);
