@@ -6,10 +6,11 @@ import { FilterForm, FilterFormField } from "../molecules/FilterForm"
 import SubmitBar from "../atoms/SubmitBar"
 import { useTranslation } from "react-i18next"
 import Card from "../atoms/Card"
+import { Loader } from "../atoms/Loader"
 import { useForm, Controller } from "react-hook-form";
 
 
-const InboxComposer = ({isMobile=false, PropsForInboxLinks, SearchFormFields, searchFormDefaultValues, onSearchFormSubmit, FilterFormFields, filterFormDefaultValues, propsForInboxTable }) => {
+const InboxComposer = ({isMobile=false, isInboxLoading, PropsForInboxLinks, SearchFormFields, searchFormDefaultValues, onSearchFormSubmit, FilterFormFields, filterFormDefaultValues, propsForInboxTable, onFilterFormSubmit }) => {
     const { t } = useTranslation()
     const [ showMobileFilterFormPopup, setMobileFilterFormPopup ] = useState(false)
 
@@ -41,18 +42,13 @@ const InboxComposer = ({isMobile=false, PropsForInboxLinks, SearchFormFields, se
                   }}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
             </SearchField>
         </SearchForm>
-        <FilterForm clearAll={resetFilterForm}>
-            <FilterFormFields/>
+        <FilterForm onSubmit={onFilterFormSubmit} handleSubmit={handleFilterFormSubmit} id="filter-form">
+            <FilterFormFields registerRef={registerFilterFormField} { ...{controlFilterForm, handleFilterFormSubmit, setFilterFormValue, getFilterFormValue} } />
+            {/* <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="filter-form"/> */}
         </FilterForm>
-        <div>
-        {propsForInboxTable?.sourceData?.display ? <Card style={{ marginTop: 20 }}>
-            {t(propsForInboxTable?.sourceData?.display)
-                .split("\\n")
-                .map((text, index) => (
-                <p key={index} style={{ textAlign: "center" }}>
-                    {text}
-                </p>
-                ))}
+        { isInboxLoading ? <Loader/> : <div>
+        {propsForInboxTable?.data?.length<1 ? <Card style={{ marginTop: 20 }}>
+            Nothin bro nothin
         </Card>
         : <Table
             t={t}
@@ -60,7 +56,7 @@ const InboxComposer = ({isMobile=false, PropsForInboxLinks, SearchFormFields, se
             // columns={tableColumnConfig}
             {...propsForInboxTable}
         />}
-        </div>
+        </div>}
     </div>
 }
 

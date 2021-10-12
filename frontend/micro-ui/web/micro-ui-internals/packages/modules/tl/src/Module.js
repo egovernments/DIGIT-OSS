@@ -20,7 +20,7 @@ import SelectCommencementDate from "./pageComponents/SelectCommencementDate";
 import SelectTradeUnits from "./pageComponents/SelectTradeUnits";
 import SelectAccessories from "./pageComponents/SelectAccessories";
 import SelectAccessoriesDetails from "./pageComponents/SelectAccessoriesDetails";
-import CheckPage from "./pages/citizen/Create/CheckPage";
+import TLCheckPage from "./pages/citizen/Create/CheckPage";
 import TLDocument from "./pageComponents/TLDocumets";
 import TLAcknowledgement from "./pages/citizen/Create/TLAcknowledgement";
 import MyApplications from "./pages/citizen/Applications/Application";
@@ -104,7 +104,7 @@ const componentsToRegister = {
   SelectOwnerAddress,
   SelectProofIdentity,
   SelectOwnershipProof,
-  CheckPage,
+  TLCheckPage,
   TLDocument,
   TLAcknowledgement,
   TradeLicenseList,

@@ -4,28 +4,31 @@ import { InboxGeneral } from "../../services/elements/InboxService";
 import { Search } from "../../services/molecules/OBPS/Search";
 import { useQuery } from "react-query"
 
-const useBPAInbox = ({ tenantId, moduleName, businessService, filters, config }) => {
-
-    const {applicationStatus, mobileNumber, applicationNumber, sortBy, sortOrder, locality, uuid, limit, offset } = filters
-    const USER_UUID = Digit.UserService.getUser()?.info?.uuid;
+const useBPAInbox = ({ tenantId, filters, config={} }) => {
+    const { filterForm, searchForm , tableForm } = filters
+    const { moduleName, businessService, applicationStatus, locality, assignee } = filterForm
+    const { mobileNumber, applicationNumber } = searchForm
+    const { sortBy, limit, offset, sortOrder } = tableForm
+    // const USER_UUID = Digit.UserService.getUser()?.info?.uuid;
     
     const _filters = {
         tenantId,
 		processSearchCriteria: {
             moduleName: moduleName ? moduleName : "bpa-services",
-			businessService: businessService ? businessService : ["BPA_LOW", "BPA", "BPA_OC"],
+			businessService: businessService?.length > 0 ? businessService.map( o => o.code) : ["BPA_LOW", "BPA", "BPA_OC"],
             ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
-            ...(uuid && Object.keys(uuid).length > 0 ? {assignee: uuid.code === "ASSIGNED_TO_ME" ? USER_UUID : ""} : {}),
         },
 		moduleSearchCriteria: {
+            assignee,
             ...(mobileNumber ? {mobileNumber}: {}),
             ...(applicationNumber ? {applicationNumber} : {}),
-            ...(sortBy ? {sortBy} : {}),
             ...(sortOrder ? {sortOrder} : {}),
             ...(locality?.length > 0 ? {locality: locality.map((item) => item.code.split("_").pop()).join(",")} : {}),
         },
+        sortBy,
         limit,
-        offset
+        offset,
+        sortOrder
     }
 
     return useQuery(
@@ -54,7 +57,7 @@ const useBPAInbox = ({ tenantId, moduleName, businessService, filters, config })
               applicationId: application.businessObject.applicationNo,
               date: application.businessObject.applicationDate,
               businessService: application?.ProcessInstance?.businessService,
-              locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.tradeLicenseDetail?.address?.locality?.code?.toUpperCase()}`,
+              locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
               status: application.businessObject.status,
               owner: application.ProcessInstance?.assigner?.name,
               edcr: application?.edcr,
@@ -65,28 +68,6 @@ const useBPAInbox = ({ tenantId, moduleName, businessService, filters, config })
         ...config 
       }
     )
-
-    // return useInbox({tenantId, filters: _filters, config:{
-    //     select: (data) =>({
-    //         statuses: data.statusMap,
-    //         table: data?.items.map( application => ({
-    //             applicationId: application.businessObject.applicationNumber,
-    //             date: application.businessObject.applicationDate,
-    //             businessService: application?.ProcessInstance?.businessService,
-    //             locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.tradeLicenseDetail?.address?.locality?.code?.toUpperCase()}`,
-    //             status: application.businessObject.status,
-    //             owner: application.ProcessInstance?.assigner?.name,
-    //             sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
-    //         })),
-    //         totalCount: data.totalCount
-    //     }),
-    //     queryFn: (contextData) => {
-    //       debugger
-    //       console.log(contextData, 'context');
-    //       return InboxGeneral.Search({inbox: {..._filters}});
-    //     },
-    //     ...config
-    // }})
 }
 
 export default useBPAInbox

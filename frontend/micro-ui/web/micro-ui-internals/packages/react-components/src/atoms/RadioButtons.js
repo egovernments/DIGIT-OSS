@@ -25,6 +25,8 @@ const RadioButtons = (props) => {
                   checked={isEqual(selected, option) ? 1 : 0}
                   onChange={() => selectOption(option)}
                   disabled={props?.disabled}
+                  name={props.name}
+                  ref={props.inputRef}
                 />
                 <span className="radio-btn-checkmark"></span>
               </span>
@@ -42,6 +44,8 @@ const RadioButtons = (props) => {
                   checked={selected?.code === option.code ? 1 : 0}
                   onChange={() => selectOption(option)}
                   disabled={props?.disabled}
+                  name={props.name}
+                  ref={props.inputRef}
                 />
                 <span className="radio-btn-checkmark"></span>
               </span>
@@ -59,6 +63,8 @@ const RadioButtons = (props) => {
                   checked={selected === option ? 1 : 0}
                   onChange={() => selectOption(option)}
                   disabled={props?.disabled}
+                  name={props.name}
+                  ref={props.inputRef}
                 />
                 <span className="radio-btn-checkmark"></span>
               </span>

@@ -9,13 +9,14 @@ import Search from "./Search";
 const EmployeeApp = ({ path }) => {
   const location = useLocation()
   const { t } = useTranslation();
-
+  const Inbox = Digit.ComponentRegistryService.getComponent("BPAInbox")
   return (
     <Fragment>
       <Switch>
         <PrivateRoute path={`${path}/stakeholder/:id`} component={ApplicationDetail} />
         <PrivateRoute path={`${path}/bpa/:id`} component={BpaApplicationDetail} />
         <PrivateRoute path={`${path}/search/application`} component={(props) => <Search {...props} parentRoute={path} />} />
+        <PrivateRoute path={`${path}/inbox`} component={(props) => <Inbox {...props} parentRoute={path} />} />
       </Switch>
     </Fragment>
   )
