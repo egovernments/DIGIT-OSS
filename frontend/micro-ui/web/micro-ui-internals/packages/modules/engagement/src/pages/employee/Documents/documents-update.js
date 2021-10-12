@@ -15,9 +15,9 @@ const Documents = (props) => {
       if (
         updatedFormData?.documentName &&
         updatedFormData?.docCategory &&
-      (updatedFormData?.document.filestoreId || updatedFormData?.document.documentLink) &&
-      updatedFormData?.ULB?.length
-    ) {
+        (updatedFormData?.document.filestoreId || updatedFormData?.document.documentLink) &&
+        updatedFormData?.ULB?.length
+      ) {
         setSubmitValve(true);
       } else {
         setSubmitValve(false);
@@ -30,13 +30,14 @@ const Documents = (props) => {
     const DocumentEntity = {
       ...props.location?.state?.DocumentEntity,
       name: data.documentName,
-      description: data?.description.length ? data.description :"NA",
+      description: data?.description.length ? data.description : "NA",
       category: data.docCategory?.name,
       filestoreId: data.document?.filestoreId?.fileStoreId,
       fileSize: data.document?.filestoreId?.fileSize,
       fileType: data.document?.filestoreId?.fileType,
       documentLink: data.document?.documentLink,
       tenantId: data.ULB.map((e) => e.code)?.[0],
+      tenantIds: data.ULB.map((e) => e.code)
     };
 
     delete DocumentEntity.ULB;

@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React, { useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, Dropdown } from "@egovernments/digit-ui-react-components";
 
@@ -7,14 +7,17 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
         defaultValues: searchParams,
     });
     const mobileView = innerWidth <= 640;
-    const ulb = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
+    const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const { data: ulbArray, isLoading } = Digit.Hooks.useTenants();
-    
-    const selectedTenat = useMemo(()=>{   
-        const filtered = ulb.filter((item)=> item.code===tenantId)
+
+    const userInfo = Digit.UserService.getUser().info;
+    const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code));
+
+
+    const selectedTenat = useMemo(() => {
+        const filtered = ulbs.filter((item) => item.code === tenantId)
         return filtered;
-      },[tenantId, ulb])
+    }, [tenantId, ulbs])
 
     const getFields = (input) => {
         switch (input.type) {
@@ -24,7 +27,7 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
                         defaultValue={selectedTenat?.[0]}
                         render={props => (
                             <Dropdown
-                                option={ulbArray}
+                                option={userUlbs}
                                 optionKey={"i18nKey"}
                                 selected={props.value}
                                 select={props.onChange}
@@ -33,7 +36,7 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
                         )}
                         name={input.name}
                         control={control}
-                        
+
                     />
                 )
             default:
