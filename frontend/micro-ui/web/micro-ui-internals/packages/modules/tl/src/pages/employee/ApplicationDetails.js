@@ -59,6 +59,8 @@ const ApplicationDetails = () => {
   }, [applicationDetails?.numOfApplications]);
 
   useEffect(() => {
+    console.log(workflowDetails,"workflowDetails");
+    debugger;
     if (workflowDetails?.data?.applicationBusinessService) {
       setBusinessService(workflowDetails?.data?.applicationBusinessService);
     }
