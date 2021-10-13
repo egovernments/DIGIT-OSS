@@ -19,14 +19,10 @@ const downloadDocument = async (filestoreId, title) => {
 
   const fileUrl = await getFileUrl(filestoreId);
   if (fileUrl) {
-    const anchorTag = document.createElement('a');
-    anchorTag.href = fileUrl;
-    if (anchorTag.download !== undefined) {
-      anchorTag.download = fileUrl.substr(fileUrl.lastIndexOf('/') + 1);
-    }
-    document.body.appendChild(anchorTag);
-    anchorTag.click();
-    document.body.removeChild(anchorTag);
+    /* Util to download file from links */
+    Digit.Utils.downloadPDFFromLink(fileUrl);
+  }else{
+    console.error("Invalid Filestoreid or no file found to download");
   }
 }
 

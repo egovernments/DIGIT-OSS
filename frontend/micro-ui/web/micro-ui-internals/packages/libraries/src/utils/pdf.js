@@ -409,3 +409,42 @@ export const downloadReceipt = async (consumerCode, businessService, pdfKey = "c
     downloadPdf(new Blob([response.data], { type: "application/pdf" }), `consumer-${consumerCode}.pdf`);
   }
 };
+export const getFileUrl = (linkText = "") => {
+  const linkList = linkText && typeof linkText=="string" && linkText.split(",") || [];
+  let fileURL = '';
+  linkList && linkList.map(link => {
+    if (!link.includes('large') && !link.includes('medium') && !link.includes('small')) {
+      fileURL = link;
+    }
+  })
+  return fileURL;
+}
+
+
+/* Use this util function to download the file from any s3 links */
+export const downloadPDFFromLink = async (link, openIn = '_blank') => {
+
+  var response = await fetch(link, {
+    responseType: "arraybuffer",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/pdf"
+    }, "method": "GET",
+    "mode": "cors"
+  }).then(res => res.blob());
+  var a = document.createElement("a");
+  document.body.appendChild(a);
+  a.style = "display: none";
+  let url = window.URL.createObjectURL(response);
+  a.href = url;
+  a.download = decodeURIComponent(
+    link
+      .split("?")[0]
+      .split("/")
+      .pop()
+      .slice(13)
+  );
+  a.click();
+  window.URL.revokeObjectURL(url);
+
+}

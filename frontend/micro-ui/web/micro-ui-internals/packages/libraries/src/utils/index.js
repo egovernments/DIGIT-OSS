@@ -3,7 +3,7 @@ import * as date from "./date";
 import * as dss from "./dss";
 import * as locale from "./locale";
 import * as obps from "./obps";
-import PDFUtil, { downloadReceipt } from "./pdf";
+import PDFUtil, { downloadReceipt ,downloadPDFFromLink ,getFileUrl} from "./pdf";
 
 const GetParamFromUrl = (key, fallback, search) => {
   if (typeof window !== "undefined") {
@@ -189,6 +189,8 @@ const hrmsAccess = () => {
 export default {
   pdf: PDFUtil,
   downloadReceipt,
+  downloadPDFFromLink,
+  getFileUrl,
   browser: BrowserUtil,
   locale,
   date,
