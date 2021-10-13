@@ -1,6 +1,7 @@
 import { prepareFinalObject,handleScreenConfigurationFieldChange as handleField, } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { getWSMyResults, getSWMyResults } from '../../../../../ui-utils/commons';
+import commonConfig from "config/common.js";
 
 export const fetchData = async (action, state, dispatch) => {
   let queryObject = [
@@ -10,7 +11,7 @@ export const fetchData = async (action, state, dispatch) => {
     },
     {
     key: "tenantId",
-    value: JSON.parse(getUserInfo()).permanentCity ? JSON.parse(getUserInfo()).permanentCity : JSON.parse(getUserInfo()).roles[0].tenantId
+    value: commonConfig.tenantId
     }
   ];
   let responseWater = [], responseSewerage = [];
