@@ -4,7 +4,6 @@ import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
 // import { newConfig } from "../../../config/config";
 
-
 const CreateTradeLicence = ({ parentRoute }) => {
   const TLAcknowledgement = Digit.ComponentRegistryService.getComponent('TLAcknowledgement');
   const CheckPage = Digit.ComponentRegistryService.getComponent('TLCheckPage') ;

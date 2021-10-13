@@ -1,0 +1,7 @@
+.EmployeeLoginFooter{
+    margin: auto;
+    @apply absolute bottom-10;
+    img{
+        @apply h-4 object-contain;
+    }
+}

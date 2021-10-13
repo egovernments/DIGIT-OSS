@@ -12,7 +12,7 @@ const Login = ({ config: propsConfig, t }) => {
   const [user, setUser] = useState(null);
   const [showToast, setShowToast] = useState(null);
   const history = useHistory();
-  const getUserType = () => "EMPLOYEE" || Digit.UserService.getType();
+  // const getUserType = () => "EMPLOYEE" || Digit.UserService.getType();
 
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const Login = ({ config: propsConfig, t }) => {
       return;
     }
     Digit.UserService.setUser(user);
-    Digit.UserService.setType('employee');
+    Digit.UserService.setType('EMPLOYEE');
     const redirectPath = location.state?.from || "/digit-ui/employee";
     history.replace(redirectPath);
   }, [user]);
@@ -32,7 +32,7 @@ const Login = ({ config: propsConfig, t }) => {
     }
     const requestData = {
       ...data,
-      userType: 'employee',
+      userType: 'EMPLOYEE',
     };
     requestData.tenantId = data.city.code;
     delete requestData.city;
@@ -120,8 +120,10 @@ const Login = ({ config: propsConfig, t }) => {
         error={true}
         label={t(showToast)}
         onClose={closeToast}
-      />
-      }
+      />}
+      <div className="EmployeeLoginFooter">
+        <img alt="Powered by DIGIT" src="https://s3.ap-south-1.amazonaws.com/egov-qa-assets/digit-footer-bw.png" />
+    </div>
     </Background>
   );
 };
