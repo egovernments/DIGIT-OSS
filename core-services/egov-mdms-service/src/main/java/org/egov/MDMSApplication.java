@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.cache.CacheManager;
+
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -15,10 +16,11 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 
 import javax.annotation.PostConstruct;
+
 import java.time.Duration;
 
-@SpringBootApplication
 @EnableCaching
+@SpringBootApplication
 @ImportAutoConfiguration(classes = {
         CacheAutoConfiguration.class,
         RedisAutoConfiguration.class
@@ -38,7 +40,7 @@ public class MDMSApplication {
     public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
         return (builder) -> builder
                 .withCacheConfiguration("mdmsData",
-                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10)));
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(120)));
 
     }
 
@@ -49,6 +51,7 @@ public class MDMSApplication {
     public void evictUserCaches() {
         cacheManager.getCache("mdmsData").clear();
     }
+
 
     public static void main(String[] args) {
         SpringApplication.run(MDMSApplication.class, args);

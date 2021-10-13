@@ -90,6 +90,7 @@ public class MDMSService {
         return responseMap;
     }
 
+    @Cacheable(value = "mdmsData" , sync = true)
     private JSONArray getMasterData(Map<String, Map<String, JSONArray>> stateLevel,
                                     Map<String, Map<String, JSONArray>> ulbLevel, String moduleName, String masterName) throws Exception {
 
