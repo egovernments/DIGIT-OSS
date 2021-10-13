@@ -9,7 +9,7 @@ export const UploadServices = {
     formData.append("module", module);
     var config = {
       method: "post",
-      url: Urls.FileStore,
+      url:`${Urls.FileStore}?tenantId=${tenantId}`,
       data: formData,
     };
 
