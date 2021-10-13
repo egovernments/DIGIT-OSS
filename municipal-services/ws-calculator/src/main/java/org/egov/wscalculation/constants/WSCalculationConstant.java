@@ -249,6 +249,8 @@ public class WSCalculationConstant {
 	
 	public static final String WS_TIME_ADHOC_REBATE = "WS_TIME_ADHOC_REBATE";
 
+	public static final String TENANTID_MDC_STRING = "TENANTID";
+
 
 	
 }
