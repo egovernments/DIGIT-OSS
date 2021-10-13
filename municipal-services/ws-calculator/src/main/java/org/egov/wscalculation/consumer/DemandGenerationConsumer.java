@@ -57,13 +57,15 @@ public class DemandGenerationConsumer {
 			"${egov.watercalculatorservice.createdemand.topic}" }, containerFactory = "kafkaListenerContainerFactoryBatch")
 	public void listen(final List<Message<?>> records) {
 		CalculationReq calculationReq = mapper.convertValue(records.get(0).getPayload(), CalculationReq.class);
+		String tenantId = calculationReq.getCalculationCriteria().get(0).getTenantId();
+		System.out.println("\nPrepared Statement"+calculationReq.toString()+"\n");
+		System.out.println("\ntenantId" +tenantId+"\n");
+		// Adding in MDC so that tracer can add it in header
+		MDC.put(TENANTID_MDC_STRING, tenantId);
 		Map<String, Object> masterMap = mDataService.loadMasterData(calculationReq.getRequestInfo(),
 				calculationReq.getCalculationCriteria().get(0).getTenantId());
 		List<CalculationCriteria> calculationCriteria = new ArrayList<>();
-		String tenantId = calculationReq.getCalculationCriteria().get(0).getTenantId();
-		log.info("Prepared Statement" + calculationReq.toString());
-		// Adding in MDC so that tracer can add it in header
-		MDC.put(TENANTID_MDC_STRING, tenantId);
+
 		records.forEach(record -> {
 			try {
 				CalculationReq calcReq = mapper.convertValue(record.getPayload(), CalculationReq.class);
