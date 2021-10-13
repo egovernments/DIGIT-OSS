@@ -84,9 +84,9 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
         <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>}
       {(mutation.isSuccess && isOpenLinkFlow) && <Link to={{
-        pathname: `/digit-ui/citizen/all-services`,
+        pathname: `/digit-ui/citizen`,
       }}>
-        <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
+        <SubmitBar label={t("BPA_COMMON_PROCEED_NEXT")} />
       </Link>}
     </Card>
   );
