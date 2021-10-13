@@ -2,6 +2,8 @@ package org.egov.waterconnection.consumer;
 
 import java.util.HashMap;
 
+import org.egov.waterconnection.constants.WCConstants;
+import org.egov.waterconnection.service.MeterReadingService;
 import org.egov.waterconnection.web.models.WaterConnectionRequest;
 import org.egov.waterconnection.service.WorkflowNotificationService;
 import org.slf4j.MDC;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 import static org.egov.waterconnection.constants.WCConstants.TENANTID_MDC_STRING;
 
@@ -23,6 +26,9 @@ public class WorkflowNotificationConsumer {
 	
 	@Autowired
 	WorkflowNotificationService workflowNotificationService;
+ 
+	@Autowired
+	private MeterReadingService meterReadingService;
 	
 	@Autowired
 	private ObjectMapper mapper;
@@ -41,8 +47,16 @@ public class WorkflowNotificationConsumer {
 
 			// Adding in MDC so that tracer can add it in header
 			MDC.put(TENANTID_MDC_STRING, tenantId);
-			
-			workflowNotificationService.process(waterConnectionRequest, topic);
+
+			if ( topic.contains("create-meter-reading") && !StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionType())
+					&& WCConstants.METERED_CONNECTION
+					.equalsIgnoreCase(waterConnectionRequest.getWaterConnection().getConnectionType())) {
+				log.info("Received request to add Meter Reading on topic - " + topic);
+				meterReadingService.process(waterConnectionRequest, topic);
+			}
+			else
+				workflowNotificationService.process(waterConnectionRequest, topic);
+
 		} catch (Exception ex) {
 			StringBuilder builder = new StringBuilder("Error while listening to value: ").append(record)
 					.append("on topic: ").append(topic);
