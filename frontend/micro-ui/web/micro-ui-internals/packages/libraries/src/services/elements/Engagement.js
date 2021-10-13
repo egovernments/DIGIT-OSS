@@ -19,6 +19,7 @@ export const Engagement = {
       userService: true,
       method: "POST",
       auth: true,
+      locale: true
     }),
   delete: (details) =>
     Request({

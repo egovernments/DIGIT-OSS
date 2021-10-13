@@ -78,7 +78,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data }) => {
             Header: t("TL_HOME_SEARCH_RESULTS__LOCALITY"),
             disableSortBy: true,
             // accessor: (row) => GetCell(row.tradeLicenseDetail.address.locality.name || ""),
-            accessor: (row) => GetCell( t(`${stringReplaceAll(row.tradeLicenseDetail.address?.city?.toUpperCase(), ".", "_")}_REVENUE_${row.tradeLicenseDetail.address.locality.code}`) || ""),
+            accessor: (row) => GetCell( t(`${stringReplaceAll(row.tenantId?.toUpperCase(), ".", "_")}_REVENUE_${row.tradeLicenseDetail.address.locality.code}`) || ""),
         },
         {
           Header: t("TL_COMMON_TABLE_COL_STATUS"),
