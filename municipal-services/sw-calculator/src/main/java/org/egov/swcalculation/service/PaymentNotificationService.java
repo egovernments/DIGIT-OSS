@@ -33,6 +33,7 @@ import org.egov.swcalculation.web.models.SewerageConnectionRequest;
 import org.egov.swcalculation.web.models.Source;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -44,6 +45,8 @@ import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
+
+import static org.egov.swcalculation.constants.SWCalculationConstant.TENANTID_MDC_STRING;
 
 @Slf4j
 @Component
@@ -90,6 +93,10 @@ public class PaymentNotificationService {
 					mappedRecord.get(consumerCode), mappedRecord.get(tenantId));
 			int size = sewerageConnectionList.size();
 			SewerageConnection sewerageConnection = sewerageConnectionList.get(size-1);
+			String tenantId = sewerageConnection.getTenantId();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(TENANTID_MDC_STRING, tenantId);
 			
 			SewerageConnectionRequest sewerageConnectionRequest = SewerageConnectionRequest.builder()
 					.sewerageConnection(sewerageConnection).requestInfo(requestInfo).build();
