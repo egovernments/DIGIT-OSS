@@ -68,7 +68,7 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
           {errors && errors['name'] && <CardLabelError>{t(`EVENTS_TITLE_ERROR_REQUIRED`)}</CardLabelError>}
         </div>
       </LabelFieldPair>
-      <LabelFieldPair>
+      <LabelFieldPair style={{marginBottom: "24px"}}>
         <CardLabel className="card-label-smaller">{`${t(`EVENTS_COMMENTS_LABEL`)} *`}</CardLabel>
         <div className="field">
           <Controller
@@ -76,7 +76,7 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
             control={control}
             defaultValue={formData?.category ? data?.mseva?.EventCategories.filter(category => category.code === formData?.category)?.[0] : null}
             rules={{ required: true }}
-            render={({ onChange, ref, value }) => <TextArea inputRef={ref} value={value} name="description" onChange={onChange} />}
+            render={({ onChange, ref, value }) => <TextArea inputRef={ref} value={value} name="description" onChange={onChange} hintText={t('PUBLIC_BRDCST_MSG_LENGTH')}/>}
           />
           {errors && errors['description'] && <CardLabelError>{t(`EVENTS_COMMENTS_ERROR_REQUIRED`)}</CardLabelError>}
         </div>
@@ -108,6 +108,8 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
                   module="ENGAGEMENT"
                   tenantId={tenantId}
                   getFormState={getFileStoreData}
+                  showHintBelow={true}
+                  hintText={t("DOCUMENTS_ATTACH_RESTRICTIONS_SIZE")}
                 />
             }
             }
@@ -116,7 +118,7 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`EVENTS_FROM_DATE_LABEL`)} *`}</CardLabel>
+        <CardLabel className="card-label-smaller">{`${t(`PUBLIC_BRDCST_FROM_DATE_LABEL`)} *`}</CardLabel>
         <div className="field">
           <Controller
             control={control}
@@ -130,7 +132,7 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`EVENTS_TO_DATE_LABEL`)} *`}</CardLabel>
+        <CardLabel className="card-label-smaller">{`${t(`PUBLIC_BRDCST_TO_DATE_LABEL`)} *`}</CardLabel>
         <div className="field">
           <Controller
             control={control}

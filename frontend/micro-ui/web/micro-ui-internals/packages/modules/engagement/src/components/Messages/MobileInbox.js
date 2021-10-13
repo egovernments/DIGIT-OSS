@@ -17,8 +17,8 @@ const MobileInbox = ({ data, t, title, iconName, links, searchFields, searchPara
       (isValid(searchParams?.range?.endDate) ? event.eventDetails?.toDate <= new Date(searchParams?.range?.endDate).getTime() : true))
     .map((event) => {
       return {
-        [t("EVENTS_EVENT_NAME_LABEL")]: event?.name,
-        [t("EVENTS_EVENT_CATEGORY_LABEL")]: t(`MSEVA_EVENTCATEGORIES_${event?.eventCategory}`),
+        [t("PUBLIC_BRDCST_TITLE_LABEL")]: event?.name,
+        [t("EVENTS_POSTING_DATE_LABEL")]: format(new Date(event?.auditDetails?.createdTime), 'dd/MM/yyyy'),
         [t("EVENTS_START_DATE_LABEL")]: format(new Date(event?.eventDetails?.fromDate), 'dd/MM/yyyy'),
         [t("EVENTS_END_DATE_LABEL")]: format(new Date(event?.eventDetails?.toDate), 'dd/MM/yyyy'),
         [t("EVENTS_POSTEDBY_LABEL")]: event?.user?.name,

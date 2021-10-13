@@ -1,4 +1,4 @@
-import { Header, ActionBar, SubmitBar, PDFSvg, Menu } from '@egovernments/digit-ui-react-components';
+import { Header, ActionBar, SubmitBar, PDFSvg, Menu, GenericFileIcon } from '@egovernments/digit-ui-react-components';
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import Confirmation from '../Modal/Confirmation';
@@ -91,7 +91,7 @@ const DocumentDetails = ({ location, match, history, }) => {
                     <div className="documentDetails_pdf">
                         <span className="documentDetails_subheader">{`${t('Document')}`}</span>
                         <div style={{ width: '100px' }} onClick={() => openUploadedDocument(details?.filestoreId ? details?.filestoreId : details?.documentLink, details?.name)}>
-                            <PDFSvg />
+                        <GenericFileIcon/>
                         </div>
 
                     </div>

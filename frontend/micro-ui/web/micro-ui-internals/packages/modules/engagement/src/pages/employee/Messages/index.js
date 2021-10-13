@@ -9,10 +9,10 @@ import MessageDetails from "./MessageDetails"
 
 const Messages = ({match:{path} = {}, tenants, parentRoute}) => {
     return <Switch>
+        <PrivateRoute path={`${path}/inbox/create`} component={props => <NewMessage {...props} />} />
+        <PrivateRoute path={`${path}/inbox/details/:id`} component={props => <MessageDetails {...props} />} />
+        <PrivateRoute path={`${path}/inbox/edit/:id`} component={props => <EditMessage {...props} />} />
         <PrivateRoute path={`${path}/inbox`} component={props => <Inbox {...props} tenants={tenants} parentRoute={parentRoute} />} />
-        <PrivateRoute path={`${path}/create`} component={props => <NewMessage {...props} />} />
-        <PrivateRoute path={`${path}/details/:id`} component={props => <MessageDetails {...props} />} />
-        <PrivateRoute path={`${path}/edit/:id`} component={props => <EditMessage {...props} />} />
         <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} />} />
 
     </Switch>

@@ -25,7 +25,6 @@ const CloseBtn = (props) => {
 };
 
 const DocumentDetails = ({ t, data, documents, paymentDetails }) => {
-  debugger
   return (
     <Fragment>
       {data?.map((document, index) => (
@@ -59,6 +58,7 @@ const MessageDetails = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { isLoading, data } = Digit.Hooks.events.useEventDetails(tenantId, { ids: id }, {
     select: (data) => {
+      console.log(',,,,', data)
       const details = [{
         title: "",
         asSectionHeader: true,
@@ -82,7 +82,7 @@ const MessageDetails = () => {
   function onActionSelect(action) {
     // setSelectedAction(action);
     if (action === "EDIT") {
-      history.push(`/digit-ui/employee/engagement/messages/edit/${id}`)
+      history.push(`/digit-ui/employee/engagement/messages/inbox/edit/${id}`)
     }
     if (action === "DELETE") {
       setShowModal(true);

@@ -15,8 +15,8 @@ const Inbox = ({ tenants }) => {
     const [records, setRecords] = useState(50);
     const [searchParams, setSearchParams] = useState({
         tenantIds: tenantId,
-        offset:pageOffset,
-        limit:records
+        offset: pageOffset,
+        limit: records
     });
 
     let isMobile = window.Digit.Utils.browser.isMobile();
@@ -37,18 +37,18 @@ const Inbox = ({ tenants }) => {
     }
 
     const fetchNextPage = () => {
-        if(pageOffset > 50) setRecords((prevRecords) => prevRecords + pageSize)
+        if (pageOffset > 50) setRecords((prevRecords) => prevRecords + pageSize)
         setPageOffset((prevState) => prevState + pageSize);
-      };
-    
-      const fetchPrevPage = () => {
+    };
+
+    const fetchPrevPage = () => {
         setPageOffset((prevState) => prevState - pageSize);
-      };
-    
-      const handlePageSizeChange = (e) => {
-        console.log(Number(e.target.value))  
+    };
+
+    const handlePageSizeChange = (e) => {
+        console.log(Number(e.target.value))
         setPageSize(Number(e.target.value));
-      };
+    };
 
     useEffect(() => {
         setSearchParams((prevSearchParams) => ({ ...prevSearchParams, tenantIds: tenantId }))
@@ -99,7 +99,8 @@ const Inbox = ({ tenants }) => {
     return (
         <div>
             <Header>
-                {t("DOCUMENTS_DOCUMENT_HEADER")}
+                {t("DOCUMENTS_DOCUMENT_HEADER")} 
+                {Number(documentsList?.length) ? <p className="inbox-count">{Number(documentsList?.length)}</p> : null}
             </Header>
             <DesktopInbox
                 t={t}

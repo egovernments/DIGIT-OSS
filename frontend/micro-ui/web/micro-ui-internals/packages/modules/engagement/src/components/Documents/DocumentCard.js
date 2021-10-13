@@ -8,6 +8,7 @@ import {
   DownloadImgIcon,
   ViewsIcon,
   //PDFDocumentIcon,
+  GenericFileIcon,
   PDFSvg
 } from "@egovernments/digit-ui-react-components";
 import { format } from 'date-fns';
@@ -34,7 +35,7 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
     <div className={`notice_and_circular_main ${!isMobile ? 'gap-ten' : ""}`}>
 
       <div className="notice_and_circular_image" style={{ width: '100px' }}>
-        <PDFSvg height={`${isMobile ? 80 : 100}`} width={`${isMobile ? 80 : 100}`} />
+        <GenericFileIcon height={`${isMobile ? 80 : 100}`} width={`${isMobile ? 80 : 100}`} />
       </div>
       <div className="notice_and_circular_content">
         <div className="notice_and_circular_heading_mb">

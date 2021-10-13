@@ -40,7 +40,7 @@ const filterAllEvents = (data, variant) => data
         timePastAfterEventCreation: Math.round((new Date().getTime() - e?.auditDetails?.createdTime)/86400000),
         timeApproxiamationInUnits: "CS_SLA_DAY",
         eventNotificationText: e?.description,
-        header: getTransformedLocale(e?.name),
+        header: e?.eventType === "BROADCAST" ? e?.name  : getTransformedLocale(e?.name),
         eventType: e?.eventType,
         actions: e?.actions?.actionUrls,
         ...variant === "events" || e?.eventType === "EVENTSONGROUND" ? timeStampBreakdown(e?.eventDetails?.fromDate, e?.eventDetails?.toDate) : {},

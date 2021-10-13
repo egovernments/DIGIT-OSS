@@ -27,7 +27,6 @@ const NewEvents = () => {
         }
       ]
     }
-    debugger
     history.push("/digit-ui/employee/engagement/messages/response", details)
   }
 

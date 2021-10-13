@@ -104,6 +104,41 @@ const EventsBreadCrumb = ({ location }) => {
       show: location.pathname.includes("/documents/inbox/update") ? true : false,
     },
 
+    {
+      path: "/digit-ui/employee/engagement/messages/inbox",
+      content: t("ES_EVENT_INBOX"),
+      show: location.pathname.includes("/messages/inbox") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/messages/inbox/create",
+      content: t("NEW_PUBLIC_BRDCST"),
+      show: location.pathname.includes("/messages/inbox/create") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/messages/inbox/details/:id",
+      content: t("CS_HEADER_PUBLIC_BRDCST"),
+      show: location.pathname.includes("/messages/inbox/details") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/messages/inbox/edit/:id",
+      content: t("EDIT_PUBLIC_BRDCST"),
+      show: location.pathname.includes("/messages/inbox/edit") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/messages/response",
+      content: t("ES_EVENT_NEW_EVENT_RESPONSE"),
+      show: location.pathname.includes("/messages/response") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/messages/response?update=true",
+      content: t("ES_EVENT_NEW_EVENT_RESPONSE"),
+      show: location.pathname.includes("/messages/response?update=true") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/messages/response?delete=true",
+      content: t("ES_EVENT_NEW_EVENT_RESPONSE"),
+      show: location.pathname.includes("/messages/response?delete=true") ? true : false,
+    },
   ];
 
   return <BreadCrumb crumbs={crumbs} />;

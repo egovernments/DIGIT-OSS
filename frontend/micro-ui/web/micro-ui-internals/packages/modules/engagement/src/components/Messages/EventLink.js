@@ -1,15 +1,15 @@
 import React from "react";
-import { Card, DocumentIcon, EventCalendar } from "@egovernments/digit-ui-react-components";
+import { Card, DocumentIcon, PMBIcon } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const EventLink = ({ title = "ACTION_TEST_PUBLIC_MESSAGE_BROADCAST", links, icon = 'calender' }) => {
+const EventLink = ({ title = "CS_HEADER_PUBLIC_BRDCST", links, icon = 'calender' }) => {
   const { t } = useTranslation();
 
   const GetLogo = () => (
     <div className="header" style={{ justifyContent: "flex-start" }}>
       <span className="logo" style={{ backgroundColor: "#fff" }}>
-        {icon === "calender" ? <EventCalendar /> : icon === "survey" ? 'surveyIcon' :  <DocumentIcon />}
+      <PMBIcon/>
       </span>
       {" "}
       <span className="text">{t(title)}</span>

@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from "react"
 import UploadFile from "../atoms/UploadFile"
 
-const MultiUploadWrapper = ({module="PGR", tenantId="pb", getFormState, requestSpecifcFileRemoval, setuploadedstate}) => {
+const MultiUploadWrapper = ({module="PGR", tenantId="pb", getFormState, requestSpecifcFileRemoval, setuploadedstate, showHintBelow, hintText}) => {
 
     const FILES_UPLOADED = "FILES_UPLOADED"
     const TARGET_FILE_REMOVAL = "TARGET_FILE_REMOVAL"
@@ -61,6 +61,8 @@ const MultiUploadWrapper = ({module="PGR", tenantId="pb", getFormState, requestS
             removeTargetedFile={(fileDetailsData) => dispatch({type: TARGET_FILE_REMOVAL ,payload: fileDetailsData})} 
             uploadedFiles={state}
             multiple={true}
+            showHintBelow={showHintBelow}
+            hintText={hintText}
         />
 }
 
