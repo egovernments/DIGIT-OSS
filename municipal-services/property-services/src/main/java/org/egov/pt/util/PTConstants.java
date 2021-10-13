@@ -130,6 +130,8 @@ public class PTConstants {
 	
 	public static final String MUTATION_PROCESS_CONSTANT = "MUTATION";
 	
+	public static final String ALTERNATE_PROCESS_CONSTANT = "ALTERNATE";
+	
 	public static final String PREVIOUS_PROPERTY_PREVIOUD_UUID = "previousPropertyUuid";
 	
 	
