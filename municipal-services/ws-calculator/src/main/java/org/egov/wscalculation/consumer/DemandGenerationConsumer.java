@@ -61,7 +61,7 @@ public class DemandGenerationConsumer {
 				calculationReq.getCalculationCriteria().get(0).getTenantId());
 		List<CalculationCriteria> calculationCriteria = new ArrayList<>();
 		String tenantId = calculationReq.getCalculationCriteria().get(0).getTenantId();
-
+		log.info("Prepared Statement" + calculationReq.toString());
 		// Adding in MDC so that tracer can add it in header
 		MDC.put(TENANTID_MDC_STRING, tenantId);
 		records.forEach(record -> {
