@@ -22,6 +22,8 @@ import net.minidev.json.JSONArray;
 @Service
 @Slf4j
 public class MDMSService {
+
+    @Cacheable(value = "mdmsData" , sync = true)
     public Map<String, Map<String, JSONArray>> searchMaster(MdmsCriteriaReq mdmsCriteriaReq) {
 
         Map<String, Map<String, Map<String, JSONArray>>> tenantIdMap = MDMSApplicationRunnerImpl.getTenantMap();
@@ -70,7 +72,7 @@ public class MDMSService {
                 JSONArray masterData = null;
                 try {
                     masterData = getMasterData(stateLevel, ulbLevel, moduleDetail.getModuleName(),
-                            masterDetail.getName(), tenantId);
+                            masterDetail.getName());
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     log.error("Exception occurred while reading master data", e);
@@ -88,10 +90,10 @@ public class MDMSService {
         return responseMap;
     }
 
-    @Cacheable(value = "mdmsData" , sync = true)
     private JSONArray getMasterData(Map<String, Map<String, JSONArray>> stateLevel,
-                                    Map<String, Map<String, JSONArray>> ulbLevel, String moduleName, String masterName, String tenantId) throws Exception {
+                                    Map<String, Map<String, JSONArray>> ulbLevel, String moduleName, String masterName) throws Exception {
 
+        log.info("Cache not used !!!");
         Map<String, Map<String, Object>> masterConfigMap = MDMSApplicationRunnerImpl.getMasterConfigMap();
 
         Map<String, Object> moduleData = masterConfigMap.get(moduleName);
