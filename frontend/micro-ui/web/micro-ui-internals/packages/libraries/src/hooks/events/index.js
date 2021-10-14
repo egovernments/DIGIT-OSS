@@ -28,40 +28,65 @@ const timeStampBreakdown = (fromTS, toTS) => {
     }
 }
 
+const fetchImageLinksFromFilestoreIds = async (filesArray, tenantId) => {
+    const ids = filesArray?.map(file => file.fileStoreId) 
+    const res = await Digit.UploadServices.Filefetch(ids, tenantId);
+    if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
+        return res.data.fileStoreIds.map((o, index) => ({
+          actionUrl: o.url.split(",")[0],
+          code: "VIEW_ATTACHMENT"
+        }));
+    } else {
+      return [];
+    }
+  };
+
 const getTransformedLocale = label => {
     if (typeof label === "number") return label;
     return label && label.toUpperCase().replace(/[.:-\s\/]/g, "_");
 };
 
-const filterAllEvents = (data, variant) => data
-.filter(e => e.status === "ACTIVE")
-.map((e => ({
-        ...e,
-        timePastAfterEventCreation: Math.round((new Date().getTime() - e?.auditDetails?.createdTime)/86400000),
-        timeApproxiamationInUnits: "CS_SLA_DAY",
-        eventNotificationText: e?.description,
-        header: e?.eventType === "BROADCAST" ? e?.name  : getTransformedLocale(e?.name),
-        eventType: e?.eventType,
-        actions: e?.actions?.actionUrls,
-        ...variant === "events" || e?.eventType === "EVENTSONGROUND" ? timeStampBreakdown(e?.eventDetails?.fromDate, e?.eventDetails?.toDate) : {},
-    })))
+const filterAllEvents = async(data, variant) => {
+    const filteredEvents = data.filter(e => e.status === "ACTIVE")
+    const events = []
+    for(const e of filteredEvents){
+        const actionDownloadLinks = e?.eventDetails?.documents?.length > 0 && e?.tenantId ? await fetchImageLinksFromFilestoreIds(e?.eventDetails?.documents, e?.tenantId) : []
+        events.push({
+            ...e,
+            timePastAfterEventCreation: Math.round((new Date().getTime() - e?.auditDetails?.createdTime)/86400000),
+            timeApproxiamationInUnits: "CS_SLA_DAY",
+            eventNotificationText: e?.description,
+            header: e?.eventType === "SYSTEMGENERATED" ? getTransformedLocale(e?.name) : e?.name,
+            eventType: e?.eventType,
+            actions: [...(e?.actions?.actionUrls ? e?.actions?.actionUrls : []), ...actionDownloadLinks],
+            ...variant === "events" || e?.eventType === "EVENTSONGROUND" ? timeStampBreakdown(e?.eventDetails?.fromDate, e?.eventDetails?.toDate) : {},
+        })
+    }
+    return events
+}
 
-const variantBasedFilter = (variant, data) =>{
+const variantBasedFilter = async(variant, data) =>{
     switch(variant){
         case "whats-new":
-            return filterAllEvents(data.events, variant).filter( i => i?.actions?.length )
+            const allWhatsNewEvents = await filterAllEvents(data.events, variant)
+            return allWhatsNewEvents.filter( i => i?.actions?.length )
         case "events":
-            return filterAllEvents(data.events, variant)
+            return await filterAllEvents(data.events, variant)
         default:
-            return filterAllEvents(data.events, variant)
+            return await filterAllEvents(data.events, variant)
     }
+}
+
+const getEventsData = async (variant, tenantId) => {
+    const data = await Digit.EventsServices.Search({tenantId, ...variant === "events" ? {filter: {eventTypes: "EVENTSONGROUND"}} : {} })
+    const allEventsData = await variantBasedFilter(variant, data)
+    return allEventsData
 }
 
 const useEvents = ({tenantId, variant, config={}}) => useQuery(
     ["EVENTS_SEARCH", tenantId, variant],
-    () => Digit.EventsServices.Search({tenantId, ...variant === "events" ? {filter: {eventTypes: "EVENTSONGROUND"}} : {} }), 
+    () => getEventsData(variant, tenantId),
     { 
-        select: (data) => variantBasedFilter(variant, data),
         ...config
     } )
 

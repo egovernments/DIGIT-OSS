@@ -10,10 +10,15 @@ const Home = () => {
     const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code
     const { data: { stateInfo } = {}, isLoading } = Digit.Hooks.useStore.getInitData()
 
-    const { data: EventsData, isLoading: EventsDataLoading } = Digit.Hooks.useEvents({tenantId, variant: "whats-new"})
-    // if(!Digit.UserService?.getUser()?.access_token){
-    //     history.push(`/digit-ui/citizen/login?from=${encodeURIComponent(window.location.pathname + window.location.search)}`)
-    // }
+    const conditionsToDisableNotificationCountTrigger = () => {
+        if(Digit.UserService?.getUser()?.info?.type === "EMPLOYEE") return false
+        if(!Digit.UserService?.getUser()?.access_token) return false
+        return true
+      }
+
+    const { data: EventsData, isLoading: EventsDataLoading } = Digit.Hooks.useEvents({tenantId, variant: "whats-new", config:{
+        enabled: conditionsToDisableNotificationCountTrigger()
+    }})
 
     if(!tenantId){
         history.push(`/digit-ui/citizen/select-language`)
@@ -97,7 +102,7 @@ const Home = () => {
             <CardBasedOptions {...allInfoAndUpdatesProps} />
         </div>
 
-        {Digit.UserService?.getUser()?.access_token ? EventsDataLoading ? <Loader /> : <div className="WhatsNewSection">
+        {conditionsToDisableNotificationCountTrigger() ? EventsDataLoading ? <Loader /> : <div className="WhatsNewSection">
             <div className="headSection">
                 <h2>{t("DASHBOARD_WHATS_NEW_LABEL")}</h2>
                 <p onClick={() => history.push("/digit-ui/citizen/engagement/whats-new")}>{t("DASHBOARD_VIEW_ALL_LABEL")}</p>

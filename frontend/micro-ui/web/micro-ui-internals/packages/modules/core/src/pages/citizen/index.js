@@ -26,11 +26,11 @@ const Home = ({stateInfo, userDetails, CITIZEN, cityDetails, mobileView, handleU
             </Route>
     });
 
-    const ModuleLevelLinkHomePages = modules.map(({ code }, index) => {
+    const ModuleLevelLinkHomePages = modules.map(({ code, bannerImage }, index) => {
         let Links = Digit.ComponentRegistryService.getComponent(`${code}Links`) || (() => <React.Fragment />);
         return <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
                 <div className="moduleLinkHomePage">
-                    <img src={stateInfo?.bannerUrl}/>
+                    <img src={ bannerImage || stateInfo?.bannerUrl}/>
                     <BackButton className="moduleLinkHomePageBackButton"/>
                     <h1>{t("MODULE_"+code.toUpperCase())}</h1>
                 </div>

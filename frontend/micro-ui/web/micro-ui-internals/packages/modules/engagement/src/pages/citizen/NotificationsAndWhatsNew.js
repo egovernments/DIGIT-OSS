@@ -1,4 +1,4 @@
-import { Header, Loader, WhatsNewCard, OnGroundEventCard } from "@egovernments/digit-ui-react-components"
+import { Header, Loader, WhatsNewCard, OnGroundEventCard, Card, CardCaption } from "@egovernments/digit-ui-react-components"
 import React, { useEffect, useCallback } from "react"
 import { useTranslation } from "react-i18next"
 import { Redirect, useLocation, useHistory } from "react-router-dom"
