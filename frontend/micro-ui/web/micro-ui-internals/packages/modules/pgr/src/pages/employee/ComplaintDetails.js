@@ -276,7 +276,7 @@ export const ComplaintDetails = (props) => {
   }
 
   function zoomImage(imageSource, index) {
-    setImageZoom(imageSource.fullImage[index - 1]);
+    setImageZoom(imageSource);
   }
 
   function onCloseImageZoom() {
@@ -338,6 +338,12 @@ export const ComplaintDetails = (props) => {
   const getTimelineCaptions = (checkpoint) => {
     // console.log("tl", checkpoint);
     const {wfComment: comment, thumbnailsToShow} = checkpoint;
+    
+    const captionForOtherCheckpointsInTL = {
+      date: checkpoint?.auditDetails?.lastModified,
+      name: checkpoint?.assigner?.name,
+      mobileNumber: checkpoint?.assigner?.mobileNumber,
+    }
     if (checkpoint.status === "COMPLAINT_FILED" && complaintDetails?.audit) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(complaintDetails.audit.details.createdTime),
@@ -359,6 +365,7 @@ export const ComplaintDetails = (props) => {
         <h3>{t("CS_COMMON_DOCUMENTS")}</h3>
         <DisplayPhotos srcs={thumbnailsToShow.thumbs} onClick={(src, index) => zoomImage(thumbnailsToShow,index)} />
       </div> : null}
+      {captionForOtherCheckpointsInTL?.date ? <TLCaption data={captionForOtherCheckpointsInTL}/> : null}
     </>
   }
 

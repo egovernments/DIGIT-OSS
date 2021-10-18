@@ -21,7 +21,7 @@ const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate, i
           );
         }
       });
-    return <CheckPoint isCompleted={isCompleted} label={t(`CS_COMMON_COMPLAINT_RESOLVED`)} customChild={<div>{actions}</div>} />;
+    return <CheckPoint isCompleted={isCompleted} label={t(`CS_COMMON_COMPLAINT_RESOLVED`)} customChild={<div>{actions}{customChild}</div>} />;
   } else if (action === "RATE" && rating) {
     return (
       <CheckPoint

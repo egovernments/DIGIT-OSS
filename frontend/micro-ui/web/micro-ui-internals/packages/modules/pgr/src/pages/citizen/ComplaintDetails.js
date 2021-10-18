@@ -77,7 +77,7 @@ const ComplaintDetailsPage = (props) => {
 
   function zoomImage(imageSource, index) {
     // console.log("index", index, imageSource,complaintDetails.images[index-1],"|||", complaintDetails.images )
-    setImageZoom(imageSource.fullImage[index - 1]);
+    setImageZoom(imageSource);
   }
 
   function onCloseImageZoom() {

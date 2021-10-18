@@ -24,7 +24,7 @@ const makeCommentsSubsidariesOfPreviousActions = async(wf) => {
     else{
       const eventAccumulator = TimelineMap.get("tlActions") || []
       const commentAccumulator = TimelineMap.get("tlCommentStack") || []
-      eventHappened.wfComments = commentAccumulator
+      eventHappened.wfComments = [...commentAccumulator, ...eventHappened.comment ? [eventHappened] : []]
       TimelineMap.set("tlActions", [...eventAccumulator, eventHappened])
       TimelineMap.delete("tlCommentStack")
     }
