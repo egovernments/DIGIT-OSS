@@ -35,7 +35,7 @@ public class ShortenController {
         // ULB specific tenantId
         String ulbSpecificTenantId = headers.get("tenantid");
         // Extracting state specific tenantId from ULB level tenant
-        String tenantId = ulbSpecificTenantId.split("\\.")[0] + ulbSpecificTenantId.split("\\.")[1];
+        String tenantId = ulbSpecificTenantId.split("\\.")[0] + "." + ulbSpecificTenantId.split("\\.")[1];
         String longUrl = shortenRequest.getUrl();
         if (URLValidator.INSTANCE.validateURL(longUrl)) {
             String shortenedUrl = urlConverterService.shortenURL(shortenRequest, tenantId);
