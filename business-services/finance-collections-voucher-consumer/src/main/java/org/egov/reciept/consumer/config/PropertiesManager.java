@@ -172,7 +172,7 @@ public class PropertiesManager {
     
     public String getErpURLBytenantId(String tenantId) throws VoucherCustomException {
     	try {
-    		tenantId = tenantId.split(Pattern.quote("."))[1];
+    		tenantId = tenantId.split(Pattern.quote(".")).length > 2 ? tenantId.split(Pattern.quote("."))[2] : tenantId.split(Pattern.quote("."))[1];
     		if(finCoeErpEnvName != null && finCoeErpEnvName.equalsIgnoreCase("local")){
     			return "http://jalandhar.lgpunjab.com:8080/";
     		}
