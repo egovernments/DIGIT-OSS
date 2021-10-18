@@ -1,6 +1,7 @@
 package org.egov.url.shortening.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -32,8 +33,8 @@ public class URLConverterService {
     @Value("${db.persistance.enabled}")
     private Boolean isDbPersitanceEnabled;
     
-    @Value("${host.name}")
-    private String hostName;
+    @Value("#{${egov.ui.app.host.map}}")
+    private Map<String, String> hostName;
     
     @Value("${server.contextPath}")
     private String serverContextPath;
@@ -56,7 +57,7 @@ public class URLConverterService {
     }
     
 
-    public String shortenURL(ShortenRequest shortenRequest) {
+    public String shortenURL(ShortenRequest shortenRequest, String tenantId) {
         LOGGER.info("Shortening {}", shortenRequest.getUrl());
         Long id = urlRepository.incrementID();
         String uniqueID = IDConvertor.createUniqueID(id);
@@ -66,13 +67,14 @@ public class URLConverterService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        StringBuilder shortenedUrl = new StringBuilder();  
+        StringBuilder shortenedUrl = new StringBuilder();
+        String stateSpecificHostName = hostName.get(tenantId);
         
-        if(hostName.endsWith("/"))
-        	hostName = hostName.substring(0, hostName.length() - 1);
+        if(stateSpecificHostName.endsWith("/"))
+            stateSpecificHostName = stateSpecificHostName.substring(0, stateSpecificHostName.length() - 1);
         if(serverContextPath.startsWith("/"))
         	serverContextPath = serverContextPath.substring(1);
-        shortenedUrl.append(hostName).append("/").append(serverContextPath);
+        shortenedUrl.append(stateSpecificHostName).append("/").append(serverContextPath);
         if(!serverContextPath.endsWith("/")) {
         	shortenedUrl.append("/");
         }
