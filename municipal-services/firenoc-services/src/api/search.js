@@ -75,13 +75,23 @@ export const searchApiResponse = async (request, next = {}) => {
     console.log("mobileNumber", mobileNumber);
     console.log("tenedrIDD", tenantId);
 
-    text = `${text} where FN.tenantid = '${queryObj.tenantId}' AND`;
+    if(queryObj.tenantId.split('.').length <= envVariables.STATE_LEVEL_TENANTID_LENGTH){
+      text = `${text} where FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
+    }
+    else{
+      text = `${text} where FN.tenantid = '${queryObj.tenantId}' AND`;
+    }
   } else {
     if (!isEmpty(queryObj)) {
       text = text + " where ";
     }
     if (queryObj.tenantId) {
-      text = `${text} FN.tenantid = '${queryObj.tenantId}' AND`;
+      if(queryObj.tenantId.split('.').length <= envVariables.STATE_LEVEL_TENANTID_LENGTH){
+        text = `${text} FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
+      }
+      else{
+        text = `${text} FN.tenantid = '${queryObj.tenantId}' AND`;
+      }
     }
   }
   // if (queryObj.status) {
