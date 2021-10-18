@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FormStep,Loader, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, Menu, MobileNumber, Card } from "@egovernments/digit-ui-react-components";
+import { FormStep,Loader, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, Menu, MobileNumber, Card, OpenLinkContainer, BackButton } from "@egovernments/digit-ui-react-components";
 import { useLocation, useRouteMatch } from "react-router-dom";
 import Timeline from "../components/Timeline";
 
@@ -20,6 +20,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const stateId = Digit.ULBService.getStateId();
 
   let isOpenLinkFlow = window.location.href.includes("openlink");
+  const isCitizenUrl = Digit.Utils.browser.isMobile()?true:false;
 
   const { isLoading,data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
 
@@ -73,6 +74,10 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   return (
     <div>
+    <div className={isOpenLinkFlow? "OpenlinkContainer":""}>
+    {isOpenLinkFlow &&<OpenLinkContainer />}
+    <div style={isOpenLinkFlow?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}>
+    {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
     <Timeline currentStep={1} flow="STAKEHOLDER" />
     <FormStep
       config={config}
@@ -145,6 +150,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         />
       </div>
     </FormStep>
+    </div>
+    </div>
     </div>
   );
 };

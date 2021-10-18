@@ -1,4 +1,4 @@
-import { CardLabel, CheckBox, CitizenInfoLabel, FormStep, Loader, TextInput, Toast, TextArea } from "@egovernments/digit-ui-react-components";
+import { CardLabel, CheckBox, CitizenInfoLabel, FormStep, Loader, TextInput, Toast, TextArea,  OpenLinkContainer, BackButton  } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import Timeline from "../components/Timeline";
 
@@ -11,6 +11,8 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
   const [showToast, setShowToast] = useState(null);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
+  let isopenlink = window.location.href.includes("/openlink/");
+  const isCitizenUrl = Digit.Utils.browser.isMobile()?true:false;
 
 function selectChecked(e){
     if(isAddressSame == false){
@@ -95,6 +97,10 @@ function selectChecked(e){
 
   return (
     <React.Fragment>
+    <div className={isopenlink? "OpenlinkContainer":""}>
+    {isopenlink &&<OpenLinkContainer />}
+    <div style={isopenlink?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}>
+    {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
       <Timeline currentStep={2} flow="STAKEHOLDER" />
       <FormStep
         config={config}
@@ -122,8 +128,10 @@ function selectChecked(e){
         disable={isAddressSame}
       />
       </FormStep>
+      </div>
+      </div>
       <div style={{ disabled: "true", height: "30px", width: "100%", fontSize: "14px" }}></div>
-        {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} onClose={() => { setShowToast(null); setError(null); }} />}
+        {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} isDleteBtn={true} onClose={() => { setShowToast(null); setError(null); }} />}
     </React.Fragment>
   );
 };

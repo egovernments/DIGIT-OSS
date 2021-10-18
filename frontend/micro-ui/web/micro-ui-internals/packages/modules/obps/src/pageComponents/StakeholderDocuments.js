@@ -6,7 +6,9 @@ import {
     Toast,
     Loader,
     FormStep,
-    CitizenInfoLabel
+    CitizenInfoLabel,
+    OpenLinkContainer,
+    BackButton 
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
 
@@ -19,6 +21,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     const [enableSubmit, setEnableSubmit] = useState(true)
     const [checkRequiredFields, setCheckRequiredFields] = useState(false);
     const isCitizenUrl = Digit.Utils.browser.isMobile()?true:false;
+    let isopenlink = window.location.href.includes("/openlink/");
 
     const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateId, "StakeholderRegistraition", "TradeTypetoRoleMapping");
     
@@ -81,6 +84,10 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
 
     return (
         <div>
+            <div className={isopenlink? "OpenlinkContainer":""}>
+            {isopenlink &&<OpenLinkContainer />}
+            <div style={isopenlink?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}>
+            {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
             <Timeline currentStep={3} flow="STAKEHOLDER" />
             {!isLoading ?
                 <FormStep
@@ -106,9 +113,11 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                             />
                         );
                     })}
-                    {error && <Toast label={error} onClose={() => setError(null)} error />}
+                    {error && <Toast label={error} isDleteBtn={true} onClose={() => setError(null)} error  />}
                 </FormStep> : <Loader />}
                 <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={`${t("BPA_APPLICATION_NUMBER_LABEL")} ${formData?.result?.Licenses?.[0]?.applicationNumber} ${t("BPA_DOCS_INFORMATION")}`} />
+                </div>
+            </div>
         </div>
     );
 }

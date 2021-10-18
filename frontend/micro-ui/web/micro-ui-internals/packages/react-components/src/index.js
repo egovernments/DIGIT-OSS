@@ -106,11 +106,13 @@ import SearchOnRadioButtons from "./molecules/SearchOnRadioButtons";
 import OnGroundEventCard from "./molecules/OnGroundEventCard";
 import MultiUploadWrapper from "./molecules/MultiUploadWrapper";
 import {FilterForm, FilterFormField} from "./molecules/FilterForm";
+import OpenLinkContainer from "./atoms/OpenLinkContainer";
 
 export {
   Body,
   Loader,
   TopBar,
+  OpenLinkContainer,
   HomeLink,
   AppContainer,
   EmployeeAppContainer,

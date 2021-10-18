@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react";
-import { Card, CardHeader, CardLabel, CardSubHeader, CardText, CitizenInfoLabel, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Card, CardHeader, CardLabel, CardSubHeader, CardText, CitizenInfoLabel, Loader, SubmitBar,NavBar,OpenLinkContainer, BackButton } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 
@@ -9,6 +9,8 @@ const StakeholderDocsRequired = ({ onSelect, onSkip, config }) => {
   const state = Digit.ULBService.getStateId();
   const history = useHistory();
   const { data, isLoading } = Digit.Hooks.obps.useMDMS(state, "StakeholderRegistraition", "TradeTypetoRoleMapping");
+  let isopenlink = window.location.href.includes("/openlink/");
+  const isCitizenUrl = Digit.Utils.browser.isMobile()?true:false;
 
   useEffect(()=>{
     if(tenantId)
@@ -24,6 +26,10 @@ const StakeholderDocsRequired = ({ onSelect, onSkip, config }) => {
 
   return (
     <Fragment>
+      <div className={isopenlink? "OpenlinkContainer":""}>
+      {isopenlink &&<OpenLinkContainer />}
+      <div style={isopenlink?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}>
+      {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
       <Card>
         <CardHeader>{t(`BPA_NEW_BUILDING_HEADER`)}</CardHeader>
         <CitizenInfoLabel style={{margin:"0px",textAlign:"center"}} textStyle={{color:"#0B0C0C"}} text={t(`BPA_DOCS_REQUIRED_TIME`)} showInfo={false} />
@@ -42,6 +48,8 @@ const StakeholderDocsRequired = ({ onSelect, onSkip, config }) => {
         <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={onSelect} />
       </Card>
       <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t(`OBPS_DOCS_FILE_SIZE`)} />
+      </div>
+      </div>
     </Fragment>
   );
 };

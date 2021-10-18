@@ -1,4 +1,4 @@
-import { CardLabel, FormStep, RadioOrSelect, TextInput } from "@egovernments/digit-ui-react-components";
+import { CardLabel, FormStep, RadioOrSelect, TextInput, OpenLinkContainer,BackButton } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { stringReplaceAll } from "../utils";
 import Timeline from "../components/Timeline";
@@ -11,6 +11,9 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   const [ArchitectNo, setArchitectNo] = useState(formData?.LicneseType?.ArchitectNo || formData?.formData?.LicneseType?.ArchitectNo || null);
 
   const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateId, "StakeholderRegistraition", "TradeTypetoRoleMapping");
+  let isopenlink = window.location.href.includes("/openlink/");
+  const isCitizenUrl = Digit.Utils.browser.isMobile()?true:false;
+
 
   function getLicenseType(){
       let list=[];
@@ -47,6 +50,10 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   }
   return (
     <div>
+    <div className={isopenlink? "OpenlinkContainer":""}>
+    {isopenlink &&<OpenLinkContainer />}
+    <div style={isopenlink?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}>
+    {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
     <Timeline currentStep={1} flow="STAKEHOLDER" />
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") ? !LicenseType || !ArchitectNo:!LicenseType}>
       <CardLabel>{t("BPA_LICENSE_TYPE_QUES")}</CardLabel>
@@ -74,6 +81,8 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
         />
         </div>}
     </FormStep>
+    </div>
+    </div>
     </div>
   );
 };

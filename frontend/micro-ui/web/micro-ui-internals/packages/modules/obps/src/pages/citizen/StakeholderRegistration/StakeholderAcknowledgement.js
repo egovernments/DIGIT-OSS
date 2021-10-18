@@ -1,4 +1,4 @@
-import { Banner, Card, CardText, LinkButton, Loader, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Banner, Card, CardText, LinkButton, Loader, Row, StatusTable, SubmitBar,OpenLinkContainer, BackButton  } from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -42,6 +42,7 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
    const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
   let isOpenLinkFlow = window.location.href.includes("openlink");
+  const isCitizenUrl = Digit.Utils.browser.isMobile()?true:false;
 
 
   useEffect(() => {
@@ -70,6 +71,11 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
   return mutation.isLoading || mutation.isIdle ? (
     <Loader />
   ) : (
+    <div>
+    <div className={isOpenLinkFlow? "OpenlinkContainer":""}>
+    {isOpenLinkFlow &&<OpenLinkContainer />}
+    <div style={isOpenLinkFlow?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}>
+    {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
     <Card>
       <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
       {mutation.isSuccess && <CardText>{t("CS_FILE_STAKEHOLDER_RESPONSE")}</CardText>}
@@ -89,6 +95,9 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
         <SubmitBar label={t("BPA_COMMON_PROCEED_NEXT")} />
       </Link>}
     </Card>
+    </div>
+    </div>
+    </div>
   );
 };
 

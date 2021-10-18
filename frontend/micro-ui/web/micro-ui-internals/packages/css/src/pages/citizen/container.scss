@@ -17,3 +17,10 @@
 .obps-search {
   margin: 8px;
 }
+
+
+.OpenlinkContainer{
+  z-index: 9999;
+  @apply fixed w-full h-full bg-grey-bg top-0 right-0;
+  overflow: scroll;
+}

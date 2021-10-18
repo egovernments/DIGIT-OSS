@@ -23,7 +23,7 @@ const App = ({ path }) => {
   const { t } = useTranslation();
   return (
         <React.Fragment>
-          {!location.pathname.includes("response") && !location.pathname.includes("/openlink/stakeholder/apply/stakeholder-docs-required") && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
+          {!location.pathname.includes("response") && !location.pathname.includes("openlink/stakeholder") && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
           <Switch>
             <PrivateRoute path={`${path}/home`} component={BPACitizenHomeScreen} />
             <PrivateRoute path={`${path}/edcrscrutiny/apply`} component={CreateEDCR} />

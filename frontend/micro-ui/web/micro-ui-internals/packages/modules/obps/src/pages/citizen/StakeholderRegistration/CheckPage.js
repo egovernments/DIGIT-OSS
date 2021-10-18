@@ -1,6 +1,6 @@
 import {
     Card, CardHeader, CardSubHeader, CardText,
-    CitizenInfoLabel, Header, LinkButton, Row, StatusTable, SubmitBar, Table, CardSectionHeader
+    CitizenInfoLabel, Header, LinkButton, Row, StatusTable, SubmitBar, Table, CardSectionHeader, OpenLinkContainer, BackButton 
   } from "@egovernments/digit-ui-react-components";
   import React,{ useMemo }  from "react";
   import { useTranslation } from "react-i18next";
@@ -14,6 +14,8 @@ import {
     const match = useRouteMatch();
     let user = Digit.UserService.getUser()
     const tenantId = user &&  user?.info && user?.info?.permanentCity ? user?.info?.permanentCity : Digit.ULBService.getCurrentTenantId();
+    let isopenlink = window.location.href.includes("/openlink/");
+    const isCitizenUrl = Digit.Utils.browser.isMobile()?true:false;
 
     const { result, formData, documents} = value;
     let consumerCode=value?.result?.Licenses[0].applicationNumber;
@@ -38,6 +40,10 @@ import {
 
     return (
     <React.Fragment>
+    <div className={isopenlink? "OpenlinkContainer":""}>
+    {isopenlink &&<OpenLinkContainer />}
+    <div style={isopenlink?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}>
+    {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
     <Timeline currentStep={4} flow="STAKEHOLDER" />
     <Header>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
     <Card>
@@ -165,6 +171,8 @@ import {
       <CardHeader>₹ {paymentDetails?.billResponse?.Bill?.[0]?.billDetails[0]?.amount}</CardHeader> 
       <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} />
       </Card>
+    </div>
+    </div>
     </React.Fragment>
     );
   };

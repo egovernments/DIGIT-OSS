@@ -247,7 +247,7 @@ initial.documents?.documents.map((ob) => {
   convertedDoc.push({
     "fileStoreId":ob.fileStoreId,
     "fileStore":ob.fileStoreId,
-    "fileName":"",
+    "fileName":ob.fileName,
     "fileUrl":"",
     "documentType":ob.documentType,
     "tenantId": initial?.result?.Licenses[0]?.tenantId,

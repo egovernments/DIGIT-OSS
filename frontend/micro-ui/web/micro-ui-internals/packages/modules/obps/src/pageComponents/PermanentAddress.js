@@ -1,4 +1,4 @@
-import { CardLabel, CheckBox, CitizenInfoLabel, FormStep, Loader, TextInput, TextArea } from "@egovernments/digit-ui-react-components";
+import { CardLabel, CheckBox, CitizenInfoLabel, FormStep, Loader, TextInput, TextArea,  OpenLinkContainer, BackButton  } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import Timeline from "../components/Timeline";
 
@@ -8,6 +8,8 @@ const PermanentAddress = ({ t, config, onSelect, value, userType, formData }) =>
   const [PermanentAddress, setPermanentAddress] = useState(formData?.LicneseDetails?.PermanentAddress || formData?.formData?.LicneseDetails?.PermanentAddress);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
+  let isopenlink = window.location.href.includes("/openlink/");
+  const isCitizenUrl = Digit.Utils.browser.isMobile()?true:false;
   //const isEdit = window.location.href.includes("/edit-application/") || window.location.href.includes("renew-trade");
   //const { isLoading, data: fydata = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "egf-master", "FinancialYear");
 
@@ -34,6 +36,10 @@ const PermanentAddress = ({ t, config, onSelect, value, userType, formData }) =>
 
   return (
     <React.Fragment>
+    <div className={isopenlink? "OpenlinkContainer":""}>
+    {isopenlink &&<OpenLinkContainer />}
+    <div style={isopenlink?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}>
+    {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
       <Timeline currentStep={2} flow="STAKEHOLDER" />
       <FormStep
         config={config}
@@ -53,6 +59,8 @@ const PermanentAddress = ({ t, config, onSelect, value, userType, formData }) =>
         value={PermanentAddress}
       />
       </FormStep>
+    </div>
+    </div>
     </React.Fragment>
   );
 };
