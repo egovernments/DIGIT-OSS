@@ -26,7 +26,7 @@ const ApplicationDetails = () => {
 
   return (
     <Fragment>
-      <Header>{t("ES_TITLE_APPLICATION_DETAILS")}</Header>
+      <Header>{t("BPA_TASK_DETAILS_HEADER")}</Header>
       <div>
         <Card>
           <StatusTable>
@@ -36,7 +36,10 @@ const ApplicationDetails = () => {
         <Card>
           <CardHeader>{t(`BPA_LICENSE_DET_CAPTION`)}</CardHeader>
           <StatusTable>
-            <Row className="border-none" label={t(`BPA_LICENSE_TYPE_LABEL`)} text={t(License?.licenseType)} />
+            <Row className="border-none" label={t(`BPA_LICENSE_TYPE_LABEL`)} text={t(`TRADELICENSE_TRADETYPE_${License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split('.')[0]}`)} />
+            {License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType.includes('ARCHITECT') && 
+              <Row className="border-none" label={t("BPA_COUNCIL_OF_ARCH_NO_LABEL")} text={License?.tradeLicenseDetail?.additionalDetail?.counsilForArchNo}  />
+            }
           </StatusTable>
         </Card>
         <Card>

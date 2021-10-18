@@ -10,7 +10,7 @@ const combineResponse = (data, users) => {
 
 
 const useInbox = (tenantId, data, filter = {}, config = {}) => {
-  return useQuery(["EVENT_INBOX", data, filter], async () => {
+  return useQuery(["EVENT_INBOX", tenantId, data, filter], async () => {
     const eventData = await Digit.EventsServices.Search({ tenantId, data, filter });
     const uuids = []
     eventData?.events?.forEach(event => uuids.push(event?.auditDetails?.lastModifiedBy));

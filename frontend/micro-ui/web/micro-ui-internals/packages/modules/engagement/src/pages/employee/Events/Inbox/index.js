@@ -17,10 +17,11 @@ const Inbox = ({ tenants, parentRoute }) => {
       startDate: null,
       endDate: new Date(""),
       title: ""
-    }
+    },
+    ulb: tenants?.find(tenant => tenant?.code === tenantId)
   });
   let isMobile = window.Digit.Utils.browser.isMobile();
-  const { data, isLoading } = Digit.Hooks.events.useInbox(tenantId, {
+  const { data, isLoading } = Digit.Hooks.events.useInbox(searchParams?.ulb?.code, {
     limit: pageSize,
     offset: pageOffset,
   },
