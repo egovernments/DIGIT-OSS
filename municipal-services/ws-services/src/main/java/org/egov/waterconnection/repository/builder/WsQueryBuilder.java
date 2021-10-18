@@ -127,9 +127,17 @@ public class WsQueryBuilder {
 		}
 
 		if (!StringUtils.isEmpty(criteria.getTenantId())) {
+			String tenantId = criteria.getTenantId();
+			int tenantLevel = tenantId.split("\\.").length;
 			addClauseIfRequired(preparedStatement, query);
-			query.append(" conn.tenantid = ? ");
-			preparedStatement.add(criteria.getTenantId());
+			if (tenantLevel <= config.getStateLevelTenantIdLength()) {
+				query.append(" conn.tenantid LIKE ? ");
+				preparedStatement.add(criteria.getTenantId() + '%');
+			}
+			else{
+				query.append(" conn.tenantid = ? ");
+				preparedStatement.add(criteria.getTenantId());
+			}
 		}
 
 		if (!StringUtils.isEmpty(criteria.getPropertyId()) && StringUtils.isEmpty(criteria.getMobileNumber())) {
