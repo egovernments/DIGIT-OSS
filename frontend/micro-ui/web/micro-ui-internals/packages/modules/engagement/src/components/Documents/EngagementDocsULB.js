@@ -20,12 +20,6 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
   const userInfo = Digit.UserService.getUser().info;
   const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code));
  
-  const location = useLocation()
-  const isInEditFormMode = useMemo(() => {
-    if (location.pathname.includes('documents/inbox/update')) return true;
-    return false;
-  }, [location.pathname])
-
   return (
     <React.Fragment>
       <LabelFieldPair
@@ -54,7 +48,7 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
             )}
           />
           <div className="tag-container">
-            {formData?.[config.key]?.map((ulb, index) => {
+            {formData && formData[config?.key]?.length > 0 && formData?.[config.key]?.map((ulb, index) => {
               return (
                 <RemoveableTag
                   key={index}

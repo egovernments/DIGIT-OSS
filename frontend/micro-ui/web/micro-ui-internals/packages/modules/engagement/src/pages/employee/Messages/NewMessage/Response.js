@@ -10,8 +10,8 @@ const BannerPicker = (props) => {
   return (
     <Banner
       message={t(props.message)}
-      applicationNumber={props?.data?.events?.[0]?.name}
-      info={t(`MESSAGE_ADD_SUCCESS_MESSAGE_MAIN`)}
+      applicationNumber={props?.data?.events?.[0]?.id}
+      //info={t(`MESSAGE_ADD_SUCCESS_MESSAGE_MAIN`)}
       successful={props.isSuccess}
     />
   )
@@ -74,13 +74,11 @@ const Response = (props) => {
     <Card>
       <BannerPicker
         t={t}
-        message={`ENGAGEMENT_PUBLIC_BRDCST_CREATED`}
+        message={`ENGAGEMENT_BROADCAST_MESSAGE_CREATED`}
         data={mutation.data}
         isSuccess={mutation.isSuccess}
         isLoading={mutation.isIdle || mutation.isLoading}
       />
-      <CardText>{t(`ENGAGEMENT_BROADCAST_MESSAGE_CREATED`)}
-      </CardText>
       <ActionBar>
         <Link to={"/digit-ui/employee"}>
           <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />

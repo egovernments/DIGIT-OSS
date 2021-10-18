@@ -2,7 +2,7 @@ import { Header, ActionBar, SubmitBar, PDFSvg, Menu, GenericFileIcon } from '@eg
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import Confirmation from '../Modal/Confirmation';
-import {  openUploadedDocument, openDocumentLink } from './DesktopInbox';
+import { openUploadedDocument, openDocumentLink } from './DesktopInbox';
 
 const Actions = ['EDIT_DOCUMENT', 'DELETE']
 const getUlbName = (tenantId) => {
@@ -39,7 +39,7 @@ const DocumentDetails = ({ location, match, history, }) => {
                     filestoreId: { fileStoreId: details?.filestoreId },
                     documentLink: details?.documentLink
                 },
-               ULB: ulbArray.filter((e) => e.code === details?.tenantId),
+                ULB: ulbArray.filter((e) => e.code === details?.tenantId),
                 ...details
             }
             history.push({
@@ -88,13 +88,15 @@ const DocumentDetails = ({ location, match, history, }) => {
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t('DOCUMENT_NAME')}:`}</p> <p>{details?.name}</p> </div>
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t('DOCUMENT_CATEGORY')}:`}</p> <p>{t(details?.category)}</p> </div>
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t('DCOUMENT_DESCRIPTION')}:`}</p> <p className="documentDetails__description">{details?.description?.length ? details?.description : 'NA'}</p> </div>
-                    <div className="documentDetails_pdf">
+                    {details?.filestoreId ? <div className="documentDetails_pdf">
                         <span className="documentDetails_subheader">{`${t('Document')}`}</span>
                         <div style={{ width: '100px' }} onClick={() => openUploadedDocument(details?.filestoreId ? details?.filestoreId : details?.documentLink, details?.name)}>
-                        <GenericFileIcon/>
+                            <GenericFileIcon />
                         </div>
 
                     </div>
+                        : null
+                    }
                 </div>
             </div>
             <ActionBar>
