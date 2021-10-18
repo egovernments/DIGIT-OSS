@@ -30,6 +30,7 @@ import StakeholderDocuments from "./pageComponents/StakeholderDocuments";
 import EmployeeApp from "./pages/employee";
 import OBPSSearchApplication from "./components/SearchApplication";
 import InspectionReport from "./pageComponents/InspectionReport";
+import OBPSEmployeeHomeCard from "./pages/employee/EmployeeCard";
 
 const OBPSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = ["bpa", "bpareg"]; //"bpa";
@@ -79,6 +80,7 @@ const OBPSLinks = ({ matchPath, userType }) => {
 const componentsToRegister = {
   OBPSModule,
   OBPSLinks,
+  OBPSCard:OBPSEmployeeHomeCard,
   BPACitizenHomeScreen,
   EDCRForm,
   BasicDetails,

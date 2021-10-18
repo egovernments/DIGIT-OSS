@@ -551,6 +551,12 @@ const OBPSIcon = () => (
   </svg>
 );
 
+const OBPSIconSolidBg = () => (
+  <svg width="34" height="30" viewBox="0 0 34 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M30.333 0H3.66634C1.83301 0 0.333008 1.5 0.333008 3.33333V26.6667C0.333008 28.5 1.83301 30 3.66634 30H30.333C32.1663 30 33.6663 28.5 33.6663 26.6667V3.33333C33.6663 1.5 32.1663 0 30.333 0ZM13.6663 23.3333H5.33301V20H13.6663V23.3333ZM13.6663 16.6667H5.33301V13.3333H13.6663V16.6667ZM13.6663 10H5.33301V6.66667H13.6663V10ZM21.6997 20L16.9997 15.2667L19.3497 12.9167L21.6997 15.2833L26.983 10L29.3497 12.3667L21.6997 20Z" fill="white"/>
+  </svg>
+);
+
 const CitizenTruck = ({ className }) => (
   <svg width="40" height="40" viewBox="0 0 23 19" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
@@ -683,6 +689,7 @@ export {
   PersonIcon,
   PTIcon,
   OBPSIcon,
+  OBPSIconSolidBg,
   CitizenTruck,
   EDCRIcon,
   BPAIcon,
