@@ -68,6 +68,11 @@ public class URLConverterService {
 			e.printStackTrace();
 		}
         StringBuilder shortenedUrl = new StringBuilder();
+
+        if(!hostName.containsKey(tenantId)){
+            throw new CustomException("EG_TENANT_HOST_NOT_FOUND_ERR", "Hostname for provided state level tenant has not been configured for tenantId: " + tenantId);
+        }
+
         String stateSpecificHostName = hostName.get(tenantId);
         
         if(stateSpecificHostName.endsWith("/"))

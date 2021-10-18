@@ -32,7 +32,10 @@ public class ShortenController {
     public String shortenUrl(@RequestBody @Valid final ShortenRequest shortenRequest,
                              @RequestHeader Map<String,String> headers) throws Exception {
         log.info(headers.toString());
-        String tenantId = headers.get("tenantid");
+        // ULB specific tenantId
+        String ulbSpecificTenantId = headers.get("tenantid");
+        // Extracting state specific tenantId from ULB level tenant
+        String tenantId = ulbSpecificTenantId.split("\\.")[0] + ulbSpecificTenantId.split("\\.")[1];
         String longUrl = shortenRequest.getUrl();
         if (URLValidator.INSTANCE.validateURL(longUrl)) {
             String shortenedUrl = urlConverterService.shortenURL(shortenRequest, tenantId);
