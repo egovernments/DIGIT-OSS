@@ -13,6 +13,7 @@ import { Link, useHistory } from "react-router-dom";
 import Searchbar from "../../../components/Documents/Searchbar";
 import DocumentCard from "../../../components/Documents/DocumentCard";
 import { useDebounce } from "../../../hooks/useDebounce";
+import { renderDocsList } from "./DocumentList";
 
 const Accordion = ({ t, title, count, onClick, children }) => {
   const [isOpen, setOpen] = React.useState(false);
@@ -81,21 +82,10 @@ const DocumentCategories = ({ t, parentRoute }) => {
           t={t}
         />
         <hr style={{ color: '#ccc' }} />
-        {!isLoading ? (
+        {isLoading ? <Loader /> : (
           <div className="wrapper">
             {searchValue.length && data?.Documents?.length ?
-              data?.Documents?.map(({ name, auditDetails, description, documentLink, fileSize, filestoreId }, index) => (
-                <DocumentCard
-                  key={index}
-                  documentTitle={name}
-                  documentSize={fileSize}
-                  lastModifiedData={auditDetails?.lastModifiedTime}
-                  description={description}
-                  documentLink={documentLink}
-                  filestoreId={filestoreId}
-                  t={t}
-                />
-              ))
+              renderDocsList(data.Documents, t)
               : data?.statusCount && data?.statusCount?.length ?
                 data?.statusCount?.map(({ category, count }, index) => {
                   return (
@@ -104,8 +94,7 @@ const DocumentCategories = ({ t, parentRoute }) => {
                 (<Card>
                   <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
                 </Card>)}
-          </div>
-        ) : <Loader />
+          </div>)
         }
       </div>
     </AppContainer>
@@ -113,3 +102,4 @@ const DocumentCategories = ({ t, parentRoute }) => {
 };
 
 export default DocumentCategories;
+

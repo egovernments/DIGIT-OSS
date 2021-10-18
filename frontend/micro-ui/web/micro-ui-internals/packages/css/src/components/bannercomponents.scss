@@ -116,16 +116,16 @@
   .bannerCard {
     min-width: 400px;
   }
-
   .bannerLogo {
+    width: 80px;
+    height: 40px;
+    object-fit: contain;
     padding-right: 10px;
-    border-right: solid 2px;
     margin-right: 10px;
-    height: 20px;
+    border-right: 1px solid #0b0c0c;
   }
-
   .bannerHeader {
-    @apply flex justify-center;
+    @apply flex justify-center items-center;
     margin-bottom: 24px;
   }
 }

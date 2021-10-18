@@ -118,7 +118,7 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
       >
         <Header />
         <CardSubHeader style={{ textAlign: "center" }}> {propsConfig.texts.header} </CardSubHeader>
-        <CardText>{`${t(`CS_LOGIN_OTP_TEXT`)} ${mobileNumber}`}</CardText>
+        <CardText>{`${t(`CS_LOGIN_OTP_TEXT`)} `}<b> {`${t(`+ 91 - `)}`} {mobileNumber}</b></CardText>
         <SelectOtp t={t} userType="employee" otp={otp} onOtpChange={setOtp} error={isOtpValid} onResend={onResendOTP} />
         {/* <div>
           <CardLabel style={{ marginBottom: "8px" }}>{t("CORE_OTP_SENT_MESSAGE")}</CardLabel>

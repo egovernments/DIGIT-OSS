@@ -20,7 +20,6 @@ const downloadDocument = async (filestoreId, title) => {
 
   const fileUrl = await getFileUrl(filestoreId);
   if (fileUrl) {
-    /* Util to download file from links */
     Digit.Utils.downloadPDFFromLink(fileUrl);
   }else{
     console.error("Invalid Filestoreid or no file found to download");

@@ -133,7 +133,8 @@
 }
 
 .submit-bar {
-  @apply h-10 bg-primary-main text-center border-b-2 border-input-border border-solid w-full outline-none;
+  @apply h-10 bg-primary-main text-center w-full outline-none;
+  box-shadow: inset 0px -2px 0px #0B0C0C;
 
   &:focus {
     @apply outline-none;
@@ -145,7 +146,7 @@
 }
 
 .submit-bar-disabled {
-  @apply h-10 bg-primary-main text-center border-b-2 border-input-border border-solid w-full outline-none opacity-50;
+  @apply h-10 bg-primary-main text-center w-full outline-none opacity-50;
 
   &:focus {
     @apply outline-none;

@@ -80,21 +80,19 @@ const DocumentList = ({ match }) => {
           t={t}
         />
       </div>
-      {
-        filteredDocs &&
-          filteredDocs.length ? renderDocsList(filteredDocs, t) :
+      {isLoadingDocs ? <Loader /> :
+          filteredDocs && filteredDocs.length ? renderDocsList(filteredDocs, t) :
           <Card>
             <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
           </Card>
       }
-    </AppContainer >
+    </AppContainer>
   );
 };
 
 export default DocumentList;
 
 export const renderDocsList = (documents, t) => (
-
 
   documents.map(({ name, lastModifiedDate, description, documentLink, fileSize, filestoreId }, index) => (
     <DocumentCard

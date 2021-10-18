@@ -91,6 +91,24 @@
 .view_download_main {
   display: flex;
   align-items: center;
+  span {
+    padding: 5px;
+    & .views {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      p {
+        padding-left: 10px;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 19px;
+        color: #f47738;
+      }
+    }
+  }
+}
+@screen dt{
+  .view_download_main span {
   span{
     padding: 5px;
   & .views {
@@ -115,6 +133,12 @@
     padding-left: 8px;
     font-size: 12px;
   }
+  .notice_and_circular_text p {
+    font-size: 12px !important;
+  }
+  .documentDetails_row {
+    grid-gap: 0 !important;
+    gap: 0 !important;
   .notice_and_circular_heading_mb header{
     font-size: 16px !important;
   }
