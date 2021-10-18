@@ -11,6 +11,13 @@ import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_PARTIAL_ONLINE;
 import static org.egov.pt.util.PTConstants.ONLINE_PAYMENT_MODE;
 import static org.egov.pt.util.PTConstants.PT_BUSINESSSERVICE;
 
+import static org.egov.pt.util.PTConstants.ALTERNATE_NOTIFICATION_PAYMENT_FAIL;
+import static org.egov.pt.util.PTConstants.ALTERNATE_NOTIFICATION_PAYMENT_OFFLINE;
+import static org.egov.pt.util.PTConstants.ALTERNATE_NOTIFICATION_PAYMENT_ONLINE;
+import static org.egov.pt.util.PTConstants.ALTERNATE_NOTIFICATION_PAYMENT_PARTIAL_OFFLINE;
+import static org.egov.pt.util.PTConstants.ALTERNATE_NOTIFICATION_PAYMENT_PARTIAL_ONLINE;
+
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -104,6 +111,9 @@ public class PaymentNotificationService {
             String localizationMessages = util.getLocalizationMessages(tenantId,requestInfo);
             String consumerCode = transaction.getConsumerCode();
             String path = getJsonPath(topic, ONLINE_PAYMENT_MODE, false);
+            
+            String pathAlternate = getJsonPathForAlternate(topic,ONLINE_PAYMENT_MODE,false);
+            
             String messageTemplate = null;
             try {
                 Object messageObj = JsonPath.parse(localizationMessages).read(path);
@@ -138,6 +148,25 @@ public class PaymentNotificationService {
 			if (!mobileNumbers.contains(payerMobileNo)) {
 				smsRequests.add(getSMSRequestsWithoutReceipt(payerMobileNo, customMessage, valMap));
 			}
+			
+			try {
+				Object messageObj = JsonPath.parse(localizationMessages).read(pathAlternate);
+                messageTemplate = ((ArrayList<String>) messageObj).get(0);
+				
+			} catch (Exception e) {
+                log.error("Fetching from localization failed", e);
+            }
+			
+			String customMessageAlternate = getCustomizedMessageAlternate(valMap,messageTemplate,pathAlternate);
+			
+			Set<String> alternateMobileNumbers = new HashSet<>();
+            property.getOwners().forEach(owner -> {
+            	if((owner.getAlternatemobilenumber()!=null)) {
+                alternateMobileNumbers.add(owner.getAlternatemobilenumber());
+            	}
+            });
+            
+            smsRequests.addAll(getSMSRequests(alternateMobileNumbers,customMessageAlternate, valMap));
             
 
             util.sendSMS(smsRequests);
@@ -207,11 +236,15 @@ public class PaymentNotificationService {
             }
 
             Property property = properties.get(0);
+            String propertyId = property.getPropertyId();
 
             Boolean isPartiallyPayment = !(paymentDetail.getTotalAmountPaid().compareTo(paymentDetail.getTotalDue())==0);
 
             String customMessage = null;
             String path = getJsonPath(topic, paymentMode, isPartiallyPayment);
+            
+            String pathAlternate = getJsonPathForAlternate(topic,paymentMode,isPartiallyPayment);
+            
             String messageTemplate = null;
             try {
                 Object messageObj = JsonPath.parse(localizationMessages).read(path);
@@ -232,6 +265,25 @@ public class PaymentNotificationService {
 			if (!mobileNumbers.contains(payerMobileNo)) {
 				smsRequests.add(getSMSRequestsWithoutReceipt(payerMobileNo, customMessage, valMap));
 			}
+			
+			try {
+				Object messageObj = JsonPath.parse(localizationMessages).read(pathAlternate);
+                messageTemplate = ((ArrayList<String>) messageObj).get(0);
+				
+			} catch (Exception e) {
+                log.error("Fetching from localization failed", e);
+            }
+			
+			String customMessageAlternate = getCustomizedMessageAlternate(valMap,messageTemplate,pathAlternate);
+			
+			Set<String> alternateMobileNumbers = new HashSet<>();
+            property.getOwners().forEach(owner -> {
+            	if((owner.getAlternatemobilenumber()!=null)) {
+                alternateMobileNumbers.add(owner.getAlternatemobilenumber());
+            	}
+            });
+            
+            smsRequests.addAll(getSMSRequests(alternateMobileNumbers,customMessageAlternate, valMap));
 
             if(null == propertyConfiguration.getIsUserEventsNotificationEnabled() || propertyConfiguration.getIsUserEventsNotificationEnabled()) {
                 if(paymentDetail.getTotalDue().compareTo(paymentDetail.getTotalAmountPaid())==0)
@@ -250,7 +302,48 @@ public class PaymentNotificationService {
 
 
 
-    /**
+    private String getCustomizedMessageAlternate(Map<String, String> valMap, String message,String pathAlternate) {
+    	
+    	String customMessage = null;
+        if(pathAlternate.contains(ALTERNATE_NOTIFICATION_PAYMENT_ONLINE) || pathAlternate.contains(ALTERNATE_NOTIFICATION_PAYMENT_PARTIAL_ONLINE))
+            customMessage = getCustomizedOnlinePaymentMessage(message,valMap);
+        if(pathAlternate.contains(ALTERNATE_NOTIFICATION_PAYMENT_OFFLINE) || pathAlternate.contains(ALTERNATE_NOTIFICATION_PAYMENT_PARTIAL_OFFLINE))
+            customMessage = getCustomizedOfflinePaymentMessage(message,valMap);
+        if(pathAlternate.contains(ALTERNATE_NOTIFICATION_PAYMENT_FAIL))
+            customMessage = getCustomizedPaymentFailMessage(message,valMap);
+        return customMessage;
+		
+		
+	}
+
+
+
+
+	private String getJsonPathForAlternate(String topic, String paymentMode, Boolean isPartiallyPayment) {
+		
+    	String path = "$..messages[?(@.code==\"{}\")].message";
+        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()) && !isPartiallyPayment && paymentMode.equalsIgnoreCase("online"))
+            path = path.replace("{}",ALTERNATE_NOTIFICATION_PAYMENT_ONLINE);
+
+        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()) && !isPartiallyPayment && !paymentMode.equalsIgnoreCase("online"))
+            path = path.replace("{}",ALTERNATE_NOTIFICATION_PAYMENT_OFFLINE);
+
+        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic())&& isPartiallyPayment && paymentMode.equalsIgnoreCase("online"))
+            path = path.replace("{}",ALTERNATE_NOTIFICATION_PAYMENT_PARTIAL_ONLINE);
+
+        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()) && isPartiallyPayment&& !paymentMode.equalsIgnoreCase("online"))
+            path = path.replace("{}",ALTERNATE_NOTIFICATION_PAYMENT_PARTIAL_OFFLINE);
+
+        if(topic.equalsIgnoreCase(propertyConfiguration.getPgTopic()))
+            path = path.replace("{}",ALTERNATE_NOTIFICATION_PAYMENT_FAIL);
+
+        return path;
+	}
+
+
+
+
+	/**
      * Generate and returns SMSRequest if oldPropertyId is not present
      * @param messagejson The list of messages received from localization
      * @param valMap The map containing all the values as key,value pairs
@@ -424,6 +517,11 @@ public class PaymentNotificationService {
         message = message.replace("{ insert payment transaction id from PG}",valMap.get("transactionId"));
         message = message.replace("{insert Property Tax Assessment ID}",valMap.get("propertyId"));
         message = message.replace("{pt due}.",valMap.get("amountDue"));
+        
+        message = message.replace("{PROPERTYID}",valMap.get("propertyId"));
+        message = message.replace("{amount}",valMap.get("amountPaid"));
+        message = message.replace("{Enter pending amount}",valMap.get("amountDue"));
+        
     //    message = message.replace("{FY}",valMap.get("financialYear"));
         return message;
     }
@@ -439,6 +537,9 @@ public class PaymentNotificationService {
         message = message.replace("{insert mode of payment}",valMap.get("paymentMode"));
         message = message.replace("{Enter pending amount}",valMap.get("amountDue"));
         message = message.replace("{insert inactive citizen application web URL}.",propertyConfiguration.getNotificationURL());
+        
+        message = message.replace("{PROPERTYID}",valMap.get("propertyId"));
+        
 //        message = message.replace("{Insert FY}",valMap.get("financialYear"));
         return message;
     }
@@ -452,6 +553,10 @@ public class PaymentNotificationService {
     private String getCustomizedPaymentFailMessage(String message,Map<String,String> valMap){
         message = message.replace("{insert amount to pay}",valMap.get("txnAmount"));
         message = message.replace("{insert ID}",valMap.get("propertyId"));
+        
+        message = message.replace("{PROPERTYID}",valMap.get("propertyId"));
+        message = message.replace("{amount}",valMap.get("txnAmount"));
+        
 //        message = message.replace("{FY}",valMap.get("financialYear"));
         return message;
     }
@@ -483,6 +588,11 @@ public class PaymentNotificationService {
                 if(customizedMessage.contains("{payLink}")){
                     finalMessage = finalMessage.replace("{payLink}", getPaymentLink(valMap));
                 }
+                
+                if(customizedMessage.contains("{PAYMENT_LINK}")){
+                    finalMessage = finalMessage.replace("{PAYMENT_LINK}", getPaymentLink(valMap));
+                }
+                
                 if(customizedMessage.contains("{receipt download link}")){
                     String receiptDownloadLink = getReceiptLink(valMap, mobileNumber);
                     finalMessage = finalMessage.replace("{receipt download link}", receiptDownloadLink);
