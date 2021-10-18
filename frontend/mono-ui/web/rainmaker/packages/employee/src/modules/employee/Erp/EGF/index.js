@@ -24,7 +24,7 @@ class EGFFinance extends Component {
     winheight = window.innerHeight - 100,
     erp_url,
     tenantId = getTenantId();
-    console.log("TenantID : " + getTenantId);
+    console.log("TenantID : " + getTenantId());
     //Reading domain name from the request url
     domainurl = hostname.substring(hostname.indexOf(".") + 1);
     // Reading environment name (ex: dev, qa, uat, fin-uat etc) from the globalconfigs if exists else reading from the .env file
