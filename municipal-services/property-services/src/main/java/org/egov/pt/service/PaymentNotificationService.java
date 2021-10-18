@@ -112,7 +112,7 @@ public class PaymentNotificationService {
             String consumerCode = transaction.getConsumerCode();
             String path = getJsonPath(topic, ONLINE_PAYMENT_MODE, false);
             
-            String pathAlternate = getJsonPathForAlternate(topic,ONLINE_PAYMENT_MODE,false);
+            String alternatePathLocalizationCode = getJsonPathForAlternate(topic,ONLINE_PAYMENT_MODE,false);
             
             String messageTemplate = null;
             try {
@@ -149,26 +149,8 @@ public class PaymentNotificationService {
 				smsRequests.add(getSMSRequestsWithoutReceipt(payerMobileNo, customMessage, valMap));
 			}
 			
-			try {
-				Object messageObj = JsonPath.parse(localizationMessages).read(pathAlternate);
-                messageTemplate = ((ArrayList<String>) messageObj).get(0);
-				
-			} catch (Exception e) {
-                log.error("Fetching from localization failed", e);
-            }
+			addSmsRequestsForAlternateNumbers(alternatePathLocalizationCode,localizationMessages,valMap,property,smsRequests,payerMobileNo);
 			
-			String customMessageAlternate = getCustomizedMessageAlternate(valMap,messageTemplate,pathAlternate);
-			
-			Set<String> alternateMobileNumbers = new HashSet<>();
-            property.getOwners().forEach(owner -> {
-            	if((owner.getAlternatemobilenumber()!=null) && !owner.getAlternatemobilenumber().equalsIgnoreCase(owner.getMobileNumber()) && !owner.getAlternatemobilenumber().equalsIgnoreCase(payerMobileNo) ) {
-                alternateMobileNumbers.add(owner.getAlternatemobilenumber());
-            	}
-            });
-            
-            smsRequests.addAll(getSMSRequests(alternateMobileNumbers,customMessageAlternate, valMap));
-            
-
             util.sendSMS(smsRequests);
 
             List<Event> events = new LinkedList<>();
@@ -236,14 +218,13 @@ public class PaymentNotificationService {
             }
 
             Property property = properties.get(0);
-            String propertyId = property.getPropertyId();
 
             Boolean isPartiallyPayment = !(paymentDetail.getTotalAmountPaid().compareTo(paymentDetail.getTotalDue())==0);
 
             String customMessage = null;
             String path = getJsonPath(topic, paymentMode, isPartiallyPayment);
             
-            String pathAlternate = getJsonPathForAlternate(topic,paymentMode,isPartiallyPayment);
+            String alternatePathLocalizationCode = getJsonPathForAlternate(topic,paymentMode,isPartiallyPayment);
             
             String messageTemplate = null;
             try {
@@ -266,24 +247,7 @@ public class PaymentNotificationService {
 				smsRequests.add(getSMSRequestsWithoutReceipt(payerMobileNo, customMessage, valMap));
 			}
 			
-			try {
-				Object messageObj = JsonPath.parse(localizationMessages).read(pathAlternate);
-                messageTemplate = ((ArrayList<String>) messageObj).get(0);
-				
-			} catch (Exception e) {
-                log.error("Fetching from localization failed", e);
-            }
-			
-			String customMessageAlternate = getCustomizedMessageAlternate(valMap,messageTemplate,pathAlternate);
-			
-			Set<String> alternateMobileNumbers = new HashSet<>();
-            property.getOwners().forEach(owner -> {
-            	if((owner.getAlternatemobilenumber()!=null) && !owner.getAlternatemobilenumber().equalsIgnoreCase(owner.getMobileNumber()) && !owner.getAlternatemobilenumber().equalsIgnoreCase(payerMobileNo) ) {
-                alternateMobileNumbers.add(owner.getAlternatemobilenumber());
-            	}
-            });
-            
-            smsRequests.addAll(getSMSRequests(alternateMobileNumbers,customMessageAlternate, valMap));
+			addSmsRequestsForAlternateNumbers(alternatePathLocalizationCode,localizationMessages,valMap,property,smsRequests,payerMobileNo);
 
             if(null == propertyConfiguration.getIsUserEventsNotificationEnabled() || propertyConfiguration.getIsUserEventsNotificationEnabled()) {
                 if(paymentDetail.getTotalDue().compareTo(paymentDetail.getTotalAmountPaid())==0)
@@ -302,14 +266,43 @@ public class PaymentNotificationService {
 
 
 
-    private String getCustomizedMessageAlternate(Map<String, String> valMap, String message,String pathAlternate) {
+    private void addSmsRequestsForAlternateNumbers(String alternatePathLocalizationCode, String localizationMessages, Map<String, String> valMap, Property property, List<SMSRequest> smsRequests, String payerMobileNo) {
+    	
+    	
+    	String messageTemplate=null;
+    	
+    	try {
+			Object messageObj = JsonPath.parse(localizationMessages).read(alternatePathLocalizationCode);
+            messageTemplate = ((ArrayList<String>) messageObj).get(0);
+			
+		} catch (Exception e) {
+            log.error("Fetching from localization failed for the code " + alternatePathLocalizationCode, e);
+        }
+		
+		String customMessageAlternate = getCustomizedMessageAlternate(valMap,messageTemplate,alternatePathLocalizationCode);
+		
+		Set<String> alternateMobileNumbers = new HashSet<>();
+        property.getOwners().forEach(owner -> {
+        	if((owner.getAlternatemobilenumber()!=null) && !owner.getAlternatemobilenumber().equalsIgnoreCase(owner.getMobileNumber()) && !owner.getAlternatemobilenumber().equalsIgnoreCase(payerMobileNo) ) {
+            alternateMobileNumbers.add(owner.getAlternatemobilenumber());
+        	}
+        });
+        
+        smsRequests.addAll(getSMSRequests(alternateMobileNumbers,customMessageAlternate, valMap));
+		
+	}
+
+
+
+
+	private String getCustomizedMessageAlternate(Map<String, String> valMap, String message,String alternatePathLocalizationCode) {
     	
     	String customMessage = null;
-        if(pathAlternate.contains(ALTERNATE_NOTIFICATION_PAYMENT_ONLINE) || pathAlternate.contains(ALTERNATE_NOTIFICATION_PAYMENT_PARTIAL_ONLINE))
+        if(alternatePathLocalizationCode.contains(ALTERNATE_NOTIFICATION_PAYMENT_ONLINE) || alternatePathLocalizationCode.contains(ALTERNATE_NOTIFICATION_PAYMENT_PARTIAL_ONLINE))
             customMessage = getCustomizedOnlinePaymentMessage(message,valMap);
-        if(pathAlternate.contains(ALTERNATE_NOTIFICATION_PAYMENT_OFFLINE) || pathAlternate.contains(ALTERNATE_NOTIFICATION_PAYMENT_PARTIAL_OFFLINE))
+        if(alternatePathLocalizationCode.contains(ALTERNATE_NOTIFICATION_PAYMENT_OFFLINE) || alternatePathLocalizationCode.contains(ALTERNATE_NOTIFICATION_PAYMENT_PARTIAL_OFFLINE))
             customMessage = getCustomizedOfflinePaymentMessage(message,valMap);
-        if(pathAlternate.contains(ALTERNATE_NOTIFICATION_PAYMENT_FAIL))
+        if(alternatePathLocalizationCode.contains(ALTERNATE_NOTIFICATION_PAYMENT_FAIL))
             customMessage = getCustomizedPaymentFailMessage(message,valMap);
         return customMessage;
 		
