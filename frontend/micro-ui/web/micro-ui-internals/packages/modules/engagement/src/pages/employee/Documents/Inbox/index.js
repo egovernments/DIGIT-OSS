@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Header } from "@egovernments/digit-ui-react-components";
 import DesktopInbox from "../../../../components/Documents/DesktopInbox";
@@ -12,20 +12,21 @@ const Inbox = ({ tenants }) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const [pageSize, setPageSize] = useState(10);
     const [pageOffset, setPageOffset] = useState(0);
-    const [records, setRecords] = useState(50);
     const [searchParams, setSearchParams] = useState({
         tenantIds: tenantId,
         offset: pageOffset,
         limit: records
     });
-
+    
     let isMobile = window.Digit.Utils.browser.isMobile();
-    const { data: documentsList, isLoading } = Digit.Hooks.engagement.useDocSearch(searchParams, {
-        select: (data) => {
-            return data?.Documents;
+    const { data: response, isLoading } = Digit.Hooks.engagement.useDocSearch(searchParams, {
+        select: ({ Documents, totalCount }) => {
+            const newData = { documentsList: Documents, totalCount };
+            return newData;
         }
     });
-
+    
+    const [records, setRecords] = useState(response?.totalCount);
     const onSearch = (params) => {
         const tenantIds = params?.ulbs?.code?.length ? params?.ulbs?.code : tenantId
         const { name, postedBy } = params;
@@ -36,10 +37,13 @@ const Inbox = ({ tenants }) => {
         setSearchParams((prevSearchParams) => ({ ...prevSearchParams, ...data }));
     }
 
-    const fetchNextPage = () => {
-        if (pageOffset > 50) setRecords((prevRecords) => prevRecords + pageSize)
+    const fetchNextPage = useCallback(() => {
         setPageOffset((prevState) => prevState + pageSize);
-    };
+        if (pageOffset > records- 10) {
+            setRecords((prevRecords) => prevRecords + pageSize)
+            setSearchParams((prevParams) => ({ ...prevParams, limit:records+pageSize, }))
+        }
+    }, [pageOffset, pageSize, records])
 
     const fetchPrevPage = () => {
         setPageOffset((prevState) => prevState - pageSize);
@@ -82,7 +86,7 @@ const Inbox = ({ tenants }) => {
     if (isMobile) {
         return (
             <MobileInbox
-                data={documentsList}
+                data={response?.documentsList}
                 searchParams={searchParams}
                 searchFields={getSearchFields()}
                 t={t}
@@ -99,13 +103,14 @@ const Inbox = ({ tenants }) => {
     return (
         <div>
             <Header>
-                {t("DOCUMENTS_DOCUMENT_HEADER")} 
-                {Number(documentsList?.length) ? <p className="inbox-count">{Number(documentsList?.length)}</p> : null}
+                {t("DOCUMENTS_DOCUMENT_HEADER")}
+                {Number(response?.totalCount) ? <p className="inbox-count">{Number(response?.totalCount)}</p> : null}
             </Header>
+
             <DesktopInbox
                 t={t}
                 isLoading={isLoading}
-                data={documentsList}
+                data={response?.documentsList}
                 links={links}
                 searchParams={searchParams}
                 onSearch={onSearch}
@@ -113,7 +118,7 @@ const Inbox = ({ tenants }) => {
                 searchFields={getSearchFields()}
                 onFilterChange={handleFilterChange}
                 pageSizeLimit={pageSize}
-                totalRecords={documentsList?.length}
+                totalRecords={response?.documentsList?.length}
                 title={"DOCUMENTS_DOCUMENT_HEADER"}
                 iconName={"document"}
                 links={links}

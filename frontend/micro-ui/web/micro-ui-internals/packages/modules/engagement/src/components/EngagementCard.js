@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { EmployeeModuleCard, PropertyHouse } from "@egovernments/digit-ui-react-components";
@@ -25,6 +25,10 @@ const EngagementCard = () => {
     select: (data) => data?.events?.length
   });
 
+  const totalDocsCount = useMemo(()=>(isLoadingDocs ? "-":documentsCount),[isLoadingDocs, documentsCount])
+  const totalEventsCount = useMemo(()=>(isLoadingEvents ? "-" : totalEvents),[isLoadingEvents, totalEvents])
+  const totalMessagesCount = useMemo(()=>(isLoadingMessages ? "-" : MessagesCount), [isLoadingMessages, MessagesCount])
+
   const { t } = useTranslation();
   let result = null;
   const propsForModuleCard = {
@@ -32,28 +36,34 @@ const EngagementCard = () => {
     moduleName: t("ES_TITLE_CITIZEN_ENGAGEMENT"),
     kpis: [
         {
-          //count: isLoadingDocs ? "-": documentsCount,
+          count: totalDocsCount,
           label: t("TOTAL_DOCUMENTS"),
-          link: `/digit-ui/employee/pt/inbox`,
+          link: `/digit-ui/employee/engagement/documents/inbox`,
         },
-        {
+        { 
+          count: totalEventsCount,
           label: t("TOTAL_EVENTS"),
-          link: `/digit-ui/employee/fsm/inbox`
-      }  
+          link: `/digit-ui/employee/engagement/event/inbox`
+      },
+      { 
+        count : totalMessagesCount,
+        label: t("TOTAL_MESSAGES"),
+        link: `/digit-ui/employee/engagement/messages/inbox`
+    }    
     ],
     links: [
       {
-        count: isLoadingDocs ? "-": documentsCount,
+        count: totalDocsCount,
         label: t("ES_TITLE_DOCS"),
         link: `/digit-ui/employee/engagement/documents/inbox`,
       },
       {
-        count: isLoadingEvents ? "-" : totalEvents,
+        count: totalEventsCount,
         label: t("ES_TITLE_EVENT_INBOX"),
         link: `/digit-ui/employee/engagement/event/inbox`,
       },
       {
-        count: isLoadingMessages  ? "-" : MessagesCount,
+        count: totalMessagesCount,
         label: t("ACTION_TEST_PUBLIC_MESSAGE_BROADCAST"),
         link: `/digit-ui/employee/engagement/messages/inbox`,
       },

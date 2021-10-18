@@ -43,7 +43,30 @@ const DocumentCategories = ({ t, parentRoute }) => {
 
   const { data, isLoading, } = Digit.Hooks.engagement.useDocSearch({ name: debouncedSearchQuery, tenantIds }, {
     select: (data) => {
-      return data;
+      const mappedDocuments =  data?.Documents?.map((
+        { uuid,
+          name,
+          category,
+          documentLink,
+          description,
+          auditDetails,
+          fileSize,
+          filestoreId,
+        }
+      ) => ({
+        docId: uuid,
+        name,
+        category,
+        description,
+        documentLink,
+        createdTime: auditDetails?.createdTime,
+        fileSize,
+        filestoreId
+      }))
+      return {
+        documentList:mappedDocuments,
+        statusCount:data?.statusCount
+      };
     }
   });
 
@@ -84,16 +107,16 @@ const DocumentCategories = ({ t, parentRoute }) => {
         <hr style={{ color: '#ccc' }} />
         {isLoading ? <Loader /> : (
           <div className="wrapper">
-            {searchValue.length && data?.Documents?.length ?
-              renderDocsList(data.Documents, t)
-              : data?.statusCount && data?.statusCount?.length ?
-                data?.statusCount?.map(({ category, count }, index) => {
+            {searchValue.length && data?.documentList?.length ?
+             renderDocsList(data.documentList, t)
+            : data?.statusCount && data?.statusCount?.length ?
+            data?.statusCount?.map(({category, count}, index) => {
                   return (
-                    <Accordion t={t} title={category} count={count} key={index} onClick={showDocuments} />);
+            <Accordion t={t} title={category} count={count} key={index} onClick={showDocuments} />);
                 }) :
-                (<Card>
-                  <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
-                </Card>)}
+            (<Card>
+              <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
+            </Card>)}
           </div>)
         }
       </div>

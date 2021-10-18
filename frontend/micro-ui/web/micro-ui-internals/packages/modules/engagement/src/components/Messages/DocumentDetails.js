@@ -87,13 +87,13 @@ const DocumentDetails = () => {
             <div className="notice_and_circular_main gap-ten">
                 <div className="documentDetails_wrapper">
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t("EVENTS_ULB_LABEL")}:`}</p> <p>{getUlbName(data?.tenantId)}</p> </div>
-                    <div className="documentDetails_row"><p className="documentDetails_title">{`${t("EVENTS_NAME_LABEL")}:`}</p> <p>{data?.applicationData?.name}</p> </div>
+                    <div className="documentDetails_row"><p className="documentDetails_title">{`${t("PUBLIC_BRDCST_TITLE_LABEL")}:`}</p> <p>{data?.applicationData?.name}</p> </div>
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t("EVENTS_FROM_DATE_LABEL")}:`}</p> <p>{data?.applicationData?.eventDetails?.fromDate ? format(new Date(data?.applicationData?.eventDetails?.fromDate), 'dd/MM/yyyy'):null}</p> </div>
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t("EVENTS_TO_DATE_LABEL")}:`}</p> <p>{data?.applicationData?.eventDetails?.toDate ?  format(new Date(data?.applicationData?.eventDetails?.toDate), 'dd/MM/yyyy'):null}</p> </div>
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t("EVENTS_COMMENTS_LABEL")}:`}</p> <p className="documentDetails__description">{data?.applicationData?.description?.length ? data?.applicationData?.description : 'NA'}</p> </div>
     
                     {data?.applicationData?.eventDetails?.documents.length ? <div className="documentDetails_pdf">
-                        <span className="documentDetails_subheader">{`${t('"CS_COMMON_DOCUMENTS"')}`}</span>
+                        <span className="documentDetails_subheader">{`${t('CS_COMMON_DOCUMENTS')}`}</span>
                         <div style={{ width: '100px' }} onClick={() => openUploadedDocument(data?.applicationData?.eventDetails?.documents[0]?.filestoreId, data?.applicationData?.name)}>
                             <GenericFileIcon />
                         </div>

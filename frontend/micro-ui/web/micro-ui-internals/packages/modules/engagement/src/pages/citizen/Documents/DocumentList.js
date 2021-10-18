@@ -39,7 +39,7 @@ const DocumentList = ({ match }) => {
         category,
         description,
         documentLink,
-        lastModifiedDate: auditDetails?.lastModifiedTime,
+        createdTime: auditDetails?.createdTime,
         fileSize,
         filestoreId
       }))
@@ -94,12 +94,12 @@ export default DocumentList;
 
 export const renderDocsList = (documents, t) => (
 
-  documents.map(({ name, lastModifiedDate, description, documentLink, fileSize, filestoreId }, index) => (
+  documents.map(({ name, createdTime, description, documentLink, fileSize, filestoreId }, index) => (
     <DocumentCard
       key={index}
       documentTitle={name}
       documentSize={fileSize}
-      lastModifiedData={lastModifiedDate}
+      lastModifiedData={createdTime}
       description={description}
       documentLink={documentLink}
       filestoreId={filestoreId}
