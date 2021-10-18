@@ -35,6 +35,8 @@ import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static org.egov.wscalculation.constants.WSCalculationConstant.*;
+
 @Service
 @Slf4j
 public class WSCalculationServiceImpl implements WSCalculationService {
@@ -314,17 +316,25 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 	 */
 	public List<Calculation> applyAdhocTax(AdhocTaxReq adhocTaxReq) {
 		List<TaxHeadEstimate> estimates = new ArrayList<>();
-		if (!(adhocTaxReq.getAdhocpenalty().compareTo(BigDecimal.ZERO) == 0))
-			estimates.add(TaxHeadEstimate.builder().taxHeadCode(WSCalculationConstant.WS_TIME_ADHOC_PENALTY)
+		String businessService = adhocTaxReq.getBusinessService();
+		if(!businessService.equalsIgnoreCase(SERVICE_FIELD_VALUE_WS) && !businessService.equalsIgnoreCase(ONE_TIME_FEE_SERVICE_FIELD))
+			throw new CustomException("INVALID_BUSINESSSERVICE", "Provide businessService is invalid");
+
+		if (!(adhocTaxReq.getAdhocpenalty().compareTo(BigDecimal.ZERO) == 0)){
+			String penaltyTaxhead = businessService == SERVICE_FIELD_VALUE_WS ? WS_TIME_ADHOC_PENALTY : WS_ADHOC_PENALTY;
+			estimates.add(TaxHeadEstimate.builder().taxHeadCode(penaltyTaxhead)
 					.estimateAmount(adhocTaxReq.getAdhocpenalty().setScale(2, 2)).build());
-		if (!(adhocTaxReq.getAdhocrebate().compareTo(BigDecimal.ZERO) == 0))
-			estimates.add(TaxHeadEstimate.builder().taxHeadCode(WSCalculationConstant.WS_TIME_ADHOC_REBATE)
+		}
+		if (!(adhocTaxReq.getAdhocrebate().compareTo(BigDecimal.ZERO) == 0)){
+			String rebateTaxhead = businessService == SERVICE_FIELD_VALUE_WS ? WS_TIME_ADHOC_REBATE : WS_ADHOC_REBATE;
+			estimates.add(TaxHeadEstimate.builder().taxHeadCode(rebateTaxhead)
 					.estimateAmount(adhocTaxReq.getAdhocrebate().setScale(2, 2).negate()).build());
+		}
 		Calculation calculation = Calculation.builder()
 				.tenantId(adhocTaxReq.getRequestInfo().getUserInfo().getTenantId())
 				.connectionNo(adhocTaxReq.getConsumerCode()).taxHeadEstimates(estimates).build();
 		List<Calculation> calculations = Collections.singletonList(calculation);
-		return demandService.updateDemandForAdhocTax(adhocTaxReq.getRequestInfo(), calculations);
+		return demandService.updateDemandForAdhocTax(adhocTaxReq.getRequestInfo(), calculations, businessService);
 	}
 	
 }

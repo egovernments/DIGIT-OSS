@@ -33,6 +33,7 @@ import org.egov.swcalculation.web.models.SewerageConnectionRequest;
 import org.egov.swcalculation.web.models.Source;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -44,6 +45,8 @@ import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
+
+import static org.egov.swcalculation.constants.SWCalculationConstant.TENANTID_MDC_STRING;
 
 @Slf4j
 @Component
@@ -90,6 +93,10 @@ public class PaymentNotificationService {
 					mappedRecord.get(consumerCode), mappedRecord.get(tenantId));
 			int size = sewerageConnectionList.size();
 			SewerageConnection sewerageConnection = sewerageConnectionList.get(size-1);
+			String tenantId = sewerageConnection.getTenantId();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(TENANTID_MDC_STRING, tenantId);
 			
 			SewerageConnectionRequest sewerageConnectionRequest = SewerageConnectionRequest.builder()
 					.sewerageConnection(sewerageConnection).requestInfo(requestInfo).build();
@@ -157,12 +164,12 @@ public class PaymentNotificationService {
 				message);
 		List<SMSRequest> smsRequest = new ArrayList<>();
 		mobileNumberAndMessage.forEach((mobileNumber, msg) -> {
-			if (msg.contains("<Link to Bill>")) {
+			if (msg.contains("{Link to Bill}")) {
 				String actionLink = config.getSmsNotificationLink()
 						.replace("$consumerCode", sewerageConnectionRequest.getSewerageConnection().getConnectionNo())
 						.replace("$tenantId", property.getTenantId());
 				actionLink = config.getNotificationUrl() + actionLink;
-				msg = msg.replace("<Link to Bill>", actionLink);
+				msg = msg.replace("{Link to Bill}", actionLink);
 			}
 			SMSRequest req = SMSRequest.builder().mobileNumber(mobileNumber).message(msg).category(Category.TRANSACTION).build();
 			smsRequest.add(req);
@@ -291,14 +298,14 @@ public class PaymentNotificationService {
 		Map<String, String> messageToReturn = new HashMap<>();
 		for (Entry<String, String> mobileAndName : mobileNumbersAndNames.entrySet()) {
 			String messageToReplace = message;
-			if (messageToReplace.contains("<Owner Name>"))
-				messageToReplace = messageToReplace.replace("<Owner Name>", mobileAndName.getValue());
-			if (messageToReplace.contains("<Service>"))
-				messageToReplace = messageToReplace.replace("<Service>", SWCalculationConstant.SERVICE_FIELD_VALUE_SW);
-			if (messageToReplace.contains("<bill amount>"))
-				messageToReplace = messageToReplace.replace("<bill amount>", mapRecords.get(totalBillAmount));
-			if (messageToReplace.contains("<Due Date>"))
-				messageToReplace = messageToReplace.replace("<Due Date>", mapRecords.get(dueDate));
+			if (messageToReplace.contains("{Owner Name}"))
+				messageToReplace = messageToReplace.replace("{Owner Name}", mobileAndName.getValue());
+			if (messageToReplace.contains("{Service}"))
+				messageToReplace = messageToReplace.replace("{Service}", SWCalculationConstant.SERVICE_FIELD_VALUE_SW);
+			if (messageToReplace.contains("{bill amount}"))
+				messageToReplace = messageToReplace.replace("{bill amount}", mapRecords.get(totalBillAmount));
+			if (messageToReplace.contains("{Due Date}"))
+				messageToReplace = messageToReplace.replace("{Due Date}", mapRecords.get(dueDate));
 			messageToReturn.put(mobileAndName.getKey(), messageToReplace);
 		}
 		return messageToReturn;

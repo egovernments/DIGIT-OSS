@@ -378,10 +378,10 @@ public class DemandService {
 	 * @return List of Demand
 	 */
 	private List<Demand> searchDemandBasedOnConsumerCode(String tenantId, String consumerCode,
-			RequestInfo requestInfo) {
+			RequestInfo requestInfo, String businessService) {
 		String uri = getDemandSearchURLForDemandId().toString();
 		uri = uri.replace("{1}", tenantId);
-		uri = uri.replace("{2}", configs.getBusinessService());
+		uri = uri.replace("{2}", businessService);
 		uri = uri.replace("{3}", consumerCode);
 		Object result = serviceRequestRepository.fetchResult(new StringBuilder(uri),
 				RequestInfoWrapper.builder().requestInfo(requestInfo).build());
@@ -782,12 +782,12 @@ public class DemandService {
 	 * @param calculations - List of Calculation to update the Demand
 	 * @return List of calculation
 	 */
-	public List<Calculation> updateDemandForAdhocTax(RequestInfo requestInfo, List<Calculation> calculations) {
+	public List<Calculation> updateDemandForAdhocTax(RequestInfo requestInfo, List<Calculation> calculations, String businessService) {
 		List<Demand> demands = new LinkedList<>();
 		for (Calculation calculation : calculations) {
 			String consumerCode = calculation.getConnectionNo();
 			List<Demand> searchResult = searchDemandBasedOnConsumerCode(calculation.getTenantId(), consumerCode,
-					requestInfo);
+					requestInfo, businessService);
 			if (CollectionUtils.isEmpty(searchResult))
 				throw new CustomException("INVALID_DEMAND_UPDATE",
 						"No demand exists for Number: " + consumerCode);
