@@ -23,15 +23,19 @@ class EGFFinance extends Component {
     hostname = loc.hostname,
     winheight = window.innerHeight - 100,
     erp_url,
-    tenantId = getTenantId();
-    console.log("TenantID : " + getTenantId());
+    tenantId = getTenantId(),
+    tenantName;
+    
     //Reading domain name from the request url
     domainurl = hostname.substring(hostname.indexOf(".") + 1);
     // Reading environment name (ex: dev, qa, uat, fin-uat etc) from the globalconfigs if exists else reading from the .env file
     finEnv = this.globalConfigExists() ? window.globalConfigs.getConfig("FIN_ENV") : process.env.REACT_APP_FIN_ENV;
     // Preparing finance subdomain url using the above environment name and the domain url
     subdomainurl = !!(finEnv) ? "-" + finEnv + "." + domainurl : "." + domainurl;
-    erp_url = loc.protocol + "//" + getTenantId().split(".").length > 2 ? getTenantId().split(".")[2] : getTenantId().split(".")[1] + subdomainurl + menuUrl;
+    tenantName = getTenantId().split(".").length > 2 ? getTenantId().split(".")[2] : getTenantId().split(".")[1];
+    erp_url = loc.protocol + "//" + tenantName + subdomainurl + menuUrl;
+    console.log("Tenant Id : " + getTenantId()); 
+    console.log("Tenant Name : " + tenantName); 
     console.log("ERP URL : " + erp_url);
 
     return (
