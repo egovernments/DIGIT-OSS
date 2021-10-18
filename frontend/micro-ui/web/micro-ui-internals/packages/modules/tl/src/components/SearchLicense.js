@@ -4,7 +4,7 @@ import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardL
 import { Link } from "react-router-dom";
 import { convertEpochToDateDMY, stringReplaceAll } from "../utils";
 
-const SearchLicense = ({tenantId, t, onSubmit, data }) => {
+const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
   let applications = {};
   let validation = {};
   //   const applicationsList = data;
@@ -180,7 +180,8 @@ const SearchLicense = ({tenantId, t, onSubmit, data }) => {
         </Card>
         : <Table
             t={t}
-            data={data} //{newapplicationlist}
+            data={data} 
+            totalRecords={count}
             columns={columns}
             getCellProps={(cellInfo) => {
             return {
@@ -199,7 +200,6 @@ const SearchLicense = ({tenantId, t, onSubmit, data }) => {
             onSort={onSort}
             disableSort={false}
             sortParams={[{id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false}]}
-            totalRecords={100}
         />}
         </React.Fragment>
 }
