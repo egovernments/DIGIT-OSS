@@ -415,8 +415,7 @@ export const downloadPdfFile = async (endPoint,
     baseURL: window.location.origin,
     responseType: "arraybuffer",
     headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/pdf"
+      "Content-Type": "application/json"
     },
   });
 
