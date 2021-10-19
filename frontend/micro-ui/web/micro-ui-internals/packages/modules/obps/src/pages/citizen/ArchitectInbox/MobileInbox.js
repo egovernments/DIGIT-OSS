@@ -1,17 +1,29 @@
 import React from "react";
 import ApplicationCard from "./ApplicationCard";
 
-const MobileInbox = ({ data, t, title, iconName, links, searchFields, searchParams, onFilterChange, sortParams, onSearch, onSort, isLoading }) => {
-  // return null;
+const MobileInbox = ({ data, edcrData = [], t, statusMap, bparegData, title, iconName, links, searchFields, searchParams, onFilterChange, sortParams, onSearch, onSort, isLoading }) => {
+
   const getData = () => {
-    return data?.table?.map(row => ({
-      [t('BPA_COMMON_APP_NO')]: row?.applicationId,
-      [t('BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL')]: row?.edcr?.appliactionType,
-      [t('BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL')]: row?.edcr?.applicationSubType,
-      [t('BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL')]: row?.owner,
-      [t('TL_COMMON_TABLE_COL_STATUS')]: row?.status,
-      [t('BPA_COMMON_SLA')]: row?.sla,
-    }))
+    return data?.table?.concat(edcrData, bparegData).map(row => {
+      if (row?.edcrNumber) {
+        return {
+          [t('BPA_COMMON_APP_NO')]: row?.applicationNumber,
+          [t('BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL')]: row?.appliactionType,
+          [t('BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL')]: row?.applicationSubType,
+          [t('BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL')]: row?.planDetail?.planInformation?.applicantName,
+          [t('TL_COMMON_TABLE_COL_STATUS')]: row?.status,
+          [t('BPA_COMMON_SLA')]: t(`OBPS_NOT_APPLICAPABLE`),
+        }
+      }
+      return {
+        [t('BPA_COMMON_APP_NO')]: row?.applicationId,
+        [t('BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL')]: row?.edcr?.appliactionType || t(`OBPS_NOT_APPLICAPABLE`),
+        [t('BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL')]: row?.edcr?.applicationSubType || t(`OBPS_NOT_APPLICAPABLE`),
+        [t('BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL')]: row?.owner,
+        [t('TL_COMMON_TABLE_COL_STATUS')]: row?.status,
+        [t('BPA_COMMON_SLA')]: row?.sla,
+      }
+    })
   }
   return (
     <div style={{ padding: 0 }}>
@@ -22,7 +34,7 @@ const MobileInbox = ({ data, t, title, iconName, links, searchFields, searchPara
           <ApplicationCard
             t={t}
             data={getData()}
-            statusMap={data?.statuses}
+            statusMap={statusMap}
             onFilterChange={onFilterChange}
             // serviceRequestIdKey={isFstpOperator ? t("ES_INBOX_VEHICLE_LOG") : DSO ? t("ES_INBOX_APPLICATION_NO") : t("ES_INBOX_APPLICATION_NO")}
             // isFstpOperator={isFstpOperator}

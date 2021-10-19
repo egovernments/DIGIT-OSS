@@ -48,7 +48,7 @@ const ApplicationCard = ({
     );
   }
   else if (data && data?.length > 0) {
-    result = <DetailsCard data={data} />
+    result = <DetailsCard data={data} handleSelect={() => {}} handleDetailCardClick={() => {}} />
   }
 
   return (

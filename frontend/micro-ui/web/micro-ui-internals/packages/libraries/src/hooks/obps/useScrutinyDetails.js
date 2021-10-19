@@ -1,10 +1,10 @@
 import { useQuery } from "react-query";
 import { Search } from "../../services/molecules/OBPS/Search";
 
-const useScrutinyDetails = (tenantId, filters, config) => {
-  return useQuery(["OBPS_SCRUTINYDETAILS", filters], async () => {
-    const scruntinyData = await Search.scrutinyDetails(tenantId, filters);
-    return Search.scrutinyDetails(scruntinyData?.tenantId, filters);
+const useScrutinyDetails = (tenantId, filters, config, key = "OBPS_SCRUTINYDETAILS") => {
+  return useQuery([key, filters], async () => {
+    const scruntinyData = await Search.scrutinyDetails(tenantId, filters, undefined, true);
+    return Search.scrutinyDetails(scruntinyData?.tenantId || tenantId, filters, undefined, true);
   }, config)
 }
 

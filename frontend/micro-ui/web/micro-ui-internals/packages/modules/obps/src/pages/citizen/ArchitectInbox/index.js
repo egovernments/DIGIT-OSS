@@ -47,6 +47,46 @@ const Inbox = ({ tenants, parentRoute }) => {
     },
     config: {}
   });
+  
+  const searchFormDefaultValues = {
+    // mobileNumber: "",
+    applicationNo: searchParams?.applicationNo,
+  }
+
+  const filterFormDefaultValues = {
+    moduleName: "bpa-services",
+    // businessService: {code: "BPA", name:t("BPA")},
+    applicationStatus: "",
+    locality: [],
+    assignee: "ASSIGNED_TO_ALL"
+  }
+  const tableOrderFormDefaultValues = {
+    sortBy: sortParams?.[0]?.id,
+    limit: 10,
+    offset: 0,
+    sortOrder: sortParams?.[0]?.sortOrder
+  }
+
+  const { isLoading: isInboxLoading, data: { table, statuses, totalCount } = {} } = Digit.Hooks.obps.useBPAInbox({
+    // tenantId, moduleName, businessService, filters, config
+    tenantId,
+    filters: {
+      filterForm: filterFormDefaultValues,
+      searchForm: searchFormDefaultValues,
+      tableForm: tableOrderFormDefaultValues
+    },
+  });
+
+  const { data: edcrData, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(stateCode, {
+    limit: pageSize,
+    offset: pageOffset,
+    sortBy: sortParams?.[0]?.id,
+    sortOrder: sortParams?.[0]?.sortOrder
+  }, {
+    enabled: true
+  },
+  "OBPS_SCRUTINYDETAILS_ALL"
+  )
 
   const handleSort = (args) => {
     setSortParams(args);
@@ -92,7 +132,10 @@ const Inbox = ({ tenants, parentRoute }) => {
   if (isMobile) {
     return (
       <MobileInbox
+        bparegData={table}
+        edcrData={edcrData || []}
         data={bpaInboxData}
+        statusMap={bpaInboxData?.statuses?.concat(statuses)}
         searchParams={searchParams}
         searchFields={getSearchFields()}
         t={t}
@@ -100,7 +143,7 @@ const Inbox = ({ tenants, parentRoute }) => {
         onSearch={onSearch}
         sortParams={sortParams}
         onSort={handleSort}
-        isLoading={bpaLoading}
+        isLoading={bpaLoading || isLoading || isInboxLoading}
         title = {"EVENTS_PUBLIC_MESSAGE_NOTICE_HEADER"}
         iconName={"calender"}
         links={links}
@@ -110,8 +153,10 @@ const Inbox = ({ tenants, parentRoute }) => {
 
   return (
     <DesktopInbox
+      bparegData={table}
+      edcrData={edcrData}
       data={bpaInboxData}
-      isLoading={bpaLoading}
+      isLoading={bpaLoading || isLoading || isInboxLoading}
       onFilterChange={handleFilterChange}
       searchFields={getSearchFields()}
       onSearch={onSearch}

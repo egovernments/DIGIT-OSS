@@ -34,16 +34,16 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
       <div className="filter-card">
         <div className="heading">
           <div className="filter-label">{t("ES_COMMON_FILTER_BY")}:</div>
-          <div className="clearAll" onClick={clearAll}>
+          {/* <div className="clearAll" onClick={clearAll}>
             {t("ES_COMMON_CLEAR_ALL")}
-          </div>
+          </div> */}
           {props.type === "desktop" && (
             <span className="clear-search" onClick={clearAll}>
               {t("ES_COMMON_CLEAR_ALL")}
             </span>
           )}
           {props.type === "mobile" && (
-            <span onClick={props.onClose}>
+            <span onClick={onClose}>
               <CloseSvg />
             </span>
           )}
