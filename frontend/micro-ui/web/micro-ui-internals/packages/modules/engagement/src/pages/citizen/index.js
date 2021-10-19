@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Switch, useLocation } from "react-router-dom";
 import { BackButton, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import DocumentCategories from "./Documents/DocumentCategories";
+import ViewDocument from "./Documents/ViewDocument";
 
 const CitizenApp = ({ path, url, userType, tenants}) => {
     const location = useLocation();
@@ -35,6 +36,7 @@ const CitizenApp = ({ path, url, userType, tenants}) => {
             component={() => <EventDetails parentRoute={path} />}
           />
           <PrivateRoute path={`${path}/docs`} component={() => <DocumentCategories t={t} {...{ path }} />} />
+          <PrivateRoute path={`${path}/documents/viewDocument`} component={() => <ViewDocument t={t} {...{ path }} />} />
           <PrivateRoute path={`${path}/documents/list/:category/:count`} component={(props) => <Documents {...props} />} />
           <PrivateRoute path={`${path}/SurveyList`} component={(props) => <SurveyList {...props} />} />
         </Switch>
