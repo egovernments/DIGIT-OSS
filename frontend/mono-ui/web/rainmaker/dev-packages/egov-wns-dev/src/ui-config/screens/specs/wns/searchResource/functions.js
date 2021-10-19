@@ -320,7 +320,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
 
 
 
-const handleAddress = (element) => {
+export const handleAddress = (element) => {
   let city = (
     element.property &&
     element.property !== "NA" &&
