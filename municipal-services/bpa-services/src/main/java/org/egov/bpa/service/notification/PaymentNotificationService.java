@@ -108,7 +108,9 @@ public class PaymentNotificationService {
 				List<SMSRequest> smsList = new ArrayList<>();
 				List<Map> users = new ArrayList<Map>();
 				users.add(mobileNumberToOwner);
-				smsList.addAll(util.createSMSRequest(message, mobileNumberToOwner));
+				BPARequest bpaRequestMsg = BPARequest.builder().requestInfo(requestInfo).BPA(bpa).build();
+
+				smsList.addAll(util.createSMSRequest(bpaRequestMsg,message, mobileNumberToOwner));
 				util.sendSMS(smsList, config.getIsSMSEnabled());
 
 				if (null != config.getIsUserEventsNotificationEnabled()) {
