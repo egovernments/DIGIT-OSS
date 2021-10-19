@@ -4,6 +4,7 @@ import {
     prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import commonConfig from "config/common.js";
 
 export const fetchData = async (action, state, dispatch) => {
     let finalResponse = [];
