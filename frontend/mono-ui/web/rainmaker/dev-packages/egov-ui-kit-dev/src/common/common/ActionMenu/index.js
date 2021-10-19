@@ -12,13 +12,14 @@ class ActionMenu extends Component {
     let userInfo = JSON.parse(getUserInfo());
     let { fetchActionMenu } = this.props;
     const roles = get(userInfo, "roles");
-    const roleCodes = roles
+    let roleCodes = roles
       ? roles.map((role) => {
           if (role.tenantId == getTenantId()) {
             return role.code;
           }
         })
       : [];
+      roleCodes=process.env.REACT_APP_NAME === "Citizen" ?["CITIZEN"]      :roleCodes ;
     await fetchActionMenu(
       {
         roleCodes: roleCodes,
