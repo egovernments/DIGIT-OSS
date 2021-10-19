@@ -67,7 +67,7 @@ import {
               onClick={() => routeTo(`${routeLink}/provide-license-type`)}
            />
         <StatusTable>
-          <Row className="border-none" label={t(`BPA_LICENSE_TYPE_LABEL`)} text={t(formData?.LicneseType?.LicenseType?.i18nKey)} />
+          <Row className="border-none" label={t(`BPA_LICENSE_TYPE`)} text={t(formData?.LicneseType?.LicenseType?.i18nKey)} />
           {formData?.LicneseType?.LicenseType?.i18nKey.includes("ARCHITECT") && <Row className="border-none" label={t(`BPA_COUNCIL_NUMBER`)} text={formData?.LicneseType?.ArchitectNo}/>}
         </StatusTable>
     </Card>

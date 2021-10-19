@@ -23,7 +23,7 @@ const ApplicationTimeline = ({ id, tenantId }) => {
               to={{ pathname: `/digit-ui/citizen/payment/collect/${data?.processInstances?.[0]?.moduleName}/${data?.processInstances?.[0]?.businessId}`,
               state: { tenantId: data?.processInstances?.[0]?.tenantId },}}
             >
-              <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
+              <SubmitBar label={t("BPA_VIEW_DETAILS_AND_PAY_LABEL")} />
             </Link>
           </div>
         );

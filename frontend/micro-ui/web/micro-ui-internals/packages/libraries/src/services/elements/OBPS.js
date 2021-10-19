@@ -134,7 +134,7 @@ export const OBPSService = {
       title: "BPA_LICENSE_DET_CAPTION",
       asSectionHeader: true,
       values: [
-        { title: "BPA_LICENSE_TYPE_LABEL", value: `TRADELICENSE_TRADETYPE_${License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0]}` || "NA" },
+        { title: "BPA_LICENSE_TYPE", value: `TRADELICENSE_TRADETYPE_${License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0]}` || "NA" },
         { title: "BPA_COUNCIL_OF_ARCH_NO_LABEL", value: License?.tradeLicenseDetail?.additionalDetail?.counsilForArchNo || "NA" }
       ]
     } : {

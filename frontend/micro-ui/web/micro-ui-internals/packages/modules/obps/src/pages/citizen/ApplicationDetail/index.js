@@ -2,9 +2,8 @@ import { StatusTable, Header, Card, CardHeader, Row, PDFSvg, CardSectionHeader }
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { pdfDocumentName, pdfDownloadLink } from "../../../utils";
+import { pdfDocumentName, pdfDownloadLink, stringReplaceAll } from "../../../utils";
 import ApplicationTimeline from "../../../components/ApplicationTimeline";
-
 const ApplicationDetails = () => {
   const { id } = useParams();
   const { t } = useTranslation();
@@ -35,7 +34,7 @@ const ApplicationDetails = () => {
         <Card>
           <CardHeader>{t(`BPA_LICENSE_DET_CAPTION`)}</CardHeader>
           <StatusTable>
-            <Row className="border-none" label={t(`BPA_LICENSE_TYPE_LABEL`)} text={t(`TRADELICENSE_TRADETYPE_${License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split('.')[0]}`)} />
+            <Row className="border-none" label={t(`BPA_LICENSE_TYPE`)} text={t(`TRADELICENSE_TRADETYPE_${License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split('.')[0]}`)} />
             {License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType.includes('ARCHITECT') && 
               <Row className="border-none" label={t("BPA_COUNCIL_OF_ARCH_NO_LABEL")} text={License?.tradeLicenseDetail?.additionalDetail?.counsilForArchNo}  />
             }
@@ -65,7 +64,7 @@ const ApplicationDetails = () => {
             return (
             <Fragment>
               <div>
-                <CardSectionHeader>{t(`BPA_DOCUMENT_${document?.documentType}`)}</CardSectionHeader>
+                <CardSectionHeader>{t(`${stringReplaceAll(document?.documentType?.toUpperCase(), ".", "_")}`)}</CardSectionHeader>
                 <a target="_" href={documents[document.fileStoreId]?.split(",")[0]}>
                   <PDFSvg />
                 </a>
