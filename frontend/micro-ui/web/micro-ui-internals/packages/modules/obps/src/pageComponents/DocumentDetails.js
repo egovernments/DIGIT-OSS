@@ -265,7 +265,7 @@ function SelectDocument({
 
     const uploadedFilesPreFill = useMemo(()=>{
         const filesDictionary = new Map()
-        formData?.documents?.documents.filter((ob) => ob.documentType === selectedDocument.code).forEach(file => {
+        formData?.documents?.documents.length > 0 && formData?.documents?.documents.filter((ob) => ob.documentType === selectedDocument.code).forEach(file => {
             filesDictionary.set(file.fileName, file)
         })
     },[formData])
