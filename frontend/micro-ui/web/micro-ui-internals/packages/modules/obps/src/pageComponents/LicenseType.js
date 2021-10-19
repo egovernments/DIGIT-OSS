@@ -4,6 +4,7 @@ import { stringReplaceAll } from "../utils";
 import Timeline from "../components/Timeline";
 
 const LicenseType = ({ t, config, onSelect, userType, formData }) => {
+  formData = JSON.parse(sessionStorage.getItem("BPAREGintermediateValue"));
   let index = window.location.href.split("/").pop();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();

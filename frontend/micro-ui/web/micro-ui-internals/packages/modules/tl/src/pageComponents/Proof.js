@@ -89,7 +89,7 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
       <UploadFile
         id={"tl-doc"}
         extraStyleName={"propertyCreate"}
-        accept=".jpg,.png"
+        accept=".jpg,.png,.pdf"
         onUpload={selectfile}
         onDelete={() => {
           setUploadedFile(null);

@@ -10,9 +10,8 @@ const ApplicationDetails = () => {
   const { t } = useTranslation();
   const [documents, setDocuments] = useState({});
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { data: License, isLoading } = Digit.Hooks.obps.useBPAREGSearch(tenantId, {}, { applicationNumber: id }, {
-    select: (data) => data?.Licenses?.[0]
-  });
+  const { data: LicenseData, isLoading } = Digit.Hooks.obps.useBPAREGSearch(tenantId, {});
+  let License = LicenseData?.Licenses?.[0];
 
 
   useEffect(() => {

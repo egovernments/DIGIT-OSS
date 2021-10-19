@@ -38,6 +38,8 @@ const StakeholderRegistration = () => {
 
   const handleSelect = (key, data, skipStep, isFromCreateApi) => {
     if (isFromCreateApi) setParams(data);
+    else if(key=== "")
+    setParams({...data});
     else setParams({ ...params, ...{ [key]: { ...params[key], ...data }}});
     goNext(skipStep);
   };
