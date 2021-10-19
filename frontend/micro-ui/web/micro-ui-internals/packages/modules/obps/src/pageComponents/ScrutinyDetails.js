@@ -170,7 +170,9 @@ const onRemove = (index, key,num) => {
         payload.additionalDetails = {};
         if (formData?.data?.holdingNumber) payload.additionalDetails.holdingNo = formData?.data?.holdingNumber;
         if (formData?.data?.registrationDetails) payload.additionalDetails.registrationDetails = formData?.data?.registrationDetails;
-
+        if (formData?.data?.applicationType) payload.additionalDetails.applicationType = formData?.data?.applicationType;
+        if (formData?.data?.serviceType) payload.additionalDetails.serviceType = formData?.data?.serviceType;
+        
         //For LandInfo
         payload.landInfo = formData?.data?.bpaData?.bpaApprovalResponse?.[0].landInfo || {};
 
