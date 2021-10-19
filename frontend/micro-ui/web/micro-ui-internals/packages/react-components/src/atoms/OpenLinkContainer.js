@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { NotificationBell } from "./svgindex";
-import {BackButton} from "@egovernments/digit-ui-react-components";
 
 const OpenLinkContainer = ({ img,}) => {
   return (

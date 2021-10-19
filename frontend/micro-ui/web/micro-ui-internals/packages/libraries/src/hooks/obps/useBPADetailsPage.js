@@ -1,4 +1,3 @@
-import { filter } from "lodash";
 import { useQuery } from "react-query";
 
 const useBPADetailsPage = (tenantId, filters, config) => {

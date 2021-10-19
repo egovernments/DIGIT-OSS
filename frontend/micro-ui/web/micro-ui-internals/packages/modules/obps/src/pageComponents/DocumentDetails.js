@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     CardLabel,
     Dropdown,
@@ -263,6 +263,13 @@ function SelectDocument({
         })();
     }, [file]);
 
+    const uploadedFilesPreFill = useMemo(()=>{
+        const filesDictionary = new Map()
+        formData?.documents?.documents.filter((ob) => ob.documentType === selectedDocument.code).forEach(file => {
+            filesDictionary.set(file.fileName, file)
+        })
+    },[formData])
+
     return (
         <div style={{ marginBottom: "24px" }}>
             <CardLabel>{doc?.required ? `${t(doc?.code)} *` : `${t(doc?.code)}`}</CardLabel>
@@ -290,7 +297,7 @@ function SelectDocument({
             module="BPA"
             tenantId={tenantId}
             getFormState={e => getData(e)}
-            setuploadedstate={formData?.documents?.documents.filter((ob) => ob.documentType === selectedDocument.code)}
+            setuploadedstate={uploadedFilesPreFill}
           />
         {doc?.uploadedDocuments?.length && <PropertyDocuments documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
         </div>

@@ -109,23 +109,23 @@
 }
 @screen dt{
   .view_download_main span {
-  span{
-    padding: 5px;
-  & .views {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    p {
-      padding-left: 10px;
-      font-weight: normal;
-      font-size: 16px;
-      line-height: 19px;
-      color: #F47738;
+    span{
+      padding: 5px;
+      & .views {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        p {
+          padding-left: 10px;
+          font-weight: normal;
+          font-size: 16px;
+          line-height: 19px;
+          color: #F47738;
+        }
+      }
     }
   }
-}
-}
-@media screen and (max-width : 768px){
+
   .view_download_main span{
     padding: 2px;
   }
@@ -139,6 +139,7 @@
   .documentDetails_row {
     grid-gap: 0 !important;
     gap: 0 !important;
+  }
   .notice_and_circular_heading_mb header{
     font-size: 16px !important;
   }
@@ -148,7 +149,7 @@
   .documentDetails_row {
     grid-gap: 0 !important;
     gap: 0 !important;
-}
+  }
 }
 .documentDetails {
   &_wrapper {

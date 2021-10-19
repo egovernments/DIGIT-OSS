@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     CardLabel,
     Dropdown,
@@ -253,6 +253,14 @@ function SelectDocument({
         })();
     }, [file]);
 
+    const uploadedFilesPreFill = useMemo(()=>{
+        const filesDictionary = new Map()
+        formData?.nocDocuments?.nocDocuments.filter((ob) => ob.documentType === doc?.documentType.replaceAll(".", "_")).forEach(file => {
+            filesDictionary.set(file.fileName, file)
+        })
+    },[formData])
+
+
     return (
         <div style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px" }}>
             <div>
@@ -279,7 +287,7 @@ function SelectDocument({
             module="BPA"
             tenantId={tenantId}
             getFormState={e => getData(e,doc?.documentType.replaceAll(".", "_"))}
-            setuploadedstate={formData?.nocDocuments?.nocDocuments.filter((ob) => ob.documentType === doc?.documentType.replaceAll(".", "_"))}
+            setuploadedstate={uploadedFilesPreFill}
           />
         </div>
     );

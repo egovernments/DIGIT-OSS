@@ -1,8 +1,17 @@
+//HAVE TO CHANGE THI
 import { stringReplaceAll } from "@egovernments/digit-ui-module-pt/src/utils";
 import { ApiCacheService } from "../atoms/ApiCacheService";
 import Urls from "../atoms/urls";
 import { Request, ServiceRequest } from "../atoms/Utils/Request";
 import { PersistantStorage } from "../atoms/Utils/Storage";
+
+// export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
+//   if (searcher == "") return str;
+//   while (str.includes(searcher)) {
+//     str = str.replace(searcher, replaceWith);
+//   }
+//   return str;
+// };
 
 const SortByName = (na, nb) => {
   if (na < nb) {

@@ -109,6 +109,7 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
                   tenantId={tenantId}
                   getFormState={getFileStoreData}
                   showHintBelow={true}
+                  setuploadedstate={value}
                   hintText={t("DOCUMENTS_ATTACH_RESTRICTIONS_SIZE")}
                 />
             }

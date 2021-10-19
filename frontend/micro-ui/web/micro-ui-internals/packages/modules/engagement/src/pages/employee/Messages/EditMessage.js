@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
 import { format } from 'date-fns';
@@ -42,16 +42,26 @@ const EditMessage = () => {
     history.push("/digit-ui/employee/engagement/messages/response?update=true", details)
   }
 
+  const defaultValues = useMemo(() => {
+    const documents = data?.eventDetails?.documents
+    debugger
+    const documentDictionary = new Map()
+    documents?.forEach((document)=>{
+      documentDictionary.set(document.fileName, document)
+    })
+    return {
+      name: data?.name,
+      description: data?.description,
+      documents: documentDictionary,
+      fromDate: data ? format(new Date(data?.eventDetails?.fromDate), 'yyyy-MM-dd') : null,
+      toDate: data ? format(new Date(data?.eventDetails?.toDate), 'yyyy-MM-dd') : null,
+    }
+  },[data])
+
   if (isLoading) {
     return (
       <Loader />
     );
-  }
-
-  const defaultValues = {
-    name: data?.name,
-    fromDate: format(new Date(data?.eventDetails?.fromDate), 'yyyy-MM-dd'),
-    toDate: format(new Date(data?.eventDetails?.toDate), 'yyyy-MM-dd'),
   }
 
   return (
