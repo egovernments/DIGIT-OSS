@@ -12,7 +12,6 @@ const pool = new Pool({
   port: envVariables.DB_PORT
 });
 
-let createJobKafkaTopic = envVariables.KAFKA_CREATE_JOB_TOPIC;
 const uuidv4 = require("uuid/v4");
 
 export const getFileStoreIds = (
@@ -105,6 +104,7 @@ export const insertStoreIds = (
   var payloads = [];
   var endtime = new Date().getTime();
   var id = uuidv4();
+  let createJobKafkaTopic = envVariables.KAFKA_CREATE_JOB_TOPIC;
 
   if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE)
     createJobKafkaTopic = getUpdatedTopic(tenantId, createJobKafkaTopic);
