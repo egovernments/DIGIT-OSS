@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FormComposer, Dropdown, Toast, Loader } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Dropdown, Toast, Loader, BackButton } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 import Background from "../../../components/Background";
@@ -97,6 +97,9 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
 
   return (
     <Background>
+    <div className="employeeBackbuttonAlign">
+        <BackButton />
+      </div>
       <FormComposer
         onSubmit={onForgotPassword}
         noBoxShadow
@@ -110,7 +113,7 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
         description={propsConfig.texts.description}
         headingStyle={{ textAlign: "center" }}
         cardStyle={{ maxWidth: "408px", margin: "auto" }}
-        className ="employeeForgotPassword"
+        className="employeeForgotPassword"
       >
         <Header />
       </FormComposer>
@@ -120,6 +123,9 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
         onClose={closeToast}
       />
       }
+      <div className="EmployeeLoginFooter">
+        <img alt="Powered by DIGIT" src="https://s3.ap-south-1.amazonaws.com/egov-qa-assets/digit-footer-bw.png" />
+      </div>
     </Background>
   );
 };

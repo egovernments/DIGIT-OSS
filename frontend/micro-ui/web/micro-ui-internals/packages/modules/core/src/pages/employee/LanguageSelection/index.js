@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-import { Card, CustomButton, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { BackButton, Card, CustomButton, SubmitBar } from "@egovernments/digit-ui-react-components";
 import Background from "../../../components/Background";
 
 const LanguageSelection = () => {
@@ -27,8 +27,8 @@ const LanguageSelection = () => {
       <Card className="bannerCard" >
         <div className="bannerHeader">
           <img className="bannerLogo" src={stateInfo?.logoUrl} />
-          
-          <p>{t(stateInfo?.name)}</p>
+
+          <p>{t(`TENANT_TENANTS_${stateInfo?.code.toUpperCase()}`)}</p>
         </div>
         <div className="language-selector" style={{ justifyContent: "space-between", marginBottom: "24px" }}>
           {languages.map((language, index) => (
@@ -37,12 +37,15 @@ const LanguageSelection = () => {
                 selected={language.value === selected}
                 text={language.label}
                 onClick={() => handleChangeLanguage(language)}
-                ></CustomButton>
+              ></CustomButton>
             </div>
           ))}
         </div>
         <SubmitBar style={{ width: "100%" }} label={t(`CORE_COMMON_CONTINUE`)} onSubmit={handleSubmit} />
       </Card>
+      <div className="EmployeeLoginFooter">
+        <img alt="Powered by DIGIT" src="https://s3.ap-south-1.amazonaws.com/egov-qa-assets/digit-footer-bw.png" />
+      </div>
     </Background>
   )
 };
