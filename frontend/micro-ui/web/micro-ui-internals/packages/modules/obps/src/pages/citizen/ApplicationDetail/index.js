@@ -32,7 +32,7 @@ const ApplicationDetails = () => {
           </StatusTable>
         </Card>
         <Card>
-          <CardHeader>{t(`BPA_LICENSE_DET_CAPTION`)}</CardHeader>
+          <CardHeader>{t(`BPA_LICENSE_DETAILS_LABEL`)}</CardHeader>
           <StatusTable>
             <Row className="border-none" label={t(`BPA_LICENSE_TYPE`)} text={t(`TRADELICENSE_TRADETYPE_${License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split('.')[0]}`)} />
             {License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType.includes('ARCHITECT') && 

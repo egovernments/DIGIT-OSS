@@ -39,7 +39,7 @@ const BPADocuments = ({ t, formData, applicationData, docs, bpaActionsDetails })
             });
             doc.uploadedDocuments[0] = {};
             doc.uploadedDocuments[0].values = [];
-            docs?.[0]?.values.map(upDocs => {
+            docs?.[0]?.values?.map(upDocs => {
                 if (code === `${upDocs?.documentType?.split('.')[0]}.${upDocs?.documentType?.split('.')[1]}`) {
                     doc.uploadedDocuments[0].values.push(upDocs)
                 }

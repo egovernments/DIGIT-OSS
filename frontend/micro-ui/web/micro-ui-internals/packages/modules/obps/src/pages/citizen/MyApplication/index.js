@@ -13,8 +13,10 @@ const MyApplication = () => {
   const history = useHistory();
   const [bpaFilters, setBpaFilters] = useState({ limit: -1, offset: 0 });
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const userInfo = Digit.UserService.getUser();
+  const requestor =  userInfo?.info?.mobileNumber;
   const { data, isLoading } = Digit.Hooks.obps.useBPAREGSearch(tenantId);
-  const { data: bpaData, isLoading: isBpaSearchLoading } = Digit.Hooks.obps.useBPASearch(tenantId, {});
+  const { data: bpaData, isLoading: isBpaSearchLoading } = Digit.Hooks.obps.useBPASearch(tenantId, { requestor , limit: -1, offset: 0});
 
   const getBPAREGFormData = (data) => {
     let license = data;
@@ -52,7 +54,7 @@ const MyApplication = () => {
 
   return (
     <Fragment>
-      <Header>{`${t("BPA_MY_APPLICATIONS")} (${data?.Licenses?.length})`}</Header>
+      <Header>{`${t("BPA_MY_APPLICATIONS")} (${data?.Licenses?.length + bpaData?.length})`}</Header>
       {data?.Licenses?.map((application, index) => (
         <Card key={index}>
           <KeyNote keyValue={t("BPA_APPLICATION_NUMBER_LABEL")} note={application?.applicationNumber} />

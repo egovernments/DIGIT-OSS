@@ -131,17 +131,17 @@ export const OBPSService = {
         ]
       },
       License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType.includes("ARCHITECT") ? {
-      title: "BPA_LICENSE_DET_CAPTION",
+      title: "BPA_LICENSE_DETAILS_LABEL",
       asSectionHeader: true,
       values: [
         { title: "BPA_LICENSE_TYPE", value: `TRADELICENSE_TRADETYPE_${License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0]}` || "NA" },
         { title: "BPA_COUNCIL_OF_ARCH_NO_LABEL", value: License?.tradeLicenseDetail?.additionalDetail?.counsilForArchNo || "NA" }
       ]
     } : {
-      title: "BPA_LICENSE_DET_CAPTION",
+      title: "BPA_LICENSE_DETAILS_LABEL",
       asSectionHeader: true,
       values: [
-        { title: "BPA_LICENSE_TYPE_LABEL", value: `TRADELICENSE_TRADETYPE_${License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0]}` || "NA"  }
+        { title: "BPA_LICENSE_TYPE", value: `TRADELICENSE_TRADETYPE_${License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0]}` || "NA"  }
       ]
     }, {
       title: "BPA_LICENSEE_DETAILS_HEADER_OWNER_INFO",
