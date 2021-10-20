@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.tracer.model.CustomException;
 import org.egov.url.shortening.model.ShortenRequest;
 import org.egov.url.shortening.repository.URLRepository;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
+@Slf4j
 @Service
 @Configuration
 public class URLConverterService {
@@ -62,6 +63,7 @@ public class URLConverterService {
         Long id = urlRepository.incrementID();
         String uniqueID = IDConvertor.createUniqueID(id);
         try {
+            log.info("Saving URL: ", shortenRequest.getUrl());
 			urlRepository.saveUrl("url:"+id, shortenRequest);
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
