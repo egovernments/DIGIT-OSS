@@ -143,7 +143,7 @@ public class NotificationUtil {
     public StringBuilder getUri(String tenantId, RequestInfo requestInfo, String locale) {
 
         if (config.getIsLocalizationStateLevel())
-            tenantId = tenantId.split("\\.")[0];
+            tenantId = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
 
         StringBuilder uri = new StringBuilder();
         uri.append(config.getLocalizationHost()).append(config.getLocalizationContextPath())
