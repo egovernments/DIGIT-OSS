@@ -10,6 +10,7 @@ import get from "lodash/get";
 import "./index.css"
 import { getDomainLink } from "../../ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { handleAddress } from "../../ui-config/screens/specs/wns/searchResource/functions";
 import store from "ui-redux/store";
 
 const styles = {
@@ -55,6 +56,7 @@ class MyConnections extends React.Component {
       <div className="application-card">
         {myConnectionResults && myConnectionResults.length > 0 ? (
           myConnectionResults.map(item => {
+            const address=handleAddress(item);
             return (
               <div>
                 <Card className={classes.card}>
@@ -156,9 +158,9 @@ class MyConnections extends React.Component {
                           />
                         </Grid>
                         <Grid item md={8} xs={6}>
-                          {(item.property && item.property.address && item.property.address.street) ?
+                          {address ?
                             (<Label
-                              labelName={item.property.address.street}
+                              labelName={address}
                               fontSize={14}
                               style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                             />) :
@@ -177,7 +179,7 @@ class MyConnections extends React.Component {
                         </Grid>
                         <Grid item md={8} xs={6}>
                           <Label
-                            labelName={item.due} onClick={() => this.getViewBillDetails(item)}
+                            labelName={item.due||"NA"} onClick={() => this.getViewBillDetails(item)}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />
