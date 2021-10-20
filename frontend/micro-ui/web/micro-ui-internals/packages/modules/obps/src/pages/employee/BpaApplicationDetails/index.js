@@ -62,10 +62,10 @@ const BpaApplicationDetail = () => {
     payments.length>0 && payments.map((ob) => {
       ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.billAccountDetails.map((bill,index) => {
         payval.push({title:`${bill?.taxHeadCode}_DETAILS`, value:""});
-        payval.push({title:bill?.taxHeadCode, value:bill?.amount});
-        payval.push({title:"status", value:"PAID"});
+        payval.push({title:bill?.taxHeadCode, value:`₹${bill?.amount}`});
+        payval.push({title:"BPA_STATUS_LABEL", value:"Paid"});
       })
-      payval.push({title:"BPA_TOT_AMT_PAID", value:ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.amount});
+      payval.push({title:"BPA_TOT_AMT_PAID", value:`₹${ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.amount}`});
     })
     payments.length > 0 && !(data.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL").length>0)&& data.applicationDetails.push({
       title:"BPA_FEE_DETAILS_LABEL",
