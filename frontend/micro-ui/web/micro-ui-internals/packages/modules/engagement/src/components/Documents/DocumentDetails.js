@@ -1,4 +1,4 @@
-import { Header, ActionBar, SubmitBar, PDFSvg, Menu, GenericFileIcon } from '@egovernments/digit-ui-react-components';
+import { Header, ActionBar, SubmitBar, ExternalLinkIcon, Menu, GenericFileIcon, LinkButton } from '@egovernments/digit-ui-react-components';
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import Confirmation from '../Modal/Confirmation';
@@ -89,9 +89,18 @@ const DocumentDetails = ({ location, match, history, }) => {
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t('DOCUMENT_NAME')}:`}</p> <p>{details?.name}</p> </div>
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t('DOCUMENT_CATEGORY')}:`}</p> <p>{t(details?.category)}</p> </div>
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t('DCOUMENT_DESCRIPTION')}:`}</p> <p className="documentDetails__description">{details?.description?.length ? details?.description : 'NA'}</p> </div>
+                    <div className="documentDetails_row"><p className="documentDetails_title">{`${t('CE_TABLE_DOCUMENT_LINK')}:`}</p>
+                        {details?.documentLink ? <LinkButton
+                            label={
+                                <div className="link" onClick={() => openDocumentLink(details?.documentLink, details?.name)}>
+                                    <p>{t(`CE_DOCUMENT_OPEN_LINK`)}</p>
+                                </div>
+                            }
+                        /> : 'NA'}
+                    </div>
                     {details?.filestoreId ? <div className="documentDetails_pdf">
                         <span className="documentDetails_subheader">{`${t('Document')}`}</span>
-                        <div style={{ width: '100px' }} onClick={() => openUploadedDocument(details?.filestoreId ? details?.filestoreId : details?.documentLink, details?.name)}>
+                        <div style={{ width: '100px' }} onClick={() => openUploadedDocument(details?.filestoreId, details?.name)}>
                             <GenericFileIcon />
                         </div>
 
