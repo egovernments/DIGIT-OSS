@@ -69,7 +69,7 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
   };
 
   const navigateToLogin = () => {
-    history.replace("/digit-ui/employee/login");
+    history.replace("/digit-ui/employee/user/login");
   };
 
   const [username, password, confirmPassword] = propsConfig.inputs;

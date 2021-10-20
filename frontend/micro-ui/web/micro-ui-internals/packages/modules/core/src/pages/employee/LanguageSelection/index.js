@@ -24,7 +24,7 @@ const LanguageSelection = () => {
 
   return (
     <Background>
-      <Card className="bannerCard" >
+      <Card className="bannerCard removeBottomMargin" >
         <div className="bannerHeader">
           <img className="bannerLogo" src={stateInfo?.logoUrl} />
 
