@@ -124,7 +124,7 @@ const Login = ({ config: propsConfig, t }) => {
         label={t(showToast)}
         onClose={closeToast}
       />}
-      <div className="EmployeeLoginFooter">
+      <div className="employee-home-footer" style={{ backgroundColor: "unset" }}>
         <img alt="Powered by DIGIT" src="https://s3.ap-south-1.amazonaws.com/egov-qa-assets/digit-footer-bw.png" />
       </div>
     </Background>

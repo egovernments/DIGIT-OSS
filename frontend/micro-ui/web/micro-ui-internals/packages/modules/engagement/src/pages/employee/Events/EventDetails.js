@@ -61,6 +61,7 @@ const EventDetails = () => {
         <Header>{t("ES_TITLE_APPLICATION_DETAILS")}</Header>
       </div>
       <ApplicationDetailsTemplate
+        applicationData={data?.applicationData}
         applicationDetails={data}
         isLoading={isLoading}
         isDataLoading={isLoading}
