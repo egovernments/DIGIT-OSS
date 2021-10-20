@@ -201,7 +201,7 @@ public class PaymentNotificationService {
         List<SMSRequest> smsRequests = new LinkedList<>();
 
         for(Map.Entry<String,String> entrySet : mobileNumberToOwnerName.entrySet()){
-            String customizedMsg = message.replace("<1>",entrySet.getValue());
+            String customizedMsg = message.replace("{1}",entrySet.getValue());
             smsRequests.add(new SMSRequest(entrySet.getKey(),customizedMsg));
         }
         return smsRequests;
@@ -223,7 +223,7 @@ public class PaymentNotificationService {
         else
             message = util.getPayerPaymentMsg(license,valMap,localizationMessages);
 
-        String customizedMsg = message.replace("<1>",valMap.get(payerNameKey));
+        String customizedMsg = message.replace("{1}",valMap.get(payerNameKey));
         SMSRequest smsRequest = new SMSRequest(valMap.get(payerMobileNumberKey),customizedMsg);
         return smsRequest;
     }
