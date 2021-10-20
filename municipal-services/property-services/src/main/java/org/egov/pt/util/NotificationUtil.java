@@ -40,6 +40,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 
 import com.jayway.jsonpath.JsonPath;
@@ -297,7 +298,7 @@ public class NotificationUtil {
                            .replace("$propertyId" , property.getPropertyId())
                            .replace("$applicationNumber" , property.getAcknowldgementNumber());
 
-                   actionLink = config.getUiAppHost() + actionLink;
+                   actionLink = getHost(tenantId) + actionLink;
                    ActionItem item = ActionItem.builder().actionUrl(actionLink).code(VIEW_APPLICATION_CODE).build();
                    items.add(item);
                }
@@ -308,7 +309,7 @@ public class NotificationUtil {
                            .replace("$tenantId", property.getTenantId())
                            .replace("$businessService" , PT_BUSINESSSERVICE);
 
-                   actionLink = config.getUiAppHost() + actionLink;
+                   actionLink = getHost(tenantId) + actionLink;
                    ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
                    items.add(item);
                }
@@ -325,5 +326,21 @@ public class NotificationUtil {
 		});
 		return events;
 	}
+
+	public String getHost(String tenantId){
+       log.info("INCOMING TENANTID FOR NOTIF HOST: " + tenantId);
+       Integer tenantLength = tenantId.split("\\.").length;
+       String topLevelTenant = tenantId;
+       if(tenantLength == 3){
+           topLevelTenant = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
+       }
+       log.info(config.getUiAppHostMap().toString());
+       log.info(topLevelTenant);
+       String host = config.getUiAppHostMap().get(topLevelTenant);
+       if(ObjectUtils.isEmpty(host)){
+           throw new CustomException("EG_NOTIF_HOST_ERR", "No host found for tenantid: " + topLevelTenant);
+       }
+       return host;
+    }
 
 }

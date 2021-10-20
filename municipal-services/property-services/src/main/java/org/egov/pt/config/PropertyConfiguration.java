@@ -2,6 +2,7 @@ package org.egov.pt.config;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import javax.annotation.PostConstruct;
@@ -171,8 +172,8 @@ public class PropertyConfiguration {
     private String localizationSearchEndpoint;
 
     //USER EVENTS
-	@Value("${egov.ui.app.host}")
-	private String uiAppHost;
+	@Value("#{${egov.ui.app.host.map}}")
+	private Map<String, String> uiAppHostMap;
     
 	@Value("${egov.usr.events.create.topic}")
 	private String saveUserEventsTopic;

@@ -160,7 +160,7 @@ public class AssessmentNotificationService {
 
         if(messageTemplate.contains(NOTIFICATION_PAYMENT_LINK)){
 
-            String UIHost = config.getUiAppHost();
+            String UIHost = util.getHost(property.getTenantId());
             String paymentPath = config.getPayLinkSMS();
             paymentPath = paymentPath.replace("$consumerCode",property.getPropertyId());
             paymentPath = paymentPath.replace("$tenantId",property.getTenantId());

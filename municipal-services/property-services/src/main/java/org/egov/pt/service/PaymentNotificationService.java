@@ -400,7 +400,7 @@ public class PaymentNotificationService {
     }
 
     private String getReceiptLink(Map<String,String> valMap,String mobileNumber){
-        StringBuilder builder = new StringBuilder(propertyConfiguration.getUiAppHost());
+        StringBuilder builder = new StringBuilder(util.getHost(valMap.get("tenantId")));
         builder.append(propertyConfiguration.getReceiptDownloadLink());
         String link = builder.toString();
         link = link.replace("$consumerCode", valMap.get("propertyId"));
@@ -548,7 +548,7 @@ public class PaymentNotificationService {
                         .replace("$tenantId", property.getTenantId())
                         .replace("$businessService" , businessService);
 
-                actionLink = propertyConfiguration.getUiAppHost() + actionLink;
+                actionLink = util.getHost(property.getTenantId()) + actionLink;
 
                 ActionItem item = ActionItem.builder().actionUrl(actionLink).code(propertyConfiguration.getPayCode()).build();
                 items.add(item);
@@ -570,7 +570,7 @@ public class PaymentNotificationService {
 
 
     private String getPaymentLink(Map<String,String> valMap){
-        StringBuilder builder = new StringBuilder(propertyConfiguration.getUiAppHost());
+        StringBuilder builder = new StringBuilder(util.getHost(valMap.get("tenantId")));
         builder.append(propertyConfiguration.getPayLink());
         String url = builder.toString();
         url = url.replace("$consumerCode", valMap.get("propertyId"));
