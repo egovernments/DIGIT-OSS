@@ -186,6 +186,13 @@ export const OBPSService = {
     BPA.riskType = riskType;
     const nocResponse = await OBPSService.NOCSearch(BPA?.tenantId, { sourceRefId: BPA?.applicationNo });
     const noc = nocResponse?.Noc;
+    const filter = { approvalNo: edcr?.permitNumber};
+    const bpaResponse = await OBPSService.BPASearch(tenantId, { ...filter });
+       const comparisionRep = {
+         ocdcrNumber: BPA?.edcrNumber,
+         edcrNumber: bpaResponse?.BPA?.[0]?.edcrNumber
+      }
+    const comparisionReport = await OBPSService.comparisionReport(tenantId, { ...comparisionRep });
 
     const nocDetails = noc
       ?.map((nocDetails, index) => ({
@@ -554,7 +561,8 @@ export const OBPSService = {
       applicationDetails: bpaFilterDetails,
       tenantId: BPA?.tenantId,
       edcrDetails: edcr,
-      nocData: noc
+      nocData: noc,
+      comparisionReport: comparisionReport?.comparisonDetail
     }
   }
 }
