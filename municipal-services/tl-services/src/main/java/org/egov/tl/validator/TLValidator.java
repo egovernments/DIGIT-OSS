@@ -264,8 +264,6 @@ public class TLValidator {
         criteria.setLicenseNumbers(licenseNumbers);
         List<TradeLicense> searchResult = tlRepository.getLicenses(criteria);
 
-        validateFinancialYear(request,searchResult);
-        
         Map<String , TradeLicense> licenseMap = new HashMap<>();
         searchResult.forEach(license -> {
             licenseMap.put(license.getLicenseNumber() , license);
@@ -305,23 +303,6 @@ public class TLValidator {
         });
     }
 
-
-    private void validateFinancialYear(TradeLicenseRequest request, List<TradeLicense> searchResult) {
-		List <TradeLicense> licenses =request.getLicenses();
-		
-		for(TradeLicense license : licenses) {
-			for(TradeLicense searchedLicense : searchResult) {
-				if(license.getLicenseNumber().toString().equals(searchedLicense.getLicenseNumber().toString())) {
-					if(searchedLicense.getApplicationType().toString().equalsIgnoreCase(APPLICATION_TYPE_RENEWAL)) {
-						if(license.getFinancialYear().toString().equalsIgnoreCase(searchedLicense.getFinancialYear().toString())) {
-							throw new CustomException("RENEWAL ERROR","There is an active renewal application created already for the given license number");
-						}
-					}
-				}
-			}
-		}
-		
-	}
 
 	/**
      *  Validates the update request
@@ -590,14 +571,6 @@ public class TLValidator {
 
         if(!requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
             throw new CustomException("INVALID SEARCH","Search based only on tenantId is not allowed");
-
-        if(!requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& !criteria.tenantIdOnly()
-                && criteria.getTenantId()==null)
-            throw new CustomException("INVALID SEARCH","TenantId is mandatory in search");
-
-        if(!requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" ) && !criteria.isEmpty()
-                && !criteria.tenantIdOnly() && criteria.getTenantId()==null)
-            throw new CustomException("INVALID SEARCH","TenantId is mandatory in search");
 
         if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
             throw new CustomException("INVALID SEARCH","Search only on tenantId is not allowed");

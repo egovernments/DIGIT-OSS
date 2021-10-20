@@ -30,6 +30,8 @@ import static org.egov.tracer.http.HttpUtils.isInterServiceCall;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
+import com.jayway.jsonpath.JsonPath;
+
 @Service
 @Slf4j
 public class TradeLicenseService {
@@ -174,10 +176,91 @@ public class TradeLicenseService {
          else {
              licenses = getLicensesWithOwnerInfo(criteria,requestInfo);
          }
+         
+         if(criteria.getRenewalPending()!=null && criteria.getRenewalPending()== true && !licenses.isEmpty()) {
+        	 
+        	 removeDuplicates(licenses);
+        	 filterRejectedApplications(requestInfo,licenses);
+        	 getLatestRejectedApplication(requestInfo, licenses);
+
+         }
+         
          return licenses;       
     }
     
-    public int countLicenses(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo, String serviceFromPath, HttpHeaders headers){
+    private void getLatestRejectedApplication(RequestInfo requestInfo, List<TradeLicense> licenses) {
+    	List <TradeLicense> licensesToBeRemoved = new ArrayList<TradeLicense>();
+        
+        for (TradeLicense rejectedLicense : licenses) {
+       	 
+       	 if(rejectedLicense.getStatus().toString().equalsIgnoreCase(TLConstants.STATUS_REJECTED)) {
+       		 TradeLicenseSearchCriteria rejectedCriteria = new TradeLicenseSearchCriteria();
+       		 
+       		 rejectedCriteria.setTenantId(rejectedLicense.getTenantId());
+       		 
+       		 List <String> rejectedLicenseNumbers = new ArrayList<String>();
+       		 rejectedLicenseNumbers.add(rejectedLicense.getLicenseNumber());
+       		 
+       		 rejectedCriteria.setLicenseNumbers(rejectedLicenseNumbers);
+       		 licensesToBeRemoved.add(rejectedLicense);
+       		 
+       		 List <TradeLicense> rejectedLicenses = getLicensesWithOwnerInfo(rejectedCriteria,requestInfo);
+       		 
+       		 TradeLicense latestApplication = rejectedLicense;
+       		 
+       		 for(TradeLicense newLicense: rejectedLicenses) {
+       			 if(latestApplication.getStatus().equalsIgnoreCase(TLConstants.STATUS_REJECTED)) {
+       				 latestApplication = newLicense;
+       			 }
+       			 else {
+       				 if(newLicense.getFinancialYear().toString().compareTo(latestApplication.getFinancialYear().toString())>0 && !newLicense.getStatus().equalsIgnoreCase(TLConstants.STATUS_REJECTED)) {
+       					 latestApplication=newLicense;
+       				 }
+       			 }
+       		 }
+       		 
+       		 if(latestApplication.getFinancialYear().toString().compareTo(rejectedLicense.getFinancialYear().toString()) <0) {
+       			 licenses.add(latestApplication);
+       		 }
+
+       	 }
+       	 
+        }
+        
+        licenses.removeAll(licensesToBeRemoved);
+	}
+
+
+	private void filterRejectedApplications(RequestInfo requestInfo, List<TradeLicense> licenses) {
+    	String currentFinancialYear = "";
+   	    TradeLicenseRequest tradeLicenseRequest = new TradeLicenseRequest();
+        tradeLicenseRequest.setRequestInfo(requestInfo);
+        tradeLicenseRequest.setLicenses(licenses);
+        
+        Object mdmsData = util.mDMSCall(tradeLicenseRequest);
+        String jsonPath = TLConstants.MDMS_CURRENT_FINANCIAL_YEAR.replace("{}",businessService_TL);
+        List<Map<String,Object>> jsonOutput =  JsonPath.read(mdmsData, jsonPath);
+        
+        for (int i=0; i<jsonOutput.size();i++) {
+       	 Object startingDate = jsonOutput.get(i).get(TLConstants.MDMS_STARTDATE);
+       	 Object endingDate = jsonOutput.get(i).get(TLConstants.MDMS_ENDDATE);
+       	 Long startTime = (Long)startingDate;
+       	 Long endTime = (Long)endingDate;
+       	 
+       	 if(System.currentTimeMillis()>=startTime && System.currentTimeMillis()<=endTime) {
+       		 currentFinancialYear = jsonOutput.get(i).get(TLConstants.MDMS_FIN_YEAR_RANGE).toString();
+       		 break;
+       	 }
+       	 
+        }
+        
+        String checker = currentFinancialYear;
+        licenses.removeIf(t->t.getStatus().toString().equalsIgnoreCase(TLConstants.STATUS_REJECTED) && !t.getFinancialYear().toString().equalsIgnoreCase(checker));
+
+	}
+
+	
+	public int countLicenses(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo, String serviceFromPath, HttpHeaders headers){
     	
     	enrichmentService.enrichSearchCriteriaWithAccountId(requestInfo,criteria);
     	
@@ -242,7 +325,24 @@ public class TradeLicenseService {
     }
 
 
-    /**
+    private void removeDuplicates(List<TradeLicense> licenses) {
+    	List <TradeLicense> duplicateLicenses = new ArrayList<TradeLicense>();
+    	
+    	for(TradeLicense license : licenses) {
+    		for(TradeLicense duplicateLicense : licenses) {
+    			if (!license.getApplicationNumber().equalsIgnoreCase(duplicateLicense.getApplicationNumber()) && license.getLicenseNumber().equalsIgnoreCase(duplicateLicense.getLicenseNumber()) &&  duplicateLicense.getFinancialYear().compareTo(license.getFinancialYear())<0 ) {
+    				duplicateLicenses.add(duplicateLicense);
+    			}
+    		}
+    	}
+    	
+    	for (TradeLicense duplicateLicense : duplicateLicenses) {
+    		licenses.removeIf(t->t.getApplicationNumber().equalsIgnoreCase(duplicateLicense.getApplicationNumber()));
+    	}
+		
+	}
+
+	/**
      * Returns tradeLicense from db for the update request
      * @param request The update request
      * @return List of tradeLicenses
@@ -275,7 +375,7 @@ public class TradeLicenseService {
         TradeLicense.ApplicationTypeEnum applicationType = licence.getApplicationType();
         List<TradeLicense> licenceResponse = null;
         if(applicationType != null && (applicationType).toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL ) &&
-                licence.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE) && licence.getStatus().equals(TLConstants.STATUS_APPROVED)){
+                licence.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE) && (licence.getStatus().equals(TLConstants.STATUS_APPROVED) || licence.getStatus().equals(TLConstants.STATUS_MANUALLYEXPIRED))){
             List<TradeLicense> createResponse = create(tradeLicenseRequest, businessServicefromPath);
             licenceResponse =  createResponse;
         }
@@ -299,7 +399,9 @@ public class TradeLicenseService {
             }
             BusinessService businessService = workflowService.getBusinessService(tradeLicenseRequest.getLicenses().get(0).getTenantId(), tradeLicenseRequest.getRequestInfo(), businessServiceName);
             List<TradeLicense> searchResult = getLicensesWithOwnerInfo(tradeLicenseRequest);
-            actionValidator.validateUpdateRequest(tradeLicenseRequest, businessService,searchResult);
+            
+            validateLatestApplicationCancellation(tradeLicenseRequest, businessService);
+
             enrichmentService.enrichTLUpdateRequest(tradeLicenseRequest, businessService);
             tlValidator.validateUpdate(tradeLicenseRequest, searchResult, mdmsData);
             switch(businessServicefromPath)
@@ -344,7 +446,31 @@ public class TradeLicenseService {
         
     }
 
-    public List<TradeLicense> plainSearch(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo){
+    private void validateLatestApplicationCancellation(TradeLicenseRequest tradeLicenseRequest, BusinessService businessService) {
+    	List <TradeLicense> licenses = tradeLicenseRequest.getLicenses();
+        TradeLicenseSearchCriteria criteria = new TradeLicenseSearchCriteria();
+    	
+    	List <String> licenseNumbers = new ArrayList<String>();
+    	
+    	for (TradeLicense license : licenses) {
+    		licenseNumbers.add(license.getLicenseNumber());
+    		
+    	}
+    	
+    	criteria.setTenantId(licenses.get(0).getTenantId());
+    	criteria.setLicenseNumbers(licenseNumbers);
+    	
+    	List<TradeLicense> searchResultForCancellation = getLicensesWithOwnerInfo(criteria,tradeLicenseRequest.getRequestInfo());
+        
+        actionValidator.validateUpdateRequest(tradeLicenseRequest, businessService,searchResultForCancellation);
+		
+	}
+
+
+
+
+
+	public List<TradeLicense> plainSearch(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo){
         List<TradeLicense> licenses;
         List<String> ids = repository.fetchTradeLicenseIds(criteria);
         if(ids.isEmpty())

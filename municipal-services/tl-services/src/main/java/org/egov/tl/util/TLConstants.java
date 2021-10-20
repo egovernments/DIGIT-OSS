@@ -133,6 +133,8 @@ public class TLConstants {
     public static final String MDMS_FINANCIALYEAR  = "FinancialYear";
 
     public static final String MDMS_FINACIALYEAR_PATH = "$.MdmsRes.egf-master.FinancialYear[?(@.code==\"{}\")]";
+    
+    public static final String MDMS_CURRENT_FINANCIAL_YEAR = "$.MdmsRes.egf-master.FinancialYear[?(@.module==\"{}\")]";
 
     public static final String MDMS_TL_FINACIALYEAR_PATH = "$.MdmsRes.egf-master.FinancialYear";
 
@@ -141,6 +143,8 @@ public class TLConstants {
     public static final String MDMS_STARTDATE  = "startingDate";
 
     public static final String MDMS_ENDDATE  = "endingDate";
+    
+    public static final String MDMS_FIN_YEAR_RANGE = "finYearRange";
     
     //TL types
 
