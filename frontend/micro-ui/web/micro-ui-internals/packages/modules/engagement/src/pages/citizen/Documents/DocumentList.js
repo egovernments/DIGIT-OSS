@@ -68,24 +68,25 @@ const DocumentList = ({ match }) => {
 
   return (
     <AppContainer>
-      <Header>{`${t(`${category}`)} (${count ? count : "-"})`}</Header>
-      <div
-      >
-
-        <Searchbar
-          searchValue={searchValue}
-          handleKeyPress={handleKeyPress}
-          handleSearch={handleSearch}
-          onChange={setSearchValue}
-          t={t}
-        />
-      </div>
-      {isLoadingDocs ? <Loader /> :
+      <div className="documentContainerPadding">
+        <Header>{`${t(`${category}`)} (${count ? count : "-"})`}</Header>
+        <div
+        >
+          <Searchbar
+            searchValue={searchValue}
+            handleKeyPress={handleKeyPress}
+            handleSearch={handleSearch}
+            onChange={setSearchValue}
+            t={t}
+          />
+        </div>
+        {isLoadingDocs ? <Loader /> :
           filteredDocs && filteredDocs.length ? renderDocsList(filteredDocs, t) :
-          <Card>
-            <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
-          </Card>
-      }
+            <Card>
+              <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
+            </Card>
+        }
+      </div>
     </AppContainer>
   );
 };

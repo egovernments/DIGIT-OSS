@@ -45,7 +45,7 @@
   margin-top: 50px;
 }
 .notice_and_circular_main {
-  @apply flex bg-white my-sm px-md pt-md pb-lg shadow-card;
+  @apply flex bg-white my-md px-md pt-md pb-lg shadow-card;
   border-radius: 4px;
 }
 .gap-ten {
@@ -54,28 +54,29 @@
 .notice_and_circular_heading_mb {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   padding: 2px;
 }
 .notice_and_circular_heading_mb header {
   font-weight: bold;
-  font-size: 30px !important;
+  font-size: 16px !important;
   line-height: 24px;
 }
 .notice_and_circular_heading_mb .card-caption {
-  padding-left: 30px;
   font-weight: normal;
   font-size: 12px;
-  line-height: 14px;
+  line-height: 24px;
   color: #505A5F;
+  padding-right: 5px;
+  padding-left: 15px;
+  min-width: 80px;
 }
 .notice_and_circular_text {
-  padding-bottom: 10px;
+  padding-bottom: 20px;
 }
 .notice_and_circular_text p {
   font-weight: normal;
   font-size: 12px;
-  line-height: 14px;
+  line-height: 18px;
   color: #505A5F;
 }
 .notice_and_circular_caption {
@@ -85,14 +86,14 @@
 .notice_and_circular_caption .card-caption {
   font-weight: normal;
   font-size: 10px;
-  line-height: 12px;
+  line-height: 18px;
   color: #A3A3A3;
 }
 .view_download_main {
   display: flex;
   align-items: center;
   span {
-    padding: 5px;
+    padding-right: 20px;
     & .views {
       display: flex;
       justify-content: space-between;
@@ -108,9 +109,8 @@
   }
 }
 @screen dt{
-  .view_download_main span {
+  .view_download_main{
     span{
-      padding: 5px;
       & .views {
         display: flex;
         justify-content: space-between;
@@ -126,25 +126,35 @@
     }
   }
 
+  .notice_and_circular_heading_mb .card-caption {
+    font-size: 16px;
+    line-height: 24px;
+    min-width : 150px;
+    padding-left: 50px;
+  }
+
   .view_download_main span{
-    padding: 2px;
+    padding-right: 30px;
   }
   .view_download_main span .views p {
     padding-left: 8px;
-    font-size: 12px;
+    font-size: 16px;
   }
   .notice_and_circular_text p {
-    font-size: 12px !important;
+    font-size: 16px !important;
+    line-height : 24px;
   }
   .documentDetails_row {
     grid-gap: 0 !important;
     gap: 0 !important;
   }
   .notice_and_circular_heading_mb header{
-    font-size: 16px !important;
+    font-size: 24px !important;
+    line-height: 28px;
   }
-  .notice_and_circular_text p{
-    font-size: 12px !important;
+  .notice_and_circular_caption .card-caption {
+    font-size: 14px;
+    line-height: 21px;
   }
   .documentDetails_row {
     grid-gap: 0 !important;
