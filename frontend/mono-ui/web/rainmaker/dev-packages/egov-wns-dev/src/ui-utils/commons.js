@@ -282,9 +282,21 @@ export const getWSMyResults = async (queryObject, consumer, dispatch) => {
                     try {
                         const data = await httpRequest(
                             "post",
-                            `billing-service/bill/v2/_fetchbill?consumerCode=${consumerCode}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=${bService}`,
+                            `billing-service/bill/v2/_fetchbill`,
                             "_fetchbill",
-                            // queryObject
+                            [{
+                                key: "consumerCode",
+                                value:  consumerCode
+                            },
+                            {
+                                key: "tenantId",
+                                value:  response.WaterConnection[i].property.tenantId
+                            },
+                            {
+                                key: "businessService",
+                                value:  bService
+                            }
+                       ]
                         );
                         if (data && data !== undefined) {
                             if (data.Bill !== undefined && data.Bill.length > 0) {
@@ -1356,7 +1368,7 @@ export const getPastPaymentsForWater = async (dispatch) => {
     let queryObject = [
         {
             key: "tenantId",
-            value: getTenantIdCommon()
+            value: commonConfig.tenantId
         },
         {
             key: "businessService",
@@ -1395,7 +1407,7 @@ export const getPastPaymentsForSewerage = async (dispatch) => {
     let queryObject = [
         {
             key: "tenantId",
-            value: getTenantIdCommon()
+            value: commonConfig.tenantId
         },
         {
             key: "businessService",
