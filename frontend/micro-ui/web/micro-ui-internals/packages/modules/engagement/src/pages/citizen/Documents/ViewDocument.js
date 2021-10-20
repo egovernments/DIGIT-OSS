@@ -40,12 +40,14 @@ const ViewDocument = ({ match }) => {
   });
   if (data?.documentList?.[0]?.filestoreId) {
     openUploadedDocument(data?.documentList?.[0]?.filestoreId, "mSeva");
+  }else if(data?.documentList?.[0]?.documentLink){
+    window.open(data?.documentList?.[0]?.documentLink, )
   }
   return (
     <div>
       {isLoading ? <Loader /> :
         <Card>
-          <CardCaption>{data?.documentList?.[0]?.filestoreId ? t("COMMON_VIEW_DOC") : t("COMMON_DOC_NO_DATA")}</CardCaption>
+          <CardCaption>{data?.documentList?.[0]?.filestoreId || data?.documentList?.[0]?.documentLink ? t("COMMON_VIEW_DOC") : t("COMMON_DOC_NO_DATA")}</CardCaption>
         </Card>
       }
     </div>
