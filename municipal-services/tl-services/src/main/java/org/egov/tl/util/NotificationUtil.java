@@ -46,6 +46,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 
 import com.jayway.jsonpath.JsonPath;
@@ -174,7 +175,7 @@ public class NotificationUtil {
 	public StringBuilder getUri(String tenantId, RequestInfo requestInfo) {
 
 		if (config.getIsLocalizationStateLevel())
-			tenantId = tenantId.split("\\.")[0];
+			tenantId = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
 
 		String locale = NOTIFICATION_LOCALE;
 		if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
@@ -216,8 +217,8 @@ public class NotificationUtil {
 	 */
 	private String getInitiatedMsg(TradeLicense license, String message) {
 		// message = message.replace("<1>",license.);
-		message = message.replace("<2>", license.getTradeName());
-		message = message.replace("<3>", license.getApplicationNumber());
+		message = message.replace("{2}", license.getTradeName());
+		message = message.replace("{3}", license.getApplicationNumber());
 
 		return message;
 	}
@@ -233,8 +234,8 @@ public class NotificationUtil {
 	 */
 	private String getAppliedMsg(TradeLicense license, String message) {
 		// message = message.replace("<1>",);
-		message = message.replace("<2>", license.getTradeName());
-		message = message.replace("<3>", license.getApplicationNumber());
+		message = message.replace("{2}", license.getTradeName());
+		message = message.replace("{3}", license.getApplicationNumber());
 
 		return message;
 	}
@@ -250,7 +251,7 @@ public class NotificationUtil {
 	 */
 	private String getApprovalPendingMsg(TradeLicense license, String message) {
 		// message = message.replace("<1>",);
-		message = message.replace("<2>", license.getTradeName());
+		message = message.replace("{2}", license.getTradeName());
 
 		return message;
 	}
@@ -265,11 +266,11 @@ public class NotificationUtil {
 	 * @return customized message for approved
 	 */
 	private String getApprovedMsg(TradeLicense license, BigDecimal amountToBePaid, String message) {
-		message = message.replace("<2>", license.getTradeName());
-		message = message.replace("<3>", amountToBePaid.toString());
+		message = message.replace("{2}", license.getTradeName());
+		message = message.replace("{3}", amountToBePaid.toString());
 
 
-		String UIHost = config.getUiAppHost();
+		String UIHost = getHost(license.getTenantId());
 
 		String paymentPath = config.getPayLinkSMS();
 		paymentPath = paymentPath.replace("$consumercode",license.getApplicationNumber());
@@ -293,7 +294,7 @@ public class NotificationUtil {
 	 */
 	private String getRejectedMsg(TradeLicense license, String message) {
 		// message = message.replace("<1>",);
-		message = message.replace("<2>", license.getTradeName());
+		message = message.replace("{2}", license.getTradeName());
 
 		return message;
 	}
@@ -308,7 +309,7 @@ public class NotificationUtil {
 	 * @return customized message for rejected
 	 */
 	private String getFieldInspectionMsg(TradeLicense license, String message) {
-		message = message.replace("<2>", license.getTradeName());
+		message = message.replace("{2}", license.getTradeName());
 		return message;
 	}
 
@@ -322,8 +323,8 @@ public class NotificationUtil {
 	 * @return customized message for cancelled
 	 */
 	private String getCitizenSendBack(TradeLicense license, String message) {
-		message = message.replace("<2>", license.getApplicationNumber());
-		message = message.replace("<3>", license.getTradeName());
+		message = message.replace("{2}", license.getApplicationNumber());
+		message = message.replace("{3}", license.getTradeName());
 
 		return message;
 	}
@@ -338,8 +339,8 @@ public class NotificationUtil {
 	 * @return customized message for cancelled
 	 */
 	private String getCitizenForward(TradeLicense license, String message) {
-		message = message.replace("<2>", license.getApplicationNumber());
-		message = message.replace("<3>", license.getTradeName());
+		message = message.replace("{2}", license.getApplicationNumber());
+		message = message.replace("{3}", license.getTradeName());
 
 		return message;
 	}
@@ -354,8 +355,8 @@ public class NotificationUtil {
 	 * @return customized message for cancelled
 	 */
 	private String getCancelledMsg(TradeLicense license, String message) {
-		message = message.replace("<2>", license.getTradeName());
-		message = message.replace("<3>", license.getLicenseNumber());
+		message = message.replace("{2}", license.getTradeName());
+		message = message.replace("{3}", license.getLicenseNumber());
 
 		return message;
 	}
@@ -371,9 +372,9 @@ public class NotificationUtil {
 	 */
 	public String getOwnerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
 		String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_PAYMENT_OWNER, localizationMessages);
-		messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
-		messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
-		messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
+		messageTemplate = messageTemplate.replace("{2}", valMap.get(amountPaidKey));
+		messageTemplate = messageTemplate.replace("{3}", license.getTradeName());
+		messageTemplate = messageTemplate.replace("{4}", valMap.get(receiptNumberKey));
 		return messageTemplate;
 	}
 
@@ -388,9 +389,9 @@ public class NotificationUtil {
 	 */
 	public String getPayerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
 		String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_PAYMENT_PAYER, localizationMessages);
-		messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
-		messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
-		messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
+		messageTemplate = messageTemplate.replace("{2}", valMap.get(amountPaidKey));
+		messageTemplate = messageTemplate.replace("{3}", license.getTradeName());
+		messageTemplate = messageTemplate.replace("{4}", valMap.get(receiptNumberKey));
 		return messageTemplate;
 	}
 
@@ -486,7 +487,7 @@ public class NotificationUtil {
 	public List<SMSRequest> createSMSRequest(String message, Map<String, String> mobileNumberToOwnerName) {
 		List<SMSRequest> smsRequest = new LinkedList<>();
 		for (Map.Entry<String, String> entryset : mobileNumberToOwnerName.entrySet()) {
-			String customizedMsg = message.replace("<1>", entryset.getValue());
+			String customizedMsg = message.replace("{1}", entryset.getValue());
 			customizedMsg = customizedMsg.replace(NOTIF_OWNER_NAME_KEY, entryset.getValue());
 			smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
 		}
@@ -548,13 +549,13 @@ public class NotificationUtil {
 	 * @return customized message for field change
 	 */
 	private String getEditMsg(TradeLicense license, List<String> list, String message) {
-		message = message.replace("<APPLICATION_NUMBER>", license.getApplicationNumber());
-		message = message.replace("<FIELDS>", StringUtils.join(list, ","));
+		message = message.replace("{APPLICATION_NUMBER}", license.getApplicationNumber());
+		message = message.replace("{FIELDS}", StringUtils.join(list, ","));
 		return message;
 	}
 
 	private String getEditMsg(TradeLicense license, String message) {
-		message = message.replace("<APPLICATION_NUMBER>", license.getApplicationNumber());
+		message = message.replace("{APPLICATION_NUMBER}", license.getApplicationNumber());
 		return message;
 	}
 
@@ -586,6 +587,22 @@ public class NotificationUtil {
 			return url;
 		}
 		else return res;
+	}
+
+	public String getHost(String tenantId){
+		log.info("INCOMING TENANTID FOR NOTIF HOST: " + tenantId);
+		Integer tenantLength = tenantId.split("\\.").length;
+		String topLevelTenant = tenantId;
+		if(tenantLength == 3){
+			topLevelTenant = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
+		}
+		log.info(config.getUiAppHostMap().toString());
+		log.info(topLevelTenant);
+		String host = config.getUiAppHostMap().get(topLevelTenant);
+		if(ObjectUtils.isEmpty(host)){
+			throw new CustomException("EG_NOTIF_HOST_ERR", "No host found for tenantid: " + topLevelTenant);
+		}
+		return host;
 	}
 
 }

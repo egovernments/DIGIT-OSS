@@ -274,7 +274,7 @@ public class TLRenewalNotificationUtil {
         String date = epochToDate(license.getValidTo());
         message = message.replace("{4}", date);
 
-        String UIHost = config.getUiAppHost();
+        String UIHost = notificationUtil.getHost(license.getTenantId());
 
         String paymentPath = config.getPayLinkSMS();
         paymentPath = paymentPath.replace("$consumercode",license.getApplicationNumber());

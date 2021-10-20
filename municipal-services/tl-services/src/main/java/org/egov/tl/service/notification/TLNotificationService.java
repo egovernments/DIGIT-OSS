@@ -189,7 +189,7 @@ public class TLNotificationService {
         						.replace("$applicationNo", license.getApplicationNumber())
         						.replace("$tenantId", license.getTenantId())
         						.replace("$businessService", license.getBusinessService());
-        			actionLink = config.getUiAppHost() + actionLink;
+        			actionLink = util.getHost(license.getTenantId()) + actionLink;
         			ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
         			items.add(item);
         			action = Action.builder().actionUrls(items).build();
@@ -199,7 +199,7 @@ public class TLNotificationService {
 					String actionLink = config.getViewApplicationLink().replace("$mobile", mobile)
 							.replace("$applicationNo", license.getApplicationNumber())
 							.replace("$tenantId", license.getTenantId());
-					actionLink = config.getUiAppHost() + actionLink;
+					actionLink = util.getHost(license.getTenantId()) + actionLink;
 					ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getViewApplicationCode()).build();
 					items.add(item);
 					action = Action.builder().actionUrls(items).build();
@@ -265,7 +265,7 @@ public class TLNotificationService {
 							.replace("$applicationNo", license.getApplicationNumber())
 							.replace("$tenantId", license.getTenantId())
 					        .replace("$businessService", license.getBusinessService());;
-					actionLink = config.getUiAppHost() + actionLink;
+					actionLink = util.getHost(license.getTenantId()) + actionLink;
 					ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
 					items.add(item);
 					action = Action.builder().actionUrls(items).build();
