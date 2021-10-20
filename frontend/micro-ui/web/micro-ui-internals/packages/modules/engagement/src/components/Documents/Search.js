@@ -1,17 +1,7 @@
 import React, { useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, Dropdown } from "@egovernments/digit-ui-react-components";
-
-export const aphabeticalSortFunctionForTenantsBasedOnName = (firstEl, secondEl) =>{
-    if (firstEl.name.toUpperCase() < secondEl.name.toUpperCase() ) {
-        return -1
-    }
-    if (firstEl.name.toUpperCase() > secondEl.name.toUpperCase() ) {
-        return 1
-    }
-        return 0
-}
-
+import { aphabeticalSortFunctionForTenantsBasedOnName } from "../../utils";
 
 const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPage, t }) => {
     const { register, handleSubmit, formState, reset, watch, control } = useForm({

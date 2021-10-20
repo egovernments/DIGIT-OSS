@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { Card, Header, LabelFieldPair, CardLabel, TextInput, Dropdown, FormComposer, RemoveableTag } from "@egovernments/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
 import { useLocation } from "react-router-dom";
-import { aphabeticalSortFunctionForTenantsBasedOnName } from "./Search";
+import { aphabeticalSortFunctionForTenantsBasedOnName } from "../../utils";
 
 const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, register, errors, setError, clearErrors, formState, control }) => {
   const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
@@ -20,7 +20,7 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
 
   const userInfo = Digit.UserService.getUser().info;
   const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code)).sort(aphabeticalSortFunctionForTenantsBasedOnName);
- 
+
   return (
     <React.Fragment>
       <LabelFieldPair

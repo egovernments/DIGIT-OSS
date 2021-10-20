@@ -2,15 +2,16 @@ import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, DateRange } from "@egovernments/digit-ui-react-components";
 import DropdownUlb from "./DropdownUlb";
+import { aphabeticalSortFunctionForTenantsBasedOnName } from "../../utils";
 
 const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPage, t }) => {
   const { register, handleSubmit, formState, reset, watch, control } = useForm({
     defaultValues: searchParams,
   });
   const mobileView = innerWidth <= 640;
-  const ulb = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const userUlbs = ulb.filter(ulb => ulb?.code === tenantId)
+  const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
+  const userInfo = Digit.UserService.getUser().info;
+  const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code)).sort(aphabeticalSortFunctionForTenantsBasedOnName);
 
   const getFields = (input) => {
     switch (input.type) {
