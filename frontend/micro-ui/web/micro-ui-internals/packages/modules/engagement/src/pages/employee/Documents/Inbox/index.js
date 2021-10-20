@@ -12,6 +12,7 @@ const Inbox = ({ tenants }) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const [pageSize, setPageSize] = useState(10);
     const [pageOffset, setPageOffset] = useState(0);
+    const [records, setRecords] = useState(100);
     const [searchParams, setSearchParams] = useState({
         tenantIds: tenantId,
         offset: pageOffset,
@@ -26,7 +27,6 @@ const Inbox = ({ tenants }) => {
         }
     });
     
-    const [records, setRecords] = useState(response?.totalCount);
     const onSearch = (params) => {
         const tenantIds = params?.ulbs?.code?.length ? params?.ulbs?.code : tenantId
         const { name, postedBy } = params;

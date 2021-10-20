@@ -2,6 +2,17 @@ import React, { useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, Dropdown } from "@egovernments/digit-ui-react-components";
 
+export const aphabeticalSortFunctionForTenantsBasedOnName = (firstEl, secondEl) =>{
+    if (firstEl.name.toUpperCase() < secondEl.name.toUpperCase() ) {
+        return -1
+    }
+    if (firstEl.name.toUpperCase() > secondEl.name.toUpperCase() ) {
+        return 1
+    }
+        return 0
+}
+
+
 const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPage, t }) => {
     const { register, handleSubmit, formState, reset, watch, control } = useForm({
         defaultValues: searchParams,
@@ -11,7 +22,7 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
     const tenantId = Digit.ULBService.getCurrentTenantId();
 
     const userInfo = Digit.UserService.getUser().info;
-    const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code));
+    const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code)).sort(aphabeticalSortFunctionForTenantsBasedOnName);
 
 
     const selectedTenat = useMemo(() => {

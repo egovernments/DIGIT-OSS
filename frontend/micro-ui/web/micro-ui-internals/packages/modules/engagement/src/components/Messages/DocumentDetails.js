@@ -83,7 +83,7 @@ const DocumentDetails = () => {
             />
 
                 : null}
-            <Header>{t(`CE_DOCUMENT_DETAILS`)}</Header>
+            <Header>{t(`CS_HEADER_PUBLIC_BRDCST`)}</Header>
             <div className="notice_and_circular_main gap-ten">
                 <div className="documentDetails_wrapper">
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t("EVENTS_ULB_LABEL")}:`}</p> <p>{getUlbName(data?.tenantId)}</p> </div>

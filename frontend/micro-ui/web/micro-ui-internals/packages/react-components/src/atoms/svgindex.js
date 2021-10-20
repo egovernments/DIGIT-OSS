@@ -363,6 +363,10 @@ const GenericFileIcon = () => <svg width="80" height="100" viewBox="0 0 80 100" 
 <path d="M50 0H10C4.5 0 0.0500011 4.5 0.0500011 10L0 90C0 95.5 4.45 100 9.95 100H70C75.5 100 80 95.5 80 90V30L50 0ZM60 80H20V70H60V80ZM60 60H20V50H60V60ZM45 35V7.5L72.5 35H45Z" fill="#505A5F"/>
 </svg>
 
+const ExternalLinkIcon = () => <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M16 16H2V2H9V0H2C0.89 0 0 0.9 0 2V16C0 17.1 0.89 18 2 18H16C17.1 18 18 17.1 18 16V9H16V16ZM11 0V2H14.59L4.76 11.83L6.17 13.24L16 3.41V7H18V0H11Z" fill="#F47738"/>
+</svg>
+
 
 const PrimaryDownlaodIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#f47738">
@@ -679,6 +683,7 @@ export {
   WhatsappIcon,
   EmailIcon,
   DocumentIcon,
+  ExternalLinkIcon,
   DownloadImgIcon,
   ViewsIcon,
   PrevIcon,

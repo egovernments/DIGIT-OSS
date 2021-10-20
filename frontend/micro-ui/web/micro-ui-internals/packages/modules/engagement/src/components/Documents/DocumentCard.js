@@ -7,7 +7,7 @@ import {
   LinkButton,
   DownloadImgIcon,
   ViewsIcon,
-  //PDFDocumentIcon,
+  ExternalLinkIcon,
   GenericFileIcon,
   PDFSvg
 } from "@egovernments/digit-ui-react-components";
@@ -42,7 +42,7 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
           {documentSize ? <CardCaption>{getFileSize(documentSize)}</CardCaption> : null}
         </div>
         <div className="notice_and_circular_caption">
-          <CardCaption>{`${t(`CE_DCOUMENT_UPLOADED_ON`)} ${lastModifiedData ? format(lastModifiedData, "eo MMMM yyyy") : "-"}`}</CardCaption>
+          <CardCaption>{`${t(`CE_DCOUMENT_UPLOADED_ON`)} ${lastModifiedData ? format(new Date(lastModifiedData), "do MMMM yyyy") : "-"}`}</CardCaption>
         </div>
         <div className="notice_and_circular_text">
           <CardText>
@@ -65,7 +65,7 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
 
               label={
                 <div className="views" onClick={() => openDocumentLink(documentLink, documentTitle)}>
-                  <ViewsIcon />
+                  <ExternalLinkIcon />
                   <p>{t(`CE_DOCUMENT_OPEN_LINK`)}</p>
                 </div>
               }

@@ -11,6 +11,7 @@ const getUlbName = (tenantId) => {
     return ulbName;
 }
 const DocumentDetails = ({ location, match, history, }) => {
+    let isMobile = window.Digit.Utils.browser.isMobile();
     const { t } = useTranslation();
     const { details } = location?.state;
     const [displayMenu, setDisplayMenu] = React.useState(false);
@@ -102,7 +103,7 @@ const DocumentDetails = ({ location, match, history, }) => {
             <ActionBar>
                 {displayMenu ? (
                     <Menu
-                        style={{ width: '240px' }}
+                        style={{ width: isMobile ? 'full' : '240px' }}
                         localeKeyPrefix={"ES_CE"}
                         options={Actions}
                         t={t}
