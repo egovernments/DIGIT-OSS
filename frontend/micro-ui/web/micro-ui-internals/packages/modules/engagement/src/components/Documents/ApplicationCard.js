@@ -3,14 +3,7 @@ import { Card, DetailsCard, Loader, PopUp, SearchAction, FilterAction } from "@e
 import Filter from "./Filter";
 import Search from "./Search";
 import { useHistory, Link } from "react-router-dom";
-
-const areEqual = (stringA, stringB) => {
-  if (!stringA || !stringB) return false;
-  if (stringA?.trim()?.toLowerCase() === stringB?.trim()?.toLowerCase()) {
-    return true;
-  }
-  return false;
-}
+import { areEqual } from "../../utils";
 
 const ApplicationCard = ({
   searchFields,
@@ -43,8 +36,8 @@ const ApplicationCard = ({
     const details = responseData?.find((item) => (areEqual(item.postedBy, data["Posted By"]) && areEqual(item.name, data["Document Name"])));
     if (details) {
       history.push(`/digit-ui/employee/engagement/documents/inbox/details/${details?.name}`, { details })
+    }
   }
-}
 
   let result;
   if (data?.length === 0) {

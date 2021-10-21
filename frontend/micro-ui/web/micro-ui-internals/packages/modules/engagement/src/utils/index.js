@@ -7,3 +7,11 @@ export const aphabeticalSortFunctionForTenantsBasedOnName = (firstEl, secondEl) 
     }
         return 0
 }
+
+export const areEqual = (stringA, stringB) => {
+    if (!stringA || !stringB) return false;
+    if (stringA?.trim()?.toLowerCase() === stringB?.trim()?.toLowerCase()) {
+      return true;
+    }
+    return false;
+  }

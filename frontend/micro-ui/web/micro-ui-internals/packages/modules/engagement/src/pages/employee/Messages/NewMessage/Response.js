@@ -10,7 +10,7 @@ const BannerPicker = (props) => {
   return (
     <Banner
       message={t(props.message)}
-      applicationNumber={props?.data?.events?.[0]?.id}
+      applicationNumber={props?.data?.events?.[0]?.name}
       //info={t(`MESSAGE_ADD_SUCCESS_MESSAGE_MAIN`)}
       successful={props.isSuccess}
     />

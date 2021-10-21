@@ -26,7 +26,7 @@ const EventDetails = () => {
 
     if(EventsDataLoading ) return <Loader/>
     return <div className="CitizenEngagementNotificationWrapper">
-        <Header>{t("CS_HEADER_PUBLIC_BRDCST")}</Header>
+        <Header>{t("EVENTS_EVENTS_HEADER")}</Header>
         <OnGroundEventCard {...onGroundEventCardPropsForEventDetails(FilteredEventForThisPage)}  />
         <div className="OnGroundEventDetailsCard">
           <p className="cardCaptionBodyS">{FilteredEventForThisPage?.description}</p>  

@@ -44,6 +44,7 @@ const MobileInbox = ({ data, t, title, iconName, links, searchFields, searchPara
             // onSort={onSort}
             searchParams={searchParams}
             searchFields={searchFields}
+            responseData={data}
             // linkPrefix={linkPrefix}
             // removeParam={removeParam}
             // sortParams={sortParams}
