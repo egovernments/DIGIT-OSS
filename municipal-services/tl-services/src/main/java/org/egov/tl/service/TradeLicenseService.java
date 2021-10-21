@@ -190,6 +190,7 @@ public class TradeLicenseService {
     
     private void getLatestRejectedApplication(RequestInfo requestInfo, List<TradeLicense> licenses) {
     	List <TradeLicense> licensesToBeRemoved = new ArrayList<TradeLicense>();
+    	List <TradeLicense> licensesToBeAdded = new ArrayList<TradeLicense>();
         
         for (TradeLicense rejectedLicense : licenses) {
        	 
@@ -220,13 +221,13 @@ public class TradeLicenseService {
        		 }
        		 
        		 if(latestApplication.getFinancialYear().toString().compareTo(rejectedLicense.getFinancialYear().toString()) <0) {
-       			 licenses.add(latestApplication);
+       			 licensesToBeAdded.add(latestApplication);
        		 }
 
        	 }
        	 
         }
-        
+        licenses.addAll(licensesToBeAdded);
         licenses.removeAll(licensesToBeRemoved);
 	}
 
