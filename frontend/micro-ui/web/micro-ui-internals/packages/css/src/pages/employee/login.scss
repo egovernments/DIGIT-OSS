@@ -146,6 +146,12 @@
 .employeeBackbuttonAlign{
   display: none;
 }
+
+.employee-select-wrap.login-city-dd {
+  .options-card{
+  max-height: 200px;
+  }
+}
 @media screen and (max-width: 768px){
   .employeeBackbuttonAlign{
     display: block;
@@ -166,6 +172,11 @@
   }
   .removeBottomMargin{
     margin-bottom: 0px !important;
+  }
+  .employee-select-wrap.login-city-dd {
+    .options-card{
+    max-height: 160px;
+    }
   }
 }
 
