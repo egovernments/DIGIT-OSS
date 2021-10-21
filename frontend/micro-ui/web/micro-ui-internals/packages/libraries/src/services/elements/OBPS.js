@@ -116,6 +116,18 @@ export const OBPSService = {
       params: {},
       auth:  window.location.href.includes("openlink") ? false : true,
     }),
+  receipt_download: (bussinessService, consumerCode, tenantId, filters = {}) =>
+    Request({
+      url: Urls.obps.receipt_download,
+      data: {},
+      useCache: true,
+      method: "POST",
+      params: { bussinessService, consumerCode, tenantId, ...filters },
+      auth: true,
+      locale: true,
+      userService: true,
+      userDownload: true,
+    }),
   LicenseDetails: async (tenantId, params) => {
     const response = await OBPSService.BPAREGSearch(tenantId, {}, params);
     if (!response?.Licenses?.length) {

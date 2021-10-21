@@ -442,3 +442,38 @@ export const getBusinessServices = (businessService, status) => {
   }
   return billBusinessService
 }
+
+export const downloadPdf = (blob, fileName) => {
+  const link = document.createElement("a");
+  // create a blobURI pointing to our Blob
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  // some browser needs the anchor to be in the doc
+  document.body.append(link);
+  link.click();
+  link.remove();
+  // in case the Blob uses a lot of memory
+  setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+};
+
+export const printPdf = (blob) => {
+  const fileURL = URL.createObjectURL(blob);
+  var myWindow = window.open(fileURL);
+  if (myWindow != undefined) {
+    myWindow.addEventListener("load", (event) => {
+      myWindow.focus();
+      myWindow.print();
+    });
+  }
+};
+
+export const downloadAndPrintReciept = async (bussinessService, consumerCode, tenantId,  mode = "download", pdfKey = "consolidatedreceipt") => {
+  const response = await Digit.OBPSService.receipt_download(bussinessService, consumerCode, tenantId, {pdfKey: pdfKey});
+  const responseStatus = parseInt(response.status, 10);
+  if (responseStatus === 201 || responseStatus === 200) {
+    let fileName =
+      mode == "print"
+        ? printPdf(new Blob([response.data], { type: "application/pdf" }))
+        : downloadPdf(new Blob([response.data], { type: "application/pdf" }), `RECEIPT-${consumerCode}.pdf`);
+  }
+};

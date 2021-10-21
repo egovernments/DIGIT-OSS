@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Header, Card, CardSectionHeader, PDFSvg, Loader, StatusTable, Row, ActionBar, SubmitBar, CardLabel } from "@egovernments/digit-ui-react-components";
+import { Header, Card, CardSectionHeader, PDFSvg, Loader, StatusTable, Row, ActionBar, SubmitBar, CardLabel, MultiLink } from "@egovernments/digit-ui-react-components";
 import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDetails";
+import { downloadAndPrintReciept } from "../../../utils";
 
 const DocumentDetails = ({ t, data, documents, paymentDetails }) => {
   return (
@@ -38,6 +39,9 @@ const ApplicationDetail = () => {
   const state = tenantId?.split('.')[0]
   const [appDetails, setAppDetails] = useState({});
   const [showToast, setShowToast] = useState(null);
+  const [showOptions, setShowOptions] = useState(false);
+  const [dowloadOptions, setDowloadOptions] = useState([]);
+
   const stateCode = Digit.ULBService.getStateId();
   const language = Digit.StoreData.getCurrentLanguage();
   const moduleCode = ["bpareg", "bpa", "common"];
@@ -71,22 +75,46 @@ const ApplicationDetail = () => {
     setShowToast(null);
   };
 
+  async function getRecieptSearch({tenantId,payments,...params}) {
+    let response = { filestoreIds: [payments?.fileStoreId] };
+    if (!payments?.fileStoreId) {
+      response = await Digit.PaymentService.generatePdf(tenantId, { Payments: payments }, "consolidatedreceipt");
+    }
+    const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
+    window.open(fileStore[response?.filestoreIds[0]], "_blank");
+  }
 
   useEffect(() => {
     if (applicationDetails) {
+      if(reciept_data?.Payments?.length > 0) {
+        setDowloadOptions([{
+          label: t("TL_RECEIPT"),
+          onClick: () => downloadAndPrintReciept(reciept_data?.Payments?.[0]?.paymentDetails?.[0]?.businessService || "BPAREG", applicationDetails?.applicationData?.applicationNumber, applicationDetails?.applicationData?.tenantId),
+        }]);
+      }
       const fileStoresIds = applicationDetails?.applicationData?.tradeLicenseDetail?.applicationDocuments.map(document => document?.fileStoreId);
       Digit.UploadServices.Filefetch(fileStoresIds, tenantId.split(".")[0])
         .then(res => {
           const { applicationDetails: details } = applicationDetails;
           setAppDetails({ ...applicationDetails, applicationDetails: [...details, { title: "CE_DOCUMENT_DETAILS", belowComponent: () => <DocumentDetails t={t} data={applicationDetails?.applicationData?.tradeLicenseDetail?.applicationDocuments} documents={res?.data} paymentDetails={reciept_data} /> }] })
-        })
+        });
     }
+    
   }, [applicationDetails, reciept_data]);
 
   return (
     <div >
       <div style={{marginLeft: "15px"}}>
         <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
+        {reciept_data?.Payments?.length > 0 && 
+        <div style={{right: "3%", top: "20px", position: "absolute"}}>
+        <MultiLink
+          className="multilinkWrapper"
+          onHeadClick={() => setShowOptions(!showOptions)}
+          displayOptions={showOptions}
+          options={dowloadOptions}
+        />  
+        </div>}
       </div>
       <ApplicationDetailsTemplate
         applicationDetails={appDetails}
