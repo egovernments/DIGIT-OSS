@@ -245,7 +245,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
         <span className={"form-pt-dropdown-only"}>
           <CardLabel>{`${t("BPA_LOC_MOHALLA_LABEL")}*`}</CardLabel>
           <RadioOrSelect
-            dropdownStyle={{ paddingBottom: "20px" }}
+            // dropdownStyle={{ paddingBottom: "20px" }}
             isMandatory={config.isMandatory}
             options={localities.sort((a, b) => a.name.localeCompare(b.name))}
             selectedOption={selectedLocality}

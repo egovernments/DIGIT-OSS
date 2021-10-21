@@ -116,7 +116,7 @@ const BpaApplicationDetail = () => {
 
   return (
     <Fragment>
-      <Header>{t("ES_TITLE_APPLICATION_DETAILS")}</Header>
+      <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
       {data?.applicationDetails?.map((detail, index, arr) => {
         return (
           <Card key={index} style={detail?.title === ""?{marginTop:"-8px"}:{}}>

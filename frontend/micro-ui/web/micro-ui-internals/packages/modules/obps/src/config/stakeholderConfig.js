@@ -15,7 +15,7 @@ export const newConfig = [
           component: "LicenseType",
           texts: {
             headerCaption: "BPA_LICENSE_DET_CAPTION",
-            header: "BPA_LICENSE_TYPE_LABEL",
+            header: "BPA_LICENSE_TYPE",
             cardText: "BPA_LICENSE_TYPE_TEXT",
             submitBarLabel: "CS_COMMON_NEXT",
           },
