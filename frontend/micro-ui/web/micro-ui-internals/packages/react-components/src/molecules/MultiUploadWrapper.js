@@ -1,24 +1,22 @@
 import React, { useEffect, useReducer } from "react"
 import UploadFile from "../atoms/UploadFile"
 
-const MultiUploadWrapper = ({module="PGR", tenantId="pb", getFormState, requestSpecifcFileRemoval, setuploadedstate, showHintBelow, hintText}) => {
+const MultiUploadWrapper = ({module="PGR", tenantId="pb", getFormState, requestSpecifcFileRemoval, setuploadedstate=[], showHintBelow, hintText}) => {
 
     const FILES_UPLOADED = "FILES_UPLOADED"
     const TARGET_FILE_REMOVAL = "TARGET_FILE_REMOVAL"
 
     const uploadMultipleFiles = (state, payload) => {
-        let mutatedState = new Map(state)
         const {files, fileStoreIds} = payload;
-        [...files]?.forEach( (file, index) => mutatedState.set(file.name, { file, fileStoreId: fileStoreIds[index] }))
-        return mutatedState
+        const newUploads = [...files]?.map( (file, index) => [file.name, { file, fileStoreId: fileStoreIds[index] }])
+        return [...state, ...newUploads]
     }
 
     const removeFile = (state, payload) => {
-        let mutatedState = new Map(state);
-        mutatedState.delete(payload.file.name)
+        const __indexOfItemToDelete = state.findIndex( e => e[0] === payload.file.name )
+        const mutatedState = state.filter((e, index) => index !== __indexOfItemToDelete)
         return mutatedState
     }
-
 
     const uploadReducer = (state, action) => {
         switch(action.type){
@@ -35,7 +33,7 @@ const MultiUploadWrapper = ({module="PGR", tenantId="pb", getFormState, requestS
         const {data: {files: fileStoreIds} = {}} = await Digit.UploadServices.MultipleFilesStorage(module, e.target.files, tenantId)
         return dispatch({type: FILES_UPLOADED ,payload: {files: e.target.files, fileStoreIds}})
     }
-    const [ state, dispatch ] = useReducer(uploadReducer, setuploadedstate ? new Map(setuploadedstate)  : new Map())
+    const [ state, dispatch ] = useReducer(uploadReducer,[...setuploadedstate])
 
     useEffect(() => getFormState(state),[state])
 

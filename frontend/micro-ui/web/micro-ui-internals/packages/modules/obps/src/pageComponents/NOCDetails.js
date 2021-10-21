@@ -254,10 +254,11 @@ function SelectDocument({
     }, [file]);
 
     const uploadedFilesPreFill = useMemo(()=>{
-        const filesDictionary = new Map()
-        formData?.nocDocuments?.nocDocuments.filter((ob) => ob.documentType === doc?.documentType.replaceAll(".", "_")).forEach(file => {
-            filesDictionary.set(file.fileName, file)
-        })
+        //const filesDictionary = new Map()
+        // formData?.nocDocuments?.nocDocuments.filter((ob) => ob.documentType === doc?.documentType.replaceAll(".", "_")).forEach(file => {
+        //     filesDictionary.set(file.fileName, file)
+        // })
+        return formData?.nocDocuments?.nocDocuments?.filter((ob) => ob.documentType === doc?.documentType.replaceAll(".", "_")).forEach(e => [e.fileName, {file: {name: e.fileName, type: e.documentType}, fileStoreId: {fileStoreId: e.fileStoreId, tenantId}}] )
     },[formData])
 
 

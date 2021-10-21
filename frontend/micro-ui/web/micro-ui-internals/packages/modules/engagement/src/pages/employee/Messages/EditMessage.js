@@ -44,14 +44,10 @@ const EditMessage = () => {
 
   const defaultValues = useMemo(() => {
     const documents = data?.eventDetails?.documents
-    const documentDictionary = new Map()
-    documents?.forEach((document)=>{
-      documentDictionary.set(document.fileName, document)
-    })
     return {
       name: data?.name,
       description: data?.description,
-      documents: documentDictionary,
+      documents: documents?.map(e => [e.fileName, {file: {name: e.fileName, type: e.documentType}, fileStoreId: {fileStoreId: e.fileStoreId, tenantId}}] ),
       fromDate: data ? format(new Date(data?.eventDetails?.fromDate), 'yyyy-MM-dd') : null,
       toDate: data ? format(new Date(data?.eventDetails?.toDate), 'yyyy-MM-dd') : null,
     }

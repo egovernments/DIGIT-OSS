@@ -92,14 +92,14 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
             rules={{ required: false }}
             render={({ onChange, ref, value=[] }) => {
               function getFileStoreData(filesData) {
-                const numberOfFiles = filesData.size
+                const numberOfFiles = filesData.length
                 let finalDocumentData = []
                 if(numberOfFiles > 0){
-                  filesData.forEach((value, key) => {
+                  filesData.forEach(value => {
                     finalDocumentData.push({
-                        fileName: value?.file?.name,
-                        fileStoreId: value?.fileStoreId?.fileStoreId,
-                        documentType: value?.file?.type
+                        fileName: value?.[0],
+                        fileStoreId: value?.[1]?.fileStoreId?.fileStoreId,
+                        documentType: value?.[1]?.file?.type
                     })
                   })
                 }
