@@ -239,7 +239,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
         t={t}
         isDependent={true}
         labelKey="TENANT_TENANTS"
-      //disabled={isEdit}
+        disabled={true}
       />}
       {!isOpen && selectedCity && localities && (
         <span className={"form-pt-dropdown-only"}>

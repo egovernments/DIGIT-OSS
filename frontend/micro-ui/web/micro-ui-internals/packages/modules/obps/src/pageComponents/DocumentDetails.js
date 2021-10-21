@@ -101,6 +101,7 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
                 >
                     {bpaTaxDocuments?.map((document, index) => {
                         return (
+                            <div style={{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth:"600px", minWidth: "280px", marginBottom:"15px", paddingTop:"15px" }}>
                             <SelectDocument
                                 key={index}
                                 document={document}
@@ -113,6 +114,7 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
                                 formData={formData}
                                 PrevStateDocuments={PrevStateDocuments}
                             />
+                            </div>
                         );
                     })}
                     {error && <Toast label={error} onClose={() => setError(null)} error />}
@@ -264,7 +266,7 @@ function SelectDocument({
     }, [file]);
 
     const uploadedFilesPreFill = useMemo(()=>{
-        //const filesDictionary = [];
+        // const filesDictionary = new Map()
         // formData?.documents?.documents.length > 0 && formData?.documents?.documents.filter((ob) => ob.documentType === selectedDocument.code).forEach(file => {
         //     filesDictionary.set(file.fileName, file)
         // })
@@ -272,7 +274,7 @@ function SelectDocument({
     },[formData])
 
     return (
-        <div style={{ marginBottom: "24px" }}>
+        <div /* style={{ marginBottom: "24px" }} */>
             <CardLabel>{doc?.required ? `${t(doc?.code)} *` : `${t(doc?.code)}`}</CardLabel>
             <Dropdown
                 t={t}

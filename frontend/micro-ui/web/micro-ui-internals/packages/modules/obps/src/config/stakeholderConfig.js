@@ -78,7 +78,7 @@ export const newConfig = [
             nextStep: null,
             key: "documents",
             texts: {
-              headerCaption: "BPA_DOC_DETAILS_SUMMARY",
+              headerCaption: "BPA_DOCUMENT_DETAILS_LABEL",
               header: "BPA_LICENSEE_DOCUMENT_DETAILS_HEADER",
               submitBarLabel: "CS_COMMON_NEXT"
             }

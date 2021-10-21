@@ -263,7 +263,7 @@ function SelectDocument({
 
 
     return (
-        <div style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px" }}>
+        <div style={{ border: "1px solid #D6D5D4", padding: "16px 8px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", marginTop:"5px" }}>
             <div>
                 <h1 style={{ color: "#0B0C0C", lineHeight: "37px", fontWeight: "700", fontSize: "32px", fontFamily: "Roboto Condensed", paddingBottom: "24px" }}>{t(`BPA_${doc?.nocType}_HEADER`)}</h1>
                 <div style={{ display: "flex", paddingBottom: "24px" }}>
