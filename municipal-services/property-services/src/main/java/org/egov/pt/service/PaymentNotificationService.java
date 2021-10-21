@@ -111,9 +111,6 @@ public class PaymentNotificationService {
             String localizationMessages = util.getLocalizationMessages(tenantId,requestInfo);
             String consumerCode = transaction.getConsumerCode();
             String path = getJsonPath(topic, ONLINE_PAYMENT_MODE, false);
-            
-            String alternatePathLocalizationCode = getJsonPathForAlternate(topic,ONLINE_PAYMENT_MODE,false);
-            
             String messageTemplate = null;
             try {
                 Object messageObj = JsonPath.parse(localizationMessages).read(path);
@@ -149,7 +146,7 @@ public class PaymentNotificationService {
 				smsRequests.add(getSMSRequestsWithoutReceipt(payerMobileNo, customMessage, valMap));
 			}
 			
-			addSmsRequestsForAlternateNumbers(alternatePathLocalizationCode,localizationMessages,valMap,property,smsRequests,payerMobileNo);
+			addSmsRequestsForAlternateNumbers(path,localizationMessages,valMap,property,smsRequests,payerMobileNo);
 			
             util.sendSMS(smsRequests);
 
@@ -223,9 +220,7 @@ public class PaymentNotificationService {
 
             String customMessage = null;
             String path = getJsonPath(topic, paymentMode, isPartiallyPayment);
-            
-            String alternatePathLocalizationCode = getJsonPathForAlternate(topic,paymentMode,isPartiallyPayment);
-            
+
             String messageTemplate = null;
             try {
                 Object messageObj = JsonPath.parse(localizationMessages).read(path);
@@ -247,7 +242,7 @@ public class PaymentNotificationService {
 				smsRequests.add(getSMSRequestsWithoutReceipt(payerMobileNo, customMessage, valMap));
 			}
 			
-			addSmsRequestsForAlternateNumbers(alternatePathLocalizationCode,localizationMessages,valMap,property,smsRequests,payerMobileNo);
+			addSmsRequestsForAlternateNumbers(path,localizationMessages,valMap,property,smsRequests,payerMobileNo);
 
             if(null == propertyConfiguration.getIsUserEventsNotificationEnabled() || propertyConfiguration.getIsUserEventsNotificationEnabled()) {
                 if(paymentDetail.getTotalDue().compareTo(paymentDetail.getTotalAmountPaid())==0)
@@ -279,7 +274,7 @@ public class PaymentNotificationService {
             log.error("Fetching from localization failed for the code " + alternatePathLocalizationCode, e);
         }
 		
-		String customMessageAlternate = getCustomizedMessageAlternate(valMap,messageTemplate,alternatePathLocalizationCode);
+		String customMessageAlternate = getCustomizedMessage(valMap,messageTemplate,alternatePathLocalizationCode);
 		
 		Set<String> alternateMobileNumbers = new HashSet<>();
         property.getOwners().forEach(owner -> {
@@ -291,50 +286,6 @@ public class PaymentNotificationService {
         smsRequests.addAll(getSMSRequests(alternateMobileNumbers,customMessageAlternate, valMap));
 		
 	}
-
-
-
-
-	private String getCustomizedMessageAlternate(Map<String, String> valMap, String message,String alternatePathLocalizationCode) {
-    	
-    	String customMessage = null;
-        if(alternatePathLocalizationCode.contains(ALTERNATE_NOTIFICATION_PAYMENT_ONLINE) || alternatePathLocalizationCode.contains(ALTERNATE_NOTIFICATION_PAYMENT_PARTIAL_ONLINE))
-            customMessage = getCustomizedOnlinePaymentMessage(message,valMap);
-        if(alternatePathLocalizationCode.contains(ALTERNATE_NOTIFICATION_PAYMENT_OFFLINE) || alternatePathLocalizationCode.contains(ALTERNATE_NOTIFICATION_PAYMENT_PARTIAL_OFFLINE))
-            customMessage = getCustomizedOfflinePaymentMessage(message,valMap);
-        if(alternatePathLocalizationCode.contains(ALTERNATE_NOTIFICATION_PAYMENT_FAIL))
-            customMessage = getCustomizedPaymentFailMessage(message,valMap);
-        return customMessage;
-		
-		
-	}
-
-
-
-
-	private String getJsonPathForAlternate(String topic, String paymentMode, Boolean isPartiallyPayment) {
-		
-    	String path = "$..messages[?(@.code==\"{}\")].message";
-        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()) && !isPartiallyPayment && paymentMode.equalsIgnoreCase("online"))
-            path = path.replace("{}",ALTERNATE_NOTIFICATION_PAYMENT_ONLINE);
-
-        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()) && !isPartiallyPayment && !paymentMode.equalsIgnoreCase("online"))
-            path = path.replace("{}",ALTERNATE_NOTIFICATION_PAYMENT_OFFLINE);
-
-        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic())&& isPartiallyPayment && paymentMode.equalsIgnoreCase("online"))
-            path = path.replace("{}",ALTERNATE_NOTIFICATION_PAYMENT_PARTIAL_ONLINE);
-
-        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()) && isPartiallyPayment&& !paymentMode.equalsIgnoreCase("online"))
-            path = path.replace("{}",ALTERNATE_NOTIFICATION_PAYMENT_PARTIAL_OFFLINE);
-
-        if(topic.equalsIgnoreCase(propertyConfiguration.getPgTopic()))
-            path = path.replace("{}",ALTERNATE_NOTIFICATION_PAYMENT_FAIL);
-
-        return path;
-	}
-
-
-
 
 	/**
      * Generate and returns SMSRequest if oldPropertyId is not present
