@@ -45,7 +45,7 @@
   margin-top: 50px;
 }
 .notice_and_circular_main {
-  @apply flex bg-white my-md px-md pt-md pb-lg shadow-card;
+  @apply flex bg-white my-md px-md pt-md pb-lg shadow-card relative;
   border-radius: 4px;
 }
 .gap-ten {
@@ -60,15 +60,15 @@
   font-weight: bold;
   font-size: 16px !important;
   line-height: 24px;
+  margin-right: 50px;
 }
 .notice_and_circular_heading_mb .card-caption {
   font-weight: normal;
   font-size: 12px;
   line-height: 24px;
   color: #505A5F;
-  padding-right: 5px;
-  padding-left: 15px;
-  min-width: 80px;
+  position: absolute;
+  right: 20px;
 }
 .notice_and_circular_text {
   padding-bottom: 20px;
@@ -129,8 +129,6 @@
   .notice_and_circular_heading_mb .card-caption {
     font-size: 16px;
     line-height: 24px;
-    min-width : 150px;
-    padding-left: 50px;
   }
 
   .view_download_main span{
@@ -151,6 +149,7 @@
   .notice_and_circular_heading_mb header{
     font-size: 24px !important;
     line-height: 28px;
+    margin-right : 100px;
   }
   .notice_and_circular_caption .card-caption {
     font-size: 14px;
