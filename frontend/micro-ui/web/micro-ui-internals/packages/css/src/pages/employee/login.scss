@@ -132,11 +132,13 @@
     margin-bottom: 0px !important;
   }
   .loginFormStyleEmployee .employeeCard, .banner .bannerCard{
-    min-width: 360px !important;
+    min-width: 340px !important;
+    margin: 10px !important;
   }
   .employeeForgotPassword .employeeCard, .employeeChangePassword .employeeCard{
     max-width: 360px !important;
-    min-width: 360px !important;
+    min-width: 340px !important;
+    margin: 10px !important;
   }
 }
 .employeeChangePassword .employeeCard .card-text{
