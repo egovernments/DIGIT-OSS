@@ -38,6 +38,8 @@ import SearchApplication from "./components/SearchApplication"
 import SearchLicense from "./components/SearchLicense"
 import TL_INBOX_FILTER from "./components/inbox/InboxFilter";
 
+import ApplicationDetails from "./pages/citizen/Applications/ApplicationDetails"
+
 import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./pages/employee";
 
@@ -119,6 +121,7 @@ const componentsToRegister = {
   TL_INBOX_FILTER,
   TLInfoLabel,
   TLWFApplicationTimeline,
+  ApplicationDetails,
 };
 
 export const initTLComponents = () => {
