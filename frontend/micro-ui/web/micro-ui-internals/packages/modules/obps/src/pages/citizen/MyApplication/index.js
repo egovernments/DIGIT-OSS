@@ -41,7 +41,8 @@ const MyApplication = () => {
       "isAddressSame":license?.tradeLicenseDetail?.owners?.[0]?.correspondenceAddress === license?.tradeLicenseDetail?.owners?.[0]?.permanentAddress ? true : false,
       "result":{
         Licenses:[{...data}],
-      }
+      },
+      "initiationFlow":true
     };
 
     sessionStorage.setItem("BPAREGintermediateValue",JSON.stringify(intermediateData));

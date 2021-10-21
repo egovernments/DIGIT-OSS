@@ -52,7 +52,7 @@ import {
         </StatusTable>
     </Card>
     <Card>
-    <CardHeader>{t(`BPA_LICENSE_DET_CAPTION`)}</CardHeader>
+    <CardHeader>{t(`BPA_LICENSE_DETAILS_LABEL`)}</CardHeader>
     <LinkButton
             label={
             <div>
@@ -158,13 +158,14 @@ import {
       ))}
       </Card>
       <Card>
-      <CardSubHeader>{t("BPA_SUMMARY_FEE_EST")}</CardSubHeader> 
+      <CardHeader>{t("BPA_SUMMARY_FEE_EST")}</CardHeader>
       <StatusTable>
       {paymentDetails?.billResponse?.Bill[0]?.billDetails[0]?.billAccountDetails.map((bill,index)=>(
         <div key={index}>
           <Row className="border-none" label={t(`${bill.taxHeadCode}`)} text={`₹ ${bill?.amount}`|| t("CS_NA")} />
         </div>
       ))}
+      <Row className="border-none" label={t(`BPA_COMMON_TOTAL_AMT`)} text={`₹ ${paymentDetails?.billResponse?.Bill?.[0]?.billDetails[0]?.amount}`|| t("CS_NA")} />
        </StatusTable>
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardHeader>{t("BPA_COMMON_TOTAL_AMT")}</CardHeader> 

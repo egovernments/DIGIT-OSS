@@ -47,7 +47,7 @@ export const newConfig = [
             component: "PermanentAddress",
             texts: {
               headerCaption: "BPA_NEW_ADDRESS_HEADER_DETAILS",
-              header: "BPA_LICENSEE_PERMANENT_LABEL",
+              header: "BPA_LICENSEE_PERM_ADDR_HEADER",
               cardText: "BPA_LICENSEE_PERMANENT_TEXT",
               submitBarLabel: "CS_COMMON_NEXT",
             },
