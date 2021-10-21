@@ -1,7 +1,7 @@
 export const loginConfig = [
   {
     texts: {
-      header: "ES_RESET_PASSWORD",
+      header: "CORE_COMMON_FORGOT_PASSWORD_LABEL",
       description: "ES_FORGOT_PASSWORD_DESC",
       submitButtonLabel: "CORE_COMMON_CONTINUE",
     },

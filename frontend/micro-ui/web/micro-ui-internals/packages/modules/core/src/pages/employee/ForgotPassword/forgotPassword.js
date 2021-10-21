@@ -76,6 +76,7 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
                 option={cities}
                 optionKey="name"
                 id={city.name}
+                className="login-city-dd"
                 select={(d) => {
                   props.onChange(d);
                 }}
@@ -98,7 +99,7 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
   return (
     <Background>
     <div className="employeeBackbuttonAlign">
-        <BackButton />
+        <BackButton variant="white" style={{borderBottom:"none"}}/>
       </div>
       <FormComposer
         onSubmit={onForgotPassword}

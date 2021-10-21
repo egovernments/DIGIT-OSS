@@ -102,7 +102,7 @@ const Login = ({ config: propsConfig, t }) => {
   return (isLoading || isStoreLoading) ? <Loader /> : (
     <Background>
       <div className="employeeBackbuttonAlign">
-        <BackButton variant="white"/>
+        <BackButton variant="white" style={{borderBottom:"none"}}/>
       </div>
       <FormComposer
         onSubmit={onLogin}

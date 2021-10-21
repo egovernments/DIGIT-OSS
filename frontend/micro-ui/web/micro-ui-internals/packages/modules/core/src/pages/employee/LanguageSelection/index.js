@@ -29,7 +29,7 @@ const LanguageSelection = () => {
           <img className="bannerLogo" src={stateInfo?.logoUrl} alt="Digit" /> 
 
 
-          <p>{" | "} {t(`TENANT_TENANTS_${stateInfo?.code.toUpperCase()}`)}</p>
+          <p>{t(`TENANT_TENANTS_${stateInfo?.code.toUpperCase()}`)}</p>
         </div>
         <div className="language-selector" style={{ justifyContent: "space-between", marginBottom: "24px" }}>
           {languages.map((language, index) => (

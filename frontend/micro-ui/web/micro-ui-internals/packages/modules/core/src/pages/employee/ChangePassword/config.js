@@ -1,7 +1,7 @@
 export const config = [
   {
     texts: {
-      header: "CORE_COMMON_FORGOT_PASSWORD_LABEL",
+      header: "CORE_COMMON_RESET_PASSWORD_LABEL",
       submitButtonLabel: "CORE_COMMON_CHANGE_PASSWORD",
     },
     inputs: [

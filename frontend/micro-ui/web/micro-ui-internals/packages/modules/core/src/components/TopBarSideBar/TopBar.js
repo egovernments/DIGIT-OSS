@@ -87,7 +87,7 @@ const TopBar = ({
         {t(`MYCITY_${stateInfo?.code?.toUpperCase()}_LABEL`)}{" "}
         {t(`MYCITY_STATECODE_LABEL`)}
       </p>)}
-        {!mobileView && <div className={mobileView ? "right" : "flex-right right w-80 column-gap-15"}>
+        {!mobileView && <div className={mobileView ? "right" : "flex-right right w-80 column-gap-15"} style={!loggedin?{width:'80%'}:{}}>
           <div className="left">
             <ChangeLanguage dropdown={true} />
           </div>

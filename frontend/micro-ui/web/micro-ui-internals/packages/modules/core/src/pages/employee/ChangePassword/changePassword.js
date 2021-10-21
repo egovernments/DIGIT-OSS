@@ -107,7 +107,7 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
   return (
     <Background>
       <div className="employeeBackbuttonAlign">
-        <BackButton />
+        <BackButton variant="white" style={{borderBottom:"none"}}/>
       </div>
       <FormComposer
         onSubmit={onChangePassword}
