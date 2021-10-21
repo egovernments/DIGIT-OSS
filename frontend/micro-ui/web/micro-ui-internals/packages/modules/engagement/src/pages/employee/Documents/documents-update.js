@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { Card, Header, LabelFieldPair, CardLabel, TextInput, Dropdown, FormComposer, SubmitBar, ActionBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { documentsFormConfig } from "../../../config/doc-create";
+import { documentsFormConfig } from "../../../config/doc-update";
 import { useHistory } from "react-router-dom";
 
 
@@ -16,7 +16,7 @@ const Documents = (props) => {
         updatedFormData?.documentName &&
         updatedFormData?.docCategory &&
         (updatedFormData?.document.filestoreId || updatedFormData?.document.documentLink) &&
-        updatedFormData?.ULB?.length
+        updatedFormData?.ULB && Object.keys(updatedFormData?.ULB).length
       ) {
         setSubmitValve(true);
       } else {
@@ -36,8 +36,7 @@ const Documents = (props) => {
       fileSize: data.document?.filestoreId?.fileSize,
       fileType: data.document?.filestoreId?.fileType,
       documentLink: data.document?.documentLink,
-      tenantId: data.ULB.map((e) => e.code)?.[0],
-      tenantIds: data.ULB.map((e) => e.code)
+      tenantId: data?.ULB?.code,
     };
 
     delete DocumentEntity.ULB;
@@ -45,7 +44,6 @@ const Documents = (props) => {
     delete DocumentEntity.documentName;
     history.push("/digit-ui/employee/engagement/documents/update-response", { DocumentEntity });
   };
-
   return (
     <React.Fragment>
       <Header>{t("ES_ENGAGEMENT_EDIT_DOC")}</Header>

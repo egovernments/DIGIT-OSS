@@ -3,7 +3,6 @@ import React, { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Controller } from "react-hook-form";
 import { isValid, format, startOfToday } from 'date-fns';
-import { aphabeticalSortFunctionForTenantsBasedOnName } from "../../utils";
 
 const MessageForm = ({ onSelect, config, formData, register, control, errors, setError }) => {
   const { t } = useTranslation();
@@ -12,8 +11,7 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
   const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
   const { isLoading, data } = Digit.Hooks.useCommonMDMS(state, "mseva", ["EventCategories"]);
 
-  const userInfo = Digit.UserService.getUser().info;
-  const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code)).sort(aphabeticalSortFunctionForTenantsBasedOnName);
+  const userUlbs = ulbs.filter(ulb => ulb?.code === tenantId)
 
   const isValidDate = (date) => {
     if (!isValid(new Date(formData?.fromDate)) || !isValid(new Date(date))) return false;

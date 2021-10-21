@@ -89,7 +89,7 @@ const DocumentDetails = ({ location, match, history, }) => {
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t('DOCUMENT_NAME')}:`}</p> <p>{details?.name}</p> </div>
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t('DOCUMENT_CATEGORY')}:`}</p> <p>{t(details?.category)}</p> </div>
                     <div className="documentDetails_row"><p className="documentDetails_title">{`${t('DCOUMENT_DESCRIPTION')}:`}</p> <p className="documentDetails__description">{details?.description?.length ? details?.description : 'NA'}</p> </div>
-                    <div className="documentDetails_row"><p className="documentDetails_title">{`${t('CE_TABLE_DOCUMENT_LINK')}:`}</p>
+                    <div className="documentDetails_row"><p className="documentDetails_title">{`${t('ES_COMMON_LINK_LABEL')}:`}</p>
                         {details?.documentLink ? <LinkButton
                             label={
                                 <div className="link" onClick={() => openDocumentLink(details?.documentLink, details?.name)}>
