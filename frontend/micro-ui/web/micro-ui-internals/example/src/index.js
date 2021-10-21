@@ -17,11 +17,11 @@ import { PaymentModule, PaymentLinks, paymentConfigs } from "@egovernments/digit
 import { HRMSModule } from "@egovernments/digit-ui-module-hrms";
 import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
-import { initNOCComponents } from "@egovernments/digit-ui-module-noc";
+// import { initNOCComponents } from "@egovernments/digit-ui-module-noc";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 // import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
 // import { Body, TopBar } from "@egovernments/digit-ui-react-components";
-import "@egovernments/digit-ui-css/example/index.css";
+// import "@egovernments/digit-ui-css/example/index.css";
 
 import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
@@ -108,7 +108,7 @@ const userInfo = {
 const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "MCollect", "HRMS", "TL", "Receipts", "OBPS", "Engagement", "NOC"];
 
 const initTokens = (stateCode) => {
-  const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
+  const userType = "EMPLOYEE";
 
   const token = window.sessionStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
 
@@ -163,7 +163,7 @@ const initDigitUI = () => {
   initReceiptsComponents();
   initOBPSComponents();
   initEngagementComponents();
-  initNOCComponents();
+  // initNOCComponents();
 
   const moduleReducers = (initData) => ({
     pgr: PGRReducers(initData),

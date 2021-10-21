@@ -7,7 +7,7 @@ const cleanCSS = require("gulp-clean-css");
 const rename = require("gulp-rename");
 const livereload = require("gulp-livereload");
 
-let output = "./example";
+let output = "./dist";
 if (process.env.NODE_ENV === "production") {
   output = "./dist";
 }
@@ -43,10 +43,11 @@ function livereloadStyles() {
 exports.styles = styles;
 exports.default = series(styles);
 exports.watch = livereloadStyles;
-if (process.env.NODE_ENV === "production") {
-  exports.build = series(cleanStyles, styles, minify);
-} else {
+if (process.env.NODE_ENV !== "production") {
   exports.build = series(styles, livereloadStyles);
+} else {
+  exports.build = series(cleanStyles, styles, minify);
+
 }
 
 // gulp.task("watch:styles", function () {
