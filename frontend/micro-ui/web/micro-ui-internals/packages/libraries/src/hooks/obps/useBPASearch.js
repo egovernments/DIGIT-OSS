@@ -26,11 +26,28 @@ const combineResponse = (applications, workflowData) => {
 
 const useBPASearch = (tenantId, filters = {}, config = {}) => {
   return useQuery(['BPA_SEARCH', tenantId, filters], async () => {
-    const userInfo = Digit.UserService.getUser();
-    const response = await OBPSService.BPASearch(tenantId, { ...filters, requestor: userInfo?.info?.mobileNumber });
-    const businessIds = response?.BPA.map(application => application.applicationNo);
-    const workflowRes = await Digit.WorkflowService.getAllApplication('pb.amritsar', { businessIds: businessIds.join()  });
-    return combineResponse(response?.BPA, workflowRes?.ProcessInstances);
+    const response = await OBPSService.BPASearch(tenantId, { ...filters });
+    let tenantMap = {}, processInstanceArray = [], appNumbers = [];
+    response?.BPA?.forEach(item => {
+      var appNums = tenantMap[item.tenantId] || [];
+      appNumbers = appNums;
+      appNums.push(item.applicationNo);
+      tenantMap[item.tenantId] = appNums;
+    });
+
+    for (var key in tenantMap) {
+      for (let i = 0; i < appNumbers.length / 100; i++) {
+        try {
+          let payload = await Digit.WorkflowService.getAllApplication(key, { businessIds: tenantMap[key]?.slice(i * 100, (i * 100) + 100)?.join()  });
+          processInstanceArray = processInstanceArray.concat(payload.ProcessInstances)
+        } catch (error) {
+          console.log(error);
+          return [];
+        }
+      }
+      processInstanceArray = processInstanceArray.filter(record => record.moduleName.includes("bpa-services"));
+    }
+    return combineResponse(response?.BPA, processInstanceArray);
   }, config)
 }
 

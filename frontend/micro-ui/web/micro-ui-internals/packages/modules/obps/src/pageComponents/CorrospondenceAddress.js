@@ -44,6 +44,7 @@ function selectChecked(e){
                             "dob": null,
                             "emailId": formData?.LicneseDetails?.email,
                             "permanentAddress": formData?.LicneseDetails?.PermanentAddress,
+                            "correspondenceAddress":Correspondenceaddress,
                             // "permanentPinCode": "143001"
                         }
                     ],

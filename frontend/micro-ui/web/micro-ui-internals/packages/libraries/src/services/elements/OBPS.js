@@ -131,17 +131,17 @@ export const OBPSService = {
         ]
       },
       License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType.includes("ARCHITECT") ? {
-      title: "BPA_LICENSE_DET_CAPTION",
+      title: "BPA_LICENSE_DETAILS_LABEL",
       asSectionHeader: true,
       values: [
         { title: "BPA_LICENSE_TYPE", value: `TRADELICENSE_TRADETYPE_${License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0]}` || "NA" },
         { title: "BPA_COUNCIL_OF_ARCH_NO_LABEL", value: License?.tradeLicenseDetail?.additionalDetail?.counsilForArchNo || "NA" }
       ]
     } : {
-      title: "BPA_LICENSE_DET_CAPTION",
+      title: "BPA_LICENSE_DETAILS_LABEL",
       asSectionHeader: true,
       values: [
-        { title: "BPA_LICENSE_TYPE_LABEL", value: `TRADELICENSE_TRADETYPE_${License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0]}` || "NA"  }
+        { title: "BPA_LICENSE_TYPE", value: `TRADELICENSE_TRADETYPE_${License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0]}` || "NA"  }
       ]
     }, {
       title: "BPA_LICENSEE_DETAILS_HEADER_OWNER_INFO",
@@ -186,6 +186,13 @@ export const OBPSService = {
     BPA.riskType = riskType;
     const nocResponse = await OBPSService.NOCSearch(BPA?.tenantId, { sourceRefId: BPA?.applicationNo });
     const noc = nocResponse?.Noc;
+    const filter = { approvalNo: edcr?.permitNumber};
+    const bpaResponse = await OBPSService.BPASearch(tenantId, { ...filter });
+       const comparisionRep = {
+         ocdcrNumber: BPA?.edcrNumber,
+         edcrNumber: bpaResponse?.BPA?.[0]?.edcrNumber
+      }
+    const comparisionReport = await OBPSService.comparisionReport(tenantId, { ...comparisionRep });
 
     const nocDetails = noc
       ?.map((nocDetails, index) => ({
@@ -554,7 +561,8 @@ export const OBPSService = {
       applicationDetails: bpaFilterDetails,
       tenantId: BPA?.tenantId,
       edcrDetails: edcr,
-      nocData: noc
+      nocData: noc,
+      comparisionReport: comparisionReport?.comparisonDetail
     }
   }
 }

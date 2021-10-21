@@ -10,6 +10,7 @@ const StatusCount = ({ status, onAssignmentChange, searchParams }) => {
       onChange={(e) => onAssignmentChange(e, status)}
       checked={searchParams?.eventStatus?.filter(event => event === status)?.length > 0 ? true : false}
       label={t(status)}
+      pageType={'employee'}
     />
   )
 }

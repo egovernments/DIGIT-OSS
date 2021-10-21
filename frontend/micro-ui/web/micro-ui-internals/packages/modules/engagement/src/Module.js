@@ -1,11 +1,12 @@
-import { Loader, PrivateRoute, BreadCrumb } from "@egovernments/digit-ui-react-components";
-import React, { Fragment } from "react";
+import { Loader, BreadCrumb } from "@egovernments/digit-ui-react-components";
+import React, {Fragment} from "react";
 import { useTranslation } from "react-i18next";
-import { Link, Redirect, Switch, useLocation, useRouteMatch, Route } from "react-router-dom";
+import { Switch, useLocation, useRouteMatch, Route } from "react-router-dom";
 
 
 import EngagementCard from "./components/EngagementCard";
 import EngagementDocSelectULB from "./components/Documents/EngagementDocsULB";
+import EngagementULBDropdown from "./components/Documents/EngagementULBDropdown";
 import EnagementDocName from "./components/Documents/engagement-doc-name";
 import EngagementDocCategory from "./components/Documents/engagement-doc-category";
 import EngagementDocDescription from "./components/Documents/engagement-doc-description";
@@ -27,7 +28,6 @@ import EventDetails from "./pages/citizen/EventsListOnGround/EventDetails";
 import DocumenetCreate from "./pages/employee/Documents/documents-create";
 import DocumentUpdate from './pages/employee/Documents/documents-update';
 import DocumentResponse from "./pages/employee/Documents/response";
-import DocUpdate from "./pages/employee/Documents/doc-update";
 import DocUpdateResponse from "./pages/employee/Documents/update-response";
 import DocDeleteResponse from "./pages/employee/Documents/delete-response";
 import DocumentNotification from "./pages/employee/Documents/Inbox";
@@ -237,6 +237,7 @@ const componentsToRegister = {
   EngagementModule,
   EngagementCard,
   EngagementDocSelectULB,
+  EngagementULBDropdown,
   EnagementDocName,
   EngagementDocCategory,
   EngagementDocDescription,

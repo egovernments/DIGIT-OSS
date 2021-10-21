@@ -4,7 +4,14 @@ import { stringReplaceAll } from "../utils";
 import Timeline from "../components/Timeline";
 
 const LicenseType = ({ t, config, onSelect, userType, formData }) => {
-  formData = JSON.parse(sessionStorage.getItem("BPAREGintermediateValue"));
+  if(JSON.parse(sessionStorage.getItem("BPAREGintermediateValue")) !== null)
+  {
+    formData = JSON.parse(sessionStorage.getItem("BPAREGintermediateValue"))
+    sessionStorage.setItem("BPAREGintermediateValue",null);
+  }
+  else
+  formData=formData
+  
   let index = window.location.href.split("/").pop();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
@@ -46,6 +53,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     {
       let data = formData?.formData;
       data.LicneseType.LicenseType = LicenseType;
+      data.LicneseType.ArchitectNo = ArchitectNo;
       onSelect("",formData)
     }
   }
@@ -57,7 +65,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
     <Timeline currentStep={1} flow="STAKEHOLDER" />
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") ? !LicenseType || !ArchitectNo:!LicenseType}>
-      <CardLabel>{t("BPA_LICENSE_TYPE_QUES")}</CardLabel>
+      <CardLabel>{t("BPA_LICENSE_TYPE_QUES")}*</CardLabel>
       <div className={"form-pt-dropdown-only"}>
         {data && (
           <RadioOrSelect

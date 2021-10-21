@@ -309,7 +309,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         <Timeline currentStep={2} />
         <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext || !ownershipCategory} forcedError={t(error)}>   
             {!isLoading ?
-                <div>
+                <div style={{marginBottom: "10px"}}>
                     <div>
                         <CardLabel>{`${t("BPA_TYPE_OF_OWNER_LABEL")} *`}</CardLabel>
                         <RadioButtons

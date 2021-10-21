@@ -75,6 +75,22 @@ const Inbox = ({ tenants, parentRoute }) => {
       searchForm: searchFormDefaultValues,
       tableForm: tableOrderFormDefaultValues
     },
+    config: {
+      select: (data) =>({
+        statuses: data.statusMap,
+        table: data?.items.map( application => ({
+            applicationId: application.businessObject.applicationNumber,
+            date: application.businessObject.applicationDate,
+            businessService: application?.ProcessInstance?.businessService,
+            locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
+            status: application.businessObject.status,
+            owner: application.ProcessInstance?.assigner?.name,
+            sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
+        })),
+        totalCount: data.totalCount
+      })
+    },
+
   });
 
   const { data: edcrData, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(stateCode, {

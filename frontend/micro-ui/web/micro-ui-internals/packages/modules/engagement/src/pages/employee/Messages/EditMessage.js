@@ -44,7 +44,6 @@ const EditMessage = () => {
 
   const defaultValues = useMemo(() => {
     const documents = data?.eventDetails?.documents
-    debugger
     const documentDictionary = new Map()
     documents?.forEach((document)=>{
       documentDictionary.set(document.fileName, document)

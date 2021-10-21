@@ -67,7 +67,7 @@ const EDCRAcknowledgement = (props) => {
             <Link to={{pathname: `/digit-ui/citizen/obps/${bpaLinks?.linkData?.flow?.toLowerCase()}/${edcrData?.appliactionType?.toLowerCase()}/${edcrData?.applicationSubType?.toLowerCase()}/docs-required`, state: bpaLinks}} >
               <SubmitBar label={t("BPA_APPLY_FOR_BPA_LABEL")} />
             </Link>
-            <CardText  style={isMobile ? {display:"flex", justifyContent: "center", marginBottom: "0px"} : {}}>{t("BPA_FOR_NEW_CONSTRUCTION_LABEL")}</CardText>
+            <CardText  style={isMobile ? {display:"flex", justifyContent: "center", marginBottom: "0px", fontSize: "12px", lineHeight: "14px"} : {}}>{t("BPA_FOR_NEW_CONSTRUCTION_LABEL")}</CardText>
             <div style={{marginTop: "12px", paddingBottom: "10px"}}>
               <Link to={`/digit-ui/citizen`} >
                 <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />

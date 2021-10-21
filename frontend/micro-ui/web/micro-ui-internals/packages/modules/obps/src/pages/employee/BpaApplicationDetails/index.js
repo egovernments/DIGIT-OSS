@@ -27,9 +27,6 @@ const BpaApplicationDetail = () => {
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateId, "BPA", ["RiskTypeComputation"]);
 
   const { data = {}, isLoading } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: id });
-  const { data: comparisonreportData, isLoading: isSearchLoading, refetch: refetchBPASearch } = Digit.Hooks.obps.useOCEdcrSearch(data?.applicationData?.tenantId, {approvalNo: data?.applicationData?.approvalNo}, {
-    enabled: data?.applicationData?.approvalNo? true : false
-  }, data?.applicationData?.edcrNumber);
 
 
   let businessService = [];
@@ -51,7 +48,8 @@ const BpaApplicationDetail = () => {
   useEffect(async() => {
     businessService.length > 0 && businessService.map((buss,index) => {
       let res = Digit.PaymentService.recieptSearch(data?.applicationData?.tenantId, buss, {consumerCodes: data?.applicationData?.applicationNo}).then((value) => {
-       !(payments.filter((val) => val.id ===value?.Payments[0].id).length>0) && setpayments([...payments,...value?.Payments]);  
+
+       value?.Payments[0] && !(payments.filter((val) => val?.id ===value?.Payments[0].id).length>0) && setpayments([...payments,...value?.Payments]);  
       });
     })
     
@@ -62,10 +60,10 @@ const BpaApplicationDetail = () => {
     payments.length>0 && payments.map((ob) => {
       ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.billAccountDetails.map((bill,index) => {
         payval.push({title:`${bill?.taxHeadCode}_DETAILS`, value:""});
-        payval.push({title:bill?.taxHeadCode, value:bill?.amount});
-        payval.push({title:"status", value:"PAID"});
+        payval.push({title:bill?.taxHeadCode, value:`₹${bill?.amount}`});
+        payval.push({title:"BPA_STATUS_LABEL", value:"Paid"});
       })
-      payval.push({title:"BPA_TOT_AMT_PAID", value:ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.amount});
+      payval.push({title:"BPA_TOT_AMT_PAID", value:`₹${ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.amount}`});
     })
     payments.length > 0 && !(data.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL").length>0)&& data.applicationDetails.push({
       title:"BPA_FEE_DETAILS_LABEL",
@@ -86,9 +84,9 @@ const BpaApplicationDetail = () => {
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
 
-  async function getPermitOrderSearch({tenantId,...params}) {
+  async function getPermitOccupancyOrderSearch({tenantId},order) {
     let requestData = {...data?.applicationData, edcrDetail:[{...data?.edcrDetails}]}
-    let response = await Digit.PaymentService.generatePdf(tenantId, { Bpa: [requestData] }, "buildingpermit-low");
+    let response = await Digit.PaymentService.generatePdf(tenantId, { Bpa: [requestData] }, order);
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
@@ -202,6 +200,18 @@ const BpaApplicationDetail = () => {
   };
 
   let dowloadOptions = [];
+  if(data?.applicationData?.businessService==="BPA_OC" && data?.applicationData?.status==="APPROVED"){
+    dowloadOptions.push({
+      label: t("BPA_OC_CERTIFICATE"),
+      onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"occupancy-certificate"),
+    });
+  }
+  if(data?.comparisionReport){
+    dowloadOptions.push({
+      label: t("BPA_COMPARISON_REPORT_LABEL"),
+      onClick: () => window.open(data?.comparisionReport?.comparisonReport, "_blank"),
+    });
+  }
   if(data && data?.applicationData?.businessService === "BPA_LOW")
   {
     dowloadOptions.push({
@@ -210,7 +220,7 @@ const BpaApplicationDetail = () => {
     });
     !(data?.applicationData?.status.includes("REVOCATION")) && dowloadOptions.push({
       label: t("BPA_PERMIT_ORDER"),
-      onClick: () => getPermitOrderSearch({tenantId: data?.applicationData?.tenantId}),
+      onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"buildingpermit-low"),
     });
     (data?.applicationData?.status.includes("REVOCATION")) && dowloadOptions.push({
       label: t("BPA_REVOCATION_PDF_LABEL"),

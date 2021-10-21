@@ -10,7 +10,20 @@ import { Loader } from "../atoms/Loader"
 import { useForm, Controller } from "react-hook-form";
 
 
-const InboxComposer = ({isMobile=false, isInboxLoading, PropsForInboxLinks, SearchFormFields, searchFormDefaultValues, onSearchFormSubmit, FilterFormFields, filterFormDefaultValues, propsForInboxTable, onFilterFormSubmit }) => {
+const InboxComposer = ({
+    isMobile=false,
+    isInboxLoading,
+    PropsForInboxLinks,
+    SearchFormFields,
+    searchFormDefaultValues,
+    onSearchFormSubmit,
+    resetSearchFormDefaultValues,
+    FilterFormFields,
+    filterFormDefaultValues,
+    propsForInboxTable,
+    onFilterFormSubmit,
+    resetFilterFormDefaultValues 
+}) => {
     const { t } = useTranslation()
     const [ showMobileFilterFormPopup, setMobileFilterFormPopup ] = useState(false)
 
@@ -21,6 +34,13 @@ const InboxComposer = ({isMobile=false, isInboxLoading, PropsForInboxLinks, Sear
     const { register: registerFilterFormField, control: controlFilterForm , handleSubmit: handleFilterFormSubmit, setValue: setFilterFormValue, getValues: getFilterFormValue, reset: resetFilterForm } = useForm({
         defaultValues: {...filterFormDefaultValues}
     })
+
+    const onResetFilterForm = () => {
+        resetFilterForm(resetFilterFormDefaultValues)
+        const alldaata = getFilterFormValue()
+        // debugger
+        handleFilterFormSubmit(onFilterFormSubmit)()
+    }
 
     if (isMobile) {
         return <div className="InboxComposerWrapper">
@@ -38,11 +58,11 @@ const InboxComposer = ({isMobile=false, isInboxLoading, PropsForInboxLinks, Sear
                 <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
                 <p onClick={() => {
                     resetSearchForm(resetSearchFormDefaultValues);
-                    // previousPage();
+                    handleSearchFormSubmit(onSearchFormSubmit)()
                   }}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
             </SearchField>
         </SearchForm>
-        <FilterForm onSubmit={onFilterFormSubmit} handleSubmit={handleFilterFormSubmit} id="filter-form">
+        <FilterForm onSubmit={onFilterFormSubmit} handleSubmit={handleFilterFormSubmit} id="filter-form" onResetFilterForm={onResetFilterForm}>
             <FilterFormFields registerRef={registerFilterFormField} { ...{controlFilterForm, handleFilterFormSubmit, setFilterFormValue, getFilterFormValue} } />
             {/* <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="filter-form"/> */}
         </FilterForm>

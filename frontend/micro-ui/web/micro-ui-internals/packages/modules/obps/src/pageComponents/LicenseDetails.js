@@ -135,7 +135,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
               value={email}
               onChange={selectEmail}
               //disable={editScreen}
-              {...{ required: true, pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$", type: "email", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+              {...{ required: true, pattern: "[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$", type: "email", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
             />
         <CardLabel>{`${t("BPA_APPLICANT_PAN_NO")}`}</CardLabel>
         <TextInput

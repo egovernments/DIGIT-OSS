@@ -72,7 +72,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
             )}
             {/* TODO, Later will move to classes */}
             <StatusTable style={checkLocation ? { position: "relative", marginTop: "19px" } : {}}>
-              {!(detail?.title.includes("NOC" )) && detail?.values?.map((value, index) => {
+              {detail?.title && !(detail?.title.includes("NOC" )) && detail?.values?.map((value, index) => {
                 if (value.map === true && value.value !== "N/A") {
                   return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
                 }

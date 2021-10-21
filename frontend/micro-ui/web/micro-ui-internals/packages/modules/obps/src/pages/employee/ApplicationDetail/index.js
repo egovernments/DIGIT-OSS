@@ -18,13 +18,15 @@ const DocumentDetails = ({ t, data, documents, paymentDetails }) => {
           </div>
         </Fragment>
       ))}
-      <div>
+      { paymentDetails?.Payments?.length > 0 && 
+        <div>
         <CardSectionHeader>{`${t("BPA_FEE_DETAILS_LABEL")}`}</CardSectionHeader>
         <StatusTable>
           <Row className="border-none"  key={`${t(`BPAREG_FEES`)}:`} label={`${t(`BPAREG_FEES`)}:`} text={paymentDetails?.Payments?.[0]?.totalAmountPaid} />
           <Row className="border-none"  key={`${t(`BPA_STATUS_LABEL`)}:`} label={`${t(`PAID`)}:`} text={paymentDetails?.Payments?.[0]?.totalAmountPaid ? (t("WF_BPA_PAID")) : "NA"} textStyle={paymentDetails?.Payments?.[0]?.totalAmountPaid ? {color: "green"}: {}} />
         </StatusTable>
       </div>
+      }
     </Fragment>
   );
 }

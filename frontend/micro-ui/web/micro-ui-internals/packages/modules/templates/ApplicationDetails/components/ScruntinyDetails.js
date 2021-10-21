@@ -10,7 +10,7 @@ const ScruntinyDetails = ({ scrutinyDetails }) => {
         <StatusTable>
           <div>
             {scrutinyDetails?.values?.map((value, index) => {
-              return <Row className="border-none" key={`${value.title}:`} label={`${t(`${value.title}`)}:`} text={value?.value ? value?.value : ""} />
+              return <Row className="border-none" textStyle={value?.value === "Paid"?{color:"darkgreen"}:{}} key={`${value.title}:`} label={`${t(`${value.title}`)}:`} text={value?.value ? value?.value : ""} />
             })}
           </div>
           <div>

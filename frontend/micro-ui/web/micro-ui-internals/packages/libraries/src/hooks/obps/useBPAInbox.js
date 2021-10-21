@@ -7,7 +7,7 @@ import { useQuery } from "react-query"
 const useBPAInbox = ({ tenantId, filters, config={} }) => {
     const { filterForm, searchForm , tableForm } = filters
     const { moduleName, businessService, applicationStatus, locality, assignee } = filterForm
-    const { mobileNumber, applicationNumber } = searchForm
+    const { mobileNumber, applicationNo } = searchForm
     const { sortBy, limit, offset, sortOrder } = tableForm
     // const USER_UUID = Digit.UserService.getUser()?.info?.uuid;
     // debugger
@@ -21,23 +21,23 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
         moduleSearchCriteria: {
           assignee,
           ...(mobileNumber ? {mobileNumber}: {}),
-          ...(applicationNumber ? {applicationNumber} : {}),
+          ...(applicationNo ? {applicationNo} : {}),
           ...(sortOrder ? {sortOrder} : {}),
+          ...(sortBy ? {sortBy} : {}),
           ...(locality?.length > 0 ? {locality: locality.map((item) => item.code.split("_").pop()).join(",")} : {}),
         },
-        sortBy,
         limit,
         offset,
-        sortOrder
     }
 
     return useInbox({tenantId, filters: _filters, config:{
         select: (data) =>({
-          statuses: data.statusMap,
+          statuses: data.statusMap.map(e => ({...e, applicationstatus: `WF_${businessService?.code}_${e.applicationstatus}`})),
           table: data?.items.map( application => ({
-              applicationId: application.businessObject.applicationNumber,
+              applicationId: application.businessObject.applicationNo,
               date: application.businessObject.applicationDate,
               businessService: application?.ProcessInstance?.businessService,
+              applicationType: `${businessService?.code}_TITLE_LABEL`,
               locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
               status: application.businessObject.status,
               owner: application.ProcessInstance?.assigner?.name,
