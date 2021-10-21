@@ -70,12 +70,8 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data }) => {
             i18nKey: "WF_BPA_INITIATED"
         }	
     ]
-    const getRedirectionLink = (appNo) => {
-        let businessSer =[];
-        if (data.length>0)
-        { businessSer =  data.filter((ob) => (ob.applicationNo === appNo || ob.applicationNumber === appNo) );
-        }
-        let redirectBS = businessSer[0]?.businessService==="BPAREG"?"stakeholder":"bpa";
+    const getRedirectionLink = (bService) => {
+        let redirectBS = bService === "BPAREG"?"stakeholder":"bpa";
         return redirectBS;
     }
     const GetCell = (value) => <span className="cell-text">{value}</span>;
@@ -88,7 +84,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data }) => {
             return (
               <div>
                 <span className="link">
-                  <Link to={`/digit-ui/employee/obps/${getRedirectionLink((row.original["applicationNo"] || row.original["applicationNumber"])) || "--"}/${row.original["applicationNo"] || row.original["applicationNumber"]}`}>
+                  <Link to={`/digit-ui/employee/obps/${getRedirectionLink(row.original["businessService"]) || "--"}/${row.original["applicationNo"] || row.original["applicationNumber"]}`}>
                     {row.original["applicationNo"] || row.original["applicationNumber"]}
                   </Link>
                 </span>
