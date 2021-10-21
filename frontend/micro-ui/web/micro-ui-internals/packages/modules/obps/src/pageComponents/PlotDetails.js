@@ -27,9 +27,9 @@ const PlotDetails = ({ formData, onSelect, config }) => {
       <Timeline flow= {checkingFlow === "OCBPA" ? "OCBPA" : ""}/>
       <FormStep config={config} onSelect={handleSubmit} childrenAtTheBottom={false} t={t} _defaultValues={formData?.data} onSkip={onSkip}>
         <StatusTable>
-          <Row className="border-none" label={t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)} text={data?.planDetail?.planInformation?.plotArea} />
-          <Row className="border-none" label={t(`BPA_BOUNDARY_PLOT_NO_LABEL`)} text={data?.planDetail?.planInformation?.plotNo} />
-          <Row className="border-none" label={t(`BPA_BOUNDARY_KHATA_NO_LABEL`)} text={data?.planDetail?.planInformation?.khataNo}/>
+          <Row className="border-none" label={t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)} text={`${data?.planDetail?.planInformation?.plotArea} sq.ft`} />
+          <Row className="border-none" label={t(`BPA_PLOT_NUMBER_LABEL`)} text={data?.planDetail?.planInformation?.plotNo} />
+          <Row className="border-none" label={t(`BPA_KHATHA_NUMBER_LABEL`)} text={data?.planDetail?.planInformation?.khataNo}/>
         </StatusTable>
       </FormStep>
     </div>

@@ -55,7 +55,7 @@ const ApplicationDetails = () => {
           <Row className="border-none" text={License?.tradeLicenseDetail?.owners?.[0]?.permanentAddress || t("CS_NA")} />
         </Card>
         <Card>
-          <CardHeader>{t(`BPA_LICENSEE_CORRESPONDENCE_LABEL`)}</CardHeader>
+          <CardHeader>{t(`BPA_CORRESPONDANCE_ADDRESS_LABEL`)}</CardHeader>
           <Row className="border-none" text={License?.tradeLicenseDetail?.owners?.[0]?.correspondenceAddress || t("CS_NA")} />
         </Card>
         <Card>
@@ -68,6 +68,7 @@ const ApplicationDetails = () => {
                 <a target="_" href={documents[document.fileStoreId]?.split(",")[0]}>
                   <PDFSvg />
                 </a>
+                {decodeURIComponent( documents[document.fileStoreId]?.split(",")[0]?.split("?")[0]?.split("/")?.pop()?.slice(13))}
               </div>
               <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
             </Fragment>

@@ -28,7 +28,7 @@ export const newConfig = [
         },
         inputs: [
           {
-            label: "BPA_BOUNDARY_HOLDING_NO_LABEL",
+            label: "BPA_HOLDING_NUMBER_LABEL",
             type: "text",
             validation: {
               // required: true,
