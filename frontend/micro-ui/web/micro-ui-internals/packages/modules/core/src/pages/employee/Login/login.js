@@ -83,6 +83,7 @@ const Login = ({ config: propsConfig, t }) => {
             component: (props, customProps) => (
               <Dropdown
                 option={cities}
+                className="login-city-dd"
                 optionKey="i18nKey"
                 select={(d) => {
                   props.onChange(d);
@@ -101,7 +102,7 @@ const Login = ({ config: propsConfig, t }) => {
   return (isLoading || isStoreLoading) ? <Loader /> : (
     <Background>
       <div className="employeeBackbuttonAlign">
-        <BackButton />
+        <BackButton variant="white"/>
       </div>
       <FormComposer
         onSubmit={onLogin}

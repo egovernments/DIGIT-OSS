@@ -1,15 +1,15 @@
 import React from "react";
-import { ArrowLeft } from "./svgindex";
+import { ArrowLeft, ArrowLeftWhite } from "./svgindex";
 import { withRouter } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const BackButton = ({ history, style, isSuccessScreen, className="" }) => {
+const BackButton = ({ history, style, isSuccessScreen, className="" ,variant="black"}) => {
   const { t } = useTranslation();
 
   return (
     <div className={`back-btn2 ${className}`} style={style ? style : {}} onClick={() => !isSuccessScreen ? history.goBack() : null}>
-      <ArrowLeft />
-      <p>{t("CS_COMMON_BACK")}</p>
+     {variant=="black"?( <React.Fragment><ArrowLeft />
+      <p>{t("CS_COMMON_BACK")}</p></React.Fragment>):<ArrowLeftWhite />}
     </div>
   );
 };

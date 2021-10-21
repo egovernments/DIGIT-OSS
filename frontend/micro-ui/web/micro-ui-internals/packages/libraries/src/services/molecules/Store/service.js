@@ -65,6 +65,7 @@ export const StoreService = {
         code: stateInfo.code,
         name: stateInfo.name,
         logoUrl: stateInfo.logoUrl,
+        statelogo: stateInfo.statelogo,
         logoUrlWhite: stateInfo.logoUrlWhite,
         bannerUrl: stateInfo.bannerUrl,
       },

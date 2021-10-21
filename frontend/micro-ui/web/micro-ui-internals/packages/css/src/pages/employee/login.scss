@@ -130,11 +130,13 @@
     margin-bottom: 0px !important;
   }
   .loginFormStyleEmployee .employeeCard, .banner .bannerCard{
-    min-width: 360px !important;
+    min-width: 340px !important;
+    margin: 10px !important;
   }
   .employeeForgotPassword .employeeCard, .employeeChangePassword .employeeCard{
     max-width: 360px !important;
-    min-width: 360px !important;
+    min-width: 340px !important;
+    margin: 10px !important;
   }
 }
 .employeeChangePassword .employeeCard .card-text{
@@ -143,6 +145,12 @@
 }
 .employeeBackbuttonAlign{
   display: none;
+}
+
+.employee-select-wrap.login-city-dd {
+  .options-card{
+  max-height: 200px;
+  }
 }
 @media screen and (max-width: 768px){
   .employeeBackbuttonAlign{
@@ -164,6 +172,11 @@
   }
   .removeBottomMargin{
     margin-bottom: 0px !important;
+  }
+  .employee-select-wrap.login-city-dd {
+    .options-card{
+    max-height: 160px;
+    }
   }
 }
 
