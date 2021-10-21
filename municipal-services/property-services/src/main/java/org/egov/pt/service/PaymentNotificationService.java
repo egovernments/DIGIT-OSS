@@ -11,13 +11,6 @@ import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_PARTIAL_ONLINE;
 import static org.egov.pt.util.PTConstants.ONLINE_PAYMENT_MODE;
 import static org.egov.pt.util.PTConstants.PT_BUSINESSSERVICE;
 
-import static org.egov.pt.util.PTConstants.ALTERNATE_NOTIFICATION_PAYMENT_FAIL;
-import static org.egov.pt.util.PTConstants.ALTERNATE_NOTIFICATION_PAYMENT_OFFLINE;
-import static org.egov.pt.util.PTConstants.ALTERNATE_NOTIFICATION_PAYMENT_ONLINE;
-import static org.egov.pt.util.PTConstants.ALTERNATE_NOTIFICATION_PAYMENT_PARTIAL_OFFLINE;
-import static org.egov.pt.util.PTConstants.ALTERNATE_NOTIFICATION_PAYMENT_PARTIAL_ONLINE;
-
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -220,7 +213,6 @@ public class PaymentNotificationService {
 
             String customMessage = null;
             String path = getJsonPath(topic, paymentMode, isPartiallyPayment);
-
             String messageTemplate = null;
             try {
                 Object messageObj = JsonPath.parse(localizationMessages).read(path);
