@@ -18,7 +18,8 @@ export const UploadServices = {
 
   MultipleFilesStorage: async (module, filesData, tenantId) => {
     const formData = new FormData();
-    [...filesData].forEach(fileData => formData.append("file", fileData, fileData.name));
+    debugger
+    [...filesData].forEach((fileData, index) => formData.append("file"+index, fileData, fileData.name));
     formData.append("tenantId", tenantId);
     formData.append("module", module);
     var config = {
