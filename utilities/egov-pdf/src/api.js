@@ -179,6 +179,7 @@ async function search_mdms(tenantId, module, master, requestinfo) {
 }
 
 async function search_echallan(tenantId, challanNo, requestinfo, headers) {
+  console.log("\nURL:-"+config.host.challan+"/"+config.paths.mcollect_challan_search+"\n");
   return await axios({
     method: "post",
     url: url.resolve(config.host.challan, config.paths.mcollect_challan_search),

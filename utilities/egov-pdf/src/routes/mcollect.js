@@ -52,7 +52,7 @@ var {
         }
         
         //console.log("data-",echallanDtls.data);
-       // console.log("data-",JSON.stringify(echallanDtls.data.challans[0]));
+        console.log("\ndata-",JSON.stringify(echallanDtls.data.challans[0]));
         var echallans = echallanDtls.data;
         var challanObj;
         if (
