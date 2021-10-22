@@ -8,8 +8,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
 import org.egov.inbox.config.InboxConfiguration;
 import org.egov.inbox.repository.ServiceRequestRepository;
 import org.egov.inbox.util.BpaConstants;
@@ -86,7 +88,9 @@ public class WorkflowService {
                 if (requestInfo.getUserInfo().getRoles().get(0).getCode().equals(FSMConstants.FSM_DSO)) {
                     url.append("&assignee=").append(requestInfo.getUserInfo().getUuid());
                 }
-                if (criteria != null && criteria.getModuleName().equalsIgnoreCase(BpaConstants.BPA)) {
+                List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
+                if (criteria != null && criteria.getModuleName().equalsIgnoreCase(BpaConstants.BPA)
+                        && roles.contains(BpaConstants.CITIZEN)) {
                     List<String> inputBusinessSrvs = new ArrayList<>(criteria.getBusinessService());
                     criteria.setBusinessService(null);
                     Map<String, Object> statusRequest = new HashMap<>();
