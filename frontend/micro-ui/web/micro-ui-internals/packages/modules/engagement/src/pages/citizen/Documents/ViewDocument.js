@@ -1,15 +1,14 @@
 import {
-  Card,
-  CardCaption, Loader
+  AppContainer, Card,
+  CardCaption, Header, Loader
 } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { openUploadedDocument } from "../../../components/Documents/DesktopInbox";
+import DocumentCard from "../../../components/Documents/DocumentCard";
 
 const ViewDocument = ({ match }) => {
   const { t } = useTranslation()
   const { applicationNumber: uuid, tenantId } = Digit.Hooks.useQueryParams();
-
   const { data, isLoading, } = Digit.Hooks.engagement.useDocSearch({ uuid, tenantId }, {
     select: (data) => {
       const mappedDocuments = data?.Documents?.map((
@@ -38,19 +37,37 @@ const ViewDocument = ({ match }) => {
       };
     }
   });
-  if (data?.documentList?.[0]?.filestoreId) {
-    openUploadedDocument(data?.documentList?.[0]?.filestoreId, "mSeva");
-  }else if(data?.documentList?.[0]?.documentLink){
-    window.open(data?.documentList?.[0]?.documentLink, )
-  }
+  
+  /* 
+    Logic to view image on load of screen
+    if (data?.documentList?.[0]?.filestoreId) {
+      openUploadedDocument(data?.documentList?.[0]?.filestoreId, "mSeva");
+    } else if (data?.documentList?.[0]?.documentLink) {
+      window.open(data?.documentList?.[0]?.documentLink,)
+    }
+   */
+
+  const { documentList = [] } = data || {};
+  const { name = false, createdTime, description, documentLink, fileSize, filestoreId } = documentList?.[0] || {};
+
   return (
-    <div>
-      {isLoading ? <Loader /> :
-        <Card>
-          <CardCaption>{data?.documentList?.[0]?.filestoreId || data?.documentList?.[0]?.documentLink ? t("COMMON_VIEW_DOC") : t("COMMON_DOC_NO_DATA")}</CardCaption>
-        </Card>
-      }
-    </div>
+    <AppContainer>
+      <Header>{`${t(`COMMON_VIEW_DOC`)}`}</Header>
+      {isLoading && <Loader />}
+      {name && <DocumentCard
+        key={1}
+        documentTitle={name}
+        documentSize={fileSize}
+        lastModifiedData={createdTime}
+        description={description}
+        documentLink={documentLink}
+        filestoreId={filestoreId}
+        t={t}
+      />}
+      {!name && !isLoading && <Card>
+        <CardCaption>{t("COMMON_DOC_DATA_NOT_FOUND")}</CardCaption>
+      </Card>}
+    </AppContainer>
   );
 };
 
