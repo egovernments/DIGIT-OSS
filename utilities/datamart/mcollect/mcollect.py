@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import requests
 import json
+from dateutil import parser
 
 def map_bs(s):
     if s == 'Tx.Ts1_copy_register_for_old_survey' or s == 'Tx.Ts1_Copy_Register_For_Old_Survey':
@@ -25,34 +26,48 @@ def map_bs(s):
     elif s == 'Advt.Light_Wala_Board':
         return 'Advertisement Tax - Light Wala Board'
     elif s == 'Tx.Electricity_Chungi':
-    	return 'Taxes - Electricty Chungi'	
+    	return 'Taxes - Electricty Chungi'
 
 def connect():
     try:
         conn = psycopg2.connect(database="{{REPLACE-WITH-DATABASE}}", user="{{REPLACE-WITH-USERNAME}}",
                             password="{{REPLACE-WITH-PASSWORD}}", host="{{REPLACE-WITH-HOST}}")
         print("Connection established!")
-   
+
     except Exception as exception:
         print("Exception occurred while connecting to the database")
         print(exception)
 
-   
-    mCollectquery = pd.read_sql_query("SELECT DISTINCT(chl.challanNo) AS \"Challan Number\", INITCAP(chl.businessService) AS \"Business Service\", INITCAP(chl.applicationstatus) AS \"Application Status\", chl.tenantid, adr.locality, eb.totalamount AS \"Total Amount Due\" ,eb.billno AS \"Bill Number\", INITCAP(bill.status) as \"Bill Status\" FROM eg_echallan chl INNER JOIN eg_challan_address adr ON chl.id=adr.echallanid LEFT OUTER JOIN egbs_billdetail_v1 eb ON chl.challanno=eb.consumercode LEFT OUTER JOIN egbs_bill_v1 bill ON eb.billid = bill.id WHERE chl.tenantid != 'pb.testing'", conn)
-    paidquery =  pd.read_sql_query("SELECT chl.challanNo AS \"Challan Number\", INITCAP(chl.businessService) AS \"Business Service\", INITCAP(chl.applicationstatus) AS \"Application Status\", chl.tenantid, adr.locality, ep.totaldue AS \"Total Amount Due\", ep.totalamountpaid as \"Total Amount Paid\", INITCAP(ep.paymentmode) AS \"Payment Mode\",INITCAP(ep.paymentstatus) AS \"Payment Status\",eb.billnumber AS \"Bill Number\", INITCAP(eb.status) as \"Bill Status\" FROM eg_echallan chl INNER JOIN eg_challan_address adr ON chl.id=adr.echallanid LEFT OUTER JOIN egcl_bill eb ON chl.challanno=eb.consumercode LEFT OUTER JOIN egcl_paymentdetail epd ON eb.id=epd.billid LEFT OUTER JOIN egcl_payment ep ON ep.id=epd.paymentid WHERE chl.tenantid != 'pb.testing' AND chl.applicationstatus = 'PAID'", conn)
+    mCollectquery = "SELECT DISTINCT(chl.challanNo) AS \"Challan Number\", INITCAP(chl.businessService) AS \"Business Service\", INITCAP(chl.applicationstatus) AS \"Application Status\", chl.tenantid, adr.locality, eb.totalamount AS \"Total Amount Due\" ,eb.billno AS \"Bill Number\", INITCAP(bill.status) as \"Bill Status\" FROM eg_echallan chl INNER JOIN eg_challan_address adr ON chl.id=adr.echallanid LEFT OUTER JOIN egbs_billdetail_v1 eb ON chl.challanno=eb.consumercode LEFT OUTER JOIN egbs_bill_v1 bill ON eb.billid = bill.id WHERE chl.tenantid != 'pb.testing' AND chl.createdtime > {START_TIME} AND chl.createdtime < {END_TIME}"
+    paidquery = "SELECT chl.challanNo AS \"Challan Number\", INITCAP(chl.businessService) AS \"Business Service\", INITCAP(chl.applicationstatus) AS \"Application Status\", chl.tenantid, adr.locality, ep.totaldue AS \"Total Amount Due\", ep.totalamountpaid as \"Total Amount Paid\", INITCAP(ep.paymentmode) AS \"Payment Mode\",INITCAP(ep.paymentstatus) AS \"Payment Status\",eb.billnumber AS \"Bill Number\", INITCAP(eb.status) as \"Bill Status\" FROM eg_echallan chl INNER JOIN eg_challan_address adr ON chl.id=adr.echallanid LEFT OUTER JOIN egcl_bill eb ON chl.challanno=eb.consumercode LEFT OUTER JOIN egcl_paymentdetail epd ON eb.id=epd.billid LEFT OUTER JOIN egcl_payment ep ON ep.id=epd.paymentid WHERE chl.tenantid != 'pb.testing' AND chl.applicationstatus = 'PAID'  AND chl.createdtime > {START_TIME} AND chl.createdtime < {END_TIME}"
+
+    starttime = input('Enter start date (dd-mm-yyyy): ')
+    endtime = input('Enter end date (dd-mm-yyyy): ')
+    print(dateToEpoch(starttime))
+    print(dateToEpoch(endtime))
+
+    mCollectquery = mCollectquery.replace('{START_TIME}',dateToEpoch(starttime))
+    mCollectquery = mCollectquery.replace('{END_TIME}',dateToEpoch(endtime))
+
+    paidquery = paidquery.replace('{START_TIME}',dateToEpoch(starttime))
+    paidquery = paidquery.replace('{END_TIME}',dateToEpoch(endtime))
+
+    mCollectquery = pd.read_sql_query(mCollectquery, conn)
+    paidquery =  pd.read_sql_query(paidquery, conn)
+
     mcollectgen = pd.DataFrame(mCollectquery)
     paid = pd.DataFrame(paidquery)
     mcollectgen['Business Service'] = mcollectgen['Business Service'].map(map_bs)
-    
+
     mcollectgen = mcollectgen.append(paid)
-    
+
     global uniquetenant
     uniquetenant = mcollectgen['tenantid'].unique()
-    global accesstoken 
+    global accesstoken
     accesstoken = accessToken()
     global localitydict
     localitydict={}
-    storeTenantValues()    
+    storeTenantValues()
 
     mcollectgen['Locality'] = mcollectgen.apply(lambda x : enrichLocality(x.tenantid,x.locality), axis=1)
     mcollectgen['Locality'] = mcollectgen['Locality'].str.upper().str.title()
@@ -64,10 +79,10 @@ def connect():
     mcollectgen=mcollectgen.drop_duplicates(subset=['Challan Number'],keep='last')
     mcollectgen=mcollectgen.reset_index(drop=True)
     mcollectgen.fillna("", inplace=True)
-      
+
     mcollectgen.to_csv('/tmp/mcollectDatamart.csv')
     print("Datamart exported. Please copy it using kubectl cp command to you required location.")
- 
+
 def accessToken():
     query = {'username':'{{REPLACE-WITH-USERNAME}}','password':'{{REPLACE-WITH-PASSWORD}}','userType':'EMPLOYEE',"scope":"read","grant_type":"password"}
     query['tenantId']='pb.amritsar'
@@ -98,24 +113,24 @@ def locationApiCall(tenantid):
     if len(jsondata)>0:
         jsondata = jsondata[0]
     else:
-        return ''    
+        return ''
     if 'boundary' in jsondata:
         jsondata = jsondata['boundary']
     else:
-        return '' 
-    
+        return ''
 
-    dictionary={} 
+
+    dictionary={}
     for v in jsondata:
         dictionary[v['code']]= v['name']
-            
-    return dictionary     
-    
+
+    return dictionary
+
 def storeTenantValues():
     for tenant in uniquetenant:
         localitydict[tenant]=locationApiCall(tenant)
 
-       
+
 def enrichLocality(tenantid,locality):
     if tenantid in localitydict:
         if localitydict[tenantid]=='':
@@ -125,9 +140,11 @@ def enrichLocality(tenantid,locality):
         else:
             return ''
     else:
-        return ''    
+        return ''
 
-    
+
+def dateToEpoch(dateString):
+     return str(parser.parse(dateString).timestamp() * 1000)
+
 if __name__ == '__main__':
     connect()
-    

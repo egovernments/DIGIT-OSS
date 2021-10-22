@@ -1,9 +1,12 @@
+from pandas.io import sql
 import psycopg2
 import csv
 import pandas as pd
 import numpy as np
 import requests
 import json
+from dateutil import parser
+
 
 def map_CompSubtype(s):
     if s == 'NoStreetlight':
@@ -31,7 +34,7 @@ def map_CompSubtype(s):
     elif s == 'BrokenWaterPipeOrLeakage':
         return 'Broken Water Pipe Or Leakage'
     elif s == 'WaterPressureisVeryLess':
-        return 'Water Pressure Is Very Less' 
+        return 'Water Pressure Is Very Less'
     elif s == 'WaterLoggedRoad':
         return 'Water Logged Road'
     elif s == 'ManholeCoverMissingOrDamaged':
@@ -113,7 +116,7 @@ def map_CompSubtype(s):
     elif s == 'InstallationOfNewStreetLight':
         return 'Installation Of New Street Light'
     elif s == 'NonSweepingOfRoad':
-        return 'Non Sweeping Of Road' 
+        return 'Non Sweeping Of Road'
     elif s == 'CongressGrassCutting':
         return 'Congress Grass Cutting'
     elif s == 'SewageMainHoleCoverMissingOrBroken':
@@ -125,10 +128,10 @@ def map_CompSubtype(s):
     elif s == 'IllegalRehriesOnRoad':
         return 'Illegal Rehries On Road'
     elif s == 'RoadJalliBroken':
-        return 'Road Jalli Broken' 
+        return 'Road Jalli Broken'
     elif s == 'ReplacementOfTrafficLights':
     	return 'Replacement Of Traffic Lights'
-    
+
 
 def map_CompType(s):
     Streetlights = ['No Street Light','Street Light Not Working', 'Installation Of New Street Light','Replacement Of Traffic Lights']
@@ -222,30 +225,34 @@ def map_CompType(s):
         return 'Drains'
     elif s in PropertyTaxHouseTax:
         return 'Property Tax/House Tax'
-    
-    
-def connect(): 
+
+
+def connect():
     try:
         conn = psycopg2.connect(database="{{REPLACE-WITH-DATABASE}}", user="{{REPLACE-WITH-USERNAME}}",
                             password="{{REPLACE-WITH-PASSWORD}}", host="{{REPLACE-WITH-HOST}}")
         print("Connection established!")
-   
+
     except Exception as exception:
         print("Exception occurred while connecting to the database")
         print(exception)
-
-    sqlquery = pd.read_sql_query("SELECT  DISTINCT(srv.servicerequestid) AS \"Service ID\",srv.tenantid, adr.mohalla as locality, srv.servicecode AS \"Complaint Subtype\", INITCAP(srv.status) AS  \"Status\", INITCAP(srv.rating) AS \"Rating\",  INITCAP(srv.source) AS \"Source\" FROM eg_pgr_service srv INNER JOIN eg_pgr_action act ON srv.servicerequestid = act.businesskey INNER JOIN eg_pgr_address adr ON srv.addressid = adr.uuid WHERE active != 'f' AND srv.tenantid != 'pb.testing'",conn)
-    pgrgen = pd.DataFrame(sqlquery)
+    sqlquery = "SELECT  DISTINCT(srv.servicerequestid) AS \"Service ID\",srv.tenantid, adr.mohalla as locality, srv.servicecode AS \"Complaint Subtype\", INITCAP(srv.status) AS  \"Status\", INITCAP(srv.rating) AS \"Rating\",  INITCAP(srv.source) AS \"Source\" FROM eg_pgr_service srv INNER JOIN eg_pgr_action act ON srv.servicerequestid = act.businesskey INNER JOIN eg_pgr_address adr ON srv.addressid = adr.uuid WHERE active != 'f' AND srv.tenantid != 'pb.testing' AND srv.createdtime > {START_TIME}  AND srv.createdtime < {END_TIME}"
+    starttime = input('Enter start date (dd-mm-yyyy): ')
+    endtime = input('Enter end date (dd-mm-yyyy): ')
+    sqlquery = sqlquery.replace('{START_TIME}',dateToEpoch(starttime))
+    sqlquery = sqlquery.replace('{END_TIME}',dateToEpoch(endtime))
+    sqlquerygen = pd.read_sql_query(sqlquery,conn)
+    pgrgen = pd.DataFrame(sqlquerygen)
     pgrgen['Complaint Subtype'] = pgrgen['Complaint Subtype'].map(map_CompSubtype)
     pgrgen['Complaint Type'] = pgrgen['Complaint Subtype'].map(map_CompType)
-    
+
     global uniquetenant
     uniquetenant = pgrgen['tenantid'].unique()
-    global accesstoken 
+    global accesstoken
     accesstoken = accessToken()
     global localitydict
     localitydict={}
-    storeTenantValues()    
+    storeTenantValues()
 
     pgrgen['Locality'] = pgrgen.apply(lambda x : enrichLocality(x.tenantid,x.locality), axis=1)
     pgrgen['Locality'] = pgrgen['Locality'].str.upper().str.title()
@@ -254,7 +261,7 @@ def connect():
     pgrgen['State'] = pgrgen['tenantid'].apply(lambda x: 'Punjab' if x[0:2]=='pb' else '')
 
     pgrgen = pgrgen.drop(columns=['tenantid','locality'])
-    
+
     pgrgen.fillna('', inplace=True)
     pgrgen = pgrgen.drop_duplicates(subset=['Service ID'],keep='last').reset_index(drop=True)
     pgrgen.to_csv('{{REPLACE-WITH-PATH}}/pgrDatamart.csv')
@@ -291,24 +298,24 @@ def locationApiCall(tenantid):
     if len(jsondata)>0:
         jsondata = jsondata[0]
     else:
-        return ''    
+        return ''
     if 'boundary' in jsondata:
         jsondata = jsondata['boundary']
     else:
-        return '' 
-    
+        return ''
 
-    dictionary={} 
+
+    dictionary={}
     for v in jsondata:
         dictionary[v['code']]= v['name']
-            
-    return dictionary     
-    
+
+    return dictionary
+
 def storeTenantValues():
     for tenant in uniquetenant:
         localitydict[tenant]=locationApiCall(tenant)
 
-       
+
 def enrichLocality(tenantid,locality):
     if tenantid in localitydict:
         if localitydict[tenantid]=='':
@@ -318,8 +325,10 @@ def enrichLocality(tenantid,locality):
         else:
             return ''
     else:
-        return ''    
-    
-    
+        return ''
+
+def dateToEpoch(dateString):
+     return str(parser.parse(dateString).timestamp() * 1000)
+
 if __name__ == '__main__':
     connect()
