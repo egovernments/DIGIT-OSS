@@ -2,6 +2,7 @@ import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker } from "@egovernments/digit-ui-react-components";
 import DropdownUlb from "./DropdownUlb";
+import { aphabeticalSortFunctionForTenantsBasedOnName } from "../../utils";
 
 const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPage, t }) => {
   const { register, handleSubmit, formState, reset, watch, control } = useForm({
@@ -11,7 +12,7 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
   const ulb = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const userInfo = Digit.UserService.getUser().info;
-  const userUlbs = ulb.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code))
+  const userUlbs = ulb.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code)).sort(aphabeticalSortFunctionForTenantsBasedOnName)
   
   const getFields = (input) => {
     switch(input.type) {

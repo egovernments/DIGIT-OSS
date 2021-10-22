@@ -58,6 +58,7 @@ const DocumentDetails = () => {
     <div>
       {showModal ? <Confirmation
         t={t}
+        heading={'CONFIRM_DELETE_EVENT'}
         docName={data?.applicationData?.name}
         closeModal={() => setShowModal(!showModal)}
         actionCancelLabel={'CS_COMMON_CANCEL'}
@@ -67,7 +68,7 @@ const DocumentDetails = () => {
       />
 
         : null}
-      <Header>{t(`CS_HEADER_PUBLIC_BRDCST`)}</Header>
+      <Header>{t(`ES_TITLE_APPLICATION_DETAILS`)}</Header>
   
       <div className="notice_and_circular_main gap-ten">
         <div className="documentDetails_wrapper">

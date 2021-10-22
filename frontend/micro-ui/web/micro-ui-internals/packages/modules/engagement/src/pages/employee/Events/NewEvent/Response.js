@@ -50,7 +50,7 @@ const Response = (props) => {
       <Card>
         <BannerPicker
           t={t}
-          message={searchParams?.update ? 'ENGAGEMENT_EVENT_UPDATED' : 'ENGAGEMENT_EVENT_DELETED'}
+          message={searchParams?.update ? updateEventMutation.isSuccess ? 'ENGAGEMENT_EVENT_UPDATED' : `ENGAGEMENT_EVENT_UPDATED_FAILED` : updateEventMutation.isSuccess ? 'ENGAGEMENT_EVENT_DELETED' : 'ENGAGEMENT_EVENT_DELETED_FAILED'}
           data={updateEventMutation.data}
           isSuccess={updateEventMutation.isSuccess}
           isLoading={updateEventMutation.isIdle || updateEventMutation.isLoading}
@@ -80,12 +80,12 @@ const Response = (props) => {
         isLoading={mutation.isIdle || mutation.isLoading}
       />
       <CardText>
-        {mutation.isSuccess ? t(`ENGAGEMENT_EVENT_CREATED_MESSAGES`, {
+        {mutation.isSuccess ? t(`ENGAGEMENT_EVENT_CREATED_MESSAGE`, {
         eventName: mutation?.data?.events?.[0]?.name,
         fromDate: Digit.DateUtils.ConvertTimestampToDate(mutation?.data?.events?.[0]?.eventDetails?.fromDate),
         toDate: Digit.DateUtils.ConvertTimestampToDate(mutation?.data?.events?.[0]?.eventDetails?.toDate),
-        fromTime: mutation.isSuccess ? format(new Date(mutation?.data?.events?.[0]?.eventDetails?.fromDate), 'hh:mm') : null,
-        toTime: mutation.isSuccess ? format(new Date(mutation?.data?.events?.[0]?.eventDetails?.toDate), 'hh:mm') : null,
+        fromTime: mutation.isSuccess ? format(new Date(mutation?.data?.events?.[0]?.eventDetails?.fromDate), 'HH:mm') : null,
+        toTime: mutation.isSuccess ? format(new Date(mutation?.data?.events?.[0]?.eventDetails?.toDate), 'HH:mm') : null,
       }) : t(`ENGAGEMENT_EVENT_FAILED_MESSAGES`)}
       </CardText>
       <ActionBar>

@@ -1,8 +1,8 @@
 import { Modal, Text } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 
-const Heading = ({ t }) => {
-    return <h1 className="heading-m">{`${t('CONFIRM_DELETE_DOC')}`}</h1>;
+const Heading = ({ t, heading }) => {
+    return <h1 className="heading-m">{`${t(heading)}`}</h1>;
 };
 
 
@@ -32,6 +32,7 @@ const ConfirmationQuestion = ({ t, title }) => (
 
 const Confirmation = ({
     t,
+    heading,
     docName,
     closeModal,
     actionCancelLabel,
@@ -41,7 +42,7 @@ const Confirmation = ({
 }) => {
     return (
         <Modal
-            headerBarMain={<Heading t={t} />}
+            headerBarMain={<Heading t={t} heading={heading} />}
             headerBarEnd={<CloseBtn onClick={closeModal} />}
             actionCancelLabel={t(actionCancelLabel)}
             actionCancelOnSubmit={actionCancelOnSubmit}

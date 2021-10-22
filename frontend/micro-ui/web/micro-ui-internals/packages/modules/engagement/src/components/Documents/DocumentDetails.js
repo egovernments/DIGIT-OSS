@@ -73,6 +73,7 @@ const DocumentDetails = ({ location, match, history, }) => {
         <div>
             {showModal ? <Confirmation
                 t={t}
+                heading={'CONFIRM_DELETE_DOC'}
                 docName={details?.name}
                 closeModal={() => setShowModal(!showModal)}
                 actionCancelLabel={'CS_COMMON_CANCEL'}
