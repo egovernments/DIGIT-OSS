@@ -20,6 +20,13 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
 
 
   const goNext = () => {
+    if(JSON.parse(sessionStorage.getItem("BPAintermediateValue")) !== null)
+    {
+    let formData = JSON.parse(sessionStorage.getItem("BPAintermediateValue"))
+    sessionStorage.setItem("BPAintermediateValue",null);
+    onSelect("",formData);
+    }
+    else
     onSelect("uiFlow", uiFlow);
   }
 

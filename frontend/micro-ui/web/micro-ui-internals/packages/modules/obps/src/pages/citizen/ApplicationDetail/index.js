@@ -1,16 +1,29 @@
-import { StatusTable, Header, Card, CardHeader, Row, PDFSvg, CardSectionHeader } from "@egovernments/digit-ui-react-components";
+import { StatusTable, Header, Card, CardHeader, Row, PDFSvg, CardSectionHeader,MultiLink } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { pdfDocumentName, pdfDownloadLink, stringReplaceAll } from "../../../utils";
 import ApplicationTimeline from "../../../components/ApplicationTimeline";
+import { downloadAndPrintReciept } from "../../../utils";
 const ApplicationDetails = () => {
   const { id } = useParams();
   const { t } = useTranslation();
   const [documents, setDocuments] = useState({});
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const [showOptions, setShowOptions] = useState(false);
+  const [dowloadOptions, setDowloadOptions] = useState([]);
+  const stateCode = Digit.ULBService.getStateId();
   const { data: LicenseData, isLoading } = Digit.Hooks.obps.useBPAREGSearch(tenantId, {});
   let License = LicenseData?.Licenses?.[0];
+  const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
+    {
+      tenantId: stateCode,
+      businessService: "BPAREG",
+      consumerCodes: id,
+      isEmployee: true
+    },
+    {}
+  );
 
 
   useEffect(() => {
@@ -21,10 +34,33 @@ const ApplicationDetails = () => {
     }
   }, [License]);
 
+  useEffect(() => {
+    if (License) {
+      if(reciept_data?.Payments?.length > 0) {
+        setDowloadOptions([{
+          label: t("TL_RECEIPT"),
+          onClick: () => downloadAndPrintReciept(reciept_data?.Payments?.[0]?.paymentDetails?.[0]?.businessService || "BPAREG", License?.applicationNumber, License?.tenantId),
+        }]);
+      }
+      const fileStoresIds = License?.tradeLicenseDetail?.applicationDocuments.map(document => document?.fileStoreId);
+    }
+    
+  }, [License, reciept_data]);
+
 
   return (
     <Fragment>
       <Header>{t("BPA_TASK_DETAILS_HEADER")}</Header>
+      {reciept_data?.Payments?.length > 0 && 
+        <div style={{right: "3%", top: "20px", position: "absolute"}}>
+        <MultiLink
+          className="multilinkWrapper"
+          onHeadClick={() => setShowOptions(!showOptions)}
+          displayOptions={showOptions}
+          options={dowloadOptions}
+          style={{top:"90px"}}
+        />  
+        </div>}
       <div>
         <Card>
           <StatusTable>
@@ -58,7 +94,7 @@ const ApplicationDetails = () => {
           <CardHeader>{t(`BPA_CORRESPONDANCE_ADDRESS_LABEL`)}</CardHeader>
           <Row className="border-none" text={License?.tradeLicenseDetail?.owners?.[0]?.correspondenceAddress || t("CS_NA")} />
         </Card>
-        <Card>
+        {License?.tradeLicenseDetail?.applicationDocuments.length>0 && <Card>
           <CardHeader>{t("BPA_DOC_DETAILS_SUMMARY")}</CardHeader>
           {License?.tradeLicenseDetail?.applicationDocuments?.map((document, index) => {
             return (
@@ -74,7 +110,7 @@ const ApplicationDetails = () => {
             </Fragment>
             )
           })}
-        </Card>
+        </Card>}
         <Card>
           <ApplicationTimeline id={id} tenantId={License?.tenantId} />
         </Card>

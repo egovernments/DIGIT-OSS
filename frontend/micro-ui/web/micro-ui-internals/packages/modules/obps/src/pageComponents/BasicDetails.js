@@ -27,7 +27,7 @@ const BasicDetails = ({ formData, onSelect, config }) => {
     const result = bpaData?.find(bpa => {
       return bpa?.edcrNumber === scrutinyNumber?.edcrNumber
     });
-    result !== undefined ? setShowToast(true) : setBasicData(data);
+    result !== undefined && !(formData?.id)? setShowToast(true) : setBasicData(data);
   }, [data, bpaData])
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { CardHeader, Header, Toast, Card, StatusTable, Row, Loader, Menu, PDFSvg, SubmitBar, LinkButton, ActionBar, CheckBox } from "@egovernments/digit-ui-react-components";
+import { CardHeader, Header, Toast, Card, StatusTable, Row, Loader, Menu, PDFSvg, SubmitBar, LinkButton, ActionBar, CheckBox, MultiLink } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useQueryClient } from "react-query";
@@ -21,6 +21,8 @@ const BpaApplicationDetail = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [appDetails, setAppDetails] = useState({});
+  const [showOptions, setShowOptions] = useState(false);
+  const [payments, setpayments] = useState([]);
   const history = useHistory();
   sessionStorage.setItem("bpaApplicationDetails", false);
   let isFromSendBack = false;
@@ -34,6 +36,75 @@ const BpaApplicationDetail = () => {
       enabled: !!data
     }
   });
+
+  let businessService = [];
+
+  if(data && data?.applicationData?.businessService === "BPA_LOW")
+  {
+    businessService = ["BPA.LOW_RISK_PERMIT_FEE"]
+  }
+  else if(data && data?.applicationData?.businessService === "BPA" && data?.applicationData?.riskType === "HIGH")
+  {
+    businessService = ["BPA.NC_APP_FEE","BPA.NC_SAN_FEE"];
+  }
+  else
+  {
+    businessService = ["BPA.NC_OC_APP_FEE","BPA.NC_OC_SAN_FEE"];
+  }
+
+
+  useEffect(async() => {
+    businessService.length > 0 && businessService.map((buss,index) => {
+      let res = Digit.PaymentService.recieptSearch(data?.applicationData?.tenantId, buss, {consumerCodes: data?.applicationData?.applicationNo}).then((value) => {
+
+       value?.Payments[0] && !(payments.filter((val) => val?.id ===value?.Payments[0].id).length>0) && setpayments([...payments,...value?.Payments]);  
+      });
+    })
+    
+  },[data, businessService]);
+
+  useEffect(() => {
+    let payval=[]
+    payments.length>0 && payments.map((ob) => {
+      ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.billAccountDetails.map((bill,index) => {
+        payval.push({title:`${bill?.taxHeadCode}_DETAILS`, value:""});
+        payval.push({title:bill?.taxHeadCode, value:`₹${bill?.amount}`});
+        payval.push({title:"BPA_STATUS_LABEL", value:"Paid"});
+      })
+      payval.push({title:"BPA_TOT_AMT_PAID", value:`₹${ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.amount}`});
+    })
+    payments.length > 0 && !(data.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL").length>0)&& data.applicationDetails.push({
+      title:"BPA_FEE_DETAILS_LABEL",
+      additionalDetails:{
+        inspectionReport:[],
+        values:[...payval]
+      }
+    })
+  },[payments]);
+
+
+  async function getRecieptSearch({tenantId,payments,...params}) {
+    let response = { filestoreIds: [payments?.fileStoreId] };
+    if (!payments?.fileStoreId) {
+      response = await Digit.PaymentService.generatePdf(tenantId, { Payments: payments }, "consolidatedreceipt");
+    }
+    const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
+    window.open(fileStore[response?.filestoreIds[0]], "_blank");
+  }
+
+  async function getPermitOccupancyOrderSearch({tenantId},order) {
+    let requestData = {...data?.applicationData, edcrDetail:[{...data?.edcrDetails}]}
+    let response = await Digit.PaymentService.generatePdf(tenantId, { Bpa: [requestData] }, order);
+    const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
+    window.open(fileStore[response?.filestoreIds[0]], "_blank");
+  }
+
+  async function getRevocationPDFSearch({tenantId,...params}) {
+    let requestData = {...data?.applicationData}
+    let response = await Digit.PaymentService.generatePdf(tenantId, { Bpa: [requestData] }, "bpa-revocation");
+    const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
+    window.open(fileStore[response?.filestoreIds[0]], "_blank");
+  }
 
   useEffect(() => {
     const workflow = { action: selectedAction }
@@ -114,9 +185,69 @@ const BpaApplicationDetail = () => {
     return <Loader />
   }
 
+  let dowloadOptions = [];
+  if(data?.applicationData?.businessService==="BPA_OC" && data?.applicationData?.status==="APPROVED"){
+    dowloadOptions.push({
+      label: t("BPA_OC_CERTIFICATE"),
+      onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"occupancy-certificate"),
+    });
+  }
+  if(data?.comparisionReport){
+    dowloadOptions.push({
+      label: t("BPA_COMPARISON_REPORT_LABEL"),
+      onClick: () => window.open(data?.comparisionReport?.comparisonReport, "_blank"),
+    });
+  }
+  if(data && data?.applicationData?.businessService === "BPA_LOW")
+  {
+    dowloadOptions.push({
+      label: t("BPA_FEE_RECEIPT"),
+      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[0],consumerCodes: data?.applicationData?.applicationNo}),
+    });
+    !(data?.applicationData?.status.includes("REVOCATION")) && dowloadOptions.push({
+      label: t("BPA_PERMIT_ORDER"),
+      onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"buildingpermit-low"),
+    });
+    (data?.applicationData?.status.includes("REVOCATION")) && dowloadOptions.push({
+      label: t("BPA_REVOCATION_PDF_LABEL"),
+      onClick: () => getRevocationPDFSearch({tenantId: data?.applicationData?.tenantId}),
+    });
+    
+  }
+  else if(data && data?.applicationData?.businessService === "BPA" && data?.applicationData?.riskType === "HIGH")
+  {
+    dowloadOptions.push({
+      label: t("BPA_APP_FEE_RECEIPT"),
+      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[0],consumerCodes: data?.applicationData?.applicationNo}),
+    });
+    if(payments.length == 2)dowloadOptions.push({
+      label: t("BPA_SAN_FEE_RECEIPT"),
+      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
+    });
+  }
+  else
+  {
+    dowloadOptions.push({
+      label: t("BPA_APP_FEE_RECEIPT"),
+      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[0],consumerCodes: data?.applicationData?.applicationNo}),
+    });
+    if(payments.length == 2)dowloadOptions.push({
+      label: t("BPA_SAN_FEE_RECEIPT"),
+      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
+    });
+  }
+
+
   return (
     <Fragment>
       <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
+      <MultiLink
+          className="multilinkWrapper"
+          onHeadClick={() => setShowOptions(!showOptions)}
+          displayOptions={showOptions}
+          options={dowloadOptions}
+          style={{top:"90px"}}
+        />
       {data?.applicationDetails?.map((detail, index, arr) => {
         return (
           <Card key={index} style={detail?.title === ""?{marginTop:"-8px"}:{}}>
