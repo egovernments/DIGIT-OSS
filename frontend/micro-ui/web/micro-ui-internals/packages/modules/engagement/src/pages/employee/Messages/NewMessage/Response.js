@@ -50,7 +50,7 @@ const Response = (props) => {
       <Card>
         <BannerPicker
           t={t}
-          message={searchParams?.update ? 'ENGAGEMENT_PUBLIC_BRDCST_UPDATED' : 'ENGAGEMENT_PUBLIC_BRDCST_DELETED'}
+          message={searchParams?.update ? updateEventMutation.isSuccess ? 'ENGAGEMENT_PUBLIC_BRDCST_UPDATED' : 'ENG_PUBLIC_BRDCST_UPDATION_FAILED' : updateEventMutation.isSuccess ? 'ENGAGEMENT_PUBLIC_BRDCST_DELETED' : 'ENGAGEMENT_PUBLIC_BRDCST_DELETION_FAILED'}
           data={updateEventMutation.data}
           isSuccess={updateEventMutation.isSuccess}
           isLoading={updateEventMutation.isIdle || updateEventMutation.isLoading}

@@ -31,10 +31,9 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
 
 
   return (
-    <div className={`notice_and_circular_main ${!isMobile ? 'gap-ten' : ""}`}>
-
-      <div className="notice_and_circular_image" style={{ width: '100px' }}>
-        <GenericFileIcon height={`${isMobile ? 80 : 100}`} width={`${isMobile ? 80 : 100}`} />
+    <div className="notice_and_circular_main">
+      <div className="notice_and_circular_image">
+        <GenericFileIcon height={`${isMobile ? 66 : 100}`} width={`${isMobile ? 53 : 100}`} />
       </div>
       <div className="notice_and_circular_content">
         <div className="notice_and_circular_heading_mb">

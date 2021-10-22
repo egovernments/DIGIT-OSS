@@ -22,7 +22,7 @@ import SelectEventGeolocation from "./components/Events/SelectGeoLocation";
 import SelectToDate from "./components/Events/SelectToDate";
 import NotificationsAndWhatsNew from "./pages/citizen/NotificationsAndWhatsNew";
 import EventsListOnGround from "./pages/citizen/EventsListOnGround";
-import EmployeeEventDetails from "./pages/employee/Events/EventDetails";
+import EmployeeEventDetails from "./components/Events/DocumentDetails";
 import CitizenApp from "./pages/citizen";
 import EventDetails from "./pages/citizen/EventsListOnGround/EventDetails";
 import DocumenetCreate from "./pages/employee/Documents/documents-create";

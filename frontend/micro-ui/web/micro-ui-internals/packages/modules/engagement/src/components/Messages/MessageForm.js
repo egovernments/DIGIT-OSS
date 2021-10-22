@@ -76,10 +76,11 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
             name="description"
             control={control}
             defaultValue={formData?.category ? data?.mseva?.EventCategories.filter(category => category.code === formData?.category)?.[0] : null}
-            rules={{ required: true }}
+            rules={{ required: true, maxLength:500 }}
             render={({ onChange, ref, value }) => <TextArea inputRef={ref} value={value} name="description" onChange={onChange} hintText={t('PUBLIC_BRDCST_MSG_LENGTH')}/>}
           />
-          {errors && errors['description'] && <CardLabelError>{t(`EVENTS_COMMENTS_ERROR_REQUIRED`)}</CardLabelError>}
+          {errors && errors?.description && errors?.description?.type==="required" && <CardLabelError>{t(`EVENTS_COMMENTS_ERROR_REQUIRED`)}</CardLabelError>}
+          {errors && errors?.description && errors?.description?.type==="maxLength" && <CardLabelError>{t(`EVENTS_MAXLENGTH_REACHED`)}</CardLabelError>}
         </div>
       </LabelFieldPair>
       <LabelFieldPair style={{marginBottom: "24px"}}>

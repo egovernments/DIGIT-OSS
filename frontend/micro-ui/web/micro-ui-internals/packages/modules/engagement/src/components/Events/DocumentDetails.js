@@ -26,7 +26,7 @@ const DocumentDetails = () => {
   function onActionSelect(action) {
     // setSelectedAction(action);
     if (action === "EDIT") {
-      history.push(`/digit-ui/employee/engagement/messages/inbox/edit/${id}`)
+      history.push(`/digit-ui/employee/engagement/event/edit-event/${id}`)
     }
     if (action === "DELETE") {
       setShowModal(true);
@@ -35,16 +35,15 @@ const DocumentDetails = () => {
   }
 
   const handleDelete = () => {
-    const finalData = (({ uploadedFilesData, ...ogData }) => ogData)(data?.applicationData)
     const details = {
-      events: [
-        {
-          ...finalData,
-          status: "CANCELLED",
-        },
-      ],
-    };
-    history.push("/digit-ui/employee/engagement/messages/response?delete=true", details);
+        events: [
+          {
+            ...data?.applicationData,
+            status: "CANCELLED",
+          },
+        ],
+      };
+      history.push("/digit-ui/employee/engagement/event/response?delete=true", details);
   };
 
   function onModalCancel() {
@@ -73,13 +72,21 @@ const DocumentDetails = () => {
       <div className="notice_and_circular_main gap-ten">
         <div className="documentDetails_wrapper">
           <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("EVENTS_ULB_LABEL")}:`}</p> <p>{getUlbName(data?.tenantId)}</p> </div>
-          <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("PUBLIC_BRDCST_TITLE_LABEL")}:`}</p> <p>{data?.applicationData?.name}</p> </div>
-          <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("EVENTS_COMMENTS_LABEL")}:`}</p> <p className="documentDetails__description">{data?.applicationData?.description?.length ? data?.applicationData?.description : 'NA'}</p> </div>
+          <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("EVENTS_CATEGORY_LABEL")}:`}</p> <p>{data?.applicationData?.eventCategory}</p> </div>
+          <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("EVENTS_DESCRIPTION_LABEL")}:`}</p> <p className="documentDetails__description">{data?.applicationData?.description?.length ? data?.applicationData?.description : 'NA'}</p> </div>
           <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("EVENTS_FROM_DATE_LABEL")}:`}</p> <p>{data?.applicationData?.eventDetails?.fromDate ? format(new Date(data?.applicationData?.eventDetails?.fromDate), 'dd/MM/yyyy') : null}</p> </div>
           <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("EVENTS_TO_DATE_LABEL")}:`}</p> <p>{data?.applicationData?.eventDetails?.toDate ? format(new Date(data?.applicationData?.eventDetails?.toDate), 'dd/MM/yyyy') : null}</p> </div>
+          <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("EVENTS_FROM_TIME_LABEL")}:`}</p> <p>{data?.applicationData?.eventDetails?.fromDate ? format(new Date(data?.applicationData?.eventDetails?.fromDate), 'hh:mm') : null}</p> </div>
+          <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("EVENTS_TO_TIME_LABEL")}:`}</p> <p>{data?.applicationData?.eventDetails?.toDate ? format(new Date(data?.applicationData?.eventDetails?.toDate), 'hh:mm') : null}</p> </div>
+          <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("EVENTS_ADDRESS_LABEL")}:`}</p> <p>{data?.applicationData?.eventDetails?.address ? data?.applicationData?.eventDetails?.address : null}</p> </div>
+          <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t( "EVENTS_MAP_LABEL")}:`}</p> <p>{data?.applicationData?.eventDetails?.latitude && data?.applicationData?.eventDetails?.longitude ?
+                Digit.Utils.getStaticMapUrl(data?.applicationData?.eventDetails?.latitude, data?.applicationData?.eventDetails?.longitude) :
+                'N/A' }</p> </div>
+          <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t( "EVENTS_ORGANIZER_NAME_LABEL")}:`}</p> <p>{data?.applicationData?.eventDetails?.organizer ? data?.applicationData?.eventDetails?.organizer : "-"}</p> </div>
+          <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t( "EVENTS_ENTRY_FEE_INR_LABEL")}:`}</p> <p>{data?.applicationData?.eventDetails?.fees ? data?.applicationData?.eventDetails?.fees: "NA"}</p> </div>  
 
 
-          {data?.applicationData?.eventDetails?.documents.length ? <div className="documentDetails_pdf">
+          {data?.applicationData?.eventDetails?.documents?.length ? <div className="documentDetails_pdf">
             <span className="documentDetails_subheader">{`${t('CS_COMMON_DOCUMENTS')}`}</span>
             <div style={{ width: '100px' }} onClick={() => openUploadedDocument(data?.applicationData?.eventDetails?.documents[0]?.filestoreId, data?.applicationData?.name)}>
               <GenericFileIcon />

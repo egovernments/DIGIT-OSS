@@ -2,19 +2,22 @@ import React, { useState, useEffect } from "react";
 import { Card, DetailsCard, Loader, PopUp, SearchAction, FilterAction } from "@egovernments/digit-ui-react-components";
 import Filter from "./Filter";
 import Search from "./Search";
+import { areEqual } from "../../utils";
+import { useHistory } from "react-router-dom";
 const ApplicationCard = ({
   searchFields,
   searchParams,
   onFilterChange,
   onSearch,
   t,
-  data
+  data,
+  responseData
 }) => {
   const [type, setType] = useState("");
   const [popup, setPopup] = useState(false);
   const [params, setParams] = useState(searchParams);
   const tenantId = Digit.ULBService.getCurrentTenantId();
-
+  const history = useHistory()
   useEffect(() => {
     if (type) setPopup(true);
   }, [type]);
@@ -27,6 +30,16 @@ const ApplicationCard = ({
     setPopup(false);
     setParams(searchParams);
   };
+
+  const redirectToDetailsPage = (data) => {
+    //TODO: @nrj-egov change it to some new statergy
+    const details = responseData?.find((item) => (areEqual(item?.user?.name, data["Posted By"]) && areEqual(item.name, data["Event Name"]) && areEqual(item.eventCategory, data["Event Category"]) && areEqual(item.status, data["Status"]?.props?.children) ));
+  
+    if (details) {
+      history.push(`/digit-ui/employee/engagement/event/inbox/event-details/${details?.id }`)
+    }
+  }
+
 
   let result;
   if (data?.length === 0) {
@@ -43,7 +56,7 @@ const ApplicationCard = ({
     );
   }
   else if (data && data?.length > 0) {
-    result = <DetailsCard data={data} handleSelect={() => { }} />
+    result = <DetailsCard data={data} handleSelect={() => { }} handleDetailCardClick={redirectToDetailsPage} />
   }
   return (
     <React.Fragment>
