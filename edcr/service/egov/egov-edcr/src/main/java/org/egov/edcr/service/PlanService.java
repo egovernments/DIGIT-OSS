@@ -341,19 +341,18 @@ public class PlanService {
                     pdfDetail.setStandardViolations(edcrPdfDetail.getStandardViolations());
 
                     File convertedPdf = edcrPdfDetail.getConvertedPdf();
-                    if (convertedPdf != null) {
+                    if (convertedPdf != null && convertedPdf.length() > 0) {
                         FileStoreMapper fileStoreMapper = fileStoreService.store(convertedPdf, convertedPdf.getName(),
-                                "application/pdf", "Digit DCR");
+                                DcrConstants.PDF_EXT, DcrConstants.FILESTORE_MODULECODE);
                         pdfDetail.setConvertedPdf(fileStoreMapper);
+                        pdfDetail.setEdcrApplicationDetail(edcrApplicationDetail);
+                        edcrPdfDetails.add(pdfDetail);
                     }
                 }
             }
 
             if (!edcrPdfDetails.isEmpty()) {
-                for (org.egov.edcr.entity.EdcrPdfDetail edcrPdfDetail : edcrPdfDetails) {
-                    edcrPdfDetail.setEdcrApplicationDetail(edcrApplicationDetail);
-                }
-
+                edcrApplicationDetail.getEdcrPdfDetails().addAll(edcrPdfDetails);
                 edcrPdfDetailService.saveAll(edcrPdfDetails);
             }
 

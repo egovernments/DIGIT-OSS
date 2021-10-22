@@ -124,9 +124,9 @@ public class LocalDiskFileStoreService implements FileStoreService {
         return storeCommon(fileStream, fileName, mimeType, moduleName, closeStream);
     }
 
-    private FileStoreMapper storeCommon(InputStream fileStream, String fileName, String mimeType, String moduleName,
-            boolean closeStream) {
-        try {
+	private FileStoreMapper storeCommon(InputStream fileStream, String fileName, String mimeType, String moduleName,
+			boolean closeStream) {
+		try {
             fileName = normalizeString(fileName);
             moduleName = normalizeString(moduleName);
             FileStoreMapper fileMapper = new FileStoreMapper(randomUUID().toString(), fileName);
@@ -137,11 +137,10 @@ public class LocalDiskFileStoreService implements FileStoreService {
                 fileStream.close();
             return fileMapper;
         } catch (IOException e) {
-            LOG.error(String.format("Error occurred while storing files at %s/%s/%s", this.fileStoreBaseDir, getCityCode(),
-                    moduleName), e);
+            LOG.error(String.format("Error occurred while storing files at %s/%s/%s", this.fileStoreBaseDir, getCityCode(), moduleName), e);
         }
         return null;
-    }
+	}
 
     @Override
     public File fetch(FileStoreMapper fileMapper, String moduleName) {
@@ -205,20 +204,20 @@ public class LocalDiskFileStoreService implements FileStoreService {
         return Paths.get(fileDirPath + separator + fileStoreId);
     }
 
-    @Override
-    public FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName,
-            String tenantId) {
-        return null;
-    }
+	@Override
+	public FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName,
+			String tenantId) {
+		return null;
+	}
 
-    @Override
-    public FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName,
-            String tenantId, boolean closeStream) {
-        return storeCommon(fileStream, fileName, mimeType, moduleName, closeStream);
-    }
+	@Override
+	public FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName,
+			String tenantId, boolean closeStream) {
+		return storeCommon(fileStream, fileName, mimeType, moduleName, closeStream);
+	}
 
-    @Override
-    public File fetch(String fileStoreId, String moduleName, String tenantId) {
-        return fetchAsPath(fileStoreId, moduleName).toFile();
-    }
+	@Override
+	public File fetch(String fileStoreId, String moduleName, String tenantId) {
+		return fetchAsPath(fileStoreId, moduleName).toFile();
+	}
 }

@@ -248,7 +248,7 @@ public class RestEdcrApplicationController {
                 HashMap<String, String> data = new HashMap<>();
                 data.put("applicationType", applicationType);
                 data.put("serviceType", serviceType);
-                masterData = mDMSValidator.getAttributeValues(mdmsData);
+                masterData = mDMSValidator.getAttributeValues(mdmsData, "BPA");
                 List<ErrorDetail> mdmsErrors = mDMSValidator.validateMdmsData(masterData, data);
                 if (!mdmsErrors.isEmpty())
                     return new ResponseEntity<>(mdmsErrors, HttpStatus.BAD_REQUEST);
