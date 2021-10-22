@@ -131,6 +131,9 @@ public class PaymentNotificationService {
             Set<String> mobileNumbers = new HashSet<>();
             property.getOwners().forEach(owner -> {
                 mobileNumbers.add(owner.getMobileNumber());
+                if (owner.getAlternatemobilenumber()!= null) {
+                	mobileNumbers.add(owner.getAlternatemobilenumber());
+                }
             });
 
 			List<SMSRequest> smsRequests = getSMSRequests(mobileNumbers, customMessage, valMap);
@@ -225,6 +228,9 @@ public class PaymentNotificationService {
             Set<String> mobileNumbers = new HashSet<>();
             property.getOwners().forEach(owner -> {
                 mobileNumbers.add(owner.getMobileNumber());
+                if (owner.getAlternatemobilenumber()!= null) {
+                	mobileNumbers.add(owner.getAlternatemobilenumber());
+                }
             });
 
             smsRequests.addAll(getSMSRequests(mobileNumbers,customMessage, valMap));
