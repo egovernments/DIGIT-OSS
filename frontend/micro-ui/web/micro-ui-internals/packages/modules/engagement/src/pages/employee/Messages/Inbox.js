@@ -17,31 +17,32 @@ const Inbox = ({ tenants, parentRoute }) => {
       startDate: null,
       endDate: new Date(""),
       title: ""
-    }
+    },
+    ulb: tenants?.find(tenant => tenant?.code === tenantId)
   });
   let isMobile = window.Digit.Utils.browser.isMobile();
-  const { data, isLoading } = Digit.Hooks.events.useInbox(tenantId, {
-    // limit: pageSize,
-    // offset: pageOffset,
+  const { data, isLoading } = Digit.Hooks.events.useInbox(searchParams?.ulb?.code, {
+    limit: pageSize,
+    offset: pageOffset,
   },
-  { status: "ACTIVE,INACTIVE",eventTypes: "BROADCAST" }, 
-  {
-    select: (data) => data?.events
-  });
+    { status: "ACTIVE,INACTIVE", eventTypes: "BROADCAST" },
+    {
+      select: (data) => data?.events
+    });
 
   const onSearch = (params) => {
-    setSearchParams({ ...searchParams, ...params });
+    setSearchParams((prevParams) => ({ ...prevParams, ...params }));
   }
 
   const handleFilterChange = (data) => {
-    setSearchParams({ ...searchParams, ...data })
+    setSearchParams((prevParams) => ({ ...prevParams, ...data }))
   }
 
   const globalSearch = (rows, columnIds) => {
     // return rows;
     return rows?.filter(row =>
       (searchParams?.eventStatus?.length > 0 ? searchParams?.eventStatus?.includes(row.original?.status) : true) &&
-      (searchParams?.eventName ? row.original?.name?.toUpperCase().startsWith(searchParams?.eventName.toUpperCase()) : true) &&
+      (searchParams?.name ? row.original?.name?.toUpperCase().startsWith(searchParams?.name.toUpperCase()) : true) &&
       (searchParams?.ulb?.code ? row.original.tenantId === searchParams?.ulb?.code : true) &&
       (searchParams?.eventCategory ? row.original.eventCategory === searchParams?.eventCategory?.code : true) &&
       (isValid(searchParams?.range?.startDate) ? row.original.eventDetails?.fromDate >= new Date(searchParams?.range?.startDate).getTime() : true) &&
@@ -57,11 +58,11 @@ const Inbox = ({ tenants, parentRoute }) => {
       },
       {
         name: "range",
-        type:"range"
+        type: "range"
       },
       {
         label: t("EVENTS_MESSAGE_LABEL"),
-        name: "eventName"
+        name: "name"
       }
     ]
   }
@@ -83,12 +84,12 @@ const Inbox = ({ tenants, parentRoute }) => {
         onFilterChange={handleFilterChange}
         onSearch={onSearch}
         isLoading={isLoading}
-        title = {"EVENTS_PUBLIC_MESSAGE_NOTICE_HEADER"}
+        title={"EVENTS_PUBLIC_MESSAGE_NOTICE_HEADER"}
         iconName={"calender"}
         links={links}
       />
     )
-  } 
+  }
 
   return (
     <div>
@@ -108,12 +109,12 @@ const Inbox = ({ tenants, parentRoute }) => {
         onFilterChange={handleFilterChange}
         pageSizeLimit={pageSize}
         totalRecords={data?.length}
-        title = {"EVENTS_PUBLIC_MESSAGE_NOTICE_HEADER"}
-        iconName={"calender"}
+        title={"EVENTS_PUBLIC_MESSAGE_NOTICE_HEADER"}
         links={links}
+        isLoading={isLoading}
       />
     </div>
   );
 }
 
-export default Inbox; 
+export default Inbox;

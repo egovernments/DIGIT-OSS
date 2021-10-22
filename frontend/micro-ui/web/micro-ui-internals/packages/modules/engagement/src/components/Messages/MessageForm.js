@@ -11,7 +11,7 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
   const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
   const { isLoading, data } = Digit.Hooks.useCommonMDMS(state, "mseva", ["EventCategories"]);
 
-  const userUlbs = ulbs.filter(ulb => ulb?.code === tenantId)
+  const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code));
 
   const isValidDate = (date) => {
     if (!isValid(new Date(formData?.fromDate)) || !isValid(new Date(date))) return false;
