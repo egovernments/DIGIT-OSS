@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import static java.util.Objects.isNull;
+
 import java.util.*;
 
 
@@ -148,7 +150,7 @@ public class WorkflowService {
     
     public List statusCount(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
         List result;
-        if(criteria.isNull() && !criteria.getBusinessService().equalsIgnoreCase(WorkflowConstants.FSM_MODULE)){
+        if(criteria.isNull() && !isNull(criteria.getBusinessService()) && !criteria.getBusinessService().equalsIgnoreCase(WorkflowConstants.FSM_MODULE)){
         	enrichSearchCriteriaFromUser(requestInfo, criteria);
             result = workflowRepository.getInboxStatusCount(criteria);
         }
