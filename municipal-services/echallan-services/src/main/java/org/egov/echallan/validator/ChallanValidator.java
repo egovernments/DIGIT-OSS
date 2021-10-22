@@ -102,7 +102,7 @@ public class ChallanValidator {
 	}
 
 	public List<String> getLocalityCodes(String tenantId, RequestInfo requestInfo){
-		StringBuilder builder = new StringBuilder(config.getBoundaryHost());
+		StringBuilder builder = new StringBuilder(config.getLocationHost());
 		builder.append(config.getFetchBoundaryEndpoint());
 		builder.append("?tenantId=");
 		builder.append(tenantId);
@@ -154,5 +154,12 @@ public class ChallanValidator {
 		if(!CollectionUtils.isEmpty(errorMap.keySet())) {
 			throw new CustomException(errorMap);
 		}
+	}
+
+	public void validateSearchRequest(String tenantId){
+		if(config.getIsEnvironmentCentralInstance() && tenantId == null)
+			throw new CustomException("ECHALLAN_INVALID_SEARCH"," TenantId is mandatory for search ");
+		else if(config.getIsEnvironmentCentralInstance() && tenantId.split("\\.").length < config.getStateLevelTenantIdLength())
+			throw new CustomException("ECHALLAN_INVALID_SEARCH"," TenantId should be mandatorily " + config.getStateLevelTenantIdLength() + " levels for search");
 	}
 }

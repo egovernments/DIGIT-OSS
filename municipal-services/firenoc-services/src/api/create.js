@@ -13,6 +13,8 @@ import { validateFireNOCModel } from "../utils/modelValidation";
 import { getUpdatedTopic } from "../utils/index";
 import set from "lodash/set";
 import get from "lodash/get";
+import { sendFireNOCSMSRequest } from "../utils/notificationUtil";
+
 const asyncHandler = require("express-async-handler");
 
 export default ({ config }) => {
@@ -84,6 +86,10 @@ export const createApiResponse = async (request, res, next) => {
     topic: topic,
     messages: JSON.stringify(body)
   });
+  
+  sendFireNOCSMSRequest(body.FireNOCs);
+
+
   let response = {
     ResponseInfo: requestInfoToResponseInfo(body.RequestInfo, true),
     FireNOCs: body.FireNOCs

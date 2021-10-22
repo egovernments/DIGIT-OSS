@@ -50,7 +50,7 @@ export const findLocalisation = async (
   let request = { 
     RequestInfo: requestInfo,
     messageSearchCriteria:{
-      tenantId: statetenantid,
+      tenantId: defaultTenant,
       locale: locale,
       codes: []
     }

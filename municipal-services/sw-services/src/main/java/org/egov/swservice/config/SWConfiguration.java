@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Map;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -191,4 +193,10 @@ public class SWConfiguration {
 
 	@Value("${is.environment.central.instance}")
 	private Boolean isEnvironmentCentralInstance;
+
+	@Value("#{${egov.ui.app.host.map}}")
+	private Map<String, String> uiAppHostMap;
+
+	@Value("${egov.url.shortner.host}")
+	private String urlShortnerHost;
 }

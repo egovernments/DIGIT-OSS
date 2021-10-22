@@ -26,9 +26,9 @@ public class ChallanQueryBuilder {
     private static final String QUERY = "SELECT challan.*,chaladdr.*,challan.id as challan_id,challan.tenantid as challan_tenantId,challan.lastModifiedTime as " +
             "challan_lastModifiedTime,challan.createdBy as challan_createdBy,challan.lastModifiedBy as challan_lastModifiedBy,challan.createdTime as " +
             "challan_createdTime,chaladdr.id as chaladdr_id," +
-            "challan.accountId as uuid,challan.description as description  FROM eg_echallan challan"
+            "challan.accountId as uuid,challan.description as description  FROM {schema}.eg_echallan challan"
             +INNER_JOIN_STRING
-            +"eg_challan_address chaladdr ON chaladdr.echallanid = challan.id";
+            +"{schema}.eg_challan_address chaladdr ON chaladdr.echallanid = challan.id";
 
 
       private final String paginationWrapper = "SELECT * FROM " +
@@ -37,11 +37,11 @@ public class ChallanQueryBuilder {
               " result) result_offset " +
               "WHERE offset_ > ? AND offset_ <= ?";
 
-      public static final String FILESTOREID_UPDATE_SQL = "UPDATE eg_echallan SET filestoreid=? WHERE id=?";
+      public static final String FILESTOREID_UPDATE_SQL = "UPDATE {schema}.eg_echallan SET filestoreid=? WHERE id=?";
       
-      public static final String CANCEL_RECEIPT_UPDATE_SQL = "UPDATE eg_echallan SET applicationStatus='ACTIVE' WHERE challanNo=? and businessService=?";
+      public static final String CANCEL_RECEIPT_UPDATE_SQL = "UPDATE {schema}.eg_echallan SET applicationStatus='ACTIVE' WHERE challanNo=? and businessService=?";
 
-      public static final String CHALLAN_COUNT_QUERY = "SELECT applicationstatus, count(*)  FROM eg_echallan WHERE tenantid ";
+      public static final String CHALLAN_COUNT_QUERY = "SELECT applicationstatus, count(*)  FROM {schema}.eg_echallan WHERE tenantid ";
 
 
 
@@ -67,9 +67,19 @@ public class ChallanQueryBuilder {
         else {
 
             if (criteria.getTenantId() != null) {
+                String tenantId = criteria.getTenantId();
+                int tenantLevel = tenantId.split("\\.").length;
                 addClauseIfRequired(preparedStmtList, builder);
-                builder.append(" challan.tenantid=? ");
-                preparedStmtList.add(criteria.getTenantId());
+
+                if(tenantLevel <= config.getStateLevelTenantIdLength()){
+                    builder.append(" challan.tenantid LIKE ? ");
+                    preparedStmtList.add(criteria.getTenantId() + '%');
+                }
+                else{
+                    builder.append(" challan.tenantid=? ");
+                    preparedStmtList.add(criteria.getTenantId());
+                }
+
             }
             List<String> ids = criteria.getIds();
             if (!CollectionUtils.isEmpty(ids)) {
@@ -162,7 +172,8 @@ public class ChallanQueryBuilder {
 
     public String getChallanCountQuery(String tenantId, List <Object> preparedStmtList ) {
         StringBuilder builder = new StringBuilder(CHALLAN_COUNT_QUERY);
-        if(tenantId.equalsIgnoreCase(config.stateLevelTenantId)){
+        int tenantLevel = tenantId.split("\\.").length;
+        if(tenantLevel <= config.getStateLevelTenantIdLength()){
             builder.append("LIKE ? ");
             preparedStmtList.add(tenantId+"%");
         }

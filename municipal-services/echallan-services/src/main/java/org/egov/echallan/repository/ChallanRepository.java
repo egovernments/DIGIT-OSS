@@ -17,9 +17,11 @@ import org.egov.echallan.producer.Producer;
 import org.egov.echallan.repository.builder.ChallanQueryBuilder;
 import org.egov.echallan.repository.rowmapper.ChallanCountRowMapper;
 import org.egov.echallan.repository.rowmapper.ChallanRowMapper;
+import org.egov.echallan.util.CommonUtils;
 import org.egov.echallan.web.models.collection.Bill;
 import org.egov.echallan.web.models.collection.PaymentDetail;
 import org.egov.echallan.web.models.collection.PaymentRequest;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -62,6 +64,9 @@ public class ChallanRepository {
     private ChallanCountRowMapper countRowMapper;
 
     @Autowired
+    private CommonUtils utils;
+
+    @Autowired
     public ChallanRepository(Producer producer, ChallanConfiguration config,ChallanQueryBuilder queryBuilder,
     		JdbcTemplate jdbcTemplate,ChallanRowMapper rowMapper,RestTemplate restTemplate) {
         this.producer = producer;
@@ -77,27 +82,28 @@ public class ChallanRepository {
     /**
      * Pushes the request on save topic
      *
-     * @param ChallanRequest The challan create request
+     * @param challanRequest The challan create request
      */
     public void save(ChallanRequest challanRequest) {
     	
-        producer.push(config.getSaveChallanTopic(), challanRequest);
+        producer.push(challanRequest.getChallan().getTenantId(),config.getSaveChallanTopic(), challanRequest);
     }
     
     /**
      * Pushes the request on update topic
      *
-     * @param ChallanRequest The challan create request
+     * @param challanRequest The challan create request
      */
     public void update(ChallanRequest challanRequest) {
     	
-        producer.push(config.getUpdateChallanTopic(), challanRequest);
+        producer.push(challanRequest.getChallan().getTenantId(),config.getUpdateChallanTopic(), challanRequest);
     }
     
     
     public List<Challan> getChallans(SearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getChallanSearchQuery(criteria, preparedStmtList);
+        query = utils.replaceSchemaPlaceholder(query, criteria.getTenantId());
         List<Challan> challans =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         return challans;
     }
@@ -113,7 +119,9 @@ public class ChallanRepository {
         	        );
         });
 
-        jdbcTemplate.batchUpdate(FILESTOREID_UPDATE_SQL,rows);
+        String query = FILESTOREID_UPDATE_SQL;
+        query = utils.replaceSchemaPlaceholder(query, challans.get(0).getTenantId());
+        jdbcTemplate.batchUpdate(query,rows);
 		
 	}
 	
@@ -138,6 +146,10 @@ public class ChallanRepository {
 
 		List<PaymentDetail> paymentDetails = paymentRequest.getPayment().getPaymentDetails();
 		String tenantId = paymentRequest.getPayment().getTenantId();
+
+        // Adding in MDC so that tracer can add it in header
+        MDC.put(TENANTID_MDC_STRING, tenantId);
+
 		List<Object[]> rows = new ArrayList<>();
 		for (PaymentDetail paymentDetail : paymentDetails) {
 			Bill bill = paymentDetail.getBill();
@@ -145,7 +157,9 @@ public class ChallanRepository {
         			bill.getBusinessService()}
         	        );
 		}
-		jdbcTemplate.batchUpdate(CANCEL_RECEIPT_UPDATE_SQL,rows);
+        String query = CANCEL_RECEIPT_UPDATE_SQL;
+        query = utils.replaceSchemaPlaceholder(query, tenantId);
+        jdbcTemplate.batchUpdate(query,rows);
 		
 	}
 
@@ -160,7 +174,7 @@ public class ChallanRepository {
         List<Object> preparedStmtList = new ArrayList<>();
 
         String query = queryBuilder.getChallanCountQuery(tenantId, preparedStmtList);
-        
+        query = utils.replaceSchemaPlaceholder(query, tenantId);
         try {
             response=jdbcTemplate.query(query, preparedStmtList.toArray(),countRowMapper);
         }catch(Exception e) {

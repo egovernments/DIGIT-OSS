@@ -236,13 +236,13 @@ public class PaymentUpdateService {
 		if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
 			EventRequest eventRequest = getEventRequest(sewerageConnectionRequest, property, paymentDetail);
 			if (eventRequest != null) {
-				notificationUtil.sendEventNotification(eventRequest);
+				notificationUtil.sendEventNotification(eventRequest, property.getTenantId());
 			}
 		}
 		if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
 			List<SMSRequest> smsRequests = getSmsRequest(sewerageConnectionRequest, property, paymentDetail);
 			if (!CollectionUtils.isEmpty(smsRequests)) {
-				notificationUtil.sendSMS(smsRequests);
+				notificationUtil.sendSMS(smsRequests, property.getTenantId());
 			}
 		}
 	}
@@ -373,7 +373,7 @@ public class PaymentUpdateService {
 				message = message.replace("{Billing Period}", billingPeriod);
 			}
 			if (message.contains("{receipt download link}")){
-				String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
+				String link = notificationUtil.getHost(paymentDetail.getTenantId()) + config.getReceiptDownloadLink();
 				link = link.replace("$consumerCode", paymentDetail.getBill().getConsumerCode());
 				link = link.replace("$tenantId", paymentDetail.getTenantId());
 				link = link.replace("$businessService",paymentDetail.getBusinessService());

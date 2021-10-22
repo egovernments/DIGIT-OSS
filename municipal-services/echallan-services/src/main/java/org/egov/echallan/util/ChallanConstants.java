@@ -50,6 +50,10 @@ public class ChallanConstants {
 
     public static final String LOCALITY_CODE_PATH = "$.TenantBoundary.[*].boundary[?(@.label==\"Locality\")].code";
 
+    public static final String SCHEMA_REPLACE_STRING = "{schema}";
+
+    public static final String TENANTID_MDC_STRING = "TENANTID";
+
 
     public ChallanConstants() {}
 

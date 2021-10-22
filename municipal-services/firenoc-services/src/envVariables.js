@@ -28,6 +28,13 @@ const envVariables = {
   KAFKA_TOPICS_EVENT_NOTIFICATION:
     process.env.KAFKA_TOPICS_EVENT_NOTIFICATION || "persist-events-async",
 
+  KAFKA_TOPICS_FIRENOC_CREATE_SMS:
+    process.env.KAFKA_TOPICS_FIRENOC_CREATE_SMS || "save-fn-firenoc-sms",
+  KAFKA_TOPICS_FIRENOC_UPDATE_SMS:
+    process.env.KAFKA_TOPICS_FIRENOC_UPDATE_SMS || "update-fn-firenoc-sms",
+  KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS:
+    process.env.KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS || "update-fn-workflow-sms",
+
   //tracer configurations
   TRACER_ENABLE_REQUEST_LOGGING:
     process.env.TRACER_ENABLE_REQUEST_LOGGING || false,

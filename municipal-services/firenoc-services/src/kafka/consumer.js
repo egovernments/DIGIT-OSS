@@ -28,9 +28,9 @@ var options = {
 };
 
 var consumerGroup = new kafka.ConsumerGroup(options, [
-  envVariables.KAFKA_TOPICS_FIRENOC_CREATE,
-  envVariables.KAFKA_TOPICS_FIRENOC_UPDATE,
-  envVariables.KAFKA_TOPICS_FIRENOC_WORKFLOW,
+  envVariables.KAFKA_TOPICS_FIRENOC_CREATE_SMS,
+  envVariables.KAFKA_TOPICS_FIRENOC_UPDATE_SMS,
+  envVariables.KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS,
   envVariables.KAFKA_TOPICS_RECEIPT_CREATE
 ]);
 
@@ -56,7 +56,7 @@ consumerGroup.on("message", function(message) {
 
     let topic = envVariables.KAFKA_TOPICS_EVENT_NOTIFICATION;
     if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE)
-      topic = getUpdatedTopic(tenantId, kafkaTopic);
+      topic = getUpdatedTopic(tenantId, topic);
 
     payloads.push({
       topic: topic,
@@ -117,12 +117,12 @@ consumerGroup.on("message", function(message) {
         case "DOCUMENTVERIFY":
           smsRequest[
             "message"
-          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} has been forwarded for field inpsection.\n\nEGOVS`;
+          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} has been forwarded for document verifier.\n\nEGOVS`;
           break;
         case "FIELDINSPECTION":
           smsRequest[
             "message"
-          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} has been forwarded for document verifier.\n\nEGOVS`;
+          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} has been forwarded for field inpsection.\n\nEGOVS`;
           break;
         case "PENDINGAPPROVAL":
           smsRequest[
@@ -146,11 +146,15 @@ consumerGroup.on("message", function(message) {
             "message"
           ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} is approved.And your fire NoC has been generated.Your Fire NoC No. is ${fireNOCNumber}. It is valid till ${dateString}\n\nEGOVS`;
           break;
-        case "SENDBACKTOCITIZEN":
+        case "CITIZENACTIONREQUIRED":
           smsRequest[
             "message"
-          ] = `Dear ${ownerName}, 
-          Your application for ${firenocType} Fire NOC Certificate with application no. ${applicationNumber} is send back to you for further actions.Please check the comments and Re-submit application through mSeva App or by ULB counter.\n\nEGOVS`;
+          ] = `Dear ${ownerName},Your application for ${firenocType} Fire NOC Certificate with application no. ${applicationNumber} is send back to you for further actions.Please check the comments and Re-submit application through mSeva App or by ULB counter.\n\nEGOVS`;
+          break;
+        case "CITIZENACTIONREQUIRED-DV":
+          smsRequest[
+            "message"
+          ] = `Dear ${ownerName},Your application for ${firenocType} Fire NOC Certificate with application no. ${applicationNumber} is send back to you for further actions.Please check the comments and Re-submit application through mSeva App or by ULB counter.\n\nEGOVS`;
           break;
         case "REJECTED":
           smsRequest[
@@ -164,13 +168,13 @@ consumerGroup.on("message", function(message) {
 
       let topic = envVariables.KAFKA_TOPICS_NOTIFICATION;
       if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE)
-        topic = getUpdatedTopic(tenantId, kafkaTopic);
+        topic = getUpdatedTopic(tenantId, topic);
 
       payloads.push({
         topic: topic,
         messages: JSON.stringify(smsRequest)
       });
-      // console.log("smsRequest",smsRequest);
+      // console.log("smsRequest",JSON.stringify(smsRequest));
       if (smsRequest.message) {
         events.push({
           tenantId: tenantId,
@@ -250,19 +254,19 @@ consumerGroup.on("message", function(message) {
   };
 
   switch (message.topic) {
-    case envVariables.KAFKA_TOPICS_FIRENOC_CREATE:
+    case envVariables.KAFKA_TOPICS_FIRENOC_CREATE_SMS:
       {
         const { FireNOCs } = value;
         sendFireNOCSMSRequest(FireNOCs);
       }
       break;
-    case envVariables.KAFKA_TOPICS_FIRENOC_UPDATE:
+    case envVariables.KAFKA_TOPICS_FIRENOC_UPDATE_SMS:
       {
         const { FireNOCs } = value;
         sendFireNOCSMSRequest(FireNOCs);
       }
       break;
-    case envVariables.KAFKA_TOPICS_FIRENOC_WORKFLOW:
+    case envVariables.KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS:
       {
         const { FireNOCs } = value;
         sendFireNOCSMSRequest(FireNOCs);
@@ -280,6 +284,25 @@ consumerGroup.on("message", function(message) {
       }
       break;
   }
+
+ /* if(message.topic.includes(envVariables.KAFKA_TOPICS_FIRENOC_CREATE)){
+    const { FireNOCs } = value;
+    sendFireNOCSMSRequest(FireNOCs);
+  }
+  else if(message.topic.includes(envVariables.KAFKA_TOPICS_FIRENOC_UPDATE)){
+    const { FireNOCs } = value;
+    sendFireNOCSMSRequest(FireNOCs);
+  }
+  else if(message.topic.includes(envVariables.KAFKA_TOPICS_FIRENOC_WORKFLOW)){
+    const { FireNOCs } = value;
+    sendFireNOCSMSRequest(FireNOCs);
+  }
+  else if(message.topic.includes(envVariables.KAFKA_TOPICS_RECEIPT_CREATE)){
+    FireNOCPaymentStatus(value);
+  }
+  else{
+    console.log("Kafka topic: "+message.topic+" does not present in consumer group");
+  }*/
 
   producer.send(payloads, function(err, data) {
     if (!err) {

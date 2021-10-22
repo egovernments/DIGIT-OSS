@@ -11,6 +11,7 @@ import org.egov.swservice.web.models.EventRequest;
 import org.egov.swservice.web.models.SMSRequest;
 import org.egov.swservice.producer.SewarageConnectionProducer;
 import org.egov.swservice.repository.ServiceRequestRepository;
+import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
 
 @Component
 @Slf4j
@@ -43,7 +45,7 @@ public class NotificationUtil {
 	public StringBuilder getUri(String tenantId, RequestInfo requestInfo) {
 
 		if (config.getIsLocalizationStateLevel())
-			tenantId = tenantId.split("\\.")[0];
+			tenantId = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
 
 		String locale = SWConstants.NOTIFICATION_LOCALE;
 		if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
@@ -99,12 +101,12 @@ public class NotificationUtil {
 	 * @param smsRequestList
 	 *            The list of SMSRequest to be sent
 	 */
-	public void sendSMS(List<SMSRequest> smsRequestList) {
+	public void sendSMS(List<SMSRequest> smsRequestList, String tenantId) {
 		if (config.getIsSMSEnabled()) {
 			if (CollectionUtils.isEmpty(smsRequestList))
 				log.info("Messages from localization couldn't be fetched!");
 			for (SMSRequest smsRequest : smsRequestList) {
-				producer.push("",config.getSmsNotifTopic(), smsRequest);
+				producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
 				StringBuilder builder = new StringBuilder();
 				builder.append(" Messages: ")
 						.append(smsRequest.getMessage());
@@ -152,8 +154,8 @@ public class NotificationUtil {
 	 * 
 	 * @param request - Event Request Object
 	 */
-	public void sendEventNotification(EventRequest request) {
-		producer.push("",config.getSaveUserEventsTopic(), request);
+	public void sendEventNotification(EventRequest request, String tenantId) {
+		producer.push(tenantId, config.getSaveUserEventsTopic(), request);
 	}
 	
 	/**
@@ -163,6 +165,22 @@ public class NotificationUtil {
 	 */
 	public String getCustomizedMsg(String code, String localizationMessage) {
 		return getMessageTemplate(code, localizationMessage);
+	}
+
+	public String getHost(String tenantId){
+		log.info("INCOMING TENANTID FOR NOTIF HOST: " + tenantId);
+		Integer tenantLength = tenantId.split("\\.").length;
+		String topLevelTenant = tenantId;
+		if(tenantLength == 3){
+			topLevelTenant = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
+		}
+		log.info(config.getUiAppHostMap().toString());
+		log.info(topLevelTenant);
+		String host = config.getUiAppHostMap().get(topLevelTenant);
+		if(ObjectUtils.isEmpty(host)){
+			throw new CustomException("EG_NOTIF_HOST_ERR", "No host found for tenantid: " + topLevelTenant);
+		}
+		return host;
 	}
 
 

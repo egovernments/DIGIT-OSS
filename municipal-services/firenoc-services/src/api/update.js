@@ -113,6 +113,11 @@ export const updateApiResponse = async (request, isExternalCall, next = {}) => {
     messages: JSON.stringify(body)
   });
 
+  payloads.push({
+    topic: envVariables.KAFKA_TOPICS_FIRENOC_UPDATE_SMS,
+    messages: JSON.stringify(body)
+  });
+
   //check approved list
   const approvedList = filter(body.FireNOCs, function(fireNoc) {
     return fireNoc.fireNOCNumber;
@@ -125,8 +130,13 @@ export const updateApiResponse = async (request, isExternalCall, next = {}) => {
     if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE)
       topic = getUpdatedTopic(tenantId, topic);
 
-      payloads.push({
+    payloads.push({
       topic: topic,
+      messages: JSON.stringify({ RequestInfo, FireNOCs: approvedList })
+    });
+
+    payloads.push({
+      topic: envVariables.KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS,
       messages: JSON.stringify({ RequestInfo, FireNOCs: approvedList })
     });
   }
