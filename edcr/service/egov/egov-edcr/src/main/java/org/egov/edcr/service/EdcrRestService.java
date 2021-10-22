@@ -281,14 +281,16 @@ public class EdcrRestService {
             edcrDetail.setPlanReport(
                     format(getFileDownloadUrl(edcrApplnDtl.getReportOutputId().getFileStoreId(), tenantId)));
 
-        File file = edcrApplnDtl.getPlanDetailFileStore() != null
-                ? fileStoreService.fetch(edcrApplnDtl.getPlanDetailFileStore().getFileStoreId(),
-                        DcrConstants.APPLICATION_MODULE_TYPE, tenantId)
-                : null;
+        
 
-        if (LOG.isInfoEnabled())
-            LOG.info("**************** End - Reading Plan detail file **************" + file);
+        
         try {
+            File file = edcrApplnDtl.getPlanDetailFileStore() != null
+                    ? fileStoreService.fetch(edcrApplnDtl.getPlanDetailFileStore().getFileStoreId(),
+                            DcrConstants.APPLICATION_MODULE_TYPE, tenantId)
+                    : null;
+            if (LOG.isInfoEnabled())
+                LOG.info("**************** End - Reading Plan detail file **************" + file);
             if (file == null) {
                 Plan pl1 = new Plan();
                 PlanInformation pi = new PlanInformation();
