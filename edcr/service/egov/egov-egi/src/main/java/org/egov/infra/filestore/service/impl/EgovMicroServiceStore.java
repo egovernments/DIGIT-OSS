@@ -326,6 +326,6 @@ public class EgovMicroServiceStore implements FileStoreService {
         restTemplate.execute(URI.create(urls), HttpMethod.GET, requestCallback, responseExtractor);
 
         LOG.debug("fetch completed....   ");
-        return path.toFile();
+        return path == null ? null : path.toFile();
     }
 }
