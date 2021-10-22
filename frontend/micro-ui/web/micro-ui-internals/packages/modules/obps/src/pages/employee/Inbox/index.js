@@ -1,10 +1,9 @@
 import React, {Fragment, useCallback, useMemo, useReducer } from "react"
 import { InboxComposer, CaseIcon } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import { format } from "date-fns";
 import FilterFormFieldsComponent from "./FilterFormFieldsComponent";
 import SearchFormFieldsComponents from "./SearchFormFieldsComponent";
+import useInboxTableConfig from "./useInboxTableConfig";
 
 const Inbox = ({parentRoute}) => {
     
@@ -44,6 +43,20 @@ const Inbox = ({parentRoute}) => {
       }
     }
     const InboxObjectInSessionStorage = Digit.SessionStorage.get("OBPS.INBOX")
+    
+    const onSearchFormReset = (setSearchFormValue) =>{
+      setSearchFormValue("mobileNumber", null)
+      setSearchFormValue("applicationNo", null)
+    }
+
+    const onFilterFormReset = (setFilterFormValue) =>{
+      setFilterFormValue("moduleName", "bpa-services")
+      setFilterFormValue("businessService", {code: "BPA", name:t("BPA")})
+      setFilterFormValue("applicationStatus", "")
+      setFilterFormValue("locality", [])
+      setFilterFormValue("assignee", "ASSIGNED_TO_ALL")
+    }
+
     const formInitValue = useMemo(() => {
       // debugger
       return InboxObjectInSessionStorage || {
@@ -59,7 +72,6 @@ const Inbox = ({parentRoute}) => {
       dispatch({action: "mutateTableForm", data: {...formState.tableForm , limit: e.target.value}})
     }
     const { isLoading: isInboxLoading, data: {table , statuses, totalCount} = {} } = Digit.Hooks.obps.useBPAInbox({
-        // tenantId, moduleName, businessService, filters, config 
         tenantId,
         filters: { ...formState }
     });
@@ -92,83 +104,11 @@ const Inbox = ({parentRoute}) => {
       console.log("find search form data here", data)
     }
 
-    const propsForSearchForm = { SearchFormFields, onSearchFormSubmit, searchFormDefaultValues: formInitValue?.searchForm, resetSearchFormDefaultValues: searchFormDefaultValues }
+    const propsForSearchForm = { SearchFormFields, onSearchFormSubmit, searchFormDefaultValues: formState?.searchForm, resetSearchFormDefaultValues: searchFormDefaultValues, onSearchFormReset }
 
-    const propsForFilterForm = { FilterFormFields, onFilterFormSubmit, filterFormDefaultValues: formInitValue?.filterForm, resetFilterFormDefaultValues: filterFormDefaultValues }
+    const propsForFilterForm = { FilterFormFields, onFilterFormSubmit, filterFormDefaultValues: formState?.filterForm, resetFilterFormDefaultValues: filterFormDefaultValues, onFilterFormReset }
 
-    const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
-    const GetStatusCell = (value) => value === "Active" ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span> 
-    
-    const tableColumnConfig = useMemo(() => {
-          return [
-            {
-              Header: t("TL_COMMON_TABLE_COL_APP_NO"),
-              accessor: "applicationNo",
-              Cell: ({ row }) => {
-                return (
-                  <div>
-                    <Link to={`${parentRoute}/bpa/${row.original["applicationId"]}`}>
-                      <span className="link">{row.original["applicationId"]}</span>
-                    </Link>
-                  </div>
-                );
-              },
-            },
-            {
-              Header: t("CS_APPLICATION_DETAILS_APPLICATION_DATE"),
-              accessor: "applicationDate",
-              Cell: ({row}) => row.original?.["date"] ? GetCell(format(new Date(row.original?.["date"]), 'dd/MM/yyyy')) : ""
-              },
-            {
-              Header: t("ES_INBOX_LOCALITY"),
-              accessor: (row) => t(row?.locality)
-            },
-            {
-              Header: t("EVENTS_STATUS_LABEL"),
-              accessor: row => t(`WF_${row?.businessService}_${row?.status}`),
-            },
-            {
-              Header: t("WF_INBOX_HEADER_CURRENT_OWNER"),
-              accessor: (row) => row?.owner,
-            },
-            {
-              Header: t("WS_COMMON_TABLE_COL_APP_TYPE_LABEL"),
-              accessor: (row) => row?.applicationType,
-            },
-            {
-              Header: t("ES_INBOX_SLA_DAYS_REMAINING"),
-              accessor: row => GetStatusCell(row?.sla),
-            }
-          ]
-        })
-
-        const propsForInboxTable = useMemo(()=>{
-          return {
-            getCellProps: (cellInfo) => {
-            return {
-                style: {
-                padding: "20px 18px",
-                fontSize: "16px"
-            }}},
-            disableSort: false,
-            autoSort:false,
-            manualPagination:true,
-            initSortI:"applicationDate",
-            onPageSizeChange:onPageSizeChange,
-            currentPage: formState.tableForm?.offset / formState.tableForm?.limit,
-            onNextPage: () => dispatch({action: "mutateTableForm", data: {...formState.tableForm , offset: (parseInt(formState.tableForm?.offset) + parseInt(formState.tableForm?.limit)) }}),
-            onPrevPage: () => dispatch({action: "mutateTableForm", data: {...formState.tableForm , offset: (parseInt(formState.tableForm?.offset) - parseInt(formState.tableForm?.limit)) }}),
-            pageSizeLimit: formState.tableForm?.limit,
-            // onSort: onSort,
-            // sortParams: [{id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false}],
-            totalRecords: totalCount,
-            onSearch: formState?.searchForm?.message,
-            // globalSearch: {searchForItemsInTable},
-            // searchQueryForTable,
-            data: table,
-            columns: tableColumnConfig
-          }
-        },[table, tableColumnConfig]) 
+    const propsForInboxTable = useInboxTableConfig({...{ parentRoute, onPageSizeChange, formState, totalCount, table}})
 
     return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable}}></InboxComposer>
 }

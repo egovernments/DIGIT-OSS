@@ -17,11 +17,13 @@ const InboxComposer = ({
     SearchFormFields,
     searchFormDefaultValues,
     onSearchFormSubmit,
+    onSearchFormReset,
     resetSearchFormDefaultValues,
     FilterFormFields,
     filterFormDefaultValues,
     propsForInboxTable,
     onFilterFormSubmit,
+    onFilterFormReset,
     resetFilterFormDefaultValues 
 }) => {
     const { t } = useTranslation()
@@ -36,17 +38,17 @@ const InboxComposer = ({
     })
 
     const onResetFilterForm = () => {
-        resetFilterForm(resetFilterFormDefaultValues)
-        const alldaata = getFilterFormValue()
-        // debugger
-        handleFilterFormSubmit(onFilterFormSubmit)()
+        onFilterFormReset(setFilterFormValue)
+    }
+
+    const onResetSearchForm = () => {
+        onSearchFormReset(setSearchFormValue)
     }
 
     if (isMobile) {
         return <div className="InboxComposerWrapper">
             <InboxLinks {...PropsForInboxLinks} />
-            <FilterForm clearAll={resetFilterForm} {...{ showMobileFilterFormPopup, onMobileExclusiveFilterPopupFormClose: () => setMobileFilterFormPopup(false) }}>
-            
+                <FilterForm clearAll={resetFilterForm} {...{ showMobileFilterFormPopup, onMobileExclusiveFilterPopupFormClose: () => setMobileFilterFormPopup(false) }}>
             </FilterForm>
         </div>
     }
@@ -56,10 +58,7 @@ const InboxComposer = ({
             <SearchFormFields registerRef={registerSearchFormField}/>
             <SearchField className="submit">
                 <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
-                <p onClick={() => {
-                    resetSearchForm(resetSearchFormDefaultValues);
-                    handleSearchFormSubmit(onSearchFormSubmit)()
-                  }}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
+                <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
             </SearchField>
         </SearchForm>
         <FilterForm onSubmit={onFilterFormSubmit} handleSubmit={handleFilterFormSubmit} id="filter-form" onResetFilterForm={onResetFilterForm}>
