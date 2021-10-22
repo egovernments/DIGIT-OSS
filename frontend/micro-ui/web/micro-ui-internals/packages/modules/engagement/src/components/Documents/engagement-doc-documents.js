@@ -23,6 +23,7 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
   const [urlDisabled, setUrlDisabled] = useState(false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [controllerProps, setProps] = useState({});
+  const [imageUploadError, setUploadError] = useState("")
 
   // TO BE UNCOMMENTED IF BOTH URL AND FILESTORE ID CANT BE SEND
   const disableUrlField = () => {
@@ -31,12 +32,25 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
   };
 
   const selectFile = (e, props) => {
-    setFile(e.target.files[0]);
-    const size = e?.target?.files[0].size;
-    const type = e?.target?.files[0].type;
-    setFileSize(size);
-    setFileType(type);
-    setProps(props);
+    setUploadError("")
+    if (!e.target?.files?.length) return
+
+    const size = e?.target?.files[0]?.size;
+    const type = e?.target?.files[0]?.type;
+
+    if (size && size > 500000) {
+      setUploadError('FILE_SIZE_EXCEEDED')
+      return
+    }
+    if (type && (type.includes('pdf') || type.includes('png') || type.includes('jpg') || type.includes('doc'))) {
+      setFileSize(size);
+      setFileType(type);
+      setProps(props);
+      setFile(e.target.files[0]);
+      return
+    } else {
+      setUploadError('NOT_SUPPORTED_FILE_TYPE')
+    }
   };
 
   useEffect(() => {
@@ -46,7 +60,7 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
   useEffect(() => {
     if (fileStoreId) disableUrlField();
     else setUrlDisabled(false);
-    controllerProps?.onChange?.({fileStoreId, fileSize , fileType});
+    controllerProps?.onChange?.({ fileStoreId, fileSize, fileType });
   }, [fileStoreId, controllerProps]);
 
   useEffect(() => {
@@ -62,6 +76,7 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
       } else {
         setError(t("CS_FILE_UPLOAD_ERROR"));
       }
+
     } catch (err) {
       console.error("Modal -> err ", err);
     }
@@ -83,6 +98,7 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
                   setFileStoreId(null);
                   setFileSize(0);
                 }}
+                accept="image/*, .pdf, .png, .jpeg, .doc"
                 showHintBelow={true}
                 hintText={t("DOCUMENTS_ATTACH_RESTRICTIONS_SIZE")}
                 message={fileStoreId ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
@@ -91,7 +107,8 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
               />
             )}
           />
-          {fileSize ? `${getFileSize(fileSize)}`:null}
+          {fileSize ? `${getFileSize(fileSize)}` : null}
+          {imageUploadError ? t(imageUploadError) : null}
         </div>
       </LabelFieldPair>
 

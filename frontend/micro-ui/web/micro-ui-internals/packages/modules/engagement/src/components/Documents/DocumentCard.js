@@ -21,7 +21,7 @@ const downloadDocument = async (filestoreId, title) => {
   const fileUrl = await getFileUrl(filestoreId);
   if (fileUrl) {
     Digit.Utils.downloadPDFFromLink(fileUrl);
-  }else{
+  } else {
     console.error("Invalid Filestoreid or no file found to download");
   }
 }
@@ -45,7 +45,7 @@ const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, des
         </div>
         <div className="notice_and_circular_text">
           <CardText>
-            {description}
+            {description?.length ? description : "NA"}
           </CardText>
         </div>
         <div className="view_download_main">
