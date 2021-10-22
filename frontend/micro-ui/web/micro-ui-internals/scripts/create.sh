@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./scripts/run.sh tl obps pgr engagement
+./scripts/run.sh engagement

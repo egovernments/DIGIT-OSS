@@ -8,7 +8,8 @@ const MultiUploadWrapper = ({module="PGR", tenantId="pb", getFormState, requestS
 
     const uploadMultipleFiles = (state, payload) => {
         const {files, fileStoreIds} = payload;
-        const newUploads = [...files]?.map( (file, index) => [file.name, { file, fileStoreId: fileStoreIds[index] }])
+        const filesData = Array.from(files)
+        const newUploads = filesData?.map( (file, index) => [file.name, { file, fileStoreId: fileStoreIds[index] }])
         return [...state, ...newUploads]
     }
 
