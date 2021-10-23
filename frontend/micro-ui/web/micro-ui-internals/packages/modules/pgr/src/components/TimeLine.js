@@ -28,6 +28,10 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
   // if (isLoading) {
   //   return <Loader />;
   // }
+  function zoomImageWrapper(imageSource, index,thumbnailsToShow){
+    let newIndex=thumbnailsToShow.thumbs?.findIndex(link=>link===imageSource);
+    zoomImage((newIndex>-1&&thumbnailsToShow?.fullImage?.[newIndex])||imageSource);
+  }
 
   let { timeline } = data;
 
@@ -65,7 +69,7 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
     )}</div> : null}
     {thumbnailsToShow?.thumbs?.length > 0 ? <div className="TLComments">
       <h3>{t("CS_COMMON_DOCUMENTS")}</h3>
-      <DisplayPhotos srcs={thumbnailsToShow.thumbs} onClick={(src, index) => zoomImage(thumbnailsToShow, index)} />
+      <DisplayPhotos srcs={thumbnailsToShow.thumbs} onClick={(src, index) => {zoomImageWrapper(src, index,thumbnailsToShow)}} />
     </div> : null}
     {captionDetails?.date ? <TLCaption data={captionDetails}/> : null}
     </>

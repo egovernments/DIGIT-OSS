@@ -278,7 +278,10 @@ export const ComplaintDetails = (props) => {
   function zoomImage(imageSource, index) {
     setImageZoom(imageSource);
   }
-
+  function zoomImageWrapper(imageSource, index){
+    let newIndex=complaintDetails.thumbnails?.findIndex(link=>link===imageSource);
+    zoomImage((newIndex>-1&&complaintDetails?.images?.[newIndex])||imageSource);
+  }
   function onCloseImageZoom() {
     setImageZoom(null);
   }
@@ -338,7 +341,10 @@ export const ComplaintDetails = (props) => {
   const getTimelineCaptions = (checkpoint) => {
     // console.log("tl", checkpoint);
     const {wfComment: comment, thumbnailsToShow} = checkpoint;
-    
+    function zoomImageTimeLineWrapper(imageSource, index,thumbnailsToShow){
+      let newIndex=thumbnailsToShow.thumbs?.findIndex(link=>link===imageSource);
+      zoomImage((newIndex>-1&&thumbnailsToShow?.fullImage?.[newIndex])||imageSource);
+    }
     const captionForOtherCheckpointsInTL = {
       date: checkpoint?.auditDetails?.lastModified,
       name: checkpoint?.assigner?.name,
@@ -363,7 +369,7 @@ export const ComplaintDetails = (props) => {
       )}</div> : null}
       {thumbnailsToShow?.thumbs?.length > 0 ? <div className="TLComments">
         <h3>{t("CS_COMMON_DOCUMENTS")}</h3>
-        <DisplayPhotos srcs={thumbnailsToShow.thumbs} onClick={(src, index) => zoomImage(thumbnailsToShow,index)} />
+        <DisplayPhotos srcs={thumbnailsToShow.thumbs} onClick={(src, index) => zoomImageTimeLineWrapper(src, index,thumbnailsToShow)} />
       </div> : null}
       {captionForOtherCheckpointsInTL?.date ? <TLCaption data={captionForOtherCheckpointsInTL}/> : null}
     </>
@@ -400,7 +406,7 @@ export const ComplaintDetails = (props) => {
           </StatusTable>
         )}
         {complaintDetails?.thumbnails && complaintDetails?.thumbnails?.length !== 0 ? (
-          <DisplayPhotos srcs={complaintDetails?.thumbnails} onClick={(source, index) => zoomImage(source, index)} />
+          <DisplayPhotos srcs={complaintDetails?.thumbnails} onClick={(source, index) => zoomImageWrapper(source, index)} />
         ) : null}
         <BreakLine />
         {workflowDetails?.isLoading && <Loader />}

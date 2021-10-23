@@ -165,7 +165,8 @@
     height: 100vh !important;
   }
   .topbar{
-    display: none !important;
+    background: rgba(34, 57, 77, var(--bg-opacity)) !important;
+    color: white;
   }
   .employee .loginContainer{
     padding-top: 0px !important;

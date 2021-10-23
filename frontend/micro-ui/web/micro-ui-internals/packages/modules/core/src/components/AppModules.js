@@ -35,7 +35,7 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
     <div class="ground-container">
       <Switch>
         {appRoutes}
-        <Route path={`${path}/login`}><EmployeeLogin /></Route>
+        <Route path={`${path}/login`}> <Redirect to={{ pathname: "/digit-ui/employee/user/login", state: { from: location.pathname + location.search } }} /></Route>
         <Route path={`${path}/forgot-password`}><ForgotPassword /></Route>
         <Route path={`${path}/change-password`}> <ChangePassword /></Route>
         <Route>

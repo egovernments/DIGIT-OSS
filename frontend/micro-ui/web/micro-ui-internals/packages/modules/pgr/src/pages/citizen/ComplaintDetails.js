@@ -79,6 +79,10 @@ const ComplaintDetailsPage = (props) => {
     // console.log("index", index, imageSource,complaintDetails.images[index-1],"|||", complaintDetails.images )
     setImageZoom(imageSource);
   }
+  function zoomImageWrapper(imageSource, index){
+    let newIndex=complaintDetails.thumbnails?.findIndex(link=>link===imageSource);
+    zoomImage((newIndex>-1&&complaintDetails?.images?.[newIndex])||imageSource);
+  }
 
   function onCloseImageZoom() {
     setImageZoom(null);
@@ -141,7 +145,7 @@ const ComplaintDetailsPage = (props) => {
               ))}
             </StatusTable>
             {complaintDetails.thumbnails && complaintDetails.thumbnails.length !== 0 ? (
-              <DisplayPhotos srcs={complaintDetails.thumbnails} onClick={(source, index) => zoomImage(source, index)} />
+              <DisplayPhotos srcs={complaintDetails.thumbnails} onClick={(source, index) => zoomImageWrapper(source, index)} />
             ) : null}
             {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
           </Card>
