@@ -642,6 +642,12 @@ const DeleteIcon = ({ style, fill }) => (
   </svg>
 );
 
+const FireNOCIcon = () => <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="56" height="56" rx="2" fill="#F47738"/>
+<path d="M41.3333 11.333H14.6666C12.8333 11.333 11.35 12.833 11.35 14.6663L11.3333 44.6663L18 37.9997H41.3333C43.1666 37.9997 44.6666 36.4997 44.6666 34.6663V14.6663C44.6666 12.833 43.1666 11.333 41.3333 11.333ZM29.6666 26.333H26.3333V16.333H29.6666V26.333ZM29.6666 32.9997H26.3333V29.6663H29.6666V32.9997Z" fill="white"/>
+</svg>
+
+
 export {
   AnnouncementIcon,
   ReceiptIcon,
@@ -720,5 +726,6 @@ export {
   DeleteIcon,
   PMBIcon,
   GenericFileIcon,
-  ArrowLeftWhite
+  ArrowLeftWhite,
+  FireNOCIcon
 };

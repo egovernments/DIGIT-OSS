@@ -64,7 +64,7 @@ import StandaloneSearchBar from "./atoms/StandaloneSearchBar";
 import {
   AnnouncementIcon, ArrowDown, ArrowLeft, ArrowRightInbox, Calender, CaseIcon, CitizenTruck, CloseSvg, ComplaintIcon, Details, DocumentSVG, DownloadIcon, DownloadImgIcon, DownwardArrow, DropIcon, Ellipsis, EmailIcon, FilterIcon, GetApp, HomeIcon,
   PrevIcon, ViewsIcon, LanguageIcon,
-  LogoutIcon, Person, PersonIcon, Poll, PrintIcon, PropertyHouse, PTIcon, ReceiptIcon, RefreshIcon, RupeeIcon, SearchIconSvg, ShareIcon, ShippingTruck, SortDown, GenericFileIcon,
+  LogoutIcon, Person, PersonIcon, Poll, PrintIcon, PropertyHouse, PTIcon, ReceiptIcon, RefreshIcon, RupeeIcon, SearchIconSvg, ShareIcon, ShippingTruck, SortDown, GenericFileIcon, FireNOCIcon,
   SortUp, UpwardArrow, WhatsappIcon, OBPSIcon, EDCRIcon, BPAIcon, BPAHomeIcon,DocumentIcon, ExternalLinkIcon, PMBIcon, PDFSvg, HelpIcon, TickMark, NotificationBell, MapMarker, Clock, EventCalendar, ImageIcon, EditIcon, SearchIcon, DeleteIcon, OBPSIconSolidBg
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
@@ -279,6 +279,7 @@ export {
   DateRange,
   EditIcon,
   SearchIcon,
-  DeleteIcon
+  DeleteIcon,
+  FireNOCIcon
 };
 
