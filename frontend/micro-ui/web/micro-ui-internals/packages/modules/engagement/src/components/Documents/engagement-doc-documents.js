@@ -32,13 +32,14 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
   };
 
   const selectFile = (e, props) => {
+    setFile()
     setUploadError("")
     if (!e.target?.files?.length) return
 
     const size = e?.target?.files[0]?.size;
     const type = e?.target?.files[0]?.type;
 
-    if (size && size > 500000) {
+    if (size && (size/1024/1024) > 5) {
       setUploadError('FILE_SIZE_EXCEEDED')
       return
     }
