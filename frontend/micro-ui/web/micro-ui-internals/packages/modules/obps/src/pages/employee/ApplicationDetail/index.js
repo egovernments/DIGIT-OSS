@@ -104,15 +104,17 @@ const ApplicationDetail = () => {
 
   return (
     <div >
-      <div style={{marginLeft: "15px"}}>
+      <div style={{marginLeft: "15px", display: "flex", justifyContent: "space-between"}}>
         <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
         {reciept_data?.Payments?.length > 0 && 
-        <div style={{right: "3%", top: "20px", position: "absolute"}}>
+        <div>
         <MultiLink
           className="multilinkWrapper"
           onHeadClick={() => setShowOptions(!showOptions)}
           displayOptions={showOptions}
           options={dowloadOptions}
+          style={{position: "unset", marginTop: "8px"}}
+          optionsStyle = {{right: "3%"}}
         />  
         </div>}
       </div>

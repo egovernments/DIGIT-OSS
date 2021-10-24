@@ -13,9 +13,14 @@ export const configBPAApproverApplication = ({
   assigneeLabel,
   businessService,
 }) => {
-  let isRejectOrRevocate = false
+  let isRejectOrRevocate = false;
   if(action?.action == "REVOCATE" || action?.action == "REJECT" || action.action == "SKIP_PAYMENT") {
     isRejectOrRevocate = true;
+  }
+
+  let isCommentRequired = false;
+  if(action?.action == "REVOCATE" || action?.action == "REJECT") {
+    isCommentRequired = true;
   }
   
   return {
@@ -45,6 +50,7 @@ export const configBPAApproverApplication = ({
           {
             label: t("WF_COMMON_COMMENTS"),
             type: "textarea",
+            isMandatory: isCommentRequired,
             populators: {
               name: "comments",
             },
