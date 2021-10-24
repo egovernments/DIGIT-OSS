@@ -8,7 +8,9 @@ import {
   StatusTable, 
   SubmitBar, 
   Table, 
-  CardSectionHeader
+  CardSectionHeader,
+  EditIcon,
+  PDFSvg
 } from "@egovernments/digit-ui-react-components";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -167,22 +169,14 @@ const CheckPage = ({ onSubmit, value }) => {
       <Card>
         <CardHeader>{t("BPA_PLOT_DETAILS_TITLE")}</CardHeader>
         <LinkButton
-          label={
-            <div>
-              <span>
-                <svg style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9.126 5.125L11.063 3.188L14.81 6.935L12.873 8.873L9.126 5.125ZM17.71 2.63L15.37 0.289999C15.1826 0.103748 14.9292 -0.000793457 14.665 -0.000793457C14.4008 -0.000793457 14.1474 0.103748 13.96 0.289999L12.13 2.12L15.88 5.87L17.71 4C17.8844 3.81454 17.9815 3.56956 17.9815 3.315C17.9815 3.06044 17.8844 2.81546 17.71 2.63ZM5.63 8.63L0 14.25V18H3.75L9.38 12.38L12.873 8.873L9.126 5.125L5.63 8.63Z" fill="#F47738" />
-                </svg>
-              </span>
-            </div>
-          }
+          label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
           style={{ width: "100px", display: "inline" }}
           onClick={() => routeTo(`${routeLink}/plot-details`)}
         />
         <StatusTable>
-          <Row className="border-none" label={`${t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)}:`} text={datafromAPI?.planDetail?.planInformation?.plotArea || t("CS_NA")} />
-          <Row className="border-none" label={`${t(`BPA_BOUNDARY_PLOT_NO_LABEL`)}:`} text={datafromAPI?.planDetail?.planInformation?.plotNo || t("CS_NA")} />
-          <Row className="border-none" label={`${t(`BPA_BOUNDARY_KHATA_NO_LABEL`)}:`} text={datafromAPI?.planDetail?.planInformation?.khataNo || t("CS_NA")} />
+          <Row className="border-none" label={`${t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)}:`} text={`${datafromAPI?.planDetail?.planInformation?.plotArea} sq.ft` || t("CS_NA")} />
+          <Row className="border-none" label={`${t(`BPA_PLOT_NUMBER_LABEL`)}:`} text={datafromAPI?.planDetail?.planInformation?.plotNo || t("CS_NA")} />
+          <Row className="border-none" label={`${t(`BPA_KHATHA_NUMBER_LABEL`)}:`} text={datafromAPI?.planDetail?.planInformation?.khataNo || t("CS_NA")} />
           <Row className="border-none" label={`${t(`BPA_HOLDING_NUMBER_LABEL`)}:`} text={data?.holdingNumber || t("CS_NA")} />
           <Row className="border-none" label={`${t(`BPA_BOUNDARY_LAND_REG_DETAIL_LABEL`)}:`} text={data?.registrationDetails || t("CS_NA")} />
         </StatusTable>
@@ -194,29 +188,13 @@ const CheckPage = ({ onSubmit, value }) => {
           <Row className="border-none" label={`${t("BPA_OC_EDCR_NO_LABEL")}:`} text={data?.scrutinyNumber?.edcrNumber}></Row>
           <Row className="border-none" label={`${t("BPA_UPLOADED_PLAN_DIAGRAM")}:`}></Row>
           <LinkButton
-            label={
-              <div>
-                <span>
-                  <svg style={{ background: "#f6f6f6", padding: "8px" }} xmlns="http://www.w3.org/2000/svg" width={85} height={100} viewBox="0 0 20 20" fill="gray">
-                    <path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm10 5.5h1v-3h-1v3z" />
-                  </svg>
-                </span>
-              </div>
-            }
+            label={ <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" /> }
             onClick={() => routeTo(datafromAPI?.updatedDxfFile)}
           />
           <p style={{ marginTop: "8px", textAlign: "Left" }}>{t(`Uploaded Plan.DXF`)}</p>
           <Row className="border-none" label={`${t("BPA_SCRUNTINY_REPORT_OUTPUT")}:`} ></Row>
           <LinkButton
-            label={
-              <div>
-                <span>
-                  <svg style={{ background: "#f6f6f6", padding: "8px" }} xmlns="http://www.w3.org/2000/svg" width={85} height={100} viewBox="0 0 20 20" fill="gray">
-                    <path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm10 5.5h1v-3h-1v3z" />
-                  </svg>
-                </span>
-              </div>
-            }
+            label={ <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" /> }
             onClick={() => routeTo(datafromAPI?.planReport)}
           />
           <p style={{ marginTop: "8px", textAlign: "Left" }}>{t(`Scrutiny Report.PDF`)}</p>
@@ -264,15 +242,7 @@ const CheckPage = ({ onSubmit, value }) => {
       <Card>
         <CardHeader>{t("BPA_DOCUMENT_DETAILS_LABEL")}</CardHeader>
         <LinkButton
-          label={
-            <div>
-              <span>
-                <svg style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9.126 5.125L11.063 3.188L14.81 6.935L12.873 8.873L9.126 5.125ZM17.71 2.63L15.37 0.289999C15.1826 0.103748 14.9292 -0.000793457 14.665 -0.000793457C14.4008 -0.000793457 14.1474 0.103748 13.96 0.289999L12.13 2.12L15.88 5.87L17.71 4C17.8844 3.81454 17.9815 3.56956 17.9815 3.315C17.9815 3.06044 17.8844 2.81546 17.71 2.63ZM5.63 8.63L0 14.25V18H3.75L9.38 12.38L12.873 8.873L9.126 5.125L5.63 8.63Z" fill="#F47738" />
-                </svg>
-              </span>
-            </div>
-          }
+          label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
           style={{ width: "100px", display: "inline" }}
           onClick={() => routeTo(`${routeLink}/document-details`)}
         />
@@ -290,15 +260,7 @@ const CheckPage = ({ onSubmit, value }) => {
       <Card>
         <CardHeader>{t("BPA_NOC_DETAILS_SUMMARY")}</CardHeader>
         <LinkButton
-          label={
-            <div>
-              <span>
-                <svg style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9.126 5.125L11.063 3.188L14.81 6.935L12.873 8.873L9.126 5.125ZM17.71 2.63L15.37 0.289999C15.1826 0.103748 14.9292 -0.000793457 14.665 -0.000793457C14.4008 -0.000793457 14.1474 0.103748 13.96 0.289999L12.13 2.12L15.88 5.87L17.71 4C17.8844 3.81454 17.9815 3.56956 17.9815 3.315C17.9815 3.06044 17.8844 2.81546 17.71 2.63ZM5.63 8.63L0 14.25V18H3.75L9.38 12.38L12.873 8.873L9.126 5.125L5.63 8.63Z" fill="#F47738" />
-                </svg>
-              </span>
-            </div>
-          }
+          label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
           style={{ width: "100px", display: "inline" }}
           onClick={() => routeTo(`${routeLink}/noc-details`)}
         />

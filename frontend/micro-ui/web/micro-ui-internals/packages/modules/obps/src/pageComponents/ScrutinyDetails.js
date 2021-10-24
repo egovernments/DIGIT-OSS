@@ -239,7 +239,7 @@ const clearall = (num) => {
       <StatusTable  style={{border:"none"}}>
       <Row className="border-none" label={t("BPA_BUILTUP_AREA_HEADER")} text={data?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea}></Row>
       <Row className="border-none" label={t("BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL")} text={data?.planDetail?.blocks?.[0]?.building?.totalFloors}></Row>
-      <Row className="border-none" label={t("BPA_HEIGHT_FROM_GROUND_LEVEL")} text={`${data?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight} mtrs`}></Row>
+      <Row className="border-none" label={t("BPA_HEIGHT_FROM_GROUND_LEVEL_FROM_MUMTY")} text={`${data?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight} mtrs`}></Row>
       </StatusTable>
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_OCC_SUBOCC_HEADER")}:</CardSubHeader>

@@ -297,9 +297,9 @@ export const OBPSService = {
         asSectionHeader: true,
         values: [
           { title: "BPA_BOUNDARY_PLOT_AREA_LABEL", value: edcr?.planDetail?.planInformation?.plotArea },
-          { title: "BPA_BOUNDARY_PLOT_NO_LABEL", value: edcr?.planDetail?.planInformation?.plotNo },
-          { title: "BPA_BOUNDARY_KHATA_NO_LABEL", value: edcr?.planDetail?.planInformation?.khataNo },
-          { title: "BPA_BOUNDARY_HOLDING_NO_LABEL", value: "" },
+          { title: "BPA_PLOT_NUMBER_LABEL", value: edcr?.planDetail?.planInformation?.plotNo },
+          { title: "BPA_KHATHA_NUMBER_LABEL", value: edcr?.planDetail?.planInformation?.khataNo },
+          { title: "BPA_HOLDING_NUMBER_LABEL", value: "" },
           { title: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL", value: "" }
         ]
       },
@@ -322,7 +322,7 @@ export const OBPSService = {
         values: [
           { title: "BPA_BUILTUP_AREA_HEADER", value: edcr?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea },
           { title: "BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL", value: edcr?.planDetail?.blocks?.[0]?.building?.totalFloors },
-          { title: "BPA_APPLICATION_HIGH_FROM_GROUND", value: edcr?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeigh }
+          { title: "BPA_HEIGHT_FROM_GROUND_LEVEL_FROM_MUMTY", value: edcr?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeigh }
         ]
       },
       {
@@ -435,7 +435,7 @@ export const OBPSService = {
           { title: "BPA_BUILDING_EXTRACT_HEADER", value : " "},
           { title: "BPA_BUILTUP_AREA_HEADER", value: edcr?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea || "NA"},
           { title: "BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL", value: edcr?.planDetail?.blocks?.[0]?.building?.totalFloors || "NA" },
-          { title: "BPA_APPLICATION_HIGH_FROM_GROUND", value: edcr?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeigh || "NA" }
+          { title: "BPA_HEIGHT_FROM_GROUND_LEVEL_FROM_MUMTY", value: edcr?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeigh || "NA" }
         ],
         scruntinyDetails: []
       }

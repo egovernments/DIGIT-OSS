@@ -177,11 +177,11 @@ import {
               onClick={() => routeTo(`${routeLink}/plot-details`)}
            />
     <StatusTable>
-          <Row className="border-none" textStyle={{marginLeft:"9px"}} label={t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.plotArea || t("CS_NA")} />
-          <Row className="border-none" label={t(`BPA_BOUNDARY_PLOT_NO_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.plotNo || t("CS_NA")} />
-          <Row className="border-none" label={t(`BPA_BOUNDARY_KHATA_NO_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.khataNo || t("CS_NA")}/>
-          <Row className="border-none" label={t(`Holding Number`)} text={data?.holdingNumber || t("CS_NA")} />
-          <Row className="border-none" label={t(`Land Registration details`)} text={data?.registrationDetails || t("CS_NA")} />
+          <Row className="border-none" textStyle={{marginLeft:"9px"}} label={t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)} text={`${datafromAPI?.planDetail?.planInformation?.plotArea} sq.ft` || t("CS_NA")} />
+          <Row className="border-none" label={t(`BPA_PLOT_NUMBER_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.plotNo || t("CS_NA")} />
+          <Row className="border-none" label={t(`BPA_KHATHA_NUMBER_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.khataNo || t("CS_NA")}/>
+          <Row className="border-none" label={t(`BPA_HOLDING_NUMBER_LABEL`)} text={data?.holdingNumber || t("CS_NA")} />
+          <Row className="border-none" label={t(`BPA_BOUNDARY_LAND_REG_DETAIL_LABEL`)} text={data?.registrationDetails || t("CS_NA")} />
     </StatusTable>
     </Card>
     <Card style={{paddingRight:"16px"}}>
@@ -191,13 +191,13 @@ import {
       <Row className="border-none" label={t("BPA_EDCR_NO_LABEL")} text={data?.scrutinyNumber?.edcrNumber}></Row>
       <CardSubHeader>{t("BPA_UPLOADED_PLAN_DIAGRAM")}:</CardSubHeader>
       <LinkButton
-        label={ <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="80px" height="75px" /> }
+        label={ <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" /> }
           onClick={() => routeTo(datafromAPI?.updatedDxfFile)}
        />
        <p style={{ marginTop: "8px",textAlign:"Left" }}>{t(`Uploaded Plan.DXF`)}</p>
       <CardSubHeader>{t("BPA_SCRUNTINY_REPORT_OUTPUT")}:</CardSubHeader>
       <LinkButton
-        label={ <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="80px" height="75px" /> }
+        label={ <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px"  /> }
           onClick={() => routeTo(datafromAPI?.planReport)}
        />
        <p style={{ marginTop: "8px",textAlign:"Left" }}>{t(`Scrutiny Report.PDF`)}</p>
@@ -207,7 +207,7 @@ import {
       <StatusTable  /* style={{border:"none"}} */>
       <Row className="border-none" label={t("BPA_BUILTUP_AREA_HEADER")} text={datafromAPI?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea}></Row>
       <Row className="border-none" label={t("BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL")} text={datafromAPI?.planDetail?.blocks?.[0]?.building?.totalFloors}></Row>
-      <Row className="border-none" label={t("BPA_HEIGHT_FROM_GROUND_LEVEL")} text={`${datafromAPI?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight} mtrs`}></Row>
+      <Row className="border-none" label={t("BPA_HEIGHT_FROM_GROUND_LEVEL_FROM_MUMTY")} text={`${datafromAPI?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight} mtrs`}></Row>
       </StatusTable>
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_OCC_SUBOCC_HEADER")}:</CardSubHeader>

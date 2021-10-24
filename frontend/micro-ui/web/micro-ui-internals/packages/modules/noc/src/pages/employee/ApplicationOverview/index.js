@@ -7,7 +7,8 @@ import {
   StatusTable,
   Row,
   UploadFile,
-  PDFSvg
+  PDFSvg,
+  MultiUploadWrapper
 } from "@egovernments/digit-ui-react-components";
 import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDetails";
 import { convertEpochToDate } from "../../../utils";

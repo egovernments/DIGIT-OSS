@@ -102,7 +102,7 @@ const ApplicationDetails = () => {
               <div>
                 <CardSectionHeader>{t(`${stringReplaceAll(document?.documentType?.toUpperCase(), ".", "_")}`)}</CardSectionHeader>
                 <a target="_" href={documents[document.fileStoreId]?.split(",")[0]}>
-                  <PDFSvg />
+                  <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />
                 </a>
                 {decodeURIComponent( documents[document.fileStoreId]?.split(",")[0]?.split("?")[0]?.split("/")?.pop()?.slice(13))}
               </div>
