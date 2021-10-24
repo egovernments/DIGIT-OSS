@@ -146,10 +146,12 @@ const BpaApplicationDetail = () => {
       {
         onError: (error, variables) => {
           // console.log("find error here",error)
+          setShowModal(false);
           setShowToast({ key: "error", action: error });
           setTimeout(closeToast, 5000);
         },
         onSuccess: (data, variables) => {
+          setShowModal(false);
           setShowToast({ key: "success", action: selectedAction });
           setTimeout(closeToast, 5000);
           queryClient.invalidateQueries("BPA_DETAILS_PAGE");
@@ -307,7 +309,10 @@ const BpaApplicationDetail = () => {
                 detail?.additionalDetails?.scruntinyDetails.map((scrutiny) => (
                   <Fragment>
                     <Row className="border-none" label={t(scrutiny?.title)} />
-                    <LinkButton onClick={() => downloadDiagram(scrutiny?.value)} label={<PDFSvg />}></LinkButton>
+                    <LinkButton 
+                      onClick={() => downloadDiagram(scrutiny?.value)} 
+                      label={<PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />}>
+                    </LinkButton>
                   </Fragment>
                 ))}
             </StatusTable>
@@ -323,18 +328,20 @@ const BpaApplicationDetail = () => {
                   />
                 )}
                 {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
-                  <div style={{ position: "relative" }}>
+                  <ActionBar style={{position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px"}}>
+                  <div style={{width: "100%"}}>
                     {displayMenu && workflowDetails?.data?.nextActions ? (
                       <Menu
-                        style={{ left: "0px", bottom: "37px" }}
-                        localeKeyPrefix={"CS_BPA"}
+                        style={{ bottom: "37px", minWidth: "240px", maxWidth: "310px", width: "100%", right: "0px"  }}
+                        localeKeyPrefix={"WF_BPA"}
                         options={workflowDetails?.data?.nextActions.map((action) => action.action)}
                         t={t}
                         onSelect={onActionSelect}
                       />
                     ) : null}
-                    <SubmitBar disabled={isFromSendBack ? !isFromSendBack : !isTocAccepted} label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+                    <SubmitBar style={{width: "100%"}} disabled={isFromSendBack ? !isFromSendBack : !isTocAccepted} label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
                   </div>
+                  </ActionBar>
                 )}
               </Fragment>
             )}
@@ -358,6 +365,7 @@ const BpaApplicationDetail = () => {
           error={showToast.key === "error" ? true : false}
           label={t(showToast.key === "success" ? `ES_OBPS_${showToast.action}_UPDATE_SUCCESS` : showToast.action)}
           onClose={closeToast}
+          style={{zIndex: "100"}}
         />
       )}
     </Fragment>

@@ -58,7 +58,7 @@ const BPAApplicationTimeline = (props) => {
                       <CheckPoint
                         keyValue={index}
                         isCompleted={index === 0}
-                        label={checkpoint.state ? t(`WF_NEW${businessService}_${checkpoint.state}`) : "NA"}
+                        label={checkpoint.state ? t(`WF_${businessService}_${checkpoint.state}`) : "NA"}
                         customChild={getTimelineCaptions(checkpoint)}
                       />
                     </React.Fragment>

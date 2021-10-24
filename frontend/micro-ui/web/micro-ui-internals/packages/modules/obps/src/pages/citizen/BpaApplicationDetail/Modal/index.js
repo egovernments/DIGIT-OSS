@@ -84,6 +84,9 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action }) => {
         fileStoreId: uploadedFile
       }]
     }
+
+    if(!data?.comments) delete data.comments;
+
     submitAction({ ...data, ...workflow, })
   }
 
