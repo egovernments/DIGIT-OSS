@@ -1,7 +1,9 @@
 import { TextInput, CardLabel, LabelFieldPair, Dropdown, Loader, LocationSearch, CardLabelError } from "@egovernments/digit-ui-react-components";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Controller } from "react-hook-form";
+import { aphabeticalSortFunctionForTenantsBasedOnName } from "../../utils";
+import { useLocation } from "react-router-dom";
 
 const EventForm = ({ onSelect, config, formData, register, control, errors }) => {
   const { t } = useTranslation();
@@ -9,33 +11,43 @@ const EventForm = ({ onSelect, config, formData, register, control, errors }) =>
   const state = tenantId?.split('.')[0];
   const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
   const userInfo = Digit.UserService.getUser().info;
-  const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code));
+  const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code)).sort(aphabeticalSortFunctionForTenantsBasedOnName)
   const getDefaultUlb = () => {
     if (formData?.defaultTenantId) {
       return ulbs?.find(ulb => ulb?.code === formData?.defaultTenantId);
+    }
+    if(tenantId){
+      return ulbs?.find(ulb => ulb?.code === tenantId)
     }
     return userUlbs?.length === 1 ? userUlbs?.[0] : null
   }
   const { isLoading, data } = Digit.Hooks.useCommonMDMS(state, "mseva", ["EventCategories"]);
 
-  const onChange = (event) => {
+ /*  const onChange = (event) => {
     onSelect(config?.key, { ...formData[config?.key], name: event?.target?.value });
   }
 
   const selectCategory = (data) => {
-    onSelect(config?.key, { ...formData[config?.key], eventCategory: data?.code  })
+    onSelect(config?.key, { ...formData[config?.key], eventCategory: data?.code })
   }
 
   const selectUlb = (data) => {
-    onSelect(config?.key, { ...formData[config?.key], tenantId: data?.code  })
+    onSelect(config?.key, { ...formData[config?.key], tenantId: data?.code })
   }
+ */
+
+  const location = useLocation();
+  const isInEditFormMode = useMemo(()=>{
+    if(location.pathname.includes('/engagement/event/edit-event')) return true;
+    return false;
+  },[location.pathname])
 
   if (isLoading) {
     return (
       <Loader />
     );
   }
-
+  
   return (
     <Fragment>
       <LabelFieldPair>
@@ -46,7 +58,7 @@ const EventForm = ({ onSelect, config, formData, register, control, errors }) =>
             defaultValue={getDefaultUlb()}
             name="tenantId"
             rules={{ required: true }}
-            render={({ onChange, value }) => <Dropdown option={userUlbs} selected={value} disable={userUlbs?.length === 1} optionKey="code" t={t} select={onChange} />}
+            render={({ onChange, value }) => <Dropdown option={userUlbs} selected={value} disable={isInEditFormMode ? true : userUlbs?.length === 1} optionKey="code" t={t} select={onChange} />}
           />
           {errors && errors['tenantId'] && <CardLabelError>{t(`EVENTS_TENANT_ERROR_REQUIRED`)}</CardLabelError>}
         </div>
@@ -58,10 +70,11 @@ const EventForm = ({ onSelect, config, formData, register, control, errors }) =>
             defaultValue={formData?.name}
             render={({ onChange, ref, value }) => <TextInput value={value} type="text" name="name" onChange={onChange} inputRef={ref} />}
             name="name"
-            rules={{ required: true }}
+            rules={{ required: true , maxLength:66}}
             control={control}
           />
-          {errors && errors['name'] && <CardLabelError>{t(`EVENTS_NAME_ERROR_REQUIRED`)}</CardLabelError>}
+           {errors && errors?.name && errors?.name?.type==="required" && <CardLabelError>{t(`EVENTS_COMMENTS_ERROR_REQUIRED`)}</CardLabelError>}
+          {errors && errors?.name && errors?.name?.type==="maxLength" && <CardLabelError>{t(`EVENTS_MAXLENGTH_66_CHARS_REACHED`)}</CardLabelError>}
         </div>
       </LabelFieldPair>
       <LabelFieldPair>

@@ -65,8 +65,8 @@ const EditEvents = () => {
     description: data?.description,
     address: data?.eventDetails?.address,
     category: data?.eventCategory,
-    fromTime: format(new Date(data?.eventDetails?.fromDate), 'hh:mm'),
-    toTime: format(new Date(data?.eventDetails?.toDate), 'hh:mm'),
+    fromTime: format(new Date(data?.eventDetails?.fromDate), 'HH:mm'),
+    toTime: format(new Date(data?.eventDetails?.toDate), 'HH:mm'),
     geoLocation: {
       latitude: data?.eventDetails?.latitude,
       longitude: data?.eventDetails?.longitude,

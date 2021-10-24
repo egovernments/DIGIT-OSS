@@ -25,6 +25,7 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
             case "ulb":
                 return (
                     <Controller
+                    rules={{ required: true }}
                         defaultValue={selectedTenat?.[0]}
                         render={props => (
                             <Dropdown

@@ -13,6 +13,7 @@ const Inbox = ({ tenants, parentRoute }) => {
   const [pageOffset, setPageOffset] = useState(0);
   const [searchParams, setSearchParams] = useState({
     eventStatus: [],
+    name:'',
     range: {
       startDate: null,
       endDate: new Date(""),
@@ -31,7 +32,11 @@ const Inbox = ({ tenants, parentRoute }) => {
     });
 
   const onSearch = (params) => {
-    setSearchParams((prevParams) => ({ ...prevParams, ...params }));
+    let updatedParams = {...params};
+    if(!params?.ulb){
+      updatedParams ={...params, ulb:{code:tenantId}}
+    }
+    setSearchParams((prevParams) => ({ ...prevParams, ...updatedParams }));
   }
 
   const handleFilterChange = (data) => {

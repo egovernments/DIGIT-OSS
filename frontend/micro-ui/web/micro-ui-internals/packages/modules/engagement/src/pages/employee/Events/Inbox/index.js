@@ -31,7 +31,11 @@ const Inbox = ({ tenants, parentRoute }) => {
   });
 
   const onSearch = (params) => {
-    setSearchParams({ ...searchParams, ...params });
+    let updatedParams = {...params};
+    if(!params?.ulb){
+      updatedParams ={...params, ulb:{code:tenantId}}
+    }
+    setSearchParams({ ...searchParams, ...updatedParams });
   }
 
   const handleFilterChange = (data) => {

@@ -74,19 +74,19 @@ const Response = (props) => {
     <Card>
       <BannerPicker
         t={t}
-        message={`ENGAGEMENT_EVENT_CREATED`}
+        message={mutation.isSuccess ? `ENGAGEMENT_EVENT_CREATED_MESSAGE`:`ENGAGEMENT_EVENT_FAILED_MESSAGES`}
         data={mutation.data}
         isSuccess={mutation.isSuccess}
         isLoading={mutation.isIdle || mutation.isLoading}
       />
       <CardText>
-        {mutation.isSuccess ? t(`ENGAGEMENT_EVENT_CREATED_MESSAGE`, {
+        {mutation.isSuccess ? t(`ENGAGEMENT_EVENT_CREATED_MESSAGES`, {
         eventName: mutation?.data?.events?.[0]?.name,
         fromDate: Digit.DateUtils.ConvertTimestampToDate(mutation?.data?.events?.[0]?.eventDetails?.fromDate),
         toDate: Digit.DateUtils.ConvertTimestampToDate(mutation?.data?.events?.[0]?.eventDetails?.toDate),
         fromTime: mutation.isSuccess ? format(new Date(mutation?.data?.events?.[0]?.eventDetails?.fromDate), 'HH:mm') : null,
         toTime: mutation.isSuccess ? format(new Date(mutation?.data?.events?.[0]?.eventDetails?.toDate), 'HH:mm') : null,
-      }) : t(`ENGAGEMENT_EVENT_FAILED_MESSAGES`)}
+      }) : null}
       </CardText>
       <ActionBar>
         <Link to={"/digit-ui/employee"}>

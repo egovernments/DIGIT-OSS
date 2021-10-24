@@ -19,6 +19,7 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
       case "ulb":
         return (
           <Controller
+          rules={{ required: true }}
             render={props => (
               <DropdownUlb
                 onAssignmentChange={props.onChange}

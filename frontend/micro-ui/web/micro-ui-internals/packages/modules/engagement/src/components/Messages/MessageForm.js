@@ -11,7 +11,8 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
   const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
   const { isLoading, data } = Digit.Hooks.useCommonMDMS(state, "mseva", ["EventCategories"]);
 
-  const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code));
+  const userInfo = Digit.UserService.getUser().info;
+  const userUlbs = ulbs.filter(ulb => ulb?.code === tenantId);
 
   const isValidDate = (date) => {
     if (!isValid(new Date(formData?.fromDate)) || !isValid(new Date(date))) return false;
@@ -41,6 +42,7 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
     );
   }
 
+
   return (
     <Fragment>
       <LabelFieldPair>
@@ -63,10 +65,11 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
             defaultValue={formData?.name}
             render={({ onChange, ref, value }) => <TextInput value={value} type="text" name="name" onChange={onChange} inputRef={ref} />}
             name="name"
-            rules={{ required: true }}
+            rules={{ required: true, maxLength:66 }}
             control={control}
           />
-          {errors && errors['name'] && <CardLabelError>{t(`EVENTS_TITLE_ERROR_REQUIRED`)}</CardLabelError>}
+          {errors && errors?.name && errors?.name?.type==="required" && <CardLabelError>{t(`EVENTS_COMMENTS_ERROR_REQUIRED`)}</CardLabelError>}
+          {errors && errors?.name && errors?.name?.type==="maxLength" && <CardLabelError>{t(`EVENTS_MAXLENGTH_66_CHARS_REACHED`)}</CardLabelError>}
         </div>
       </LabelFieldPair>
       <LabelFieldPair style={{marginBottom: "24px"}}>
@@ -127,7 +130,7 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
             control={control}
             name="fromDate"
             defaultValue={formData?.fromDate}
-            rules={{ required: true, validate: { isValidDate: isValidDate }}}
+            rules={{ required: true, }}
             render={({ onChange, value }) => <TextInput type="date" isRequired={true} onChange={onChange} defaultValue={value} />}
           />
           {errors && errors?.fromDate && errors?.fromDate?.type === "required" && <CardLabelError>{t(`EVENTS_FROM_DATE_ERROR_REQUIRED`)}</CardLabelError>}
@@ -141,7 +144,7 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
             control={control}
             name="toDate"
             defaultValue={formData?.toDate}
-            rules={{ required: true, validate: { isValidDate: isValidDate }}}
+            rules={{ required: true, }}
             render={({ onChange, value }) => <TextInput type="date" isRequired={true} onChange={onChange} defaultValue={value} />}
           />
           {errors && errors?.toDate && errors?.toDate?.type === "required" && <CardLabelError>{t(`EVENTS_TO_DATE_ERROR_REQUIRED`)}</CardLabelError>}

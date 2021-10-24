@@ -1,4 +1,4 @@
-import { CardLabel, LabelFieldPair, TextInput, UploadFile } from "@egovernments/digit-ui-react-components";
+import { CardLabel, LabelFieldPair, TextInput, UploadFile, CardLabelError } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 
@@ -33,6 +33,8 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
 
   const selectFile = (e, props) => {
     setFile()
+    setFileSize()
+    setFileType()
     setUploadError("")
     if (!e.target?.files?.length) return
 
@@ -43,7 +45,7 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
       setUploadError('FILE_SIZE_EXCEEDED')
       return
     }
-    if (type && (type.includes('pdf') || type.includes('png') || type.includes('jpg') || type.includes('doc'))) {
+    if (type && (type.includes('pdf') || type.includes('png') || type.includes('jpg') || type.includes('msword ') || type.includes('vnd.openxmlformats-officedocument.wordprocessingml.document'))) {
       setFileSize(size);
       setFileType(type);
       setProps(props);
@@ -109,7 +111,7 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
             )}
           />
           {fileSize ? `${getFileSize(fileSize)}` : null}
-          {imageUploadError ? t(imageUploadError) : null}
+          {imageUploadError ? <CardLabelError>{t(imageUploadError)}</CardLabelError>  : null}
         </div>
       </LabelFieldPair>
 
