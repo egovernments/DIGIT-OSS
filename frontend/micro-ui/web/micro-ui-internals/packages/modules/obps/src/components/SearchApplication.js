@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect } from "react"
+import React, { useCallback, useMemo, useEffect, useState } from "react"
 import { useForm, Controller } from "react-hook-form";
 import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
@@ -6,12 +6,19 @@ import { convertEpochToDateDMY } from  "../utils";
 
 const OBPSSearchApplication = ({tenantId, t, onSubmit, data }) => {
     let validation = {};
+    const [ Applicationtype, setApplicationtype] = useState("BUILDING_PLAN_SCRUTINY");
+    const { data: applicationTypes } = Digit.Hooks.obps.useSearchMdmsTypes.applicationTypes(tenantId.split(".")[0]);
+    const { data: serviceTypes } = Digit.Hooks.obps.useSearchMdmsTypes.serviceTypes(tenantId.split(".")[0]);
+    let defaultAppType = applicationTypes && applicationTypes.filter((ob) => ob.code === "BUILDING_PLAN_SCRUTINY")[0];
+    let defaultserviceType = serviceTypes && serviceTypes.filter((ob) => ob.code === "NEW_CONSTRUCTION")[0];
     const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
         defaultValues: {
             offset: 0,
             limit: 10,
             sortBy: "commencementDate",
-            sortOrder: "DESC"
+            sortOrder: "DESC",
+            applicationType: defaultAppType, 
+            serviceType: defaultserviceType,
         }
     })
     useEffect(() => {
@@ -20,18 +27,34 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data }) => {
       register("sortBy", "commencementDate")
       register("sortOrder", "DESC")
     },[register])
-    const { data: applicationTypes } = Digit.Hooks.tl.useMDMS.applicationTypes(tenantId)
+
     //need to get from workflow
-    const ServiceTypes = [
-        {
-            code: "BPA",
-            i18nKey: "BPA"
-        },
-        {
-            code: "BPAREG",
-            i18nKey: "BPAREG"
-        }
-    ]
+
+    if(applicationTypes && applicationTypes.length>0)
+    {
+        applicationTypes.push({
+            code: "BPA_STAKEHOLDER_REGISTRATION",
+            i18nKey: "BPA_APPLICATIONTYPE_BPA_STAKEHOLDER_REGISTRATION",
+        })
+    }
+
+
+    let ServiceTypes = [];
+    useEffect(() => {
+        serviceTypes && serviceTypes.push({
+            applicationType:["BPA_STAKEHOLDER_REGISTRATION"],
+            code: "BPA_STAKEHOLDER_REGISTRATION",
+            i18nKey: "BPA_SERVICETYPE_BPA_STAKEHOLDER_REGISTRATION",
+        })
+        serviceTypes && serviceTypes.filter((ob) => ob.applicationType.includes(Applicationtype)).map((ser) => {
+            ServiceTypes.push({
+                code:ser.code,
+                i18nKey:ser.i18nKey,
+            })
+        });
+        
+    },[Applicationtype,serviceTypes,applicationTypes]);
+
     const applicationStatuses = [
         {
             code: "CANCELLED",
@@ -70,6 +93,12 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data }) => {
             i18nKey: "WF_BPA_INITIATED"
         }	
     ]
+
+    function getApplicationType(data){
+        data && setApplicationtype(data.code || "BUILDING_PLAN_SCRUTINY");
+        return data?data:defaultAppType;
+    }
+    
     const getRedirectionLink = (bService) => {
         let redirectBS = bService === "BPAREG"?"stakeholder":"bpa";
         return redirectBS;
@@ -77,7 +106,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data }) => {
     const GetCell = (value) => <span className="cell-text">{value}</span>;
     const columns = useMemo( () => ([
         {
-          Header: t("BPA_APP_NUMBER_HEAD"),
+          Header: t("BPA_APPLICATION_NUMBER_LABEL"),
           accessor: "applicationNo",
           disableSortBy: true,
           Cell: ({ row }) => {
@@ -93,19 +122,28 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data }) => {
           },
         },
         {
-            Header: t("BPA_APP_DATE_HEAD"),
+            Header: t("BPA_COMMON_TABLE_COL_APP_DATE_LABEL"),
             disableSortBy: true,
             accessor: (row) => GetCell(row.auditDetails.createdTime ? convertEpochToDateDMY(row.auditDetails.createdTime) : ""),
         },
         {
-            Header: t("BPA_APP_TYPE_HEAD"),
+            Header: t("BPA_SEARCH_APPLICATION_TYPE_LABEL"),
             disableSortBy: true,
-            accessor: (row) => GetCell(t(`${row.additionalDetails?.applicationType || "-"}`)),
+            accessor: "applicationType",
+            Cell: ({ row }) => {
+                return (
+                    <div>
+                      <span className="cell-text">
+                          {t(`${row.original?.additionalDetails?.applicationType || "-"}`)}
+                      </span>
+                    </div>
+                  );
+            },
         },
         {
             Header: t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"),
             disableSortBy: true,
-            accessor: (row) => GetCell(row.additionalDetails?.serviceType || "-"),
+            accessor: (row) => GetCell(t(row.additionalDetails?.serviceType || "-")),
         },
         {
           Header: t("BPA_CURRENT_OWNER_HEAD"),
@@ -164,7 +202,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data }) => {
                             name="applicationType"
                             render={(props) => (
                                 <Dropdown
-                                selected={props.value}
+                                selected={getApplicationType(props.value)}
                                 select={props.onChange}
                                 onBlur={props.onBlur}
                                 option={applicationTypes}
@@ -178,10 +216,10 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data }) => {
                     <label>{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</label>
                     <Controller
                             control={control}
-                            name="ServiceType"
+                            name="serviceType"
                             render={(props) => (
                                 <Dropdown
-                                selected={props.value}
+                                selected={props.value?props.value:defaultserviceType}
                                 select={props.onChange}
                                 onBlur={props.onBlur}
                                 option={ServiceTypes}
@@ -230,8 +268,8 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data }) => {
                         reset({ 
                             applicationNo: "",
                             mobileNumber: "",
-                            applicationType: "", 
-                            ServiceType: "",
+                            applicationType: defaultAppType, 
+                            serviceType: defaultserviceType,
                             fromDate: "", 
                             toDate: "",
                             status: "",

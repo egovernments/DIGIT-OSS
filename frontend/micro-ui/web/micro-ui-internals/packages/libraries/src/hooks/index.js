@@ -118,6 +118,7 @@ import useReceiptsSearch from "./receipts/useReceiptsSearch";
 import useReceiptsMDMS from "./receipts/useReceiptsMDMS";
 import useReceiptsUpdate from "./receipts/useReceiptsUpdate";
 
+import useSearchMdmsTypes from "./obps/useSearchMdmsTypes";
 import useOBPSMDMS from "./obps/useMDMS";
 import useScrutinyDetails from "./obps/useScrutinyDetails";
 import useTenantsOBPS from "./obps/useTenants";
@@ -275,6 +276,7 @@ const obps = {
   useEmpBPAREGSearch,
   useBPAInbox,
   useArchitectInbox,
+  useSearchMdmsTypes,
   useApplicationActions: useBPAApplicationActions
 };
 

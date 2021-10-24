@@ -21,7 +21,7 @@ const Search = ({path}) => {
         var fromDate = new Date(_data?.fromDate)
         fromDate?.setSeconds(fromDate?.getSeconds() - 19800 )
         var toDate = new Date(_data?.toDate)
-        setSelectedType(_data?.ServiceType?.code);
+        setSelectedType(_data?.serviceType?.code);
         toDate?.setSeconds(toDate?.getSeconds() + 86399 - 19800)
         const data = {
             ..._data,
@@ -29,7 +29,7 @@ const Search = ({path}) => {
             ...(_data.fromDate ? {fromDate: fromDate?.getTime()} : {})
         }
 
-        setPayload(Object.keys(data).filter( k => data[k] && k !=="ServiceType" ).reduce( (acc, key) => ({...acc,  [key]: typeof data[key] === "object" ? data[key].code : data[key] }), {} ))
+        setPayload(Object.keys(data).filter( k => data[k]).reduce( (acc, key) => ({...acc,  [key]: typeof data[key] === "object" ? data[key].code : data[key] }), {} ))
     }
 
     const config = {
@@ -45,8 +45,9 @@ const Search = ({path}) => {
     //     });
     // },[BPAdata,BPAREGdata])
 
-    if(selectedType === "BPAREG")
+    if((selectedType && selectedType.includes("STAKEHOLDER")) || (Object.keys(payload).length>0 && payload?.applicationType.includes("STAKEHOLDER")))
     {
+
         let filters = payload;
         if(payload.applicationNo) {
         payload["applicationNumber"] = payload.applicationNo;
@@ -60,6 +61,14 @@ const Search = ({path}) => {
     }
     else
     {
+        if(Object.keys(payload).length === 0)
+        {
+            let payload1={
+                applicationType:"BUILDING_PLAN_SCRUTINY",
+                serviceType:"NEW_CONSTRUCTION",
+            }
+            setPayload({...payload,...payload1});
+        }
         let filters = payload;
         const { data: bpaData, isLoading: isBpaSearchLoading, isSuccess : isBpaSuccess } = Digit.Hooks.obps.useBPASearch(tenantId, filters);
         const businessIds = bpaData ? bpaData.map(application => application.applicationNumber) : "";
