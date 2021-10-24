@@ -104,7 +104,7 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
                 accept="image/*, .pdf, .png, .jpeg, .doc"
                 showHintBelow={true}
                 hintText={t("DOCUMENTS_ATTACH_RESTRICTIONS_SIZE")}
-                message={fileStoreId ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+                message={fileStoreId && fileStoreId.length ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
                 textStyles={{ width: "100%" }}
                 inputStyles={{ width: "280px" }}
               />

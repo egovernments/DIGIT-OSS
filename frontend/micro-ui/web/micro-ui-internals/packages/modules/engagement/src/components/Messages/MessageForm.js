@@ -24,17 +24,6 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
     return new Date(`${formData?.fromDate}`) <= new Date(`${date}`);
   }
 
-  const onChange = (event) => {
-    onSelect(config?.key, { ...formData[config?.key], name: event?.target?.value });
-  }
-
-  const selectCategory = (data) => {
-    onSelect(config?.key, { ...formData[config?.key], eventCategory: data?.code  })
-  }
-
-  const selectUlb = (data) => {
-    onSelect(config?.key, { ...formData[config?.key], tenantId: data?.code  })
-  }
 
   if (isLoading) {
     return (

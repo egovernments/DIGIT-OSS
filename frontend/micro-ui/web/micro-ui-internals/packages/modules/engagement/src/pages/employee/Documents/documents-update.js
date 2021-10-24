@@ -30,7 +30,7 @@ const Documents = (props) => {
     const DocumentEntity = {
       ...props.location?.state?.DocumentEntity,
       name: data.documentName,
-      description: data?.description.length ? data.description : "NA",
+      description: data?.description.length ? data.description : "",
       category: data.docCategory?.name,
       filestoreId: data.document?.filestoreId?.fileStoreId,
       fileSize: data.document?.filestoreId?.fileSize,

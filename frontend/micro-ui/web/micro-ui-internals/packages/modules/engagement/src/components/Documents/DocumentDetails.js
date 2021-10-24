@@ -40,7 +40,7 @@ const DocumentDetails = ({ location, match, history, }) => {
                     filestoreId: { fileStoreId: details?.filestoreId },
                     documentLink: details?.documentLink
                 },
-                ULB: ulbArray.filter((e) => e.code === details?.tenantId),
+                ULB: {code:details?.tenantId},
                 ...details
             }
             history.push({
