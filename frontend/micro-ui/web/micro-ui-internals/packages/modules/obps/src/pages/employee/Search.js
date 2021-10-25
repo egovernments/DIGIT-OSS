@@ -53,6 +53,8 @@ const Search = ({path}) => {
         payload["applicationNumber"] = payload.applicationNo;
         payload.applicationNo="";
         }
+        if(payload && payload["applicationType"]) delete payload["applicationType"];
+        if(payload && payload["serviceType"]) delete payload["serviceType"];
         let params = {...payload, tenantId:"pb"};
         const { data: bparegData, isLoading: isBparegLoading, isSuccess : isBpregSuccess } = Digit.Hooks.obps.useEmpBPAREGSearch(tenantId, {}, params);
         

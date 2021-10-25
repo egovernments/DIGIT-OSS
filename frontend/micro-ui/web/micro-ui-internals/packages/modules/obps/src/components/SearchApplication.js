@@ -11,6 +11,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
     const { data: serviceTypes } = Digit.Hooks.obps.useSearchMdmsTypes.serviceTypes(tenantId.split(".")[0]);
     let defaultAppType = applicationTypes && applicationTypes.filter((ob) => ob.code === "BUILDING_PLAN_SCRUTINY")[0];
     let defaultserviceType = serviceTypes && serviceTypes.filter((ob) => ob.code === "NEW_CONSTRUCTION")[0];
+    const [serviceType, setserviceType] = useState(defaultserviceType);
     const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
         defaultValues: {
             offset: 0,
@@ -54,6 +55,14 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
         });
         
     },[Applicationtype,serviceTypes,applicationTypes]);
+
+    useEffect(() => {
+        Applicationtype && (Applicationtype.includes("STAKEHOLDER") || (Applicationtype?.code && Applicationtype?.code.includes("STAKEHOLDER"))) ? setserviceType({
+            applicationType:["BPA_STAKEHOLDER_REGISTRATION"],
+            code: "BPA_STAKEHOLDER_REGISTRATION",
+            i18nKey: "BPA_SERVICETYPE_BPA_STAKEHOLDER_REGISTRATION",
+        }):setserviceType(defaultserviceType);
+    },[Applicationtype]);
 
     const fetchLastPage = () => {
         setValue("offset", Count && (Math.ceil(Count / 10) * 10 - getValues("limit")));
@@ -107,6 +116,11 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
     function getApplicationType(data){
         data && setApplicationtype(data.code || "BUILDING_PLAN_SCRUTINY");
         return data?data:defaultAppType;
+    }
+
+    function getselectedServiceType(data){
+        if(data && data.code!== serviceType.code) data=serviceType;
+        return data?data:(serviceType?serviceType:defaultserviceType);
     }
     
     const getRedirectionLink = (bService) => {
@@ -229,7 +243,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
                             name="serviceType"
                             render={(props) => (
                                 <Dropdown
-                                selected={props.value?props.value:defaultserviceType}
+                                selected={getselectedServiceType(props.value)}
                                 select={props.onChange}
                                 onBlur={props.onBlur}
                                 option={ServiceTypes}
