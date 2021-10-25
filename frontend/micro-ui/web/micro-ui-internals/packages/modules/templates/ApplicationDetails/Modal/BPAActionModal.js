@@ -177,6 +177,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
        workflow:{
         action: action?.action,
         comment: data?.comments,
+        comments: data?.comments,
         assignee: !selectedApprover?.uuid ? null : [selectedApprover?.uuid],
         varificationDocuments: uploadedFile
         ? [
