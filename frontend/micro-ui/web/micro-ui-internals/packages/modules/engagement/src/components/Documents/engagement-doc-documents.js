@@ -45,7 +45,7 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
       setUploadError('FILE_SIZE_EXCEEDED')
       return
     }
-    if (type && (type.includes('pdf') || type.includes('png') || type.includes('jpg') || type.includes('msword ') || type.includes('vnd.openxmlformats-officedocument.wordprocessingml.document'))) {
+    if (type && (type.includes('pdf') || type.includes('png') || type.includes('jpg') || type.includes('msword') || type.includes('vnd.openxmlformats-officedocument.wordprocessingml.document'))) {
       setFileSize(size);
       setFileType(type);
       setProps(props);
@@ -104,7 +104,7 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
                 accept="image/*, .pdf, .png, .jpeg, .doc"
                 showHintBelow={true}
                 hintText={t("DOCUMENTS_ATTACH_RESTRICTIONS_SIZE")}
-                message={fileStoreId && fileStoreId.length ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+                message={fileStoreId && fileStoreId?.fileStoreId?.length ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
                 textStyles={{ width: "100%" }}
                 inputStyles={{ width: "280px" }}
               />
