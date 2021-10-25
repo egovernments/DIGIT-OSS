@@ -8,7 +8,7 @@ import DocumentDetails from "../../../components/DocumentDetails";
 import ActionModal from "./Modal";
 import OBPSDocument from "../../../pageComponents/OBPSDocuments";
 import SubOccupancyTable from "../../../../../templates/ApplicationDetails/components/SubOccupancyTable";
-
+import { getBusinessServices } from "../../../utils";
 
 const BpaApplicationDetail = () => {
   const { id } = useParams();
@@ -111,6 +111,8 @@ const BpaApplicationDetail = () => {
     switch (selectedAction) {
       case "APPROVE":
       case "SEND_TO_ARCHITECT":
+      case "APPLY":
+      case "SKIP_PAYMENT":
         setShowModal(true);
     }
   }, [selectedAction]);
@@ -135,6 +137,9 @@ const BpaApplicationDetail = () => {
   function onActionSelect(action) {
     if(action === "FORWARD") {
       history.replace(`/digit-ui/citizen/obps/sendbacktocitizen/ocbpa/${data?.applicationData?.tenantId}/${data?.applicationData?.applicationNo}/check`, { data: data?.applicationData, edcrDetails: data?.edcrDetails });
+    }
+    if (action === "PAY") {
+      window.location.assign(`${window.location.origin}/digit-ui/citizen/payment/collect/${`${getBusinessServices(data?.businessService, data?.applicationStatus)}/${id}/${tenantId}`}`);
     }
     setSelectedAction(action);
     setDisplayMenu(false);
@@ -239,6 +244,10 @@ const BpaApplicationDetail = () => {
     });
   }
 
+  if (workflowDetails?.data?.nextActions?.length > 0) {
+    workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "INITIATE");
+    workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "ADHOC");
+  };
 
   return (
     <Fragment>

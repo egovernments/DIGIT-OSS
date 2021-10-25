@@ -574,7 +574,10 @@ export const OBPSService = {
       tenantId: BPA?.tenantId,
       edcrDetails: edcr,
       nocData: noc,
-      comparisionReport: comparisionReport?.comparisonDetail
+      comparisionReport: comparisionReport?.comparisonDetail,
+      businessService: BPA?.businessService,
+      applicationNo: BPA?.applicationNo,
+      applicationStatus : BPA?.status
     }
   }
 }
