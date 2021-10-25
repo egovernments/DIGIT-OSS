@@ -4,6 +4,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { format } from 'date-fns';
 import { FormComposer, Header, Loader } from "@egovernments/digit-ui-react-components";
 import { config } from "../NewMessageConfig";
+import { isNestedArray, reduceDocsArray } from "../../../utils";
 
 const EditMessage = () => {
   const { t } = useTranslation();
@@ -20,7 +21,10 @@ const EditMessage = () => {
 
   const onSubmit = (formData) => {
     const { fromDate, toDate, description, name, documents } = formData;
-
+    
+    
+    const finalDocuments = isNestedArray(documents) ? reduceDocsArray(documents) : documents;
+  
     const details = {
       events: [
         {
@@ -32,7 +36,7 @@ const EditMessage = () => {
           description,
           name,
           eventDetails: {
-            documents,
+            documents : finalDocuments,
             fromDate: new Date(`${fromDate}`).getTime(),
             toDate: new Date(`${toDate}`).getTime(),
           }

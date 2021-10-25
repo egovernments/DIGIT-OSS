@@ -80,7 +80,7 @@ const DocumentDetails = () => {
           <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("EVENTS_TO_DATE_LABEL")}:`}</p> <p>{data?.applicationData?.eventDetails?.toDate ? format(new Date(data?.applicationData?.eventDetails?.toDate), 'dd/MM/yyyy') : null}</p> </div>
 
 
-          {data?.applicationData?.eventDetails?.documents.length ? <div className="documentDetails_pdf">
+          {data?.applicationData?.eventDetails?.documents?.length ? <div className="documentDetails_pdf">
             <span className="documentDetails_subheader">{`${t('CS_COMMON_DOCUMENTS')}`}</span>
             <div style={{ width: '100px' }} onClick={() => openUploadedDocument(data?.applicationData?.eventDetails?.documents[0]?.fileStoreId, data?.applicationData?.name)}>
               <GenericFileIcon />
