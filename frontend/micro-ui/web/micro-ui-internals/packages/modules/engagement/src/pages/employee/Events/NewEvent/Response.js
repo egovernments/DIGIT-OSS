@@ -24,21 +24,29 @@ const Response = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const mutation = Digit.Hooks.events.useCreateEvent();
   const updateEventMutation = Digit.Hooks.events.useUpdateEvent();
+  const [isSuccess, setIsSuccess] = useState(false)
   const { state } = props.location;
 
   useEffect(() => {
     const onSuccess = () => {
+      setIsSuccess(true)
       queryClient.clear();
     }
-    if (searchParams?.delete || searchParams?.update) {
-      updateEventMutation.mutate(state, {
+    if (!isSuccess) {
+      if (searchParams?.delete || searchParams?.update) {
+        updateEventMutation.mutate(state, {
+          onSuccess
+        });
+        return;
+      }
+      mutation.mutate(state, {
         onSuccess
-      });
+      })
       return;
     }
-    mutation.mutate(state, {
-      onSuccess
-    })
+    return () => {
+      queryClient.clear();
+    };
   }, []);
 
   if (searchParams?.delete || searchParams?.update) {
@@ -74,19 +82,19 @@ const Response = (props) => {
     <Card>
       <BannerPicker
         t={t}
-        message={mutation.isSuccess ? `ENGAGEMENT_EVENT_CREATED_MESSAGE`:`ENGAGEMENT_EVENT_FAILED_MESSAGES`}
+        message={mutation.isSuccess ? `ENGAGEMENT_EVENT_CREATED_MESSAGE` : `ENGAGEMENT_EVENT_FAILED_MESSAGES`}
         data={mutation.data}
         isSuccess={mutation.isSuccess}
         isLoading={mutation.isIdle || mutation.isLoading}
       />
       <CardText>
         {mutation.isSuccess ? t(`ENGAGEMENT_EVENT_CREATED_MESSAGES`, {
-        eventName: mutation?.data?.events?.[0]?.name,
-        fromDate: Digit.DateUtils.ConvertTimestampToDate(mutation?.data?.events?.[0]?.eventDetails?.fromDate),
-        toDate: Digit.DateUtils.ConvertTimestampToDate(mutation?.data?.events?.[0]?.eventDetails?.toDate),
-        fromTime: mutation.isSuccess ? format(new Date(mutation?.data?.events?.[0]?.eventDetails?.fromDate), 'HH:mm') : null,
-        toTime: mutation.isSuccess ? format(new Date(mutation?.data?.events?.[0]?.eventDetails?.toDate), 'HH:mm') : null,
-      }) : null}
+          eventName: mutation?.data?.events?.[0]?.name,
+          fromDate: Digit.DateUtils.ConvertTimestampToDate(mutation?.data?.events?.[0]?.eventDetails?.fromDate),
+          toDate: Digit.DateUtils.ConvertTimestampToDate(mutation?.data?.events?.[0]?.eventDetails?.toDate),
+          fromTime: mutation.isSuccess ? format(new Date(mutation?.data?.events?.[0]?.eventDetails?.fromDate), 'HH:mm') : null,
+          toTime: mutation.isSuccess ? format(new Date(mutation?.data?.events?.[0]?.eventDetails?.toDate), 'HH:mm') : null,
+        }) : null}
       </CardText>
       <ActionBar>
         <Link to={"/digit-ui/employee"}>
