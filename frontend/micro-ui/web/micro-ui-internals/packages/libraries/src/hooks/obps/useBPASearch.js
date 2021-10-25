@@ -33,6 +33,7 @@ const useBPASearch = (tenantId, filters = {}, config = {}) => {
       appNumbers = appNums;
       appNums.push(item.applicationNo);
       tenantMap[item.tenantId] = appNums;
+      item["Count"] = response?.Count;
     });
 
     for (var key in tenantMap) {

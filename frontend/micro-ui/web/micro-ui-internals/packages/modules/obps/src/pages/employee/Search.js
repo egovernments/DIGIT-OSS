@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown } from "@egovernments/digit-ui-react-components";
+import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Loader } from "@egovernments/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
 import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next";
@@ -45,7 +45,7 @@ const Search = ({path}) => {
     //     });
     // },[BPAdata,BPAREGdata])
 
-    if((selectedType && selectedType.includes("STAKEHOLDER")) || (Object.keys(payload).length>0 && payload?.applicationType.includes("STAKEHOLDER")))
+    if((selectedType && selectedType.includes("STAKEHOLDER")) || (Object.keys(payload).length>0 && payload?.applicationType && payload?.applicationType.includes("STAKEHOLDER")))
     {
 
         let filters = payload;
@@ -56,7 +56,7 @@ const Search = ({path}) => {
         let params = {...payload, tenantId:"pb"};
         const { data: bparegData, isLoading: isBparegLoading, isSuccess : isBpregSuccess } = Digit.Hooks.obps.useEmpBPAREGSearch(tenantId, {}, params);
         
-        return <Search t={t} tenantId={tenantId} onSubmit={onSubmit} data={ !isBparegLoading && isBpregSuccess ? bparegData : { display: "ES_COMMON_NO_DATA" } } /> 
+        return <Search t={t} tenantId={tenantId} onSubmit={onSubmit} isLoading={isBparegLoading} Count={bparegData?.[0]?.Count} data={ !isBparegLoading && isBpregSuccess ? bparegData : { display: "ES_COMMON_NO_DATA" } } /> 
         
     }
     else
@@ -90,7 +90,7 @@ const Search = ({path}) => {
         //     enabled: bpaData?.[0]?.edcrNumber?true:false
         //   })
         // console.log(data1,"data1");
-        return <Search t={t} tenantId={tenantId} onSubmit={onSubmit} data={ !isBpaSearchLoading && isBpaSuccess ? bpaData : { display: "ES_COMMON_NO_DATA" } } /> 
+        return <Search t={t} tenantId={tenantId} onSubmit={onSubmit} isLoading={isBpaSearchLoading} Count={bpaData?.[0]?.Count} data={ !isBpaSearchLoading && isBpaSuccess ? bpaData : { display: "ES_COMMON_NO_DATA" }  } /> 
     }
     //  const { data: bpaData, isLoading: isBpaSearchLoading } = Digit.Hooks.obps.useBPASearch(tenantId, {applicationNo:applicationNo});
 

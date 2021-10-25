@@ -54,7 +54,12 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     const handleSubmit = () => {
         let document = formData.documents;
         let documentStep;
-        documentStep = { ...document, documents: documents };
+        let regularDocs = [];
+        bpaTaxDocuments && documents && documents !== null && bpaTaxDocuments.map((initialob,index) => {
+            let docobject = documents.find((ob) => (ob && ob !==null) && (ob.documentType === initialob.code));
+            regularDocs.push(docobject);
+        })
+        documentStep = { ...document, documents: regularDocs };
         onSelect(config.key, documentStep);
      };
     const onSkip = () => onSelect();
@@ -65,7 +70,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
         bpaTaxDocuments.map(doc => {
             let isRequired = false;
             documents.map(data => {
-                if (doc.required && doc.code == `${data.documentType.split('.')[0]}.${data.documentType.split('.')[1]}`) {
+                if (doc.required && data !== null && data && doc.code == `${data.documentType.split('.')[0]}.${data.documentType.split('.')[1]}`) {
                     isRequired = true;
                 }
             });

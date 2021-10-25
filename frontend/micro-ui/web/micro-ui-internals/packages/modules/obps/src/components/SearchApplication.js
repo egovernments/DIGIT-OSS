@@ -4,7 +4,7 @@ import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardL
 import { Link } from "react-router-dom";
 import { convertEpochToDateDMY } from  "../utils";
 
-const OBPSSearchApplication = ({tenantId, t, onSubmit, data }) => {
+const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count }) => {
     let validation = {};
     const [ Applicationtype, setApplicationtype] = useState("BUILDING_PLAN_SCRUTINY");
     const { data: applicationTypes } = Digit.Hooks.obps.useSearchMdmsTypes.applicationTypes(tenantId.split(".")[0]);
@@ -54,6 +54,16 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data }) => {
         });
         
     },[Applicationtype,serviceTypes,applicationTypes]);
+
+    const fetchLastPage = () => {
+        setValue("offset", Count && (Math.ceil(Count / 10) * 10 - getValues("limit")));
+        handleSubmit(onSubmit)()
+    };
+
+    const fetchFirstPage = () => {
+        setValue("offset", 0);
+        handleSubmit(onSubmit)()
+      };
 
     const applicationStatuses = [
         {
@@ -282,6 +292,8 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data }) => {
                     }}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
                 </SearchField>
             </SearchForm>
+            {!isLoading &&
+            <div>
             {data?.display ? <Card style={{ marginTop: 20 }}>
                 {
                 t(data.display)
@@ -312,9 +324,13 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data }) => {
                 onPrevPage={previousPage}
                 pageSizeLimit={getValues("limit")}
                 onSort={onSort}
+                totalRecords={Count}
                 disableSort={false}
+                onLastPage={fetchLastPage}
+                onFirstPage={fetchFirstPage}
                 sortParams={[{id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false}]}
             />}
+            </div>}
         </React.Fragment>
 }
 

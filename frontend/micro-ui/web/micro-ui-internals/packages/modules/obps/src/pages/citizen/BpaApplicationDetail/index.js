@@ -200,7 +200,7 @@ const BpaApplicationDetail = () => {
       onClick: () => window.open(data?.comparisionReport?.comparisonReport, "_blank"),
     });
   }
-  if(data && data?.applicationData?.businessService === "BPA_LOW")
+  if(data && data?.applicationData?.businessService === "BPA_LOW"  && payments.length>0)
   {
     dowloadOptions.push({
       label: t("BPA_FEE_RECEIPT"),
@@ -216,7 +216,7 @@ const BpaApplicationDetail = () => {
     });
     
   }
-  else if(data && data?.applicationData?.businessService === "BPA" && data?.applicationData?.riskType === "HIGH")
+  else if(data && data?.applicationData?.businessService === "BPA" && data?.applicationData?.riskType === "HIGH" )
   {
     dowloadOptions.push({
       label: t("BPA_APP_FEE_RECEIPT"),
@@ -229,7 +229,7 @@ const BpaApplicationDetail = () => {
   }
   else
   {
-    dowloadOptions.push({
+    payments.length>0 && dowloadOptions.push({
       label: t("BPA_APP_FEE_RECEIPT"),
       onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[0],consumerCodes: data?.applicationData?.applicationNo}),
     });
@@ -243,13 +243,13 @@ const BpaApplicationDetail = () => {
   return (
     <Fragment>
       <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
-      <MultiLink
+      {dowloadOptions && dowloadOptions.length>0 && <MultiLink
           className="multilinkWrapper"
           onHeadClick={() => setShowOptions(!showOptions)}
           displayOptions={showOptions}
           options={dowloadOptions}
           style={{top:"90px"}}
-        />
+        />}
       {data?.applicationDetails?.map((detail, index, arr) => {
         return (
           <Card key={index} style={detail?.title === ""?{marginTop:"-8px"}:{}}>

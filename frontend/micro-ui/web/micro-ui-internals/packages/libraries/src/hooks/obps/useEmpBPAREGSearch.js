@@ -11,13 +11,14 @@ const convertMillisecondsToDays = (milliseconds) => {
     }, {})
   } 
   
-  const combineResponse = (applications, workflowData) => {
+  const combineResponse = (applications, workflowData, totalCount) => {
     const workflowInstances = mapWfBybusinessId(workflowData);
     return applications.map(application => ({
       ...application,
       assignee: workflowInstances[application?.applicationNumber]?.assignes?.[0]?.name,
       //sla: convertMillisecondsToDays(workflowInstances[application?.applicationNumber]?.businesssServiceSla),
-      state: workflowInstances[application?.applicationNumber]?.state?.state
+      state: workflowInstances[application?.applicationNumber]?.state?.state,
+      Count:totalCount,
     }))
   }
 
@@ -27,7 +28,7 @@ const useEmpBPAREGSearch = (tenantId, filters, params, config = {}) => {
     const response = await Digit.OBPSService.BPAREGSearch(tenantId, filters, params);
     const businessIds = response?.Licenses.map(application => application.applicationNumber);
     const workflowRes = await Digit.WorkflowService.getAllApplication('pb', { businessIds: businessIds.join()  });
-    return combineResponse(response?.Licenses, workflowRes?.ProcessInstances);
+    return combineResponse(response?.Licenses, workflowRes?.ProcessInstances, response?.Count);
   }, config);
 }
 
