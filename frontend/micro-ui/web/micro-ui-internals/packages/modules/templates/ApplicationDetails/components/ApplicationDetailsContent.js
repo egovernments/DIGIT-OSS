@@ -51,6 +51,14 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
     }
   };
 
+  const getTranslatedValues = (dataValue, isNotTranslated) => {
+    if(dataValue) {
+      return !isNotTranslated ? t(dataValue) : dataValue
+    } else {
+      return t("NA")
+    }
+  };
+
   // console.log(applicationDetails?.applicationDetails, "inside app details content");
   const checkLocation = window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps");
   const isNocLocation = window.location.href.includes("noc/application-overview");
@@ -80,7 +88,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
                   <Row
                     key={t(value.title)}
                     label={(isNocLocation || isBPALocation) ? `${t(value.title)}:` : t(value.title)}
-                    text={value?.skip ? value.value : (t(value.value) || "N/A")}
+                    text={value?.skip ? value.value : (getTranslatedValues(value?.value , value?.isNotTranslated) || "N/A")}
                     last={index === detail?.values?.length - 1}
                     caption={value.caption}
                     className="border-none"

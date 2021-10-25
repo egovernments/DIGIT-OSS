@@ -82,6 +82,14 @@ const BpaApplicationDetail = () => {
     })
   },[payments]);
 
+  const getTranslatedValues = (dataValue, isNotTranslated) => {
+    if(dataValue) {
+      return !isNotTranslated ? t(dataValue) : dataValue
+    } else {
+      return t("NA")
+    }
+  };
+
 
   async function getRecieptSearch({tenantId,payments,...params}) {
     let response = { filestoreIds: [payments?.fileStoreId] };
@@ -248,7 +256,7 @@ const BpaApplicationDetail = () => {
     workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "INITIATE");
     workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "ADHOC");
   };
-
+  
   return (
     <Fragment>
       <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
@@ -265,18 +273,18 @@ const BpaApplicationDetail = () => {
             <CardHeader>{t(detail?.title)}</CardHeader>
             <StatusTable>
               {!(detail?.additionalDetails?.noc) && detail?.values?.map((value) => (
-                <Row className="border-none" label={t(value?.title)} text={t(value?.value) || t("CS_NA")} />
+                <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value , value?.isNotTranslated) || t("CS_NA")} />
               ))}
               {detail?.additionalDetails?.owners && detail?.additionalDetails?.owners.map((owner,index) => (
                 <div key={index}>
                 <Row className="border-none" label={`${t("Owner")} - ${index+1}`} />
                 {owner?.values.map((value) =>(
-                  <Row className="border-none" label={t(value?.title)} text={t(value?.value) || t("CS_NA")} />
+                  <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value , value?.isNotTranslated) || t("CS_NA")} />
                 ))}
                 </div>
               ))}
               {!(detail?.additionalDetails?.FIdocuments) && !(detail?.additionalDetails?.subOccupancyTableDetails) && detail?.additionalDetails?.values && detail?.additionalDetails?.values?.map((value) => (
-                <Row className="border-none" label={t(value?.title)} text={t(value?.value) || t("CS_NA")} />
+                <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value , value?.isNotTranslated) || t("CS_NA")} />
               ))}
               {detail?.additionalDetails?.FIdocuments && detail?.additionalDetails?.values && detail?.additionalDetails?.values?.map((doc,index) => (
               <div key={index}>
@@ -294,7 +302,7 @@ const BpaApplicationDetail = () => {
         <div key={ind}>
         <StatusTable>
         <Row className="border-none" label={t(`BPA_${nocob?.values?.[0]?.documentType.replaceAll(".","_")}_HEADER`)}></Row>
-        <Row className="border-none" label={t(`${detail?.values?.[0]?.title}`)} textStyle={{marginLeft:"10px"}} text={detail?.values?.[0]?.value} />
+        <Row className="border-none" label={t(`${detail?.values?.[0]?.title}`)} textStyle={{marginLeft:"10px"}} text={getTranslatedValues(detail?.values?.[0]?.value , detail?.values?.[0]?.isNotTranslated)} />
         <Row className="border-none" label={t(`${nocob?.title}`)}></Row>
         </StatusTable>
         {nocob?.values && nocob?.values.map((noc,index)=> (

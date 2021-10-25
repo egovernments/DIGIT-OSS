@@ -188,6 +188,11 @@ const BpaApplicationDetail = () => {
     if ((!actions || actions?.length == 0) && workflowDetails?.data?.actionState) workflowDetails.data.actionState.nextActions = [];
   }
 
+  if (workflowDetails?.data?.nextActions?.length > 0) {
+    workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "INITIATE");
+    workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "ADHOC");
+  };
+
   if (rolearray) {
     workflowDetails?.data?.nextActions?.forEach(action => {
       if (action?.action === "PAY") {

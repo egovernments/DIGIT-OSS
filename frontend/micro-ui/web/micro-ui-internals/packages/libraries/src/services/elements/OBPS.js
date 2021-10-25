@@ -284,11 +284,11 @@ export const OBPSService = {
         title: "BPA_BASIC_DETAILS_TITLE",
         asSectionHeader: true,
         values: [
-          { title: "BPA_BASIC_DETAILS_APP_DATE_LABEL", value: BPA?.applicationDate ? format(new Date(BPA?.applicationDate), 'dd/MM/yyyy') : '' },
+          { title: "BPA_BASIC_DETAILS_APP_DATE_LABEL", value: BPA?.auditDetails?.createdTime ? format(new Date(BPA?.auditDetails?.createdTime), 'dd/MM/yyyy') : '' },
           { title: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL", value: `WF_BPA_${edcr?.appliactionType}` },
           { title: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL", value: edcr?.applicationSubType },
           { title: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL", value: edcr?.planDetail?.planInformation?.occupancy },
-          { title: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL", value: "" },
+          { title: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL", value: `WF_BPA_${riskType}` },
           { title: "BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL", value: edcr?.planDetail?.planInformation?.applicantName },
         ]
       },
@@ -393,11 +393,11 @@ export const OBPSService = {
       asSectionHeader: true,
       isInsert: true,
       values: [
-        { title: "BPA_BASIC_DETAILS_APP_DATE_LABEL", value: BPA?.applicationDate ? format(new Date(BPA?.applicationDate), 'dd/MM/yyyy') : '' },
+        { title: "BPA_BASIC_DETAILS_APP_DATE_LABEL", value: BPA?.auditDetails?.createdTime ? format(new Date(BPA?.auditDetails?.createdTime), 'dd/MM/yyyy') : '' },
         { title: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL", value: `WF_BPA_${edcr?.appliactionType}` },
         { title: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL", value: edcr?.applicationSubType },
         { title: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL", value: edcr?.planDetail?.planInformation?.occupancy },
-        { title: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL", value: "", isInsert: true, },
+        { title: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL", value: `WF_BPA_${riskType}`, isInsert: true, },
         { title: "BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL", value: edcr?.planDetail?.planInformation?.applicantName },
       ]
     };
@@ -406,11 +406,11 @@ export const OBPSService = {
       title: "BPA_PLOT_DETAILS_TITLE",
       asSectionHeader: true,
       values: [
-        { title: "BPA_BOUNDARY_PLOT_AREA_LABEL", value: edcr?.planDetail?.planInformation?.plotArea || "NA"  },
-        { title: "BPA_PLOT_NUMBER_LABEL", value: edcr?.planDetail?.planInformation?.plotNo || "NA"  },
-        { title: "BPA_KHATHA_NUMBER_LABEL", value: edcr?.planDetail?.planInformation?.khataNo || "NA"  },
-        { title: "BPA_HOLDING_NUMBER_LABEL", value: BPA?.additionalDetails?.holdingNo || "NA"  },
-        { title: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL", value: BPA?.additionalDetails?.registrationDetails || "NA" }
+        { title: "BPA_BOUNDARY_PLOT_AREA_LABEL", value: `${edcr?.planDetail?.planInformation?.plotArea} sq.ft` || "NA", isNotTranslated: true   },
+        { title: "BPA_PLOT_NUMBER_LABEL", value: edcr?.planDetail?.planInformation?.plotNo || "NA", isNotTranslated: true  },
+        { title: "BPA_KHATHA_NUMBER_LABEL", value: edcr?.planDetail?.planInformation?.khataNo || "NA", isNotTranslated: true  },
+        { title: "BPA_HOLDING_NUMBER_LABEL", value: BPA?.additionalDetails?.holdingNo || "NA", isNotTranslated: true  },
+        { title: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL", value: BPA?.additionalDetails?.registrationDetails || "NA", isNotTranslated: true }
       ]
     };
 
