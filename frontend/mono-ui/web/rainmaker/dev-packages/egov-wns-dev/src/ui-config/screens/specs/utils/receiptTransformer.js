@@ -18,6 +18,7 @@ import {
   transformById,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
+import commonConfig from "config/common.js";
 
 const ifNotNull = value => {
   return !["", "NA", "null", null].includes(value);
@@ -66,7 +67,7 @@ export const loadUlbLogo = tenantid => {
     store.dispatch(prepareFinalObject("base64UlbLogo", canvas.toDataURL()));
     canvas = null;
   };
-  img.src = `/pb-egov-assets/${tenantid}/logo.png`;
+  img.src = `/${commonConfig.tenantId}-assets/logo.jpg`;
 };
 
 export const loadApplicationData = async (applicationNumber, tenant) => {
