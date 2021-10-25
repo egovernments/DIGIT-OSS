@@ -54,7 +54,7 @@ const DocumentDetails = () => {
   if(isLoading){
     return <Loader/>
   }
-
+  
   return (
     <div>
       {showModal ? <Confirmation
@@ -82,7 +82,7 @@ const DocumentDetails = () => {
 
           {data?.applicationData?.eventDetails?.documents.length ? <div className="documentDetails_pdf">
             <span className="documentDetails_subheader">{`${t('CS_COMMON_DOCUMENTS')}`}</span>
-            <div style={{ width: '100px' }} onClick={() => openUploadedDocument(data?.applicationData?.eventDetails?.documents[0]?.filestoreId, data?.applicationData?.name)}>
+            <div style={{ width: '100px' }} onClick={() => openUploadedDocument(data?.applicationData?.eventDetails?.documents[0]?.fileStoreId, data?.applicationData?.name)}>
               <GenericFileIcon />
             </div>
 

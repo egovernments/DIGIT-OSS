@@ -18,7 +18,7 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
       case "ulb":
         return (
           <Controller
-          rules={{ required: true }}
+            rules={{ required: true }}
             render={props => (
               <DropdownUlb
                 onAssignmentChange={props.onChange}
@@ -36,10 +36,9 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
       case "range":
         return (
           <Controller
-            render={props => {
-              (          
+            render={props => (
               <DateRange t={t} values={props?.value} onFilterChange={props?.onChange} labelClass="filter-label" />
-            )}}
+            )}
             name={input.name}
             control={control}
             defaultValue={null}
@@ -71,7 +70,7 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
   }
 
   const clearSearch = () => {
-    reset({ ulb: null, name: '' });
+    reset({ ulb: null, name: '', });
     onSearch({ ulb: null, name: '' })
   };
 
