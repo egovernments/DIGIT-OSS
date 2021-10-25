@@ -12,7 +12,7 @@ import {
   PDFSvg
 } from "@egovernments/digit-ui-react-components";
 import { format } from 'date-fns';
-import { getFileSize } from './engagement-doc-documents';
+import { getFileSize } from '../../utils';
 import { downloadDocument, openDocumentLink, openUploadedDocument } from '../../utils';
 
 

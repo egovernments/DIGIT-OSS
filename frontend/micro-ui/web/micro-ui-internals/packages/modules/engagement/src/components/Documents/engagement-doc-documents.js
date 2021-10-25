@@ -1,19 +1,10 @@
 import { CardLabel, LabelFieldPair, TextInput, UploadFile, CardLabelError } from "@egovernments/digit-ui-react-components";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Controller } from "react-hook-form";
+import { useLocation } from "react-router-dom";
+import { documentUploadMessage, getFileSize } from "../../utils";
 
 
-export const getFileSize = (size) => {
-  if (size === 0) return '0 Bytes';
-  const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-  const i = Math.floor(Math.log(size) / Math.log(k));
-  return (
-    parseFloat((size / Math.pow(k, i)).toFixed(2)) +
-    ' ' +
-    sizes[i]
-  );
-};
 
 const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, register, errors, setError, clearErrors, formState, control }) => {
   const [fileStoreId, setFileStoreId] = useState(() => formData?.[config.key]?.filestoreId);
@@ -85,6 +76,12 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
     }
   };
 
+  const location = useLocation();
+  const isInEditFormMode = useMemo(()=>{
+    if(location.pathname.includes('/documents/inbox/update')) return true;
+    return false;
+  },[location.pathname])
+
   return (
     <React.Fragment>
       <LabelFieldPair>
@@ -104,7 +101,7 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
                 accept="image/*, .pdf, .png, .jpeg, .doc"
                 showHintBelow={true}
                 hintText={t("DOCUMENTS_ATTACH_RESTRICTIONS_SIZE")}
-                message={fileStoreId && fileStoreId?.fileStoreId?.length ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+                message={documentUploadMessage(t, fileStoreId, isInEditFormMode)}
                 textStyles={{ width: "100%" }}
                 inputStyles={{ width: "280px" }}
               />

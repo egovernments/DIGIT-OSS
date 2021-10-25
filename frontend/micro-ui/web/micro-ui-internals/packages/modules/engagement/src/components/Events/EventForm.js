@@ -23,19 +23,6 @@ const EventForm = ({ onSelect, config, formData, register, control, errors }) =>
   }
   const { isLoading, data } = Digit.Hooks.useCommonMDMS(state, "mseva", ["EventCategories"]);
 
- /*  const onChange = (event) => {
-    onSelect(config?.key, { ...formData[config?.key], name: event?.target?.value });
-  }
-
-  const selectCategory = (data) => {
-    onSelect(config?.key, { ...formData[config?.key], eventCategory: data?.code })
-  }
-
-  const selectUlb = (data) => {
-    onSelect(config?.key, { ...formData[config?.key], tenantId: data?.code })
-  }
- */
-
   const location = useLocation();
   const isInEditFormMode = useMemo(()=>{
     if(location.pathname.includes('/engagement/event/edit-event')) return true;

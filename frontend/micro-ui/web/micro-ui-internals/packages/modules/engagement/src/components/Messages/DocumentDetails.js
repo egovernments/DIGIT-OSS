@@ -6,6 +6,24 @@ import Confirmation from '../Modal/Confirmation';
 import { format } from "date-fns";
 import { openUploadedDocument } from '../../utils';
 
+
+const renderMultipleDocuments = (documents) => {
+  if (!documents && !documents.length) return null;
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      {documents.map(({ fileStoreId, fileName }) => (
+        <div className="documentDetails_pdf">
+          <div style={{ width: '100px' }} onClick={() => openUploadedDocument(fileStoreId, fileName)}>
+            <GenericFileIcon />
+            <span className="cell-text">{fileName}</span>
+          </div>
+        </div>
+      ))
+      }
+    </div>
+  )
+}
+
 const Actions = ['EDIT', 'DELETE']
 const getUlbName = (tenantId) => {
   let ulbName = tenantId?.split('.')[1];
@@ -50,11 +68,11 @@ const DocumentDetails = () => {
   function onModalCancel() {
     setShowModal(false)
   }
- 
-  if(isLoading){
-    return <Loader/>
+
+  if (isLoading) {
+    return <Loader />
   }
-  
+
   return (
     <div>
       {showModal ? <Confirmation
@@ -70,7 +88,7 @@ const DocumentDetails = () => {
 
         : null}
       <Header>{t(`CS_HEADER_PUBLIC_BRDCST`)}</Header>
-  
+
       <div className="notice_and_circular_main gap-ten">
         <div className="documentDetails_wrapper">
           <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("EVENTS_ULB_LABEL")}:`}</p> <p>{getUlbName(data?.tenantId)}</p> </div>
@@ -78,17 +96,8 @@ const DocumentDetails = () => {
           <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("EVENTS_COMMENTS_LABEL")}:`}</p> <p className="documentDetails__description">{data?.applicationData?.description?.length ? data?.applicationData?.description : 'NA'}</p> </div>
           <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("EVENTS_FROM_DATE_LABEL")}:`}</p> <p>{data?.applicationData?.eventDetails?.fromDate ? format(new Date(data?.applicationData?.eventDetails?.fromDate), 'dd/MM/yyyy') : null}</p> </div>
           <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("EVENTS_TO_DATE_LABEL")}:`}</p> <p>{data?.applicationData?.eventDetails?.toDate ? format(new Date(data?.applicationData?.eventDetails?.toDate), 'dd/MM/yyyy') : null}</p> </div>
-
-
-          {data?.applicationData?.eventDetails?.documents?.length ? <div className="documentDetails_pdf">
-            <span className="documentDetails_subheader">{`${t('CS_COMMON_DOCUMENTS')}`}</span>
-            <div style={{ width: '100px' }} onClick={() => openUploadedDocument(data?.applicationData?.eventDetails?.documents[0]?.fileStoreId, data?.applicationData?.name)}>
-              <GenericFileIcon />
-            </div>
-
-          </div>
-            : null
-          }
+          <span className="documentDetails_subheader">{`${t('CS_COMMON_DOCUMENTS')}`}</span>
+          {data?.applicationData?.eventDetails?.documents?.length ? renderMultipleDocuments(data?.applicationData?.eventDetails?.documents) : null}
         </div>
       </div>
       <ActionBar>

@@ -23,7 +23,8 @@ export const getFileUrl = async (fileStoreId) => {
             const url = response.data.fileStoreIds[0]?.url
             if (url.includes('.jpg') || url.includes('.png')) {
                 const arr = url.split(',');
-                return arr[1];
+                const [original, large, medium, small] = arr;
+                return original;
             }
             return response.data.fileStoreIds[0]?.url;
         }
@@ -33,7 +34,7 @@ export const getFileUrl = async (fileStoreId) => {
 }
 
 export const openUploadedDocument = async (filestoreId, name) => {
-  
+
     if (!filestoreId || !filestoreId.length) { alert('No Document exists!'); return; }
     const w = window.open('', '_blank');
     const url = await getFileUrl(filestoreId)
@@ -50,14 +51,14 @@ export const openDocumentLink = (docLink, title) => {
 
 export const downloadDocument = async (filestoreId, title) => {
     if (!filestoreId || !filestoreId.length) { alert('No Document exists!'); return; }
-  
+
     const fileUrl = await getFileUrl(filestoreId);
     if (fileUrl) {
-      Digit.Utils.downloadPDFFromLink(fileUrl);
+        Digit.Utils.downloadPDFFromLink(fileUrl);
     } else {
-      console.error("Invalid Filestoreid or no file found to download");
+        console.error("Invalid Filestoreid or no file found to download");
     }
-  }
+}
 
 /** For testing multiple file upload */
 export const isNestedArray = (documents) => {
@@ -89,3 +90,21 @@ export const reduceDocsArray = (documentsArray) => {
     }, [])
 
 }
+
+export const getFileSize = (size) => {
+    if (size === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(size) / Math.log(k));
+    return (
+        parseFloat((size / Math.pow(k, i)).toFixed(2)) +
+        ' ' +
+        sizes[i]
+    );
+};
+
+export const documentUploadMessage = (t, fileStoreId, editMode) => {
+    if (!fileStoreId) return t(`CS_ACTION_NO_FILEUPLOADED`);
+    return editMode ? fileStoreId?.fileStoreId?.length ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`) : fileStoreId ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)
+}
+
