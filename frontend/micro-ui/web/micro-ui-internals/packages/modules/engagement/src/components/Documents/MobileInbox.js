@@ -2,7 +2,8 @@ import React from "react";
 import { Link } from 'react-router-dom'
 import ApplicationCard from "./ApplicationCard";
 import EventLink from "../Events/EventLink";
-import { openDocumentLink, openUploadedDocument } from "./DesktopInbox";
+import { openDocumentLink, openUploadedDocument } from "../../utils";
+
 
 
 const MobileInbox = ({ data, t, title, iconName, links, searchFields, searchParams, onFilterChange, onSearch, isLoading }) => {

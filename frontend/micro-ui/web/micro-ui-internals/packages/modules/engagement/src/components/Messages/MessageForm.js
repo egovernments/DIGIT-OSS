@@ -11,7 +11,7 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
   const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
   const { isLoading, data } = Digit.Hooks.useCommonMDMS(state, "mseva", ["EventCategories"]);
 
-  const userInfo = Digit.UserService.getUser().info;
+  const stateId = Digit.ULBService.getStateId()
   const userUlbs = ulbs.filter(ulb => ulb?.code === tenantId);
 
   const isValidDate = (date) => {
@@ -99,8 +99,8 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
                 onChange(finalDocumentData)
               }
               return <MultiUploadWrapper
-                  module="ENGAGEMENT"
-                  tenantId={tenantId}
+                  module="engagement"
+                  tenantId={stateId}
                   getFormState={getFileStoreData}
                   showHintBelow={true}
                   setuploadedstate={value}

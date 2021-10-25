@@ -13,18 +13,8 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import { format } from 'date-fns';
 import { getFileSize } from './engagement-doc-documents';
-import { getFileUrl, openUploadedDocument, openDocumentLink } from './DesktopInbox';
+import { downloadDocument, openDocumentLink, openUploadedDocument } from '../../utils';
 
-const downloadDocument = async (filestoreId, title) => {
-  if (!filestoreId || !filestoreId.length) { alert('No Document exists!'); return; }
-
-  const fileUrl = await getFileUrl(filestoreId);
-  if (fileUrl) {
-    Digit.Utils.downloadPDFFromLink(fileUrl);
-  } else {
-    console.error("Invalid Filestoreid or no file found to download");
-  }
-}
 
 const DocumentCard = ({ documentTitle, documentSize = 2.3, lastModifiedData, description, filestoreId, documentLink, t }) => {
   let isMobile = window.Digit.Utils.browser.isMobile();

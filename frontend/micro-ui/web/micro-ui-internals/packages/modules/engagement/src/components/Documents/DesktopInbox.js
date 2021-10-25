@@ -6,6 +6,7 @@ import EventLink from "../Events/EventLink";
 import DocumentNotificationTable from "./DocumentNotificationTable";
 import Search from "./Search";
 import Filter from "./Filter";
+import { openDocumentLink, openUploadedDocument } from "../../utils";
 
 
 
@@ -15,37 +16,6 @@ const getDocumentDetailsPath = (document) => {
     state: { details: document }
   }
 
-}
-
-export const getFileUrl = async (fileStoreId) => {
-  try {
-    const response = await Digit.UploadServices.Filefetch([fileStoreId], Digit.ULBService.getStateId());
-    if (response?.data?.fileStoreIds?.length > 0) {
-      const url = response.data.fileStoreIds[0]?.url
-      if (url.includes('.jpg') || url.includes('.png')) {
-        const arr = url.split(',');
-        return arr[1];
-      }
-      return response.data.fileStoreIds[0]?.url;
-    }
-  } catch (err) {
-    console.error("Failed to Fetch from filestore", err);
-  }
-}
-
-export const openUploadedDocument = async (filestoreId, name) => {
-  if (!filestoreId || !filestoreId.length) { alert('No Document exists!'); return; }
-  const w = window.open('', '_blank');
-  const url = await getFileUrl(filestoreId)
-  w.location = url;
-  w.document.title = name;
-}
-
-export const openDocumentLink = (docLink, title) => {
-  if (!docLink || !docLink.length) { alert('No Document Link exists!'); return; }
-  const w = window.open("", '_blank');
-  w.location = docLink;
-  w.document.title = title;
 }
 
 const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;

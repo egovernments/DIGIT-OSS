@@ -3,8 +3,8 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { useParams, useHistory } from "react-router-dom";
 import Confirmation from '../Modal/Confirmation';
-import { openUploadedDocument, openDocumentLink } from '../Documents/DesktopInbox';
 import { format } from "date-fns";
+import { openUploadedDocument } from '../../utils';
 
 const Actions = ['EDIT', 'DELETE']
 const getUlbName = (tenantId) => {

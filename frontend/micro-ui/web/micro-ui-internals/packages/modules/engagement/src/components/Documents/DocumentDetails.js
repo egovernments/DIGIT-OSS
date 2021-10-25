@@ -1,8 +1,9 @@
 import { Header, ActionBar, SubmitBar, ExternalLinkIcon, Menu, GenericFileIcon, LinkButton } from '@egovernments/digit-ui-react-components';
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
+import { openDocumentLink, openUploadedDocument } from '../../utils';
 import Confirmation from '../Modal/Confirmation';
-import { openUploadedDocument, openDocumentLink } from './DesktopInbox';
+
 
 const Actions = ['EDIT_DOCUMENT', 'DELETE']
 const getUlbName = (tenantId) => {
