@@ -70,7 +70,7 @@ export const Request = async ({
 
   const headers1 = {
     "Content-Type": "application/json",
-    Accept: "application/pdf",
+    Accept: "*/*",
   };
 
   if (authHeader) headers = { ...headers, ...authHeaders() };
