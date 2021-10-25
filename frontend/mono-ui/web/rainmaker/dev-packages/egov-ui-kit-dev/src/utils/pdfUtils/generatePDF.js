@@ -454,7 +454,7 @@ export const loadUlbLogo = tenantid => {
         localStorage.setItem("UlbLogoForPdf", canvas.toDataURL());
         canvas = null;
     };
-    img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
+    img.src = `/${commonConfig.tenantId}-assets/logo.jpg`;
 };
 
 const getHeaderCard = (applicationData, logo) => {
