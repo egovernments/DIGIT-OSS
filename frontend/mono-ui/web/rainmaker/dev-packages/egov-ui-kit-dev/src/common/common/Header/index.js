@@ -11,6 +11,7 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import get from "lodash/get";
 import "./index.css";
 import { updateActiveRoute } from "egov-ui-kit/redux/app/actions";
+import commonConfig from "config/common.js";
 import { getTenantId, getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 
 // get userInfo role
@@ -168,7 +169,7 @@ class Header extends Component {
       msevaLogo,
       headerStyle
     } = this.props;
-    const tenantId = role.toLowerCase() === "citizen" ? userInfo.permanentCity : getTenantId();
+    const tenantId = role.toLowerCase() === "citizen" ? commonConfig.tenantId: getTenantId();
     const currentCity = cities.filter((item) => item.code === tenantId);
     const ulbLogo =
       currentCity.length > 0 ? get(currentCity[0], "logoId") : "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png";
