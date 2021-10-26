@@ -7,8 +7,6 @@ import { newConfig as newConfigTL } from "../../../config/config";
 // import TLAcknowledgement from "./TLAcknowledgement";
 
 const CreateTradeLicence = ({ parentRoute }) => {
-  const TLAcknowledgement = Digit.ComponentRegistryService.getComponent('TLAcknowledgement');
-  const CheckPage = Digit.ComponentRegistryService.getComponent('TLCheckPage') ;
   const queryClient = useQueryClient();
   const match = useRouteMatch();
   const { t } = useTranslation();
