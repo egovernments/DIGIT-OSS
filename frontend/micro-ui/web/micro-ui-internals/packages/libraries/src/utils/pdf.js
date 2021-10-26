@@ -3,9 +3,8 @@ const pdfMake = require("pdfmake/build/pdfmake.js");
 // const pdfFonts = require("pdfmake/build/vfs_fonts.js");
 // pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-pdfMake.vfs = Fonts;
 
-pdfMake.fonts = {
+let pdfFonts =  {
   //   Roboto: {
   //     normal: "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf",
   //     bold: "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf"
@@ -14,7 +13,26 @@ pdfMake.fonts = {
     normal: "Hind-Regular.ttf",
     bold: "Hind-Bold.ttf",
   },
+  en_IN: {
+    normal: "Hind-Regular.ttf",
+    bold: "Hind-Bold.ttf",
+  },
+  pn_IN: {
+    normal:  'BalooPaaji2-Regular.ttf',
+    bold:'BalooPaaji2-Bold.ttf',
+  },
+  od_IN: {
+    normal: 'BalooBhaina2-Regular.ttf',
+    bold: 'BalooBhaina2-Bold.ttf',
+  },
+  hi_IN: {
+    normal: "Hind-Regular.ttf",
+    bold: "Hind-Bold.ttf",
+  },
 };
+pdfMake.vfs = Fonts;
+
+pdfMake.fonts =pdfFonts;
 
 const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
   if (
@@ -138,6 +156,10 @@ const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, headin
       font: "Hind",
     },
   };
+  pdfMake.vfs = Fonts;
+  let locale = Digit.SessionStorage.get("locale") || "en_IN";
+  let Hind = pdfFonts[locale]|| pdfFonts["Hind"];
+  pdfMake.fonts ={Hind:{...Hind}};
   const generatedPDF = pdfMake.createPdf(dd);
   downloadPDFFileUsingBase64(generatedPDF, "acknowledgement.pdf");
 };
