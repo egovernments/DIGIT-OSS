@@ -176,8 +176,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       additionalDetails: {...applicationData?.additionalDetails, fieldinspection_pending:getfeildInspection(), pendingapproval: getPendingApprovals() },
        workflow:{
         action: action?.action,
-        comment: data?.comments,
-        comments: data?.comments,
+        comment: data?.comments?.length > 0 ? data?.comments : null,
+        comments: data?.comments?.length > 0 ? data?.comments : null,
         assignee: !selectedApprover?.uuid ? null : [selectedApprover?.uuid],
         varificationDocuments: uploadedFile
         ? [
