@@ -217,6 +217,7 @@ const dss = {
 };
 
 const mcollect = {
+  useCommonMDMS,
   useMCollectMDMS,
   useMCollectSearch,
   useMcollectSearchBill,
