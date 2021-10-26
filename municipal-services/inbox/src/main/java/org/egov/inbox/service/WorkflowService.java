@@ -83,12 +83,14 @@ public class WorkflowService {
                 url.append(config.getProcessStatusCountPath());
                 criteria.setIsProcessCountCall(true);
                 // For BPA having large request, so that it was sending from the body
-                if (!criteria.getModuleName().equalsIgnoreCase(BpaConstants.BPA))
+                List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
+                if (!criteria.getModuleName().equalsIgnoreCase(BpaConstants.BPA) 
+                        || (criteria.getModuleName().equalsIgnoreCase(BpaConstants.BPA) && !roles.contains(BpaConstants.CITIZEN)))
                     url = this.buildWorkflowUrl(criteria, url, Boolean.FALSE);
                 if (requestInfo.getUserInfo().getRoles().get(0).getCode().equals(FSMConstants.FSM_DSO)) {
                     url.append("&assignee=").append(requestInfo.getUserInfo().getUuid());
                 }
-                List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
+                
                 if (criteria != null && criteria.getModuleName().equalsIgnoreCase(BpaConstants.BPA)
                         && roles.contains(BpaConstants.CITIZEN)) {
                     List<String> inputBusinessSrvs = new ArrayList<>(criteria.getBusinessService());
