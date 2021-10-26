@@ -10,11 +10,13 @@ import org.egov.tl.web.models.SMSRequest;
 import org.egov.tl.web.models.TradeLicense;
 import org.egov.tl.web.models.TradeLicenseRequest;
 import org.egov.tl.web.models.TradeLicenseSearchCriteria;
+import org.egov.tl.util.TradeUtil;
 import org.egov.tl.workflow.WorkflowIntegrator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import com.jayway.jsonpath.JsonPath;
 
 import java.util.*;
 
@@ -38,17 +40,20 @@ public class TLBatchService {
     private WorkflowIntegrator workflowIntegrator;
 
     private Producer producer;
+    
+    private TradeUtil tradeUtil;
 
     @Autowired
     public TLBatchService(NotificationUtil util, TLConfiguration config, TLRepository repository,
                           EnrichmentService enrichmentService, WorkflowIntegrator workflowIntegrator,
-                          Producer producer) {
+                          Producer producer, TradeUtil tradeUtil) {
         this.util = util;
         this.config = config;
         this.repository = repository;
         this.enrichmentService = enrichmentService;
         this.workflowIntegrator = workflowIntegrator;
         this.producer = producer;
+        this.tradeUtil = tradeUtil;
     }
 
 
@@ -68,18 +73,25 @@ public class TLBatchService {
 
         Long validTill = System.currentTimeMillis();
 
-        if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER))
-            validTill = validTill + config.getReminderPeriod();
-
-
         TradeLicenseSearchCriteria criteria = TradeLicenseSearchCriteria.builder()
                 .businessService(serviceName)
                 .validTo(validTill)
                 .status(Collections.singletonList(STATUS_APPROVED))
                 .limit(config.getPaginationSize())
                 .build();
+        
+        if (jobName.equalsIgnoreCase(JOB_SMS_REMINDER)) {
+        	criteria = TradeLicenseSearchCriteria.builder()
+                    .businessService(serviceName)
+                    .status(Collections.singletonList(STATUS_APPROVED))
+                    .limit(config.getPaginationSize())
+                    .build();
+        }
 
         int offSet = 0;
+        
+        Object mdmsData = null;
+        List<Map<String,Object>> jsonOutput = null;
 
         while (true){
 
@@ -90,9 +102,17 @@ public class TLBatchService {
                 break;
 
             licenses = enrichmentService.enrichTradeLicenseSearch(licenses, criteria, requestInfo);
+            
+            if(mdmsData==null) {
+            	
+                mdmsData = tradeUtil.mDMSCall(requestInfo, licenses.get(0).getTenantId());
+                String jsonPath = REMINDER_JSONPATH;
+                jsonOutput =  JsonPath.read(mdmsData, jsonPath);
+
+            }
 
             if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER))
-                sendReminderSMS(requestInfo, licenses);
+                sendReminderSMS(requestInfo, licenses, jsonOutput);
 
             else if(jobName.equalsIgnoreCase(JOB_EXPIRY))
                 expireLicenses(requestInfo, licenses);
@@ -109,8 +129,9 @@ public class TLBatchService {
     /**
      * Sends customized reminder sms to the owner's of the given licenses
      * @param licenses The licenses for which reminder has to be send
+     * @param jsonOutput 
      */
-    private void sendReminderSMS(RequestInfo requestInfo, List<TradeLicense> licenses){
+    private void sendReminderSMS(RequestInfo requestInfo, List<TradeLicense> licenses, List<Map<String, Object>> jsonOutput){
 
         String tenantId = getStateLevelTenant(licenses.get(0).getTenantId());
 
@@ -119,6 +140,24 @@ public class TLBatchService {
         List<SMSRequest> smsRequests = new LinkedList<>();
 
         for(TradeLicense license : licenses){
+        	
+        	boolean sendReminderSms= true;
+
+        	for(int i=0; i<jsonOutput.size();i++) {
+        		String cityId = (String) jsonOutput.get(i).get(TENANT_ID);
+        		Long reminderInterval = ((Number)jsonOutput.get(i).get(REMINDER_INTERVAL)).longValue();
+
+        		if (cityId.equalsIgnoreCase(license.getTenantId()) && System.currentTimeMillis()+reminderInterval<license.getValidTo() ) {
+        			sendReminderSms=false;
+        			break;
+        		}
+
+        	}
+
+        	if(!sendReminderSms) {
+        		continue;
+        	}
+        	
             try{
 
                 String message = util.getReminderMsg(license, localizationMessages);
