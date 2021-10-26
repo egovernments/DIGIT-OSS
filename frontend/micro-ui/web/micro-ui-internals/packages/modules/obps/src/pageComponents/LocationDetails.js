@@ -142,7 +142,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
     sessionStorage.setItem("currLocality", JSON.stringify({ }));
     setSelectedLocality(null);
     setLocalities(null);
-    setSelectedCity(null);
+    //setSelectedCity(null);
   }
 
   function selectStreet(e) {
@@ -152,13 +152,14 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   function selectGeolocation(e) {
     formData.address["geoLocation"] = (typeof e === 'object' && e !== null) ? e.target.value : e;
     setgeoLocation((typeof e === 'object' && e !== null) ? e.target.value : e);
+    setplaceName((typeof e === 'object' && e !== null) ? e.target.value : e);
     sessionStorage.setItem("currentPincode", "");
     sessionStorage.setItem("currentCity", JSON.stringify({ }));
     sessionStorage.setItem("currLocality", JSON.stringify({ }));
     setPincode("");
     setSelectedLocality(null);
     setLocalities(null);
-    setSelectedCity(null);
+    //setSelectedCity(null);
   }
 
   function selectLandmark(e) {

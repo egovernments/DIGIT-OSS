@@ -12,6 +12,7 @@ const BasicDetails = ({ formData, onSelect, config }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateCode = Digit.ULBService.getStateId();
+  const isMobile = window.Digit.Utils.browser.isMobile();
   //TODO will change this is future
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["RiskTypeComputation"]);
   const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(stateCode, scrutinyNumber, {
@@ -69,7 +70,7 @@ const BasicDetails = ({ formData, onSelect, config }) => {
       />
       }
       <Timeline />
-      <div className="obps-search">
+      <div className={isMobile?"obps-search":""} style={!isMobile?{maxWidth:"960px",minWidth:"640px",marginRight:"auto"}:{}}>
         <Label>{t(`OBPS_SEARCH_EDCR_NUMBER`)}</Label>
         <TextInput className="searchInput"
           onKeyPress={handleKeyPress}

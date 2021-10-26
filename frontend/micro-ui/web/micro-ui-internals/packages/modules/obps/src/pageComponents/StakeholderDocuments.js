@@ -57,6 +57,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
         let regularDocs = [];
         bpaTaxDocuments && documents && documents !== null && bpaTaxDocuments.map((initialob,index) => {
             let docobject = documents.find((ob) => (ob && ob !==null) && (ob.documentType === initialob.code));
+            if(docobject)
             regularDocs.push(docobject);
         })
         documentStep = { ...document, documents: regularDocs };
@@ -102,6 +103,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                     onSkip={onSkip}
                     isDisabled={enableSubmit}
                     onAdd={onAdd}
+                    cardStyle={{paddingRight:"16px"}}
                 >
                     {bpaTaxDocuments?.map((document, index) => {
                         return (
