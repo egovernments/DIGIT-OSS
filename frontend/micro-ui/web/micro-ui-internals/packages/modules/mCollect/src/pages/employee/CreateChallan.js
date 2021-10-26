@@ -30,11 +30,14 @@ const CreateChallen = ({ ChallanData }) => {
     : {};
 
   const cities = Digit.Hooks.mcollect.usemcollectTenants();
+  const stateCode = window?.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID");
+  const data = Digit.Hooks.mcollect.useCommonMDMS(stateCode, "common-masters", ["HierarchyType"]);
+  const type = data &&  data.data &&  data.data[`common-masters`] && data.data[`common-masters`]["HierarchyType"] && data.data[`common-masters`]["HierarchyType"][0];
   const getCities = () => cities?.filter((e) => e.code === Digit.ULBService.getCurrentTenantId()) || [];
   const { t } = useTranslation();
   const { data: fetchedLocalities } = Digit.Hooks.useBoundaryLocalities(
     getCities()[0]?.code,
-    "admin",
+    type && type.code,
     {
       enabled: !!getCities()[0],
     },
