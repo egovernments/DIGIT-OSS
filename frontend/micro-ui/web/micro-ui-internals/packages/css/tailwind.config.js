@@ -36,6 +36,7 @@ module.exports = {
         bg: "#E3E3E3",
       },
       white: "#FFFFFF",
+      accordionTitle : "#666",
     },
     fontFamily: {
       sans: ["Roboto", "sans-serif"],

@@ -7,9 +7,8 @@
   }
 }
 .accordion-item {
-  overflow: hidden;
+  @apply overflow-hidden h-auto;
   transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
-  height: auto;
   max-height: 9999px;
 }
 .accordion-item.collapsed {
@@ -17,20 +16,13 @@
   transition: max-height 0.35s cubic-bezier(0, 1, 0, 1);
 }
 .accordion-title {
-  font-weight: 600;
-  cursor: pointer;
-  color: #666;
-  padding: 0.5em 0em;
-  border-radius: 1.5em;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @apply font-bold cursor-pointer text-accordionTitle py-sm rounded-3xl flex justify-between items-center;
   &.open svg {
-    transform: rotate(-90deg);
+    @apply -rotate-90;
   }
   &:hover,
   &.open {
-    color: black;
+    @apply text-black;
   }
 }
 .accordion-content {
@@ -45,22 +37,20 @@
   margin-top: 50px;
 }
 .notice_and_circular_main {
-  @apply flex bg-white my-md px-md pt-md pb-lg shadow-card relative;
-  border-radius: 4px;
+  @apply flex bg-white my-md px-md pt-md pb-lg shadow-card relative rounded;
 }
 .gap-ten {
   @apply gap-10;
 }
 .notice_and_circular_heading_mb {
-  display: flex;
-  justify-content: space-between;
+  @apply flex justify-between;
   padding: 2px;
 }
 .notice_and_circular_heading_mb header {
   font-weight: bold;
   font-size: 16px !important;
   line-height: 24px;
-  margin-right: 50px;
+  margin-right: 50px; 
 }
 .notice_and_circular_heading_mb .card-caption {
   font-weight: normal;
@@ -95,9 +85,7 @@
   span {
     padding-right: 20px;
     & .views {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      @apply flex justify-between items-center;
       p {
         padding-left: 10px;
         font-weight: normal;
@@ -213,12 +201,10 @@
   @apply grid grid-cols-3 gap-4;
 }
 .document_notification_clear_search_btn {
-  display: flex;
+  @apply flex items-center;
   justify-content: flex-end;
-  align-items: center;
   & .document_notification_clear_search_btn_align {
-    display: flex;
-    align-items: center;
+    @apply flex items-center;
   }
 }
 .new_document_clear_search_alignment {
@@ -265,21 +251,17 @@
   }
 }
 .confirmation_box {
+  @apply flex items-center pl-sm overflow-hidden;
   height: 130px;
-  display: flex;
-  align-items: center;
-  padding-left: 8px;
   gap: 10px;
-  overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .Docs_CardWrapper{
-  @apply bg-white m-sm px-md pt-md pb-lg shadow-card;
-  border-radius: 4px;
+  @apply bg-white m-sm px-md pt-md pb-lg shadow-card rounded;
 }
 
 .mobileInbox_attachments{
-  display:flex;
+  @apply flex;
   gap:5px;
 }
