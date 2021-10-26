@@ -279,10 +279,8 @@ public class TradeUtil {
         return  res.get(0);
     }
 
-    public Object mDMSCall(TradeLicenseRequest tradeLicenseRequest){
-        RequestInfo requestInfo = tradeLicenseRequest.getRequestInfo();
-        String tenantId = tradeLicenseRequest.getLicenses().get(0).getTenantId();
-        MdmsCriteriaReq mdmsCriteriaReq = getMDMSRequest(requestInfo,tenantId);
+    public Object mDMSCall(RequestInfo requestInfo, String tenantId) {
+    	MdmsCriteriaReq mdmsCriteriaReq = getMDMSRequest(requestInfo,tenantId);
         Object result = serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
         return result;
     }

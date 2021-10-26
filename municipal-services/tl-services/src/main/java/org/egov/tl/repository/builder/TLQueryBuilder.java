@@ -196,7 +196,7 @@ public class TLQueryBuilder {
             
             if(criteria.getRenewalPending()!=null && criteria.getRenewalPending()) {     
 
-            	addRenewalCriteria(builder,preparedStmtList);
+            	addRenewalCriteria(builder,preparedStmtList,criteria);
 
             }
 
@@ -238,7 +238,7 @@ public class TLQueryBuilder {
     }
 
 
-    private void addRenewalCriteria(StringBuilder builder, List<Object> preparedStmtList) {
+    private void addRenewalCriteria(StringBuilder builder, List<Object> preparedStmtList, TradeLicenseSearchCriteria criteria) {
     	
     	addClauseIfRequired(preparedStmtList, builder);
         builder.append(" ((  tl.validTo <= ? ");
@@ -249,17 +249,27 @@ public class TLQueryBuilder {
         preparedStmtList.add(TLConstants.STATUS_APPROVED); 
         
         addClauseIfRequired(preparedStmtList, builder);
+        
+        /* SELECT NewTL applications which do not have any renewal applications yet */
         builder.append(" (tl.licensenumber NOT IN (SELECT licensenumber from eg_tl_tradelicense WHERE UPPER(applicationtype) = ? AND licensenumber IS NOT NULL)  OR (");    
-        builder.append(" tl.applicationtype = ? and ? > tl.financialyear AND tl.licensenumber NOT IN (select t1.licensenumber from eg_tl_tradelicense t1,eg_tl_tradelicense t2 where t1.licensenumber=t2.licensenumber and t1.applicationtype= ? and t2.applicationtype= ? and t1.status<>t2.status))))");
-        builder.append(" OR ( tl.status = ? )))  OR  ( tl.status = ?  AND  tl.applicationtype = ? ) ) ");
+        
+        /*SELECT applications which have application type as renewal, and having the latest financial year among all the renewal application
+         * for that particular license number*/
+        builder.append(" tl.applicationtype = ? and ? > tl.financialyear AND tl.financialyear = (select max(financialyear) from eg_tl_tradelicense where licensenumber=tl.licensenumber)    )))");
+        
+        /* SELECT applications which are manually expired after their real expiry date, and which is having the latest financial year from among all the applications for that particular license number*/
+        builder.append(" OR ( tl.status = ? AND tl.financialyear = (select max(financialyear) from eg_tl_tradelicense where licensenumber=tl.licensenumber)  )))  ");
+        
+        /* SELECT those applications for which there exist a rejected application for the current financial year, and financial year of this application should be just before that of the rejected application*/
+        builder.append("OR  ( tl.financialyear= (select max(financialyear) from eg_tl_tradelicense where licensenumber=tl.licensenumber and licensenumber in ( select licensenumber from eg_tl_tradelicense where status=? and financialyear=? ) and status<>?  )   ) ) ");
+        
         preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL); 
         preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL);
-        preparedStmtList.add(Integer.toString(Calendar.getInstance().get(Calendar.YEAR)));
-        preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL);
-        preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL);
+        preparedStmtList.add(Integer.toString(Calendar.getInstance().get(Calendar.YEAR)));        
         preparedStmtList.add(TLConstants.STATUS_MANUALLYEXPIRED);
         preparedStmtList.add(TLConstants.STATUS_REJECTED);
-        preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL);
+        preparedStmtList.add(criteria.getFinancialYear());
+        preparedStmtList.add(TLConstants.STATUS_REJECTED);
 
 	}
 

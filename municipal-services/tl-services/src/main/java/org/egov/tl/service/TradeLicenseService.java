@@ -106,7 +106,7 @@ public class TradeLicenseService {
        if(businessServicefromPath==null)
             businessServicefromPath = businessService_TL;
        tlValidator.validateBusinessService(tradeLicenseRequest,businessServicefromPath);
-       Object mdmsData = util.mDMSCall(tradeLicenseRequest);
+       Object mdmsData = util.mDMSCall(tradeLicenseRequest.getRequestInfo(), tradeLicenseRequest.getLicenses().get(0).getTenantId());
        actionValidator.validateCreateRequest(tradeLicenseRequest);
        enrichmentService.enrichTLCreateRequest(tradeLicenseRequest, mdmsData);
        tlValidator.validateCreate(tradeLicenseRequest, mdmsData);
@@ -170,21 +170,40 @@ public class TradeLicenseService {
         tlValidator.validateSearch(requestInfo,criteria,serviceFromPath, isInterServiceCall);
         criteria.setBusinessService(serviceFromPath);
         enrichmentService.enrichSearchCriteriaWithAccountId(requestInfo,criteria);
+        if(criteria.getRenewalPending()!=null && criteria.getRenewalPending()== true ) {
+        	
+        	String currentFinancialYear = "";
+       	    
+            
+            Object mdmsData = util.mDMSCall(requestInfo, criteria.getTenantId() );
+            String jsonPath = TLConstants.MDMS_CURRENT_FINANCIAL_YEAR.replace("{}",businessService_TL);
+            List<Map<String,Object>> jsonOutput =  JsonPath.read(mdmsData, jsonPath);
+            
+            for (int i=0; i<jsonOutput.size();i++) {
+           	 Object startingDate = jsonOutput.get(i).get(TLConstants.MDMS_STARTDATE);
+           	 Object endingDate = jsonOutput.get(i).get(TLConstants.MDMS_ENDDATE);
+           	 Long startTime = (Long)startingDate;
+           	 Long endTime = (Long)endingDate;
+           	 
+           	 if(System.currentTimeMillis()>=startTime && System.currentTimeMillis()<=endTime) {
+           		 currentFinancialYear = jsonOutput.get(i).get(TLConstants.MDMS_FIN_YEAR_RANGE).toString();
+           		 break;
+           	 }
+           	 
+            }
+            
+            
+            criteria.setFinancialYear(currentFinancialYear);
+        	
+        }
+        
          if(criteria.getMobileNumber()!=null || criteria.getOwnerName() != null){
              licenses = getLicensesFromMobileNumber(criteria,requestInfo);
          }
          else {
              licenses = getLicensesWithOwnerInfo(criteria,requestInfo);
          }
-         
-         if(criteria.getRenewalPending()!=null && criteria.getRenewalPending()== true && !licenses.isEmpty()) {
-        	 
-        	 removeDuplicates(licenses);
-        	 filterRejectedApplications(requestInfo,licenses);
-        	 getLatestRejectedApplication(requestInfo, licenses);
 
-         }
-         
          return licenses;       
     }
     
@@ -238,7 +257,7 @@ public class TradeLicenseService {
         tradeLicenseRequest.setRequestInfo(requestInfo);
         tradeLicenseRequest.setLicenses(licenses);
         
-        Object mdmsData = util.mDMSCall(tradeLicenseRequest);
+        Object mdmsData = util.mDMSCall(tradeLicenseRequest.getRequestInfo(), tradeLicenseRequest.getLicenses().get(0).getTenantId());
         String jsonPath = TLConstants.MDMS_CURRENT_FINANCIAL_YEAR.replace("{}",businessService_TL);
         List<Map<String,Object>> jsonOutput =  JsonPath.read(mdmsData, jsonPath);
         
@@ -384,7 +403,7 @@ public class TradeLicenseService {
             if (businessServicefromPath == null)
                 businessServicefromPath = businessService_TL;
             tlValidator.validateBusinessService(tradeLicenseRequest, businessServicefromPath);
-            Object mdmsData = util.mDMSCall(tradeLicenseRequest);
+            Object mdmsData = util.mDMSCall(tradeLicenseRequest.getRequestInfo(), tradeLicenseRequest.getLicenses().get(0).getTenantId());
             String businessServiceName = null;
             switch (businessServicefromPath) {
                 case businessService_TL:

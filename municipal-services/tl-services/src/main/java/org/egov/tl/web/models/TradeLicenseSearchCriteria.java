@@ -84,6 +84,9 @@ public class TradeLicenseSearchCriteria {
     
     @JsonProperty("onlyMobileNumber")
     private Boolean onlyMobileNumber;
+    
+    @JsonProperty("financialYear")
+    private String financialYear;
 
 
     public boolean isEmpty() {
