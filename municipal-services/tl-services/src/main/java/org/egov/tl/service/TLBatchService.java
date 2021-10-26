@@ -112,7 +112,7 @@ public class TLBatchService {
                 tradeLicenseRequest.setLicenses(licenses);
                 
                 mdmsData = tradeUtil.mDMSCall(tradeLicenseRequest);
-                String jsonPath = "$.MdmsRes.TradeLicense.ReminderPeriods";
+                String jsonPath = REMINDER_JSONPATH;
                 jsonOutput =  JsonPath.read(mdmsData, jsonPath);
                 
             }
@@ -150,8 +150,8 @@ public class TLBatchService {
         	boolean sendReminderSms= true;
         	
         	for(int i=0; i<jsonOutput.size();i++) {
-        		String cityId = (String) jsonOutput.get(i).get("tenantId");
-        		Long reminderInterval = (Long) jsonOutput.get(i).get("reminderInterval");
+        		String cityId = (String) jsonOutput.get(i).get(TENANT_ID);
+        		Long reminderInterval = (Long) jsonOutput.get(i).get(REMINDER_INTERVAL);
         		
         		if (cityId.equalsIgnoreCase(license.getTenantId()) && System.currentTimeMillis()+reminderInterval<license.getValidTo() ) {
         			sendReminderSms=false;
