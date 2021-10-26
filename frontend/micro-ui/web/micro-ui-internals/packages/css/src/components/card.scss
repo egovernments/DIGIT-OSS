@@ -283,3 +283,13 @@
 .card-section-header {
   @apply text-text-primary text-heading-m font-bold;
 }
+
+.button-sub-text {
+  width: 100%;
+}
+
+@media (min-width: 780px) {
+  .button-sub-text {
+    width: 240px;
+  }
+}

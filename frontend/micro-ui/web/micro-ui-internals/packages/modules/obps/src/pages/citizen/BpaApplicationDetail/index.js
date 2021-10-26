@@ -382,7 +382,7 @@ const BpaApplicationDetail = () => {
           error={showToast.key === "error" ? true : false}
           label={t(showToast.key === "success" ? `ES_OBPS_${showToast.action}_UPDATE_SUCCESS` : showToast.action)}
           onClose={closeToast}
-          style={{zIndex: "100"}}
+          style={{zIndex: "1000"}}
         />
       )}
     </Fragment>
