@@ -1,15 +1,9 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import {
-  Header,
-  CardSectionHeader,
-  StatusTable,
-  Row,
-  UploadFile,
-  PDFSvg,
-  MultiUploadWrapper
+  CardSectionHeader, Header, MultiUploadWrapper, PDFSvg, Row, StatusTable
 } from "@egovernments/digit-ui-react-components";
+import React, { Fragment, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
 import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDetails";
 import { convertEpochToDate } from "../../../utils";
 
@@ -38,7 +32,7 @@ const ApplicationOverview = () => {
   const [commonDocMaping, setCommonDocMaping] = useState([]);
   const [nocDocuments, setNocDocuments] = useState([]);
   const [pdfFiles, setPdfFiles] = useState({});
-  const [filesArray, setFilesArray] = useState(() => [] );
+  const [filesArray, setFilesArray] = useState(() => []);
 
 
   const { isLoading: nocDocsLoading, data: nocDocs } = Digit.Hooks.obps.useMDMS(state, "NOC", ["DocumentTypeMapping"]);
@@ -61,8 +55,8 @@ const ApplicationOverview = () => {
     moduleCode: "NOC",
   });
 
-  if(workflowDetails && workflowDetails.data && !workflowDetails.isLoading)
-  workflowDetails.data.actionState.nextActions = [...workflowDetails?.data?.nextActions];
+  if (workflowDetails && workflowDetails.data && !workflowDetails.isLoading)
+    workflowDetails.data.actionState.nextActions = [...workflowDetails?.data?.nextActions];
 
   const closeToast = () => {
     setShowToast(null);
@@ -81,8 +75,8 @@ const ApplicationOverview = () => {
   }, [commonDocs]);
 
   useEffect(() => {
-    sessionStorage.setItem("NewNOCDocs",JSON.stringify(nocDocuments));
-  },[nocDocuments]);
+    sessionStorage.setItem("NewNOCDocs", JSON.stringify(nocDocuments));
+  }, [nocDocuments]);
 
   useEffect(() => {
     if (nocDatils?.length && nocDocumentTypeMaping?.length) {
@@ -162,16 +156,16 @@ const ApplicationOverview = () => {
               <Row className="border-none" label={`${t("NOC_SUBMITED_ON_LABEL")}:`} text={nocDataDetails?.[0]?.additionalDetails?.SubmittedOn ? convertEpochToDate(Number(nocDataDetails?.[0]?.additionalDetails?.SubmittedOn)) : "NA"} />
               <Row className="border-none" label={`${t("NOC_APPROVAL_NO_LABEL")}:`} text={nocDataDetails?.[0]?.nocNo || "NA"} />
               <Row className="border-none" label={`${t("NOC_APPROVED_ON_LABEL")}:`} text={(status === "APPROVED" || status === "REJECTED" || status === "AUTO_APPROVED" || status === "AUTO_REJECTED") ? convertEpochToDate(Number(nocDataDetails?.[0]?.auditDetails?.lastModifiedTime)) : "NA"} />
-              <Row className="border-none" label={`${t("Documents")}:`} text={""} />
+              <Row className="border-none" label={`${t("Documents")}:`} text={nocDataDetails?.[0]?.documents || t("CS_NA")} />
             </StatusTable>
-            { nocDataDetails?.[0]?.documents ? <div style={{ display: "flex", flexWrap: "wrap" }}>
+            {nocDataDetails?.[0]?.documents ? <div style={{ display: "flex", flexWrap: "wrap" }}>
               {nocDataDetails?.[0]?.documents?.map((value, index) => (
                 <a target="_" href={pdfFiles[value.fileStoreId]?.split(",")[0]} style={{ minWidth: "160px", marginRight: "20px" }} key={index}>
                   <PDFSvg />
                   <p style={{ marginTop: "8px", fontWeight: "bold", textAlign: "center", width: "100px" }}>{t(value?.title ? value?.title : `DOCUMENT_${index}`)}</p>
                 </a>
               ))}
-            </div> : null }
+            </div> : null}
             <div style={{ display: "flex", paddingBottom: "8px", marginBottom: "8px" }}>
               <h1 style={{ width: "40%", fontWeight: 700, paddingTop: "20px" }}>{`${t("NOC_UPLOAD_FILE_LABEL")}:`}</h1>
               <div style={{ width: "50%" }}>
@@ -195,13 +189,20 @@ const ApplicationOverview = () => {
       );
     } else return <div></div>
   }
-
+  const getBuldingComponent = (details = []) => details.map(detail => ({
+    title: detail.title, belowComponent: () => <Fragment>
+      <StatusTable style={{ position: "relative", marginTop: "19px" }}>
+        {detail.values.map(value => <Row className="border-none" label={`${t(value?.title)}:`} text={value?.value || "NA"} />
+        )}
+      </StatusTable>
+    </Fragment>
+  }))
 
 
   useEffect(() => {
     if (applicationDetails) {
       const { applicationDetails: details } = applicationDetails;
-      setAppDetails({ ...applicationDetails, applicationDetails: [...details, { title: "NOC_DETAILS_SUMMARY_LABEL", belowComponent: () => <DocumentDetails t={t} data={applicationDetails} nocDataDetails={nocDatils} nocDocumentsList={nocTaxDocuments} /> }] })
+      setAppDetails({ ...applicationDetails, applicationDetails: [getBuldingComponent(details)?.[0], { title: "NOC_DETAILS_SUMMARY_LABEL", belowComponent: () => <DocumentDetails t={t} data={applicationDetails} nocDataDetails={nocDatils} nocDocumentsList={nocTaxDocuments} /> }] })
     }
   }, [applicationDetails, nocTaxDocuments, nocDatils, uploadedFile, filesArray, pdfFiles]);
 
@@ -299,10 +300,10 @@ function SelectDocument({
     })();
   }, [file]);
 
-  const getData =(state) => {
+  const getData = (state) => {
     let data = Object.fromEntries(state);
     let newArr = Object.values(data);
-    selectfile(newArr[newArr.length-1]);
+    selectfile(newArr[newArr.length - 1]);
   }
 
   return (
@@ -314,10 +315,10 @@ function SelectDocument({
             multiple={true}
         /> */}
       <MultiUploadWrapper
-                    module="NOC"
-                    tenantId={tenantId}
-                    getFormState={e => getData(e)}
-                    />
+        module="NOC"
+        tenantId={tenantId}
+        getFormState={e => getData(e)}
+      />
     </div>
   );
 }
