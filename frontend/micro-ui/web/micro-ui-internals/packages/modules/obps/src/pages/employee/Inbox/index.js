@@ -1,4 +1,4 @@
-import React, {Fragment, useCallback, useMemo, useReducer } from "react"
+import React, {Fragment, useCallback, useEffect, useMemo, useReducer } from "react"
 import { InboxComposer, CaseIcon } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import FilterFormFieldsComponent from "./FilterFormFieldsComponent";
@@ -90,7 +90,7 @@ const Inbox = ({parentRoute}) => {
     const SearchFormFields = useCallback(({registerRef}) => <SearchFormFieldsComponents {...{registerRef}} />,[])
 
     const FilterFormFields = useCallback(
-      ({registerRef, controlFilterForm}) => <FilterFormFieldsComponent {...{statuses, isInboxLoading, registerRef, controlFilterForm}} />
+      ({registerRef, controlFilterForm, setFilterFormValue}) => <FilterFormFieldsComponent {...{statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState: formState?.filterForm}} />
     ,[statuses, isInboxLoading])
 
     const onSearchFormSubmit = (data) => {
@@ -98,8 +98,7 @@ const Inbox = ({parentRoute}) => {
       console.log("find search form data here", data)  
     }
     
-    const onFilterFormSubmit = (data) => {
-      debugger
+    const onFilterFormSubmit = (data,setFilterFormValue) => {
       dispatch({action: "mutateFilterForm", data})
       console.log("find search form data here", data)
     }

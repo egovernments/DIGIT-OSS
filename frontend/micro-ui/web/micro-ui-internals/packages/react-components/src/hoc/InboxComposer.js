@@ -36,13 +36,17 @@ const InboxComposer = ({
     const { register: registerFilterFormField, control: controlFilterForm , handleSubmit: handleFilterFormSubmit, setValue: setFilterFormValue, getValues: getFilterFormValue, reset: resetFilterForm } = useForm({
         defaultValues: {...filterFormDefaultValues}
     })
-
+    
     const onResetFilterForm = () => {
         onFilterFormReset(setFilterFormValue)
     }
 
     const onResetSearchForm = () => {
         onSearchFormReset(setSearchFormValue)
+    }
+
+    const onSubmitFilterForm = (data) => {
+        onFilterFormSubmit(data, setFilterFormValue)
     }
 
     if (isMobile) {
@@ -61,7 +65,7 @@ const InboxComposer = ({
                 <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
             </SearchField>
         </SearchForm>
-        <FilterForm onSubmit={onFilterFormSubmit} handleSubmit={handleFilterFormSubmit} id="filter-form" onResetFilterForm={onResetFilterForm}>
+        <FilterForm onSubmit={onSubmitFilterForm} handleSubmit={handleFilterFormSubmit} id="filter-form" onResetFilterForm={onResetFilterForm}>
             <FilterFormFields registerRef={registerFilterFormField} { ...{controlFilterForm, handleFilterFormSubmit, setFilterFormValue, getFilterFormValue} } />
             {/* <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="filter-form"/> */}
         </FilterForm>

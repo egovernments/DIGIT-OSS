@@ -1,9 +1,9 @@
-import React, { Fragment, useMemo, useState } from "react"
+import React, { Fragment, useEffect, useMemo, useState } from "react"
 import { FilterFormField, Loader, RadioButtons, Localities, RemoveableTag, Dropdown, CheckBox } from "@egovernments/digit-ui-react-components";
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, controlFilterForm}) => {
+const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState}) => {
   const { t } = useTranslation()
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
@@ -16,6 +16,12 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
     {code: "BPA", name:t("BPA")},
     {code: "STAKEHOLDER", name:t("STAKEHOLDER")},
   ]
+
+  useEffect(()=>{
+    Object.keys(filterFormState)?.forEach( key => {
+      setFilterFormValue(key, filterFormState[key])
+    })
+  }, [Object.values(filterFormState || {})])
 
   return <>
     <FilterFormField>

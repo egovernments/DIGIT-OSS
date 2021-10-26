@@ -31,12 +31,11 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
 
     const size = e?.target?.files[0]?.size;
     const type = e?.target?.files[0]?.type;
-
     if (size && (size/1024/1024) > 5) {
       setUploadError('FILE_SIZE_EXCEEDED')
       return
     }
-    if (type && (type.includes('pdf') || type.includes('png') || type.includes('jpg') || type.includes('msword') || type.includes('vnd.openxmlformats-officedocument.wordprocessingml.document'))) {
+    if (type && (type.includes('pdf') || type.includes('png') || type.includes('jpg') || type.includes('jpeg') || type.includes('msword') || type.includes('vnd.openxmlformats-officedocument.wordprocessingml.document'))) {
       setFileSize(size);
       setFileType(type);
       setProps(props);

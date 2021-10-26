@@ -44,7 +44,7 @@ const FilterForm = ({onMobileExclusiveFilterPopupFormClose = () => null , showMo
 		<form id={id} onSubmit={handleSubmit(onSubmit)}>
 			{children}
 		</form>
-		<SubmitBar className="w-fullwidth" label={t("ES_COMMON_SEARCH")} submit form={id} />
+		<SubmitBar className="w-fullwidth" label={t("ES_COMMON_APPLY")} submit form={id} />
 	</div>
   </div>
 }

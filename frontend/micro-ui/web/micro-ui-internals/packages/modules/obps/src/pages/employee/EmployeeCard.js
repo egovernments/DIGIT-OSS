@@ -44,7 +44,7 @@ const OBPSEmployeeHomeCard = () => {
             label: t("TOTAL_FSM"),
             link: `/digit-ui/employee/obps/inbox`
         },
-        {
+        {   count:"-",
             label: t("TOTAL_NEARING_SLA"),
             link: `/digit-ui/employee/obps/inbox`
         }  
@@ -56,6 +56,7 @@ const OBPSEmployeeHomeCard = () => {
           link: `/digit-ui/employee/obps/inbox`
         },
         {
+          count : "-",
           label: t("ES_COMMON_SEARCH_APPLICATION"),
           link: `/digit-ui/employee/obps/search/application`
         },

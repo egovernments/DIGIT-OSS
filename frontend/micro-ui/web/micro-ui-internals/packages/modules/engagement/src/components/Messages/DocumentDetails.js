@@ -10,12 +10,12 @@ import { openUploadedDocument } from '../../utils';
 const renderMultipleDocuments = (documents) => {
   if (!documents && !documents.length) return null;
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+    <div style={{ display: 'flex', gap: '100px', overflow:'scroll' }}>
       {documents.map(({ fileStoreId, fileName }) => (
         <div className="documentDetails_pdf">
           <div style={{ width: '100px' }} onClick={() => openUploadedDocument(fileStoreId, fileName)}>
             <GenericFileIcon />
-            <span className="cell-text">{fileName}</span>
+            <span className="cell-text">{fileName?.split(10)}</span>
           </div>
         </div>
       ))
