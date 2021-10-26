@@ -170,7 +170,7 @@ const NOCDocuments = ({ t, noc, docs, isNoc, applicationData,NOCdata }) => {
       <StatusTable>
       <Row label={t(`BPA_${noc?.nocType}_HEADER`)} />
       {NOCdata && NOCdata.map((noc,index) => (
-        <Row label={t(noc?.title)} text={t(noc?.value)} />
+        <Row label={t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} />
       ))}
       </StatusTable>
       <PropertyDocuments documents={docs} />

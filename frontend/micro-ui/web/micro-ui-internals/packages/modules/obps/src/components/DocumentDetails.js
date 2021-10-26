@@ -12,7 +12,7 @@ const DocumentDetails = ({ documents }) => {
     documents?.forEach((element, index, array) => {
       acc = [...acc, element];
     });
-    setFilesArray(acc?.map((value) => value?.fileStoreId));
+    setFilesArray(acc?.map((value) => value?.filestoreIdArray.map((val) => val)));
   }, [documents]);
 
   useEffect(() => {
@@ -28,10 +28,16 @@ const DocumentDetails = ({ documents }) => {
     <Fragment>
       {documents?.map(document => (
         <Fragment>
-          <Row label={t(document?.title)} />
-          <a target="_" href={pdfFiles[document.fileStoreId]?.split(",")[0]}>
-            <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />
-          </a>
+        <Row labelStyle={{paddingTop:"10px",width:"100%"}} label={t(document?.title)} />
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+        {document?.filestoreIdArray && document?.filestoreIdArray.map((filestoreId,index) => 
+          <a target="_" href={pdfFiles[filestoreId]?.split(",")[0]} style={{ minWidth: "100px",marginRight:"10px" }} key={index}>
+          <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />
+          <p style={{ marginTop: "8px",textAlign:"center" }}>{`${t(`ES_COMMON_DOC_DOCUMENT`)} - ${index + 1}`}</p>
+        </a>
+        )  
+        }
+        </div>
         </Fragment>
       ))}
     </Fragment>

@@ -8,7 +8,7 @@ import DocumentDetails from "../../../components/DocumentDetails";
 import ActionModal from "./Modal";
 import OBPSDocument from "../../../pageComponents/OBPSDocuments";
 import SubOccupancyTable from "../../../../../templates/ApplicationDetails/components/SubOccupancyTable";
-import { getBusinessServices } from "../../../utils";
+import { getBusinessServices, getOrderedDocs } from "../../../utils";
 
 const BpaApplicationDetail = () => {
   const { id } = useParams();
@@ -229,7 +229,7 @@ const BpaApplicationDetail = () => {
     });
     
   }
-  else if(data && data?.applicationData?.businessService === "BPA" && data?.applicationData?.riskType === "HIGH" )
+  else if(data && data?.applicationData?.businessService === "BPA" && data?.applicationData?.riskType === "HIGH" && payments.length>0)
   {
     dowloadOptions.push({
       label: t("BPA_APP_FEE_RECEIPT"),
@@ -267,8 +267,8 @@ const BpaApplicationDetail = () => {
           options={dowloadOptions}
           style={{top:"90px"}}
         />}
-      {data?.applicationDetails?.map((detail, index, arr) => {
-        return (
+      {data?.applicationDetails?.filter((ob) => Object.keys(ob).length>0).map((detail, index, arr) => {
+       return (
           <Card key={index} style={detail?.title === ""?{marginTop:"-8px"}:{}}>
             <CardHeader>{t(detail?.title)}</CardHeader>
             <StatusTable>
@@ -305,20 +305,15 @@ const BpaApplicationDetail = () => {
         <Row className="border-none" label={t(`${detail?.values?.[0]?.title}`)} textStyle={{marginLeft:"10px"}} text={getTranslatedValues(detail?.values?.[0]?.value , detail?.values?.[0]?.isNotTranslated)} />
         <Row className="border-none" label={t(`${nocob?.title}`)}></Row>
         </StatusTable>
-        {nocob?.values && nocob?.values.map((noc,index)=> (
-        <div key={index}>
         <StatusTable>
-        <OBPSDocument value={nocob?.values} Code={noc?.documentType?.split("_")[0]} index={index} isNOC={true}/> 
+        <OBPSDocument value={nocob?.values} Code={nocob?.values?.[0]?.documentType?.split("_")[0]} index={ind} isNOC={true}/> 
         </StatusTable>
-        </div>
-        ))
-        }
         </div>
       ))}
               {detail?.additionalDetails?.obpsDocuments?.[0]?.values && (
                 <Fragment>
                   <Row className="border-none" label={t(detail?.additionalDetails?.obpsDocuments?.[0].title)} />
-                  <DocumentDetails documents={detail?.additionalDetails?.obpsDocuments?.[0]?.values} />
+                  <DocumentDetails documents={getOrderedDocs(detail?.additionalDetails?.obpsDocuments?.[0]?.values)} />
                 </Fragment>
               )}
               {detail?.additionalDetails?.scruntinyDetails &&

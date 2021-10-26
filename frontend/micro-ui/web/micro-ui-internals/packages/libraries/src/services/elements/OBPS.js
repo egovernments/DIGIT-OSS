@@ -557,7 +557,7 @@ export const OBPSService = {
     })
 
     if(BPA?.businessService !== "BPA_OC") {
-      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, ...FieldInspectionData, approvalChecksDetails, ...nocDetails]
+      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, ...FieldInspectionData, ...nocDetails, approvalChecksDetails]
     } else {
       details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails, documentDetails,...FieldInspectionData, ...nocDetails ]
     }

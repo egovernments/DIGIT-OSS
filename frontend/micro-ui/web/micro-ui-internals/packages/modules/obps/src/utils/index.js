@@ -477,3 +477,15 @@ export const downloadAndPrintReciept = async (bussinessService, consumerCode, te
         : downloadPdf(new Blob([response.data], { type: "application/pdf" }), `RECEIPT-${consumerCode}.pdf`);
   }
 };
+
+export const getOrderedDocs = (docs) => {
+//let uniqueDocs = [...new Map(docs.map(item => [item["documentType"], item])).values()];
+  let uniqueDocs = docs.filter((elem, index) => docs.findIndex(obj => obj.documentType === elem.documentType) === index);
+uniqueDocs.map((ob) => {
+  ob["filestoreIdArray"] = [];
+  docs.filter((doc) => doc.documentType === ob.documentType).map((obb) => {
+    ob["filestoreIdArray"] = [...ob.filestoreIdArray, obb.fileStoreId];
+  })  
+})
+return uniqueDocs;
+}
