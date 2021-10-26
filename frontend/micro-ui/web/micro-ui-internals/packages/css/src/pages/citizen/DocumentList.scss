@@ -292,3 +292,9 @@
   flex-direction: row;
   align-self: flex-start;
 }
+
+@media screen and (max-width : 768px){
+  .documentDetails_row_items{
+    @apply grid grid-cols-2 gap-4;
+  }
+}
