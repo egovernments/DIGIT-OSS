@@ -73,7 +73,6 @@ public class TLBatchService {
 
 
         Long validTill = System.currentTimeMillis();
-        
 
 
         TradeLicenseSearchCriteria criteria = TradeLicenseSearchCriteria.builder()

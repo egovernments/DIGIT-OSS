@@ -242,7 +242,7 @@ public class TradeLicenseService {
         String jsonPath = TLConstants.MDMS_CURRENT_FINANCIAL_YEAR.replace("{}",businessService_TL);
         List<Map<String,Object>> jsonOutput =  JsonPath.read(mdmsData, jsonPath);
         
-         for (int i=0; i<jsonOutput.size();i++) {
+        for (int i=0; i<jsonOutput.size();i++) {
        	 Object startingDate = jsonOutput.get(i).get(TLConstants.MDMS_STARTDATE);
        	 Object endingDate = jsonOutput.get(i).get(TLConstants.MDMS_ENDDATE);
        	 Long startTime = (Long)startingDate;

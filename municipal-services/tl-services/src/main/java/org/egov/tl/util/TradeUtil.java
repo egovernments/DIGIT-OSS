@@ -243,7 +243,7 @@ public class TradeUtil {
 
         return tlModuleDtls;
     }
-    
+
 
     private MdmsCriteriaReq getMDMSRequest(RequestInfo requestInfo,String tenantId){
         ModuleDetail financialYearRequest = getFinancialYearRequest();
