@@ -264,6 +264,7 @@ function SelectDocument({
             }
         })();
     }, [file]);
+    const allowedFileTypes = /(.*?)(jpg|jpeg|png|image|pdf|msword|openxmlformats)$/i;
 
     const uploadedFilesPreFill = useMemo(()=>{
         // const filesDictionary = new Map()
@@ -300,6 +301,8 @@ function SelectDocument({
             module="BPA"
             tenantId={tenantId}
             getFormState={e => getData(e)}
+            allowedFileTypesRegex={allowedFileTypes}
+            allowedMaxSizeInMB={5}
             setuploadedstate={uploadedFilesPreFill}
           />
         {doc?.uploadedDocuments?.length && <PropertyDocuments documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
