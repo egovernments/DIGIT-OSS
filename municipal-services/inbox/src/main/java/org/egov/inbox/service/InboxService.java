@@ -136,6 +136,7 @@ public class InboxService {
         }
         // Since we want the whole status count map regardless of the status filter and assignee filter being passed
         processCriteria.setAssignee(null);
+        processCriteria.setStatus(null);
         
         List<HashMap<String, Object>> bpaCitizenStatusCountMap = new ArrayList<HashMap<String,Object>>();
         List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
@@ -161,7 +162,7 @@ public class InboxService {
                     tenantAndApplnNumbersMap.put(tenant, l);
                 }
             }
-            processCriteria.setStatus(null);
+            
             for(Map.Entry<String, List<String>> t : tenantAndApplnNumbersMap.entrySet()) {
                 processCriteria.setTenantId(t.getKey());
                 processCriteria.setBusinessIds(t.getValue());
