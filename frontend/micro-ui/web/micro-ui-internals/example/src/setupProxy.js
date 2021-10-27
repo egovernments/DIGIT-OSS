@@ -2,12 +2,12 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const createProxy = createProxyMiddleware({
   //target: process.env.REACT_APP_PROXY_API || "https://uat.digit.org",
-  target: process.env.REACT_APP_PROXY_API || "https://statea.digit.org",
+  target: process.env.REACT_APP_PROXY_API || "https://stateb.digit.org",
   // target: process.env.REACT_APP_PROXY_API || "https://dev.digit.org",
   changeOrigin: true,
 });
 const assetsProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_ASSETS || "https://statea.digit.org",
+  target: process.env.REACT_APP_PROXY_ASSETS || "https://stateb.digit.org",
   changeOrigin: true,
 });
 module.exports = function (app) {
