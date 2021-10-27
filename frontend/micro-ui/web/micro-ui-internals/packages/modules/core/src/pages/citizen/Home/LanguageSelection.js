@@ -12,7 +12,7 @@ const LanguageSelection = () => {
 
     const texts = useMemo(() => ({
         header: t("CS_COMMON_CHOOSE_LANGUAGE"),
-        submitBarLabel: t( "CS_COMMON_SUBMIT")
+        submitBarLabel: t( "CORE_COMMON_CONTINUE")
     }), [t])
 
     const RadioButtonProps = useMemo(() => ({

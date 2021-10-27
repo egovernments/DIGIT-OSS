@@ -4,6 +4,7 @@ import SideBarMenu from "../../../config/sidebar-menu";
 import { useTranslation } from "react-i18next";
 import { digitImg } from "../../../Images/digit.js";
 import { powered } from "../../../Images/powered.js";
+import { useHistory } from "react-router-dom";
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
@@ -54,21 +55,27 @@ const PoweredBy = () => (
   </div>
 );
 
-export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout ,isEmployee=false}) => {
+export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEmployee = false }) => {
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
   const { t } = useTranslation();
-
+  const history = useHistory()
   const closeSidebar = () => {
     Digit.clikOusideFired = true;
     toggleSidebar(false);
   };
 
-  let menuItems = [...SideBarMenu(t, closeSidebar,isEmployee)];
+  const redirectToLoginPage = () => {
+    history.push('/digit-ui/citizen/login')
+    closeSidebar();
+  }
+
+  let menuItems = [...SideBarMenu(t, closeSidebar, redirectToLoginPage, isEmployee)];
   let profileItem;
   if (isFetched && user && user.access_token) {
     profileItem = <Profile info={user.info} stateName={stateInfo.name} />;
+    menuItems = menuItems.filter((item) => (item?.id !== 'login-btn'))
     menuItems = [
       ...menuItems,
       {
