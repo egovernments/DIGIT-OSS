@@ -95,10 +95,15 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
             return <>
               <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
               {/* <Dropdown option={localities} keepNull={true} selected={null} select={selectLocality} optionKey={"name"} /> */}
-              <Localities selectLocality={ (e) => {
+              <Localities 
+              selectLocality={ (e) => {
                   setSelectedLocalities([e, ...selectedLocalities])
                   props.onChange([e, ...selectedLocalities])
-                } } tenantId={tenantId} boundaryType="revenue" />
+                } } 
+                tenantId={tenantId} 
+                boundaryType="revenue" 
+                optionCardStyles={{maxHeight:'350px'}}
+                />
               <div className="tag-container">
                 {renderRemovableTokens}
               </div>
