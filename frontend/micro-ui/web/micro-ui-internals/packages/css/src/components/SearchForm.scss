@@ -2,7 +2,7 @@
     @apply flex flex-wrap justify-between bg-white mb-lg py-lg pl-lg;
     .form-field{
         width: calc( 25% - 16px );
-        @apply inline-block mr-md align-middle flex-1;
+        @apply inline-block mr-md align-middle;
     }
     .submit{
         right: 36px;

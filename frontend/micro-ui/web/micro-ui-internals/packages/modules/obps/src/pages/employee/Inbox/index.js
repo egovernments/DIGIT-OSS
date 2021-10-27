@@ -86,7 +86,7 @@ const Inbox = ({parentRoute}) => {
           }]
     }
 
-    const SearchFormFields = useCallback(({registerRef}) => <SearchFormFieldsComponents {...{registerRef}} />,[])
+    const SearchFormFields = useCallback(({registerRef, searchFormState}) => <SearchFormFieldsComponents {...{registerRef, searchFormState}} />,[])
 
     const FilterFormFields = useCallback(
       ({registerRef, controlFilterForm, setFilterFormValue, getFilterFormValue}) => <FilterFormFieldsComponent {...{statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState: formState?.filterForm, getFilterFormValue}} />

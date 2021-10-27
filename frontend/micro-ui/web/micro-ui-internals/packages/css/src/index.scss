@@ -94,6 +94,10 @@
 @import "./pages/citizen/SurveyList.scss";
 @import "./pages/citizen/citizenDocument.scss";
 
+.flex-one{
+  @apply flex-1;
+}
+
 .rm-mb {
   margin-bottom: unset !important;
 }

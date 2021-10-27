@@ -46,29 +46,11 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
           name="businessService"
           control={controlFilterForm}
           render={({ref, onChange, value}) => {
-            const [ businessService, setBusinessService] = useState(()=> value || [])
-            const renderRemovableTokens = useMemo(()=>{
-              // debugger
-              return (
-                <RemoveableTag
-                  text={businessService.name}
-                  onClick={() => {
-                    setBusinessService()
-                    onChange()
-                  }}
-                />
-              )
-            },[businessService])
             return <>
               <div className="filter-label">{t("BPA_SEARCH_APPLICATION_TYPE_LABEL")}</div>
-              {/* <Dropdown option={localities} keepNull={true} selected={null} select={selectLocality} optionKey={"name"} /> */}
               <Dropdown inputRef={ref} option={availableBusinessService} optionKey="name" t={t} select={ (e) => {
-                  setBusinessService(e)
                   onChange(e)
                 }} selected={value} />
-              {/* <div className="tag-container">
-                {renderRemovableTokens}
-              </div> */}
             </>
           }
         }

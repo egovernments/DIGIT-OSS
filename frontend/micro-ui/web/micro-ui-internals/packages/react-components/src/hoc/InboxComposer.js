@@ -30,7 +30,7 @@ const InboxComposer = ({
     const { t } = useTranslation()
     const [ showMobileFilterFormPopup, setMobileFilterFormPopup ] = useState(false)
 
-    const { register: registerSearchFormField, control: controlSearchForm , handleSubmit: handleSearchFormSubmit, setValue: setSearchFormValue, getValues: getSearchFormValue, reset: resetSearchForm } = useForm({
+    const { register: registerSearchFormField, control: controlSearchForm , handleSubmit: handleSearchFormSubmit, setValue: setSearchFormValue, getValues: getSearchFormValue, reset: resetSearchForm, formState: searchFormState } = useForm({
         defaultValues: {...searchFormDefaultValues}
     })
     
@@ -61,14 +61,14 @@ const InboxComposer = ({
     }
     return <div className="InboxComposerWrapper">
         <InboxLinks {...PropsForInboxLinks} />
-        <SearchForm onSubmit={onSearchFormSubmit} handleSubmit={handleSearchFormSubmit} id="search-form" className="rm-mb" >
-            <SearchFormFields registerRef={registerSearchFormField}/>
+        <SearchForm onSubmit={onSearchFormSubmit} handleSubmit={handleSearchFormSubmit} id="search-form" className="rm-mb form-field-flex-one" >
+            <SearchFormFields registerRef={registerSearchFormField} searchFormState={searchFormState} />
             <SearchField className="submit">
                 <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
                 <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
             </SearchField>
         </SearchForm>
-        <FilterForm onSubmit={onSubmitFilterForm} handleSubmit={handleFilterFormSubmit} id="filter-form" onResetFilterForm={onResetFilterForm}>
+        <FilterForm onSubmit={onFilterFormSubmit} handleSubmit={handleFilterFormSubmit} id="filter-form" onResetFilterForm={onResetFilterForm}>
             <FilterFormFields registerRef={registerFilterFormField} { ...{controlFilterForm, handleFilterFormSubmit, setFilterFormValue, getFilterFormValue} } />
             {/* <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="filter-form"/> */}
         </FilterForm>

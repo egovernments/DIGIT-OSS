@@ -1,5 +1,9 @@
 .InboxComposerWrapper{
-    
+    .form-field-flex-one{
+        .form-field{
+            @apply flex-1;
+        }
+    }
 }
 
 @screen dt{
