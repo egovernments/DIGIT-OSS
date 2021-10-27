@@ -1,8 +1,8 @@
-import React, { Fragment } from "react";
+import { FormComposer, Header, Loader } from "@egovernments/digit-ui-react-components";
+import { format } from 'date-fns';
+import React, { Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
-import { format } from 'date-fns';
-import { FormComposer, Header, Loader } from "@egovernments/digit-ui-react-components";
 import { config } from "../../NewEventConfig";
 
 const EditEvents = () => {
@@ -11,13 +11,22 @@ const EditEvents = () => {
   const { id: EventId } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { isLoading, data } = Digit.Hooks.events.useInbox(tenantId, {},
-  { eventTypes: "EVENTSONGROUND",
-    ids: EventId
-  }, 
-  {
-    select: (data) => data?.events?.[0]
-  });
+    {
+      eventTypes: "EVENTSONGROUND",
+      ids: EventId
+    },
+    {
+      select: (data) => data?.events?.[0]
+    });
+  const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_EVENT_MUTATION_HAPPENED", false);
+  const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("EMPLOYEE_EVENT_ERROR_DATA", false);
+  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_EVENT_MUTATION_SUCCESS_DATA", false);
 
+  useEffect(() => {
+    setMutationHappened(false);
+    clearSuccessData();
+    clearError();
+  }, []);
   const onSubmit = (formData) => {
     const { fromDate, toDate, fromTime, toTime, address, organizer, fees, geoLocation } = formData;
     const details = {

@@ -1,7 +1,7 @@
-import React, { Fragment } from "react";
+import { FormComposer, Header } from "@egovernments/digit-ui-react-components";
+import React, { Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-import { FormComposer, Header, Loader } from "@egovernments/digit-ui-react-components";
 import { config } from "../../NewEventConfig";
 
 const NewEvents = () => {
@@ -34,6 +34,16 @@ const NewEvents = () => {
     }
     history.push("/digit-ui/employee/engagement/event/response", details)
   }
+
+  const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_EVENT_MUTATION_HAPPENED", false);
+  const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("EMPLOYEE_EVENT_ERROR_DATA", false);
+  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_EVENT_MUTATION_SUCCESS_DATA", false);
+
+  useEffect(() => {
+    setMutationHappened(false);
+    clearSuccessData();
+    clearError();
+  }, []);
 
   return (
     <Fragment>
