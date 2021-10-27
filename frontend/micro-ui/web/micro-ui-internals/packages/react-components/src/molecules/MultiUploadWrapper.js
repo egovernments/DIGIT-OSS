@@ -2,28 +2,33 @@ import React, { useEffect, useReducer, useState } from "react"
 import UploadFile from "../atoms/UploadFile"
 import CardLabelError from "../atoms/CardLabelError";
 
+const displayError = ({ t, error, name }) => (
+    <span style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className="validation-error">{t(error)}</div>
+        <div className="validation-error">{`${t('ES_COMMON_DOC_FILENAME')} : ${name} ...`}</div>
+    </span>
+)
 
 const fileValidationStatus = (file, regex, maxSize) => {
-    const status = { valid: true, name: file?.name, error: '' };
-
+    const status = { valid: true, name: file?.name?.substring(0, 15), error: '' };
     if (!file) return;
 
     if (!regex.test(file.type) && (file.size / 1024 / 1024) > maxSize) {
-        status.valid = false; status.error = `UnSupported File Type : ${file.type?.substring(0,4)} and File Size exceeds ${maxSize} mb `;
+        status.valid = false; status.error = `NOT_SUPPORTED_FILE_TYPE_AND_FILE_SIZE_EXCEEDED`;
     }
 
     if (!regex.test(file.type)) {
-        status.valid = false; status.error = `UnSupported File Type : ${file.type}`
+        status.valid = false; status.error = `NOT_SUPPORTED_FILE_TYPE`
     }
 
     if ((file.size / 1024 / 1024) > maxSize) {
-        status.valid = false; status.error = `File Size exceeds ${maxSize} mb`
+        status.valid = false; status.error = `FILE_SIZE_EXCEEDED`
     }
 
     return status;
 }
 const checkIfAllValidFiles = (files, regex, maxSize) => {
-    if (!files.length || !regex.length || !maxSize) return[{}, false];
+    if (!files.length || !regex || !maxSize) return [{}, false];
     const messages = [];
     let isInValidGroup = false;
     for (let file of files) {
@@ -37,7 +42,7 @@ const checkIfAllValidFiles = (files, regex, maxSize) => {
 }
 
 
-const MultiUploadWrapper = ({ module = "PGR", tenantId = "pb", getFormState, requestSpecifcFileRemoval, setuploadedstate = [], showHintBelow, hintText, allowedFileTypesRegex, allowedMaxSizeInMB }) => {
+const MultiUploadWrapper = ({ t, module = "PGR", tenantId = "pb", getFormState, requestSpecifcFileRemoval, setuploadedstate = [], showHintBelow, hintText, allowedFileTypesRegex, allowedMaxSizeInMB }) => {
 
     const FILES_UPLOADED = "FILES_UPLOADED"
     const TARGET_FILE_REMOVAL = "TARGET_FILE_REMOVAL"
@@ -70,18 +75,18 @@ const MultiUploadWrapper = ({ module = "PGR", tenantId = "pb", getFormState, req
 
     const onUploadMultipleFiles = async (e) => {
         setFileErrors([])
-        const { files } = e.target;
+        const files = Array.from(e.target.files);
         if (!files.length) return;
         const [validationMsg, error] = checkIfAllValidFiles(files, allowedFileTypesRegex, allowedMaxSizeInMB);
         if (!error) {
-            try{
+            try {
                 const { data: { files: fileStoreIds } = {} } = await Digit.UploadServices.MultipleFilesStorage(module, e.target.files, tenantId)
                 return dispatch({ type: FILES_UPLOADED, payload: { files: e.target.files, fileStoreIds } })
-            }catch(err){
+            } catch (err) {
                 console.error('Failed to upload files', err);
             }
-            } else {
-                setFileErrors(validationMsg)
+        } else {
+            setFileErrors(validationMsg)
         }
     }
     const [state, dispatch] = useReducer(uploadReducer, [...setuploadedstate])
@@ -101,14 +106,14 @@ const MultiUploadWrapper = ({ module = "PGR", tenantId = "pb", getFormState, req
                 multiple={true}
                 showHintBelow={showHintBelow}
                 hintText={hintText}
-                onDelete={()=>{
+                onDelete={() => {
                     setFileErrors([])
                 }}
             />
-            <span style={{display:'flex'}}>
-            {fileErrors.length ? fileErrors.map(({ valid, name, type, size, error }) => (
-                valid ? null : <CardLabelError>{`${error} filename : ${name?.substring(0,10)}...`}</CardLabelError>
-            )):null}
+            <span style={{ display: 'flex' }}>
+                {fileErrors.length ? fileErrors.map(({ valid, name, type, size, error }) => (
+                    valid ? null : displayError({ t, error, name })
+                )) : null}
             </span>
         </div>)
 }

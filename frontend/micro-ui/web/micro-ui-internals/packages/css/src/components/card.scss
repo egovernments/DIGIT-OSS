@@ -47,6 +47,10 @@
   }
 }
 
+.validation-error{
+  @apply block text-body-s text-error;
+}
+
 .docsDescription {
   color: #0B0C0C !important;
 } 

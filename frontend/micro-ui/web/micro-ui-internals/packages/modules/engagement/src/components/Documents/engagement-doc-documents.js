@@ -8,7 +8,7 @@ import { checkValidFileType, documentUploadMessage, getFileSize } from "../../ut
 
 const EngagementDocUploadDocument = ({ userType, t, onSelect, setValue, config, data, formData, register, errors, setError, clearErrors, formState, control }) => {
   const [fileStoreId, setFileStoreId] = useState(() => formData?.[config.key]?.filestoreId);
-  const [fileSize, setFileSize] = useState(()=> formData?.[config.key]?.fileSize);
+  const [fileSize, setFileSize] = useState();
   const [fileType, setFileType] = useState('');
   const [file, setFile] = useState();
   const [urlDisabled, setUrlDisabled] = useState(false);
@@ -22,21 +22,20 @@ const EngagementDocUploadDocument = ({ userType, t, onSelect, setValue, config, 
     // setUrlDisabled(true);
     // setValue(config.key + ".documentLink", "");
   };
-
   const selectFile = (e, props) => {
     setFile()
     setFileSize()
     setFileType()
     setUploadError("")
     if (!e.target?.files?.length) return
-  
+
     const size = e?.target?.files[0]?.size;
     const type = e?.target?.files[0]?.type;
-    if (size && (size/1024/1024) > 5) {
+    if (size && (size / 1024 / 1024) > 5) {
       setUploadError('FILE_SIZE_EXCEEDED')
       return
     }
-   
+
     if (type && checkValidFileType(type)) {
       setFileSize(size);
       setFileType(type);
@@ -75,16 +74,16 @@ const EngagementDocUploadDocument = ({ userType, t, onSelect, setValue, config, 
 
     } catch (err) {
       console.error("Modal -> err ", err);
-    }finally{
+    } finally {
       setIsUploadingImage(false)
     }
   };
 
   const location = useLocation();
-  const isInEditFormMode = useMemo(()=>{
-    if(location.pathname.includes('/documents/inbox/update')) return true;
+  const isInEditFormMode = useMemo(() => {
+    if (location.pathname.includes('/documents/inbox/update')) return true;
     return false;
-  },[location.pathname])
+  }, [location.pathname])
 
   return (
     <React.Fragment>
@@ -100,19 +99,19 @@ const EngagementDocUploadDocument = ({ userType, t, onSelect, setValue, config, 
                 onUpload={(d) => selectFile(d, props)}
                 onDelete={() => {
                   setFileStoreId(null);
-                  setFileSize(0);
+                  setFileSize(100);
                 }}
                 accept="image/*, .pdf, .png, .jpeg, .doc"
                 showHintBelow={true}
                 hintText={t("DOCUMENTS_ATTACH_RESTRICTIONS_SIZE")}
-                message={ isUploadingImage ? <Loader/> : documentUploadMessage(t, fileStoreId, isInEditFormMode)}
+                message={isUploadingImage ? <Loader /> : documentUploadMessage(t, fileStoreId, isInEditFormMode)}
                 textStyles={{ width: "100%" }}
                 inputStyles={{ width: "280px" }}
               />
             )}
           />
           {fileSize ? `${getFileSize(fileSize)}` : null}
-          {imageUploadError ? <CardLabelError>{t(imageUploadError)}</CardLabelError>  : null}
+          {imageUploadError ? <CardLabelError>{t(imageUploadError)}</CardLabelError> : null}
         </div>
       </LabelFieldPair>
 

@@ -27,14 +27,16 @@ const Documents = (props) => {
   )
 
   const update = (data) => {
+    const fileSize = data.document?.filestoreId?.fileSize ? data.document?.filestoreId?.fileSize : props.location.state?.DocumentEntity?.fileSize;
+    const fileType = data.document?.filestoreId?.fileType ? data.document?.filestoreId?.fileType : props.location.state?.DocumentEntity?.fileType;
     const DocumentEntity = {
       ...props.location?.state?.DocumentEntity,
       name: data.documentName,
       description: data?.description.length ? data.description : "",
       category: data.docCategory?.name,
       filestoreId: data.document?.filestoreId?.fileStoreId,
-      fileSize: data.document?.filestoreId?.fileSize,
-      fileType: data.document?.filestoreId?.fileType,
+      fileSize,
+      fileType,
       documentLink: data.document?.documentLink,
       tenantId: data?.ULB?.code,
     };

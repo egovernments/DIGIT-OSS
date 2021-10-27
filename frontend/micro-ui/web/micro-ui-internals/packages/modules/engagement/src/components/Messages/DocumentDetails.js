@@ -8,9 +8,10 @@ import { openUploadedDocument } from '../../utils';
 
 
 const renderMultipleDocuments = (documents) => {
+  let isMobile = window.Digit.Utils.browser.isMobile();
   if (!documents && !documents.length) return null;
   return (
-    <div style={{ display: 'flex', gap: '100px', overflow:'scroll' }}>
+    <div style={{ display: 'flex', flexDirection: isMobile ? 'column':'row', gap: isMobile ? '40px' : '100px'}}>
       {documents.map(({ fileStoreId, fileName }) => (
         <div className="documentDetails_pdf">
           <div style={{ width: '100px' }} onClick={() => openUploadedDocument(fileStoreId, fileName)}>

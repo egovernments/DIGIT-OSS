@@ -45,7 +45,6 @@ const Response = (props) => {
     if (updateEventMutation.isLoading || updateEventMutation.isIdle) {
       return <Loader />
     }
-
     return (
       <Card>
         <BannerPicker
@@ -74,7 +73,7 @@ const Response = (props) => {
     <Card>
       <BannerPicker
         t={t}
-        message={`ENGAGEMENT_BROADCAST_MESSAGE_CREATED`}
+        message={mutation.isSuccess ? `ENGAGEMENT_BROADCAST_MESSAGE_CREATED` : `ENGAGEMENT_BROADCAST_MESSAGE_FAILED`}
         data={mutation.data}
         isSuccess={mutation.isSuccess}
         isLoading={mutation.isIdle || mutation.isLoading}

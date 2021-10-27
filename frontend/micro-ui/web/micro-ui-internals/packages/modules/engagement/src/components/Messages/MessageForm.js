@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Controller } from "react-hook-form";
 import { isValid, format, startOfToday } from 'date-fns';
 
-const allowedFileTypes = /(.*?)(jpg|jpeg|png|image|pdf|msword|openxmlformats)$/i;
+const allowedFileTypes = /(.*?)(jpg|jpeg|png|image|pdf|msword|openxmlformats-officedocument)$/i;
 
 const MessageForm = ({ onSelect, config, formData, register, control, errors, setError }) => {
   const { t } = useTranslation();
@@ -101,6 +101,7 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
                 onChange(finalDocumentData)
               }
               return <MultiUploadWrapper
+                  t={t}
                   module="engagement"
                   tenantId={stateId}
                   getFormState={getFileStoreData}
