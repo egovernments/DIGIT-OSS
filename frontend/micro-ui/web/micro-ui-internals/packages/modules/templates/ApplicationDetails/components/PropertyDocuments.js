@@ -47,7 +47,7 @@ function PropertyDocuments({ documents, svgStyles = {} }) {
                 {/* TODO, Later will move to classes */}
                 <p style={checkLocation ? { marginTop: "8px", fontWeight: "bold", textAlign: "center", fontSize: "16px", lineHeight: "19px", color: "#505A5F" } : { marginTop: "8px", fontWeight: "bold", textAlign: "center" }}>{t(value?.title)}</p>
               </a>
-            )):<div><p>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</p></div>}
+            )):!(window.location.href.includes("citizen"))&& <div><p>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</p></div>}
           </div>
         </React.Fragment>
       ))}

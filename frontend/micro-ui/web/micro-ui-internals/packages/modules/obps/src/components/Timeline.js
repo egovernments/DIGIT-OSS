@@ -30,9 +30,10 @@ const getAction = (flow) => {
 }
 const Timeline = ({ currentStep = 1, flow="" }) => {
   const { t } = useTranslation();
+  const isMobile = window.Digit.Utils.browser.isMobile();
   getAction(flow);
   return (
-    <div className="timeline-container">
+    <div className="timeline-container" style={isMobile?{}:{maxWidth:"960px",minWidth:"640px",marginRight:"auto"}} >
       {actions.map((action, index, arr) => (
         <div className="timeline-checkpoint" key={index}>
           <div className="timeline-content">
