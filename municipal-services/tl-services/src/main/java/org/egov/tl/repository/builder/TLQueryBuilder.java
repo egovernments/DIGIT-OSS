@@ -261,7 +261,10 @@ public class TLQueryBuilder {
         builder.append(" OR ( tl.status = ? AND tl.financialyear = (select max(financialyear) from eg_tl_tradelicense where licensenumber=tl.licensenumber)  )))  ");
         
         /* SELECT those applications for which there exist a rejected application for the current financial year, and financial year of this application should be just before that of the rejected application*/
-        builder.append("OR  ( tl.financialyear= (select max(financialyear) from eg_tl_tradelicense where licensenumber=tl.licensenumber and licensenumber in ( select licensenumber from eg_tl_tradelicense where status=? and financialyear=? ) and status<>?  )   ) ) ");
+        builder.append("OR  ( tl.financialyear= (select max(financialyear) from eg_tl_tradelicense where licensenumber=tl.licensenumber and licensenumber in ( select licensenumber from eg_tl_tradelicense where status=? and financialyear=? ) and status<>?  ) ");
+        
+        /*set status (approved) and validTo(before current timestamp) conditions*/
+        builder.append(" AND tl.status=? AND tl.validTo <= ? ) ) ");
         
         preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL); 
         preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL);
@@ -270,6 +273,8 @@ public class TLQueryBuilder {
         preparedStmtList.add(TLConstants.STATUS_REJECTED);
         preparedStmtList.add(criteria.getFinancialYear());
         preparedStmtList.add(TLConstants.STATUS_REJECTED);
+        preparedStmtList.add(TLConstants.STATUS_APPROVED);
+        preparedStmtList.add(System.currentTimeMillis()+renewalPeriod); 
 
 	}
 
