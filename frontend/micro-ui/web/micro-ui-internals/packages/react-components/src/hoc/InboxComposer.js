@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react"
+import React, { useState, Fragment, useEffect } from "react"
 import InboxLinks from "../atoms/InboxLinks"
 import Table from "../atoms/Table"
 import { SearchField, SearchForm } from "../molecules/SearchForm"
@@ -24,7 +24,8 @@ const InboxComposer = ({
     propsForInboxTable,
     onFilterFormSubmit,
     onFilterFormReset,
-    resetFilterFormDefaultValues 
+    resetFilterFormDefaultValues,
+    formState
 }) => {
     const { t } = useTranslation()
     const [ showMobileFilterFormPopup, setMobileFilterFormPopup ] = useState(false)
@@ -45,9 +46,11 @@ const InboxComposer = ({
         onSearchFormReset(setSearchFormValue)
     }
 
-    const onSubmitFilterForm = (data) => {
-        onFilterFormSubmit(data, setFilterFormValue)
-    }
+    useEffect(()=>{
+        resetFilterForm(formState?.filterForm)
+        resetSearchForm(formState?.searchForm)
+      }, [formState])
+    
 
     if (isMobile) {
         return <div className="InboxComposerWrapper">

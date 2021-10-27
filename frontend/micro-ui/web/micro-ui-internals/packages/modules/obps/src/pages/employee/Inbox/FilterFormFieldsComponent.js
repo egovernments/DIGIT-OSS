@@ -3,7 +3,7 @@ import { FilterFormField, Loader, RadioButtons, Localities, RemoveableTag, Dropd
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState}) => {
+const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState, getFilterFormValue}) => {
   const { t } = useTranslation()
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
@@ -79,31 +79,20 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
           name="locality"
           control={controlFilterForm}
           render={(props) => {
-            const [selectedLocalities, setSelectedLocalities] = useState(()=> props?.value || [])
-            const renderRemovableTokens = useMemo(()=>selectedLocalities?.map((locality, index) => {
+            const renderRemovableTokens = useMemo(()=>props?.value?.map((locality, index) => {
               return (
                 <RemoveableTag
-                  key={index}
-                  text={locality.i18nkey}
-                  onClick={() => {
-                    setSelectedLocalities(selectedLocalities?.filter((loc) => loc.code !== locality.code) )
-                    props.onChange(selectedLocalities?.filter((loc) => loc.code !== locality.code))
-                  }}
+                key={index}
+                text={locality.i18nkey}
+                onClick={() => {
+                  props.onChange(props?.value?.filter((loc) => loc.code !== locality.code))
+                }}
                 />
-              );
-            }),[selectedLocalities])
+                );
+              }),[props?.value])
             return <>
               <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
-              {/* <Dropdown option={localities} keepNull={true} selected={null} select={selectLocality} optionKey={"name"} /> */}
-              <Localities 
-              selectLocality={ (e) => {
-                  setSelectedLocalities([e, ...selectedLocalities])
-                  props.onChange([e, ...selectedLocalities])
-                } } 
-                tenantId={tenantId} 
-                boundaryType="revenue" 
-                optionCardStyles={{maxHeight:'350px'}}
-                />
+              <Localities selectLocality={ (e) => {props.onChange([e, ...props?.value])}} tenantId={tenantId} boundaryType="revenue" />
               <div className="tag-container">
                 {renderRemovableTokens}
               </div>
@@ -118,8 +107,6 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
         name="applicationStatus"
         control={controlFilterForm}
         render={(props) => {
-          // debugger
-          const [selectedStatuses, setSelectedStatuses] = useState(() => props.value)
           function changeItemCheckStatus(value){
             props.onChange(value)
           }

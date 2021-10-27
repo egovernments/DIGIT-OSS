@@ -58,7 +58,6 @@ const Inbox = ({parentRoute}) => {
     }
 
     const formInitValue = useMemo(() => {
-      // debugger
       return InboxObjectInSessionStorage || {
         filterForm: filterFormDefaultValues,
         searchForm: searchFormDefaultValues,
@@ -90,7 +89,7 @@ const Inbox = ({parentRoute}) => {
     const SearchFormFields = useCallback(({registerRef}) => <SearchFormFieldsComponents {...{registerRef}} />,[])
 
     const FilterFormFields = useCallback(
-      ({registerRef, controlFilterForm, setFilterFormValue}) => <FilterFormFieldsComponent {...{statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState: formState?.filterForm}} />
+      ({registerRef, controlFilterForm, setFilterFormValue, getFilterFormValue}) => <FilterFormFieldsComponent {...{statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState: formState?.filterForm, getFilterFormValue}} />
     ,[statuses, isInboxLoading])
 
     const onSearchFormSubmit = (data) => {
@@ -98,7 +97,7 @@ const Inbox = ({parentRoute}) => {
       console.log("find search form data here", data)  
     }
     
-    const onFilterFormSubmit = (data,setFilterFormValue) => {
+    const onFilterFormSubmit = (data) => {
       dispatch({action: "mutateFilterForm", data})
       console.log("find search form data here", data)
     }
@@ -107,9 +106,9 @@ const Inbox = ({parentRoute}) => {
 
     const propsForFilterForm = { FilterFormFields, onFilterFormSubmit, filterFormDefaultValues: formState?.filterForm, resetFilterFormDefaultValues: filterFormDefaultValues, onFilterFormReset }
 
-    const propsForInboxTable = useInboxTableConfig({...{ parentRoute, onPageSizeChange, formState, totalCount, table}})
+    const propsForInboxTable = useInboxTableConfig({...{ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch}})
 
-    return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable}}></InboxComposer>
+    return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable, formState}}></InboxComposer>
 }
 
 export default Inbox
