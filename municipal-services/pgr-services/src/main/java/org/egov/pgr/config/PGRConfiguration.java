@@ -170,7 +170,7 @@ public class PGRConfiguration {
     @Value("${egov.pgr.events.rate.link}")
     private String rateLink;
 
-    @Value("${egov.pgr.events.rate.link}")
+    @Value("${egov.pgr.events.reopen.link}")
     private String reopenLink;
 
     @Value("${egov.usr.events.rate.code}")
