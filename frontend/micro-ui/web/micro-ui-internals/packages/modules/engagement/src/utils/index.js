@@ -108,3 +108,11 @@ export const documentUploadMessage = (t, fileStoreId, editMode) => {
     return editMode ? fileStoreId?.fileStoreId?.length ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`) : fileStoreId ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)
 }
 
+export const checkValidFileType = (fileType) =>{
+    if(!fileType) return false;
+    const allowedFileType = /(.*?)(jpg|jpeg|png|image|pdf|msword|openxmlformats)$/i;
+    if(allowedFileType.test(fileType)){
+        return true;
+    }
+    return false;
+}

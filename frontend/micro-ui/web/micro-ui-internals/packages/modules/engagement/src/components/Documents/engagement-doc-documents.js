@@ -1,19 +1,20 @@
-import { CardLabel, LabelFieldPair, TextInput, UploadFile, CardLabelError } from "@egovernments/digit-ui-react-components";
+import { CardLabel, LabelFieldPair, TextInput, UploadFile, CardLabelError, Loader } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState, useMemo } from "react";
 import { Controller } from "react-hook-form";
 import { useLocation } from "react-router-dom";
-import { documentUploadMessage, getFileSize } from "../../utils";
+import { checkValidFileType, documentUploadMessage, getFileSize } from "../../utils";
 
 
 
-const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, register, errors, setError, clearErrors, formState, control }) => {
+const EngagementDocUploadDocument = ({ userType, t, onSelect, setValue, config, data, formData, register, errors, setError, clearErrors, formState, control }) => {
   const [fileStoreId, setFileStoreId] = useState(() => formData?.[config.key]?.filestoreId);
-  const [fileSize, setFileSize] = useState('');
+  const [fileSize, setFileSize] = useState(()=> formData?.[config.key]?.fileSize);
   const [fileType, setFileType] = useState('');
   const [file, setFile] = useState();
   const [urlDisabled, setUrlDisabled] = useState(false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [controllerProps, setProps] = useState({});
+  const [isUploadingImage, setIsUploadingImage] = useState(false)
   const [imageUploadError, setUploadError] = useState("")
 
   // TO BE UNCOMMENTED IF BOTH URL AND FILESTORE ID CANT BE SEND
@@ -28,14 +29,15 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
     setFileType()
     setUploadError("")
     if (!e.target?.files?.length) return
-
+  
     const size = e?.target?.files[0]?.size;
     const type = e?.target?.files[0]?.type;
     if (size && (size/1024/1024) > 5) {
       setUploadError('FILE_SIZE_EXCEEDED')
       return
     }
-    if (type && (type.includes('pdf') || type.includes('png') || type.includes('jpg') || type.includes('jpeg') || type.includes('msword') || type.includes('vnd.openxmlformats-officedocument.wordprocessingml.document'))) {
+   
+    if (type && checkValidFileType(type)) {
       setFileSize(size);
       setFileType(type);
       setProps(props);
@@ -63,6 +65,7 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
 
   const uploadFile = async () => {
     try {
+      setIsUploadingImage(true)
       const response = await Digit.UploadServices.Filestorage("engagement", file, Digit.ULBService.getStateId());
       if (response?.data?.files?.length > 0) {
         setFileStoreId(response?.data?.files[0]?.fileStoreId);
@@ -72,6 +75,8 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
 
     } catch (err) {
       console.error("Modal -> err ", err);
+    }finally{
+      setIsUploadingImage(false)
     }
   };
 
@@ -100,7 +105,7 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
                 accept="image/*, .pdf, .png, .jpeg, .doc"
                 showHintBelow={true}
                 hintText={t("DOCUMENTS_ATTACH_RESTRICTIONS_SIZE")}
-                message={documentUploadMessage(t, fileStoreId, isInEditFormMode)}
+                message={ isUploadingImage ? <Loader/> : documentUploadMessage(t, fileStoreId, isInEditFormMode)}
                 textStyles={{ width: "100%" }}
                 inputStyles={{ width: "280px" }}
               />
@@ -130,4 +135,4 @@ const SelectULB = ({ userType, t, onSelect, setValue, config, data, formData, re
   );
 };
 
-export default SelectULB;
+export default EngagementDocUploadDocument;

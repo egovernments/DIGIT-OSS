@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import { Controller } from "react-hook-form";
 import { isValid, format, startOfToday } from 'date-fns';
 
+const allowedFileTypes = /(.*?)(jpg|jpeg|png|image|pdf|msword|openxmlformats)$/i;
+
 const MessageForm = ({ onSelect, config, formData, register, control, errors, setError }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -104,6 +106,8 @@ const MessageForm = ({ onSelect, config, formData, register, control, errors, se
                   getFormState={getFileStoreData}
                   showHintBelow={true}
                   setuploadedstate={value}
+                  allowedFileTypesRegex={allowedFileTypes}
+                  allowedMaxSizeInMB={5}
                   hintText={t("DOCUMENTS_ATTACH_RESTRICTIONS_SIZE")}
                 />
             }
