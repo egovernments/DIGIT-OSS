@@ -45,16 +45,97 @@ const getTransformedLocale = label => {
     if (typeof label === "number") return label;
     return label && label.toUpperCase().replace(/[.:-\s\/]/g, "_");
 };
+const getTimeFormat = (epochTime) => {
+    epochTime = new Date(epochTime);
+    const Period = epochTime.getHours() < 12 ? "AM" : "PM";
+    const Format = epochTime.getHours() % 12 > 0 ? epochTime.getHours() % 12 : 12;
+    return Format.toString() + ":" + epochTime.toString().split(":")[1] + " " + Period;
+  };
+  const getDateFormat = (epochTime) => {
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+      "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    epochTime = new Date(epochTime);
+    const day = epochTime.getDate();
+    const Month = epochTime.getMonth();
+    return day.toString() + " " + monthNames[Month];
+  };
+  
+
+const getEventSLA = (item) => {
+    const days = (Date.now() - item.auditDetails.lastModifiedTime) / (1000 * 60 * 60 * 24);
+    let time;
+  let unit;
+    if (item.eventType === "EVENTSONGROUND") {
+      const disp = getDateFormat(item.eventDetails.fromDate) + " " + getTimeFormat(item.eventDetails.fromDate) + "-" + getDateFormat(item.eventDetails.toDate) + " " + getTimeFormat(item.eventDetails.toDate);
+      time="";
+      unit=disp;
+    } else {
+      if (days >= 60){
+        time=[Math.floor(days / 30)];
+        unit="EV_SLA_MONTH";
+      } 
+      else if (days >= 30){
+        time=[Math.floor(days / 30)];
+        unit="EV_SLA_MONTH_ONE";
+      } 
+      else if (days >= 14){
+        time=[Math.floor(days / 7)];
+        unit="EV_SLA_WEEK";
+      } 
+      else if (days >= 7) {
+        time=[Math.floor(days / 7)];
+        unit="EV_SLA_WEEK_ONE";
+      }
+      else if (days >= 2){
+        time=[Math.floor(days)];
+        unit="CS_SLA_DAY";
+      } 
+      else if (days >= 1){
+        time=[Math.floor(days)];
+        unit="EV_SLA_DAY_ONE";
+    } 
+      else if ((days % 1) * 24 >= 2) {
+        time=[Math.floor((days % 1) * 24)];
+        unit="EV_SLA_TIME";
+      }
+      else if ((days % 1) * 24 >= 1){
+        time=[Math.floor((days % 1) * 24)];
+        unit="EV_SLA_TIME_ONE";
+      }
+      else if ((days % 1) * 24 * 60 >= 2) {
+        time=[Math.floor((days % 1) * 24 * 60)];
+        unit="EV_SLA_MINUTE";
+      }
+      else if ((days % 1) * 24 * 60 >= 1) {
+        time=[Math.floor((days % 1) * 24 * 60)];
+        unit="EV_SLA_MINUTE_ONE";
+
+      }
+      else{
+        time="";
+        unit="CS_SLA_NOW";
+      }
+    }
+  
+    return {
+        time,unit
+    };
+  };
+
+
 
 const filterAllEvents = async(data, variant) => {
     const filteredEvents = data.filter(e => e.status === "ACTIVE")
     const events = []
     for(const e of filteredEvents){
         const actionDownloadLinks = e?.eventDetails?.documents?.length > 0 && e?.tenantId ? await fetchImageLinksFromFilestoreIds(e?.eventDetails?.documents, e?.tenantId) : []
+       const slaDetails=getEventSLA(e);
         events.push({
             ...e,
-            timePastAfterEventCreation: Math.round((new Date().getTime() - e?.auditDetails?.createdTime)/86400000),
-            timeApproxiamationInUnits: "CS_SLA_DAY",
+            timePastAfterEventCreation: slaDetails.time,
+            timeApproxiamationInUnits: slaDetails.unit,
+            //todo
             eventNotificationText: e?.description,
             header: e?.eventType === "SYSTEMGENERATED" ? getTransformedLocale(e?.name) : e?.name,
             eventType: e?.eventType,
