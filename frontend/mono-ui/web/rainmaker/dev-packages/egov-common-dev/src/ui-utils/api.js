@@ -64,7 +64,7 @@ export const httpRequest = async (
   /* Fix for central instance to send tenantID in all query params  */
   const tenantId = process.env.REACT_APP_NAME === "Citizen" ? commonConfig.tenantId:(endPoint&&endPoint.includes("mdms")?commonConfig.tenantId:getTenantId()) || commonConfig.tenantId ;
   if (!some(queryObject, ["key", "tenantId"])) {
-    queryObject &&
+    endPoint&&!endPoint.includes("tenantId")&&queryObject &&
       queryObject.push({
         key: "tenantId",
         value: tenantId,
