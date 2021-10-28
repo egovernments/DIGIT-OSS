@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { FormStep,Loader, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, Menu, MobileNumber, Card, OpenLinkContainer, BackButton } from "@egovernments/digit-ui-react-components";
-import { useLocation, useRouteMatch } from "react-router-dom";
+import { BackButton, CardLabel, FormStep, Loader, MobileNumber, RadioButtons, TextInput } from "@egovernments/digit-ui-react-components";
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import Timeline from "../components/Timeline";
 
 const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
@@ -8,10 +8,10 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const userInfo = Digit.UserService.getUser();
   let validation = {};
   const [name, setName] = useState(userInfo?.info?.name || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
-  const [email, setEmail] = useState( formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
+  const [email, setEmail] = useState(formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
   const [gender, setGender] = useState(formData?.LicneseDetails?.gender || formData?.formData?.LicneseDetails?.gender);
-  const [mobileNumber, setMobileNumber] = useState(userInfo?.info?.mobileNumber || 
-    formData?.LicneseDetails?.mobileNumber|| formData?.formData?.LicneseDetails?.mobileNumber || ""
+  const [mobileNumber, setMobileNumber] = useState(userInfo?.info?.mobileNumber ||
+    formData?.LicneseDetails?.mobileNumber || formData?.formData?.LicneseDetails?.mobileNumber || ""
   );
   const [PanNumber, setPanNumber] = useState(
     formData?.LicneseDetails?.PanNumber || formData?.formData?.LicneseDetails?.PanNumber || ""
@@ -20,17 +20,17 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const stateId = Digit.ULBService.getStateId();
 
   let isOpenLinkFlow = window.location.href.includes("openlink");
-  const isCitizenUrl = Digit.Utils.browser.isMobile()?true:false;
+  const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
-  const { isLoading,data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
+  const { isLoading, data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
 
   let menu = [];
   genderTypeData &&
-  genderTypeData["common-masters"].GenderType.filter(data => data.active).map((genderDetails) => {
+    genderTypeData["common-masters"].GenderType.filter(data => data.active).map((genderDetails) => {
       menu.push({ i18nKey: `COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
     });
-  
-    if (isLoading) return <Loader />;
+
+  if (isLoading) return <Loader />;
 
   function SelectName(e) {
     setName(e.target.value);
@@ -51,21 +51,19 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
 
   const goNext = () => {
-    
-    if(!(formData?.result && formData?.result?.Licenses[0]?.id))
-    {
-      let licenseDet = {name:name, mobileNumber:mobileNumber,gender:gender,email:email,PanNumber:PanNumber}
-      onSelect(config.key,licenseDet);
+
+    if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
+      let licenseDet = { name: name, mobileNumber: mobileNumber, gender: gender, email: email, PanNumber: PanNumber }
+      onSelect(config.key, licenseDet);
     }
-    else
-    {
+    else {
       let data = formData?.formData;
       data.LicneseDetails.name = name;
       data.LicneseDetails.mobileNumber = mobileNumber;
       data.LicneseDetails.gender = gender;
       data.LicneseDetails.email = email;
       data.LicneseDetails.PanNumber = PanNumber;
-      onSelect("",formData)
+      onSelect("", formData)
     }
 
   };
@@ -74,59 +72,58 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   return (
     <div>
-    <div className={isOpenLinkFlow? "OpenlinkContainer":""}>
-    {isOpenLinkFlow &&<OpenLinkContainer />}
-    <div style={isOpenLinkFlow?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}>
-    {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
-    <Timeline currentStep={1} flow="STAKEHOLDER" />
-    <FormStep
-      config={config}
-      onSelect={goNext}
-      onSkip={onSkip}
-      t={t}
-      isDisabled={!name || !mobileNumber || !gender }
-    >
-      <div>
-        <CardLabel>{`${t("BPA_APPLICANT_NAME_LABEL")}*`}</CardLabel>
-        <TextInput
+      <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
+
+        {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
+        <Timeline currentStep={1} flow="STAKEHOLDER" />
+        <FormStep
+          config={config}
+          onSelect={goNext}
+          onSkip={onSkip}
           t={t}
-          type={"text"}
-          isMandatory={false}
-          optionKey="i18nKey"
-          name="name"
-          value={name}
-          onChange={SelectName}
-          disable={name && !isOpenLinkFlow?true:false}
-          {...(validation = {
-            isRequired: true,
-            pattern: "^[a-zA-Z-.`' ]*$",
-            type: "text",
-            title: t("PT_NAME_ERROR_MESSAGE"),
-          })}
-        />
-        <CardLabel>{`${t("BPA_APPLICANT_GENDER_LABEL")}*`}</CardLabel>
-        <RadioButtons
-          t={t}
-          options={menu}
-          optionsKey="code"
-          name="gender"
-          value={gender}
-          selectedOption={gender}
-          onSelect={setGenderName}
-          isDependent={true}
-          labelKey="COMMON_GENDER"
-          //disabled={isUpdateProperty || isEditProperty}
-        />
-        <CardLabel>{`${t("BPA_OWNER_MOBILE_NO_LABEL")}*`}</CardLabel>
-        <MobileNumber
-          value={mobileNumber}
-          name="mobileNumber"
-          onChange={(value) => setMobileNo({ target: { value } })}
-          disable={mobileNumber && !isOpenLinkFlow?true:false}
-          {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
-        />
-        <CardLabel>{t("BPA_APPLICANT_EMAIL_LABEL")}</CardLabel>
-        <TextInput
+          isDisabled={!name || !mobileNumber || !gender}
+        >
+          <div>
+            <CardLabel>{`${t("BPA_APPLICANT_NAME_LABEL")}*`}</CardLabel>
+            <TextInput
+              t={t}
+              type={"text"}
+              isMandatory={false}
+              optionKey="i18nKey"
+              name="name"
+              value={name}
+              onChange={SelectName}
+              disable={name && !isOpenLinkFlow ? true : false}
+              {...(validation = {
+                isRequired: true,
+                pattern: "^[a-zA-Z-.`' ]*$",
+                type: "text",
+                title: t("PT_NAME_ERROR_MESSAGE"),
+              })}
+            />
+            <CardLabel>{`${t("BPA_APPLICANT_GENDER_LABEL")}*`}</CardLabel>
+            <RadioButtons
+              t={t}
+              options={menu}
+              optionsKey="code"
+              name="gender"
+              value={gender}
+              selectedOption={gender}
+              onSelect={setGenderName}
+              isDependent={true}
+              labelKey="COMMON_GENDER"
+            //disabled={isUpdateProperty || isEditProperty}
+            />
+            <CardLabel>{`${t("BPA_OWNER_MOBILE_NO_LABEL")}*`}</CardLabel>
+            <MobileNumber
+              value={mobileNumber}
+              name="mobileNumber"
+              onChange={(value) => setMobileNo({ target: { value } })}
+              disable={mobileNumber && !isOpenLinkFlow ? true : false}
+              {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+            />
+            <CardLabel>{t("BPA_APPLICANT_EMAIL_LABEL")}</CardLabel>
+            <TextInput
               t={t}
               type={"email"}
               isMandatory={false}
@@ -137,21 +134,20 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
               //disable={editScreen}
               {...{ required: true, pattern: "[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$", type: "email", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
             />
-        <CardLabel>{`${t("BPA_APPLICANT_PAN_NO")}`}</CardLabel>
-        <TextInput
-          t={t}
-          type={"text"}
-          isMandatory={false}
-          optionKey="i18nKey"
-          name="PanNumber"
-          value={PanNumber}
-          onChange={selectPanNumber}
-          {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
-        />
+            <CardLabel>{`${t("BPA_APPLICANT_PAN_NO")}`}</CardLabel>
+            <TextInput
+              t={t}
+              type={"text"}
+              isMandatory={false}
+              optionKey="i18nKey"
+              name="PanNumber"
+              value={PanNumber}
+              onChange={selectPanNumber}
+              {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
+            />
+          </div>
+        </FormStep>
       </div>
-    </FormStep>
-    </div>
-    </div>
     </div>
   );
 };

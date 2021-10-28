@@ -43,6 +43,7 @@ const useArchitectInbox = ({ tenantId, filters, withEDCRData = true, isTotalCoun
             const filters = { edcrNumber: application?.businessObject?.edcrNumber }
             return Search.scrutinyDetails('pb.amritsar', filters);
           });
+          try{
           const edcrData = await Promise.all(promises);
           data.items = data?.items?.map(application => ({
             ...application,
@@ -51,6 +52,10 @@ const useArchitectInbox = ({ tenantId, filters, withEDCRData = true, isTotalCoun
             }
             
           }));
+        }
+        catch(error){
+          console.error("error",error);
+        }
         }
         return data;
       },
@@ -61,6 +66,8 @@ const useArchitectInbox = ({ tenantId, filters, withEDCRData = true, isTotalCoun
               applicationId: application.businessObject.applicationNo,
               date: application.businessObject.applicationDate,
               businessService: application?.ProcessInstance?.businessService,
+              applicationType:application?.businessObject?.additionalDetails?.applicationType,
+              serviceType:application?.businessObject?.additionalDetails?.serviceType,
               locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
               status: application.businessObject.status,
               owner: application.ProcessInstance?.assigner?.name,

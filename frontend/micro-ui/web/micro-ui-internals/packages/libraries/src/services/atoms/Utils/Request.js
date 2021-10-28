@@ -7,6 +7,8 @@ Axios.interceptors.response.use(
     if (err?.response?.data?.Errors) {
       for (const error of err.response.data.Errors) {
         if (error.message.includes("InvalidAccessTokenException")) {
+          localStorage.clear();
+          sessionStorage.clear()
           window.location.href =
             (isEmployee ? "/digit-ui/employee/user/login" : "/digit-ui/citizen/login") +
             `?from=${encodeURIComponent(window.location.pathname + window.location.search)}`;

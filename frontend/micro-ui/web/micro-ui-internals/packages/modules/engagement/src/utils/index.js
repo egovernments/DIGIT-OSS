@@ -1,3 +1,4 @@
+import isToday from 'date-fns/isToday';
 export const aphabeticalSortFunctionForTenantsBasedOnName = (firstEl, secondEl) => {
     if (firstEl.name.toUpperCase() < secondEl.name.toUpperCase()) {
         return -1
@@ -116,3 +117,24 @@ export const checkValidFileType = (fileType) =>{
     }
     return false;
 }
+
+/**
+ * 
+ * So, this was really painful. While using DatePicker we set date as yyyymmdd and downside is it picks time as beginning of the day or 5:30 am and
+ * the api expects not just date but also time to be greater than actuall time right hence this.
+ * 
+ * what's really funny is I was testing this few days back at around 2:00 am and api was working fine(you can now understand why) no date errors, but then QA came back with invalid date issue and then it was all a spin roll from there. ALAS!
+ */
+export const handleTodaysDate = (dateString) =>{
+    let dateObject = new Date(dateString);
+    if(isToday(dateObject)){
+      const todaysDate = new Date();
+      dateObject = new Date(todaysDate.getFullYear(), todaysDate.getMonth(), todaysDate.getDate(), 23, 59);    
+    }
+    return dateObject.getTime();
+  }
+
+  //@saurabh @jagan we should actually be doing this in the TextImput Component where we setDate 
+  export const convertDateToMaximumPossibleValue = (dateObject) =>{
+    return new Date(dateObject.getFullYear(), dateObject.getMonth(), dateObject.getDate(), 23, 59)
+  }

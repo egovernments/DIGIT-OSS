@@ -1,8 +1,8 @@
-import { Banner, Card, CardText, LinkButton, Loader, Row, StatusTable, SubmitBar,OpenLinkContainer, BackButton  } from "@egovernments/digit-ui-react-components";
+import { BackButton, Banner, Card, CardText, LinkButton, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import {convertToStakeholderObject} from "../../../utils/index";
+import { convertToStakeholderObject } from "../../../utils/index";
 
 const GetActionMessage = (props) => {
   const { t } = useTranslation();
@@ -38,23 +38,23 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
   const mutation = Digit.Hooks.obps.useStakeholderAPI(
     data?.address?.city ? data.address?.city?.code : tenantId,
     true
-  ); 
-   const { data: storeData } = Digit.Hooks.useStore.getInitData();
+  );
+  const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
   let isOpenLinkFlow = window.location.href.includes("openlink");
-  const isCitizenUrl = Digit.Utils.browser.isMobile()?true:false;
+  const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
 
   useEffect(() => {
     try {
       let tenantId = data?.result?.Licenses[0]?.tenantId ? data?.result?.Licenses[0]?.tenantId : tenantId;
       data.tenantId = tenantId;
-      let formdata ={};
+      let formdata = {};
       formdata = convertToStakeholderObject(data);
       mutation.mutate(formdata, {
         onSuccess,
       });
-      
+
     } catch (err) {
       console.log(err, "inside ack");
     }
@@ -72,32 +72,32 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
     <Loader />
   ) : (
     <div>
-    <div className={isOpenLinkFlow? "OpenlinkContainer":""}>
-    {isOpenLinkFlow &&<OpenLinkContainer />}
-    <div style={isOpenLinkFlow?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}>
-    {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
-    <Card>
-      <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
-      {mutation.isSuccess && <CardText>{t("CS_FILE_STAKEHOLDER_RESPONSE")}</CardText>}
-      {!mutation.isSuccess && <CardText>{t("CS_FILE_PROPERTY_FAILED_RESPONSE")}</CardText>}
-      {(mutation.isSuccess && !isOpenLinkFlow) && <Link to={{
-        pathname: `/digit-ui/citizen/payment/collect/${mutation.data.Licenses[0].businessService}/${mutation.data.Licenses[0].applicationNumber}/${mutation.data.Licenses[0].tenantId}?tenantId=${mutation.data.Licenses[0].tenantId}`,
-        state: { tenantId: mutation.data.Licenses[0].tenantId },
-      }}>
-        <SubmitBar label={t("COMMON_MAKE_PAYMENT")} />
-      </Link>}
-      {!isOpenLinkFlow && <Link to={`/digit-ui/citizen`}>
-        <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
-      </Link>}
-      {(mutation.isSuccess && isOpenLinkFlow) && <Link to={{
-        pathname: `/digit-ui/citizen`,
-      }}>
-        <SubmitBar label={t("BPA_COMMON_PROCEED_NEXT")} />
-      </Link>}
-    </Card>
+      <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
+        {/* {isOpenLinkFlow &&<OpenLinkContainer />}
+    <div style={isOpenLinkFlow?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}> */}
+        {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
+        <Card>
+          <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
+          {mutation.isSuccess && <CardText>{t("CS_FILE_STAKEHOLDER_RESPONSE")}</CardText>}
+          {!mutation.isSuccess && <CardText>{t("CS_FILE_PROPERTY_FAILED_RESPONSE")}</CardText>}
+          {(mutation.isSuccess && !isOpenLinkFlow) && <Link to={{
+            pathname: `/digit-ui/citizen/payment/collect/${mutation.data.Licenses[0].businessService}/${mutation.data.Licenses[0].applicationNumber}/${mutation.data.Licenses[0].tenantId}?tenantId=${mutation.data.Licenses[0].tenantId}`,
+            state: { tenantId: mutation.data.Licenses[0].tenantId },
+          }}>
+            <SubmitBar label={t("COMMON_MAKE_PAYMENT")} />
+          </Link>}
+          {!isOpenLinkFlow && <Link to={`/digit-ui/citizen`}>
+            <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
+          </Link>}
+          {(mutation.isSuccess && isOpenLinkFlow) && <Link to={{
+            pathname: `/digit-ui/citizen`,
+          }}>
+            <SubmitBar label={t("BPA_COMMON_PROCEED_NEXT")} />
+          </Link>}
+        </Card>
+      </div>
     </div>
-    </div>
-    </div>
+    // </div>
   );
 };
 

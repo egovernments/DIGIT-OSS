@@ -3,6 +3,13 @@ import { useTranslation } from "react-i18next";
 import MobileInbox from "./MobileInbox";
 import DesktopInbox from "./DesktopInbox";
 
+const headerStyle={
+  fontSize: "30px",
+  fontWeight:"700",
+    marginTop: "-10px",
+    marginLeft: "15px"
+}
+
 const Inbox = ({ tenants, parentRoute }) => {
   const { t } = useTranslation()
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -82,6 +89,8 @@ const Inbox = ({ tenants, parentRoute }) => {
             applicationId: application.businessObject.applicationNumber,
             date: application.businessObject.applicationDate,
             businessService: application?.ProcessInstance?.businessService,
+            applicationType:application?.businessObject?.additionalDetails?.applicationType,
+            serviceType:application?.businessObject?.additionalDetails?.serviceType,
             locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
             status: application.businessObject.status,
             owner: application.ProcessInstance?.assigner?.name,
@@ -99,7 +108,9 @@ const Inbox = ({ tenants, parentRoute }) => {
     sortBy: sortParams?.[0]?.id,
     sortOrder: sortParams?.[0]?.sortOrder
   }, {
-    enabled: true
+    enabled: true,
+    retry:false,
+    staleTime: Infinity
   },
   "OBPS_SCRUTINYDETAILS_ALL"
   )
@@ -147,6 +158,8 @@ const Inbox = ({ tenants, parentRoute }) => {
 
   if (isMobile) {
     return (
+      <React.Fragment>
+         <h2 style={headerStyle} >{`${t("ES_INBOX")} ( ${bpaInboxData?.totalCount||0} )`}</h2>
       <MobileInbox
         bparegData={table}
         edcrData={edcrData || []}
@@ -164,6 +177,7 @@ const Inbox = ({ tenants, parentRoute }) => {
         iconName={"calender"}
         links={links}
       />
+      </React.Fragment>
     )
   }
 

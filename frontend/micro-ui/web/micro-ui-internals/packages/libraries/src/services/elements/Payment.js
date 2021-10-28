@@ -104,8 +104,8 @@ export const PaymentService = {
 
   recieptSearch: (tenantId, businessService, params) =>
     Request({
-      url: (businessService === "BPAREG" && !params?.isEmployee) ? Urls.payment.obps_Reciept_Search : Urls.payment.reciept_search,
-      urlParams: (businessService === "BPAREG" && !params?.isEmployee) ? {}:{ buisnessService: businessService },
+      url: ((businessService === "BPAREG" && !params?.isEmployee) || businessService.includes("BPA.") && !params?.isEmployee ) ? Urls.payment.obps_Reciept_Search : Urls.payment.reciept_search,
+      urlParams: (businessService === "BPAREG" && !params?.isEmployee || businessService.includes("BPA.") && !params?.isEmployee) ? {}:{ buisnessService: businessService },
       method: "POST",
       // do not change this directly add a param if needed
       auth: true,

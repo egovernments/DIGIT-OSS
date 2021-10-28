@@ -22,11 +22,11 @@ const DesktopInbox = (props) => {
       },
       {
         Header: t('BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL'),
-        accessor: (row) => row?.edcr?.appliactionType
+        accessor: (row) => t(row?.applicationType||"NA")
       },
       {
         Header: t('BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL'),
-        accessor: row => row?.edcr?.applicationSubType
+        accessor: row => t(row?.serviceType||"NA")
       },
       {
         Header: t('BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL'),
@@ -34,7 +34,7 @@ const DesktopInbox = (props) => {
       },
       {
         Header: t('TL_COMMON_TABLE_COL_STATUS'),
-        accessor: 'status'
+        accessor: row => t(row?.status||"NA")
       },
       {
         Header: t('BPA_COMMON_SLA'),

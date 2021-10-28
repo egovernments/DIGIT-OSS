@@ -17,10 +17,10 @@ const MobileInbox = ({ data, edcrData = [], t, statusMap, bparegData, title, ico
       }
       return {
         [t('BPA_COMMON_APP_NO')]: row?.applicationId,
-        [t('BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL')]: row?.edcr?.appliactionType || t(`OBPS_NOT_APPLICAPABLE`),
-        [t('BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL')]: row?.edcr?.applicationSubType || t(`OBPS_NOT_APPLICAPABLE`),
+        [t('BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL')]: row?.applicationType && t(row?.applicationType) || t(`OBPS_NOT_APPLICAPABLE`),
+        [t('BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL')]: row?.serviceType && t(row?.serviceType ) || t(`OBPS_NOT_APPLICAPABLE`),
         [t('BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL')]: row?.owner,
-        [t('TL_COMMON_TABLE_COL_STATUS')]: row?.status,
+        [t('TL_COMMON_TABLE_COL_STATUS')]: row?.status&& t(row?.status ),
         [t('BPA_COMMON_SLA')]: row?.sla,
       }
     })

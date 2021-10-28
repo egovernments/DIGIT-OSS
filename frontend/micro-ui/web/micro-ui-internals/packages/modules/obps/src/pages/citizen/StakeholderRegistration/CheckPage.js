@@ -40,7 +40,7 @@ import {
     return (
     <React.Fragment>
     <div className={isopenlink? "OpenlinkContainer":""}>
-    {isopenlink &&<OpenLinkContainer />}
+    {/* {isopenlink &&<OpenLinkContainer />} */}
     <div style={isopenlink?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}>
     {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
     <Timeline currentStep={4} flow="STAKEHOLDER" />

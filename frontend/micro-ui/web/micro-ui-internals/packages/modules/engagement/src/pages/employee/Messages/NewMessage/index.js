@@ -3,6 +3,9 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { FormComposer, Header, Loader } from "@egovernments/digit-ui-react-components";
 import { config } from "../../NewMessageConfig";
+import {handleTodaysDate} from "../../../../utils";
+
+
 
 const NewEvents = () => {
   const { t } = useTranslation();
@@ -21,8 +24,8 @@ const NewEvents = () => {
           name,
           eventDetails: {
             documents,
-            fromDate: new Date(`${fromDate}`).getTime(),
-            toDate: new Date(`${toDate}`).getTime(),
+            fromDate: handleTodaysDate(`${fromDate}`),
+            toDate: handleTodaysDate(`${toDate}`),
           }
         }
       ]

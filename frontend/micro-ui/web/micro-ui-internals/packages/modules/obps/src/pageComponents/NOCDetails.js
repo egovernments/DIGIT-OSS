@@ -104,7 +104,12 @@ const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setForm
         nocDocumentStep = { ...nocDocument, nocDocuments: nocDocuments, NocDetails: nocDatils, nocTaxDocuments: nocTaxDocuments };
         onSelect(config.key, nocDocumentStep);
     };
-    const onSkip = () => onSelect();
+    const onSkip = () =>{ 
+        let nocDocument = formData.nocDocuments;
+        let nocDocumentStep;
+        nocDocumentStep = { ...nocDocument, nocDocuments: nocDocuments, NocDetails: nocDatils, nocTaxDocuments: nocTaxDocuments };
+        onSelect(config.key, nocDocumentStep);
+    };
     function onAdd() { }
     
     // useEffect(() => {
