@@ -1,4 +1,4 @@
-import { CardHeader, Header, Toast, Card, StatusTable, Row, Loader, Menu, PDFSvg, SubmitBar, LinkButton, ActionBar, CheckBox, MultiLink } from "@egovernments/digit-ui-react-components";
+import { CardHeader, Header, Toast, Card, StatusTable, Row, Loader, Menu, PDFSvg, SubmitBar, LinkButton, ActionBar, CheckBox, MultiLink, CardText } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useQueryClient } from "react-query";
@@ -93,9 +93,9 @@ const BpaApplicationDetail = () => {
 
   async function getRecieptSearch({tenantId,payments,...params}) {
     let response = { filestoreIds: [payments?.fileStoreId] };
-    if (!payments?.fileStoreId) {
+    //if (!payments?.fileStoreId) {
       response = await Digit.PaymentService.generatePdf(tenantId, { Payments: [{...payments}] }, "consolidatedreceipt");
-    }
+    //}
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
@@ -301,12 +301,13 @@ const BpaApplicationDetail = () => {
         {detail?.additionalDetails?.noc && detail?.additionalDetails?.noc.map((nocob, ind) => (
         <div key={ind}>
         <StatusTable>
-        <Row className="border-none" label={t(`BPA_${nocob?.values?.[0]?.documentType.replaceAll(".","_")}_HEADER`)}></Row>
+        <Row className="border-none" label={nocob?.values?.[0]?.documentType?t(`BPA_${nocob?.values?.[0]?.documentType.replaceAll(".","_")}_HEADER`):t(`${detail?.values?.[0]?.title.slice(0,-5)}HEADER`)}></Row>
         <Row className="border-none" label={t(`${detail?.values?.[0]?.title}`)} textStyle={{marginLeft:"10px"}} text={getTranslatedValues(detail?.values?.[0]?.value , detail?.values?.[0]?.isNotTranslated)} />
         <Row className="border-none" label={t(`${nocob?.title}`)}></Row>
         </StatusTable>
         <StatusTable>
-        <OBPSDocument value={nocob?.values} Code={nocob?.values?.[0]?.documentType?.split("_")[0]} index={ind} isNOC={true}/> 
+        {nocob?.values ? <OBPSDocument value={nocob?.values} Code={nocob?.values?.[0]?.documentType?.split("_")[0]} index={ind} isNOC={true}/>:
+        <div><CardText>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</CardText></div> }
         </StatusTable>
         </div>
       ))}

@@ -47,7 +47,7 @@ const BpaApplicationDetail = () => {
 
   useEffect(async() => {
     businessService.length > 0 && businessService.map((buss,index) => {
-      let res = Digit.PaymentService.recieptSearch(data?.applicationData?.tenantId, buss, {consumerCodes: data?.applicationData?.applicationNo}).then((value) => {
+      let res = Digit.PaymentService.recieptSearch(data?.applicationData?.tenantId, buss, {consumerCodes: data?.applicationData?.applicationNo, isEmployee:true}).then((value) => {
 
        value?.Payments[0] && !(payments.filter((val) => val?.id ===value?.Payments[0].id).length>0) && setpayments([...payments,...value?.Payments]);  
       });
@@ -77,9 +77,9 @@ const BpaApplicationDetail = () => {
 
   async function getRecieptSearch({tenantId,payments,...params}) {
     let response = { filestoreIds: [payments?.fileStoreId] };
-    if (!payments?.fileStoreId) {
+    //if (!payments?.fileStoreId) {
       response = await Digit.PaymentService.generatePdf(tenantId, { Payments: [{...payments}] }, "consolidatedreceipt");
-    }
+    //}
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }

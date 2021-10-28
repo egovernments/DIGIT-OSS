@@ -30,6 +30,8 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
     },[register])
 
     //need to get from workflow
+    const [currPage, setCurrPage] = useState(getValues("offset")/getValues("limit"));
+
 
     if(applicationTypes && applicationTypes.length>0)
     {
@@ -119,7 +121,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
     }
 
     function getselectedServiceType(data){
-        if(data && data.code!== serviceType.code) data=serviceType;
+        if(data && serviceType && data?.code !== serviceType.code) data=serviceType;
         return data?data:(serviceType?serviceType:defaultserviceType);
     }
     
@@ -200,6 +202,12 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
         setValue("offset", getValues("offset") - getValues("limit") )
         handleSubmit(onSubmit)()
     }
+
+    useEffect(() => {
+        // setValue("offset",getValues("offset"));
+        // setValue("limit",getValues("limit"));
+        setCurrPage(getValues("offset")/getValues("limit"));
+    },[getValues("offset"),getValues("limit")])
 
     return <React.Fragment>
                 <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
@@ -333,7 +341,8 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
                 };
                 }}
                 onPageSizeChange={onPageSizeChange}
-                currentPage={getValues("offset")/getValues("limit")}
+                //currentPage={getValues("offset")/getValues("limit")}
+                currentPage={currPage}
                 onNextPage={nextPage}
                 onPrevPage={previousPage}
                 pageSizeLimit={getValues("limit")}
