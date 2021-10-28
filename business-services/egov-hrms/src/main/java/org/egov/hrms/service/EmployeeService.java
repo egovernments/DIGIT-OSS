@@ -138,7 +138,7 @@ public class EmployeeService {
 	 * @param requestInfo
 	 * @return
 	 */
-	public EmployeeResponse search(EmployeeSearchCriteria criteria, RequestInfo requestInfo) {
+	public EmployeeResponse search(EmployeeSearchCriteria criteria, RequestInfo requestInfo, String headerTenantId) {
 		boolean  userChecked = false;
 		/*if(null == criteria.getIsActive() || criteria.getIsActive())
 			criteria.setIsActive(true);
@@ -196,7 +196,7 @@ public class EmployeeService {
 
 		List <Employee> employees = new ArrayList<>();
         if(!((!CollectionUtils.isEmpty(criteria.getRoles()) || !CollectionUtils.isEmpty(criteria.getNames()) || !StringUtils.isEmpty(criteria.getPhone())) && CollectionUtils.isEmpty(criteria.getUuids())))
-            employees = repository.fetchEmployees(criteria, requestInfo);
+            employees = repository.fetchEmployees(criteria, requestInfo, headerTenantId);
         List<String> uuids = employees.stream().map(Employee :: getUuid).collect(Collectors.toList());
 		if(!CollectionUtils.isEmpty(uuids)){
             Map<String, Object> UserSearchCriteria = new HashMap<>();
@@ -339,7 +339,7 @@ public class EmployeeService {
 			uuidList.add(employee.getUuid());
 		}
 		String tenantId = employeeRequest.getEmployees().get(0).getTenantId();
-		EmployeeResponse existingEmployeeResponse = search(EmployeeSearchCriteria.builder().uuids(uuidList).tenantId(tenantId).build(),requestInfo);
+		EmployeeResponse existingEmployeeResponse = search(EmployeeSearchCriteria.builder().uuids(uuidList).tenantId(tenantId).build(),requestInfo, tenantId);
 		List <Employee> existingEmployees = existingEmployeeResponse.getEmployees();
 		employeeRequest.getEmployees().stream().forEach(employee -> {
 			enrichUpdateRequest(employee, requestInfo, existingEmployees);

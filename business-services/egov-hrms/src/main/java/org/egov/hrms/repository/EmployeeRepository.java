@@ -46,7 +46,7 @@ public class EmployeeRepository {
 	 * @param requestInfo
 	 * @return
 	 */
-	public List<Employee> fetchEmployees(EmployeeSearchCriteria criteria, RequestInfo requestInfo){
+	public List<Employee> fetchEmployees(EmployeeSearchCriteria criteria, RequestInfo requestInfo, String headerTenantId){
 		List<Employee> employees = new ArrayList<>();
 		List<Object> preparedStmtList = new ArrayList<>();
 		if(hrmsUtils.isAssignmentSearchReqd(criteria)) {
@@ -62,6 +62,8 @@ public class EmployeeRepository {
 		}
 		String query = queryBuilder.getEmployeeSearchQuery(criteria, preparedStmtList);
 		String tenantId = !ObjectUtils.isEmpty(criteria.getTenantId()) ? criteria.getTenantId() : criteria.getCentralInstanceTenantId();
+		if(ObjectUtils.isEmpty(tenantId))
+			tenantId = headerTenantId;
 
 		String finalQuery = "";
 
