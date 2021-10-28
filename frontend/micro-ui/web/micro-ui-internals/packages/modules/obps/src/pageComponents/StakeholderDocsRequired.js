@@ -27,8 +27,8 @@ const StakeholderDocsRequired = ({ onSelect, onSkip, config }) => {
   return (
     <Fragment>
       <div className={isopenlink? "OpenlinkContainer":""}>
-      {isopenlink &&<OpenLinkContainer />}
-      <div style={isopenlink?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}>
+      {/* {isopenlink &&<OpenLinkContainer />} */}
+      {/* <div style={isopenlink?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}> */}
       <Card>
         <CardHeader>{t(`BPA_NEW_BUILDING_HEADER`)}</CardHeader>
         <CitizenInfoLabel style={{margin:"0px",textAlign:"center"}} textStyle={{color:"#0B0C0C"}} text={t(`BPA_DOCS_REQUIRED_TIME`)} showInfo={false} />
@@ -48,7 +48,7 @@ const StakeholderDocsRequired = ({ onSelect, onSkip, config }) => {
       </Card>
       <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t(`OBPS_DOCS_FILE_SIZE`)} />
       </div>
-      </div>
+      {/* </div> */}
     </Fragment>
   );
 };

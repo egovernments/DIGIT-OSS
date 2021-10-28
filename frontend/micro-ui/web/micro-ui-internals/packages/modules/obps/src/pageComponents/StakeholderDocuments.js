@@ -91,8 +91,8 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     return (
         <div>
             <div className={isopenlink? "OpenlinkContainer":""}>
-            {isopenlink &&<OpenLinkContainer />}
-            <div style={isopenlink?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}>
+            {/* {isopenlink &&<OpenLinkContainer />} */}
+            {/* <div style={isopenlink?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}> */}
             {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
             <Timeline currentStep={3} flow="STAKEHOLDER" />
             {!isLoading ?
@@ -125,7 +125,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                 {!(formData?.initiationFlow) && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={`${t("BPA_APPLICATION_NUMBER_LABEL")} ${formData?.result?.Licenses?.[0]?.applicationNumber} ${t("BPA_DOCS_INFORMATION")}`} />}
                 </div>
             </div>
-        </div>
+        // </div>
     );
 }
 
