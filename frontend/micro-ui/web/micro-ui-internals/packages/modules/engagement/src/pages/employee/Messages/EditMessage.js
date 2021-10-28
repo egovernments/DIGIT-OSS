@@ -4,7 +4,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { format } from 'date-fns';
 import { FormComposer, Header, Loader } from "@egovernments/digit-ui-react-components";
 import { config } from "../NewMessageConfig";
-import { isNestedArray, reduceDocsArray } from "../../../utils";
+import { isNestedArray, reduceDocsArray, handleTodaysDate } from "../../../utils";
 
 const EditMessage = () => {
   const { t } = useTranslation();
@@ -37,8 +37,8 @@ const EditMessage = () => {
           name,
           eventDetails: {
             documents : finalDocuments,
-            fromDate: new Date(`${fromDate}`).getTime(),
-            toDate: new Date(`${toDate}`).getTime(),
+            fromDate: handleTodaysDate(`${fromDate}`),
+            toDate: handleTodaysDate(`${toDate}`),
           }
         }
       ]
