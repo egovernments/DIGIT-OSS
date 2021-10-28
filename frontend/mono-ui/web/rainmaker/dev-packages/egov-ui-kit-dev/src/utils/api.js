@@ -118,7 +118,7 @@ export const httpRequest = async (
     /* if (!some(queryObject, ["key", "tenantId"]) && !ignoreTenantId) { */
     /* Fix for central instance to send tenantID in all query params  */
   if (!some(queryObject, ["key", "tenantId"])) {
-    queryObject &&
+    endPoint&&!endPoint.includes("tenantId")&&queryObject &&
       queryObject.push({
         key: "tenantId",
         value: tenantId,
