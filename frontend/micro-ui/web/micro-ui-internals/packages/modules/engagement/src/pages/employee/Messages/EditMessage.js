@@ -1,10 +1,10 @@
-import React, { Fragment, useMemo } from "react";
+import { FormComposer, Header, Loader } from "@egovernments/digit-ui-react-components";
+import { format } from 'date-fns';
+import React, { Fragment, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
-import { format } from 'date-fns';
-import { FormComposer, Header, Loader } from "@egovernments/digit-ui-react-components";
+import { handleTodaysDate, isNestedArray, reduceDocsArray } from "../../../utils";
 import { config } from "../NewMessageConfig";
-import { isNestedArray, reduceDocsArray, handleTodaysDate } from "../../../utils";
 
 const EditMessage = () => {
   const { t } = useTranslation();
@@ -12,19 +12,29 @@ const EditMessage = () => {
   const { id: MessageId } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { isLoading, data } = Digit.Hooks.events.useInbox(tenantId, {},
-  { eventTypes: "BROADCAST",
-    ids: MessageId
-  }, 
-  {
-    select: (data) => data?.events?.[0]
-  });
+    {
+      eventTypes: "BROADCAST",
+      ids: MessageId
+    },
+    {
+      select: (data) => data?.events?.[0]
+    });
+  const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MSG_MUTATION_HAPPENED", false);
+  const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("EMPLOYEE_MSG_ERROR_DATA", false);
+  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MSG_MUTATION_SUCCESS_DATA", false);
+
+  useEffect(() => {
+    setMutationHappened(false);
+    clearSuccessData();
+    clearError();
+  }, []);
 
   const onSubmit = (formData) => {
     const { fromDate, toDate, description, name, documents } = formData;
-    
-    
+
+
     const finalDocuments = isNestedArray(documents) ? reduceDocsArray(documents) : documents;
-  
+
     const details = {
       events: [
         {
@@ -36,7 +46,7 @@ const EditMessage = () => {
           description,
           name,
           eventDetails: {
-            documents : finalDocuments,
+            documents: finalDocuments,
             fromDate: handleTodaysDate(`${fromDate}`),
             toDate: handleTodaysDate(`${toDate}`),
           }
@@ -51,11 +61,11 @@ const EditMessage = () => {
     return {
       name: data?.name,
       description: data?.description,
-      documents: documents?.map(e => [e.fileName, {file: {name: e.fileName, type: e.documentType}, fileStoreId: {fileStoreId: e.fileStoreId, tenantId}}] ),
+      documents: documents?.map(e => [e.fileName, { file: { name: e.fileName, type: e.documentType }, fileStoreId: { fileStoreId: e.fileStoreId, tenantId } }]),
       fromDate: data ? format(new Date(data?.eventDetails?.fromDate), 'yyyy-MM-dd') : null,
       toDate: data ? format(new Date(data?.eventDetails?.toDate), 'yyyy-MM-dd') : null,
     }
-  },[data])
+  }, [data])
 
   if (isLoading) {
     return (
