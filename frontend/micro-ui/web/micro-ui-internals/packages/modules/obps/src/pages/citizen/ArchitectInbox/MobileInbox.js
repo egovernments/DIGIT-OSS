@@ -11,7 +11,7 @@ const MobileInbox = ({ data, edcrData = [], t, statusMap, bparegData, title, ico
           [t('BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL')]: row?.appliactionType,
           [t('BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL')]: row?.applicationSubType,
           [t('BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL')]: row?.planDetail?.planInformation?.applicantName,
-          [t('TL_COMMON_TABLE_COL_STATUS')]: row?.status,
+          [t('TL_COMMON_TABLE_COL_STATUS')]: t(`WF_BPA_${row?.status}`),
           [t('BPA_COMMON_SLA')]: t(`OBPS_NOT_APPLICAPABLE`),
         }
       }
@@ -20,7 +20,7 @@ const MobileInbox = ({ data, edcrData = [], t, statusMap, bparegData, title, ico
         [t('BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL')]: row?.applicationType && t(row?.applicationType) || t(`OBPS_NOT_APPLICAPABLE`),
         [t('BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL')]: row?.serviceType && t(row?.serviceType ) || t(`OBPS_NOT_APPLICAPABLE`),
         [t('BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL')]: row?.owner,
-        [t('TL_COMMON_TABLE_COL_STATUS')]: row?.status&& t(row?.status ),
+        [t('TL_COMMON_TABLE_COL_STATUS')]: row?.status&& t(`WF_BPA_${row?.status}`),
         [t('BPA_COMMON_SLA')]: row?.sla,
         "serviceType":{value:row?.businessService,hidden:true}
       }

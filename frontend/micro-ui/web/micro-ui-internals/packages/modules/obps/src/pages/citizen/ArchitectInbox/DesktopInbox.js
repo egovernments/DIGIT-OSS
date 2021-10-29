@@ -35,7 +35,7 @@ const DesktopInbox = (props) => {
       },
       {
         Header: t('TL_COMMON_TABLE_COL_STATUS'),
-        accessor: row => t(row?.status || "NA")
+        accessor: row => t(`WF_BPA_${row?.status}`||"NA")
       },
       {
         Header: t('BPA_COMMON_SLA'),

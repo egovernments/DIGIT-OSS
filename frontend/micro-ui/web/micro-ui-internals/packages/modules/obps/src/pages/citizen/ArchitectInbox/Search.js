@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
-import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker } from "@egovernments/digit-ui-react-components";
+import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardHeader, } from "@egovernments/digit-ui-react-components";
 
 const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPage, t }) => {
   const { register, handleSubmit, formState, reset, watch, control } = useForm({
@@ -50,15 +50,15 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
         <div className="search-complaint-container">
           {(type === "mobile" || mobileView) && (
             <div className="complaint-header">
-              <h2>{t("ES_COMMON_SEARCH_BY")}</h2>
-              <span onClick={onClose}>
+              <h2 style={{fontWeight:"700", fontSize:"24px", marginTop:"30px"}}>{t("BPA_SEARCH_BY_LABEL")}:</h2>
+              <span onClick={onClose} style={{position:"relative",float:"right",marginTop:"-60px"}}>
                 <CloseSvg />
               </span>
             </div>
           )}
           <div className={"complaint-input-container for-pt " + (!isInboxPage ? "for-search" : "")} style={{ width: "100%" }}>
             {searchFields?.map((input, index) => (
-              <div key={input.name} className="input-fields">
+              <div key={input.name} className="input-fields" style={mobileView?{marginTop:"30px"}:{}}>
                 {/* <span className={index === 0 ? "complaint-input" : "mobile-input"}> */}
                 <span className={"mobile-input"}>
                   <Label>{t(input.label) + ` ${input.isMendatory ? "*" : ""}`}</Label>
@@ -80,9 +80,9 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
       </div>
       {(type === "mobile" || mobileView) && (
         <ActionBar className="clear-search-container">
-          <button className="clear-search" style={{ flex: 1 }}>
+          {/* <button className="clear-search" style={{ flex: 1 }}>
             {clearAll(mobileView)}
-          </button>
+          </button> */}
           <SubmitBar disabled={!!Object.keys(formState.errors).length} label={t("ES_COMMON_SEARCH")} style={{ flex: 1 }} submit={true} />
         </ActionBar>
       )}
