@@ -122,19 +122,17 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
             {/* )} */}
 
             {type === "desktop" && !mobileView && (
-              <div style={{ maxWidth: "unset", marginLeft: "unset" }} className="search-submit-wrapper">
-                <SubmitBar
-                  className="submit-bar-search"
-                  label={t("ES_COMMON_SEARCH")}
-                  // disabled={!!Object.keys(formState.errors).length || formValueEmpty()}
-                  submit
-                />
-                {/* style={{ paddingTop: "16px", textAlign: "center" }} className="clear-search" */}
-              </div>
-            )}
-            {type === "desktop" && !mobileView && (
-              <div className="document-clear-all">{clearAll()}</div>)
-            }
+                <div style={{ maxWidth: "unset", marginLeft: "unset", marginTop: "55px"}} className="search-submit-wrapper">
+                  <SubmitBar
+                    className="submit-bar-search"
+                    label={t("ES_COMMON_SEARCH")}
+                    // disabled={!!Object.keys(formState.errors).length || formValueEmpty()}
+                    submit
+                  />
+                  {/* style={{ paddingTop: "16px", textAlign: "center" }} className="clear-search" */}
+                  <div>{clearAll()}</div>
+                </div>
+              )}
           </div>
         </div>
       </div>

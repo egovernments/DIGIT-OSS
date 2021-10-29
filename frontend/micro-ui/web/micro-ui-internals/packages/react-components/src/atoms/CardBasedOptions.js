@@ -13,7 +13,7 @@ const CardBasedOptions = ({header, sideOption, options, styles={}}) => {
             <h2>{header}</h2>
             <p onClick={sideOption.onClick}>{sideOption.name}</p>
         </div>
-        <div className="mainContent" style={styles}>
+        <div className="mainContent citizenAllServiceGrid">
             {options.map( (props, index) => 
                 <Option key={index} {...props} />
             )}

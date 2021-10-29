@@ -61,10 +61,10 @@ const Inbox = ({ tenants, parentRoute }) => {
         name: "ulb",
         type: "ulb",
       },
-      {
+      /* {
         name: "range",
         type: "range"
-      },
+      }, */
       {
         label: t("EVENTS_MESSAGE_LABEL"),
         name: "name"

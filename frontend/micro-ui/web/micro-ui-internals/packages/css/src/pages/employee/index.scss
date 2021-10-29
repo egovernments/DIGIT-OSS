@@ -334,3 +334,7 @@
 .mb-25{
   margin-bottom: 25px;
 }
+
+.citizenAllServiceGrid{
+  @apply grid grid-cols-2 gap-4;
+}
