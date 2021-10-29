@@ -268,6 +268,12 @@ public class TLConfiguration {
 	@Value("${egov.usr.events.pay.triggers}")
 	private String payTriggers;
 
+    //Email
+    @Value("${kafka.topics.notification.email}")
+    private String emailNotifTopic;
+
+    @Value("${notification.email.enabled}")
+    private Boolean isEmailNotificationEnabled;
 
 
 	//Reminder

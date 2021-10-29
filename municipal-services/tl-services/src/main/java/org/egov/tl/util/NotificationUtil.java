@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.egov.tl.util.TLConstants.*;
+import static org.springframework.util.StringUtils.capitalize;
 
 @Component
 @Slf4j
@@ -109,6 +110,90 @@ public class NotificationUtil {
 			break;
 		}
 
+		return message;
+	}
+
+	/**
+	 * Creates customized email message based on tradelicense
+	 *
+	 * @param license
+	 *            The tradeLicense for which message is to be sent
+	 * @param localizationMessage
+	 *            The messages from localization
+	 * @return customized message based on tradelicense
+	 */
+	public String getEmailCustomizedMsg(RequestInfo requestInfo, TradeLicense license, String localizationMessage) {
+		String message = "", messageTemplate;
+		String ACTION_STATUS = license.getAction() + "_" + license.getStatus();
+		switch (ACTION_STATUS) {
+			case ACTION_STATUS_INITIATED:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_INITIATED + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_STATUS_APPLIED:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_APPLIED + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_STATUS_APPROVED:
+				BigDecimal amountToBePaid = getAmountToBePaid(requestInfo, license);
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_APPROVED + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				if (message.contains("{AMOUNT_TO_BE_PAID}")) {
+					message = message.replace("{AMOUNT_TO_BE_PAID}", amountToBePaid.toString());
+				}
+				break;
+
+			case ACTION_STATUS_REJECTED:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_REJECTED + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_STATUS_FIELDINSPECTION:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_FIELD_INSPECTION + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_SENDBACKTOCITIZEN_FIELDINSPECTION:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_SENDBACK_CITIZEN + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_FORWARD_CITIZENACTIONREQUIRED:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_FORWARD_CITIZEN + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_CANCEL_CANCELLED:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_CANCELLED + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+		}
+
+		return message;
+	}
+
+	/**
+	 * Replaces placeholders from message template
+	 * *
+	 * @param license
+	 *            The tradeLicense for which message is to be sent
+	 * @param messageTemplate
+	 *            The messages from localization
+	 * @return customized message with replaced placeholders
+	 * */
+	private String getReplacedMessage(TradeLicense license, String messageTemplate) {
+		String message = messageTemplate.replace("YYYY", license.getBusinessService());
+		message = message.replace("ZZZZ", license.getApplicationNumber());
+
+		if (message.contains("RRRR")) {
+			message = message.replace("RRRR", license.getLicenseNumber());
+		}
+		message = message.replace("XYZ", capitalize(license.getTenantId().split("\\.")[1]));
+		message = message.replace("{PORTAL_LINK}",config.getUiAppHost());
+		//CCC - Designaion configurable according to ULB
+		// message = message.replace("CCC","");
 		return message;
 	}
 
@@ -400,6 +485,43 @@ public class NotificationUtil {
 	}
 
 	/**
+	 * Creates email request for the each owners
+	 *
+	 * @param message
+	 *            The message for the specific tradeLicense
+	 * @param mobileNumberToEmailId
+	 *            Map of mobileNumber to Email Ids
+	 * @return List of EmailRequest
+	 */
+	public List<EmailRequest> createEmailRequest(String message, Map<String, String> mobileNumberToEmailId) {
+
+		List<EmailRequest> emailRequest = new LinkedList<>();
+		for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
+			String customizedMsg = message.replace("XXXX",entryset.getValue());
+			customizedMsg = customizedMsg.replace("{MOBILE_NUMBER}",entryset.getKey());
+			emailRequest.add(new EmailRequest(entryset.getValue(), customizedMsg));
+		}
+		return emailRequest;
+	}
+
+	/**
+	 * Send the EmailRequest on the EmailNotification kafka topic
+	 *
+	 * @param emailRequestList
+	 *            The list of EmailRequest to be sent
+	 */
+	public void sendEmail(List<EmailRequest> emailRequestList, boolean isEmailEnabled) {
+		if (isEmailEnabled) {
+			if (CollectionUtils.isEmpty(emailRequestList))
+				log.info("Messages from localization couldn't be fetched!");
+			for (EmailRequest emailRequest : emailRequestList) {
+				producer.push(config.getEmailNotifTopic(), emailRequest);
+				log.info("Email notification sent!");
+			}
+		}
+	}
+
+	/**
 	 * Fetches the amount to be paid from getBill API
 	 * 
 	 * @param requestInfo
@@ -558,4 +680,40 @@ public class NotificationUtil {
 		else return res;
 	}
 
+	/**
+	 * Fetches Email Ids of CITIZENs based on the phone number.
+	 *
+	 * @param mobileNumbers
+	 * @param requestInfo
+	 * @param tenantId
+	 * @return  Map of mobileNumber to Email Ids
+	 */
+	public Map<String, String> fetchUserEmailIds(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
+		Map<String, String> mapOfPhnoAndEmailIds = new HashMap<>();
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
+		Map<String, Object> userSearchRequest = new HashMap<>();
+		userSearchRequest.put("RequestInfo", requestInfo);
+		userSearchRequest.put("tenantId", tenantId);
+		userSearchRequest.put("userType", "CITIZEN");
+		for(String mobileNo: mobileNumbers) {
+			userSearchRequest.put("userName", mobileNo);
+			try {
+				Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest);
+				if(null != user) {
+					if(JsonPath.read(user, "$.user[0].emailId")!=null) {
+						String email = JsonPath.read(user, "$.user[0].emailId");
+						mapOfPhnoAndEmailIds.put(mobileNo, email);
+					}
+				}else {
+					log.error("Service returned null while fetching user for username - "+mobileNo);
+				}
+			}catch(Exception e) {
+				log.error("Exception while fetching user for username - "+mobileNo);
+				log.error("Exception trace: ",e);
+				continue;
+			}
+		}
+		return mapOfPhnoAndEmailIds;
+	}
 }

@@ -6,10 +6,7 @@ import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.TLRepository;
 import org.egov.tl.util.NotificationUtil;
-import org.egov.tl.web.models.SMSRequest;
-import org.egov.tl.web.models.TradeLicense;
-import org.egov.tl.web.models.TradeLicenseRequest;
-import org.egov.tl.web.models.TradeLicenseSearchCriteria;
+import org.egov.tl.web.models.*;
 import org.egov.tl.workflow.WorkflowIntegrator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -92,7 +89,8 @@ public class TLBatchService {
             licenses = enrichmentService.enrichTradeLicenseSearch(licenses, criteria, requestInfo);
 
             if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER))
-                sendReminderSMS(requestInfo, licenses);
+            {sendReminderSMS(requestInfo, licenses);
+                sendReminderEmail(requestInfo,licenses);}
 
             else if(jobName.equalsIgnoreCase(JOB_EXPIRY))
                 expireLicenses(requestInfo, licenses);
@@ -139,6 +137,39 @@ public class TLBatchService {
 
     }
 
+    /**
+     * Sends customized reminder sms to the owner's of the given licenses
+     * @param licenses The licenses for which reminder has to be send
+     */
+    private void sendReminderEmail(RequestInfo requestInfo, List<TradeLicense> licenses){
+
+        String tenantId = getStateLevelTenant(licenses.get(0).getTenantId());
+        String localizationMessages = util.getLocalizationMessages(tenantId, requestInfo);
+        List<EmailRequest> emailRequests = new LinkedList<>();
+        for(TradeLicense license : licenses){
+            try{
+
+                String message = util.getReminderMsg(license, localizationMessages);
+                Map<String,String > mobileNumberToEmails = new HashMap<>();
+                Set<String> mobileNumbers = new HashSet<>();
+
+                license.getTradeLicenseDetail().getOwners().forEach(owner -> {
+                    if(owner.getMobileNumber()!=null)
+                        mobileNumbers.add(owner.getMobileNumber());
+                });
+
+                mobileNumberToEmails = util.fetchUserEmailIds(mobileNumbers,requestInfo,tenantId);
+                emailRequests.addAll(util.createEmailRequest(message,mobileNumberToEmails));
+
+            }
+            catch (Exception e){
+                producer.push(config.getReminderErrorTopic(), license);
+            }
+        }
+
+        util.sendEmail(emailRequests, config.getIsReminderEnabled());
+
+    }
 
     /**
      * Calls workflow with action expire on the given license
