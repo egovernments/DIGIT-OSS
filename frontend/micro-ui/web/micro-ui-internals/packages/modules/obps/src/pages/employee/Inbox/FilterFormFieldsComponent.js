@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useMemo, useState } from "react"
+import React, { Fragment, useMemo } from "react"
 import { FilterFormField, Loader, RadioButtons, Localities, RemoveableTag, Dropdown, CheckBox } from "@egovernments/digit-ui-react-components";
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -15,11 +15,6 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
     {code: "BPA", name:t("BPA")},
     {code: "STAKEHOLDER", name:t("STAKEHOLDER")},
   ]
-  useEffect(()=>{
-    Object.keys(filterFormState)?.forEach( key => {
-      setFilterFormValue(key, filterFormState[key])
-    })
-  }, [Object.values(filterFormState || {})])
 
   return <>
     <FilterFormField>
@@ -33,7 +28,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
           }}
           selectedOption={availableOptions.filter((option) => option.code === props.value)[0]}
           optionsKey="name"
-          inputRef={registerRef({})}
+          name="assignee"
           options={availableOptions}
         />
       }}
@@ -72,6 +67,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
               }),[props?.value])
             return <>
               <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
+              {/* TODO: know that it is rerendering once in mobile view this is due to the fact that controlled components can not react to async calls inside the components ie controlled caomponent can only entertain PURE components hence this molecule needs to be removed and dropdown is to be placed, with this localities should be fetched at the top of the inbox/index.js and memoized functions should be handled accordingly */}
               <Localities selectLocality={ (e) => {props.onChange([e, ...props?.value])}} tenantId={tenantId} optionCardStyles={{maxHeight:'350px'}} boundaryType="revenue" />
               <div className="tag-container">
                 {renderRemovableTokens}
@@ -90,8 +86,9 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
           function changeItemCheckStatus(value){
             props.onChange(value)
           }
-          const renderStatusCheckBoxes = useMemo(()=>statuses?.map( status => {
+          const renderStatusCheckBoxes = useMemo(()=>statuses?.map( (status, index) => {
             return <CheckBox
+              key={index}
               onChange={(e) => e.target.checked ? changeItemCheckStatus([...props.value, status?.statusid]) : changeItemCheckStatus(props.value?.filter( id => id !== status?.statusid)) }
               checked={props.value?.includes(status?.statusid)}
               label={t(`${status.businessservice}_${status.applicationstatus}`)}

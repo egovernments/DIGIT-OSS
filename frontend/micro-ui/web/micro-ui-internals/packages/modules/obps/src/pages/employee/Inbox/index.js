@@ -93,11 +93,13 @@ const Inbox = ({parentRoute}) => {
     ,[statuses, isInboxLoading])
 
     const onSearchFormSubmit = (data) => {
+      data.hasOwnProperty("") ? delete data?.[""] : null
       dispatch({action: "mutateSearchForm", data})
       console.log("find search form data here", data)  
     }
     
     const onFilterFormSubmit = (data) => {
+      data.hasOwnProperty("") ? delete data?.[""] : null
       dispatch({action: "mutateFilterForm", data})
       console.log("find search form data here", data)
     }

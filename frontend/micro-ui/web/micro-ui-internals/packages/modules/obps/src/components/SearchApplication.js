@@ -314,9 +314,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
                     }}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
                 </SearchField>
             </SearchForm>
-            {!isLoading &&
-            <div>
-            {data?.display ? <Card style={{ marginTop: 20 }}>
+            {!isLoading && data?.display ? <Card style={{ marginTop: 20 }}>
                 {
                 t(data.display)
                     .split("\\n")
@@ -353,7 +351,6 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
                 onFirstPage={fetchFirstPage}
                 sortParams={[{id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false}]}
             />}
-            </div>}
         </React.Fragment>
 }
 
