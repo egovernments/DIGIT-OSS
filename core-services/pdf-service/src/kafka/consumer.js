@@ -1,7 +1,7 @@
 const kafka = require("kafka-node");
 import envVariables from "../EnvironmentVariables";
 import logger from "../config/logger";
-import { createAndSave } from "../index";
+import { createNoSave } from "../index";
 
 
 export const listenConsumer = async(topic)=>{
@@ -33,8 +33,8 @@ consumer.on("message", function(message) {
   logger.info("record received on consumer for create");
   try {
     var data = JSON.parse(message.value);
-    data.topic = message.topic;
-    createAndSave(
+    //console.log(JSON.stringify(data));
+    createNoSave(
       data,
       null,
       () => {},

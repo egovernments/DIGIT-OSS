@@ -38,7 +38,8 @@ import {
 } from "./utils/commons";
 import {
   getFileStoreIds,
-  insertStoreIds
+  insertStoreIds,
+  insertRecords
 } from "./queries";
 import {
   listenConsumer
@@ -591,12 +592,13 @@ dataConfigUrls &&
           } else {
             data = JSON.parse(data);
             dataConfigMap[data.key] = data;
-            if (data.fromTopic != null) {
+            /*if (data.fromTopic != null) {
               topicKeyMap[data.fromTopic] = data.key;
               topic.push(data.fromTopic);
-            }
+            }*/
             i++;
             if (i == datafileLength) {
+              topic.push(envVariables.KAFKA_RECEIVE_CREATE_JOB_TOPIC)
               listenConsumer(topic);
             }
             logger.info("loaded dataconfig: file:///" + item);
@@ -677,13 +679,15 @@ export const createAndSave = async (
 ) => {
   var starttime = new Date().getTime();
 
-  let topic = get(req, "topic");
+  let topic = get(req, "pdfKey");
   let key;
-  if (topic != null && topicKeyMap[topic] != null) {
-    key = topicKeyMap[topic];
+  if (topic != null) {
+    key = topic;
   } else {
     key = get(req.query || req, "key");
   }
+  console.log("\ntopic-->"+topic+"\n");
+  console.log("\ntopicKeyMap-->"+JSON.stringify(topicKeyMap)+"\n");
   //let key = get(req.query || req, "key");
   let tenantId = get(req.query || req, "tenantId");
   var formatconfig = formatConfigMap[key];
@@ -741,6 +745,82 @@ export const createAndSave = async (
     });
   }
 };
+
+export const createNoSave = async (
+  req,
+  res,
+  successCallback,
+  errorCallback
+) => {
+  try {
+    var starttime = new Date().getTime();
+    var topic = get(req, "pdfKey");
+    var key;
+    if (topic != null) {
+      key = topic;
+    } else {
+      key = get(req.query || req, "key");
+    }
+
+    var tenantId = get(req.query || req, "tenantId");
+    var formatconfig = formatConfigMap[key];
+    var dataconfig = dataConfigMap[key];
+    var totalPdfRecords = get(req, "totalPdfRecords");
+    var currentPdfRecords = get(req, "currentPdfRecords");
+    var bulkPdfJobId = get(req, "pdfJobId");
+    var requestInfo = get(req.body || req, "RequestInfo");
+    var userid = get(req.body || req, "RequestInfo.userInfo.uuid");
+    
+
+    logger.info("received createnosave request on key: " + key);
+
+    var valid = validateRequest(req, res, key, tenantId, requestInfo);
+
+    if (valid) {
+      let [
+        formatConfigByFile,
+        totalobjectcount,
+        entityIds,
+      ] = await prepareBegin(
+        key,
+        req,
+        requestInfo,
+        true,
+        formatconfig,
+        dataconfig
+      );
+      // restoring footer function
+      formatConfigByFile[0].footer = convertFooterStringtoFunctionIfExist(formatconfig.footer);
+      const doc = printer.createPdfKitDocument(formatConfigByFile[0]);
+      let fileNameAppend = "-" + new Date().getTime();
+      let filename = key + "" + fileNameAppend + ".pdf";
+
+      var chunks = [];
+      doc.on("data", function (chunk) {
+        chunks.push(chunk);
+      });
+      doc.on("end", function () {
+        var data = Buffer.concat(chunks);
+        fs.createWriteStream(filename).write(data);
+        logger.info(
+          `createnosave success for pdf with key: ${key}, entityId ${entityIds}`
+        );
+
+      });
+      doc.end();
+
+      await insertRecords(bulkPdfJobId, totalPdfRecords, currentPdfRecords, userid);
+    }
+  } catch (error) {
+    logger.error(error.stack || error);
+    // res.json({
+    //   message: "some unknown error while creating: " + error.message,
+    // });
+  }
+
+};
+
+
 const updateBorderlayout = (formatconfig) => {
   formatconfig.content = formatconfig.content.map((item) => {
     if (

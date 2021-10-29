@@ -13,6 +13,9 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
-    "morgan": "~1.9.1"
+    "kafka-node": "^5.0.0",
+    "morgan": "~1.9.1",
+    "uuid": "^3.3.3",
+    "winston": "^3.2.1"
   }
 }

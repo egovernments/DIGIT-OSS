@@ -1,4 +1,4 @@
-const Pool = require("pg").Pool;
+const { Pool } = require('pg');
 import logger from "./config/logger";
 import producer from "./kafka/producer";
 import consumer from "./kafka/consumer";
@@ -9,8 +9,8 @@ const pool = new Pool({
   host: envVariables.DB_HOST,
   database: envVariables.DB_NAME,
   password: envVariables.DB_PASSWORD,
-  port: envVariables.DB_PORT
-});
+  port: envVariables.DB_PORT,
+})
 
 let createJobKafkaTopic = envVariables.KAFKA_CREATE_JOB_TOPIC;
 const uuidv4 = require("uuid/v4");
@@ -130,3 +130,21 @@ export const insertStoreIds = (
     }
   });
 };
+
+export async function insertRecords(bulkPdfJobId, totalPdfRecords, currentPdfRecords, userid) {
+  const result = await pool.query('select * from egov_bulk_pdf_info where jobid = $1', [bulkPdfJobId]);
+  if(result.rowCount<1){
+    const insertQuery = 'INSERT INTO egov_bulk_pdf_info(jobid, uuid, recordscompleted, totalrecords, createdtime, filestoreid, lastmodifiedby, lastmodifiedtime) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
+    const curentTimeStamp = new Date().getTime();
+    await pool.query(insertQuery,[bulkPdfJobId, userid, currentPdfRecords, totalPdfRecords, curentTimeStamp, null, userid, curentTimeStamp]);
+  }
+  else{
+    var recordscompleted = parseInt(result.rows[0].recordscompleted);
+    var totalrecords = parseInt(result.rows[0].totalrecords);
+    if(recordscompleted < totalrecords){
+      const updateQuery = 'UPDATE egov_bulk_pdf_info SET recordscompleted = (select recordscompleted from egov_bulk_pdf_info where jobid = $4) + $1, lastmodifiedby = $2, lastmodifiedtime = $3 WHERE jobid = $4';
+      const curentTimeStamp = new Date().getTime();
+      await pool.query(updateQuery,[currentPdfRecords, userid, curentTimeStamp, bulkPdfJobId]);
+    }
+  }
+}

@@ -2,6 +2,9 @@ var express = require("express");
 var router = express.Router();
 var url = require("url");
 var config = require("../config");
+var producer = require("../producer").producer ;
+var logger = require("../logger").logger;
+const uuidv4 = require("uuid/v4");
 
 var {
   search_water,
@@ -49,7 +52,7 @@ router.post(
                 restWns = await search_water(
                     applicationNumber,
                     tenantId,
-                    requestinfo,
+                    {RequestInfo:requestinfo.RequestInfo},
                     true
                   );
             }
@@ -57,7 +60,7 @@ router.post(
                 restWns = await search_sewerage(
                     applicationNumber,
                     tenantId,
-                    requestinfo,
+                    {RequestInfo:requestinfo.RequestInfo},
                     true
                   );
             }
@@ -78,7 +81,7 @@ router.post(
           var propertyId   = connection.WaterConnection[0].propertyId;
           var propertytoConsumerCodeMap = {};
           propertytoConsumerCodeMap[propertyId] = [consumerCode];
-          var propertyDetails = await getPropertyDeatils(requestinfo, tenantId, [propertyId], propertytoConsumerCodeMap);
+          var propertyDetails = await getPropertyDeatils({RequestInfo:requestinfo.RequestInfo}, tenantId, [propertyId], propertytoConsumerCodeMap);
 
           var billresponse;
           try {
@@ -86,7 +89,7 @@ router.post(
               tenantId,
               consumerCode,
               bussinessService,
-              requestinfo
+              {RequestInfo:requestinfo.RequestInfo}
             );
           } catch (ex) {
             if (ex.response && ex.response.data) console.log(ex.response.data);
@@ -108,7 +111,7 @@ router.post(
                 tenantId,
                 pdfkey,
                 billArray,
-                requestinfo
+                {RequestInfo:requestinfo.RequestInfo}
               );
             } catch (ex) {
               let errorMessage;
@@ -142,7 +145,7 @@ router.post(
             var propertyId   = connection.SewerageConnections[0].propertyId;
             var propertytoConsumerCodeMap = {};
             propertytoConsumerCodeMap[propertyId] = [consumerCode];
-            var propertyDetails = await getPropertyDeatils(requestinfo, tenantId, [propertyId], propertytoConsumerCodeMap);
+            var propertyDetails = await getPropertyDeatils({RequestInfo:requestinfo.RequestInfo}, tenantId, [propertyId], propertytoConsumerCodeMap);
   
             var billresponse;
           try {
@@ -150,7 +153,7 @@ router.post(
               tenantId,
               consumerCode,
               bussinessService,
-              requestinfo
+              {RequestInfo:requestinfo.RequestInfo}
             );
           } catch (ex) {
             if (ex.response && ex.response.data) console.log(ex.response.data);
@@ -172,7 +175,7 @@ router.post(
                 tenantId,
                 pdfkey,
                 billArray,
-                requestinfo
+                {RequestInfo:requestinfo.RequestInfo}
               );
             } catch (ex) {
               let errorMessage;
@@ -233,7 +236,7 @@ router.post(
                 restWns = await search_water(
                     applicationNumber,
                     tenantId,
-                    requestinfo,
+                    {RequestInfo:requestinfo.RequestInfo},
                     false
                   );
             }
@@ -241,7 +244,7 @@ router.post(
                 restWns = await search_sewerage(
                     applicationNumber,
                     tenantId,
-                    requestinfo,
+                    {RequestInfo:requestinfo.RequestInfo},
                     false
                   );
             }
@@ -263,7 +266,7 @@ router.post(
             paymentresponse = await search_payment(
                 consumerCode,
                 tenantId,
-                requestinfo,
+                {RequestInfo:requestinfo.RequestInfo},
                 bussinessService
               );
           } catch (ex) {
@@ -280,7 +283,7 @@ router.post(
                 tenantId,
                 pdfkey,
                 payments,
-                requestinfo
+                {RequestInfo:requestinfo.RequestInfo}
               );
             } catch (ex) {
               let errorMessage;
@@ -316,7 +319,7 @@ router.post(
             paymentresponse = await search_payment(
                 consumerCode,
                 tenantId,
-                requestinfo,
+                {RequestInfo:requestinfo.RequestInfo},
                 bussinessService
               );
           } catch (ex) {
@@ -333,7 +336,7 @@ router.post(
                 tenantId,
                 pdfkey,
                 payments,
-                requestinfo
+                {RequestInfo:requestinfo.RequestInfo}
               );
             } catch (ex) {
               let errorMessage;
@@ -405,7 +408,7 @@ router.post(
 
             restWater = await search_waterOpenSearch(
               searchCriteria,
-              requestinfo
+              {RequestInfo:requestinfo.RequestInfo}
             );
   
             restWater = restWater.data.WaterConnection;
@@ -426,7 +429,7 @@ router.post(
   
             restSewerage = await search_sewerageOpenSearch(
               searchCriteria,
-              requestinfo
+              {RequestInfo:requestinfo.RequestInfo}
             );
   
             restSewerage = restSewerage.data.SewerageConnections;
@@ -455,13 +458,13 @@ router.post(
 
             waterBills = await search_bill_genie_water_bills(
               inputData,
-              requestinfo
+              {RequestInfo:requestinfo.RequestInfo}
             );
             waterBills = waterBills.data.Bills;
-  
+
             sewerageBills = await search_bill_genie_sewerage_bills(
               inputData,
-              requestinfo
+              {RequestInfo:requestinfo.RequestInfo}
             );
             sewerageBills = sewerageBills.data.Bills;
   
@@ -470,7 +473,7 @@ router.post(
                 if(waterBill.status ==='EXPIRED'){
                   var billresponse = await fetch_bill(
                   tenantId, waterBill.consumerCode,
-                  waterBill.businessService, requestinfo);
+                  waterBill.businessService, {RequestInfo:requestinfo.RequestInfo});
                   consolidatedResult.Bill.push(billresponse.data.Bill[0]);
                 }
                 else{
@@ -485,7 +488,7 @@ router.post(
                 if(sewerageBill.status ==='EXPIRED'){
                   var billresponse = await fetch_bill(
                   tenantId, sewerageBill.consumerCode,
-                  sewerageBill.businessService, requestinfo);
+                  sewerageBill.businessService, {RequestInfo:requestinfo.RequestInfo});
                   consolidatedResult.Bill.push(billresponse.data.Bill[0]);
                 }
                 else{
@@ -512,7 +515,7 @@ router.post(
 
             restWater = await search_waterOpenSearch(
               searchCriteria,
-              requestinfo
+              {RequestInfo:requestinfo.RequestInfo}
             );
 
             restWater = restWater.data.WaterConnection;
@@ -542,7 +545,7 @@ router.post(
             var inputData = {searchCriteria :{locality: locality, tenantId: tenantId, propertyId: propertyIdSet}};
             waterBills = await search_bill_genie_water_bills(
               inputData,
-              requestinfo
+              {RequestInfo:requestinfo.RequestInfo}
             );
   
             waterBills = waterBills.data.Bills;
@@ -551,7 +554,7 @@ router.post(
                 if(waterBill.status ==='EXPIRED'){
                   var billresponse = await fetch_bill(
                   tenantId, waterBill.consumerCode,
-                  waterBill.businessService, requestinfo);
+                  waterBill.businessService, {RequestInfo:requestinfo.RequestInfo});
                 
                   consolidatedResult.Bill.push(billresponse.data.Bill[0]);
                 }
@@ -576,7 +579,7 @@ router.post(
   
             restSewerage = await search_sewerageOpenSearch(
               searchCriteria,
-              requestinfo
+              {RequestInfo:requestinfo.RequestInfo}
             );
   
             restSewerage = restSewerage.data.SewerageConnections;
@@ -605,7 +608,7 @@ router.post(
   
             sewerageBills = await search_bill_genie_sewerage_bills(
               inputData,
-              requestinfo
+              {RequestInfo:requestinfo.RequestInfo}
             );
             sewerageBills = sewerageBills.data.Bills;
   
@@ -614,7 +617,7 @@ router.post(
                 if(sewerageBill.status ==='EXPIRED'){
                   var billresponse = await fetch_bill(
                   tenantId, sewerageBill.consumerCode,
-                  sewerageBill.businessService, requestinfo);
+                  sewerageBill.businessService, {RequestInfo:requestinfo.RequestInfo});
                 
                   consolidatedResult.Bill.push(billresponse.data.Bill[0]);
                 }
@@ -637,7 +640,7 @@ router.post(
           return renderError(res, "There is no billfound for the criteria");
         }
 
-        var propertyDetails = await getPropertyDeatils(requestinfo, tenantId, propertyIdSet, connectionnoToPropertyMap);
+        var propertyDetails = await getPropertyDeatils({RequestInfo:requestinfo.RequestInfo}, tenantId, propertyIdSet, connectionnoToPropertyMap);
         if (consolidatedResult && consolidatedResult.Bill && consolidatedResult.Bill.length > 0) {
           var pdfResponse;
           var pdfkey = config.pdf.wns_bill;
@@ -652,13 +655,44 @@ router.post(
                 consolidatedResult.Bill[i].locality = data.locality;
               }
             }
-            var billArray = { Bill: consolidatedResult.Bill };
-            pdfResponse = await create_pdf(
+            
+            /*pdfResponse = await create_pdf(
               tenantId,
               pdfkey,
               billArray,
               requestinfo
-            );
+            );*/
+            var size = consolidatedResult.Bill.length;
+            var id = uuidv4();
+            var jobid = `${pdfkey}-${new Date().getTime()}-${id}`;
+            for(var i = 0;i<size;i+=20){
+              var payloads = [];
+              var billData = consolidatedResult.Bill.slice(i,i+20);
+              var billArray = { 
+                  Bill: billData,
+                  isBulkPdf: true,
+                  pdfJobId: jobid,
+                  pdfKey: pdfkey,
+                  totalPdfRecords:size,
+                  currentPdfRecords: billData.length
+              };
+              var pdfData = Object.assign({RequestInfo:requestinfo.RequestInfo}, billArray)
+              payloads.push({
+                topic: config.KAFKA_RECEIVE_CREATE_JOB_TOPIC,
+                messages: JSON.stringify(pdfData)
+              });
+              producer.send(payloads, function(err, data) {
+                if (err) {
+                  logger.error(err.stack || err);
+                  errorCallback({
+                    message: `error while publishing to kafka: ${err.message}`
+                  });
+                } else {
+                  logger.info("jobid: " + jobid + ": published to kafka successfully");
+                }
+              });
+
+            }
           } catch (ex) {
             let errorMessage= "Failed to generate PDF"; 
             if (ex.response && ex.response.data) console.log(ex.response.data);
@@ -667,12 +701,17 @@ router.post(
               errorMessage
             );
           }
-          var filename = `${pdfkey}_${new Date().getTime()}`;
-          res.writeHead(200, {
-            "Content-Type": "application/pdf",
-            "Content-Disposition": `attachment; filename=${filename}.pdf`,
+          // var filename = `${pdfkey}_${new Date().getTime()}`;
+          // res.writeHead(200, {
+          //   "Content-Type": "application/pdf",
+          //   "Content-Disposition": `attachment; filename=${filename}.pdf`,
+          // });
+          // pdfResponse.data.pipe(res);
+          res.status(201);
+          res.json({
+            ResponseInfo: requestinfo.RequestInfo,
+            message: "Bulk pdf creation is in process",
           });
-          pdfResponse.data.pipe(res);
         } else {
           return renderError(res, "There is no billfound for the criteria");
         }
