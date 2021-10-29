@@ -292,8 +292,19 @@
   width: 100%;
 }
 
+.home-page-info-banner-wrap {
+  margin: "0px 16px 24px 16px";
+}
+
 @media (min-width: 780px) {
   .button-sub-text {
     width: 240px;
+  }
+  .home-page-info-banner-wrap {
+    max-width: 45%;
+    min-width: 40%;
+    margin-left: 0;
+    margin-right: 24px;
+    margin-bottom: 24px;
   }
 }

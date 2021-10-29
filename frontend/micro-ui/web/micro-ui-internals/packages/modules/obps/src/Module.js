@@ -72,7 +72,7 @@ const OBPSLinks = ({ matchPath, userType }) => {
   return (
     <div>
       <CitizenHomeCard header={t("ACTION_TEST_BUILDING_PLAN_APPROVAL")} links={links} Icon={() => <OBPSIcon />} />
-      <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)} style={{margin: "0px 16px"}} />
+      <CitizenInfoLabel className="home-page-info-banner-wrap" info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)}/>
     </div>
   );
 } 

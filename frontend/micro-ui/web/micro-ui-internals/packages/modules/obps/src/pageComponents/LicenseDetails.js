@@ -30,7 +30,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       menu.push({ i18nKey: `COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
     });
 
-  if (isLoading) return <Loader />;
+  // if (isLoading) return <Loader />;
 
   function SelectName(e) {
     setName(e.target.value);
@@ -76,6 +76,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
         {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
         <Timeline currentStep={1} flow="STAKEHOLDER" />
+        {!isLoading ? 
         <FormStep
           config={config}
           onSelect={goNext}
@@ -146,7 +147,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
               {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
             />
           </div>
-        </FormStep>
+        </FormStep> : <Loader /> }
       </div>
     </div>
   );
