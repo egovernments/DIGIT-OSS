@@ -150,7 +150,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
         {
             Header: t("BPA_COMMON_TABLE_COL_APP_DATE_LABEL"),
             disableSortBy: true,
-            accessor: (row) => GetCell(row.auditDetails.createdTime ? convertEpochToDateDMY(row.auditDetails.createdTime) : ""),
+            accessor: (row) => GetCell(row?.auditDetails?.createdTime ? convertEpochToDateDMY(row?.auditDetails?.createdTime) : ""),
         },
         {
             Header: t("BPA_SEARCH_APPLICATION_TYPE_LABEL"),
@@ -173,7 +173,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
         },
         {
           Header: t("BPA_CURRENT_OWNER_HEAD"),
-          accessor: (row) => GetCell(row.businessService === "BPAREG"?row.tradeLicenseDetail.owners.map( o => o.name ). join(",") || "" : row.landInfo.owners.map( o => o.name ). join(",") || ""),
+          accessor: (row) => GetCell(row.businessService === "BPAREG"?row?.tradeLicenseDetail?.owners.map( o => o.name ). join(",") || "" : row?.landInfo?.owners.map( o => o.name ). join(",") || ""),
           disableSortBy: true,
         },
         {
@@ -314,9 +314,9 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
                     }}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
                 </SearchField>
             </SearchForm>
-            {!isLoading && data?.display ? <Card style={{ marginTop: 20 }}>
+            {!isLoading && data?.[0]?.display ? <Card style={{ marginTop: 20 }}>
                 {
-                t(data.display)
+                t(data?.[0]?.display)
                     .split("\\n")
                     .map((text, index) => (
                     <p key={index} style={{ textAlign: "center" }}>

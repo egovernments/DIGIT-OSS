@@ -56,9 +56,9 @@ const Search = ({path}) => {
         if(payload && payload["applicationType"]) delete payload["applicationType"];
         if(payload && payload["serviceType"]) delete payload["serviceType"];
         let params = {...payload, tenantId:"pb"};
-        const { data: bparegData, isLoading: isBparegLoading, isSuccess : isBpregSuccess } = Digit.Hooks.obps.useEmpBPAREGSearch(tenantId, {}, params);
+        const { data: bparegData=[], isLoading: isBparegLoading, isSuccess : isBpregSuccess } = Digit.Hooks.obps.useEmpBPAREGSearch(tenantId, {}, params);
         
-        return <Search t={t} tenantId={tenantId} onSubmit={onSubmit} isLoading={isBparegLoading} Count={bparegData?.[0]?.Count} data={ !isBparegLoading && isBpregSuccess ? bparegData : { display: "ES_COMMON_NO_DATA" } } /> 
+        return <Search t={t} tenantId={tenantId} onSubmit={onSubmit} isLoading={isBparegLoading} Count={bparegData?.[0]?.Count} data={ !isBparegLoading && isBpregSuccess ? bparegData : [{ display: "ES_COMMON_NO_DATA" }] } /> 
         
     }
     else
@@ -72,7 +72,7 @@ const Search = ({path}) => {
             setPayload({...payload,...payload1});
         }
         let filters = payload;
-        const { data: bpaData, isLoading: isBpaSearchLoading, isSuccess : isBpaSuccess } = Digit.Hooks.obps.useBPASearch(tenantId, filters);
+        const { data: bpaData=[], isLoading: isBpaSearchLoading, isSuccess : isBpaSuccess } = Digit.Hooks.obps.useBPASearch(tenantId, filters);
         const businessIds = bpaData ? bpaData.map(application => application.applicationNumber) : "";
         // if(BPAdata.length>0)
         // (async () => {
@@ -92,7 +92,7 @@ const Search = ({path}) => {
         //     enabled: bpaData?.[0]?.edcrNumber?true:false
         //   })
         // console.log(data1,"data1");
-        return <Search t={t} tenantId={tenantId} onSubmit={onSubmit} isLoading={isBpaSearchLoading} Count={bpaData?.[0]?.Count} data={ !isBpaSearchLoading && isBpaSuccess ? bpaData : { display: "ES_COMMON_NO_DATA" }  } /> 
+        return <Search t={t} tenantId={tenantId} onSubmit={onSubmit} isLoading={isBpaSearchLoading} Count={bpaData?.[0]?.Count} data={ !isBpaSearchLoading && isBpaSuccess ? bpaData : [{ display: "ES_COMMON_NO_DATA" }]  } /> 
     }
     //  const { data: bpaData, isLoading: isBpaSearchLoading } = Digit.Hooks.obps.useBPASearch(tenantId, {applicationNo:applicationNo});
 
