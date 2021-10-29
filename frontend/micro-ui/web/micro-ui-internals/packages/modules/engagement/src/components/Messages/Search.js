@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import { useForm, Controller } from "react-hook-form";
 import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, DateRange } from "@egovernments/digit-ui-react-components";
 import DropdownUlb from "./DropdownUlb";
@@ -36,9 +36,9 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
       case "range":
         return (
           <Controller
-            render={props => (
-              <DateRange t={t} values={props?.value} onFilterChange={props?.onChange} labelClass="filter-label" />
-            )}
+            render={({value, onChange}) =>{             
+              return <DateRange t={t} values={value} onFilterChange={(value)=> onChange(value.range)} labelClass="filter-label" />
+            }}
             name={input.name}
             control={control}
             defaultValue={null}

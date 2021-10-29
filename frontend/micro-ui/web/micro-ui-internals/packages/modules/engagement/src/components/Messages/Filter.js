@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { ActionBar, RemoveableTag, CloseSvg, Loader, DateRange, Localities, ApplyFilterBar, SubmitBar, Dropdown, RefreshIcon } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import Status from "./Status";
@@ -20,9 +20,10 @@ const Filter = ({ type = "desktop", onClose, onSearch, onFilterChange, searchPar
     onFilterChange(localSearchParams);
     onClose?.();
   };
-  const handleChange = (data) => {
+  const handleChange = useCallback((data) => {
     setLocalSearchParams({ ...localSearchParams, ...data });
-  };
+  },[])
+
   const onStatusChange = (e, type) => {
     if (e.target.checked) handleChange({ eventStatus: [...(localSearchParams?.eventStatus || []), type] })
     else handleChange({ eventStatus: localSearchParams?.eventStatus?.filter(status => status !== type) })
