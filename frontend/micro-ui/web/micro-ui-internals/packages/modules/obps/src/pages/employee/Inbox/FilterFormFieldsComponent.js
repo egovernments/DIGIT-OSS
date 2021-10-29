@@ -74,7 +74,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
               }),[props?.value])
             return <>
               <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
-              <Localities selectLocality={ (e) => {props.onChange([e, ...props?.value])}} tenantId={tenantId} boundaryType="revenue" />
+              <Localities selectLocality={ (e) => {props.onChange([e, ...props?.value])}} tenantId={tenantId} optionCardStyles={{maxHeight:'350px'}} boundaryType="revenue" />
               <div className="tag-container">
                 {renderRemovableTokens}
               </div>
