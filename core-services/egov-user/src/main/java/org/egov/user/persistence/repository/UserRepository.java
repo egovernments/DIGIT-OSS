@@ -1,6 +1,8 @@
 package org.egov.user.persistence.repository;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.egov.user.domain.model.Address;
 import org.egov.user.domain.model.Role;
@@ -35,6 +37,7 @@ import static org.springframework.util.StringUtils.isEmpty;
 public class UserRepository {
 
     private AddressRepository addressRepository;
+    private AuditRepository auditRepository;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private JdbcTemplate jdbcTemplate;
     private UserTypeQueryBuilder userTypeQueryBuilder;
@@ -45,13 +48,14 @@ public class UserRepository {
     UserRepository(RoleRepository roleRepository, UserTypeQueryBuilder userTypeQueryBuilder,
                    AddressRepository addressRepository, UserResultSetExtractor userResultSetExtractor,
                    JdbcTemplate jdbcTemplate,
-                   NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+                   NamedParameterJdbcTemplate namedParameterJdbcTemplate, AuditRepository auditRepository) {
         this.addressRepository = addressRepository;
         this.roleRepository = roleRepository;
         this.userTypeQueryBuilder = userTypeQueryBuilder;
         this.userResultSetExtractor = userResultSetExtractor;
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        this.auditRepository = auditRepository;
     }
 
     /**
@@ -166,9 +170,11 @@ public class UserRepository {
      * api will update the user details.
      *
      * @param user
+     * @param uuid 
+     * @param  
      * @return
      */
-    public void update(final User user, User oldUser) {
+    public void update(final User user, User oldUser, long userId, String uuid) {
 
 
         Map<String, Object> updateuserInputs = new HashMap<>();
@@ -286,7 +292,9 @@ public class UserRepository {
         updateuserInputs.put("alternatemobilenumber", user.getAlternateMobileNumber());
 
         updateuserInputs.put("LastModifiedDate", new Date());
-        updateuserInputs.put("LastModifiedBy", 1);
+        updateuserInputs.put("LastModifiedBy", userId );
+        
+        updateAuditDetails(oldUser, userId, uuid);
 
         namedParameterJdbcTemplate.update(userTypeQueryBuilder.getUpdateUserQuery(), updateuserInputs);
         if (user.getRoles() != null && !CollectionUtils.isEmpty(user.getRoles()) && !oldUser.getRoles().equals(user.getRoles())) {
@@ -298,7 +306,7 @@ public class UserRepository {
         }
     }
 
-    public void fetchFailedLoginAttemptsByUser(String uuid) {
+	public void fetchFailedLoginAttemptsByUser(String uuid) {
         fetchFailedAttemptsByUserAndTime(uuid, 0L);
     }
 
@@ -577,5 +585,11 @@ public class UserRepository {
     private String getStateLevelTenant(String tenantId) {
         return tenantId.split("\\.")[0];
     }
+
+	
+	private void updateAuditDetails(User oldUser, long userId, String uuid) {
+		auditRepository.auditUser(oldUser,userId,uuid);
+		
+	}
 
 }
