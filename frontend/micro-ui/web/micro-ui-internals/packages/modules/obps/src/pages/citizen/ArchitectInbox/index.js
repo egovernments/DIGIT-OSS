@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import MobileInbox from "./MobileInbox";
 import DesktopInbox from "./DesktopInbox";
+import MobileInbox from "./MobileInbox";
 
-const headerStyle={
+const headerStyle = {
   fontSize: "30px",
-  fontWeight:"700",
-    marginTop: "-10px",
-    marginLeft: "15px"
+  fontWeight: "700",
+  marginTop: "-10px",
+  marginLeft: "15px"
 }
 
 const Inbox = ({ tenants, parentRoute }) => {
@@ -25,7 +25,7 @@ const Inbox = ({ tenants, parentRoute }) => {
   const paginationParams = isMobile ? { limit: 10, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.sortOrder } :
     { limit: pageSize, offset: pageOffset, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.sortOrder }
   const inboxSearchParams = { limit: 10, offset: 0, mobileNumber: userInfo?.info?.mobileNumber }
-  
+
   const { isLoading: bpaLoading, data: bpaInboxData } = Digit.Hooks.obps.useArchitectInbox({
     tenantId: stateCode,
     moduleName: "bpa-services",
@@ -43,77 +43,78 @@ const Inbox = ({ tenants, parentRoute }) => {
       filterForm: {
         moduleName: "bpa-services",
         businessService: [
-          {code: "BPA_LOW", name:t("BPA_LOW")},
-          {code: "BPA", name:t("BPA")},
-          {code: "BPA_OC", name:t("BPA_OC")}
+          { code: "BPA_LOW", name: t("BPA_LOW") },
+          { code: "BPA", name: t("BPA") },
+          { code: "BPA_OC", name: t("BPA_OC") }
         ],
         applicationStatus: searchParams?.applicationStatus,
         locality: [],
         assignee: "ASSIGNED_TO_ALL"
       }
     },
-    config: {}
+    config: {},
+    withEDCRData:false
   });
+
+  /*   const searchFormDefaultValues = {
+      // mobileNumber: "",
+      applicationNo: searchParams?.applicationNo,
+    }
   
-  const searchFormDefaultValues = {
-    // mobileNumber: "",
-    applicationNo: searchParams?.applicationNo,
-  }
+    const filterFormDefaultValues = {
+      moduleName: "bpa-services",
+      // businessService: {code: "BPA", name:t("BPA")},
+      applicationStatus: "",
+      locality: [],
+      assignee: "ASSIGNED_TO_ALL"
+    }
+    const tableOrderFormDefaultValues = {
+      sortBy: sortParams?.[0]?.id,
+      limit: 10,
+      offset: 0,
+      sortOrder: sortParams?.[0]?.sortOrder
+    } */
 
-  const filterFormDefaultValues = {
-    moduleName: "bpa-services",
-    // businessService: {code: "BPA", name:t("BPA")},
-    applicationStatus: "",
-    locality: [],
-    assignee: "ASSIGNED_TO_ALL"
-  }
-  const tableOrderFormDefaultValues = {
-    sortBy: sortParams?.[0]?.id,
-    limit: 10,
-    offset: 0,
-    sortOrder: sortParams?.[0]?.sortOrder
-  }
+  /*   const { isLoading: isInboxLoading, data: { table, statuses, totalCount } = {} } = Digit.Hooks.obps.useBPAInbox({
+      // tenantId, moduleName, businessService, filters, config
+      tenantId,
+      filters: {
+        filterForm: filterFormDefaultValues,
+        searchForm: searchFormDefaultValues,
+        tableForm: tableOrderFormDefaultValues
+      },
+      config: {
+        select: (data) =>({
+          statuses: data.statusMap,
+          table: data?.items.map( application => ({
+              applicationId: application.businessObject.applicationNumber,
+              date: application.businessObject.applicationDate,
+              businessService: application?.ProcessInstance?.businessService,
+              applicationType:application?.businessObject?.additionalDetails?.applicationType,
+              serviceType:application?.businessObject?.additionalDetails?.serviceType,
+              locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
+              status: application.businessObject.status,
+              owner: application.ProcessInstance?.assigner?.name,
+              sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
+          })),
+          totalCount: data.totalCount
+        })
+      },
+  
+    }); */
 
-  const { isLoading: isInboxLoading, data: { table, statuses, totalCount } = {} } = Digit.Hooks.obps.useBPAInbox({
-    // tenantId, moduleName, businessService, filters, config
-    tenantId,
-    filters: {
-      filterForm: filterFormDefaultValues,
-      searchForm: searchFormDefaultValues,
-      tableForm: tableOrderFormDefaultValues
+  /*   const { data: edcrData, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(stateCode, {
+      limit: pageSize,
+      offset: pageOffset,
+      sortBy: sortParams?.[0]?.id,
+      sortOrder: sortParams?.[0]?.sortOrder
+    }, {
+      enabled: true,
+      retry:false,
+      staleTime: Infinity
     },
-    config: {
-      select: (data) =>({
-        statuses: data.statusMap,
-        table: data?.items.map( application => ({
-            applicationId: application.businessObject.applicationNumber,
-            date: application.businessObject.applicationDate,
-            businessService: application?.ProcessInstance?.businessService,
-            applicationType:application?.businessObject?.additionalDetails?.applicationType,
-            serviceType:application?.businessObject?.additionalDetails?.serviceType,
-            locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
-            status: application.businessObject.status,
-            owner: application.ProcessInstance?.assigner?.name,
-            sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
-        })),
-        totalCount: data.totalCount
-      })
-    },
-
-  });
-
-  const { data: edcrData, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(stateCode, {
-    limit: pageSize,
-    offset: pageOffset,
-    sortBy: sortParams?.[0]?.id,
-    sortOrder: sortParams?.[0]?.sortOrder
-  }, {
-    enabled: true,
-    retry:false,
-    staleTime: Infinity
-  },
-  "OBPS_SCRUTINYDETAILS_ALL"
-  )
+    "OBPS_SCRUTINYDETAILS_ALL"
+    ) */
 
   const handleSort = (args) => {
     setSortParams(args);
@@ -159,34 +160,35 @@ const Inbox = ({ tenants, parentRoute }) => {
   if (isMobile) {
     return (
       <React.Fragment>
-         <h2 style={headerStyle} >{`${t("ES_INBOX")} ( ${bpaInboxData?.totalCount||0} )`}</h2>
-      <MobileInbox
-        bparegData={table}
-        edcrData={edcrData || []}
-        data={bpaInboxData}
-        statusMap={bpaInboxData?.statuses?.concat(statuses)}
-        searchParams={searchParams}
-        searchFields={getSearchFields()}
-        t={t}
-        onFilterChange={handleFilterChange}
-        onSearch={onSearch}
-        sortParams={sortParams}
-        onSort={handleSort}
-        isLoading={bpaLoading || isLoading || isInboxLoading}
-        title = {"EVENTS_PUBLIC_MESSAGE_NOTICE_HEADER"}
-        iconName={"calender"}
-        links={links}
-      />
+        <h2 style={headerStyle} >{`${t("ES_INBOX")} ( ${bpaInboxData?.totalCount || 0} )`}</h2>
+        <MobileInbox
+          bparegData={[]}
+          edcrData={[]}
+          data={bpaInboxData}
+          statusMap={bpaInboxData?.statuses}
+          searchParams={searchParams}
+          searchFields={getSearchFields()}
+          t={t}
+          onFilterChange={handleFilterChange}
+          onSearch={onSearch}
+          sortParams={sortParams}
+          onSort={handleSort}
+          isLoading={bpaLoading}
+          title={"EVENTS_PUBLIC_MESSAGE_NOTICE_HEADER"}
+          iconName={"calender"}
+          links={links}
+        />
       </React.Fragment>
     )
   }
 
   return (
     <DesktopInbox
-      bparegData={table}
-      edcrData={edcrData}
+      // bparegData={table}
+      bparegData={[]}
+      edcrData={[]}
       data={bpaInboxData}
-      isLoading={bpaLoading || isLoading || isInboxLoading}
+      isLoading={bpaLoading}
       onFilterChange={handleFilterChange}
       searchFields={getSearchFields()}
       onSearch={onSearch}
@@ -201,7 +203,7 @@ const Inbox = ({ tenants, parentRoute }) => {
       parentRoute={parentRoute}
       paginationParms={paginationParams}
       sortParams={sortParams}
-      // totalRecords={isInbox ? Number(applications?.totalCount) : totalCount}
+    // totalRecords={isInbox ? Number(applications?.totalCount) : totalCount}
     />
   );
 }

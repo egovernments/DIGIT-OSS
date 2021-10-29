@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Card, DetailsCard, Loader, PopUp, SearchAction, FilterAction } from "@egovernments/digit-ui-react-components";
+import { Card, DetailsCard, FilterAction, PopUp, SearchAction } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import Filter from "./Filter";
 import Search from "./Search";
 import SortBy from "./SortBy";
-import Filter from "./Filter";
 
 const ApplicationCard = ({
   searchFields,
@@ -13,9 +14,11 @@ const ApplicationCard = ({
   onFilterChange,
   onSearch,
   t,
-  data
+  data,
+  idKey
 }) => {
   const [type, setType] = useState("");
+  const history = useHistory();
   const [popup, setPopup] = useState(false);
   const [params, setParams] = useState(searchParams);
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -48,7 +51,7 @@ const ApplicationCard = ({
     );
   }
   else if (data && data?.length > 0) {
-    result = <DetailsCard data={data} handleSelect={() => {}} handleDetailCardClick={() => {}} />
+    result = <DetailsCard data={data} handleSelect={(e) => console.log(e)} handleDetailCardClick={(e) => { history.push(`/digit-ui/citizen/obps/${["BPA_LOW", "BPA", "BPA_OC"].includes(e?.serviceType?.value) ? "bpa" : "stakeholder"}/${e?.[idKey]}`); console.log(e) }} />
   }
 
   return (
@@ -103,7 +106,7 @@ const ApplicationCard = ({
                   type="mobile"
                   searchParams={searchParams}
                   statuses={statusMap}
-                  // removeParam={removeParam}
+                // removeParam={removeParam}
                 />
               }
             </div>

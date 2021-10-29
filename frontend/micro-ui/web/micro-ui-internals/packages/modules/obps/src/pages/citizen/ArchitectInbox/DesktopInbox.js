@@ -1,14 +1,15 @@
+import { Card, Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { Card, Loader } from "@egovernments/digit-ui-react-components";
-import SearchApplication from './Search';
-import Filter from "./Filter";
 import ApplicationTable from "./ApplicationTable";
+import SearchApplication from './Search';
 
 const DesktopInbox = (props) => {
   const { t } = useTranslation();
-  const GetCell = (value) => <span className="cell-text">{value}</span>;
+  const GetCell = (row) => <span className="cell-text">
+    <Link to={`/digit-ui/citizen/obps/${["BPA_LOW", "BPA", "BPA_OC"].includes(row?.businessService) ? "bpa" : "stakeholder"}/${encodeURIComponent(row.applicationId)}`}>{row?.applicationId}</Link>
+  </span>;
   const GetSlaCell = (value) => {
     if (isNaN(value)) return <span className="sla-cell-success">0</span>;
     return value < 0 ? <span className="sla-cell-error">{value}</span> : <span className="sla-cell-success">{value}</span>;
@@ -18,15 +19,15 @@ const DesktopInbox = (props) => {
     return [
       {
         Header: t('BPA_COMMON_APP_NO'),
-        accessor: 'applicationId'
+        accessor: (row) => GetCell(row)
       },
       {
         Header: t('BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL'),
-        accessor: (row) => t(row?.applicationType||"NA")
+        accessor: (row) => t(row?.applicationType || "NA")
       },
       {
         Header: t('BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL'),
-        accessor: row => t(row?.serviceType||"NA")
+        accessor: row => t(row?.serviceType || "NA")
       },
       {
         Header: t('BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL'),
@@ -34,7 +35,7 @@ const DesktopInbox = (props) => {
       },
       {
         Header: t('TL_COMMON_TABLE_COL_STATUS'),
-        accessor: row => t(row?.status||"NA")
+        accessor: row => t(row?.status || "NA")
       },
       {
         Header: t('BPA_COMMON_SLA'),
@@ -49,9 +50,7 @@ const DesktopInbox = (props) => {
   } else if (props?.data?.table?.length === 0) {
     result = (
       <Card style={{ marginTop: 20 }}>
-        {/* TODO Change localization key */}
         {
-          // t("CS_MYCOMPLAINTS_NO_COMPLAINTS")
           t("CS_MYAPPLICATIONS_NO_APPLICATION")
             .split("\\n")
             .map((text, index) => (
@@ -74,9 +73,6 @@ const DesktopInbox = (props) => {
               minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
               padding: "20px 18px",
               fontSize: "16px",
-              // borderTop: "1px solid grey",
-              // textAlign: "left",
-              // verticalAlign: "middle",
             },
           };
         }}
@@ -87,7 +83,6 @@ const DesktopInbox = (props) => {
         pageSizeLimit={props.pageSizeLimit}
         onSort={props.onSort}
         disableSort={props.disableSort}
-        onPageSizeChange={props.onPageSizeChange}
         sortParams={props.sortParams}
         totalRecords={props.totalRecords}
       />
@@ -95,7 +90,7 @@ const DesktopInbox = (props) => {
   }
   return (
     <div className="inbox-container">
-        {/* <div className="filters-container">
+      {/* <div className="filters-container">
           <div>
             <Filter searchParams={props.searchParams} paginationParms={props.paginationParms} applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
           </div>

@@ -22,6 +22,7 @@ const MobileInbox = ({ data, edcrData = [], t, statusMap, bparegData, title, ico
         [t('BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL')]: row?.owner,
         [t('TL_COMMON_TABLE_COL_STATUS')]: row?.status&& t(row?.status ),
         [t('BPA_COMMON_SLA')]: row?.sla,
+        "serviceType":{value:row?.businessService,hidden:true}
       }
     })
   }
@@ -34,6 +35,7 @@ const MobileInbox = ({ data, edcrData = [], t, statusMap, bparegData, title, ico
           <ApplicationCard
             t={t}
             data={getData()}
+            idKey={t('BPA_COMMON_APP_NO')}
             statusMap={statusMap}
             onFilterChange={onFilterChange}
             // serviceRequestIdKey={isFstpOperator ? t("ES_INBOX_VEHICLE_LOG") : DSO ? t("ES_INBOX_APPLICATION_NO") : t("ES_INBOX_APPLICATION_NO")}

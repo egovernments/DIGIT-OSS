@@ -59,7 +59,7 @@ const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, sele
             className="details-container"
             onClick={() => handleSelect(object)}
           >
-            {Object.keys(object).map((name, index) => {
+            {Object.keys(object).filter(rowEle=>!(typeof object[rowEle]=="object"&&object[rowEle]?.hidden==true)).map((name, index) => {
               return <Details label={name} name={object[name]} key={index} onClick={()=> handleDetailCardClick(object)}/>;
             })}
           </div>
