@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState, getFilterFormValue}) => {
   const { t } = useTranslation()
   const tenantId = Digit.ULBService.getCurrentTenantId();
-
   const availableOptions = [
     { code: "ASSIGNED_TO_ME", name: `${t("ES_INBOX_ASSIGNED_TO_ME")}` },
     { code: "ASSIGNED_TO_ALL", name: `${t("ES_INBOX_ASSIGNED_TO_ALL")}` },
@@ -16,7 +15,6 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
     {code: "BPA", name:t("BPA")},
     {code: "STAKEHOLDER", name:t("STAKEHOLDER")},
   ]
-
   useEffect(()=>{
     Object.keys(filterFormState)?.forEach( key => {
       setFilterFormValue(key, filterFormState[key])
@@ -96,7 +94,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
             return <CheckBox
               onChange={(e) => e.target.checked ? changeItemCheckStatus([...props.value, status?.statusid]) : changeItemCheckStatus(props.value?.filter( id => id !== status?.statusid)) }
               checked={props.value?.includes(status?.statusid)}
-              label={t(status.applicationstatus)}
+              label={t(`${status.businessservice}_${status.applicationstatus}`)}
             />}),[props.value, statuses])
           return <>
             {isInboxLoading ? <Loader /> : <>{renderStatusCheckBoxes}</>}
