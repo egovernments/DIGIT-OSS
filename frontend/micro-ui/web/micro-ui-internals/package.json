@@ -65,6 +65,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.20",
-    "microbundle-crl": "^0.13.11"
+    "microbundle-crl": "^0.13.11",
+    "node-sass": "npm:sass@^1.43.4"
   }
 }
