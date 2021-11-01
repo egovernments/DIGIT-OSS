@@ -38,7 +38,9 @@
     "build:prepare": "./build.sh"
   },
   "eslintConfig": {
-   
+    "extends": [
+      "react-app"
+    ]
   },
   "browserslist": {
     "production": [

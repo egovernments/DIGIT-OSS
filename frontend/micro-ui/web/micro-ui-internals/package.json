@@ -16,9 +16,9 @@
   "scripts": {
     "start": "SKIP_PREFLIGHT_CHECK=true run-s build start:dev",
     "sprint": "SKIP_PREFLIGHT_CHECK=true run-s start:script",
-    "start:dev": "export NODE_OPTIONS=--openssl-legacy-provider; run-p dev:**",
+    "start:dev": "run-p dev:**",
     "start:script": "./scripts/create.sh",
-    
+    "dev:css": "cd packages/css && yarn start",
     "dev:libraries": "cd packages/libraries && yarn start",
     "dev:components": "cd packages/react-components && yarn start",
     "dev:common": "cd packages/modules/common && yarn start",
