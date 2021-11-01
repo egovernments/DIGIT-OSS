@@ -15,8 +15,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 14
-      - run: npm ci
-      - run: npm test
+      - run: cd frontend/micro-ui/web/micro-ui-internals/packages/css && yarn ci
+      - run: yarn prepublish
 
   publish-npm:
     needs: build
@@ -27,8 +27,7 @@ jobs:
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
-      - run: cd frontend/micro-ui/web/micro-ui-internals/packages/css && yarn ci
-      - run: yarn prepublish
+      - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
 
