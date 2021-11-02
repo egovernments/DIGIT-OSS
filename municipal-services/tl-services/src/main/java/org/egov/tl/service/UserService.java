@@ -386,7 +386,7 @@ public class UserService{
         userSearchRequest.setMobileNumber(criteria.getMobileNumber());
         userSearchRequest.setName(criteria.getOwnerName());
         userSearchRequest.setActive(true);
-        userSearchRequest.setUserType("CITIZEN");
+        //userSearchRequest.setUserType("CITIZEN");
         if(!CollectionUtils.isEmpty(criteria.getOwnerIds()))
             userSearchRequest.setUuid(criteria.getOwnerIds());
         return userSearchRequest;
