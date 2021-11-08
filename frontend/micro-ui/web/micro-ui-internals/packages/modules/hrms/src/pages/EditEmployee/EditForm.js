@@ -183,7 +183,12 @@ const EditForm = ({ tenantId, data }) => {
     requestdata["user"]["name"] = input?.SelectEmployeeName?.employeeName;
     requestdata.user.correspondenceAddress = input?.SelectEmployeeCorrespondenceAddress?.correspondenceAddress;
     requestdata.user.roles = roles;
-    const Employees = [requestdata];
+    let Employees = [requestdata];
+
+    /* use customiseUpdateFormData hook to make some chnages to the Employee object */
+    Employees=Digit?.Customizations?.HRMS?.customiseUpdateFormData?Digit.Customizations.HRMS.customiseUpdateFormData(data,Employees):Employees;
+
+
     history.replace("/digit-ui/employee/hrms/response", { Employees, key: "UPDATE", action: "UPDATE" });
   };
   const configs = newConfig;

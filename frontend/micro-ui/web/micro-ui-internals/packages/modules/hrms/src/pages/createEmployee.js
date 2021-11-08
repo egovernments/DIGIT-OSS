@@ -164,6 +164,9 @@ const CreateEmployee = () => {
         tests: [],
       },
     ];
+      /* use customiseCreateFormData hook to make some chnages to the Employee object */
+      Employees=Digit?.Customizations?.HRMS?.customiseCreateFormData?Digit.Customizations.HRMS.customiseCreateFormData(data,Employees):Employees;
+
     if (data?.SelectEmployeeId?.code && data?.SelectEmployeeId?.code?.trim().length > 0) {
       Digit.HRMSService.search(tenantId, null, { codes: data?.SelectEmployeeId?.code }).then((result, err) => {
         if (result.Employees.length > 0) {

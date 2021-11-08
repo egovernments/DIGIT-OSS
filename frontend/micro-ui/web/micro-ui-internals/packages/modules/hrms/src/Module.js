@@ -44,6 +44,7 @@ export const HRMSModule = ({ stateCode, userType, tenants }) => {
     return null;
   }
   if (userType === "employee") {
+    const HRMSResponse= Digit?.ComponentRegistryService?.getComponent('HRMSResponse') ;
     return (
       <Switch>
         <React.Fragment>
@@ -67,7 +68,7 @@ export const HRMSModule = ({ stateCode, userType, tenants }) => {
               )}
             />
             <PrivateRoute path={`${path}/create`} component={() => <CreateEmployee />} />
-            <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
+            <PrivateRoute path={`${path}/response`} component={(props) => <HRMSResponse {...props} parentRoute={path} />} />
             <PrivateRoute path={`${path}/details/:tenantId/:id`} component={() => <Details />} />
             <PrivateRoute path={`${path}/edit/:tenantId/:id`} component={() => <EditEmpolyee />} />
           </div>
@@ -94,6 +95,7 @@ const componentsToRegister = {
   SelectEmployeeGender,
   SelectDateofBirthEmployment,
   HRMSModule,
+  HRMSResponse:Response,
   HRMS_INBOX_FILTER: (props) => <InboxFilter {...props} />,
 };
 
