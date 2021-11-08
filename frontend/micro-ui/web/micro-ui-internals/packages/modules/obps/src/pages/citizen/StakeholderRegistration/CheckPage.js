@@ -30,7 +30,7 @@ import {
         }
       );
 
-      let routeLink = `/digit-ui/citizen/obps/stakeholder/apply`;
+      let routeLink = isopenlink?`/digit-ui/citizen/obps/openlink/stakeholder/apply`:`/digit-ui/citizen/obps/stakeholder/apply`;
 
       function routeTo(jumpTo) {
         location.href=jumpTo;
