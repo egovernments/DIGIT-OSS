@@ -2,7 +2,9 @@ import { Card, Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import ApplicationLinks from './ApplicationLinks';
 import ApplicationTable from "./ApplicationTable";
+import Filter from "./Filter";
 import SearchApplication from './Search';
 
 const DesktopInbox = (props) => {
@@ -42,7 +44,7 @@ const DesktopInbox = (props) => {
         accessor: 'sla'
       }
     ]
-  })
+  },[t])
 
   let result;
   if (props.isLoading) {
@@ -89,12 +91,28 @@ const DesktopInbox = (props) => {
     );
   }
   return (
+    
     <div className="inbox-container">
-      {/* <div className="filters-container">
+        {!props.isSearch && (
+        <div className="filters-container">
+            <ApplicationLinks
+            parentRoute={props.parentRoute}
+            allLinks={[
+              {
+                text: "OBPS_HOME",
+                link: "/digit-ui/citizen/obps/home",              
+              }
+            ]}
+            headerText={t("OBPS_ARCH_INBOX")}
+            businessService={props.businessService}
+          />
           <div>
-            <Filter searchParams={props.searchParams} paginationParms={props.paginationParms} applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
+            {
+             <Filter  statuses={props.statusMap} searchParams={props.searchParams} paginationParms={props.paginationParms} applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
+            }
           </div>
-        </div> */}
+        </div>
+      )}
       <div style={{ flex: 1 }}>
         <SearchApplication
           t={t}

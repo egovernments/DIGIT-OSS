@@ -85,7 +85,7 @@ const ApplicationCard = ({
       {popup && (
         <PopUp>
           {type === "SEARCH" && (
-            <div className="popup-module">
+            <div className="popup-module w-fullwidth">
               <Search
                 t={t}
                 type="mobile"
@@ -97,7 +97,7 @@ const ApplicationCard = ({
             </div>
           )}
           {type === "FILTER" && (
-            <div className="popup-module">
+            <div className="popup-module w-fullwidth">
               {
                 <Filter
                   onFilterChange={onFilterChange}
@@ -112,7 +112,7 @@ const ApplicationCard = ({
             </div>
           )}
           {type === "SORT" && (
-            <div className="popup-module">
+            <div className="popup-module w-fullwidth">
               {<SortBy type="mobile" sortParams={sortParams} onClose={handlePopupClose} type="mobile" onSort={onSort} />}
             </div>
           )}
