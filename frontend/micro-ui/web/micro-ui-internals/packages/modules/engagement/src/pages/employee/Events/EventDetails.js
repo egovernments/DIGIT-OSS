@@ -57,7 +57,7 @@ const EventDetails = () => {
 
   return (
     <Fragment>
-      <div>
+      <div style={{marginLeft: "15px", display: "flex", justifyContent: "space-between"}}> 
         <Header>{t("ES_TITLE_APPLICATION_DETAILS")}</Header>
       </div>
       <ApplicationDetailsTemplate

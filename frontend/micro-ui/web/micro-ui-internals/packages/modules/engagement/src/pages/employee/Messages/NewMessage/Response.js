@@ -50,7 +50,7 @@ const Response = (props) => {
       queryClient.clear();
     }
     if (!mutationHappened) {
-      if (searchParams?.delete || searchParams?.update) {
+      if (Boolean(searchParams?.delete) || Boolean(searchParams?.update)) {
         updateEventMutation.mutate(state, {
           onError,
           onSuccess,

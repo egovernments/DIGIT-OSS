@@ -4,6 +4,7 @@ import Filter from "./Filter";
 import Search from "./Search";
 import { areEqual } from "../../utils";
 import { useHistory } from "react-router-dom";
+
 const ApplicationCard = ({
   searchFields,
   searchParams,
@@ -11,7 +12,7 @@ const ApplicationCard = ({
   onSearch,
   t,
   data,
-  responseData
+  serviceRequestIdKey
 }) => {
   const [type, setType] = useState("");
   const [popup, setPopup] = useState(false);
@@ -31,16 +32,6 @@ const ApplicationCard = ({
     setParams(searchParams);
   };
 
-  const redirectToDetailsPage = (data) => {
-    //TODO: @nrj-egov change it to some new statergy
-    const details = responseData?.find((item) => (areEqual(item?.user?.name, data["Posted By"]) && areEqual(item.name, data["Event Name"]) && areEqual(item.eventCategory, data["Event Category"]) && areEqual(item.status, data["Status"]?.props?.children) ));
-  
-    if (details) {
-      history.push(`/digit-ui/employee/engagement/event/inbox/event-details/${details?.id }`)
-    }
-  }
-
-
   let result;
   if (data?.length === 0) {
     result = (
@@ -56,7 +47,7 @@ const ApplicationCard = ({
     );
   }
   else if (data && data?.length > 0) {
-    result = <DetailsCard data={data} handleSelect={() => { }} handleDetailCardClick={redirectToDetailsPage} />
+    result = <DetailsCard data={data}  linkPrefix={'/digit-ui/employee/engagement/event/inbox/event-details/'} serviceRequestIdKey={serviceRequestIdKey}/>
   }
   return (
     <React.Fragment>

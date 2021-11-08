@@ -17,6 +17,7 @@ const MobileInbox = ({ data, t, title, iconName, links, searchFields, searchPara
       (isValid(searchParams?.range?.endDate) ? event.eventDetails?.toDate <= new Date(searchParams?.range?.endDate).getTime() : true))
     .map((event) => {
       return {
+        ["applicationNo"]:event?.id,
         [t("EVENTS_EVENT_NAME_LABEL")]: event?.name,
         [t("EVENTS_EVENT_CATEGORY_LABEL")]: t(`MSEVA_EVENTCATEGORIES_${event?.eventCategory}`),
         [t("EVENTS_START_DATE_LABEL")]: format(new Date(event?.eventDetails?.fromDate), 'dd/MM/yyyy'),
@@ -30,24 +31,16 @@ const MobileInbox = ({ data, t, title, iconName, links, searchFields, searchPara
     <div style={{ padding: 0 }}>
       <div className="inbox-container">
         <div className="filters-container">
-          {/* {!isFstpOperator && !isSearch && <ApplicationLinks linkPrefix={parentRoute} isMobile={true} />} */}
           <EventLink title={title} icon={iconName} links={links} />
           <ApplicationCard
             t={t}
             data={getData()}
             onFilterChange={onFilterChange}
-            // serviceRequestIdKey={isFstpOperator ? t("ES_INBOX_VEHICLE_LOG") : DSO ? t("ES_INBOX_APPLICATION_NO") : t("ES_INBOX_APPLICATION_NO")}
-            // isFstpOperator={isFstpOperator}
             isLoading={isLoading}
-            // isSearch={isSearch}
             onSearch={onSearch}
-            // onSort={onSort}
             searchParams={searchParams}
             searchFields={searchFields}
-            responseData={data}
-            // linkPrefix={linkPrefix}
-            // removeParam={removeParam}
-            // sortParams={sortParams}
+            serviceRequestIdKey={"applicationNo"}
           />
         </div>
       </div>

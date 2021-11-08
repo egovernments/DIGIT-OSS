@@ -50,7 +50,7 @@ const Response = (props) => {
       queryClient.clear();
     }
     if (!mutationHappened) {
-      if (searchParams?.delete || searchParams?.update) {
+      if (Boolean(searchParams?.delete) || Boolean(searchParams?.update)) {
         updateEventMutation.mutate(state, {
           onError,
           onSuccess,
@@ -83,7 +83,7 @@ const Response = (props) => {
           isLoading={(updateEventMutation.isIdle && !mutationHappened) || updateEventMutation.isLoading}
         />
         <CardText>
-          {searchParams?.update ? t(`ENGAGEMENT_EVENT_UPDATED_MESSAGES`) : t(`ENGAGEMENT_EVENT_DELETED_MESSAGES`)}
+        {searchParams?.update ? (updateEventMutation.isSuccess || successData) ? t('ENGAGEMENT_EVENT_UPDATED') : t(`ENGAGEMENT_EVENT_UPDATED_FAILED`) : (updateEventMutation.isSuccess || successData) ? t('ENGAGEMENT_EVENT_DELETED') : t('ENGAGEMENT_EVENT_DELETED_FAILED')}
         </CardText>
         <ActionBar>
           <Link to={"/digit-ui/employee"}>

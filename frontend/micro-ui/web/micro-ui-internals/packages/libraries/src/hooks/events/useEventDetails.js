@@ -8,7 +8,7 @@ const useEventDetails = (tenantId, filters, config = {}) => {
     {
       select: (data) => {
         const details = [{
-          title: "",
+          title:" ",
           asSectionHeader: true,
           values: [
             { title: "EVENTS_ULB_LABEL", value: data?.tenantId },
