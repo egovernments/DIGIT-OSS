@@ -83,7 +83,7 @@ public class SurveyService {
         // 1. Validate whether userType is citizen or not
         surveyValidator.validateUserTypeForAnsweringSurvey(requestInfo);
         // 2. Validate if survey for which citizen is responding exists
-        if(CollectionUtils.isEmpty(surveyRepository.fetchSurveys(SurveySearchCriteria.builder().uuid(answerEntity.getSurveyId()).build())))
+        if(CollectionUtils.isEmpty(surveyRepository.fetchSurveys(SurveySearchCriteria.builder().isCountCall(Boolean.FALSE).uuid(answerEntity.getSurveyId()).build())))
             throw new CustomException("EG_SY_DOES_NOT_EXIST_ERR", "The survey for which citizen responded does not exist");
         // 3. Validate if citizen has already responded or not
         surveyValidator.validateWhetherCitizenAlreadyResponded(answerEntity, requestInfo.getUserInfo().getUuid());
@@ -169,7 +169,7 @@ public class SurveyService {
         surveyValidator.validateUserType(requestInfo);
 
         // Validate survey exists
-        List<SurveyEntity> surveyEntities = surveyRepository.fetchSurveys(SurveySearchCriteria.builder().uuid(criteria.getSurveyId()).build());
+        List<SurveyEntity> surveyEntities = surveyRepository.fetchSurveys(SurveySearchCriteria.builder().isCountCall(Boolean.FALSE).uuid(criteria.getSurveyId()).build());
 
         if(CollectionUtils.isEmpty(surveyEntities))
             throw new CustomException("EG_SY_DOES_NOT_EXIST_ERR", "The provided survey does not exist");
