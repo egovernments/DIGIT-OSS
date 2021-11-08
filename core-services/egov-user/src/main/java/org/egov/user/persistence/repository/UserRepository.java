@@ -180,7 +180,7 @@ public class UserRepository {
         Map<String, Object> updateuserInputs = new HashMap<>();
 
         updateuserInputs.put("username", oldUser.getUsername());
-        updateuserInputs.put("type", oldUser.getType().toString());
+        updateuserInputs.put("type", user.getType().toString());
         updateuserInputs.put("tenantid", oldUser.getTenantId());
         updateuserInputs.put("AadhaarNumber", user.getAadhaarNumber());
 
