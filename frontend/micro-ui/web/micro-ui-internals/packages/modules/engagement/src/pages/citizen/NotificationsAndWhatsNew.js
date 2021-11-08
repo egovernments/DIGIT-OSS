@@ -2,16 +2,19 @@ import { Header, Loader, WhatsNewCard, OnGroundEventCard, Card, CardCaption } fr
 import React, { useEffect, useCallback } from "react"
 import { useTranslation } from "react-i18next"
 import { Redirect, useLocation, useHistory } from "react-router-dom"
+import BroadcastWhatsNewCard from '../../components/Messages/BroadcastWhatsNewCard'
 
-const NotificationsAndWhatsNew = ({variant, parentRoute}) => {
+const NotificationsAndWhatsNew = ({ variant, parentRoute }) => {
     const { t } = useTranslation()
     const location = useLocation();
     const history = useHistory()
 
     const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code
-    const { data:{ unreadCount: preVisitUnseenNotificationCount } = {}, isSuccess: preVisitUnseenNotificationCountLoaded, refetch } = Digit.Hooks.useNotificationCount({tenantId, config:{
-        enabled: !!Digit.UserService?.getUser()?.access_token,
-      }})
+    const { data: { unreadCount: preVisitUnseenNotificationCount } = {}, isSuccess: preVisitUnseenNotificationCountLoaded, refetch } = Digit.Hooks.useNotificationCount({
+        tenantId, config: {
+            enabled: !!Digit.UserService?.getUser()?.access_token,
+        }
+    })
 
     const { mutate, isSuccess } = Digit.Hooks.useClearNotifications()
 
@@ -19,17 +22,17 @@ const NotificationsAndWhatsNew = ({variant, parentRoute}) => {
         isSuccess ? refetch() : false
     }, [isSuccess])
 
-    useEffect(() => preVisitUnseenNotificationCount && tenantId ? mutate({tenantId}) : null ,[tenantId, preVisitUnseenNotificationCount])
+    useEffect(() => preVisitUnseenNotificationCount && tenantId ? mutate({ tenantId }) : null, [tenantId, preVisitUnseenNotificationCount])
 
-    const { data: EventsData, isLoading: EventsDataLoading } = Digit.Hooks.useEvents({tenantId, variant})
+    const { data: EventsData, isLoading: EventsDataLoading } = Digit.Hooks.useEvents({ tenantId, variant })
 
-    if(!Digit.UserService?.getUser()?.access_token){
+    if (!Digit.UserService?.getUser()?.access_token) {
         return <Redirect to={{ pathname: `/digit-ui/citizen/login`, state: { from: location.pathname + location.search } }} />
     }
 
-    if(EventsDataLoading || !preVisitUnseenNotificationCountLoaded) return <Loader/>
+    if (EventsDataLoading || !preVisitUnseenNotificationCountLoaded) return <Loader />
 
-    if(EventsData?.length === 0){
+    if (EventsData?.length === 0) {
         return <div className="CitizenEngagementNotificationWrapper">
             <Header>{`${t("CS_HEADER_NOTIFICATIONS")}`}</Header>
             <h1>Nothing to show</h1>
@@ -37,29 +40,31 @@ const NotificationsAndWhatsNew = ({variant, parentRoute}) => {
     }
 
     const VariantWiseRender = () => {
-        switch(variant){
+        switch (variant) {
             case "notifications":
-                return <Header>{`${t("CS_HEADER_NOTIFICATIONS")} ${preVisitUnseenNotificationCount ? `(${preVisitUnseenNotificationCount})` : ""}`}</Header>
-            
+                return <div style={{ marginLeft: "15px", display: "flex", justifyContent: "space-between" }}>
+                    <Header>{`${t("CS_HEADER_NOTIFICATIONS")} ${preVisitUnseenNotificationCount ? `(${preVisitUnseenNotificationCount})` : ""}`}</Header>
+                </div>
+
             case "whats-new":
-                return <Header>{t("CS_HEADER_WHATSNEW")}</Header>
-            
+                return <div style={{ marginLeft: "15px", display: "flex", justifyContent: "space-between" }}><Header>{t("CS_HEADER_WHATSNEW")}</Header></div>
+
             default:
                 return <Redirect to={{ pathname: `/digit-ui/citizen`, state: { from: location.pathname + location.search } }} />
         }
     }
-    
-    function onEventCardClick(id){
-        history.push(parentRoute+'/events/details/'+id)
+
+    function onEventCardClick(id) {
+        history.push(parentRoute + '/events/details/' + id)
     }
 
     return <div className="CitizenEngagementNotificationWrapper">
-            <VariantWiseRender/>
-            {EventsData.length ? EventsData.map( DataParamsInEvent => DataParamsInEvent?.eventType === "EVENTSONGROUND" ?  <OnGroundEventCard onClick={onEventCardClick} {...DataParamsInEvent} /> : <WhatsNewCard {...DataParamsInEvent} />) : (
-                <Card>
-                    <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
-                </Card>)
-            }
+        <VariantWiseRender />
+        {EventsData.length ? EventsData.map(DataParamsInEvent => DataParamsInEvent?.eventType === "EVENTSONGROUND" ? <OnGroundEventCard onClick={onEventCardClick} {...DataParamsInEvent} /> : DataParamsInEvent?.eventType === "BROADCAST" ? <BroadcastWhatsNewCard {...DataParamsInEvent} /> : <WhatsNewCard {...DataParamsInEvent} />) : (
+            <Card>
+                <CardCaption>{t("COMMON_INBOX_NO_DATA")}</CardCaption>
+            </Card>)
+        }
     </div>
 }
 

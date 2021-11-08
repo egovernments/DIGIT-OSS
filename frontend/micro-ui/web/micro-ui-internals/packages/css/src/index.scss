@@ -98,6 +98,9 @@
   @apply flex-1;
 }
 
+.display-flex-gap-1{
+  @apply flex gap-1;
+}
 .rm-mb {
   margin-bottom: unset !important;
 }
