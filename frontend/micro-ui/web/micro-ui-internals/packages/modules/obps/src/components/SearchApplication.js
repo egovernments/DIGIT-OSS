@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo, useEffect, useState } from "react"
+import React, { Fragment, useCallback, useMemo, useEffect, useState, useReducer } from "react"
 import { useForm, Controller } from "react-hook-form";
-import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card } from "@egovernments/digit-ui-react-components";
+import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card, SearchAction, PopUp, SortAction, DetailsCard, Loader } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { convertEpochToDateDMY } from  "../utils";
 
@@ -209,110 +209,185 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
         setCurrPage(getValues("offset")/getValues("limit"));
     },[getValues("offset"),getValues("limit")])
 
+    const isMobile = window.Digit.Utils.browser.isMobile();
+
+    function activateModal(state, action){
+        switch(action.type){
+            case "set":
+                return action.payload
+            case "remove":
+                return false
+            default:
+                console.warn("no such action defined")
+        }
+    }
+
+    const [ currentlyActiveMobileModal, setActiveMobileModal ] = useReducer(activateModal, false)
+
+    const SearchFormComponent = () => <>
+        <SearchField>
+            <label>{t("BPA_SEARCH_APPLICATION_NO_LABEL")}</label>
+            <TextInput name="applicationNo" inputRef={register({})} />
+        </SearchField>
+        <SearchField>
+            <label>{t("BPA_APP_MOBILE_NO_SEARCH_PARAM")}</label>
+            <TextInput name="mobileNumber" inputRef={register({})} 
+                type="mobileNumber"
+                componentInFront={<div className="employee-card-input employee-card-input--front">+91</div>} 
+                maxlength={10}
+                {...(validation = {
+                pattern: "[6-9]{1}[0-9]{9}",
+                type: "tel",
+                //title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
+                })}/>
+        </SearchField>
+        <SearchField>
+            <label>{t("BPA_SEARCH_APPLICATION_TYPE_LABEL")}</label>
+            <Controller
+                    control={control}
+                    name="applicationType"
+                    render={(props) => (
+                        <Dropdown
+                        selected={getApplicationType(props.value)}
+                        select={props.onChange}
+                        onBlur={props.onBlur}
+                        option={applicationTypes}
+                        optionKey="i18nKey"
+                        t={t}
+                        />
+                    )}
+                    />
+        </SearchField>
+        <SearchField>
+            <label>{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</label>
+            <Controller
+                    control={control}
+                    name="serviceType"
+                    render={(props) => (
+                        <Dropdown
+                        selected={getselectedServiceType(props.value)}
+                        select={props.onChange}
+                        onBlur={props.onBlur}
+                        option={ServiceTypes}
+                        optionKey="i18nKey"
+                        t={t}
+                        />
+                    )}
+                    />
+        </SearchField>
+        <SearchField>
+            <label>{t("BPA_APP_FROM_DATE_SEARCH_PARAM")}</label>
+            <Controller
+                render={(props) => <DatePicker date={props.value} onChange={props.onChange} />}
+                name="fromDate"
+                control={control}
+                />
+        </SearchField>
+        <SearchField>
+            <label>{t("BPA_APP_TO_DATE_SEARCH_PARAM")}</label>
+            <Controller
+                render={(props) => <DatePicker date={props.value} onChange={props.onChange} />}
+                name="toDate"
+                control={control}
+                />
+        </SearchField>
+        <SearchField>
+            <label>{t("BPA_SEARCH_APPLICATION_STATUS_LABEL")}</label>
+            <Controller
+                    control={control}
+                    name="status"
+                    render={(props) => (
+                        <Dropdown
+                        selected={props.value}
+                        select={props.onChange}
+                        onBlur={props.onBlur}
+                        option={applicationStatuses}
+                        optionKey="i18nKey"
+                        t={t}
+                        />
+                    )}
+                    />
+        </SearchField>
+        <SearchField className="submit">
+            <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
+            <p onClick={() => {
+                reset({ 
+                    applicationNo: "",
+                    mobileNumber: "",
+                    applicationType: defaultAppType, 
+                    serviceType: defaultserviceType,
+                    fromDate: "", 
+                    toDate: "",
+                    status: "",
+                    offset: 0,
+                    limit: 10,
+                    sortBy: "commencementDate",
+                    sortOrder: "DESC"
+                });
+                previousPage();
+            }}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
+        </SearchField>
+    </>
+
+    const closeMobilePopupModal = () => {
+        setActiveMobileModal({type:"remove"})
+    }
+
+    const MobilePopUpCloseButton = () => <div className="InboxMobilePopupCloseButtonWrapper" onClick={closeMobilePopupModal}>
+        <CloseSvg/>
+    </div>
+
+    const MobileComponentDirectory= {
+        SearchFormComponent: () => <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit} id="search-form" className="rm-mb form-field-flex-one inboxPopupMobileWrapper" >
+            <MobilePopUpCloseButton/>
+            <SearchFormComponent/>
+            {/* <SearchField className="submit">
+                <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
+                <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
+            </SearchField> */}
+        </SearchForm>,
+    }
+
+    const CurrentMobileModalComponent = MobileComponentDirectory[currentlyActiveMobileModal]
+    
+    const propsMobileInboxCards = useMemo(() => data?.map((data) =>({
+        [t("BPA_APPLICATION_NUMBER_LABEL")]: data.applicationNo,
+        [t("BPA_COMMON_TABLE_COL_APP_DATE_LABEL")]: convertEpochToDateDMY(data.auditDetails?.createdTime) || "",
+        [t("BPA_SEARCH_APPLICATION_TYPE_LABEL")]: data.additionalDetails?.applicationType || "-",
+        [t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")]: data.additionalDetails?.serviceType,
+        [t("BPA_CURRENT_OWNER_HEAD")]: data.landInfo?.owners.map( o => o.name ). join(",") || "",
+        [t("BPA_STATUS_LABEL")]: data.state || "NA"
+    })), [data])
+
+    if(isMobile){
+        if(isLoading){
+            return <Loader/>
+        }
+        return <React.Fragment>
+            <div className="searchBox">
+                <SearchAction text={t("ES_COMMON_SEARCH")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"SearchFormComponent"})}/>
+                {/* {isInboxLoading ? <Loader /> : <FilterAction text={t("ES_COMMON_FILTER")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"FilterFormComponent"})}/>} */}
+                <SortAction text={t("ES_COMMON_SORT")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"SortComponent"})}/>
+            </div>
+            {currentlyActiveMobileModal ? <PopUp>
+                <CurrentMobileModalComponent/>
+            </PopUp> : null}
+            {!isLoading && data?.[0]?.display ? <Card style={{ marginTop: 20 }}>
+                {t(data?.[0]?.display)
+                    .split("\\n")
+                    .map((text, index) => (
+                    <p key={index} style={{ textAlign: "center" }}>
+                        {text}
+                    </p>
+                ))}
+            </Card>
+            : <DetailsCard {...{data:propsMobileInboxCards, linkPrefix: `/digit-ui/employee/obps/applicationNo/`, serviceRequestIdKey: "applicationNo" }} />}
+        </React.Fragment>
+    }
+
     return <React.Fragment>
-                <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-                <SearchField>
-                    <label>{t("BPA_SEARCH_APPLICATION_NO_LABEL")}</label>
-                    <TextInput name="applicationNo" inputRef={register({})} />
-                </SearchField>
-                <SearchField>
-                    <label>{t("BPA_APP_MOBILE_NO_SEARCH_PARAM")}</label>
-                    <TextInput name="mobileNumber" inputRef={register({})} 
-                        type="mobileNumber"
-                        componentInFront={<div className="employee-card-input employee-card-input--front">+91</div>} 
-                        maxlength={10}
-                        {...(validation = {
-                        pattern: "[6-9]{1}[0-9]{9}",
-                        type: "tel",
-                        //title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
-                        })}/>
-                </SearchField>
-                <SearchField>
-                    <label>{t("BPA_SEARCH_APPLICATION_TYPE_LABEL")}</label>
-                    <Controller
-                            control={control}
-                            name="applicationType"
-                            render={(props) => (
-                                <Dropdown
-                                selected={getApplicationType(props.value)}
-                                select={props.onChange}
-                                onBlur={props.onBlur}
-                                option={applicationTypes}
-                                optionKey="i18nKey"
-                                t={t}
-                                />
-                            )}
-                            />
-                </SearchField>
-                <SearchField>
-                    <label>{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</label>
-                    <Controller
-                            control={control}
-                            name="serviceType"
-                            render={(props) => (
-                                <Dropdown
-                                selected={getselectedServiceType(props.value)}
-                                select={props.onChange}
-                                onBlur={props.onBlur}
-                                option={ServiceTypes}
-                                optionKey="i18nKey"
-                                t={t}
-                                />
-                            )}
-                            />
-                </SearchField>
-                <SearchField>
-                    <label>{t("BPA_APP_FROM_DATE_SEARCH_PARAM")}</label>
-                    <Controller
-                        render={(props) => <DatePicker date={props.value} onChange={props.onChange} />}
-                        name="fromDate"
-                        control={control}
-                        />
-                </SearchField>
-                <SearchField>
-                    <label>{t("BPA_APP_TO_DATE_SEARCH_PARAM")}</label>
-                    <Controller
-                        render={(props) => <DatePicker date={props.value} onChange={props.onChange} />}
-                        name="toDate"
-                        control={control}
-                        />
-                </SearchField>
-                <SearchField>
-                    <label>{t("BPA_SEARCH_APPLICATION_STATUS_LABEL")}</label>
-                    <Controller
-                            control={control}
-                            name="status"
-                            render={(props) => (
-                                <Dropdown
-                                selected={props.value}
-                                select={props.onChange}
-                                onBlur={props.onBlur}
-                                option={applicationStatuses}
-                                optionKey="i18nKey"
-                                t={t}
-                                />
-                            )}
-                            />
-                </SearchField>
-                <SearchField className="submit">
-                    <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
-                    <p onClick={() => {
-                        reset({ 
-                            applicationNo: "",
-                            mobileNumber: "",
-                            applicationType: defaultAppType, 
-                            serviceType: defaultserviceType,
-                            fromDate: "", 
-                            toDate: "",
-                            status: "",
-                            offset: 0,
-                            limit: 10,
-                            sortBy: "commencementDate",
-                            sortOrder: "DESC"
-                        });
-                        previousPage();
-                    }}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
-                </SearchField>
+            <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
+                <SearchFormComponent/>
             </SearchForm>
             {!isLoading && data?.[0]?.display ? <Card style={{ marginTop: 20 }}>
                 {

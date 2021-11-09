@@ -98,6 +98,7 @@ import RadioOrSelect from "./molecules/RadioOrSelect";
 import RatingCard from "./molecules/RatingCard";
 import RemoveableTag from "./atoms/RemoveableTag";
 import SearchAction from "./molecules/SearchAction";
+import SortAction from "./molecules/SortAction";
 import { SearchField, SearchForm } from "./molecules/SearchForm";
 import TextInputCard from "./molecules/TextInputCard";
 import TypeSelectCard from "./molecules/TypeSelectCard";
@@ -234,6 +235,7 @@ export {
   MultiUploadWrapper,
   FilterForm,
   FilterFormField,
+  SortAction,
   // hoc
   FormComposer,
   ResponseComposer,
