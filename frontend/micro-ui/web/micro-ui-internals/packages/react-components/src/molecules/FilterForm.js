@@ -9,11 +9,12 @@ const FilterFormField = ({children, className}) => {
 	</div>
 }
 
-const FilterForm = ({onMobileExclusiveFilterPopupFormClose = () => null , showMobileFilterFormPopup = false, children, id="", onSubmit, handleSubmit, onResetFilterForm=() => null, className="" }) => {
+const FilterForm = ({onMobileExclusiveFilterPopupFormClose = () => null , closeButton= () => null, showMobileFilterFormPopup = false, children, id="", onSubmit, handleSubmit, onResetFilterForm=() => null, className="" }) => {
     const { t } = useTranslation()
 
 	return <div className={`filter-form ${className}`}>
 	<div className="filter-card">
+		{closeButton()}
 		<div className="heading" style={{ alignItems: "center" }}>
 			<div className="filter-label" style={{ display: "flex", alignItems: "center" }}>
 			<span>

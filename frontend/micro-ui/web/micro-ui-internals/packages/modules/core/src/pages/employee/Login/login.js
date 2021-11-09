@@ -20,7 +20,6 @@ const Login = ({ config: propsConfig, t }) => {
       return;
     }
     Digit.UserService.setUser(user);
-    Digit.UserService.setType('EMPLOYEE');
     const redirectPath = location.state?.from || "/digit-ui/employee";
     history.replace(redirectPath);
   }, [user]);

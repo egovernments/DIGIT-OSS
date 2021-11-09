@@ -94,6 +94,10 @@
 @import "./pages/citizen/SurveyList.scss";
 @import "./pages/citizen/citizenDocument.scss";
 
+.p-unset{
+  padding: unset !important;
+}
+
 .flex-one{
   @apply flex-1;
 }

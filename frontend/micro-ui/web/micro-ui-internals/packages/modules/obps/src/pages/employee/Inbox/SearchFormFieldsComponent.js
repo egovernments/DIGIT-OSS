@@ -12,12 +12,19 @@ const SearchFormFieldsComponents = ({registerRef, searchFormState}) => {
         </SearchField>
         <SearchField>
             <label>{t("CORE_COMMON_MOBILE_NUMBER")}</label>
-            <TextInput name="mobileNumber" inputRef={registerRef({
+            <TextInput name="mobileNumber" type="number" inputRef={registerRef({
                 minLength: {
                     value: 10,
                     message: t("CORE_COMMON_MOBILE_ERROR")
                 },
-                maxLength: 10
+                maxLength: {
+                    value: 10,
+                    message: t("CORE_COMMON_MOBILE_ERROR")
+                },
+                pattern: {
+                    value: /[789][0-9]{9}/,
+                    message: t("CORE_COMMON_MOBILE_ERROR")
+                }
             })} />
             <CardLabelError>
                 {searchFormState?.errors?.["mobileNumber"]?.message}

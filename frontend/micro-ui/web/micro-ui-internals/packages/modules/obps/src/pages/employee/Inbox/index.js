@@ -1,9 +1,10 @@
-import React, {Fragment, useCallback, useEffect, useMemo, useReducer } from "react"
+import React, {Fragment, useCallback, useMemo, useReducer } from "react"
 import { InboxComposer, CaseIcon } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import FilterFormFieldsComponent from "./FilterFormFieldsComponent";
 import SearchFormFieldsComponents from "./SearchFormFieldsComponent";
 import useInboxTableConfig from "./useInboxTableConfig";
+import useInboxMobileCardsData from "./useInboxMobileCardsData";
 
 const Inbox = ({parentRoute}) => {
     
@@ -70,6 +71,9 @@ const Inbox = ({parentRoute}) => {
     const onPageSizeChange = (e) => {
       dispatch({action: "mutateTableForm", data: {...formState.tableForm , limit: e.target.value}})
     }
+
+    const { data: localitiesForEmployeesCurrentTenant, isLoading: loadingLocalitiesForEmployeesCurrentTenant } = Digit.Hooks.useBoundaryLocalities(tenantId, "revenue", {}, t);
+
     const { isLoading: isInboxLoading, data: {table , statuses, totalCount} = {} } = Digit.Hooks.obps.useBPAInbox({
         tenantId,
         filters: { ...formState }
@@ -89,8 +93,8 @@ const Inbox = ({parentRoute}) => {
     const SearchFormFields = useCallback(({registerRef, searchFormState}) => <SearchFormFieldsComponents {...{registerRef, searchFormState}} />,[])
 
     const FilterFormFields = useCallback(
-      ({registerRef, controlFilterForm, setFilterFormValue, getFilterFormValue}) => <FilterFormFieldsComponent {...{statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState: formState?.filterForm, getFilterFormValue}} />
-    ,[statuses, isInboxLoading])
+      ({registerRef, controlFilterForm, setFilterFormValue, getFilterFormValue}) => <FilterFormFieldsComponent {...{statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState: formState?.filterForm, getFilterFormValue, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}} />
+    ,[statuses, isInboxLoading, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant])
 
     const onSearchFormSubmit = (data) => {
       data.hasOwnProperty("") ? delete data?.[""] : null
@@ -110,7 +114,9 @@ const Inbox = ({parentRoute}) => {
 
     const propsForInboxTable = useInboxTableConfig({...{ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch}})
 
-    return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable, formState}}></InboxComposer>
+    const propsForInboxMobileCards = useInboxMobileCardsData({parentRoute, table})
+
+    return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable, propsForInboxMobileCards, formState}}></InboxComposer>
 }
 
 export default Inbox

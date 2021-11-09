@@ -1,8 +1,4 @@
-import React from "react"
 import useInbox from "../useInbox"
-import { InboxGeneral } from "../../services/elements/InboxService";
-import { Search } from "../../services/molecules/OBPS/Search";
-import { useQuery } from "react-query"
 
 const useBPAInbox = ({ tenantId, filters, config={} }) => {
     const { filterForm, searchForm , tableForm } = filters

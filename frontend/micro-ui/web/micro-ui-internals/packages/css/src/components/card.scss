@@ -308,3 +308,7 @@
     margin-bottom: 24px;
   }
 }
+
+.card-label-error {
+  @apply block text-body-s text-error mb-md;
+}

@@ -3,9 +3,9 @@ import { FilterFormField, Loader, RadioButtons, Localities, RemoveableTag, Dropd
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState, getFilterFormValue}) => {
+const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState, getFilterFormValue, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}) => {
   const { t } = useTranslation()
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  // const tenantId = Digit.ULBService.getCurrentTenantId();
   const availableOptions = [
     { code: "ASSIGNED_TO_ME", name: `${t("ES_INBOX_ASSIGNED_TO_ME")}` },
     { code: "ASSIGNED_TO_ALL", name: `${t("ES_INBOX_ASSIGNED_TO_ALL")}` },
@@ -65,10 +65,16 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
                 />
                 );
               }),[props?.value])
-            return <>
+            return loadingLocalitiesForEmployeesCurrentTenant ? <Loader/> : <>
               <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
-              {/* TODO: know that it is rerendering once in mobile view this is due to the fact that controlled components can not react to async calls inside the components ie controlled caomponent can only entertain PURE components hence this molecule needs to be removed and dropdown is to be placed, with this localities should be fetched at the top of the inbox/index.js and memoized functions should be handled accordingly */}
-              <Localities selectLocality={ (e) => {props.onChange([e, ...props?.value])}} tenantId={tenantId} optionCardStyles={{maxHeight:'350px'}} boundaryType="revenue" />
+              {/* Done: know that it is rerendering once in mobile view this is due to the fact that controlled components can not react to async calls inside the components ie controlled caomponent can only entertain PURE components hence this molecule needs to be removed and dropdown is to be placed, with this localities should be fetched at the top of the inbox/index.js and memoized functions should be handled accordingly */}
+              {/* <Localities selectLocality={ (e) => {props.onChange([e, ...props?.value])}} tenantId={tenantId} optionCardStyles={{maxHeight:'350px'}} boundaryType="revenue" /> */}
+              <Dropdown
+                option={localitiesForEmployeesCurrentTenant}
+                select={(e) => {props.onChange([e, ...props?.value])}}
+                optionCardStyles={{maxHeight:'350px'}}
+                optionKey="i18nkey"
+              />
               <div className="tag-container">
                 {renderRemovableTokens}
               </div>

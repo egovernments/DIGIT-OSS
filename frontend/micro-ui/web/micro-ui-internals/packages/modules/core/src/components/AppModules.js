@@ -24,15 +24,15 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
 
   const appRoutes = modules.map(({ code, tenants }, index) => {
     const Module = Digit.ComponentRegistryService.getComponent(`${code}Module`);
-    return (
+    return Module ? (
       <Route key={index} path={`${path}/${code.toLowerCase()}`}>
         <Module stateCode={stateCode} moduleCode={code} userType={userType} tenants={getTenants(tenants, appTenants)} />
       </Route>
-    );
+    ): null
   });
 
   return (
-    <div class="ground-container">
+    <div className="ground-container">
       <Switch>
         {appRoutes}
         <Route path={`${path}/login`}> <Redirect to={{ pathname: "/digit-ui/employee/user/login", state: { from: location.pathname + location.search } }} /></Route>
