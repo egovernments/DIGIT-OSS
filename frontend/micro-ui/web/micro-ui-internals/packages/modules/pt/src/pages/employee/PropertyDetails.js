@@ -131,7 +131,7 @@ const PropertyDetails = () => {
       data: {
         ...workflowDetails?.data,
         actionState: {
-          nextActions: [
+          nextActions: PT_CEMP?[
             {
               action: "ASSESS_PROPERTY",
               forcedName: "PT_ASSESS",
@@ -154,7 +154,7 @@ const PropertyDetails = () => {
               },
               tenantId: Digit.ULBService.getStateId(),
             },
-          ],
+          ]:[],
         },
       },
     };
