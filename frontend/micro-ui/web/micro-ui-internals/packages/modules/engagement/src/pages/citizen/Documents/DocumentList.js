@@ -68,8 +68,9 @@ const DocumentList = ({ match }) => {
 
   return (
     <AppContainer>
+      <Header>{`${t(`${category}`)} (${count ? count : "-"})`}</Header>
       <div className="documentContainerPadding">
-        <Header>{`${t(`${category}`)} (${count ? count : "-"})`}</Header>
+        
         <div
         >
 

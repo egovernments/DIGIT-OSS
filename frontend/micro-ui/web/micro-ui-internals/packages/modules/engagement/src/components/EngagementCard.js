@@ -22,7 +22,7 @@ const EngagementCard = () => {
   const { data:totalEvents, isLoadingEvents } = Digit.Hooks.events.useInbox(tenantId, { },
   { eventTypes: "EVENTSONGROUND" }, 
   {
-    select: (data) => data?.events?.length
+    select: (data) => data?.totalCount
   });
 
   const totalDocsCount = useMemo(()=>(isLoadingDocs ? "-":documentsCount),[isLoadingDocs, documentsCount])

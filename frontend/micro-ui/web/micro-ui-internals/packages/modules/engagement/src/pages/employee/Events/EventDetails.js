@@ -57,20 +57,18 @@ const EventDetails = () => {
 
   return (
     <Fragment>
-      <div style={{marginLeft: "15px", display: "flex", justifyContent: "space-between"}}> 
-        <Header>{t("ES_TITLE_APPLICATION_DETAILS")}</Header>
-      </div>
+      <Header>{t("ES_TITLE_APPLICATION_DETAILS")}</Header>
       <ApplicationDetailsTemplate
         applicationData={data?.applicationData}
         applicationDetails={data}
         isLoading={isLoading}
         isDataLoading={isLoading}
-        // workflowDetails={workflowDetails}
-        // businessService={
-        //   workflowDetails?.data?.applicationBusinessService
-        //     ? workflowDetails?.data?.applicationBusinessService
-        //     : data?.applicationData?.businessService
-        // }
+      // workflowDetails={workflowDetails}
+      // businessService={
+      //   workflowDetails?.data?.applicationBusinessService
+      //     ? workflowDetails?.data?.applicationBusinessService
+      //     : data?.applicationData?.businessService
+      // }
       />
       <ActionBar>
         {displayMenu ? (
@@ -85,12 +83,12 @@ const EventDetails = () => {
       </ActionBar>
       {showModal &&
         <Modal
-        headerBarMain={<Heading label={t('ES_EVENT_DELETE_POPUP_HEADER')} />}
-        headerBarEnd={<CloseBtn onClick={() => setShowModal(false)} />}
-        actionCancelLabel={t("CS_COMMON_CANCEL")}
-        actionCancelOnSubmit={() => setShowModal(false)}
-        actionSaveLabel={t('ES_EVENT_DELETE')}
-        actionSaveOnSubmit={handleDelete}
+          headerBarMain={<Heading label={t('ES_EVENT_DELETE_POPUP_HEADER')} />}
+          headerBarEnd={<CloseBtn onClick={() => setShowModal(false)} />}
+          actionCancelLabel={t("CS_COMMON_CANCEL")}
+          actionCancelOnSubmit={() => setShowModal(false)}
+          actionSaveLabel={t('ES_EVENT_DELETE')}
+          actionSaveOnSubmit={handleDelete}
         >
           <Card style={{ boxShadow: "none" }}>
             <CardText>{t(`ES_EVENT_DELETE_TEXT`)}</CardText>

@@ -25,15 +25,15 @@ const Inbox = ({ tenants, parentRoute }) => {
     limit: pageSize,
     offset: pageOffset,
   },
-  { eventTypes: "EVENTSONGROUND" }, 
-  {
-    select: (data) => data?.events
-  });
+    { eventTypes: "EVENTSONGROUND" },
+    {
+      select: (data) => ({ events: data?.events, totalCount: data?.totalCount })
+    });
 
   const onSearch = (params) => {
-    let updatedParams = {...params};
-    if(!params?.ulb){
-      updatedParams ={...params, ulb:{code:tenantId}}
+    let updatedParams = { ...params };
+    if (!params?.ulb) {
+      updatedParams = { ...params, ulb: { code: tenantId } }
     }
     setSearchParams({ ...searchParams, ...updatedParams });
   }
@@ -77,29 +77,29 @@ const Inbox = ({ tenants, parentRoute }) => {
   if (isMobile) {
     return (
       <MobileInbox
-        data={data}
+        data={data?.events}
         searchParams={searchParams}
         searchFields={getSearchFields()}
         t={t}
         onFilterChange={handleFilterChange}
         onSearch={onSearch}
         isLoading={isLoading}
-        title = {"EVENTS_EVENTS_HEADER"}
+        title={"EVENTS_EVENTS_HEADER"}
         iconName={"calender"}
         links={links}
       />
     )
-  } 
+  }
 
   return (
     <div>
       <Header>
         {t("EVENTS_EVENTS_HEADER")}
-        {Number(data?.length) ? <p className="inbox-count">{Number(data?.length)}</p> : null}
+        {Number(data?.totalCount) ? <p className="inbox-count">{Number(data?.totalCount)}</p> : null}
       </Header>
       <DesktopInbox
         t={t}
-        data={data}
+        data={data?.events}
         links={links}
         parentRoute={parentRoute}
         searchParams={searchParams}
@@ -108,8 +108,8 @@ const Inbox = ({ tenants, parentRoute }) => {
         searchFields={getSearchFields()}
         onFilterChange={handleFilterChange}
         pageSizeLimit={pageSize}
-        totalRecords={data?.length}
-        title = {"EVENTS_EVENTS_HEADER"}
+        totalRecords={data?.totalCount}
+        title={"EVENTS_EVENTS_HEADER"}
         iconName={"calender"}
         links={links}
       />
@@ -117,4 +117,4 @@ const Inbox = ({ tenants, parentRoute }) => {
   );
 }
 
-export default Inbox; 
+export default Inbox;
