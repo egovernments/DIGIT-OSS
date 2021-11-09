@@ -1,12 +1,13 @@
 import React, { Fragment, useCallback, useMemo, useEffect, useState, useReducer } from "react"
 import { useForm, Controller } from "react-hook-form";
-import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card, SearchAction, PopUp, SortAction, DetailsCard, Loader } from "@egovernments/digit-ui-react-components";
+import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card, SearchAction, PopUp, SortAction, DetailsCard, Loader, Toast } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { convertEpochToDateDMY } from  "../utils";
 
-const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count }) => {
+const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, Count }) => {
     let validation = {};
     const [ Applicationtype, setApplicationtype] = useState("BUILDING_PLAN_SCRUTINY");
+    const [showToast, setShowToast] = useState(null);
     const { data: applicationTypes } = Digit.Hooks.obps.useSearchMdmsTypes.applicationTypes(tenantId.split(".")[0]);
     const { data: serviceTypes } = Digit.Hooks.obps.useSearchMdmsTypes.serviceTypes(tenantId.split(".")[0]);
     let defaultAppType = applicationTypes && applicationTypes.filter((ob) => ob.code === "BUILDING_PLAN_SCRUTINY")[0];
@@ -18,7 +19,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
             limit: 10,
             sortBy: "commencementDate",
             sortOrder: "DESC",
-            applicationType: defaultAppType, 
+            applicationType: Applicationtype?{code: Applicationtype,i18nKey: `BPA_APPLICATIONTYPE_${Applicationtype}`}:defaultAppType, 
             serviceType: defaultserviceType,
         }
     })
@@ -31,6 +32,14 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
 
     //need to get from workflow
     const [currPage, setCurrPage] = useState(getValues("offset")/getValues("limit"));
+
+    useEffect(() => {
+        if(error !== "")
+        {
+            //alert(t(error));
+            setShowToast({ key: true, label: error });
+        }
+    },[error]);
 
 
     if(applicationTypes && applicationTypes.length>0)
@@ -178,7 +187,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
         },
         {
           Header: t("BPA_STATUS_LABEL"),
-          accessor: (row) =>GetCell(t(row?.state&&`WF_BPA_${row.state}`|| "NA") ),
+          accessor: (row) =>GetCell(t(row?.state&&`WF_BPA_${row.state}`|| row?.status&&`WF_BPA_${row.status}`|| "NA") ),
           disableSortBy: true,
         }
       ]), [] )
@@ -400,7 +409,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
                     ))
                 }
             </Card>
-            : <Table
+            : !isLoading?<Table
                 t={t}
                 data={data}
                 columns={columns}
@@ -425,7 +434,16 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, isLoading, Count })
                 onLastPage={fetchLastPage}
                 onFirstPage={fetchFirstPage}
                 sortParams={[{id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false}]}
-            />}
+            />:<Loader />}
+            {showToast && (
+        <Toast
+          error={showToast.key}
+          label={t(showToast.label)}
+          onClose={() => {
+            setShowToast(null);
+          }}
+        />
+      )}
         </React.Fragment>
 }
 

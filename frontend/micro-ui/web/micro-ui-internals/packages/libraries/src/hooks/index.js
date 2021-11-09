@@ -120,6 +120,7 @@ import useReceiptsUpdate from "./receipts/useReceiptsUpdate";
 
 import useSearchMdmsTypes from "./obps/useSearchMdmsTypes";
 import useOBPSMDMS from "./obps/useMDMS";
+import useOBPSSearch from "./obps/useOBPSSearch";
 import useScrutinyDetails from "./obps/useScrutinyDetails";
 import useTenantsOBPS from "./obps/useTenants";
 import useNocDetails from "./obps/useNocDetails";
@@ -284,7 +285,8 @@ const obps = {
   useBPAInbox,
   useArchitectInbox,
   useSearchMdmsTypes,
-  useApplicationActions: useBPAApplicationActions
+  useApplicationActions: useBPAApplicationActions,
+  useOBPSSearch
 };
 
 const events = {
