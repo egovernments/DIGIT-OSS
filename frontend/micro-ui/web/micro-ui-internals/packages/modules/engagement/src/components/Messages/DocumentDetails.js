@@ -1,5 +1,5 @@
 import { Header, ActionBar, SubmitBar, PDFSvg, Menu, GenericFileIcon, Loader } from '@egovernments/digit-ui-react-components';
-import React, { useState } from 'react'
+import React, { useState ,useEffect} from 'react'
 import { useTranslation } from 'react-i18next';
 import { useParams, useHistory } from "react-router-dom";
 import Confirmation from '../Modal/Confirmation';
@@ -41,6 +41,15 @@ const DocumentDetails = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { isLoading, data } = Digit.Hooks.events.useEventDetails(tenantId, { ids: id }, {
   });
+    const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MSG_MUTATION_HAPPENED", false);
+  const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("EMPLOYEE_MSG_ERROR_DATA", false);
+  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MSG_MUTATION_SUCCESS_DATA", false);
+
+  useEffect(() => {
+    setMutationHappened(false);
+    clearSuccessData();
+    clearError();
+  }, []);
 
   function onActionSelect(action) {
     // setSelectedAction(action);

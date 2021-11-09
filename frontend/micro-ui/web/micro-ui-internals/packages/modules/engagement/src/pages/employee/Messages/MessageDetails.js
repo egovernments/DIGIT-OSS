@@ -56,9 +56,10 @@ const MessageDetails = () => {
   const [showModal, setShowModal] = useState(false);
   const [displayMenu, setDisplayMenu] = useState(false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
+
+
   const { isLoading, data } = Digit.Hooks.events.useEventDetails(tenantId, { ids: id }, {
     select: (data) => {
-      console.log(',,,,', data)
       const details = [{
         title: "",
         asSectionHeader: true,
