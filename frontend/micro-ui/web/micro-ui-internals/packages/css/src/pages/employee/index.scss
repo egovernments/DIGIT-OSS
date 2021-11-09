@@ -322,6 +322,7 @@
     row-gap: 2px;
     margin-left: -12px;
   }
+
 }
 
 .m-auto {
@@ -333,8 +334,4 @@
 }
 .mb-25{
   margin-bottom: 25px;
-}
-
-.citizenAllServiceGrid{
-  @apply grid grid-cols-2 gap-4;
 }

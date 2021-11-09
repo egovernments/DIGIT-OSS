@@ -42,12 +42,11 @@ const NotificationsAndWhatsNew = ({ variant, parentRoute }) => {
     const VariantWiseRender = () => {
         switch (variant) {
             case "notifications":
-                return <div style={{ marginLeft: "15px", display: "flex", justifyContent: "space-between" }}>
-                    <Header>{`${t("CS_HEADER_NOTIFICATIONS")} ${preVisitUnseenNotificationCount ? `(${preVisitUnseenNotificationCount})` : ""}`}</Header>
-                </div>
+                return <Header>{`${t("CS_HEADER_NOTIFICATIONS")} ${preVisitUnseenNotificationCount ? `(${preVisitUnseenNotificationCount})` : ""}`}</Header>
+
 
             case "whats-new":
-                return <div style={{ marginLeft: "15px", display: "flex", justifyContent: "space-between" }}><Header>{t("CS_HEADER_WHATSNEW")}</Header></div>
+                return <Header>{t("CS_HEADER_WHATSNEW")}</Header>
 
             default:
                 return <Redirect to={{ pathname: `/digit-ui/citizen`, state: { from: location.pathname + location.search } }} />

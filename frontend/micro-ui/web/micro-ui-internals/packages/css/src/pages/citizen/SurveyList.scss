@@ -14,5 +14,9 @@
     @apply text-success;
 }
 .surveyListCardMargin{
-    @apply my-lg;
+    @apply mx-md my-lg ;
+}
+.centered-message{
+    @apply flex items-center pl-md py-lg ;
+    
 }
