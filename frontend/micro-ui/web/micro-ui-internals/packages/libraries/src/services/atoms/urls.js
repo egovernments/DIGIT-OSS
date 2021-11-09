@@ -129,10 +129,20 @@ const Urls = {
   },
 
   engagement: {
-    search: "/egov-document-uploader/egov-du/document/_search",
-    create: "/egov-document-uploader/egov-du/document/_create",
-    delete: "/egov-document-uploader/egov-du/document/_delete",
-    update: "/egov-document-uploader/egov-du/document/_update",
+    document: {
+      search: "/egov-document-uploader/egov-du/document/_search",
+      create: "/egov-document-uploader/egov-du/document/_create",
+      delete: "/egov-document-uploader/egov-du/document/_delete",
+      update: "/egov-document-uploader/egov-du/document/_update",
+    },
+    surveys: {
+      create: "/egov-survey-services/egov-ss/survey/_create",
+      update: "/egov-survey-services/egov-ss/survey/_update",
+      search: "/egov-survey-services/egov-ss/survey/_search",
+      delete: "/egov-survey-services/egov-ss/survey/_delete",
+      submitResponse: "/egov-survey-services/egov-ss/survey/response/_submit",
+      showResults: "/egov-survey-services/egov-ss/survey/response/_results"
+    }
   },
 
   noc: {

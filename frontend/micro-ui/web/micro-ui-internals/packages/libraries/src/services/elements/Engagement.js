@@ -4,7 +4,7 @@ import { Request } from "../atoms/Utils/Request";
 export const Engagement = {
   search: (filters = {}) =>
     Request({
-      url: Urls.engagement.search,
+      url: Urls.engagement.document.search,
       useCache: false,
       method: "POST",
       auth: true,
@@ -13,7 +13,7 @@ export const Engagement = {
     }),
   create: (details) =>
     Request({
-      url: Urls.engagement.create,
+      url: Urls.engagement.document.create,
       data: details,
       useCache: true,
       userService: true,
@@ -23,7 +23,7 @@ export const Engagement = {
     }),
   delete: (details) =>
     Request({
-      url: Urls.engagement.delete,
+      url: Urls.engagement.document.delete,
       data: details,
       useCache: true,
       userService: true,
@@ -32,7 +32,7 @@ export const Engagement = {
     }),
   update: (details) =>
     Request({
-      url: Urls.engagement.update,
+      url: Urls.engagement.document.update,
       data: details,
       useCache: true,
       userService: true,

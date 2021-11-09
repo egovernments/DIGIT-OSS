@@ -146,6 +146,12 @@ import useDocSearch from "./engagement/useSearch";
 import useDocCreate from "./engagement/useCreate";
 import useDocUpdate from "./engagement/useUpdate";
 import useDocDelete from "./engagement/useDelete";
+import useSurveyCreate from "./surveys/useCreate";
+import useSurveyDelete from "./surveys/useDelete";
+import useSurveyUpdate from "./surveys/useUpdate";
+import useSurveySearch from "./surveys/useSearch";
+import useSurveyShowResults from "./surveys/useShowResults";
+import useSurveySubmitResponse from "./surveys/useSubmitResponse";
 
 import useNOCDetails from "./noc/useNOCDetails";
 import useNOCInbox from "./noc/useInbox"
@@ -296,6 +302,15 @@ const engagement = {
   useDocUpdate,
 };
 
+const survey = {
+  useCreate: useSurveyCreate,
+  useUpdate: useSurveyUpdate,
+  useDelete: useSurveyDelete,
+  useSearch: useSurveySearch,
+  useSubmitResponse: useSurveySubmitResponse,
+  useShowResults: useSurveyShowResults
+}
+
 const noc = {
   useNOCDetails,
   useNOCApplicationActions,
@@ -341,6 +356,7 @@ const Hooks = {
   obps,
   events,
   engagement,
+  survey,
   noc
 };
 

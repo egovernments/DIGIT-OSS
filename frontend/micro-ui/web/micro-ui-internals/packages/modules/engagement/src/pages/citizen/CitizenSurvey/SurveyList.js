@@ -1,7 +1,15 @@
-import { Clock, Header, WhatsNewCard } from '@egovernments/digit-ui-react-components'
+import { Clock, Header, Loader, WhatsNewCard } from '@egovernments/digit-ui-react-components'
 import React from 'react'
-import SurveyListCard from '../../../components/SurveyListCard'
+import { useTranslation } from "react-i18next";
+import SurveyListCard from '../../../components/Surveys/SurveyListCard'
+const isActive = (startDate, endDate) =>{
+    const currentDate = new Date().getTime();
+    if(startDate < currentDate && currentDate <= endDate){
+        return true;
+    }
+    return false;
 
+}
 const SurveyListData = [
     {
         id: 1,
@@ -36,27 +44,56 @@ const InactiveSurveyListData = [
     }
 ]
 const SurveyList = () => {
+    const {t} = useTranslation()
+    const tenantIds = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+    const { data, isLoading: isLoadingSurveys, } = Digit.Hooks.survey.useSearch({ tenantIds }, {
+        select : ({Surveys}) => {
+        const allSurveys = Surveys.map((survey)=>({hasResponded:false, responseStatus:'CS_SURVEY_YT_TO_RESPOND', ...survey}))
+         const activeSurveysList = [];
+         const inactiveSurveysList = [];
+         for(let survey of allSurveys){
+              if(survey.status === "ACTIVE" && isActive(survey.startDate, survey.endDate)){
+                     activeSurveysList.push(survey)
+                 }else{
+                     inactiveSurveysList.push(survey)
+                 }
+         }    
+        return {
+                 activeSurveysList,
+                 inactiveSurveysList
+             }
+         } 
+    })
+
+    if(isLoadingSurveys){
+        return(
+            <Loader/>
+        )
+    }
+
+   
+
     return (
-        <div>
-            <Header>Surveys (2)</Header>
+        <div style={{marginLeft:"10px"}}>
+            <Header>{`${t('CS_COMMON_SURVEYS')} (${data?.activeSurveysList.length})`}</Header>
             {
-                SurveyListData && SurveyListData.map((data) => {
+                data?.activeSurveysList && data.activeSurveysList.length ? data.activeSurveysList.map((data, index) => {
                     return (
                         <div className="surveyListCardMargin">
-                            <SurveyListCard header={data.header} about={data.about} activeTime={data.activeTime} day={data.day} statusData={data.statusData} status={data.status} key={data.id} />
+                            <SurveyListCard header={data.title} about={data.description} activeTime={data.endDate} postedAt={data.auditDetails.createdTime} responseStatus={data.responseStatus} hasResponsed={data.status} key={index} />
                         </div>
                     )
-                })
+                }) : <p>{t('CS_NO_ACTIVE_SURVEYS')}</p>
             }
-            <Header>Inactive Surveys (2)</Header>
+            <Header>{`${t('CS_COMMON_INACTIVE_SURVEYS')} (${data.inactiveSurveysList.length})`}</Header>
             {
-                InactiveSurveyListData && InactiveSurveyListData.map((data) => {
+                data?.inactiveSurveysList && data.inactiveSurveysList.length ? data.inactiveSurveysList.map((data, index) => {
                     return (
                         <div className="surveyListCardMargin">
-                            <SurveyListCard header={data.header} about={data.about} activeTime={data.activeTime} day={data.day} statusData={data.statusData} status={data.status} key={data.id} />
+                            <SurveyListCard header={data.title} about={data.description} activeTime={data.endDate} postedAt={data.auditDetails.createdTime} responseStatus={data.responseStatus} hasResponsed={data.status} key={index} />
                         </div>
                     )
-                })
+                }) : <p>{t(`CS_NO_INACTIVE_SURVEYS`)}</p>
             }
         </div>
     )

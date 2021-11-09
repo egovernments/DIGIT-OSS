@@ -6,7 +6,7 @@ const renderSingleViewAndDownloadButton = (t,documents) =>{
     if(!documents.length) return null;
     const {fileStoreId, fileName} = documents?.[0];
     return(
-        <div className="broadcastnotifications_actionswrapper">
+        <div className="display-flex-gap-2">
             {fileStoreId && fileStoreId.length ? <span className="link" onClick={() => openUploadedDocument(fileStoreId, fileName)} > {t('CE_DOCUMENT_VIEW_LINK')} </span> : null }
             {fileStoreId && fileStoreId.length ? <span className="link" onClick={() => downloadDocument(fileStoreId, fileName)} > {t('CE_DOCUMENT_DOWNLOAD_LINK')} </span> : null }
         </div>
@@ -19,7 +19,7 @@ const renderMultipleViewAndDownloadButtons = (t, documents) =>{
         <div className="broadcastnotifications_actionswrapper-multi">
             {documents.map(({fileName,fileStoreId}, index) =>{
                 return(
-                <div className="display-flex-gap-1">
+                <div className="display-flex-gap-2">
                     {fileName.length ? <p>{fileName} : </p> : null} 
                     {fileStoreId.length ? <span className="link" onClick={() => openUploadedDocument(fileStoreId, fileName)} > {t('CE_DOCUMENT_VIEW_LINK')} </span> : null }
                     {fileStoreId.length ? <span className="link" onClick={() => downloadDocument(fileStoreId, fileName)} > {t('CE_DOCUMENT_DOWNLOAD_LINK')} </span> : null }
