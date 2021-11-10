@@ -159,12 +159,13 @@ public class PdfFileStoreService {
 			StringBuilder builder = new StringBuilder();
 			builder.append(config.getPdfServiceHost());
 			String pdfLink = config.getPdfServiceLink();
-			log.info("\nTenantid:"+tenantId+"\n");
 			pdfLink = pdfLink.replace(tenantIdReplacer, tenantId).replace(pdfApplicationKey, applicationKey);
 			builder.append(pdfLink);
 			Object response = serviceRequestRepository.fetchResult(builder, requestPayload);
 			DocumentContext responseContext = JsonPath.parse(response);
 			List<Object> fileStoreIds = responseContext.read("$.filestoreIds");
+			String tid = responseContext.read("$.tenantid");
+			log.info("\nTenantid:"+tid+"\n");
 			if (CollectionUtils.isEmpty(fileStoreIds)) {
 				throw new CustomException("EMPTY_FILESTORE_IDS_FROM_PDF_SERVICE",
 						"NO file store id found from pdf service");
