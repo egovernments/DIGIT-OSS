@@ -12,6 +12,7 @@ import AssessmentDetails from "./AssessmentDetails";
 import Response from "../Response";
 import TransferOwnership from "./PropertyMutation";
 import DocsRequired from "./PropertyMutation/docsRequired";
+import Search from "./search";
 
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
@@ -99,8 +100,9 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/property-mutate/:id`} component={() => <TransferOwnership parentRoute={path} />} />
           <PrivateRoute path={`${path}/property-mutate-docs-required/:id`} component={() => <DocsRequired parentRoute={path} />} />
+          <PrivateRoute path={`${path}/search`} component={(props) => <Search {...props} t={t} parentRoute={path} />} />
           <PrivateRoute
-            path={`${path}/search`}
+            path={`${path}/searchold`}
             component={() => (
               <Inbox
                 parentRoute={path}

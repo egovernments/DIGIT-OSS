@@ -38,7 +38,8 @@ import SearchPropertyCitizen from "./pages/citizen/SearchProperty/searchProperty
 import SearchResultCitizen from "./pages/citizen/SearchResults";
 import PTCheckPage from "./pages/citizen/Create/CheckPage";
 import PTAcknowledgement from "./pages/citizen/Create/PTAcknowledgement";
-
+import PropertySearchForm from './components/search/PropertySearchForm';
+import PropertySearchResults from './components/search/PropertySearchResults';
 import PropertyInformation from "./pages/citizen/MyProperties/propertyInformation";
 import PTWFCaption from "./pageComponents/PTWFCaption";
 import PTWFReason from "./pageComponents/PTWFReason";
@@ -112,6 +113,8 @@ const componentsToRegister = {
   PTRegistrationDocument,
   UnderStateAquire,
   TransferProof,
+  PropertySearchForm,
+  PropertySearchResults
 };
 
 const addComponentsToRegistry = () => {
