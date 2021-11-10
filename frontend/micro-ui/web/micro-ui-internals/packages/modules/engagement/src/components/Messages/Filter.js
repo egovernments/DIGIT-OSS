@@ -21,7 +21,7 @@ const Filter = ({ type = "desktop", onClose, onSearch, onFilterChange, searchPar
     onClose?.();
   };
   const handleChange = useCallback((data) => {
-    setLocalSearchParams({ ...localSearchParams, ...data });
+    setLocalSearchParams((prevLocalSearchParams) => ({ ...prevLocalSearchParams, ...data }));
   },[])
 
   const onStatusChange = (e, type) => {
@@ -34,8 +34,6 @@ const Filter = ({ type = "desktop", onClose, onSearch, onFilterChange, searchPar
       <Loader />
     );
   }
-  console.log('eventCategories', data?.mseva?.EventCategories);
-  console.log('localsearch Params', localSearchParams?.eventCategory)
   return (
     <div className="filter">
       <div className="filter-card">
