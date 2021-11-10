@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Header,
   Card,
@@ -10,6 +10,7 @@ import {
   CardSectionHeader,
   InfoBanner,
   Loader,
+  Toast
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
@@ -18,7 +19,7 @@ import { useParams, useHistory, useLocation, Redirect } from "react-router-dom";
 export const SelectPaymentType = (props) => {
   const { state = {} } = useLocation();
   const userInfo = Digit.UserService.getUser();
-
+  const [showToast, setShowToast] = useState(null);
   const { tenantId: __tenantId, authorization } = Digit.Hooks.useQueryParams();
   const paymentAmount = state?.paymentAmount;
   const { t } = useTranslation();
@@ -32,7 +33,11 @@ export const SelectPaymentType = (props) => {
   const { control, handleSubmit } = useForm();
   const { data: menu, isLoading } = Digit.Hooks.useCommonMDMS(stateTenant, "DIGIT-UI", "PaymentGateway");
   const { data: paymentdetails, isLoading: paymentLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService }, {});
-
+  useEffect(()=>{
+    if(paymentdetails?.Bill&&paymentdetails.Bill.length==0){
+      setShowToast({ key: true, label: "CS_BILL_NOT_FOUND" });
+    }
+  },[paymentdetails])
   const { name, mobileNumber } = state;
 
   const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
@@ -97,6 +102,7 @@ export const SelectPaymentType = (props) => {
     return <Loader />;
   }
 
+
   return (
     <React.Fragment>
       <BackButton>{t("CS_COMMON_BACK")}</BackButton>
@@ -105,7 +111,7 @@ export const SelectPaymentType = (props) => {
         <Card>
           <div className="payment-amount-info">
             <CardLabelDesc className="dark">{t("PAYMENT_CS_TOTAL_AMOUNT_DUE")}</CardLabelDesc>
-            <CardSectionHeader> ₹ {paymentAmount || billDetails.totalAmount}</CardSectionHeader>
+            <CardSectionHeader> ₹ {paymentAmount || billDetails?.totalAmount}</CardSectionHeader>
           </div>
           <CardLabel>{t("PAYMENT_CS_SELECT_METHOD")}</CardLabel>
           {menu?.length && (
@@ -116,10 +122,19 @@ export const SelectPaymentType = (props) => {
               render={(props) => <RadioButtons selectedOption={props.value} options={menu} onSelect={props.onChange} />}
             />
           )}
-          <SubmitBar label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />
+          {!showToast&&<SubmitBar label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />}
         </Card>
       </form>
       <InfoBanner label={t("CS_COMMON_INFO")} text={t("CS_PAYMENT_REDIRECT_NOTICE")} />
+      {showToast && (
+        <Toast
+          error={showToast.key}
+          label={t(showToast.label)}
+          onClose={() => {
+            setShowToast(null);
+          }}
+        />
+      )}
     </React.Fragment>
   );
 };
