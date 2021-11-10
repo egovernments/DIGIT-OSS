@@ -123,9 +123,9 @@ public class PdfFileStoreService {
 			waterObject.put(slaDate, slaDays.add(new BigDecimal(System.currentTimeMillis())));
 			String[] tenantDetails = property.getTenantId().split("\\.");
 			String tenantId = property.getTenantId();
-			if(tenantDetails.length > config.getStateLevelTenantIdLength()){
+			/*if(tenantDetails.length > config.getStateLevelTenantIdLength()){
 				tenantId = tenantDetails[0] + "." + tenantDetails[1];
-			}
+			}*/
 			if(tenantDetails.length > 1)
 			{
 				waterObject.put(tenantName, tenantDetails[1].toUpperCase());
@@ -164,8 +164,6 @@ public class PdfFileStoreService {
 			Object response = serviceRequestRepository.fetchResult(builder, requestPayload);
 			DocumentContext responseContext = JsonPath.parse(response);
 			List<Object> fileStoreIds = responseContext.read("$.filestoreIds");
-			String tid = responseContext.read("$.tenantid");
-			log.info("\nTenantid:"+tid+"\n");
 			if (CollectionUtils.isEmpty(fileStoreIds)) {
 				throw new CustomException("EMPTY_FILESTORE_IDS_FROM_PDF_SERVICE",
 						"NO file store id found from pdf service");
