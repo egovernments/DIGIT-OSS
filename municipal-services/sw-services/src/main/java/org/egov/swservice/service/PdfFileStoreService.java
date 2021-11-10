@@ -166,6 +166,7 @@ public class PdfFileStoreService {
 			StringBuilder builder = new StringBuilder();
 			builder.append(config.getPdfServiceHost());
 			String pdfLink = config.getPdfServiceLink();
+			log.info("\nTenantid:"+tenantId+"\n");
 			pdfLink = pdfLink.replace(tenantIdReplacer, tenantId).replace(pdfApplicationKey, applicationKey);
 			builder.append(pdfLink);
 			Object response = serviceRequestRepository.fetchResult(builder, requestPayload);
