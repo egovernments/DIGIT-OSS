@@ -57,7 +57,7 @@ const Inbox = ({ parentRoute }) => {
     setFilterFormValue("applicationStatus", "");
     setFilterFormValue("locality", []);
     setFilterFormValue("assignee", "ASSIGNED_TO_ALL");
-    dispatch({ action: "mutateFilterForm", data: filterFormDefaultValues })
+    dispatch({ action: "mutateFilterForm", data: filterFormDefaultValues });
   }
 
   const formInitValue = useMemo(() => {

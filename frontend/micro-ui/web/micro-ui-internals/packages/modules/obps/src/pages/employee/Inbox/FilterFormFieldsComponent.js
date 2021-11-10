@@ -3,7 +3,7 @@ import { FilterFormField, Loader, RadioButtons, Localities, RemoveableTag, Dropd
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState, getFilterFormValue, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}) => {
+const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState, getFilterFormValue, applicationTypesOfBPA, loadingApplicationTypesOfBPA,  localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}) => {
   const { t } = useTranslation()
   const tenantId = Digit.ULBService.getStateId();
   const availableOptions = [
@@ -11,8 +11,12 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
     { code: "ASSIGNED_TO_ALL", name: `${t("ES_INBOX_ASSIGNED_TO_ALL")}` },
   ];
 
-  const { data: applicationTypes } = Digit.Hooks.obps.useSearchMdmsTypes.applicationTypes(tenantId);
-  applicationTypes?.forEach(type => type.name = t(`WF_BPA_${type.code}`));
+  applicationTypesOfBPA?.forEach(type => {
+    type.name = t(`WF_BPA_${type.code}`);
+    type.i18nKey = t(`WF_BPA_${type.code}`);
+  });
+
+  console.log(localitiesForEmployeesCurrentTenant, applicationTypesOfBPA,  "localitiesForEmployeesCurrentTenantlocalitiesForEmployeesCurrentTenant")
 
   return <>
     <FilterFormField>
@@ -36,12 +40,29 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
       <Controller
           name="applicationType"
           control={controlFilterForm}
-          render={({ref, onChange, value}) => {
-            return <>
+          render={(props) => {
+            const renderRemovableTokens = useMemo(()=>props?.value?.map((applicationType, index) => {
+              return (
+                <RemoveableTag
+                key={index}
+                text={applicationType.i18nKey}
+                onClick={() => {
+                  props.onChange(props?.value?.filter((loc) => loc.code !== applicationType.code))
+                }}
+                />
+                );
+              }),[props?.value])
+            return loadingApplicationTypesOfBPA ? <Loader/> : <>
               <div className="filter-label">{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</div>
-              <Dropdown inputRef={ref} option={applicationTypes ? applicationTypes : []} optionKey="name" t={t} select={ (e) => {
-                  onChange(e)
-                }} selected={value} />
+              <Dropdown
+                option={applicationTypesOfBPA ? applicationTypesOfBPA : []}
+                select={(e) => {props.onChange([e, ...props?.value])}}
+                optionCardStyles={{maxHeight:'350px'}}
+                optionKey="i18nKey"
+              />
+              <div className="tag-container">
+                {renderRemovableTokens}
+              </div>
             </>
           }
         }
@@ -95,7 +116,8 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
               key={index}
               onChange={(e) => e.target.checked ? changeItemCheckStatus([...props.value, status?.statusid]) : changeItemCheckStatus(props.value?.filter( id => id !== status?.statusid)) }
               checked={props.value?.includes(status?.statusid)}
-              label={t(`${status.businessservice}_${status.applicationstatus}`)}
+              label={t(`WF_${status.businessservice}_${status.applicationstatus.split('_').pop()}`)}
+              // label={t(`${status.businessservice}_${status.applicationstatus}`)}
             />}),[props.value, statuses])
           return <>
             {isInboxLoading ? <Loader /> : <>{renderStatusCheckBoxes}</>}

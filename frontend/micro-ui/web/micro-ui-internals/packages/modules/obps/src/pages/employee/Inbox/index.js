@@ -74,7 +74,7 @@ const Inbox = ({parentRoute}) => {
       dispatch({action: "mutateTableForm", data: {...formState.tableForm , limit: e.target.value}})
     }
 
-    const { data: applicationType, isLoading: loadingApplicationType } = Digit.Hooks.obps.useSearchMdmsTypes.applicationTypes(tenantId);
+    const { data: applicationTypesOfBPA, isLoading: loadingApplicationTypesOfBPA } = Digit.Hooks.obps.useSearchMdmsTypes.applicationTypes(tenantId);
 
     const { data: localitiesForEmployeesCurrentTenant, isLoading: loadingLocalitiesForEmployeesCurrentTenant } = Digit.Hooks.useBoundaryLocalities(tenantId, "revenue", {}, t);
 
@@ -97,8 +97,8 @@ const Inbox = ({parentRoute}) => {
     const SearchFormFields = useCallback(({registerRef, searchFormState}) => <SearchFormFieldsComponents {...{registerRef, searchFormState}} />,[])
 
     const FilterFormFields = useCallback(
-      ({registerRef, controlFilterForm, setFilterFormValue, getFilterFormValue}) => <FilterFormFieldsComponent {...{statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState: formState?.filterForm, getFilterFormValue, applicationType, loadingApplicationType, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}} />
-    ,[statuses, isInboxLoading, applicationType, loadingApplicationType, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant])
+      ({registerRef, controlFilterForm, setFilterFormValue, getFilterFormValue}) => <FilterFormFieldsComponent {...{statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState: formState?.filterForm, getFilterFormValue, applicationTypesOfBPA, loadingApplicationTypesOfBPA, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}} />
+    ,[statuses, isInboxLoading, applicationTypesOfBPA, loadingApplicationTypesOfBPA, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant])
 
     const onSearchFormSubmit = (data) => {
       data.hasOwnProperty("") ? delete data?.[""] : null

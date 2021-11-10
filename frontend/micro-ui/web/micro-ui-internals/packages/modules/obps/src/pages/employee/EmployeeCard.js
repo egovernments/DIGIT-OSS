@@ -15,7 +15,8 @@ const OBPSEmployeeHomeCard = () => {
       moduleName: "bpa-services",
       applicationStatus: "",
       locality: [],
-      assignee: "ASSIGNED_TO_ALL"
+      assignee: "ASSIGNED_TO_ALL",
+      applicationType: []
     }
     const tableOrderFormDefaultValues = {
       sortBy: "",
@@ -34,7 +35,7 @@ const OBPSEmployeeHomeCard = () => {
 
     const filterFormDefaultValuesOfStakeholder = {
       moduleName: "BPAREG",
-      businessService: {code: "BPAREG", name:t("BPAREG")},
+      // businessService: {code: "BPAREG", name:t("BPAREG")},
       applicationStatus: "",
       locality: [],
       assignee: "ASSIGNED_TO_ALL"

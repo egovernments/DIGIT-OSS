@@ -1,29 +1,32 @@
 import useInbox from "../useInbox"
 
 const useBPAInbox = ({ tenantId, filters, config={} }) => {
+  debugger;
     const { filterForm, searchForm , tableForm } = filters;
-    const { moduleName, businessService, applicationStatus, locality, assignee } = filterForm;
+    const { moduleName, businessService, applicationStatus, locality, assignee, applicationType } = filterForm;
     const { mobileNumber, applicationNo } = searchForm;
     const { sortBy, limit, offset, sortOrder } = tableForm;
     let applicationNumber = "";
-    if (businessService?.code == "BPAREG" || window.location.href.includes("stakeholder-inbox")) {
+    if (moduleName == "BPAREG") {
       applicationNumber = applicationNo;
       tenantId = Digit.ULBService.getStateId();
     }
+
     const _filters = {
         tenantId,
         processSearchCriteria: {
-          moduleName: !window.location.href.includes("stakeholder-inbox") ? "bpa-services" : "BPAREG", 
-          businessService: !window.location.href.includes("stakeholder-inbox") ? ["BPA_LOW", "BPA", "BPA_OC"] :  ["ARCHITECT","BUILDER","ENGINEER","STRUCTURALENGINEER"],
+          moduleName: moduleName !== "BPAREG"  ? "bpa-services" : "BPAREG", 
+          businessService: moduleName !== "BPAREG"  ? ["BPA_LOW", "BPA", "BPA_OC"] :  ["ARCHITECT","BUILDER","ENGINEER","STRUCTURALENGINEER"],
           ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
         },
         moduleSearchCriteria: {
           assignee,
           ...(mobileNumber ? {mobileNumber}: {}),
-          ...(applicationNo ? {applicationNo} : {}),
+          ...(!applicationNumber ? applicationNo ? {applicationNo} : {} : (applicationNumber ? {applicationNumber} : {})),
           ...(applicationNumber ? {applicationNumber} : {}),
           ...(sortOrder ? {sortOrder} : {}),
           ...(sortBy ? {sortBy} : {}),
+          ...(applicationType?.length > 0 ? {applicationType: applicationType.map((item) => item.code).join(",")} : {}),
           ...(locality?.length > 0 ? {locality: locality.map((item) => item.code.split("_").pop()).join(",")} : {}),
         },
         limit,
