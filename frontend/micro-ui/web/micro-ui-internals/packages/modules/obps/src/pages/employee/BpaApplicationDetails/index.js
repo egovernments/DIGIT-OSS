@@ -270,10 +270,10 @@ const BpaApplicationDetail = () => {
           options={dowloadOptions}
         />}
       </div>
-      {data?.applicationData?.status === "FIELDINSPECTION_INPROGRESS" && <div style={{ marginLeft: "15px" }}>
+      {data?.applicationData?.status === "FIELDINSPECTION_INPROGRESS" && (userInfo?.info?.roles.filter(role => role.code === "BPA_FIELD_INSPECTOR")).length>0 && <div style={{ marginLeft: "15px" }}>
         <Header>{t("BPA_FI_REPORT")}</Header>
       </div>}
-      {data?.applicationData?.status === "FIELDINSPECTION_INPROGRESS" && <FormComposer
+      {data?.applicationData?.status === "FIELDINSPECTION_INPROGRESS" && (userInfo?.info?.roles.filter(role => role.code === "BPA_FIELD_INSPECTOR")).length>0 && <FormComposer
         heading={t("")}
         isDisabled={!canSubmit}
         config={configs.map((config) => {
