@@ -252,6 +252,7 @@ function SelectDocument({
             module="BPA"
             tenantId={tenantId}
             getFormState={e => getData(e,doc?.documentType.replaceAll(".", "_"))}
+            t={t}
           />
         </div>
       </LabelFieldPair>

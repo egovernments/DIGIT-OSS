@@ -318,6 +318,7 @@ function SelectDocument({
         module="NOC"
         tenantId={tenantId}
         getFormState={e => getData(e)}
+        t={t}
       />
     </div>
   );

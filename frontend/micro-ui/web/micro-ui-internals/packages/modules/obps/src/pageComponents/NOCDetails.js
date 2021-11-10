@@ -294,6 +294,7 @@ function SelectDocument({
             tenantId={tenantId}
             getFormState={e => getData(e,doc?.documentType.replaceAll(".", "_"))}
             setuploadedstate={uploadedFilesPreFill}
+            t={t}
           />
         </div>
     );

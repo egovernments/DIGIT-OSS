@@ -207,6 +207,7 @@ function SelectDocument({
                                     module="BPA"
                                     tenantId={tenantId}
                                     getFormState={e => getData(index, e)}
+                                    t={t}
                                 />
                             </div>
                         </LabelFieldPair>

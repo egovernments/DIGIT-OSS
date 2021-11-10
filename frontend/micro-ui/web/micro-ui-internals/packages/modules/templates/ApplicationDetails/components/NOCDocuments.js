@@ -94,6 +94,7 @@ function SelectDocument({
           module="NOC"
           tenantId={tenantId}
           getFormState={e => getData(e)}
+          t={t}
         />
         {/* <UploadFile
             id={"noc-doc"}
