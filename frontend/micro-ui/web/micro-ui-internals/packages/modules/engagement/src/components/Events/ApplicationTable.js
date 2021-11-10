@@ -10,6 +10,10 @@ const ApplicationTable = ({
   getCellProps,
   pageSizeLimit,
   totalRecords,
+  currentPage,
+  onNextPage,
+  onPrevPage,
+  onPageSizeChange,
 
 }) => {
   return (
@@ -20,10 +24,14 @@ const ApplicationTable = ({
       onSearch={onSearch}
       globalSearch={globalSearch}
       manualGlobalFilter={true}
-      manualPagination={false}
+      manualPagination={true}
       pageSizeLimit={pageSizeLimit}
       getCellProps={getCellProps}
       totalRecords={totalRecords}
+      currentPage={currentPage}
+      onNextPage={onNextPage}
+      onPrevPage={onPrevPage}
+      onPageSizeChange={onPageSizeChange}
 
     />
   )

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { format, isValid } from "date-fns";
 import { Header } from "@egovernments/digit-ui-react-components";
@@ -13,7 +13,7 @@ const Inbox = ({ tenants, parentRoute }) => {
   const [pageOffset, setPageOffset] = useState(0);
   const [searchParams, setSearchParams] = useState({
     eventStatus: [],
-    name:'',
+    name: '',
     range: {
       startDate: null,
       endDate: new Date(""),
@@ -22,19 +22,19 @@ const Inbox = ({ tenants, parentRoute }) => {
     ulb: tenants?.find(tenant => tenant?.code === tenantId)
   });
   let isMobile = window.Digit.Utils.browser.isMobile();
-  const { data, isLoading } = Digit.Hooks.events.useInbox(searchParams?.ulb?.code, {
-    limit: pageSize,
-    offset: pageOffset,
-  },
-    { status: "ACTIVE,INACTIVE", eventTypes: "BROADCAST" },
+  const { data, isLoading } = Digit.Hooks.events.useInbox(searchParams?.ulb?.code, {},
     {
-      select: (data) => data?.events
+      status: "ACTIVE,INACTIVE", eventTypes: "BROADCAST", limit: pageSize,
+      offset: pageOffset,
+    },
+    {
+      select: (data) => ({ events: data?.events, totalCount: data?.totalCount })
     });
 
   const onSearch = (params) => {
-    let updatedParams = {...params};
-    if(!params?.ulb){
-      updatedParams ={...params, ulb:{code:tenantId}}
+    let updatedParams = { ...params };
+    if (!params?.ulb) {
+      updatedParams = { ...params, ulb: { code: tenantId } }
     }
     setSearchParams((prevParams) => ({ ...prevParams, ...updatedParams }));
   }
@@ -79,10 +79,22 @@ const Inbox = ({ tenants, parentRoute }) => {
     }
   ]
 
+  const fetchNextPage = useCallback(() => {
+    setPageOffset((prevPageOffSet) => ((parseInt(prevPageOffSet) + parseInt(pageSize))));
+  }, [pageSize])
+
+  const fetchPrevPage = useCallback(() => {
+    setPageOffset((prevPageOffSet) => ((parseInt(prevPageOffSet) - parseInt(pageSize))));
+  }, [pageSize])
+
+  const handlePageSizeChange = (e) => {
+    setPageSize((prevPageSize) => (e.target.value));
+  };
+
   if (isMobile) {
     return (
       <MobileInbox
-        data={data}
+        data={data?.events}
         searchParams={searchParams}
         searchFields={getSearchFields()}
         t={t}
@@ -104,7 +116,7 @@ const Inbox = ({ tenants, parentRoute }) => {
       </Header>
       <DesktopInbox
         t={t}
-        data={data}
+        data={data?.events}
         links={links}
         parentRoute={parentRoute}
         searchParams={searchParams}
@@ -113,7 +125,11 @@ const Inbox = ({ tenants, parentRoute }) => {
         searchFields={getSearchFields()}
         onFilterChange={handleFilterChange}
         pageSizeLimit={pageSize}
-        totalRecords={data?.length}
+        totalRecords={data?.totalCount}
+        currentPage={parseInt(pageOffset / pageSize)}
+        onNextPage={fetchNextPage}
+        onPrevPage={fetchPrevPage}
+        onPageSizeChange={handlePageSizeChange}
         title={"EVENTS_PUBLIC_MESSAGE_NOTICE_HEADER"}
         links={links}
         isLoading={isLoading}

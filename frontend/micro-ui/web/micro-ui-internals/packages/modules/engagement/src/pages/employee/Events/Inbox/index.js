@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { format, isValid } from "date-fns";
 import { Header } from "@egovernments/digit-ui-react-components";
 import DesktopInbox from "../../../../components/Events/DesktopInbox";
 import MobileInbox from "../../../../components/Events/MobileInbox";
+
+
 
 const Inbox = ({ tenants, parentRoute }) => {
   const { t } = useTranslation()
@@ -21,11 +23,33 @@ const Inbox = ({ tenants, parentRoute }) => {
     ulb: tenants?.find(tenant => tenant?.code === tenantId)
   });
   let isMobile = window.Digit.Utils.browser.isMobile();
-  const { data, isLoading } = Digit.Hooks.events.useInbox(searchParams?.ulb?.code, {
-    limit: pageSize,
-    offset: pageOffset,
-  },
-    { eventTypes: "EVENTSONGROUND" },
+
+  const getSearchFields = () => {
+    return [
+      {
+        label: t("EVENTS_ULB_LABEL"),
+        name: "ulb",
+        type: "ulb",
+      },
+      {
+        label: t("EVENTS_NAME_LABEL"),
+        name: "eventName"
+      }
+    ]
+  }
+
+  const links = [
+    {
+      text: t("ES_TITLE_NEW_EVENTS"),
+      link: "/digit-ui/employee/engagement/event/inbox/new-event",
+    }
+  ]
+
+  const { data, isLoading } = Digit.Hooks.events.useInbox(searchParams?.ulb?.code, {},
+    {
+      eventTypes: "EVENTSONGROUND", limit: pageSize,
+      offset: pageOffset,
+    },
     {
       select: (data) => ({ events: data?.events, totalCount: data?.totalCount })
     });
@@ -53,26 +77,19 @@ const Inbox = ({ tenants, parentRoute }) => {
       (isValid(searchParams?.range?.endDate) ? row.original.eventDetails?.toDate <= new Date(searchParams?.range?.endDate).getTime() : true))
   }
 
-  const getSearchFields = () => {
-    return [
-      {
-        label: t("EVENTS_ULB_LABEL"),
-        name: "ulb",
-        type: "ulb",
-      },
-      {
-        label: t("EVENTS_NAME_LABEL"),
-        name: "eventName"
-      }
-    ]
-  }
+  const fetchNextPage = useCallback(() => {
+    setPageOffset((prevPageOffSet) => ((parseInt(prevPageOffSet) + parseInt(pageSize))));
+  }, [pageSize])
 
-  const links = [
-    {
-      text: t("ES_TITLE_NEW_EVENTS"),
-      link: "/digit-ui/employee/engagement/event/inbox/new-event",
-    }
-  ]
+  const fetchPrevPage = useCallback(() => {
+    setPageOffset((prevPageOffSet) => ((parseInt(prevPageOffSet) - parseInt(pageSize))));
+  }, [pageSize])
+
+  const handlePageSizeChange = (e) => {
+    setPageSize((prevPageSize) => (e.target.value));
+  };
+
+
 
   if (isMobile) {
     return (
@@ -112,6 +129,10 @@ const Inbox = ({ tenants, parentRoute }) => {
         title={"EVENTS_EVENTS_HEADER"}
         iconName={"calender"}
         links={links}
+        currentPage={parseInt(pageOffset / pageSize)}
+        onNextPage={fetchNextPage}
+        onPrevPage={fetchPrevPage}
+        onPageSizeChange={handlePageSizeChange}
       />
     </div>
   );

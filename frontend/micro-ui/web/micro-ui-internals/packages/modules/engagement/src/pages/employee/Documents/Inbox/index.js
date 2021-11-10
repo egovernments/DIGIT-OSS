@@ -10,23 +10,18 @@ const Inbox = ({ tenants }) => {
     const { t } = useTranslation()
     Digit.SessionStorage.set("ENGAGEMENT_TENANTS", tenants);
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const [pageSize, setPageSize] = useState(10);
-    const [pageOffset, setPageOffset] = useState(0);
-    const [records, setRecords] = useState(100);
     const [searchParams, setSearchParams] = useState({
         tenantIds: tenantId,
-        offset: pageOffset,
-        limit: records
+        offset: 0,
+        limit: 10
     });
-    
+
     let isMobile = window.Digit.Utils.browser.isMobile();
     const { data: response, isLoading } = Digit.Hooks.engagement.useDocSearch(searchParams, {
-        select: ({ Documents, totalCount }) => {
-            const newData = { documentsList: Documents, totalCount };
-            return newData;
-        }
+        select: ({ Documents, totalCount }) => ({ documentsList: Documents, totalCount })
+
     });
-    
+
     const onSearch = (params) => {
         const tenantIds = params?.ulbs?.code?.length ? params?.ulbs?.code : tenantId
         const { name, postedBy } = params;
@@ -38,25 +33,21 @@ const Inbox = ({ tenants }) => {
     }
 
     const fetchNextPage = useCallback(() => {
-        setPageOffset((prevState) => prevState + pageSize);
-        if (pageOffset > records- 10) {
-            setRecords((prevRecords) => prevRecords + pageSize)
-            setSearchParams((prevParams) => ({ ...prevParams, limit:records+pageSize, }))
-        }
-    }, [pageOffset, pageSize, records])
+        setSearchParams((prevSearchParams) => ({...prevSearchParams, offset: (parseInt(prevSearchParams?.offset) + parseInt(prevSearchParams?.limit))}));
+        
+    }, [])
 
     const fetchPrevPage = () => {
-        setPageOffset((prevState) => prevState - pageSize);
+        setSearchParams((prevSearchParams) => ({...prevSearchParams, offset: (parseInt(prevSearchParams?.offset) - parseInt(prevSearchParams?.limit))}));
     };
 
     const handlePageSizeChange = (e) => {
-        console.log(Number(e.target.value))
-        setPageSize(Number(e.target.value));
+        setSearchParams((prevSearchParams) => ({...prevSearchParams, limit:e.target.value}));
     };
 
     useEffect(() => {
         setSearchParams((prevSearchParams) => ({ ...prevSearchParams, tenantIds: tenantId }))
-    }, [])
+    }, [tenantId])
 
     const getSearchFields = () => {
         return [
@@ -82,7 +73,7 @@ const Inbox = ({ tenants }) => {
             link: "/digit-ui/employee/engagement/documents/inbox/new-doc",
         }
     ]
-
+    console.log('<<<search[arams', {searchParams})
     if (isMobile) {
         return (
             <MobileInbox
@@ -117,17 +108,19 @@ const Inbox = ({ tenants }) => {
                 //  globalSearch={globalSearch}
                 searchFields={getSearchFields()}
                 onFilterChange={handleFilterChange}
-                pageSizeLimit={pageSize}
-                totalRecords={response?.documentsList?.length}
+                pageSizeLimit={searchParams?.limit}
+                totalRecords={response?.totalCount}
                 title={"DOCUMENTS_DOCUMENT_HEADER"}
                 iconName={"document"}
                 links={links}
+                currentPage={parseInt(searchParams.offset / searchParams.limit)}
                 onNextPage={fetchNextPage}
                 onPrevPage={fetchPrevPage}
                 onPageSizeChange={handlePageSizeChange}
             //onSort={handleSortBy}
             //sortParams={sortParams}
             />
+
         </div>
     );
 }

@@ -27,7 +27,7 @@ const getDocumentCell = (name = "mSeva", link, docLink, t) => (
   </span>);
 
 
-const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, links, onSort, sortParams, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords, onNextPage, onPrevPage, onPageSizeChange }) => {
+const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, links, onSort, sortParams, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords, currentPage, onNextPage, onPrevPage, onPageSizeChange }) => {
   const columns = React.useMemo(() => [
     {
       Header: t('CE_TABLE_DOCUMENT_NAME'),
@@ -70,6 +70,7 @@ const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, l
         onSearch={searchParams}
         pageSizeLimit={pageSizeLimit}
         totalRecords={totalRecords}
+        currentPage={currentPage}
         onNextPage={onNextPage}
         onPrevPage={onPrevPage}
         onPageSizeChange={onPageSizeChange}
