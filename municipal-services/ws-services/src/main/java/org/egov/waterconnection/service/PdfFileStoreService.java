@@ -121,8 +121,11 @@ public class PdfFileStoreService {
 					waterConnectionRequest.getRequestInfo(),applicationStatus, config.getBusinessServiceValue());
 			waterObject.put(sla, slaDays.divide(BigDecimal.valueOf(WCConstants.DAYS_CONST)));
 			waterObject.put(slaDate, slaDays.add(new BigDecimal(System.currentTimeMillis())));
-			String[] tenantDetails = property.getTenantId().split("\\."); 
-			String tenantId = tenantDetails[0];
+			String[] tenantDetails = property.getTenantId().split("\\.");
+			String tenantId = property.getTenantId();
+			if(tenantDetails.length > config.getStateLevelTenantIdLength()){
+				tenantId = tenantDetails[0] + "." + tenantDetails[1];
+			}
 			if(tenantDetails.length > 1)
 			{
 				waterObject.put(tenantName, tenantDetails[1].toUpperCase());

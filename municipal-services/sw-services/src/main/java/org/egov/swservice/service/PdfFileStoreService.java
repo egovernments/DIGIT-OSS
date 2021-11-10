@@ -126,8 +126,12 @@ public class PdfFileStoreService {
 			sewerageObject.put(sla, slaDays.divide(BigDecimal.valueOf(SWConstants.DAYS_CONST)));
 			sewerageObject.put(slaDate, slaDays.add(
 					new BigDecimal(System.currentTimeMillis())));
-			String[] tenantDetails = property.getTenantId().split("\\."); 
-			String tenantId = tenantDetails[0];
+			String[] tenantDetails = property.getTenantId().split("\\.");
+			String tenantId = property.getTenantId();
+			if(tenantDetails.length > config.getStateLevelTenantIdLength()){
+				tenantId = tenantDetails[0] + "." + tenantDetails[1];
+			}
+
 			if(tenantDetails.length > 1)
 			{
 				sewerageObject.put(tenantName, tenantDetails[1].toUpperCase());
