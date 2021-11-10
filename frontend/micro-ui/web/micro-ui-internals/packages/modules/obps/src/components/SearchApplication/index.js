@@ -1,11 +1,11 @@
 import React, { Fragment, useCallback, useMemo, useEffect, useState, useReducer } from "react"
 import { useForm, Controller } from "react-hook-form";
-import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card, SearchAction, PopUp, SortAction, DetailsCard, Loader, Toast } from "@egovernments/digit-ui-react-components";
+import { CloseSvg, SearchForm, Table, Card, SearchAction, PopUp, SortAction, DetailsCard, Loader, Toast } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
-import { convertEpochToDateDMY } from  "../utils";
+import { convertEpochToDateDMY } from  "../../utils";
+import SearchFormFieldsComponent from "./SearchFormFieldsComponent";
 
 const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, Count }) => {
-    let validation = {};
     const [ Applicationtype, setApplicationtype] = useState("BUILDING_PLAN_SCRUTINY");
     const [showToast, setShowToast] = useState(null);
     const { data: applicationTypes } = Digit.Hooks.obps.useSearchMdmsTypes.applicationTypes(tenantId.split(".")[0]);
@@ -83,47 +83,8 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
     const fetchFirstPage = () => {
         setValue("offset", 0);
         handleSubmit(onSubmit)()
-      };
-
-    const applicationStatuses = [
-        {
-            code: "CANCELLED",
-            i18nKey: "WF_BPA_CANCELLED"
-        },
-        {
-            code: "APPROVED",
-            i18nKey: "WF_BPA_APPROVED"
-        },
-        {
-            code: "INPROGRESS",
-            i18nKey: "WF_BPA_INPROGRESS"
-        },
-        {
-            code: "PENDINGPAYMENT",
-            i18nKey: "WF_NEWTL_PENDINGPAYMENT"
-        },
-        {
-            code: "CITIZEN_APPROVAL_INPROCESS",
-            i18nKey: "WF_BPA_CITIZEN_APPROVAL_INPROCESS"
-        },
-        {
-            code: "CITIZEN_APPROVAL_PENDING",
-            i18nKey: "WF_BPA_CITIZEN_APPROVAL_PENDING"
-        },
-        {
-            code: "DOC_VERIFICATION_PENDING",
-            i18nKey: "WF_BPA_DOC_VERIFICATION_PENDING"
-        },
-        {
-            code: "FIELDINSPECTION_PENDING",
-            i18nKey: "WF_BPA_FIELDINSPECTION_PENDING"
-        },
-        {
-            code: "INITIATED",
-            i18nKey: "WF_BPA_INITIATED"
-        }	
-    ]
-
+    };
+    
     function getApplicationType(data){
         data && setApplicationtype(data.code || "BUILDING_PLAN_SCRUTINY");
         return data?data:defaultAppType;
@@ -133,7 +94,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
         if(data && serviceType && data?.code !== serviceType.code) data=serviceType;
         return data?data:(serviceType?serviceType:defaultserviceType);
     }
-    
+
     const getRedirectionLink = (bService) => {
         let redirectBS = bService === "BPAREG"?"stakeholder":"search/application/bpa";
         return redirectBS;
@@ -220,155 +181,50 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
 
     const isMobile = window.Digit.Utils.browser.isMobile();
 
-    function activateModal(state, action){
-        switch(action.type){
-            case "set":
-                return action.payload
-            case "remove":
-                return false
-            default:
-                console.warn("no such action defined")
-        }
-    }
-
-    const [ currentlyActiveMobileModal, setActiveMobileModal ] = useReducer(activateModal, false)
-
-    const SearchFormComponent = () => <>
-        <SearchField>
-            <label>{t("BPA_SEARCH_APPLICATION_NO_LABEL")}</label>
-            <TextInput name="applicationNo" inputRef={register({})} />
-        </SearchField>
-        <SearchField>
-            <label>{t("BPA_APP_MOBILE_NO_SEARCH_PARAM")}</label>
-            <TextInput name="mobileNumber" inputRef={register({})} 
-                type="mobileNumber"
-                componentInFront={<div className="employee-card-input employee-card-input--front">+91</div>} 
-                maxlength={10}
-                {...(validation = {
-                pattern: "[6-9]{1}[0-9]{9}",
-                type: "tel",
-                //title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
-                })}/>
-        </SearchField>
-        <SearchField>
-            <label>{t("BPA_SEARCH_APPLICATION_TYPE_LABEL")}</label>
-            <Controller
-                    control={control}
-                    name="applicationType"
-                    render={(props) => (
-                        <Dropdown
-                        selected={getApplicationType(props.value)}
-                        select={props.onChange}
-                        onBlur={props.onBlur}
-                        option={applicationTypes}
-                        optionKey="i18nKey"
-                        t={t}
-                        />
-                    )}
-                    />
-        </SearchField>
-        <SearchField>
-            <label>{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</label>
-            <Controller
-                    control={control}
-                    name="serviceType"
-                    render={(props) => (
-                        <Dropdown
-                        selected={getselectedServiceType(props.value)}
-                        select={props.onChange}
-                        onBlur={props.onBlur}
-                        option={ServiceTypes}
-                        optionKey="i18nKey"
-                        t={t}
-                        />
-                    )}
-                    />
-        </SearchField>
-        <SearchField>
-            <label>{t("BPA_APP_FROM_DATE_SEARCH_PARAM")}</label>
-            <Controller
-                render={(props) => <DatePicker date={props.value} onChange={props.onChange} />}
-                name="fromDate"
-                control={control}
-                />
-        </SearchField>
-        <SearchField>
-            <label>{t("BPA_APP_TO_DATE_SEARCH_PARAM")}</label>
-            <Controller
-                render={(props) => <DatePicker date={props.value} onChange={props.onChange} />}
-                name="toDate"
-                control={control}
-                />
-        </SearchField>
-        <SearchField>
-            <label>{t("BPA_SEARCH_APPLICATION_STATUS_LABEL")}</label>
-            <Controller
-                    control={control}
-                    name="status"
-                    render={(props) => (
-                        <Dropdown
-                        selected={props.value}
-                        select={props.onChange}
-                        onBlur={props.onBlur}
-                        option={applicationStatuses}
-                        optionKey="i18nKey"
-                        t={t}
-                        />
-                    )}
-                    />
-        </SearchField>
-        <SearchField className="submit">
-            <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
-            <p onClick={() => {
-                reset({ 
-                    applicationNo: "",
-                    mobileNumber: "",
-                    applicationType: defaultAppType, 
-                    serviceType: defaultserviceType,
-                    fromDate: "", 
-                    toDate: "",
-                    status: "",
-                    offset: 0,
-                    limit: 10,
-                    sortBy: "commencementDate",
-                    sortOrder: "DESC"
-                });
-                previousPage();
-            }}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
-        </SearchField>
-    </>
-
-    const closeMobilePopupModal = () => {
-        setActiveMobileModal({type:"remove"})
-    }
-
-    const MobilePopUpCloseButton = () => <div className="InboxMobilePopupCloseButtonWrapper" onClick={closeMobilePopupModal}>
-        <CloseSvg/>
-    </div>
-
-    const MobileComponentDirectory= {
-        SearchFormComponent: () => <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit} id="search-form" className="rm-mb form-field-flex-one inboxPopupMobileWrapper" >
-            <MobilePopUpCloseButton/>
-            <SearchFormComponent/>
-            {/* <SearchField className="submit">
-                <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
-                <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
-            </SearchField> */}
-        </SearchForm>,
-    }
-
-    const CurrentMobileModalComponent = MobileComponentDirectory[currentlyActiveMobileModal]
-    
-    const propsMobileInboxCards = useMemo(() => data?.map((data) =>({
-        [t("BPA_APPLICATION_NUMBER_LABEL")]: data.applicationNo,
-        [t("BPA_COMMON_TABLE_COL_APP_DATE_LABEL")]: convertEpochToDateDMY(data.auditDetails?.createdTime) || "",
-        [t("BPA_SEARCH_APPLICATION_TYPE_LABEL")]: data.additionalDetails?.applicationType || "-",
-        [t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")]: data.additionalDetails?.serviceType,
-        [t("BPA_CURRENT_OWNER_HEAD")]: data.landInfo?.owners.map( o => o.name ). join(",") || "",
-        [t("BPA_STATUS_LABEL")]: data.state || "NA"
-    })), [data])
-
     if(isMobile){
+        
+        function activateModal(state, action){
+            switch(action.type){
+                case "set":
+                    return action.payload
+                case "remove":
+                    return false
+                default:
+                    console.warn("no such action defined")
+            }
+        }
+
+        const [ currentlyActiveMobileModal, setActiveMobileModal ] = useReducer(activateModal, false)
+
+        const closeMobilePopupModal = () => {
+            setActiveMobileModal({type:"remove"})
+        }
+    
+        const MobilePopUpCloseButton = () => <div className="InboxMobilePopupCloseButtonWrapper" onClick={closeMobilePopupModal}>
+            <CloseSvg/>
+        </div>
+    
+        const MobileComponentDirectory= {
+            SearchFormComponent: () => <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit} id="search-form" className="rm-mb form-field-flex-one inboxPopupMobileWrapper" >
+                <MobilePopUpCloseButton/>
+                <SearchFormFieldsComponent {...{Controller, register, control, t, getApplicationType, getselectedServiceType, applicationTypes, ServiceTypes}}/>
+                {/* <SearchField className="submit">
+                    <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
+                    <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
+                </SearchField> */}
+            </SearchForm>,
+        }
+    
+        const CurrentMobileModalComponent = MobileComponentDirectory[currentlyActiveMobileModal]
+        const propsMobileInboxCards = useMemo(() => data?.map((data) =>({
+            [t("BPA_APPLICATION_NUMBER_LABEL")]: data.applicationNo,
+            [t("BPA_COMMON_TABLE_COL_APP_DATE_LABEL")]: convertEpochToDateDMY(data.auditDetails?.createdTime) || "",
+            [t("BPA_SEARCH_APPLICATION_TYPE_LABEL")]: data.additionalDetails?.applicationType || "-",
+            [t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")]: data.additionalDetails?.serviceType,
+            [t("BPA_CURRENT_OWNER_HEAD")]: data.landInfo?.owners.map( o => o.name ). join(",") || "",
+            [t("BPA_STATUS_LABEL")]: data.state || "NA"
+        })), [data])
+
         if(isLoading){
             return <Loader/>
         }
@@ -396,7 +252,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
 
     return <React.Fragment>
             <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-                <SearchFormComponent/>
+                <SearchFormFieldsComponent {...{Controller, register, control, t, getApplicationType, getselectedServiceType, applicationTypes, ServiceTypes}}/>
             </SearchForm>
             {!isLoading && data?.[0]?.display ? <Card style={{ marginTop: 20 }}>
                 {
