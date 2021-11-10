@@ -16,10 +16,10 @@ const Inbox = ({parentRoute}) => {
 
     const filterFormDefaultValues = {
       moduleName: "bpa-services",
-      businessService: {code: "BPA", name:t("BPA")},
       applicationStatus: "",
       locality: [],
-      assignee: "ASSIGNED_TO_ALL"
+      assignee: "ASSIGNED_TO_ALL",
+      applicationType: []
     }
     const tableOrderFormDefaultValues = {
       sortBy: "",
@@ -46,16 +46,18 @@ const Inbox = ({parentRoute}) => {
     const InboxObjectInSessionStorage = Digit.SessionStorage.get("OBPS.INBOX")
     
     const onSearchFormReset = (setSearchFormValue) =>{
-      setSearchFormValue("mobileNumber", null)
-      setSearchFormValue("applicationNo", null)
+      setSearchFormValue("mobileNumber", null);
+      setSearchFormValue("applicationNo", null);
+      dispatch({action: "mutateSearchForm", data: searchFormDefaultValues});
     }
 
     const onFilterFormReset = (setFilterFormValue) =>{
-      setFilterFormValue("moduleName", "bpa-services")
-      setFilterFormValue("businessService", {code: "BPA", name:t("BPA")})
-      setFilterFormValue("applicationStatus", "")
-      setFilterFormValue("locality", [])
-      setFilterFormValue("assignee", "ASSIGNED_TO_ALL")
+      setFilterFormValue("moduleName", "bpa-services");
+      setFilterFormValue("applicationStatus", "");
+      setFilterFormValue("locality", []);
+      setFilterFormValue("assignee", "ASSIGNED_TO_ALL");
+      setFilterFormValue("applicationType", []);
+      dispatch({action: "mutateFilterForm", data: filterFormDefaultValues});
     }
 
     const formInitValue = useMemo(() => {
@@ -71,6 +73,8 @@ const Inbox = ({parentRoute}) => {
     const onPageSizeChange = (e) => {
       dispatch({action: "mutateTableForm", data: {...formState.tableForm , limit: e.target.value}})
     }
+
+    const { data: applicationType, isLoading: loadingApplicationType } = Digit.Hooks.obps.useSearchMdmsTypes.applicationTypes(tenantId);
 
     const { data: localitiesForEmployeesCurrentTenant, isLoading: loadingLocalitiesForEmployeesCurrentTenant } = Digit.Hooks.useBoundaryLocalities(tenantId, "revenue", {}, t);
 
@@ -93,8 +97,8 @@ const Inbox = ({parentRoute}) => {
     const SearchFormFields = useCallback(({registerRef, searchFormState}) => <SearchFormFieldsComponents {...{registerRef, searchFormState}} />,[])
 
     const FilterFormFields = useCallback(
-      ({registerRef, controlFilterForm, setFilterFormValue, getFilterFormValue}) => <FilterFormFieldsComponent {...{statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState: formState?.filterForm, getFilterFormValue, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}} />
-    ,[statuses, isInboxLoading, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant])
+      ({registerRef, controlFilterForm, setFilterFormValue, getFilterFormValue}) => <FilterFormFieldsComponent {...{statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState: formState?.filterForm, getFilterFormValue, applicationType, loadingApplicationType, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}} />
+    ,[statuses, isInboxLoading, applicationType, loadingApplicationType, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant])
 
     const onSearchFormSubmit = (data) => {
       data.hasOwnProperty("") ? delete data?.[""] : null

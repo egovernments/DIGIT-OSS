@@ -48,7 +48,8 @@ const OBPSBreadCrumbs = ({ location }) => {
 const EmployeeApp = ({ path }) => {
   const location = useLocation()
   const { t } = useTranslation();
-  const Inbox = Digit.ComponentRegistryService.getComponent("BPAInbox")
+  const Inbox = Digit.ComponentRegistryService.getComponent("BPAInbox");
+  const StakeholderInbox = Digit.ComponentRegistryService.getComponent("StakeholderInbox");
   return (
     <Fragment>
       <OBPSBreadCrumbs location={location} />
@@ -58,6 +59,7 @@ const EmployeeApp = ({ path }) => {
         <PrivateRoute path={`${path}/search/application`} component={(props) => <Search {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/inbox/bpa/:id`} component={BpaApplicationDetail} />
         <PrivateRoute path={`${path}/inbox`} component={(props) => <Inbox {...props} parentRoute={path} />} />
+        <PrivateRoute path={`${path}/stakeholder-inbox`} component={(props) => <StakeholderInbox {...props} parentRoute={path} />} />
       </Switch>
     </Fragment>
   )

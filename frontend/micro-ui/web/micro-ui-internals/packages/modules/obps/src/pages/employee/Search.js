@@ -37,7 +37,6 @@ const Search = ({path}) => {
     }
 
     // useEffect(() => {
-    //     debugger;
     //     if(BPAdata.length>0 || BPAREGdata.length>0)
     //     (async () => {
     //         workflowRes = await Digit.WorkflowService.getAllApplication('pb.amritsar', id);

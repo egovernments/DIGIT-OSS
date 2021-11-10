@@ -1,10 +1,11 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { OBPSIconSolidBg, EmployeeModuleCard } from "@egovernments/digit-ui-react-components";
 
 const OBPSEmployeeHomeCard = () => {
 
-    const { t } = useTranslation()
+    const [totalCount, setTotalCount] = useState(0);
+    const { t } = useTranslation();
   
     const tenantId = Digit.ULBService.getCurrentTenantId();
   
@@ -12,7 +13,6 @@ const OBPSEmployeeHomeCard = () => {
   
     const filterFormDefaultValues = {
       moduleName: "bpa-services",
-      businessService: {code: "BPA", name:t("BPA")},
       applicationStatus: "",
       locality: [],
       assignee: "ASSIGNED_TO_ALL"
@@ -29,18 +29,54 @@ const OBPSEmployeeHomeCard = () => {
       searchForm: searchFormDefaultValues,
       tableForm: tableOrderFormDefaultValues
     }
+
+    const searchFormDefaultValuesOfStakeholder = {}
+
+    const filterFormDefaultValuesOfStakeholder = {
+      moduleName: "BPAREG",
+      businessService: {code: "BPAREG", name:t("BPAREG")},
+      applicationStatus: "",
+      locality: [],
+      assignee: "ASSIGNED_TO_ALL"
+    }
+    const tableOrderFormDefaultValuesOfStakeholder = {
+      sortBy: "",
+      limit: 10,
+      offset: 0,
+      sortOrder: "DESC"
+    }
   
-    const { isLoading: isInboxLoading, data: {table , statuses, totalCount} = {} } = Digit.Hooks.obps.useBPAInbox({
+    const formInitValueOfStakeholder = {
+      filterForm: filterFormDefaultValuesOfStakeholder,
+      searchForm: searchFormDefaultValuesOfStakeholder,
+      tableForm: tableOrderFormDefaultValuesOfStakeholder
+    }
+  
+    const { isLoading: isInboxLoadingOfStakeholder, data: dataOfStakeholder } = Digit.Hooks.obps.useBPAInbox({
+      tenantId,
+      filters: { ...formInitValueOfStakeholder }
+    });
+
+    const { isLoading: isInboxLoading, data : dataOfBPA } = Digit.Hooks.obps.useBPAInbox({
       tenantId,
       filters: { ...formInitValue }
     });
+
+  useEffect(() => {
+    if (!isInboxLoading && !isInboxLoadingOfStakeholder) {
+      const bpaCount = dataOfBPA?.totalCount ? dataOfBPA?.totalCount : 0;
+      const stakeHolderCount = dataOfStakeholder?.totalCount ? dataOfStakeholder?.totalCount : 0;
+      setTotalCount(bpaCount + stakeHolderCount);
+    }
+  }, [dataOfBPA, dataOfStakeholder]);
+
   
     const propsForModuleCard = useMemo(()=>({
       Icon: <OBPSIconSolidBg />,
       moduleName: t("MODULE_OBPS"),
       kpis:[
         {
-            count: isInboxLoading ? "" : totalCount ,
+            count: !isInboxLoading && !isInboxLoadingOfStakeholder ? totalCount : "",
             label: t("TOTAL_FSM"),
             link: `/digit-ui/employee/obps/inbox`
         },
@@ -51,17 +87,22 @@ const OBPSEmployeeHomeCard = () => {
       ],
       links: [
         {
-          count: isInboxLoading ? "" : totalCount ,
-          label: t("ES_COMMON_INBOX"),
+          count: isInboxLoadingOfStakeholder ? "" : dataOfStakeholder?.totalCount ,
+          label: t("ES_COMMON_STAKEHOLDER_INBOX_LABEL"),
+          link: `/digit-ui/employee/obps/stakeholder-inbox`
+        },
+        {
+          count: isInboxLoading ? "" : dataOfBPA?.totalCount ,
+          label: t("ES_COMMON_OBPS_INBOX_LABEL"),
           link: `/digit-ui/employee/obps/inbox`
         },
         {
-          count : "-",
+          // count : "-",
           label: t("ES_COMMON_SEARCH_APPLICATION"),
           link: `/digit-ui/employee/obps/search/application`
         },
       ]
-    }),[isInboxLoading, totalCount])
+    }),[isInboxLoading, isInboxLoadingOfStakeholder, dataOfStakeholder, dataOfBPA, totalCount])
   
     return <EmployeeModuleCard {...propsForModuleCard} />
   }

@@ -11,7 +11,7 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
     const tableColumnConfig = useMemo(() => {
         return [
         {
-            Header: t("TL_COMMON_TABLE_COL_APP_NO"),
+            Header: t("BPA_APPLICATION_NUMBER_LABEL"),
             accessor: "applicationNo",
             Cell: ({ row }) => {
             return (
@@ -41,8 +41,8 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
             accessor: (row) => row?.owner,
         },
         {
-            Header: t("WS_COMMON_TABLE_COL_APP_TYPE_LABEL"),
-            accessor: (row) => row?.applicationType,
+            Header: t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"),
+            accessor: (row) => t(row?.applicationType),
         },
         {
             Header: t("ES_INBOX_SLA_DAYS_REMAINING"),

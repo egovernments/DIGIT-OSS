@@ -5,8 +5,7 @@ const useNOCInbox = ({ tenantId, filters, config={} }) => {
     const { moduleName, businessService, applicationStatus, locality, assignee } = filterForm
     const { mobileNumber, applicationNumber } = searchForm
     const { sortBy, limit, offset, sortOrder } = tableForm
-    // const USER_UUID = Digit.UserService.getUser()?.info?.uuid;
-    // debugger
+    
     const _filters = {
         tenantId,
         processSearchCriteria: {

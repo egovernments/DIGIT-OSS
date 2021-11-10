@@ -53,7 +53,6 @@ const refObj = (tenantId, filters) => {
 
 export const useApplicationsForBusinessServiceSearch = ({ tenantId, businessService, filters }, config = {}) => {
   let _key = businessService?.toLowerCase().split(".")[0];
-  //debugger;
   if (window.location.href.includes("mcollect")) {
     _key = "mcollect";
   }

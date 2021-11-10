@@ -170,7 +170,6 @@ const Inbox = ({parentRoute}) => {
     }
     
     const onFilterFormSubmit = (data) => {
-      // debugger
       dispatch({action: "mutateFilterForm", data})
       console.log("find search form data here", data)
     }

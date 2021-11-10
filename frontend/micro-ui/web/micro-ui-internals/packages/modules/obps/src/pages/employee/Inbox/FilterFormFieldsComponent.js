@@ -5,16 +5,14 @@ import { useTranslation } from "react-i18next";
 
 const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState, getFilterFormValue, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}) => {
   const { t } = useTranslation()
-  // const tenantId = Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.ULBService.getStateId();
   const availableOptions = [
     { code: "ASSIGNED_TO_ME", name: `${t("ES_INBOX_ASSIGNED_TO_ME")}` },
     { code: "ASSIGNED_TO_ALL", name: `${t("ES_INBOX_ASSIGNED_TO_ALL")}` },
   ];
 
-  const availableBusinessService = [
-    {code: "BPA", name:t("BPA")},
-    {code: "STAKEHOLDER", name:t("STAKEHOLDER")},
-  ]
+  const { data: applicationTypes } = Digit.Hooks.obps.useSearchMdmsTypes.applicationTypes(tenantId);
+  applicationTypes?.forEach(type => type.name = t(`WF_BPA_${type.code}`));
 
   return <>
     <FilterFormField>
@@ -36,12 +34,12 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
     </FilterFormField>
     <FilterFormField>
       <Controller
-          name="businessService"
+          name="applicationType"
           control={controlFilterForm}
           render={({ref, onChange, value}) => {
             return <>
-              <div className="filter-label">{t("BPA_SEARCH_APPLICATION_TYPE_LABEL")}</div>
-              <Dropdown inputRef={ref} option={availableBusinessService} optionKey="name" t={t} select={ (e) => {
+              <div className="filter-label">{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</div>
+              <Dropdown inputRef={ref} option={applicationTypes ? applicationTypes : []} optionKey="name" t={t} select={ (e) => {
                   onChange(e)
                 }} selected={value} />
             </>

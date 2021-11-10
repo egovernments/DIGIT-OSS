@@ -137,7 +137,6 @@ const Inbox = () => {
         })
 
         const searchForItemsInTable = (rows, columnIds)=>{
-          debugger
           return rows
         }
 

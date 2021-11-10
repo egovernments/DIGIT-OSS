@@ -4,9 +4,9 @@ const useInboxMobileCardsData = ({parentRoute, table }) => {
     const { t } = useTranslation()
 
     const dataForMobileInboxCards = table?.map(({ applicationId, date, applicationType, locality, status, owner, sla}) => ({
-            [t("TL_COMMON_TABLE_COL_APP_NO")]: applicationId,
+            [t("BPA_APPLICATION_NUMBER_LABEL")]: applicationId,
             [t("CS_APPLICATION_DETAILS_APPLICATION_DATE")]: date,
-            [t("WS_COMMON_TABLE_COL_APP_TYPE_LABEL")]: applicationType,
+            [t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")]: t(applicationType),
             [t("ES_INBOX_LOCALITY")]: locality,
             [t("EVENTS_STATUS_LABEL")]: status,
             [t("WF_INBOX_HEADER_CURRENT_OWNER")]: owner,

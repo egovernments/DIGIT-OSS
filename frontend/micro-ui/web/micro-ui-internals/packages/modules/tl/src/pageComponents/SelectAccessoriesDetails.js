@@ -160,7 +160,6 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
     let formdata;
 
     formdata = { ...data, accessories: fields };
-    // debugger;
     onSelect(config.key, formdata);
   };
 
