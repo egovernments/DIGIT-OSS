@@ -156,7 +156,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
                             isCompleted={index === 0}
                             info={checkpoint.comment}
                             label={t(
-                              `${timelineStatusPrefix}${checkpoint?.performedAction === "REOPEN" ? checkpoint?.performedAction : checkpoint.state}`
+                              `${timelineStatusPrefix}${checkpoint?.performedAction === "REOPEN" ? checkpoint?.performedAction : checkpoint.status}`
                             )}
                             customChild={getTimelineCaptions(checkpoint)}
                           />

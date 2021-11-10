@@ -17,7 +17,7 @@
         @apply w-full;
     }
     .InboxMobilePopupCloseButtonWrapper{
-        @apply float-right;
+        @apply flex flex-row-reverse;
     }
 }
 

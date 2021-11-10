@@ -49,6 +49,13 @@
   }
 }
 
+.MobilePopupHeadingWrapper{
+  @apply flex place-content-between mb-md;
+  h2{
+    @apply text-heading-l font-bold;
+  }
+}
+
 .filter-button {
   @apply text-primary-main;
   &:hover {

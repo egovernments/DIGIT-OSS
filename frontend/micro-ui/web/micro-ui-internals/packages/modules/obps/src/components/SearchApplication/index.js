@@ -203,10 +203,13 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
         const MobilePopUpCloseButton = () => <div className="InboxMobilePopupCloseButtonWrapper" onClick={closeMobilePopupModal}>
             <CloseSvg/>
         </div>
-    
+
         const MobileComponentDirectory= {
             SearchFormComponent: () => <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit} id="search-form" className="rm-mb form-field-flex-one inboxPopupMobileWrapper" >
                 <MobilePopUpCloseButton/>
+                <div className="MobilePopupHeadingWrapper">
+                    <h2>{t("ES_COMMON_SEARCH")}:</h2>
+                </div>
                 <SearchFormFieldsComponent {...{Controller, register, control, t, getApplicationType, getselectedServiceType, applicationTypes, ServiceTypes}}/>
                 {/* <SearchField className="submit">
                     <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
