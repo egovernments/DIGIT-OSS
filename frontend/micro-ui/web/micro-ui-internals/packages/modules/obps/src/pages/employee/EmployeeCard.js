@@ -1,13 +1,14 @@
 import React, { useMemo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { OBPSIconSolidBg, EmployeeModuleCard } from "@egovernments/digit-ui-react-components";
-
+import { showHidingLinksForStakeholder, showHidingLinksForBPA } from "../../utils";
 const OBPSEmployeeHomeCard = () => {
 
     const [totalCount, setTotalCount] = useState(0);
     const { t } = useTranslation();
   
     const tenantId = Digit.ULBService.getCurrentTenantId();
+    const stateCode = Digit.ULBService.getStateId();
   
     const searchFormDefaultValues = {}
   
@@ -90,20 +91,39 @@ const OBPSEmployeeHomeCard = () => {
         {
           count: isInboxLoadingOfStakeholder ? "" : dataOfStakeholder?.totalCount ,
           label: t("ES_COMMON_STAKEHOLDER_INBOX_LABEL"),
-          link: `/digit-ui/employee/obps/stakeholder-inbox`
+          link: `/digit-ui/employee/obps/stakeholder-inbox`,
+          field: "STAKEHOLDER"
         },
         {
           count: isInboxLoading ? "" : dataOfBPA?.totalCount ,
           label: t("ES_COMMON_OBPS_INBOX_LABEL"),
-          link: `/digit-ui/employee/obps/inbox`
+          link: `/digit-ui/employee/obps/inbox`,
+          field: "BPA"
         },
         {
-          // count : "-",
           label: t("ES_COMMON_SEARCH_APPLICATION"),
           link: `/digit-ui/employee/obps/search/application`
         },
       ]
-    }),[isInboxLoading, isInboxLoadingOfStakeholder, dataOfStakeholder, dataOfBPA, totalCount])
+    }),[isInboxLoading, isInboxLoadingOfStakeholder, dataOfStakeholder, dataOfBPA, totalCount]);
+
+    const stakeholderEmployeeRoles = [ { code: "BPAREG_DOC_VERIFIER", tenantId: stateCode }, { code: "BPAREG_APPROVER", tenantId: stateCode }];
+    const bpaEmployeeRoles = [ "BPA_FIELD_INSPECTOR", "BPA_NOC_VERIFIER", "BPA_APPROVER", "BPA_VERIFIER", "CEMP"];
+
+    const checkingForStakeholderRoles = showHidingLinksForStakeholder(stakeholderEmployeeRoles);
+    const checkingForBPARoles = showHidingLinksForBPA(bpaEmployeeRoles);
+    
+    if (!checkingForStakeholderRoles) {
+      propsForModuleCard.links = propsForModuleCard.links.filter(obj => {
+        return obj.field !== 'STAKEHOLDER';
+      });
+    }
+
+    if (!checkingForBPARoles) {
+      propsForModuleCard.links = propsForModuleCard.links.filter(obj => {
+        return obj.field !== 'BPA';
+      });
+    }
   
     return <EmployeeModuleCard {...propsForModuleCard} />
   }

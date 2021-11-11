@@ -16,8 +16,6 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
     type.i18nKey = t(`WF_BPA_${type.code}`);
   });
 
-  console.log(localitiesForEmployeesCurrentTenant, applicationTypesOfBPA,  "localitiesForEmployeesCurrentTenantlocalitiesForEmployeesCurrentTenant")
-
   return <>
     <FilterFormField>
       <Controller

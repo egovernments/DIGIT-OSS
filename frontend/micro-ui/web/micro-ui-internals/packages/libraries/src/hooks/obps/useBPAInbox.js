@@ -1,7 +1,6 @@
 import useInbox from "../useInbox"
 
 const useBPAInbox = ({ tenantId, filters, config={} }) => {
-  debugger;
     const { filterForm, searchForm , tableForm } = filters;
     const { moduleName, businessService, applicationStatus, locality, assignee, applicationType } = filterForm;
     const { mobileNumber, applicationNo } = searchForm;
@@ -38,7 +37,7 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
           statuses: window.location.href.includes("stakeholder-inbox") ? data.statusMap.map(e => ({...e, applicationstatus: `WF_${businessService}_${e.applicationstatus}`})) : data.statusMap.map(e => ({...e, applicationstatus: `WF_${businessService?.code}_${e.applicationstatus}`})),
           table: data?.items.map( application => ({
               applicationId: application.businessObject.applicationNo || application.businessObject.applicationNumber,
-              date: application.businessObject.applicationDate,
+              date: application.businessObject.auditDetails.createdTime,
               businessService: application?.ProcessInstance?.businessService,
               applicationType: application?.businessObject?.additionalDetails?.applicationType ? `WF_BPA_${application?.businessObject?.additionalDetails?.applicationType}` : "-",
               locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
