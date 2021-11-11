@@ -228,7 +228,7 @@ function SelectDocument({
   }, [doc])
   return (
     <div style={{ marginBottom: "24px" }}>
-      <LabelFieldPair>
+      <LabelFieldPair style={{maxWidth:"600px"}}>
         <CardLabel className="card-label-smaller">
           {doc?.documentType != "OLDLICENCENO" ?
             `${t(`${doc?.documentType.replaceAll(".", "_")}`)} * :` :

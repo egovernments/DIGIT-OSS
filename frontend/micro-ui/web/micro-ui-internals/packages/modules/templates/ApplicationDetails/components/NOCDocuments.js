@@ -167,7 +167,7 @@ const NOCDocuments = ({ t, noc, docs, isNoc, applicationData,NOCdata }) => {
   }, [nocDocs, commonDocMaping]);
 
   return (
-    <div style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px",/*  display: "flex" */ }}>
+    <div style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", maxWidth:"600px"/*  display: "flex" */ }}>
       <StatusTable>
       <Row label={t(`BPA_${noc?.nocType}_HEADER`)} />
       {NOCdata && NOCdata.map((noc,index) => (

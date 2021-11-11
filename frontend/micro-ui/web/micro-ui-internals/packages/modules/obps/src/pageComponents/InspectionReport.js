@@ -274,8 +274,8 @@ const InspectionReportForm = (_props) => {
                         </div>
                     ) : null}
                     <CardSectionHeader>{`${t("BPA_FI_REPORT")}`} {index+1}</CardSectionHeader>
-                    <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("BPA_FI_DATE_LABEL")} * :`}</CardLabel>
+                    <LabelFieldPair style={{maxWidth:"600px"}}>
+            <CardLabel style={{marginTop:"0px"}} className="card-label-smaller">{`${t("BPA_FI_DATE_LABEL")} * :`}</CardLabel>
             <div className="field">
               <Controller
                 name="InspectionDate"
@@ -294,8 +294,8 @@ const InspectionReportForm = (_props) => {
               />
             </div>
             </LabelFieldPair>
-            <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("ES_COMMON_TIME")} * :`}</CardLabel>
+            <LabelFieldPair style={{maxWidth:"600px"}}>
+            <CardLabel style={{marginTop:"0px"}} className="card-label-smaller">{`${t("ES_COMMON_TIME")} * :`}</CardLabel>
             <div className="field">
             <Controller
                 name="InspectionTime"
