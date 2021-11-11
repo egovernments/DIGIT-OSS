@@ -96,7 +96,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
     }
 
     const getRedirectionLink = (bService) => {
-        let redirectBS = bService === "BPAREG"?"stakeholder":"search/application/bpa";
+        let redirectBS = bService === "BPAREG"?"search/application/stakeholder":"search/application/bpa";
         return redirectBS;
     }
     const GetCell = (value) => <span className="cell-text">{value}</span>;

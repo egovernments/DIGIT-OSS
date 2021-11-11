@@ -20,9 +20,19 @@ const OBPSBreadCrumbs = ({ location }) => {
       show: location.pathname.includes("obps/inbox") ? true : false,
     },
     {
+      path: "/digit-ui/employee/obps/stakeholder-inbox",
+      content: t("ES_COMMON_STAKEHOLDER_INBOX_LABEL"),
+      show: location.pathname.includes("obps/stakeholder-inbox") ? true : false,
+    },
+    {
       path: "/digit-ui/employee/obps/inbox/bpa/:id",
       content: t("ES_OBPS_BPA_DETAILS"),
       show: location.pathname.includes("obps/inbox/bpa") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/obps/inbox/stakeholder/:id",
+      content: t("ES_OBPS_SEARCH_BPA"),
+      show: location.pathname.includes("obps/stakeholder-inbox/stakeholder") ? true : false,
     },
     {
       path: "/digit-ui/employee/obps/search/application",
@@ -35,11 +45,10 @@ const OBPSBreadCrumbs = ({ location }) => {
       show: location.pathname.includes("/obps/search/application/bpa") ? true : false,
     },
     {
-      path: "/digit-ui/employee/obps/stakeholder/:id",
-      content: t("ES_OBPS_SEARCH"),
-      show: location.pathname.includes("/obpsobps/stakeholder") ? true : false,
+      path: "/digit-ui/employee/obps/search/application/stakeholder/:id",
+      content: t("ES_OBPS_SEARCH_BPA"),
+      show: location.pathname.includes("/obps/search/application/stakeholder/") ? true : false,
     },
-
   ];
 
   return <BreadCrumb crumbs={crumbs} />;
@@ -54,7 +63,8 @@ const EmployeeApp = ({ path }) => {
     <Fragment>
       <OBPSBreadCrumbs location={location} />
       <Switch>
-        <PrivateRoute path={`${path}/stakeholder/:id`} component={ApplicationDetail} />
+        <PrivateRoute path={`${path}/stakeholder-inbox/stakeholder/:id`} component={ApplicationDetail} />
+        <PrivateRoute path={`${path}/search/application/stakeholder/:id`} component={ApplicationDetail} />
         <PrivateRoute path={`${path}/search/application/bpa/:id`} component={BpaApplicationDetail} />
         <PrivateRoute path={`${path}/search/application`} component={(props) => <Search {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/inbox/bpa/:id`} component={BpaApplicationDetail} />
