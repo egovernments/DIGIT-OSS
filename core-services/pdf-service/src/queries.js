@@ -190,10 +190,9 @@ export async function mergePdf(bulkPdfJobId, tenantId, userid){
         }).catch((err) => {
           logger.error(err.stack || err);
         });
-
-        fs.rmdirSync(baseFolder, { recursive: true });
-
       })();
+
+      fs.rmdirSync(baseFolder, { recursive: true });
     }
   } catch (err) {
     logger.error(err.stack || err);
