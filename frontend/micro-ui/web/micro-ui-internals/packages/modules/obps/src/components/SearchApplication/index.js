@@ -13,7 +13,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
     let defaultAppType = applicationTypes && applicationTypes.filter((ob) => ob.code === "BUILDING_PLAN_SCRUTINY")[0];
     let defaultserviceType = serviceTypes && serviceTypes.filter((ob) => ob.code === "NEW_CONSTRUCTION")[0];
     const [serviceType, setserviceType] = useState(defaultserviceType);
-    const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
+    const { register, control, handleSubmit, setValue, getValues, reset, formState } = useForm({
         defaultValues: {
             offset: 0,
             limit: 10,
@@ -255,7 +255,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
 
     return <React.Fragment>
             <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-                <SearchFormFieldsComponent {...{Controller, register, control, t, getApplicationType, getselectedServiceType, applicationTypes, ServiceTypes}}/>
+                <SearchFormFieldsComponent {...{formState, Controller, register, control, t, getApplicationType, getselectedServiceType, applicationTypes, ServiceTypes, reset, defaultAppType, defaultserviceType,previousPage}}/>
             </SearchForm>
             {!isLoading && data?.[0]?.display ? <Card style={{ marginTop: 20 }}>
                 {
@@ -268,7 +268,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
                     ))
                 }
             </Card>
-            : !isLoading?<Table
+            : !showToast?!isLoading?<Table
                 t={t}
                 data={data}
                 columns={columns}
@@ -293,11 +293,12 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
                 onLastPage={fetchLastPage}
                 onFirstPage={fetchFirstPage}
                 sortParams={[{id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false}]}
-            />:<Loader />}
+            />:<Loader />:""}
             {showToast && (
         <Toast
           error={showToast.key}
           label={t(showToast.label)}
+          isDleteBtn={true}
           onClose={() => {
             setShowToast(null);
           }}

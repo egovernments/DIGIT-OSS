@@ -1,5 +1,5 @@
 import React, { Fragment } from "react"
-import { TextInput, SubmitBar, DatePicker, SearchField, Dropdown } from "@egovernments/digit-ui-react-components";
+import { TextInput, SubmitBar, DatePicker, SearchField, Dropdown, CardLabelError } from "@egovernments/digit-ui-react-components";
 
 const applicationStatuses = [
     {
@@ -41,7 +41,7 @@ const applicationStatuses = [
 ]
 
 
-const SearchFormFieldsComponent = ({Controller, register, control, t, getApplicationType, getselectedServiceType, applicationTypes, ServiceTypes}) => <>
+const SearchFormFieldsComponent = ({formState,Controller, register, control, t, getApplicationType, getselectedServiceType, applicationTypes, ServiceTypes, reset, defaultAppType, defaultserviceType,previousPage}) => <>
     <SearchField>
         <label>{t("BPA_SEARCH_APPLICATION_NO_LABEL")}</label>
         <TextInput name="applicationNo" inputRef={register({})} />
@@ -49,14 +49,26 @@ const SearchFormFieldsComponent = ({Controller, register, control, t, getApplica
     <SearchField>
         <label>{t("BPA_APP_MOBILE_NO_SEARCH_PARAM")}</label>
         <TextInput name="mobileNumber" inputRef={register({
+             minLength: {
+                value: 10,
+                message: t("CORE_COMMON_MOBILE_ERROR")
+            },
+            maxLength: {
+                value: 10,
+                message: t("CORE_COMMON_MOBILE_ERROR")
+            },
             pattern: {
-                value: /[6789][0-9]{9}/,
+                value: /[789][0-9]{9}/,
+                //type: "tel",
                 message: t("CORE_COMMON_MOBILE_ERROR")
             }})} 
-            type="mobileNumber"
+            type="number"
             componentInFront={<div className="employee-card-input employee-card-input--front">+91</div>} 
-            maxlength={10}
+            //maxlength={10}
         />
+         <CardLabelError>
+                {formState?.errors?.["mobileNumber"]?.message}
+        </CardLabelError>
     </SearchField>
     <SearchField>
         <label>{t("BPA_SEARCH_APPLICATION_TYPE_LABEL")}</label>

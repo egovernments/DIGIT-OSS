@@ -336,7 +336,7 @@ const BpaApplicationDetail = () => {
                   <CheckBox
                     styles={{ margin: "20px 0 40px" }}
                     checked={isTocAccepted}
-                    label={t(`BPA_TERMS_AND_CONDITIONS`)}
+                    label={`${t(`BPA_CITIZEN_1_DECLARAION_LABEL`)}${t(`BPA_CITIZEN_2_DECLARAION_LABEL`)}`}
                     onChange={() => setIsTocAccepted(!isTocAccepted)}
                   />
                 )}
