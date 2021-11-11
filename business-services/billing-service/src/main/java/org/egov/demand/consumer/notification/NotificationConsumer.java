@@ -138,7 +138,7 @@ public class NotificationConsumer {
 			content = content.replace("{OWNER_NAME}", bill.getPayerName());
 			content = content.replace("{SERVICE}", bill.getBusinessService());
 			content = content.replace("{BILLING_PERIOD}", getPeriod(detail.getFromPeriod(), detail.getToPeriod()));
-			content = content.replace("{REASON_FOR_CANCELLATION}", bill.getAdditionalDetails().toString());
+			content = content.replace("{REASON_FOR_CANCELLATION}", bill.getAdditionalDetails().get("reason").textValue());
 
 		}
 		return content;
