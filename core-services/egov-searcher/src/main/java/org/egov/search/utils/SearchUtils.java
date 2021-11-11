@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -90,6 +92,7 @@ public class SearchUtils {
 	public String buildWhereClause(SearchRequest searchRequest, SearchParams searchParam,  Map<String, Object> preparedStatementValues) {
 		StringBuilder whereClause = new StringBuilder();
 		String condition = searchParam.getCondition();
+		Pattern p = Pattern.compile("->>");
 		try {
 			
 			String request = mapper.writeValueAsString(searchRequest);
@@ -125,7 +128,10 @@ public class SearchUtils {
 				if (i > 0) {
 					whereClause.append(" " + condition + " ");
 				}
-				
+				Matcher matcher = p.matcher(param.getName());
+				String namedParam = param.getName();
+                                if(matcher.find())
+                                    namedParam = removeJSONOperatorsForNamedParam(namedParam);
 				/**
 				 * Array operators
 				 */
@@ -133,8 +139,9 @@ public class SearchUtils {
 					String[] validListOperators = {"NOT IN", "IN"};
 					String operator = (!StringUtils.isEmpty(param.getOperator())) ? " " + param.getOperator() + " " : " IN ";
 					if(!Arrays.asList(validListOperators).contains(operator))
-						operator = " IN "; 
-					whereClause.append(param.getName()).append(operator).append("(").append(":"+param.getName()).append(")");
+						operator = " IN ";
+					
+					whereClause.append(param.getName()).append(operator).append("(").append(":"+namedParam).append(")");
 				} 
 				/**
 				 * single operators
@@ -166,10 +173,10 @@ public class SearchUtils {
 						paramValue = ((String) paramValue).toLowerCase();
 					}
 					
-					whereClause.append(param.getName()).append(" " + operator + " ").append(":" + param.getName());
+					whereClause.append(param.getName()).append(" " + operator + " ").append(":" + namedParam);
 				}
 
-				preparedStatementValues.put(param.getName(), paramValue);
+				preparedStatementValues.put(namedParam, paramValue);
 			}
 		} catch (Exception e) {
 			log.error("Exception while bulding query: ", e);
@@ -268,5 +275,27 @@ public class SearchUtils {
 		
 		return result;
 	}
+	
+        private String removeJSONOperatorsForNamedParam(String namedParam) {
+            
+            /*
+             * In the param, if contain the json operators then removing those special characters from param setting as param name
+             * for named param. ex, if param name is like bpa.additionadetails->>'applicationtype' then removing the single
+             * quote(') and json operator (->>) and setting named param name as bpa.additionadetailsapplicationtype.
+             */
+            String namedParamTemp = namedParam.replace("'", "");
+            StringBuilder namedParamRes = new StringBuilder();
+            Pattern pattern = Pattern.compile("->>");
+            Matcher m = pattern.matcher(namedParamTemp);
+            int lastIndex = 0;
+            if (m.find()) {
+                namedParamRes.append(namedParamTemp, lastIndex, m.start());
+                lastIndex = m.end();
+            }
+
+            if (lastIndex < namedParamTemp.length())
+                namedParamRes.append(namedParamTemp, lastIndex, namedParamTemp.length());
+            return namedParamRes.toString();
+        }
 
 }

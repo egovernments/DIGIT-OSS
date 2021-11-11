@@ -23,5 +23,7 @@ public class BpaConstants {
 	public static final String USER_ROLES = "userRoles";
 	public static final String USER_UUID = "userUUID";
 	public static final String BPAREG = "BPAREG";
+	public static final String APPLICATION_TYPE = "applicationType";
+	public static final String SERVICE_TYPE = "serviceType";
 
 }

@@ -94,6 +94,20 @@ public class BPAQueryBuilder {
             addToPreparedStatement(preparedStmtList, statuses);
 
         }
+        String applicationType = criteria.getApplicationType();
+        if(applicationType != null) {
+            addClauseIfRequired(preparedStmtList, builder);
+            builder.append(" bpa.additionaldetails ->>'applicationType'=? ");
+            preparedStmtList.add(applicationType);
+        }
+        
+        String serviceType = criteria.getServiceType();
+        if(serviceType != null) {
+            addClauseIfRequired(preparedStmtList, builder);
+            builder.append(" bpa.additionaldetails ->>'serviceType'=? ");
+            preparedStmtList.add(serviceType);
+        }
+        
         Long permitDt = criteria.getApprovalDate();
         if (permitDt != null) {
 

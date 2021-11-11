@@ -161,6 +161,12 @@ public class BPAInboxFilterService {
         if (moduleSearchCriteria != null && moduleSearchCriteria.containsKey(BPA_APPLICATION_NUMBER_PARAM)) {
             searchCriteria.put(BPA_APPLICATION_NUMBER_PARAM, moduleSearchCriteria.get(BPA_APPLICATION_NUMBER_PARAM));
         }
+        if (moduleSearchCriteria != null && moduleSearchCriteria.containsKey(APPLICATION_TYPE)) {
+            searchCriteria.put(APPLICATION_TYPE, moduleSearchCriteria.get(APPLICATION_TYPE));
+        }
+        if (moduleSearchCriteria != null && moduleSearchCriteria.containsKey(SERVICE_TYPE)) {
+            searchCriteria.put(SERVICE_TYPE, moduleSearchCriteria.get(SERVICE_TYPE));
+        }
 
         // Accommodating process search criteria in searcher request
         if (!ObjectUtils.isEmpty(processCriteria.getAssignee())) {
