@@ -2,10 +2,11 @@ import useInbox from "../useInbox"
 
 const useBPAInbox = ({ tenantId, filters, config={} }) => {
     const { filterForm, searchForm , tableForm } = filters;
-    const { moduleName, businessService, applicationStatus, locality, assignee, applicationType } = filterForm;
+    let { moduleName, businessService, applicationStatus, locality, assignee, applicationType } = filterForm;
     const { mobileNumber, applicationNo } = searchForm;
     const { sortBy, limit, offset, sortOrder } = tableForm;
     let applicationNumber = "";
+    if (window.location.href.includes("stakeholder-inbox")) moduleName = "BPAREG";
     if (moduleName == "BPAREG") {
       applicationNumber = applicationNo;
       tenantId = Digit.ULBService.getStateId();
