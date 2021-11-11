@@ -1,5 +1,5 @@
 import isToday from 'date-fns/isToday';
-export const aphabeticalSortFunctionForTenantsBasedOnName = (firstEl, secondEl) => {
+export const alphabeticalSortFunctionForTenantsBasedOnName = (firstEl, secondEl) => {
     if (firstEl.name.toUpperCase() < secondEl.name.toUpperCase()) {
         return -1
     }

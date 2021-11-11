@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, Dropdown } from "@egovernments/digit-ui-react-components";
-import { aphabeticalSortFunctionForTenantsBasedOnName } from "../../utils";
+import { alphabeticalSortFunctionForTenantsBasedOnName } from "../../utils";
 
 const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPage, t }) => {
     const { register, handleSubmit, formState, reset, watch, control } = useForm({
@@ -12,7 +12,7 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
     const tenantId = Digit.ULBService.getCurrentTenantId();
 
     const userInfo = Digit.UserService.getUser().info;
-    const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code)).sort(aphabeticalSortFunctionForTenantsBasedOnName);
+    const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code)).sort(alphabeticalSortFunctionForTenantsBasedOnName);
 
 
     const selectedTenat = useMemo(() => {

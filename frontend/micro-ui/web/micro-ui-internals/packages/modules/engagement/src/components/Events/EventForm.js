@@ -2,7 +2,7 @@ import { TextInput, CardLabel, LabelFieldPair, Dropdown, Loader, LocationSearch,
 import React, { Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Controller } from "react-hook-form";
-import { aphabeticalSortFunctionForTenantsBasedOnName } from "../../utils";
+import { alphabeticalSortFunctionForTenantsBasedOnName } from "../../utils";
 import { useLocation } from "react-router-dom";
 
 const EventForm = ({ onSelect, config, formData, register, control, errors }) => {
@@ -11,7 +11,7 @@ const EventForm = ({ onSelect, config, formData, register, control, errors }) =>
   const state = tenantId?.split('.')[0];
   const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
   const userInfo = Digit.UserService.getUser().info;
-  const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code)).sort(aphabeticalSortFunctionForTenantsBasedOnName)
+  const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code)).sort(alphabeticalSortFunctionForTenantsBasedOnName)
   const getDefaultUlb = () => {
     if (formData?.defaultTenantId) {
       return ulbs?.find(ulb => ulb?.code === formData?.defaultTenantId);

@@ -153,6 +153,7 @@ import useSurveyUpdate from "./surveys/useUpdate";
 import useSurveySearch from "./surveys/useSearch";
 import useSurveyShowResults from "./surveys/useShowResults";
 import useSurveySubmitResponse from "./surveys/useSubmitResponse";
+import useSurveyInbox from "./surveys/useSurveyInbox";
 
 import useNOCDetails from "./noc/useNOCDetails";
 import useNOCInbox from "./noc/useInbox"
@@ -310,7 +311,8 @@ const survey = {
   useDelete: useSurveyDelete,
   useSearch: useSurveySearch,
   useSubmitResponse: useSurveySubmitResponse,
-  useShowResults: useSurveyShowResults
+  useShowResults: useSurveyShowResults,
+  useSurveyInbox,
 }
 
 const noc = {

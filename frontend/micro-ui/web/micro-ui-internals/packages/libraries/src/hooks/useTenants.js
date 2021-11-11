@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 
-const aphabeticalSortFunctionForTenantsBasedOnName = (firstEl, secondEl) =>{
+const alphabeticalSortFunctionForTenantsBasedOnName = (firstEl, secondEl) =>{
     if (firstEl.name.toUpperCase() < secondEl.name.toUpperCase() ) {
         return -1
     }
@@ -10,4 +10,4 @@ const aphabeticalSortFunctionForTenantsBasedOnName = (firstEl, secondEl) =>{
         return 0
 }
 
-export const useTenants = () => useQuery(["ALL_TENANTS"], () => Digit.SessionStorage.get("initData").tenants.sort(aphabeticalSortFunctionForTenantsBasedOnName))
+export const useTenants = () => useQuery(["ALL_TENANTS"], () => Digit.SessionStorage.get("initData").tenants.sort(alphabeticalSortFunctionForTenantsBasedOnName))

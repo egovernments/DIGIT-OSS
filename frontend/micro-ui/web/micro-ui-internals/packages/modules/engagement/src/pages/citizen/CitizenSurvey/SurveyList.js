@@ -70,9 +70,7 @@ const SurveyList = () => {
             <Loader />
         )
     }
-
-
-
+    
     return (
         <div >
             <Header>{`${t('CS_COMMON_SURVEYS')} (${data?.activeSurveysList.length})`}</Header>

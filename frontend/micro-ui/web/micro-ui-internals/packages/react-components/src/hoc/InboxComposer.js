@@ -34,8 +34,8 @@ const InboxComposer = ({
 }) => {
     const { t } = useTranslation()
 
-    function activateModal(state, action){
-        switch(action.type){
+    function activateModal(state, action) {
+        switch (action.type) {
             case "set":
                 return action.payload
             case "remove":
@@ -45,20 +45,20 @@ const InboxComposer = ({
         }
     }
 
-    const [ currentlyActiveMobileModal, setActiveMobileModal ] = useReducer(activateModal, false)
+    const [currentlyActiveMobileModal, setActiveMobileModal] = useReducer(activateModal, false)
 
     const closeMobilePopupModal = () => {
-        setActiveMobileModal({type:"remove"})
+        setActiveMobileModal({ type: "remove" })
     }
 
-    const { register: registerSearchFormField, control: controlSearchForm , handleSubmit: handleSearchFormSubmit, setValue: setSearchFormValue, getValues: getSearchFormValue, reset: resetSearchForm, formState: searchFormState, clearErrors: clearSearchFormErrors } = useForm({
-        defaultValues: {...searchFormDefaultValues}
+    const { register: registerSearchFormField, control: controlSearchForm, handleSubmit: handleSearchFormSubmit, setValue: setSearchFormValue, getValues: getSearchFormValue, reset: resetSearchForm, formState: searchFormState, clearErrors: clearSearchFormErrors } = useForm({
+        defaultValues: { ...searchFormDefaultValues }
     })
-    
-    const { register: registerFilterFormField, control: controlFilterForm , handleSubmit: handleFilterFormSubmit, setValue: setFilterFormValue, getValues: getFilterFormValue, reset: resetFilterForm } = useForm({
-        defaultValues: {...filterFormDefaultValues}
+
+    const { register: registerFilterFormField, control: controlFilterForm, handleSubmit: handleFilterFormSubmit, setValue: setFilterFormValue, getValues: getFilterFormValue, reset: resetFilterForm } = useForm({
+        defaultValues: { ...filterFormDefaultValues }
     })
-    
+
     const onResetFilterForm = () => {
         onFilterFormReset(setFilterFormValue)
     }
@@ -68,30 +68,30 @@ const InboxComposer = ({
         clearSearchFormErrors()
     }
 
-    useEffect(()=>{
-        if(resetFilterForm && resetSearchForm && inboxFormState){
+    useEffect(() => {
+        if (resetFilterForm && resetSearchForm && inboxFormState) {
             resetFilterForm(inboxFormState?.filterForm)
             resetSearchForm(inboxFormState?.searchForm)
         }
-      }, [inboxFormState, resetSearchForm, resetFilterForm])
-    
+    }, [inboxFormState, resetSearchForm, resetFilterForm])
+
     const isMobile = window.Digit.Utils.browser.isMobile();
 
     const MobilePopUpCloseButton = () => <div className="InboxMobilePopupCloseButtonWrapper" onClick={closeMobilePopupModal}>
-        <CloseSvg/>
+        <CloseSvg />
     </div>
 
-    const MobileComponentDirectory= {
+    const MobileComponentDirectory = {
         SearchFormComponent: () => <SearchForm onSubmit={onSearchFormSubmit} handleSubmit={handleSearchFormSubmit} id="search-form" className="rm-mb form-field-flex-one inboxPopupMobileWrapper" >
-            <MobilePopUpCloseButton/>
+            <MobilePopUpCloseButton />
             <SearchFormFields registerRef={registerSearchFormField} searchFormState={searchFormState} />
             <SearchField className="submit">
-                <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
+                <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form" />
                 <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
             </SearchField>
         </SearchForm>,
-        FilterFormComponent: () => <FilterForm onSubmit={onFilterFormSubmit} closeButton={() => <MobilePopUpCloseButton/>} handleSubmit={handleFilterFormSubmit} id="filter-form" onResetFilterForm={onResetFilterForm} className="inboxPopupMobileWrapper p-unset">
-            <FilterFormFields registerRef={registerFilterFormField} { ...{controlFilterForm, handleFilterFormSubmit, setFilterFormValue, getFilterFormValue} } />
+        FilterFormComponent: () => <FilterForm onSubmit={onFilterFormSubmit} closeButton={() => <MobilePopUpCloseButton />} handleSubmit={handleFilterFormSubmit} id="filter-form" onResetFilterForm={onResetFilterForm} className="inboxPopupMobileWrapper p-unset">
+            <FilterFormFields registerRef={registerFilterFormField} {...{ controlFilterForm, handleFilterFormSubmit, setFilterFormValue, getFilterFormValue }} />
         </FilterForm>
     }
 
@@ -102,41 +102,41 @@ const InboxComposer = ({
             {/* TODO fix design for card */}
             {/* <InboxLinks {...PropsForInboxLinks} /> */}
             <div className="searchBox">
-                <SearchAction text={t("ES_COMMON_SEARCH")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"SearchFormComponent"})}/>
-                {isInboxLoading ? <Loader /> : <FilterAction text={t("ES_COMMON_FILTER")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"FilterFormComponent"})}/>}
-                <SortAction text={t("ES_COMMON_SORT")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"SortComponent"})}/>
+                <SearchAction text={t("ES_COMMON_SEARCH")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "SearchFormComponent" })} />
+                {isInboxLoading ? <Loader /> : <FilterAction text={t("ES_COMMON_FILTER")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "FilterFormComponent" })} />}
+                <SortAction text={t("ES_COMMON_SORT")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "SortComponent" })} />
             </div>
             {currentlyActiveMobileModal ? <PopUp>
-                <CurrentMobileModalComponent/>
+                <CurrentMobileModalComponent />
             </PopUp> : null}
             {/* <FilterForm clearAll={resetFilterForm} {...{ showMobileFilterFormPopup, onMobileExclusiveFilterPopupFormClose: () => setMobileFilterFormPopup(false) }}>
             </FilterForm> */}
-            {isInboxLoading ? <Loader/> : <DetailsCard {...propsForInboxMobileCards} />}
+            {isInboxLoading ? <Loader /> : <DetailsCard {...propsForInboxMobileCards} />}
         </div>
     }
     return <div className="InboxComposerWrapper">
         <InboxLinks {...PropsForInboxLinks} />
         <SearchForm onSubmit={onSearchFormSubmit} handleSubmit={handleSearchFormSubmit} id="search-form" className="rm-mb form-field-flex-one" >
-            <SearchFormFields registerRef={registerSearchFormField} searchFormState={searchFormState} />
+            <SearchFormFields registerRef={registerSearchFormField} searchFormState={searchFormState} {...{controlSearchForm}} />
             <SearchField className="submit">
-                <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
+                <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form" />
                 <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
             </SearchField>
         </SearchForm>
         <FilterForm onSubmit={onFilterFormSubmit} handleSubmit={handleFilterFormSubmit} id="filter-form" onResetFilterForm={onResetFilterForm}>
-            <FilterFormFields registerRef={registerFilterFormField} { ...{controlFilterForm, handleFilterFormSubmit, setFilterFormValue, getFilterFormValue} } />
+            <FilterFormFields registerRef={registerFilterFormField} {...{ controlFilterForm, handleFilterFormSubmit, setFilterFormValue, getFilterFormValue }} />
             {/* <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="filter-form"/> */}
         </FilterForm>
-        { isInboxLoading ? <Loader/> : <div>
-        {propsForInboxTable?.data?.length<1 ? <Card className="margin-unset text-align-center">
-            {t("CS_MYAPPLICATIONS_NO_APPLICATION")}
-        </Card>
-        : <Table
-            t={t}
-            // data={sourceData}
-            // columns={tableColumnConfig}
-            {...propsForInboxTable}
-        />}
+        {isInboxLoading ? <Loader /> : <div>
+            {propsForInboxTable?.data?.length < 1 ? <Card className="margin-unset text-align-center">
+                {propsForInboxTable.noResultsMessage ? t(propsForInboxTable.noResultsMessage) : t("CS_MYAPPLICATIONS_NO_APPLICATION")}
+            </Card>
+                : <Table
+                    t={t}
+                    // data={sourceData}
+                    // columns={tableColumnConfig}
+                    {...propsForInboxTable}
+                />}
         </div>}
     </div>
 }
