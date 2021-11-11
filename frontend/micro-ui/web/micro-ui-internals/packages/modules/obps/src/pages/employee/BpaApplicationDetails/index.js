@@ -6,7 +6,7 @@ import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDeta
 import { newConfig } from "../../../config/InspectionReportConfig";
 import get from "lodash/get";
 import orderBy from "lodash/orderBy";
-import { getBusinessServices } from "../../../utils";
+import { getBusinessServices, convertDateToEpoch } from "../../../utils";
 
 const BpaApplicationDetail = () => {
   const { id } = useParams();
@@ -85,6 +85,8 @@ const BpaApplicationDetail = () => {
   }
 
   async function getPermitOccupancyOrderSearch({tenantId},order) {
+    let currentDate = new Date();
+    data.applicationData.additionalDetails.runDate = convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate());
     let requestData = {...data?.applicationData, edcrDetail:[{...data?.edcrDetails}]}
     let response = await Digit.PaymentService.generatePdf(tenantId, { Bpa: [requestData] }, order);
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
