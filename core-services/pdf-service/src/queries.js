@@ -202,10 +202,23 @@ export async function mergePdf(bulkPdfJobId, tenantId, userid){
 }
 
 
-export async function getBulkPdfRecordsDetails(userid, offset, limit){
+export async function getBulkPdfRecordsDetails(userid, offset, limit, jobId){
   try {
     let data = [];
-    const result = await pool.query('select * from egov_bulk_pdf_info where uuid = $1 limit $2 offset $3', [userid, limit, offset]);
+    let param;
+    let query = 'select * from egov_bulk_pdf_info where ';
+    if(jobId){
+      query = query + 'jobid = $1 ';
+      param = jobId;
+    }
+    else{
+      query = query + 'uuid = $1 ';
+      param = userid;
+    }
+
+    query = query + 'limit $2 offset $3';
+
+    const result = await pool.query(query, [param, limit, offset]);
     if(result.rowCount>=1){
       
       for(let row of result.rows){

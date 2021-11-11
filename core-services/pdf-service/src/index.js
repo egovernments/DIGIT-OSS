@@ -581,14 +581,15 @@ app.post(
 app.post(
   "/pdf-service/v1/_getBulkPdfRecordsDetails",
   asyncHandler(async (req, res) => {
-    let requestInfo, uuid, offset, limit;
+    let requestInfo, uuid, offset, limit, jobId;
     try {
       requestInfo = get(req.body, "RequestInfo");
       uuid = requestInfo.userInfo.uuid;
       offset = get(req.query, "offset");
       limit = get(req.query, "limit");
+      jobId = get(req.query, "jobId");
 
-      let data = await getBulkPdfRecordsDetails(uuid, offset, limit);
+      let data = await getBulkPdfRecordsDetails(uuid, offset, limit, jobId);
       if(data.length<=0){
         res.status(500);
         res.json({
