@@ -73,6 +73,16 @@ const Inbox = ({parentRoute}) => {
     const onPageSizeChange = (e) => {
       dispatch({action: "mutateTableForm", data: {...formState.tableForm , limit: e.target.value}})
     }
+    const onSortingByData = (e) => {
+      if(e.length > 0){
+        const [{id, desc}] = e
+        const sortOrder = desc ? "DESC" : "ASC"
+        const sortBy = id
+        if(!(formState.tableForm.sortBy === sortBy && formState.tableForm.sortOrder === sortOrder)){
+          dispatch({action: "mutateTableForm", data:{ ...formState.tableForm, sortBy: id, sortOrder: desc ? "DESC" : "ASC" }})
+        }
+      }
+    }
 
     const { data: applicationTypesOfBPA, isLoading: loadingApplicationTypesOfBPA } = Digit.Hooks.obps.useSearchMdmsTypes.applicationTypes(tenantId);
 
@@ -116,7 +126,7 @@ const Inbox = ({parentRoute}) => {
 
     const propsForFilterForm = { FilterFormFields, onFilterFormSubmit, filterFormDefaultValues: formState?.filterForm, resetFilterFormDefaultValues: filterFormDefaultValues, onFilterFormReset }
 
-    const propsForInboxTable = useInboxTableConfig({...{ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch}})
+    const propsForInboxTable = useInboxTableConfig({...{ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch, onSortingByData}})
 
     const propsForInboxMobileCards = useInboxMobileCardsData({parentRoute, table})
 

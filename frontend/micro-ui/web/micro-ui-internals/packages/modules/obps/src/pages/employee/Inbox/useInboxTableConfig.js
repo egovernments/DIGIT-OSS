@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 
-const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch}) => {
+const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch, onSortingByData}) => {
     const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
     const GetStatusCell = (value) => value === "Active" ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span> 
     const { t } = useTranslation()
@@ -61,13 +61,13 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
         disableSort: false,
         autoSort:false,
         manualPagination:true,
-        initSortI:"applicationDate",
+        initSortId:"applicationDate",
         onPageSizeChange:onPageSizeChange,
         currentPage: formState.tableForm?.offset / formState.tableForm?.limit,
         onNextPage: () => dispatch({action: "mutateTableForm", data: {...formState.tableForm , offset: (parseInt(formState.tableForm?.offset) + parseInt(formState.tableForm?.limit)) }}),
         onPrevPage: () => dispatch({action: "mutateTableForm", data: {...formState.tableForm , offset: (parseInt(formState.tableForm?.offset) - parseInt(formState.tableForm?.limit)) }}),
         pageSizeLimit: formState.tableForm?.limit,
-        // onSort: onSort,
+        onSort: onSortingByData,
         // sortParams: [{id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false}],
         totalRecords: totalCount,
         onSearch: formState?.searchForm?.message,

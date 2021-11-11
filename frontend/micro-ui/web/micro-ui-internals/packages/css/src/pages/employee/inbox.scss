@@ -110,7 +110,9 @@
       .filter-card {
         @apply bg-white;
         padding: 10px;
-
+        .filter-card-close-button{
+          @apply flex flex-row-reverse;
+        }
         .heading {
           @apply flex justify-between;
 
@@ -120,7 +122,7 @@
         }
 
         .filter-label {
-          @apply font-bold text-heading-m;
+          @apply font-bold text-heading-m block;
           padding-bottom: 6px;
         }
       }
