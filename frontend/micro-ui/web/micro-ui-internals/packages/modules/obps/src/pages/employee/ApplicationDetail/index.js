@@ -104,7 +104,7 @@ const ApplicationDetail = () => {
 
   return (
     <div >
-      <div style={{marginLeft: "15px", display: "flex", justifyContent: "space-between"}}>
+      <div style={{marginLeft: "15px"}}>
         <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
         {reciept_data?.Payments?.length > 0 && 
         <div>
@@ -113,8 +113,9 @@ const ApplicationDetail = () => {
           onHeadClick={() => setShowOptions(!showOptions)}
           displayOptions={showOptions}
           options={dowloadOptions}
-          style={{position: "unset", marginTop: "8px"}}
-          optionsStyle = {{right: "3%"}}
+          // style={{position: "unset", marginTop: "8px"}}
+          // optionsStyle = {{right: "3%"}}
+          //display: "flex", justifyContent: "space-between"
         />  
         </div>}
       </div>

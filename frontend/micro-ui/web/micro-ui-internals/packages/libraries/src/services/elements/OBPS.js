@@ -219,8 +219,8 @@ export const OBPSService = {
             value: nocDetails?.applicationStatus,
           },
           {
-            title: "BPA_NOC_SUBMISSION_DATE",
-            value: "", //format(new Date(nocDetails?.auditDetaills?.createdTime), 'dd/MM/yyyy')
+            title: "BPA_SUDMITTED_ON_LABEL",
+            value: nocDetails?.additionalDetails?.SubmittedOn ? format(new Date(nocDetails?.additionalDetails?.SubmittedOn), 'dd/MM/yyyy') : "NA", //format(new Date(nocDetails?.auditDetaills?.createdTime), 'dd/MM/yyyy')
           },
         ],
         additionalDetails: {
