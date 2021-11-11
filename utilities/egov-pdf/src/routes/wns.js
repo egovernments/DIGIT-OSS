@@ -674,7 +674,8 @@ router.post(
                   pdfJobId: jobid,
                   pdfKey: pdfkey,
                   totalPdfRecords:size,
-                  currentPdfRecords: billData.length
+                  currentPdfRecords: billData.length,
+                  tenantId: tenantId
               };
               var pdfData = Object.assign({RequestInfo:requestinfo.RequestInfo}, billArray)
               payloads.push({
@@ -710,6 +711,7 @@ router.post(
           res.status(201);
           res.json({
             ResponseInfo: requestinfo.RequestInfo,
+            jobId:jobid,
             message: "Bulk pdf creation is in process",
           });
         } else {

@@ -1,8 +1,12 @@
 const { Pool } = require('pg');
 import logger from "./config/logger";
 import producer from "./kafka/producer";
-import consumer from "./kafka/consumer";
 import envVariables from "./EnvironmentVariables";
+import PDFMerger from 'pdf-merger-js';
+import { fileStoreAPICall } from "./utils/fileStoreAPICall";
+import fs, {
+  exists
+} from "fs";
 
 const pool = new Pool({
   user: envVariables.DB_USER,
@@ -132,19 +136,94 @@ export const insertStoreIds = (
 };
 
 export async function insertRecords(bulkPdfJobId, totalPdfRecords, currentPdfRecords, userid) {
-  const result = await pool.query('select * from egov_bulk_pdf_info where jobid = $1', [bulkPdfJobId]);
-  if(result.rowCount<1){
-    const insertQuery = 'INSERT INTO egov_bulk_pdf_info(jobid, uuid, recordscompleted, totalrecords, createdtime, filestoreid, lastmodifiedby, lastmodifiedtime) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
-    const curentTimeStamp = new Date().getTime();
-    await pool.query(insertQuery,[bulkPdfJobId, userid, currentPdfRecords, totalPdfRecords, curentTimeStamp, null, userid, curentTimeStamp]);
-  }
-  else{
-    var recordscompleted = parseInt(result.rows[0].recordscompleted);
-    var totalrecords = parseInt(result.rows[0].totalrecords);
-    if(recordscompleted < totalrecords){
-      const updateQuery = 'UPDATE egov_bulk_pdf_info SET recordscompleted = (select recordscompleted from egov_bulk_pdf_info where jobid = $4) + $1, lastmodifiedby = $2, lastmodifiedtime = $3 WHERE jobid = $4';
+  try {
+    const result = await pool.query('select * from egov_bulk_pdf_info where jobid = $1', [bulkPdfJobId]);
+    if(result.rowCount<1){
+      const insertQuery = 'INSERT INTO egov_bulk_pdf_info(jobid, uuid, recordscompleted, totalrecords, createdtime, filestoreid, lastmodifiedby, lastmodifiedtime) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
       const curentTimeStamp = new Date().getTime();
-      await pool.query(updateQuery,[currentPdfRecords, userid, curentTimeStamp, bulkPdfJobId]);
+      await pool.query(insertQuery,[bulkPdfJobId, userid, currentPdfRecords, totalPdfRecords, curentTimeStamp, null, userid, curentTimeStamp]);
     }
+    else{
+      var recordscompleted = parseInt(result.rows[0].recordscompleted);
+      var totalrecords = parseInt(result.rows[0].totalrecords);
+      if(recordscompleted < totalrecords){
+        const updateQuery = 'UPDATE egov_bulk_pdf_info SET recordscompleted = recordscompleted + $1, lastmodifiedby = $2, lastmodifiedtime = $3 WHERE jobid = $4';
+        const curentTimeStamp = new Date().getTime();
+        await pool.query(updateQuery,[currentPdfRecords, userid, curentTimeStamp, bulkPdfJobId]);
+      }
+    }
+  } catch (err) {
+    logger.error(err.stack || err);
+  } 
+}
+
+export async function mergePdf(bulkPdfJobId, tenantId, userid){
+
+  try {
+    const updateResult = await pool.query('select * from egov_bulk_pdf_info where jobid = $1', [bulkPdfJobId]);
+    var recordscompleted = parseInt(updateResult.rows[0].recordscompleted);
+    var totalrecords = parseInt(updateResult.rows[0].totalrecords);
+    
+    if(recordscompleted == totalrecords){
+      var merger = new PDFMerger();
+      var baseFolder = envVariables.SAVE_PDF_DIR + bulkPdfJobId + '/';
+    
+      let fileNames = fs.readdirSync(baseFolder);
+      (async () => {
+        try {
+          for (let i = 0; i < fileNames.length; i++){
+            merger.add(baseFolder+fileNames[i]);            //merge all pages. parameter is the path to file and filename.
+          }
+          await merger.save(baseFolder+'/output.pdf');        //save under given name and reset the internal document
+        } catch (err) {
+          logger.error(err.stack || err);
+        }
+      
+        var mergePdfData = fs.createReadStream(baseFolder+'output.pdf');
+        await fileStoreAPICall('output.pdf', tenantId, mergePdfData).then((filestoreid) => {
+          const updateQuery = 'UPDATE egov_bulk_pdf_info SET filestoreid = $1, lastmodifiedby = $2, lastmodifiedtime = $3 WHERE jobid = $4';
+          const curentTimeStamp = new Date().getTime();
+          pool.query(updateQuery,[filestoreid, userid, curentTimeStamp, bulkPdfJobId]);
+        }).catch((err) => {
+          logger.error(err.stack || err);
+        });
+
+        fs.rmdirSync(baseFolder, { recursive: true });
+
+      })();
+    }
+  } catch (err) {
+    logger.error(err.stack || err);
   }
+  
+}
+
+
+export async function getBulkPdfRecordsDetails(userid, offset, limit){
+  try {
+    let data = [];
+    const result = await pool.query('select * from egov_bulk_pdf_info where uuid = $1 limit $2 offset $3', [userid, limit, offset]);
+    if(result.rowCount>=1){
+      
+      for(let row of result.rows){
+        let value = {
+          jobid: row.jobid,
+          uuid: row.uuid,
+          totalrecords: row.totalrecords,
+          recordscompleted: row.recordscompleted,
+          filestoreid: row.filestoreid,
+          createdtime: row.createdtime,
+          lastmodifiedby: row.lastmodifiedby,
+          lastmodifiedtime: row.lastmodifiedtime
+        };
+        data.push(value);
+      }
+    }
+    return data;
+    
+  } catch (err) {
+    logger.error(err.stack || err);
+    
+  }
+
 }

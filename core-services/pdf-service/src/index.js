@@ -39,7 +39,9 @@ import {
 import {
   getFileStoreIds,
   insertStoreIds,
-  insertRecords
+  insertRecords,
+  mergePdf,
+  getBulkPdfRecordsDetails
 } from "./queries";
 import {
   listenConsumer
@@ -576,6 +578,45 @@ app.post(
 
 );
 
+app.post(
+  "/pdf-service/v1/_getBulkPdfRecordsDetails",
+  asyncHandler(async (req, res) => {
+    let requestInfo, uuid, offset, limit;
+    try {
+      requestInfo = get(req.body, "RequestInfo");
+      uuid = requestInfo.userInfo.uuid;
+      offset = get(req.query, "offset");
+      limit = get(req.query, "limit");
+
+      let data = await getBulkPdfRecordsDetails(uuid, offset, limit);
+      if(data.length<=0){
+        res.status(500);
+        res.json({
+            ResponseInfo: requestInfo,
+            message: `Group bill pdf records details are not present for the employee ${requestInfo.userInfo.name}`,
+          });
+      }
+      else{
+        res.status(200);
+        res.json({
+            ResponseInfo: requestInfo,
+            groupBillrecords: data,
+          });
+      }
+
+      
+    } catch (error) {
+      logger.error(error.stack || error);
+      res.status(400);
+      res.json({
+        ResponseInfo: requestInfo,
+        message: "Error while retreving the details",
+      });
+    }
+  })
+
+);
+
 var i = 0;
 dataConfigUrls &&
   dataConfigUrls.split(",").map((item) => {
@@ -686,8 +727,6 @@ export const createAndSave = async (
   } else {
     key = get(req.query || req, "key");
   }
-  console.log("\ntopic-->"+topic+"\n");
-  console.log("\ntopicKeyMap-->"+JSON.stringify(topicKeyMap)+"\n");
   //let key = get(req.query || req, "key");
   let tenantId = get(req.query || req, "tenantId");
   var formatconfig = formatConfigMap[key];
@@ -793,7 +832,11 @@ export const createNoSave = async (
       formatConfigByFile[0].footer = convertFooterStringtoFunctionIfExist(formatconfig.footer);
       const doc = printer.createPdfKitDocument(formatConfigByFile[0]);
       let fileNameAppend = "-" + new Date().getTime();
-      let filename = key + "" + fileNameAppend + ".pdf";
+      let directory = envVariables.SAVE_PDF_DIR + bulkPdfJobId
+      if(!fs.existsSync(directory))
+        fs.mkdirSync(directory, { recursive: true });
+
+      let filename = directory + "/"  + key + "" + fileNameAppend + ".pdf";
 
       var chunks = [];
       doc.on("data", function (chunk) {
@@ -805,11 +848,13 @@ export const createNoSave = async (
         logger.info(
           `createnosave success for pdf with key: ${key}, entityId ${entityIds}`
         );
-
+        (async () => {
+          await insertRecords(bulkPdfJobId, totalPdfRecords, currentPdfRecords, userid);
+          await mergePdf(bulkPdfJobId, tenantId, userid);
+        })();
       });
       doc.end();
 
-      await insertRecords(bulkPdfJobId, totalPdfRecords, currentPdfRecords, userid);
     }
   } catch (error) {
     logger.error(error.stack || error);
