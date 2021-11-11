@@ -166,12 +166,15 @@ export async function mergePdf(bulkPdfJobId, tenantId, userid){
     
     if(recordscompleted == totalrecords){
       var merger = new PDFMerger();
-      var baseFolder = envVariables.SAVE_PDF_DIR + bulkPdfJobId + '/';
+      //var baseFolder = envVariables.SAVE_PDF_DIR + bulkPdfJobId + '/';
+      var baseFolder = process.cwd() + '/' + bulkPdfJobId + '/';
     
       let fileNames = fs.readdirSync(baseFolder);
+      //console.log('Files to be merged: ',fileNames);
       (async () => {
         try {
           for (let i = 0; i < fileNames.length; i++){
+            //console.log(baseFolder+fileNames[i]);
             merger.add(baseFolder+fileNames[i]);            //merge all pages. parameter is the path to file and filename.
           }
           await merger.save(baseFolder+'/output.pdf');        //save under given name and reset the internal document
