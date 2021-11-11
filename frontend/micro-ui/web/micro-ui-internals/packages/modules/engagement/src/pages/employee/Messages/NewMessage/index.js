@@ -2,7 +2,7 @@ import { FormComposer, Header } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-import { handleTodaysDate } from "../../../../utils";
+import { convertDateToMaximumPossibleValue } from "../../../../utils";
 import { config } from "../../NewMessageConfig";
 
 
@@ -32,8 +32,8 @@ const NewEvents = () => {
           name,
           eventDetails: {
             documents,
-            fromDate: handleTodaysDate(`${fromDate}`),
-            toDate: handleTodaysDate(`${toDate}`),
+            fromDate: convertDateToMaximumPossibleValue(new Date(`${fromDate}`))?.getTime(),
+            toDate: convertDateToMaximumPossibleValue(new Date(`${toDate}`))?.getTime(),
           }
         }
       ]

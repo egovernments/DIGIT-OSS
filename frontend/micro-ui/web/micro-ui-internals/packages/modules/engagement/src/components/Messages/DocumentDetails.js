@@ -107,7 +107,7 @@ const DocumentDetails = () => {
           <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("EVENTS_FROM_DATE_LABEL")}:`}</p> <p>{data?.applicationData?.eventDetails?.fromDate ? format(new Date(data?.applicationData?.eventDetails?.fromDate), 'dd/MM/yyyy') : null}</p> </div>
           <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t("EVENTS_TO_DATE_LABEL")}:`}</p> <p>{data?.applicationData?.eventDetails?.toDate ? format(new Date(data?.applicationData?.eventDetails?.toDate), 'dd/MM/yyyy') : null}</p> </div>
           <span className="documentDetails_subheader">{`${t('CS_COMMON_DOCUMENTS')}`}</span>
-          {data?.applicationData?.eventDetails?.documents?.length ? renderMultipleDocuments(data?.applicationData?.eventDetails?.documents) : null}
+          {data?.applicationData?.eventDetails?.documents?.length ? renderMultipleDocuments(data?.applicationData?.eventDetails?.documents) : "NA"}
         </div>
       </div>
       <ActionBar>
