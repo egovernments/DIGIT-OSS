@@ -47,7 +47,7 @@ const MobileInbox = ({
             searchFields={searchFields}
             linkPrefix={linkPrefix}
             sortParams={sortParams}
-            serviceRequestIdKey={tableConfig.serviceRequestIdKey}
+            serviceRequestIdKey={tableConfig?.serviceRequestIdKey}
             filterComponent={filterComponent}
           />
         </div>

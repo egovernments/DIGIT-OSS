@@ -1,7 +1,6 @@
-import { Header ,Localities,Toast} from "@egovernments/digit-ui-react-components";
+import { Header, Localities, Toast } from "@egovernments/digit-ui-react-components";
 import React, { memo, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
 
 const PTSearchFields = {
   searchId: {
@@ -59,7 +58,6 @@ const PTSearchFields = {
     // }
   },
   searchDetail: {
-   
     locality: {
       type: "custom",
       label: "PT_SEARCH_LOCALITY",
@@ -67,14 +65,15 @@ const PTSearchFields = {
       validation: {
         required: "PTLOCALITYMANDATORY",
       },
-      customComponent:Localities,
-      customCompProps:{
-        boundaryType:"revenue",
-                    keepNull:false,
-                    optionCardStyles:{ height: "600px", overflow: "auto", zIndex: "10" },
-                    disableLoader:true
-      }
-    }, doorNo: {
+      customComponent: Localities,
+      customCompProps: {
+        boundaryType: "revenue",
+        keepNull: false,
+        optionCardStyles: { height: "600px", overflow: "auto", zIndex: "10" },
+        disableLoader: true,
+      },
+    },
+    doorNo: {
       type: "text",
       label: "PT_SEARCHPROPERTY_TABEL_DOOR_NO",
       placeHolder: "PT_SEARCH_DOOR_NO_PLACEHOLDER",
@@ -102,53 +101,61 @@ const PTSearchFields = {
     },
   },
 };
-const defaultValues={
+const defaultValues = {
   propertyIds: "",
-  mobileNumber: "",   
+  mobileNumber: "",
   oldPropertyId: "",
-  locality:"",
+  locality: "",
   name: "",
   doorNo: "",
-}
+};
 
-const Search = ({ path }) => {
-  const { variant } = useParams();
+const Search = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [payload, setPayload] = useState({});
-
   const [formData, setFormData] = useState(defaultValues);
   const [searchBy, setSearchBy] = useState("searchId");
   const [showToast, setShowToast] = useState(null);
   const SearchComponent = memo(Digit.ComponentRegistryService.getComponent("PropertySearchForm"));
   const SearchResultComponent = memo(Digit.ComponentRegistryService.getComponent("PropertySearchResults"));
 
-const onReset=useCallback(()=>{
-  setFormData(defaultValues);
-  // setPayload({});
-  setShowToast(null);
-})
+  const onReset = useCallback(() => {
+    setFormData(defaultValues);
+    // setPayload({});
+    setShowToast(null);
+  });
 
   const onSubmit = useCallback((_data) => {
     setFormData(_data);
-    if(Object.keys(_data).filter((k) => _data[k]&&typeof _data[k] !== "object").length>0){
+    if (Object.keys(_data).filter((k) => _data[k] && typeof _data[k] !== "object").length > 0) {
       setPayload(
-          Object.keys(_data)
-            .filter((k) => _data[k])
-            .reduce((acc, key) => ({ ...acc, [key]: typeof _data[key] === "object" ? _data[key].code : _data[key] }), {})
-        );
-        setShowToast(null);
-    }else{
+        Object.keys(_data)
+          .filter((k) => _data[k])
+          .reduce((acc, key) => ({ ...acc, [key]: typeof _data[key] === "object" ? _data[key].code : _data[key] }), {})
+      );
+      setShowToast(null);
+    } else {
       setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
     }
-
   });
- 
+
   return (
     <React.Fragment>
       <Header>{t("SEARCH_PROPERTY")}</Header>
-      <SearchComponent t={t} payload={formData} searchBy={searchBy} setSearchBy={setSearchBy} PTSearchFields={PTSearchFields} tenantId={tenantId} onSubmit={onSubmit} onReset={onReset}/>
-      {Object.keys(payload).length > 0 && <SearchResultComponent t={t} showToast={showToast} setShowToast={setShowToast} tenantId={tenantId} payload={payload} />}
+      <SearchComponent
+        t={t}
+        payload={formData}
+        searchBy={searchBy}
+        setSearchBy={setSearchBy}
+        PTSearchFields={PTSearchFields}
+        tenantId={tenantId}
+        onSubmit={onSubmit}
+        onReset={onReset}
+      />
+      {Object.keys(payload).length > 0 && (
+        <SearchResultComponent t={t} showToast={showToast} setShowToast={setShowToast} tenantId={tenantId} payload={payload} />
+      )}
       {showToast && (
         <Toast
           error={showToast.error}
