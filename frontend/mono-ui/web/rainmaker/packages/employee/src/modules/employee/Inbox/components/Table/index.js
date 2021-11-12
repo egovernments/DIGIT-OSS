@@ -264,7 +264,8 @@ class InboxData extends React.Component {
     const { wfSlaConfig } = this.state;
     const MAX_SLA = businessServiceSla[businessService];
     if (wfSlaConfig) {
-      if ((MAX_SLA - (MAX_SLA * wfSlaConfig[0].slotPercentage / 100) <= sla) && sla <= MAX_SLA) {
+      // if ((MAX_SLA - (MAX_SLA * wfSlaConfig[0].slotPercentage / 100) <= sla) && sla <= MAX_SLA) {
+      if ((MAX_SLA - (MAX_SLA * wfSlaConfig[0].slotPercentage / 100) <= sla)) {
         return wfSlaConfig[0].positiveSlabColor;
       } else if (0 < sla && sla < MAX_SLA - (MAX_SLA * wfSlaConfig[0].slotPercentage / 100)) {
         return wfSlaConfig[0].middleSlabColor;
@@ -362,7 +363,7 @@ class InboxData extends React.Component {
                             return (
                               <TableCell className={classNames}>
                                 <div style= {item.isEscalatedApplication ? {width: "80%", display: "flex", justifyContent: "space-between"}: {}}>
-                                  <span class={"inbox-cell-badge-primary"} style={{ backgroundColor: this.getSlaColor(item.text, row[2].text.props.label.split("_")[1]) }}>{item.text}</span>
+                                  <span class={"inbox-cell-badge-primary"} style={{ backgroundColor: this.getSlaColor(item.text, row[2].text.props.label.includes("AIRPORT_NOC_OFFLINE") ? "AIRPORT_NOC_OFFLINE" : row[2].text.props.label.includes("FIRE_NOC_SRV") ? "FIRE_NOC_SRV" : row[2].text.props.label.split("_")[1]) }}>{item.text}</span>
                                     {item.isEscalatedApplication ?
                                     <Tooltip title="Escalated" placement="top">
                                       <span> <i class="material-icons" style={{color: "rgb(244, 67, 54)"}}>error</i> </span>
@@ -464,7 +465,7 @@ class InboxData extends React.Component {
                             <Label label={data.headers[4]} labelStyle={{ fontWeight: "500" }} />
                           </div>
                           <div className="card-sladiv-style">
-                            <span class={"inbox-cell-badge-primary"} style={{ backgroundColor: this.getSlaColor(row[4].text, row[2].text.props.label.split("_")[1]) }}>{row[4].text}</span>
+                            <span class={"inbox-cell-badge-primary"} style={{ backgroundColor: this.getSlaColor(row[4].text, row[2].text.props.label.includes("AIRPORT_NOC_OFFLINE") ? "AIRPORT_NOC_OFFLINE" : row[2].text.props.label.includes("FIRE_NOC_SRV") ? "FIRE_NOC_SRV" : row[2].text.props.label.split("_")[1]) }}>{row[4].text}</span>
                           </div>
                           {/* <div>
                                 <i class="material-icons">error</i>

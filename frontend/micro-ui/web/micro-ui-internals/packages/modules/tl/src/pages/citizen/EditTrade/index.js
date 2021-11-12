@@ -169,6 +169,10 @@ const EditTrade = ({ parentRoute }) => {
       let tradeEditDetails = getTradeEditDetails(application);
       setParams({ ...params, ...tradeEditDetails });
     }
+
+    const setCustomEditState = Digit?.ComponentRegistryService?.getComponent("TLCitizenEditFormDataLoad");
+    if (setCustomEditState) setCustomEditState({ data, setParams, params, licenseNo, tenantId });
+    
   }, [data]);
 
   const goNext = (skipStep, index, isAddMultiple, key) => {

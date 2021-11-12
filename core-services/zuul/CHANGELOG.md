@@ -1,6 +1,9 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.3.1 - 2021-09-28
+- Added cache burst during initialisation
+
 ## 1.3.0 - 2021-05-17
 - Changes to error handling
 - Removed stack trace printing

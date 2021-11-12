@@ -66,8 +66,7 @@ const initTokens = (stateCode) => {
 };
 
 const initDigitUI = () => {
-  // eslint-disable-next-line
-  Digit.ComponentRegistryService.setupRegistry({
+  window?.Digit.ComponentRegistryService.setupRegistry({
     ...pgrComponents,
     PaymentModule,
     ...paymentConfigs,
@@ -104,8 +103,8 @@ const moduleReducers = (initData) => ({
 
   const stateCode = window?.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || "pb";
   initTokens(stateCode);
-  // eslint-disable-next-line
-  const registry = Digit.ComponentRegistryService.getRegistry();
+
+  const registry = window?.Digit.ComponentRegistryService.getRegistry();
   console.log(registry);
   ReactDOM.render(<DigitUI stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />, document.getElementById("root"));
 };

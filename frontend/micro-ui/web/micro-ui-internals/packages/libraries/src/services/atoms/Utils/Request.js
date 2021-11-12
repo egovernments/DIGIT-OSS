@@ -41,7 +41,7 @@ export const Request = async ({
   auth,
   urlParams = {},
   userService,
-  locale = false,
+  locale = true,
   authHeader = false,
   setTimeParam = true,
   userDownload = false,
@@ -53,6 +53,7 @@ export const Request = async ({
   // console.log("in request", method);
   // console.log("url:", url);
   if (method.toUpperCase() === "POST") {
+    const ts = new Date().getTime()
     data.RequestInfo = {
       apiId: "Rainmaker",
     };
@@ -66,7 +67,7 @@ export const Request = async ({
       data.RequestInfo = { ...data.RequestInfo, ...userServiceData() };
     }
     if (locale) {
-      data.RequestInfo = { ...data.RequestInfo, msgId: `string|${Digit.StoreData.getCurrentLanguage()}` };
+      data.RequestInfo = { ...data.RequestInfo, msgId: `${ts}|${Digit.StoreData.getCurrentLanguage()}` };
     }
   }
 
