@@ -57,6 +57,9 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
                 select={(e) => {props.onChange([e, ...props?.value])}}
                 optionCardStyles={{maxHeight:'350px'}}
                 optionKey="i18nKey"
+                isMultiSelectEmp={true}
+                selected={props?.value?.length}
+                t={t}
               />
               <div className="tag-container">
                 {renderRemovableTokens}

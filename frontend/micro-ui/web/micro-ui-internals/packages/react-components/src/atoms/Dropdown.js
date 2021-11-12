@@ -180,8 +180,8 @@ return (
             keepNull={props.keepNull}
             selectedVal={
               selectedOption
-                ? props.t
-                  ? props.t(props.optionKey ? selectedOption[props.optionKey] : selectedOption)
+                ?props.t ? props.isMultiSelectEmp?`${selectedOption} ${t("BPA_SELECTED_TEXT")}`: 
+                 props.t(props.optionKey ? selectedOption[props.optionKey] : selectedOption)
                   : props.optionKey
                     ? selectedOption[props.optionKey]
                     : selectedOption
