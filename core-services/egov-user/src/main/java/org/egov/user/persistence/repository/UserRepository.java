@@ -1,6 +1,22 @@
 package org.egov.user.persistence.repository;
 
-import lombok.extern.slf4j.Slf4j;
+import static java.util.Objects.isNull;
+import static org.egov.user.repository.builder.UserTypeQueryBuilder.SELECT_FAILED_ATTEMPTS_BY_USER_SQL;
+import static org.egov.user.repository.builder.UserTypeQueryBuilder.SELECT_NEXT_SEQUENCE_USER;
+import static org.springframework.util.StringUtils.isEmpty;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.egov.tracer.model.CustomException;
 import org.egov.user.domain.model.Address;
 import org.egov.user.domain.model.Role;
@@ -22,13 +38,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.Objects.isNull;
-import static org.egov.user.repository.builder.UserTypeQueryBuilder.SELECT_FAILED_ATTEMPTS_BY_USER_SQL;
-import static org.egov.user.repository.builder.UserTypeQueryBuilder.SELECT_NEXT_SEQUENCE_USER;
-import static org.springframework.util.StringUtils.isEmpty;
+import lombok.extern.slf4j.Slf4j;
 
 @Repository
 @Slf4j
@@ -175,7 +185,12 @@ public class UserRepository {
 
         updateuserInputs.put("username", oldUser.getUsername());
         updateuserInputs.put("type", oldUser.getType().toString());
-        updateuserInputs.put("tenantid", oldUser.getTenantId());
+        
+        String tenantId = oldUser.getTenantId();
+        if(UserType.CITIZEN.equals(oldUser.getType()) && tenantId.contains("."))
+        		tenantId = tenantId.split("//.")[0];
+        	
+        updateuserInputs.put("tenantid", tenantId);
         updateuserInputs.put("AadhaarNumber", user.getAadhaarNumber());
 
         if (isNull(user.getAccountLocked()))
@@ -292,7 +307,7 @@ public class UserRepository {
             updateRoles(user);
         }
         if (user.getPermanentAndCorrespondenceAddresses() != null) {
-            addressRepository.update(user.getPermanentAndCorrespondenceAddresses(), user.getId(), user.getTenantId());
+            addressRepository.update(user.getPermanentAndCorrespondenceAddresses(), user.getId(), tenantId);
         }
     }
 
