@@ -148,7 +148,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
         },
         {
           Header: t("BPA_STATUS_LABEL"),
-          accessor: (row) =>GetCell(t(row?.state&&`WF_BPA_${row.state}`|| row?.status&&`WF_BPA_${row.status}`|| "NA") ),
+          accessor: (row) =>GetCell(t(row?.status&&`WF_BPA_${row.status}` || row?.state&&`WF_BPA_${row.state}`|| "NA") ),
           disableSortBy: true,
         }
       ]), [] )
