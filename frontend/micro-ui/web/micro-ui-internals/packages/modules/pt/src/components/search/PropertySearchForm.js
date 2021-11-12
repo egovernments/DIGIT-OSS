@@ -1,20 +1,14 @@
 import { CardLabelError, SearchField, SearchForm, SubmitBar, TextInput,Localities } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-// import { convertEpochToDateDMY, stringReplaceAll } from "../utils";
 
-// city{
-//   PT_ULB_CITY
-//   PT_ULB_CITY_PLACEHOLDER
-//   tenantId
-// }
 
 const SwitchComponent = (props) => {
   return (
     <div className="w-fullwidth PropertySearchFormSwitcher">
       {props.keys.map((key) => (
-        <span className={props.searchBy === key ? "selected" : "non-selected"} onClick={() => {props.onSwitch(key);props.onReset();}}>
-          {key}
+        <span key={key} className={props.searchBy === key ? "selected" : "non-selected"} onClick={() => {props.onSwitch(key);props.onReset();}}>
+          {props.t(`PT_SEARCH_BY_${key?.toUpperCase()}`)}
         </span>
       ))}
     </div>
@@ -27,12 +21,11 @@ const SearchPTID = ({ tenantId, t, onSubmit, onReset, searchBy, PTSearchFields, 
         }
   });
   const formValue = watch();
-  console.log(formValue,formState)
   const fields = PTSearchFields?.[searchBy] || {};
   return (
     <div className="PropertySearchForm">
       <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-        <SwitchComponent keys={Object.keys(PTSearchFields || {})} searchBy={searchBy} onReset={onReset} onSwitch={setSearchBy} />
+        <SwitchComponent keys={Object.keys(PTSearchFields || {})} searchBy={searchBy} onReset={onReset} t={t} onSwitch={setSearchBy} />
         {fields &&
           Object.keys(fields).map((key) => {
             let field = fields[key];

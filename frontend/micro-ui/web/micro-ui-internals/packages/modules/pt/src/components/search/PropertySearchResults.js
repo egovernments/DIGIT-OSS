@@ -1,30 +1,25 @@
-import { Loader, Table } from "@egovernments/digit-ui-react-components";
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { DetailsCard, Loader, Table } from "@egovernments/digit-ui-react-components";
+import React, { memo, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 const GetCell = (value) => <span className="cell-text">{value}</span>;
 
-const SearchPTID = ({ tenantId, t, payload,showToast ,setShowToast}) => {
-  const [defaultValues, setValue] = useState({ sortOrder: "DESC", limit: 10, offset: 0, sortBy: "createdDate" });
-  const getValues = (key) => defaultValues[key];
+const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast }) => {
+  const [searchQuery, setSearchQuery] = useState({
+    /* ...defaultValues,   to enable pagination */
+    ...payload,
+  });
 
-  const [searchQuery, setSearchQuery] = useState({ ...defaultValues, ...payload });
-
-  useEffect(() => {
-    setSearchQuery({ ...defaultValues, ...payload });
-  }, [payload, defaultValues]);
   const { data, isLoading, error, isSuccess, billData } = Digit.Hooks.pt.usePropertySearchWithDue({
     tenantId,
     filters: searchQuery,
-    configs: { enabled: Object.keys(payload).length > 0 ? true : false,  retry: false
-    , retryOnMount: false, staleTime: Infinity },
+    configs: { enabled: Object.keys(payload).length > 0 ? true : false, retry: false, retryOnMount: false, staleTime: Infinity },
   });
 
   const columns = useMemo(
     () => [
       {
         Header: t("PT_COMMON_TABLE_COL_PT_ID"),
-        accessor: "propertyId",
         disableSortBy: true,
         Cell: ({ row }) => {
           return (
@@ -39,33 +34,30 @@ const SearchPTID = ({ tenantId, t, payload,showToast ,setShowToast}) => {
       {
         Header: t("PT_COMMON_TABLE_COL_OWNER_NAME"),
         disableSortBy: true,
-        accessor: (row) => GetCell(row.name || ""),
+        Cell: ({ row }) => GetCell(row.original.name || ""),
       },
 
       {
         Header: t("ES_INBOX_LOCALITY"),
         disableSortBy: true,
-        accessor: (row) => GetCell(t(row.locality) || ""),
-        // accessor: (row) => GetCell( t(`${stringReplaceAll(row.tenantId?.toUpperCase(), ".", "_")}_REVENUE_${row.tradeLicenseDetail.address.locality.code}`) || ""),
-      },
+        Cell: ({ row }) => GetCell(t(row.original.locality) || ""),
+   },
       {
         Header: t("PT_COMMON_TABLE_COL_STATUS_LABEL"),
-        accessor: (row) => GetCell(t(row?.status || "NA")),
+        Cell: ({ row }) => GetCell(t(row?.original?.status || "NA")),
         disableSortBy: true,
       },
       {
         Header: t("PT_AMOUNT_DUE"),
-        accessor: (row) => GetCell(t(row?.due || "NA")),
+        Cell: ({ row }) => GetCell(t(row?.original?.due || "NA")),
         disableSortBy: true,
       },
       {
         Header: t("ES_SEARCH_ACTION"),
-        accessor: "action",
         disableSortBy: true,
         Cell: ({ row }) => {
           return (
             <div>
-              {/* {row.original?.due> 0? (  */}
               {row.original?.due > 0 && Digit.Utils.didEmployeeHasRole("PT_CEMP") ? (
                 <span className="link">
                   <Link to={`/digit-ui/employee/payment/collect/PT/` + row.original?.["propertyId"]}>{t("ES_PT_COLLECT_TAX")}</Link>
@@ -78,43 +70,38 @@ const SearchPTID = ({ tenantId, t, payload,showToast ,setShowToast}) => {
     ],
     []
   );
+  let isMobile = window.Digit.Utils.browser.isMobile();
 
-  const onSort = useCallback((args) => {
-    // if (args.length === 0) return;
-    // setValue("sortBy", args.id);
-    // setValue("sortOrder", args.desc ? "DESC" : "ASC");
-  }, []);
-
-  const onPageSizeChange = useCallback((e) => {
-    setValue("limit", Number(e.target.value));
-    // handleSubmit(onSubmit)();
-  });
-
-  const nextPage = useCallback(() => {
-    setValue("offset", getValues("offset") + getValues("limit"));
-    // handleSubmit(onSubmit)();
-  });
-  const previousPage = useCallback(() => {
-    setValue("offset", getValues("offset") - getValues("limit"));
-    // handleSubmit(onSubmit)();
-  });
   if (isLoading) {
-    showToast&&setShowToast(null);
-        return <Loader />;
+    showToast && setShowToast(null);
+    return <Loader />;
   }
-  if(error){
-    !showToast&&setShowToast({error:true,label:error?.response?.data?.Errors?.[0]?.code||error});
+  if (error) {
+    !showToast && setShowToast({ error: true, label: error?.response?.data?.Errors?.[0]?.code || error });
     return null;
   }
   const PTEmptyResultInbox = memo(Digit.ComponentRegistryService.getComponent("PTEmptyResultInbox"));
+  const getData = (tableData = []) => {
+    return tableData?.map((dataObj) => {
+      const obj = {};
+      columns.forEach((el) => {
+        if (el.Cell) obj[el.Header] = el.Cell({row:{original:dataObj}});
+      });
+      return obj;
+    });
+  };
+
+  const tableData = Object.values(data?.FormattedData || {}) || [];
   return (
     <React.Fragment>
-      {data?.Properties?.length == 0 ? (
+      {data?.Properties?.length === 0 ? (
         <PTEmptyResultInbox data={true}></PTEmptyResultInbox>
+      ) : isMobile ? (
+        <DetailsCard data={getData(tableData)} t={t} />
       ) : (
         <Table
           t={t}
-          data={Object.values(data?.FormattedData || {}) || []}
+          data={tableData}
           totalRecords={data?.Properties?.length}
           columns={columns}
           getCellProps={(cellInfo) => {
@@ -125,14 +112,8 @@ const SearchPTID = ({ tenantId, t, payload,showToast ,setShowToast}) => {
               },
             };
           }}
-          onPageSizeChange={onPageSizeChange}
-          currentPage={getValues("offset") / getValues("limit")}
-          onNextPage={nextPage}
-          onPrevPage={previousPage}
-          pageSizeLimit={getValues("limit")}
-          onSort={onSort}
-          disableSort={false}
-          sortParams={[{ id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false }]}
+          manualPagination={false}
+          disableSort={true}
         />
       )}
     </React.Fragment>

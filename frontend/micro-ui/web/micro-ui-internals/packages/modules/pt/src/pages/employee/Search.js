@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 const PTSearchFields = {
   searchId: {
-    propertyId: {
+    propertyIds: {
       type: "text",
       label: "PT_PROPERTY_UNIQUE_ID",
       placeHolder: "PT_PROPERTY_UNIQUE_ID_PLACEHOLDER",
@@ -81,7 +81,7 @@ const PTSearchFields = {
       validation: {
         pattern: {
           value: /^[^\$\"'<>?~`!@$%^={}\[\]*:;“”‘’]{1,50}$/i,
-          message: "CORE_COMMON_MOBILE_ERROR",
+          message: "ERR_INVALID_DOOR_NO",
         },
       },
     },
@@ -94,10 +94,10 @@ const PTSearchFields = {
           value: 3,
           message: "PT_MIN_3CHAR",
         },
-        // pattern: {
-        //   value: '/^[^{0-9}^$"<>?\\\\~!@#$%^()+={}[]*,/_:;“”‘’]{3,50}$/i',
-        //   message: "CORE_COMMON_MOBILE_ERROR",
-        // },
+        pattern: {
+          value: /^[^{0-9}^$"<>?\\\\~!@#$%^()+={}[]*,_:;“”‘’]{3,50}$/i,
+          message: "PAYMENT_INVALID_NAME",
+        },
       },
     },
   },
