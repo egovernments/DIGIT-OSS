@@ -9,6 +9,8 @@ import PTApplicationDetails from "./PTApplicationDetails";
 import SearchPropertyComponent from "./SearchProperty";
 import SearchResultsComponent from "./SearchResults";
 import { shouldHideBackButton } from "../../utils";
+import Search from "../employee/Search";
+import { useTranslation } from "react-i18next";
 import propertyOwnerHistory from "./MyProperties/propertyOwnerHistory";
 import EditProperty from "./EditProperty";
 import MutateProperty from "./Mutate";
@@ -20,6 +22,8 @@ const hideBackButtonConfig = [
 
 const App = () => {
   const { path, url, ...match } = useRouteMatch();
+    const { t } = useTranslation();
+
   return (
     <span className={"pt-citizen"}>
       <Switch>
@@ -37,6 +41,7 @@ const App = () => {
           {/* <PrivateRoute path={`${path}/property/transfer-ownership`} component={MutateProperty}></PrivateRoute> */}
           <PrivateRoute path={`${path}/property/owner-history/:tenantId/:propertyIds`} component={propertyOwnerHistory}></PrivateRoute>
           {/* <Redirect to={`/`}></Redirect> */}
+        <PrivateRoute path={`${path}/property/search`} component={(props) => <Search {...props} t={t} parentRoute={path} />} />
         </AppContainer>
       </Switch>
     </span>

@@ -49,7 +49,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast }) => {
       },
       {
         Header: t("PT_AMOUNT_DUE"),
-        Cell: ({ row }) => GetCell(t(row?.original?.due || "NA")),
+        Cell: ({ row }) => GetCell(row?.original?.due&&`₹ ${row?.original?.due}` || "NA"),
         disableSortBy: true,
       },
       {

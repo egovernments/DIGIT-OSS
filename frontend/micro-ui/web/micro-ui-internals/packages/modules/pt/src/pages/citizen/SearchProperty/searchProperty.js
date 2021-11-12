@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { FormComposer, CardLabelDesc, Loader, Dropdown, Localities } from "@egovernments/digit-ui-react-components";
+import { FormComposer, CardLabelDesc, Loader, Dropdown, Localities,RadioButtons } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -9,6 +9,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   const { t } = useTranslation();
 
   const history = useHistory();
+ const { action=0} = Digit.Hooks.useQueryParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [canSubmit, setCanSubmit] = useState(false);
 
@@ -68,6 +69,31 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   const config = [
     {
       body: [
+        {
+     
+          type: "custom",
+          populators: {
+            name: "addParam",
+            defaultValue: { code: 0, name: "ES_INBOX_ASSIGNED_TO_ME" },
+            customProps: { t, isMendatory: true, optionsKey:"name",
+              options:[
+                { code: 0, name: "ES_INBOX_ASSIGNED_TO_ME" },
+                { code: 1, name: "ES_INBOX_ASSIGNED_TO_ALL" },
+              ]},
+            component: (props, customProps) => (
+              <RadioButtons
+                {...customProps}
+                selectedOption={props.value}
+                onSelect={(d) => {
+                  console.log(d,history);
+                   history.push(`${history.location.pathname}?action=${action==0?1:0}`)
+              //  ?   if (d.code !== cityCode) props.setValue("locality", null);
+                  // props.onChange(d);
+                }}
+              />
+            ),
+          },
+        },
         {
           label: "PT_SELECT_CITY",
           isMandatory: true,
@@ -143,6 +169,81 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           isMandatory: false,
         },
       ],
+      body1:[
+        {
+          type: "custom",
+          populators: {
+            name: "addParam1",
+            defaultValue: { code: 1, name: "ES_INBOX_ASSIGNED_TO_ALL" },
+            customProps: { t, isMendatory: true, optionsKey:"name",
+              options:[
+                { code: 0, name: "ES_INBOX_ASSIGNED_TO_ME" },
+                { code: 1, name: "ES_INBOX_ASSIGNED_TO_ALL" },
+              ]},
+            component: (props, customProps) => (
+              <RadioButtons
+                {...customProps}
+                selectedOption={props.value}
+                onSelect={(d) => {
+                  console.log(d,history);
+history.push(`${history.location.pathname}?action=${action==0?1:0}`)
+              //  ?   if (d.code !== cityCode) props.setValue("locality", null);
+                  // props.onChange(d);
+                }}
+              />
+            ),
+          },
+        },
+        {
+          label: "PT_SELECT_CITY",
+          isMandatory: true,
+          type: "custom",
+          populators: {
+            name: "city",
+            defaultValue: null,
+            rules: { required: true },
+            customProps: { t, isMendatory: true, option: [...allCities], optionKey: "i18nKey" },
+            component: (props, customProps) => (
+              <Dropdown
+                {...customProps}
+                selected={props.value}
+                select={(d) => {
+                  if (d.code !== cityCode) props.setValue("locality", null);
+                  props.onChange(d);
+                }}
+              />
+            ),
+          },
+        },
+        
+        {
+          label: mobileNumber.label,
+          type: mobileNumber.type,
+          populators: {
+            name: mobileNumber.name,
+            validation: { pattern: /^[6-9]{1}[0-9]{9}$ / },
+          },
+          isMandatory: false,
+        },
+        {
+          label: property.label,
+          description: t(property.description) + "\n" + propertyIdFormat,
+          descriptionStyles: { whiteSpace: "pre", fontSize: "14px", fontWeight: "400", fontFamily: "Roboto" },
+          type: property.type,
+          populators: {
+            name: property.name,
+          },
+          isMandatory: false,
+        },
+        {
+          label: oldProperty.label,
+          type: oldProperty.type,
+          populators: {
+            name: oldProperty.name,
+          },
+          isMandatory: false,
+        }
+      ]
     },
   ];
 
@@ -175,6 +276,10 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   if (isLoading) {
     return <Loader />;
   }
+if(action==1){
+  console.log(config);
+  config[0].body=[...config[0].body1];
+}
 
   return (
     <div style={{ marginTop: "16px", marginBottom: "16px" }}>
