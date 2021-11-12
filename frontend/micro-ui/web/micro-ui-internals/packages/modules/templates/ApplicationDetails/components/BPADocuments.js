@@ -10,13 +10,14 @@ import PropertyDocuments from "./PropertyDocuments";
 
 const BPADocuments = ({ t, formData, applicationData, docs, bpaActionsDetails }) => {
     const applicationStatus = applicationData?.status || "";
-    const actions = bpaActionsDetails?.data?.actionState?.actionState?.actionState?.actions || [];
+    const actions = bpaActionsDetails?.data?.nextActions || [];
     const stateId = Digit.ULBService.getStateId();
     const [documents, setDocuments] = useState(formData?.documents?.documents || []);
     const [error, setError] = useState(null);
     const [bpaTaxDocuments, setBpaTaxDocuments] = useState([]);
     const [enableSubmit, setEnableSubmit] = useState(true)
     const [checkRequiredFields, setCheckRequiredFields] = useState(false);
+    const [checkEnablingDocs, setCheckEnablingDocs] = useState(false);
 
     const { isLoading: bpaDocsLoading, data: bpaDocs } = Digit.Hooks.obps.useMDMS(stateId, "BPA", ["DocTypeMapping"]);
     const { isLoading: commonDocsLoading, data: commonDocs } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["DocumentType"]);
@@ -68,6 +69,11 @@ const BPADocuments = ({ t, formData, applicationData, docs, bpaActionsDetails })
         else setEnableSubmit(true);
     }, [documents, checkRequiredFields])
 
+    useEffect(() => {
+        if ( applicationStatus === "DOC_VERIFICATION_INPROGRESS" && actions?.length > 0 ) setCheckEnablingDocs(true);
+        else setCheckEnablingDocs(false);
+    }, [applicationData, bpaActionsDetails])
+
     return (
         <div>
             {bpaTaxDocuments?.map((document, index) => {
@@ -86,6 +92,7 @@ const BPADocuments = ({ t, formData, applicationData, docs, bpaActionsDetails })
                             applicationStatus={applicationStatus}
                             actions={actions}
                             bpaTaxDocuments={bpaTaxDocuments}
+                            checkEnablingDocs={checkEnablingDocs}
                         />
                     </div>
                 );
@@ -105,7 +112,8 @@ function SelectDocument({
     index,
     applicationStatus,
     actions,
-    bpaTaxDocuments
+    bpaTaxDocuments,
+    checkEnablingDocs
 }) {
 
     const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0];
@@ -186,7 +194,7 @@ function SelectDocument({
             <CardSubHeader style={{ marginBottom: "8px", paddingBottom: "9px", color: "#0B0C0C", fontSize: "16px", lineHeight: "19px" }}>{`${t(doc?.code)}:`}</CardSubHeader>
             {doc?.uploadedDocuments?.length && <PropertyDocuments documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
             {
-                applicationStatus === "DOC_VERIFICATION_INPROGRESS" && actions?.length > 0 ?
+                checkEnablingDocs ?
                     <div style={{ marginTop: "20px" }}>
                         <LabelFieldPair>
                             <CardLabel>{doc?.required ? `${t(doc?.code)}* :` : `${t(doc?.code)}:`}</CardLabel>

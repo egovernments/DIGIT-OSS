@@ -32,7 +32,7 @@ function PropertyDocuments({ documents, svgStyles = {} }) {
     }
   }, [filesArray]);
 
-  const checkLocation = window.location.href.includes("employee/tl");
+  const checkLocation = window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps");
 
   return (
     <div style={{ marginTop: "19px" }}>

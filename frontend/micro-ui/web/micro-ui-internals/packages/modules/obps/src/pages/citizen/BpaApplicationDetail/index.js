@@ -8,12 +8,13 @@ import DocumentDetails from "../../../components/DocumentDetails";
 import ActionModal from "./Modal";
 import OBPSDocument from "../../../pageComponents/OBPSDocuments";
 import SubOccupancyTable from "../../../../../templates/ApplicationDetails/components/SubOccupancyTable";
-import { getBusinessServices, getOrderedDocs } from "../../../utils";
+import { getBusinessServices, getOrderedDocs, getCheckBoxLabelData } from "../../../utils";
 
 const BpaApplicationDetail = () => {
   const { id } = useParams();
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const stateCode = Digit.ULBService.getStateId();
   const queryClient = useQueryClient();
   const [showToast, setShowToast] = useState(null);
   const [isTocAccepted, setIsTocAccepted] = useState(false); 
@@ -23,9 +24,11 @@ const BpaApplicationDetail = () => {
   const [appDetails, setAppDetails] = useState({});
   const [showOptions, setShowOptions] = useState(false);
   const [payments, setpayments] = useState([]);
+  const [checkBoxVisible, setCheckBoxVisible] = useState(false);
   const history = useHistory();
   sessionStorage.setItem("bpaApplicationDetails", false);
   let isFromSendBack = false;
+  const { data: stakeHolderDetails, isLoading: stakeHolderDetailsLoading } = Digit.Hooks.obps.useMDMS(stateCode, "StakeholderRegistraition", "TradeTypetoRoleMapping");
   const { data, isLoading } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: id });
   const mutation = Digit.Hooks.obps.useObpsAPI(data?.applicationData?.tenantId, false);
   let workflowDetails = Digit.Hooks.useWorkflowDetails({
@@ -81,6 +84,11 @@ const BpaApplicationDetail = () => {
       }
     })
   },[payments]);
+
+  useEffect(() => {
+    if (data?.applicationData?.status == "CITIZEN_APPROVAL_INPROCESS" || data?.applicationData?.status == "INPROGRESS") setCheckBoxVisible(true);
+    else setCheckBoxVisible(false);
+  },[data]);
 
   const getTranslatedValues = (dataValue, isNotTranslated) => {
     if(dataValue) {
@@ -153,6 +161,11 @@ const BpaApplicationDetail = () => {
     setDisplayMenu(false);
   }
 
+  function checkForSubmitDisable () {
+    if(checkBoxVisible) return isFromSendBack ? !isFromSendBack : !isTocAccepted;
+    else return false;
+  }
+
   const submitAction = (workflow) => {
     mutation.mutate(
       { BPA: { ...data?.applicationData, workflow } },
@@ -173,6 +186,37 @@ const BpaApplicationDetail = () => {
       }
     );
   }
+
+  if (workflowDetails?.data?.nextActions?.length > 0 && data?.applicationData?.status == "CITIZEN_APPROVAL_INPROCESS") {
+    const userInfo = Digit.UserService.getUser();
+    const rolearray = userInfo?.info?.roles;
+    if (data?.applicationData?.status == "CITIZEN_APPROVAL_INPROCESS") {
+      if(rolearray?.length == 1 && rolearray?.[0]?.code == "CITIZEN") {
+        workflowDetails.data.nextActions = workflowDetails?.data?.nextActions;
+      } else {
+        workflowDetails.data.nextActions = [];
+      }
+    } else if (data?.applicationData?.status == "INPROGRESS") {
+      let isArchitect = false;
+      stakeHolderDetails?.StakeholderRegistraition?.TradeTypetoRoleMapping?.map(type => {
+        type?.role?.map(role => { roles.push(role); });
+      });
+      const uniqueRoles = roles.filter((item, i, ar) => ar.indexOf(item) === i);
+      if (rolearray?.length > 1) {
+        rolearray.forEach(role => {
+          if (uniqueRoles.includes(role.code)) {
+            isArchitect = true;
+          }
+        })
+      }
+      if (isArchitect) {
+        workflowDetails.data.nextActions = workflowDetails?.data?.nextActions;
+      } else {
+        workflowDetails.data.nextActions = [];
+      }
+    }
+  }
+
 
   if (workflowDetails?.data?.processInstances?.[0]?.action === "SEND_BACK_TO_CITIZEN") {
       if(isTocAccepted) setIsTocAccepted(true);
@@ -303,6 +347,8 @@ const BpaApplicationDetail = () => {
         <StatusTable>
         <Row className="border-none" label={nocob?.values?.[0]?.documentType?t(`BPA_${nocob?.values?.[0]?.documentType.replaceAll(".","_")}_HEADER`):t(`${detail?.values?.[0]?.title.slice(0,-5)}HEADER`)}></Row>
         <Row className="border-none" label={t(`${detail?.values?.[0]?.title}`)} textStyle={{marginLeft:"10px"}} text={getTranslatedValues(detail?.values?.[0]?.value , detail?.values?.[0]?.isNotTranslated)} />
+        <Row className="border-none" label={t(`${detail?.values?.[1]?.title}`)} textStyle={{marginLeft:"10px"}} text={getTranslatedValues(detail?.values?.[1]?.value , detail?.values?.[1]?.isNotTranslated)} />
+        <Row className="border-none" label={t(`${detail?.values?.[2]?.title}`)} textStyle={{marginLeft:"10px"}} text={getTranslatedValues(detail?.values?.[2]?.value , detail?.values?.[2]?.isNotTranslated)} />
         <Row className="border-none" label={t(`${nocob?.title}`)}></Row>
         </StatusTable>
         <StatusTable>
@@ -326,17 +372,19 @@ const BpaApplicationDetail = () => {
                       onClick={() => downloadDiagram(scrutiny?.value)} 
                       label={<PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />}>
                     </LinkButton>
+                    <Row className="border-none" label={t(scrutiny?.text)} labelStyle={{fontSize: "14px", color: "#505A5F", fontWeight:"400"}} />
                   </Fragment>
                 ))}
             </StatusTable>
             {index === arr.length - 1 && (
               <Fragment>
                 <BPAApplicationTimeline application={data?.applicationData} id={id} />
-                {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && !isFromSendBack && (
+                {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && !isFromSendBack && checkBoxVisible && (
                   <CheckBox
                     styles={{ margin: "20px 0 40px" }}
                     checked={isTocAccepted}
-                    label={`${t(`BPA_CITIZEN_1_DECLARAION_LABEL`)}${t(`BPA_CITIZEN_2_DECLARAION_LABEL`)}`}
+                    // label={`${t(`BPA_CITIZEN_1_DECLARAION_LABEL`)}${t(`BPA_CITIZEN_2_DECLARAION_LABEL`)}`}
+                    label={getCheckBoxLabelData(t, data?.applicationData, workflowDetails?.data?.nextActions)}
                     onChange={() => setIsTocAccepted(!isTocAccepted)}
                   />
                 )}
@@ -352,7 +400,7 @@ const BpaApplicationDetail = () => {
                         onSelect={onActionSelect}
                       />
                     ) : null}
-                    <SubmitBar style={{width: "100%"}} disabled={isFromSendBack ? !isFromSendBack : !isTocAccepted} label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+                    <SubmitBar style={{width: "100%"}} disabled={checkForSubmitDisable(isFromSendBack, isTocAccepted)} label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
                   </div>
                   </ActionBar>
                 )}

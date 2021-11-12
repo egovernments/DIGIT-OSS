@@ -227,7 +227,7 @@ const clearall = (num) => {
       <Row className="border-none" style={{border:"none"}} label={checkingFlow === "OCBPA" ? t("BPA_OC_EDCR_NO_LABEL") : t("BPA_EDCR_NO_LABEL")} text={data?.edcrNumber}></Row>
       <Row className="border-none" 
       label={t("BPA_UPLOADED_PLAN_DIAGRAM")} 
-      text={<ActionButton label={t("BPA_UPLOADED_PLAN")} jumpTo={data?.updatedDxfFile} />}>
+      text={<ActionButton label={t("BPA_UPLOADED_PLAN_DXF")} jumpTo={data?.updatedDxfFile} />}>
       </Row>
       <Row className="border-none" 
       label={t("BPA_SCRUNTINY_REPORT_OUTPUT")} 

@@ -213,14 +213,17 @@ export const OBPSService = {
           {
             title: `BPA_${nocDetails?.nocType}_LABEL`,
             value: nocDetails?.applicationNo,
+            isNotTranslated: true
           },
           {
             title: `BPA_NOC_STATUS`,
             value: nocDetails?.applicationStatus,
+            field: "STATUS"
           },
           {
             title: "BPA_SUDMITTED_ON_LABEL",
-            value: nocDetails?.additionalDetails?.SubmittedOn ? format(new Date(nocDetails?.additionalDetails?.SubmittedOn), 'dd/MM/yyyy') : "NA", //format(new Date(nocDetails?.auditDetaills?.createdTime), 'dd/MM/yyyy')
+            value: nocDetails?.additionalDetails?.SubmittedOn ? format(new Date(Number(nocDetails?.additionalDetails?.SubmittedOn)), 'dd/MM/yyyy') : "NA", //format(new Date(nocDetails?.auditDetaills?.createdTime), 'dd/MM/yyyy')
+            isNotTranslated: true
           },
         ],
         additionalDetails: {
@@ -229,7 +232,7 @@ export const OBPSService = {
             {
               title: "BPA_DOCUMENT_DETAILS_LABEL",
               values: nocDetails?.documents?.map((doc) => ({
-                title: "",
+                title: doc?.documentType?.replaceAll('.', '_'),
                 documentType: doc?.documentType,
                 documentUid: doc?.documentUid,
                 fileStoreId: doc?.fileStoreId,
@@ -311,8 +314,8 @@ export const OBPSService = {
         ],
         additionalDetails: {
           scruntinyDetails: [
-            { title: "BPA_UPLOADED_PLAN_DIAGRAM", value: edcr?.updatedDxfFile },
-            { title: "BPA_SCRUNTINY_REPORT_OUTPUT", value: edcr?.planReport },
+            { title: "BPA_UPLOADED_PLAN_DIAGRAM", value: edcr?.updatedDxfFile, text: "BPA_UPLOADED_PLAN_DXF" },
+            { title: "BPA_SCRUNTINY_REPORT_OUTPUT", value: edcr?.planReport, text: "BPA_SCRUTINY_REPORT_PDF" },
           ]
         }
       },

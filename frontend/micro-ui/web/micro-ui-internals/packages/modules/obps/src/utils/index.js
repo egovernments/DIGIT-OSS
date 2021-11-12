@@ -513,3 +513,11 @@ export const showHidingLinksForBPA = (roles = []) => {
   });
   return checkedRoles?.length;
 }
+
+export const getCheckBoxLabelData = (t, appData, nextActions) => {
+  if (appData?.status == "CITIZEN_APPROVAL_INPROCESS" && nextActions.length > 0) {
+    return `${t(`BPA_CITIZEN_1_DECLARAION_LABEL`)}${t(`BPA_CITIZEN_2_DECLARAION_LABEL`)}`
+  } else if (appData?.status == "INPROGRESS" && nextActions.length > 0) {
+    return `${t(`BPA_STAKEHOLDER_1_DECLARAION_LABEL`)}${t(`BPA_STAKEHOLDER_2_DECLARAION_LABEL`)}`
+  }
+}

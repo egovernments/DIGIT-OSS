@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
   CardLabel,
-  Dropdown,
-  UploadFile,
-  Toast,
-  Loader,
-  FormStep,
   MultiUploadWrapper,
   StatusTable,
   Row,
-  CardSectionHeader
+  LabelFieldPair
 } from "@egovernments/digit-ui-react-components";
 import PropertyDocuments from "./PropertyDocuments";
 
@@ -17,10 +12,8 @@ function SelectDocument({
   t,
   document: doc,
   setNocDocuments,
-  error,
   setError,
-  nocDocuments,
-  setCheckRequiredFields
+  nocDocuments
 }) {
   const filteredDocument = nocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0];
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -88,37 +81,32 @@ function SelectDocument({
   }
 
   return (
-      <div style={{/*  border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", display: "flex" */ display:"flex"}}>
-        <CardLabel>{doc?.required ? `${t("TL_BUTTON_UPLOAD FILE")}*:` : `${t("TL_BUTTON_UPLOAD FILE")}:`}</CardLabel>
-        <MultiUploadWrapper
-          module="NOC"
-          tenantId={tenantId}
-          getFormState={e => getData(e)}
-          t={t}
-        />
-        {/* <UploadFile
-            id={"noc-doc"}
-            extraStyleName={"propertyCreate"}
-            accept=".jpg,.png,.pdf"
-            onUpload={selectfile}
-            onDelete={() => {
-                setUploadedFile(null);
-                // setCheckRequiredFields(true);
-            }}
-            message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`ES_NO_FILE_SELECTED_LABEL`)}
-            error={error}
-        /> */}
+      <div style={{/*  border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", display: "flex" */ }}>
+        <LabelFieldPair>
+          <CardLabel>{doc?.required ? `${t("TL_BUTTON_UPLOAD FILE")}*:` : `${t("TL_BUTTON_UPLOAD FILE")}:`}</CardLabel>
+          <div className="field">
+            <MultiUploadWrapper
+              module="NOC"
+              tenantId={tenantId}
+              getFormState={e => getData(e)}
+              t={t}
+            />
+          </div>
+        </LabelFieldPair>
       </div>
   );
 }
-const NOCDocuments = ({ t, noc, docs, isNoc, applicationData,NOCdata }) => {
+const NOCDocuments = ({ t, noc, docs, isNoc, applicationData,NOCdata, bpaActionsDetails }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
+  const bpaApplicationStatus = applicationData?.status || "";
+  const actions = bpaActionsDetails?.data?.nextActions || [];
   const { isLoading: nocDocsLoading, data: nocDocs } = Digit.Hooks.obps.useMDMS(stateId, "NOC", ["DocumentTypeMapping"], { enabled: isNoc });
   const { isLoading: bpaDocsLoading, data: bpaDocs } = Digit.Hooks.obps.useMDMS(stateId, "BPA", ["DocTypeMapping"], { enabled: !isNoc });
   const { isLoading: commonDocsLoading, data: commonDocs } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["DocumentType"]);
   const [commonDocMaping, setCommonDocMaping] = useState([]);
   const [nocTaxDocuments, setNocTaxDocuments] = useState([]);
+  const [checkEnablingDocs, setCheckEnablingDocs] = useState(false);
   const [nocDocuments, setNocDocuments] = Digit.Hooks.useSessionStorage(noc?.nocType, []);
   const [error, setError] = useState(null);
 
@@ -166,16 +154,25 @@ const NOCDocuments = ({ t, noc, docs, isNoc, applicationData,NOCdata }) => {
     }
   }, [nocDocs, commonDocMaping]);
 
+  useEffect(() => {
+    if (bpaApplicationStatus === 'NOC_VERIFICATION_INPROGRESS' && actions?.length > 0) setCheckEnablingDocs(true);
+    else setCheckEnablingDocs(false);
+  }, [applicationData, bpaActionsDetails])
+
   return (
     <div style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", maxWidth:"600px"/*  display: "flex" */ }}>
       <StatusTable>
       <Row label={t(`BPA_${noc?.nocType}_HEADER`)} />
-      {NOCdata && NOCdata.map((noc,index) => (
-        <Row label={t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} />
-      ))}
+      {NOCdata && NOCdata.map((noc,index) => {
+        if (noc?.field == "STATUS") {
+          return <Row label={t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} textStyle = {(noc?.value == "APPROVED" || noc?.value == "AUTO_APPROVED") ? {color: "GREEN"} : {color : "#D4351C"}}/>
+        } else {
+          return <Row label={t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} />
+        }
+      })}
       </StatusTable>
-      <PropertyDocuments documents={docs} />
-      {applicationData?.status === 'NOC_VERIFICATION_INPROGRESS' && nocTaxDocuments?.map((document, index) => {
+      <PropertyDocuments documents={docs} svgStyles={{ width: "80px", height: "100px", viewBox: "0 0 25 25", minWidth: "80px" }}/>
+      {checkEnablingDocs && nocTaxDocuments?.map((document, index) => {
         return (
           <SelectDocument
             key={index}
@@ -185,7 +182,7 @@ const NOCDocuments = ({ t, noc, docs, isNoc, applicationData,NOCdata }) => {
             setError={setError}
             setNocDocuments={setNocDocuments}
             nocDocuments={nocDocuments}
-            // setCheckRequiredFields={setCheckRequiredFields}
+            checkEnablingDocs={checkEnablingDocs}
           />
         );
       })}
