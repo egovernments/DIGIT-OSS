@@ -96,16 +96,18 @@ public class BPAQueryBuilder {
         }
         String applicationType = criteria.getApplicationType();
         if(applicationType != null) {
+            List<String> applicationTypes = Arrays.asList(applicationType.split(","));
             addClauseIfRequired(preparedStmtList, builder);
-            builder.append(" bpa.additionaldetails ->>'applicationType'=? ");
-            preparedStmtList.add(applicationType);
+            builder.append(" bpa.additionaldetails ->>'applicationType' IN (").append(createQuery(applicationTypes)).append(")");
+            addToPreparedStatement(preparedStmtList, applicationTypes);
         }
         
         String serviceType = criteria.getServiceType();
         if(serviceType != null) {
+            List<String> serviceTypes = Arrays.asList(serviceType.split(","));
             addClauseIfRequired(preparedStmtList, builder);
-            builder.append(" bpa.additionaldetails ->>'serviceType'=? ");
-            preparedStmtList.add(serviceType);
+            builder.append(" bpa.additionaldetails ->>'serviceType' IN (").append(createQuery(serviceTypes)).append(")");
+            addToPreparedStatement(preparedStmtList, serviceTypes);
         }
         
         Long permitDt = criteria.getApprovalDate();
