@@ -11,10 +11,7 @@ let receiveJob = topic;
 
 const Consumer = kafka.Consumer;
 let client = new kafka.KafkaClient({
-  kafkaHost: envVariables.KAFKA_BROKER_HOST,
-  protocol: ["roundrobin"],
-  fromOffset: "latest",
-  outOfRangeOffset: "earliest"
+  kafkaHost: envVariables.KAFKA_BROKER_HOST
 });
 
 
@@ -25,7 +22,7 @@ for (var i in receiveJob) {
 
 const consumer = new Consumer(client, topicList, {
 
-  autoCommit: true
+  autoCommit: false
 });
 
 consumer.on("ready", function() {
