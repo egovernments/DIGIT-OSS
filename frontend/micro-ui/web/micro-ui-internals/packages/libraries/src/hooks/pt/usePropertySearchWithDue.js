@@ -27,16 +27,15 @@ const usePropertySearchWithDue = ({ tenantId, filters, auth = true, configs }) =
   const { isLoading, error, data } = useQuery(
     ["propertySearchList", tenantId, filters, auth],
     () => configs.enabled && Digit.PTService.search({ tenantId, filters, auth: true }),
-    {
+    {...configs,
       select: defaultSelect,
-    },
-    configs
+    }
   );
   let consumerCodes = data?.ConsumerCodes?.join(",") || "";
   const { isLoading: billLoading, data: billData, isSuccess } = useQuery(
     ["propertySearchBillList", tenantId, filters, auth, consumerCodes],
     () => configs.enabled && data && Digit.PTService.fetchPaymentDetails({ tenantId, consumerCodes, auth: true }),
-    {
+    {...configs,
       select: (billResp) => {
         data["Bill"] =
           billResp?.Bill?.reduce((curr, acc) => {
@@ -46,8 +45,7 @@ const usePropertySearchWithDue = ({ tenantId, filters, auth = true, configs }) =
           }, {}) || {};
         return billResp;
       },
-    },
-    configs
+    }
   );
   return {
     isLoading: isLoading || billLoading,

@@ -35,10 +35,12 @@
 
   .form-field {
     width: 30% !important;
+    margin-bottom: 20px;
   }
   @media (max-width: 780px) {
   .form-field{
     width: 100% !important;
+    margin-bottom: 15px;
   }
   }
 }

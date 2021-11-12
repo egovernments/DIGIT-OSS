@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const GetCell = (value) => <span className="cell-text">{value}</span>;
 
-const SearchPTID = ({ tenantId, t, payload }) => {
+const SearchPTID = ({ tenantId, t, payload,showToast ,setShowToast}) => {
   const [defaultValues, setValue] = useState({ sortOrder: "DESC", limit: 10, offset: 0, sortBy: "createdDate" });
   const getValues = (key) => defaultValues[key];
 
@@ -16,7 +16,8 @@ const SearchPTID = ({ tenantId, t, payload }) => {
   const { data, isLoading, error, isSuccess, billData } = Digit.Hooks.pt.usePropertySearchWithDue({
     tenantId,
     filters: searchQuery,
-    configs: { enabled: Object.keys(payload).length > 0 ? true : false, retry: false, retryOnMount: false, staleTime: Infinity },
+    configs: { enabled: Object.keys(payload).length > 0 ? true : false,  retry: false
+    , retryOnMount: false, staleTime: Infinity },
   });
 
   const columns = useMemo(
@@ -98,7 +99,12 @@ const SearchPTID = ({ tenantId, t, payload }) => {
     // handleSubmit(onSubmit)();
   });
   if (isLoading) {
-    return <Loader />;
+    showToast&&setShowToast(null);
+        return <Loader />;
+  }
+  if(error){
+    !showToast&&setShowToast({error:true,label:error?.response?.data?.Errors?.[0]?.code||error});
+    return null;
   }
   const PTEmptyResultInbox = memo(Digit.ComponentRegistryService.getComponent("PTEmptyResultInbox"));
   return (
@@ -114,7 +120,6 @@ const SearchPTID = ({ tenantId, t, payload }) => {
           getCellProps={(cellInfo) => {
             return {
               style: {
-                minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
                 padding: "20px 18px",
                 fontSize: "16px",
               },
