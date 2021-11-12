@@ -6,6 +6,7 @@ import { createNoSave } from "../index";
 
 export const listenConsumer = async(topic)=>{
 //let receiveJob = envVariables.KAFKA_RECEIVE_CREATE_JOB_TOPIC;
+logger.info("consumer is loaded");
 let receiveJob = topic;
 
 
