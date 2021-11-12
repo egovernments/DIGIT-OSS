@@ -192,7 +192,18 @@ export async function mergePdf(bulkPdfJobId, tenantId, userid){
         });
 
         try {
-          fs.rmdirSync(baseFolder, { recursive: true });
+          //fs.rmdirSync(baseFolder, { recursive: true });
+          if( fs.existsSync(baseFolder) ) {
+            fs.readdirSync(baseFolder).forEach(function(file,index){
+              var curPath = baseFolder + file;
+              if(fs.lstatSync(curPath).isDirectory()) { // recurse
+                deleteFolderRecursive(curPath);
+              } else { // delete file
+                fs.unlinkSync(curPath);
+              }
+            });
+            fs.rmdirSync(baseFolder);
+          }
         } catch (err) {
           logger.error(err.stack || err);
         }
