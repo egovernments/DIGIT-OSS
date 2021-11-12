@@ -31,7 +31,7 @@ const SearchPTID = ({ tenantId, t, onSubmit, onReset, searchBy, PTSearchFields, 
             let field = fields[key];
             let validation = field?.validation || {};
             return (
-              <SearchField>
+              <SearchField key={key}>
                 <label>{t(field?.label)}{`${field?.validation?.required?"*":""}`}</label>
                 {field?.type==="custom"? 
                 <Controller
