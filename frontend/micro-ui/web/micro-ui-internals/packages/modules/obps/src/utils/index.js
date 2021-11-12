@@ -60,6 +60,89 @@ export const convertToNocObject = (data,datafromflow) => {
   return formData;
 }
 
+export const getBPAFormData = async(data,mdmsData,history) => {
+  const edcrResponse = await Digit.OBPSService.scrutinyDetails(data?.tenantId, { edcrNumber: data?.edcrNumber })
+  const APIScrutinyDetails = edcrResponse?.edcrDetail[0];
+  const getBlockIds = (unit) => {
+    let blocks = {};
+    unit && unit.map((ob, index) => {
+      blocks[`Block_${index+1}`]=ob.id;
+    });
+    return blocks;
+  }
+
+  const getBlocksforFlow = (unit) => {
+    let arr=[];
+    let subBlocks = [];
+    let subOcc = {};
+    unit && unit.map((un, index) => {
+      arr = un?.usageCategory.split(",");
+      subBlocks=[];
+      arr && arr.map((ob, ind) => {
+        subBlocks.push({
+          code:ob,
+          i18nKey:`BPA_SUBOCCUPANCYTYPE_${ob.replaceAll(".","_")}`,
+          name:t(`BPA_SUBOCCUPANCYTYPE_${ob.replaceAll(".","_")}`),
+        })
+      })
+      subOcc[`Block_${index+1}`]=subBlocks;
+    });
+
+    return subOcc;
+    
+  }
+
+  data.BlockIds=getBlockIds(data?.landInfo?.unit);
+  data.address = data?.landInfo?.address;
+  data.data = {
+    scrutinyNumber:{edcrNumber:APIScrutinyDetails?.edcrNumber},
+    applicantName: APIScrutinyDetails?.planDetail?.planInformation?.applicantName,
+    applicationDate: APIScrutinyDetails?.applicationDate,
+    applicationType: APIScrutinyDetails?.appliactionType,
+    holdingNumber: data?.additionalDetails?.holdingNo,
+    occupancyType: APIScrutinyDetails?.planDetail?.planInformation?.occupancy,
+    registrationDetails: data?.additionalDetails?.registrationDetails,
+    riskType: Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks),
+    serviceType:data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType,
+  }
+
+  data?.landInfo.owners.map((owner,ind) => {
+    owner.gender = {
+      active:true,
+      code:owner.gender,
+      i18nKey:`COMMON_GENDER_${owner.gender}`,
+    }
+  })
+
+  data.owners ={
+    owners:data?.landInfo?.owners,
+    ownershipCategory:{
+      active:true,
+      code:data?.landInfo?.ownershipCategory,
+      i18nKey:`COMMON_MASTERS_OWNERSHIPCATEGORY_${data?.landInfo?.ownershipCategory.replaceAll(".","_")}`,
+    }
+  }
+
+  data.riskType = Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks)
+  data.subOccupancy = getBlocksforFlow(data?.landInfo?.unit);
+  data.uiFlow = {
+    flow:data?.businessService.split(".")[0],
+    applicationType:data?.additionalDetails?.applicationType || APIScrutinyDetails?.appliactionType,
+    serviceType:data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType
+  }
+  
+  if(data?.businessService.includes("OC")){
+  sessionStorage.setItem("BPAintermediateValue",JSON.stringify({...data}));
+  history.push(`/digit-ui/citizen/obps/ocbpa/${data?.additionalDetails?.applicationType.toLowerCase()}/${data?.additionalDetails?.serviceType.toLowerCase()}`);
+  }
+  else
+  {
+    sessionStorage.setItem("BPAintermediateValue",JSON.stringify({...data}));
+    history.push(`/digit-ui/citizen/obps/bpa/${data?.additionalDetails?.applicationType.toLowerCase()}/${data?.additionalDetails?.serviceType.toLowerCase()}`);
+  }
+
+}
+
 export const getDocumentforBPA = (docs, PrevStateDocs) => {
 let document = [];
   docs && docs.map((ob) =>{

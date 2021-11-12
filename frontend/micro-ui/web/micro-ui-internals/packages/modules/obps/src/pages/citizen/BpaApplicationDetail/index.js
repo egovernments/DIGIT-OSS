@@ -8,7 +8,7 @@ import DocumentDetails from "../../../components/DocumentDetails";
 import ActionModal from "./Modal";
 import OBPSDocument from "../../../pageComponents/OBPSDocuments";
 import SubOccupancyTable from "../../../../../templates/ApplicationDetails/components/SubOccupancyTable";
-import { getBusinessServices, getOrderedDocs, getCheckBoxLabelData } from "../../../utils";
+import { getBusinessServices, getOrderedDocs, getCheckBoxLabelData, getBPAFormData } from "../../../utils";
 
 const BpaApplicationDetail = () => {
   const { id } = useParams();
@@ -30,6 +30,7 @@ const BpaApplicationDetail = () => {
   let isFromSendBack = false;
   const { data: stakeHolderDetails, isLoading: stakeHolderDetailsLoading } = Digit.Hooks.obps.useMDMS(stateCode, "StakeholderRegistraition", "TradeTypetoRoleMapping");
   const { data, isLoading } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: id });
+  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(tenantId.split(".")[0], "BPA", ["RiskTypeComputation"]);
   const mutation = Digit.Hooks.obps.useObpsAPI(data?.applicationData?.tenantId, false);
   let workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: data?.applicationData?.tenantId,
@@ -156,6 +157,9 @@ const BpaApplicationDetail = () => {
     }
     if (action === "PAY") {
       window.location.assign(`${window.location.origin}/digit-ui/citizen/payment/collect/${`${getBusinessServices(data?.businessService, data?.applicationStatus)}/${id}/${data?.tenantId}?tenantId=${data?.tenantId}`}`);
+    }
+    if (action === "SEND_TO_CITIZEN"){
+      getBPAFormData(data?.applicationData,mdmsData,history);
     }
     setSelectedAction(action);
     setDisplayMenu(false);
