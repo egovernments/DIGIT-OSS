@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
 import { Loader, CitizenHomeCard, OBPSIcon } from "@egovernments/digit-ui-react-components";
 import EmployeeApp from "./pages/employee";
+import NOCCard from "./pages/employee/EmployeeCard";
 
 const NOCModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "common-noc";
@@ -24,7 +25,8 @@ const NOCModule = ({ stateCode, userType, tenants }) => {
 }
 
 const componentsToRegister = {
-  NOCModule
+  NOCModule,
+  NOCCard
 }
 
 export const initNOCComponents = () => {

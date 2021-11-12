@@ -4,57 +4,62 @@ import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 
 const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch, onSortingByData}) => {
-    const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
-    const GetStatusCell = (value) => value === "Active" ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span> 
     const { t } = useTranslation()
     
+    const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
+    const GetStatusCell = (value) => value === "Active" ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span> 
+    
     const tableColumnConfig = useMemo(() => {
-        return [
-        {
-            Header: t("BPA_APPLICATION_NUMBER_LABEL"),
-            accessor: "applicationNo",
-            disableSortBy: true,
-            Cell: ({ row }) => {
-            return (
-                <div>
-                <Link to={`${parentRoute}/inbox/bpa/${row.original["applicationId"]}`}>
-                    <span className="link">{row.original["applicationId"]}</span>
-                </Link>
-                </div>
-            );
+          return [
+            {
+              Header: t("TL_COMMON_TABLE_COL_APP_NO"),
+              accessor: "applicationNumber",
+                disableSortBy: true,
+              Cell: ({ row }) => {
+                return (
+                  <div>
+                    <Link to={`${parentRoute}/application-overview/${row.original["applicationId"]}`}>
+                      <span className="link">{row.original["applicationId"]}</span>
+                    </Link>
+                  </div>
+                );
+              },
             },
-        },
-        {
-            Header: t("CS_APPLICATION_DETAILS_APPLICATION_DATE"),
-            accessor: "applicationDate",
-            Cell: ({row}) => row.original?.["date"] ? GetCell(format(new Date(row.original?.["date"]), 'dd/MM/yyyy')) : ""
+            {
+              Header: t("CS_APPLICATION_DETAILS_APPLICATION_DATE"),
+              accessor: "applicationDate",
+              Cell: ({row}) => row.original?.["date"] ? GetCell(format(new Date(row.original?.["date"]), 'dd/MM/yyyy')) : ""
+              },
+            // {
+            //   Header: t("ES_INBOX_LOCALITY"),
+            //   accessor: (row) => t(row?.locality),
+            // disableSortBy: true,
+
+            // },
+            {
+              Header: t("EVENTS_STATUS_LABEL"),
+              accessor: row => t(`WF_${row?.businessService}_${row?.status}`),
+            disableSortBy: true,
+
             },
-        {
-            Header: t("ES_INBOX_LOCALITY"),
-            accessor: (row) => t(row?.locality),
+            {
+              Header: t("WF_INBOX_HEADER_CURRENT_OWNER"),
+              accessor: (row) => row?.owner,
             disableSortBy: true,
-        },
-        {
-            Header: t("EVENTS_STATUS_LABEL"),
-            accessor: row => t(`WF_${row?.businessService}_${row?.status}`),
+
+            },
+            {
+              Header: t("WS_COMMON_TABLE_COL_APP_TYPE_LABEL"),
+              accessor: (row) => row?.businessService,
             disableSortBy: true,
-        },
-        {
-            Header: t("WF_INBOX_HEADER_CURRENT_OWNER"),
-            accessor: (row) => row?.owner,
-            disableSortBy: true,
-        },
-        {
-            Header: t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"),
-            accessor: (row) => t(row?.applicationType),
-            disableSortBy: true,
-        },
-        {
-            Header: t("ES_INBOX_SLA_DAYS_REMAINING"),
-            accessor: row => GetStatusCell(row?.sla),
-        }
-        ]
-    })
+
+            },
+            {
+              Header: t("ES_INBOX_SLA_DAYS_REMAINING"),
+              accessor: row => GetStatusCell(row?.sla),
+            }
+          ]
+        })
 
     return {
         getCellProps: (cellInfo) => {
