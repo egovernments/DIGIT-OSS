@@ -117,7 +117,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
               key={index}
               onChange={(e) => e.target.checked ? changeItemCheckStatus([...props.value, status?.statusid]) : changeItemCheckStatus(props.value?.filter( id => id !== status?.statusid)) }
               checked={props.value?.includes(status?.statusid)}
-              label={t(`WF_${status.businessservice}_${status.applicationstatus.split('_').pop()}`)}
+              label={t(`WF_NEW_${status.businessservice}_${status.applicationstatus.split('_').pop()}`)}
               // label={t(`${status.businessservice}_${status.applicationstatus}`)}
             />}),[props.value, statuses])
           return <>
