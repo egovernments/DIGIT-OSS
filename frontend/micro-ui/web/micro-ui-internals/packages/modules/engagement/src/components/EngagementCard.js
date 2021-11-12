@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, Fragment, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { EmployeeModuleCard, PropertyHouse } from "@egovernments/digit-ui-react-components";
+import { EmployeeModuleCard, DocumentIcon, EventCalendar, PMBIcon, PropertyHouse } from "@egovernments/digit-ui-react-components";
 
 const EngagementCard = () => {
   const userRoles = Digit.SessionStorage.get('User')?.info?.roles
@@ -25,7 +25,7 @@ const EngagementCard = () => {
       select: (data) => data?.totalCount
     });
 
-  const { data: surveysCount, isLoading: isLoadingSurveys } = Digit.Hooks.survey.useSearch({ tenantIds:tenantId }, { select: (data) => data?.TotalCount })
+  const { data: surveysCount, isLoading: isLoadingSurveys } = Digit.Hooks.survey.useSearch({ tenantIds: tenantId }, { select: (data) => data?.TotalCount })
 
   const totalDocsCount = useMemo(() => (isLoadingDocs ? "-" : documentsCount), [isLoadingDocs, documentsCount])
   const totalEventsCount = useMemo(() => (isLoadingEvents ? "-" : totalEvents), [isLoadingEvents, totalEvents])
@@ -34,25 +34,11 @@ const EngagementCard = () => {
 
   const { t } = useTranslation();
   let result = null;
-  const propsForModuleCard = {
-    Icon: <PropertyHouse />,
-    moduleName: t("ES_TITLE_CITIZEN_ENGAGEMENT"),
+
+  const propsForSurveyModuleCard = {
+    Icon: <DocumentIcon />,
+    moduleName: t("CS_COMMON_SURVEYS"),
     kpis: [
-      {
-        count: totalDocsCount,
-        label: t("TOTAL_DOCUMENTS"),
-        link: `/digit-ui/employee/engagement/documents/inbox`,
-      },
-      {
-        count: totalEventsCount,
-        label: t("TOTAL_EVENTS"),
-        link: `/digit-ui/employee/engagement/event/inbox`
-      },
-      {
-        count: totalMessagesCount,
-        label: t("TOTAL_MESSAGES"),
-        link: `/digit-ui/employee/engagement/messages/inbox`
-      },
       {
         count: totalSurveysCount,
         label: t("TOTAL_SURVEYS"),
@@ -61,31 +47,91 @@ const EngagementCard = () => {
     ],
     links: [
       {
-        count: totalDocsCount,
-        label: t("ES_TITLE_DOCS"),
-        link: `/digit-ui/employee/engagement/documents/inbox`,
-      },
-      {
-        count: totalEventsCount,
-        label: t("ES_TITLE_EVENT_INBOX"),
-        link: `/digit-ui/employee/engagement/event/inbox`,
-      },
+        count: totalSurveysCount,
+        label: t("ES_TITLE_INBOX"),
+        link: `/digit-ui/employee/engagement/surveys/inbox`
+      }
+    ]
+  }
+
+  const propsForPMBModuleCard = {
+    Icon: <PMBIcon/>,
+    moduleName: t("ACTION_TEST_PUBLIC_MESSAGE_BROADCAST"),
+    kpis: [
       {
         count: totalMessagesCount,
-        label: t("ACTION_TEST_PUBLIC_MESSAGE_BROADCAST"),
+        label: t("TOTAL_MESSAGES"),
+        link: `/digit-ui/employee/engagement/messages/inbox`
+      },
+    ],
+
+    links: [
+      {
+        count: totalMessagesCount,
+        label: t("ES_TITLE_INBOX"),
         link: `/digit-ui/employee/engagement/messages/inbox`,
       },
       {
-        count: totalSurveysCount,
-        label: t("CS_COMMON_SURVEYS"),
-        link: `/digit-ui/employee/engagement/surveys/inbox`
-      }
+        label: t("NEW_PUBLIC_MESSAGE_BUTTON_LABEL"),
+        link: `/digit-ui/employee/engagement/messages/inbox/create`,
+      },
+    ]
+  }
+  const propsForEventsModuleCard = {
+    Icon: <EventCalendar />,
+    moduleName: t("TOTAL_EVENTS"),
+    kpis: [
+      {
+        count: totalEventsCount,
+        label: t("TOTAL_EVENTS"),
+        link: `/digit-ui/employee/engagement/event/inbox`
+      },
+    ],
+
+    links: [
+      {
+        count: totalEventsCount,
+        label: t("ES_TITLE_INBOX"),
+        link: `/digit-ui/employee/engagement/event/inbox`
+      },
+      {
+        label: t("ES_TITLE_NEW_EVENTS"),
+        link: `/digit-ui/employee/engagement/event/inbox/new-event`
+      },
+    ]
+  }
+  const propsForDocumentModuleCard = {
+    Icon: <DocumentIcon />,
+    moduleName: t("ES_TITLE_DOCS"),
+    kpis: [
+      {
+        count: totalDocsCount,
+        label: t("TOTAL_DOCUMENTS"),
+        link: `/digit-ui/employee/engagement/documents/inbox`,
+      },
+    ],
+    links: [
+      {
+        count: totalDocsCount,
+        label: t("ES_TITLE_INBOX"),
+        link: `/digit-ui/employee/engagement/documents/inbox`,
+      },
+      {
+        label: t("NEW_DOCUMENT_TEXT"),
+        link: `/digit-ui/employee/engagement/documents/inbox/new-doc`,
+      },
     ],
   };
 
+  const engagementSubModulesProps = [propsForDocumentModuleCard, propsForEventsModuleCard, propsForPMBModuleCard, propsForSurveyModuleCard]
 
 
-  if (isEmployee) result = <EmployeeModuleCard {...propsForModuleCard} />;
+  if (isEmployee) result = (
+      <>
+      {engagementSubModulesProps.map((propsForModuleCard) => <EmployeeModuleCard {...propsForModuleCard} />)
+      }
+      </>
+    );
 
   return result;
 };

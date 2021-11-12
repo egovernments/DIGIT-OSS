@@ -73,7 +73,6 @@ const Inbox = ({ tenants }) => {
             link: "/digit-ui/employee/engagement/documents/inbox/new-doc",
         }
     ]
-    console.log('<<<search[arams', {searchParams})
     if (isMobile) {
         return (
             <MobileInbox

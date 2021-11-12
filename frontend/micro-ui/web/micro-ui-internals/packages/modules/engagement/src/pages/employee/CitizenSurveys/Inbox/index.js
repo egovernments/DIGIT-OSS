@@ -120,8 +120,8 @@ const Inbox = ({ parentRoute }) => {
   const propsForInboxTable = useInboxTableConfig({ ...{ parentRoute, onPageSizeChange, formState, totalCount: TotalCount, table: Surveys, noResultsMessage: "CS_SURVEYS_NOT_FOUND", dispatch } })
 
   const propsForInboxMobileCards = useInboxMobileCardsData({parentRoute, table:Surveys})
-
-  return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable, formState }}></InboxComposer>
+  
+  return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxMobileCards, propsForInboxTable, formState }}></InboxComposer>
 }
 
 export default Inbox
