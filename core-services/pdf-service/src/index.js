@@ -639,10 +639,10 @@ dataConfigUrls &&
               topic.push(data.fromTopic);
             }*/
             i++;
-            if (i == datafileLength) {
-              topic.push(envVariables.KAFKA_RECEIVE_CREATE_JOB_TOPIC)
-              listenConsumer(topic);
-            }
+            // if (i == datafileLength) {
+            //   topic.push(envVariables.KAFKA_RECEIVE_CREATE_JOB_TOPIC)
+            //   listenConsumer(topic);
+            // }
             logger.info("loaded dataconfig: file:///" + item);
           }
         } catch (error) {
@@ -703,6 +703,9 @@ formatConfigUrls &&
 app.listen(serverport, () => {
   logger.info(`Server running at http:${serverport}/`);
 });
+
+topic.push(envVariables.KAFKA_RECEIVE_CREATE_JOB_TOPIC)
+listenConsumer(topic);
 
 /**
  *
