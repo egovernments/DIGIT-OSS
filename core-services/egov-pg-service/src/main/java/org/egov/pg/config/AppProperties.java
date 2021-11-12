@@ -78,6 +78,8 @@ public class AppProperties {
 
     private final String notificationHost;
 
+    private final String egovPgReconciliationSystemUserUuid;
+
     @Autowired
     public AppProperties(Environment environment){
         this.earlyReconcileJobRunInterval = Integer.valueOf(environment.getRequiredProperty("pg.earlyReconcileJobRunInterval.mins"));
@@ -112,6 +114,7 @@ public class AppProperties {
         this.billingServiceHost = environment.getRequiredProperty("egov.billing.service.host");
         this.billingServiceSearchEndpoint = environment.getRequiredProperty("egov.bill.searchendpoint");
         this.notificationHost = environment.getRequiredProperty("notification.url");
+        this.egovPgReconciliationSystemUserUuid = environment.getRequiredProperty("egov.pg.reconciliation.system.user.uuid");
     }
 
 }
