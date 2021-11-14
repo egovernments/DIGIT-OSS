@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { FormComposer, CardLabelDesc, Loader, Dropdown, Localities,RadioButtons } from "@egovernments/digit-ui-react-components";
+import { FormComposer, CardLabelDesc, Loader, Dropdown, Localities,RadioButtons,Toast } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -12,11 +12,15 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
  const { action=0} = Digit.Hooks.useQueryParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [canSubmit, setCanSubmit] = useState(false);
-
+  const [showToast, setShowToast] = useState(null);
   const allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
 
   const [cityCode, setCityCode] = useState();
   const [formValue, setFormValue] = useState();
+
+useEffect(()=>{
+  setShowToast(null);
+},[action])
 
   useLayoutEffect(() => {
     //Why do we need this? !!!!!
@@ -44,6 +48,9 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   });
 
   const onPropertySearch = async (data) => {
+    setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+    console.log(data,"sasa");
+return;
     if (!data.mobileNumber && !data.propertyId && !data.oldPropertyId) {
       alert(t("PT_ERROR_NEED_ONE_PARAM"));
     } else if (propsConfig.action === "MUTATION") {
@@ -64,7 +71,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     }
   };
 
-  const [mobileNumber, property, oldProperty] = propsConfig.inputs;
+  const [mobileNumber, property, oldProperty,name,doorNo] = propsConfig.inputs;
 
   const config = [
     {
@@ -74,11 +81,11 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           type: "custom",
           populators: {
             name: "addParam",
-            defaultValue: { code: 0, name: "ES_INBOX_ASSIGNED_TO_ME" },
-            customProps: { t, isMendatory: true, optionsKey:"name",
+            defaultValue: { code: 0, name: "PT_KNOW_PT_ID" },
+            customProps: { t, isMandatory: true, optionsKey:"name",
               options:[
-                { code: 0, name: "ES_INBOX_ASSIGNED_TO_ME" },
-                { code: 1, name: "ES_INBOX_ASSIGNED_TO_ALL" },
+                { code: 0, name: "PT_KNOW_PT_ID" },
+                { code: 1, name: "PT_KNOW_PT_DETAIL" },
               ]},
             component: (props, customProps) => (
               <RadioButtons
@@ -86,7 +93,14 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
                 selectedOption={props.value}
                 onSelect={(d) => {
                   console.log(d,history);
-                   history.push(`${history.location.pathname}?action=${action==0?1:0}`)
+                  props?.setValue("city",{});
+                  props?.setValue("locality",{});
+                  props?.setValue("mobileNumber","");
+                  props?.setValue("propertyId","");
+                  props?.setValue("doorNo","");
+                  props?.setValue("oldPropertyId","");
+                  props?.setValue("name","");
+                   history.replace(`${history.location.pathname}?action=${action==0?1:0}`)
               //  ?   if (d.code !== cityCode) props.setValue("locality", null);
                   // props.onChange(d);
                 }}
@@ -102,7 +116,92 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
             name: "city",
             defaultValue: null,
             rules: { required: true },
-            customProps: { t, isMendatory: true, option: [...allCities], optionKey: "i18nKey" },
+            customProps: { t, isMandatory: true, option: [...allCities], optionKey: "i18nKey" },
+            component: (props, customProps) => (
+              <Dropdown
+                {...customProps}
+                selected={props.value}
+                select={(d) => {
+                  if (d.code !== cityCode) props.setValue("locality", null);
+                  props.onChange(d);
+                }}
+              />
+            ),
+          },
+        },
+        {
+          label: mobileNumber.label,
+          type: mobileNumber.type,
+          populators: {
+            defaultValue:"",
+            name: mobileNumber.name,
+            validation: { pattern: /^[6-9]{1}[0-9]{9}$ / },
+          },
+          isMandatory: false,
+        },
+        {
+          label: property.label,
+          description: t(property.description) + "\n" + propertyIdFormat,
+          descriptionStyles: { whiteSpace: "pre", fontSize: "14px", fontWeight: "400", fontFamily: "Roboto" },
+          type: property.type,
+          populators: {
+            name: property.name,
+            defaultValue:"",
+          },
+          isMandatory: false,
+        },
+        {
+          label: oldProperty.label,
+          type: oldProperty.type,
+          populators: {
+            name: oldProperty.name,
+            defaultValue:"",
+          },
+          isMandatory: false,
+        },
+      ],
+      body1:[
+        {
+          type: "custom",
+          populators: {
+            name: "addParam1",
+            defaultValue: { code: 1, name: "PT_KNOW_PT_DETAIL" },
+            customProps: { t, isMandatory: true, optionsKey:"name",
+              options:[
+                { code: 0, name: "PT_KNOW_PT_ID" },
+                { code: 1, name: "PT_KNOW_PT_DETAIL" },
+              ]},
+            component: (props, customProps) => (
+              <RadioButtons
+                {...customProps}
+                selectedOption={props.value}
+                onSelect={(d) => {
+                  console.log(d,history);
+                  console.log(props,customProps);
+                  props?.setValue("city",{});
+                  props?.setValue("locality",{});
+                  props?.setValue("mobileNumber","");
+                  props?.setValue("propertyId","");
+                  props?.setValue("doorNo","");
+                  props?.setValue("oldPropertyId","");
+                  props?.setValue("name","");
+history.replace(`${history.location.pathname}?action=${action==0?1:0}`)
+              //  ?   if (d.code !== cityCode) props.setValue("locality", null);
+                  // props.onChange(d);
+                }}
+              />
+            ),
+          },
+        },
+        {
+          label: "PT_SELECT_CITY",
+          isMandatory: true,
+          type: "custom",
+          populators: {
+            name: "city",
+            defaultValue: null,
+            rules: { required: true },
+            customProps: { t, isMandatory: true, option: [...allCities], optionKey: "i18nKey" },
             component: (props, customProps) => (
               <Dropdown
                 {...customProps}
@@ -121,7 +220,8 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           isMandatory: true,
           populators: {
             name: "locality",
-            defaultValue: formValue?.locality,
+            // defaultValue: formValue?.locality,
+            defaultValue:"",
             rules: { required: true },
             customProps: {},
             component: (props, customProps) => (
@@ -142,104 +242,21 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           },
         },
         {
-          label: mobileNumber.label,
-          type: mobileNumber.type,
+          label: doorNo.label,
+          type: doorNo.type,
           populators: {
-            name: mobileNumber.name,
-            validation: { pattern: /^[6-9]{1}[0-9]{9}$ / },
+            defaultValue:"",
+            name: doorNo.name,
+            // validation: { pattern: /^[6-9]{1}[0-9]{9}$ / },
           },
           isMandatory: false,
         },
         {
-          label: property.label,
-          description: t(property.description) + "\n" + propertyIdFormat,
-          descriptionStyles: { whiteSpace: "pre", fontSize: "14px", fontWeight: "400", fontFamily: "Roboto" },
-          type: property.type,
+          label: name.label,
+          type: name.type,
           populators: {
-            name: property.name,
-          },
-          isMandatory: false,
-        },
-        {
-          label: oldProperty.label,
-          type: oldProperty.type,
-          populators: {
-            name: oldProperty.name,
-          },
-          isMandatory: false,
-        },
-      ],
-      body1:[
-        {
-          type: "custom",
-          populators: {
-            name: "addParam1",
-            defaultValue: { code: 1, name: "ES_INBOX_ASSIGNED_TO_ALL" },
-            customProps: { t, isMendatory: true, optionsKey:"name",
-              options:[
-                { code: 0, name: "ES_INBOX_ASSIGNED_TO_ME" },
-                { code: 1, name: "ES_INBOX_ASSIGNED_TO_ALL" },
-              ]},
-            component: (props, customProps) => (
-              <RadioButtons
-                {...customProps}
-                selectedOption={props.value}
-                onSelect={(d) => {
-                  console.log(d,history);
-history.push(`${history.location.pathname}?action=${action==0?1:0}`)
-              //  ?   if (d.code !== cityCode) props.setValue("locality", null);
-                  // props.onChange(d);
-                }}
-              />
-            ),
-          },
-        },
-        {
-          label: "PT_SELECT_CITY",
-          isMandatory: true,
-          type: "custom",
-          populators: {
-            name: "city",
-            defaultValue: null,
-            rules: { required: true },
-            customProps: { t, isMendatory: true, option: [...allCities], optionKey: "i18nKey" },
-            component: (props, customProps) => (
-              <Dropdown
-                {...customProps}
-                selected={props.value}
-                select={(d) => {
-                  if (d.code !== cityCode) props.setValue("locality", null);
-                  props.onChange(d);
-                }}
-              />
-            ),
-          },
-        },
-        
-        {
-          label: mobileNumber.label,
-          type: mobileNumber.type,
-          populators: {
-            name: mobileNumber.name,
-            validation: { pattern: /^[6-9]{1}[0-9]{9}$ / },
-          },
-          isMandatory: false,
-        },
-        {
-          label: property.label,
-          description: t(property.description) + "\n" + propertyIdFormat,
-          descriptionStyles: { whiteSpace: "pre", fontSize: "14px", fontWeight: "400", fontFamily: "Roboto" },
-          type: property.type,
-          populators: {
-            name: property.name,
-          },
-          isMandatory: false,
-        },
-        {
-          label: oldProperty.label,
-          type: oldProperty.type,
-          populators: {
-            name: oldProperty.name,
+            defaultValue:"",
+            name: name.name,
           },
           isMandatory: false,
         }
@@ -293,9 +310,19 @@ if(action==1){
         text={t(propsConfig.texts.text)}
         headingStyle={{ fontSize: "32px", marginBottom: "16px", fontFamily: "Roboto Condensed,sans-serif" }}
         // headingStyle={{ fontSize: "32px", marginBottom: "16px" }}
-        isDisabled={!canSubmit}
+        // isDisabled={!canSubmit}
         onFormValueChange={onFormValueChange}
       ></FormComposer>
+      {showToast && (
+        <Toast
+          error={showToast.error}
+          warning={showToast.warning}
+          label={t(showToast.label)}
+          onClose={() => {
+            setShowToast(null);
+          }}
+        />
+      )}
     </div>
   );
 };
