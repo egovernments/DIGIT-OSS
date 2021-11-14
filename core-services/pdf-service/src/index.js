@@ -813,9 +813,10 @@ export const createNoSave = async (
     var bulkPdfJobId = get(req, "pdfJobId");
     var requestInfo = get(req.body || req, "RequestInfo");
     var userid = get(req.body || req, "RequestInfo.userInfo.uuid");
+    var billd = get(req, "Bill");
     
 
-    logger.info("received createnosave request on key: " + key);
+    logger.info("received createnosave request on key: " + key + "totalPdfRecords:"+totalPdfRecords+" currentPdfRecords:"+currentPdfRecords + " size:"+billd.length);
 
     var valid = validateRequest(req, res, key, tenantId, requestInfo);
 
