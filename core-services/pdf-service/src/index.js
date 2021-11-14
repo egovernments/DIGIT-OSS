@@ -816,7 +816,7 @@ export const createNoSave = async (
     var billd = get(req, "Bill");
     
 
-    logger.info("received createnosave request on key: " + key + "totalPdfRecords:"+totalPdfRecords+" currentPdfRecords:"+currentPdfRecords + " size:"+billd.length);
+    logger.info("received createnosave request on key: " + key + " totalPdfRecords:"+totalPdfRecords+" currentPdfRecords:"+currentPdfRecords + " size:"+billd.length);
 
     var valid = validateRequest(req, res, key, tenantId, requestInfo);
 
