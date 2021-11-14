@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
+import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DateFormat;
@@ -599,23 +599,28 @@ public class BPAService {
 	private void createTempReport(BPARequest bpaRequest,String fileName,PDDocument document) throws Exception {
 		URL downloadUrl = this.getEdcrReportDownloaUrl(bpaRequest);
 		// Read the PDF from the URL and save to a local file
-		FileOutputStream writeStream = null;
+		OutputStream writeStream = null;
 		InputStream readStream = null;
-		try {
-			writeStream = new FileOutputStream(fileName);
-			byte[] byteChunck = new byte[1024];
-			int baLength;
-			readStream = downloadUrl.openStream();
-			while ((baLength = readStream.read(byteChunck, 0 , byteChunck.length)) != -1) {
-				writeStream.write(byteChunck, 0, baLength);
-			}
-		}catch (Exception e){
-			log.error("Error while creating temp report.");
-		}finally {
-			writeStream.flush();
-			writeStream.close();
-			readStream.close();
-		}
+                try {
+                    // connection to the file
+                    URLConnection connection = downloadUrl.openConnection();
+                    // get input stream to the file
+                    readStream = connection.getInputStream();
+                    // get output stream to download file
+                    writeStream = new FileOutputStream(fileName);
+                    byte[] byteChunck = new byte[2048];
+                    int baLength;
+
+                    while ((baLength = readStream.read(byteChunck, 0, byteChunck.length)) != -1) {
+                        writeStream.write(byteChunck, 0, baLength);
+                    }
+                } catch (Exception e) {
+                    log.error("Error while creating temp report.");
+                } finally {
+                    writeStream.flush();
+                    writeStream.close();
+                    readStream.close();
+                }
 
 		document = PDDocument.load(new File(fileName));
 	}
