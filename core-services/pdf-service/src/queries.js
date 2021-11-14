@@ -164,7 +164,7 @@ export async function mergePdf(bulkPdfJobId, tenantId, userid){
     var recordscompleted = parseInt(updateResult.rows[0].recordscompleted);
     var totalrecords = parseInt(updateResult.rows[0].totalrecords);
     
-    if(recordscompleted == totalrecords){
+    if(recordscompleted <= totalrecords){
       var merger = new PDFMerger();
       //var baseFolder = envVariables.SAVE_PDF_DIR + bulkPdfJobId + '/';
       var baseFolder = process.cwd() + '/' + bulkPdfJobId + '/';
