@@ -665,6 +665,7 @@ router.post(
             var size = consolidatedResult.Bill.length;
             var id = uuidv4();
             var jobid = `${pdfkey}-${new Date().getTime()}-${id}`;
+            var numberOfFiles = (size%20) == 0 ? (size/20) : (~~(size/20) +1);
             for(var i = 0;i<size;i+=20){
               var payloads = [];
               var billData = consolidatedResult.Bill.slice(i,i+20);
@@ -675,7 +676,8 @@ router.post(
                   pdfKey: pdfkey,
                   totalPdfRecords:size,
                   currentPdfRecords: billData.length,
-                  tenantId: tenantId
+                  tenantId: tenantId,
+                  numberOfFiles:numberOfFiles
               };
               var pdfData = Object.assign({RequestInfo:requestinfo.RequestInfo}, billArray)
               payloads.push({

@@ -157,20 +157,23 @@ export async function insertRecords(bulkPdfJobId, totalPdfRecords, currentPdfRec
   } 
 }
 
-export async function mergePdf(bulkPdfJobId, tenantId, userid){
+export async function mergePdf(bulkPdfJobId, tenantId, userid, numberOfFiles){
 
   try {
     const updateResult = await pool.query('select * from egov_bulk_pdf_info where jobid = $1', [bulkPdfJobId]);
     var recordscompleted = parseInt(updateResult.rows[0].recordscompleted);
     var totalrecords = parseInt(updateResult.rows[0].totalrecords);
+    //var baseFolder = envVariables.SAVE_PDF_DIR + bulkPdfJobId + '/';
+    var baseFolder = process.cwd() + '/' + bulkPdfJobId + '/';
     
-    if(recordscompleted >= totalrecords){
+    let fileNames = fs.readdirSync(baseFolder);
+
+    console.log("files:"+fileNames.length+" numberOfFiles:"+numberOfFiles);
+    
+    if(recordscompleted >= totalrecords && fileNames.length == numberOfFiles){
       console.log("recordscompleted:"+recordscompleted+" totalrecords:"+totalrecords);
       var merger = new PDFMerger();
-      //var baseFolder = envVariables.SAVE_PDF_DIR + bulkPdfJobId + '/';
-      var baseFolder = process.cwd() + '/' + bulkPdfJobId + '/';
     
-      let fileNames = fs.readdirSync(baseFolder);
       console.log('Files to be merged: ',fileNames);
       (async () => {
         try {
