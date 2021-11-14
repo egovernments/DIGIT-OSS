@@ -10,8 +10,8 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
     const [showToast, setShowToast] = useState(null);
     const { data: applicationTypes } = Digit.Hooks.obps.useSearchMdmsTypes.applicationTypes(tenantId.split(".")[0]);
     const { data: serviceTypes } = Digit.Hooks.obps.useSearchMdmsTypes.serviceTypes(tenantId.split(".")[0]);
-    let defaultAppType = applicationTypes && applicationTypes.filter((ob) => ob.code === "BUILDING_PLAN_SCRUTINY")[0];
-    let defaultserviceType = serviceTypes && serviceTypes.filter((ob) => ob.code === "NEW_CONSTRUCTION")[0];
+    const defaultAppType = applicationTypes && applicationTypes.filter((ob) => ob.code === "BUILDING_PLAN_SCRUTINY")[0];
+    const defaultserviceType = serviceTypes && serviceTypes.filter((ob) => ob.code === "NEW_CONSTRUCTION")[0];
     const [serviceType, setserviceType] = useState(defaultserviceType);
     const { register, control, handleSubmit, setValue, getValues, reset, formState } = useForm({
         defaultValues: {
@@ -204,21 +204,24 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
             <CloseSvg/>
         </div>
 
-        const MobileComponentDirectory= {
-            SearchFormComponent: () => <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit} id="search-form" className="rm-mb form-field-flex-one inboxPopupMobileWrapper" >
-                <MobilePopUpCloseButton/>
-                <div className="MobilePopupHeadingWrapper">
-                    <h2>{t("ES_COMMON_SEARCH")}:</h2>
-                </div>
-                <SearchFormFieldsComponent {...{Controller, register, control, t, getApplicationType, getselectedServiceType, applicationTypes, ServiceTypes}}/>
-                {/* <SearchField className="submit">
-                    <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
-                    <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
-                </SearchField> */}
-            </SearchForm>,
+        const MobileComponentDirectory= ({currentlyActiveMobileModal, ...props}) => {
+            switch (currentlyActiveMobileModal) {
+                case "SearchFormComponent":
+                    return <SearchForm {...props} >
+                    <MobilePopUpCloseButton/>
+                    <div className="MobilePopupHeadingWrapper">
+                        <h2>{t("ES_COMMON_SEARCH")}:</h2>
+                    </div>
+                    <SearchFormFieldsComponent {...{formState, Controller, register, control, t, getApplicationType, getselectedServiceType, applicationTypes, ServiceTypes, reset, defaultAppType, defaultserviceType,previousPage}}/>
+                    {/* <SearchField className="submit">
+                        <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
+                        <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
+                    </SearchField> */}
+                </SearchForm>
+            }
         }
     
-        const CurrentMobileModalComponent = MobileComponentDirectory[currentlyActiveMobileModal]
+        const CurrentMobileModalComponent = (props) => MobileComponentDirectory({currentlyActiveMobileModal, ...props})
         const propsMobileInboxCards = useMemo(() => data?.map((data) =>({
             [t("BPA_APPLICATION_NUMBER_LABEL")]: data.applicationNo,
             [t("BPA_COMMON_TABLE_COL_APP_DATE_LABEL")]: convertEpochToDateDMY(data.auditDetails?.createdTime) || "",
@@ -238,9 +241,9 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
                 <SortAction text={t("ES_COMMON_SORT")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"SortComponent"})}/>
             </div>
             {currentlyActiveMobileModal ? <PopUp>
-                <CurrentMobileModalComponent/>
+                <CurrentMobileModalComponent onSubmit={onSubmit} handleSubmit={handleSubmit} id="search-form" className="rm-mb form-field-flex-one inboxPopupMobileWrapper" />
             </PopUp> : null}
-            {!isLoading && data?.[0]?.display ? <Card style={{ marginTop: 20 }}>
+            {data?.[0]?.display ? <Card style={{ marginTop: 20 }}>
                 {t(data?.[0]?.display)
                     .split("\\n")
                     .map((text, index) => (

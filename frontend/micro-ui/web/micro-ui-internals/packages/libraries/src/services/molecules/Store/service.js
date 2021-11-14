@@ -84,61 +84,10 @@ export const StoreService = {
       .filter((item) => !!moduleTenants.find((mt) => mt.code === item.code))
       .map((tenant) => ({ i18nKey: `TENANT_TENANTS_${tenant.code.replace(".", "_").toUpperCase()}`, ...tenant }));
 
-    // TODO: remove the FSM & Payment temp data once added in mdms master
-    initData.modules.push({
-      module: "Payment",
-      code: "Payment",
-      tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    });
-
-    initData.modules.push({
-      module: "MCollect",
-      code: "MCollect",
-      tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    });
-
-    initData.modules.push({
-      module: "HRMS",
-      code: "HRMS",
-      tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    });
-
-    // initData.modules.push({
-    //   module: "TL",
-    //   code: "TL",
-    //   tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    // });
-
-    initData.modules.push({
-      module: "Receipts",
-      code: "Receipts",
-      tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    });
-    
-    initData.modules.push({
-      module: "NOC",
-      code: "NOC",
-      tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    });
-
-    initData.modules.push({
-      module: "DSS",
-      code: "DSS",
-      tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    });
-
-    initData.modules.push({
-      module: "Engagement",
-      code: "Engagement",
-      tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    });
-
-
     await LocalizationService.getLocale({
       modules: [
         `rainmaker-common`,
         `rainmaker-${stateCode.toLowerCase()}`,
-        // ...initData.tenants.map((tenant) => `rainmaker-${tenant.code.toLowerCase()}`),
       ],
       locale: initData.selectedLanguage,
       tenantId: stateCode,
