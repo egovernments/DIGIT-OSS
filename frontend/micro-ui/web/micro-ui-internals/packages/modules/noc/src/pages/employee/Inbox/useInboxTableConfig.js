@@ -12,13 +12,13 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
     const tableColumnConfig = useMemo(() => {
           return [
             {
-              Header: t("TL_COMMON_TABLE_COL_APP_NO"),
-              accessor: "applicationNumber",
+              Header: t("NOC_APP_NO_LABEL"),
+              accessor: "applicationNo",
                 disableSortBy: true,
               Cell: ({ row }) => {
                 return (
                   <div>
-                    <Link to={`${parentRoute}/application-overview/${row.original["applicationId"]}`}>
+                    <Link to={`${parentRoute}/inbox/application-overview/${row.original["applicationId"]}`}>
                       <span className="link">{row.original["applicationId"]}</span>
                     </Link>
                   </div>
@@ -26,7 +26,7 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
               },
             },
             {
-              Header: t("CS_APPLICATION_DETAILS_APPLICATION_DATE"),
+              Header: t("TL_COMMON_TABLE_COL_APP_DATE"),
               accessor: "applicationDate",
               Cell: ({row}) => row.original?.["date"] ? GetCell(format(new Date(row.original?.["date"]), 'dd/MM/yyyy')) : ""
               },
@@ -37,20 +37,20 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
 
             // },
             {
-              Header: t("EVENTS_STATUS_LABEL"),
-              accessor: row => t(`WF_${row?.businessService}_${row?.status}`),
+              Header: t("NOC_MODULE_SOURCE_LABEL"),
+              accessor: row => t(`${row?.source}`),
+            disableSortBy: true,
+
+            },
+            {
+              Header: t("NOC_STATUS_LABEL"),
+              accessor: (row) => t(row?.status),
             disableSortBy: true,
 
             },
             {
               Header: t("WF_INBOX_HEADER_CURRENT_OWNER"),
               accessor: (row) => row?.owner,
-            disableSortBy: true,
-
-            },
-            {
-              Header: t("WS_COMMON_TABLE_COL_APP_TYPE_LABEL"),
-              accessor: (row) => row?.businessService,
             disableSortBy: true,
 
             },

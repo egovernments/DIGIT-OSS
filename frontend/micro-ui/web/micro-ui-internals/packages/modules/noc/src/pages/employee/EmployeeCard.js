@@ -41,24 +41,23 @@ const NOCEmployeeHomeCard = () => {
   
     const propsForModuleCard = useMemo(()=>({
       Icon: <ComplaintIcon />,
-      moduleName: t("NOC_COMMON_NOC"),
+      moduleName: t("CS_COMMON_INBOX_FIRE_NOC_SRV"),
       kpis:[
         {
             count: !isInboxLoading ? totalCount : "",
             label: t("TOTAL_FSM"),
             link: `/digit-ui/employee/obps/inbox`
         },
-        {   count:"-",
-            label: t("TOTAL_NEARING_SLA"),
-            link: `/digit-ui/employee/obps/inbox`
-        }  
+        // {   count:"-",
+        //     label: t("TOTAL_NEARING_SLA"),
+        //     link: `/digit-ui/employee/obps/inbox`
+        // }  
       ],
       links: [
         {
           count: totalCount ,
-          label: t("ES_COMMON_NOC_INBOX_LABEL"),
-          link: `/digit-ui/employee/noc/inbox`,
-          field: "STAKEHOLDER"
+          label: t("ES_COMMON_INBOX"),
+          link: `/digit-ui/employee/noc/inbox`
         }
       ]
     }),[isInboxLoading, totalCount]);

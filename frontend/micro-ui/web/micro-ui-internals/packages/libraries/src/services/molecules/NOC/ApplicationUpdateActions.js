@@ -1,9 +1,9 @@
-import { TLService } from "../../elements/TL";
+import { OBPSService } from "../../elements/OBPS";
 
 const ApplicationUpdateActions = async (applicationData, tenantId) => {
   // console.log("find application update action here", applicationData, action, tenantId)
   try {
-    const response = await TLService.update(applicationData, tenantId);
+    const response = await OBPSService.updateNOC(applicationData, tenantId);
     // console.log("find me here", response)
     return response;
   } catch (error) {

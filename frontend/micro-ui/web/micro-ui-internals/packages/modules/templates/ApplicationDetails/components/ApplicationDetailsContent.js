@@ -60,7 +60,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
   };
 
   // console.log(applicationDetails?.applicationDetails, "inside app details content");
-  const checkLocation = window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps");
+  const checkLocation = window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc");
   const isNocLocation = window.location.href.includes("noc/application-overview");
   const isBPALocation = window.location.href.includes("employee/obps");
   return (
