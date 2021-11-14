@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -599,30 +600,28 @@ public class BPAService {
 	private void createTempReport(BPARequest bpaRequest,String fileName,PDDocument document) throws Exception {
 		URL downloadUrl = this.getEdcrReportDownloaUrl(bpaRequest);
 		// Read the PDF from the URL and save to a local file
-		OutputStream writeStream = null;
-		InputStream readStream = null;
+                /*
+                 * OutputStream writeStream = null; InputStream readStream = null;
+                 */
+		File file = new File(fileName);
                 try {
-                    // connection to the file
-                    URLConnection connection = downloadUrl.openConnection();
-                    // get input stream to the file
-                    readStream = connection.getInputStream();
-                    // get output stream to download file
-                    writeStream = new FileOutputStream(fileName);
-                    byte[] byteChunck = new byte[2048];
-                    int baLength;
-
-                    while ((baLength = readStream.read(byteChunck, 0, byteChunck.length)) != -1) {
-                        writeStream.write(byteChunck, 0, baLength);
-                    }
+                    /*
+                     * // connection to the file URLConnection connection = downloadUrl.openConnection(); // get input stream to
+                     * the file readStream = connection.getInputStream(); // get output stream to download file writeStream = new
+                     * FileOutputStream(fileName); byte[] byteChunck = new byte[2048]; int baLength; while ((baLength =
+                     * readStream.read(byteChunck, 0, byteChunck.length)) != -1) { writeStream.write(byteChunck, 0, baLength); }
+                     */
+                    FileUtils.copyURLToFile(downloadUrl, file); 
                 } catch (Exception e) {
+                    e.printStackTrace();
                     log.error("Error while creating temp report.");
                 } finally {
-                    writeStream.flush();
-                    writeStream.close();
-                    readStream.close();
+                    /*
+                     * writeStream.flush(); writeStream.close(); readStream.close();
+                     */
                 }
 
-		document = PDDocument.load(new File(fileName));
+		document = PDDocument.load(file);
 	}
 	
 	private void addDataToPdf(PDDocument document,BPARequest bpaRequest, String permitNo, String generatedOn,String fileName) throws IOException {
