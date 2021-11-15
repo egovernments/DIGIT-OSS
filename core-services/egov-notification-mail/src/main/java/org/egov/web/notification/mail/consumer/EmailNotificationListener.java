@@ -2,6 +2,7 @@ package org.egov.web.notification.mail.consumer;
 
 import java.util.HashMap;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.web.notification.mail.consumer.contract.EmailRequest;
 import org.egov.web.notification.mail.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@Slf4j
 @Service
 public class EmailNotificationListener {
 
@@ -27,8 +29,9 @@ public class EmailNotificationListener {
     @KafkaListener(topics = "${kafka.topics.notification.mail.name}")
     public void listen(final HashMap<String, Object> record) {
     	EmailRequest emailRequest = objectMapper.convertValue(record, EmailRequest.class);
+        log.info("Email Request"+emailRequest);
         emailService.sendEmail(emailRequest.getEmail());
-        
+        log.info("Email sent!");
     }
     
     
