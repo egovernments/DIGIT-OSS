@@ -17,7 +17,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   const [pincode, setPincode] = useState(currPincode || formData?.address?.pincode || "");
   const [geoLocation, setgeoLocation] = useState(formData?.address?.geolocation || "")
   const [tenantIdData, setTenantIdData] = useState(formData?.Scrutiny?.[0]?.tenantIdData);
-  const [selectedCity, setSelectedCity] = useState(() => currCity || formData?.address?.city || null);
+  const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city  || currCity || null);
   const [street, setStreet] = useState(formData?.address?.street || "");
   const [landmark, setLandmark] = useState(formData?.address?.landmark || formData?.address?.Landmark || "");
   const [placeName, setplaceName] = useState(formData?.address?.placeName || "");
@@ -76,7 +76,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
 
   const [localities, setLocalities] = useState();
 
-  const [selectedLocality, setSelectedLocality] = useState();
+  const [selectedLocality, setSelectedLocality] = useState(formData.address.locality || {});
 
   useEffect(() => {
     if (selectedCity && fetchedLocalities) {

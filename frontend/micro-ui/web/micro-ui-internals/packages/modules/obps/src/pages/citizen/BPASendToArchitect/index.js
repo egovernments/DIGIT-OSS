@@ -48,6 +48,8 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t) => {
 
   data.BlockIds=getBlockIds(data?.landInfo?.unit);
   data.address = data?.landInfo?.address;
+  data.address.city = { code:data?.landInfo?.address?.city, name:data?.landInfo?.address?.city.split(".")[1]}
+  data.address.locality = {...data?.landInfo?.address?.locality, "i18nkey":data?.landInfo?.address?.locality?.name}
   data.data = {
     applicantName: APIScrutinyDetails?.planDetail?.planInformation?.applicantName,
     applicationDate: APIScrutinyDetails?.applicationDate,
@@ -57,6 +59,7 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t) => {
     registrationDetails: data?.additionalDetails?.registrationDetails,
     riskType: Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks),
     serviceType:data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType,
+    scrutinyNumber:{edcrNumber:data?.edcrNumber}
   }
 
   data["PrevStateDocuments"] = data?.documents;
@@ -66,8 +69,8 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t) => {
 
 
   let nocDocs = [];
-  nocdata.map((a,index) => {
-    a.documents.map((b,index) => {
+  nocdata && nocdata.map((a,index) => {
+    a.documents && a.documents.map((b,index) => {
       nocDocs.push(b);
     })
   })
@@ -226,7 +229,7 @@ const BPASendToArchitect = ({ parentRoute }) => {
   let scrutinyNumber = {edcrNumber:bpaData?.[0]?.edcrNumber};
 
   const { data: data1, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails("pb", scrutinyNumber, {
-    enabled: bpaData?.[0]?.edcrNumber?true:false
+    enabled: scrutinyNumber["edcrNumber"]?true:false
   })
 
   let sourceRefId = applicationNo;
@@ -238,7 +241,7 @@ const BPASendToArchitect = ({ parentRoute }) => {
 
   useEffect(() => {
      application = bpaData ? bpaData[0]:{};
-     if (/* bpaData && application && data1 && mdmsData && nocdata */data1) {
+     if (/* bpaData && application && data1 && mdmsData && nocdata */data1 && nocdata) {
       application = bpaData[0];
        if (editApplication) {
          application.isEditApplication = true;

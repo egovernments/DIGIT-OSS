@@ -253,6 +253,7 @@ function SelectDocument({
             tenantId={tenantId}
             getFormState={e => getData(e,doc?.documentType.replaceAll(".", "_"))}
             t={t}
+            extraStyleName="IP"
           />
         </div>
       </LabelFieldPair>

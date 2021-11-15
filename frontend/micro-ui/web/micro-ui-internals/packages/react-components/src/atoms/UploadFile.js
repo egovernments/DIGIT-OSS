@@ -46,9 +46,30 @@ const getCitizenStyles = (value) => {
       containerStyles: {
         padding: "10px", 
         marginTop: "0px"
-      }
+      },
+
     };
-  } else {
+  } else if (value == "IP") {
+    citizenStyles = {
+      textStyles: {
+        whiteSpace: "nowrap",
+        maxWidth: "250px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+      },
+      tagStyles: {
+        marginLeft:"-30px"
+      },
+      inputStyles: {},
+      closeIconStyles: {
+        position:"absolute",
+        marginTop:"-12px"
+      },
+      buttonStyles: {},
+      tagContainerStyles: {},
+    };
+  }
+  else {
     citizenStyles = {
       textStyles: {},
       tagStyles: {},
@@ -72,6 +93,9 @@ const UploadFile = (props) => {
   switch (props.extraStyleName) {
     case "propertyCreate":
       extraStyles = getCitizenStyles("propertyCreate");
+      break;
+    case "IP":
+      extraStyles = getCitizenStyles("IP");
       break;
     default:
       extraStyles = getCitizenStyles("");
@@ -106,7 +130,7 @@ const UploadFile = (props) => {
             {props?.uploadedFiles?.map((file, index) => {
               const fileDetailsData = file[1]
               return <div className="tag-container" style={extraStyles ? extraStyles?.tagContainerStyles : null}>
-                <RemoveableTag key={index} text={file[0]} onClick={(e) => props?.removeTargetedFile(fileDetailsData, e)} />
+                <RemoveableTag extraStyles={extraStyles} key={index} text={file[0]} onClick={(e) => props?.removeTargetedFile(fileDetailsData, e)} />
               </div>
             })}
           {!hasFile || props.error ? (
