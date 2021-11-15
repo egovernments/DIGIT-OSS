@@ -1,5 +1,5 @@
 import React, { Fragment, useMemo } from "react"
-import { FilterFormField, Loader, RadioButtons, Localities, RemoveableTag, Dropdown, CheckBox } from "@egovernments/digit-ui-react-components";
+import { FilterFormField, Loader, RadioButtons, Localities, RemoveableTag, Dropdown, CheckBox, MultiSelectDropdown } from "@egovernments/digit-ui-react-components";
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -15,6 +15,19 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
     type.name = t(`WF_BPA_${type.code}`);
     type.i18nKey = t(`WF_BPA_${type.code}`);
   });
+
+
+  const selectrole = (e, data, props) => {
+    const index = props?.value.filter((ele) => ele.code == data.code);
+    let res = null;
+    if (index.length) {
+      props?.value.splice(props?.value.indexOf(index[0]), 1);
+      res = [...props?.value];
+    } else {
+      res = [...props?.value, {...data}];
+    }
+    return props.onChange(res);
+  };
 
   return <>
     <FilterFormField>
@@ -43,7 +56,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
               return (
                 <RemoveableTag
                 key={index}
-                text={applicationType.i18nKey}
+                text={applicationType.name}
                 onClick={() => {
                   props.onChange(props?.value?.filter((loc) => loc.code !== applicationType.code))
                 }}
@@ -52,14 +65,14 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
               }),[props?.value])
             return loadingApplicationTypesOfBPA ? <Loader/> : <>
               <div className="filter-label">{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</div>
-              <Dropdown
-                option={applicationTypesOfBPA ? applicationTypesOfBPA : []}
-                select={(e) => {props.onChange([e, ...props?.value])}}
-                optionCardStyles={{maxHeight:'350px'}}
-                optionKey="i18nKey"
-                isMultiSelectEmp={true}
-                selected={props?.value?.length}
-                t={t}
+              <MultiSelectDropdown
+              options={applicationTypesOfBPA ? applicationTypesOfBPA : []}
+              optionsKey="i18nKey"
+              props={props}
+              isPropsNeeded={true}
+              onSelect={selectrole}
+              selected={props?.value}
+              defaultUnit="Selected"
               />
               <div className="tag-container">
                 {renderRemovableTokens}
@@ -89,11 +102,20 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
               <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
               {/* Done: know that it is rerendering once in mobile view this is due to the fact that controlled components can not react to async calls inside the components ie controlled caomponent can only entertain PURE components hence this molecule needs to be removed and dropdown is to be placed, with this localities should be fetched at the top of the inbox/index.js and memoized functions should be handled accordingly */}
               {/* <Localities selectLocality={ (e) => {props.onChange([e, ...props?.value])}} tenantId={tenantId} optionCardStyles={{maxHeight:'350px'}} boundaryType="revenue" /> */}
-              <Dropdown
+              {/* <Dropdown
                 option={localitiesForEmployeesCurrentTenant}
                 select={(e) => {props.onChange([e, ...props?.value])}}
                 optionCardStyles={{maxHeight:'350px'}}
                 optionKey="i18nkey"
+              /> */}
+              <MultiSelectDropdown
+              options={localitiesForEmployeesCurrentTenant ? localitiesForEmployeesCurrentTenant : []}
+              optionsKey="i18nkey"
+              props={props}
+              isPropsNeeded={true}
+              onSelect={selectrole}
+              selected={props?.value}
+              defaultUnit="Selected"
               />
               <div className="tag-container">
                 {renderRemovableTokens}

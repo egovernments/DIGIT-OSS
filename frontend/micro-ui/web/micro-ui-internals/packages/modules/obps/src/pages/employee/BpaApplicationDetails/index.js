@@ -270,6 +270,8 @@ const BpaApplicationDetail = () => {
           onHeadClick={() => setShowOptions(!showOptions)}
           displayOptions={showOptions}
           options={dowloadOptions}
+          style={{right:"0",marginTop:"70px",marginRight:"50px"}}
+          optionsStyle={{right:"0",marginTop:"70px",marginRight:"50px"}}
         />}
       </div>
       {data?.applicationData?.status === "FIELDINSPECTION_INPROGRESS" && (userInfo?.info?.roles.filter(role => role.code === "BPA_FIELD_INSPECTOR")).length>0 && <div style={{ marginLeft: "15px" }}>
