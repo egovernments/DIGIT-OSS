@@ -16,7 +16,7 @@ const OBPSBreadCrumbs = ({ location }) => {
     },
     {
       path: "/digit-ui/employee/obps/inbox",
-      content: t("ES_OBPS_INBOX"),
+      content: t("ES_COMMON_OBPS_INBOX_LABEL"),
       show: location.pathname.includes("obps/inbox") ? true : false,
     },
     {
@@ -26,7 +26,7 @@ const OBPSBreadCrumbs = ({ location }) => {
     },
     {
       path: "/digit-ui/employee/obps/inbox/bpa/:id",
-      content: t("ES_OBPS_BPA_DETAILS"),
+      content: t("ES_OBPS_SEARCH_BPA"),
       show: location.pathname.includes("obps/inbox/bpa") ? true : false,
     },
     {

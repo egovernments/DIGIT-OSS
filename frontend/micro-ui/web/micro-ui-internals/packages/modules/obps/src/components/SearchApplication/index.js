@@ -19,7 +19,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
             limit: 10,
             sortBy: "commencementDate",
             sortOrder: "DESC",
-            applicationType: Applicationtype?{code: Applicationtype,i18nKey: `BPA_APPLICATIONTYPE_${Applicationtype}`}:defaultAppType, 
+            applicationType: Applicationtype?{code: Applicationtype,i18nKey: `WF_BPA_${Applicationtype}`}:defaultAppType, 
             serviceType: defaultserviceType,
         }
     })

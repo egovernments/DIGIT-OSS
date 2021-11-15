@@ -35,7 +35,7 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
 
     return useInbox({tenantId, filters: _filters, config:{
         select: (data) =>({
-          statuses: window.location.href.includes("stakeholder-inbox") ? data.statusMap.map(e => ({...e, applicationstatus: `WF_${businessService}_${e.applicationstatus}`})) : data.statusMap.map(e => ({...e, applicationstatus: `WF_${businessService?.code}_${e.applicationstatus}`})),
+          statuses: data.statusMap, //window.location.href.includes("stakeholder-inbox") ? data.statusMap.map(e => ({...e, applicationstatus: `WF_${businessService}_${e.applicationstatus}`})) : data.statusMap.map(e => ({...e, applicationstatus: `WF_${e.businessservice}_${e.applicationstatus}`})),
           table: data?.items.map( application => ({
               applicationId: application.businessObject.applicationNo || application.businessObject.applicationNumber,
               date: application.businessObject.auditDetails.createdTime,

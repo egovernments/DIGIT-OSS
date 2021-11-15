@@ -30,7 +30,7 @@ const useSearchMdmsTypes = {
         select: (data) =>
           data.BPA.ApplicationType.map((type) => ({
             code: type.code,
-            i18nKey: `BPA_APPLICATIONTYPE_${type.code}`,
+            i18nKey: `WF_BPA_${type.code}`,
           })),
       }
     ),
