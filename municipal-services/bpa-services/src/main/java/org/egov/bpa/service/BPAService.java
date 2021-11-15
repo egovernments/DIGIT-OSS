@@ -1,10 +1,7 @@
 package org.egov.bpa.service;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DateFormat;
@@ -18,7 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -50,6 +46,17 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.Rectangle;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfReader;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.VerticalAlignment;
 
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
@@ -527,6 +534,7 @@ public class BPAService {
 		
 		String fileName = BPAConstants.EDCR_PDF;
 		PDDocument document = null;
+	        PdfDocument pdfDoc = null;
 		BPA bpa = bpaRequest.getBPA();
 
 		if (StringUtils.isEmpty(bpa.getApprovalNo())) {
@@ -535,14 +543,14 @@ public class BPAService {
 
 		Exception exception = null;
 		try {
-			this.createTempReport(bpaRequest, fileName, document);
+			this.createTempReport(bpaRequest, fileName, pdfDoc);
 			String localizationMessages = notificationUtil.getLocalizationMessages(bpa.getTenantId(),
 					bpaRequest.getRequestInfo());
 			String permitNo = notificationUtil.getMessageTemplate(BPAConstants.PERMIT_ORDER_NO, localizationMessages);
 			permitNo = permitNo != null ? permitNo : BPAConstants.PERMIT_ORDER_NO;
 			String generatedOn = notificationUtil.getMessageTemplate(BPAConstants.GENERATEDON, localizationMessages);
 			generatedOn = generatedOn != null ? generatedOn : BPAConstants.GENERATEDON;
-			this.addDataToPdf(document, bpaRequest, permitNo, generatedOn,fileName);
+			this.addDataToPdf(pdfDoc, bpaRequest, permitNo, generatedOn,fileName);
 
 		} catch (Exception ex) {
 			exception = ex;
@@ -591,38 +599,75 @@ public class BPAService {
 		return downloadUrl;
 	}
 	/**
-	 * download the edcr report and create in tempfile
-	 * @param bpaRequest
-	 * @param fileName
-	 * @param document
-	 * @throws Exception
-	 */
-	private void createTempReport(BPARequest bpaRequest,String fileName,PDDocument document) throws Exception {
-		URL downloadUrl = this.getEdcrReportDownloaUrl(bpaRequest);
-		// Read the PDF from the URL and save to a local file
-                /*
-                 * OutputStream writeStream = null; InputStream readStream = null;
-                 */
-		File file = new File(fileName);
+         * download the edcr report and create in tempfile
+         * @param bpaRequest
+         * @param fileName
+         * @param document
+         * @throws Exception
+         */
+        private void createTempReport(BPARequest bpaRequest,String fileName,PdfDocument document) throws Exception {
+                URL downloadUrl = this.getEdcrReportDownloaUrl(bpaRequest);
+                // Read the PDF from the URL and save to a local file
+                //FileOutputStream writeStream = null;
+                InputStream readStream = null;
                 try {
                     /*
-                     * // connection to the file URLConnection connection = downloadUrl.openConnection(); // get input stream to
-                     * the file readStream = connection.getInputStream(); // get output stream to download file writeStream = new
-                     * FileOutputStream(fileName); byte[] byteChunck = new byte[2048]; int baLength; while ((baLength =
-                     * readStream.read(byteChunck, 0, byteChunck.length)) != -1) { writeStream.write(byteChunck, 0, baLength); }
+                     * writeStream = new FileOutputStream(fileName); byte[] byteChunck = new byte[1024]; int baLength;
                      */
-                    FileUtils.copyURLToFile(downloadUrl, file); 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    log.error("Error while creating temp report.");
-                } finally {
+                        readStream = downloadUrl.openStream();
+                        /*
+                         * while ((baLength = readStream.read(byteChunck, 0 , byteChunck.length)) != -1) {
+                         * writeStream.write(byteChunck, 0, baLength); }
+                         */
+                        document = new PdfDocument(new PdfReader(readStream),
+                                new PdfWriter(fileName));
+                }catch (Exception e){
+                        log.error("Error while creating temp report.");
+                }finally {
                     /*
-                     * writeStream.flush(); writeStream.close(); readStream.close();
+                     * writeStream.flush(); writeStream.close();
                      */
+                        readStream.close();
                 }
 
-		document = PDDocument.load(file);
-	}
+                //document = PDDocument.load(new File(fileName));
+                
+        }
+        
+        private void addDataToPdf(PdfDocument pdfDoc, BPARequest bpaRequest, String permitNo, String generatedOn, String fileName)
+                throws IOException {
+
+            BPA bpa = bpaRequest.getBPA();
+            Document doc = new Document(pdfDoc);
+            Paragraph headerLeft = new Paragraph(permitNo + " : " + bpaRequest.getBPA().getApprovalNo())
+                    .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
+                    .setFontSize(10);
+            String generatedOnMsg;
+            if (bpa.getApprovalDate() != null) {
+                Date date = new Date(bpa.getApprovalDate());
+                DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                String formattedDate = format.format(date);
+                generatedOnMsg = generatedOn + " : " + formattedDate;
+            } else {
+                generatedOnMsg = generatedOn + " : " + "NA";
+            }
+            Paragraph headerRight = new Paragraph(generatedOnMsg)
+                    .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
+                    .setFontSize(10);
+
+            for (int i = 1; i <= pdfDoc.getNumberOfPages(); i++) {
+                Rectangle pageSize = pdfDoc.getPage(i).getPageSize();
+                float margin = 32;
+                float x = pageSize.getX() + margin;
+                float y = pageSize.getTop() - (margin / 2);
+                doc.showTextAligned(headerLeft, x, y, i, TextAlignment.LEFT, VerticalAlignment.BOTTOM, 0);
+                float x1 = pageSize.getWidth() - 22;
+                float y1 = pageSize.getTop() - (margin / 2);
+                doc.showTextAligned(headerRight, x1, y1, i, TextAlignment.RIGHT, VerticalAlignment.BOTTOM, 0);
+            }
+            pdfDoc.close();
+            doc.close();
+        }
 	
 	private void addDataToPdf(PDDocument document,BPARequest bpaRequest, String permitNo, String generatedOn,String fileName) throws IOException {
 		PDPageTree allPages = document.getDocumentCatalog().getPages();
