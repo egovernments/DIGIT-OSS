@@ -1,0 +1,4155 @@
+  swagger: '2.0'
+
+  info:
+    version: "1.0.0"
+    title: Master Service
+    description: Master services APIs - to create, update and search Master. 
+    contact:
+      name: Manikanta P T
+      email: info@egovernments.org
+    
+  basePath: "/egf-master/v110"
+  x-common-path: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/financials/contracts/egf-master/v1-0-0.yml'
+  x-api-id: 'org.egov.egf.master'
+  paths:
+      /funds/_search:
+        post:
+          summary: Get the list of funds
+          description: funds
+          tags: 
+            - Master
+            - Fund
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: name
+              type: string
+              in: query
+              description: |
+                name is the name of the fund . Example :Municipal Fund,Capital Fund. Also
+                name is unique.
+              maxLength: 50
+            - name: code
+              type: string
+              in: query
+              description: |
+                code is a unique number given to each fund . ULB may refer this for the
+                short name
+              maxLength: 50
+            - name: identifier
+              type: string
+              in: query
+              description: |
+                identifier of the Fund
+            - name: parent
+              type: integer
+              format: int64
+              in: query
+              description: |
+                parent adding a parent will create the fund as a sub-fund (child) of a
+                fund already created (parent fund).
+            - name: active
+              type: boolean
+              in: query
+              description: |
+                active is a boolean value which says whether fund is in use or not . If
+                Fund is active, then accounting of transactions under the fund is
+                enabled. If Fund becomes inactive, and no transactions can be accounted
+                under the Fund.
+            - name: isParent
+              type: boolean
+              in: query
+              description: |
+                isParent is updated internally so that system can identify whether the
+                fund is parent or child. Only child which is not parent for any other
+                fund can only participate in transaction .
+            - name: level
+              type: integer
+              format: int64
+              in: query
+              description: |
+                level identifies what is the level of the fund in the tree structure. Top
+                most parent will have level 0 and its child will have level as 1
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: Fund retrieved Successfully
+              schema:
+                $ref: '#/definitions/FundResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /funds/_create:
+        post:
+          summary: Create  new  funds
+          description: Create  new funds
+          tags: 
+            - Master
+            - Fund
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: fundRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/FundRequest'
+          responses:
+            201:
+              description: Fund created Successfully
+              schema:
+                $ref: '#/definitions/FundResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /funds/_update:
+        post:
+          summary: Update any of the funds
+          description: Update any of the funds
+          tags: 
+            - Master
+            - Fund
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: fundRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/FundRequest'
+          responses:
+            200:
+              description: Fund updated Successfully
+              schema:
+                $ref: '#/definitions/FundResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /financialyears/_search:
+        post:
+          summary: Get the list of financialyears
+          description: financialyears
+          tags: 
+            - Master
+            - FinancialYear
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: finYearRange
+              type: string
+              in: query
+              description: |
+                finYearRange is the name of the Financial Year . for example for
+                accounting year 2017 and 2018 it may be named 2017-18
+              maxLength: 25
+            - name: startingDate
+              type: string
+              format: date
+              in: query
+              description: |
+                startingDate is the date on which Accounting Year starts. Usually it is
+                1st April of that year.
+            - name: endingDate
+              type: string
+              format: date
+              in: query
+              description: |
+                endingDate is the date on which Financial Year ends. Usually it is 31st
+                march of next year
+            - name: active
+              type: boolean
+              in: query
+              description: |
+                active says whether Financial Year is active or not . Over a period
+                system will have number of Financial years. Reports
+                ,searches,transactions will need to display this.If the active value is
+                true then Financial Year is listed, if value is false it wont be listed
+            - name: isActiveForPosting
+              type: boolean
+              in: query
+              description: |
+                isActiveForPosting refers whether posting allowed for the Financial Year
+                or not . This value will be true for current year and few previous year
+                for which data entry will be happening. Once the account is closed this
+                value is set to false . All transactions will happen if and only if
+                isActiveForPosting is true
+            - name: isClosed
+              type: boolean
+              in: query
+              description: |
+                isClosed refers whether the account is closed or not . Once the account
+                is closed and balance is transferred this value is set to false if the
+                account is closed no transaction can happen on that financial year.
+            - name: transferClosingBalance
+              type: boolean
+              in: query
+              description: |
+                transferClosingBalance informs whether While closing account balance is
+                transferred or not .
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: FinancialYear retrieved Successfully
+              schema:
+                $ref: '#/definitions/FinancialYearResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /financialyears/_create:
+        post:
+          summary: Create  new  financialyears
+          description: Create  new financialyears
+          tags: 
+            - Master
+            - FinancialYear
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: financialYearRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/FinancialYearRequest'
+          responses:
+            201:
+              description: FinancialYear created Successfully
+              schema:
+                $ref: '#/definitions/FinancialYearResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /financialyears/_update:
+        post:
+          summary: Update any of the financialyears
+          description: Update any of the financialyears
+          tags: 
+            - Master
+            - FinancialYear
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: financialYearRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/FinancialYearRequest'
+          responses:
+            200:
+              description: FinancialYear updated Successfully
+              schema:
+                $ref: '#/definitions/FinancialYearResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /fiscalperiods/_search:
+        post:
+          summary: Get the list of fiscalperiods
+          description: fiscalperiods
+          tags: 
+            - Master
+            - FiscalPeriod
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: name
+              type: string
+              in: query
+              description: |
+                name of the FiscalPeriod
+              maxLength: 25
+            - name: financialYear
+              type: integer
+              format: int64
+              in: query
+              description: |
+                financial year of the FiscalPeriod
+            - name: startingDate
+              type: string
+              format: date
+              in: query
+              description: |
+                startingDate is the date on which period starts.
+            - name: endingDate
+              type: string
+              format: date
+              in: query
+              description: |
+                endingDate is the date on which period ends.
+            - name: active
+              type: boolean
+              in: query
+              description: |
+                active says whether fiscal period is active or not . Over a period system
+                will have number of fiscal period. Reports ,searches,transactions will
+                need to display this.If the active value is true then fiscal period is
+                listed, if value is false it wont be listed
+            - name: isActiveForPosting
+              type: boolean
+              in: query
+              description: |
+                isActiveForPosting refers whether posting allowed for the fiscal period
+                or not . This value will be true for current year and few previous year
+                for which data entry will be happening. Once the account is closed this
+                value is set to false . All transactions will happen if and only if
+                isActiveForPosting is true
+            - name: isClosed
+              type: boolean
+              in: query
+              description: |
+                isClosed refers whether the account is closed or not . Once the account
+                is closed and balance is transferred this value is set to false if the
+                account is closed no transaction can happen on that fiscal period.
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: FiscalPeriod retrieved Successfully
+              schema:
+                $ref: '#/definitions/FiscalPeriodResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /fiscalperiods/_create:
+        post:
+          summary: Create  new  fiscalperiods
+          description: Create  new fiscalperiods
+          tags: 
+            - Master
+            - FiscalPeriod
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: fiscalPeriodRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/FiscalPeriodRequest'
+          responses:
+            201:
+              description: FiscalPeriod created Successfully
+              schema:
+                $ref: '#/definitions/FiscalPeriodResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /fiscalperiods/_update:
+        post:
+          summary: Update any of the fiscalperiods
+          description: Update any of the fiscalperiods
+          tags: 
+            - Master
+            - FiscalPeriod
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: fiscalPeriodRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/FiscalPeriodRequest'
+          responses:
+            200:
+              description: FiscalPeriod updated Successfully
+              schema:
+                $ref: '#/definitions/FiscalPeriodResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /functions/_search:
+        post:
+          summary: Get the list of functions
+          description: functions
+          tags: 
+            - Master
+            - Function
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: name
+              type: string
+              in: query
+              description: |
+                name is the name of the function .
+              maxLength: 128
+            - name: code
+              type: string
+              in: query
+              description: |
+                code is a unique number given to each function . ULBs may refer this for
+                the short name.
+              maxLength: 16
+            - name: level
+              type: integer
+              format: int32
+              in: query
+              description: |
+                level identifies what is the level of the function in the tree structure.
+                Top most parent will have level 0 and its child will have level as 1
+            - name: active
+              type: boolean
+              in: query
+              description: |
+                active is a boolean value which says whether function is in use or not .
+                If Function is active, then accounting of transactions under the Function
+                is enabled. If Function becomes inactive, and no transactions can be
+                accounted under the Function. Only leaf function can be used in
+                transaction ie function which is not parent to any other function
+            - name: parentId
+              type: integer
+              format: int64
+              in: query
+              description: |
+                parent id of the Function
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: Function retrieved Successfully
+              schema:
+                $ref: '#/definitions/FunctionResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /functions/_create:
+        post:
+          summary: Create  new  functions
+          description: Create  new functions
+          tags: 
+            - Master
+            - Function
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: functionRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/FunctionRequest'
+          responses:
+            201:
+              description: Function created Successfully
+              schema:
+                $ref: '#/definitions/FunctionResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /functions/_update:
+        post:
+          summary: Update any of the functions
+          description: Update any of the functions
+          tags: 
+            - Master
+            - Function
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: functionRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/FunctionRequest'
+          responses:
+            200:
+              description: Function updated Successfully
+              schema:
+                $ref: '#/definitions/FunctionResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /functionaries/_search:
+        post:
+          summary: Get the list of functionaries
+          description: functionaries
+          tags: 
+            - Master
+            - Functionary
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: code
+              type: string
+              in: query
+              description: |
+                code is uniue identifier and ULB may refer this for short name.
+              maxLength: 16
+            - name: name
+              type: string
+              in: query
+              description: |
+                name is the name of the functionary
+              maxLength: 256
+            - name: active
+              type: boolean
+              in: query
+              description: |
+                active states whether the functionary is active or not . Only active
+                functionaries will be used in transaction
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: Functionary retrieved Successfully
+              schema:
+                $ref: '#/definitions/FunctionaryResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /functionaries/_create:
+        post:
+          summary: Create  new  functionaries
+          description: Create  new functionaries
+          tags: 
+            - Master
+            - Functionary
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: functionaryRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/FunctionaryRequest'
+          responses:
+            201:
+              description: Functionary created Successfully
+              schema:
+                $ref: '#/definitions/FunctionaryResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /functionaries/_update:
+        post:
+          summary: Update any of the functionaries
+          description: Update any of the functionaries
+          tags: 
+            - Master
+            - Functionary
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: functionaryRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/FunctionaryRequest'
+          responses:
+            200:
+              description: Functionary updated Successfully
+              schema:
+                $ref: '#/definitions/FunctionaryResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /fundsources/_search:
+        post:
+          summary: Get the list of fundsources
+          description: fundsources
+          tags: 
+            - Master
+            - Fundsource
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: code
+              type: string
+              in: query
+              description: |
+                code of the Fundsource
+              maxLength: 25
+            - name: name
+              type: string
+              in: query
+              description: |
+                name of the Fundsource
+              maxLength: 25
+            - name: type
+              type: string
+              in: query
+              description: |
+                type of the Fundsource
+              maxLength: 25
+            - name: parent
+              type: integer
+              format: int64
+              in: query
+              description: |
+                parent of the Fundsource
+            - name: llevel
+              type: number
+              format: double
+              in: query
+              description: |
+                llevel of the Fundsource
+            - name: active
+              type: boolean
+              in: query
+              description: |
+                Whether Fundsource is Active or not. If the value is TRUE, then Fundsource is active,If the value is FALSE then Fundsource is inactive,Default value is TRUE
+            - name: isParent
+              type: boolean
+              in: query
+              description: |
+                is parent of the Fundsource
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: Fundsource retrieved Successfully
+              schema:
+                $ref: '#/definitions/FundsourceResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /fundsources/_create:
+        post:
+          summary: Create  new  fundsources
+          description: Create  new fundsources
+          tags: 
+            - Master
+            - Fundsource
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: fundsourceRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/FundsourceRequest'
+          responses:
+            201:
+              description: Fundsource created Successfully
+              schema:
+                $ref: '#/definitions/FundsourceResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /fundsources/_update:
+        post:
+          summary: Update any of the fundsources
+          description: Update any of the fundsources
+          tags: 
+            - Master
+            - Fundsource
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: fundsourceRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/FundsourceRequest'
+          responses:
+            200:
+              description: Fundsource updated Successfully
+              schema:
+                $ref: '#/definitions/FundsourceResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /schemes/_search:
+        post:
+          summary: Get the list of schemes
+          description: schemes
+          tags: 
+            - Master
+            - Scheme
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: fund
+              type: integer
+              format: int64
+              in: query
+              description: |
+                fund of the Scheme
+            - name: code
+              type: string
+              in: query
+              description: |
+                code of the Scheme
+              maxLength: 25
+            - name: name
+              type: string
+              in: query
+              description: |
+                name of the Scheme
+              maxLength: 25
+            - name: validFrom
+              type: string
+              format: date
+              in: query
+              description: |
+                valid from of the Scheme
+            - name: validTo
+              type: string
+              format: date
+              in: query
+              description: |
+                valid to of the Scheme
+            - name: active
+              type: boolean
+              in: query
+              description: |
+                Whether Scheme is Active or not. If the value is TRUE, then Scheme is active,If the value is FALSE then Scheme is inactive,Default value is TRUE
+            - name: description
+              type: string
+              in: query
+              description: |
+                description of the Scheme
+              maxLength: 256
+            - name: boundary
+              type: string
+              in: query
+              description: |
+                boundary of the Scheme
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: Scheme retrieved Successfully
+              schema:
+                $ref: '#/definitions/SchemeResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /schemes/_create:
+        post:
+          summary: Create  new  schemes
+          description: Create  new schemes
+          tags: 
+            - Master
+            - Scheme
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: schemeRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/SchemeRequest'
+          responses:
+            201:
+              description: Scheme created Successfully
+              schema:
+                $ref: '#/definitions/SchemeResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /schemes/_update:
+        post:
+          summary: Update any of the schemes
+          description: Update any of the schemes
+          tags: 
+            - Master
+            - Scheme
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: schemeRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/SchemeRequest'
+          responses:
+            200:
+              description: Scheme updated Successfully
+              schema:
+                $ref: '#/definitions/SchemeResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /banks/_search:
+        post:
+          summary: Get the list of banks
+          description: banks
+          tags: 
+            - Master
+            - Bank
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: code
+              type: string
+              in: query
+              description: |
+                code is the code of the bank
+            - name: name
+              type: string
+              in: query
+              description: |
+                name is the Bank Name .
+            - name: description
+              type: string
+              in: query
+              description: |
+                description more detailed description of the bank
+            - name: active
+              type: boolean
+              in: query
+              description: |
+                active states whether the bank is active in the system or not .
+            - name: type
+              type: string
+              in: query
+              description: |
+                type of the Bank
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: Bank retrieved Successfully
+              schema:
+                $ref: '#/definitions/BankResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /banks/_create:
+        post:
+          summary: Create  new  banks
+          description: Create  new banks
+          tags: 
+            - Master
+            - Bank
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: bankRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/BankRequest'
+          responses:
+            201:
+              description: Bank created Successfully
+              schema:
+                $ref: '#/definitions/BankResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /banks/_update:
+        post:
+          summary: Update any of the banks
+          description: Update any of the banks
+          tags: 
+            - Master
+            - Bank
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: bankRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/BankRequest'
+          responses:
+            200:
+              description: Bank updated Successfully
+              schema:
+                $ref: '#/definitions/BankResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /bankbranches/_search:
+        post:
+          summary: Get the list of bankbranches
+          description: bankbranches
+          tags: 
+            - Master
+            - BankBranch
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: bank
+              type: integer
+              format: int64
+              in: query
+              description: |
+                bank is the bank of the branch
+            - name: code
+              type: string
+              in: query
+              description: |
+                code is the branch code
+              maxLength: 50
+            - name: name
+              type: string
+              in: query
+              description: |
+                name is the branch name
+              maxLength: 50
+            - name: address
+              type: string
+              in: query
+              description: |
+                address2 is the secondary address of the branch
+              maxLength: 50
+            - name: address2
+              type: string
+              in: query
+              description: |
+                address2 of the BankBranch
+              maxLength: 50
+            - name: city
+              type: string
+              in: query
+              description: |
+                city is the name of the bank branches city
+              maxLength: 50
+            - name: state
+              type: string
+              in: query
+              description: |
+                state is the name of the state
+              maxLength: 50
+            - name: pincode
+              type: string
+              in: query
+              description: |
+                pincode is the pincode of the branch
+              maxLength: 50
+            - name: phone
+              type: string
+              in: query
+              description: |
+                phone is the phone number of the branch
+              maxLength: 15
+            - name: fax
+              type: string
+              in: query
+              description: |
+                fax is the fax number of the branch
+              maxLength: 15
+            - name: contactPerson
+              type: string
+              in: query
+              description: |
+                contactPerson is the name of the person in contact
+              maxLength: 50
+            - name: active
+              type: boolean
+              in: query
+              description: |
+                active states whether branch is active. i.e is usable by the system or not
+                if not active it cannot be used
+            - name: description
+              type: string
+              in: query
+              description: |
+                description is the more detailed description of the branch
+              maxLength: 256
+            - name: micr
+              type: string
+              in: query
+              description: |
+                micr is the micr code of the bank branch
+              maxLength: 50
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: BankBranch retrieved Successfully
+              schema:
+                $ref: '#/definitions/BankBranchResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /bankbranches/_create:
+        post:
+          summary: Create  new  bankbranches
+          description: Create  new bankbranches
+          tags: 
+            - Master
+            - BankBranch
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: bankBranchRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/BankBranchRequest'
+          responses:
+            201:
+              description: BankBranch created Successfully
+              schema:
+                $ref: '#/definitions/BankBranchResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /bankbranches/_update:
+        post:
+          summary: Update any of the bankbranches
+          description: Update any of the bankbranches
+          tags: 
+            - Master
+            - BankBranch
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: bankBranchRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/BankBranchRequest'
+          responses:
+            200:
+              description: BankBranch updated Successfully
+              schema:
+                $ref: '#/definitions/BankBranchResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /bankaccounts/_search:
+        post:
+          summary: Get the list of bankaccounts
+          description: bankaccounts
+          tags: 
+            - Master
+            - BankAccount
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: bankBranch
+              type: integer
+              format: int64
+              in: query
+              description: |
+                bank branch of the BankAccount
+            - name: chartOfAccount
+              type: integer
+              format: int64
+              in: query
+              description: |
+                chart of account of the BankAccount
+            - name: fund
+              type: integer
+              format: int64
+              in: query
+              description: |
+                fund of the BankAccount
+            - name: accountNumber
+              type: string
+              in: query
+              description: |
+                account number of the BankAccount
+              maxLength: 25
+            - name: accountType
+              type: string
+              in: query
+              description: |
+                account type of the BankAccount
+            - name: description
+              type: string
+              in: query
+              description: |
+                description of the BankAccount
+              maxLength: 256
+            - name: active
+              type: boolean
+              in: query
+              description: |
+                Whether BankAccount is Active or not. If the value is TRUE, then BankAccount is active,If the value is FALSE then BankAccount is inactive,Default value is TRUE
+            - name: payTo
+              type: string
+              in: query
+              description: |
+                pay to of the BankAccount
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: BankAccount retrieved Successfully
+              schema:
+                $ref: '#/definitions/BankAccountResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /bankaccounts/_create:
+        post:
+          summary: Create  new  bankaccounts
+          description: Create  new bankaccounts
+          tags: 
+            - Master
+            - BankAccount
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: bankAccountRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/BankAccountRequest'
+          responses:
+            201:
+              description: BankAccount created Successfully
+              schema:
+                $ref: '#/definitions/BankAccountResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /bankaccounts/_update:
+        post:
+          summary: Update any of the bankaccounts
+          description: Update any of the bankaccounts
+          tags: 
+            - Master
+            - BankAccount
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: bankAccountRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/BankAccountRequest'
+          responses:
+            200:
+              description: BankAccount updated Successfully
+              schema:
+                $ref: '#/definitions/BankAccountResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /subschemes/_search:
+        post:
+          summary: Get the list of subschemes
+          description: subschemes
+          tags: 
+            - Master
+            - SubScheme
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: scheme
+              type: integer
+              format: int64
+              in: query
+              description: |
+                scheme of the SubScheme
+            - name: code
+              type: string
+              in: query
+              description: |
+                code of the SubScheme
+              maxLength: 50
+            - name: name
+              type: string
+              in: query
+              description: |
+                name of the SubScheme
+              maxLength: 50
+            - name: validFrom
+              type: string
+              format: date
+              in: query
+              description: |
+                valid from of the SubScheme
+            - name: validTo
+              type: string
+              format: date
+              in: query
+              description: |
+                valid to of the SubScheme
+            - name: active
+              type: boolean
+              in: query
+              description: |
+                Whether SubScheme is Active or not. If the value is TRUE, then SubScheme is active,If the value is FALSE then SubScheme is inactive,Default value is TRUE
+            - name: departmentId
+              type: string
+              in: query
+              description: |
+                department id of the SubScheme
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: SubScheme retrieved Successfully
+              schema:
+                $ref: '#/definitions/SubSchemeResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /subschemes/_create:
+        post:
+          summary: Create  new  subschemes
+          description: Create  new subschemes
+          tags: 
+            - Master
+            - SubScheme
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: subSchemeRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/SubSchemeRequest'
+          responses:
+            201:
+              description: SubScheme created Successfully
+              schema:
+                $ref: '#/definitions/SubSchemeResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /subschemes/_update:
+        post:
+          summary: Update any of the subschemes
+          description: Update any of the subschemes
+          tags: 
+            - Master
+            - SubScheme
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: subSchemeRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/SubSchemeRequest'
+          responses:
+            200:
+              description: SubScheme updated Successfully
+              schema:
+                $ref: '#/definitions/SubSchemeResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /suppliers/_search:
+        post:
+          summary: Get the list of suppliers
+          description: suppliers
+          tags: 
+            - Master
+            - Supplier
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: code
+              type: string
+              in: query
+              description: |
+                code of the Supplier
+              maxLength: 50
+            - name: name
+              type: string
+              in: query
+              description: |
+                name of the Supplier
+              maxLength: 50
+            - name: address
+              type: string
+              in: query
+              description: |
+                address of the Supplier
+              maxLength: 300
+            - name: mobile
+              type: string
+              in: query
+              description: |
+                mobile of the Supplier
+              maxLength: 10
+            - name: email
+              type: string
+              in: query
+              description: |
+                email of the Supplier
+              maxLength: 25
+            - name: description
+              type: string
+              in: query
+              description: |
+                description of the Supplier
+              maxLength: 250
+            - name: active
+              type: boolean
+              in: query
+              description: |
+                Whether Supplier is Active or not. If the value is TRUE, then Supplier is active,If the value is FALSE then Supplier is inactive,Default value is TRUE
+            - name: panNo
+              type: string
+              in: query
+              description: |
+                pan no of the Supplier
+              maxLength: 10
+            - name: tinNo
+              type: string
+              in: query
+              description: |
+                tin no of the Supplier
+              maxLength: 20
+            - name: registationNo
+              type: string
+              in: query
+              description: |
+                registation no of the Supplier
+              maxLength: 25
+            - name: bankAccount
+              type: integer
+              format: int64
+              in: query
+              description: |
+                bank account of the Supplier
+            - name: ifscCode
+              type: string
+              in: query
+              description: |
+                ifsc code of the Supplier
+              maxLength: 12
+            - name: bank
+              type: integer
+              format: int64
+              in: query
+              description: |
+                bank of the Supplier
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: Supplier retrieved Successfully
+              schema:
+                $ref: '#/definitions/SupplierResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /suppliers/_create:
+        post:
+          summary: Create  new  suppliers
+          description: Create  new suppliers
+          tags: 
+            - Master
+            - Supplier
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: supplierRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/SupplierRequest'
+          responses:
+            201:
+              description: Supplier created Successfully
+              schema:
+                $ref: '#/definitions/SupplierResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /suppliers/_update:
+        post:
+          summary: Update any of the suppliers
+          description: Update any of the suppliers
+          tags: 
+            - Master
+            - Supplier
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: supplierRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/SupplierRequest'
+          responses:
+            200:
+              description: Supplier updated Successfully
+              schema:
+                $ref: '#/definitions/SupplierResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /accountdetailtypes/_search:
+        post:
+          summary: Get the list of accountdetailtypes
+          description: accountdetailtypes
+          tags: 
+            - Master
+            - AccountDetailType
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: name
+              type: string
+              in: query
+              description: |
+                name of the AccountDetailType
+              maxLength: 50
+            - name: description
+              type: string
+              in: query
+              description: |
+                description of the AccountDetailType
+              maxLength: 50
+            - name: tableName
+              type: string
+              in: query
+              description: |
+                table name of the AccountDetailType
+              maxLength: 25
+            - name: active
+              type: boolean
+              in: query
+              description: |
+                Whether AccountDetailType is Active or not. If the value is TRUE, then AccountDetailType is active,If the value is FALSE then AccountDetailType is inactive,Default value is TRUE
+            - name: fullyQualifiedName
+              type: string
+              in: query
+              description: |
+                fully qualified name of the AccountDetailType
+              maxLength: 250
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: AccountDetailType retrieved Successfully
+              schema:
+                $ref: '#/definitions/AccountDetailTypeResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /accountdetailtypes/_create:
+        post:
+          summary: Create  new  accountdetailtypes
+          description: Create  new accountdetailtypes
+          tags: 
+            - Master
+            - AccountDetailType
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: accountDetailTypeRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/AccountDetailTypeRequest'
+          responses:
+            201:
+              description: AccountDetailType created Successfully
+              schema:
+                $ref: '#/definitions/AccountDetailTypeResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /accountdetailtypes/_update:
+        post:
+          summary: Update any of the accountdetailtypes
+          description: Update any of the accountdetailtypes
+          tags: 
+            - Master
+            - AccountDetailType
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: accountDetailTypeRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/AccountDetailTypeRequest'
+          responses:
+            200:
+              description: AccountDetailType updated Successfully
+              schema:
+                $ref: '#/definitions/AccountDetailTypeResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /accountdetailkeys/_search:
+        post:
+          summary: Get the list of accountdetailkeys
+          description: accountdetailkeys
+          tags: 
+            - Master
+            - AccountDetailKey
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: key
+              type: string
+              in: query
+              description: |
+                key of the AccountDetailKey
+            - name: accountDetailType
+              type: integer
+              format: int64
+              in: query
+              description: |
+                account detail type of the AccountDetailKey
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: AccountDetailKey retrieved Successfully
+              schema:
+                $ref: '#/definitions/AccountDetailKeyResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /accountdetailkeys/_create:
+        post:
+          summary: Create  new  accountdetailkeys
+          description: Create  new accountdetailkeys
+          tags: 
+            - Master
+            - AccountDetailKey
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: accountDetailKeyRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/AccountDetailKeyRequest'
+          responses:
+            201:
+              description: AccountDetailKey created Successfully
+              schema:
+                $ref: '#/definitions/AccountDetailKeyResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /accountdetailkeys/_update:
+        post:
+          summary: Update any of the accountdetailkeys
+          description: Update any of the accountdetailkeys
+          tags: 
+            - Master
+            - AccountDetailKey
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: accountDetailKeyRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/AccountDetailKeyRequest'
+          responses:
+            200:
+              description: AccountDetailKey updated Successfully
+              schema:
+                $ref: '#/definitions/AccountDetailKeyResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /accountentities/_search:
+        post:
+          summary: Get the list of accountentities
+          description: accountentities
+          tags: 
+            - Master
+            - AccountEntity
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: accountDetailType
+              type: integer
+              format: int64
+              in: query
+              description: |
+                account detail type of the AccountEntity
+            - name: code
+              type: string
+              in: query
+              description: |
+                code of the AccountEntity
+              maxLength: 25
+            - name: name
+              type: string
+              in: query
+              description: |
+                name of the AccountEntity
+              maxLength: 350
+            - name: active
+              type: boolean
+              in: query
+              description: |
+                Whether AccountEntity is Active or not. If the value is TRUE, then AccountEntity is active,If the value is FALSE then AccountEntity is inactive,Default value is TRUE
+            - name: description
+              type: string
+              in: query
+              description: |
+                description of the AccountEntity
+              maxLength: 256
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: AccountEntity retrieved Successfully
+              schema:
+                $ref: '#/definitions/AccountEntityResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /accountentities/_create:
+        post:
+          summary: Create  new  accountentities
+          description: Create  new accountentities
+          tags: 
+            - Master
+            - AccountEntity
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: accountEntityRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/AccountEntityRequest'
+          responses:
+            201:
+              description: AccountEntity created Successfully
+              schema:
+                $ref: '#/definitions/AccountEntityResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /accountentities/_update:
+        post:
+          summary: Update any of the accountentities
+          description: Update any of the accountentities
+          tags: 
+            - Master
+            - AccountEntity
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: accountEntityRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/AccountEntityRequest'
+          responses:
+            200:
+              description: AccountEntity updated Successfully
+              schema:
+                $ref: '#/definitions/AccountEntityResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /accountcodepurposes/_search:
+        post:
+          summary: Get the list of accountcodepurposes
+          description: accountcodepurposes
+          tags: 
+            - Master
+            - AccountCodePurpose
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: name
+              type: string
+              in: query
+              description: |
+                name of the AccountCodePurpose
+              maxLength: 256
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: AccountCodePurpose retrieved Successfully
+              schema:
+                $ref: '#/definitions/AccountCodePurposeResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /accountcodepurposes/_create:
+        post:
+          summary: Create  new  accountcodepurposes
+          description: Create  new accountcodepurposes
+          tags: 
+            - Master
+            - AccountCodePurpose
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: accountCodePurposeRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/AccountCodePurposeRequest'
+          responses:
+            201:
+              description: AccountCodePurpose created Successfully
+              schema:
+                $ref: '#/definitions/AccountCodePurposeResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /accountcodepurposes/_update:
+        post:
+          summary: Update any of the accountcodepurposes
+          description: Update any of the accountcodepurposes
+          tags: 
+            - Master
+            - AccountCodePurpose
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: accountCodePurposeRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/AccountCodePurposeRequest'
+          responses:
+            200:
+              description: AccountCodePurpose updated Successfully
+              schema:
+                $ref: '#/definitions/AccountCodePurposeResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /chartofaccounts/_search:
+        post:
+          summary: Get the list of chartofaccounts
+          description: chartofaccounts
+          tags: 
+            - Master
+            - ChartOfAccount
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: glcode
+              type: string
+              in: query
+              description: |
+                glcode is the Account Code or Account Head in Accounting terms.It may be
+                Major head,Minor head or Detailed head.It is numeric examples are
+                1,110,1101,1101001,2,210,21000,210010
+              maxLength: 16
+            - name: name
+              type: string
+              in: query
+              description: |
+                name is the name of the account code . for example 110 glcode has the
+                name "Tax Revenue"
+              maxLength: 128
+            - name: accountCodePurpose
+              type: integer
+              format: int64
+              in: query
+              description: |
+                accountCodePurpose is the mapped AccountCodePurpose . This mapping can
+                happen at any level say Major,minor or detailed. When Account code is
+                searched 1. If mapped at major code then it lists major and all other
+                codes under that major code 2. If mapped at minor code then it list minor
+                code and all other codes under that minor code 3. If mapped at detailed
+                code then it lists only that code
+            - name: description
+              type: string
+              in: query
+              description: |
+                description is the more detailed description about the account code
+              maxLength: 256
+            - name: isActiveForPosting
+              type: boolean
+              in: query
+              description: |
+                isActiveForPosting true will be considered for transactions. All
+                major,minor codes will be false and only detailed code will be true .
+                Further any account code can be disabled for transaction by making this
+                field false
+            - name: parentId
+              type: integer
+              format: int64
+              in: query
+              description: |
+                parentId is the id of other account code in the chart of account .Chart
+                of account is created in tree structure. Any code can have other code as
+                parent . All minor code will have manjor code as parent . All detailed
+                code will have minor code as parent only leaf account code that is which
+                is not parent for any account code will used for transactions.
+            - name: type
+              type: string
+              in: query
+              description: |
+                type is a single character representation of account code type I: Income
+                E: Expenditure L: Liability A: Asset Account code for all I start with 1
+                Account code for all E start with 2 Account code for all L start with 3
+                Account code for all A start with 4
+            - name: classification
+              type: integer
+              format: int64
+              in: query
+              description: |
+                classification is internal to the system. This tells whether the code is
+                Major ,Minor,Subminor or detailed. Major code classification value is 1
+                Minor code is 2 Subminor code is 3 Detailed code is 4. Only
+                classification 4 and is activeforposting=true will be used in
+                transactions. Reports can be generated at any level.
+            - name: functionRequired
+              type: boolean
+              in: query
+              description: |
+                functionRequired field specifies while transacting with this accountcode
+                is the function is mandatory or not . For any account code this field is
+                set to true then all transactions expect a fun=ction code to be passed
+                along with account code
+            - name: budgetCheckRequired
+              type: boolean
+              in: query
+              description: |
+                budgetCheckRequired field specifies whether budgeting check required for
+                this account code. Apart from global Budgetcheck configuration this is
+                where glcode wise budget check decision is made.
+            - name: majorCode
+              type: string
+              in: query
+              description: |
+                major code of the ChartOfAccount
+              maxLength: 16
+            - name: isSubLedger
+              type: boolean
+              in: query
+              description: |
+                is sub ledger of the ChartOfAccount
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: ChartOfAccount retrieved Successfully
+              schema:
+                $ref: '#/definitions/ChartOfAccountResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /chartofaccounts/_create:
+        post:
+          summary: Create  new  chartofaccounts
+          description: Create  new chartofaccounts
+          tags: 
+            - Master
+            - ChartOfAccount
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: chartOfAccountRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/ChartOfAccountRequest'
+          responses:
+            201:
+              description: ChartOfAccount created Successfully
+              schema:
+                $ref: '#/definitions/ChartOfAccountResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /chartofaccounts/_update:
+        post:
+          summary: Update any of the chartofaccounts
+          description: Update any of the chartofaccounts
+          tags: 
+            - Master
+            - ChartOfAccount
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: chartOfAccountRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/ChartOfAccountRequest'
+          responses:
+            200:
+              description: ChartOfAccount updated Successfully
+              schema:
+                $ref: '#/definitions/ChartOfAccountResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /chartofaccountdetails/_search:
+        post:
+          summary: Get the list of chartofaccountdetails
+          description: chartofaccountdetails
+          tags: 
+            - Master
+            - ChartOfAccountDetail
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: chartOfAccount
+              type: integer
+              format: int64
+              in: query
+              description: |
+                chart of account of the ChartOfAccountDetail
+            - name: accountDetailType
+              type: integer
+              format: int64
+              in: query
+              description: |
+                account detail type of the ChartOfAccountDetail
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: ChartOfAccountDetail retrieved Successfully
+              schema:
+                $ref: '#/definitions/ChartOfAccountDetailResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /chartofaccountdetails/_create:
+        post:
+          summary: Create  new  chartofaccountdetails
+          description: Create  new chartofaccountdetails
+          tags: 
+            - Master
+            - ChartOfAccountDetail
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: chartOfAccountDetailRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/ChartOfAccountDetailRequest'
+          responses:
+            201:
+              description: ChartOfAccountDetail created Successfully
+              schema:
+                $ref: '#/definitions/ChartOfAccountDetailResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /chartofaccountdetails/_update:
+        post:
+          summary: Update any of the chartofaccountdetails
+          description: Update any of the chartofaccountdetails
+          tags: 
+            - Master
+            - ChartOfAccountDetail
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: chartOfAccountDetailRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/ChartOfAccountDetailRequest'
+          responses:
+            200:
+              description: ChartOfAccountDetail updated Successfully
+              schema:
+                $ref: '#/definitions/ChartOfAccountDetailResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /budgetgroups/_search:
+        post:
+          summary: Get the list of budgetgroups
+          description: budgetgroups
+          tags: 
+            - Master
+            - BudgetGroup
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: name
+              type: string
+              in: query
+              description: |
+                name of the BudgetGroup
+              maxLength: 250
+            - name: description
+              type: string
+              in: query
+              description: |
+                description of the BudgetGroup
+              maxLength: 250
+            - name: majorCode
+              type: integer
+              format: int64
+              in: query
+              description: |
+                major code of the BudgetGroup
+            - name: maxCode
+              type: integer
+              format: int64
+              in: query
+              description: |
+                max code of the BudgetGroup
+            - name: minCode
+              type: integer
+              format: int64
+              in: query
+              description: |
+                min code of the BudgetGroup
+            - name: active
+              type: boolean
+              in: query
+              description: |
+                Whether BudgetGroup is Active or not. If the value is TRUE, then BudgetGroup is active,If the value is FALSE then BudgetGroup is inactive,Default value is TRUE
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: BudgetGroup retrieved Successfully
+              schema:
+                $ref: '#/definitions/BudgetGroupResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /budgetgroups/_create:
+        post:
+          summary: Create  new  budgetgroups
+          description: Create  new budgetgroups
+          tags: 
+            - Master
+            - BudgetGroup
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: budgetGroupRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/BudgetGroupRequest'
+          responses:
+            201:
+              description: BudgetGroup created Successfully
+              schema:
+                $ref: '#/definitions/BudgetGroupResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /budgetgroups/_update:
+        post:
+          summary: Update any of the budgetgroups
+          description: Update any of the budgetgroups
+          tags: 
+            - Master
+            - BudgetGroup
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: budgetGroupRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/BudgetGroupRequest'
+          responses:
+            200:
+              description: BudgetGroup updated Successfully
+              schema:
+                $ref: '#/definitions/BudgetGroupResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /financialstatuses/_search:
+        post:
+          summary: Get the list of financialstatuses
+          description: financialstatuses
+          tags: 
+            - Master
+            - FinancialStatus
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: moduleType
+              type: string
+              in: query
+              description: |
+                module type of the FinancialStatus
+            - name: code
+              type: string
+              in: query
+              description: |
+                code of the FinancialStatus
+            - name: name
+              type: string
+              in: query
+              description: |
+                name of the FinancialStatus
+            - name: description
+              type: string
+              in: query
+              description: |
+                description of the FinancialStatus
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: FinancialStatus retrieved Successfully
+              schema:
+                $ref: '#/definitions/FinancialStatusResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /financialstatuses/_create:
+        post:
+          summary: Create  new  financialstatuses
+          description: Create  new financialstatuses
+          tags: 
+            - Master
+            - FinancialStatus
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: financialStatusRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/FinancialStatusRequest'
+          responses:
+            201:
+              description: FinancialStatus created Successfully
+              schema:
+                $ref: '#/definitions/FinancialStatusResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /financialstatuses/_update:
+        post:
+          summary: Update any of the financialstatuses
+          description: Update any of the financialstatuses
+          tags: 
+            - Master
+            - FinancialStatus
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: financialStatusRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/FinancialStatusRequest'
+          responses:
+            200:
+              description: FinancialStatus updated Successfully
+              schema:
+                $ref: '#/definitions/FinancialStatusResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+      /financialconfigurations/_search:
+        post:
+          summary: Get the list of financialconfigurations
+          description: financialconfigurations
+          tags: 
+            - Master
+            - FinancialConfiguration
+          parameters:
+            - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: ids
+              type: array
+              items: 
+               type: string
+              in: query
+              maxItems: 50
+              description: comma seperated list of Ids 
+            - name: name
+              type: string
+              in: query
+              description: |
+                name of the FinancialConfiguration
+            - name: description
+              type: string
+              in: query
+              description: |
+                description of the FinancialConfiguration
+            - name: module
+              type: string
+              in: query
+              description: |
+                module of the FinancialConfiguration
+            - $ref: "#/parameters/pageSize"
+            - $ref: "#/parameters/offset"
+            - name: sortBy
+              type: string
+              in: query
+              description: |
+                This takes any field from the Object seperated by comma and asc,desc keywords.  
+                example name asc,code desc or name,code or name,code desc 
+          responses:
+            200:
+              description: FinancialConfiguration retrieved Successfully
+              schema:
+                $ref: '#/definitions/FinancialConfigurationResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /financialconfigurations/_create:
+        post:
+          summary: Create  new  financialconfigurations
+          description: Create  new financialconfigurations
+          tags: 
+            - Master
+            - FinancialConfiguration
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: financialConfigurationRequest
+              in: body
+              description: Create  new 
+              schema:
+                $ref: '#/definitions/FinancialConfigurationRequest'
+          responses:
+            201:
+              description: FinancialConfiguration created Successfully
+              schema:
+                $ref: '#/definitions/FinancialConfigurationResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      /financialconfigurations/_update:
+        post:
+          summary: Update any of the financialconfigurations
+          description: Update any of the financialconfigurations
+          tags: 
+            - Master
+            - FinancialConfiguration
+          parameters:
+            - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+            - name: financialConfigurationRequest
+              in: body
+              description: common Request info
+              schema:
+                $ref: '#/definitions/FinancialConfigurationRequest'
+          responses:
+            200:
+              description: FinancialConfiguration updated Successfully
+              schema:
+                $ref: '#/definitions/FinancialConfigurationResponse'
+            400:
+              description: Invalid Input
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+  definitions:
+      Auditable:
+        type: object
+        properties:
+          tenantId:
+            type: string
+            maxLength: 50
+            minLength: 5
+            description: |
+              tenantId Unique Identifier of the tenant, Like AP, AP.Kurnool etc.
+              represents the client for which the transaction is created.
+          createdBy:
+            $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/egov-user/contracts/v1-0-0.yml#/definitions/User"
+            description: |
+              createdBy is the logged in user who is conducting transaction
+          lastModifiedBy:
+            $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/egov-user/contracts/v1-0-0.yml#/definitions/User"
+            description: |
+              lastModifiedBy is the logged in user who is updating transaction
+          createdDate:
+            type: string
+            format: date
+            description: |
+              
+          lastModifiedDate:
+            type: string
+            format: date
+            description: |
+              lastModifiedDate date is on which trnasaction is updated lastly
+      Page:
+       type: object
+       properties:
+        totalResults:
+          type: integer
+          format: int32
+          description: total results of the Pagination
+        totalPages:
+          type: integer
+          format: int32
+          description: total pages of the Pagination
+        pageSize:
+          type: integer
+          format: int32
+          description: Number of records in a per page in  the Pagination, Default value is 20
+        currentPage:
+          type: integer
+          format: int32
+          description: current page of the Pagination
+        offSet:
+          type: integer
+          format: int32
+          description: page number of the Pagination, Default value is 0  
+
+      Fund:
+        type: object
+        description: |
+            Fund is a defining concept in municipal accounting – where it is required to
+            segregate all accounting transactions into designated funds. Each fund needs
+            to be treated as an independent accounting entity – in other words, all
+            vouchers within a fund must be self-balancing and balance sheets and
+            IncomeExpenditure reports must be generated for each fund. A hierarchy of
+            funds may be defined – i.e. each fund can have multiple sub-funds and so on.
+        properties:
+          id:
+            type: string
+            description: |
+              identifier appears as prefix in all the vouchers accounted in the books
+              of the Fund. Each fund must have an identifier – each voucher belonging
+              to a fund must have the identifier embedded in the voucher number for
+              easy identification. Fund is taken at a voucher head level for each
+              voucher transaction.
+          name:
+            type: string
+            maxLength: 50
+            minLength: 2
+            description: |
+              name is the name of the fund . Example :Municipal Fund,Capital Fund. Also
+              name is unique.
+          code:
+            type: string
+            maxLength: 50
+            minLength: 2
+            description: |
+              code is a unique number given to each fund . ULB may refer this for the
+              short name
+          identifier:
+            type: string
+            description: |
+              identifier of the Fund
+          parent:
+            type: integer
+            format: int64
+            description: |
+              parent adding a parent will create the fund as a sub-fund (child) of a
+              fund already created (parent fund).
+          active:
+            type: boolean
+            description: |
+              active is a boolean value which says whether fund is in use or not . If
+              Fund is active, then accounting of transactions under the fund is
+              enabled. If Fund becomes inactive, and no transactions can be accounted
+              under the Fund.
+          isParent:
+            type: boolean
+            description: |
+              isParent is updated internally so that system can identify whether the
+              fund is parent or child. Only child which is not parent for any other
+              fund can only participate in transaction .
+          level:
+            type: integer
+            format: int64
+            description: |
+              level identifies what is the level of the fund in the tree structure. Top
+              most parent will have level 0 and its child will have level as 1
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - name
+        - code
+        - identifier
+        - active
+        - level
+      FundRequest:
+        description: Contract class for web request. Array of Fund items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          funds:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/Fund'
+      FundResponse:
+        description: Contract class for web response. Array of Fund items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          funds:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/Fund'
+          page:
+            $ref: '#/definitions/Page'
+
+      FinancialYear:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              id is the unique identifier. it is generated internally
+          finYearRange:
+            type: string
+            maxLength: 25
+            minLength: 1
+            description: |
+              finYearRange is the name of the Financial Year . for example for
+              accounting year 2017 and 2018 it may be named 2017-18
+          startingDate:
+            type: string
+            format: date
+            description: |
+              startingDate is the date on which Accounting Year starts. Usually it is
+              1st April of that year.
+          endingDate:
+            type: string
+            format: date
+            description: |
+              endingDate is the date on which Financial Year ends. Usually it is 31st
+              march of next year
+          active:
+            type: boolean
+            description: |
+              active says whether Financial Year is active or not . Over a period
+              system will have number of Financial years. Reports
+              ,searches,transactions will need to display this.If the active value is
+              true then Financial Year is listed, if value is false it wont be listed
+          isActiveForPosting:
+            type: boolean
+            description: |
+              isActiveForPosting refers whether posting allowed for the Financial Year
+              or not . This value will be true for current year and few previous year
+              for which data entry will be happening. Once the account is closed this
+              value is set to false . All transactions will happen if and only if
+              isActiveForPosting is true
+          isClosed:
+            type: boolean
+            description: |
+              isClosed refers whether the account is closed or not . Once the account
+              is closed and balance is transferred this value is set to false if the
+              account is closed no transaction can happen on that financial year.
+          transferClosingBalance:
+            type: boolean
+            description: |
+              transferClosingBalance informs whether While closing account balance is
+              transferred or not .
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - finYearRange
+        - startingDate
+        - endingDate
+        - active
+        - isActiveForPosting
+      FinancialYearRequest:
+        description: Contract class for web request. Array of FinancialYear items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          financialYears:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/FinancialYear'
+      FinancialYearResponse:
+        description: Contract class for web response. Array of FinancialYear items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          financialYears:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/FinancialYear'
+          page:
+            $ref: '#/definitions/Page'
+
+      FiscalPeriod:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              id is the unique identifier. it is generated internally
+          name:
+            type: string
+            maxLength: 25
+            minLength: 1
+            description: |
+              name of the FiscalPeriod
+          financialYear:
+            $ref: "#/definitions/FinancialYear"
+            description: |
+              financial year of the FiscalPeriod
+          startingDate:
+            type: string
+            format: date
+            description: |
+              startingDate is the date on which period starts.
+          endingDate:
+            type: string
+            format: date
+            description: |
+              endingDate is the date on which period ends.
+          active:
+            type: boolean
+            description: |
+              active says whether fiscal period is active or not . Over a period system
+              will have number of fiscal period. Reports ,searches,transactions will
+              need to display this.If the active value is true then fiscal period is
+              listed, if value is false it wont be listed
+          isActiveForPosting:
+            type: boolean
+            description: |
+              isActiveForPosting refers whether posting allowed for the fiscal period
+              or not . This value will be true for current year and few previous year
+              for which data entry will be happening. Once the account is closed this
+              value is set to false . All transactions will happen if and only if
+              isActiveForPosting is true
+          isClosed:
+            type: boolean
+            description: |
+              isClosed refers whether the account is closed or not . Once the account
+              is closed and balance is transferred this value is set to false if the
+              account is closed no transaction can happen on that fiscal period.
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - name
+        - financialYear
+        - startingDate
+        - endingDate
+        - active
+        - isActiveForPosting
+      FiscalPeriodRequest:
+        description: Contract class for web request. Array of FiscalPeriod items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          fiscalPeriods:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/FiscalPeriod'
+      FiscalPeriodResponse:
+        description: Contract class for web response. Array of FiscalPeriod items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          fiscalPeriods:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/FiscalPeriod'
+          page:
+            $ref: '#/definitions/Page'
+
+      Function:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              id is the unique identifier .
+          name:
+            type: string
+            maxLength: 128
+            minLength: 2
+            description: |
+              name is the name of the function .
+          code:
+            type: string
+            maxLength: 16
+            minLength: 2
+            description: |
+              code is a unique number given to each function . ULBs may refer this for
+              the short name.
+          level:
+            type: integer
+            format: int32
+            description: |
+              level identifies what is the level of the function in the tree structure.
+              Top most parent will have level 0 and its child will have level as 1
+          active:
+            type: boolean
+            description: |
+              active is a boolean value which says whether function is in use or not .
+              If Function is active, then accounting of transactions under the Function
+              is enabled. If Function becomes inactive, and no transactions can be
+              accounted under the Function. Only leaf function can be used in
+              transaction ie function which is not parent to any other function
+          parentId:
+            type: integer
+            format: int64
+            description: |
+              parent id of the Function
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - name
+        - code
+        - level
+        - active
+      FunctionRequest:
+        description: Contract class for web request. Array of Function items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          functions:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/Function'
+      FunctionResponse:
+        description: Contract class for web response. Array of Function items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          functions:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/Function'
+          page:
+            $ref: '#/definitions/Page'
+
+      Functionary:
+        type: object
+        description: |
+            Functionary is considered as another cost center. In the government set-up,
+            demands for expenditure are drawn by the department discharging the functions
+            and become the responsibility center for the assigned functions. Functionary
+            group represents this. Each sub-level within this group typically can
+            represent the organisational structure within the ULB. This level is used
+            only for the internal control of the ULB.
+
+        properties:
+          id:
+            type: string
+            description: |
+              id is the unique identifier and it is generated internally
+          code:
+            type: string
+            maxLength: 16
+            minLength: 1
+            description: |
+              code is uniue identifier and ULB may refer this for short name.
+          name:
+            type: string
+            maxLength: 256
+            minLength: 1
+            description: |
+              name is the name of the functionary
+          active:
+            type: boolean
+            description: |
+              active states whether the functionary is active or not . Only active
+              functionaries will be used in transaction
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - code
+        - name
+        - active
+      FunctionaryRequest:
+        description: Contract class for web request. Array of Functionary items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          functionaries:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/Functionary'
+      FunctionaryResponse:
+        description: Contract class for web response. Array of Functionary items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          functionaries:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/Functionary'
+          page:
+            $ref: '#/definitions/Page'
+
+      Fundsource:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              Unique Identifier of the Fundsource
+          code:
+            type: string
+            maxLength: 25
+            minLength: 1
+            description: |
+              code of the Fundsource
+          name:
+            type: string
+            maxLength: 25
+            minLength: 1
+            description: |
+              name of the Fundsource
+          type:
+            type: string
+            maxLength: 25
+            minLength: 1
+            description: |
+              type of the Fundsource
+          parent:
+            type: integer
+            format: int64
+            description: |
+              parent of the Fundsource
+          llevel:
+            type: number
+            format: double
+            description: |
+              llevel of the Fundsource
+          active:
+            type: boolean
+            description: |
+              Whether Fundsource is Active or not. If the value is TRUE, then Fundsource is active,If the value is FALSE then Fundsource is inactive,Default value is TRUE
+          isParent:
+            type: boolean
+            description: |
+              is parent of the Fundsource
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - code
+        - name
+        - active
+      FundsourceRequest:
+        description: Contract class for web request. Array of Fundsource items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          fundsources:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/Fundsource'
+      FundsourceResponse:
+        description: Contract class for web response. Array of Fundsource items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          fundsources:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/Fundsource'
+          page:
+            $ref: '#/definitions/Page'
+
+      Scheme:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              Unique Identifier of the Scheme
+          fund:
+            $ref: "#/definitions/Fund"
+            description: |
+              fund of the Scheme
+          code:
+            type: string
+            maxLength: 25
+            minLength: 1
+            description: |
+              code of the Scheme
+          name:
+            type: string
+            maxLength: 25
+            minLength: 1
+            description: |
+              name of the Scheme
+          validFrom:
+            type: string
+            format: date
+            description: |
+              valid from of the Scheme
+          validTo:
+            type: string
+            format: date
+            description: |
+              valid to of the Scheme
+          active:
+            type: boolean
+            description: |
+              Whether Scheme is Active or not. If the value is TRUE, then Scheme is active,If the value is FALSE then Scheme is inactive,Default value is TRUE
+          description:
+            type: string
+            maxLength: 256
+            description: |
+              description of the Scheme
+          boundary:
+            type: string
+            description: |
+              boundary of the Scheme
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - validFrom
+        - validTo
+        - active
+      SchemeRequest:
+        description: Contract class for web request. Array of Scheme items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          schemes:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/Scheme'
+      SchemeResponse:
+        description: Contract class for web response. Array of Scheme items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          schemes:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/Scheme'
+          page:
+            $ref: '#/definitions/Page'
+
+      Bank:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              id is unique identifier . It is generated internally
+          code:
+            type: string
+            maxLength: 50
+            minLength: 1
+            description: |
+              code is the code of the bank
+          name:
+            type: string
+            maxLength: 100
+            minLength: 2
+            description: |
+              name is the Bank Name .
+          description:
+            type: string
+            maxLength: 250
+            description: |
+              description more detailed description of the bank
+          active:
+            type: boolean
+            description: |
+              active states whether the bank is active in the system or not .
+          type:
+            type: string
+            maxLength: 50
+            description: |
+              type of the Bank
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - code
+        - name
+        - active
+        - type
+      BankRequest:
+        description: Contract class for web request. Array of Bank items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          banks:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/Bank'
+      BankResponse:
+        description: Contract class for web response. Array of Bank items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          banks:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/Bank'
+          page:
+            $ref: '#/definitions/Page'
+
+      BankBranch:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              id is the unique identifier
+          bank:
+            $ref: "#/definitions/Bank"
+            description: |
+              bank is the bank of the branch
+          code:
+            type: string
+            maxLength: 50
+            minLength: 1
+            description: |
+              code is the branch code
+          name:
+            type: string
+            maxLength: 50
+            minLength: 1
+            pattern: '^[a-zA-Z0-9_]*$'
+            description: |
+              name is the branch name
+          address:
+            type: string
+            maxLength: 50
+            minLength: 1
+            description: |
+              address2 is the secondary address of the branch
+          address2:
+            type: string
+            maxLength: 50
+            description: |
+              address2 of the BankBranch
+          city:
+            type: string
+            maxLength: 50
+            description: |
+              city is the name of the bank branches city
+          state:
+            type: string
+            maxLength: 50
+            description: |
+              state is the name of the state
+          pincode:
+            type: string
+            maxLength: 50
+            description: |
+              pincode is the pincode of the branch
+          phone:
+            type: string
+            maxLength: 15
+            description: |
+              phone is the phone number of the branch
+          fax:
+            type: string
+            maxLength: 15
+            description: |
+              fax is the fax number of the branch
+          contactPerson:
+            type: string
+            maxLength: 50
+            description: |
+              contactPerson is the name of the person in contact
+          active:
+            type: boolean
+            description: |
+              active states whether branch is active. i.e is usable by the system or not
+              if not active it cannot be used
+          description:
+            type: string
+            maxLength: 256
+            description: |
+              description is the more detailed description of the branch
+          micr:
+            type: string
+            maxLength: 50
+            description: |
+              micr is the micr code of the bank branch
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - bank
+        - code
+        - name
+        - address
+        - active
+      BankBranchRequest:
+        description: Contract class for web request. Array of BankBranch items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          bankBranches:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/BankBranch'
+      BankBranchResponse:
+        description: Contract class for web response. Array of BankBranch items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          bankBranches:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/BankBranch'
+          page:
+            $ref: '#/definitions/Page'
+
+      BankAccount:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              Unique Identifier of the BankAccount
+          bankBranch:
+            $ref: "#/definitions/BankBranch"
+            description: |
+              bank branch of the BankAccount
+          chartOfAccount:
+            $ref: "#/definitions/ChartOfAccount"
+            description: |
+              chart of account of the BankAccount
+          fund:
+            $ref: "#/definitions/Fund"
+            description: |
+              fund of the BankAccount
+          accountNumber:
+            type: string
+            maxLength: 25
+            description: |
+              account number of the BankAccount
+          accountType:
+            type: string
+            description: |
+              account type of the BankAccount
+          description:
+            type: string
+            maxLength: 256
+            description: |
+              description of the BankAccount
+          active:
+            type: boolean
+            description: |
+              Whether BankAccount is Active or not. If the value is TRUE, then BankAccount is active,If the value is FALSE then BankAccount is inactive,Default value is TRUE
+          payTo:
+            type: string
+            maxLength: 100
+            description: |
+              pay to of the BankAccount
+          type:
+            type: string
+            enum:
+              - RECEIPTS
+              - PAYMENTS
+              - RECEIPTS_PAYMENTS
+            description: |
+              type of the BankAccount
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - bankBranch
+        - chartOfAccount
+        - fund
+        - accountNumber
+        - active
+        - type
+      BankAccountRequest:
+        description: Contract class for web request. Array of BankAccount items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          bankAccounts:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/BankAccount'
+      BankAccountResponse:
+        description: Contract class for web response. Array of BankAccount items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          bankAccounts:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/BankAccount'
+          page:
+            $ref: '#/definitions/Page'
+
+      SubScheme:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              Unique Identifier of the SubScheme
+          scheme:
+            $ref: "#/definitions/Scheme"
+            description: |
+              scheme of the SubScheme
+          code:
+            type: string
+            maxLength: 50
+            minLength: 1
+            description: |
+              code of the SubScheme
+          name:
+            type: string
+            maxLength: 50
+            minLength: 1
+            description: |
+              name of the SubScheme
+          validFrom:
+            type: string
+            format: date
+            description: |
+              valid from of the SubScheme
+          validTo:
+            type: string
+            format: date
+            description: |
+              valid to of the SubScheme
+          active:
+            type: boolean
+            description: |
+              Whether SubScheme is Active or not. If the value is TRUE, then SubScheme is active,If the value is FALSE then SubScheme is inactive,Default value is TRUE
+          departmentId:
+            type: string
+            description: |
+              department id of the SubScheme
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - scheme
+        - code
+        - name
+        - validFrom
+        - validTo
+        - active
+      SubSchemeRequest:
+        description: Contract class for web request. Array of SubScheme items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          subSchemes:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/SubScheme'
+      SubSchemeResponse:
+        description: Contract class for web response. Array of SubScheme items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          subSchemes:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/SubScheme'
+          page:
+            $ref: '#/definitions/Page'
+
+      Supplier:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              Unique Identifier of the Supplier
+          code:
+            type: string
+            maxLength: 50
+            minLength: 1
+            description: |
+              code of the Supplier
+          name:
+            type: string
+            maxLength: 50
+            minLength: 1
+            description: |
+              name of the Supplier
+          address:
+            type: string
+            maxLength: 300
+            description: |
+              address of the Supplier
+          mobile:
+            type: string
+            maxLength: 10
+            description: |
+              mobile of the Supplier
+          email:
+            type: string
+            maxLength: 25
+            description: |
+              email of the Supplier
+          description:
+            type: string
+            maxLength: 250
+            description: |
+              description of the Supplier
+          active:
+            type: boolean
+            description: |
+              Whether Supplier is Active or not. If the value is TRUE, then Supplier is active,If the value is FALSE then Supplier is inactive,Default value is TRUE
+          panNo:
+            type: string
+            maxLength: 10
+            description: |
+              pan no of the Supplier
+          tinNo:
+            type: string
+            maxLength: 20
+            description: |
+              tin no of the Supplier
+          registationNo:
+            type: string
+            maxLength: 25
+            description: |
+              registation no of the Supplier
+          bankAccount:
+            $ref: "#/definitions/BankAccount"
+            description: |
+              bank account of the Supplier
+          ifscCode:
+            type: string
+            maxLength: 12
+            description: |
+              ifsc code of the Supplier
+          bank:
+            $ref: "#/definitions/Bank"
+            description: |
+              bank of the Supplier
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - code
+        - name
+        - active
+      SupplierRequest:
+        description: Contract class for web request. Array of Supplier items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          suppliers:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/Supplier'
+      SupplierResponse:
+        description: Contract class for web response. Array of Supplier items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          suppliers:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/Supplier'
+          page:
+            $ref: '#/definitions/Page'
+
+      AccountDetailType:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              Unique Identifier of the AccountDetailType
+          name:
+            type: string
+            maxLength: 50
+            minLength: 1
+            description: |
+              name of the AccountDetailType
+          description:
+            type: string
+            maxLength: 50
+            minLength: 1
+            description: |
+              description of the AccountDetailType
+          tableName:
+            type: string
+            maxLength: 25
+            description: |
+              table name of the AccountDetailType
+          active:
+            type: boolean
+            description: |
+              Whether AccountDetailType is Active or not. If the value is TRUE, then AccountDetailType is active,If the value is FALSE then AccountDetailType is inactive,Default value is TRUE
+          fullyQualifiedName:
+            type: string
+            maxLength: 250
+            minLength: 1
+            description: |
+              fully qualified name of the AccountDetailType
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - name
+        - description
+        - active
+      AccountDetailTypeRequest:
+        description: Contract class for web request. Array of AccountDetailType items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          accountDetailTypes:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/AccountDetailType'
+      AccountDetailTypeResponse:
+        description: Contract class for web response. Array of AccountDetailType items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          accountDetailTypes:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/AccountDetailType'
+          page:
+            $ref: '#/definitions/Page'
+
+      AccountDetailKey:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              Unique Identifier of the AccountDetailKey
+          key:
+            type: string
+            description: |
+              key of the AccountDetailKey
+          accountDetailType:
+            $ref: "#/definitions/AccountDetailType"
+            description: |
+              account detail type of the AccountDetailKey
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - key
+        - accountDetailType
+      AccountDetailKeyRequest:
+        description: Contract class for web request. Array of AccountDetailKey items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          accountDetailKeys:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/AccountDetailKey'
+      AccountDetailKeyResponse:
+        description: Contract class for web response. Array of AccountDetailKey items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          accountDetailKeys:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/AccountDetailKey'
+          page:
+            $ref: '#/definitions/Page'
+
+      AccountEntity:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              Unique Identifier of the AccountEntity
+          accountDetailType:
+            $ref: "#/definitions/AccountDetailType"
+            description: |
+              account detail type of the AccountEntity
+          code:
+            type: string
+            maxLength: 25
+            minLength: 1
+            description: |
+              code of the AccountEntity
+          name:
+            type: string
+            maxLength: 350
+            minLength: 1
+            description: |
+              name of the AccountEntity
+          active:
+            type: boolean
+            description: |
+              Whether AccountEntity is Active or not. If the value is TRUE, then AccountEntity is active,If the value is FALSE then AccountEntity is inactive,Default value is TRUE
+          description:
+            type: string
+            maxLength: 256
+            description: |
+              description of the AccountEntity
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - accountDetailType
+        - code
+        - name
+        - active
+      AccountEntityRequest:
+        description: Contract class for web request. Array of AccountEntity items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          accountEntities:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/AccountEntity'
+      AccountEntityResponse:
+        description: Contract class for web response. Array of AccountEntity items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          accountEntities:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/AccountEntity'
+          page:
+            $ref: '#/definitions/Page'
+
+      AccountCodePurpose:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              Unique Identifier of the AccountCodePurpose
+          name:
+            type: string
+            maxLength: 256
+            minLength: 3
+            description: |
+              name of the AccountCodePurpose
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - name
+      AccountCodePurposeRequest:
+        description: Contract class for web request. Array of AccountCodePurpose items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          accountCodePurposes:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/AccountCodePurpose'
+      AccountCodePurposeResponse:
+        description: Contract class for web response. Array of AccountCodePurpose items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          accountCodePurposes:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/AccountCodePurpose'
+          page:
+            $ref: '#/definitions/Page'
+
+      ChartOfAccount:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              id is the Unique Identifier . This data is generated internally
+          glcode:
+            type: string
+            maxLength: 16
+            minLength: 1
+            description: |
+              glcode is the Account Code or Account Head in Accounting terms.It may be
+              Major head,Minor head or Detailed head.It is numeric examples are
+              1,110,1101,1101001,2,210,21000,210010
+          name:
+            type: string
+            maxLength: 128
+            minLength: 5
+            description: |
+              name is the name of the account code . for example 110 glcode has the
+              name "Tax Revenue"
+          accountCodePurpose:
+            $ref: "#/definitions/AccountCodePurpose"
+            description: |
+              accountCodePurpose is the mapped AccountCodePurpose . This mapping can
+              happen at any level say Major,minor or detailed. When Account code is
+              searched 1. If mapped at major code then it lists major and all other
+              codes under that major code 2. If mapped at minor code then it list minor
+              code and all other codes under that minor code 3. If mapped at detailed
+              code then it lists only that code
+          description:
+            type: string
+            maxLength: 256
+            description: |
+              description is the more detailed description about the account code
+          isActiveForPosting:
+            type: boolean
+            description: |
+              isActiveForPosting true will be considered for transactions. All
+              major,minor codes will be false and only detailed code will be true .
+              Further any account code can be disabled for transaction by making this
+              field false
+          parentId:
+            type: integer
+            format: int64
+            description: |
+              parentId is the id of other account code in the chart of account .Chart
+              of account is created in tree structure. Any code can have other code as
+              parent . All minor code will have manjor code as parent . All detailed
+              code will have minor code as parent only leaf account code that is which
+              is not parent for any account code will used for transactions.
+          type:
+            type: string
+            description: |
+              type is a single character representation of account code type I: Income
+              E: Expenditure L: Liability A: Asset Account code for all I start with 1
+              Account code for all E start with 2 Account code for all L start with 3
+              Account code for all A start with 4
+          classification:
+            type: integer
+            format: int64
+            description: |
+              classification is internal to the system. This tells whether the code is
+              Major ,Minor,Subminor or detailed. Major code classification value is 1
+              Minor code is 2 Subminor code is 3 Detailed code is 4. Only
+              classification 4 and is activeforposting=true will be used in
+              transactions. Reports can be generated at any level.
+          functionRequired:
+            type: boolean
+            description: |
+              functionRequired field specifies while transacting with this accountcode
+              is the function is mandatory or not . For any account code this field is
+              set to true then all transactions expect a fun=ction code to be passed
+              along with account code
+          budgetCheckRequired:
+            type: boolean
+            description: |
+              budgetCheckRequired field specifies whether budgeting check required for
+              this account code. Apart from global Budgetcheck configuration this is
+              where glcode wise budget check decision is made.
+          majorCode:
+            type: string
+            maxLength: 16
+            description: |
+              major code of the ChartOfAccount
+          isSubLedger:
+            type: boolean
+            description: |
+              is sub ledger of the ChartOfAccount
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - glcode
+        - name
+        - isActiveForPosting
+        - type
+        - classification
+        - functionRequired
+        - budgetCheckRequired
+      ChartOfAccountRequest:
+        description: Contract class for web request. Array of ChartOfAccount items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          chartOfAccounts:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/ChartOfAccount'
+      ChartOfAccountResponse:
+        description: Contract class for web response. Array of ChartOfAccount items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          chartOfAccounts:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/ChartOfAccount'
+          page:
+            $ref: '#/definitions/Page'
+
+      ChartOfAccountDetail:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              Unique Identifier of the ChartOfAccountDetail
+          chartOfAccount:
+            $ref: "#/definitions/ChartOfAccount"
+            description: |
+              chart of account of the ChartOfAccountDetail
+          accountDetailType:
+            $ref: "#/definitions/AccountDetailType"
+            description: |
+              account detail type of the ChartOfAccountDetail
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - chartOfAccount
+        - accountDetailType
+      ChartOfAccountDetailRequest:
+        description: Contract class for web request. Array of ChartOfAccountDetail items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          chartOfAccountDetails:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/ChartOfAccountDetail'
+      ChartOfAccountDetailResponse:
+        description: Contract class for web response. Array of ChartOfAccountDetail items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          chartOfAccountDetails:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/ChartOfAccountDetail'
+          page:
+            $ref: '#/definitions/Page'
+
+      BudgetGroup:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              Unique Identifier of the BudgetGroup
+          name:
+            type: string
+            maxLength: 250
+            minLength: 1
+            description: |
+              name of the BudgetGroup
+          description:
+            type: string
+            maxLength: 250
+            description: |
+              description of the BudgetGroup
+          majorCode:
+            $ref: "#/definitions/ChartOfAccount"
+            description: |
+              major code of the BudgetGroup
+          maxCode:
+            $ref: "#/definitions/ChartOfAccount"
+            description: |
+              max code of the BudgetGroup
+          minCode:
+            $ref: "#/definitions/ChartOfAccount"
+            description: |
+              min code of the BudgetGroup
+          accountType:
+            type: string
+            enum:
+              - REVENUE_RECEIPTS
+              - REVENUE_EXPENDITURE
+              - CAPITAL_RECEIPTS
+              - CAPITAL_EXPENDITURE
+            description: |
+              account type of the BudgetGroup
+          budgetingType:
+            type: string
+            enum:
+              - ALL
+              - DEBIT
+              - CREDIT
+            description: |
+              budgeting type of the BudgetGroup
+          active:
+            type: boolean
+            description: |
+              Whether BudgetGroup is Active or not. If the value is TRUE, then BudgetGroup is active,If the value is FALSE then BudgetGroup is inactive,Default value is TRUE
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+      BudgetGroupRequest:
+        description: Contract class for web request. Array of BudgetGroup items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          budgetGroups:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/BudgetGroup'
+      BudgetGroupResponse:
+        description: Contract class for web response. Array of BudgetGroup items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          budgetGroups:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/BudgetGroup'
+          page:
+            $ref: '#/definitions/Page'
+
+      FinancialStatus:
+        type: object
+        description: |
+            
+        properties:
+          id:
+            type: string
+            description: |
+              Unique Identifier of the FinancialStatus
+          moduleType:
+            type: string
+            maxLength: 50
+            minLength: 3
+            description: |
+              module type of the FinancialStatus
+          code:
+            type: string
+            maxLength: 20
+            minLength: 3
+            description: |
+              code of the FinancialStatus
+          name:
+            type: string
+            maxLength: 20
+            minLength: 3
+            description: |
+              name of the FinancialStatus
+          description:
+            type: string
+            maxLength: 250
+            minLength: 3
+            description: |
+              description of the FinancialStatus
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - moduleType
+        - code
+        - name
+        - description
+      FinancialStatusRequest:
+        description: Contract class for web request. Array of FinancialStatus items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          financialStatuses:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/FinancialStatus'
+      FinancialStatusResponse:
+        description: Contract class for web response. Array of FinancialStatus items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          financialStatuses:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/FinancialStatus'
+          page:
+            $ref: '#/definitions/Page'
+
+      FinancialConfiguration:
+        type: object
+        description: | 
+          what s
+
+        properties:
+          id:
+            type: string
+            description: |
+              Unique Identifier of the FinancialConfiguration
+          name:
+            type: string
+            maxLength: 50
+            minLength: 3
+            description: |
+              name of the FinancialConfiguration
+          description:
+            type: string
+            maxLength: 250
+            minLength: 3
+            description: |
+              description of the FinancialConfiguration
+          module:
+            type: string
+            maxLength: 50
+            minLength: 3
+            description: |
+              module of the FinancialConfiguration
+          auditDetails:
+            $ref: '#/definitions/Auditable'
+        required:
+        - id
+        - description
+        - module
+      FinancialConfigurationRequest:
+        description: Contract class for web request. Array of FinancialConfiguration items  are used in case of create or update
+        properties:
+          requestInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+          financialConfigurations:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/FinancialConfiguration'
+      FinancialConfigurationResponse:
+        description: Contract class for web response. Array of FinancialConfiguration items  are used in case of search ,create or update request. 
+        properties:
+          responseInfo:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+          financialConfigurations:
+            description: Used for search result and create only
+            type:  array
+            items:
+              $ref: '#/definitions/FinancialConfiguration'
+          page:
+            $ref: '#/definitions/Page'
+
+  parameters:
+    pageSize:
+      name: pageSize
+      type: integer
+      format: int32
+      in: query
+      description: pageSize
+    offset:
+      name: offset
+      type: integer
+      format: int32
+      in: query
+      description: offset          
+            

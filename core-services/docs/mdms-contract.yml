@@ -1,0 +1,184 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Master Data Management Service
+  description: APIs available to get the master data for perticuler tenant and module master.
+  contact:
+    name: Abhishek Jain
+schemes:
+  - https
+basePath: '/mdms/v1/[API endpoint]'
+paths:
+  /_search:
+    post:
+      summary: Get list of masters for a particular module and tenantId.
+      description: Get list of masters for a perticulare module and tenantId.
+      parameters:
+        - name: MdmsCriteriaReq
+          in: body
+          description: Details of module and master which need to be search using MDMS .
+          required: true
+          schema:
+            $ref: '#/definitions/MdmsCriteriaReq'
+      tags:
+        - MDMS
+      responses:
+        '201':
+          description: Designation created sucessfully.
+          schema:
+            $ref: '#/definitions/MdmsResponse'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+            
+  /_create:
+    post:
+      summary: Creates/Updates master data on github.
+      description: Creates/Updates the module master data json files on the github through UI input.
+      parameters:
+        - name: MDMSCreateRequest
+          in: body
+          description: Details of the masterdata that is to be created/updated on github.
+          required: true
+          schema:
+            $ref: '#/definitions/MDMSCreateRequest'
+      tags:
+        - MDMS
+      responses:
+        '201':
+          description: Designation created sucessfully.
+          schema:
+            $ref: '#/definitions/MdmsCreateResponse'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+definitions:
+ 
+  MdmsCriteriaReq:
+    type: object
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+
+      MdmsCriteria:
+        $ref: '#/definitions/MdmsCriteria'
+  
+  MdmsCriteria:
+    type: object
+    properties:
+      tenantId:
+        description: Unique id for for a tenant.
+        type: string
+        minLength: 1
+        maxLength: 100
+      
+      moduleDetails:
+        type: array
+        items:
+          $ref: '#/definitions/ModuleDetail'
+    required:
+      - tenantId
+      - moduleDetails
+      
+  ModuleDetail:
+    type: object
+    properties:
+      moduleName:
+        description: Name of the module for which master are required.
+        type: string
+        minLength: 1
+        maxLength: 100
+      
+      masterDetails:
+        type: array
+        items:
+          $ref: '#/definitions/MasterDetail'
+     
+    required:
+      - moduleName
+      - masterDetails
+     
+  
+  MasterDetail:
+    type: object
+    properties:
+      name:
+        description: Unique id for for a tenant.
+        type: string
+        minLength: 1
+        maxLength: 100
+      filter:
+        description: Pass JsonPath predicate to get ther filtered data for a master.
+        type: string
+        minLength: 1
+        maxLength: 500
+    required:
+      - name
+      
+  MdmsResponse:
+    type: object
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      mdms:
+        type: array
+        description: array of modules
+        items: 
+          type: array
+          description: array of masters
+          items:
+            type: object
+            
+  MDMSCreateRequest:
+    type: object
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+
+      MasterMetaData:
+        $ref: '#/definitions/MasterMetaData'
+        
+  MdmsCreateResponse:
+    type: object
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+        
+      Data:
+        type: object
+        description: content written on the file
+       
+  MasterMetaData:
+    type: object
+    properties:
+      tenantId:
+        description: Unique id for for a tenant.
+        type: string
+        minLength: 1
+        maxLength: 100
+        
+      filePath:
+        description: file path on git that is to be created/updated.
+        type: string
+        minLength: 1
+        maxLength: 1000
+        
+      masterName:
+        description: Master name to be created/updated.
+        type: string
+        minLength: 1
+        maxLength: 100
+        
+      masterData:
+        description: content of be written on the file.
+        type: object
+      
+    required:
+      - tenantId
+      - filePath
+      - masterName
+      - masterData
+      
