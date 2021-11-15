@@ -146,14 +146,14 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     return fieldinspection_pending;
   }
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    if(mutation.isSuccess && !mutation.isLoading)
-    {
-        history.replace(`/digit-ui/employee/noc/response`, { data: mutation?.data?.Noc[0] });
+  //   if(mutation.isSuccess && !mutation.isLoading)
+  //   {
+  //       history.replace(`/digit-ui/employee/noc/response`, { data: mutation?.data?.Noc[0] });
 
-    }
-  },[mutation.isSuccess])
+  //   }
+  // },[mutation.isSuccess])
 
 
   const onSuccess = () => {
@@ -165,7 +165,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
 
   function submit(data) {
       let enteredDocs = JSON.parse(sessionStorage.getItem("NewNOCDocs"));
-      let newDocs = [...applicationData?.documents];
+      let newDocs = applicationData?.documents?.length > 0 ? [...applicationData?.documents] : [];
         enteredDocs.map((d,index) => {
             newDocs.push(d);
         })
@@ -174,7 +174,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       ...applicationData,
        workflow:{
         action: action?.action,
-        comment: data?.comments,
+        comment: data?.comments ? data?.comments : null,
         assignee: !selectedApprover?.uuid ? null : [selectedApprover?.uuid],
         documents: uploadedFile
         ? [
@@ -189,17 +189,17 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       documents: newDocs,
     };
 
-    try{
-      mutation.mutate({Noc:applicationData}, {
-        onSuccess,
-      });
-    }
-    catch (err) {
-      console.log(err, "inside ack");
-    }
-    // submitAction({
-    //   Licenses: [applicationData],
-    // });
+    // try{
+    //   mutation.mutate({Noc:applicationData}, {
+    //     onSuccess,
+    //   });
+    // }
+    // catch (err) {
+    //   console.log(err, "inside ack");
+    // }
+    submitAction({
+      Noc: applicationData,
+    });
   }
 
   useEffect(() => {
@@ -215,6 +215,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           uploadedFile,
           setUploadedFile,
           businessService,
+          assigneeLabel: "WF_ASSIGNEE_NAME_LABEL"
         })
       );
     }

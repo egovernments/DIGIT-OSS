@@ -12,12 +12,13 @@ import { HRMSModule ,initHRMSComponents  } from "@egovernments/digit-ui-module-h
 import { TLModule, TLLinks,initTLComponents } from "@egovernments/digit-ui-module-tl";
 import { initReceiptsComponents, ReceiptsModule } from "@egovernments/digit-ui-module-receipts";
 import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
+import { initNOCComponents } from "@egovernments/digit-ui-module-noc";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 import {initCustomisationComponents} from "./Customisations";
 
 initLibraries();
 
-const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "MCollect","HRMS", "TL","Receipts" ,"OBPS"];
+const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "MCollect","HRMS", "TL","Receipts" ,"OBPS","NOC","Engagement"];
 window.Digit.ComponentRegistryService.setupRegistry({
   ...paymentConfigs,
   PTModule,
@@ -42,6 +43,7 @@ initHRMSComponents()
 initTLComponents();
 initReceiptsComponents();
 initOBPSComponents();
+initNOCComponents();
 initEngagementComponents();
 
 initCustomisationComponents();

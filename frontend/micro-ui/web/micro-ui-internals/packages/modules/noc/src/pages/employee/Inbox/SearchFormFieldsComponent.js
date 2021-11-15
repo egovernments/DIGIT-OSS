@@ -7,8 +7,8 @@ const SearchFormFieldsComponents = ({registerRef, searchFormState}) => {
 
     return <>
         <SearchField>
-            <label>{t("REFERENCE_NO")}</label>
-            <TextInput name="applicationNumber" inputRef={registerRef({})} />
+            <label>{t("NOC_APP_NO_LABEL")}</label>
+            <TextInput name="applicationNo" inputRef={registerRef({})} />
         </SearchField>
         <SearchField>
             <label>{t("CORE_COMMON_MOBILE_NUMBER")}</label>
