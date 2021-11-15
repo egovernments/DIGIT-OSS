@@ -130,7 +130,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
                 return (
                     <div>
                       <span className="cell-text">
-                          {t(`${row.original?.additionalDetails?.applicationType || "-"}`)}
+                          {row.original?.additionalDetails?.applicationType ? t(`WF_BPA_${row.original?.additionalDetails?.applicationType}`) : "-"}
                       </span>
                     </div>
                   );
