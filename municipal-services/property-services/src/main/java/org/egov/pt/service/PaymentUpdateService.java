@@ -17,6 +17,7 @@ import org.egov.pt.models.workflow.ProcessInstanceRequest;
 import org.egov.pt.models.workflow.State;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.PropertyRepository;
+import org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
@@ -63,7 +64,13 @@ public class PaymentUpdateService {
 
 			PaymentRequest paymentRequest = mapper.convertValue(record, PaymentRequest.class);
 			RequestInfo requestInfo = paymentRequest.getRequestInfo();
-
+			// Enriching userInfo in case of WF transition upon payment reconciliation
+			if(requestInfo.getUserInfo().getType().equals(PTConstants.PAYMENT_RECONCILIATION_SYSTEM_USER_CODE)){
+				requestInfo.getUserInfo().getRoles().forEach(role->{
+					role.setTenantId(config.getStateLevelTenantId());
+				});
+				requestInfo.getUserInfo().setTenantId(config.getStateLevelTenantId());
+			}
 			List<PaymentDetail> paymentDetails = paymentRequest.getPayment().getPaymentDetails();
 			String tenantId = paymentRequest.getPayment().getTenantId();
 

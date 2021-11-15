@@ -363,5 +363,7 @@ public class PTConstants {
 
     public static final String EVENT_PAY_PROPERTYID = "$propertyId";
 
+    public static final String PAYMENT_RECONCILIATION_SYSTEM_USER_CODE = "SYSTEM_PAYMENT";
+
 }
 
