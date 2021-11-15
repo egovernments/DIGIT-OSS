@@ -226,9 +226,11 @@ public class UserEventsService {
 		validator.validateSearch(requestInfo, criteria);
 		log.info("Searching events......");
 		List<Event> events = new ArrayList<>();
+		Integer totalCount = 0;
 		if (!isUpdate) {
 			enrichSearchCriteria(requestInfo, criteria);
 			events = repository.fetchEvents(criteria);
+			totalCount = repository.fetchTotalEventCount(criteria);
 			searchPostProcessor(requestInfo, events);
 			if (null != criteria.getIsCitizenSearch()) {
 				if (criteria.getIsCitizenSearch())
@@ -236,9 +238,10 @@ public class UserEventsService {
 			}
 		} else {
 			events = repository.fetchEvents(criteria);
+			totalCount = repository.fetchTotalEventCount(criteria);
 		}
 		return EventResponse.builder().responseInfo(responseInfo.createResponseInfoFromRequestInfo(requestInfo, true))
-				.events(events).build();
+				.events(events).totalCount(totalCount).build();
 	}
 
 	/**
@@ -505,7 +508,7 @@ public class UserEventsService {
 	 */
 	private void enrichSearchCriteria(RequestInfo requestInfo, EventSearchCriteria criteria) {
 		List<String> statuses = new ArrayList<>();
-		if (requestInfo.getUserInfo().getType().equals("CITIZEN")) {
+		if ( requestInfo.getUserInfo() != null && requestInfo.getUserInfo().getType().equals("CITIZEN")) {
 			if (!CollectionUtils.isEmpty(criteria.getUserids()))
 				criteria.getUserids().clear();
 			if (!CollectionUtils.isEmpty(criteria.getRoles()))

@@ -381,7 +381,7 @@ public class Parking extends FeatureProcess {
         }
 
         for (Block block : pl.getBlocks()) {
-            if (block.getBuilding().getBuildingHeight().compareTo(maxHeightOfBuilding) > 0) {
+            if (block.getBuilding().getBuildingHeight() != null && block.getBuilding().getBuildingHeight().compareTo(maxHeightOfBuilding) > 0) {
                 maxHeightOfBuilding = block.getBuilding().getBuildingHeight();
             }
         }

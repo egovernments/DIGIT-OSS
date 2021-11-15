@@ -30,6 +30,7 @@ public class UserSearchCriteria {
     private UserType type;
     private String tenantId;
     private List<String> roleCodes;
+    private String alternatemobilenumber;
 
     public void validate(boolean isInterServiceCall) {
         if (validateIfEmptySearch(isInterServiceCall) || validateIfTenantIdExists(isInterServiceCall)) {

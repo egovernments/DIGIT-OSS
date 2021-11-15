@@ -18,8 +18,8 @@ export const getAddressItems = (properties, OldProperty) => {
   const localityCode = address.locality && address.locality.code ? address.locality.code : 'NA';
   if(OldProperty){
    oldTenantInfo = OldProperty.tenantId.split(".");
-   oldStateId = oldTenantInfo[0].toUpperCase();
-   oldCityId = oldTenantInfo[1].toUpperCase();
+   oldStateId = oldTenantInfo[0]&&oldTenantInfo[0].toUpperCase();
+   oldCityId = oldTenantInfo[1]&&oldTenantInfo[1].toUpperCase();
    oldLocality = OldProperty.address && OldProperty.address.locality && OldProperty.address.locality.code || 'NA';
   }
 

@@ -16,6 +16,22 @@ export const UploadServices = {
     return Axios(config);
   },
 
+  MultipleFilesStorage: async (module, filesData, tenantId) => {
+    const formData = new FormData();
+    const filesArray = Array.from(filesData)
+    filesArray?.forEach((fileData, index) => fileData ? formData.append("file", fileData, fileData.name) : null);
+    formData.append("tenantId", tenantId);
+    formData.append("module", module);
+    var config = {
+      method: "post",
+      url: Urls.FileStore,
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' },
+    };
+
+    return Axios(config);
+  },
+
   Filefetch: async (filesArray, tenantId) => {
     var config = {
       method: "get",

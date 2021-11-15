@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useParams } from "react-router-dom";
 import {
   BreakLine,
@@ -60,14 +60,20 @@ const CloseBtn = (props) => {
   );
 };
 
-const TLCaption = ({ data }) => {
-  const { t } = useTranslation();
+const TLCaption = ({ data, comments }) => {
+  const { t } = useTranslation()
   return (
     <div>
-      {data.date && <p>{data.date}</p>}
-      <p>{data.name}</p>
-      <p>{data.mobileNumber}</p>
-      {data.source && <p>{t("ES_COMMON_FILED_VIA_" + data.source.toUpperCase())}</p>}
+      {data?.date && <p>{data?.date}</p>}
+      <p>{data?.name}</p>
+      <p>{data?.mobileNumber}</p>
+      {data?.source && <p>{t("ES_COMMON_FILED_VIA_" + data?.source.toUpperCase())}</p>}
+      {comments?.map( e => 
+        <div className="TLComments">
+          <h3>{t("WF_COMMON_COMMENTS")}</h3>
+          <p>{e}</p>
+        </div>
+      )}
     </div>
   );
 };
@@ -78,8 +84,8 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
   const useEmployeeData = Digit.Hooks.pgr.useEmployeeFilter(tenantId, roles[0]?.roles, complaintDetails);
   const employeeData = useEmployeeData
     ? useEmployeeData.map((departmentData) => {
-        return { heading: departmentData.department, options: departmentData.employees };
-      })
+      return { heading: departmentData.department, options: departmentData.employees };
+    })
     : null;
 
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -143,10 +149,10 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
             selectedAction === "ASSIGN" || selectedAction === "REASSIGN"
               ? t("CS_ACTION_ASSIGN")
               : selectedAction === "REJECT"
-              ? t("CS_ACTION_REJECT")
-              : selectedAction === "REOPEN"
-              ? t("CS_COMMON_REOPEN")
-              : t("CS_COMMON_RESOLVE")
+                ? t("CS_ACTION_REJECT")
+                : selectedAction === "REOPEN"
+                  ? t("CS_COMMON_REOPEN")
+                  : t("CS_COMMON_RESOLVE")
           }
         />
       }
@@ -157,10 +163,10 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
         selectedAction === "ASSIGN" || selectedAction === "REASSIGN"
           ? t("CS_COMMON_ASSIGN")
           : selectedAction === "REJECT"
-          ? t("CS_COMMON_REJECT")
-          : selectedAction === "REOPEN"
-          ? t("CS_COMMON_REOPEN")
-          : t("CS_COMMON_RESOLVE")
+            ? t("CS_COMMON_REJECT")
+            : selectedAction === "REOPEN"
+              ? t("CS_COMMON_REOPEN")
+              : t("CS_COMMON_RESOLVE")
       }
       actionSaveOnSubmit={() => {
         onAssign(selectedEmployee, comments, uploadedFile);
@@ -186,6 +192,7 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
         <CardLabel>{t("CS_ACTION_SUPPORTING_DOCUMENTS")}</CardLabel>
         <CardLabelDesc>{t(`CS_UPLOAD_RESTRICTIONS`)}</CardLabelDesc>
         <UploadFile
+          id={"pgr-doc"}
           accept=".jpg"
           onUpload={selectfile}
           onDelete={() => {
@@ -269,9 +276,12 @@ export const ComplaintDetails = (props) => {
   }
 
   function zoomImage(imageSource, index) {
-    setImageZoom(complaintDetails.images[index - 1]);
+    setImageZoom(imageSource);
   }
-
+  function zoomImageWrapper(imageSource, index){
+    let newIndex=complaintDetails.thumbnails?.findIndex(link=>link===imageSource);
+    zoomImage((newIndex>-1&&complaintDetails?.images?.[newIndex])||imageSource);
+  }
   function onCloseImageZoom() {
     setImageZoom(null);
   }
@@ -330,6 +340,16 @@ export const ComplaintDetails = (props) => {
 
   const getTimelineCaptions = (checkpoint) => {
     // console.log("tl", checkpoint);
+    const {wfComment: comment, thumbnailsToShow} = checkpoint;
+    function zoomImageTimeLineWrapper(imageSource, index,thumbnailsToShow){
+      let newIndex=thumbnailsToShow.thumbs?.findIndex(link=>link===imageSource);
+      zoomImage((newIndex>-1&&thumbnailsToShow?.fullImage?.[newIndex])||imageSource);
+    }
+    const captionForOtherCheckpointsInTL = {
+      date: checkpoint?.auditDetails?.lastModified,
+      name: checkpoint?.assigner?.name,
+      mobileNumber: checkpoint?.assigner?.mobileNumber,
+    }
     if (checkpoint.status === "COMPLAINT_FILED" && complaintDetails?.audit) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(complaintDetails.audit.details.createdTime),
@@ -337,10 +357,23 @@ export const ComplaintDetails = (props) => {
         mobileNumber: complaintDetails.audit.citizen.mobileNumber,
         source: complaintDetails.audit.source,
       };
-      return <TLCaption data={caption} />;
+      return <TLCaption data={caption} comments={checkpoint?.wfComment}/>;
     }
-    return checkpoint.caption && checkpoint.caption.length !== 0 ? <TLCaption data={checkpoint.caption[0]} /> : null;
-  };
+    // return (checkpoint.caption && checkpoint.caption.length !== 0) || checkpoint?.wfComment?.length > 0 ? <TLCaption data={checkpoint?.caption?.[0]} comments={checkpoint?.wfComment} /> : null;
+    return <>
+      {comment ? <div>{comment?.map( e => 
+        <div className="TLComments">
+          <h3>{t("WF_COMMON_COMMENTS")}</h3>
+          <p>{e}</p>
+        </div>
+      )}</div> : null}
+      {thumbnailsToShow?.thumbs?.length > 0 ? <div className="TLComments">
+        <h3>{t("CS_COMMON_DOCUMENTS")}</h3>
+        <DisplayPhotos srcs={thumbnailsToShow.thumbs} onClick={(src, index) => zoomImageTimeLineWrapper(src, index,thumbnailsToShow)} />
+      </div> : null}
+      {captionForOtherCheckpointsInTL?.date ? <TLCaption data={captionForOtherCheckpointsInTL}/> : null}
+    </>
+  }
 
   return (
     <React.Fragment>
@@ -373,7 +406,7 @@ export const ComplaintDetails = (props) => {
           </StatusTable>
         )}
         {complaintDetails?.thumbnails && complaintDetails?.thumbnails?.length !== 0 ? (
-          <DisplayPhotos srcs={complaintDetails?.thumbnails} onClick={(source, index) => zoomImage(source, index)} />
+          <DisplayPhotos srcs={complaintDetails?.thumbnails} onClick={(source, index) => zoomImageWrapper(source, index)} />
         ) : null}
         <BreakLine />
         {workflowDetails?.isLoading && <Loader />}

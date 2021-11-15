@@ -1,24 +1,22 @@
 package org.egov.bpa.util;
 
-import static org.egov.bpa.util.BPAConstants.BILL_AMOUNT;
+import static org.egov.bpa.util.BPAConstants.*;
+import static org.springframework.util.StringUtils.capitalize;
+
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.bpa.config.BPAConfiguration;
 import org.egov.bpa.producer.Producer;
 import org.egov.bpa.repository.ServiceRequestRepository;
 import org.egov.bpa.service.EDCRService;
-import org.egov.bpa.web.model.BPA;
-import org.egov.bpa.web.model.EventRequest;
-import org.egov.bpa.web.model.RequestInfoWrapper;
-import org.egov.bpa.web.model.SMSRequest;
+import org.egov.bpa.service.UserService;
+import org.egov.bpa.web.model.*;
+import org.egov.bpa.web.model.collection.PaymentResponse;
+import org.egov.bpa.web.model.user.UserDetailResponse;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONArray;
@@ -30,6 +28,7 @@ import org.springframework.util.CollectionUtils;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.client.RestTemplate;
 
 @Component
 @Slf4j
@@ -45,6 +44,15 @@ public class NotificationUtil {
 	
 	private BPAUtil bpaUtil;
 
+	private RestTemplate restTemplate;
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private ObjectMapper mapper;
+
+
 	@Autowired
 	public NotificationUtil(BPAConfiguration config, ServiceRequestRepository serviceRequestRepository,
 			Producer producer, EDCRService edcrService, BPAUtil bpaUtil) {
@@ -53,11 +61,14 @@ public class NotificationUtil {
 		this.producer = producer;
 		this.edcrService = edcrService;
 		this.bpaUtil = bpaUtil;
+		this.restTemplate = restTemplate;
 	}
 
 	final String receiptNumberKey = "receiptNumber";
 
 	final String amountPaidKey = "amountPaid";
+	private String URL = "url";
+
 
 	/**
 	 * Creates customized message based on bpa
@@ -89,9 +100,9 @@ public class NotificationUtil {
 			if (!StringUtils.isEmpty(messageTemplate)) {
 				message = getInitiatedMsg(bpa, messageTemplate, serviceType);
 
-				if (message.contains("<AMOUNT_TO_BE_PAID>")) {
+				if (message.contains("{AMOUNT_TO_BE_PAID}")) {
 					BigDecimal amount = getAmountToBePaid(requestInfo, bpa);
-					message = message.replace("<AMOUNT_TO_BE_PAID>", amount.toString());
+					message = message.replace("{AMOUNT_TO_BE_PAID}", amount.toString());
 				}
 			}
 		}
@@ -117,9 +128,9 @@ public class NotificationUtil {
 			messageTemplate = getMessageTemplate(messageCode, localizationMessage);
 			if (!StringUtils.isEmpty(messageTemplate)) {
 				message = getInitiatedMsg(bpa, messageTemplate, serviceType);
-				if (message.contains("<AMOUNT_TO_BE_PAID>")) {
+				if (message.contains("{AMOUNT_TO_BE_PAID}")) {
 					BigDecimal amount = getAmountToBePaid(requestInfo, bpa);
-					message = message.replace("<AMOUNT_TO_BE_PAID>", amount.toString());
+					message = message.replace("{AMOUNT_TO_BE_PAID}", amount.toString());
 				}
 			}
 		}
@@ -279,11 +290,16 @@ public class NotificationUtil {
 	 *            Map of mobileNumber to OwnerName
 	 * @return List of SMSRequest
 	 */
-	public List<SMSRequest> createSMSRequest(String message, Map<String, String> mobileNumberToOwner) {
+	public List<SMSRequest> createSMSRequest(BPARequest bpaRequest,String message, Map<String, String> mobileNumberToOwner) {
 		List<SMSRequest> smsRequest = new LinkedList<>();
 
 		for (Map.Entry<String, String> entryset : mobileNumberToOwner.entrySet()) {
 			String customizedMsg = message.replace("<1>", entryset.getValue());
+			if (customizedMsg.contains("<RECEIPT_DOWNLOAD_LINK>")) {
+				String linkToReplace = getRecepitDownloadLink(bpaRequest, entryset.getKey());
+//				log.info("Link to replace - "+linkToReplace);
+				customizedMsg = customizedMsg.replace("{RECEIPT_DOWNLOAD_LINK}",linkToReplace);
+			}
 			smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
 		}
 		return smsRequest;
@@ -300,8 +316,181 @@ public class NotificationUtil {
 
 		log.debug("STAKEHOLDER:: " + request.getEvents().get(0).getDescription());
 	}
-	
-	
 
+	public String getEmailCustomizedMsg(RequestInfo requestInfo, BPA bpa, String localizationMessage) {
+		String message = null, messageTemplate;
+		Map<String, String> edcrResponse = edcrService.getEDCRDetails(requestInfo, bpa);
 
+		String applicationType = edcrResponse.get(BPAConstants.APPLICATIONTYPE);
+		String serviceType = edcrResponse.get(BPAConstants.SERVICETYPE);
+
+		if (bpa.getStatus().toString().toUpperCase().equals(BPAConstants.STATUS_REJECTED)) {
+			messageTemplate = getMessageTemplate(
+					applicationType + "_" + serviceType + "_" + BPAConstants.STATUS_REJECTED + "_" + "EMAIL", localizationMessage);
+			message = getReplacedMessage(bpa, messageTemplate);
+		} else {
+			String messageCode = applicationType + "_" + serviceType + "_" + bpa.getWorkflow().getAction() + "_"
+					+ bpa.getStatus() + "_" + "EMAIL";
+
+			messageTemplate = getMessageTemplate(messageCode, localizationMessage);
+
+			if (!StringUtils.isEmpty(messageTemplate)) {
+				message = getReplacedMessage(bpa, messageTemplate);
+
+				if (message.contains("{AMOUNT_TO_BE_PAID}")) {
+					BigDecimal amount = getAmountToBePaid(requestInfo, bpa);
+					message = message.replace("{AMOUNT_TO_BE_PAID}", amount.toString());
+				}
+				if(message.contains("{STAKEHOLDER_NAME}") || message.contains("{STAKEHOLDER_TYPE}"))
+				{
+					message  = getStakeHolderDetailsReplaced(requestInfo,bpa, message);
+				}
+		 }
+		}
+		return message;
+	}
+			public String getStakeHolderDetailsReplaced(RequestInfo requestInfo, BPA bpa, String message)
+		{
+				String stakeUUID = bpa.getAuditDetails().getCreatedBy();
+				List<String> ownerId = new ArrayList<String>();
+				ownerId.add(stakeUUID);
+				BPASearchCriteria bpaSearchCriteria = new BPASearchCriteria();
+				bpaSearchCriteria.setOwnerIds(ownerId);
+				bpaSearchCriteria.setTenantId(bpa.getTenantId());
+				UserDetailResponse userDetailResponse = userService.getUser(bpaSearchCriteria,requestInfo);
+				if(message.contains("{STAKEHOLDER_TYPE}"))
+				{message = message.replace("{STAKEHOLDER_TYPE}", userDetailResponse.getUser().get(0).getType());}
+			if(message.contains("{STAKEHOLDER_NAME}"))
+			{message = message.replace("{STAKEHOLDER_NAME}", userDetailResponse.getUser().get(0).getName());}
+
+			 return message;
+		}
+
+		private String getReplacedMessage(BPA bpa, String message) {
+
+		message = message.replace("YYYY", bpa.getBusinessService());
+		message = message.replace("ZZZZ", bpa.getApplicationNo());
+		message = message.replace("XYZ", capitalize(bpa.getTenantId().split("\\.")[1]));
+		message = message.replace("{PORTAL_LINK}",config.getUiAppHost());
+		//CCC - Designaion configurable according to ULB
+		// message = message.replace("CCC","");
+		return message;
+	}
+
+	public List<EmailRequest> createEmailRequest(BPARequest bpaRequest,String message, Map<String, String> mobileNumberToEmailId) {
+
+		List<EmailRequest> emailRequest = new LinkedList<>();
+		for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
+			String customizedMsg = message.replace("XXXX",entryset.getValue());
+			customizedMsg = customizedMsg.replace("{MOBILE_NUMBER}",entryset.getKey());
+			if (customizedMsg.contains("<RECEIPT_DOWNLOAD_LINK>")) {
+				String linkToReplace = getRecepitDownloadLink(bpaRequest, entryset.getKey());
+//				log.info("Link to replace - "+linkToReplace);
+				customizedMsg = customizedMsg.replace("{RECEIPT_DOWNLOAD_LINK}",linkToReplace);
+			}
+			emailRequest.add(new EmailRequest(entryset.getValue(), customizedMsg));
+		}
+		return emailRequest;
+	}
+
+	/**
+	 * Send the EmailRequest on the EmailNotification kafka topic
+	 *
+	 * @param emailRequestList
+	 *            The list of EmailRequest to be sent
+	 */
+	public void sendEmail(List<EmailRequest> emailRequestList) {
+
+		if (config.getIsEmailNotificationEnabled()) {
+			if (CollectionUtils.isEmpty(emailRequestList))
+				log.info("Messages from localization couldn't be fetched!");
+			for (EmailRequest emailRequest : emailRequestList) {
+				producer.push(config.getEmailNotifTopic(), emailRequest);
+//				log.info("EMAIL notification sent!");
+			}
+		}
+	}
+
+	/**
+	 * Fetches email ids of CITIZENs based on the phone number.
+	 *
+	 * @param mobileNumbers
+	 * @param requestInfo
+	 * @param tenantId
+	 * @return
+	 */
+
+	public Map<String, String> fetchUserEmailIds(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
+		Map<String, String> mapOfPhnoAndEmailIds = new HashMap<>();
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
+		Map<String, Object> userSearchRequest = new HashMap<>();
+		userSearchRequest.put("RequestInfo", requestInfo);
+		userSearchRequest.put("tenantId", tenantId);
+		userSearchRequest.put("userType", "CITIZEN");
+		for(String mobileNo: mobileNumbers) {
+			userSearchRequest.put("userName", mobileNo);
+			try {
+				Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest);
+				if(null != user) {
+					if(JsonPath.read(user, "$.user[0].emailId")!=null) {
+						String email = JsonPath.read(user, "$.user[0].emailId");
+						mapOfPhnoAndEmailIds.put(mobileNo, email);
+					}
+				}else {
+					log.error("Service returned null while fetching user for username - "+mobileNo);
+				}
+			}catch(Exception e) {
+				log.error("Exception while fetching user for username - "+mobileNo);
+				log.error("Exception trace: ",e);
+				continue;
+			}
+		}
+		return mapOfPhnoAndEmailIds;
+	}
+
+	public String getRecepitDownloadLink(BPARequest bpaRequest, String mobileno) {
+
+		String receiptNumber = getReceiptNumber(bpaRequest);
+		String consumerCode;
+		consumerCode = bpaRequest.getBPA().getApplicationNo();
+			String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
+			link = link.replace("$consumerCode", consumerCode);
+			link = link.replace("$tenantId", bpaRequest.getBPA().getTenantId());
+			link = link.replace("$businessService", bpaRequest.getBPA().getBusinessService());
+			link = link.replace("$receiptNumber", receiptNumber);
+			link = link.replace("$mobile", mobileno);
+			link = getShortnerURL(link);
+        log.info(link);
+		return link;
+	}
+
+	public String getReceiptNumber(BPARequest bpaRequest){
+		String consumerCode,service;
+
+		consumerCode = bpaRequest.getBPA().getApplicationNo();
+		service = "BPA";
+
+		StringBuilder URL = getcollectionURL();
+		URL.append(service).append("/_search").append("?").append("consumerCodes=").append(consumerCode)
+				.append("&").append("tenantId=").append(bpaRequest.getBPA().getTenantId());
+		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(bpaRequest.getRequestInfo()).build();
+		Object response = serviceRequestRepository.fetchResult(URL,requestInfoWrapper);
+		PaymentResponse paymentResponse = mapper.convertValue(response, PaymentResponse.class);
+		return paymentResponse.getPayments().get(0).getPaymentDetails().get(0).getReceiptNumber();
+	}
+
+	public StringBuilder getcollectionURL() {
+		StringBuilder builder = new StringBuilder();
+		return builder.append(config.getCollectionHost()).append(config.getPaymentSearch());
+	}
+
+	public String getShortnerURL(String actualURL) {
+		net.minidev.json.JSONObject obj = new net.minidev.json.JSONObject();
+		obj.put(URL, actualURL);
+		String url = config.getNotificationUrl() + config.getShortenerURL();
+
+		Object response = serviceRequestRepository.getShorteningURL(new StringBuilder(url), obj);
+		return response.toString();
+	}
 }

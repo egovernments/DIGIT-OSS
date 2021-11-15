@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { FormComposer, Dropdown, Loader } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Dropdown, Loader, Toast, BackButton } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
+import Background from "../../../components/Background";
+import Header from "../../../components/Header";
 
 const Login = ({ config: propsConfig, t }) => {
-  const {data: cities, isLoading} = Digit.Hooks.useTenants();
+  const { data: cities, isLoading } = Digit.Hooks.useTenants();
+  const { data: storeData, isLoading: isStoreLoading } = Digit.Hooks.useStore.getInitData();
+  const { stateInfo } = storeData || {};
   const [user, setUser] = useState(null);
+  const [showToast, setShowToast] = useState(null);
   const history = useHistory();
-  const getUserType = () => Digit.UserService.getType();
+  // const getUserType = () => "EMPLOYEE" || Digit.UserService.getType();
+
 
   useEffect(() => {
     if (!user) {
@@ -25,24 +31,28 @@ const Login = ({ config: propsConfig, t }) => {
     }
     const requestData = {
       ...data,
-      userType: getUserType(),
+      userType: 'EMPLOYEE',
     };
     requestData.tenantId = data.city.code;
     delete requestData.city;
     try {
       const { UserRequest: info, ...tokens } = await Digit.UserService.authenticate(requestData);
+      Digit.SessionStorage.set("Employee.tenantId", info?.tenantId);
       setUser({ info, ...tokens });
     } catch (err) {
-      console.log({ err });
-      alert(err?.response?.data?.error_description || "Invalid login credentials!");
+      setShowToast(err?.response?.data?.error_description || "Invalid login credentials!");
+      setTimeout(closeToast, 5000);
     }
   };
 
-  const onForgotPassword = () => {
-    history.push("/digit-ui/employee/forgot-password");
+  const closeToast = () => {
+    setShowToast(null);
   };
 
-  console.log({ propsConfig });
+  const onForgotPassword = () => {
+    history.push("/digit-ui/employee/user/forgot-password");
+  };
+
   const [userId, password, city] = propsConfig.inputs;
   const config = [
     {
@@ -72,10 +82,12 @@ const Login = ({ config: propsConfig, t }) => {
             component: (props, customProps) => (
               <Dropdown
                 option={cities}
+                className="login-city-dd"
                 optionKey="i18nKey"
                 select={(d) => {
                   props.onChange(d);
                 }}
+                t={t}
                 {...customProps}
               />
             ),
@@ -86,20 +98,36 @@ const Login = ({ config: propsConfig, t }) => {
     },
   ];
 
-  return isLoading ? <Loader /> : (
-    <FormComposer
-      onSubmit={onLogin}
-      noBoxShadow
-      inline
-      submitInForm
-      config={config}
-      label={propsConfig.texts.submitButtonLabel}
-      secondaryActionLabel={propsConfig.texts.secondaryButtonLabel}
-      onSecondayActionClick={onForgotPassword}
-      heading={propsConfig.texts.header}
-      headingStyle={{ textAlign: "center" }}
-      cardStyle={{ maxWidth: "400px", margin: "auto" }}
-    />
+  return (isLoading || isStoreLoading) ? <Loader /> : (
+    <Background>
+      <div className="employeeBackbuttonAlign">
+        <BackButton variant="white" style={{borderBottom:"none"}}/>
+      </div>
+      <FormComposer
+        onSubmit={onLogin}
+        noBoxShadow
+        inline
+        submitInForm
+        config={config}
+        label={propsConfig.texts.submitButtonLabel}
+        secondaryActionLabel={propsConfig.texts.secondaryButtonLabel}
+        onSecondayActionClick={onForgotPassword}
+        heading={propsConfig.texts.header}
+        headingStyle={{ textAlign: "center" }}
+        cardStyle={{ margin: "auto", minWidth: "408px" }}
+        className="loginFormStyleEmployee"
+      >
+        <Header />
+      </FormComposer>
+      {showToast && <Toast
+        error={true}
+        label={t(showToast)}
+        onClose={closeToast}
+      />}
+      <div className="employee-home-footer" style={{ backgroundColor: "unset" }}>
+        <img alt="Powered by DIGIT" src="https://s3.ap-south-1.amazonaws.com/egov-qa-assets/digit-footer-bw.png" />
+      </div>
+    </Background>
   );
 };
 

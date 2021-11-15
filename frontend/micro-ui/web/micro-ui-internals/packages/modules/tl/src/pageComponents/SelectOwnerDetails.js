@@ -36,7 +36,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   const editScreen = url.includes("/modify-application/");
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
 
   const {data: Menu} = Digit.Hooks.tl.useTLGenderMDMS(stateId, "common-masters", "GenderType");
 

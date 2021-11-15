@@ -250,7 +250,7 @@ public class UserServiceTest {
         User domainUser = validDomainUser(false);
         User user = User.builder().build();
         final User expectedUser = User.builder().build();
-        Mockito.doNothing().when(userRepository).update(any(org.egov.user.domain.model.User.class), any(User.class));
+        Mockito.doNothing().when(userRepository).update(any(org.egov.user.domain.model.User.class), any(User.class),any(Long.class), any(String.class) );
         when(userRepository.findAll(any(UserSearchCriteria.class))).thenReturn(Collections.singletonList(user));
         when(userService.getUniqueUser(anyString(), anyString(), any(UserType.class))).thenReturn
                 (expectedUser);
@@ -267,7 +267,7 @@ public class UserServiceTest {
         Mockito.doNothing().when(userRepository).update(any(org.egov.user.domain.model.User.class), any(org.egov.user
                 .domain
                 .model.User
-                .class));
+                .class),any(Long.class) , any(String.class));
         when(userRepository.findAll(any(UserSearchCriteria.class))).thenReturn(Collections.singletonList(user));
         userService.updateWithoutOtpValidation(domainUser, any());
         verify(domainUser).validateUserModification();
@@ -316,7 +316,7 @@ public class UserServiceTest {
 
         userService.partialUpdate(user, any());
 
-        verify(userRepository).update(user, user);
+        verify(userRepository).update(user, user,user.getId() ,user.getUuid());
     }
 
     @Test(expected = UserProfileUpdateDeniedException.class)
@@ -420,14 +420,15 @@ public class UserServiceTest {
                 .newPassword("P@ssw0rd")
                 .existingPassword("existingPassword")
                 .build();
-        User domainUser = User.builder().username("xyz").tenantId("default").type(UserType.CITIZEN).password("existingPasswordEncoded").build();
+        Long id =(long) 123;
+        User domainUser = User.builder().id(id).username("xyz").tenantId("default").type(UserType.CITIZEN).password("existingPasswordEncoded").build();
         when(passwordEncoder.matches("existingPassword", "existingPasswordEncoded")).thenReturn(true);
         when(userRepository.findAll(any(UserSearchCriteria.class))).thenReturn(Collections.singletonList(domainUser));
 
         userService.updatePasswordForLoggedInUser(updatePasswordRequest);
 
 //		verify(domainUser).updatePassword(updatePasswordRequest.getNewPassword());
-        verify(userRepository).update(domainUser, domainUser);
+        verify(userRepository).update(domainUser, domainUser, domainUser.getId(), domainUser.getUuid() );
     }
 
     @Test
@@ -571,13 +572,13 @@ public class UserServiceTest {
         final OtpValidationRequest expectedRequest = OtpValidationRequest.builder().otpReference("otpReference")
                 .mobileNumber("mobileNumber").tenantId("tenant").build();
         when(otpRepository.isOtpValidationComplete(expectedRequest)).thenReturn(true);
-        final User domainUser = User.builder().type(UserType.SYSTEM).build();
+        final User domainUser = User.builder().type(UserType.SYSTEM).id((long)123).build();
         when(userRepository.findAll(any(UserSearchCriteria.class))).thenReturn(Collections.singletonList(domainUser));
         when(encryptionDecryptionUtil.decryptObject(domainUser, "User", User.class, getValidRequestInfo())).thenReturn(domainUser);
         when(encryptionDecryptionUtil.encryptObject(domainUser, "User", User.class)).thenReturn(domainUser);
         userService.updatePasswordForNonLoggedInUser(request, getValidRequestInfo());
 
-        verify(userRepository).update(domainUser, domainUser);
+        verify(userRepository).update(domainUser, domainUser,domainUser.getId(), domainUser.getUuid() );
     }
 
     private org.egov.user.domain.model.User validDomainUser(boolean otpValidationMandatory) {
@@ -594,7 +595,7 @@ public class UserServiceTest {
 
     private RequestInfo getValidRequestInfo() {
         List<org.egov.common.contract.request.Role> roles = Collections.singletonList(org.egov.common.contract.request.Role.builder().code("roleCode1").build());
-        org.egov.common.contract.request.User userInfo = org.egov.common.contract.request.User.builder().roles(roles).build();
+        org.egov.common.contract.request.User userInfo = org.egov.common.contract.request.User.builder().roles(roles).id((long)123).build();
         return RequestInfo.builder().userInfo(userInfo).build();
     }
 

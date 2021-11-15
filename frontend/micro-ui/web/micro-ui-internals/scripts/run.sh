@@ -12,12 +12,10 @@ do
 done
 
 a=0
-i=0
 while [ "$a" -lt 4 ]
 do 
     BUILD[$a]=build:${MODULES[$a]}
     a=` expr $a + 1 `
-    i=` expr $i + 1 `
 done
 
 echo "BUILDING MODULES:-" ${BUILD[*]} ${BUILDARGS[*]}

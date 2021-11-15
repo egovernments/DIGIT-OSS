@@ -6,7 +6,7 @@ const EditApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const state = tenantId?.split(".")[0] || "pb";
+  const state = Digit.ULBService.getStateId();
 
   let { id: applicationNumber } = useParams();
   const userInfo = Digit.UserService.getUser();

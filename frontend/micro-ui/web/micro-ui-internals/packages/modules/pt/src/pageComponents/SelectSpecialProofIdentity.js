@@ -19,8 +19,8 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, o
   const [dropdownValue, setDropdownValue] = useState(formData?.owners[index]?.documents?.specialProofIdentity?.documentType);
   let dropdownData = [];
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
-  const { data: Documentsob = {} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Documents");
+  const stateId = Digit.ULBService.getStateId();
+  const { data: Documentsob = { } } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Documents");
   const docs = Documentsob?.PropertyTax?.Documents;
   const specialProofIdentity = Array.isArray(docs) && docs.filter((doc) => doc.code.includes("SPECIALCATEGORYPROOF"));
   if (specialProofIdentity.length > 0) {
@@ -49,7 +49,7 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, o
     if (ownerDetails && ownerDetails.documents) {
       ownerDetails.documents["specialProofIdentity"] = fileDetails;
     } else {
-      ownerDetails["documents"] = {};
+      ownerDetails["documents"] = { };
       ownerDetails.documents["specialProofIdentity"] = fileDetails;
     }
     onSelect(config.key, ownerDetails, "", index);
@@ -58,7 +58,7 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, o
   const onSkip = () => onSelect();
 
   useEffect(() => {
-    if (formData.owners && formData.owners[index] && formData.owners[index].ownerType.code === "NONE") onSelect("", {}, true, index);
+    if (formData.owners && formData.owners[index] && formData.owners[index].ownerType.code === "NONE") onSelect("", { }, true, index);
   }, [formData.owners && formData.owners[index] && formData.owners[index].ownerType.code]);
   function selectfile(e) {
     setFile(e.target.files[0]);
@@ -102,6 +102,7 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, o
         disable={isUpdateProperty || isEditProperty}
       />
       <UploadFile
+        id={"pt-doc"}
         extraStyleName={"propertyCreate"}
         accept=".jpg,.png,.pdf"
         onUpload={selectfile}

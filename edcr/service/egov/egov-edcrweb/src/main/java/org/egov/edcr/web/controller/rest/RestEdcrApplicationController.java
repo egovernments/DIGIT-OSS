@@ -248,7 +248,7 @@ public class RestEdcrApplicationController {
                 HashMap<String, String> data = new HashMap<>();
                 data.put("applicationType", applicationType);
                 data.put("serviceType", serviceType);
-                masterData = mDMSValidator.getAttributeValues(mdmsData);
+                masterData = mDMSValidator.getAttributeValues(mdmsData, "BPA");
                 List<ErrorDetail> mdmsErrors = mDMSValidator.validateMdmsData(masterData, data);
                 if (!mdmsErrors.isEmpty())
                     return new ResponseEntity<>(mdmsErrors, HttpStatus.BAD_REQUEST);
@@ -302,10 +302,11 @@ public class RestEdcrApplicationController {
         if (edcRes != null && StringUtils.isNotBlank(edcRes.getErrorMessage()))
             return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
         List<EdcrDetail> edcrDetail = edcrRestService.fetchEdcr(edcrRequest, requestInfoWrapper);
+        Integer count = edcrRestService.fetchCount(edcrRequest, requestInfoWrapper);
         if (!edcrDetail.isEmpty() && edcrDetail.get(0).getErrors() != null) {
             return new ResponseEntity<>(edcrDetail.get(0).getErrors(), HttpStatus.OK);
         } else {
-            return getSuccessResponse(edcrDetail, requestInfoWrapper.getRequestInfo());
+            return getSuccessResponse(edcrDetail, requestInfoWrapper.getRequestInfo(), count);
         }
     }
 
@@ -356,6 +357,16 @@ public class RestEdcrApplicationController {
     private ResponseEntity<?> getSuccessResponse(List<EdcrDetail> edcrDetails, RequestInfo requestInfo) {
         EdcrResponse edcrRes = new EdcrResponse();
         edcrRes.setEdcrDetail(edcrDetails);
+        ResponseInfo responseInfo = edcrRestService.createResponseInfoFromRequestInfo(requestInfo, true);
+        edcrRes.setResponseInfo(responseInfo);
+        return new ResponseEntity<>(edcrRes, HttpStatus.OK);
+
+    }
+    
+    private ResponseEntity<?> getSuccessResponse(List<EdcrDetail> edcrDetails, RequestInfo requestInfo, Integer count) {
+        EdcrResponse edcrRes = new EdcrResponse();
+        edcrRes.setEdcrDetail(edcrDetails);
+        edcrRes.setCount(count);
         ResponseInfo responseInfo = edcrRestService.createResponseInfoFromRequestInfo(requestInfo, true);
         edcrRes.setResponseInfo(responseInfo);
         return new ResponseEntity<>(edcrRes, HttpStatus.OK);

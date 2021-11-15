@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Banner, Card, CardText, SubmitBar, ActionBar } from "@egovernments/digit-ui-react-components";
+import { Banner, Card, CardText, SubmitBar, ActionBar, DownloadPrefixIcon } from "@egovernments/digit-ui-react-components";
 import { useHistory, useParams, Link, LinkLabel } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
@@ -12,6 +12,7 @@ export const SuccessfulPayment = (props) => {
   let { consumerCode, receiptNumber, businessService } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   receiptNumber = receiptNumber.replace(/%2F/g, "/");
+  const { data = {}, isLoading } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: consumerCode });
 
   useEffect(() => {
     return () => {
@@ -29,7 +30,7 @@ export const SuccessfulPayment = (props) => {
 
   const printCertificate = async () => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const state = tenantId?.split(".")[0];
+    const state = Digit.ULBService.getStateId();
     const applicationDetails = await Digit.TLService.search({ applicationNumber: consumerCode, tenantId });
     const generatePdfKeyForTL = "tlcertificate";
 
@@ -39,9 +40,18 @@ export const SuccessfulPayment = (props) => {
       window.open(fileStore[response.filestoreIds[0]], "_blank");
     }
   };
+
+  const getPermitOccupancyOrderSearch = async() => {
+    let requestData = {...data?.applicationData, edcrDetail:[{...data?.edcrDetails}]}
+    let response = await Digit.PaymentService.generatePdf(data?.applicationData?.tenantId, { Bpa: [requestData] }, "occupancy-certificate");
+    const fileStore = await Digit.PaymentService.printReciept(data?.applicationData?.tenantId, { fileStoreIds: response.filestoreIds[0] });
+    window.open(fileStore[response?.filestoreIds[0]], "_blank");
+  }
+
+
   const printReciept = async () => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const state = tenantId?.split(".")[0];
+    const state = Digit.ULBService.getStateId();
     const payments = await Digit.PaymentService.getReciept(tenantId, businessService, { receiptNumbers: receiptNumber });
     let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
 
@@ -74,6 +84,12 @@ export const SuccessfulPayment = (props) => {
                   <path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z" />
                 </svg>
                 {t("CS_COMMON_PRINT_CERTIFICATE")}
+              </div>
+            ) : null}
+            {businessService.includes("BPA") ? (
+              <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={getPermitOccupancyOrderSearch}>
+                <DownloadPrefixIcon />
+                {t("BPA_OC_CERTIFICATE")}
               </div>
             ) : null}
           </div>

@@ -2,8 +2,8 @@ import React from "react";
 import { CheckSvg } from "./svgindex";
 import PropTypes from "prop-types";
 
-const CheckBox = ({ onChange, label, value, disable, ref, checked, inputRef, style, ...props }) => {
-  const userType = Digit.SessionStorage.get("userType");
+const CheckBox = ({ onChange, label, value, disable, ref, checked, inputRef, pageType, style, ...props }) => {
+  const userType = pageType || Digit.SessionStorage.get("userType");
   let wrkflwStyle = props.styles;
   return (
     <div className="checkbox-wrap" style={wrkflwStyle ? wrkflwStyle : {}}>

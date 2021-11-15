@@ -3,7 +3,7 @@ import LinkButton from "./LinkButton";
 import { PrimaryDownlaodIcon } from "./svgindex";
 import { useTranslation } from "react-i18next";
 
-const MultiLink = ({ className, onHeadClick, displayOptions = false, options, label, icon, showOptions }) => {
+const MultiLink = ({ className, onHeadClick, displayOptions = false, options, label, icon, showOptions, style={}, optionsStyle={} }) => {
   const { t } = useTranslation();
   const menuRef = useRef();
   const handleOnClick = useCallback(() => {
@@ -12,12 +12,12 @@ const MultiLink = ({ className, onHeadClick, displayOptions = false, options, la
   Digit.Hooks.useClickOutside(menuRef, handleOnClick, displayOptions);
   return (
     <div className={className} ref={menuRef}>
-      <div className="multilink-labelWrap" onClick={onHeadClick}>
+      <div className="multilink-labelWrap" style={style} onClick={onHeadClick}>
         {icon ? icon : <PrimaryDownlaodIcon />}
         <LinkButton label={label || t("CS_COMMON_DOWNLOAD")} className="multilink-link-button" />
       </div>
       {displayOptions ? (
-        <div className="multilink-optionWrap">
+        <div className="multilink-optionWrap" style={optionsStyle}>
           {options.map((option, index) => (
             <div onClick={() => option.onClick()} key={index} className="multilink-option">
               {option?.icon}

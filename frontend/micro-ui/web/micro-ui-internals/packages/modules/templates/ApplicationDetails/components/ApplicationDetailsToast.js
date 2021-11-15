@@ -2,7 +2,7 @@ import React from "react";
 import { Toast } from "@egovernments/digit-ui-react-components";
 
 function ApplicationDetailsToast({ t, showToast, closeToast, businessService }) {
-  if (businessService.includes("NewTL") || businessService.includes("TL") || businessService.includes("EDITRENEWAL")) {
+  if (businessService?.includes("NewTL") || businessService?.includes("TL") || businessService?.includes("EDITRENEWAL")) {
     let label = "";
     switch (showToast?.action?.action) {
       case "SENDBACK":

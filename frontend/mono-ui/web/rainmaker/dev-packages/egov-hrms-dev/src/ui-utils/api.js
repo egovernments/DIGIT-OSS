@@ -1,18 +1,16 @@
 import axios from "axios";
-import {
-  fetchFromLocalStorage,
-  addQueryArg
-} from "egov-ui-framework/ui-utils/commons";
-import store from "ui-redux/store";
+import commonConfig from "config/common.js";
 import {
   toggleSnackbar,
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-  getAccessToken,
-  getTenantId,
-  getLocale
+  addQueryArg
+} from "egov-ui-framework/ui-utils/commons";
+import {
+  getAccessToken, getLocale, getTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
+import store from "ui-redux/store";
 
 const instance = axios.create({
   baseURL: window.location.origin,
@@ -36,7 +34,7 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
   };
   RequestInfo = { ...RequestInfo, ...customRequestInfo };
   return Object.assign(
-    {},
+    { },
     {
       RequestInfo
     },
@@ -49,9 +47,9 @@ export const httpRequest = async (
   endPoint,
   action,
   queryObject = [],
-  requestBody = {},
+  requestBody = { },
   headers = [],
-  customRequestInfo = {}
+  customRequestInfo = { }
 ) => {
   store.dispatch(toggleSpinner());
   let apiError = "Api Error";
@@ -145,8 +143,8 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
   // Bad idea to fetch from local storage, change as feasible
   const tenantId = getTenantId()
     ? ulbLevel
-      ? getTenantId().split(".")[0]
-      : getTenantId().split(".")[0]
+      ? commonConfig.tenantId
+      : commonConfig.tenantId
     : "";
   const uploadInstance = axios.create({
     baseURL: window.location.origin,

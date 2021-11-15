@@ -537,6 +537,22 @@ serviceMaps:
 
       - jsonPath: $.Property.units.*.id
 
+    - query: INSERT INTO eg_pt_alternatenumbers(id, uuid, propertyid, tenantId, name, mobilenumber) VALUES (?,?,?,?,?,?);
+      basePath: Property.alternateMobileNumberDetails.*
+      jsonMaps:
+     
+      - jsonPath: $.Property.alternateMobileNumberDetails.*.id
+      
+      - jsonPath: $.Property.alternateMobileNumberDetails.*.uuid
+      
+      - jsonPath: $.Property.id
+      
+      - jsonPath: $.Property.tenantId
+      
+      - jsonPath: $.Property.alternateMobileNumberDetails.*.name
+      
+      - jsonPath: $.Property.alternateMobileNumberDetails.*.mobileNumber
+
 
   - version: 1.0
     description: Update documents in  EG_PT_PROPERTY ltable

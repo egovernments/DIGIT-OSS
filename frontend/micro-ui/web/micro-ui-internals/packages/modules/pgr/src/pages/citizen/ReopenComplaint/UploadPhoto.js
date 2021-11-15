@@ -51,7 +51,7 @@ const UploadPhoto = (props) => {
       <Card>
         <ImageUploadHandler
           header={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO`)}
-          tenantId={Digit.ULBService.getCurrentTenantId()}
+          tenantId={props?.complaintDetails?.service?.tenantId}
           cardText=""
           onPhotoChange={handleUpload}
           uploadedImages={null}

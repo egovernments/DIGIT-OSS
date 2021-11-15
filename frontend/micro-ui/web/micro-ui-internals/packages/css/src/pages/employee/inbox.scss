@@ -33,7 +33,7 @@
     .inbox-total {
       padding: 4px;
       display: table;
-      @apply whitespace-normal text-center text-white w-8 h-8 bg-primary-main rounded-full ml-xs ;
+      @apply whitespace-normal text-center text-white w-8 h-8 bg-primary-main rounded-full ml-xs;
     }
   }
 
@@ -46,6 +46,13 @@
         @apply ml-sm;
       }
     }
+  }
+}
+
+.MobilePopupHeadingWrapper{
+  @apply flex place-content-between mb-md;
+  h2{
+    @apply text-heading-l font-bold;
   }
 }
 
@@ -72,13 +79,40 @@
   }
 }
 
+.filter-form {
+  .filter-card {
+    @apply bg-white;
+    padding: 10px;
+
+    .heading {
+      @apply flex justify-between;
+
+      .clearAll {
+        display: none;
+      }
+    }
+
+    .filter-label {
+      @apply font-bold text-heading-m;
+      padding-bottom: 6px;
+    }
+  }
+  .filter-form-field{
+    p{
+      @apply text-form-field text-text-primary block mb-md;
+    }
+  }
+}
+
 .inbox-container {
   .filters-container {
     .filter {
       .filter-card {
         @apply bg-white;
         padding: 10px;
-
+        .filter-card-close-button{
+          @apply flex flex-row-reverse;
+        }
         .heading {
           @apply flex justify-between;
 
@@ -88,7 +122,7 @@
         }
 
         .filter-label {
-          @apply font-bold text-heading-m;
+          @apply font-bold text-heading-m block;
           padding-bottom: 6px;
         }
       }
@@ -189,6 +223,20 @@
     }
   }
 
+  .filter-form {
+    .filter-card {
+      @apply p-md bg-white;
+
+      .heading {
+        @apply flex justify-between;
+      }
+
+      .label {
+        @apply text-heading-s;
+      }
+    }
+  }
+
   .inbox-container {
     @apply flex;
 
@@ -268,6 +316,7 @@
             }
           }
 
+    
           .input-fields {
             /*width: calc(50% - 16px);*/
 
@@ -303,6 +352,8 @@
           }
         }
 
+      
+
         .search-action-wrapper {
           width: 33%;
           margin-top: 28px;
@@ -320,6 +371,16 @@
     }
   }
 }
+
+.document-clear-all{
+  grid-area: 2/2;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 16px;
+  align-items: center;
+}         
+
+
 
 .cell-text {
   color: #505a5f;
@@ -352,4 +413,23 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
+}
+.complaint-links-container .header .removeHeight {
+  line-height: 28px;
+}
+
+@screen dt {
+  .complaint-links-container .header .removeBorderRadiusLogo {
+    border-radius: 2px !important;
+  }
+}
+@screen dt {
+  .customEmployeeCard {
+    width: 288px !important;
+    height: 263px !important;
+  }
+}
+.employeeTotalLink{
+  color: #505A5F;
+  font-size: 16px;
 }

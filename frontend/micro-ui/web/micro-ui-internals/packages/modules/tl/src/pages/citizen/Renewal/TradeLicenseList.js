@@ -10,7 +10,7 @@ const TradeLicenseList = ({ application }) => {
   const owners = application?.tradeLicenseDetail?.owners;
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { isLoading, data: fydata = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "egf-master", "FinancialYear");
   let mdmsFinancialYear = fydata["egf-master"] ? fydata["egf-master"].FinancialYear.filter(y => y.module === "TL") : [];
   let isrenewalspresent = false;

@@ -2,6 +2,7 @@ package org.egov.tl.workflow;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
+import org.egov.common.contract.request.User;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.util.TLConstants;
 import org.egov.tl.web.models.TradeLicense;
@@ -96,15 +97,80 @@ public class ActionValidator {
      * Validates the update request
      * @param request The tradeLciense update request
      */
-    public void validateUpdateRequest(TradeLicenseRequest request,BusinessService businessService){
+    public void validateUpdateRequest(TradeLicenseRequest request,BusinessService businessService,List<TradeLicense> searchResult){
         validateDocumentsForUpdate(request);
+        validateManualExpiration(request);
+        validateCancellation(request, searchResult);
        // validateRole(request);
        // validateAction(request);
         validatePayAction(request);
         validateIds(request,businessService);
     }
 
-    private void validatePayAction(TradeLicenseRequest request){
+    private void validateCancellation(TradeLicenseRequest request, List<TradeLicense> searchResult) {
+		
+    	List<TradeLicense> licenses = request.getLicenses();
+
+    	Map<String,String> errorMap = new HashMap<>();
+
+    	for (TradeLicense license : licenses) {
+    		
+    		if(license.getAction()!= null && license.getAction().toString().equalsIgnoreCase(ACTION_CANCEL)) {
+    		
+        	List <TradeLicense> existingApplications = new ArrayList<TradeLicense>();
+
+        	for(TradeLicense searchedLicense : searchResult) {
+        		if(searchedLicense.getLicenseNumber().toString().equalsIgnoreCase(license.getLicenseNumber().toString())) {
+        			existingApplications.add(searchedLicense);
+        		}
+        	}
+
+        	for(int i=0; i<existingApplications.size(); i++) {
+        		
+        		if(!existingApplications.get(i).getApplicationNumber().toString().equalsIgnoreCase(license.getApplicationNumber().toString()) && !existingApplications.get(i).getStatus().toString().equalsIgnoreCase(STATUS_CANCELLED) && license.getFinancialYear().toString().compareTo(existingApplications.get(i).getFinancialYear().toString())<0) {        			
+        			errorMap.put("INVALID_ACTION","Cannot cancel an application when later applications are in the workflow");
+        			break;
+        		}
+        	}
+
+        }
+    	}
+
+    	if(!errorMap.isEmpty()) {
+            throw new CustomException(errorMap);   
+    	}
+		
+	}
+
+	private void validateManualExpiration(TradeLicenseRequest request) {
+    	
+    	RequestInfo requestInfo = request.getRequestInfo();
+        Boolean isCitizen = false;
+        
+        User user = requestInfo.getUserInfo();
+        
+        if (user.getType().toString().equalsIgnoreCase("CITIZEN")) {
+        	isCitizen = true;
+        }
+    	    	    	
+    	Map<String,String> errorMap = new HashMap<>();
+    	
+    	List<TradeLicense> licenses = request.getLicenses();
+    	
+        for(TradeLicense license : licenses) {
+        	if(license.getAction().toString().equalsIgnoreCase(ACTION_MANUALLYEXPIRE)) {
+        		if(isCitizen) {
+        			errorMap.put("INVALID_ACTION","Citizen can not manually expire a license");
+        		}
+        	}
+        }
+         
+            if(!errorMap.isEmpty())
+                throw new CustomException(errorMap);       
+		
+	}
+
+	private void validatePayAction(TradeLicenseRequest request){
         Map<String,String> errorMap = new HashMap<>();
         if(config.getIsExternalWorkFlowEnabled()){
             request.getLicenses().forEach(license -> {

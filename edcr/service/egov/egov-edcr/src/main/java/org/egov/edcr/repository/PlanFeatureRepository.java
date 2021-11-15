@@ -68,6 +68,7 @@ import org.egov.edcr.feature.Coverage;
 import org.egov.edcr.feature.DepthCuttingService;
 import org.egov.edcr.feature.DistanceToRoad;
 import org.egov.edcr.feature.DrinageService;
+import org.egov.edcr.feature.DxfToPdfConverter;
 import org.egov.edcr.feature.ExitWidth;
 import org.egov.edcr.feature.Far;
 import org.egov.edcr.feature.FireStair;
@@ -379,6 +380,8 @@ public class PlanFeatureRepository {
         pf = new PlanFeature(InfoCommsTechService.class);
         features.add(pf);
         
+        pf = new PlanFeature(DxfToPdfConverter.class);
+        features.add(pf);
         
         
         return features;

@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const Details = ({ label, name }) => {
+const Details = ({ label, name, onClick }) => {
   return (
-    <div className="detail">
+    <div className="detail" onClick={onClick}>
       <span className="label">
         <h2>{label}</h2>
       </span>
@@ -13,7 +13,7 @@ const Details = ({ label, name }) => {
   );
 };
 
-const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, selectedItems, keyForSelected }) => {
+const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, selectedItems, keyForSelected, handleDetailCardClick }) => {
   if (linkPrefix && serviceRequestIdKey) {
     return (
       <div>
@@ -25,6 +25,7 @@ const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, sele
             >
               <div className="details-container">
                 {Object.keys(object).map((name, index) => {
+                  if (name === "applicationNo") return null;
                   return <Details label={name} name={object[name]} key={index} />;
                 })}
               </div>
@@ -38,20 +39,6 @@ const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, sele
   return (
     <div>
       {data.map((object, itemIndex) => {
-        if (serviceRequestIdKey && linkPrefix) {
-          return (
-            <Link
-              key={itemIndex}
-              to={`${linkPrefix}${typeof serviceRequestIdKey === "function" ? serviceRequestIdKey(object) : object[serviceRequestIdKey]}`}
-            >
-              <div className="details-container">
-                {Object.keys(object).map((name, index) => {
-                  return <Details label={name} name={object[name]} key={index} />;
-                })}
-              </div>
-            </Link>
-          );
-        }
         return (
           <div
             key={itemIndex}
@@ -59,8 +46,8 @@ const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, sele
             className="details-container"
             onClick={() => handleSelect(object)}
           >
-            {Object.keys(object).map((name, index) => {
-              return <Details label={name} name={object[name]} key={index} />;
+            {Object.keys(object).filter(rowEle => !(typeof object[rowEle] == "object" && object[rowEle]?.hidden == true)).map((name, index) => {
+              return <Details label={name} name={object[name]} key={index} onClick={() => handleDetailCardClick(object)} />;
             })}
           </div>
         );

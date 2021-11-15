@@ -2,6 +2,37 @@ import Urls from "../atoms/urls";
 import { Request } from "../atoms/Utils/Request";
 import cloneDeep from "lodash/cloneDeep";
 
+const getThumbnails = async (ids, tenantId) => {
+  const res = await Digit.UploadServices.Filefetch(ids, tenantId);
+  if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
+    return { thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3]), images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url)) };
+  } else {
+    return null;
+  }
+};
+
+const makeCommentsSubsidariesOfPreviousActions = async(wf) => {
+  const TimelineMap = new Map();
+  for (const eventHappened of wf ){
+    if(eventHappened?.documents){
+      eventHappened.thumbnailsToShow = await getThumbnails(eventHappened?.documents?.map(e => e?.fileStoreId), eventHappened?.tenantId)
+    }
+    if( eventHappened.action === "COMMENT" ){
+      const commentAccumulator = TimelineMap.get("tlCommentStack") || []
+      TimelineMap.set("tlCommentStack", [...commentAccumulator, eventHappened])
+    }
+    else{
+      const eventAccumulator = TimelineMap.get("tlActions") || []
+      const commentAccumulator = TimelineMap.get("tlCommentStack") || []
+      eventHappened.wfComments = [...commentAccumulator, ...eventHappened.comment ? [eventHappened] : []]
+      TimelineMap.set("tlActions", [...eventAccumulator, eventHappened])
+      TimelineMap.delete("tlCommentStack")
+    }
+  } 
+  const response = TimelineMap.get("tlActions")
+  return response
+}
+
 export const WorkflowService = {
   init: (stateCode, businessServices) => {
     return Request({
@@ -24,14 +55,15 @@ export const WorkflowService = {
   },
 
   getDetailsById: async ({ tenantId, id, moduleCode, role }) => {
-    // console.log("getWorkflowDetails", tenantId, id, moduleCode, role);
-    // console.log(Digit);
+
     const workflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
     const applicationProcessInstance = cloneDeep(workflow?.ProcessInstances);
-    const businessServiceResponse = (await Digit.WorkflowService.init(tenantId, moduleCode))?.BusinessServices[0]?.states;
+    const getLocationDetails = window.location.href.includes("/obps/") || window.location.href.includes("noc/inbox");
+    const moduleCodeData = getLocationDetails ? applicationProcessInstance?.[0]?.businessService : moduleCode;
+    const businessServiceResponse = (await Digit.WorkflowService.init(tenantId, moduleCodeData))?.BusinessServices[0]?.states;
     if (workflow && workflow.ProcessInstances) {
       const processInstances = workflow.ProcessInstances;
-      const nextStates = processInstances[0]?.nextActions.map((action) => ({ action: action?.action, nextState: action.nextState }));
+      const nextStates = processInstances[0]?.nextActions.map((action) => ({ action: action?.action, nextState: processInstances[0]?.state.uuid }));
       const nextActions = nextStates.map((id) => ({
         action: id.action,
         state: businessServiceResponse?.find((state) => state.uuid === id.nextState),
@@ -40,7 +72,7 @@ export const WorkflowService = {
       /* To check state is updatable and provide edit option*/
       const currentState = businessServiceResponse?.find((state) => state.uuid === processInstances[0]?.state.uuid);
       if (currentState && currentState?.isStateUpdatable) {
-        if (moduleCode === "FSM" || moduleCode === "FSM_VEHICLE_TRIP" || moduleCode === "PGR") null;
+        if (moduleCode === "FSM" || moduleCode === "FSM_VEHICLE_TRIP" || moduleCode === "PGR" || moduleCode === "OBPS") null;
         else nextActions.push({ action: "EDIT", state: currentState });
       }
 
@@ -65,17 +97,18 @@ export const WorkflowService = {
       }));
 
       if (processInstances.length > 0) {
-        const timeline = processInstances
-          .filter((e) => e.action !== "COMMENT")
-          .map((instance, ind) => {
+        const TLEnrichedWithWorflowData = await makeCommentsSubsidariesOfPreviousActions(processInstances)
+        const timeline = TLEnrichedWithWorflowData.map((instance, ind) => {
             const checkPoint = {
               performedAction: instance.action,
               status: instance.state.applicationStatus,
               state: instance.state.state,
               assigner: instance?.assigner,
               rating: instance?.rating,
-              comment: instance?.comment,
-              documents: instance?.documents,
+              wfComment: instance?.wfComments.map(e => e?.comment),
+              wfDocuments: instance?.documents,
+              thumbnailsToShow: {thumbs: instance?.thumbnailsToShow?.thumbs, fullImage: instance?.thumbnailsToShow?.images},
+              assignes:instance.assignes,
               caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
               auditDetails: {
                 created: Digit.DateUtils.ConvertTimestampToDate(instance.auditDetails.createdTime),

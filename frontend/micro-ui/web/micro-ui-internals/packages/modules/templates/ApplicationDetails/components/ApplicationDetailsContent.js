@@ -21,9 +21,16 @@ import PropertyEstimates from "./PropertyEstimates";
 import PropertyOwners from "./PropertyOwners";
 import TLTradeUnits from "./TLTradeUnits";
 import TLTradeAccessories from "./TLTradeAccessories";
+import ScruntinyDetails from "./ScruntinyDetails";
+import NOCDocuments from "./NOCDocuments";
+import SubOccupancyTable from "./SubOccupancyTable";
+import OBPSDocument from "../../../obps/src/pageComponents/OBPSDocuments";
+import PermissionCheck from "./PermissionCheck";
+import BPADocuments from "./BPADocuments";
 
 function ApplicationDetailsContent({ applicationDetails, workflowDetails, isDataLoading, applicationData, businessService, timelineStatusPrefix }) {
   const { t } = useTranslation();
+
 
   const getTimelineCaptions = (checkpoint) => {
     if (checkpoint.state === "OPEN" || checkpoint.status === "INITIATED") {
@@ -35,15 +42,27 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
     } else {
       const caption = {
         date: Digit.DateUtils?.ConvertTimestampToDate(applicationData?.auditDetails?.lastModifiedTime),
-        name: checkpoint?.assigner?.name,
-        mobileNumber: checkpoint?.assigner?.mobileNumber,
+        // name: checkpoint?.assigner?.name,
+        name: checkpoint?.assignes?.[0]?.name,
+        // mobileNumber: checkpoint?.assigner?.mobileNumber,
+        mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
       };
       return <TLCaption data={caption} />;
     }
   };
 
+  const getTranslatedValues = (dataValue, isNotTranslated) => {
+    if(dataValue) {
+      return !isNotTranslated ? t(dataValue) : dataValue
+    } else {
+      return t("NA")
+    }
+  };
+
   // console.log(applicationDetails?.applicationDetails, "inside app details content");
-  const checkLocation = window.location.href.includes("employee/tl");
+  const checkLocation = window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc");
+  const isNocLocation = window.location.href.includes("noc/application-overview");
+  const isBPALocation = window.location.href.includes("employee/obps");
   return (
     <Card style={{ position: "relative" }}>
       {applicationDetails?.applicationDetails?.map((detail, index) => (
@@ -54,22 +73,22 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
             ) : (
               <React.Fragment>
                 <CardSectionHeader style={(index == 0 && checkLocation) ? { marginBottom: "16px" } : { marginBottom: "16px", marginTop: "32px" }}>
-                  {t(detail.title)}
+                  {isNocLocation ? `${t(detail.title)}:` : t(detail.title)}
                   {detail?.Component ? <detail.Component /> : null}
                 </CardSectionHeader>
               </React.Fragment>
             )}
             {/* TODO, Later will move to classes */}
             <StatusTable style={checkLocation ? { position: "relative", marginTop: "19px" } : {}}>
-              {detail?.values?.map((value, index) => {
+              {detail?.title && !(detail?.title.includes("NOC" )) && detail?.values?.map((value, index) => {
                 if (value.map === true && value.value !== "N/A") {
                   return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
                 }
                 return (
                   <Row
                     key={t(value.title)}
-                    label={t(value.title)}
-                    text={t(value.value) || "N/A"}
+                    label={(isNocLocation || isBPALocation) ? `${t(value.title)}:` : t(value.title)}
+                    text={value?.skip ? value.value : (getTranslatedValues(value?.value , value?.isNotTranslated) || "N/A")}
                     last={index === detail?.values?.length - 1}
                     caption={value.caption}
                     className="border-none"
@@ -83,10 +102,28 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
             </StatusTable>
           </div>
           {detail?.belowComponent && <detail.belowComponent />}
+          {detail?.additionalDetails?.inspectionReport && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
+          {/* {detail?.additionalDetails?.FIdocuments && detail?.additionalDetails?.values?.map((doc,index) => (
+            <div key={index}>
+            {doc.isNotDuplicate && <div> 
+             <StatusTable>
+             <Row label={t(doc?.documentType)}></Row>
+             <OBPSDocument value={detail?.additionalDetails?.values} Code={doc?.documentType} index={index}/> 
+             <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
+             </StatusTable>
+             </div>}
+             </div>
+          )) } */}
           {detail?.additionalDetails?.floors && <PropertyFloors floors={detail?.additionalDetails?.floors} />}
           {detail?.additionalDetails?.owners && <PropertyOwners owners={detail?.additionalDetails?.owners} />}
           {detail?.additionalDetails?.units && <TLTradeUnits units={detail?.additionalDetails?.units} />}
           {detail?.additionalDetails?.accessories && <TLTradeAccessories units={detail?.additionalDetails?.accessories} />}
+          {detail?.additionalDetails?.permissions && <PermissionCheck applicationData={applicationDetails?.applicationData} t={t} permissions={detail?.additionalDetails?.permissions} />}
+          {detail?.additionalDetails?.obpsDocuments && <BPADocuments t={t} applicationData={applicationDetails?.applicationData} docs={detail.additionalDetails.obpsDocuments} bpaActionsDetails={workflowDetails} />}
+          {detail?.additionalDetails?.noc && <NOCDocuments t={t} isNoc={true} NOCdata = {detail.values} applicationData={applicationDetails?.applicationData} docs={detail.additionalDetails.noc} noc={detail.additionalDetails?.data} bpaActionsDetails={workflowDetails}/>}
+          {detail?.additionalDetails?.scruntinyDetails && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
+          {detail?.additionalDetails?.buildingExtractionDetails && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
+          {detail?.additionalDetails?.subOccupancyTableDetails && <SubOccupancyTable edcrDetails={detail?.additionalDetails} />}
           {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
           {detail?.additionalDetails?.taxHeadEstimatesCalculation && (
             <PropertyEstimates taxHeadEstimatesCalculation={detail?.additionalDetails?.taxHeadEstimatesCalculation} />
@@ -119,7 +156,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
                             isCompleted={index === 0}
                             info={checkpoint.comment}
                             label={t(
-                              `${timelineStatusPrefix}${checkpoint?.performedAction === "REOPEN" ? checkpoint?.performedAction : checkpoint.state}`
+                              `${timelineStatusPrefix}${checkpoint?.performedAction === "REOPEN" ? checkpoint?.performedAction : checkpoint.status}`
                             )}
                             customChild={getTimelineCaptions(checkpoint)}
                           />

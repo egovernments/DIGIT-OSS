@@ -37,7 +37,7 @@ const Details = () => {
     setShowModal(false);
   };
   const handleDownload = async (document) => {
-    const res = await Digit.UploadServices.Filefetch([document?.documentId], document.tenantId.split(".")[0]);
+    const res = await Digit.UploadServices.Filefetch([document?.documentId], Digit.ULBService.getStateId());
     let documentLink = pdfDownloadLink(res.data, document?.documentId);
     window.open(documentLink, "_blank");
   };

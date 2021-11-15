@@ -69,7 +69,7 @@ const Response = (props) => {
   // console.log("find payment Roles here", paymentAccess)
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { state } = props.location;
 
   const mutation = state.key === "update" ? Digit.Hooks.fsm.useApplicationActions(tenantId) : Digit.Hooks.fsm.useDesludging(tenantId);
@@ -79,7 +79,6 @@ const Response = (props) => {
   const localityCode = mutation?.data?.fsm[0].address?.locality?.code;
   const slumCode = mutation?.data?.fsm[0].address?.slumName;
   // console.log("find mutation here", mutation);
-  // debugger
   const slum = Digit.Hooks.fsm.useSlum(mutation?.data?.fsm[0]?.tenantId, slumCode, localityCode, {
     enabled: slumCode ? true : false,
     retry: slumCode ? true : false,

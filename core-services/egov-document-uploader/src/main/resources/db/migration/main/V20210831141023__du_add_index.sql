@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS index_eg_du_document_uuid ON eg_du_document (uuid);

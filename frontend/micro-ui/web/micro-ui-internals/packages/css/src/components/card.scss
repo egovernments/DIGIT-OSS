@@ -35,7 +35,7 @@
   }
 
   .card-label-error {
-    @apply block font-bold text-legend text-error mb-md;
+    @apply block text-body-s text-error mb-md;
   }
 
   .card-label-desc {
@@ -45,6 +45,10 @@
   .card-link {
     @apply block text-center text-link text-primary-main mt-md cursor-pointer;
   }
+}
+
+.validation-error{
+  @apply block text-body-s text-error;
 }
 
 .docsDescription {
@@ -97,7 +101,7 @@
   }
 
   .card-label-error {
-    @apply block font-bold text-legend text-error mb-md;
+    @apply block text-body-s text-error mb-md;
   }
 
   .card-label-desc {
@@ -133,7 +137,8 @@
 }
 
 .submit-bar {
-  @apply h-10 bg-primary-main text-center border-b-2 border-input-border border-solid w-full outline-none;
+  @apply h-10 bg-primary-main text-center w-full outline-none;
+  box-shadow: inset 0px -2px 0px #0B0C0C;
 
   &:focus {
     @apply outline-none;
@@ -145,7 +150,7 @@
 }
 
 .submit-bar-disabled {
-  @apply h-10 bg-primary-main text-center border-b-2 border-input-border border-solid w-full outline-none opacity-50;
+  @apply h-10 bg-primary-main text-center w-full outline-none opacity-50;
 
   &:focus {
     @apply outline-none;
@@ -281,4 +286,29 @@
 
 .card-section-header {
   @apply text-text-primary text-heading-m font-bold;
+}
+
+.button-sub-text {
+  width: 100%;
+}
+
+.home-page-info-banner-wrap {
+  margin: "0px 16px 24px 16px";
+}
+
+@media (min-width: 780px) {
+  .button-sub-text {
+    width: 240px;
+  }
+  .home-page-info-banner-wrap {
+    max-width: 45%;
+    min-width: 40%;
+    margin-left: 0;
+    margin-right: 24px;
+    margin-bottom: 24px;
+  }
+}
+
+.card-label-error {
+  @apply block text-body-s text-error mb-md;
 }

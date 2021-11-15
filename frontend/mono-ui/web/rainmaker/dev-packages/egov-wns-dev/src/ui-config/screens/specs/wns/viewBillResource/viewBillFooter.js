@@ -1,9 +1,9 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getCommonApplyFooter } from "../../utils";
-import { downloadBill } from "../../../../../ui-utils/commons";
-import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { downloadWNSBillFromConsumer } from "egov-ui-kit/utils/commons";
 import get from "lodash/get";
+import { getCommonApplyFooter } from "../../utils";
+import "./index.css";
 
 // const connectionNo = getQueryArg(window.location.href, "connectionNumber");
 // const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -23,10 +23,13 @@ const getRedirectionForPayment = async (state, dispatch) => {
   window.location.assign(`${origin}${environment}/egov-common/pay?consumerCode=${connectionNo}&tenantId=${tenantId}&businessService=${businessService}`);
 };
 
-const callDownloadBill = ( mode) => {
-  let tenantId=getQueryArg(window.location.href, "tenantId");
-  const businessService = getQueryArg(window.location.href, "connectionNumber")&&getQueryArg(window.location.href, "connectionNumber").includes("WS") ? "WS" : "SW";
-  const val = [
+const callDownloadBill = (mode) => {
+  let conCode = getQueryArg(window.location.href, "connectionNumber");
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  const businessService = getQueryArg(window.location.href, "connectionNumber") && getQueryArg(window.location.href, "connectionNumber").includes("WS") ? "WS" : "SW";
+
+  downloadWNSBillFromConsumer(conCode, tenantId, businessService);
+  /* const val = [
     {
       key: 'consumerCode',
       value: getQueryArg(window.location.href, "connectionNumber")
@@ -36,11 +39,11 @@ const callDownloadBill = ( mode) => {
       key: "businessService", value: businessService
     }
   ]
-  downloadBill(val, mode);
+  downloadBill(val, mode); */
 }
 
 
-export const viewBillFooter = getCommonApplyFooter("BOTTOM",{
+export const viewBillFooter = getCommonApplyFooter("BOTTOM", {
   downloadButton: {
     componentPath: "Button",
     props: {
@@ -60,7 +63,7 @@ export const viewBillFooter = getCommonApplyFooter("BOTTOM",{
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-        callDownloadBill( "download");
+        callDownloadBill("download");
       }
     },
   },

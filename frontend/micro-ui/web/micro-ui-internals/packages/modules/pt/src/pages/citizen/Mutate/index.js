@@ -15,7 +15,7 @@ const MutationCitizen = (props) => {
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
-  const { data: mutationDocs, isLoading } = Digit.Hooks.pt.useMDMS(tenantId.split(".")[0], "PropertyTax", "MutationDocuments");
+  const { data: mutationDocs, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "PropertyTax", "MutationDocuments");
 
   const selectParams = (key, data) => {
     setParams((prev) => ({ ...prev, [key]: data }));

@@ -30,8 +30,8 @@ public class BalconyExtract extends FeatureExtract {
         for (Block block : planDetail.getBlocks())
             for (Floor floor : block.getBuilding().getFloors()) {
                 List<Balcony> balconies = new ArrayList<>();
-                String balconylayerPattern = "BLK_" + block.getNumber() + "_FLR_" + floor.getNumber() + "_BALCONY"
-                        + "_+\\d";
+                String balconylayerPattern = "BLK_" + block.getNumber() + "_FLR_" + floor.getNumber() + "_BALCONY_"
+                        + "\\d{1,2}";
 
                 List<String> balconyLayers = Util.getLayerNamesLike(planDetail.getDoc(), balconylayerPattern);
 

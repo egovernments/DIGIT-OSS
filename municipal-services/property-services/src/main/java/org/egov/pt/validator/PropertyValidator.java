@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.AlternateMobileNumber;
 import org.egov.pt.models.ConstructionDetail;
 import org.egov.pt.models.GeoLocation;
 import org.egov.pt.models.Institution;
@@ -564,7 +565,7 @@ public class PropertyValidator {
     public void validatePropertyCriteria(PropertyCriteria criteria,RequestInfo requestInfo) {
     	
 		List<String> allowedParams = null;
-
+		
 		User user = requestInfo.getUserInfo();
 		String userType = user.getType();
 		Boolean isUserCitizen = "CITIZEN".equalsIgnoreCase(userType);
@@ -592,7 +593,7 @@ public class PropertyValidator {
 				&& null == criteria.getOldPropertyId();
 		
 		if (isUserCitizen) {
-
+			
 			if (isCriteriaEmpty)
 				criteria.setMobileNumber(user.getMobileNumber());
 			
@@ -761,9 +762,6 @@ public class PropertyValidator {
 		if (!statusSet.contains(Status.ACTIVE))
 			errorMap.put("EG_PT_MUTATION_ALL_OWNER_INACTIVE_ERROR", "At the least one owner object should be ACTIVE");
 
-		if (!CollectionUtils.isEmpty(uuidsNotFound))
-			errorMap.put("EG_PT_UPDATE_OWNER_ERROR", "Invalid owners found in request : " + uuidsNotFound);
-
 		if (!propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 			
 
@@ -820,6 +818,73 @@ public class PropertyValidator {
 
 		if (!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);
+	}
+
+	public Property validateAlternateMobileNumberInformation(PropertyRequest request) {
+		
+		Map<String, String> errorMap = new HashMap<>();
+		Property property = request.getProperty();
+		validateIds(request, errorMap);	
+		
+		PropertyCriteria criteria = getPropertyCriteriaForSearch(request);
+        List<Property> propertiesFromSearchResponse = service.searchProperty(criteria, request.getRequestInfo());
+        boolean ifPropertyExists=PropertyExists(propertiesFromSearchResponse);
+		if (!ifPropertyExists) {
+			throw new CustomException("EG_PT_PROPERTY_NOT_FOUND", "The property to be updated does not exist in the system");
+		}
+
+		List <String> alternateNumbersinRequest = new ArrayList<String>();
+		for(OwnerInfo owner : property.getOwners()) {
+			if(owner.getAlternatemobilenumber()!=null) {
+				alternateNumbersinRequest.add(owner.getAlternatemobilenumber());
+			}
+		}
+		
+		if(alternateNumbersinRequest.isEmpty()) {
+			throw new CustomException("EG_PT_ALTERNATE_NUMBERS_NOT_FOUND", "The alternate mobile number details are null");
+		}
+		
+		Property propertyFromSearch = propertiesFromSearchResponse.get(0);	
+
+		Map<String, String> userToAlternateNumberMap = new HashMap<String,String>(); 
+		
+		for(OwnerInfo owner : propertyFromSearch.getOwners()) {
+			userToAlternateNumberMap.put(owner.getUuid(), owner.getAlternatemobilenumber());
+		}
+		
+		boolean isAlternateNumberSame = true;
+		
+		for(OwnerInfo owner : property.getOwners()) {
+			if(userToAlternateNumberMap.get(owner.getUuid())!=null && userToAlternateNumberMap.get(owner.getUuid()).equals(owner.getAlternatemobilenumber()) ) {
+					isAlternateNumberSame = true;
+			}
+			
+			else {
+				isAlternateNumberSame=false;
+				break;
+			}
+		}
+		
+		if(isAlternateNumberSame) {
+			throw new CustomException("EG_PT_ALTERNATE_EXISTS", "The alternate mobile number already exists for the owner");
+		}
+		
+		for(OwnerInfo owner : property.getOwners()) {
+			if(!userToAlternateNumberMap.containsKey(owner.getUuid())) {
+				throw new CustomException("EG_PT_OWNER_DOES_NOT_EXIST", "New owner can not be added while updating alternate mobile number details");
+			}
+			
+			else {
+				
+				if(owner.getMobileNumber().equals(owner.getAlternatemobilenumber())) {
+					throw new CustomException("EG_PT_ALTERNATE_EXISTS", "The alternate mobile number should not be same as primary number");
+				}
+			}
+		}
+		
+		if(!property.getStatus().equals(Status.ACTIVE)) {throw new CustomException("EG_PT_ALTERNATE_INACTIVE","Alternate number details cannot be updated if status is not active");}
+		
+		return propertyFromSearch;
 	}
 
 }

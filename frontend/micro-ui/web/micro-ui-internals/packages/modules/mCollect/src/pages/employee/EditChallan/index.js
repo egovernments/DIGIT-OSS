@@ -10,6 +10,7 @@ const EditChallan = () => {
   const { t } = useTranslation();
   let { challanNo: challanNo } = useParams();
   let isMcollectAppChanged = Digit.SessionStorage.get("isMcollectAppChanged");
+  sessionStorage.setItem("isHookRecall", true);
   const { isLoading, data: result } = Digit.Hooks.mcollect.useMCollectSearch({ tenantId, filters: { challanNo }, isMcollectAppChanged });
   return result && !isLoading ? <CreateChallen ChallanData={result?.challans} tenantId={tenantId} /> : null;
 };

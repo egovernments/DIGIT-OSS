@@ -27,62 +27,117 @@ public class TLConstants {
 
     public static final String RENEWAL_NOTIFICATION_INITIATED = "tl.renew.en.counter.initiate";
 
+    public static final String RENEWAL_NOTIFICATION_INITIATED_EMAIL = "tl.renew.en.counter.initiate.email";
+
     public static final String RENEWAL_NOTIFICATION_APPLIED = "tl.renew.en.counter.submit";
+
+    public static final String RENEWAL_NOTIFICATION_APPLIED_EMAIL  = "tl.renew.en.counter.submit.email";
 
     public static final String RENEWAL_NOTIFICATION_FIELD_INSPECTION = "tl.renew.en.field.inspection";
 
+    public static final String RENEWAL_NOTIFICATION_FIELD_INSPECTION_EMAIL = "tl.renew.en.field.inspection.email";
+
     public static final String RENEWAL_NOTIFICATION_PENDINGAPPROVAL = "tl.renew.en.pending.approval";
+
+    public static final String RENEWAL_NOTIFICATION_PENDINGAPPROVAL_EMAIL = "tl.renew.en.pending.approval.email";
 
     public static final String RENEWAL_NOTIFICATION_REJECTED = "tl.renew.en.counter.rejected";
 
+    public static final String RENEWAL_NOTIFICATION_REJECTED_EMAIL = "tl.renew.en.counter.rejected.email";
+
     public static final String RENEWAL_NOTIFICATION_APPROVED = "tl.renew.en.counter.approved";
+
+    public static final String RENEWAL_NOTIFICATION_APPROVED_EMAIL = "tl.renew.en.counter.approved.email";
 
     public static final String NOTIFICATION_INITIATED = "tl.en.counter.initiate";
 
+    public static final String NOTIFICATION_INITIATED_EMAIL = "tl.en.counter.initiate.email";
+
     public static final String NOTIFICATION_APPLIED = "tl.en.counter.submit";
+
+    public static final String NOTIFICATION_APPLIED_EMAIL = "tl.en.counter.submit.email";
 
     public static final String NOTIFICATION_FIELD_INSPECTION = "tl.en.field.inspection";
 
+    public static final String NOTIFICATION_FIELD_INSPECTION_EMAIL = "tl.en.field.inspection.email";
+
     public static final String NOTIFICATION_PAYMENT_OWNER = "tl.en.counter.payment.successful.owner";
+
+    public static final String NOTIFICATION_PAYMENT_OWNER_EMAIL = "tl.en.counter.payment.successful.owner.email";
 
     public static final String NOTIFICATION_RENEWAL_PAYMENT_OWNER = "tl.en.counter.renewal.payment.successful.owner";
 
+    public static final String NOTIFICATION_RENEWAL_PAYMENT_OWNER_EMAIL = "tl.en.counter.renewal.payment.successful.owner.email";
+
     public static final String NOTIFICATION_PAYMENT_PAYER = "tl.en.counter.payment.successful.payer";
+
+    public static final String NOTIFICATION_PAYMENT_PAYER_EMAIL = "tl.en.counter.payment.successful.payer.email";
 
     public static final String NOTIFICATION_RENEWAL_PAYMENT_PAYER = "tl.en.counter.renewal.payment.successful.payer";
 
+    public static final String NOTIFICATION_RENEWAL_PAYMENT_PAYER_EMAIL = "tl.en.counter.renewal.payment.successful.payer.email";
+
     public static final String NOTIFICATION_PAID = "tl.en.counter.pending.approval";
+
+    public static final String NOTIFICATION_PAID_EMAIL = "tl.en.counter.pending.approval.email";
 
     public static final String NOTIFICATION_APPROVED = "tl.en.counter.approved";
 
+    public static final String NOTIFICATION_APPROVED_EMAIL = "tl.en.counter.approved.email";
+
     public static final String NOTIFICATION_REJECTED = "tl.en.counter.rejected";
+
+    public static final String NOTIFICATION_REJECTED_EMAIL = "tl.en.counter.rejected.email";
 
     public static final String NOTIFICATION_CANCELLED = "tl.en.counter.cancelled";
 
+    public static final String NOTIFICATION_CANCELLED_EMAIL = "tl.en.counter.cancelled.email";
+
     public static final String NOTIFICATION_FIELD_CHANGED = "tl.en.edit.field.change";
+
+    public static final String NOTIFICATION_FIELD_CHANGED_EMAIL = "tl.en.edit.field.change.email";
 
     public static final String NOTIFICATION_OBJECT_ADDED = "tl.en.edit.object.added";
 
+    public static final String NOTIFICATION_OBJECT_ADDED_EMAIL = "tl.en.edit.object.added.email";
+
     public static final String NOTIFICATION_OBJECT_REMOVED = "tl.en.edit.object.removed";
+
+    public static final String NOTIFICATION_OBJECT_REMOVED_EMAIL = "tl.en.edit.object.removed.email";
+
 
     public static final String NOTIFICATION_OBJECT_MODIFIED = "tl.en.edit.object.modified";
 
+    public static final String NOTIFICATION_OBJECT_MODIFIED_EMAIL = "tl.en.edit.object.modified.email";
+
     public static final String NOTIFICATION_OBJECT_RENEW_MODIFIED = "tl.en.edit.object.renew.modified";
+
+    public static final String NOTIFICATION_OBJECT_RENEW_MODIFIED_EMAIL = "tl.en.edit.object.renew.modified.email";
 
     public static final String NOTIFICATION_SENDBACK_CITIZEN= "tl.en.sendback.citizen";
 
+    public static final String NOTIFICATION_SENDBACK_CITIZEN_EMAIL = "tl.en.sendback.citizen.email";
+
     public static final String NOTIFICATION_FORWARD_CITIZEN = "tl.en.forward.citizen";
+
+    public static final String NOTIFICATION_FORWARD_CITIZEN_EMAIL = "tl.en.forward.citizen.email";
 
     public static final String NOTIFICATION_TL_REMINDER = "tl.en.reminder";
 
+    public static final String NOTIFICATION_TL_REMINDER_EMAIL = "tl.en.reminder.email";
 
     public static final List<String> NOTIFICATION_CODES = Collections.unmodifiableList(Arrays.asList(
-            RENEWAL_NOTIFICATION_INITIATED, RENEWAL_NOTIFICATION_APPLIED, RENEWAL_NOTIFICATION_FIELD_INSPECTION, RENEWAL_NOTIFICATION_PENDINGAPPROVAL,
+            NOTIFICATION_INITIATED_EMAIL,  RENEWAL_NOTIFICATION_INITIATED,RENEWAL_NOTIFICATION_INITIATED_EMAIL, RENEWAL_NOTIFICATION_APPLIED, RENEWAL_NOTIFICATION_FIELD_INSPECTION, RENEWAL_NOTIFICATION_PENDINGAPPROVAL,
             RENEWAL_NOTIFICATION_REJECTED,RENEWAL_NOTIFICATION_APPROVED,NOTIFICATION_INITIATED,NOTIFICATION_APPLIED,NOTIFICATION_FIELD_INSPECTION,
             NOTIFICATION_PAYMENT_OWNER,NOTIFICATION_RENEWAL_PAYMENT_OWNER,NOTIFICATION_PAYMENT_PAYER,NOTIFICATION_RENEWAL_PAYMENT_PAYER,
             NOTIFICATION_PAID,NOTIFICATION_APPROVED,NOTIFICATION_REJECTED,NOTIFICATION_CANCELLED,NOTIFICATION_FIELD_CHANGED,NOTIFICATION_OBJECT_ADDED,
             NOTIFICATION_OBJECT_REMOVED,NOTIFICATION_OBJECT_MODIFIED,NOTIFICATION_OBJECT_RENEW_MODIFIED,NOTIFICATION_SENDBACK_CITIZEN,
-            NOTIFICATION_FORWARD_CITIZEN,NOTIFICATION_TL_REMINDER));
+            NOTIFICATION_FORWARD_CITIZEN,NOTIFICATION_TL_REMINDER,NOTIFICATION_TL_REMINDER_EMAIL,NOTIFICATION_FORWARD_CITIZEN_EMAIL,NOTIFICATION_SENDBACK_CITIZEN_EMAIL,
+            NOTIFICATION_OBJECT_RENEW_MODIFIED_EMAIL,NOTIFICATION_OBJECT_MODIFIED_EMAIL,NOTIFICATION_OBJECT_REMOVED_EMAIL,NOTIFICATION_OBJECT_ADDED_EMAIL,NOTIFICATION_FIELD_CHANGED_EMAIL,
+            NOTIFICATION_CANCELLED_EMAIL,NOTIFICATION_REJECTED_EMAIL,NOTIFICATION_APPROVED_EMAIL,NOTIFICATION_PAID_EMAIL,NOTIFICATION_RENEWAL_PAYMENT_PAYER_EMAIL,
+            NOTIFICATION_RENEWAL_PAYMENT_OWNER_EMAIL,NOTIFICATION_PAYMENT_PAYER_EMAIL,NOTIFICATION_PAYMENT_OWNER_EMAIL,NOTIFICATION_FIELD_INSPECTION_EMAIL,
+            NOTIFICATION_APPLIED_EMAIL,RENEWAL_NOTIFICATION_APPROVED_EMAIL,RENEWAL_NOTIFICATION_APPLIED_EMAIL,RENEWAL_NOTIFICATION_FIELD_INSPECTION_EMAIL,
+            RENEWAL_NOTIFICATION_PENDINGAPPROVAL_EMAIL,RENEWAL_NOTIFICATION_REJECTED_EMAIL));
 
 
     public static final String DEFAULT_OBJECT_MODIFIED_MSG = "Dear <1>,Your Trade License with application number <APPLICATION_NUMBER> was modified.";
@@ -133,6 +188,8 @@ public class TLConstants {
     public static final String MDMS_FINANCIALYEAR  = "FinancialYear";
 
     public static final String MDMS_FINACIALYEAR_PATH = "$.MdmsRes.egf-master.FinancialYear[?(@.code==\"{}\")]";
+    
+    public static final String MDMS_CURRENT_FINANCIAL_YEAR = "$.MdmsRes.egf-master.FinancialYear[?(@.module==\"{}\")]";
 
     public static final String MDMS_TL_FINACIALYEAR_PATH = "$.MdmsRes.egf-master.FinancialYear";
 
@@ -141,6 +198,8 @@ public class TLConstants {
     public static final String MDMS_STARTDATE  = "startingDate";
 
     public static final String MDMS_ENDDATE  = "endingDate";
+    
+    public static final String MDMS_FIN_YEAR_RANGE = "finYearRange";
     
     //TL types
 
@@ -175,7 +234,8 @@ public class TLConstants {
     public static final String ACTION_ADHOC  = "ADHOC";
 
     public static final String ACTION_EXPIRE  = "EXPIRE";
-
+    
+    public static final String ACTION_MANUALLYEXPIRE = "MANUALEXPIRE";
 
     public static final String STATUS_INITIATED = "INITIATED";
 
@@ -190,6 +250,10 @@ public class TLConstants {
     public static final String STATUS_CANCELLED  = "CANCELLED";
 
     public static final String STATUS_PAID  = "PAID";
+    
+    public static final String STATUS_EXPIRED="EXPIRED";
+    
+    public static final String STATUS_MANUALLYEXPIRED = "MANUALEXPIRED";
 
     public static final String BILL_AMOUNT_JSONPATH = "$.Bill[0].totalAmount";
 
@@ -280,6 +344,24 @@ public class TLConstants {
     public static final String DEFAULT_WORKFLOW = "NewTL";
 
     public static final String PAYMENT_LINK_PLACEHOLDER="{PAYMENT_LINK}";
+
+    public static final String CHANNEL_NAME_SMS = "SMS";
+
+    public static final String CHANNEL_NAME_EVENT = "EVENT";
+
+    public static final String CHANNEL_NAME_EMAIL = "EMAIL";
+
+    public static final String MODULENAME = "module";
+
+    public static final String ACTION = "action";
+
+    public static final String CHANNEL_LIST = "channelList";
+
+    public static final String CHANNEL_NAMES = "channelNames";
+
+    public static final String CHANNEL = "Channel";
+
+    public static final String TL_BUSINESSSERVICE = "TL";
 
     public TLConstants() {}
 

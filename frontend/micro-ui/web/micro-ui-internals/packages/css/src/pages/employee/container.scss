@@ -40,4 +40,7 @@
   .moduleCardWrapper{
     @apply flex flex-row flex-wrap !important;
   }
+  .gridModuleWrapper{
+    @apply grid grid-cols-4 gap-4;
+  }
 }

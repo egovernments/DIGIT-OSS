@@ -1,9 +1,9 @@
+import { Dropdown, UploadFile } from "@egovernments/digit-ui-react-components";
 import React from "react";
-import { UploadFile, Dropdown } from "@egovernments/digit-ui-react-components";
 import { convertEpochToDate } from "../Utils/index";
 
-export const configEmployeeActiveApplication = ({ t, action, selectFile, uploadedFile, setUploadedFile, selectedReason, Reasons, selectReason,employees={} }) => {
-  employees.deactivationDetails=employees?.deactivationDetails?.sort((y,x)=>x?.auditDetails?.createdDate-y?.auditDetails?.createdDate);
+export const configEmployeeActiveApplication = ({ t, action, selectFile, uploadedFile, setUploadedFile, selectedReason, Reasons, selectReason, employees = { } }) => {
+  employees.deactivationDetails = employees?.deactivationDetails?.sort((y, x) => x?.auditDetails?.createdDate - y?.auditDetails?.createdDate);
   return {
     label: {
       heading: `HR_ACTIVATE_EMPLOYEE_HEAD`,
@@ -30,8 +30,8 @@ export const configEmployeeActiveApplication = ({ t, action, selectFile, uploade
           {
             label: t("HR_EFFECTIVE_DATE"),
             type: "date",
-            isMandatory: true,  
-            disable:true,   /* Disabled date and set defaultvalue */
+            isMandatory: true,
+            disable: true,   /* Disabled date and set defaultvalue */
             populators: {
               error: t("HR_EFFECTIVE_DATE_INVALID"),
               name: "effectiveFrom",
@@ -46,6 +46,7 @@ export const configEmployeeActiveApplication = ({ t, action, selectFile, uploade
               <div style={{ marginBottom: "2rem" }}>
                 <span>{t("TL_APPROVAL_UPLOAD_SUBHEAD")}</span>
                 <UploadFile
+                  id={"hrms-activation-doc"}
                   accept="image/*, .pdf, .png, .jpeg"
                   onUpload={selectFile}
                   onDelete={() => {

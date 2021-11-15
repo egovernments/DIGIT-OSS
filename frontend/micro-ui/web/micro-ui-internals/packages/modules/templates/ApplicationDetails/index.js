@@ -13,7 +13,7 @@ import ApplicationDetailsActionBar from "./components/ApplicationDetailsActionBa
 
 const ApplicationDetails = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const state = tenantId.split(".")[0];
+  const state = Digit.ULBService.getStateId();
   const { t } = useTranslation();
   const history = useHistory();
   let { id: applicationNumber } = useParams();
@@ -29,6 +29,7 @@ const ApplicationDetails = (props) => {
     isDataLoading,
     applicationData,
     mutate,
+    nocMutation,
     workflowDetails,
     businessService,
     closeToast,
@@ -67,11 +68,25 @@ const ApplicationDetails = (props) => {
     setShowModal(false);
   };
 
-  const submitAction = (data) => {
+  const submitAction = async (data, nocData = false) => {
     if (typeof data?.customFunctionToExecute === "function") {
       data?.customFunctionToExecute({ ...data });
     }
-
+    if (nocData !== false && nocMutation) {
+      const nocPrmomises = nocData?.map(noc => {
+        return nocMutation?.mutateAsync(noc)
+      })
+      try {
+        const values = await Promise.all(nocPrmomises);
+        values && values.map((ob) => {
+          Digit.SessionStorage.del(ob?.Noc?.[0]?.nocType);
+        })
+      }
+      catch (err) {
+        closeModal();
+        return;
+      }
+    }
     if (mutate) {
       mutate(data, {
         onError: (error, variables) => {
@@ -113,6 +128,7 @@ const ApplicationDetails = (props) => {
               tenantId={tenantId}
               state={state}
               id={applicationNumber}
+              applicationDetails={applicationDetails}
               applicationData={applicationDetails?.applicationData}
               closeModal={closeModal}
               submitAction={submitAction}
