@@ -26,7 +26,7 @@ const CloseBtn = (props) => {
 const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation, onSelect, config, clearParams = () => {} }) => {
   const { t } = useTranslation();
   const modalRef = useRef();
-  const { mobileNumber, propertyIds, oldPropertyIds, locality, city } = Digit.Hooks.useQueryParams();
+  const { mobileNumber, propertyIds, oldPropertyIds, locality, city,doorNo,name } = Digit.Hooks.useQueryParams();
   const filters = {};
 
   const [modalData, setShowModal] = useState(false);
@@ -40,6 +40,8 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
   if (propertyIds) filters.propertyIds = propertyIds;
   if (oldPropertyIds) filters.oldPropertyIds = oldPropertyIds;
   if (locality) filters.locality = locality;
+  if (doorNo) filters.doorNo = doorNo;
+  if (name) filters.name = name;
 
   const [owners, setOwners, clearOwners] = Digit.Hooks.useSessionStorage("PT_MUTATE_MULTIPLE_OWNERS", null);
   // const [params, setParams, ] = Digit.Hooks.useSessionStorage("PT_MUTATE_PROPERTY");

@@ -79,7 +79,7 @@ const PTSearchFields = {
       placeHolder: "PT_SEARCH_DOOR_NO_PLACEHOLDER",
       validation: {
         pattern: {
-          value: /^[^\$\"'<>?~`!@$%^={}\[\]*:;“”‘’]{1,50}$/i,
+          value: /^[^$"'<>?~`!@$%^={}[]*:;“”‘’]{1,50}$/i,
           message: "ERR_INVALID_DOOR_NO",
         },
       },

@@ -31,11 +31,13 @@ export const newConfigMutate = [
           submitButtonLabel: "PT_HOME_SEARCH_RESULTS_BUTTON_SEARCH",
           text: "CS_PT_HOME_SEARCH_RESULTS_DESC",
         },
-        inputs: [
+        inputs:  [
           {
             label: "PT_HOME_SEARCH_RESULTS_OWN_MOB_LABEL",
             type: "mobileNumber",
             name: "mobileNumber",
+            validation:{pattern:{  value: /[789][0-9]{9}/,
+            message: "CORE_COMMON_MOBILE_ERROR",}},
             error: "CORE_COMMON_MOBILE_ERROR",
           },
           {
@@ -44,21 +46,43 @@ export const newConfigMutate = [
             type: "text",
             name: "propertyId",
             error: "ERR_INVALID_PROPERTY_ID",
+            validation: {
+              pattern: {
+                value: /^[a-zA-Z0-9-]*$/i,
+                message: "ERR_INVALID_PROPERTY_ID",
+              },
+            },
           },
           {
             label: "PT_EXISTING_PROPERTY_ID",
             type: "text",
             name: "oldPropertyId",
             error: "ERR_INVALID_PROPERTY_ID",
+            validation: {
+              pattern: {
+                value: /^[a-zA-Z0-9-]*$/i,
+                message: "ERR_INVALID_PROPERTY_ID",
+              },
+            },
           }, {
             label: "PT_SEARCHPROPERTY_TABEL_OWNERNAME",
             type: "text",
             name: "name",
+            validation: {
+              pattern: {
+                value: "[A-Za-z .`'-]{3,63}",
+                message: "PAYMENT_INVALID_NAME",
+              },
+            },
             error: "PAYMENT_INVALID_NAME",
           }, {
             label: "PT_SEARCHPROPERTY_TABEL_DOOR_NO",
             type: "text",
             name: "doorNo",
+            validation:{pattern: {
+              value: "[A-Za-z0-9#,/ -()]{1,63}",
+              message: "ERR_INVALID_DOOR_NO",
+            }},
             error: "ERR_INVALID_DOOR_NO",
           },
         ],
