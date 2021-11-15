@@ -146,7 +146,7 @@ function SelectDocument({
                 : {}
     );
     const [file, setFile] = useState(null);
-    const [uploadedFile, setUploadedFile] = useState(() => documents?.filter((item) => item?.documentType?.includes(doc?.code))[0]?.fileStoreId || null);
+    const [uploadedFile, setUploadedFile] = useState(() => ({fileStoreId: documents?.filter((item) => item?.documentType?.includes(doc?.code))[0]?.fileStoreId,fileName: documents?.filter((item) =>item?.documentType?.includes(doc?.code))[0]?.fileName || ""}) || null);
     const [newArray, setnewArray ] = useState([]);
     const [uploadedfileArray, setuploadedfileArray] = useState([]);
     const [fileArray, setfileArray] = useState([] || formData?.documents?.documents.filter((ob) => ob.documentType === selectedDocument.code) );
@@ -185,17 +185,17 @@ function SelectDocument({
             setDocuments((prev) => {
                 //const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
 
-                if (uploadedFile?.length === 0 || uploadedFile === null) {
+                if (uploadedFile === null || uploadedFile?.fileStoreId === undefined || uploadedFile?.fileStoreId === null) {
                     return prev;
                 }
 
-                const filteredDocumentsByFileStoreId = prev?.filter((item) => item?.fileStoreId !== uploadedFile);
+                const filteredDocumentsByFileStoreId = prev?.filter((item) => item?.fileStoreId !== uploadedFile.fileStoreId);
                 let newfiles = [];
                 uploadedfileArray && uploadedfileArray.map((docc, index) => {
                     newfiles.push({
                         documentType: selectedDocument?.code,
-                            fileStoreId: docc,
-                            documentUid: docc,
+                            fileStoreId: docc.fileStoreId,
+                            documentUid: docc.fileStoreId,
                             fileName: fileArray[index]?.name || "",
                             id:documents? documents.find(x => x.documentType === selectedDocument?.code)?.id:undefined,
                     })
@@ -212,22 +212,22 @@ function SelectDocument({
 
     useEffect(() => {
         uploadedfileArray.length>0 && setcodeafterupload();
+
         if (selectedDocument?.code) {
             setDocuments((prev) => {
                 //const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
 
-                if (uploadedFile?.length === 0 || uploadedFile === null) {
+                if (uploadedFile === null|| uploadedFile?.fileStoreId === undefined || uploadedFile?.fileStoreId === null) {
                     return prev;
                 }
-
-                const filteredDocumentsByFileStoreId = prev?.filter((item) => item?.fileStoreId !== uploadedFile);
+                const filteredDocumentsByFileStoreId = prev?.filter((item) => item?.fileStoreId !== uploadedFile.fileStoreId);
                 return [
                     ...filteredDocumentsByFileStoreId,
                     {
                         documentType: selectedDocument?.code,
-                        fileStoreId: uploadedFile,
-                        documentUid: uploadedFile,
-                        fileName: file?.name || "document",
+                        fileStoreId: uploadedFile.fileStoreId,
+                        documentUid: uploadedFile.fileStoreId,
+                        fileName: file?.name ||uploadedFile.fileName || "document",
                         id:documents? documents.find(x => x.documentType === selectedDocument?.code)?.id:undefined,
                     },
                 ];
@@ -252,7 +252,7 @@ function SelectDocument({
                         setUploadedFile(null);
                         const response = await Digit.UploadServices.Filestorage("PT", file, Digit.ULBService.getStateId());
                         if (response?.data?.files?.length > 0) {
-                            setUploadedFile(response?.data?.files[0]?.fileStoreId);
+                            setUploadedFile({fileStoreId: response?.data?.files[0]?.fileStoreId, fileName:file.name});
                         } else {
                             setError(t("CS_FILE_UPLOAD_ERROR"));
                         }

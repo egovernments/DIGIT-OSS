@@ -179,7 +179,7 @@ function SelectDocument({
     const tenantId = Digit.ULBService.getCurrentTenantId(doc);
     const [selectedDocument, setSelectedDocument] = useState(doc?.dropdownData?.[0]);
     const [file, setFile] = useState(null);
-    const [uploadedFile, setUploadedFile] = useState(() => ({fileStoreId: nocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0]?.fileStoreId,fileName:""}) || null);
+    const [uploadedFile, setUploadedFile] = useState(() => ({fileStoreId: nocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0]?.fileStoreId,fileName:nocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0]?.fileName}) || null);
     const [newArray, setnewArray ] = useState([]);
 
     const handleSelectDocument = (value) => setSelectedDocument(value);
@@ -237,7 +237,7 @@ function SelectDocument({
     useEffect(() => {
         (async () => {
             setError(null);
-            if (file && !file.fileStoreId && !(file.documentType === file.type)) {
+            if (file && !file.fileStoreId && (file.type.includes("/"))) {
                 if (file.size >= 5242880) {
                     setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
                 } else {
@@ -264,7 +264,7 @@ function SelectDocument({
         //     filesDictionary.set(file.fileName, file)
         // })
         let selectedUplDocs=[];
-        formData?.nocDocuments?.nocDocuments?.filter((ob) => ob.documentType === doc?.documentType.replaceAll(".", "_")).forEach(e =>
+        formData?.nocDocuments?.nocDocuments?.filter((ob) => ob.documentType === doc?.dropdownData?.[0]?.code).forEach(e =>
             selectedUplDocs.push([e.fileName, {file: {name: e.fileName, type: e.documentType}, fileStoreId: {fileStoreId: e.fileStoreId, tenantId}}])
              )
         return selectedUplDocs;
