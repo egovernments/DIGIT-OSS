@@ -116,6 +116,14 @@ const Inbox = ({ tenants, parentRoute }) => {
     "OBPS_SCRUTINYDETAILS_ALL"
     ) */
 
+    const fetchLastPage = () => {
+      setPageOffset(bpaInboxData?.totalCount && (Math.ceil(bpaInboxData?.totalCount / 10) * 10 - pageSize));
+  };
+
+  const fetchFirstPage = () => {
+      setPageOffset(0);
+  };
+
   const handleSort = (args) => {
     setSortParams(args);
   };
@@ -196,6 +204,8 @@ const Inbox = ({ tenants, parentRoute }) => {
       onSort={handleSort}
       onNextPage={fetchNextPage}
       onPrevPage={fetchPrevPage}
+      onLastPage={fetchLastPage}
+      onFirstPage={fetchFirstPage}
       currentPage={Math.floor(pageOffset / pageSize)}
       pageSizeLimit={pageSize}
       disableSort={false}
@@ -204,6 +214,7 @@ const Inbox = ({ tenants, parentRoute }) => {
       parentRoute={parentRoute}
       paginationParms={paginationParams}
       sortParams={sortParams}
+      totalRecords={bpaInboxData?.totalCount}
     // totalRecords={isInbox ? Number(applications?.totalCount) : totalCount}
     />
   );

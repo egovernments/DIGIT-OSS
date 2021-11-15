@@ -87,6 +87,8 @@ const DesktopInbox = (props) => {
         disableSort={props.disableSort}
         sortParams={props.sortParams}
         totalRecords={props.totalRecords}
+        onLastPage={props.onLastPage}
+        onFirstPage={props.onFirstPage}
       />
     );
   }

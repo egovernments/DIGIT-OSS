@@ -82,7 +82,7 @@ const MyApplication = () => {
           <KeyNote keyValue={t("BPA_COMMON_SERVICE")} note={t(`BPA_SERVICETYPE_NEW_CONSTRUCTION`)} />
           <KeyNote keyValue={t("TL_COMMON_TABLE_COL_STATUS")} note={t(`WF_BPA_${application?.state}`)} noteStyle={application?.status === "APPROVED" ? {color: "#00703C"} : {color: "#D4351C"}}/>
           <KeyNote keyValue={t("BPA_COMMON_SLA")} note={application?.sla} />
-          {application.status !== "INITIATED"?<Link to={{ pathname: `/digit-ui/citizen/obps/bpa/${application?.applicationNo}`, state: { tenantId: '' } }}>
+          {application.action === "SEND_TO_ARCHITECT" || application.status !== "INITIATED"?<Link to={{ pathname: `/digit-ui/citizen/obps/bpa/${application?.applicationNo}`, state: { tenantId: '' } }}>
             <SubmitBar label={t("TL_VIEW_DETAILS")} />
           </Link>:
           <SubmitBar label={t("BPA_COMP_WORKFLOW")} onSubmit={() => getBPAFormData(application,mdmsData,history,t)}/>}

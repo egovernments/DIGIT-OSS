@@ -244,7 +244,7 @@ function SelectDocument({
     useEffect(() => {
         (async () => {
             setError(null);
-            if (file && !file.fileStoreId) {
+            if (file && !file.fileStoreId && !(file.documentType === file.type)) {
                 if (file.size >= 5242880) {
                     setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
                 } else {
@@ -271,7 +271,11 @@ function SelectDocument({
         // formData?.documents?.documents.length > 0 && formData?.documents?.documents.filter((ob) => ob.documentType === selectedDocument.code).forEach(file => {
         //     filesDictionary.set(file.fileName, file)
         // })
-        return formData?.documents?.documents?.filter((ob) => ob.documentType === selectedDocument.code).forEach(e => [e.fileName, {file: {name: e.fileName, type: e.documentType}, fileStoreId: {fileStoreId: e.fileStoreId, tenantId}}] )
+        let selectedUplDocs=[];
+        formData?.documents?.documents?.filter((ob) => ob.documentType === selectedDocument.code).forEach(e =>
+            selectedUplDocs.push([e.fileName, {file: {name: e.fileName, type: e.documentType}, fileStoreId: {fileStoreId: e.fileStoreId, tenantId}}])
+            )
+        return selectedUplDocs;
     },[formData])
 
     return (
