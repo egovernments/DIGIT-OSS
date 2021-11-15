@@ -62,6 +62,7 @@ import { LastRow, MediaRow, Row, StatusTable } from "./atoms/StatusTable";
 import SubmitBar from "./atoms/SubmitBar";
 import StandaloneSearchBar from "./atoms/StandaloneSearchBar";
 import {
+  InfoBannerIcon,
   AnnouncementIcon, ArrowDown, ArrowLeft, ArrowRightInbox, Calender, CaseIcon, CitizenTruck, CloseSvg, ComplaintIcon, Details, DocumentSVG, DownloadIcon, DownloadImgIcon, DownwardArrow, DropIcon, Ellipsis, EmailIcon, FilterIcon, GetApp, HomeIcon,
   PrevIcon, ViewsIcon, LanguageIcon,
   LogoutIcon, Person, PersonIcon, Poll, PrintIcon, PropertyHouse, PTIcon, ReceiptIcon, RefreshIcon, RupeeIcon, SearchIconSvg, ShareIcon, ShippingTruck, SortDown, GenericFileIcon,
@@ -214,6 +215,7 @@ export {
   PMBIcon,
   GenericFileIcon,
   HelpIcon,
+  InfoBannerIcon,
   NotificationBell,
   ImageIcon,
   OBPSIconSolidBg,

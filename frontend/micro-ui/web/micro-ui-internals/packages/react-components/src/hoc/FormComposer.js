@@ -156,6 +156,7 @@ export const FormComposer = (props) => {
                       <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }} className={field?.disable ? "disabled" : ""}>
                         {t(field.label)}
                         {field.isMandatory ? " * " : null}
+                        {field.labelChildren&&field.labelChildren}
                       </CardLabel>
                     )}
                     {errors && errors[field.populators?.name] && Object.keys(errors[field.populators?.name]).length ? (

@@ -11,13 +11,13 @@ export const PTService = {
       userService: auth === false ? auth : true,
       params: { tenantId, ...filters },
     }),
-  fetchPaymentDetails: ({ tenantId, consumerCodes }) =>
+  fetchPaymentDetails: ({ tenantId, consumerCodes ,auth=true}) =>
     Request({
       url: Urls.pt.fetch_payment_details,
       useCache: false,
       method: "POST",
-      auth: true,
-      userService: true,
+      auth: auth === false ? auth : true,
+      userService: auth === false ? auth : true,
       params: { tenantId, consumerCode: consumerCodes, businessService: "PT" },
     }),
   create: (details, tenantId) =>
