@@ -46,4 +46,6 @@ public class WorkflowConstants {
     
     public static final String  FSM_MODULE="FSM";
 
+    public static final String  PAYMENT_RECONCILIATION_SYSTEM_USER_CODE="SYSTEM_PAYMENT";
+
 }

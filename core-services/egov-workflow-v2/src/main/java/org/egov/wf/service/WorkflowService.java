@@ -61,6 +61,14 @@ public class WorkflowService {
     public List<ProcessInstance> transition(ProcessInstanceRequest request){
         RequestInfo requestInfo = request.getRequestInfo();
 
+        // Enriching userInfo in case of WF transition upon payment reconciliation
+        if(requestInfo.getUserInfo().getType().equals(WorkflowConstants.PAYMENT_RECONCILIATION_SYSTEM_USER_CODE)){
+            requestInfo.getUserInfo().getRoles().forEach(role->{
+                role.setTenantId(config.getStateLevelTenantId());
+            });
+            requestInfo.getUserInfo().setTenantId(config.getStateLevelTenantId());
+        }
+
         List<ProcessStateAndAction> processStateAndActions = transitionService.getProcessStateAndActions(request.getProcessInstances(),true);
         enrichmentService.enrichProcessRequest(requestInfo,processStateAndActions);
         workflowValidator.validateRequest(requestInfo,processStateAndActions);
