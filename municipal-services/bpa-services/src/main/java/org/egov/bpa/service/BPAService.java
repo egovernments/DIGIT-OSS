@@ -554,6 +554,7 @@ public class BPAService {
 
 		} catch (Exception ex) {
 			exception = ex;
+			ex.printStackTrace();
 			log.debug("Exception occured while downloading pdf", ex.getMessage());
 			throw new CustomException(BPAErrorConstants.UNABLE_TO_DOWNLOAD, "Unable to download the file");
 		} finally {
@@ -622,6 +623,7 @@ public class BPAService {
                         document = new PdfDocument(new PdfReader(readStream),
                                 new PdfWriter(fileName));
                 }catch (Exception e){
+                    e.printStackTrace();
                         log.error("Error while creating temp report.");
                 }finally {
                     /*
