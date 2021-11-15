@@ -1,4 +1,4 @@
-import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Card, CardSubHeader, Header, LinkButton, Loader, Row, CloseSvg,StatusTable, SubmitBar ,PopUp,EditIcon } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
@@ -48,7 +48,7 @@ const PropertyInformation = () => {
       select: (d) => d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
     }
   );
-
+const [popup,showPopup] = useState(false);
   const [billData, updateCanFetchBillData] = useState({
     loading: false,
     loaded: false,
@@ -129,6 +129,8 @@ const PropertyInformation = () => {
     }
     return <LinkButton label={t("PT_OWNER_HISTORY")} className="check-page-link-button" onClick={routeTo} />;
   };
+  const  UpdatePropertyNumberComponent = Digit?.ComponentRegistryService?.getComponent('UpdatePropertyNumber');
+
   return (
     <React.Fragment>
       <Header>{t("PT_PROPERTY_INFORMATION")}</Header>
@@ -222,7 +224,7 @@ const PropertyInformation = () => {
                       label={t("PT_FORM3_OWNERSHIP_TYPE")}
                       text={`${property?.ownershipCategory ? t(`PT_OWNERSHIP_${property?.ownershipCategory}`) : t("CS_NA")}`}
                     />
-                    <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={`${t(owner?.mobileNumber)}` || t("CS_NA")} />
+                    <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={`${t(owner?.mobileNumber)}` || t("CS_NA")} actionButton={<div onClick={()=>showPopup(true)}><EditIcon /></div>}/>
                     <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={`${t(t("CS_NA"))}`} />
                     <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={`${t(owner?.ownerType).toLowerCase()}` || t("CS_NA")} />
                     <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={`${t(owners?.correspondenceAddress)}` || t("CS_NA")} />
@@ -249,6 +251,10 @@ const PropertyInformation = () => {
               </div>
             )}
           </div>
+          {popup && (
+        <PopUp>
+          <UpdatePropertyNumberComponent showPopup={showPopup} property={property} t={t}  ></UpdatePropertyNumberComponent>
+      </PopUp>)}
         </Card>
       </div>
     </React.Fragment>
