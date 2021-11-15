@@ -543,7 +543,33 @@ public class BPAService {
 
 		Exception exception = null;
 		try {
-			this.createTempReport(bpaRequest, fileName, pdfDoc);
+			//this.createTempReport(bpaRequest, fileName, pdfDoc);
+		    URL downloadUrl = this.getEdcrReportDownloaUrl(bpaRequest);
+	                // Read the PDF from the URL and save to a local file
+	                //FileOutputStream writeStream = null;
+	                InputStream readStream = null;
+	                try {
+	                    /*
+	                     * writeStream = new FileOutputStream(fileName); byte[] byteChunck = new byte[1024]; int baLength;
+	                     */
+	                        readStream = downloadUrl.openStream();
+	                        /*
+	                         * while ((baLength = readStream.read(byteChunck, 0 , byteChunck.length)) != -1) {
+	                         * writeStream.write(byteChunck, 0, baLength); }
+	                         */
+	                        pdfDoc = new PdfDocument(new PdfReader(readStream),
+	                                new PdfWriter(fileName));
+	                        log.info("pdf version-->>"+pdfDoc.getPdfVersion());
+	                        log.info("Page Size--->>"+pdfDoc.getNumberOfPages());
+	                } catch (Exception e) {
+	                    e.printStackTrace();
+	                        log.error("Error while creating temp report.");
+	                } finally {
+	                    /*
+	                     * writeStream.flush(); writeStream.close();
+	                     */
+	                        readStream.close();
+	                }
 			String localizationMessages = notificationUtil.getLocalizationMessages(bpa.getTenantId(),
 					bpaRequest.getRequestInfo());
 			String permitNo = notificationUtil.getMessageTemplate(BPAConstants.PERMIT_ORDER_NO, localizationMessages);
@@ -622,6 +648,7 @@ public class BPAService {
                          */
                         document = new PdfDocument(new PdfReader(readStream),
                                 new PdfWriter(fileName));
+                        
                 }catch (Exception e){
                     e.printStackTrace();
                         log.error("Error while creating temp report.");
