@@ -174,7 +174,7 @@ const CheckPage = ({ onSubmit, value }) => {
           onClick={() => routeTo(`${routeLink}/plot-details`)}
         />
         <StatusTable>
-          <Row className="border-none" label={`${t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)}:`} text={`${datafromAPI?.planDetail?.planInformation?.plotArea} sq.ft` || t("CS_NA")} />
+          <Row className="border-none" label={`${t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)}:`} text={`${datafromAPI?.planDetail?.planInformation?.plotArea} sq.ft` || t("CS_NA")} textStyle={{marginLeft:"9px"}}/>
           <Row className="border-none" label={`${t(`BPA_PLOT_NUMBER_LABEL`)}:`} text={datafromAPI?.planDetail?.planInformation?.plotNo || t("CS_NA")} />
           <Row className="border-none" label={`${t(`BPA_KHATHA_NUMBER_LABEL`)}:`} text={datafromAPI?.planDetail?.planInformation?.khataNo || t("CS_NA")} />
           <Row className="border-none" label={`${t(`BPA_HOLDING_NUMBER_LABEL`)}:`} text={data?.holdingNumber || t("CS_NA")} />
@@ -265,11 +265,13 @@ const CheckPage = ({ onSubmit, value }) => {
           onClick={() => routeTo(`${routeLink}/noc-details`)}
         />
         {nocDocuments && nocDocuments?.NocDetails.map((noc, index) => (
-          <div key={index}>
-            <CardSectionHeader>{`${t(`BPA_${noc?.nocType}_HEADER`)}:`}</CardSectionHeader>
+          <div key={index} style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", maxWidth:"600px" }}>
+            <CardSectionHeader style={{marginBottom: "24px"}}>{`${t(`BPA_${noc?.nocType}_HEADER`)}:`}</CardSectionHeader>
             <StatusTable>
               <Row className="border-none" label={t(`BPA_${noc?.nocType}_LABEL`)} text={noc?.applicationNo} />
-              <OBPSDocument value={isEditApplication?[...PrevStateNocDocuments,...nocDocuments.nocDocuments]:value} Code="NOC" index={index} />
+              <Row className="border-none" label={t(`BPA_NOC_STATUS`)} text={t(`${noc?.applicationStatus}`)} textStyle={noc?.applicationStatus == "APPROVED" || noc?.applicationStatus == "AUTO_APPROVED" ? {color : "#00703C"} : {color: "#D4351C"}} />
+              <Row className="border-none" label={t(`BPA_DOCUMENT_DETAILS_LABEL`)} text={""} />
+              <OBPSDocument value={isEditApplication?[...PrevStateNocDocuments,...nocDocuments.nocDocuments]:value} Code={noc?.nocType?.split("_")[0]} index={index} isNOC={true}/>
             </StatusTable>
           </div>
         ))}

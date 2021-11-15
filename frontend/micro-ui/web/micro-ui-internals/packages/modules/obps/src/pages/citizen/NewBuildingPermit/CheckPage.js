@@ -164,18 +164,10 @@ import {
     <Card style={{paddingRight:"16px"}}>
     <CardHeader>{t("BPA_PLOT_DETAILS_TITLE")}</CardHeader>
     <LinkButton
-            label={
-            <div>
-            <span>
-            <svg style={{marginTop:"-10px",float:"right", position:"relative",bottom:"32px"  }}  width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9.126 5.125L11.063 3.188L14.81 6.935L12.873 8.873L9.126 5.125ZM17.71 2.63L15.37 0.289999C15.1826 0.103748 14.9292 -0.000793457 14.665 -0.000793457C14.4008 -0.000793457 14.1474 0.103748 13.96 0.289999L12.13 2.12L15.88 5.87L17.71 4C17.8844 3.81454 17.9815 3.56956 17.9815 3.315C17.9815 3.06044 17.8844 2.81546 17.71 2.63ZM5.63 8.63L0 14.25V18H3.75L9.38 12.38L12.873 8.873L9.126 5.125L5.63 8.63Z" fill="#F47738"/>
-            </svg>
-            </span>
-            </div>
-            }
-              style={{ width: "100px", display:"inline" }}
-              onClick={() => routeTo(`${routeLink}/plot-details`)}
-           />
+          label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
+          style={{ width: "100px", display:"inline" }}
+          onClick={() => routeTo(`${routeLink}/plot-details`)}
+        />
     <StatusTable>
           <Row className="border-none" textStyle={{marginLeft:"9px"}} label={t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)} text={`${datafromAPI?.planDetail?.planInformation?.plotArea} sq.ft` || t("CS_NA")} />
           <Row className="border-none" label={t(`BPA_PLOT_NUMBER_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.plotNo || t("CS_NA")} />
@@ -304,13 +296,15 @@ import {
             onClick={() => routeTo(`${routeLink}/noc-details`)}
           />
       {nocDocuments && nocDocuments?.NocDetails.map((noc, index) => (
-        <div key={index}>
-        <CardSectionHeader>{t(`BPA_${noc?.nocType}_HEADER`)}:</CardSectionHeader>
+        <div key={index} style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", maxWidth:"600px" }}>
+        <CardSectionHeader style={{marginBottom: "24px"}}>{`${t(`BPA_${noc?.nocType}_HEADER`)}:`}</CardSectionHeader>
         <StatusTable>
-        <Row className="border-none" label={t(`BPA_${noc?.nocType}_LABEL`)} textStyle={{marginLeft:"10px"}} text={noc?.applicationNo} />
-        <OBPSDocument value={isEditApplication?[...PrevStateNocDocuments,...nocDocuments.nocDocuments]: value} Code={noc?.nocType?.split("_")[0]} index={index} isNOC={true}/> 
+          <Row className="border-none" label={t(`BPA_${noc?.nocType}_LABEL`)} text={noc?.applicationNo} />
+          <Row className="border-none" label={t(`BPA_NOC_STATUS`)} text={t(`${noc?.applicationStatus}`)} textStyle={noc?.applicationStatus == "APPROVED" || noc?.applicationStatus == "AUTO_APPROVED" ? {color : "#00703C"} : {color: "#D4351C"}} />
+          <Row className="border-none" label={t(`BPA_DOCUMENT_DETAILS_LABEL`)} text={""} />
+          <OBPSDocument value={isEditApplication?[...PrevStateNocDocuments,...nocDocuments.nocDocuments]:value} Code={noc?.nocType?.split("_")[0]} index={index} isNOC={true}/>
         </StatusTable>
-        </div>
+      </div>
       ))}
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_SUMMARY_FEE_EST")}:</CardSubHeader> 

@@ -165,7 +165,7 @@ const NOCDocuments = ({ t, noc, docs, isNoc, applicationData,NOCdata, bpaActions
       <Row label={t(`BPA_${noc?.nocType}_HEADER`)} />
       {NOCdata && NOCdata.map((noc,index) => {
         if (noc?.field == "STATUS") {
-          return <Row label={t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} textStyle = {(noc?.value == "APPROVED" || noc?.value == "AUTO_APPROVED") ? {color: "GREEN"} : {color : "#D4351C"}}/>
+          return <Row label={t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} textStyle = {(noc?.value == "APPROVED" || noc?.value == "AUTO_APPROVED") ? {color: "#00703C"} : {color : "#D4351C"}}/>
         } else {
           return <Row label={t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} />
         }

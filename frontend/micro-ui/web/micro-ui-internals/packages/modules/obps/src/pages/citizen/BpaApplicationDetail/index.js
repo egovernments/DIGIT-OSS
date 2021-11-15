@@ -8,7 +8,7 @@ import DocumentDetails from "../../../components/DocumentDetails";
 import ActionModal from "./Modal";
 import OBPSDocument from "../../../pageComponents/OBPSDocuments";
 import SubOccupancyTable from "../../../../../templates/ApplicationDetails/components/SubOccupancyTable";
-import { getBusinessServices, getOrderedDocs, getCheckBoxLabelData, getBPAFormData } from "../../../utils";
+import { getBusinessServices, getOrderedDocs, getCheckBoxLabelData, getBPAFormData, convertDateToEpoch } from "../../../utils";
 
 const BpaApplicationDetail = () => {
   const { id } = useParams();
@@ -71,7 +71,7 @@ const BpaApplicationDetail = () => {
     let payval=[]
     payments.length>0 && payments.map((ob) => {
       ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.billAccountDetails.map((bill,index) => {
-        payval.push({title:`${bill?.taxHeadCode}_DETAILS`, value:""});
+        payval.push({title:`${bill?.taxHeadCode}_DETAILS`, value:" "});
         payval.push({title:bill?.taxHeadCode, value:`₹${bill?.amount}`});
         payval.push({title:"BPA_STATUS_LABEL", value:"Paid"});
       })
@@ -110,6 +110,8 @@ const BpaApplicationDetail = () => {
   }
 
   async function getPermitOccupancyOrderSearch({tenantId},order) {
+    let currentDate = new Date();
+    data.applicationData.additionalDetails.runDate = convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate());
     let requestData = {...data?.applicationData, edcrDetail:[{...data?.edcrDetails}]}
     let response = await Digit.PaymentService.generatePdf(tenantId, { Bpa: [requestData] }, order);
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
@@ -159,7 +161,7 @@ const BpaApplicationDetail = () => {
       window.location.assign(`${window.location.origin}/digit-ui/citizen/payment/collect/${`${getBusinessServices(data?.businessService, data?.applicationStatus)}/${id}/${data?.tenantId}?tenantId=${data?.tenantId}`}`);
     }
     if (action === "SEND_TO_CITIZEN"){
-      getBPAFormData(data?.applicationData,mdmsData,history);
+      getBPAFormData(data?.applicationData,mdmsData,history,t);
     }
     setSelectedAction(action);
     setDisplayMenu(false);
@@ -345,13 +347,13 @@ const BpaApplicationDetail = () => {
                 </div>}
              </div>
           )) }
-              {detail?.additionalDetails?.subOccupancyTableDetails && <SubOccupancyTable edcrDetails={detail?.additionalDetails} />}
+              {detail?.additionalDetails?.subOccupancyTableDetails && <SubOccupancyTable edcrDetails={detail?.additionalDetails} applicationData={data?.applicationData} />}
         {detail?.additionalDetails?.noc && detail?.additionalDetails?.noc.map((nocob, ind) => (
-        <div key={ind}>
+        <div key={ind} style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px" }}>
         <StatusTable>
-        <Row className="border-none" label={nocob?.values?.[0]?.documentType?t(`BPA_${nocob?.values?.[0]?.documentType.replaceAll(".","_")}_HEADER`):t(`${detail?.values?.[0]?.title.slice(0,-5)}HEADER`)}></Row>
+        <Row className="border-none" label={t(`${`BPA_${detail?.additionalDetails?.data?.nocType}_HEADER`}`)}></Row>
         <Row className="border-none" label={t(`${detail?.values?.[0]?.title}`)} textStyle={{marginLeft:"10px"}} text={getTranslatedValues(detail?.values?.[0]?.value , detail?.values?.[0]?.isNotTranslated)} />
-        <Row className="border-none" label={t(`${detail?.values?.[1]?.title}`)} textStyle={{marginLeft:"10px"}} text={getTranslatedValues(detail?.values?.[1]?.value , detail?.values?.[1]?.isNotTranslated)} />
+        <Row className="border-none" label={t(`${detail?.values?.[1]?.title}`)} textStyle={detail?.values?.[1]?.title == "APPROVED" || detail?.values?.[1]?.title == "AUTO_APPROVED" ? {marginLeft:"10px", color: "#00703C"} : {marginLeft:"10px", color: "#D4351C"}} text={getTranslatedValues(detail?.values?.[1]?.value , detail?.values?.[1]?.isNotTranslated)} />
         <Row className="border-none" label={t(`${detail?.values?.[2]?.title}`)} textStyle={{marginLeft:"10px"}} text={getTranslatedValues(detail?.values?.[2]?.value , detail?.values?.[2]?.isNotTranslated)} />
         <Row className="border-none" label={t(`${nocob?.title}`)}></Row>
         </StatusTable>

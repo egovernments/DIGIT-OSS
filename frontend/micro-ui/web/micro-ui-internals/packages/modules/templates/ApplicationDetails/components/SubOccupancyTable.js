@@ -2,7 +2,7 @@ import React, { Fragment, useMemo } from "react";
 import { Table, StatusTable, Row, CardSubHeader, CardSectionHeader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
-const SubOccupancyTable = ({ edcrDetails }) => {
+const SubOccupancyTable = ({ edcrDetails, applicationData }) => {
   const { t } = useTranslation();
 
   const tableHeader = [
@@ -65,6 +65,19 @@ const SubOccupancyTable = ({ edcrDetails }) => {
     return floors;
   }
 
+  function getSubOccupancyValues(index) {
+    let values = applicationData?.landInfo?.unit;
+    let returnValue = "";
+    if (values?.length > 0) {
+      let splitArray = values[index]?.usageCategory?.split(',');
+      if (splitArray?.length) {
+        const returnValueArray = splitArray.map(data => data ? `${t(`BPA_SUBOCCUPANCYTYPE_${data}`)}` : "NA");
+        returnValue = returnValueArray.join(',')
+      }
+    }
+    return returnValue ? returnValue : "NA";
+  }
+
   return (
     <Fragment>
       <div style={window.location.href.includes("citizen")?{}:{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "600px", minWidth: "280px" }}>
@@ -77,6 +90,9 @@ const SubOccupancyTable = ({ edcrDetails }) => {
         {edcrDetails?.subOccupancyTableDetails?.[0]?.value?.planDetail?.blocks.map((block, index) => (
           <div key={index}>
             <CardSubHeader style={{ marginBottom: "8px", paddingBottom: "9px", color: "#0B0C0C", fontSize: "16px", lineHeight: "19px" }}>{t("BPA_BLOCK_SUBHEADER")} {index + 1}</CardSubHeader>
+            <StatusTable>
+              <Row className="border-none" label={`${t("BPA_SUB_OCCUPANCY_LABEL")}:`} text={getSubOccupancyValues(index)}></Row>
+            </StatusTable>
             <div style={window.location.href.includes("citizen")?{overflow:"scroll"}:{ maxWidth: "600px", maxHeight: "280px" }}>
               <Table
                 className="customTable"

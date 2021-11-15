@@ -60,7 +60,7 @@ export const convertToNocObject = (data,datafromflow) => {
   return formData;
 }
 
-export const getBPAFormData = async(data,mdmsData,history) => {
+export const getBPAFormData = async(data,mdmsData,history,t) => {
   const edcrResponse = await Digit.OBPSService.scrutinyDetails(data?.tenantId, { edcrNumber: data?.edcrNumber })
   const APIScrutinyDetails = edcrResponse?.edcrDetail[0];
   const getBlockIds = (unit) => {

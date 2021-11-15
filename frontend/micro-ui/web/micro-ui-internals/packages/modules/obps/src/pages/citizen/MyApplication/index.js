@@ -85,7 +85,7 @@ const MyApplication = () => {
           {application.status !== "INITIATED"?<Link to={{ pathname: `/digit-ui/citizen/obps/bpa/${application?.applicationNo}`, state: { tenantId: '' } }}>
             <SubmitBar label={t("TL_VIEW_DETAILS")} />
           </Link>:
-          <SubmitBar label={t("BPA_COMP_WORKFLOW")} onSubmit={() => getBPAFormData(application,mdmsData,history)}/>}
+          <SubmitBar label={t("BPA_COMP_WORKFLOW")} onSubmit={() => getBPAFormData(application,mdmsData,history,t)}/>}
         </Card>
       ))}
     </Fragment>
