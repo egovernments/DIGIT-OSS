@@ -12,6 +12,7 @@ module.exports = {
   auth_token: process.env.AUTH_TOKEN,
   KAFKA_BROKER_HOST: process.env.KAFKA_BROKER_HOST || "kafka-v2.kafka-cluster:9092",
   KAFKA_RECEIVE_CREATE_JOB_TOPIC: process.env.KAFKA_RECEIVE_CREATE_JOB_TOPIC || "PDF_GEN_RECEIVE",
+  PDF_BATCH_SIZE: process.PDF_BATCH_SIZE || 20,
   pdf: {
     epass_pdf_template: process.env.EPASS_TEMPLATE || "tlcertificate",
     tlcertificate_pdf_template: process.env.TL_CERTIFICATE || "tlcertificate",

@@ -662,13 +662,14 @@ router.post(
               billArray,
               requestinfo
             );*/
+            var batchSize = config.PDF_BATCH_SIZE;
             var size = consolidatedResult.Bill.length;
             var id = uuidv4();
             var jobid = `${pdfkey}-${new Date().getTime()}-${id}`;
-            var numberOfFiles = (size%20) == 0 ? (size/20) : (~~(size/20) +1);
-            for(var i = 0;i<size;i+=20){
+            var numberOfFiles = (size%batchSize) == 0 ? (size/batchSize) : (~~(size/batchSize) +1);
+            for(var i = 0;i<size;i+=batchSize){
               var payloads = [];
-              var billData = consolidatedResult.Bill.slice(i,i+20);
+              var billData = consolidatedResult.Bill.slice(i,i+batchSize);
               var billArray = { 
                   Bill: billData,
                   isBulkPdf: true,

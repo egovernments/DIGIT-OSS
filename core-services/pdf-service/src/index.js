@@ -838,8 +838,8 @@ export const createNoSave = async (
       formatConfigByFile[0].footer = convertFooterStringtoFunctionIfExist(formatconfig.footer);
       const doc = printer.createPdfKitDocument(formatConfigByFile[0]);
       let fileNameAppend = "-" + new Date().getTime();
-      //let directory = envVariables.SAVE_PDF_DIR + bulkPdfJobId
-      let directory = bulkPdfJobId;
+      let directory = envVariables.SAVE_PDF_DIR + bulkPdfJobId
+      //let directory = bulkPdfJobId;
 
       if(!fs.existsSync(directory))
         fs.mkdirSync(directory, { recursive: true });
