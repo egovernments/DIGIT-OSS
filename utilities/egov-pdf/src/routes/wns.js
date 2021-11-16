@@ -384,11 +384,7 @@ router.post(
       if(req.query.consumerCode)
         consumerCode = req.query.consumerCode;
       var requestinfo = req.body;
-      var restWater,restSewerage;
-      var waterBills, sewerageBills;
-      var consolidatedResult = {Bill:[]};
-      var propertyIdSet = [];
-      var connectionnoToPropertyMap = {};
+      
       if (requestinfo == undefined) {
         return renderError(res, "requestinfo can not be null");
       }
@@ -397,331 +393,46 @@ router.post(
           res,
           "Bussiness Service, TenantId and Locality are mandatory to generate the water and sewerage bill"
         );
-      } 
-           
+      }
+
+      var id = uuidv4();
+      var jobid = `${config.pdf.wns_bill}-${new Date().getTime()}-${id}`;
+
+      var kafkaData = {
+        requestinfo: requestinfo,
+        tenantId: tenantId,
+        locality: locality,
+        bussinessService: bussinessService,
+        isConsolidated: isConsolidated,
+        consumerCode: consumerCode,
+        jobid: jobid
+      };
+
       try {
-
-        if(isConsolidated){
-          try{
-           
-            var searchCriteria = {searchCriteria :{locality: locality, tenantId: tenantId,connectionno: consumerCode}};
-
-            restWater = await search_waterOpenSearch(
-              searchCriteria,
-              {RequestInfo:requestinfo.RequestInfo}
-            );
-  
-            restWater = restWater.data.WaterConnection;
-            if(restWater.length>0){
-              for(let water of restWater){
-                if(water.connectionno){
-                  if(!connectionnoToPropertyMap[water.property_id]){
-                    connectionnoToPropertyMap[water.property_id] = [];
-                  }
-                    connectionnoToPropertyMap[water.property_id].push(water.connectionno);
-                }
-                if(!propertyIdSet.includes(water.property_id)){
-                  propertyIdSet.push(water.property_id);
-                }
-              }
-            }
-
-  
-            restSewerage = await search_sewerageOpenSearch(
-              searchCriteria,
-              {RequestInfo:requestinfo.RequestInfo}
-            );
-  
-            restSewerage = restSewerage.data.SewerageConnections;
-            if(restSewerage.length>0){
-              for(let sewerage of restSewerage){
-                if(sewerage.connectionno){
-                  if(!connectionnoToPropertyMap[sewerage.property_id]){
-                    connectionnoToPropertyMap[sewerage.property_id] = [];
-                  }
-                    connectionnoToPropertyMap[sewerage.property_id].push(sewerage.connectionno);
-                }
-                if(!propertyIdSet.includes(sewerage.property_id)){
-                    propertyIdSet.push(sewerage.property_id);
-                }
-              }   
-            }
-  
+        var payloads = [];
+        payloads.push({
+          topic: config.KAFKA_BULK_PDF_TOPIC,
+          messages: JSON.stringify(kafkaData)
+        });
+        producer.send(payloads, function(err, data) {
+          if (err) {
+            logger.error(err.stack || err);
+            errorCallback({
+              message: `error while publishing to kafka: ${err.message}`
+            });
+          } else {
+            logger.info("jobid: " + jobid + ": published to kafka successfully");
           }
-          catch (ex) {
-            if (ex.response && ex.response.data) console.log(ex.response.data);
-            return renderError(res, "Failed to query details of water and sewerage connection");
-          }
-  
-          try{
-            var inputData = {searchCriteria :{locality: locality, tenantId: tenantId, propertyId: propertyIdSet}};
+        });
 
-            waterBills = await search_bill_genie_water_bills(
-              inputData,
-              {RequestInfo:requestinfo.RequestInfo}
-            );
-            waterBills = waterBills.data.Bills;
-
-            sewerageBills = await search_bill_genie_sewerage_bills(
-              inputData,
-              {RequestInfo:requestinfo.RequestInfo}
-            );
-            sewerageBills = sewerageBills.data.Bills;
-  
-            if(waterBills.length>0){
-              for(let waterBill of waterBills){
-                if(waterBill.status ==='EXPIRED'){
-                  var billresponse = await fetch_bill(
-                  tenantId, waterBill.consumerCode,
-                  waterBill.businessService, {RequestInfo:requestinfo.RequestInfo});
-                  consolidatedResult.Bill.push(billresponse.data.Bill[0]);
-                }
-                else{
-                  if(waterBill.status ==='ACTIVE')
-                    consolidatedResult.Bill.push(waterBill);
-                }
-              }
-            }
-  
-            if(sewerageBills.length>0){
-              for(let sewerageBill of sewerageBills){
-                if(sewerageBill.status ==='EXPIRED'){
-                  var billresponse = await fetch_bill(
-                  tenantId, sewerageBill.consumerCode,
-                  sewerageBill.businessService, {RequestInfo:requestinfo.RequestInfo});
-                  consolidatedResult.Bill.push(billresponse.data.Bill[0]);
-                }
-                else{
-                  if(sewerageBill.status ==='ACTIVE')
-                    consolidatedResult.Bill.push(sewerageBill);
-                }
-              }
-            }
-  
-          }
-          catch (ex) {
-            if (ex.response && ex.response.data) console.log(ex.response.data);
-            return renderError(res, `Failed to query bills for water and sewerage connection`);
-          }
-  
-  
-        }
-
-        else if(!isConsolidated && bussinessService == 'WS'){
-
-          //get property ids
-          try{
-            var searchCriteria = {searchCriteria :{locality: locality, tenantId: tenantId,connectionno: consumerCode}};
-
-            restWater = await search_waterOpenSearch(
-              searchCriteria,
-              {RequestInfo:requestinfo.RequestInfo}
-            );
-
-            restWater = restWater.data.WaterConnection;
-            if(restWater.length>0){
-              for(let water of restWater){
-                if(water.connectionno){
-                  if(!connectionnoToPropertyMap[water.property_id]){
-                    connectionnoToPropertyMap[water.property_id] = [];
-                  }
-                    connectionnoToPropertyMap[water.property_id].push(water.connectionno);
-                }
-                if(!propertyIdSet.includes(water.property_id)){
-                  propertyIdSet.push(water.property_id);
-                }
-              }
-            }
-
-          }
-          catch (ex) {
-            if (ex.response && ex.response.data) console.log(ex.response.data);
-            return renderError(res, "Failed to query details of water connection");
-          }
-          
-          //get water bills for the property ids
-          try{
-
-            var inputData = {searchCriteria :{locality: locality, tenantId: tenantId, propertyId: propertyIdSet}};
-            waterBills = await search_bill_genie_water_bills(
-              inputData,
-              {RequestInfo:requestinfo.RequestInfo}
-            );
-  
-            waterBills = waterBills.data.Bills;
-            if(waterBills.length>0){
-              for(let waterBill of waterBills){
-                if(waterBill.status ==='EXPIRED'){
-                  var billresponse = await fetch_bill(
-                  tenantId, waterBill.consumerCode,
-                  waterBill.businessService, {RequestInfo:requestinfo.RequestInfo});
-                
-                  consolidatedResult.Bill.push(billresponse.data.Bill[0]);
-                }
-                else{
-                  if(waterBill.status ==='ACTIVE')
-                    consolidatedResult.Bill.push(waterBill);
-                }
-              }
-            }
-          }
-          catch (ex) {
-            if (ex.response && ex.response.data) console.log(ex.response.data);
-            return renderError(res, `Failed to query bills for water connection`);
-          }
-        }
-  
-        else if(!isConsolidated && bussinessService == 'SW'){
-
-          try{
-           
-            var searchCriteria = {searchCriteria :{locality: locality, tenantId: tenantId,connectionno: consumerCode}};
-  
-            restSewerage = await search_sewerageOpenSearch(
-              searchCriteria,
-              {RequestInfo:requestinfo.RequestInfo}
-            );
-  
-            restSewerage = restSewerage.data.SewerageConnections;
-            if(restSewerage.length>0){
-              for(let sewerage of restSewerage){
-                if(sewerage.connectionno){
-                  if(!connectionnoToPropertyMap[sewerage.property_id]){
-                    connectionnoToPropertyMap[sewerage.property_id] = [];
-                  }
-                    connectionnoToPropertyMap[sewerage.property_id].push(sewerage.connectionno);
-                }
-                if(!propertyIdSet.includes(sewerage.property_id)){
-                  propertyIdSet.push(sewerage.property_id);
-                }
-              }   
-            }
-  
-          }
-          catch (ex) {
-            if (ex.response && ex.response.data) console.log(ex.response.data);
-            return renderError(res, "Failed to query details of sewerage connection");
-          }
-  
-          try{
-            var inputData = {searchCriteria :{locality: locality, tenantId: tenantId, propertyId: propertyIdSet}};
-  
-            sewerageBills = await search_bill_genie_sewerage_bills(
-              inputData,
-              {RequestInfo:requestinfo.RequestInfo}
-            );
-            sewerageBills = sewerageBills.data.Bills;
-  
-            if(sewerageBills.length>0){
-              for(let sewerageBill of sewerageBills){
-                if(sewerageBill.status ==='EXPIRED'){
-                  var billresponse = await fetch_bill(
-                  tenantId, sewerageBill.consumerCode,
-                  sewerageBill.businessService, {RequestInfo:requestinfo.RequestInfo});
-                
-                  consolidatedResult.Bill.push(billresponse.data.Bill[0]);
-                }
-                else{
-                  if(sewerageBill.status ==='ACTIVE')
-                    consolidatedResult.Bill.push(sewerageBill);
-                }
-              }
-            }
-  
-          }
-          catch (ex) {
-            if (ex.response && ex.response.data) console.log(ex.response.data);
-            return renderError(res, `Failed to query bills for sewerage connection`);
-          }
-  
-        }
-
-        else{
-          return renderError(res, "There is no billfound for the criteria");
-        }
-
-        var propertyDetails = await getPropertyDeatils({RequestInfo:requestinfo.RequestInfo}, tenantId, propertyIdSet, connectionnoToPropertyMap);
-        if (consolidatedResult && consolidatedResult.Bill && consolidatedResult.Bill.length > 0) {
-          var pdfResponse;
-          var pdfkey = config.pdf.wns_bill;
-          try {
-            consolidatedResult.Bill = consolidatedResult.Bill.filter(function(e){return e});
-            for(let i=0;i<consolidatedResult.Bill.length;i++){
-              let consumerCode = consolidatedResult.Bill[i].consumerCode;
-              let data = propertyDetails[consumerCode];
-              if(data){
-                consolidatedResult.Bill[i].propertyUniqueId = data.propertyUniqueId;
-                consolidatedResult.Bill[i].propertyAddress = data.propertyAddress;
-                consolidatedResult.Bill[i].locality = data.locality;
-              }
-            }
-            
-            /*pdfResponse = await create_pdf(
-              tenantId,
-              pdfkey,
-              billArray,
-              requestinfo
-            );*/
-            var batchSize = config.PDF_BATCH_SIZE;
-            var size = consolidatedResult.Bill.length;
-            var id = uuidv4();
-            var jobid = `${pdfkey}-${new Date().getTime()}-${id}`;
-            var numberOfFiles = (size%batchSize) == 0 ? (size/batchSize) : (~~(size/batchSize) +1);
-            for(var i = 0;i<size;i+=batchSize){
-              var payloads = [];
-              var billData = consolidatedResult.Bill.slice(i,i+batchSize);
-              var billArray = { 
-                  Bill: billData,
-                  isBulkPdf: true,
-                  pdfJobId: jobid,
-                  pdfKey: pdfkey,
-                  totalPdfRecords:size,
-                  currentPdfRecords: billData.length,
-                  tenantId: tenantId,
-                  numberOfFiles:numberOfFiles
-              };
-              var pdfData = Object.assign({RequestInfo:requestinfo.RequestInfo}, billArray)
-              payloads.push({
-                topic: config.KAFKA_RECEIVE_CREATE_JOB_TOPIC,
-                messages: JSON.stringify(pdfData)
-              });
-              producer.send(payloads, function(err, data) {
-                if (err) {
-                  logger.error(err.stack || err);
-                  errorCallback({
-                    message: `error while publishing to kafka: ${err.message}`
-                  });
-                } else {
-                  logger.info("jobid: " + jobid + ": published to kafka successfully");
-                }
-              });
-
-            }
-          } catch (ex) {
-            let errorMessage= "Failed to generate PDF"; 
-            if (ex.response && ex.response.data) console.log(ex.response.data);
-            return renderError(
-              res,
-              errorMessage
-            );
-          }
-          // var filename = `${pdfkey}_${new Date().getTime()}`;
-          // res.writeHead(200, {
-          //   "Content-Type": "application/pdf",
-          //   "Content-Disposition": `attachment; filename=${filename}.pdf`,
-          // });
-          // pdfResponse.data.pipe(res);
-          res.status(201);
-          res.json({
-            ResponseInfo: requestinfo.RequestInfo,
-            jobId:jobid,
-            message: "Bulk pdf creation is in process",
-          });
-        } else {
-          return renderError(res, "There is no billfound for the criteria");
-        }
+        res.status(201);
+        res.json({
+          ResponseInfo: requestinfo.RequestInfo,
+          jobId:jobid,
+          message: "Bulk pdf creation is in process",
+        });
         
-      } catch (ex) {
+      } catch (error) {
         return renderError(res, `Failed to query bill for water and sewerage application`);
       }
 

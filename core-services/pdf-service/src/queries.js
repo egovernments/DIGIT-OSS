@@ -171,11 +171,11 @@ export async function mergePdf(bulkPdfJobId, tenantId, userid, numberOfFiles){
     if(recordscompleted >= totalrecords && fileNames.length == numberOfFiles){
       var merger = new PDFMerger();
     
-      console.log('Files to be merged: ',fileNames);
+      logger.info('Files to be merged: ',fileNames);
       (async () => {
         try {
           for (let i = 0; i < fileNames.length; i++){
-            console.log(baseFolder+fileNames[i]);
+            logger.info(baseFolder+fileNames[i]);
             merger.add(baseFolder+fileNames[i]);            //merge all pages. parameter is the path to file and filename.
           }
           await merger.save(baseFolder+'/output.pdf');        //save under given name and reset the internal document
@@ -193,7 +193,6 @@ export async function mergePdf(bulkPdfJobId, tenantId, userid, numberOfFiles){
         });
 
         try {
-          //fs.rmdirSync(baseFolder, { recursive: true });
           if( fs.existsSync(baseFolder) ) {
             fs.readdirSync(baseFolder).forEach(function(file,index){
               var curPath = baseFolder + file;

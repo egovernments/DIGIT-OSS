@@ -11,6 +11,7 @@ var paymentRouter = require("./routes/payments");
 var mcollectRouter = require("./routes/mcollect");
 var billRouter = require("./routes/bills");
 var wnsRouter = require("./routes/wns");
+var {listenConsumer} = require("./consumer");
 
 var app = express();
 app.disable('x-powered-by');
@@ -48,5 +49,5 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-
+listenConsumer();
 module.exports = app;
