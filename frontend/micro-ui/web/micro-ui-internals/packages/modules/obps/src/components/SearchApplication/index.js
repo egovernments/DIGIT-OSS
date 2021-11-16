@@ -1,28 +1,21 @@
 import React, { Fragment, useCallback, useMemo, useEffect, useState, useReducer } from "react"
 import { useForm, Controller } from "react-hook-form";
 import { CloseSvg, SearchForm, Table, Card, SearchAction, PopUp, SortAction, DetailsCard, Loader, Toast } from "@egovernments/digit-ui-react-components";
-import { Link } from "react-router-dom";
 import { convertEpochToDateDMY } from  "../../utils";
 import SearchFormFieldsComponent from "./SearchFormFieldsComponent";
+import useSearchApplicationTableConfig from "./useTableConfig";
 
 const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, Count }) => {
-    const [ Applicationtype, setApplicationtype] = useState("BUILDING_PLAN_SCRUTINY");
     const [showToast, setShowToast] = useState(null);
-    const { data: applicationTypes } = Digit.Hooks.obps.useSearchMdmsTypes.applicationTypes(tenantId.split(".")[0]);
-    const { data: serviceTypes } = Digit.Hooks.obps.useSearchMdmsTypes.serviceTypes(tenantId.split(".")[0]);
-    const defaultAppType = applicationTypes && applicationTypes.filter((ob) => ob.code === "BUILDING_PLAN_SCRUTINY")[0];
-    const defaultserviceType = serviceTypes && serviceTypes.filter((ob) => ob.code === "NEW_CONSTRUCTION")[0];
-    const [serviceType, setserviceType] = useState(defaultserviceType);
     const { register, control, handleSubmit, setValue, getValues, reset, formState } = useForm({
         defaultValues: {
             offset: 0,
             limit: 10,
             sortBy: "commencementDate",
-            sortOrder: "DESC",
-            applicationType: Applicationtype?{code: Applicationtype,i18nKey: `WF_BPA_${Applicationtype}`}:defaultAppType, 
-            serviceType: defaultserviceType,
+            sortOrder: "DESC"
         }
     })
+
     useEffect(() => {
       register("offset", 0)
       register("limit", 10)
@@ -30,50 +23,15 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
       register("sortOrder", "DESC")
     },[register])
 
-    //need to get from workflow
+    const columns = useSearchApplicationTableConfig({t})
+
     const [currPage, setCurrPage] = useState(getValues("offset")/getValues("limit"));
 
     useEffect(() => {
-        if(error !== "")
-        {
-            //alert(t(error));
+        if(error !== ""){
             setShowToast({ key: true, label: error });
         }
     },[error]);
-
-
-    if(applicationTypes && applicationTypes.length>0)
-    {
-        applicationTypes.push({
-            code: "BPA_STAKEHOLDER_REGISTRATION",
-            i18nKey: "BPA_APPLICATIONTYPE_BPA_STAKEHOLDER_REGISTRATION",
-        })
-    }
-
-
-    let ServiceTypes = [];
-    useEffect(() => {
-        serviceTypes && serviceTypes.push({
-            applicationType:["BPA_STAKEHOLDER_REGISTRATION"],
-            code: "BPA_STAKEHOLDER_REGISTRATION",
-            i18nKey: "BPA_SERVICETYPE_BPA_STAKEHOLDER_REGISTRATION",
-        })
-        serviceTypes && serviceTypes.filter((ob) => ob.applicationType.includes(Applicationtype)).map((ser) => {
-            ServiceTypes.push({
-                code:ser.code,
-                i18nKey:ser.i18nKey,
-            })
-        });
-        
-    },[Applicationtype,serviceTypes,applicationTypes]);
-
-    useEffect(() => {
-        Applicationtype && (Applicationtype.includes("STAKEHOLDER") || (Applicationtype?.code && Applicationtype?.code.includes("STAKEHOLDER"))) ? setserviceType({
-            applicationType:["BPA_STAKEHOLDER_REGISTRATION"],
-            code: "BPA_STAKEHOLDER_REGISTRATION",
-            i18nKey: "BPA_SERVICETYPE_BPA_STAKEHOLDER_REGISTRATION",
-        }):setserviceType(defaultserviceType);
-    },[Applicationtype]);
 
     const fetchLastPage = () => {
         setValue("offset", Count && (Math.ceil(Count / 10) * 10 - getValues("limit")));
@@ -84,74 +42,6 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
         setValue("offset", 0);
         handleSubmit(onSubmit)()
     };
-    
-    function getApplicationType(data){
-        data && setApplicationtype(data.code || "BUILDING_PLAN_SCRUTINY");
-        return data?data:defaultAppType;
-    }
-
-    function getselectedServiceType(data){
-        if(data && serviceType && data?.code !== serviceType.code) data=serviceType;
-        return data?data:(serviceType?serviceType:defaultserviceType);
-    }
-
-    const getRedirectionLink = (bService) => {
-        let redirectBS = bService === "BPAREG"?"search/application/stakeholder":"search/application/bpa";
-        return redirectBS;
-    }
-    const GetCell = (value) => <span className="cell-text">{value}</span>;
-    const columns = useMemo( () => ([
-        {
-          Header: t("BPA_APPLICATION_NUMBER_LABEL"),
-          accessor: "applicationNo",
-          disableSortBy: true,
-          Cell: ({ row }) => {
-            return (
-              <div>
-                <span className="link">
-                  <Link to={`/digit-ui/employee/obps/${getRedirectionLink(row.original["businessService"]) || "--"}/${row.original["applicationNo"] || row.original["applicationNumber"]}`}>
-                    {row.original["applicationNo"] || row.original["applicationNumber"]}
-                  </Link>
-                </span>
-              </div>
-            );
-          },
-        },
-        {
-            Header: t("BPA_COMMON_TABLE_COL_APP_DATE_LABEL"),
-            disableSortBy: true,
-            accessor: (row) => GetCell(row?.auditDetails?.createdTime ? convertEpochToDateDMY(row?.auditDetails?.createdTime) : ""),
-        },
-        {
-            Header: t("BPA_SEARCH_APPLICATION_TYPE_LABEL"),
-            disableSortBy: true,
-            accessor: "applicationType",
-            Cell: ({ row }) => {
-                return (
-                    <div>
-                      <span className="cell-text">
-                          {row.original?.additionalDetails?.applicationType ? t(`WF_BPA_${row.original?.additionalDetails?.applicationType}`) : "-"}
-                      </span>
-                    </div>
-                  );
-            },
-        },
-        {
-            Header: t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"),
-            disableSortBy: true,
-            accessor: (row) => GetCell(t(row.additionalDetails?.serviceType || "-")),
-        },
-        {
-          Header: t("BPA_CURRENT_OWNER_HEAD"),
-          accessor: (row) => GetCell(row.businessService === "BPAREG"?row?.tradeLicenseDetail?.owners.map( o => o.name ). join(",") || "" : row?.landInfo?.owners.map( o => o.name ). join(",") || ""),
-          disableSortBy: true,
-        },
-        {
-          Header: t("BPA_STATUS_LABEL"),
-          accessor: (row) =>GetCell(t(row?.status&&`WF_BPA_${row.status}` || row?.state&&`WF_BPA_${row.state}`|| "NA") ),
-          disableSortBy: true,
-        }
-      ]), [] )
 
     const onSort = useCallback((args) => {
         if (args.length === 0) return
@@ -174,14 +64,23 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
     }
 
     useEffect(() => {
-        // setValue("offset",getValues("offset"));
-        // setValue("limit",getValues("limit"));
         setCurrPage(getValues("offset")/getValues("limit"));
     },[getValues("offset"),getValues("limit")])
 
     const isMobile = window.Digit.Utils.browser.isMobile();
 
+    const searchFormFieldsComponentProps = {formState, Controller, register, control, t, reset, previousPage}
+
     if(isMobile){
+
+        const propsMobileInboxCards = useMemo(() => data?.map((data) =>({
+            [t("BPA_APPLICATION_NUMBER_LABEL")]: data.applicationNo,
+            [t("BPA_COMMON_TABLE_COL_APP_DATE_LABEL")]: convertEpochToDateDMY(data.auditDetails?.createdTime) || "",
+            [t("BPA_SEARCH_APPLICATION_TYPE_LABEL")]: data.additionalDetails?.applicationType || "-",
+            [t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")]: data.additionalDetails?.serviceType,
+            [t("BPA_CURRENT_OWNER_HEAD")]: data.landInfo?.owners.map( o => o.name ). join(",") || "",
+            [t("BPA_STATUS_LABEL")]: data.state || "NA"
+        })), [data])
         
         function activateModal(state, action){
             switch(action.type){
@@ -204,7 +103,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
             <CloseSvg/>
         </div>
 
-        const MobileComponentDirectory= ({currentlyActiveMobileModal, ...props}) => {
+        const MobileComponentDirectory = ({currentlyActiveMobileModal, searchFormFieldsComponentProps, ...props}) => {
             switch (currentlyActiveMobileModal) {
                 case "SearchFormComponent":
                     return <SearchForm {...props} >
@@ -212,7 +111,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
                     <div className="MobilePopupHeadingWrapper">
                         <h2>{t("ES_COMMON_SEARCH")}:</h2>
                     </div>
-                    <SearchFormFieldsComponent {...{formState, Controller, register, control, t, getApplicationType, getselectedServiceType, applicationTypes, ServiceTypes, reset, defaultAppType, defaultserviceType,previousPage}}/>
+                    <SearchFormFieldsComponent {...searchFormFieldsComponentProps}/>
                     {/* <SearchField className="submit">
                         <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
                         <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
@@ -221,15 +120,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
             }
         }
     
-        const CurrentMobileModalComponent = (props) => MobileComponentDirectory({currentlyActiveMobileModal, ...props})
-        const propsMobileInboxCards = useMemo(() => data?.map((data) =>({
-            [t("BPA_APPLICATION_NUMBER_LABEL")]: data.applicationNo,
-            [t("BPA_COMMON_TABLE_COL_APP_DATE_LABEL")]: convertEpochToDateDMY(data.auditDetails?.createdTime) || "",
-            [t("BPA_SEARCH_APPLICATION_TYPE_LABEL")]: data.additionalDetails?.applicationType || "-",
-            [t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")]: data.additionalDetails?.serviceType,
-            [t("BPA_CURRENT_OWNER_HEAD")]: data.landInfo?.owners.map( o => o.name ). join(",") || "",
-            [t("BPA_STATUS_LABEL")]: data.state || "NA"
-        })), [data])
+        const CurrentMobileModalComponent = ({currentlyActiveMobileModal, searchFormFieldsComponentProps, ...props}) => MobileComponentDirectory({currentlyActiveMobileModal, searchFormFieldsComponentProps, ...props})
 
         if(isLoading){
             return <Loader/>
@@ -241,7 +132,10 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
                 <SortAction text={t("ES_COMMON_SORT")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"SortComponent"})}/>
             </div>
             {currentlyActiveMobileModal ? <PopUp>
-                <CurrentMobileModalComponent onSubmit={onSubmit} handleSubmit={handleSubmit} id="search-form" className="rm-mb form-field-flex-one inboxPopupMobileWrapper" />
+                <CurrentMobileModalComponent onSubmit={(data) => {
+                    setActiveMobileModal({type:"remove"})                    
+                    onSubmit(data)
+                }} handleSubmit={handleSubmit} id="search-form" className="rm-mb form-field-flex-one inboxPopupMobileWrapper" {...{searchFormFieldsComponentProps, currentlyActiveMobileModal}} />
             </PopUp> : null}
             {data?.[0]?.display ? <Card style={{ marginTop: 20 }}>
                 {t(data?.[0]?.display)
@@ -258,7 +152,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
 
     return <React.Fragment>
             <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-                <SearchFormFieldsComponent {...{formState, Controller, register, control, t, getApplicationType, getselectedServiceType, applicationTypes, ServiceTypes, reset, defaultAppType, defaultserviceType,previousPage}}/>
+                <SearchFormFieldsComponent {...searchFormFieldsComponentProps}/>
             </SearchForm>
             {!isLoading && data?.[0]?.display ? <Card style={{ marginTop: 20 }}>
                 {

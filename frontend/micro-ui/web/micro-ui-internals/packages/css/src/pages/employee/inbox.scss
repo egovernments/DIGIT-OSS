@@ -81,7 +81,7 @@
 
 .filter-form {
   .filter-card {
-    @apply bg-white;
+    @apply bg-white min-h-full;
     padding: 10px;
 
     .heading {

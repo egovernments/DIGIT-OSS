@@ -118,7 +118,7 @@ import useReceiptsSearch from "./receipts/useReceiptsSearch";
 import useReceiptsMDMS from "./receipts/useReceiptsMDMS";
 import useReceiptsUpdate from "./receipts/useReceiptsUpdate";
 
-import useSearchMdmsTypes from "./obps/useSearchMdmsTypes";
+import SearchMdmsTypes from "./obps/SearchMdmsTypes";
 import useOBPSMDMS from "./obps/useMDMS";
 import useOBPSSearch from "./obps/useOBPSSearch";
 import useScrutinyDetails from "./obps/useScrutinyDetails";
@@ -140,6 +140,8 @@ import useBPAApplicationActions from "./obps/useApplicationActions"
 import useArchitectInbox from "./obps/useArchitectInbox";
 import useBPAREGSearch from "./obps/useBPAREGSearch";
 import useEmpBPAREGSearch from "./obps/useEmpBPAREGSearch";
+import useServiceTypeFromApplicationType from "./obps/useServiceTypeFromApplicationType"
+
 import useEventInbox from "./events/useEventInbox";
 import useEventDetails from "./events/useEventDetails";
 import { useEngagementMDMS } from "./engagement/useMdms";
@@ -147,6 +149,7 @@ import useDocSearch from "./engagement/useSearch";
 import useDocCreate from "./engagement/useCreate";
 import useDocUpdate from "./engagement/useUpdate";
 import useDocDelete from "./engagement/useDelete";
+
 import useSurveyCreate from "./surveys/useCreate";
 import useSurveyDelete from "./surveys/useDelete";
 import useSurveyUpdate from "./surveys/useUpdate";
@@ -285,7 +288,8 @@ const obps = {
   useEmpBPAREGSearch,
   useBPAInbox,
   useArchitectInbox,
-  useSearchMdmsTypes,
+  SearchMdmsTypes,
+  useServiceTypeFromApplicationType,
   useApplicationActions: useBPAApplicationActions,
   useOBPSSearch
 };

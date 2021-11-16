@@ -11,7 +11,10 @@ const FilterFormField = ({children, className}) => {
 
 const FilterForm = ({onMobileExclusiveFilterPopupFormClose = () => null , closeButton= () => null, showMobileFilterFormPopup = false, children, id="", onSubmit, handleSubmit, onResetFilterForm=() => null, className="" }) => {
     const { t } = useTranslation()
-
+    // min-height: calc(100% - 110
+	// 	px
+	// 	);
+		
 	return <div className={`filter-form ${className}`}>
 	<div className="filter-card">
 		{closeButton()}

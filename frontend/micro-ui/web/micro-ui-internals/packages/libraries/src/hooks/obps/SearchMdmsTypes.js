@@ -1,9 +1,8 @@
-import React from "react";
 import { useQuery } from "react-query";
 import { MdmsService } from "../../services/elements/MDMS";
 
-const useSearchMdmsTypes = {
-  applicationTypes: (tenantId) =>
+const SearchMdmsTypes = {
+  useApplicationTypes: (tenantId) =>
     useQuery(
       [tenantId, "BPA_MDMS_APPLICATION_STATUS"],
       () =>
@@ -27,15 +26,19 @@ const useSearchMdmsTypes = {
           "BPA"
         ),
       {
-        select: (data) =>
-          data.BPA.ApplicationType.map((type) => ({
-            code: type.code,
-            i18nKey: `WF_BPA_${type.code}`,
-          })),
+        select: (data) =>{
+          return [...data?.BPA?.ApplicationType?.map((type) => ({
+              code: type.code,
+              i18nKey: `WF_BPA_${type.code}`,
+            })),{
+              code: "BPA_STAKEHOLDER_REGISTRATION",
+              i18nKey: "WF_BPA_BPA_STAKEHOLDER_REGISTRATION",
+          }]
+        },
       }
     ),
 
-    serviceTypes: (tenantId) =>
+    useServiceTypes: (tenantId) =>
     useQuery(
       [tenantId, "BPA_MDMS_SERVICE_STATUS"],
       () =>
@@ -59,14 +62,19 @@ const useSearchMdmsTypes = {
           "BPA"
         ),
       {
-        select: (data) =>
-          data.BPA.ServiceType.map((type) => ({
+        select: (data) =>{
+          return [...data?.BPA?.ServiceType?.map((type) => ({
             code: type.code,
             i18nKey: `BPA_SERVICETYPE_${type.code}`,
             applicationType: type.applicationType,
-          })),
+          })),{
+            applicationType:["BPA_STAKEHOLDER_REGISTRATION"],
+            code: "BPA_STAKEHOLDER_REGISTRATION",
+            i18nKey: "BPA_SERVICETYPE_BPA_STAKEHOLDER_REGISTRATION",
+        }]
+        },
       }
     ),
 };
 
-export default useSearchMdmsTypes;
+export default SearchMdmsTypes;

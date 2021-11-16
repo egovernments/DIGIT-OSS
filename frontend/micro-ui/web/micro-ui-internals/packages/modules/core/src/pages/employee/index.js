@@ -70,6 +70,9 @@ const EmployeeApp = ({ stateInfo, userDetails, CITIZEN, cityDetails, mobileView,
             </div>
           </div>
         </Route>
+        <Route>
+          <Redirect to={`${path}/user/language-selection`} />
+        </Route>
       </Switch>
     </div>
   )
