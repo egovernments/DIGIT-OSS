@@ -28,7 +28,7 @@ import OBPSDocument from "../../../obps/src/pageComponents/OBPSDocuments";
 import PermissionCheck from "./PermissionCheck";
 import BPADocuments from "./BPADocuments";
 
-function ApplicationDetailsContent({ applicationDetails, workflowDetails, isDataLoading, applicationData, businessService, timelineStatusPrefix }) {
+function ApplicationDetailsContent({ applicationDetails, workflowDetails, isDataLoading, applicationData, businessService, timelineStatusPrefix,statusAttribute="status" }) {
   const { t } = useTranslation();
 
 
@@ -59,7 +59,6 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
     }
   };
 
-  // console.log(applicationDetails?.applicationDetails, "inside app details content");
   const checkLocation = window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc");
   const isNocLocation = window.location.href.includes("noc/application-overview");
   const isBPALocation = window.location.href.includes("employee/obps");
@@ -156,7 +155,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
                             isCompleted={index === 0}
                             info={checkpoint.comment}
                             label={t(
-                              `${timelineStatusPrefix}${checkpoint?.performedAction === "REOPEN" ? checkpoint?.performedAction : checkpoint.status}`
+                              `${timelineStatusPrefix}${checkpoint?.performedAction === "REOPEN" ? checkpoint?.performedAction : checkpoint?.[statusAttribute]}`
                             )}
                             customChild={getTimelineCaptions(checkpoint)}
                           />

@@ -184,6 +184,7 @@ const ApplicationDetails = () => {
         closeToast={closeToast}
         timelineStatusPrefix={"ES_PT_COMMON_STATUS_"}
         forcedActionPrefix={"WF_EMPLOYEE_PT.CREATE"}
+        statusAttribute={"state"}
       />
     </div>
   );
