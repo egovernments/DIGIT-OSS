@@ -27,7 +27,6 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
                   }}
                   selectedOption={availableOptions.filter((option) => option.code === props.value)[0]}
                   optionsKey="name"
-                  inputRef={registerRef({})}
                   options={availableOptions}
                 />}
               />

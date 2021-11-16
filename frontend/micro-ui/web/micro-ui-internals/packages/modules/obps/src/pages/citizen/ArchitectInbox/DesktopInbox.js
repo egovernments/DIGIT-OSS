@@ -9,7 +9,7 @@ import SearchApplication from './Search';
 
 const DesktopInbox = (props) => {
   const { t } = useTranslation();
-  const GetCell = (row) => <span className="cell-text">
+  const GetCell = (row) => <span className="link">
     <Link to={`/digit-ui/citizen/obps/${["BPA_LOW", "BPA", "BPA_OC"].includes(row?.businessService) ? "bpa" : "stakeholder"}/${encodeURIComponent(row.applicationId)}`}>{row?.applicationId}</Link>
   </span>;
   const GetSlaCell = (value) => {
