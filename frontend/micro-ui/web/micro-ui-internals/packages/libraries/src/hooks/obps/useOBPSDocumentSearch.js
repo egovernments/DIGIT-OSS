@@ -7,9 +7,9 @@ const useOBPSDocumentSearch = ({ application }, config = {}, Code, index, isNOC=
   let newDocs = [];
   if(isNOC){
     config?.value?.nocDocuments ? config?.value?.nocDocuments?.nocDocuments.length>0 && config?.value?.nocDocuments?.nocDocuments.filter((ob) => ob?.documentType?.includes(Code)).map((ob) => {
-      newDocs.push();
+      newDocs.push(ob);
     }) : config?.value.length>0 && config?.value.filter((ob) => ob?.documentType?.includes(Code)).map((ob) => {
-      newDocs.push();
+      newDocs.push(ob);
     });
   }
   else{

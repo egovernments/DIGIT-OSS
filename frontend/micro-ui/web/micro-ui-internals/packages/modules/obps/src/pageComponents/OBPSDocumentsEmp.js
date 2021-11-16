@@ -228,7 +228,7 @@ function SelectDocument({
   }, [doc])
   return (
     <div style={{ marginBottom: "24px" }}>
-      <LabelFieldPair style={{maxWidth:"600px"}}>
+      <LabelFieldPair style={{maxWidth:"70%"}}>
         <CardLabel className="card-label-smaller">
           {doc?.documentType != "OLDLICENCENO" ?
             `${t(`${doc?.documentType.replaceAll(".", "_")}`)} * :` :
@@ -253,7 +253,7 @@ function SelectDocument({
             tenantId={tenantId}
             getFormState={e => getData(e,doc?.documentType.replaceAll(".", "_"))}
             t={t}
-            extraStyleName="IP"
+            //extraStyleName="IP"
           />
         </div>
       </LabelFieldPair>

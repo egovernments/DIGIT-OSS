@@ -20,7 +20,7 @@ const ApplicationDetails = () => {
       tenantId: stateCode,
       businessService: "BPAREG",
       consumerCodes: id,
-      isEmployee: true
+      isEmployee: false
     },
     {}
   );

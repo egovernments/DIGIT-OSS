@@ -261,7 +261,7 @@ const InspectionReportForm = (_props) => {
     return (
         <React.Fragment>
             <div style={{ marginBottom: "16px" }}>
-                <div /* style={{ border: "1px solid #D6D5D4", padding: "16px", marginTop: "8px", background: "#FAFAFA" } }*/>
+                <div className="fieldInspectionWrapper" /* style={{ border: "1px solid #D6D5D4", padding: "16px", marginTop: "8px", background: "#FAFAFA" } } */>
                     {allFieldReport?.length > 1 ? (
                         <div style={{ display: "flex", justifyContent: "flex-end" }}>
                             <div onClick={() => removeUnit(unit)} style={{ padding: "5px", cursor: "pointer", textAlign: "right" }}>
@@ -274,7 +274,7 @@ const InspectionReportForm = (_props) => {
                         </div>
                     ) : null}
                     <CardSectionHeader>{`${t("BPA_FI_REPORT")}`} {index+1}</CardSectionHeader>
-                    <LabelFieldPair style={{maxWidth:"600px"}}>
+                    <LabelFieldPair style={{maxWidth:"70%"}}>
             <CardLabel style={{marginTop:"0px"}} className="card-label-smaller">{`${t("BPA_FI_DATE_LABEL")} * :`}</CardLabel>
             <div className="field">
               <Controller
@@ -294,7 +294,7 @@ const InspectionReportForm = (_props) => {
               />
             </div>
             </LabelFieldPair>
-            <LabelFieldPair style={{maxWidth:"600px"}}>
+            <LabelFieldPair style={{maxWidth:"70%"}}>
             <CardLabel style={{marginTop:"0px"}} className="card-label-smaller">{`${t("ES_COMMON_TIME")} * :`}</CardLabel>
             <div className="field">
             <Controller
@@ -316,7 +316,7 @@ const InspectionReportForm = (_props) => {
           </LabelFieldPair>
           <CardSectionHeader>{t("BPA_CHECK_LIST_DETAILS")}</CardSectionHeader>
           {questionList && questionList.map((ob,ind) => (
-              <div key={ind} style={{ border: "1px solid #D6D5D4", padding: "16px", marginTop: "8px", background: "#FAFAFA", maxWidth:"600px", minWidth:"280px" } }>
+              <div key={ind} className="fieldInsepctionInsideWrapper" /* style={{ border: "1px solid #D6D5D4", padding: "16px", marginTop: "8px", background: "#FFFFFF", maxWidth:"70%", minWidth:"280px" }  }*/>
                   <LabelFieldPair>
                         <CardLabel style={{marginRight:"30px"}} className="card-label-smaller">{`${t(ob.question)} * :`}</CardLabel>
                         <Controller
@@ -365,7 +365,7 @@ const InspectionReportForm = (_props) => {
                                         }}
                                         //disable={!(unit?.tradeSubType?.uom)}
                                         onBlur={props.onBlur}
-                                        style={{ background: "#FAFAFA" }}
+                                        //style={{ background: "#FAFAFA" }}
                                     />
                                 )}
                             />

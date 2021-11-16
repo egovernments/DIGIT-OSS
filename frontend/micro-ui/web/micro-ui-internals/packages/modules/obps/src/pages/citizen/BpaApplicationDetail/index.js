@@ -393,7 +393,7 @@ const BpaApplicationDetail = () => {
                     checked={isTocAccepted}
                     // label={`${t(`BPA_CITIZEN_1_DECLARAION_LABEL`)}${t(`BPA_CITIZEN_2_DECLARAION_LABEL`)}`}
                     label={getCheckBoxLabelData(t, data?.applicationData, workflowDetails?.data?.nextActions)}
-                    onChange={() => setIsTocAccepted(!isTocAccepted)}
+                    onChange={() => {setIsTocAccepted(!isTocAccepted); isTocAccepted?setDisplayMenu(!isTocAccepted):"" }}
                   />
                 )}
                 {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
