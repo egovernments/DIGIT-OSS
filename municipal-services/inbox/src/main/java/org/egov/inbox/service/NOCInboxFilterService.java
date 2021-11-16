@@ -8,6 +8,8 @@ import static org.egov.inbox.util.NocConstants.LIMIT_PARAM;
 import static org.egov.inbox.util.NocConstants.LOCALITY_PARAM;
 import static org.egov.inbox.util.NocConstants.MOBILE_NUMBER_PARAM;
 import static org.egov.inbox.util.NocConstants.NOC_APPLICATION_NUMBER_PARAM;
+import static org.egov.inbox.util.NocConstants.NOC_SOURCE_APPLICATION_NUMBER_PARAM;
+import static org.egov.inbox.util.NocConstants.NOC_SOURCE_REF_ID_PARAM;
 import static org.egov.inbox.util.NocConstants.NO_OF_RECORDS_PARAM;
 import static org.egov.inbox.util.NocConstants.OFFSET_PARAM;
 import static org.egov.inbox.util.NocConstants.REQUESTINFO_PARAM;
@@ -137,6 +139,9 @@ public class NOCInboxFilterService {
         }
         if (moduleSearchCriteria != null && moduleSearchCriteria.containsKey(NOC_APPLICATION_NUMBER_PARAM)) {
             searchCriteria.put(NOC_APPLICATION_NUMBER_PARAM, moduleSearchCriteria.get(NOC_APPLICATION_NUMBER_PARAM));
+        }
+        if (moduleSearchCriteria != null && moduleSearchCriteria.containsKey(NOC_SOURCE_REF_ID_PARAM)) {
+            searchCriteria.put(NOC_SOURCE_APPLICATION_NUMBER_PARAM, moduleSearchCriteria.get(NOC_SOURCE_REF_ID_PARAM));
         }
 
         // Accommodating process search criteria in searcher request
