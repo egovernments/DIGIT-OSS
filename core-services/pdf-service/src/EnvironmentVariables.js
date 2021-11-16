@@ -13,6 +13,8 @@ const envVariables = {
     process.env.KAFKA_CREATE_JOB_TOPIC || "PDF_GEN_CREATE",
   KAFKA_RECEIVE_CREATE_JOB_TOPIC:
     process.env.KAFKA_RECEIVE_CREATE_JOB_TOPIC || "PDF_GEN_RECEIVE",
+  KAFKA_PDF_ERROR_TOPIC:
+    process.env.KAFKA_PDF_ERROR_TOPIC || "PDF_GEN_ERROR",
   DATE_TIMEZONE: process.env.DATE_TIMEZONE || "Asia/Kolkata",
   DB_USER: process.env.DB_USER || "postgres",
   DB_PASSWORD: process.env.DB_PASSWORD || "postgres",

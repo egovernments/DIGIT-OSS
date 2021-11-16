@@ -205,8 +205,22 @@ export async function mergePdf(bulkPdfJobId, tenantId, userid, numberOfFiles){
             });
             fs.rmdirSync(baseFolder);
           }
-        } catch (err) {
-          logger.error(err.stack || err);
+        } catch (error) {
+          logger.error(error.stack || error);
+          var errorPlayloads = [];
+          
+          errorPlayloads.push({
+            topic: envVariables.KAFKA_PDF_ERROR_TOPIC,
+            messages: error
+          });
+          producer.send(errorPlayloads, function(err, data) {
+            if (err) {
+              logger.error(err.stack || err);
+              errorCallback({
+                message: `error while publishing to kafka: ${err.message}`
+              });
+            } 
+          });
         }
         
 
