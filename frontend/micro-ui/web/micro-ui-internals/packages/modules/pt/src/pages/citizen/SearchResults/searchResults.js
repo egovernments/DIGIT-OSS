@@ -4,31 +4,12 @@ import PropTypes from "prop-types";
 import { useHistory, Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const Heading = (props) => {
-  return <h1 className="heading-m">{props.label}</h1>;
-};
-
-const Close = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFFFFF">
-    <path d="M0 0h24v24H0V0z" fill="none" />
-    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-  </svg>
-);
-
-const CloseBtn = (props) => {
-  return (
-    <div className="icon-bg-secondary" onClick={props.onClick}>
-      <Close />
-    </div>
-  );
-};
 
 const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation, onSelect, config, clearParams = () => {} }) => {
   const { t } = useTranslation();
   const modalRef = useRef();
   const { mobileNumber, propertyIds, oldPropertyIds, locality, city,doorNo,name } = Digit.Hooks.useQueryParams();
   const filters = {};
-
   const [modalData, setShowModal] = useState(false);
 
   const closeModal = () => {
@@ -53,7 +34,8 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
     setLastPath("");
   }, []);
 
-  const auth = !!isMutation;
+  // const auth = !!isMutation;    /*  to enable open search set false  */
+  const auth =true;
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const searchArgs = city ? { tenantId: city, filters, auth } : { filters, auth };
   const result = Digit.Hooks.pt.usePropertySearch(searchArgs);
@@ -132,13 +114,11 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
 
       {modalData ? (
         <Modal
-          // headerBarEnd={<CloseBtn onClick={closeModal} />}
           hideSubmit={true}
           isDisabled={false}
           popupStyles={{ width: "319px", height: "250px", margin: "auto" }}
           formId="modal-action"
         >
-          {/* <Card> */}
           <div ref={modalRef}>
             <KeyNote
               keyValue={t("PT_AMOUNT_DUE")}
@@ -163,26 +143,8 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
               label={t("PT_PROCEED_PAYMENT")}
             />
           </div>
-          {/* </Card> */}
         </Modal>
       ) : null}
-
-      {/* <div
-        style={{
-          paddingLeft: "16px",
-          paddingTop: "16px",
-          position: "fixed",
-          bottom: "40px",
-          backgroundColor: "#e3e3e3",
-          textAlign: "left",
-          width: "100%",
-        }}
-      >
-        <p>{t("PT_TEXT_WANT_TO_ADD_A_NEW_PROPERTY")} </p>
-        <p className="link">
-          <Link to="/digit-ui/citizen/pt/property/new-application/info">{t("PT_COMMON_CLICK_HERE_TO_REGISTER_NEW_PROPERTY")}</Link>
-        </p>
-      </div> */}
     </div>
   );
 };

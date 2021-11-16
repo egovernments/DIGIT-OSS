@@ -1,8 +1,4 @@
-import {
-  Dropdown, FormComposer, InfoBannerIcon, Loader, Localities,
-  RadioButtons,
-  Toast
-} from "@egovernments/digit-ui-react-components";
+import { Dropdown, FormComposer, InfoBannerIcon, Loader, Localities, RadioButtons, Toast } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
 import PropTypes from "prop-types";
 import React, { useEffect, useLayoutEffect, useState } from "react";
@@ -28,16 +24,16 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   const allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
   const [cityCode, setCityCode] = useState();
   const [formValue, setFormValue] = useState();
-  const { data: da, isLoading: isl, error, isSuccess, billData } = Digit.Hooks.pt.usePropertySearchWithDue({
+  const { data: propertyData, isLoading: propertyDataLoading, error, isSuccess, billData } = Digit.Hooks.pt.usePropertySearchWithDue({
     tenantId: searchData?.city,
     filters: searchData?.filters,
-    auth:false,
+    auth: true /*  to enable open search set false  */,
     configs: { enabled: Object.keys(searchData).length > 0, retry: false, retryOnMount: false, staleTime: Infinity },
   });
 
   useEffect(() => {
-    setShowToast(null);
-  }, [action]);
+    showToast && setShowToast(null);
+  }, [action, propertyDataLoading]);
 
   useLayoutEffect(() => {
     //Why do we need this? !!!!!
@@ -57,9 +53,9 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     getActionBar();
   }, []);
 
-  const { data: propertyIdFormat, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "DIGIT-UI", "HelpText", {
+  const { data: ptSearchConfig, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "DIGIT-UI", "HelpText", {
     select: (data) => {
-      return data?.["DIGIT-UI"]?.["HelpText"]?.[0]?.PT?.propertyIdFormat;
+      return data?.["DIGIT-UI"]?.["HelpText"]?.[0]?.PT;
     },
   });
 
@@ -114,7 +110,11 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
                 {...customProps}
                 selected={props.value}
                 select={(d) => {
-                  Digit.LocalizationService.getLocale({ modules: [`rainmaker-${props?.value?.code}`], locale: Digit.StoreData.getCurrentLanguage(), tenantId: `${props?.value?.code}` });
+                  Digit.LocalizationService.getLocale({
+                    modules: [`rainmaker-${props?.value?.code}`],
+                    locale: Digit.StoreData.getCurrentLanguage(),
+                    tenantId: `${props?.value?.code}`,
+                  });
                   if (d.code !== cityCode) props.setValue("locality", null);
                   props.onChange(d);
                 }}
@@ -140,7 +140,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
               {"  "}
               <InfoBannerIcon fill="#0b0c0c" />
               <span className="tooltiptext" style={{ whiteSpace: "nowrap" }}>
-                {t(property.description) + "<br />" + propertyIdFormat}
+                {t(property.description) + "<br />" + ptSearchConfig?.propertyIdFormat}
               </span>
             </div>
           ),
@@ -213,7 +213,11 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
                 {...customProps}
                 selected={props.value}
                 select={(d) => {
-                  Digit.LocalizationService.getLocale({ modules: [`rainmaker-${props?.value?.code}`], locale: Digit.StoreData.getCurrentLanguage(), tenantId: `${props?.value?.code}` });
+                  Digit.LocalizationService.getLocale({
+                    modules: [`rainmaker-${props?.value?.code}`],
+                    locale: Digit.StoreData.getCurrentLanguage(),
+                    tenantId: `${props?.value?.code}`,
+                  });
                   if (d.code !== cityCode) props.setValue("locality", null);
                   props.onChange(d);
                 }}
@@ -254,7 +258,6 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
             name: doorNo.name,
             validation: doorNo?.validation,
           },
-          ...description,
           isMandatory: false,
         },
         {
@@ -349,11 +352,19 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     return <Loader />;
   }
 
-  if (da && !isl && !error) {
+  if (propertyData && !propertyDataLoading && !error) {
     let qs = {};
     qs = { ...searchData.filters, city: searchData.city };
 
-    if (propsConfig.action === "MUTATION") {
+    if (
+      ptSearchConfig?.ptSearchCount &&
+      searchData?.filters?.locality &&
+      propertyDataLoading &&
+      propertyDataLoading?.Properties?.length &&
+      propertyDataLoading.Properties.length > ptSearchConfig.ptSearchCount
+    ) {
+      !showToast && setShowToast({ error: true, label: "PT_MODIFY_SEARCH_CRITERIA" });
+    } else if (propsConfig.action === "MUTATION") {
       onSelect(propsConfig.key, qs, null, null, null, {
         queryParams: { ...qs },
       });
@@ -370,8 +381,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     !showToast && setShowToast({ error: true, label: error?.response?.data?.Errors?.[0]?.code || error });
   }
 
-  if (action == 1) {
-    console.log(config);
+  if (action === 1) {
     config[0].body = [...config[0].body1];
   }
 
@@ -386,8 +396,6 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
         heading={t(propsConfig.texts.header)}
         text={t(propsConfig.texts.text)}
         headingStyle={{ fontSize: "32px", marginBottom: "16px", fontFamily: "Roboto Condensed,sans-serif" }}
-        // headingStyle={{ fontSize: "32px", marginBottom: "16px" }}
-        // isDisabled={!canSubmit}
         onFormValueChange={onFormValueChange}
       ></FormComposer>
       {showToast && (

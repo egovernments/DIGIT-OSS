@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const GetCell = (value) => <span className="cell-text">{value}</span>;
 
-const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast }) => {
+const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConfig }) => {
   const [searchQuery, setSearchQuery] = useState({
     /* ...defaultValues,   to enable pagination */
     ...payload,
@@ -49,7 +49,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast }) => {
       },
       {
         Header: t("PT_AMOUNT_DUE"),
-        Cell: ({ row }) => GetCell(row?.original?.due&&`₹ ${row?.original?.due}` || "NA"),
+        Cell: ({ row }) => GetCell(row?.original?.due?`₹ ${row?.original?.due}`:t("PT_NA")),
         disableSortBy: true,
       },
       {
@@ -92,6 +92,10 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast }) => {
   };
 
   const tableData = Object.values(data?.FormattedData || {}) || [];
+  if(ptSearchConfig?.ptSearchCount&&payload.locality&&tableData&&tableData.length>ptSearchConfig.ptSearchCount){
+    !showToast &&setShowToast({ error: true, label: "PT_MODIFY_SEARCH_CRITERIA" });
+    return null;
+  }
   return (
     <React.Fragment>
       {data?.Properties?.length === 0 ? (

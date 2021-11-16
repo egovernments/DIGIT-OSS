@@ -79,7 +79,7 @@ const PTSearchFields = {
       placeHolder: "PT_SEARCH_DOOR_NO_PLACEHOLDER",
       validation: {
         pattern: {
-          value: /^[^$"'<>?~`!@$%^={}[]*:;“”‘’]{1,50}$/i,
+          value:  "[A-Za-z0-9#,/ -()]{1,63}",
           message: "ERR_INVALID_DOOR_NO",
         },
       },
@@ -94,7 +94,7 @@ const PTSearchFields = {
           message: "PT_MIN_3CHAR",
         },
         pattern: {
-          value: /^[^{0-9}^$"<>?\\\\~!@#$%^()+={}[]*,_:;“”‘’]{3,50}$/i,
+          value:  "[A-Za-z .`'-]{3,63}",
           message: "PAYMENT_INVALID_NAME",
         },
       },
@@ -119,7 +119,11 @@ const Search = () => {
   const [showToast, setShowToast] = useState(null);
   const SearchComponent = memo(Digit.ComponentRegistryService.getComponent("PropertySearchForm"));
   const SearchResultComponent = memo(Digit.ComponentRegistryService.getComponent("PropertySearchResults"));
-
+  const { data: ptSearchConfig, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "DIGIT-UI", "HelpText", {
+    select: (data) => {
+      return data?.["DIGIT-UI"]?.["HelpText"]?.[0]?.PT;
+    },
+  });
   const onReset = useCallback(() => {
     setFormData(defaultValues);
     // setPayload({});
@@ -139,7 +143,6 @@ const Search = () => {
       setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
     }
   });
-
   return (
     <React.Fragment>
       <Header>{t("SEARCH_PROPERTY")}</Header>
@@ -154,7 +157,7 @@ const Search = () => {
         onReset={onReset}
       />
       {Object.keys(payload).length > 0 && (
-        <SearchResultComponent t={t} showToast={showToast} setShowToast={setShowToast} tenantId={tenantId} payload={payload} />
+        <SearchResultComponent t={t} showToast={showToast} setShowToast={setShowToast} tenantId={tenantId} payload={payload} ptSearchConfig={{...ptSearchConfig}} />
       )}
       {showToast && (
         <Toast
