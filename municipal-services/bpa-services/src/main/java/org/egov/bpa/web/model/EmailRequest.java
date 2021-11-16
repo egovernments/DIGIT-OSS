@@ -1,15 +1,16 @@
 package org.egov.bpa.web.model;
 
 import lombok.*;
+import org.egov.common.contract.request.RequestInfo;
 
-
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Setter
+@Getter
 @ToString
 public class EmailRequest {
-    private String emailId;
-    private String message;
-
+    private RequestInfo requestInfo;
+    
+    private Email email;
 }

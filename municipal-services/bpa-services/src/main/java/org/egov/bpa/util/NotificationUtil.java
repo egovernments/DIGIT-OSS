@@ -388,7 +388,11 @@ public class NotificationUtil {
 //				log.info("Link to replace - "+linkToReplace);
 				customizedMsg = customizedMsg.replace("{RECEIPT_DOWNLOAD_LINK}",linkToReplace);
 			}
-			emailRequest.add(new EmailRequest(entryset.getValue(), customizedMsg));
+			String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
+			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
+			EmailRequest email = new EmailRequest(bpaRequest.getRequestInfo(),emailobj);
+			emailRequest.add(email);
 		}
 		return emailRequest;
 	}
@@ -406,7 +410,8 @@ public class NotificationUtil {
 				log.info("Messages from localization couldn't be fetched!");
 			for (EmailRequest emailRequest : emailRequestList) {
 				producer.push(config.getEmailNotifTopic(), emailRequest);
-//				log.info("EMAIL notification sent!");
+				log.info("Email Request -> "+emailRequest.toString());
+				log.info("EMAIL notification sent!");
 			}
 		}
 	}
