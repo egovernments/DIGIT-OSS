@@ -116,7 +116,8 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
             kpis: [
                 {
                     count: !bpaLoading && !bparegLoading ? totalCount : "-",
-                    label: t("BPA_PDF_TOTAL")
+                    label: t("BPA_PDF_TOTAL"),
+                    link: `/digit-ui/citizen/obps/bpa/inbox`
                 }
             ],
             links: [

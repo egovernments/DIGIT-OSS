@@ -381,14 +381,17 @@ export const OBPSService = {
 
     let details = [];
 
-    const applicationDetailsInfo = {
+    let applicationDetailsInfo = {
       title: " ",
       values: [
-        { title: "BPA_APPLICATION_NUMBER_LABEL", value: BPA?.applicationNo || "NA" },
-        { title: "BPA_PERMIT_NUMBER_LABEL", value: BPA?.approvalNo || "NA"  },
-        { title: "BPA_PERMIT_VALIDITY", value: BPA?.additionalDetails?.validityDate ? `${format(new Date(BPA?.applicationDate), 'dd/MM/yyyy')} - ${format(new Date(BPA?.additionalDetails?.validityDate), 'dd/MM/yyyy')}` : "NA"  }
+        { title: "BPA_APPLICATION_NUMBER_LABEL", value: BPA?.applicationNo || "NA" }
       ]
     };
+
+    if(BPA?.approvalNo) {
+      applicationDetailsInfo?.values?.push({ title: "BPA_PERMIT_NUMBER_LABEL", value: BPA?.approvalNo || "NA"  });
+      applicationDetailsInfo?.values?.push({ title: "BPA_PERMIT_VALIDITY", value: BPA?.additionalDetails?.validityDate ? `${format(new Date(BPA?.applicationDate), 'dd/MM/yyyy')} - ${format(new Date(BPA?.additionalDetails?.validityDate), 'dd/MM/yyyy')}` : "NA"  });
+    }
 
 
     const basicDetails = {

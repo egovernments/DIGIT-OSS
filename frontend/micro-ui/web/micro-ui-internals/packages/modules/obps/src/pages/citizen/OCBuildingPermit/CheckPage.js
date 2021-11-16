@@ -33,7 +33,7 @@ const CheckPage = ({ onSubmit, value }) => {
   else if (value.businessService === "BPA_OC")
     BusinessService = "BPA.NC_OC_APP_FEE"
 
-  const { data, address, owners, nocDocuments, documents, additionalDetails,PrevStateDocuments,PrevStateNocDocuments } = value;
+  const { data, address, owners, nocDocuments, documents, additionalDetails, PrevStateDocuments, PrevStateNocDocuments, applicationNo } = value;
   let isEditApplication = window.location.href.includes("editApplication");
   let val;
   var i;
@@ -150,20 +150,30 @@ const CheckPage = ({ onSubmit, value }) => {
     location.href = jumpTo;
   }
 
+  function getdate(date) {
+    let newdate = Date.parse(date);
+    return `${new Date(newdate).getDate().toString() + "/" + (new Date(newdate).getMonth() + 1).toString() + "/" + new Date(newdate).getFullYear().toString()
+      }`;
+  }
 
   return (
     <React.Fragment>
       <Timeline currentStep={4} />
       <Header>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
+      <Card style={{paddingRight:"16px"}}>
+        <StatusTable>
+          <Row className="border-none" label={t(`BPA_APPLICATION_NUMBER_LABEL`)} text={applicationNo?applicationNo:""} />
+        </StatusTable>
+      </Card>
       <Card>
         <CardHeader>{t(`BPA_BASIC_DETAILS_TITLE`)}</CardHeader>
         <StatusTable>
-          <Row className="border-none" label={`${t(`BPA_BASIC_DETAILS_APP_DATE_LABEL`)}:`} text={data?.applicationDate} />
-          <Row className="border-none" label={`${t(`BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL`)}:`} text={t(`WF_BPA_${data?.applicationType}`)} />
-          <Row className="border-none" label={`${t(`BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL`)}:`} text={t(data?.serviceType)} />
-          <Row className="border-none" label={`${t(`BPA_BASIC_DETAILS_OCCUPANCY_LABEL`)}:`} text={data?.occupancyType} />
-          <Row className="border-none" label={`${t(`BPA_BASIC_DETAILS_RISK_TYPE_LABEL`)}:`} text={t(`WF_BPA_${data?.riskType}`)} />
-          <Row className="border-none" label={`${t(`BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL`)}:`} text={data?.applicantName} />
+          <Row className="border-none" label={`${t(`BPA_BASIC_DETAILS_APP_DATE_LABEL`)}`} text={getdate(data?.applicationDate)} />
+          <Row className="border-none" label={`${t(`BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL`)}`} text={t(`WF_BPA_${data?.applicationType}`)} />
+          <Row className="border-none" label={`${t(`BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL`)}`} text={t(data?.serviceType)} />
+          <Row className="border-none" label={`${t(`BPA_BASIC_DETAILS_OCCUPANCY_LABEL`)}`} text={data?.occupancyType} />
+          <Row className="border-none" label={`${t(`BPA_BASIC_DETAILS_RISK_TYPE_LABEL`)}`} text={t(`WF_BPA_${data?.riskType}`)} />
+          <Row className="border-none" label={`${t(`BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL`)}`} text={data?.applicantName} />
         </StatusTable>
       </Card>
       <Card>
@@ -174,25 +184,25 @@ const CheckPage = ({ onSubmit, value }) => {
           onClick={() => routeTo(`${routeLink}/plot-details`)}
         />
         <StatusTable>
-          <Row className="border-none" label={`${t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)}:`} text={`${datafromAPI?.planDetail?.planInformation?.plotArea} sq.ft` || t("CS_NA")} textStyle={{marginLeft:"9px"}}/>
-          <Row className="border-none" label={`${t(`BPA_PLOT_NUMBER_LABEL`)}:`} text={datafromAPI?.planDetail?.planInformation?.plotNo || t("CS_NA")} />
-          <Row className="border-none" label={`${t(`BPA_KHATHA_NUMBER_LABEL`)}:`} text={datafromAPI?.planDetail?.planInformation?.khataNo || t("CS_NA")} />
-          <Row className="border-none" label={`${t(`BPA_HOLDING_NUMBER_LABEL`)}:`} text={data?.holdingNumber || t("CS_NA")} />
-          <Row className="border-none" label={`${t(`BPA_BOUNDARY_LAND_REG_DETAIL_LABEL`)}:`} text={data?.registrationDetails || t("CS_NA")} />
+          <Row className="border-none" label={`${t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)}`} text={`${datafromAPI?.planDetail?.planInformation?.plotArea} sq.ft` || t("CS_NA")} textStyle={{marginLeft:"9px"}}/>
+          <Row className="border-none" label={`${t(`BPA_PLOT_NUMBER_LABEL`)}`} text={datafromAPI?.planDetail?.planInformation?.plotNo || t("CS_NA")} />
+          <Row className="border-none" label={`${t(`BPA_KHATHA_NUMBER_LABEL`)}`} text={datafromAPI?.planDetail?.planInformation?.khataNo || t("CS_NA")} />
+          <Row className="border-none" label={`${t(`BPA_HOLDING_NUMBER_LABEL`)}`} text={data?.holdingNumber || t("CS_NA")} />
+          <Row className="border-none" label={`${t(`BPA_BOUNDARY_LAND_REG_DETAIL_LABEL`)}`} text={data?.registrationDetails || t("CS_NA")} />
         </StatusTable>
       </Card>
       <Card>
         <CardHeader>{`${t("BPA_STEPPER_SCRUTINY_DETAILS_HEADER")}`}</CardHeader>
         <CardSubHeader>{`${t("BPA_EDCR_DETAILS")}:`}</CardSubHeader>
         <StatusTable style={{ border: "none" }}>
-          <Row className="border-none" label={`${t("BPA_OC_EDCR_NO_LABEL")}:`} text={data?.scrutinyNumber?.edcrNumber}></Row>
-          <Row className="border-none" label={`${t("BPA_UPLOADED_PLAN_DIAGRAM")}:`}></Row>
+          <Row className="border-none" label={`${t("BPA_OC_EDCR_NO_LABEL")}`} text={data?.scrutinyNumber?.edcrNumber}></Row>
+          <Row className="border-none" label={`${t("BPA_UPLOADED_PLAN_DIAGRAM")}`}></Row>
           <LinkButton
             label={ <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" /> }
             onClick={() => routeTo(datafromAPI?.updatedDxfFile)}
           />
           <p style={{ marginTop: "8px", textAlign: "Left" }}>{t(`Uploaded Plan.DXF`)}</p>
-          <Row className="border-none" label={`${t("BPA_SCRUNTINY_REPORT_OUTPUT")}:`} ></Row>
+          <Row className="border-none" label={`${t("BPA_SCRUNTINY_REPORT_OUTPUT")}`} ></Row>
           <LinkButton
             label={ <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" /> }
             onClick={() => routeTo(datafromAPI?.planReport)}
@@ -202,17 +212,17 @@ const CheckPage = ({ onSubmit, value }) => {
         <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
         <CardSubHeader>{`${t("BPA_BUILDING_EXTRACT_HEADER")}:`}</CardSubHeader>
         <StatusTable>
-          <Row className="border-none" label={`${t("BPA_BUILTUP_AREA_HEADER")}:`} text={datafromAPI?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea}></Row>
-          <Row className="border-none" label={`${t("BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL")}:`} text={datafromAPI?.planDetail?.blocks?.[0]?.building?.totalFloors}></Row>
-          <Row className="border-none" label={`${t("BPA_APPLICATION_HIGH_FROM_GROUND")}:`} text={`${datafromAPI?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight} mtrs`}></Row>
+          <Row className="border-none" label={`${t("BPA_BUILTUP_AREA_HEADER")}`} text={datafromAPI?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea}></Row>
+          <Row className="border-none" label={`${t("BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL")}`} text={datafromAPI?.planDetail?.blocks?.[0]?.building?.totalFloors}></Row>
+          <Row className="border-none" label={`${t("BPA_APPLICATION_HIGH_FROM_GROUND")}`} text={`${datafromAPI?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight} mtrs`}></Row>
         </StatusTable>
         <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
         <CardSubHeader>{`${t("BPA_OCC_SUBOCC_HEADER")}:`}</CardSubHeader>
         {datafromAPI?.planDetail?.blocks.map((block, index) => (
           <div key={index}>
-            <CardSubHeader>{`${t("BPA_BLOCK_SUBHEADER")}:`} {index + 1}</CardSubHeader>
+            <CardSubHeader>{`${t("BPA_BLOCK_SUBHEADER")}-`} {index + 1}</CardSubHeader>
               <StatusTable>
-                <Row className="border-none" label={`${t("BPA_SUB_OCCUPANCY_LABEL")}:`} text={getSubOccupancyValues(index)}></Row>
+                <Row className="border-none" label={`${t("BPA_SUB_OCCUPANCY_LABEL")}`} text={getSubOccupancyValues(index)}></Row>
               </StatusTable>
             <div style={{ overflow: "scroll" }}>
               <Table
@@ -236,7 +246,7 @@ const CheckPage = ({ onSubmit, value }) => {
           </div>))}
         <CardSubHeader>{`${t("BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL")}:`}</CardSubHeader>
         <StatusTable style={{ border: "none" }}>
-          <Row className="border-none" label={`${t("BPA_APPLICATION_DEMOLITION_AREA_LABEL")}:`} text={datafromAPI?.planDetail?.planInformation?.demolitionArea ? `${datafromAPI?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : t("CS_NA")}></Row>
+          <Row className="border-none" label={`${t("BPA_APPLICATION_DEMOLITION_AREA_LABEL")}`} text={datafromAPI?.planDetail?.planInformation?.demolitionArea ? `${datafromAPI?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : t("CS_NA")}></Row>
         </StatusTable>
       </Card>
       <Card>
@@ -248,7 +258,7 @@ const CheckPage = ({ onSubmit, value }) => {
         />
         {improvedDoc.map((doc, index) => (
           <div key={index}>
-            {doc.isNotDuplicate && <div><CardSectionHeader>{`${t(doc?.documentType)}:`}</CardSectionHeader>
+            {doc.isNotDuplicate && <div><CardSectionHeader>{`${t(doc?.documentType)}`}</CardSectionHeader>
             <StatusTable>
               <OBPSDocument value={isEditApplication?[...PrevStateDocuments,...documents.documents]:value} Code={doc?.documentType} index={index} />
               <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
@@ -265,22 +275,24 @@ const CheckPage = ({ onSubmit, value }) => {
           onClick={() => routeTo(`${routeLink}/noc-details`)}
         />
         {nocDocuments && nocDocuments?.NocDetails.map((noc, index) => (
-          <div key={index} style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", maxWidth:"600px" }}>
+          // <div key={index} style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", maxWidth:"600px" }}>
+          <div key={index}>
             <CardSectionHeader style={{marginBottom: "24px"}}>{`${t(`BPA_${noc?.nocType}_HEADER`)}:`}</CardSectionHeader>
             <StatusTable>
               <Row className="border-none" label={t(`BPA_${noc?.nocType}_LABEL`)} text={noc?.applicationNo} />
               <Row className="border-none" label={t(`BPA_NOC_STATUS`)} text={t(`${noc?.applicationStatus}`)} textStyle={noc?.applicationStatus == "APPROVED" || noc?.applicationStatus == "AUTO_APPROVED" ? {color : "#00703C"} : {color: "#D4351C"}} />
               <Row className="border-none" label={t(`BPA_DOCUMENT_DETAILS_LABEL`)} text={""} />
               <OBPSDocument value={isEditApplication?[...PrevStateNocDocuments,...nocDocuments.nocDocuments]:value} Code={noc?.nocType?.split("_")[0]} index={index} isNOC={true}/>
+              <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
             </StatusTable>
           </div>
         ))}
-        <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
+        {/* <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} /> */}
         <CardSubHeader>{`${t("BPA_SUMMARY_FEE_EST")}:`}</CardSubHeader>
         <StatusTable>
           {paymentDetails?.Bill[0]?.billDetails[0]?.billAccountDetails.map((bill, index) => (
             <div key={index}>
-              <Row className="border-none" label={`${t(`${bill.taxHeadCode}`)}:`} text={`₹ ${bill?.amount}`} />
+              <Row className="border-none" label={`${t(`${bill.taxHeadCode}`)}`} text={`₹ ${bill?.amount}`} />
             </div>
           ))}
         </StatusTable>
