@@ -1,7 +1,7 @@
 import React, { useEffect, Fragment, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { EmployeeModuleCard, DocumentIcon, EventCalendar, PMBIcon, PropertyHouse } from "@egovernments/digit-ui-react-components";
+import { EmployeeModuleCard, DocumentIconSolid, EventsIconSolid, PMBIconSolid, SurveyIconSolid, PropertyHouse } from "@egovernments/digit-ui-react-components";
 
 const EngagementCard = () => {
   const userRoles = Digit.SessionStorage.get('User')?.info?.roles
@@ -36,7 +36,7 @@ const EngagementCard = () => {
   let result = null;
 
   const propsForSurveyModuleCard = {
-    Icon: <DocumentIcon />,
+    Icon: <SurveyIconSolid />,
     moduleName: t("CS_COMMON_SURVEYS"),
     kpis: [
       {
@@ -55,7 +55,7 @@ const EngagementCard = () => {
   }
 
   const propsForPMBModuleCard = {
-    Icon: <PMBIcon/>,
+    Icon: <PMBIconSolid />,
     moduleName: t("ACTION_TEST_PUBLIC_MESSAGE_BROADCAST"),
     kpis: [
       {
@@ -73,12 +73,12 @@ const EngagementCard = () => {
       },
       {
         label: t("NEW_PUBLIC_MESSAGE_BUTTON_LABEL"),
-        link: `/digit-ui/employee/engagement/messages/inbox/create`,
+        link: `/digit-ui/employee/engagement/messages/create`,
       },
     ]
   }
   const propsForEventsModuleCard = {
-    Icon: <EventCalendar />,
+    Icon: <EventsIconSolid />,
     moduleName: t("TOTAL_EVENTS"),
     kpis: [
       {
@@ -96,12 +96,12 @@ const EngagementCard = () => {
       },
       {
         label: t("ES_TITLE_NEW_EVENTS"),
-        link: `/digit-ui/employee/engagement/event/inbox/new-event`
+        link: `/digit-ui/employee/engagement/event/new-event`
       },
     ]
   }
   const propsForDocumentModuleCard = {
-    Icon: <DocumentIcon />,
+    Icon: <DocumentIconSolid />,
     moduleName: t("ES_TITLE_DOCS"),
     kpis: [
       {
@@ -118,7 +118,7 @@ const EngagementCard = () => {
       },
       {
         label: t("NEW_DOCUMENT_TEXT"),
-        link: `/digit-ui/employee/engagement/documents/inbox/new-doc`,
+        link: `/digit-ui/employee/engagement/documents/new-doc`,
       },
     ],
   };

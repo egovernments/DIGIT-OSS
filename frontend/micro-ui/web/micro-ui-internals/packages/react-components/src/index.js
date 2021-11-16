@@ -65,7 +65,7 @@ import {
   AnnouncementIcon, ArrowDown, ArrowLeft, ArrowRightInbox, Calender, CaseIcon, CitizenTruck, CloseSvg, ComplaintIcon, Details, DocumentSVG, DownloadIcon, DownloadImgIcon, DownwardArrow, DropIcon, Ellipsis, EmailIcon, FilterIcon, GetApp, HomeIcon,
   PrevIcon, ViewsIcon, LanguageIcon,
   LogoutIcon, Person, PersonIcon, Poll, PrintIcon, PropertyHouse, PTIcon, ReceiptIcon, RefreshIcon, RupeeIcon, SearchIconSvg, ShareIcon, ShippingTruck, SortDown, GenericFileIcon,
-  SortUp, UpwardArrow, WhatsappIcon, OBPSIcon, EDCRIcon, BPAIcon, BPAHomeIcon,DocumentIcon, ExternalLinkIcon, PMBIcon, PDFSvg, DownloadPrefixIcon, HelpIcon, TickMark, NotificationBell, MapMarker, Clock, EventCalendar, ImageIcon, EditIcon, SearchIcon, DeleteIcon, OBPSIconSolidBg
+  SortUp, UpwardArrow, WhatsappIcon, OBPSIcon, EDCRIcon, BPAIcon, BPAHomeIcon, DocumentIcon, DocumentIconSolid, EventsIconSolid, SurveyIconSolid, PMBIconSolid, ExternalLinkIcon, PMBIcon, PDFSvg, DownloadPrefixIcon, HelpIcon, TickMark, NotificationBell, MapMarker, Clock, EventCalendar, ImageIcon, EditIcon, SearchIcon, DeleteIcon, OBPSIconSolidBg
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -106,7 +106,7 @@ import PageBasedInput from "./molecules/PageBasedInput";
 import SearchOnRadioButtons from "./molecules/SearchOnRadioButtons";
 import OnGroundEventCard from "./molecules/OnGroundEventCard";
 import MultiUploadWrapper from "./molecules/MultiUploadWrapper";
-import {FilterForm, FilterFormField} from "./molecules/FilterForm";
+import { FilterForm, FilterFormField } from "./molecules/FilterForm";
 import OpenLinkContainer from "./atoms/OpenLinkContainer";
 
 export {
@@ -211,6 +211,10 @@ export {
   CaseIcon,
   PTIcon,
   DocumentIcon,
+  DocumentIconSolid,
+  PMBIconSolid,
+  EventsIconSolid,
+  SurveyIconSolid,
   PMBIcon,
   GenericFileIcon,
   HelpIcon,

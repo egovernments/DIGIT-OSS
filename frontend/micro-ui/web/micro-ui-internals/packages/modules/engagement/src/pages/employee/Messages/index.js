@@ -10,6 +10,7 @@ import DocumentDetails from "../../../components/Messages/DocumentDetails"
 
 const Messages = ({match:{path} = {}, tenants, parentRoute}) => {
     return <Switch>
+        <PrivateRoute path={`${path}/create`} component={props => <NewMessage {...props} />} />
         <PrivateRoute path={`${path}/inbox/create`} component={props => <NewMessage {...props} />} />
         <PrivateRoute path={`${path}/inbox/details/:id`} component={props => <DocumentDetails {...props} />} />
         <PrivateRoute path={`${path}/inbox/edit/:id`} component={props => <EditMessage {...props} />} />
