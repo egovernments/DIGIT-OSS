@@ -61,44 +61,71 @@ public class TLBatchService {
      * @param requestInfo
      */
     public void getLicensesAndPerformAction(String serviceName, String jobName, RequestInfo requestInfo){
+    	
+    	List <String> tenantIdsFromRepository = repository.fetchTradeLicenseTenantIds();
 
+        List <String> workflowCodes = Arrays.asList(config.getTlBusinessServices().split("\\s*,\\s*"));
+        
+        tenantIdsFromRepository.forEach(tenantIdFromRepository->{
 
-        Long validTill = System.currentTimeMillis();
+        	try {
+        	
+        	Long validTill = System.currentTimeMillis();
 
-        if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER))
-            validTill = validTill + config.getReminderPeriod();
+        	if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER))
+        		validTill = validTill + config.getReminderPeriod();
 
-
-        TradeLicenseSearchCriteria criteria = TradeLicenseSearchCriteria.builder()
+        	TradeLicenseSearchCriteria criteria = TradeLicenseSearchCriteria.builder()
                 .businessService(serviceName)
                 .validTo(validTill)
-                .status(Collections.singletonList(STATUS_APPROVED))
+                .status(Collections.singletonList(STATUS_APPROVED)).tenantId(tenantIdFromRepository)
                 .limit(config.getPaginationSize())
                 .build();
 
-        int offSet = 0;
+        	workflowCodes.forEach(workflowCode ->{
 
-        while (true){
+        		int offSet = 0;
+        		criteria.setOffset(offSet);
 
-            log.info("current Offset: "+offSet);
+        		while (true){
 
-            List<TradeLicense> licenses = repository.getLicenses(criteria);
-            if(CollectionUtils.isEmpty(licenses))
-                break;
+        				log.info("current Offset: "+offSet);
 
-            licenses = enrichmentService.enrichTradeLicenseSearch(licenses, criteria, requestInfo);
+        				List<TradeLicense> licensesFromRepository = repository.getLicenses(criteria);
+        				if(CollectionUtils.isEmpty(licensesFromRepository)) 
+        					break;
 
-            if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER))
-            {sendReminderSMS(requestInfo, licenses);
-                sendReminderEmail(requestInfo,licenses);}
+        				List <TradeLicense> licensesWithWorkflowCode= new ArrayList<TradeLicense>();
+            
+        				licensesFromRepository.forEach(license->{
+        						if (license.getWorkflowCode()!=null && license.getWorkflowCode().equalsIgnoreCase(workflowCode) ) {
+        							licensesWithWorkflowCode.add(license);
+        						}
+            	
+        				});
+            
+        				List<TradeLicense> licenses = enrichmentService.enrichTradeLicenseSearch(licensesWithWorkflowCode, criteria, requestInfo);
 
-            else if(jobName.equalsIgnoreCase(JOB_EXPIRY))
-                expireLicenses(requestInfo, licenses);
+        				if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER))
+        				{sendReminderSMS(requestInfo, licenses);
+        				sendReminderEmail(requestInfo,licenses);}
 
-            offSet = offSet + config.getPaginationSize();
+        				else if(jobName.equalsIgnoreCase(JOB_EXPIRY))
+        					expireLicenses(requestInfo, licenses);
 
-            criteria.setOffset(offSet);
-        }
+        				offSet = offSet + config.getPaginationSize();
+
+        				criteria.setOffset(offSet);
+        		}
+        
+        	});
+        	
+        	}
+        	catch(Exception ex) {
+        		log.error("The batch process could not be completed for the tenant id : "+tenantIdFromRepository);
+        	}
+        
+        	});
 
 
     }

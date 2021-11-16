@@ -239,6 +239,9 @@ public class TLConfiguration {
 
     @Value("${is.external.workflow.enabled}")
     private Boolean isExternalWorkFlowEnabled;
+    
+    @Value("${egov.tl.businessservices}")
+    private String tlBusinessServices;
 
     //USER EVENTS
 	@Value("${egov.ui.app.host}")
