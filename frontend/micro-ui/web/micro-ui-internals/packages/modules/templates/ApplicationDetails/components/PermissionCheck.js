@@ -53,12 +53,14 @@ const PermissionCheck = ({ permissions, t }) => {
           label={permission?.label}
           checked={permission?.checked}
           onChange={(event => handleCheck(event, permission?.label, index))}
+          isLabelFirst={true}
+          index={index}
         />
       ))}
       {newApprovals?.map((approval, index) => (
-        <TextInput key={index} value={approval?.label} onChange={event => handleChange(event, index)} />
+        <TextInput key={index} value={approval?.label} onChange={event => handleChange(event, index)} textInputStyle={{maxWidth: "80%", width: "80%"}} placeholder={"Enter permit conditions.........."} />
       ))}
-      <LinkButton style={{ color: "#f47738" }} label={t(`BPA_ADD_MORE`)} onClick={handleAdd} />
+      <LinkButton style={{ color: "#f47738", maxWidth: "10%", float: "right", marginTop: "-50px", marginRight: "3%" }} label={t(`BPA_ADD_MORE`)} onClick={handleAdd} />
     </div>
   )
 }
