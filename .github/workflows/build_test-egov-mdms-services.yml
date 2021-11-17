@@ -1,9 +1,9 @@
-name: Build and push egov-mdms-services image
+name: Build and push egov-mdms-service image
 
 on:
   push:
     paths:
-      - 'core-services/egov-mdms-services/**'
+      - 'core-services/egov-mdms-service/**'
     branches:
       - build_test
 
