@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
@@ -137,6 +138,10 @@ public class PaymentUpdateService {
 
 					Property property = validateProperty.getOrValidateProperty(waterConnectionRequest);
 
+					// Enrich tenantId in userInfo for workflow call
+					RequestInfo requestInfo = waterConnectionRequest.getRequestInfo();
+					Role role = Role.builder().code("SYSTEM_PAYMENT").tenantId(property.getTenantId()).build();
+					requestInfo.getUserInfo().getRoles().add(role);
 					wfIntegrator.callWorkFlow(waterConnectionRequest, property);
 					enrichmentService.enrichFileStoreIds(waterConnectionRequest);
 					repo.updateWaterConnection(waterConnectionRequest, false);
