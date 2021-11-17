@@ -1,4 +1,4 @@
-import { CheckBox, LinkButton, TextInput } from "@egovernments/digit-ui-react-components";
+import { CheckBox, LinkButton, TextInput,Close } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 
 const PermissionCheck = ({ permissions, t }) => {
@@ -14,6 +14,12 @@ const PermissionCheck = ({ permissions, t }) => {
 
   const handleAdd = () => {
     setNewApprovals([...newApprovals, { label: '' }]);
+  }
+
+  const handleRemove = (index) => {
+    const values = [...newApprovals];
+            values.splice(index, 1);
+            setNewApprovals([...values]);     
   }
 
   const handleChange = (event, index) => {
@@ -58,9 +64,21 @@ const PermissionCheck = ({ permissions, t }) => {
         />
       ))}
       {newApprovals?.map((approval, index) => (
-        <TextInput key={index} value={approval?.label} onChange={event => handleChange(event, index)} textInputStyle={{maxWidth: "80%", width: "80%"}} placeholder={"Enter permit conditions.........."} />
+       <div> <TextInput key={index} value={approval?.label} onChange={event => handleChange(event, index)} textInputStyle={{maxWidth: "80%", width: "80%"}} placeholder={"Enter permit conditions.........."} />
+         {<LinkButton
+          label={
+            <div>
+              <span>
+              <Close style={{float: "right", position: "relative", bottom: "32px", marginTop: "-20px", marginRight: "21%" }}/>
+              </span>
+            </div>
+          }
+          style={{ }}
+          onClick={(e) => handleRemove(index)}
+        />}
+       </div>
       ))}
-      <LinkButton style={{ color: "#f47738", maxWidth: "10%", float: "right", marginTop: "-50px", marginRight: "3%" }} label={t(`BPA_ADD_MORE`)} onClick={handleAdd} />
+      <LinkButton style={{ color: "#f47738", maxWidth: "10%", /* float: "right", marginTop: "-50px", */ marginRight: "3%" }} label={t(`BPA_ADD_MORE`)} onClick={handleAdd} />
     </div>
   )
 }

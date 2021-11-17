@@ -209,6 +209,31 @@ export const getBPAUnit = (data) =>{
 
 }
 
+export const getBPAusageCategoryAPI = (arr)=>{
+  let usageCat = ""
+  arr.map((ob,i) => {
+      usageCat = usageCat + (i !==0?",":"") + ob.code;
+  });
+  return usageCat;
+}
+
+
+export const getBPAUnitsForAPI = (ob) => {
+  let units=[];
+  if(ob) {
+      let result = Object.entries(ob);
+      result.map((unit,index)=>{
+          units.push({
+              blockIndex:index,
+              floorNo:unit[0].split("_")[1],
+              unitType:"Block",
+              usageCategory:getusageCategoryAPI(unit[1]),
+          });
+      })
+  }
+  return units;
+}
+
 export const getunitforBPA = (units) => {
   let unit = [];
   units && units.map((ob,index) => {
@@ -287,7 +312,7 @@ export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = 
   
     data.landInfo.address.city=data?.landInfo?.address?.city?.code;
   
-    data.landInfo.unit=getunitforBPA(data?.landInfo?.unit);
+    data.landInfo.unit=data?.landInfo?.unit.length>0?getunitforBPA(data?.landInfo?.unit):data?.subOccupancy?getBPAUnitsForAPI(data?.subOccupancy):[];
   }
 
   let formData={

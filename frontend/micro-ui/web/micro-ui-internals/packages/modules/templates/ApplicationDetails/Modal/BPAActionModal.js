@@ -157,7 +157,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     const approvals = Digit.SessionStorage.get("OBPS_APPROVAL_CHECKS");
     const newApprovals = Digit.SessionStorage.get("OBPS_NEW_APPROVALS");
     let result = approvals?.reduce((acc, approval) => approval?.checked ? acc.push(approval?.label) && acc : acc, []);
-    result = result?.concat(newApprovals !== null?newApprovals.map(approval => approval?.label):[]);
+    result = result?.concat(newApprovals !== null?newApprovals.filter(ob => ob.label !== "").map(approval => approval?.label):[]);
     return result;
   }
 
