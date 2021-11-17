@@ -1,7 +1,34 @@
+
+
 .updatePropertyNumber{
 
     .pt-update-no-popup-wrapper{
         @apply m-md;
     }
-
+.search-form-wrapper {
+    display: inherit;
+    padding:16px;
+    .submit-bar {
+        position: absolute;
+    bottom: 25px;
+    width:90%;
+    }
 }
+}
+
+@screen dt{
+    .updatePropertyNumber{
+
+        .h1{
+            @apply m-md;
+        }
+        .search-form-wrapper {
+        .submit-bar {
+            width: 100%!important;
+            position:unset !important;
+        }
+    }
+    }
+   
+}
+
