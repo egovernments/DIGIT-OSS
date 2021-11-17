@@ -103,6 +103,9 @@ public class TLBatchService {
         						}
             	
         				});
+        				
+        				if(!CollectionUtils.isEmpty(licensesWithWorkflowCode)) 
+        				{
             
         				List<TradeLicense> licenses = enrichmentService.enrichTradeLicenseSearch(licensesWithWorkflowCode, criteria, requestInfo);
 
@@ -112,6 +115,7 @@ public class TLBatchService {
 
         				else if(jobName.equalsIgnoreCase(JOB_EXPIRY))
         					expireLicenses(requestInfo, licenses);
+        				}
 
         				offSet = offSet + config.getPaginationSize();
 
