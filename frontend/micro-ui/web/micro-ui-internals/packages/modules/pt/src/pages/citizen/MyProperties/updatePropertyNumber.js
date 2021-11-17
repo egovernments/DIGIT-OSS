@@ -9,6 +9,7 @@ import {
   SearchForm,
   CardLabel,
   CardLabelError,
+  Toast
 } from "@egovernments/digit-ui-react-components";
 import React, { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -28,8 +29,9 @@ let stateCode="";
   };
 
 // TODO  @jagan make this component to reuse for multiple module
-const UpdatePropertyNumber = ({ showPopup, property, t }) => {
+const UpdatePropertyNumber = ({ showPopup, property, t ,onValidation}) => {
   stateCode=Digit.ULBService.getStateId();
+  const [showToast, setShowToast] = useState(null)
   const SelectOtp = Digit?.ComponentRegistryService?.getComponent("SelectOtp");
 
   const [updatePropertyState,setUpdatedProperty] =useState({name:property?.owners?.[0]?.name||"NA",
@@ -41,9 +43,12 @@ const [otpInfo,setOtpInfo]=useState({otpSentTo:false,isNewUser:false,invalid:fal
 const onSubmit=useCallback(async(_data) => {
 
   if(_data?.mobileNumber==updatePropertyState.mobileNumber){
-console.error("PT_SEC_SAME_NUMBER");
+    
+       setShowToast({ error:true,warning:false,label: "PT_SEC_SAME_NUMBER" });
+
 return;
-  }
+  }else{
+     setShowToast(null);
 const requestData={ mobileNumber:_data?.mobileNumber,tenantId:stateCode,userType:"CITIZEN"};
 //TODO  @jagan create a seperate hook later
    if(!otpInfo?.otpSentTo){
@@ -52,16 +57,21 @@ const requestData={ mobileNumber:_data?.mobileNumber,tenantId:stateCode,userType
     if(err){
        const [registerResponse, registerError] = await sendOtp({ otp: { ...requestData,name:updatePropertyState?.name, ...TYPE_REGISTER } });
    if(!registerError){
+     
+       setShowToast({ error:false,warning:false,label: "PT_SEC_OTP_SENT_SUCEESS" });
      setOtpInfo((old)=>({...old,otpSentTo:_data?.mobileNumber,isNewUser:true}));
    }
     }else{
+             setShowToast({ error:false,warning:false,label: "PT_SEC_OTP_SENT_SUCEESS" });
 setOtpInfo((old)=>({...old,otpSentTo:_data?.mobileNumber}));
     }
    }else{
           /* authenticate or register user flow */
-loginOrRegister(_data,(d)=>console.log(_data));
+loginOrRegister(_data,(d)=>{       setShowToast({ error:false,warning:false,label: "PT_MOBILE_NUM_UPDATED_SUCCESS" });
+console.log(_data)});
 
    }
+  }
 
 });
 
@@ -77,11 +87,10 @@ loginOrRegister(_data,(d)=>console.log(_data));
           tenantId: stateCode,
           userType: "CITIZEN",
         };
-
         const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.authenticate(requestData);
 
-       onSuccess&&onSuccess(_data);
-      } else if (!isUserRegistered) {
+       onValidation&&onValidation(_data,onSuccess);
+      } else {
         const requestData = {
           name:updatePropertyState?.name,
           username: mobileNumber,
@@ -90,7 +99,7 @@ loginOrRegister(_data,(d)=>console.log(_data));
         };
 
         const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.registerUser(requestData, stateCode);
-  onSuccess&&onSuccess(_data);
+  onValidation&&onValidation(_data,onSuccess);
       }
     } catch (err) {
       setOtpInfo(old=>({...old,invalid:true}));
@@ -178,6 +187,16 @@ const resendOtp = async () => {
             )}
           />}
         </StatusTable>
+         {showToast && (
+        <Toast
+          error={showToast.error}
+          warning={showToast.warning}
+          label={t(showToast.label)}
+          onClose={() => {
+            setShowToast(null);
+          }}
+        />
+      )}
         <SubmitBar label={t(otpInfo?.otpSentTo?"PTUPNO_VERUPD_NO":"PTUPNO_SENDOTP")} submit />
       </SearchForm>
     </div>

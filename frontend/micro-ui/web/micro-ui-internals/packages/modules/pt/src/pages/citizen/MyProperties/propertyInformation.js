@@ -48,6 +48,7 @@ const PropertyInformation = () => {
       select: (d) => d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
     }
   );
+
 const [popup,showPopup] = useState(false);
   const [billData, updateCanFetchBillData] = useState({
     loading: false,
@@ -58,6 +59,8 @@ const [popup,showPopup] = useState(false);
   const [fetchBillData, updatefetchBillData] = useState({});
 
   const [property, setProperty] = useState(() => data?.Properties[0] || " ");
+    const mutation = Digit.Hooks.pt.usePropertyAPI(property?.tenantId, false);
+
 
   useEffect(() => {
     if (data) {
@@ -130,7 +133,6 @@ const [popup,showPopup] = useState(false);
     return <LinkButton label={t("PT_OWNER_HISTORY")} className="check-page-link-button" onClick={routeTo} />;
   };
   const  UpdatePropertyNumberComponent = Digit?.ComponentRegistryService?.getComponent('UpdatePropertyNumber');
-
   return (
     <React.Fragment>
       <Header>{t("PT_PROPERTY_INFORMATION")}</Header>
@@ -253,7 +255,26 @@ const [popup,showPopup] = useState(false);
           </div>
           {popup && (
         <PopUp>
-          <UpdatePropertyNumberComponent showPopup={showPopup} property={property} t={t}  ></UpdatePropertyNumberComponent>
+          <UpdatePropertyNumberComponent showPopup={showPopup} property={property} t={t} onValidation={(data,showToast)=>{
+            let newProp={...property};
+            newProp.owners[0].mobileNumber=data.mobileNumber;
+            newProp.creationReason = "UPDATE";
+            newProp.workflow=null;
+            mutation.mutate(
+        {
+          Property: newProp,
+        },
+        {
+          onError:()=>console.error("error"),
+          onSuccess:async (successRes) => {
+            showToast();
+setTimeout(() => {
+  
+      window.location.reload();
+}, 3000);    }
+        }
+      );
+          }} ></UpdatePropertyNumberComponent>
       </PopUp>)}
         </Card>
       </div>
