@@ -132,6 +132,10 @@ public class PaymentUpdateService {
 							.build();
 
 					Property property = validateProperty.getOrValidateProperty(sewerageConnectionRequest);
+					// Enrich tenantId in userInfo for workflow call
+					RequestInfo requestInfo = sewerageConnectionRequest.getRequestInfo();
+					Role role = Role.builder().code("SYSTEM_PAYMENT").tenantId(property.getTenantId()).build();
+					requestInfo.getUserInfo().getRoles().add(role);
 					wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
 					enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
 					repo.updateSewerageConnection(sewerageConnectionRequest, false);
