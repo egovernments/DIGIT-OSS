@@ -124,7 +124,11 @@ import {
   EditIcon,
   SearchIcon,
   DeleteIcon,
-  OBPSIconSolidBg
+  OBPSIconSolidBg,
+  DocumentIconSolid,
+  PMBIconSolid,
+  EventsIconSolid,
+  SurveyIconSolid,
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
