@@ -339,7 +339,7 @@ export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = 
           "varificationDocuments": null
       },
       "auditDetails": data?.auditDetails,
-    "additionalDetails": data?.additionalDetails,
+    "additionalDetails": {...data?.additionalDetails, holdingNo:data?.data?.holdingNumber?data?.data?.holdingNumber:data?.additionalDetails?.holdingNo, registrationDetails:data?.data?.registrationDetails?data?.data?.registrationDetails:data?.additionalDetails?.registrationDetails },
     "applicationType": "BUILDING_PLAN_SCRUTINY",
     "serviceType": "NEW_CONSTRUCTION",
     "occupancyType": "A"
