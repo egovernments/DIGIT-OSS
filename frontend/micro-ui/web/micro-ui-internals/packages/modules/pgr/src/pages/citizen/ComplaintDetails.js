@@ -50,7 +50,6 @@ const ComplaintDetailsPage = (props) => {
 
   let tenantId = Digit.ULBService.getCurrentTenantId(); // ToDo: fetch from state
   const { isLoading, error, isError, complaintDetails, revalidate } = Digit.Hooks.pgr.useComplaintDetails({ tenantId, id });
-  // console.log("find complaint details here", complaintDetails);
 
   const [imageZoom, setImageZoom] = useState(null);
 
@@ -75,7 +74,6 @@ const ComplaintDetailsPage = (props) => {
   }, []);
 
   function zoomImage(imageSource, index) {
-    // console.log("index", index, imageSource,complaintDetails.images[index-1],"|||", complaintDetails.images )
     setImageZoom(complaintDetails.images[index - 1]);
   }
 
@@ -84,7 +82,6 @@ const ComplaintDetailsPage = (props) => {
   }
 
   const onWorkFlowChange = (data) => {
-    // console.log("ssdsodososooo ==== ", data);
     let timeline = data?.timeline;
     timeline && timeline[0].timeLineActions?.filter((e) => e === "COMMENT").length ? setDisableComment(false) : setDisableComment(true);
   };
