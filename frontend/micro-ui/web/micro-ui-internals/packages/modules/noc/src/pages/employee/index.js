@@ -7,7 +7,7 @@ import ApplicationOverview from "./ApplicationOverview";
 import Inbox from "./Inbox";
 
 
-const OBPSBreadCrumbs = ({ location }) => {
+const NOCBreadCrumbs = ({ location }) => {
   const { t } = useTranslation();
   const crumbs = [
     {
@@ -37,7 +37,7 @@ const EmployeeApp = ({ path }) => {
 
   return (
     <Fragment>
-      <OBPSBreadCrumbs location={location} />
+      <div style={window.location.href.includes("application-overview") ? {marginLeft: "10px"} : {}}><NOCBreadCrumbs location={location} /></div>
       <Switch>
         <PrivateRoute path={`${path}/inbox/application-overview/:id`} component={ApplicationOverview} />
         <PrivateRoute path={`${path}/inbox`} component={(props) => <Inbox {...props} parentRoute={path} />} />

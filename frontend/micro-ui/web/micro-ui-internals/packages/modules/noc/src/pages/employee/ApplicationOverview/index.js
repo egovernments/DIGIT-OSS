@@ -148,6 +148,7 @@ const ApplicationOverview = () => {
             boxSizing: "border-box",
             borderRadius: "4px",
             padding: "8px",
+            maxWidth: "950px"
           }}>
             <CardSectionHeader style={{ marginBottom: "16px" }}>{`${t(`NOC_MAIN_${stringReplaceAll(nocDocumentsList?.[0]?.code, ".", "_")}_LABEL`)}:`}</CardSectionHeader>
             <StatusTable style={{ position: "relative", marginTop: "19px" }}>

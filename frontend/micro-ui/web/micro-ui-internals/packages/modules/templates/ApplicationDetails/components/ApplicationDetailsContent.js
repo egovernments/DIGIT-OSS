@@ -27,6 +27,7 @@ import SubOccupancyTable from "./SubOccupancyTable";
 import OBPSDocument from "../../../obps/src/pageComponents/OBPSDocuments";
 import PermissionCheck from "./PermissionCheck";
 import BPADocuments from "./BPADocuments";
+import InspectionReport from "./InspectionReport";
 
 function ApplicationDetailsContent({ applicationDetails, workflowDetails, isDataLoading, applicationData, businessService, timelineStatusPrefix,statusAttribute="status" }) {
   const { t } = useTranslation();
@@ -62,11 +63,42 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
   const checkLocation = window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc");
   const isNocLocation = window.location.href.includes("noc/application-overview");
   const isBPALocation = window.location.href.includes("employee/obps");
+  
+  const getRowStyles = () => {
+    if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
+      return { justifyContent: "space-between", fontSize: "16px", lineHeight: "19px", color: "#0B0C0C" };
+    } else if(checkLocation) {
+      return { justifyContent: "space-between", fontSize: "16px", lineHeight: "19px", color: "#0B0C0C" };
+    } else {
+      return {}
+    }
+  }
+
+  const getTableStyles = () => {
+    if(window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
+      return { position: "relative", marginTop: "19px" }
+    } else if (checkLocation) {
+      return { position: "relative", marginTop: "19px" }
+    } else {
+      return {}
+    }
+  }
+
+  const getMainDivStyles = () => {
+    if(window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
+      return  { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" }
+    } else if (checkLocation) {
+      return  { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" }
+    } else {
+      return {}
+    }
+  }
+
   return (
     <Card style={{ position: "relative" }}>
       {applicationDetails?.applicationDetails?.map((detail, index) => (
         <React.Fragment key={index}>
-          <div style={checkLocation ? { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" } : {}}>
+          <div style={getMainDivStyles()}>
             {index === 0 && !detail.asSectionHeader ? (
               <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>
             ) : (
@@ -78,7 +110,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
               </React.Fragment>
             )}
             {/* TODO, Later will move to classes */}
-            <StatusTable style={checkLocation ? { position: "relative", marginTop: "19px" } : {}}>
+            <StatusTable style={getTableStyles()}>
               {detail?.title && !(detail?.title.includes("NOC" )) && detail?.values?.map((value, index) => {
                 if (value.map === true && value.value !== "N/A") {
                   return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
@@ -92,16 +124,15 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
                     caption={value.caption}
                     className="border-none"
                     // TODO, Later will move to classes
-                    rowContainerStyle={
-                      checkLocation ? { justifyContent: "space-between", fontSize: "16px", lineHeight: "19px", color: "#0B0C0C" } : {}
-                    }
+                    rowContainerStyle={getRowStyles()}
                   />
                 );
               })}
             </StatusTable>
           </div>
           {detail?.belowComponent && <detail.belowComponent />}
-          {detail?.additionalDetails?.inspectionReport && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
+          {detail?.additionalDetails?.inspectionReport1 && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
+          {applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending?.length && detail?.additionalDetails?.fiReport && <InspectionReport fiReport={applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending} />}
           {/* {detail?.additionalDetails?.FIdocuments && detail?.additionalDetails?.values?.map((doc,index) => (
             <div key={index}>
             {doc.isNotDuplicate && <div> 

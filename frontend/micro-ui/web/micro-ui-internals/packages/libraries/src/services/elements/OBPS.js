@@ -441,7 +441,7 @@ export const OBPSService = {
           { title: "BPA_BUILDING_EXTRACT_HEADER", value : " "},
           { title: "BPA_BUILTUP_AREA_HEADER", value: edcr?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea || "NA"},
           { title: "BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL", value: edcr?.planDetail?.blocks?.[0]?.building?.totalFloors || "NA" },
-          { title: "BPA_HEIGHT_FROM_GROUND_LEVEL_FROM_MUMTY", value: edcr?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeigh || "NA" }
+          { title: "BPA_HEIGHT_FROM_GROUND_LEVEL", value: edcr?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeigh || "NA" }
         ],
         scruntinyDetails: []
       }
@@ -560,12 +560,20 @@ export const OBPSService = {
       });
       FieldInspectionData = [...FieldInspectionData,{title:ob.title,additionalDetails:{FIdocuments:[],"documents":[{values:improvedDoc}]}} ]
       }
-    })
+    });
+
+    const fiReports = {
+      title: "",
+      additionalDetails: {
+        values: [],
+        fiReport : true
+      }
+    }
 
     if(BPA?.businessService !== "BPA_OC") {
-      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, ...FieldInspectionData, ...nocDetails, approvalChecksDetails]
+      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, fiReports, ...nocDetails, approvalChecksDetails]
     } else {
-      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails, documentDetails,...FieldInspectionData, ...nocDetails ]
+      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails, documentDetails, fiReports, ...nocDetails ]
     }
     
     const isEmployee = sessionStorage.getItem("bpaApplicationDetails") === "true" || true ? true : false;

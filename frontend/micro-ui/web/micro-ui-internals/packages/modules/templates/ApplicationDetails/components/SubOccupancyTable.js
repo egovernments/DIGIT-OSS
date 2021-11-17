@@ -80,7 +80,7 @@ const SubOccupancyTable = ({ edcrDetails, applicationData }) => {
 
   return (
     <Fragment>
-      <div style={window.location.href.includes("citizen")?{}:{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "600px", minWidth: "280px" }}>
+      <div style={window.location.href.includes("citizen")?{}:{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "950px", minWidth: "280px" }}>
         <StatusTable>
           {edcrDetails?.values?.map((value, index) => {
             return <Row className="border-none" labelStyle={{width: "100%"}} key={`${value.title}:`} label={`${t(`${value.title}`)}:`} text={value?.value ? value?.value : ""} />
@@ -93,7 +93,7 @@ const SubOccupancyTable = ({ edcrDetails, applicationData }) => {
             <StatusTable>
               <Row className="border-none" label={`${t("BPA_SUB_OCCUPANCY_LABEL")}:`} text={getSubOccupancyValues(index)}></Row>
             </StatusTable>
-            <div style={window.location.href.includes("citizen")?{overflow:"scroll"}:{ maxWidth: "600px", maxHeight: "280px" }}>
+            <div style={window.location.href.includes("citizen")?{overflow:"scroll"}:{ maxWidth: "950px", maxHeight: "280px" }}>
               <Table
                 className="customTable"
                 t={t}

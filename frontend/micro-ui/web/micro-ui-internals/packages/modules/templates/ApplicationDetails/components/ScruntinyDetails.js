@@ -7,7 +7,7 @@ const ScruntinyDetails = ({ scrutinyDetails }) => {
   let count = 0;
   return (
     <Fragment>
-      {!scrutinyDetails?.isChecklist && <div style={{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: scrutinyDetails?.isChecklist ?"1200px":"600px", minWidth: "280px" }}>
+      {!scrutinyDetails?.isChecklist && <div style={{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "950px", minWidth: "280px" }}>
         <StatusTable>
           <div>
             {scrutinyDetails?.values?.map((value, index) => {
@@ -27,23 +27,6 @@ const ScruntinyDetails = ({ scrutinyDetails }) => {
           </div>
         </StatusTable>
       </div>}
-      {scrutinyDetails?.isChecklist && <div>
-            {scrutinyDetails.values.filter((ob,index) => (index%2==0)).map((val,ind) => {
-              count=count+1;
-              return(
-                <Fragment>
-                  <div style={{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: scrutinyDetails?.isChecklist ?"1200px":"600px", minWidth: "280px", marginBottom:"10px" }}>
-                  <StatusTable>
-                  <Row className="border-none" key={`${val.title}:`} label={`${t(`${val.title}`)}:`} text={val?.value ? val?.value : ""} />
-                  <Row className="border-none" key={`${scrutinyDetails.values[ind+count].title}:`} label={`${t(`${scrutinyDetails.values[ind+count].title}`)}:`} text={scrutinyDetails.values[ind+count]?.value ? scrutinyDetails.values[ind+count]?.value : ""} />
-                  </StatusTable>
-                  </div>
-                </Fragment>
-              )
-            })
-            }
-
-          </div>}
     </Fragment>
   )
 }

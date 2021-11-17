@@ -41,7 +41,7 @@ const NOCEmployeeHomeCard = () => {
   
     const propsForModuleCard = useMemo(()=>({
       Icon: <ComplaintIcon />,
-      moduleName: t("CS_COMMON_INBOX_FIRE_NOC_SRV"),
+      moduleName: t("ACTION_TEST_NOC"),
       kpis:[
         {
             count: !isInboxLoading ? totalCount : "",

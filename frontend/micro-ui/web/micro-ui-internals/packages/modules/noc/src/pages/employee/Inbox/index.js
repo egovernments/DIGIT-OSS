@@ -94,7 +94,7 @@ const Inbox = ({parentRoute}) => {
     });
     const PropsForInboxLinks = {
         logoIcon: <ComplaintIcon />,
-        headerText: "CS_COMMON_INBOX_FIRE_NOC_SRV",
+        headerText: "ACTION_TEST_NOC",
         links: []
     }
 

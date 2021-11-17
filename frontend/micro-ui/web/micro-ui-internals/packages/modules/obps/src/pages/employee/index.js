@@ -61,7 +61,7 @@ const EmployeeApp = ({ path }) => {
   const StakeholderInbox = Digit.ComponentRegistryService.getComponent("StakeholderInbox");
   return (
     <Fragment>
-      <OBPSBreadCrumbs location={location} />
+      <div style={window.location.href.includes("inbox/") ? {marginLeft: "10px"} : {}}><OBPSBreadCrumbs location={location} /></div>
       <Switch>
         <PrivateRoute path={`${path}/stakeholder-inbox/stakeholder/:id`} component={ApplicationDetail} />
         <PrivateRoute path={`${path}/search/application/stakeholder/:id`} component={ApplicationDetail} />
