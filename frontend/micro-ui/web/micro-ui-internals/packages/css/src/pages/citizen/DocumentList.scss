@@ -45,7 +45,7 @@
   margin-top: 50px;
 }
 .notice_and_circular_main {
-  @apply flex bg-white mx-sm my-md px-md pt-md pb-lg shadow-card relative;
+  @apply flex bg-white my-md px-md pt-md pb-lg shadow-card relative;
   border-radius: 4px;
 }
 .gap-ten {
@@ -95,6 +95,8 @@
 }
 .view_download_main {
   display: flex;
+  flex-wrap: wrap;
+  gap:8px;
   align-items: center;
   span {
     padding-right: 20px;
@@ -110,6 +112,9 @@
         color: #f47738;
       }
     }
+  }
+  & .download_views_padding{
+      padding-top: 8px;
   }
 }
 @screen dt{
