@@ -23,7 +23,10 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class NOCService {
 	
 	@Autowired
@@ -86,6 +89,7 @@ public class NOCService {
 		   wfIntegrator.callWorkFlow(nocRequest, additionalDetails.get(NOCConstants.WORKFLOWCODE));
 		   enrichmentService.postStatusEnrichment(nocRequest, additionalDetails.get(NOCConstants.WORKFLOWCODE));
 		   BusinessService businessService = workflowService.getBusinessService(nocRequest.getNoc(), nocRequest.getRequestInfo(), additionalDetails.get(NOCConstants.WORKFLOWCODE));
+		   log.info("before pushing to kafka nocRequest.toString()--->>>"+nocRequest.toString());
 		   if(businessService == null)
 			   nocRepository.update(nocRequest, true);
 		   else
@@ -93,7 +97,7 @@ public class NOCService {
 		}else {
            nocRepository.update(nocRequest, Boolean.FALSE);
 		}
-		
+		log.info("After pushing to kafka NOC.toString()--->>>"+nocRequest.getNoc().toString());
 		return Arrays.asList(nocRequest.getNoc());
 	}
 	/**

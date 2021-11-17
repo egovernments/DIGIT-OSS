@@ -26,9 +26,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
+import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 
 @Service
+@Slf4j
 public class EnrichmentService {
 
 	@Autowired
@@ -153,12 +155,13 @@ public class EnrichmentService {
 
 		BusinessService businessService = workflowService.getBusinessService(noc, nocRequest.getRequestInfo(),
 				businessServiceValue);
-
+		log.info("businessServiceValue-->>"+businessServiceValue);
+		log.info("nocRequest.toString()--->>>"+nocRequest.toString());
 		if (businessService != null) {
-
+		        log.info("businessService.toString()-->>"+businessService.toString());
 			State stateObj = workflowService.getCurrentState(noc.getApplicationStatus(), businessService);
 			String state = stateObj != null ? stateObj.getState() : StringUtils.EMPTY;
-
+			log.info(state+"---state--->>>>>"+stateObj.toString());
 			if (state.equalsIgnoreCase(NOCConstants.APPROVED_STATE)
 					|| state.equalsIgnoreCase(NOCConstants.AUTOAPPROVED_STATE)) {
 
@@ -173,6 +176,7 @@ public class EnrichmentService {
 				List<IdResponse> idResponses = idGenRepository
 						.getId(nocRequest.getRequestInfo(), noc.getTenantId(), config.getApplicationNoIdgenName(), 1)
 						.getIdResponses();
+				log.info("idResponses.get(0).getId()-->>"+idResponses.get(0).getId());
 				noc.setNocNo(idResponses.get(0).getId());
 			}
 			if (state.equalsIgnoreCase(NOCConstants.VOIDED_STATUS)) {
