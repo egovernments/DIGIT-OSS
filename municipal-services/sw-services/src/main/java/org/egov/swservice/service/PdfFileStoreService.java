@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.swservice.config.SWConfiguration;
+import org.egov.swservice.util.NotificationUtil;
 import org.egov.swservice.web.models.Calculation;
 import org.egov.swservice.web.models.CalculationCriteria;
 import org.egov.swservice.web.models.CalculationReq;
@@ -57,6 +58,9 @@ public class PdfFileStoreService {
 	
 	@Autowired
 	private ValidateProperty validateProperty;
+
+	@Autowired
+	private NotificationUtil notificationUtil;
 
 	String tenantIdReplacer = "$tenantId";
 	String fileStoreIdsReplacer = "$.filestoreIds";
@@ -126,8 +130,11 @@ public class PdfFileStoreService {
 			sewerageObject.put(sla, slaDays.divide(BigDecimal.valueOf(SWConstants.DAYS_CONST)));
 			sewerageObject.put(slaDate, slaDays.add(
 					new BigDecimal(System.currentTimeMillis())));
-			String[] tenantDetails = property.getTenantId().split("\\."); 
-			String tenantId = tenantDetails[0];
+			String[] tenantDetails = property.getTenantId().split("\\.");
+			String tenantId = property.getTenantId();
+			if(tenantDetails.length > config.getStateLevelTenantIdLength()){
+				tenantId = tenantDetails[0] + "." + tenantDetails[1];
+			}
 			if(tenantDetails.length > 1)
 			{
 				sewerageObject.put(tenantName, tenantDetails[1].toUpperCase());
@@ -160,7 +167,7 @@ public class PdfFileStoreService {
 		requestPayload.put(WaterConnectionReplacer, sewerageConnectionList);
 		try {
 			StringBuilder builder = new StringBuilder();
-			builder.append(config.getPdfServiceHost());
+			builder.append(notificationUtil.getHost(tenantId));
 			String pdfLink = config.getPdfServiceLink();
 			pdfLink = pdfLink.replace(tenantIdReplacer, tenantId).replace(pdfApplicationKey, applicationKey);
 			builder.append(pdfLink);
