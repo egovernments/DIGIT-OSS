@@ -38,6 +38,6 @@ jobs:
           context: .
           file: ./build/maven/Dockerfile
           push: true
-          tags: egovernments/egov-mdms-service:v2-${{ env.SHA }}
+          tags: ghcr.io/egovernments/egov-mdms-service:v2-${{ env.SHA }}
           build-args: |
             WORK_DIR=core-services/egov-mdms-service
