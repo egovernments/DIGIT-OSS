@@ -190,7 +190,7 @@ public class TLBatchService {
                 });
 
                 mobileNumberToEmails = util.fetchUserEmailIds(mobileNumbers,requestInfo,tenantId);
-                emailRequests.addAll(util.createEmailRequest(message,mobileNumberToEmails));
+                emailRequests.addAll(util.createEmailRequest(requestInfo,message,mobileNumberToEmails));
 
             }
             catch (Exception e){

@@ -507,7 +507,7 @@ public class TLRenewalNotificationUtil {
                 log.info("Messages from localization couldn't be fetched!");
             for (SMSRequest smsRequest : smsRequestList) {
                 producer.push(config.getSmsNotifTopic(), smsRequest);
-                log.info("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
+                log.info("SMS Sent! MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
             }
         }
     }

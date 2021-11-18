@@ -1,15 +1,20 @@
 package org.egov.tl.web.models;
 
-import lombok.*;
+import org.egov.common.contract.request.RequestInfo;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
+@Setter
+@Getter
 public class EmailRequest {
-    private String emailId;
-    private String message;
+    private RequestInfo requestInfo;
 
+    private Email email;
 }
