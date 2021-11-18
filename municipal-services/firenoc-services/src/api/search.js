@@ -27,8 +27,8 @@ export const searchApiResponse = async (request, next = {}) => {
     FireNOCs: []
   };
   const queryObj = JSON.parse(JSON.stringify(request.query));
-  console.log("request", request.query);
-  console.log("Query object:"+JSON.stringify(queryObj));
+  //console.log("request", request.query);
+  //console.log("Query object:"+JSON.stringify(queryObj));
   let errors = validateFireNOCSearchModel(queryObj);
   if (errors.length > 0) {
     next({
@@ -59,8 +59,8 @@ export const searchApiResponse = async (request, next = {}) => {
       ? queryObj.mobileNumber
       : mobileNumber;
     queryObj.tenantId = queryObj.tenantId ? queryObj.tenantId : tenantId;
-    console.log("mobileNumber", mobileNumber);
-    console.log("tenedrIDD", tenantId);
+    //console.log("mobileNumber", mobileNumber);
+    //console.log("tenedrIDD", tenantId);
 
     text = `${text} where FN.tenantid = '${queryObj.tenantId}' AND`;
   } else {
@@ -169,7 +169,7 @@ export const searchApiResponse = async (request, next = {}) => {
   } else if (!isEmpty(queryObj)) {
     sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)} ORDER BY FN.uuid`;
   }
-  console.log("SQL QUery:" +sqlQuery);
+  //console.log("SQL QUery:" +sqlQuery);
   const dbResponse = await db.query(sqlQuery);
   //console.log("dbResponse"+JSON.stringify(dbResponse));
   if (dbResponse.err) {
