@@ -30,10 +30,7 @@ const SearchMdmsTypes = {
           return [...data?.BPA?.ApplicationType?.map((type) => ({
               code: type.code,
               i18nKey: `WF_BPA_${type.code}`,
-            })),{
-              code: "BPA_STAKEHOLDER_REGISTRATION",
-              i18nKey: "WF_BPA_BPA_STAKEHOLDER_REGISTRATION",
-          }]
+            }))]
         },
       }
     ),
@@ -67,11 +64,7 @@ const SearchMdmsTypes = {
             code: type.code,
             i18nKey: `BPA_SERVICETYPE_${type.code}`,
             applicationType: type.applicationType,
-          })),{
-            applicationType:["BPA_STAKEHOLDER_REGISTRATION"],
-            code: "BPA_STAKEHOLDER_REGISTRATION",
-            i18nKey: "BPA_SERVICETYPE_BPA_STAKEHOLDER_REGISTRATION",
-        }]
+          }))]
         },
       }
     ),

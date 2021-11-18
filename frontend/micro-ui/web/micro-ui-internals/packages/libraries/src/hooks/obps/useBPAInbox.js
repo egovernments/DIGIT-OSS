@@ -16,7 +16,7 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
         tenantId,
         processSearchCriteria: {
           moduleName: moduleName !== "BPAREG"  ? "bpa-services" : "BPAREG", 
-          businessService: moduleName !== "BPAREG"  ? ["BPA_LOW", "BPA", "BPA_OC"] :  ["ARCHITECT","BUILDER","ENGINEER","STRUCTURALENGINEER"],
+          businessService: moduleName !== "BPAREG"  ? (businessService ? [businessService] : ["BPA_LOW", "BPA", "BPA_OC"] ) :  ["ARCHITECT","BUILDER","ENGINEER","STRUCTURALENGINEER"],
           ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
         },
         moduleSearchCriteria: {

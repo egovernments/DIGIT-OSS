@@ -141,6 +141,7 @@ import useArchitectInbox from "./obps/useArchitectInbox";
 import useBPAREGSearch from "./obps/useBPAREGSearch";
 import useEmpBPAREGSearch from "./obps/useEmpBPAREGSearch";
 import useServiceTypeFromApplicationType from "./obps/useServiceTypeFromApplicationType"
+import useBusinessServiceBasedOnServiceType from "./obps/useBusinessServiceBasedOnServiceType"
 
 import useEventInbox from "./events/useEventInbox";
 import useEventDetails from "./events/useEventDetails";
@@ -291,7 +292,8 @@ const obps = {
   SearchMdmsTypes,
   useServiceTypeFromApplicationType,
   useApplicationActions: useBPAApplicationActions,
-  useOBPSSearch
+  useOBPSSearch,
+  useBusinessServiceBasedOnServiceType
 };
 
 const events = {
