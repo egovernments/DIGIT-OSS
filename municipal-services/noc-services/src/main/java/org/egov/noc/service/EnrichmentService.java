@@ -152,9 +152,10 @@ public class EnrichmentService {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void postStatusEnrichment(NocRequest nocRequest, String businessServiceValue) {
 		Noc noc = nocRequest.getNoc();
-
+		log.info("Before getting businessservice--->>>"+nocRequest.toString());
 		BusinessService businessService = workflowService.getBusinessService(noc, nocRequest.getRequestInfo(),
 				businessServiceValue);
+		log.info("businessService-->>"+businessService);
 		log.info("businessServiceValue-->>"+businessServiceValue);
 		log.info("nocRequest.toString()--->>>"+nocRequest.toString());
 		if (businessService != null) {
