@@ -1,125 +1,152 @@
 import {
-  CloseSvg,
-  SubmitBar,
-  Header,
-  StatusTable,
-  Row,
-  TextInput,
-  MobileNumber,
-  SearchForm,
   CardLabel,
   CardLabelError,
+  CloseSvg,
+  Header,
+  MobileNumber,
+  Row,
+  SearchForm,
+  StatusTable,
+  SubmitBar,
   Toast
 } from "@egovernments/digit-ui-react-components";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useReducer } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 
 const TYPE_REGISTER = { type: "register" };
 const TYPE_LOGIN = { type: "login" };
-let stateCode="";
 
-  const sendOtp = async (data) => {
-    try {
-      const res = await Digit.UserService.sendOtp(data, stateCode);
-      return [res, null];
-    } catch (err) {
-      return [null, err];
-    }
-  };
+const defaultState = {
+  otpSentTo: false,
+  isNewUser: false,
+  invalid: false,
+  showToast: null,
+  error: false,
+  warning: false,
+  name: "",
+  message: "",
+  mobileNumber: "",
+  previousAction: null,
+  disable: false,
+};
 
-// TODO  @jagan make this component to reuse for multiple module
-const UpdatePropertyNumber = ({ showPopup, property, t ,onValidation}) => {
-  stateCode=Digit.ULBService.getStateId();
-  const [showToast, setShowToast] = useState(null)
+const compStateReducer = (state, action) => {
+  console.log(state,action);
+  switch (action.type) {
+    case "verifiedotp":
+      return { ...state, previousAction: action.type, message: "", disable:false,showToast: false, error: true, warning: false, invalid: true };
+    case "verifyotp":
+      return { ...state, previousAction: action.type, message: "", disable: true, showToast: false, error: true, warning: false, invalid: false };
+    case "otpsent":
+      return {
+        ...state,
+        previousAction: action.type,
+        message: "PT_SEC_OTP_SENT_SUCEESS",
+        otpSentTo: action.value,
+        isNewUser: action.isNewUser,
+        showToast: true,
+        error: false,
+        warning: false,
+      };
+    case "resettoast":
+      return { ...state, previousAction: action.type, message: "", showToast: false, error: false, warning: false };
+    case "success":
+      return { ...state, previousAction: action.type, message: action.value, showToast: true, warning: false, error: false };
+    case "warning":
+      return { ...state, previousAction: action.type, message: action.value, showToast: true, warning: true, error: false };
+    case "error":
+      return { ...state, previousAction: action.type, message: action.value, showToast: true, error: true };
+    case "reset":
+      return { ...defaultState };
+    default:
+      return { ...defaultState };
+  }
+};
+
+const sendOtp = async (data, stateCode) => {
+  try {
+    const res = await Digit.UserService.sendOtp(data, stateCode);
+    return [res, null];
+  } catch (err) {
+    return [null, err];
+  }
+};
+
+// TODO make this component to reuse for multiple module
+const UpdateNumber = ({ showPopup, t, onValidation, mobileNumber, name }) => {
+  const stateCode = Digit.ULBService.getStateId();
+  const [compState, compStateDispatch] = useReducer(compStateReducer, { ...defaultState, name: name, mobileNumber: mobileNumber });
   const SelectOtp = Digit?.ComponentRegistryService?.getComponent("SelectOtp");
 
-  const [updatePropertyState,setUpdatedProperty] =useState({name:property?.owners?.[0]?.name||"NA",
-  mobileNumber: property?.owners?.[0]?.mobileNumber||"NA" 
-} );
-const [otpInfo,setOtpInfo]=useState({otpSentTo:false,isNewUser:false,invalid:false});
-
-
-const onSubmit=useCallback(async(_data) => {
-
-  if(_data?.mobileNumber==updatePropertyState.mobileNumber){
-    
-       setShowToast({ error:true,warning:false,label: "PT_SEC_SAME_NUMBER" });
-
-return;
-  }else{
-     setShowToast(null);
-const requestData={ mobileNumber:_data?.mobileNumber,tenantId:stateCode,userType:"CITIZEN"};
-//TODO  @jagan create a seperate hook later
-   if(!otpInfo?.otpSentTo){
-     /* send otp or create user flow */
-  const [res, err] = await sendOtp({ otp: { ...requestData, ...TYPE_LOGIN } });
-    if(err){
-       const [registerResponse, registerError] = await sendOtp({ otp: { ...requestData,name:updatePropertyState?.name, ...TYPE_REGISTER } });
-   if(!registerError){
-     
-       setShowToast({ error:false,warning:false,label: "PT_SEC_OTP_SENT_SUCEESS" });
-     setOtpInfo((old)=>({...old,otpSentTo:_data?.mobileNumber,isNewUser:true}));
-   }
-    }else{
-             setShowToast({ error:false,warning:false,label: "PT_SEC_OTP_SENT_SUCEESS" });
-setOtpInfo((old)=>({...old,otpSentTo:_data?.mobileNumber}));
+  const onSubmit = useCallback(async (_data) => {
+    compStateDispatch({ type: "resettoast" });
+    console.log(compState,'compstate');
+    if (_data?.mobileNumber == compState.mobileNumber) {
+      compStateDispatch({ type: "warning", value: "PT_SEC_SAME_NUMBER" });
+      return;
+    } else {
+      const requestData = { mobileNumber: _data?.mobileNumber, tenantId: stateCode, userType: "CITIZEN" };
+      if (compState.otpSentTo==false) {
+        /* send otp or create user flow */
+        const [res, err] = await sendOtp({ otp: { ...requestData, ...TYPE_LOGIN } }, stateCode);
+        if (err) {
+          const [registerResponse, registerError] = await sendOtp({ otp: { ...requestData, name: compState?.name, ...TYPE_REGISTER } }, stateCode);
+          if (!registerError) {
+            compStateDispatch({ type: "otpsent", value: _data?.mobileNumber, isNewUser: true });
+          }else{
+            compStateDispatch({ type: "error", value: registerError});
+          }
+        } else {
+          compStateDispatch({ type: "otpsent", value: _data?.mobileNumber });
+        }
+      } else {
+        /* authenticate or register user flow */
+        loginOrRegister(_data, (d) => {
+          compStateDispatch({ type: "success", value: "PT_MOBILE_NUM_UPDATED_SUCCESS" });
+        });
+      }
     }
-   }else{
-          /* authenticate or register user flow */
-loginOrRegister(_data,(d)=>{       setShowToast({ error:false,warning:false,label: "PT_MOBILE_NUM_UPDATED_SUCCESS" });
-console.log(_data)});
+  }, [compState]);
 
-   }
-  }
-
-});
-
-
- const loginOrRegister = async (_data,onSuccess) => {
+  const loginOrRegister = async (_data, onSuccess) => {
     try {
-      setOtpInfo(old=>({...old,invalid:false}));
+      compStateDispatch({ type: "verifyotp" });
       const { mobileNumber, otp } = _data;
-      if (!otpInfo?.isNewUser) {
-        const requestData = {
+      if (!compState?.isNewUser) {
+        const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.authenticate({
           username: mobileNumber,
           password: otp,
           tenantId: stateCode,
           userType: "CITIZEN",
-        };
-        const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.authenticate(requestData);
-
-       onValidation&&onValidation(_data,onSuccess);
+        });
+        onValidation && onValidation(_data, onSuccess);
       } else {
-        const requestData = {
-          name:updatePropertyState?.name,
+        const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.registerUser({
+          name: compState?.name,
           username: mobileNumber,
           otpReference: otp,
           tenantId: stateCode,
-        };
-
-        const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.registerUser(requestData, stateCode);
-  onValidation&&onValidation(_data,onSuccess);
+        }, stateCode);
+        onValidation && onValidation(_data, onSuccess);
       }
     } catch (err) {
-      setOtpInfo(old=>({...old,invalid:true}));
-      console.log(err);
+      compStateDispatch({ type: "verifiedotp" });
+      console.error(err);
     }
   };
 
-const resendOtp = async () => {
+  const resendOtp = useCallback(async () => {
     const data = {
-      mobileNumber:otpInfo?.otpSentTo,
-      tenantId:stateCode,
-     userType:"CITIZEN",
+      mobileNumber: compState?.otpSentTo,
+      tenantId: stateCode,
+      userType: "CITIZEN",
     };
-    if (otpInfo?.isNewUser) {
-      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
+    if (compState?.isNewUser) {
+      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } }, stateCode);
     } else {
-      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
+      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } }, stateCode);
     }
-  }
-
+  },[compState]);
 
   const { register, control, handleSubmit, getValues, reset, formState } = useForm({
     defaultValues: {
@@ -128,20 +155,16 @@ const resendOtp = async () => {
     },
   });
 
-
-
-
   return (
     <div className="popup-module updatePropertyNumber">
       <div className="popup-close-icon" onClick={() => showPopup(false)}>
         <CloseSvg />
       </div>
-
       <Header>{t("PTUPNO_HEADER")}</Header>
       <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
         <StatusTable>
-          <Row label={t("PTUPNO_OWNER_NAME")} text={`${updatePropertyState?.name || t("CS_NA")}`} />
-          <Row label={t("PTUPNO_CURR_NO")} text={`${updatePropertyState?.mobileNumber || t("CS_NA")}`} />
+          <Row label={t("PTUPNO_OWNER_NAME")} text={`${compState?.name || t("CS_NA")}`} />
+          <Row label={t("PTUPNO_CURR_NO")} text={`${compState?.mobileNumber || t("CS_NA")}`} />
           <CardLabel style={{ marginBottom: "8px" }}>{t("PT_UPDATE_NEWNO")}</CardLabel>
           <MobileNumber
             className="field pt-update-no-field"
@@ -165,48 +188,46 @@ const resendOtp = async () => {
                 },
               },
             })}
-            disable={otpInfo?.otpSentTo&&true}
+            disable={compState?.otpSentTo && true}
           />
           <CardLabelError style={{ marginTop: "-10px" }}>{t(formState?.errors?.mobileNumber?.message)}</CardLabelError>
-          {otpInfo?.otpSentTo&&<Controller
-            control={control}
-            name="otp"
-            render={(props, customProps) => (
-              <SelectOtp
-                userType="employee"
-                config={{ header: "OTP Verification", cardText: "Enter the OTP sent to 9965664222", nextText: "Next", submitBarLabel: "Next" }}
-                onOtpChange={(d) => {
-                  props.onChange(d);
-                }}
-                onResend={resendOtp}
-                onSelect={(e) => console.log(e)}
-                error={!otpInfo.invalid}
-                t={t}
-                otp={props.value}
-              />
-            )}
-          />}
+          {compState?.otpSentTo && (
+            <Controller
+              control={control}
+              name="otp"
+              rules={ {required: "MANDATORY_OTP",minLength: {
+                value: 6,
+                message: "CORE_COMMON_OTP_ERROR",
+              },}}
+              render={(props, customProps) => (
+                <SelectOtp
+                  userType="employee"
+                  config={{ header: "OTPVERIFICATION", cardText: "ENTEROTP", nextText: "Next", submitBarLabel: "Next" }}
+                  onOtpChange={(d) => {
+                    props.onChange(d);
+                  }}
+                  onResend={resendOtp}
+                  error={!compState.invalid}
+                  t={t}
+                  otp={props.value}
+                />
+              )}
+            />
+          )}
         </StatusTable>
-         {showToast && (
-        <Toast
-          error={showToast.error}
-          warning={showToast.warning}
-          label={t(showToast.label)}
-          onClose={() => {
-            setShowToast(null);
-          }}
-        />
-      )}
-        <SubmitBar label={t(otpInfo?.otpSentTo?"PTUPNO_VERUPD_NO":"PTUPNO_SENDOTP")} submit />
+        {compState.showToast && (
+          <Toast
+            error={compState.error}
+            warning={compState.warning}
+            label={t(compState.message)}
+            onClose={() => {
+              compStateDispatch({ type: "resettoast" });
+            }}
+          />
+        )}
+        <SubmitBar label={t(compState?.otpSentTo ? "PTUPNO_VERUPD_NO" : "PTUPNO_SENDOTP")} submit disabled={compState.disable} />
       </SearchForm>
     </div>
   );
 };
-export default UpdatePropertyNumber;
-
-
-//PT_SEC_OTP_SENT_SUCEESS
-//PT_MOBILE_NUM_UPDATED_SUCCESS
-//PT_SEC_OTP_SENT_FAILURE
-        // if (result.error && result.error.fields[0] && result.error.fields[0].code == "OTP.VALIDATION_UNSUCCESSFUL") {
-// PT_SEC_SAME_NUMBER
+export default UpdateNumber;
