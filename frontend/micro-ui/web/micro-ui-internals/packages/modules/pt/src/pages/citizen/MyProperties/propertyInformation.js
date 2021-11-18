@@ -45,6 +45,13 @@ const PropertyInformation = () => {
   const [enableAudit, setEnableAudit] = useState(false);
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const { data: UpdateNumberConfig } = Digit.Hooks.useCommonMDMS(Digit.ULBService.getStateId(),"PropertyTax",["UpdateNumber"],{
+    select: (data) => {
+      return data?.PropertyTax?.UpdateNumber?.[0];
+    },
+    retry:false,
+    enable:false
+  });
 
   const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch({ filters: { propertyIds } }, { filters: { propertyIds } });
 
@@ -142,7 +149,7 @@ const PropertyInformation = () => {
     }
     return <LinkButton label={t("PT_OWNER_HISTORY")} className="check-page-link-button" onClick={routeTo} />;
   };
-  const UpdatePropertyNumberComponent = Digit?.ComponentRegistryService?.getComponent("UpdatePropertyNumber");
+  const UpdatePropertyNumberComponent = Digit?.ComponentRegistryService?.getComponent("UpdateNumber");
   return (
     <React.Fragment>
       <Header>{t("PT_PROPERTY_INFORMATION")}</Header>
@@ -276,6 +283,7 @@ const PropertyInformation = () => {
               <UpdatePropertyNumberComponent
                 showPopup={showPopup}
                 name={popup?.name}
+                UpdateNumberConfig={UpdateNumberConfig}
                 mobileNumber={popup?.mobileNumber}
                 t={t}
                 onValidation={(data, showToast) => {

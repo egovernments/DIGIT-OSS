@@ -73,16 +73,18 @@ const sendOtp = async (data, stateCode) => {
 };
 
 // TODO make this component to reuse for multiple module
-const UpdateNumber = ({ showPopup, t, onValidation, mobileNumber, name }) => {
+const UpdateNumber = ({ showPopup, t, onValidation, mobileNumber, name ,UpdateNumberConfig}) => {
   const stateCode = Digit.ULBService.getStateId();
   const [compState, compStateDispatch] = useReducer(compStateReducer, { ...defaultState, name: name, mobileNumber: mobileNumber });
   const SelectOtp = Digit?.ComponentRegistryService?.getComponent("SelectOtp");
 
   const onSubmit = useCallback(async (_data) => {
     compStateDispatch({ type: "resettoast" });
-    console.log(compState,'compstate');
-    if (_data?.mobileNumber == compState.mobileNumber) {
-      compStateDispatch({ type: "warning", value: "PT_SEC_SAME_NUMBER" });
+    
+    let invalidNo=(UpdateNumberConfig?.invalidNumber===_data?.mobileNumber&&"PTUPNO_INVALIDNO_HEADER")||false;
+    invalidNo=_data?.mobileNumber === compState.mobileNumber?"PT_SEC_SAME_NUMBER":invalidNo;
+    if (invalidNo) {
+      compStateDispatch({ type: "warning", value: invalidNo });
       return;
     } else {
       const requestData = { mobileNumber: _data?.mobileNumber, tenantId: stateCode, userType: "CITIZEN" };
