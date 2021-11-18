@@ -13,12 +13,8 @@ import {
 import React, { useCallback, useReducer } from "react";
 import { Controller, useForm } from "react-hook-form";
 
-const TYPE_REGISTER = { type: "register" };
-const TYPE_LOGIN = { type: "login" };
-
 const defaultState = {
-  otpSentTo: false,
-  isNewUser: false,
+  
   invalid: false,
   showToast: null,
   error: false,
@@ -42,8 +38,6 @@ const compStateReducer = (state, action) => {
         ...state,
         previousAction: action.type,
         message: "PT_SEC_OTP_SENT_SUCEESS",
-        otpSentTo: action.value,
-        isNewUser: action.isNewUser,
         showToast: true,
         error: false,
         warning: false,
@@ -63,20 +57,11 @@ const compStateReducer = (state, action) => {
   }
 };
 
-const sendOtp = async (data, stateCode) => {
-  try {
-    const res = await Digit.UserService.sendOtp(data, stateCode);
-    return [res, null];
-  } catch (err) {
-    return [null, err];
-  }
-};
+
 
 // TODO make this component to reuse for multiple module
-const UpdateNumber = ({ showPopup, t, onValidation, mobileNumber, name ,UpdateNumberConfig}) => {
-  const stateCode = Digit.ULBService.getStateId();
+const UpdateNumber = ({ t, onValidation, mobileNumber, name ,UpdateNumberConfig}) => {
   const [compState, compStateDispatch] = useReducer(compStateReducer, { ...defaultState, name: name, mobileNumber: mobileNumber });
-  const SelectOtp = Digit?.ComponentRegistryService?.getComponent("SelectOtp");
 
   const onSubmit = useCallback(async (_data) => {
     compStateDispatch({ type: "resettoast" });
@@ -87,79 +72,21 @@ const UpdateNumber = ({ showPopup, t, onValidation, mobileNumber, name ,UpdateNu
       compStateDispatch({ type: "warning", value: invalidNo });
       return;
     } else {
-      const requestData = { mobileNumber: _data?.mobileNumber, tenantId: stateCode, userType: "CITIZEN" };
-      if (compState.otpSentTo==false) {
-        /* send otp or create user flow */
-        const [res, err] = await sendOtp({ otp: { ...requestData, ...TYPE_LOGIN } }, stateCode);
-        if (err) {
-          const [registerResponse, registerError] = await sendOtp({ otp: { ...requestData, name: compState?.name, ...TYPE_REGISTER } }, stateCode);
-          if (!registerError) {
-            compStateDispatch({ type: "otpsent", value: _data?.mobileNumber, isNewUser: true });
-          }else{
-            compStateDispatch({ type: "error", value: registerError});
-          }
-        } else {
-          compStateDispatch({ type: "otpsent", value: _data?.mobileNumber });
-        }
-      } else {
-        /* authenticate or register user flow */
-        loginOrRegister(_data, (d) => {
-          compStateDispatch({ type: "success", value: "PT_MOBILE_NUM_UPDATED_SUCCESS" });
-        });
-      }
+      onValidation && onValidation(_data, (d) => {
+        compStateDispatch({ type: "success", value: "PT_MOBILE_NUM_UPDATED_SUCCESS" });
+      });
     }
   }, [compState]);
 
-  const loginOrRegister = async (_data, onSuccess) => {
-    try {
-      compStateDispatch({ type: "verifyotp" });
-      const { mobileNumber, otp } = _data;
-      if (!compState?.isNewUser) {
-        const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.authenticate({
-          username: mobileNumber,
-          password: otp,
-          tenantId: stateCode,
-          userType: "CITIZEN",
-        });
-        onValidation && onValidation(_data, onSuccess);
-      } else {
-        const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.registerUser({
-          name: compState?.name,
-          username: mobileNumber,
-          otpReference: otp,
-          tenantId: stateCode,
-        }, stateCode);
-        onValidation && onValidation(_data, onSuccess);
-      }
-    } catch (err) {
-      compStateDispatch({ type: "verifiedotp" });
-      console.error(err);
-    }
-  };
-
-  const resendOtp = useCallback(async () => {
-    const data = {
-      mobileNumber: compState?.otpSentTo,
-      tenantId: stateCode,
-      userType: "CITIZEN",
-    };
-    if (compState?.isNewUser) {
-      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } }, stateCode);
-    } else {
-      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } }, stateCode);
-    }
-  },[compState]);
 
   const { register, control, handleSubmit, getValues, reset, formState } = useForm({
     defaultValues: {
       mobileNumber: "",
-      otp: "",
     },
   });
 
   return (
-    <div className="popup-module updateNumberEmployee">
-      
+    <div className="popup-module updateNumberEmployee">     
       <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
         <StatusTable>
           <Row label={t("PTUPNO_OWNER_NAME")} text={`${compState?.name || t("CS_NA")}`} />
@@ -187,32 +114,9 @@ const UpdateNumber = ({ showPopup, t, onValidation, mobileNumber, name ,UpdateNu
                 },
               },
             })}
-            disable={compState?.otpSentTo && true}
+            disable={compState.disable}
           />
           <CardLabelError style={{ marginTop: "-10px" }}>{t(formState?.errors?.mobileNumber?.message)}</CardLabelError>
-          {compState?.otpSentTo && (
-            <Controller
-              control={control}
-              name="otp"
-              rules={ {required: "MANDATORY_OTP",minLength: {
-                value: 6,
-                message: "CORE_COMMON_OTP_ERROR",
-              },}}
-              render={(props, customProps) => (
-                <SelectOtp
-                  userType="employee"
-                  config={{ header: "OTPVERIFICATION", cardText: "ENTEROTP", nextText: "Next", submitBarLabel: "Next" }}
-                  onOtpChange={(d) => {
-                    props.onChange(d);
-                  }}
-                  onResend={resendOtp}
-                  error={!compState.invalid}
-                  t={t}
-                  otp={props.value}
-                />
-              )}
-            />
-          )}
         </StatusTable>
         {compState.showToast && (
           <Toast
@@ -224,7 +128,7 @@ const UpdateNumber = ({ showPopup, t, onValidation, mobileNumber, name ,UpdateNu
             }}
           />
         )}
-        <SubmitBar label={t(compState?.otpSentTo ? "PTUPNO_VERUPD_NO" : "PTUPNO_SENDOTP")} submit disabled={compState.disable} />
+        <SubmitBar label={t( "ES_COMMON_UPDATE")} submit disabled={compState.disable} />
       </SearchForm>
     </div>
   );
