@@ -49,7 +49,15 @@ const PropertyDetails = () => {
       select: (data) => data.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
     }
   );
-
+  const { isLoading: rrr, isError: eee, data: www } = Digit.Hooks.useCommonMDMS("pb","PropertyTax",["UpdateNumber"],{
+    select: (data) => {
+      return data?.PropertyTax?.UpdateNumber?.[0];
+    },
+    retry:false,
+    enable:false
+  });
+ console.log(rrr,eee,www);
+ 
   useEffect(() => {
     if (applicationDetails && !enableAudit) {
       setAppDetailsToShow(_.cloneDeep(applicationDetails));
@@ -177,7 +185,7 @@ const PropertyDetails = () => {
   if (fetchBillLoading) {
     return <Loader />;
   }
-
+  const UpdatePropertyNumberComponent = Digit?.ComponentRegistryService?.getComponent("EmployeeUpdateOwnerNumber");
   return (
     <div>
       <Header>{t("PT_PROPERTY_INFORMATION")}</Header>
@@ -197,13 +205,26 @@ const PropertyDetails = () => {
       />
       {showModal ? (
         <Modal
-          headerBarMain={<h1 className="heading-m">{t("PT_OWNER_HISTORY")}</h1>}
+          headerBarMain={<h1 className="heading-m">{t("PTUPNO_HEADER")}</h1>}
           headerBarEnd={<CloseBtn onClick={() => setShowModal(false)} />}
           hideSubmit={true}
           isDisabled={false}
-          popupStyles={{ width: "75%", marginTop: "75px" }}
+          popupStyles={{ width: "50%", marginTop: "auto" }}
         >
-          <OwnerHistory propertyId={applicationNumber} userType={"employee"} />
+            <UpdatePropertyNumberComponent
+                showPopup={setShowModal}
+                name={"Jagan"}
+                mobileNumber={"9965664222"}
+                t={t}
+                onValidation={(data, showToast) => {
+                  let newProp = { ...appDetailsToShow?.applicationData };
+                  newProp.owners[0].mobileNumber = data.mobileNumber;
+                  newProp.creationReason = "UPDATE";
+                  newProp.workflow = null;
+
+                }}
+              ></UpdatePropertyNumberComponent>
+          {/* <OwnerHistory propertyId={applicationNumber} userType={"employee"} /> */}
         </Modal>
       ) : null}
     </div>
