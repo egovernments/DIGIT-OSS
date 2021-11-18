@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { useRouteMatch, useLocation, useHistory, Switch, Route, Redirect } from "react-router-dom";
-import { newConfig } from "../../../config/ocbuildingPermitConfig";
-import CheckPage from "./CheckPage";
-import OBPSAcknowledgement from "./OBPSAcknowledgement";
+import { newConfig as newConfigOCBPA } from "../../../config/ocbuildingPermitConfig";
+// import CheckPage from "./CheckPage";
+// import OBPSAcknowledgement from "./OBPSAcknowledgement";
 
 const getPath = (path, params) => {
   params && Object.keys(params).map(key => {
@@ -23,6 +23,9 @@ const OCBuildingPermit = () => {
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BUILDING_PERMIT", state?.edcrNumber ? { data: { scrutinyNumber: { edcrNumber: state?.edcrNumber } } } : {});
+
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
 
   const goNext = (skipStep) => {
     const currentPath = pathname.split("/").pop();
@@ -51,6 +54,7 @@ const OCBuildingPermit = () => {
   const handleSkip = () => { };
 
   let config = [];
+  newConfig = newConfig?.OCBuildingPermitConfig ? newConfig?.OCBuildingPermitConfig : newConfigOCBPA;
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
@@ -62,6 +66,9 @@ const OCBuildingPermit = () => {
       sessionStorage.setItem("isPermitApplication", false);
     }
   }, []);
+
+  const CheckPage = Digit?.ComponentRegistryService?.getComponent('OCBPACheckPage') ;
+  const OBPSAcknowledgement = Digit?.ComponentRegistryService?.getComponent('OCBPAAcknowledgement');
 
   return (
     <Switch>

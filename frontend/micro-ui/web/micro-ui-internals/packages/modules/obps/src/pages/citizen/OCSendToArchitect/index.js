@@ -3,11 +3,10 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
-import { newConfig } from "../../../config/ocbuildingPermitConfig";
-//import { getCommencementDataFormat } from "../../../utils/index";
-import CheckPage from "../OCBuildingPermit/CheckPage";
-import OBPSAcknowledgement from "../OCBuildingPermit/OBPSAcknowledgement";
-//import TLAcknowledgement from "../Create/TLAcknowledgement";
+import { newConfig as newConfigOCBPA } from "../../../config/ocbuildingPermitConfig";
+// import CheckPage from "../OCBuildingPermit/CheckPage";
+// import OBPSAcknowledgement from "../OCBuildingPermit/OBPSAcknowledgement";
+
 const getPath = (path, params) => {
   params && Object.keys(params).map(key => {
     path = path.replace(`:${key}`, params[key]);
@@ -93,6 +92,9 @@ const OCSendToArchitect = ({ parentRoute }) => {
   let application = {};
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("OC_BUILDING_PERMIT_EDITFLOW", {});
 
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
+
   let filter1 = {};
   //let applicationNumber = "PB-BP-2021-09-15-002776";
 
@@ -163,6 +165,7 @@ const OCSendToArchitect = ({ parentRoute }) => {
   };
   const handleSkip = () => {};
 
+  newConfig = newConfig?.OCBuildingPermitConfig ? newConfig?.OCBuildingPermitConfig : newConfigOCBPA;
   // const state = tenantId.split(".")[0];
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
@@ -175,6 +178,9 @@ const OCSendToArchitect = ({ parentRoute }) => {
       sessionStorage.setItem("isPermitApplication", false);
     }
   }, []);
+
+  const CheckPage = Digit?.ComponentRegistryService?.getComponent('OCBPACheckPage') ;
+  const OBPSAcknowledgement = Digit?.ComponentRegistryService?.getComponent('OCBPAAcknowledgement');
 
   return (
     <Switch>

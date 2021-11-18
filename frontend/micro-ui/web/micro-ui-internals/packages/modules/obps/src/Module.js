@@ -33,6 +33,18 @@ import OBPSSearchApplication from "./components/SearchApplication";
 import InspectionReport from "./pageComponents/InspectionReport";
 import OBPSEmployeeHomeCard from "./pages/employee/EmployeeCard";
 
+import BPACheckPage from "./pages/citizen/NewBuildingPermit/CheckPage";
+import OCBPACheckPage from "./pages/citizen/OCBuildingPermit/CheckPage";
+import OCBPASendBackCheckPage from "./pages/citizen/OCSendBackToCitizen/CheckPage";
+import StakeholderCheckPage from "./pages/citizen/StakeholderRegistration/CheckPage";
+import EDCRAcknowledgement from "./pages/citizen/EDCR/EDCRAcknowledgement";
+import OCEDCRAcknowledgement from "./pages/citizen/OCEDCR/EDCRAcknowledgement";
+import BPAAcknowledgement from "./pages/citizen/NewBuildingPermit/OBPSAcknowledgement";
+import OCBPAAcknowledgement from "./pages/citizen/OCBuildingPermit/OBPSAcknowledgement";
+import OCSendBackAcknowledgement from "./pages/citizen/OCSendBackToCitizen/Acknowledgement";
+import StakeholderAcknowledgement from "./pages/citizen/StakeholderRegistration/StakeholderAcknowledgement";
+ 
+
 const OBPSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = ["bpa", "bpareg"]; //"bpa";
   const { path, url } = useRouteMatch();
@@ -105,7 +117,17 @@ const componentsToRegister = {
   OBPSSearchApplication,
   InspectionReport,
   BPAInbox: Inbox,
-  StakeholderInbox: stakeholderInbox
+  StakeholderInbox: stakeholderInbox,
+  StakeholderCheckPage,
+  BPACheckPage,
+  OCBPACheckPage,
+  OCBPASendBackCheckPage,
+  EDCRAcknowledgement,
+  OCEDCRAcknowledgement,
+  BPAAcknowledgement,
+  OCBPAAcknowledgement,
+  OCSendBackAcknowledgement,
+  StakeholderAcknowledgement
 }
 
 export const initOBPSComponents = () => {

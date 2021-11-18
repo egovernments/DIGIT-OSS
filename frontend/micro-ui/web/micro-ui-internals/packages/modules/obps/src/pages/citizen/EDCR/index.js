@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
-import { newConfig } from "../../../config/edcrConfig";
+import { newConfig as newConfigEDCR } from "../../../config/edcrConfig";
 import { uuidv4 } from "../../../utils";
-import EDCRAcknowledgement from "./EDCRAcknowledgement";
+// import EDCRAcknowledgement from "./EDCRAcknowledgement";
 
 const CreateEDCR = ({ parentRoute }) => {
   const queryClient = useQueryClient();
@@ -15,6 +15,9 @@ const CreateEDCR = ({ parentRoute }) => {
   let config = [];
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("EDCR_CREATE", {});
   const [isShowToast, setIsShowToast] = useState(null);
+
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
 
   function handleSelect(key, data, skipStep, index) {
     const loggedInuserInfo = Digit.UserService.getUser();
@@ -78,10 +81,13 @@ const CreateEDCR = ({ parentRoute }) => {
     sessionStorage.removeItem("CurrentFinancialYear");
     queryClient.invalidateQueries("TL_CREATE_TRADE");
   };
+  newConfig = newConfig?.EdcrConfig ? newConfig?.EdcrConfig : newConfigEDCR;
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
   config.indexRoute = "home";
+
+  const EDCRAcknowledgement = Digit?.ComponentRegistryService?.getComponent('EDCRAcknowledgement') ;
 
   return (
     <Switch>

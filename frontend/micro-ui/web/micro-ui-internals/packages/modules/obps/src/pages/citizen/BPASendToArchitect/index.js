@@ -3,11 +3,7 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
-import { newConfig } from "../../../config/buildingPermitConfig";
-//import { getCommencementDataFormat } from "../../../utils/index";
-import CheckPage from "../NewBuildingPermit/CheckPage";
-import OBPSAcknowledgement from "../NewBuildingPermit/OBPSAcknowledgement";
-//import TLAcknowledgement from "../Create/TLAcknowledgement";
+import { newConfig as newConfigBPA } from "../../../config/buildingPermitConfig";
 const getPath = (path, params) => {
   params && Object.keys(params).map(key => {
     path = path.replace(`:${key}`, params[key]);
@@ -106,100 +102,6 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t) => {
     serviceType:data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType
   }
 
-  // const gettradeaccessories = (tradeacceserioies) => {
-  //   let acc = [];
-  //   tradeacceserioies && tradeacceserioies.map((ob) => {
-  //     acc.push({
-  //       accessory: { code: `${ob.accessoryCategory}`, i18nKey: `TRADELICENSE_ACCESSORIESCATEGORY_${ob.accessoryCategory.replaceAll("-", "_")}` },
-  //       accessorycount: ob.count,
-  //       unit: `${ob.uom}`,
-  //       uom: `${ob.uomValue}`,
-  //       id: ob.id,
-  //     })
-  //   })
-  //   return acc;
-  // }
-
-  // const gettradeunits = (tradeunits) => {
-  //   let units = [];
-  //   tradeunits && tradeunits.map((ob) => {
-  //     units.push({
-  //       tradecategory: { i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, code: `${ob.tradeType.split(".")[0]}` },
-  //       tradesubtype: { i18nKey: `TL_${ob.tradeType}`, code: `${ob.tradeType}` },
-  //       tradetype: { i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[1]}`, code: `${ob.tradeType.split(".")[1]}` },
-  //       unit: ob.uom,
-  //       uom: ob.uomValue,
-  //       id : ob.id,
-  //     });
-  //   })
-  //   return units;
-  // };
-
-  // const gettradedocuments = (docs) => {
-  //   let documents = [];
-  //   docs && docs.map((ob) => {
-  //     if (ob.documentType.includes("OWNERPHOTO")) {
-  //       documents["OwnerPhotoProof"] = ob;
-  //     }
-  //     else if (ob.documentType.includes("OWNERIDPROOF")) {
-  //       documents["ProofOfIdentity"] = ob;
-  //     }
-  //     else if (ob.documentType.includes("OWNERSHIPPROOF")) {
-  //       documents["ProofOfOwnership"] = ob;
-  //     }
-  //   })
-  //   return documents;
-  // }
-
-  // const gettradeowners = (owner) => {
-  //   let ownerarray = [];
-  //   owner && owner.map((ob) => {
-  //     ownerarray.push({
-  //       gender: { code: `${ob.gender}`, name: `${!ob?.gender.includes("FEMALE") ? "Male" : "Female"}`, value: `${!ob?.gender.includes("FEMALE") ? "Male" : "Female"}`, i18nKey:`TL_GENDER_${ob.gender}` },
-  //       isprimaryowner: false,
-  //       name: ob.name,
-  //       mobilenumber: ob.mobileNumber,
-  //       permanentAddress: ob.permanentAddress,
-  //       id: ob.id,
-  //     })
-  //   })
-  //   // ownerarray["permanentAddress"]=owner.permanentAddress;
-  //   return ownerarray;
-  // }
-  // data.TradeDetails = {
-  //   BuildingType: { code: `${data?.tradeLicenseDetail?.structureType}`, i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${data.tradeLicenseDetail?.structureType.replaceAll(".", "_")}` },
-  //   //CommencementDate: getCommencementDataFormat(data?.commencementDate),
-  //   StructureType: { code: `${data.tradeLicenseDetail?.structureType.split(".")[0]}`, i18nKey: `${data.tradeLicenseDetail?.structureType.includes("IMMOVABLE") ? "TL_COMMON_YES" : "TL_COMMON_NO"}` },
-  //   TradeName: data?.tradeName,
-  //   accessories: gettradeaccessories(data?.tradeLicenseDetail?.accessories),
-  //   isAccessories: gettradeaccessories(data?.tradeLicenseDetail?.accessories).length > 0 ? { code: `ACCESSORY`, i18nKey: "TL_COMMON_YES" } : { code: `NONACCESSORY`, i18nKey: "TL_COMMON_NO" },
-  //   units: gettradeunits(data?.tradeLicenseDetail?.tradeUnits),
-  // }
-  // data.address = {};
-  // if (data?.tradeLicenseDetail?.address?.geoLocation?.latitude && data?.tradeLicenseDetail?.address?.geoLocation?.longitude) {
-  //   data.address.geoLocation = {
-  //     latitude: data?.tradeLicenseDetail?.address?.geoLocation?.latitude,
-  //     longitude: data?.tradeLicenseDetail?.address?.geoLocation?.longitude,
-  //   };
-  // } else {
-  //   data.address.geoLocation = {};
-  // }
-  // data.address.doorNo = data?.tradeLicenseDetail?.address?.doorNo;
-  // data.address.street = data?.tradeLicenseDetail?.address?.street;
-  // data.address.landmark = data?.tradeLicenseDetail?.address?.landmark;
-  // data.address.pincode = data?.tradeLicenseDetail?.address?.pincode;
-  // data.address.city = { code: data?.tradeLicenseDetail?.address?.tenantId };
-  // data.address.locality = data?.tradeLicenseDetail?.address?.locality;
-  // data.address.locality.i18nkey = data?.tenantId.replace(".", "_").toUpperCase() + "_" + "REVENUE" + "_" + data?.address?.locality?.code;
-  // data.address.locality.doorNo = data?.tradeLicenseDetail?.address?.doorNo;
-  // data.address.locality.landmark = data?.tradeLicenseDetail?.address?.landmark;
-  // data.owners = {
-  //   documents: gettradedocuments(data?.tradeLicenseDetail?.applicationDocuments),
-  //   owners: gettradeowners(data?.tradeLicenseDetail?.owners),
-  //   permanentAddress: data?.tradeLicenseDetail?.owners[0].permanentAddress,
-  //   isCorrespondenceAddress: false,
-  // }
-  // data.ownershipCategory = { code: `${data?.tradeLicenseDetail?.subOwnerShipCategory}`, i18nKey: `PT_OWNERSHIP_${data?.tradeLicenseDetail?.subOwnerShipCategory.split(".")[1]}`, value: `${data?.tradeLicenseDetail?.subOwnerShipCategory}` };
   return data;
 }
 
@@ -214,16 +116,16 @@ const BPASendToArchitect = ({ parentRoute }) => {
   let application = {};
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BUILDING_PERMIT_EDITFLOW", {});
 
-  let filter1 = {};
-  //let applicationNumber = "PB-BP-2021-09-16-002778";
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
 
-  //if (licenseNo) filter1.applicationNumber = licenseNo;
+  let filter1 = {};
+
   if (tenantId) filter1.tenantId = tenantId;
   if(applicationNo) filter1.applicationNo=applicationNo;
 
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS("pb", "BPA", ["RiskTypeComputation"]);
 
-  //const { isLoading, isError, error, data } = Digit.Hooks.tl.useTradeLicenseSearch({ filters: filter1 }, { filters: filter1 });
   const { data: bpaData, isLoading: isBpaSearchLoading } = Digit.Hooks.obps.useBPASearch(tenantId, {applicationNo:applicationNo});
 
   let scrutinyNumber = {edcrNumber:bpaData?.[0]?.edcrNumber};
@@ -237,11 +139,10 @@ const BPASendToArchitect = ({ parentRoute }) => {
   const { data : nocdata, isLoading: isNocLoading, refetch:nocRefetch } = Digit.Hooks.obps.useNocDetails(tenantId, { sourceRefId: sourceRefId });
 
   const editApplication = window.location.href.includes("editApplication");
-  //const tlTrade = JSON.parse(sessionStorage.getItem("tl-trade")) || {};
 
   useEffect(() => {
      application = bpaData ? bpaData[0]:{};
-     if (/* bpaData && application && data1 && mdmsData && nocdata */data1 && nocdata) {
+     if (data1 && nocdata) {
       application = bpaData[0];
        if (editApplication) {
          application.isEditApplication = true;
@@ -265,7 +166,6 @@ const BPASendToArchitect = ({ parentRoute }) => {
   }
 
   const onSuccess = () => {
-    //clearParams();
     queryClient.invalidateQueries("PT_CREATE_PROPERTY");
   };
   const createApplication = async () => {
@@ -278,8 +178,8 @@ const BPASendToArchitect = ({ parentRoute }) => {
     goNext(skipStep);
   };
   const handleSkip = () => {};
-
-  // const state = tenantId.split(".")[0];
+  
+  newConfig = newConfig?.BuildingPermitConfig ? newConfig?.BuildingPermitConfig : newConfigBPA;
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
@@ -291,6 +191,9 @@ const BPASendToArchitect = ({ parentRoute }) => {
       sessionStorage.setItem("isPermitApplication", false);
     }
   }, []);
+
+  const CheckPage = Digit?.ComponentRegistryService?.getComponent('BPACheckPage') ;
+  const OBPSAcknowledgement = Digit?.ComponentRegistryService?.getComponent('BPAAcknowledgement');
 
   return (
     <Switch>

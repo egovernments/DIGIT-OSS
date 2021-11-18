@@ -68,6 +68,47 @@ const SearchMdmsTypes = {
         },
       }
     ),
+
+  getFormConfig: (tenantId, config) =>
+    useQuery(
+      [tenantId, "FORM_CONFIG"],
+      () =>
+        MdmsService.getDataByCriteria(
+          tenantId,
+          {
+            details: {
+              tenantId: tenantId,
+              moduleDetails: [
+                {
+                  moduleName: "BPA",
+                  masterDetails: [
+                    {
+                      "name": "BuildingPermitConfig"
+                    },
+                    {
+                      "name": "EdcrConfig"
+                    },
+                    {
+                      "name": "InspectionReportConfig"
+                    },
+                    {
+                      "name": "OCBuildingPermitConfig"
+                    },
+                    {
+                      "name": "OCEdcrConfig"
+                    },
+                    {
+                      "name": "StakeholderConfig"
+                    }
+                  ],
+                },
+              ],
+            },
+          },
+          "BPA"
+        ),
+      { select: (d) => d.BPA, ...config }
+    ),
 };
 
 export default SearchMdmsTypes;

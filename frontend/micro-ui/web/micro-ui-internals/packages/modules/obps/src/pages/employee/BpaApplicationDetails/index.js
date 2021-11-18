@@ -3,7 +3,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FormComposer, Header, Card, CardSectionHeader, PDFSvg, Loader, StatusTable, Row, ActionBar, SubmitBar, MultiLink } from "@egovernments/digit-ui-react-components";
 import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDetails";
-import { newConfig } from "../../../config/InspectionReportConfig";
+import { newConfig as newConfigFI } from "../../../config/InspectionReportConfig";
 import get from "lodash/get";
 import orderBy from "lodash/orderBy";
 import { getBusinessServices, convertDateToEpoch, downloadPdf, printPdf } from "../../../utils";
@@ -23,6 +23,8 @@ const BpaApplicationDetail = () => {
   const [error, setError] = useState(null);
   const [payments, setpayments] = useState([]);
   const stateId = Digit.ULBService.getStateId();
+
+  let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
 
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateId, "BPA", ["RiskTypeComputation"]);
 
@@ -162,8 +164,9 @@ const BpaApplicationDetail = () => {
   const onFormValueChange = (setValue, formData, formState) => {
     setSubmitValve(!Object.keys(formState.errors).length);
   };
-  let configs = newConfig;
 
+  let configs =  newConfig?.InspectionReportConfig ? newConfig?.InspectionReportConfig : newConfigFI;
+  
   let workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: tenantId,
     id: id,
