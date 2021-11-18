@@ -46,10 +46,10 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
         value={option[optionsKey]}
         checked={selected.find((selectedOption) => selectedOption[optionsKey] === option[optionsKey]) ? true : false}
         onChange={(e) => isPropsNeeded?onSelect(e, option,props):isOBPSMultiple?onSelect(e, option,BlockNumber):onSelect(e, option)}
-        
+        style={{minWidth: "24px"}}
       />
       <div className="custom-checkbox">
-        <CheckSvg />
+        <CheckSvg style={{innerWidth: "24px", width: "24px"}}/>
       </div>
       <p className="label" style={index === optionIndex ? {
                     opacity: 1,

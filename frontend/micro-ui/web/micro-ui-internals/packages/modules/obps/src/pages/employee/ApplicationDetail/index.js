@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Header, Card, CardSectionHeader, PDFSvg, Loader, StatusTable, Row, ActionBar, SubmitBar, CardLabel, MultiLink } from "@egovernments/digit-ui-react-components";
+import { Header, CardSectionHeader, PDFSvg, StatusTable, Row, MultiLink } from "@egovernments/digit-ui-react-components";
 import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDetails";
 import { downloadAndPrintReciept } from "../../../utils";
 
@@ -23,8 +23,8 @@ const DocumentDetails = ({ t, data, documents, paymentDetails }) => {
         <div>
         <CardSectionHeader>{`${t("BPA_FEE_DETAILS_LABEL")}`}</CardSectionHeader>
         <StatusTable>
-          <Row className="border-none"  key={`${t(`BPAREG_FEES`)}:`} label={`${t(`BPAREG_FEES`)}:`} text={paymentDetails?.Payments?.[0]?.totalAmountPaid} />
-          <Row className="border-none"  key={`${t(`BPA_STATUS_LABEL`)}:`} label={`${t(`PAID`)}:`} text={paymentDetails?.Payments?.[0]?.totalAmountPaid ? (t("WF_BPA_PAID")) : "NA"} textStyle={paymentDetails?.Payments?.[0]?.totalAmountPaid ? {color: "green"}: {}} />
+          <Row className="border-none"  key={`${t(`BPAREG_FEES`)}:`} label={`${t(`BPAREG_FEES`)}:`} text={<span>&#8377;{paymentDetails?.Payments?.[0]?.totalAmountPaid}</span>} />
+          <Row className="border-none"  key={`${t(`BPA_STATUS_LABEL`)}:`} label={`${t(`BPA_STATUS_LABEL`)}:`} text={paymentDetails?.Payments?.[0]?.totalAmountPaid ? (t("WF_BPA_PAID")) : "NA"} textStyle={paymentDetails?.Payments?.[0]?.totalAmountPaid ? {color: "green"}: {}} />
         </StatusTable>
       </div>
       }
@@ -113,9 +113,8 @@ const ApplicationDetail = () => {
           onHeadClick={() => setShowOptions(!showOptions)}
           displayOptions={showOptions}
           options={dowloadOptions}
-          // style={{position: "unset", marginTop: "8px"}}
-          // optionsStyle = {{right: "3%"}}
-          //display: "flex", justifyContent: "space-between"
+          style={{right:"0",marginTop:"70px",marginRight:"50px"}}
+          optionsStyle={{right:"0",marginTop:"70px",marginRight:"50px"}}
         />  
         </div>}
       </div>

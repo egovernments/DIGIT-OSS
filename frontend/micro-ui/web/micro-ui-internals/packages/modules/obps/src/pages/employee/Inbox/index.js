@@ -7,7 +7,7 @@ import useInboxTableConfig from "./useInboxTableConfig";
 import useInboxMobileCardsData from "./useInboxMobileCardsData";
 
 const Inbox = ({parentRoute}) => {
-    
+    window.scroll(0,0);
     const { t } = useTranslation()
 
     const tenantId = Digit.ULBService.getCurrentTenantId();

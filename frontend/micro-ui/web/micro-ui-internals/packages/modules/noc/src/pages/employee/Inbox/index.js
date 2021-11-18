@@ -48,7 +48,7 @@ const Inbox = ({parentRoute}) => {
     const InboxObjectInSessionStorage = Digit.SessionStorage.get("OBPS.INBOX")
     
     const onSearchFormReset = (setSearchFormValue) =>{
-      setSearchFormValue("mobileNumber", null);
+      setSearchFormValue("sourceRefId", null);
       setSearchFormValue("applicationNo", null);
       dispatch({action: "mutateSearchForm", data: searchFormDefaultValues});
     }

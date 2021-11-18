@@ -3,7 +3,7 @@ import useInbox from "../useInbox"
 const useNOCInbox = ({ tenantId, filters, config={} }) => {
     const { filterForm, searchForm , tableForm } = filters
     const { moduleName, businessService, applicationStatus, locality, assignee } = filterForm
-    const { mobileNumber, applicationNo } = searchForm
+    const { sourceRefId, applicationNo } = searchForm
     const { sortBy, limit, offset, sortOrder } = tableForm
     
     const _filters = {
@@ -15,7 +15,7 @@ const useNOCInbox = ({ tenantId, filters, config={} }) => {
         },
         moduleSearchCriteria: {
           assignee,
-          ...(mobileNumber ? {mobileNumber}: {}),
+          ...(sourceRefId ? {sourceRefId}: {}),
           ...(applicationNo ? {applicationNo} : {}),
           ...(sortOrder ? {sortOrder} : {}),
           ...(locality?.length > 0 ? {locality: locality.map((item) => item.code.split("_").pop()).join(",")} : {}),

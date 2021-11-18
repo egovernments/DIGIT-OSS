@@ -1,5 +1,5 @@
 import React, { Fragment } from "react"
-import { TextInput, SubmitBar, DatePicker, SearchField, Dropdown, CardLabelError } from "@egovernments/digit-ui-react-components";
+import { TextInput, SubmitBar, DatePicker, SearchField, Dropdown, CardLabelError, MobileNumber } from "@egovernments/digit-ui-react-components";
 import { useWatch } from "react-hook-form";
 
 const applicationStatuses = [
@@ -56,7 +56,7 @@ const SearchFormFieldsComponent = ({formState,Controller, register, control, t, 
         </SearchField>
         <SearchField>
             <label>{t("BPA_APP_MOBILE_NO_SEARCH_PARAM")}</label>
-            <TextInput name="mobileNumber" inputRef={register({
+            <MobileNumber name="mobileNumber" inputRef={register({
                 minLength: {
                     value: 10,
                     message: t("CORE_COMMON_MOBILE_ERROR")
@@ -147,7 +147,7 @@ const SearchFormFieldsComponent = ({formState,Controller, register, control, t, 
         </SearchField>
         <SearchField className="submit">
             <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
-            <p onClick={() => {
+            <p style={{marginTop: "24px"}} onClick={() => {
                 reset({ 
                     applicationNo: "",
                     mobileNumber: "",

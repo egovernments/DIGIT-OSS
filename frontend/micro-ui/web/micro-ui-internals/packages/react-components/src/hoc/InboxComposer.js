@@ -120,7 +120,7 @@ const InboxComposer = ({
             <SearchFormFields registerRef={registerSearchFormField} searchFormState={searchFormState} {...{controlSearchForm}} />
             <SearchField className="submit">
                 <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form" />
-                <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
+                <p style={{marginTop: "24px"}} onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
             </SearchField>
         </SearchForm>
         <FilterForm onSubmit={onFilterFormSubmit} handleSubmit={handleFilterFormSubmit} id="filter-form" onResetFilterForm={onResetFilterForm}>
