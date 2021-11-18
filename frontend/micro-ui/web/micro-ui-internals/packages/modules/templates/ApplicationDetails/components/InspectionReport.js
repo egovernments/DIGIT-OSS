@@ -1,4 +1,4 @@
-import { StatusTable, Row, CardSectionHeader } from "@egovernments/digit-ui-react-components";
+import { StatusTable, Row, CardHeader, CardSectionHeader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import PropertyDocuments from "./PropertyDocuments";
@@ -17,13 +17,14 @@ const getDocuments = (fiDocuments) => {
     return returnDocuments;
 };
 
-function InspectionReport({ fiReport }) {
+function InspectionReport({ fiReport, isCitizen=false }) {
     const { t } = useTranslation();
 
     return (
         <React.Fragment>
             <div style={{ marginTop: "10px" }}>
-                <CardSectionHeader>{`${t(`BPA_FI_REPORT`)}`}</CardSectionHeader>
+            {isCitizen?<CardHeader>{`${t(`BPA_FI_REPORT`)}`}</CardHeader>:
+            <CardSectionHeader>{`${t(`BPA_FI_REPORT`)}`}</CardSectionHeader>}
                 {fiReport.map((fiData, index) =>
                     <div style={{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "950px", minWidth: "280px", marginBottom: "24px" }}>
                         <StatusTable>

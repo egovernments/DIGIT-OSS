@@ -128,9 +128,9 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     return refinedQues;
   }
 
-  const getfeildInspection = () => {
+  const getfeildInspection = (data) => {
     let formdata = JSON.parse(sessionStorage.getItem("INSPECTION_DATA"));
-    let inspectionOb = [];
+    let inspectionOb = data?.additionalDetails?.fieldinspection_pending && data?.additionalDetails?.fieldinspection_pending.length>0? [...data?.additionalDetails?.fieldinspection_pending]:[];
     formdata && formdata.map((ob,ind) => {
       inspectionOb.push({
         docs: getInspectionDocs(ob.Documents),
@@ -173,7 +173,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     applicationData = {
       ...applicationData,
       documents: getDocuments(applicationData),
-      additionalDetails: {...applicationData?.additionalDetails, fieldinspection_pending:getfeildInspection(), pendingapproval: getPendingApprovals() },
+      additionalDetails: {...applicationData?.additionalDetails, fieldinspection_pending:getfeildInspection(applicationData), pendingapproval: getPendingApprovals() },
        workflow:{
         action: action?.action,
         comment: data?.comments?.length > 0 ? data?.comments : null,

@@ -128,6 +128,17 @@ export const OBPSService = {
       userService: true,
       userDownload: true,
     }),
+  edcr_report_download: (details, tenantId) =>
+    Request({
+      url: Urls.obps.edcrreportdownload,
+      data: details,
+      useCache: true,
+      method: "POST",
+      auth: true,
+      locale: true,
+      userService: false,
+      userDownload: true,
+    }),
   LicenseDetails: async (tenantId, params) => {
     const response = await OBPSService.BPAREGSearch(tenantId, {}, params);
     if (!response?.Licenses?.length) {

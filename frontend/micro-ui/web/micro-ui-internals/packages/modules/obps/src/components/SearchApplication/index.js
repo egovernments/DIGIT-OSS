@@ -12,7 +12,16 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
             offset: 0,
             limit: 10,
             sortBy: "commencementDate",
-            sortOrder: "DESC"
+            sortOrder: "DESC",
+            applicationType:{
+                code: "BUILDING_PLAN_SCRUTINY",
+                i18nKey: "WF_BPA_BUILDING_PLAN_SCRUTINY",
+            },
+            serviceType:{
+                applicationType:["BUILDING_PLAN_SCRUTINY","BUILDING_OC_PLAN_SCRUTINY"],
+                code: "NEW_CONSTRUCTION",
+                i18nKey: "BPA_SERVICETYPE_NEW_CONSTRUCTION",
+            }
         }
     })
 
@@ -71,6 +80,10 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
 
     const searchFormFieldsComponentProps = {formState, Controller, register, control, t, reset, previousPage}
 
+    const getRedirectionLink = (bService) => {
+        let redirectBS = bService === "BPAREG"?"search/application/stakeholder":"search/application/bpa";
+        return redirectBS;
+    }
     if(isMobile){
 
         const propsMobileInboxCards = useMemo(() => data?.map((data) =>({
@@ -146,7 +159,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
                     </p>
                 ))}
             </Card>
-            : <DetailsCard {...{data:propsMobileInboxCards, linkPrefix: `/digit-ui/employee/obps/applicationNo/`, serviceRequestIdKey: "applicationNo" }} />}
+            : <DetailsCard {...{data:propsMobileInboxCards, isTwoDynamicPrefix:true, linkPrefix: `/digit-ui/employee/obps/`,getRedirectionLink:getRedirectionLink, serviceRequestIdKey: "applicationNo" }} />}
         </React.Fragment>
     }
 

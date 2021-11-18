@@ -6,7 +6,7 @@ import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDeta
 import { newConfig } from "../../../config/InspectionReportConfig";
 import get from "lodash/get";
 import orderBy from "lodash/orderBy";
-import { getBusinessServices, convertDateToEpoch } from "../../../utils";
+import { getBusinessServices, convertDateToEpoch, downloadPdf, printPdf } from "../../../utils";
 
 const BpaApplicationDetail = () => {
   const { id } = useParams();
@@ -84,13 +84,21 @@ const BpaApplicationDetail = () => {
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
 
-  async function getPermitOccupancyOrderSearch({tenantId},order) {
+  async function getPermitOccupancyOrderSearch({tenantId},order,mode="download") {
     let currentDate = new Date();
     data.applicationData.additionalDetails.runDate = convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate());
     let requestData = {...data?.applicationData, edcrDetail:[{...data?.edcrDetails}]}
     let response = await Digit.PaymentService.generatePdf(tenantId, { Bpa: [requestData] }, order);
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
+    requestData["applicationType"] = data?.applicationData?.additionalDetails?.applicationType;
+    let edcrResponse = await Digit.OBPSService.edcr_report_download({BPA: {...requestData}});
+    const responseStatus = parseInt(edcrResponse.status, 10);
+    if (responseStatus === 201 || responseStatus === 200) {
+      mode == "print"
+        ? printPdf(new Blob([edcrResponse.data], { type: "application/pdf" }))
+        : downloadPdf(new Blob([edcrResponse.data], { type: "application/pdf" }), `edcrReport.pdf`);
+    }
   }
 
   async function getRevocationPDFSearch({tenantId,...params}) {
@@ -259,6 +267,23 @@ const BpaApplicationDetail = () => {
   }
 
     
+  const wfDocs = workflowDetails.data?.timeline?.reduce((acc, { wfDocuments }) => {
+    return wfDocuments ? [...acc, ...wfDocuments] : acc;
+  }, []);
+
+
+  if(wfDocs?.length && data?.applicationDetails&& !(data?.applicationDetails.find(e => e.title === "BPA_WORKFLOW_DOCS"))){
+    data?.applicationDetails.push({
+      title: "BPA_WORKFLOW_DOCS",
+      //values: wfDocs?.map?.((e) => ({ ...e, })),
+      additionalDetails:{
+        "documents":[{values: wfDocs?.map?.((e) => ({
+        ...e,
+        title: e.documentType,
+        }))}]
+      }
+    });
+  }
 
 
   return (

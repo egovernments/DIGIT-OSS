@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 const SubOccupancyTable = ({ edcrDetails, applicationData }) => {
   const { t } = useTranslation();
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   const tableHeader = [
     {
@@ -93,7 +94,7 @@ const SubOccupancyTable = ({ edcrDetails, applicationData }) => {
             <StatusTable>
               <Row className="border-none" label={`${t("BPA_SUB_OCCUPANCY_LABEL")}:`} text={getSubOccupancyValues(index)}></Row>
             </StatusTable>
-            <div style={window.location.href.includes("citizen")?{overflow:"scroll"}:{ maxWidth: "950px", maxHeight: "280px" }}>
+            <div style={window.location.href.includes("citizen") || isMobile?{overflow:"scroll"}:{ maxWidth: "950px", maxHeight: "280px" }}>
               <Table
                 className="customTable"
                 t={t}

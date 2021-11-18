@@ -114,6 +114,7 @@ const Urls = {
     bpaRegGetBill: "/tl-calculator/v1/BPAREG/_getbill",
     bpaRegUpdate: "/tl-services/v1/BPAREG/_update",
     receipt_download: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
+    edcrreportdownload: "/bpa-services/v1/bpa/_permitorderedcr",
   },
 
   edcr: {

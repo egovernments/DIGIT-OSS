@@ -8,7 +8,8 @@ import DocumentDetails from "../../../components/DocumentDetails";
 import ActionModal from "./Modal";
 import OBPSDocument from "../../../pageComponents/OBPSDocuments";
 import SubOccupancyTable from "../../../../../templates/ApplicationDetails/components/SubOccupancyTable";
-import { getBusinessServices, getOrderedDocs, getCheckBoxLabelData, getBPAFormData, convertDateToEpoch } from "../../../utils";
+import InspectionReport from "../../../../../templates/ApplicationDetails/components/InspectionReport";
+import { getBusinessServices, getOrderedDocs, getCheckBoxLabelData, getBPAFormData, convertDateToEpoch, printPdf,downloadPdf  } from "../../../utils";
 
 const BpaApplicationDetail = () => {
   const { id } = useParams();
@@ -109,13 +110,21 @@ const BpaApplicationDetail = () => {
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
 
-  async function getPermitOccupancyOrderSearch({tenantId},order) {
+  async function getPermitOccupancyOrderSearch({tenantId},order, mode="download") {
     let currentDate = new Date();
     data.applicationData.additionalDetails.runDate = convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate());
     let requestData = {...data?.applicationData, edcrDetail:[{...data?.edcrDetails}]}
     let response = await Digit.PaymentService.generatePdf(tenantId, { Bpa: [requestData] }, order);
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
+    requestData["applicationType"] = data?.applicationData?.additionalDetails?.applicationType;
+    let edcrResponse = await Digit.OBPSService.edcr_report_download({BPA: {...requestData}});
+    const responseStatus = parseInt(edcrResponse.status, 10);
+    if (responseStatus === 201 || responseStatus === 200) {
+      mode == "print"
+        ? printPdf(new Blob([edcrResponse.data], { type: "application/pdf" }))
+        : downloadPdf(new Blob([edcrResponse.data], { type: "application/pdf" }), `edcrReport.pdf`);
+    }
   }
 
   async function getRevocationPDFSearch({tenantId,...params}) {
@@ -319,7 +328,8 @@ const BpaApplicationDetail = () => {
         />}
       {data?.applicationDetails?.filter((ob) => Object.keys(ob).length>0).map((detail, index, arr) => {
        return (
-          <Card key={index} style={detail?.title === ""?{marginTop:"-50px"}:{}}>
+          <Card key={index} style={!detail?.additionalDetails?.fiReport && detail?.title === ""?{marginTop:"-50px"}:{}}>
+            {data?.applicationData?.additionalDetails?.fieldinspection_pending?.length && detail?.additionalDetails?.fiReport && <InspectionReport isCitizen={true} fiReport={data?.applicationData?.additionalDetails?.fieldinspection_pending} />}
             <CardHeader>{t(detail?.title)}</CardHeader>
             <StatusTable>
               {!(detail?.additionalDetails?.noc) && detail?.values?.map((value) => (

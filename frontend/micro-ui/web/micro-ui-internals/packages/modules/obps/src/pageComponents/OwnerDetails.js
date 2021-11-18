@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, CheckBox, LinkButton, Loader, Toast, SearchIcon, DeleteIcon } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput, CardLabel, RadioButtons,RadioOrSelect, LabelFieldPair, Dropdown, CheckBox, LinkButton, Loader, Toast, SearchIcon, DeleteIcon } from "@egovernments/digit-ui-react-components";
 import { stringReplaceAll, getPattern, convertDateTimeToEpoch, convertDateToEpoch } from "../utils";
 import Timeline from "../components/Timeline";
 import cloneDeep from "lodash/cloneDeep";
@@ -373,16 +373,13 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                                         })}
                                     />
                                     <CardLabel>{`${t("BPA_APPLICANT_GENDER_LABEL")} *`}</CardLabel>
-                                    <RadioButtons
-                                        t={t}
-                                        options={genderList}
-                                        optionsKey="code"
-                                        name="gender"
-                                        value={gender}
-                                        selectedOption={field.gender}
-                                        onSelect={(e) => setGenderName(index, e)}
-                                        isDependent={true}
-                                        labelKey="COMMON_GENDER"
+                                    <RadioOrSelect
+                                    name="gender"
+                                    options={genderList}
+                                    selectedOption={field.gender}
+                                    optionKey="i18nKey"
+                                    onSelect={(e) => setGenderName(index, e)}
+                                    t={t}
                                     />
                                     {ismultiple && (
                                         <CheckBox
