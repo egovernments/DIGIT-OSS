@@ -59,9 +59,10 @@ const EmployeeApp = ({ path }) => {
   const { t } = useTranslation();
   const Inbox = Digit.ComponentRegistryService.getComponent("BPAInbox");
   const StakeholderInbox = Digit.ComponentRegistryService.getComponent("StakeholderInbox");
+  const isLocation = window.location.href.includes("bpa") || window.location.href.includes("stakeholder-inbox/stakeholder") || window.location.href.includes("application");
   return (
     <Fragment>
-      <div style={window.location.href.includes("inbox/") ? {marginLeft: "10px"} : {}}><OBPSBreadCrumbs location={location} /></div>
+      <div style={isLocation ? {marginLeft: "10px"} : {}}><OBPSBreadCrumbs location={location} /></div>
       <Switch>
         <PrivateRoute path={`${path}/stakeholder-inbox/stakeholder/:id`} component={ApplicationDetail} />
         <PrivateRoute path={`${path}/search/application/stakeholder/:id`} component={ApplicationDetail} />

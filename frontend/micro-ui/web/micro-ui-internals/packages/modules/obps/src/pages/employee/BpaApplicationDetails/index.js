@@ -292,7 +292,7 @@ const BpaApplicationDetail = () => {
   return (
     <Fragment>
       <div style={{ marginLeft: "15px" }}>
-        <Header>{t("BPA_TASK_DETAILS_HEADER")}</Header>
+        <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
         {dowloadOptions && dowloadOptions.length>0 && <MultiLink
           className="multilinkWrapper"
           onHeadClick={() => setShowOptions(!showOptions)}
@@ -302,9 +302,6 @@ const BpaApplicationDetail = () => {
           optionsStyle={{right:"0",marginTop:"70px",marginRight:"50px"}}
         />}
       </div>
-      {data?.applicationData?.status === "FIELDINSPECTION_INPROGRESS" && (userInfo?.info?.roles.filter(role => role.code === "BPA_FIELD_INSPECTOR")).length>0 && <div style={{ marginLeft: "15px" }}>
-        <Header>{t("BPA_FI_REPORT")}</Header>
-      </div>}
       {data?.applicationData?.status === "FIELDINSPECTION_INPROGRESS" && (userInfo?.info?.roles.filter(role => role.code === "BPA_FIELD_INSPECTOR")).length>0 && <FormComposer
         heading={t("")}
         isDisabled={!canSubmit}
