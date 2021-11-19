@@ -60,7 +60,6 @@ let gMap={};
 
 const MyMapComponent = compose(
   withProps({
-    // googleMapURL: `https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=${API_KEY}`,
     googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${API_KEY}`,
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `100%`, minWidth: `300px` }} />,
