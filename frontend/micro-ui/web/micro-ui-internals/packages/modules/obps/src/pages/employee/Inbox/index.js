@@ -84,6 +84,11 @@ const Inbox = ({parentRoute}) => {
       }
     }
 
+    const getRedirectionLink = (bService) => {
+      let redirectBS = bService === "BPAREG"?"search/application/stakeholder":"search/application/bpa";
+      return redirectBS;
+  }
+
     const { data: applicationTypesOfBPA, isLoading: loadingApplicationTypesOfBPA } = Digit.Hooks.obps.SearchMdmsTypes.useApplicationTypes(tenantId);
 
     const { data: localitiesForEmployeesCurrentTenant, isLoading: loadingLocalitiesForEmployeesCurrentTenant } = Digit.Hooks.useBoundaryLocalities(tenantId, "revenue", {}, t);
@@ -128,7 +133,7 @@ const Inbox = ({parentRoute}) => {
 
     const propsForInboxTable = useInboxTableConfig({...{ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch, onSortingByData}})
 
-    const propsForInboxMobileCards = useInboxMobileCardsData({parentRoute, table})
+    const propsForInboxMobileCards = useInboxMobileCardsData({parentRoute, table, getRedirectionLink})
 
     return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable, propsForInboxMobileCards, formState}}></InboxComposer>
 }

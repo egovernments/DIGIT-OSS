@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-const useInboxMobileCardsData = ({parentRoute, table }) => {
+const useInboxMobileCardsData = ({parentRoute, table, getRedirectionLink }) => {
     const { t } = useTranslation()
 
     const dataForMobileInboxCards = table?.map(({ applicationId, date, applicationType, locality, status, owner, sla, state}) => ({
@@ -13,7 +13,7 @@ const useInboxMobileCardsData = ({parentRoute, table }) => {
             [t("ES_INBOX_SLA_DAYS_REMAINING")]: sla
     }))
 
-    return ({ data:dataForMobileInboxCards, linkPrefix:`${parentRoute}/inbox/bpa/`, serviceRequestIdKey:t("TL_COMMON_TABLE_COL_APP_NO")})
+    return ({ data:dataForMobileInboxCards,isTwoDynamicPrefix:true, linkPrefix: `/digit-ui/employee/obps/`,getRedirectionLink:getRedirectionLink, serviceRequestIdKey: "applicationNo"})
 
 }
 

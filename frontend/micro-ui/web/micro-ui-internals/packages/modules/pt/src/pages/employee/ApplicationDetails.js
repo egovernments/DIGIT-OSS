@@ -149,8 +149,8 @@ const ApplicationDetails = () => {
     });
   }
 
-  const wfDocs = workflowDetails.data?.timeline?.reduce((acc, { documents }) => {
-    return documents ? [...acc, ...documents] : acc;
+  const wfDocs = workflowDetails.data?.timeline?.reduce((acc, { wfDocuments }) => {
+    return wfDocuments ? [...acc, ...wfDocuments] : acc;
   }, []);
   let appdetailsDocuments = appDetailsToShow?.applicationDetails?.find((e) => e.title === "PT_OWNERSHIP_INFO_SUB_HEADER")?.additionalDetails
     ?.documents;
