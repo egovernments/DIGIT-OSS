@@ -18,6 +18,7 @@ const Inbox = ({ parentRoute }) => {
     moduleName: "BPAREG",
     // businessService: {code: "BPA", name:t("BPA")},
     applicationStatus: "",
+    applicationType: [],
     locality: [],
     assignee: "ASSIGNED_TO_ALL"
   }

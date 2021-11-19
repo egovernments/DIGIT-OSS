@@ -32,6 +32,18 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
     return props.onChange(res);
   };
 
+  function selectCheckbox({values, onChange, applicationType, e}){
+    if(e.target.checked){
+      onChange([...values, applicationType])
+    } else{
+      onChange(values.filter( item => item.code !== applicationType.code ))
+    } 
+  }
+
+  function isChecked(selectedValues, currentValue ){
+    return !!selectedValues.find(i => i.code === currentValue.code) 
+  }
+
   return <>
     <FilterFormField>
       <Controller
@@ -55,31 +67,15 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
           name="applicationType"
           control={controlFilterForm}
           render={(props) => {
-            const renderRemovableTokens = useMemo(()=>props?.value?.map((applicationType, index) => {
-              return (
-                <RemoveableTag
-                key={index}
-                text={applicationType.name}
-                onClick={() => {
-                  props.onChange(props?.value?.filter((loc) => loc.code !== applicationType.code))
-                }}
-                />
-                );
-              }),[props?.value])
             return loadingApplicationTypesOfBPA ? <Loader/> : <>
               <div className="filter-label">{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</div>
-              <MultiSelectDropdown
-              options={applicationTypesOfBPA ? applicationTypesOfBPA : []}
-              optionsKey="i18nKey"
-              props={props}
-              isPropsNeeded={true}
-              onSelect={selectrole}
-              selected={props?.value}
-              defaultUnit="Selected"
-              />
-              <div className="tag-container">
-                {renderRemovableTokens}
-              </div>
+              {applicationTypesOfBPA.map(applicationType => {
+                return <CheckBox
+                  onChange={(e) => selectCheckbox({e, applicationType, onChange: props.onChange, values: props.value})}
+                  checked={isChecked(props.value, applicationType)}
+                  label={t(applicationType?.i18nKey)}
+                />  
+              })}
             </>
           }
         }

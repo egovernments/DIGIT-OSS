@@ -9,6 +9,32 @@ const FilterFormFieldsComponent = ({ statuses, isInboxLoading, registerRef, cont
     { code: "ASSIGNED_TO_ME", name: `${t("ES_INBOX_ASSIGNED_TO_ME")}` },
     { code: "ASSIGNED_TO_ALL", name: `${t("ES_INBOX_ASSIGNED_TO_ALL")}` },
   ];
+  const stateId = Digit.ULBService.getStateId();
+  const { data: stakeholderServiceTypes, isLoading: stakeholderServiceTypesLoading } = Digit.Hooks.obps.useMDMS(stateId, "StakeholderRegistraition", "TradeTypetoRoleMapping", {
+    select: (data) => {
+      return data?.StakeholderRegistraition?.TradeTypetoRoleMapping.reduce((accumulator, currentObject) => {
+        const identifier = currentObject.tradeType.split(".")[0]
+        if (accumulator.find(el => el.i18nKey.includes(identifier))) return accumulator
+        else return [...accumulator, {
+          role: currentObject.role,
+          i18nKey: `TRADELICENSE_TRADETYPE_${currentObject.tradeType.split(".")[0]}`,
+          tradeType: currentObject.tradeType,
+          identifier
+        }]
+      }, []);
+    }
+  });
+  function selectCheckbox({values, onChange, applicationType, e}){
+    if(e.target.checked){
+      onChange([...values, applicationType])
+    } else{
+      onChange(values.filter( item => item.code !== applicationType.code ))
+    } 
+  }
+
+  function isChecked(selectedValues, currentValue){
+    return !!selectedValues.find(i => i.code === currentValue.code) 
+  }
 
   return <>
     <FilterFormField>
@@ -26,6 +52,25 @@ const FilterFormFieldsComponent = ({ statuses, isInboxLoading, registerRef, cont
             options={availableOptions}
           />
         }}
+      />
+    </FilterFormField>
+    <FilterFormField>
+      <Controller
+          name="applicationType"
+          control={controlFilterForm}
+          render={(props) => {
+            return stakeholderServiceTypesLoading ? <Loader/> : <>
+              <div className="filter-label">{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</div>
+              {stakeholderServiceTypes.map(applicationType => {
+                return <CheckBox
+                  onChange={(e) => selectCheckbox({e, applicationType, onChange: props.onChange, values: props.value})}
+                  checked={isChecked(props.value, applicationType)}
+                  label={t(applicationType?.i18nKey)}
+                />  
+              })}
+            </>
+          }
+        }
       />
     </FilterFormField>
     <FilterFormField>
