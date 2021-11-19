@@ -2,15 +2,17 @@ import {
   CardLabel,
   CardLabelError,
   CloseSvg,
+  FormComposer,
   Header,
   MobileNumber,
   Row,
   SearchForm,
   StatusTable,
   SubmitBar,
-  Toast
+  Toast,
+  UploadFile
 } from "@egovernments/digit-ui-react-components";
-import React, { useCallback, useReducer } from "react";
+import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 const defaultState = {
@@ -25,7 +27,62 @@ const defaultState = {
   previousAction: null,
   disable: false,
 };
+const getConfig=(t,selectFile,setUploadedFile,uploadedFile,UpdateNumberConfig)=>{
+  const doc=UpdateNumberConfig?.documents?.map(document=>{
+    return ({
+      label: t(document.code),
+      populators: (
+        <div style={{ marginBottom: "2rem" }}>
+          
+          <UploadFile
+            id={document.documentType}
+            {...document.inputProps}
+            onUpload={selectFile}
+              onDelete={() => {
+                setUploadedFile((pre)=>({...pre,[document?.documentType]:null}));
+              }}
+            message={uploadedFile?.[document?.documentType] ? `1 ${t(`HR_ACTION_FILEUPLOADED`)}` : t(`HR_ACTION_NO_FILEUPLOADED`)}
+          />
+          <span>{t("PT_ATTACH_RESTRICTIONS_SIZE")}</span>
+        </div>
+      ),
+    })
+  })||[];
+  console.log(UpdateNumberConfig,doc);
+  return[
+  {
+    body:[
+     
+      {
+        label: t("PTUPNO_CURR_NO"),
+        type: "mobileNumber",
+        populators: {
+          name: "mobileNumber",
+          validation:{
+            required: "MANDATORY_MOBILE",
+            minLength: {
+              value: 10,
+              message: "CORE_COMMON_MOBILE_ERROR",
+            },
+            maxLength: {
+              value: 10,
+              message: "CORE_COMMON_MOBILE_ERROR",
+            },
+            pattern: {
+              value: /[789][0-9]{9}/,
+              message: "CORE_COMMON_MOBILE_ERROR",
+            },
+          }
+        },
+      },
+      ...doc
+     
 
+      
+    ]
+  },
+]
+};
 const compStateReducer = (state, action) => {
   console.log(state,action);
   switch (action.type) {
@@ -62,8 +119,43 @@ const compStateReducer = (state, action) => {
 // TODO make this component to reuse for multiple module
 const UpdateNumber = ({ t, onValidation, mobileNumber, name ,UpdateNumberConfig}) => {
   const [compState, compStateDispatch] = useReducer(compStateReducer, { ...defaultState, name: name, mobileNumber: mobileNumber });
+  const [file, setFile] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [error, setError] = useState(null);
+
+
+  function selectFile(e) {
+    console.log(e,"ewe");
+    e?.target?.files?.[0]? setFile({[e.target.id]:e.target.files[0]}):setFile(null);
+  }
+
+  useEffect(() => {
+    (async () => {
+      setError(null);
+      if (file) {
+        let key=Object.keys(file)?.[0]
+        if (file[key].size >= 5242880) {
+          setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+        } else {
+          try {
+            const response = await Digit.UploadServices.Filestorage("PT", file[key], Digit.ULBService.getStateId());
+            if (response?.data?.files?.length > 0) {
+              setUploadedFile((prev)=>({...prev,[key]:response?.data?.files[0]?.fileStoreId}));
+            } else {
+              setError(t("CS_FILE_UPLOAD_ERROR"));
+            }
+          } catch (err) {
+            console.error("Modal -> err ", err);
+            setError(t("CS_FILE_UPLOAD_ERROR"));
+          }
+        }
+      }
+    })();
+  }, [file]);
+
 
   const onSubmit = useCallback(async (_data) => {
+    console.log(_data);
     compStateDispatch({ type: "resettoast" });
     
     let invalidNo=(UpdateNumberConfig?.invalidNumber===_data?.mobileNumber&&"PTUPNO_INVALIDNO_HEADER")||false;
@@ -85,39 +177,37 @@ const UpdateNumber = ({ t, onValidation, mobileNumber, name ,UpdateNumberConfig}
     },
   });
 
+const config=useMemo(()=>getConfig(t,selectFile,setUploadedFile,uploadedFile,UpdateNumberConfig),[t,setUploadedFile,uploadedFile,UpdateNumberConfig])
+console.log(config);
   return (
     <div className="popup-module updateNumberEmployee">     
-      <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-        <StatusTable>
+      {/* <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}> */}
+        
+         
+          <FormComposer
+          config={config}
+          noBoxShadow
+          inline
+          submitInForm={true}
+          
+          onSubmit={(_data)=>onSubmit({..._data,...uploadedFile})}
+          label={"ES_COMMON_UPDATE"}
+          defaultValues={{
+            mobileNumber: "",
+          }}
+          formId="modal-action"
+          // isDisabled={!action.showFinancialYearsModal ? PTALoading || (!action?.isTerminateState && !selectedApprover?.uuid) : !selectedFinancialYear}
+        >
+
+          <div>
+          <StatusTable>
           <Row label={t("PTUPNO_OWNER_NAME")} text={`${compState?.name || t("CS_NA")}`} />
           <Row label={t("PTUPNO_CURR_NO")} text={`${compState?.mobileNumber || t("CS_NA")}`} />
-          <CardLabel style={{ marginBottom: "8px" }}>{t("PT_UPDATE_NEWNO")}</CardLabel>
-          <MobileNumber
-            className="field pt-update-no-field"
-            name="mobileNumber"
-            inputRef={register({
-              value: getValues("mobileNumber"),
-              shouldUnregister: true,
-              ...{
-                required: "MANDATORY_MOBILE",
-                minLength: {
-                  value: 10,
-                  message: "CORE_COMMON_MOBILE_ERROR",
-                },
-                maxLength: {
-                  value: 10,
-                  message: "CORE_COMMON_MOBILE_ERROR",
-                },
-                pattern: {
-                  value: /[789][0-9]{9}/,
-                  message: "CORE_COMMON_MOBILE_ERROR",
-                },
-              },
-            })}
-            disable={compState.disable}
-          />
-          <CardLabelError style={{ marginTop: "-10px" }}>{t(formState?.errors?.mobileNumber?.message)}</CardLabelError>
-        </StatusTable>
+          </StatusTable>
+
+          </div>
+        </FormComposer>
+         
         {compState.showToast && (
           <Toast
             error={compState.error}
@@ -128,8 +218,8 @@ const UpdateNumber = ({ t, onValidation, mobileNumber, name ,UpdateNumberConfig}
             }}
           />
         )}
-        <SubmitBar label={t( "ES_COMMON_UPDATE")} submit disabled={compState.disable} />
-      </SearchForm>
+        {/* <SubmitBar label={t( "ES_COMMON_UPDATE")} submit disabled={compState.disable} /> */}
+      {/* </SearchForm> */}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { Header, LinkLabel, Loader, Modal } from "@egovernments/digit-ui-react-components";
-import _ from "lodash";
+import _, { property } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
@@ -49,14 +49,15 @@ const PropertyDetails = () => {
       select: (data) => data.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
     }
   );
-  const { isLoading: rrr, isError: eee, data: www } = Digit.Hooks.useCommonMDMS("pb","PropertyTax",["UpdateNumber"],{
+  const mutation = Digit.Hooks.pt.usePropertyAPI(tenantId, false);
+
+  const {  data: UpdateNumberConfig } = Digit.Hooks.useCommonMDMS(Digit.ULBService.getStateId(),"PropertyTax",["UpdateNumber"],{
     select: (data) => {
       return data?.PropertyTax?.UpdateNumber?.[0];
     },
     retry:false,
     enable:false
   });
- console.log(rrr,eee,www);
  
   useEffect(() => {
     if (applicationDetails && !enableAudit) {
@@ -214,6 +215,7 @@ const PropertyDetails = () => {
             <UpdatePropertyNumberComponent
                 showPopup={setShowModal}
                 name={"Jagan"}
+                UpdateNumberConfig={UpdateNumberConfig}
                 mobileNumber={"9965664222"}
                 t={t}
                 onValidation={(data, showToast) => {
@@ -221,7 +223,30 @@ const PropertyDetails = () => {
                   newProp.owners[0].mobileNumber = data.mobileNumber;
                   newProp.creationReason = "UPDATE";
                   newProp.workflow = null;
+                  let newDocObj={...data};
+                  delete newDocObj.mobileNumber
 
+                  
+                  newProp.documents=[...newProp.documents, ...Object.keys(newDocObj).map(key=>({
+                    documentType: key,
+                    documentUid: newDocObj[key],
+                    fileStoreId: newDocObj[key],
+                  }))]
+console.log(newProp)
+mutation.mutate(
+  {
+    Property: newProp,
+  },
+  {
+    onError: () => console.error("error"),
+    onSuccess: async (successRes) => {
+      showToast();
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
+    },
+  }
+);
                 }}
               ></UpdatePropertyNumberComponent>
           {/* <OwnerHistory propertyId={applicationNumber} userType={"employee"} /> */}
