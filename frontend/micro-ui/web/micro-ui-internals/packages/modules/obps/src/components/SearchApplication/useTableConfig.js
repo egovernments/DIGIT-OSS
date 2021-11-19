@@ -58,7 +58,7 @@ const useSearchApplicationTableConfig = ({t}) => {
         },
         {
           Header: t("BPA_STATUS_LABEL"),
-          accessor: (row) =>GetCell(t(row?.status&&`WF_BPA_${row.status}` || row?.state&&`WF_BPA_${row.state}`|| "NA") ),
+          accessor: (row) =>GetCell(t(row?.state&&`WF_BPA_${row.state}` || row?.state&&`WF_BPA_${row.status}`|| "NA") ),
           disableSortBy: true,
         }
       ]), [] )

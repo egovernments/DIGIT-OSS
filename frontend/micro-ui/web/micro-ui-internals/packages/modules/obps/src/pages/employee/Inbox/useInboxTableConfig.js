@@ -36,7 +36,7 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
         },
         {
             Header: t("EVENTS_STATUS_LABEL"),
-            accessor: row => t(`WF_${row?.businessService}_${row?.status}`),
+            accessor: row => row?.state ? t(`WF_${row?.businessService}_${row?.state}`) : t(`WF_${row?.businessService}_${row?.status}`),
             disableSortBy: true,
         },
         {

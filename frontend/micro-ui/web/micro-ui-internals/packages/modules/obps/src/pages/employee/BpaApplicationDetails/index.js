@@ -336,6 +336,7 @@ const BpaApplicationDetail = () => {
         showToast={showToast}
         setShowToast={setShowToast}
         closeToast={closeToast}
+        statusAttribute={"state"}
         timelineStatusPrefix={`WF_${workflowDetails?.data?.applicationBusinessService ? workflowDetails?.data?.applicationBusinessService : data?.applicationData?.businessService}_`}
       />
     </Fragment>

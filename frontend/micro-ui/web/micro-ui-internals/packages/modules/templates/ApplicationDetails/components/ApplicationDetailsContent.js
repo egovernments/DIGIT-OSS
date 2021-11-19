@@ -131,8 +131,8 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
             </StatusTable>
           </div>
           {detail?.belowComponent && <detail.belowComponent />}
-          {detail?.additionalDetails?.inspectionReport1 && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
-          {applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending?.length && detail?.additionalDetails?.fiReport && <InspectionReport fiReport={applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending} />}
+          {detail?.additionalDetails?.inspectionReport && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
+          {applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending?.length > 0 && detail?.additionalDetails?.fiReport && <InspectionReport fiReport={applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending} />}
           {/* {detail?.additionalDetails?.FIdocuments && detail?.additionalDetails?.values?.map((doc,index) => (
             <div key={index}>
             {doc.isNotDuplicate && <div> 

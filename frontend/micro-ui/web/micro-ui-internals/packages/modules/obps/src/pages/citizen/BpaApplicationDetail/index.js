@@ -329,7 +329,7 @@ const BpaApplicationDetail = () => {
       {data?.applicationDetails?.filter((ob) => Object.keys(ob).length>0).map((detail, index, arr) => {
        return (
           <Card key={index} style={!detail?.additionalDetails?.fiReport && detail?.title === ""?{marginTop:"-50px"}:{}}>
-            {data?.applicationData?.additionalDetails?.fieldinspection_pending?.length && detail?.additionalDetails?.fiReport && <InspectionReport isCitizen={true} fiReport={data?.applicationData?.additionalDetails?.fieldinspection_pending} />}
+            {data?.applicationData?.additionalDetails?.fieldinspection_pending?.length > 0 && detail?.additionalDetails?.fiReport && <InspectionReport isCitizen={true} fiReport={data?.applicationData?.additionalDetails?.fieldinspection_pending} />}
             <CardHeader>{t(detail?.title)}</CardHeader>
             <StatusTable>
               {!(detail?.additionalDetails?.noc) && detail?.values?.map((value) => (
