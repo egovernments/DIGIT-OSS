@@ -80,7 +80,6 @@ function totalAmount(arr) {
 function FeesEstimateCard(props) {
   const { classes, estimate } = props;
   const total = totalAmount(estimate.fees);
-  console.log("estimate---", estimate);
   const isPaid = estimate.fees.payStatus
   const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
   return (

@@ -16,7 +16,6 @@ export default function dispatchAPI(api, page) {
                     }
                 })
                 .catch(function(err) {
-                    // console.log(err)
                     dispatch(apiStatusAsync(false, true, 'api failed'))
                 })
         }
@@ -34,7 +33,6 @@ export default function dispatchAPI(api, page) {
                     }
                 })
                 .catch(function(err) {
-                    // console.log(err)
                     dispatch(apiStatusAsync(false, true, 'api failed'))
                 })
         }
@@ -53,7 +51,6 @@ export default function dispatchAPI(api, page) {
                     }
                 })
                 .catch(function(err) {
-                    // console.log(err)
                     dispatch(apiStatusAsync(false, true, 'api failed'))
                 })
         }

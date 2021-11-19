@@ -73,7 +73,6 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
         callBack: (state, dispatch) => {
           const challanData = generateMiniChallan(state, dispatch);
           try {
-            console.log("printData",JSON.stringify(challanData));
             window.Android && window.Android.sendPrintData("printData",JSON.stringify(challanData));
           } catch (e) {
             console.log(e);
@@ -226,7 +225,6 @@ const generateMiniChallan = (state, dispatch) => {
 //   challanString = challanString + " Paid Amount   : Rs." + h["receiptAmount"] + NEXTLINE;
 //   challanString = challanString + " Created By: " + h["collectorName"] + NEXTLINE;
 //   challanString = challanString + "******************************************" + NEXTLINE; 
-//   //console.log(challanString.replace(/&&/g, "\n"));
 
 //   return "egov://print/" + challanString;
 // };

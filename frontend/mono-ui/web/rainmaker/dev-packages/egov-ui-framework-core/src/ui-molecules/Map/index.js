@@ -105,7 +105,6 @@ const MyMapComponent = compose(
             this.state.center
           );
 
-          // console.log(nextMarkers);
           setLocation(nextMarkers)
 
           this.setState({
@@ -224,7 +223,6 @@ const MyMapComponent = compose(
   withScriptjs,
   withGoogleMap
 )(props => {
-  // console.log(props);
   return (
     <GoogleMap
       ref={props.onMapMounted}

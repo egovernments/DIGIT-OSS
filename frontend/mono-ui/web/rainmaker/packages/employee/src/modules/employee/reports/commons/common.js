@@ -3,7 +3,6 @@ export function translate(locale_text) {
   //   var langresult = JSON.parse(localStorageGet(`localization_${getLocale()}`)).filter(function(obj) {
   //     return obj.code == locale_text;
   //   });
-  //   console.log(langresult);
   //   if (langresult[0]) return Object.values(langresult[0])[1];
   //   else return localStorage.locale == 'mr_IN' ? localization_MR_Data[locale_text] || locale_text : localization_EN_Data[locale_text] || locale_text;
   // }
@@ -25,7 +24,6 @@ export function validate_fileupload(files, formats) {
     if (filename.length <= 30) {
       if (formats.indexOf(fileext) >= 0 || !formats || formats.length === 0) {
         if (filesize <= filelimit) {
-          //console.log('file size validation success');
         } else {
           return "File size exceeds 5MB";
         }

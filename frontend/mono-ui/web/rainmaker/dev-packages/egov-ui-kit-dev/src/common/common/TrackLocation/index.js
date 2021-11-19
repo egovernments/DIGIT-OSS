@@ -59,7 +59,6 @@ class TrackLocation extends Component {
           });
         },
         function(error) {
-          console.log(error.code);
         }
       );
     }

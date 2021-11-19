@@ -354,7 +354,6 @@ const callBackForNext = async (state, dispatch) => {
     0
   );
   const isMutationDetailsCard = get(state, "screenConfiguration.preparedFinalObject.PropertyConfiguration[0].Mutation.MutationDetails");
-  // console.log(activeStep);
   let errorMsg = false;
   let isFormValid = true;
   let hasFieldToaster = false;

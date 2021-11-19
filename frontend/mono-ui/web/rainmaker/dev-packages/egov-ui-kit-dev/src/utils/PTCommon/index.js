@@ -418,13 +418,6 @@ export const transformPropertyDataToAssessInfo = (data) => {
     }
   }
 
-  // Object.keys(basicInfoConfig["fields"]).map((item) => {
-  //   var jsonPath = basicInfoConfig["fields"][item]["jsonPath"];
-  //   var valueInJSON = get(data, jsonPath);
-  //   basicInfoConfig["fields"][item].value = valueInJSON;
-  //   console.log(jsonPath, valueInJSON, basicInfoConfig["fields"][item].value);
-  // });
-  // console.log(basicInfoConfig);
   return { basicInformation: basicInfoConfig, plotDetails: configPlot, ...dictFloor, ...dictCustomSelect };
 };
 

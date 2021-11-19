@@ -169,7 +169,6 @@ const cancelReceipt = async (state, dispatch) => {
         { UpdateBillCriteria: UpdateBillCriteria }
       );
       if (payload) {
-        console.log(payload, "payloadpayloadpayloadpayloadpayloadpayloadpayload")
         dispatch(hideSpinner());
         dispatch(setRoute(`/bills/acknowledgement?purpose=apply&status=success&consumerNumber=${getQueryArg(window.location.href, "consumerNumber", "")}&service=${getQueryArg(window.location.href, "service", "")}&billNo=${getQueryArg(window.location.href, "billNumber", "")}`));
       }

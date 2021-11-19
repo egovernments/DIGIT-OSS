@@ -199,7 +199,6 @@ const callBackForPay = async (state, dispatch) => {
         "Receipt[0].Bill[0].billDetails[0].receiptNumber",
         null
       );
-      console.log(receiptNumber, response);
       dispatch(prepareFinalObject("receiptSearchResponse", response));
       // moveToSuccess(href, dispatch, receiptNumber);
       dispatch(
