@@ -96,7 +96,7 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
                     config={config}
                     onSelect={handleSubmit}
                     onSkip={onSkip}
-                    isDisabled={window.location.href.includes("editApplication")?false:enableSubmit}
+                    isDisabled={window.location.href.includes("editApplication")||window.location.href.includes("sendbacktocitizen")?false:enableSubmit}
                     onAdd={onAdd}
                 >
                     {bpaTaxDocuments?.map((document, index) => {

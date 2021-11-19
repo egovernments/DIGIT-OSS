@@ -302,7 +302,6 @@ export const getBPAOwners = (data) => {
 }
 
 export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = false) => {
-  
   if(isOCBPA) {
     data.landInfo = data.landInfo
   } else {
@@ -459,13 +458,25 @@ export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t
     serviceType: data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType,
     edcrDetails: APIScrutinyDetails
   }
+
+
+  data["PrevStateDocuments"] = data?.documents;
   data.documents = {
-    documents: data?.documents
+    documents: []
   }
+
+  let nocDocs = [];
+  nocdata && nocdata.map((a,index) => {
+    a.documents && a.documents.map((b,index) => {
+      nocDocs.push(b);
+    })
+  })
+
+  data["PrevStateNocDocuments"]=nocDocs;
 
   data.nocDocuments = {
     NocDetails: nocdata,
-    nocDocuments: nocdata.map(a => a?.documents?.[0] || {}),
+    nocDocuments: [],
   }
 
   data?.landInfo.owners.map((owner, ind) => {

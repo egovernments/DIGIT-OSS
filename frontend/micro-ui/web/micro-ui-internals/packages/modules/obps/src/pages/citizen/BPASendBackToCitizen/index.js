@@ -3,8 +3,9 @@ import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
 import { newConfig as newConfigBPA } from "../../../config/buildingPermitConfig";
-// import CheckPage from "../OCSendBackToCitizen";
-// import Acknowledgement from "../OCSendBackToCitizen";
+//import CheckPage from "../OCSendBackToCitizen";
+//import Acknowledgement from "../OCSendBackToCitizen";
+//import OBPSAcknowledgement from "../OCBuildingPermit/OBPSAcknowledgement";
 import { getBPAEditDetails, getPath } from "../../../utils";
 
 const BPASendBackToCitizen = ({ parentRoute }) => {

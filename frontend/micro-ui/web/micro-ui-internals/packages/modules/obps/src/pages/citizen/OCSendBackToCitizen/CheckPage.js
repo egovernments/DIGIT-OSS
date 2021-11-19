@@ -34,12 +34,31 @@ const CheckPage = ({ onSubmit, value }) => {
   const [showToast, setShowToast] = useState(null);
   const datafromAPI = value?.data?.edcrDetails;
   const queryClient = useQueryClient();
-  const { data, address, owners, nocDocuments, documents, additionalDetails, subOccupancy } = value;
+  const { data, address, owners, nocDocuments, documents, additionalDetails, subOccupancy,PrevStateDocuments } = value;
 
   let routeLink = `/digit-ui/citizen/obps/sendbacktocitizen/bpa/${value?.tenantId}/${value?.applicationNo}`;
   if (data?.uiFlow?.flow === "OCBPA") routeLink = `/digit-ui/citizen/obps/sendbacktocitizen/ocbpa/${value?.tenantId}/${value?.applicationNo}`;
   if (value.businessService === "BPA_LOW") BusinessService = "BPA.LOW_RISK_PERMIT_FEE";
   else if (value.businessService === "BPA") BusinessService = "BPA.NC_APP_FEE";
+
+  let isEditApplication = window.location.href.includes("editApplication")|| window.location.href.includes("sendbacktocitizen");
+  let val;
+  var i;
+  let improvedDoc =isEditApplication?PrevStateDocuments && documents ?[...PrevStateDocuments, ...documents.documents]: []: [...documents.documents];
+  improvedDoc.map((ob) => { ob["isNotDuplicate"] = true; })
+  improvedDoc.map((ob,index) => {
+    val = ob.documentType;
+    if(ob.isNotDuplicate == true)
+    for(i=index+1; i<improvedDoc.length;i++)
+    {
+      if(val === improvedDoc[i].documentType)
+      improvedDoc[i].isNotDuplicate=false;
+    }
+  })
+
+  // const { data:datafromAPI, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId,value?.data?.scrutinyNumber, {
+  //   enabled: true
+  // })
 
   const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
     {
@@ -299,13 +318,23 @@ const CheckPage = ({ onSubmit, value }) => {
           style={{ width: "100px", display: "inline" }}
           onClick={() => routeTo(`${routeLink}/document-details`)}
         />
-        {documents?.documents.map((doc, index) => (
+        {/* {documents?.documents.map((doc, index) => (
           <div key={index}>
             <CardSectionHeader>{t(doc?.documentType)}</CardSectionHeader>
             <StatusTable>
               <OBPSDocument value={value} Code={doc?.documentType} index={index} />
               <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
             </StatusTable>
+          </div>
+        ))} */}
+         {improvedDoc.map((doc, index) => (
+          <div key={index}>
+            {doc.isNotDuplicate && <div><CardSectionHeader>{`${t(doc?.documentType)}`}</CardSectionHeader>
+            <StatusTable>
+              <OBPSDocument value={isEditApplication?[...PrevStateDocuments,...documents.documents]:value} Code={doc?.documentType} index={index} />
+              <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
+            </StatusTable>
+          </div>}
           </div>
         ))}
       </Card>
