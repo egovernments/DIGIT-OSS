@@ -318,13 +318,6 @@ public class NotificationService {
 			    mobileNumbers.add(owner.getMobileNumber());
 		});
 
-				if(property.getAlternateMobileNumberDetails()!=null)
-				{
-		property.getAlternateMobileNumberDetails().forEach(entry ->{
-				mobileNumberToOwner.put(entry.getMobileNumber(), entry.getName());
-			    mobileNumbers.add(entry.getMobileNumber());
-		});}
-
 		if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
 			List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 			notifUtil.sendSMS(smsRequests);

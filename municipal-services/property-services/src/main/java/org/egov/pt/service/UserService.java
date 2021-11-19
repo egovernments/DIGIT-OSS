@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
-import org.egov.pt.models.AlternateMobileNumber;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.enums.Status;
@@ -483,7 +482,6 @@ public class UserService {
 			addUserDefaultFields(property.getTenantId(), role, ownerFromRequest);
 			UserDetailResponse userDetailResponse = userExists(ownerFromRequest, requestInfo);
 			List<OwnerInfo> existingUsersFromService = userDetailResponse.getUser();
-			Map<String, OwnerInfo> ownerMapFromSearch = existingUsersFromService.stream().collect(Collectors.toMap(OwnerInfo::getUuid, Function.identity()));
 
 			if (CollectionUtils.isEmpty(existingUsersFromService)) {
 
@@ -503,24 +501,7 @@ public class UserService {
 			setOwnerFields(ownerFromRequest, userDetailResponse, requestInfo);
 		}
 	}
-    
-    private UserDetailResponse updateExistingAlternateUser(Property property, RequestInfo requestInfo, Role role,
-			OwnerInfo ownerFromRequest, OwnerInfo ownerInfoFromSearch) {
-		
-		UserDetailResponse userDetailResponse;
-		
-		ownerFromRequest.setId(ownerInfoFromSearch.getId()+ (int)(Math.random() * 100) );
-		ownerFromRequest.setUuid(ownerInfoFromSearch.getUuid());
-		addUserDefaultFields(property.getTenantId(), role, ownerFromRequest);
 
-		StringBuilder uri = new StringBuilder(userHost).append(userContextPath).append(userUpdateEndpoint);
-		userDetailResponse = userCall(new CreateUserRequest(requestInfo, ownerFromRequest), uri);
-		if (userDetailResponse.getUser().get(0).getUuid() == null) {
-			throw new CustomException("INVALID USER RESPONSE", "The user updated has uuid as null");
-		}
-		return userDetailResponse;
-	}
-    
     /*
 		Method to update user mobile number
 	*/
