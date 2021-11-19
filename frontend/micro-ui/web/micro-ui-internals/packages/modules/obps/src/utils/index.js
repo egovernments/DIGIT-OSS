@@ -205,7 +205,7 @@ export const getBPAUnit = (data) =>{
   })   
   }
 
-  return units;
+  return units.length>0?units:data?.landInfo?.unit;
 
 }
 
@@ -311,7 +311,7 @@ export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = 
   
     data.landInfo.address.city=data?.landInfo?.address?.city?.code;
   
-    data.landInfo.unit=data?.landInfo?.unit.length>0?getunitforBPA(data?.landInfo?.unit):data?.subOccupancy?getBPAUnitsForAPI(data?.subOccupancy):[];
+    data.landInfo.unit=data?.landInfo?.unit && data?.landInfo?.unit.length>0?getunitforBPA(data?.landInfo?.unit):data?.subOccupancy?getBPAUnitsForAPI(data?.subOccupancy):[];
   }
 
   let formData={

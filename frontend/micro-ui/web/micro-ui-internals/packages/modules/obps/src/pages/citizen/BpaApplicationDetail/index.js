@@ -318,14 +318,16 @@ const BpaApplicationDetail = () => {
   
   return (
     <Fragment>
+      <div className="cardHeaderWithOptions" style={{marginRight:"auto",maxWidth:"960px"}}>
       <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
       {dowloadOptions && dowloadOptions.length>0 && <MultiLink
           className="multilinkWrapper"
           onHeadClick={() => setShowOptions(!showOptions)}
           displayOptions={showOptions}
           options={dowloadOptions}
-          style={{top:"90px"}}
+          
         />}
+        </div>
       {data?.applicationDetails?.filter((ob) => Object.keys(ob).length>0).map((detail, index, arr) => {
        return (
           <Card key={index} style={!detail?.additionalDetails?.fiReport && detail?.title === ""?{marginTop:"-50px"}:{}}>

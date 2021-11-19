@@ -36,18 +36,18 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action }) => {
     switch (action) {
       case "APPROVE": {
         setConfig(
-          configAcceptApplication({ t, action, selectFile, uploadedFile, error, isCommentRequired: false })
+          configAcceptApplication({ t, action, selectFile, uploadedFile, error, isCommentRequired: false, setUploadedFile,file })
         )
         break;
       }
       case "SEND_TO_ARCHITECT":
         setConfig(
-          configAcceptApplication({ t, action, selectFile, uploadedFile, error })
+          configAcceptApplication({ t, action, selectFile, uploadedFile, error, setUploadedFile,file })
         );
         break;
       default:
         setConfig(
-          configAcceptApplication({ t, action, selectFile, uploadedFile, error, isCommentRequired: false })
+          configAcceptApplication({ t, action, selectFile, uploadedFile, error, isCommentRequired: false , setUploadedFile,file})
         )
     }
   }, [action, uploadedFile]);

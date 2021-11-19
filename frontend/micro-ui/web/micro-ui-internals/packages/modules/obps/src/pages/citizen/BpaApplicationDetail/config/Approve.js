@@ -1,7 +1,7 @@
 import { UploadFile } from "@egovernments/digit-ui-react-components"
 import React from 'react';
 
-export const configAcceptApplication = ({ t, action, selectFile, uploadedFile, error, isCommentRequired = true }) => {
+export const configAcceptApplication = ({ t, action, selectFile, uploadedFile, error, isCommentRequired = true, setUploadedFile, file }) => {
   return {
     label: {
       heading: `BPA_FORWARD_APPLICATION_HEADER`,
@@ -35,6 +35,10 @@ export const configAcceptApplication = ({ t, action, selectFile, uploadedFile, e
                   onUpload={selectFile}
                   message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`ES_NO_FILE_SELECTED_LABEL`)}
                   error={error}
+                  onDelete={() => {
+                    setUploadedFile(null);
+                  }}
+                  file={file}
                 />
               ),
             },
