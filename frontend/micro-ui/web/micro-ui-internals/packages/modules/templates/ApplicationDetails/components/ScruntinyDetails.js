@@ -1,4 +1,4 @@
-import { StatusTable, Row, PDFSvg } from "@egovernments/digit-ui-react-components";
+import { StatusTable, Row, PDFSvg, CardLabel } from "@egovernments/digit-ui-react-components";
 import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -12,6 +12,9 @@ const ScruntinyDetails = ({ scrutinyDetails }) => {
           <div>
             {scrutinyDetails?.values?.map((value, index) => {
               return <Row className="border-none" textStyle={value?.value === "Paid"?{color:"darkgreen"}:{}} key={`${value.title}:`} label={`${t(`${value.title}`)}:`} text={value?.value ? value?.value : ""} />
+            })}
+            {scrutinyDetails?.permit?.map((value,ind) => {
+              return <CardLabel style={{fontWeight:"400"}}>{value?.title}</CardLabel>
             })}
           </div>
           <div>

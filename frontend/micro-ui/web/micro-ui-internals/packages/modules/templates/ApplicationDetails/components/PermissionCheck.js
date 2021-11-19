@@ -55,7 +55,7 @@ const PermissionCheck = ({ permissions, t }) => {
       {approvalChecks?.map((permission, index) => (
         <CheckBox
           key={index}
-          styles={{ margin: "20px 0 40px" }}
+          styles={{ margin: "20px 0 40px",maxWidth:"70%" }}
           label={permission?.label}
           checked={permission?.checked}
           onChange={(event => handleCheck(event, permission?.label, index))}
@@ -64,12 +64,12 @@ const PermissionCheck = ({ permissions, t }) => {
         />
       ))}
       {newApprovals?.map((approval, index) => (
-       <div> <TextInput key={index} value={approval?.label} onChange={event => handleChange(event, index)} textInputStyle={{maxWidth: "80%", width: "80%"}} placeholder={"Enter permit conditions.........."} />
+       <div> <TextInput key={index} value={approval?.label} onChange={event => handleChange(event, index)} textInputStyle={{maxWidth: "830px", width: "830px"}} placeholder={"Enter permit conditions.........."} />
          {<LinkButton
           label={
             <div>
               <span>
-              <Close style={{float: "right", position: "relative", bottom: "32px", marginTop: "-20px", marginRight: "21%" }}/>
+              <Close style={{float: "right", position: "relative", bottom: "32px", marginTop: "-21px", marginRight: "35%" }}/>
               </span>
             </div>
           }
