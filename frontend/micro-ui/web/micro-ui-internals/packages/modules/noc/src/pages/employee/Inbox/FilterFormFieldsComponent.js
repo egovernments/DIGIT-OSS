@@ -18,72 +18,40 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
 
   return <>
     <FilterFormField>
-              <Controller
-                name="assignee"
-                control={controlFilterForm}
-                render={(props) => <RadioButtons
-                  onSelect={(e) => {
-                    props.onChange(e.code)
-                  }}
-                  selectedOption={availableOptions.filter((option) => option.code === props.value)[0]}
-                  optionsKey="name"
-                  options={availableOptions}
-                />}
-              />
-            </FilterFormField>
-            {/* <FilterFormField>
-              <Controller
-                  name="locality"
-                  control={controlFilterForm}
-                  render={(props) => {
-                    const renderRemovableTokens = useMemo(()=>props?.value?.map((locality, index) => {
-                        return (
-                          <RemoveableTag
-                          key={index}
-                          text={locality.i18nkey}
-                          onClick={() => {
-                            props.onChange(props?.value?.filter((loc) => loc.code !== locality.code))
-                          }}
-                          />
-                          );
-                        }),[props?.value])
-                      return loadingLocalitiesForEmployeesCurrentTenant ? <Loader/> : <>
-                        <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
-                        <Dropdown
-                          option={localitiesForEmployeesCurrentTenant}
-                          select={(e) => {props.onChange([e, ...props?.value])}}
-                          optionCardStyles={{maxHeight:'350px'}}
-                          optionKey="i18nkey"
-                        />
-                        <div className="tag-container">
-                          {renderRemovableTokens}
-                        </div>
-                      </>
-                  }
-                }
-                />
-            </FilterFormField> */}
-            <FilterFormField>
-              <Controller
-                name="applicationStatus"
-                control={controlFilterForm}
-                render={(props) => {
-                  function changeItemCheckStatus(value){
-                    props.onChange(value)
-                  }
-                  const renderStatusCheckBoxes = useMemo(()=>statuses?.map( status => {
-                    return <CheckBox
-                      onChange={(e) => e.target.checked ? changeItemCheckStatus([...props.value, status?.statusid]) : changeItemCheckStatus(props.value?.filter( id => id !== status?.statusid)) }
-                      checked={props.value?.includes(status?.statusid)}
-                      label={t(`WF_${status.businessservice}_${status.applicationstatus.split('_').pop()}`)}
-                    />}),[props.value, statuses])
-                  return <>
-                    <div className="filter-label">{t("ACTION_TEST_APPLICATION_STATUS")}</div>
-                    {isInboxLoading ? <Loader /> : <>{renderStatusCheckBoxes}</>}
-                  </>
-                }}
-              />
-            </FilterFormField>
+      <Controller
+        name="assignee"
+        control={controlFilterForm}
+        render={(props) => <RadioButtons
+          onSelect={(e) => {
+            props.onChange(e.code)
+          }}
+          selectedOption={availableOptions.filter((option) => option.code === props.value)[0]}
+          optionsKey="name"
+          options={availableOptions}
+        />}
+      />
+    </FilterFormField>
+    <FilterFormField>
+      <Controller
+        name="applicationStatus"
+        control={controlFilterForm}
+        render={(props) => {
+          function changeItemCheckStatus(value){
+            props.onChange(value)
+          }
+          const renderStatusCheckBoxes = useMemo(()=>statuses?.map( status => {
+            return <CheckBox
+              onChange={(e) => e.target.checked ? changeItemCheckStatus([...props.value, status?.statusid]) : changeItemCheckStatus(props.value?.filter( id => id !== status?.statusid)) }
+              checked={props.value?.includes(status?.statusid)}
+              label={t(`WF_${status.businessservice}_${status.applicationstatus.split('_').pop()}`)}
+            />}),[props.value, statuses])
+          return <>
+            <div className="filter-label">{t("ACTION_TEST_APPLICATION_STATUS")}</div>
+            {isInboxLoading ? <Loader /> : <>{renderStatusCheckBoxes}</>}
+          </>
+        }}
+      />
+    </FilterFormField>
   </>
 }
 

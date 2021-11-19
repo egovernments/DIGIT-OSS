@@ -31,7 +31,6 @@ const TopBar = ({
     
     const conditionsToDisableNotificationCountTrigger = () => {
       if(Digit.UserService?.getUser()?.info?.type === "EMPLOYEE") return false
-      if(!Digit.UserService?.getUser()?.access_token) return false
       return true
     }
 

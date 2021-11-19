@@ -16,9 +16,8 @@ const Inbox = ({ parentRoute }) => {
 
   const filterFormDefaultValues = {
     moduleName: "BPAREG",
-    // businessService: {code: "BPA", name:t("BPA")},
     applicationStatus: "",
-    applicationType: [],
+    businessService: null,
     locality: [],
     assignee: "ASSIGNED_TO_ALL"
   }

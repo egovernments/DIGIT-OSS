@@ -64,25 +64,6 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
     </FilterFormField>
     <FilterFormField>
       <Controller
-          name="applicationType"
-          control={controlFilterForm}
-          render={(props) => {
-            return loadingApplicationTypesOfBPA ? <Loader/> : <>
-              <div className="filter-label">{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</div>
-              {applicationTypesOfBPA.map(applicationType => {
-                return <CheckBox
-                  onChange={(e) => selectCheckbox({e, applicationType, onChange: props.onChange, values: props.value})}
-                  checked={isChecked(props.value, applicationType)}
-                  label={t(applicationType?.i18nKey)}
-                />  
-              })}
-            </>
-          }
-        }
-        />
-    </FilterFormField>
-    <FilterFormField>
-      <Controller
           name="locality"
           control={controlFilterForm}
           render={(props) => {
@@ -119,6 +100,25 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
               <div className="tag-container">
                 {renderRemovableTokens}
               </div>
+            </>
+          }
+        }
+        />
+    </FilterFormField>
+    <FilterFormField>
+      <Controller
+          name="applicationType"
+          control={controlFilterForm}
+          render={(props) => {
+            return loadingApplicationTypesOfBPA ? <Loader/> : <>
+              <div className="filter-label">{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</div>
+              {applicationTypesOfBPA.map(applicationType => {
+                return <CheckBox
+                  onChange={(e) => selectCheckbox({e, applicationType, onChange: props.onChange, values: props.value})}
+                  checked={isChecked(props.value, applicationType)}
+                  label={t(applicationType?.i18nKey)}
+                />  
+              })}
             </>
           }
         }
