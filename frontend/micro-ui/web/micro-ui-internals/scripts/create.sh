@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./scripts/run.sh obps engagement
+./scripts/run.sh noc

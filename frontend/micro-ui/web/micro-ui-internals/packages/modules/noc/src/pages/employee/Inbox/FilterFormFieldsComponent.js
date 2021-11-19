@@ -1,6 +1,6 @@
 import React, { Fragment, useMemo } from "react"
 import { FilterFormField, Loader, RadioButtons, Localities, RemoveableTag, Dropdown, CheckBox } from "@egovernments/digit-ui-react-components";
-import { Controller } from "react-hook-form";
+import { Controller, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState, getFilterFormValue, applicationTypesOfBPA, loadingApplicationTypesOfBPA,  localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}) => {
@@ -11,10 +11,26 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
     { code: "ASSIGNED_TO_ALL", name: `${t("ES_INBOX_ASSIGNED_TO_ALL")}` },
   ];
 
+  const availableBusinessServices = [{
+      code: "FIRE_NOC_SRV",
+      i18nKey: "WF_FIRE_NOC_FIRE_NOC_SRV"
+    },{
+      code: "FIRE_NOC_OFFLINE",
+      i18nKey: "WF_FIRE_NOC_FIRE_NOC_OFFLINE"
+    },{
+      code: "AIRPORT_NOC_OFFLINE",
+      i18nKey: "WF_FIRE_NOC_AIRPORT_NOC_OFFLINE"
+    },{
+      code: "AIRPORT_NOC_SRV",
+      i18nKey: "WF_FIRE_NOC_AIRPORT_NOC_SRV"
+  }]
+
   applicationTypesOfBPA?.forEach(type => {
     type.name = t(`WF_BPA_${type.code}`);
     type.i18nKey = t(`WF_BPA_${type.code}`);
   });
+
+  const selectedBusinessService = useWatch({control: controlFilterForm, name: "businessService", defaultValue: null});
 
   return <>
     <FilterFormField>
@@ -33,13 +49,30 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
     </FilterFormField>
     <FilterFormField>
       <Controller
+          name="businessService"
+          control={controlFilterForm}
+          render={(props) => {
+            return <>
+              <div className="filter-label">{t("BPA_LICENSE_TYPE")}</div>
+                <RadioButtons
+                  onSelect={(e) => props.onChange(e)}
+                  selectedOption={props.value}
+                  optionsKey="i18nKey"
+                  options={availableBusinessServices}
+                />  
+              </>
+          }}
+      />
+    </FilterFormField>
+    {selectedBusinessService ? <FilterFormField>
+      <Controller
         name="applicationStatus"
         control={controlFilterForm}
         render={(props) => {
           function changeItemCheckStatus(value){
             props.onChange(value)
           }
-          const renderStatusCheckBoxes = useMemo(()=>statuses?.map( status => {
+          const renderStatusCheckBoxes = useMemo(()=>statuses?.filter(e => e.businessservice === selectedBusinessService.code)?.map( status => {
             return <CheckBox
               onChange={(e) => e.target.checked ? changeItemCheckStatus([...props.value, status?.statusid]) : changeItemCheckStatus(props.value?.filter( id => id !== status?.statusid)) }
               checked={props.value?.includes(status?.statusid)}
@@ -51,7 +84,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
           </>
         }}
       />
-    </FilterFormField>
+    </FilterFormField> : null}
   </>
 }
 

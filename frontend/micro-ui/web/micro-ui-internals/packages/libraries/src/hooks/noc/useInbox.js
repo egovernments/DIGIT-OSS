@@ -10,7 +10,7 @@ const useNOCInbox = ({ tenantId, filters, config={} }) => {
         tenantId,
         processSearchCriteria: {
           moduleName: "noc-services", 
-          businessService: ["FIRE_NOC_SRV","FIRE_NOC_OFFLINE","AIRPORT_NOC_OFFLINE","AIRPORT_NOC_SRV"],
+          businessService: businessService ? [businessService.code] : ["FIRE_NOC_SRV","FIRE_NOC_OFFLINE","AIRPORT_NOC_OFFLINE","AIRPORT_NOC_SRV"],
           ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
         },
         moduleSearchCriteria: {
