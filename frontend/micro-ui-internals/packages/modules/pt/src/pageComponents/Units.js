@@ -102,7 +102,6 @@ const Units = ({ t, config, onSelect, userType, formData, setError, formState, c
         }, {});
         let totalGroundFloorArea = Object.keys(floorWiseAreas).reduce((acc, key) => (floorWiseAreas[key] <= acc ? acc : floorWiseAreas[key]), 0);
 
-        // console.log(floorWiseAreas, totalGroundFloorArea, "areaas");
         if (totalGroundFloorArea > Number(formData?.landarea)) {
           setError(config.key, { type: "landArea extended", message: t("PT_BUILTUPAREA_GRATER_THAN_LANDAREA") });
         } else clearErrors(config.key);
@@ -125,7 +124,6 @@ const Units = ({ t, config, onSelect, userType, formData, setError, formState, c
     }, {});
 
     let totalGroundFloorArea = Object.keys(floorWiseAreas).reduce((acc, key) => (floorWiseAreas[key] <= acc ? acc : floorWiseAreas[key]), 0);
-    // console.log(floorWiseAreas, totalGroundFloorArea, "areaas");
     const continuousFloorsArr = floorListData.filter((e) => {
       let num = Number(e?.code);
       return (num < maxFloor && num > minFloor) || num === maxFloor || num === minFloor;
@@ -173,7 +171,6 @@ const Units = ({ t, config, onSelect, userType, formData, setError, formState, c
     return menu;
   };
 
-  // console.log(usageCategoryMajorMenu(usagecat), subUsageCategoryMenu(usagecat), getfloorlistdata(floorlist), "options inside units");
 
   function goNext() {
     let unitsData = units?.map((unit) => ({
@@ -227,7 +224,6 @@ const Units = ({ t, config, onSelect, userType, formData, setError, formState, c
   }, [formData?.PropertyType]);
 
   useEffect(() => {
-    // console.log(units, "inside units change");
     goNext();
     calculateNumberOfFloors();
   }, [units, formData.PropertyType, formData.landarea]);
@@ -357,8 +353,6 @@ function Unit({
         clearLocalErrors([key]);
       }
     }
-
-    // console.log(formValue, "on units fromvalue change");
 
     if (Object.keys(localFormState.errors).length && !formState?.errors?.units) {
       setError("units", { type: `${unit.key}`, message: Object.keys(localFormState.errors).join() });

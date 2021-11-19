@@ -207,7 +207,6 @@ export const ComplaintDetails = (props) => {
   const [toast, setToast] = useState(false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { isLoading, complaintDetails, revalidate: revalidateComplaintDetails } = Digit.Hooks.pgr.useComplaintDetails({ tenantId, id });
-  // console.log("find complaint details here", complaintDetails);
   const workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId, id, moduleCode: "PGR", role: "EMPLOYEE" });
   const [displayMenu, setDisplayMenu] = useState(false);
   const [popup, setPopup] = useState(false);
@@ -217,7 +216,6 @@ export const ComplaintDetails = (props) => {
   const [rerender, setRerender] = useState(1);
   const client = useQueryClient();
   function popupCall(option) {
-    console.log("option", option);
     setDisplayMenu(false);
     setPopup(true);
   }
@@ -225,7 +223,6 @@ export const ComplaintDetails = (props) => {
   useEffect(() => {
     (async () => {
       const assignWorkflow = await Digit?.WorkflowService?.getByBusinessId(tenantId, id);
-      console.log("assign", assignWorkflow);
     })();
   }, [complaintDetails]);
 
@@ -245,10 +242,6 @@ export const ComplaintDetails = (props) => {
     })();
   }, []);
 
-  // useEffect(() => {
-  //   console.log("action", props.action);
-  //   setActionCalled(props.action);
-  // }, [props.action]);
 
   function zoomView() {
     setFullscreen(!fullscreen);
@@ -263,7 +256,6 @@ export const ComplaintDetails = (props) => {
         setPopup(!popup);
         break;
       default:
-        console.log(state);
         break;
     }
   }
@@ -300,7 +292,6 @@ export const ComplaintDetails = (props) => {
         setDisplayMenu(false);
         break;
       default:
-        console.log("action not known");
         setDisplayMenu(false);
     }
   }
@@ -308,7 +299,6 @@ export const ComplaintDetails = (props) => {
   async function onAssign(selectedEmployee, comments, uploadedFile) {
     setPopup(false);
     const response = await Digit.Complaint.assign(complaintDetails, selectedAction, selectedEmployee, comments, uploadedFile, tenantId);
-    console.log("find response complaint assign here", response);
     setAssignResponse(response);
     setToast(true);
     setLoader(true);
@@ -329,7 +319,6 @@ export const ComplaintDetails = (props) => {
   if (workflowDetails.isError) return <React.Fragment>{workflowDetails.error}</React.Fragment>;
 
   const getTimelineCaptions = (checkpoint) => {
-    // console.log("tl", checkpoint);
     if (checkpoint.status === "COMPLAINT_FILED" && complaintDetails?.audit) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(complaintDetails.audit.details.createdTime),

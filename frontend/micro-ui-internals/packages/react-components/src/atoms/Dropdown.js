@@ -112,7 +112,6 @@ const Dropdown = (props) => {
   }
 
   function onSelect(val) {
-    //console.log(val, "curent", selectedOption, "old");
     if (val !== selectedOption) {
       props.select(val);
       setSelectedOption(val);
@@ -169,7 +168,6 @@ const Dropdown = (props) => {
           <ArrowDown onClick={dropdownSwitch} className="cp" disable={props.disable} />
         </div>
       )}
-      {/* {console.log("dropdownStatus::::::::::::::>", dropdownStatus)} */}
       {dropdownStatus ? (
         props.optionKey ? (
           <div
@@ -182,7 +180,6 @@ const Dropdown = (props) => {
                 .filter((option) => t(option[props.optionKey]).toUpperCase().indexOf(filterVal.toUpperCase()) > -1)
                 .map((option, index) => {
                   if (props.t) {
-                    // console.log(props.t(option[props.optionKey]));
                   }
                   return (
                     <div className="cp profile-dropdown--item display: flex" key={index} onClick={() => onSelect(option)}>

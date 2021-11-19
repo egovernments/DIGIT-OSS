@@ -63,7 +63,6 @@ const useApplicationStatus = (select, isEnabled = true, statusMap=[]) => {
       };
     });
 
-    // console.log("find filter status",DSO ? allowedStatusForDSO.map(item => applicationStatus.filter(status => status.code === item)[0] ) : applicationStatus);
     return DSO ? allowedStatusForDSO.map((item) => applicationStatus.filter((status) => status.code === item)[0]) : applicationStatus;
   };
   return useQuery(

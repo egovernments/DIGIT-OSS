@@ -38,7 +38,6 @@ export const SelectPaymentType = (props) => {
   const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
 
   const onSubmit = async (d) => {
-    // console.log("find submitted data", d);
     const filterData = {
       Transaction: {
         tenantId: tenantId,
@@ -76,7 +75,6 @@ export const SelectPaymentType = (props) => {
     } catch (error) {
       let messageToShow = "CS_PAYMENT_UNKNOWN_ERROR_ON_SERVER";
       console.dir(error);
-      console.log(error.response);
       if (error.response?.data?.Errors?.[0]) {
         const { code, message } = error.response?.data?.Errors?.[0];
         messageToShow = t(message);
@@ -88,8 +86,7 @@ export const SelectPaymentType = (props) => {
   };
 
   if (authorization === "true" && !userInfo.access_token) {
-    // console.log("find query params", __tenantId, authorization, authorization === "true",!userInfo.access_token, authorization === "true" && !userInfo.access_token)
-    // console.log("find encoded url",encodeURI(pathname))
+
     return <Redirect to={`/digit-ui/citizen/login?from=${encodeURIComponent(pathname + search)}`} />;
   }
 

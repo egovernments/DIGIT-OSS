@@ -14,7 +14,6 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
   const { t } = useTranslation();
   // let GetComplaintInstance = ({}) => {
 
-  // console.log("find complaintWorkflow here", complaintWorkflow, data)
   // if (isLoading) {
   //   return <Loader />;
   // }
@@ -23,14 +22,12 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
 
   useEffect(() => {
     const auditDetails = timeline?.filter((status, index, array) => {
-      // console.log("find audit details index and status here", status, index);
       if (index === array.length - 1 && status.status === "PENDINGFORASSIGNMENT") {
         return true;
       } else {
         return false;
       }
     });
-    // console.log("find audit details here", auditDetails);
     timeline?.push({
       auditDetails: { created: auditDetails.created, lastModified: auditDetails.lastModified },
       performedAction: "FILED",
@@ -38,10 +35,8 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
     });
   }, [timeline]);
 
-  // console.log("find timeline here", timeline);
 
   const getCheckPoint = ({ status, caption, auditDetails, timeLineActions, index, array, performedAction }) => {
-    // console.log("find getChechPoint data here", status, index)
     const isCurrent = 0 === index;
     switch (status) {
       case "PENDINGFORREASSIGNMENT":

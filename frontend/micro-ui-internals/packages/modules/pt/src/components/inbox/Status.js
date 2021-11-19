@@ -23,18 +23,7 @@ const Status = ({ onAssignmentChange, searchParams, businessServices, statusMap,
     // return t(`ES_PT_COMMON_STATUS_${state.state || "CREATED"}`);
   };
 
-  // useEffect(() => {
-  //   if (statusData) {
-  //     let a = statusData.userRoleStates
-  //       ?.filter((e) => !e.isTerminateState)
-  //       .reduce((acc, state) => {
-  //         if (!acc[state.state]) acc[state.state] = [state];
-  //         else acc[state.state]?.push(state);
-  //         return acc;
-  //       }, {});
-  //      console.log(statusData, a, "status data");
-  //   }
-  // }, [statusData]);
+
 
   if (isLoading) {
     return <Loader />;

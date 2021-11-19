@@ -35,7 +35,6 @@ const PropertyType = ({ t, config, onSelect, userType, formData, setError, clear
         }
       }
       menu.sort((a, b) => a.i18nKey.split("_").pop().localeCompare(b.i18nKey.split("_").pop()));
-      //console.log(menu);
       return menu;
     }
   }

@@ -33,7 +33,6 @@ const Login = ({ config: propsConfig, t }) => {
       const { UserRequest: info, ...tokens } = await Digit.UserService.authenticate(requestData);
       setUser({ info, ...tokens });
     } catch (err) {
-      console.log({ err });
       alert(err?.response?.data?.error_description || "Invalid login credentials!");
     }
   };
@@ -42,7 +41,6 @@ const Login = ({ config: propsConfig, t }) => {
     history.push("/digit-ui/employee/forgot-password");
   };
 
-  console.log({ propsConfig });
   const [userId, password, city] = propsConfig.inputs;
   const config = [
     {

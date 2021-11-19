@@ -17,7 +17,6 @@ const DigitUIWrapper = ({ stateCode, enabledModules, moduleReducers }) => {
   }
 
   const i18n = getI18n();
-  // console.log("core module rendered", initData);
   return (
     <Provider store={getStore(initData, moduleReducers(initData))}>
       <Router>

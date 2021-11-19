@@ -8,7 +8,6 @@ const useOnClickOutside = (ref, handler, isActive) => {
       document.removeEventListener("click", handleClickOutSide, false);
     }
     return () => {
-      // console.log("removeEventListener event fired:::::>", event);
       document.removeEventListener("click", handleClickOutSide, false);
     };
   }, [isActive]);

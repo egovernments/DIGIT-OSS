@@ -51,7 +51,6 @@ const defaultCatchSearch = (Err) => {
     )
   )
     return [];
-  console.log(Err?.response?.data, " this is error");
   throw Err;
 };
 

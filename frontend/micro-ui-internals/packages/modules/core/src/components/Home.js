@@ -11,7 +11,6 @@ const CitizenHome = ({ modules }) => {
   return (
     <React.Fragment>
       {moduleArray.map(({ code }, index) => {
-        //console.log("in module map", code);
         let Links = Digit.ComponentRegistryService.getComponent(`${code}Links`) || (() => <React.Fragment />);
         if (code === "Payment" && !showQuickPay) {
           Links = () => <React.Fragment />;
