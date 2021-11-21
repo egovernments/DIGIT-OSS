@@ -77,7 +77,7 @@ public class ApportionServiceV2 {
 
 
             String businessKey = bill.getBusinessService();
-            BigDecimal amountPaid = bill.getAmountPaid();
+           // BigDecimal amountPaid = bill.getAmountPaid();
 
             List<BillDetail> billDetails = bill.getBillDetails();
 
