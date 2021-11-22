@@ -20,7 +20,7 @@ const Inbox = ({ tenants, parentRoute }) => {
   let isMobile = window.Digit.Utils.browser.isMobile();
   const userInfo = Digit.UserService.getUser();
   const [pageOffset, setPageOffset] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(window.Digit.Utils.browser.isMobile()?50:10);
   const [sortParams, setSortParams] = useState([{ id: "createdTime", sortOrder: "DESC" }]);
   const paginationParams = isMobile ? { limit: 10, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.sortOrder } :
     { limit: pageSize, offset: pageOffset, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.sortOrder }

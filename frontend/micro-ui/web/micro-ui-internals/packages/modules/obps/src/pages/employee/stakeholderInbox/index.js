@@ -23,7 +23,7 @@ const Inbox = ({ parentRoute }) => {
   }
   const tableOrderFormDefaultValues = {
     sortBy: "",
-    limit: 10,
+    limit: window.Digit.Utils.browser.isMobile()?50:10,
     offset: 0,
     sortOrder: "DESC"
   }
