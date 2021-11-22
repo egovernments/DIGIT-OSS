@@ -91,7 +91,6 @@ public class CityController {
 	public String getCity(@RequestParam(value = "tenantId", required = true) @Size(max = 256) String tenantId,
 			@RequestParam(value = "code", required = false) @Size(max = 4) String code) {
 		List<District> districts;
-//		List<District> result = new ArrayList<>();
 		String jsonInString = "";
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 		try {

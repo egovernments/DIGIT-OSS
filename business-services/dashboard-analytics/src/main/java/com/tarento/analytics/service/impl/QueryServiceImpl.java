@@ -451,7 +451,6 @@ public class QueryServiceImpl implements QueryService {
 			SearchRequest searchRequest = elasticSearchDao.buildElasticSearchQuery(dictator);
 			JsonNode querySegment = mapper.readTree(searchRequest.source().toString());
 			objectNode = (ObjectNode) querySegment;
-//			JsonNode aggrNode = mapper.readTree(aggrQuery).get(Constants.JsonPaths.AGGS);
 			objectNode.put(Constants.JsonPaths.AGGS, mapper.readTree(aggrQuery).get(Constants.JsonPaths.AGGS));
 		} catch (Exception ex) {
 			logger.error("Encountered an Exception while parsing the JSON : " + ex.getMessage());

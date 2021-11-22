@@ -156,7 +156,6 @@ public class RestApiController {
 	@RequestMapping(value = "/migrate/{indexName}/{version}", method = RequestMethod.POST)
 	public ResponseEntity<?> migrateIndex(@PathVariable String indexName, @PathVariable String version) throws Exception {
 		String queryString = null;
-//		String index = null, dataContext = null;
 		Boolean status = elasticService.searchIndex(indexName, queryString, version);
 		if (status) {
 			return new ResponseEntity<String>(HttpStatus.CREATED);

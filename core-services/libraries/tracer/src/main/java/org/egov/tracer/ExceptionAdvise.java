@@ -168,7 +168,6 @@ public class ExceptionAdvise {
 				errorRes.setErrors(new ArrayList<>(Collections.singletonList(new Error(exceptionName, "An unhandled exception occurred on the server", exceptionMessage, null))));
 			} else if (provideExceptionInDetails && errorRes.getErrors() != null && errorRes.getErrors().size() > 0) {
                 StringWriter sw = new StringWriter();
-//                PrintWriter pw = new PrintWriter(sw);
                 errorRes.getErrors().get(0).setDescription(sw.toString());
             }
 

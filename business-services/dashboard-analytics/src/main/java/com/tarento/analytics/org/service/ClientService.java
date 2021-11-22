@@ -19,7 +19,6 @@ public interface ClientService {
 	 * Default handle request to translates tenant code to a value
 	 */
 	default boolean preHandle(AggregateRequestDto request, ObjectNode chartNode, MdmsApiMappings mdmsApiMappings){
-//		boolean status = Boolean.FALSE;
 		JsonNode translateNode = chartNode.get(Constants.JsonPaths.TRANSLATE_CODE);
 		boolean isTranslate = translateNode == null || translateNode.asBoolean()==Boolean.FALSE ? Boolean.FALSE : translateNode.asBoolean();
 		boolean valueExist = request.getFilters().containsKey(Constants.MDMSKeys.TENANT_ID);
@@ -32,13 +31,11 @@ public interface ClientService {
 					if(val!=null) values.add(val);
 				}
 				request.getFilters().put(Constants.MDMSKeys.TENANT_ID, values);
-//				status = Boolean.TRUE;
 
 			} else if(filter instanceof String){
 				String code = request.getFilters().get(Constants.MDMSKeys.TENANT_ID).toString();
 				String value = mdmsApiMappings.valueOf(code);
 				request.getFilters().put(Constants.MDMSKeys.TENANT_ID, value);
-//				status = Boolean.TRUE;
 			}
 
 		}

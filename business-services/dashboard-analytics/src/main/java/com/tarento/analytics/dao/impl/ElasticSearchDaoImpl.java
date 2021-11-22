@@ -242,7 +242,6 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 		}
 
 		searchSourceBuilder.query(query);
-//		List finalFacetList = new ArrayList();
 
 		if (null != searchDTO.getFacets() && !searchDTO.getFacets().isEmpty()) {
 			// addAggregations(searchSourceBuilder, searchDTO.getFacets());
@@ -254,11 +253,9 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 
 		try {
 			response = client.search(searchReq);
-//			long count = 0;
 
 			if (response != null) {
 				SearchHits hits = response.getHits();
-//				count = hits.getTotalHits();
 				for (SearchHit hit : hits) {
 					esSource.add(hit.getSourceAsMap());
 				}
@@ -278,7 +275,6 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 		for (Map.Entry<String, Object> entry : aggregations.entrySet()) {
 
 			String key = entry.getKey();
-//			Map<String, Object> aggregationInfo = (Map<String, Object>) entry.getValue();
 			for (Map.Entry<String, Object> en : aggregations.entrySet()) {
 				if ("DATE_HISTOGRAM".equalsIgnoreCase(en.getKey())) {
 					Map<String, String> aggsVal = (Map<String, String>) en.getValue();

@@ -133,7 +133,6 @@ public class MdmsServiceImpl implements ClientService {
     }
 
     private ArrayNode getBuckets(Map<String, List<String>> map, AggregateRequestDto requestDto, JsonNode query, String indexName) {
-//        ObjectNode nodes = JsonNodeFactory.instance.objectNode();
         ArrayNode bucket = JsonNodeFactory.instance.arrayNode();
         for (String ddrkey : map.keySet()) {
             List<String> tenantIds = map.get(ddrkey);

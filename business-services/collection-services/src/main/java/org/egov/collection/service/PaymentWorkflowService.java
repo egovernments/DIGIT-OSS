@@ -246,8 +246,6 @@ public class PaymentWorkflowService {
             payment.setPaymentStatus(PaymentStatusEnum.DEPOSITED);
             payment.setInstrumentStatus(InstrumentStatusEnum.REMITTED);
 
-//            JsonNode additionalDetails = workflowRequestByPaymentId.get(payment.getId())
-//                    .getAdditionalDetails();
 
             payment.getPaymentDetails().forEach(paymentDetail -> {
                 paymentDetail.getBill().setAdditionalDetails(jsonMerge(paymentDetail.getBill().getAdditionalDetails(),

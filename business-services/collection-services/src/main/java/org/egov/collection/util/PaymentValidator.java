@@ -290,8 +290,6 @@ public class PaymentValidator {
                         billFromDB.setPayerName(bill.getPayerName());
                     }
 
-//                    Map<String,BillDetail> idToBillDetailMap = billFromDB.getBillDetails().stream().collect(Collectors.toMap(BillDetail::getId,Function.identity()));
-
 
                     for(BillDetail billDetail : bill.getBillDetails()){
 
