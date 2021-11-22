@@ -60,7 +60,7 @@ public class MetricChartResponseHandler implements IResponseHandler{
     @Override
     public AggregateDto translate(AggregateRequestDto request, ObjectNode aggregations) throws IOException {
         List<Data> dataList = new ArrayList<>();
-        String requestId = request.getRequestId(); 
+//        String requestId = request.getRequestId();
         String visualizationCode = request.getVisualizationCode();
 
         JsonNode aggregationNode = aggregations.get(AGGREGATIONS);

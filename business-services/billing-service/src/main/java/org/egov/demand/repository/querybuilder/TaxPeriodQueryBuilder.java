@@ -157,7 +157,7 @@ public class TaxPeriodQueryBuilder {
 		
 		String baseQuery = "select exists (select * from egbs_taxperiod taxperiod where ";
 		StringBuilder whereClause = new StringBuilder();
-		Long currDate = new Date().getTime();
+//		Long currDate = new Date().getTime();
 		int count = 0;
 		
 		for (TaxPeriod taxPeriod : taxPeriodList) {

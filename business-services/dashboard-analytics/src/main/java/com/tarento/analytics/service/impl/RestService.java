@@ -55,7 +55,7 @@ public class RestService {
         LOGGER.info("Index Name : " + index); 
         LOGGER.info("Searching ES for Query: " + searchQuery); 
         HttpEntity<String> requestEntity = new HttpEntity<>(searchQuery, headers);
-        String reqBody = requestEntity.getBody();
+//        String reqBody = requestEntity.getBody();
         JsonNode responseNode = null;
 
         try {

@@ -44,9 +44,9 @@ public abstract class JdbcRepository {
         List<String> updateFields = new ArrayList<>();
         List<String> uniqueFields = new ArrayList<>();
 
-        String insertQuery = "";
+//        String insertQuery = "";
         String updateQuery = "";
-        String searchQuery = "";
+//        String searchQuery = "";
 
         try {
 
@@ -373,7 +373,7 @@ public abstract class JdbcRepository {
 
         String obName = ob.getClass().getSimpleName();
         List<String> identifierFields = allIdentitiferFields.get(obName);
-        List<Map<String, Object>> batchValues = new ArrayList<>();
+//        List<Map<String, Object>> batchValues = new ArrayList<>();
 
         // batchValues.get(0).putAll(paramValues(ob, allIdentitiferFields.get(obName)));
         Map<String, Object> paramValues = new HashMap<>();
@@ -386,7 +386,7 @@ public abstract class JdbcRepository {
         StringBuffer uniqueQuery = new StringBuffer(
                 "select count(*) as count from " + table + " where " + fieldName + "=:fieldValue");
         paramValues.put("fieldValue", getValue(getField(ob, fieldName), ob));
-        int i = 0;
+//        int i = 0;
         for (String s : identifierFields) {
 
             if (s.equalsIgnoreCase("tenantId")) {
@@ -414,7 +414,7 @@ public abstract class JdbcRepository {
 
         String obName = ob.getClass().getSimpleName();
         List<String> identifierFields = allIdentitiferFields.get(obName);
-        List<Map<String, Object>> batchValues = new ArrayList<>();
+//        List<Map<String, Object>> batchValues = new ArrayList<>();
 
         // batchValues.get(0).putAll(paramValues(ob, allIdentitiferFields.get(obName)));
         Map<String, Object> paramValues = new HashMap<>();
@@ -428,7 +428,7 @@ public abstract class JdbcRepository {
                 + "=:firstFieldValue" + " and " + secondFieldName + "=:secondFieldValue");
         paramValues.put("firstFieldValue", getValue(getField(ob, firstFieldName), ob));
         paramValues.put("secondFieldValue", getValue(getField(ob, secondFieldName), ob));
-        int i = 0;
+//        int i = 0;
         for (String s : identifierFields) {
 
             if (s.equalsIgnoreCase("tenantId")) {
