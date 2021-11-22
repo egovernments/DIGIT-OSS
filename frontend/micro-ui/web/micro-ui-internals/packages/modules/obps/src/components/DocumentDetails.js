@@ -28,12 +28,12 @@ const DocumentDetails = ({ documents }) => {
     <Fragment>
       {documents?.map(document => (
         <Fragment>
-        <Row labelStyle={{paddingTop:"10px",width:"100%"}} label={t(document?.title)} />
+        <Row labelStyle={{paddingTop:"10px",width:"100%"}} label={t(document?.title?.split('_')?.slice(0,2).join('_'))} />
         <div style={{ display: "flex", flexWrap: "wrap" }}>
         {document?.filestoreIdArray && document?.filestoreIdArray.map((filestoreId,index) => 
           <a target="_" href={pdfFiles[filestoreId]?.split(",")[0]} style={{ minWidth: "100px",marginRight:"10px" }} key={index}>
           <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />
-          <p style={{ marginTop: "8px",textAlign:"center" }}>{`${t(`ES_COMMON_DOC_DOCUMENT`)} - ${index + 1}`}</p>
+          <p style={{ marginTop: "8px",textAlign:"center" }}>{t(document?.title)}</p>
         </a>
         )  
         }

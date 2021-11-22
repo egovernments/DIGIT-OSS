@@ -352,7 +352,7 @@ const BpaApplicationDetail = () => {
               <div key={index}>
                 {doc.isNotDuplicate && <div> 
                 <StatusTable>
-                <Row label={t(doc?.documentType)}></Row>
+                <Row label={t(doc?.documentType?.split('_')?.slice(0,2).join('_'))}></Row>
                 <OBPSDocument value={detail?.additionalDetails?.values} Code={doc?.documentType} index={index}/> 
                 <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
                 </StatusTable>
