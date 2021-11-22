@@ -6,12 +6,14 @@ import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.TLRepository;
 import org.egov.tl.util.NotificationUtil;
+import org.egov.tl.util.TradeUtil;
 import org.egov.tl.web.models.*;
 import org.egov.tl.workflow.WorkflowIntegrator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import com.jayway.jsonpath.JsonPath;
 
 import java.util.*;
 
@@ -35,17 +37,20 @@ public class TLBatchService {
     private WorkflowIntegrator workflowIntegrator;
 
     private Producer producer;
+    
+    private TradeUtil tradeUtil;
 
     @Autowired
     public TLBatchService(NotificationUtil util, TLConfiguration config, TLRepository repository,
                           EnrichmentService enrichmentService, WorkflowIntegrator workflowIntegrator,
-                          Producer producer) {
+                          Producer producer, TradeUtil tradeUtil) {
         this.util = util;
         this.config = config;
         this.repository = repository;
         this.enrichmentService = enrichmentService;
         this.workflowIntegrator = workflowIntegrator;
         this.producer = producer;
+        this.tradeUtil=tradeUtil;
     }
 
 
@@ -65,15 +70,25 @@ public class TLBatchService {
     	List <String> tenantIdsFromRepository = repository.fetchTradeLicenseTenantIds();
 
         List <String> workflowCodes = Arrays.asList(config.getTlBusinessServices().split("\\s*,\\s*"));
-        
+
+        Map<String,Long>tenantIdToReminderPeriod = tradeUtil.getTenantIdToReminderPeriod(requestInfo);
+
         tenantIdsFromRepository.forEach(tenantIdFromRepository->{
 
         	try {
         	
         	Long validTill = System.currentTimeMillis();
 
-        	if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER))
-        		validTill = validTill + config.getReminderPeriod();
+        	if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER)) {
+        		
+        		if(tenantIdToReminderPeriod.containsKey(tenantIdFromRepository)) { 
+        			validTill = validTill + tenantIdToReminderPeriod.get(tenantIdFromRepository);
+        		}	
+        		else {
+        			validTill = validTill + config.getReminderPeriod();
+        		}
+        	}
+        	 
 
         	TradeLicenseSearchCriteria criteria = TradeLicenseSearchCriteria.builder()
                 .businessService(serviceName)
@@ -110,8 +125,10 @@ public class TLBatchService {
         				List<TradeLicense> licenses = enrichmentService.enrichTradeLicenseSearch(licensesWithWorkflowCode, criteria, requestInfo);
 
         				if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER))
-        				{sendReminderSMS(requestInfo, licenses);
-        				sendReminderEmail(requestInfo,licenses);}
+        				{
+        				sendReminderSMS(requestInfo, licenses);
+        				sendReminderEmail(requestInfo,licenses);
+        				}
 
         				else if(jobName.equalsIgnoreCase(JOB_EXPIRY))
         					expireLicenses(requestInfo, licenses);
