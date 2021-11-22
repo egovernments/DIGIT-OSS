@@ -37,6 +37,9 @@ public class SurveySearchCriteria {
     private String uuid;
 
     @JsonIgnore
+    private List<String> listOfSurveyIds;
+
+    @JsonIgnore
     private Boolean isCountCall = false;
 
 }

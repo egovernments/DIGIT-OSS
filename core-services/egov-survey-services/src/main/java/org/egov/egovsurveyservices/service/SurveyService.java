@@ -66,6 +66,8 @@ public class SurveyService {
     }
 
     public List<SurveyEntity> searchSurveys(SurveySearchCriteria criteria) {
+        List<String> listOfSurveyIds = surveyRepository.fetchSurveyUuids(criteria);
+        criteria.setListOfSurveyIds(listOfSurveyIds);
         List<SurveyEntity> surveyEntities = surveyRepository.fetchSurveys(criteria);
 
         if(CollectionUtils.isEmpty(surveyEntities))
