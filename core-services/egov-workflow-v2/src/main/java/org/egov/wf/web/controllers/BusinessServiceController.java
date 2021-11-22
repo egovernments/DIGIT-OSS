@@ -57,7 +57,7 @@ public class BusinessServiceController {
     @RequestMapping(value="/businessservice/_search", method = RequestMethod.POST)
     public ResponseEntity<BusinessServiceResponse> search(@Valid @ModelAttribute BusinessServiceSearchCriteria searchCriteria,
                                                           @Valid @RequestBody RequestInfoWrapper requestInfoWrapper) {
-
+        System.out.println("/businessservice/_search controller -->>"+searchCriteria.getBusinessServices()+"---tenantid--->>>"+searchCriteria.getTenantId());
         List<BusinessService> businessServices = businessMasterService.search(searchCriteria);
         BusinessServiceResponse response = BusinessServiceResponse.builder().businessServices(businessServices)
                 .responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(),true))
