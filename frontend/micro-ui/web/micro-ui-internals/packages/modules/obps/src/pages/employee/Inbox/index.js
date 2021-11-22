@@ -1,5 +1,5 @@
 import React, {Fragment, useCallback, useMemo, useReducer } from "react"
-import { InboxComposer, CaseIcon } from "@egovernments/digit-ui-react-components";
+import { InboxComposer, CaseIcon, Header } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import FilterFormFieldsComponent from "./FilterFormFieldsComponent";
 import SearchFormFieldsComponents from "./SearchFormFieldsComponent";
@@ -88,9 +88,6 @@ const Inbox = ({parentRoute}) => {
       let redirectBS = bService === "BPAREG"?"search/application/stakeholder":"search/application/bpa";
       return redirectBS;
   }
-
-    const { data: applicationTypesOfBPA, isLoading: loadingApplicationTypesOfBPA } = Digit.Hooks.obps.SearchMdmsTypes.useApplicationTypes(tenantId);
-
     const { data: localitiesForEmployeesCurrentTenant, isLoading: loadingLocalitiesForEmployeesCurrentTenant } = Digit.Hooks.useBoundaryLocalities(tenantId, "revenue", {}, t);
 
     const { isLoading: isInboxLoading, data: {table , statuses, totalCount} = {} } = Digit.Hooks.obps.useBPAInbox({
@@ -112,8 +109,8 @@ const Inbox = ({parentRoute}) => {
     const SearchFormFields = useCallback(({registerRef, searchFormState}) => <SearchFormFieldsComponents {...{registerRef, searchFormState}} />,[])
 
     const FilterFormFields = useCallback(
-      ({registerRef, controlFilterForm, setFilterFormValue, getFilterFormValue}) => <FilterFormFieldsComponent {...{statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState: formState?.filterForm, getFilterFormValue, applicationTypesOfBPA, loadingApplicationTypesOfBPA, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}} />
-    ,[statuses, isInboxLoading, applicationTypesOfBPA, loadingApplicationTypesOfBPA, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant])
+      ({registerRef, controlFilterForm, setFilterFormValue, getFilterFormValue}) => <FilterFormFieldsComponent {...{statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState: formState?.filterForm, getFilterFormValue, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}} />
+    ,[statuses, isInboxLoading, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant])
 
     const onSearchFormSubmit = (data) => {
       data.hasOwnProperty("") ? delete data?.[""] : null
@@ -135,7 +132,13 @@ const Inbox = ({parentRoute}) => {
 
     const propsForInboxMobileCards = useInboxMobileCardsData({parentRoute, table, getRedirectionLink})
 
-    return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable, propsForInboxMobileCards, formState}}></InboxComposer>
+    return<>
+      <Header>
+        {t("ES_COMMON_INBOX")}
+        {totalCount ? <p className="inbox-count">{totalCount}</p> : null}
+      </Header>
+     <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable, propsForInboxMobileCards, formState}}></InboxComposer>
+    </>
 }
 
 export default Inbox

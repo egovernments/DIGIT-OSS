@@ -2,10 +2,13 @@ import React, { useMemo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { OBPSIconSolidBg, EmployeeModuleCard } from "@egovernments/digit-ui-react-components";
 import { showHidingLinksForStakeholder, showHidingLinksForBPA } from "../../utils";
+import { useLocation } from "react-router-dom";
+
 const OBPSEmployeeHomeCard = () => {
 
     const [totalCount, setTotalCount] = useState(0);
     const { t } = useTranslation();
+    const location = useLocation()
   
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateCode = Digit.ULBService.getStateId();
@@ -72,7 +75,12 @@ const OBPSEmployeeHomeCard = () => {
     }
   }, [dataOfBPA, dataOfStakeholder]);
 
-  
+  useEffect(()=>{
+    if (location.pathname === "/digit-ui/employee"){
+      Digit.SessionStorage.del("OBPS.INBOX")
+      Digit.SessionStorage.del("STAKEHOLDER.INBOX")
+    }
+  },[location.pathname])
     const propsForModuleCard = useMemo(()=>({
       Icon: <OBPSIconSolidBg />,
       moduleName: t("MODULE_OBPS"),
@@ -125,7 +133,7 @@ const OBPSEmployeeHomeCard = () => {
       });
     }
   
-    return <EmployeeModuleCard {...propsForModuleCard} />
+    return checkingForBPARoles || checkingForStakeholderRoles ? <EmployeeModuleCard {...propsForModuleCard} /> : null
   }
 
   export default OBPSEmployeeHomeCard

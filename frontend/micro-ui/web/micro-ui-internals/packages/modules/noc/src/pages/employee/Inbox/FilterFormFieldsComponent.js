@@ -76,8 +76,8 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
             return <CheckBox
               onChange={(e) => e.target.checked ? changeItemCheckStatus([...props.value, status?.statusid]) : changeItemCheckStatus(props.value?.filter( id => id !== status?.statusid)) }
               checked={props.value?.includes(status?.statusid)}
-              label={t(`WF_${status.businessservice}_${status.applicationstatus.split('_').pop()}`)}
-            />}),[props.value, statuses])
+              label={`${t(`WF_${status.businessservice}_${status.applicationstatus.split('_').pop()}`)} (${status.count})`}
+            />}),[props.value, statuses, selectedBusinessService])
           return <>
             <div className="filter-label">{t("ACTION_TEST_APPLICATION_STATUS")}</div>
             {isInboxLoading ? <Loader /> : <>{renderStatusCheckBoxes}</>}

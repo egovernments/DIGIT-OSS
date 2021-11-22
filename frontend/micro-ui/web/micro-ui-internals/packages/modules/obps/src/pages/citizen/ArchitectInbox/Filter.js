@@ -53,11 +53,6 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
                 </svg>
               </span>
             </div>
-            {props.type === "desktop" && (
-              <span className="clear-search" onClick={clearAll}>
-                {t("ES_COMMON_CLEAR_ALL")}
-              </span>
-            )}
             {props.type === "mobile" && (
               <span onClick={onClose}>
                 <CloseSvg />

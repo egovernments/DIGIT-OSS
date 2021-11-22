@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback, useMemo, useReducer } from "react"
-import { InboxComposer, CaseIcon } from "@egovernments/digit-ui-react-components";
+import { InboxComposer, CaseIcon, Header } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import FilterFormFieldsComponent from "./FilterFormFieldsComponent";
 import SearchFormFieldsComponents from "./SearchFormFieldsComponent";
@@ -118,7 +118,13 @@ const Inbox = ({ parentRoute }) => {
 
   const propsForInboxMobileCards = useInboxMobileCardsData({ parentRoute, table })
 
-  return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable, propsForInboxMobileCards, formState }}></InboxComposer>
+  return <>
+    <Header>
+      {t("ES_COMMON_INBOX")}
+      {totalCount ? <p className="inbox-count">{totalCount}</p> : null}
+    </Header>
+    <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable, propsForInboxMobileCards, formState }}></InboxComposer>
+  </>
 }
 
 export default Inbox

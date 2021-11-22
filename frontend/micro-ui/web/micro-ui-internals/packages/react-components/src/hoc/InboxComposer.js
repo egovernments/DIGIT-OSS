@@ -82,7 +82,10 @@ const InboxComposer = ({
     </div>
 
     const MobileComponentDirectory = {
-        SearchFormComponent: () => <SearchForm onSubmit={onSearchFormSubmit} handleSubmit={handleSearchFormSubmit} id="search-form" className="rm-mb form-field-flex-one inboxPopupMobileWrapper" >
+        SearchFormComponent: () => <SearchForm onSubmit={({...props}) => {
+            closeMobilePopupModal()
+            onSearchFormSubmit({...props})
+        }} handleSubmit={handleSearchFormSubmit} id="search-form" className="rm-mb form-field-flex-one inboxPopupMobileWrapper" >
             <MobilePopUpCloseButton />
             <SearchFormFields registerRef={registerSearchFormField} searchFormState={searchFormState} />
             <SearchField className="submit">
@@ -90,7 +93,10 @@ const InboxComposer = ({
                 <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
             </SearchField>
         </SearchForm>,
-        FilterFormComponent: () => <FilterForm onSubmit={onFilterFormSubmit} closeButton={() => <MobilePopUpCloseButton />} handleSubmit={handleFilterFormSubmit} id="filter-form" onResetFilterForm={onResetFilterForm} className="inboxPopupMobileWrapper p-unset">
+        FilterFormComponent: () => <FilterForm onSubmit={({...props}) => {
+            closeMobilePopupModal()
+            onFilterFormSubmit({...props})
+        }} closeButton={() => <MobilePopUpCloseButton />} handleSubmit={handleFilterFormSubmit} id="filter-form" onResetFilterForm={onResetFilterForm} className="inboxPopupMobileWrapper p-unset">
             <FilterFormFields registerRef={registerFilterFormField} {...{ controlFilterForm, handleFilterFormSubmit, setFilterFormValue, getFilterFormValue }} />
         </FilterForm>
     }

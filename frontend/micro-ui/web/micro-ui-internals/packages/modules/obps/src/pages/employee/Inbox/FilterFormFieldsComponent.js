@@ -3,18 +3,15 @@ import { FilterFormField, Loader, RadioButtons, Localities, RemoveableTag, Dropd
 import { Controller, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState, getFilterFormValue, applicationTypesOfBPA, loadingApplicationTypesOfBPA,  localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}) => {
+const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState, getFilterFormValue, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant }) => {
   const { t } = useTranslation()
-  const tenantId = Digit.ULBService.getStateId();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const { data: applicationTypesOfBPA, isLoading: loadingApplicationTypesOfBPA } = Digit.Hooks.obps.SearchMdmsTypes.useApplicationTypes(tenantId);
+
   const availableOptions = [
     { code: "ASSIGNED_TO_ME", name: `${t("ES_INBOX_ASSIGNED_TO_ME")}` },
     { code: "ASSIGNED_TO_ALL", name: `${t("ES_INBOX_ASSIGNED_TO_ALL")}` },
   ];
-
-  applicationTypesOfBPA?.forEach(type => {
-    type.name = t(`WF_BPA_${type.code}`);
-    type.i18nKey = t(`WF_BPA_${type.code}`);
-  });
   
   const selectedApplicationType = useWatch({control: controlFilterForm, name: "applicationType", defaultValue: null});
   const availableBusinessServicesOptions = Digit.Hooks.obps.useBusinessServiceBasedOnServiceType({applicationType: selectedApplicationType})
@@ -114,6 +111,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
               <div className="filter-label">{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</div>
               {applicationTypesOfBPA.map(applicationType => {
                 return <CheckBox
+                  key={applicationType.code}
                   onChange={(e) => selectCheckbox({e, applicationType, onChange: props.onChange, values: props.value})}
                   checked={isChecked(props.value, applicationType)}
                   label={t(applicationType?.i18nKey)}
@@ -157,7 +155,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
               key={index}
               onChange={(e) => e.target.checked ? changeItemCheckStatus([...props.value, status?.statusid]) : changeItemCheckStatus(props.value?.filter( id => id !== status?.statusid)) }
               checked={props.value?.includes(status?.statusid)}
-              label={t(`WF_${status.businessservice}_${status.applicationstatus}`)}
+              label={`${t(`WF_${status.businessservice}_${status.applicationstatus}`)} (${status.count})`}
             />}),[props.value, statuses, selectedBusinessService])
           return <>
             {isInboxLoading ? <Loader /> : <>{renderStatusCheckBoxes}</>}

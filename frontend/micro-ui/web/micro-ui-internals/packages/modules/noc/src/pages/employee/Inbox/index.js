@@ -1,5 +1,5 @@
 import React, {Fragment, useCallback, useMemo, useReducer} from "react"
-import { InboxComposer, ComplaintIcon } from "@egovernments/digit-ui-react-components";
+import { InboxComposer, ComplaintIcon, Header } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import SearchFormFieldsComponents from "./SearchFormFieldsComponent";
 import FilterFormFieldsComponent from "./FilterFormFieldsComponent";
@@ -34,19 +34,19 @@ const Inbox = ({parentRoute}) => {
     function formReducer(state, payload) {
       switch(payload.action){
         case "mutateSearchForm":
-          Digit.SessionStorage.set("OBPS.INBOX", {...state, searchForm: payload.data})
+          Digit.SessionStorage.set("NOC.INBOX", {...state, searchForm: payload.data})
           return {...state, searchForm: payload.data};
         case "mutateFilterForm":
-          Digit.SessionStorage.set("OBPS.INBOX", {...state, filterForm: payload.data})
+          Digit.SessionStorage.set("NOC.INBOX", {...state, filterForm: payload.data})
           return {...state, filterForm: payload.data};
         case "mutateTableForm":
-          Digit.SessionStorage.set("OBPS.INBOX", {...state, tableForm: payload.data})
+          Digit.SessionStorage.set("NOC.INBOX", {...state, tableForm: payload.data})
           return {...state, tableForm: payload.data};
         default:
           console.warn("dispatched action has nothing to reduce")
       }
     }
-    const InboxObjectInSessionStorage = Digit.SessionStorage.get("OBPS.INBOX")
+    const InboxObjectInSessionStorage = Digit.SessionStorage.get("NOC.INBOX")
     
     const onSearchFormReset = (setSearchFormValue) =>{
       setSearchFormValue("sourceRefId", null);
@@ -126,7 +126,13 @@ const Inbox = ({parentRoute}) => {
 
     const propsForInboxMobileCards = useInboxMobileCardsData({parentRoute, table})
 
-    return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable, propsForInboxMobileCards, formState}}></InboxComposer>
+    return <>
+      <Header>
+        {t("ES_COMMON_INBOX")}
+        {totalCount ? <p className="inbox-count">{totalCount}</p> : null}
+      </Header>
+      <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable, propsForInboxMobileCards, formState}}></InboxComposer>
+    </>
 }
 
 export default Inbox
