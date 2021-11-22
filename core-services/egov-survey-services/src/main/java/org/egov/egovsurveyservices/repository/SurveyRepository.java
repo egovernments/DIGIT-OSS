@@ -101,4 +101,18 @@ public class SurveyRepository {
 
         return jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
     }
+
+    public List<String> fetchSurveyUuids(SurveySearchCriteria criteria) {
+        List<Object> preparedStmtList = new ArrayList<>();
+
+        if(CollectionUtils.isEmpty(criteria.getTenantIds()) && ObjectUtils.isEmpty(criteria.getUuid()))
+            return new ArrayList<>();
+
+        criteria.setIsCountCall(Boolean.FALSE);
+
+        String query = surveyQueryBuilder.getSurveyUuidsQuery(criteria, preparedStmtList);
+        log.info("query for uuids search: " + query + " params: " + preparedStmtList);
+
+        return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
+    }
 }

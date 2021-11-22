@@ -26,7 +26,7 @@ public class SurveyQueryBuilder {
 
     private static final String QUESTION_SELECT_VALUES = " question.uuid as quuid, question.surveyid as qsurveyid, question.questionstatement as qstatement, question.options as qoptions, question.status as qstatus, question.type as qtype, question.required as qrequired, question.createdby as qcreatedby, question.lastmodifiedby as qlastmodifiedby, question.createdtime as qcreatedtime, question.lastmodifiedtime as qlastmodifiedtime ";
 
-    public static final String SURVEY_COUNT_WRAPPER = " SELECT COUNT(DISTINCT suuid) FROM ({INTERNAL_QUERY}) AS count ";
+    public static final String SURVEY_COUNT_WRAPPER = " SELECT COUNT(suuid) FROM ({INTERNAL_QUERY}) AS count ";
 
     public String getSurveySearchQuery(SurveySearchCriteria criteria, List<Object> preparedStmtList){
         StringBuilder query = new StringBuilder(SELECT);
@@ -36,43 +36,14 @@ public class SurveyQueryBuilder {
         query.append(INNER_JOIN);
         query.append(" eg_ss_question question ON survey.uuid = question.surveyid ");
 
-        if(!CollectionUtils.isEmpty(criteria.getTenantIds())){
+        if(!CollectionUtils.isEmpty(criteria.getListOfSurveyIds())){
             addClauseIfRequired(query, preparedStmtList);
-            query.append(" survey.tenantid IN ( ").append(createQuery(criteria.getTenantIds())).append(" )");
-            addToPreparedStatement(preparedStmtList, criteria.getTenantIds());
+            query.append(" survey.uuid IN ( ").append(createQuery(criteria.getListOfSurveyIds())).append(" )");
+            addToPreparedStatement(preparedStmtList, criteria.getListOfSurveyIds());
         }
-        if(!ObjectUtils.isEmpty(criteria.getTitle())){
-            addClauseIfRequired(query, preparedStmtList);
-            query.append(" survey.title ILIKE ? ");
-            preparedStmtList.add("%" + criteria.getTitle() + "%");
-        }
-        if(!ObjectUtils.isEmpty(criteria.getPostedBy())){
-            addClauseIfRequired(query, preparedStmtList);
-            query.append(" survey.postedby ILIKE ? ");
-            preparedStmtList.add("%" + criteria.getPostedBy() + "%");
-        }
-        if(!ObjectUtils.isEmpty(criteria.getStatus())){
-            addClauseIfRequired(query, preparedStmtList);
-            query.append(" survey.status = ? ");
-            preparedStmtList.add(criteria.getStatus());
-        }
-        if(!ObjectUtils.isEmpty(criteria.getUuid())){
-            addClauseIfRequired(query, preparedStmtList);
-            query.append(" survey.uuid = ? ");
-            preparedStmtList.add(criteria.getUuid());
-        }
-        // Fetch surveys which have NOT been soft deleted
-        addClauseIfRequired(query, preparedStmtList);
-        query.append(" survey.active = ? ");
-        preparedStmtList.add(Boolean.TRUE);
 
         // order surveys based on their createdtime in latest first manner
         query.append(ORDERBY_CREATEDTIME);
-
-        // Pagination to limit results, do not paginate query in case of count call.
-        if(!criteria.getIsCountCall())
-            addPagination(query, preparedStmtList, criteria);
-
 
         return query.toString();
     }
@@ -168,7 +139,51 @@ public class SurveyQueryBuilder {
     }
 
     public String getSurveyCountQuery(SurveySearchCriteria criteria, List<Object> preparedStmtList) {
-        String query = getSurveySearchQuery(criteria, preparedStmtList);
+        String query = getSurveyUuidsQuery(criteria, preparedStmtList);
         return SURVEY_COUNT_WRAPPER.replace("{INTERNAL_QUERY}", query);
+    }
+
+    public String getSurveyUuidsQuery(SurveySearchCriteria criteria, List<Object> preparedStmtList) {
+        StringBuilder query = new StringBuilder(SELECT + " DISTINCT survey.uuid as suuid ");
+        query.append(" FROM eg_ss_survey survey ");
+
+        if(!CollectionUtils.isEmpty(criteria.getTenantIds())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" survey.tenantid IN ( ").append(createQuery(criteria.getTenantIds())).append(" )");
+            addToPreparedStatement(preparedStmtList, criteria.getTenantIds());
+        }
+        if(!ObjectUtils.isEmpty(criteria.getTitle())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" survey.title ILIKE ? ");
+            preparedStmtList.add("%" + criteria.getTitle() + "%");
+        }
+        if(!ObjectUtils.isEmpty(criteria.getPostedBy())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" survey.postedby ILIKE ? ");
+            preparedStmtList.add("%" + criteria.getPostedBy() + "%");
+        }
+        if(!ObjectUtils.isEmpty(criteria.getStatus())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" survey.status = ? ");
+            preparedStmtList.add(criteria.getStatus());
+        }
+        if(!ObjectUtils.isEmpty(criteria.getUuid())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" survey.uuid = ? ");
+            preparedStmtList.add(criteria.getUuid());
+        }
+        // Fetch surveys which have NOT been soft deleted
+        addClauseIfRequired(query, preparedStmtList);
+        query.append(" survey.active = ? ");
+        preparedStmtList.add(Boolean.TRUE);
+
+        // order surveys based on their createdtime in latest first manner
+        query.append(ORDERBY_CREATEDTIME);
+
+        // Pagination to limit results, do not paginate query in case of count call.
+        if(!criteria.getIsCountCall())
+            addPagination(query, preparedStmtList, criteria);
+
+        return query.toString();
     }
 }
