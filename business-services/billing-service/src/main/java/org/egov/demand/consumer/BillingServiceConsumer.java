@@ -174,7 +174,7 @@ public class BillingServiceConsumer {
 		
 		DocumentContext context = JsonPath.parse(objectMapper.writeValueAsString(consumerRecord));
 		
-		//context = JsonPath.parse(objectMapper.writeValueAsString(consumerRecord));
+		context = JsonPath.parse(objectMapper.writeValueAsString(consumerRecord));
 
 		String paymentId = objectMapper.convertValue(context.read("$.Payment.id"), String.class);
 		List<BigDecimal> amtPaidList = Arrays.asList(objectMapper.convertValue(context.read("$.Payment.paymentDetails.*.totalAmountPaid"), BigDecimal[].class));
