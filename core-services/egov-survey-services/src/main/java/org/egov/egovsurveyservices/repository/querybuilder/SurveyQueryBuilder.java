@@ -26,7 +26,9 @@ public class SurveyQueryBuilder {
 
     private static final String QUESTION_SELECT_VALUES = " question.uuid as quuid, question.surveyid as qsurveyid, question.questionstatement as qstatement, question.options as qoptions, question.status as qstatus, question.type as qtype, question.required as qrequired, question.createdby as qcreatedby, question.lastmodifiedby as qlastmodifiedby, question.createdtime as qcreatedtime, question.lastmodifiedtime as qlastmodifiedtime ";
 
-    public static final String SURVEY_COUNT_WRAPPER = " SELECT COUNT(suuid) FROM ({INTERNAL_QUERY}) AS count ";
+    public static final String SURVEY_COUNT_WRAPPER = " SELECT COUNT(uuid) FROM ({INTERNAL_QUERY}) AS count ";
+
+    public static final String SURVEY_UUIDS_QUERY_WRAPPER = " SELECT uuid FROM ({HELPER_TABLE}) temp ";
 
     public String getSurveySearchQuery(SurveySearchCriteria criteria, List<Object> preparedStmtList){
         StringBuilder query = new StringBuilder(SELECT);
@@ -40,6 +42,12 @@ public class SurveyQueryBuilder {
             addClauseIfRequired(query, preparedStmtList);
             query.append(" survey.uuid IN ( ").append(createQuery(criteria.getListOfSurveyIds())).append(" )");
             addToPreparedStatement(preparedStmtList, criteria.getListOfSurveyIds());
+        }
+
+        if(!ObjectUtils.isEmpty(criteria.getUuid())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" survey.uuid = ? ");
+            preparedStmtList.add(criteria.getUuid());
         }
 
         // order surveys based on their createdtime in latest first manner
@@ -144,7 +152,7 @@ public class SurveyQueryBuilder {
     }
 
     public String getSurveyUuidsQuery(SurveySearchCriteria criteria, List<Object> preparedStmtList) {
-        StringBuilder query = new StringBuilder(SELECT + " DISTINCT survey.uuid as suuid ");
+        StringBuilder query = new StringBuilder(SELECT + " DISTINCT(survey.uuid), survey.createdtime ");
         query.append(" FROM eg_ss_survey survey ");
 
         if(!CollectionUtils.isEmpty(criteria.getTenantIds())){
@@ -184,6 +192,6 @@ public class SurveyQueryBuilder {
         if(!criteria.getIsCountCall())
             addPagination(query, preparedStmtList, criteria);
 
-        return query.toString();
+        return SURVEY_UUIDS_QUERY_WRAPPER.replace("{HELPER_TABLE}", query.toString());
     }
 }
