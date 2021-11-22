@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -49,7 +50,7 @@ public class BusinessServiceRepository {
 
     public List<BusinessService> getBusinessServices(BusinessServiceSearchCriteria criteria){
         String query;
-
+        log.info("criteria--->>"+criteria.getTenantId()+"-->busnessservie"+criteria.getBusinessServices()+"--actionuuids-->>"+criteria.getActionUuids()+"--->>stateuuids--->>"+criteria.getStateUuids());
         List<String> stateLevelBusinessServices = new LinkedList<>();
         List<String> tenantBusinessServices = new LinkedList<>();
 
@@ -64,23 +65,29 @@ public class BusinessServiceRepository {
                     tenantBusinessServices.add(businessService);
             });
         }
-
+        
         List<BusinessService> searchResults = new LinkedList<>();
-
+        log.info("stateLevelBusinessServices-->>>"+stateLevelBusinessServices.stream().collect(Collectors.joining(",")));
+        log.info("tenantBusinessServices-->>>"+tenantBusinessServices.stream().collect(Collectors.joining(",")));
         if(!CollectionUtils.isEmpty(stateLevelBusinessServices)){
             BusinessServiceSearchCriteria stateLevelCriteria = new BusinessServiceSearchCriteria();
             stateLevelCriteria.setTenantId(criteria.getTenantId().split("\\.")[0]);
             stateLevelCriteria.setBusinessServices(stateLevelBusinessServices);
+            log.info("criteria--->>"+stateLevelCriteria.getTenantId()+"-->busnessservie"+stateLevelCriteria.getBusinessServices());
             List<Object> stateLevelPreparedStmtList = new ArrayList<>();
+            log.info("--->>>state Level business service--->>>>");
             query = queryBuilder.getBusinessServices(stateLevelCriteria, stateLevelPreparedStmtList);
+            log.info("--->>>query--->>>>"+query);
             searchResults.addAll(jdbcTemplate.query(query, stateLevelPreparedStmtList.toArray(), rowMapper));
         }
         if(!CollectionUtils.isEmpty(tenantBusinessServices)){
             BusinessServiceSearchCriteria tenantLevelCriteria = new BusinessServiceSearchCriteria();
             tenantLevelCriteria.setTenantId(criteria.getTenantId());
             tenantLevelCriteria.setBusinessServices(tenantBusinessServices);
+            log.info("criteria--->>"+tenantLevelCriteria.getTenantId()+"-->busnessservie"+tenantLevelCriteria.getBusinessServices());
             List<Object> tenantLevelPreparedStmtList = new ArrayList<>();
             query = queryBuilder.getBusinessServices(tenantLevelCriteria, tenantLevelPreparedStmtList);
+            log.info("--->>>query--->>>>"+query);
             searchResults.addAll(jdbcTemplate.query(query, tenantLevelPreparedStmtList.toArray(), rowMapper));
         }
 
