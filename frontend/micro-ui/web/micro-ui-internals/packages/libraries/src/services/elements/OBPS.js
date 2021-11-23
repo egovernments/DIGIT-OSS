@@ -427,6 +427,7 @@ export const OBPSService = {
 
     let applicationDetailsInfo = {
       title: " ",
+      isCommon: true,
       values: [
         { title: "BPA_APPLICATION_NUMBER_LABEL", value: BPA?.applicationNo || "NA" }
       ]
@@ -439,6 +440,7 @@ export const OBPSService = {
 
     let PermitConditions = {
       title:"BPA_PERMIT_CONDITIONS",
+      isTitleVisible: permitcondn?.length > 0 ? false : true,
       additionalDetails:{
         inspectionReport:[],
         permit:[...permitcondn]
@@ -455,6 +457,7 @@ export const OBPSService = {
       title: "BPA_BASIC_DETAILS_TITLE",
       asSectionHeader: true,
       isInsert: true,
+      isCommon: true,
       values: [
         { title: "BPA_BASIC_DETAILS_APP_DATE_LABEL", value: BPA?.auditDetails?.createdTime ? format(new Date(BPA?.auditDetails?.createdTime), 'dd/MM/yyyy') : '' },
         { title: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL", value: `WF_BPA_${edcr?.appliactionType}` },
@@ -468,6 +471,7 @@ export const OBPSService = {
     const plotDetails =  {
       title: "BPA_PLOT_DETAILS_TITLE",
       asSectionHeader: true,
+      isCommon: true,
       values: [
         { title: "BPA_BOUNDARY_PLOT_AREA_LABEL", value: `${edcr?.planDetail?.planInformation?.plotArea} sq.ft` || "NA", isNotTranslated: true   },
         { title: "BPA_PLOT_NUMBER_LABEL", value: edcr?.planDetail?.planInformation?.plotNo || "NA", isNotTranslated: true  },
@@ -479,6 +483,7 @@ export const OBPSService = {
 
     const scrutinyDetails = {
       title: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
+      isScrutinyDetails: true,
       additionalDetails: {
         values: [
           { title: "BPA_EDCR_DETAILS", value: " " },
@@ -493,6 +498,7 @@ export const OBPSService = {
 
     const buildingExtractionDetails = {
       title: "",
+      isScrutinyDetails: true,
       additionalDetails: {
         values: [
           { title: "BPA_BUILDING_EXTRACT_HEADER", value : " "},
@@ -506,6 +512,7 @@ export const OBPSService = {
 
     const demolitionAreaDetails = {
       title: "",
+      isScrutinyDetails: true,
       additionalDetails: {
         values: [
           { title: "BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL", value : " "},
@@ -517,6 +524,7 @@ export const OBPSService = {
 
     const subOccupancyTableDetails = {
       title: "",
+      isSubOccupancyTable: true,
       additionalDetails: {
         values: [
           { title: "BPA_OCC_SUBOCC_HEADER", value : " "} 
@@ -530,6 +538,7 @@ export const OBPSService = {
     const addressDetails = {
       title: "BPA_NEW_TRADE_DETAILS_HEADER_DETAILS",
       asSectionHeader: true,
+      isCommon: true,
       values: [
         { title: "BPA_DETAILS_PIN_LABEL", value: BPA?.landInfo?.address?.pincode },
         { title: "BPA_CITY_LABEL", value: BPA?.landInfo?.address?.city },
@@ -543,6 +552,7 @@ export const OBPSService = {
     const checkOwnerLength = BPA?.landInfo?.owners?.length || 1;
     const ownerDetails = {
       title: "BPA_APPLICANT_DETAILS_HEADER",
+      isOwnerDetails: true,
       additionalDetails: {
         owners: BPA?.landInfo?.owners?.map((owner, index) => {
           return {
@@ -560,6 +570,7 @@ export const OBPSService = {
     const documentDetails =  {
       title: "BPA_DOCUMENT_DETAILS_LABEL",
       asSectionHeader: true,
+      isDocumentDetails: true,
       additionalDetails: {
         obpsDocuments: [{
           title: "",
@@ -586,7 +597,9 @@ export const OBPSService = {
       
       approvalChecksDetails = {
         title: "BPA_PERMIT_CONDITIONS",
+        isTitleVisible: approvalChecks?.length > 0 ? false : true,
         asSectionHeader: true,
+        isPermissions: true,
         additionalDetails: {
           permissions: approvalChecks
         }
@@ -621,9 +634,10 @@ export const OBPSService = {
 
     const fiReports = {
       title: "",
+      isFieldInspection: true,
       additionalDetails: {
         values: [],
-        fiReport : true
+        fiReport : BPA?.additionalDetails?.fieldinspection_pending?.length > 0 ? true : false
       }
     }
 

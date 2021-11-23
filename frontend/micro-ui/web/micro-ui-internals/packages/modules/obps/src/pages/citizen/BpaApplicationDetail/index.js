@@ -82,6 +82,7 @@ const BpaApplicationDetail = () => {
       title:"BPA_FEE_DETAILS_LABEL",
       additionalDetails:{
         inspectionReport:[],
+        isFeeDetails: true,
         values:[...payval]
       }
     })
@@ -315,119 +316,144 @@ const BpaApplicationDetail = () => {
     workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "INITIATE");
     workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "ADHOC");
   };
-  
+
+  data.applicationDetails = data?.applicationDetails?.length > 0 && data?.applicationDetails?.filter(bpaData => Object.keys(bpaData).length !== 0);
+
   return (
     <Fragment>
-      <div className="cardHeaderWithOptions" style={{marginRight:"auto",maxWidth:"960px"}}>
-      <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
-      {dowloadOptions && dowloadOptions.length>0 && <MultiLink
+      <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
+        <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
+        {dowloadOptions && dowloadOptions.length > 0 && <MultiLink
           className="multilinkWrapper"
           onHeadClick={() => setShowOptions(!showOptions)}
           displayOptions={showOptions}
           options={dowloadOptions}
-          
+
         />}
-        </div>
-      {data?.applicationDetails?.filter((ob) => Object.keys(ob).length>0).map((detail, index, arr) => {
-       return (
-          <Card key={index} style={!detail?.additionalDetails?.fiReport && detail?.title === ""?{marginTop:"-50px"}:{}}>
-            {data?.applicationData?.additionalDetails?.fieldinspection_pending?.length > 0 && detail?.additionalDetails?.fiReport && <InspectionReport isCitizen={true} fiReport={data?.applicationData?.additionalDetails?.fieldinspection_pending} />}
-            <CardHeader>{t(detail?.title)}</CardHeader>
-            <StatusTable>
-              {!(detail?.additionalDetails?.noc) && detail?.values?.map((value) => (
-                <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value , value?.isNotTranslated) || t("CS_NA")} />
-              ))}
-              {detail?.additionalDetails?.owners && detail?.additionalDetails?.owners.map((owner,index) => (
-                <div key={index}>
-                <Row className="border-none" label={`${t("Owner")} - ${index+1}`} />
-                {owner?.values.map((value) =>(
-                  <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value , value?.isNotTranslated) || t("CS_NA")} />
-                ))}
-                </div>
-              ))}
-              {!(detail?.additionalDetails?.FIdocuments) && !(detail?.additionalDetails?.subOccupancyTableDetails) && detail?.additionalDetails?.values && detail?.additionalDetails?.values?.map((value) => (
-                <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value , value?.isNotTranslated) || t("CS_NA")} />
-              ))}
-              {detail?.additionalDetails?.FIdocuments && detail?.additionalDetails?.values && detail?.additionalDetails?.values?.map((doc,index) => (
-              <div key={index}>
-                {doc.isNotDuplicate && <div> 
-                <StatusTable>
-                <Row label={t(doc?.documentType?.split('_')?.slice(0,2).join('_'))}></Row>
-                <OBPSDocument value={detail?.additionalDetails?.values} Code={doc?.documentType} index={index}/> 
-                <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
-                </StatusTable>
-                </div>}
-             </div>
-          )) }
-              {detail?.additionalDetails?.subOccupancyTableDetails && <SubOccupancyTable edcrDetails={detail?.additionalDetails} applicationData={data?.applicationData} />}
-        {detail?.additionalDetails?.noc && detail?.additionalDetails?.noc.map((nocob, ind) => (
-        // <div key={ind} style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px" }}>
-        <div key={ind}>
-        <StatusTable>
-        <Row className="border-none" label={t(`${`BPA_${detail?.additionalDetails?.data?.nocType}_HEADER`}`)}></Row>
-        <Row className="border-none" label={t(`${detail?.values?.[0]?.title}`)} textStyle={{marginLeft:"10px"}} text={getTranslatedValues(detail?.values?.[0]?.value , detail?.values?.[0]?.isNotTranslated)} />
-        <Row className="border-none" label={t(`${detail?.values?.[1]?.title}`)} textStyle={detail?.values?.[1]?.value == "APPROVED" || detail?.values?.[1]?.value == "AUTO_APPROVED" ? {marginLeft:"10px", color: "#00703C"} : {marginLeft:"10px", color: "#D4351C"}} text={getTranslatedValues(detail?.values?.[1]?.value , detail?.values?.[1]?.isNotTranslated)} />
-        <Row className="border-none" label={t(`${detail?.values?.[2]?.title}`)} textStyle={{marginLeft:"10px"}} text={getTranslatedValues(detail?.values?.[2]?.value , detail?.values?.[2]?.isNotTranslated)} />
-        <Row className="border-none" label={t(`${nocob?.title}`)}></Row>
-        </StatusTable>
-        <StatusTable>
-        {nocob?.values ? <OBPSDocument value={nocob?.values} Code={nocob?.values?.[0]?.documentType?.split("_")[0]} index={ind} isNOC={true}/>:
-        <div><CardText>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</CardText></div> }
-        <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
-        </StatusTable>
-        </div>
-      ))}
-              {detail?.additionalDetails?.obpsDocuments?.[0]?.values && (
-                <Fragment>
-                  <Row className="border-none" label={t(detail?.additionalDetails?.obpsDocuments?.[0].title)} />
-                  <DocumentDetails documents={getOrderedDocs(detail?.additionalDetails?.obpsDocuments?.[0]?.values)} />
-                </Fragment>
-              )}
-              {detail?.additionalDetails?.scruntinyDetails &&
-                // <DocumentDetails documents={detail?.additionalDetails?.scruntinyDetails} />
-                detail?.additionalDetails?.scruntinyDetails.map((scrutiny) => (
-                  <Fragment>
-                    <Row className="border-none" label={t(scrutiny?.title)} />
-                    <LinkButton 
-                      onClick={() => downloadDiagram(scrutiny?.value)} 
-                      label={<PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />}>
-                    </LinkButton>
-                    <Row className="border-none" label={t(scrutiny?.text)} labelStyle={{fontSize: "14px", color: "#505A5F", fontWeight:"400"}} />
-                  </Fragment>
-                ))}
-            </StatusTable>
-            {index === arr.length - 1 && (
-              <Fragment>
-                <BPAApplicationTimeline application={data?.applicationData} id={id} />
-                {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && !isFromSendBack && checkBoxVisible && (
-                  <CheckBox
-                    styles={{ margin: "20px 0 40px" }}
-                    checked={isTocAccepted}
-                    // label={`${t(`BPA_CITIZEN_1_DECLARAION_LABEL`)}${t(`BPA_CITIZEN_2_DECLARAION_LABEL`)}`}
-                    label={getCheckBoxLabelData(t, data?.applicationData, workflowDetails?.data?.nextActions)}
-                    onChange={() => {setIsTocAccepted(!isTocAccepted); isTocAccepted?setDisplayMenu(!isTocAccepted):"" }}
-                  />
-                )}
-                {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
-                  <ActionBar style={{position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px"}}>
-                  <div style={{width: "100%"}}>
-                    {displayMenu && workflowDetails?.data?.nextActions ? (
-                      <Menu
-                        style={{ bottom: "37px", minWidth: "240px", maxWidth: "310px", width: "100%", right: "0px"  }}
-                        localeKeyPrefix={"WF_BPA"}
-                        options={workflowDetails?.data?.nextActions.map((action) => action.action)}
-                        t={t}
-                        onSelect={onActionSelect}
-                      />
-                    ) : null}
-                    <SubmitBar style={{width: "100%"}} disabled={checkForSubmitDisable(isFromSendBack, isTocAccepted)} label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+      </div>
+      {data?.applicationDetails?.filter((ob) => Object.keys(ob).length > 0).map((detail, index, arr) => {
+
+        return (
+          <div>
+            <Card key={index} style={!detail?.additionalDetails?.fiReport && detail?.title === "" ? { marginTop: "-50px" } : {}}>
+
+              {!detail?.isTitleVisible ? <CardHeader>{t(detail?.title)}</CardHeader> : null}
+
+              <StatusTable>
+                {/* to get common values */}
+                {(detail?.isCommon && detail?.values?.length > 0) ? detail?.values?.map((value) => (
+                  <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
+                )) : null}
+
+                {/* to get additional common values */}
+                {detail?.additionalDetails?.values?.length > 0 ? detail?.additionalDetails?.values?.map((value) => (
+                  <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
+                )) : null}
+
+                {/* to get subOccupancyValues values */}
+                {(detail?.isSubOccupancyTable && detail?.additionalDetails?.subOccupancyTableDetails) ? <SubOccupancyTable edcrDetails={detail?.additionalDetails} applicationData={data?.applicationData} /> : null}
+
+                {/* to get Scrutiny values */}
+                {(detail?.isScrutinyDetails && detail?.additionalDetails?.scruntinyDetails?.length > 0) ?
+                  detail?.additionalDetails?.scruntinyDetails.map((scrutiny) => (
+                    <Fragment>
+                      <Row className="border-none" label={t(scrutiny?.title)} />
+                      <LinkButton
+                        onClick={() => downloadDiagram(scrutiny?.value)}
+                        label={<PDFSvg style={{ background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />}>
+                      </LinkButton>
+                      <Row className="border-none" label={t(scrutiny?.text)} labelStyle={{ fontSize: "14px", color: "#505A5F", fontWeight: "400" }} />
+                    </Fragment>
+                  )) : null}
+
+                {/* to get Owner values */}
+                {(detail?.isOwnerDetails && detail?.additionalDetails?.owners?.length > 0) ? detail?.additionalDetails?.owners.map((owner, index) => (
+                  <div key={index}>
+                    <Row className="border-none" label={`${t("Owner")} - ${index + 1}`} />
+                    {owner?.values.map((value) => (
+                      <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
+                    ))}
                   </div>
-                  </ActionBar>
+                )) : null}
+
+                {/* to get Document values */}
+                {(detail?.isDocumentDetails && detail?.additionalDetails?.obpsDocuments?.[0]?.values) && (
+                  <Fragment>
+                    <Row className="border-none" label={t(detail?.additionalDetails?.obpsDocuments?.[0].title)} />
+                    <DocumentDetails documents={getOrderedDocs(detail?.additionalDetails?.obpsDocuments?.[0]?.values)} />
+                  </Fragment>
                 )}
-              </Fragment>
+
+                {/* to get FieldInspection values */}
+                {(detail?.isFieldInspection && data?.applicationData?.additionalDetails?.fieldinspection_pending?.length > 0) ? <InspectionReport isCitizen={true} fiReport={data?.applicationData?.additionalDetails?.fieldinspection_pending} /> : null}
+
+                {/* to get NOC values */}
+                {detail?.additionalDetails?.noc?.length > 0 ? detail?.additionalDetails?.noc.map((nocob, ind) => (
+                  <div key={ind}>
+                    <StatusTable>
+                      <Row className="border-none" label={t(`${`BPA_${detail?.additionalDetails?.data?.nocType}_HEADER`}`)}></Row>
+                      <Row className="border-none" label={t(`${detail?.values?.[0]?.title}`)} textStyle={{ marginLeft: "10px" }} text={getTranslatedValues(detail?.values?.[0]?.value, detail?.values?.[0]?.isNotTranslated)} />
+                      <Row className="border-none" label={t(`${detail?.values?.[1]?.title}`)} textStyle={detail?.values?.[1]?.value == "APPROVED" || detail?.values?.[1]?.value == "AUTO_APPROVED" ? { marginLeft: "10px", color: "#00703C" } : { marginLeft: "10px", color: "#D4351C" }} text={getTranslatedValues(detail?.values?.[1]?.value, detail?.values?.[1]?.isNotTranslated)} />
+                      <Row className="border-none" label={t(`${detail?.values?.[2]?.title}`)} textStyle={{ marginLeft: "10px" }} text={getTranslatedValues(detail?.values?.[2]?.value, detail?.values?.[2]?.isNotTranslated)} />
+                      <Row className="border-none" label={t(`${nocob?.title}`)}></Row>
+                    </StatusTable>
+                    <StatusTable>
+                      {nocob?.values ? <OBPSDocument value={nocob?.values} Code={nocob?.values?.[0]?.documentType?.split("_")[0]} index={ind} isNOC={true} /> :
+                        <div><CardText>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</CardText></div>}
+                      <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
+                    </StatusTable>
+                  </div>
+                )) : null}
+
+                {/* to get permit values */}
+                {(!detail?.isTitleVisible && detail?.additionalDetails?.permit?.length > 0) ? detail?.additionalDetails?.permit?.map((value) => (
+                  <CardText >{value?.title}</CardText>
+                )) : null}
+
+                {/* to get permit values */}
+                {(detail?.isFeeDetails && detail?.additionalDetails?.values?.length > 0) ? detail?.additionalDetails?.permit?.map((value) => (
+                  <StatusTable>
+                    <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
+                  </StatusTable>
+                )) : null}
+
+              </StatusTable>
+            </Card>
+
+            {/* to get Timeline values */}
+            {index === arr.length - 1 && (
+              <Card>
+                <Fragment>
+                  <BPAApplicationTimeline application={data?.applicationData} id={id} />
+                  {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && !isFromSendBack && checkBoxVisible && (
+                    <CheckBox
+                      styles={{ margin: "20px 0 40px" }}
+                      checked={isTocAccepted}
+                      label={getCheckBoxLabelData(t, data?.applicationData, workflowDetails?.data?.nextActions)}
+                      onChange={() => { setIsTocAccepted(!isTocAccepted); isTocAccepted ? setDisplayMenu(!isTocAccepted) : "" }}
+                    />
+                  )}
+                  {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
+                    <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px" }}>
+                      <div style={{ width: "100%" }}>
+                        {displayMenu && workflowDetails?.data?.nextActions ? (
+                          <Menu
+                            style={{ bottom: "37px", minWidth: "240px", maxWidth: "310px", width: "100%", right: "0px" }}
+                            localeKeyPrefix={"WF_BPA"}
+                            options={workflowDetails?.data?.nextActions.map((action) => action.action)}
+                            t={t}
+                            onSelect={onActionSelect}
+                          />
+                        ) : null}
+                        <SubmitBar style={{ width: "100%" }} disabled={checkForSubmitDisable(isFromSendBack, isTocAccepted)} label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+                      </div>
+                    </ActionBar>
+                  )}
+                </Fragment>
+              </Card>
             )}
-          </Card>
-        );
+          </div>
+        )
       })}
       {showModal ? (
         <ActionModal
@@ -446,7 +472,7 @@ const BpaApplicationDetail = () => {
           error={showToast.key === "error" ? true : false}
           label={t(showToast.key === "success" ? `ES_OBPS_${showToast.action}_UPDATE_SUCCESS` : showToast.action)}
           onClose={closeToast}
-          style={{zIndex: "1000"}}
+          style={{ zIndex: "1000" }}
         />
       )}
     </Fragment>
