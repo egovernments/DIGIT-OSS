@@ -194,7 +194,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 return;
             } else {
                 const userData = usersResponse?.user?.[0];
-                userData.gender = { code: userData.gender, active: true, i18nKey: `COMMON_GENDER_${userData.gender}` };
+                userData.gender = userData.gender ? { code: userData.gender, active: true, i18nKey: `COMMON_GENDER_${userData.gender}` } : "";
                 if(userData?.dob) userData.dob = convertDateToEpoch(userData?.dob);
                 if (userData?.createdDate) {
                     userData.createdDate = convertDateTimeToEpoch(userData?.createdDate);
@@ -205,7 +205,8 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 let values = [...ownersCopy];
                 if (values[indexValue]) { values[indexValue] = userData; values[indexValue].isPrimaryOwner = fields[indexValue]?.isPrimaryOwner || false; }
                 setFeilds(values);
-                setCanmovenext(true);
+                if(values[indexValue]?.mobileNumber && values[indexValue]?.name && values[indexValue]?.gender?.code) setCanmovenext(true);
+                else setCanmovenext(false);
             }
         }
     }

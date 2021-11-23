@@ -26,9 +26,9 @@ const EmployeeModuleCard = ({Icon, moduleName, kpis = [], links = [], isCitizen 
                     <div className="links-wrapper" style={{width: "80%"}}>
                         {links.map(({count, label, link}, index) => <span className="link" key={index}>
                             {link ? <Link to={link}>{label}</Link> : null }
-                            {(count || isCitizen) ? 
+                            {count  ? 
                             <>
-                                <span className={isCitizen ? "" : "inbox-total"}>{isCitizen ? "" : count || "-"}</span> 
+                                <span className={"inbox-total"}>{count || "-"}</span> 
                                     <Link to={link}>
                                         <ArrowRightInbox />
                                     </Link>

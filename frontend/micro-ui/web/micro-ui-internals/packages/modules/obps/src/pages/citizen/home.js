@@ -10,11 +10,8 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
     const stateCode = Digit.ULBService.getStateId();
     const [stakeHolderRoles, setStakeholderRoles] = useState(false);
     const { data: stakeHolderDetails, isLoading: stakeHolderDetailsLoading } = Digit.Hooks.obps.useMDMS(stateCode, "StakeholderRegistraition", "TradeTypetoRoleMapping");
-    // const moduleCode = "bpareg";
-    // const language = Digit.StoreData.getCurrentLanguage();
     const [bpaLinks, setBpaLinks] = useState([]);
     const state = Digit.ULBService.getStateId();
-    // const { data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
     const { t } = useTranslation();
     const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BPA_HOME_CREATE", {});
     const { data: homePageUrlLinks, isLoading: homePageUrlLinksLoading } = Digit.Hooks.obps.useMDMS(state, "BPA", ["homePageUrlLinks"]);
@@ -26,37 +23,53 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
         setShowToast(null);
     };
 
-    const inboxSearchParams = { limit: 10, offset: 0, mobileNumber: userInfo?.info?.mobileNumber }
-    const { isLoading: bpaLoading, data: bpaInboxData } = Digit.Hooks.obps.useArchitectInbox({
+    const [searchParams, setSearchParams] = useState({
+        applicationStatus: [],
+      });
+      let isMobile = window.Digit.Utils.browser.isMobile();
+      const [pageOffset, setPageOffset] = useState(0);
+      const [pageSize, setPageSize] = useState(window.Digit.Utils.browser.isMobile()?50:10);
+      const [sortParams, setSortParams] = useState([{ id: "createdTime", sortOrder: "DESC" }]);
+      const paginationParams = isMobile ? { limit: 10, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.sortOrder } :
+        { limit: pageSize, offset: pageOffset, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.sortOrder }
+      const inboxSearchParams = { limit: 10, offset: 0, mobileNumber: userInfo?.info?.mobileNumber }
+    
+      const { isLoading: bpaLoading, data: bpaInboxData } = Digit.Hooks.obps.useArchitectInbox({
         tenantId: stateCode,
+        moduleName: "bpa-services",
+        businessService: ["BPA_LOW", "BPA", "BPA_OC"],
         filters: {
-            ...inboxSearchParams,
+          searchForm: {
+            ...searchParams
+          },
+          tableForm: {
+            sortBy: sortParams?.[0]?.id,
+            limit: pageSize,
+            offset: pageOffset,
+            sortOrder: sortParams?.[0]?.sortOrder
+          },
+          filterForm: {
             moduleName: "bpa-services",
-            businessService: ["BPA_LOW", "BPA", "BPA_OC"],
+            businessService: [
+              { code: "BPA_LOW", name: t("BPA_LOW") },
+              { code: "BPA", name: t("BPA") },
+              { code: "BPA_OC", name: t("BPA_OC") }
+            ],
+            applicationStatus: searchParams?.applicationStatus,
+            locality: [],
+            assignee: "ASSIGNED_TO_ALL"
+          }
         },
-        withEDCRData : true, 
-        isTotalCount: true,
-        config: {}
-    });
-
-    const { isLoading: bparegLoading, data: bpareginboxData } = Digit.Hooks.obps.useArchitectInbox({
-        tenantId: stateCode,
-        filters: {
-            ...inboxSearchParams,
-            moduleName: "BPAREG",
-            businessService: ["ARCHITECT", "BUILDER", "ENGINEER", "STRUCTURALENGINEER"],
-        },
-        withEDCRData : true, 
-        isTotalCount: true,
-        config: {}
-    });
+        config: {},
+        withEDCRData:false
+      });
 
     useEffect(() => {
-        if(!bpaLoading && !bparegLoading) {
-            const totalCountofBoth = bpaInboxData?.totalCount || 0 + bpareginboxData?.totalCount || 0;
+        if(!bpaLoading) {
+            const totalCountofBoth = bpaInboxData?.totalCount || 0;
             setTotalCount(totalCountofBoth);
         } 
-    }, [bpaInboxData, bpareginboxData]);
+    }, [bpaInboxData]);
 
 
 
@@ -75,7 +88,6 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
             });
             if (!isRoute) {
                 setStakeholderRoles(false);
-                // window.location.replace("/digit-ui/citizen/all-services");
                 setShowToast({ key: "true", message: t("BPA_LOGIN_HOME_VALIDATION_MESSAGE_LABEL") });
             } else {
                 setStakeholderRoles(true);
@@ -105,7 +117,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
 
     if (showToast) return (<Toast error={true} label={t(showToast?.message)} isDleteBtn={true} onClose={closeToast} />);
 
-    if (stakeHolderDetailsLoading || !stakeHolderRoles || bpaLoading || bparegLoading) { return (<Loader />); }
+    if (stakeHolderDetailsLoading || !stakeHolderRoles || bpaLoading) { return (<Loader />); } // || bparegLoading
 
     const homeDetails = [
         {
@@ -115,14 +127,15 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
             isCitizen: true,
             kpis: [
                 {
-                    count: !bpaLoading && !bparegLoading ? totalCount : "-",
+                    count: !bpaLoading ? totalCount : "-",
                     label: t("BPA_PDF_TOTAL"),
                     link: `/digit-ui/citizen/obps/bpa/inbox`
                 }
             ],
             links: [
-                {
-                    label: t("ES_COMMON_INBOX"),
+                {   
+                    count: !bpaLoading ? totalCount : "-",
+                    label: t("ES_COMMON_OBPS_INBOX_LABEL"),
                     link: `/digit-ui/citizen/obps/bpa/inbox`
                 }
             ]
@@ -157,7 +170,6 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
     });
     sessionStorage.setItem("isPermitApplication", true);
     return homeScreen;
-    // return <CitizenHomeCard header={t("ACTION_TEST_BPA_STAKE_HOLDER_HOME")} links={links} Icon={() => <BPAIcon className="fill-path-primary-main" />} />;
 };
 
 export default BPACitizenHomeScreen;

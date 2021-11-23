@@ -46,7 +46,7 @@ import StakeholderAcknowledgement from "./pages/citizen/StakeholderRegistration/
  
 
 const OBPSModule = ({ stateCode, userType, tenants }) => {
-  const moduleCode = ["bpa", "bpareg"]; //"bpa";
+  const moduleCode = ["bpa", "bpareg", "common"]; //"bpa";
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });

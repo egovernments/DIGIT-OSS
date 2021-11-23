@@ -70,6 +70,7 @@ const useArchitectInbox = ({ tenantId, filters, withEDCRData = true, isTotalCoun
               serviceType:application?.businessObject?.additionalDetails?.serviceType,
               locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
               status: application.businessObject.status,
+              state:  application?.ProcessInstance?.state?.state,
               owner: application.ProcessInstance?.assigner?.name,
               edcr: application?.edcr,
               sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))

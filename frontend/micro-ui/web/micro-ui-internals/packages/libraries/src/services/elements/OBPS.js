@@ -2,6 +2,7 @@ import { Request } from "../atoms/Utils/Request"
 import Urls from "../atoms/urls";
 import { format } from "date-fns";
 import { MdmsService } from "./MDMS";
+import React from "react";
 
 export const OBPSService = {
   scrutinyDetails: (tenantId, params) =>
@@ -144,8 +145,14 @@ export const OBPSService = {
     if (!response?.Licenses?.length) {
       return;
     }
-
     const [License] = response?.Licenses;
+
+    const paymentRes = await Digit.PaymentService.recieptSearch(
+      License?.tenantId,
+      "BPAREG",
+      {consumerCodes: License?.applicationNumber, isEmployee:true}
+    );
+
     const details = [
       {
         title: " ",
@@ -188,12 +195,38 @@ export const OBPSService = {
       values: [
         { title: "BPA_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.correspondenceAddress || "NA"  }
       ]
+    },{
+      title: "BPA_DOCUMENT_DETAILS_LABEL",
+      asSectionHeader: true,
+      additionalDetails: {
+        documents: [{
+          title: "",
+          values: License?.tradeLicenseDetail?.applicationDocuments?.map(doc => ({
+            title: doc?.documentType?.replaceAll('.', '_'),
+            documentType: doc?.documentType,
+            documentUid: doc?.documentUid,
+            fileStoreId: doc?.fileStoreId,
+            id: doc?.id
+          }))
+        }]
+      },
     },
+    paymentRes?.Payments?.length > 0 && {
+      title: "BPA_FEE_DETAILS_LABEL",
+      additionalDetails: {
+        inspectionReport: [],
+        values: [
+          { title: "BPAREG_FEES", value: <span>&#8377;{paymentRes?.Payments?.[0]?.totalAmountPaid}</span>},
+          { title: "BPA_STATUS_LABEL", isTransLate: true, isStatus: true, value: paymentRes?.Payments?.[0]?.totalAmountPaid ? ("WF_BPA_PAID") : "NA", isTransLate:true }
+        ]
+      }
+    }
   ]
     return {
       applicationData: License,
       applicationDetails: details,
       tenantId: License?.tenantId,
+      payments: paymentRes?.Payments || []
     }
   },
   BPADetailsPage: async (tenantId, filters) => {

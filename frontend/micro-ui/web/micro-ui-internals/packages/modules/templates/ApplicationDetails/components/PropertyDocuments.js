@@ -33,10 +33,11 @@ function PropertyDocuments({ documents, svgStyles = {} }) {
   }, [filesArray]);
 
   const checkLocation = window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps");
+  const isStakeholderApplication = window.location.href.includes("stakeholder");
 
   return (
     <div style={{ marginTop: "19px" }}>
-      {documents?.map((document, index) => (
+      {!isStakeholderApplication && documents?.map((document, index) => (
         <React.Fragment key={index}>
           {/* TODO, Later will move to classes */}
           <CardSubHeader style={checkLocation ? { marginTop: "32px", marginBottom: "18px", color: "#0B0C0C, 100%", fontSize: "24px", lineHeight: "30px" } : { marginTop: "32px", marginBottom: "8px", color: "#505A5F", fontSize: "24px" }}>{t(document?.title)}</CardSubHeader>
@@ -46,6 +47,22 @@ function PropertyDocuments({ documents, svgStyles = {} }) {
                 <PDFSvg width={svgStyles?.width ? svgStyles?.width : 140} height={svgStyles?.height ? svgStyles?.height : 140} style={{ background: "#f6f6f6", padding: "8px" }} viewBox={svgStyles?.viewBox ? svgStyles?.viewBox : "0 0 34 34"} />
                 {/* TODO, Later will move to classes */}
                 <p style={checkLocation ? { marginTop: "8px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#505A5F" } : { marginTop: "8px", fontWeight: "bold" }}>{t(value?.title)}</p>
+              </a>
+            )):!(window.location.href.includes("citizen"))&& <div><p>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</p></div>}
+          </div>
+        </React.Fragment>
+      ))}
+      {isStakeholderApplication && documents?.map((document, index) => (
+        <React.Fragment key={index}>
+          <CardSubHeader style={{ marginTop: "32px", marginBottom: "8px", color: "#505A5F", fontSize: "24px" }}>{t(document?.title)}</CardSubHeader>
+          <div>
+            {document?.values && document?.values.length>0 ? document?.values?.map((value, index) => (
+              <a target="_" href={pdfFiles[value.fileStoreId]?.split(",")[0]} style={{ minWidth: svgStyles?.minWidth ? svgStyles?.minWidth : "160px", marginRight: "20px" }} key={index}>
+                <div  style={{maxWidth: "940px", padding: "8px", borderRadius: "4px", border: "1px solid #D6D5D4", background: "#FAFAFA"}}>
+                  <p style={{ marginTop: "8px", fontWeight: "bold" }}>{t(value?.title)}</p>
+                  <PDFSvg width={svgStyles?.width ? svgStyles?.width : 140} height={svgStyles?.height ? svgStyles?.height : 140} style={{ background: "#f6f6f6", padding: "8px" }} viewBox={svgStyles?.viewBox ? svgStyles?.viewBox : "0 0 34 34"} />
+                  <div>{decodeURIComponent(pdfFiles[value.fileStoreId]?.split(",")[0].split("?")[0].split("/").pop().slice(13))}</div>
+                </div>
               </a>
             )):!(window.location.href.includes("citizen"))&& <div><p>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</p></div>}
           </div>
