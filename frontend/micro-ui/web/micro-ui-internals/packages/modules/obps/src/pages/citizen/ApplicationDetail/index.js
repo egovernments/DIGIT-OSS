@@ -28,7 +28,7 @@ const ApplicationDetails = () => {
 
   useEffect(() => {
     if (License?.tradeLicenseDetail?.applicationDocuments?.length) {
-      const fileStoresIds = License?.tradeLicenseDetail?.applicationDocuments.map(document => document?.fileStoreId);
+      const fileStoresIds = License?.tradeLicenseDetail?.applicationDocuments?.map(document => document?.fileStoreId);
       Digit.UploadServices.Filefetch(fileStoresIds, tenantId.split(".")[0])
         .then(res => setDocuments(res?.data))
     }
@@ -42,7 +42,7 @@ const ApplicationDetails = () => {
           onClick: () => downloadAndPrintReciept(reciept_data?.Payments?.[0]?.paymentDetails?.[0]?.businessService || "BPAREG", License?.applicationNumber, License?.tenantId),
         }]);
       }
-      const fileStoresIds = License?.tradeLicenseDetail?.applicationDocuments.map(document => document?.fileStoreId);
+      const fileStoresIds = License?.tradeLicenseDetail?.applicationDocuments?.map(document => document?.fileStoreId);
     }
     
   }, [License, reciept_data]);
@@ -82,7 +82,7 @@ const ApplicationDetails = () => {
             <Row className="border-none" label={t(`BPA_APPLICANT_NAME_LABEL`)} text={t(License?.tradeLicenseDetail?.owners?.[0]?.name)} />
             <Row className="border-none" label={t(`BPA_APPLICANT_GENDER_LABEL`)} text={t(License?.tradeLicenseDetail?.owners?.[0]?.gender)}/>
             <Row className="border-none" label={t(`BPA_OWNER_MOBILE_NO_LABEL`)} text={License?.tradeLicenseDetail?.owners?.[0]?.mobileNumber}/>
-            <Row className="border-none" label={t(`BPA_APPLICANT_EMAIL_LABEL`)} text={License?.tradeLicenseDetail?.owners?.[0]?.emailId}/>
+            <Row className="border-none" label={t(`BPA_APPLICANT_EMAIL_LABEL`)} text={License?.tradeLicenseDetail?.owners?.[0]?.emailId || t("CS_NA")}/>
             <Row className="border-none" label={t(`BPA_APPLICANT_PAN_NO`)} text={License?.tradeLicenseDetail?.owners?.[0]?.pan || t("CS_NA")}/>
           </StatusTable>
         </Card>
@@ -94,7 +94,7 @@ const ApplicationDetails = () => {
           <CardHeader>{t(`BPA_CORRESPONDANCE_ADDRESS_LABEL`)}</CardHeader>
           <Row className="border-none" text={License?.tradeLicenseDetail?.owners?.[0]?.correspondenceAddress || t("CS_NA")} />
         </Card>
-        {License?.tradeLicenseDetail?.applicationDocuments.length>0 && <Card>
+        {License?.tradeLicenseDetail?.applicationDocuments?.length>0 && <Card>
           <CardHeader>{t("BPA_DOC_DETAILS_SUMMARY")}</CardHeader>
           {License?.tradeLicenseDetail?.applicationDocuments?.map((document, index) => {
             return (
