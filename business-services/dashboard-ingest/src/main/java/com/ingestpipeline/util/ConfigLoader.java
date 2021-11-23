@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,9 @@ public class ConfigLoader {
      * @return
      */
     public String get(String name) {
+        if(!nameContentMap.containsKey(name)){
+            throw new CustomException("EG_KEY_DOES_NOT_EXIST_ERR", "The provided keyname does not exist in nameContentMap");
+        }
         return nameContentMap.get(name);
     }
 

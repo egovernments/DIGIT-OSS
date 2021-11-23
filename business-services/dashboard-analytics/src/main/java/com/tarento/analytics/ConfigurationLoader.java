@@ -3,6 +3,7 @@ package com.tarento.analytics;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
+import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,9 @@ public class ConfigurationLoader {
      * @return
      */
     public ObjectNode get(String name) {
+        if(!nameContentMap.containsKey(name)){
+            throw new CustomException("EG_KEY_DOES_NOT_EXIST_ERR", "The provided key was not found in nameContentMap");
+        }
         return nameContentMap.get(name);
     }
 

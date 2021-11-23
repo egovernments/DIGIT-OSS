@@ -50,6 +50,9 @@ public class DataUploadConsumer {
 			logger.info("Consuming record : {}", record);
 			req = mapper.convertValue(record, UploaderRequest.class);
 
+			if(req.getUploadJobs().size() == 0)
+				throw new CustomException("EG_UPLOAD_JOBS_EMPTY_ERR", "Upload jobs cannot be empty");
+
 			if (propertyModuleName.equalsIgnoreCase(req.getUploadJobs().get(0).getModuleName()))
 				propUploader.uploadPropertyData(req);
 			else
