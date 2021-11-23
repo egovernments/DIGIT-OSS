@@ -543,7 +543,7 @@ public class UserService {
      */
     private void validateExistingPassword(User user, String existingRawPassword) {
         if (!passwordEncoder.matches(existingRawPassword, user.getPassword())) {
-            throw new PasswordMismatchException();
+            throw new PasswordMismatchException("Invalid username or password");
         }
     }
 

@@ -10,8 +10,8 @@ import org.springframework.http.HttpStatus;
 
 public class UserNotExistErrorAdapter implements ErrorAdapter<Void> {
 
-	private static final String UNKNOWN_MOBILE_NUMBER_CODE = "OTP.UNKNOWN_USER";
-	private static final String UNKNOWN_MOBILE_NUMBER_MESSAGE = "User not Found With this UserName";
+	private static final String UNKNOWN_MOBILE_NUMBER_CODE = "OTP.UNKNOWN_CREDENTIAL";
+	private static final String UNKNOWN_MOBILE_NUMBER_MESSAGE = "No such username or password";
 	private static final String UNKNOWN_MOBILE_NUMBER_FIELD = "otp.mobileNumber";
 	private static final String MESSAGE = "OTP request for login failed";
 
