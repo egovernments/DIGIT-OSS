@@ -26,9 +26,9 @@ const SearchFormFieldsComponents = ({registerRef, searchFormState}) => {
                     message: t("CORE_COMMON_MOBILE_ERROR")
                 }
             })} />
-            <CardLabelError>
+            {searchFormState?.errors?.["mobileNumber"]?.message ? <CardLabelError>
                 {searchFormState?.errors?.["mobileNumber"]?.message}
-            </CardLabelError>
+            </CardLabelError> : null}
         </SearchField>
     </>
 }

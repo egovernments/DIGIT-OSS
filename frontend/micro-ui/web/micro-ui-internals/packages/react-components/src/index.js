@@ -143,6 +143,7 @@ import CardBasedOptions from "./atoms/CardBasedOptions";
 import WhatsNewCard from "./atoms/WhatsNewCard";
 import EventCalendarView from "./atoms/EventCalendarView";
 import InboxLinks from "./atoms/InboxLinks";
+import PopupHeadingLabel from "./atoms/PopupHeadingLabel"
 
 import { FormComposer } from "./hoc/FormComposer";
 import Modal from "./hoc/Modal";
@@ -252,6 +253,7 @@ export {
   WhatsNewCard,
   EventCalendarView,
   InboxLinks,
+  PopupHeadingLabel,
   // Icons
   GetApp,
   ArrowLeft,

@@ -1,6 +1,9 @@
+import React from "react";
 import { useTranslation } from "react-i18next";
+import { SearchField, RadioButtons } from "@egovernments/digit-ui-react-components";
+import { Controller, useFormContext } from "react-hook-form";
 
-const useInboxMobileCardsData = ({parentRoute, table, getRedirectionLink }) => {
+const useInboxMobileCardsData = ({parentRoute, table, getRedirectionLink}) => {
     const { t } = useTranslation()
 
     const dataForMobileInboxCards = table?.map(({ applicationId, date, applicationType, locality, status, owner, sla, state}) => ({
@@ -13,7 +16,33 @@ const useInboxMobileCardsData = ({parentRoute, table, getRedirectionLink }) => {
             [t("ES_INBOX_SLA_DAYS_REMAINING")]: sla
     }))
 
-    return ({ data:dataForMobileInboxCards,isTwoDynamicPrefix:true, linkPrefix: `/digit-ui/employee/obps/`,getRedirectionLink:getRedirectionLink, serviceRequestIdKey: "applicationNo"})
+    const MobileSortFormValues = () => {
+        const sortOrderOptions = [{
+            code: "DESC",
+            i18nKey: "ES_COMMON_SORT_BY_DESC"
+        },{
+            code: "ASC",
+            i18nKey: "ES_COMMON_SORT_BY_ASC"
+        }]
+        const { control: controlSortForm  } = useFormContext()
+        return <SearchField>
+            <Controller
+                name="sortOrder"
+                control={controlSortForm}
+                render={({onChange, value}) => <RadioButtons
+                    onSelect={(e) => {
+                        onChange(e.code)
+                    }}
+                    selectedOption={sortOrderOptions.filter((option) => option.code === value)[0]}
+                    optionsKey="i18nKey"
+                    name="sortOrder"
+                    options={sortOrderOptions}
+                />}
+            />
+        </SearchField>
+    }
+
+    return ({ data:dataForMobileInboxCards,isTwoDynamicPrefix:true, linkPrefix: `/digit-ui/employee/obps/`,getRedirectionLink:getRedirectionLink, serviceRequestIdKey: "applicationNo", MobileSortFormValues})
 
 }
 

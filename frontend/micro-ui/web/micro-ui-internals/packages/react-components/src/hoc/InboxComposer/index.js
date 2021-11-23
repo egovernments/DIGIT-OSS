@@ -1,19 +1,20 @@
-import React, { Fragment, useEffect, useReducer } from "react"
-import InboxLinks from "../atoms/InboxLinks"
-import Table from "../atoms/Table"
-import { SearchField, SearchForm } from "../molecules/SearchForm"
-import { FilterForm, FilterFormField } from "../molecules/FilterForm"
-import SubmitBar from "../atoms/SubmitBar"
+import React, { Fragment, useCallback, useEffect, useMemo, useReducer } from "react"
+import InboxLinks from "../../atoms/InboxLinks"
+import Table from "../../atoms/Table"
+import { SearchField, SearchForm } from "../../molecules/SearchForm"
+import { FilterForm, FilterFormField } from "../../molecules/FilterForm"
+import SubmitBar from "../../atoms/SubmitBar"
 import { useTranslation } from "react-i18next"
-import Card from "../atoms/Card"
-import { Loader } from "../atoms/Loader"
+import Card from "../../atoms/Card"
+import { Loader } from "../../atoms/Loader"
 import { useForm, Controller } from "react-hook-form";
-import SearchAction from "../molecules/SearchAction"
-import FilterAction from "../molecules/FilterAction"
-import SortAction from "../molecules/SortAction"
-import DetailsCard from "../molecules/DetailsCard"
-import PopUp from "../atoms/PopUp"
-import { CloseSvg } from "../atoms/svgindex"
+import SearchAction from "../../molecules/SearchAction"
+import FilterAction from "../../molecules/FilterAction"
+import SortAction from "../../molecules/SortAction"
+import DetailsCard from "../../molecules/DetailsCard"
+import PopUp from "../../atoms/PopUp"
+import { CloseSvg } from "../../atoms/svgindex"
+import MobileComponentDirectory from "./MobileComponentDirectory"
 
 const InboxComposer = ({
     isInboxLoading,
@@ -30,8 +31,12 @@ const InboxComposer = ({
     onFilterFormSubmit,
     onFilterFormReset,
     resetFilterFormDefaultValues,
-    formState: inboxFormState
+    onMobileSortOrderData,
+    sortFormDefaultValues,
+    onSortFormReset,
+    formState: inboxFormState,
 }) => {
+
     const { t } = useTranslation()
 
     function activateModal(state, action) {
@@ -77,48 +82,46 @@ const InboxComposer = ({
 
     const isMobile = window.Digit.Utils.browser.isMobile();
 
-    const MobilePopUpCloseButton = () => <div className="InboxMobilePopupCloseButtonWrapper" onClick={closeMobilePopupModal}>
-        <CloseSvg />
-    </div>
+    if (isMobile) {
 
-    const MobileComponentDirectory = {
-        SearchFormComponent: () => <SearchForm onSubmit={({...props}) => {
-            closeMobilePopupModal()
-            onSearchFormSubmit({...props})
-        }} handleSubmit={handleSearchFormSubmit} id="search-form" className="rm-mb form-field-flex-one inboxPopupMobileWrapper" >
-            <MobilePopUpCloseButton />
-            <SearchFormFields registerRef={registerSearchFormField} searchFormState={searchFormState} />
-            <SearchField className="submit">
-                <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form" />
-                <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
-            </SearchField>
-        </SearchForm>,
-        FilterFormComponent: () => <FilterForm onSubmit={({...props}) => {
-            closeMobilePopupModal()
-            onFilterFormSubmit({...props})
-        }} closeButton={() => <MobilePopUpCloseButton />} handleSubmit={handleFilterFormSubmit} id="filter-form" onResetFilterForm={onResetFilterForm} className="inboxPopupMobileWrapper p-unset">
-            <FilterFormFields registerRef={registerFilterFormField} {...{ controlFilterForm, handleFilterFormSubmit, setFilterFormValue, getFilterFormValue }} />
-        </FilterForm>
+    const CurrentMobileModalComponent = useCallback(({...props}) => currentlyActiveMobileModal ? MobileComponentDirectory[currentlyActiveMobileModal]({...props}) : null, [currentlyActiveMobileModal])
+
+    const propsForCurrentMobileModalComponent = {
+        SearchFormFields,
+        FilterFormFields,
+        registerSearchFormField,
+        searchFormState,
+        handleSearchFormSubmit,
+        onResetSearchForm,
+        registerFilterFormField,
+        onResetFilterForm,
+        controlFilterForm,
+        handleFilterFormSubmit,
+        setFilterFormValue,
+        getFilterFormValue,
+        closeMobilePopupModal,
+        onSearchFormSubmit,
+        onFilterFormSubmit,
+        onMobileSortOrderData,
+        sortFormDefaultValues,
+        onSortFormReset,
+        MobileSortFormValues: propsForInboxMobileCards?.MobileSortFormValues,
+        t,
     }
 
-    const CurrentMobileModalComponent = MobileComponentDirectory[currentlyActiveMobileModal]
-
-    if (isMobile) {
-        return <div className="InboxComposerWrapper">
-            {/* TODO fix design for card */}
-            {/* <InboxLinks {...PropsForInboxLinks} /> */}
-            <div className="searchBox">
-                <SearchAction text={t("ES_COMMON_SEARCH")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "SearchFormComponent" })} />
-                {isInboxLoading ? <Loader /> : <FilterAction text={t("ES_COMMON_FILTER")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "FilterFormComponent" })} />}
-                <SortAction text={t("ES_COMMON_SORT")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "SortComponent" })} />
-            </div>
-            {currentlyActiveMobileModal ? <PopUp>
-                <CurrentMobileModalComponent />
-            </PopUp> : null}
-            {/* <FilterForm clearAll={resetFilterForm} {...{ showMobileFilterFormPopup, onMobileExclusiveFilterPopupFormClose: () => setMobileFilterFormPopup(false) }}>
-            </FilterForm> */}
-            {isInboxLoading ? <Loader /> : <DetailsCard {...propsForInboxMobileCards} />}
+    return <div className="InboxComposerWrapper">
+        {/* TODO fix design for card */}
+        {/* <InboxLinks {...PropsForInboxLinks} /> */}
+        <div className="searchBox">
+            <SearchAction text={t("ES_COMMON_SEARCH")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "SearchFormComponent" })} />
+            {isInboxLoading ? <Loader /> : <FilterAction text={t("ES_COMMON_FILTER")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "FilterFormComponent" })} />}
+            <SortAction text={t("ES_COMMON_SORT")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "SortFormComponent" })} />
         </div>
+        {currentlyActiveMobileModal ? <PopUp>
+            <CurrentMobileModalComponent {...propsForCurrentMobileModalComponent} />
+        </PopUp> : null}
+        {isInboxLoading ? <Loader /> : <DetailsCard {...propsForInboxMobileCards} />}
+    </div>
     }
     return <div className="InboxComposerWrapper">
         <InboxLinks {...PropsForInboxLinks} />
@@ -139,8 +142,6 @@ const InboxComposer = ({
             </Card>
                 : <Table
                     t={t}
-                    // data={sourceData}
-                    // columns={tableColumnConfig}
                     {...propsForInboxTable}
                 />}
         </div>}
