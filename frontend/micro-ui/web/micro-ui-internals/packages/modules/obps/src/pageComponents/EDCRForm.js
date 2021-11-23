@@ -117,6 +117,7 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
                 onUpload={selectfile}
                 onDelete={() => {
                     setUploadedFile(null);
+                    setFile("");
                 }}
                 message={uploadedFile ? `1 ${t(`PT_ACTION_FILEUPLOADED`)}` : t(`ES_NO_FILE_SELECTED_LABEL`)}
                 error={error}

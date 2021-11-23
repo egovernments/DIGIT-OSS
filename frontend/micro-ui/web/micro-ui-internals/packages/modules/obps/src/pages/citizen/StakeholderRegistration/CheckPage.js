@@ -110,7 +110,7 @@ import {
         <div key={index}>
         <CardSectionHeader>{t(doc?.documentType)}</CardSectionHeader>
         <StatusTable>
-        <OBPSDocument value={value} Code={doc?.documentType} index={index}/> 
+        <OBPSDocument value={value} Code={doc?.documentType} index={index} isNOC={false} svgStyles={{}} isStakeHolder={true}/> 
         <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
         </StatusTable>
         </div>
