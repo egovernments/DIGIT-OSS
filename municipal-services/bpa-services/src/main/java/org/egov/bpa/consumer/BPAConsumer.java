@@ -29,6 +29,8 @@ public class BPAConsumer {
 		try {
 			log.debug("Consuming record: " + record);
 			bpaRequest = mapper.convertValue(record, BPARequest.class);
+			System.out.println("**** Consuming record ****"+ bpaRequest.toString() + "\n Cur Time "+ java.time.LocalDateTime.now() + "\n Topic "+ topic);
+
 		} catch (final Exception e) {
 			log.error("Error while listening to value: " + record + " on topic: " + topic + ": " + e);
 		}
