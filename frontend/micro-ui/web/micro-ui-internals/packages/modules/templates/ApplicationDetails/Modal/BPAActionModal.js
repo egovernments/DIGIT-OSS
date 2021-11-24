@@ -260,6 +260,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       actionSaveLabel={t(config.label.submit)}
       actionSaveOnSubmit={() => { }}
       formId="modal-action"
+      style={{height: "auto"}}
     >
       {financialYearsLoading ? (
         <Loader />
