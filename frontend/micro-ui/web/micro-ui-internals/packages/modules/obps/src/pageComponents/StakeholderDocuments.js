@@ -8,7 +8,7 @@ import {
     FormStep,
     CitizenInfoLabel,
     OpenLinkContainer,
-    BackButton 
+    BackButton
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
 
@@ -175,6 +175,7 @@ function SelectDocument({
                     fileStoreId: uploadedFile,
                     documentUid: uploadedFile,
                     fileName: file?.name || "",
+                    info: doc?.info || ""
                 },
             ];
         });       
@@ -207,15 +208,8 @@ function SelectDocument({
 
     return (
         <div style={{ marginBottom: "24px" }}>
-            <CardLabel>{doc?.required ? `${t(doc?.code)} *` : `${t(doc?.code)}`}</CardLabel>
-            {/* <Dropdown
-                t={t}
-                isMandatory={false}
-                option={doc?.dropdownData}
-                selected={selectedDocument}
-                optionKey="i18nKey"
-                select={handleSelectDocument}
-            /> */}
+            <CardLabel style={{marginBottom: "10px"}}>{doc?.required ? `${t(`BPAREG_HEADER_${doc?.code}`)} *` : `${t(`BPAREG_HEADER_${doc?.code}`)}`}</CardLabel>
+            {doc?.info ? <div style={{fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px"}}>{`${t(doc?.info)}`}</div> : null}
             <UploadFile
                 extraStyleName={"propertyCreate"}
                 accept=".jpg,.png,.pdf"

@@ -153,6 +153,20 @@ export const OBPSService = {
       {consumerCodes: License?.applicationNumber, isEmployee:true}
     );
 
+    const mdmsRes = await MdmsService.getMultipleTypes(License?.tenantId, "StakeholderRegistraition", ["TradeTypetoRoleMapping"]);
+
+    if (License?.tradeLicenseDetail?.applicationDocuments?.length && mdmsRes?.StakeholderRegistraition?.TradeTypetoRoleMapping?.length > 0) {
+      mdmsRes?.StakeholderRegistraition?.TradeTypetoRoleMapping?.map(doc => {
+        if(doc?.docTypes?.length > 0 && doc?.tradeType == License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType) {
+          doc?.docTypes?.map(docType => {
+            License?.tradeLicenseDetail?.applicationDocuments?.forEach(document => {
+              if(docType?.code == document?.documentType && docType?.info) document.info = docType?.info
+            })
+          })
+        }
+      })
+    }
+
     const details = [
       {
         title: " ",
@@ -202,11 +216,12 @@ export const OBPSService = {
         documents: [{
           title: "",
           values: License?.tradeLicenseDetail?.applicationDocuments?.map(doc => ({
-            title: doc?.documentType?.replaceAll('.', '_'),
+            title: `BPAREG_HEADER_${doc?.documentType?.replaceAll('.', '_')}`,
             documentType: doc?.documentType,
             documentUid: doc?.documentUid,
             fileStoreId: doc?.fileStoreId,
-            id: doc?.id
+            id: doc?.id,
+            docInfo: doc?.info
           }))
         }]
       },
@@ -222,7 +237,8 @@ export const OBPSService = {
       }
     }
   ]
-    return {
+
+  return {
       applicationData: License,
       applicationDetails: details,
       tenantId: License?.tenantId,

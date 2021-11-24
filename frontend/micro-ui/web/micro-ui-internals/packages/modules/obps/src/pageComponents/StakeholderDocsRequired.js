@@ -37,9 +37,19 @@ const StakeholderDocsRequired = ({ onSelect, onSkip, config }) => {
           <Loader /> :
           <Fragment>
             {data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.[0]?.docTypes?.map((doc, index) => (
-              <div key={index}>
-              <CardLabel style={{fontWeight:700}}>{`${index + 1}. `}</CardLabel>
-              <CardLabel style={{ fontWeight: 700, marginTop:"-39px", marginLeft:"20px" }}>{`${t(doc?.code.replace('.', '_'))}`}</CardLabel>
+              <div>
+                <div style={{ fontWeight: 700, marginBottom: "8px" }} key={index}>
+                  <div style={{ display: "flex" }}>
+                    <div style={{ minWidth: "20px" }}>{`${index + 1}.`}&nbsp;</div>
+                    <div>{` ${t(`BPAREG_HEADER_${doc?.code.replace('.', '_')}`)}`}</div>
+                  </div>
+                </div>
+                <div style={{ marginBottom: "16px" }}>
+                  <div style={{ display: "flex" }}>
+                    <div style={{ minWidth: "20px" }}></div>
+                    {doc?.info ? <div style={{color: "#505A5F", fontSize: "16px"}}>{`${t(doc?.info.replace('.', '_'))}`}</div> : null}
+                  </div>
+                </div>
               </div>
             ))}
           </Fragment>

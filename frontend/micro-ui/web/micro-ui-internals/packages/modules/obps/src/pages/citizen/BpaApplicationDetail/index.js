@@ -410,7 +410,7 @@ const BpaApplicationDetail = () => {
                   <CardText >{value?.title}</CardText>
                 )) : null}
 
-                {/* to get permit values */}
+                {/* to get Fee values */}
                 {(detail?.isFeeDetails && detail?.additionalDetails?.values?.length > 0) ? detail?.additionalDetails?.permit?.map((value) => (
                   <StatusTable>
                     <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />

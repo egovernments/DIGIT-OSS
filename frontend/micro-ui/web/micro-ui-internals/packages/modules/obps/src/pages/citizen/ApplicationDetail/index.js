@@ -15,6 +15,7 @@ const ApplicationDetails = () => {
   const stateCode = Digit.ULBService.getStateId();
   const { data: LicenseData, isLoading } = Digit.Hooks.obps.useBPAREGSearch(tenantId, {});
   let License = LicenseData?.Licenses?.[0];
+  const { data: mdmsRes, isLoading: mdmsResIsLoading } = Digit.Hooks.obps.useMDMS(stateCode, "StakeholderRegistraition", "TradeTypetoRoleMapping");
   const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
     {
       tenantId: stateCode,
@@ -46,6 +47,19 @@ const ApplicationDetails = () => {
     }
     
   }, [License, reciept_data]);
+
+
+  if (License?.tradeLicenseDetail?.applicationDocuments?.length && mdmsRes?.StakeholderRegistraition?.TradeTypetoRoleMapping?.length > 0) {
+    mdmsRes?.StakeholderRegistraition?.TradeTypetoRoleMapping?.map(doc => {
+      if(doc?.docTypes?.length > 0 && doc?.tradeType == License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType) {
+        doc?.docTypes?.map(docType => {
+          License?.tradeLicenseDetail?.applicationDocuments?.forEach(document => {
+            if(docType?.code == document?.documentType && docType?.info) document.info = docType?.info
+          })
+        })
+      }
+    })
+  }
 
 
   return (
@@ -100,7 +114,8 @@ const ApplicationDetails = () => {
             return (
             <Fragment>
               <div>
-                <CardSectionHeader>{t(`${stringReplaceAll(document?.documentType?.toUpperCase(), ".", "_")}`)}</CardSectionHeader>
+                <CardSectionHeader>{t(`BPAREG_HEADER_${stringReplaceAll(document?.documentType?.toUpperCase(), ".", "_")}`)}</CardSectionHeader>
+                {document?.info ? <div style={{fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px"}}>{`${t(document?.info)}`}</div> : null}
                 <a target="_" href={documents[document.fileStoreId]?.split(",")[0]}>
                   <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />
                 </a>
