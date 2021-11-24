@@ -159,6 +159,21 @@ const EventsBreadCrumb = ({ location }) => {
       content: t("ES_EVENT_INBOX"),
       show: location.pathname.includes("/surveys/inbox") ? true : false,
     },
+    {
+      path: "/digit-ui/employee/engagement/surveys/inbox/create",
+      content: t("CS_COMMON_SURVEYS"),
+      show: location.pathname.includes("/surveys/inbox/create") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/surveys/create",
+      content: t("CS_COMMON_SURVEYS"),
+      show: location.pathname.includes("/surveys/create") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/survey/create-response",
+      content: t("ES_EVENT_NEW_EVENT_RESPONSE"),
+      show: location.pathname.includes("/engagement/survey/create-response") ? true : false,
+    },
   ];
 
   return <BreadCrumb crumbs={crumbs} />;

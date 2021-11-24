@@ -83,7 +83,7 @@ const Inbox = ({ parentRoute }) => {
     headerText: "CS_COMMON_SURVEYS",
     links: [{
       text: t("CS_COMMON_NEW_SURVEY"),
-      link: "/digit-ui/employee/engagement/survey/create",
+      link: "/digit-ui/employee/engagement/surveys/inbox/create",
     }]
   }
 
@@ -104,13 +104,13 @@ const Inbox = ({ parentRoute }) => {
   const onSearchFormSubmit = (data) => {
     data.hasOwnProperty("") ? delete data?.[""] : null
     dispatch({ action: "mutateSearchForm", data })
-    console.log("find search form data here", data)
+    //console.log("find search form data here", data)
   }
 
   const onFilterFormSubmit = (data) => {
     data.hasOwnProperty("") ? delete data?.[""] : null
     dispatch({ action: "mutateFilterForm", data })
-    console.log("find filter form data here", data)
+    //console.log("find filter form data here", data)
   }
 
   const propsForSearchForm = { SearchFormFields, onSearchFormSubmit, searchFormDefaultValues: formState?.searchForm, resetSearchFormDefaultValues: searchFormDefaultValues, onSearchFormReset }

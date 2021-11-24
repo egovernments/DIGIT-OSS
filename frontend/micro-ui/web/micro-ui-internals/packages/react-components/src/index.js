@@ -130,6 +130,7 @@ import {
   PMBIconSolid,
   EventsIconSolid,
   SurveyIconSolid,
+  DustbinIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -284,6 +285,7 @@ export {
   EventsIconSolid,
   SurveyIconSolid,
   PMBIcon,
+  DustbinIcon,
   GenericFileIcon,
   HelpIcon,
   NotificationBell,

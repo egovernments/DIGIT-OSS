@@ -50,7 +50,11 @@ const EngagementCard = () => {
         count: totalSurveysCount,
         label: t("ES_TITLE_INBOX"),
         link: `/digit-ui/employee/engagement/surveys/inbox`
-      }
+      },
+      {
+        label: t("CS_COMMON_NEW_SURVEY"),
+        link: `/digit-ui/employee/engagement/surveys/create`,
+      },
     ]
   }
 
@@ -128,7 +132,7 @@ const EngagementCard = () => {
 
   if (isEmployee) result = (
       <>
-      {engagementSubModulesProps.map((propsForModuleCard) => <EmployeeModuleCard {...propsForModuleCard} />)
+      {engagementSubModulesProps.map((propsForModuleCard, index) => <EmployeeModuleCard key={index} {...propsForModuleCard} />)
       }
       </>
     );
