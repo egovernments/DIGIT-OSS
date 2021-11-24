@@ -57,7 +57,6 @@ export const Search = {
       }
     }
 
-    const stateId = tenantId?.split(".")[0];
     let slumLabel = "";
     if (response?.address?.slumName && response?.address?.locality?.code && response?.tenantId) {
       const slumData = await MdmsService.getSlumLocalityMapping(response?.tenantId, "FSM", "Slum");

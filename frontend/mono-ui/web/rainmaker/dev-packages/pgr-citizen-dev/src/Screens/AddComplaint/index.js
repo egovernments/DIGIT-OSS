@@ -6,6 +6,7 @@ import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { Screen } from "modules/common";
 import "./index.css";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { fetchComplaintCategories } from "egov-ui-kit/redux/complaints/actions";
 
 
 const ComplaintFormHOC = formHoc({
@@ -15,8 +16,10 @@ const ComplaintFormHOC = formHoc({
 })(AddComplaintForm);
 
 class AddComplaints extends Component {
-  componentDidMount(){
-    this.props.resetForm()
+  componentDidMount() {
+    this.props.resetForm();
+    const { fetchComplaintCategories } = this.props;
+    fetchComplaintCategories();
   }
   render() {
     const { categories, localizationLabels } = this.props;
@@ -40,6 +43,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    fetchComplaintCategories: () => dispatch(fetchComplaintCategories()),
     handleFieldChange: (formKey, fieldKey, value) =>
       dispatch(handleFieldChange(formKey, fieldKey, value)),
     resetForm:()=>dispatch(prepareFinalObject("services",[{}]))  

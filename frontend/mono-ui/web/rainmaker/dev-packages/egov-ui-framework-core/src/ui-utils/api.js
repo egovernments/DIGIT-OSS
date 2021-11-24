@@ -4,6 +4,7 @@ import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/a
 import {
   getAccessToken, getLocale, getTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
+import some from "lodash/some";
 import store from "../ui-redux/store";
 import { addQueryArg, isPublicSearch } from "./commons";
 
@@ -53,6 +54,16 @@ export const httpRequest = async (
       headers
     });
 
+
+  /* Fix for central instance to send tenantID in all query params  */
+  const tenantId = process.env.REACT_APP_NAME === "Citizen" ? commonConfig.tenantId:(endPoint&&endPoint.includes("mdms")?commonConfig.tenantId:getTenantId()) || commonConfig.tenantId ;
+  if (!some(queryObject, ["key", "tenantId"])) {
+    commonConfig.singleInstance&&endPoint&&!endPoint.includes("tenantId")&&queryObject &&
+      queryObject.push({
+        key: "tenantId",
+        value: tenantId,
+      });
+  }
   endPoint = addQueryArg(endPoint, queryObject);
   var response;
   try {
@@ -153,7 +164,9 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
   const requestBody = prepareForm(requestParams);
 
   try {
-    const response = await uploadInstance.post(endPoint, requestBody);
+//else no tensnt info
+let tenantInfo =commonConfig.singleInstance?`?tenantId=${commonConfig.tenantId}`:"";
+    const response = await uploadInstance.post(`${endPoint}${tenantInfo}`, requestBody);
     const responseStatus = parseInt(response.status, 10);
     let fileStoreIds = [];
     store.dispatch(toggleSpinner());

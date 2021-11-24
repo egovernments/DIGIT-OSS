@@ -4,19 +4,20 @@ import {
   toggleSnackbar,
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { addQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
-  addQueryArg
-} from "egov-ui-framework/ui-utils/commons";
-import {
-  getAccessToken, getLocale, getTenantId
+  getAccessToken,
+  getLocale,
+  getTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
+import some from "lodash/some";
 import store from "ui-redux/store";
 
 const instance = axios.create({
   baseURL: window.location.origin,
   headers: {
-    "Content-Type": "application/json"
-  }
+    "Content-Type": "application/json",
+  },
 });
 
 const wrapRequestBody = (requestBody, action, customRequestInfo) => {
@@ -30,13 +31,13 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     key: "",
     msgId: `20170310130900|${getLocale()}`,
     requesterId: "",
-    authToken
+    authToken,
   };
   RequestInfo = { ...RequestInfo, ...customRequestInfo };
   return Object.assign(
-    { },
+    {},
     {
-      RequestInfo
+      RequestInfo,
     },
     requestBody
   );
@@ -47,18 +48,32 @@ export const httpRequest = async (
   endPoint,
   action,
   queryObject = [],
-  requestBody = { },
+  requestBody = {},
   headers = [],
-  customRequestInfo = { }
+  customRequestInfo = {}
 ) => {
   store.dispatch(toggleSpinner());
   let apiError = "Api Error";
 
   if (headers)
     instance.defaults = Object.assign(instance.defaults, {
-      headers
+      headers,
     });
 
+  /* Fix for central instance to send tenantID in all query params  */
+  const tenantId =
+    process.env.REACT_APP_NAME === "Citizen"
+      ? commonConfig.tenantId
+      : (endPoint && endPoint.includes("mdms")
+          ? commonConfig.tenantId
+          : getTenantId()) || commonConfig.tenantId;
+  if (!some(queryObject, ["key", "tenantId"]) && commonConfig.singleInstance) {
+    queryObject &&
+      queryObject.push({
+        key: "tenantId",
+        value: tenantId,
+      });
+  }
   endPoint = addQueryArg(endPoint, queryObject);
   var response;
   try {
@@ -131,7 +146,7 @@ export const logoutRequest = async () => {
   throw new Error(apiError);
 };
 
-export const prepareForm = params => {
+export const prepareForm = (params) => {
   let formData = new FormData();
   for (var k in params) {
     formData.append(k, params[k]);
@@ -149,14 +164,14 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
   const uploadInstance = axios.create({
     baseURL: window.location.origin,
     headers: {
-      "Content-Type": "multipart/form-data"
-    }
+      "Content-Type": "multipart/form-data",
+    },
   });
 
   const requestParams = {
     tenantId,
     module,
-    file
+    file,
   };
   const requestBody = prepareForm(requestParams);
 
@@ -169,7 +184,7 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
     if (responseStatus === 201) {
       const responseData = response.data;
       const files = responseData.files || [];
-      fileStoreIds = files.map(f => f.fileStoreId);
+      fileStoreIds = files.map((f) => f.fileStoreId);
       store.dispatch(toggleSpinner());
       return fileStoreIds[0];
     }

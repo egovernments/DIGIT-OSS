@@ -159,6 +159,10 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
             return;
           }
         }
+if(window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")){
+  info.tenantId= Digit.ULBService.getStateId();
+}
+
         setUser({ info, ...tokens });
       } else if (!isUserRegistered) {
         const requestData = {
@@ -169,6 +173,11 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
         };
 
         const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.registerUser(requestData, stateCode);
+      
+        if(window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")){
+        info.tenantId= Digit.ULBService.getStateId();
+        }
+
         setUser({ info, ...tokens });
       }
     } catch (err) {

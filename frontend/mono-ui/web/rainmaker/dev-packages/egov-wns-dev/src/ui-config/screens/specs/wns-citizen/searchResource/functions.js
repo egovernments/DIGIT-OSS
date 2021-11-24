@@ -5,6 +5,8 @@ import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { httpRequest } from "../../../../../ui-utils";
+import { handleAddress } from "../../wns/searchResource/functions";
+
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let queryObject = [
@@ -125,7 +127,7 @@ export const searchApiCall = async (state, dispatch) => {
               connectionNo: element.connectionNo,
               name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:'',
               status: element.status,
-              address: (element.property && element.property !== "NA" && element.property.address)?element.property.address.street:'',
+              address: handleAddress(element),
               tenantId: element.tenantId,
               connectionType: element.connectionType
             }
@@ -137,7 +139,7 @@ export const searchApiCall = async (state, dispatch) => {
             connectionNo: element.connectionNo,
             name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:'',
             status: element.status,
-            address: (element.property && element.property !== "NA" && element.property.address)?element.property.address.street:'',
+            address:handleAddress(element),
             tenantId: element.tenantId,
             connectionType: element.connectionType
           })

@@ -1,30 +1,28 @@
 import axios from "axios";
-import {
-  fetchFromLocalStorage,
-  addQueryArg
-} from "egov-ui-framework/ui-utils/commons";
-import store from "ui-redux/store";
+import commonConfig from "config/common.js";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-  getAccessToken,
-  getTenantId,
-  getLocale,
-  getUserInfo
+  addQueryArg
+} from "egov-ui-framework/ui-utils/commons";
+import {
+  getAccessToken, getLocale, getTenantId, getUserInfo
 } from "egov-ui-kit/utils/localStorageUtils";
+import some from "lodash/some";
+import store from "ui-redux/store";
 
 const instance = axios.create({
   baseURL: window.location.origin,
   headers: {
-    "Content-Type": "application/json"
-  }
+    "Content-Type": "application/json",
+  },
 });
 
 const edcrInstance = axios.create({
   baseURL: window.location.origin,
   headers: {
-    "Content-Type": "application/json"
-  }
-})
+    "Content-Type": "application/json",
+  },
+});
 
 export const wrapRequestBody = (requestBody, action, customRequestInfo) => {
   const authToken = getAccessToken();
@@ -37,14 +35,14 @@ export const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     key: "",
     msgId: `20170310130900|${getLocale()}`,
     requesterId: "",
-    authToken
+    authToken,
   };
 
   RequestInfo = { ...RequestInfo, ...customRequestInfo };
   return Object.assign(
     {},
     {
-      RequestInfo
+      RequestInfo,
     },
     requestBody
   );
@@ -55,30 +53,33 @@ const wrapEdcrRequestBody = (requestBody, action, customRequestInfo) => {
   const userInfo = JSON.parse(getUserInfo());
   let uuid = userInfo.uuid;
   let userInfos = {
-    "id": uuid,
-    "tenantId": getTenantId()
+    id: uuid,
+    tenantId: getTenantId(),
   };
 
-  let Ids = process.env.REACT_APP_NAME === "Citizen" && action != "search" ? userInfos : null;
-  let usrInfo = (action == "search") ? null: Ids;
+  let Ids =
+    process.env.REACT_APP_NAME === "Citizen" && action != "search"
+      ? userInfos
+      : null;
+  let usrInfo = action == "search" ? null : Ids;
   let RequestInfo = {
-    "apiId": "1",
-    "ver": "1",
-    "ts": "01-01-2017 01:01:01",
-    "action": "create",
-    "did": "jh",
-    "key": "",
-    "msgId": "gfcfc",
-    "correlationId": "wefiuweiuff897",
+    apiId: "1",
+    ver: "1",
+    ts: "01-01-2017 01:01:01",
+    action: "create",
+    did: "jh",
+    key: "",
+    msgId: "gfcfc",
+    correlationId: "wefiuweiuff897",
     authToken,
-    "userInfo": usrInfo
+    userInfo: usrInfo,
   };
 
   RequestInfo = { ...RequestInfo, ...customRequestInfo };
   return Object.assign(
     {},
     {
-      RequestInfo
+      RequestInfo,
     },
     requestBody
   );
@@ -98,9 +99,23 @@ export const httpRequest = async (
 
   if (headers)
     instance.defaults = Object.assign(instance.defaults, {
-      headers
+      headers,
     });
 
+  /* Fix for central instance to send tenantID in all query params  */
+  const tenantId =
+    process.env.REACT_APP_NAME === "Citizen"
+      ? commonConfig.tenantId
+      : (endPoint && endPoint.includes("mdms")
+          ? commonConfig.tenantId
+          : getTenantId()) || commonConfig.tenantId;
+  if (!some(queryObject, ["key", "tenantId"]) && commonConfig.singleInstance) {
+    queryObject &&
+      queryObject.push({
+        key: "tenantId",
+        value: tenantId,
+      });
+  }
   endPoint = addQueryArg(endPoint, queryObject);
   var response;
   try {
@@ -157,19 +172,19 @@ export const edcrHttpRequest = async (
   // headers = { "Content-Type": "application/json", "auth-token": authToken }
   if (headers)
     edcrInstance.defaults = Object.assign(edcrInstance.defaults, {
-      headers
+      headers,
     });
 
   endPoint = addQueryArg(endPoint, queryObject);
   var response;
   try {
     response = await edcrInstance.post(
-        endPoint,
-        wrapEdcrRequestBody(requestBody, action, customRequestInfo)
-      );
+      endPoint,
+      wrapEdcrRequestBody(requestBody, action, customRequestInfo)
+    );
     const responseStatus = parseInt(response.status, 10);
     store.dispatch(toggleSpinner());
-    if (responseStatus === 200 || responseStatus === 201) {      
+    if (responseStatus === 200 || responseStatus === 201) {
       return response.data;
     }
   } catch (error) {

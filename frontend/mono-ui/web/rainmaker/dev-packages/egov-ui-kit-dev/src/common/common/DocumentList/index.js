@@ -363,8 +363,8 @@ class DocumentList extends Component {
             id={`jk-document-id-${key}`}
             classes={this.props.classes}
             handleFileUpload={e =>
-              handleFileUpload(e, this.handleDocument, this.props, this.showLoading)
-            }
+              handleFileUpload(e, this.handleDocument, this.props, this.showLoading, this.hideLoading)
+                        }
             uploaded={
               documentsUploadRedux[key] && documentsUploadRedux[key].documents
                 ? true
