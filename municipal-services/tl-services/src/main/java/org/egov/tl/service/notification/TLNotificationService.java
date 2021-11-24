@@ -418,7 +418,7 @@ public class TLNotificationService {
      * @param tenantId
      * @return
      */
-    private Map<String, String> fetchUserUUIDs(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
+    public Map<String, String> fetchUserUUIDs(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
     	Map<String, String> mapOfPhnoAndUUIDs = new HashMap<>();
     	StringBuilder uri = new StringBuilder();
     	uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());

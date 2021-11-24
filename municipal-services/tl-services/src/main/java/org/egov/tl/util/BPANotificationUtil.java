@@ -7,6 +7,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.ServiceRequestRepository;
+import org.egov.tl.service.notification.TLNotificationService;
 import org.egov.tl.web.models.*;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
@@ -17,9 +18,11 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.egov.tl.util.BPAConstants.*;
 import static org.egov.tl.util.TLConstants.BILL_AMOUNT_JSONPATH;
+import static org.egov.tl.util.TLConstants.CHANNEL_NAME_EVENT;
 import static org.springframework.util.StringUtils.capitalize;
 
 @Component
@@ -34,6 +37,9 @@ public class BPANotificationUtil {
 
     @Autowired
     private NotificationUtil notificationUtil;
+
+    @Autowired
+    private TLNotificationService tlNotificationService;
 
 
     @Value("${egov.ui.app.host}")
@@ -299,7 +305,7 @@ public class BPANotificationUtil {
         if(message.contains("{PAYMENT_LINK}"))
         {
             String payEndpoint = commonPayEndpoint.replace("$applicationNo", license.getApplicationNumber()).replace("$tenantId", license.getTenantId());
-            message = message.replace("{PAYMENT_LINK}", egovhost + payEndpoint);
+            message = message.replace("{PAYMENT_LINK}", notificationUtil.getShortenedUrl(egovhost + payEndpoint));
         }
         return message;
     }
@@ -342,4 +348,60 @@ public class BPANotificationUtil {
 //        log.info(link);
         return link;
     }
-}
+
+    public EventRequest getEventsForBPA(TradeLicenseRequest request, boolean isStatusPaid, String message,String receiptno) {
+        if(message == null)
+            return null;
+
+        List<Event> events = new ArrayList<>();
+        TradeLicense license = request.getLicenses().get(0);
+
+        Map<String,String > mobileNumberToOwner = new HashMap<>();
+        license.getTradeLicenseDetail().getOwners().forEach(owner -> {
+            if(owner.getMobileNumber()!=null)
+                mobileNumberToOwner.put(owner.getMobileNumber(),owner.getName());
+        });
+
+        List<SMSRequest> smsRequests = createSMSRequestForBPA(message, mobileNumberToOwner,license,receiptno);
+        Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
+        Map<String, String> mapOfPhnoAndUUIDs = tlNotificationService.fetchUserUUIDs(mobileNumbers, request.getRequestInfo(), request.getLicenses().get(0).getTenantId());
+        if (CollectionUtils.isEmpty(mapOfPhnoAndUUIDs.keySet())) {
+            log.info("UUID search failed!");
+            return null;
+        }
+        Map<String,String > mobileNumberToMsg = smsRequests.stream().collect(Collectors.toMap(SMSRequest::getMobileNumber, SMSRequest::getMessage));
+        for(String mobile: mobileNumbers) {
+            if(null == mapOfPhnoAndUUIDs.get(mobile) || null == mobileNumberToMsg.get(mobile)) {
+                log.error("No UUID/SMS for mobile {} skipping event", mobile);
+                continue;
+            }
+            List<String> toUsers = new ArrayList<>();
+            toUsers.add(mapOfPhnoAndUUIDs.get(mobile));
+            Recepient recepient = Recepient.builder().toUsers(toUsers).toRoles(null).build();
+            List<String> payTriggerList = Arrays.asList(config.getPayTriggers().split("[,]"));
+            Action action = null;
+            if(payTriggerList.contains(license.getStatus()) && !isStatusPaid) {
+                List<ActionItem> items = new ArrayList<>();
+                String actionLink = config.getPayLink().replace("$mobile", mobile)
+                        .replace("$applicationNo", license.getApplicationNumber())
+                        .replace("$tenantId", license.getTenantId())
+                        .replace("$businessService", license.getBusinessService());;
+                actionLink = config.getUiAppHost() + actionLink;
+                ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
+                items.add(item);
+                action = Action.builder().actionUrls(items).build();
+            }
+
+            events.add(Event.builder().tenantId(license.getTenantId()).description(mobileNumberToMsg.get(mobile))
+                    .eventType(BPAConstants.USREVENTS_EVENT_TYPE).name(BPAConstants.USREVENTS_EVENT_NAME)
+                    .postedBy(BPAConstants.USREVENTS_EVENT_POSTEDBY).source(Source.WEBAPP).recepient(recepient)
+                    .eventDetails(null).actions(action).build());
+            }
+        if(!CollectionUtils.isEmpty(events)) {
+                return EventRequest.builder().requestInfo(request.getRequestInfo()).events(events).build();
+                }else {
+                return null;
+                }
+       }
+
+    }
