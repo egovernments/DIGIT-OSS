@@ -130,7 +130,7 @@ public class URLConverterService {
             params.put(name, value);
         }
         String channel = params.get("channel");
-        if(channel.equalsIgnoreCase("whatsapp") || channel.equalsIgnoreCase("sms")){
+        if( channel != null && (channel.equalsIgnoreCase("whatsapp") || channel.equalsIgnoreCase("sms"))){
             HashMap <String,Object> data = new HashMap<String, Object>();
             StringBuilder shortenedUrl = new StringBuilder();
 
