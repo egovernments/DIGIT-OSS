@@ -114,8 +114,11 @@ public class URLConverterService {
         LOGGER.info("Converting shortened URL back to {}", longUrl);
         if(longUrl.isEmpty())
         	throw new CustomException("INVALID_REQUEST","Invalid Key");
-        else
-            indexData(longUrl,uniqueID);
+        else{
+            String[] queryString = longUrl.split("\\?");
+            if(queryString.length > 1)
+                indexData(longUrl,uniqueID);
+        }
         return longUrl;
     }
 
@@ -130,7 +133,7 @@ public class URLConverterService {
             params.put(name, value);
         }
         String channel = params.get("channel");
-        if(channel.equalsIgnoreCase("whatsapp") || channel.equalsIgnoreCase("sms")){
+        if(channel !=null && (channel.equalsIgnoreCase("whatsapp") || channel.equalsIgnoreCase("sms"))){
             HashMap <String,Object> data = new HashMap<String, Object>();
             StringBuilder shortenedUrl = new StringBuilder();
 
