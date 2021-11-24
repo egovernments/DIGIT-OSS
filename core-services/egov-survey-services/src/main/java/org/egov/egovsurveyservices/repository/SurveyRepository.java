@@ -118,15 +118,15 @@ public class SurveyRepository {
         return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
     }
 
-    public Map fetchCountMapForGivenSurveyIds(List<String> listOfSurveyIds) {
+    public List fetchCountMapForGivenSurveyIds(List<String> listOfSurveyIds) {
         List<Object> preparedStmtList = new ArrayList<>();
 
         if(CollectionUtils.isEmpty(listOfSurveyIds))
-            return new HashMap<>();
+            return new ArrayList();
 
         String query = surveyQueryBuilder.getSurveyUuidsToCountMapQuery(listOfSurveyIds, preparedStmtList);
         log.info("query for uuids to count map search: " + query + " params: " + preparedStmtList);
 
-        return jdbcTemplate.queryForMap(query, preparedStmtList.toArray());
+        return jdbcTemplate.queryForList(query, preparedStmtList.toArray());
     }
 }
