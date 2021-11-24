@@ -359,6 +359,7 @@ export const OBPSService = {
     let PermitConditions = {
       title:"BPA_PERMIT_CONDITIONS",
       isTitleVisible: permitcondn?.length > 0 ? false : true,
+      isNotAllowed: permitcondn?.length > 0 ? false : true,
       additionalDetails:{
         inspectionReport:[],
         permit:[...permitcondn]
@@ -553,6 +554,7 @@ export const OBPSService = {
     const fiReports = {
       title: "",
       isFieldInspection: true,
+      isNotAllowed: BPA?.additionalDetails?.fieldinspection_pending?.length > 0 ? false : true,
       additionalDetails: {
         values: [],
         fiReport : BPA?.additionalDetails?.fieldinspection_pending?.length > 0 ? true : false

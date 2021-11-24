@@ -335,7 +335,7 @@ const BpaApplicationDetail = () => {
 
         return (
           <div>
-            <Card key={index} style={!detail?.additionalDetails?.fiReport && detail?.title === "" ? { marginTop: "-50px" } : {}}>
+            {!detail?.isNotAllowed ? <Card key={index} style={!detail?.additionalDetails?.fiReport && detail?.title === "" ? { marginTop: "-50px" } : {}}>
 
               {!detail?.isTitleVisible ? <CardHeader>{t(detail?.title)}</CardHeader> : null}
 
@@ -418,7 +418,7 @@ const BpaApplicationDetail = () => {
                 )) : null}
 
               </StatusTable>
-            </Card>
+            </Card> : null }
 
             {/* to get Timeline values */}
             {index === arr.length - 1 && (
