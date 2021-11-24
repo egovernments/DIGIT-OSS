@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static org.egov.egovsurveyservices.utils.SurveyServiceConstants.*;
 
@@ -84,10 +81,17 @@ public class SurveyService {
     }
 
     private void enrichNumberOfResponsesForEachSurvey(List<String> listOfSurveyIds, List<SurveyEntity> surveyEntities) {
-        Map surveyIdToResponseCountMap = surveyRepository.fetchCountMapForGivenSurveyIds(listOfSurveyIds);
-        log.info(surveyIdToResponseCountMap.toString());
-        surveyEntities.forEach(surveyEntity -> {
-            surveyEntity.setAnswersCount((Integer)surveyIdToResponseCountMap.get(surveyEntity.getUuid()));
+        List<Map<String, Object>> surveyIdToResponseCountList = (List<Map<String, Object>>) surveyRepository.fetchCountMapForGivenSurveyIds(listOfSurveyIds);
+        //log.info(surveyIdToResponseCountList.toString());
+        Map<Object, Object> surveyIdToResponseCountMap = new HashMap<>();
+        for(Map m : surveyIdToResponseCountList){
+            surveyIdToResponseCountMap.put(m.get("surveyid"), m.get("count"));
+        }
+        surveyEntities.forEach(entity -> {
+            if(surveyIdToResponseCountMap.containsKey(entity.getUuid()))
+                entity.setAnswersCount((Integer)surveyIdToResponseCountMap.get(entity.getUuid()));
+            else
+                entity.setAnswersCount(0);
         });
     }
 
