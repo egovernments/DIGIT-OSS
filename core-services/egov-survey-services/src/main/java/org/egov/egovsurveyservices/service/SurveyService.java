@@ -15,6 +15,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.egov.egovsurveyservices.utils.SurveyServiceConstants.*;
@@ -77,7 +78,17 @@ public class SurveyService {
         if(CollectionUtils.isEmpty(surveyEntities))
             return new ArrayList<>();
 
+        enrichNumberOfResponsesForEachSurvey(listOfSurveyIds, surveyEntities);
+
         return surveyEntities;
+    }
+
+    private void enrichNumberOfResponsesForEachSurvey(List<String> listOfSurveyIds, List<SurveyEntity> surveyEntities) {
+        Map surveyIdToResponseCountMap = surveyRepository.fetchCountMapForGivenSurveyIds(listOfSurveyIds);
+        log.info(surveyIdToResponseCountMap.toString());
+        surveyEntities.forEach(surveyEntity -> {
+            surveyEntity.setAnswersCount((Integer)surveyIdToResponseCountMap.get(surveyEntity.getUuid()));
+        });
     }
 
     public void submitResponse(AnswerRequest answerRequest) {
