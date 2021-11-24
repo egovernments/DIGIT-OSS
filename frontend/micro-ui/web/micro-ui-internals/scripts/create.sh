@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./scripts/run.sh obps
+./scripts/run.sh obps noc
