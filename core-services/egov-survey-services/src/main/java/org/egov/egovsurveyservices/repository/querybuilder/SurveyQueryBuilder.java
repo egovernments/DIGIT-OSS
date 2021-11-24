@@ -194,4 +194,12 @@ public class SurveyQueryBuilder {
 
         return SURVEY_UUIDS_QUERY_WRAPPER.replace("{HELPER_TABLE}", query.toString());
     }
+
+    public String getSurveyUuidsToCountMapQuery(List<String> listOfSurveyIds, List<Object> preparedStmtList) {
+        StringBuilder query = new StringBuilder(" SELECT surveyid, COUNT(DISTINCT citizenid) FROM eg_ss_answer answer ");
+        query.append(" answer.surveyid IN ( ").append(createQuery(listOfSurveyIds)).append(" )");
+        addToPreparedStatement(preparedStmtList, listOfSurveyIds);
+        query.append(" GROUP  BY surveyid ");
+        return query.toString();
+    }
 }

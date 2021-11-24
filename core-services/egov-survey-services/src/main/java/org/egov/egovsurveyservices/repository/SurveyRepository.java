@@ -15,7 +15,9 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Repository
@@ -114,5 +116,17 @@ public class SurveyRepository {
         log.info("query for uuids search: " + query + " params: " + preparedStmtList);
 
         return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
+    }
+
+    public Map fetchCountMapForGivenSurveyIds(List<String> listOfSurveyIds) {
+        List<Object> preparedStmtList = new ArrayList<>();
+
+        if(CollectionUtils.isEmpty(listOfSurveyIds))
+            return new HashMap<>();
+
+        String query = surveyQueryBuilder.getSurveyUuidsToCountMapQuery(listOfSurveyIds, preparedStmtList);
+        log.info("query for uuids to count map search: " + query + " params: " + preparedStmtList);
+
+        return jdbcTemplate.queryForMap(query, preparedStmtList.toArray());
     }
 }
