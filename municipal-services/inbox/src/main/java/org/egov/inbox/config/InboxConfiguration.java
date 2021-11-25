@@ -45,6 +45,9 @@ public class InboxConfiguration {
 	@Value("${workflow.process.count.path}")
 	private String processCountPath;
 
+	@Value("${workflow.process.nearing.sla.count.path}")
+	private String nearingSlaProcessCountPath;
+
 	@Value("${workflow.process.statuscount.path}")
 	private String processStatusCountPath;
 

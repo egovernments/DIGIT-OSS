@@ -50,6 +50,9 @@ public class ProcessInstanceSearchCriteria {
     @JsonIgnore
     private Boolean isProcessCountCall;
 
+    @JsonIgnore
+    private Boolean isNearingSlaCount;
+
 
     public Boolean isNull(){
         if(this.getBusinessIds()==null && this.getIds()==null && this.getAssignee()==null &&
