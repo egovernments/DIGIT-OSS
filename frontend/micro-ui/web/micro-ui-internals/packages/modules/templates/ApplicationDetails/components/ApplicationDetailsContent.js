@@ -95,7 +95,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
   }
 
   return (
-    <Card style={{ position: "relative" }}>
+    <Card style={{ position: "relative"}} className={"employeeCard-override"}>
       {applicationDetails?.applicationDetails?.map((detail, index) => (
         <React.Fragment key={index}>
           <div style={getMainDivStyles()}>

@@ -291,15 +291,16 @@ const BpaApplicationDetail = () => {
 
   return (
     <Fragment>
-      <div style={{ marginLeft: "15px" }}>
-        <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
+      <div className={"employee-main-application-details"}>
+      <div className={"employee-application-details"}>
+        <Header styles={{}}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
         {dowloadOptions && dowloadOptions.length>0 && <MultiLink
-          className="multilinkWrapper"
+          className="multilinkWrapper employee-mulitlink-main-div"
           onHeadClick={() => setShowOptions(!showOptions)}
           displayOptions={showOptions}
           options={dowloadOptions}
-          style={{right:"0",marginTop:"70px",marginRight:"50px"}}
-          optionsStyle={{right:"0",marginTop:"70px",marginRight:"50px"}}
+          downloadBtnClassName={"employee-download-btn-className"}
+          optionsClassName={"employee-options-btn-className"}
         />}
       </div>
       {data?.applicationData?.status === "FIELDINSPECTION_INPROGRESS" && (userInfo?.info?.roles.filter(role => role.code === "BPA_FIELD_INSPECTOR")).length>0 && <FormComposer
@@ -336,6 +337,7 @@ const BpaApplicationDetail = () => {
         statusAttribute={"state"}
         timelineStatusPrefix={`WF_${workflowDetails?.data?.applicationBusinessService ? workflowDetails?.data?.applicationBusinessService : data?.applicationData?.businessService}_`}
       />
+      </div>
     </Fragment>
   )
 };

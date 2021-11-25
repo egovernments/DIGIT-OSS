@@ -312,3 +312,34 @@
 .card-label-error {
   @apply block text-body-s text-error mb-md;
 }
+
+.employeeCard-override {
+  margin-left: 0px !important;
+}
+
+.employee-application-details {
+  display: flex !important;
+  justify-content: space-between !important;
+  max-height: 60px !important;
+  height: 60px !important
+}
+.employee-main-application-details {
+  padding: 10px !important;
+}
+
+.employee-mulitlink-main-div {
+  z-index: 10 !important; 
+  max-width: 41% !important;
+}
+
+.employee-download-btn-className {
+  position: unset !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+}
+
+.employee-options-btn-className {
+  position: "unset" !important;
+  margin: 0 !important;
+  width: "100%" !important;
+}

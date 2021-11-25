@@ -20,10 +20,6 @@ const applicationStatuses = [
         i18nKey: "WF_NEWTL_PENDINGPAYMENT"
     },
     {
-        code: "CITIZEN_APPROVAL_INPROCESS",
-        i18nKey: "WF_BPA_CITIZEN_APPROVAL_INPROCESS"
-    },
-    {
         code: "CITIZEN_APPROVAL_PENDING",
         i18nKey: "WF_BPA_CITIZEN_APPROVAL_PENDING"
     },
