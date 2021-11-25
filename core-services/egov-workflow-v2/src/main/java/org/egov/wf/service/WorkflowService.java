@@ -36,6 +36,12 @@ public class WorkflowService {
 
     private BusinessServiceRepository businessServiceRepository;
 
+    @Autowired
+    private MDMSService mdmsService;
+
+    @Autowired
+    private BusinessMasterService businessMasterService;
+
 
     @Autowired
     public WorkflowService(WorkflowConfig config, TransitionService transitionService,
@@ -93,6 +99,13 @@ public class WorkflowService {
 
     public Integer count(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
         Integer count;
+        // Enrich slot sla limit in case of nearingSla count
+        if(criteria.getIsNearingSlaCount()){
+            Integer slotPercentage = mdmsService.fetchSlotPercentageForNearingSla(requestInfo);
+            Long maxBusinessServiceSla = businessMasterService.getMaxBusinessServiceSla(criteria);
+            criteria.setSlotPercentageSlaLimit(maxBusinessServiceSla - slotPercentage * (maxBusinessServiceSla/100));
+        }
+
         if(criteria.isNull()){
             enrichSearchCriteriaFromUser(requestInfo, criteria);
             count = workflowRepository.getInboxCount(criteria);
@@ -258,6 +271,18 @@ public class WorkflowService {
         Integer count;
         criteria.setIsEscalatedCount(true);
         count = workflowRepository.getEscalatedApplicationsCount(requestInfo,criteria);
+        return count;
+    }
+
+    public Integer nearingSlaCount(RequestInfo requestInfo, ProcessInstanceSearchCriteria criteria) {
+        Integer count;
+        criteria.setIsNearingSlaCount(Boolean.TRUE);
+        if(criteria.isNull()){
+            enrichSearchCriteriaFromUser(requestInfo, criteria);
+            count = workflowRepository.getInboxCount(criteria);
+        }
+        else count = workflowRepository.getProcessInstancesCount(criteria);
+
         return count;
     }
 }

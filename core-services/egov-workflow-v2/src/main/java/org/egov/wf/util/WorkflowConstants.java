@@ -28,6 +28,12 @@ public class WorkflowConstants {
 
     public static final String MDMS_TENANTS= "tenants";
 
+    public static final String MDMS_WF_SLA_CONFIG = "wfSlaConfig";
+
+    public static final String MDMS_COMMON_MASTERS = "common-masters";
+
+    public static final String SLOT_PERCENTAGE_PATH = "$.MdmsRes.common-masters.wfSlaConfig[0].slotPercentage";
+
     public static final String MDMS_ALLOWED_ROLES_ALL_SERVICES = "$..roles";
 
     public static final String MDMS_ALLOWED_ROLES= "$.BusinessService[?(@.businessService=='NewTL')]..roles";
