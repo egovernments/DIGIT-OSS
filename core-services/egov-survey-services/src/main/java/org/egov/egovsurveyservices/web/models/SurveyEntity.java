@@ -59,7 +59,7 @@ public class SurveyEntity {
     private Boolean active;
 
     @JsonProperty("answersCount")
-    private Integer answersCount;
+    private Long answersCount;
 
     public SurveyEntity addQuestionsItem(Question questionItem) {
         if (this.questions == null) {
