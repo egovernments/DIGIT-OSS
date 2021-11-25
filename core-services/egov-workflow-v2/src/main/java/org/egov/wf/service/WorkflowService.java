@@ -1,6 +1,7 @@
 package org.egov.wf.service;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.tracer.model.CustomException;
 import org.egov.wf.config.WorkflowConfig;
 import org.egov.wf.repository.BusinessServiceRepository;
 import org.egov.wf.repository.WorKflowRepository;
@@ -11,6 +12,7 @@ import org.egov.wf.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import static java.util.Objects.isNull;
 
@@ -101,6 +103,10 @@ public class WorkflowService {
         Integer count;
         // Enrich slot sla limit in case of nearingSla count
         if(criteria.getIsNearingSlaCount()){
+
+            if(ObjectUtils.isEmpty(criteria.getBusinessService()))
+                throw new CustomException("EG_WF_BUSINESSSRV_ERR", "Providing business service is mandatory for nearing escalation count");
+
             Integer slotPercentage = mdmsService.fetchSlotPercentageForNearingSla(requestInfo);
             Long maxBusinessServiceSla = businessMasterService.getMaxBusinessServiceSla(criteria);
             criteria.setSlotPercentageSlaLimit(maxBusinessServiceSla - slotPercentage * (maxBusinessServiceSla/100));
