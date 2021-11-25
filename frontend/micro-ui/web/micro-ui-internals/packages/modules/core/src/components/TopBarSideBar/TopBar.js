@@ -30,6 +30,7 @@ const TopBar = ({
     const { pathname } = useLocation();
     
     const conditionsToDisableNotificationCountTrigger = () => {
+      if(!CitizenHomePageTenantId) return false
       if(Digit.UserService?.getUser()?.info?.type === "EMPLOYEE") return false
       return true
     }

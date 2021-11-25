@@ -1,32 +1,20 @@
-import { ActionBar, ApplyFilterBar, CloseSvg, Dropdown, SubmitBar, FilterIcon } from "@egovernments/digit-ui-react-components";
-import React ,{useState}from "react";
+import { ActionBar, ApplyFilterBar, CloseSvg, Dropdown, SubmitBar, FilterIcon, Loader, CheckBox, RadioButtons } from "@egovernments/digit-ui-react-components";
+import React ,{useMemo, useState}from "react";
 import { useTranslation } from "react-i18next";
 import Status from "./Status";
-
-const applicationTypes = [
-  {
-    name: "BUILDING_PLAN_SCRUTINY",
-  },
-  {
-    name: "BUILDING_NEW_PLAN_SCRUTINY",
-  },
-];
-
-const serviceTypes = [
-  {
-    name: "NEW_CONSTRUCTION",
-  },
-];
 
 const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClose, removeParam, statuses, ...props }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const [_searchParams, setSearchParams] = useState(() => ({...searchParams,applicationStatus:[]}));
+  const [_searchParams, setSearchParams] = useState(() => ({...searchParams,applicationType: [], applicationStatus:[]}));
   
-
+  const { data: applicationTypes, isLoading: loadingApplicationTypes } = Digit.Hooks.obps.SearchMdmsTypes.useApplicationTypes(tenantId);
+  const availableBusinessServicesOptions = Digit.Hooks.obps.useBusinessServiceBasedOnServiceType({applicationType: _searchParams?.applicationType})
+  const filteredStatus = useMemo(() => _searchParams.businessService ? statuses?.filter(e => e.businessservice === _searchParams.businessService) : null ,[statuses, _searchParams.businessService])
+  
   const onStatusChange = (e, type) => {
-    if (e.target.checked) setSearchParams({ applicationStatus: [..._searchParams?.applicationStatus, type] });
-    else setSearchParams({ applicationStatus: _searchParams?.applicationStatus.filter((option) => type.name !== option.name) });
+    if (e.target.checked) setSearchParams({..._searchParams, applicationStatus: [..._searchParams?.applicationStatus, type] });
+    else setSearchParams({..._searchParams, applicationStatus: _searchParams?.applicationStatus.filter((option) => type.name !== option.name) });
   };
 
   const handleChange = (option) => {
@@ -59,23 +47,43 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
               </span>
             )}
           </div>
-          <div>
+          {loadingApplicationTypes ? <Loader/> : <div>
             <div className="filter-label">{t("BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL")}</div>
-            <Dropdown t={t} option={applicationTypes} selected={{name:_searchParams?.applicationType}} optionKey={"name"} select={(arg) => handleChange({ applicationType: arg?.name })} />
-          </div>
-          <div>
+            {/* <Dropdown t={t} option={applicationTypes} selected={_searchParams?.applicationType} optionKey={"i18nKey"} select={(arg) => handleChange({ applicationType: arg })} /> */}
+            {applicationTypes.map(applicationType => {
+                return <CheckBox
+                  key={applicationType.code}
+                  onChange={(e) => handleChange({
+                    applicationType : e.target.checked ? [..._searchParams?.applicationType, applicationType] : _searchParams?.applicationType.filter( item => item.code !== applicationType.code ) 
+                  })}
+                  checked={_searchParams?.applicationType?.filter(e => e.code === applicationType.code)[0]}
+                  label={t(applicationType?.i18nKey)}
+                />  
+              })}
+          </div>}
+          {/* {filteredServiceTypes?.length > 0 ? loadingServiceTypes ? <Loader/> : <div>
             <div className="filter-label">{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</div>
-            <Dropdown t={t} option={serviceTypes} optionKey={"name"} selected={{name:_searchParams?.serviceType}} select={(arg) => handleChange({ serviceType: arg?.name })} />
-          </div>
-          <div>
-            <Status onAssignmentChange={onStatusChange} statuses={statuses} searchParams={_searchParams} />
-          </div>
+            <Dropdown t={t} option={filteredServiceTypes} optionKey={"i18nKey"} selected={_searchParams?.serviceType} select={(arg) => handleChange({ serviceType: arg })} />
+          </div> : null} */}
+          {availableBusinessServicesOptions?.length > 0 ? <div>
+            <div className="filter-label">{t("ES_INBOX_RISK_TYPE")}</div>
+            <RadioButtons
+                onSelect={(e) => handleChange({businessService: e.code})}
+                selectedOption={availableBusinessServicesOptions.filter((option) => option.code === _searchParams?.businessService)[0]}
+                optionsKey="i18nKey"
+                name="businessService"
+                options={availableBusinessServicesOptions}
+              />
+          </div> : null }
+          {filteredStatus?.length > 0 ? <div>
+            <Status onAssignmentChange={onStatusChange} statuses={filteredStatus} searchParams={_searchParams} />
+          </div> : null}
           {props.type !== "mobile" && (
             <div>
               <SubmitBar
                 // disabled={status?.length == mdmsStatus?.length&& service?.code == defaultService}
                 onSubmit={() => {
-                  onFilterChange(_searchParams);
+                  onFilterChange({applicationStatus: _searchParams?.applicationStatus });
                   props?.onClose?.();
                 }}
                 label={t("ACTION_TEST_APPLY")}
@@ -97,7 +105,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
                 if (props.type === "mobile") {
                   onClose();
                 }
-                onFilterChange(_searchParams);
+                onFilterChange({applicationStatus: _searchParams?.applicationStatus });
               }}
               style={{ flex: 1 }}
             />

@@ -16,6 +16,7 @@ const DesktopInbox = (props) => {
     if (isNaN(value)) return <span className="sla-cell-success">0</span>;
     return value < 0 ? <span className="sla-cell-error">{value}</span> : <span className="sla-cell-success">{value}</span>;
   };
+  const GetStatusCell = (value) => value === "Active" || value>0 ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span> 
 
   const columns = React.useMemo(() => {
     return [
@@ -41,7 +42,7 @@ const DesktopInbox = (props) => {
       },
       {
         Header: t('BPA_COMMON_SLA'),
-        accessor: 'sla'
+        accessor: row => GetStatusCell(row?.sla || "-")
       }
     ]
   },[t])

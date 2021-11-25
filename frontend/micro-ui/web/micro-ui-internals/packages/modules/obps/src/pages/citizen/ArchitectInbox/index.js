@@ -1,3 +1,4 @@
+import { Header } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import DesktopInbox from "./DesktopInbox";
@@ -191,6 +192,11 @@ const Inbox = ({ tenants, parentRoute }) => {
   }
 
   return (
+    <div>
+    <Header>
+      {t("ES_COMMON_INBOX")}
+      {Number(bpaInboxData?.totalCount) ? <p className="inbox-count">{Number(bpaInboxData?.totalCount)}</p> : null}
+    </Header>
     <DesktopInbox
       // bparegData={table}
       bparegData={[]}
@@ -217,6 +223,7 @@ const Inbox = ({ tenants, parentRoute }) => {
       totalRecords={bpaInboxData?.totalCount}
     // totalRecords={isInbox ? Number(applications?.totalCount) : totalCount}
     />
+    </div>
   );
 }
 

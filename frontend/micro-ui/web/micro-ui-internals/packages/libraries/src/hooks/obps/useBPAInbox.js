@@ -42,7 +42,7 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
               businessService: application?.ProcessInstance?.businessService,
               applicationType: application?.businessObject?.additionalDetails?.applicationType ? `WF_BPA_${application?.businessObject?.additionalDetails?.applicationType}` : "-",
               locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
-              status: application.businessObject.status,
+              status: application?.ProcessInstance?.state?.state,
               state:  application?.ProcessInstance?.state?.state,
               owner: application.ProcessInstance?.assigner?.name,
               sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))

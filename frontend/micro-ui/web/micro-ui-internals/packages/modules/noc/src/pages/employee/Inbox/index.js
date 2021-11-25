@@ -63,6 +63,11 @@ const Inbox = ({parentRoute}) => {
       dispatch({action: "mutateFilterForm", data: filterFormDefaultValues});
     }
 
+    const onSortFormReset = (setSortFormValue) => {
+      setSortFormValue("sortOrder", "DESC")
+      dispatch({action: "mutateTableForm", data: tableOrderFormDefaultValues})
+    }
+
     const formInitValue = useMemo(() => {
       return InboxObjectInSessionStorage || {
         filterForm: filterFormDefaultValues,
@@ -87,6 +92,11 @@ const Inbox = ({parentRoute}) => {
       }
     }
     
+    const onMobileSortOrderData = (data) => {
+      const {sortOrder} = data
+      dispatch({action: "mutateTableForm", data:{ ...formState.tableForm, sortOrder }})
+    }
+
     const { data: localitiesForEmployeesCurrentTenant, isLoading: loadingLocalitiesForEmployeesCurrentTenant } = Digit.Hooks.useBoundaryLocalities(tenantId, "revenue", {}, t);
 
     const { isLoading: isInboxLoading, data: {table , statuses, totalCount} = {} } = Digit.Hooks.noc.useInbox({
@@ -126,12 +136,14 @@ const Inbox = ({parentRoute}) => {
 
     const propsForInboxMobileCards = useInboxMobileCardsData({parentRoute, table})
 
+    const propsForMobileSortForm = { onMobileSortOrderData, sortFormDefaultValues: formState?.tableForm, onSortFormReset }
+
     return <>
       <Header>
         {t("ES_COMMON_INBOX")}
         {totalCount ? <p className="inbox-count">{totalCount}</p> : null}
       </Header>
-      <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable, propsForInboxMobileCards, formState}}></InboxComposer>
+      <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, ...propsForMobileSortForm, propsForInboxTable, propsForInboxMobileCards, formState}}></InboxComposer>
     </>
 }
 
