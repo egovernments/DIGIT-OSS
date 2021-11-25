@@ -89,9 +89,9 @@ public class SurveyService {
         }
         surveyEntities.forEach(entity -> {
             if(surveyIdToResponseCountMap.containsKey(entity.getUuid()))
-                entity.setAnswersCount((Integer)surveyIdToResponseCountMap.get(entity.getUuid()));
+                entity.setAnswersCount((Long)surveyIdToResponseCountMap.get(entity.getUuid()));
             else
-                entity.setAnswersCount(0);
+                entity.setAnswersCount(0l);
         });
     }
 
