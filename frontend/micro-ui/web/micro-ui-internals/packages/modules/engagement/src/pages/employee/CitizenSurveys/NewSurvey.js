@@ -33,7 +33,7 @@ const NewSurveys = () => {
   const history = useHistory();
   const onSubmit = (data) => {
     const { collectCitizenInfo, title, description, tenantIds, fromDate, toDate, fromTime, toTime, questions } = data;
-    const mappedQuestions = mapQuestions(questions.formsConfig);
+    const mappedQuestions = mapQuestions(questions);
     const details = {
       SurveyEntity: {
         tenantIds: tenantIds.map(({code})=>(code)),

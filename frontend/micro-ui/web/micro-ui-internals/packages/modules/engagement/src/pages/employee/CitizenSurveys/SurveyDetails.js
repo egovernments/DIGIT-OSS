@@ -3,8 +3,17 @@ import React, { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useHistory } from "react-router-dom";
 import { format } from "date-fns";
-
 import EditSurveyForm from "../../../components/Surveys/EditSurveyForms";
+/**TODO : Think of better to do this possibly in service layer */
+const answerTypeEnum = {
+  SHORT_ANSWER_TYPE: "Short Answer",
+  LONG_ANSWER_TYPE: "Paragraph",
+  MULTIPLE_ANSWER_TYPE: "Multiple Choice",
+  CHECKBOX_ANSWER_TYPE: "Check Boxes",
+  DATE_ANSWER_TYPE: "Date",
+  TIME_ANSWER_TYPE: "Time",
+};
+
 
 const Heading = (props) => {
   return <h1 className="heading-m">{props.label}</h1>;
@@ -24,6 +33,7 @@ const CloseBtn = (props) => {
     </div>
   );
 };
+
 
 const SurveyDetails = ({ location, match }) => {
   let isMobile = window.Digit.Utils.browser.isMobile();
@@ -49,7 +59,12 @@ const SurveyDetails = ({ location, match }) => {
           toDate: format(new Date(surveyObj.endDate), "yyyy-MM-dd"),
           fromTime: format(new Date(surveyObj.startDate), "hh:mm"),
           toTime: format(new Date(surveyObj.endDate), "hh:mm"),
-          questions: surveyObj.questions.map(({questionStatement, type, required, options})=>({questionStatement, type, required, options})),
+          questions: surveyObj.questions.map(({ questionStatement, type, required, options }) => ({
+            questionStatement,
+            type:answerTypeEnum[type],
+            required,
+            options,
+          })),
         };
       },
     }
@@ -59,7 +74,7 @@ const SurveyDetails = ({ location, match }) => {
     // setSelectedAction(action);
     if (action === "EDIT") {
       //make form editable
-      setIsFormDisabled(!isFormDisabled)
+      setIsFormDisabled(!isFormDisabled);
       setUserAction("EDIT");
     }
     if (action === "INACTIVE") {
@@ -76,7 +91,7 @@ const SurveyDetails = ({ location, match }) => {
     }
     setDisplayMenu(false);
   }
-  console.log("surveyData", { surveyData });
+  
   const onEdit = (data) => {
     //console.log("<<data>>", { data });
   };

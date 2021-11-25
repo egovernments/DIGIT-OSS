@@ -8,51 +8,44 @@ const defaultFormsConfig = {
   options: [],
 };
 
-const initialSurveyFormState = {
-  formsConfig: [defaultFormsConfig],
-  formsCount: 1,
-};
+const initialSurveyFormState = [defaultFormsConfig];
 
 const surveyFormReducer = (state, { type, payload }) => {
   switch (type) {
     case "addNewForm":
-      const newState = {
-        ...state,
-        formsConfig: [...state.formsConfig, defaultFormsConfig],
-        formsCount: state.formsCount + 1,
-      };
-      //console.log("addNewForm >>>", { newState });
-      payload.setSurveyConfig("questions", newState);
-      return newState;
+      const newSurveyQues = [...state, defaultFormsConfig];
+      //console.log("addNewForm >>>", { newSurveyQues });
+      payload.setSurveyConfig("questions", newSurveyQues);
+      return newSurveyQues;
     case "updateForm":
-      const updatedState = { ...state };
-      updatedState.formsConfig.splice(payload.index, 1, payload);
-      //console.log("updateForm >>>", { updatedState });
-      payload.setSurveyConfig("questions", updatedState);
-      return updatedState;
+      const updatedSurveyQues = [...state];
+      //console.log("updateForm >>>", { updatedSurveyQues });
+      updatedSurveyQues.splice(payload.index, 1, payload);
+      payload.setSurveyConfig("questions", updatedSurveyQues);
+      return updatedSurveyQues;
     case "removeForm":
-      if (state.formsCount === 1) return state;
-      state.formsConfig.splice(payload.index, 1);
-      //console.log("removeForm >>>", { state });
-      payload.setSurveyConfig("questions", state);
-      return {
-        ...state,
-        formsCount: state.formsCount - 1,
-      };
+      if (state.length === 1) return state;
+      const copyOfSate = [...state];
+      copyOfSate.splice(payload.index, 1);
+      //console.log("removeForm After>>>", { copyOfSate, payload });
+      payload.setSurveyConfig("questions", copyOfSate);
+      return copyOfSate;
   }
 };
 
-const SurveyFormsMaker = ({ t, formsConfig, setSurveyConfig }) => {
+const SurveyFormsMaker = ({ t, formsConfig, setSurveyConfig, disableInputs }) => {
   const [surveyState, dispatch] = useReducer(surveyFormReducer, formsConfig ? formsConfig : initialSurveyFormState);
-  
+
   const passingSurveyConfigInDispatch = ({ type, payload }) => {
     dispatch({ type, payload: { ...payload, setSurveyConfig } });
   };
 
   const renderPreviewForms = () => {
-    return surveyState.formsConfig.map((config, index) => (
-      <NewSurveyForm key={index} {...config} t={t} index={index} dispatch={passingSurveyConfigInDispatch} />
-    ));
+    return surveyState.length
+      ? surveyState.map((config, index) => (
+          <NewSurveyForm key={index} {...config} t={t} index={index} disableInputs={disableInputs} dispatch={passingSurveyConfigInDispatch} />
+        ))
+      : null;
   };
 
   return (
@@ -60,7 +53,11 @@ const SurveyFormsMaker = ({ t, formsConfig, setSurveyConfig }) => {
       <div className="heading">{t("CS_SURVEYS_QUESTIONS")}</div>
       {renderPreviewForms()}
       <div className="pointer">
-        <button className="unstyled-button link" type="button" onClick={() => passingSurveyConfigInDispatch({ type: "addNewForm" })}>
+        <button
+          className={`unstyled-button link ${disableInputs ? "disabled-btn" : ""} `}
+          type="button"
+          onClick={() => passingSurveyConfigInDispatch({ type: "addNewForm" })}
+        >
           {t("CS_COMMON_ADD_QUESTION")}
         </button>
       </div>

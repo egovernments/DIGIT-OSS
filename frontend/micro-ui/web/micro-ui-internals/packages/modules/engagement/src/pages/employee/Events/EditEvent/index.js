@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import React, { Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
-import { config } from "../../NewEventConfig";
+import { config } from "../../../../config/NewEventConfig";
 
 const EditEvents = () => {
   const { t } = useTranslation();

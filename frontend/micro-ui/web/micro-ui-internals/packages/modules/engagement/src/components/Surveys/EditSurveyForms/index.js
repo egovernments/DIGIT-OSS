@@ -7,6 +7,7 @@ import SurveyFormsMaker from "../SurveyForms/SurveyFormsMaker";
 import SurveySettingsForms from "../SurveyForms/SurveySettingsForm";
 
 const EditSurveyForms = ({ t, onEdit, initialSurveysConfig, isFormDisabled = true, displayMenu, setDisplayMenu, onActionSelect }) => {
+ 
   const {
     register: registerRef,
     control: controlSurveyForm,
@@ -34,7 +35,7 @@ const EditSurveyForms = ({ t, onEdit, initialSurveysConfig, isFormDisabled = tru
             surveyFormState={surveyFormState}
             disableInputs={isFormDisabled}
           />
-          <SurveyFormsMaker t={t} setSurveyConfig={setSurveyFormValue} disableInputs={isFormDisabled} />
+          <SurveyFormsMaker t={t} setSurveyConfig={setSurveyFormValue} disableInputs={isFormDisabled} formsConfig={initialSurveysConfig.questions} />
           <SurveySettingsForms t={t} controlSurveyForm={controlSurveyForm} surveyFormState={surveyFormState} disableInputs={isFormDisabled} />
         </Card>
 

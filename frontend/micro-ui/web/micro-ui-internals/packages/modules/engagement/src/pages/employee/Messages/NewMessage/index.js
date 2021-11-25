@@ -3,7 +3,7 @@ import React, { Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { convertDateToMaximumPossibleValue } from "../../../../utils";
-import { config } from "../../NewMessageConfig";
+import { config } from "../../../../config/NewMessageConfig";
 
 
 

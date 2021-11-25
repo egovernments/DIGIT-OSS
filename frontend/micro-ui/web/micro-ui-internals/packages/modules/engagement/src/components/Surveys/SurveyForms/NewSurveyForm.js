@@ -41,16 +41,8 @@ const dropdownOptions = [
   },
 ];
 
-const defaultQuestionConfig = {
-  questionStatement: "",
-  type: "Short Answer",
-  required: true,
-  options: ["option 1"],
-};
-
-const NewSurveyForm = ({ t, index, question, answerType, required, options, dispatch }) => {
-  const [surveyQuestionConfig, setSurveyQuestionConfig] = useState(defaultQuestionConfig);
-  //options, label for checkbox and radio buttons
+const NewSurveyForm = ({ t, index, questionStatement, type, required, options, disableInputs, dispatch }) => {
+  const [surveyQuestionConfig, setSurveyQuestionConfig] = useState({ questionStatement, type, required, options });
 
   const handleAddOption = () =>
     setSurveyQuestionConfig((prevState) => {
@@ -75,7 +67,7 @@ const NewSurveyForm = ({ t, index, question, answerType, required, options, disp
   };
 
   useEffect(() => {
-    dispatch({ type: "updateForm", payload: {index:index, formConfig:surveyQuestionConfig }});
+    dispatch({ type: "updateForm", payload: { index: index, formConfig: surveyQuestionConfig } });
   }, [surveyQuestionConfig]);
 
   const renderAnswerComponent = (type) => {
@@ -123,6 +115,7 @@ const NewSurveyForm = ({ t, index, question, answerType, required, options, disp
             onChange={(ev) => {
               setSurveyQuestionConfig((prevState) => ({ ...prevState, questionStatement: ev.target.value }));
             }}
+            disable={disableInputs}
           />
           <Dropdown
             option={dropdownOptions}
@@ -131,6 +124,7 @@ const NewSurveyForm = ({ t, index, question, answerType, required, options, disp
             }}
             selected={surveyQuestionConfig.type}
             optionKey="title"
+            disable={disableInputs}
           />
         </div>
         <div className="newSurveyForm_answer">{renderAnswerComponent(surveyQuestionConfig.type)}</div>
@@ -141,10 +135,11 @@ const NewSurveyForm = ({ t, index, question, answerType, required, options, disp
               checked={surveyQuestionConfig.required}
               label={t("CS_COMMON_REQUIRED")}
               pageType={"employee"}
+              disable={disableInputs}
             />
           </div>
           <div className="newSurveyForm_seprator" />
-          <div className="pointer" onClick={() => dispatch({ type: "removeForm", payload: { index } })}>
+          <div className={`pointer ${disableInputs ? 'disabled-btn':''}`} onClick={() => dispatch({ type: "removeForm", payload: { index } })}>
             <DustbinIcon />
           </div>
         </div>

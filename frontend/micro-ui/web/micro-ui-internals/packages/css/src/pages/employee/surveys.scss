@@ -66,6 +66,10 @@
   cursor: pointer;
 }
 
+.disabled-btn{
+  @apply pointer-events-none cursor-not-allowed ;
+}
+
 .optionradiobtnwrapper{
   @apply flex gap-2;
 
@@ -119,7 +123,7 @@
 
   .newSurveyForm_wrapper {
     @apply grid p-md bg-grey-light border border-border rounded;
-    grid-template-columns: 30% 1fr;
+    grid-template-columns: 33% 1fr;
 
     .newSurveyForm_quesno {
       @apply text-heading-m font-medium;

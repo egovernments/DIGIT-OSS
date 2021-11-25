@@ -2,7 +2,7 @@ import { FormComposer, Header } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-import { config } from "../../NewEventConfig";
+import { config } from "../../../../config/NewEventConfig";
 
 const NewEvents = () => {
   const { t } = useTranslation();
