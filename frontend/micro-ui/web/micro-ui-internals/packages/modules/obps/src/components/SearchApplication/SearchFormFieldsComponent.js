@@ -2,49 +2,39 @@ import React, { Fragment } from "react"
 import { TextInput, SubmitBar, DatePicker, SearchField, Dropdown, CardLabelError, MobileNumber } from "@egovernments/digit-ui-react-components";
 import { useWatch } from "react-hook-form";
 
-const applicationStatuses = [
-    {
-        code: "CANCELLED",
-        i18nKey: "WF_BPA_CANCELLED"
-    },
-    {
-        code: "APPROVED",
-        i18nKey: "WF_BPA_APPROVED"
-    },
-    {
-        code: "INPROGRESS",
-        i18nKey: "WF_BPA_INPROGRESS"
-    },
-    {
-        code: "PENDINGPAYMENT",
-        i18nKey: "WF_NEWTL_PENDINGPAYMENT"
-    },
-    {
-        code: "CITIZEN_APPROVAL_PENDING",
-        i18nKey: "WF_BPA_CITIZEN_APPROVAL_PENDING"
-    },
-    {
-        code: "DOC_VERIFICATION_PENDING",
-        i18nKey: "WF_BPA_DOC_VERIFICATION_PENDING"
-    },
-    {
-        code: "FIELDINSPECTION_PENDING",
-        i18nKey: "WF_BPA_FIELDINSPECTION_PENDING"
-    },
-    {
-        code: "INITIATED",
-        i18nKey: "WF_BPA_INITIATED"
-    }	
-]
-
-
 const SearchFormFieldsComponent = ({formState,Controller, register, control, t, reset, previousPage}) => {
     const stateTenantId = Digit.ULBService.getStateId()
     const applicationType = useWatch({control, name:"applicationType"})
     const { applicationTypes, ServiceTypes } = Digit.Hooks.obps.useServiceTypeFromApplicationType({
         Applicationtype: applicationType?.code || "BUILDING_PLAN_SCRUTINY",
         tenantId: stateTenantId
-    })
+    });
+    const businessServices = "BPA,BPA_LOW,BPA_OC,ARCHITECT,BUILDER,ENGINEER,STRUCTURALENGINEER";
+    const { isLoading, data: businessServiceData } = Digit.Hooks.obps.useBusinessServiceData(stateTenantId, businessServices, {});
+    let bpaStatus = [], bparegStatus = [], applicationStatuses = [];
+    businessServiceData?.BusinessServices?.map(data => {
+        data.states.map(state => {
+            if(state.state && state.applicationStatus) {
+                if (data.business == "BPAREG") {
+                    bparegStatus.push({
+                        code: state.applicationStatus,
+                        i18nKey: `WF_ARCHITECT_${state.state}`,
+                        module: data.business
+                   })
+                } else {
+                    bpaStatus.push({
+                        code: state.applicationStatus,
+                        i18nKey: `WF_BPA_${state.state}`,
+                        module: data.business
+                   })
+                }
+            }
+        })
+    });
+    const bpaStatusUnique = [...new Map(bpaStatus.map(item => [item["code"], item])).values()];
+    const bparegStatusUnique = [...new Map(bparegStatus.map(item => [item["code"], item])).values()];
+    if (applicationType?.code) applicationStatuses = applicationType?.code == "BPA_STAKEHOLDER_REGISTRATION" ? bparegStatusUnique : bpaStatusUnique;
+
     return <>
         <SearchField>
             <label>{t("BPA_SEARCH_APPLICATION_NO_LABEL")}</label>
