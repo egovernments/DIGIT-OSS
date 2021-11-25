@@ -3,15 +3,19 @@ import { TextInput, SubmitBar, DatePicker, SearchField, Dropdown, CardLabelError
 import { useWatch } from "react-hook-form";
 
 const SearchFormFieldsComponent = ({formState,Controller, register, control, t, reset, previousPage}) => {
-    const stateTenantId = Digit.ULBService.getStateId()
-    const applicationType = useWatch({control, name:"applicationType"})
+    const stateTenantId = Digit.ULBService.getStateId();
+    const tenantId = Digit.ULBService.getCurrentTenantId();
+    const applicationType = useWatch({control, name:"applicationType"});
+    const oldApplicationType = sessionStorage.getItem("search_application");
+    if(oldApplicationType && JSON.parse(oldApplicationType)?.code !== applicationType?.code) control.setValue("status", "");
+    sessionStorage.setItem("search_application", JSON.stringify(applicationType));
     const { applicationTypes, ServiceTypes } = Digit.Hooks.obps.useServiceTypeFromApplicationType({
         Applicationtype: applicationType?.code || "BUILDING_PLAN_SCRUTINY",
         tenantId: stateTenantId
     });
     const businessServices = "BPA,BPA_LOW,BPA_OC,ARCHITECT,BUILDER,ENGINEER,STRUCTURALENGINEER";
-    const { isLoading, data: businessServiceData } = Digit.Hooks.obps.useBusinessServiceData(stateTenantId, businessServices, {});
-    let bpaStatus = [], bparegStatus = [], applicationStatuses = [];
+    const { isLoading, data: businessServiceData } = Digit.Hooks.obps.useBusinessServiceData(tenantId, businessServices, {});
+    let bpaStatus = [], bpaOCStatus = [], bparegStatus = [], applicationStatuses = [];
     businessServiceData?.BusinessServices?.map(data => {
         data.states.map(state => {
             if(state.state && state.applicationStatus) {
@@ -22,18 +26,31 @@ const SearchFormFieldsComponent = ({formState,Controller, register, control, t, 
                         module: data.business
                    })
                 } else {
-                    bpaStatus.push({
-                        code: state.applicationStatus,
-                        i18nKey: `WF_BPA_${state.state}`,
-                        module: data.business
-                   })
+                    if(data?.businessService == "BPA_OC") {
+                        bpaOCStatus.push({
+                            code: state.applicationStatus,
+                            i18nKey: `WF_BPA_${state.state}`,
+                            module: data.business
+                       })
+                    } else {
+                        bpaStatus.push({
+                            code: state.applicationStatus,
+                            i18nKey: `WF_BPA_${state.state}`,
+                            module: data.business
+                       })
+                    }
+                    
                 }
             }
         })
     });
     const bpaStatusUnique = [...new Map(bpaStatus.map(item => [item["code"], item])).values()];
+    const bpaOCStatusStatusUnique = [...new Map(bpaOCStatus.map(item => [item["code"], item])).values()];
     const bparegStatusUnique = [...new Map(bparegStatus.map(item => [item["code"], item])).values()];
-    if (applicationType?.code) applicationStatuses = applicationType?.code == "BPA_STAKEHOLDER_REGISTRATION" ? bparegStatusUnique : bpaStatusUnique;
+    if (applicationType?.code === "BPA_STAKEHOLDER_REGISTRATION") applicationStatuses = bparegStatusUnique;
+    else if (applicationType?.code === "BUILDING_PLAN_SCRUTINY") applicationStatuses = bpaStatusUnique;
+    else if (applicationType?.code === "BUILDING_OC_PLAN_SCRUTINY") applicationStatuses = bpaOCStatusStatusUnique;
+    else applicationStatuses = [];
 
     return <>
         <SearchField>
