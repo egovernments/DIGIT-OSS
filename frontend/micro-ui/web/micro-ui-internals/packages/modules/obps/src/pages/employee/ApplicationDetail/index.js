@@ -42,21 +42,19 @@ const ApplicationDetail = () => {
   }
 
   return (
-    <div >
-      <div style={{marginLeft: "15px"}}>
+    <div className={"employee-main-application-details"}>
+        <div  className={"employee-application-details"}>
         <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
         {applicationDetails?.payments?.length > 0 && 
-        <div>
         <MultiLink
-          className="multilinkWrapper"
+          className="multilinkWrapper employee-mulitlink-main-div"
           onHeadClick={() => setShowOptions(!showOptions)}
           displayOptions={showOptions}
           options={dowloadOptions}
-          style={{right:"0",marginTop:"70px",marginRight:"50px"}}
-          optionsStyle={{right:"0",marginTop:"70px",marginRight:"50px"}}
-        />  
-        </div>}
-      </div>
+          downloadBtnClassName={"employee-download-btn-className"}
+          optionsClassName={"employee-options-btn-className"}
+        />}
+        </div>
       <ApplicationDetailsTemplate
         applicationDetails={applicationDetails}
         isLoading={isLoading}
