@@ -135,13 +135,13 @@ export const insertStoreIds = (
   });
 };
 
-export async function insertRecords(bulkPdfJobId, totalPdfRecords, currentPdfRecords, userid) {
+export async function insertRecords(bulkPdfJobId, totalPdfRecords, currentPdfRecords, userid, tenantId, locality, bussinessService, consumerCode, isConsolidated) {
   try {
     const result = await pool.query('select * from egov_bulk_pdf_info where jobid = $1', [bulkPdfJobId]);
     if(result.rowCount<1){
-      const insertQuery = 'INSERT INTO egov_bulk_pdf_info(jobid, uuid, recordscompleted, totalrecords, createdtime, filestoreid, lastmodifiedby, lastmodifiedtime) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
+      const insertQuery = 'INSERT INTO egov_bulk_pdf_info(jobid, uuid, recordscompleted, totalrecords, createdtime, filestoreid, lastmodifiedby, lastmodifiedtime, tenantid, locality, businessservice, consumercode, isconsolidated) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)';
       const curentTimeStamp = new Date().getTime();
-      await pool.query(insertQuery,[bulkPdfJobId, userid, currentPdfRecords, totalPdfRecords, curentTimeStamp, null, userid, curentTimeStamp]);
+      await pool.query(insertQuery,[bulkPdfJobId, userid, currentPdfRecords, totalPdfRecords, curentTimeStamp, null, userid, curentTimeStamp, tenantId, locality, bussinessService, consumerCode, isConsolidated]);
     }
     else{
       var recordscompleted = parseInt(result.rows[0].recordscompleted);
@@ -260,7 +260,12 @@ export async function getBulkPdfRecordsDetails(userid, offset, limit, jobId){
           filestoreid: row.filestoreid,
           createdtime: row.createdtime,
           lastmodifiedby: row.lastmodifiedby,
-          lastmodifiedtime: row.lastmodifiedtime
+          lastmodifiedtime: row.lastmodifiedtime,
+          tenantId: row.tenantid,
+          locality: row.locality,
+          bussinessService: row.businessservice,
+          consumercode: row.consumercode,
+          isConsolidated: row.isconsolidated
         };
         data.push(value);
       }

@@ -59,12 +59,13 @@ var pdfMakePrinter = require("pdfmake/src/printer");
 let app = express();
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json({
-  limit: "10mb",
+  limit: "50mb",
   extended: true
 }));
 app.use(bodyParser.urlencoded({
-  limit: "10mb",
-  extended: true
+  limit: "50mb",
+  extended: true,
+  parameterLimit:50000
 }));
 
 let maxPagesAllowed = envVariables.MAX_NUMBER_PAGES;
@@ -815,9 +816,13 @@ export const createNoSave = async (
     var requestInfo = get(req.body || req, "RequestInfo");
     var userid = get(req.body || req, "RequestInfo.userInfo.uuid");
     var billd = get(req, "Bill");
+    var locality = get(req, "locality");
+    var bussinessService = get(req, "service");
+    var isConsolidated = get(req, "isConsolidated");
+    var consumerCode = get(req, "consumerCode");
     
 
-    logger.info("received createnosave request on key: " + key + " totalPdfRecords:"+totalPdfRecords+" currentPdfRecords:"+currentPdfRecords + " size:"+billd.length);
+    logger.info("received createnosave request on key: " + key + " totalPdfRecords: "+totalPdfRecords+" currentPdfRecords: "+currentPdfRecords + " size: "+billd.length);
 
     var valid = validateRequest(req, res, key, tenantId, requestInfo);
 
@@ -857,7 +862,7 @@ export const createNoSave = async (
           `createnosave success for pdf with key: ${key}, entityId ${entityIds}`
         );
         (async () => {
-          await insertRecords(bulkPdfJobId, totalPdfRecords, currentPdfRecords, userid);
+          await insertRecords(bulkPdfJobId, totalPdfRecords, currentPdfRecords, userid, tenantId, locality, bussinessService, consumerCode, isConsolidated);
           await mergePdf(bulkPdfJobId, tenantId, userid, numberOfFiles);
         })();
       });

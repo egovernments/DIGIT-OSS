@@ -3,6 +3,15 @@ var axios = require("axios").default;
 var url = require("url");
 var producer = require("./producer").producer ;
 var logger = require("./logger").logger;
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  user: config.DB_USER,
+  host: config.DB_HOST,
+  database: config.DB_NAME,
+  password: config.DB_PASSWORD,
+  port: config.DB_PORT,
+});
 
 auth_token = config.auth_token;
 
@@ -685,7 +694,11 @@ async function create_bulk_pdf(kafkaData){
               totalPdfRecords:size,
               currentPdfRecords: billData.length,
               tenantId: tenantId,
-              numberOfFiles:numberOfFiles
+              numberOfFiles:numberOfFiles,
+              locality: locality,
+              service: bussinessService,
+              isConsolidated: isConsolidated,
+              consumerCode: consumerCode
           };
           var pdfData = Object.assign({RequestInfo:requestinfo.RequestInfo}, billArray)
           payloads.push({
@@ -703,6 +716,16 @@ async function create_bulk_pdf(kafkaData){
             }
           });
 
+        }
+
+        try {
+          const result = await pool.query('select * from egov_bulk_pdf_info where jobid = $1', [jobid]);
+          if(result.rowCount>=1){
+            const updateQuery = 'UPDATE egov_bulk_pdf_info SET totalrecords = $1 WHERE jobid = $2';
+            await pool.query(updateQuery,[size, jobid]);
+              }
+        } catch (err) {
+          logger.error(err.stack || err);
         }
       } catch (ex) {
         let errorMessage= "Failed to generate PDF"; 

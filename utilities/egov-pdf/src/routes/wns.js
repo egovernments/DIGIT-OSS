@@ -5,6 +5,15 @@ var config = require("../config");
 var producer = require("../producer").producer ;
 var logger = require("../logger").logger;
 const uuidv4 = require("uuid/v4");
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  user: config.DB_USER,
+  host: config.DB_HOST,
+  database: config.DB_NAME,
+  password: config.DB_PASSWORD,
+  port: config.DB_PORT,
+});
 
 var {
   search_water,
@@ -424,6 +433,18 @@ router.post(
             logger.info("jobid: " + jobid + ": published to kafka successfully");
           }
         });
+
+        try {
+          const result = await pool.query('select * from egov_bulk_pdf_info where jobid = $1', [jobid]);
+          if(result.rowCount<1){
+            var userid = requestinfo.RequestInfo.userInfo.uuid;
+            const insertQuery = 'INSERT INTO egov_bulk_pdf_info(jobid, uuid, recordscompleted, totalrecords, createdtime, filestoreid, lastmodifiedby, lastmodifiedtime, tenantid, locality, businessservice, consumercode, isconsolidated) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)';
+            const curentTimeStamp = new Date().getTime();
+            await pool.query(insertQuery,[jobid, userid, 0, 0, curentTimeStamp, null, userid, curentTimeStamp, tenantId, locality, bussinessService, consumerCode, isConsolidated]);
+          }
+        } catch (err) {
+          logger.error(err.stack || err);
+        } 
 
         res.status(201);
         res.json({
