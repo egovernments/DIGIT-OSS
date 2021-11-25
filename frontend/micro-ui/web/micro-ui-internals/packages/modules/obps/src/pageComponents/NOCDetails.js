@@ -280,7 +280,7 @@ function SelectDocument({
                     <h1>{doc?.additionalDetails?.appNumberLink}</h1>
                 </div>
             </div>
-            {doc?.uploadedDocuments?.length && <PropertyDocuments documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
+            {doc?.uploadedDocuments?.length && <PropertyDocuments isSendBackFlow={true} documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
             {/* <UploadFile
                 id={"noc-doc"}
                 extraStyleName={"propertyCreate"}

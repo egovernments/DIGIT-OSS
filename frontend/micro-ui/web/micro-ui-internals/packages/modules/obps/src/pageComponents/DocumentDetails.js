@@ -310,7 +310,7 @@ function SelectDocument({
             setuploadedstate={uploadedFilesPreFill}
             t={t}
           />
-        {doc?.uploadedDocuments?.length && <PropertyDocuments documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
+        {doc?.uploadedDocuments?.length && <PropertyDocuments isSendBackFlow={true} documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
         </div>
     );
 

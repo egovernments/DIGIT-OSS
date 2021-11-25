@@ -139,6 +139,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         time: ob?.InspectionTime,
       })
     })
+    inspectionOb = inspectionOb.filter((ob) => ob.docs && ob.docs.length>0);
     let fieldinspection_pending = [ ...inspectionOb];
     return fieldinspection_pending;
   }

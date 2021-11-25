@@ -296,7 +296,7 @@ export const getunitforBPA = (units) => {
 //               fatherOrHusbandName: "",
 //               relationship: "",
 //               dob: null,
-//               gender: ob.gender.code,
+//               gender: ob.gender.code? ob.gender.code : ob.gender,
 //             });
 //     }
 //   })

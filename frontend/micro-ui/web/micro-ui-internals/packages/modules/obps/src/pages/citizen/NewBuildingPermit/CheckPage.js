@@ -282,7 +282,7 @@ import {
           />
         {improvedDoc.map((doc, index) => (
           <div key={index}>
-         {doc.isNotDuplicate && <div><CardSectionHeader>{t(doc?.documentType?.split('_')?.slice(0,2).join('_'))}</CardSectionHeader>
+         {doc.isNotDuplicate && <div><CardSectionHeader>{t(doc?.documentType?.split('.').slice(0,2).join('_'))}</CardSectionHeader>
           <StatusTable>
           <OBPSDocument value={isEditApplication?[...PrevStateDocuments,...documents.documents]:value} Code={doc?.documentType} index={index}/> 
           <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>

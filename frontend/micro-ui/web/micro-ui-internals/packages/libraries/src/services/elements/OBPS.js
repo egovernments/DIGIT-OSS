@@ -304,7 +304,7 @@ export const OBPSService = {
       }));
       let inspectionReport = [];
       let checklist = [];
-      BPA?.additionalDetails?.fieldinspection_pending?.map((ob,ind) => {
+      BPA?.additionalDetails?.fieldinspection_pending?.filter((ob) => ob.docs && ob.docs.length>0).map((ob,ind) => {
         checklist = [];
         inspectionReport.push({
         title: "BPA_FI_REPORT",
@@ -366,6 +366,9 @@ export const OBPSService = {
       }
     }
 
+    if(permitcondn.length == 0)
+    PermitConditions={};
+    
     if(BPA?.approvalNo) {
       applicationDetailsInfo?.values?.push({ title: "BPA_PERMIT_NUMBER_LABEL", value: BPA?.approvalNo || "NA"  });
       applicationDetailsInfo?.values?.push({ title: "BPA_PERMIT_VALIDITY", value: BPA?.additionalDetails?.validityDate ? `${format(new Date(BPA?.applicationDate), 'dd/MM/yyyy')} - ${format(new Date(BPA?.additionalDetails?.validityDate), 'dd/MM/yyyy')}` : "NA"  });
