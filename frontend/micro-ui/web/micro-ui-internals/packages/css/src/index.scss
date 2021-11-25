@@ -469,3 +469,10 @@ input[type="number"] {
 .payment-form-text-input-correction {
   width: 100% !important;
 }
+
+
+.edcr-citizen-inbox{ 
+   thead th:first-child{
+  min-width:155px; 
+}
+}

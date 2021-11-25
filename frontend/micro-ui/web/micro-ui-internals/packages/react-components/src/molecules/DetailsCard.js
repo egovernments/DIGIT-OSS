@@ -13,7 +13,7 @@ const Details = ({ label, name, onClick }) => {
   );
 };
 
-const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, selectedItems, keyForSelected, handleDetailCardClick, isTwoDynamicPrefix=false,getRedirectionLink }) => {
+const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, selectedItems, keyForSelected, handleDetailCardClick, isTwoDynamicPrefix=false,getRedirectionLink ,handleClickEnabled =true}) => {
   if (linkPrefix && serviceRequestIdKey) {
     return (
       <div>
@@ -44,10 +44,10 @@ const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, sele
             key={itemIndex}
             style={{ border: selectedItems?.includes(object[keyForSelected]) ? "2px solid #f47738" : "2px solid #fff" }}
             className="details-container"
-            onClick={() => handleSelect(object)}
+            onClick={() =>handleClickEnabled && handleSelect(object)}
           >
             {Object.keys(object).filter(rowEle => !(typeof object[rowEle] == "object" && object[rowEle]?.hidden == true)).map((name, index) => {
-              return <Details label={name} name={object[name]} key={index} onClick={() => handleDetailCardClick(object)} />;
+              return <Details label={name} name={object[name]} key={index} onClick={() =>handleClickEnabled && handleDetailCardClick(object)} />;
             })}
           </div>
         );

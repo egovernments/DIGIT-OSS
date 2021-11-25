@@ -136,6 +136,7 @@ import useLicenseDetails from "./obps/useLicenseDetails";
 import useBPAREGApplicationActions from "./obps/useBPAREGApplicationActions";
 import useBPADetailsPage from "./obps/useBPADetailsPage";
 import useBPAInbox from "./obps/useBPAInbox";
+import useEDCRInbox from "./obps/useEDCRInbox";
 import useBPAApplicationActions from "./obps/useApplicationActions"
 import useArchitectInbox from "./obps/useArchitectInbox";
 import useBPAREGSearch from "./obps/useBPAREGSearch";
@@ -289,6 +290,7 @@ const obps = {
   useBPADetailsPage,
   useEmpBPAREGSearch,
   useBPAInbox,
+  useEDCRInbox,
   useArchitectInbox,
   SearchMdmsTypes,
   useServiceTypeFromApplicationType,
