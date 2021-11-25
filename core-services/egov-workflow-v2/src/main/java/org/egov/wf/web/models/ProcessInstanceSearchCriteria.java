@@ -48,7 +48,7 @@ public class ProcessInstanceSearchCriteria {
     @JsonProperty("moduleName")
     private String moduleName;
 
-    @JsonProperty("isNearingSlaCount")
+    @JsonIgnore
     private Boolean isNearingSlaCount;
 
     @JsonIgnore

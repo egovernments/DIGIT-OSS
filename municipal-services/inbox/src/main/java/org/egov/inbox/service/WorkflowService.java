@@ -79,7 +79,7 @@ public class WorkflowService {
 		for(String businessSrv : listOfBusinessServices) {
 			criteria.setBusinessService(Collections.singletonList(businessSrv));
 			StringBuilder url = new StringBuilder(config.getWorkflowHost());
-			url.append(config.getProcessCountPath());
+			url.append(config.getNearingSlaProcessCountPath());
 			criteria.setIsProcessCountCall(true);
 			url = this.buildWorkflowUrl(criteria, url, Boolean.FALSE);
 
