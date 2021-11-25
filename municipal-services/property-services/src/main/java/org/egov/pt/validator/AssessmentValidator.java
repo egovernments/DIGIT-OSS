@@ -180,10 +180,6 @@ public class AssessmentValidator {
 			}
 		}
 
-		else {
-
-		}
-
 		if (!CollectionUtils.isEmpty(errorMap.keySet())) {
 			throw new CustomException(errorMap);
 		}

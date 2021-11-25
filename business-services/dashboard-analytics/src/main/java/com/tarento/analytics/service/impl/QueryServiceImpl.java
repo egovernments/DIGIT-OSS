@@ -198,7 +198,7 @@ public class QueryServiceImpl implements QueryService {
 				labelMap.put(itrQuery.getKey(), propertiesMap.get(ElasticProperties.Query.LABEL.toLowerCase()).toString());
 			}
 		} catch (Exception e) { 
-			
+			logger.error("Encountered an Exception : " + e.getMessage());
 		}
 	}
 	/*

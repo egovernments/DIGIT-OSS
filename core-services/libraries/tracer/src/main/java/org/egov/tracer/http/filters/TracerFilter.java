@@ -180,7 +180,9 @@ public class TracerFilter implements Filter {
                     correlationId = (String) ((Map) requestInfo).get(CORRELATION_ID_FIELD_NAME);
                 }
             }
-        } catch (IOException ignored){}
+        } catch (IOException e){
+            log.error("Encountered an Exception : " + e.getMessage());
+        }
 
         return correlationId;
     }

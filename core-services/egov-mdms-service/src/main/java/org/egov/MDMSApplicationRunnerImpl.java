@@ -186,7 +186,8 @@ public class MDMSApplicationRunnerImpl {
                 try {
                     isMergeAllowed = JsonPath.read(objectMapper.writeValueAsString(masterData),
                             MDMSConstants.MERGE_FILES);
-                } catch (Exception ignored) {
+                } catch (Exception e) {
+                    log.error("Encountered an Exception : " + e.getMessage());
                 }
             }
         }

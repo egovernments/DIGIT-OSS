@@ -31,10 +31,7 @@ public class MessageWebhook {
             message = requestFormatter.getTransformedRequest(message);
             String key = message.at("/user/mobileNumber").asText();
             kafkaTemplate.send(outputTopicName, key, message);
-        } else {
-
         }
-
         return null;
     }
 
