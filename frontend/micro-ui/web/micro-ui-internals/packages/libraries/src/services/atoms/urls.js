@@ -27,6 +27,7 @@ const Urls = {
   InboxSearch: "/inbox/v1/_search",
 
   UserSearch: "/user/_search",
+  UserLogout : "/user/_logout",
 
   Shortener: "/egov-url-shortening/shortener",
 

@@ -18,6 +18,18 @@ export const UserService = {
       },
     });
   },
+  logoutUser: () => {
+    let user = UserService.getUser();
+    if (!user || !user.info || !user.access_token) return false;
+    const { type } = user.info;
+    return ServiceRequest({
+      serviceName: "logoutUser",
+      url: Urls.UserLogout,
+      data: { access_token: user?.access_token },
+      auth: true,
+      params: { tenantId: type === "CITIZEN" ? Digit.ULBService.getStateId() : Digit.ULBService.getCurrentTenantId() },
+    });
+  },
   getType: () => {
     return Storage.get("userType") || "citizen";
   },
@@ -28,15 +40,19 @@ export const UserService = {
   getUser: () => {
     return Digit.SessionStorage.get("User");
   },
-  logout: () => {
+  logout: async () => {
     const userType = UserService.getType();
-    Digit.SessionStorage.set("User", {});
-    window.localStorage.clear();
-    window.sessionStorage.clear();
-    if (userType === "citizen") {
-      window.location.replace("/digit-ui/citizen");
-    } else {
-      window.location.replace("/digit-ui/employee/user/language-selection");
+    try {
+      await UserService.logoutUser();
+      window.localStorage.clear();
+      window.sessionStorage.clear();
+      if (userType === "citizen") {
+        window.location.replace("/digit-ui/citizen");
+      } else {
+        window.location.replace("/digit-ui/employee/user/language-selection");
+      }
+    } catch (e) {
+      console.error(e);
     }
   },
   sendOtp: (details, stateCode) =>
