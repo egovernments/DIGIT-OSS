@@ -8,13 +8,13 @@ const useInboxMobileCardsData = ({  table }) => {
   const { t } = useTranslation();
 
   const dataForMobileInboxCards = table?.map(
-    ({ applicationId, edcrNumber, date, planReportUrl, dxfFileurl, applicationType, locality, status, owner, sla, state }) => ({
+    ({ applicationId, edcrNumber, date, planReportUrl, dxfFileurl, locality, status, owner }) => ({
       [t("EDCR_COMMON_TABLE_APPL_NO")]: applicationId,
       [t("CS_APPLICATION_DETAILS_APPLICATION_DATE")]: date ? format(new Date(date), "dd/MM/yyyy") : "NA",
       [t("EDCR_COMMON_TABLE_CITY_LABEL")]: t(locality),
       [t("EDCR_COMMON_TABLE_APPL_NAME")]: owner,
       [t("EDCR_COMMON_TABLE_SCRUTINY_NO")]: edcrNumber,
-      [t("EDCR_COMMON_TABLE_COL_STATUS")]: status,
+      [t("EDCR_COMMON_TABLE_COL_STATUS")]: (status === "Accepted" ? <span className="sla-cell-success " style={{background:"none"}}>{status}</span> : <span className="sla-cell-error" style={{background:"none"}}>{status}</span>),
       [t("BPA_UPLOADED_PLAN_DXF")]: (
         <a href={`${dxfFileurl}`}>
           <span className="link">{t("BPA_DOWNLOAD")}</span>

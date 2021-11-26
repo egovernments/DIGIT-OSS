@@ -8,27 +8,28 @@ const useInbox = ({ tenantId, filters, config }) =>
 
 const useEDCRInbox = ({ tenantId, filters, config = { retry: false, retryOnMount: false, staleTime: Infinity } }) => {
   const { filterForm, searchForm, tableForm } = filters;
-  let { status, applicationType } = filterForm;
-  const { applicationNo, edcrNumber } = searchForm;
+  let { status, appliactionType } = filterForm;
+  const { applicationNumber, edcrNumber } = searchForm;
   const { sortBy, limit, offset, sortOrder } = tableForm;
-  const _filters = {
+  let _filters = {
     tenantId,
     ...(edcrNumber ? { edcrNumber } : {}),
+    ...(applicationNumber ? { applicationNumber } : {}),
     ...(status ? { status } : {}),
-    ...(sortOrder ? { sortOrder } : {}),
-    ...(sortBy ? { sortBy } : {}),
-    ...(applicationType ? { appliactionType: applicationType } : {}),
+    ...(sortOrder ? { sortBy:sortOrder } : {}),
+    // ...(sortBy ? { sortBy } : {}),
+    ...(appliactionType ? { appliactionType} : {}),
     limit,
     offset,
   };
+
 
   return useInbox({
     tenantId,
     filters: _filters,
     config: {
       select: (data) => ({
-        statuses: [],
-        table: data?.edcrDetail.map((application) => ({
+        table: data?.edcrDetail?.map((application) => ({
           applicationId: application?.applicationNumber,
           edcrNumber: application?.edcrNumber,
           date: application?.applicationDate,
@@ -41,8 +42,8 @@ const useEDCRInbox = ({ tenantId, filters, config = { retry: false, retryOnMount
           planReportUrl: application?.planReport,
           dxfFileurl: application?.dxfFile,
           sla: "NA",
-        })),
-        totalCount: data.count,
+        })) || [],
+        totalCount: data?.count||0,
       }),
       ...config,
     },

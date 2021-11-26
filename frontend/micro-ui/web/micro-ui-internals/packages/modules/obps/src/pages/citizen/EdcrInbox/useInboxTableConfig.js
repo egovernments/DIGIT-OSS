@@ -23,7 +23,7 @@ const Download = ({ dowloadOptions }) => {
 
 const useInboxTableConfig = ({ onPageSizeChange, formState, totalCount, table, dispatch, onSortingByData }) => {
   const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
-  const GetStatusCell = (value) =>  value === "Accepted" ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span>;
+  const GetStatusCell = (value) =>  value === "Accepted" ? <span className="sla-cell-success " style={{background:"none",padding:"unset"}}>{value}</span> : <span className="sla-cell-error" style={{background:"none",padding:"unset"}}>{value}</span>;
   const { t } = useTranslation();
 
   const tableColumnConfig = useMemo(() => {

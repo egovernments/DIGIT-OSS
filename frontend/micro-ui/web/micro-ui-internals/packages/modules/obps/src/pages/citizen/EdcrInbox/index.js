@@ -12,7 +12,7 @@ const Inbox = ({ parentRoute }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const searchFormDefaultValues = {};
   const filterFormDefaultValues = {
-    applicationType: "",
+    appliactionType: "",
     status: "",
   };
   const tableOrderFormDefaultValues = {
@@ -41,13 +41,13 @@ const Inbox = ({ parentRoute }) => {
 
   const onSearchFormReset = (setSearchFormValue) => {
     setSearchFormValue("edcrNumber", null);
-    setSearchFormValue("applicationNo", null);
+    setSearchFormValue("applicationNumber", null);
     dispatch({ action: "mutateSearchForm", data: searchFormDefaultValues });
   };
 
   const onFilterFormReset = (setFilterFormValue) => {
     setFilterFormValue("status", "");
-    setFilterFormValue("applicationType", "");
+    setFilterFormValue("appliactionType", "");
     dispatch({ action: "mutateFilterForm", data: filterFormDefaultValues });
   };
 
@@ -90,7 +90,7 @@ const Inbox = ({ parentRoute }) => {
     dispatch({ action: "mutateTableForm", data: { ...formState.tableForm, sortOrder } });
   };
 
-  const { isLoading: isInboxLoading, data: { table, statuses, totalCount } = {} } = Digit.Hooks.obps.useEDCRInbox({
+  const { isLoading: isInboxLoading, data: { table, totalCount } = {} } = Digit.Hooks.obps.useEDCRInbox({
     tenantId,
     filters: { ...formState },
   });
@@ -119,7 +119,6 @@ const Inbox = ({ parentRoute }) => {
     ({ registerRef, controlFilterForm, setFilterFormValue, getFilterFormValue }) => (
       <FilterFormFieldsComponent
         {...{
-          statuses,
           isInboxLoading,
           registerRef,
           controlFilterForm,
@@ -129,7 +128,7 @@ const Inbox = ({ parentRoute }) => {
         }}
       />
     ),
-    [statuses, isInboxLoading]
+    [isInboxLoading]
   );
 
   const onSearchFormSubmit = (data) => {

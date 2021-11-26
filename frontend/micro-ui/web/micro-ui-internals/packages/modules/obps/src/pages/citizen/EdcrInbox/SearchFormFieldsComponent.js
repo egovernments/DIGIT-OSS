@@ -9,7 +9,7 @@ const SearchFormFieldsComponents = ({ registerRef, searchFormState }) => {
     <>
       <SearchField>
         <label>{t("BPA_APPLICATION_NUMBER_LABEL")}</label>
-        <TextInput name="applicationNo" inputRef={registerRef({})} />
+        <TextInput name="applicationNumber" inputRef={registerRef({})} />
       </SearchField>
       <SearchField>
         <label>{t("BPA_EDCR_NO_LABEL")}</label>

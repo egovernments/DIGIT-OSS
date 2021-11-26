@@ -41,7 +41,7 @@ const FilterFormFieldsComponent = ({ controlFilterForm }) => {
       </FilterFormField>
       <FilterFormField>
         <Controller
-          name="applicationType"
+          name="appliactionType"
           control={controlFilterForm}
           render={(props) => {
             return loadingApplicationTypesOfBPA ? (

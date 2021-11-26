@@ -57,7 +57,7 @@ const ReceiptCancelModal = ({ t, action, tenantId, closeModal, submitAction, app
     history.replace("/digit-ui/employee/receipts/response", {
       paymentWorkflow: {
         action: "CANCEL",
-        additionalDetails: data.otherDetails,
+        additionalDetails: {...data.otherDetails,selectedReasonMessage:t(`CR_REASON_${selectedReason.code}`)},
         paymentId: applicationData?.Payments[0]?.id,
         reason: selectedReason.code,
         tenantId: applicationData?.Payments[0]?.tenantId,
