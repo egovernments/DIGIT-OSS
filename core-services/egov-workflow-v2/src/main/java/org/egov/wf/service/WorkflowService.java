@@ -280,15 +280,4 @@ public class WorkflowService {
         return count;
     }
 
-    public Integer nearingSlaCount(RequestInfo requestInfo, ProcessInstanceSearchCriteria criteria) {
-        Integer count;
-        criteria.setIsNearingSlaCount(Boolean.TRUE);
-        if(criteria.isNull()){
-            enrichSearchCriteriaFromUser(requestInfo, criteria);
-            count = workflowRepository.getInboxCount(criteria);
-        }
-        else count = workflowRepository.getProcessInstancesCount(criteria);
-
-        return count;
-    }
 }
