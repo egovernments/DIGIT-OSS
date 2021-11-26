@@ -1,4 +1,4 @@
-import { Loader, PDFSvg } from "@egovernments/digit-ui-react-components";
+import { CardText, Loader, PDFSvg } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { pdfDocumentName, pdfDownloadLink, getDocumentsName } from "../utils";
@@ -36,6 +36,7 @@ function OBPSDocument({ value = {},Code,index, isNOC = false, svgStyles={width: 
     <div style={{ marginTop: "19px" }}>
       <React.Fragment>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
+          {documents.length>0? <div>
           {documents?.map((document, index) => {
             let documentLink = pdfDownloadLink(data.pdfFiles, document?.fileStoreId);
             // let documentName = getDocumentsName(data.pdfFiles, document?.fileStoreId);
@@ -48,6 +49,7 @@ function OBPSDocument({ value = {},Code,index, isNOC = false, svgStyles={width: 
               </a>
             );
           })}
+          </div>: <CardText>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</CardText>}
         </div>
       </React.Fragment>
     </div>

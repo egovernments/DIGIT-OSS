@@ -293,7 +293,7 @@ const BpaApplicationDetail = () => {
     <Fragment>
       <div className={"employee-main-application-details"}>
       <div className={"employee-application-details"}>
-        <Header styles={{}}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
+        <Header styles={{marginLeft:"20px"}}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
         {dowloadOptions && dowloadOptions.length>0 && <MultiLink
           className="multilinkWrapper employee-mulitlink-main-div"
           onHeadClick={() => setShowOptions(!showOptions)}

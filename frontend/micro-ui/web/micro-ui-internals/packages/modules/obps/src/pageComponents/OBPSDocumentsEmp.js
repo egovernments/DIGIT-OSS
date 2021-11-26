@@ -46,6 +46,7 @@ const OBPSDocumentsEmp = ({ t, config, onSelect, userType, formData, setError: s
     <div>
       {finalTlDocumentsList?.map((document, index) => {
         return (
+          <div style={{ paddingLeft: "16px" }}>
           <SelectDocument
             key={index}
             document={document}
@@ -62,6 +63,7 @@ const OBPSDocumentsEmp = ({ t, config, onSelect, userType, formData, setError: s
             config={config}
             formState={formState}
           />
+          </div>
         );
       })}
       {error && <Toast label={error} onClose={() => setError(null)} error />}

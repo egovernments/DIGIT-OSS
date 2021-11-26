@@ -1,6 +1,6 @@
 import {
     Card, CardHeader, CardSubHeader, CardText,
-    CitizenInfoLabel, Header, LinkButton, Row, StatusTable, SubmitBar, Table, CardSectionHeader, EditIcon, PDFSvg
+    CitizenInfoLabel, Header, LinkButton, Row, StatusTable, SubmitBar, Table, CardSectionHeader, EditIcon, PDFSvg, Loader
   } from "@egovernments/digit-ui-react-components";
   import React,{ useMemo }  from "react";
   import { useTranslation } from "react-i18next";
@@ -24,7 +24,7 @@ import {
     const isEditApplication = window.location.href.includes("editApplication");
     let val;
     var i;
-    let improvedDoc =isEditApplication?[...PrevStateDocuments , ...documents.documents]: [...documents.documents];
+    let improvedDoc =isEditApplication?PrevStateDocuments && documents ?[...PrevStateDocuments, ...documents.documents]: []: [...documents.documents];
     improvedDoc.map((ob) => { ob["isNotDuplicate"] = true; })
     improvedDoc.map((ob,index) => {
       val = ob.documentType;

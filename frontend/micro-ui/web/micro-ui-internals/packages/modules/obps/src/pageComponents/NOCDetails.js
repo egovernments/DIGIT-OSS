@@ -280,7 +280,6 @@ function SelectDocument({
                     <h1>{doc?.additionalDetails?.appNumberLink}</h1>
                 </div>
             </div>
-            {doc?.uploadedDocuments?.length && <PropertyDocuments isSendBackFlow={true} documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
             {/* <UploadFile
                 id={"noc-doc"}
                 extraStyleName={"propertyCreate"}
@@ -293,13 +292,15 @@ function SelectDocument({
                 message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`ES_NO_FILE_SELECTED_LABEL`)}
                 error={error}
             /> */}
-            <MultiUploadWrapper
+           {!(window.location.href.includes("sendbacktocitizen")) && <MultiUploadWrapper
             module="BPA"
             tenantId={tenantId}
             getFormState={e => getData(e,doc?.documentType.replaceAll(".", "_"))}
             setuploadedstate={uploadedFilesPreFill}
             t={t}
-          />
+          />}
+        {doc?.uploadedDocuments?.length && <PropertyDocuments isSendBackFlow={true} documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
+
         </div>
     );
 }
