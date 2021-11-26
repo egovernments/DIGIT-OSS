@@ -117,6 +117,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
         </div>
 
         const MobileComponentDirectory = ({currentlyActiveMobileModal, searchFormFieldsComponentProps, ...props}) => {
+            const { closeMobilePopupModal } = props
             switch (currentlyActiveMobileModal) {
                 case "SearchFormComponent":
                     return <SearchForm {...props} >
@@ -124,7 +125,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
                     <div className="MobilePopupHeadingWrapper">
                         <h2>{t("ES_COMMON_SEARCH")}:</h2>
                     </div>
-                    <SearchFormFieldsComponent {...searchFormFieldsComponentProps}/>
+                    <SearchFormFieldsComponent {...searchFormFieldsComponentProps} {...{closeMobilePopupModal}}/>
                     {/* <SearchField className="submit">
                         <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
                         <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
@@ -133,7 +134,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
             }
         }
     
-        const CurrentMobileModalComponent = ({currentlyActiveMobileModal, searchFormFieldsComponentProps, ...props}) => MobileComponentDirectory({currentlyActiveMobileModal, searchFormFieldsComponentProps, ...props})
+        const CurrentMobileModalComponent = useCallback(({currentlyActiveMobileModal, searchFormFieldsComponentProps, ...props}) => MobileComponentDirectory({currentlyActiveMobileModal, searchFormFieldsComponentProps, ...props}),[currentlyActiveMobileModal])
 
         if(isLoading){
             return <Loader/>
@@ -148,7 +149,7 @@ const OBPSSearchApplication = ({tenantId, t, onSubmit, data, error, isLoading, C
                 <CurrentMobileModalComponent onSubmit={(data) => {
                     setActiveMobileModal({type:"remove"})                    
                     onSubmit(data)
-                }} handleSubmit={handleSubmit} id="search-form" className="rm-mb form-field-flex-one inboxPopupMobileWrapper" {...{searchFormFieldsComponentProps, currentlyActiveMobileModal}} />
+                }} handleSubmit={handleSubmit} id="search-form" className="rm-mb form-field-flex-one inboxPopupMobileWrapper" {...{searchFormFieldsComponentProps, currentlyActiveMobileModal, closeMobilePopupModal}} />
             </PopUp> : null}
             {data?.[0]?.display ? <Card style={{ marginTop: 20 }}>
                 {t(data?.[0]?.display)

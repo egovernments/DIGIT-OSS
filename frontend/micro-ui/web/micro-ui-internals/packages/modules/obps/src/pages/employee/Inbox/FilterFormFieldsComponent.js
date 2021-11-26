@@ -141,7 +141,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
         }
         />
     </FilterFormField> : null}
-    {selectedBusinessService?.length > 0 ? <FilterFormField>
+    {selectedApplicationType?.length > 0 && selectedBusinessService?.length > 0 ? <FilterFormField>
       <div className="filter-label">{t("ACTION_TEST_APPLICATION_STATUS")}</div>
       <Controller
         name="applicationStatus"

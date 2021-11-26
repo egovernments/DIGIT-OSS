@@ -10,7 +10,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
   
   const { data: applicationTypes, isLoading: loadingApplicationTypes } = Digit.Hooks.obps.SearchMdmsTypes.useApplicationTypes(tenantId);
   const availableBusinessServicesOptions = Digit.Hooks.obps.useBusinessServiceBasedOnServiceType({applicationType: _searchParams?.applicationType})
-  const filteredStatus = useMemo(() => _searchParams.businessService ? statuses?.filter(e => e.businessservice === _searchParams.businessService) : null ,[statuses, _searchParams.businessService])
+  const filteredStatus = useMemo(() => _searchParams?.applicationType?.length > 0 && _searchParams.businessService ? statuses?.filter(e => e.businessservice === _searchParams.businessService) : null ,[statuses, _searchParams.businessService, _searchParams?.applicationType])
   
   const onStatusChange = (e, type) => {
     if (e.target.checked) setSearchParams({..._searchParams, applicationStatus: [..._searchParams?.applicationStatus, type] });
@@ -53,9 +53,11 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
             {applicationTypes.map(applicationType => {
                 return <CheckBox
                   key={applicationType.code}
-                  onChange={(e) => handleChange({
-                    applicationType : e.target.checked ? [..._searchParams?.applicationType, applicationType] : _searchParams?.applicationType.filter( item => item.code !== applicationType.code ) 
-                  })}
+                  onChange={(e) =>{
+                    e.target.checked ?
+                    handleChange({applicationType : [..._searchParams?.applicationType, applicationType]}) 
+                    : setSearchParams({applicationType : _searchParams?.applicationType.filter( item => item.code !== applicationType.code), applicationStatus:[]})
+                  }}
                   checked={_searchParams?.applicationType?.filter(e => e.code === applicationType.code)[0]}
                   label={t(applicationType?.i18nKey)}
                 />  

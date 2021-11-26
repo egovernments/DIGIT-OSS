@@ -165,6 +165,7 @@ const SearchFormFieldsComponent = ({formState,Controller, register, control, t, 
                     sortOrder: "DESC"
                 });
                 previousPage();
+                closeMobilePopupModal()
             }}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
         </SearchField>
     </>

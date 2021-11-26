@@ -19,7 +19,7 @@ const Inbox = ({parentRoute}) => {
 
     const filterFormDefaultValues = {
       moduleName: "noc-services",
-      applicationStatus: "",
+      applicationStatus: [],
       businessService: null,
       locality: [],
       assignee: "ASSIGNED_TO_ALL"

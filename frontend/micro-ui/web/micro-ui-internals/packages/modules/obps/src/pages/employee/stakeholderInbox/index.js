@@ -16,7 +16,7 @@ const Inbox = ({ parentRoute }) => {
 
   const filterFormDefaultValues = {
     moduleName: "BPAREG",
-    applicationStatus: "",
+    applicationStatus: [],
     businessService: null,
     locality: [],
     assignee: "ASSIGNED_TO_ALL"
