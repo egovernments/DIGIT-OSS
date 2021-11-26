@@ -57,6 +57,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -85,6 +86,7 @@ import org.egov.edcr.utility.DcrConstants;
 import org.egov.infra.admin.master.entity.City;
 import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.config.core.EnvironmentSettings;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.filestore.service.FileStoreService;
 import org.egov.infra.microservice.contract.RequestInfoWrapper;
@@ -155,6 +157,9 @@ public class EdcrRestService {
     @Autowired
     private EdcrApplicationDetailService applicationDetailService;
 
+    @Autowired
+    private EnvironmentSettings environmentSettings;
+
     public Session getCurrentSession() {
         return entityManager.unwrap(Session.class);
     }
@@ -215,7 +220,6 @@ public class EdcrRestService {
             } else if (StringUtils.isBlank(tenantId)) {
                 tenantId = ApplicationThreadLocals.getTenantID();
             }
-
             edcrApplication.setThirdPartyUserTenant(tenantId);
         }
 
@@ -264,7 +268,7 @@ public class EdcrRestService {
         }
         if (edcrApplnDtl.getApplication().getServiceType() != null)
             edcrDetail.setApplicationSubType(edcrApplnDtl.getApplication().getServiceType());
-        String tenantId = "";
+        String tenantId;
         String[] tenantArr = edcrApplnDtl.getApplication().getThirdPartyUserTenant().split("\\.");
         if (tenantArr.length == 1)
             tenantId = tenantArr[0];
@@ -308,14 +312,14 @@ public class EdcrRestService {
             LOG.log(Level.ERROR, e);
         }
 
-        for(EdcrPdfDetail planPdf : edcrApplnDtl.getEdcrPdfDetails()) {
+        for (EdcrPdfDetail planPdf : edcrApplnDtl.getEdcrPdfDetails()) {
             if (planPdf.getConvertedPdf() != null) {
                 String downloadURL = format(getFileDownloadUrl(
                         planPdf.getConvertedPdf().getFileStoreId(),
                         ApplicationThreadLocals.getTenantID()));
                 planPdfs.add(planPdf.getLayer().concat(" - ").concat(downloadURL));
-                for(org.egov.common.entity.edcr.EdcrPdfDetail pdf : edcrDetail.getPlanDetail().getEdcrPdfDetails()) {
-                    if(planPdf.getLayer().equalsIgnoreCase(pdf.getLayer()))
+                for (org.egov.common.entity.edcr.EdcrPdfDetail pdf : edcrDetail.getPlanDetail().getEdcrPdfDetails()) {
+                    if (planPdf.getLayer().equalsIgnoreCase(pdf.getLayer()))
                         pdf.setDownloadURL(downloadURL);
                 }
             }
@@ -435,19 +439,31 @@ public class EdcrRestService {
             edcrRequest.setOffset(0);
         boolean onlyTenantId = edcrRequest != null && isBlank(edcrRequest.getEdcrNumber())
                 && isBlank(edcrRequest.getTransactionNumber()) && isBlank(edcrRequest.getAppliactionType())
-                && isBlank(edcrRequest.getApplicationSubType()) && isBlank(edcrRequest.getStatus()) 
-                && edcrRequest.getFromDate() != null && edcrRequest.getToDate() != null
+                && isBlank(edcrRequest.getApplicationSubType()) && isBlank(edcrRequest.getStatus())
+                && edcrRequest.getFromDate() == null && edcrRequest.getToDate() == null
+                && isBlank(edcrRequest.getApplicationNumber())
                 && isNotBlank(edcrRequest.getTenantId());
 
         City stateCity = cityService.fetchStateCityDetails();
+
+        int limit = Integer.valueOf(environmentSettings.getProperty("egov.edcr.default.limit"));
+        int offset = Integer.valueOf(environmentSettings.getProperty("egov.edcr.default.offset"));
+        int maxLimit = Integer.valueOf(environmentSettings.getProperty("egov.edcr.max.limit"));
+        if (edcrRequest.getLimit() != null && edcrRequest.getLimit() <= maxLimit)
+            limit = edcrRequest.getLimit();
+        if (edcrRequest.getLimit() != null && (edcrRequest.getLimit() > maxLimit || edcrRequest.getLimit() == -1)) {
+            limit = maxLimit;
+        }
+        if (edcrRequest.getLimit() != null)
+            offset = edcrRequest.getOffset();
+
         if (edcrRequest != null && edcrRequest.getTenantId().equalsIgnoreCase(stateCity.getCode())) {
             final Map<String, String> params = new ConcurrentHashMap<>();
 
             StringBuilder queryStr = new StringBuilder();
             searchAtStateTenantLevel(edcrRequest, userInfo, userId, onlyTenantId, params, queryStr);
-
-            final Query query = getCurrentSession().createSQLQuery(queryStr.toString()).setFirstResult(edcrRequest.getOffset())
-                    .setMaxResults(edcrRequest.getLimit());
+            final Query query = getCurrentSession().createSQLQuery(queryStr.toString()).setFirstResult(offset)
+                    .setMaxResults(limit);
             for (final Map.Entry<String, String> param : params.entrySet())
                 query.setParameter(param.getKey(), param.getValue());
             List<Object[]> applns = query.list();
@@ -459,12 +475,24 @@ public class EdcrRestService {
                 List<EdcrDetail> edcrDetails2 = new ArrayList<>();
                 for (Object[] appln : applns)
                     edcrDetails2.add(setEdcrResponseForAcrossTenants(appln, stateCity.getCode()));
-                return edcrDetails2;
+                List<EdcrDetail> sortedList = new ArrayList<>();
+                String orderBy = "desc";
+                if (isNotBlank(edcrRequest.getOrderBy()))
+                    orderBy = edcrRequest.getOrderBy();
+                if (orderBy.equalsIgnoreCase("asc"))
+                    sortedList = edcrDetails2.stream().sorted(Comparator.comparing(EdcrDetail::getApplicationDate))
+                            .collect(Collectors.toList());
+                else
+                    sortedList = edcrDetails2.stream().sorted(Comparator.comparing(EdcrDetail::getApplicationDate).reversed())
+                            .collect(Collectors.toList());
+
+                LOG.info("The number of records = " + edcrDetails2.size());
+                return sortedList;
             }
         } else {
             final Criteria criteria = getCriteriaofSingleTenant(edcrRequest, userInfo, userId, onlyTenantId);
-            criteria.setFirstResult(edcrRequest.getOffset());
-            criteria.setMaxResults(edcrRequest.getLimit());
+            criteria.setFirstResult(offset);
+            criteria.setMaxResults(limit);
             edcrApplications = criteria.list();
         }
 
@@ -497,7 +525,10 @@ public class EdcrRestService {
         }
         boolean onlyTenantId = edcrRequest != null && isBlank(edcrRequest.getEdcrNumber())
                 && isBlank(edcrRequest.getTransactionNumber()) && isBlank(edcrRequest.getAppliactionType())
-                && isBlank(edcrRequest.getApplicationSubType()) && isNotBlank(edcrRequest.getTenantId());
+                && isBlank(edcrRequest.getApplicationSubType()) && isBlank(edcrRequest.getStatus())
+                && edcrRequest.getFromDate() == null && edcrRequest.getToDate() == null
+                && isBlank(edcrRequest.getApplicationNumber())
+                && isNotBlank(edcrRequest.getTenantId());
 
         City stateCity = cityService.fetchStateCityDetails();
         if (edcrRequest != null && edcrRequest.getTenantId().equalsIgnoreCase(stateCity.getCode())) {
@@ -550,6 +581,11 @@ public class EdcrRestService {
                 params.put("transactionNumber", edcrRequest.getTransactionNumber());
             }
 
+            if (isNotBlank(edcrRequest.getApplicationNumber())) {
+                queryStr.append("and appln.applicationNumber=:applicationNumber ");
+                params.put("applicationNumber", edcrRequest.getApplicationNumber());
+            }
+
             if (onlyTenantId && userInfo != null && isNotBlank(userId)) {
                 queryStr.append("and appln.thirdPartyUserCode=:thirdPartyUserCode ");
                 params.put("thirdPartyUserCode", userId);
@@ -590,8 +626,13 @@ public class EdcrRestService {
                 queryStr.append("and appln.applicationDate<=to_timestamp(:toDate ,'yyyy-MM-dd')");
                 params.put("toDate", sf.format(resetToDateTimeStamp(edcrRequest.getToDate())));
             }
-
-            queryStr.append(" order by appln.createddate desc)");
+            String orderBy = "desc";
+            if (isNotBlank(edcrRequest.getOrderBy()))
+                orderBy = edcrRequest.getOrderBy();
+            if (orderBy.equalsIgnoreCase("asc"))
+                queryStr.append(" order by appln.createddate asc)");
+            else
+                queryStr.append(" order by appln.createddate desc)");
             if (tenantItr.hasNext()) {
                 queryStr.append(" union ");
             }
@@ -608,6 +649,9 @@ public class EdcrRestService {
         }
         if (edcrRequest != null && isNotBlank(edcrRequest.getTransactionNumber())) {
             criteria.add(Restrictions.eq("application.transactionNumber", edcrRequest.getTransactionNumber()));
+        }
+        if (edcrRequest != null && isNotBlank(edcrRequest.getApplicationNumber())) {
+            criteria.add(Restrictions.eq("application.applicationNumber", edcrRequest.getApplicationNumber()));
         }
 
         String appliactionType = edcrRequest.getAppliactionType();
@@ -641,8 +685,14 @@ public class EdcrRestService {
             criteria.add(Restrictions.ge("application.applicationDate", edcrRequest.getFromDate()));
         if (edcrRequest.getToDate() != null)
             criteria.add(Restrictions.le("application.applicationDate", edcrRequest.getToDate()));
+        String orderBy = "desc";
+        if (isNotBlank(edcrRequest.getOrderBy()))
+            orderBy = edcrRequest.getOrderBy();
+        if (orderBy.equalsIgnoreCase("asc"))
+            criteria.addOrder(Order.asc("edcrApplicationDetail.createdDate"));
+        else
+            criteria.addOrder(Order.desc("edcrApplicationDetail.createdDate"));
 
-        criteria.addOrder(Order.asc("edcrApplicationDetail.createdDate"));
         criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
         return criteria;
     }
