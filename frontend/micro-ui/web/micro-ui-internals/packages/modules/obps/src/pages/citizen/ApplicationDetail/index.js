@@ -64,17 +64,18 @@ const ApplicationDetails = () => {
 
   return (
     <Fragment>
+      <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
       <Header>{t("BPA_TASK_DETAILS_HEADER")}</Header>
       {reciept_data?.Payments?.length > 0 && 
-        <div style={{right: "3%", top: "20px", position: "absolute"}}>
+        // <div style={{right: "3%", top: "20px", position: "absolute"}}>
         <MultiLink
           className="multilinkWrapper"
           onHeadClick={() => setShowOptions(!showOptions)}
           displayOptions={showOptions}
           options={dowloadOptions}
           style={{top:"90px"}}
-        />  
-        </div>}
+        />}  
+      </div>
       <div>
         <Card>
           <StatusTable>

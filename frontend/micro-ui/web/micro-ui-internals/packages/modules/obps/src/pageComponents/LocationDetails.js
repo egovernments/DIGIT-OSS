@@ -98,7 +98,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
         sessionStorage.setItem("currLocality", JSON.stringify(filteredLocalityList[0]));
       }
     }
-  }, [selectedCity, formData?.pincode, fetchedLocalities]);
+  }, [selectedCity, formData?.pincode, fetchedLocalities, pincode]);
 
 
   const handleGIS = () => {
@@ -125,12 +125,14 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
 
   function onSave(geoLocation, pincode, placeName) {
     selectPincode(pincode);
+    sessionStorage.setItem("currentPincode", pincode);
     setgeoLocation(geoLocation);
     setplaceName(placeName);
     setIsOpen(false);
   }
   function selectPincode(e) {
     setPinerror(null);
+    if(((typeof e === 'object' && e !== null) ? e.target.value : e) !== "")
     if(!(((typeof e === 'object' && e !== null) ? e.target.value : e).match(/^[1-9][0-9]{5}$/)))
     {
       setPinerror("BPA_PIN_NOT_VALID_ERROR");
@@ -158,7 +160,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
     sessionStorage.setItem("currLocality", JSON.stringify({ }));
     setPincode("");
     setSelectedLocality(null);
-    setLocalities(null);
+    //setLocalities(null);
     //setSelectedCity(null);
   }
 

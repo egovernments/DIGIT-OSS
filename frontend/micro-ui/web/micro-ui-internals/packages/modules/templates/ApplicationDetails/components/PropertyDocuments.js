@@ -47,7 +47,7 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow=false }) 
                 <PDFSvg width={svgStyles?.width ? svgStyles?.width : 140} height={svgStyles?.height ? svgStyles?.height : 140} style={{ background: "#f6f6f6", padding: "8px" }} viewBox={svgStyles?.viewBox ? svgStyles?.viewBox : "0 0 34 34"} />
                 {/* TODO, Later will move to classes */}
                 <p style={checkLocation ? { marginTop: "8px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#505A5F" } : { marginTop: "8px", fontWeight: "bold" }}>{t(value?.title)}</p>
-               {isSendBackFlow?<p style={{textAlign:"center"}}>{t(value?.documentType)}</p>:""}
+               {isSendBackFlow? value?.documentType?.includes("NOC")?<p style={{textAlign:"center"}}>{t(value?.documentType.split(".")[1])}</p> :<p style={{textAlign:"center"}}>{t(value?.documentType)}</p>:""}
               </a>
             )):!(window.location.href.includes("citizen"))&& <div><p>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</p></div>}
           </div>
