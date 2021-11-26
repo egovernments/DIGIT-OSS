@@ -258,7 +258,11 @@ public class NotificationUtil {
 	 */
 	@SuppressWarnings("unchecked")
 	private String getInitiatedMsg(BPA bpa, String message, String serviceType) {
-		message = message.replace("<2>", serviceType);
+		if(serviceType=="NEW_CONSTRUCTION")
+			message = message.replace("<2>", "New Construction");
+		else
+			message = message.replace("<2>", serviceType);
+
 		message = message.replace("<3>", bpa.getApplicationNo());
 		return message;
 	}
@@ -295,10 +299,10 @@ public class NotificationUtil {
 
 		for (Map.Entry<String, String> entryset : mobileNumberToOwner.entrySet()) {
 			String customizedMsg = message.replace("<1>", entryset.getValue());
-			if (customizedMsg.contains("<RECEIPT_DOWNLOAD_LINK>")) {
+			if (customizedMsg.contains("{RECEIPT_LINK}")) {
 				String linkToReplace = getRecepitDownloadLink(bpaRequest, entryset.getKey());
 //				log.info("Link to replace - "+linkToReplace);
-				customizedMsg = customizedMsg.replace("{RECEIPT_DOWNLOAD_LINK}",linkToReplace);
+				customizedMsg = customizedMsg.replace("{RECEIPT_LINK}",linkToReplace);
 			}
 			smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
 		}
@@ -327,7 +331,7 @@ public class NotificationUtil {
 		if (bpa.getStatus().toString().toUpperCase().equals(BPAConstants.STATUS_REJECTED)) {
 			messageTemplate = getMessageTemplate(
 					applicationType + "_" + serviceType + "_" + BPAConstants.STATUS_REJECTED + "_" + "EMAIL", localizationMessage);
-			message = getReplacedMessage(bpa, messageTemplate);
+			message = getReplacedMessage(bpa, messageTemplate,serviceType);
 		} else {
 			String messageCode = applicationType + "_" + serviceType + "_" + bpa.getWorkflow().getAction() + "_"
 					+ bpa.getStatus() + "_" + "EMAIL";
@@ -335,7 +339,7 @@ public class NotificationUtil {
 			messageTemplate = getMessageTemplate(messageCode, localizationMessage);
 
 			if (!StringUtils.isEmpty(messageTemplate)) {
-				message = getReplacedMessage(bpa, messageTemplate);
+				message = getReplacedMessage(bpa, messageTemplate,serviceType);
 
 				if (message.contains("{AMOUNT_TO_BE_PAID}")) {
 					BigDecimal amount = getAmountToBePaid(requestInfo, bpa);
@@ -366,10 +370,14 @@ public class NotificationUtil {
 			 return message;
 		}
 
-		private String getReplacedMessage(BPA bpa, String message) {
+		private String getReplacedMessage(BPA bpa, String message,String serviceType) {
 
-		message = message.replace("YYYY", bpa.getBusinessService());
-		message = message.replace("ZZZZ", bpa.getApplicationNo());
+		if(serviceType=="NEW_CONSTRUCTION")
+			message = message.replace("YYYY", "New Construction");
+		else
+			message = message.replace("YYYY", serviceType);
+
+			message = message.replace("ZZZZ", bpa.getApplicationNo());
 		message = message.replace("XYZ", capitalize(bpa.getTenantId().split("\\.")[1]));
 		message = message.replace("{PORTAL_LINK}",config.getUiAppHost());
 		//CCC - Designaion configurable according to ULB
@@ -383,10 +391,10 @@ public class NotificationUtil {
 		for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
 			String customizedMsg = message.replace("XXXX",entryset.getValue());
 			customizedMsg = customizedMsg.replace("{MOBILE_NUMBER}",entryset.getKey());
-			if (customizedMsg.contains("<RECEIPT_DOWNLOAD_LINK>")) {
+			if (customizedMsg.contains("{RECEIPT_LINK}")) {
 				String linkToReplace = getRecepitDownloadLink(bpaRequest, entryset.getKey());
 //				log.info("Link to replace - "+linkToReplace);
-				customizedMsg = customizedMsg.replace("{RECEIPT_DOWNLOAD_LINK}",linkToReplace);
+				customizedMsg = customizedMsg.replace("{RECEIPT_LINK}",linkToReplace);
 			}
 			String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
 			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
