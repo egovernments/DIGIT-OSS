@@ -1,4 +1,4 @@
-import { StatusTable, Header, Card, CardHeader, Row, PDFSvg, CardSectionHeader,MultiLink } from "@egovernments/digit-ui-react-components";
+import { StatusTable, Header, Card, CardHeader, Row, PDFSvg, CardSectionHeader,MultiLink, Loader } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -61,6 +61,7 @@ const ApplicationDetails = () => {
     })
   }
 
+  if (isLoading) return <Loader /> 
 
   return (
     <Fragment>
@@ -122,7 +123,7 @@ const ApplicationDetails = () => {
                 </a>
                 {decodeURIComponent( documents[document.fileStoreId]?.split(",")[0]?.split("?")[0]?.split("/")?.pop()?.slice(13))}
               </div>
-              <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
+              {License?.tradeLicenseDetail?.applicationDocuments?.length != index + 1 ? <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/> : null }
             </Fragment>
             )
           })}

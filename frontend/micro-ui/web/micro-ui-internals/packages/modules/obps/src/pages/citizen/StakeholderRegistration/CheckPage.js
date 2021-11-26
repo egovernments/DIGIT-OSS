@@ -41,7 +41,7 @@ import {
     <React.Fragment>
     <div className={isopenlink? "OpenlinkContainer":""}>
     {/* {isopenlink &&<OpenLinkContainer />} */}
-    <div style={isopenlink?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}>
+    <div style={isopenlink?{ width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}>
     {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
     <Timeline currentStep={4} flow="STAKEHOLDER" />
     <Header>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
@@ -108,11 +108,11 @@ import {
            />
       {documents?.documents.map((doc, index) => (
         <div key={index}>
-        <CardSectionHeader>{t(`BPAREG_HEADER_${doc?.documentType}`)}</CardSectionHeader>
+        <CardSectionHeader>{t(`BPAREG_HEADER_${doc?.documentType?.replace('.', '_')}`)}</CardSectionHeader>
         {doc?.info ? <div style={{fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px"}}>{`${t(doc?.info)}`}</div> : null}
         <StatusTable>
         <OBPSDocument value={value} Code={doc?.documentType} index={index} isNOC={false} svgStyles={{}} isStakeHolder={true}/> 
-        <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
+        {documents?.documents?.length != index + 1 ? <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/> : null }
         </StatusTable>
         </div>
       ))}
