@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { getPattern, stringReplaceAll } from "../utils";
 
-const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner, isShowToast }) => {
+const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner, isShowToast, isSubmitBtnDisable }) => {
     const { pathname: url } = useLocation();
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateId = Digit.ULBService.getStateId();
@@ -80,7 +80,7 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
             config={config}
             onSelect={handleSubmit}
             onSkip={onSkip}
-            isDisabled={!tenantIdData || !name || !file}
+            isDisabled={!tenantIdData || !name || !file || isSubmitBtnDisable}
             onAdd={onAdd}
             isMultipleAllow={true}
         >

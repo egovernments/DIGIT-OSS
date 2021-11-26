@@ -122,7 +122,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                     })}
                     {error && <Toast label={error} isDleteBtn={true} onClose={() => setError(null)} error  />}
                 </FormStep> : <Loader />}
-                {!(formData?.initiationFlow) && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={`${t("BPA_APPLICATION_NUMBER_LABEL")} ${formData?.result?.Licenses?.[0]?.applicationNumber} ${t("BPA_DOCS_INFORMATION")}`} />}
+                {!(formData?.initiationFlow) && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={`${t("BPA_APPLICATION_NUMBER_LABEL")} ${formData?.result?.Licenses?.[0]?.applicationNumber} ${t("BPA_DOCS_INFORMATION")}`} className={"info-banner-wrap-citizen-override"}/>}
                 </div>
             </div>
         // </div>

@@ -15,11 +15,13 @@ const CreateEDCR = ({ parentRoute }) => {
   let config = [];
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("EDCR_CREATE", {});
   const [isShowToast, setIsShowToast] = useState(null);
+  const [isSubmitBtnDisable, setIsSubmitBtnDisable] = useState(false);
 
   const stateId = Digit.ULBService.getStateId();
   let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
 
   function handleSelect(key, data, skipStep, index) {
+    setIsSubmitBtnDisable(true);
     const loggedInuserInfo = Digit.UserService.getUser();
     const userInfo = { id: loggedInuserInfo?.info?.uuid, tenantId: loggedInuserInfo?.info?.tenantId };
     let edcrRequest = {
@@ -60,6 +62,7 @@ const CreateEDCR = ({ parentRoute }) => {
 
     Digit.EDCRService.create({ data: bodyFormData }, tenantId)
       .then((result, err) => {
+        setIsSubmitBtnDisable(false);
         if (result?.data?.edcrDetail) {
           setParams(result?.data?.edcrDetail);
           history.replace(
@@ -69,6 +72,7 @@ const CreateEDCR = ({ parentRoute }) => {
         }
       })
       .catch((e) => {
+        setIsSubmitBtnDisable(false);
         setIsShowToast({ key: true, label: e?.response?.data?.errorCode })
       });
 
@@ -96,7 +100,7 @@ const CreateEDCR = ({ parentRoute }) => {
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Route path={`${match.path}/${routeObj.route}`} key={index}>
-            <Component config={{ texts, inputs, key }} onSelect={handleSelect} onSkip={handleSkip} t={t} formData={params} onAdd={handleMultiple} isShowToast={isShowToast} />
+            <Component config={{ texts, inputs, key }} onSelect={handleSelect} onSkip={handleSkip} t={t} formData={params} onAdd={handleMultiple} isShowToast={isShowToast} isSubmitBtnDisable={isSubmitBtnDisable}/>
           </Route>
         );
       })}

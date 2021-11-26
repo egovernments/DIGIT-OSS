@@ -19,6 +19,5 @@ export const calculateRiskType = (riskTypes, plotArea, blocks) => {
 
     return false;
   })
-  console.log(plotArea, blocks, riskTypes, buildingHeight, risk);
   return risk?.riskType;
 }

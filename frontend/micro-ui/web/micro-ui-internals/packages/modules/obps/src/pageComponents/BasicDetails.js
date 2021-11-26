@@ -10,10 +10,8 @@ const BasicDetails = ({ formData, onSelect, config }) => {
   const [scrutinyNumber, setScrutinyNumber] = useState(formData?.data?.scrutinyNumber);
   const [isDisabled, setIsDisabled] = useState(formData?.data?.scrutinyNumber ? true : false);
   const { t } = useTranslation();
-  const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateCode = Digit.ULBService.getStateId();
   const isMobile = window.Digit.Utils.browser.isMobile();
-  //TODO will change this is future
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["RiskTypeComputation"]);
   const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(stateCode, scrutinyNumber, {
     enabled: formData?.data?.scrutinyNumber ? true : false
@@ -90,7 +88,6 @@ const BasicDetails = ({ formData, onSelect, config }) => {
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_OCCUPANCY_LABEL`)} text={basicData?.planDetail?.planInformation?.occupancy}/>
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_RISK_TYPE_LABEL`)} text={t(`WF_BPA_${Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, basicData?.planDetail?.plot?.area, basicData?.planDetail?.blocks)}`)} />
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL`)} text={basicData?.planDetail?.planInformation?.applicantName} />
-          {/* <Row className="border-none" label={t(`BPA_BASIC_DETAILS_SPECIAL_CATEGORY_LABEL`)} text={'None'}/> */}
         </StatusTable>
         <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={handleSubmit} />
       </Card>
@@ -100,4 +97,3 @@ const BasicDetails = ({ formData, onSelect, config }) => {
 }
 
 export default BasicDetails;
-// DCR82021FCBZ0

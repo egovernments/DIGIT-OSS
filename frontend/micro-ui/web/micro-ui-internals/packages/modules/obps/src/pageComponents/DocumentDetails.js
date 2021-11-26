@@ -119,7 +119,7 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
                     })}
                     {error && <Toast label={error} onClose={() => setError(null)} error />}
                 </FormStep>: <Loader />}
-                <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={`${t("BPA_APPLICATION_NUMBER_LABEL")} ${formData?.applicationNo} ${t("BPA_DOCS_INFORMATION")}`} />
+                <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={`${t("BPA_APPLICATION_NUMBER_LABEL")} ${formData?.applicationNo} ${t("BPA_DOCS_INFORMATION")}`} className={"info-banner-wrap-citizen-override"}/>
         </div>
     );
 }
