@@ -1,4 +1,4 @@
-import { CitizenHomeCard, BPAHomeIcon, BPAIcon, EmployeeModuleCard, EDCRIcon, Loader, Toast } from "@egovernments/digit-ui-react-components";
+import { BPAHomeIcon, BPAIcon, CitizenHomeCard, EDCRIcon, EmployeeModuleCard, Loader, Toast } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 

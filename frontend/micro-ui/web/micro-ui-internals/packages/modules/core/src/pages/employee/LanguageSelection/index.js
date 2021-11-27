@@ -1,7 +1,7 @@
+import { Card, CustomButton, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-import { BackButton, Card, CustomButton, SubmitBar } from "@egovernments/digit-ui-react-components";
 import Background from "../../../components/Background";
 
 const LanguageSelection = () => {
@@ -18,16 +18,15 @@ const LanguageSelection = () => {
 
   const handleSubmit = (event) => {
     history.push("/digit-ui/employee/user/login");
-  }
+  };
 
   if (isLoading) return null;
 
   return (
     <Background>
-      <Card className="bannerCard removeBottomMargin" >
+      <Card className="bannerCard removeBottomMargin">
         <div className="bannerHeader">
-          <img className="bannerLogo" src={stateInfo?.logoUrl} alt="Digit" /> 
-
+          <img className="bannerLogo" src={stateInfo?.logoUrl} alt="Digit" />
 
           <p>{t(`TENANT_TENANTS_${stateInfo?.code.toUpperCase()}`)}</p>
         </div>
@@ -45,10 +44,17 @@ const LanguageSelection = () => {
         <SubmitBar style={{ width: "100%" }} label={t(`CORE_COMMON_CONTINUE`)} onSubmit={handleSubmit} />
       </Card>
       <div className="EmployeeLoginFooter">
-        <img alt="Powered by DIGIT" src="https://s3.ap-south-1.amazonaws.com/egov-qa-assets/digit-footer-bw.png" />
+        <img
+          alt="Powered by DIGIT"
+          src={window?.globalConfigs?.getConfig?.("DIGIT_FOOTER_BW")}
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            window.open(window?.globalConfigs?.getConfig?.("DIGIT_HOME_URL"), "_blank").focus();
+          }}
+        />{" "}
       </div>
     </Background>
-  )
+  );
 };
 
 export default LanguageSelection;

@@ -2,18 +2,32 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
 import { AppModules } from "../../components/AppModules";
-import TopBarSideBar from "../../components/TopBarSideBar"
-import EmployeeLogin from "./Login";
+import TopBarSideBar from "../../components/TopBarSideBar";
 import ChangePassword from "./ChangePassword";
 import ForgotPassword from "./ForgotPassword";
 import LanguageSelection from "./LanguageSelection";
+import EmployeeLogin from "./Login";
 
-const EmployeeApp = ({ stateInfo, userDetails, CITIZEN, cityDetails, mobileView, handleUserDropdownSelection, logoUrl, DSO, stateCode, modules, appTenants, sourceUrl, pathname }) => {
+const EmployeeApp = ({
+  stateInfo,
+  userDetails,
+  CITIZEN,
+  cityDetails,
+  mobileView,
+  handleUserDropdownSelection,
+  logoUrl,
+  DSO,
+  stateCode,
+  modules,
+  appTenants,
+  sourceUrl,
+  pathname,
+}) => {
   const { t } = useTranslation();
   const { path } = useRouteMatch();
-  useEffect(()=>{
-    Digit.UserService.setType('employee');
-  },[])
+  useEffect(() => {
+    Digit.UserService.setType("employee");
+  }, []);
   return (
     <div className="employee">
       <Switch>
@@ -29,11 +43,18 @@ const EmployeeApp = ({ stateInfo, userDetails, CITIZEN, cityDetails, mobileView,
             logoUrl={logoUrl}
             showSidebar={false}
           />
-          <div className="loginContainer" style={{ '--banner-url': `url(${stateInfo?.bannerUrl})` }}>
+          <div className="loginContainer" style={{ "--banner-url": `url(${stateInfo?.bannerUrl})` }}>
             <Switch>
-              <Route path={`${path}/user/login`}><EmployeeLogin /></Route>
-              <Route path={`${path}/user/forgot-password`}><ForgotPassword /></Route>
-              <Route path={`${path}/user/change-password`}> <ChangePassword /></Route>
+              <Route path={`${path}/user/login`}>
+                <EmployeeLogin />
+              </Route>
+              <Route path={`${path}/user/forgot-password`}>
+                <ForgotPassword />
+              </Route>
+              <Route path={`${path}/user/change-password`}>
+                {" "}
+                <ChangePassword />
+              </Route>
               <Route path={`${path}/user/language-selection`}>
                 <LanguageSelection />
               </Route>
@@ -61,10 +82,11 @@ const EmployeeApp = ({ stateInfo, userDetails, CITIZEN, cityDetails, mobileView,
             </div>
             <div className="employee-home-footer">
               <img
-                src={`${sourceUrl}/digit-footer.png`}
+                alt="Powered by DIGIT"
+                src={window?.globalConfigs?.getConfig?.("DIGIT_FOOTER")}
                 style={{ height: "1.1em", cursor: "pointer" }}
                 onClick={() => {
-                  window.open("https://www.digit.org/", "_blank").focus();
+                  window.open(window?.globalConfigs?.getConfig?.("DIGIT_HOME_URL"), "_blank").focus();
                 }}
               />
             </div>
@@ -75,7 +97,7 @@ const EmployeeApp = ({ stateInfo, userDetails, CITIZEN, cityDetails, mobileView,
         </Route>
       </Switch>
     </div>
-  )
-}
+  );
+};
 
-export default EmployeeApp
+export default EmployeeApp;
