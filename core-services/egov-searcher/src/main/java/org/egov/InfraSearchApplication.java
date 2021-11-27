@@ -28,7 +28,7 @@ public class InfraSearchApplication
     @Value("${egov.indexer.file.path}")
     private static String yamllistfile;
     
-    public void setEnvironment(final Environment env) {
+    public static void setEnvironment(final Environment env) {
     	InfraSearchApplication.env = env;
     }
 	

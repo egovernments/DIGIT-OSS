@@ -140,7 +140,7 @@ public class PGRCustomIndexConsumerConfig implements ApplicationRunner {
          return new KafkaMessageListenerContainer<>(consumerFactory(), properties); 
     }
         
-    public boolean startContainer(){
+    public static boolean startContainer(){
     	KafkaMessageListenerContainer<String, String> container = null;
     	try {
 			    container = container();

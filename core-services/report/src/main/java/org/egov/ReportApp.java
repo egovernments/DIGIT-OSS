@@ -40,14 +40,14 @@ public class ReportApp implements EnvironmentAware {
     private static Environment env;
 
     @Override
-    public void setEnvironment(final Environment env) {
+    public static void setEnvironment(final Environment env) {
         ReportApp.env = env;
     }
 
     @Autowired
     private static ReportDefinitions reportDefinitions;
 
-    public void setReportDefinitions(ReportDefinitions reportDefinitions) {
+    public static void setReportDefinitions(ReportDefinitions reportDefinitions) {
         ReportApp.reportDefinitions = reportDefinitions;
     }
 
@@ -63,7 +63,7 @@ public class ReportApp implements EnvironmentAware {
     private static String locationspath;
 
     @Value("${report.locationsfile.path}")
-    public void setLocationspath(String locationspath) {
+    public static void setLocationspath(String locationspath) {
         ReportApp.locationspath = locationspath;
     }
 

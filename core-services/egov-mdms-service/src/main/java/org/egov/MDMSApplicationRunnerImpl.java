@@ -160,7 +160,7 @@ public class MDMSApplicationRunnerImpl {
         }
     }
 
-    public void readMdmsConfigFiles(String masterConfigUrl) {
+    public static void readMdmsConfigFiles(String masterConfigUrl) {
         log.info("Loading master configs from: " + masterConfigUrl);
         Resource resource = resourceLoader.getResource(masterConfigUrl);
         InputStream inputStream = null;
