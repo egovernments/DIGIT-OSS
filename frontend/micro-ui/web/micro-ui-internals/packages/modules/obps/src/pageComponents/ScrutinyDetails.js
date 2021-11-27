@@ -272,7 +272,7 @@ const clearall = (num) => {
         <Row className="border-none" label={`${t("BPA_SUB_OCCUPANCY_LABEL")}:`} text={getSubOccupancyValues(index)}></Row>
       </StatusTable>: null }
       <Table
-        className="customTable"
+        className="customTable table-fixed-first-column"
         t={t}
         disableSort={false}
         autoSort={true}

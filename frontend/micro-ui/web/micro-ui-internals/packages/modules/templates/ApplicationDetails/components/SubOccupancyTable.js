@@ -96,7 +96,7 @@ const SubOccupancyTable = ({ edcrDetails, applicationData }) => {
             </StatusTable>
             <div style={window.location.href.includes("citizen") || isMobile?{overflow:"scroll"}:{ maxWidth: "950px", maxHeight: "280px" }}>
               <Table
-                className="customTable"
+                className="customTable table-fixed-first-column"
                 t={t}
                 disableSort={false}
                 autoSort={true}

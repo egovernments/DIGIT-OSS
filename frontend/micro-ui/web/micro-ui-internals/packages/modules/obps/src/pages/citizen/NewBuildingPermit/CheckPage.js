@@ -215,7 +215,7 @@ import {
       </StatusTable>
       <div style={{overflow:"scroll"}}>
       <Table
-        className="customTable"
+        className="customTable table-fixed-first-column"
         t={t}
         disableSort={false}
         autoSort={true}
