@@ -21,9 +21,9 @@ function OBPSDocument({ value = {},Code,index, isNOC = false, svgStyles={width: 
     });
   }
   else{
-  value?.documents ? value?.documents?.documents.filter(doc => doc?.documentType?.includes(Code)).map((ob)=>{
+  value?.documents ? value?.documents?.documents.filter(doc => doc?.documentType?.includes(Code) || doc?.documentType?.includes(Code.split(".")[1])).map((ob)=>{
     documents.push(ob);
-  }) : value.filter(doc => doc?.documentType?.includes(Code)).map((ob)=>{
+  }) : value.filter(doc => doc?.documentType?.includes(Code) || doc?.documentType?.includes(Code.split(".")[1])).map((ob)=>{
     documents.push(ob);
   })
 }
@@ -45,7 +45,7 @@ function OBPSDocument({ value = {},Code,index, isNOC = false, svgStyles={width: 
                 <PDFSvg width={svgStyles?.width} height={svgStyles?.height} viewBox={svgStyles?.viewBox} style={{ background: "#f6f6f6", padding: "8px" }} />
                 {/* <p style={{ marginTop: "8px",textAlign:"center" }}>{`${t(`ES_COMMON_DOC_DOCUMENT`)} - ${index + 1}`}</p> */}
                 {isStakeHolder ? <p style={{ marginTop: "8px",textAlign:"center", color: "#505A5F" }}>{document?.fileName ? `${document?.fileName}` : `${t(`ES_COMMON_DOC_DOCUMENT`)} - ${index + 1}`}</p>: null}
-                {!isStakeHolder ? <p style={{ marginTop: "8px",textAlign:"center" }}>{`${t(Code)}`}</p>: null}
+                {!isStakeHolder ? <p style={{ marginTop: "8px",textAlign:"center" }}>{`${t(document?.documentType)}`}</p>: null}
               </a>
             );
           })}

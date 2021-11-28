@@ -31,7 +31,7 @@ import {
       if(ob.isNotDuplicate == true)
       for(i=index+1; i<improvedDoc.length;i++)
       {
-        if(val === improvedDoc[i].documentType)
+        if(val === improvedDoc[i].documentType || val.includes(improvedDoc[i].documentType.split(".")[1]))
         improvedDoc[i].isNotDuplicate=false;
       }
     })

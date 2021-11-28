@@ -13,9 +13,9 @@ const useOBPSDocumentSearch = ({ application }, config = {}, Code, index, isNOC=
     });
   }
   else{
-    config?.value?.documents ? config?.value?.documents?.documents.filter(doc => doc?.documentType?.includes(Code)).map((ob)=>{
+    config?.value?.documents ? config?.value?.documents?.documents.filter(doc => doc?.documentType?.includes(Code)|| doc?.documentType?.includes(Code.split(".")[1])).map((ob)=>{
     newDocs.push(ob);
-  }) : config?.value.filter(doc => doc?.documentType?.includes(Code)).map((ob)=>{
+  }) : config?.value.filter(doc => doc?.documentType?.includes(Code)|| doc?.documentType?.includes(Code.split(".")[1])).map((ob)=>{
     newDocs.push(ob);
   })
 }
