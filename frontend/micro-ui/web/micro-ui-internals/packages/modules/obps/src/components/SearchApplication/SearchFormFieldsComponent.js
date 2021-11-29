@@ -16,8 +16,8 @@ const SearchFormFieldsComponent = ({formState,Controller, register, control, t, 
     const businessServices = "BPA,BPA_LOW,BPA_OC,ARCHITECT,BUILDER,ENGINEER,STRUCTURALENGINEER";
     const { isLoading, data: businessServiceData } = Digit.Hooks.obps.useBusinessServiceData(tenantId, businessServices, {});
     let bpaStatus = [], bpaOCStatus = [], bparegStatus = [], applicationStatuses = [];
-    businessServiceData?.BusinessServices?.map(data => {
-        data.states.map(state => {
+    businessServiceData?.BusinessServices?.forEach(data => {
+        data.states.forEach(state => {
             if(state.state && state.applicationStatus) {
                 if (data.business == "BPAREG") {
                     bparegStatus.push({
@@ -44,12 +44,38 @@ const SearchFormFieldsComponent = ({formState,Controller, register, control, t, 
             }
         })
     });
-    const bpaStatusUnique = [...new Map(bpaStatus.map(item => [item["code"], item])).values()];
-    const bpaOCStatusStatusUnique = [...new Map(bpaOCStatus.map(item => [item["code"], item])).values()];
-    const bparegStatusUnique = [...new Map(bparegStatus.map(item => [item["code"], item])).values()];
-    if (applicationType?.code === "BPA_STAKEHOLDER_REGISTRATION") applicationStatuses = bparegStatusUnique;
-    else if (applicationType?.code === "BUILDING_PLAN_SCRUTINY") applicationStatuses = bpaStatusUnique;
-    else if (applicationType?.code === "BUILDING_OC_PLAN_SCRUTINY") applicationStatuses = bpaOCStatusStatusUnique;
+
+
+    let bpaFlags = [], bpaStatusUnique = [], i;
+    for (i = 0; i < bpaStatus.length; i++) {
+        if (bpaFlags[bpaStatus[i].code]) continue;
+        bpaFlags[bpaStatus[i].code] = true;
+        bpaStatusUnique.push(bpaStatus[i].code);
+    }
+
+    let bpaOCFlags = [], bpaOCStatusStatusUnique = [], j;
+    for (j = 0; j < bpaOCStatus.length; j++) {
+        if (bpaOCFlags[bpaOCStatus[j].code]) continue;
+        bpaOCFlags[bpaOCStatus[j].code] = true;
+        bpaOCStatusStatusUnique.push(bpaOCStatus[j].code);
+    }
+
+    let bpaRegFlags = [], bparegStatusUnique = [], k;
+    for (k = 0; k < bparegStatus.length; k++) {
+        if (bpaRegFlags[bparegStatus[k].code]) continue;
+        bpaRegFlags[bparegStatus[k].code] = true;
+        bparegStatusUnique.push(bparegStatus[k].code);
+    }
+    
+    const bpaApplicationStatus = [], bpaOCApplicationStatus = [], bpaRegApplicationStatus = [];
+
+    bpaStatusUnique.forEach(code => bpaApplicationStatus.push({i18nKey: `WF_BPA_${code}`, code: code}));
+    bpaOCStatusStatusUnique.forEach(code => bpaOCApplicationStatus.push({i18nKey: `WF_BPA_${code}`, code: code}));
+    bparegStatusUnique.forEach(code => bpaRegApplicationStatus.push({i18nKey: `WF_BPA_${code}`, code: code}));
+
+    if (applicationType?.code === "BPA_STAKEHOLDER_REGISTRATION") applicationStatuses = bpaRegApplicationStatus;
+    else if (applicationType?.code === "BUILDING_PLAN_SCRUTINY") applicationStatuses = bpaApplicationStatus;
+    else if (applicationType?.code === "BUILDING_OC_PLAN_SCRUTINY") applicationStatuses = bpaOCApplicationStatus;
     else applicationStatuses = [];
 
     return <>
@@ -165,7 +191,7 @@ const SearchFormFieldsComponent = ({formState,Controller, register, control, t, 
                     sortOrder: "DESC"
                 });
                 previousPage();
-                closeMobilePopupModal()
+                // closeMobilePopupModal()
             }}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
         </SearchField>
     </>
