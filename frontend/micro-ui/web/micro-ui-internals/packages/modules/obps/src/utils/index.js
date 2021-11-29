@@ -128,7 +128,7 @@ export const getBPAFormData = async(data,mdmsData,history,t) => {
   data.riskType = Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks)
   data.subOccupancy = getBlocksforFlow(data?.landInfo?.unit);
   data.uiFlow = {
-    flow:data?.businessService?.split(".")[0],
+    flow:data?.businessService.includes("OC")?"OCBPA":data?.businessService?.split(".")[0],
     applicationType:data?.additionalDetails?.applicationType || APIScrutinyDetails?.appliactionType,
     serviceType:data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType
   }
@@ -305,7 +305,7 @@ export const getunitforBPA = (units) => {
 
 export const getBPAOwners = (data) => {
   let bpaownerarray = cloneDeep(data?.owners?.owners);
-  bpaownerarray.forEach(newOwner => {
+  bpaownerarray && bpaownerarray.forEach(newOwner => {
       if(newOwner?.gender?.code) newOwner.gender = newOwner.gender?.code;
       if(!newOwner?.fatherOrHusbandName) newOwner.fatherOrHusbandName = "NAME"
   });

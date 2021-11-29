@@ -48,6 +48,8 @@ const OCBuildingPermit = () => {
 
   const handleSelect = (key, data, skipStep, isFromCreateApi) => {
     if (isFromCreateApi) setParams(data);
+    else if(key=== "")
+    setParams({...data});
     else setParams({ ...params, ...{ [key]: { ...params[key], ...data } } });
     goNext(skipStep);
   };
@@ -58,7 +60,7 @@ const OCBuildingPermit = () => {
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-  config.indexRoute = "basic-details";
+  config.indexRoute = "docs-required";
 
   useEffect(() => {
     if (sessionStorage.getItem("isPermitApplication") && sessionStorage.getItem("isPermitApplication") == "true") {
