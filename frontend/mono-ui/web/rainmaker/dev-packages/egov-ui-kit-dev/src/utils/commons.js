@@ -721,6 +721,10 @@ export const hasTokenExpired = (status, data) => {
 };
 
 const getEndpointfromUrl = (url, name) => {
+  if(url&&url.includes("digit-ui")  )
+  {
+    return url;
+  }
   let result = url.split(`${name}=`)[1];
   return result;
 };
