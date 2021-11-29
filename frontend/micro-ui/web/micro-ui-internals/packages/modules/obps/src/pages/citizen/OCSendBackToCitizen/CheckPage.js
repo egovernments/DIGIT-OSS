@@ -234,7 +234,7 @@ const CheckPage = ({ onSubmit, value }) => {
         <CardHeader>{t("BPA_STEPPER_SCRUTINY_DETAILS_HEADER")}</CardHeader>
         <CardSubHeader>{t(data?.uiFlow?.flow === "OCBPA" ? "BPA_OC_EDCR_NO_LABEL" : "BPA_EDCR_DETAILS")}:</CardSubHeader>
         <StatusTable style={{ border: "none" }}>
-          <Row className="border-none" label={t("BPA_EDCR_NO_LABEL")} text={data?.scrutinyNumber?.edcrNumber}></Row>
+          <Row className="border-none" label={t("BPA_EDCR_NO_LABEL")} text={data?.scrutinyNumber?.edcrNumber || t("CS_NA")}></Row>
           <CardSubHeader>{t("BPA_UPLOADED_PLAN_DIAGRAM")}:</CardSubHeader>
           <LinkButton
             label={<PDFSvg style={{ background: "#f6f6f6", padding: "8px" }} width="80px" height="75px" />}
@@ -259,7 +259,7 @@ const CheckPage = ({ onSubmit, value }) => {
         <CardSubHeader>{t("BPA_OCC_SUBOCC_HEADER")}:</CardSubHeader>
         {datafromAPI?.planDetail?.blocks.map((block, index) => (
           <div key={index}>
-            <CardSubHeader>{t("BPA_BLOCK_SUBHEADER")} {index + 1}</CardSubHeader>
+            <CardSubHeader style={{marginTop:"15px"}}>{t("BPA_BLOCK_SUBHEADER")} {index + 1}</CardSubHeader>
             <StatusTable >
               <Row className="border-none" label={t("BPA_SUB_OCCUPANCY_LABEL")} text={getBlockSubOccupancy(index) === "" ? t("CS_NA") : getBlockSubOccupancy(index)}></Row>
             </StatusTable>

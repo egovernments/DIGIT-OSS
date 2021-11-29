@@ -208,7 +208,7 @@ import {
       <CardSubHeader>{t("BPA_OCC_SUBOCC_HEADER")}:</CardSubHeader>
       {datafromAPI?.planDetail?.blocks.map((block,index)=>(
       <div key={index} style={datafromAPI?.planDetail?.blocks?.length > 1 ?{ marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", maxWidth: "960px", minWidth: "280px" } : {}}>
-      <CardSubHeader>{t("BPA_BLOCK_SUBHEADER")} {index+1}</CardSubHeader>
+      <CardSubHeader style={{marginTop:"15px"}}>{t("BPA_BLOCK_SUBHEADER")} {index+1}</CardSubHeader>
       <StatusTable >
       <Row className="border-none" label={t("BPA_SUB_OCCUPANCY_LABEL")} text={getBlockSubOccupancy(index) === ""?t("CS_NA"):getBlockSubOccupancy(index)}></Row>
       </StatusTable>
