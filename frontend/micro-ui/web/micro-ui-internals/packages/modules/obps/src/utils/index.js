@@ -195,14 +195,14 @@ export const getBPAUnit = (data) =>{
       {
         units.push({...oldUnit,  usageCategory:getusageCategoryAPI(newunit[1])})
       }
-      else{
-        units.push({
-            blockIndex:index,
-            floorNo:newunit[0]?.split("_")[1],
-            unitType:"Block",
-            usageCategory:getusageCategoryAPI(newunit[1]),
-        });
-      }
+      // else{
+      //   units.push({
+      //       blockIndex:index,
+      //       floorNo:newunit[0]?.split("_")[1],
+      //       unitType:"Block",
+      //       usageCategory:getusageCategoryAPI(newunit[1]),
+      //   });
+      // }
     })
   })   
   }

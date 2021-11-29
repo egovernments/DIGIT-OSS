@@ -15,7 +15,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   const [Pinerror, setPinerror] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [pincode, setPincode] = useState(currPincode || formData?.address?.pincode || "");
-  const [geoLocation, setgeoLocation] = useState(formData?.address?.geolocation || "")
+  const [geoLocation, setgeoLocation] = useState(formData?.address?.geoLocation || "")
   const [tenantIdData, setTenantIdData] = useState(formData?.Scrutiny?.[0]?.tenantIdData);
   const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city  || currCity || null);
   const [street, setStreet] = useState(formData?.address?.street || "");
@@ -72,6 +72,8 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
     t
   );
 
+  let isEditApplication = window.location.href.includes("editApplication");
+  let isSendBackTOCitizen = window.location.href.includes("sendbacktocitizen");
 
 
   const [localities, setLocalities] = useState();
@@ -205,7 +207,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
           t={t}
           name="gis"
           //value={geoLocation && geoLocation.latitude && geoLocation.longitude?`${geoLocation.latitude},${geoLocation.longitude}`:""}
-          value={placeName}
+          value={isEditApplication || isSendBackTOCitizen?(geoLocation.latitude !== null?`${geoLocation.latitude}, ${geoLocation.longitude}`:""):placeName}
           onChange={selectGeolocation}
         />
         <LinkButton
