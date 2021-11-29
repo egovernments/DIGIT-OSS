@@ -159,14 +159,14 @@ const ApplicationOverview = () => {
               <Row className="border-none" label={`${t("NOC_APPROVED_ON_LABEL")}:`} text={(status === "APPROVED" || status === "REJECTED" || status === "AUTO_APPROVED" || status === "AUTO_REJECTED") ? convertEpochToDate(Number(nocDataDetails?.[0]?.auditDetails?.lastModifiedTime)) : "NA"} />
               <Row className="border-none" label={`${t("Documents")}:`} text={""} /> 
             </StatusTable>
-            {nocDataDetails?.[0]?.documents ? <div style={{ display: "flex", flexWrap: "wrap" }}>
+            {nocDataDetails?.[0]?.documents && nocDataDetails?.[0]?.documents.length>0 ? <div style={{ display: "flex", flexWrap: "wrap" }}>
               {nocDataDetails?.[0]?.documents?.map((value, index) => (
                 <a target="_" href={pdfFiles[value.fileStoreId]?.split(",")[0]} style={{ minWidth: "160px", marginRight: "20px" }} key={index}>
                   <PDFSvg />
-                  <p style={{ marginTop: "8px", fontWeight: "bold", textAlign: "center", width: "100px", color: "#505A5F" }}>{t(value?.title ? value?.title : decodeURIComponent( pdfFiles[value.fileStoreId]?.split(",")?.[0]?.split("?")?.[0]?.split("/")?.pop()?.slice(13)))}</p>
+                  <p style={{ marginTop: "8px", fontWeight: "bold", textAlign: "center", width: "100px", color: "#505A5F" }}>{t(stringReplaceAll(value?.documentType, ".", "_"))/* t(value?.title ? value?.title : decodeURIComponent( pdfFiles[value.fileStoreId]?.split(",")?.[0]?.split("?")?.[0]?.split("/")?.pop()?.slice(13))) */}</p>
                 </a>
               ))}
-            </div> : null}
+            </div> : <div><p>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</p></div>}
             {/* <div style={{ display: "flex", paddingBottom: "8px", marginBottom: "8px" }}> */}
               {/* <h1 style={{ width: "40%", fontWeight: 700, paddingTop: "20px" }}>{`${t("NOC_UPLOAD_FILE_LABEL")}:`}</h1> */}
               <div>
