@@ -45,6 +45,7 @@ public class ExternalEmailService implements EmailService {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper;
 		try {
+			log.info("Inside html func 1");
 			helper = new MimeMessageHelper(message, true);
 			helper.setTo(email.getEmailTo().toArray(new String[0]));
 			helper.setSubject(email.getSubject());
@@ -55,5 +56,6 @@ public class ExternalEmailService implements EmailService {
 			throw new RuntimeException(e);
 		}
 		mailSender.send(message);
+		log.info("*** EMAIL sent-> "+message.toString());
 	}
 }
