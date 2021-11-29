@@ -50,7 +50,7 @@ export const searchApiResponse = async (request, next = {}) => {
   const isUser = some(roles, { code: "CITIZEN" }) && userUUID;
   if (isUser) {
     const mobileNumber = get(request.body, "RequestInfo.userInfo.mobileNumber");
-    const tenantId = get(request.body, "RequestInfo.userInfo.permanentCity");
+    const tenantId = envVariables.EGOV_DEFAULT_STATE_ID;
     
     
     //text = `${text} where (FN.createdby = '${userUUID}' OR`;    
@@ -62,13 +62,19 @@ export const searchApiResponse = async (request, next = {}) => {
     //console.log("mobileNumber", mobileNumber);
     //console.log("tenedrIDD", tenantId);
 
-    text = `${text} where FN.tenantid = '${queryObj.tenantId}' AND`;
+    if(queryObj.tenantId == envVariables.EGOV_DEFAULT_STATE_ID)
+      text = `${text} where FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
+    else
+      text = `${text} where FN.tenantid = '${queryObj.tenantId}' AND`;
   } else {
     if (!isEmpty(queryObj)) {
       text = text + " where ";
     }
     if (queryObj.tenantId) {
-      text = `${text} FN.tenantid = '${queryObj.tenantId}' AND`;
+      if(queryObj.tenantId == envVariables.EGOV_DEFAULT_STATE_ID)
+        text = `${text} FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
+      else
+        text = `${text} FN.tenantid = '${queryObj.tenantId}' AND`;
     }
   }
   // if (queryObj.status) {
