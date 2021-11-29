@@ -84,6 +84,7 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
       ...menuItems,
       {
         text: t("CORE_COMMON_LOGOUT"),
+        element:"LOGOUT",
         icon: <LogoutIcon className="icon" />,
         populators: {
           onClick: onLogout,
@@ -91,6 +92,13 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
       },
     ];
   }
+  
+    /*  URL with openlink wont have sidebar and actions    */
+  if(history.location.pathname.includes("/openlink")){
+    profileItem=(<span></span>);
+    menuItems=menuItems.filter(ele=>ele.element==="LANGUAGE");
+  }
+  
   return (
     <div>
       <NavBar open={isOpen} profileItem={profileItem} menuItems={menuItems} onClose={closeSidebar} Footer={<PoweredBy />} />
