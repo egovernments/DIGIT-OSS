@@ -477,7 +477,9 @@ export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t
   }
 
 
-  data["PrevStateDocuments"] = data?.documents;
+  let PrevStateDocuments = [];
+  data?.documents.map(doc => PrevStateDocuments.push(doc));
+  data["PrevStateDocuments"] = cloneDeep(PrevStateDocuments);
   data.documents = {
     documents: []
   }

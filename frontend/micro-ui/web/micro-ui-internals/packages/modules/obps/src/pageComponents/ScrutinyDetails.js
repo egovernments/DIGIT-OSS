@@ -257,7 +257,7 @@ const clearall = (num) => {
               options={getsuboptions()}
               onSelect={selectOccupancy}
               isOBPSMultiple={true}
-              optionsKey="name"
+              optionsKey="i18nKey"
               t={t}
             /> :null}
         { !(checkingFlow === "OCBPA") ? <div className="tag-container">

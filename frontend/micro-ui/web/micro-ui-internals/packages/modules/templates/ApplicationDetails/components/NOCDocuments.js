@@ -165,10 +165,12 @@ const NOCDocuments = ({ t, noc, docs, isNoc, applicationData,NOCdata, bpaActions
       <StatusTable>
       <Row label={isEmployee ? `${t(`BPA_${noc?.nocType}_HEADER`)}:` : t(`BPA_${noc?.nocType}_HEADER`)} />
       {NOCdata && NOCdata.map((noc,index) => {
-        if (noc?.field == "STATUS") {
-          return <Row label={isEmployee ? `${t(noc?.title)}:` : t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} textStyle = {(noc?.value == "APPROVED" || noc?.value == "AUTO_APPROVED") ? {color: "#00703C"} : {color : "#D4351C"}}/>
-        } else {
-          return <Row label={isEmployee ? `${t(noc?.title)}:` : t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} />
+        if (noc?.value) {
+          if (noc?.field == "STATUS") {
+            return <Row label={isEmployee ? `${t(noc?.title)}:` : t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} textStyle = {(noc?.value == "APPROVED" || noc?.value == "AUTO_APPROVED") ? {color: "#00703C"} : {color : "#D4351C"}}/>
+          } else {
+            return <Row label={isEmployee ? `${t(noc?.title)}:` : t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} />
+          }
         }
       })}
       </StatusTable>

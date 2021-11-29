@@ -38,7 +38,7 @@ const OCSendBackToCitizen = ({ parentRoute }) => {
   const editApplication = window.location.href.includes("editApplication");
 
   useEffect(async () => {
-    if (!isLoading) {
+    if (!isLoading && !isNocLoading && !isBpaSearchLoading && !isMdmsLoading) {
       application = bpaData ? bpaData[0] : {};
       if (bpaData && application && edcrDetails && mdmsData && nocdata) {
         application = bpaData[0];

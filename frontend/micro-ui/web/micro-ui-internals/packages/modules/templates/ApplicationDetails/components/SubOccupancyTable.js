@@ -78,10 +78,10 @@ const SubOccupancyTable = ({ edcrDetails, applicationData }) => {
     }
     return returnValue ? returnValue : "NA";
   }
-
+  
   return (
     <Fragment>
-      <div style={window.location.href.includes("citizen")?{}:{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "950px", minWidth: "280px" }}>
+      <div style={{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "950px", minWidth: "280px" }}>
         <StatusTable>
           {edcrDetails?.values?.map((value, index) => {
             return <Row className="border-none" labelStyle={{width: "100%"}} key={`${value.title}:`} label={`${t(`${value.title}`)}:`} text={value?.value ? value?.value : ""} />
@@ -89,7 +89,7 @@ const SubOccupancyTable = ({ edcrDetails, applicationData }) => {
         </StatusTable>
 
         {edcrDetails?.subOccupancyTableDetails?.[0]?.value?.planDetail?.blocks.map((block, index) => (
-          <div key={index} style={{marginBottom: "30px"}}>
+          <div key={index} style={edcrDetails?.subOccupancyTableDetails?.[0]?.value?.planDetail?.blocks?.length > 0 ? {marginBottom: "30px", background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "950px", minWidth: "280px"} : {marginBottom: "30px"}}>
             <CardSubHeader style={{ marginBottom: "8px", paddingBottom: "9px", color: "#0B0C0C", fontSize: "16px", lineHeight: "19px" }}>{t("BPA_BLOCK_SUBHEADER")} {index + 1}</CardSubHeader>
             <StatusTable>
               <Row className="border-none" label={`${t("BPA_SUB_OCCUPANCY_LABEL")}:`} text={getSubOccupancyValues(index)}></Row>

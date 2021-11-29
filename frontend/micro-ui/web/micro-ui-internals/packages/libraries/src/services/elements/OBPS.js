@@ -280,11 +280,21 @@ export const OBPSService = {
             value: nocDetails?.applicationStatus,
             field: "STATUS"
           },
-          {
+          nocDetails?.additionalDetails?.SubmittedOn && {
             title: "BPA_SUDMITTED_ON_LABEL",
-            value: nocDetails?.additionalDetails?.SubmittedOn ? format(new Date(Number(nocDetails?.additionalDetails?.SubmittedOn)), 'dd/MM/yyyy') : "NA", //format(new Date(nocDetails?.auditDetaills?.createdTime), 'dd/MM/yyyy')
+            value: nocDetails?.additionalDetails?.SubmittedOn ? format(new Date(Number(nocDetails?.additionalDetails?.SubmittedOn)), 'dd/MM/yyyy') : "NA",
             isNotTranslated: true
           },
+          nocDetails?.nocNo && {
+            title: "BPA_APPROVAL_NUMBER_LABEL",
+            value: nocDetails?.nocNo || "NA",
+            isNotTranslated: true
+          },
+          nocDetails?.nocNo && {
+            title: "BPA_APPROVED_REJECTED_ON_LABEL",
+            value: (nocDetails?.applicationStatus === "APPROVED" || nocDetails?.applicationStatus === "REJECTED" || nocDetails?.applicationStatus === "AUTO_APPROVED" || nocDetails?.applicationStatus === "AUTO_REJECTED") ? format(new Date(Number(nocDetails?.auditDetails?.lastModifiedTime)), 'dd/MM/yyyy') : "NA",
+            isNotTranslated: true
+          }
         ],
         additionalDetails: {
           data: nocDetails,
@@ -406,6 +416,7 @@ export const OBPSService = {
     const scrutinyDetails = {
       title: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
       isScrutinyDetails: true,
+      isBackGroundColor: true,
       additionalDetails: {
         values: [
           { title: "BPA_EDCR_DETAILS", value: " " },
@@ -421,6 +432,7 @@ export const OBPSService = {
     const buildingExtractionDetails = {
       title: "",
       isScrutinyDetails: true,
+      isBackGroundColor: true,
       additionalDetails: {
         values: [
           { title: "BPA_BUILDING_EXTRACT_HEADER", value : " "},
@@ -435,6 +447,7 @@ export const OBPSService = {
     const demolitionAreaDetails = {
       title: "",
       isScrutinyDetails: true,
+      isBackGroundColor: true,
       additionalDetails: {
         values: [
           { title: "BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL", value : " "},
@@ -447,12 +460,14 @@ export const OBPSService = {
     const subOccupancyTableDetails = {
       title: "",
       isSubOccupancyTable: true,
+      isTitleRepeat: true,
       additionalDetails: {
         values: [
           { title: "BPA_OCC_SUBOCC_HEADER", value : " "} 
         ],
         subOccupancyTableDetails: [
-          { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr }
+          { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr },
+          { title: "NO_REPEAT", value: "" }
         ]
       }
     }

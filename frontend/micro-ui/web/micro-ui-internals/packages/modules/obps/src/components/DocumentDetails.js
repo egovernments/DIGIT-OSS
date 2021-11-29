@@ -4,8 +4,7 @@ import { PDFSvg, Row } from "@egovernments/digit-ui-react-components";
 
 const DocumentDetails = ({ documents }) => {
   const { t } = useTranslation();
-  const [filesArray, setFilesArray] = useState(() => [] );
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const [filesArray, setFilesArray] = useState(() => []);
   const [pdfFiles, setPdfFiles] = useState({});
   useEffect(() => {
     let acc = [];
@@ -16,28 +15,31 @@ const DocumentDetails = ({ documents }) => {
   }, [documents]);
 
   useEffect(() => {
-    if(filesArray?.length)
-   { 
-     Digit.UploadServices.Filefetch(filesArray, Digit.ULBService.getStateId()).then((res) => {
-      setPdfFiles(res?.data);
-     });
+    if (filesArray?.length) {
+      Digit.UploadServices.Filefetch(filesArray, Digit.ULBService.getStateId()).then((res) => {
+        setPdfFiles(res?.data);
+      });
     }
   }, [filesArray]);
 
   return (
     <Fragment>
-      {documents?.map(document => (
+      {documents?.map((document, docIndex) => (
         <Fragment>
-        <Row labelStyle={{paddingTop:"10px",width:"100%"}} label={t(document?.title?.split('_')?.slice(0,2).join('_'))} />
-        <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {document?.filestoreIdArray && document?.filestoreIdArray.map((filestoreId,index) => 
-          <a target="_" href={pdfFiles[filestoreId]?.split(",")[0]} style={{ minWidth: "100px",marginRight:"10px" }} key={index}>
-          <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />
-          <p style={{ marginTop: "8px",textAlign:"center" }}>{t(document?.title)}</p>
-        </a>
-        )  
-        }
-        </div>
+          <Row className="border-none" labelStyle={{ paddingTop: "10px", width: "100%" }} label={t(document?.title?.split('_')?.slice(0, 2).join('_'))} />
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
+            {document?.filestoreIdArray && document?.filestoreIdArray.map((filestoreId, index) =>
+              <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-start", alignContent: "center" }}>
+                <a target="_" href={pdfFiles[filestoreId]?.split(",")[0]} style={{ minWidth: "100px", marginRight: "10px", maxWidth: "100px", height: "auto" }} key={index}>
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <PDFSvg style={{ background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />
+                  </div>
+                  <p style={{ marginTop: "8px", textAlign: "center", color: "#505A5F" }}>{t(document?.title)}</p>
+                </a>
+              </div>
+            )}
+          </div>
+          {documents?.length != docIndex + 1 ? <hr style={{ color: "#D6D5D4", backgroundColor: "#D6D5D4", height: "2px", marginTop: "20px", marginBottom: "20px" }} /> : null}
         </Fragment>
       ))}
     </Fragment>

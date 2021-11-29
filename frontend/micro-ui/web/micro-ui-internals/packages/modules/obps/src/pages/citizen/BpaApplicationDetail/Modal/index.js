@@ -103,7 +103,7 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action }) => {
       style={{height: "auto", padding: "10px"}}
     >
       <FormComposer
-        // cardStyle={{ minWidth: "unset", paddingRight: "unset" }}
+        cardStyle={{ minWidth: "unset", paddingRight: "unset" }}
         config={config?.form}
         noBoxShadow
         inline
