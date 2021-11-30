@@ -45,8 +45,8 @@ jobs:
       run: |
          chmod +x build_utilities/build_svc.sh
          ./build_utilities/build_svc.sh
-         cat build_utilities/servicelist
-         cd build_utilities/
-         ls -ll
-         go run build_setup.go
+         ls -la
+         cat servicelist
+         #cd build_utilities/
+         #go run build_setup.go
          
