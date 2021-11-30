@@ -2,10 +2,10 @@ name: Build and push egov-mdms-services image
 
 on:
   push:
-    paths:
-      - 'core-services/egov-mdms-service/**'
+   # paths:
+    #  - 'core-services/**'
     branches:
-      - build_test
+      - githubaction-test
 
 jobs:
   build:
@@ -33,11 +33,15 @@ jobs:
         registry: ghcr.io
         username: ${{ secrets.GHCR_PASSWORD_SECRET }}
         password: ${{ secrets.GHCR_USERNAME_SECRET }} 
+    
+    - name: Setup Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ‘1.13.3’
 
     - name: Build and push
-      uses: docker/build-push-action@v2
-      with:
-          context: ./core-services/egov-mdms-service
-          file: ./egov-mdms-service
-          push: true
-          tags: egovernments/egov-mdms-service:v2-${{ env.SHA }}
+      run: |
+         echo `git diff HEAD~1 | grep 'git' | cut -d " " -f 3 | cut -d "/" -f 3 | uniq -d | sort -nr ` > servicelist
+         cat servicelist
+         go version
+         ls -ll
