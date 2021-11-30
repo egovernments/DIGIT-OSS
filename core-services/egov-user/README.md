@@ -1,4 +1,4 @@
-# Egov-User service
+# Egov-user service
 
 <p>Egov-user service is used for user data management and providing functionality to login and logout into Digit system </p>
 
