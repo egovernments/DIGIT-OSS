@@ -41,7 +41,7 @@ jobs:
 
     - name: Build and push
       run: |
-         echo `git diff HEAD~1 | grep 'git' | cut -d " " -f 3 | cut -d "/" -f 3 | uniq -d | sort -nr ` > servicelist
-         cat servicelist
+         echo `git diff HEAD~1 | grep 'git' 
+         ls -l .git/refs/heads
          go version
-         ls -ll
+         ls -la
