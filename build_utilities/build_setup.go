@@ -28,11 +28,11 @@ type BuildConfig struct {
 func main() {
 	//var job string = "pt-calculator-v2"
 	//var jobs []string
-	serviceList := ("./servicelist")
+	serviceList := ("../servicelist")
 	content, _ := ioutil.ReadFile(serviceList)
 	jobs := strings.Split(string(content), "\n")
 	//fmt.Println(jobs)
-	argFile := ("./build/build-config.yml")
+	argFile := ("../build/build-config.yml")
 	var dockerBuildCmd string
 	var dockerPushCmd string
 	// Decode the yaml file and assigning the values to a map
@@ -59,10 +59,13 @@ func main() {
 					imglist := c.Build
 					//fmt.Println("name", job)
 					for _, img := range imglist {
-						var dockerfile string = ""
+
 						workdir := "/home/runner/work/DIGIT-Dev/DIGIT-Dev/" + img.Workdir
-						dockerfile = "/home/runner/work/DIGIT-Dev/DIGIT-Dev/" + img.Dockerfile
 						buildContext := "/home/runner/work/DIGIT-Dev/DIGIT-Dev/."
+
+						var dockerfile string = ""
+						dockerfile = "/home/runner/work/DIGIT-Dev/DIGIT-Dev/" + img.Dockerfile
+
 						if dockerfile == "" {
 							dockerfile = "/home/runner/work/DIGIT-Dev/DIGIT-Dev/" + img.Workdir + "/Dockerfile"
 							//  buildContext = img.Workdir + "/."
