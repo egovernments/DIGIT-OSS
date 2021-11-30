@@ -7,11 +7,11 @@ import {convertToNocObject,convertToBPAObject} from "../../../utils/index";
 const GetActionMessage = (props) => {
   const { t } = useTranslation();
   if (props.isSuccess) {
-    return !window.location.href.includes("editApplication") ? t("CS_BPA_APPLICATION_SUCCESS") : t("CS_PROPERTY_UPDATE_APPLICATION_SUCCESS");
+    return !window.location.href.includes("editApplication") ? t("CS_BPA_APPLICATION_SUCCESS") : t("CS_BPA_APPLICATION_SUCCESS");
   } else if (props.isLoading) {
-    return !window.location.href.includes("editApplication") ? t("CS_BPA_APPLICATION_PENDING") : t("CS_PROPERTY_UPDATE_APPLICATION_PENDING");
+    return !window.location.href.includes("editApplication") ? t("CS_BPA_APPLICATION_PENDING") : t("CS_BPA_APPLICATION_PENDING");
   } else if (!props.isSuccess) {
-    return !window.location.href.includes("editApplication") ? t("CS_BPA_APPLICATION_FAILED") : t("CS_PROPERTY_UPDATE_APPLICATION_FAILED");
+    return !window.location.href.includes("editApplication") ? t("CS_BPA_APPLICATION_FAILED") : t("CS_BPA_APPLICATION_FAILED");
   }
 };
 

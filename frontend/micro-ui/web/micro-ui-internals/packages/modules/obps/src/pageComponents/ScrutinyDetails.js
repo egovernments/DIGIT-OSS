@@ -290,9 +290,9 @@ const clearall = (num) => {
           };
         }}
       />
-      <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       </div>
       </div>))}
+      <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL")}:</CardSubHeader>
       <StatusTable  style={{border:"none"}}>
       <Row label={t("BPA_APPLICATION_DEMOLITION_AREA_LABEL")} text={data?.planDetail?.planInformation?.demolitionArea?`${data?.planDetail?.planInformation?.demolitionArea} sq.mtrs`:t("CS_NA")}></Row>

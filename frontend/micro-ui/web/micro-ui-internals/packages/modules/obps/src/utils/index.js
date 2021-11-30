@@ -315,14 +315,14 @@ export const getunitforBPA = (units) => {
 
 export const getBPAOwners = (data) => {
   let bpaownerarray = cloneDeep(data?.owners?.owners);
-  bpaownerarray && bpaownerarray.forEach(newOwner => {
+  bpaownerarray && bpaownerarray?.forEach(newOwner => {
       if(newOwner?.gender?.code) newOwner.gender = newOwner.gender?.code;
       if(!newOwner?.fatherOrHusbandName) newOwner.fatherOrHusbandName = "NAME"
   });
 
-  data.landInfo.owners.map((oldowner) => {
-    let found = bpaownerarray.length > 0 ? bpaownerarray?.some(el => el.id === oldowner.id):false;
-    if(!found) bpaownerarray.push({...oldowner,active:false});   
+  data?.landInfo?.owners?.map((oldowner) => {
+    let found = bpaownerarray?.length > 0 ? bpaownerarray?.some(el => el.id === oldowner.id):false;
+    if(!found) bpaownerarray?.push({...oldowner,active:false});   
   });
 
   return bpaownerarray;
