@@ -2,8 +2,8 @@ name: Build and push egov-mdms-services image
 
 on:
   push:
-   # paths:
-    #  - 'core-services/**'
+    paths:
+      - 'core-services/**'
     branches:
       - githubaction-test
 
@@ -44,6 +44,7 @@ jobs:
     - name: Build and push
       run: |
          chmod +x build_utilities/build_svc.sh
-         ./build_utilities/build_svc.sh
-         cat servicelist
-         ls -la
+         cd build_utilities/
+         ./build_svc.sh
+         go run build_setup.go
+         
