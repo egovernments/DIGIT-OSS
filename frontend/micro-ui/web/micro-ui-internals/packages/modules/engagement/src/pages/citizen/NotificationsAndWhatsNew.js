@@ -26,9 +26,9 @@ const NotificationsAndWhatsNew = ({ variant, parentRoute }) => {
 
     const { data: EventsData, isLoading: EventsDataLoading } = Digit.Hooks.useEvents({ tenantId, variant })
 
-    if (!Digit.UserService?.getUser()?.access_token) {
-        return <Redirect to={{ pathname: `/digit-ui/citizen/login`, state: { from: location.pathname + location.search } }} />
-    }
+    // if (!Digit.UserService?.getUser()?.access_token) {
+    //     return <Redirect to={{ pathname: `/digit-ui/citizen/login`, state: { from: location.pathname + location.search } }} />
+    // }
 
     if (EventsDataLoading || !preVisitUnseenNotificationCountLoaded) return <Loader />
 

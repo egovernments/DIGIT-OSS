@@ -30,9 +30,12 @@ const TopBar = ({
     const { pathname } = useLocation();
     
     const conditionsToDisableNotificationCountTrigger = () => {
-      if(!CitizenHomePageTenantId) return false
       if(Digit.UserService?.getUser()?.info?.type === "EMPLOYEE") return false
-      return true
+      if(Digit.SessionStorage.get("userType") === "citizen") {
+        if(!CitizenHomePageTenantId) return false
+        else return true
+      }
+      return false
     }
 
     const { data:{ unreadCount: unreadNotificationCount } = {}, isSuccess: notificationCountLoaded } = Digit.Hooks.useNotificationCount({tenantId:CitizenHomePageTenantId, config:{
