@@ -36,8 +36,8 @@ jobs:
       env:
         COMMIT-SHA: ${{ github.run_id }}-${{ github.run_number }}
       run: |
-         #echo ${{ emv.COMMIT-SHA }}
-         echo $COMMIT-SHA
+         echo ${{ env.COMMIT-SHA }}
+         #echo $COMMIT-SHA
          #chmod +x build_utilities/build_svc.sh
          #./build_utilities/build_svc.sh
          #cd build_utilities/
