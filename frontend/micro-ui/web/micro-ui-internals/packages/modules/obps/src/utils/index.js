@@ -204,9 +204,19 @@ export const getBPAUnit = (data) =>{
       //   });
       // }
     })
-  })   
+  }) 
+  result && result.map((newunit,index)=>{
+    let found = units.length > 0 ? units?.some(el => el?.floorNo === newunit[0]?.split("_")[1]):false;
+    if(!found){
+      units.push({
+          blockIndex:index,
+          floorNo:newunit[0]?.split("_")[1],
+          unitType:"Block",
+          usageCategory:getusageCategoryAPI(newunit[1]),
+      });
+    }
+  })  
   }
-
   return units.length>0?units:data?.landInfo?.unit;
 
 }
