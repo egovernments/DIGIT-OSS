@@ -43,4 +43,4 @@ jobs:
 
     - name: Build and push
       run: |
-         git diff HEAD~1 | grep 'git' | cut -d " " -f 3 | cut -d "/" -f 3 | uniq -d | sort -n
+         git diff HEAD~1 | grep 'git' | cut -d " " -f 3 | cut -d "/" -f 3 
