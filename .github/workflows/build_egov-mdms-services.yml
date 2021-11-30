@@ -11,7 +11,7 @@ jobs:
   build:
     runs-on: 'ubuntu-latest'
     env:
-      commit-sha: "${{ github.run_id }}-${{ github.run_number }}"
+      COMMIT-SHA: "${{ GITHUB_RUN_ID }}-${{ GITHUB_RUN_NUMBER }}"
 
     steps:
     - name: Repo Checkout
@@ -36,7 +36,8 @@ jobs:
 
     - name: Build and push
       run: |
-         echo ${{ emv.commit-sha }}
+         echo ${{ emv.COMMIT-SHA }}
+         echo $COMMIT-SHA
          #chmod +x build_utilities/build_svc.sh
          #./build_utilities/build_svc.sh
          #cd build_utilities/
