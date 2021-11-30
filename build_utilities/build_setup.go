@@ -28,11 +28,11 @@ type BuildConfig struct {
 func main() {
 	//var job string = "pt-calculator-v2"
 	//var jobs []string
-	serviceList := ("../servicelist")
+	serviceList := ("./servicelist")
 	content, _ := ioutil.ReadFile(serviceList)
 	jobs := strings.Split(string(content), "\n")
 	//fmt.Println(jobs)
-	argFile := ("../build/build-config.yml")
+	argFile := ("./build/build-config.yml")
 	var dockerBuildCmd string
 	var dockerPushCmd string
 	// Decode the yaml file and assigning the values to a map
@@ -61,23 +61,23 @@ func main() {
 					for _, img := range imglist {
 
 						workdir := img.Workdir
-						buildContext := "/home/runner/work/DIGIT-Dev/DIGIT-Dev/."
+						buildContext := "."
 
-						dockerFile := "/home/runner/work/DIGIT-Dev/DIGIT-Dev/" + img.Dockerfile
+						dockerFile := img.Dockerfile
 						var dockerfile string = ""
 						dockerfile = img.Dockerfile
 						if dockerfile == "" {
-							dockerfile = "/home/runner/work/DIGIT-Dev/DIGIT-Dev/" + img.Workdir + "/Dockerfile"
+							dockerfile = img.Workdir + "/Dockerfile"
 							//  buildContext = img.Workdir + "/."
 						}
 						if strings.Contains(img.Workdir, "/db") {
-							buildContext = "/home/runner/work/DIGIT-Dev/DIGIT-Dev/" + img.Workdir + "/."
+							buildContext = img.Workdir + "/."
 							fmt.Println("\nBuiling the", img.Imagename)
 							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-%s -f %s %s", img.Imagename, os.Getenv("COMMIT-SHA"), dockerfile, buildContext)
 							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-%s", img.Imagename, os.Getenv("COMMIT-SHA"))
 						} else {
 							fmt.Println("\nBuiling the", img.Imagename)
-							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-%s --build-arg 'WORK_DIR=./%s' -f %s .", img.Imagename, os.Getenv("COMMIT-SHA"), workdir, dockerFile)
+							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-%s --build-arg WORK_DIR=%s -f %s .", img.Imagename, os.Getenv("COMMIT-SHA"), workdir, dockerFile)
 							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-%s", img.Imagename, os.Getenv("COMMIT-SHA"))
 
 						}
