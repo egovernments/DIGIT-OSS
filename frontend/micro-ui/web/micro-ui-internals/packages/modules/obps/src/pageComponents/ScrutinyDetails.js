@@ -244,7 +244,7 @@ const clearall = (num) => {
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_OCC_SUBOCC_HEADER")}:</CardSubHeader>
       {data?.planDetail?.blocks.map((block,index)=>(
-      <div key={index}>
+      <div key={index} style={{marginTop: "20px"}}>
       <CardSubHeader>{t("BPA_BLOCK_SUBHEADER")} {index+1}</CardSubHeader>
       { !(checkingFlow === "OCBPA") ? <CardSectionHeader style={{fontWeight: "normal"}} className="card-label-smaller">{t("BPA_SUB_OCCUPANCY_LABEL")}</CardSectionHeader> : null }
       {!(checkingFlow === "OCBPA") ? <MultiSelectDropdown
@@ -267,10 +267,11 @@ const clearall = (num) => {
                 ))}
         </div> : null }
         { !(checkingFlow === "OCBPA") ? (subOccupancyObject[`Block_${block.number}`] && subOccupancyObject[`Block_${block.number}`].length>0 ) && <LinkButton style={{textAlign:"left"}} label={"Clear All"} onClick={() => clearall(block.number)}/>: null}
-      <div style={{overflow:"scroll"}}>
+      <div style={{marginTop: "20px"}}>
       { checkingFlow === "OCBPA" ? <StatusTable>
         <Row className="border-none" label={`${t("BPA_SUB_OCCUPANCY_LABEL")}:`} text={getSubOccupancyValues(index)}></Row>
       </StatusTable>: null }
+      <div style={{overflowX:"scroll"}}>
       <Table
         className="customTable table-fixed-first-column"
         t={t}
@@ -290,6 +291,7 @@ const clearall = (num) => {
           };
         }}
       />
+      </div>
       </div>
       </div>))}
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>

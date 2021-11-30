@@ -58,7 +58,7 @@ const EDCRAcknowledgement = (props) => {
               <SubmitBar label={t("BPA_APPLY_OC_FOR_BPA_LABEL")} />
             </Link>
           </div>
-          <div style={{marginTop: "12px", paddingBottom: "10px"}}>
+          <div style={{marginTop: "12px", paddingBottom: "10px", paddingLeft: "10px"}}>
             <Link to={`/digit-ui/citizen`} >
               <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
             </Link>
@@ -81,7 +81,7 @@ const EDCRAcknowledgement = (props) => {
             </svg>
             {t("EDCR_DOWNLOAD_SCRUTINY_REPORT_LABEL")}
           </div>
-          <div style={{padding: "10px", paddingBottom: "10px"}}>
+          <div style={{padding: "10px", paddingBottom: "10px", paddingLeft: "10px"}}>
             <Link to={`/digit-ui/citizen`} >
               <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
             </Link>

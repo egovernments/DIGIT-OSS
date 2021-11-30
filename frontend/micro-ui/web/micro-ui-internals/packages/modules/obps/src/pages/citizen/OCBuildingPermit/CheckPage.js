@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import Timeline from "../../../components/Timeline";
 import OBPSDocument from "../../../pageComponents/OBPSDocuments";
+import { convertEpochToDateDMY } from "../../../utils";
 
 const CheckPage = ({ onSubmit, value }) => {
   const { t } = useTranslation();
@@ -33,7 +34,7 @@ const CheckPage = ({ onSubmit, value }) => {
   else if (value.businessService === "BPA_OC")
     BusinessService = "BPA.NC_OC_APP_FEE"
 
-  const { data, address, owners, nocDocuments, documents, additionalDetails, PrevStateDocuments, PrevStateNocDocuments, applicationNo } = value;
+  const { data, address, owners, nocDocuments, documents, additionalDetails, PrevStateDocuments, PrevStateNocDocuments, applicationNo, uiFlow } = value;
   let isEditApplication = window.location.href.includes("editApplication");
   let val;
   var i;
@@ -158,7 +159,7 @@ const CheckPage = ({ onSubmit, value }) => {
 
   return (
     <React.Fragment>
-      <Timeline currentStep={4} />
+      <Timeline currentStep={uiFlow?.flow === "OCBPA" ? 2 : 1} flow= {uiFlow?.flow === "OCBPA" ? "OCBPA" : ""}/>
       <Header>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
       <Card style={{paddingRight:"16px"}}>
         <StatusTable>
@@ -221,12 +222,12 @@ const CheckPage = ({ onSubmit, value }) => {
         <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
         <CardSubHeader>{`${t("BPA_OCC_SUBOCC_HEADER")}:`}</CardSubHeader>
         {datafromAPI?.planDetail?.blocks.map((block, index) => (
-          <div key={index}>
+          <div key={index}  style={datafromAPI?.planDetail?.blocks?.length > 1 ?{ marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", maxWidth: "960px", minWidth: "280px" } : {}}>
             <CardSubHeader style={{marginTop:"15px"}}>{`${t("BPA_BLOCK_SUBHEADER")}`} {index + 1}</CardSubHeader>
               <StatusTable>
                 <Row className="border-none" label={`${t("BPA_SUB_OCCUPANCY_LABEL")}`} text={getSubOccupancyValues(index)}></Row>
               </StatusTable>
-            <div style={{ overflow: "scroll" }}>
+            <div style={{ overflowX: "scroll" }}>
               <Table
                 className="customTable table-fixed-first-column"
                 t={t}
@@ -243,9 +244,9 @@ const CheckPage = ({ onSubmit, value }) => {
                   };
                 }}
               />
-              <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
             </div>
           </div>))}
+          <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
         <CardSubHeader>{`${t("BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL")}:`}</CardSubHeader>
         <StatusTable style={{ border: "none" }}>
           <Row className="border-none" label={`${t("BPA_APPLICATION_DEMOLITION_AREA_LABEL")}`} text={datafromAPI?.planDetail?.planInformation?.demolitionArea ? `${datafromAPI?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : t("CS_NA")}></Row>
@@ -282,6 +283,9 @@ const CheckPage = ({ onSubmit, value }) => {
             <StatusTable>
               <Row className="border-none" label={t(`BPA_${noc?.nocType}_LABEL`)} text={noc?.applicationNo} />
               <Row className="border-none" label={t(`BPA_NOC_STATUS`)} text={t(`${noc?.applicationStatus}`)} textStyle={noc?.applicationStatus == "APPROVED" || noc?.applicationStatus == "AUTO_APPROVED" ? {color : "#00703C"} : {color: "#D4351C"}} />
+              {noc?.additionalDetails?.SubmittedOn ? <Row className="border-none" label={`${t("BPA_NOC_SUBMISSION_DATE")}:`} text={noc?.additionalDetails?.SubmittedOn ? convertEpochToDateDMY(Number(noc?.additionalDetails?.SubmittedOn)) : "NA"} /> : null }
+              {noc?.nocNo ? <Row className="border-none" label={`${t("BPA_APPROVAL_NUMBER_LABEL")}:`} text={noc?.nocNo || "NA"} /> : null }
+              {(noc?.applicationStatus === "APPROVED" || noc?.applicationStatus === "REJECTED" || noc?.applicationStatus === "AUTO_APPROVED" || noc?.applicationStatus === "AUTO_REJECTED") ? <Row className="border-none" label={`${t("BPA_APPROVED_REJECTED_ON_LABEL")}:`} text= {convertEpochToDateDMY(Number(noc?.auditDetails?.lastModifiedTime))} /> : null }
               <Row className="border-none" label={t(`BPA_DOCUMENT_DETAILS_LABEL`)} text={""} />
               <OBPSDocument value={isEditApplication?[...PrevStateNocDocuments,...nocDocuments.nocDocuments]:value} Code={noc?.nocType?.split("_")[0]} index={index} isNOC={true}/>
             </StatusTable>
