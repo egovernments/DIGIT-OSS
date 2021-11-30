@@ -60,7 +60,7 @@ func main() {
 					//fmt.Println("name", job)
 					for _, img := range imglist {
 
-						workdir := img.Workdir
+						workdir := "home/runner/work/DIGIT-Dev/DIGIT-Dev/" + img.Workdir
 						buildContext := "/home/runner/work/DIGIT-Dev/DIGIT-Dev/."
 
 						dockerFile := "/home/runner/work/DIGIT-Dev/DIGIT-Dev/" + img.Dockerfile
