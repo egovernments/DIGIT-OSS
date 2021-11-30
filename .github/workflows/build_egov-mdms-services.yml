@@ -2,8 +2,8 @@ name: Build and push egov-mdms-services image
 
 on:
   push:
-    #paths:
-     # - 'core-services/**'
+    paths:
+      - 'core-services/**'
     branches:
       - githubaction-test
 
@@ -36,10 +36,8 @@ jobs:
       env:
         COMMIT-SHA: ${{ github.run_id }}-${{ github.run_number }}
       run: |
-         echo ${{ env.COMMIT-SHA }}
-         #echo $COMMIT-SHA
-         #chmod +x build_utilities/build_svc.sh
-         #./build_utilities/build_svc.sh
-         #cd build_utilities/
-         #go run build_setup.go
+         chmod +x build_utilities/build_svc.sh
+         ./build_utilities/build_svc.sh
+         cd build_utilities/
+         go run build_setup.go
          
