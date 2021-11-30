@@ -1,4 +1,4 @@
-# Master Data Management service
+# Master Data Management servic
 
 Master Data Management Service is a core service that is made available on the DIGIT platform.  It encapsulates the functionality surrounding Master Data Management.  The service fetches Master Data pertaining to different modules. The functionality is exposed via REST API.
 
