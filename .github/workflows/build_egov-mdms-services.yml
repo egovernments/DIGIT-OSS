@@ -31,8 +31,8 @@ jobs:
       uses: docker/login-action@v1
       with:
         registry: ghcr.io
-        username: ${{ secrets.GHCR_PASSWORD_SECRET }}
-        password: ${{ secrets.GHCR_USERNAME_SECRET }} 
+        username: ${{ secrets.GHCR_USERNAME_SECRET }}
+        password: ${{ secrets.GHCR_PASSWORD_SECRET }} 
     
     - name: Setup Go
       uses: actions/setup-go@v2
