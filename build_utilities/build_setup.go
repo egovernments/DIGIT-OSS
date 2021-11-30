@@ -77,7 +77,7 @@ func main() {
 							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-%s", img.Imagename, os.Getenv("COMMIT-SHA"))
 						} else {
 							fmt.Println("\nBuiling the", img.Imagename)
-							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-%s --build-arg 'WORK_DIR=./%s' -f %s %s", img.Imagename, os.Getenv("COMMIT-SHA"), workdir, dockerFile, buildContext)
+							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-%s --build-arg 'WORK_DIR=./%s' -f %s .", img.Imagename, os.Getenv("COMMIT-SHA"), workdir, dockerFile)
 							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-%s", img.Imagename, os.Getenv("COMMIT-SHA"))
 
 						}
