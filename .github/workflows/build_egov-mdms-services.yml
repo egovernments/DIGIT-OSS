@@ -39,7 +39,7 @@ jobs:
          chmod +x build_utilities/build_svc.sh
          ./build_utilities/build_svc.sh
          ls -la
-         ls ./home/runner/work/DIGIT-Dev/DIGIT-Dev/core-services/egov-user
+         ls ./core-services/egov-user
          #cd build_utilities
          #go run build_setup.go
          
