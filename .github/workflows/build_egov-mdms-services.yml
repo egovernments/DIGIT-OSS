@@ -41,7 +41,7 @@ jobs:
 
     - name: Build and push
       run: |
-         echo `git diff HEAD~1 | grep 'git' 
+         git diff HEAD~1 | grep 'git' 
          ls -l .git/refs/heads
          go version
          ls -la
