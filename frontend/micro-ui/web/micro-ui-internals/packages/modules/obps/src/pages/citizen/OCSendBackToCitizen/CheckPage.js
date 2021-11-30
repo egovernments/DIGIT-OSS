@@ -37,7 +37,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const { data, address, owners, nocDocuments, documents, additionalDetails, subOccupancy,PrevStateDocuments, PrevStateNocDocuments, applicationNo } = value;
 
   let routeLink = `/digit-ui/citizen/obps/sendbacktocitizen/bpa/${value?.tenantId}/${value?.applicationNo}`;
-  if (data?.uiFlow?.flow === "OCBPA") routeLink = `/digit-ui/citizen/obps/sendbacktocitizen/ocbpa/${value?.tenantId}/${value?.applicationNo}`;
+  if (value?.uiFlow?.flow === "OCBPA") routeLink = `/digit-ui/citizen/obps/sendbacktocitizen/ocbpa/${value?.tenantId}/${value?.applicationNo}`;
   if (value.businessService === "BPA_LOW") BusinessService = "BPA.LOW_RISK_PERMIT_FEE";
   else if (value.businessService === "BPA") BusinessService = "BPA.NC_APP_FEE";
 
@@ -88,7 +88,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const submitAction = (workflow) => {
     let bpaData = cloneDeep(value);
     bpaData.assignee = [];
-    const isOCBPS = (data?.uiFlow?.flow === "OCBPA") ? true : false;
+    const isOCBPS = (value?.uiFlow?.flow === "OCBPA") ? true : false;
     const formdata = convertToBPAObject(bpaData, isOCBPS, true);
     mutation.mutate(
       { BPA: { ...formdata?.BPA, workflow } },
@@ -202,7 +202,7 @@ const CheckPage = ({ onSubmit, value }) => {
 
   return (
     <React.Fragment>
-      <Timeline currentStep={4} />
+      <Timeline currentStep={4}  flow= {value?.uiFlow?.flow === "OCBPA" ? "OCBPA" : ""} />
       <Header>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
       <Card style={{paddingRight:"16px"}}>
         <StatusTable>
@@ -232,7 +232,7 @@ const CheckPage = ({ onSubmit, value }) => {
       </Card>
       <Card style={{paddingRight:"16px"}}>
         <CardHeader>{t("BPA_STEPPER_SCRUTINY_DETAILS_HEADER")}</CardHeader>
-        <CardSubHeader>{t(data?.uiFlow?.flow === "OCBPA" ? "BPA_OC_EDCR_NO_LABEL" : "BPA_EDCR_DETAILS")}:</CardSubHeader>
+        <CardSubHeader>{t(value?.uiFlow?.flow === "OCBPA" ? "BPA_OC_EDCR_NO_LABEL" : "BPA_EDCR_DETAILS")}:</CardSubHeader>
         <StatusTable style={{ border: "none" }}>
           <Row className="border-none" label={t("BPA_EDCR_NO_LABEL")} text={data?.scrutinyNumber?.edcrNumber || t("CS_NA")}></Row>
           <CardSubHeader>{t("BPA_UPLOADED_PLAN_DIAGRAM")}:</CardSubHeader>
@@ -288,7 +288,7 @@ const CheckPage = ({ onSubmit, value }) => {
           <Row className="border-none" label={t("BPA_APPLICATION_DEMOLITION_AREA_LABEL")} text={datafromAPI?.planDetail?.planInformation?.demolitionArea ? `${datafromAPI?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : t("CS_NA")}></Row>
         </StatusTable>
       </Card>
-      {data?.uiFlow?.flow !== "OCBPA" ? <div>
+      {value?.uiFlow?.flow !== "OCBPA" ? <div>
         <Card style={{paddingRight:"16px"}}>
           <CardHeader>{t("BPA_NEW_TRADE_DETAILS_HEADER_DETAILS")}</CardHeader>
           <StatusTable>

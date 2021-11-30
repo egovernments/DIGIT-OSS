@@ -1,4 +1,4 @@
-import { Banner, Card, CardText, Loader, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Banner, Card, CardText, Loader, Row, StatusTable, SubmitBar, DownloadPrefixIcon } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
@@ -11,6 +11,8 @@ export const SuccessfulPayment = (props) => {
   const [printing, setPrinting] = useState(false);
   const [allowFetchBill, setallowFetchBill] = useState(false);
   const { businessService: business_service, consumerCode, tenantId } = useParams();
+  const { data:bpaData = {} } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: consumerCode });
+
 
   const { isLoading, data, isError } = Digit.Hooks.usePaymentUpdate({ egId }, business_service, {
     retry: false,
@@ -137,6 +139,13 @@ export const SuccessfulPayment = (props) => {
     setPrinting(false);
   };
 
+  const getPermitOccupancyOrderSearch = async(order) => {
+    let requestData = {...bpaData?.applicationData, edcrDetail:[{...bpaData?.edcrDetails}]}
+    let response = await Digit.PaymentService.generatePdf(bpaData?.applicationData?.tenantId, { Bpa: [requestData] }, order);
+    const fileStore = await Digit.PaymentService.printReciept(bpaData?.applicationData?.tenantId, { fileStoreIds: response.filestoreIds[0] });
+    window.open(fileStore[response?.filestoreIds[0]], "_blank");
+  }
+
   const getBillingPeriod = (billDetails) => {
     const { taxPeriodFrom, taxPeriodTo, fromPeriod, toPeriod } = billDetails || {};
     if (taxPeriodFrom && taxPeriodTo) {
@@ -256,6 +265,18 @@ export const SuccessfulPayment = (props) => {
           </svg>
           {t("TL_CERTIFICATE")}
         </div>
+      ) : null}
+      {business_service.includes("OC") ? (
+              <div className="primary-label-btn d-grid" style={{ marginLeft: "unset", marginTop:"15px" }} onClick={e => getPermitOccupancyOrderSearch("occupancy-certificate")}>
+                <DownloadPrefixIcon />
+                {t("BPA_OC_CERTIFICATE")}
+              </div>
+      ) : null}
+      {business_service.includes("BPA") && !(business_service.includes("OC")) ? (
+              <div className="primary-label-btn d-grid" style={{ marginLeft: "unset", marginTop:"15px" }} onClick={r => getPermitOccupancyOrderSearch("buildingpermit-low")}>
+                <DownloadPrefixIcon />
+                {t("BPA_PERMIT_ORDER")}
+              </div>
       ) : null}
       </div>
       {!(business_service == "TL") && <SubmitBar onSubmit={printReciept} label={t("COMMON_DOWNLOAD_RECEIPT")} />}

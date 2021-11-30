@@ -483,7 +483,8 @@ export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t
     registrationDetails: data?.additionalDetails?.registrationDetails,
     riskType: Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks),
     serviceType: data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType,
-    edcrDetails: APIScrutinyDetails
+    edcrDetails: APIScrutinyDetails,
+    scrutinyNumber:{edcrNumber:APIScrutinyDetails?.edcrNumber},
   }
 
 
@@ -537,7 +538,7 @@ export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t
 
 
   data.uiFlow = {
-    flow: bpaFlow ? bpaFlow : data?.businessService?.split(".")[0],
+    flow:data?.businessService.includes("OC")?"OCBPA":data?.businessService?.split(".")[0],
     applicationType: data?.additionalDetails?.applicationType || APIScrutinyDetails?.appliactionType,
     serviceType: data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType
   }

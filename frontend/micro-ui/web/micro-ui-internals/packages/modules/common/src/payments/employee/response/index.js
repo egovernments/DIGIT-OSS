@@ -41,9 +41,9 @@ export const SuccessfulPayment = (props) => {
     }
   };
 
-  const getPermitOccupancyOrderSearch = async() => {
+  const getPermitOccupancyOrderSearch = async(order) => {
     let requestData = {...data?.applicationData, edcrDetail:[{...data?.edcrDetails}]}
-    let response = await Digit.PaymentService.generatePdf(data?.applicationData?.tenantId, { Bpa: [requestData] }, "occupancy-certificate");
+    let response = await Digit.PaymentService.generatePdf(data?.applicationData?.tenantId, { Bpa: [requestData] }, order);
     const fileStore = await Digit.PaymentService.printReciept(data?.applicationData?.tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
@@ -86,10 +86,16 @@ export const SuccessfulPayment = (props) => {
                 {t("CS_COMMON_PRINT_CERTIFICATE")}
               </div>
             ) : null}
-            {businessService.includes("BPA") ? (
-              <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={getPermitOccupancyOrderSearch}>
+            {businessService.includes("OC") ? (
+              <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={e => getPermitOccupancyOrderSearch("occupancy-certificate")}>
                 <DownloadPrefixIcon />
                 {t("BPA_OC_CERTIFICATE")}
+              </div>
+            ) : null}
+            {businessService.includes("BPA") && !(businessService.includes("OC")) ? (
+              <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={r => getPermitOccupancyOrderSearch("buildingpermit-low")}>
+                <DownloadPrefixIcon />
+                {t("BPA_PERMIT_ORDER")}
               </div>
             ) : null}
           </div>
