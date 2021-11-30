@@ -43,6 +43,6 @@ jobs:
 
     - name: Build and push
       run: |
-         echo `git diff HEAD~1 | grep 'git' | cut -d " " -f 3 | cut -d "/" -f 3 | uniq -d | sort -n`` > servicelist 
+         echo `git diff HEAD~1 | grep 'git' | cut -d " " -f 3 | cut -d "/" -f 3 | uniq -d | sort -n` > servicelist 
          cat servicelist
          ls -la
