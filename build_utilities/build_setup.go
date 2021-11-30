@@ -86,7 +86,7 @@ func main() {
 						fmt.Println("\nPushing image to github packages")
 						fmt.Println(dockerPushCmd)
 						execCmd(dockerBuildCmd)
-						execCmd(dockerPushcmd)
+						execCmd(dockerPushCmd)
 					}
 					//return
 				}
