@@ -28,11 +28,11 @@ type BuildConfig struct {
 func main() {
 	//var job string = "pt-calculator-v2"
 	//var jobs []string
-	serviceList := "./servicelist"
+	serviceList := ("../servicelist")
 	content, _ := ioutil.ReadFile(serviceList)
 	jobs := strings.Split(string(content), "\n")
 	//fmt.Println(jobs)
-	argFile := "./build/build-config.yml"
+	argFile := ("../build/build-config.yml")
 	var dockerBuildCmd string
 	// Decode the yaml file and assigning the values to a map
 	buildFile, err := ioutil.ReadFile(argFile)
