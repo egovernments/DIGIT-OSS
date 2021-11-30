@@ -59,9 +59,11 @@ import javax.servlet.http.HttpServletRequest;
                                                        @Valid @ModelAttribute TradeLicenseSearchCriteria criteria,
                                                        @PathVariable(required = false) String servicename
             , @RequestHeader HttpHeaders headers) {
+    	
+    	TradeLicenseSearchCriteria countCriteria = criteria;
         List<TradeLicense> licenses = tradeLicenseService.search(criteria, requestInfoWrapper.getRequestInfo(), servicename, headers);
         
-        int count = tradeLicenseService.countLicenses(criteria, requestInfoWrapper.getRequestInfo(), servicename, headers);
+        int count = tradeLicenseService.countLicenses(countCriteria, requestInfoWrapper.getRequestInfo(), servicename, headers);
 
         TradeLicenseResponse response = TradeLicenseResponse.builder().licenses(licenses).responseInfo(
                 responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true)).count(count)

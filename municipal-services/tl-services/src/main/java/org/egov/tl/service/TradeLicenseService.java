@@ -281,6 +281,36 @@ public class TradeLicenseService {
 
 	
 	public int countLicenses(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo, String serviceFromPath, HttpHeaders headers){
+		
+		criteria.setBusinessService(serviceFromPath);
+		
+		if(criteria.getRenewalPending()!=null && criteria.getRenewalPending()== true ) {
+        	
+        	String currentFinancialYear = "";
+       	    
+            
+            Object mdmsData = util.mDMSCall(requestInfo, criteria.getTenantId() );
+            String jsonPath = TLConstants.MDMS_CURRENT_FINANCIAL_YEAR.replace("{}",businessService_TL);
+            List<Map<String,Object>> jsonOutput =  JsonPath.read(mdmsData, jsonPath);
+            
+            for (int i=0; i<jsonOutput.size();i++) {
+           	 Object startingDate = jsonOutput.get(i).get(TLConstants.MDMS_STARTDATE);
+           	 Object endingDate = jsonOutput.get(i).get(TLConstants.MDMS_ENDDATE);
+           	 Long startTime = (Long)startingDate;
+           	 Long endTime = (Long)endingDate;
+           	 
+           	 if(System.currentTimeMillis()>=startTime && System.currentTimeMillis()<=endTime) {
+           		 currentFinancialYear = jsonOutput.get(i).get(TLConstants.MDMS_FIN_YEAR_RANGE).toString();
+           		 break;
+           	 }
+           	 
+            }
+            
+            
+            criteria.setFinancialYear(currentFinancialYear);
+        	
+        }
+		
     	
     	enrichmentService.enrichSearchCriteriaWithAccountId(requestInfo,criteria);
     	
