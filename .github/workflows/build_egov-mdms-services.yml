@@ -2,8 +2,8 @@ name: Build and push egov-mdms-services image
 
 on:
   push:
-    paths:
-      - 'core-services/**'
+    #paths:
+     # - 'core-services/**'
     branches:
       - githubaction-test
 
@@ -17,10 +17,10 @@ jobs:
       with:
        fetch-depth: '0'
       
-    - name: commit sha env
-      env:
-        commit-sha: ${{ github.run_id }}-${{ github.run_number }}
-       
+    - name: Setup env
+      uses: jwulf/add-env-vars-action@master
+      with:
+        map: '{"commit-sha": "${{ github.run_id }}-${{ github.run_number }}"}'
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
@@ -39,8 +39,9 @@ jobs:
 
     - name: Build and push
       run: |
-         chmod +x build_utilities/build_svc.sh
-         ./build_utilities/build_svc.sh
-         cd build_utilities/
-         go run build_setup.go
+         echo ${{ emv.commit-sha }}
+         #chmod +x build_utilities/build_svc.sh
+         #./build_utilities/build_svc.sh
+         #cd build_utilities/
+         #go run build_setup.go
          
