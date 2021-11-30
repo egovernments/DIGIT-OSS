@@ -293,7 +293,7 @@ public class IdGenerationService {
                 SimpleDateFormat formatter = new SimpleDateFormat(yearPattern.trim());
                 formattedYear = formatter.format(date);
 
-                if (financialYearPatternArray[0] == yearPattern) {
+                if (financialYearPatternArray[0].equals(yearPattern)) {
                     if (month > 3) {
                         preYear = Integer.valueOf(formattedYear);
                     } else {

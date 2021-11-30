@@ -136,7 +136,7 @@ public class RoleActionRepository {
 
 				String rolecode = sqlrowset.getString("rolecode");
 
-				if (rolecode != null && rolecode != "") {
+				if (rolecode != null && !rolecode.equals("")) {
 
 					return false;
 				}
