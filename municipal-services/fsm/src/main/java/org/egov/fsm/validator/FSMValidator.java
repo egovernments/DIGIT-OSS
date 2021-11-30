@@ -420,7 +420,7 @@ public class FSMValidator {
 	}
 	
 	public void validateWorkflowActions(FSMRequest fsmRequest) {
-		FSM fsm = fsmRequest.getFsm();
+//		FSM fsm = fsmRequest.getFsm();
 		// TODO Validate the the current workflow action is valid according to business
 	}
 	

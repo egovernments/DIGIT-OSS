@@ -63,7 +63,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoofTank extends FeatureProcess {
 
-	private static final Logger LOG = Logger.getLogger(RoofTank.class);
+//	private static final Logger LOG = Logger.getLogger(RoofTank.class);
 	private static final String RULE_44_A = "44-A";
 	public static final String ROOFTANK_DESCRIPTION = "Roof Tanks";
 

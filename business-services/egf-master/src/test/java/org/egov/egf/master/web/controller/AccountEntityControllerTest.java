@@ -47,6 +47,8 @@ public class AccountEntityControllerTest {
 
     private RequestJsonReader resources = new RequestJsonReader();
 
+    private String string="default";
+
     @Test
     public void testCreate() throws IOException, Exception {
         when(accountEntityService.create(any(List.class), any(BindingResult.class), any(RequestInfo.class)))
@@ -62,7 +64,7 @@ public class AccountEntityControllerTest {
         final List<AccountEntity> actualRequest = captor.getValue();
         assertEquals("name", actualRequest.get(0).getName());
         assertEquals("code", actualRequest.get(0).getCode());
-        assertEquals("default", actualRequest.get(0).getTenantId());
+        assertEquals(string, actualRequest.get(0).getTenantId());
     }
 
     @Test
@@ -91,7 +93,7 @@ public class AccountEntityControllerTest {
         final List<AccountEntity> actualRequest = captor.getValue();
         assertEquals("nameU", actualRequest.get(0).getName());
         assertEquals("codeU", actualRequest.get(0).getCode());
-        assertEquals("default", actualRequest.get(0).getTenantId());
+        assertEquals(string, actualRequest.get(0).getTenantId());
     }
 
     @Test
@@ -117,7 +119,7 @@ public class AccountEntityControllerTest {
         List<AccountEntity> accountEntities = new ArrayList<AccountEntity>();
         AccountEntity accountEntity = AccountEntity.builder().id("1").name("name").code("code").active(true)
                 .accountDetailType(getAccountDetaialType()).description("entity").build();
-        accountEntity.setTenantId("default");
+        accountEntity.setTenantId(string);
         accountEntities.add(accountEntity);
         return accountEntities;
     }
@@ -126,7 +128,7 @@ public class AccountEntityControllerTest {
         List<AccountEntity> accountEntities = new ArrayList<AccountEntity>();
         AccountEntity accountEntity = AccountEntity.builder().name("nameU").code("codeU").active(true)
                 .accountDetailType(getAccountDetaialType()).id("1").description("entity").build();
-        accountEntity.setTenantId("default");
+        accountEntity.setTenantId(string);
         accountEntities.add(accountEntity);
         return accountEntities;
     }
@@ -135,7 +137,7 @@ public class AccountEntityControllerTest {
 
         AccountDetailType accountDetailType = AccountDetailType.builder().id("1").name("name").tableName("table")
                 .fullyQualifiedName("abc/table").build();
-        accountDetailType.setTenantId("default");
+        accountDetailType.setTenantId(string);
         return accountDetailType;
     }
 

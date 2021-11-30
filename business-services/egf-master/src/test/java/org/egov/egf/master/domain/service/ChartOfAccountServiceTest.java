@@ -46,10 +46,7 @@ public class ChartOfAccountServiceTest {
 
 	private List<ChartOfAccount> chartOfAccounts = new ArrayList<>();
 
-	@Before
-	public void setup() {
 
-	}
 
 	@Test
 	public final void testFetchRelated() {

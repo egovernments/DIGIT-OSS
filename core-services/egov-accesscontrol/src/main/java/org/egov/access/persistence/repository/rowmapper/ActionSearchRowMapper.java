@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ActionSearchRowMapper implements RowMapper<Action> {
 
+
 	public Map<String, List<Action>> actionMap = new HashMap<String, List<Action>>();
 
 	@Override

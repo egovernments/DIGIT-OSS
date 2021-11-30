@@ -12,10 +12,7 @@ public class MaskingServiceTest {
 
     }
 
-    @Test
-    public void test() throws IllegalAccessException, InstantiationException {
 
-    }
 
 
 }

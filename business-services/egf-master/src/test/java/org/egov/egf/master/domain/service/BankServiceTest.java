@@ -50,10 +50,7 @@ public class BankServiceTest {
 
 	private List<Bank> banks = new ArrayList<>();
 
-	@Before
-	public void setup() {
 
-	}
 
 	@Test
 	public final void testCreate() {

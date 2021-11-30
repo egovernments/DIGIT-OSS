@@ -25,8 +25,8 @@ public class AmendmentDetails implements Comparable<AmendmentDetails> {
 			return null;
 	}
 
-	public AmendmentDetails() {
-	}
+//	public AmendmentDetails() {
+//	}
 
 	@Override
 	public int hashCode() {

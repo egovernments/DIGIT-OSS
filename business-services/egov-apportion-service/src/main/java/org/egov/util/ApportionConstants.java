@@ -24,6 +24,6 @@ public class ApportionConstants {
     public static final String MDMS_TAXHEADCODE_KEY  = "code";
 
 
-    public ApportionConstants() {
-    }
+//    public ApportionConstants() {
+//    }
 }

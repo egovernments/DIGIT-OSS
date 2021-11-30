@@ -49,15 +49,6 @@ public class BaseTest {
 
     }
 
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
-
-    }
-
-    @Test
-    public final void testVal() {
-
-    }
 
     @Before
     public void setUp() throws Exception {
@@ -82,10 +73,7 @@ public class BaseTest {
 
     }
 
-    @After
-    public void tearDown() throws Exception {
 
-    }
 
     protected DXFDocument getDxfDocument(String fileName) {
         // Parser parser = ParserBuilder.createDefaultParser();

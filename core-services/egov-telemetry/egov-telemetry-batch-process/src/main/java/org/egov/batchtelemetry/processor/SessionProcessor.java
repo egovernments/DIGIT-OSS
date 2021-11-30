@@ -37,11 +37,12 @@ public class SessionProcessor {
 
     private static ElasticsearchConnector elasticsearchConnector;
 
-    private static PathProcessor pathProcessor;
+   private static PathProcessor pathProcessor;
 
-    public SessionProcessor() {
-        init();
-    }
+//    CONSTRUCTOR SHOULD NOT BE THERE
+//    public SessionProcessor() {
+//        init();
+//    }
 
     public static void init() {
         appProperties = new AppProperties();

@@ -50,7 +50,10 @@ import javax.validation.constraints.Max;
 @Data
 public class PaginationContract {
 
+    // VARIABLE NOT USED
     public static int DEFAULT_PAGE_SIZE = 500;
+
+    // VARIABLE NOT USED
     public static int DEFAULT_PAGE_OFFSET = 0;
 
     private Integer totalResults;

@@ -46,9 +46,6 @@ public class RecoveryServiceTest {
     private RequestInfo requestInfo = new RequestInfo();
     private List<Recovery> recoverys = new ArrayList<>();
 
-    @Before
-    public void setup() {
-    }
 
     @Test
     public final void test_create() {

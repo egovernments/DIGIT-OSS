@@ -36,6 +36,11 @@ public class AccountDetailTypeJdbcRepositoryTest {
 	private AccountDetailTypeJdbcRepository accountDetailTypeJdbcRepository;
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	private String string="default";
+	private String contract="contractor";
+	private String ac="abc/contractor";
+	private String table="tableName";
+	private String fullName="fullyQualifiedName";
 
 	@Before
 	public void setUp() throws Exception {
@@ -47,8 +52,8 @@ public class AccountDetailTypeJdbcRepositoryTest {
 	public void test_create() {
 
 		AccountDetailTypeEntity accountDetailType = AccountDetailTypeEntity.builder().id("1").tablename("contractor")
-				.description("contractor").fullyQualifiedName("abc/contractor").name("name").active(true).build();
-		accountDetailType.setTenantId("default");
+				.description(contract).fullyQualifiedName(ac).name("name").active(true).build();
+		accountDetailType.setTenantId(string);
 		AccountDetailTypeEntity actualResult = accountDetailTypeJdbcRepository.create(accountDetailType);
 
 		List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_accountDetailType",
@@ -56,8 +61,8 @@ public class AccountDetailTypeJdbcRepositoryTest {
 		Map<String, Object> row = result.get(0);
 		assertThat(row.get("id")).isEqualTo(actualResult.getId());
 		assertThat(row.get("name")).isEqualTo(actualResult.getName());
-		assertThat(row.get("tableName")).isEqualTo(actualResult.getTablename());
-		assertThat(row.get("fullyQualifiedName")).isEqualTo(actualResult.getFullyQualifiedName());
+		assertThat(row.get(table)).isEqualTo(actualResult.getTablename());
+		assertThat(row.get(fullName)).isEqualTo(actualResult.getFullyQualifiedName());
 
 	}
 
@@ -65,8 +70,8 @@ public class AccountDetailTypeJdbcRepositoryTest {
 	@Sql(scripts = { "/sql/clearAccountDetailType.sql" })
 	public void test_create_with_tenantId_null() {
 
-		AccountDetailTypeEntity accountDetailType = AccountDetailTypeEntity.builder().tablename("contractor")
-				.fullyQualifiedName("abc/contractor").name("name").active(true).build();
+		AccountDetailTypeEntity accountDetailType = AccountDetailTypeEntity.builder().tablename(contract)
+				.fullyQualifiedName(ac).name("name").active(true).build();
 		accountDetailTypeJdbcRepository.create(accountDetailType);
 
 	}
@@ -76,9 +81,9 @@ public class AccountDetailTypeJdbcRepositoryTest {
 	public void test_update() {
 
 		AccountDetailTypeEntity accountDetailType = AccountDetailTypeEntity.builder().tablename("contractorU")
-				.description("contractor").fullyQualifiedName("abc/contractorU").name("nameU").active(true).id("1")
+				.description(contract).fullyQualifiedName("abc/contractorU").name("nameU").active(true).id("1")
 				.build();
-		accountDetailType.setTenantId("default");
+		accountDetailType.setTenantId(string);
 		AccountDetailTypeEntity actualResult = accountDetailTypeJdbcRepository.update(accountDetailType);
 
 		List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_accountDetailType",
@@ -116,7 +121,7 @@ public class AccountDetailTypeJdbcRepositoryTest {
 	public void test_find_by_id() {
 
 		AccountDetailTypeEntity accountDetailTypeEntity = AccountDetailTypeEntity.builder().id("1").build();
-		accountDetailTypeEntity.setTenantId("default");
+		accountDetailTypeEntity.setTenantId(string);
 		AccountDetailTypeEntity result = accountDetailTypeJdbcRepository.findById(accountDetailTypeEntity);
 		assertThat(result.getId()).isEqualTo("1");
 		assertThat(result.getName()).isEqualTo("name");
@@ -128,7 +133,7 @@ public class AccountDetailTypeJdbcRepositoryTest {
 	public void test_find_by_invalid_id_should_return_null() {
 
 		AccountDetailTypeEntity accountDetailTypeEntity = AccountDetailTypeEntity.builder().id("5").build();
-		accountDetailTypeEntity.setTenantId("default");
+		accountDetailTypeEntity.setTenantId(string);
 		AccountDetailTypeEntity result = accountDetailTypeJdbcRepository.findById(accountDetailTypeEntity);
 		assertNull(result);
 
@@ -168,9 +173,9 @@ public class AccountDetailTypeJdbcRepositoryTest {
 					{
 						put("id", resultSet.getString("id"));
 						put("name", resultSet.getString("name"));
-						put("tableName", resultSet.getString("tableName"));
+						put(table, resultSet.getString(table));
 						put("active", resultSet.getBoolean("active"));
-						put("fullyQualifiedName", resultSet.getString("fullyQualifiedName"));
+						put(fullName, resultSet.getString(fullName));
 						put("createdBy", resultSet.getString("createdBy"));
 						put("createdDate", resultSet.getString("createdDate"));
 						put("lastModifiedBy", resultSet.getString("lastModifiedBy"));
@@ -189,9 +194,9 @@ public class AccountDetailTypeJdbcRepositoryTest {
 		AccountDetailTypeSearch accountDetailTypeSearch = new AccountDetailTypeSearch();
 		accountDetailTypeSearch.setId("1");
 		accountDetailTypeSearch.setName("name");
-		accountDetailTypeSearch.setTableName("contractor");
+		accountDetailTypeSearch.setTableName(contract);
 		accountDetailTypeSearch.setActive(true);
-		accountDetailTypeSearch.setFullyQualifiedName("abc/contractor");
+		accountDetailTypeSearch.setFullyQualifiedName(ac);
 		accountDetailTypeSearch.setPageSize(500);
 		accountDetailTypeSearch.setOffset(0);
 		accountDetailTypeSearch.setSortBy("name desc");

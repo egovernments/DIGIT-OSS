@@ -57,6 +57,6 @@ public class DepartmentSearchCriteria {
 
 	@JsonProperty("RequestInfo")
 	private RequestInfo requestInfo;
-	
-	public String tenantId;
+
+	private String tenantId;
 }

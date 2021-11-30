@@ -1,4 +1,4 @@
-package org.egov.egfcollectionreceiptvoucherconsumer;
+/*package org.egov.egfcollectionreceiptvoucherconsumer;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -16,3 +16,4 @@ public class EgfCollectionReceiptVoucherConsumerApplicationTests {
 	}
 
 }
+*/

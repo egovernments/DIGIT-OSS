@@ -10,10 +10,7 @@ import java.util.Map;
 public class EgovChatSerializer implements Serializer<EgovChat> {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Override
-    public void configure(Map<String, ?> map, boolean b) {
 
-    }
 
     @Override
     public byte[] serialize(String s, EgovChat egovChat) {
@@ -27,8 +24,5 @@ public class EgovChatSerializer implements Serializer<EgovChat> {
         }
     }
 
-    @Override
-    public void close() {
 
-    }
 }

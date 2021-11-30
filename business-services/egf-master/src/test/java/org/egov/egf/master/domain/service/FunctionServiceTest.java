@@ -44,9 +44,7 @@ public class FunctionServiceTest {
 	private RequestInfo requestInfo = new RequestInfo();
 	private List<Function> functions = new ArrayList<>();
 
-	@Before
-	public void setup() {
-	}
+
 
 	@Test
 	public final void testCreate() {
