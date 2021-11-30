@@ -60,21 +60,22 @@ func main() {
 					//fmt.Println("name", job)
 					for _, img := range imglist {
 						var dockerfile string = ""
-						dockerfile = img.Dockerfile
-						buildContext := "."
+						workdir := "/home/runner/work/" + img.Workdir
+						dockerfile = "/home/runner/work/" + img.Dockerfile
+						buildContext := "/home/runner/work/."
 						if dockerfile == "" {
-							dockerfile = img.Workdir + "/Dockerfile"
+							dockerfile = "/home/runner/work/" + img.Workdir + "/Dockerfile"
 							//  buildContext = img.Workdir + "/."
 						}
 						if strings.Contains(img.Workdir, "/db") {
-							buildContext = img.Workdir + "/."
+							buildContext = "/home/runner/work/" + img.Workdir + "/."
 							fmt.Println("\nBuiling the", img.Imagename)
 							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-%s -f %s %s", img.Imagename, os.Getenv("COMMIT-SHA"), dockerfile, buildContext)
-							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-%s", img.Imagename , os.Getenv("COMMIT-SHA"))
+							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-%s", img.Imagename, os.Getenv("COMMIT-SHA"))
 						} else {
 							fmt.Println("\nBuiling the", img.Imagename)
-							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-%s --build-arg WORK_DIR=%s -f %s %s", img.Imagename, os.Getenv("COMMIT-SHA"), img.Workdir, dockerfile, buildContext)
-							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-%s", img.Imagename , os.Getenv("COMMIT-SHA"))
+							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-%s --build-arg WORK_DIR=%s -f %s %s", img.Imagename, os.Getenv("COMMIT-SHA"), workdir, dockerfile, buildContext)
+							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-%s", img.Imagename, os.Getenv("COMMIT-SHA"))
 
 						}
 						//fmt.Printf(buildContext)
@@ -85,8 +86,8 @@ func main() {
 						fmt.Println(dockerBuildCmd)
 						fmt.Println("\nPushing image to github packages")
 						fmt.Println(dockerPushCmd)
-						execCmd(dockerBuildCmd)
-						execCmd(dockerPushCmd)
+						//execCmd(dockerBuildCmd)
+						//execCmd(dockerPushCmd)
 					}
 					//return
 				}
