@@ -69,8 +69,8 @@ func main() {
 						if strings.Contains(img.Workdir, "/db") {
 							buildContext = img.Workdir + "/."
 							fmt.Println("\nBuiling the", img.Imagename)
-							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-${ env.COMMIT-SHA } -f %s %s", img.Imagename, dockerfile, buildContext)
-							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-${ env.COMMIT-SHA }", img.Imagename)
+							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-%s -f %s %s", img.Imagename, os.Getenv("COMMIT-SHA"), dockerfile, buildContext)
+							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-%s", img.Imagename , os.Getenv("COMMIT-SHA"))
 						} else {
 							fmt.Println("\nBuiling the", img.Imagename)
 							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-%s --build-arg WORK_DIR=%s -f %s %s", img.Imagename, os.Getenv("COMMIT-SHA"), img.Workdir, dockerfile, buildContext)
@@ -85,8 +85,8 @@ func main() {
 						fmt.Println(dockerBuildCmd)
 						fmt.Println("\nPushing image to github packages")
 						fmt.Println(dockerPushCmd)
-						//execCmd(dockerBuildCmd)
-						//execCmd(dockerPushcmd)
+						execCmd(dockerBuildCmd)
+						execCmd(dockerPushcmd)
 					}
 					//return
 				}
