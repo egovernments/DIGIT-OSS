@@ -1,6 +1,6 @@
 # Egov-user service
 
-<p>egov-user service is used for user data management and providing functionality to login and logout into Digit system </p>
+<p>Egov-user service is used for user data management and providing functionality to login and logout into Digit system </p>
 
 ### DB UML Diagram
 
