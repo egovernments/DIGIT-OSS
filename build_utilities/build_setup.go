@@ -28,12 +28,13 @@ type BuildConfig struct {
 func main() {
 	//var job string = "pt-calculator-v2"
 	//var jobs []string
-	serviceList := ("../servicelist")
+	serviceList := ("./servicelist")
 	content, _ := ioutil.ReadFile(serviceList)
 	jobs := strings.Split(string(content), "\n")
 	//fmt.Println(jobs)
 	argFile := ("../build/build-config.yml")
 	var dockerBuildCmd string
+	var dockerPushCmd string
 	// Decode the yaml file and assigning the values to a map
 	buildFile, err := ioutil.ReadFile(argFile)
 	if err != nil {
@@ -68,10 +69,13 @@ func main() {
 						if strings.Contains(img.Workdir, "/db") {
 							buildContext = img.Workdir + "/."
 							fmt.Println("\nBuiling the", img.Imagename)
-							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-${{ env.SHA }}-${{ env.GITHUB_RUN_NUMBER }} -f %s %s", img.Imagename, dockerfile, buildContext)
+							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-${env.SHA}-${GITHUB_RUN_NUMBER} -f %s %s", img.Imagename, dockerfile, buildContext)
+							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-${env.SHA}-${GITHUB_RUN_NUMBER}", img.Imagename)
 						} else {
 							fmt.Println("\nBuiling the", img.Imagename)
-							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-${{ env.SHA }}-${{ env.GITHUB_RUN_NUMBER }} --build-arg WORK_DIR=%s -f %s %s", img.Imagename, img.Workdir, dockerfile, buildContext)
+							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-${env.SHA}-${GITHUB_RUN_NUMBER} --build-arg WORK_DIR=%s -f %s %s", img.Imagename, img.Workdir, dockerfile, buildContext)
+							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-${env.SHA}-${GITHUB_RUN_NUMBER}", img.Imagename)
+
 						}
 						//fmt.Printf(buildContext)
 						//fmt.Println("docker", img.Dockerfile)
@@ -79,7 +83,10 @@ func main() {
 						//goBuildCmd = fmt.Sprintf("go run main.go deploy -c -e %s %s", env, argStr)
 						//dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2 --build-arg WORK_DIR=%s -f %s %s", img.Imagename, img.Workdir, dockerfile, buildContext)
 						fmt.Println(dockerBuildCmd)
+						fmt.Println("\nPushing image to github packages")
+						fmt.Println(dockerPushCmd)
 						//execCmd(dockerBuildCmd)
+						//execCmd(dockerPushcmd)
 					}
 					//return
 				}
