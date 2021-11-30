@@ -71,13 +71,13 @@ func main() {
 							//  buildContext = img.Workdir + "/."
 						}
 						if strings.Contains(img.Workdir, "/db") {
-							buildContext = "/home/runner/work/" + img.Workdir + "/."
+							buildContext = "/home/runner/work/DIGIT-Dev/DIGIT-Dev/" + img.Workdir + "/."
 							fmt.Println("\nBuiling the", img.Imagename)
 							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-%s -f %s %s", img.Imagename, os.Getenv("COMMIT-SHA"), dockerfile, buildContext)
 							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-%s", img.Imagename, os.Getenv("COMMIT-SHA"))
 						} else {
 							fmt.Println("\nBuiling the", img.Imagename)
-							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-%s --build-arg WORK_DIR=%s -f %s %s", img.Imagename, os.Getenv("COMMIT-SHA"), workdir, dockerfile, buildContext)
+							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-%s --build-arg WORK_DIR=/%s -f %s %s", img.Imagename, os.Getenv("COMMIT-SHA"), workdir, dockerfile, buildContext)
 							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-%s", img.Imagename, os.Getenv("COMMIT-SHA"))
 
 						}
