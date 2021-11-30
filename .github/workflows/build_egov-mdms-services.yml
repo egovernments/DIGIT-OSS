@@ -38,9 +38,7 @@ jobs:
       run: |
          chmod +x build_utilities/build_svc.sh
          ./build_utilities/build_svc.sh
-         #ls -la
-         #ls ./core-services/egov-user
-         cd build_utilities
+         mv build_utilities/build_setup.go .
          go run build_setup.go
          
          
