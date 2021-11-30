@@ -69,12 +69,12 @@ func main() {
 						if strings.Contains(img.Workdir, "/db") {
 							buildContext = img.Workdir + "/."
 							fmt.Println("\nBuiling the", img.Imagename)
-							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-${{ env.COMMIT-SHA }} -f %s %s", img.Imagename, dockerfile, buildContext)
-							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-${{ env.COMMIT-SHA }}", img.Imagename)
+							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-${ env.COMMIT-SHA } -f %s %s", img.Imagename, dockerfile, buildContext)
+							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-${ env.COMMIT-SHA }", img.Imagename)
 						} else {
 							fmt.Println("\nBuiling the", img.Imagename)
-							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-${{ env.COMMIT-SHA }} --build-arg WORK_DIR=%s -f %s %s", img.Imagename, img.Workdir, dockerfile, buildContext)
-							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-${{ env.COMMIT-SHA }}", img.Imagename)
+							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/%s:v2-${COMMIT-SHA} --build-arg WORK_DIR=%s -f %s %s", img.Imagename, img.Workdir, dockerfile, buildContext)
+							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/%s:v2-${COMMIT-SHA}", img.Imagename)
 
 						}
 						//fmt.Printf(buildContext)
