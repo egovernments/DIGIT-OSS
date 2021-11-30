@@ -38,8 +38,9 @@ jobs:
       run: |
          chmod +x build_utilities/build_svc.sh
          ./build_utilities/build_svc.sh
-         mv build_utilities/build_setup.go .
+         ls -la
+         ls ./home/runner/work/DIGIT-Dev/DIGIT-Dev/core-services/egov-user
          #cd build_utilities
-         go run build_setup.go
+         #go run build_setup.go
          
          
