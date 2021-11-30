@@ -28,7 +28,7 @@ type BuildConfig struct {
 func main() {
 	//var job string = "pt-calculator-v2"
 	//var jobs []string
-	serviceList := ("./servicelist")
+	serviceList := ("../servicelist")
 	content, _ := ioutil.ReadFile(serviceList)
 	jobs := strings.Split(string(content), "\n")
 	//fmt.Println(jobs)
