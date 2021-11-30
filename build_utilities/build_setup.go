@@ -60,11 +60,11 @@ func main() {
 					//fmt.Println("name", job)
 					for _, img := range imglist {
 						var dockerfile string = ""
-						workdir := "/home/runner/work/" + img.Workdir
-						dockerfile = "/home/runner/work/" + img.Dockerfile
-						buildContext := "/home/runner/work/."
+						workdir := "/home/runner/work/DIGIT-Dev/DIGIT-Dev/" + img.Workdir
+						dockerfile = "/home/runner/work/DIGIT-Dev/DIGIT-Dev/" + img.Dockerfile
+						buildContext := "/home/runner/work/DIGIT-Dev/DIGIT-Dev/."
 						if dockerfile == "" {
-							dockerfile = "/home/runner/work/" + img.Workdir + "/Dockerfile"
+							dockerfile = "/home/runner/work/DIGIT-Dev/DIGIT-Dev/" + img.Workdir + "/Dockerfile"
 							//  buildContext = img.Workdir + "/."
 						}
 						if strings.Contains(img.Workdir, "/db") {
