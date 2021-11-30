@@ -34,9 +34,9 @@ jobs:
 
     - name: Build and push
       env:
-        COMMIT-SHA: "${{ GITHUB_RUN_ID }}-${{ GITHUB_RUN_NUMBER }}"
+        COMMIT-SHA: ${{ github.run_id }}-${{ github.run_number }}
       run: |
-         echo ${{ emv.COMMIT-SHA }}
+         #echo ${{ emv.COMMIT-SHA }}
          echo $COMMIT-SHA
          #chmod +x build_utilities/build_svc.sh
          #./build_utilities/build_svc.sh
