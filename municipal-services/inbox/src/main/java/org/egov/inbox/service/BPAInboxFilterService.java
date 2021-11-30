@@ -93,6 +93,12 @@ public class BPAInboxFilterService {
             if (isSearchResultEmpty) {
                 return new ArrayList<>();
             }
+        } else {
+            List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
+            if(roles.contains(CITIZEN)) {
+                userUUIDs.add(requestInfo.getUserInfo().getUuid());
+                citizenRoles = roles;
+            }
         }
 
         if (!isSearchResultEmpty) {
@@ -100,7 +106,7 @@ public class BPAInboxFilterService {
 
             Map<String, Object> searcherRequest = new HashMap<>();
             Map<String, Object> searchCriteria = getSearchCriteria(criteria, StatusIdNameMap, requestInfo,
-                    moduleSearchCriteria, processCriteria, userUUIDs);
+                    moduleSearchCriteria, processCriteria, userUUIDs, citizenRoles);
             // Paginating searcher results
             searchCriteria.put(OFFSET_PARAM, criteria.getOffset());
             searchCriteria.put(NO_OF_RECORDS_PARAM, criteria.getLimit());
@@ -142,14 +148,15 @@ public class BPAInboxFilterService {
 
     private Map<String, Object> getSearchCriteria(InboxSearchCriteria criteria, HashMap<String, String> StatusIdNameMap,
             RequestInfo requestInfo, HashMap<String, Object> moduleSearchCriteria,
-            ProcessInstanceSearchCriteria processCriteria, List<String> userUUIDs) {
+            ProcessInstanceSearchCriteria processCriteria, List<String> userUUIDs, List<String> userRoles) {
         Map<String, Object> searchCriteria = new HashMap<>();
 
         searchCriteria.put(TENANT_ID_PARAM, criteria.getTenantId());
         searchCriteria.put(BUSINESS_SERVICE_PARAM, processCriteria.getBusinessService());
 
         // Accommodating module search criteria in searcher request
-        if (moduleSearchCriteria != null && moduleSearchCriteria.containsKey(MOBILE_NUMBER_PARAM) && !CollectionUtils.isEmpty(userUUIDs)) {
+        if (moduleSearchCriteria != null && (moduleSearchCriteria.containsKey(MOBILE_NUMBER_PARAM) || userRoles.contains(CITIZEN))
+                && !CollectionUtils.isEmpty(userUUIDs)) {
             searchCriteria.put(USERID_PARAM, userUUIDs);
         }
         if (moduleSearchCriteria != null && moduleSearchCriteria.containsKey(LOCALITY_PARAM)) {
@@ -207,6 +214,12 @@ public class BPAInboxFilterService {
             if (isSearchResultEmpty) {
                 return 0;
             }
+        } else {
+            List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
+            if(roles.contains(CITIZEN)) {
+                userUUIDs.add(requestInfo.getUserInfo().getUuid());
+                citizenRoles = roles;
+            }
         }
 
         if (!isSearchResultEmpty) {
@@ -214,7 +227,7 @@ public class BPAInboxFilterService {
 
             Map<String, Object> searcherRequest = new HashMap<>();
             Map<String, Object> searchCriteria = getSearchCriteria(criteria, StatusIdNameMap, requestInfo,
-                    moduleSearchCriteria, processCriteria, userUUIDs);
+                    moduleSearchCriteria, processCriteria, userUUIDs, citizenRoles);
             searcherRequest.put(REQUESTINFO_PARAM, requestInfo);
             searcherRequest.put(SEARCH_CRITERIA_PARAM, searchCriteria);
             if (citizenHasStakeholderRoles(requestInfo, citizenRoles)) {
@@ -308,7 +321,7 @@ public class BPAInboxFilterService {
 
             Map<String, Object> searcherRequest = new HashMap<>();
             Map<String, Object> searchCriteria = getSearchCriteria(criteria, StatusIdNameMap, requestInfo,
-                    moduleSearchCriteria, processCriteria, userUUIDs);
+                    moduleSearchCriteria, processCriteria, userUUIDs, citizenRoles);
 
             searcherRequest.put(REQUESTINFO_PARAM, requestInfo);
             searcherRequest.put(SEARCH_CRITERIA_PARAM, searchCriteria);
