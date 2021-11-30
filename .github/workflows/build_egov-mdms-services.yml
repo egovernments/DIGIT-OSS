@@ -10,8 +10,6 @@ on:
 jobs:
   build:
     runs-on: 'ubuntu-latest'
-    env:
-      COMMIT-SHA: "${{ GITHUB_RUN_ID }}-${{ GITHUB_RUN_NUMBER }}"
 
     steps:
     - name: Repo Checkout
@@ -35,6 +33,8 @@ jobs:
         go-version: '1.13.3'
 
     - name: Build and push
+      env:
+        COMMIT-SHA: "${{ GITHUB_RUN_ID }}-${{ GITHUB_RUN_NUMBER }}"
       run: |
          echo ${{ emv.COMMIT-SHA }}
          echo $COMMIT-SHA
