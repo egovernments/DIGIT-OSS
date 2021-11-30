@@ -1,4 +1,4 @@
-name: Build and push egov-mdms-services image
+name: Build and push core-services images
 
 on:
   push:
