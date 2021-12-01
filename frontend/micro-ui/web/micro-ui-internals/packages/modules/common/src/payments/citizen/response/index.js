@@ -272,7 +272,7 @@ export const SuccessfulPayment = (props) => {
                 {t("BPA_OC_CERTIFICATE")}
               </div>
       ) : null}
-      {business_service.includes("BPA") && !(business_service.includes("OC")) ? (
+      {business_service.includes("BPA") && !(business_service.includes("OC")) && !(business_service.includes("BPAREG")) ? (
               <div className="primary-label-btn d-grid" style={{ marginLeft: "unset", marginTop:"15px" }} onClick={r => getPermitOccupancyOrderSearch("buildingpermit-low")}>
                 <DownloadPrefixIcon />
                 {t("BPA_PERMIT_ORDER")}
