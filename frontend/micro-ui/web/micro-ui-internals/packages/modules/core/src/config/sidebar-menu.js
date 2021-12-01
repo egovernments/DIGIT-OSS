@@ -7,7 +7,7 @@ const SideBarMenu = (t, closeSidebar, redirectToLoginPage, isEmployee) => [
     type: "link",
     element:"HOME",
     text: t("COMMON_BOTTOM_NAVIGATION_HOME"),
-    link: isEmployee?"/digit-ui/employee/":"/digit-ui/citizen/obps-home",
+    link: isEmployee?"/digit-ui/employee/":"/digit-ui/citizen/",
     icon: <HomeIcon className="icon" />,
     populators: {
       onClick: closeSidebar,

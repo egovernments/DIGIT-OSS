@@ -115,7 +115,7 @@ const InboxComposer = ({
         <div className="searchBox">
             <SearchAction text={t("ES_COMMON_SEARCH")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "SearchFormComponent" })} />
              <FilterAction text={t("ES_COMMON_FILTER")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "FilterFormComponent" })} />
-            <SortAction text={t("ES_COMMON_SORT")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "SortFormComponent" })} />
+            <SortAction text={t("COMMON_TABLE_SORT")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "SortFormComponent" })} />
         </div>
         {currentlyActiveMobileModal ? <PopUp>
             <CurrentMobileModalComponent {...propsForCurrentMobileModalComponent} />
