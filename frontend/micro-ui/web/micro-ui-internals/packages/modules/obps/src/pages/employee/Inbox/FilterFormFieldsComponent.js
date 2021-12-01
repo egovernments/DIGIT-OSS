@@ -130,7 +130,8 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
             return <>
               <div className="filter-label">{t("ES_INBOX_RISK_TYPE")}</div>
               <RadioButtons
-                onSelect={(e) => {props.onChange(e.code)}}
+                onSelect={(e) => {props.onChange(e.code);
+                setFilterFormValue("applicationStatus",[])}}
                 selectedOption={availableBusinessServicesOptions.filter((option) => option.code === props.value)[0]}
                 optionsKey="i18nKey"
                 name="businessService"
