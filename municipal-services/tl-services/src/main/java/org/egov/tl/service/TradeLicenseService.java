@@ -281,17 +281,10 @@ public class TradeLicenseService {
 
 	
 	public int countLicenses(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo, String serviceFromPath, HttpHeaders headers){
-    	
+		
+		criteria.setBusinessService(serviceFromPath);
     	enrichmentService.enrichSearchCriteriaWithAccountId(requestInfo,criteria);
-    	
-    	if(criteria.getMobileNumber()!=null || criteria.getOwnerName() != null) {
 
-    		boolean isEmpty = enrichWithUserDetails(criteria, requestInfo);
-    		
-    		if(isEmpty) {
-    			return 0;
-    		}
-    	}
 
     	int licenseCount = repository.getLicenseCount(criteria);
     	
