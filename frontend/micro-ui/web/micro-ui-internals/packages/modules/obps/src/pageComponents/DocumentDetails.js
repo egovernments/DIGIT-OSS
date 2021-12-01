@@ -35,7 +35,7 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
         const allRequiredDocumentsCode = bpaTaxDocuments.filter( e => e.required).map(e => e.code)
 
         const reqDocumentEntered = allRequiredDocumentsCode.filter(reqCode => documents.reduce((acc,doc) => {
-            if (reqCode == `${doc.documentType.split('.')[0]}.${doc.documentType.split('.')[1]}`) {
+            if (reqCode == `${doc?.documentType?.split('.')?.[0]}.${doc?.documentType?.split('.')?.[1]}`) {
                 return true
             }
             else{
@@ -133,8 +133,8 @@ function SelectDocument({
             e?.map((doc, index) => {
                 newfiles.push({
                         documentType: selectedDocument?.code,
-                        fileStoreId: doc?.[1].fileStoreId,
-                        documentUid: doc?.[1].fileStoreId,
+                        fileStoreId: doc?.[1]?.fileStoreId?.fileStoreId,
+                        documentUid: doc?.[1].fileStoreId?.fileStoreId,
                         fileName: doc?.[0] || "",
                         id:documents? documents.find(x => x.documentType === selectedDocument?.code)?.id:undefined,
                 })
@@ -156,6 +156,7 @@ function SelectDocument({
       }
 
     function setcodeafterupload(){
+        debugger;
         if (selectedDocument?.code) {
             setDocuments((prev) => {
                 //const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
