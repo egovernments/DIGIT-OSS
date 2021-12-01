@@ -102,12 +102,10 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
               buttonLink={t("ES_COMMON_FILTER")}
               onClear={clearAll}
               onSubmit={() => {
-                // if (props.type === "mobile") onSearch({ delete: ["applicationNos"] });
-                // else onSearch();
+                onFilterChange({applicationStatus: _searchParams?.applicationStatus });
                 if (props.type === "mobile") {
                   onClose();
                 }
-                onFilterChange({applicationStatus: _searchParams?.applicationStatus });
               }}
               style={{ flex: 1 }}
             />
