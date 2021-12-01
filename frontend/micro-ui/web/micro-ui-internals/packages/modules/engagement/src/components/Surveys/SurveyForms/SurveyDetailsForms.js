@@ -1,9 +1,9 @@
 import { CardLabelError, Dropdown, RemoveableTag, TextInput } from "@egovernments/digit-ui-react-components";
-import React, {Fragment, useMemo } from "react";
+import React, { Fragment, useMemo } from "react";
 import { Controller } from "react-hook-form";
 
 import { alphabeticalSortFunctionForTenantsBasedOnName } from "../../../utils/index";
-const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState, surveyFormData, disableInputs }) => {
+const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState, surveyFormData, disableInputs, enableDescriptionOnly }) => {
   const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const userInfo = Digit.UserService.getUser().info;
@@ -18,7 +18,7 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
   return (
     <div className="surveydetailsform-wrapper">
       <span className="surveyformfield">
-      <label>{`${t("LABEL_FOR_ULB")} * :`}</label>
+        <label>{`${t("LABEL_FOR_ULB")} * :`}</label>
         <Controller
           name="tenantIds"
           control={controlSurveyForm}
@@ -40,7 +40,7 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
               [props?.value]
             );
             return (
-              <div style={{display:"grid", gridAutoFlow:"row"}}>
+              <div style={{ display: "grid", gridAutoFlow: "row" }}>
                 <Dropdown
                   allowMultiselect={true}
                   optionKey={"i18nKey"}
@@ -86,7 +86,7 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
               message: t("EXCEEDS_250_CHAR_LIMIT"),
             },
           })}
-          disable={disableInputs}
+          disable={enableDescriptionOnly ?  !enableDescriptionOnly : disableInputs}
         />
         {surveyFormState?.errors?.description && <CardLabelError>{surveyFormState?.errors?.["description"]?.message}</CardLabelError>}
       </span>

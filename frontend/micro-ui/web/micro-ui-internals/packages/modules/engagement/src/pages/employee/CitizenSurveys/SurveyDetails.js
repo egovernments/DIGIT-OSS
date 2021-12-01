@@ -1,11 +1,28 @@
 import { Header, Modal, Loader } from "@egovernments/digit-ui-react-components";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useHistory } from "react-router-dom";
 import { format } from "date-fns";
 import EditSurveyForm from "../../../components/Surveys/EditSurveyForms";
+import { mapQuestions } from "./NewSurvey";
+import DeleteModal from "../../../components/Modal/Surveys/Delete";
+import MarkActiveModal from "../../../components/Modal/Surveys/MarkActive";
+import MarkInActiveModal from "../../../components/Modal/Surveys/MarkInActive";
+import { answerTypeEnum } from "./NewSurvey";
+
+/**Putting this fix becasue backend doesn't how to define optional fields in Models
+ * tldr; remove `options:["NA"] for open ended questions which gets added by BE`
+ */
+const filterQuestion = (question) => {
+  if (!question) return;
+  if (question.type !== "Multiple Choice" || question.type !== "Check Boxes") {
+    delete question.options;
+  }
+  return { ...question, type: answerTypeEnum[question.type] };
+};
+
 /**TODO : Think of better to do this possibly in service layer */
-const answerTypeEnum = {
+const TypeAnswerEnum = {
   SHORT_ANSWER_TYPE: "Short Answer",
   LONG_ANSWER_TYPE: "Paragraph",
   MULTIPLE_ANSWER_TYPE: "Multiple Choice",
@@ -14,27 +31,6 @@ const answerTypeEnum = {
   TIME_ANSWER_TYPE: "Time",
 };
 
-
-const Heading = (props) => {
-  return <h1 className="heading-m">{props.label}</h1>;
-};
-
-const Close = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFFFFF">
-    <path d="M0 0h24v24H0V0z" fill="none" />
-    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-  </svg>
-);
-
-const CloseBtn = (props) => {
-  return (
-    <div className="icon-bg-secondary" onClick={props.onClick}>
-      <Close />
-    </div>
-  );
-};
-
-
 const SurveyDetails = ({ location, match }) => {
   let isMobile = window.Digit.Utils.browser.isMobile();
   const { id } = useParams();
@@ -42,6 +38,7 @@ const SurveyDetails = ({ location, match }) => {
   const history = useHistory();
   const [showModal, setShowModal] = useState(false);
   const [isFormDisabled, setIsFormDisabled] = useState(true);
+  const [isFormPartiallyEnabled, setFormPartiallyEnabled] = useState(false);
   const [displayMenu, setDisplayMenu] = useState(false);
   const [userAction, setUserAction] = useState(undefined);
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -52,6 +49,7 @@ const SurveyDetails = ({ location, match }) => {
         const surveyObj = data?.Surveys?.[0];
         return {
           //tenantIds: { code: surveyObj.tenantId },
+          uuid: surveyObj.uuid,
           title: surveyObj.title,
           description: surveyObj.description,
           collectCitizenInfo: { code: surveyObj.collectCitizenInfo },
@@ -59,22 +57,37 @@ const SurveyDetails = ({ location, match }) => {
           toDate: format(new Date(surveyObj.endDate), "yyyy-MM-dd"),
           fromTime: format(new Date(surveyObj.startDate), "hh:mm"),
           toTime: format(new Date(surveyObj.endDate), "hh:mm"),
-          questions: surveyObj.questions.map(({ questionStatement, type, required, options }) => ({
+          questions: surveyObj.questions.map(({ questionStatement, type, required, options, uuid, surveyId }) => ({
             questionStatement,
-            type:answerTypeEnum[type],
+            type: TypeAnswerEnum[type],
             required,
             options,
+            uuid,
+            surveyId
           })),
+          status: surveyObj.status,
         };
       },
     }
   );
 
+  const isSurveyActive = useMemo(() => {
+    const surveyStartTime = new Date(`${surveyData?.fromDate} ${surveyData?.fromTime}`).getTime();
+    const surveyEndTime = new Date(`${surveyData?.toDate} ${surveyData?.toTime}`).getTime();
+    const currentTime = new Date().getTime();
+    if (surveyStartTime < currentTime && currentTime < surveyEndTime) {
+      return true;
+    }
+    return false;
+  }, [surveyData?.fromDate, surveyData?.fromTime, surveyData?.toDate, surveyData?.toTime]);
+
   function onActionSelect(action) {
-    // setSelectedAction(action);
     if (action === "EDIT") {
-      //make form editable
-      setIsFormDisabled(!isFormDisabled);
+      if (isSurveyActive) {
+        setFormPartiallyEnabled(!isFormPartiallyEnabled);
+      } else {
+        setIsFormDisabled(!isFormDisabled);
+      }
       setUserAction("EDIT");
     }
     if (action === "INACTIVE") {
@@ -91,17 +104,66 @@ const SurveyDetails = ({ location, match }) => {
     }
     setDisplayMenu(false);
   }
-  
+
   const onEdit = (data) => {
-    //console.log("<<data>>", { data });
+    console.log("<<data>>", { data });
+    const { collectCitizenInfo, title, description, tenantIds, fromDate, toDate, fromTime, toTime, questions } = data;
+    const mappedQuestions = mapQuestions(questions);
+    const details = {
+      SurveyEntity: {
+        uuid: surveyData.uuid,
+        tenantIds: tenantIds.map(({ code }) => code),
+        title,
+        description,
+        collectCitizenInfo: collectCitizenInfo.code,
+        startDate: new Date(`${fromDate} ${fromTime}`).getTime(),
+        endDate: new Date(`${toDate} ${toTime}`).getTime(),
+        questions: mappedQuestions,
+      },
+    };
+    //console.log("what the data is >>", { tenantIds, questions, details });
+    history.push("/digit-ui/employee/engagement/surveys/update-response", details);
   };
 
   const handleDelete = () => {
     const details = {
-      SurveyEntity: surveyData,
+      SurveyEntity: { ...surveyData, collectCitizenInfo: surveyData.collectCitizenInfo.code },
     };
     history.push("/digit-ui/employee/engagement/surveys/delete-response", details);
   };
+
+  const handleMarkActive = (data) => {
+    console.log("update data>>>", { data });
+    const { fromDate, toDate, fromTime, toTime } = data;
+    const details = {
+      SurveyEntity: {
+        ...surveyData,
+        status: "ACTIVE",
+        startDate: new Date(`${fromDate} ${fromTime}`).getTime(),
+        endDate: new Date(`${toDate} ${toTime}`).getTime(),
+        collectCitizenInfo: surveyData.collectCitizenInfo.code,
+        questions: surveyData.questions.map(filterQuestion),
+      },
+    };
+    history.push("/digit-ui/employee/engagement/surveys/update-response", details);
+  };
+
+  const handleMarkInactive = () => {
+    const details = {
+      SurveyEntity: { ...surveyData, status: "INACTIVE", collectCitizenInfo: surveyData.collectCitizenInfo.code },
+    };
+    history.push("/digit-ui/employee/engagement/surveys/update-response", details);
+  };
+
+  const actionMenuOptions = useMemo(() => {
+    const options = ["EDIT", "DELETE"];
+    if (isSurveyActive && surveyData?.status === "ACTIVE") {
+      options.splice(1, 0, "INACTIVE");
+    } else if (!isSurveyActive) {
+      options.splice(1, 0, "ACTIVE");
+    }
+    return options;
+  }, [isSurveyActive, surveyData?.status]);
 
   if (isLoading) return <Loader />;
 
@@ -111,26 +173,51 @@ const SurveyDetails = ({ location, match }) => {
       <EditSurveyForm
         t={t}
         onEdit={onEdit}
+        menuOptions={actionMenuOptions}
         displayMenu={displayMenu}
         isFormDisabled={isFormDisabled}
+        isPartiallyEnabled={isFormPartiallyEnabled}
         setDisplayMenu={setDisplayMenu}
         onActionSelect={onActionSelect}
         initialSurveysConfig={surveyData}
       />
 
-      {showModal && (
-        <Modal
-          headerBarMain={<Heading label={t("ES_EVENT_DELETE_POPUP_HEADER")} />}
-          headerBarEnd={<CloseBtn onClick={() => setShowModal(false)} />}
-          actionCancelLabel={t("CS_COMMON_CANCEL")}
+      {showModal && userAction === "DELETE" && (
+        <DeleteModal
+          t={t}
+          heading={"CONFIRM_DELETE_SURVEY"}
+          surveyTitle={surveyData.title}
+          closeModal={() => setShowModal(false)}
+          actionCancelLabel={"CS_COMMON_CANCEL"}
           actionCancelOnSubmit={() => setShowModal(false)}
-          actionSaveLabel={t("ES_EVENT_DELETE")}
+          actionSaveLabel={"ES_COMMON_Y_DEL"}
           actionSaveOnSubmit={handleDelete}
-        >
-          <Card style={{ boxShadow: "none" }}>
-            <CardText>{t(`ES_EVENT_DELETE_TEXT`)}</CardText>
-          </Card>
-        </Modal>
+        />
+      )}
+      {showModal && userAction === "ACTIVE" && (
+        <MarkActiveModal
+          t={t}
+          heading={"CONFIRM_MARKACTIVE_SURVEY"}
+          initialValues={surveyData}
+          closeModal={() => setShowModal(false)}
+          actionCancelLabel={"CS_COMMON_CANCEL"}
+          actionCancelOnSubmit={() => setShowModal(false)}
+          actionSaveLabel={"ES_COMMON_SAVE"}
+          actionSaveOnSubmit={handleMarkActive}
+          onSubmit={handleMarkActive}
+        />
+      )}
+      {showModal && userAction === "INACTIVE" && (
+        <MarkInActiveModal
+          t={t}
+          heading={"CONFIRM_MARKINACTIVE_SURVEY"}
+          surveyTitle={surveyData.title}
+          closeModal={() => setShowModal(false)}
+          actionCancelLabel={"CS_COMMON_CANCEL"}
+          actionCancelOnSubmit={() => setShowModal(false)}
+          actionSaveLabel={"ES_COMMON_Y_MARKINACTIVE"}
+          actionSaveOnSubmit={handleMarkInactive}
+        />
       )}
     </Fragment>
   );

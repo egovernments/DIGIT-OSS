@@ -7,7 +7,6 @@ import SurveyFormsMaker from "./SurveyFormsMaker";
 import SurveySettingsForms from "./SurveySettingsForm";
 
 const CreateNewSurvey = ({ t, initialFormValues, onSubmit, isFormDisabled = false }) => {
-  const [isDisabled, setIsDisabled] = useState(isFormDisabled);
   const {
     register: registerRef,
     control: controlSurveyForm,
@@ -24,18 +23,24 @@ const CreateNewSurvey = ({ t, initialFormValues, onSubmit, isFormDisabled = fals
   useEffect(() => {
     registerRef("questions");
   }, []);
-  
+
   return (
     <div>
       <form onSubmit={handleSurveyFormSubmit(onSubmit)}>
         <Card>
-          <SurveyDetailsForms t={t} registerRef={registerRef} controlSurveyForm={controlSurveyForm} surveyFormState={surveyFormState} surveyFormData={getSurveyFormValues} />
+          <SurveyDetailsForms
+            t={t}
+            registerRef={registerRef}
+            controlSurveyForm={controlSurveyForm}
+            surveyFormState={surveyFormState}
+            surveyFormData={getSurveyFormValues}
+          />
           <SurveyFormsMaker t={t} setSurveyConfig={setSurveyFormValue} />
           <SurveySettingsForms t={t} controlSurveyForm={controlSurveyForm} surveyFormState={surveyFormState} />
         </Card>
 
         <ActionBar>
-          <SubmitBar label={t("CS_CREATE_SURVEY")} submit="submit" disabled={isDisabled} />
+          <SubmitBar label={t("CS_CREATE_SURVEY")} submit="submit" />
         </ActionBar>
       </form>
     </div>

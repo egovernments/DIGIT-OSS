@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import CreateNewSurvey from "../../../components/Surveys/SurveyForms";
 
-const answerTypeEnum = {
+export const answerTypeEnum = {
   "Short Answer": "SHORT_ANSWER_TYPE",
   Paragraph: "LONG_ANSWER_TYPE",
   "Multiple Choice": "MULTIPLE_ANSWER_TYPE",
@@ -15,7 +15,7 @@ const answerTypeEnum = {
 
 
 /**TODO NRJ-egov handle this by setting correct state inside the surveyFormMaker */
-const mapQuestions = (questions =[]) =>{
+export const mapQuestions = (questions =[]) =>{
   if(!questions.length) return;
   return questions.map(({formConfig},index)=>{
       const {options:choices, questionStatement,required, type:stringType} = formConfig;
@@ -31,6 +31,7 @@ const mapQuestions = (questions =[]) =>{
 const NewSurveys = () => {
   const { t } = useTranslation();
   const history = useHistory();
+  
   const onSubmit = (data) => {
     const { collectCitizenInfo, title, description, tenantIds, fromDate, toDate, fromTime, toTime, questions } = data;
     const mappedQuestions = mapQuestions(questions);

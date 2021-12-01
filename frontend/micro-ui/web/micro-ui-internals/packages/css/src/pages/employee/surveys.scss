@@ -78,6 +78,10 @@
   }
 }
 
+.edit-action-btn{
+  @apply flex justify-end;
+}
+
 @screen dt {
   .surveydetailsform-wrapper {
     .surveyformfield {
