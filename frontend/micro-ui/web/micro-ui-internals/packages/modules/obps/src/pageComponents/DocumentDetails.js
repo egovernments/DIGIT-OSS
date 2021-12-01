@@ -17,44 +17,10 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
     const stateId = Digit.ULBService.getStateId();
     const [documents, setDocuments] = useState(formData?.documents?.documents || []);
     const [error, setError] = useState(null);
-    const [bpaTaxDocuments, setBpaTaxDocuments] = useState([]);
     const [enableSubmit, setEnableSubmit] = useState(true)
     const [checkRequiredFields, setCheckRequiredFields] = useState(false);
-    const [PrevStateDocuments, setPrevStateDocuments] = useState(formData?.PrevStateDocuments || []);
     const checkingFlow = formData?.uiFlow?.flow;
-    const { isLoading: bpaDocsLoading, data: bpaDocs } = Digit.Hooks.obps.useMDMS(stateId, "BPA", ["DocTypeMapping"]);
-    const { isLoading: commonDocsLoading, data: commonDocs } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["DocumentType"]);
-
-    useEffect(() => {
-        let filtredBpaDocs = [];
-        if (bpaDocs?.BPA?.DocTypeMapping) {
-            filtredBpaDocs = bpaDocs?.BPA?.DocTypeMapping?.filter(data => (data.WFState == formData?.status ? formData?.status : "INPROGRESS" && data.RiskType == formData?.riskType && data.ServiceType == formData?.data?.serviceType && data.applicationType == formData?.data?.applicationType))
-        }
-        let documentsList = [];
-        filtredBpaDocs?.[0]?.docTypes?.forEach(doc => {
-            let code = doc.code; doc.dropdownData = []; doc.uploadedDocuments = [];
-            commonDocs?.["common-masters"]?.DocumentType?.forEach(value => {
-                let values = value.code.slice(0, code.length);
-                if (code === values) {
-                    doc.hasDropdown = true;
-                    value.i18nKey = value.code;
-                    doc.dropdownData.push(value);
-                }
-            });
-            
-            doc.uploadedDocuments[0] = {};
-            doc.uploadedDocuments[0].values = [];
-            PrevStateDocuments.map(upDocs => {
-                if (code === `${upDocs?.documentType?.split('.')[0]}.${upDocs?.documentType?.split('.')[1]}`) {
-                    doc.uploadedDocuments[0].values.push(upDocs)
-                }
-            })
-            documentsList.push(doc);
-        });
-
-        setBpaTaxDocuments(documentsList);
-
-    }, [!bpaDocsLoading, !commonDocsLoading]);
+    const {data: bpaTaxDocuments, isLoading} = Digit.Hooks.obps.useBPATaxDocuments(stateId, formData, formData?.PrevStateDocuments || []);
 
     const handleSubmit = () => {
         let document = formData.documents;
@@ -86,7 +52,7 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
     return (
         <div>
             <Timeline currentStep={checkingFlow === "OCBPA" ? 3 : 2} flow= {checkingFlow === "OCBPA" ? "OCBPA" : ""}/>
-            {!bpaDocsLoading ?
+            {!isLoading ?
                 <FormStep
                     t={t}
                     config={config}
@@ -108,7 +74,7 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
                                 documents={documents}
                                 setCheckRequiredFields={setCheckRequiredFields}
                                 formData={formData}
-                                PrevStateDocuments={PrevStateDocuments}
+                                PrevStateDocuments={formData?.PrevStateDocuments || []}
                             />
                             </div>
                         );
@@ -167,19 +133,23 @@ function SelectDocument({
             e?.map((doc, index) => {
                 newfiles.push({
                         documentType: selectedDocument?.code,
-                        fileStoreId: doc.fileStoreId,
-                        documentUid: doc.fileStoreId,
-                        fileName: fileArray[index]?.name || "",
+                        fileStoreId: doc?.[1].fileStoreId,
+                        documentUid: doc?.[1].fileStoreId,
+                        fileName: doc?.[0] || "",
                         id:documents? documents.find(x => x.documentType === selectedDocument?.code)?.id:undefined,
                 })
             })
-            setDocuments([
-                ...documents,
+            const __documents = [
+                ...documents.filter(e => e.documentType !== key ),
                 ...newfiles,
-            ])
+            ]
+            setDocuments(__documents)
         }
     
         newArr?.map((ob) => {
+            if(!ob?.file){
+                ob.file = {}
+            }
           ob.file.documentType = key;
           selectfile(ob,key);
         })

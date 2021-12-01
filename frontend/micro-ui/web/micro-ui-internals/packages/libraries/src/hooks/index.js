@@ -144,6 +144,7 @@ import useEmpBPAREGSearch from "./obps/useEmpBPAREGSearch";
 import useServiceTypeFromApplicationType from "./obps/useServiceTypeFromApplicationType"
 import useBusinessServiceBasedOnServiceType from "./obps/useBusinessServiceBasedOnServiceType"
 import useBusinessServiceData from "./obps/useBusinessServiceData";
+import useBPATaxDocuments from "./obps/useBPATaxDocuments";
 
 import useEventInbox from "./events/useEventInbox";
 import useEventDetails from "./events/useEventDetails";
@@ -297,7 +298,8 @@ const obps = {
   useApplicationActions: useBPAApplicationActions,
   useOBPSSearch,
   useBusinessServiceBasedOnServiceType,
-  useBusinessServiceData
+  useBusinessServiceData,
+  useBPATaxDocuments
 };
 
 const events = {
