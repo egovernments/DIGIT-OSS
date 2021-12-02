@@ -254,6 +254,7 @@ public class UserService {
 
 
     private void validateAndEnrichCitizen(User user) {
+    	
         log.info("Validating User........");
         if (isCitizenLoginOtpBased && !StringUtils.isNumeric(user.getUsername()))
             throw new UserNameNotValidException();

@@ -100,8 +100,8 @@ public class MutliStateInstanceUtil {
 		String[] tenantArray = tenantId.split("\\.");
 
 		if (getIsEnvironmentCentralInstance()) {
-			if (getStateLevelTenantIdLength() > tenantArray.length) {
-				for (int i = 0; i <= getStateLevelTenantIdLength(); i++) {
+			if (getStateLevelTenantIdLength() < tenantArray.length) {
+				for (int i = 0; i < getStateLevelTenantIdLength(); i++) {
 					stateTenant = stateTenant.concat(tenantArray[i]);
 				}
 			} else {
