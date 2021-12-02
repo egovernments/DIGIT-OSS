@@ -233,11 +233,13 @@ public class UserService {
     }
 
     private void validateUserUniqueness(User user) {
-        if (userRepository.isUserPresent(user.getUsername(), userUtils.getStateLevelTenantForCitizen(user.getTenantId(), user
-                .getType()), user.getType()))
-            throw new DuplicateUserNameException(UserSearchCriteria.builder().userName(user.getUsername()).type(user
-                    .getType()).tenantId(user.getTenantId()).build());
-    }
+    	
+		String tenantId = userUtils.getStateLevelTenantForCitizen(user.getTenantId(), user.getType());
+		Boolean isUserPresent = userRepository.isUserPresent(user.getUsername(), tenantId, user.getType());
+		if (isUserPresent)
+			throw new DuplicateUserNameException(UserSearchCriteria.builder().userName(user.getUsername())
+					.type(user.getType()).tenantId(user.getTenantId()).build());
+	}
 
     /**
      * api will create the citizen with otp

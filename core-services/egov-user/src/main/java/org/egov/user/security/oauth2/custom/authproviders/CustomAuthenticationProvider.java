@@ -1,9 +1,12 @@
 package org.egov.user.security.oauth2.custom.authproviders;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.log4j.MDC;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.egov.tracer.model.ServiceCallException;
+import org.egov.user.config.UserServiceConstants;
 import org.egov.user.domain.exception.DuplicateUserNameException;
 import org.egov.user.domain.exception.UserNotFoundException;
 import org.egov.user.domain.model.SecureUser;
@@ -11,6 +14,7 @@ import org.egov.user.domain.model.User;
 import org.egov.user.domain.model.enums.UserType;
 import org.egov.user.domain.service.UserService;
 import org.egov.user.domain.service.utils.EncryptionDecryptionUtil;
+import org.egov.user.domain.service.utils.UserUtils;
 import org.egov.user.web.contract.auth.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,6 +48,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     // TODO Remove default error handling provided by TokenEndpoint.class
 
     private UserService userService;
+    
+    @Autowired
+    private UserUtils userUtils;
 
     @Autowired
     private EncryptionDecryptionUtil encryptionDecryptionUtil;
@@ -77,6 +84,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         String tenantId = details.get("tenantId");
         String userType = details.get("userType");
+		/*
+		 * Central instance tenant MDC enanchement
+		 */
+		if (userUtils.getIsEnvironmentCentralInstance()) {
+			MDC.put(UserServiceConstants.TENANTID_MDC_STRING, tenantId);
+		}
 
         if (isEmpty(tenantId)) {
             throw new OAuth2Exception("TenantId is mandatory");

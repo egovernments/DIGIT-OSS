@@ -232,6 +232,7 @@ public class UserServiceTest {
         org.egov.user.domain.model.User domainUser = validDomainUser(false);
         when(otpRepository.isOtpValidationComplete(getExpectedRequest())).thenReturn(true);
         when(userRepository.isUserPresent("supandi_rocks", "tenantId", UserType.CITIZEN)).thenReturn(true);
+        when(userUtils.getStateLevelTenantForCitizen("tenantId", UserType.CITIZEN)).thenReturn("tenantId");
         when(encryptionDecryptionUtil.encryptObject(domainUser, "User", User.class)).thenReturn(domainUser);
         userService.createUser(domainUser, getValidRequestInfo());
     }

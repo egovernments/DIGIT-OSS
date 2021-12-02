@@ -608,8 +608,8 @@ public class UserRepository {
 		String[] tenantArray = tenantId.split("\\.");
 
 		if (userUtils.getIsEnvironmentCentralInstance()) {
-			if (userUtils.getStateLevelTenantIdLength() > tenantArray.length) {
-				for (int i = 0; i <= userUtils.getStateLevelTenantIdLength(); i++) {
+			if (userUtils.getStateLevelTenantIdLength() < tenantArray.length) {
+				for (int i = 0; i < userUtils.getStateLevelTenantIdLength(); i++) {
 					stateTenant = stateTenant.concat(tenantArray[i]);
 				}
 			} else {
