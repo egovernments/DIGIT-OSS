@@ -26,6 +26,7 @@ import org.egov.user.domain.model.enums.BloodGroup;
 import org.egov.user.domain.model.enums.Gender;
 import org.egov.user.domain.model.enums.GuardianRelation;
 import org.egov.user.domain.model.enums.UserType;
+import org.egov.user.domain.service.utils.UserUtils;
 import org.egov.user.persistence.dto.FailedLoginAttempt;
 import org.egov.user.repository.builder.RoleQueryBuilder;
 import org.egov.user.repository.builder.UserTypeQueryBuilder;
@@ -43,6 +44,9 @@ import lombok.extern.slf4j.Slf4j;
 @Repository
 @Slf4j
 public class UserRepository {
+	
+	@Autowired
+	private UserUtils userUtils;
 
     private AddressRepository addressRepository;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -159,6 +163,11 @@ public class UserRepository {
         user.setLastModifiedDate(new Date());
         user.setCreatedBy(user.getLoggedInUserId());
         user.setLastModifiedBy(user.getLoggedInUserId());
+		/*
+		 * for central 'in' will be returned and for states state level will be returned
+		 * like pb for pb.amritsar
+		 */
+        user.setTenantId(userUtils.getStateLevelTenantForCitizen(user.getTenantId(), user.getType()));
         final User savedUser = save(user);
         if (user.getRoles().size() > 0) {
             saveUserRoles(user);
@@ -586,8 +595,29 @@ public class UserRepository {
         saveUserRoles(user);
     }
 
-    private String getStateLevelTenant(String tenantId) {
-        return tenantId.split("\\.")[0];
-    }
+	/**
+	 * For central instance if the then tenantid size is lesser than state level
+	 * length the same will be returned without splitting
+	 * 
+	 * @param tenantId
+	 * @return
+	 */
+	private String getStateLevelTenant(String tenantId) {
+
+		String stateTenant = "";
+		String[] tenantArray = tenantId.split("\\.");
+
+		if (userUtils.getIsEnvironmentCentralInstance()) {
+			if (userUtils.getStateLevelTenantIdLength() > tenantArray.length) {
+				for (int i = 0; i <= userUtils.getStateLevelTenantIdLength(); i++) {
+					stateTenant = stateTenant.concat(tenantArray[i]);
+				}
+			} else {
+				stateTenant = tenantId;
+			}
+			return stateTenant;
+		}
+		return tenantArray[0];
+	}
 
 }
