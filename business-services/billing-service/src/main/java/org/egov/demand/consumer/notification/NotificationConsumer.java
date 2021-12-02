@@ -83,6 +83,8 @@ public class NotificationConsumer {
 	public static final String SERVICENUMBER_OF_MODULE_REPLACE_STRING = "{servicenumber}";
 	public static final String EXPIRY_DATE_REPLACE_STRING = "{expirydate}";
 	
+	public static final String CANCELLATION_REASON_MSG= "selectedReasonMessage";
+	
 
 	/**
 	 * Kafka consumer
@@ -138,7 +140,7 @@ public class NotificationConsumer {
 			content = content.replace("{OWNER_NAME}", bill.getPayerName());
 			content = content.replace("{SERVICE}", bill.getBusinessService());
 			content = content.replace("{BILLING_PERIOD}", getPeriod(detail.getFromPeriod(), detail.getToPeriod()));
-			content = content.replace("{REASON_FOR_CANCELLATION}", bill.getAdditionalDetails().get("reason").textValue());
+			content = content.replace("{REASON_FOR_CANCELLATION}", bill.getAdditionalDetails().get(CANCELLATION_REASON_MSG).textValue());
 
 		}
 		return content;
