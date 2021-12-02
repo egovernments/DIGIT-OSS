@@ -24,7 +24,7 @@ const envVariables = {
   KAFKA_TOPICS_RECEIPT_CREATE:
     process.env.KAFKA_TOPICS_RECEIPT_CREATE || "egov.collection.payment-create",
   KAFKA_TOPICS_NOTIFICATION:
-    process.env.KAFKA_TOPICS_NOTIFICATION || "egov.core.notification.sms",
+    process.env.KAFKA_TOPICS_NOTIFICATION || "fire-sms",
   KAFKA_TOPICS_EVENT_NOTIFICATION:
     process.env.KAFKA_TOPICS_EVENT_NOTIFICATION || "persist-events-async",
 
@@ -40,7 +40,7 @@ const envVariables = {
     process.env.HTTP_CLIENT_DETAILED_LOGGING_ENABLED || false,
 
   //workflow service configurations
-  EGOV_WORKFLOW_HOST: process.env.EGOV_WORKFLOW_HOST || "http://localhost:8089",
+  EGOV_WORKFLOW_HOST: process.env.EGOV_WORKFLOW_HOST || "https://dev.digit.org",
   // "https://dev.digit.org",
   EGOV_WORKFLOW_TRANSITION_ENDPOINT:
     process.env.EGOV_WORKFLOW_TRANSITION_PATH ||
@@ -48,16 +48,16 @@ const envVariables = {
   BUSINESS_SERVICE: process.env.BUSINESS_SERVICE || "FIRENOC",
 
   //location service configurations
-  EGOV_LOCATION_HOST: process.env.EGOV_LOCATION_HOST || "http://localhost:8090",
+  EGOV_LOCATION_HOST: process.env.EGOV_LOCATION_HOST || "https://dev.digit.org",
   EGOV_LOCATION_CONTEXT_PATH:
-    process.env.EGOV_LOCATION_CONTEXT_PATH || "/egov-location/location/v11/",
+    process.env.EGOV_LOCATION_CONTEXT_PATH || "/egov-location/location/v11",
   EGOV_LOCATION_SEARCH_ENDPOINT:
     process.env.EGOV_LOCATION_SEARCH_ENDPOINT || "/boundarys/_search",
   EGOV_LOCATION_HIERARCHY_TYPE_CODE: process.env.EGOV_LOCATION || "REVENUE",
   EGOV_LOCATION_BOUNDARY_TYPE_CODE: process.env.EGOV_BOUNDARY || "Locality",
 
   //user service configurations
-  EGOV_USER_HOST: process.env.EGOV_USER_HOST || "http://localhost:8088",
+  EGOV_USER_HOST: process.env.EGOV_USER_HOST || "http://localhost:8081",
   //"https://dev.digit.org",
   EGOV_USER_CONTEXT_PATH: process.env.EGOV_USER_CONTEXT_PATH || "/user",
   EGOV_USER_CREATE_ENDPOINT:
@@ -69,7 +69,7 @@ const envVariables = {
   EGOV_USER_USERNAME_PREFIX: process.env.EGOV_USER_USERNAME_PREFIX || "FN-",
 
   //idgen service configurations
-  EGOV_IDGEN_HOST: process.env.EGOV_IDGEN_HOST || "http://localhost:8087",
+  EGOV_IDGEN_HOST: process.env.EGOV_IDGEN_HOST || "https://dev.digit.org",
   EGOV_IDGEN_CONTEXT_PATH: process.env.EGOV_IDGEN_CONTEXT_PATH || "/egov-idgen",
   EGOV_IDGEN_GENERATE_ENPOINT:
     process.env.EGOV_IDGEN_GENERATE_ENPOINT || "/id/_generate",
@@ -100,7 +100,7 @@ const envVariables = {
 
   //firenoc calcultor service configurations
   EGOV_FN_CALCULATOR_HOST:
-    process.env.EGOV_FN_CALCULATOR_HOST || "http://localhost:8083",
+    process.env.EGOV_FN_CALCULATOR_HOST || "https://dev.digit.org",
   EGOV_FN_CALCULATOR_CONTEXT_PATH:
     process.env.EGOV_FN_CALCULATOR_CONTEXT_PATH || "/firenoc-calculator/v1",
   EGOV_FN_CALCULATOR_CALCULATOR_ENPOINT:

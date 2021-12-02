@@ -5,7 +5,8 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { searchApiResponse } from "../api/search";
 import { updateApiResponse } from "../api/update";
-// import { httpRequest } from "../api";
+import  fetchChannelList from "../utils/notificationutil";
+import { httpRequest } from "../api";
 
 var options = {
   // connect directly to kafka broker (instantiates a KafkaClient)
@@ -39,13 +40,13 @@ consumerGroup.on("message", function(message) {
   console.log("consumer-topic", message.topic);
   // console.log("consumer-value", JSON.parse(message.value));
   const value = JSON.parse(message.value);
-
   let payloads = [];
   const topic = envVariables.KAFKA_TOPICS_NOTIFICATION;
   let smsRequest = {};
   let fireNOCRequest = {};
   let events = [];
   let { RequestInfo } = value;
+
 
   const sendEventNotificaiton = () => {
     let requestPayload = {
@@ -238,8 +239,12 @@ consumerGroup.on("message", function(message) {
   switch (message.topic) {
     case envVariables.KAFKA_TOPICS_FIRENOC_CREATE:
       {
-        const { FireNOCs } = value;
+        const { FireNOCs,RequestInfo } = value;
+
         sendFireNOCSMSRequest(FireNOCs);
+        console.log("FireNOCs        "+JSON.stringify(FireNOCs));
+        console.log("RequestInfo       "+JSON.stringify(RequestInfo));
+        fetchChannelList(RequestInfo,"pb.amritsar","TL");
       }
       break;
     case envVariables.KAFKA_TOPICS_FIRENOC_UPDATE:
