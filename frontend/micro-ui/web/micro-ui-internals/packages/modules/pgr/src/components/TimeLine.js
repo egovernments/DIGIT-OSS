@@ -44,9 +44,10 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
         return false;
       }
     });
-    // console.log("find audit details here", auditDetails);
+
+    const duplicateCheckpointOfPendingForAssignment = timeline?.find( e => e?.status === "PENDINGFORASSIGNMENT")
     timeline?.push({
-      auditDetails: { created: auditDetails?.created, lastModified: auditDetails?.lastModified },
+      ...duplicateCheckpointOfPendingForAssignment,
       performedAction: "FILED",
       status: "COMPLAINT_FILED",
     });
@@ -83,7 +84,7 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
         return <CheckPoint isCompleted={isCurrent} key={index} label={t(`CS_COMMON_PENDINGFORASSIGNMENT`)} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})} />;
 
       case "PENDINGFORASSIGNMENT":
-        return <PendingForAssignment key={index} isCompleted={isCurrent} text={t("CS_COMMON_PENDINGFORASSIGNMENT")} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow})} />;
+        return <PendingForAssignment key={index} isCompleted={isCurrent} text={t("CS_COMMON_PENDINGFORASSIGNMENT")} customChild={getCommentsInCustomChildComponent({comment})} />;
 
       case "PENDINGFORASSIGNMENT_AFTERREOPEN":
         return <PendingForAssignment isCompleted={isCurrent} key={index} text={t(`CS_COMMON_PENDINGFORASSIGNMENT`)} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})} />;
@@ -133,7 +134,7 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
       //   />
       // );
       case "COMPLAINT_FILED":
-        return <CheckPoint isCompleted={isCurrent} key={index} label={t("CS_COMMON_COMPLAINT_FILED")} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})} />;
+        return <CheckPoint isCompleted={isCurrent} key={index} label={t("CS_COMMON_COMPLAINT_FILED")} customChild={getCommentsInCustomChildComponent({thumbnailsToShow, assigner})} />;
 
       default:
         return <CheckPoint isCompleted={isCurrent} key={index} label={t(`CS_COMMON_${status}`)} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})} />;

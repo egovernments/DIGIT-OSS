@@ -216,6 +216,17 @@ export const ComplaintDetails = (props) => {
   const { isLoading, complaintDetails, revalidate: revalidateComplaintDetails } = Digit.Hooks.pgr.useComplaintDetails({ tenantId, id });
   // console.log("find complaint details here", complaintDetails);
   const workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId, id, moduleCode: "PGR", role: "EMPLOYEE" });
+  const [imagesToShowBelowComplaintDetails, setImagesToShowBelowComplaintDetails] = useState([])
+  useEffect(()=>{
+    if(workflowDetails){
+      const {data:{timeline: complaintTimelineData}={}} = workflowDetails
+      if(complaintTimelineData){
+        const actionByCitizenOnComplaintCreation = complaintTimelineData?.find( e => e?.performedAction === "APPLY")
+        const { thumbnailsToShow } = actionByCitizenOnComplaintCreation
+        thumbnailsToShow ? setImagesToShowBelowComplaintDetails(thumbnailsToShow) : null
+      }
+    }
+  },[workflowDetails])
   const [displayMenu, setDisplayMenu] = useState(false);
   const [popup, setPopup] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
@@ -279,8 +290,7 @@ export const ComplaintDetails = (props) => {
     setImageZoom(imageSource);
   }
   function zoomImageWrapper(imageSource, index){
-    let newIndex=complaintDetails.thumbnails?.findIndex(link=>link===imageSource);
-    zoomImage((newIndex>-1&&complaintDetails?.images?.[newIndex])||imageSource);
+    zoomImage(imagesToShowBelowComplaintDetails?.fullImage[index-1]);
   }
   function onCloseImageZoom() {
     setImageZoom(null);
@@ -349,13 +359,13 @@ export const ComplaintDetails = (props) => {
       date: checkpoint?.auditDetails?.lastModified,
       name: checkpoint?.assigner?.name,
       mobileNumber: checkpoint?.assigner?.mobileNumber,
+      ...checkpoint.status === "COMPLAINT_FILED" && complaintDetails?.audit ? {
+        source: complaintDetails.audit.source,
+      } : {}
     }
-    if (checkpoint.status === "COMPLAINT_FILED" && complaintDetails?.audit) {
+    if (checkpoint.status === "PENDINGFORASSIGNMENT" && complaintDetails?.audit) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(complaintDetails.audit.details.createdTime),
-        name: complaintDetails.audit.citizen.name,
-        mobileNumber: complaintDetails.audit.citizen.mobileNumber,
-        source: complaintDetails.audit.source,
       };
       return <TLCaption data={caption} comments={checkpoint?.wfComment}/>;
     }
@@ -368,7 +378,7 @@ export const ComplaintDetails = (props) => {
         </div>
       )}</div> : null}
       {thumbnailsToShow?.thumbs?.length > 0 ? <div className="TLComments">
-        <h3>{t("CS_COMMON_DOCUMENTS")}</h3>
+        <h3>{t("CS_COMMON_ATTACHMENTS")}</h3>
         <DisplayPhotos srcs={thumbnailsToShow.thumbs} onClick={(src, index) => zoomImageTimeLineWrapper(src, index,thumbnailsToShow)} />
       </div> : null}
       {captionForOtherCheckpointsInTL?.date ? <TLCaption data={captionForOtherCheckpointsInTL}/> : null}
@@ -405,8 +415,8 @@ export const ComplaintDetails = (props) => {
             )}
           </StatusTable>
         )}
-        {complaintDetails?.thumbnails && complaintDetails?.thumbnails?.length !== 0 ? (
-          <DisplayPhotos srcs={complaintDetails?.thumbnails} onClick={(source, index) => zoomImageWrapper(source, index)} />
+        {imagesToShowBelowComplaintDetails?.thumbs ? (
+          <DisplayPhotos srcs={imagesToShowBelowComplaintDetails?.thumbs} onClick={(source, index) => zoomImageWrapper(source, index)} />
         ) : null}
         <BreakLine />
         {workflowDetails?.isLoading && <Loader />}

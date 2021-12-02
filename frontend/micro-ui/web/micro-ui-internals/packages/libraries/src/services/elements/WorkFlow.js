@@ -124,7 +124,9 @@ export const WorkflowService = {
         const nextActions = actionRolePair;
 
         if (role !== "CITIZEN" && moduleCode === "PGR") {
+          const duplicateCheckpointOfPendingForAssignment = timeline?.find( e => e?.status === "PENDINGFORASSIGNMENT")
           timeline.push({
+            ...duplicateCheckpointOfPendingForAssignment,
             status: "COMPLAINT_FILED",
           });
         }
