@@ -129,17 +129,27 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   }
 
   const getfeildInspection = (data) => {
-    let formdata = JSON.parse(sessionStorage.getItem("INSPECTION_DATA"));
-    let inspectionOb = data?.additionalDetails?.fieldinspection_pending && data?.additionalDetails?.fieldinspection_pending.length>0? [...data?.additionalDetails?.fieldinspection_pending]:[];
-    formdata && formdata.map((ob,ind) => {
-      inspectionOb.push({
-        docs: getInspectionDocs(ob.Documents),
-        date: ob.InspectionDate,
-        questions: getQuestion(ob),
-        time: ob?.InspectionTime,
+    let formdata = [], inspectionOb = [];
+    
+    if (data?.additionalDetails?.fieldinspection_pending?.length > 0) {
+      inspectionOb = data?.additionalDetails?.fieldinspection_pending
+    }
+
+    if(data.status == "FIELDINSPECTION_INPROGRESS") {
+      formdata = JSON.parse(sessionStorage.getItem("INSPECTION_DATA"));
+      formdata?.length > 0 && formdata.map((ob,ind) => {
+        inspectionOb.push({
+          docs: getInspectionDocs(ob.Documents),
+          date: ob.InspectionDate,
+          questions: getQuestion(ob),
+          time: ob?.InspectionTime,
+        })
       })
-    })
-    inspectionOb = inspectionOb.filter((ob) => ob.docs && ob.docs.length>0);
+      inspectionOb = inspectionOb.filter((ob) => ob.docs && ob.docs.length>0);
+    } else {
+      sessionStorage.removeItem("INSPECTION_DATA")
+    }
+  
     let fieldinspection_pending = [ ...inspectionOb];
     return fieldinspection_pending;
   }

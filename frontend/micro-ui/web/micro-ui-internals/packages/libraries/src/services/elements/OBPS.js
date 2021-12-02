@@ -451,7 +451,7 @@ export const OBPSService = {
       additionalDetails: {
         values: [
           { title: "BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL", value : " "},
-          { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr?.planDetail?.planInformation?.demolitionArea ? `${edcr?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : "" } 
+          { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr?.planDetail?.planInformation?.demolitionArea ? `${edcr?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : "NA" } 
         ],
         scruntinyDetails: []
       }

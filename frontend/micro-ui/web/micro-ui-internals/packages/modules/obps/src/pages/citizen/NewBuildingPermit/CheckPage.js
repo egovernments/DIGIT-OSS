@@ -27,15 +27,15 @@ import {
     var i;
     let improvedDoc =isEditApplication?PrevStateDocuments && documents ?[...PrevStateDocuments, ...documents.documents]: []: [...documents.documents];
     improvedDoc.map((ob) => { ob["isNotDuplicate"] = true; })
-    improvedDoc.map((ob,index) => {
-      val = ob.documentType;
-      if(ob.isNotDuplicate == true)
-      for(i=index+1; i<improvedDoc.length;i++)
-      {
-        if(val === improvedDoc[i].documentType || val.includes(improvedDoc[i].documentType.split(".")[1]))
-        improvedDoc[i].isNotDuplicate=false;
-      }
-    })
+    // improvedDoc.map((ob,index) => {
+    //   val = ob.documentType;
+    //   if(ob.isNotDuplicate == true)
+    //   for(i=index+1; i<improvedDoc.length;i++)
+    //   {
+    //     if(val === improvedDoc[i].documentType || val.includes(improvedDoc[i].documentType.split(".")[1]))
+    //     improvedDoc[i].isNotDuplicate=false;
+    //   }
+    // })
     const { data:datafromAPI, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId,value?.data?.scrutinyNumber, {
         enabled: true
       })
@@ -278,10 +278,10 @@ import {
             onClick={() => routeTo(`${routeLink}/document-details`)}
           />
         {improvedDoc.map((doc, index) => (
-          <div key={index}>
+          <div key={`doc-${index}`}>
          {doc.isNotDuplicate && <div><CardSectionHeader>{t(doc?.documentType?.split('.').slice(0,2).join('_'))}</CardSectionHeader>
           <StatusTable>
-          <OBPSDocument value={isEditApplication?[...PrevStateDocuments,...documents.documents]:value} Code={doc?.documentType} index={index}/> 
+          <OBPSDocument value={isEditApplication?[...PrevStateDocuments,...documents.documents]:value} Code={doc?.documentType} index={index} isNOC={false}/> 
           {improvedDoc?.length != index+ 1 ? <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/> : null}
           </StatusTable>
           </div>}
@@ -296,7 +296,7 @@ import {
             onClick={() => routeTo(`${routeLink}/noc-details`)}
           />
       {nocDocuments && nocDocuments?.NocDetails.map((noc, index) => (
-        <div key={index} style={nocDocuments?.NocDetails?.length > 1 ?{ marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", maxWidth: "960px", minWidth: "280px" } : {}}>
+        <div key={`noc-${index}`} style={nocDocuments?.NocDetails?.length > 1 ?{ marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", maxWidth: "960px", minWidth: "280px" } : {}}>
         <CardSectionHeader style={{marginBottom: "24px"}}>{`${t(`BPA_${noc?.nocType}_HEADER`)}:`}</CardSectionHeader>
         <StatusTable>
           <Row className="border-none" label={t(`BPA_${noc?.nocType}_LABEL`)} text={noc?.applicationNo} />

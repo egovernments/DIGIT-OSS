@@ -63,11 +63,20 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t,OCData) =
     documents:[]
   }
 
-  data["PrevStateNocDocuments"]=nocdata.map(a => a.documents[0]);
+  let nocDocs = [];
+  nocdata && nocdata.map((a,index) => {
+    a.documents && a.documents.map((b,index) => {
+      nocDocs.push(b);
+    })
+  })
+
+  data["PrevStateNocDocuments"]=nocDocs;
+
   data.nocDocuments = {
     NocDetails:nocdata,
     nocDocuments:[],
   }
+
 
   data.riskType = Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks)
   data.subOccupancy = getBlocksforFlow(data?.landInfo?.unit);

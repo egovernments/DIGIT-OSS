@@ -45,7 +45,7 @@ const CheckPage = ({ onSubmit, value }) => {
     if(ob.isNotDuplicate == true)
     for(i=index+1; i<improvedDoc.length;i++)
     {
-      if(val === improvedDoc[i].documentType || val.includes(improvedDoc[i].documentType.split(".")[1]) )
+      if(val === improvedDoc[i].documentType || val?.includes(improvedDoc[i].documentType.split(".")[1]) )
       improvedDoc[i].isNotDuplicate=false;
     }
   })
@@ -66,7 +66,7 @@ const CheckPage = ({ onSubmit, value }) => {
   );
 
 
-  let routeLink = !isEditApplication?`/digit-ui/citizen/obps/bpa/${additionalDetails?.applicationType.toLowerCase()}/${additionalDetails?.serviceType.toLowerCase()}`:`/digit-ui/citizen/obps/editApplication/ocbpa/${value?.tenantId}/${value?.applicationNo}`;
+  let routeLink = !isEditApplication?`/digit-ui/citizen/obps/ocbpa/${additionalDetails?.applicationType.toLowerCase()}/${additionalDetails?.serviceType.toLowerCase()}`:`/digit-ui/citizen/obps/editApplication/ocbpa/${value?.tenantId}/${value?.applicationNo}`;
 
   const tableHeader = [
     {

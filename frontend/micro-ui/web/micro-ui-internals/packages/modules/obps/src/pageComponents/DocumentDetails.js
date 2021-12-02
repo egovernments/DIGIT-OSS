@@ -156,7 +156,6 @@ function SelectDocument({
       }
 
     function setcodeafterupload(){
-        debugger;
         if (selectedDocument?.code) {
             setDocuments((prev) => {
                 //const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);

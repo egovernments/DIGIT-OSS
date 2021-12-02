@@ -164,6 +164,7 @@ const BpaApplicationDetail = () => {
   };
 
   function onActionSelect(action) {
+    let path = data?.applicationData?.businessService == "BPA_OC" ? "ocbpa" : "bpa";
     if(action === "FORWARD") {
       history.replace(`/digit-ui/citizen/obps/sendbacktocitizen/ocbpa/${data?.applicationData?.tenantId}/${data?.applicationData?.applicationNo}/check`, { data: data?.applicationData, edcrDetails: data?.edcrDetails });
     }
@@ -171,7 +172,7 @@ const BpaApplicationDetail = () => {
       window.location.assign(`${window.location.origin}/digit-ui/citizen/payment/collect/${`${getBusinessServices(data?.businessService, data?.applicationStatus)}/${id}/${data?.tenantId}?tenantId=${data?.tenantId}`}`);
     }
     if (action === "SEND_TO_CITIZEN"){
-      window.location.replace(`/digit-ui/citizen/obps/editApplication/bpa/${data?.applicationData?.tenantId}/${data?.applicationData?.applicationNo}`)
+      window.location.replace(`/digit-ui/citizen/obps/editApplication/${path}/${data?.applicationData?.tenantId}/${data?.applicationData?.applicationNo}`)
     }
     setSelectedAction(action);
     setDisplayMenu(false);

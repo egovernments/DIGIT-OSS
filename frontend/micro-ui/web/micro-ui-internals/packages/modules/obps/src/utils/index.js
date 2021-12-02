@@ -313,7 +313,8 @@ export const getunitforBPA = (units) => {
 //   return bpaownerarray;
 // }
 
-export const getBPAOwners = (data) => {
+export const getBPAOwners = (data, isOCBPA) => {
+  if (isOCBPA) return data.landInfo.owners;
   let bpaownerarray = cloneDeep(data?.owners?.owners);
   bpaownerarray && bpaownerarray?.forEach(newOwner => {
       if(newOwner?.gender?.code) newOwner.gender = newOwner.gender?.code;
@@ -330,7 +331,10 @@ export const getBPAOwners = (data) => {
 
 export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = false) => {
   if(isOCBPA) {
-    data.landInfo = data.landInfo
+    data.landInfo = data.landInfo;
+    data.landInfo.owners.forEach((owner,index) => {
+      if (owner?.gender?.code) data.landInfo.owners[index].gender=owner?.gender?.code;
+    });
   } else {
     data.landInfo.owners.map((owner,index) => {
       data.landInfo.owners[index].gender=owner?.gender?.code;
@@ -356,7 +360,7 @@ export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = 
         "applicationDate": data?.applicationDate,
         "status": isSendBackTOCitizen ? data.status : (data.status ? data.status : "INITIATED"),
         "documents": getDocumentforBPA(data?.documents?.documents, data?.PrevStateDocuments),
-        "landInfo": {...data?.landInfo, owners:getBPAOwners(data), unit:getBPAUnit(data)},
+        "landInfo": isOCBPA ? data?.landInfo : {...data?.landInfo, owners:getBPAOwners(data, isOCBPA), unit:getBPAUnit(data)},
         "assignee": isSendBackTOCitizen ? data.assignee : [],
         "workflow": {
           "action": "SEND_TO_CITIZEN",

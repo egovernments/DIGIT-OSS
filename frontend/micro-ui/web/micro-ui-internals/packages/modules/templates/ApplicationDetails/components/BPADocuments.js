@@ -25,7 +25,8 @@ const BPADocuments = ({ t, formData, applicationData, docs, bpaActionsDetails })
     useEffect(() => {
         let filtredBpaDocs = [];
         if (bpaDocs?.BPA?.DocTypeMapping) {
-            filtredBpaDocs = bpaDocs?.BPA?.DocTypeMapping?.filter(data => (data.WFState == "INPROGRESS"))
+            // filtredBpaDocs = bpaDocs?.BPA?.DocTypeMapping?.filter(data => (data.WFState == "INPROGRESS"))
+            filtredBpaDocs = bpaDocs?.BPA?.DocTypeMapping?.filter(data => (data.WFState == applicationData?.status ? applicationData?.status : "INPROGRESS" && data.RiskType == applicationData?.riskType && data.ServiceType == applicationData?.additionalDetails?.serviceType && data.applicationType == applicationData?.additionalDetails?.applicationType))
         }
         let documentsList = [];
         filtredBpaDocs?.[0]?.docTypes?.forEach(doc => {
