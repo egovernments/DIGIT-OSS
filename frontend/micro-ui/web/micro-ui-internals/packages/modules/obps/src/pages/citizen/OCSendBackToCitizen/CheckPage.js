@@ -46,16 +46,18 @@ const CheckPage = ({ onSubmit, value }) => {
   let val;
   var i;
   let improvedDoc =isEditApplication?PrevStateDocuments && documents ?[...PrevStateDocuments, ...documents.documents]: []: [...documents.documents];
-  improvedDoc.map((ob) => { ob["isNotDuplicate"] = true; })
-  improvedDoc.map((ob,index) => {
-    val = ob.documentType;
-    if(ob.isNotDuplicate == true)
-    for(i=index+1; i<improvedDoc.length;i++)
-    {
-      if(val === improvedDoc[i].documentType || val.includes(improvedDoc[i].documentType.split(".")[1]))
-      improvedDoc[i].isNotDuplicate=false;
-    }
-  })
+  improvedDoc.map((ob) => { ob["isNotDuplicate"] = false; })
+  // improvedDoc.map((ob,index) => {
+  //   val = ob.documentType;
+  //   if(ob.isNotDuplicate == true)
+  //   for(i=index+1; i<improvedDoc.length;i++)
+  //   {
+  //     if(val === improvedDoc[i].documentType || val.includes(improvedDoc[i].documentType.split(".")[1]))
+  //     improvedDoc[i].isNotDuplicate=false;
+  //   }
+  // })
+  improvedDoc.filter((ele,ind)=>improvedDoc.findIndex((elee)=>elee.documentType===ele.documentType)===ind).map(obj=>obj.isNotDuplicate=true);
+
 
   const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
     {

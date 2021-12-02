@@ -53,7 +53,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
           control={controlFilterForm}
           render={(props) => {
             return <>
-              <div className="filter-label">{t("BPA_LICENSE_TYPE")}</div>
+              <div className="filter-label">{t("BUSINESS_SERVICE")}</div>
                 <RadioButtons
                   onSelect={(e) => props.onChange(e)}
                   selectedOption={props.value}
