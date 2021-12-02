@@ -13,6 +13,12 @@ const OBPSEmployeeHomeCard = () => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateCode = Digit.ULBService.getStateId();
   
+    const stakeholderEmployeeRoles = [ { code: "BPAREG_DOC_VERIFIER", tenantId: stateCode }, { code: "BPAREG_APPROVER", tenantId: stateCode }];
+    const bpaEmployeeRoles = [ "BPA_FIELD_INSPECTOR", "BPA_NOC_VERIFIER", "BPA_APPROVER", "BPA_VERIFIER", "CEMP"];
+
+    const checkingForStakeholderRoles = showHidingLinksForStakeholder(stakeholderEmployeeRoles);
+    const checkingForBPARoles = showHidingLinksForBPA(bpaEmployeeRoles);
+
     const searchFormDefaultValues = {}
   
     const filterFormDefaultValues = {
@@ -59,12 +65,14 @@ const OBPSEmployeeHomeCard = () => {
   
     const { isLoading: isInboxLoadingOfStakeholder, data: dataOfStakeholder } = Digit.Hooks.obps.useBPAInbox({
       tenantId,
-      filters: { ...formInitValueOfStakeholder }
+      filters: { ...formInitValueOfStakeholder },
+      config:{ enabled: !!checkingForStakeholderRoles }
     });
 
     const { isLoading: isInboxLoading, data : dataOfBPA } = Digit.Hooks.obps.useBPAInbox({
       tenantId,
-      filters: { ...formInitValue }
+      filters: { ...formInitValue },
+      config:{ enabled: !!checkingForBPARoles }
     });
 
   useEffect(() => {
@@ -115,12 +123,6 @@ const OBPSEmployeeHomeCard = () => {
       ]
     }),[isInboxLoading, isInboxLoadingOfStakeholder, dataOfStakeholder, dataOfBPA, totalCount]);
 
-    const stakeholderEmployeeRoles = [ { code: "BPAREG_DOC_VERIFIER", tenantId: stateCode }, { code: "BPAREG_APPROVER", tenantId: stateCode }];
-    const bpaEmployeeRoles = [ "BPA_FIELD_INSPECTOR", "BPA_NOC_VERIFIER", "BPA_APPROVER", "BPA_VERIFIER", "CEMP"];
-
-    const checkingForStakeholderRoles = showHidingLinksForStakeholder(stakeholderEmployeeRoles);
-    const checkingForBPARoles = showHidingLinksForBPA(bpaEmployeeRoles);
-    
     if (!checkingForStakeholderRoles) {
       propsForModuleCard.links = propsForModuleCard.links.filter(obj => {
         return obj.field !== 'STAKEHOLDER';

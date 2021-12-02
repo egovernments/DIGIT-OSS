@@ -68,7 +68,7 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
       </div>
     )}</div> : null}
     {thumbnailsToShow?.thumbs?.length > 0 ? <div className="TLComments">
-      <h3>{t("CS_COMMON_DOCUMENTS")}</h3>
+      <h3>{t("CS_COMMON_ATTACHMENTS")}</h3>
       <DisplayPhotos srcs={thumbnailsToShow.thumbs} onClick={(src, index) => {zoomImageWrapper(src, index,thumbnailsToShow)}} />
     </div> : null}
     {captionDetails?.date ? <TLCaption data={captionDetails}/> : null}
