@@ -1776,7 +1776,7 @@ export const getDocList = (state, dispatch) => {
 
   const applicationType = getQueryArg(window.location.href , "action") === "EDITRENEWAL" ? "RENEWAL" :
   get( state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "NEW");
-  const documentObjArray = documentObj && documentObj.filter(item => item.tradeType === tradeUnits.tradeType.split(".")[0]);
+  const documentObjArray = documentObj && documentObj.filter(item => item&&item.tradeType === tradeUnits&&tradeUnits.tradeType.split(".")[0]);
 
   const filteredDocTypes = documentObjArray[0].allowedDocs.reduce((acc, item, index) => {
     documentTypes.find((document, index) => {

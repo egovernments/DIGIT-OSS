@@ -51,7 +51,10 @@ const FilterFormFieldsComponent = ({ statuses, isInboxLoading, registerRef, cont
             return stakeholderServiceTypesLoading ? <Loader/> : <>
               <div className="filter-label">{t("BPA_LICENSE_TYPE")}</div>
                 <RadioButtons
-                  onSelect={(e) => props.onChange(e)}
+                  onSelect={(e) => {
+                    setFilterFormValue("applicationStatus",[]);
+                    props.onChange(e);
+                  }}
                   selectedOption={props.value}
                   optionsKey="i18nKey"
                   options={stakeholderServiceTypes}
