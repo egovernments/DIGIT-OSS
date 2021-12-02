@@ -20,8 +20,8 @@ const SearchFormFieldsComponent = ({ formState, Controller, register, control, t
     bpaOCStatus = [],
     bparegStatus = [],
     applicationStatuses = [];
-  businessServiceData?.BusinessServices?.forEach((data) => {
-    data.states.forEach((state) => {
+  businessServiceData?.BusinessServices?.map((data) => {
+    data.states.map((state) => {
       if (state.state && state.applicationStatus) {
         if (data.business == "BPAREG") {
           bparegStatus.push({
@@ -82,6 +82,18 @@ const SearchFormFieldsComponent = ({ formState, Controller, register, control, t
   bpaStatusUnique.forEach((code) => bpaApplicationStatus.push({ i18nKey: `WF_BPA_${code}`, code: code }));
   bpaOCStatusStatusUnique.forEach((code) => bpaOCApplicationStatus.push({ i18nKey: `WF_BPA_${code}`, code: code }));
   bparegStatusUnique.forEach((code) => bpaRegApplicationStatus.push({ i18nKey: `WF_BPA_${code}`, code: code }));
+
+  bpaApplicationStatus.forEach(bpaCode => {
+    bpaStatus.map(bpaCde => { if(bpaCode?.code == bpaCde?.code) bpaCode.i18nKey = bpaCde.i18nKey })
+  })
+
+  bpaOCApplicationStatus.forEach(bpaOCCode => {
+    bpaOCStatus.map(bpaOCCde => { if(bpaOCCode?.code == bpaOCCde?.code) bpaOCCode.i18nKey = bpaOCCde.i18nKey })
+  })
+
+  bpaRegApplicationStatus.forEach(bparegCode => {
+    bparegStatus.map(bparegCde => { if(bparegCode?.code == bparegCde?.code) bparegCode.i18nKey = bparegCde.i18nKey})
+  })
 
   if (applicationType?.code === "BPA_STAKEHOLDER_REGISTRATION") applicationStatuses = bpaRegApplicationStatus;
   else if (applicationType?.code === "BUILDING_PLAN_SCRUTINY") applicationStatuses = bpaApplicationStatus;
