@@ -86,14 +86,20 @@ export const SuccessfulPayment = (props) => {
                 {t("CS_COMMON_PRINT_CERTIFICATE")}
               </div>
             ) : null}
-            {businessService.includes("OC") ? (
+            {data?.applicationData?.businessService === "BPA_OC" && data?.applicationData?.status==="APPROVED" ? (
               <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={e => getPermitOccupancyOrderSearch("occupancy-certificate")}>
                 <DownloadPrefixIcon />
                 {t("BPA_OC_CERTIFICATE")}
               </div>
             ) : null}
-            {businessService.includes("BPA") && !(businessService.includes("OC")) && !(business_service.includes("BPAREG")) ? (
+            {data?.applicationData?.businessService === "BPA_LOW" ? (
               <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={r => getPermitOccupancyOrderSearch("buildingpermit-low")}>
+                <DownloadPrefixIcon />
+                {t("BPA_PERMIT_ORDER")}
+              </div>
+            ) : null}
+            {data?.applicationData?.businessService === "BPA" && (data?.applicationData?.businessService !== "BPA_LOW") && (data?.applicationData?.businessService !== "BPA_OC") && data?.applicationData?.status==="PENDING_SANC_FEE_PAYMENT"? (
+              <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={r => getPermitOccupancyOrderSearch("buildingpermit")}>
                 <DownloadPrefixIcon />
                 {t("BPA_PERMIT_ORDER")}
               </div>

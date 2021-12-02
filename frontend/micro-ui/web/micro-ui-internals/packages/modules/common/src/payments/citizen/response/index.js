@@ -266,17 +266,23 @@ export const SuccessfulPayment = (props) => {
           {t("TL_CERTIFICATE")}
         </div>
       ) : null}
-      {business_service.includes("OC") ? (
-              <div className="primary-label-btn d-grid" style={{ marginLeft: "unset", marginTop:"15px" }} onClick={e => getPermitOccupancyOrderSearch("occupancy-certificate")}>
-                <DownloadPrefixIcon />
-                {t("BPA_OC_CERTIFICATE")}
-              </div>
+      {bpaData?.applicationData?.businessService === "BPA_OC" && bpaData?.applicationData?.status==="APPROVED" ? (
+        <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={e => getPermitOccupancyOrderSearch("occupancy-certificate")}>
+          <DownloadPrefixIcon />
+            {t("BPA_OC_CERTIFICATE")}
+          </div>
       ) : null}
-      {business_service.includes("BPA") && !(business_service.includes("OC")) && !(business_service.includes("BPAREG")) ? (
-              <div className="primary-label-btn d-grid" style={{ marginLeft: "unset", marginTop:"15px" }} onClick={r => getPermitOccupancyOrderSearch("buildingpermit-low")}>
-                <DownloadPrefixIcon />
-                {t("BPA_PERMIT_ORDER")}
-              </div>
+      {bpaData?.applicationData?.businessService === "BPA_LOW" ? (
+        <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={r => getPermitOccupancyOrderSearch("buildingpermit-low")}>
+          <DownloadPrefixIcon />
+            {t("BPA_PERMIT_ORDER")}
+          </div>
+      ) : null}
+      {bpaData?.applicationData?.businessService === "BPA" && (bpaData?.applicationData?.businessService !== "BPA_LOW") && (bpaData?.applicationData?.businessService !== "BPA_OC") && bpaData?.applicationData?.status==="PENDING_SANC_FEE_PAYMENT"? (
+        <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={r => getPermitOccupancyOrderSearch("buildingpermit")}>
+          <DownloadPrefixIcon />
+            {t("BPA_PERMIT_ORDER")}
+          </div>
       ) : null}
       </div>
       {!(business_service == "TL") && <SubmitBar onSubmit={printReciept} label={t("COMMON_DOWNLOAD_RECEIPT")} />}

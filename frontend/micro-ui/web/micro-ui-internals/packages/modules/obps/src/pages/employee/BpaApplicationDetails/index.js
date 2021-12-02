@@ -246,16 +246,21 @@ const BpaApplicationDetail = () => {
     });
     
   }
-  else if(data && data?.applicationData?.businessService === "BPA" && data?.applicationData?.riskType === "HIGH" && payments.length>0)
+  else if(data && data?.applicationData?.businessService === "BPA" && payments.length>0)
   {
     dowloadOptions.push({
       label: t("BPA_APP_FEE_RECEIPT"),
       onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[0],consumerCodes: data?.applicationData?.applicationNo}),
     });
-    if(payments.length == 2)dowloadOptions.push({
+    if(payments.length == 2){dowloadOptions.push({
       label: t("BPA_SAN_FEE_RECEIPT"),
       onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
     });
+    dowloadOptions.push({
+      label: t("BPA_PERMIT_ORDER"),
+      onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"buildingpermit"),
+    });}
+
   }
   else
   {
@@ -263,10 +268,14 @@ const BpaApplicationDetail = () => {
       label: t("BPA_APP_FEE_RECEIPT"),
       onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[0],consumerCodes: data?.applicationData?.applicationNo}),
     });
-    if(payments.length == 2)dowloadOptions.push({
+    if(payments.length == 2){dowloadOptions.push({
       label: t("BPA_SAN_FEE_RECEIPT"),
       onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
     });
+    dowloadOptions.push({
+      label: t("BPA_PERMIT_ORDER"),
+      onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"buildingpermit"),
+    });}
   }
 
     
