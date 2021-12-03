@@ -139,10 +139,37 @@ export const SuccessfulPayment = (props) => {
     setPrinting(false);
   };
 
+  const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
+    //example input format : "2018-10-02"
+    try {
+      const parts = dateString.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+      const DateObj = new Date(Date.UTC(parts[1], parts[2] - 1, parts[3]));
+      DateObj.setMinutes(DateObj.getMinutes() + DateObj.getTimezoneOffset());
+      if (dayStartOrEnd === "dayend") {
+        DateObj.setHours(DateObj.getHours() + 24);
+        DateObj.setSeconds(DateObj.getSeconds() - 1);
+      }
+      return DateObj.getTime();
+    } catch (e) {
+      return dateString;
+    }
+  };
+
   const getPermitOccupancyOrderSearch = async(order) => {
-    let requestData = {...bpaData?.applicationData, edcrDetail:[{...bpaData?.edcrDetails}]}
-    let response = await Digit.PaymentService.generatePdf(bpaData?.applicationData?.tenantId, { Bpa: [requestData] }, order);
-    const fileStore = await Digit.PaymentService.printReciept(bpaData?.applicationData?.tenantId, { fileStoreIds: response.filestoreIds[0] });
+    // let requestData = {...bpaData?.applicationData, edcrDetail:[{...bpaData?.edcrDetails}]}
+    // let response = await Digit.PaymentService.generatePdf(bpaData?.applicationData?.tenantId, { Bpa: [requestData] }, order);
+    // const fileStore = await Digit.PaymentService.printReciept(bpaData?.applicationData?.tenantId, { fileStoreIds: response.filestoreIds[0] });
+    // window.open(fileStore[response?.filestoreIds[0]], "_blank");
+
+    let queryObj = { applicationNo: bpaData?.applicationData?.applicationNo };
+    let bpaResponse = await Digit.OBPSService.BPASearch(bpaData?.applicationData?.tenantId, queryObj);
+    const edcrResponse = await Digit.OBPSService.scrutinyDetails(bpaData?.applicationData?.tenantId, { edcrNumber: bpaData?.applicationData?.edcrNumber });
+    let bpaDataDetails = bpaResponse?.BPA?.[0], edcrData = edcrResponse?.edcrDetail?.[0];
+    let currentDate = new Date();
+    bpaDataDetails.additionalDetails.runDate = convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate());
+    let reqData = {...bpaDataDetails, edcrDetail: [{...edcrData}]};
+    let response = await Digit.PaymentService.generatePdf(data?.applicationData?.tenantId, { Bpa: [reqData] }, order);
+    const fileStore = await Digit.PaymentService.printReciept(data?.applicationData?.tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
 
