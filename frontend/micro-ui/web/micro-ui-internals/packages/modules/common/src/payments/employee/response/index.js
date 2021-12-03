@@ -70,8 +70,8 @@ export const SuccessfulPayment = (props) => {
     let currentDate = new Date();
     bpaData.additionalDetails.runDate = convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate());
     let reqData = {...bpaData, edcrDetail: [{...edcrData}]};
-    let response = await Digit.PaymentService.generatePdf(data?.applicationData?.tenantId, { Bpa: [reqData] }, order);
-    const fileStore = await Digit.PaymentService.printReciept(data?.applicationData?.tenantId, { fileStoreIds: response.filestoreIds[0] });
+    let response = await Digit.PaymentService.generatePdf(bpaData?.tenantId, { Bpa: [reqData] }, order);
+    const fileStore = await Digit.PaymentService.printReciept(bpaData?.tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
 
