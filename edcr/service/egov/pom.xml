@@ -97,7 +97,7 @@
         
 
         <!-- Application server provided dependency versions -->
-        <hibernate-version>5.1.10.Final</hibernate-version>
+        <hibernate-version>5.4.24.Final</hibernate-version>
         <hibernate-search-version>5.5.8.Final</hibernate-search-version>
         <hibernate-validator-version>5.3.5.Final</hibernate-validator-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
@@ -111,15 +111,15 @@
         <postgres-version>42.1.4</postgres-version>
 
         <!-- Other application dependency versions -->
-        <struts2-version>2.5.14.1</struts2-version>
+        <struts2-version>2.5.20</struts2-version>
         <struts2-jquery-version>4.0.2</struts2-jquery-version>
         <xstream-version>1.4.10</xstream-version>
         <spring-version>4.3.11.RELEASE</spring-version>
         <spring-session-version>1.3.2.RELEASE</spring-session-version>
         <spring-data-jpa-version>1.10.6.RELEASE</spring-data-jpa-version>
-        <spring-data-jpa-envers-version>1.0.6.RELEASE</spring-data-jpa-envers-version>
+        <spring-data-jpa-envers-version>2.6.0</spring-data-jpa-envers-version>
         <spring-security-version>4.2.3.RELEASE</spring-security-version>
-        <spring-security-oauth2-version>2.2.0.RELEASE</spring-security-oauth2-version>
+        <spring-security-oauth2-version>2.4.2.RELEASE</spring-security-oauth2-version>
         <spring-data-elasticsearch>2.0.6.RELEASE</spring-data-elasticsearch>
         <elastic-search-version>2.4.6</elastic-search-version>
         <apache-tiles-version>3.0.7</apache-tiles-version>
