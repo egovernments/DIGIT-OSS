@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.6 - 2021-12-03
+- Fixed Language switc isue.
+
 ## 1.1.5 - 2021-09-24
 - Added support for punjabi and odiya language.
 
