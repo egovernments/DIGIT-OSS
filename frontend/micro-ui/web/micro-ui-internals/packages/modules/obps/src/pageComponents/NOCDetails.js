@@ -173,22 +173,21 @@ function SelectDocument({
         e && setFile(e.file);
     }
 
-    function getData(e) {
-        let key = selectedDocument.code;
+    function getData(e, key) {
         let data,newArr;
         if(e?.length > 0) {
             data = Object.fromEntries(e);
             newArr = Object.values(data);
-            newArr = formData?.nocDocuments?.nocDocuments.filter((ob) => ob.documentType === selectedDocument.code);
+            newArr = formData?.nocDocuments?.nocDocuments.filter((ob) => ob.documentType === key);
             setnewArray(newArr);
             let newfiles = [];
             e?.map((doc, index) => {
                 newfiles.push({
-                        documentType: selectedDocument?.code,
+                        documentType: key,
                         fileStoreId: doc?.[1]?.fileStoreId?.fileStoreId,
                         documentUid: doc?.[1].fileStoreId?.fileStoreId,
                         fileName: doc?.[0] || "",
-                        id:nocDocuments? nocDocuments.find(x => x.documentType === selectedDocument?.code)?.id:undefined,
+                        id:nocDocuments? nocDocuments.find(x => x.documentType === key)?.id:undefined,
                 })
             })
             const __documents = [
@@ -231,7 +230,8 @@ function SelectDocument({
 
     const uploadedFilesPreFill = useMemo(()=>{
         let selectedUplDocs=[];
-        formData?.nocDocuments?.nocDocuments?.filter((ob) => ob.documentType === selectedDocument.code).forEach(e =>
+        const key = selectedDocument.code.split(".",2).join(".").replaceAll(".", "_")
+        formData?.nocDocuments?.nocDocuments?.filter((ob) => ob.documentType === key).forEach(e =>
             selectedUplDocs.push([e.fileName, {file: {name: e.fileName, type: e.documentType}, fileStoreId: {fileStoreId: e.fileStoreId, tenantId}}])
              )
         return selectedUplDocs;
@@ -250,7 +250,7 @@ function SelectDocument({
            {!(window.location.href.includes("sendbacktocitizen")) && <MultiUploadWrapper
             module="BPA"
             tenantId={tenantId}
-            getFormState={getData}
+            getFormState={e => getData(e,doc?.documentType?.replaceAll(".", "_"))}
             setuploadedstate={uploadedFilesPreFill}
             t={t}
           />}
