@@ -173,7 +173,7 @@ const bills = {
           onEntry: assign((context, event) => {
             let messageText = event.message.input;
             messageText = messageText.toLowerCase();
-            let isValid = ((messageText === 'main menu' || messageText === 'pay other bill') && dialog.validateInputType(event, 'button'));
+            let isValid = ((messageText === dialog.get_message(messages.quickReplyButtonText.mainMenu, context.user.locale) || messageText === dialog.get_message(messages.quickReplyButtonText.payOtherBill, context.user.locale)) && dialog.validateInputType(event, 'button'));
             context.message = {
               isValid: isValid,
               messageContent: messageText
@@ -366,7 +366,7 @@ const bills = {
         openSearch:{
           onEntry: assign((context, event) => {
             (async() => {
-              context.slots.bills.openSearchLink = await billService.getOpenSearchLink(context.service,context.user.name,context.user.mobileNumber);
+              context.slots.bills.openSearchLink = await billService.getOpenSearchLink(context.service,context.user.name,context.user.mobileNumber,context.user.locale);
               let { services, messageBundle } = billService.getSupportedServicesAndMessageBundle();
               let billServiceName = dialog.get_message(messageBundle[context.service],context.user.locale);
               let message = dialog.get_message(messages.openSearch, context.user.locale);
@@ -618,7 +618,7 @@ const bills = {
           onEntry: assign((context, event) => {
             let messageText = event.message.input;
             messageText = messageText.toLowerCase();
-            let isValid = ((messageText === 'main menu' || messageText === 'pay other bill') && dialog.validateInputType(event, 'button'));
+            let isValid = ((messageText === dialog.get_message(messages.quickReplyButtonText.mainMenu, context.user.locale) || messageText === dialog.get_message(messages.quickReplyButtonText.payOtherBill, context.user.locale)) && dialog.validateInputType(event, 'button'));
             //let textValid = (messageText === '1' || messageText === '2');
             context.message = {
               isValid: (isValid || textValid),
@@ -802,7 +802,7 @@ let messages = {
     },
     error:{
       en_IN: 'Option you have selected seems to be invalid  😐\nKindly select the valid option to proceed further.',
-      hi_IN: 'क्चयनित विकल्प अमान्य प्रतीत होता है  😐\nकृपया आगे बढ़ने के लिए वैध विकल्प का चयन करें।'
+      hi_IN: 'चयनित विकल्प अमान्य प्रतीत होता है  😐\nकृपया आगे बढ़ने के लिए वैध विकल्प का चयन करें।'
     }
   },
   paramInput: {
@@ -852,7 +852,7 @@ let messages = {
     },
     error:{
       en_IN: "Option you have selected seems to be invalid  😐\nKindly select the valid option to proceed further.",
-      hi_IN: "क्चयनित विकल्प अमान्य प्रतीत होता है  😐\nकृपया आगे बढ़ने के लिए वैध विकल्प का चयन करें।"
+      hi_IN: "चयनित विकल्प अमान्य प्रतीत होता है  😐\nकृपया आगे बढ़ने के लिए वैध विकल्प का चयन करें।"
     }
   },
   openSearch: {
@@ -872,6 +872,16 @@ let messages = {
   endStatement: {
     en_IN: "👉 To go back to the main menu, type and send *mseva*",
     hi_IN: "👉 मुख्य मेनू पर वापस जाने के लिए *mseva* टाइप करें और भेजें।"
+  },
+  quickReplyButtonText:{
+    mainMenu:{
+      en_IN: 'main menu',
+      hi_IN: 'मुख्य मेनू'
+    },
+    payOtherBill:{
+      en_IN: 'pay other bill',
+      hi_IN: 'अन्य बिल भुगतान'
+    }
   }
 }
 let grammer = {

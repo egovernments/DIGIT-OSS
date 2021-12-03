@@ -597,7 +597,7 @@ const receipts = {
             onEntry: assign((context, event) => {
               let messageText = event.message.input;
               messageText = messageText.toLowerCase();
-              let isValid = ((messageText === 'main menu' || messageText === 'view receipts') && dialog.validateInputType(event, 'button'));
+              let isValid = ((messageText === dialog.get_message(messages.quickReplyButtonText.mainMenu,context.user.locale) || messageText === dialog.get_message(messages.quickReplyButtonText.viewReceipts,context.user.locale)) && dialog.validateInputType(event, 'button'));
               context.message = {
                 isValid: isValid,
                 messageContent: messageText
@@ -1156,6 +1156,17 @@ let messages = {
   wait:{
     en_IN: "Please wait while your receipt is being generated.",
     hi_IN: "कृपया प्रतीक्षा करें जब तक आपकी रसीद तैयार की जा रही है।"
+  },
+
+  quickReplyButtonText:{
+    mainMenu:{
+      en_IN: 'main menu',
+      hi_IN: 'मुख्य मेनू'
+    },
+    viewReceipts:{
+      en_IN: 'view receipts',
+      hi_IN: 'रसीद देखें'
+    }
   }
   
 };
