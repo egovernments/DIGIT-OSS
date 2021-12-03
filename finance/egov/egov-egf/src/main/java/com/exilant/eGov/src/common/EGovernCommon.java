@@ -347,6 +347,7 @@ public class EGovernCommon extends AbstractTask {
            } else
                isUnique = true;
        } finally {
+    	   LOGGER.debug("finally block of uniqueVN");
        }
        return isUnique;
    }

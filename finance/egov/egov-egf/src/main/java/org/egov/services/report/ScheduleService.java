@@ -282,6 +282,7 @@ public abstract class ScheduleService extends PersistenceService {
 			LOGGER.info("Getting ledger transactions details where >>>> EndDate=" + toDate + "from Date=" + fromDate);
 		final String voucherStatusToExclude = getAppConfigValueFor("EGF", "statusexcludeReport");
 		if (!majorcode.equals("")) {
+			LOGGER.info("Major code is: "+majorcode);
 		}
 
 		final Query query = getSession().createSQLQuery(new StringBuilder(

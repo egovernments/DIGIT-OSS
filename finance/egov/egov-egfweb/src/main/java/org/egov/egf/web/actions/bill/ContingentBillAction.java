@@ -274,7 +274,7 @@ public class ContingentBillAction extends BaseBillAction {
                 date = df.parse(cutOffDateconfigValue.get(0).getValue());
                 cutOffDate = formatter.format(date);
             } catch (ParseException e) {
-
+            	LOGGER.error("Parse exception");
             }
         }
         reset();
@@ -404,7 +404,7 @@ public class ContingentBillAction extends BaseBillAction {
                     date = sdf.parse(cutOffDate);
                     cutOffDate1 = formatter1.format(date);
                 } catch (ParseException e) {
-
+                   LOGGER.error("Parse exception");
                 }
             }
             if (cutOffDate1 != null && voucherDate.compareTo(cutOffDate1) <= 0

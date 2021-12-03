@@ -224,7 +224,7 @@ public class JournalBookReportAction extends BaseFormAction {
             startDate = sdf.parse(journalBookReport.getStartDate());
             endDate = sdf.parse(journalBookReport.getEndDate());
         } catch (ParseException e) {
-
+            LOGGER.error("Parse exception");
         }
         StringBuilder subQuery = new StringBuilder();
         if (journalBookReport.getFund_id() != null && !journalBookReport.getFund_id().equals("")) {

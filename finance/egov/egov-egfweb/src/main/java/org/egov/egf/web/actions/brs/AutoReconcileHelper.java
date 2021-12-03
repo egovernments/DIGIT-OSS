@@ -1097,7 +1097,7 @@ public class AutoReconcileHelper{
                         updated = updateQuery2.executeUpdate();
                     }
                     if (updated == 0) {
-
+                    	LOGGER.info("No instruments updated.");
                     }
                 }
                 // if updated is 0 means nothing got updated means could not find matching row in instrumentheader

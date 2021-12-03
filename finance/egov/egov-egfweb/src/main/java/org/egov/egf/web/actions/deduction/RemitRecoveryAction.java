@@ -347,7 +347,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
                     date = df.parse(cutOffDateconfigValue.get(0).getValue());
                     setCutOffDate(formatter.format(date));
                 } catch (final ParseException e) {
-
+                	LOGGER.error("Parse exception");
                 }
             voucherHeader.setType(FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
             if (voucherHeader.getVouchermis().getDepartmentcode() == null) {
