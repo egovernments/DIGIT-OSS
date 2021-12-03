@@ -971,11 +971,11 @@ let messages = {
     imageUpload: {
       question: {
         en_IN: 'If possible, attach a photo of your grievance.\n\nTo continue without photo, type and send *1*',
-        hi_IN: 'यदि संभव हो तो अपनी शिकायत का फोटो संलग्न करें\n\nफोटो के बिना जारी रखने के लिए, *1* टाइप करें और भेजें'
+        hi_IN: 'यदि संभव हो तो अपनी शिकायत का फोटो संलग्न करें।\n\nफोटो के बिना जारी रखने के लिए, *1* टाइप करें और भेजें'
       },
       error:{
         en_IN : 'Sorry, I didn\'t understand',
-        hi_IN: 'क्षमा करें, मुझे समझ नहीं आया ।',
+        hi_IN: 'क्षमा करें, मुझे समझ नहीं आया।',
       }
     },
     persistComplaint: {
