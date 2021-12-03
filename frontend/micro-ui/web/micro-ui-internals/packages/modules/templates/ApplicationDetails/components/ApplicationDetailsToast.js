@@ -32,8 +32,10 @@ function ApplicationDetailsToast({ t, showToast, closeToast, businessService }) 
     return <React.Fragment>{showToast && <Toast error={showToast.key === "error"} label={label} onClose={closeToast} />}</React.Fragment>;
   } else if (businessService?.includes("BPA") || businessService?.includes("BPA_LOW") || businessService?.includes("BPA_OC")) {
     const getMessage = (messages = []) => {
-      if(messages?.length == 2) businessService?.includes("BPA_OC") ? t(messages[1]) : t(messages [0]);
-      else return t(messages[0]);
+      let returnValue = messages[0];
+      if(messages?.length == 2) returnValue = businessService?.includes("BPA_OC") ? t(messages[1]) : t(messages [0]);
+      else returnValue = t(messages[0]);
+      return returnValue;
     }
     let label = "";
     switch (showToast?.action?.action) {
