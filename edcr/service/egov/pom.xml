@@ -97,7 +97,7 @@
         
 
         <!-- Application server provided dependency versions -->
-        <hibernate-version>5.1.10.Final</hibernate-version>
+        <hibernate-version>5.4.24.Final</hibernate-version>
         <hibernate-search-version>5.5.8.Final</hibernate-search-version>
         <hibernate-validator-version>5.3.5.Final</hibernate-validator-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
@@ -119,7 +119,7 @@
         <spring-data-jpa-version>1.10.6.RELEASE</spring-data-jpa-version>
         <spring-data-jpa-envers-version>1.0.6.RELEASE</spring-data-jpa-envers-version>
         <spring-security-version>4.2.3.RELEASE</spring-security-version>
-        <spring-security-oauth2-version>2.2.0.RELEASE</spring-security-oauth2-version>
+        <spring-security-oauth2-version>2.4.2.RELEASE</spring-security-oauth2-version>
         <spring-data-elasticsearch>2.0.6.RELEASE</spring-data-elasticsearch>
         <elastic-search-version>2.4.6</elastic-search-version>
         <apache-tiles-version>3.0.7</apache-tiles-version>
