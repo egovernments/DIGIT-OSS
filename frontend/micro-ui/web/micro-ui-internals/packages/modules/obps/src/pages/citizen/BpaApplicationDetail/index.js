@@ -190,7 +190,7 @@ const BpaApplicationDetail = () => {
         onError: (error, variables) => {
           // console.log("find error here",error)
           setShowModal(false);
-          setShowToast({ key: "error", action: error });
+          setShowToast({ key: "error", action: error?.response?.data?.Errors[0]?.message ? error?.response?.data?.Errors[0]?.message : error });
           setTimeout(closeToast, 5000);
         },
         onSuccess: (data, variables) => {
@@ -326,6 +326,7 @@ const BpaApplicationDetail = () => {
   if (workflowDetails?.data?.nextActions?.length > 0) {
     workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "INITIATE");
     workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "ADHOC");
+    workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "SKIP_PAYMENT");
   };
 
   data.applicationDetails = data?.applicationDetails?.length > 0 && data?.applicationDetails?.filter(bpaData => Object.keys(bpaData).length !== 0);
