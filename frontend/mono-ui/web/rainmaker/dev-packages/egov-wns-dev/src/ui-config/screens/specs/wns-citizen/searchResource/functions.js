@@ -74,6 +74,7 @@ export const searchApiCall = async (state, dispatch) => {
         payloadbillingPeriod = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
         
       } catch (err) { console.log(err) }
+      if(queryObject.length > 0) queryObject.push({key: "searchType", value: "CONNECTION" })
       let getSearchResult = getSearchResults(queryObject)
       let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       let finalArray = [];
