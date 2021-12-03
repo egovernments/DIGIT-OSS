@@ -42,8 +42,19 @@ export const SuccessfulPayment = (props) => {
   };
 
   const getPermitOccupancyOrderSearch = async(order) => {
-    let requestData = {...data?.applicationData, edcrDetail:[{...data?.edcrDetails}]}
-    let response = await Digit.PaymentService.generatePdf(data?.applicationData?.tenantId, { Bpa: [requestData] }, order);
+    // let requestData = {...data?.applicationData, edcrDetail:[{...data?.edcrDetails}]}
+    // let response = await Digit.PaymentService.generatePdf(data?.applicationData?.tenantId, { Bpa: [requestData] }, order);
+    // const fileStore = await Digit.PaymentService.printReciept(data?.applicationData?.tenantId, { fileStoreIds: response.filestoreIds[0] });
+    // window.open(fileStore[response?.filestoreIds[0]], "_blank");
+
+    let queryObj = { applicationNo: data?.applicationData?.applicationNo };
+    let bpaResponse = await Digit.OBPSService.BPASearch(data?.applicationData?.tenantId, queryObj);
+    const edcrResponse = await Digit.OBPSService.scrutinyDetails(data?.applicationData?.tenantId, { edcrNumber: data?.applicationData?.edcrNumber });
+    let bpaData = bpaResponse?.BPA?.[0], edcrData = edcrResponse?.edcrDetail?.[0];
+    let currentDate = new Date();
+    bpaData.additionalDetails.runDate = convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate());
+    let reqData = {...bpaData, edcrDetail: [{...edcrData}]};
+    let response = await Digit.PaymentService.generatePdf(data?.applicationData?.tenantId, { Bpa: [reqData] }, order);
     const fileStore = await Digit.PaymentService.printReciept(data?.applicationData?.tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
