@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./scripts/run.sh obps pgr tl
+./scripts/run.sh tl

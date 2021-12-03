@@ -122,7 +122,6 @@ function SelectDocument({
 
     function getData(e) {
         let key = selectedDocument.code;
-        debugger
         let data,newArr;
         if (e?.length > 0) {
             data = Object.fromEntries(e);
