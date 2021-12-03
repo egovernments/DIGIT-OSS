@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContextException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -121,7 +122,11 @@ public class EgovUserApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(EgovUserApplication.class, args);
+        try {
+            SpringApplication.run(EgovUserApplication.class, args);
+        }catch(ApplicationContextException e){
+            throw new CustomException("EG_USER_SERVICE_FAILED_TO_START", "User service failed to start. \n Possible cause might be missing encryption master data in /egov-mdms-data/tree/DEV/data/pb/DataSecurity. \n Ensure that encryption master data is added in mdms then restart mdms and user service. ");
+        }
     }
 
 }
