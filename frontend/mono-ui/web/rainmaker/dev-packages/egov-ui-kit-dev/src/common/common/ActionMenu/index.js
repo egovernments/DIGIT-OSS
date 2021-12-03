@@ -19,7 +19,18 @@ class ActionMenu extends Component {
           }
         })
       : [];
-      roleCodes=process.env.REACT_APP_NAME === "Citizen" ?["CITIZEN"] :roleCodes ;
+
+      const bpaRolesArray = ["BPA_ARCHITECT", "BPA_ENGINEER", "BPA_BUILDER", "BPA_STRUCTURALENGINEER", "BPA_TOWNPLANNER", "BPA_SUPERVISOR"];
+      
+      let citizenRoles = ["CITIZEN"];
+      if (process.env.REACT_APP_NAME === "Citizen") {
+        let rolesArray = ["CITIZEN"];
+        roles.map(data => { if(bpaRolesArray.includes(data.code)) return rolesArray.push(data.code); })
+        if (rolesArray.length > 1) citizenRoles = rolesArray;
+        else citizenRoles
+      }
+      roleCodes=process.env.REACT_APP_NAME === "Citizen" ? citizenRoles :roleCodes ;
+      
     await fetchActionMenu(
       {
         roleCodes: roleCodes,
