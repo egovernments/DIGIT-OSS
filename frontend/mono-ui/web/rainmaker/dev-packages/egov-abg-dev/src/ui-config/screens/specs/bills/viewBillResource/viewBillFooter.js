@@ -7,6 +7,7 @@ import { PAYMENTSEARCH } from "egov-ui-kit/utils/endPoints";
 import { set } from "lodash";
 import get from "lodash/get";
 import { ifUserRoleExists, validateFields } from "../../utils";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 
 
 export const getRedirectionURL = () => {
@@ -160,6 +161,7 @@ const cancelReceipt = async (state, dispatch) => {
       } else {
         additionalDetails.reason = UpdateBillCriteriaObj.additionalDetails.reason;
       }
+      additionalDetails.reasonMessage = getLocaleLabels(`BC_REASON_${UpdateBillCriteriaObj.additionalDetails.reason}`,`BC_REASON_${UpdateBillCriteriaObj.additionalDetails.reason}`);
       set(UpdateBillCriteria, "additionalDetails", additionalDetails);
       let payload = await httpRequest(
         "post",
