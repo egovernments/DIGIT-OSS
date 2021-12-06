@@ -9,7 +9,7 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { set } from "lodash";
 import get from "lodash/get";
 import { httpRequest } from "../../../../ui-utils";
-import { generateMultipleBills } from "../utils/receiptPdf";
+import { generateMultipleBill, generateMultipleBills } from "../utils/receiptPdf";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -543,7 +543,10 @@ export const getMergeAndDownloadList = (state, dispatch, dataLength = 0) => {
             "groupBills",
             "components.div.children.mergeDownloadButton.children.mergeButton",
             "props.data.menu",
-            []
+            [ {
+              label: { labelName: "SEWERAGE CONNECTION", labelKey: "ABG_GROUP_BILLS_MERGE_AND_DOWNLOAD_BUTTON", },
+              link: () => { generateMultipleBill(state, dispatch); }
+            },]
           )
         );
     }

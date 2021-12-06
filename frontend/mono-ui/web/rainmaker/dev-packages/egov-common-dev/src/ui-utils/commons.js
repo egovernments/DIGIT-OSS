@@ -891,7 +891,7 @@ export const downloadMultipleBill = async (bills = [], configKey) => {
       { Accept: "application/pdf" },
       { responseType: "arraybuffer" }
     );
-    downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], "download");
+    downloadMultipleFileFromFilestoreIds(pfResponse.filestoreIds,"download",commonConfig.tenantId)
   } catch (error) {
     console.log(error);
   }
