@@ -20,7 +20,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
   const handleChange = (option) => {
     setSearchParams(old=>({...old,...option}));
   };
-  const clearAll = () => {setSearchParams({applicationStatus:[]});
+  const clearAll = () => {setSearchParams({applicationType: [], applicationStatus:[]});
   onFilterChange({});
 };
 
