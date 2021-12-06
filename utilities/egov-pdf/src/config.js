@@ -13,7 +13,7 @@ module.exports = {
   KAFKA_BROKER_HOST: process.env.KAFKA_BROKER_HOST || "kafka-v2.kafka-cluster:9092",
   KAFKA_RECEIVE_CREATE_JOB_TOPIC: process.env.KAFKA_RECEIVE_CREATE_JOB_TOPIC || "PDF_GEN_RECEIVE",
   KAFKA_BULK_PDF_TOPIC: process.env.KAFKA_BULK_PDF_TOPIC || "BULK_PDF_GEN",
-  PDF_BATCH_SIZE: process.env.PDF_BATCH_SIZE || 20,
+  PDF_BATCH_SIZE: process.env.PDF_BATCH_SIZE || 40,
   DB_USER: process.env.DB_USER || "postgres",
   DB_PASSWORD: process.env.DB_PASSWORD || "postgres",
   DB_HOST: process.env.DB_HOST || "localhost",

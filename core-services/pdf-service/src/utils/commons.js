@@ -66,7 +66,10 @@ export const findLocalisation = async (
   };
 
   let responseBody = await axios.post(url,request,headers)
-  .catch((error) => {throw error.response.data });
+  .catch((error) => {
+    console.log("\nError-->  "+JSON.stringify(error)+"\n")
+    throw error.response.data
+   });
   
   return responseBody.data;
 }
