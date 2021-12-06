@@ -9,6 +9,7 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
   const [basicData, setBasicData] = useState(null);
   const [basicDataError, setBasicDataError] = useState(false);
   const [scrutinyNumber, setScrutinyNumber] = useState(formData?.data?.scrutinyNumber);
+  const isMobile = window.Digit.Utils.browser.isMobile();
   const [approvalNo, setSpprovalNo] = useState();
   const [isDisabled, setIsDisabled] = useState(formData?.data?.scrutinyNumber ? true : false);
   const { t } = useTranslation();
@@ -150,7 +151,7 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
   return (
     <div>
       <Timeline currentStep={1} flow="OCBPA" />
-      <div className="obps-search">
+      <div className={isMobile?"obps-search":""} style={!isMobile?{maxWidth:"960px",minWidth:"640px",marginRight:"auto"}:{}}>
         <Label>{t(`OBPS_SEARCH_EDCR_NUMBER`)}</Label>
         <TextInput className="searchInput"
           onKeyPress={handleKeyPress}

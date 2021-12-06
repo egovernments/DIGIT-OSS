@@ -118,7 +118,7 @@ const ApplicationDetails = () => {
               <div>
                 <CardSectionHeader>{t(`BPAREG_HEADER_${stringReplaceAll(document?.documentType?.toUpperCase(), ".", "_")}`)}</CardSectionHeader>
                 {document?.info ? <div style={{fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px"}}>{`${t(document?.info)}`}</div> : null}
-                <a target="_" href={documents[document.fileStoreId]?.split(",")[0]}>
+                <a target="_blank" href={documents[document.fileStoreId]?.split(",")[0]}>
                   <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />
                 </a>
                 {decodeURIComponent( documents[document.fileStoreId]?.split(",")[0]?.split("?")[0]?.split("/")?.pop()?.slice(13))}
