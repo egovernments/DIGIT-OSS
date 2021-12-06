@@ -89,6 +89,10 @@ import useMCollectSearch from "./mcollect/useMCollectSearch";
 import useMcollectSearchBill from "./mcollect/useMcollectSearchBill";
 import usemcollectTenants from "./mcollect/useTenants";
 import useMCollectCount from "./mcollect/useMCollectCount";
+import useMCollectCategory from "./mcollect/useMcollectCategory";
+import useMCollectCategoryTypes from './mcollect/useMcollectCategoryTypes';
+import useMCollectTaxHeads from "./mcollect/useMcollectTaxHeads";
+import useMcollectFormConfig from "./mcollect/useMcollectFormConfig";
 
 import useTenantsTL from "./tl/useTenants";
 import useTradeLicenseMDMS from "./tl/useTradeLicenseMDMS";
@@ -238,6 +242,10 @@ const mcollect = {
   useMcollectSearchBill,
   usemcollectTenants,
   useMCollectCount,
+  useMCollectCategory,
+  useMCollectCategoryTypes,
+  useMCollectTaxHeads,
+  useMcollectFormConfig,
 };
 
 const hrms = {
