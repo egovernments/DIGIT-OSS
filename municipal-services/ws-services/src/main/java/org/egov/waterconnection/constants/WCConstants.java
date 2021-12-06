@@ -248,4 +248,19 @@ public class WCConstants {
 
 	public static final String PENDING_APPROVAL_FOR_CONNECTION_CODE ="PENDING_APPROVAL_FOR_CONNECTION";
 
+	//
+	public static final String CHANNEL_NAME_SMS = "SMS";
+
+	public static final String CHANNEL_NAME_EVENT = "EVENT";
+
+	public static final String CHANNEL_NAME_EMAIL = "EMAIL";
+
+	public static final String MODULECONSTANT = "module";
+
+	public static final String ACTION = "action";
+
+	public static final String CHANNEL_LIST = "channelList";
+
+	public static final String CHANNEL = "Channel";
+
 }

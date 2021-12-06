@@ -249,6 +249,19 @@ public class WSCalculationConstant {
 	
 	public static final String WS_TIME_ADHOC_REBATE = "WS_TIME_ADHOC_REBATE";
 
+	//
+	public static final String CHANNEL_NAME_SMS = "SMS";
 
+	public static final String CHANNEL_NAME_EVENT = "EVENT";
+
+	public static final String CHANNEL_NAME_EMAIL = "EMAIL";
+
+	public static final String MODULECONSTANT = "module";
+
+	public static final String ACTION = "action";
+
+	public static final String CHANNEL_LIST = "channelList";
+
+	public static final String CHANNEL = "Channel";
 	
 }

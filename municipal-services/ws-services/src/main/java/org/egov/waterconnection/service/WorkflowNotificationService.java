@@ -41,6 +41,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 
+import static org.egov.waterconnection.constants.WCConstants.*;
+
 @Service
 @Slf4j
 public class WorkflowNotificationService {
@@ -93,24 +95,28 @@ public class WorkflowNotificationService {
 	public void process(WaterConnectionRequest request, String topic) {
 		try {
 			String applicationStatus = request.getWaterConnection().getApplicationStatus();
-			
+			List<String> configuredChannelNames =  notificationUtil.fetchChannelList(request.getRequestInfo(), request.getWaterConnection().getTenantId(), WATER_SERVICE_BUSINESS_ID, request.getWaterConnection().getProcessInstance().getAction());
+
 			if (!WCConstants.NOTIFICATION_ENABLE_FOR_STATUS.contains(request.getWaterConnection().getProcessInstance().getAction()+"_"+applicationStatus)) {
 				log.info("Notification Disabled For State :" + applicationStatus);
 				return;
 			}
 			Property property = validateProperty.getOrValidateProperty(request);
-			if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
+
+			if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)){
+				if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
 			      EventRequest eventRequest = getEventRequest(request, topic, property, applicationStatus);
 					if (eventRequest != null) {
 						notificationUtil.sendEventNotification(eventRequest);
 					}
-			}
-			if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
+			}}
+			if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
+				if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
 					List<SMSRequest> smsRequests = getSmsRequest(request, topic, property, applicationStatus);
 					if (!CollectionUtils.isEmpty(smsRequests)) {
 						notificationUtil.sendSMS(smsRequests);
 					}
-			}
+			}}
 
 		} catch (Exception ex) {
 			log.error("Error occured while processing the record from topic : " + topic, ex);
@@ -139,19 +145,48 @@ public class WorkflowNotificationService {
 			log.info("No message Found For Topic : " + topic);
 			return null;
 		}
+
 		Map<String, String> mobileNumbersAndNames = new HashMap<>();
-		property.getOwners().forEach(owner -> {
-			if (owner.getMobileNumber() != null)
-				mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
-		});
-		//send the notification to the connection holders
-		if (!CollectionUtils.isEmpty(request.getWaterConnection().getConnectionHolders())) {
-			request.getWaterConnection().getConnectionHolders().forEach(holder -> {
-				if (!StringUtils.isEmpty(holder.getMobileNumber())) {
-					mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
-				}
+		if(reqType==0 || reqType==1)
+		{
+			//Send the notification to all owners
+			property.getOwners().forEach(owner -> {
+				if (owner.getMobileNumber() != null)
+					mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
 			});
+
+			//send the notification to the connection holders
+			if (!CollectionUtils.isEmpty(request.getWaterConnection().getConnectionHolders())) {
+				request.getWaterConnection().getConnectionHolders().forEach(holder -> {
+					if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+						mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+					}
+				});
+			}
+			//Send the notification to applicant
+			if(!StringUtils.isEmpty(request.getRequestInfo().getUserInfo().getMobileNumber()))
+			{
+				mobileNumbersAndNames.put(request.getRequestInfo().getUserInfo().getMobileNumber(), request.getRequestInfo().getUserInfo().getName());
+			}
 		}
+		if(reqType==2) {
+			//Send the notification to primary owner
+			property.getOwners().forEach(owner -> {
+				if (owner.getMobileNumber() != null)
+					if (owner.getIsPrimaryOwner() != null && owner.getIsPrimaryOwner())
+						mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
+			});
+
+			//send the notification to the connection holders
+			if (!CollectionUtils.isEmpty(request.getWaterConnection().getConnectionHolders())) {
+				request.getWaterConnection().getConnectionHolders().forEach(holder -> {
+					if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+						mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+					}
+				});
+			}
+		}
+
 		Map<String, String> mobileNumberAndMessage = getMessageForMobileNumber(mobileNumbersAndNames, request,
 				message, property);
 		if (message.contains("{receipt download link}"))
@@ -280,18 +315,48 @@ public class WorkflowNotificationService {
 			return Collections.emptyList();
 		}
 		Map<String, String> mobileNumbersAndNames = new HashMap<>();
-		property.getOwners().forEach(owner -> {
-			if (owner.getMobileNumber() != null)
-				mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
-		});
-		//send the notification to the connection holders
-		if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
-			waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
-				if (!StringUtils.isEmpty(holder.getMobileNumber())) {
-					mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
-				}
+
+		if(reqType==0 || reqType==1)
+		{
+			//Send the notification to all owners
+			property.getOwners().forEach(owner -> {
+				if (owner.getMobileNumber() != null)
+					mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
 			});
+
+			//send the notification to the connection holders
+			if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
+				waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
+					if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+						mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+					}
+				});
+			}
+			//Send the notification to applicant
+			if(!StringUtils.isEmpty(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
+			{
+				mobileNumbersAndNames.put(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), waterConnectionRequest.getRequestInfo().getUserInfo().getName());
+			}
 		}
+		if(reqType==2)
+		{
+			//Send the notification to primary owner
+			property.getOwners().forEach(owner -> {
+				if (owner.getMobileNumber() != null)
+					if(owner.getIsPrimaryOwner()!=null && owner.getIsPrimaryOwner())
+						mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
+			});
+
+			//send the notification to the connection holders
+			if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
+				waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
+					if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+						mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+					}
+				});
+			}
+		}
+
 		Map<String, String> mobileNumberAndMessage = getMessageForMobileNumber(mobileNumbersAndNames,
 				waterConnectionRequest, message, property);
 		if (message.contains("{receipt download link}"))

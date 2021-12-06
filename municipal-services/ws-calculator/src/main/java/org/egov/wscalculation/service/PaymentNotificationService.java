@@ -43,6 +43,9 @@ import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static org.egov.wscalculation.constants.WSCalculationConstant.CHANNEL_NAME_EVENT;
+import static org.egov.wscalculation.constants.WSCalculationConstant.CHANNEL_NAME_SMS;
+
 @Component
 @Slf4j
 public class PaymentNotificationService {
@@ -94,7 +97,12 @@ public class PaymentNotificationService {
 			WaterConnectionRequest waterConnectionRequest = WaterConnectionRequest.builder()
 					.waterConnection(waterConnection).requestInfo(requestInfo).build();
 			Property property = wSCalculationUtil.getProperty(waterConnectionRequest);
-			if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
+
+			List<String> configuredChannelNames =  notificationUtil.fetchChannelList(waterConnectionRequest.getRequestInfo(), waterConnectionRequest.getWaterConnection().getTenantId(), "WS", waterConnectionRequest.getWaterConnection().getProcessInstance().getAction());
+
+			if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)){
+
+				if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
 				if (mappedRecord.get(serviceName).equalsIgnoreCase(WSCalculationConstant.SERVICE_FIELD_VALUE_WS)) {
 					if (waterConnection == null) {
 						throw new CustomException("WATER_CONNECTION_NOT_FOUND",
@@ -108,17 +116,21 @@ public class PaymentNotificationService {
 					}
 				}
 			}
-			if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
-				if (mappedRecord.get(serviceName).equalsIgnoreCase(WSCalculationConstant.SERVICE_FIELD_VALUE_WS)) {
-					if (waterConnection == null) {
-						throw new CustomException("WATER_CONNECTION_NOT_FOUND",
-								"Water Connection are not present for " + mappedRecord.get(consumerCode)
-										+ " connection no");
-					}
-					List<SMSRequest> smsRequests = getSmsRequest(mappedRecord, waterConnectionRequest, topic, property);
-					if (!CollectionUtils.isEmpty(smsRequests)) {
-						log.info("SMS Notification :: -> " + mapper.writeValueAsString(smsRequests));
-						notificationUtil.sendSMS(smsRequests);
+			}
+
+			if(configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
+				if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
+					if (mappedRecord.get(serviceName).equalsIgnoreCase(WSCalculationConstant.SERVICE_FIELD_VALUE_WS)) {
+						if (waterConnection == null) {
+							throw new CustomException("WATER_CONNECTION_NOT_FOUND",
+									"Water Connection are not present for " + mappedRecord.get(consumerCode)
+											+ " connection no");
+						}
+						List<SMSRequest> smsRequests = getSmsRequest(mappedRecord, waterConnectionRequest, topic, property);
+						if (!CollectionUtils.isEmpty(smsRequests)) {
+							log.info("SMS Notification :: -> " + mapper.writeValueAsString(smsRequests));
+							notificationUtil.sendSMS(smsRequests);
+						}
 					}
 				}
 			}
@@ -155,7 +167,7 @@ public class PaymentNotificationService {
 				if (!StringUtils.isEmpty(holder.getMobileNumber())) {
 					mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
 				}
-			});
+		});
 		}
 		Map<String, String> mobileNumberAndMessage = getMessageForMobileNumber(mobileNumbersAndNames, mappedRecord,
 				message);
