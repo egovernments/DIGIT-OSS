@@ -66,13 +66,21 @@ const SubOccupancyTable = ({ edcrDetails, applicationData }) => {
     return floors;
   }
 
+  const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
+    if (searcher == "") return str;
+    while (str.includes(searcher)) {
+      str = str.replace(searcher, replaceWith);
+    }
+    return str;
+  };
+
   function getSubOccupancyValues(index) {
     let values = applicationData?.landInfo?.unit;
     let returnValue = "";
     if (values?.length > 0) {
       let splitArray = values[index]?.usageCategory?.split(',');
       if (splitArray?.length) {
-        const returnValueArray = splitArray.map(data => data ? `${t(`BPA_SUBOCCUPANCYTYPE_${data}`)}` : "NA");
+        const returnValueArray = splitArray.map(data => data ? `${t(`BPA_SUBOCCUPANCYTYPE_${stringReplaceAll(data?.toUpperCase(), "-", "_")}`)}` : "NA");
         returnValue = returnValueArray.join(',')
       }
     }

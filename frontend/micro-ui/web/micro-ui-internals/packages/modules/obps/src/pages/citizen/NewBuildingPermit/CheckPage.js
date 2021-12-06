@@ -7,7 +7,7 @@ import {
   import { useHistory, useRouteMatch } from "react-router-dom";
   import Timeline from "../../../components/Timeline";
   import OBPSDocument from "../../../pageComponents/OBPSDocuments";
-  import { convertEpochToDateDMY } from "../../../utils";
+  import { convertEpochToDateDMY, stringReplaceAll } from "../../../utils";
 
   const CheckPage = ({ onSubmit, value }) => {
     const { t } = useTranslation();
@@ -130,7 +130,7 @@ import {
       let returnValueArray = [];
       subOccupancy && subOccupancy[`Block_${index+1}`] && subOccupancy[`Block_${index+1}`].map((ob) => {
         // subOccupancyString += `${t(ob.i18nKey)}, `;
-        returnValueArray.push(`${t(ob.i18nKey)}`);
+        returnValueArray.push(`${t(stringReplaceAll(ob?.i18nKey?.toUpperCase(), "-", "_"))}`);
       })
       return returnValueArray?.length ? returnValueArray.join(',') : "NA"
       // return subOccupancyString;

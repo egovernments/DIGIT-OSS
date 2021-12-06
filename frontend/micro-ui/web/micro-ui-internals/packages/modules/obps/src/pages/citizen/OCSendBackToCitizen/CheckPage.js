@@ -19,7 +19,7 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import Timeline from "../../../components/Timeline";
 import OBPSDocument from "../../../pageComponents/OBPSDocuments";
 import ActionModal from "../BpaApplicationDetail/Modal";
-import { convertToBPAObject } from "../../../utils";
+import { convertToBPAObject, stringReplaceAll } from "../../../utils";
 import cloneDeep from "lodash/cloneDeep";
 import { useQueryClient } from "react-query";
 
@@ -190,7 +190,7 @@ const CheckPage = ({ onSubmit, value }) => {
   function getBlockSubOccupancy(index) {
     let subOccupancyString = "";
     subOccupancy[`Block_${index + 1}`] && subOccupancy[`Block_${index + 1}`].map((ob) => {
-      subOccupancyString += `${t(ob.i18nKey)}, `;
+      subOccupancyString += `${t(stringReplaceAll(ob?.i18nKey?.toUpperCase(), "-", "_"))}, `;
     })
     return subOccupancyString;
   }

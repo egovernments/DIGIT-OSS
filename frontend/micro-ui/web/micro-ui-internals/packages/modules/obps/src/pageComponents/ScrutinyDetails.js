@@ -15,6 +15,7 @@ import { render } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
 import Timeline from "../components/Timeline";
+import { stringReplaceAll } from "../utils";
 
 const ScrutinyDetails = ({ onSelect, userType, formData,config }) => {
   const { t } = useTranslation();
@@ -54,7 +55,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData,config }) => {
   function getsuboptions(){
     let suboccoption = [];
    data &&  data?.planDetail?.mdmsMasterData?.SubOccupancyType.map((ob) => {
-        suboccoption.push({code:ob.code,name:ob.name,i18nKey:`BPA_SUBOCCUPANCYTYPE_${ob.code.replaceAll("-","_")}`});
+        suboccoption.push({code:ob.code,name:ob.name,i18nKey:`BPA_SUBOCCUPANCYTYPE_${stringReplaceAll(ob?.code?.toUpperCase(), "-", "_")}`});
     });
     return suboccoption;
   }
@@ -210,7 +211,7 @@ const clearall = (num) => {
     if (values?.length > 0) {
       let splitArray = values[index]?.usageCategory?.split(',');
       if (splitArray?.length) {
-        const returnValueArray = splitArray.map(data => data ? `${t(`BPA_SUBOCCUPANCYTYPE_${data}`)}` : "NA");
+        const returnValueArray = splitArray.map(data => data ? `${t(`BPA_SUBOCCUPANCYTYPE_${stringReplaceAll(data?.toUpperCase(), "-", "_")}`)}` : "NA");
         returnValue = returnValueArray.join(',')
       }
     }

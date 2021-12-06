@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import Timeline from "../../../components/Timeline";
 import OBPSDocument from "../../../pageComponents/OBPSDocuments";
-import { convertEpochToDateDMY } from "../../../utils";
+import { convertEpochToDateDMY, stringReplaceAll } from "../../../utils";
 
 const CheckPage = ({ onSubmit, value }) => {
   const { t } = useTranslation();
@@ -142,7 +142,7 @@ const CheckPage = ({ onSubmit, value }) => {
     if(values?.length > 0) {
       let splitArray = values[index]?.usageCategory?.split(',');
       if(splitArray?.length) {
-        const returnValueArray = splitArray.map(data => data ? `${t(`BPA_SUBOCCUPANCYTYPE_${data}`)}` : "NA");
+        const returnValueArray = splitArray.map(data => data ? `${t(`BPA_SUBOCCUPANCYTYPE_${stringReplaceAll(data?.toUpperCase(), "-", "_")}`)}` : "NA");
         returnValue = returnValueArray.join(',')
       }
     }
