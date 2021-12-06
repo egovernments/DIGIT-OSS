@@ -57,21 +57,26 @@ public class EditNotificationService {
 
 	public void sendEditNotification(WaterConnectionRequest request) {
 		try {
-			
+			String applicationStatus = request.getWaterConnection().getApplicationStatus();
+			List<String> configuredChannelNames =  notificationUtil.fetchChannelList(request.getRequestInfo(), request.getWaterConnection().getTenantId(), WATER_SERVICE_BUSINESS_ID, request.getWaterConnection().getProcessInstance().getAction());
+
 			Property property = validateProperty.getOrValidateProperty(request);
-			
-			if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
-				EventRequest eventRequest = getEventRequest(request, property);
-				if (eventRequest != null) {
-					notificationUtil.sendEventNotification(eventRequest);
+
+			if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
+				if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
+					EventRequest eventRequest = getEventRequest(request, property);
+					if (eventRequest != null) {
+						notificationUtil.sendEventNotification(eventRequest);
+					}
 				}
 			}
-			if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
+			if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
+				if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
 				List<SMSRequest> smsRequests = getSmsRequest(request, property);
 				if (!CollectionUtils.isEmpty(smsRequests)) {
 					notificationUtil.sendSMS(smsRequests);
 				}
-			}
+			}}
 		} catch (Exception ex) {
 			log.error("Exception when trying to send notification. ", ex);
 		}
@@ -93,18 +98,47 @@ public class EditNotificationService {
 				message = notificationUtil.getCustomizedMsg(DEFAULT_OBJECT_MODIFY_APP_MSG, localizationMessage);
 		}
 		Map<String, String> mobileNumbersAndNames = new HashMap<>();
-		property.getOwners().forEach(owner -> {
-			if (owner.getMobileNumber() != null)
-				mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
-		});
-		//send the notification to the connection holders
-		if(!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
-			waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
-				if (!StringUtils.isEmpty(holder.getMobileNumber())) {
-					mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
-				}
+		if(code.equalsIgnoreCase(WCConstants.WS_EDIT_IN_APP))
+		{
+			//Send the notification to all owners
+			property.getOwners().forEach(owner -> {
+				if (owner.getMobileNumber() != null)
+					mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
 			});
+
+			//send the notification to the connection holders
+			if(!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
+				waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
+					if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+						mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+					}
+				});
+			}
+			//Send the notification to applicant
+			if(!org.apache.commons.lang.StringUtils.isEmpty(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
+			{
+				mobileNumbersAndNames.put(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), waterConnectionRequest.getRequestInfo().getUserInfo().getName());
+			}
 		}
+		if(code.equalsIgnoreCase(WCConstants.WS_MODIFY_IN_APP))
+		{
+			//Send the notification to primary owner
+			property.getOwners().forEach(owner -> {
+				if (owner.getMobileNumber() != null)
+					if(owner.getIsPrimaryOwner()!=null && owner.getIsPrimaryOwner())
+						mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
+			});
+
+			//send the notification to the connection holders
+			if(!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
+				waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
+					if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+						mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+					}
+				});
+			}
+		}
+
 		Map<String, String> mobileNumberAndMessage = workflowNotificationService
 				.getMessageForMobileNumber(mobileNumbersAndNames, waterConnectionRequest, message, property);
 		Set<String> mobileNumbers = mobileNumberAndMessage.keySet().stream().collect(Collectors.toSet());
@@ -153,17 +187,45 @@ public class EditNotificationService {
 				message = notificationUtil.getCustomizedMsg(DEFAULT_OBJECT_MODIFY_SMS_MSG, localizationMessage);
 		}
 		Map<String, String> mobileNumbersAndNames = new HashMap<>();
-		property.getOwners().forEach(owner -> {
-			if (owner.getMobileNumber() != null)
-				mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
-		});
-		//send the notification to the connection holders
-		if(!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
-			waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
-				if (!StringUtils.isEmpty(holder.getMobileNumber())) {
-					mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
-				}
+		if(code.equalsIgnoreCase(WCConstants.WS_EDIT_IN_APP))
+		{
+			//Send the notification to all owners
+			property.getOwners().forEach(owner -> {
+				if (owner.getMobileNumber() != null)
+					mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
 			});
+
+			//send the notification to the connection holders
+			if(!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
+				waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
+					if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+						mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+					}
+				});
+			}
+			//Send the notification to applicant
+			if(!org.apache.commons.lang.StringUtils.isEmpty(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
+			{
+				mobileNumbersAndNames.put(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), waterConnectionRequest.getRequestInfo().getUserInfo().getName());
+			}
+		}
+		if(code.equalsIgnoreCase(WCConstants.WS_MODIFY_IN_APP))
+		{
+			//Send the notification to primary owner
+			property.getOwners().forEach(owner -> {
+				if (owner.getMobileNumber() != null)
+					if(owner.getIsPrimaryOwner()!=null && owner.getIsPrimaryOwner())
+						mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
+			});
+
+			//send the notification to the connection holders
+			if(!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
+				waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
+					if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+						mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+					}
+				});
+			}
 		}
 		Map<String, String> mobileNumberAndMessage = workflowNotificationService
 				.getMessageForMobileNumber(mobileNumbersAndNames, waterConnectionRequest, message, property);

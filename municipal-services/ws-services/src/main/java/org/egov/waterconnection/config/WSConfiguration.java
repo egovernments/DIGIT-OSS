@@ -98,6 +98,13 @@ public class WSConfiguration {
 	@Value("${egov.usr.events.create.topic}")
 	private String saveUserEventsTopic;
 
+	// Email
+	@Value("${kafka.topics.notification.email}")
+	private String emailNotifTopic;
+
+	@Value("${notification.email.enabled}")
+	private Boolean isEmailNotificationEnabled;
+
 	// Water Topic
 	@Value("${egov.waterservice.createwaterconnection.topic}")
 	private String onWaterSaved;
@@ -199,4 +206,11 @@ public class WSConfiguration {
 
 	@Value("${state.level.tenant.id}")
 	private String stateLevelTenantId;
+
+	//mdms
+	@Value("${egov.mdms.host}")
+	private String mdmsHost;
+
+	@Value("${egov.mdms.search.endpoint}")
+	private String mdmsUrl;
 }
