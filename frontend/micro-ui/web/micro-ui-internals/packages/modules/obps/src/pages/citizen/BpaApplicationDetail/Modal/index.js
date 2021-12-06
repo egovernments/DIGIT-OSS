@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Loader, Modal, FormComposer, Toast } from "@egovernments/digit-ui-react-components";
-import { configAcceptApplication } from "../config/Approve"; 
+import { Loader, Modal, FormComposer, ButtonSelector } from "@egovernments/digit-ui-react-components";
+import { configAcceptApplication } from "../config/Approve";
+import { configTermsAndConditions } from "../config/TermsAndConditions";
 
 const Heading = (props) => {
   return <h1 className="heading-m">{props.label}</h1>;
@@ -21,12 +22,13 @@ const CloseBtn = (props) => {
   );
 };
 
-const ActionModal = ({ t, closeModal, submitAction, actionData, action }) => {
+const ActionModal = ({ t, closeModal, submitAction, actionData, action, applicationData }) => {
   const [config, setConfig] = useState({});
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [defaultValues, setDefaultValues] = useState({});
   const [error, setError] = useState(null);
+  const [termsData, setTermsData] = useState(false);
 
   const selectFile = (e) => {
     setFile(e.target.files[0]);
@@ -45,6 +47,10 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action }) => {
           configAcceptApplication({ t, action, selectFile, uploadedFile, error, setUploadedFile,file })
         );
         break;
+      case "TERMS_AND_CONDITIONS":
+        setTermsData(true);
+        setConfig(configTermsAndConditions({ t, applicationData }));
+        break;  
       default:
         setConfig(
           configAcceptApplication({ t, action, selectFile, uploadedFile, error, isCommentRequired: false , setUploadedFile,file})
@@ -101,17 +107,31 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action }) => {
       formId="modal-action"
       isDisabled={false}
       style={{height: "auto", padding: "10px"}}
+      hideSubmit={config?.label?.hideSubmit ? true : false}
     >
-      <FormComposer
-        cardStyle={{ minWidth: "unset", paddingRight: "unset" }}
-        config={config?.form}
-        noBoxShadow
-        inline
-        childrenAtTheBottom
-        onSubmit={submit}
-        defaultValues={defaultValues}
-        formId="modal-action"
-      />
+      {config?.form ?
+        <FormComposer
+          cardStyle={{ minWidth: "unset", paddingRight: "unset" }}
+          config={config?.form}
+          noBoxShadow
+          inline
+          childrenAtTheBottom
+          onSubmit={submit}
+          defaultValues={defaultValues}
+          formId="modal-action"
+        /> : null
+      }
+      {termsData ?
+        <div>
+          <div style={{ padding: "10px" }}>
+            {config?.data && config?.data?.map((value, index) => <div>{`${index + 1}. ${value}`}</div>)}
+          </div>
+          <div style={{display: "flex", justifyContent: "center"}}>
+            <ButtonSelector label={t("BPA_GO_BACK_LABEL")} onSubmit={closeModal} style={{minWidth: "240px"}}/>
+          </div>
+        </div> : null
+      }
+     
     </Modal>
   )
 }

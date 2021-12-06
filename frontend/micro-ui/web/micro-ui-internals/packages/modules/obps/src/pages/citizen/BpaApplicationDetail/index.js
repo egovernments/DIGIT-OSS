@@ -21,6 +21,7 @@ const BpaApplicationDetail = () => {
   const [isTocAccepted, setIsTocAccepted] = useState(false); 
   const [displayMenu, setDisplayMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [appDetails, setAppDetails] = useState({});
   const [showOptions, setShowOptions] = useState(false);
@@ -162,6 +163,10 @@ const BpaApplicationDetail = () => {
     setSelectedAction(null);
     setShowModal(false);
   };
+
+  const closeTermsModal = () => {
+    setShowTermsModal(false);
+  }
 
   function onActionSelect(action) {
     let path = data?.applicationData?.businessService == "BPA_OC" ? "ocbpa" : "bpa";
@@ -331,6 +336,14 @@ const BpaApplicationDetail = () => {
 
   data.applicationDetails = data?.applicationDetails?.length > 0 && data?.applicationDetails?.filter(bpaData => Object.keys(bpaData).length !== 0);
 
+  const getCheckBoxLable = () => {
+    return (
+      <div>
+        <span>{`${t("BPA_I_AGREE_THE_LABEL")} `}</span>
+        <span style={{color: "#F47738", cursor: "pointer"}} onClick={() => setShowTermsModal(!showTermsModal)}>{t(`BPA_TERMS_AND_CONDITIONS_LABEL`)}</span>
+      </div>
+    )
+  }
   return (
     <Fragment>
       <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
@@ -444,9 +457,10 @@ const BpaApplicationDetail = () => {
                   <BPAApplicationTimeline application={data?.applicationData} id={id} />
                   {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && !isFromSendBack && checkBoxVisible && (
                     <CheckBox
-                      styles={{ margin: "20px 0 40px" }}
+                      styles={{ margin: "20px 0 40px", paddingTop: "10px" }}
                       checked={isTocAccepted}
-                      label={getCheckBoxLabelData(t, data?.applicationData, workflowDetails?.data?.nextActions)}
+                      label={getCheckBoxLable()}
+                      // label={getCheckBoxLabelData(t, data?.applicationData, workflowDetails?.data?.nextActions)}
                       onChange={() => { setIsTocAccepted(!isTocAccepted); isTocAccepted ? setDisplayMenu(!isTocAccepted) : "" }}
                     />
                   )}
@@ -472,6 +486,17 @@ const BpaApplicationDetail = () => {
           </div>
         )
       })}
+      {showTermsModal ? (
+        <ActionModal
+          t={t}
+          action={"TERMS_AND_CONDITIONS"}
+          tenantId={tenantId}
+          id={id}
+          closeModal={closeTermsModal}
+          submitAction={submitAction}
+          applicationData={data?.applicationData || {}}
+        />
+      ) : null}
       {showModal ? (
         <ActionModal
           t={t}
