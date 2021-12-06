@@ -21,9 +21,9 @@ function OBPSDocument({ value = {}, Code, index, isNOC = false, svgStyles = { wi
     });
   }
   else{
-  value?.documents ? value?.documents?.documents.filter(doc => doc?.documentType?.includes(Code) || doc?.documentType?.includes(Code.split(".")[1])).map((ob)=>{
+  value?.documents ? value?.documents?.documents.filter(doc => doc?.documentType === Code /* || doc?.documentType?.includes(Code.split(".")[1]) */).map((ob)=>{
     documents.push(ob);
-  }) : value.filter(doc => doc?.documentType?.includes(Code) || doc?.documentType?.includes(Code.split(".")[1])).map((ob)=>{
+  }) : value.filter(doc => doc?.documentType === Code /* || doc?.documentType.includes(Code.split(".")[1]) */).map((ob)=>{
     documents.push(ob);
   })
 }
