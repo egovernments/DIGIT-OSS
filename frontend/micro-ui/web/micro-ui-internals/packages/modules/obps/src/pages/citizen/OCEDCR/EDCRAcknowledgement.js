@@ -55,7 +55,7 @@ const EDCRAcknowledgement = (props) => {
           </div>
           <div style={{padding: "0px 10px"}}>
           <Link to={{pathname: `/digit-ui/citizen/obps/${bpaLinks?.linkData?.flow?.toLowerCase()}/${edcrData?.appliactionType?.toLowerCase()}/${edcrData?.applicationSubType?.toLowerCase()}/docs-required`, state: bpaLinks}} >
-              <SubmitBar label={t("BPA_APPLY_OC_FOR_BPA_LABEL")} />
+              <SubmitBar label={t("BPA_APPLY_OC_FOR_BPA_LABEL")} className={"oc-aknowledgement-screen"}/>
             </Link>
           </div>
           <div style={{marginTop: "12px", paddingBottom: "10px", paddingLeft: "10px"}}>
@@ -72,7 +72,7 @@ const EDCRAcknowledgement = (props) => {
             successful={false}
             infoStyles={{ fontSize: "18px", lineHeight: "21px", fontWeight: "bold", textAlign: "center", padding: "0px 15px" }}
             applicationNumberStyles={{ fontSize: "24px", lineHeight: "28px", fontWeight: "bold", marginTop: "10px" }}
-            style={{ padding: "10px" }}
+            style={{width: "100%", padding: "10px"}}
           />
           <CardText style={{ padding: "0px 8px" }}>{t("EDCR_ACKNOWLEDGEMENT_REJECTED_MESSAGE_TEXT_LABEL")}</CardText>
           <div className="primary-label-btn d-grid" style={{ marginLeft: "unset", marginBottom: "10px", padding: "0px 8px" }} onClick={printReciept}>
