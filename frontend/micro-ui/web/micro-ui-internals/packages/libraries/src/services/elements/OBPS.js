@@ -264,7 +264,7 @@ export const OBPSService = {
          ocdcrNumber: BPA?.edcrNumber,
          edcrNumber: bpaResponse?.BPA?.[0]?.edcrNumber
       }
-    const comparisionReport = await OBPSService.comparisionReport(tenantId, { ...comparisionRep });
+    const comparisionReport = await OBPSService.comparisionReport(BPA?.tenantId, { ...comparisionRep });
 
     const nocDetails = noc
       ?.map((nocDetails, index) => ({

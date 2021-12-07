@@ -264,7 +264,7 @@ const clearall = (num) => {
         { !(checkingFlow === "OCBPA") ? <div className="tag-container">
                {subOccupancyObject[`Block_${block.number}`] && subOccupancyObject[`Block_${block.number}`].length > 0 &&
                 subOccupancyObject[`Block_${block.number}`].map((value, index) => (
-                  <RemoveableTag key={index} text={`${t(value["name"])}`} onClick={() => onRemove(index,value,block.number)} />
+                  <RemoveableTag key={index} text={`${t(value["i18nKey"])}`} onClick={() => onRemove(index,value,block.number)} />
                 ))}
         </div> : null }
         { !(checkingFlow === "OCBPA") ? (subOccupancyObject[`Block_${block.number}`] && subOccupancyObject[`Block_${block.number}`].length>0 ) && <LinkButton style={{textAlign:"left"}} label={"Clear All"} onClick={() => clearall(block.number)}/>: null}
