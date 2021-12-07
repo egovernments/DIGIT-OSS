@@ -1,6 +1,6 @@
 import React from "react"
 import { useTranslation } from "react-i18next";
-import { Switch, useLocation } from "react-router-dom";
+import { Switch, useLocation, Route } from "react-router-dom";
 import { BackButton, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import DocumentCategories from "./Documents/DocumentCategories";
 import ViewDocument from "./Documents/ViewDocument";
@@ -18,7 +18,7 @@ const CitizenApp = ({ path, url, userType, tenants}) => {
       <React.Fragment>
         <BackButton>{t("CS_COMMON_BACK")}</BackButton>
         <Switch>
-          <PrivateRoute
+          <Route
             path={`${path}/notifications`}
             component={() => <NotificationsOrWhatsNew variant="notifications" parentRoute={path} />}
           />

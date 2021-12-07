@@ -30,7 +30,7 @@ const NotificationsAndWhatsNew = ({ variant, parentRoute }) => {
     //     return <Redirect to={{ pathname: `/digit-ui/citizen/login`, state: { from: location.pathname + location.search } }} />
     // }
 
-    if (EventsDataLoading || !preVisitUnseenNotificationCountLoaded) return <Loader />
+    if (EventsDataLoading ) return <Loader />
 
     if (EventsData?.length === 0) {
         return <div className="CitizenEngagementNotificationWrapper">
