@@ -41,7 +41,8 @@ import {
   insertStoreIds,
   insertRecords,
   mergePdf,
-  getBulkPdfRecordsDetails
+  getBulkPdfRecordsDetails,
+  cancelBulkPdfProcess
 } from "./queries";
 import {
   listenConsumer
@@ -59,11 +60,11 @@ var pdfMakePrinter = require("pdfmake/src/printer");
 let app = express();
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json({
-  limit: "50mb",
+  limit: "200mb",
   extended: true
 }));
 app.use(bodyParser.urlencoded({
-  limit: "50mb",
+  limit: "200mb",
   extended: true,
   parameterLimit:50000
 }));
@@ -613,6 +614,91 @@ app.post(
       res.json({
         ResponseInfo: requestInfo,
         message: "Error while retreving the details",
+      });
+    }
+  })
+
+);
+
+app.post(
+  "/pdf-service/v1/_deleteBulkPdfRecordsDetails",
+  asyncHandler(async (req, res) => {
+    let requestInfo = get(req.body, "RequestInfo");
+    try {
+      let pdfDirectory = envVariables.SAVE_PDF_DIR;
+      let folderNames = fs.readdirSync(pdfDirectory);
+
+      for(let folder of folderNames){
+        let baseFolder = pdfDirectory + folder + '/';
+        if( fs.existsSync(baseFolder) ) {
+          fs.readdirSync(baseFolder).forEach(function(file,index){
+            var curPath = baseFolder + file;
+            if(fs.lstatSync(curPath).isDirectory()) { // recurse
+              deleteFolderRecursive(curPath);
+            } else { // delete file
+              fs.unlinkSync(curPath);
+            }
+          });
+          fs.rmdirSync(baseFolder);
+        }
+      }
+      
+      res.status(200);
+      res.json({
+            ResponseInfo: requestInfo,
+            Message: "Bulk PDF records details are clear",
+      });
+    } catch (error) {
+      logger.error(error.stack || error);
+      res.status(400);
+      res.json({
+        ResponseInfo: requestInfo,
+        message: "Error while clearing the Bulk PDF records details",
+      });
+    }
+  })
+
+);
+
+app.post(
+  "/pdf-service/v1/_cancelProcess",
+  asyncHandler(async (req, res) => {
+    let requestInfo = get(req.body, "RequestInfo");
+    let jobId = get(req.query, "jobId");
+    let uuid = requestInfo.userInfo.uuid;
+    try {
+
+      if( !jobId || !uuid){
+        res.status(400);
+        res.json({
+          ResponseInfo: requestInfo,
+          message: "jobid or userid can not be empty",
+        });
+      }
+      else{
+        let errorMap = await cancelBulkPdfProcess(requestInfo, jobId, uuid);
+        if(errorMap != undefined && errorMap.length>=1){
+          res.status(400);
+          res.json({
+              ResponseInfo: requestInfo,
+              errorMessage: errorMap,
+        });
+        }
+        else{
+          res.status(200);
+          res.json({
+                ResponseInfo: requestInfo,
+                Message: `Bulk PDF process with job id: ${jobId} is cancel`,
+          });
+        }
+        
+      }
+    } catch (error) {
+      logger.error(error.stack || error);
+      res.status(400);
+      res.json({
+        ResponseInfo: requestInfo,
+        message: "Error while clearing the Bulk PDF records details",
       });
     }
   })

@@ -139,9 +139,10 @@ export async function insertRecords(bulkPdfJobId, totalPdfRecords, currentPdfRec
   try {
     const result = await pool.query('select * from egov_bulk_pdf_info where jobid = $1', [bulkPdfJobId]);
     if(result.rowCount<1){
-      const insertQuery = 'INSERT INTO egov_bulk_pdf_info(jobid, uuid, recordscompleted, totalrecords, createdtime, filestoreid, lastmodifiedby, lastmodifiedtime, tenantid, locality, businessservice, consumercode, isconsolidated) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)';
+      const insertQuery = 'INSERT INTO egov_bulk_pdf_info(jobid, uuid, recordscompleted, totalrecords, createdtime, filestoreid, lastmodifiedby, lastmodifiedtime, tenantid, locality, businessservice, consumercode, isconsolidated, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)';
       const curentTimeStamp = new Date().getTime();
-      await pool.query(insertQuery,[bulkPdfJobId, userid, currentPdfRecords, totalPdfRecords, curentTimeStamp, null, userid, curentTimeStamp, tenantId, locality, bussinessService, consumerCode, isConsolidated]);
+      const status = 'INPROGRESS';
+      await pool.query(insertQuery,[bulkPdfJobId, userid, currentPdfRecords, totalPdfRecords, curentTimeStamp, null, userid, curentTimeStamp, tenantId, locality, bussinessService, consumerCode, isConsolidated, status]);
     }
     else{
       var recordscompleted = parseInt(result.rows[0].recordscompleted);
@@ -173,24 +174,28 @@ export async function mergePdf(bulkPdfJobId, tenantId, userid, numberOfFiles){
     
       logger.info('Files to be merged: ',fileNames);
       (async () => {
-        try {
-          for (let i = 0; i < fileNames.length; i++){
-            logger.info(baseFolder+fileNames[i]);
-            merger.add(baseFolder+fileNames[i]);            //merge all pages. parameter is the path to file and filename.
+        var processStatus = updateResult.rows[0].status;
+        if(processStatus != 'CANCEL'){
+          try {
+            for (let i = 0; i < fileNames.length; i++){
+              logger.info(baseFolder+fileNames[i]);
+              merger.add(baseFolder+fileNames[i]);            //merge all pages. parameter is the path to file and filename.
+            }
+            await merger.save(baseFolder+'/output.pdf');        //save under given name and reset the internal document
+          } catch (err) {
+            logger.error(err.stack || err);
           }
-          await merger.save(baseFolder+'/output.pdf');        //save under given name and reset the internal document
-        } catch (err) {
-          logger.error(err.stack || err);
-        }
       
-        var mergePdfData = fs.createReadStream(baseFolder+'output.pdf');
-        await fileStoreAPICall('output.pdf', tenantId, mergePdfData).then((filestoreid) => {
-          const updateQuery = 'UPDATE egov_bulk_pdf_info SET filestoreid = $1, lastmodifiedby = $2, lastmodifiedtime = $3 WHERE jobid = $4';
-          const curentTimeStamp = new Date().getTime();
-          pool.query(updateQuery,[filestoreid, userid, curentTimeStamp, bulkPdfJobId]);
-        }).catch((err) => {
-          logger.error(err.stack || err);
-        });
+          var mergePdfData = fs.createReadStream(baseFolder+'output.pdf');
+          await fileStoreAPICall('output.pdf', tenantId, mergePdfData).then((filestoreid) => {
+            const updateQuery = 'UPDATE egov_bulk_pdf_info SET filestoreid = $1, lastmodifiedby = $2, lastmodifiedtime = $3, status = $5 WHERE jobid = $4';
+            const curentTimeStamp = new Date().getTime();
+            const status = 'DONE';
+            pool.query(updateQuery,[filestoreid, userid, curentTimeStamp, bulkPdfJobId, status]);
+          }).catch((err) => {
+            logger.error(err.stack || err);
+          });
+        }
 
         try {
           if( fs.existsSync(baseFolder) ) {
@@ -277,4 +282,42 @@ export async function getBulkPdfRecordsDetails(userid, offset, limit, jobId){
     
   }
 
+}
+
+export async function cancelBulkPdfProcess(requestInfo, jobId, userid){
+  let errorMap = [];
+  try{
+    const result = await pool.query('select * from egov_bulk_pdf_info where jobid = $1 and uuid = $2', [jobId, userid]);
+    if(result.rowCount==1){
+      var recordscompleted = parseInt(result.rows[0].recordscompleted);
+      var totalrecords = parseInt(result.rows[0].totalrecords);
+      if(recordscompleted == totalrecords){
+        let error = {
+          message: `Not allowed to cancel already completed process`,
+        };
+        errorMap.push(error);
+        return errorMap;
+      }
+      const updateQuery = 'UPDATE egov_bulk_pdf_info SET status = $1, lastmodifiedby = $2, lastmodifiedtime = $3 WHERE jobid = $4';
+      const curentTimeStamp = new Date().getTime();
+      const status = 'CANCEL';
+      await pool.query(updateQuery,[status, userid, curentTimeStamp, jobId]);
+  
+    }
+    else{
+      let error = {
+        message: `No process with jobId: ${jobId} present for ${requestInfo.userInfo.userName}`,
+      };
+      errorMap.push(error);
+      return errorMap;
+    }
+  }catch (err){
+    logger.error(err.stack || err);
+    let error = {
+      message: `Error occured while getting details from database`,
+    };
+    errorMap.push(error);
+    return errorMap;
+  }
+  
 }

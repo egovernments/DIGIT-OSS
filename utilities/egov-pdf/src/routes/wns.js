@@ -438,9 +438,10 @@ router.post(
           const result = await pool.query('select * from egov_bulk_pdf_info where jobid = $1', [jobid]);
           if(result.rowCount<1){
             var userid = requestinfo.RequestInfo.userInfo.uuid;
-            const insertQuery = 'INSERT INTO egov_bulk_pdf_info(jobid, uuid, recordscompleted, totalrecords, createdtime, filestoreid, lastmodifiedby, lastmodifiedtime, tenantid, locality, businessservice, consumercode, isconsolidated) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)';
+            const insertQuery = 'INSERT INTO egov_bulk_pdf_info(jobid, uuid, recordscompleted, totalrecords, createdtime, filestoreid, lastmodifiedby, lastmodifiedtime, tenantid, locality, businessservice, consumercode, isconsolidated, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)';
             const curentTimeStamp = new Date().getTime();
-            await pool.query(insertQuery,[jobid, userid, 0, 0, curentTimeStamp, null, userid, curentTimeStamp, tenantId, locality, bussinessService, consumerCode, isConsolidated]);
+            const status = 'INPROGRESS';
+            await pool.query(insertQuery,[jobid, userid, 0, 0, curentTimeStamp, null, userid, curentTimeStamp, tenantId, locality, bussinessService, consumerCode, isConsolidated, status]);
           }
         } catch (err) {
           logger.error(err.stack || err);
