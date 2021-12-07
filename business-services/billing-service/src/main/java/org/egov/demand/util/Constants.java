@@ -171,4 +171,18 @@ public class Constants {
 	public static final String PAID_CANCEL_BILL_MSG = "You cannot cancel the bill in the workflow";
 	
 	public static final String COUNT_REPLACE_CANCEL_BILL_MSG = "{count}";
+	
+	// Bill cancel 
+	
+	public static final String CANCELLATION_REASON_MSG= "reasonMessage";
+	
+	public static final String CANCELLATION_REASON_CODE= "reason";
+	
+	public static final String CANCELL_REASON_MSG_NOT_FOUND = "EG_BS_CANCELL_REASON_MSG_NOT";
+	public static final String CANCELL_REASON_MSG_NOT_FOUND_MSG = "Cancell Reason message with key " + "'" + CANCELLATION_REASON_MSG + "'" + " is madnatory Text field in additionalDetails of Bill cancell Request";
+	public static final String CANCELL_REASON_MSG_EMPTY_MSG = "Cancell Reason message cannot be empty";
+	
+	public static final String CANCELL_REASON_CODE_NOT_FOUND = "EG_BS_CANCELL_REASON_CODE_NOT";
+	public static final String CANCELL_REASON_CODE_NOT_FOUND_MSG = "Cancellation Reason with key " + "'" + CANCELLATION_REASON_CODE + "'" + " is a madnatory Text field in additionalDetails of Bill cancell Request";
+	public static final String CANCELL_REASON_CODE_EMPTY_MSG = "Cancell Reason code cannot be empty";
 }

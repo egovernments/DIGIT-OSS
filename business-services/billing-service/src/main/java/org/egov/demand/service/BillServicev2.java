@@ -161,6 +161,7 @@ public class BillServicev2 {
 	public Integer cancelBill(UpdateBillRequest updateBillRequest) {
 		
 		UpdateBillCriteria cancelBillCriteria = updateBillRequest.getUpdateBillCriteria();
+		billValidator.validateBillSearchRequest(cancelBillCriteria);
 		Set<String> consumerCodes = cancelBillCriteria.getConsumerCodes();
 		cancelBillCriteria.setStatusToBeUpdated(BillStatus.CANCELLED);
 
