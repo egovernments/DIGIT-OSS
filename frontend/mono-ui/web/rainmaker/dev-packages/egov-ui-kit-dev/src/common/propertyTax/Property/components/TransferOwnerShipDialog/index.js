@@ -47,19 +47,15 @@ const TransferOwnerShipDialog = (props) => {
   //   return getLocaleLabels("PT_YOU_HAVE", "PT_YOU_HAVE") + " " + getLocaleLabels("PT_MUTATION_RS", "PT_MUTATION_RS") + "<b>" + amount + "</b>" + " " + getLocaleLabels("PT_PENDING_AMOUNT", "PT_PENDING_AMOUNT") + "<br/>" + getLocaleLabels("PT_INORDER_TO_TRANSFER", "PT_INORDER_TO_TRANSFER");
   // }
   const { open, closeDialogue, amount, routeUrl } = props;
-  console.log(props.documents,"documents")
   const printDiv = () => {
     let content = document.getElementById("documents-div").innerHTML;
-    let printWindow = window.open("", "Print");
-
-    printWindow.document.write("<html><body >");
-    printWindow.document.write(content);
-    printWindow.document.write("</body></html>");
-
+    let printWindow = window.open("", "");
+  
+    printWindow.document.write(`<html><body>${content}</body></html>`);
+  
     printWindow.document.close();
     printWindow.focus();
     printWindow.print();
-    printWindow.close();
   };
   return (
     <Dialog
