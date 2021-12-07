@@ -106,9 +106,9 @@ public class AssessmentNotificationService {
 
             String UIHost = config.getUiAppHost();
             String paymentPath = config.getPayLinkSMS();
-            paymentPath = paymentPath.replace("$consumerCode",property.getPropertyId());
+            paymentPath = paymentPath.replace("$consumercode",property.getPropertyId());
             paymentPath = paymentPath.replace("$tenantId",property.getTenantId());
-            paymentPath = paymentPath.replace("$businessService",PT_BUSINESSSERVICE);
+            paymentPath = paymentPath.replace("$businessservice",PT_BUSINESSSERVICE);
 
             String finalPath = UIHost + paymentPath;
 
@@ -119,8 +119,8 @@ public class AssessmentNotificationService {
         property.getOwners().forEach(owner -> {
             if(owner.getMobileNumber()!=null)
                 mobileNumberToOwner.put(owner.getMobileNumber(),owner.getName());
-            if(owner.getAltContactNumber()!=null && !owner.getAltContactNumber().equalsIgnoreCase(owner.getMobileNumber()) ) {
-            	mobileNumberToOwner.put(owner.getAltContactNumber(),owner.getName());
+            if(owner.getAlternatemobilenumber() !=null && !owner.getAlternatemobilenumber().equalsIgnoreCase(owner.getMobileNumber()) ) {
+            	mobileNumberToOwner.put(owner.getAlternatemobilenumber() ,owner.getName());
             }
         });
         
@@ -218,9 +218,9 @@ public class AssessmentNotificationService {
 
             String UIHost = config.getUiAppHost();
             String paymentPath = config.getPayLinkSMS();
-            paymentPath = paymentPath.replace("$consumerCode",property.getPropertyId());
+            paymentPath = paymentPath.replace("$consumercode",property.getPropertyId());
             paymentPath = paymentPath.replace("$tenantId",property.getTenantId());
-            paymentPath = paymentPath.replace("$businessService",PT_BUSINESSSERVICE);
+            paymentPath = paymentPath.replace("$businessservice",PT_BUSINESSSERVICE);
 
             String finalPath = UIHost + paymentPath;
 
