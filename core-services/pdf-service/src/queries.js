@@ -270,7 +270,8 @@ export async function getBulkPdfRecordsDetails(userid, offset, limit, jobId){
           locality: row.locality,
           bussinessService: row.businessservice,
           consumercode: row.consumercode,
-          isConsolidated: row.isconsolidated
+          isConsolidated: row.isconsolidated,
+          status: row.status
         };
         data.push(value);
       }
