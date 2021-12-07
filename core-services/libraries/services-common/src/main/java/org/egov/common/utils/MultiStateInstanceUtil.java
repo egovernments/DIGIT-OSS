@@ -12,7 +12,7 @@ import lombok.Getter;
 @Component
 @Builder
 @Getter
-public class MutliStateInstanceUtil {
+public class MultiStateInstanceUtil {
 
     // central-instance configs
 	public static String SCHEMA_REPLACE_STRING = "{schema}";
