@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useLocation } from "react-router-dom";
 import { newConfig } from "../../../config/Create/config";
+import { stringReplaceAll } from "../../../utils";
 
 const EditForm = ({ applicationData }) => {
   const { t } = useTranslation();
@@ -21,7 +22,28 @@ const EditForm = ({ applicationData }) => {
   const defaultValues = {
     originalData: applicationData,
     address: applicationData?.address,
+    owners:applicationData?.owners.map(owner=>({...owner,
+      ownerType: {code: owner.ownerType,
+      i18nKey: owner.ownerType},
+      relationship: {code: owner.relationship,
+i18nKey: `PT_FORM3_${owner.relationship}`},
+      gender:{
+      code:owner.gender,
+i18nKey: `PT_FORM3_${owner.gender}`,
+value: owner.gender
+    }})),
+ 
   };
+console.log(defaultValues,"defltvalues");
+  //designation
+
+//   institution:
+// name: ""
+// type:
+// active: true
+// code: "INSTITUTIONALPRIVATE.PRIVATECOMPANY"
+// i18nKey: "COMMON_MASTERS_OWNERSHIPCATEGORY_INSTITUTIONALPRIVATE_PRIVATECOMPANY"
+// name: "Private Company"
 
   const onFormValueChange = (setValue, formData, formState) => {
     setSubmitValve(!Object.keys(formState.errors).length);
@@ -40,11 +62,9 @@ const EditForm = ({ applicationData }) => {
       usageCategory: data?.usageCategoryMinor?.subuagecode ? data?.usageCategoryMinor?.subuagecode : data?.usageCategoryMajor?.code,
       usageCategoryMajor: data?.usageCategoryMajor?.code.split(".")[0],
       usageCategoryMinor: data?.usageCategoryMajor?.code.split(".")[1] || null,
-      propertyType: data?.PropertyType?.code,
       noOfFloors: Number(data?.noOfFloors),
       landArea: Number(data?.landarea),
       superBuiltUpArea: Number(data?.landarea),
-      propertyType: data?.PropertyType?.code,
       source: "MUNICIPAL_RECORDS", // required
       channel: "CFC_COUNTER", // required
       documents: applicationData?.documents.map((old) => {
@@ -69,7 +89,7 @@ const EditForm = ({ applicationData }) => {
 
   /* use newConfig instead of commonFields for local development in case needed */
 
-  const configs = commonFields?commonFields:newConfig;
+  const configs = newConfig;
 
   return (
     <FormComposer
