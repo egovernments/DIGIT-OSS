@@ -12,7 +12,7 @@
     </mirrors>
     <servers>
         <server>
-            <id>repo.egovernments.org</id>
+            <id>repo.digit.org</id>
             <username>${nexus.user}</username>
             <password>${nexus.password}</password>
         </server>
