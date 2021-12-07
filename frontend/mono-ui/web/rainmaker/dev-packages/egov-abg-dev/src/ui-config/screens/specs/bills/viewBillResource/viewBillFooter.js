@@ -163,6 +163,8 @@ const cancelReceipt = async (state, dispatch) => {
       }
       additionalDetails.reasonMessage = getLocaleLabels(`BC_REASON_${UpdateBillCriteriaObj.additionalDetails.reason}`,`BC_REASON_${UpdateBillCriteriaObj.additionalDetails.reason}`);
       set(UpdateBillCriteria, "additionalDetails", additionalDetails);
+      set(UpdateBillCriteria, 'statusToBeUpdated', 'CANCELLED');
+
       let payload = await httpRequest(
         "post",
         `billing-service/bill/v2/_cancelbill`,
