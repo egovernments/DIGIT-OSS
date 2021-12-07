@@ -124,9 +124,9 @@ func getAlternateRouteMap() map[string]string {
 
 	keymap := make(map[string]string)
 	routes, _ := os.LookupEnv("INTERNAL_ROUTER_MAP")
-	routeList := strings.SplitN(routes, ",", 2)
+	routeList := strings.Split(routes, ",")
 	for _, element := range routeList {
-		arr := strings.SplitN(element, ":", 2)
+		arr := strings.Split(element, ":")
 		keymap[arr[0]] = arr[1]
 	}
 	return keymap

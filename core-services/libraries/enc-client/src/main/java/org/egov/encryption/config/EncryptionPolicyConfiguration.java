@@ -1,29 +1,47 @@
 package org.egov.encryption.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import net.minidev.json.JSONArray;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.encryption.models.Attribute;
 import org.egov.encryption.models.EncryptionPolicy;
-import org.egov.mdms.model.*;
+import org.egov.mdms.model.MasterDetail;
+import org.egov.mdms.model.MdmsCriteria;
+import org.egov.mdms.model.MdmsCriteriaReq;
+import org.egov.mdms.model.MdmsResponse;
+import org.egov.mdms.model.ModuleDetail;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+
+import net.minidev.json.JSONArray;
 
 @Component
 public class EncryptionPolicyConfiguration {
 
+	@Value("${is.environment.central.instance}")
+    private Boolean isEnvironmentCentralInstance;
+	
     @Autowired
     private EncProperties encProperties;
+    
     @Autowired
     private RestTemplate restTemplate;
+    
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -46,6 +64,11 @@ public class EncryptionPolicyConfiguration {
             ResponseEntity<MdmsResponse> response =
                     restTemplate.postForEntity(encProperties.getEgovMdmsHost() + encProperties.getEgovMdmsSearchEndpoint(),
                             mdmsCriteriaReq, MdmsResponse.class);
+            
+
+            if(isEnvironmentCentralInstance) {
+            	MDC.put(EncClientConstants.TENANTID_MDC, encProperties.getStateLevelTenantId());
+            }
 
             JSONArray policyListJSON = response.getBody().getMdmsRes().get(EncClientConstants.MDMS_MODULE_NAME)
                     .get(EncClientConstants.MDMS_ENCRYPTION_MASTER_NAME);

@@ -603,6 +603,11 @@ config:
     build:
       - work-dir: "utilities/certificate-verification"
         image-name: "certificate-verification"
+  - name: "builds/digit-dev/utilities/demo-utility"
+    build:
+      - work-dir: "utilities/demo-utility"
+        image-name: "demo-utility"
+        dockerfile: "build/maven/Dockerfile"      
 
 # Frontend
 

@@ -40,22 +40,6 @@ public class RequestEnrichmentFilterTest {
     }
 
     @Test
-    public void test_should_add_correlation_id_request_header() {
-        final RequestContext currentContext = RequestContext.getCurrentContext();
-        final MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setMethod("GET");
-        currentContext.setRequest(request);
-        final String expectedCorrelationId = "someCorrelationId";
-        currentContext.set("CORRELATION_ID", expectedCorrelationId);
-
-        filter.run();
-
-        final Map<String, String> zuulRequestHeaders = currentContext.getZuulRequestHeaders();
-        assertEquals(2, zuulRequestHeaders.size());
-        assertEquals(expectedCorrelationId, zuulRequestHeaders.get("x-correlation-id"));
-    }
-
-    @Test
     public void test_should_add_correlation_id_to_request_info_section_of_request_body() throws IOException {
         final RequestContext currentContext = RequestContext.getCurrentContext();
         final MockHttpServletRequest request = new MockHttpServletRequest();

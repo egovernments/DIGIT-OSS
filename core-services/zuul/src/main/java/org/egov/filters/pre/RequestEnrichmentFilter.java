@@ -1,11 +1,17 @@
 package org.egov.filters.pre;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netflix.zuul.ZuulFilter;
-import com.netflix.zuul.context.RequestContext;
+import static org.egov.Utils.Utils.isRequestBodyCompatible;
+import static org.egov.constants.RequestContextConstants.CORRELATION_ID_FIELD_NAME;
+import static org.egov.constants.RequestContextConstants.CORRELATION_ID_HEADER_NAME;
+import static org.egov.constants.RequestContextConstants.CORRELATION_ID_KEY;
+import static org.egov.constants.RequestContextConstants.REQUEST_TENANT_ID_KEY;
+import static org.egov.constants.RequestContextConstants.TENANTID_MDC;
+import static org.egov.constants.RequestContextConstants.USER_INFO_FIELD_NAME;
+import static org.egov.constants.RequestContextConstants.USER_INFO_KEY;
+
+import java.io.IOException;
+import java.util.HashMap;
+
 import org.apache.commons.io.IOUtils;
 import org.egov.Utils.ExceptionUtils;
 import org.egov.contract.User;
@@ -16,11 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.HashMap;
-
-import static org.egov.Utils.Utils.isRequestBodyCompatible;
-import static org.egov.constants.RequestContextConstants.*;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netflix.zuul.ZuulFilter;
+import com.netflix.zuul.context.RequestContext;
 
 /**
  *  6th pre filter to get executed.
@@ -94,6 +101,7 @@ public class RequestEnrichmentFilter extends ZuulFilter {
 
     private void addCorrelationIdHeader(RequestContext ctx) {
         ctx.addZuulRequestHeader(CORRELATION_ID_HEADER_NAME, getCorrelationId());
+        ctx.addZuulRequestHeader(REQUEST_TENANT_ID_KEY,  getTenantId());
     }
 
     private void addPassThroughGatewayHeader(RequestContext ctx) {
@@ -142,6 +150,11 @@ public class RequestEnrichmentFilter extends ZuulFilter {
     private String getCorrelationId() {
         RequestContext ctx = RequestContext.getCurrentContext();
         return (String) ctx.get(CORRELATION_ID_KEY);
+    }
+    
+    private String getTenantId() {
+        RequestContext ctx = RequestContext.getCurrentContext();
+        return (String) ctx.get(TENANTID_MDC);
     }
 
     private void setUserInfo(HashMap<String, Object> requestInfo) {
