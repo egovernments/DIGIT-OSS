@@ -629,6 +629,8 @@ app.post(
       let folderNames = fs.readdirSync(pdfDirectory);
 
       for(let folder of folderNames){
+        if(folder == 'lost+found')
+          continue;
         let baseFolder = pdfDirectory + folder + '/';
         if( fs.existsSync(baseFolder) ) {
           fs.readdirSync(baseFolder).forEach(function(file,index){
