@@ -244,6 +244,11 @@ public class ReportService {
         List<SourceColumn> columns = reportDefinition.getSourceColumns();
         ReportResponse reportResponse = new ReportResponse();
         populateData(columns, maps, reportResponse);
+        
+        /*
+         * TODO add user integration
+         * 
+         */
         populateReportHeader(reportDefinition, reportResponse);
 
         return reportResponse;
@@ -252,26 +257,31 @@ public class ReportService {
     private void populateData(List<SourceColumn> columns, List<Map<String, Object>> maps,
                               ReportResponse reportResponse) {
 
-        List<List<Object>> lists = new ArrayList<>();
+        List<List<Object>> listOfresultSetRowsWithoutColumnName = new ArrayList<>();
 
         for (int i = 0; i < maps.size(); i++) {
-            List<Object> objects = new ArrayList<>();
-            Map<String, Object> map = maps.get(i);
+        	
+            List<Object> singleResultSetRow = new ArrayList<>();
+            Map<String, Object> iThIndexMapOfResultSet = maps.get(i);
             Map<String, Object> newMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-            newMap.putAll(map);
-            // restore ['abc','xyz'] -> 'abc, xyz'  -- earlier the string had to be transformed to array to allow decryption incase of encrypted columns
+            newMap.putAll(iThIndexMapOfResultSet);
+            /*
+             *  restore ['abc','xyz'] -> 'abc, xyz'  -- 
+             *  earlier the string had to be transformed to array to allow decryption in case of encrypted columns
+             */
             for (SourceColumn sourceColm : columns) {
+            	
                 if (sourceColm.getType().toString().equals("stringarray") && (newMap.get(sourceColm.getName()) != null)) {
                     List<String> stringlist = (List<String>) newMap.get(sourceColm.getName());
                     String value = StringUtils.join(stringlist, ", ");
-                    objects.add(value);
+                    singleResultSetRow.add(value);
                 } else {
-                    objects.add(newMap.get(sourceColm.getName()));
+                    singleResultSetRow.add(newMap.get(sourceColm.getName()));
                 }
             }
-            lists.add(objects);
+            listOfresultSetRowsWithoutColumnName.add(singleResultSetRow);
         }
-        reportResponse.setReportData(lists);
+        reportResponse.setReportData(listOfresultSetRowsWithoutColumnName);
     }
 
     private void populateReportHeader(ReportDefinition reportDefinition, ReportResponse reportResponse) {

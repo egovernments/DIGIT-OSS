@@ -1,18 +1,14 @@
 package org.egov.swagger.model;
 
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import java.util.ArrayList;
 import java.util.List;
-import javax.validation.constraints.*;
+import java.util.Objects;
 
-import org.egov.domain.model.ReportDefinitions;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Combination of below properties provides the decription of a report that can be generically obtained from the framework. Please note that in this version, only reports out of RDBMS are supported - but later the framework will be enhanced to support reports out of RDBMS/Cross service non join reports from RDBMS/Elastic search and mashups.
@@ -21,6 +17,9 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties
 @EnableConfigurationProperties(ReportDefinition.class)
 public class ReportDefinition {
+	
+	@JsonProperty("isUserIntegrationRequired")
+	private Boolean isUserIntegrationRequired = false;
 
     @JsonProperty("additionalConfig")
     private Object additionalConfig = null;

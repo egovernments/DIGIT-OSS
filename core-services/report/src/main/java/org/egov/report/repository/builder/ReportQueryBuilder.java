@@ -129,7 +129,7 @@ public class ReportQueryBuilder {
                 log.info("URL from yaml config: " + url);
                 url = url.replaceAll("\\$currentTime", Long.toString(getCurrentTime()));
                 String[] stateid = null;
-                if (es.getStateData() && (!tenantid.equals("default"))) {
+                if (es.getStateData() && tenantid.contains(".")) {
                     log.info("State Data");
                     stateid = tenantid.split("\\.");
                     url = url.replaceAll("\\$tenantid", stateid[0]);
