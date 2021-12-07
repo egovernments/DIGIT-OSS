@@ -106,14 +106,14 @@ public class MicroDiskFileStoreService implements FileStoreService {
 
     @Override
     public FileStoreMapper store(File file, String fileName, String mimeType, String moduleName, boolean deleteFile) {
-        try {
+        try(InputStream inputs =  new FileInputStream(file);) {
             String probeContentType = mimeType;
             String name = fileName;
             int length = (int) file.length();
             File parentFile = file.getParentFile();
     
             DiskFileItem fileItem = new DiskFileItem("files",probeContentType, false, name, length, parentFile);
-            InputStream inputs =  new FileInputStream(file);
+            
             OutputStream os = fileItem.getOutputStream();
             int ret = inputs.read();
             while ( ret != -1 )
