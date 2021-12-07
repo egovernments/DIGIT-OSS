@@ -1,12 +1,16 @@
 package org.egov.swservice.util;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
+import com.jayway.jsonpath.Filter;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.mdms.model.MasterDetail;
+import org.egov.mdms.model.MdmsCriteria;
+import org.egov.mdms.model.MdmsCriteriaReq;
+import org.egov.mdms.model.ModuleDetail;
 import org.egov.swservice.config.SWConfiguration;
+import org.egov.swservice.web.models.EmailRequest;
 import org.egov.swservice.web.models.EventRequest;
 import org.egov.swservice.web.models.SMSRequest;
 import org.egov.swservice.producer.SewarageConnectionProducer;
@@ -19,6 +23,11 @@ import org.springframework.util.CollectionUtils;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.client.RestTemplate;
+
+import static com.jayway.jsonpath.Criteria.where;
+import static com.jayway.jsonpath.Filter.filter;
+import static org.egov.swservice.util.SWConstants.*;
 
 @Component
 @Slf4j
@@ -32,6 +41,10 @@ public class NotificationUtil {
 
 	@Autowired
 	private SewarageConnectionProducer producer;
+
+	@Autowired
+	private RestTemplate restTemplate;
+
 
 	/**
 	 * Returns the uri for the localization call
@@ -163,6 +176,98 @@ public class NotificationUtil {
 	 */
 	public String getCustomizedMsg(String code, String localizationMessage) {
 		return getMessageTemplate(code, localizationMessage);
+	}
+
+	/**
+	 * Send the EmailRequest on the EmailNotification kafka topic
+	 *
+	 * @param emailRequestList
+	 *            The list of EmailRequest to be sent
+	 */
+	public void sendEmail(List<EmailRequest> emailRequestList) {
+
+		if (config.getIsEmailNotificationEnabled()) {
+			if (CollectionUtils.isEmpty(emailRequestList))
+				log.info("Messages from localization couldn't be fetched!");
+			for (EmailRequest emailRequest : emailRequestList) {
+				producer.push(config.getEmailNotifTopic(), emailRequest);
+				log.info("Email Request -> "+emailRequest.toString());
+				log.info("EMAIL notification sent!");
+			}
+		}
+	}
+
+	public Map<String, String> fetchUserEmailIds(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
+		Map<String, String> mapOfPhnoAndEmailIds = new HashMap<>();
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
+		Map<String, Object> userSearchRequest = new HashMap<>();
+		userSearchRequest.put("RequestInfo", requestInfo);
+		userSearchRequest.put("tenantId", tenantId);
+		userSearchRequest.put("userType", "CITIZEN");
+		for(String mobileNo: mobileNumbers) {
+			userSearchRequest.put("userName", mobileNo);
+			try {
+				Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest);
+				if(null != user) {
+					if(JsonPath.read(user, "$.user[0].emailId")!=null) {
+						String email = JsonPath.read(user, "$.user[0].emailId");
+						mapOfPhnoAndEmailIds.put(mobileNo, email);
+					}
+				}else {
+					log.error("Service returned null while fetching user for username - "+mobileNo);
+				}
+			}catch(Exception e) {
+				log.error("Exception while fetching user for username - "+mobileNo);
+				log.error("Exception trace: ",e);
+				continue;
+			}
+		}
+		return mapOfPhnoAndEmailIds;
+	}
+
+	public List<String> fetchChannelList(RequestInfo requestInfo, String tenantId, String moduleName, String action){
+		List<String> masterData = new ArrayList<>();
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getMdmsHost()).append(config.getMdmsUrl());
+		if(StringUtils.isEmpty(tenantId))
+			return masterData;
+		MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, tenantId.split("\\.")[0]);
+
+		Filter masterDataFilter = filter(
+				where(MODULECONSTANT).is(moduleName).and(ACTION).is(action)
+		);
+
+		try {
+			Object response = restTemplate.postForObject(uri.toString(), mdmsCriteriaReq, Map.class);
+			masterData = JsonPath.parse(response).read("$.MdmsRes.Channel.channelList[?].channelNames[*]", masterDataFilter);
+		}catch(Exception e) {
+			log.error("Exception while fetching workflow states to ignore: ",e);
+		}
+		return masterData;
+	}
+
+	private MdmsCriteriaReq getMdmsRequestForChannelList(RequestInfo requestInfo, String tenantId){
+		MasterDetail masterDetail = new MasterDetail();
+		masterDetail.setName(CHANNEL_LIST);
+		List<MasterDetail> masterDetailList = new ArrayList<>();
+		masterDetailList.add(masterDetail);
+
+		ModuleDetail moduleDetail = new ModuleDetail();
+		moduleDetail.setMasterDetails(masterDetailList);
+		moduleDetail.setModuleName(CHANNEL);
+		List<ModuleDetail> moduleDetailList = new ArrayList<>();
+		moduleDetailList.add(moduleDetail);
+
+		MdmsCriteria mdmsCriteria = new MdmsCriteria();
+		mdmsCriteria.setTenantId(tenantId);
+		mdmsCriteria.setModuleDetails(moduleDetailList);
+
+		MdmsCriteriaReq mdmsCriteriaReq = new MdmsCriteriaReq();
+		mdmsCriteriaReq.setMdmsCriteria(mdmsCriteria);
+		mdmsCriteriaReq.setRequestInfo(requestInfo);
+
+		return mdmsCriteriaReq;
 	}
 
 
