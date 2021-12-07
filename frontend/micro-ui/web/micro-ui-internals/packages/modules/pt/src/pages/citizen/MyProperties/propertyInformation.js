@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
 import PropertyDocument from "../../../pageComponents/PropertyDocument";
-import { getCityLocale, getPropertyTypeLocale } from "../../../utils";
+import { getCityLocale, getPropertyTypeLocale, stringReplaceAll } from "../../../utils";
 
 const setBillData = async (tenantId, propertyIds, updatefetchBillData, updateCanFetchBillData) => {
   const assessmentData = await Digit.PTService.assessmentSearch({ tenantId, filters: { propertyIds } });
@@ -32,6 +32,7 @@ const PropertyInformation = () => {
   const { t } = useTranslation();
   const { propertyIds } = useParams();
 
+  var isMobile = window.Digit.Utils.browser.isMobile();
   const [enableAudit, setEnableAudit] = useState(false);
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -59,6 +60,11 @@ const PropertyInformation = () => {
 
   const [property, setProperty] = useState(() => data?.Properties[0] || " ");
 
+  let specialCategoryDoc = [];
+  property?.documents?.filter(ob => ob.documentType.includes("SPECIALCATEGORYPROOF")).map((doc) => {
+      specialCategoryDoc.push(doc);
+  })
+  
   useEffect(() => {
     if (data) {
       setProperty(data?.Properties[0]);
@@ -140,11 +146,11 @@ const PropertyInformation = () => {
           </StatusTable>
           <CardSubHeader>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
           <StatusTable>
-            <Row label={t("PT_PROPERTY_ADDRESS_COLONY_NAME")} text={`${property.address?.buildingName || t("CS_NA")}`} />
-            <Row label={t("PT_PROPERTY_ADDRESS_STREET_NAME")} text={`${property.address?.street || t("CS_NA")}`} />
-            <Row label={t("PT_COMMON_LOCALITY_OR_MOHALLA")} text={`${t(property?.address?.locality?.name)}` || t("CS_NA")} />
-            <Row label={t("PT_COMMON_CITY")} text={`${t(getCityLocale(property?.tenantId)) || t("CS_NA")}`} />
             <Row label={t("PT_PROPERTY_ADDRESS_PINCODE")} text={`${property.address?.pincode || t("CS_NA")}`} />
+            <Row label={t("PT_COMMON_CITY")} text={`${t(getCityLocale(property?.tenantId)) || t("CS_NA")}`} />
+            <Row label={t("PT_COMMON_LOCALITY_OR_MOHALLA")} text={`${t(property?.address?.locality?.name)}` || t("CS_NA")} />
+            <Row label={t("PT_PROPERTY_ADDRESS_STREET_NAME")} text={`${property.address?.street || t("CS_NA")}`} />
+            <Row label={t("PT_PROPERTY_ADDR_DOOR_HOUSE_NO")} text={`${property.address?.doorNo || t("CS_NA")}`} />
           </StatusTable>
           <CardSubHeader>{t("PT_PROPERTY_ASSESSMENT_DETAILS_HEADER")}</CardSubHeader>
           <StatusTable>
@@ -209,22 +215,25 @@ const PropertyInformation = () => {
                     )}
                   </CardSubHeader>
                   <StatusTable>
+                  {property?.institution && property?.institution?.name && <Row label={t("PT_INSTITUTION_NAME")} text={`${property?.institution?.name || t("CS_NA")}`} />}
+                  {property?.institution && property?.institution?.type && <Row label={t("PT_INSTITUTION_TYPE")} text={`${t(`COMMON_MASTERS_OWNERSHIPCATEGORY_${property?.institution?.type}`) || t("CS_NA")}`} />}
                     <Row
                       label={t("PT_COMMON_APPLICANT_NAME_LABEL")}
+                      textStyle={isMobile?{width:"22%"}:{width:"40%"}}
                       text={`${owner?.name || t("CS_NA")}`}
                       actionButton={
                         <ActionButton jumpTo={`/digit-ui/citizen/pt/property/owner-history/${property.tenantId}/${property.propertyId}`} />
                       }
                     />
-                    <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={`${owner?.fatherOrHusbandName || t("CS_NA")}`} />
                     <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${owner?.gender ? owner?.gender.toLowerCase() : t("CS_NA")}`} />
-                    <Row
-                      label={t("PT_FORM3_OWNERSHIP_TYPE")}
-                      text={`${property?.ownershipCategory ? t(`PT_OWNERSHIP_${property?.ownershipCategory}`) : t("CS_NA")}`}
-                    />
+                    {property?.institution && <Row label={t("PT_LANDLINE_NUMBER_FLOATING_LABEL")} text={`${owner?.altContactNumber || t("CS_NA")}`} />}
                     <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={`${t(owner?.mobileNumber)}` || t("CS_NA")} />
+                    {property?.institution && property?.institution?.designation && <Row label={t("Designation")} text={`${property?.institution?.designation || t("CS_NA")}`} />}
+                    <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={`${owner?.fatherOrHusbandName || t("CS_NA")}`} />
+                    <Row label={t("PT_FORM3_RELATIONSHIP")} text={`${owner?.relationship || t("CS_NA")}`} />
+                    {specialCategoryDoc && specialCategoryDoc.length>0 && <Row label={t("PT_SPL_CAT_DOC_TYPE")} text={`${t(stringReplaceAll(specialCategoryDoc[index].documentType,".","_"))}` || t("CS_NA")} />}
+                    {specialCategoryDoc && specialCategoryDoc.length>0 && <Row label={t("PT_SPL_CAT_DOC_ID")} text={`${t(specialCategoryDoc[index].id)}` || t("CS_NA")} />}
                     <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={`${t(t("CS_NA"))}`} />
-                    <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={`${t(owner?.ownerType).toLowerCase()}` || t("CS_NA")} />
                     <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={`${t(owners?.correspondenceAddress)}` || t("CS_NA")} />
                   </StatusTable>
                 </div>
