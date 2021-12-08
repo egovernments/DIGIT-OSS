@@ -137,7 +137,7 @@ public class ContingentBillAction extends BaseBillAction {
         }
 
     }
-
+    
     private static final  String FORWARD = "Forward";
     private static final String ACCOUNT_DETAIL_TYPE_LIST = "accountDetailTypeList";
     private static final String BILL_SUB_TYPE_LIST = "billSubTypeList";
@@ -183,7 +183,7 @@ public class ContingentBillAction extends BaseBillAction {
     @Override
     public void prepare() {
         super.prepare();
-        System.out.println("*********** New ExpenseBill recieved - Prepare *********************");
+        LOGGER.info("*********** New ExpenseBill recieved - Prepare *********************");
         accountDetailTypeList = persistenceService.findAllBy("from Accountdetailtype where isactive=true order by name");
         addDropdownData(ACCOUNT_DETAIL_TYPE_LIST, accountDetailTypeList);
         addDropdownData(BILL_SUB_TYPE_LIST, getBillSubTypes());
@@ -264,7 +264,7 @@ public class ContingentBillAction extends BaseBillAction {
     @SkipValidation
     @Action(value = "/bill/contingentBill-newform")
     public String newform() {
-    	System.out.println("*********** New ExpenseBill recieved- newForm*********************");
+    	 LOGGER.info("*********** New ExpenseBill recieved- newForm*********************");
         List<AppConfigValues> cutOffDateconfigValue = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
                 "DataEntryCutOffDate");
         Date date;
@@ -360,7 +360,7 @@ public class ContingentBillAction extends BaseBillAction {
     public String create() {
         if (LOGGER.isInfoEnabled())
             LOGGER.info(billDetailsTableCreditFinal);
-        System.out.println("*********** ExpenseBill creation started*********************");
+        LOGGER.info("*********** ExpenseBill creation started*********************");
         try {
         	populateWorkflowBean();
             if (FinancialConstants.BUTTONFORWARD.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {

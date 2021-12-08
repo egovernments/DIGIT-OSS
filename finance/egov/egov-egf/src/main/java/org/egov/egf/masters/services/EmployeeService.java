@@ -3,6 +3,7 @@ package org.egov.egf.masters.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.egov.commons.Accountdetailkey;
 import org.egov.commons.service.AccountDetailKeyService;
 import org.egov.commons.service.EntityTypeService;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class EmployeeService implements EntityTypeService {
 
+	private static final Logger LOGGER = Logger.getLogger(EmployeeService.class);
     @Autowired
     private AccountDetailKeyService accountDetailKeyService;
 
@@ -48,7 +50,7 @@ public class EmployeeService implements EntityTypeService {
        
         List<Accountdetailkey> accdetails = accountDetailKeyService.findByDetailName(accountDetailTypeId, filterKey);
         List<Employee> employees = new ArrayList<>();
-        System.out.println("*********accdetails size"+accdetails.size());
+        LOGGER.info("*********accdetails size"+accdetails.size());
         accdetails.forEach(accdetail->{
             Employee employee = new Employee();
             employee.setName(accdetail.getDetailname());
