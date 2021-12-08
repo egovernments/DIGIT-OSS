@@ -34,7 +34,7 @@ public class MultiStateInstanceUtil {
     /*
      * Index in which to find the schema name in a tenantId split by "."
      */
-    @Value("${state.schema.index.position.tenantid:0}")
+    @Value("${state.schema.index.position.tenantid:1}")
     private Integer stateSchemaIndexPositionInTenantId;
     
 	/**
@@ -128,7 +128,7 @@ public class MultiStateInstanceUtil {
 
 			String[] tenants = tenantId.split("\\.");
 			if (tenants.length > 1)
-				updatedTopic = tenants[1].concat("-").concat(topic);
+				updatedTopic = tenants[stateSchemaIndexPositionInTenantId].concat("-").concat(topic);
 		}
 		return updatedTopic;
 	}
