@@ -72,7 +72,7 @@ public class TokenService {
         for (Token t: tokens.getTokens()) {
 
             if (!otpConfiguration.isEncryptOTP() && validateRequest.getOtp().equalsIgnoreCase(t.getNumber())
-             || (otpConfiguration.isEncryptOTP()  && passwordEncoder.matches(validateRequest.getOtp(), t.getNumber()))) {
+             || otpConfiguration.isEncryptOTP()  && passwordEncoder.matches(validateRequest.getOtp(), t.getNumber())) {
                 tokenRepository.markAsValidated(t);
                 return t;
             }

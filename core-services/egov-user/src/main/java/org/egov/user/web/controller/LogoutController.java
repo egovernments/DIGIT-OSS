@@ -8,9 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LogoutController {
@@ -33,14 +34,14 @@ public class LogoutController {
         String accessToken = tokenWrapper.getAccessToken();
         OAuth2AccessToken redisToken = tokenStore.readAccessToken(accessToken);
         tokenStore.removeAccessToken(redisToken);
-        return new ResponseInfo("", "", new Date().toString(), "", "", "Logout successfully");
+        return new ResponseInfo("", "", System.currentTimeMillis(), "", "", "Logout successfully");
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleError(Exception ex) {
         ex.printStackTrace();
         ErrorResponse response = new ErrorResponse();
-        ResponseInfo responseInfo = new ResponseInfo("", "", new Date().toString(), "", "", "Logout failed");
+        ResponseInfo responseInfo = new ResponseInfo("", "", System.currentTimeMillis(), "", "", "Logout failed");
         response.setResponseInfo(responseInfo);
         Error error = new Error();
         error.setCode(400);

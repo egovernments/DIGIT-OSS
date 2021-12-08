@@ -19,6 +19,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.egov.Utils.Utils;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.exceptions.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,6 @@ public class CorrelationIdFilter extends ZuulFilter {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     
     private ObjectMapper objectMapper;
-    private List<String> encryptedUrlList;
     private List<String> openEndpointsWhitelist;
     private List<String> mixedModeEndpointsWhitelist;
     
@@ -52,14 +52,16 @@ public class CorrelationIdFilter extends ZuulFilter {
     private Utils utils;
     
     @Autowired
-    public CorrelationIdFilter(List<String> openEndpointsWhitelist, List<String> mixedModeEndpointsWhitelist,
-    		List<String> encryptedUrlList, ObjectMapper objectMapper) {
- 		super();
- 		this.openEndpointsWhitelist = openEndpointsWhitelist;
- 		this.mixedModeEndpointsWhitelist = mixedModeEndpointsWhitelist;
- 		this.encryptedUrlList = encryptedUrlList;
- 		this.objectMapper = objectMapper;
- 	}
+    private MultiStateInstanceUtil centralInstanceUtil;
+    
+	@Autowired
+	public CorrelationIdFilter(List<String> openEndpointsWhitelist, List<String> mixedModeEndpointsWhitelist,
+			ObjectMapper objectMapper) {
+		super();
+		this.openEndpointsWhitelist = openEndpointsWhitelist;
+		this.mixedModeEndpointsWhitelist = mixedModeEndpointsWhitelist;
+		this.objectMapper = objectMapper;
+	}
 
     @Override
     public String filterType() {
@@ -84,7 +86,8 @@ public class CorrelationIdFilter extends ZuulFilter {
         Boolean isOpenRequest = openEndpointsWhitelist.contains(requestURI);
         Boolean isMixModeRequest = mixedModeEndpointsWhitelist.contains(requestURI);
         
-		if ((isOpenRequest || isMixModeRequest) && !requestURI.equalsIgnoreCase("/user/oauth/token")) {
+		if (centralInstanceUtil.getIsEnvironmentCentralInstance() && (isOpenRequest || isMixModeRequest)
+				&& !requestURI.equalsIgnoreCase("/user/oauth/token")) {
 			/*
 			 * Adding tenantid to header for open urls, authorized urls will get ovverrided
 			 * in RBAC filter
@@ -94,7 +97,7 @@ public class CorrelationIdFilter extends ZuulFilter {
 				throw new CustomException("Unique value of tenantId must be given for open URI requests", 400,
 						"multiple or No tenantids found in Request body");
 			}
-			String tenantId = utils.getLowLevelTenatFromSet(tenantIds);;
+			String tenantId = utils.getLowLevelTenatFromSet(tenantIds);
 			MDC.put(TENANTID_MDC, tenantId);
 			ctx.set(TENANTID_MDC, tenantId);
 

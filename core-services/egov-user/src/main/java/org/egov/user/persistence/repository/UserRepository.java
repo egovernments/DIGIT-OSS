@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.CustomException;
 import org.egov.user.domain.model.Address;
 import org.egov.user.domain.model.Role;
@@ -47,6 +48,9 @@ public class UserRepository {
 	
 	@Autowired
 	private UserUtils userUtils;
+	
+	@Autowired
+	private MultiStateInstanceUtil multiStateInstanceUtil;
 
     private AddressRepository addressRepository;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -433,7 +437,8 @@ public class UserRepository {
         if (roleCodes.isEmpty())
             return Collections.emptyMap();
 
-        Set<Role> validatedRoles = fetchRolesByCode(roleCodes, getStateLevelTenant(users.get(0).getTenantId()));
+		Set<Role> validatedRoles = fetchRolesByCode(roleCodes,
+				multiStateInstanceUtil.getStateLevelTenant(users.get(0).getTenantId()));
 
         Map<String, Role> roleCodeMap = new HashMap<>();
 
@@ -594,30 +599,5 @@ public class UserRepository {
         namedParameterJdbcTemplate.update(RoleQueryBuilder.DELETE_USER_ROLES, roleInputs);
         saveUserRoles(user);
     }
-
-	/**
-	 * For central instance if the then tenantid size is lesser than state level
-	 * length the same will be returned without splitting
-	 * 
-	 * @param tenantId
-	 * @return
-	 */
-	private String getStateLevelTenant(String tenantId) {
-
-		String stateTenant = "";
-		String[] tenantArray = tenantId.split("\\.");
-
-		if (userUtils.getIsEnvironmentCentralInstance()) {
-			if (userUtils.getStateLevelTenantIdLength() < tenantArray.length) {
-				for (int i = 0; i < userUtils.getStateLevelTenantIdLength(); i++) {
-					stateTenant = stateTenant.concat(tenantArray[i]);
-				}
-			} else {
-				stateTenant = tenantId;
-			}
-			return stateTenant;
-		}
-		return tenantArray[0];
-	}
 
 }

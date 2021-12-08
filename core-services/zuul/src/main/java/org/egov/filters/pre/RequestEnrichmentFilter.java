@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 import org.apache.commons.io.IOUtils;
 import org.egov.Utils.ExceptionUtils;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.contract.User;
 import org.egov.model.RequestBodyInspector;
 import org.egov.tracer.model.CustomException;
@@ -35,6 +36,8 @@ import com.netflix.zuul.context.RequestContext;
  */
 @Component
 public class RequestEnrichmentFilter extends ZuulFilter {
+	
+	private MultiStateInstanceUtil centralInstanceUtil;
 
     private static final String FAILED_TO_ENRICH_REQUEST_BODY_MESSAGE = "Failed to enrich request body";
     private static final String USER_SERIALIZATION_MESSAGE = "Failed to serialize user";
@@ -50,8 +53,9 @@ public class RequestEnrichmentFilter extends ZuulFilter {
     private static final String PASS_THROUGH_GATEWAY_HEADER_VALUE = "true";
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public RequestEnrichmentFilter() {
-        this.objectMapper = new ObjectMapper();
+    public RequestEnrichmentFilter(MultiStateInstanceUtil centralInstanceUtil, ObjectMapper objectMapper) {
+    	this.centralInstanceUtil = centralInstanceUtil;
+        this.objectMapper = objectMapper;
         objectMapper.getFactory().configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
 
     }
@@ -101,7 +105,8 @@ public class RequestEnrichmentFilter extends ZuulFilter {
 
     private void addCorrelationIdHeader(RequestContext ctx) {
         ctx.addZuulRequestHeader(CORRELATION_ID_HEADER_NAME, getCorrelationId());
-        ctx.addZuulRequestHeader(REQUEST_TENANT_ID_KEY,  getTenantId());
+		if (centralInstanceUtil.getIsEnvironmentCentralInstance())
+			ctx.addZuulRequestHeader(REQUEST_TENANT_ID_KEY, getTenantId());
     }
 
     private void addPassThroughGatewayHeader(RequestContext ctx) {

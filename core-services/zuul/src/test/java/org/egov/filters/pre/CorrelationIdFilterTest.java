@@ -30,7 +30,7 @@ public class CorrelationIdFilterTest {
         mixModeEndpointslist.add("anonymous-endpoint1");
         mixModeEndpointslist.add("anonymous-endpoint2");
         
-		correlationIdFilter = new CorrelationIdFilter(openEndpointsWhitelist, mixModeEndpointslist, encrytpedUlList, objectMapper);
+		correlationIdFilter = new CorrelationIdFilter(openEndpointsWhitelist, mixModeEndpointslist, objectMapper);
 	}
 
 	@Test

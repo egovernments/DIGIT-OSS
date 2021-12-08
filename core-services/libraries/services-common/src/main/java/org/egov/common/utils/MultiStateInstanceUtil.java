@@ -4,13 +4,11 @@ import java.util.regex.Pattern;
 
 import org.egov.common.exception.InvalidTenantIdException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
-import lombok.Builder;
 import lombok.Getter;
 
-@Component
-@Builder
+@Configuration
 @Getter
 public class MultiStateInstanceUtil {
 
@@ -88,8 +86,12 @@ public class MultiStateInstanceUtil {
 	}
 	
 	/**
-	 * For central instance if the then tenantId size is lesser than state level
+	 * For central instance if the tenantId size is lesser than state level
 	 * length the same will be returned without splitting
+	 * 
+	 * if the tenant-id is longer than the given stateTenantlength then the length of tenant-id
+	 * till state-level index will be returned 
+	 * (for example if statetenantlength is 1 and tenant-id is 'in.statea.tenantx'. the returned tenant-id will be in.statea)
 	 * 
 	 * @param tenantId
 	 * @return

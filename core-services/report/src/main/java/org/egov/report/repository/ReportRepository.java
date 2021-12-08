@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.report.repository.builder.ReportQueryBuilder;
 import org.egov.swagger.model.ReportDefinition;
 import org.egov.swagger.model.ReportRequest;
@@ -31,6 +33,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Repository
 public class ReportRepository {
+
+	@Autowired
+	private MultiStateInstanceUtil centralInsUtil;
 	
     @Value("${is.environment.central.instance}")
     private Boolean isEnvironmentCentralInstance;
@@ -96,19 +101,15 @@ public class ReportRepository {
 
         Long startTime = new Date().getTime();
         List<Map<String, Object>> maps = null;
-        String tenantIdForReplace = reportRequest.getTenantId();
 
         String query = getQuery(reportRequest, reportDefinition, authToken);
         
-		if (isEnvironmentCentralInstance) {
-			if (tenantIdForReplace.contains("."))
-				tenantIdForReplace = tenantIdForReplace.split("//.")[1];
-			else
-				tenantIdForReplace = "";
-		} else {
-			tenantIdForReplace = "";
+		try {
+			query = centralInsUtil.replaceSchemaPlaceholder(query, reportRequest.getTenantId());
+		} catch (InvalidTenantIdException e1) {
+			throw new CustomException("EG_REPORT_TENANT_EXCEPTION",
+					"Tenantid too short or does not contain enough data to replace schema in query");
 		}
-		query = query.replace("{SCHEMA}", tenantIdForReplace);
 
         Map<String, Object> parameters = getQueryParameters(reportRequest);
         MapSqlParameterSource params =  new MapSqlParameterSource(parameters);

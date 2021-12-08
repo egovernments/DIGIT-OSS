@@ -1,22 +1,26 @@
 package org.egov.filters.pre;
 
-import com.netflix.zuul.context.RequestContext;
-import org.apache.commons.io.IOUtils;
-import org.egov.Resources;
-import org.egov.contract.Role;
-import org.egov.contract.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.apache.commons.io.IOUtils;
+import org.egov.Resources;
+import org.egov.common.utils.MultiStateInstanceUtil;
+import org.egov.contract.Role;
+import org.egov.contract.User;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netflix.zuul.context.RequestContext;
 
 public class RequestEnrichmentFilterTest {
 
@@ -25,7 +29,8 @@ public class RequestEnrichmentFilterTest {
 
     @Before
     public void before() {
-        filter = new RequestEnrichmentFilter();
+    	MultiStateInstanceUtil multiStateInstanceUtil = Mockito.mock(MultiStateInstanceUtil.class);
+        filter = new RequestEnrichmentFilter(multiStateInstanceUtil, new ObjectMapper());
         RequestContext.getCurrentContext().clear();
     }
 

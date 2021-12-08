@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.egov.Utils.ExceptionUtils;
 import org.egov.Utils.UserUtils;
 import org.egov.Utils.Utils;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.contract.User;
 import org.egov.model.RequestBodyInspector;
 import org.egov.wrapper.CustomRequestWrapper;
@@ -57,14 +58,14 @@ public class AuthPreCheckFilter extends ZuulFilter {
     private List<String> mixedModeEndpointsWhitelist;
     private final ObjectMapper objectMapper;
     private UserUtils userUtils;
-
-
+    private MultiStateInstanceUtil centralInstanceUtil;
 	public AuthPreCheckFilter(List<String> openEndpointsWhitelist, List<String> mixedModeEndpointsWhitelist,
-			UserUtils userUtils) {
+			UserUtils userUtils, MultiStateInstanceUtil centralInstanceUtil) {
 		
 		this.openEndpointsWhitelist = openEndpointsWhitelist;
 		this.mixedModeEndpointsWhitelist = mixedModeEndpointsWhitelist;
 		this.userUtils = userUtils;
+		this.centralInstanceUtil = centralInstanceUtil;
 		objectMapper = new ObjectMapper();
 	}
 
@@ -208,12 +209,31 @@ public class AuthPreCheckFilter extends ZuulFilter {
     private void setAnonymousUser(){
     	
     	RequestContext ctx = RequestContext.getCurrentContext();
-		String host = ctx.getRequest().getRequestURL().toString()
-				.replace(getRequestURI(), "")
-				.replace("https://", "")
-				.replace("http://", "");
-        User systemUser = userUtils.fetchSystemUser(host);
+    	String tenantId = getStateLevelTenantForHost(ctx);
+        User systemUser = userUtils.fetchSystemUser(tenantId);
         ctx.set(USER_INFO_KEY, systemUser);
     }
+
+	/**
+	 * method to fetch state level tenant-id based on whether the server is a
+	 * multi-state instance or single-state instance
+	 * 
+	 * @param ctx
+	 * @return
+	 */
+	private String getStateLevelTenantForHost(RequestContext ctx) {
+		String tenantId = "";
+    	if(centralInstanceUtil.getIsEnvironmentCentralInstance()) {
+    		
+    		String host = ctx.getRequest().getRequestURL().toString()
+    				.replace(getRequestURI(), "")
+    				.replace("https://", "")
+    				.replace("http://", "");
+    		tenantId = userUtils.getStateLevelTenantMap().get(host);
+    	}else {
+    		tenantId = userUtils.getStateLevelTenant();
+    	}
+		return tenantId;
+	}
 
 }

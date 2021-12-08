@@ -4,7 +4,6 @@ import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import org.egov.user.domain.model.enums.UserType;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import lombok.Getter;
@@ -19,10 +18,4 @@ public class UserUtils {
         else
             return tenantId;
     }
-
-    @Value(("${is.environment.central.instance}"))
-    private Boolean isEnvironmentCentralInstance;
-    
-    @Value(("${state.level.tenantid.length}"))
-    private Integer stateLevelTenantIdLength;
 }

@@ -37,6 +37,11 @@ public class UserRepository {
 
     public User fetchUser(String mobileNumber, String tenantId, String userType) {
     	
+    	/*
+    	 * #central-instance
+    	 * tenantId for header will be  when citizen is being fetched in OTP
+    	 * directly taking 0th index since citizen will be saved with highest parent of tenant hierarchy
+    	 */
     	String tenantIdForHeader = tenantId;
         UserSearchRequest request = null;
         if (userType !=null && userType.equals("EMPLOYEE")) {

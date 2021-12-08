@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.egov.Utils.ExceptionUtils;
 import org.egov.Utils.Utils;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.contract.User;
 import org.egov.exceptions.CustomException;
 import org.slf4j.Logger;
@@ -44,6 +45,9 @@ public class AuthFilter extends ZuulFilter {
 
     @Autowired
     private Utils utils;
+    
+    @Autowired
+    private MultiStateInstanceUtil centralInstanceUtil;
 
     public AuthFilter(ProxyRequestHelper helper, RestTemplate restTemplate, String authServiceHost, String authUri) {
         this.helper = helper;
@@ -82,7 +86,7 @@ public class AuthFilter extends ZuulFilter {
             ExceptionUtils.raiseCustomException(HttpStatus.INTERNAL_SERVER_ERROR, "User authentication service is down");
         }
         
-		if (StringUtils.isEmpty(ctx.get(TENANTID_MDC))) {
+		if (centralInstanceUtil.getIsEnvironmentCentralInstance() && StringUtils.isEmpty(ctx.get(TENANTID_MDC))) {
 			
 			Set<String> tenantIds = utils.validateRequestAndSetRequestTenantId();
 			/*

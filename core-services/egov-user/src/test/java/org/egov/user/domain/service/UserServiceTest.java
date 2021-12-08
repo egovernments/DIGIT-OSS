@@ -12,7 +12,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -188,7 +187,7 @@ public class UserServiceTest {
 
     private org.egov.user.web.contract.OtpValidateRequest buildOtpValidationRequest() {
         // TODO Auto-generated method stub
-        RequestInfo requestInfo = RequestInfo.builder().action("validate").ts(new Date()).build();
+        RequestInfo requestInfo = RequestInfo.builder().action("validate").ts(System.currentTimeMillis()).build();
         Otp otp = Otp.builder().build();
         org.egov.user.web.contract.OtpValidateRequest otpValidationRequest = org.egov.user.web.contract.OtpValidateRequest
                 .builder().requestInfo(requestInfo).otp(otp).build();

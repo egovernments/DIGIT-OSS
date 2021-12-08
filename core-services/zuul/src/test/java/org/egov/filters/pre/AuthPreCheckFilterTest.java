@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.egov.Utils.UserUtils;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.contract.User;
 import org.egov.exceptions.CustomException;
 import org.junit.Before;
@@ -45,8 +46,9 @@ public class AuthPreCheckFilterTest {
         anonymousEndpointsWhitelist.add("anonymous-endpoint2");
         
         UserUtils userUtils = Mockito.mock(UserUtils.class);
-        Mockito.when(userUtils.fetchSystemUser("host")).thenReturn(new User());
-        authPreCheckFilter = new AuthPreCheckFilter(openEndpointsWhitelist, anonymousEndpointsWhitelist, userUtils);
+        MultiStateInstanceUtil multiStateInstanceUtil = Mockito.mock(MultiStateInstanceUtil.class);
+        Mockito.when(userUtils.fetchSystemUser("tenantId")).thenReturn(new User());
+        authPreCheckFilter = new AuthPreCheckFilter(openEndpointsWhitelist, anonymousEndpointsWhitelist, userUtils , multiStateInstanceUtil);
         RequestContext ctx = RequestContext.getCurrentContext();
         ctx.clear();
         ctx.setRequest(request);

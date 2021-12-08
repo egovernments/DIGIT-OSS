@@ -11,6 +11,7 @@ import java.util.WeakHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -46,6 +47,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class ReportQueryBuilder {
+	
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -128,12 +132,12 @@ public class ReportQueryBuilder {
                 }
                 log.info("URL from yaml config: " + url);
                 url = url.replaceAll("\\$currentTime", Long.toString(getCurrentTime()));
-                String[] stateid = null;
-                if (es.getStateData() && tenantid.contains(".")) {
+                String stateid = null;
+                if (es.getStateData()) {
                     log.info("State Data");
-                    stateid = tenantid.split("\\.");
-                    url = url.replaceAll("\\$tenantid", stateid[0]);
-                    finalJson = finalJson.replaceAll("\\$tenantid", stateid[0]);
+                    stateid = centralInstanceUtil.getStateLevelTenant(tenantid);
+                    url = url.replaceAll("\\$tenantid", stateid);
+                    finalJson = finalJson.replaceAll("\\$tenantid", stateid);
                 } else {
                     log.info("Tenant Data");
                     url = url.replaceAll("\\$tenantId", tenantid);

@@ -16,15 +16,20 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Repository
 public class UserUtils {
-
-
-    @Value("#{${egov.statelevel.tenant.map}}")
+	
+	@Getter
+    @Value("#{${egov.statelevel.tenant.map:{}}}")
     private Map<String, String> stateLevelTenantMap;
+    
+	@Getter
+    @Value("${egov.statelevel.tenant}")
+    private String stateLevelTenant;
 
     @Value("${egov.auth-service-host}${egov.user.search.path}")
     private String userSearchURI;
@@ -42,13 +47,13 @@ public class UserUtils {
 
 
     @Cacheable(value = "systemUser" , sync = true)
-    public User fetchSystemUser(String host){
+    public User fetchSystemUser(String tenantId){
 
         UserSearchRequest userSearchRequest =new UserSearchRequest();
         userSearchRequest.setRoleCodes(Collections.singletonList("ANONYMOUS"));
         userSearchRequest.setUserType("SYSTEM");
         userSearchRequest.setPageSize(1);
-		userSearchRequest.setTenantId(stateLevelTenantMap.get(host));
+		userSearchRequest.setTenantId(tenantId);
 
         StringBuilder uri = new StringBuilder(userSearchURI);
         User user = null;

@@ -14,6 +14,7 @@ import java.util.Set;
 import org.egov.Utils.ExceptionUtils;
 import org.egov.Utils.Utils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.contract.User;
 import org.egov.model.AuthorizationRequest;
 import org.egov.model.AuthorizationRequestWrapper;
@@ -43,6 +44,9 @@ public class RbacFilter extends ZuulFilter {
 
     @Autowired
     private Utils utils;
+    
+    @Autowired
+    private MultiStateInstanceUtil centralInstanceUtil;
     
     private RestTemplate restTemplate;
 
@@ -94,7 +98,7 @@ public class RbacFilter extends ZuulFilter {
         /*
          * Adding tenantId to header for tracer logging with correlation-id
          */
-		if (StringUtils.isEmpty(ctx.get(TENANTID_MDC))) {
+		if (centralInstanceUtil.getIsEnvironmentCentralInstance() && StringUtils.isEmpty(ctx.get(TENANTID_MDC))) {
 			String singleTenantId = utils.getLowLevelTenatFromSet(tenantIds);
 			MDC.put(TENANTID_MDC, singleTenantId);
 			ctx.set(TENANTID_MDC, singleTenantId);
@@ -120,7 +124,8 @@ public class RbacFilter extends ZuulFilter {
         
         final HttpHeaders headers = new HttpHeaders();
         headers.add(CORRELATION_ID_HEADER_NAME, (String) ctx.get(CORRELATION_ID_KEY));
-        headers.add(REQUEST_TENANT_ID_KEY, (String) ctx.get(TENANTID_MDC));
+		if (centralInstanceUtil.getIsEnvironmentCentralInstance())
+			headers.add(REQUEST_TENANT_ID_KEY, (String) ctx.get(TENANTID_MDC));
         final HttpEntity<Object> httpEntity = new HttpEntity<>(authorizationRequestWrapper, headers);
 
         try {

@@ -3,8 +3,11 @@ package org.egov;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.egov.Utils.CustomRateLimitUtils;
 import org.egov.Utils.UserUtils;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.filters.pre.AuthFilter;
 import org.egov.filters.pre.AuthPreCheckFilter;
 import org.egov.filters.pre.CorrelationIdFilter;
@@ -28,8 +31,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.RateLimitUtils;
 import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.properties.RateLimitProperties;
 import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.support.SecuredRateLimitUtils;
-
-import javax.annotation.PostConstruct;
 
 @EnableZuulProxy
 @EnableCaching
@@ -92,18 +93,20 @@ public class ZuulGatewayApplication {
     private UserUtils userUtils;
     
     @Autowired
+    private MultiStateInstanceUtil centralInstanceUtil;
+    
+    @Autowired
     private CustomRateLimitUtils customRateLimitUtils;
 
     
 	@Bean
 	public CorrelationIdFilter correlationIdFilter() {
-		return new CorrelationIdFilter(openEndpointsWhitelist, mixedModeEndpointsWhitelist, encryptedUrlSet,
-				this.objectMapper);
+		return new CorrelationIdFilter(openEndpointsWhitelist, mixedModeEndpointsWhitelist, this.objectMapper);
 	}
     
     @Bean
     public AuthPreCheckFilter authCheckFilter() {
-        return new AuthPreCheckFilter(openEndpointsWhitelist, mixedModeEndpointsWhitelist,userUtils);
+        return new AuthPreCheckFilter(openEndpointsWhitelist, mixedModeEndpointsWhitelist,userUtils, centralInstanceUtil);
     }
 
     @Bean

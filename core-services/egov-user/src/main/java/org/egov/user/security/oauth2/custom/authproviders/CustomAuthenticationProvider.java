@@ -1,10 +1,21 @@
 package org.egov.user.security.oauth2.custom.authproviders;
 
-import lombok.extern.slf4j.Slf4j;
+import static java.util.Objects.isNull;
+import static org.egov.user.config.UserServiceConstants.IP_HEADER_NAME;
+import static org.springframework.util.StringUtils.isEmpty;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.MDC;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.tracer.model.CustomException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.ServiceCallException;
 import org.egov.user.config.UserServiceConstants;
 import org.egov.user.domain.exception.DuplicateUserNameException;
@@ -14,7 +25,6 @@ import org.egov.user.domain.model.User;
 import org.egov.user.domain.model.enums.UserType;
 import org.egov.user.domain.service.UserService;
 import org.egov.user.domain.service.utils.EncryptionDecryptionUtil;
-import org.egov.user.domain.service.utils.UserUtils;
 import org.egov.user.web.contract.auth.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,14 +37,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.Objects.isNull;
-import static org.egov.user.config.UserServiceConstants.IP_HEADER_NAME;
-import static org.springframework.util.StringUtils.isEmpty;
+import lombok.extern.slf4j.Slf4j;
 
 @Component("customAuthProvider")
 @Slf4j
@@ -50,8 +53,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private UserService userService;
     
     @Autowired
-    private UserUtils userUtils;
-
+    private MultiStateInstanceUtil centraInstanceUtil;
+    
     @Autowired
     private EncryptionDecryptionUtil encryptionDecryptionUtil;
 
@@ -87,7 +90,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		/*
 		 * Central instance tenant MDC enanchement
 		 */
-		if (userUtils.getIsEnvironmentCentralInstance()) {
+		if (centraInstanceUtil.getIsEnvironmentCentralInstance()) {
 			MDC.put(UserServiceConstants.TENANTID_MDC_STRING, tenantId);
 		}
 
