@@ -1,8 +1,18 @@
 package org.egov.filters.pre;
 
-import com.netflix.zuul.context.RequestContext;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+
 import org.egov.Resources;
 import org.egov.contract.User;
+import org.egov.exceptions.CustomException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -14,14 +24,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.netflix.zuul.context.RequestContext;
 
 public class AuthFilterTest {
     private MockHttpServletRequest request = new MockHttpServletRequest();
@@ -65,7 +68,7 @@ public class AuthFilterTest {
     }
 
     @Test
-    public void testThatFilterShouldAbortIfValidatingAuthTokenFails() throws IOException {
+    public void testThatFilterShouldAbortIfValidatingAuthTokenFails() throws IOException, CustomException {
         RequestContext ctx = RequestContext.getCurrentContext();
         String authToken = "dummy-auth-token";
         ctx.set("authToken", authToken);

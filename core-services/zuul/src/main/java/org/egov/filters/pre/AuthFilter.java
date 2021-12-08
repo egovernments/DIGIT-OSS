@@ -1,20 +1,34 @@
 package org.egov.filters.pre;
 
-import com.netflix.zuul.ZuulFilter;
-import com.netflix.zuul.context.RequestContext;
+import static org.egov.constants.RequestContextConstants.AUTH_BOOLEAN_FLAG_NAME;
+import static org.egov.constants.RequestContextConstants.AUTH_TOKEN_KEY;
+import static org.egov.constants.RequestContextConstants.CORRELATION_ID_HEADER_NAME;
+import static org.egov.constants.RequestContextConstants.CORRELATION_ID_KEY;
+import static org.egov.constants.RequestContextConstants.TENANTID_MDC;
+import static org.egov.constants.RequestContextConstants.USER_INFO_KEY;
+
+import java.util.Set;
+
 import org.egov.Utils.ExceptionUtils;
+import org.egov.Utils.Utils;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.contract.User;
+import org.egov.exceptions.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.zuul.filters.ProxyRequestHelper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
-import static org.egov.constants.RequestContextConstants.*;
+import com.netflix.zuul.ZuulFilter;
+import com.netflix.zuul.context.RequestContext;
 
 /**
  *  4th pre filter to get executed.
@@ -22,7 +36,6 @@ import static org.egov.constants.RequestContextConstants.*;
  */
 public class AuthFilter extends ZuulFilter {
 
-    private static final String INPUT_STREAM_CONVERSION_FAILED_MESSAGE = "Failed to convert to input stream";
     private static final String RETRIEVING_USER_FAILED_MESSAGE = "Retrieving user failed";
     private final ProxyRequestHelper helper;
     private final String authServiceHost;
@@ -30,6 +43,11 @@ public class AuthFilter extends ZuulFilter {
     private final RestTemplate restTemplate;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
+    private Utils utils;
+    
+    @Autowired
+    private MultiStateInstanceUtil centralInstanceUtil;
 
     public AuthFilter(ProxyRequestHelper helper, RestTemplate restTemplate, String authServiceHost, String authUri) {
         this.helper = helper;
@@ -54,7 +72,7 @@ public class AuthFilter extends ZuulFilter {
     }
 
     @Override
-    public Object run() {
+    public Object run() throws CustomException {
         RequestContext ctx = RequestContext.getCurrentContext();
         String authToken = (String) ctx.get(AUTH_TOKEN_KEY);
         try {
@@ -67,6 +85,18 @@ public class AuthFilter extends ZuulFilter {
             logger.error(RETRIEVING_USER_FAILED_MESSAGE, ex);
             ExceptionUtils.raiseCustomException(HttpStatus.INTERNAL_SERVER_ERROR, "User authentication service is down");
         }
+        
+		if (centralInstanceUtil.getIsEnvironmentCentralInstance() && StringUtils.isEmpty(ctx.get(TENANTID_MDC))) {
+			
+			Set<String> tenantIds = utils.validateRequestAndSetRequestTenantId();
+			/*
+			 * Adding tenantId to header for tracer logging with correlation-id and routing
+			 */
+			String singleTenantId = utils.getLowLevelTenatFromSet(tenantIds);
+			MDC.put(TENANTID_MDC, singleTenantId);
+			ctx.set(TENANTID_MDC, singleTenantId);
+		}
+        
         return null;
     }
 
@@ -77,5 +107,5 @@ public class AuthFilter extends ZuulFilter {
         final HttpEntity<Object> httpEntity = new HttpEntity<>(null, headers);
         return restTemplate.postForObject(authURL, httpEntity, User.class);
     }
-
+    
 }

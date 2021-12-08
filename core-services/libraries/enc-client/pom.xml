@@ -4,13 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.egov</groupId>
   <artifactId>enc-client</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
   <distributionManagement>
-    <snapshotRepository>
-      <id>repo.egovernments.org</id>
-      <name>eGov ERP Snapshots Repository</name>
-      <url>https://nexus-repo.egovernments.org/nexus/content/repositories/snapshots/</url>
-    </snapshotRepository>
+	<snapshotRepository>
+		<id>repo.digit.org</id>
+		<name>eGov DIGIT Releases Repository</name>
+		<url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
+	</snapshotRepository>
   </distributionManagement>
   <properties>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -105,11 +105,16 @@
     </dependency>
   </dependencies>
   <repositories>
-    <repository>
-      <id>repo.egovernments.org</id>
-      <name>eGov ERP Releases Repository</name>
-      <url>https://nexus-repo.egovernments.org/nexus/content/repositories/releases/</url>
-    </repository>
+	<repository>
+		<id>repo.digit.org</id>
+		<name>eGov DIGIT Releases Repository</name>
+		<url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
+	</repository>
+	<repository>
+		<id>repo.egovernments.org</id>
+		<name>eGov ERP Releases Repository</name>
+		<url>https://nexus-repo.egovernments.org/nexus/content/repositories/releases/</url>
+	</repository>
     <repository>
       <id>snapshots.repo.egovernments.org</id>
       <name>eGov ERP Snapshots Repository</name>
