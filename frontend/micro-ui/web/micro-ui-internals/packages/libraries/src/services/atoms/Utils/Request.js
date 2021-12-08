@@ -73,7 +73,7 @@ export const Request = async ({
 
   const headers1 = {
     "Content-Type": "application/json",
-    Accept: "application/pdf",
+    Accept: window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")?"*/*":"application/pdf",
   };
 
   if (authHeader) headers = { ...headers, ...authHeaders() };
@@ -105,6 +105,13 @@ export const Request = async ({
     const multipartFormDataRes = await Axios({ method, url: _url, data: multipartData.data, params, headers: { "Content-Type": "multipart/form-data", "auth-token": Digit.UserService.getUser().access_token  } });
     return multipartFormDataRes;
   }
+
+ 
+    /* Fix for central instance to send tenantID in all query params  */
+    const tenantInfo = Digit.SessionStorage.get("userType") === "citizen" ? Digit.ULBService.getStateId():Digit.ULBService.getCurrentTenantId() || Digit.ULBService.getStateId() ;
+    if ((!params["tenantId"])&&(window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE"))) {
+      params["tenantId"]=tenantInfo;
+    }
 
   const res = userDownload
     ? await Axios({ method, url: _url, data, params, headers, responseType: "arraybuffer" })

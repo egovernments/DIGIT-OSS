@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback, useMemo, useReducer } from "react"
-import { InboxComposer, CaseIcon } from "@egovernments/digit-ui-react-components";
+import { InboxComposer, CaseIcon, Header } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import FilterFormFieldsComponent from "./FilterFormFieldsComponent";
 import SearchFormFieldsComponents from "./SearchFormFieldsComponent";
@@ -16,14 +16,14 @@ const Inbox = ({ parentRoute }) => {
 
   const filterFormDefaultValues = {
     moduleName: "BPAREG",
-    // businessService: {code: "BPA", name:t("BPA")},
-    applicationStatus: "",
+    applicationStatus: [],
+    businessService: null,
     locality: [],
     assignee: "ASSIGNED_TO_ALL"
   }
   const tableOrderFormDefaultValues = {
     sortBy: "",
-    limit: 10,
+    limit: window.Digit.Utils.browser.isMobile()?50:10,
     offset: 0,
     sortOrder: "DESC"
   }
@@ -59,6 +59,11 @@ const Inbox = ({ parentRoute }) => {
     setFilterFormValue("assignee", "ASSIGNED_TO_ALL");
     dispatch({ action: "mutateFilterForm", data: filterFormDefaultValues });
   }
+  
+  const onSortFormReset = (setSortFormValue) => {
+    setSortFormValue("sortOrder", "DESC")
+    dispatch({action: "mutateTableForm", data: tableOrderFormDefaultValues})
+  }
 
   const formInitValue = useMemo(() => {
     return InboxObjectInSessionStorage || {
@@ -72,6 +77,22 @@ const Inbox = ({ parentRoute }) => {
   const [formState, dispatch] = useReducer(formReducer, formInitValue)
   const onPageSizeChange = (e) => {
     dispatch({ action: "mutateTableForm", data: { ...formState.tableForm, limit: e.target.value } })
+  }
+
+  const onSortingByData = (e) => {
+    if(e.length > 0){
+      const [{id, desc}] = e
+      const sortOrder = desc ? "DESC" : "ASC"
+      const sortBy = id
+      if(!(formState.tableForm.sortBy === sortBy && formState.tableForm.sortOrder === sortOrder)){
+        dispatch({action: "mutateTableForm", data:{ ...formState.tableForm, sortBy: id, sortOrder: desc ? "DESC" : "ASC" }})
+      }
+    }
+  }
+
+  const onMobileSortOrderData = (data) => {
+    const {sortOrder} = data
+    dispatch({action: "mutateTableForm", data:{ ...formState.tableForm, sortOrder }})
   }
 
   const { data: localitiesForEmployeesCurrentTenant, isLoading: loadingLocalitiesForEmployeesCurrentTenant } = Digit.Hooks.useBoundaryLocalities(tenantId, "revenue", {}, t);
@@ -114,11 +135,19 @@ const Inbox = ({ parentRoute }) => {
 
   const propsForFilterForm = { FilterFormFields, onFilterFormSubmit, filterFormDefaultValues: formState?.filterForm, resetFilterFormDefaultValues: filterFormDefaultValues, onFilterFormReset }
 
-  const propsForInboxTable = useInboxTableConfig({ ...{ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch } })
+  const propsForInboxTable = useInboxTableConfig({ ...{ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch, onSortingByData } })
 
   const propsForInboxMobileCards = useInboxMobileCardsData({ parentRoute, table })
+  
+  const propsForMobileSortForm = { onMobileSortOrderData, sortFormDefaultValues: formState?.tableForm, onSortFormReset }
 
-  return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable, propsForInboxMobileCards, formState }}></InboxComposer>
+  return <>
+    <Header>
+      {t("ES_COMMON_INBOX")}
+      {totalCount ? <p className="inbox-count">{totalCount}</p> : null}
+    </Header>
+    <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, ...propsForMobileSortForm, propsForInboxTable, propsForInboxMobileCards, formState }}></InboxComposer>
+  </>
 }
 
 export default Inbox

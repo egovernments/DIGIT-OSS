@@ -1,3 +1,4 @@
+import { Header } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import DesktopInbox from "./DesktopInbox";
@@ -20,7 +21,7 @@ const Inbox = ({ tenants, parentRoute }) => {
   let isMobile = window.Digit.Utils.browser.isMobile();
   const userInfo = Digit.UserService.getUser();
   const [pageOffset, setPageOffset] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(window.Digit.Utils.browser.isMobile()?50:10);
   const [sortParams, setSortParams] = useState([{ id: "createdTime", sortOrder: "DESC" }]);
   const paginationParams = isMobile ? { limit: 10, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.sortOrder } :
     { limit: pageSize, offset: pageOffset, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.sortOrder }
@@ -116,6 +117,14 @@ const Inbox = ({ tenants, parentRoute }) => {
     "OBPS_SCRUTINYDETAILS_ALL"
     ) */
 
+    const fetchLastPage = () => {
+      setPageOffset(bpaInboxData?.totalCount && (Math.ceil(bpaInboxData?.totalCount / 10) * 10 - pageSize));
+  };
+
+  const fetchFirstPage = () => {
+      setPageOffset(0);
+  };
+
   const handleSort = (args) => {
     setSortParams(args);
   };
@@ -183,6 +192,11 @@ const Inbox = ({ tenants, parentRoute }) => {
   }
 
   return (
+    <div>
+    <Header>
+      {t("ES_COMMON_INBOX")}
+      {Number(bpaInboxData?.totalCount) ? <p className="inbox-count">{Number(bpaInboxData?.totalCount)}</p> : null}
+    </Header>
     <DesktopInbox
       // bparegData={table}
       bparegData={[]}
@@ -196,6 +210,8 @@ const Inbox = ({ tenants, parentRoute }) => {
       onSort={handleSort}
       onNextPage={fetchNextPage}
       onPrevPage={fetchPrevPage}
+      onLastPage={fetchLastPage}
+      onFirstPage={fetchFirstPage}
       currentPage={Math.floor(pageOffset / pageSize)}
       pageSizeLimit={pageSize}
       disableSort={false}
@@ -204,8 +220,10 @@ const Inbox = ({ tenants, parentRoute }) => {
       parentRoute={parentRoute}
       paginationParms={paginationParams}
       sortParams={sortParams}
+      totalRecords={bpaInboxData?.totalCount}
     // totalRecords={isInbox ? Number(applications?.totalCount) : totalCount}
     />
+    </div>
   );
 }
 

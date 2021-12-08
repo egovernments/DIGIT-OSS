@@ -2,6 +2,7 @@ import { Request } from "../atoms/Utils/Request"
 import Urls from "../atoms/urls";
 import { format } from "date-fns";
 import { MdmsService } from "./MDMS";
+import React from "react";
 
 export const OBPSService = {
   scrutinyDetails: (tenantId, params) =>
@@ -128,13 +129,44 @@ export const OBPSService = {
       userService: true,
       userDownload: true,
     }),
+  edcr_report_download: (details, tenantId) =>
+    Request({
+      url: Urls.obps.edcrreportdownload,
+      data: details,
+      useCache: true,
+      method: "POST",
+      auth: true,
+      locale: true,
+      userService: false,
+      userDownload: true,
+    }),
   LicenseDetails: async (tenantId, params) => {
     const response = await OBPSService.BPAREGSearch(tenantId, {}, params);
     if (!response?.Licenses?.length) {
       return;
     }
-
     const [License] = response?.Licenses;
+
+    const paymentRes = await Digit.PaymentService.recieptSearch(
+      License?.tenantId,
+      "BPAREG",
+      {consumerCodes: License?.applicationNumber, isEmployee:true}
+    );
+
+    const mdmsRes = await MdmsService.getMultipleTypes(License?.tenantId, "StakeholderRegistraition", ["TradeTypetoRoleMapping"]);
+
+    if (License?.tradeLicenseDetail?.applicationDocuments?.length && mdmsRes?.StakeholderRegistraition?.TradeTypetoRoleMapping?.length > 0) {
+      mdmsRes?.StakeholderRegistraition?.TradeTypetoRoleMapping?.map(doc => {
+        if(doc?.docTypes?.length > 0 && doc?.tradeType == License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType) {
+          doc?.docTypes?.map(docType => {
+            License?.tradeLicenseDetail?.applicationDocuments?.forEach(document => {
+              if(docType?.code == document?.documentType && docType?.info) document.info = docType?.info
+            })
+          })
+        }
+      })
+    }
+
     const details = [
       {
         title: " ",
@@ -177,12 +209,40 @@ export const OBPSService = {
       values: [
         { title: "BPA_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL", value: License?.tradeLicenseDetail?.owners?.[0]?.correspondenceAddress || "NA"  }
       ]
+    },{
+      title: "BPA_DOCUMENT_DETAILS_LABEL",
+      asSectionHeader: true,
+      additionalDetails: {
+        documents: [{
+          title: "",
+          values: License?.tradeLicenseDetail?.applicationDocuments?.map(doc => ({
+            title: `BPAREG_HEADER_${doc?.documentType?.replaceAll('.', '_')}`,
+            documentType: doc?.documentType,
+            documentUid: doc?.documentUid,
+            fileStoreId: doc?.fileStoreId,
+            id: doc?.id,
+            docInfo: doc?.info
+          }))
+        }]
+      },
     },
+    paymentRes?.Payments?.length > 0 && {
+      title: "BPA_FEE_DETAILS_LABEL",
+      additionalDetails: {
+        inspectionReport: [],
+        values: [
+          { title: "BPAREG_FEES", value: <span>&#8377;{paymentRes?.Payments?.[0]?.totalAmountPaid}</span>},
+          { title: "BPA_STATUS_LABEL", isTransLate: true, isStatus: true, value: paymentRes?.Payments?.[0]?.totalAmountPaid ? ("WF_BPA_PAID") : "NA", isTransLate:true }
+        ]
+      }
+    }
   ]
-    return {
+
+  return {
       applicationData: License,
       applicationDetails: details,
       tenantId: License?.tenantId,
+      payments: paymentRes?.Payments || []
     }
   },
   BPADetailsPage: async (tenantId, filters) => {
@@ -204,7 +264,7 @@ export const OBPSService = {
          ocdcrNumber: BPA?.edcrNumber,
          edcrNumber: bpaResponse?.BPA?.[0]?.edcrNumber
       }
-    const comparisionReport = await OBPSService.comparisionReport(tenantId, { ...comparisionRep });
+    const comparisionReport = await OBPSService.comparisionReport(BPA?.tenantId, { ...comparisionRep });
 
     const nocDetails = noc
       ?.map((nocDetails, index) => ({
@@ -220,11 +280,21 @@ export const OBPSService = {
             value: nocDetails?.applicationStatus,
             field: "STATUS"
           },
-          {
+          nocDetails?.additionalDetails?.SubmittedOn && {
             title: "BPA_SUDMITTED_ON_LABEL",
-            value: nocDetails?.additionalDetails?.SubmittedOn ? format(new Date(Number(nocDetails?.additionalDetails?.SubmittedOn)), 'dd/MM/yyyy') : "NA", //format(new Date(nocDetails?.auditDetaills?.createdTime), 'dd/MM/yyyy')
+            value: nocDetails?.additionalDetails?.SubmittedOn ? format(new Date(Number(nocDetails?.additionalDetails?.SubmittedOn)), 'dd/MM/yyyy') : "NA",
             isNotTranslated: true
           },
+          nocDetails?.nocNo && {
+            title: "BPA_APPROVAL_NUMBER_LABEL",
+            value: nocDetails?.nocNo || "NA",
+            isNotTranslated: true
+          },
+          nocDetails?.nocNo && {
+            title: "BPA_APPROVED_REJECTED_ON_LABEL",
+            value: (nocDetails?.applicationStatus === "APPROVED" || nocDetails?.applicationStatus === "REJECTED" || nocDetails?.applicationStatus === "AUTO_APPROVED" || nocDetails?.applicationStatus === "AUTO_REJECTED") ? format(new Date(Number(nocDetails?.auditDetails?.lastModifiedTime)), 'dd/MM/yyyy') : "NA",
+            isNotTranslated: true
+          }
         ],
         additionalDetails: {
           data: nocDetails,
@@ -244,7 +314,7 @@ export const OBPSService = {
       }));
       let inspectionReport = [];
       let checklist = [];
-      BPA?.additionalDetails?.fieldinspection_pending?.map((ob,ind) => {
+      BPA?.additionalDetails?.fieldinspection_pending?.filter((ob) => ob.docs && ob.docs.length>0).map((ob,ind) => {
         checklist = [];
         inspectionReport.push({
         title: "BPA_FI_REPORT",
@@ -281,120 +351,45 @@ export const OBPSService = {
         }})
       })
 
-    const detailsOfBPA = [
-      ...inspectionReport,
-      {
-        title: "BPA_BASIC_DETAILS_TITLE",
-        asSectionHeader: true,
-        values: [
-          { title: "BPA_BASIC_DETAILS_APP_DATE_LABEL", value: BPA?.auditDetails?.createdTime ? format(new Date(BPA?.auditDetails?.createdTime), 'dd/MM/yyyy') : '' },
-          { title: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL", value: `WF_BPA_${edcr?.appliactionType}` },
-          { title: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL", value: edcr?.applicationSubType },
-          { title: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL", value: edcr?.planDetail?.planInformation?.occupancy },
-          { title: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL", value: `WF_BPA_${riskType}` },
-          { title: "BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL", value: edcr?.planDetail?.planInformation?.applicantName },
-        ]
-      },
-      {
-        title: "BPA_PLOT_DETAILS_TITLE",
-        asSectionHeader: true,
-        values: [
-          { title: "BPA_BOUNDARY_PLOT_AREA_LABEL", value: edcr?.planDetail?.planInformation?.plotArea },
-          { title: "BPA_PLOT_NUMBER_LABEL", value: edcr?.planDetail?.planInformation?.plotNo },
-          { title: "BPA_KHATHA_NUMBER_LABEL", value: edcr?.planDetail?.planInformation?.khataNo },
-          { title: "BPA_HOLDING_NUMBER_LABEL", value: "" },
-          { title: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL", value: "" }
-        ]
-      },
-      {
-        title: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
-        asSectionHeader: true,
-        values: [
-          { title: BPA?.businessService !== "BPA_OC" ? "BPA_EDCR_NO_LABEL" : "BPA_OC_EDCR_NO_LABEL", value: BPA?.edcrNumber },
-        ],
-        additionalDetails: {
-          scruntinyDetails: [
-            { title: "BPA_UPLOADED_PLAN_DIAGRAM", value: edcr?.updatedDxfFile, text: "BPA_UPLOADED_PLAN_DXF" },
-            { title: "BPA_SCRUNTINY_REPORT_OUTPUT", value: edcr?.planReport, text: "BPA_SCRUTINY_REPORT_PDF" },
-          ]
-        }
-      },
-      {
-        title: "BPA_BUILDING_EXTRACT_HEADER",
-        asSectionHeader: true,
-        values: [
-          { title: "BPA_BUILTUP_AREA_HEADER", value: edcr?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea },
-          { title: "BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL", value: edcr?.planDetail?.blocks?.[0]?.building?.totalFloors },
-          { title: "BPA_HEIGHT_FROM_GROUND_LEVEL_FROM_MUMTY", value: edcr?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeigh }
-        ]
-      },
-      {
-        title: "BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL",
-        asSectionHeader: true,
-        values: [
-          { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr?.planDetail?.planInformation?.demolitionArea ? `${edcr?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : "" }
-        ]
-      },
-      BPA?.businessService !== "BPA_OC" && {
-        title: "BPA_NEW_TRADE_DETAILS_HEADER_DETAILS",
-        asSectionHeader: true,
-        values: [
-          { title: "BPA_DETAILS_PIN_LABEL", value: BPA?.landInfo?.address?.pincode },
-          { title: "BPA_CITY_LABEL", value: BPA?.landInfo?.address?.city },
-          { title: "BPA_LOC_MOHALLA_LABEL", value: BPA?.landInfo?.address?.locality?.name },
-          { title: "BPA_DETAILS_SRT_NAME_LABEL", value: BPA?.landInfo?.address?.street },
-          { title: "ES_NEW_APPLICATION_LOCATION_LANDMARK", value: BPA?.landInfo?.address?.landmark }
-        ]
-      },
-      BPA?.businessService !== "BPA_OC" && {
-        title: "BPA_APPLICANT_DETAILS_HEADER",
-        asSectionHeader: true,
-        values: [
-          { title: "CORE_COMMON_NAME", value: BPA?.landInfo?.owners?.[0]?.name },
-          { title: "BPA_APPLICANT_GENDER_LABEL", value: BPA?.landInfo?.owners?.[0]?.gender },
-          { title: "CORE_COMMON_MOBILE_NUMBER`", value: BPA?.landInfo?.owners?.[0]?.mobileNumber },
-        ]
-      },
-      {
-        title: "BPA_DOCUMENT_DETAILS_LABEL",
-        asSectionHeader: true,
-        additionalDetails: {
-          obpsDocuments: [{
-            title: "",
-            values: BPA?.documents?.map(doc => ({
-              title: doc?.documentType?.replaceAll('.', '_'),
-              documentType: doc?.documentType,
-              documentUid: doc?.documentUid,
-              fileStoreId: doc?.fileStoreId,
-              id: doc?.id
-            }))
-          }]
-        },
-      },
-      ...nocDetails,
-      // {
-      //   title: "BPA_NOC_DETAILS_SUMMARY",
-      //   asSectionHeader: true,
-      //   values: nocDetails
-      // },
-    ];
-
     let details = [];
 
-    const applicationDetailsInfo = {
+    let applicationDetailsInfo = {
       title: " ",
+      isCommon: true,
       values: [
-        { title: "BPA_APPLICATION_NUMBER_LABEL", value: BPA?.applicationNo || "NA" },
-        { title: "BPA_PERMIT_NUMBER_LABEL", value: BPA?.approvalNo || "NA"  },
-        { title: "BPA_PERMIT_VALIDITY", value: BPA?.additionalDetails?.validityDate ? `${format(new Date(BPA?.applicationDate), 'dd/MM/yyyy')} - ${format(new Date(BPA?.additionalDetails?.validityDate), 'dd/MM/yyyy')}` : "NA"  }
+        { title: "BPA_APPLICATION_NUMBER_LABEL", value: BPA?.applicationNo || "NA" }
       ]
     };
+
+    let permitcondn = [];
+    BPA?.additionalDetails?.pendingapproval && BPA?.additionalDetails?.pendingapproval.length>0 && BPA?.additionalDetails?.pendingapproval.map((ob,index) => {
+      permitcondn.push({title:`${index+1}. ${ob}`, value:""})
+    })
+
+    let PermitConditions = {
+      title:"BPA_PERMIT_CONDITIONS",
+      isTitleVisible: permitcondn?.length > 0 ? false : true,
+      isNotAllowed: permitcondn?.length > 0 ? false : true,
+      additionalDetails:{
+        inspectionReport:[],
+        permit:[...permitcondn]
+      }
+    }
+
+    if(permitcondn.length == 0)
+    PermitConditions={};
+    
+    if(BPA?.approvalNo) {
+      applicationDetailsInfo?.values?.push({ title: "BPA_PERMIT_NUMBER_LABEL", value: BPA?.approvalNo || "NA"  });
+      applicationDetailsInfo?.values?.push({ title: "BPA_PERMIT_VALIDITY", value: BPA?.additionalDetails?.validityDate ? `${format(new Date(BPA?.applicationDate), 'dd/MM/yyyy')} - ${format(new Date(BPA?.additionalDetails?.validityDate), 'dd/MM/yyyy')}` : "NA"  });
+    }
 
 
     const basicDetails = {
       title: "BPA_BASIC_DETAILS_TITLE",
       asSectionHeader: true,
       isInsert: true,
+      isCommon: true,
       values: [
         { title: "BPA_BASIC_DETAILS_APP_DATE_LABEL", value: BPA?.auditDetails?.createdTime ? format(new Date(BPA?.auditDetails?.createdTime), 'dd/MM/yyyy') : '' },
         { title: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL", value: `WF_BPA_${edcr?.appliactionType}` },
@@ -408,6 +403,7 @@ export const OBPSService = {
     const plotDetails =  {
       title: "BPA_PLOT_DETAILS_TITLE",
       asSectionHeader: true,
+      isCommon: true,
       values: [
         { title: "BPA_BOUNDARY_PLOT_AREA_LABEL", value: `${edcr?.planDetail?.planInformation?.plotArea} sq.ft` || "NA", isNotTranslated: true   },
         { title: "BPA_PLOT_NUMBER_LABEL", value: edcr?.planDetail?.planInformation?.plotNo || "NA", isNotTranslated: true  },
@@ -419,6 +415,8 @@ export const OBPSService = {
 
     const scrutinyDetails = {
       title: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER",
+      isScrutinyDetails: true,
+      isBackGroundColor: true,
       additionalDetails: {
         values: [
           { title: "BPA_EDCR_DETAILS", value: " " },
@@ -433,12 +431,14 @@ export const OBPSService = {
 
     const buildingExtractionDetails = {
       title: "",
+      isScrutinyDetails: true,
+      isBackGroundColor: true,
       additionalDetails: {
         values: [
           { title: "BPA_BUILDING_EXTRACT_HEADER", value : " "},
           { title: "BPA_BUILTUP_AREA_HEADER", value: edcr?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea || "NA"},
           { title: "BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL", value: edcr?.planDetail?.blocks?.[0]?.building?.totalFloors || "NA" },
-          { title: "BPA_HEIGHT_FROM_GROUND_LEVEL_FROM_MUMTY", value: edcr?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeigh || "NA" }
+          { title: "BPA_HEIGHT_FROM_GROUND_LEVEL", value: edcr?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeigh || "NA" }
         ],
         scruntinyDetails: []
       }
@@ -446,10 +446,12 @@ export const OBPSService = {
 
     const demolitionAreaDetails = {
       title: "",
+      isScrutinyDetails: true,
+      isBackGroundColor: true,
       additionalDetails: {
         values: [
           { title: "BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL", value : " "},
-          { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr?.planDetail?.planInformation?.demolitionArea ? `${edcr?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : "" } 
+          { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr?.planDetail?.planInformation?.demolitionArea ? `${edcr?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : "NA" } 
         ],
         scruntinyDetails: []
       }
@@ -457,12 +459,15 @@ export const OBPSService = {
 
     const subOccupancyTableDetails = {
       title: "",
+      isSubOccupancyTable: true,
+      isTitleRepeat: true,
       additionalDetails: {
         values: [
           { title: "BPA_OCC_SUBOCC_HEADER", value : " "} 
         ],
         subOccupancyTableDetails: [
-          { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr }
+          { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr },
+          { title: "NO_REPEAT", value: "" }
         ]
       }
     }
@@ -470,6 +475,7 @@ export const OBPSService = {
     const addressDetails = {
       title: "BPA_NEW_TRADE_DETAILS_HEADER_DETAILS",
       asSectionHeader: true,
+      isCommon: true,
       values: [
         { title: "BPA_DETAILS_PIN_LABEL", value: BPA?.landInfo?.address?.pincode },
         { title: "BPA_CITY_LABEL", value: BPA?.landInfo?.address?.city },
@@ -483,6 +489,7 @@ export const OBPSService = {
     const checkOwnerLength = BPA?.landInfo?.owners?.length || 1;
     const ownerDetails = {
       title: "BPA_APPLICANT_DETAILS_HEADER",
+      isOwnerDetails: true,
       additionalDetails: {
         owners: BPA?.landInfo?.owners?.map((owner, index) => {
           return {
@@ -500,6 +507,7 @@ export const OBPSService = {
     const documentDetails =  {
       title: "BPA_DOCUMENT_DETAILS_LABEL",
       asSectionHeader: true,
+      isDocumentDetails: true,
       additionalDetails: {
         obpsDocuments: [{
           title: "",
@@ -526,7 +534,9 @@ export const OBPSService = {
       
       approvalChecksDetails = {
         title: "BPA_PERMIT_CONDITIONS",
+        isTitleVisible: approvalChecks?.length > 0 ? false : true,
         asSectionHeader: true,
+        isPermissions: true,
         additionalDetails: {
           permissions: approvalChecks
         }
@@ -557,18 +567,26 @@ export const OBPSService = {
       });
       FieldInspectionData = [...FieldInspectionData,{title:ob.title,additionalDetails:{FIdocuments:[],"documents":[{values:improvedDoc}]}} ]
       }
-    })
+    });
+
+    const fiReports = {
+      title: "",
+      isFieldInspection: true,
+      isNotAllowed: BPA?.additionalDetails?.fieldinspection_pending?.length > 0 ? false : true,
+      additionalDetails: {
+        values: [],
+        fiReport : BPA?.additionalDetails?.fieldinspection_pending?.length > 0 ? true : false
+      }
+    }
 
     if(BPA?.businessService !== "BPA_OC") {
-      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, ...FieldInspectionData, ...nocDetails, approvalChecksDetails]
+      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, fiReports, ...nocDetails, approvalChecksDetails,PermitConditions]
     } else {
-      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails, documentDetails,...FieldInspectionData, ...nocDetails ]
+      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails, documentDetails, fiReports, ...nocDetails,PermitConditions ]
     }
     
-    const isEmployee = sessionStorage.getItem("bpaApplicationDetails") === "true" || true ? true : false;
 
-    let bpaFilterDetails = detailsOfBPA?.filter(data => data);
-        bpaFilterDetails = details?.filter(data => data);
+    let bpaFilterDetails = details?.filter(data => data);
     
 
     return {

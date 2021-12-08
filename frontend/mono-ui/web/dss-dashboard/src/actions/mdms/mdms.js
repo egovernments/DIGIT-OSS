@@ -3,6 +3,7 @@ import C from '../constants';
 import CONFIGS from '../../config/configs';
 import getMDMSData from '../getMDMSData'
 import { get } from 'lodash';
+import { stateTenant } from '../../utils/commons';
 
 export default class MdmsAPI extends API {
 
@@ -35,7 +36,7 @@ export default class MdmsAPI extends API {
     }
 
     getBody() {
-        let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[0] : ''
+        let tenent = stateTenant() || '';
         return {
            "RequestInfo": {
                "authToken": ""

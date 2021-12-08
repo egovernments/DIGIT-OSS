@@ -7,28 +7,12 @@ const SearchFormFieldsComponents = ({registerRef, searchFormState}) => {
 
     return <>
         <SearchField>
-            <label>{t("NOC_APP_NO_LABEL")}</label>
+            <label>{t("NOC_APPLICATION_NUMBER_LABEL")}</label>
             <TextInput name="applicationNo" inputRef={registerRef({})} />
         </SearchField>
         <SearchField>
-            <label>{t("CORE_COMMON_MOBILE_NUMBER")}</label>
-            <TextInput name="mobileNumber" type="number" inputRef={registerRef({
-                minLength: {
-                    value: 10,
-                    message: t("CORE_COMMON_MOBILE_ERROR")
-                },
-                maxLength: {
-                    value: 10,
-                    message: t("CORE_COMMON_MOBILE_ERROR")
-                },
-                pattern: {
-                    value: /[789][0-9]{9}/,
-                    message: t("CORE_COMMON_MOBILE_ERROR")
-                }
-            })} />
-            <CardLabelError>
-                {searchFormState?.errors?.["mobileNumber"]?.message}
-            </CardLabelError>
+            <label>{t("NOC_BPA_APPLICATION_NUMBER_LABEL")}</label>
+            <TextInput name="sourceRefId" inputRef={registerRef({})} />
         </SearchField>
     </>
 }

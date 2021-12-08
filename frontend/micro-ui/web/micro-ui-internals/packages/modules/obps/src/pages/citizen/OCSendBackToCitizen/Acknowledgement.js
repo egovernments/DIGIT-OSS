@@ -19,6 +19,9 @@ const Acknowledgement = (props) => {
           applicationNumber={BPAData?.applicationNo}
           info={t("PDF_STATIC_LABEL_APPLICATION_NUMBER_LABEL")}
           successful={true}
+          infoStyles = {{fontSize: "18px", lineHeight: "21px", fontWeight: "bold", textAlign: "center", padding: "0px 15px"}}
+          applicationNumberStyles = {{fontSize: "24px", lineHeight: "28px", fontWeight: "bold", marginTop: "10px"}}
+          style={{width: "100%", padding: "10px"}}
         />
         <div style={{ marginTop: "12px", padding: "10px" }}>
           <Link to={`/digit-ui/citizen`} >

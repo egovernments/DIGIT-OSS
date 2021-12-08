@@ -1,5 +1,5 @@
 import React, {Fragment, useCallback, useMemo, useReducer} from "react"
-import { InboxComposer, ComplaintIcon } from "@egovernments/digit-ui-react-components";
+import { InboxComposer, ComplaintIcon, Header } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import SearchFormFieldsComponents from "./SearchFormFieldsComponent";
 import FilterFormFieldsComponent from "./FilterFormFieldsComponent";
@@ -19,13 +19,14 @@ const Inbox = ({parentRoute}) => {
 
     const filterFormDefaultValues = {
       moduleName: "noc-services",
-      applicationStatus: "",
+      applicationStatus: [],
+      businessService: null,
       locality: [],
       assignee: "ASSIGNED_TO_ALL"
     }
     const tableOrderFormDefaultValues = {
       sortBy: "",
-      limit: 10,
+      limit: window.Digit.Utils.browser.isMobile()?50:10,
       offset: 0,
       sortOrder: "DESC"
     }
@@ -33,22 +34,22 @@ const Inbox = ({parentRoute}) => {
     function formReducer(state, payload) {
       switch(payload.action){
         case "mutateSearchForm":
-          Digit.SessionStorage.set("OBPS.INBOX", {...state, searchForm: payload.data})
+          Digit.SessionStorage.set("NOC.INBOX", {...state, searchForm: payload.data})
           return {...state, searchForm: payload.data};
         case "mutateFilterForm":
-          Digit.SessionStorage.set("OBPS.INBOX", {...state, filterForm: payload.data})
+          Digit.SessionStorage.set("NOC.INBOX", {...state, filterForm: payload.data})
           return {...state, filterForm: payload.data};
         case "mutateTableForm":
-          Digit.SessionStorage.set("OBPS.INBOX", {...state, tableForm: payload.data})
+          Digit.SessionStorage.set("NOC.INBOX", {...state, tableForm: payload.data})
           return {...state, tableForm: payload.data};
         default:
           console.warn("dispatched action has nothing to reduce")
       }
     }
-    const InboxObjectInSessionStorage = Digit.SessionStorage.get("OBPS.INBOX")
+    const InboxObjectInSessionStorage = Digit.SessionStorage.get("NOC.INBOX")
     
     const onSearchFormReset = (setSearchFormValue) =>{
-      setSearchFormValue("mobileNumber", null);
+      setSearchFormValue("sourceRefId", null);
       setSearchFormValue("applicationNo", null);
       dispatch({action: "mutateSearchForm", data: searchFormDefaultValues});
     }
@@ -60,6 +61,11 @@ const Inbox = ({parentRoute}) => {
       setFilterFormValue("assignee", "ASSIGNED_TO_ALL");
       setFilterFormValue("applicationType", []);
       dispatch({action: "mutateFilterForm", data: filterFormDefaultValues});
+    }
+
+    const onSortFormReset = (setSortFormValue) => {
+      setSortFormValue("sortOrder", "DESC")
+      dispatch({action: "mutateTableForm", data: tableOrderFormDefaultValues})
     }
 
     const formInitValue = useMemo(() => {
@@ -86,6 +92,11 @@ const Inbox = ({parentRoute}) => {
       }
     }
     
+    const onMobileSortOrderData = (data) => {
+      const {sortOrder} = data
+      dispatch({action: "mutateTableForm", data:{ ...formState.tableForm, sortOrder }})
+    }
+
     const { data: localitiesForEmployeesCurrentTenant, isLoading: loadingLocalitiesForEmployeesCurrentTenant } = Digit.Hooks.useBoundaryLocalities(tenantId, "revenue", {}, t);
 
     const { isLoading: isInboxLoading, data: {table , statuses, totalCount} = {} } = Digit.Hooks.noc.useInbox({
@@ -94,7 +105,7 @@ const Inbox = ({parentRoute}) => {
     });
     const PropsForInboxLinks = {
         logoIcon: <ComplaintIcon />,
-        headerText: "CS_COMMON_INBOX_FIRE_NOC_SRV",
+        headerText: "ACTION_TEST_NOC",
         links: []
     }
 
@@ -125,7 +136,15 @@ const Inbox = ({parentRoute}) => {
 
     const propsForInboxMobileCards = useInboxMobileCardsData({parentRoute, table})
 
-    return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable, propsForInboxMobileCards, formState}}></InboxComposer>
+    const propsForMobileSortForm = { onMobileSortOrderData, sortFormDefaultValues: formState?.tableForm, onSortFormReset }
+
+    return <>
+      <Header>
+        {t("ES_COMMON_INBOX")}
+        {totalCount ? <p className="inbox-count">{totalCount}</p> : null}
+      </Header>
+      <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, ...propsForMobileSortForm, propsForInboxTable, propsForInboxMobileCards, formState}}></InboxComposer>
+    </>
 }
 
 export default Inbox

@@ -72,7 +72,7 @@
 @import "./components/SearchOnRadioButton.scss";
 @import "./components/EventCalendarView.scss";
 @import "./components/OnGroundEventCard.scss";
-
+@import "./components/PopupHeadingLabel.scss";
 @import "./components/hoc/index.scss";
 
 @import "./pages/employee/index.scss";
@@ -93,6 +93,11 @@
 @import "./pages/citizen/DocumentList.scss";
 @import "./pages/citizen/SurveyList.scss";
 @import "./pages/citizen/citizenDocument.scss";
+@import "./pages/employee/surveys.scss";
+
+.display-none{
+  display: none;
+}
 
 .p-unset{
   padding: unset !important;
@@ -463,4 +468,12 @@ input[type="number"] {
 
 .payment-form-text-input-correction {
   width: 100% !important;
+}
+
+
+.edcr-citizen-inbox{ 
+   thead th:first-child{
+  min-width:155px; 
+}
+
 }

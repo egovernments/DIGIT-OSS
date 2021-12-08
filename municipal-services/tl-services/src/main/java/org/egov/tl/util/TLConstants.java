@@ -179,6 +179,10 @@ public class TLConstants {
     public static final String ACCESSORY_JSONPATH_CODE = "$.MdmsRes.TradeLicense.AccessoriesCategory.*.code";
 
     public static final String ACCESSORY_JSONPATH_UOM = "$.MdmsRes.TradeLicense.AccessoriesCategory.*.uom";
+    
+    public static final String REMINDER_JSONPATH = "$.MdmsRes.TradeLicense.ReminderPeriods";
+    
+    public static final String REMINDER_PERIODS = "ReminderPeriods";
 
 
     //FINANCIAL YEAR
@@ -200,6 +204,10 @@ public class TLConstants {
     public static final String MDMS_ENDDATE  = "endingDate";
     
     public static final String MDMS_FIN_YEAR_RANGE = "finYearRange";
+    
+    public static final String TENANT_ID = "tenantId";
+
+    public static final String REMINDER_INTERVAL = "reminderInterval";
     
     //TL types
 

@@ -1,10 +1,11 @@
 import React, { useMemo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EmployeeModuleCard } from "@egovernments/digit-ui-react-components";
+import { useLocation } from "react-router-dom";
 
 const NOCEmployeeHomeCard = () => {
     const { t } = useTranslation();
-  
+    const location = useLocation()
     const tenantId = Digit.ULBService.getCurrentTenantId();
        
     const searchFormDefaultValues = {}
@@ -38,10 +39,16 @@ const NOCEmployeeHomeCard = () => {
         <path d="M0 0h24v24H0z" fill="none"></path>
         <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z" fill="white"></path>
     </svg>
-  
+
+    useEffect(()=>{
+      if (location.pathname === "/digit-ui/employee"){
+        Digit.SessionStorage.del("NOC.INBOX")
+      }
+    },[location.pathname])
+
     const propsForModuleCard = useMemo(()=>({
       Icon: <ComplaintIcon />,
-      moduleName: t("CS_COMMON_INBOX_FIRE_NOC_SRV"),
+      moduleName: t("ACTION_TEST_NOC"),
       kpis:[
         {
             count: !isInboxLoading ? totalCount : "",
@@ -62,7 +69,7 @@ const NOCEmployeeHomeCard = () => {
       ]
     }),[isInboxLoading, totalCount]);
   
-    return <EmployeeModuleCard {...propsForModuleCard} />
+    return Digit.Utils.NOCAccess() ? <EmployeeModuleCard {...propsForModuleCard} /> : null
   }
 
   export default NOCEmployeeHomeCard

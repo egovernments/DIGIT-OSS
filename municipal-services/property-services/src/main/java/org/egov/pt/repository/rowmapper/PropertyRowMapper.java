@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.egov.pt.models.Address;
-import org.egov.pt.models.AlternateMobileNumber;
 import org.egov.pt.models.AuditDetails;
 import org.egov.pt.models.ConstructionDetail;
 import org.egov.pt.models.Document;
@@ -135,7 +134,6 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 		addOwnerToProperty(rs, currentProperty);
 		addDocToProperty(rs, currentProperty);
 		addUnitsToProperty(rs, currentProperty);
-		addAlternateToProperty(rs, currentProperty);
 	}
 
 
@@ -406,25 +404,5 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 		return propertyAdditionalDetails;
 
 	}
-	
-private void addAlternateToProperty(ResultSet rs, Property currentProperty) throws SQLException {
-		
-		List<AlternateMobileNumber> altExisting = currentProperty.getAlternateMobileNumberDetails();
-		
-		if (!CollectionUtils.isEmpty(altExisting))
-			for (AlternateMobileNumber altnum : altExisting) {
-				if (altnum.getId().toString().equals(rs.getString("altid")))
-					return;
-			}
-		
-		
-	if(rs.getString("altid")!=null) {
-	Long id = Long.parseLong(rs.getString("altid"));
-		AlternateMobileNumber alternateNumber = AlternateMobileNumber.builder().id(id).uuid(rs.getString("altuuid")).name(rs.getString("altname")).mobileNumber(rs.getString("altnumber")).build();
-		
 
-		
-		currentProperty.addAlternateItem(alternateNumber); }
-	}
-	
 }

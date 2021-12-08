@@ -25,7 +25,8 @@ const BPADocuments = ({ t, formData, applicationData, docs, bpaActionsDetails })
     useEffect(() => {
         let filtredBpaDocs = [];
         if (bpaDocs?.BPA?.DocTypeMapping) {
-            filtredBpaDocs = bpaDocs?.BPA?.DocTypeMapping?.filter(data => (data.WFState == "INPROGRESS"))
+            // filtredBpaDocs = bpaDocs?.BPA?.DocTypeMapping?.filter(data => (data.WFState == "INPROGRESS"))
+            filtredBpaDocs = bpaDocs?.BPA?.DocTypeMapping?.filter(data => (data.WFState == applicationData?.status ? applicationData?.status : "INPROGRESS" && data.RiskType == applicationData?.riskType && data.ServiceType == applicationData?.additionalDetails?.serviceType && data.applicationType == applicationData?.additionalDetails?.applicationType))
         }
         let documentsList = [];
         filtredBpaDocs?.[0]?.docTypes?.forEach(doc => {
@@ -190,7 +191,7 @@ function SelectDocument({
     }
 
     return (
-        <div style={{ marginBottom: "24px", maxWidth: "600px", minWidth: "280px", background: "#FAFAFA", borderRadius: "4px", border: "1px solid #D6D5D4", padding: "8px" }}>
+        <div style={{ marginBottom: "24px", maxWidth: "950px", minWidth: "280px", background: "#FAFAFA", borderRadius: "4px", border: "1px solid #D6D5D4", padding: "8px" }}>
             <CardSubHeader style={{ marginBottom: "8px", paddingBottom: "9px", color: "#0B0C0C", fontSize: "16px", lineHeight: "19px" }}>{`${t(doc?.code)}:`}</CardSubHeader>
             {doc?.uploadedDocuments?.length && <PropertyDocuments documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
             {
@@ -206,11 +207,12 @@ function SelectDocument({
                                 selected={selectedDocument}
                                 optionKey="i18nKey"
                                 select={handleSelectDocument}
+                                style={{width: "70%"}}
                             />
                         </LabelFieldPair>
                         <LabelFieldPair>
                             <CardLabel className="card-label-smaller"></CardLabel>
-                            <div className="field">
+                            <div className="field"  style={{width: "70%"}}>
                                 <MultiUploadWrapper
                                     module="BPA"
                                     tenantId={tenantId}

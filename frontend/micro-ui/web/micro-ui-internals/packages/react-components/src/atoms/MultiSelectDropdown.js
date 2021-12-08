@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { ArrowDown, CheckSvg } from "./svgindex";
 import { useTranslation } from "react-i18next";
 
-const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, defaultLabel = "", defaultUnit = "",BlockNumber=1,isOBPSMultiple=false}) => {
+const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, defaultLabel = "", defaultUnit = "",BlockNumber=1,isOBPSMultiple=false,props={},isPropsNeeded=false}) => {
   const [active, setActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState();
   const [optionIndex, setOptionIndex] = useState(-1);
@@ -45,11 +45,11 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
         type="checkbox"
         value={option[optionsKey]}
         checked={selected.find((selectedOption) => selectedOption[optionsKey] === option[optionsKey]) ? true : false}
-        onChange={(e) => isOBPSMultiple?onSelect(e, option,BlockNumber):onSelect(e, option)}
-        
+        onChange={(e) => isPropsNeeded?onSelect(e, option,props):isOBPSMultiple?onSelect(e, option,BlockNumber):onSelect(e, option)}
+        style={{minWidth: "24px"}}
       />
       <div className="custom-checkbox">
-        <CheckSvg />
+        <CheckSvg style={{innerWidth: "24px", width: "24px"}}/>
       </div>
       <p className="label" style={index === optionIndex ? {
                     opacity: 1,

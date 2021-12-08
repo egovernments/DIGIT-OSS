@@ -1,5 +1,5 @@
 import React, {Fragment, useCallback, useMemo, useReducer } from "react"
-import { InboxComposer, CaseIcon } from "@egovernments/digit-ui-react-components";
+import { InboxComposer, CaseIcon, Header } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import FilterFormFieldsComponent from "./FilterFormFieldsComponent";
 import SearchFormFieldsComponents from "./SearchFormFieldsComponent";
@@ -7,7 +7,7 @@ import useInboxTableConfig from "./useInboxTableConfig";
 import useInboxMobileCardsData from "./useInboxMobileCardsData";
 
 const Inbox = ({parentRoute}) => {
-    
+    window.scroll(0,0);
     const { t } = useTranslation()
 
     const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -16,14 +16,14 @@ const Inbox = ({parentRoute}) => {
 
     const filterFormDefaultValues = {
       moduleName: "bpa-services",
-      applicationStatus: "",
+      applicationStatus: [],
       locality: [],
       assignee: "ASSIGNED_TO_ALL",
       applicationType: []
     }
     const tableOrderFormDefaultValues = {
       sortBy: "",
-      limit: 10,
+      limit: Digit.Utils.browser.isMobile()?50:10,
       offset: 0,
       sortOrder: "DESC"
     }
@@ -45,19 +45,24 @@ const Inbox = ({parentRoute}) => {
     }
     const InboxObjectInSessionStorage = Digit.SessionStorage.get("OBPS.INBOX")
     
-    const onSearchFormReset = (setSearchFormValue) =>{
+    const onSearchFormReset = (setSearchFormValue) => {
       setSearchFormValue("mobileNumber", null);
       setSearchFormValue("applicationNo", null);
       dispatch({action: "mutateSearchForm", data: searchFormDefaultValues});
     }
 
-    const onFilterFormReset = (setFilterFormValue) =>{
+    const onFilterFormReset = (setFilterFormValue) => {
       setFilterFormValue("moduleName", "bpa-services");
       setFilterFormValue("applicationStatus", "");
       setFilterFormValue("locality", []);
       setFilterFormValue("assignee", "ASSIGNED_TO_ALL");
       setFilterFormValue("applicationType", []);
       dispatch({action: "mutateFilterForm", data: filterFormDefaultValues});
+    }
+
+    const onSortFormReset = (setSortFormValue) => {
+      setSortFormValue("sortOrder", "DESC")
+      dispatch({action: "mutateTableForm", data: tableOrderFormDefaultValues})
     }
 
     const formInitValue = useMemo(() => {
@@ -84,8 +89,15 @@ const Inbox = ({parentRoute}) => {
       }
     }
 
-    const { data: applicationTypesOfBPA, isLoading: loadingApplicationTypesOfBPA } = Digit.Hooks.obps.useSearchMdmsTypes.applicationTypes(tenantId);
+    const onMobileSortOrderData = (data) => {
+      const {sortOrder} = data
+      dispatch({action: "mutateTableForm", data:{ ...formState.tableForm, sortOrder }})
+    }
 
+    const getRedirectionLink = (bService) => {
+      let redirectBS = bService === "BPAREG"?"search/application/stakeholder":"search/application/bpa";
+      return redirectBS;
+  }
     const { data: localitiesForEmployeesCurrentTenant, isLoading: loadingLocalitiesForEmployeesCurrentTenant } = Digit.Hooks.useBoundaryLocalities(tenantId, "revenue", {}, t);
 
     const { isLoading: isInboxLoading, data: {table , statuses, totalCount} = {} } = Digit.Hooks.obps.useBPAInbox({
@@ -107,8 +119,8 @@ const Inbox = ({parentRoute}) => {
     const SearchFormFields = useCallback(({registerRef, searchFormState}) => <SearchFormFieldsComponents {...{registerRef, searchFormState}} />,[])
 
     const FilterFormFields = useCallback(
-      ({registerRef, controlFilterForm, setFilterFormValue, getFilterFormValue}) => <FilterFormFieldsComponent {...{statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState: formState?.filterForm, getFilterFormValue, applicationTypesOfBPA, loadingApplicationTypesOfBPA, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}} />
-    ,[statuses, isInboxLoading, applicationTypesOfBPA, loadingApplicationTypesOfBPA, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant])
+      ({registerRef, controlFilterForm, setFilterFormValue, getFilterFormValue}) => <FilterFormFieldsComponent {...{statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState: formState?.filterForm, getFilterFormValue, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}} />
+    ,[statuses, isInboxLoading, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant])
 
     const onSearchFormSubmit = (data) => {
       data.hasOwnProperty("") ? delete data?.[""] : null
@@ -128,9 +140,17 @@ const Inbox = ({parentRoute}) => {
 
     const propsForInboxTable = useInboxTableConfig({...{ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch, onSortingByData}})
 
-    const propsForInboxMobileCards = useInboxMobileCardsData({parentRoute, table})
+    const propsForInboxMobileCards = useInboxMobileCardsData({parentRoute, table, getRedirectionLink})
+    
+    const propsForMobileSortForm = { onMobileSortOrderData, sortFormDefaultValues: formState?.tableForm, onSortFormReset }
 
-    return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxTable, propsForInboxMobileCards, formState}}></InboxComposer>
+    return<>
+      <Header>
+        {t("ES_COMMON_INBOX")}
+        {totalCount ? <p className="inbox-count">{totalCount}</p> : null}
+      </Header>
+     <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, ...propsForMobileSortForm, propsForInboxTable, propsForInboxMobileCards, formState}}></InboxComposer>
+    </>
 }
 
 export default Inbox

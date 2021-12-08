@@ -4,7 +4,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 
-const OCUploadPlanDiagram = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner, isShowToast }) => {
+const OCUploadPlanDiagram = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner, isShowToast, isSubmitBtnDisable }) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateId = Digit.ULBService.getStateId();
     const [uploadedFile, setUploadedFile] = useState(() => formData?.uploadData?.file || null);
@@ -40,7 +40,7 @@ const OCUploadPlanDiagram = ({ t, config, onSelect, userType, formData, ownerInd
             config={config}
             onSelect={handleSubmit}
             onSkip={onSkip}
-            isDisabled={!file}
+            isDisabled={!file || isSubmitBtnDisable}
             onAdd={onAdd}
             isMultipleAllow={true}
         >

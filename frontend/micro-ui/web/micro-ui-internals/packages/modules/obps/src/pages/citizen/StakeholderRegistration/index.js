@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { useRouteMatch, useLocation, useHistory, Switch, Route, Redirect } from "react-router-dom";
-import { newConfig } from "../../../config/stakeholderConfig";
-import CheckPage from "./CheckPage";
-import StakeholderAcknowledgement from "./StakeholderAcknowledgement";
+import { newConfig as newConfigBPAREG } from "../../../config/stakeholderConfig";
+// import CheckPage from "./CheckPage";
+// import StakeholderAcknowledgement from "./StakeholderAcknowledgement";
 
 
 const StakeholderRegistration = () => {
@@ -16,6 +16,9 @@ const StakeholderRegistration = () => {
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BUILDING_PERMIT", state?.edcrNumber ? { data: { scrutinyNumber: { edcrNumber: state?.edcrNumber }}} : {});
+
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
 
   const goNext = (skipStep) => {
     const currentPath = pathname.split("/").pop();
@@ -47,6 +50,7 @@ const StakeholderRegistration = () => {
 
   // const state = tenantId.split(".")[0];
   let config = [];
+  newConfig = newConfig?.StakeholderConfig ? newConfig?.StakeholderConfig : newConfigBPAREG;
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
@@ -58,6 +62,9 @@ const StakeholderRegistration = () => {
       sessionStorage.setItem("isPermitApplication", false);
     }
   }, []);
+
+  const CheckPage = Digit?.ComponentRegistryService?.getComponent('StakeholderCheckPage') ;
+  const StakeholderAcknowledgement = Digit?.ComponentRegistryService?.getComponent('StakeholderAcknowledgement');
 
   return (
     <Switch>

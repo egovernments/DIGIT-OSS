@@ -1,11 +1,11 @@
 import React from "react";
 import { Close } from "./svgindex";
 
-const RemoveableTag = ({ text, onClick }) => (
-  <div className="tag">
-    <span className="text">{text}</span>
+const RemoveableTag = ({ text, onClick, extraStyles }) => (
+  <div className="tag" style={extraStyles?extraStyles?.tagStyles:{}} >
+    <span className="text" style={extraStyles?extraStyles?.textStyles:{}}>{text}</span>
     <span onClick={onClick}>
-      <Close className="close" />
+      <Close className="close" style={extraStyles?extraStyles?.closeIconStyles:{}} />
     </span>
   </div>
 );

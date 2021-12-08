@@ -2,14 +2,23 @@ import React, { useMemo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { OBPSIconSolidBg, EmployeeModuleCard } from "@egovernments/digit-ui-react-components";
 import { showHidingLinksForStakeholder, showHidingLinksForBPA } from "../../utils";
+import { useLocation } from "react-router-dom";
+
 const OBPSEmployeeHomeCard = () => {
 
     const [totalCount, setTotalCount] = useState(0);
     const { t } = useTranslation();
+    const location = useLocation()
   
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateCode = Digit.ULBService.getStateId();
   
+    const stakeholderEmployeeRoles = [ { code: "BPAREG_DOC_VERIFIER", tenantId: stateCode }, { code: "BPAREG_APPROVER", tenantId: stateCode }];
+    const bpaEmployeeRoles = [ "BPA_FIELD_INSPECTOR", "BPA_NOC_VERIFIER", "BPA_APPROVER", "BPA_VERIFIER", "CEMP"];
+
+    const checkingForStakeholderRoles = showHidingLinksForStakeholder(stakeholderEmployeeRoles);
+    const checkingForBPARoles = showHidingLinksForBPA(bpaEmployeeRoles);
+
     const searchFormDefaultValues = {}
   
     const filterFormDefaultValues = {
@@ -56,12 +65,14 @@ const OBPSEmployeeHomeCard = () => {
   
     const { isLoading: isInboxLoadingOfStakeholder, data: dataOfStakeholder } = Digit.Hooks.obps.useBPAInbox({
       tenantId,
-      filters: { ...formInitValueOfStakeholder }
+      filters: { ...formInitValueOfStakeholder },
+      config:{ enabled: !!checkingForStakeholderRoles }
     });
 
     const { isLoading: isInboxLoading, data : dataOfBPA } = Digit.Hooks.obps.useBPAInbox({
       tenantId,
-      filters: { ...formInitValue }
+      filters: { ...formInitValue },
+      config:{ enabled: !!checkingForBPARoles }
     });
 
   useEffect(() => {
@@ -72,7 +83,12 @@ const OBPSEmployeeHomeCard = () => {
     }
   }, [dataOfBPA, dataOfStakeholder]);
 
-  
+  useEffect(()=>{
+    if (location.pathname === "/digit-ui/employee"){
+      Digit.SessionStorage.del("OBPS.INBOX")
+      Digit.SessionStorage.del("STAKEHOLDER.INBOX")
+    }
+  },[location.pathname])
     const propsForModuleCard = useMemo(()=>({
       Icon: <OBPSIconSolidBg />,
       moduleName: t("MODULE_OBPS"),
@@ -107,12 +123,6 @@ const OBPSEmployeeHomeCard = () => {
       ]
     }),[isInboxLoading, isInboxLoadingOfStakeholder, dataOfStakeholder, dataOfBPA, totalCount]);
 
-    const stakeholderEmployeeRoles = [ { code: "BPAREG_DOC_VERIFIER", tenantId: stateCode }, { code: "BPAREG_APPROVER", tenantId: stateCode }];
-    const bpaEmployeeRoles = [ "BPA_FIELD_INSPECTOR", "BPA_NOC_VERIFIER", "BPA_APPROVER", "BPA_VERIFIER", "CEMP"];
-
-    const checkingForStakeholderRoles = showHidingLinksForStakeholder(stakeholderEmployeeRoles);
-    const checkingForBPARoles = showHidingLinksForBPA(bpaEmployeeRoles);
-    
     if (!checkingForStakeholderRoles) {
       propsForModuleCard.links = propsForModuleCard.links.filter(obj => {
         return obj.field !== 'STAKEHOLDER';
@@ -125,7 +135,7 @@ const OBPSEmployeeHomeCard = () => {
       });
     }
   
-    return <EmployeeModuleCard {...propsForModuleCard} />
+    return checkingForBPARoles || checkingForStakeholderRoles ? <EmployeeModuleCard {...propsForModuleCard} /> : null
   }
 
   export default OBPSEmployeeHomeCard

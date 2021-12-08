@@ -219,7 +219,7 @@ export const FormComposer = (props) => {
   const checkKeyDown = (e) => { const keyCode = e.keyCode ? e.keyCode : e.key ? e.key : e.which; if (keyCode === 13) { e.preventDefault() }; };
   return (
     <form onSubmit={handleSubmit(onSubmit)} onKeyDown={(e) => checkKeyDown(e)} id={props.formId} className={props.className}>
-      <Card style={getCardStyles()}>
+      <Card style={getCardStyles()} className={props?.className}>
         {!props.childrenAtTheBottom && props.children}
         {props.heading && <CardSubHeader style={{ ...props.headingStyle }}> {props.heading} </CardSubHeader>}
         {props.description && <CardLabelDesc> {props.description} </CardLabelDesc>}

@@ -84,6 +84,8 @@ public class TLQueryBuilder {
               "WHERE offset_ > ? AND offset_ <= ?";
       
       private final String countWrapper = "SELECT COUNT(DISTINCT(tl_id)) FROM ({INTERNAL_QUERY}) as license_count";
+      
+      public static final String TENANTIDQUERY="select distinct(tenantid) from eg_tl_tradelicense";
 
 
 

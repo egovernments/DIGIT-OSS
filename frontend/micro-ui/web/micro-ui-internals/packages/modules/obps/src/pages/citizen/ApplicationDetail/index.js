@@ -1,4 +1,4 @@
-import { StatusTable, Header, Card, CardHeader, Row, PDFSvg, CardSectionHeader,MultiLink } from "@egovernments/digit-ui-react-components";
+import { StatusTable, Header, Card, CardHeader, Row, PDFSvg, CardSectionHeader,MultiLink, Loader } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -15,12 +15,13 @@ const ApplicationDetails = () => {
   const stateCode = Digit.ULBService.getStateId();
   const { data: LicenseData, isLoading } = Digit.Hooks.obps.useBPAREGSearch(tenantId, {});
   let License = LicenseData?.Licenses?.[0];
+  const { data: mdmsRes, isLoading: mdmsResIsLoading } = Digit.Hooks.obps.useMDMS(stateCode, "StakeholderRegistraition", "TradeTypetoRoleMapping");
   const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
     {
       tenantId: stateCode,
       businessService: "BPAREG",
       consumerCodes: id,
-      isEmployee: true
+      isEmployee: false
     },
     {}
   );
@@ -28,7 +29,7 @@ const ApplicationDetails = () => {
 
   useEffect(() => {
     if (License?.tradeLicenseDetail?.applicationDocuments?.length) {
-      const fileStoresIds = License?.tradeLicenseDetail?.applicationDocuments.map(document => document?.fileStoreId);
+      const fileStoresIds = License?.tradeLicenseDetail?.applicationDocuments?.map(document => document?.fileStoreId);
       Digit.UploadServices.Filefetch(fileStoresIds, tenantId.split(".")[0])
         .then(res => setDocuments(res?.data))
     }
@@ -42,25 +43,40 @@ const ApplicationDetails = () => {
           onClick: () => downloadAndPrintReciept(reciept_data?.Payments?.[0]?.paymentDetails?.[0]?.businessService || "BPAREG", License?.applicationNumber, License?.tenantId),
         }]);
       }
-      const fileStoresIds = License?.tradeLicenseDetail?.applicationDocuments.map(document => document?.fileStoreId);
+      const fileStoresIds = License?.tradeLicenseDetail?.applicationDocuments?.map(document => document?.fileStoreId);
     }
     
   }, [License, reciept_data]);
 
 
+  if (License?.tradeLicenseDetail?.applicationDocuments?.length && mdmsRes?.StakeholderRegistraition?.TradeTypetoRoleMapping?.length > 0) {
+    mdmsRes?.StakeholderRegistraition?.TradeTypetoRoleMapping?.map(doc => {
+      if(doc?.docTypes?.length > 0 && doc?.tradeType == License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType) {
+        doc?.docTypes?.map(docType => {
+          License?.tradeLicenseDetail?.applicationDocuments?.forEach(document => {
+            if(docType?.code == document?.documentType && docType?.info) document.info = docType?.info
+          })
+        })
+      }
+    })
+  }
+
+  if (isLoading) return <Loader /> 
+
   return (
     <Fragment>
+      <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
       <Header>{t("BPA_TASK_DETAILS_HEADER")}</Header>
       {reciept_data?.Payments?.length > 0 && 
-        <div style={{right: "3%", top: "20px", position: "absolute"}}>
+        // <div style={{right: "3%", top: "20px", position: "absolute"}}>
         <MultiLink
           className="multilinkWrapper"
           onHeadClick={() => setShowOptions(!showOptions)}
           displayOptions={showOptions}
           options={dowloadOptions}
           style={{top:"90px"}}
-        />  
-        </div>}
+        />}  
+      </div>
       <div>
         <Card>
           <StatusTable>
@@ -82,7 +98,7 @@ const ApplicationDetails = () => {
             <Row className="border-none" label={t(`BPA_APPLICANT_NAME_LABEL`)} text={t(License?.tradeLicenseDetail?.owners?.[0]?.name)} />
             <Row className="border-none" label={t(`BPA_APPLICANT_GENDER_LABEL`)} text={t(License?.tradeLicenseDetail?.owners?.[0]?.gender)}/>
             <Row className="border-none" label={t(`BPA_OWNER_MOBILE_NO_LABEL`)} text={License?.tradeLicenseDetail?.owners?.[0]?.mobileNumber}/>
-            <Row className="border-none" label={t(`BPA_APPLICANT_EMAIL_LABEL`)} text={License?.tradeLicenseDetail?.owners?.[0]?.emailId}/>
+            <Row className="border-none" label={t(`BPA_APPLICANT_EMAIL_LABEL`)} text={License?.tradeLicenseDetail?.owners?.[0]?.emailId || t("CS_NA")}/>
             <Row className="border-none" label={t(`BPA_APPLICANT_PAN_NO`)} text={License?.tradeLicenseDetail?.owners?.[0]?.pan || t("CS_NA")}/>
           </StatusTable>
         </Card>
@@ -94,19 +110,20 @@ const ApplicationDetails = () => {
           <CardHeader>{t(`BPA_CORRESPONDANCE_ADDRESS_LABEL`)}</CardHeader>
           <Row className="border-none" text={License?.tradeLicenseDetail?.owners?.[0]?.correspondenceAddress || t("CS_NA")} />
         </Card>
-        {License?.tradeLicenseDetail?.applicationDocuments.length>0 && <Card>
+        {License?.tradeLicenseDetail?.applicationDocuments?.length>0 && <Card>
           <CardHeader>{t("BPA_DOC_DETAILS_SUMMARY")}</CardHeader>
           {License?.tradeLicenseDetail?.applicationDocuments?.map((document, index) => {
             return (
             <Fragment>
               <div>
-                <CardSectionHeader>{t(`${stringReplaceAll(document?.documentType?.toUpperCase(), ".", "_")}`)}</CardSectionHeader>
-                <a target="_" href={documents[document.fileStoreId]?.split(",")[0]}>
+                <CardSectionHeader>{t(`BPAREG_HEADER_${stringReplaceAll(document?.documentType?.toUpperCase(), ".", "_")}`)}</CardSectionHeader>
+                {document?.info ? <div style={{fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px"}}>{`${t(document?.info)}`}</div> : null}
+                <a target="_blank" href={documents[document.fileStoreId]?.split(",")[0]}>
                   <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />
                 </a>
                 {decodeURIComponent( documents[document.fileStoreId]?.split(",")[0]?.split("?")[0]?.split("/")?.pop()?.slice(13))}
               </div>
-              <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
+              {License?.tradeLicenseDetail?.applicationDocuments?.length != index + 1 ? <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/> : null }
             </Fragment>
             )
           })}

@@ -7,10 +7,9 @@
 }
 
 .inboxPopupMobileWrapper{
-    @apply block p-md;
+    @apply block p-md w-full overflow-scroll;
     .submit{
-        bottom: 36px;
-        @apply flex absolute left-0 w-full px-xl items-center flex-row-reverse !important;
+        @apply flex left-0 w-full px-xl items-center flex-row-reverse !important;
     }
     .form-field{
         margin: 0 !important;

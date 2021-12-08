@@ -5198,7 +5198,7 @@ export const downloadFeeReceipt = async (state, dispatch, status, serviceCode, m
 
   let paymentPayload = await httpRequest(
     "post",
-    getPaymentSearchAPI(serviceCode),
+    getPaymentSearchAPI(serviceCode, true),
     "",
     queryObject
   );

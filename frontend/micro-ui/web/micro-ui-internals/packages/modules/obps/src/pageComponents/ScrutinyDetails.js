@@ -15,6 +15,7 @@ import { render } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
 import Timeline from "../components/Timeline";
+import { stringReplaceAll } from "../utils";
 
 const ScrutinyDetails = ({ onSelect, userType, formData,config }) => {
   const { t } = useTranslation();
@@ -54,7 +55,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData,config }) => {
   function getsuboptions(){
     let suboccoption = [];
    data &&  data?.planDetail?.mdmsMasterData?.SubOccupancyType.map((ob) => {
-        suboccoption.push({code:ob.code,name:ob.name,i18nKey:`BPA_SUBOCCUPANCYTYPE_${ob.code.replaceAll("-","_")}`});
+        suboccoption.push({code:ob.code,name:ob.name,i18nKey:`BPA_SUBOCCUPANCYTYPE_${stringReplaceAll(ob?.code?.toUpperCase(), "-", "_")}`});
     });
     return suboccoption;
   }
@@ -210,7 +211,7 @@ const clearall = (num) => {
     if (values?.length > 0) {
       let splitArray = values[index]?.usageCategory?.split(',');
       if (splitArray?.length) {
-        const returnValueArray = splitArray.map(data => data ? `${t(`BPA_SUBOCCUPANCYTYPE_${data}`)}` : "NA");
+        const returnValueArray = splitArray.map(data => data ? `${t(`BPA_SUBOCCUPANCYTYPE_${stringReplaceAll(data?.toUpperCase(), "-", "_")}`)}` : "NA");
         returnValue = returnValueArray.join(',')
       }
     }
@@ -244,7 +245,7 @@ const clearall = (num) => {
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_OCC_SUBOCC_HEADER")}:</CardSubHeader>
       {data?.planDetail?.blocks.map((block,index)=>(
-      <div key={index}>
+      <div key={index} style={{marginTop: "20px"}}>
       <CardSubHeader>{t("BPA_BLOCK_SUBHEADER")} {index+1}</CardSubHeader>
       { !(checkingFlow === "OCBPA") ? <CardSectionHeader style={{fontWeight: "normal"}} className="card-label-smaller">{t("BPA_SUB_OCCUPANCY_LABEL")}</CardSectionHeader> : null }
       {!(checkingFlow === "OCBPA") ? <MultiSelectDropdown
@@ -257,22 +258,23 @@ const clearall = (num) => {
               options={getsuboptions()}
               onSelect={selectOccupancy}
               isOBPSMultiple={true}
-              optionsKey="name"
+              optionsKey="i18nKey"
               t={t}
             /> :null}
         { !(checkingFlow === "OCBPA") ? <div className="tag-container">
                {subOccupancyObject[`Block_${block.number}`] && subOccupancyObject[`Block_${block.number}`].length > 0 &&
                 subOccupancyObject[`Block_${block.number}`].map((value, index) => (
-                  <RemoveableTag key={index} text={`${t(value["name"])}`} onClick={() => onRemove(index,value,block.number)} />
+                  <RemoveableTag key={index} text={`${t(value["i18nKey"])}`} onClick={() => onRemove(index,value,block.number)} />
                 ))}
         </div> : null }
         { !(checkingFlow === "OCBPA") ? (subOccupancyObject[`Block_${block.number}`] && subOccupancyObject[`Block_${block.number}`].length>0 ) && <LinkButton style={{textAlign:"left"}} label={"Clear All"} onClick={() => clearall(block.number)}/>: null}
-      <div style={{overflow:"scroll"}}>
+      <div style={{marginTop: "20px"}}>
       { checkingFlow === "OCBPA" ? <StatusTable>
         <Row className="border-none" label={`${t("BPA_SUB_OCCUPANCY_LABEL")}:`} text={getSubOccupancyValues(index)}></Row>
       </StatusTable>: null }
+      <div style={{overflowX:"scroll"}}>
       <Table
-        className="customTable"
+        className="customTable table-fixed-first-column"
         t={t}
         disableSort={false}
         autoSort={true}
@@ -290,9 +292,10 @@ const clearall = (num) => {
           };
         }}
       />
-      <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
+      </div>
       </div>
       </div>))}
+      <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL")}:</CardSubHeader>
       <StatusTable  style={{border:"none"}}>
       <Row label={t("BPA_APPLICATION_DEMOLITION_AREA_LABEL")} text={data?.planDetail?.planInformation?.demolitionArea?`${data?.planDetail?.planInformation?.demolitionArea} sq.mtrs`:t("CS_NA")}></Row>

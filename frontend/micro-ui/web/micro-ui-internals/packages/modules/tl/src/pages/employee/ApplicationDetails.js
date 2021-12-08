@@ -158,8 +158,8 @@ const ApplicationDetails = () => {
       })
   };
 
-  const wfDocs = workflowDetails.data?.timeline?.reduce((acc, { documents }) => {
-    return documents ? [...acc, ...documents] : acc;
+  const wfDocs = workflowDetails.data?.timeline?.reduce((acc, { wfDocuments }) => {
+    return wfDocuments ? [...acc, ...wfDocuments] : acc;
   }, []);
   const ownerdetails = applicationDetails?.applicationDetails.find(e => e.title === "ES_NEW_APPLICATION_OWNERSHIP_DETAILS");
   let appdetailsDocuments = ownerdetails?.additionalDetails?.documents;

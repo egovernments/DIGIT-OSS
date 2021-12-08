@@ -16,7 +16,7 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
                 Cell: ({ row }) => {
                     return (
                         <div>
-                            <Link to={`${parentRoute}/inbox/${row.original["uuid"]}`}>
+                            <Link to={`${parentRoute}/surveys/inbox/details/${row.original["uuid"]}`}>
                                 <span className="link">{row.original["title"]}</span>
                             </Link>
                         </div>

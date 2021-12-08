@@ -479,7 +479,7 @@ public class NotificationUtil {
 				log.info("Messages from localization couldn't be fetched!");
 			for (SMSRequest smsRequest : smsRequestList) {
 				producer.push(config.getSmsNotifTopic(), smsRequest);
-				log.info("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
+				log.info("SMS SENT!");
 			}
 		}
 	}
@@ -493,16 +493,23 @@ public class NotificationUtil {
 	 *            Map of mobileNumber to Email Ids
 	 * @return List of EmailRequest
 	 */
-	public List<EmailRequest> createEmailRequest(String message, Map<String, String> mobileNumberToEmailId) {
+	public List<EmailRequest> createEmailRequest(RequestInfo requestInfo,String message, Map<String, String> mobileNumberToEmailId) {
 
 		List<EmailRequest> emailRequest = new LinkedList<>();
 		for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
 			String customizedMsg = message.replace("XXXX",entryset.getValue());
 			customizedMsg = customizedMsg.replace("{MOBILE_NUMBER}",entryset.getKey());
-			emailRequest.add(new EmailRequest(entryset.getValue(), customizedMsg));
+
+			String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
+			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
+			EmailRequest email = new EmailRequest(requestInfo,emailobj);
+			emailRequest.add(email);
 		}
 		return emailRequest;
 	}
+
+
 
 	/**
 	 * Send the EmailRequest on the EmailNotification kafka topic
@@ -516,7 +523,7 @@ public class NotificationUtil {
 				log.info("Messages from localization couldn't be fetched!");
 			for (EmailRequest emailRequest : emailRequestList) {
 				producer.push(config.getEmailNotifTopic(), emailRequest);
-				log.info("Email notification sent!");
+				log.info("EMAIL notification sent!");
 			}
 		}
 	}
@@ -530,7 +537,7 @@ public class NotificationUtil {
 	 *            The TradeLicense object for which
 	 * @return
 	 */
-	private BigDecimal getAmountToBePaid(RequestInfo requestInfo, TradeLicense license) {
+	BigDecimal getAmountToBePaid(RequestInfo requestInfo, TradeLicense license) {
 
 		LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(getBillUri(license),
 				new RequestInfoWrapper(requestInfo));
@@ -562,7 +569,7 @@ public class NotificationUtil {
 		builder.append("&consumerCode=");
 		builder.append(license.getApplicationNumber());
 		builder.append("&businessService=");
-		builder.append(TRADE_LICENSE_MODULE_CODE);
+		builder.append(license.getBusinessService());
 		return builder;
 	}
 

@@ -116,7 +116,7 @@ public class BPANotificationService {
 		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)){
 //			EMAIL block TBD
 			if (null != config.getIsEmailNotificationEnabled()) {
-				if (config.getIsUserEventsNotificationEnabled()) {
+				if (config.getIsEmailNotificationEnabled()) {
 					Map<String, String> mapOfPhnoAndEmail = util.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
 					String localizationMessages = util.getLocalizationMessages(tenantId, bpaRequest.getRequestInfo());
 					String message = util.getEmailCustomizedMsg(bpaRequest.getRequestInfo(), bpaRequest.getBPA(), localizationMessages);

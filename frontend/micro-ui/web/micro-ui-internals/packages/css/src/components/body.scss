@@ -21,7 +21,7 @@ body {
 }*/
 
 .h1 {
-  @apply font-rc text-heading-xl text-text-primary font-bold mb-md ml-md ;
+  @apply text-heading-l text-text-primary font-bold mb-md ml-md ;
 }
 
 .link-label {
@@ -98,7 +98,7 @@ body {
 
   .h1 {
     margin-left: 0;
-    @apply text-heading-xl-dt;
+    @apply text-heading-l-dt;
   }
 
   .link-label {

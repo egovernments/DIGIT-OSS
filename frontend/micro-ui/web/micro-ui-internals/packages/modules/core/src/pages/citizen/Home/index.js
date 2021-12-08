@@ -46,11 +46,11 @@ const Home = () => {
                 Icon: <CaseIcon className="fill-path-primary-main" />,
                 onClick: () => history.push("/digit-ui/citizen/tl-home")
             },
-            {
-                name: t("ACTION_TEST_WATER_AND_SEWERAGE"), 
-                Icon: <DropIcon/>,
-                onClick: () => history.push("/digit-ui/citizen")
-            },
+            // {
+            //     name: t("ACTION_TEST_WATER_AND_SEWERAGE"), 
+            //     Icon: <DropIcon/>,
+            //     onClick: () => history.push("/digit-ui/citizen")
+            // },
             {
                 name: t("CS_COMMON_INBOX_BPA"), 
                 Icon: <OBPSIcon />,
@@ -85,10 +85,10 @@ const Home = () => {
                 Icon: <DocumentIcon/>,
                 onClick: () => history.push("/digit-ui/citizen/engagement/SurveyList")
             },
-            {
-                name: t("CS_COMMON_HELP"),
-                Icon: <HelpIcon/>
-            }
+            // {
+            //     name: t("CS_COMMON_HELP"),
+            //     Icon: <HelpIcon/>
+            // }
         ],
         styles: { display: "flex", flexWrap: "wrap",  justifyContent: "flex-start", width: "100%"}
     }

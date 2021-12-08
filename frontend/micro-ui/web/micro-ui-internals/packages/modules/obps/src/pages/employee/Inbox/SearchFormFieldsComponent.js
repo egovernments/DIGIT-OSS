@@ -1,5 +1,5 @@
 import React, {Fragment} from "react"
-import { CardLabelError, SearchField, TextInput } from "@egovernments/digit-ui-react-components";
+import { CardLabelError, SearchField, TextInput, MobileNumber } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
 const SearchFormFieldsComponents = ({registerRef, searchFormState}) => {
@@ -12,7 +12,7 @@ const SearchFormFieldsComponents = ({registerRef, searchFormState}) => {
         </SearchField>
         <SearchField>
             <label>{t("CORE_COMMON_MOBILE_NUMBER")}</label>
-            <TextInput name="mobileNumber" type="number" inputRef={registerRef({
+            <MobileNumber name="mobileNumber" type="number" inputRef={registerRef({
                 minLength: {
                     value: 10,
                     message: t("CORE_COMMON_MOBILE_ERROR")
@@ -26,9 +26,9 @@ const SearchFormFieldsComponents = ({registerRef, searchFormState}) => {
                     message: t("CORE_COMMON_MOBILE_ERROR")
                 }
             })} />
-            <CardLabelError>
+            {searchFormState?.errors?.["mobileNumber"]?.message ? <CardLabelError>
                 {searchFormState?.errors?.["mobileNumber"]?.message}
-            </CardLabelError>
+            </CardLabelError> : null}
         </SearchField>
     </>
 }

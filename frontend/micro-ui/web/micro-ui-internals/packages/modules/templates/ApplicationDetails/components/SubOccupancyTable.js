@@ -2,8 +2,9 @@ import React, { Fragment, useMemo } from "react";
 import { Table, StatusTable, Row, CardSubHeader, CardSectionHeader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
-const SubOccupancyTable = ({ edcrDetails }) => {
+const SubOccupancyTable = ({ edcrDetails, applicationData }) => {
   const { t } = useTranslation();
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   const tableHeader = [
     {
@@ -65,9 +66,30 @@ const SubOccupancyTable = ({ edcrDetails }) => {
     return floors;
   }
 
+  const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
+    if (searcher == "") return str;
+    while (str.includes(searcher)) {
+      str = str.replace(searcher, replaceWith);
+    }
+    return str;
+  };
+
+  function getSubOccupancyValues(index) {
+    let values = applicationData?.landInfo?.unit;
+    let returnValue = "";
+    if (values?.length > 0) {
+      let splitArray = values[index]?.usageCategory?.split(',');
+      if (splitArray?.length) {
+        const returnValueArray = splitArray.map(data => data ? `${t(`BPA_SUBOCCUPANCYTYPE_${stringReplaceAll(data?.toUpperCase(), "-", "_")}`)}` : "NA");
+        returnValue = returnValueArray.join(',')
+      }
+    }
+    return returnValue ? returnValue : "NA";
+  }
+  
   return (
     <Fragment>
-      <div style={window.location.href.includes("citizen")?{}:{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "600px", minWidth: "280px" }}>
+      <div style={{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "950px", minWidth: "280px" }}>
         <StatusTable>
           {edcrDetails?.values?.map((value, index) => {
             return <Row className="border-none" labelStyle={{width: "100%"}} key={`${value.title}:`} label={`${t(`${value.title}`)}:`} text={value?.value ? value?.value : ""} />
@@ -75,11 +97,14 @@ const SubOccupancyTable = ({ edcrDetails }) => {
         </StatusTable>
 
         {edcrDetails?.subOccupancyTableDetails?.[0]?.value?.planDetail?.blocks.map((block, index) => (
-          <div key={index}>
+          <div key={index} style={edcrDetails?.subOccupancyTableDetails?.[0]?.value?.planDetail?.blocks?.length > 0 ? {marginBottom: "30px", background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "950px", minWidth: "280px"} : {marginBottom: "30px"}}>
             <CardSubHeader style={{ marginBottom: "8px", paddingBottom: "9px", color: "#0B0C0C", fontSize: "16px", lineHeight: "19px" }}>{t("BPA_BLOCK_SUBHEADER")} {index + 1}</CardSubHeader>
-            <div style={window.location.href.includes("citizen")?{overflow:"scroll"}:{ maxWidth: "600px", maxHeight: "280px" }}>
+            <StatusTable>
+              <Row className="border-none" label={`${t("BPA_SUB_OCCUPANCY_LABEL")}:`} text={getSubOccupancyValues(index)}></Row>
+            </StatusTable>
+            <div style={window.location.href.includes("citizen") || isMobile?{overflow:"scroll"}:{ maxWidth: "950px", maxHeight: "280px" }}>
               <Table
-                className="customTable"
+                className="customTable table-fixed-first-column"
                 t={t}
                 disableSort={false}
                 autoSort={true}

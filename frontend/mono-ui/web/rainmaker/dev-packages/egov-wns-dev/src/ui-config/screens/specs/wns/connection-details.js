@@ -118,6 +118,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
   let queryObject = [
     { key: "tenantId", value: tenantId },
     { key: "connectionNumber", value: connectionNumber },
+    { key: "searchType", value: "CONNECTION" }
   ];
   let serviceUrl = getQueryArg(window.location.href, "service");
   if (serviceUrl === serviceConst.SEWERAGE) {

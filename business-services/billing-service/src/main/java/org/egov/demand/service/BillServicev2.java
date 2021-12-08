@@ -161,6 +161,7 @@ public class BillServicev2 {
 	public Integer cancelBill(UpdateBillRequest updateBillRequest) {
 		
 		UpdateBillCriteria cancelBillCriteria = updateBillRequest.getUpdateBillCriteria();
+		billValidator.validateBillSearchRequest(cancelBillCriteria);
 		Set<String> consumerCodes = cancelBillCriteria.getConsumerCodes();
 		cancelBillCriteria.setStatusToBeUpdated(BillStatus.CANCELLED);
 
@@ -168,8 +169,9 @@ public class BillServicev2 {
 			
 			throw new CustomException("EG_BS_CANCEL_BILL_ERROR", "Only one consumer code can be provided in the Cancel request");
 		} else {
+			int result = billRepository.updateBillStatus(cancelBillCriteria);
 			sendNotificationForBillCancellation(updateBillRequest.getRequestInfo(), cancelBillCriteria);
-			return billRepository.updateBillStatus(cancelBillCriteria);
+			return result;
 		}
 	}
 

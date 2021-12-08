@@ -384,7 +384,7 @@ export const acceptedFiles = acceptedExt => {
   return acceptedFileTypes;
 };
 
-export const handleFileUpload = (event, handleDocument, props,afterFileSelected) => {
+export const handleFileUpload = (event, handleDocument, props,afterFileSelected,ifError) => {
   const S3_BUCKET = {
     endPoint: "filestore/v1/files"
   };
@@ -406,23 +406,27 @@ export const handleFileUpload = (event, handleDocument, props,afterFileSelected)
         uploadDocument = false;
       }
       if (uploadDocument) {
-        afterFileSelected&&typeof afterFileSelected=='function'&&afterFileSelected()
-        if (file.type.match(/^image\//)) {
-          const fileStoreId = await uploadFile(
-            S3_BUCKET.endPoint,
-            moduleName,
-            file,
-            commonConfig.tenantId
-          );
-          handleDocument(file, fileStoreId);
-        } else {
-          const fileStoreId = await uploadFile(
-            S3_BUCKET.endPoint,
-            moduleName,
-            file,
-            commonConfig.tenantId
-          );
-          handleDocument(file, fileStoreId);
+        afterFileSelected && typeof afterFileSelected == 'function' && afterFileSelected();
+        try {
+          if (file.type.match(/^image\//)) {
+            const fileStoreId = await uploadFile(
+              S3_BUCKET.endPoint,
+              moduleName,
+              file,
+              commonConfig.tenantId
+            );
+            handleDocument(file, fileStoreId);
+          } else {
+            const fileStoreId = await uploadFile(
+              S3_BUCKET.endPoint,
+              moduleName,
+              file,
+              commonConfig.tenantId
+            );
+            handleDocument(file, fileStoreId);
+          }
+        } catch (e) {
+          ifError && typeof ifError == 'function' && ifError();
         }
       }
     });

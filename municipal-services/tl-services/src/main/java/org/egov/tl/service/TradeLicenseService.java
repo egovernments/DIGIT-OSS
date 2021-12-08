@@ -281,17 +281,10 @@ public class TradeLicenseService {
 
 	
 	public int countLicenses(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo, String serviceFromPath, HttpHeaders headers){
-    	
+		
+		criteria.setBusinessService(serviceFromPath);
     	enrichmentService.enrichSearchCriteriaWithAccountId(requestInfo,criteria);
-    	
-    	if(criteria.getMobileNumber()!=null || criteria.getOwnerName() != null) {
 
-    		boolean isEmpty = enrichWithUserDetails(criteria, requestInfo);
-    		
-    		if(isEmpty) {
-    			return 0;
-    		}
-    	}
 
     	int licenseCount = repository.getLicenseCount(criteria);
     	
@@ -395,7 +388,7 @@ public class TradeLicenseService {
         TradeLicense.ApplicationTypeEnum applicationType = licence.getApplicationType();
         List<TradeLicense> licenceResponse = null;
         if(applicationType != null && (applicationType).toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL ) &&
-                licence.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE) && (licence.getStatus().equals(TLConstants.STATUS_APPROVED) || licence.getStatus().equals(TLConstants.STATUS_MANUALLYEXPIRED))){
+                licence.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE) && (licence.getStatus().equals(TLConstants.STATUS_APPROVED) || licence.getStatus().equals(TLConstants.STATUS_MANUALLYEXPIRED) || licence.getStatus().equals(TLConstants.STATUS_EXPIRED) )){
             List<TradeLicense> createResponse = create(tradeLicenseRequest, businessServicefromPath);
             licenceResponse =  createResponse;
         }

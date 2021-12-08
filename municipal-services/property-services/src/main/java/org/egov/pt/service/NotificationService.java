@@ -318,13 +318,6 @@ public class NotificationService {
 			    mobileNumbers.add(owner.getMobileNumber());
 		});
 
-				if(property.getAlternateMobileNumberDetails()!=null)
-				{
-		property.getAlternateMobileNumberDetails().forEach(entry ->{
-				mobileNumberToOwner.put(entry.getMobileNumber(), entry.getName());
-			    mobileNumbers.add(entry.getMobileNumber());
-		});}
-
 		if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
 			List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 			notifUtil.sendSMS(smsRequests);
@@ -344,7 +337,7 @@ public class NotificationService {
 			String messageTemplate = fetchContentFromLocalization(request.getRequestInfo(), tenantId, "rainmaker-pt", "PT_NOTIFICATION_EMAIL");
 			messageTemplate = messageTemplate.replace("{MESSAGE}",msg);
 			messageTemplate = messageTemplate.replace(NOTIFICATION_OWNERNAME,NOTIFICATION_EMAIL);
-			List<EmailRequest> emailRequests = notifUtil.createEmailRequest(messageTemplate, mapOfPhnoAndEmail);
+			List<EmailRequest> emailRequests = notifUtil.createEmailRequest(requestInfo,messageTemplate, mapOfPhnoAndEmail);
 			notifUtil.sendEmail(emailRequests);
 		}
 	}
@@ -355,8 +348,9 @@ public class NotificationService {
 		List<String> messages = new ArrayList<>();
 		Object result = null;
 		String locale = "";
-		if(requestInfo.getMsgId().contains("|"))
-			locale = requestInfo.getMsgId().split("[\\|]")[1];
+		if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
+			locale = requestInfo.getMsgId().split("\\|")[1];
+
 		if(StringUtils.isEmpty(locale))
 			locale = configs.getFallBackLocale();
 		StringBuilder uri = new StringBuilder();

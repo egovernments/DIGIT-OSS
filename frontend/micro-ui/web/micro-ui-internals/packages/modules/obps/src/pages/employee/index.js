@@ -16,7 +16,7 @@ const OBPSBreadCrumbs = ({ location }) => {
     },
     {
       path: "/digit-ui/employee/obps/inbox",
-      content: t("ES_OBPS_INBOX"),
+      content: t("ES_COMMON_OBPS_INBOX_LABEL"),
       show: location.pathname.includes("obps/inbox") ? true : false,
     },
     {
@@ -26,7 +26,7 @@ const OBPSBreadCrumbs = ({ location }) => {
     },
     {
       path: "/digit-ui/employee/obps/inbox/bpa/:id",
-      content: t("ES_OBPS_BPA_DETAILS"),
+      content: t("ES_OBPS_SEARCH_BPA"),
       show: location.pathname.includes("obps/inbox/bpa") ? true : false,
     },
     {
@@ -59,9 +59,10 @@ const EmployeeApp = ({ path }) => {
   const { t } = useTranslation();
   const Inbox = Digit.ComponentRegistryService.getComponent("BPAInbox");
   const StakeholderInbox = Digit.ComponentRegistryService.getComponent("StakeholderInbox");
+  const isLocation = window.location.href.includes("bpa") || window.location.href.includes("stakeholder-inbox/stakeholder") || window.location.href.includes("application");
   return (
     <Fragment>
-      <OBPSBreadCrumbs location={location} />
+      <div style={isLocation ? {marginLeft: "10px"} : {}}><OBPSBreadCrumbs location={location} /></div>
       <Switch>
         <PrivateRoute path={`${path}/stakeholder-inbox/stakeholder/:id`} component={ApplicationDetail} />
         <PrivateRoute path={`${path}/search/application/stakeholder/:id`} component={ApplicationDetail} />

@@ -81,7 +81,7 @@
 
 .filter-form {
   .filter-card {
-    @apply bg-white;
+    @apply bg-white min-h-full;
     padding: 10px;
 
     .heading {
@@ -93,8 +93,11 @@
     }
 
     .filter-label {
-      @apply font-bold text-heading-m;
+      @apply font-bold text-heading-l flex gap-3;
       padding-bottom: 6px;
+      svg{
+        fill: #0b0c0c
+      }
     }
   }
   .filter-form-field{
@@ -122,8 +125,11 @@
         }
 
         .filter-label {
-          @apply font-bold text-heading-m block;
+          @apply font-bold text-heading-m block flex gap-3 items-center;
           padding-bottom: 6px;
+          svg{
+            fill: #0b0c0c
+          }
         }
       }
     }
@@ -171,7 +177,7 @@
 }
 
 .inbox-count {
-  @apply inline ml-sm p-sm bg-primary-main rounded-full text-white text-heading-s align-middle text-center;
+  @apply inline ml-sm p-sm bg-primary-main rounded-full text-white text-heading-s align-middle text-center font-regular;
 }
 
 @screen dt {

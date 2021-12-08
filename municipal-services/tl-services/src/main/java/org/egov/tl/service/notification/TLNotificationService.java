@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import static com.jayway.jsonpath.Criteria.where;
 import static com.jayway.jsonpath.Filter.filter;
+import static org.egov.tl.util.BPAConstants.BUSINESS_SERVICE_BPAREG;
 import static org.egov.tl.util.TLConstants.*;
 
 
@@ -84,6 +85,7 @@ public class TLNotificationService {
 		String businessService = request.getLicenses().isEmpty() ? null : request.getLicenses().get(0).getBusinessService();
 		if (businessService == null)
 			businessService = businessService_TL;
+
 		switch (businessService) {
 			case businessService_TL:
 				List<SMSRequest> smsRequestsTL = new LinkedList<>();
@@ -107,6 +109,7 @@ public class TLNotificationService {
 					if (config.getIsEmailNotificationEnabled()) {
 						Map<String, String> mapOfPhnoAndEmail = util.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
 						enrichEmailRequest(request, emailRequests, mapOfPhnoAndEmail, configuredChannelList);
+
 						if (!CollectionUtils.isEmpty(emailRequests))
 							util.sendEmail(emailRequests, config.getIsEmailNotificationEnabled());
 					}
@@ -114,6 +117,7 @@ public class TLNotificationService {
 				break;
 
 			case businessService_BPA:
+				configuredChannelList = fetchChannelList(new RequestInfo(), tenantId, "BPAREG", action);
 				List<SMSRequest> smsRequestsBPA = new LinkedList<>();
 				if (null != config.getIsBPASMSEnabled()) {
 					if (config.getIsBPASMSEnabled()) {
@@ -129,7 +133,16 @@ public class TLNotificationService {
 							util.sendEventNotification(eventRequest);
 					}
 				}
-				break;
+				List<EmailRequest> emailRequestsForBPA = new LinkedList<>();
+				if (null != config.getIsEmailNotificationEnabledForBPA()) {
+					if (config.getIsEmailNotificationEnabledForBPA()) {
+						Map<String, String> mapOfPhnoAndEmail = util.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
+						enrichEmailRequest(request, emailRequestsForBPA, mapOfPhnoAndEmail, configuredChannelList);
+					if (!CollectionUtils.isEmpty(emailRequestsForBPA))
+						util.sendEmail(emailRequestsForBPA, config.getIsEmailNotificationEnabledForBPA());
+					}
+				}
+			break;
 		}
 	}
 
@@ -141,7 +154,7 @@ public class TLNotificationService {
 	 * @param configuredChannelList Map of actions mapped to configured channels for this business service
 	 */
 
-	private void enrichEmailRequest(TradeLicenseRequest request,List<EmailRequest> emailRequests, Map<String, String> mapOfPhnoAndEmail,Map<Object,Object> configuredChannelList) {
+	public void enrichEmailRequest(TradeLicenseRequest request,List<EmailRequest> emailRequests, Map<String, String> mapOfPhnoAndEmail,Map<Object,Object> configuredChannelList) {
 		String tenantId = request.getLicenses().get(0).getTenantId();
 
 		for(TradeLicense license : request.getLicenses()){
@@ -168,8 +181,18 @@ public class TLNotificationService {
 				String localizationMessages = tlRenewalNotificationUtil.getLocalizationMessages(tenantId, request.getRequestInfo());
 				message = tlRenewalNotificationUtil.getEmailCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
 			}
+			if (businessService.equals(businessService_BPA)) {
+					String localizationMessages = bpaNotificationUtil.getLocalizationMessages(tenantId, request.getRequestInfo());
+					message = bpaNotificationUtil.getEmailCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+			}
 			if(message==null || message == "") continue;
-			emailRequests.addAll(util.createEmailRequest(message,mapOfPhnoAndEmail));
+
+				license.getTradeLicenseDetail().getOwners().forEach(owner -> {
+					if (owner.getMobileNumber() != null)
+						mapOfPhnoAndEmail.put(owner.getMobileNumber(), owner.getEmailId());
+				});
+
+			emailRequests.addAll(util.createEmailRequest(request.getRequestInfo(),message,mapOfPhnoAndEmail));
 			}
 		}
 	}
@@ -217,6 +240,7 @@ public class TLNotificationService {
 					if (owner.getMobileNumber() != null)
 						mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
 				});
+
 				smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
 			}
 		}
@@ -304,7 +328,8 @@ public class TLNotificationService {
 						.eventDetails(null).actions(action).build());
     			
     		}
-        }}
+        }
+		}
         if(!CollectionUtils.isEmpty(events)) {
     		return EventRequest.builder().requestInfo(request.getRequestInfo()).events(events).build();
         }else {
@@ -314,11 +339,16 @@ public class TLNotificationService {
     }
 
 	public EventRequest getEventsForBPA(TradeLicenseRequest request, boolean isStatusPaid, String paidMessage) {
+		Map<Object, Object> configuredChannelList = fetchChannelList(new RequestInfo(), request.getLicenses().get(0).getTenantId(), "BPAREG", request.getLicenses().get(0).getAction());
 		List<Event> events = new ArrayList<>();
 		String tenantId = request.getLicenses().get(0).getTenantId();
 		for(TradeLicense license : request.getLicenses()){
-			String message = null;
-			if(isStatusPaid)
+			String actionForChannel = license.getAction();
+			List<String> configuredChannelNames = (List<String>) configuredChannelList.get(actionForChannel);
+			if (!CollectionUtils.isEmpty(configuredChannelNames) && configuredChannelNames.contains(CHANNEL_NAME_EVENT))
+			{
+				String message = null;
+				if(isStatusPaid)
 			{
 				message = paidMessage;
 			}
@@ -368,7 +398,7 @@ public class TLNotificationService {
 						.postedBy(BPAConstants.USREVENTS_EVENT_POSTEDBY).source(Source.WEBAPP).recepient(recepient)
 						.eventDetails(null).actions(action).build());
 
-			}
+			}}
 		}
 		if(!CollectionUtils.isEmpty(events)) {
 			return EventRequest.builder().requestInfo(request.getRequestInfo()).events(events).build();
@@ -388,7 +418,7 @@ public class TLNotificationService {
      * @param tenantId
      * @return
      */
-    private Map<String, String> fetchUserUUIDs(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
+    public Map<String, String> fetchUserUUIDs(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
     	Map<String, String> mapOfPhnoAndUUIDs = new HashMap<>();
     	StringBuilder uri = new StringBuilder();
     	uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());

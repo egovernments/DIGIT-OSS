@@ -3,10 +3,10 @@ import { useParams, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FormComposer, Header, Card, CardSectionHeader, PDFSvg, Loader, StatusTable, Row, ActionBar, SubmitBar, MultiLink } from "@egovernments/digit-ui-react-components";
 import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDetails";
-import { newConfig } from "../../../config/InspectionReportConfig";
+import { newConfig as newConfigFI } from "../../../config/InspectionReportConfig";
 import get from "lodash/get";
 import orderBy from "lodash/orderBy";
-import { getBusinessServices, convertDateToEpoch } from "../../../utils";
+import { getBusinessServices, convertDateToEpoch, downloadPdf, printPdf } from "../../../utils";
 
 const BpaApplicationDetail = () => {
   const { id } = useParams();
@@ -23,6 +23,8 @@ const BpaApplicationDetail = () => {
   const [error, setError] = useState(null);
   const [payments, setpayments] = useState([]);
   const stateId = Digit.ULBService.getStateId();
+
+  let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
 
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateId, "BPA", ["RiskTypeComputation"]);
 
@@ -84,13 +86,21 @@ const BpaApplicationDetail = () => {
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
 
-  async function getPermitOccupancyOrderSearch({tenantId},order) {
+  async function getPermitOccupancyOrderSearch({tenantId},order,mode="download") {
     let currentDate = new Date();
     data.applicationData.additionalDetails.runDate = convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate());
     let requestData = {...data?.applicationData, edcrDetail:[{...data?.edcrDetails}]}
     let response = await Digit.PaymentService.generatePdf(tenantId, { Bpa: [requestData] }, order);
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
+    requestData["applicationType"] = data?.applicationData?.additionalDetails?.applicationType;
+    let edcrResponse = await Digit.OBPSService.edcr_report_download({BPA: {...requestData}});
+    const responseStatus = parseInt(edcrResponse.status, 10);
+    if (responseStatus === 201 || responseStatus === 200) {
+      mode == "print"
+        ? printPdf(new Blob([edcrResponse.data], { type: "application/pdf" }))
+        : downloadPdf(new Blob([edcrResponse.data], { type: "application/pdf" }), `edcrReport.pdf`);
+    }
   }
 
   async function getRevocationPDFSearch({tenantId,...params}) {
@@ -154,8 +164,9 @@ const BpaApplicationDetail = () => {
   const onFormValueChange = (setValue, formData, formState) => {
     setSubmitValve(!Object.keys(formState.errors).length);
   };
-  let configs = newConfig;
 
+  let configs =  newConfig?.InspectionReportConfig ? newConfig?.InspectionReportConfig : newConfigFI;
+  
   let workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: tenantId,
     id: id,
@@ -235,16 +246,21 @@ const BpaApplicationDetail = () => {
     });
     
   }
-  else if(data && data?.applicationData?.businessService === "BPA" && data?.applicationData?.riskType === "HIGH" && payments.length>0)
+  else if(data && data?.applicationData?.businessService === "BPA" && payments.length>0)
   {
     dowloadOptions.push({
       label: t("BPA_APP_FEE_RECEIPT"),
       onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[0],consumerCodes: data?.applicationData?.applicationNo}),
     });
-    if(payments.length == 2)dowloadOptions.push({
+    if(payments.length == 2){dowloadOptions.push({
       label: t("BPA_SAN_FEE_RECEIPT"),
       onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
     });
+    dowloadOptions.push({
+      label: t("BPA_PERMIT_ORDER"),
+      onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"buildingpermit"),
+    });}
+
   }
   else
   {
@@ -252,29 +268,60 @@ const BpaApplicationDetail = () => {
       label: t("BPA_APP_FEE_RECEIPT"),
       onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[0],consumerCodes: data?.applicationData?.applicationNo}),
     });
-    if(payments.length == 2)dowloadOptions.push({
+    if(payments.length == 1 && payments[0]?.paymentDetails[0]?.businessService==="BPA.NC_OC_SAN_FEE"){
+      dowloadOptions.push({
+        label: t("BPA_OC_DEV_PEN_RECEIPT"),
+        onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
+      });
+    }
+    if(payments.length == 2){dowloadOptions.push({
       label: t("BPA_SAN_FEE_RECEIPT"),
       onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
     });
+    dowloadOptions.push({
+      label: t("BPA_PERMIT_ORDER"),
+      onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"buildingpermit"),
+    });
+    dowloadOptions.push({
+      label: t("BPA_OC_DEV_PEN_RECEIPT"),
+      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
+    });}
   }
 
     
+  const wfDocs = workflowDetails.data?.timeline?.reduce((acc, { wfDocuments }) => {
+    return wfDocuments ? [...acc, ...wfDocuments] : acc;
+  }, []);
+
+
+  if(wfDocs?.length && data?.applicationDetails&& !(data?.applicationDetails.find(e => e.title === "BPA_WORKFLOW_DOCS"))){
+    data?.applicationDetails.push({
+      title: "BPA_WORKFLOW_DOCS",
+      //values: wfDocs?.map?.((e) => ({ ...e, })),
+      additionalDetails:{
+        "documents":[{values: wfDocs?.map?.((e) => ({
+        ...e,
+        title: e.documentType,
+        }))}]
+      }
+    });
+  }
 
 
   return (
     <Fragment>
-      <div style={{ marginLeft: "15px" }}>
-        <Header>{t("BPA_TASK_DETAILS_HEADER")}</Header>
+      <div className={"employee-main-application-details"}>
+      <div className={"employee-application-details"}>
+        <Header styles={{marginLeft:"0px", paddingTop: "10px"}}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
         {dowloadOptions && dowloadOptions.length>0 && <MultiLink
-          className="multilinkWrapper"
+          className="multilinkWrapper employee-mulitlink-main-div"
           onHeadClick={() => setShowOptions(!showOptions)}
           displayOptions={showOptions}
           options={dowloadOptions}
+          downloadBtnClassName={"employee-download-btn-className"}
+          optionsClassName={"employee-options-btn-className"}
         />}
       </div>
-      {data?.applicationData?.status === "FIELDINSPECTION_INPROGRESS" && (userInfo?.info?.roles.filter(role => role.code === "BPA_FIELD_INSPECTOR")).length>0 && <div style={{ marginLeft: "15px" }}>
-        <Header>{t("BPA_FI_REPORT")}</Header>
-      </div>}
       {data?.applicationData?.status === "FIELDINSPECTION_INPROGRESS" && (userInfo?.info?.roles.filter(role => role.code === "BPA_FIELD_INSPECTOR")).length>0 && <FormComposer
         heading={t("")}
         isDisabled={!canSubmit}
@@ -292,6 +339,7 @@ const BpaApplicationDetail = () => {
         defaultValues={defaultValues}
         onFormValueChange={onFormValueChange}
         breaklineStyle={{ border: "0px" }}
+        className={"employeeCard-override"}
       />}
       <ApplicationDetailsTemplate
         applicationDetails={data}
@@ -306,8 +354,10 @@ const BpaApplicationDetail = () => {
         showToast={showToast}
         setShowToast={setShowToast}
         closeToast={closeToast}
+        statusAttribute={"state"}
         timelineStatusPrefix={`WF_${workflowDetails?.data?.applicationBusinessService ? workflowDetails?.data?.applicationBusinessService : data?.applicationData?.businessService}_`}
       />
+      </div>
     </Fragment>
   )
 };

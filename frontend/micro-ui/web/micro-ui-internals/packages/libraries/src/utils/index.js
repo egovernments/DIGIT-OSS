@@ -140,6 +140,41 @@ const fsmAccess = () => {
   return FSM_ACCESS?.length > 0;
 };
 
+const NOCAccess = () => {
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
+
+  const NOC_ROLES =  ["NOC_CEMP","NOC_DOC_VERIFIER","NOC_FIELD_INSPECTOR","NOC_APPROVER","BPA_NOC_VERIFIER", "AIRPORT_AUTHORITY_APPROVER", "FIRE_NOC_APPROVER", "NOC_DEPT_APPROVER"]
+
+  const NOC_ACCESS = userRoles?.filter((role) => NOC_ROLES.includes(role));
+
+  return NOC_ACCESS?.length > 0
+}
+
+const BPAREGAccess = () => {
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
+
+  const BPAREG_ROLES =["BPAREG_APPROVER","BPAREG_DOC_VERIFIER"]
+
+  const BPAREG_ACCESS = userRoles?.filter((role) => BPAREG_ROLES.includes(role));
+
+  return BPAREG_ACCESS?.length > 0
+}
+
+const BPAAccess = () => {
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
+
+  const BPA_ROLES = ["BPA_VERIFIER", "CEMP", "BPA_APPROVER", "BPA_FIELD_INSPECTOR", "BPA_NOC_VERIFIER", "AIRPORT_AUTHORITY_APPROVER", "FIRE_NOC_APPROVER", "NOC_DEPT_APPROVER", "BPA_NOC_VERIFIER", "BPA_TOWNPLANNER", "BPA_ENGINEER", "BPA_BUILDER", "BPA_STRUCTURALENGINEER", "BPA_SUPERVISOR", "BPA_DOC_VERIFIER", "EMPLOYEE"]
+
+  const BPA_ACCESS = userRoles?.filter((role) => BPA_ROLES.includes(role));
+
+  return BPA_ACCESS?.length > 0
+}
+
+
+
 const ptAccess = () => {
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
@@ -200,9 +235,12 @@ export default {
   routeSubscription,
   pgrAccess,
   fsmAccess,
+  BPAREGAccess,
+  BPAAccess,
   dss,
   obps,
   ptAccess,
+  NOCAccess,
   mCollectAccess,
   receiptsAccess,
   didEmployeeHasRole,

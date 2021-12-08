@@ -53,6 +53,8 @@ const ComplaintDetailsPage = (props) => {
   const { isLoading, error, isError, complaintDetails, revalidate } = Digit.Hooks.pgr.useComplaintDetails({ tenantId, id });
   // console.log("find complaint details here", complaintDetails);
 
+  const [imageShownBelowComplaintDetails, setImageToShowBelowComplaintDetails] = useState({})
+
   const [imageZoom, setImageZoom] = useState(null);
 
   const [comment, setComment] = useState("");
@@ -80,8 +82,7 @@ const ComplaintDetailsPage = (props) => {
     setImageZoom(imageSource);
   }
   function zoomImageWrapper(imageSource, index){
-    let newIndex=complaintDetails.thumbnails?.findIndex(link=>link===imageSource);
-    zoomImage((newIndex>-1&&complaintDetails?.images?.[newIndex])||imageSource);
+    zoomImage(imageShownBelowComplaintDetails?.fullImage[index-1]);
   }
 
   function onCloseImageZoom() {
@@ -92,6 +93,11 @@ const ComplaintDetailsPage = (props) => {
     // console.log("ssdsodososooo ==== ", data);
     let timeline = data?.timeline;
     timeline && timeline[0].timeLineActions?.filter((e) => e === "COMMENT").length ? setDisableComment(false) : setDisableComment(true);
+    if(timeline) {
+      const actionByCitizenOnComplaintCreation = timeline.find( e => e?.performedAction === "APPLY")
+      const { thumbnailsToShow } = actionByCitizenOnComplaintCreation
+      setImageToShowBelowComplaintDetails(thumbnailsToShow)
+    }
   };
 
   const submitComment = async () => {
@@ -144,8 +150,8 @@ const ComplaintDetailsPage = (props) => {
                 />
               ))}
             </StatusTable>
-            {complaintDetails.thumbnails && complaintDetails.thumbnails.length !== 0 ? (
-              <DisplayPhotos srcs={complaintDetails.thumbnails} onClick={(source, index) => zoomImageWrapper(source, index)} />
+            {imageShownBelowComplaintDetails?.thumbs ? (
+              <DisplayPhotos srcs={imageShownBelowComplaintDetails?.thumbs} onClick={(source, index) => zoomImageWrapper(source, index)} />
             ) : null}
             {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
           </Card>

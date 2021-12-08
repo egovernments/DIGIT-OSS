@@ -17,14 +17,14 @@ const styles = {
     paddingTop: 11,
     paddingBottom: 0,
     marginRight: 16,
-    marginTop: 16
+    marginTop: 16,
   },
   subtext: {
-    paddingTop: 7
+    paddingTop: 7,
   },
   body2: {
-    wordWrap: "break-word"
-  }
+    wordWrap: "break-word",
+  },
 };
 
 const documentTitle = {
@@ -33,51 +33,64 @@ const documentTitle = {
   fontSize: "16px",
   fontWeight: 400,
   letterSpacing: "0.67px",
-  lineHeight: "19px"
+  lineHeight: "19px",
 };
 
 function MultiCardDownloadGrid(props) {
   const { classes, data, ...rest } = props;
   return (
     <Grid container {...rest}>
-      {data && data.length && data.map((item, key) => {
-         let linkText=`CS_${item.linkText&&item.linkText.toUpperCase()||'NA'}`;
-        return (
-          <Grid
-            item
-            container
-            xs={6}
-            sm={4}
-            className={
-              props.backgroundGrey
-                ? classNames(classes.whiteCard, "background-grey")
-                : classes.whiteCard
-            }
-          >
-            <Grid xs={12}>
-              <LabelContainer
-                labelName={item.title}
-                labelKey={item.title}
-                style={documentTitle}
-              />
-            </Grid>
-            <Grid container>
-              <Grid xs={6} className={classes.subtext}>
-                <Typography className={classes.body2}>{item.name}</Typography>
+      {(!data || data.length == 0) && (
+        <Grid xs={12}>
+          <LabelContainer
+            labelName={"CE_DOCUMENTS_NOT_FOUND"}
+            labelKey={"CE_DOCUMENTS_NOT_FOUND"}
+          />
+        </Grid>
+      )}
+      {data &&
+        data.length > 0 &&
+        data.map((item, key) => {
+          let linkText = `CS_${
+            (item.linkText && item.linkText.toUpperCase()) || "NA"
+          }`;
+          return (
+            <Grid
+              item
+              container
+              xs={6}
+              sm={4}
+              className={
+                props.backgroundGrey
+                  ? classNames(classes.whiteCard, "background-grey")
+                  : classes.whiteCard
+              }
+            >
+              <Grid xs={12}>
+                <LabelContainer
+                  labelName={item.title}
+                  labelKey={item.title}
+                  style={documentTitle}
+                />
               </Grid>
-              <Grid xs={6} align="right">
-                <Button target="_blank" href={item.link} color="primary" rel="noopener noreferrer">
-                 
-                  <LabelContainer
-                labelName={linkText}
-                labelKey={linkText}
-              />
-                </Button>
+              <Grid container>
+                <Grid xs={6} className={classes.subtext}>
+                  <Typography className={classes.body2}>{item.name}</Typography>
+                </Grid>
+                <Grid xs={6} align="right">
+                  <Button
+                    target="_blank"
+                    href={item.link}
+                    color="primary"
+                    rel="noopener noreferrer"
+                  >
+                    <LabelContainer labelName={linkText} labelKey={linkText} />
+                  </Button>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        );
-      })}
+          );
+        })}
     </Grid>
   );
 }
@@ -86,7 +99,7 @@ MultiCardDownloadGrid.propTypes = {
   title: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   link: PropTypes.array.isRequired,
-  linktext: PropTypes.array.isRequired
+  linktext: PropTypes.array.isRequired,
 };
 
 export default withStyles(styles)(MultiCardDownloadGrid);

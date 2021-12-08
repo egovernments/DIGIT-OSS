@@ -17,6 +17,7 @@ import OCSendToArchitect from "./OCSendToArchitect";
 import BPASendBackToCitizen from "./BPASendBackToCitizen";
 import OCSendBackToCitizen from "./OCSendBackToCitizen";
 import Inbox from "./ArchitectInbox";
+import EdcrInbox from "./EdcrInbox";
 
 const App = ({ path }) => {
   const location = useLocation()
@@ -34,6 +35,7 @@ const App = ({ path }) => {
             <Route path={`${path}/openlink/stakeholder/apply`} component={StakeholderRegistration} /> 
             <PrivateRoute path={`${path}/my-applications`} component={MyApplication} />
             <PrivateRoute path={`${path}/bpa/inbox`} component={Inbox} />
+            <PrivateRoute path={`${path}/edcr/inbox`} component={(props) => <EdcrInbox {...props} parentRoute={path} />} />
             <PrivateRoute path={`${path}/stakeholder/:id`} component={ApplicationDetails} />
             <PrivateRoute path={`${path}/bpa/:id`} component={BpaApplicationDetail} />
             <PrivateRoute path={`${path}/editApplication/bpa/:tenantId/:applicationNo`} component={BPASendToArchitect} />

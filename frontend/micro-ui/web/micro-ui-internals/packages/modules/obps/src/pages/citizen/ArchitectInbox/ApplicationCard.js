@@ -1,4 +1,4 @@
-import { Card, DetailsCard, FilterAction, PopUp, SearchAction } from "@egovernments/digit-ui-react-components";
+import { Card, DetailsCard, FilterAction, Loader, PopUp, SearchAction } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Filter from "./Filter";
@@ -15,7 +15,8 @@ const ApplicationCard = ({
   onSearch,
   t,
   data,
-  idKey
+  idKey,
+  isLoading
 }) => {
   const [type, setType] = useState("");
   const history = useHistory();
@@ -37,6 +38,9 @@ const ApplicationCard = ({
   };
 
   let result;
+  if(isLoading){
+    return <Loader/>
+  }
   if (data?.length === 0) {
     result = (
       <Card style={{ marginTop: 20 }}>
@@ -51,7 +55,7 @@ const ApplicationCard = ({
     );
   }
   else if (data && data?.length > 0) {
-    result = <DetailsCard data={data} handleSelect={(e) => console.log(e)} handleDetailCardClick={(e) => { history.push(`/digit-ui/citizen/obps/${["BPA_LOW", "BPA", "BPA_OC"].includes(e?.serviceType?.value) ? "bpa" : "stakeholder"}/${e?.[idKey]}`); console.log(e) }} />
+    result = <DetailsCard data={data} handleSelect={(e) => console.log(e)} handleDetailCardClick={(e) => { history.push(`/digit-ui/citizen/obps/bpa/${e?.[idKey]}`); console.log(e) }} />
   }
 
   return (

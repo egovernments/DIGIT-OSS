@@ -3,19 +3,19 @@ import useInbox from "../useInbox"
 const useNOCInbox = ({ tenantId, filters, config={} }) => {
     const { filterForm, searchForm , tableForm } = filters
     const { moduleName, businessService, applicationStatus, locality, assignee } = filterForm
-    const { mobileNumber, applicationNo } = searchForm
+    const { sourceRefId, applicationNo } = searchForm
     const { sortBy, limit, offset, sortOrder } = tableForm
     
     const _filters = {
         tenantId,
         processSearchCriteria: {
           moduleName: "noc-services", 
-          businessService: ["FIRE_NOC_SRV","FIRE_NOC_OFFLINE","AIRPORT_NOC_OFFLINE","AIRPORT_NOC_SRV"],
+          businessService: businessService ? [businessService.code] : ["FIRE_NOC_SRV","FIRE_NOC_OFFLINE","AIRPORT_NOC_OFFLINE","AIRPORT_NOC_SRV"],
           ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
         },
         moduleSearchCriteria: {
           assignee,
-          ...(mobileNumber ? {mobileNumber}: {}),
+          ...(sourceRefId ? {sourceRefId}: {}),
           ...(applicationNo ? {applicationNo} : {}),
           ...(sortOrder ? {sortOrder} : {}),
           ...(locality?.length > 0 ? {locality: locality.map((item) => item.code.split("_").pop()).join(",")} : {}),

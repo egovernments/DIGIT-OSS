@@ -148,6 +148,8 @@ const ApplicationOverview = () => {
             boxSizing: "border-box",
             borderRadius: "4px",
             padding: "8px",
+            maxWidth: "950px",
+            minWidth: "280px"
           }}>
             <CardSectionHeader style={{ marginBottom: "16px" }}>{`${t(`NOC_MAIN_${stringReplaceAll(nocDocumentsList?.[0]?.code, ".", "_")}_LABEL`)}:`}</CardSectionHeader>
             <StatusTable style={{ position: "relative", marginTop: "19px" }}>
@@ -158,16 +160,17 @@ const ApplicationOverview = () => {
               <Row className="border-none" label={`${t("NOC_APPROVED_ON_LABEL")}:`} text={(status === "APPROVED" || status === "REJECTED" || status === "AUTO_APPROVED" || status === "AUTO_REJECTED") ? convertEpochToDate(Number(nocDataDetails?.[0]?.auditDetails?.lastModifiedTime)) : "NA"} />
               <Row className="border-none" label={`${t("Documents")}:`} text={""} /> 
             </StatusTable>
-            {nocDataDetails?.[0]?.documents ? <div style={{ display: "flex", flexWrap: "wrap" }}>
+            {nocDataDetails?.[0]?.documents && nocDataDetails?.[0]?.documents.length>0 ? 
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-start" }}>
               {nocDataDetails?.[0]?.documents?.map((value, index) => (
-                <a target="_" href={pdfFiles[value.fileStoreId]?.split(",")[0]} style={{ minWidth: "160px", marginRight: "20px" }} key={index}>
-                  <PDFSvg />
-                  <p style={{ marginTop: "8px", fontWeight: "bold", textAlign: "center", width: "100px", color: "#505A5F" }}>{t(value?.title ? value?.title : decodeURIComponent( pdfFiles[value.fileStoreId]?.split(",")?.[0]?.split("?")?.[0]?.split("/")?.pop()?.slice(13)))}</p>
+                <a target="_" href={pdfFiles[value.fileStoreId]?.split(",")[0]} style={{ minWidth: "80px", marginRight: "10px", maxWidth: "100px", height: "auto" }} key={index}>
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                      <PDFSvg />
+                    </div>
+                  <p style={{ marginTop: "8px", fontWeight: "bold", textAlign: "center", width: "100px", color: "#505A5F" }}>{t(stringReplaceAll(value?.documentType, ".", "_"))/* t(value?.title ? value?.title : decodeURIComponent( pdfFiles[value.fileStoreId]?.split(",")?.[0]?.split("?")?.[0]?.split("/")?.pop()?.slice(13))) */}</p>
                 </a>
               ))}
-            </div> : null}
-            {/* <div style={{ display: "flex", paddingBottom: "8px", marginBottom: "8px" }}> */}
-              {/* <h1 style={{ width: "40%", fontWeight: 700, paddingTop: "20px" }}>{`${t("NOC_UPLOAD_FILE_LABEL")}:`}</h1> */}
+            </div> : <div><p>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</p></div>}
               <div>
                 {workflowDetails?.data?.nextActions?.length > 0 ? nocTaxDocuments?.map((document, index) => {
                   return (
@@ -183,7 +186,6 @@ const ApplicationOverview = () => {
                   );
                 }) : null}
               </div>
-            {/* </div> */}
           </div>
         </Fragment>
       );
@@ -191,10 +193,12 @@ const ApplicationOverview = () => {
   }
   const getBuldingComponent = (details = []) => details.map(detail => ({
     title: detail.title, belowComponent: () => <Fragment>
+      <div style={{maxWidth: "950px"}}>
       <StatusTable style={{ position: "relative", marginTop: "19px" }}>
         {detail.values.map(value => <Row className="border-none" label={`${t(value?.title)}:`} text={value?.value || "NA"} />
         )}
       </StatusTable>
+      </div>
     </Fragment>
   }))
 
@@ -209,8 +213,8 @@ const ApplicationOverview = () => {
   console.log(applicationDetails, nocTaxDocuments, nocDatils, nocDocumentTypeMaping, commonDocMaping, "applicationDetailsapplicationDetailsapplicationDetailsapplicationDetails")
 
   return (
-    <div >
-      <div style={{ marginLeft: "15px" }}>
+    <div className={"employee-main-application-details"}>
+      <div>
         <Header>{t("NOC_APP_OVER_VIEW_HEADER")}</Header>
       </div>
       <ApplicationDetailsTemplate

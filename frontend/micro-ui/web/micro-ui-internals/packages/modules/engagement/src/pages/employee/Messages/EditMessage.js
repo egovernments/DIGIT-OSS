@@ -4,7 +4,7 @@ import React, { Fragment, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
 import { handleTodaysDate, isNestedArray, reduceDocsArray } from "../../../utils";
-import { config } from "../NewMessageConfig";
+import { config } from "../../../config/NewMessageConfig";
 
 const EditMessage = () => {
   const { t } = useTranslation();

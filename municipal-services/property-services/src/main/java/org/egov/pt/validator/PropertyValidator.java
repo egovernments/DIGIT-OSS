@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.AlternateMobileNumber;
 import org.egov.pt.models.ConstructionDetail;
 import org.egov.pt.models.GeoLocation;
 import org.egov.pt.models.Institution;

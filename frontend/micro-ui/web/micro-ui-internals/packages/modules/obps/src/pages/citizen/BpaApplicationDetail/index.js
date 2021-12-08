@@ -8,7 +8,8 @@ import DocumentDetails from "../../../components/DocumentDetails";
 import ActionModal from "./Modal";
 import OBPSDocument from "../../../pageComponents/OBPSDocuments";
 import SubOccupancyTable from "../../../../../templates/ApplicationDetails/components/SubOccupancyTable";
-import { getBusinessServices, getOrderedDocs, getCheckBoxLabelData, getBPAFormData } from "../../../utils";
+import InspectionReport from "../../../../../templates/ApplicationDetails/components/InspectionReport";
+import { getBusinessServices, getOrderedDocs, getCheckBoxLabelData, getBPAFormData, convertDateToEpoch, printPdf,downloadPdf  } from "../../../utils";
 
 const BpaApplicationDetail = () => {
   const { id } = useParams();
@@ -20,6 +21,7 @@ const BpaApplicationDetail = () => {
   const [isTocAccepted, setIsTocAccepted] = useState(false); 
   const [displayMenu, setDisplayMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [appDetails, setAppDetails] = useState({});
   const [showOptions, setShowOptions] = useState(false);
@@ -71,7 +73,7 @@ const BpaApplicationDetail = () => {
     let payval=[]
     payments.length>0 && payments.map((ob) => {
       ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.billAccountDetails.map((bill,index) => {
-        payval.push({title:`${bill?.taxHeadCode}_DETAILS`, value:""});
+        payval.push({title:`${bill?.taxHeadCode}_DETAILS`, value:" "});
         payval.push({title:bill?.taxHeadCode, value:`₹${bill?.amount}`});
         payval.push({title:"BPA_STATUS_LABEL", value:"Paid"});
       })
@@ -81,6 +83,7 @@ const BpaApplicationDetail = () => {
       title:"BPA_FEE_DETAILS_LABEL",
       additionalDetails:{
         inspectionReport:[],
+        isFeeDetails: true,
         values:[...payval]
       }
     })
@@ -109,11 +112,21 @@ const BpaApplicationDetail = () => {
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
 
-  async function getPermitOccupancyOrderSearch({tenantId},order) {
+  async function getPermitOccupancyOrderSearch({tenantId},order, mode="download") {
+    let currentDate = new Date();
+    data.applicationData.additionalDetails.runDate = convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate());
     let requestData = {...data?.applicationData, edcrDetail:[{...data?.edcrDetails}]}
     let response = await Digit.PaymentService.generatePdf(tenantId, { Bpa: [requestData] }, order);
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
+    requestData["applicationType"] = data?.applicationData?.additionalDetails?.applicationType;
+    let edcrResponse = await Digit.OBPSService.edcr_report_download({BPA: {...requestData}});
+    const responseStatus = parseInt(edcrResponse.status, 10);
+    if (responseStatus === 201 || responseStatus === 200) {
+      mode == "print"
+        ? printPdf(new Blob([edcrResponse.data], { type: "application/pdf" }))
+        : downloadPdf(new Blob([edcrResponse.data], { type: "application/pdf" }), `edcrReport.pdf`);
+    }
   }
 
   async function getRevocationPDFSearch({tenantId,...params}) {
@@ -151,7 +164,12 @@ const BpaApplicationDetail = () => {
     setShowModal(false);
   };
 
+  const closeTermsModal = () => {
+    setShowTermsModal(false);
+  }
+
   function onActionSelect(action) {
+    let path = data?.applicationData?.businessService == "BPA_OC" ? "ocbpa" : "bpa";
     if(action === "FORWARD") {
       history.replace(`/digit-ui/citizen/obps/sendbacktocitizen/ocbpa/${data?.applicationData?.tenantId}/${data?.applicationData?.applicationNo}/check`, { data: data?.applicationData, edcrDetails: data?.edcrDetails });
     }
@@ -159,7 +177,7 @@ const BpaApplicationDetail = () => {
       window.location.assign(`${window.location.origin}/digit-ui/citizen/payment/collect/${`${getBusinessServices(data?.businessService, data?.applicationStatus)}/${id}/${data?.tenantId}?tenantId=${data?.tenantId}`}`);
     }
     if (action === "SEND_TO_CITIZEN"){
-      getBPAFormData(data?.applicationData,mdmsData,history);
+      window.location.replace(`/digit-ui/citizen/obps/editApplication/${path}/${data?.applicationData?.tenantId}/${data?.applicationData?.applicationNo}`)
     }
     setSelectedAction(action);
     setDisplayMenu(false);
@@ -177,7 +195,7 @@ const BpaApplicationDetail = () => {
         onError: (error, variables) => {
           // console.log("find error here",error)
           setShowModal(false);
-          setShowToast({ key: "error", action: error });
+          setShowToast({ key: "error", action: error?.response?.data?.Errors[0]?.message ? error?.response?.data?.Errors[0]?.message : error });
           setTimeout(closeToast, 5000);
         },
         onSuccess: (data, variables) => {
@@ -277,16 +295,21 @@ const BpaApplicationDetail = () => {
     });
     
   }
-  else if(data && data?.applicationData?.businessService === "BPA" && data?.applicationData?.riskType === "HIGH" && payments.length>0)
+  else if(data && data?.applicationData?.businessService === "BPA" && payments.length>0)
   {
     dowloadOptions.push({
       label: t("BPA_APP_FEE_RECEIPT"),
       onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[0],consumerCodes: data?.applicationData?.applicationNo}),
     });
-    if(payments.length == 2)dowloadOptions.push({
+    if(payments.length == 2){dowloadOptions.push({
       label: t("BPA_SAN_FEE_RECEIPT"),
       onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
     });
+    dowloadOptions.push({
+      label: t("BPA_PERMIT_ORDER"),
+      onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"buildingpermit"),
+    });
+  }
   }
   else
   {
@@ -294,125 +317,196 @@ const BpaApplicationDetail = () => {
       label: t("BPA_APP_FEE_RECEIPT"),
       onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[0],consumerCodes: data?.applicationData?.applicationNo}),
     });
-    if(payments.length == 2)dowloadOptions.push({
+    if(payments.length == 1 && payments[0]?.paymentDetails[0]?.businessService==="BPA.NC_OC_SAN_FEE"){
+      dowloadOptions.push({
+        label: t("BPA_OC_DEV_PEN_RECEIPT"),
+        onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
+      });
+    }
+    if(payments.length == 2){dowloadOptions.push({
       label: t("BPA_SAN_FEE_RECEIPT"),
       onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
     });
+    dowloadOptions.push({
+      label: t("BPA_PERMIT_ORDER"),
+      onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"buildingpermit"),
+    });
+    dowloadOptions.push({
+      label: t("BPA_OC_DEV_PEN_RECEIPT"),
+      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
+    });
+  }
   }
 
   if (workflowDetails?.data?.nextActions?.length > 0) {
     workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "INITIATE");
     workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "ADHOC");
+    workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "SKIP_PAYMENT");
   };
-  
+
+  data.applicationDetails = data?.applicationDetails?.length > 0 && data?.applicationDetails?.filter(bpaData => Object.keys(bpaData).length !== 0);
+
+  const getCheckBoxLable = () => {
+    return (
+      <div>
+        <span>{`${t("BPA_I_AGREE_THE_LABEL")} `}</span>
+        <span style={{color: "#F47738", cursor: "pointer"}} onClick={() => setShowTermsModal(!showTermsModal)}>{t(`BPA_TERMS_AND_CONDITIONS_LABEL`)}</span>
+      </div>
+    )
+  }
   return (
     <Fragment>
-      <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
-      {dowloadOptions && dowloadOptions.length>0 && <MultiLink
+      <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
+        <Header style={{marginLeft: "0px"}}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
+        {dowloadOptions && dowloadOptions.length > 0 && <MultiLink
           className="multilinkWrapper"
           onHeadClick={() => setShowOptions(!showOptions)}
           displayOptions={showOptions}
           options={dowloadOptions}
-          style={{top:"90px"}}
+
         />}
-      {data?.applicationDetails?.filter((ob) => Object.keys(ob).length>0).map((detail, index, arr) => {
-       return (
-          <Card key={index} style={detail?.title === ""?{marginTop:"-8px"}:{}}>
-            <CardHeader>{t(detail?.title)}</CardHeader>
-            <StatusTable>
-              {!(detail?.additionalDetails?.noc) && detail?.values?.map((value) => (
-                <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value , value?.isNotTranslated) || t("CS_NA")} />
-              ))}
-              {detail?.additionalDetails?.owners && detail?.additionalDetails?.owners.map((owner,index) => (
-                <div key={index}>
-                <Row className="border-none" label={`${t("Owner")} - ${index+1}`} />
-                {owner?.values.map((value) =>(
-                  <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value , value?.isNotTranslated) || t("CS_NA")} />
-                ))}
-                </div>
-              ))}
-              {!(detail?.additionalDetails?.FIdocuments) && !(detail?.additionalDetails?.subOccupancyTableDetails) && detail?.additionalDetails?.values && detail?.additionalDetails?.values?.map((value) => (
-                <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value , value?.isNotTranslated) || t("CS_NA")} />
-              ))}
-              {detail?.additionalDetails?.FIdocuments && detail?.additionalDetails?.values && detail?.additionalDetails?.values?.map((doc,index) => (
-              <div key={index}>
-                {doc.isNotDuplicate && <div> 
-                <StatusTable>
-                <Row label={t(doc?.documentType)}></Row>
-                <OBPSDocument value={detail?.additionalDetails?.values} Code={doc?.documentType} index={index}/> 
-                <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
-                </StatusTable>
-                </div>}
-             </div>
-          )) }
-              {detail?.additionalDetails?.subOccupancyTableDetails && <SubOccupancyTable edcrDetails={detail?.additionalDetails} />}
-        {detail?.additionalDetails?.noc && detail?.additionalDetails?.noc.map((nocob, ind) => (
-        <div key={ind}>
-        <StatusTable>
-        <Row className="border-none" label={nocob?.values?.[0]?.documentType?t(`BPA_${nocob?.values?.[0]?.documentType.replaceAll(".","_")}_HEADER`):t(`${detail?.values?.[0]?.title.slice(0,-5)}HEADER`)}></Row>
-        <Row className="border-none" label={t(`${detail?.values?.[0]?.title}`)} textStyle={{marginLeft:"10px"}} text={getTranslatedValues(detail?.values?.[0]?.value , detail?.values?.[0]?.isNotTranslated)} />
-        <Row className="border-none" label={t(`${detail?.values?.[1]?.title}`)} textStyle={{marginLeft:"10px"}} text={getTranslatedValues(detail?.values?.[1]?.value , detail?.values?.[1]?.isNotTranslated)} />
-        <Row className="border-none" label={t(`${detail?.values?.[2]?.title}`)} textStyle={{marginLeft:"10px"}} text={getTranslatedValues(detail?.values?.[2]?.value , detail?.values?.[2]?.isNotTranslated)} />
-        <Row className="border-none" label={t(`${nocob?.title}`)}></Row>
-        </StatusTable>
-        <StatusTable>
-        {nocob?.values ? <OBPSDocument value={nocob?.values} Code={nocob?.values?.[0]?.documentType?.split("_")[0]} index={ind} isNOC={true}/>:
-        <div><CardText>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</CardText></div> }
-        </StatusTable>
-        </div>
-      ))}
-              {detail?.additionalDetails?.obpsDocuments?.[0]?.values && (
-                <Fragment>
-                  <Row className="border-none" label={t(detail?.additionalDetails?.obpsDocuments?.[0].title)} />
-                  <DocumentDetails documents={getOrderedDocs(detail?.additionalDetails?.obpsDocuments?.[0]?.values)} />
-                </Fragment>
-              )}
-              {detail?.additionalDetails?.scruntinyDetails &&
-                // <DocumentDetails documents={detail?.additionalDetails?.scruntinyDetails} />
-                detail?.additionalDetails?.scruntinyDetails.map((scrutiny) => (
-                  <Fragment>
-                    <Row className="border-none" label={t(scrutiny?.title)} />
-                    <LinkButton 
-                      onClick={() => downloadDiagram(scrutiny?.value)} 
-                      label={<PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />}>
-                    </LinkButton>
-                    <Row className="border-none" label={t(scrutiny?.text)} labelStyle={{fontSize: "14px", color: "#505A5F", fontWeight:"400"}} />
-                  </Fragment>
-                ))}
-            </StatusTable>
-            {index === arr.length - 1 && (
-              <Fragment>
-                <BPAApplicationTimeline application={data?.applicationData} id={id} />
-                {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && !isFromSendBack && checkBoxVisible && (
-                  <CheckBox
-                    styles={{ margin: "20px 0 40px" }}
-                    checked={isTocAccepted}
-                    // label={`${t(`BPA_CITIZEN_1_DECLARAION_LABEL`)}${t(`BPA_CITIZEN_2_DECLARAION_LABEL`)}`}
-                    label={getCheckBoxLabelData(t, data?.applicationData, workflowDetails?.data?.nextActions)}
-                    onChange={() => setIsTocAccepted(!isTocAccepted)}
-                  />
-                )}
-                {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
-                  <ActionBar style={{position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px"}}>
-                  <div style={{width: "100%"}}>
-                    {displayMenu && workflowDetails?.data?.nextActions ? (
-                      <Menu
-                        style={{ bottom: "37px", minWidth: "240px", maxWidth: "310px", width: "100%", right: "0px"  }}
-                        localeKeyPrefix={"WF_BPA"}
-                        options={workflowDetails?.data?.nextActions.map((action) => action.action)}
-                        t={t}
-                        onSelect={onActionSelect}
-                      />
-                    ) : null}
-                    <SubmitBar style={{width: "100%"}} disabled={checkForSubmitDisable(isFromSendBack, isTocAccepted)} label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+      </div>
+      {data?.applicationDetails?.filter((ob) => Object.keys(ob).length > 0).map((detail, index, arr) => {
+
+        return (
+          <div>
+            {!detail?.isNotAllowed ? <Card key={index} style={!detail?.additionalDetails?.fiReport && detail?.title === "" ? { marginTop: "-30px" } : {}}>
+
+              {!detail?.isTitleVisible ? <CardHeader>{t(detail?.title)}</CardHeader> : null}
+              
+              <div style={detail?.isBackGroundColor ? { marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", maxWidth: "950px", minWidth: "280px" } : {}}>
+
+              <StatusTable>
+                {/* to get common values */}
+                {(detail?.isCommon && detail?.values?.length > 0) ? detail?.values?.map((value) => (
+                  <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
+                )) : null}
+
+                {/* to get additional common values */}
+                {detail?.additionalDetails?.values?.length > 0 ? detail?.additionalDetails?.values?.map((value) => (
+                    !detail?.isTitleRepeat ? <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} /> : null 
+                )) : null}
+
+                {/* to get subOccupancyValues values */}
+                {(detail?.isSubOccupancyTable && detail?.additionalDetails?.subOccupancyTableDetails) ? <SubOccupancyTable edcrDetails={detail?.additionalDetails} applicationData={data?.applicationData} /> : null}
+
+                {/* to get Scrutiny values */}
+                {(detail?.isScrutinyDetails && detail?.additionalDetails?.scruntinyDetails?.length > 0) ?
+                  detail?.additionalDetails?.scruntinyDetails.map((scrutiny) => (
+                    <Fragment>
+                      <Row className="border-none" label={t(scrutiny?.title)} />
+                      <LinkButton
+                        onClick={() => downloadDiagram(scrutiny?.value)}
+                        label={<PDFSvg style={{ background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />}>
+                      </LinkButton>
+                      <Row className="border-none" label={t(scrutiny?.text)} labelStyle={{ fontSize: "14px", color: "#505A5F", fontWeight: "400" }} />
+                    </Fragment>
+                  )) : null}
+
+                {/* to get Owner values */}
+                {(detail?.isOwnerDetails && detail?.additionalDetails?.owners?.length > 0) ? detail?.additionalDetails?.owners.map((owner, index) => (
+                  <div key={index} style={detail?.additionalDetails?.owners?.length > 1 ? { marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", maxWidth: "950px", minWidth: "280px" } : {}}>
+                    {detail?.additionalDetails?.owners?.length > 1 ? <Row className="border-none" label={`${t("Owner")} - ${index + 1}`} /> : null }
+                    {owner?.values.map((value) => (
+                      <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
+                    ))}
                   </div>
-                  </ActionBar>
+                )) : null}
+
+                {/* to get Document values */}
+                {(detail?.isDocumentDetails && detail?.additionalDetails?.obpsDocuments?.[0]?.values) && (
+                  <Fragment>
+                    <Row className="border-none" label={t(detail?.additionalDetails?.obpsDocuments?.[0].title)} />
+                    <DocumentDetails documents={getOrderedDocs(detail?.additionalDetails?.obpsDocuments?.[0]?.values)} />
+                  </Fragment>
                 )}
-              </Fragment>
+
+                {/* to get FieldInspection values */}
+                {(detail?.isFieldInspection && data?.applicationData?.additionalDetails?.fieldinspection_pending?.length > 0) ? <InspectionReport isCitizen={true} fiReport={data?.applicationData?.additionalDetails?.fieldinspection_pending} /> : null}
+
+                {/* to get NOC values */}
+                {detail?.additionalDetails?.noc?.length > 0 ? detail?.additionalDetails?.noc.map((nocob, ind) => (
+                  <div key={ind} style={{ marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", maxWidth: "960px", minWidth: "280px" }}>
+                    <StatusTable>
+                      <Row className="border-none" label={t(`${`BPA_${detail?.additionalDetails?.data?.nocType}_HEADER`}`)}></Row>
+                      <Row className="border-none" label={t(`${detail?.values?.[0]?.title}`)} textStyle={{ marginLeft: "10px" }} text={getTranslatedValues(detail?.values?.[0]?.value, detail?.values?.[0]?.isNotTranslated)} />
+                      <Row className="border-none" label={t(`${detail?.values?.[1]?.title}`)} textStyle={detail?.values?.[1]?.value == "APPROVED" || detail?.values?.[1]?.value == "AUTO_APPROVED" ? { marginLeft: "10px", color: "#00703C" } : { marginLeft: "10px", color: "#D4351C" }} text={getTranslatedValues(detail?.values?.[1]?.value, detail?.values?.[1]?.isNotTranslated)} />
+                      { detail?.values?.[2]?.value ? <Row className="border-none" label={t(`${detail?.values?.[2]?.title}`)} textStyle={{ marginLeft: "10px" }} text={getTranslatedValues(detail?.values?.[2]?.value, detail?.values?.[2]?.isNotTranslated)} /> : null }
+                      { detail?.values?.[3]?.value ? <Row className="border-none" label={t(`${detail?.values?.[3]?.title}`)} textStyle={{ marginLeft: "10px" }} text={getTranslatedValues(detail?.values?.[3]?.value, detail?.values?.[3]?.isNotTranslated)} /> : null }
+                      { detail?.values?.[3]?.value ? <Row className="border-none" label={t(`${detail?.values?.[4]?.title}`)} textStyle={{ marginLeft: "10px" }} text={getTranslatedValues(detail?.values?.[4]?.value, detail?.values?.[4]?.isNotTranslated)} /> : null }
+                      <Row className="border-none" label={t(`${nocob?.title}`)}></Row>
+                    </StatusTable>
+                    <StatusTable>
+                      {nocob?.values ? <OBPSDocument value={nocob?.values} Code={nocob?.values?.[0]?.documentType?.split("_")[0]} index={ind} isNOC={true} /> :
+                        <div><CardText>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</CardText></div>}
+                    </StatusTable>
+                    {/* {detail?.title ? <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} /> : null } */}
+                  </div>
+                )) : null}
+
+                {/* to get permit values */}
+                {(!detail?.isTitleVisible && detail?.additionalDetails?.permit?.length > 0) ? detail?.additionalDetails?.permit?.map((value) => (
+                  <CardText >{value?.title}</CardText>
+                )) : null}
+
+                {/* to get Fee values */}
+                {(detail?.isFeeDetails && detail?.additionalDetails?.values?.length > 0) ? detail?.additionalDetails?.permit?.map((value) => (
+                  <StatusTable>
+                    <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
+                  </StatusTable>
+                )) : null}
+
+              </StatusTable>
+              </div>
+            </Card> : null }
+
+            {/* to get Timeline values */}
+            {index === arr.length - 1 && (
+              <Card>
+                <Fragment>
+                  <BPAApplicationTimeline application={data?.applicationData} id={id} />
+                  {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && !isFromSendBack && checkBoxVisible && (
+                    <CheckBox
+                      styles={{ margin: "20px 0 40px", paddingTop: "10px" }}
+                      checked={isTocAccepted}
+                      label={getCheckBoxLable()}
+                      // label={getCheckBoxLabelData(t, data?.applicationData, workflowDetails?.data?.nextActions)}
+                      onChange={() => { setIsTocAccepted(!isTocAccepted); isTocAccepted ? setDisplayMenu(!isTocAccepted) : "" }}
+                    />
+                  )}
+                  {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
+                    <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px" }}>
+                      <div style={{ width: "100%" }}>
+                        {displayMenu && workflowDetails?.data?.nextActions ? (
+                          <Menu
+                            style={{ bottom: "37px", minWidth: "240px", maxWidth: "310px", width: "100%", right: "0px" }}
+                            localeKeyPrefix={"WF_BPA"}
+                            options={workflowDetails?.data?.nextActions.map((action) => action.action)}
+                            t={t}
+                            onSelect={onActionSelect}
+                          />
+                        ) : null}
+                        <SubmitBar style={{ width: "100%" }} disabled={checkForSubmitDisable(isFromSendBack, isTocAccepted)} label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+                      </div>
+                    </ActionBar>
+                  )}
+                </Fragment>
+              </Card>
             )}
-          </Card>
-        );
+          </div>
+        )
       })}
+      {showTermsModal ? (
+        <ActionModal
+          t={t}
+          action={"TERMS_AND_CONDITIONS"}
+          tenantId={tenantId}
+          id={id}
+          closeModal={closeTermsModal}
+          submitAction={submitAction}
+          applicationData={data?.applicationData || {}}
+        />
+      ) : null}
       {showModal ? (
         <ActionModal
           t={t}
@@ -430,7 +524,7 @@ const BpaApplicationDetail = () => {
           error={showToast.key === "error" ? true : false}
           label={t(showToast.key === "success" ? `ES_OBPS_${showToast.action}_UPDATE_SUCCESS` : showToast.action)}
           onClose={closeToast}
-          style={{zIndex: "1000"}}
+          style={{ zIndex: "1000" }}
         />
       )}
     </Fragment>

@@ -84,7 +84,7 @@ function SelectDocument({
       <div style={{/*  border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", display: "flex" */ }}>
         <LabelFieldPair>
           <CardLabel>{doc?.required ? `${t("TL_BUTTON_UPLOAD FILE")}*:` : `${t("TL_BUTTON_UPLOAD FILE")}:`}</CardLabel>
-          <div className="field">
+          <div className="field" style={{width: "70%"}}>
             <MultiUploadWrapper
               module="NOC"
               tenantId={tenantId}
@@ -109,6 +109,7 @@ const NOCDocuments = ({ t, noc, docs, isNoc, applicationData,NOCdata, bpaActions
   const [checkEnablingDocs, setCheckEnablingDocs] = useState(false);
   const [nocDocuments, setNocDocuments] = Digit.Hooks.useSessionStorage(noc?.nocType, []);
   const [error, setError] = useState(null);
+  const isEmployee = window.location.href.includes("/employee/")
 
   useEffect(() => {
     setCommonDocMaping(commonDocs?.["common-masters"]?.DocumentType);
@@ -160,14 +161,16 @@ const NOCDocuments = ({ t, noc, docs, isNoc, applicationData,NOCdata, bpaActions
   }, [applicationData, bpaActionsDetails])
 
   return (
-    <div style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", maxWidth:"600px"/*  display: "flex" */ }}>
+    <div style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", maxWidth:"950px"/*  display: "flex" */ }}>
       <StatusTable>
-      <Row label={t(`BPA_${noc?.nocType}_HEADER`)} />
+      <Row label={isEmployee ? `${t(`BPA_${noc?.nocType}_HEADER`)}:` : t(`BPA_${noc?.nocType}_HEADER`)} />
       {NOCdata && NOCdata.map((noc,index) => {
-        if (noc?.field == "STATUS") {
-          return <Row label={t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} textStyle = {(noc?.value == "APPROVED" || noc?.value == "AUTO_APPROVED") ? {color: "GREEN"} : {color : "#D4351C"}}/>
-        } else {
-          return <Row label={t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} />
+        if (noc?.value) {
+          if (noc?.field == "STATUS") {
+            return <Row label={isEmployee ? `${t(noc?.title)}:` : t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} textStyle = {(noc?.value == "APPROVED" || noc?.value == "AUTO_APPROVED") ? {color: "#00703C"} : {color : "#D4351C"}}/>
+          } else {
+            return <Row label={isEmployee ? `${t(noc?.title)}:` : t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} />
+          }
         }
       })}
       </StatusTable>

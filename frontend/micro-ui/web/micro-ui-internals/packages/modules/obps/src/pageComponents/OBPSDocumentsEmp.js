@@ -20,28 +20,18 @@ const OBPSDocumentsEmp = ({ t, config, onSelect, userType, formData, setError: s
 
   const ckeckingLocation = window.location.href.includes("renew-application-details");
 
-
   const tlDocuments = documentsData?.TradeLicense?.documentObj;
   const tlDocumentsList = tlDocuments?.["0"]?.allowedDocs;
 
   let finalTlDocumentsList = [];
   documentList && documentList.map((doc) => {
-      finalTlDocumentsList.push({documentType:doc.code, code:doc.code});
+    finalTlDocumentsList.push({ documentType: doc.code, code: doc.code });
   })
-//   if (tlDocumentsList && tlDocumentsList.length > 0) {
-//     tlDocumentsList.map(data => {
-//       if ((!ckeckingLocation || previousLicenseDetails?.action == "SENDBACKTOCITIZEN") && data?.applicationType?.includes("NEW")) {
-//         finalTlDocumentsList.push(data);
-//       } else if (ckeckingLocation && previousLicenseDetails?.action != "SENDBACKTOCITIZEN" && data?.applicationType?.includes("RENEWAL")) {
-//         finalTlDocumentsList.push(data);
-//       }
-//     })
-//   }
 
   const goNext = () => {
     let data = formData;
-    data && data?.FieldReports && data?.FieldReports.length >0 && documents.length>0 ?data.FieldReports[indexx] = {...data.FieldReports[indexx], Documents:documents} : "";
-    data && data?.FieldReports && data?.FieldReports.length >0 && documents.length>0 ? setFieldReports(data.FieldReports):"";
+    data && data?.FieldReports && data?.FieldReports.length > 0 && documents.length > 0 ? data.FieldReports[indexx] = { ...data.FieldReports[indexx], Documents: documents } : "";
+    data && data?.FieldReports && data?.FieldReports.length > 0 && documents.length > 0 ? setFieldReports(data.FieldReports) : "";
   };
 
   useEffect(() => {
@@ -56,6 +46,7 @@ const OBPSDocumentsEmp = ({ t, config, onSelect, userType, formData, setError: s
     <div>
       {finalTlDocumentsList?.map((document, index) => {
         return (
+          <div style={{ paddingLeft: "16px" }}>
           <SelectDocument
             key={index}
             document={document}
@@ -72,6 +63,7 @@ const OBPSDocumentsEmp = ({ t, config, onSelect, userType, formData, setError: s
             config={config}
             formState={formState}
           />
+          </div>
         );
       })}
       {error && <Toast label={error} onClose={() => setError(null)} error />}
@@ -102,7 +94,7 @@ function SelectDocument({
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
   const [isHidden, setHidden] = useState(false);
-  const [newArray, setnewArray ] = useState([]);
+  const [newArray, setnewArray] = useState([]);
 
   function selectfile(e, key) {
     e && setSelectedDocument({ documentType: key });
@@ -113,14 +105,13 @@ function SelectDocument({
     let data = Object.fromEntries(e);
     let newArr = Object.values(data);
     setnewArray(newArr);
-    if(documents && newArr && documents.filter(ob => ob.documentType === key).length > newArr.length)
-    {
+    if (documents && newArr && documents.filter(ob => ob.documentType === key).length > newArr.length) {
       setDocuments(documents.filter(ob => ob.documentType !== key));
     }
 
     newArr && newArr.map((ob) => {
       ob.file.documentType = key;
-      selectfile(ob,key);
+      selectfile(ob, key);
     })
   }
 
@@ -147,13 +138,12 @@ function SelectDocument({
   };
 
   useEffect(() => {
-    if (selectedDocument?.documentType && (( documents.filter((ob) => ob.documentType === selectedDocument?.documentType)).length == 0 || ((newArray.filter((ob) => ob?.file?.documentType === selectedDocument?.documentType)).length) !== (documents.filter((ob) => ob.documentType === selectedDocument?.documentType)).length)) {
+    if (selectedDocument?.documentType && ((documents.filter((ob) => ob.documentType === selectedDocument?.documentType)).length == 0 || ((newArray.filter((ob) => ob?.file?.documentType === selectedDocument?.documentType)).length) !== (documents.filter((ob) => ob.documentType === selectedDocument?.documentType)).length)) {
       setDocuments((prev) => {
-        //const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.documentType);
-        if (uploadedFile?.length === 0 || uploadedFile === null ) {
+        if (uploadedFile?.length === 0 || uploadedFile === null) {
           return prev;
         }
-        const filteredDocumentsByFileStoreId = prev?.filter((item) => item?.fileStoreId !== uploadedFile );
+        const filteredDocumentsByFileStoreId = prev?.filter((item) => item?.fileStoreId !== uploadedFile);
         if (selectedDocument?.id) {
           return [
             ...filteredDocumentsByFileStoreId,
@@ -197,7 +187,6 @@ function SelectDocument({
       if (file) {
         if (file.size >= 5242880) {
           setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
-          // if (!formState.errors[config.key]) setFormError(config.key, { type: doc?.code });
         } else {
           try {
             setUploadedFile(null);
@@ -228,30 +217,17 @@ function SelectDocument({
   }, [doc])
   return (
     <div style={{ marginBottom: "24px" }}>
-      <LabelFieldPair style={{maxWidth:"600px"}}>
+      <LabelFieldPair>
         <CardLabel className="card-label-smaller">
           {doc?.documentType != "OLDLICENCENO" ?
-            `${t(`${doc?.documentType.replaceAll(".", "_")}`)} * :` :
-            `${t(`${doc?.documentType.replaceAll(".", "_")}`)} :`}
+            `${t(`${doc?.documentType.replaceAll(".", "_")}`)}*:` :
+            `${t(`${doc?.documentType.replaceAll(".", "_")}`)}:`}
         </CardLabel>
-        <div className="field">
-          {/* <UploadFile
-            id={id}
-            onUpload={(e) => { selectfile(e, doc?.documentType.replaceAll(".", "_")) }}
-            onDelete={() => {
-              setUploadedFile(null);
-            }}
-            message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
-            textStyles={{ width: "100%" }}
-            inputStyles={{ width: "280px" }}
-            // disabled={enabledActions?.[action].disableUpload || !selectedDocument?.code}
-            buttonType="button"
-            accept={doc?.documentType === "OWNERPHOTO" ? "image/*,.jpg,.png" : "image/*,.jpg,.png,.pdf"}
-          /> */}
+        <div className="field" style={{ width: "70%" }}>
           <MultiUploadWrapper
             module="BPA"
             tenantId={tenantId}
-            getFormState={e => getData(e,doc?.documentType.replaceAll(".", "_"))}
+            getFormState={e => getData(e, doc?.documentType.replaceAll(".", "_"))}
             t={t}
           />
         </div>

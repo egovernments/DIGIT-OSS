@@ -239,6 +239,9 @@ public class TLConfiguration {
 
     @Value("${is.external.workflow.enabled}")
     private Boolean isExternalWorkFlowEnabled;
+    
+    @Value("${egov.tl.businessservices}")
+    private String tlBusinessServices;
 
     //USER EVENTS
 	@Value("${egov.ui.app.host}")
@@ -274,6 +277,9 @@ public class TLConfiguration {
 
     @Value("${notification.email.enabled}")
     private Boolean isEmailNotificationEnabled;
+
+    @Value("${notification.email.enabled.forBPA}")
+    private Boolean isEmailNotificationEnabledForBPA;
 
 
 	//Reminder
@@ -313,5 +319,14 @@ public class TLConfiguration {
 
     @Value("${id.timezone}")
     private String egovAppTimeZone;
+
+    //receipt
+    @Value("${notification.url}")
+    private String notificationUrl;
+
+    @Value("${egov.download.receipt.link}")
+    private String receiptDownloadLink;
+
+
 
 }

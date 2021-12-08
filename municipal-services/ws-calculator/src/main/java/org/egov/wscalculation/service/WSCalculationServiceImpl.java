@@ -321,15 +321,16 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 			throw new CustomException("INVALID_BUSINESSSERVICE", "Provide businessService is invalid");
 
 		if (!(adhocTaxReq.getAdhocpenalty().compareTo(BigDecimal.ZERO) == 0)){
-			String penaltyTaxhead = businessService == SERVICE_FIELD_VALUE_WS ? WS_TIME_ADHOC_PENALTY : WS_ADHOC_PENALTY;
+			String penaltyTaxhead = businessService.equals(SERVICE_FIELD_VALUE_WS) ? WS_TIME_ADHOC_PENALTY : WS_ADHOC_PENALTY;
 			estimates.add(TaxHeadEstimate.builder().taxHeadCode(penaltyTaxhead)
 					.estimateAmount(adhocTaxReq.getAdhocpenalty().setScale(2, 2)).build());
 		}
 		if (!(adhocTaxReq.getAdhocrebate().compareTo(BigDecimal.ZERO) == 0)){
-			String rebateTaxhead = businessService == SERVICE_FIELD_VALUE_WS ? WS_TIME_ADHOC_REBATE : WS_ADHOC_REBATE;
+			String rebateTaxhead = businessService.equals(SERVICE_FIELD_VALUE_WS) ? WS_TIME_ADHOC_REBATE : WS_ADHOC_REBATE;
 			estimates.add(TaxHeadEstimate.builder().taxHeadCode(rebateTaxhead)
 					.estimateAmount(adhocTaxReq.getAdhocrebate().setScale(2, 2).negate()).build());
 		}
+		
 		Calculation calculation = Calculation.builder()
 				.tenantId(adhocTaxReq.getRequestInfo().getUserInfo().getTenantId())
 				.connectionNo(adhocTaxReq.getConsumerCode()).taxHeadEstimates(estimates).build();

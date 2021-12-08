@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
-import { newConfig } from "../../../config/ocEdcrConfig";
+import { newConfig as newConfigOCEDCR } from "../../../config/ocEdcrConfig";
 import { uuidv4, convertDateToEpoch } from "../../../utils";
-import EDCRAcknowledgement from "./EDCRAcknowledgement";
+// import EDCRAcknowledgement from "./EDCRAcknowledgement";
 
 const CreateOCEDCR = ({ parentRoute }) => {
   const queryClient = useQueryClient();
@@ -16,8 +16,13 @@ const CreateOCEDCR = ({ parentRoute }) => {
   let config = [];
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("OC_EDCR_CREATE", {});
   const [isShowToast, setIsShowToast] = useState(null);
+  const [isSubmitBtnDisable, setIsSubmitBtnDisable] = useState(false);
+
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
 
   function createOCEdcr(key, uploadData, skipStep, isFromCreateApi) {
+    setIsSubmitBtnDisable(true);
     const data = params;
     const loggedInuserInfo = Digit.UserService.getUser();
     const userInfo = { id: loggedInuserInfo?.info?.uuid, tenantId: loggedInuserInfo?.info?.tenantId };
@@ -67,6 +72,7 @@ const CreateOCEDCR = ({ parentRoute }) => {
 
     Digit.EDCRService.create({ data: bodyFormData }, tenantId)
       .then((result, err) => {
+        setIsSubmitBtnDisable(false);
         if (result?.data?.edcrDetail) {
           setParams(result?.data?.edcrDetail);
           history.replace(
@@ -76,6 +82,7 @@ const CreateOCEDCR = ({ parentRoute }) => {
         }
       })
       .catch((e) => {
+        setIsSubmitBtnDisable(false);
         setIsShowToast({ key: true, label: e?.response?.data?.errorCode })
       });
   }
@@ -103,10 +110,13 @@ const CreateOCEDCR = ({ parentRoute }) => {
     sessionStorage.removeItem("CurrentFinancialYear");
     queryClient.invalidateQueries("TL_CREATE_TRADE");
   };
+  newConfig = newConfig?.OCEdcrConfig ? newConfig?.OCEdcrConfig : newConfigOCEDCR;
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
   config.indexRoute = "docs-required";
+
+  const EDCRAcknowledgement = Digit?.ComponentRegistryService?.getComponent('OCEDCRAcknowledgement');
 
   return (
     <Switch>
@@ -115,7 +125,7 @@ const CreateOCEDCR = ({ parentRoute }) => {
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Route path={`${match.path}/${routeObj.route}`} key={index}>
-            <Component config={{ texts, inputs, key }} onSelect={handleSelect} onSkip={handleSkip} t={t} formData={params} onAdd={handleMultiple} isShowToast={isShowToast} />
+            <Component config={{ texts, inputs, key }} onSelect={handleSelect} onSkip={handleSkip} t={t} formData={params} onAdd={handleMultiple} isShowToast={isShowToast} isSubmitBtnDisable={isSubmitBtnDisable}/>
           </Route>
         );
       })}

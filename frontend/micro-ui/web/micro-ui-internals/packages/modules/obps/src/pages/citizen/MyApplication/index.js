@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import { Card, KeyNote, Loader, SubmitBar, Header } from "@egovernments/digit-ui-react-components";
 import { Fragment } from "react";
@@ -13,6 +13,7 @@ const MyApplication = () => {
   const { t } = useTranslation();
   const history = useHistory();
   const [bpaFilters, setBpaFilters] = useState({ limit: -1, offset: 0 });
+  const [finalData, setFinalData] = useState([]);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const userInfo = Digit.UserService.getUser();
   const requestor =  userInfo?.info?.mobileNumber;
@@ -51,6 +52,32 @@ const MyApplication = () => {
     history.push("/digit-ui/citizen/obps/stakeholder/apply/stakeholder-docs-required");
   }
 
+  useEffect(() => {
+    if(!isLoading && !isBpaSearchLoading) {
+      let searchConvertedArray = [];
+      let sortConvertedArray = [];
+      if(data?.Licenses?.length) {
+        data?.Licenses?.forEach(license => {
+          license.sortNumber = 0;
+          license.modifiedTime = license.auditDetails.lastModifiedTime;
+          license.type = "BPAREG"
+          searchConvertedArray.push(license);
+        })
+      }
+      if(bpaData?.length) {
+        bpaData?.forEach(bpaDta => {
+          bpaDta.sortNumber = 0;
+          bpaDta.modifiedTime = bpaDta.auditDetails.lastModifiedTime;
+          bpaDta.type = "BPA"
+          searchConvertedArray.push(bpaDta);
+        })
+      }
+      sortConvertedArray = [].slice.call(searchConvertedArray).sort(function (a, b) {
+        return new Date(b.modifiedTime) - new Date(a.modifiedTime) || a.sortNumber - b.sortNumber;
+      });
+      setFinalData(sortConvertedArray);
+    }
+  },[isLoading, isBpaSearchLoading, bpaData, data]);
 
 
   if (isLoading || isBpaSearchLoading) {
@@ -60,7 +87,7 @@ const MyApplication = () => {
   return (
     <Fragment>
       <Header>{`${t("BPA_MY_APPLICATIONS")} (${data?.Licenses?.length + bpaData?.length})`}</Header>
-      {data?.Licenses?.map((application, index) => (
+      {/* {data?.Licenses?.map((application, index) => (
         <Card key={index}>
           <KeyNote keyValue={t("BPA_APPLICATION_NUMBER_LABEL")} note={application?.applicationNumber} />
           <KeyNote keyValue={t("BPA_LICENSE_TYPE")} note={t(`TRADELICENSE_TRADETYPE_${application?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split('.')[0]}`)} />
@@ -82,12 +109,45 @@ const MyApplication = () => {
           <KeyNote keyValue={t("BPA_COMMON_SERVICE")} note={t(`BPA_SERVICETYPE_NEW_CONSTRUCTION`)} />
           <KeyNote keyValue={t("TL_COMMON_TABLE_COL_STATUS")} note={t(`WF_BPA_${application?.state}`)} noteStyle={application?.status === "APPROVED" ? {color: "#00703C"} : {color: "#D4351C"}}/>
           <KeyNote keyValue={t("BPA_COMMON_SLA")} note={application?.sla} />
-          {application.status !== "INITIATED"?<Link to={{ pathname: `/digit-ui/citizen/obps/bpa/${application?.applicationNo}`, state: { tenantId: '' } }}>
+          {application.action === "SEND_TO_ARCHITECT" || application.status !== "INITIATED"?<Link to={{ pathname: `/digit-ui/citizen/obps/bpa/${application?.applicationNo}`, state: { tenantId: '' } }}>
             <SubmitBar label={t("TL_VIEW_DETAILS")} />
           </Link>:
-          <SubmitBar label={t("BPA_COMP_WORKFLOW")} onSubmit={() => getBPAFormData(application,mdmsData,history)}/>}
+          <SubmitBar label={t("BPA_COMP_WORKFLOW")} onSubmit={() => getBPAFormData(application,mdmsData,history,t)}/>}
         </Card>
-      ))}
+      ))} */}
+      {finalData?.map((application, index) => {
+        if (application.type == "BPAREG") {
+          return (
+            <Card key={index}>
+              <KeyNote keyValue={t("BPA_APPLICATION_NUMBER_LABEL")} note={application?.applicationNumber} />
+              <KeyNote keyValue={t("BPA_LICENSE_TYPE")} note={t(`TRADELICENSE_TRADETYPE_${application?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split('.')[0]}`)} />
+              {application?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType.includes('ARCHITECT') &&
+                <KeyNote keyValue={t("BPA_COUNCIL_OF_ARCH_NO_LABEL")} note={application?.tradeLicenseDetail?.additionalDetail?.counsilForArchNo} />
+              }
+              <KeyNote keyValue={t("BPA_APPLICANT_NAME_LABEL")} note={application?.tradeLicenseDetail?.owners?.[0]?.name} />
+              <KeyNote keyValue={t("TL_COMMON_TABLE_COL_STATUS")} note={t(`WF_ARCHITECT_${application?.status}`)} noteStyle={application?.status === "APPROVED" ? { color: "#00703C" } : { color: "#D4351C" }} />
+              {application.status !== "INITIATED" ? <Link to={{ pathname: `/digit-ui/citizen/obps/stakeholder/${application?.applicationNumber}`, state: { tenantId: '' } }}>
+                <SubmitBar label={t("TL_VIEW_DETAILS")} />
+              </Link> :
+                <SubmitBar label={t("BPA_COMP_WORKFLOW")} onSubmit={() => getBPAREGFormData(application)} />}
+            </Card>
+          )
+        } else {
+          return (
+            <Card key={index}>
+              <KeyNote keyValue={t("BPA_APPLICATION_NUMBER_LABEL")} note={application?.applicationNo} />
+              <KeyNote keyValue={t("BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL")} note={application?.businessService !== "BPA_OC" ? t(`WF_BPA_BUILDING_PLAN_SCRUTINY`) : t(`WF_BPA_BUILDING_OC_PLAN_SCRUTINY`)} />
+              <KeyNote keyValue={t("BPA_COMMON_SERVICE")} note={t(`BPA_SERVICETYPE_NEW_CONSTRUCTION`)} />
+              <KeyNote keyValue={t("TL_COMMON_TABLE_COL_STATUS")} note={t(`WF_BPA_${application?.state}`)} noteStyle={application?.status === "APPROVED" ? { color: "#00703C" } : { color: "#D4351C" }} />
+              <KeyNote keyValue={t("BPA_COMMON_SLA")} note={application?.sla} />
+              {application.action === "SEND_TO_ARCHITECT" || application.status !== "INITIATED" ? <Link to={{ pathname: `/digit-ui/citizen/obps/bpa/${application?.applicationNo}`, state: { tenantId: '' } }}>
+                <SubmitBar label={t("TL_VIEW_DETAILS")} />
+              </Link> :
+                <SubmitBar label={t("BPA_COMP_WORKFLOW")} onSubmit={() => getBPAFormData(application, mdmsData, history, t)} />}
+            </Card>
+          )
+        }
+      })}
     </Fragment>
   )
 };

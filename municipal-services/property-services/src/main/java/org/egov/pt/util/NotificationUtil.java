@@ -13,13 +13,7 @@ import static org.egov.pt.util.PTConstants.USREVENTS_EVENT_POSTEDBY;
 import static org.egov.pt.util.PTConstants.USREVENTS_EVENT_TYPE;
 import static org.egov.pt.util.PTConstants.VIEW_APPLICATION_CODE;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +29,10 @@ import org.egov.pt.models.event.Recepient;
 import org.egov.pt.models.event.Source;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.ServiceRequestRepository;
+import org.egov.pt.web.contracts.Email;
 import org.egov.pt.web.contracts.EmailRequest;
+import org.egov.pt.web.contracts.EmailRequest;
+
 import org.egov.pt.web.contracts.SMSRequest;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
@@ -47,6 +44,7 @@ import org.springframework.web.client.RestTemplate;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+
 
 @Slf4j
 @Component
@@ -253,12 +251,16 @@ public class NotificationUtil {
      * @return List of EmailRequest
      */
 
-    public List<EmailRequest> createEmailRequest(String message, Map<String, String> mobileNumberToEmailId) {
+    public List<EmailRequest> createEmailRequest(RequestInfo requestInfo,String message, Map<String, String> mobileNumberToEmailId) {
 
         List<EmailRequest> emailRequest = new LinkedList<>();
         for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
             String customizedMsg = message.replace(NOTIFICATION_EMAIL, entryset.getValue());
-            emailRequest.add(new EmailRequest(entryset.getValue(), customizedMsg));
+            String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
+            String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+            Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
+            EmailRequest email = new EmailRequest(requestInfo,emailobj);
+            emailRequest.add(email);
         }
         return emailRequest;
     }
@@ -278,7 +280,7 @@ public class NotificationUtil {
             for (EmailRequest emailRequest : emailRequestList) {
                 producer.push(config.getEmailNotifTopic(), emailRequest);
                 log.info("Sending EMAIL notification: ");
-                log.info("Email Id: " + emailRequest.getEmailId() + " Messages: " + emailRequest.getMessage());
+                log.info("Email Id: " + emailRequest.getEmail().toString());
             }
         }
     }

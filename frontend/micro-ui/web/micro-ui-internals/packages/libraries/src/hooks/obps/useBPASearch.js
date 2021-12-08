@@ -20,7 +20,8 @@ const combineResponse = (applications, workflowData) => {
     ...application,
     assignee: workflowInstances[application?.applicationNo]?.assignes?.[0]?.name,
     sla: convertMillisecondsToDays(workflowInstances[application?.applicationNo].businesssServiceSla),
-    state: workflowInstances[application?.applicationNo]?.state?.state
+    state: workflowInstances[application?.applicationNo]?.state?.state,
+    action: workflowInstances[application?.applicationNo]?.action
   }))
 }
 

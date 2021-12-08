@@ -723,20 +723,23 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
 
  export const checkValidOwners=(currentOwners=[],oldOwners=[])=>{
 
-  for (var i = 0, len = currentOwners.length; i < len; i++) { 
-    for (var j = 0, len2 = oldOwners.length; j < len2; j++) { 
-        if (currentOwners[i].name === oldOwners[j].name) {
-          oldOwners.splice(j, 1);
-            len2=oldOwners.length;
-        }
-    }   
-}
-oldOwners=oldOwners&&Array.isArray(oldOwners)&&oldOwners.map(owner=>{
-  return {...owner, userActive :false}
-})
-currentOwners=currentOwners&&Array.isArray(currentOwners)&&currentOwners.map(owner=>{
-  return {...owner, userActive :true}
-})
+/*  Quick fix for the owner issue fix in renewal flow */
 
-return [...currentOwners, ...oldOwners];
+
+//   for (var i = 0, len = currentOwners.length; i < len; i++) { 
+//     for (var j = 0, len2 = oldOwners.length; j < len2; j++) { 
+//         if (currentOwners[i].name === oldOwners[j].name) {
+//           oldOwners.splice(j, 1);
+//             len2=oldOwners.length;
+//         }
+//     }   
+// }
+// oldOwners=oldOwners&&Array.isArray(oldOwners)&&oldOwners.map(owner=>{
+//   return {...owner, userActive :false}
+// })
+// currentOwners=currentOwners&&Array.isArray(currentOwners)&&currentOwners.map(owner=>{
+//   return {...owner, userActive :true}
+// })
+
+return [...currentOwners];
  }

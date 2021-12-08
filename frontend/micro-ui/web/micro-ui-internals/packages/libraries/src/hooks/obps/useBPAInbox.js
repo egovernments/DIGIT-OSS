@@ -16,7 +16,7 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
         tenantId,
         processSearchCriteria: {
           moduleName: moduleName !== "BPAREG"  ? "bpa-services" : "BPAREG", 
-          businessService: moduleName !== "BPAREG"  ? ["BPA_LOW", "BPA", "BPA_OC"] :  ["ARCHITECT","BUILDER","ENGINEER","STRUCTURALENGINEER"],
+          businessService: moduleName !== "BPAREG"  ? (businessService ? [businessService] : ["BPA_LOW", "BPA", "BPA_OC"] ) : (businessService ? [businessService.identifier] : ["ARCHITECT","BUILDER","ENGINEER","STRUCTURALENGINEER"]),
           ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
         },
         moduleSearchCriteria: {
@@ -35,14 +35,15 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
 
     return useInbox({tenantId, filters: _filters, config:{
         select: (data) =>({
-          statuses: window.location.href.includes("stakeholder-inbox") ? data.statusMap.map(e => ({...e, applicationstatus: `WF_${businessService}_${e.applicationstatus}`})) : data.statusMap.map(e => ({...e, applicationstatus: `WF_${businessService?.code}_${e.applicationstatus}`})),
+          statuses: data.statusMap, 
           table: data?.items.map( application => ({
               applicationId: application.businessObject.applicationNo || application.businessObject.applicationNumber,
               date: application.businessObject.auditDetails.createdTime,
               businessService: application?.ProcessInstance?.businessService,
               applicationType: application?.businessObject?.additionalDetails?.applicationType ? `WF_BPA_${application?.businessObject?.additionalDetails?.applicationType}` : "-",
               locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
-              status: application.businessObject.status,
+              status: application?.ProcessInstance?.state?.state,
+              state:  application?.ProcessInstance?.state?.state,
               owner: application.ProcessInstance?.assigner?.name,
               sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
           })),

@@ -159,7 +159,8 @@ const variantBasedFilter = async(variant, data) =>{
 }
 
 const getEventsData = async (variant, tenantId) => {
-    const data = await Digit.EventsServices.Search({tenantId, ...variant === "events" ? {filter: {eventTypes: "EVENTSONGROUND"}} : {} })
+    const isLoggedIn = Digit.UserService.getUser()
+    const data = await Digit.EventsServices.Search({tenantId, auth: !!isLoggedIn, ...variant === "events" ? {filter: {eventTypes: "EVENTSONGROUND"}} : {} })
     const allEventsData = await variantBasedFilter(variant, data)
     return allEventsData
 }

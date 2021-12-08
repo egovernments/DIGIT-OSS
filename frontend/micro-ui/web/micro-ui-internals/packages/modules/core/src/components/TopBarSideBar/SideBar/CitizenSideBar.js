@@ -1,10 +1,8 @@
+import { LogoutIcon, NavBar } from "@egovernments/digit-ui-react-components";
 import React from "react";
-import { NavBar, LogoutIcon } from "@egovernments/digit-ui-react-components";
-import SideBarMenu from "../../../config/sidebar-menu";
 import { useTranslation } from "react-i18next";
-import { digitImg } from "../../../Images/digit.js";
-import { powered } from "../../../Images/powered.js";
 import { useHistory } from "react-router-dom";
+import SideBarMenu from "../../../config/sidebar-menu";
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
@@ -50,8 +48,14 @@ const Profile = ({ info, stateName }) => (
 
 const PoweredBy = () => (
   <div className="digit-footer">
-    <img src={powered} alt="Powered by" />
-    <img src={digitImg} alt="DIGIT" />
+    <img
+      alt="Powered by DIGIT"
+      src={window?.globalConfigs?.getConfig?.("DIGIT_FOOTER")}
+      style={{ cursor: "pointer" }}
+      onClick={() => {
+        window.open(window?.globalConfigs?.getConfig?.("DIGIT_HOME_URL"), "_blank").focus();
+      }}
+    />{" "}
   </div>
 );
 
@@ -60,26 +64,27 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
   const { t } = useTranslation();
-  const history = useHistory()
+  const history = useHistory();
   const closeSidebar = () => {
     Digit.clikOusideFired = true;
     toggleSidebar(false);
   };
 
   const redirectToLoginPage = () => {
-    history.push('/digit-ui/citizen/login')
+    history.push("/digit-ui/citizen/login");
     closeSidebar();
-  }
+  };
 
   let menuItems = [...SideBarMenu(t, closeSidebar, redirectToLoginPage, isEmployee)];
   let profileItem;
   if (isFetched && user && user.access_token) {
     profileItem = <Profile info={user.info} stateName={stateInfo.name} />;
-    menuItems = menuItems.filter((item) => (item?.id !== 'login-btn'))
+    menuItems = menuItems.filter((item) => item?.id !== "login-btn");
     menuItems = [
       ...menuItems,
       {
         text: t("CORE_COMMON_LOGOUT"),
+        element:"LOGOUT",
         icon: <LogoutIcon className="icon" />,
         populators: {
           onClick: onLogout,
@@ -87,6 +92,13 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
       },
     ];
   }
+  
+    /*  URL with openlink wont have sidebar and actions    */
+  if(history.location.pathname.includes("/openlink")){
+    profileItem=(<span></span>);
+    menuItems=menuItems.filter(ele=>ele.element==="LANGUAGE");
+  }
+  
   return (
     <div>
       <NavBar open={isOpen} profileItem={profileItem} menuItems={menuItems} onClose={closeSidebar} Footer={<PoweredBy />} />

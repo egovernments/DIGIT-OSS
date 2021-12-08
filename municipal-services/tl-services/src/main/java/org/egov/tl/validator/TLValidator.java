@@ -258,6 +258,7 @@ public class TLValidator {
         List<String> statuses = new ArrayList<String>();
         statuses.add(TLConstants.STATUS_APPROVED);
         statuses.add(TLConstants.STATUS_MANUALLYEXPIRED);
+        statuses.add(TLConstants.STATUS_EXPIRED);
 
         criteria.setStatus(statuses);
         criteria.setBusinessService(request.getLicenses().get(0).getBusinessService());

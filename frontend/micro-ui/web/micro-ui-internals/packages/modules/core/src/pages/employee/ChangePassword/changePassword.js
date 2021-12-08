@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { FormComposer, Dropdown, CardSubHeader, CardLabel, TextInput, CardLabelDesc, CardText, Toast, BackButton } from "@egovernments/digit-ui-react-components";
+import {
+  BackButton, CardSubHeader, CardText, FormComposer, Toast
+} from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Background from "../../../components/Background";
 import Header from "../../../components/Header";
@@ -16,7 +18,7 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
   const getUserType = () => Digit.UserService.getType();
   useEffect(() => {
     if (!user) {
-      Digit.UserService.setType('employee');
+      Digit.UserService.setType("employee");
       return;
     }
     Digit.UserService.setUser(user);
@@ -60,7 +62,7 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
       };
 
       const response = await Digit.UserService.changePassword(requestData, tenantId);
-      console.log({ response })
+      console.log({ response });
       navigateToLogin();
     } catch (err) {
       setShowToast(err?.response?.data?.error?.fields?.[0]?.message || t("ES_SOMETHING_WRONG"));
@@ -107,7 +109,7 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
   return (
     <Background>
       <div className="employeeBackbuttonAlign">
-        <BackButton variant="white" style={{borderBottom:"none"}}/>
+        <BackButton variant="white" style={{ borderBottom: "none" }} />
       </div>
       <FormComposer
         onSubmit={onChangePassword}
@@ -121,7 +123,13 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
       >
         <Header />
         <CardSubHeader style={{ textAlign: "center" }}> {propsConfig.texts.header} </CardSubHeader>
-        <CardText>{`${t(`CS_LOGIN_OTP_TEXT`)} `}<b> {`${t(`+ 91 - `)}`} {mobileNumber}</b></CardText>
+        <CardText>
+          {`${t(`CS_LOGIN_OTP_TEXT`)} `}
+          <b>
+            {" "}
+            {`${t(`+ 91 - `)}`} {mobileNumber}
+          </b>
+        </CardText>
         <SelectOtp t={t} userType="employee" otp={otp} onOtpChange={setOtp} error={isOtpValid} onResend={onResendOTP} />
         {/* <div>
           <CardLabel style={{ marginBottom: "8px" }}>{t("CORE_OTP_SENT_MESSAGE")}</CardLabel>
@@ -136,14 +144,16 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
           </div>
         </div> */}
       </FormComposer>
-      {showToast && <Toast
-        error={true}
-        label={t(showToast)}
-        onClose={closeToast}
-      />
-      }
+      {showToast && <Toast error={true} label={t(showToast)} onClose={closeToast} />}
       <div className="EmployeeLoginFooter">
-        <img alt="Powered by DIGIT" src="https://s3.ap-south-1.amazonaws.com/egov-qa-assets/digit-footer-bw.png" />
+        <img
+          alt="Powered by DIGIT"
+          src={window?.globalConfigs?.getConfig?.("DIGIT_FOOTER_BW")}
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            window.open(window?.globalConfigs?.getConfig?.("DIGIT_HOME_URL"), "_blank").focus();
+          }}
+        />{" "}
       </div>
     </Background>
   );

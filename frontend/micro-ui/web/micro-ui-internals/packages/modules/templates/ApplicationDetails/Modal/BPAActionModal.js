@@ -128,17 +128,28 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     return refinedQues;
   }
 
-  const getfeildInspection = () => {
-    let formdata = JSON.parse(sessionStorage.getItem("INSPECTION_DATA"));
-    let inspectionOb = [];
-    formdata && formdata.map((ob,ind) => {
-      inspectionOb.push({
-        docs: getInspectionDocs(ob.Documents),
-        date: ob.InspectionDate,
-        questions: getQuestion(ob),
-        time: ob?.InspectionTime,
+  const getfeildInspection = (data) => {
+    let formdata = [], inspectionOb = [];
+    
+    if (data?.additionalDetails?.fieldinspection_pending?.length > 0) {
+      inspectionOb = data?.additionalDetails?.fieldinspection_pending
+    }
+
+    if(data.status == "FIELDINSPECTION_INPROGRESS") {
+      formdata = JSON.parse(sessionStorage.getItem("INSPECTION_DATA"));
+      formdata?.length > 0 && formdata.map((ob,ind) => {
+        inspectionOb.push({
+          docs: getInspectionDocs(ob.Documents),
+          date: ob.InspectionDate,
+          questions: getQuestion(ob),
+          time: ob?.InspectionTime,
+        })
       })
-    })
+      inspectionOb = inspectionOb.filter((ob) => ob.docs && ob.docs.length>0);
+    } else {
+      sessionStorage.removeItem("INSPECTION_DATA")
+    }
+  
     let fieldinspection_pending = [ ...inspectionOb];
     return fieldinspection_pending;
   }
@@ -157,7 +168,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     const approvals = Digit.SessionStorage.get("OBPS_APPROVAL_CHECKS");
     const newApprovals = Digit.SessionStorage.get("OBPS_NEW_APPROVALS");
     let result = approvals?.reduce((acc, approval) => approval?.checked ? acc.push(approval?.label) && acc : acc, []);
-    result = result?.concat(newApprovals !== null?newApprovals.map(approval => approval?.label):[]);
+    result = result?.concat(newApprovals !== null?newApprovals.filter(ob => ob.label !== "").map(approval => approval?.label):[]);
     return result;
   }
 
@@ -173,7 +184,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     applicationData = {
       ...applicationData,
       documents: getDocuments(applicationData),
-      additionalDetails: {...applicationData?.additionalDetails, fieldinspection_pending:getfeildInspection(), pendingapproval: getPendingApprovals() },
+      additionalDetails: {...applicationData?.additionalDetails, fieldinspection_pending:getfeildInspection(applicationData), pendingapproval: getPendingApprovals() },
        workflow:{
         action: action?.action,
         comment: data?.comments?.length > 0 ? data?.comments : null,
@@ -260,6 +271,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       actionSaveLabel={t(config.label.submit)}
       actionSaveOnSubmit={() => { }}
       formId="modal-action"
+      style={{height: "auto", padding: "10px"}}
     >
       {financialYearsLoading ? (
         <Loader />

@@ -89,6 +89,10 @@ import useMCollectSearch from "./mcollect/useMCollectSearch";
 import useMcollectSearchBill from "./mcollect/useMcollectSearchBill";
 import usemcollectTenants from "./mcollect/useTenants";
 import useMCollectCount from "./mcollect/useMCollectCount";
+import useMCollectCategory from "./mcollect/useMcollectCategory";
+import useMCollectCategoryTypes from './mcollect/useMcollectCategoryTypes';
+import useMCollectTaxHeads from "./mcollect/useMcollectTaxHeads";
+import useMcollectFormConfig from "./mcollect/useMcollectFormConfig";
 
 import useTenantsTL from "./tl/useTenants";
 import useTradeLicenseMDMS from "./tl/useTradeLicenseMDMS";
@@ -118,7 +122,7 @@ import useReceiptsSearch from "./receipts/useReceiptsSearch";
 import useReceiptsMDMS from "./receipts/useReceiptsMDMS";
 import useReceiptsUpdate from "./receipts/useReceiptsUpdate";
 
-import useSearchMdmsTypes from "./obps/useSearchMdmsTypes";
+import SearchMdmsTypes from "./obps/SearchMdmsTypes";
 import useOBPSMDMS from "./obps/useMDMS";
 import useOBPSSearch from "./obps/useOBPSSearch";
 import useScrutinyDetails from "./obps/useScrutinyDetails";
@@ -136,10 +140,16 @@ import useLicenseDetails from "./obps/useLicenseDetails";
 import useBPAREGApplicationActions from "./obps/useBPAREGApplicationActions";
 import useBPADetailsPage from "./obps/useBPADetailsPage";
 import useBPAInbox from "./obps/useBPAInbox";
+import useEDCRInbox from "./obps/useEDCRInbox";
 import useBPAApplicationActions from "./obps/useApplicationActions"
 import useArchitectInbox from "./obps/useArchitectInbox";
 import useBPAREGSearch from "./obps/useBPAREGSearch";
 import useEmpBPAREGSearch from "./obps/useEmpBPAREGSearch";
+import useServiceTypeFromApplicationType from "./obps/useServiceTypeFromApplicationType"
+import useBusinessServiceBasedOnServiceType from "./obps/useBusinessServiceBasedOnServiceType"
+import useBusinessServiceData from "./obps/useBusinessServiceData";
+import useBPATaxDocuments from "./obps/useBPATaxDocuments";
+
 import useEventInbox from "./events/useEventInbox";
 import useEventDetails from "./events/useEventDetails";
 import { useEngagementMDMS } from "./engagement/useMdms";
@@ -147,6 +157,7 @@ import useDocSearch from "./engagement/useSearch";
 import useDocCreate from "./engagement/useCreate";
 import useDocUpdate from "./engagement/useUpdate";
 import useDocDelete from "./engagement/useDelete";
+
 import useSurveyCreate from "./surveys/useCreate";
 import useSurveyDelete from "./surveys/useDelete";
 import useSurveyUpdate from "./surveys/useUpdate";
@@ -231,6 +242,10 @@ const mcollect = {
   useMcollectSearchBill,
   usemcollectTenants,
   useMCollectCount,
+  useMCollectCategory,
+  useMCollectCategoryTypes,
+  useMCollectTaxHeads,
+  useMcollectFormConfig,
 };
 
 const hrms = {
@@ -284,10 +299,15 @@ const obps = {
   useBPADetailsPage,
   useEmpBPAREGSearch,
   useBPAInbox,
+  useEDCRInbox,
   useArchitectInbox,
-  useSearchMdmsTypes,
+  SearchMdmsTypes,
+  useServiceTypeFromApplicationType,
   useApplicationActions: useBPAApplicationActions,
-  useOBPSSearch
+  useOBPSSearch,
+  useBusinessServiceBasedOnServiceType,
+  useBusinessServiceData,
+  useBPATaxDocuments
 };
 
 const events = {

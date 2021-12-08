@@ -27,8 +27,9 @@ import SubOccupancyTable from "./SubOccupancyTable";
 import OBPSDocument from "../../../obps/src/pageComponents/OBPSDocuments";
 import PermissionCheck from "./PermissionCheck";
 import BPADocuments from "./BPADocuments";
+import InspectionReport from "./InspectionReport";
 
-function ApplicationDetailsContent({ applicationDetails, workflowDetails, isDataLoading, applicationData, businessService, timelineStatusPrefix }) {
+function ApplicationDetailsContent({ applicationDetails, workflowDetails, isDataLoading, applicationData, businessService, timelineStatusPrefix,statusAttribute="status" }) {
   const { t } = useTranslation();
 
 
@@ -59,15 +60,45 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
     }
   };
 
-  // console.log(applicationDetails?.applicationDetails, "inside app details content");
   const checkLocation = window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc");
-  const isNocLocation = window.location.href.includes("noc/application-overview");
+  const isNocLocation = window.location.href.includes("employee/noc");
   const isBPALocation = window.location.href.includes("employee/obps");
+  
+  const getRowStyles = () => {
+    if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
+      return { justifyContent: "space-between", fontSize: "16px", lineHeight: "19px", color: "#0B0C0C" };
+    } else if(checkLocation) {
+      return { justifyContent: "space-between", fontSize: "16px", lineHeight: "19px", color: "#0B0C0C" };
+    } else {
+      return {}
+    }
+  }
+
+  const getTableStyles = () => {
+    if(window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
+      return { position: "relative", marginTop: "19px" }
+    } else if (checkLocation) {
+      return { position: "relative", marginTop: "19px" }
+    } else {
+      return {}
+    }
+  }
+
+  const getMainDivStyles = () => {
+    if(window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
+      return  { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" }
+    } else if (checkLocation) {
+      return  { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" }
+    } else {
+      return {}
+    }
+  }
+
   return (
-    <Card style={{ position: "relative" }}>
+    <Card style={{ position: "relative"}} className={"employeeCard-override"}>
       {applicationDetails?.applicationDetails?.map((detail, index) => (
         <React.Fragment key={index}>
-          <div style={checkLocation ? { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" } : {}}>
+          <div style={getMainDivStyles()}>
             {index === 0 && !detail.asSectionHeader ? (
               <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>
             ) : (
@@ -79,7 +110,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
               </React.Fragment>
             )}
             {/* TODO, Later will move to classes */}
-            <StatusTable style={checkLocation ? { position: "relative", marginTop: "19px" } : {}}>
+            <StatusTable style={getTableStyles()}>
               {detail?.title && !(detail?.title.includes("NOC" )) && detail?.values?.map((value, index) => {
                 if (value.map === true && value.value !== "N/A") {
                   return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
@@ -93,9 +124,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
                     caption={value.caption}
                     className="border-none"
                     // TODO, Later will move to classes
-                    rowContainerStyle={
-                      checkLocation ? { justifyContent: "space-between", fontSize: "16px", lineHeight: "19px", color: "#0B0C0C" } : {}
-                    }
+                    rowContainerStyle={getRowStyles()}
                   />
                 );
               })}
@@ -103,6 +132,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
           </div>
           {detail?.belowComponent && <detail.belowComponent />}
           {detail?.additionalDetails?.inspectionReport && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
+          {applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending?.length > 0 && detail?.additionalDetails?.fiReport && <InspectionReport fiReport={applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending} />}
           {/* {detail?.additionalDetails?.FIdocuments && detail?.additionalDetails?.values?.map((doc,index) => (
             <div key={index}>
             {doc.isNotDuplicate && <div> 
@@ -123,7 +153,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
           {detail?.additionalDetails?.noc && <NOCDocuments t={t} isNoc={true} NOCdata = {detail.values} applicationData={applicationDetails?.applicationData} docs={detail.additionalDetails.noc} noc={detail.additionalDetails?.data} bpaActionsDetails={workflowDetails}/>}
           {detail?.additionalDetails?.scruntinyDetails && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
           {detail?.additionalDetails?.buildingExtractionDetails && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
-          {detail?.additionalDetails?.subOccupancyTableDetails && <SubOccupancyTable edcrDetails={detail?.additionalDetails} />}
+          {detail?.additionalDetails?.subOccupancyTableDetails && <SubOccupancyTable edcrDetails={detail?.additionalDetails} applicationData={applicationDetails?.applicationData} />}
           {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
           {detail?.additionalDetails?.taxHeadEstimatesCalculation && (
             <PropertyEstimates taxHeadEstimatesCalculation={detail?.additionalDetails?.taxHeadEstimatesCalculation} />
@@ -156,7 +186,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
                             isCompleted={index === 0}
                             info={checkpoint.comment}
                             label={t(
-                              `${timelineStatusPrefix}${checkpoint?.performedAction === "REOPEN" ? checkpoint?.performedAction : checkpoint.status}`
+                              `${timelineStatusPrefix}${checkpoint?.performedAction === "REOPEN" ? checkpoint?.performedAction : checkpoint?.[statusAttribute]}`
                             )}
                             customChild={getTimelineCaptions(checkpoint)}
                           />

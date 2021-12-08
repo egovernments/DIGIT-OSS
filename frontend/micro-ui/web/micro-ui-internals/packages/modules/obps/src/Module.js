@@ -33,8 +33,20 @@ import OBPSSearchApplication from "./components/SearchApplication";
 import InspectionReport from "./pageComponents/InspectionReport";
 import OBPSEmployeeHomeCard from "./pages/employee/EmployeeCard";
 
+import BPACheckPage from "./pages/citizen/NewBuildingPermit/CheckPage";
+import OCBPACheckPage from "./pages/citizen/OCBuildingPermit/CheckPage";
+import OCBPASendBackCheckPage from "./pages/citizen/OCSendBackToCitizen/CheckPage";
+import StakeholderCheckPage from "./pages/citizen/StakeholderRegistration/CheckPage";
+import EDCRAcknowledgement from "./pages/citizen/EDCR/EDCRAcknowledgement";
+import OCEDCRAcknowledgement from "./pages/citizen/OCEDCR/EDCRAcknowledgement";
+import BPAAcknowledgement from "./pages/citizen/NewBuildingPermit/OBPSAcknowledgement";
+import OCBPAAcknowledgement from "./pages/citizen/OCBuildingPermit/OBPSAcknowledgement";
+import OCSendBackAcknowledgement from "./pages/citizen/OCSendBackToCitizen/Acknowledgement";
+import StakeholderAcknowledgement from "./pages/citizen/StakeholderRegistration/StakeholderAcknowledgement";
+ 
+
 const OBPSModule = ({ stateCode, userType, tenants }) => {
-  const moduleCode = ["bpa", "bpareg"]; //"bpa";
+  const moduleCode = ["bpa", "bpareg", "common"]; //"bpa";
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
@@ -71,9 +83,9 @@ const OBPSLinks = ({ matchPath, userType }) => {
   ];
 
   return (
-    
-      <CitizenHomeCard header={t("ACTION_TEST_BUILDING_PLAN_APPROVAL")} links={links} Icon={() => <OBPSIcon />} />
-      
+    <CitizenHomeCard header={t("ACTION_TEST_BUILDING_PLAN_APPROVAL")} links={links} Icon={() => <OBPSIcon />}
+      Info={() => <CitizenInfoLabel style={{margin: "0px"}} info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)} />} isInfo={true}
+    />
   );
 } 
 
@@ -105,7 +117,17 @@ const componentsToRegister = {
   OBPSSearchApplication,
   InspectionReport,
   BPAInbox: Inbox,
-  StakeholderInbox: stakeholderInbox
+  StakeholderInbox: stakeholderInbox,
+  StakeholderCheckPage,
+  BPACheckPage,
+  OCBPACheckPage,
+  OCBPASendBackCheckPage,
+  EDCRAcknowledgement,
+  OCEDCRAcknowledgement,
+  BPAAcknowledgement,
+  OCBPAAcknowledgement,
+  OCSendBackAcknowledgement,
+  StakeholderAcknowledgement
 }
 
 export const initOBPSComponents = () => {

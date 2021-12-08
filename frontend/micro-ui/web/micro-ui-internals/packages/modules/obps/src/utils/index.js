@@ -1,3 +1,5 @@
+import cloneDeep from "lodash/cloneDeep";
+
 export const getPattern = type => {
   switch (type) {
     case "Name":
@@ -41,7 +43,7 @@ export const pdfDownloadLink = (documents = {}, fileStoreId = "", format = "") =
 export const convertToNocObject = (data,datafromflow) => {
 
   let formData = {Noc: data};
-  let doc = datafromflow?.nocDocuments?.nocDocuments.length>0 ? datafromflow?.nocDocuments?.nocDocuments.filter((n) => n.documentType.includes(data.nocType.split("_")[0])).map((noc) => {
+  let doc = datafromflow?.nocDocuments?.nocDocuments.length>0 ? datafromflow?.nocDocuments?.nocDocuments.filter((n) => n.documentType.includes(data?.nocType?.split("_")[0])).map((noc) => {
     return ( {    "fileName": noc?.fileName || "",
                   "name": noc?.name || "",
                   "fileStoreId": noc?.fileStoreId,
@@ -55,12 +57,12 @@ export const convertToNocObject = (data,datafromflow) => {
                   }})
                   
   }) || [] : [];
-  doc = [...doc,...(datafromflow?.PrevStateNocDocuments? datafromflow?.PrevStateNocDocuments.filter((n) => n.documentType.includes(data.nocType.split("_")[0])):[])];
+  doc = [...doc,...(datafromflow?.PrevStateNocDocuments? datafromflow?.PrevStateNocDocuments.filter((n) => n.documentType.includes(data?.nocType?.split("_")[0])):[])];
   formData.Noc.documents = doc;
   return formData;
 }
 
-export const getBPAFormData = async(data,mdmsData,history) => {
+export const getBPAFormData = async(data,mdmsData,history,t) => {
   const edcrResponse = await Digit.OBPSService.scrutinyDetails(data?.tenantId, { edcrNumber: data?.edcrNumber })
   const APIScrutinyDetails = edcrResponse?.edcrDetail[0];
   const getBlockIds = (unit) => {
@@ -76,7 +78,7 @@ export const getBPAFormData = async(data,mdmsData,history) => {
     let subBlocks = [];
     let subOcc = {};
     unit && unit.map((un, index) => {
-      arr = un?.usageCategory.split(",");
+      arr = un?.usageCategory?.split(",");
       subBlocks=[];
       arr && arr.map((ob, ind) => {
         subBlocks.push({
@@ -126,7 +128,7 @@ export const getBPAFormData = async(data,mdmsData,history) => {
   data.riskType = Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks)
   data.subOccupancy = getBlocksforFlow(data?.landInfo?.unit);
   data.uiFlow = {
-    flow:data?.businessService.split(".")[0],
+    flow:data?.businessService.includes("OC")?"OCBPA":data?.businessService?.split(".")[0],
     applicationType:data?.additionalDetails?.applicationType || APIScrutinyDetails?.appliactionType,
     serviceType:data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType
   }
@@ -189,24 +191,59 @@ export const getBPAUnit = (data) =>{
     let result = Object.entries(ob);
   data?.landInfo?.unit.map((oldUnit,ind) => {
     result.map((newunit,index)=>{
-      if(oldUnit.id && oldUnit.floorNo === newunit[0].split("_")[1])
+      if(oldUnit.id && oldUnit.floorNo === newunit[0]?.split("_")[1])
       {
         units.push({...oldUnit,  usageCategory:getusageCategoryAPI(newunit[1])})
       }
-      else{
-        units.push({
-            blockIndex:index,
-            floorNo:newunit[0].split("_")[1],
-            unitType:"Block",
-            usageCategory:getusageCategoryAPI(newunit[1]),
-        });
-      }
+      // else{
+      //   units.push({
+      //       blockIndex:index,
+      //       floorNo:newunit[0]?.split("_")[1],
+      //       unitType:"Block",
+      //       usageCategory:getusageCategoryAPI(newunit[1]),
+      //   });
+      // }
     })
-  })   
+  }) 
+  result && result.map((newunit,index)=>{
+    let found = units.length > 0 ? units?.some(el => el?.floorNo === newunit[0]?.split("_")[1]):false;
+    if(!found){
+      units.push({
+          blockIndex:index,
+          floorNo:newunit[0]?.split("_")[1],
+          unitType:"Block",
+          usageCategory:getusageCategoryAPI(newunit[1]),
+      });
+    }
+  })  
   }
+  return units.length>0?units:data?.landInfo?.unit;
 
+}
+
+export const getBPAusageCategoryAPI = (arr)=>{
+  let usageCat = ""
+  arr.map((ob,i) => {
+      usageCat = usageCat + (i !==0?",":"") + ob.code;
+  });
+  return usageCat;
+}
+
+
+export const getBPAUnitsForAPI = (ob) => {
+  let units=[];
+  if(ob) {
+      let result = Object.entries(ob);
+      result.map((unit,index)=>{
+          units.push({
+              blockIndex:index,
+              floorNo:unit[0]?.split("_")[1],
+              unitType:"Block",
+              usageCategory:getusageCategoryAPI(unit[1]),
+          });
+      })
+  }
   return units;
-
 }
 
 export const getunitforBPA = (units) => {
@@ -223,63 +260,81 @@ export const getunitforBPA = (units) => {
   return unit;
 }
 
-export const getBPAOwners = (data) => {
-  let bpaownerarray = [];
-  data.landInfo.owners.map((oldowner) => {
-    data?.owners?.owners.map((newowner) => {
-      oldowner.gender = oldowner.gender.code?oldowner.gender.code:oldowner.gender;
-      newowner.gender = newowner.gender.code ?newowner.gender.code:newowner.gender;
-      if(oldowner.id === newowner.id)
-      {
-        if((oldowner.name !== newowner.name) || (oldowner.gender !== newowner.gender.code) || (oldowner.mobileNumber !== newowner.mobilenumber))
-        {
-        if (oldowner.name !== newowner.name)
-        {
-          oldowner.name = newowner.name;
-        }
-        if(oldowner.gender !== newowner.gender)
-        {
-          oldowner.gender = newowner.gender;
-        }
-        if(oldowner.mobileNumber !== newowner.mobilenumber)
-        {
-          oldowner.mobileNumber = newowner.mobileNumber;
-        }
-        let found = bpaownerarray.length > 0 ?bpaownerarray.some(el => el.id === oldowner.id):false;
-          if(!found)bpaownerarray.push(oldowner);
-      }
-        else
-        {
-          let found = bpaownerarray.length > 0 ? bpaownerarray.some(el => el.id === oldowner.id):false;
-          if(!found)bpaownerarray.push(oldowner);
-        }
-      }
-    })
-  })
-  data.landInfo.owners.map((oldowner) => {
-    let found = bpaownerarray.length > 0 ? bpaownerarray.some(el => el.id === oldowner.id):false;
-    if(!found)bpaownerarray.push({...oldowner,active:false});   
-  })
-  data?.owners?.owners.map((ob) => {
-    if(!ob.id)
-    {
-      bpaownerarray.push({
-              mobileNumber: ob.mobileNumber,
-              name: ob.name,
-              fatherOrHusbandName: "",
-              relationship: "",
-              dob: null,
-              gender: ob.gender.code,
-            });
-    }
-  })
+// export const getBPAOwners = (data) => {
+//   let bpaownerarray = [];
+//   data.landInfo.owners.map((oldowner) => {
+//     data?.owners?.owners.map((newowner) => {
+//       oldowner.gender = oldowner.gender.code?oldowner.gender.code:oldowner.gender;
+//       newowner.gender = newowner.gender.code ?newowner.gender.code:newowner.gender;
+//       if(oldowner.id === newowner.id)
+//       {
+//         if((oldowner.name !== newowner.name) || (oldowner.gender !== newowner.gender.code) || (oldowner.mobileNumber !== newowner.mobilenumber))
+//         {
+//         if (oldowner.name !== newowner.name)
+//         {
+//           oldowner.name = newowner.name;
+//         }
+//         if(oldowner.gender !== newowner.gender)
+//         {
+//           oldowner.gender = newowner.gender;
+//         }
+//         if(oldowner.mobileNumber !== newowner.mobilenumber)
+//         {
+//           oldowner.mobileNumber = newowner.mobileNumber;
+//         }
+//         let found = bpaownerarray.length > 0 ?bpaownerarray.some(el => el.id === oldowner.id):false;
+//           if(!found)bpaownerarray.push(oldowner);
+//       }
+//         else
+//         {
+//           let found = bpaownerarray.length > 0 ? bpaownerarray.some(el => el.id === oldowner.id):false;
+//           if(!found)bpaownerarray.push(oldowner);
+//         }
+//       }
+//     })
+//   })
+//   data.landInfo.owners.map((oldowner) => {
+//     let found = bpaownerarray.length > 0 ? bpaownerarray.some(el => el.id === oldowner.id):false;
+//     if(!found)bpaownerarray.push({...oldowner,active:false});   
+//   })
+//   data?.owners?.owners.map((ob) => {
+//     if(!ob.id)
+//     {
+//       bpaownerarray.push({
+//               mobileNumber: ob.mobileNumber,
+//               name: ob.name,
+//               fatherOrHusbandName: "",
+//               relationship: "",
+//               dob: null,
+//               gender: ob.gender.code? ob.gender.code : ob.gender,
+//             });
+//     }
+//   })
+//   return bpaownerarray;
+// }
+
+export const getBPAOwners = (data, isOCBPA) => {
+  if (isOCBPA) return data.landInfo.owners;
+  let bpaownerarray = cloneDeep(data?.owners?.owners);
+  bpaownerarray && bpaownerarray?.forEach(newOwner => {
+      if(newOwner?.gender?.code) newOwner.gender = newOwner.gender?.code;
+      if(!newOwner?.fatherOrHusbandName) newOwner.fatherOrHusbandName = "NAME"
+  });
+
+  data?.landInfo?.owners?.map((oldowner) => {
+    let found = bpaownerarray?.length > 0 ? bpaownerarray?.some(el => el.id === oldowner.id):false;
+    if(!found) bpaownerarray?.push({...oldowner,active:false});   
+  });
+
   return bpaownerarray;
 }
 
 export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = false) => {
-  
   if(isOCBPA) {
-    data.landInfo = data.landInfo
+    data.landInfo = data.landInfo;
+    data.landInfo.owners.forEach((owner,index) => {
+      if (owner?.gender?.code) data.landInfo.owners[index].gender=owner?.gender?.code;
+    });
   } else {
     data.landInfo.owners.map((owner,index) => {
       data.landInfo.owners[index].gender=owner?.gender?.code;
@@ -287,7 +342,7 @@ export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = 
   
     data.landInfo.address.city=data?.landInfo?.address?.city?.code;
   
-    data.landInfo.unit=getunitforBPA(data?.landInfo?.unit);
+    data.landInfo.unit=data?.landInfo?.unit && data?.landInfo?.unit.length>0?getunitforBPA(data?.landInfo?.unit):data?.subOccupancy?getBPAUnitsForAPI(data?.subOccupancy):[];
   }
 
   let formData={
@@ -305,7 +360,7 @@ export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = 
         "applicationDate": data?.applicationDate,
         "status": isSendBackTOCitizen ? data.status : (data.status ? data.status : "INITIATED"),
         "documents": getDocumentforBPA(data?.documents?.documents, data?.PrevStateDocuments),
-        "landInfo": {...data?.landInfo, owners:getBPAOwners(data), unit:getBPAUnit(data)},
+        "landInfo": isOCBPA ? data?.landInfo : {...data?.landInfo, owners:getBPAOwners(data, isOCBPA), unit:getBPAUnit(data)},
         "assignee": isSendBackTOCitizen ? data.assignee : [],
         "workflow": {
           "action": "SEND_TO_CITIZEN",
@@ -314,7 +369,7 @@ export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = 
           "varificationDocuments": null
       },
       "auditDetails": data?.auditDetails,
-    "additionalDetails": data?.additionalDetails,
+    "additionalDetails": {...data?.additionalDetails, holdingNo:data?.data?.holdingNumber?data?.data?.holdingNumber:data?.additionalDetails?.holdingNo, registrationDetails:data?.data?.registrationDetails?data?.data?.registrationDetails:data?.additionalDetails?.registrationDetails },
     "applicationType": "BUILDING_PLAN_SCRUTINY",
     "serviceType": "NEW_CONSTRUCTION",
     "occupancyType": "A"
@@ -405,7 +460,7 @@ export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t
     let subBlocks = [];
     let subOcc = {};
     unit && unit.map((un, index) => {
-      arr = un?.usageCategory.split(",");
+      arr = un?.usageCategory?.split(",");
       subBlocks = [];
       arr && arr.map((ob, ind) => {
         subBlocks.push({
@@ -432,15 +487,30 @@ export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t
     registrationDetails: data?.additionalDetails?.registrationDetails,
     riskType: Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks),
     serviceType: data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType,
-    edcrDetails: APIScrutinyDetails
+    edcrDetails: APIScrutinyDetails,
+    scrutinyNumber:{edcrNumber:APIScrutinyDetails?.edcrNumber},
   }
+
+
+  let PrevStateDocuments = [];
+  data?.documents.map(doc => PrevStateDocuments.push(doc));
+  data["PrevStateDocuments"] = cloneDeep(PrevStateDocuments);
   data.documents = {
-    documents: data?.documents
+    documents: []
   }
+
+  let nocDocs = [];
+  nocdata && nocdata.map((a,index) => {
+    a.documents && a.documents.map((b,index) => {
+      nocDocs.push(b);
+    })
+  })
+
+  data["PrevStateNocDocuments"]=nocDocs;
 
   data.nocDocuments = {
     NocDetails: nocdata,
-    nocDocuments: nocdata.map(a => a?.documents?.[0] || {}),
+    nocDocuments: [],
   }
 
   data?.landInfo.owners.map((owner, ind) => {
@@ -472,7 +542,7 @@ export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t
 
 
   data.uiFlow = {
-    flow: bpaFlow ? bpaFlow : data?.businessService.split(".")[0],
+    flow:data?.businessService.includes("OC")?"OCBPA":data?.businessService?.split(".")[0],
     applicationType: data?.additionalDetails?.applicationType || APIScrutinyDetails?.appliactionType,
     serviceType: data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType
   }
@@ -597,10 +667,10 @@ export const showHidingLinksForBPA = (roles = []) => {
   return checkedRoles?.length;
 }
 
-export const getCheckBoxLabelData = (t, appData, nextActions) => {
-  if (appData?.status == "CITIZEN_APPROVAL_INPROCESS" && nextActions.length > 0) {
+export const getCheckBoxLabelData = (t, appData) => {
+  if (appData?.status == "CITIZEN_APPROVAL_INPROCESS") {
     return `${t(`BPA_CITIZEN_1_DECLARAION_LABEL`)}${t(`BPA_CITIZEN_2_DECLARAION_LABEL`)}`
-  } else if (appData?.status == "INPROGRESS" && nextActions.length > 0) {
+  } else if (appData?.status == "INPROGRESS") {
     return `${t(`BPA_STAKEHOLDER_1_DECLARAION_LABEL`)}${t(`BPA_STAKEHOLDER_2_DECLARAION_LABEL`)}`
   }
 }

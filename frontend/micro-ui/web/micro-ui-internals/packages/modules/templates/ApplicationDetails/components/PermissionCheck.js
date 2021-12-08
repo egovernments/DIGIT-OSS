@@ -1,4 +1,4 @@
-import { CheckBox, LinkButton, TextInput } from "@egovernments/digit-ui-react-components";
+import { CheckBox, LinkButton, TextInput,Close } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 
 const PermissionCheck = ({ permissions, t }) => {
@@ -14,6 +14,12 @@ const PermissionCheck = ({ permissions, t }) => {
 
   const handleAdd = () => {
     setNewApprovals([...newApprovals, { label: '' }]);
+  }
+
+  const handleRemove = (index) => {
+    const values = [...newApprovals];
+            values.splice(index, 1);
+            setNewApprovals([...values]);     
   }
 
   const handleChange = (event, index) => {
@@ -49,16 +55,30 @@ const PermissionCheck = ({ permissions, t }) => {
       {approvalChecks?.map((permission, index) => (
         <CheckBox
           key={index}
-          styles={{ margin: "20px 0 40px" }}
+          styles={{ margin: "20px 0 40px",maxWidth:"70%" }}
           label={permission?.label}
           checked={permission?.checked}
           onChange={(event => handleCheck(event, permission?.label, index))}
+          isLabelFirst={true}
+          index={index}
         />
       ))}
       {newApprovals?.map((approval, index) => (
-        <TextInput key={index} value={approval?.label} onChange={event => handleChange(event, index)} />
+       <div> <TextInput key={index} value={approval?.label} onChange={event => handleChange(event, index)} textInputStyle={{maxWidth: "830px", width: "830px"}} placeholder={"Enter permit conditions.........."} />
+         {<LinkButton
+          label={
+            <div>
+              <span>
+              <Close style={{float: "right", position: "relative", bottom: "32px", marginTop: "-21px", marginRight: "35%" }}/>
+              </span>
+            </div>
+          }
+          style={{ }}
+          onClick={(e) => handleRemove(index)}
+        />}
+       </div>
       ))}
-      <LinkButton style={{ color: "#f47738" }} label={t(`BPA_ADD_MORE`)} onClick={handleAdd} />
+      <LinkButton style={{ color: "#f47738", maxWidth: "10%", /* float: "right", marginTop: "-50px", */ marginRight: "3%" }} label={t(`BPA_ADD_MORE`)} onClick={handleAdd} />
     </div>
   )
 }

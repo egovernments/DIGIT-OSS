@@ -62,10 +62,75 @@ import { LastRow, MediaRow, Row, StatusTable } from "./atoms/StatusTable";
 import SubmitBar from "./atoms/SubmitBar";
 import StandaloneSearchBar from "./atoms/StandaloneSearchBar";
 import {
-  AnnouncementIcon, ArrowDown, ArrowLeft, ArrowRightInbox, Calender, CaseIcon, CitizenTruck, CloseSvg, ComplaintIcon, Details, DocumentSVG, DownloadIcon, DownloadImgIcon, DownwardArrow, DropIcon, Ellipsis, EmailIcon, FilterIcon, GetApp, HomeIcon,
-  PrevIcon, ViewsIcon, LanguageIcon,
-  LogoutIcon, Person, PersonIcon, Poll, PrintIcon, PropertyHouse, PTIcon, ReceiptIcon, RefreshIcon, RupeeIcon, SearchIconSvg, ShareIcon, ShippingTruck, SortDown, GenericFileIcon,
-  SortUp, UpwardArrow, WhatsappIcon, OBPSIcon, EDCRIcon, BPAIcon, BPAHomeIcon,DocumentIcon, ExternalLinkIcon, PMBIcon, PDFSvg, DownloadPrefixIcon, HelpIcon, TickMark, NotificationBell, MapMarker, Clock, EventCalendar, ImageIcon, EditIcon, SearchIcon, DeleteIcon, OBPSIconSolidBg
+  AnnouncementIcon,
+  ArrowDown,
+  ArrowLeft,
+  ArrowRightInbox,
+  Calender,
+  CaseIcon,
+  CitizenTruck,
+  CloseSvg,
+  Close,
+  ComplaintIcon,
+  Details,
+  DocumentSVG,
+  DownloadIcon,
+  DownloadImgIcon,
+  DownwardArrow,
+  DropIcon,
+  Ellipsis,
+  EmailIcon,
+  FilterIcon,
+  GetApp,
+  HomeIcon,
+  PrevIcon,
+  ViewsIcon,
+  LanguageIcon,
+  FilterSvg,
+  LogoutIcon,
+  Person,
+  PersonIcon,
+  Poll,
+  PrintIcon,
+  PropertyHouse,
+  PTIcon,
+  ReceiptIcon,
+  RefreshIcon,
+  RupeeIcon,
+  SearchIconSvg,
+  ShareIcon,
+  ShippingTruck,
+  SortDown,
+  SortSvg,
+  GenericFileIcon,
+  SortUp,
+  UpwardArrow,
+  WhatsappIcon,
+  OBPSIcon,
+  EDCRIcon,
+  BPAIcon,
+  BPAHomeIcon,
+  DocumentIcon,
+  ExternalLinkIcon,
+  PMBIcon,
+  PDFSvg,
+  DownloadPrefixIcon,
+  HelpIcon,
+  TickMark,
+  NotificationBell,
+  MapMarker,
+  Clock,
+  EventCalendar,
+  ImageIcon,
+  EditIcon,
+  SearchIcon,
+  DeleteIcon,
+  OBPSIconSolidBg,
+  DocumentIconSolid,
+  PMBIconSolid,
+  EventsIconSolid,
+  SurveyIconSolid,
+  DustbinIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -79,6 +144,7 @@ import CardBasedOptions from "./atoms/CardBasedOptions";
 import WhatsNewCard from "./atoms/WhatsNewCard";
 import EventCalendarView from "./atoms/EventCalendarView";
 import InboxLinks from "./atoms/InboxLinks";
+import PopupHeadingLabel from "./atoms/PopupHeadingLabel"
 
 import { FormComposer } from "./hoc/FormComposer";
 import Modal from "./hoc/Modal";
@@ -106,7 +172,7 @@ import PageBasedInput from "./molecules/PageBasedInput";
 import SearchOnRadioButtons from "./molecules/SearchOnRadioButtons";
 import OnGroundEventCard from "./molecules/OnGroundEventCard";
 import MultiUploadWrapper from "./molecules/MultiUploadWrapper";
-import {FilterForm, FilterFormField} from "./molecules/FilterForm";
+import { FilterForm, FilterFormField } from "./molecules/FilterForm";
 import OpenLinkContainer from "./atoms/OpenLinkContainer";
 
 export {
@@ -188,6 +254,7 @@ export {
   WhatsNewCard,
   EventCalendarView,
   InboxLinks,
+  PopupHeadingLabel,
   // Icons
   GetApp,
   ArrowLeft,
@@ -203,15 +270,22 @@ export {
   ArrowDown,
   SortDown,
   SortUp,
+  SortSvg,
   ShippingTruck,
   CloseSvg,
+  Close,
   PropertyHouse,
   MultiLink,
   MultiSelectDropdown,
   CaseIcon,
   PTIcon,
   DocumentIcon,
+  DocumentIconSolid,
+  PMBIconSolid,
+  EventsIconSolid,
+  SurveyIconSolid,
   PMBIcon,
+  DustbinIcon,
   GenericFileIcon,
   HelpIcon,
   NotificationBell,
@@ -255,6 +329,7 @@ export {
   InboxComposer,
   // Icons
   FilterIcon,
+  FilterSvg,
   PrintIcon,
   ShareIcon,
   Calender,

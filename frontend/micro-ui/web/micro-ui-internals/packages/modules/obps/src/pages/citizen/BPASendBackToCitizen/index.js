@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
-import { newConfig } from "../../../config/buildingPermitConfig";
-import CheckPage from "../OCSendBackToCitizen";
-import Acknowledgement from "../OCSendBackToCitizen";
+import { newConfig as newConfigBPA } from "../../../config/buildingPermitConfig";
+//import CheckPage from "../OCSendBackToCitizen";
+//import Acknowledgement from "../OCSendBackToCitizen";
+//import OBPSAcknowledgement from "../OCBuildingPermit/OBPSAcknowledgement";
 import { getBPAEditDetails, getPath } from "../../../utils";
 
 const BPASendBackToCitizen = ({ parentRoute }) => {
@@ -19,6 +20,9 @@ const BPASendBackToCitizen = ({ parentRoute }) => {
   let config = [], application = {};
 
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BUILDING_PERMIT_EDITFLOW", {});
+
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
 
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["RiskTypeComputation"]);
 
@@ -75,6 +79,7 @@ const BPASendBackToCitizen = ({ parentRoute }) => {
   };
   const handleSkip = () => { };
 
+  newConfig = newConfig?.BuildingPermitConfig ? newConfig?.BuildingPermitConfig : newConfigBPA;
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
@@ -86,6 +91,10 @@ const BPASendBackToCitizen = ({ parentRoute }) => {
       sessionStorage.setItem("isPermitApplication", false);
     }
   }, []);
+
+  const CheckPage = Digit?.ComponentRegistryService?.getComponent('OCBPASendBackCheckPage') ;
+  const OBPSAcknowledgement = Digit?.ComponentRegistryService?.getComponent('OCSendBackAcknowledgement');
+
 
   return (
     <Switch>

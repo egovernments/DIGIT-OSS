@@ -342,7 +342,7 @@ class PaymentStatusUpdateEventFormatter{
           if(connectionHolder.mobileNumber === mobileNumber){
             data.isMobileNumberPresent = true;
           }
-          if(!ownerMobileNumberList.includes(connectionHolder.mobileNumber))
+          if(!data.ownerMobileNumberList.includes(connectionHolder.mobileNumber))
             data.ownerMobileNumberList.push(connectionHolder.mobileNumber);
         }
       }

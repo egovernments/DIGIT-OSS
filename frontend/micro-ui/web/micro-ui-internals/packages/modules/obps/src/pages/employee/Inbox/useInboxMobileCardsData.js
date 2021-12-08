@@ -1,19 +1,49 @@
+import React from "react";
 import { useTranslation } from "react-i18next";
+import { format } from "date-fns";
+import { SearchField, RadioButtons } from "@egovernments/digit-ui-react-components";
+import { Controller, useFormContext } from "react-hook-form";
 
-const useInboxMobileCardsData = ({parentRoute, table }) => {
+const useInboxMobileCardsData = ({parentRoute, table, getRedirectionLink}) => {
     const { t } = useTranslation()
 
-    const dataForMobileInboxCards = table?.map(({ applicationId, date, applicationType, locality, status, owner, sla}) => ({
+    const dataForMobileInboxCards = table?.map(({ applicationId, date, applicationType,businessService, locality, status, owner, sla, state}) => ({
             [t("BPA_APPLICATION_NUMBER_LABEL")]: applicationId,
-            [t("CS_APPLICATION_DETAILS_APPLICATION_DATE")]: date,
+            [t("CS_APPLICATION_DETAILS_APPLICATION_DATE")]: format(new Date(date), 'dd/MM/yyyy'),
             [t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")]: t(applicationType),
-            [t("ES_INBOX_LOCALITY")]: locality,
-            [t("EVENTS_STATUS_LABEL")]: status,
+            [t("ES_INBOX_LOCALITY")]: t(locality),
+            [t("EVENTS_STATUS_LABEL")]: state ? t(`WF_${businessService}_${state}`): t(`WF_${businessService}_${status}`),
             [t("WF_INBOX_HEADER_CURRENT_OWNER")]: owner,
             [t("ES_INBOX_SLA_DAYS_REMAINING")]: sla
     }))
 
-    return ({ data:dataForMobileInboxCards, linkPrefix:`${parentRoute}/inbox/bpa/`, serviceRequestIdKey:t("TL_COMMON_TABLE_COL_APP_NO")})
+    const MobileSortFormValues = () => {
+        const sortOrderOptions = [{
+            code: "DESC",
+            i18nKey: "ES_COMMON_SORT_BY_DESC"
+        },{
+            code: "ASC",
+            i18nKey: "ES_COMMON_SORT_BY_ASC"
+        }]
+        const { control: controlSortForm  } = useFormContext()
+        return <SearchField>
+            <Controller
+                name="sortOrder"
+                control={controlSortForm}
+                render={({onChange, value}) => <RadioButtons
+                    onSelect={(e) => {
+                        onChange(e.code)
+                    }}
+                    selectedOption={sortOrderOptions.filter((option) => option.code === value)[0]}
+                    optionsKey="i18nKey"
+                    name="sortOrder"
+                    options={sortOrderOptions}
+                />}
+            />
+        </SearchField>
+    }
+
+    return ({ data:dataForMobileInboxCards,isTwoDynamicPrefix:true, linkPrefix: `/digit-ui/employee/obps/`,getRedirectionLink:getRedirectionLink, serviceRequestIdKey: "applicationNo", MobileSortFormValues})
 
 }
 

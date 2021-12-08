@@ -112,7 +112,7 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
         }
         <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={goNext} />
       </Card>
-      <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t(`OBPS_DOCS_FILE_SIZE`)} />
+      <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t(`OBPS_DOCS_FILE_SIZE`)} className={"info-banner-wrap-citizen-override"}/>
     </Fragment>
   );
 };

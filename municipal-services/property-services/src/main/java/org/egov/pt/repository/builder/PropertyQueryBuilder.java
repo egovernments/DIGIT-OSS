@@ -52,8 +52,6 @@ public class PropertyQueryBuilder {
 	
 	private static String UnitSelectValues = "unit.id as unitid, unit.tenantid as unittenantid, unit.propertyid as unitpid, floorno, unittype, unit.usagecategory as unitusagecategory, occupancytype, occupancydate, carpetarea, builtuparea, plintharea, unit.superbuiltuparea as unitspba, arv, constructiontype, constructiondate, dimensions, unit.active as isunitactive, unit.createdby as unitcreatedby, unit.createdtime as unitcreatedtime, unit.lastmodifiedby as unitlastmodifiedby, unit.lastmodifiedtime as unitlastmodifiedtime ";
 
-	private static String alternateNumberValues = ",altno.id as altid, altno.uuid as altuuid, altno.name as altname, altno.mobilenumber as altnumber ";
-	
 	private static final String QUERY = SELECT 
 			
 			+	propertySelectValues    
@@ -69,9 +67,7 @@ public class PropertyQueryBuilder {
 			+   ownerDocSelectValues  
 			
 			+   UnitSelectValues
-			
-			+   alternateNumberValues
-			
+
 			+   " FROM EG_PT_PROPERTY property " 
 			
 			+   INNER_JOIN +  " EG_PT_ADDRESS address         ON property.id = address.propertyid " 
@@ -84,9 +80,8 @@ public class PropertyQueryBuilder {
 			
 			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 			
-			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid "
-			
-			+   LEFT_JOIN +  " EG_PT_ALTERNATENUMBERS altno  ON property.id = altno.propertyid";
+			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid ";
+	
 
 	private static final String ID_QUERY = SELECT
 

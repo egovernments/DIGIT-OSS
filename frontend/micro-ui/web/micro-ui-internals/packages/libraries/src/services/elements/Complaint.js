@@ -69,14 +69,7 @@ export const Complaint = {
     complaintDetails.workflow.assignes = employeeData ? [employeeData.uuid] : null;
     complaintDetails.workflow.comments = comments;
     uploadedDocument
-      ? complaintDetails.workflow.verificationDocuments
-        ? complaintDetails.workflow.verificationDocuments.push({
-            documentType: "PHOTO",
-            fileStoreId: uploadedDocument,
-            documentUid: "",
-            additionalDetails: {},
-          })
-        : (complaintDetails.workflow.verificationDocuments = [
+      ? (complaintDetails.workflow.verificationDocuments = [
             {
               documentType: "PHOTO",
               fileStoreId: uploadedDocument,

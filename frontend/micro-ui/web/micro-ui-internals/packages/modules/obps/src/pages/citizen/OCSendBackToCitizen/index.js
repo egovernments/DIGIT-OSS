@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
-import { newConfig } from "../../../config/ocbuildingPermitConfig";
-import CheckPage from "./CheckPage";
-import Acknowledgement from "./Acknowledgement";
+import { newConfig as newConfigOCBPA } from "../../../config/ocbuildingPermitConfig";
+// import CheckPage from "./CheckPage";
+// import Acknowledgement from "./Acknowledgement";
 import { getBPAEditDetails, getPath } from "../../../utils";
 
 const OCSendBackToCitizen = ({ parentRoute }) => {
@@ -19,6 +19,9 @@ const OCSendBackToCitizen = ({ parentRoute }) => {
   let config = [], application = {};
 
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BUILDING_PERMIT_EDITFLOW", {});
+
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
 
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["RiskTypeComputation", "homePageUrlLinks"]);
 
@@ -35,7 +38,7 @@ const OCSendBackToCitizen = ({ parentRoute }) => {
   const editApplication = window.location.href.includes("editApplication");
 
   useEffect(async () => {
-    if (!isLoading) {
+    if (!isLoading && !isNocLoading && !isBpaSearchLoading && !isMdmsLoading) {
       application = bpaData ? bpaData[0] : {};
       if (bpaData && application && edcrDetails && mdmsData && nocdata) {
         application = bpaData[0];
@@ -76,6 +79,7 @@ const OCSendBackToCitizen = ({ parentRoute }) => {
   };
   const handleSkip = () => { };
 
+  newConfig = newConfig?.OCBuildingPermitConfig ? newConfig?.OCBuildingPermitConfig : newConfigOCBPA;
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
@@ -87,6 +91,9 @@ const OCSendBackToCitizen = ({ parentRoute }) => {
       sessionStorage.setItem("isPermitApplication", false);
     }
   }, []);
+
+  const CheckPage = Digit?.ComponentRegistryService?.getComponent('OCBPASendBackCheckPage') ;
+  const Acknowledgement = Digit?.ComponentRegistryService?.getComponent('OCSendBackAcknowledgement');
 
   return (
     <Switch>

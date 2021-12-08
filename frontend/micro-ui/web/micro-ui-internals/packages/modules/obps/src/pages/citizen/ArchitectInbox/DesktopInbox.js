@@ -9,13 +9,14 @@ import SearchApplication from './Search';
 
 const DesktopInbox = (props) => {
   const { t } = useTranslation();
-  const GetCell = (row) => <span className="cell-text">
-    <Link to={`/digit-ui/citizen/obps/${["BPA_LOW", "BPA", "BPA_OC"].includes(row?.businessService) ? "bpa" : "stakeholder"}/${encodeURIComponent(row.applicationId)}`}>{row?.applicationId}</Link>
+  const GetCell = (row) => <span className="link">
+    <Link to={`/digit-ui/citizen/obps/bpa/${encodeURIComponent(row.applicationId)}`}>{row?.applicationId}</Link>
   </span>;
   const GetSlaCell = (value) => {
     if (isNaN(value)) return <span className="sla-cell-success">0</span>;
     return value < 0 ? <span className="sla-cell-error">{value}</span> : <span className="sla-cell-success">{value}</span>;
   };
+  const GetStatusCell = (value) => value === "Active" || value>0 ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span> 
 
   const columns = React.useMemo(() => {
     return [
@@ -37,11 +38,11 @@ const DesktopInbox = (props) => {
       },
       {
         Header: t('TL_COMMON_TABLE_COL_STATUS'),
-        accessor: row => t(`WF_BPA_${row?.status}`||"NA")
+        accessor: row => row?.state ? t(`WF_BPA_${row?.state}`) : t(`WF_BPA_${row?.status}`)
       },
       {
         Header: t('BPA_COMMON_SLA'),
-        accessor: 'sla'
+        accessor: row => GetStatusCell(row?.sla || "-")
       }
     ]
   },[t])
@@ -87,6 +88,8 @@ const DesktopInbox = (props) => {
         disableSort={props.disableSort}
         sortParams={props.sortParams}
         totalRecords={props.totalRecords}
+        onLastPage={props.onLastPage}
+        onFirstPage={props.onFirstPage}
       />
     );
   }

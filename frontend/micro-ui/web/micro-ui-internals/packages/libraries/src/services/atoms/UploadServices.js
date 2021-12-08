@@ -7,9 +7,10 @@ export const UploadServices = {
     formData.append("file", filedata, filedata.name);
     formData.append("tenantId", tenantId);
     formData.append("module", module);
+    let tenantInfo=window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")?`?tenantId=${tenantId}`:"";
     var config = {
       method: "post",
-      url: Urls.FileStore,
+      url:`${Urls.FileStore}${tenantInfo}`,   
       data: formData,
     };
 

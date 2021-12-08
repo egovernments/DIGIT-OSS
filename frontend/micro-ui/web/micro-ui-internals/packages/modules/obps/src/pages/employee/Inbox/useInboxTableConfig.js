@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch, onSortingByData}) => {
     const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
-    const GetStatusCell = (value) => value === "Active" ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span> 
+    const GetStatusCell = (value) => value === "Active" || value>0 ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span> 
     const { t } = useTranslation()
     
     const tableColumnConfig = useMemo(() => {
@@ -36,7 +36,7 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
         },
         {
             Header: t("EVENTS_STATUS_LABEL"),
-            accessor: row => t(`WF_${row?.businessService}_${row?.status}`),
+            accessor: row => row?.state ? t(`WF_${row?.businessService}_${row?.state}`) : t(`WF_${row?.businessService}_${row?.status}`),
             disableSortBy: true,
         },
         {

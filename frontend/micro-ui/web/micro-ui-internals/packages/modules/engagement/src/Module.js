@@ -50,6 +50,11 @@ const EventsBreadCrumb = ({ location }) => {
       show: location.pathname.includes("event/inbox") ? true : false,
     },
     {
+      path: "/digit-ui/employee/event/new-event",
+      content: t("ES_EVENT_NEW_EVENT"),
+      show: location.pathname.includes("event/new-event") ? true : false,
+    },
+    {
       path: "/digit-ui/employee/event/inbox/new-event",
       content: t("ES_EVENT_NEW_EVENT"),
       show: location.pathname.includes("event/inbox/new-event") ? true : false,
@@ -73,6 +78,11 @@ const EventsBreadCrumb = ({ location }) => {
       path: "/digit-ui/employee/engagement/documents/inbox",
       content: t("ES_EVENT_INBOX"),
       show: location.pathname.includes("/documents/inbox") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/documents/new-doc",
+      content: t("NEW_DOCUMENT_TEXT"),
+      show: location.pathname.includes("/documents/new-doc") ? true : false,
     },
     {
       path: "/digit-ui/employee/engagement/documents/inbox/new-doc",
@@ -104,11 +114,15 @@ const EventsBreadCrumb = ({ location }) => {
       content: t("DOCUMENTS_EDIT_HEADER"),
       show: location.pathname.includes("/documents/inbox/update") ? true : false,
     },
-
     {
       path: "/digit-ui/employee/engagement/messages/inbox",
       content: t("ES_EVENT_INBOX"),
       show: location.pathname.includes("/messages/inbox") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/messages/create",
+      content: t("NEW_PUBLIC_BRDCST"),
+      show: location.pathname.includes("/messages/create") ? true : false,
     },
     {
       path: "/digit-ui/employee/engagement/messages/inbox/create",
@@ -140,6 +154,26 @@ const EventsBreadCrumb = ({ location }) => {
       content: t("ES_EVENT_NEW_EVENT_RESPONSE"),
       show: location.pathname.includes("/messages/response?delete=true") ? true : false,
     },
+    {
+      path: "/digit-ui/employee/engagement/surveys/inbox",
+      content: t("ES_EVENT_INBOX"),
+      show: location.pathname.includes("/surveys/inbox") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/surveys/inbox/create",
+      content: t("CS_COMMON_SURVEYS"),
+      show: location.pathname.includes("/surveys/inbox/create") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/surveys/create",
+      content: t("CS_COMMON_SURVEYS"),
+      show: location.pathname.includes("/surveys/create") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/engagement/survey/create-response",
+      content: t("ES_EVENT_NEW_EVENT_RESPONSE"),
+      show: location.pathname.includes("/engagement/survey/create-response") ? true : false,
+    },
   ];
 
   return <BreadCrumb crumbs={crumbs} />;
@@ -161,6 +195,9 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
         <Route path={`${path}/event/inbox/new-event`}>
           <NewEvent />
         </Route>
+        <Route path={`${path}/event/new-event`}>
+          <NewEvent />
+        </Route>
         <Route path={`${path}/event/edit-event/:id`}>
           <EditEvent />
         </Route>
@@ -169,6 +206,7 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
         </Route>
         <Route exact path={`${path}/documents/inbox/update`} component={(props) => <DocumentUpdate {...props} />} />
         <Route exact path={`${path}/documents/inbox/new-doc`} component={() => <DocumenetCreate {...{ path }} />} />
+        <Route exact path={`${path}/documents/new-doc`} component={() => <DocumenetCreate {...{ path }} />} />
         <Route path={`${path}/documents/inbox/details/:id`} component={(props) => <DocumentDetails {...props} />} />
         <Route path={`${path}/documents/response`} component={(props) => <DocumentResponse {...props} />} />
         <Route path={`${path}/documents/update-response`} component={(props) => <DocUpdateResponse {...props} />} />

@@ -60,7 +60,8 @@ try{
       "demandId":demandId,
       "adhocrebate" : (WSRequestBody[0].additionalDetails.adhocRebate)?WSRequestBody[0].additionalDetails.adhocRebate:0,
       "adhocpenalty" : (WSRequestBody[0].additionalDetails.adhocPenalty)?WSRequestBody[0].additionalDetails.adhocPenalty:0,
-      "consumerCode": consumerCode
+      "consumerCode": consumerCode,
+      "businessService": "WS"
     }
   );
 

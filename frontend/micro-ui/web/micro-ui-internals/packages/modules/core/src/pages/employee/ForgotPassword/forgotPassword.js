@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { FormComposer, Dropdown, Toast, Loader, BackButton } from "@egovernments/digit-ui-react-components";
+import { BackButton, Dropdown, FormComposer, Loader, Toast } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Background from "../../../components/Background";
 import Header from "../../../components/Header";
@@ -14,7 +14,7 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
 
   useEffect(() => {
     if (!user) {
-      Digit.UserService.setType('employee');
+      Digit.UserService.setType("employee");
       return;
     }
     Digit.UserService.setUser(user);
@@ -61,7 +61,7 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
           type: userId.type,
           populators: {
             name: userId.name,
-            componentInFront: "+91"
+            componentInFront: "+91",
           },
           isMandatory: true,
         },
@@ -91,15 +91,13 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
   ];
 
   if (isLoading) {
-    return (
-      <Loader />
-    )
+    return <Loader />;
   }
 
   return (
     <Background>
-    <div className="employeeBackbuttonAlign">
-        <BackButton variant="white" style={{borderBottom:"none"}}/>
+      <div className="employeeBackbuttonAlign">
+        <BackButton variant="white" style={{ borderBottom: "none" }} />
       </div>
       <FormComposer
         onSubmit={onForgotPassword}
@@ -118,14 +116,16 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
       >
         <Header />
       </FormComposer>
-      {showToast && <Toast
-        error={true}
-        label={t(showToast)}
-        onClose={closeToast}
-      />
-      }
+      {showToast && <Toast error={true} label={t(showToast)} onClose={closeToast} />}
       <div className="EmployeeLoginFooter">
-        <img alt="Powered by DIGIT" src="https://s3.ap-south-1.amazonaws.com/egov-qa-assets/digit-footer-bw.png" />
+        <img
+          alt="Powered by DIGIT"
+          src={window?.globalConfigs?.getConfig?.("DIGIT_FOOTER_BW")}
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            window.open(window?.globalConfigs?.getConfig?.("DIGIT_HOME_URL"), "_blank").focus();
+          }}
+        />{" "}
       </div>
     </Background>
   );

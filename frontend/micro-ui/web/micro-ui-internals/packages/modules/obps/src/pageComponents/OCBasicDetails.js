@@ -9,6 +9,7 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
   const [basicData, setBasicData] = useState(null);
   const [basicDataError, setBasicDataError] = useState(false);
   const [scrutinyNumber, setScrutinyNumber] = useState(formData?.data?.scrutinyNumber);
+  const isMobile = window.Digit.Utils.browser.isMobile();
   const [approvalNo, setSpprovalNo] = useState();
   const [isDisabled, setIsDisabled] = useState(formData?.data?.scrutinyNumber ? true : false);
   const { t } = useTranslation();
@@ -33,6 +34,7 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
       } else if (bpaData?.bpaResponse?.[0]?.edcrNumber === scrutinyNumber && ((bpaData?.bpaResponse?.[0]?.status != "REJECTED") && (bpaData?.bpaResponse?.[0]?.status != "PERMIT REVOCATION"))) {
         setShowToast({key: "true", message: "APPLICATION_NUMBER_ALREADY_EXISTS"});
       } else {
+        sessionStorage.setItem("checkForProcced", JSON.stringify(false));
         setShowToast(null);
         setBasicData(data);
       }
@@ -61,6 +63,15 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
 
   const closeToast = () => {
     setShowToast(null);
+  };
+
+  const noTocloseToast = () => {
+    setShowToast(null);
+  };
+
+  const yesTocloseToast = () => {
+    sessionStorage.setItem("checkForProcced", JSON.stringify(true));
+    handleSubmit();
   };
 
   const handleSearch = (event) => {
@@ -103,14 +114,14 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
         }
       }
 
-      // if (riskTypes[edcrRisktype] < riskTypes[ocEdcrRiskType]) {
-      //   isProccedToNextStep = false;
-      //   setShowToast({key: "true", message: "The Risk type from permit order XXXX(permit order number) to occupancy certificate application is changed from Low to high .You cannot proceed with the application."});
-      // } 
-      // else if (riskTypes[edcrRisktype] > riskTypes[ocEdcrRiskType]) {
-      //   isProccedToNextStep = false;
-      //   showRisktypeWarning(state, dispatch, activeStep);
-      // } 
+      if (riskTypes[edcrRisktype] < riskTypes[ocEdcrRiskType]) {
+        isProccedToNextStep = false;
+        setShowToast({key: "true", message: t("BPA_RISK_TYPE_VALIDATION_ERROR"), labelName: "The Risk type from permit order XXXX(permit order number) to occupancy certificate application is changed from Low to high .You cannot proceed with the application."});
+      } 
+      else if (riskTypes[edcrRisktype] > riskTypes[ocEdcrRiskType]) {
+        isProccedToNextStep = JSON.parse(sessionStorage.getItem("checkForProcced"))
+        setShowToast({warning: "true", message: t("BPA_RISK_TYPE_VALIDATION_WARNING"), labelName: "The Risk type in permit order XXXX is high where as the risk type in occupancy is Low , do you want to continue"});
+      } 
       else {
         isProccedToNextStep = true;
       }
@@ -140,7 +151,7 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
   return (
     <div>
       <Timeline currentStep={1} flow="OCBPA" />
-      <div className="obps-search">
+      <div className={isMobile?"obps-search":""} style={!isMobile?{maxWidth:"960px",minWidth:"640px",marginRight:"auto"}:{}}>
         <Label>{t(`OBPS_SEARCH_EDCR_NUMBER`)}</Label>
         <TextInput className="searchInput"
           onKeyPress={handleKeyPress}
@@ -165,10 +176,14 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
       </Card>
       }
       {showToast && <Toast
-        error={true}
+        error={showToast?.key ? true : false}
+        warning={showToast?.warning ? true : false}
         label={t(showToast?.message)}
         isDleteBtn={true}
         onClose={closeToast}
+        onNo={noTocloseToast}
+        onYes={yesTocloseToast}
+        isWarningButtons={true}
       />
       }
     </div>

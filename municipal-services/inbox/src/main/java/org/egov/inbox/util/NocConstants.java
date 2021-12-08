@@ -16,6 +16,8 @@ public class NocConstants {
 	public static final String SEARCH_CRITERIA_PARAM = "searchCriteria";
 	public static final String USERID_PARAM = "userid";
 	public static final String NOC_APPLICATION_NUMBER_PARAM = "applicationNo";
+	public static final String NOC_SOURCE_APPLICATION_NUMBER_PARAM = "sourceApplicationNumber";
+	public static final String NOC_SOURCE_REF_ID_PARAM = "sourceRefId";
 	public static final String SORT_ORDER_PARAM = "sortOrder";
 	public static final String DESC_PARAM = "DESC";
 	public static final String CITIZEN = "CITIZEN";

@@ -9,6 +9,7 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
   const [isAddressSame, setisAddressSame] = useState(formData?.isAddressSame || formData?.formData?.isAddressSame || false);
   const [error, setError] = useState(null);
   const [showToast, setShowToast] = useState(null);
+  const [isDisableForNext, setIsDisableForNext] = useState(false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   let isopenlink = window.location.href.includes("/openlink/");
@@ -32,7 +33,7 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
   const goNext = () => {
 
     if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
-
+      setIsDisableForNext(true);
       let payload = {
         "Licenses": [
           {
@@ -76,12 +77,14 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
 
       Digit.OBPSService.BPAREGCreate(payload, tenantId)
         .then((result, err) => {
+          setIsDisableForNext(false);
           let data = { result: result, formData: formData, Correspondenceaddress: Correspondenceaddress, isAddressSame: isAddressSame }
           //1, units
           onSelect("", data, "", true);
 
         })
         .catch((e) => {
+          setIsDisableForNext(false);
           console.log(e, "e");
           setShowToast({ key: "error" });
           setError(e?.response?.data?.Errors[0]?.message || null);
@@ -107,7 +110,7 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
           onSelect={goNext}
           onSkip={onSkip}
           t={t}
-        //isDisabled={!TradeName}
+          isDisabled={isDisableForNext}
         >
           <CheckBox
             label={t("BPA_SAME_AS_PERMANENT_ADDRESS")}
