@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { CardLabel, LabelFieldPair, Dropdown, TextInput, LinkButton, CardLabelError, MobileNumber } from "@egovernments/digit-ui-react-components";
-import { useForm, Controller } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { CardLabel, CardLabelError, Dropdown, LabelFieldPair, LinkButton, MobileNumber, TextInput } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
+import React, { useEffect, useMemo, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { stringReplaceAll } from "../utils";
 
@@ -59,12 +59,11 @@ const PTEmployeeOwnershipDetails = ({ config, onSelect, userType, formData, setE
   };
 
   useEffect(() => {
-
     onSelect(config?.key, owners);
   }, [owners]);
 
   useEffect(() => {
-    if(!formData?.owners){
+    if (!formData?.owners) {
       setOwners([createOwnerDetails()]);
     }
   }, [formData?.ownershipCategory?.code]);
@@ -83,7 +82,7 @@ const PTEmployeeOwnershipDetails = ({ config, onSelect, userType, formData, setE
     clearErrors,
     config,
     menu,
-    isEditScreen
+    isEditScreen,
   };
 
   // if (isEditScreen) {
@@ -95,7 +94,7 @@ const PTEmployeeOwnershipDetails = ({ config, onSelect, userType, formData, setE
       {owners.map((owner, index) => (
         <OwnerForm key={owner.key} index={index} owner={owner} {...commonProps} />
       ))}
-      {!isEditScreen&&formData?.ownershipCategory?.code === "INDIVIDUAL.MULTIPLEOWNERS" ? (
+      {!isEditScreen && formData?.ownershipCategory?.code === "INDIVIDUAL.MULTIPLEOWNERS" ? (
         <LinkButton label="Add Owner" onClick={addNewOwner} style={{ color: "orange" }} />
       ) : null}
     </React.Fragment>
@@ -103,7 +102,6 @@ const PTEmployeeOwnershipDetails = ({ config, onSelect, userType, formData, setE
 };
 
 const OwnerForm = (_props) => {
-  console.log("D",_props);
   const {
     owner,
     index,
@@ -120,15 +118,22 @@ const OwnerForm = (_props) => {
     clearErrors,
     formState,
     menu,
-    isEditScreen
+    isEditScreen,
   } = _props;
-  const {originalData={}}=formData;
-  const {institution={}}=originalData;
+  const { originalData = {} } = formData;
+  const { institution = {} } = originalData;
 
   const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger } = useForm();
   const formValue = watch();
   const { errors } = localFormState;
-
+  owner["institution"] = { name: institution.name };
+  owner["institution"].type = {
+    active: true,
+    code: institution?.type,
+    i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type || "")}`,
+    name: t(`COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type || "")}`),
+  };
+  owner.designation = institution.designation;
   const specialDocsMenu = useMemo(
     () =>
       mdmsData?.PropertyTax?.Documents?.filter((e) => e.code === "OWNER.SPECIALCATEGORYPROOF")?.[0]
@@ -205,7 +210,7 @@ const OwnerForm = (_props) => {
                   <Controller
                     control={control}
                     name={"institution.name"}
-                    defaultValue={owner?.name}
+                    defaultValue={institution?.name ? institution.name : owner?.name}
                     rules={{
                       required: t("CORE_COMMON_REQUIRED_ERRMSG"),
                       validate: {
@@ -240,9 +245,9 @@ const OwnerForm = (_props) => {
                   name={"institution.type"}
                   defaultValue={{
                     active: true,
-              code: institution?.type,
-              i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type||"")}`,
-              name: t(`COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type||"")}`)
+                    code: institution?.type,
+                    i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type || "")}`,
+                    name: t(`COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type || "")}`),
                   }}
                   rules={{ required: t("CORE_COMMON_REQUIRED_ERRMSG") }}
                   render={(props) => (
@@ -280,7 +285,6 @@ const OwnerForm = (_props) => {
                   <TextInput
                     value={props.value}
                     disable={isEditScreen}
-
                     autoFocus={focusIndex.index === owner?.key && focusIndex.type === "name"}
                     onChange={(e) => {
                       props.onChange(e.target.value);
@@ -312,7 +316,6 @@ const OwnerForm = (_props) => {
                       selected={props.value}
                       select={props.onChange}
                       disable={isEditScreen}
-
                       onBlur={props.onBlur}
                       /*option={[
                         { i18nKey: "PT_FORM3_MALE", code: "Male" },
@@ -351,7 +354,6 @@ const OwnerForm = (_props) => {
                         value={props.value}
                         hideSpan={true}
                         disable={isEditScreen}
-
                         maxLength={11}
                         autoFocus={focusIndex.index === owner?.key && focusIndex.type === "altContactNumber"}
                         onChange={(e) => {
@@ -383,7 +385,6 @@ const OwnerForm = (_props) => {
                   <MobileNumber
                     value={props.value}
                     disable={isEditScreen}
-
                     autoFocus={focusIndex.index === owner?.key && focusIndex.type === "mobileNumber"}
                     onChange={(e) => {
                       props.onChange(e);
@@ -414,7 +415,6 @@ const OwnerForm = (_props) => {
                       <TextInput
                         value={props.value}
                         disable={isEditScreen}
-
                         autoFocus={focusIndex.index === owner?.key && focusIndex.type === "fatherOrHusbandName"}
                         onChange={(e) => {
                           props.onChange(e.target.value);
@@ -443,7 +443,6 @@ const OwnerForm = (_props) => {
                       select={props.onChange}
                       onBlur={props.onBlur}
                       disable={isEditScreen}
-
                       option={[
                         { i18nKey: "PT_FORM3_FATHER", code: "FATHER" },
                         { i18nKey: "PT_FORM3_HUSBAND", code: "HUSBAND" },
@@ -470,7 +469,6 @@ const OwnerForm = (_props) => {
                       onBlur={props.onBlur}
                       option={ownerTypesMenu}
                       disable={isEditScreen}
-
                       optionKey="i18nKey"
                       t={t}
                     />
@@ -493,7 +491,6 @@ const OwnerForm = (_props) => {
                       <TextInput
                         value={props.value}
                         disable={isEditScreen}
-
                         autoFocus={focusIndex.index === owner?.key && focusIndex.type === "designation"}
                         onChange={(e) => {
                           props.onChange(e.target.value);
@@ -524,7 +521,6 @@ const OwnerForm = (_props) => {
                       selected={props.value}
                       select={props.onChange}
                       disable={isEditScreen}
-
                       onBlur={props.onBlur}
                       option={specialDocsMenu}
                       optionKey="i18nKey"
@@ -548,7 +544,6 @@ const OwnerForm = (_props) => {
                       <TextInput
                         value={props.value}
                         disable={isEditScreen}
-
                         autoFocus={focusIndex.index === owner?.key && focusIndex.type === "documents.documentUid"}
                         onChange={(e) => {
                           props.onChange(e);
@@ -578,7 +573,6 @@ const OwnerForm = (_props) => {
                   <TextInput
                     value={props.value}
                     disable={isEditScreen}
-
                     autoFocus={focusIndex.index === owner?.key && focusIndex.type === "emailId"}
                     onChange={(e) => {
                       props.onChange(e);
@@ -605,7 +599,6 @@ const OwnerForm = (_props) => {
                   <TextInput
                     value={props.value}
                     disable={isEditScreen}
-
                     autoFocus={focusIndex.index === owner?.key && focusIndex.type === "correspondenceAddress"}
                     onChange={(e) => {
                       props.onChange(e);

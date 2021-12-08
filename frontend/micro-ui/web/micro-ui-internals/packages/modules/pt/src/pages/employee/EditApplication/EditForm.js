@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useLocation } from "react-router-dom";
 import { newConfig } from "../../../config/Create/config";
-import { stringReplaceAll } from "../../../utils";
 
 const EditForm = ({ applicationData }) => {
   const { t } = useTranslation();
@@ -11,7 +10,7 @@ const EditForm = ({ applicationData }) => {
   const { state } = useLocation();
   const [canSubmit, setSubmitValve] = useState(false);
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
-  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", { });
+  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", {});
   const { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "PropertyTax", "CommonFieldsConfig");
 
   useEffect(() => {
@@ -22,28 +21,17 @@ const EditForm = ({ applicationData }) => {
   const defaultValues = {
     originalData: applicationData,
     address: applicationData?.address,
-    owners:applicationData?.owners.map(owner=>({...owner,
-      ownerType: {code: owner.ownerType,
-      i18nKey: owner.ownerType},
-      relationship: {code: owner.relationship,
-i18nKey: `PT_FORM3_${owner.relationship}`},
-      gender:{
-      code:owner.gender,
-i18nKey: `PT_FORM3_${owner.gender}`,
-value: owner.gender
-    }})),
- 
+    owners: applicationData?.owners.map((owner) => ({
+      ...owner,
+      ownerType: { code: owner.ownerType, i18nKey: owner.ownerType },
+      relationship: { code: owner.relationship, i18nKey: `PT_FORM3_${owner.relationship}` },
+      gender: {
+        code: owner.gender,
+        i18nKey: `PT_FORM3_${owner.gender}`,
+        value: owner.gender,
+      },
+    })),
   };
-console.log(defaultValues,"defltvalues");
-  //designation
-
-//   institution:
-// name: ""
-// type:
-// active: true
-// code: "INSTITUTIONALPRIVATE.PRIVATECOMPANY"
-// i18nKey: "COMMON_MASTERS_OWNERSHIPCATEGORY_INSTITUTIONALPRIVATE_PRIVATECOMPANY"
-// name: "Private Company"
 
   const onFormValueChange = (setValue, formData, formState) => {
     setSubmitValve(!Object.keys(formState.errors).length);
@@ -72,14 +60,18 @@ console.log(defaultValues,"defltvalues");
         let newDoc = data?.documents?.documents?.find((e) => e.documentType.includes(dt[0] + "." + dt[1]));
         return { ...old, ...newDoc };
       }),
-      units: [...(applicationData?.units?.map((old) => ({ ...old, active: false })) || []), ...(data?.units?.map(unit => { return { ...unit, active: true } }) || [])],
+      units: [
+        ...(applicationData?.units?.map((old) => ({ ...old, active: false })) || []),
+        ...(data?.units?.map((unit) => {
+          return { ...unit, active: true };
+        }) || []),
+      ],
       workflow: state.workflow,
       applicationStatus: "UPDATE",
     };
     if (state?.workflow?.action === "OPEN") {
-      formData.units = formData.units.filter(unit => unit.active);
+      formData.units = formData.units.filter((unit) => unit.active);
     }
-    // console.log(formData, "in submit");
     history.push("/digit-ui/employee/pt/response", { Property: formData, key: "UPDATE", action: "SUBMIT" });
   };
 
