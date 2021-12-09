@@ -96,7 +96,7 @@ export const searchApiCall = async (state, dispatch) => {
       return;
     }
     searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Citizen" ? tenantId : getTenantId();
-    const responseFromAPI = await getGroupBillSearch(dispatch, searchScreenObject);
+    const responseFromAPI = await getGroupBillSearch(dispatch, {...searchScreenObject,billActive:"ACTIVE"});
     let bills = (responseFromAPI && responseFromAPI.Bills) || [];
     bills = bills.filter(bill => bill.status === "ACTIVE");
     let expiredConsumers = []
