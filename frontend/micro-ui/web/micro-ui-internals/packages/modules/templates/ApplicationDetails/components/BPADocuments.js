@@ -118,7 +118,7 @@ function SelectDocument({
 }) {
 
     const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0];
-    const tenantId = Digit.ULBService.getCurrentTenantId();
+    const tenantId = Digit.ULBService.getStateId();
     const [selectedDocument, setSelectedDocument] = useState(
         filteredDocument
             ? { ...filteredDocument, active: true, code: filteredDocument?.documentType, i18nKey: filteredDocument?.documentType }
