@@ -230,7 +230,7 @@ function SelectDocument({
 
     const uploadedFilesPreFill = useMemo(()=>{
         let selectedUplDocs=[];
-        const key = selectedDocument.code.split(".",2).join(".").replaceAll(".", "_")
+        const key = selectedDocument.code/* .split(".",2).join(".").replaceAll(".", "_") */
         formData?.nocDocuments?.nocDocuments?.filter((ob) => ob.documentType === key).forEach(e =>
             selectedUplDocs.push([e.fileName, {file: {name: e.fileName, type: e.documentType}, fileStoreId: {fileStoreId: e.fileStoreId, tenantId}}])
              )
@@ -250,7 +250,7 @@ function SelectDocument({
            {!(window.location.href.includes("sendbacktocitizen")) && <MultiUploadWrapper
             module="BPA"
             tenantId={tenantId}
-            getFormState={e => getData(e,doc?.documentType?.replaceAll(".", "_"))}
+            getFormState={e => getData(e,/* doc?.documentType?.replaceAll(".", "_") */doc.dropdownData[0].code)}
             setuploadedstate={uploadedFilesPreFill}
             t={t}
           />}
