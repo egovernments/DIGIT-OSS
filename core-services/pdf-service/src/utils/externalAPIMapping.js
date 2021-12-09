@@ -167,7 +167,6 @@ export const externalAPIMapping = async function (
     };
 
     var resPromise;
-    console.log("\n URL:"+externalAPIArray[i].uri+"\n");
     if (externalAPIArray[i].requesttype == "POST") {
       resPromise = axios.post(
         externalAPIArray[i].uri + "?" + externalAPIArray[i].queryParams, {

@@ -12,6 +12,7 @@ let receiveJob = topic;
 const Consumer = kafka.Consumer;
 let client = new kafka.KafkaClient({
   kafkaHost: envVariables.KAFKA_BROKER_HOST,
+  groupId: "bulk-pdf",
   protocol: ["roundrobin"],
   fromOffset: "latest",
   outOfRangeOffset: "earliest"
