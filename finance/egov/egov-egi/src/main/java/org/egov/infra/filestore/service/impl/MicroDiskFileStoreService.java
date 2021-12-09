@@ -141,7 +141,7 @@ public class MicroDiskFileStoreService implements FileStoreService {
             List<FileReq> filesList = new ArrayList<FileReq>();
             if (storageRes.getFiles() != null && !storageRes.getFiles().isEmpty())
                 filesList = storageRes.getFiles();
-            if (!filesList.isEmpty() && filesList != null)
+            if (!filesList.isEmpty())
                 for (FileReq filesId : filesList) {
                     fileMapper = new FileStoreMapper(filesId.getFileStoreId(), fileName);
                     fileMapper.setContentType(mimeType);

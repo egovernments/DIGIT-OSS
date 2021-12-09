@@ -434,7 +434,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
                     remittanceBean.getTotalAmount(), listRemitBean, recovery, remittanceBean, remittedTo, workflowBean,
                     headerDetails, commonBean);
 
-            if (!cutOffDate.isEmpty() && cutOffDate != null)
+            if (!cutOffDate.isEmpty())
                 try {
                     date = sdf1.parse(cutOffDate);
                     cutOffDate1 = formatter1.format(date);

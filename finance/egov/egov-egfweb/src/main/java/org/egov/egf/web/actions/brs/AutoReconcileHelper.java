@@ -644,13 +644,13 @@ public class AutoReconcileHelper{
     private void validateBankAccountInfo(HSSFSheet sheet) {
         final HSSFRow bankNameRow = sheet.getRow(BANKNAME_ROW_INDEX);
         String bankName = getStrValue(bankNameRow.getCell(0));
-        if(bankNameRow == null || StringUtils.isBlank(bankName) || !bankName.trim().equalsIgnoreCase(bank.getName())){
+        if(StringUtils.isBlank(bankName) || !bankName.trim().equalsIgnoreCase(bank.getName())){
             failureMessage = "Bank Name row(row no : #rowNumber) in spreadsheet #name should not be empty or different with selected bank".replace("#rowNumber", BANKNAME_ROW_INDEX+1+"").replace("#name", bankStatmentInXlsFileName);
             throw new ValidationException(Arrays.asList(new ValidationError(failureMessage, failureMessage)));
         }
         final HSSFRow bankAccountRow = sheet.getRow(ACCOUNTNUMBER_ROW_INDEX);
         String bankAccount = getStrValue(bankAccountRow.getCell(0));
-        if (bankAccountRow == null || StringUtils.isBlank(bankAccount)) {
+        if (StringUtils.isBlank(bankAccount)) {
             failureMessage = "Bank Account row(row no : #rowNumber) in spreadsheet #name should not be empty"
                     .replace("#rowNumber", ACCOUNTNUMBER_ROW_INDEX+1+"")
                     .replace("#name", bankStatmentInXlsFileName);

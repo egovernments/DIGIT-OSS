@@ -485,7 +485,6 @@ public class EGovernCommon extends AbstractTask {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("total balance  " + totalAvailable);       
         
-        if (resultset1 == null || resultset1.size() == 0)
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("Else resultset in getAccountBalance...");
 

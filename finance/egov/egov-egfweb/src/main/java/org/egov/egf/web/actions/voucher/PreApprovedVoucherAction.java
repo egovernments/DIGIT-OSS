@@ -372,7 +372,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
             List<AppConfigValues> cutOffDateconfigValue = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
                     "DataEntryCutOffDate");
             if (cutOffDateconfigValue != null && !cutOffDateconfigValue.isEmpty()) {
-                if (null == model || null == model.getId() || model.getCurrentState().getValue().endsWith("NEW")) {
+                if (null == model.getId() || model.getCurrentState().getValue().endsWith("NEW")) {
                     validActions = Arrays.asList(FORWARD, FinancialConstants.CREATEANDAPPROVE);
                 } else {
                     if (model.getCurrentState() != null) {
@@ -382,7 +382,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
                     }
                 }
             } else {
-                if (null == model || null == model.getId() || model.getCurrentState().getValue().endsWith("NEW")) {
+                if (null == model.getId() || model.getCurrentState().getValue().endsWith("NEW")) {
                     validActions = Arrays.asList(FORWARD);
                 } else {
                     if (model.getCurrentState() != null) {

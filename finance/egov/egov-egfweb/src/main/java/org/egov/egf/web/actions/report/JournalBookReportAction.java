@@ -156,7 +156,7 @@ public class JournalBookReportAction extends BaseFormAction {
         prepareResultList();
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("JournalBookAction | list | End");
-        if (journalBookDisplayList.isEmpty() && journalBookDisplayList == null)
+        if (journalBookDisplayList.isEmpty())
         {
             addActionMessage("No records found.");
         }

@@ -67,6 +67,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.commons.Accountdetailtype;
 import org.egov.commons.CChartOfAccountDetail;
@@ -529,7 +530,7 @@ public class ChartOfAccounts {
 		rs = pst.list();
 		for (final Object[] element : rs)
 			if (Integer.parseInt(element[0].toString()) == 1)
-				if (fuctid.length() > 0 && fuctid != null) {
+				if (StringUtils.isNotBlank(fuctid) && fuctid.length() > 0 ) {
 					if (LOGGER.isInfoEnabled())
 						LOGGER.info("in COA33--" + fuctid);
 				} else {
