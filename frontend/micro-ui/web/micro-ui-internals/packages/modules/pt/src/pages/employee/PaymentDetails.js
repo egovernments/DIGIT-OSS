@@ -55,11 +55,11 @@ const PaymentDetails = () => {
 
   return (
     <React.Fragment>
-      <div style={{ marginLeft: "16px" }}>
+     
         <Header>{t("PT_PAYMENT_HISTORY")}</Header>
         {t("PT_PROPERTY_PTUID")} {applicationNumber}
-      </div>
       {paymentObject?.map((payment) => (
+         <div style={{ marginLeft: "-16px" }}>
         <Card>
           <StatusTable>
             <Row label={t("PT_HISTORY_BILL_NO")} text={payment?.billNo} textStyle={{ whiteSpace: "pre" }} />
@@ -71,6 +71,7 @@ const PaymentDetails = () => {
             <LinkLabel onClick={() => printReciept("PT", applicationNumber)}>{t("PT_DOWNLOAD_RECEIPT")}</LinkLabel>
           </StatusTable>
         </Card>
+        </div>
       ))}
     </React.Fragment>
   );
