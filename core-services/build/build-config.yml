@@ -268,3 +268,9 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "egov-document-uploader/src/main/resources/db"
         image-name: "egov-document-uploader-db"
+
+  - name: "builds/core-services/egov-filestore-bulk"
+    build:
+      - work-dir: "egov-filestore"
+        image-name: "egov-filestore-bulk"
+        dockerfile: "build/maven/Dockerfile"
