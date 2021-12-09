@@ -34,7 +34,7 @@ const PropertyDetails = () => {
   const history = useHistory();
 
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, applicationNumber);
-  const { data: fetchBillData, isLoading: fetchBillLoading,revalidate } = Digit.Hooks.useFetchBillsForBuissnessService({
+  const { data: fetchBillData, isLoading: fetchBillLoading, revalidate } = Digit.Hooks.useFetchBillsForBuissnessService({
     businessService: "PT",
     consumerCode: applicationNumber,
   });
@@ -46,7 +46,8 @@ const PropertyDetails = () => {
     },
     {
       enabled: enableAudit,
-      select: (data) => data.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
+      select: (data) =>
+        data.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
     }
   );
 
@@ -62,7 +63,7 @@ const PropertyDetails = () => {
   useEffect(() => {
     if (enableAudit && auditData?.length && Object.keys(appDetailsToShow).length) {
       const lastActiveProperty = auditData?.[0];
-      lastActiveProperty.owners = lastActiveProperty?.owners?.filter(owner => owner.status == "ACTIVE");
+      lastActiveProperty.owners = lastActiveProperty?.owners?.filter((owner) => owner.status == "ACTIVE");
       if (lastActiveProperty) {
         let applicationDetails = appDetailsToShow?.transformToAppDetailsForEmployee({ property: lastActiveProperty, t });
         setAppDetailsToShow({ ...appDetailsToShow, applicationDetails });
@@ -102,28 +103,38 @@ const PropertyDetails = () => {
       return e;
     });
   }
- useEffect(()=>{
- if (appDetailsToShow?.applicationDetails?.[0]?.values?.[1].title !== "PT_TOTAL_DUES") {
-    appDetailsToShow?.applicationDetails?.unshift({
-      values: [
-        {
-          title: "PT_PROPERTY_PTUID",
-          value: applicationNumber,
-        },
-        {
-          title: "PT_TOTAL_DUES",
-          value: fetchBillData?.Bill[0]?.totalAmount ? `₹ ${fetchBillData?.Bill[0]?.totalAmount}` : "N/A",
-        },
-      ],
-    });
-  }
-  return ()=>{
-    if (appDetailsToShow?.applicationDetails?.[0]?.values?.[1].title == "PT_TOTAL_DUES") {
-    appDetailsToShow?.applicationDetails.shift();
-    revalidate()
+  useEffect(() => {
+    if (appDetailsToShow?.applicationDetails?.[0]?.values?.[1].title !== "PT_TOTAL_DUES") {
+      appDetailsToShow?.applicationDetails?.unshift({
+        title: "PT_DUES",
+        asSectionHeader: true,
+        belowComponent: () => (
+          <LinkLabel
+            onClick={() => history.push({ pathname: `/digit-ui/employee/pt/payment-details/${applicationNumber}` })}
+            style={{ marginTop: "15px" }}
+          >
+            {t("PT_VIEW_PAYMENT")}
+          </LinkLabel>
+        ),
+        values: [
+          {
+            title: "PT_PROPERTY_PTUID",
+            value: applicationNumber,
+          },
+          {
+            title: "PT_TOTAL_DUES",
+            value: fetchBillData?.Bill[0]?.totalAmount ? `₹ ${fetchBillData?.Bill[0]?.totalAmount}` : "N/A",
+          },
+        ],
+      });
     }
-  }
- },[fetchBillData,appDetailsToShow])
+    return () => {
+      if (appDetailsToShow?.applicationDetails?.[0]?.values?.[1].title == "PT_TOTAL_DUES") {
+        appDetailsToShow?.applicationDetails.shift();
+        revalidate();
+      }
+    };
+  }, [fetchBillData, appDetailsToShow]);
 
   if (applicationDetails?.applicationData?.status === "ACTIVE") {
     workflowDetails = {
@@ -131,30 +142,32 @@ const PropertyDetails = () => {
       data: {
         ...workflowDetails?.data,
         actionState: {
-          nextActions: PT_CEMP?[
-            {
-              action: "ASSESS_PROPERTY",
-              forcedName: "PT_ASSESS",
-              showFinancialYearsModal: true,
-              customFunctionToExecute: (data) => {
-                delete data.customFunctionToExecute;
-                history.replace({ pathname: `/digit-ui/employee/pt/assessment-details/${applicationNumber}`, state: { ...data } });
-              },
-              tenantId: Digit.ULBService.getStateId(),
-            },
-            {
-              action: !fetchBillData?.Bill[0]?.totalAmount ? "MUTATE_PROPERTY" : "PT_TOTALDUES_PAY",
-              forcedName: "PT_OWNERSHIP_TRANSFER",
-              redirectionUrl: {
-                pathname: !fetchBillData?.Bill[0]?.totalAmount
-                  ? `/digit-ui/employee/pt/property-mutate-docs-required/${applicationNumber}`
-                  : `/digit-ui/employee/payment/collect/PT/${applicationNumber}`,
-                // state: { workflow: { action: "OPEN", moduleName: "PT", businessService } },
-                state: null,
-              },
-              tenantId: Digit.ULBService.getStateId(),
-            },
-          ]:[],
+          nextActions: PT_CEMP
+            ? [
+                {
+                  action: "ASSESS_PROPERTY",
+                  forcedName: "PT_ASSESS",
+                  showFinancialYearsModal: true,
+                  customFunctionToExecute: (data) => {
+                    delete data.customFunctionToExecute;
+                    history.replace({ pathname: `/digit-ui/employee/pt/assessment-details/${applicationNumber}`, state: { ...data } });
+                  },
+                  tenantId: Digit.ULBService.getStateId(),
+                },
+                {
+                  action: !fetchBillData?.Bill[0]?.totalAmount ? "MUTATE_PROPERTY" : "PT_TOTALDUES_PAY",
+                  forcedName: "PT_OWNERSHIP_TRANSFER",
+                  redirectionUrl: {
+                    pathname: !fetchBillData?.Bill[0]?.totalAmount
+                      ? `/digit-ui/employee/pt/property-mutate-docs-required/${applicationNumber}`
+                      : `/digit-ui/employee/payment/collect/PT/${applicationNumber}`,
+                    // state: { workflow: { action: "OPEN", moduleName: "PT", businessService } },
+                    state: null,
+                  },
+                  tenantId: Digit.ULBService.getStateId(),
+                },
+              ]
+            : [],
         },
       },
     };
@@ -187,7 +200,7 @@ const PropertyDetails = () => {
         isDataLoading={isLoading}
         applicationData={appDetailsToShow?.applicationData}
         mutate={null}
-        workflowDetails={appDetailsToShow?.applicationData?.status === "ACTIVE" ? workflowDetails : {}}
+        workflowDetails={{}}
         businessService="PT"
         showToast={showToast}
         setShowToast={setShowToast}
