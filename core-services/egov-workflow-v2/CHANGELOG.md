@@ -3,6 +3,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.2.1 
+- Added fuzzy search on application id
+- Added count for assigned to me and auto escalated Application
+
 ## 1.2.0 2021-06-23
 - Added autoescalation feature
 - Added statelevel fallback feature at businessService level

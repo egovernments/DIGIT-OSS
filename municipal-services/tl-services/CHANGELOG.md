@@ -2,6 +2,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.6
+
+- Notification enhancement for bpa stakeholder registration flow
+
 ## 1.1.5 - 2021-07-23
 
 - Fixed validation for TL Renewal
