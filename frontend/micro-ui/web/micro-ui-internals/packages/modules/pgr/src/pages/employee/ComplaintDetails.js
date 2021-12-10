@@ -348,7 +348,7 @@ export const ComplaintDetails = (props) => {
 
   if (workflowDetails.isError) return <React.Fragment>{workflowDetails.error}</React.Fragment>;
 
-  const getTimelineCaptions = (checkpoint) => {
+  const getTimelineCaptions = (checkpoint, index, arr) => {
     // console.log("tl", checkpoint);
     const {wfComment: comment, thumbnailsToShow} = checkpoint;
     function zoomImageTimeLineWrapper(imageSource, index,thumbnailsToShow){
@@ -363,7 +363,8 @@ export const ComplaintDetails = (props) => {
         source: complaintDetails.audit.source,
       } : {}
     }
-    if (checkpoint.status === "PENDINGFORASSIGNMENT" && complaintDetails?.audit) {
+    const isFirstPendingForAssignment = arr.length - (index + 1) === 1 ? true : false
+    if (checkpoint.status === "PENDINGFORASSIGNMENT" && complaintDetails?.audit && isFirstPendingForAssignment) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(complaintDetails.audit.details.createdTime),
       };
@@ -436,7 +437,7 @@ export const ComplaintDetails = (props) => {
                           keyValue={index}
                           isCompleted={index === 0}
                           label={t("CS_COMMON_" + checkpoint.status)}
-                          customChild={getTimelineCaptions(checkpoint)}
+                          customChild={getTimelineCaptions(checkpoint, index, arr)}
                         />
                       </React.Fragment>
                     );

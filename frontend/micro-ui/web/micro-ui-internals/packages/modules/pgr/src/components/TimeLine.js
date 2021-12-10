@@ -1,5 +1,5 @@
 import { Card, CardSubHeader, CheckPoint, ConnectingCheckPoints, GreyOutText, Loader, DisplayPhotos } from "@egovernments/digit-ui-react-components";
-import React, {Fragment, useEffect } from "react";
+import React, {Fragment, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../constants/Localization";
 import PendingAtLME from "./timelineInstances/pendingAtLme";
@@ -34,6 +34,7 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
   }
 
   let { timeline } = data;
+  const totalTimelineLength = useMemo(()=> timeline?.length ,[timeline])
 
   useEffect(() => {
     const [{auditDetails}] = timeline?.filter((status, index, array) => {
@@ -45,7 +46,8 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
       }
     });
 
-    const duplicateCheckpointOfPendingForAssignment = timeline?.find( e => e?.status === "PENDINGFORASSIGNMENT")
+    const onlyPendingForAssignmentStatusArray = timeline?.filter( e => e?.status === "PENDINGFORASSIGNMENT")
+    const duplicateCheckpointOfPendingForAssignment = onlyPendingForAssignmentStatusArray.at(-1)
     timeline?.push({
       ...duplicateCheckpointOfPendingForAssignment,
       performedAction: "FILED",
@@ -76,7 +78,7 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
     </>
   }
 
-  const getCheckPoint = ({ status, caption, auditDetails, timeLineActions, index, array, performedAction, comment, thumbnailsToShow, assigner }) => {
+  const getCheckPoint = ({ status, caption, auditDetails, timeLineActions, index, array, performedAction, comment, thumbnailsToShow, assigner, totalTimelineLength }) => {
     // console.log("find getChechPoint data here", status, index)
     const isCurrent = 0 === index;
     switch (status) {
@@ -84,7 +86,8 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
         return <CheckPoint isCompleted={isCurrent} key={index} label={t(`CS_COMMON_PENDINGFORASSIGNMENT`)} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})} />;
 
       case "PENDINGFORASSIGNMENT":
-        return <PendingForAssignment key={index} isCompleted={isCurrent} text={t("CS_COMMON_PENDINGFORASSIGNMENT")} customChild={getCommentsInCustomChildComponent({comment})} />;
+        const isFirstPendingForAssignment = totalTimelineLength - (index + 1) === 0 ? true : false
+        return <PendingForAssignment key={index} isCompleted={isCurrent} text={t("CS_COMMON_PENDINGFORASSIGNMENT")} customChild={getCommentsInCustomChildComponent({comment, ...isFirstPendingForAssignment ? {} : {thumbnailsToShow, auditDetails} })} />;
 
       case "PENDINGFORASSIGNMENT_AFTERREOPEN":
         return <PendingForAssignment isCompleted={isCurrent} key={index} text={t(`CS_COMMON_PENDINGFORASSIGNMENT`)} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})} />;
@@ -144,10 +147,10 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
   return (
     <React.Fragment>
       <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader>
-      {timeline && timeline.length > 0 ? (
+      {timeline && totalTimelineLength > 0 ? (
         <ConnectingCheckPoints>
           {timeline.map(({ status, caption, auditDetails, timeLineActions, performedAction, wfComment: comment, thumbnailsToShow, assigner }, index, array) => {
-            return getCheckPoint({ status, caption, auditDetails, timeLineActions, index, array, performedAction, comment, thumbnailsToShow, assigner });
+            return getCheckPoint({ status, caption, auditDetails, timeLineActions, index, array, performedAction, comment, thumbnailsToShow, assigner, totalTimelineLength });
           })}
         </ConnectingCheckPoints>
       ) : (

@@ -12,26 +12,26 @@ const getThumbnails = async (ids, tenantId) => {
 };
 
 const makeCommentsSubsidariesOfPreviousActions = async(wf) => {
-  const {info: { type: userType } = {}} = Digit.UserService.getUser()
+  // const {info: { type: userType } = {}} = Digit.UserService.getUser()
   const TimelineMap = new Map();
-  if(userType === "CITIZEN"){
-    for (const eventHappened of wf ){
-      if(eventHappened.action === "APPLY" && eventHappened?.documents){
-        eventHappened.thumbnailsToShow = await getThumbnails(eventHappened?.documents?.map(e => e?.fileStoreId), eventHappened?.tenantId)
-      }
-      if( eventHappened.action === "COMMENT" ){
-        const commentAccumulator = TimelineMap.get("tlCommentStack") || []
-        TimelineMap.set("tlCommentStack", [...commentAccumulator, eventHappened])
-      }
-      else{
-        const eventAccumulator = TimelineMap.get("tlActions") || []
-        const commentAccumulator = TimelineMap.get("tlCommentStack") || []
-        eventHappened.wfComments = [...commentAccumulator]
-        TimelineMap.set("tlActions", [...eventAccumulator, eventHappened])
-        TimelineMap.delete("tlCommentStack")
-      }
-    }
-  } else{
+  // if(userType === "CITIZEN"){
+  //   for (const eventHappened of wf ){
+  //     if(eventHappened.action === "APPLY" && eventHappened?.documents){
+  //       eventHappened.thumbnailsToShow = await getThumbnails(eventHappened?.documents?.map(e => e?.fileStoreId), eventHappened?.tenantId)
+  //     }
+  //     if( eventHappened.action === "COMMENT" ){
+  //       const commentAccumulator = TimelineMap.get("tlCommentStack") || []
+  //       TimelineMap.set("tlCommentStack", [...commentAccumulator, eventHappened])
+  //     }
+  //     else{
+  //       const eventAccumulator = TimelineMap.get("tlActions") || []
+  //       const commentAccumulator = TimelineMap.get("tlCommentStack") || []
+  //       eventHappened.wfComments = [...commentAccumulator]
+  //       TimelineMap.set("tlActions", [...eventAccumulator, eventHappened])
+  //       TimelineMap.delete("tlCommentStack")
+  //     }
+  //   }
+  // } else{
     for (const eventHappened of wf ){
       if(eventHappened?.documents){
         eventHappened.thumbnailsToShow = await getThumbnails(eventHappened?.documents?.map(e => e?.fileStoreId), eventHappened?.tenantId)
@@ -48,7 +48,7 @@ const makeCommentsSubsidariesOfPreviousActions = async(wf) => {
         TimelineMap.delete("tlCommentStack")
       }
     } 
-  }
+  // }
   const response = TimelineMap.get("tlActions")
   return response
 }
@@ -144,7 +144,9 @@ export const WorkflowService = {
         const nextActions = actionRolePair;
 
         if (role !== "CITIZEN" && moduleCode === "PGR") {
-          const duplicateCheckpointOfPendingForAssignment = timeline?.find( e => e?.status === "PENDINGFORASSIGNMENT")
+          const onlyPendingForAssignmentStatusArray = timeline?.filter( e => e?.status === "PENDINGFORASSIGNMENT")
+          const duplicateCheckpointOfPendingForAssignment = onlyPendingForAssignmentStatusArray.at(-1)
+          // const duplicateCheckpointOfPendingForAssignment = timeline?.find( e => e?.status === "PENDINGFORASSIGNMENT")
           timeline.push({
             ...duplicateCheckpointOfPendingForAssignment,
             status: "COMPLAINT_FILED",
