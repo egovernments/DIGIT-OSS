@@ -140,8 +140,8 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldProp
             },
             {
               key: getTranslatedLabel("PT_FORM3_ALT_MOBILE_NO", localizationLabelsData),
-              value: owner.alternatemobilenumber || "NA",
-              oldValue: oldPropertydetails && oldPropertydetails.owners && Array.isArray(oldPropertydetails.owners) && oldPropertydetails.owners[index].alternatemobilenumber
+              value: owner.alternateMobileNumber || "NA",
+              oldValue: oldPropertydetails && oldPropertydetails.owners && Array.isArray(oldPropertydetails.owners) && oldPropertydetails.owners[index].alternateMobileNumber
             },
             {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_EMAIL_ID", localizationLabelsData),

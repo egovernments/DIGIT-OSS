@@ -62,7 +62,7 @@ export const transfereeSummaryDetails={
           labelKey: "PT_FORM3_ALT_MOBILE_NO"
         },
         {
-          jsonPath: "Property.ownersTemp[0].alternatemobilenumber",
+          jsonPath: "Property.ownersTemp[0].alternateMobileNumber",
           callBack: checkValueForNA
         }
       ), ownerEmail: getLabelWithValue(
@@ -205,7 +205,7 @@ export const transfereeInstitutionSummaryDetails={
           labelKey: "PT_FORM3_ALT_MOBILE_NO"
         },
         {
-          jsonPath: "Property.ownersTemp[0].alternatemobilenumber",
+          jsonPath: "Property.ownersTemp[0].alternateMobileNumber",
           callBack: checkValueForNA
         }
       ),

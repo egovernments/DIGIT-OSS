@@ -147,7 +147,7 @@ export default class UpdateMobileDialog extends React.Component {
       property.owners.map(owner => {
         if (owner.uuid == propertyNumbers.uuid) {
           if(isAlternate){
-            owner.alternatemobilenumber = mobileNumber.value;
+            owner.alternateMobileNumber = mobileNumber.value;
           }else{
             owner.mobileNumber = mobileNumber.value;
           }

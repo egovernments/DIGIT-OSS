@@ -26,7 +26,7 @@ const formConfig = {
     },
     alterMobile: {
       id: "authority-altermobile",
-      jsonPath: "Properties[0].propertyDetails[0].owners[0].alternatemobilenumber",
+      jsonPath: "Properties[0].propertyDetails[0].owners[0].alternateMobileNumber",
       type: "textfield",
       floatingLabelText: "PT_FORM3_ALT_MOBILE_NO",
       hintText: "PT_FORM3_ALT_MOBILE_NO_PLACEHOLDER",

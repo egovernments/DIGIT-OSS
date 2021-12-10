@@ -70,7 +70,7 @@ export const transferorSummaryDetails = {
           labelKey: "PT_FORM3_ALT_MOBILE_NO"
         },
         {
-          jsonPath: "Property.ownersInit[0].alternatemobilenumber",
+          jsonPath: "Property.ownersInit[0].alternateMobileNumber",
           callBack: checkValueForNA
         }
       ),
@@ -204,7 +204,7 @@ export const transferorInstitutionSummaryDetails = {
           labelKey: "PT_FORM3_ALT_MOBILE_NO"
         },
         {
-          jsonPath: "Property.ownersInit[0].alternatemobilenumber",
+          jsonPath: "Property.ownersInit[0].alternateMobileNumber",
           callBack: checkValueForNA
         }
       ),

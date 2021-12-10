@@ -150,7 +150,7 @@ if(window.location.pathname.includes('withoutAuth')){
                 "type": "owner"
             };
             /* this.setState({ propertyNumbers: propertyNumbers, showWarning: true }); */
-            this.setState({ propertyNumbers: propertyNumbers, showWarning: !owners.some(owner => owner.alternatemobilenumber && owner.status == "ACTIVE") });
+            this.setState({ propertyNumbers: propertyNumbers, showWarning: !owners.some(owner => owner.alternateMobileNumber && owner.status == "ACTIVE") });
         }
     }
 

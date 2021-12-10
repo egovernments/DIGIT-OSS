@@ -127,7 +127,7 @@ const commonApplicantInformation = () => {
         pattern: getPattern("MobileNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath:
-          "Property.ownersTemp[0].alternatemobilenumber",
+          "Property.ownersTemp[0].alternateMobileNumber",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -562,7 +562,7 @@ const institutionInformation = () => {
           pattern: getPattern("MobileNo"),
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
           jsonPath:
-            "Property.ownersTemp[0].alternatemobilenumber",
+            "Property.ownersTemp[0].alternateMobileNumber",
           gridDefination: {
             xs: 12,
             sm: 12,

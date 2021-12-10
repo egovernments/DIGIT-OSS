@@ -130,12 +130,12 @@ export const transfereeSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.ownersTemp[0].alternatemobilenumber" ,
+              "Property.ownersTemp[0].alternateMobileNumber" ,
               callBack: checkValueForNA
             },{
               labelKey: "PTM_OLD_LABEL_NAME"
             },
-              { jsonPath: "PropertyOld.ownersTemp[0].alternatemobilenumber", callBack: checkValueForNA }
+              { jsonPath: "PropertyOld.ownersTemp[0].alternateMobileNumber", callBack: checkValueForNA }
           ), ownerEmail: getLabelWithValue(
             {
               labelName: "Email",
@@ -404,12 +404,12 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-        "Property.institutionTemp.alternatemobilenumber" ,
+        "Property.institutionTemp.alternateMobileNumber" ,
         callBack: checkValueForNA
       }, {
         labelKey: "PTM_OLD_LABEL_NAME"
       },
-        { jsonPath: "PropertyOld.institutionTemp.alternatemobilenumber", callBack: checkValueForNA }
+        { jsonPath: "PropertyOld.institutionTemp.alternateMobileNumber", callBack: checkValueForNA }
     ),
     officialAddress: getLabelWithValueForModifiedLabel(
       {

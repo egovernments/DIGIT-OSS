@@ -102,7 +102,7 @@ export const transferorDetails = getCommonCard(
           labelKey: "PT_FORM3_ALT_MOBILE_NO"
         },
         {
-          jsonPath: "Property.owners[0].alternatemobilenumber",
+          jsonPath: "Property.owners[0].alternateMobileNumber",
           callBack: checkValueForNA
           // callBack: value => {
           //   return value.split(".")[1];

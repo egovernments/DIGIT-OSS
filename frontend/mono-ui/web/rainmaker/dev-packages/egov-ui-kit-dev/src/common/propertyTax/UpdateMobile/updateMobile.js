@@ -75,7 +75,7 @@ export default class UpdateMobile extends React.Component {
             owners = owners && owners.filter(owner => owner.status == "ACTIVE");
             owners && owners.map(owner => {
 
-                let numb = isAlternate?owner.alternatemobilenumber: owner.mobileNumber;
+                let numb = isAlternate?owner.alternateMobileNumber: owner.mobileNumber;
                 if ( numb == this.props.number) {
 
                     propertyNumbers = {
@@ -125,7 +125,7 @@ export default class UpdateMobile extends React.Component {
             let propertyNumbers = {};
             owners = owners && owners.filter(owner => owner.status == "ACTIVE");
             owners && owners.map(owner => {
-                let numb = isAlternate?owner.alternatemobilenumber: owner.mobileNumber;
+                let numb = isAlternate?owner.alternateMobileNumber: owner.mobileNumber;
                 if (process.env.REACT_APP_NAME !== "Citizen") {
                     if ((number == updateNumberConfig.invalidNumber) || !number.match(updateNumberConfig['invalidPattern'])) {
                         /* !this.state.skipped&&this.setState({ invalidNumber: true }); */

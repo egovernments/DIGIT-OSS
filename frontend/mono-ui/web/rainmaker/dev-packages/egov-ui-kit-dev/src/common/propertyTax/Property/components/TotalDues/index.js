@@ -51,16 +51,16 @@ class TotalDues extends React.Component {
         if ((owner.mobileNumber == updateNumberConfig.invalidNumber) || !owner.mobileNumber.match(updateNumberConfig['invalidPattern'])) {
           this.setState({ showWarning: true, invalidNumber: owner.mobileNumber,isAlternate:false });
           returnValue = false;
-        }else if(owner.alternatemobilenumber && ((owner.alternatemobilenumber == updateNumberConfig.invalidNumber) || !owner.alternatemobilenumber.match(updateNumberConfig['invalidPattern']))) {
-          this.setState({ showWarning: true, invalidNumber: owner.alternatemobilenumber,isAlternate:true });
+        }else if(owner.alternateMobileNumber && ((owner.alternateMobileNumber == updateNumberConfig.invalidNumber) || !owner.alternateMobileNumber.match(updateNumberConfig['invalidPattern']))) {
+          this.setState({ showWarning: true, invalidNumber: owner.alternateMobileNumber,isAlternate:true });
           returnValue = false;
         }
       } else {
         if (((owner.mobileNumber == updateNumberConfig.invalidNumber) || !owner.mobileNumber.match(updateNumberConfig['invalidPattern']) && owner.mobileNumber == JSON.parse(getUserInfo()).mobileNumber)) {
           this.setState({ showWarning: true, invalidNumber: owner.mobileNumber,isAlternate:false  });
           returnValue = false;
-        }else if (owner.alternatemobilenumber !=null && ((owner.alternatemobilenumber == updateNumberConfig.invalidNumber) || !owner.alternatemobilenumber.match(updateNumberConfig['invalidPattern']) && owner.alternatemobilenumber == JSON.parse(getUserInfo()).mobileNumber)) {
-          this.setState({ showWarning: true, invalidNumber: owner.alternatemobilenumber ,isAlternate:true });
+        }else if (owner.alternateMobileNumber !=null && ((owner.alternateMobileNumber == updateNumberConfig.invalidNumber) || !owner.alternateMobileNumber.match(updateNumberConfig['invalidPattern']) && owner.alternateMobileNumber == JSON.parse(getUserInfo()).mobileNumber)) {
+          this.setState({ showWarning: true, invalidNumber: owner.alternateMobileNumber ,isAlternate:true });
           returnValue = false;
         }
       }
