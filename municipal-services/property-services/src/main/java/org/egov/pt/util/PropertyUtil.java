@@ -100,6 +100,7 @@ public class PropertyUtil extends CommonUtils {
 		info.setUserName(null);
 		info.setGender(null);
 		info.setAltContactNumber(null);
+		info.setAlternatemobilenumber(null);
 		info.setPwdExpiryDate(null);
 
 		return info;
