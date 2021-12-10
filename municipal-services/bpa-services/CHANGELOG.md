@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.5
+
+- Notification enhancement for different channels
+
 ## 1.1.4
 
 - Fixed the inbox related assignee issue
