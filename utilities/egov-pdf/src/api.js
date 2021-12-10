@@ -97,13 +97,25 @@ async function search_workflow(applicationNumber, tenantId, requestinfo) {
   });
 }
 
-async function search_payment(consumerCodes, tenantId, requestinfo, bussinessService) {
+async function search_payment(
+  consumerCodes,
+  tenantId,
+  requestinfo,
+  bussinessService,
+  receiptNumbers
+) {
   var params = {
     tenantId: tenantId,
     consumerCodes: consumerCodes,
   };
+  if (receiptNumbers && !consumerCodes) {
+    params = {
+      tenantId: tenantId,
+      receiptNumbers: receiptNumbers,
+    };
+  }
   var searchEndpoint = config.paths.payment_search;
-  searchEndpoint = searchEndpoint.replace(/\$module/g,bussinessService);
+  searchEndpoint = searchEndpoint.replace(/\$module/g, bussinessService);
   if (checkIfCitizen(requestinfo)) {
     var mobileNumber = requestinfo.RequestInfo.userInfo.mobileNumber;
     var userName = requestinfo.RequestInfo.userInfo.userName;

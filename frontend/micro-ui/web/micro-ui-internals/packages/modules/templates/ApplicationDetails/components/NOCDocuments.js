@@ -16,7 +16,7 @@ function SelectDocument({
   nocDocuments
 }) {
   const filteredDocument = nocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0];
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.ULBService.getStateId();
   const [selectedDocument, setSelectedDocument] = useState();
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
@@ -97,7 +97,7 @@ function SelectDocument({
   );
 }
 const NOCDocuments = ({ t, noc, docs, isNoc, applicationData,NOCdata, bpaActionsDetails }) => {
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.ULBService.getStateId();
   const stateId = Digit.ULBService.getStateId();
   const bpaApplicationStatus = applicationData?.status || "";
   const actions = bpaActionsDetails?.data?.nextActions || [];
