@@ -52,7 +52,6 @@ public class UpdateRequest {
     private String otpReference;
     private Long lastModifiedBy;
     private String tenantId;
-    private String alternatemobilenumber;
 
     private Set<RoleRequest> roles;
 
@@ -99,7 +98,7 @@ public class UpdateRequest {
         this.roles = convertDomainRoleToContract(user.getRoles());
         this.fatherOrHusbandName = user.getGuardian();
         this.uuid = user.getUuid();
-        this.alternatemobilenumber=user.getAlternateMobileNumber();
+        this.altContactNumber =user.getAltContactNumber();
         mapPermanentAddress(user);
         mapCorrespondenceAddress(user);
     }

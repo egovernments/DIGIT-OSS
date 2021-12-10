@@ -437,8 +437,8 @@ public class PropertyService {
 		
 		for(OwnerInfo owner : owners) {
 			
-			if(owner.getAlternatemobilenumber()!=null) {
-			   uuidToAlternateMobileNumber.put(owner.getUuid(), owner.getAlternatemobilenumber());
+			if(owner.getAltContactNumber() !=null) {
+			   uuidToAlternateMobileNumber.put(owner.getUuid(), owner.getAltContactNumber());
 			}
 			else {
 				uuidToAlternateMobileNumber.put(owner.getUuid(), " ");

@@ -145,7 +145,7 @@ public class AuditRepository {
         }
         
 
-        auditInputs.put("alternatemobilenumber", oldUser.getAlternateMobileNumber());
+        auditInputs.put("alternatemobilenumber", oldUser.getAltContactNumber());
 
         
         

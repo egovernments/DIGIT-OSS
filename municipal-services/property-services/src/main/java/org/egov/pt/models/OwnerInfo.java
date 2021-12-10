@@ -116,7 +116,6 @@ public class OwnerInfo extends User {
 		this.setIdentificationMark(user.getIdentificationMark());
 		this.setPhoto(user.getPhoto());
 		this.setTenantId(user.getTenantId());
-		this.setAlternatemobilenumber(user.getAlternatemobilenumber());
 	}
 
 	@Builder()
@@ -129,12 +128,12 @@ public class OwnerInfo extends User {
 					 String createdBy, Long createdDate, String lastModifiedBy, Long lastModifiedDate, String tenantId,
 					 String ownerInfoUuid, String mobileNumber2, String gender2, String fatherOrHusbandName2,
 					 String correspondenceAddress2, Boolean isPrimaryOwner, Double ownerShipPercentage, String ownerType,
-					 String institutionId, Status status, List<Document> documents, Relationship relationship, String alternatemobilenumber) {
+					 String institutionId, Status status, List<Document> documents, Relationship relationship) {
 		super(id, uuid, userName, password, salutation, name, gender, mobileNumber, emailId, altContactNumber, pan,
 				aadhaarNumber, permanentAddress, permanentCity, permanentPincode, correspondenceCity,
 				correspondencePincode, correspondenceAddress, active, dob, pwdExpiryDate, locale, type, signature,
 				accountLocked, roles, fatherOrHusbandName, bloodGroup, identificationMark, photo, createdBy,
-				createdDate, lastModifiedBy, lastModifiedDate, tenantId,alternatemobilenumber);
+				createdDate, lastModifiedBy, lastModifiedDate, tenantId);
 		this.ownerInfoUuid = ownerInfoUuid;
 		mobileNumber = mobileNumber2;
 		gender = gender2;
@@ -160,7 +159,7 @@ public class OwnerInfo extends User {
 				ownerInfo.getPwdExpiryDate(), ownerInfo.getLocale(), ownerInfo.getType(), ownerInfo.getSignature(),
 				ownerInfo.getAccountLocked(), ownerInfo.getRoles(), ownerInfo.getFatherOrHusbandName(), ownerInfo.getBloodGroup(),
 				ownerInfo.getIdentificationMark(), ownerInfo.getPhoto(), ownerInfo.getCreatedBy(), ownerInfo.getCreatedDate(),
-				ownerInfo.getLastModifiedBy(), ownerInfo.getLastModifiedDate(), ownerInfo.getTenantId(),ownerInfo.getAlternatemobilenumber());
+				ownerInfo.getLastModifiedBy(), ownerInfo.getLastModifiedDate(), ownerInfo.getTenantId());
 
 		this.ownerInfoUuid = ownerInfo.getOwnerInfoUuid();
 		this.fatherOrHusbandName = ownerInfo.getFatherOrHusbandName();

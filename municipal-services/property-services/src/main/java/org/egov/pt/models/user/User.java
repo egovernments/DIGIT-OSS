@@ -200,12 +200,6 @@ public class User   {
         @JsonProperty("tenantId")
         private String tenantId;
         
-        @Size(max=50)
-        @SafeHtml
-        @JsonProperty("alternatemobilenumber")
-        private String alternatemobilenumber;
-
-
         public User addRolesItem(Role rolesItem) {
             if (this.roles == null) {
             this.roles = new ArrayList<>();

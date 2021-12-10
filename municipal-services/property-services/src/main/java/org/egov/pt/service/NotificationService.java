@@ -497,8 +497,8 @@ public class NotificationService {
 		
 		property.getOwners().forEach(owner -> {
 
-			if(owner.getAlternatemobilenumber()!=null && !uuidToAlternateMobileNumber.get(owner.getUuid()).equalsIgnoreCase(owner.getAlternatemobilenumber()) ) {	
-				String customizedMsg = msg.replace(PT_OWNER_NAME,owner.getName()).replace(PT_ALTERNATE_NUMBER, owner.getAlternatemobilenumber());
+			if(owner.getAltContactNumber() !=null && !uuidToAlternateMobileNumber.get(owner.getUuid()).equalsIgnoreCase(owner.getAltContactNumber()) ) {	
+				String customizedMsg = msg.replace(PT_OWNER_NAME,owner.getName()).replace(PT_ALTERNATE_NUMBER, owner.getAltContactNumber());
 				Map<String, String> mobileNumberToOwner = new HashMap<>();
 				
 				mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());

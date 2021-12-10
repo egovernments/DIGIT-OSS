@@ -51,7 +51,7 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
                         .createdDate(rs.getTimestamp("createddate")).guardian(rs.getString("guardian")).signature(rs.getString("signature"))
                         .accountLocked(rs.getBoolean("accountlocked")).photo(rs.getString("photo"))
                         .identificationMark(rs.getString("identificationmark")).uuid(rs.getString("uuid"))
-                        .accountLockedDate(rs.getLong("accountlockeddate")).alternateMobileNumber(rs.getString("alternatemobilenumber"))
+                        .accountLockedDate(rs.getLong("accountlockeddate"))
                         .build();
 
                 for (UserType type : UserType.values()) {
