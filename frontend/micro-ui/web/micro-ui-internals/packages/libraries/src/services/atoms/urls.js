@@ -65,6 +65,7 @@ const Urls = {
     pt_calculation_estimate: "/pt-calculator-v2/propertytax/v2/_estimate",
     assessment_create: "/property-services/assessment/_create",
     assessment_search: "/property-services/assessment/_search",
+    payment_search: "/collection-services/payments/PT/_search"
   },
 
   dss: {

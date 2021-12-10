@@ -71,6 +71,15 @@ export const PTService = {
       userService: true,
       params: { tenantId, ...filters },
     }),
+  paymentsearch: ({ tenantId, filters, auth }) =>
+    Request({
+      url: Urls.pt.payment_search,
+      useCache: false,
+      method: "POST",
+      auth: auth === false ? auth : true,
+      userService: auth === false ? auth : true,
+      params: { tenantId, ...filters },
+    }),
 };
 
 // export const PTService = {

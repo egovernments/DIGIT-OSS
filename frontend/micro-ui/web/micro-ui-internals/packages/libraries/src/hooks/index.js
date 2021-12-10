@@ -78,6 +78,7 @@ import usePropertyAssessment from "./pt/usePropertyAssessment";
 import usePtCalculationEstimate from "./pt/usePtCalculationEstimate";
 import useGenderMDMS from "./pt/useGenderMDMS";
 import usePTGenderMDMS from "./pt/usePTGenderMDMS";
+import useMyPropertyPayments from "./pt/useMyPropertyPayments";
 
 import useDssMdms from "./dss/useMDMS";
 import useDashboardConfig from "./dss/useDashboardConfig";
@@ -226,6 +227,7 @@ const pt = {
   usePtCalculationEstimate,
   useGenderMDMS,
   usePTGenderMDMS,
+  useMyPropertyPayments,
 };
 
 const dss = {

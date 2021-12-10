@@ -858,6 +858,25 @@ export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   return str;
 };
 
+const downloadPdf = (blob, fileName) => {
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+};
+
+export const downloadReceipt = async (consumerCode, tenantId, businessService, pdfKey = "consolidatedreceipt") => {
+  tenantId = tenantId ? tenantId : Digit.ULBService.getCurrentTenantId();
+  const response = await Digit.ReceiptsService.receipt_download(businessService, consumerCode, tenantId, pdfKey);
+  const responseStatus = parseInt(response.status, 10);
+  if (responseStatus === 201 || responseStatus === 200) {
+    downloadPdf(new Blob([response.data], { type: "application/pdf" }), `consumer-${consumerCode}.pdf`);
+  }
+};
+
 export const checkIsAnArray = (obj = []) => {
   return obj && Array.isArray(obj) ? true : false;
 };
