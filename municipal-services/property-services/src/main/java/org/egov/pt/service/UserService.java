@@ -491,7 +491,7 @@ public class UserService {
 			
 			for (OwnerInfo existingUser : existingUsersFromService) {
 				if(existingUser.getUuid().equals(ownerFromRequest.getUuid())) {
-					ownerFromRequest.setAlternatemobilenumber(owner.getAlternatemobilenumber());
+					ownerFromRequest.setAlternateMobileNumber(owner.getAlternateMobileNumber());
 					userDetailResponse = updateExistingUser(property, requestInfo, role, ownerFromRequest, existingUser);
 					break;
 				}

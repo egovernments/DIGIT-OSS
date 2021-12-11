@@ -289,7 +289,7 @@ public class UserRepository {
             updateuserInputs.put("Type", oldUser.getType().toString());
         }
 
-        updateuserInputs.put("alternatemobilenumber", user.getAlternateMobileNumber());
+        updateuserInputs.put("alternateMobileNumber", user.getAlternateMobileNumber());
 
         updateuserInputs.put("LastModifiedDate", new Date());
         updateuserInputs.put("LastModifiedBy", userId );
@@ -537,7 +537,7 @@ public class UserRepository {
         userInputs.put("lastmodifieddate", entityUser.getLastModifiedDate());
         userInputs.put("createdby", entityUser.getLoggedInUserId());
         userInputs.put("lastmodifiedby", entityUser.getLoggedInUserId());
-        userInputs.put("alternatemobilenumber", entityUser.getAlternateMobileNumber());
+        userInputs.put("alternateMobileNumber", entityUser.getAlternateMobileNumber());
 
         namedParameterJdbcTemplate.update(userTypeQueryBuilder.getInsertUserQuery(), userInputs);
         return entityUser;

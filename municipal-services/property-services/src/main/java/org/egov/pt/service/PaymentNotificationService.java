@@ -131,8 +131,8 @@ public class PaymentNotificationService {
             Set<String> mobileNumbers = new HashSet<>();
             property.getOwners().forEach(owner -> {
                 mobileNumbers.add(owner.getMobileNumber());
-                if (owner.getAlternatemobilenumber()!= null) {
-                	mobileNumbers.add(owner.getAlternatemobilenumber());
+                if (owner.getAlternateMobileNumber()!= null) {
+                	mobileNumbers.add(owner.getAlternateMobileNumber());
                 }
             });
 
@@ -228,8 +228,8 @@ public class PaymentNotificationService {
             Set<String> mobileNumbers = new HashSet<>();
             property.getOwners().forEach(owner -> {
                 mobileNumbers.add(owner.getMobileNumber());
-                if (owner.getAlternatemobilenumber()!= null) {
-                	mobileNumbers.add(owner.getAlternatemobilenumber());
+                if (owner.getAlternateMobileNumber()!= null) {
+                	mobileNumbers.add(owner.getAlternateMobileNumber());
                 }
             });
 

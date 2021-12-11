@@ -119,8 +119,8 @@ public class AssessmentNotificationService {
         property.getOwners().forEach(owner -> {
             if(owner.getMobileNumber()!=null)
                 mobileNumberToOwner.put(owner.getMobileNumber(),owner.getName());
-            if(owner.getAlternatemobilenumber() !=null && !owner.getAlternatemobilenumber().equalsIgnoreCase(owner.getMobileNumber()) ) {
-            	mobileNumberToOwner.put(owner.getAlternatemobilenumber() ,owner.getName());
+            if(owner.getAlternateMobileNumber() !=null && !owner.getAlternateMobileNumber().equalsIgnoreCase(owner.getMobileNumber()) ) {
+            	mobileNumberToOwner.put(owner.getAlternateMobileNumber() ,owner.getName());
             }
         });
         

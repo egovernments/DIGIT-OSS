@@ -48,7 +48,7 @@ public class UserRequest {
     private String mobileNumber;
     
     @Pattern(regexp = UserServiceConstants.PATTERN_MOBILE)
-    private String alternatemobilenumber;
+    private String alternateMobileNumber;
 
     @Email
     @Size(max = 128)
@@ -176,7 +176,7 @@ public class UserRequest {
         this.fatherOrHusbandName = user.getGuardian();
         this.relationship = user.getGuardianRelation();
         this.uuid = user.getUuid();
-        this.alternatemobilenumber=user.getAlternateMobileNumber();
+        this.alternateMobileNumber=user.getAlternateMobileNumber();
         mapPermanentAddress(user);
         mapCorrespondenceAddress(user);
     }
@@ -244,7 +244,7 @@ public class UserRequest {
                 .permanentAddress(toDomainPermanentAddress())
                 .correspondenceAddress(toDomainCorrespondenceAddress())
                 .guardian(fatherOrHusbandName)
-                .guardianRelation(relationship).alternateMobileNumber(this.alternatemobilenumber)
+                .guardianRelation(relationship).alternateMobileNumber(this.alternateMobileNumber)
                 .build();
     }
 

@@ -834,8 +834,8 @@ public class PropertyValidator {
 
 		List <String> alternateNumbersinRequest = new ArrayList<String>();
 		for(OwnerInfo owner : property.getOwners()) {
-			if(owner.getAlternatemobilenumber()!=null) {
-				alternateNumbersinRequest.add(owner.getAlternatemobilenumber());
+			if(owner.getAlternateMobileNumber()!=null) {
+				alternateNumbersinRequest.add(owner.getAlternateMobileNumber());
 			}
 		}
 		
@@ -848,13 +848,13 @@ public class PropertyValidator {
 		Map<String, String> userToAlternateNumberMap = new HashMap<String,String>(); 
 		
 		for(OwnerInfo owner : propertyFromSearch.getOwners()) {
-			userToAlternateNumberMap.put(owner.getUuid(), owner.getAlternatemobilenumber());
+			userToAlternateNumberMap.put(owner.getUuid(), owner.getAlternateMobileNumber());
 		}
 		
 		boolean isAlternateNumberSame = true;
 		
 		for(OwnerInfo owner : property.getOwners()) {
-			if(userToAlternateNumberMap.get(owner.getUuid())!=null && userToAlternateNumberMap.get(owner.getUuid()).equals(owner.getAlternatemobilenumber()) ) {
+			if(userToAlternateNumberMap.get(owner.getUuid())!=null && userToAlternateNumberMap.get(owner.getUuid()).equals(owner.getAlternateMobileNumber())) {
 					isAlternateNumberSame = true;
 			}
 			
@@ -875,7 +875,7 @@ public class PropertyValidator {
 			
 			else {
 				
-				if(owner.getMobileNumber().equals(owner.getAlternatemobilenumber())) {
+				if(owner.getMobileNumber().equals(owner.getAlternateMobileNumber())) {
 					throw new CustomException("EG_PT_ALTERNATE_EXISTS", "The alternate mobile number should not be same as primary number");
 				}
 			}

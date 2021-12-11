@@ -166,17 +166,11 @@ public class UserTypeQueryBuilder {
 //            preparedStatementValues.add(userSearchCriteria.getAadhaarNumber().trim());
 //        }
 
-        if (userSearchCriteria.getMobileNumber() != null && userSearchCriteria.getAlternatemobilenumber()!=null) {
+        if (userSearchCriteria.getMobileNumber() != null ) {
             isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
             selectQuery.append(" ( userdata.mobilenumber = ? OR ");
             preparedStatementValues.add(userSearchCriteria.getMobileNumber().trim());
             selectQuery.append(" userdata.alternatemobilenumber = ? )");
-            preparedStatementValues.add(userSearchCriteria.getAlternatemobilenumber().trim());
-        }
-        
-        else if(userSearchCriteria.getMobileNumber() != null) {
-        	isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
-            selectQuery.append(" userdata.mobilenumber = ? ");
             preparedStatementValues.add(userSearchCriteria.getMobileNumber().trim());
         }
 
@@ -288,7 +282,7 @@ public class UserTypeQueryBuilder {
         return "insert into eg_user (id,uuid,tenantid,salutation,dob,locale,username,password,pwdexpirydate,mobilenumber,altcontactnumber,emailid,active,name,gender,pan,aadhaarnumber,"
                 + "type,guardian,guardianrelation,signature,accountlocked,bloodgroup,photo,identificationmark,createddate,lastmodifieddate,createdby,lastmodifiedby,alternatemobilenumber) values (:id,:uuid,:tenantid,:salutation,"
                 + ":dob,:locale,:username,:password,:pwdexpirydate,:mobilenumber,:altcontactnumber,:emailid,:active,:name,:gender,:pan,:aadhaarnumber,:type,:guardian,:guardianrelation,:signature,"
-                + ":accountlocked,:bloodgroup,:photo,:identificationmark,:createddate,:lastmodifieddate,:createdby,:lastmodifiedby,:alternatemobilenumber) ";
+                + ":accountlocked,:bloodgroup,:photo,:identificationmark,:createddate,:lastmodifieddate,:createdby,:lastmodifiedby,:alternateMobileNumber) ";
     }
 
     public String getUpdateUserQuery() {
@@ -296,7 +290,7 @@ public class UserTypeQueryBuilder {
                 + "type=:Type,guardian=:Guardian,guardianrelation=:GuardianRelation,signature=:Signature," +
                 "accountlocked=:AccountLocked, accountlockeddate=:AccountLockedDate, bloodgroup=:BloodGroup," +
                 "photo=:Photo, identificationmark=:IdentificationMark,lastmodifieddate=:LastModifiedDate," +
-                "lastmodifiedby=:LastModifiedBy, alternatemobilenumber=:alternatemobilenumber where username=:username and tenantid=:tenantid and type=:type";
+                "lastmodifiedby=:LastModifiedBy, alternatemobilenumber=:alternateMobileNumber where username=:username and tenantid=:tenantid and type=:type";
     }
 
 
