@@ -1,6 +1,13 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.1.7 - 2021-12-10
+- Added provision to send dues notifications to owner's alternate number.
+- Addded provision to send payment notifications to owner's alternate mobile number and payer's mobile number
+- Added feature to update the owner's primary mobile number, and send notification
+- Added secondary mobile number feature
+- Implemented property search using alternate numbers
+
 ## 1.1.6 - 2021-07-23
 
 - Added fuzzy search functionality

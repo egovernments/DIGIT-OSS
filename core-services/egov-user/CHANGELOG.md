@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.2.6 - 2021-12-10
+- Added alternate mobile number for user
+- Implemented search using alternate mobile number
+- Implemented audit trail
+
 ## 1.2.5 - 2021-07-26
 - Added OTHERS as one of the gender option values
 - Allowed names with apostrophe symbol

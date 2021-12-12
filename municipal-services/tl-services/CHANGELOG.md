@@ -2,6 +2,14 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+#1.1.6 - 2021-12-10
+
+- Configured reminder periods from mdms
+- Implemented count feature to count the search results
+- Modified the search api to show only those applications which are to be renewed.
+- Added different state for manually expired licenses
+- Added different state for cancelled licenses
+
 ## 1.1.5 - 2021-07-23
 
 - Fixed validation for TL Renewal
