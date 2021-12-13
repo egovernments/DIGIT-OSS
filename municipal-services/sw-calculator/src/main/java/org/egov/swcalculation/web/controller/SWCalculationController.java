@@ -2,17 +2,15 @@ package org.egov.swcalculation.web.controller;
 
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.egov.swcalculation.web.models.AdhocTaxReq;
-import org.egov.swcalculation.web.models.Calculation;
-import org.egov.swcalculation.web.models.CalculationReq;
-import org.egov.swcalculation.web.models.CalculationRes;
-import org.egov.swcalculation.web.models.DemandResponse;
-import org.egov.swcalculation.web.models.GetBillCriteria;
-import org.egov.swcalculation.web.models.RequestInfoWrapper;
+import org.egov.common.contract.request.RequestInfo;
+import org.egov.swcalculation.service.PaymentNotificationService;
+import org.egov.swcalculation.web.models.*;
 import org.egov.swcalculation.service.DemandService;
 import org.egov.swcalculation.service.SWCalculationService;
 import org.egov.swcalculation.service.SWCalculationServiceImpl;
@@ -20,11 +18,7 @@ import org.egov.swcalculation.util.ResponseInfoFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -48,6 +42,7 @@ public class SWCalculationController {
 	
 	@Autowired
 	private SWCalculationServiceImpl sWCalculationServiceImpl;
+
 	
 	@PostMapping("/_calculate")
 	public ResponseEntity<CalculationRes> calculate(@RequestBody @Valid CalculationReq calculationReq) {

@@ -18,22 +18,8 @@ import org.egov.swcalculation.repository.SewerageCalculatorDao;
 import org.egov.swcalculation.util.CalculatorUtils;
 import org.egov.swcalculation.util.SWCalculationUtil;
 import org.egov.swcalculation.validator.SWCalculationWorkflowValidator;
-import org.egov.swcalculation.web.models.Calculation;
-import org.egov.swcalculation.web.models.CalculationCriteria;
-import org.egov.swcalculation.web.models.CalculationReq;
-import org.egov.swcalculation.web.models.Demand;
+import org.egov.swcalculation.web.models.*;
 import org.egov.swcalculation.web.models.Demand.StatusEnum;
-import org.egov.swcalculation.web.models.DemandDetail;
-import org.egov.swcalculation.web.models.DemandDetailAndCollection;
-import org.egov.swcalculation.web.models.DemandRequest;
-import org.egov.swcalculation.web.models.DemandResponse;
-import org.egov.swcalculation.web.models.GetBillCriteria;
-import org.egov.swcalculation.web.models.Property;
-import org.egov.swcalculation.web.models.RequestInfoWrapper;
-import org.egov.swcalculation.web.models.SewerageConnection;
-import org.egov.swcalculation.web.models.SewerageConnectionRequest;
-import org.egov.swcalculation.web.models.TaxHeadEstimate;
-import org.egov.swcalculation.web.models.TaxPeriod;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -95,6 +81,9 @@ public class DemandService {
     
     @Autowired
 	private SWCalculationWorkflowValidator swCalulationWorkflowValidator;
+
+	@Autowired
+	private PaymentNotificationService paymentNotificationService;
 
 	/**
 	 * Creates or updates Demand
@@ -165,6 +154,7 @@ public class DemandService {
 	private List<Demand> createDemand(RequestInfo requestInfo, List<Calculation> calculations,
 			Map<String, Object> masterMap,boolean isForConnectionNO) {
 		List<Demand> demands = new LinkedList<>();
+		Set<String> sewerageConnectionIds = new HashSet<>();
 		for (Calculation calculation : calculations) {
 
 			SewerageConnection connection = calculation.getSewerageConnection();
@@ -181,6 +171,7 @@ public class DemandService {
 			Property property = sWCalculationUtil.getProperty(sewerageConnectionRequest);
 			
 			String consumerCode = isForConnectionNO ?  calculation.getConnectionNo() : calculation.getApplicationNO();
+			sewerageConnectionIds.add(consumerCode);
 			User owner = property.getOwners().get(0).toCommonUser();
 			if (!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders())) {
 				owner = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).toCommonUser();
@@ -211,15 +202,19 @@ public class DemandService {
 					.status(StatusEnum.valueOf("ACTIVE")).billExpiryTime(expiryDate).build());
 		}
 		log.info("Demand Object" + demands.toString());
-		List<Demand> demandRes = demandRepository.saveDemand(requestInfo, demands);
+		DemandNotificationObj notificationObj = DemandNotificationObj.builder().requestInfo(requestInfo).tenantId(calculations.get(0).getTenantId())
+				.sewerageConnetionIds(sewerageConnectionIds).billingCycle((String) masterMap.get(SWCalculationConstant.Billing_Cycle_String)).isSuccess(false).build();
+		List<Demand> demandRes = demandRepository.saveDemand(requestInfo, demands,notificationObj);
 		if(isForConnectionNO)
-			fetchBill(demandRes, requestInfo);
+			fetchBill(demandRes, requestInfo,masterMap);
 		return demandRes;
 	}
 	
 	
-	public boolean fetchBill(List<Demand> demandResponse, RequestInfo requestInfo) {
+	public boolean fetchBill(List<Demand> demandResponse, RequestInfo requestInfo,Map<String, Object> masterMap) {
 		boolean notificationSent = false;
+		List<Demand> errorMap = new ArrayList<>();
+		int successCount=0;
 		for (Demand demand : demandResponse) {
 			try {
 				Object result = serviceRequestRepository.fetchResult(calculatorUtils.getFetchBillURL(demand.getTenantId(), demand.getConsumerCode()),
@@ -229,9 +224,24 @@ public class DemandService {
 				billResponse.put("billResponse", result);
 				producer.push(configs.getPayTriggers(), billResponse);
 				notificationSent = true;
+				successCount++;
+
 			} catch (Exception ex) {
 				log.error("Fetch Bill Error", ex);
+				errorMap.add(demand);
 			}
+		}
+		String uuid = demandResponse.get(0).getAuditDetails().getCreatedBy();
+		if(errorMap.size() == demandResponse.size())
+		{
+			paymentNotificationService.sendBillNotification(requestInfo,uuid,demandResponse.get(0).getTenantId(),masterMap,false);
+		}
+		else
+		{if(!errorMap.isEmpty())
+		{
+			paymentNotificationService.sendBillNotification(requestInfo,uuid, demandResponse.get(0).getTenantId(), masterMap,false);
+		}
+			paymentNotificationService.sendBillNotification(requestInfo,uuid,demandResponse.get(0).getTenantId(),masterMap,true);
 		}
 		return notificationSent;
 	}
@@ -651,6 +661,7 @@ public class DemandService {
 		if (isCurrentDateIsMatching((String) master.get(SWCalculationConstant.BILLING_CYCLE_CONST), startDay)) {
 			List<String> connectionNos = sewerageCalculatorDao.getConnectionsNoList(tenantId,
 					SWCalculationConstant.nonMeterdConnection);
+			Set<String> sewerageConnetionIds = null;
 			for (String connectionNo : connectionNos) {
 				CalculationCriteria calculationCriteria = CalculationCriteria.builder().tenantId(tenantId)
 						.assessmentYear(estimationService.getAssessmentYear()).connectionNo(connectionNo).build();
@@ -659,7 +670,11 @@ public class DemandService {
 				CalculationReq calculationReq = CalculationReq.builder().calculationCriteria(calculationCriteriaList)
 						.requestInfo(requestInfo).isconnectionCalculation(true).build();
 				kafkaTemplate.send(configs.getCreateDemand(), calculationReq);
+				sewerageConnetionIds.add(connectionNo);
 			}
+			DemandNotificationObj notificationObj = DemandNotificationObj.builder().requestInfo(requestInfo).tenantId(tenantId)
+					.sewerageConnetionIds(sewerageConnetionIds).billingCycle((String) master.get(SWCalculationConstant.Billing_Cycle_String)).isSuccess(true).build();
+			producer.push(configs.getOnDemandSuccess(), notificationObj);
 		}
 	}
 	
