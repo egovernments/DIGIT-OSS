@@ -1,8 +1,9 @@
 package org.egov.waterconnection.util;
 
-import java.util.*;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.Filter;
+import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.mdms.model.MasterDetail;
@@ -11,19 +12,17 @@ import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
-import org.egov.waterconnection.web.models.*;
 import org.egov.waterconnection.producer.WaterConnectionProducer;
 import org.egov.waterconnection.repository.ServiceRequestRepository;
+import org.egov.waterconnection.service.UserService;
+import org.egov.waterconnection.web.models.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-
-import com.jayway.jsonpath.JsonPath;
-
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.*;
 
 import static com.jayway.jsonpath.Criteria.where;
 import static com.jayway.jsonpath.Filter.filter;
@@ -45,7 +44,11 @@ public class NotificationUtil {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	@Autowired
+	private ObjectMapper mapper;
 
+	@Autowired
+	private UserService userService;
 	/**
 	 * Returns the uri for the localization call
 	 * 
@@ -120,7 +123,7 @@ public class NotificationUtil {
 			}
 			for (SMSRequest smsRequest : smsRequestList) {
 				producer.push(config.getSmsNotifTopic(), smsRequest);
-				log.info("Messages: " + smsRequest.getMessage());
+				log.info("SMS Sent! Messages: " + smsRequest.getMessage());
 			}
 		}
 	}
@@ -289,4 +292,6 @@ public class NotificationUtil {
 
 		return mdmsCriteriaReq;
 	}
+
+
 }
