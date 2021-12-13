@@ -105,6 +105,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   dispatch(prepareFinalObject("SewerageConnection",[]));
   dispatch(prepareFinalObject("WaterConnectionOld",[]));
   dispatch(prepareFinalObject("SewerageConnectionOld",[]));
+  localStorage.setItem("WS_ADDITIONAL_DETAILS_FOR_DATA", JSON.stringify({}));
+  localStorage.setItem("IS_WS_ADDITIONAL_DETAILS_FOR_DATA", JSON.stringify(false));
   const queryObj = [
     { key: "businessIds", value: applicationNumber },
     { key: "history", value: true },
@@ -116,6 +118,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
 
   let Response = await getWorkFlowData(queryObj);
   let processInstanceAppStatus = Response.ProcessInstances[0].state.applicationStatus;
+  let nextActions = Response.ProcessInstances[0].nextActions;
   //Search details for given application Number
   if (applicationNumber) {
 
@@ -287,7 +290,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus")
     );
 
-    if (process.env.REACT_APP_NAME !== "Citizen" && processInstanceAppStatus == 'PENDING_FOR_PAYMENT' && (ifUserRoleExists("WS_CEMP") || ifUserRoleExists("SW_CEMP"))) {
+    if (process.env.REACT_APP_NAME !== "Citizen" && processInstanceAppStatus == "PENDING_APPROVAL_FOR_CONNECTION" && nextActions.length > 0) {
       dispatch(
         handleField(
           "search-preview",
@@ -668,11 +671,11 @@ const screenConfig = {
               data.waterSource = getWaterSource(data.waterSource, data.waterSubSource);
               // data.roadCuttingInfo = data.roadCuttingInfos || [];
               // data.roadCuttingInfos = [];
-              let additionalDetailsformdata = JSON.parse(localStorage.getItem("WS_ADDITIONAL_DETAILS"));
-              if(additionalDetailsformdata) {
-                set(data, 'additionalDetails', additionalDetailsformdata );
-                localStorage.removeItem("WS_ADDITIONAL_DETAILS");
-              }
+              // let additionalDetailsformdata = JSON.parse(localStorage.getItem("WS_ADDITIONAL_DETAILS"));
+              // if(additionalDetailsformdata) {
+              //   set(data, 'additionalDetails', additionalDetailsformdata );
+              //   localStorage.removeItem("WS_ADDITIONAL_DETAILS");
+              // }
 
               return data;
             }
@@ -716,10 +719,10 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     payload = [];
     payload = await getSearchResults(queryObjForSearch);
     set(payload, 'WaterConnection[0].service', service);
-    let additionalDetailsformdata = JSON.parse(localStorage.getItem("WS_ADDITIONAL_DETAILS"));
-    if(additionalDetailsformdata) {
-      set(payload, 'WaterConnection[0].additionalDetails', additionalDetailsformdata );
-    }
+    // let additionalDetailsformdata = JSON.parse(localStorage.getItem("WS_ADDITIONAL_DETAILS"));
+    // if(additionalDetailsformdata) {
+    //   set(payload, 'WaterConnection[0].additionalDetails', additionalDetailsformdata );
+    // }
     const convPayload = findAndReplace(payload, "NA", null)
     let queryObjectForEst = [{
       applicationNo: applicationNumber,
