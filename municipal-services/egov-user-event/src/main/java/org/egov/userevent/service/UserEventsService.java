@@ -240,8 +240,33 @@ public class UserEventsService {
 			events = repository.fetchEvents(criteria);
 			totalCount = repository.fetchTotalEventCount(criteria);
 		}
+
+
+		if(requestInfo.getUserInfo().getType().equalsIgnoreCase("SYSTEM")){
+			events = getFilterEventsforOpenSearch(events);
+			totalCount = events.size();
+		}
+
+
 		return EventResponse.builder().responseInfo(responseInfo.createResponseInfoFromRequestInfo(requestInfo, true))
 				.events(events).totalCount(totalCount).build();
+	}
+
+	public List<Event> getFilterEventsforOpenSearch(List<Event> events){
+		List<Event> filterEvents = new ArrayList<>();
+		for(Event event: events){
+			if(event.getEventType().equalsIgnoreCase(UserEventsConstants.MEN_MDMS_EVENTSONGROUND_CODE))
+				filterEvents.add(event);
+			else if(event.getEventType().equalsIgnoreCase(UserEventsConstants.MEN_MDMS_BROADCAST_CODE))
+				filterEvents.add(event);
+			else if(event.getEventType().equalsIgnoreCase(UserEventsConstants.MEN_MDMS_SYSTEMGENERATED_CODE)){
+				if(event.getName().equalsIgnoreCase(UserEventsConstants.SURVEY_EVENT_NAME) || event.getName().equalsIgnoreCase(UserEventsConstants.DOCUMENT_EVENT_NAME))
+					filterEvents.add(event);
+			}
+			else
+				continue;
+		}
+		return filterEvents;
 	}
 
 	/**
