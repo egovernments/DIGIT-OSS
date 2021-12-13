@@ -19,22 +19,8 @@ import org.egov.wscalculation.repository.WSCalculationDao;
 import org.egov.wscalculation.util.CalculatorUtil;
 import org.egov.wscalculation.util.WSCalculationUtil;
 import org.egov.wscalculation.validator.WSCalculationWorkflowValidator;
-import org.egov.wscalculation.web.models.Calculation;
-import org.egov.wscalculation.web.models.CalculationCriteria;
-import org.egov.wscalculation.web.models.CalculationReq;
-import org.egov.wscalculation.web.models.Demand;
+import org.egov.wscalculation.web.models.*;
 import org.egov.wscalculation.web.models.Demand.StatusEnum;
-import org.egov.wscalculation.web.models.DemandDetail;
-import org.egov.wscalculation.web.models.DemandDetailAndCollection;
-import org.egov.wscalculation.web.models.DemandRequest;
-import org.egov.wscalculation.web.models.DemandResponse;
-import org.egov.wscalculation.web.models.GetBillCriteria;
-import org.egov.wscalculation.web.models.Property;
-import org.egov.wscalculation.web.models.RequestInfoWrapper;
-import org.egov.wscalculation.web.models.TaxHeadEstimate;
-import org.egov.wscalculation.web.models.TaxPeriod;
-import org.egov.wscalculation.web.models.WaterConnection;
-import org.egov.wscalculation.web.models.WaterConnectionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -93,6 +79,9 @@ public class DemandService {
     @Autowired
 	private WSCalculationWorkflowValidator wsCalulationWorkflowValidator;
 
+	@Autowired
+	private PaymentNotificationService paymentNotificationService;
+
 	/**
 	 * Creates or updates Demand
 	 * 
@@ -109,7 +98,6 @@ public class DemandService {
 				.get(WSCalculationConstant.BILLING_PERIOD);
 		Long fromDate = (Long) financialYearMaster.get(WSCalculationConstant.STARTING_DATE_APPLICABLES);
 		Long toDate = (Long) financialYearMaster.get(WSCalculationConstant.ENDING_DATE_APPLICABLES);
-		
 		// List that will contain Calculation for new demands
 				List<Calculation> createCalculations = new LinkedList<>();
 		// List that will contain Calculation for old demands
@@ -150,7 +138,7 @@ public class DemandService {
 			createdDemands = createDemand(requestInfo, createCalculations, masterMap, isForConnectionNo);
 
 		if (!CollectionUtils.isEmpty(updateCalculations))
-			createdDemands = updateDemandForCalculation(requestInfo, updateCalculations, fromDate, toDate, isForConnectionNo);
+			createdDemands = updateDemandForCalculation(requestInfo, updateCalculations, fromDate, toDate,isForConnectionNo);
 		return createdDemands;
 	}
 	
@@ -164,6 +152,8 @@ public class DemandService {
 	private List<Demand> createDemand(RequestInfo requestInfo, List<Calculation> calculations,
 			Map<String, Object> masterMap, boolean isForConnectionNO) {
 		List<Demand> demands = new LinkedList<>();
+		Set<String> waterConnectionIds = new HashSet<>();
+
 		for (Calculation calculation : calculations) {
 			WaterConnection connection = calculation.getWaterConnection();
 			if (connection == null) {
@@ -177,6 +167,8 @@ public class DemandService {
 			String tenantId = calculation.getTenantId();
 			String consumerCode = isForConnectionNO ? calculation.getConnectionNo()
 					: calculation.getApplicationNO();
+			waterConnectionIds.add(consumerCode);
+
 			User owner = property.getOwners().get(0).toCommonUser();
 			if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
 				owner = waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0).toCommonUser();
@@ -200,16 +192,18 @@ public class DemandService {
 					: ONE_TIME_FEE_SERVICE_FIELD;
 
 			addRoundOffTaxHead(calculation.getTenantId(), demandDetails);
-
 			demands.add(Demand.builder().consumerCode(consumerCode).demandDetails(demandDetails).payer(owner)
 					.minimumAmountPayable(minimumPayableAmount).tenantId(tenantId).taxPeriodFrom(fromDate)
 					.taxPeriodTo(toDate).consumerType("waterConnection").businessService(businessService)
 					.status(StatusEnum.valueOf("ACTIVE")).billExpiryTime(expiryDate).build());
 		}
+
 		log.info("Demand Object" + demands.toString());
-		List<Demand> demandRes = demandRepository.saveDemand(requestInfo, demands);
+		DemandNotificationObj notificationObj = DemandNotificationObj.builder().requestInfo(requestInfo).tenantId(calculations.get(0).getTenantId())
+				.waterConnectionIds(waterConnectionIds).billingCycle((String) masterMap.get(WSCalculationConstant.Billing_Cycle_String)).isSuccess(false).build();
+		List<Demand> demandRes = demandRepository.saveDemand(requestInfo, demands,notificationObj);
 		if(isForConnectionNO)
-		fetchBill(demandRes, requestInfo);
+		fetchBill(demandRes, requestInfo,masterMap);
 		return demandRes;
 	}
 
@@ -681,6 +675,7 @@ public class DemandService {
 			List<String> connectionNos = waterCalculatorDao.getConnectionsNoList(tenantId,
 					WSCalculationConstant.nonMeterdConnection);
 			String assessmentYear = estimationService.getAssessmentYear();
+			Set<String> waterConnectionIds = null;
 			for (String connectionNo : connectionNos) {
 				CalculationCriteria calculationCriteria = CalculationCriteria.builder().tenantId(tenantId)
 						.assessmentYear(assessmentYear).connectionNo(connectionNo).build();
@@ -690,8 +685,14 @@ public class DemandService {
 						.requestInfo(requestInfo).isconnectionCalculation(true).build();
 				wsCalculationProducer.push(configs.getCreateDemand(), calculationReq);
 				// log.info("Prepared Statement" + calculationRes.toString());
-
+				waterConnectionIds.add(connectionNo);
 			}
+
+			DemandNotificationObj notificationObj = DemandNotificationObj.builder().requestInfo(requestInfo).tenantId(tenantId)
+					.waterConnectionIds(waterConnectionIds).billingCycle((String) master.get(WSCalculationConstant.Billing_Cycle_String)).isSuccess(true).build();
+
+			log.info("pushing -> "+notificationObj.toString());
+		wsCalculationProducer.push(configs.getOnDemandsSaved(), notificationObj);
 		}
 	}
 
@@ -711,8 +712,10 @@ public class DemandService {
 		return true;
 	}
 	
-	public boolean fetchBill(List<Demand> demandResponse, RequestInfo requestInfo) {
+	public boolean fetchBill(List<Demand> demandResponse, RequestInfo requestInfo,Map<String, Object> masterMap) {
 		boolean notificationSent = false;
+		List<Demand> errorMap = new ArrayList<>();
+		int successCount=0;
 		for (Demand demand : demandResponse) {
 			try {
 				Object result = serviceRequestRepository.fetchResult(
@@ -721,11 +724,26 @@ public class DemandService {
 				HashMap<String, Object> billResponse = new HashMap<>();
 				billResponse.put("requestInfo", requestInfo);
 				billResponse.put("billResponse", result);
+				log.info("Result"+result.toString());
 				wsCalculationProducer.push(configs.getPayTriggers(), billResponse);
 				notificationSent = true;
+				successCount++;
 			} catch (Exception ex) {
 				log.error("Fetch Bill Error", ex);
+                errorMap.add(demand);
 			}
+		}
+		String uuid = demandResponse.get(0).getAuditDetails().getCreatedBy();
+		if(errorMap.size() == demandResponse.size())
+		{
+			paymentNotificationService.sendBillNotification(requestInfo,uuid,demandResponse.get(0).getTenantId(),masterMap,false);
+		}
+		else
+		{if(!errorMap.isEmpty())
+			{
+				paymentNotificationService.sendBillNotification(requestInfo,uuid, demandResponse.get(0).getTenantId(), masterMap,false);
+			}
+			paymentNotificationService.sendBillNotification(requestInfo,uuid,demandResponse.get(0).getTenantId(),masterMap,true);
 		}
 		return notificationSent;
 	}

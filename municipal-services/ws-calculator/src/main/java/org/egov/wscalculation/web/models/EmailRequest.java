@@ -2,6 +2,7 @@ package org.egov.wscalculation.web.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.egov.common.contract.request.RequestInfo;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -9,18 +10,6 @@ import lombok.*;
 @Setter
 @Getter
 public class EmailRequest {
-    private String email;
-    private String subject;
-    private String body;
-    @JsonProperty("isHTML")
-    private boolean isHTML;
-
-    public Email toDomain() {
-        return Email.builder()
-				.toAddress(email)
-				.subject(subject)
-				.body(body)
-				.html(isHTML)
-				.build();
-    }
+    private RequestInfo requestInfo;
+    private Email email;
 }

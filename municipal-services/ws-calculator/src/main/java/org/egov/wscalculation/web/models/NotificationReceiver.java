@@ -19,5 +19,6 @@ public class NotificationReceiver {
 	private String serviceName;
 	private String ulbName;
 	private String mobileNumber;
+	private String emailId;
 	
 }
