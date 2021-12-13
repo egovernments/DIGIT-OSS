@@ -108,6 +108,12 @@
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.hashids/hashids -->
+		<dependency>
+			<groupId>org.hashids</groupId>
+			<artifactId>hashids</artifactId>
+			<version>1.0.3</version>
+		</dependency>
 		
 	</dependencies>
 	<repositories>
