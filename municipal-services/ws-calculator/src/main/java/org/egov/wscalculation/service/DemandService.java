@@ -724,7 +724,7 @@ public class DemandService {
 				HashMap<String, Object> billResponse = new HashMap<>();
 				billResponse.put("requestInfo", requestInfo);
 				billResponse.put("billResponse", result);
-				log.info("Result"+result.toString());
+//				log.info("Result"+result.toString());
 				wsCalculationProducer.push(configs.getPayTriggers(), billResponse);
 				notificationSent = true;
 				successCount++;
