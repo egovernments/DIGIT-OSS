@@ -52,8 +52,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -65,7 +65,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class SegregatedToilet extends FeatureProcess {
 
-    private static final Logger LOG = Logger.getLogger(SegregatedToilet.class);
     private static final String RULE_59_10  = "59-10-i";
     public static final String SEGREGATEDTOILET_DESCRIPTION = "Num. of segregated toilets";
     public static final String SEGREGATEDTOILET_DIMENSION_DESCRIPTION = "Segregated toilet distance from main entrance";
@@ -94,8 +93,11 @@ public class SegregatedToilet extends FeatureProcess {
         BigDecimal maxHeightOfBuilding = BigDecimal.ZERO;
         BigDecimal maxNumOfFloorsOfBuilding = BigDecimal.ZERO;
 
-        if (pl.getSegregatedToilet() != null && !pl.getSegregatedToilet().getDistancesToMainEntrance().isEmpty())
-            minDimension = pl.getSegregatedToilet().getDistancesToMainEntrance().stream().reduce(BigDecimal::min).get();
+        if (pl.getSegregatedToilet() != null && !pl.getSegregatedToilet().getDistancesToMainEntrance().isEmpty()) {
+        	Optional<BigDecimal> distances = pl.getSegregatedToilet().getDistancesToMainEntrance().stream().reduce(BigDecimal::min);
+        	if(distances.isPresent())
+        		minDimension = distances.get();
+        }
 
         for (Block b : pl.getBlocks()) {
             if (b.getBuilding().getBuildingHeight() != null) {
@@ -111,8 +113,7 @@ public class SegregatedToilet extends FeatureProcess {
 
         if (pl.getVirtualBuilding() != null && (pl.getVirtualBuilding().getMostRestrictiveFarHelper() != null
                 && pl.getVirtualBuilding().getMostRestrictiveFarHelper().getType() != null
-                && ((StringUtils
-                        .isNotBlank(pl.getVirtualBuilding().getMostRestrictiveFarHelper().getType().getCode())
+                && ((StringUtils.isNotBlank(pl.getVirtualBuilding().getMostRestrictiveFarHelper().getType().getCode())
                 && DxfFileConstants.A
                         .equals(pl.getVirtualBuilding().getMostRestrictiveFarHelper().getType().getCode())
                 && maxHeightOfBuilding.compareTo(new BigDecimal(15)) >= 0)
@@ -157,7 +158,7 @@ public class SegregatedToilet extends FeatureProcess {
             } else {
                 details.put(DESCRIPTION, SEGREGATEDTOILET_DIMENSION_DESCRIPTION);
                 details.put(REQUIRED, ">= 200");
-                details.put(PROVIDED, minDimension.toString());
+                details.put(PROVIDED, minDimension == null ? "" : minDimension.toString());
                 details.put(STATUS, Result.Not_Accepted.getResultVal());
                 scrutinyDetail.getDetail().add(details);
                 pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);

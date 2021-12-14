@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,9 +54,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class Util {
-    public static final int COMPARE_WITH_2_PERCENT_ERROR_DIGITS = 2;
+    private static final String IS_NOT_AS_PER_DEFINED_STANDARD = " is not as per defined standard.";
+	private static final String DIMENSION = "Dimension ";
+	private static final String MARKED_IN_LAYER = " marked in layer ";
+	private static final String REG_EXP = "[^\\d.]";
+	public static final int COMPARE_WITH_2_PERCENT_ERROR_DIGITS = 2;
     private static final int DECIMALDIGITS = 10;
-    private static String FLOOR_NAME_PREFIX = "FLOOR_";
+    private static final String FLOOR_NAME_PREFIX = "FLOOR_";
     static final Logger LOG = Logger.getLogger(Util.class);
     private static final BigDecimal ONEHUNDREDFIFTY = BigDecimal.valueOf(150);
     private static final BigDecimal FIFTY = BigDecimal.valueOf(50);
@@ -263,10 +268,8 @@ public class Util {
     public static List<BigDecimal> getListOfDimensionOtherThanSpecifiedColourCode(DXFDocument dxfDocument, String name,
             int colourCode, PlanDetail planDetail) {
 
-        if (dxfDocument == null)
-            return null;
-        if (name == null)
-            return null;
+        if (dxfDocument == null || name == null)
+            return Collections.emptyList();
         name = name.toUpperCase();
         List<BigDecimal> values = new ArrayList<>();
 
@@ -292,7 +295,7 @@ public class Util {
         if (line.getDXFDimensionStyle() != null)
             LOG.info("DIM Style Name=" + line.getDXFDimensionStyle().getName());
         DXFBlock dxfBlock = dxfDocument.getDXFBlock(dimensionBlock);
-        if (!planDetail.getStrictlyValidateDimension()) {
+        if (Boolean.FALSE.equals(planDetail.getStrictlyValidateDimension())) {
             Iterator dxfEntitiesIterator = dxfBlock.getDXFEntitiesIterator();
             while (dxfEntitiesIterator.hasNext()) {
                 DXFEntity e = (DXFEntity) dxfEntitiesIterator.next();
@@ -307,7 +310,7 @@ public class Util {
                     }
                     
                     if (planDetail.getDrawingPreference() != null &&
-                            org.egov.infra.utils.StringUtils.isNotBlank(planDetail.getDrawingPreference().getUom())
+                            StringUtils.isNotBlank(planDetail.getDrawingPreference().getUom())
                             && (DxfFileConstants.INCH_UOM.equalsIgnoreCase(planDetail.getDrawingPreference().getUom())
                                     || DxfFileConstants.FEET_UOM.equalsIgnoreCase(planDetail.getDrawingPreference().getUom()))
                             && StringUtils.isNotBlank(text2)) {
@@ -321,11 +324,11 @@ public class Util {
                             if (length >= 1) {
                                 int index = length - 1;
                                 text2 = textSplit[index];
-                                text2 = text2.replaceAll("[^\\d.]", "");
+                                text2 = text2.replaceAll(REG_EXP, "");
                             } else
-                                text2 = text2.replaceAll("[^\\d.]", "");
+                                text2 = text2.replaceAll(REG_EXP, "");
                         } else
-                            text2 = text2.replaceAll("[^\\d.]", "");
+                            text2 = text2.replaceAll(REG_EXP, "");
 
                         if (!text2.isEmpty())
                             values.add(BigDecimal.valueOf(Double.parseDouble(text2)));
@@ -341,7 +344,7 @@ public class Util {
                 if (e.getType().equals(DXFConstants.ENTITY_TYPE_LINE)) {
                     DXFLine dxfLine = (DXFLine) e;
                     lines.add(dxfLine);
-                    BigDecimal dub1 = new BigDecimal(dxfLine.getLength());
+                    BigDecimal dub1 = BigDecimal.valueOf(dxfLine.getLength());
                     dub1 = dub1.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS, DcrConstants.ROUNDMODE_MEASUREMENTS);
                     values.add(dub1);
                     LOG.info("line length=" + dxfLine.getLength() + " Layer Name :      " + line.getLayerName() + "Style"
@@ -365,11 +368,11 @@ public class Util {
                         if (length >= 1) {
                             int index = length - 1;
                             text2 = textSplit[index];
-                            text2 = text2.replaceAll("[^\\d.]", "");
+                            text2 = text2.replaceAll(REG_EXP, "");
                         } else
-                            text2 = text2.replaceAll("[^\\d.]", "");
+                            text2 = text2.replaceAll(REG_EXP, "");
                     } else
-                        text2 = text2.replaceAll("[^\\d.]", "");
+                        text2 = text2.replaceAll(REG_EXP, "");
 
                 }
 
@@ -377,7 +380,7 @@ public class Util {
 
             if (values.size() != 3) {
                 planDetail.getErrors().put(layerName + "-" + DcrConstants.DIMENSION_LINES_STANDARD,
-                        "Dimension " + text2 + " marked in layer " + layerName + " is not as per defined standard.");
+                        DIMENSION + text2 + MARKED_IN_LAYER + layerName + IS_NOT_AS_PER_DEFINED_STANDARD);
             }
 
             Iterator itr = values.iterator();
@@ -399,7 +402,6 @@ public class Util {
 
             }
             LOG.error("dimDecimal : " + dimDecimal);
-            // LOG.error("Dimension text : " + text2);
             if (values.size() == 1) {
                 if (values.get(0).compareTo(dimDecimal) == 0) {
                     LOG.debug("Proper Dimension found");
@@ -410,12 +412,12 @@ public class Util {
                     LOG.debug("Proper Dimension found");
                 } else {
                     planDetail.getErrors().put(layerName + "-" + DcrConstants.DIMENSION_EDITED,
-                            "Dimension " + text2 + " marked in layer " + layerName + " is edited.");
+                            DIMENSION + text2 + MARKED_IN_LAYER + layerName + " is edited.");
                 }
             } else {
                 if (!planDetail.getErrors().containsKey(layerName + "-" + DcrConstants.DIMENSION_LINES_STANDARD))
-                    planDetail.getErrors().put(layerName + "-" + DcrConstants.DIMENSION_LINES_STANDARD, "Dimension "
-                            + text2 + " marked in layer " + layerName + " is not as per defined standard.");
+                    planDetail.getErrors().put(layerName + "-" + DcrConstants.DIMENSION_LINES_STANDARD, DIMENSION
+                            + text2 + MARKED_IN_LAYER + layerName + IS_NOT_AS_PER_DEFINED_STANDARD);
             }
         }
     }
@@ -480,7 +482,7 @@ public class Util {
 	                                .divide(new BigDecimal(fractionSplit[1].replaceAll("[^\\d]", "")));
 	                }
                 	else
-                    inch = new BigDecimal(split[1].replaceAll("[^\\d.]", ""));
+                    inch = new BigDecimal(split[1].replaceAll(REG_EXP, ""));
                 }
                 BigDecimal feetToInch = new BigDecimal(split[0]).multiply(BigDecimal.valueOf(12));
                 return feetToInch.add(inch);
@@ -511,10 +513,8 @@ public class Util {
 
     public static List<BigDecimal> getListOfDimensionValueByLayer(PlanDetail planDetail, String name) {
         DXFDocument dxfDocument = planDetail.getDoc();
-        if (dxfDocument == null)
-            return null;
-        if (name == null)
-            return null;
+        if (dxfDocument == null || name == null)
+            return Collections.emptyList();
         name = name.toUpperCase();
         List<BigDecimal> values = new ArrayList<>();
 
@@ -568,7 +568,7 @@ public class Util {
                     layerName = next.getName();
                 }
             }
-            if (!found) {
+            if (Boolean.FALSE.equals(found)) {
                 LOG.error("No Layer Found with name" + layerName);
                 return null;
             }
@@ -763,7 +763,7 @@ public class Util {
         DXFText text = null;
         Map<String, String> planInfoProperties = new HashMap<>();
 
-        if (texts != null && texts.size() > 0) {
+        if (texts != null && !texts.isEmpty()) {
             Iterator iterator = texts.iterator();
             while (iterator.hasNext()) {
                 text = (DXFText) iterator.next();
@@ -771,7 +771,7 @@ public class Util {
                 while (styledParagraphIterator.hasNext()) {
                     StyledTextParagraph styledTextParagraph = (StyledTextParagraph) styledParagraphIterator.next();
                     String[] data = styledTextParagraph.getText().split("=");
-                    System.out.println(styledTextParagraph.getText());
+                    LOG.info(styledTextParagraph.getText());
                     if (data.length == 2)
                         planInfoProperties.put(data[0].trim(), data[1].trim());
                 }
@@ -965,8 +965,8 @@ public class Util {
                                 text2 = next.getText();
                             }
 
-                            if (pl.getDrawingPreference() != null &&
-                                    org.egov.infra.utils.StringUtils.isNotBlank(pl.getDrawingPreference().getUom())
+                            if (pl.getDrawingPreference() != null 
+                            		&& StringUtils.isNotBlank(pl.getDrawingPreference().getUom())
                                     && (DxfFileConstants.INCH_UOM.equalsIgnoreCase(pl.getDrawingPreference().getUom())
                                             || DxfFileConstants.FEET_UOM.equalsIgnoreCase(pl.getDrawingPreference().getUom()))
                                     && StringUtils.isNotBlank(text2)) {
@@ -979,11 +979,11 @@ public class Util {
                                 if (length >= 1) {
                                     int index = length - 1;
                                     text2 = textSplit[index];
-                                    text2 = text2.replaceAll("[^\\d.]", "");
+                                    text2 = text2.replaceAll(REG_EXP, "");
                                 } else
-                                    text2 = text2.replaceAll("[^\\d.]", "");
+                                    text2 = text2.replaceAll(REG_EXP, "");
                             } else
-                                text2 = text2.replaceAll("[^\\d.]", "");
+                                text2 = text2.replaceAll(REG_EXP, "");
 
                             if (!text2.isEmpty())
                                 value = BigDecimal.valueOf(Double.parseDouble(text2));
@@ -1006,8 +1006,6 @@ public class Util {
         if (name == null)
             return null;
         if (dxfDocument == null)
-            return null;
-        if (name == null)
             return null;
 
         name = name.toUpperCase();
@@ -1112,10 +1110,7 @@ public class Util {
         BigDecimal py = BigDecimal.valueOf(point.getY()).setScale(DECIMALDIGITS, BigDecimal.ROUND_DOWN);
         BigDecimal p1x = BigDecimal.valueOf(point1.getX()).setScale(DECIMALDIGITS, BigDecimal.ROUND_DOWN);
         BigDecimal p1y = BigDecimal.valueOf(point1.getY()).setScale(DECIMALDIGITS, BigDecimal.ROUND_DOWN);
-        if (px.compareTo(p1x) == 0 && py.compareTo(p1y) == 0)
-            return true;
-        else
-            return false;
+        return px.compareTo(p1x) == 0 && py.compareTo(p1y) == 0;
     }
 
     public static boolean pointsEqualsWith2PercentError(Point point1, Point point) {
@@ -1171,7 +1166,7 @@ public class Util {
 
     public static List<Point> pointsOnPolygon(DXFLWPolyline plotBoundary) {
         if (plotBoundary == null)
-            return null;
+            return Collections.emptyList();
         plotBoundary.getVertexCount();
         List<Point> points = new ArrayList<>();
         Iterator plotBIterator1 = plotBoundary.getVertexIterator();
@@ -1218,7 +1213,8 @@ public class Util {
         // if (polyLine.getVertexCount() == 4 || polyLine.getVertexCount() == 5) {
         if (polyLine.getVertexCount() > 1) {
             Iterator vertexIterator = polyLine.getVertexIterator();
-            Point next = null, first = null;
+            Point next = null;
+            Point first = null;
             List<Double> distances = new ArrayList<>();
             while (vertexIterator.hasNext()) {
                 DXFVertex dxfVertex = (DXFVertex) vertexIterator.next();
@@ -1231,7 +1227,7 @@ public class Util {
                 distances.add(MathUtils.distance(next, p));
                 next = p;
             }
-            if (!pointsEquals(next, first))
+            if (first != null && next != null && !pointsEquals(next, first))
                 distances.add(MathUtils.distance(next, first));
 
             if (!distances.isEmpty()) {
@@ -1488,7 +1484,7 @@ public class Util {
             for (TypicalFloor typicalFloor : block.getTypicalFloor()) {
                 if (typicalFloor.getRepetitiveFloorNos().contains(floor.getNumber()))
                     isTypicalRepititiveFloor = true;
-                if (typicalFloor.getModelFloorNo() == floor.getNumber()) {
+                if (Objects.equals(typicalFloor.getModelFloorNo(), floor.getNumber())) {
                     typicalFlrs.add(floor.getNumber());
                     typicalFlrs.addAll(typicalFloor.getRepetitiveFloorNos());
                     if (!typicalFlrs.isEmpty()) {
@@ -1511,27 +1507,22 @@ public class Util {
     }
 
     public static boolean checkExemptionConditionForBuildingParts(Block blk) {
-        if (blk.getBuilding() != null && blk.getBuilding().getFloorsAboveGround() != null)
-            if (blk.getResidentialBuilding() && blk.getBuilding().getFloorsAboveGround().intValue() <= 3)
-                return true;
-        return false;
+		return blk.getBuilding() != null && blk.getBuilding().getFloorsAboveGround() != null
+				&& Boolean.TRUE.equals(blk.getResidentialBuilding())
+				&& blk.getBuilding().getFloorsAboveGround().intValue() <= 3;
     }
 
     public static boolean checkExemptionConditionForSmallPlotAtBlkLevel(Plot plot, Block blk) {
-        if (plot != null && blk.getBuilding() != null && blk.getBuilding().getFloorsAboveGround() != null)
-            if (blk.getResidentialOrCommercialBuilding() && plot.getSmallPlot()
-                    && blk.getBuilding().getFloorsAboveGround().intValue() <= 3)
-                return true;
-        return false;
+		return plot != null && blk.getBuilding() != null && blk.getBuilding().getFloorsAboveGround() != null
+				&& blk.getResidentialOrCommercialBuilding() && plot.getSmallPlot()
+				&& blk.getBuilding().getFloorsAboveGround().intValue() <= 3;
     }
 
     public static boolean isSmallPlot(PlanDetail pl) {
-        if (pl != null && !pl.getBlocks().isEmpty() && pl.getPlot() != null && pl.getVirtualBuilding() != null)
-            if (checkAnyBlockHasFloorsGreaterThanThree(pl.getBlocks()) == false
-                    && pl.getVirtualBuilding().getResidentialOrCommercialBuilding().equals(Boolean.TRUE)
-                    && pl.getPlot().getSmallPlot().equals(Boolean.TRUE))
-                return true;
-        return false;
+		return pl != null && !pl.getBlocks().isEmpty() && pl.getPlot() != null && pl.getVirtualBuilding() != null
+				&& !checkAnyBlockHasFloorsGreaterThanThree(pl.getBlocks())
+				&& pl.getVirtualBuilding().getResidentialOrCommercialBuilding().equals(Boolean.TRUE)
+				&& pl.getPlot().getSmallPlot().equals(Boolean.TRUE);
     }
 
     public static boolean checkAnyBlockHasFloorsGreaterThanThree(List<Block> blockList) {
