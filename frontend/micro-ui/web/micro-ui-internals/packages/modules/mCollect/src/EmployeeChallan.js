@@ -20,6 +20,7 @@ const EmployeeChallan = (props) => {
   const { url } = useRouteMatch();
   const [isDisplayDownloadMenu, setIsDisplayDownloadMenu] = useState(false);
   const [showToast, setShowToast] = useState(null);
+  const isMobileView = Digit.Utils.browser.isMobile() ? true : false;
 
   useEffect(() => {
     switch (selectedAction) {
@@ -108,7 +109,7 @@ const EmployeeChallan = (props) => {
   return (
     <React.Fragment>
       <div style={{ width: "100%", fontFamily: "calibri", color: "#FF0000", display: "flex", justifyContent: "space-between" }}>
-        <Header>{`${t("CHALLAN_DETAILS")}`} </Header>
+        <Header styles={!isMobileView?{marginLeft:"20px"}:{}}>{`${t("CHALLAN_DETAILS")}`} </Header>
         <div>
           <SubmitBar label={t("TL_DOWNLOAD")} onSubmit={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)} />
           {isDisplayDownloadMenu ? (
