@@ -52,7 +52,29 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
 
   React.useEffect(() => {
     if (formState.isSubmitSuccessful) {
-      reset({ ...searchData, isSubmitSuccessful: false });
+      //reset({ ...searchData, isSubmitSuccessful: false });
+      reset({
+        applicationNo: "",
+        mobileNumber: "",
+        fromDate: "",
+        toDate: "",
+        status: "",
+        offset: 0,
+        limit: 10,
+        sortBy: "commencementDate",
+        sortOrder: "DESC",
+        applicationType: {
+          code: "BUILDING_PLAN_SCRUTINY",
+          i18nKey: "WF_BPA_BUILDING_PLAN_SCRUTINY",
+        },
+        serviceType: {
+          applicationType: ["BUILDING_PLAN_SCRUTINY", "BUILDING_OC_PLAN_SCRUTINY"],
+          code: "NEW_CONSTRUCTION",
+          i18nKey: "BPA_SERVICETYPE_NEW_CONSTRUCTION",
+        },
+        ...searchData,
+        isSubmitSuccessful: false,
+      })
     }
   }, [formState]);
   const columns = useSearchApplicationTableConfig({ t });
@@ -96,6 +118,7 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
   }
 
   useEffect(() => {
+    if(!(getValues("offset") == undefined || getValues("limit") == undefined))
     setCurrPage(getValues("offset") / getValues("limit"));
   }, [getValues("offset"), getValues("limit")]);
 

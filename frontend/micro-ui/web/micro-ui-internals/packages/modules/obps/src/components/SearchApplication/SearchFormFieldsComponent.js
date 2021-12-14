@@ -193,6 +193,7 @@ const SearchFormFieldsComponent = ({ formState, Controller, register, control, t
                 code: "NEW_CONSTRUCTION",
                 i18nKey: "BPA_SERVICETYPE_NEW_CONSTRUCTION",
               },
+              "isSubmitSuccessful":false,
             });
             previousPage();
             // closeMobilePopupModal()

@@ -156,11 +156,11 @@ const ComplaintDetailsPage = (props) => {
             {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
           </Card>
           <Card>{complaintDetails?.service && <WorkflowComponent getWorkFlow={onWorkFlowChange} complaintDetails={complaintDetails} id={id} zoomImage={zoomImage} />}</Card>
-          <Card>
+          {/* <Card>
             <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
             <TextArea value={comment} onChange={(e) => setComment(e.target.value)} name="" />
             <SubmitBar disabled={disableComment || comment.length < 1} onSubmit={submitComment} label={t("CS_PGR_SEND_COMMENT")} />
-          </Card>
+          </Card> */}
           {toast && (
             <Toast
               error={commentError}

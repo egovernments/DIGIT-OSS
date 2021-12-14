@@ -6,7 +6,7 @@ import {
   getCommonSubHeader,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { showHideAdhocPopup } from "../../utils";
+import { showHideAdhocPopup, showHideAdhocPopupAndValues } from "../../utils";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { serviceConst } from "../../../../../ui-utils/commons";
@@ -18,8 +18,6 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { fetchBill, getDescriptionFromMDMS } from "../../../../../ui-utils/commons";
-import { processBillsSearch } from "../../wns/search-preview";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 
@@ -39,59 +37,24 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     }
   }
 
+  localStorage.setItem("WS_ADDITIONAL_DETAILS_FOR_DATA", JSON.stringify(WSRequestBody[0]));
+  localStorage.setItem("IS_WS_ADDITIONAL_DETAILS_FOR_DATA", JSON.stringify(true));
   dispatch(prepareFinalObject("WaterConnection[0]", WSRequestBody[0]));
   dispatch(prepareFinalObject("WaterConnectionTemp[0]", cloneDeep(WSRequestBody[0])));
   set(WSRequestBody[0], "action", "ADHOC");
 
-  // Todo (removed for updating the bills in one time payment)
+  let querObj = [{
+    applicationNo: WSRequestBody[0].applicationNo,
+    tenantId: tenantId,
+  }]
 
-  // let querObj = [{
-  //   applicationNo: WSRequestBody[0].applicationNo,
-  //   tenantId: tenantId,
-  // }]
-
-  // let serviceUrl;
-  // if (WSRequestBody[0].service === serviceConst.WATER) {
-  //   serviceUrl = "ws-calculator/waterCalculator/_estimate";
-  //   querObj[0].waterConnection = WSRequestBody[0];
-  // } else {
-  //   serviceUrl = "sw-calculator/sewerageCalculator/_estimate"
-  //   querObj[0].sewerageConnection = WSRequestBody[0];
-  // }
-
-  // const WSpayload = await httpRequest(
-  //   "post",
-  //   serviceUrl,
-  //   "",
-  //   [],
-  //   {
-  //     isconnectionCalculation: false,
-  //     CalculationCriteria: querObj
-  //   }
-  // );
-
-  // WSpayload.Calculation[0].billSlabData = _.groupBy(WSpayload.Calculation[0].taxHeadEstimates, 'category');
-
-  // const billPayload = await createEstimateData(
-  //   WSpayload.Calculation[0],
-  //   "dataCalculation",
-  //   dispatch,
-  //   window.location.href,
-  //   showHideAdhocPopup(state, dispatch, "search-preview", false),
-  // );
-
-  const demandId = get(
-    state.screenConfiguration.preparedFinalObject,
-    "dataCalculation.billDetails[0].demandId"
-  );
-
-  let serviceUrl,httpmethod;
+  let serviceUrl;
   if (WSRequestBody[0].service === serviceConst.WATER) {
-    serviceUrl = "ws-calculator/waterCalculator/_applyAdhocTax";
-    httpmethod = "post";
+    serviceUrl = "ws-calculator/waterCalculator/_estimate";
+    querObj[0].waterConnection = WSRequestBody[0];
   } else {
-    serviceUrl = "sw-calculator/sewerageCalculator/_applyAdhocTax"
-    httpmethod = "get";
+    serviceUrl = "sw-calculator/sewerageCalculator/_estimate"
+    querObj[0].sewerageConnection = WSRequestBody[0];
   }
 
   const WSpayload = await httpRequest(
@@ -100,61 +63,20 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     "",
     [],
     {
-      "demandId": demandId,
-      "adhocrebate": (WSRequestBody[0].additionalDetails.adhocRebate) ? WSRequestBody[0].additionalDetails.adhocRebate : 0,
-      "adhocpenalty": (WSRequestBody[0].additionalDetails.adhocPenalty) ? WSRequestBody[0].additionalDetails.adhocPenalty : 0,
-      "consumerCode": WSRequestBody[0].applicationNo,
-      "businessService": "WS.ONE_TIME_FEE"
+      isconnectionCalculation: false,
+      CalculationCriteria: querObj
     }
   );
 
-  let viewBillTooltip = [];
+  WSpayload.Calculation[0].billSlabData = _.groupBy(WSpayload.Calculation[0].taxHeadEstimates, 'category');
 
-  if (WSpayload) {
-    // showHideAdhocPopup(state, dispatch, "viewBill");
-    // window.location.reload();
-    let queryObjectForFetch = [
-      { key: "tenantId", value: tenantId },
-      { key: "consumerCode", value: WSRequestBody[0].applicationNo },
-      { key: "businessService", value: "WS.ONE_TIME_FEE" }
-    ]
-    let estimateSearch = await fetchBill(queryObjectForFetch, dispatch);
-    localStorage.setItem("WS_ADDITIONAL_DETAILS", JSON.stringify(WSRequestBody[0].additionalDetails));
-    estimateSearch.Bill[0].billDetails[0].billAccountDetails.forEach(bill => { bill.estimateAmount = bill.amount;});
-      let bodyOfTH = { "MdmsCriteria": { "tenantId": tenantId, "moduleDetails": [{ "moduleName": "BillingService", "masterDetails": [{ "name": "TaxHeadMaster" }] }] } }
-      let taxHeadMasterRes = await getDescriptionFromMDMS(bodyOfTH, dispatch);
-      let taxHeadMasterResponce = taxHeadMasterRes.MdmsRes.BillingService.TaxHeadMaster;
-      estimateSearch.Bill[0].billDetails[0].billAccountDetails.forEach(data => {
-      taxHeadMasterResponce.forEach(taxHeadCode => { if(data.taxHeadCode == taxHeadCode.code) { data.category = taxHeadCode.category } });
-      })
-      if (estimateSearch !== null && estimateSearch !== undefined) {
-        await processBillsSearch(estimateSearch, viewBillTooltip, dispatch, WSRequestBody[0].applicationNo);
-        let fee = 0, charge = 0, taxAmount = 0;
-        estimateSearch.Bill[0].billSlabData = _.groupBy(estimateSearch.Bill[0].billDetails[0].billAccountDetails, 'category') 
-        if(estimateSearch.Bill[0].billSlabData && estimateSearch.Bill[0].billSlabData.FEE && estimateSearch.Bill[0].billSlabData.FEE.length > 0) estimateSearch.Bill[0].billSlabData.FEE.map(amount => { fee += parseFloat(amount.amount); });
-        if(estimateSearch.Bill[0].billSlabData && estimateSearch.Bill[0].billSlabData.CHARGES && estimateSearch.Bill[0].billSlabData.CHARGES.length > 0) estimateSearch.Bill[0].billSlabData.CHARGES.map(amount => { charge += parseFloat(amount.amount); });
-        if(estimateSearch.Bill[0].billSlabData && estimateSearch.Bill[0].billSlabData.TAX && estimateSearch.Bill[0].billSlabData.TAX.length > 0) estimateSearch.Bill[0].billSlabData.TAX.map(amount => { taxAmount += parseFloat(amount.amount); });
-        estimateSearch.Bill[0].fee = fee;
-        estimateSearch.Bill[0].charge = charge
-        estimateSearch.Bill[0].taxAmount = taxAmount;
-        estimateSearch.Bill[0].totalAmount = fee + charge + taxAmount;
-        dispatch(prepareFinalObject("dataCalculation", estimateSearch.Bill[0]));
-      }
-      showHideAdhocPopup(state, dispatch, "viewBill");
-      window.location.reload();
-
-  } else {
-    showHideAdhocPopup(state, dispatch, "viewBill");
-    dispatch(
-      toggleSnackbar(
-        true, {
-        labelKey: "PT_COMMON_ADD_REBATE_PENALITY",
-        labelName: "Failed to add rebate and penality"
-      },
-        "warning"
-      )
-    )
-  }
+  const billPayload = await createEstimateData(
+    WSpayload.Calculation[0],
+    "dataCalculation",
+    dispatch,
+    window.location.href,
+    showHideAdhocPopup(state, dispatch, "search-preview", false),
+  );
 };
 
 const updateAdhoc = (state, dispatch) => {
@@ -270,12 +192,7 @@ export const adhocPopup = getCommonContainer({
             onClickDefination: {
               action: "condition",
               callBack: (state, dispatch) => {
-                const WaterConnectionTemp = cloneDeep( get(state.screenConfiguration.preparedFinalObject, "WaterConnectionTemp[0].additionalDetails"));
-                let isAdhocOrRebateValue = true;
-                const adhocAmount = get(WaterConnectionTemp, "adhocPenalty", null);
-                const rebateAmount = get(WaterConnectionTemp, "adhocRebate", null);
-                if(adhocAmount || rebateAmount) { isAdhocOrRebateValue = false }
-                showHideAdhocPopup(state, dispatch, "search-preview", isAdhocOrRebateValue, WaterConnectionTemp);
+                showHideAdhocPopupAndValues(state, dispatch, "search-preview");
               }
             }
           }
@@ -476,12 +393,7 @@ export const adhocPopup = getCommonContainer({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            const WaterConnectionTemp = cloneDeep( get(state.screenConfiguration.preparedFinalObject, "WaterConnectionTemp[0].additionalDetails"));
-            let isAdhocOrRebateValue = true;
-            const adhocAmount = get(WaterConnectionTemp, "adhocPenalty", null);
-            const rebateAmount = get(WaterConnectionTemp, "adhocRebate", null);
-            if(adhocAmount || rebateAmount) { isAdhocOrRebateValue = false }
-            showHideAdhocPopup(state, dispatch, "search-preview", isAdhocOrRebateValue, WaterConnectionTemp);
+            showHideAdhocPopupAndValues(state, dispatch, "search-preview");
           }
         }
       },
