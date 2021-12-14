@@ -11,7 +11,7 @@ import { getUniqueItemsFromArray, commonTransform, stringReplaceAll,getPattern, 
 const createConsumerDetails = () => ({
   ConsumerName: "",
   mobileNumber: "",
-  key: Date.now(),
+  //key: Date.now(),
 });
 
 const ConsumerDetails = ({ config, onSelect, userType, formData, setError, formState, clearErrors }) => {
@@ -35,13 +35,10 @@ const ConsumerDetails = ({ config, onSelect, userType, formData, setError, formS
 
 
 
-  const selectCity = async (city) => {
-    return;
-  };
 
 
   useEffect(() => {
-    const data = consumerDetails.map((e) => {
+    const data = consumerDetails && consumerDetails.map((e) => {
       return e;
     });
     onSelect(config?.key, data);
@@ -67,7 +64,7 @@ const ConsumerDetails = ({ config, onSelect, userType, formData, setError, formS
 
   return (
     <React.Fragment>
-      {consumerDetails.map((consumerdetail, index) => (
+      {consumerDetails && consumerDetails.map((consumerdetail, index) => (
         <OwnerForm1 key={consumerdetail.key} index={index} consumerdetail={consumerdetail} {...commonProps} />
       ))}
     </React.Fragment>
@@ -106,6 +103,12 @@ const OwnerForm1 = (_props) => {
     trigger();
   }, []);
 
+  useEffect(() => {
+    if(isEdit){
+    setValue("ConsumerName",formData?.consomerDetails1?.[0]?.ConsumerName);
+    setValue("mobileNumber",formData?.consomerDetails1?.[0]?.mobileNumber);
+    }
+  },[formData?.consomerDetails1?.[0]?.ConsumerName,formData?.consomerDetails1?.[0]?.mobileNumber]);
   useEffect(() => {
     if(Object.entries(formValue).length>0){
     const keys = Object.keys(formValue);

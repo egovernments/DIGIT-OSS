@@ -15,7 +15,7 @@ const createConsumerDetails = (getCities) => ({
   pincode: "",
   mohalla: "",
   city: getCities()[0] ? getCities()[0] : "",
-  key: Date.now(),
+  //key: Date.now(),
 });
 
 const AddressDetails = ({ config, onSelect, userType, formData, setError, formState, clearErrors }) => {
@@ -176,6 +176,16 @@ const OwnerForm1 = (_props) => {
   useEffect(() => {
     trigger();
   }, []);
+
+  useEffect(() => {
+    if(isEdit){
+    setValue("doorNo",formData?.consomerDetails1?.[0]?.doorNo);
+    setValue("building",formData?.consomerDetails1?.[0]?.building);
+    setValue("streetName",formData?.consomerDetails1?.[0]?.streetName);
+    setValue("pincode",formData?.consomerDetails1?.[0]?.pincode);
+    setValue("mohalla",formData?.consomerDetails1?.[0]?.mohalla);
+    }
+  },[formData?.consomerDetails1?.[0]?.mohalla]);
 
   useEffect(() => {
     if(Object.entries(formValue).length>0){
