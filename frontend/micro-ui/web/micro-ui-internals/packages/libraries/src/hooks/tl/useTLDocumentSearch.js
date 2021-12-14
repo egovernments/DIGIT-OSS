@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "react-query";
 const useTLDocumentSearch = (data1 = {}, config = {}) => {
   const client = useQueryClient();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const tenant = tenantId.split(".")[0];
+  const tenant = Digit.ULBService.getStateId();
   //const propertyId = property?.propertyId;
   //const filesArray = property?.documents?.map((value) => value?.fileStoreId);
   let filesArray = [

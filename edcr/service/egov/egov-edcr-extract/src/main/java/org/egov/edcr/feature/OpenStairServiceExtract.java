@@ -1,6 +1,7 @@
 package org.egov.edcr.feature;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -45,45 +46,17 @@ public class OpenStairServiceExtract extends FeatureExtract {
                     List<DXFDimension> lines = Util.getDimensionsByLayer(doc, openStairName);
                     if (lines != null && !lines.isEmpty())
                         for (Object dxfEntity : lines) {
-                            BigDecimal value;
-                            DXFDimension line = (DXFDimension) dxfEntity;
-                            String dimensionBlock = line.getDimensionBlock();
-                            DXFBlock dxfBlock = doc.getDXFBlock(dimensionBlock);
-                            Iterator dxfEntitiesIterator = dxfBlock.getDXFEntitiesIterator();
-                            while (dxfEntitiesIterator.hasNext()) {
-                                DXFEntity e = (DXFEntity) dxfEntitiesIterator.next();
-                                if (e.getType().equals(DXFConstants.ENTITY_TYPE_MTEXT)) {
-                                    DXFMText text = (DXFMText) e;
-                                    String text2 = text.getText();
+                            DXFDimension dimension = (DXFDimension) dxfEntity;
+                            List<BigDecimal> values = new ArrayList<>();
+                            Util.extractDimensionValue(planDetail, values, dimension, openStairName);
 
-                                    Iterator styledParagraphIterator = text.getTextDocument().getStyledParagraphIterator();
-
-                                    while (styledParagraphIterator.hasNext()) {
-                                        StyledTextParagraph next = (StyledTextParagraph) styledParagraphIterator.next();
-                                        text2 = next.getText();
-                                    }
-                                    if (text2.contains(";")) {
-                                        String[] textSplit = text2.split(";");
-                                        int length = textSplit.length;
-
-                                        if (length >= 1) {
-                                            int index = length - 1;
-                                            text2 = textSplit[index];
-                                            text2 = text2.replaceAll("[^\\d.]", "");
-                                        } else
-                                            text2 = text2.replaceAll("[^\\d.]", "");
-                                    } else
-                                        text2 = text2.replaceAll("[^\\d.]", "");
-
-                                    if (!text2.isEmpty()) {
-                                        value = getNumericValue(text2, planDetail, openStairName);
-                                        OpenStair openStair = new OpenStair();
-                                        openStair.setMinimumDistance(value);
-                                        block.getOpenStairs().add(openStair);
-                                    }
+                            if (!values.isEmpty()) {
+                                for (BigDecimal minDis : values) {
+                                    OpenStair openStair = new OpenStair();
+                                    openStair.setMinimumDistance(minDis);
+                                    block.getOpenStairs().add(openStair);
                                 }
                             }
-
                         }
                 }
 

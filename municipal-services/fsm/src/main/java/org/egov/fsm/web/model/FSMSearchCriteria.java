@@ -53,6 +53,13 @@ public class FSMSearchCriteria {
     @JsonProperty("applicationNos")
     private List<String> applicationNos;
     
+
+    @JsonProperty("applicationType")
+    private String applicationType;
+    
+    @JsonProperty("oldApplicationNos")
+    private List<String> oldApplicationNos;
+    
     @JsonProperty("ids")
     private List <String> ids;
     

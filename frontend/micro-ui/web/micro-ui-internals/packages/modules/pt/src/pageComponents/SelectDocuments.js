@@ -13,7 +13,7 @@ import { useLocation } from "react-router-dom";
 
 const SelectDocuments = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const [documents, setDocuments] = useState(formData?.documents?.documents || []);
   const [error, setError] = useState(null);
 
@@ -73,6 +73,7 @@ const SelectDocuments = ({ t, config, onSelect, userType, formData, setError: se
             document={document}
             action={action}
             t={t}
+            id={`pt-document-${index}`}
             error={error}
             setError={setError}
             setDocuments={setDocuments}
@@ -104,6 +105,7 @@ function SelectDocument({
   config,
   formState,
   fromRawData,
+  id,
 }) {
   const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0];
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -207,7 +209,7 @@ function SelectDocument({
         } else {
           try {
             setUploadedFile(null);
-            const response = await Digit.UploadServices.Filestorage("PT", file, tenantId?.split(".")[0]);
+            const response = await Digit.UploadServices.Filestorage("PT", file, Digit.ULBService.getStateId());
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
             } else {
@@ -238,7 +240,7 @@ function SelectDocument({
   if (filterCondition) {
     const { filterValue, jsonPath, onArray, arrayAttribute, formDataPath, formArrayAttrPath } = filterCondition;
     if (action === "create") {
-      const value = formDataPath.reduce((acc, key) => {
+      const value = formDataPath?.reduce((acc, key) => {
         if (key.charAt(0).toUpperCase() + key.slice(1) === "PropertyType") return acc["PropertyType"];
         return acc?.[key];
       }, formData);
@@ -261,7 +263,7 @@ function SelectDocument({
       const a = fromRawData ? jsonPath : jsonPath?.split("Properties[0].propertyDetails[0].")[1];
       const keyArr = a?.split(".")?.map((e) => (e.includes("[") ? e.split("[")[1]?.split("]")[0] : e));
       const value = keyArr.reduce((acc, curr) => acc[curr], formData?.originalData);
-      const formDataValue = formDataPath.reduce((acc, key) => {
+      const formDataValue = formDataPath?.reduce((acc, key) => {
         if (key.charAt(0).toUpperCase() + key.slice(1) === "PropertyType") return acc["PropertyType"];
         return acc?.[key];
       }, formData);
@@ -283,7 +285,6 @@ function SelectDocument({
 
   if (dropdownFilter) {
     const { formDataPath, formArrayAttrPath, onArray, parentJsonpath, arrayAttribute, parentArrayJsonPath } = dropdownFilter;
-    // console.log(dropdownFilter, doc?.code);
     if (["create", "update"].includes(action)) {
       if (enabledActions?.[action].disableUpload) {
         if (onArray) {
@@ -298,7 +299,7 @@ function SelectDocument({
         }
       } else {
         const arr = formDataPath;
-        const value = arr.reduce((acc, key) => acc?.[key], formData);
+        const value = arr?.reduce((acc, key) => acc?.[key], formData);
         const attrForFormArray = formArrayAttrPath;
         if (value) {
           if (!onArray) {
@@ -344,6 +345,7 @@ function SelectDocument({
             onDelete={() => {
               setUploadedFile(null);
             }}
+            id={id}
             message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
             textStyles={{ width: "100%" }}
             inputStyles={{ width: "280px" }}

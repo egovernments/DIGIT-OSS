@@ -84,6 +84,7 @@ public class PropertyController {
     @PostMapping("/_search")
     public ResponseEntity<PropertyResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
                                                    @Valid @ModelAttribute PropertyCriteria propertyCriteria) {
+
         // If inbox search has been disallowed at config level or if inbox search is allowed but the current search is NOT, from inbox service validate the search criteria.
         if(!configs.getIsInboxSearchAllowed() || !propertyCriteria.getIsInboxSearch()){
             propertyValidator.validatePropertyCriteria(propertyCriteria, requestInfoWrapper.getRequestInfo());
@@ -130,8 +131,17 @@ public class PropertyController {
 //				.build();
 //		return new ResponseEntity<>(response, HttpStatus.OK);
 //	}
-
-
+    
+    @PostMapping("/_addAlternateNumber")
+    public ResponseEntity<PropertyResponse> _addAlternateNumber(@Valid @RequestBody PropertyRequest propertyRequest) {    	
+        Property property = propertyService.addAlternateNumber(propertyRequest);
+        ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(propertyRequest.getRequestInfo(), true);
+        PropertyResponse response = PropertyResponse.builder()
+                .properties(Arrays.asList(property))
+                .responseInfo(resInfo)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
     @PostMapping("/fuzzy/_search")
     public ResponseEntity<PropertyResponse> fuzzySearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,

@@ -1,6 +1,7 @@
 package org.egov.pt.service;
 
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.collection.BillResponse;
 import org.egov.pt.models.event.Event;
 import org.egov.pt.models.event.EventRequest;
 import org.egov.pt.models.workflow.ProcessInstance;
@@ -37,13 +39,15 @@ public class AssessmentNotificationService {
     private PropertyService propertyService;
 
     private PropertyConfiguration config;
-
+    
+    private BillingService billingService;
 
     @Autowired
-    public AssessmentNotificationService(NotificationUtil util, PropertyService propertyService, PropertyConfiguration config) {
+    public AssessmentNotificationService(NotificationUtil util, PropertyService propertyService, PropertyConfiguration config,BillingService billingService ) {
         this.util = util;
         this.propertyService = propertyService;
         this.config = config;
+        this.billingService = billingService;
     }
 
     public void process(String topicName, AssessmentRequest assessmentRequest){
@@ -61,8 +65,17 @@ public class AssessmentNotificationService {
             log.error("NO_PROPERTY_FOUND","No property found for the assessment: "+assessment.getPropertyId());
 
         Property property = properties.get(0);
+        
+        BillResponse billResponse = billingService.fetchBill(property, requestInfo);
+        BigDecimal dueAmount = billResponse.getBill().get(0).getTotalAmount();
 
         List<SMSRequest> smsRequests = enrichSMSRequest(topicName, assessmentRequest, property);
+        
+        if (dueAmount!=null && dueAmount.compareTo(BigDecimal.ZERO)>0) {
+        	enrichSMSRequestForDues(smsRequests,assessmentRequest,property);
+        	
+        }
+        
         util.sendSMS(smsRequests);
 
         Boolean isActionReq = false;
@@ -75,7 +88,50 @@ public class AssessmentNotificationService {
 
 
 
-    /**
+    private void enrichSMSRequestForDues(List<SMSRequest> smsRequests, AssessmentRequest assessmentRequest,
+			Property property) {
+		
+    	String tenantId = assessmentRequest.getAssessment().getTenantId();
+    	String localizationMessages = util.getLocalizationMessages(tenantId,assessmentRequest.getRequestInfo());
+    	
+    	String messageTemplate = util.getMessageTemplate(DUES_NOTIFICATION, localizationMessages);
+    	
+    	if(messageTemplate.contains(NOTIFICATION_PROPERTYID))
+            messageTemplate = messageTemplate.replace(NOTIFICATION_PROPERTYID, property.getPropertyId());
+
+        if(messageTemplate.contains(NOTIFICATION_FINANCIALYEAR))
+            messageTemplate = messageTemplate.replace(NOTIFICATION_FINANCIALYEAR, assessmentRequest.getAssessment().getFinancialYear());
+        
+        if(messageTemplate.contains(NOTIFICATION_PAYMENT_LINK)){
+
+            String UIHost = config.getUiAppHost();
+            String paymentPath = config.getPayLinkSMS();
+            paymentPath = paymentPath.replace("$consumercode",property.getPropertyId());
+            paymentPath = paymentPath.replace("$tenantId",property.getTenantId());
+            paymentPath = paymentPath.replace("$businessservice",PT_BUSINESSSERVICE);
+
+            String finalPath = UIHost + paymentPath;
+
+            messageTemplate = messageTemplate.replace(NOTIFICATION_PAYMENT_LINK,util.getShortenedUrl(finalPath));
+        }
+        
+        Map<String,String > mobileNumberToOwner = new HashMap<>();
+        property.getOwners().forEach(owner -> {
+            if(owner.getMobileNumber()!=null)
+                mobileNumberToOwner.put(owner.getMobileNumber(),owner.getName());
+            if(owner.getAlternatemobilenumber() !=null && !owner.getAlternatemobilenumber().equalsIgnoreCase(owner.getMobileNumber()) ) {
+            	mobileNumberToOwner.put(owner.getAlternatemobilenumber() ,owner.getName());
+            }
+        });
+        
+        List <SMSRequest> smsRequestsForDues = util.createSMSRequest(messageTemplate,mobileNumberToOwner);
+        
+        smsRequests.addAll(smsRequestsForDues);
+    	
+		
+	}
+
+	/**
      * Enriches the smsRequest with the customized messages
      * @param request The tradeLicenseRequest from kafka topic
      * @param smsRequests List of SMSRequets
@@ -162,9 +218,9 @@ public class AssessmentNotificationService {
 
             String UIHost = config.getUiAppHost();
             String paymentPath = config.getPayLinkSMS();
-            paymentPath = paymentPath.replace("$consumerCode",property.getPropertyId());
+            paymentPath = paymentPath.replace("$consumercode",property.getPropertyId());
             paymentPath = paymentPath.replace("$tenantId",property.getTenantId());
-            paymentPath = paymentPath.replace("$businessService",PT_BUSINESSSERVICE);
+            paymentPath = paymentPath.replace("$businessservice",PT_BUSINESSSERVICE);
 
             String finalPath = UIHost + paymentPath;
 

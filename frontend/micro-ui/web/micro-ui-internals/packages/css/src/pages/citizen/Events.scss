@@ -1,0 +1,47 @@
+.OnGroundEventDetailsCard{
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.16);
+    @apply bg-white mx-sm mb-md p-md rounded;
+}
+
+.eventAddressAndDirection{
+    @apply text-body-s mb-md;
+    span{
+        @apply flex mb-sm;
+        svg{
+            @apply h-5 w-5;
+        }
+        div{
+            @apply ml-md;
+            p{
+                @apply mb-sm;
+            }
+            .direction{
+                @apply text-primary-main cursor-pointer;
+            }
+        }
+    }
+}
+
+.eventTimeRange{
+    @apply text-body-s flex;
+    svg{
+        @apply h-5 w-5;
+    }
+    p{
+        @apply ml-md;
+    }
+}
+
+.cardCaptionBodyS{
+    @apply text-body-s text-text-secondary mb-md;
+}
+
+@screen dt{
+    .eventAddressAndDirection{
+        @apply text-body-s-dt;
+    }
+
+    .cardCaptionBodyS{
+        @apply text-body-s-dt;
+    }
+}

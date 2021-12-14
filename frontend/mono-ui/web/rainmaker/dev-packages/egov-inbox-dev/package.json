@@ -1,0 +1,34 @@
+{
+  "name": "egov-inbox-dev",
+  "version": "0.1.2",
+  "private": false,
+  "proxy": "https://qa.digit.org/",
+  "licence":"MIT",
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3"
+  },
+  "scripts": {
+    "start": "set PORT=3004 && react-scripts start",
+    "build": "react-scripts build",
+    "compile": "babel src -d lib",
+    "new":"cd src && yarn version-patch && cd .. && yarn lib && yarn --pub",
+    "lib": "babel src --out-dir lib/react-tour  --copy-files",
+    "package-publish":"cd lib/react-tour && npm publish",
+    "compile-publish": "yarn lib &&  cd lib/react-tour && yarn version-patch",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "--pub":"yarn package-publish"
+  },
+  "devDependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.15.0",
+    "babel-cli": "6.26.0",
+    "babel-plugin-transform-runtime": "6.23.0",
+    "babel-preset-es2015": "6.24.1",
+    "babel-preset-es2020": "^1.0.2",
+    "babel-preset-react": "6.24.1",
+    "babel-preset-stage-0": "6.24.1"
+  }
+}

@@ -82,7 +82,7 @@ let global_messages = {
   error: {
     retry: {
       en_IN: 'Selected option seems to be invalid 😐\n\nPlease select the valid option to proceed further.',
-      hi_IN: 'मुझे क्षमा करें, मुझे समझ नहीं आया। फिर से कोशिश करें।'
+      hi_IN: 'चयनित विकल्प अमान्य प्रतीत होता है 😐\n\n कृपया आगे बढ़ने के लिए वैध विकल्प का चयन करें।'
     },
     proceeding: {
       en_IN: 'I am sorry, I didn\'t understand. But proceeding nonetheless',

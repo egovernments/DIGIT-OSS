@@ -3,7 +3,7 @@ import { CitizenInfoLabel, Loader, Dropdown, FormStep, CardLabel, RadioOrSelect 
 
 const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
 
   const propertyTypesData = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PropertyType", { select });

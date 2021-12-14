@@ -795,13 +795,31 @@ const pgr =  {
             onDone: {
               target: '#endstate',
               actions: assign((context, event) => {
+                let templateList;
                 let complaintDetails = event.data;
-                let message = dialog.get_message(messages.fileComplaint.persistComplaint, context.user.locale);
-                message = message.replace('{{complaintNumber}}', complaintDetails.complaintNumber);
-                message = message.replace('{{complaintLink}}', complaintDetails.complaintLink);
-                let closingStatement = dialog.get_message(messages.fileComplaint.closingStatement, context.user.locale);
-                message = message + closingStatement;
-                dialog.sendMessage(context, message);
+                let localeList = config.supportedLocales.split(',');
+                let localeIndex = localeList.indexOf(context.user.locale);
+                templateList =  config.valueFirstWhatsAppProvider.valuefirstNotificationLodgeCompliantTemplateid.split(',');
+                
+                if(templateList[localeIndex])
+                  context.extraInfo.templateId = templateList[localeIndex];
+                else
+                  context.extraInfo.templateId = templateList[0];
+
+                let params=[];
+                params.push(complaintDetails.complaintNumber);
+
+                let urlComponemt = complaintDetails.complaintLink.split('/');
+                let bttnUrlComponent = urlComponemt[urlComponemt.length -1];
+
+                var templateContent = {
+                  output: context.extraInfo.templateId,
+                  type: "template",
+                  params: params,
+                  bttnUrlComponent: bttnUrlComponent
+                };
+
+                dialog.sendMessage(context, templateContent, true);
               })
             }
           }
@@ -821,19 +839,41 @@ const pgr =  {
             },
             actions: assign((context, event) => {
               (async() => {   
+                let templateList;
+                let localeList = config.supportedLocales.split(',');
+                let localeIndex = localeList.indexOf(context.user.locale);
+                templateList =  config.valueFirstWhatsAppProvider.valuefirstNotificationTrackCompliantTemplateid.split(',');
+                
+                if(templateList[localeIndex])
+                  context.extraInfo.templateId = templateList[localeIndex];
+                else
+                  context.extraInfo.templateId = templateList[0];
+
+
                 let complaints = event.data;
                 var preamble =  dialog.get_message(messages.trackComplaint.results.preamble, context.user.locale);
                 dialog.sendMessage(context, preamble, true);
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 for(let i = 0; i < complaints.length; i++) {
-                  let template = dialog.get_message(messages.trackComplaint.results.complaintTemplate, context.user.locale);
+                  let params=[];
                   let complaint = complaints[i];
-                  template = template.replace('{{complaintType}}',complaint.complaintType);
-                  template = template.replace('{{filedDate}}', complaint.filedDate);
-                  template = template.replace('{{complaintStatus}}', complaint.complaintStatus);
-                  template = template.replace('{{complaintLink}}', complaint.complaintLink);
 
-                  dialog.sendMessage(context, template, true);
+                  params.push(complaint.complaintType);
+                  params.push(complaint.complaintNumber);
+                  params.push(complaint.filedDate);
+                  params.push(complaint.complaintStatus);
+
+                  let urlComponemt = complaint.complaintLink.split('/');
+                  let bttnUrlComponent = urlComponemt[urlComponemt.length -1];
+
+                  var templateContent = {
+                    output: context.extraInfo.templateId,
+                    type: "template",
+                    params: params,
+                    bttnUrlComponent: bttnUrlComponent
+                  };
+
+                  dialog.sendMessage(context, templateContent, true);
                 }
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 var closingStatement = dialog.get_message(messages.trackComplaint.results.closingStatement, context.user.locale);
@@ -858,7 +898,7 @@ let messages = {
   pgrmenu: {
     question: {
       en_IN : 'Please type and send the number for your option 👇\n\n1. File New Complaint.\n2. Track Old Complaints.',
-      hi_IN: 'कृपया नीचे 👇 दिए गए सूची से अपना विकल्प टाइप करें और भेजें\n\n1. यदि आप शिकायत दर्ज करना चाहते हैं\n2. यदि आप अपनी शिकायतों की स्थिति देखना चाहते हैं'
+      hi_IN: ' सेवा का चयन करने के लिए प्रासंगिक विकल्प संख्या टाइप करें और भेजें 👇\n\n1. शिकायत दर्ज करें\n2. शिकायतों को ट्रैक करें'
     }
   },
   fileComplaint: {
@@ -879,7 +919,7 @@ let messages = {
         question: {
           preamble: {
             en_IN : 'Please type and send the number to select a complaint type from the list below 👇\n',
-            hi_IN : 'आप किस लिए शिकायत करना चाहते हैं? कृपया टाइप करें और अपने विकल्प का नंबर भेजें 👇'
+            hi_IN : 'नीचे दी गई सूची से शिकायत प्रकार चुनने के लिए विकल्प संख्या टाइप करें और भेजें 👇'
           },
           otherType: {
             en_IN: 'Others',
@@ -891,7 +931,7 @@ let messages = {
         question: {
           preamble : {
             en_IN : 'What is the problem you are facing with {{complaint}}?\n',
-            hi_IN : 'कृपया {{complaint}} के लिए समस्या श्रेणी चुनें'
+            hi_IN : '{{complaint}} से आप किस प्रकार की समस्या का सामना कर रहे हैं?\n',
           },
         }
       },
@@ -899,17 +939,17 @@ let messages = {
     geoLocation: {
       question: {
         en_IN :'Please share your location if you are at the grievance site.\n\n👉  Refer the image below to understand steps for sharing the location.\n\n👉  To continue without sharing the location, type and send  *1*.',
-        hi_IN : 'यदि आप शिकायत स्थल पर हैं, तो कृपया अपना स्थान साझा करें।\n\n👉 स्थान साझा करने के चरणों को समझने के लिए कृपया नीचे दी गई छवि देखें।\n\n👉 स्थान साझा किए बिना जारी रखने के लिए, टाइप करें और *1* भेजें।'
+        hi_IN : 'यदि आप शिकायत स्थल पर हैं तो कृपया अपना स्थान साझा करें।\n\n👉 स्थान साझा करने के चरणों को समझने के लिए नीचे दी गई छवि देखें।\n\n👉 स्थान साझा किए बिना जारी रखने के लिए, 1 टाइप करें और भेजें।'
       }
     }, // geoLocation 
     confirmLocation: {
       confirmCityAndLocality: {
         en_IN: 'Is this the correct location of the complaint?\nCity: {{city}}\nLocality: {{locality}}\n\nType and send *1* if it is incorrect\nElse, type and send *2* to confirm and proceed',
-        hi_IN: 'क्या यह शिकायत का सही स्थान है?\nशहर: {{city}} \n स्थान: {{locality}} \n अगर यह गलत है तो कृपया "No" भेजें ।'
+        hi_IN: 'क्या यह शिकायत का सही स्थान है?\nशहर: {{city}} \n स्थान: {{locality}} \n\nयदि यह गलत है *1* टाइप करें और भेजें\nअन्यथा, पुष्टि करने और आगे बढ़ने के लिए *2* टाइप करें और भेजें'
       },
       confirmCity: {
         en_IN: 'Is this the correct location of the complaint?\nCity: {{city}}\n\nType and send *1* if it is incorrect\nElse, type and send *2* to confirm and proceed',
-        hi_IN: 'क्या यह शिकायत का सही स्थान है? \nशहर: {{city}}\n अगर यह गलत है तो कृपया "No" भेजें।\nअन्यथा किसी भी चरित्र को टाइप करें और आगे बढ़ने के लिए भेजें।'
+        hi_IN: 'क्या यह शिकायत का सही स्थान है? \nशहर: {{city}}\nयदि यह गलत है *1* टाइप करें और भेजें\nअन्यथा, पुष्टि करने और आगे बढ़ने के लिए *2* टाइप करें और भेजें'
       }
     },
     city: {
@@ -931,67 +971,67 @@ let messages = {
     imageUpload: {
       question: {
         en_IN: 'If possible, attach a photo of your grievance.\n\nTo continue without photo, type and send *1*',
-        hi_IN: 'यदि संभव हो, तो कृपया अपनी शिकायत के बारे में एक फोटो संलग्न करें।\n\nबिना फोटो के जारी रखने के लिए, टाइप करें और भेजें *1*'
+        hi_IN: 'यदि संभव हो तो अपनी शिकायत का फोटो संलग्न करें।\n\nफोटो के बिना जारी रखने के लिए, *1* टाइप करें और भेजें'
       },
       error:{
         en_IN : 'Sorry, I didn\'t understand',
-        hi_IN: 'क्षमा करें, मुझे समझ नहीं आया ।',
+        hi_IN: 'क्षमा करें, मुझे समझ नहीं आया।',
       }
     },
     persistComplaint: {
       en_IN: 'Thank You 😃 Your complaint is registered successfully with mSeva.\n\nThe Complaint No is : *{{complaintNumber}}*\n\nClick on the link below to view and track your complaint:\n{{complaintLink}}\n',
-      hi_IN: 'धन्यवाद! आपने mSeva Punjab के माध्यम से सफलतापूर्वक शिकायत दर्ज की है।\nआपकी शिकायत संख्या: {{complaintNumber}}\n आप नीचे दिए गए लिंक के माध्यम से अपनी शिकायत देख और ट्रैक कर सकते हैं:\n {{complaintLink}}\n'
+      hi_IN: 'धन्यवाद 😃 आपकी शिकायत mSeva के साथ सफलतापूर्वक दर्ज हो गई है।\n\nशिकायत संख्या है : *{{complaintNumber}}*\n\nअपनी शिकायत देखने और ट्रैक करने के लिए नीचे दिए गए लिंक पर क्लिक करें:\n {{complaintLink}}\n'
     },
     closingStatement: {
       en_IN: '\nIn case of any help please type and send "mseva"',
-      hi_IN: '\nजब भी आपको मेरी सहायता की आवश्यकता हो तो कृपया "mseva" लिखें और भेजें'
+      hi_IN: '\nकिसी भी मदद के लिए कृपया "mseva" टाइप करें और भेजें'
     },
     cityFuzzySearch: {
       question: {
         en_IN: "Enter the name of your city.\n\n(For example - Jalandhar, Amritsar, Ludhiana)",
-        hi_IN: "कृपया अपने शहर का नाम दर्ज करें। उदाहरण के लिए - जालंधर, अमृतसर, लुधियाना"
+        hi_IN: "अपने शहर का नाम दर्ज करें।\n\n(उदाहरण के लिए - जालंधर, अमृतसर, लुधियाना)"
       },
       confirmation: {
         en_IN: "Did you mean *“{{city}}”* ?\n\n👉  Type and send *1* to confirm.\n\n👉  Type and send *2* to write again.",
-        hi_IN: "क्या आपका मतलब *“{{city}}”* ?\n\n👉 टाइप करें और पुष्टि करने के लिए *1* भेजें।\n\n👉 फिर से लिखने के लिए *2* टाइप करें और भेजें।"
+        hi_IN: "क्या आपका मतलब *“{{city}}”* था?\n\n👉 पुष्टि करने के लिए *1* टाइप करें और भेजें।\n\n👉 फिर से लिखने के लिए *2* टाइप करें और भेजें।"
       },
       noRecord:{
         en_IN: 'The provided city is either incorrect or not present in our record.\nPlease enter the details again.',
-        hi_IN: 'आपके द्वारा दर्ज किया गया शहर गलत वर्तनी वाला है या हमारे सिस्टम रिकॉर्ड में मौजूद नहीं है।\nकृपया फिर से विवरण दर्ज करें।'
+        hi_IN: 'प्रदान किया गया शहर या तो गलत है या हमारे रिकॉर्ड में मौजूद नहीं है।\nकृपया विवरण फिर से दर्ज करें'
       }
     },
     localityFuzzySearch: {
       question: {
         en_IN: "Enter the name of your locality.\n\n(For example - Ajit Nagar)",
-        hi_IN: "कृपया अपने शहर का नाम दर्ज करें। उदाहरण के लिए - अजीत नगर, मोहल्ला कांगो"
+        hi_IN: "अपने इलाके का नाम दर्ज करें।\n\n(उदाहरण के लिए - अजीत नगर)"
       },
       confirmation: {
         en_IN: "Did you mean *“{{locality}}”* ?\n\n👉  Type and send *1* to confirm.\n\n👉  Type and send *2* to write again.",
-        hi_IN: "क्या आपका मतलब *“{{locality}}”* ?\n\n👉 टाइप करें और पुष्टि करने के लिए *1* भेजें।\n\n👉 फिर से लिखने के लिए *2* टाइप करें और भेजें।"      
+        hi_IN: "क्या आपका मतलब *“{{locality}}”* था?\n\n👉 पुष्टि करने के लिए *1* टाइप करें और भेजें।\n\n👉 फिर से लिखने के लिए *2* टाइप करें और भेजें।"      
       },
       noRecord:{
         en_IN: 'The provided locality is either incorrect or not present in our record.\nPlease enter the details again.',
-        hi_IN: 'आपके द्वारा दर्ज किया गया स्थान गलत वर्तनी वाला है या हमारे सिस्टम रिकॉर्ड में मौजूद नहीं है।\nकृपया फिर से विवरण दर्ज करें।'
+        hi_IN: 'प्रदान किया गया स्थान या तो गलत है या हमारे रिकॉर्ड में मौजूद नहीं है।\nकृपया विवरण फिर से दर्ज करें'
       }
     }
   }, // fileComplaint
   trackComplaint: {
     noRecords: {
       en_IN: 'Sorry 😥 No complaints are found registered from this mobile number.\n\n👉 To go back to the main menu, type and send mseva.',
-      hi_IN: 'अब आपके द्वारा पंजीकृत कोई खुली शिकायत नहीं है।\nमुख्य मेनू पर वापस जाने के लिए ‘mseva’ टाइप करें और भेजें ।'
+      hi_IN: 'अब आपके द्वारा पंजीकृत कोई खुली शिकायत नहीं है।\n\n👉 मुख्य मेनू पर वापस जाने के लिए mseva टाइप करें और भेजें।'
     },
     results: {
       preamble: {
         en_IN: 'Following are your open complaints',
-        hi_IN: 'आपकी पंजीकृत ओपन शिकायतें'
+        hi_IN: 'आपकी निम्नलिखित शिकायतें खुली हैं:'
       },
       complaintTemplate: {
-        en_IN: '*{{complaintType}}*\n\nFiled Date: {{filedDate}}\n\nCurrent Complaint Status: *{{complaintStatus}}*\n\nTap on the link below to view details\n{{complaintLink}}',
-        hi_IN: '*{{complaintType}}*\n\nदायर तिथि: {{filedDate}}\n\nशिकायत की स्थिति: *{{complaintStatus}}*\n\nशिकायत देखने के लिए नीचे दिए गए लिंक पर टैप करें\n{{complaintLink}}'
+        en_IN: '*{{complaintType}}*\n\nFiled Date: {{filedDate}}\n\nCurrent Complaint Status: *{{complaintStatus}}*\n\nTap on the link below to view complaint details\n{{complaintLink}}',
+        hi_IN: '*{{complaintType}}*\n\nदायर तिथि: {{filedDate}}\n\nवर्तमान शिकायत की स्थिति: *{{complaintStatus}}*\n\nशिकायत विवरण देखने के लिए नीचे दिए गए लिंक पर टैप करें\n{{complaintLink}}'
       },
       closingStatement: {
         en_IN: '👉 To go back to the main menu, type and send mseva.',
-        hi_IN: '👉 मुख्य मेनू पर वापस जाने के लिए, टाइप करें और mseva भेजें।'
+        hi_IN: '👉 मुख्य मेनू पर वापस जाने के लिए mseva टाइप करें और भेजें।'
       }
     }
   }

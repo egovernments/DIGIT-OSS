@@ -6,7 +6,7 @@ import { getDefaultReceiptService } from "../utils";
 const ReceiptsFilter = ({ searchParams, onFilterChange, onSearch, removeParam, ...props }) => {
 
   const tenantId = Digit.ULBService.getCurrentTenantId() || '';
-  const tenant = tenantId.split && tenantId.split('.')[0] || '';
+  const tenant =Digit.ULBService.getStateId();
   const [_searchParams, setSearchParams] = useState(() => searchParams);
   const { t } = useTranslation();
   const defaultService = getDefaultReceiptService();

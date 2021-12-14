@@ -11,6 +11,7 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import get from "lodash/get";
 import "./index.css";
 import { updateActiveRoute } from "egov-ui-kit/redux/app/actions";
+import commonConfig from "config/common.js";
 import { getTenantId, getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 
 // get userInfo role
@@ -35,7 +36,7 @@ class Header extends Component {
     const { role, userInfo } = this.props;
     const permanentCity = get(nextProps, "userInfo.permanentCity");
     if (get(userInfo ,"permanentCity") !== get(nextProps, "userInfo.permanentCity")) {
-      const tenantId = role.toLowerCase() === "citizen" ? permanentCity : getTenantId();
+      const tenantId = role.toLowerCase() === "citizen" ? (permanentCity?permanentCity:commonConfig.tenantId) : getTenantId();
       const ulbLogo = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
       this.setState({ ulbLogo });
     }

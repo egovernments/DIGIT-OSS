@@ -57,7 +57,7 @@ public class NotificationConsumer {
 					notifService.sendNotificationForMutation(request);
 				} else {
 
-					notifService.sendNotificationForUpdate(request);					
+					notifService.sendNotificationForUpdate(request);
 				}
 			}
 

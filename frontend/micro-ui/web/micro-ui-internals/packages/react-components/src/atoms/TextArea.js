@@ -5,6 +5,7 @@ const TextArea = (props) => {
   const user_type = Digit.SessionStorage.get("userType");
 
   return (
+    <React.Fragment>
     <textarea
       name={props.name}
       ref={props.inputRef}
@@ -19,6 +20,8 @@ const TextArea = (props) => {
       maxLength={props.maxLength} 
       autoComplete="off"
     ></textarea>
+    {  <p className="cell-text">{props.hintText}</p>}
+    </React.Fragment>
   );
 };
 

@@ -22,6 +22,22 @@
   }
 }
 
+.fieldInspectionWrapper{
+  border: 1px solid #d6d5d4;
+  padding: 16px;
+  margin-top: 8px;
+  background: #FAFAFA;
+}
+
+.fieldInsepctionInsideWrapper{
+  border: 1px solid #D6D5D4;
+  padding: 16px;
+  margin-top: 8px;
+  background: #FFFFFF;
+  max-width: 70%;
+  min-width: 280px;
+}
+
 @screen dt {
   .ground-container {
     margin-bottom: 56px;
@@ -39,5 +55,8 @@
   }
   .moduleCardWrapper{
     @apply flex flex-row flex-wrap !important;
+  }
+  .gridModuleWrapper{
+    @apply grid grid-cols-4 gap-4;
   }
 }

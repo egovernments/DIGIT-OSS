@@ -4,6 +4,7 @@ const moment = require("moment-timezone");
 const localisationService = require('../util/localisation-service');
 const dialog = require('../util/dialog');
 const pdfService = require('../util/pdf-service');
+const paymentStatusConsumer = require('./payment-status-update-event');
 
 let supportedServiceForLocality = "{\"TL\" : \"tl-services\",\"FIRENOC\" : \"fireNoc\",\"WS\" : \"ws-services\",\"SW\" : \"sw-services\",\"PT\" : \"PT\",\"BPA\" : \"bpa-services\"}";
 
@@ -248,7 +249,8 @@ class ReceiptService {
             date: transactionDate,
             businessService: businessService,
             transactionNumber: result.transactionNumber,
-            fileStoreId: result.fileStoreId
+            fileStoreId: result.fileStoreId,
+            tenantId: tenantId
           }
           Payments['Payments'].push(data);
           lookup.push(consumerCode);
@@ -256,51 +258,53 @@ class ReceiptService {
         }
       }
 
-      let service = Payments['Payments'][0].businessService;
-      var businessServiceList = ['WS','SW'];
-      let consumerCodeToLocalityMapping;
-    
-      if(businessServiceList.includes(service))
-        consumerCodeToLocalityMapping = await this.getApplicationNumber(Payments['Payments'], service, authToken, locale);
-    
-      else
-        consumerCodeToLocalityMapping = await this.getLocality(lookup, authToken, service,locale);
-
-      var tenantIdList=[];
-      var stateLevelCode = "TENANT_TENANTS_"+config.rootTenantId.toUpperCase();
-      tenantIdList.push(stateLevelCode);
-
-      for(var i=0; i<Payments['Payments'].length;i++){
-        if(!(Object.keys(consumerCodeToLocalityMapping).length === 0) && consumerCodeToLocalityMapping[Payments['Payments'][i].id])
-          Payments['Payments'][i].locality = consumerCodeToLocalityMapping[Payments['Payments'][i].id];
-        
-        let tenantId = Payments['Payments'][i].city;
-        tenantId = "TENANT_TENANTS_" + tenantId.toUpperCase().replace('.','_');
-
-        if(!tenantIdList.includes(tenantId))
-          tenantIdList.push(tenantId);
-      }
+      if(!isMultipleRecords){
+        let service = Payments['Payments'][0].businessService;
+        var businessServiceList = ['WS','SW'];
+        let consumerCodeToLocalityMapping;
       
-      let localisedMessages = await localisationService.getMessagesForCodesAndTenantId(tenantIdList, config.rootTenantId);
-
-      for(var i=0; i<Payments['Payments'].length;i++){
-        let tenantId = Payments['Payments'][i].city;
-        tenantId = "TENANT_TENANTS_" + tenantId.toUpperCase().replace('.','_');
-
-        if(!Payments['Payments'][i].locality){
-          if(localisedMessages[tenantId][locale])
-            Payments['Payments'][i].locality = localisedMessages[tenantId][locale];
+        if(businessServiceList.includes(service))
+          consumerCodeToLocalityMapping = await this.getApplicationNumber(Payments['Payments'], service, authToken, locale);
+      
+        else
+          consumerCodeToLocalityMapping = await this.getLocality(lookup, authToken, service,locale);
+  
+        var tenantIdList=[];
+        var stateLevelCode = "TENANT_TENANTS_"+config.rootTenantId.toUpperCase();
+        tenantIdList.push(stateLevelCode);
+  
+        for(var i=0; i<Payments['Payments'].length;i++){
+          if(!(Object.keys(consumerCodeToLocalityMapping).length === 0) && consumerCodeToLocalityMapping[Payments['Payments'][i].id])
+            Payments['Payments'][i].locality = consumerCodeToLocalityMapping[Payments['Payments'][i].id];
           
-          if(localisedMessages[stateLevelCode][locale])
-            Payments['Payments'][i].city = localisedMessages[stateLevelCode][locale];
-
-        }
-
-        else{
-          if(localisedMessages[tenantId][locale])
-            Payments['Payments'][i].city = localisedMessages[tenantId][locale]; 
+          let tenantId = Payments['Payments'][i].city;
+          tenantId = "TENANT_TENANTS_" + tenantId.toUpperCase().replace('.','_');
+  
+          if(!tenantIdList.includes(tenantId))
+            tenantIdList.push(tenantId);
         }
         
+        let localisedMessages = await localisationService.getMessagesForCodesAndTenantId(tenantIdList, config.rootTenantId);
+  
+        for(var i=0; i<Payments['Payments'].length;i++){
+          let tenantId = Payments['Payments'][i].city;
+          tenantId = "TENANT_TENANTS_" + tenantId.toUpperCase().replace('.','_');
+  
+          if(!Payments['Payments'][i].locality){
+            if(localisedMessages[tenantId][locale])
+              Payments['Payments'][i].locality = localisedMessages[tenantId][locale];
+            
+            if(localisedMessages[stateLevelCode][locale])
+              Payments['Payments'][i].city = localisedMessages[stateLevelCode][locale];
+  
+          }
+  
+          else{
+            if(localisedMessages[tenantId][locale])
+              Payments['Payments'][i].city = localisedMessages[tenantId][locale]; 
+          }
+        }
+
       }
       
       return Payments['Payments'];
@@ -394,7 +398,7 @@ class ReceiptService {
           return await this.findreceiptsList(user,service,user.locale);
     }
 
-    async multipleRecordReceipt(user,service,consumerCodes,transactionNumber, forPdf){ 
+    async multipleRecordReceipt(user,service,consumerCodes,transactionNumber, tenantId, forPdf){ 
       
       let requestBody = {
         RequestInfo: {
@@ -407,12 +411,30 @@ class ReceiptService {
       let paymentUrl = config.egovServices.egovServicesHost + searchEndpoint;
       paymentUrl =  paymentUrl + '?tenantId=' + config.rootTenantId;
       paymentUrl+='&';
-      if(forPdf)
+      if(forPdf){
         paymentUrl +='transactionNumber='+transactionNumber;
-      else
+        paymentUrl+='&mobileNumber='+user.mobileNumber;
+      }
+        
+      else{
         paymentUrl +='consumerCodes='+consumerCodes;
+        let isOwner = false;
+        if(service === 'PT'){
+          let result = await paymentStatusConsumer.getPTOwnerDetails(consumerCodes, tenantId, user.mobileNumber, user.authToken);
+          isOwner = result.isMobileNumberPresent;
+        }
 
-      paymentUrl+='&mobileNumber='+user.mobileNumber;
+        if(service === 'WS' || service === 'SW'){
+          let result = await paymentStatusConsumer.getWnsOwnerDeatils(consumerCodes, tenantId, service, user.mobileNumber, user.authToken);
+          isOwner = result.isMobileNumberPresent;
+        }
+
+
+        if(!isOwner)
+        paymentUrl+='&mobileNumber='+user.mobileNumber;
+      }
+        
+
 
       let options = {
         method: 'POST',

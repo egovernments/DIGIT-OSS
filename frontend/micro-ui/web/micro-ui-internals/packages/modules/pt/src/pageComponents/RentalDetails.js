@@ -16,7 +16,7 @@ const RentalDetails = ({ t, config, onSelect, value, userType, formData }) => {
     [AnnualRent, setAnnualRent] = useState(formData.Constructiondetails?.AnnualRent);
   }
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { data: Menu, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "RentalDetails");
 
   if (Menu) {

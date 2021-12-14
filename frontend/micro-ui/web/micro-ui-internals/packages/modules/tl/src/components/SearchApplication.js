@@ -4,7 +4,7 @@ import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardL
 import { Link } from "react-router-dom";
 import { convertEpochToDateDMY } from  "../utils";
 
-const SearchApplication = ({tenantId, t, onSubmit, data }) => {
+const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
     const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
         defaultValues: {
             offset: 0,
@@ -235,6 +235,7 @@ const SearchApplication = ({tenantId, t, onSubmit, data }) => {
             : <Table
                 t={t}
                 data={data}
+                totalRecords={count}
                 columns={columns}
                 getCellProps={(cellInfo) => {
                 return {

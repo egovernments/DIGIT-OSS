@@ -52,7 +52,7 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
   const isEdit = window.location.href.includes("renew-trade");
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { isLoading, data: fydata = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "egf-master", "FinancialYear");
   let isDirectRenewal = sessionStorage.getItem("isDirectRenewal") ? stringToBoolean(sessionStorage.getItem("isDirectRenewal")) : null;
 

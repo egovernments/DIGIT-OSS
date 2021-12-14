@@ -5,6 +5,9 @@ import { useRouteMatch } from "react-router-dom";
 import EmployeeApp from "./pages/employee";
 import MCollectCard from "./components/MCollectCard";
 import InboxFilter from "./components/inbox/NewInboxFilter";
+import ConsumerDetails from "./pageComponents/ConsumerDetails"
+import ServiceDetails from "./pageComponents/ServiceDetails";
+import AddressDetails from "./pageComponents/AddressDetails";
 import CitizenApp from "./pages/citizen";
 
 export const MCollectModule = ({ stateCode, userType, tenants }) => {
@@ -45,6 +48,9 @@ export const MCollectLinks = ({ matchPath, userType }) => {
 };
 
 const componentsToRegister = {
+  ConsumerDetails,
+  ServiceDetails,
+  AddressDetails,
   MCollectCard,
   MCollectModule,
   MCollectLinks,

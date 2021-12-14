@@ -4,7 +4,7 @@ import {
   getPattern, getSelectField, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 
 const onIconClick = (state, dispatch, index) => {
@@ -91,13 +91,15 @@ export const payeeDetails = getCommonContainer({
       let tabs = get(state.screenConfiguration.screenConfig, "pay.components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs", []);
       let tabValue = get(tabs[tabIndex], "code", '').toLowerCase();
       let componentPath = process.env.REACT_APP_NAME === "Citizen" ? "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePayerDetails.children.cardContent.children.payerDetailsCardContainer" : `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${tabIndex}].tabContent.${tabValue}.children.payeeDetails`;
+      let payerOtherName = process.env.REACT_APP_NAME === "Citizen" ? getQueryArg(window.location.href, "name") : "" || "";
+      let payerOtherNumber = process.env.REACT_APP_NAME === "Citizen" ? getQueryArg(window.location.href, "mobileNumber") : "" || "";
       if (action.value === "COMMON_OTHER") {
         dispatch(
           handleField(
             "pay",
             `${componentPath}.children.payerName`,
             "props.value",
-            ""
+            payerOtherName
           )
         );
         dispatch(
@@ -105,7 +107,7 @@ export const payeeDetails = getCommonContainer({
             "pay",
             `${componentPath}.children.payerMobileNo`,
             "props.value",
-            ""
+            payerOtherNumber
           )
         );
         dispatch(
@@ -124,7 +126,42 @@ export const payeeDetails = getCommonContainer({
             false
           )
         );
+
+        dispatch(
+          handleField(
+            "pay",
+            `${componentPath}.children.payerName`,
+            "props.disabled",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "pay",
+            `${componentPath}.children.payerMobileNo`,
+            "props.disabled",
+            false
+          )
+        );
+
       } else {
+        /* To disable the payer name and mobile number incase the user is not owner */
+        dispatch(
+          handleField(
+            "pay",
+            `${componentPath}.children.payerName`,
+            "props.disabled",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "pay",
+            `${componentPath}.children.payerMobileNo`,
+            "props.disabled",
+            true
+          )
+        );
         dispatch(
           handleField(
             "pay",

@@ -4,7 +4,7 @@ import { FormStep, RadioOrSelect, RadioButtons } from "@egovernments/digit-ui-re
 const IsThisFloorSelfOccupied = ({ t, config, onSelect, userType, formData }) => {
   let index = window.location.href.split("/").pop();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   //const [selfOccupied, setSelfOccupied] = useState(formData?.IsThisFloorSelfOccupied);
   let selfOccupied, setSelfOccupied;
   if (!isNaN(index)) {

@@ -41,7 +41,7 @@ export const PaymentService = {
 
   getReciept: (tenantId, businessservice, filters = {}) =>
     Request({
-      url: businessservice ? `${Urls.payment.print_reciept}/${businessservice}/_search` : `${Urls.payment.print_reciept}/_search`,
+      url: businessservice && businessservice !=="BPAREG" ? `${Urls.payment.print_reciept}/${businessservice}/_search` : `${Urls.payment.print_reciept}/_search`,
       useCache: false,
       method: "POST",
       auth: true,
@@ -104,8 +104,8 @@ export const PaymentService = {
 
   recieptSearch: (tenantId, businessService, params) =>
     Request({
-      url: Urls.payment.reciept_search,
-      urlParams: { buisnessService: businessService },
+      url: (businessService === "BPAREG" && !params?.isEmployee) /* || businessService.includes("BPA.") && !params?.isEmployee ) */ ? Urls.payment.obps_Reciept_Search : Urls.payment.reciept_search,
+      urlParams: (businessService === "BPAREG" && !params?.isEmployee) /* || businessService.includes("BPA.") && !params?.isEmployee) */ ? {}:{ buisnessService: businessService },
       method: "POST",
       // do not change this directly add a param if needed
       auth: true,

@@ -87,6 +87,10 @@ const getTradeEditDetails = (data) => {
       code: `${data?.tradeLicenseDetail?.structureType}`,
       i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${data.tradeLicenseDetail?.structureType.replaceAll(".", "_")}`,
     },
+    VehicleType:{
+      code: `${data?.tradeLicenseDetail?.structureType}`,
+      i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${data.tradeLicenseDetail?.structureType.replaceAll(".", "_")}`,
+    },
     CommencementDate: getCommencementDataFormat(data?.commencementDate),
     StructureType: {
       code: `${data.tradeLicenseDetail?.structureType.split(".")[0]}`,

@@ -1,5 +1,4 @@
 package org.egov.pt.repository.builder;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
+import org.egov.pt.models.enums.Status.*;
 
 @Component
 public class PropertyQueryBuilder {
@@ -67,7 +67,7 @@ public class PropertyQueryBuilder {
 			+   ownerDocSelectValues  
 			
 			+   UnitSelectValues
-			
+
 			+   " FROM EG_PT_PROPERTY property " 
 			
 			+   INNER_JOIN +  " EG_PT_ADDRESS address         ON property.id = address.propertyid " 
@@ -81,6 +81,7 @@ public class PropertyQueryBuilder {
 			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 			
 			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid ";
+	
 
 	private static final String ID_QUERY = SELECT
 
@@ -146,14 +147,13 @@ public class PropertyQueryBuilder {
 		
 		if(isEmpty)
 			throw new CustomException("EG_PT_SEARCH_ERROR"," No criteria given for the property search");
-
+		
 		StringBuilder builder;
 
 		if(onlyIds)
 			builder = new StringBuilder(ID_QUERY);
 		else
 			builder = new StringBuilder(QUERY);
-
 		Boolean appendAndQuery = false;
 		if(isPlainSearch)
 		{
@@ -251,9 +251,18 @@ public class PropertyQueryBuilder {
 			builder.append("property.oldpropertyid IN (").append(createQuery(oldpropertyids)).append(")");
 			addToPreparedStatement(preparedStmtList, oldpropertyids);
 		}
+		
+		/* 
+		 * Condition to evaluate if owner is active.
+		 * Inactive owners should never be shown in results
+		*/
+		
+		addClauseIfRequired(preparedStmtList,builder);
+		builder.append("owner.status = ?");
+		preparedStmtList.add(Status.ACTIVE.toString());
+		
 
 		String withClauseQuery = WITH_CLAUSE_QUERY.replace(REPLACE_STRING, builder);
-
 		if (onlyIds)
 			return builder.toString();
 		else

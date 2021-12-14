@@ -1,14 +1,15 @@
 import React from "react";
 import { InfoBannerIcon } from "./svgindex";
 
-const CitizenInfoLabel = ({ info, text }) => {
+const CitizenInfoLabel = ({ info, text, style, textStyle, showInfo = true, className }) => {
   return (
-    <div className="info-banner-wrap">
-      <div>
+    <div className={`info-banner-wrap ${className ? className : ""}`} style={style}>
+      {showInfo && <div>
         <InfoBannerIcon />
         <h2>{info}</h2>
       </div>
-      <p>{text}</p>
+      }
+      <p style={textStyle}>{text}</p>
     </div>
   );
 };

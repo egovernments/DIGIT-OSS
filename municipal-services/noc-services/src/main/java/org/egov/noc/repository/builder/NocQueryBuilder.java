@@ -1,5 +1,6 @@
 package org.egov.noc.repository.builder;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.egov.noc.config.NOCConfiguration;
@@ -7,8 +8,8 @@ import org.egov.noc.web.model.NocSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+
 import lombok.extern.slf4j.Slf4j;
-import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 
 @Component
 @Slf4j
@@ -26,6 +27,8 @@ public class NocQueryBuilder {
 	private final String paginationWrapper = "SELECT * FROM "
 			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY noc_lastModifiedTime DESC) offset_ FROM " + "({})"
 			+ " result) result_offset " + "WHERE offset_ > ? AND offset_ <= ?";
+	
+	private final String countWrapper = "SELECT COUNT(DISTINCT(noc_id)) FROM ({INTERNAL_QUERY}) as noc_count";
 
 	/**
 	 * To give the Search query based on the requirements.
@@ -36,7 +39,7 @@ public class NocQueryBuilder {
 	 *            values to be replased on the query
 	 * @return Final Search Query
 	 */
-	public String getNocSearchQuery(NocSearchCriteria criteria, List<Object> preparedStmtList) {
+	public String getNocSearchQuery(NocSearchCriteria criteria, List<Object> preparedStmtList, boolean isCount) {
 
 		StringBuilder builder = new StringBuilder(QUERY);
 
@@ -56,9 +59,10 @@ public class NocQueryBuilder {
 
 		String applicationNo = criteria.getApplicationNo();
 		if (applicationNo!=null) {
+		        List<String> applicationNos = Arrays.asList(applicationNo.split(","));
 			addClauseIfRequired(builder);
-			builder.append(" noc.applicationNo =?");
-			preparedStmtList.add(criteria.getApplicationNo());
+			builder.append(" noc.applicationNo IN (").append(createQuery(applicationNos)).append(")");
+			addToPreparedStatement(preparedStmtList, applicationNos);
 		}
 		
 		String approvalNo = criteria.getNocNo();
@@ -78,23 +82,34 @@ public class NocQueryBuilder {
 		
 		String sourceRefId = criteria.getSourceRefId();
 		if (sourceRefId!=null) {
+		        List<String> sourceRefIds = Arrays.asList(sourceRefId.split(","));
 			addClauseIfRequired(builder);
-			builder.append(" noc.sourceRefId = ?");
-			preparedStmtList.add(criteria.getSourceRefId());
-			log.info(criteria.getSourceRefId());
+			builder.append(" noc.sourceRefId IN (").append(createQuery(sourceRefIds)).append(")");
+                        addToPreparedStatement(preparedStmtList, sourceRefIds);
 		}
 		
 		String nocType = criteria.getNocType();
 		if (nocType!=null) {
+		        List<String> nocTypes = Arrays.asList(nocType.split(","));
 			addClauseIfRequired(builder);
-			builder.append(" noc.nocType = ?");
-			preparedStmtList.add(nocType);
+			builder.append(" noc.nocType IN (").append(createQuery(nocTypes)).append(")");
+                        addToPreparedStatement(preparedStmtList, nocTypes);
 			log.info(nocType);
 		}
+		
+		List<String> status = criteria.getStatus();
+                if (status!=null) {
+                        addClauseIfRequired(builder);
+                        builder.append(" noc.status IN (").append(createQuery(status)).append(")");
+                        addToPreparedStatement(preparedStmtList, status);
+                }
 		
 		log.info(criteria.toString());
 		log.info("Final Query");
 		log.info(builder.toString());
+		if(isCount)
+	            return addCountWrapper(builder.toString());
+		
 		return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
 
 	}
@@ -157,5 +172,9 @@ public class NocQueryBuilder {
 				builder.append(",");
 		}
 		return builder.toString();
+	}
+	
+	private String addCountWrapper(String query) {
+	    return countWrapper.replace("{INTERNAL_QUERY}", query);
 	}
 }

@@ -1,0 +1,99 @@
+.HomePageWrapper{
+    margin-top: -25px;
+    .BannerWithSearch{
+        margin-bottom: 40px;
+        @apply relative;
+        .Search{
+            width: calc( 100% - 32px );
+            bottom: -18px;
+            @apply mx-md absolute;
+        }
+        img{
+            height: 33vw;
+            @apply w-full object-cover;
+        }
+    }
+
+    .ServicesSection{
+        @apply flex flex-wrap ;
+    }
+
+    .WhatsNewSection{
+        @apply m-sm;
+        .headSection{
+            @apply flex mb-sm justify-between;
+            h2{
+                @apply text-heading-s font-bold text-text-primary pl-sm; 
+            }
+            p{
+                @apply text-link text-primary-main font-medium;
+            }
+        }
+    }
+}
+
+.moduleLinkHomePage{
+    margin-top: -25px;
+    img{
+        height: 33vw;
+        filter: grayscale(100%);
+        @apply w-full object-cover;
+    }
+    h1{
+        position: absolute;
+        top: 100px;
+        left: 21px;
+        @apply text-heading-xl text-white font-bold;
+    }
+    .moduleLinkHomePageBackButton{
+        border: none;
+        top: 76px;
+        svg{
+            fill: #ffffff;
+        }
+        @apply absolute text-white text-heading-s ml-md;
+    }
+}
+
+.moduleLinkHomePageModuleLinks{
+    @apply mt-md;
+    .CitizenHomeCard{
+        .header{
+            @apply hidden;
+        }
+    }
+}
+
+@screen dt{
+    .HomePageWrapper{
+        .BannerWithSearch{
+            margin-bottom: 56px;
+            min-width: 100vw;
+            margin-left: calc( -15vw - 16px );
+            .Search{
+                width: calc(70% - 32px);
+                left: calc( 15% + 25px );
+                margin: 0;
+            }
+            img{
+                height: 20vw;
+            }
+        }
+    }
+    .moduleLinkHomePage{
+        img{
+            min-width: 100vw;
+            margin-left: calc( -15vw - 16px );
+            height: 20vw;
+        }
+        h1{
+            top: calc( 10vw + 40px );
+            left: calc( 15% + 14px );
+            @apply ml-lg;
+        }
+        .moduleLinkHomePageBackButton{
+            top: calc( 10vw + 16px );
+            @apply ml-md;
+        }
+    }
+}

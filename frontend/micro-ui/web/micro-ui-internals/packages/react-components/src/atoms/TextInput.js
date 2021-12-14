@@ -18,7 +18,7 @@ const TextInput = (props) => {
 
   return (
     <React.Fragment>
-      <div className={`text-input ${props.className}`}>
+      <div className={`text-input ${props.className}`} style={props?.textInputStyle ? { ...props.textInputStyle} : {}}>
         {props.isMandatory ? (
           <input
             type={props.type || "text"}
@@ -80,6 +80,7 @@ const TextInput = (props) => {
             step={props.step}
             autoFocus={props.autoFocus}
             onBlur={props.onBlur}
+            onKeyPress={props.onKeyPress}
             autoComplete="off"
           />
         )}

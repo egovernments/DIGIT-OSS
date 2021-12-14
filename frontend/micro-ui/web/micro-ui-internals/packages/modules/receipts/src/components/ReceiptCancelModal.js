@@ -9,7 +9,7 @@ const ReceiptCancelModal = ({ t, action, tenantId, closeModal, submitAction, app
   const [Reasons, setReasons] = useState([]);
   const [selectedReason, selecteReason] = useState("");
   const tenantIds = Digit.ULBService.getCurrentTenantId() || '';
-  const tenant = tenantIds.split && tenantIds.split('.')[0] || '';
+  const tenant = Digit.ULBService.getStateId();
   const { isLoading, isError, errors, data, ...rest } = Digit.Hooks.receipts.useReceiptsMDMS(
     tenant,
     "CancelReceiptReason"
@@ -57,7 +57,7 @@ const ReceiptCancelModal = ({ t, action, tenantId, closeModal, submitAction, app
     history.replace("/digit-ui/employee/receipts/response", {
       paymentWorkflow: {
         action: "CANCEL",
-        additionalDetails: data.otherDetails,
+        additionalDetails: {...data.otherDetails,selectedReasonMessage:t(`CR_REASON_${selectedReason.code}`)},
         paymentId: applicationData?.Payments[0]?.id,
         reason: selectedReason.code,
         tenantId: applicationData?.Payments[0]?.tenantId,

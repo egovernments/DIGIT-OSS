@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
+import React, { useEffect, useRef, useState } from "react";
 import { ArrowDown } from "./svgindex";
 
 const TextField = (props) => {
@@ -29,13 +29,35 @@ const TextField = (props) => {
     props.dropdownDisplay(false);
   }
 
+  /* Custom function to scroll and select in the dropdowns while using key up and down */
+  const keyChange = (e) => {
+    if (e.key == "ArrowDown") {
+      props.setOptionIndex(state =>state+1== props.addProps.length?0:state+1);
+      if(props.addProps.currentIndex+1== props.addProps.length){
+        e?.target?.parentElement?.parentElement?.children?.namedItem("jk-dropdown-unique")?.scrollTo?.(0,0)
+      }else{
+        props?.addProps?.currentIndex>2&& e?.target?.parentElement?.parentElement?.children?.namedItem("jk-dropdown-unique")?.scrollBy?.(0,45)
+      }
+      e.preventDefault();
+    } else if (e.key == "ArrowUp") {
+      props.setOptionIndex(state =>  state!==0? state - 1: props.addProps.length-1);
+        if(props.addProps.currentIndex==0){
+        e?.target?.parentElement?.parentElement?.children?.namedItem("jk-dropdown-unique")?.scrollTo?.(100000,100000)
+      }else{
+        props?.addProps?.currentIndex>2&& e?.target?.parentElement?.parentElement?.children?.namedItem("jk-dropdown-unique")?.scrollBy?.(0,-45)
+      }
+      e.preventDefault();
+    }else if(e.key=="Enter"){
+      props.addProps.selectOption(props.addProps.currentIndex);
+    } 
+  }
+
   return (
     <input
       ref={props.inputRef}
       className={`employee-select-wrap--elipses ${props.disable && "disabled"}`}
       type="text"
       value={value}
-      autoComplete={props.autoComplete || "on"}
       onChange={inputChange}
       onClick={props.onClick}
       onFocus={broadcastToOpen}
@@ -43,12 +65,15 @@ const TextField = (props) => {
         broadcastToClose();
         props?.onBlur?.(e);
       }}
+      onKeyDown={keyChange}
       readOnly={props.disable}
       autoFocus={props.autoFocus}
       placeholder={props.placeholder}
+      autoComplete={"off"}
+      style={props.style}
     />
   );
-};
+}; 
 
 const translateDummy = (text) => {
   return text;
@@ -60,6 +85,7 @@ const Dropdown = (props) => {
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
   const [forceSet, setforceSet] = useState(0);
+  const [optionIndex, setOptionIndex] = useState(-1);
   const optionRef = useRef(null);
   const hasCustomSelector = props.customSelector ? true : false;
   const t = props.t || translateDummy;
@@ -112,8 +138,8 @@ const Dropdown = (props) => {
   }
 
   function onSelect(val) {
-    //console.log(val, "curent", selectedOption, "old");
-    if (val !== selectedOption) {
+    // console.log(val, "curent", selectedOption, "old");
+    if (val !== selectedOption || props.allowMultiselect) {
       props.select(val);
       setSelectedOption(val);
       setDropdownStatus(false);
@@ -127,7 +153,13 @@ const Dropdown = (props) => {
     setFilterVal(val);
   }
 
-  return (
+let filteredOption= props.option&&props.option.filter((option) => t(option[props.optionKey]).toUpperCase().indexOf(filterVal.toUpperCase()) > -1) || [];
+function selectOption(ind){
+  onSelect(filteredOption[ind]);
+}
+
+
+return (
     <div
       className={`${user_type === "employee" ? "employee-select-wrap" : "select-wrap"} ${props?.className ? props?.className : ""}`}
       style={{ ...props.style }}
@@ -140,31 +172,34 @@ const Dropdown = (props) => {
         </div>
       )}
       {!hasCustomSelector && (
-        <div className={`${dropdownStatus ? "select-active" : "select"} ${props.disable && "disabled"}`} style={props.errorStyle ? {border: "1px solid red"}: {}}>
+        <div className={`${dropdownStatus ? "select-active" : "select"} ${props.disable && "disabled"}`} style={props.errorStyle ? { border: "1px solid red" } : { }}>
           <TextField
             autoComplete={props.autoComplete}
             setFilter={setFilter}
             forceSet={forceSet}
+            setOptionIndex={setOptionIndex}
             keepNull={props.keepNull}
             selectedVal={
               selectedOption
-                ? props.t
-                  ? props.t(props.optionKey ? selectedOption[props.optionKey] : selectedOption)
+                ?props.t ? props.isMultiSelectEmp?`${selectedOption} ${t("BPA_SELECTED_TEXT")}`: 
+                 props.t(props.optionKey ? selectedOption[props.optionKey] : selectedOption)
                   : props.optionKey
-                  ? selectedOption[props.optionKey]
-                  : selectedOption
+                    ? selectedOption[props.optionKey]
+                    : selectedOption
                 : null
             }
             filterVal={filterVal}
+            addProps={{length:filteredOption.length,currentIndex:optionIndex,selectOption:selectOption}}
             // onClick={dropdownOn}
             dropdownDisplay={dropdownOn}
+            handleClick={handleClick}
             disable={props.disable}
             freeze={props.freeze ? true : false}
             autoFocus={props.autoFocus}
             placeholder={props.placeholder}
             onBlur={props?.onBlur}
             inputRef={props.ref}
-            // setOutsideClicked={setOutsideClicked}
+          // setOutsideClicked={setOutsideClicked}
           />
           <ArrowDown onClick={dropdownSwitch} className="cp" disable={props.disable} />
         </div>
@@ -173,19 +208,24 @@ const Dropdown = (props) => {
       {dropdownStatus ? (
         props.optionKey ? (
           <div
+          id="jk-dropdown-unique"
             className={`${hasCustomSelector ? "margin-top-10 display: table" : ""} options-card`}
-            style={{ ...props.optionCardStyles }}
+
+            style={{ ...props.optionCardStyles ,overflow:"scroll"}}
+
             ref={optionRef}
           >
-            {props.option &&
-              props.option
-                .filter((option) => t(option[props.optionKey]).toUpperCase().indexOf(filterVal.toUpperCase()) > -1)
+            {filteredOption &&
+              filteredOption
                 .map((option, index) => {
                   if (props.t) {
                     // console.log(props.t(option[props.optionKey]));
                   }
                   return (
-                    <div className="cp profile-dropdown--item display: flex" key={index} onClick={() => onSelect(option)}>
+                    <div className={`cp profile-dropdown--item display: flex `} style={index === optionIndex ? {
+                      opacity: 1,
+                      backgroundColor: "rgba(238, 238, 238, var(--bg-opacity))"
+                    } : { }} key={index} onClick={() => onSelect(option)}>
                       {option.icon && <span className="icon"> {option.icon} </span>}
                       {<span> {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</span>}
                     </div>
@@ -193,12 +233,15 @@ const Dropdown = (props) => {
                 })}
           </div>
         ) : (
-          <div className="options-card" style={props.optionCardStyles} ref={optionRef}>
+          <div className="options-card" style={{...props.optionCardStyles,overflow:"scroll",maxHeight:'350px'}} id="jk-dropdown-unique" ref={optionRef}>
             {props.option
               .filter((option) => option.toUpperCase().indexOf(filterVal.toUpperCase()) > -1)
               .map((option, index) => {
                 return (
-                  <p key={index} onClick={() => onSelect(option)}>
+                  <p key={index} style={index === optionIndex ? {
+                    opacity: 1,
+                    backgroundColor: "rgba(238, 238, 238, var(--bg-opacity))"
+                  } : { }} onClick={() => onSelect(option)}>
                     {option}
                   </p>
                 );

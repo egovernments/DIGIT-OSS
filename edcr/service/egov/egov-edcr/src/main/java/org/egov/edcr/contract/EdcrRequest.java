@@ -82,6 +82,20 @@ public class EdcrRequest {
 
     private String comparisonEdcrNumber;
 
+    private String status;
+
+    private Date fromDate;
+
+    private Date toDate;
+    
+    private String applicationNumber;
+
+    private Integer offset;
+
+    private Integer limit;
+    
+    private String orderBy;
+
     public RequestInfo getRequestInfo() {
         return requestInfo;
     }
@@ -168,6 +182,62 @@ public class EdcrRequest {
 
     public void setComparisonEdcrNumber(String comparisonEdcrNumber) {
         this.comparisonEdcrNumber = comparisonEdcrNumber;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public Date getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(Date toDate) {
+        this.toDate = toDate;
+    }
+
+    public String getApplicationNumber() {
+        return applicationNumber;
+    }
+
+    public void setApplicationNumber(String applicationNumber) {
+        this.applicationNumber = applicationNumber;
+    }
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
     }
 
 }

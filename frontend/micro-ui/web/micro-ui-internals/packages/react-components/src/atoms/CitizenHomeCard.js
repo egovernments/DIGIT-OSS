@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const CitizenHomeCard = ({ header, links, state, Icon }) => {
+const CitizenHomeCard = ({ header, links, state, Icon, Info, isInfo = false }) => {
   return (
     <div className="CitizenHomeCard">
       <div className="header">
@@ -15,6 +15,9 @@ const CitizenHomeCard = ({ header, links, state, Icon }) => {
             {e.i18nKey}
           </Link>
         ))}
+      </div>
+      <div>
+        {isInfo ? <Info /> : null} 
       </div>
     </div>
   );

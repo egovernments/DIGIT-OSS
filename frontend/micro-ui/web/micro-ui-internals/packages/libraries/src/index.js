@@ -6,6 +6,7 @@ import { initI18n } from "./translations/index";
 
 import { Storage, PersistantStorage } from "./services/atoms/Utils/Storage";
 import { UploadServices } from "./services/atoms/UploadServices";
+import  JsDictionary  from "./services/atoms/JsDictionary";
 
 import { LocationService } from "./services/elements/Location";
 import { LocalityService } from "./services/elements/Localities";
@@ -25,6 +26,7 @@ import { TLService } from "./services/elements/TL";
 import { MCollectService } from "./services/elements/MCollect";
 import HrmsService from "./services/elements/HRMS";
 import { InboxGeneral } from "./services/elements/InboxService";
+import EventsServices from "./services/elements/Events";
 
 import ShareFiles from "./services/molecules/ShareFiles";
 import { GetServiceDefinitions } from "./services/molecules/ServiceDefinitions";
@@ -38,6 +40,9 @@ import Hooks from "./hooks";
 import Utils from "./utils";
 import { subFormRegistry } from "./subFormRegistry";
 import ReceiptsService from "./services/elements/Receipts";
+import { EDCRService } from "./services/elements/EDCR";
+import { OBPSService } from "./services/elements/OBPS";
+import { NOCService } from "./services/elements/NOC";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -66,15 +71,19 @@ const initLibraries = () => {
   setupLibraries("ReceiptsService", ReceiptsService);
   setupLibraries("MCollectService", MCollectService);
   setupLibraries("PaymentService", PaymentService);
+  setupLibraries("EDCRService", EDCRService);
+  setupLibraries("OBPSService", OBPSService);
   setupLibraries("DateUtils", dateUtils);
   setupLibraries("WorkflowService", WorkflowService);
   setupLibraries("MDMSService", MdmsService);
   setupLibraries("UploadServices", UploadServices);
+  setupLibraries("JsDictionary",JsDictionary);
   setupLibraries("GetServiceDefinitions", GetServiceDefinitions);
   setupLibraries("Complaint", Complaint);
   setupLibraries("FileDesludging", FileDesludging);
   setupLibraries("ComponentRegistryService", ComponentRegistryService);
   setupLibraries("StoreData", StoreData);
+  setupLibraries("EventsServices", EventsServices);
 
   setupLibraries("InboxGeneral", InboxGeneral);
   setupLibraries("ShareFiles", ShareFiles);
@@ -83,6 +92,8 @@ const initLibraries = () => {
   setupLibraries("Customizations", {});
   setupLibraries("Utils", Utils);
   setupLibraries("Download", Download);
+
+  setupLibraries("NOCService", NOCService);
 
   return new Promise((resolve) => {
     initI18n(resolve);

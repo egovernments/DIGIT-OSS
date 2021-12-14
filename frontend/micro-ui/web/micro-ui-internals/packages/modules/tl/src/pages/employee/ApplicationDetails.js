@@ -17,10 +17,11 @@ const ApplicationDetails = () => {
   const [numberOfApplications, setNumberOfApplications] = useState([]);
   const [allowedToNextYear, setAllowedToNextYear] = useState(false);
   sessionStorage.setItem("applicationNumber", applicationNumber)
+  const { renewalPending: renewalPending } = Digit.Hooks.useQueryParams();
 
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.tl.useApplicationDetail(t, tenantId, applicationNumber);
   
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { data: TradeRenewalDate = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", ["TradeRenewal"]);
 
   const {
@@ -31,11 +32,14 @@ const ApplicationDetails = () => {
     mutate,
   } = Digit.Hooks.tl.useApplicationActions(tenantId);
 
+  let EditRenewalApplastModifiedTime = Digit.SessionStorage.get("EditRenewalApplastModifiedTime");
+
   let workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: applicationDetails?.tenantId || tenantId,
     id: applicationDetails?.applicationData?.applicationNumber,
     moduleCode: businessService,
     role: "TL_CEMP",
+    config:{EditRenewalApplastModifiedTime:EditRenewalApplastModifiedTime},
   });
 
   const closeToast = () => {
@@ -47,7 +51,7 @@ const ApplicationDetails = () => {
       let financialYear = cloneDeep(applicationDetails?.applicationData?.financialYear);
       const financialYearDate = financialYear?.split('-')[1];
       const finalFinancialYear = `20${Number(financialYearDate)}-${Number(financialYearDate)+1}`
-      const isAllowedToNextYear = applicationDetails?.numOfApplications?.filter(data => data.financialYear == finalFinancialYear);
+      const isAllowedToNextYear = applicationDetails?.numOfApplications?.filter(data => (data.financialYear == finalFinancialYear && data?.status !== "REJECTED"));
       if (isAllowedToNextYear?.length > 0) setAllowedToNextYear(false);
       if (!isAllowedToNextYear || isAllowedToNextYear?.length == 0) setAllowedToNextYear(true);
       setNumberOfApplications(applicationDetails?.numOfApplications);
@@ -90,7 +94,7 @@ const ApplicationDetails = () => {
   const duration = validTo - currentDate;
   const renewalPeriod = TradeRenewalDate?.TradeLicense?.TradeRenewal?.[0]?.renewalPeriod;
 
-  if (rolecheck && (applicationDetails?.applicationData?.status === "APPROVED" || applicationDetails?.applicationData?.status === "EXPIRED") && duration <= renewalPeriod) {
+  if (rolecheck && (applicationDetails?.applicationData?.status === "APPROVED" || applicationDetails?.applicationData?.status === "EXPIRED" || (applicationDetails?.applicationData?.status === "MANUALEXPIRED" && renewalPending==="true")) && duration <= renewalPeriod) {
     if(workflowDetails?.data && allowedToNextYear) {
       if(!workflowDetails?.data?.actionState) {
         workflowDetails.data.actionState = {};
@@ -154,8 +158,8 @@ const ApplicationDetails = () => {
       })
   };
 
-  const wfDocs = workflowDetails.data?.timeline?.reduce((acc, { documents }) => {
-    return documents ? [...acc, ...documents] : acc;
+  const wfDocs = workflowDetails.data?.timeline?.reduce((acc, { wfDocuments }) => {
+    return wfDocuments ? [...acc, ...wfDocuments] : acc;
   }, []);
   const ownerdetails = applicationDetails?.applicationDetails.find(e => e.title === "ES_NEW_APPLICATION_OWNERSHIP_DETAILS");
   let appdetailsDocuments = ownerdetails?.additionalDetails?.documents;
