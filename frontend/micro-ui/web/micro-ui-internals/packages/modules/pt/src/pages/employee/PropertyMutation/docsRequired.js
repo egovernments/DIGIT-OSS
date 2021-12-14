@@ -8,7 +8,7 @@ import { useHistory, useParams } from "react-router-dom";
 
 const RequiredDoc = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { t } = useTranslation();
   const history = useHistory();
   const { id } = useParams();

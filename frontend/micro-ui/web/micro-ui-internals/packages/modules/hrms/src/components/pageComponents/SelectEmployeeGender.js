@@ -20,7 +20,7 @@ const SelectEmployeeGender = ({ t, config, onSelect, formData = {}, userType, re
   ];
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
 
   const { data: Menu} = Digit.Hooks.hrms.useHRMSGenderMDMS(stateId, "common-masters", "GenderType");
 

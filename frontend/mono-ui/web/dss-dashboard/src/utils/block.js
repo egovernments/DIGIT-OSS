@@ -10,6 +10,7 @@ import {
 } from "react-device-detect";
 import logoNotFound from '../components/Dashboard/download/logoNotFound.png';
 import logo from '../images/Digit.png';
+import { stateTenant } from './commons';
 
 
 const filterFunc = function (node) {
@@ -362,7 +363,7 @@ export const loadUlbLogo = tenantid => {
             localStorage.setItem("UlbLogoForPdf", canvas.toDataURL());
             canvas = null;
         };
-        var tenant = tenantid ? tenantid.split('.')[0] : tenantid;
+        var tenant = stateTenant() || "";
         img.src = `/${tenant}-egov-assets/${tenantid}/logo.png`;
     } catch (e) {
         localStorage.setItem("IsUlbLogoLoading", 'FAILED');

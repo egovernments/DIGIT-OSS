@@ -64,6 +64,16 @@
 @import "./components/CitizenHomeCard.scss";
 @import "./components/SearchForm.scss";
 @import "./components/cardHeaderWithOptions.scss";
+@import "./components/TimeLine.scss";
+@import "./components/PageBasedInput.scss";
+@import "./components/StandaloneSearchBar.scss";
+@import "./components/CardBasedOptions.scss";
+@import "./components/WhatsNewCard.scss";
+@import "./components/SearchOnRadioButton.scss";
+@import "./components/EventCalendarView.scss";
+@import "./components/OnGroundEventCard.scss";
+@import "./components/PopupHeadingLabel.scss";
+@import "./components/hoc/index.scss";
 
 @import "./pages/employee/index.scss";
 @import "./pages/employee/cardfix.scss";
@@ -73,9 +83,68 @@
 @import "./pages/employee/response.scss";
 @import "./pages/employee/form-fields.scss";
 @import "./pages/employee/scroll-table.scss";
+@import "./pages/employee/EmployeeLogin.scss";
 
 @import "./pages/citizen/payment/payment-type.scss";
 @import "./pages/citizen/container.scss";
+@import "./pages/citizen/HomePageWrapper.scss";
+@import "./pages/citizen/CitizenEngagementNotificationWrapper.scss";
+@import "./pages/citizen/Events.scss";
+@import "./pages/citizen/DocumentList.scss";
+@import "./pages/citizen/SurveyList.scss";
+@import "./pages/citizen/citizenDocument.scss";
+@import "./pages/employee/surveys.scss";
+
+.display-none{
+  display: none;
+}
+
+.p-unset{
+  padding: unset !important;
+}
+
+.flex-one{
+  @apply flex-1;
+}
+
+.display-flex-gap-2{
+  @apply flex gap-3;
+}
+.rm-mb {
+  margin-bottom: unset !important;
+}
+
+.w-fullwidth{
+  @apply w-full;
+}
+
+.margin-unset{
+  margin: unset !important;
+}
+
+.text-align-center{
+  @apply text-center;
+}
+
+.desktop-only{
+  @apply hidden;
+}
+
+@screen dt {
+  .desktop-only{
+    @apply block;
+  } 
+}
+
+.mobile-only{
+  @apply block;
+}
+
+@screen dt {
+  .mobile-only{
+    @apply hidden;
+  } 
+}
 
 .dark {
   @apply text-text-primary;
@@ -399,4 +468,12 @@ input[type="number"] {
 
 .payment-form-text-input-correction {
   width: 100% !important;
+}
+
+
+.edcr-citizen-inbox{ 
+   thead th:first-child{
+  min-width:155px; 
+}
+
 }

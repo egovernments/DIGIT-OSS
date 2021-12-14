@@ -55,28 +55,38 @@ import org.egov.infra.microservice.contract.ResponseInfo;
 public class EdcrResponse {
 
     private ResponseInfo responseInfo;
-    
+
     private List<EdcrDetail> edcrDetail;
 
-	public ResponseInfo getResponseInfo() {
-		return responseInfo;
-	}
+    private int count;
 
-	public void setResponseInfo(ResponseInfo responseInfo) {
-		this.responseInfo = responseInfo;
-	}
+    public ResponseInfo getResponseInfo() {
+        return responseInfo;
+    }
 
-	public List<EdcrDetail> getEdcrDetail() {
-		return edcrDetail;
-	}
+    public void setResponseInfo(ResponseInfo responseInfo) {
+        this.responseInfo = responseInfo;
+    }
 
-	public void setEdcrDetail(List<EdcrDetail> edcrDetail) {
-		this.edcrDetail = edcrDetail;
-	}
+    public List<EdcrDetail> getEdcrDetail() {
+        return edcrDetail;
+    }
+
+    public void setEdcrDetail(List<EdcrDetail> edcrDetail) {
+        this.edcrDetail = edcrDetail;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 
     @Override
     public String toString() {
         return "EdcrResponse [responseInfo=" + responseInfo + ", edcrDetail=" + edcrDetail + "]";
     }
-	
+
 }

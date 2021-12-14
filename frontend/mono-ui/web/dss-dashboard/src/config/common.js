@@ -1,4 +1,6 @@
-let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[0] : ''
+import { stateTenant } from "../utils/commons";
+
+let tenent = stateTenant()||"";
 
 const commonConfig = {
   MAP_API_KEY: "AIzaSyBN01pR2wGavj2_q3v4-vFgQzmcx-gllk0",

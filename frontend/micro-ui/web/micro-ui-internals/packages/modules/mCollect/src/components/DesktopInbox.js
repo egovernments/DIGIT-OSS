@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-
 import { Card, Loader } from "@egovernments/digit-ui-react-components";
-import InboxLinks from "./inbox/InboxLink";
-import ApplicationTable from "./inbox/ApplicationTable";
-import SearchApplication from "./inbox/search";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { getActionButton } from "../utils";
+import ApplicationTable from "./inbox/ApplicationTable";
+import InboxLinks from "./inbox/InboxLink";
+import SearchApplication from "./inbox/search";
+
 
 const DesktopInbox = ({ tableConfig, filterComponent, columns, ...props }) => {
   const { data } = props;
@@ -159,9 +159,9 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, ...props }) => {
               minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
               padding: "20px 18px",
               fontSize: "16px",
-              wordBreak:"break-word",
-              overflowWrap: 'break-word',
-              width: "250px"
+              wordBreak: "break-word",
+              overflowWrap: "break-word",
+              width: "250px",
             },
           };
         }}
@@ -172,7 +172,6 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, ...props }) => {
         pageSizeLimit={props.pageSizeLimit}
         onSort={props.onSort}
         disableSort={props.disableSort}
-        onPageSizeChange={props.onPageSizeChange}
         sortParams={props.sortParams}
         totalRecords={props.totalRecords}
       />

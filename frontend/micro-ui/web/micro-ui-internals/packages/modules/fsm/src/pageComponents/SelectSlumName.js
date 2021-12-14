@@ -3,7 +3,7 @@ import { CardLabel, LabelFieldPair, Dropdown, FormStep, Loader } from "@egovernm
 
 const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const [slum, setSlum] = useState();
   const slumTenantId = formData?.address?.city ? formData?.address?.city.code : tenantId;
   const { data: slumData, isLoading: slumDataLoading } = Digit.Hooks.fsm.useMDMS(slumTenantId, "FSM", "Slum");

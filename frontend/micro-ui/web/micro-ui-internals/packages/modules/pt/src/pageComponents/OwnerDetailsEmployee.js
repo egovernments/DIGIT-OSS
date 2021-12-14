@@ -28,7 +28,7 @@ const PTEmployeeOwnershipDetails = ({ config, onSelect, userType, formData, setE
   const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { data: mdmsData, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", [
     "UsageCategory",
     "OccupancyType",

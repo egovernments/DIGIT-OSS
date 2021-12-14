@@ -2,7 +2,8 @@ import BrowserUtil from "./browser";
 import * as date from "./date";
 import * as dss from "./dss";
 import * as locale from "./locale";
-import PDFUtil, { downloadReceipt } from "./pdf";
+import * as obps from "./obps";
+import PDFUtil, { downloadReceipt ,downloadPDFFromLink ,getFileUrl} from "./pdf";
 
 const GetParamFromUrl = (key, fallback, search) => {
   if (typeof window !== "undefined") {
@@ -86,7 +87,7 @@ const getStaticMapUrl = (latitude, longitude) => {
 };
 
 const detectDsoRoute = (pathname) => {
-  const employeePages = ["search", "inbox", "dso-dashboard", "dso-application-details"];
+  const employeePages = ["search", "inbox", "dso-dashboard", "dso-application-details", "user"];
 
   return employeePages.some((url) => pathname.split("/").includes(url));
 };
@@ -101,19 +102,26 @@ const routeSubscription = (pathname) => {
   }
 };
 
+const didEmployeeHasRole = (role) => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const userInfo = Digit.UserService.getUser();
+  const rolearray = userInfo?.info?.roles.filter(item => { if (item.code == role && item.tenantId === tenantId) return true; });
+  return rolearray?.length;
+}
+
 const pgrAccess = () => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
   const pgrRoles = ["PGR_LME", "PGR-ADMIN", "CSR", "CEMP", "FEMP", "DGRO", "ULB Operator", "GRO", "GO", "RO", "GA"];
 
-  const PGR_ACCESS = userRoles.filter((role) => pgrRoles.includes(role));
+  const PGR_ACCESS = userRoles?.filter((role) => pgrRoles.includes(role));
 
-  return PGR_ACCESS.length > 0;
+  return PGR_ACCESS?.length > 0;
 };
 
 const fsmAccess = () => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
   const fsmRoles = [
     "FSM_CREATOR_EMP",
     "FSM_EDITOR_EMP",
@@ -127,60 +135,97 @@ const fsmAccess = () => {
     "FSM_COLLECTOR",
   ];
 
-  const FSM_ACCESS = userRoles.filter((role) => fsmRoles.includes(role));
+  const FSM_ACCESS = userRoles?.filter((role) => fsmRoles.includes(role));
 
-  return FSM_ACCESS.length > 0;
+  return FSM_ACCESS?.length > 0;
 };
+
+const NOCAccess = () => {
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
+
+  const NOC_ROLES =  ["NOC_CEMP","NOC_DOC_VERIFIER","NOC_FIELD_INSPECTOR","NOC_APPROVER","BPA_NOC_VERIFIER", "AIRPORT_AUTHORITY_APPROVER", "FIRE_NOC_APPROVER", "NOC_DEPT_APPROVER"]
+
+  const NOC_ACCESS = userRoles?.filter((role) => NOC_ROLES.includes(role));
+
+  return NOC_ACCESS?.length > 0
+}
+
+const BPAREGAccess = () => {
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
+
+  const BPAREG_ROLES =["BPAREG_APPROVER","BPAREG_DOC_VERIFIER"]
+
+  const BPAREG_ACCESS = userRoles?.filter((role) => BPAREG_ROLES.includes(role));
+
+  return BPAREG_ACCESS?.length > 0
+}
+
+const BPAAccess = () => {
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
+
+  const BPA_ROLES = ["BPA_VERIFIER", "CEMP", "BPA_APPROVER", "BPA_FIELD_INSPECTOR", "BPA_NOC_VERIFIER", "AIRPORT_AUTHORITY_APPROVER", "FIRE_NOC_APPROVER", "NOC_DEPT_APPROVER", "BPA_NOC_VERIFIER", "BPA_TOWNPLANNER", "BPA_ENGINEER", "BPA_BUILDER", "BPA_STRUCTURALENGINEER", "BPA_SUPERVISOR", "BPA_DOC_VERIFIER", "EMPLOYEE"]
+
+  const BPA_ACCESS = userRoles?.filter((role) => BPA_ROLES.includes(role));
+
+  return BPA_ACCESS?.length > 0
+}
+
+
 
 const ptAccess = () => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
   const ptRoles = ["PT_APPROVER", "PT_CEMP", "PT_DOC_VERIFIER", "PT_FIELD_INSPECTOR"];
 
-  const PT_ACCESS = userRoles.filter((role) => ptRoles.includes(role));
+  const PT_ACCESS = userRoles?.filter((role) => ptRoles.includes(role));
 
-  return PT_ACCESS.length > 0;
+  return PT_ACCESS?.length > 0;
 };
 
 const tlAccess = () => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
   const tlRoles = ["TL_CEMP", "TL_APPROVER", "TL_FIELD_INSPECTOR", "TL_DOC_VERIFIER"];
 
-  const TL_ACCESS = userRoles.filter((role) => tlRoles.includes(role));
+  const TL_ACCESS = userRoles?.filter((role) => tlRoles.includes(role));
 
-  return TL_ACCESS.length > 0;
+  return TL_ACCESS?.length > 0;
 };
 
 const mCollectAccess = () => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
   const mCollectRoles = ["UC_EMP"];
 
-  const MCOLLECT_ACCESS = userRoles.filter((role) => mCollectRoles.includes(role));
+  const MCOLLECT_ACCESS = userRoles?.filter((role) => mCollectRoles.includes(role));
 
-  return MCOLLECT_ACCESS.length > 0;
+  return MCOLLECT_ACCESS?.length > 0;
 };
 
 
 const receiptsAccess = () => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
   const receiptsRoles = ["CR_PT"];
-  const RECEIPTS_ACCESS = userRoles.filter((role) => receiptsRoles.includes(role));
-  return RECEIPTS_ACCESS.length > 0;
+  const RECEIPTS_ACCESS = userRoles?.filter((role) => receiptsRoles.includes(role));
+  return RECEIPTS_ACCESS?.length > 0;
 }
 const hrmsRoles = ["HRMS_ADMIN"];
 const hrmsAccess = () => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
-  const HRMS_ACCESS = userRoles.filter((role) => hrmsRoles.includes(role));
-  return HRMS_ACCESS.length > 0;
+  const userRoles = userInfo?.info.roles.map((roleData) => roleData.code);
+  const HRMS_ACCESS = userRoles?.filter((role) => hrmsRoles.includes(role));
+  return HRMS_ACCESS?.length > 0;
 };
 
 export default {
   pdf: PDFUtil,
   downloadReceipt,
+  downloadPDFFromLink,
+  getFileUrl,
   browser: BrowserUtil,
   locale,
   date,
@@ -190,10 +235,15 @@ export default {
   routeSubscription,
   pgrAccess,
   fsmAccess,
+  BPAREGAccess,
+  BPAAccess,
   dss,
+  obps,
   ptAccess,
+  NOCAccess,
   mCollectAccess,
   receiptsAccess,
+  didEmployeeHasRole,
   hrmsAccess,
   getPattern,
   hrmsRoles,

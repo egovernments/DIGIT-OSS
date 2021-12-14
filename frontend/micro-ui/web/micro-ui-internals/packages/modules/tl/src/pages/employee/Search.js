@@ -30,8 +30,8 @@ const Search = ({path}) => {
         enabled: !!( payload && Object.keys(payload).length > 0 )
     }
 
-    const {data: searchReult, isLoading , isSuccess } = Digit.Hooks.tl.useSearch({tenantId, filters: payload, config})
-    return <Search t={t} tenantId={tenantId} onSubmit={onSubmit} data={ !isLoading && isSuccess ? searchReult : { display: "ES_COMMON_NO_DATA" } } /> 
+    const {data: {Licenses: searchReult, Count: count} = {}, isLoading , isSuccess } = Digit.Hooks.tl.useSearch({tenantId, filters: payload, config})
+    return <Search t={t} tenantId={tenantId} onSubmit={onSubmit} data={ !isLoading && isSuccess ? searchReult : { display: "ES_COMMON_NO_DATA" } } count={count} /> 
 
 }
 

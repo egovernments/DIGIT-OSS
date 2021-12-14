@@ -176,12 +176,13 @@ public class Plan implements Serializable {
     @Transient
     private String dxfFileName;
 
-    @Transient
-    @JsonIgnore
     private List<EdcrPdfDetail> edcrPdfDetails;
 
     @Transient
     private Boolean strictlyValidateDimension = false;
+    
+    @Transient
+    private Boolean strictlyValidateBldgHeightDimension = false;
 
     private Gate gate;
 
@@ -604,6 +605,14 @@ public class Plan implements Serializable {
 
     public void setStrictlyValidateDimension(Boolean strictlyValidateDimension) {
         this.strictlyValidateDimension = strictlyValidateDimension;
+    }
+
+    public Boolean getStrictlyValidateBldgHeightDimension() {
+        return strictlyValidateBldgHeightDimension;
+    }
+
+    public void setStrictlyValidateBldgHeightDimension(Boolean strictlyValidateBldgHeightDimension) {
+        this.strictlyValidateBldgHeightDimension = strictlyValidateBldgHeightDimension;
     }
 
     public HashMap<String, String> getFeatureAmendments() {

@@ -1,10 +1,18 @@
 import axios from "axios";
-import commonConfig from "egov-ui-kit/config/common.js";
-import { getAccessToken, getLocale, getTenantId, localStorageGet, localStorageSet, setLocale, setTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import commonConfig from "config/common.js";
+import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
+import {
+  getAccessToken,
+  getLocale,
+  getTenantId,
+  localStorageGet,
+  localStorageSet,
+  setLocale,
+  setTenantId
+} from "egov-ui-kit/utils/localStorageUtils";
 import some from "lodash/some";
-import { addQueryArg, hasTokenExpired, prepareForm } from "./commons";
 import store from "ui-redux/store";
-import { hideSpinner,showSpinner } from "egov-ui-kit/redux/common/actions";
+import { addQueryArg, hasTokenExpired, prepareForm } from "./commons";
 
 axios.interceptors.response.use(
   (response) => {
@@ -50,14 +58,7 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
   );
 };
 
-export const multiHttpRequest = async (
-  endPoint = [],
-  action,
-  queryObject = [],
-  requestBody = [],
-  headers = [],
-  customRequestInfo = {},
-) => {
+export const multiHttpRequest = async (endPoint = [], action, queryObject = [], requestBody = [], headers = [], customRequestInfo = {}) => {
   let apiError = "Api Error";
 
   if (headers)
@@ -66,18 +67,18 @@ export const multiHttpRequest = async (
     });
 
   try {
-
-    const response = await axios.all(requestBody.map((requestB, index) => {
-      if (queryObject && queryObject[index] && queryObject[index].length) {
-        endPoint[index] = addQueryArg(endPoint[index], queryObject[index]);
-      }
-      return instance.post(endPoint[index], wrapRequestBody(requestB, action, customRequestInfo))
-    }))
-    const responseStatus = parseInt(response && Array.isArray(response)&&response.length>0&&response[0] && response[0].status, 10);
+    const response = await axios.all(
+      requestBody.map((requestB, index) => {
+        if (queryObject && queryObject[index] && queryObject[index].length) {
+          endPoint[index] = addQueryArg(endPoint[index], queryObject[index]);
+        }
+        return instance.post(endPoint[index], wrapRequestBody(requestB, action, customRequestInfo));
+      })
+    );
+    const responseStatus = parseInt(response && Array.isArray(response) && response.length > 0 && response[0] && response[0].status, 10);
     if (responseStatus === 200 || responseStatus === 201) {
-      return response && response.map(resp => resp.data);
+      return response && response.map((resp) => resp.data);
     }
-
   } catch (error) {
     const { data, status } = error.response[0];
     if (hasTokenExpired(status, data)) {
@@ -94,7 +95,6 @@ export const multiHttpRequest = async (
   throw new Error(apiError);
 };
 
-
 export const httpRequest = async (
   endPoint,
   action,
@@ -105,7 +105,12 @@ export const httpRequest = async (
   ignoreTenantId = false,
   isGetMethod = false
 ) => {
-  const tenantId = getTenantId() || commonConfig.tenantId;
+  /* const tenantId = getTenantId() || commonConfig.tenantId; */
+  /* Fix for central instance to send tenantID in all query params  */
+  const tenantId =
+    process.env.REACT_APP_NAME === "Citizen"
+      ? commonConfig.tenantId
+      : (endPoint && endPoint.includes("mdms") ? commonConfig.tenantId : getTenantId()) || commonConfig.tenantId;
   let apiError = "Api Error";
 
   if (headers)
@@ -113,8 +118,13 @@ export const httpRequest = async (
       headers,
     });
 
-  if (!some(queryObject, ["key", "tenantId"]) && !ignoreTenantId) {
-    queryObject &&
+  /* if (!some(queryObject, ["key", "tenantId"]) && !ignoreTenantId) { */
+  /* Fix for central instance to send tenantID in all query params  */
+  if (!some(queryObject, ["key", "tenantId"])) {
+    commonConfig.singleInstance &&
+      endPoint &&
+      !endPoint.includes("tenantId") &&
+      queryObject &&
       queryObject.push({
         key: "tenantId",
         value: tenantId,
@@ -138,7 +148,6 @@ export const httpRequest = async (
         return response.data;
       }
     }
-
   } catch (error) {
     const { data, status } = error.response;
     if (hasTokenExpired(status, data)) {
@@ -157,7 +166,7 @@ export const httpRequest = async (
 
 export const uploadFile = async (endPoint, module, file, ulbLevel) => {
   // Bad idea to fetch from local storage, change as feasible
-  const tenantId = getTenantId() ? (ulbLevel ? getTenantId() : getTenantId().split(".")[0]) : "";
+  const tenantId = getTenantId() ? (ulbLevel ? commonConfig.tenantId : commonConfig.tenantId) : "";
   const uploadInstance = axios.create({
     baseURL: window.location.origin,
     headers: {
@@ -173,7 +182,8 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
   const requestBody = prepareForm(requestParams);
 
   try {
-    const response = await uploadInstance.post(endPoint, requestBody);
+    const tenantInfo = commonConfig.singleInstance ? `?tenantId=${commonConfig.tenantId}` : "";
+    const response = await uploadInstance.post(`${endPoint}${tenantInfo}`, requestBody);
     const responseStatus = parseInt(response.status, 10);
     let fileStoreIds = [];
 
@@ -212,7 +222,7 @@ export const loginRequest = async (username = null, password = null, refreshToke
     const response = await loginInstance.post("/user/oauth/token", params);
     const responseStatus = parseInt(response.status, 10);
     if (responseStatus === 200 || responseStatus === 201) {
-      localStorage.setItem("citizen.userRequestObject",JSON.stringify(response.data.UserRequest));
+      localStorage.setItem("citizen.userRequestObject", JSON.stringify(response.data.UserRequest));
       return response.data;
     }
   } catch (error) {
@@ -261,9 +271,9 @@ export const commonApiPost = (
   if (url && url[url.length - 1] === "/") url = url.substring(0, url.length - 1);
   if (!doNotOverride) {
     if (url.split("?").length > 1) {
-      url += "&tenantId=" + (getTenantId() ? (isStateLevel ? getTenantId().split(".")[0] : getTenantId()) : "default");
+      url += "&tenantId=" + (getTenantId() ? (isStateLevel ? commonConfig.tenantId : commonConfig.tenantId) : "default");
     } else {
-      url += "?tenantId=" + (getTenantId() ? (isStateLevel ? getTenantId().split(".")[0] : getTenantId()) : "default");
+      url += "?tenantId=" + (getTenantId() ? (isStateLevel ? commonConfig.tenantId : commonConfig.tenantId) : "default");
     }
   } else {
     url += "?";
@@ -371,9 +381,8 @@ export const commonApiPost = (
     });
 };
 
-
 const downloadPdf = (blob, fileName) => {
-  const link = document.createElement('a');
+  const link = document.createElement("a");
   // create a blobURI pointing to our Blob
   link.href = URL.createObjectURL(blob);
   link.download = fileName;
@@ -385,34 +394,34 @@ const downloadPdf = (blob, fileName) => {
   setTimeout(() => URL.revokeObjectURL(link.href), 7000);
 };
 
-
-const printPdf=(blob)=>{
+const printPdf = (blob) => {
   const fileURL = URL.createObjectURL(blob);
   var myWindow = window.open(fileURL);
   if (myWindow != undefined) {
-    myWindow.addEventListener("load", event => {
+    myWindow.addEventListener("load", (event) => {
       myWindow.focus();
       myWindow.print();
     });
   }
-}
+};
 
-export const downloadPdfFile = async  ( endPoint,
-action,
-queryObject = [],
-requestBody = {},
-customRequestInfo = {},
-ignoreTenantId = false,
-fileName='download.pdf',
-onSuccess
+export const downloadPdfFile = async (
+  endPoint,
+  action,
+  queryObject = [],
+  requestBody = {},
+  customRequestInfo = {},
+  ignoreTenantId = false,
+  fileName = "download.pdf",
+  onSuccess
 ) => {
-const tenantId = getTenantId() || commonConfig.tenantId;
+  const tenantId = getTenantId() || commonConfig.tenantId;
   const downloadInstance = axios.create({
     baseURL: window.location.origin,
     responseType: "arraybuffer",
     headers: {
       "Content-Type": "application/json",
-      "Accept": "application/pdf"
+      Accept: "application/pdf",
     },
   });
 
@@ -430,11 +439,12 @@ const tenantId = getTenantId() || commonConfig.tenantId;
     store.dispatch(showSpinner());
     const response = await downloadInstance.post(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
     const responseStatus = parseInt(response.status, 10);
- 
+
     if (responseStatus === 201 || responseStatus === 200) {
-     
-      fileName=='print'?printPdf(new Blob([response.data], { type: "application/pdf" })):downloadPdf(new Blob([response.data], { type: "application/pdf" }), fileName);
-      onSuccess?onSuccess():{};
+      fileName == "print"
+        ? printPdf(new Blob([response.data], { type: "application/pdf" }))
+        : downloadPdf(new Blob([response.data], { type: "application/pdf" }), fileName);
+      onSuccess ? onSuccess() : {};
       store.dispatch(hideSpinner());
     }
   } catch (error) {

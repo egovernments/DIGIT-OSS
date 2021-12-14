@@ -33,6 +33,9 @@ public class NocResponse   {
   @JsonProperty("Noc")
   @Valid
   private List<Noc> noc = null;
+  
+  @JsonProperty("count")
+  private Integer count;
 
   public NocResponse responseInfo(ResponseInfo responseInfo) {
     this.responseInfo = responseInfo;

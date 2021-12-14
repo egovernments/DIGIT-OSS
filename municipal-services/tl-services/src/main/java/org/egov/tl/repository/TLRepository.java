@@ -56,10 +56,17 @@ public class TLRepository {
      */
     public List<TradeLicense> getLicenses(TradeLicenseSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getTLSearchQuery(criteria, preparedStmtList);
+        String query = queryBuilder.getTLSearchQuery(criteria, preparedStmtList,false);
         List<TradeLicense> licenses =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         sortChildObjectsById(licenses);
         return licenses;
+    }
+    
+    public int getLicenseCount(TradeLicenseSearchCriteria criteria) {
+    	List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getTLSearchQuery(criteria, preparedStmtList,true);
+        int licenseCount = jdbcTemplate.queryForObject(query,preparedStmtList.toArray(),Integer.class);
+        return licenseCount;
     }
 
     /**
@@ -149,5 +156,12 @@ public class TLRepository {
                 preparedStmtList.toArray(),
                 new SingleColumnRowMapper<>(String.class));
     }
+    
+    public List <String> fetchTradeLicenseTenantIds(){
+    	List<Object> preparedStmtList = new ArrayList<>();
+    	return jdbcTemplate.query(queryBuilder.TENANTIDQUERY,preparedStmtList.toArray(),new SingleColumnRowMapper<>(String.class));
+    	
+    }
+    
 
 }

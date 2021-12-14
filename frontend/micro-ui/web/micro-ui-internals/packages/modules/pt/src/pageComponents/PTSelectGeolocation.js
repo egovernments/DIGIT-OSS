@@ -9,7 +9,7 @@ const PTSelectGeolocation = ({ t, config, onSelect, formData = {} }) => {
   const [pincodeServicability, setPincodeServicability] = useState(null);
   const isEditProperty = formData?.isEditProperty || false;
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { data: defaultConfig = {} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "MapConfig");
   const defaultcoord = defaultConfig?.PropertyTax?.MapConfig;
   let defaultcoord1 = defaultcoord ? defaultcoord[0] : {};

@@ -20,7 +20,7 @@ export const ULBService = {
     return tenantId;
   },
   getStateId: () => {
-    return ULBService.getCurrentTenantId()?.split(".")[0];
+    return window?.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID");
   },
   getCurrentUlb: () => {
     const initData = StoreService.getInitData();

@@ -61,13 +61,20 @@ public interface FileStoreService {
 
     FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName);
 
+    FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName, String tenantId);
+
     FileStoreMapper store(File file, String fileName, String mimeType, String moduleName, boolean deleteFile);
 
     FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName, boolean closeStream);
 
+    FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName, String tenantId,
+            boolean closeStream);
+
     File fetch(FileStoreMapper fileMappers, String moduleName);
 
     File fetch(String fileStoreId, String moduleName);
+
+    File fetch(String fileStoreId, String moduleName, String tenantId);
 
     Path fetchAsPath(String fileStoreId, String moduleName);
 

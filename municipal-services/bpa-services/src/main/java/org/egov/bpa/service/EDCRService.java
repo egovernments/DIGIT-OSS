@@ -102,11 +102,25 @@ public class EDCRService {
 		TypeRef<List<Double>> typeRef = new TypeRef<List<Double>>(){};
 		Map<String, String> additionalDetails = bpa.getAdditionalDetails() != null ? (Map)bpa.getAdditionalDetails()
 				: new HashMap<String, String>();
-		LinkedList<String> serviceType = context.read("edcrDetail.*.planDetail.planInformation.serviceType");
+		LinkedList<String> serviceType = context.read("edcrDetail.*.applicationSubType");
+                if (serviceType != null && !serviceType.isEmpty() && additionalDetails.get(BPAConstants.SERVICETYPE) != null
+                        && !serviceType.get(0).equalsIgnoreCase(additionalDetails.get(BPAConstants.SERVICETYPE))) {
+                    throw new CustomException(BPAErrorConstants.INVALID_SERVICE_TYPE,
+                            "The service type is invalid, it is not matching with scrutinized plan service type "
+                                    + serviceType.get(0));
+                }
 		if(serviceType == null || serviceType.size() == 0){
 			serviceType.add("NEW_CONSTRUCTION");
 		}
 		LinkedList<String> applicationType = context.read("edcrDetail.*.appliactionType");
+                if (applicationType != null && !applicationType.isEmpty()
+                        && additionalDetails.get(BPAConstants.APPLICATIONTYPE) != null
+                        && !applicationType.get(0).equalsIgnoreCase(additionalDetails.get(BPAConstants.APPLICATIONTYPE))) {
+                    throw new CustomException(BPAErrorConstants.INVALID_APPLN_TYPE,
+                            "The application type is invalid, it is not matching with scrutinized plan application type "
+                                    + applicationType.get(0));
+                }
+		
 		if(applicationType == null || applicationType.size() == 0){
 			applicationType.add("permit");
 		}

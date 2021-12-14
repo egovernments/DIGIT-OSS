@@ -19,6 +19,7 @@ const Modal = ({
   formId,
   isDisabled,
   hideSubmit,
+  style={}
 }) => {
   /**
    * TODO: It needs to be done from the desgin changes
@@ -36,8 +37,8 @@ const Modal = ({
         <div className="popup-module-main">
           {children}
           <div className="popup-module-action-bar">
-            {actionCancelLabel ? <ButtonSelector theme="border" label={actionCancelLabel} onSubmit={actionCancelOnSubmit} /> : null}
-            {!hideSubmit ? <ButtonSelector label={actionSaveLabel} onSubmit={actionSaveOnSubmit} formId={formId} isDisabled={isDisabled} /> : null}
+            {actionCancelLabel ? <ButtonSelector theme="border" label={actionCancelLabel} onSubmit={actionCancelOnSubmit} style={style}/> : null}
+            {!hideSubmit ? <ButtonSelector label={actionSaveLabel} onSubmit={actionSaveOnSubmit} formId={formId} isDisabled={isDisabled} style={style}/> : null}
           </div>
         </div>
       </div>

@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 2.1.0
+
+- Dimension validation feature
+- DXF to PDF conversion feature
+- Enhance search filters by fromdate, todate, application number, status and added pagination in fetch API
+
 ## 2.0.0
 
 - The Extracting data from dxf file module has been made **open source**.

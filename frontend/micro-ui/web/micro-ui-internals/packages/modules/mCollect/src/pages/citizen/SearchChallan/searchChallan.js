@@ -104,14 +104,19 @@ const SearchChallan = ({ config: propsConfig, formData }) => {
       >
         <CardLabel>{`${t("UC_CITY_LABEL")}*`}</CardLabel>
         <RadioOrSelect
-            className="form-field"
-            isMandatory={true}
-            value={city}
-            //disable={employeeMenu?.length === 1}
-            options={allCities}
-            onSelect={selectCity}
-            optionKey="code"
-            t={t}
+             className="form-field"
+             isMandatory={true}
+              t={t}
+              optionKey="code"
+              name="City"
+              options={allCities}
+              value={city}
+              selectedOption={city}
+              onSelect={selectCity}
+              {...(validation = {
+                isRequired: true,
+                title: t("UC_CITY_MANDATORY"),
+              })}
           />
         <CardLabel>{`${t("UC_SERVICE_CATEGORY_LABEL")}*`}</CardLabel>
         {Menu && (

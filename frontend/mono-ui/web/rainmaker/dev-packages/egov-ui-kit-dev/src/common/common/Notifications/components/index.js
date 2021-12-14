@@ -77,7 +77,6 @@ class EventDetails extends Component {
     const { openMapHandler } = this;
     const { eventDetails, loading } = this.props;
     const { description, SLA, address, locationObj, eventCategory, name, eventDate,eventToDate, entryFees } = eventDetails || "";
-    console.log(eventDate);
     return (
       <Screen className="notifications-screen-style" loading={loading}>
         {eventCategory && <Card

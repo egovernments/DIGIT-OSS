@@ -15,7 +15,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
   );
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
 
   function handleAdd() {
     const values = [...fields];

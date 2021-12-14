@@ -5,10 +5,11 @@ import { CardSubHeader, StatusTable, Row, CardSectionHeader } from "@egovernment
 function PropertyOwners({ owners }) {
   const { t } = useTranslation();
 
-  const checkLocation = true //window.location.href.includes("employee/tl");
+  const checkLocation = true;
   const checkOwnerLength = owners?.length || 1;
   let cardStyles = { marginTop: "19px" };
   let statusTableStyles = { position: "relative", padding: "8px" };
+  let rowContainerStyle = {justifyContent: "space-between", fontSize: "16px", lineHeight: "19px", color: "#0B0C0C"};
   if (checkLocation && Number(checkOwnerLength) > 1) {
     cardStyles = { marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", maxWidth: "600px", minWidth: "280px" };
   } else if (checkLocation && !(Number(checkOwnerLength) > 1)) {
@@ -16,6 +17,12 @@ function PropertyOwners({ owners }) {
      statusTableStyles = { position: "relative", marginTop: "19px",};
   }
   
+  if (window.location.href.includes("obps")) {
+    cardStyles = {...cardStyles, maxWidth: "950px" };
+    cardStyles = {...cardStyles, maxWidth: "950px" };
+    rowContainerStyle = {};
+  }
+
   return (
     <React.Fragment>
       {owners.map((owner, index) => (
@@ -48,7 +55,7 @@ function PropertyOwners({ owners }) {
                     caption={value.caption}
                     className="border-none"
                     // TODO, Later will move to classes
-                    rowContainerStyle={checkLocation ? {justifyContent: "space-between", fontSize: "16px", lineHeight: "19px", color: "#0B0C0C"}: {}}
+                    rowContainerStyle={rowContainerStyle}
                   />
                 );
               })}

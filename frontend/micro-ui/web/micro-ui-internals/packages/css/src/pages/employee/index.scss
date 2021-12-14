@@ -1,9 +1,11 @@
+@import "./login.scss";
 /* TODO: convert using tailwind */
 .employee {
   .breadcrumb {
     @apply ml-sm mb-lg;
   }
   .ground-container {
+    margin-bottom: 56px;
     @apply flex flex-col;
   }
   .card-home {
@@ -60,6 +62,10 @@
     padding-top: 88px;
   }
 
+  .loginContainer {
+    padding-top: 88px;
+  }
+
   .react-time-picker {
     width: 100%;
     max-width: 200px;
@@ -93,6 +99,7 @@
 .citizen {
   .main {
     padding-top: 82px;
+    min-height: calc(100vh - 90px);
   }
 }
 
@@ -224,10 +231,25 @@
 }
 
 .link {
-  @apply text-primary-main;
+  @apply text-primary-main cursor-pointer ;
 
   :hover {
     @apply text-primary-dark;
+  }
+}
+
+.RightMostTopBarOptions{
+  @apply inline-block float-right;
+  .EventNotificationWrapper{
+    @apply relative cursor-pointer;
+    span{
+      top: -10px;
+      right: -10px;
+      @apply absolute bg-error h-5 w-5 rounded-full text-center;
+      p{
+        line-height: 20px;
+      }
+    }
   }
 }
 
@@ -264,6 +286,7 @@
       width: 100%;
       padding-top: 80px;
       padding-left: 16px;
+      min-height: calc(100vh - 40px);
     }
 
     .center-container {
@@ -271,6 +294,10 @@
       margin: 0 auto;
     }
   }
+}
+
+.fullWidth {
+  width: 100%;
 }
 
 .multi-select-container {
@@ -295,6 +322,7 @@
     row-gap: 2px;
     margin-left: -12px;
   }
+
 }
 
 .m-auto {
@@ -303,4 +331,7 @@
 
 .mb-50{
   margin-bottom: 50px;
+}
+.mb-25{
+  margin-bottom: 25px;
 }

@@ -2,6 +2,7 @@
 .report-pdf-button {
   color: #fe7a51 !important;
   border: none !important;
+  margin: 0px 4px !important;
 }
 
 .report-result-table {
@@ -89,9 +90,15 @@
 }
 
 
+
 .dt-button-collection{
   margin-top: 2% !important;
     display: flex!important;
     flex-direction: row-reverse!important;
     width: 100%!important;
+}
+.dt-buttons{
+  display: flex;
+justify-content: end;
+cursor: pointer;
 }

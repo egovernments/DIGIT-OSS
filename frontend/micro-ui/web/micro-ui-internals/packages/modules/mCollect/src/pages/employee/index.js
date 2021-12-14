@@ -8,6 +8,7 @@ import EmployeeChallan from "../../EmployeeChallan";
 import CreateChallen from "../employee/CreateChallan";
 import MCollectAcknowledgement from "../employee/EmployeeChallanAcknowledgement";
 import EditChallan from "../employee/EditChallan/index";
+import NewChallan from "./NewChallan";
 
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
@@ -70,7 +71,8 @@ const EmployeeApp = ({ path, url, userType }) => {
               />
             )}
           />
-          <PrivateRoute path={`${path}/new-application`} component={() => <CreateChallen />} />
+{/*           <PrivateRoute path={`${path}/new-application`} component={() => <CreateChallen />} />
+ */}          <PrivateRoute path={`${path}/new-application`} component={() => <NewChallan parentUrl={url} />} />
           <PrivateRoute
             path={`${path}/search`}
             component={() => (

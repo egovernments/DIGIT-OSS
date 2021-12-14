@@ -57,7 +57,6 @@ export const Search = {
       }
     }
 
-    const stateId = tenantId?.split(".")[0];
     let slumLabel = "";
     if (response?.address?.slumName && response?.address?.locality?.code && response?.tenantId) {
       const slumData = await MdmsService.getSlumLocalityMapping(response?.tenantId, "FSM", "Slum");
@@ -75,10 +74,10 @@ export const Search = {
     }
     const slumName = slumLabel ? slumLabel.i18nKey : "N/A";
 
-    const state = tenantId.split(".")[0];
+    const state = Digit.ULBService.getStateId();
     const vehicleMenu = await MdmsService.getVehicleType(state, "Vehicle", "VehicleType");
     const _vehicle = vehicleMenu?.find((vehicle) => response?.vehicleType === vehicle?.code);
-
+    
     const vehicleMake = _vehicle?.i18nKey;
     const vehicleCapacity = _vehicle?.capacity;
 

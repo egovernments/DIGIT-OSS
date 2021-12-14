@@ -15,9 +15,8 @@ const AddtionalDetails = (props) => {
   const dispatch = useDispatch();
   const appState = useSelector((state) => state)["common"];
   let { t } = useTranslation();
-  let tenantId = Digit.ULBService.getCurrentTenantId();
-
-  const complaintDetails = Digit.Hooks.pgr.useComplaintDetails({ tenantId: tenantId, id: id }).complaintDetails;
+  
+  const {complaintDetails} = props
   useEffect(() => {
     if (appState.complaints) {
       const { response } = appState.complaints;

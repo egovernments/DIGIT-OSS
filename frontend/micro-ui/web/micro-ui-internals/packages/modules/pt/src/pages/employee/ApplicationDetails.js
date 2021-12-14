@@ -149,8 +149,8 @@ const ApplicationDetails = () => {
     });
   }
 
-  const wfDocs = workflowDetails.data?.timeline?.reduce((acc, { documents }) => {
-    return documents ? [...acc, ...documents] : acc;
+  const wfDocs = workflowDetails.data?.timeline?.reduce((acc, { wfDocuments }) => {
+    return wfDocuments ? [...acc, ...wfDocuments] : acc;
   }, []);
   let appdetailsDocuments = appDetailsToShow?.applicationDetails?.find((e) => e.title === "PT_OWNERSHIP_INFO_SUB_HEADER")?.additionalDetails
     ?.documents;
@@ -184,6 +184,7 @@ const ApplicationDetails = () => {
         closeToast={closeToast}
         timelineStatusPrefix={"ES_PT_COMMON_STATUS_"}
         forcedActionPrefix={"WF_EMPLOYEE_PT.CREATE"}
+        statusAttribute={"state"}
       />
     </div>
   );

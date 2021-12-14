@@ -20,8 +20,11 @@ import useInboxGeneral from "./useInboxGeneral/useInboxGeneral";
 import useApplicationStatusGeneral from "./useStatusGeneral";
 import useModuleTenants from "./useModuleTenants";
 import useStore from "./useStore";
-import { useTenants } from "./useTenants"
-import useInbox from "./useInbox"
+import { useTenants } from "./useTenants";
+import useInbox from "./useInbox";
+import { useEvents, useClearNotifications, useNotificationCount } from "./events";
+import useCreateEvent from "./events/useCreateEvent";
+import useUpdateEvent from "./events/useUpdateEvent";
 import useNewInboxGeneral from "./useInboxGeneral/useNewInbox";
 
 import useComplaintDetails from "./pgr/useComplaintDetails";
@@ -86,6 +89,10 @@ import useMCollectSearch from "./mcollect/useMCollectSearch";
 import useMcollectSearchBill from "./mcollect/useMcollectSearchBill";
 import usemcollectTenants from "./mcollect/useTenants";
 import useMCollectCount from "./mcollect/useMCollectCount";
+import useMCollectCategory from "./mcollect/useMcollectCategory";
+import useMCollectCategoryTypes from './mcollect/useMcollectCategoryTypes';
+import useMCollectTaxHeads from "./mcollect/useMcollectTaxHeads";
+import useMcollectFormConfig from "./mcollect/useMcollectFormConfig";
 
 import useTenantsTL from "./tl/useTenants";
 import useTradeLicenseMDMS from "./tl/useTradeLicenseMDMS";
@@ -111,10 +118,56 @@ import useHRMSUpdate from "./hrms/useHRMSUpdate";
 import useHRMSCount from "./hrms/useHRMSCount";
 import useHRMSGenderMDMS from "./hrms/useHRMSGender";
 
-
 import useReceiptsSearch from "./receipts/useReceiptsSearch";
 import useReceiptsMDMS from "./receipts/useReceiptsMDMS";
 import useReceiptsUpdate from "./receipts/useReceiptsUpdate";
+
+import SearchMdmsTypes from "./obps/SearchMdmsTypes";
+import useOBPSMDMS from "./obps/useMDMS";
+import useOBPSSearch from "./obps/useOBPSSearch";
+import useScrutinyDetails from "./obps/useScrutinyDetails";
+import useTenantsOBPS from "./obps/useTenants";
+import useNocDetails from "./obps/useNocDetails";
+import useNOCApplicationActions from "./noc/useNOCApplicationActions";
+import useOBPSDocumentSearch from "./obps/useOBPSDocumentSearch";
+import useObpsAPI from "./obps/useObpsAPI";
+import useBPADetails from "./obps/useBPADetails";
+import useBPASearch from "./obps/useBPASearch";
+import { useBPAREGgetbill } from "./obps/useBPAREGgetbill";
+import useStakeholderAPI from "./obps/useStakeholderAPI";
+import useOCEdcrSearch from "./obps/useOCEdcrSearch";
+import useLicenseDetails from "./obps/useLicenseDetails";
+import useBPAREGApplicationActions from "./obps/useBPAREGApplicationActions";
+import useBPADetailsPage from "./obps/useBPADetailsPage";
+import useBPAInbox from "./obps/useBPAInbox";
+import useEDCRInbox from "./obps/useEDCRInbox";
+import useBPAApplicationActions from "./obps/useApplicationActions"
+import useArchitectInbox from "./obps/useArchitectInbox";
+import useBPAREGSearch from "./obps/useBPAREGSearch";
+import useEmpBPAREGSearch from "./obps/useEmpBPAREGSearch";
+import useServiceTypeFromApplicationType from "./obps/useServiceTypeFromApplicationType"
+import useBusinessServiceBasedOnServiceType from "./obps/useBusinessServiceBasedOnServiceType"
+import useBusinessServiceData from "./obps/useBusinessServiceData";
+import useBPATaxDocuments from "./obps/useBPATaxDocuments";
+
+import useEventInbox from "./events/useEventInbox";
+import useEventDetails from "./events/useEventDetails";
+import { useEngagementMDMS } from "./engagement/useMdms";
+import useDocSearch from "./engagement/useSearch";
+import useDocCreate from "./engagement/useCreate";
+import useDocUpdate from "./engagement/useUpdate";
+import useDocDelete from "./engagement/useDelete";
+
+import useSurveyCreate from "./surveys/useCreate";
+import useSurveyDelete from "./surveys/useDelete";
+import useSurveyUpdate from "./surveys/useUpdate";
+import useSurveySearch from "./surveys/useSearch";
+import useSurveyShowResults from "./surveys/useShowResults";
+import useSurveySubmitResponse from "./surveys/useSubmitResponse";
+import useSurveyInbox from "./surveys/useSurveyInbox";
+
+import useNOCDetails from "./noc/useNOCDetails";
+import useNOCInbox from "./noc/useInbox"
 
 const pgr = {
   useComplaintDetails,
@@ -131,7 +184,7 @@ const pgr = {
   useComplaintSubType,
   usePropertyMDMS,
   useComplaintStatusCount,
-  useTradeLicenseBillingslab
+  useTradeLicenseBillingslab,
 };
 
 const fsm = {
@@ -188,7 +241,11 @@ const mcollect = {
   useMCollectSearch,
   useMcollectSearchBill,
   usemcollectTenants,
-  useMCollectCount
+  useMCollectCount,
+  useMCollectCategory,
+  useMCollectCategoryTypes,
+  useMCollectTaxHeads,
+  useMcollectFormConfig,
 };
 
 const hrms = {
@@ -197,7 +254,7 @@ const hrms = {
   useHRMSCreate,
   useHRMSUpdate,
   useHRMSCount,
-  useHRMSGenderMDMS
+  useHRMSGenderMDMS,
 };
 const tl = {
   useTenants: useTenantsTL,
@@ -209,13 +266,13 @@ const tl = {
   useTradeLicenseSearch,
   useTLGenderMDMS,
   useTradeLicenseBillingslab,
-  useInbox:useTLInbox,
+  useInbox: useTLInbox,
   useMDMS: useTLMDMS,
   useSearch: useTLSearch,
   useApplicationDetail: useTLApplicationDetail,
   useApplicationActions: useTLApplicationActions,
   useFetchBill: useTLFetchBill,
-  useTLApplicationDetails
+  useTLApplicationDetails,
 };
 
 const receipts = {
@@ -223,6 +280,66 @@ const receipts = {
   useReceiptsSearch,
   useReceiptsUpdate,
 };
+
+const obps = {
+  useMDMS: useOBPSMDMS,
+  useScrutinyDetails,
+  useTenants: useTenantsOBPS,
+  useNocDetails: useNocDetails,
+  useOBPSDocumentSearch,
+  useObpsAPI,
+  useBPADetails,
+  useBPASearch,
+  useBPAREGgetbill,
+  useStakeholderAPI,
+  useBPAREGSearch,
+  useOCEdcrSearch,
+  useLicenseDetails,
+  useBPAREGApplicationActions,
+  useBPADetailsPage,
+  useEmpBPAREGSearch,
+  useBPAInbox,
+  useEDCRInbox,
+  useArchitectInbox,
+  SearchMdmsTypes,
+  useServiceTypeFromApplicationType,
+  useApplicationActions: useBPAApplicationActions,
+  useOBPSSearch,
+  useBusinessServiceBasedOnServiceType,
+  useBusinessServiceData,
+  useBPATaxDocuments
+};
+
+const events = {
+  useInbox: useEventInbox,
+  useCreateEvent,
+  useEventDetails,
+  useUpdateEvent
+};
+
+const engagement = {
+  useMDMS: useEngagementMDMS,
+  useDocCreate,
+  useDocSearch,
+  useDocDelete,
+  useDocUpdate,
+};
+
+const survey = {
+  useCreate: useSurveyCreate,
+  useUpdate: useSurveyUpdate,
+  useDelete: useSurveyDelete,
+  useSearch: useSurveySearch,
+  useSubmitResponse: useSurveySubmitResponse,
+  useShowResults: useSurveyShowResults,
+  useSurveyInbox,
+}
+
+const noc = {
+  useNOCDetails,
+  useNOCApplicationActions,
+  useInbox: useNOCInbox
+}
 
 const Hooks = {
   useSessionStorage,
@@ -246,6 +363,9 @@ const Hooks = {
   useModuleTenants,
   useRecieptSearch,
   useNewInboxGeneral,
+  useEvents,
+  useClearNotifications,
+  useNotificationCount,
   useStore,
   useTenants,
   useInbox: useTLInbox,
@@ -256,7 +376,12 @@ const Hooks = {
   mcollect,
   hrms,
   tl,
-  receipts
+  receipts,
+  obps,
+  events,
+  engagement,
+  survey,
+  noc
 };
 
 export default Hooks;

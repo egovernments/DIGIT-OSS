@@ -30,13 +30,16 @@ const removeSpaceInLocalisationKey = (key = "") => {
 export const getTenantId = () => {
     return `${localStorage.getItem('tenant-id')}`;
 }
+export const stateTenant= () => {
+    return window&&window.globalConfigs&&window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID")?window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID"):getTenantId();
+}
 
 export const fetchLocalisationRequest = (language) => {
     const reqHeaders = {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     };
-    const reqUrl = `${CONFIGS.LOCALISATION_URL}?locale=${language}&tenantId=${getTenantId().split('.')[0]}&module=rainmaker-common,rainmaker-dss`;
+    const reqUrl = `${CONFIGS.LOCALISATION_URL}?locale=${language}&tenantId=${stateTenant()}&module=rainmaker-common,rainmaker-dss`;
     const reqBody = {}
     return { reqHeaders, reqBody, reqUrl };
 }

@@ -23,7 +23,7 @@ const Units = ({ t, config, onSelect, userType, formData, setError, formState, c
       },
     ]
   );
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const [focusIndex, setFocusIndex] = useState({ index: -1 });
   const [loader, setLoader] = useState(true);
 

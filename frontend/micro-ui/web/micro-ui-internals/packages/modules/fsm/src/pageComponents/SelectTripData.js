@@ -4,7 +4,7 @@ import { LabelFieldPair, CardLabel, TextInput, Dropdown, Loader, CardLabelError 
 
 const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const state = tenantId?.split(".")[0] || "pb";
+  const state = Digit.ULBService.getStateId();
 
   const [vehicle, setVehicle] = useState(formData?.tripData?.vehicleType);
   const [billError, setError] = useState(false);

@@ -49,9 +49,14 @@ package org.egov.common.entity.edcr;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Transient;
+
+import org.egov.edcr.entity.PdfPageSize;
 
 public class EdcrPdfDetail implements Serializable {
 
@@ -59,14 +64,32 @@ public class EdcrPdfDetail implements Serializable {
 
     private String layer;
 
-    private transient File convertedPdf;
+    @Transient
+    private File convertedPdf;
 
     private String failureReasons;
 
     private String standardViolations;
 
-    @Transient
     private List<String> violations;
+
+    @Transient
+    private List<String> layers;
+    @Transient
+    private PdfPageSize pageSize;
+    @Transient
+    private List<String> measurementLayers = new ArrayList<>();
+    @Transient
+    private List<String> dimensionLayers = new ArrayList<>();
+    @Transient
+    private List<String> printNameLayers = new ArrayList<>();
+
+    @Transient
+    private Map<String, Integer> colorOverrides = new HashMap<>();
+    @Transient
+    private Map<String, Integer> thicknessOverrides = new HashMap<>();
+    
+    private String downloadURL;
 
     public String getLayer() {
         return layer;
@@ -107,4 +130,69 @@ public class EdcrPdfDetail implements Serializable {
     public void setViolations(List<String> violations) {
         this.violations = violations;
     }
+
+    public List<String> getLayers() {
+        return layers;
+    }
+
+    public void setLayers(List<String> layers) {
+        this.layers = layers;
+    }
+
+    public PdfPageSize getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(PdfPageSize pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public List<String> getMeasurementLayers() {
+        return measurementLayers;
+    }
+
+    public void setMeasurementLayers(List<String> measurementLayers) {
+        this.measurementLayers = measurementLayers;
+    }
+
+    public List<String> getDimensionLayers() {
+        return dimensionLayers;
+    }
+
+    public void setDimensionLayers(List<String> dimensionLayers) {
+        this.dimensionLayers = dimensionLayers;
+    }
+
+    public List<String> getPrintNameLayers() {
+        return printNameLayers;
+    }
+
+    public void setPrintNameLayers(List<String> printNameLayers) {
+        this.printNameLayers = printNameLayers;
+    }
+
+    public Map<String, Integer> getColorOverrides() {
+        return colorOverrides;
+    }
+
+    public void setColorOverrides(Map<String, Integer> colorOverrides) {
+        this.colorOverrides = colorOverrides;
+    }
+
+    public Map<String, Integer> getThicknessOverrides() {
+        return thicknessOverrides;
+    }
+
+    public void setThicknessOverrides(Map<String, Integer> thicknessOverrides) {
+        this.thicknessOverrides = thicknessOverrides;
+    }
+
+    public String getDownloadURL() {
+        return downloadURL;
+    }
+
+    public void setDownloadURL(String downloadURL) {
+        this.downloadURL = downloadURL;
+    }
+
 }

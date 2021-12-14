@@ -1,17 +1,15 @@
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import get from "lodash/get";
-import { getQueryArg,getTransformedLocalStorgaeLabels ,getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-  getCommonCard,
-  getCommonCaption
+  getCommonCaption, getCommonCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { httpRequest } from "../../../../ui-utils";
-import {  prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { set } from "lodash";
-import { generateMultipleBills } from "../utils/receiptPdf";
+import get from "lodash/get";
+import { httpRequest } from "../../../../ui-utils";
+import { generateMultipleBill, generateMultipleBills } from "../utils/receiptPdf";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -37,7 +35,7 @@ export const transformById = (payload, id) => {
   );
 };
 
-export const getMdmsData = async  requestBody=> {
+export const getMdmsData = async requestBody => {
   try {
     const response = await httpRequest(
       "post",
@@ -46,7 +44,7 @@ export const getMdmsData = async  requestBody=> {
       [],
       requestBody
     );
-   
+
     return response;
   } catch (error) {
     console.log(error);
@@ -150,9 +148,9 @@ export const ifUserRoleExists = role => {
 };
 
 export const convertEpochToDate = dateEpoch => {
-  if(dateEpoch == null || dateEpoch == undefined || dateEpoch == ''){
-    return "NA" ;
-  } 
+  if (dateEpoch == null || dateEpoch == undefined || dateEpoch == '') {
+    return "NA";
+  }
   const dateFromApi = new Date(dateEpoch);
   let month = dateFromApi.getMonth() + 1;
   let day = dateFromApi.getDate();
@@ -289,11 +287,11 @@ export const getLabelOnlyValue = (value, props = {}) => {
 };
 
 
-export const onActionClick = (rowData) =>{
-  switch(rowData[8]){
-    case "PAY" : return "";
-    case "DOWNLOAD RECEIPT" : ""
-    case "GENERATE NEW RECEIPT" : ""
+export const onActionClick = (rowData) => {
+  switch (rowData[8]) {
+    case "PAY": return "";
+    case "DOWNLOAD RECEIPT": ""
+    case "GENERATE NEW RECEIPT": ""
   }
 }
 
@@ -354,14 +352,14 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
-   case "Owner Name":
+    case "Owner Name":
       return getLocaleLabels(
         "Owner Name",
         "ABG_COMMON_TABLE_COL_OWN_NAME",
         localisationLabels
       );
 
-  case "Download":
+    case "Download":
       return getLocaleLabels(
         "Download",
         "ABG_COMMON_TABLE_COL_DOWNLOAD_BUTTON"
@@ -374,77 +372,77 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
-      case "ACTIVE":
+    case "ACTIVE":
       return getLocaleLabels(
         "Pending",
         "BILL_GENIE_ACTIVE_LABEL",
         localisationLabels
       );
 
-      case "CANCELLED":
+    case "CANCELLED":
       return getLocaleLabels(
         "Cancelled",
         "BILL_GENIE_CANCELLED_LABEL",
         localisationLabels
       );
 
-      case "PAID":
+    case "PAID":
       return getLocaleLabels(
         "Paid",
         "BILL_GENIE_PAID_LABEL",
         localisationLabels
       );
-      case "PAY":
-      case "PARTIALLY PAID":
+    case "PAY":
+    case "PARTIALLY PAID":
       return getLocaleLabels(
         "PAY",
         "BILL_GENIE_PAY",
         localisationLabels
       );
-      case "EXPIRED":
+    case "EXPIRED":
       return getLocaleLabels(
         "Expired",
         "BILL_GENIE_EXPIRED",
         localisationLabels
       );
-      case "GENERATE NEW BILL":
+    case "GENERATE NEW BILL":
       return getLocaleLabels(
         "GENERATE NEW BILL",
         "BILL_GENIE_GENERATE_NEW_BILL",
         localisationLabels
       );
 
-      case "DOWNLOAD RECEIPT":
-        return getLocaleLabels(
-          "DOWNLOAD RECEIPT",
-          "BILL_GENIE_DOWNLOAD_RECEIPT",
-          localisationLabels
-        );
-      case "Search Results for Bill":
-        return getLocaleLabels(
-          "Search Results for Bill",
-          "BILL_GENIE_SEARCH_TABLE_HEADER",
-          localisationLabels
-        );
-      case "PARTIALLY_PAID":
-      case "PARTIALLY PAID":
-        return getLocaleLabels(
-            "Partially Paid",
-            "BILL_GENIE_PARTIALLY_PAID",
-            localisationLabels
-          ); 
-      case "BILL_GENIE_GROUP_SEARCH_HEADER" : 
-          return getLocaleLabels(
-            "Search Results for Group Bills",
-            "BILL_GENIE_GROUP_SEARCH_HEADER",
-            localisationLabels
-          ); 
-        default :
-        return getLocaleLabels(
-          "Search Results for Group Bills",
-          label,
-          localisationLabels
-        ); 
+    case "DOWNLOAD RECEIPT":
+      return getLocaleLabels(
+        "DOWNLOAD RECEIPT",
+        "BILL_GENIE_DOWNLOAD_RECEIPT",
+        localisationLabels
+      );
+    case "Search Results for Bill":
+      return getLocaleLabels(
+        "Search Results for Bill",
+        "BILL_GENIE_SEARCH_TABLE_HEADER",
+        localisationLabels
+      );
+    case "PARTIALLY_PAID":
+    case "PARTIALLY PAID":
+      return getLocaleLabels(
+        "Partially Paid",
+        "BILL_GENIE_PARTIALLY_PAID",
+        localisationLabels
+      );
+    case "BILL_GENIE_GROUP_SEARCH_HEADER":
+      return getLocaleLabels(
+        "Search Results for Group Bills",
+        "BILL_GENIE_GROUP_SEARCH_HEADER",
+        localisationLabels
+      );
+    default:
+      return getLocaleLabels(
+        "Search Results for Group Bills",
+        label,
+        localisationLabels
+      );
   }
 };
 
@@ -499,7 +497,7 @@ export const getMergeAndDownloadList = (state, dispatch, dataLength = 0) => {
     "searchDetailsOfGroupBills",
     {}
   );
-  if(searchScreenObject.businesService && searchScreenObject.tenantId && searchScreenObject.locality) {
+  if (searchScreenObject.businesService && searchScreenObject.tenantId && searchScreenObject.locality) {
     switch (searchScreenObject.businesService) {
       case "WS":
         dispatch(
@@ -545,7 +543,10 @@ export const getMergeAndDownloadList = (state, dispatch, dataLength = 0) => {
             "groupBills",
             "components.div.children.mergeDownloadButton.children.mergeButton",
             "props.data.menu",
-            []
+            [ {
+              label: { labelName: "SEWERAGE CONNECTION", labelKey: "ABG_GROUP_BILLS_MERGE_AND_DOWNLOAD_BUTTON", },
+              link: () => { generateMultipleBill(state, dispatch); }
+            },]
           )
         );
     }

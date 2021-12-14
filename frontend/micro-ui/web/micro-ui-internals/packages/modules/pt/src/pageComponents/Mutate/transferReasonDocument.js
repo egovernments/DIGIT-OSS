@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { FormStep, UploadFile, CardLabelDesc, Dropdown, CardLabel } from "@egovernments/digit-ui-react-components";
-import { stringReplaceAll } from "../../utils";
+import { CardLabel, CardLabelDesc, Dropdown, FormStep, UploadFile } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { stringReplaceAll } from "../../utils";
 
 const TransferProof = ({ t, config, onSelect, userType, formData }) => {
   //let index = window.location.href.charAt(window.location.href.length - 1);
@@ -17,7 +17,7 @@ const TransferProof = ({ t, config, onSelect, userType, formData }) => {
   const [dropdownValue, setDropdownValue] = useState(formData?.[config.key]?.documentType || null);
   let dropdownData = [];
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { data: Documentsob } = Digit.Hooks.pt.useMDMS(stateId, "PropertyTax", "MutationDocuments");
   const docs = Documentsob?.PropertyTax?.MutationDocuments;
   const transferReason = Array.isArray(docs) && docs.filter((doc) => doc.code.includes("OWNER.TRANSFERREASONDOCUMENT"));
@@ -83,6 +83,7 @@ const TransferProof = ({ t, config, onSelect, userType, formData }) => {
         placeholder={t(`PT_MUTATION_SELECT_DOC_LABEL`)}
       />
       <UploadFile
+        id={"ptm-doc"}
         extraStyleName={"propertyCreate"}
         accept=".jpg,.png,.pdf"
         onUpload={selectfile}

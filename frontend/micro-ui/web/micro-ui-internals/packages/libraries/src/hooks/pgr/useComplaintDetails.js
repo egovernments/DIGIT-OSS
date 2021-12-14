@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "react-query";
 const getThumbnails = async (ids, tenantId) => {
   const res = await Digit.UploadServices.Filefetch(ids, tenantId);
   if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
-    return { thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3]), images: res.data.fileStoreIds.map((o) => o.url.split(",")[1]) };
+    return { thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3]), images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url)) };
   } else {
     return null;
   }

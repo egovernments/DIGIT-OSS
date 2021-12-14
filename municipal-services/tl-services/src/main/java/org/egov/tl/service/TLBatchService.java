@@ -6,15 +6,14 @@ import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.TLRepository;
 import org.egov.tl.util.NotificationUtil;
-import org.egov.tl.web.models.SMSRequest;
-import org.egov.tl.web.models.TradeLicense;
-import org.egov.tl.web.models.TradeLicenseRequest;
-import org.egov.tl.web.models.TradeLicenseSearchCriteria;
+import org.egov.tl.util.TradeUtil;
+import org.egov.tl.web.models.*;
 import org.egov.tl.workflow.WorkflowIntegrator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import com.jayway.jsonpath.JsonPath;
 
 import java.util.*;
 
@@ -38,17 +37,20 @@ public class TLBatchService {
     private WorkflowIntegrator workflowIntegrator;
 
     private Producer producer;
+    
+    private TradeUtil tradeUtil;
 
     @Autowired
     public TLBatchService(NotificationUtil util, TLConfiguration config, TLRepository repository,
                           EnrichmentService enrichmentService, WorkflowIntegrator workflowIntegrator,
-                          Producer producer) {
+                          Producer producer, TradeUtil tradeUtil) {
         this.util = util;
         this.config = config;
         this.repository = repository;
         this.enrichmentService = enrichmentService;
         this.workflowIntegrator = workflowIntegrator;
         this.producer = producer;
+        this.tradeUtil=tradeUtil;
     }
 
 
@@ -64,43 +66,87 @@ public class TLBatchService {
      * @param requestInfo
      */
     public void getLicensesAndPerformAction(String serviceName, String jobName, RequestInfo requestInfo){
+    	
+    	List <String> tenantIdsFromRepository = repository.fetchTradeLicenseTenantIds();
 
+        List <String> workflowCodes = Arrays.asList(config.getTlBusinessServices().split("\\s*,\\s*"));
 
-        Long validTill = System.currentTimeMillis();
+        Map<String,Long>tenantIdToReminderPeriod = tradeUtil.getTenantIdToReminderPeriod(requestInfo);
 
-        if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER))
-            validTill = validTill + config.getReminderPeriod();
+        tenantIdsFromRepository.forEach(tenantIdFromRepository->{
 
+        	try {
+        	
+        	Long validTill = System.currentTimeMillis();
 
-        TradeLicenseSearchCriteria criteria = TradeLicenseSearchCriteria.builder()
+        	if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER)) {
+        		
+        		if(tenantIdToReminderPeriod.containsKey(tenantIdFromRepository)) { 
+        			validTill = validTill + tenantIdToReminderPeriod.get(tenantIdFromRepository);
+        		}	
+        		else {
+        			validTill = validTill + config.getReminderPeriod();
+        		}
+        	}
+        	 
+
+        	TradeLicenseSearchCriteria criteria = TradeLicenseSearchCriteria.builder()
                 .businessService(serviceName)
                 .validTo(validTill)
-                .status(Collections.singletonList(STATUS_APPROVED))
+                .status(Collections.singletonList(STATUS_APPROVED)).tenantId(tenantIdFromRepository)
                 .limit(config.getPaginationSize())
                 .build();
 
-        int offSet = 0;
+        	workflowCodes.forEach(workflowCode ->{
 
-        while (true){
+        		int offSet = 0;
+        		criteria.setOffset(offSet);
 
-            log.info("current Offset: "+offSet);
+        		while (true){
 
-            List<TradeLicense> licenses = repository.getLicenses(criteria);
-            if(CollectionUtils.isEmpty(licenses))
-                break;
+        				log.info("current Offset: "+offSet);
 
-            licenses = enrichmentService.enrichTradeLicenseSearch(licenses, criteria, requestInfo);
+        				List<TradeLicense> licensesFromRepository = repository.getLicenses(criteria);
+        				if(CollectionUtils.isEmpty(licensesFromRepository)) 
+        					break;
 
-            if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER))
-                sendReminderSMS(requestInfo, licenses);
+        				List <TradeLicense> licensesWithWorkflowCode= new ArrayList<TradeLicense>();
+            
+        				licensesFromRepository.forEach(license->{
+        						if (license.getWorkflowCode()!=null && license.getWorkflowCode().equalsIgnoreCase(workflowCode) ) {
+        							licensesWithWorkflowCode.add(license);
+        						}
+            	
+        				});
+        				
+        				if(!CollectionUtils.isEmpty(licensesWithWorkflowCode)) 
+        				{
+            
+        				List<TradeLicense> licenses = enrichmentService.enrichTradeLicenseSearch(licensesWithWorkflowCode, criteria, requestInfo);
 
-            else if(jobName.equalsIgnoreCase(JOB_EXPIRY))
-                expireLicenses(requestInfo, licenses);
+        				if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER))
+        				{
+        				sendReminderSMS(requestInfo, licenses);
+        				sendReminderEmail(requestInfo,licenses);
+        				}
 
-            offSet = offSet + config.getPaginationSize();
+        				else if(jobName.equalsIgnoreCase(JOB_EXPIRY))
+        					expireLicenses(requestInfo, licenses);
+        				}
 
-            criteria.setOffset(offSet);
-        }
+        				offSet = offSet + config.getPaginationSize();
+
+        				criteria.setOffset(offSet);
+        		}
+        
+        	});
+        	
+        	}
+        	catch(Exception ex) {
+        		log.error("The batch process could not be completed for the tenant id : "+tenantIdFromRepository);
+        	}
+        
+        	});
 
 
     }
@@ -139,6 +185,39 @@ public class TLBatchService {
 
     }
 
+    /**
+     * Sends customized reminder sms to the owner's of the given licenses
+     * @param licenses The licenses for which reminder has to be send
+     */
+    private void sendReminderEmail(RequestInfo requestInfo, List<TradeLicense> licenses){
+
+        String tenantId = getStateLevelTenant(licenses.get(0).getTenantId());
+        String localizationMessages = util.getLocalizationMessages(tenantId, requestInfo);
+        List<EmailRequest> emailRequests = new LinkedList<>();
+        for(TradeLicense license : licenses){
+            try{
+
+                String message = util.getReminderMsg(license, localizationMessages);
+                Map<String,String > mobileNumberToEmails = new HashMap<>();
+                Set<String> mobileNumbers = new HashSet<>();
+
+                license.getTradeLicenseDetail().getOwners().forEach(owner -> {
+                    if(owner.getMobileNumber()!=null)
+                        mobileNumbers.add(owner.getMobileNumber());
+                });
+
+                mobileNumberToEmails = util.fetchUserEmailIds(mobileNumbers,requestInfo,tenantId);
+                emailRequests.addAll(util.createEmailRequest(requestInfo,message,mobileNumberToEmails));
+
+            }
+            catch (Exception e){
+                producer.push(config.getReminderErrorTopic(), license);
+            }
+        }
+
+        util.sendEmail(emailRequests, config.getIsReminderEnabled());
+
+    }
 
     /**
      * Calls workflow with action expire on the given license

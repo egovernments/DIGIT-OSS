@@ -40,6 +40,7 @@ const Table = ({
   onPageSizeChange,
   onLastPage,
   onFirstPage,
+  isPaginationRequired = true,
   sortParams = [],
 }) => {
   const {
@@ -146,8 +147,8 @@ const Table = ({
                         getCellProps(cell),
                       ])}
                     >
-                      {cell.column.link ? (
-                        <a style={{ color: "#1D70B8" }} href={cell.column.to}>
+                      {cell.attachment_link ? (
+                        <a style={{ color: "#1D70B8" }} href={cell.attachment_link}>
                           {cell.render("Cell")}
                         </a>
                       ) : (
@@ -161,7 +162,7 @@ const Table = ({
           })}
         </tbody>
       </table>
-      {
+      {isPaginationRequired && 
         <div className="pagination">
           {`${t("CS_COMMON_ROWS_PER_PAGE")} :`}
           <select
@@ -178,7 +179,7 @@ const Table = ({
           </select>
           <span>
             <span>
-              {currentPage * pageSizeLimit + 1}
+              {pageIndex * pageSizeLimit + 1}
               {"-"}
               {manualPagination ?
                 (currentPage + 1) * pageSizeLimit > totalRecords ? totalRecords : (currentPage + 1) * pageSizeLimit :
@@ -191,7 +192,7 @@ const Table = ({
           {/* to go to first and last page we need to do a manual pagination , it can be updated later*/}
           {canPreviousPage && manualPagination && onFirstPage && <ArrowToFirst onClick={() => (manualPagination && onFirstPage())} className={"cp"} />}
           {canPreviousPage && <ArrowBack onClick={() => (manualPagination ? onPrevPage() : previousPage())} className={"cp"} />}
-          {rows.length == pageSizeLimit && canNextPage && <ArrowForward onClick={() => (manualPagination ? onNextPage() : nextPage())} className={"cp"} />}
+          {canNextPage && <ArrowForward onClick={() => (manualPagination ? onNextPage() : nextPage())} className={"cp"} />}
           {rows.length == pageSizeLimit && canNextPage && manualPagination && onLastPage && <ArrowToLast onClick={() => (manualPagination && onLastPage())} className={"cp"} />}
           {/* to go to first and last page we need to do a manual pagination , it can be updated later*/}
         </div>

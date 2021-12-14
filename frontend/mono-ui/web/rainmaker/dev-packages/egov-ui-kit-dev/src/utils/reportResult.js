@@ -134,8 +134,7 @@ class ShowField extends Component {
         messageTop: tabLabel,
         footer: true,
         className: "report-excel-button",
-      },
-      "colvis",
+      }
     ];
     return buttons;
   };

@@ -20,7 +20,7 @@ const ButtonSelector = (props) => {
       disabled={props.isDisabled}
       style={props.style ? props.style : null}
     >
-      <h2 style={props?.textStyles}>{props.label}</h2>
+      <h2 style={{ ...props?.textStyles, ...{ width: "100%" } }}>{props.label}</h2>
     </button>
   );
 };

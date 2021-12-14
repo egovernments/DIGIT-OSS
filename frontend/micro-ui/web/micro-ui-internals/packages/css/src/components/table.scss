@@ -57,7 +57,32 @@
     padding: 15px 10px;
   }
 
-  tr:nth-child(even) {
+  tr:nth-child(odd) {
     background-color: #EEEEEE;
   }
+
+ thead {
+  tr:first-child{
+    background-color: unset;
+  }
+}
+}
+
+.table-fixed-first-column{
+  thead {
+    th:first-child{
+      position: sticky;
+      background: #fff;
+      left: 0;
+   
+    }
+   }
+   tbody {
+    td:first-child{
+      position: sticky;
+      background: #fff;
+      color: #f47738;
+      left: 0;
+    }
+   }
 }

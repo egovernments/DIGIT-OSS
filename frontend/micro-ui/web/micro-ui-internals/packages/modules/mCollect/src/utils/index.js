@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 export const printReciept = async (businessService, receiptNumber) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const state = tenantId?.split(".")[0];
+  const state = Digit.ULBService.getStateId();
   const payments = await Digit.PaymentService.getReciept(tenantId, businessService, { consumerCodes: receiptNumber });
   let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
 

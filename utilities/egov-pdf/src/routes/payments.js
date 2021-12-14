@@ -20,22 +20,34 @@ router.post(
     var consumerCode = req.query.consumerCode;
     var bussinessService = req.query.bussinessService;
     var receiptKey = req.query.pdfKey;
+    var receiptNumbers = req.query.receiptNumbers;
     var requestinfo = req.body;
     if (requestinfo == undefined) {
       return renderError(res, "requestinfo can not be null", 400);
     }
-    if (!tenantId || !consumerCode) {
+    if (!tenantId) {
       return renderError(
         res,
-        "tenantId and consumerCode are mandatory to generate the receipt",
+        "tenantId is mandatory to generate the receipt",
+        400
+      );
+    } else if (!receiptNumbers && !consumerCode) {
+      return renderError(
+        res,
+        "consumerCode or receiptNumbers are mandatory to generate the receipt",
         400
       );
     }
     try {
       try {
-        resProperty = await search_payment(consumerCode, tenantId, requestinfo, bussinessService);
+        resProperty = await search_payment(
+          consumerCode,
+          tenantId,
+          requestinfo,
+          bussinessService,
+          receiptNumbers
+        );
       } catch (ex) {
-        
         if (ex.response && ex.response.data) console.log(ex.response.data);
         return renderError(res, "Failed to query details of the payment", 500);
       }
@@ -51,7 +63,6 @@ router.post(
             requestinfo
           );
         } catch (ex) {
-          
           if (ex.response && ex.response.data) console.log(ex.response.data);
           return renderError(res, "Failed to generate PDF for payment", 500);
         }

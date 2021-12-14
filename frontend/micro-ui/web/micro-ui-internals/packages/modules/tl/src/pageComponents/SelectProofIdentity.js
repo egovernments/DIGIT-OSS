@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { FormStep, UploadFile, CardLabelDesc, Dropdown, CardLabel } from "@egovernments/digit-ui-react-components";
-import { stringReplaceAll } from "../utils";
+import { CardLabel, CardLabelDesc, FormStep, UploadFile } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
 
 const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
   const [uploadedFile, setUploadedFile] = useState(formData?.owners?.documents?.ProofOfIdentity?.fileStoreId || null);
@@ -11,8 +10,8 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
   const [dropdownValue, setDropdownValue] = useState(formData?.owners?.documents?.ProofOfIdentity?.documentType || null);
   //let dropdownData = [];
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
-  const { data: Documentsob = {} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Documents");
+  const stateId = Digit.ULBService.getStateId();
+  const { data: Documentsob = { } } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Documents");
   const docs = Documentsob?.PropertyTax?.Documents;
   const proofOfIdentity = Array.isArray(docs) && docs.filter((doc) => doc.code.includes("ADDRESSPROOF"));
   // if (proofOfIdentity.length > 0) {
@@ -72,8 +71,8 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
 
   return (
     <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t} isDisabled={!uploadedFile || error}>
-      <CardLabelDesc style={{fontWeight:"unset"}}>{t(`TL_UPLOAD_RESTRICTIONS_TYPES`)}</CardLabelDesc>
-      <CardLabelDesc style={{fontWeight:"unset"}}> {t(`TL_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
+      <CardLabelDesc style={{ fontWeight: "unset" }}>{t(`TL_UPLOAD_RESTRICTIONS_TYPES`)}</CardLabelDesc>
+      <CardLabelDesc style={{ fontWeight: "unset" }}> {t(`TL_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
       <CardLabel>{`${t("TL_CATEGORY_DOCUMENT_TYPE")}`}</CardLabel>
       {/* <Dropdown
         t={t}
@@ -85,6 +84,7 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
         //placeholder={t(`PT_MUTATION_SELECT_DOC_LABEL`)}
       /> */}
       <UploadFile
+        id={"tl-doc"}
         extraStyleName={"propertyCreate"}
         accept=".jpg,.png,.pdf"
         onUpload={selectfile}

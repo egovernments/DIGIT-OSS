@@ -53,7 +53,7 @@ const combineResponses = (complaintDetailsResponse, workflowInstances) => {
     complaintSubType: complaint.service.serviceCode,
     locality: complaint.service.address.locality.code,
     status: complaint.service.applicationStatus,
-    taskOwner: wfMap[complaint.service.serviceRequestId]?.assigner?.name,
+    taskOwner: wfMap[complaint.service.serviceRequestId]?.assignes?.[0]?.name || "-",
     sla: wfMap[complaint.service.serviceRequestId]?.businesssServiceSla,
     tenantId: complaint.service.tenantId,
   }));
