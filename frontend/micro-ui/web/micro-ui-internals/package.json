@@ -34,6 +34,7 @@
     "dev:obps": "cd packages/modules/obps && yarn start",
     "dev:engagement": "cd packages/modules/engagement && yarn start",
     "dev:noc": "cd packages/modules/noc && yarn start",
+    "dev:ws": "cd packages/modules/ws && yarn start",
     "dev:example": "cd example && yarn start",
     "build": "run-p build:**",
     "build:libraries": "cd packages/libraries && yarn build",
@@ -49,6 +50,7 @@
     "build:tl": "cd packages/modules/tl && yarn build",
     "build:hrms": "cd packages/modules/hrms && yarn build",
     "build:obps": "cd packages/modules/obps && yarn build",
+    "build:ws": "cd packages/modules/ws && yarn build",
     "build:engagement": "cd packages/modules/engagement && yarn build",
     "build:noc": "cd packages/modules/noc && yarn build",
     "deploy:jenkins": "./scripts/jenkins.sh"
