@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useEffect } from "react"
 import { useForm, Controller } from "react-hook-form";
 import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card, MobileNumber, Loader } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
-//import { convertEpochToDateDMY } from  "../utils";
 
 const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) => {
     const { register, control, handleSubmit, setValue, getValues, reset, formState } = useForm({
@@ -19,7 +18,6 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
       register("sortBy", "commencementDate")
       register("sortOrder", "DESC")
     },[register])
-    //const { data: applicationTypes } = Digit.Hooks.tl.useMDMS.applicationTypes(tenantId)
     //need to get from workflow
     const applicationTypes = [
         {
@@ -209,31 +207,6 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                         control={control}
                         />
                 </SearchField>
-                {/* <SearchField>
-                    <label>{t("TL_TRADE_LICENSE_LABEL")}</label>
-                    <TextInput name="licenseNumbers" inputRef={register({})}/>
-                </SearchField> */}
-                {/* <SearchField>
-                    <label>{t("TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL")}</label>
-                    <Controller
-                            control={control}
-                            name="status"
-                            render={(props) => (
-                                <Dropdown
-                                selected={props.value}
-                                select={props.onChange}
-                                onBlur={props.onBlur}
-                                option={applicationStatuses}
-                                optionKey="i18nKey"
-                                t={t}
-                                />
-                            )}
-                            />
-                </SearchField> */}
-                {/* <SearchField>
-                    <label>{t("TL_LOCALIZATION_TRADE_NAME")}</label>
-                    <TextInput name="tradeName" inputRef={register({})}/>
-                </SearchField> */}
                 <SearchField className="submit">
                     <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
                     <p onClick={() => {

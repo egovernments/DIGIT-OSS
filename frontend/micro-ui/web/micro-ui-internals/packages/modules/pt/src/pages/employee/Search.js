@@ -11,8 +11,6 @@ const Search = ({path}) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const [payload, setPayload] = useState({})
 
-    //const Search = "SearchApplication"
-
     function onSubmit (_data) {
         var fromDate = new Date(_data?.fromDate)
         fromDate?.setSeconds(fromDate?.getSeconds() - 19800 )
@@ -30,7 +28,6 @@ const Search = ({path}) => {
     const config = {
         enabled: !!( payload && Object.keys(payload).length > 0 )
     }
-    console.log(payload,"payload");
 
     const { isLoading, isSuccess, isError, error, data: {Properties: searchReult, Count: count} = {} } = Digit.Hooks.pt.usePropertySearch(
         { tenantId,
@@ -38,10 +35,6 @@ const Search = ({path}) => {
         },
        config,
       );
-        console.log(isLoading,"isloading");
-        console.log(searchReult,"dataa");
-        console.log(isSuccess,"isss");
-   // const {data: {Licenses: searchReult, Count: count} = {}, isLoading , isSuccess } = Digit.Hooks.tl.useSearch({tenantId, filters: payload, config})
     return <PTSearchApplication t={t} isLoading={isLoading} tenantId={tenantId} onSubmit={onSubmit} data={ !isLoading && isSuccess ? searchReult : { display: "ES_COMMON_NO_DATA" } } count={count} /> 
 
 }
