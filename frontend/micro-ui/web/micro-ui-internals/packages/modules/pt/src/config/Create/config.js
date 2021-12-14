@@ -99,7 +99,7 @@ export const newConfig =[
                 {
                     "route": "info",
                     "component": "PropertyTax",
-                    "nextStep": "isResidential",
+                    "nextStep": "property-type",
                     "hideInEmployee": true,
                     "key": "Documents"
                 },
@@ -176,7 +176,7 @@ export const newConfig =[
                     },
                     "nextStep": {
                         "COMMON_PROPTYPE_BUILTUP_INDEPENDENTPROPERTY": "number-of-floors",
-                        "COMMON_PROPTYPE_BUILTUP_SHAREDPROPERTY": "provide-floor-no",
+                        "COMMON_PROPTYPE_BUILTUP_SHAREDPROPERTY": "PtUnits",
                         "COMMON_PROPTYPE_VACANT": "area"
                     },
                     "key": "PropertyType",
@@ -188,6 +188,26 @@ export const newConfig =[
                     "component": "Area",
                     "key": "landarea",
                     "withoutLabel": true
+                },
+                {
+                    "type": "component",
+                    "route": "PtUnits",
+                    "isMandatory": true,
+                    "component": "SelectPTUnits",
+                    "texts": {
+                        "headerCaption": "",
+                        "header": "PT_ASSESSMENT_FLOW_AREA_HEADER",
+                        "cardText": "PT_SELFOCCUPIED_AREA",
+                        "submitBarLabel": "PT_COMMON_NEXT"
+                    },
+                    "key": "units",
+                    "withoutLabel": true,
+                    "nextStep": {
+                        "yes": "rental-details",
+                        "no": "provide-sub-usage-type",
+                        "vacant": "map"
+                    },
+                    "hideInEmployee": true
                 },
                 {
                     "type": "component",

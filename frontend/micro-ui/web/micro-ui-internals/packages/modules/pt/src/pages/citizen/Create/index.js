@@ -137,7 +137,7 @@ const CreateProperty = ({ parentRoute }) => {
 
 // commonFields=newConfig;
   /* use newConfig instead of commonFields for local development in case needed */
-  commonFields=commonFields?commonFields:newConfig;
+  commonFields=newConfig;
   commonFields.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
