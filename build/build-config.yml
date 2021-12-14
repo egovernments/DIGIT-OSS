@@ -672,7 +672,7 @@ config:
 
   - name: builds/digit-dev/frontend/micro-ui/digit-ui
     build:
-      - work-dir: frontend/micro-ui/web/
+      - work-dir: frontend/micro-ui/
         dockerfile: frontend/micro-ui/web/docker/Dockerfile
         image-name: digit-ui
 

@@ -9,9 +9,8 @@ COPY ${WORK_DIR} .
 RUN ls -lah
 
 #RUN node web/envs.js
-RUN cd frontend/micro-ui/web/ \
+RUN cd web/ \
     && node envs.js \
-    && git branch --show-current \
     &&  ./install-deps.sh \
     && yarn install \
     && yarn build 
@@ -21,5 +20,5 @@ ENV WORK_DIR=/var/web/digit-ui
 
 RUN mkdir -p ${WORK_DIR}
 
-COPY --from=build /app/frontend/micro-ui/web/build ${WORK_DIR}/
-COPY --from=build /app/frontend/micro-ui/web/docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/web/build ${WORK_DIR}/
+COPY --from=build /app/web/docker/nginx.conf /etc/nginx/conf.d/default.conf
