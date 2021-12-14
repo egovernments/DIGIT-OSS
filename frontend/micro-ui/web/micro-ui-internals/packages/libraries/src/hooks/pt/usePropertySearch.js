@@ -17,12 +17,12 @@ const usePropertySearch = ({ tenantId, filters, auth,searchedFrom="" }, config =
     return data;
   };
 
-  const { isLoading, error, data } = useQuery(["propertySearchList", tenantId, filters, auth], () => Digit.PTService.search(args), {
+  const { isLoading, error, data, isSuccess } = useQuery(["propertySearchList", tenantId, filters, auth], () => Digit.PTService.search(args), {
     select: defaultSelect,
     ...config,
   });
 
-  return { isLoading, error, data, revalidate: () => client.invalidateQueries(["propertySearchList", tenantId, filters, auth]) };
+  return { isLoading, error, data, isSuccess, revalidate: () => client.invalidateQueries(["propertySearchList", tenantId, filters, auth]) };
 };
 
 export default usePropertySearch;

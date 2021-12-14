@@ -12,6 +12,7 @@ import AssessmentDetails from "./AssessmentDetails";
 import Response from "../Response";
 import TransferOwnership from "./PropertyMutation";
 import DocsRequired from "./PropertyMutation/docsRequired";
+import Search from "./Search";
 
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
@@ -54,6 +55,7 @@ const EmployeeApp = ({ path, url, userType }) => {
     ["/digit-ui/employee/pt/inbox"]: "ES_TITLE_INBOX",
     ["/digit-ui/employee/pt/new-application"]: "ES_TITLE_NEW_PROPERTY_APPLICATION",
     ["/digit-ui/employee/pt/search"]: "ES_COMMON_SEARCH",
+    ["/digit-ui/employee/pt/application-search"]: "ES_COMMON_APPLICATION_SEARCH",
   };
 
   const getBreadCrumb = () => {
@@ -112,6 +114,7 @@ const EmployeeApp = ({ path, url, userType }) => {
               />
             )}
           />
+          <PrivateRoute path={`${path}/application-search`} component={(props) => <Search {...props} parentRoute={path} />} />
         </div>
       </React.Fragment>
     </Switch>
