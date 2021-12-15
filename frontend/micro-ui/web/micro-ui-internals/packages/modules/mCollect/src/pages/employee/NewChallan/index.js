@@ -99,8 +99,6 @@ const NewChallan = ({ChallanData}) => {
 
   const onFormValueChange = (setValue, formData, formState) => {
     let mcollectFormValue = JSON.parse(sessionStorage.getItem("mcollectFormData"));
-    console.log(formState);
-    console.log(mcollectFormValue,"mm");
     if(Object.keys(formState.errors).length > 0)
     {
       setSubmitValve(!(Object.keys(formState.errors).length));
