@@ -168,6 +168,11 @@ export async function mergePdf(bulkPdfJobId, tenantId, userid, numberOfFiles){
     //var baseFolder = process.cwd() + '/' + bulkPdfJobId + '/';
     
     let fileNames = fs.readdirSync(baseFolder);
+    console.log("\n recordscompleted--> "+recordscompleted);
+    console.log("\n totalrecords--> "+totalrecords);
+    console.log("\n fileNames.length--> "+fileNames.length);
+    console.log("\n numberOfFiles--> "+numberOfFiles+"\n");
+
     
     if(recordscompleted >= totalrecords && fileNames.length == numberOfFiles){
       var merger = new PDFMerger();
