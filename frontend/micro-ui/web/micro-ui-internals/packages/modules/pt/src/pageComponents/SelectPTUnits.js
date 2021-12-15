@@ -1,5 +1,5 @@
 import { CardLabel, Dropdown, FormStep, LinkButton, TextInput } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import React, {Fragment, useState } from "react";
 
 const getUnique = (arr) => {
   return arr.filter((value, index, self) => self.indexOf(value) === index);
@@ -149,7 +149,7 @@ const SelectPTUnits = ({ t, config, onSelect, userType, formData }) => {
 
     unitsdata = fields.map((field) => {
       let unit = {};
-      Object.keys(field).map((key) => {
+      Object.keys(field).filter(key=>field[key]).map((key) => {
         if (key === "usageCategory") {
           unit["usageCategory"] = mdmsData?.usageDetails.find(
             (e) =>
@@ -209,7 +209,7 @@ const SelectPTUnits = ({ t, config, onSelect, userType, formData }) => {
                 selected={field?.usageCategory}
                 select={(e) => selectUsageCategory(index, e)}
               />
-              <CardLabel>{`${t("PT_FORM2_SUB_USAGE_TYPE")}`}</CardLabel>
+              {field?.usageCategory?.code&&field.usageCategory.code.includes("RESIDENTIAL")===false&&(<><CardLabel>{`${t("PT_FORM2_SUB_USAGE_TYPE")}`}</CardLabel>
               <div className={"form-pt-dropdown-only"}>
                 <Dropdown
                   t={t}
@@ -219,7 +219,7 @@ const SelectPTUnits = ({ t, config, onSelect, userType, formData }) => {
                   selected={field?.unitType}
                   select={(e) => selectSubUsageCategory(index, e)}
                 />
-              </div>
+              </div></>)}
               <CardLabel>{`${t("PT_FORM2_OCCUPANCY")}`}</CardLabel>
               <div className={"form-pt-dropdown-only"}>
                 <Dropdown
@@ -231,7 +231,7 @@ const SelectPTUnits = ({ t, config, onSelect, userType, formData }) => {
                   select={(e) => selectOccupancy(index, e)}
                 />
               </div>
-              <CardLabel>{`${t("PT_FORM2_TOTAL_ANNUAL_RENT")}`}</CardLabel>
+              {field?.occupancyType?.code&&field.occupancyType.code.includes("RENTED")&&(<><CardLabel>{`${t("PT_FORM2_TOTAL_ANNUAL_RENT")}`}</CardLabel>
               <TextInput
                 style={{ background: "#FAFAFA" }}
                 t={t}
@@ -248,6 +248,7 @@ const SelectPTUnits = ({ t, config, onSelect, userType, formData }) => {
                   title: t("CORE_COMMON_REQUIRED_ERRMSG"),
                 }}
               />
+              </>)}
               <CardLabel>{`${t("PT_FORM2_BUILT_UP_AREA")}`}</CardLabel>
               <TextInput
                 style={{ background: "#FAFAFA" }}
