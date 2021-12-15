@@ -1,266 +1,24 @@
 openapi: 3.0.1
 info:
   title: eGov Property Registry System.
-  description: APIs for Property Registry module. This provide APIs for create new
-    property, update existing property, search existing property.
+  description: APIs for Property Registry module. This provide APIs for create new property, update existing property, search existing property.
   contact:
     name: Egovernments Foundation
     email: contact@egovernments.org
-  version: "1.0"
+  version: '1.0'
 servers:
-- url: https://virtserver.swaggerhub.com/egovernmets-faundation/PT-2.0/1.0.0
-  description: SwaggerHub API Auto Mocking
-  variables: {}
-- url: https://egov-micro-dev.egovernments.org
-  variables: {}
+  - url: https://virtserver.swaggerhub.com/egovernmets-faundation/PT-2.0/1.0.0
+    description: SwaggerHub API Auto Mocking
+    variables: {}
+  - url: https://egov-micro-dev.egovernments.org
+    variables: {}
 paths:
-  /assessment/_create:
-    post:
-      tags:
-      - assessment
-      summary: creates new assessment
-      operationId: createUsingPOST
-      requestBody:
-        description: assessmentRequest
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AssessmentRequest'
-        required: true
-      responses:
-        200:
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/AssessmentResponse'
-        201:
-          description: Created
-          content: {}
-        401:
-          description: Unauthorized
-          content: {}
-        403:
-          description: Forbidden
-          content: {}
-        404:
-          description: Not Found
-          content: {}
-      x-codegen-request-body-name: assessmentRequest
-  /assessment/_plainsearch:
-    post:
-      tags:
-      - assessment
-      summary: plainsearch
-      operationId: plainsearchUsingPOST
-      parameters:
-      - name: assessmentNumbers
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
-            type: string
-      - name: financialYear
-        in: query
-        schema:
-          type: string
-      - name: ids
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
-            type: string
-      - name: limit
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: offset
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: propertyIds
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
-            type: string
-      - name: status
-        in: query
-        schema:
-          type: string
-          enum:
-          - ACTIVE
-          - INACTIVE
-          - INWORKFLOW
-          - CANCELLED
-          - REJECTED
-      - name: tenantId
-        in: query
-        schema:
-          type: string
-      requestBody:
-        description: requestInfoWrapper
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RequestInfoWrapper'
-        required: true
-      responses:
-        200:
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/AssessmentResponse'
-        201:
-          description: Created
-          content: {}
-        401:
-          description: Unauthorized
-          content: {}
-        403:
-          description: Forbidden
-          content: {}
-        404:
-          description: Not Found
-          content: {}
-      x-codegen-request-body-name: requestInfoWrapper
-  /assessment/_search:
-    post:
-      tags:
-      - assessment
-      summary: Get the list of assessments defined in the system.
-      operationId: searchUsingPOST
-      parameters:
-      - name: assessmentNumbers
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
-            type: string
-      - name: financialYear
-        in: query
-        schema:
-          type: string
-      - name: ids
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
-            type: string
-      - name: limit
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: offset
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: propertyIds
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
-            type: string
-      - name: status
-        in: query
-        schema:
-          type: string
-          enum:
-          - ACTIVE
-          - INACTIVE
-          - INWORKFLOW
-          - CANCELLED
-          - REJECTED
-      - name: tenantId
-        in: query
-        schema:
-          type: string
-      requestBody:
-        description: requestInfoWrapper
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RequestInfoWrapper'
-        required: true
-      responses:
-        200:
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/AssessmentResponse'
-        201:
-          description: Created
-          content: {}
-        401:
-          description: Unauthorized
-          content: {}
-        403:
-          description: Forbidden
-          content: {}
-        404:
-          description: Not Found
-          content: {}
-      x-codegen-request-body-name: requestInfoWrapper
-  /assessment/_update:
-    post:
-      tags:
-      - assessment
-      summary: updates the assessment
-      operationId: updateUsingPOST
-      requestBody:
-        description: assessmentRequest
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AssessmentRequest'
-        required: true
-      responses:
-        200:
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/AssessmentResponse'
-        201:
-          description: Created
-          content: {}
-        401:
-          description: Unauthorized
-          content: {}
-        403:
-          description: Forbidden
-          content: {}
-        404:
-          description: Not Found
-          content: {}
-      x-codegen-request-body-name: assessmentRequest
   /property/_create:
     post:
       tags:
-      - property
+        - property
       summary: Creates new property.
-      description: Creates new property with basic information related to land and
-        owner information. Can be integrated with other modules like Water and Sewerage
-        or Trade License to act as base entity against which water connection or trade
-        license can be issued
+      description: Creates new property with basic information related to land and owner information. Can be integrated with other modules like Water and Sewerage or Trade License to act as base entity against which water connection or trade license can be issued
       operationId: Createsnewproperty.
       requestBody:
         description: propertyRequest
@@ -270,163 +28,163 @@ paths:
               $ref: '#/components/schemas/PropertyRequest'
         required: true
       responses:
-        200:
+        '200':
           description: OK
           content:
             '*/*':
               schema:
                 $ref: '#/components/schemas/PropertyResponse'
-        201:
+        '201':
           description: Property created sucessfully
           content: {}
-        401:
+        '401':
           description: Unauthorized
           content: {}
-        403:
+        '403':
           description: Forbidden
           content: {}
-        404:
+        '404':
           description: Not Found
           content: {}
       x-codegen-request-body-name: propertyRequest
   /property/_migration:
     post:
       tags:
-      - property
+        - property
       summary: propertyMigration
       operationId: propertyMigrationUsingPOST
       parameters:
-      - name: accountId
-        in: query
-        schema:
-          type: string
-      - name: addressids
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: accountId
+          in: query
+          schema:
             type: string
-      - name: asOnDate
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: documentids
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: addressids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: asOnDate
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: documentids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: doorNo
+          in: query
+          schema:
             type: string
-      - name: doorNo
-        in: query
-        schema:
-          type: string
-      - name: financialYear
-        in: query
-        schema:
-          type: string
-      - name: ids
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: financialYear
+          in: query
+          schema:
             type: string
-      - name: limit
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: locality
-        in: query
-        schema:
-          type: string
-      - name: mobileNumber
-        in: query
-        schema:
-          type: string
-      - name: name
-        in: query
-        schema:
-          type: string
-      - name: offset
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: oldpropertyids
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: ids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: locality
+          in: query
+          schema:
             type: string
-      - name: ownerids
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: mobileNumber
+          in: query
+          schema:
             type: string
-      - name: propertyDetailStatus
-        in: query
-        schema:
-          type: string
-          enum:
-          - ACTIVE
-          - INACTIVE
-          - INWORKFLOW
-          - CANCELLED
-          - REJECTED
-      - name: propertyDetailids
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: name
+          in: query
+          schema:
             type: string
-      - name: propertyId
-        in: query
-        schema:
-          type: string
-      - name: statuses
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: oldpropertyids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: ownerids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: propertyDetailStatus
+          in: query
+          schema:
             type: string
             enum:
-            - ACTIVE
-            - INACTIVE
-          enum:
-          - ACTIVE
-          - INACTIVE
-      - name: tenantId
-        in: query
-        schema:
-          type: string
-      - name: unitids
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+              - ACTIVE
+              - INACTIVE
+              - INWORKFLOW
+              - CANCELLED
+              - REJECTED
+        - name: propertyDetailids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: propertyId
+          in: query
+          schema:
             type: string
-      - name: userName
-        in: query
-        schema:
-          type: string
+        - name: statuses
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - ACTIVE
+                - INACTIVE
+            enum:
+              - ACTIVE
+              - INACTIVE
+        - name: tenantId
+          in: query
+          schema:
+            type: string
+        - name: unitids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: userName
+          in: query
+          schema:
+            type: string
       requestBody:
         description: requestInfoWrapper
         content:
@@ -435,160 +193,160 @@ paths:
               $ref: '#/components/schemas/RequestInfoWrapper'
         required: true
       responses:
-        200:
+        '200':
           description: OK
           content:
             '*/*':
               schema:
                 type: object
-        201:
+        '201':
           description: Created
           content: {}
-        401:
+        '401':
           description: Unauthorized
           content: {}
-        403:
+        '403':
           description: Forbidden
           content: {}
-        404:
+        '404':
           description: Not Found
           content: {}
       x-codegen-request-body-name: requestInfoWrapper
   /property/_plainsearch:
     post:
       tags:
-      - property
+        - property
       summary: plainsearch
       operationId: plainsearchUsingPOST_1
       parameters:
-      - name: acknowledgementIds
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: acknowledgementIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: audit
+          in: query
+          schema:
+            type: boolean
+        - name: creationReason
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: doorNo
+          in: query
+          schema:
             type: string
-      - name: audit
-        in: query
-        schema:
-          type: boolean
-      - name: creationReason
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: fromDate
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: isInboxSearch
+          in: query
+          schema:
+            type: boolean
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: locality
+          in: query
+          schema:
             type: string
-      - name: doorNo
-        in: query
-        schema:
-          type: string
-      - name: fromDate
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: isInboxSearch
-        in: query
-        schema:
-          type: boolean
-      - name: limit
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: locality
-        in: query
-        schema:
-          type: string
-      - name: mobileNumber
-        in: query
-        schema:
-          type: string
-      - name: name
-        in: query
-        schema:
-          type: string
-      - name: offset
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: oldPropertyId
-        in: query
-        schema:
-          type: string
-      - name: oldpropertyids
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: mobileNumber
+          in: query
+          schema:
             type: string
-      - name: ownerIds
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: name
+          in: query
+          schema:
             type: string
-      - name: propertyIds
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: oldPropertyId
+          in: query
+          schema:
             type: string
-      - name: status
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
-            type: string
+        - name: oldpropertyids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: ownerIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: propertyIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: status
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - ACTIVE
+                - INACTIVE
+                - INWORKFLOW
+                - CANCELLED
+                - REJECTED
             enum:
-            - ACTIVE
-            - INACTIVE
-            - INWORKFLOW
-            - CANCELLED
-            - REJECTED
-          enum:
-          - ACTIVE
-          - INACTIVE
-          - INWORKFLOW
-          - CANCELLED
-          - REJECTED
-      - name: tenantId
-        in: query
-        schema:
-          type: string
-      - name: tenantIds
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+              - ACTIVE
+              - INACTIVE
+              - INWORKFLOW
+              - CANCELLED
+              - REJECTED
+        - name: tenantId
+          in: query
+          schema:
             type: string
-      - name: toDate
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: uuids
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
-            type: string
+        - name: tenantIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: toDate
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: uuids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
       requestBody:
         description: requestInfoWrapper
         content:
@@ -597,161 +355,161 @@ paths:
               $ref: '#/components/schemas/RequestInfoWrapper'
         required: true
       responses:
-        200:
+        '200':
           description: OK
           content:
             '*/*':
               schema:
                 $ref: '#/components/schemas/PropertyResponse'
-        201:
+        '201':
           description: Created
           content: {}
-        401:
+        '401':
           description: Unauthorized
           content: {}
-        403:
+        '403':
           description: Forbidden
           content: {}
-        404:
+        '404':
           description: Not Found
           content: {}
       x-codegen-request-body-name: requestInfoWrapper
   /property/_search:
     post:
       tags:
-      - property
+        - property
       summary: Get the list of properties defined in the system.
       description: Get the properties list based on the input parameters.
       operationId: Getthelistofpropertiesdefinedinthesystem.
       parameters:
-      - name: acknowledgementIds
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: acknowledgementIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: audit
+          in: query
+          schema:
+            type: boolean
+        - name: creationReason
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: doorNo
+          in: query
+          schema:
             type: string
-      - name: audit
-        in: query
-        schema:
-          type: boolean
-      - name: creationReason
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: fromDate
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: isInboxSearch
+          in: query
+          schema:
+            type: boolean
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: locality
+          in: query
+          schema:
             type: string
-      - name: doorNo
-        in: query
-        schema:
-          type: string
-      - name: fromDate
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: isInboxSearch
-        in: query
-        schema:
-          type: boolean
-      - name: limit
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: locality
-        in: query
-        schema:
-          type: string
-      - name: mobileNumber
-        in: query
-        schema:
-          type: string
-      - name: name
-        in: query
-        schema:
-          type: string
-      - name: offset
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: oldPropertyId
-        in: query
-        schema:
-          type: string
-      - name: oldpropertyids
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: mobileNumber
+          in: query
+          schema:
             type: string
-      - name: ownerIds
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: name
+          in: query
+          schema:
             type: string
-      - name: propertyIds
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: oldPropertyId
+          in: query
+          schema:
             type: string
-      - name: status
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
-            type: string
+        - name: oldpropertyids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: ownerIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: propertyIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: status
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - ACTIVE
+                - INACTIVE
+                - INWORKFLOW
+                - CANCELLED
+                - REJECTED
             enum:
-            - ACTIVE
-            - INACTIVE
-            - INWORKFLOW
-            - CANCELLED
-            - REJECTED
-          enum:
-          - ACTIVE
-          - INACTIVE
-          - INWORKFLOW
-          - CANCELLED
-          - REJECTED
-      - name: tenantId
-        in: query
-        schema:
-          type: string
-      - name: tenantIds
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+              - ACTIVE
+              - INACTIVE
+              - INWORKFLOW
+              - CANCELLED
+              - REJECTED
+        - name: tenantId
+          in: query
+          schema:
             type: string
-      - name: toDate
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: uuids
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
-            type: string
+        - name: tenantIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: toDate
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: uuids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
       requestBody:
         description: requestInfoWrapper
         content:
@@ -760,29 +518,29 @@ paths:
               $ref: '#/components/schemas/RequestInfoWrapper'
         required: true
       responses:
-        200:
+        '200':
           description: OK
           content:
             '*/*':
               schema:
                 $ref: '#/components/schemas/PropertyResponse'
-        201:
+        '201':
           description: Created
           content: {}
-        401:
+        '401':
           description: Unauthorized
           content: {}
-        403:
+        '403':
           description: Forbidden
           content: {}
-        404:
+        '404':
           description: Not Found
           content: {}
       x-codegen-request-body-name: requestInfoWrapper
   /property/_update:
     post:
       tags:
-      - property
+        - property
       summary: Update existing property.
       description: Updates a given `Property` with newer details.
       operationId: Updateexistingproperty.
@@ -794,160 +552,160 @@ paths:
               $ref: '#/components/schemas/PropertyRequest'
         required: true
       responses:
-        200:
+        '200':
           description: OK
           content:
             '*/*':
               schema:
                 $ref: '#/components/schemas/PropertyResponse'
-        201:
+        '201':
           description: Update Property successful
           content: {}
-        401:
+        '401':
           description: Unauthorized
           content: {}
-        403:
+        '403':
           description: Forbidden
           content: {}
-        404:
+        '404':
           description: Not Found
           content: {}
       x-codegen-request-body-name: propertyRequest
   /property/fuzzy/_search:
     post:
       tags:
-      - property
+        - property
       summary: fuzzySearch
       operationId: fuzzySearchUsingPOST
       parameters:
-      - name: acknowledgementIds
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: acknowledgementIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: audit
+          in: query
+          schema:
+            type: boolean
+        - name: creationReason
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: doorNo
+          in: query
+          schema:
             type: string
-      - name: audit
-        in: query
-        schema:
-          type: boolean
-      - name: creationReason
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: fromDate
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: isInboxSearch
+          in: query
+          schema:
+            type: boolean
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: locality
+          in: query
+          schema:
             type: string
-      - name: doorNo
-        in: query
-        schema:
-          type: string
-      - name: fromDate
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: isInboxSearch
-        in: query
-        schema:
-          type: boolean
-      - name: limit
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: locality
-        in: query
-        schema:
-          type: string
-      - name: mobileNumber
-        in: query
-        schema:
-          type: string
-      - name: name
-        in: query
-        schema:
-          type: string
-      - name: offset
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: oldPropertyId
-        in: query
-        schema:
-          type: string
-      - name: oldpropertyids
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: mobileNumber
+          in: query
+          schema:
             type: string
-      - name: ownerIds
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: name
+          in: query
+          schema:
             type: string
-      - name: propertyIds
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: oldPropertyId
+          in: query
+          schema:
             type: string
-      - name: status
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
-            type: string
+        - name: oldpropertyids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: ownerIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: propertyIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: status
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - ACTIVE
+                - INACTIVE
+                - INWORKFLOW
+                - CANCELLED
+                - REJECTED
             enum:
-            - ACTIVE
-            - INACTIVE
-            - INWORKFLOW
-            - CANCELLED
-            - REJECTED
-          enum:
-          - ACTIVE
-          - INACTIVE
-          - INWORKFLOW
-          - CANCELLED
-          - REJECTED
-      - name: tenantId
-        in: query
-        schema:
-          type: string
-      - name: tenantIds
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
+              - ACTIVE
+              - INACTIVE
+              - INWORKFLOW
+              - CANCELLED
+              - REJECTED
+        - name: tenantId
+          in: query
+          schema:
             type: string
-      - name: toDate
-        in: query
-        schema:
-          type: integer
-          format: int64
-      - name: uuids
-        in: query
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
-            type: string
+        - name: tenantIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: toDate
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: uuids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
       requestBody:
         description: requestInfoWrapper
         content:
@@ -956,22 +714,22 @@ paths:
               $ref: '#/components/schemas/RequestInfoWrapper'
         required: true
       responses:
-        200:
+        '200':
           description: OK
           content:
             '*/*':
               schema:
                 $ref: '#/components/schemas/PropertyResponse'
-        201:
+        '201':
           description: Created
           content: {}
-        401:
+        '401':
           description: Unauthorized
           content: {}
-        403:
+        '403':
           description: Forbidden
           content: {}
-        404:
+        '404':
           description: Not Found
           content: {}
       x-codegen-request-body-name: requestInfoWrapper
@@ -1063,85 +821,6 @@ components:
           type: string
           description: Unique Identifier of the tenant to which user primarily belongs
       description: Representation of a address. Indiavidual APIs may choose to extend from this using allOf if more details needed to be added in their case.
-    Assessment:
-      title: Assessment
-      required:
-      - assessmentDate
-      - financialYear
-      - propertyId
-      - tenantId
-      type: object
-      properties:
-        additionalDetails:
-          $ref: '#/components/schemas/JsonNode'
-        assessmentDate:
-          type: integer
-          format: int64
-        assessmentNumber:
-          type: string
-        auditDetails:
-          $ref: '#/components/schemas/AuditDetails'
-        channel:
-          type: string
-          enum:
-          - SYSTEM
-          - CFC_COUNTER
-          - CITIZEN
-          - DATA_ENTRY
-          - MIGRATION
-        documents:
-          type: array
-          items:
-            $ref: '#/components/schemas/Document'
-        financialYear:
-          type: string
-        id:
-          type: string
-        propertyId:
-          type: string
-        source:
-          type: string
-          enum:
-          - MUNICIPAL_RECORDS
-          - WEBAPP
-          - MOBILEAPP
-          - FIELD_SURVEY
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - INACTIVE
-          - INWORKFLOW
-          - CANCELLED
-          - REJECTED
-        tenantId:
-          type: string
-        unitUsageList:
-          type: array
-          items:
-            $ref: '#/components/schemas/UnitUsage'
-        workflow:
-          $ref: '#/components/schemas/ProcessInstance'
-    AssessmentRequest:
-      title: AssessmentRequest
-      required:
-      - Assessment
-      type: object
-      properties:
-        Assessment:
-          $ref: '#/components/schemas/Assessment'
-        RequestInfo:
-          $ref: '#/components/schemas/RequestInfo'
-    AssessmentResponse:
-      title: AssessmentResponse
-      type: object
-      properties:
-        Assessments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Assessment'
-        ResponseInfo:
-          $ref: '#/components/schemas/ResponseInfo'
     AuditDetails:
       title: AuditDetails
       type: object
@@ -1185,8 +864,8 @@ components:
     Document:
       title: Document
       required:
-      - documentType
-      - fileStoreId
+        - documentType
+        - fileStoreId
       type: object
       properties:
         auditDetails:
@@ -1207,11 +886,11 @@ components:
         status:
           type: string
           enum:
-          - ACTIVE
-          - INACTIVE
-          - INWORKFLOW
-          - CANCELLED
-          - REJECTED
+            - ACTIVE
+            - INACTIVE
+            - INWORKFLOW
+            - CANCELLED
+            - REJECTED
       description: This object holds list of documents attached during the transaciton for a property
     GeoLocation:
       title: GeoLocation
@@ -1339,104 +1018,13 @@ components:
         name:
           type: string
       additionalProperties:
-        $ref: '#/components/schemas/Link'
-    ModelAndView:
-      title: ModelAndView
-      type: object
-      properties:
-        empty:
-          type: boolean
-        model:
-          type: object
-          properties: {}
-        modelMap:
-          type: object
-          additionalProperties:
-            type: object
-            properties: {}
-        reference:
-          type: boolean
-        status:
-          type: string
-          enum:
-          - 100 CONTINUE
-          - 101 SWITCHING_PROTOCOLS
-          - 102 PROCESSING
-          - 103 CHECKPOINT
-          - 200 OK
-          - 201 CREATED
-          - 202 ACCEPTED
-          - 203 NON_AUTHORITATIVE_INFORMATION
-          - 204 NO_CONTENT
-          - 205 RESET_CONTENT
-          - 206 PARTIAL_CONTENT
-          - 207 MULTI_STATUS
-          - 208 ALREADY_REPORTED
-          - 226 IM_USED
-          - 300 MULTIPLE_CHOICES
-          - 301 MOVED_PERMANENTLY
-          - 302 FOUND
-          - 302 MOVED_TEMPORARILY
-          - 303 SEE_OTHER
-          - 304 NOT_MODIFIED
-          - 305 USE_PROXY
-          - 307 TEMPORARY_REDIRECT
-          - 308 PERMANENT_REDIRECT
-          - 400 BAD_REQUEST
-          - 401 UNAUTHORIZED
-          - 402 PAYMENT_REQUIRED
-          - 403 FORBIDDEN
-          - 404 NOT_FOUND
-          - 405 METHOD_NOT_ALLOWED
-          - 406 NOT_ACCEPTABLE
-          - 407 PROXY_AUTHENTICATION_REQUIRED
-          - 408 REQUEST_TIMEOUT
-          - 409 CONFLICT
-          - 410 GONE
-          - 411 LENGTH_REQUIRED
-          - 412 PRECONDITION_FAILED
-          - 413 PAYLOAD_TOO_LARGE
-          - 413 REQUEST_ENTITY_TOO_LARGE
-          - 414 URI_TOO_LONG
-          - 414 REQUEST_URI_TOO_LONG
-          - 415 UNSUPPORTED_MEDIA_TYPE
-          - 416 REQUESTED_RANGE_NOT_SATISFIABLE
-          - 417 EXPECTATION_FAILED
-          - 418 I_AM_A_TEAPOT
-          - 419 INSUFFICIENT_SPACE_ON_RESOURCE
-          - 420 METHOD_FAILURE
-          - 421 DESTINATION_LOCKED
-          - 422 UNPROCESSABLE_ENTITY
-          - 423 LOCKED
-          - 424 FAILED_DEPENDENCY
-          - 425 TOO_EARLY
-          - 426 UPGRADE_REQUIRED
-          - 428 PRECONDITION_REQUIRED
-          - 429 TOO_MANY_REQUESTS
-          - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
-          - 451 UNAVAILABLE_FOR_LEGAL_REASONS
-          - 500 INTERNAL_SERVER_ERROR
-          - 501 NOT_IMPLEMENTED
-          - 502 BAD_GATEWAY
-          - 503 SERVICE_UNAVAILABLE
-          - 504 GATEWAY_TIMEOUT
-          - 505 HTTP_VERSION_NOT_SUPPORTED
-          - 506 VARIANT_ALSO_NEGOTIATES
-          - 507 INSUFFICIENT_STORAGE
-          - 508 LOOP_DETECTED
-          - 509 BANDWIDTH_LIMIT_EXCEEDED
-          - 510 NOT_EXTENDED
-          - 511 NETWORK_AUTHENTICATION_REQUIRED
-        view:
-          $ref: '#/components/schemas/View'
-        viewName:
-          type: string
+            $ref: '#/components/schemas/Link'
     OwnerInfo:
       title: OwnerInfo
       required:
-      - mobileNumber
-      - name
-      - ownerType
+        - mobileNumber
+        - name
+        - ownerType
       type: object
       properties:
         aadhaarNumber:
@@ -1553,8 +1141,8 @@ components:
         relationship:
           type: string
           enum:
-          - FATHER
-          - HUSBAND
+            - FATHER
+            - HUSBAND
         roles:
           type: array
           items:
@@ -1568,11 +1156,11 @@ components:
         status:
           type: string
           enum:
-          - ACTIVE
-          - INACTIVE
-          - INWORKFLOW
-          - CANCELLED
-          - REJECTED
+            - ACTIVE
+            - INACTIVE
+            - INWORKFLOW
+            - CANCELLED
+            - REJECTED
         tenantId:
           maxLength: 256
           minLength: 0
@@ -1641,7 +1229,7 @@ components:
     Property:
       title: Property
       required:
-      - creationReason
+        - creationReason
       type: object
       properties:
         accountId:
@@ -1659,22 +1247,22 @@ components:
         channel:
           type: string
           enum:
-          - SYSTEM
-          - CFC_COUNTER
-          - CITIZEN
-          - DATA_ENTRY
-          - MIGRATION
+            - SYSTEM
+            - CFC_COUNTER
+            - CITIZEN
+            - DATA_ENTRY
+            - MIGRATION
         creationReason:
           type: string
           enum:
-          - CREATE
-          - UPDATE
-          - MUTATION
-          - LEGACY_ENTRY
-          - BIFURCATION
-          - AMALGAMATION
-          - SUBDIVISION
-          - DATA_UPLOAD
+            - CREATE
+            - UPDATE
+            - MUTATION
+            - LEGACY_ENTRY
+            - BIFURCATION
+            - AMALGAMATION
+            - SUBDIVISION
+            - DATA_UPLOAD
         documents:
           type: array
           items:
@@ -1694,7 +1282,7 @@ components:
           items:
             type: string
         noOfFloors:
-          maximum: 5E+2
+          maximum: 500
           exclusiveMaximum: false
           type: integer
           description: no of floors in the property
@@ -1719,17 +1307,17 @@ components:
         source:
           type: string
           enum:
-          - MUNICIPAL_RECORDS
-          - FIELD_SURVEY
-          - WATER_CHARGES
+            - MUNICIPAL_RECORDS
+            - FIELD_SURVEY
+            - WATER_CHARGES
         status:
           type: string
           enum:
-          - ACTIVE
-          - INACTIVE
-          - INWORKFLOW
-          - CANCELLED
-          - REJECTED
+            - ACTIVE
+            - INACTIVE
+            - INWORKFLOW
+            - CANCELLED
+            - REJECTED
         superBuiltUpArea:
           type: number
           description: super builtup area of the complete property
@@ -1828,6 +1416,49 @@ components:
           type: string
         tenantId:
           type: string
+    Unit:
+      title: Unit
+      required:
+        - constructionDetail
+        - usageCategory
+      type: object
+      properties:
+        active:
+          type: boolean
+        additionalDetails:
+          type: object
+          description: Json object to capture any extra information which is not accommodated by model
+          properties: {}
+        arv:
+          type: number
+        auditDetails:
+          $ref: '#/components/schemas/AuditDetails'
+        constructionDetail:
+          $ref: '#/components/schemas/ConstructionDetail'
+        floorNo:
+          maximum: 500
+          exclusiveMaximum: false
+          type: integer
+          description: floor number of the Unit
+          format: int32
+        id:
+          type: string
+          description: Unique Identifier of the Unit(UUID).
+        occupancyDate:
+          type: integer
+          format: int64
+        occupancyType:
+          type: string
+        tenantId:
+          type: string
+          description: tenant id of the Property
+        unitType:
+          type: string
+          description: Unit type is master data.
+          example: Building, Room, Kitchen etc.
+        usageCategory:
+          type: string
+          description: This is about the usage of the property like Residential, Non-residential, Mixed(Property witch is gettiong used for Residential, Non-residential purpose)
     State:
       title: State
       type: object
@@ -1870,55 +1501,12 @@ components:
           minLength: 0
           type: string
       description: A Object holds the basic data for a Trade License
-    Unit:
-      title: Unit
-      required:
-      - constructionDetail
-      - usageCategory
-      type: object
-      properties:
-        active:
-          type: boolean
-        additionalDetails:
-          type: object
-          description: Json object to capture any extra information which is not accommodated by model
-          properties: {}
-        arv:
-          type: number
-        auditDetails:
-          $ref: '#/components/schemas/AuditDetails'
-        constructionDetail:
-          $ref: '#/components/schemas/ConstructionDetail'
-        floorNo:
-          maximum: 5E+2
-          exclusiveMaximum: false
-          type: integer
-          description: floor number of the Unit
-          format: int32
-        id:
-          type: string
-          description: Unique Identifier of the Unit(UUID).
-        occupancyDate:
-          type: integer
-          format: int64
-        occupancyType:
-          type: string
-        tenantId:
-          type: string
-          description: tenant id of the Property
-        unitType:
-          type: string
-          description: Unit type is master data.
-          example: Building, Room, Kitchen etc.
-        usageCategory:
-          type: string
-          description: This is about the usage of the property like Residential, Non-residential, Mixed(Property witch is gettiong used for Residential, Non-residential purpose)
     UnitUsage:
       title: UnitUsage
       required:
-      - occupancyType
-      - unitId
-      - usageCategory
+        - occupancyType
+        - unitId
+        - usageCategory
       type: object
       properties:
         auditDetails:
@@ -2070,9 +1658,3 @@ components:
         uuid:
           type: string
           description: System Generated User id of the authenticated user.
-    View:
-      title: View
-      type: object
-      properties:
-        contentType:
-          type: string
