@@ -97,6 +97,9 @@ const NewChallan = ({ChallanData}) => {
     clearSuccessData();
   }, []);
 
+  window.onunload = function () {
+    sessionStorage.removeItem("mcollectFormData");
+  }
   const onFormValueChange = (setValue, formData, formState) => {
     let mcollectFormValue = JSON.parse(sessionStorage.getItem("mcollectFormData"));
     if(Object.keys(formState.errors).length > 0)
@@ -117,8 +120,8 @@ const NewChallan = ({ChallanData}) => {
   const onSubmit = (data) => {
     let mcollectFormValue = JSON.parse(sessionStorage.getItem("mcollectFormData"));
     data = mcollectFormValue? mcollectFormValue : data?.consomerDetails1?.[0];
-    let TaxHeadMasterKeys= Object.keys(data[`${data?.category?.code?.split(".")[0]}`]);
-    let TaxHeadMasterValues = Object.values(data[`${data?.category?.code?.split(".")[0]}`]);
+    let TaxHeadMasterKeys= data[`${data?.category?.code?.split(".")[0]}`] ? Object.keys(data[`${data?.category?.code?.split(".")[0]}`]) : [];
+    let TaxHeadMasterValues = data[`${data?.category?.code?.split(".")[0]}`] ? Object.values(data[`${data?.category?.code?.split(".")[0]}`]) : [];
     let Challan = {};
     if(!isEdit){
       let temp = data?.category?.code;
@@ -128,7 +131,7 @@ const NewChallan = ({ChallanData}) => {
           mobileNumber: data.mobileNumber,
         },
         //businessService: selectedCategoryType ? temp + "." + humanized(selectedCategoryType.code, temp) : "",
-        businessService:data?.category?.code,
+        businessService:data?.categoryType?.code,
         consumerType: data?.category?.code?.split(".")[0],
         description: data?.comments,
         taxPeriodFrom: Date.parse(data?.fromDate),
@@ -196,6 +199,7 @@ const NewChallan = ({ChallanData}) => {
         .then((result, err) => {
           if (result.challans && result.challans.length > 0) {
             const challan = result.challans[0];
+            sessionStorage.removeItem("mcollectFormData");
             Digit.MCollectService.generateBill(challan.challanNo, tenantId, challan.businessService, "challan").then((response) => {
               if (response.Bill && response.Bill.length > 0) {
                 history.push(
@@ -206,7 +210,7 @@ const NewChallan = ({ChallanData}) => {
             });
           }
         })
-        .catch((e) => setShowToast({ key: true, label: e?.response?.data?.Errors[0].message }));
+        .catch((e) => {setShowToast({ key: true, label: e?.response?.data?.Errors[0].message })});
     }
   };
   let configs = newConfig || [];
@@ -232,7 +236,7 @@ const NewChallan = ({ChallanData}) => {
   return (
     <div>
       <div style={{ marginLeft: "15px" }}>
-        <Header>{t("UC_COMMON_HEADER")}</Header>
+        <Header>{isEdit ? t("UC_UPDATE_CHALLAN"):t("UC_COMMON_HEADER")}</Header>
       </div>
       <FormComposer
         heading={t("")}
