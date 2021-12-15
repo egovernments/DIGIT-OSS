@@ -554,7 +554,8 @@ app.post(
       let resposnseMap = await findLocalisation(
         requestInfo,
         [],
-        unregisteredLocalisationCodes
+        unregisteredLocalisationCodes,
+        null
       );
 
       resposnseMap.messages.map((item) => {
@@ -1125,7 +1126,8 @@ const handlelogic = async (
       dataconfig,
       variableTovalueMap,
       requestInfo,
-      unregisteredLocalisationCodes
+      unregisteredLocalisationCodes,
+      key
     ),
     //external API mapping
     externalAPIMapping(
