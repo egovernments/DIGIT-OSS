@@ -3,6 +3,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.1 - 2021-12-15
+- Added Support for link tracking
+
 ## 1.1.0 - 2021-02-26
 - Updated domain name in application.properties
 
