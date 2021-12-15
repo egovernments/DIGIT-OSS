@@ -1,3 +1,7 @@
+## 1.1.3 - 15-12-2021
+
+- Added flag for sms enable
+
 ## 1.1.2 - 11-05-2021
 
 - added size validations
