@@ -1,8 +1,15 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
-import { Loader, CitizenHomeCard, WSICon, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
+import { Loader, CitizenHomeCard, WSICon } from "@egovernments/digit-ui-react-components";
 import CitizenApp from "./pages/citizen";
+
+import WSServiceName from "./pageComponents/WSServiceName";
+import WSWaterConnectionDetails from "./pageComponents/WSWaterConnectionDetails";
+import WSDocsRequired from "./pageComponents/WSDocsRequired";
+import WSDocumentDetails from "./pageComponents/WSDocumentDetails";
+import WSSewerageConnectionDetails from "./pageComponents/WSSewerageConnectionDetails";
+import WSPlumberPreference from "./pageComponents/WSPlumberPreference";
 
 
 const WSModule = ({ stateCode, userType, tenants }) => {
@@ -37,7 +44,7 @@ const WSLinks = ({ matchPath, userType }) => {
       i18nKey: t("ACTION_TEST_MY_CONNECTIONS"),
     },
     {
-      link: ``,
+      link: `${matchPath}/create-application`,
       i18nKey: t("ACTION_TEST_APPLY_NEW_CONNECTION"),
     },
   ];
@@ -48,7 +55,13 @@ const WSLinks = ({ matchPath, userType }) => {
 
 const componentsToRegister = {
   WSModule,
-  WSLinks
+  WSLinks,
+  WSDocsRequired,
+  WSDocumentDetails,
+  WSServiceName,
+  WSWaterConnectionDetails,
+  WSSewerageConnectionDetails,
+  WSPlumberPreference
 }
 
 export const initWSComponents = () => {
