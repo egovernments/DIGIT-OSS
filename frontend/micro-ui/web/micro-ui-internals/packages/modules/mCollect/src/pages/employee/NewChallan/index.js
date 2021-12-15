@@ -82,6 +82,8 @@ const NewChallan = ({ChallanData}) => {
     {
       let formdata = getformDataforEdit(ChallanData, fetchBillData);
       sessionStorage.setItem("mcollectEditObject", JSON.stringify({consomerDetails1:[{...formdata}]}))
+      setSubmitValve(true);
+      
     }
   },[isEdit,fetchBillData])
 
@@ -96,7 +98,22 @@ const NewChallan = ({ChallanData}) => {
   }, []);
 
   const onFormValueChange = (setValue, formData, formState) => {
-    setSubmitValve(!Object.keys(formState.errors).length);
+    let mcollectFormValue = JSON.parse(sessionStorage.getItem("mcollectFormData"));
+    console.log(formState);
+    console.log(mcollectFormValue,"mm");
+    if(Object.keys(formState.errors).length > 0)
+    {
+      setSubmitValve(!(Object.keys(formState.errors).length));
+    }
+    else if(Object.keys(formState.errors).length == 0 && mcollectFormValue &&Object.keys(mcollectFormValue).length<=7)
+    {
+      setSubmitValve(false);
+    }
+    else
+    {
+      setSubmitValve(true);
+    }
+    //setSubmitValve(!(Object.keys(formState.errors).length && mcollectFormValue &&Object.keys(mcollectFormValue).length<=7));
   };
 
   const onSubmit = (data) => {
@@ -221,7 +238,7 @@ const NewChallan = ({ChallanData}) => {
       </div>
       <FormComposer
         heading={t("")}
-        //isDisabled={!canSubmit}
+        isDisabled={!canSubmit}
         label={t("ES_COMMON_APPLICATION_SUBMIT")}
         config={configs.map((config) => {
           return {
@@ -238,7 +255,7 @@ const NewChallan = ({ChallanData}) => {
         onFormValueChange={onFormValueChange}
         breaklineStyle={{ border: "0px" }}
       />
-      {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} onClose={closeToast} />}
+      {showToast && <Toast isDleteBtn={true} error={showToast?.key? true : false} label={showToast?.label} onClose={closeToast} />}
     </div>
   );
 };

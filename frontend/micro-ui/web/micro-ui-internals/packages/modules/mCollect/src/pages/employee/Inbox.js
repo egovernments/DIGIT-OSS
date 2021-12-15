@@ -31,6 +31,10 @@ const Inbox = ({
     return initialStates.searchParams || {};
   });
 
+  if(sessionStorage.getItem("mcollectEditObject"))
+  {
+  sessionStorage.removeItem("mcollectEditObject");
+  }
   const [businessIdToOwnerMappings, setBusinessIdToOwnerMappings] = useState({});
   const [isLoader, setIsLoader] = useState(true);
 

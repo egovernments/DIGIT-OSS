@@ -168,6 +168,15 @@ const OwnerForm1 = (_props) => {
   },[selectedPincode])
 
   useEffect(() => {
+    if(isEdit){
+    setValue("category",formData?.consomerDetails1?.[0]?.category);
+    setValue("categoryType",formData?.consomerDetails1?.[0]?.categoryType);
+    setValue("fromDate",formValue.fromDate?formValue.fromDate:formData?.consomerDetails1?.[0]?.fromDate);
+    setValue("toDate",formValue.toDate?formValue.toDate:formData?.consomerDetails1?.[0]?.toDate);
+    }
+  },[formData?.consomerDetails1?.[0]?.category]);
+
+  useEffect(() => {
     if(isEdit)
     setValue("city",selectedCity);
   },[selectedCity]);
@@ -237,10 +246,41 @@ const OwnerForm1 = (_props) => {
     if (Object.keys(errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, errors)) {
       setError(config.key, { type: errors });
     }
-    else if (!Object.keys(errors).length && formState.errors[config.key] && isErrors) {
+    else if (!Object.keys(errors).length && formState.errors[config.key] && isErrors ) {
+      let flag = 0;
+      TaxHeadMasterFields && TaxHeadMasterFields.length>0 && TaxHeadMasterFields.map((tax) => {
+        let ob = consumerdetail?.[`${tax?.code.split(".")[0]}`];
+        if(tax.isRequired && (ob?.[`${tax?.code.split(".")[1]}`] === "" || ob?.[`${tax?.code.split(".")[1]}`] === null || ob?.[`${tax?.code.split(".")[1]}`] === undefined ) )
+        {
+          flag=1;
+        } 
+      })
+      if(flag == 0){
       clearErrors(config.key);
+      }
     }
   }, [errors]);
+
+  const getNestedObject = (tax,caseflow) => {
+    if(caseflow === "touched")
+    {
+      let ob = localFormState.touched?.[`${tax?.code.split(".")[0]}`];
+      return ob?.[`${tax?.code.split(".")[1]}`];
+    }
+    else if(caseflow === "errors")
+    {
+      let ob = errors?.[`${tax?.code.split(".")[0]}`];
+      return ob?.[`${tax?.code.split(".")[1]}`];
+    }
+  }
+
+  const getRules = (tax) => {
+    let rule = { validate: { pattern: (val) => (val == undefined || /^$|^[+]?\d+([.]\d+)?$/.test(val) ? true : t("CS_NO_NEGATIVE_VALUE_REQ_FIELD")) } }
+    if(tax.isRequired)
+    rule = {...rule, required: t("REQUIRED_FIELD") }
+
+    return rule;
+  }
 
   const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
   return (
@@ -371,7 +411,7 @@ const OwnerForm1 = (_props) => {
           {TaxHeadMasterFields && TaxHeadMasterFields.length>0 && TaxHeadMasterFields.map((tax) => 
           <div>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t(stringReplaceAll(tax?.name,".","_"))} * :`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t(stringReplaceAll(tax?.name,".","_"))} ${tax.isRequired?"*":""} :`}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
@@ -379,7 +419,7 @@ const OwnerForm1 = (_props) => {
                 defaultValue={consumerdetail[tax?.code]}
                 isMandatory={tax.isRequired}
                 componentInFront={<div className="employee-card-input employee-card-input--front">₹</div>}
-                rules={tax.isRequired?{ required: t("REQUIRED_FIELD")}:"" }
+                rules={getRules(tax)}
                 render={(props) => (
                   <div style={{display:"flex"}}>
                   <div className="employee-card-input employee-card-input--front">₹</div>
@@ -388,7 +428,7 @@ const OwnerForm1 = (_props) => {
                     //className="employee-card-input employee-card-input--front"
                     componentInFront={<div className="employee-card-input employee-card-input--front">₹</div>}
                     autoFocus={focusIndex.index === consumerdetail?.key && focusIndex.type === "name"}
-                    //errorStyle={(localFormState.touched.tradeName && errors?.tradeName?.message) ? true : false}
+                    errorStyle={(getNestedObject(tax,"touched") && getNestedObject(tax,"errors")?.message) ? true : false}
                     onChange={(e) => {
                       props.onChange(e.target.value);
                       setFocusIndex({ index: consumerdetail.key, type: tax?.code });
@@ -404,6 +444,7 @@ const OwnerForm1 = (_props) => {
               />
             </div>
           </LabelFieldPair> 
+          {<CardLabelError style={errorStyle}>{getNestedObject(tax,"touched") ? getNestedObject(tax,"errors")?.message : ""}</CardLabelError>}
           </div>)}
         </div>
     </div>

@@ -1,3 +1,4 @@
+import { Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -13,6 +14,10 @@ const EditChallan = () => {
   let isMcollectAppChanged = Digit.SessionStorage.get("isMcollectAppChanged");
   sessionStorage.setItem("isHookRecall", true);
   const { isLoading, data: result } = Digit.Hooks.mcollect.useMCollectSearch({ tenantId, filters: { challanNo }, isMcollectAppChanged });
+  if(isLoading)
+  {
+    return< Loader />
+  }
   return result && !isLoading ? <NewChallan ChallanData={result?.challans} tenantId={tenantId} /> : null;
 };
 export default EditChallan;
