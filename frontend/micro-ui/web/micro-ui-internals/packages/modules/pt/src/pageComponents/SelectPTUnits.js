@@ -1,145 +1,174 @@
-import React, { useEffect, useState } from "react";
-import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, RadioOrSelect, LinkButton } from "@egovernments/digit-ui-react-components";
-import { useLocation } from "react-router-dom";
+import { CardLabel, Dropdown, FormStep, LinkButton, TextInput } from "@egovernments/digit-ui-react-components";
+import React, { useState } from "react";
 
+const getUnique = (arr) => {
+  return arr.filter((value, index, self) => self.indexOf(value) === index);
+};
+const getUsageCategory = (usageCategory) => {
+  let categoryArray = usageCategory.split(".");
+  let tempObj = {};
+  tempObj["usageCategoryMajor"] = categoryArray && categoryArray.length > 0 && categoryArray[0];
+  tempObj["usageCategoryMinor"] = categoryArray && categoryArray.length > 1 && categoryArray[1];
+  tempObj["usageCategorySubMinor"] = categoryArray && categoryArray.length > 2 && categoryArray[2];
+  tempObj["usageCategoryDetail"] = categoryArray && categoryArray.length > 3 && categoryArray[3];
+  return tempObj;
+};
+
+const DeleteIcon = (showIcon = false) => {
+  return (
+    <div>
+      <span>
+        <svg
+          style={{ float: "right", position: "relative", bottom: "32px" }}
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M1 16C1 17.1 1.9 18 3 18H11C12.1 18 13 17.1 13 16V4H1V16ZM14 1H10.5L9.5 0H4.5L3.5 1H0V3H14V1Z"
+            fill={!showIcon ? "#494848" : "#FAFAFA"}
+          />
+        </svg>
+      </span>
+    </div>
+  );
+};
+
+const formatUnits = (units) => {
+  return units.map((unit) => {
+    let usageCategory = unit.usageCategory.includes("RESIDENTIAL") ? "RESIDENTIAL" : getUsageCategory(unit.usageCategory).usageCategoryMinor;
+    return {
+      ...unit,
+      builtUpArea: unit?.constructionDetail?.builtUpArea,
+      usageCategory: { code: usageCategory, i18nKey: `PROPERTYTAX_BILLING_SLAB_${usageCategory}` },
+      occupancyType: { code: unit.occupancyType, i18nKey: `PROPERTYTAX_OCCUPANCYTYPE_${unit.occupancyType}` },
+      floorNo: { code: unit.floorNo, i18nKey: `PROPERTYTAX_FLOOR_${unit.floorNo}` },
+      unitType: { code: unit.unitType, i18nKey: `PROPERTYTAX_BILLING_SLAB_${unit.unitType}` },
+    };
+  });
+};
 const SelectPTUnits = ({ t, config, onSelect, userType, formData }) => {
-  let validation = {};
-  const [TradeCategory, setTradeCategory] = useState("");
-  const [TradeType, setTradeType] = useState(formData?.TadeDetails?.Units?.TradeType || "");
-  const [TradeSubType, setTradeSubType] = useState(formData?.TadeDetails?.Units?.TradeSubType || "");
-  const [UnitOfMeasure, setUnitOfMeasure] = useState(formData?.TadeDetails?.Units?.UnitOfMeasure || "");
-  const [UomValue, setUomValue] = useState(formData?.TadeDetails?.Units?.UomValue || "");
-  const [fields, setFeilds] = useState(
-    (formData?.TradeDetails && formData?.TradeDetails?.units) || [{ tradecategory: "", tradetype: "", tradesubtype: "", unit: null, uom: null }]
+  const [fields, setFields] = useState(
+    (formData?.units?.length > 0 && formatUnits(formData?.units)) || [
+      { usageCategory: "", unitType: "", occupancyType: "", builtUpArea: null, arv: "", floorNo: "" },
+    ]
   );
 
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = Digit.ULBService.getStateId();
+  const { data: mdmsData } = Digit.Hooks.useCommonMDMS(Digit.ULBService.getStateId(), "PropertyTax", ["Floor", "OccupancyType", "UsageCategory"], {
+    select: (data) => {
+      let usageCategory = data?.PropertyTax?.UsageCategory?.map((category) => getUsageCategory(category.code))
+        .filter(
+          (category) => category.usageCategoryDetail === false && category.usageCategorySubMinor === false && category.usageCategoryMinor !== false
+        )
+        .map((category) => ({ code: category.usageCategoryMinor, i18nKey: `PROPERTYTAX_BILLING_SLAB_${category.usageCategoryMinor}` }));
+      let subCategory = getUnique(
+        data?.PropertyTax?.UsageCategory.map((e) => getUsageCategory(e.code))
+          .filter((e) => e.usageCategoryDetail)
+          .map((e) => ({
+            code: e.usageCategoryDetail,
+            i18nKey: `PROPERTYTAX_BILLING_SLAB_${e.usageCategoryDetail}`,
+            usageCategorySubMinor: e.usageCategorySubMinor,
+            usageCategoryMinor: e.usageCategoryMinor,
+          }))
+      );
 
+      return {
+        Floor: data?.PropertyTax?.Floor?.filter((floor) => floor.active)?.map((floor) => ({
+          i18nKey: `PROPERTYTAX_FLOOR_${floor.code}`,
+          code: floor.code,
+        })),
+        OccupancyType: data?.PropertyTax?.OccupancyType?.filter((occupancy) => occupancy.active)?.map((occupancy) => ({
+          i18nKey: `PROPERTYTAX_OCCUPANCYTYPE_${occupancy.code}`,
+          code: occupancy.code,
+        })),
+        UsageCategory: usageCategory,
+        UsageSubCategory: subCategory,
+        usageDetails: data?.PropertyTax?.UsageCategory,
+      };
+    },
+    retry: false,
+    enable: false,
+  });
+
+  console.log(mdmsData, "UpdateNumberConfigUpdateNumberConfigUpdateNumberConfig");
   function handleAdd() {
     const values = [...fields];
-    values.push({ tradecategory: "", tradetype: "", tradesubtype: "", unit: null, uom: null });
-    setFeilds(values);
+    values.push({ usageCategory: "", unitType: "", occupancyType: "", builtUpArea: null, arv: "", floorNo: "" });
+    setFields(values);
   }
 
   function handleRemove(index) {
     const values = [...fields];
-    if(values.length !=1){
-    values.splice(index,1);
-    setFeilds(values);
+    if (values.length != 1) {
+      values.splice(index, 1);
+      setFields(values);
     }
   }
 
-  const { isLoading, data: Data = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "TradeUnits", "[?(@.type=='TL')]");
-  let TradeCategoryMenu = [];
-  //let TradeTypeMenu = [];
+  function selectSubUsageCategory(i, value) {
+    let units = [...fields];
+    units[i].unitType = value;
 
-  Data &&
-    Data.TradeLicense &&
-    Data.TradeLicense.TradeType.map((ob) => {
-      if (!TradeCategoryMenu.some((TradeCategoryMenu) => TradeCategoryMenu.code === `${ob.code.split(".")[0]}`)) {
-        TradeCategoryMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.code.split(".")[0]}`, code: `${ob.code.split(".")[0]}` });
-      }
-    });
-
-  function getTradeTypeMenu(TradeCategory) {
-    let TradeTypeMenu = [];
-    Data &&
-      Data.TradeLicense &&
-      Data.TradeLicense.TradeType.map((ob) => {
-        if (
-          ob.code.split(".")[0] === TradeCategory.code &&
-          !TradeTypeMenu.some((TradeTypeMenu) => TradeTypeMenu.code === `${ob.code.split(".")[1]}`)
-        ) {
-          TradeTypeMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.code.split(".")[1]}`, code: `${ob.code.split(".")[1]}` });
-        }
-      });
-    return TradeTypeMenu;
+    setFields(units);
   }
 
-  function getTradeSubTypeMenu(TradeType) {
-    let TradeSubTypeMenu = [];
-    TradeType &&
-      Data &&
-      Data.TradeLicense &&
-      Data.TradeLicense.TradeType.map((ob) => {
-        if (ob.code.split(".")[1] === TradeType.code && !TradeSubTypeMenu.some((TradeSubTypeMenu) => TradeSubTypeMenu.code === `${ob.code}`)) {
-          TradeSubTypeMenu.push({ i18nKey: `TL_${ob.code}`, code: `${ob.code}` });
-        }
-      });
-    return TradeSubTypeMenu;
-  }
+  function selectUsageCategory(i, value) {
+    let units = [...fields];
+    units[i].usageCategory = value;
 
-  const isUpdateProperty = formData?.isUpdateProperty || false;
-  let isEditProperty = formData?.isEditProperty || false;
-  const { pathname: url } = useLocation();
-  const editScreen = url.includes("/modify-application/");
+    setFields(units);
+  }
+  function selectFloor(i, value) {
+    let units = [...fields];
+    units[i].floorNo = value;
 
-  function selectTradeCategory(i, value) {
-    let units = [...fields];
-    units[i].tradecategory = value;
-    setTradeCategory(value);
-    selectTradeType(i, null);
-    selectTradeSubType(i, null);
-    setFeilds(units);
+    setFields(units);
   }
-  function selectTradeType(i, value) {
+  function selectOccupancy(i, value) {
     let units = [...fields];
-    units[i].tradetype = value;
-    setTradeType(value);
-    selectTradeSubType(i, null);
-    setFeilds(units);
+    units[i].occupancyType = value;
+
+    setFields(units);
   }
-  function selectTradeSubType(i, value) {
+  function onChangeRent(i, e) {
     let units = [...fields];
-    units[i].tradesubtype = value;
-    setTradeSubType(value);
-    if (value == null) {
-      units[i].unit = null;
-      setUnitOfMeasure(null);
-    }
-    Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
-    value &&
-      Data &&
-      Data.TradeLicense &&
-      Data.TradeLicense.TradeType.map((ob) => {
-        if (value.code === ob.code) {
-          units[i].unit = ob.uom;
-          setUnitOfMeasure(ob.uom);
-          // setFeilds(units);
-        }
-      });
-    setFeilds(units);
+    units[i].arv = e.target.value;
+    setFields(units);
   }
-  function selectUnitOfMeasure(i, e) {
+  function onChangeArea(i, e) {
     let units = [...fields];
-    units[i].unit = e.target.value;
-    setUnitOfMeasure(e.target.value);
-    setFeilds(units);
-  }
-  function selectUomValue(i, e) {
-    let units = [...fields];
-    units[i].uom = e.target.value;
-    setUomValue(e.target.value);
-    setFeilds(units);
+    units[i].builtUpArea = e.target.value;
+    setFields(units);
   }
 
   const goNext = () => {
-    let units = formData.TradeDetails.Units;
+    let units = formData.units;
     let unitsdata;
 
-    unitsdata = { ...units, units: fields };
+    unitsdata = fields.map((field) => {
+      let unit = {};
+      Object.keys(field).map((key) => {
+        if (key === "usageCategory") {
+          unit["usageCategory"] = mdmsData?.usageDetails.find(
+            (e) =>
+              e.code.includes(field[key]?.code) && e.code.includes(typeof field["unitType"] == "object" ? field["unitType"]?.code : field["unitType"])
+          )?.code;
+        } else if (key === "builtUpArea") {
+          unit["constructionDetail"] = { builtUpArea: field[key] };
+        } else {
+          unit[key] = typeof field[key] == "object" ? field[key]?.code : field[key];
+        }
+      });
+      return unit;
+    });
+
+    console.log(units, unitsdata, "units");
     onSelect(config.key, unitsdata);
   };
 
   const onSkip = () => onSelect();
-
-  const GuardianOptions = [
-    { name: "HUSBAND", code: "HUSBAND", i18nKey: "PT_RELATION_HUSBAND" },
-    { name: "Father", code: "FATHER", i18nKey: "PT_RELATION_FATHER" },
-    // { name: "Husband/Wife", code: "HUSBANDWIFE", i18nKey: "PT_RELATION_HUSBANDWIFE" },
-    // { name: "Other", code: "OTHER", i18nKey: "PT_RELATION_OTHER" },
-  ];
 
   return (
     <FormStep
@@ -147,111 +176,113 @@ const SelectPTUnits = ({ t, config, onSelect, userType, formData }) => {
       onSelect={goNext}
       onSkip={onSkip}
       t={t}
-      isDisabled={!fields[0].tradecategory || !fields[0].tradetype || !fields[0].tradesubtype }
+      // isDisabled={!fields[0].tradecategory || !fields[0].tradetype || !fields[0].tradesubtype}
     >
       {fields.map((field, index) => {
         return (
           <div key={`${field}-${index}`}>
-            <div style={{border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"10px",borderColor:"#f3f3f3",background:"#FAFAFA"}}>
-            <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL")}`}</CardLabel>
-            <LinkButton
-            label={
-            <div>
-            <span>
-            <svg style={{float:"right", position:"relative",bottom:"32px"  }} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 16C1 17.1 1.9 18 3 18H11C12.1 18 13 17.1 13 16V4H1V16ZM14 1H10.5L9.5 0H4.5L3.5 1H0V3H14V1Z" fill={!(fields.length == 1)?"#494848":"#FAFAFA"}/>
-            </svg>
-            </span>
+            <div
+              style={{
+                border: "solid",
+                borderRadius: "5px",
+                padding: "10px",
+                paddingTop: "20px",
+                marginTop: "10px",
+                borderColor: "#f3f3f3",
+                background: "#FAFAFA",
+              }}
+            >
+              <LinkButton
+                label={<DeleteIcon showIcon={fields.length === 1} />}
+                style={{ width: "100px", display: "inline" }}
+                onClick={(e) => handleRemove(index)}
+              />
+              <CardLabel>{`${t("PT_FORM2_USAGE_TYPE")}`}</CardLabel>
+              <Dropdown
+                t={t}
+                optionKey="i18nKey"
+                isMandatory={config.isMandatory}
+                option={[
+                  ...(mdmsData?.UsageCategory ? mdmsData?.UsageCategory : []),
+                  { code: "RESIDENTIAL", i18nKey: "PROPERTYTAX_BILLING_SLAB_RESIDENTIAL" },
+                ]}
+                selected={field?.usageCategory}
+                select={(e) => selectUsageCategory(index, e)}
+              />
+              <CardLabel>{`${t("PT_FORM2_SUB_USAGE_TYPE")}`}</CardLabel>
+              <div className={"form-pt-dropdown-only"}>
+                <Dropdown
+                  t={t}
+                  optionKey="i18nKey"
+                  isMandatory={config.isMandatory}
+                  option={mdmsData?.UsageSubCategory}
+                  selected={field?.unitType}
+                  select={(e) => selectSubUsageCategory(index, e)}
+                />
+              </div>
+              <CardLabel>{`${t("PT_FORM2_OCCUPANCY")}`}</CardLabel>
+              <div className={"form-pt-dropdown-only"}>
+                <Dropdown
+                  t={t}
+                  optionKey="i18nKey"
+                  isMandatory={config.isMandatory}
+                  option={mdmsData?.OccupancyType}
+                  selected={field?.occupancyType}
+                  select={(e) => selectOccupancy(index, e)}
+                />
+              </div>
+              <CardLabel>{`${t("PT_FORM2_TOTAL_ANNUAL_RENT")}`}</CardLabel>
+              <TextInput
+                style={{ background: "#FAFAFA" }}
+                t={t}
+                type={"text"}
+                isMandatory={false}
+                optionKey="i18nKey"
+                name="arv"
+                value={field?.arv}
+                onChange={(e) => onChangeRent(index, e)}
+                {...{
+                  isRequired: true,
+                  pattern: "[0-9]+",
+                  type: "text",
+                  title: t("CORE_COMMON_REQUIRED_ERRMSG"),
+                }}
+              />
+              <CardLabel>{`${t("PT_FORM2_BUILT_UP_AREA")}`}</CardLabel>
+              <TextInput
+                style={{ background: "#FAFAFA" }}
+                t={t}
+                type={"text"}
+                isMandatory={false}
+                optionKey="i18nKey"
+                name="builtUpArea"
+                value={field?.builtUpArea}
+                onChange={(e) => onChangeArea(index, e)}
+                {...{
+                  isRequired: true,
+                  pattern: "[0-9]+",
+                  type: "text",
+                  title: t("CORE_COMMON_REQUIRED_ERRMSG"),
+                }}
+              />
+              <CardLabel>{`${t("PT_FORM2_SELECT_FLOOR")}`}</CardLabel>
+              <div className={"form-pt-dropdown-only"}>
+                <Dropdown
+                  t={t}
+                  optionKey="i18nKey"
+                  isMandatory={config.isMandatory}
+                  option={mdmsData?.Floor}
+                  selected={field?.floorNo}
+                  select={(e) => selectFloor(index, e)}
+                />
+              </div>
             </div>
-            }
-              style={{ width: "100px", display:"inline" }}
-              onClick={(e) => handleRemove(index)}
-           />
-            <RadioButtons
-              t={t}
-              options={TradeCategoryMenu}
-              optionsKey="code"
-              name="TradeCategory"
-              value={TradeCategory}
-              //selectedOption={TradeCategory}
-              selectedOption={field?.tradecategory}
-              onSelect={(e) => selectTradeCategory(index, e)}
-              isDependent={true}
-              labelKey="TRADELICENSE_TRADETYPE"
-              //disabled={isUpdateProperty || isEditProperty}
-            />
-            <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL")}`}</CardLabel>
-            <Dropdown
-              t={t}
-              optionKey="i18nKey"
-              isMandatory={config.isMandatory}
-              //options={[{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"}]}
-              //option={TradeTypeMenu}
-              option={getTradeTypeMenu(field?.tradecategory)}
-              //selected={TradeType}
-              selected={field?.tradetype}
-              select={(e) => selectTradeType(index, e)}
-            />
-            <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL")}`}</CardLabel>
-             <div className={"form-pt-dropdown-only"}>
-            <Dropdown
-              t={t}
-              optionKey="i18nKey"
-              isMandatory={config.isMandatory}
-              //option={[{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"}]}
-              //option={TradeSubTypeMenu}
-              option={getTradeSubTypeMenu(field?.tradetype)}
-              //selected={TradeSubType}
-              selected={field?.tradesubtype}
-              select={(e) => selectTradeSubType(index, e)}
-            />
-            </div>
-            <CardLabel>{`${t("TL_UNIT_OF_MEASURE_LABEL")}`}</CardLabel>
-            <TextInput
-              style={{background:"#FAFAFA"}}
-              t={t}
-              type={"text"}
-              isMandatory={false}
-              optionKey="i18nKey"
-              name="UnitOfMeasure"
-              //value={UnitOfMeasure}
-              value={field?.unit}
-              onChange={(e) => selectUnitOfMeasure(index, e)}
-              disable={true}
-              /* {...(validation = {
-            isRequired: true,
-            pattern: "^[a-zA-Z-.`' ]*$",
-            type: "text",
-            title: t("PT_NAME_ERROR_MESSAGE"),
-          })} */
-            />
-            <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")}`}</CardLabel>
-            <TextInput
-              style={{background:"#FAFAFA"}}
-              t={t}
-              type={"text"}
-              isMandatory={false}
-              optionKey="i18nKey"
-              name="UomValue"
-              //value={UomValue}
-              value={field?.uom}
-              onChange={(e) => selectUomValue(index, e)}
-              disable={!field.unit}
-              {...(validation = {
-                isRequired: true,
-                pattern: "[0-9]+",
-                type: "text",
-                title: t("TL_WRONG_UOM_VALUE_ERROR"),
-              })}
-            />
-          </div>
           </div>
         );
       })}
-     {/* <hr color="#d6d5d4" className="break-line"></hr> */}
-     <div style={{ justifyContent: "center", display: "flex", paddingBottom: "15px", color: "#FF8C00" }}>
-        <button type="button"style={{paddingTop:"10px"}} onClick={() => handleAdd() }>
-          {`${t("TL_ADD_MORE_TRADE_UNITS")}`}
+      <div style={{ justifyContent: "center", display: "flex", paddingBottom: "15px", color: "#FF8C00" }}>
+        <button type="button" style={{ paddingTop: "10px" }} onClick={() => handleAdd()}>
+          {`${t("PT_ADD_UNIT")}`}
         </button>
       </div>
     </FormStep>

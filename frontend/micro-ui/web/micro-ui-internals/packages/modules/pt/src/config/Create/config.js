@@ -196,17 +196,13 @@ export const newConfig =[
                     "component": "SelectPTUnits",
                     "texts": {
                         "headerCaption": "",
-                        "header": "PT_ASSESSMENT_FLOW_AREA_HEADER",
-                        "cardText": "PT_SELFOCCUPIED_AREA",
+                        "header": "PT_FLAT_DETAILS",
+                        "cardText": "PT_FLAT_DETAILS_DESC",
                         "submitBarLabel": "PT_COMMON_NEXT"
                     },
                     "key": "units",
                     "withoutLabel": true,
-                    "nextStep": {
-                        "yes": "rental-details",
-                        "no": "provide-sub-usage-type",
-                        "vacant": "map"
-                    },
+                    "nextStep": "map",
                     "hideInEmployee": true
                 },
                 {
@@ -216,17 +212,13 @@ export const newConfig =[
                     "component": "Area",
                     "texts": {
                         "headerCaption": "",
-                        "header": "PT_ASSESSMENT_FLOW_AREA_HEADER",
-                        "cardText": "PT_SELFOCCUPIED_AREA",
+                        "header": "PT_FLAT_DETAILS",
+                        "cardText": "PT_FLAT_DETAILS_DESC",
                         "submitBarLabel": "PT_COMMON_NEXT"
                     },
                     "key": "units",
                     "withoutLabel": true,
-                    "nextStep": {
-                        "yes": "rental-details",
-                        "no": "provide-sub-usage-type",
-                        "vacant": "map"
-                    },
+                    "nextStep": "map",
                     "hideInEmployee": true
                 },
                 {
