@@ -352,12 +352,4 @@ public class PropertyConfiguration {
     @Value("${inbox.property.search.allowed}")
     private Boolean isInboxSearchAllowed;
     
-    // central-instance configs
-    
-    @Value("${state.level.tenantid.length}")
-    private Integer stateLevelTenantIdLength;
-    
-    @Value("${is.environment.central.instance}")
-    private Boolean isEnvironmentCentralInstance;
-    
 }

@@ -1,23 +1,26 @@
 package org.egov.pt.repository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.AssessmentSearchCriteria;
-import org.egov.pt.models.Property;
-import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.repository.builder.AssessmentQueryBuilder;
 import org.egov.pt.repository.rowmapper.AssessmentRowMapper;
-import org.egov.pt.util.PropertyUtil;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Repository
 @Slf4j
@@ -33,14 +36,19 @@ public class AssessmentRepository {
 	private AssessmentRowMapper rowMapper;
 	
 	@Autowired
-	private PropertyUtil util;
+	private MultiStateInstanceUtil centralInstanceutil;
 	
 	
 	public List<Assessment> getAssessments(AssessmentSearchCriteria criteria){
 		Map<String, Object> preparedStatementValues = new HashMap<>();
 		List<Assessment> assessments = new ArrayList<>();
 		String query = queryBuilder.getSearchQuery(criteria, preparedStatementValues);
-		query = util.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		try {
+			query = centralInstanceutil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		log.info("Query: "+query);
 		log.debug("preparedStatementValues: "+preparedStatementValues);
 		assessments = namedParameterJdbcTemplate.query(query, preparedStatementValues, rowMapper);
@@ -59,7 +67,13 @@ public class AssessmentRepository {
 		preparedStatementValues.put("offset", criteria.getOffset());
 		preparedStatementValues.put("limit", criteria.getLimit());
 		builder.append(orderbyClause);
-		String query = util.replaceSchemaPlaceholder(builder.toString(), criteria.getTenantId());
+		String query;
+		try {
+			query = centralInstanceutil.replaceSchemaPlaceholder(builder.toString(), criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		return namedParameterJdbcTemplate.query(query, preparedStatementValues, new SingleColumnRowMapper<>(String.class));
 	}
 

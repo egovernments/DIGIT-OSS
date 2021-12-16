@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.tracer.model.CustomException;
@@ -15,6 +16,9 @@ import org.springframework.util.StringUtils;
 
 @Component
 public class PropertyQueryBuilder {
+	
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 	
 	@Autowired
 	private PropertyConfiguration config;
@@ -254,8 +258,7 @@ public class PropertyQueryBuilder {
 
 	private void appendTenantIdToQuery(List<Object> preparedStmtList, String tenantId, StringBuilder builder, String tableName) {
 
-		int tenantLevel = tenantId.split("\\.").length;
-		if (tenantLevel <= config.getStateLevelTenantIdLength()) {
+		if (centralInstanceUtil.isTenantIdStateLevel(tenantId)) {
 
 			addClauseIfRequired(preparedStmtList, builder);
 			if (!StringUtils.isEmpty(tableName))

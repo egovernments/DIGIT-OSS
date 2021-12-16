@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.ConstructionDetail;
 import org.egov.pt.models.GeoLocation;
@@ -53,6 +54,9 @@ public class PropertyValidator {
 
     @Autowired
     private PropertyConfiguration configs;
+    
+    @Autowired
+    private MultiStateInstanceUtil centralInstanceUtil;
     
     @Autowired
     private PropertyService service;
@@ -563,10 +567,15 @@ public class PropertyValidator {
     	
 		List<String> allowedParams = null;
 		
-		if(configs.getIsEnvironmentCentralInstance() && criteria.getTenantId() == null)
-			throw new CustomException("EG_PT_INVALID_SEARCH"," TenantId is mandatory for search ");
-		else if(configs.getIsEnvironmentCentralInstance() && criteria.getTenantId().split("\\.").length < configs.getStateLevelTenantIdLength())
-			throw new CustomException("EG_PT_INVALID_SEARCH"," TenantId should be mandatorily " + configs.getStateLevelTenantIdLength() + " levels for search");
+		if (centralInstanceUtil.getIsEnvironmentCentralInstance() && criteria.getTenantId() == null) {
+			
+			throw new CustomException("EG_PT_INVALID_SEARCH", " TenantId is mandatory for search ");
+		} else if (centralInstanceUtil.getIsEnvironmentCentralInstance()
+				&& criteria.getTenantId().split("\\.").length < centralInstanceUtil.getStateLevelTenantIdLength()) {
+			
+			throw new CustomException("EG_PT_INVALID_SEARCH",
+					" TenantId should be mandatorily " + centralInstanceUtil.getStateLevelTenantIdLength() + " levels for search");
+		}
 
 		User user = requestInfo.getUserInfo();
 		String userType = user.getType();
