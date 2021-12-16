@@ -1,7 +1,11 @@
 package org.egov.edcr.feature;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,11 +42,16 @@ import org.kabeja.svg.SVGGenerator;
 import org.kabeja.xml.SAXSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
 
 @Service
 public class DxfToPdfConverterExtract extends FeatureExtract {
 
-    private static final Logger LOG = Logger.getLogger(DxfToPdfConverterExtract.class);
+    private static final String AND = " and ";
+
+	private static final String OTHERS = " others ";
+
+	private static final Logger LOG = Logger.getLogger(DxfToPdfConverterExtract.class);
 
     private static final String MULTIPLE_LAYER = "Multiple layers is defined with %s";
     private static final String LAYER_NOT_DEFINED = "%s is not defined.";
@@ -66,11 +75,11 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
         LOG.info("*************** Converting " + fileName + " to pdf ***************" + "\n");
         DXFDocument dxfDocument = planDetail.getDoc();
         List<EdcrPdfDetail> edcrPdfDetails = planDetail.getEdcrPdfDetails();
-        if (edcrPdfDetails != null && edcrPdfDetails.size() > 0)
+        if (edcrPdfDetails != null && !edcrPdfDetails.isEmpty())
             for (EdcrPdfDetail edcrPdfDetail : edcrPdfDetails) {
-                StringBuffer standardViolations = new StringBuffer();
+                StringBuilder standardViolations = new StringBuilder();
 
-                if (org.apache.commons.lang.StringUtils.isBlank(edcrPdfDetail.getFailureReasons())) {
+                if (isBlank(edcrPdfDetail.getFailureReasons())) {
 
                     // get all the layerIterator from the document
                     Iterator layerIterator = dxfDocument.getDXFLayerIterator();
@@ -104,7 +113,7 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
                     if (psltScale != null) {
                         String psltScaleValue = psltScale.getValue("70");
 
-                        if (!org.apache.commons.lang.StringUtils.isBlank(psltScaleValue))
+                        if (!isBlank(psltScaleValue))
                             dxfDocument.getDXFHeader().getVariable("$PSLTSCALE").setValue("70", String.valueOf(0));
 
                     }
@@ -153,7 +162,7 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
 
             }
 
-            if (appConfigValue.toUpperCase().contains("MANDATORY") && layerNameList.size() == 0) {
+            if (appConfigValue.toUpperCase().contains("MANDATORY") && layerNameList.isEmpty()) {
 
                 EdcrPdfDetail edcrPdfDetail = new EdcrPdfDetail();
 
@@ -201,9 +210,8 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
 
                 // checking whether layer is present , by default a layer 0 is returned if layer
                 // is absent
-                if (dxfLayer != null && !dxfLayer.getName().equalsIgnoreCase("0"))
                     // checking for content in layer
-                    if (entities.size() > 0) {
+                    if (dxfLayer != null && !dxfLayer.getName().equalsIgnoreCase("0") && !entities.isEmpty()) {
                         HashMap<String, String> entitiesToBeValidated = new HashMap<>();
                         entitiesToBeValidated.put(DXFConstants.ENTITY_TYPE_INSERT, NEGATIVE_WIDTH);
 
@@ -228,41 +236,35 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
     private File convertDxfToPdf(DXFDocument dxfDocument, String fileName, String layerName,
             EdcrPdfDetail edcrPdfDetail) {
 
-        // File fileOut = new File("/home/sanjeev/" + layerName + ".pdf");
-
         File fileOut = new File(layerName + ".pdf");
 
-        if (fileOut != null)
-            try {
+		try (FileOutputStream fout = new FileOutputStream(fileOut)) {
 
-                LOG.info("---------converting " + fileName + " - " + layerName + " to pdf----------");
-                FileOutputStream fout = new FileOutputStream(fileOut);
-                LOG.info("fout : " + fileOut.getAbsolutePath());
-                LOG.info("doc : " + dxfDocument);
-                SVGGenerator generator = new SVGGenerator();
-                LOG.info("generator : " + generator);
-                SAXSerializer out = new SAXPDFSerializer();
-                LOG.info("out before  : " + out);
-                out.setOutput(fout);
-                LOG.info("out after  : " + out);
-                HashMap map = new HashMap();
-                // factor of 3.78 for setting page size
-                // A0 landscape = 841mm X 1189mm (w * h)
-                map.put("width", String.valueOf(1189 * 3.78));
-                map.put("height", String.valueOf(841 * 3.78));
-                map.put("margin", String.valueOf(0.5));
-                LOG.info("map : " + map);
-                LOG.info("dxfDocument : " + dxfDocument);
-                generator.generate(dxfDocument, out, map);
-                LOG.info("---------conversion success " + fileName + " - " + layerName + "----------");
-                fout.flush();
-                fout.close();
-                return fileOut.length() > 0 ? fileOut : null;
-            } catch (Exception ep) {
-                LOG.error("Pdf convertion failed for " + fileName + " - " + layerName + " due to " + ep.getMessage());
-                ep.printStackTrace();
-                edcrPdfDetail.setFailureReasons(ep.getMessage());
-            }
+			LOG.info("---------converting " + fileName + " - " + layerName + " to pdf----------");
+			LOG.info("fout : " + fileOut.getAbsolutePath());
+			LOG.info("doc : " + dxfDocument);
+			SVGGenerator generator = new SVGGenerator();
+			LOG.info("generator : " + generator);
+			SAXSerializer out = new SAXPDFSerializer();
+			LOG.info("out before  : " + out);
+			out.setOutput(fout);
+			LOG.info("out after  : " + out);
+			HashMap map = new HashMap();
+			// factor of 3.78 for setting page size
+			// A0 landscape = 841mm X 1189mm (w * h)
+			map.put("width", String.valueOf(1189 * 3.78));
+			map.put("height", String.valueOf(841 * 3.78));
+			map.put("margin", String.valueOf(0.5));
+			LOG.info("map : " + map);
+			LOG.info("dxfDocument : " + dxfDocument);
+			generator.generate(dxfDocument, out, map);
+			LOG.info("---------conversion success " + fileName + " - " + layerName + "----------");
+			fout.flush();
+			return fileOut.length() > 0 ? fileOut : null;
+		} catch (IOException | SAXException ep) {
+			LOG.error("Pdf convertion failed for " + fileName + " - " + layerName + " due to " + ep.getMessage());
+			edcrPdfDetail.setFailureReasons(ep.getMessage());
+		}
 
         return null;
     }
@@ -285,7 +287,7 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
 
     private List<String> validateEntities(DXFLayer dxfLayer, HashMap<String, String> entities) {
 
-        StringBuffer errorBuffer = new StringBuffer();
+        StringBuilder errorBuilder = new StringBuilder();
         HashSet<String> blks = new HashSet<>();
         ArrayList<String> errors = new ArrayList<>();
 
@@ -293,7 +295,7 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
             if (entity.getKey().equalsIgnoreCase(DXFConstants.ENTITY_TYPE_INSERT)) {
                 List insertEntites = dxfLayer.getDXFEntities(DXFConstants.ENTITY_TYPE_INSERT);
 
-                if (insertEntites != null && insertEntites.size() > 0)
+                if (insertEntites != null && !insertEntites.isEmpty())
                     for (Object o : insertEntites) {
                         DXFInsert insert = (DXFInsert) o;
                         if (insert.getScaleX() < 0 || insert.getScaleY() < 0)
@@ -301,10 +303,10 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
                     }
 
                 for (String blk : blks)
-                    errorBuffer = errorBuffer.append(blk).append(",");
+                    errorBuilder = errorBuilder.append(blk).append(",");
 
-                String insertError = errorBuffer.toString();
-                if (insertError != null && !org.apache.commons.lang.StringUtils.isBlank(insertError))
+                String insertError = errorBuilder.toString();
+                if (insertError != null && !isBlank(insertError))
                     errors.add(entity.getValue() + insertError.substring(0, insertError.length() - 1) + ".");
             }
 
@@ -315,14 +317,14 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
     private boolean isDuplicatePresent(List<String> layerList) {
         Set<String> duplicateLayerList = layerList.stream().filter(i -> Collections.frequency(layerList, i) > 1)
                 .collect(Collectors.toSet());
-        return duplicateLayerList.size() > 0 ? true : false;
+        return !duplicateLayerList.isEmpty();
     }
 
-    private void buildText(List texts, StringBuffer standardViolations) {
+    private void buildText(List texts, StringBuilder standardViolations) {
 
-        if (texts != null && texts.size() > 0) {
+        if (texts != null && !texts.isEmpty()) {
             long issueCount = 0;
-            StringBuffer errorMText = new StringBuffer();
+            StringBuilder errorMText = new StringBuilder();
             Iterator iterator = texts.iterator();
             while (iterator.hasNext()) {
                 DXFText text = (DXFText) iterator.next();
@@ -345,9 +347,9 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
 
                 if (text.getText().contains("{") || text.getText().contains("}")) {
                     issueCount++;
-                    if (errorMText.toString().split(",").length < 5)
-                        if (org.apache.commons.lang.StringUtils.isNotBlank(text.getText()))
-                            errorMText.append(text.getText()).append(",");
+					if (errorMText.toString().split(",").length < 5
+							&& isNotBlank(text.getText()))
+						errorMText.append(text.getText()).append(",");
                 }
 
             }
@@ -355,15 +357,15 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
             if (issueCount > 0)
                 standardViolations.append("Text defined as ")
                         .append(errorMText.toString(), 0, errorMText.toString().length() - 1)
-                        .append(issueCount > 5 ? " and " + (issueCount - 5) + " others " : "")
+                        .append(issueCount > 5 ? AND + (issueCount - 5) + OTHERS : "")
                         .append(" are not as per standards.|");
 
         }
     }
 
-    private void buildMtext(List mtexts, StringBuffer standardViolations) {
+    private void buildMtext(List mtexts, StringBuilder standardViolations) {
 
-        if (mtexts != null && mtexts.size() > 0) {
+        if (mtexts != null && !mtexts.isEmpty()) {
             String text = "";
 
             long issueCount = 0;
@@ -403,17 +405,17 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
 
             if (issueCount > 0)
                 standardViolations.append("Mtext defined as ").append(text)
-                        .append(issueCount > 5 ? " and " + (issueCount - 5) + " others " : "")
+                        .append(issueCount > 5 ? AND + (issueCount - 5) + OTHERS : "")
                         .append(" are not as per standards.|");
         }
     }
 
-    private void buildDimension(DXFDocument dxfDocument, List dimensions, StringBuffer standardViolations) {
+    private void buildDimension(DXFDocument dxfDocument, List dimensions, StringBuilder standardViolations) {
 
-        if (dimensions != null && dimensions.size() > 0) {
+        if (dimensions != null && !dimensions.isEmpty()) {
             long issueCount = 0;
             Iterator iterator = dimensions.iterator();
-            StringBuffer mText = new StringBuffer();
+            StringBuilder mText = new StringBuilder();
 
             while (iterator.hasNext()) {
                 DXFDimension dimension = (DXFDimension) iterator.next();
@@ -437,7 +439,7 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
                         DXFSolid dxfSolid = (DXFSolid) e;
                         if (dxfSolid.getLineWeight() > 1) {
                             dxfSolid.setLineWeight(1);
-                            if (issuePresent = false)
+                            if (!issuePresent)
                                 issuePresent = true;
                         }
                     }
@@ -457,7 +459,7 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
                 standardViolations
                         .append("Line weight defined for " + (issueCount > 5 ? " dimensions " : " dimension "))
                         .append(mText.toString(), 0, mText.toString().length() - 1)
-                        .append(issueCount > 5 ? " and " + (issueCount - 5) + " others " : "")
+                        .append(issueCount > 5 ? AND + (issueCount - 5) + OTHERS : "")
                         .append(" are not as per standards.");
 
         }
