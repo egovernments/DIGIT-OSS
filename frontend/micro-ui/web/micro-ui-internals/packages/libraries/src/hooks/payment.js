@@ -13,11 +13,6 @@ export const useFetchCitizenBillsForBuissnessService = ({ businessService, ...fi
     () => Digit.PaymentService.fetchBill(tenantId, { ...params }),
     {
       refetchOnMount: true,
-      // retry: (failureCount, error) => {
-      //   console.log("retried from hook");
-      //   if (error?.response?.data?.Errors?.[0]?.code === "EG_BS_BILL_NO_DEMANDS_FOUND") return false;
-      //   else return failureCount < 1;
-      // },
       retry: false,
       ...config,
     }
@@ -44,7 +39,7 @@ export const useFetchBillsForBuissnessService = ({ tenantId, businessService, ..
     () => Digit.PaymentService.fetchBill(_tenantId, params),
     {
       retry: (count, err) => {
-        console.log(err, "inside the payment hook");
+        console.error(err, "inside the payment hook");
         return false;
       },
       ...config,

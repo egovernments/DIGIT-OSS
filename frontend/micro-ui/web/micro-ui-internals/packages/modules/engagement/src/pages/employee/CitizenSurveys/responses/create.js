@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 const getMessage = (mutation) => {
-  console.log('<<<>>>', {mutation})
   if (mutation.isSuccess) return mutation.data?.Surveys?.[0]?.uuid;
   return "";
 };
@@ -28,7 +27,6 @@ const Acknowledgement = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const mutation = Digit.Hooks.survey.useCreate();
   const { state } = props.location;
-  console.log('>>>>', state)
 
   useEffect(() => {
     const onSuccess = () => {
@@ -45,7 +43,6 @@ const Acknowledgement = (props) => {
 
 
   const survey = mutation.data?.Surveys?.[0];
-  console.log('<<mutation>>', {mutation})
   return (
     <Card>
       <BannerPicker

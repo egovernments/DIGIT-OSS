@@ -25,7 +25,6 @@ const CheckPage = ({ onSubmit, value }) => {
   const match = useRouteMatch();
   let user = Digit.UserService.getUser();
   const tenantId = user.info.permanentCity;
-  //let tenantId="pb.amritsar";
   let BusinessService;
   if (value.businessService === "BPA_LOW")
     BusinessService = "BPA.LOW_RISK_PERMIT_FEE";

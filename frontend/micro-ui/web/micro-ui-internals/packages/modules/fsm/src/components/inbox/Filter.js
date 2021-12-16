@@ -32,7 +32,6 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
     { statuses: [] }
   );
 
-  // console.log("find use query localities here", localities)
   const selectLocality = (d) => {
     onFilterChange({ locality: [...searchParams?.locality, d] });
   };

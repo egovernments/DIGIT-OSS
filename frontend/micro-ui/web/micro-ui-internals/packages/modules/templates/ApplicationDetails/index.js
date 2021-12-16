@@ -56,7 +56,7 @@ const ApplicationDetails = (props) => {
           state: { ...action.redirectionUrl?.state },
         });
       }
-    } else console.log("no action found");
+    } else console.debug("no action found");
 
     setSelectedAction(action);
     setDisplayMenu(false);

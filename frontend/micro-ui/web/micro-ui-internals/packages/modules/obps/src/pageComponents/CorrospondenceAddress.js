@@ -85,7 +85,6 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
         })
         .catch((e) => {
           setIsDisableForNext(false);
-          console.log(e, "e");
           setShowToast({ key: "error" });
           setError(e?.response?.data?.Errors[0]?.message || null);
         });

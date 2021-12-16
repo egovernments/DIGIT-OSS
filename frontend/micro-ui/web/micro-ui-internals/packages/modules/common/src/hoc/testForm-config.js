@@ -17,13 +17,12 @@ const middleWare_3 = async (data, _break, _next) => {
   if (data.b === "b") {
     try {
       const res = await window.fetch(`https://ifsc.razorpay.com/hdfc0000090`);
-      console.log(res.ok);
       if (res.ok) {
         const { BANK, BRANCH } = await res.json();
         data.BANKFROMMiddleWare = BANK;
       } else alert("Wrong IFSC Code");
     } catch (er) {
-      console.log(er);
+      console.error(er);
       alert("Something Went Wrong !");
     }
   }
@@ -102,14 +101,13 @@ export const testForm = {
         setBankDetailsFromIFSC: async (props) => {
           try {
             const res = await window.fetch(`https://ifsc.razorpay.com/${props.getValues("ifsc")}`);
-            console.log(res.ok);
             if (res.ok) {
               const { BANK, BRANCH } = await res.json();
               props.setValue("bank", BANK);
               props.setValue("branch", BRANCH);
             } else alert("Wrong IFSC Code");
           } catch (er) {
-            console.log(er);
+            console.error(er);
             alert("Something Went Wrong !");
           }
         },

@@ -27,7 +27,7 @@ const useEmpBPAREGSearch = (tenantId, filters, params, config = {}) => {
     const userInfo = Digit.UserService.getUser();
     const response = await Digit.OBPSService.BPAREGSearch(tenantId, filters, params);
     const businessIds = response?.Licenses.map(application => application.applicationNumber);
-    const workflowRes = await Digit.WorkflowService.getAllApplication('pb', { businessIds: businessIds.join()  });
+    const workflowRes = await Digit.WorkflowService.getAllApplication(Digit.ULBService.getStateId(), { businessIds: businessIds.join()  });
     return combineResponse(response?.Licenses, workflowRes?.ProcessInstances, response?.Count);
   }, config);
 }

@@ -125,13 +125,11 @@ const Inbox = ({parentRoute}) => {
     const onSearchFormSubmit = (data) => {
       data.hasOwnProperty("") ? delete data?.[""] : null
       dispatch({action: "mutateSearchForm", data})
-      console.log("find search form data here", data)  
     }
     
     const onFilterFormSubmit = (data) => {
       data.hasOwnProperty("") ? delete data?.[""] : null
       dispatch({action: "mutateFilterForm", data})
-      console.log("find search form data here", data)
     }
 
     const propsForSearchForm = { SearchFormFields, onSearchFormSubmit, searchFormDefaultValues: formState?.searchForm, resetSearchFormDefaultValues: searchFormDefaultValues, onSearchFormReset }

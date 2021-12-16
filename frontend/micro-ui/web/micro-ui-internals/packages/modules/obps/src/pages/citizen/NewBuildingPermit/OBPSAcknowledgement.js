@@ -63,7 +63,7 @@ const OBPSAcknowledgement = ({ data, onSuccess }) => {
       });
       
     } catch (err) {
-      console.log(err, "inside ack");
+      console.error(err, "inside ack");
     }
   }, []);
 

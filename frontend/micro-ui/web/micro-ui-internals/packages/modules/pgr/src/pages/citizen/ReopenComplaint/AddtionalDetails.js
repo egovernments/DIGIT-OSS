@@ -50,11 +50,6 @@ const AddtionalDetails = (props) => {
 
   function reopenComplaint() {
     let reopenDetails = Digit.SessionStorage.get(`reopen.${id}`);
-    // let complaintDetails = Digit.SessionStorage.get(`complaint.${id}`);
-    // console.log("reopen complaint1", reopenDetails, complaintDetails);
-
-    // console.log("reopen complaint2", reopenDetails, complaintDetails)
-
     if (complaintDetails) {
       complaintDetails.workflow = getUpdatedWorkflow(
         reopenDetails,

@@ -37,7 +37,6 @@ const SelectDocuments = ({ t, config, onSelect, userType, formData, setError: se
     "MutationDocuments",
   ]);
 
-  // console.log(data);
 
   const mutationDocs = data?.PropertyTax?.MutationDocuments;
   const commonDocs = data?.PropertyTax?.Documents;
@@ -189,7 +188,6 @@ function SelectDocument({
       const docType = dropDownData
         .filter((e) => e.code === originalDoc?.documentType)
         .map((e) => ({ ...e, i18nKey: e?.code?.replaceAll(".", "_") }))[0];
-      // console.log(dropDownData, docType, doc?.code, "inside update docs");
       if (!docType) setHidden(true);
       else {
         setSelectedDocument(docType);
@@ -250,7 +248,6 @@ function SelectDocument({
         if (onArray) {
           const valueArr = value?.map((e) => formArrayAttrPath.reduce((acc, f) => acc?.[f], e) || e);
           hideInput = valueArr?.every((e) => filterValue.includes(e));
-          // if (doc.code === "OWNER.SPECIALCATEGORYPROOF") console.log(filterValue, formDataPath, formArrayAttrPath, value, valueArr, doc.code);
         } else {
           hideInput = filterValue?.includes(value);
         }

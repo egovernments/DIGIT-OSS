@@ -32,7 +32,7 @@ const EmployeeChallan = (props) => {
           `/digit-ui/employee/payment/collect/${challanDetails?.businessService}/${challanno}/tenantId=${tenantId}?workflow=mcollect`
         );
       default:
-        console.log("default case");
+        console.debug("default case");
         break;
     }
   }, [selectedAction]);

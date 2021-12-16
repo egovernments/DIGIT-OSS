@@ -29,9 +29,7 @@ const FormStep = ({
     defaultValues: _defaultValues,
   });
 
-  // console.log("config", config);
   const goNext = (data) => {
-    // console.log("data", data);
     onSelect(data);
   };
 

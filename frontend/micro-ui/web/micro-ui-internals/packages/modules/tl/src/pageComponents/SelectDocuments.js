@@ -188,14 +188,11 @@ function SelectDocument({
         if (key.charAt(0).toUpperCase() + key.slice(1) === "PropertyType") return acc["PropertyType"];
         return acc?.[key];
       }, formData);
-
-      // console.log(value, onArray, "find value here");
       if (value) {
         if (onArray) {
           const valueArr = value?.map((e) => formArrayAttrPath.reduce((acc, f) => acc?.[f], e) || e);
           hideInput = valueArr?.some((e) => filterValue.includes(e));
         } else {
-          // console.log(value, "find value here");
           hideInput = filterValue?.includes(value);
         }
         if (hideInput !== isHidden) setHidden(hideInput);

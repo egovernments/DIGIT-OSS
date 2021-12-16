@@ -41,7 +41,7 @@ const checkIfAllValidFiles = (files, regex, maxSize) => {
 }
 
 // can use react hook form to set validations @neeraj-egov
-const MultiUploadWrapper = ({ t, module = "PGR", tenantId = "pb", getFormState, requestSpecifcFileRemoval, extraStyleName="",setuploadedstate = [], showHintBelow, hintText, allowedFileTypesRegex=/(.*?)(jpg|jpeg|webp|aif|png|image|pdf|msword|openxmlformats-officedocument)$/i, allowedMaxSizeInMB=10 }) => {
+const MultiUploadWrapper = ({ t, module = "PGR", tenantId = Digit.ULBService.getStateId(), getFormState, requestSpecifcFileRemoval, extraStyleName="",setuploadedstate = [], showHintBelow, hintText, allowedFileTypesRegex=/(.*?)(jpg|jpeg|webp|aif|png|image|pdf|msword|openxmlformats-officedocument)$/i, allowedMaxSizeInMB=10 }) => {
 
     const FILES_UPLOADED = "FILES_UPLOADED"
     const TARGET_FILE_REMOVAL = "TARGET_FILE_REMOVAL"

@@ -22,12 +22,7 @@ const TLCaption = ({ data }) => {
 
 const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating, zoomImage }) => {
   const { t } = useTranslation();
-  // let GetComplaintInstance = ({}) => {
 
-  // console.log("find complaintWorkflow here", complaintWorkflow, data)
-  // if (isLoading) {
-  //   return <Loader />;
-  // }
   function zoomImageWrapper(imageSource, index,thumbnailsToShow){
     let newIndex=thumbnailsToShow.thumbs?.findIndex(link=>link===imageSource);
     zoomImage((newIndex>-1&&thumbnailsToShow?.fullImage?.[newIndex])||imageSource);
@@ -38,7 +33,6 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
 
   useEffect(() => {
     const [{auditDetails}] = timeline?.filter((status, index, array) => {
-      // console.log("find audit details index and status here", status, index);
       if (index === array.length - 1 && status.status === "PENDINGFORASSIGNMENT") {
         return true;
       } else {
@@ -54,8 +48,6 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
       status: "COMPLAINT_FILED",
     });
   }, [timeline]);
-
-  // console.log("find timeline here", timeline);
 
   const getCommentsInCustomChildComponent = ({comment, thumbnailsToShow, auditDetails, assigner}) => {
     const captionDetails = {
@@ -79,7 +71,6 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
   }
 
   const getCheckPoint = ({ status, caption, auditDetails, timeLineActions, index, array, performedAction, comment, thumbnailsToShow, assigner, totalTimelineLength }) => {
-    // console.log("find getChechPoint data here", status, index)
     const isCurrent = 0 === index;
     switch (status) {
       case "PENDINGFORREASSIGNMENT":

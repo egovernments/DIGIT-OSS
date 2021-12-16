@@ -193,7 +193,6 @@ const BpaApplicationDetail = () => {
       { BPA: { ...data?.applicationData, workflow } },
       {
         onError: (error, variables) => {
-          // console.log("find error here",error)
           setShowModal(false);
           setShowToast({ key: "error", action: error?.response?.data?.Errors[0]?.message ? error?.response?.data?.Errors[0]?.message : error });
           setTimeout(closeToast, 5000);

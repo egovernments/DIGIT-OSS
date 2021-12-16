@@ -106,7 +106,6 @@ const SurveyDetails = ({ location, match }) => {
   }
 
   const onEdit = (data) => {
-    console.log("<<data>>", { data });
     const { collectCitizenInfo, title, description, tenantIds, fromDate, toDate, fromTime, toTime, questions } = data;
     const mappedQuestions = mapQuestions(questions);
     const details = {
@@ -121,7 +120,6 @@ const SurveyDetails = ({ location, match }) => {
         questions: mappedQuestions,
       },
     };
-    //console.log("what the data is >>", { tenantIds, questions, details });
     history.push("/digit-ui/employee/engagement/surveys/update-response", details);
   };
 
@@ -133,7 +131,6 @@ const SurveyDetails = ({ location, match }) => {
   };
 
   const handleMarkActive = (data) => {
-    console.log("update data>>>", { data });
     const { fromDate, toDate, fromTime, toTime } = data;
     const details = {
       SurveyEntity: {

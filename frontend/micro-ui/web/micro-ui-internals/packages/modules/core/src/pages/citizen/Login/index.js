@@ -51,7 +51,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
         setErrorTO(null);
       }
       errorTimeout = setTimeout(() => {
-        console.log("clearing err");
+        console.error("clearing err");
         setError("");
       }, 5000);
       setErrorTO(errorTimeout);
@@ -182,7 +182,7 @@ if(window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")){
       }
     } catch (err) {
       setIsOtpValid(false);
-      console.log(err);
+      console.error(err);
     }
   };
 

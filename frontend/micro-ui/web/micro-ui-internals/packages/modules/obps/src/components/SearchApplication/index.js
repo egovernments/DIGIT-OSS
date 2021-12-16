@@ -41,7 +41,6 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
       ...searchData,
     },
   });
-  console.log("adsdsdsd");
 
   useEffect(() => {
     register("offset", 0);

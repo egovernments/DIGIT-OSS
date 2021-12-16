@@ -18,12 +18,7 @@ const UpdateDocument = () => {
   useEffect(() => {
     if (data?.Documents?.[0] && ulbArray) {
       let doc = data?.Documents?.[0];
-      /* console.log(
-        data,
-        ulbArray.filter((e) => doc?.tenantIds?.includes(e.code)),
-        doc?.tenantIds,
-        "doc details >>>>>>"
-      ); */
+
       const dv = {
         documentName: doc.name,
         description: doc.description,

@@ -103,7 +103,6 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
     }
   };
 
-  //console.log(">>>", { surveyQuestionConfig });
   return (
     <div className="newSurveyForm_wrapper">
       <span className="newSurveyForm_quesno">{`${t("CS_COMMON_QUESTION")} ${index + 1}`}</span>

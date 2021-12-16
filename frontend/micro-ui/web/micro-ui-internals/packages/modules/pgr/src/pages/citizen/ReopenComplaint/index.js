@@ -9,9 +9,6 @@ import AddtionalDetails from "./AddtionalDetails";
 import Response from "../Response";
 
 const ReopenComplaint = ({ match, history, parentRoute }) => {
-  // console.log("match:", match);
-  // console.log("sddddddadasds", getRoute(match, PgrRoutes.ReasonPage), match, parentRoute);
-  // const _match = useRouteMatch()
   
   const allParams = window.location.pathname.split("/")
   const id = allParams[allParams.length - 1]

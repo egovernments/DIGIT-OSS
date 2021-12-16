@@ -138,7 +138,6 @@ const Dropdown = (props) => {
   }
 
   function onSelect(val) {
-    // console.log(val, "curent", selectedOption, "old");
     if (val !== selectedOption || props.allowMultiselect) {
       props.select(val);
       setSelectedOption(val);
@@ -204,7 +203,6 @@ return (
           <ArrowDown onClick={dropdownSwitch} className="cp" disable={props.disable} />
         </div>
       )}
-      {/* {console.log("dropdownStatus::::::::::::::>", dropdownStatus)} */}
       {dropdownStatus ? (
         props.optionKey ? (
           <div
@@ -218,9 +216,6 @@ return (
             {filteredOption &&
               filteredOption
                 .map((option, index) => {
-                  if (props.t) {
-                    // console.log(props.t(option[props.optionKey]));
-                  }
                   return (
                     <div className={`cp profile-dropdown--item display: flex `} style={index === optionIndex ? {
                       opacity: 1,

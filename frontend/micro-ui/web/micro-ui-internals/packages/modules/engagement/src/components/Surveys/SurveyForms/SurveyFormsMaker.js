@@ -14,12 +14,10 @@ const surveyFormReducer = (state, { type, payload }) => {
   switch (type) {
     case "addNewForm":
       const newSurveyQues = [...state, defaultFormsConfig];
-      //console.log("addNewForm >>>", { newSurveyQues });
       payload.setSurveyConfig("questions", newSurveyQues);
       return newSurveyQues;
     case "updateForm":
       const updatedSurveyQues = [...state];
-      //console.log("updateForm >>>", { updatedSurveyQues });
       updatedSurveyQues.splice(payload.index, 1, payload);
       payload.setSurveyConfig("questions", updatedSurveyQues);
       return updatedSurveyQues;
@@ -27,7 +25,6 @@ const surveyFormReducer = (state, { type, payload }) => {
       if (state.length === 1) return state;
       const copyOfSate = [...state];
       copyOfSate.splice(payload.index, 1);
-      //console.log("removeForm After>>>", { copyOfSate, payload });
       payload.setSurveyConfig("questions", copyOfSate);
       return copyOfSate;
   }

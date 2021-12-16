@@ -43,7 +43,7 @@ const useBPASearch = (tenantId, filters = {}, config = {}) => {
           let payload = await Digit.WorkflowService.getAllApplication(key, { businessIds: tenantMap[key]?.slice(i * 100, (i * 100) + 100)?.join()  });
           processInstanceArray = processInstanceArray.concat(payload.ProcessInstances)
         } catch (error) {
-          console.log(error);
+          console.error(error);
           return [];
         }
       }

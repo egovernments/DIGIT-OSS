@@ -16,22 +16,15 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData }) => {
         menu.push({ i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${ob.code.replaceAll(".", "_")}`, code: `${ob.code}` });
       }
     });
-  /* const menu = [
-    { i18nKey: "MOTOR_DRIVEN", code: "motor" },
-    { i18nKey: "HAND_PULLED", code: "hand" },
-  ]; */
 
   const onSkip = () => onSelect();
 
-  // const propertyOwnerShipCategory = Digit.Hooks.pt.useMDMS("pb", "PropertyTax", "OwnerShipCategory", {});
   function selectVehicleType(value) {
     setVehicleType(value);
   }
 
   function goNext() {
-    //sessionStorage.setItem("VehicleType", VehicleType.i18nKey);
     onSelect(config.key, { VehicleType });
-    //onSelect("usageCategoryMajor", { i18nKey: "PROPERTYTAX_BILLING_SLAB_RESIDENTIAL" });
   }
   return (
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!VehicleType}>

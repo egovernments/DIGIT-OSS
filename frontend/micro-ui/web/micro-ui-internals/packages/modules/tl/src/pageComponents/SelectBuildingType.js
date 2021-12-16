@@ -23,7 +23,6 @@ const SelectBuildingType = ({ t, config, onSelect, userType, formData }) => {
 
   const onSkip = () => onSelect();
 
-  // const propertyOwnerShipCategory = Digit.Hooks.pt.useMDMS("pb", "PropertyTax", "OwnerShipCategory", {});
   function selectBuildingType(value) {
     setBuildingType(value);
   }

@@ -111,14 +111,14 @@ const OCSendToArchitect = ({ parentRoute }) => {
   if (tenantId) filter1.tenantId = tenantId;
   if(applicationNo) filter1.applicationNo=applicationNo;
 
-  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS("pb", "BPA", ["RiskTypeComputation"]);
+  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(Digit.ULBService.getStateId(), "BPA", ["RiskTypeComputation"]);
 
   //const { isLoading, isError, error, data } = Digit.Hooks.tl.useTradeLicenseSearch({ filters: filter1 }, { filters: filter1 });
   const { data: bpaData, isLoading: isBpaSearchLoading } = Digit.Hooks.obps.useBPASearch(tenantId, {applicationNo:applicationNo});
 
   let scrutinyNumber = {edcrNumber:bpaData?.[0]?.edcrNumber};
 
-  const { data: data1, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails("pb", scrutinyNumber, {
+  const { data: data1, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(Digit.ULBService.getStateId(), scrutinyNumber, {
     enabled: bpaData?.[0]?.edcrNumber?true:false
   })
 

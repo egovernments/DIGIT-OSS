@@ -4,7 +4,6 @@ import { useLocation } from "react-router-dom";
 
 const SelectEmployeeGender = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
   const { pathname: url } = useLocation();
-  // console.log("find errors here", errors)
 
   const inputs = [
     {
