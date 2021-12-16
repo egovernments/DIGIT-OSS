@@ -15,13 +15,6 @@ const CheckSlum = ({ t, config, onSelect, userType, formData }) => {
     onSelect(config.key, { slumArea });
   }
 
-  // useEffect(() => {
-  //   // console.log("find slum data here", slumData && slumData[locality])
-  //   if (slumData && (!slumData[locality] || slumData[locality].length === 0)) {
-  //     onSelect(config.key, { slumArea: { code: false, i18nKey: "CS_COMMON_NO" } }, true);
-  //   }
-  // }, [locality, slumDataLoading]);
-
   return (
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!slumArea}>
       <RadioOrSelect

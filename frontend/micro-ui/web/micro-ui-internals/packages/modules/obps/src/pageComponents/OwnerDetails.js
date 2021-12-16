@@ -128,9 +128,6 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     }
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        console.log("Error Loged", error);
-    }, [error]);
 
     function getusageCategoryAPI(arr){
         let usageCat = ""
@@ -188,7 +185,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
             setShowToast({ key: "true", error: true, message: "ERR_OWNER_ALREADY_ADDED" });
             return;
         } else {
-            const usersResponse = await Digit.UserService.userSearch("pb", { userName: fields?.[indexValue]?.mobileNumber }, {});
+            const usersResponse = await Digit.UserService.userSearch(Digit.ULBService.getStateId(), { userName: fields?.[indexValue]?.mobileNumber }, {});
             if (usersResponse?.user?.length === 0) {
                 setShowToast({ key: "true", warning: true, message: "ERR_MOBILE_NUMBER_NOT_REGISTERED" });
                 return;

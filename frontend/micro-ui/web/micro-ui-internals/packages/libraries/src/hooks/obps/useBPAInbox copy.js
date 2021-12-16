@@ -47,7 +47,6 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
           }
             
         }));
-        console.log(data, 'edcrData');
         return data;
       },
       {

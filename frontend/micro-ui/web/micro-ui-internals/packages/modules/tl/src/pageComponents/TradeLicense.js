@@ -30,7 +30,7 @@ const TradeLicense = ({ t, config, onSelect, userType, formData }) => {
                   ))}
                 </div>
               ))
-              : console.log("error")}
+              : console.error("error")}
           </div>
         </div>
         <span>

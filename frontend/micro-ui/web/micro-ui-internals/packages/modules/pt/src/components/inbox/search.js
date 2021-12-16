@@ -73,7 +73,6 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
     });
   }, [form, formState, setError, clearErrors]);
 
-  // console.log(_.isEqual(defaultSearchParams, searchParams), { defaultSearchParams, searchParams }, "params are defaulted");
 
   const onSubmitInput = (data) => {
     if (!data.mobileNumber) {

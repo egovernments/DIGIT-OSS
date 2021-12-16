@@ -21,7 +21,6 @@ export const SuccessfulPayment = (props) => {
   }, []);
 
   const getMessage = () => t("ES_PAYMENT_COLLECTED");
-  // console.log("--------->", consumerCode);
 
   const { data: generatePdfKey } = Digit.Hooks.useCommonMDMS(tenantId, "common-masters", "ReceiptKey", {
     select: (data) =>
@@ -84,7 +83,6 @@ export const SuccessfulPayment = (props) => {
 
     if (!payments.Payments[0]?.fileStoreId) {
       response = await Digit.PaymentService.generatePdf(state, { Payments: payments.Payments }, generatePdfKey);
-      // console.log({ response });
     }
     const fileStore = await Digit.PaymentService.printReciept(state, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response.filestoreIds[0]], "_blank");

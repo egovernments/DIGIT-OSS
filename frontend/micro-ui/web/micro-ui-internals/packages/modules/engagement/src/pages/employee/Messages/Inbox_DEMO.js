@@ -85,12 +85,10 @@ const Inbox = () => {
 
     const onSearchFormSubmit = (data) => {
       dispatch({action: "mutateSearchForm", data})
-      console.log("find search form data here", data)  
     }
     
     const onFilterFormSubmit = (data) => {
       dispatch({action: "mutateFilterForm", data})
-      console.log("find search form data here", data)
     }
 
     const propsForSearchForm = { SearchFormFields, onSearchFormSubmit, searchFormDefaultValues }

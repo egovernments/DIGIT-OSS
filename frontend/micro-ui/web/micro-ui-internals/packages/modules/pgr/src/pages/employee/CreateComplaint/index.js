@@ -74,7 +74,6 @@ export const CreateComplaint = ({ parentUrl }) => {
   async function selectedType(value) {
     if (value.key !== complaintType.key) {
       if (value.key === "Others") {
-        // console.log("let me know if others is selected");
         setSubType({ name: "" });
         setComplaintType(value);
         setSubTypeMenu([{ key: "Others", name: t("SERVICEDEFS.OTHERS") }]);
@@ -103,7 +102,6 @@ export const CreateComplaint = ({ parentUrl }) => {
   //On SUbmit
   const onSubmit = async (data) => {
     if (!canSubmit) return;
-    console.log("submit data", data, subType, selectedCity, selectedLocality);
     const cityCode = selectedCity.code;
     const city = selectedCity.city.name;
     const district = selectedCity.city.name;

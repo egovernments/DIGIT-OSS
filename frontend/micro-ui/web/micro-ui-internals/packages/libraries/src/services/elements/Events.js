@@ -51,7 +51,6 @@ const Events = {
       const eventRes = await Events.Search({ tenantId, filter });
       if (eventRes?.events?.length < 1) return;
       const [event] = eventRes?.events;
-      console.log(eventRes, 'eventRes');
       const fileStoresIds = event?.eventDetails?.documents?.map(document => document?.fileStoreId);
       const uploadedFilesData = fileStoresIds?.length > 0 ? await Digit.UploadServices.Filefetch(fileStoresIds, tenantId) : null
       return {...event, uploadedFilesData}

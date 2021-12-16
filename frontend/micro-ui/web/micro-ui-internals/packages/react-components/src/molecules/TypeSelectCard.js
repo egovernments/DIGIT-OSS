@@ -21,7 +21,6 @@ const TypeSelectCard = ({
   selected,
   onSave,
 }) => {
-  // console.log("cardText", t("ULBGRADE_MUNICIPAL_CORPORATION"), cardText);
   return (
     <Card>
       <CardCaption>{t(headerCaption)}</CardCaption>

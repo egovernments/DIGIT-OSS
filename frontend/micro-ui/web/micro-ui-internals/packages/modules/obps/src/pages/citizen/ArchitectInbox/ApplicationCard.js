@@ -55,7 +55,7 @@ const ApplicationCard = ({
     );
   }
   else if (data && data?.length > 0) {
-    result = <DetailsCard data={data} handleSelect={(e) => console.log(e)} handleDetailCardClick={(e) => { history.push(`/digit-ui/citizen/obps/bpa/${e?.[idKey]}`); console.log(e) }} />
+    result = <DetailsCard data={data} handleSelect={(e) => console.debug(e)} handleDetailCardClick={(e) => { history.push(`/digit-ui/citizen/obps/bpa/${e?.[idKey]}`); }} />
   }
 
   return (

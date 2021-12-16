@@ -12,7 +12,6 @@ const DatePicker = (props) => {
       const years = operationDate?.getFullYear();
       const month = operationDate?.getMonth() + 1;
       const _date = operationDate?.getDate();
-      // console.log("find current date", _date, month, years)
       return _date && month && years ? `${_date}/${month}/${years}` : "";
     }
     return "";

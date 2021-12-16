@@ -11,7 +11,6 @@ export const useBPAREGgetbill = ({ tenantId, businessService, ...filters }, conf
       () => Digit.OBPSService.BPAREGGetBill(_tenantId, params),
       {
         retry: (count, err) => {
-          console.log(err, "inside the payment hook");
           return false;
         },
         ...config,

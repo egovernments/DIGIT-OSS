@@ -124,13 +124,13 @@ const BPASendToArchitect = ({ parentRoute }) => {
   if (tenantId) filter1.tenantId = tenantId;
   if(applicationNo) filter1.applicationNo=applicationNo;
 
-  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS("pb", "BPA", ["RiskTypeComputation"]);
+  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(Digit.ULBService.getStateId(), "BPA", ["RiskTypeComputation"]);
 
   const { data: bpaData, isLoading: isBpaSearchLoading } = Digit.Hooks.obps.useBPASearch(tenantId, {applicationNo:applicationNo});
 
   let scrutinyNumber = {edcrNumber:bpaData?.[0]?.edcrNumber};
 
-  const { data: data1, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails("pb", scrutinyNumber, {
+  const { data: data1, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(Digit.ULBService.getStateId(), scrutinyNumber, {
     enabled: scrutinyNumber["edcrNumber"]?true:false
   })
 

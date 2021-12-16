@@ -29,12 +29,9 @@ const ScrutinyDetails = ({ onSelect, userType, formData,config }) => {
   const tenantId = user.info.permanentCity;
   const checkingFlow = formData?.uiFlow?.flow;
   const [showToast, setShowToast] = useState(null);
-  //let tenantId="pb.amritsar";
   const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId,formData?.data?.scrutinyNumber, {
     enabled: true
   })
-  console.log(data,"data from api");
-
  
   function getFloorData(block){
     let floors = [];

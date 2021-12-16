@@ -62,7 +62,6 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
       };
 
       const response = await Digit.UserService.changePassword(requestData, tenantId);
-      console.log({ response });
       navigateToLogin();
     } catch (err) {
       setShowToast(err?.response?.data?.error?.fields?.[0]?.message || t("ES_SOMETHING_WRONG"));

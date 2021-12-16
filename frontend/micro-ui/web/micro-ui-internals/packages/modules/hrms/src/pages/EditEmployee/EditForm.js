@@ -1,4 +1,4 @@
-import { FormComposer, Toast } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Toast,Loader } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -13,6 +13,15 @@ const EditForm = ({ tenantId, data }) => {
   const [mobileNumber, setMobileNumber] = useState(null);
   const [phonecheck, setPhonecheck] = useState(false);
   const [checkfield, setcheck] = useState(false);
+   const { data: mdmsData,isLoading } = Digit.Hooks.useCommonMDMS(Digit.ULBService.getStateId(), "egov-hrms", ["CommonFieldsConfig"], {
+    select: (data) => {
+       return {
+        config: data?.MdmsRes?.['egov-hrms']?.CommonFieldsConfig
+      };
+    },
+    retry: false,
+    enable: false,
+  });
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("EMPLOYEE_HRMS_ERROR_DATA", false);
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_HRMS_MUTATION_HAPPENED", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_HRMS_MUTATION_SUCCESS_DATA", false);
@@ -191,14 +200,18 @@ const EditForm = ({ tenantId, data }) => {
 
     history.replace("/digit-ui/employee/hrms/response", { Employees, key: "UPDATE", action: "UPDATE" });
   };
-  const configs = newConfig;
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  const config =mdmsData?.config?mdmsData.config: newConfig;
   return (
     <div>
       <FormComposer
         heading={t("HR_COMMON_EDIT_EMPLOYEE_HEADER")}
         isDisabled={!canSubmit}
         label={t("HR_COMMON_BUTTON_SUBMIT")}
-        config={configs.map((config) => {
+        config={config.map((config) => {
           return {
             ...config,
             body: config.body.filter((a) => !a.hideInEmployee),

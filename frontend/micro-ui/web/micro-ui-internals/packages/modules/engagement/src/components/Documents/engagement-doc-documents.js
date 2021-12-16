@@ -57,11 +57,6 @@ const EngagementDocUploadDocument = ({ userType, t, onSelect, setValue, config, 
     controllerProps?.onChange?.({ fileStoreId, fileSize, fileType });
   }, [fileStoreId, controllerProps]);
 
-  useEffect(() => {
-    // console.log(formData, "assac >>> sassa");
-    // if(!fileStoreId && url !== formData?.[config.key]) setValue(config.key,url)
-  }, [formData?.[config?.key]?.["documentLink"]]);
-
   const uploadFile = async () => {
     try {
       setIsUploadingImage(true)

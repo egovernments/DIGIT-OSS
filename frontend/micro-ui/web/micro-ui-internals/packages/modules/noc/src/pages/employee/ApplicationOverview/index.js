@@ -210,8 +210,6 @@ const ApplicationOverview = () => {
     }
   }, [applicationDetails, nocTaxDocuments, nocDatils, uploadedFile, filesArray, pdfFiles]);
 
-  console.log(applicationDetails, nocTaxDocuments, nocDatils, nocDocumentTypeMaping, commonDocMaping, "applicationDetailsapplicationDetailsapplicationDetailsapplicationDetails")
-
   return (
     <div className={"employee-main-application-details"}>
       <div>

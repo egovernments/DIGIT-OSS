@@ -46,7 +46,6 @@ const NewSurveys = () => {
         questions:mappedQuestions
       },
     };
-    //console.log("what the data is >>", { tenantIds, questions, details });
     history.push("/digit-ui/employee/engagement/surveys/create-response", details)
   };
 

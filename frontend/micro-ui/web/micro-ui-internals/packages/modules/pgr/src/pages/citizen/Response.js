@@ -45,7 +45,6 @@ const TextPicker = ({ response }) => {
 const Response = (props) => {
   const { t } = useTranslation();
   const appState = useSelector((state) => state)["pgr"];
-  // console.log("inside response", appState);
   return (
     <Card>
       {appState.complaints.response && <BannerPicker response={appState} />}

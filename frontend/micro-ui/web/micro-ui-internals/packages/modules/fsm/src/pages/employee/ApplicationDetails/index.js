@@ -41,7 +41,6 @@ const ApplicationDetails = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(null);
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
-  // console.log("find DSO here", DSO)
 
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(t, tenantId, applicationNumber);
   const { isLoading: isDataLoading, isSuccess, data: applicationData } = Digit.Hooks.fsm.useSearch(
@@ -102,24 +101,11 @@ const ApplicationDetails = (props) => {
       case "ADDITIONAL_PAY_REQUEST":
         return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
       default:
-        console.log("default case");
+        console.debug("default case");
         break;
     }
   }, [selectedAction]);
 
-  //TODO: remove after conformation that no information of this sort is needed
-  //   const getTimelineCaptions = (checkpoint) => {
-  //     if (checkpoint.status === "COMPLAINT_FILED" && complaintDetails?.audit) {
-  //       const caption = {
-  //         date: Digit.DateUtils.ConvertTimestampToDate(complaintDetails.audit.details.createdTime),
-  //         name: complaintDetails.audit.citizen.name,
-  //         mobileNumber: complaintDetails.audit.citizen.mobileNumber,
-  //         source: complaintDetails.audit.source,
-  //       };
-  //       return <TLCaption data={caption} />;
-  //     }
-  //     return checkpoint.caption && checkpoint.caption.length !== 0 ? <TLCaption data={checkpoint.caption[0]} /> : null;
-  //   };
 
   const closeModal = () => {
     setSelectedAction(null);
@@ -131,10 +117,8 @@ const ApplicationDetails = (props) => {
   };
 
   const submitAction = (data) => {
-    // console.log("find submit action data here", data);
     mutate(data, {
       onError: (error, variables) => {
-        // console.log("find error here",error)
         setShowToast({ key: "error", action: error });
         setTimeout(closeToast, 5000);
       },
@@ -150,7 +134,6 @@ const ApplicationDetails = (props) => {
   };
 
   const getTimelineCaptions = (checkpoint) => {
-    // console.log("tl", checkpoint);
     const __comment = checkpoint?.comment?.split("~");
     const reason = __comment ? __comment[0] : null;
     const reason_comment = __comment ? __comment[1] : null;
@@ -274,7 +257,7 @@ const ApplicationDetails = (props) => {
               </Fragment>
             )}
           </Card>
-          {/* {console.log("above show modal", showModal)} */}
+          
           {showModal ? (
             <ActionModal
               t={t}

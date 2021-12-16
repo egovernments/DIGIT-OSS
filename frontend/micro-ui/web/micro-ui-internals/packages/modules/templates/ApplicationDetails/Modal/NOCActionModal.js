@@ -195,7 +195,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     //   });
     // }
     // catch (err) {
-    //   console.log(err, "inside ack");
+    //   console.error(err, "inside ack");
     // }
     submitAction({
       Noc: applicationData,

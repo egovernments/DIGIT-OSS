@@ -11,7 +11,6 @@ const SelectAccessories = ({ t, config, onSelect, userType, formData }) => {
 
   const onSkip = () => onSelect();
 
-  // const propertyOwnerShipCategory = Digit.Hooks.pt.useMDMS("pb", "PropertyTax", "OwnerShipCategory", {});
   function selectisAccessories(value) {
     setisAccessories(value);
   }
