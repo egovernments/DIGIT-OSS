@@ -14,6 +14,7 @@ This service provides localisation capacity to the Digit suite of services.
 
 ### Swagger API Contract
 
+https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/core-services/docs/localisation-contract.yml#!/
 
 
 
