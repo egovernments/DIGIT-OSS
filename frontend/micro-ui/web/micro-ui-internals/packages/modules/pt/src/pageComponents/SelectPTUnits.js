@@ -4,8 +4,8 @@ import React, {Fragment, useState } from "react";
 const getUnique = (arr) => {
   return arr.filter((value, index, self) => self.indexOf(value) === index);
 };
-const getUsageCategory = (usageCategory) => {
-  let categoryArray = usageCategory.split(".");
+const getUsageCategory = (usageCategory='') => {
+  let categoryArray = usageCategory?.split(".")||[];
   let tempObj = {};
   tempObj["usageCategoryMajor"] = categoryArray && categoryArray.length > 0 && categoryArray[0];
   tempObj["usageCategoryMinor"] = categoryArray && categoryArray.length > 1 && categoryArray[1];
@@ -14,7 +14,7 @@ const getUsageCategory = (usageCategory) => {
   return tempObj;
 };
 
-const DeleteIcon = (showIcon = false) => {
+const DeleteIcon = ({showIcon = false}) => {
   return (
     <div>
       <span>
@@ -36,23 +36,29 @@ const DeleteIcon = (showIcon = false) => {
   );
 };
 
-const formatUnits = (units) => {
+const formatUnits = (units=[],currentFloor,isFloor) => {
+if(!units || units.length==0){
+  return ([{ usageCategory: "", unitType: "", occupancyType: "", builtUpArea: null, arv: "", floorNo:  isFloor?{ code: currentFloor, i18nKey: `PROPERTYTAX_FLOOR_${currentFloor}` }:"" }])
+}
   return units.map((unit) => {
-    let usageCategory = unit.usageCategory.includes("RESIDENTIAL") ? "RESIDENTIAL" : getUsageCategory(unit.usageCategory).usageCategoryMinor;
+    let usageCategory = unit?.usageCategory?.includes("RESIDENTIAL") ? "RESIDENTIAL" : getUsageCategory(unit?.usageCategory)?.usageCategoryMinor;
     return {
       ...unit,
       builtUpArea: unit?.constructionDetail?.builtUpArea,
       usageCategory: { code: usageCategory, i18nKey: `PROPERTYTAX_BILLING_SLAB_${usageCategory}` },
-      occupancyType: { code: unit.occupancyType, i18nKey: `PROPERTYTAX_OCCUPANCYTYPE_${unit.occupancyType}` },
-      floorNo: { code: unit.floorNo, i18nKey: `PROPERTYTAX_FLOOR_${unit.floorNo}` },
-      unitType: { code: unit.unitType, i18nKey: `PROPERTYTAX_BILLING_SLAB_${unit.unitType}` },
+      occupancyType: { code: unit.occupancyType, i18nKey: `PROPERTYTAX_OCCUPANCYTYPE_${unit?.occupancyType}` },
+      floorNo: { code: unit.floorNo, i18nKey: `PROPERTYTAX_FLOOR_${unit?.floorNo}` },
+      unitType: { code: unit.unitType, i18nKey: `PROPERTYTAX_BILLING_SLAB_${unit?.unitType}` },
     };
   });
 };
 const SelectPTUnits = ({ t, config, onSelect, userType, formData }) => {
+  let path=window.location.pathname.split('/');
+  let currentFloor=Number(path[path.length-1]);
+  let isFloor=window.location.pathname.includes("new-application/units");
   const [fields, setFields] = useState(
-    (formData?.units?.length > 0 && formatUnits(formData?.units)) || [
-      { usageCategory: "", unitType: "", occupancyType: "", builtUpArea: null, arv: "", floorNo: "" },
+    (formData?.units?.length > 0 && formatUnits(isFloor?formData?.units?.filter(ee=>ee.floorNo==currentFloor):formData?.units,currentFloor,isFloor) )|| [
+      { usageCategory: "", unitType: "", occupancyType: "", builtUpArea: null, arv: "", floorNo:  isFloor?{ code: currentFloor, i18nKey: `PROPERTYTAX_FLOOR_${currentFloor}` }:"" },
     ]
   );
 
@@ -95,7 +101,7 @@ const SelectPTUnits = ({ t, config, onSelect, userType, formData }) => {
   console.log(mdmsData, "UpdateNumberConfigUpdateNumberConfigUpdateNumberConfig");
   function handleAdd() {
     const values = [...fields];
-    values.push({ usageCategory: "", unitType: "", occupancyType: "", builtUpArea: null, arv: "", floorNo: "" });
+    values.push({ usageCategory: "", unitType: "", occupancyType: "", builtUpArea: null, arv: "", floorNo: isFloor?{ code: currentFloor, i18nKey: `PROPERTYTAX_FLOOR_${currentFloor}` }:""  });
     setFields(values);
   }
 
@@ -144,10 +150,9 @@ const SelectPTUnits = ({ t, config, onSelect, userType, formData }) => {
   }
 
   const goNext = () => {
-    let units = formData.units;
-    let unitsdata;
-
-    unitsdata = fields.map((field) => {
+    let units = formData?.units||[];
+   
+    let unitsdata = fields.map((field) => {
       let unit = {};
       Object.keys(field).filter(key=>field[key]).map((key) => {
         if (key === "usageCategory") {
@@ -163,9 +168,16 @@ const SelectPTUnits = ({ t, config, onSelect, userType, formData }) => {
       });
       return unit;
     });
-
-    console.log(units, unitsdata, "units");
-    onSelect(config.key, unitsdata);
+    if(isFloor){
+      units=units?.filter(e=>e.floorNo!=currentFloor);
+      unitsdata=[...units,...unitsdata];
+    }
+    if(currentFloor===formData?.noOfFloors?.code){
+      onSelect(config.key, unitsdata);
+    }else{
+      onSelect(config.key, unitsdata,false,currentFloor+1,true);
+    }
+    
   };
 
   const onSkip = () => onSelect();
@@ -266,7 +278,7 @@ const SelectPTUnits = ({ t, config, onSelect, userType, formData }) => {
                   title: t("CORE_COMMON_REQUIRED_ERRMSG"),
                 }}
               />
-              <CardLabel>{`${t("PT_FORM2_SELECT_FLOOR")}`}</CardLabel>
+              {!isFloor&&(<><CardLabel>{`${t("PT_FORM2_SELECT_FLOOR")}`}</CardLabel>
               <div className={"form-pt-dropdown-only"}>
                 <Dropdown
                   t={t}
@@ -276,7 +288,7 @@ const SelectPTUnits = ({ t, config, onSelect, userType, formData }) => {
                   selected={field?.floorNo}
                   select={(e) => selectFloor(index, e)}
                 />
-              </div>
+              </div></>)}
             </div>
           </div>
         );

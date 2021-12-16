@@ -110,15 +110,16 @@ const CreateProperty = ({ parentRoute }) => {
   };
 
   function handleSelect(key, data, skipStep, index, isAddMultiple = false) {
+    console.log(params,data);
     if (key === "owners") {
       let owners = params.owners || [];
       owners[index] = data;
       setParams({ ...params, ...{ [key]: [...owners] } });
     } else if (key === "units") {
       let units = params.units || [];
-      if(index){units[index] = data;}else{
+      // if(index){units[index] = data;}else{
         units = data;
-      }
+      
       setParams({ ...params, units });
     } else {
       setParams({ ...params, ...{ [key]: { ...params[key], ...data } } });
