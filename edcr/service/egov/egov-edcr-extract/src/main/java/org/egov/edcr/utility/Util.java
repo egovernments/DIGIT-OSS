@@ -14,6 +14,7 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -54,7 +55,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class Util {
-    private static final String IS_NOT_AS_PER_DEFINED_STANDARD = " is not as per defined standard.";
+    private static final String POINT_TO_MATCH = "Point to match ";
+	private static final String POINT_ON_BOUNDARY_LINE = "Point on Boundary Line ";
+	private static final String REG_EXP_D = "[^\\d]";
+	private static final String IS_NOT_AS_PER_DEFINED_STANDARD = " is not as per defined standard.";
 	private static final String DIMENSION = "Dimension ";
 	private static final String MARKED_IN_LAYER = " marked in layer ";
 	private static final String REG_EXP = "[^\\d.]";
@@ -169,8 +173,8 @@ public class Util {
                             i++;
                     }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (PatternSyntaxException | NumberFormatException e) {
+                    LOG.error(e);
                     // throw new RuntimeException("Floor number not in format");
                     // //TODO: HANDLE THIS LATER
                 }
@@ -182,7 +186,7 @@ public class Util {
 
     public static List<String> getLayerNamesLike(DXFDocument doc, String regExp) {
         Set<String> layerNames = new TreeSet<>();
-        List<String> disNames = new ArrayList();
+        List<String> disNames = new ArrayList<>();
         Iterator dxfLayerIterator = doc.getDXFLayerIterator();
         while (dxfLayerIterator.hasNext()) {
             DXFLayer name = (DXFLayer) dxfLayerIterator.next();
@@ -472,14 +476,14 @@ public class Util {
                     if (inchSplit.length > 1) {
                         String[] fractionSplit = inchSplit[1].split("/");
                         BigDecimal inchDecimalvalue = new BigDecimal(fractionSplit[0])
-                                .divide(new BigDecimal(fractionSplit[1].replaceAll("[^\\d]", "")));
-                        inch = new BigDecimal(inchSplit[0].replaceAll("[^\\d]", "")).add(inchDecimalvalue);
+                                .divide(new BigDecimal(fractionSplit[1].replaceAll(REG_EXP_D, "")));
+                        inch = new BigDecimal(inchSplit[0].replaceAll(REG_EXP_D, "")).add(inchDecimalvalue);
                     }
                 } else {
                 	if (split[1].contains("/")) {
 	                        String[] fractionSplit = split[1].split("/");
 	                        inch = new BigDecimal(fractionSplit[0])
-	                                .divide(new BigDecimal(fractionSplit[1].replaceAll("[^\\d]", "")));
+	                                .divide(new BigDecimal(fractionSplit[1].replaceAll(REG_EXP_D, "")));
 	                }
                 	else
                     inch = new BigDecimal(split[1].replaceAll(REG_EXP, ""));
@@ -487,7 +491,7 @@ public class Util {
                 BigDecimal feetToInch = new BigDecimal(split[0]).multiply(BigDecimal.valueOf(12));
                 return feetToInch.add(inch);
             } else if (split[0].contains("\"")) {
-                return new BigDecimal(split[0].replaceAll("[^\\d]", ""));
+                return new BigDecimal(split[0].replaceAll(REG_EXP_D, ""));
             }
 		} else {
 			if (text2.contains(" ") && text2.contains("/")) {
@@ -495,18 +499,18 @@ public class Util {
 				if (inchSplit.length > 1) {
 					String[] fractionSplit = inchSplit[1].split("/");
 					BigDecimal inchDecimalvalue = new BigDecimal(fractionSplit[0])
-							.divide(new BigDecimal(fractionSplit[1].replaceAll("[^\\d]", "")));
-					return new BigDecimal(inchSplit[0].replaceAll("[^\\d]", "")).add(inchDecimalvalue);
+							.divide(new BigDecimal(fractionSplit[1].replaceAll(REG_EXP_D, "")));
+					return new BigDecimal(inchSplit[0].replaceAll(REG_EXP_D, "")).add(inchDecimalvalue);
 				}
 			} else if (text2.contains("/")) {
 				String[] fractionSplit = text2.split("/");
 				return new BigDecimal(fractionSplit[0])
-						.divide(new BigDecimal(fractionSplit[1].replaceAll("[^\\d]", "")));
+						.divide(new BigDecimal(fractionSplit[1].replaceAll(REG_EXP_D, "")));
 			} else
-				return new BigDecimal(text2.replaceAll("[^\\d]", ""));
+				return new BigDecimal(text2.replaceAll(REG_EXP_D, ""));
 		}
 
-        return new BigDecimal(text2.replaceAll("[^\\d]", "")).multiply(BigDecimal.valueOf(12));
+        return new BigDecimal(text2.replaceAll(REG_EXP_D, "")).multiply(BigDecimal.valueOf(12));
     }
     
     
@@ -641,7 +645,7 @@ public class Util {
                     layerName = next.getName();
                 }
             }
-            if (!found) {
+            if (Boolean.FALSE.equals(found)) {
                 LOG.error("No Layer Found with name " + layerName);
                 return null;
             }
@@ -874,9 +878,7 @@ public class Util {
                     }
                 }
 
-            } else {
-                // TODO: add what if polylines not found
-            }
+            } 
         }
 
         return dxflwPolylines;
@@ -1042,7 +1044,7 @@ public class Util {
     public static BigDecimal getSmallestSide(DXFLWPolyline polyLine) {
         List<Point> pointsOnPolygon = pointsOnPolygon(polyLine);
         Point oldPoint = null;
-        double distance = 0d;
+        double distance;
         double smallSide = 0d;
         for (Point p : pointsOnPolygon)
             if (oldPoint == null)
@@ -1106,57 +1108,57 @@ public class Util {
     }
 
     public static boolean pointsEquals(Point point1, Point point) {
-        BigDecimal px = BigDecimal.valueOf(point.getX()).setScale(DECIMALDIGITS, BigDecimal.ROUND_DOWN);
-        BigDecimal py = BigDecimal.valueOf(point.getY()).setScale(DECIMALDIGITS, BigDecimal.ROUND_DOWN);
-        BigDecimal p1x = BigDecimal.valueOf(point1.getX()).setScale(DECIMALDIGITS, BigDecimal.ROUND_DOWN);
-        BigDecimal p1y = BigDecimal.valueOf(point1.getY()).setScale(DECIMALDIGITS, BigDecimal.ROUND_DOWN);
+        BigDecimal px = BigDecimal.valueOf(point.getX()).setScale(DECIMALDIGITS, RoundingMode.DOWN);
+        BigDecimal py = BigDecimal.valueOf(point.getY()).setScale(DECIMALDIGITS, RoundingMode.DOWN);
+        BigDecimal p1x = BigDecimal.valueOf(point1.getX()).setScale(DECIMALDIGITS, RoundingMode.DOWN);
+        BigDecimal p1y = BigDecimal.valueOf(point1.getY()).setScale(DECIMALDIGITS, RoundingMode.DOWN);
         return px.compareTo(p1x) == 0 && py.compareTo(p1y) == 0;
     }
 
     public static boolean pointsEqualsWith2PercentError(Point point1, Point point) {
         BigDecimal px = BigDecimal.valueOf(point.getX()).setScale(COMPARE_WITH_2_PERCENT_ERROR_DIGITS,
-                BigDecimal.ROUND_DOWN);
+                RoundingMode.DOWN);
         BigDecimal py = BigDecimal.valueOf(point.getY()).setScale(COMPARE_WITH_2_PERCENT_ERROR_DIGITS,
-                BigDecimal.ROUND_DOWN);
+                RoundingMode.DOWN);
         BigDecimal p1x = BigDecimal.valueOf(point1.getX()).setScale(COMPARE_WITH_2_PERCENT_ERROR_DIGITS,
-                BigDecimal.ROUND_DOWN);
+                RoundingMode.DOWN);
         BigDecimal p1y = BigDecimal.valueOf(point1.getY()).setScale(COMPARE_WITH_2_PERCENT_ERROR_DIGITS,
-                BigDecimal.ROUND_DOWN);
+                RoundingMode.DOWN);
         double d = 0.01;
 
         if (px.compareTo(p1x) == 0 && py.compareTo(p1y) == 0) {
             LOG.debug(" Matched in pointsEqualsWith2PercentError for points using round down with exact match");
-            PrintUtil.print(point1, "Point on Boundary Line ");
-            PrintUtil.print(point, "Point to match ");
+            PrintUtil.print(point1, POINT_ON_BOUNDARY_LINE);
+            PrintUtil.print(point, POINT_TO_MATCH);
             return true;
         } else if (Math.abs(px.doubleValue() - p1x.doubleValue()) <= d
                 && Math.abs(py.doubleValue() - p1y.doubleValue()) <= d) {
             LOG.debug(" Matched in pointsEqualsWith2PercentError for points using round down");
-            PrintUtil.print(point1, "Point on Boundary Line ");
-            PrintUtil.print(point, "Point to match ");
+            PrintUtil.print(point1, POINT_ON_BOUNDARY_LINE);
+            PrintUtil.print(point, POINT_TO_MATCH);
 
             return true;
         } else {
             px = BigDecimal.valueOf(point.getX()).setScale(COMPARE_WITH_2_PERCENT_ERROR_DIGITS,
-                    BigDecimal.ROUND_HALF_UP);
+                    RoundingMode.HALF_UP);
             py = BigDecimal.valueOf(point.getY()).setScale(COMPARE_WITH_2_PERCENT_ERROR_DIGITS,
-                    BigDecimal.ROUND_HALF_UP);
+                     RoundingMode.HALF_UP);
             p1x = BigDecimal.valueOf(point1.getX()).setScale(COMPARE_WITH_2_PERCENT_ERROR_DIGITS,
-                    BigDecimal.ROUND_HALF_UP);
+                     RoundingMode.HALF_UP);
             p1y = BigDecimal.valueOf(point1.getY()).setScale(COMPARE_WITH_2_PERCENT_ERROR_DIGITS,
-                    BigDecimal.ROUND_HALF_UP);
+                     RoundingMode.HALF_UP);
             d = 0.01;
 
             if (px.compareTo(p1x) == 0 && py.compareTo(p1y) == 0) {
                 LOG.debug(" Matched in pointsEqualsWith2PercentError for points using round halfup with exact match");
-                PrintUtil.print(point1, "Point on Boundary Line ");
-                PrintUtil.print(point, "Point to match ");
+                PrintUtil.print(point1, POINT_ON_BOUNDARY_LINE);
+                PrintUtil.print(point, POINT_TO_MATCH);
                 return true;
             } else if (Math.abs(px.doubleValue() - p1x.doubleValue()) <= d
                     && Math.abs(py.doubleValue() - p1y.doubleValue()) <= d) {
                 LOG.debug(" Matched in pointsEqualsWith2PercentError for points using round halfup");
-                PrintUtil.print(point1, "Point on Boundary Line ");
-                PrintUtil.print(point, "Point to match ");
+                PrintUtil.print(point1, POINT_ON_BOUNDARY_LINE);
+                PrintUtil.print(point, POINT_TO_MATCH);
                 return true;
             }
 

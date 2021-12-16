@@ -1,20 +1,24 @@
 package org.egov.edcr.utility.math;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import org.apache.log4j.Logger;
+
 public class CalculationUtil {
+	private static final Logger LOG = Logger.getLogger(CalculationUtil.class);
     public static void main(String[] args) {
-        CalculationUtil rc = new CalculationUtil();
-        System.out.println(CalculationUtil.process("10 * 20 / 10"));
+        //CalculationUtil rc = new CalculationUtil();
+        LOG.info(CalculationUtil.process("10 * 20 / 10"));
     }
 
     public static BigDecimal process(String args) {
 
         StringBuilder sb = new StringBuilder();
-        BigDecimal firstVal = BigDecimal.ZERO;
-        BigDecimal secondVal = BigDecimal.ZERO;
+        BigDecimal firstVal;
+        BigDecimal secondVal;
         BigDecimal mainVal = BigDecimal.ZERO;
         Queue<String> q = new LinkedList<>();
         String operation = "";
@@ -50,7 +54,9 @@ public class CalculationUtil {
             case '.':
                 sb.append(c);
                 break;
-
+            default:
+            	// No update
+            	break;
             }
         while (!q.isEmpty()) {
             firstVal = BigDecimal.valueOf(Double.valueOf(q.remove()));
@@ -58,7 +64,7 @@ public class CalculationUtil {
             secondVal = BigDecimal.valueOf(Double.valueOf(q.remove()));
             switch (operation) {
             case "/":
-                mainVal = firstVal.divide(secondVal, 2);
+                mainVal = firstVal.divide(secondVal, 2, RoundingMode.HALF_UP);
                 q.add("" + mainVal.doubleValue());
                 break;
             case "*":
@@ -73,6 +79,8 @@ public class CalculationUtil {
                 mainVal = firstVal.subtract(secondVal);
                 q.add("" + mainVal.doubleValue());
                 break;
+            default:
+            	break;
 
             }
         }
