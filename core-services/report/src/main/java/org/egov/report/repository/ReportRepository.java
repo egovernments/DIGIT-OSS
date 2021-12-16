@@ -37,9 +37,6 @@ public class ReportRepository {
 	@Autowired
 	private MultiStateInstanceUtil centralInsUtil;
 	
-    @Value("${is.environment.central.instance}")
-    private Boolean isEnvironmentCentralInstance;
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

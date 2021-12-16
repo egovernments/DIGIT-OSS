@@ -33,9 +33,6 @@ import net.minidev.json.JSONArray;
 @Component
 public class EncryptionPolicyConfiguration {
 
-	@Value("${is.environment.central.instance}")
-    private Boolean isEnvironmentCentralInstance;
-	
     @Autowired
     private EncProperties encProperties;
     
@@ -54,7 +51,9 @@ public class EncryptionPolicyConfiguration {
             MasterDetail masterDetail = MasterDetail.builder().name(EncClientConstants.MDMS_ENCRYPTION_MASTER_NAME).build();
             ModuleDetail moduleDetail = ModuleDetail.builder().moduleName(EncClientConstants.MDMS_MODULE_NAME)
                     .masterDetails(Arrays.asList(masterDetail)) .build();
-
+            
+            MDC.put(EncClientConstants.TENANTID_MDC, encProperties.getStateLevelTenantId());
+            
             MdmsCriteria mdmsCriteria = MdmsCriteria.builder().tenantId(encProperties.getStateLevelTenantId())
                     .moduleDetails(Arrays.asList(moduleDetail)).build();
 
@@ -65,13 +64,8 @@ public class EncryptionPolicyConfiguration {
                     restTemplate.postForEntity(encProperties.getEgovMdmsHost() + encProperties.getEgovMdmsSearchEndpoint(),
                             mdmsCriteriaReq, MdmsResponse.class);
             
-
-            if(isEnvironmentCentralInstance) {
-            	MDC.put(EncClientConstants.TENANTID_MDC, encProperties.getStateLevelTenantId());
-            }
-
-            JSONArray policyListJSON = response.getBody().getMdmsRes().get(EncClientConstants.MDMS_MODULE_NAME)
-                    .get(EncClientConstants.MDMS_ENCRYPTION_MASTER_NAME);
+			JSONArray policyListJSON = response.getBody().getMdmsRes().get(EncClientConstants.MDMS_MODULE_NAME)
+				      .get(EncClientConstants.MDMS_ENCRYPTION_MASTER_NAME);
 
             ObjectReader reader = objectMapper.readerFor(objectMapper.getTypeFactory().constructCollectionType(List.class,
                     EncryptionPolicy.class));
