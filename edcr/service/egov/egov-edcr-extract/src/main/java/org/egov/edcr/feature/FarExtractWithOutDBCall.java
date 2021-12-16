@@ -7,10 +7,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import org.egov.common.entity.bpa.SubOccupancy;
@@ -24,13 +23,8 @@ import org.egov.common.entity.edcr.GeneralStair;
 import org.egov.common.entity.edcr.Lift;
 import org.egov.common.entity.edcr.Occupancy;
 import org.egov.common.entity.edcr.Stair;
-import org.egov.common.entity.edcr.SubFeatureColorCode;
 import org.egov.common.entity.edcr.TypicalFloor;
-import org.egov.commons.mdms.BpaMdmsUtil;
-import org.egov.commons.mdms.config.MdmsConfiguration;
-import org.egov.commons.mdms.validator.MDMSValidator;
 import org.egov.commons.service.OccupancyService;
-import org.egov.commons.service.SubFeatureColorCodeService;
 import org.egov.commons.service.SubOccupancyService;
 import org.egov.commons.service.UsageService;
 import org.egov.edcr.entity.blackbox.FloorDetail;
@@ -38,13 +32,8 @@ import org.egov.edcr.entity.blackbox.LiftDetail;
 import org.egov.edcr.entity.blackbox.OccupancyDetail;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.entity.blackbox.StairDetail;
-import org.egov.edcr.service.LayerNames;
 import org.egov.edcr.utility.DcrConstants;
 import org.egov.edcr.utility.Util;
-import org.egov.infra.admin.master.entity.City;
-import org.egov.infra.admin.master.service.CityService;
-import org.egov.infra.config.core.ApplicationThreadLocals;
-import org.egov.infra.microservice.models.RequestInfo;
 import org.kabeja.dxf.DXFLWPolyline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,18 +48,6 @@ public class FarExtractWithOutDBCall extends FeatureExtract {
     private SubOccupancyService subOccupancyService;
     @Autowired
     private UsageService usageService;
-    @Autowired
-    private SubFeatureColorCodeService subFeatureColorCodeService;
-    @Autowired
-    private LayerNames layerNames;
-    @Autowired
-    private MdmsConfiguration mdmsConfiguration;
-    @Autowired
-    private BpaMdmsUtil bpaMdmsUtil;
-    @Autowired
-    private MDMSValidator mDMSValidator;
-    @Autowired
-    private CityService cityService;
 
     private static final String VALIDATION_WRONG_COLORCODE_FLOORAREA = "msg.error.wrong.colourcode.floorarea";
     public static final String RULE_31_1 = "31(1)";
@@ -118,7 +95,6 @@ public class FarExtractWithOutDBCall extends FeatureExtract {
 			 */
             String layerRegEx = "BLK_" + block.getNumber() + "_" + "FLR_" + "-?\\d+_" + "BLT_UP_AREA";
             List<String> layerNames = Util.getLayerNamesLike(pl.getDoc(), layerRegEx);
-            Door d = new Door();
             int floorNo;
             FloorDetail floor;
             for (String s : layerNames) {
@@ -225,8 +201,8 @@ public class FarExtractWithOutDBCall extends FeatureExtract {
                             Floor newFloor = (Floor) modelFloor.clone();
                             newFloor.setNumber(no);
                             b.getBuilding().getFloors().add(newFloor);
-                        } catch (Exception e) {
-
+                        } catch (CloneNotSupportedException e) {
+                        	LOG.error(e.getMessage());
                         }
                 }
         }
@@ -247,7 +223,7 @@ public class FarExtractWithOutDBCall extends FeatureExtract {
                 List<DXFLWPolyline> polylines = Util.getPolyLinesByLayer(pl.getDoc(), layer);
                 if (polylines.isEmpty())
                     continue;
-                int floorNo = Integer.valueOf(layer.split("_")[3]);
+                int floorNo = Integer.parseInt(layer.split("_")[3]);
                 if (block.getBuilding().getFloorNumber(floorNo) == null) {
                     floor = new FloorDetail();
                     floor.setNumber(floorNo);
@@ -300,7 +276,8 @@ public class FarExtractWithOutDBCall extends FeatureExtract {
         for (Block block : pl.getBlocks()) {
             Building building = block.getBuilding();
             if (building != null && !building.getFloors().isEmpty()) {
-                Floor floor = building.getFloors().stream().max(Comparator.comparing(Floor::getNumber)).get();
+                Optional<Floor> maxFloor = building.getFloors().stream().max(Comparator.comparing(Floor::getNumber));
+				Floor floor = maxFloor.isPresent() ? maxFloor.get() : null;
                 if (floor != null)
                     floor.setTerrace(checkTerrace(floor));
             }

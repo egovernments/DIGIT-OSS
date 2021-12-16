@@ -47,12 +47,9 @@
  */
 package org.egov.infra.filestore.service.impl;
 
-import org.apache.commons.io.FileUtils;
-import org.egov.infra.exception.ApplicationRuntimeException;
-import org.egov.infra.filestore.entity.FileStoreMapper;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -68,11 +65,16 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.filestore.entity.FileStoreMapper;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.Test;
 
 public class LocalDiskFileStoreServiceTest {
+	private static final Logger LOG = Logger.getLogger(LocalDiskFileStoreServiceTest.class);
     private static Path tempFilePath = Paths.get(System.getProperty("user.home") + File.separator + "testtmpr");
     private LocalDiskFileStoreService diskFileService;
 
@@ -101,7 +103,7 @@ public class LocalDiskFileStoreServiceTest {
 
             });
         } catch (IOException e) {
-
+        	LOG.error(e.getMessage());
         }
     }
 

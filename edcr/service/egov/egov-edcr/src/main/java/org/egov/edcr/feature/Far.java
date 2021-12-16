@@ -86,6 +86,8 @@ import static org.egov.edcr.utility.DcrConstants.DECIMALDIGITS_MEASUREMENTS;
 import static org.egov.edcr.utility.DcrConstants.OBJECTNOTDEFINED;
 import static org.egov.edcr.utility.DcrConstants.PLOT_AREA;
 import static org.egov.edcr.utility.DcrConstants.ROUNDMODE_MEASUREMENTS;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -95,6 +97,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -112,27 +115,42 @@ import org.egov.common.entity.edcr.ScrutinyDetail;
 import org.egov.edcr.constants.DxfFileConstants;
 import org.egov.edcr.service.ProcessPrintHelper;
 import org.egov.edcr.utility.DcrConstants;
-import org.egov.infra.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
 public class Far extends FeatureProcess {
 
-        private static final Logger LOG = Logger.getLogger(Far.class);
+        private static final String LESS_THAN_OR_EQUAL = "<=";
+
+		private static final String LESS_THAN_2_POINT_5 = "<= 2.5";
+
+		private static final String OCCUPANCY2 = "occupancy";
+
+		private static final String EXISTING_FLOOR_AREA = "existingFloorArea";
+
+		private static final String EXISTING_BUILT_UP_AREA = "existingBuiltUpArea";
+
+		private static final String TOTAL_BUILT_UP_AREA = "totalBuiltUpArea";
+
+		private static final String TOTAL_FLOOR_AREA = "totalFloorArea";
+
+		private static final String FLOOR = "floor ";
+
+		private static final Logger LOG = Logger.getLogger(Far.class);
 
         private static final String VALIDATION_NEGATIVE_FLOOR_AREA = "msg.error.negative.floorarea.occupancy.floor";
         private static final String VALIDATION_NEGATIVE_EXISTING_FLOOR_AREA = "msg.error.negative.existing.floorarea.occupancy.floor";
         private static final String VALIDATION_NEGATIVE_BUILTUP_AREA = "msg.error.negative.builtuparea.occupancy.floor";
         private static final String VALIDATION_NEGATIVE_EXISTING_BUILTUP_AREA = "msg.error.negative.existing.builtuparea.occupancy.floor";
-        public static final String RULE_31_1 = "31-1";
-        public static final String RULE_38 = "38";
+        //private static final String RULE_31_1 = "31-1";
+        private static final String RULE_38 = "38";
 
-        private static final BigDecimal POINTTWO = BigDecimal.valueOf(0.2);
-        private static final BigDecimal POINTFOUR = BigDecimal.valueOf(0.4);
+        //private static final BigDecimal POINTTWO = BigDecimal.valueOf(0.2);
+        //private static final BigDecimal POINTFOUR = BigDecimal.valueOf(0.4);
         private static final BigDecimal POINTFIVE = BigDecimal.valueOf(0.5);
-        private static final BigDecimal POINTSIX = BigDecimal.valueOf(0.6);
-        private static final BigDecimal POINTSEVEN = BigDecimal.valueOf(0.7);
-        private static final BigDecimal ONE = BigDecimal.valueOf(1);
+        //private static final BigDecimal POINTSIX = BigDecimal.valueOf(0.6);
+        //private static final BigDecimal POINTSEVEN = BigDecimal.valueOf(0.7);
+        //private static final BigDecimal ONE = BigDecimal.valueOf(1);
         private static final BigDecimal ONE_POINTTWO = BigDecimal.valueOf(1.2);
         private static final BigDecimal ONE_POINTFIVE = BigDecimal.valueOf(1.5);
         private static final BigDecimal ONE_POINTEIGHT = BigDecimal.valueOf(1.8);
@@ -141,7 +159,7 @@ public class Far extends FeatureProcess {
         private static final BigDecimal THREE = BigDecimal.valueOf(3);
         private static final BigDecimal THREE_POINTTWOFIVE = BigDecimal.valueOf(3.25);
         private static final BigDecimal THREE_POINTFIVE = BigDecimal.valueOf(3.5);
-        private static final BigDecimal FIFTEEN = BigDecimal.valueOf(15);
+        //private static final BigDecimal FIFTEEN = BigDecimal.valueOf(15);
 
         private static final BigDecimal ROAD_WIDTH_TWO_POINTFOUR = BigDecimal.valueOf(2.4);
         private static final BigDecimal ROAD_WIDTH_TWO_POINTFOURFOUR = BigDecimal.valueOf(2.44);
@@ -156,12 +174,12 @@ public class Far extends FeatureProcess {
         private static final BigDecimal ROAD_WIDTH_TWENTYSEVEN_POINTFOUR = BigDecimal.valueOf(27.4);
         private static final BigDecimal ROAD_WIDTH_THIRTY_POINTFIVE = BigDecimal.valueOf(30.5);
 
-        public static final String OLD = "OLD";
-        public static final String NEW = "NEW";
-        public static final String OLD_AREA_ERROR = "road width old area";
-        public static final String NEW_AREA_ERROR = "road width new area";
-        public static final String OLD_AREA_ERROR_MSG = "No construction shall be permitted if the road width is less than 2.4m for old area.";
-        public static final String NEW_AREA_ERROR_MSG = "No construction shall be permitted if the road width is less than 6.1m for new area.";
+        private static final String OLD = "OLD";
+        private static final String NEW = "NEW";
+        private static final String OLD_AREA_ERROR = "road width old area";
+        private static final String NEW_AREA_ERROR = "road width new area";
+        private static final String OLD_AREA_ERROR_MSG = "No construction shall be permitted if the road width is less than 2.4m for old area.";
+        private static final String NEW_AREA_ERROR_MSG = "No construction shall be permitted if the road width is less than 6.1m for new area.";
 
 
         @Override
@@ -279,11 +297,11 @@ public class Far extends FeatureProcess {
                                 occupancy.setTypeHelper(occupancyType);
                                 building.getTotalArea().add(occupancy);
 
-                                allDtlsMap.put("occupancy", occupancyType);
-                                allDtlsMap.put("totalFloorArea", blockWiseFloorArea);
-                                allDtlsMap.put("totalBuiltUpArea", blockWiseBuiltupArea);
-                                allDtlsMap.put("existingFloorArea", blockWiseExistingFloorArea);
-                                allDtlsMap.put("existingBuiltUpArea", blockWiseExistingBuiltupArea);
+                                allDtlsMap.put(OCCUPANCY2, occupancyType);
+                                allDtlsMap.put(TOTAL_FLOOR_AREA, blockWiseFloorArea);
+                                allDtlsMap.put(TOTAL_BUILT_UP_AREA, blockWiseBuiltupArea);
+                                allDtlsMap.put(EXISTING_FLOOR_AREA, blockWiseExistingFloorArea);
+                                allDtlsMap.put(EXISTING_BUILT_UP_AREA, blockWiseExistingBuiltupArea);
 
                                 listOfOccupancyTypes.add(occupancyType);
 
@@ -302,14 +320,14 @@ public class Far extends FeatureProcess {
                                         BigDecimal totalExistingBltUpArea = BigDecimal.ZERO;
 
                                         for (Map<String, Object> dtlsMap : listOfMapOfAllDtls) {
-                                                if (occupancyType.equals(dtlsMap.get("occupancy"))) {
-                                                        totalFlrArea = totalFlrArea.add((BigDecimal) dtlsMap.get("totalFloorArea"));
-                                                        totalBltUpArea = totalBltUpArea.add((BigDecimal) dtlsMap.get("totalBuiltUpArea"));
+                                                if (occupancyType.equals(dtlsMap.get(OCCUPANCY2))) {
+                                                        totalFlrArea = totalFlrArea.add((BigDecimal) dtlsMap.get(TOTAL_FLOOR_AREA));
+                                                        totalBltUpArea = totalBltUpArea.add((BigDecimal) dtlsMap.get(TOTAL_BUILT_UP_AREA));
 
                                                         totalExistingBltUpArea = totalExistingBltUpArea
-                                                                        .add((BigDecimal) dtlsMap.get("existingBuiltUpArea"));
+                                                                        .add((BigDecimal) dtlsMap.get(EXISTING_BUILT_UP_AREA));
                                                         totalExistingFlrArea = totalExistingFlrArea
-                                                                        .add((BigDecimal) dtlsMap.get("existingFloorArea"));
+                                                                        .add((BigDecimal) dtlsMap.get(EXISTING_FLOOR_AREA));
 
                                                 }
                                         }
@@ -436,14 +454,14 @@ public class Far extends FeatureProcess {
                                 if (mostRestrictiveFar != null && mostRestrictiveFar.getConvertedSubtype() != null
                                                 && !A_R.equals(mostRestrictiveFar.getSubtype().getCode())) {
                                         if (carpetArea.compareTo(BigDecimal.ZERO) == 0) {
-                                                pl.addError("Carpet area in block " + blk.getNumber() + "floor " + flr.getNumber(),
-                                                                "Carpet area is not defined in block " + blk.getNumber() + "floor " + flr.getNumber());
+                                                pl.addError("Carpet area in block " + blk.getNumber() + FLOOR + flr.getNumber(),
+                                                                "Carpet area is not defined in block " + blk.getNumber() + FLOOR + flr.getNumber());
                                         }
 
                                         if (existingBltUpArea.compareTo(BigDecimal.ZERO) > 0
                                                         && existingCarpetArea.compareTo(BigDecimal.ZERO) == 0) {
-                                                pl.addError("Existing Carpet area in block " + blk.getNumber() + "floor " + flr.getNumber(),
-                                                                "Existing Carpet area is not defined in block " + blk.getNumber() + "floor "
+                                                pl.addError("Existing Carpet area in block " + blk.getNumber() + FLOOR + flr.getNumber(),
+                                                                "Existing Carpet area is not defined in block " + blk.getNumber() + FLOOR
                                                                                 + flr.getNumber());
                                         }
                                 }
@@ -451,8 +469,8 @@ public class Far extends FeatureProcess {
                                 if (flrArea.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS, DcrConstants.ROUNDMODE_MEASUREMENTS)
                                                 .compareTo(carpetArea.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS,
                                                                 DcrConstants.ROUNDMODE_MEASUREMENTS)) < 0) {
-                                        pl.addError("Floor area in block " + blk.getNumber() + "floor " + flr.getNumber(),
-                                                        "Floor area is less than carpet area in block " + blk.getNumber() + "floor "
+                                        pl.addError("Floor area in block " + blk.getNumber() + FLOOR + flr.getNumber(),
+                                                        "Floor area is less than carpet area in block " + blk.getNumber() + FLOOR
                                                                         + flr.getNumber());
                                 }
 
@@ -460,8 +478,8 @@ public class Far extends FeatureProcess {
                                                 .setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS, DcrConstants.ROUNDMODE_MEASUREMENTS)
                                                 .compareTo(existingCarpetArea.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS,
                                                                 DcrConstants.ROUNDMODE_MEASUREMENTS)) < 0) {
-                                        pl.addError("Existing floor area in block " + blk.getNumber() + "floor " + flr.getNumber(),
-                                                        "Existing Floor area is less than carpet area in block " + blk.getNumber() + "floor "
+                                        pl.addError("Existing floor area in block " + blk.getNumber() + FLOOR + flr.getNumber(),
+                                                        "Existing Floor area is less than carpet area in block " + blk.getNumber() + FLOOR
                                                                         + flr.getNumber());
                                 }
                         }
@@ -607,8 +625,8 @@ public class Far extends FeatureProcess {
                 BigDecimal roadWidth = pl.getPlanInformation().getRoadWidth();
 
                 if (mostRestrictiveOccupancyType != null && 
-                        StringUtils.isNotBlank(typeOfArea) && roadWidth != null && !processFarForSpecialOccupancy(pl,
-                                mostRestrictiveOccupancyType, providedFar, typeOfArea, roadWidth, errorMsgs)) {
+                        isNotBlank(typeOfArea) && roadWidth != null && Boolean.TRUE.equals(Boolean.TRUE.equals(!processFarForSpecialOccupancy(pl,
+                                mostRestrictiveOccupancyType, providedFar, typeOfArea, roadWidth, errorMsgs)))) {
                         if ((mostRestrictiveOccupancyType.getType() != null
                                         && DxfFileConstants.A.equalsIgnoreCase(mostRestrictiveOccupancyType.getType().getCode()))
                                         || (mostRestrictiveOccupancyType.getSubtype() != null
@@ -651,17 +669,18 @@ public class Far extends FeatureProcess {
 
                         }
                 }
-                if (isHighRise) {
+                if (Boolean.TRUE.equals(isHighRise)) {
                         pl.getPlanInformation().setNocFireDept("YES");
                 }
 
-                if (StringUtils.isNotBlank(pl.getPlanInformation().getBuildingNearMonument())
+                if (isNotBlank(pl.getPlanInformation().getBuildingNearMonument())
                                 && "YES".equalsIgnoreCase(pl.getPlanInformation().getBuildingNearMonument())) {
-                        BigDecimal minDistanceFromMonument = BigDecimal.ZERO;
+                        BigDecimal minDistanceFromMonument;
                         List<BigDecimal> distancesFromMonument = pl.getDistanceToExternalEntity().getMonuments();
                         if (!distancesFromMonument.isEmpty()) {
 
-                                minDistanceFromMonument = distancesFromMonument.stream().reduce(BigDecimal::min).get();
+                                Optional<BigDecimal> minDis = distancesFromMonument.stream().reduce(BigDecimal::min);
+								minDistanceFromMonument = minDis.isPresent() ? minDis.get() : BigDecimal.ZERO;
 
                                 if (minDistanceFromMonument.compareTo(BigDecimal.valueOf(300)) > 0) {
                                         pl.getPlanInformation().setNocNearMonument("YES");
@@ -673,7 +692,7 @@ public class Far extends FeatureProcess {
         }
 
         private void validate2(Plan pl, Block blk, Floor flr, Occupancy occupancy) {
-                String occupancyTypeHelper = StringUtils.EMPTY;
+                String occupancyTypeHelper = EMPTY;
                 if (occupancy.getTypeHelper() != null) {
                         if (occupancy.getTypeHelper().getType() != null) {
                                 occupancyTypeHelper = occupancy.getTypeHelper().getType().getName();
@@ -711,7 +730,6 @@ public class Far extends FeatureProcess {
         }
 
         protected OccupancyTypeHelper getMostRestrictiveFar(Set<OccupancyTypeHelper> distinctOccupancyTypes) {
-                Set<String> codes = new HashSet<>();
                 Map<String, OccupancyTypeHelper> codesMap = new HashMap<>();
                 for (OccupancyTypeHelper typeHelper : distinctOccupancyTypes) {
 
@@ -720,7 +738,7 @@ public class Far extends FeatureProcess {
                         if (typeHelper.getSubtype() != null)
                                 codesMap.put(typeHelper.getSubtype().getCode(), typeHelper);
                 }
-                codes = codesMap.keySet();
+                Set<String> codes = codesMap.keySet();
                 if (codes.contains(S_ECFG))
                         return codesMap.get(S_ECFG);
                 else if (codes.contains(A_FH))
@@ -790,45 +808,45 @@ public class Far extends FeatureProcess {
                         String typeOfArea, BigDecimal roadWidth, HashMap<String, String> errors) {
 
                 OccupancyTypeHelper mostRestrictiveOccupancyType = pl.getVirtualBuilding() != null ? pl.getVirtualBuilding().getMostRestrictiveFarHelper(): null ;
-                String expectedResult = StringUtils.EMPTY;
+                String expectedResult = EMPTY;
                 boolean isAccepted = false;
                 if (mostRestrictiveOccupancyType != null && mostRestrictiveOccupancyType.getSubtype() != null) {
                         if (mostRestrictiveOccupancyType.getSubtype().getCode().equals(S_ECFG)
                                         || mostRestrictiveOccupancyType.getSubtype().getCode().equals(A_FH)) {
-                                isAccepted = far.compareTo(POINTTWO) <= 0;
-                                expectedResult = "<= 0.2";
+                                //isAccepted = far.compareTo(POINTTWO) <= 0;
+                                //expectedResult = "<= 0.2";
                                 return true;
                         }
 
                         if (mostRestrictiveOccupancyType.getSubtype().getCode().equals(S_SAS)) {
-                                isAccepted = far.compareTo(POINTFOUR) <= 0;
-                                expectedResult = "<= 0.4";
+                                //isAccepted = far.compareTo(POINTFOUR) <= 0;
+                                //expectedResult = "<= 0.4";
                                 return true;
                         }
 
                         if (mostRestrictiveOccupancyType.getSubtype().getCode().equals(D_B)) {
-                                isAccepted = far.compareTo(POINTFIVE) <= 0;
-                                expectedResult = "<= 0.5";
+                                //isAccepted = far.compareTo(POINTFIVE) <= 0;
+                                //expectedResult = "<= 0.5";
                                 return true;
                         }
 
                         if (mostRestrictiveOccupancyType.getSubtype().getCode().equals(D_C)) {
-                                isAccepted = far.compareTo(POINTSIX) <= 0;
-                                expectedResult = "<= 0.6";
+                                //isAccepted = far.compareTo(POINTSIX) <= 0;
+                                //expectedResult = "<= 0.6";
                                 return true;
                         }
 
                         if (mostRestrictiveOccupancyType.getSubtype().getCode().equals(D_A)) {
-                                isAccepted = far.compareTo(POINTSEVEN) <= 0;
-                                expectedResult = "<= 0.7";
+                                //isAccepted = far.compareTo(POINTSEVEN) <= 0;
+                                //expectedResult = "<= 0.7";
                                 return true;
                         }
 
                         if (mostRestrictiveOccupancyType.getSubtype().getCode().equals(H_PP)
                                         || mostRestrictiveOccupancyType.getSubtype().getCode().equals(E_NS)
                                         || mostRestrictiveOccupancyType.getSubtype().getCode().equals(M_DFPAB)) {
-                                isAccepted = far.compareTo(ONE) <= 0;
-                                expectedResult = "<= 1";
+                                //isAccepted = far.compareTo(ONE) <= 0;
+                                //expectedResult = "<= 1";
                                 return true;
                         }
 
@@ -843,8 +861,8 @@ public class Far extends FeatureProcess {
                                         || mostRestrictiveOccupancyType.getSubtype().getCode().equals(S_SC)
                                         || mostRestrictiveOccupancyType.getSubtype().getCode().equals(S_ICC)
                                         || mostRestrictiveOccupancyType.getSubtype().getCode().equals(A2)) {
-                                isAccepted = far.compareTo(ONE_POINTTWO) <= 0;
-                                expectedResult = "<= 1.2";
+                                //isAccepted = far.compareTo(ONE_POINTTWO) <= 0;
+                                //expectedResult = "<= 1.2";
                                 return true;
                         }
 
@@ -853,20 +871,20 @@ public class Far extends FeatureProcess {
                                         || mostRestrictiveOccupancyType.getSubtype().getCode().equals(M_OHF)
                                         || mostRestrictiveOccupancyType.getSubtype().getCode().equals(M_VH)
                                         || mostRestrictiveOccupancyType.getSubtype().getCode().equals(M_NAPI)) {
-                                isAccepted = far.compareTo(ONE_POINTFIVE) <= 0;
-                                expectedResult = "<= 1.5";
+                                //isAccepted = far.compareTo(ONE_POINTFIVE) <= 0;
+                                //expectedResult = "<= 1.5";
                                 return true;
                         }
 
                         if (mostRestrictiveOccupancyType.getSubtype().getCode().equals(A_SA)) {
-                                isAccepted = far.compareTo(TWO_POINTFIVE) <= 0;
-                                expectedResult = "<= 2.5";
+                                //isAccepted = far.compareTo(TWO_POINTFIVE) <= 0;
+                                //expectedResult = "<= 2.5";
                                 return true;
                         }
 
                         if (mostRestrictiveOccupancyType.getSubtype().getCode().equals(E_SACA)) {
-                                isAccepted = far.compareTo(FIFTEEN) <= 0;
-                                expectedResult = "<= 15";
+                                //isAccepted = far.compareTo(FIFTEEN) <= 0;
+                                //expectedResult = "<= 15";
                                 return true;
                         }
 
@@ -875,7 +893,7 @@ public class Far extends FeatureProcess {
                 String occupancyName = occupancyType.getSubtype() != null ? occupancyType.getSubtype().getName()
                         : occupancyType.getType().getName();
                 
-                if (StringUtils.isNotBlank(expectedResult)) {
+                if (isNotBlank(expectedResult)) {
                         buildResult(pl, occupancyName, far, typeOfArea, roadWidth, expectedResult, isAccepted);
                 }
 
@@ -885,7 +903,7 @@ public class Far extends FeatureProcess {
         private void processFarResidential(Plan pl, OccupancyTypeHelper occupancyType, BigDecimal far, String typeOfArea,
                         BigDecimal roadWidth, HashMap<String, String> errors) {
 
-                String expectedResult = StringUtils.EMPTY;
+                String expectedResult = EMPTY;
                 boolean isAccepted = false;
 
                 if (typeOfArea.equalsIgnoreCase(OLD)) {
@@ -912,20 +930,14 @@ public class Far extends FeatureProcess {
                                 isAccepted = far.compareTo(TWO) <= 0;
                                 pl.getFarDetails().setPermissableFar(TWO.doubleValue());
                                 expectedResult = "<= 2";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_NINE_POINTONE) >= 0
-                                        && roadWidth.compareTo(ROAD_WIDTH_TWELVE_POINTTWO) < 0) {
+							} else if ((roadWidth.compareTo(ROAD_WIDTH_NINE_POINTONE) >= 0
+									&& roadWidth.compareTo(ROAD_WIDTH_TWELVE_POINTTWO) < 0)
+									|| (roadWidth.compareTo(ROAD_WIDTH_TWELVE_POINTTWO) >= 0
+											&& roadWidth.compareTo(ROAD_WIDTH_EIGHTEEN_POINTTHREE) < 0)
+									|| roadWidth.compareTo(ROAD_WIDTH_EIGHTEEN_POINTTHREE) >= 0) {
                                 isAccepted = far.compareTo(TWO_POINTFIVE) <= 0;
                                 pl.getFarDetails().setPermissableFar(TWO_POINTFIVE.doubleValue());
-                                expectedResult = "<= 2.5";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_TWELVE_POINTTWO) >= 0
-                                        && roadWidth.compareTo(ROAD_WIDTH_EIGHTEEN_POINTTHREE) < 0) {
-                                isAccepted = far.compareTo(TWO_POINTFIVE) <= 0;
-                                pl.getFarDetails().setPermissableFar(TWO_POINTFIVE.doubleValue());
-                                expectedResult = "<= 2.5";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_EIGHTEEN_POINTTHREE) >= 0) {
-                                isAccepted = far.compareTo(TWO_POINTFIVE) <= 0;
-                                pl.getFarDetails().setPermissableFar(TWO_POINTFIVE.doubleValue());
-                                expectedResult = "<= 2.5";
+                                expectedResult = LESS_THAN_2_POINT_5;
                         }
 
                 }
@@ -939,22 +951,16 @@ public class Far extends FeatureProcess {
                                 isAccepted = far.compareTo(TWO) <= 0;
                                 pl.getFarDetails().setPermissableFar(TWO.doubleValue());
                                 expectedResult = "<= 2";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_NINE_POINTONE) >= 0
-                                        && roadWidth.compareTo(ROAD_WIDTH_TWELVE_POINTTWO) < 0) {
-                                isAccepted = far.compareTo(TWO_POINTFIVE) <= 0;
-                                pl.getFarDetails().setPermissableFar(TWO_POINTFIVE.doubleValue());
-                                expectedResult = "<= 2.5";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_TWELVE_POINTTWO) >= 0
-                                        && roadWidth.compareTo(ROAD_WIDTH_EIGHTEEN_POINTTHREE) < 0) {
-                                isAccepted = far.compareTo(TWO_POINTFIVE) <= 0;
-                                pl.getFarDetails().setPermissableFar(TWO_POINTFIVE.doubleValue());
-                                expectedResult = "<= 2.5";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_EIGHTEEN_POINTTHREE) >= 0
-                                        && roadWidth.compareTo(ROAD_WIDTH_TWENTYFOUR_POINTFOUR) < 0) {
-                                isAccepted = far.compareTo(TWO_POINTFIVE) <= 0;
-                                pl.getFarDetails().setPermissableFar(TWO_POINTFIVE.doubleValue());
-                                expectedResult = "<= 2.5";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_TWENTYFOUR_POINTFOUR) >= 0
+							} else if ((roadWidth.compareTo(ROAD_WIDTH_NINE_POINTONE) >= 0
+									&& roadWidth.compareTo(ROAD_WIDTH_TWELVE_POINTTWO) < 0)
+									|| (roadWidth.compareTo(ROAD_WIDTH_TWELVE_POINTTWO) >= 0
+											&& roadWidth.compareTo(ROAD_WIDTH_EIGHTEEN_POINTTHREE) < 0)
+									|| (roadWidth.compareTo(ROAD_WIDTH_EIGHTEEN_POINTTHREE) >= 0
+											&& roadWidth.compareTo(ROAD_WIDTH_TWENTYFOUR_POINTFOUR) < 0)) {
+								isAccepted = far.compareTo(TWO_POINTFIVE) <= 0;
+								pl.getFarDetails().setPermissableFar(TWO_POINTFIVE.doubleValue());
+								expectedResult = LESS_THAN_2_POINT_5;
+							} else if (roadWidth.compareTo(ROAD_WIDTH_TWENTYFOUR_POINTFOUR) >= 0
                                         && roadWidth.compareTo(ROAD_WIDTH_TWENTYSEVEN_POINTFOUR) < 0) {
                                 isAccepted = far.compareTo(THREE) <= 0;
                                 pl.getFarDetails().setPermissableFar(THREE.doubleValue());
@@ -973,7 +979,7 @@ public class Far extends FeatureProcess {
                 }
 
                 String occupancyName = occupancyType.getType().getName();
-                if (errors.isEmpty() && StringUtils.isNotBlank(expectedResult)) {
+                if (errors.isEmpty() && isNotBlank(expectedResult)) {
                         buildResult(pl, occupancyName, far, typeOfArea, roadWidth, expectedResult, isAccepted);
                 }
         }
@@ -981,7 +987,7 @@ public class Far extends FeatureProcess {
         private void processFarNonResidential(Plan pl, OccupancyTypeHelper occupancyType, BigDecimal far, String typeOfArea,
                         BigDecimal roadWidth, HashMap<String, String> errors) {
 
-                String expectedResult = StringUtils.EMPTY;
+                String expectedResult = EMPTY;
                 boolean isAccepted = false;
 
                 if (typeOfArea.equalsIgnoreCase(OLD)) {
@@ -993,27 +999,18 @@ public class Far extends FeatureProcess {
                                 isAccepted = far.compareTo(ONE_POINTTWO) <= 0;
                                 pl.getFarDetails().setPermissableFar(TWO.doubleValue());
                                 expectedResult = "<= 1.2";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_THREE_POINTSIX) >= 0
-                                        && roadWidth.compareTo(ROAD_WIDTH_FOUR_POINTEIGHT) < 0) {
-                                isAccepted = far.compareTo(BigDecimal.ZERO) >= 0;
-                                pl.getFarDetails().setPermissableFar(BigDecimal.ZERO.doubleValue());
-                                expectedResult = "0";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_FOUR_POINTEIGHT) >= 0
-                                        && roadWidth.compareTo(ROAD_WIDTH_SIX_POINTONE) < 0) {
-                                isAccepted = far.compareTo(BigDecimal.ZERO) >= 0;
-                                pl.getFarDetails().setPermissableFar(BigDecimal.ZERO.doubleValue());
-                                expectedResult = "0";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_SIX_POINTONE) >= 0
-                                        && roadWidth.compareTo(ROAD_WIDTH_NINE_POINTONE) < 0) {
-                                isAccepted = far.compareTo(BigDecimal.ZERO) >= 0;
-                                pl.getFarDetails().setPermissableFar(BigDecimal.ZERO.doubleValue());
-                                expectedResult = "0";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_NINE_POINTONE) >= 0
-                                        && roadWidth.compareTo(ROAD_WIDTH_TWELVE_POINTTWO) < 0) {
-                                isAccepted = far.compareTo(BigDecimal.ZERO) >= 0;
-                                pl.getFarDetails().setPermissableFar(BigDecimal.ZERO.doubleValue());
-                                expectedResult = "0";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_TWELVE_POINTTWO) >= 0
+							} else if ((roadWidth.compareTo(ROAD_WIDTH_THREE_POINTSIX) >= 0
+									&& roadWidth.compareTo(ROAD_WIDTH_FOUR_POINTEIGHT) < 0)
+									|| (roadWidth.compareTo(ROAD_WIDTH_FOUR_POINTEIGHT) >= 0
+											&& roadWidth.compareTo(ROAD_WIDTH_SIX_POINTONE) < 0)
+									|| (roadWidth.compareTo(ROAD_WIDTH_SIX_POINTONE) >= 0
+											&& roadWidth.compareTo(ROAD_WIDTH_NINE_POINTONE) < 0)
+									|| (roadWidth.compareTo(ROAD_WIDTH_NINE_POINTONE) >= 0
+											&& roadWidth.compareTo(ROAD_WIDTH_TWELVE_POINTTWO) < 0)) {
+								isAccepted = far.compareTo(BigDecimal.ZERO) >= 0;
+								pl.getFarDetails().setPermissableFar(BigDecimal.ZERO.doubleValue());
+								expectedResult = "0";
+							} else if (roadWidth.compareTo(ROAD_WIDTH_TWELVE_POINTTWO) >= 0
                                         && roadWidth.compareTo(ROAD_WIDTH_EIGHTEEN_POINTTHREE) < 0) {
                                 isAccepted = far.compareTo(TWO) <= 0;
                                 pl.getFarDetails().setPermissableFar(TWO.doubleValue());
@@ -1021,7 +1018,7 @@ public class Far extends FeatureProcess {
                         } else if (roadWidth.compareTo(ROAD_WIDTH_TWENTYFOUR_POINTFOUR) >= 0) {
                                 isAccepted = far.compareTo(TWO_POINTFIVE) <= 0;
                                 pl.getFarDetails().setPermissableFar(TWO_POINTFIVE.doubleValue());
-                                expectedResult = "<= 2.5";
+                                expectedResult = LESS_THAN_2_POINT_5;
                         }
 
                 }
@@ -1030,32 +1027,26 @@ public class Far extends FeatureProcess {
                         if (roadWidth.compareTo(ROAD_WIDTH_SIX_POINTONE) < 0) {
                                 errors.put(NEW_AREA_ERROR, NEW_AREA_ERROR_MSG);
                                 pl.addErrors(errors);
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_SIX_POINTONE) >= 0
-                                        && roadWidth.compareTo(ROAD_WIDTH_NINE_POINTONE) < 0) {
-                                isAccepted = far.compareTo(BigDecimal.ZERO) >= 0;
-                                pl.getFarDetails().setPermissableFar(BigDecimal.ZERO.doubleValue());
-                                expectedResult = "0";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_NINE_POINTONE) >= 0
-                                        && roadWidth.compareTo(ROAD_WIDTH_TWELVE_POINTTWO) < 0) {
-                                isAccepted = far.compareTo(BigDecimal.ZERO) >= 0;
-                                pl.getFarDetails().setPermissableFar(BigDecimal.ZERO.doubleValue());
-                                expectedResult = "0";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_TWELVE_POINTTWO) >= 0
+							} else if ((roadWidth.compareTo(ROAD_WIDTH_SIX_POINTONE) >= 0
+									&& roadWidth.compareTo(ROAD_WIDTH_NINE_POINTONE) < 0)
+									|| (roadWidth.compareTo(ROAD_WIDTH_NINE_POINTONE) >= 0
+											&& roadWidth.compareTo(ROAD_WIDTH_TWELVE_POINTTWO) < 0)) {
+								isAccepted = far.compareTo(BigDecimal.ZERO) >= 0;
+								pl.getFarDetails().setPermissableFar(BigDecimal.ZERO.doubleValue());
+								expectedResult = "0";
+							} else if (roadWidth.compareTo(ROAD_WIDTH_TWELVE_POINTTWO) >= 0
                                         && roadWidth.compareTo(ROAD_WIDTH_EIGHTEEN_POINTTHREE) < 0) {
                                 isAccepted = far.compareTo(TWO) <= 0;
                                 pl.getFarDetails().setPermissableFar(TWO.doubleValue());
                                 expectedResult = "<= 2";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_EIGHTEEN_POINTTHREE) >= 0
-                                        && roadWidth.compareTo(ROAD_WIDTH_TWENTYFOUR_POINTFOUR) < 0) {
-                                isAccepted = far.compareTo(TWO_POINTFIVE) <= 0;
-                                pl.getFarDetails().setPermissableFar(TWO_POINTFIVE.doubleValue());
-                                expectedResult = "<= 2.5";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_TWENTYFOUR_POINTFOUR) >= 0
-                                        && roadWidth.compareTo(ROAD_WIDTH_TWENTYSEVEN_POINTFOUR) < 0) {
-                                isAccepted = far.compareTo(TWO_POINTFIVE) <= 0;
-                                pl.getFarDetails().setPermissableFar(TWO_POINTFIVE.doubleValue());
-                                expectedResult = "<= 2.5";
-                        } else if (roadWidth.compareTo(ROAD_WIDTH_TWENTYSEVEN_POINTFOUR) >= 0
+							} else if ((roadWidth.compareTo(ROAD_WIDTH_EIGHTEEN_POINTTHREE) >= 0
+									&& roadWidth.compareTo(ROAD_WIDTH_TWENTYFOUR_POINTFOUR) < 0)
+									|| (roadWidth.compareTo(ROAD_WIDTH_TWENTYFOUR_POINTFOUR) >= 0
+											&& roadWidth.compareTo(ROAD_WIDTH_TWENTYSEVEN_POINTFOUR) < 0)) {
+								isAccepted = far.compareTo(TWO_POINTFIVE) <= 0;
+								pl.getFarDetails().setPermissableFar(TWO_POINTFIVE.doubleValue());
+								expectedResult = LESS_THAN_2_POINT_5;
+							} else if (roadWidth.compareTo(ROAD_WIDTH_TWENTYSEVEN_POINTFOUR) >= 0
                                         && roadWidth.compareTo(ROAD_WIDTH_THIRTY_POINTFIVE) < 0) {
                                 isAccepted = far.compareTo(THREE) <= 0;
                                 pl.getFarDetails().setPermissableFar(THREE.doubleValue());
@@ -1070,7 +1061,7 @@ public class Far extends FeatureProcess {
 
                 String occupancyName = occupancyType.getType().getName();
                 
-                if (errors.isEmpty() && StringUtils.isNotBlank(expectedResult)) {
+                if (errors.isEmpty() && isNotBlank(expectedResult)) {
                         buildResult(pl, occupancyName, far, typeOfArea, roadWidth, expectedResult, isAccepted);
                 }
         }
@@ -1078,7 +1069,7 @@ public class Far extends FeatureProcess {
         private void processFarForGBDOccupancy(Plan pl, OccupancyTypeHelper occupancyType, BigDecimal far,
                     String typeOfArea, BigDecimal roadWidth, HashMap<String, String> errors) {
         
-                String expectedResult = StringUtils.EMPTY;
+                String expectedResult = EMPTY;
                 boolean isAccepted = false;
         
                 if (typeOfArea.equalsIgnoreCase(OLD)) {
@@ -1089,7 +1080,7 @@ public class Far extends FeatureProcess {
                     } else {
                         isAccepted = far.compareTo(ONE_POINTFIVE) <= 0;
                         pl.getFarDetails().setPermissableFar(ONE_POINTFIVE.doubleValue());
-                        expectedResult = "<=" + ONE_POINTFIVE;
+                        expectedResult = LESS_THAN_OR_EQUAL + ONE_POINTFIVE;
                     }
         
                 }
@@ -1102,7 +1093,7 @@ public class Far extends FeatureProcess {
                     } else {
                         isAccepted = far.compareTo(ONE_POINTFIVE) <= 0;
                         pl.getFarDetails().setPermissableFar(ONE_POINTFIVE.doubleValue());
-                        expectedResult = "<=" + ONE_POINTFIVE;
+                        expectedResult = LESS_THAN_OR_EQUAL + ONE_POINTFIVE;
                     }
         
                 }
@@ -1117,15 +1108,15 @@ public class Far extends FeatureProcess {
                     if (G_PHI.equalsIgnoreCase(code)) {
                         isAccepted = far.compareTo(POINTFIVE) <= 0;
                         pl.getFarDetails().setPermissableFar(POINTFIVE.doubleValue());
-                        expectedResult = "<=" + POINTFIVE;
+                        expectedResult = LESS_THAN_OR_EQUAL + POINTFIVE;
                     } else if (G_NPHI.equalsIgnoreCase(code)) {
                         isAccepted = far.compareTo(ONE_POINTFIVE) <= 0;
                         pl.getFarDetails().setPermissableFar(ONE_POINTFIVE.doubleValue());
-                        expectedResult = "<=" + ONE_POINTFIVE;
+                        expectedResult = LESS_THAN_OR_EQUAL + ONE_POINTFIVE;
                     }
                 }
         
-                if (errors.isEmpty() && StringUtils.isNotBlank(expectedResult)) {
+                if (errors.isEmpty() && isNotBlank(expectedResult)) {
                     buildResult(pl, occupancyName, far, typeOfArea, roadWidth, expectedResult, isAccepted);
                 }
             }
@@ -1133,7 +1124,7 @@ public class Far extends FeatureProcess {
         private void processFarHaazardous(Plan pl, OccupancyTypeHelper occupancyType, BigDecimal far, String typeOfArea,
                         BigDecimal roadWidth, HashMap<String, String> errors) {
 
-                String expectedResult = StringUtils.EMPTY;
+                String expectedResult = EMPTY;
                 boolean isAccepted = false;
 
                 if (typeOfArea.equalsIgnoreCase(OLD)) {
@@ -1143,7 +1134,7 @@ public class Far extends FeatureProcess {
                         } else {
                                 isAccepted = far.compareTo(POINTFIVE) <= 0;
                                 pl.getFarDetails().setPermissableFar(POINTFIVE.doubleValue());
-                                expectedResult = "<=" + POINTFIVE;
+                                expectedResult = LESS_THAN_OR_EQUAL + POINTFIVE;
                         }
 
                 }
@@ -1155,14 +1146,14 @@ public class Far extends FeatureProcess {
                         } else {
                                 isAccepted = far.compareTo(POINTFIVE) <= 0;
                                 pl.getFarDetails().setPermissableFar(POINTFIVE.doubleValue());
-                                expectedResult = "<=" + POINTFIVE;
+                                expectedResult = LESS_THAN_OR_EQUAL + POINTFIVE;
                         }
 
                 }
 
                 String occupancyName = occupancyType.getType().getName();
                 
-                if (errors.isEmpty() && StringUtils.isNotBlank(expectedResult)) {
+                if (errors.isEmpty() && isNotBlank(expectedResult)) {
                         buildResult(pl, occupancyName, far, typeOfArea, roadWidth, expectedResult, isAccepted);
                 }
         }
@@ -1192,18 +1183,6 @@ public class Far extends FeatureProcess {
 
                 scrutinyDetail.getDetail().add(details);
                 pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
-        }
-
-        private ScrutinyDetail getFarScrutinyDetail(String key) {
-                ScrutinyDetail scrutinyDetail = new ScrutinyDetail();
-                scrutinyDetail.addColumnHeading(1, RULE_NO);
-                scrutinyDetail.addColumnHeading(2, "Area Type");
-                scrutinyDetail.addColumnHeading(3, "Road Width");
-                scrutinyDetail.addColumnHeading(4, PERMISSIBLE);
-                scrutinyDetail.addColumnHeading(5, PROVIDED);
-                scrutinyDetail.addColumnHeading(6, STATUS);
-                scrutinyDetail.setKey(key);
-                return scrutinyDetail;
         }
 
         @Override
