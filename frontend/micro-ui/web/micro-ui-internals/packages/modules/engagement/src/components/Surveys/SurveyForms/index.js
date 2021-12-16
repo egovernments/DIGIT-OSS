@@ -25,7 +25,7 @@ const CreateNewSurvey = ({ t, initialFormValues, onSubmit, isFormDisabled = fals
   }, []);
 
   return (
-    <div>
+    <div style={{margin:"8px"}}>
       <form onSubmit={handleSurveyFormSubmit(onSubmit)}>
         <Card>
           <SurveyDetailsForms

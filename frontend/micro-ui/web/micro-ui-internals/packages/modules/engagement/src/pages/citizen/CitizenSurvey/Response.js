@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 const getMessage = (mutation) => {
-
   if (mutation.isSuccess) return mutation.data?.Surveys?.[0]?.uuid;
   return "";
 };
@@ -14,7 +13,7 @@ const BannerPicker = (props) => {
   const { t } = useTranslation();
   return (
     <Banner
-      message={props.mutation.isSuccess ? t(`SURVEY_FORM_CREATED`) : t("SURVEY_FORM_FAILURE")}
+      message={props.mutation.isSuccess ? t(`SURVEY_RESPONSE_SUBMITED`) : t("SURVEY_RESPONSE_FAILED")}
       applicationNumber={getMessage(props.mutation)}
       info={props.mutation.isSuccess ? t("SURVEY_FORM_ID") : ""}
       successful={props.mutation.isSuccess}
@@ -26,9 +25,9 @@ const Acknowledgement = (props) => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const mutation = Digit.Hooks.survey.useCreate();
+  const mutation = Digit.Hooks.survey.useSubmitResponse();
   const { state } = props.location;
-
+  
 
   useEffect(() => {
     const onSuccess = () => {
@@ -43,17 +42,13 @@ const Acknowledgement = (props) => {
     return <Loader />;
   }
 
-
   const survey = mutation.data?.Surveys?.[0];
- 
+  
   return (
     <Card>
-      <BannerPicker
-        t={t}
-        mutation={mutation}
-      />
+      <BannerPicker t={t} mutation={mutation} />
       <CardText>
-        {mutation.isSuccess 
+        {mutation.isSuccess
           ? t(`SURVEY_FORM_CREATION_MESSAGE`, {
               surveyName: survey?.title,
               fromDate: Digit.DateUtils.ConvertTimestampToDate(survey?.startDate),

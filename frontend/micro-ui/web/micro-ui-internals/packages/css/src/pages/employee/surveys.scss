@@ -15,13 +15,13 @@
 }
 
 .newSurveyForm_wrapper {
-  @apply grid p-md bg-grey-light border border-border rounded;
+  @apply grid p-md bg-grey-light border border-border rounded gap-6 ;
   .newSurveyForm_questions {
   }
   .newSurveyForm_answer {
   }
   .newSurveyForm_actions {
-    @apply flex justify-end  gap-4;
+    @apply flex justify-end  gap-4 py-md;
     .checkbox-wrap .label {
       margin-left: 40px;
     }
@@ -62,24 +62,39 @@
   background: transparent;
 }
 
-.pointer{
+.pointer {
   cursor: pointer;
 }
 
-.disabled-btn{
-  @apply pointer-events-none cursor-not-allowed ;
+.disabled-btn {
+  @apply pointer-events-none cursor-not-allowed;
 }
 
-.optionradiobtnwrapper{
+.optionradiobtnwrapper {
   @apply flex gap-2;
 
-  .customradiobutton{
+  .customradiobutton {
     @apply w-6 h-6;
   }
 }
 
-.edit-action-btn{
+.edit-action-btn {
   @apply flex justify-end;
+}
+
+.surveyQuestion-wrapper{
+  @apply grid gap-6;
+}
+
+.question-title {
+  font-size: 18px;
+  line-height: 21px;
+  color: #0b0c0c;
+  font-weight: 700;
+}
+
+.align-columns{
+  @apply grid gap-4;
 }
 
 @screen dt {
