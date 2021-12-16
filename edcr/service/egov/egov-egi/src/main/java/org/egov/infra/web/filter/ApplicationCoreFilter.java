@@ -104,6 +104,9 @@ public class ApplicationCoreFilter implements Filter {
 
     @Value("${app.version}_${app.build.no}")
     private String applicationRelease;
+    
+    @Autowired
+    private ApplicationTenantResolverFilter tenantResolverFilter;
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationCoreFilter.class);
 
@@ -124,7 +127,7 @@ public class ApplicationCoreFilter implements Filter {
     private void prepareRestService(HttpServletRequest req) {
         String requestURL = new StringBuilder().append(ApplicationThreadLocals.getDomainURL())
                 .append(req.getRequestURI()).toString();
-        if (requestURL.contains(ApplicationTenantResolverFilter.tenants.get("state"))
+        if (requestURL.contains(tenantResolverFilter.getTenants().get("state"))
                 && (requestURL.contains("/rest/") || requestURL.contains("/oauth/"))) {
             prepareThreadLocal(ApplicationThreadLocals.getTenantID());
 

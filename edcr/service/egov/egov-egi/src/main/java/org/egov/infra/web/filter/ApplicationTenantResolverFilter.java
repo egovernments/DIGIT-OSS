@@ -83,7 +83,9 @@ import org.egov.infra.validation.exception.ApplicationRestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ApplicationTenantResolverFilter implements Filter {
 
     private static final String STATE = "state";
@@ -94,7 +96,7 @@ public class ApplicationTenantResolverFilter implements Filter {
     @Resource(name = "cities")
     private List<String> cities;
 
-    public static Map<String, String> tenants = new HashMap<>();
+    private Map<String, String> tenants = new HashMap<>();
 
     @Autowired
     private TenantUtils tenantUtils;
@@ -104,6 +106,13 @@ public class ApplicationTenantResolverFilter implements Filter {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationTenantResolverFilter.class);
 
+    public Map<String, String> getTenants() {
+		return tenants;
+	}
+    
+    public void setTenants(Map<String, String> tenants) {
+		this.tenants = tenants;
+	}
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
