@@ -45,7 +45,7 @@
     "lodash.set": "^4.3.2",
     "moment-timezone": "^0.5.28",
     "morgan": "^1.8.0",
-    "pdfmake": "^0.2.2",
+    "pdfmake": "0.2.4",
     "pg": "^8.7.1",
     "qrcode": "^1.4.1",
     "request": "^2.88.0",
