@@ -18,7 +18,7 @@ Vehicle Registry is a system that enables ULB Employees to create and search Veh
 
 ### Swagger API Contract
 
-Link to the swagger API contract [yaml](https://raw.githubusercontent.com/egovernments/municipal-services/master/docs/fsm/Vehicle_Registry_Contract.yaml) and editor link like below
+Link to the swagger API contract [yaml](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/municipal-services/docs/fsm/Vehicle_Registry_Contract.yaml#!/) and editor link like below
 
 
 ### Postman Collection

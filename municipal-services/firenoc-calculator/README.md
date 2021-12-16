@@ -12,7 +12,7 @@ The main objective of the Firenoc calculator module is to create, update, search
 
 ### Swagger API Contract
 
-Please refer to the [Swagger API contarct](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/municipal-services/master/firenoc-calculator/config/docs/contract/fire_noc_calculation_service.yaml#!/) for firenoc calculator to understand the structure of APIs and to have visualization of all internal APIs.
+Please refer to the [Swagger API contarct](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/municipal-services/docs/fire_noc_calculation_service.yaml#!/) for firenoc calculator to understand the structure of APIs and to have visualization of all internal APIs.
 
 
 ## Service Details

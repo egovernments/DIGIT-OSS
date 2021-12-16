@@ -1,0 +1,509 @@
+swagger: '2.0'
+
+info:
+  version: "1.1.0"
+  title: User Service
+  description: User services APIs - to create, update and search users. All individuals interacting with the platform - Citizens, Employees, Contractors, Vendors etc. are considered as users of the platform
+  contact:
+    name: eGov
+    email: info@egovernments.org
+  
+basePath: "/users/v110"
+x-common-path: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml'
+x-api-id: 'org.egov.users'
+#####################################################
+paths:
+  /_create:
+    post:
+      summary: Create a new User.
+      description: |
+        To create new User(s) in the system. API supports bulk creation with max limit as defined in the UserReq. Please note that either whole batch succeeds or fails, there's no partial batch success. To create one user, please pass array with one user object. 
+        
+        Users can be created based on the roles. Users with types as SYSTEM and EMPLOYEE can create other users if their RBAC mapping provides them the permission. Users with CITIZEN type can only create themselves, while EMPLOYEE and SYSTEM type users can also create other EMPLOYEES and CITIZENS.
+        
+        User registration will always be a two step process, where this API will create a non authenticated user (without password) and after verification (using OTP) other user details (including password) can be updated using update user API to complete the user registration process.
+      parameters:
+        - name: users
+          in: body
+          description: Details for the new user + RequestInfo meta data
+          required: true
+          schema:
+            $ref: '#/definitions/UserReq'
+      tags:
+        - Users
+      responses:
+        '201':
+          description: User(s) created sucessfully
+          schema:
+            $ref: '#/definitions/UserRes'
+        '400':
+          description: User(s) creation failed
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+          
+#####################################################
+  /_update:
+      post:
+        summary: Update user API
+        description: |
+          This API will update all user related details based on their type. Following rules apply -
+            1. Username cannot be updated once created
+            2. Password can only be updated by the user itself (CITIZEN or EMPLOYEE) using reissue OTP issued to them
+            3. User can self update mobile number/email by doing OTP verification with old phone/email
+            4. An employee can reset another user mobile number/email after OTP/other necessary validation (need specific privilege)
+        parameters:
+          - name: users
+            in: body
+            description: Request header for the user with new of values.
+            required: true
+            schema:
+              $ref: '#/definitions/UserReq'
+        tags:
+          - Users
+        responses:
+          '200':
+            description: Update user(s) successful
+            schema:
+              $ref: '#/definitions/UserRes'
+          '400':
+            description: Update user(s) failed
+            schema:
+              $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+#####################################################
+  /_search:
+    post:
+      summary: Search the users in the system based on the criterion specified. 
+      description: |
+        Search and get user(s) based on defined search criteria. Currently search parameters are only allowed as HTTP query params. In case multiple parameters are passed user will be searched as an AND combination of all the parameters. Maximum result size is restricted based on the maxlength of Users as defined in UserRes model.
+        
+        By default results will be sorted by UserName
+      parameters:
+        - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo"
+        - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
+        - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/lastChangedSince"
+        - $ref: "#/parameters/userName"
+        - $ref: "#/parameters/active"
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/userType"
+        - $ref: "#/parameters/roleCodes"
+        - $ref: "#/parameters/includeDetails"
+        - $ref: "#/parameters/pageSize"
+        - $ref: "#/parameters/pageNumber"
+        - $ref: "#/parameters/sortUser"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/UserRes"
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      tags:
+       - Users
+#####################################################       
+  /password/_update:
+      post:
+        summary: The user can update his password after login 
+        description: |
+          This API used for update the password after login
+        parameters:
+          - name: update password
+            in: body
+            description: Request header for the user with new of values.
+            required: true
+            schema:
+              $ref: '#/definitions/updatePasswordReq'
+        tags:
+          - Update password
+        responses:
+          '200':
+            description: Updated password successful
+            schema:
+              $ref: '#/definitions/PasswordRes'
+          '400':
+            description: Updated password failed
+            schema:
+              $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'   
+#####################################################              
+  /password/nologin/_update:
+      post:
+        summary: This API act as reset password or forgot password before login
+        description: |
+          This API used for reset the password when user forgot his password   by getting otp Reference through registerd mobile number,
+        parameters:
+          - name: Reset password before login using five digit otp
+            in: body
+            description: Request header for the user with new of values.
+            required: true
+            schema:
+              $ref: '#/definitions/resetpasswordreq'
+        tags:
+          - Update password
+        responses:
+          '200':
+            description: Updated password successful
+            schema:
+              $ref: '#/definitions/PasswordRes'
+          '400':
+            description: Updated password failed
+            schema:
+              $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'     
+#####################################################
+definitions:
+  resetpasswordreq:
+    type: object
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      otpReference:
+        type: string
+        description: otp reference number which sent to registered mobile
+      userName: 
+        type: string
+        description: Registered User name
+      newPassword: 
+        type: string
+        description: New password
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant to which user primarily belongs
+    required:
+      - otpReference
+      - userName
+      - newPassword
+      - tenantId
+#####################################################
+  updatePasswordReq:
+    type: object
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+        
+      
+      existingPassword: 
+        type: string
+        description: Existing password
+      newPassword: 
+        type: string
+        description:  New password
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant to which user primarily belongs
+    required:
+      - existingPassword
+      - newPassword
+      - tenantId    
+#####################################################      
+  PasswordRes:
+    type: object
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+#####################################################
+  User:
+    type: object
+    properties:
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant to which user primarily belongs
+      id:
+        type: integer
+        format: int64
+        description: The unique numeric id of an user. To be deprecated in future.
+      userName:
+        type: string
+        description: The unique username used of the user - this will be used for user login. This needs to be unique within the tenant.
+        minLength: 4
+        maxLength: 64
+      authToken:
+        type: string
+        format: password
+        description: |
+          Authentication token for the user that may be - 
+          1. Password in case of basic auth
+          2. OTP in case of OTP based verification
+          3. OAuth auth token for OAuth based auth
+      salutation:
+        type: string
+        description: The salutation of user name. Example- Mr, Miss, Mrs
+        maxLength: 5
+      name:
+        type: string
+        description: The full name of the user.
+        minLength: 3
+        maxLength: 100
+      gender:
+        type: string
+        description: Gender of the user.
+        items:
+          type: string
+          enum:
+           - MALE
+           - FEMALE
+           - OTHERS
+      mobileNumber:
+        type: string
+        description: Mobile number of the user
+        maxLength: 10
+      emailId:
+        type: string
+        description: Email address of the user
+        maxLength: 128
+      aadhaarNumber:
+        type: string
+        description: Aadhaar number of the user
+        pattern: "[0-9]"
+        maxLength: 12
+      active:
+        type: boolean
+        description: True if the user is active and False if the user is inactive.
+      pwdExpiryDate:
+        type: integer
+        format: int64
+        readOnly: true
+        description: epoch of time when the current auth token (password/OTP) will expire.
+      locale:
+        type: string
+        description: Value will be set to "en_IN".
+        maxLength: 5
+      type:
+        type: string
+        maxLength: 20
+        description : System set value internally. For employee value will be always "EMPLOYEE". For citizen value will be "CITIZEN".
+        items:
+          type: string
+          enum:
+           - EMPLOYEE
+           - CITIZEN
+           - SYSTEM
+      accountLocked:
+        type: boolean
+        default: false
+        description: Set to True if account is locked after several incorrect password attempt. False if account is not locked.
+      roles:
+        #This should ideally extend from accesscontrol service - for now this should suffice
+        type: array
+        description: List of roles that are attached to the user.
+        items:
+         $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/Role"
+      userDetails:
+        $ref: "#/definitions/UserDetails"
+      auditDetails:
+        $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails"
+    required:
+     - userName
+     - name
+     - gender
+     - mobileNumber
+     - active
+     - locale
+     - type
+     - tenantId
+#####################################################   
+  UserDetails:
+    type: object
+    description: Infrequently used details for the user
+    properties:
+      firstName:
+        type: string
+        description: The full name of the user.
+        minLength: 1
+        maxLength: 32
+      middleName:
+        type: string
+        description: The full name of the user.
+        minLength: 1
+        maxLength: 32
+      lastName:
+        type: string
+        description: The full name of the user.
+        minLength: 1
+        maxLength: 32
+      dob:
+        type: string
+        format: date
+        description: Date of birth of the user in dd/mm/yyyy format.
+      altContactNumber:
+        type: string
+        description: Alternate contact number of the user
+        maxLength: 16
+      fatherName:
+        type: string
+        description: User's father's name if available
+        maxLength: 100
+      husbandName:
+        type: string
+        description: Name of user's husband - if applicable
+        maxLength: 100
+      bloodGroup:
+        type: string
+        description: Blood group of the user.
+        maxLength: 3
+        items:
+          type: string
+          enum:
+           - A+
+           - B+
+           - O+
+           - AB+
+           - A-
+           - B-
+           - AB-
+           - O-
+      pan:
+        type: string
+        description: PAN number of the user
+        maxLength: 10
+      permanentAddress:
+        type: string
+        description: Permanent address of the user.
+        maxLength: 300
+      permanentCity:
+        type: string
+        description: City of the permanent address.
+        maxLength: 300
+      permanentPincode:
+        type: string
+        description: Permanent address pincode.
+        maxLength: 6
+      correspondenceCity:
+        type: string
+        description: City of the correspondence address.
+        maxLength: 50
+      correspondencePincode:
+        type: string
+        description: Permanent address pincode.
+        maxLength: 6
+      correspondenceAddress:
+        type: string
+        description: Correspondence address of the user.
+        maxLength: 300
+      signature:
+        type: string
+        description : Image to be loaded for the signature of the employee
+      identificationMark:
+        type: string
+        description: Any identification mark of the person.
+        maxLength: 300
+      photo:
+        type: string
+        description : Image to be loaded for the photo of the user
+#####################################################
+  UserReq:
+    type: object
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      Users:
+        type: array
+        minimum: 1
+        maximum: 100
+        items:
+         $ref: '#/definitions/User'
+    required:
+      - RequestInfo
+      - Users
+#####################################################
+  UserRes:
+    type: object
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      Users:
+        type: array
+        maximum: 500
+        items:
+         $ref: '#/definitions/User'
+         
+parameters:
+  userName:
+    name: userName
+    in: query
+    required: false
+    description: The unique user name of the User.
+    type: string
+    minLength: 0
+    maxLength: 64
+    
+  active:
+    name: active
+    in: query
+    description: True will be set in cases where only active users are needed and False will be set when inactive users are needed and no value will be set when all users are needed.
+    required: false
+    type: boolean
+    format: varchar
+    default: true
+    allowEmptyValue: true
+        
+  id:      
+    name: id
+    in: query
+    description: List of Unique Id of User
+    required: false
+    type: array
+    items:
+      type: integer
+    format: int64
+
+  userType:
+    name: userType
+    in: query
+    required: false
+    description: Defines the type of user. Possible values are as per type enum defined in User object. 
+    type: string
+    minLength: 0
+    maxLength: 64
+    exclusiveMinimum: true
+    exclusiveMaximum: false
+          
+  roleCodes:        
+    name: roleCodes
+    in: query
+    required: false
+    description: roles assigned to the user(roleCodes).Search response will have all users having all roles specified in the request.
+    type: array
+    items:
+      type: string
+
+  includeDetails:
+    name: includeDetails
+    description: parameter to indicate whether UserDetails should be included as a part of User object in the response
+    in: query
+    required: false
+    type: boolean
+    default: false
+  
+  pageSize:
+    name: pageSize
+    in: query
+    description: Number of records returned.
+    type: integer
+    minimum: 0
+    exclusiveMinimum: true
+    maximum: 100
+    exclusiveMaximum: false
+    multipleOf: 10
+    default: 20
+
+  pageNumber:
+    name: pageNumber
+    in: query
+    description: Page number
+    type: integer
+    default: 1
+
+  sortUser:
+    name: sort
+    in: query
+    description: User results will be sorted by name ascending by default if this parameter is not provided.
+    type: array
+    uniqueItems: true
+    minItems: 1
+    maxItems: 3
+    collectionFormat: pipes
+    items:
+      type: string
+      pattern: '[-+](userName|name|gender)'
+    default:
+      - +name

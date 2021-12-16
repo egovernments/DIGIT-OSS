@@ -17,7 +17,7 @@ NA
 
 ### Swagger API Contract
 
-https://raw.githubusercontent.com/egovernments/municipal-services/master/docs/property-services/property-services.yml
+https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/municipal-services/docs/property-services/property-services.yml#!/
 
 ## Service Details
 
