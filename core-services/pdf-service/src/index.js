@@ -946,7 +946,12 @@ export const createNoSave = async (
       });
       doc.on("end", function () {
         var data = Buffer.concat(chunks);
-        fs.createWriteStream(filename).write(data);
+         //fs.createWriteStream(filename).write(data);
+         var tempFile = fs.createWriteStream(filename);
+         tempFile.on('open', function(fd) {
+           tempFile.write(data);
+           tempFile.end();
+         });
         logger.info(
           `createnosave success for pdf with key: ${key}, entityId ${entityIds}`
         );
