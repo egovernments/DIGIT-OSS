@@ -10,7 +10,7 @@ const EditForm = ({ applicationData }) => {
   const { state } = useLocation();
   const [canSubmit, setSubmitValve] = useState(false);
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
-  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", { });
+  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", {});
   const { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "PropertyTax", "CommonFieldsConfig");
 
   useEffect(() => {
@@ -21,6 +21,16 @@ const EditForm = ({ applicationData }) => {
   const defaultValues = {
     originalData: applicationData,
     address: applicationData?.address,
+    owners: applicationData?.owners.map((owner) => ({
+      ...owner,
+      ownerType: { code: owner.ownerType, i18nKey: owner.ownerType },
+      relationship: { code: owner.relationship, i18nKey: `PT_FORM3_${owner.relationship}` },
+      gender: {
+        code: owner.gender,
+        i18nKey: `PT_FORM3_${owner.gender}`,
+        value: owner.gender,
+      },
+    })),
   };
 
   const onFormValueChange = (setValue, formData, formState) => {
@@ -40,11 +50,9 @@ const EditForm = ({ applicationData }) => {
       usageCategory: data?.usageCategoryMinor?.subuagecode ? data?.usageCategoryMinor?.subuagecode : data?.usageCategoryMajor?.code,
       usageCategoryMajor: data?.usageCategoryMajor?.code.split(".")[0],
       usageCategoryMinor: data?.usageCategoryMajor?.code.split(".")[1] || null,
-      propertyType: data?.PropertyType?.code,
       noOfFloors: Number(data?.noOfFloors),
       landArea: Number(data?.landarea),
       superBuiltUpArea: Number(data?.landarea),
-      propertyType: data?.PropertyType?.code,
       source: "MUNICIPAL_RECORDS", // required
       channel: "CFC_COUNTER", // required
       documents: applicationData?.documents.map((old) => {
@@ -52,12 +60,17 @@ const EditForm = ({ applicationData }) => {
         let newDoc = data?.documents?.documents?.find((e) => e.documentType.includes(dt[0] + "." + dt[1]));
         return { ...old, ...newDoc };
       }),
-      units: [...(applicationData?.units?.map((old) => ({ ...old, active: false })) || []), ...(data?.units?.map(unit => { return { ...unit, active: true } }) || [])],
+      units: [
+        ...(applicationData?.units?.map((old) => ({ ...old, active: false })) || []),
+        ...(data?.units?.map((unit) => {
+          return { ...unit, active: true };
+        }) || []),
+      ],
       workflow: state.workflow,
       applicationStatus: "UPDATE",
     };
     if (state?.workflow?.action === "OPEN") {
-      formData.units = formData.units.filter(unit => unit.active);
+      formData.units = formData.units.filter((unit) => unit.active);
     }
     history.push("/digit-ui/employee/pt/response", { Property: formData, key: "UPDATE", action: "SUBMIT" });
   };
@@ -68,7 +81,7 @@ const EditForm = ({ applicationData }) => {
 
   /* use newConfig instead of commonFields for local development in case needed */
 
-  const configs = commonFields?commonFields:newConfig;
+  const configs = commonFields ? commonFields : newConfig;
 
   return (
     <FormComposer
