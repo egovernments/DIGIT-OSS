@@ -52,6 +52,10 @@ const PTCard = () => {
       label: t("ES_TITLE_NEW_REGISTRATION"),
       link: `/digit-ui/employee/pt/new-application`,
     });
+    propsForModuleCard.links.push({
+      label: t("ES_COMMON_APPLICATION_SEARCH"),
+      link: `/digit-ui/employee/pt/application-search`,
+    });
   }
 
   return <EmployeeModuleCard {...propsForModuleCard} />;
