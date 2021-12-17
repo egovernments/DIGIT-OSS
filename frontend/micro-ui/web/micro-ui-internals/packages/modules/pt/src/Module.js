@@ -56,6 +56,8 @@ import PropertyMarketValue from "./pageComponents/Mutate/PropertyMarketValue";
 import PTReasonForTransfer from "./pageComponents/Mutate/ReasonForTransfer";
 import PTRegistrationDocument from "./pageComponents/Mutate/RegistrationDocument";
 import TransferProof from "./pageComponents/Mutate/transferReasonDocument";
+import UpdateNumber from "./pages/citizen/MyProperties/updateNumber";
+import EmployeeUpdateOwnerNumber from "./pages/employee/updateNumber";
 
 import EmployeeApp from "./pages/employee";
 import PTCard from "./components/PTCard";
@@ -114,6 +116,8 @@ const componentsToRegister = {
   PTRegistrationDocument,
   UnderStateAquire,
   TransferProof,
+  UpdateNumber,
+  EmployeeUpdateOwnerNumber,
   PropertySearchForm,
   PropertySearchResults,
   PTMyPayments,

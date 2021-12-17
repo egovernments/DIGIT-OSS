@@ -1,4 +1,15 @@
-import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
+import {
+  Card,
+  CardSubHeader,
+  EditIcon,
+  Header,
+  LinkButton,
+  Loader,
+  PopUp,
+  Row,
+  StatusTable,
+  SubmitBar,
+} from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
@@ -14,7 +25,6 @@ const setBillData = async (tenantId, propertyIds, updatefetchBillData, updateCan
       consumerCode: propertyIds,
     });
   }
-
   updatefetchBillData(billData);
   updateCanFetchBillData({
     loading: false,
@@ -36,6 +46,13 @@ const PropertyInformation = () => {
   const [enableAudit, setEnableAudit] = useState(false);
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const { data: UpdateNumberConfig } = Digit.Hooks.useCommonMDMS(Digit.ULBService.getStateId(),"PropertyTax",["UpdateNumber"],{
+    select: (data) => {
+      return data?.PropertyTax?.UpdateNumber?.[0];
+    },
+    retry:false,
+    enable:false
+  });
 
   const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch({ filters: { propertyIds } }, { filters: { propertyIds } });
 
@@ -46,10 +63,12 @@ const PropertyInformation = () => {
     },
     {
       enabled: enableAudit,
-      select: (d) => d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
+      select: (d) =>
+        d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
     }
   );
 
+  const [popup, showPopup] = useState(false);
   const [billData, updateCanFetchBillData] = useState({
     loading: false,
     loaded: false,
@@ -59,6 +78,7 @@ const PropertyInformation = () => {
   const [fetchBillData, updatefetchBillData] = useState({});
 
   const [property, setProperty] = useState(() => data?.Properties[0] || " ");
+  const mutation = Digit.Hooks.pt.usePropertyAPI(property?.tenantId, false);
 
   let specialCategoryDoc = [];
   property?.documents?.filter(ob => ob.documentType.includes("SPECIALCATEGORYPROOF")).map((doc) => {
@@ -75,9 +95,9 @@ const PropertyInformation = () => {
   useEffect(() => {
     if (auditData?.[0]) {
       const property = auditData?.[0] || {};
-      property.owners = property?.owners?.filter(owner => owner.status == "ACTIVE");
-      setProperty(property)
-    };
+      property.owners = property?.owners?.filter((owner) => owner.status == "ACTIVE");
+      setProperty(property);
+    }
   }, [enableAudit, auditData]);
 
   sessionStorage.setItem("pt-property", JSON.stringify(property));
@@ -135,6 +155,7 @@ const PropertyInformation = () => {
     }
     return <LinkButton label={t("PT_OWNER_HISTORY")} className="check-page-link-button" onClick={routeTo} />;
   };
+  const UpdatePropertyNumberComponent = Digit?.ComponentRegistryService?.getComponent("UpdateNumber");
   return (
     <React.Fragment>
       <Header>{t("PT_PROPERTY_INFORMATION")}</Header>
@@ -159,7 +180,7 @@ const PropertyInformation = () => {
               text={
                 `${t(
                   (property.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                  (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory)
+                    (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory)
                 )}` || t("CS_NA")
               }
             />
@@ -186,8 +207,8 @@ const PropertyInformation = () => {
                           text={
                             `${t(
                               (property.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPSUBUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                              (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory) +
-                              (property.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
+                                (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory) +
+                                (property.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
                             )}` || t("CS_NA")
                           }
                         />
@@ -227,7 +248,19 @@ const PropertyInformation = () => {
                     />
                     <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${owner?.gender ? owner?.gender.toLowerCase() : t("CS_NA")}`} />
                     {property?.institution && <Row label={t("PT_LANDLINE_NUMBER_FLOATING_LABEL")} text={`${owner?.altContactNumber || t("CS_NA")}`} />}
-                    <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={`${t(owner?.mobileNumber)}` || t("CS_NA")} />
+                    <Row
+                      label={t("PT_FORM3_OWNERSHIP_TYPE")}
+                      text={`${property?.ownershipCategory ? t(`PT_OWNERSHIP_${property?.ownershipCategory}`) : t("CS_NA")}`}
+                    />
+                    <Row
+                    label={t("PT_FORM3_MOBILE_NUMBER")}
+                    text={`${t(owner?.mobileNumber)}` || t("CS_NA")}
+                    actionButton={
+                    property?.status === "ACTIVE"&&owner?.mobileNumber&&Digit.UserService.getUser()?.info?.mobileNumber&&owner.mobileNumber===Digit.UserService.getUser()?.info?.mobileNumber&&<div onClick={() => showPopup({ name: owner?.name, mobileNumber: owner?.mobileNumber, ownerIndex: index })}>
+                    <EditIcon />
+                    </div>
+                    }
+                    />         
                     {property?.institution && property?.institution?.designation && <Row label={t("Designation")} text={`${property?.institution?.designation || t("CS_NA")}`} />}
                     <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={`${owner?.fatherOrHusbandName || t("CS_NA")}`} />
                     <Row label={t("PT_FORM3_RELATIONSHIP")} text={`${owner?.relationship || t("CS_NA")}`} />
@@ -258,6 +291,37 @@ const PropertyInformation = () => {
               </div>
             )}
           </div>
+          {popup && (
+            <PopUp>
+              <UpdatePropertyNumberComponent
+                showPopup={showPopup}
+                name={popup?.name}
+                UpdateNumberConfig={UpdateNumberConfig}
+                mobileNumber={popup?.mobileNumber}
+                t={t}
+                onValidation={(data, showToast) => {
+                  let newProp = { ...property };
+                  newProp.owners[popup?.ownerIndex].mobileNumber = data.mobileNumber;
+                  newProp.creationReason = "UPDATE";
+                  newProp.workflow = null;
+                  mutation.mutate(
+                    {
+                      Property: newProp,
+                    },
+                    {
+                      onError: () => console.error("error"),
+                      onSuccess: async (successRes) => {
+                        showToast();
+                        setTimeout(() => {
+                          window.location.reload();
+                        }, 3000);
+                      },
+                    }
+                  );
+                }}
+              ></UpdatePropertyNumberComponent>
+            </PopUp>
+          )}
         </Card>
       </div>
     </React.Fragment>
