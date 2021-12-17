@@ -130,7 +130,8 @@ import {
   PMBIconSolid,
   EventsIconSolid,
   SurveyIconSolid,
-  DustbinIcon
+  DustbinIcon,
+  InfoBannerIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -288,6 +289,7 @@ export {
   DustbinIcon,
   GenericFileIcon,
   HelpIcon,
+  InfoBannerIcon,
   NotificationBell,
   ImageIcon,
   OBPSIconSolidBg,

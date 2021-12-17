@@ -38,8 +38,9 @@ import SearchPropertyCitizen from "./pages/citizen/SearchProperty/searchProperty
 import SearchResultCitizen from "./pages/citizen/SearchResults";
 import PTCheckPage from "./pages/citizen/Create/CheckPage";
 import PTAcknowledgement from "./pages/citizen/Create/PTAcknowledgement";
+import PropertySearchForm from './components/search/PropertySearchForm';
+import PropertySearchResults from './components/search/PropertySearchResults';
 import { PTMyPayments } from "./pages/citizen/MyPayments";
-
 import PropertyInformation from "./pages/citizen/MyProperties/propertyInformation";
 import PTWFCaption from "./pageComponents/PTWFCaption";
 import PTWFReason from "./pageComponents/PTWFReason";
@@ -113,6 +114,8 @@ const componentsToRegister = {
   PTRegistrationDocument,
   UnderStateAquire,
   TransferProof,
+  PropertySearchForm,
+  PropertySearchResults,
   PTMyPayments,
 };
 
@@ -132,6 +135,12 @@ export const PTModule = ({ stateCode, userType, tenants }) => {
   addComponentsToRegistry();
 
   Digit.SessionStorage.set("PT_TENANTS", tenants);
+  useEffect(()=>userType === "employee"&&Digit.LocalizationService.getLocale({ 
+    modules: [`rainmaker-${Digit.ULBService.getCurrentTenantId()}`],
+     locale: Digit.StoreData.getCurrentLanguage(), 
+     tenantId: Digit.ULBService.getCurrentTenantId()
+    }),
+   []);
 
   if (userType === "employee") {
     return <EmployeeApp path={path} url={url} userType={userType} />;

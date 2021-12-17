@@ -40,6 +40,7 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
       queries: {
         staleTime: 15 * 60 * 1000,
         cacheTime: 30 * 60 * 1000,
+        retryDelay: attemptIndex => Math.min(1000 * 3 ** attemptIndex, 60000)
       },
     },
   });

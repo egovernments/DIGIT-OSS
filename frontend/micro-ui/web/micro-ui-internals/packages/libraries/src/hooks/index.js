@@ -54,6 +54,7 @@ import useWorkflowData from "./fsm/useWorkflowData";
 import useRouteSubscription from "./fsm/useRouteSubscription";
 import useDsoSearch from "./fsm/useDsoSearch";
 import usePropertySearch from "./pt/usePropertySearch";
+import usePropertySearchWithDue from "./pt/usePropertySearchWithDue";
 import usePropertyPayment from "./pt/usePropertyPayment";
 import useApplicationDetail from "./fsm/useApplicationDetail";
 import useApplicationActions from "./fsm/useApplicationActions";
@@ -217,6 +218,7 @@ const pt = {
   usePropertySearch,
   usePropertyPayment,
   usePropertyMDMS,
+  usePropertySearchWithDue,
   usePropertyAPI,
   usePropertyDocumentSearch,
   useTenants: useTenantsPT,
