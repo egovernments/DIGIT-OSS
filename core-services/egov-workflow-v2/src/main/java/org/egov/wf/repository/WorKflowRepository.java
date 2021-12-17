@@ -161,6 +161,7 @@ public class WorKflowRepository {
         String query = queryBuilder.getAutoEscalatedApplicationsFinalQuery(requestInfo,criteria, preparedStmtList);
         log.info(query);
         List<String> escalatedApplicationsBusinessIds = jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
+        log.info(preparedStmtList.toString());
         preparedStmtList.clear();
         log.info(escalatedApplicationsBusinessIds.toString());
         // 3rd step is to do a simple search on these business ids(DONE IN WORKFLOW SERVICE)
@@ -171,6 +172,8 @@ public class WorKflowRepository {
     public Integer getEscalatedApplicationsCount(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getEscalatedApplicationsCount(requestInfo,criteria, (ArrayList<Object>) preparedStmtList);
+        log.info(query);
+        log.info(preparedStmtList.toString());
         Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
         return count;
     }
