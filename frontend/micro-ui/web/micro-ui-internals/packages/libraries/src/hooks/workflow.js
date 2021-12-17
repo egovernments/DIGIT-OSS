@@ -5,10 +5,8 @@ const useWorkflowDetails = ({ tenantId, id, moduleCode, role = "CITIZEN", servic
 
   const staleDataConfig = { staleTime: Infinity };
 
-  // console.log("ok this ", getStaleData, staleDataConfig);
-
   const { isLoading, error, isError, data } = useQuery(
-    ["workFlowDetails", tenantId, id, moduleCode, role],
+    ["workFlowDetails", tenantId, id, moduleCode, role, config],
     () => Digit.WorkflowService.getDetailsById({ tenantId, id, moduleCode, role }),
     getStaleData ? { ...staleDataConfig, ...config } : config
   );

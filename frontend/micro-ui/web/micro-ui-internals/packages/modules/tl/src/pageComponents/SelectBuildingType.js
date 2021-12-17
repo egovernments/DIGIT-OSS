@@ -4,7 +4,7 @@ import { FormStep, RadioOrSelect, RadioButtons, CitizenInfoLabel } from "@egover
 
 const SelectBuildingType = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const [BuildingType, setBuildingType] = useState(formData?.TradeDetails?.BuildingType);
   const { isLoading, data: Menu = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "StructureType");
   const isEdit = window.location.href.includes("/edit-application/")||window.location.href.includes("renew-trade");
@@ -23,7 +23,6 @@ const SelectBuildingType = ({ t, config, onSelect, userType, formData }) => {
 
   const onSkip = () => onSelect();
 
-  // const propertyOwnerShipCategory = Digit.Hooks.pt.useMDMS("pb", "PropertyTax", "OwnerShipCategory", {});
   function selectBuildingType(value) {
     setBuildingType(value);
   }

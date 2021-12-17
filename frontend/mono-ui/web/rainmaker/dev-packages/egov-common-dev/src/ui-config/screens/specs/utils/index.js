@@ -758,6 +758,7 @@ export const generateBill = async (dispatch, consumerCode, tenantId, businessSer
 
       if (payload && payload.Bill[0]) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
+        localStorage.setItem("pay-bill-mobile",payload.Bill[0].mobileNumber);
         loadArrearsDetails(dispatch, payload.Bill);
         const estimateData = createEstimateData(payload.Bill[0], payload.Bill[0].totalAmount);
         estimateData &&

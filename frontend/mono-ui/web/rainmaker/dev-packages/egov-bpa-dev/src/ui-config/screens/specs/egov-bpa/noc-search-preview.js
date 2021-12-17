@@ -1,21 +1,18 @@
+import commonConfig from "config/common.js";
 import {
   getCommonCard,
   getCommonContainer,
-  getCommonGrayCard,
-  getCommonSubHeader,
-  getCommonHeader,
-  getLabelWithValue,
-  getCommonTitle,
-  getLabel,
+  getCommonGrayCard, getCommonHeader, getCommonSubHeader, getCommonTitle,
+  getLabel, getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import get from "lodash/get";
-import set from "lodash/set";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
+import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils/api";
 import { getNocSearchResults } from "../../../../ui-utils/commons";
 import { checkValueForNA, ifUserRoleExists } from "../utils/index";
@@ -52,7 +49,7 @@ const titlebar2 = {
       uiFramework: "custom-atoms-local",
       moduleName: "egov-bpa",
       componentPath: "NocNumber",
-      gridDefination: {},
+      gridDefination: { },
       props: {
         number: "NA"
       },
@@ -126,23 +123,23 @@ const applicationOverview = getCommonContainer({
       onClickDefination: {
         action: "condition",
         callBack: (state, dispatch) => {
-          let nocData = get( state.screenConfiguration.preparedFinalObject, "Noc", "");
+          let nocData = get(state.screenConfiguration.preparedFinalObject, "Noc", "");
           let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
           let appendUrl = window.location.origin;
           if (process.env.NODE_ENV === "production") {
             appendUrl = `${window.location.origin}/${checkingApp}`
           }
-          if(nocData && nocData.source === "BPA"){
-            let bpaAppurl = appendUrl +'/egov-bpa/search-preview?applicationNumber='+nocData.sourceRefId+'&tenantId='+nocData.tenantId;
+          if (nocData && nocData.source === "BPA") {
+            let bpaAppurl = appendUrl + '/egov-bpa/search-preview?applicationNumber=' + nocData.sourceRefId + '&tenantId=' + nocData.tenantId;
             window.open(bpaAppurl, '_blank');
 
-          }else if(nocData && nocData.source === "BPA_OC") {
-            let bpaAppurl = appendUrl +'/oc-bpa/search-preview?applicationNumber='+nocData.sourceRefId+'&tenantId='+nocData.tenantId;
+          } else if (nocData && nocData.source === "BPA_OC") {
+            let bpaAppurl = appendUrl + '/oc-bpa/search-preview?applicationNumber=' + nocData.sourceRefId + '&tenantId=' + nocData.tenantId;
             window.open(bpaAppurl, '_blank');
           }
         }
       }
-      
+
     },
   }),
 });
@@ -201,7 +198,7 @@ const setSearchResponse = async (
     },
     { key: "applicationNo", value: applicationNumber }
   ]);
-  dispatch(prepareFinalObject("Noc", get(response, "Noc[0]", {})));
+  dispatch(prepareFinalObject("Noc", get(response, "Noc[0]", { })));
   const queryObject = [
     { key: "tenantId", value: tenantId },
     { key: "businessServices", value: get(response, "Noc[0].additionalDetails.workflowCode") }
@@ -240,7 +237,7 @@ const setSearchResponse = async (
 const getRequiredMdmsDetails = async (state, dispatch, action) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getTenantId().split('.')[0],
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "common-masters",
@@ -312,23 +309,23 @@ export const prepareDocsInEmployee = (state, dispatch, action) => {
   }
   const bpaDocuments = documentsList;
   let documentsContract = [];
-  let tempDoc = {};
+  let tempDoc = { };
 
   if (bpaDocuments && bpaDocuments.length > 0) {
     bpaDocuments.forEach(doc => {
-      let card = {};
+      let card = { };
       card["code"] = doc.documentType.split(".")[0];
       card["title"] = doc.documentType.split(".")[0];
       card["cards"] = [];
       tempDoc[doc.documentType.split(".")[0]] = card;
     });
     bpaDocuments.forEach(doc => {
-      let card = {};
+      let card = { };
       card["name"] = doc.documentType;
       card["code"] = doc.documentType;
       card["required"] = doc.required ? true : false;
       if (doc.hasDropdown && doc.dropDownValues) {
-        let dropDownValues = {};
+        let dropDownValues = { };
         dropDownValues.label = "BPA_SELECT_DOCS_LABEL";
         dropDownValues.required = doc.required;
         dropDownValues.menu = doc.dropDownValues.filter(item => {
@@ -423,4 +420,4 @@ const screenConfig = {
   }
 };
 
-export default screenConfig; 
+export default screenConfig;

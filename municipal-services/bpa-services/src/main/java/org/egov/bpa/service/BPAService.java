@@ -1,10 +1,7 @@
 package org.egov.bpa.service;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DateFormat;
@@ -18,13 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.PDPageTree;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.egov.bpa.config.BPAConfiguration;
 import org.egov.bpa.repository.BPARepository;
 import org.egov.bpa.util.BPAConstants;
@@ -49,6 +39,17 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.Rectangle;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfReader;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.VerticalAlignment;
 
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
@@ -200,6 +201,7 @@ public class BPAService {
 		bpaValidator.validateSearch(requestInfo, criteria);
 		LandSearchCriteria landcriteria = new LandSearchCriteria();
 		landcriteria.setTenantId(criteria.getTenantId());
+		landcriteria.setLocality(criteria.getLocality());
 		List<String> edcrNos = null;
 		if (criteria.getMobileNumber() != null) {
 			bpas= this.getBPAFromMobileNumber(criteria, landcriteria, requestInfo);
@@ -257,6 +259,9 @@ public class BPAService {
 		}
 		log.debug("Call with multiple to Land::" + landcriteria.getTenantId() + landcriteria.getMobileNumber());
 		ArrayList<LandInfo> landInfos = landService.searchLandInfoToBPA(requestInfo, landcriteria);
+		// With given mobile number if no record exists then return empty response
+		if(landInfos.isEmpty())
+		    return Collections.emptyList();
 		ArrayList<String> landIds = new ArrayList<String>();
 		if (landInfos.size() > 0) {
 			landInfos.forEach(land -> {
@@ -311,6 +316,9 @@ public class BPAService {
 		log.debug("Call with mobile number to Land::" + criteria.getMobileNumber());
 		landcriteria.setMobileNumber(criteria.getMobileNumber());
 		ArrayList<LandInfo> landInfo = landService.searchLandInfoToBPA(requestInfo, landcriteria);
+		// With given mobile number if no record exists then return empty response
+		if(landInfo.isEmpty())
+		    return Collections.emptyList();
 		ArrayList<String> landId = new ArrayList<String>();
 		if (landInfo.size() > 0) {
 			landInfo.forEach(land -> {
@@ -388,7 +396,7 @@ public class BPAService {
 		}
 		
 		
-		Map<String, String> additionalDetails = bpa.getAdditionalDetails() != null ? (Map)bpa.getAdditionalDetails()
+		Map<String, String> additionalDetails = bpa.getAdditionalDetails() != null ? (Map<String, String>)bpa.getAdditionalDetails()
 				: new HashMap<String, String>();
 		
 		if (bpa.getStatus().equalsIgnoreCase(BPAConstants.FI_STATUS)
@@ -407,7 +415,6 @@ public class BPAService {
 		
 		this.handleRejectSendBackActions(applicationType, bpaRequest, businessService, searchResult, mdmsData, edcrResponse);
 
-		
 		wfIntegrator.callWorkFlow(bpaRequest);
 		log.debug("===> workflow done =>" +bpaRequest.getBPA().getStatus()  );
 		enrichmentService.postStatusEnrichment(bpaRequest);
@@ -515,142 +522,196 @@ public class BPAService {
 	}
 
 	/**
-	 * downloads the EDCR Report from the edcr system and stamp the permit no and generated date on the download pdf and return
-	 * @param bpaRequest
-	 */
-	@SuppressWarnings("resource")
-	public void getEdcrPdf(BPARequest bpaRequest) {
-		
-		String fileName = BPAConstants.EDCR_PDF;
-		PDDocument document = null;
-		BPA bpa = bpaRequest.getBPA();
+	     * downloads the EDCR Report from the edcr system and stamp the permit no and generated date on the download pdf and return
+	     * @param bpaRequest
+	     */
+	    public void getEdcrPdf(BPARequest bpaRequest) {
 
-		if (StringUtils.isEmpty(bpa.getApprovalNo())) {
-			throw new CustomException(BPAErrorConstants.INVALID_REQUEST, "Approval Number is required.");
-		}
+	        String fileName = BPAConstants.EDCR_PDF;
+	        PdfDocument pdfDoc = null;
+	        BPA bpa = bpaRequest.getBPA();
 
-		Exception exception = null;
-		try {
-			this.createTempReport(bpaRequest, fileName, document);
-			String localizationMessages = notificationUtil.getLocalizationMessages(bpa.getTenantId(),
-					bpaRequest.getRequestInfo());
-			String permitNo = notificationUtil.getMessageTemplate(BPAConstants.PERMIT_ORDER_NO, localizationMessages);
-			permitNo = permitNo != null ? permitNo : BPAConstants.PERMIT_ORDER_NO;
-			String generatedOn = notificationUtil.getMessageTemplate(BPAConstants.GENERATEDON, localizationMessages);
-			generatedOn = generatedOn != null ? generatedOn : BPAConstants.GENERATEDON;
-			this.addDataToPdf(document, bpaRequest, permitNo, generatedOn,fileName);
+	        if (StringUtils.isEmpty(bpa.getApprovalNo())) {
+	            throw new CustomException(BPAErrorConstants.INVALID_REQUEST, "Approval Number is required.");
+	        }
 
-		} catch (Exception ex) {
-			exception = ex;
-			log.debug("Exception occured while downloading pdf", ex.getMessage());
-			throw new CustomException(BPAErrorConstants.UNABLE_TO_DOWNLOAD, "Unable to download the file");
-		} finally {
-			try {
-				if (document != null) {
-					document.close();
-				}
-			} catch (Throwable t) {
-				exception.addSuppressed(t);
-			}
-		}
+	        try {
+	            pdfDoc = createTempReport(bpaRequest, fileName);
+	            String localizationMessages = notificationUtil.getLocalizationMessages(bpa.getTenantId(),
+	                    bpaRequest.getRequestInfo());
+	            String permitNo = notificationUtil.getMessageTemplate(BPAConstants.PERMIT_ORDER_NO, localizationMessages);
+	            permitNo = permitNo != null ? permitNo : BPAConstants.PERMIT_ORDER_NO;
+	            String generatedOn = notificationUtil.getMessageTemplate(BPAConstants.GENERATEDON, localizationMessages);
+	            generatedOn = generatedOn != null ? generatedOn : BPAConstants.GENERATEDON;
+	            if(pdfDoc != null)
+	                addDataToPdf(pdfDoc, bpaRequest, permitNo, generatedOn, fileName);
+
+	        } catch (IOException ex) {
+	            log.debug("Exception occured while downloading pdf", ex.getMessage());
+	            throw new CustomException(BPAErrorConstants.UNABLE_TO_DOWNLOAD, "Unable to download the file");
+	        } finally {
+	            if (pdfDoc != null && !pdfDoc.isClosed())
+                        pdfDoc.close();
+	        }
+	    }
+
+	    /**
+	     * make edcr call and get the edcr report url to download the edcr report
+	     * @param bpaRequest
+	     * @return
+	     */
+	    private URL getEdcrReportDownloaUrl(BPARequest bpaRequest) {
+	        String pdfUrl = edcrService.getEDCRPdfUrl(bpaRequest);
+	        URL downloadUrl = null;
+	        try {
+	            downloadUrl = new URL(pdfUrl);
+	            log.debug("Connecting to redirect url" + downloadUrl.toString() + " ... ");
+	            URLConnection urlConnection = downloadUrl.openConnection();
+
+	            // Checking whether the URL contains a PDF
+	            if (!urlConnection.getContentType().equalsIgnoreCase("application/pdf")) {
+	                String downloadUrlString = urlConnection.getHeaderField("Location");
+	                if (!StringUtils.isEmpty(downloadUrlString)) {
+	                    downloadUrl = new URL(downloadUrlString);
+	                    log.debug("Connecting to download url" + downloadUrl.toString() + " ... ");
+	                    urlConnection = downloadUrl.openConnection();
+	                    if (!urlConnection.getContentType().equalsIgnoreCase("application/pdf")) {
+	                        log.error("Download url content type is not application/pdf.");
+	                        throw new CustomException(BPAErrorConstants.INVALID_EDCR_REPORT,
+	                                "Download url content type is not application/pdf.");
+	                    }
+	                } else {
+	                    log.error("Unable to fetch the location header URL");
+	                    throw new CustomException(BPAErrorConstants.INVALID_EDCR_REPORT, "Unable to fetch the location header URL");
+	                }
+	            }
+	        } catch (IOException e) {
+	            log.error("Invalid download URL::" + pdfUrl);
+	            throw new CustomException(BPAErrorConstants.INVALID_EDCR_REPORT, "Invalid download URL::" + pdfUrl);
+	        }
+
+	        return downloadUrl;
+	    }
+
+	    /**
+	     * download the edcr report and create in tempfile
+	     * @param bpaRequest
+	     * @param fileName
+	     * @param document
+	     * return PdfDocument
+	     */
+	    private PdfDocument createTempReport(BPARequest bpaRequest, String fileName) {
+
+	        InputStream readStream = null;
+	        PdfDocument pdfDocument = null;
+	        try {
+	            URL downloadUrl = this.getEdcrReportDownloaUrl(bpaRequest);
+	            readStream = downloadUrl.openStream();
+	            pdfDocument = new PdfDocument(new PdfReader(readStream),
+	                    new PdfWriter(fileName));
+
+	        } catch (IOException e) {
+	            log.error("Error while creating temp report.");
+	        } finally {
+	            try {
+	                readStream.close();
+	            } catch (IOException e) {
+	                log.error("Error while creating temp report.");
+	            }
+	        }
+	        return pdfDocument;
+	    }
+
+	    private void addDataToPdf(PdfDocument pdfDoc, BPARequest bpaRequest, String permitNo, String generatedOn, String fileName)
+	            throws IOException {
+
+	        BPA bpa = bpaRequest.getBPA();
+	        Document doc = new Document(pdfDoc);
+	        Paragraph headerLeft = new Paragraph(permitNo + " : " + bpaRequest.getBPA().getApprovalNo())
+	                .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
+	                .setFontSize(10);
+	        String generatedOnMsg;
+	        if (bpa.getApprovalDate() != null) {
+	            Date date = new Date(bpa.getApprovalDate());
+	            DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+	            String formattedDate = format.format(date);
+	            generatedOnMsg = generatedOn + " : " + formattedDate;
+	        } else {
+	            generatedOnMsg = generatedOn + " : " + "NA";
+	        }
+	        Paragraph headerRight = new Paragraph(generatedOnMsg)
+	                .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
+	                .setFontSize(10);
+
+	        for (int i = 1; i <= pdfDoc.getNumberOfPages(); i++) {
+	            Rectangle pageSize = pdfDoc.getPage(i).getPageSize();
+	            float margin = 32;
+	            float x = pageSize.getX() + margin;
+	            float y = pageSize.getTop() - (margin / 2);
+	            doc.showTextAligned(headerLeft, x, y, i, TextAlignment.LEFT, VerticalAlignment.BOTTOM, 0);
+	            float x1 = pageSize.getWidth() - 22;
+	            float y1 = pageSize.getTop() - (margin / 2);
+	            doc.showTextAligned(headerRight, x1, y1, i, TextAlignment.RIGHT, VerticalAlignment.BOTTOM, 0);
+	        }
+	        pdfDoc.close();
+	        doc.close();
+	    }
+	
+	public int getBPACount(BPASearchCriteria criteria, RequestInfo requestInfo) {
+	    
+
+            LandSearchCriteria landcriteria = new LandSearchCriteria();
+            landcriteria.setTenantId(criteria.getTenantId());
+            landcriteria.setLocality(criteria.getLocality());
+            List<String> edcrNos = null;
+            if (criteria.getMobileNumber() != null) {
+                landcriteria.setMobileNumber(criteria.getMobileNumber());
+                ArrayList<LandInfo> landInfo = landService.searchLandInfoToBPA(requestInfo, landcriteria);
+                // With given mobile number if no record exists then return count as 0
+                if(landInfo.isEmpty())
+                    return 0;
+                ArrayList<String> landId = new ArrayList<String>();
+                if (landInfo.size() > 0) {
+                        landInfo.forEach(land -> {
+                                landId.add(land.getId());
+                        });
+                        criteria.setLandId(landId);
+                } 
+            } else {
+                List<String> roles = new ArrayList<>();
+                for (Role role : requestInfo.getUserInfo().getRoles()) {
+                        roles.add(role.getCode());
+                }
+                if ((criteria.tenantIdOnly() || criteria.isEmpty()) && roles.contains(BPAConstants.CITIZEN)) {
+                    UserSearchRequest userSearchRequest = new UserSearchRequest();
+                    if (criteria.getTenantId() != null) {
+                            userSearchRequest.setTenantId(criteria.getTenantId());
+                    }
+                    List<String> uuids = new ArrayList<String>();
+                    if (requestInfo.getUserInfo() != null && !StringUtils.isEmpty(requestInfo.getUserInfo().getUuid())) {
+                            uuids.add(requestInfo.getUserInfo().getUuid());
+                            criteria.setOwnerIds(uuids);
+                            criteria.setCreatedBy(uuids);
+                    }
+                    UserDetailResponse userInfo = userService.getUser(criteria, requestInfo);
+                    if (userInfo != null) {
+                            landcriteria.setMobileNumber(userInfo.getUser().get(0).getMobileNumber());
+                    }
+                    ArrayList<LandInfo> landInfos = landService.searchLandInfoToBPA(requestInfo, landcriteria);
+                    // With given mobile number if no record exists then return count as 0
+                    if(landInfos.isEmpty())
+                        return 0;
+                    ArrayList<String> landIds = new ArrayList<String>();
+                    if (landInfos.size() > 0) {
+                            landInfos.forEach(land -> {
+                                    landIds.add(land.getId());
+                            });
+                            criteria.setLandId(landIds);
+                    }
+                }
+            }
+            return repository.getBPACount(criteria, edcrNos);
+        
 	}
 	
-	/**
-	 * make edcr call and get the edcr report url to download the edcr report
-	 * @param bpaRequest
-	 * @return
-	 * @throws Exception
-	 */
-	private URL getEdcrReportDownloaUrl(BPARequest bpaRequest) throws Exception {
-		String pdfUrl = edcrService.getEDCRPdfUrl(bpaRequest);
-		URL downloadUrl = new URL(pdfUrl);
-		
-		log.debug("Connecting to redirect url" + downloadUrl.toString() + " ... ");
-		URLConnection urlConnection = downloadUrl.openConnection();
-
-		// Checking whether the URL contains a PDF
-		if (!urlConnection.getContentType().equalsIgnoreCase("application/pdf")) {
-			String downloadUrlString = urlConnection.getHeaderField("Location");
-			if (!StringUtils.isEmpty(downloadUrlString)) {
-				downloadUrl = new URL(downloadUrlString);
-				log.debug("Connecting to download url" + downloadUrl.toString() + " ... ");
-				urlConnection = downloadUrl.openConnection();
-				if (!urlConnection.getContentType().equalsIgnoreCase("application/pdf")) {
-					log.error("Download url content type is not application/pdf.");
-					throw new CustomException(BPAErrorConstants.INVALID_EDCR_REPORT,"Download url content type is not application/pdf.");
-				}
-			} else {
-				log.error("Unable to fetch the location header URL");
-				throw new CustomException(BPAErrorConstants.INVALID_EDCR_REPORT,"Unable to fetch the location header URL");
-			}
-		}
-		return downloadUrl;
-	}
-	/**
-	 * download the edcr report and create in tempfile
-	 * @param bpaRequest
-	 * @param fileName
-	 * @param document
-	 * @throws Exception
-	 */
-	private void createTempReport(BPARequest bpaRequest,String fileName,PDDocument document) throws Exception {
-		URL downloadUrl = this.getEdcrReportDownloaUrl(bpaRequest);
-		// Read the PDF from the URL and save to a local file
-		FileOutputStream writeStream = null;
-		InputStream readStream = null;
-		try {
-			writeStream = new FileOutputStream(fileName);
-			byte[] byteChunck = new byte[1024];
-			int baLength;
-			readStream = downloadUrl.openStream();
-			while ((baLength = readStream.read(byteChunck, 0 , byteChunck.length)) != -1) {
-				writeStream.write(byteChunck, 0, baLength);
-			}
-		}catch (Exception e){
-			log.error("Error while creating temp report.");
-		}finally {
-			writeStream.flush();
-			writeStream.close();
-			readStream.close();
-		}
-
-		document = PDDocument.load(new File(fileName));
-	}
-	
-	private void addDataToPdf(PDDocument document,BPARequest bpaRequest, String permitNo, String generatedOn,String fileName) throws IOException {
-		PDPageTree allPages = document.getDocumentCatalog().getPages();
-		BPA bpa = bpaRequest.getBPA();
-		for (int i = 0; i < allPages.getCount(); i++) {
-			PDPage page = (PDPage) allPages.get(i);
-			@SuppressWarnings("deprecation")
-			PDPageContentStream contentStream = new PDPageContentStream(document, page, true, true, true);
-			PDFont font = PDType1Font.TIMES_ROMAN;
-			float fontSize = 10.0f;
-			contentStream.beginText();
-			// set font and font size
-			contentStream.setFont(font, fontSize);
-
-			PDRectangle mediabox = page.getMediaBox();
-			float margin = 32;
-			float startX = mediabox.getLowerLeftX() + margin;
-			float startY = mediabox.getUpperRightY() - (margin/2);
-			contentStream.newLineAtOffset(startX, startY);
-
-			contentStream.showText(permitNo + " : " + bpaRequest.getBPA().getApprovalNo());
-			if (bpa.getApprovalDate() != null) {
-				Date date = new Date(bpa.getApprovalDate());
-				DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-				String formattedDate = format.format(date);
-				contentStream.newLineAtOffset(436, 0);
-				contentStream.showText(generatedOn + " : " + formattedDate);
-			} else {
-				contentStream.newLineAtOffset(436, 0);
-				contentStream.showText(generatedOn + " : " + "NA");
-			}
-
-			contentStream.endText();
-			contentStream.close();
-		}
-		document.save(fileName);
-	}
 }

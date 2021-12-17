@@ -80,7 +80,7 @@ public class UserEventsValidator {
 	 */
 	public void validateSearch(RequestInfo requestInfo, EventSearchCriteria criteria) {
 		Map<String, String> errorMap = new HashMap<>();
-		validateRI(requestInfo, errorMap);
+		//validateRI(requestInfo, errorMap);
 		if (!CollectionUtils.isEmpty(errorMap.keySet())) {
 			throw new CustomException(errorMap);
 		}

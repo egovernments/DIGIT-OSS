@@ -58,6 +58,32 @@ async function search_property(
   });
 }
 
+async function search_property_by_id(
+  propertyId,
+  tenantId,
+  requestinfo,
+  allowCitizenTOSearchOthersRecords
+){
+  var params = {
+    tenantId: tenantId,
+    propertyIds: propertyId,
+  };
+  if (
+    checkIfCitizen(requestinfo) &&
+    allowCitizenTOSearchOthersRecords != true
+  ) {
+    var mobileNumber = requestinfo.RequestInfo.userInfo.mobileNumber;
+    var userName = requestinfo.RequestInfo.userInfo.userName;
+    params["mobileNumber"] = mobileNumber || userName;
+  }
+  return await axios({
+    method: "post",
+    url: url.resolve(config.host.pt, config.paths.pt_search),
+    data: requestinfo,
+    params,
+  });
+}
+
 async function search_workflow(applicationNumber, tenantId, requestinfo) {
   var params = {
     tenantId: tenantId,
@@ -71,13 +97,25 @@ async function search_workflow(applicationNumber, tenantId, requestinfo) {
   });
 }
 
-async function search_payment(consumerCodes, tenantId, requestinfo, bussinessService) {
+async function search_payment(
+  consumerCodes,
+  tenantId,
+  requestinfo,
+  bussinessService,
+  receiptNumbers
+) {
   var params = {
     tenantId: tenantId,
     consumerCodes: consumerCodes,
   };
+  if (receiptNumbers && !consumerCodes) {
+    params = {
+      tenantId: tenantId,
+      receiptNumbers: receiptNumbers,
+    };
+  }
   var searchEndpoint = config.paths.payment_search;
-  searchEndpoint = searchEndpoint.replace(/\$module/g,bussinessService);
+  searchEndpoint = searchEndpoint.replace(/\$module/g, bussinessService);
   if (checkIfCitizen(requestinfo)) {
     var mobileNumber = requestinfo.RequestInfo.userInfo.mobileNumber;
     var userName = requestinfo.RequestInfo.userInfo.userName;
@@ -266,6 +304,62 @@ async function search_amendment(tenantId, amendmentId, serviceId, requestinfo) {
   });
 }
 
+async function getPropertyDeatils(requestinfo,tenantId,propertyIds,connectionnoToPropertyMap){
+  var resProperty;
+
+  try {
+    resProperty = await search_property_by_id(
+                  propertyIds.toString(),
+                  tenantId,
+                  requestinfo,
+                  true);
+  } catch (ex) {
+      if (ex.response && ex.response.data) console.log(ex.response.data);
+            return renderError(res, "Failed to query details of the property", 500);
+      }
+
+  
+  var properties = resProperty.data;
+  var propertyDeatils = {}; 
+
+  for(let property of properties.Properties){
+    var propertyAddress="";
+    var locality;
+    var address = property.address;
+    if(address.plotNo)
+      propertyAddress = propertyAddress + address.plotNo + ",";
+
+    if(address.doorNo)
+      propertyAddress = propertyAddress + address.doorNo + ",";
+
+    if(address.buildingName)
+      propertyAddress = propertyAddress + address.buildingName + ",";
+
+    if(address.street)
+      propertyAddress = propertyAddress + address.street + ",";
+
+    if(address.locality.code)
+      locality = address.locality.code;
+
+    let result = {
+      propertyUniqueId: property.propertyId,
+      locality: locality,
+      propertyAddress: propertyAddress
+    };
+
+    let connectionList = connectionnoToPropertyMap[property.propertyId];
+
+    if(connectionList){
+      for(let connection of connectionList){
+        propertyDeatils[connection] =result;
+      }
+    }
+    
+  }
+
+  return propertyDeatils;
+}
+
 
 async function create_pdf(tenantId, key, data, requestinfo) {
   return await axios({
@@ -308,5 +402,7 @@ module.exports = {
   search_sewerageOpenSearch,
   search_bill_genie_water_bills,
   search_bill_genie_sewerage_bills,
-  fetch_bill
+  fetch_bill,
+  search_property_by_id,
+  getPropertyDeatils
 };

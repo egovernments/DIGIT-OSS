@@ -146,7 +146,7 @@ const receipts = {
               ],
               onError: {
                 actions: assign((context, event) => {
-                  let message = messages.receiptSlip.error;
+                  let message = dialog.get_message(messages.receiptSlip.error,context.user.locale);
                   //context.chatInterface.toUser(context.user, message);
                   dialog.sendMessage(context, message, true);
                 }),
@@ -495,7 +495,7 @@ const receipts = {
               ],
               onError: {
                 actions: assign((context, event) => {
-                  let message = messages.receiptSearchResults.error;
+                  let message = dialog.get_message(messages.receiptSearchResults.error,context.user.locale);
                   dialog.sendMessage(context, message , true);
                 }),
                 always : [
@@ -597,7 +597,7 @@ const receipts = {
             onEntry: assign((context, event) => {
               let messageText = event.message.input;
               messageText = messageText.toLowerCase();
-              let isValid = ((messageText === 'main menu' || messageText === 'view receipts') && dialog.validateInputType(event, 'button'));
+              let isValid = ((messageText === dialog.get_message(messages.quickReplyButtonText.mainMenu,context.user.locale) || messageText === dialog.get_message(messages.quickReplyButtonText.viewReceipts,context.user.locale)) && dialog.validateInputType(event, 'button'));
               context.message = {
                 isValid: isValid,
                 messageContent: messageText
@@ -692,10 +692,12 @@ const receipts = {
                 var receiptIndex = context.receipts.slots.receiptNumber;
                 var consumerCode;
                 var businessService;
+                var tenantId;
                 if(context.receipts.slots.searchresults)
                   consumerCode = context.receipts.slots.searchresults[receiptIndex-1].id;
                   businessService = context.receipts.slots.searchresults[receiptIndex-1].businessService;
-                return receiptService.multipleRecordReceipt(context.user,businessService,consumerCode,null,false);
+                  tenantId = context.receipts.slots.searchresults[receiptIndex-1].tenantId;
+                return receiptService.multipleRecordReceipt(context.user,businessService,consumerCode,null, tenantId,false);
               },
               onDone:[
                 {
@@ -707,7 +709,7 @@ const receipts = {
               ],
               onError: {
                 actions: assign((context, event) => {
-                  let message = messages.multipleRecordReceipt.error;
+                  let message = dialog.get_message(messages.multipleRecordReceipt.error,context.user.locale);
                   dialog.sendMessage(context, message , true);
                 }),
                 always : [
@@ -911,7 +913,7 @@ const receipts = {
                   else {
                         businessService = receiptData.businessService;
                         transactionNumber = receiptData.transactionNumber;
-                        let payment = await receiptService.multipleRecordReceipt(context.user,businessService,null,transactionNumber, true);
+                        let payment = await receiptService.multipleRecordReceipt(context.user,businessService,null,transactionNumber, receiptData.tenantId, true);
                         await receiptService.getPdfFilestoreId(businessService, payment, context.user);
                         await new Promise(resolve => setTimeout(resolve, 3000));
                         dialog.sendMessage(context, dialog.get_message(messages.lastState,context.user.locale));
@@ -969,40 +971,40 @@ let messages = {
     question: {
       preamble: {
         en_IN: 'Type and send the option number to view payment history for the preferred service  👇',
-        hi_IN: 'कृपया नीचे 👇 दिए गए सूची से अपना विकल्प टाइप करें और भेजें:'
+        hi_IN: 'पसंदीदा सेवा का भुगतान इतिहास देखने के लिए, विकल्प संख्या टाइप करें और भेजें 👇'
       },
     },
     error:{
       en_IN: 'Selected option seems to be invalid 😐\n\nPlease select the valid option to proceed further.',
-      hi_IN: 'मुझे क्षमा करें, मुझे समझ नहीं आया। फिर से कोशिश करें।'
+      hi_IN: 'चयनित विकल्प अमान्य प्रतीत होता है 😐\n\nकृपया आगे बढ़ने के लिए वैध विकल्प का चयन करें।'
     },
   },
   trackReceipts:{
     error:{
       en_IN: 'Sorry. Some error occurred on server!',
-      hi_IN: 'माफ़ करना। सर्वर पर कुछ त्रुटि हुई!'
+      hi_IN: 'क्षमा करें। सर्वर पर कुछ त्रुटि हुई!'
     },
   },
   receiptSlip:{
     not_found:{
-      en_IN: 'Sorry 😥 !  Your mobile number is not linked to selected service.\n\n👉 We can still proceed to view payment history using the *{{searchOption}}* mentioned in your {{service}} bill/receipt.',
-      hi_IN: 'सॉरी 😥 ! आपका मोबाइल नंबर चयनित सेवा से लिंक नहीं है।'
+      en_IN: 'Sorry 😥 !  Your mobile number is not linked to the selected service.\n\n👉 We can still proceed to view payment history using the *{{searchOption}}* mentioned in your {{service}} bill/receipt.',
+      hi_IN: 'क्षमा करें 😥 ! आपका मोबाइल नंबर चयनित सेवा से लिंक नहीं है।'
     },
     error:{
       en_IN:'Sorry. Some error occurred on server.',
-      hi_IN: 'माफ़ करना। सर्वर पर कुछ त्रुटि हुई!'
+      hi_IN: 'क्षमा करें। सर्वर पर कुछ त्रुटि हुई!'
     },
     listofreceipts:{
       singleRecord: {
         en_IN:'👉  {{service}} payment receipt\n\nConnection No       {{id}}\nAmount Paid       Rs. {{amount}}\nDate of Payment       {{date}}\n\nReceipt Link : {{receiptDocumentLink}}\n\n',
-        hi_IN: 'आपकी {{service}} {{locality}}, {{city}} में संपत्ति के खिलाफ उपभोक्ता संख्या {{id}} के लिए भुगतान रसीद नीचे दी गई है 👇:\n\n भुगतान की प्रति देखने और डाउनलोड करने के लिए लिंक पर क्लिक करें ।\n\n {{date}} - रु {{amount}} - {{transactionNumber}} \n पलक: {{receiptDocumentLink}}\n\n'
+        hi_IN: '👉 आपकी {{service}} {{locality}}, {{city}}में संपत्ति के खिलाफ उपभोक्ता संख्या {{id}} के लिए भुगतान रसीद नीचे दी गई है 👇:\n\n भुगतान की प्रति देखने और डाउनलोड करने के लिए लिंक पर क्लिक करें ।\n\n {{date}} - रु {{amount}} - {{transactionNumber}} \n पलक: {{receiptDocumentLink}}\n\n'
       },
       multipleRecordsSameService: {
-        en_IN: 'Following {{service records}} records found linked to your mobile number.\n\nPlease type and send the applicable option number to view the payment history 👇',
-        hi_IN: 'कई रिकॉर्ड मिले हैं। आगे बढ़ने के लिए एक रिकॉर्ड का चयन करें। आप हमेशा वापस आ सकते हैं और एक और रिकॉर्ड चुन सकते हैं।',
+        en_IN: 'Following {{service records}} records found linked to your mobile number.\n\nPlease type and send the preferred option number to view the payment history 👇',
+        hi_IN: 'निम्नलिखित जल और सीवरेज रिकॉर्ड आपके मोबाइल नंबर से जुड़े हुए पाए गए।\n\nभुगतान इतिहास देखने के लिए पसंदीदा विकल्प संख्या टाइप करें और भेजें 👇',
         receiptTemplate: {
           en_IN: '*{{consumerNumber}}*\n{{id}}\n*Locality:* {{locality}} , {{city}}',
-          hi_IN: '*उपभोक्ता संख्या*\n{{id}} ,\n*इलाका:* {{locality}} , {{city}}'
+          hi_IN: '*{{consumerNumber}}*\n{{id}}\n*इलाका:* {{locality}} , {{city}}'
         }
       }
     },
@@ -1010,19 +1012,19 @@ let messages = {
   searchReceptInitiate:{
     question:{
       en_IN:'Please type and send ‘1’ to Search and View for past payments which are not linked to your mobile number.',
-      hi_IN:'पिछले भुगतानों के खोज और दृश्य के लिए जो आपके मोबाइल नंबर से लिंक नहीं हैं| कृपया 1 टाइप करें और भेजें',
+      hi_IN:'पिछले भुगतानों के खोज और दृश्य के लिए जो आपके मोबाइल नंबर से लिंक नहीं हैं| कृपया ’1’ टाइप करें और भेजें',
     },
     error:{
       en_IN: 'Selected option seems to be invalid 😐\n\nPlease select the valid option to proceed further.',
-      hi_IN: 'मुझे क्षमा करें, मुझे समझ नहीं आया। फिर से कोशिश करें।'
+      hi_IN: 'चयनित विकल्प अमान्य प्रतीत होता है 😐\n\nकृपया आगे बढ़ने के लिए वैध विकल्प का चयन करें।'
     },
 
 
   },
   mobileLinkage:{
     notLinked: {
-      en_IN: 'Sorry 😥 !  Your mobile number is not linked to selected service.\n\n👉 We can still proceed to view payment history using the {{searchOption}} mentioned in your {{service}} bill/receipt.',
-      hi_IN: 'ऐसा लगता है कि आपके द्वारा उपयोग किया जा रहा मोबाइल नंबर {{service}} सेवा से लिंक नहीं है। कृपया अपने खाता नंबर को {{service}} सेवा से जोड़ने के लिए शहरी स्थानीय निकाय पर जाएँ। फिर भी आप अपनी खाता जानकारी खोजकर सेवा का लाभ उठा सकते हैं।',
+      en_IN: 'Sorry 😥 !  Your mobile number is not linked to the selected service.\n\n👉 We can still proceed to view payment history using the {{searchOption}} mentioned in your {{service}} bill/receipt.',
+      hi_IN: 'सॉरी 😥 ! आपका मोबाइल नंबर चयनित सेवा से लिंक नहीं है।\n\n👉 हम आपके {{service}} बिल या रसीद में उल्लिखित {{searchOption}} का उपयोग करके भुगतान इतिहास देखने के लिए आगे बढ़ सकते हैं।',
       resultHeader:{
         en_IN: 'Here are your past bill payment 👇\n\n',
         hi_IN: 'ये रहा आपका भुगतान इतिहास 👇\n\n',
@@ -1033,26 +1035,26 @@ let messages = {
     question: {
       preamble: {
         en_IN: 'Please type and send the number for your option👇\n\n*1.* Yes\n*2.* No',
-        hi_IN: 'कृपया टाइप करें और अपने विकल्प के लिए नंबर भेजें👇\n\n1.हां\n2.नहीं'
+        hi_IN: 'सेवा का चयन करने के लिए प्रासंगिक विकल्प संख्या टाइप करें और भेजें 👇\n\n*1.* हां\n*2.* नहीं'
       },
       confirmation: {
         en_IN: 'Type and send option number to indicate if you know the *{{searchOption}}* 👇\n\n*1.* Yes\n*2.* No',
-        hi_IN: 'क्या आपके पास भुगतान के लिए आगे बढ़ने के लिए {{searchOption}} है ?\n'
+        hi_IN: 'यदि आप *{{searchOption}}* जानते हैं तो इंगित करने के लिए विकल्प संख्या टाइप करें और भेजें 👇\n\n*1.* हाँ\n*2.* नहीं'
       }
     },
     error:{
       en_IN: 'Selected option seems to be invalid 😐\n\nPlease select the valid option to proceed further.',
-      hi_IN: 'मुझे क्षमा करें, मुझे समझ नहीं आया। फिर से कोशिश करें।'
+      hi_IN: 'चयनित विकल्प अमान्य प्रतीत होता है 😐\n\nकृपया आगे बढ़ने के लिए वैध विकल्प का चयन करें।'
     },
   },
   paramInput: {
     question: {
       en_IN: 'Please enter the *{{option}}*\n\n{{example}}',
-      hi_IN: 'भुगतान रसीदें देखने के लिए कृपया *{{option}}* डालें।\n\n{{example}}'
+      hi_IN: 'कृपया *{{option}}* दर्ज करें\n\n{example}'
     },
     re_enter: {
       en_IN: 'The entered {{option}} is not found in our records.\n\nPlease check the entered details and try again.\n\n👉 To go back to the main menu, type and send mseva.',
-      hi_IN: 'क्षमा करें, आपके द्वारा प्रदान किया गया मान गलत है। \n कृपया फिर से बिल प्राप्त करने के लिए {{option}} फिर से दर्ज करें।\n\nऔर टाइप करें "mseva" और मुख्य मेनू पर वापस जाएं।'
+      hi_IN: 'दर्ज किया गया {{option}} हमारे रिकॉर्ड में नहीं मिला है।\n\nकृपया दर्ज किए गए विवरणों की जांच करें और पुनः प्रयास करें\n\n👉 मुख्य मेनू पर वापस जाने के लिए mseva टाइप करें और भेजें।'
     }
   },
   receiptSearchResults:{
@@ -1062,7 +1064,7 @@ let messages = {
     },
     norecords:{
       en_IN:'The {{searchparamoption}} :   {{paramInput}}   is not found in our records.\n\nPlease check the entered details and try again.',
-      hi_IN: 'आपके द्वारा प्रदान किए गए विवरण {{searchparamoption}} :   {{paramInput}} हमारे रिकॉर्ड में नहीं पाया जाता है। कृपया आपके द्वारा प्रदान किए गए विवरण को एक बार फिर से देखें।'
+      hi_IN: 'दर्ज किया गया {{searchparamoption}} :   {{paramInput}} हमारे रिकॉर्ड में नहीं मिला है।\n\nकृपया दर्ज किए गए विवरणों की जांच करें और पुनः प्रयास करें।'
     },
     results:{
       singleRecord: {
@@ -1070,23 +1072,23 @@ let messages = {
         hi_IN: 'आपकी {{service}} {{locality}}, {{city}} में संपत्ति के खिलाफ उपभोक्ता संख्या {{id}} के लिए भुगतान रसीद नीचे दी गई है 👇:\n\n भुगतान की प्रति देखने और डाउनलोड करने के लिए लिंक पर क्लिक करें ।\n\n {{date}} - रु {{amount}} - {{transactionNumber}} \n पलक: {{receiptDocumentLink}}\n\n'
       },
       multipleRecordsSameService: {
-        en_IN: 'Following {{service records}} records found linked to your mobile number.\n\nPlease type and send the applicable option number to view the payment history 👇',
-        hi_IN: 'कई रिकॉर्ड मिले हैं। आगे बढ़ने के लिए एक रिकॉर्ड का चयन करें। आप हमेशा वापस आ सकते हैं और एक और रिकॉर्ड चुन सकते हैं।',
+        en_IN: 'Following {{service records}} records found linked to your mobile number.\n\nPlease type and send the preferred option number to view the payment history 👇',
+        hi_IN: 'निम्नलिखित {{service records}} रिकॉर्ड आपके मोबाइल नंबर से जुड़े हुए पाए गए।\n\nभुगतान इतिहास देखने के लिए पसंदीदा विकल्प संख्या टाइप करें और भेजें 👇',
         receiptTemplate: {
           en_IN: 'Consumer Number - {{id}}\nLocality: {{locality}} , {{city}}',
-          hi_IN: 'उपभोक्ता संख्या - {{id}} , {{locality}} , {{city}}'
+          hi_IN: 'उपभोक्ता संख्या - {{id}}\nलोकैलिटी: {{locality}} , {{city}}'
         }
       }
     },
   },
   paramInputInitiate: {
     question: {
-      en_IN: '👉 To view last payment receipt, type and send *1*\n\n👉 To go back to the main menu, type and send *mseva*.',
-      hi_IN: '👉 अंतिम भुगतान रसीद देखने के लिए, टाइप करें और भेजें *1* \n\n👉 मुख्य मेनू पर वापस जाने के लिए, *mseva* टाइप करें और भेजें।'
+      en_IN: '👉 To view last payment receipt, type *1* and send\n\n👉 To go back to the main menu, type and send *mseva*.',
+      hi_IN: '👉 अंतिम भुगतान रसीद देखने के लिए, *1* टाइप करें और भेजें\n\n👉 मुख्य मेनू पर वापस जाने के लिए, *mseva* टाइप करें और भेजें।'
     },
     error:{
       en_IN: 'Selected option seems to be invalid 😐\n\nPlease select the valid option to proceed further.',
-      hi_IN: 'मुझे क्षमा करें, मुझे समझ नहीं आया। फिर से कोशिश करें।'
+      hi_IN: 'चयनित विकल्प अमान्य प्रतीत होता है 😐\n\nकृपया आगे बढ़ने के लिए वैध विकल्प का चयन करें।',
     },
 
   },
@@ -1099,7 +1101,7 @@ let messages = {
   multipleRecordReceipt:{
     error:{
       en_IN:'Sorry. Some error occurred on server.',
-      hi_IN: 'माफ़ करना। सर्वर पर कुछ त्रुटि हुई!'
+      hi_IN: 'क्षमा करें। सर्वर पर कुछ त्रुटि हुई!'
     },
     singleReceipt: {
       en_IN:'Your {{service}} payment receipt for consumer number {{id}} against property in  {{locality}},{{city}} is given 👇 below:\n\nClick on the link to view and download a copy of payment receipt.\n\n {{date}} - Rs.  {{amount}} -  {{transactionNumber}}\nLink: {{receiptDocumentLink}}\n\n',
@@ -1137,7 +1139,7 @@ let messages = {
   },
   pdfReceiptList:{
     en_IN:"To view the receipt, please type and send the option number 👇",
-    hi_IN:"रसीद देखने के लिए कृपया टाइप करें और अपने विकल्प के लिए नंबर भेजें 👇",
+    hi_IN:"रसीद देखने के लिए विकल्प संख्या टाइप करें और भेजें 👇",
     receiptTemplate:{
       en_IN: "*Paid:* ₹ {{amount}} | *Date:* {{date}}",
       hi_IN: "*भुगतान किया गया:* ₹ {{amount}} | *तारीख:* {{date}}"
@@ -1145,7 +1147,7 @@ let messages = {
   },
   lastState:{
     en_IN: '👉 To go back to the main menu, type and send *mseva*.',
-    hi_IN: '👉 मुख्य मेनू पर वापस जाने के लिए, टाइप करें और *mseva* भेजें।',
+    hi_IN: '👉 मुख्य मेनू पर वापस जाने के लिए mseva टाइप करें और भेजें।',
     template: {
       en_IN: '*Consumer Number*\n{{id}}\n*Amount Paid*   {{amount}}\n*Paid On*   {{date}}',
       hi_IN: '*Consumer Number*\n{{id}}\n*Amount Paid*   {{amount}}\n*Paid On*   {{date}}'
@@ -1153,7 +1155,18 @@ let messages = {
   },
   wait:{
     en_IN: "Please wait while your receipt is being generated.",
-    hi_IN: "कृपया प्रतीक्षा करें जब तक कि आपकी रसीद उत्पन्न न हो जाए।"
+    hi_IN: "कृपया प्रतीक्षा करें जब तक आपकी रसीद तैयार की जा रही है।"
+  },
+
+  quickReplyButtonText:{
+    mainMenu:{
+      en_IN: 'main menu',
+      hi_IN: 'मुख्य मेनू'
+    },
+    viewReceipts:{
+      en_IN: 'view receipts',
+      hi_IN: 'रसीद देखें'
+    }
   }
   
 };

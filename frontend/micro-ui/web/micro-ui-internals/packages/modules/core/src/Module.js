@@ -4,7 +4,6 @@ import { Provider } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
 import { getI18n } from "react-i18next";
 import { Body, Loader } from "@egovernments/digit-ui-react-components";
-
 import { DigitApp } from "./App";
 
 import getStore from "./redux/store";
@@ -17,7 +16,6 @@ const DigitUIWrapper = ({ stateCode, enabledModules, moduleReducers }) => {
   }
 
   const i18n = getI18n();
-  // console.log("core module rendered", initData);
   return (
     <Provider store={getStore(initData, moduleReducers(initData))}>
       <Router>
@@ -59,3 +57,11 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
     </div>
   );
 };
+
+const componentsToRegister = {}
+
+export const initCoreComponents = () => {
+  Object.entries(componentsToRegister).forEach(([key, value]) => {
+    Digit.ComponentRegistryService.setComponent(key, value);
+  });
+}

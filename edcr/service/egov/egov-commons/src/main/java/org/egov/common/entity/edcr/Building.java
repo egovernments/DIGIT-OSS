@@ -60,6 +60,8 @@ public class Building extends Measurement {
     private static final long serialVersionUID = 13L;
 
     private BigDecimal buildingHeight;
+    
+    private BigDecimal buildingHeightAsMeasured;
 
     private BigDecimal declaredBuildingHeight;
 
@@ -163,6 +165,14 @@ public class Building extends Measurement {
 
     public void setBuildingHeight(BigDecimal buildingHeight) {
         this.buildingHeight = buildingHeight;
+    }
+
+    public BigDecimal getBuildingHeightAsMeasured() {
+        return buildingHeightAsMeasured;
+    }
+
+    public void setBuildingHeightAsMeasured(BigDecimal buildingHeightAsMeasured) {
+        this.buildingHeightAsMeasured = buildingHeightAsMeasured;
     }
 
     public List<Floor> getFloors() {

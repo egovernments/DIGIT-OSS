@@ -4,7 +4,7 @@ import { stringReplaceAll } from "../utils";
 
 const TradeLicense = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
 
   const { isLoading, data: Documentsob = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "TLDocuments");
   let docs = Documentsob?.TradeLicense?.Documents;
@@ -30,7 +30,7 @@ const TradeLicense = ({ t, config, onSelect, userType, formData }) => {
                   ))}
                 </div>
               ))
-              : console.log("error")}
+              : console.error("error")}
           </div>
         </div>
         <span>

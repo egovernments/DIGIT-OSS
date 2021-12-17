@@ -1,8 +1,17 @@
+//HAVE TO CHANGE THI
 import { stringReplaceAll } from "@egovernments/digit-ui-module-pt/src/utils";
 import { ApiCacheService } from "../atoms/ApiCacheService";
 import Urls from "../atoms/urls";
 import { Request, ServiceRequest } from "../atoms/Utils/Request";
 import { PersistantStorage } from "../atoms/Utils/Storage";
+
+// export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
+//   if (searcher == "") return str;
+//   while (str.includes(searcher)) {
+//     str = str.replace(searcher, replaceWith);
+//   }
+//   return str;
+// };
 
 const SortByName = (na, nb) => {
   if (na < nb) {
@@ -705,6 +714,41 @@ const getCancelReceiptReasonAndStatus = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getDocumentTypesCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "DocTypeMapping"
+          }
+        ]
+      }
+    ]
+  }
+})
+
+
+const getTradeTypeRoleCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "TradeTypetoRoleMapping"
+          }
+        ]
+      }
+    ]
+  }
+})
+
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
     name: obj.localname,
@@ -751,7 +795,6 @@ const GetVehicleType = (MdmsRes) =>
 
 const GetSlumLocalityMapping = (MdmsRes, tenantId) =>
   MdmsRes["FSM"].Slum.filter((type) => type.active).reduce((prev, curr) => {
-    // console.log("find prev",prev, curr)
     return prev[curr.locality]
       ? {
           ...prev,
@@ -968,6 +1011,10 @@ const GetPostFields = (MdmsRes) => MdmsRes["FSM"].PostFieldsConfig;
 
 const GetFSTPPlantInfo = (MdmsRes) => MdmsRes["FSM"].FSTPPlantInfo;
 
+const GetDocumentsTypes = (MdmsRes) => MdmsRes["BPA"].DocTypeMapping;
+
+const GetChecklist = (MdmsRes) => MdmsRes["BPA"].CheckList;
+
 const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
   switch (type) {
     case "citymodule":
@@ -1044,6 +1091,10 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return PTGenderType(MdmsRes);
     case "HRGenderType":
       return HRGenderType(MdmsRes);
+    case "DocumentTypes":
+      return GetDocumentsTypes(MdmsRes);
+    case "CheckList":
+      return GetChecklist(MdmsRes);
     default:
       return MdmsRes;
   }
@@ -1092,7 +1143,6 @@ const debouncedCall = ({ serviceName, url, data, useCache, params }, resolve, re
       mergedData[params.tenantId] = {};
       let callPromises = [...mergedPromises[params.tenantId]];
       mergedPromises[params.tenantId] = [];
-      // console.log("calling merged mdms service", callData);
       ServiceRequest({
         serviceName,
         url,
@@ -1113,7 +1163,6 @@ const debouncedCall = ({ serviceName, url, data, useCache, params }, resolve, re
     mergedPromises[params.tenantId] = [];
   }
   mergedPromises[params.tenantId].push({ resolve, reject });
-  // console.log("debouncing mdms", JSON.stringify(data, null, 2), JSON.stringify(mergedData[params.tenantId], null, 2));
 };
 
 export const MdmsService = {
@@ -1310,5 +1359,12 @@ export const MdmsService = {
   HRGenderType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getGenderTypeList(tenantId, moduleCode, type), moduleCode);
   },
+
+  getDocumentTypes: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getDocumentTypesCriteria(tenantId, moduleCode, type), moduleCode);
+  },
   
+  getTradeTypeRoleTypes: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getTradeTypeRoleCriteria(tenantId, moduleCode, type), moduleCode);
+  }
 };

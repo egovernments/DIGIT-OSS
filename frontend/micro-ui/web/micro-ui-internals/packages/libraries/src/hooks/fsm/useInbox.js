@@ -15,7 +15,7 @@ const useFSMInbox = (tenantId, filters, config = {}, overRideUUID=false) => {
             ...(applicationNos ? {applicationNos} : {}),
             ...(sortBy ? {sortBy} : {}),
             ...(sortOrder ? {sortOrder} : {}),
-            ...(filters?.locality?.length > 0 ? {locality: filters.locality.map((item) => item.code.split("_").pop()).join(",")} : {}),
+            ...(filters?.locality?.length > 0 ? {locality: filters.locality.map((item) => item.code.split("_").pop())} : {}),
 		},
 		limit,
 		offset,

@@ -1,5 +1,5 @@
-import React from "react";
 import { Dropdown, UploadFile } from "@egovernments/digit-ui-react-components";
+import React from "react";
 
 export const configTLApproverApplication = ({
   t,
@@ -13,9 +13,9 @@ export const configTLApproverApplication = ({
   assigneeLabel,
   businessService,
 }) => {
-   let checkCondtions = true;
-   if (action?.action == "SENDBACKTOCITIZEN") checkCondtions = false;
-   if (action.isTerminateState) checkCondtions = false;
+  let checkCondtions = true;
+  if (action?.action == "SENDBACKTOCITIZEN") checkCondtions = false;
+  if (action.isTerminateState) checkCondtions = false;
 
   return {
     label: {
@@ -51,8 +51,9 @@ export const configTLApproverApplication = ({
           },
           {
             label: t("TL_APPROVAL_CHECKLIST_BUTTON_UP_FILE"),
-            populators:  (
+            populators: (
               <UploadFile
+                id={"workflow-doc"}
                 // accept=".jpg"
                 onUpload={selectFile}
                 onDelete={() => {
@@ -62,19 +63,19 @@ export const configTLApproverApplication = ({
               />
             )
           },
-        //   {
-        //     label: action.docUploadRequired ? t("ES_PT_UPLOAD_FILE") : null,
-        //     populators: action.docUploadRequired ? (
-        //       <UploadFile
-        //         // accept=".jpg"
-        //         onUpload={selectFile}
-        //         onDelete={() => {
-        //           setUploadedFile(null);
-        //         }}
-        //         message={uploadedFile ? `1 ${t(`ES_PT_ACTION_FILEUPLOADED`)}` : t(`ES_PT_ACTION_NO_FILEUPLOADED`)}
-        //       />
-        //     ) : null,
-        //   },
+          //   {
+          //     label: action.docUploadRequired ? t("ES_PT_UPLOAD_FILE") : null,
+          //     populators: action.docUploadRequired ? (
+          //       <UploadFile
+          //         // accept=".jpg"
+          //         onUpload={selectFile}
+          //         onDelete={() => {
+          //           setUploadedFile(null);
+          //         }}
+          //         message={uploadedFile ? `1 ${t(`ES_PT_ACTION_FILEUPLOADED`)}` : t(`ES_PT_ACTION_NO_FILEUPLOADED`)}
+          //       />
+          //     ) : null,
+          //   },
         ],
       },
     ],

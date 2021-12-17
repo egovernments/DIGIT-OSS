@@ -34,7 +34,7 @@ const PropertyDetails = () => {
   const history = useHistory();
 
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, applicationNumber);
-  const { data: fetchBillData, isLoading: fetchBillLoading } = Digit.Hooks.useFetchBillsForBuissnessService({
+  const { data: fetchBillData, isLoading: fetchBillLoading,revalidate } = Digit.Hooks.useFetchBillsForBuissnessService({
     businessService: "PT",
     consumerCode: applicationNumber,
   });
@@ -102,7 +102,8 @@ const PropertyDetails = () => {
       return e;
     });
   }
-  if (appDetailsToShow?.applicationDetails?.[0]?.values?.[1].title !== "PT_TOTAL_DUES") {
+ useEffect(()=>{
+ if (appDetailsToShow?.applicationDetails?.[0]?.values?.[1].title !== "PT_TOTAL_DUES") {
     appDetailsToShow?.applicationDetails?.unshift({
       values: [
         {
@@ -116,6 +117,13 @@ const PropertyDetails = () => {
       ],
     });
   }
+  return ()=>{
+    if (appDetailsToShow?.applicationDetails?.[0]?.values?.[1].title == "PT_TOTAL_DUES") {
+    appDetailsToShow?.applicationDetails.shift();
+    revalidate()
+    }
+  }
+ },[fetchBillData,appDetailsToShow])
 
   if (applicationDetails?.applicationData?.status === "ACTIVE") {
     workflowDetails = {
@@ -123,14 +131,14 @@ const PropertyDetails = () => {
       data: {
         ...workflowDetails?.data,
         actionState: {
-          nextActions: [
+          nextActions: PT_CEMP?[
             {
               action: "ASSESS_PROPERTY",
               forcedName: "PT_ASSESS",
               showFinancialYearsModal: true,
               customFunctionToExecute: (data) => {
                 delete data.customFunctionToExecute;
-                history.push({ pathname: `/digit-ui/employee/pt/assessment-details/${applicationNumber}`, state: { ...data } });
+                history.replace({ pathname: `/digit-ui/employee/pt/assessment-details/${applicationNumber}`, state: { ...data } });
               },
               tenantId: Digit.ULBService.getStateId(),
             },
@@ -146,7 +154,7 @@ const PropertyDetails = () => {
               },
               tenantId: Digit.ULBService.getStateId(),
             },
-          ],
+          ]:[],
         },
       },
     };

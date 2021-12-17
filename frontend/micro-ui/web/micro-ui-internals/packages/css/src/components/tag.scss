@@ -10,6 +10,10 @@
     margin-top: 1rem;
     .text {
       padding-right: 5px;
+      max-width: calc( 100% - 24px );
+      height: 22px;
+      overflow: hidden;
+      text-overflow: clip;
     }
 
     &:hover {

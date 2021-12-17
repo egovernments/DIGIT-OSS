@@ -131,6 +131,9 @@ public class PaymentNotificationService {
             Set<String> mobileNumbers = new HashSet<>();
             property.getOwners().forEach(owner -> {
                 mobileNumbers.add(owner.getMobileNumber());
+                if (owner.getAlternatemobilenumber()!= null) {
+                	mobileNumbers.add(owner.getAlternatemobilenumber());
+                }
             });
 
 			List<SMSRequest> smsRequests = getSMSRequests(mobileNumbers, customMessage, valMap);
@@ -225,6 +228,9 @@ public class PaymentNotificationService {
             Set<String> mobileNumbers = new HashSet<>();
             property.getOwners().forEach(owner -> {
                 mobileNumbers.add(owner.getMobileNumber());
+                if (owner.getAlternatemobilenumber()!= null) {
+                	mobileNumbers.add(owner.getAlternatemobilenumber());
+                }
             });
 
             smsRequests.addAll(getSMSRequests(mobileNumbers,customMessage, valMap));
@@ -420,11 +426,11 @@ public class PaymentNotificationService {
      * @return Customized message depending on values in valMap
      */
     private String getCustomizedOnlinePaymentMessage(String message,Map<String,String> valMap){
-        message = message.replace("< insert amount paid>",valMap.get("amountPaid"));
-        message = message.replace("< insert payment transaction id from PG>",valMap.get("transactionId"));
-        message = message.replace("<insert Property Tax Assessment ID>",valMap.get("propertyId"));
-        message = message.replace("<pt due>.",valMap.get("amountDue"));
-    //    message = message.replace("<FY>",valMap.get("financialYear"));
+        message = message.replace("{ insert amount paid}",valMap.get("amountPaid"));
+        message = message.replace("{ insert payment transaction id from PG}",valMap.get("transactionId"));
+        message = message.replace("{insert Property Tax Assessment ID}",valMap.get("propertyId"));
+        message = message.replace("{pt due}.",valMap.get("amountDue"));
+    //    message = message.replace("{FY}",valMap.get("financialYear"));
         return message;
     }
 
@@ -435,11 +441,11 @@ public class PaymentNotificationService {
      * @return Customized message depending on values in valMap
      */
     private String getCustomizedOfflinePaymentMessage(String message,Map<String,String> valMap){
-        message = message.replace("<amount>",valMap.get("amountPaid"));
-        message = message.replace("<insert mode of payment>",valMap.get("paymentMode"));
-        message = message.replace("<Enter pending amount>",valMap.get("amountDue"));
-        message = message.replace("<insert inactive citizen application web URL>.",propertyConfiguration.getNotificationURL());
-//        message = message.replace("<Insert FY>",valMap.get("financialYear"));
+        message = message.replace("{amount}",valMap.get("amountPaid"));
+        message = message.replace("{insert mode of payment}",valMap.get("paymentMode"));
+        message = message.replace("{Enter pending amount}",valMap.get("amountDue"));
+        message = message.replace("{insert inactive citizen application web URL}.",propertyConfiguration.getNotificationURL());
+//        message = message.replace("{Insert FY}",valMap.get("financialYear"));
         return message;
     }
 
@@ -450,9 +456,9 @@ public class PaymentNotificationService {
      * @return Customized message depending on values in valMap
      */
     private String getCustomizedPaymentFailMessage(String message,Map<String,String> valMap){
-        message = message.replace("<insert amount to pay>",valMap.get("txnAmount"));
-        message = message.replace("<insert ID>",valMap.get("propertyId"));
-//        message = message.replace("<FY>",valMap.get("financialYear"));
+        message = message.replace("{insert amount to pay}",valMap.get("txnAmount"));
+        message = message.replace("{insert ID}",valMap.get("propertyId"));
+//        message = message.replace("{FY}",valMap.get("financialYear"));
         return message;
     }
 
@@ -463,8 +469,8 @@ public class PaymentNotificationService {
      * @return Customized message depending on values in valMap
      */
     private String getCustomizedOldPropertyIdAbsentMessage(String message,Map<String,String> valMap){
-        message = message.replace("<insert Property Tax Assessment ID>",valMap.get("propertyId"));
-        message = message.replace("<FY>",valMap.get("financialYear"));
+        message = message.replace("{insert Property Tax Assessment ID}",valMap.get("propertyId"));
+        message = message.replace("{FY}",valMap.get("financialYear"));
         return  message;
     }
 
@@ -480,12 +486,12 @@ public class PaymentNotificationService {
         for(String mobileNumber : mobileNumbers){
             if(mobileNumber!=null)
             {   String finalMessage = customizedMessage.replace("$mobile", mobileNumber);
-                if(customizedMessage.contains("<payLink>")){
-                    finalMessage = finalMessage.replace("<payLink>", getPaymentLink(valMap));
+                if(customizedMessage.contains("{payLink}")){
+                    finalMessage = finalMessage.replace("{payLink}", getPaymentLink(valMap));
                 }
-                if(customizedMessage.contains("<receipt download link>")){
+                if(customizedMessage.contains("{receipt download link}")){
                     String receiptDownloadLink = getReceiptLink(valMap, mobileNumber);
-                    finalMessage = finalMessage.replace("<receipt download link>", receiptDownloadLink);
+                    finalMessage = finalMessage.replace("{receipt download link}", receiptDownloadLink);
                 }                
                 SMSRequest smsRequest = new SMSRequest(mobileNumber,finalMessage);
                 smsRequests.add(smsRequest);
@@ -503,11 +509,11 @@ public class PaymentNotificationService {
 	private SMSRequest getSMSRequestsWithoutReceipt(String mobileNumber, String customizedMessage, Map<String, String> valMap) {
 
 		String finalMessage = customizedMessage.replace("$mobile", mobileNumber);
-		if (customizedMessage.contains("<receipt download link>")) {
-			finalMessage = finalMessage.replace("Click on the link to download payment receipt <receipt download link>", "");
+		if (customizedMessage.contains("{receipt download link}")) {
+			finalMessage = finalMessage.replace("Click on the link to download payment receipt <receipt download link}", "");
 		}
-		if (customizedMessage.contains("<payLink>")) {
-			finalMessage = finalMessage.replace("<payLink>", getPaymentLink(valMap));
+		if (customizedMessage.contains("{payLink}")) {
+			finalMessage = finalMessage.replace("{payLink}", getPaymentLink(valMap));
 		}
 		return new SMSRequest(mobileNumber, finalMessage);
 	}
@@ -546,7 +552,7 @@ public class PaymentNotificationService {
                 }
 
                 String actionLink = propertyConfiguration.getPayLink().replace("$mobile", mobile)
-                        .replace("$consumerCode", property.getPropertyId())
+                        .replace("propertyId", property.getPropertyId())
                         .replace("$tenantId", property.getTenantId())
                         .replace("$businessService" , businessService);
 
@@ -575,7 +581,7 @@ public class PaymentNotificationService {
         StringBuilder builder = new StringBuilder(propertyConfiguration.getUiAppHost());
         builder.append(propertyConfiguration.getPayLink());
         String url = builder.toString();
-        url = url.replace("$consumerCode", valMap.get("propertyId"));
+        url = url.replace("$propertyId", valMap.get("propertyId"));
         url = url.replace("$tenantId", valMap.get("tenantId"));
         url = url.replace("$businessService",PT_BUSINESSSERVICE);
 

@@ -3,11 +3,14 @@
 .env
 .eslintcache
 
-# yarn
+# yarn $
 .yarn
+yarn.lock
+.yarnrc.yml
 
 # dependencies
 node_modules
+.yarn
 /.pnp
 .pnp.js
 
@@ -16,7 +19,7 @@ node_modules
 
 # production
 /web/build
-
+dist
 # misc
 .DS_Store
 .env.local

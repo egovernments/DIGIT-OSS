@@ -3,7 +3,7 @@ import { CardLabel, LabelFieldPair, Dropdown, UploadFile, Toast, Loader } from "
 
 const SelectDocuments = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const [documents, setDocuments] = useState(formData?.documents?.documents || []);
   const [error, setError] = useState(null);
 
@@ -85,8 +85,8 @@ function SelectDocument({
     filteredDocument
       ? { ...filteredDocument, active: filteredDocument?.status === "ACTIVE", code: filteredDocument?.documentType }
       : doc?.dropdownData?.length === 1
-      ? doc?.dropdownData[0]
-      : {}
+        ? doc?.dropdownData[0]
+        : { }
   );
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
@@ -166,7 +166,7 @@ function SelectDocument({
         } else {
           try {
             setUploadedFile(null);
-            const response = await Digit.UploadServices.Filestorage("PT", file, tenantId?.split(".")[0]);
+            const response = await Digit.UploadServices.Filestorage("PT", file, Digit.ULBService.getStateId());
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
             } else {
@@ -188,14 +188,11 @@ function SelectDocument({
         if (key.charAt(0).toUpperCase() + key.slice(1) === "PropertyType") return acc["PropertyType"];
         return acc?.[key];
       }, formData);
-
-      // console.log(value, onArray, "find value here");
       if (value) {
         if (onArray) {
           const valueArr = value?.map((e) => formArrayAttrPath.reduce((acc, f) => acc?.[f], e) || e);
           hideInput = valueArr?.some((e) => filterValue.includes(e));
         } else {
-          // console.log(value, "find value here");
           hideInput = filterValue?.includes(value);
         }
         if (hideInput !== isHidden) setHidden(hideInput);
@@ -241,6 +238,7 @@ function SelectDocument({
         <CardLabel className="card-label-smaller"></CardLabel>
         <div className="field">
           <UploadFile
+            id={"tl-doc"}
             onUpload={selectfile}
             onDelete={() => {
               setUploadedFile(null);

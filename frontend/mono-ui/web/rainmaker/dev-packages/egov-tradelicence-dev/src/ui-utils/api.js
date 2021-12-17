@@ -1,21 +1,20 @@
 import axios from "axios";
-import {
-  fetchFromLocalStorage,
-  addQueryArg
-} from "egov-ui-framework/ui-utils/commons";
-import store from "../ui-redux/store";
+import commonConfig from "config/common.js";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-  getAccessToken,
-  getTenantId,
-  getLocale
+  addQueryArg
+} from "egov-ui-framework/ui-utils/commons";
+import {
+  getAccessToken, getLocale, getTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
+import some from "lodash/some";
+import store from "../ui-redux/store";
 
 const instance = axios.create({
   baseURL: window.location.origin,
   headers: {
-    "Content-Type": "application/json"
-  }
+    "Content-Type": "application/json",
+  },
 });
 
 const wrapRequestBody = (requestBody, action, customRequestInfo) => {
@@ -29,13 +28,13 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     key: "",
     msgId: `20170310130900|${getLocale()}`,
     requesterId: "",
-    authToken
+    authToken,
   };
   RequestInfo = { ...RequestInfo, ...customRequestInfo };
   return Object.assign(
     {},
     {
-      RequestInfo
+      RequestInfo,
     },
     requestBody
   );
@@ -55,9 +54,23 @@ export const httpRequest = async (
 
   if (headers)
     instance.defaults = Object.assign(instance.defaults, {
-      headers
+      headers,
     });
 
+  /* Fix for central instance to send tenantID in all query params  */
+  const tenantId =
+    process.env.REACT_APP_NAME === "Citizen"
+      ? commonConfig.tenantId
+      : (endPoint && endPoint.includes("mdms")
+          ? commonConfig.tenantId
+          : getTenantId()) || commonConfig.tenantId;
+  if (!some(queryObject, ["key", "tenantId"]) && commonConfig.singleInstance) {
+    queryObject &&
+      queryObject.push({
+        key: "tenantId",
+        value: tenantId,
+      });
+  }
   endPoint = addQueryArg(endPoint, queryObject);
   var response;
   try {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Header,
   Card,
@@ -10,6 +10,7 @@ import {
   CardSectionHeader,
   InfoBanner,
   Loader,
+  Toast
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
@@ -18,7 +19,7 @@ import { useParams, useHistory, useLocation, Redirect } from "react-router-dom";
 export const SelectPaymentType = (props) => {
   const { state = {} } = useLocation();
   const userInfo = Digit.UserService.getUser();
-
+  const [showToast, setShowToast] = useState(null);
   const { tenantId: __tenantId, authorization } = Digit.Hooks.useQueryParams();
   const paymentAmount = state?.paymentAmount;
   const { t } = useTranslation();
@@ -28,17 +29,20 @@ export const SelectPaymentType = (props) => {
   // const menu = ["AXIS"];
   const { consumerCode, businessService } = useParams();
   const tenantId = state?.tenantId || __tenantId || Digit.ULBService.getCurrentTenantId();
-  const stateTenant = tenantId.split(".")[0];
+  const stateTenant = Digit.ULBService.getStateId();
   const { control, handleSubmit } = useForm();
   const { data: menu, isLoading } = Digit.Hooks.useCommonMDMS(stateTenant, "DIGIT-UI", "PaymentGateway");
   const { data: paymentdetails, isLoading: paymentLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService }, {});
-
+  useEffect(()=>{
+    if(paymentdetails?.Bill&&paymentdetails.Bill.length==0){
+      setShowToast({ key: true, label: "CS_BILL_NOT_FOUND" });
+    }
+  },[paymentdetails])
   const { name, mobileNumber } = state;
 
   const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
 
   const onSubmit = async (d) => {
-    // console.log("find submitted data", d);
     const filterData = {
       Transaction: {
         tenantId: tenantId,
@@ -76,7 +80,7 @@ export const SelectPaymentType = (props) => {
     } catch (error) {
       let messageToShow = "CS_PAYMENT_UNKNOWN_ERROR_ON_SERVER";
       console.dir(error);
-      console.log(error.response);
+      console.error(error.response);
       if (error.response?.data?.Errors?.[0]) {
         const { code, message } = error.response?.data?.Errors?.[0];
         messageToShow = t(message);
@@ -88,14 +92,14 @@ export const SelectPaymentType = (props) => {
   };
 
   if (authorization === "true" && !userInfo.access_token) {
-    // console.log("find query params", __tenantId, authorization, authorization === "true",!userInfo.access_token, authorization === "true" && !userInfo.access_token)
-    // console.log("find encoded url",encodeURI(pathname))
+
     return <Redirect to={`/digit-ui/citizen/login?from=${encodeURIComponent(pathname + search)}`} />;
   }
 
   if (isLoading || paymentLoading) {
     return <Loader />;
   }
+
 
   return (
     <React.Fragment>
@@ -105,7 +109,7 @@ export const SelectPaymentType = (props) => {
         <Card>
           <div className="payment-amount-info">
             <CardLabelDesc className="dark">{t("PAYMENT_CS_TOTAL_AMOUNT_DUE")}</CardLabelDesc>
-            <CardSectionHeader> ₹ {paymentAmount || billDetails.totalAmount}</CardSectionHeader>
+            <CardSectionHeader> ₹ {paymentAmount || billDetails?.totalAmount}</CardSectionHeader>
           </div>
           <CardLabel>{t("PAYMENT_CS_SELECT_METHOD")}</CardLabel>
           {menu?.length && (
@@ -116,10 +120,19 @@ export const SelectPaymentType = (props) => {
               render={(props) => <RadioButtons selectedOption={props.value} options={menu} onSelect={props.onChange} />}
             />
           )}
-          <SubmitBar label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />
+          {!showToast&&<SubmitBar label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />}
         </Card>
       </form>
       <InfoBanner label={t("CS_COMMON_INFO")} text={t("CS_PAYMENT_REDIRECT_NOTICE")} />
+      {showToast && (
+        <Toast
+          error={showToast.key}
+          label={t(showToast.label)}
+          onClose={() => {
+            setShowToast(null);
+          }}
+        />
+      )}
     </React.Fragment>
   );
 };

@@ -28,7 +28,7 @@ export const ApplicationCard = ({
   const [_sortparams, setSortParams] = useState(sortParams);
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const state = tenantId.split(".")[0];
+  const state = Digit.ULBService.getStateId();
   const { data: roleStatuses, isFetched: isRoleStatusFetched } = Digit.Hooks.fsm.useMDMS(state, "DIGIT-UI", "RoleStatusMapping");
 
   const userInfo = Digit.UserService.getUser();

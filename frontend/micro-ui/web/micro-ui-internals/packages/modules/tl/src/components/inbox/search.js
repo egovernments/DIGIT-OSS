@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, MobileNumber } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
@@ -10,15 +10,29 @@ const fieldComponents = {
   mobileNumber: MobileNumber,
 };
 
-const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams, isInboxPage, defaultSearchParams, clearSearch: _clearSearch }) => {
+const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams, isInboxPage, defaultSearchParams, clearSearch: _clearSearch, setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState }) => {
   const { t } = useTranslation();
-  const { register, handleSubmit, reset, watch, control, setError, clearErrors, formState } = useForm({
+  const { register, handleSubmit, reset, watch, control, setError, clearErrors, formState, setValue } = useForm({
     defaultValues: searchParams,
   });
 
   const form = watch();
 
   const mobileView = innerWidth <= 640;
+  const [justToResetSearchFieldsInCaseOfFilterTrigger, setSearchFieldsInCaseOfFilterTrigger] = useState([{applicationNumber: "", mobileNumber: ""}])
+
+  useEffect(()=>{
+    if(setSearchFieldsBackToOriginalState){
+      setNotRemovedStateToSearchFields()
+      setTimeout(setSetSearchFieldsBackToOriginalState(false), 1000)
+    }
+  },[setSearchFieldsBackToOriginalState])
+
+  const setNotRemovedStateToSearchFields = () => {
+    const {applicationNumber, mobileNumber} = justToResetSearchFieldsInCaseOfFilterTrigger
+    setValue("applicationNumber", applicationNumber)
+    setValue("mobileNumber", mobileNumber)
+  }
 
   useEffect(() => {
     searchFields.forEach(({ pattern, name, maxLength, minLength, errorMessages, ...el }) => {
@@ -48,6 +62,9 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
       delete data.mobileNumber;
     }
 
+    const mobileNumber = data?.mobileNumber
+    const applicationNumber = data?.applicationNumber
+    setSearchFieldsInCaseOfFilterTrigger({mobileNumber, applicationNumber})
     data.delete = [];
 
     searchFields.forEach((field) => {

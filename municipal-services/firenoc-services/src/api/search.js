@@ -27,8 +27,8 @@ export const searchApiResponse = async (request, next = {}) => {
     FireNOCs: []
   };
   const queryObj = JSON.parse(JSON.stringify(request.query));
-  console.log("request", request.query);
-  console.log("Query object:"+JSON.stringify(queryObj));
+  //console.log("request", request.query);
+  //console.log("Query object:"+JSON.stringify(queryObj));
   let errors = validateFireNOCSearchModel(queryObj);
   if (errors.length > 0) {
     next({
@@ -50,7 +50,7 @@ export const searchApiResponse = async (request, next = {}) => {
   const isUser = some(roles, { code: "CITIZEN" }) && userUUID;
   if (isUser) {
     const mobileNumber = get(request.body, "RequestInfo.userInfo.mobileNumber");
-    const tenantId = get(request.body, "RequestInfo.userInfo.permanentCity");
+    const tenantId = envVariables.EGOV_DEFAULT_STATE_ID;
     
     
     //text = `${text} where (FN.createdby = '${userUUID}' OR`;    
@@ -59,16 +59,22 @@ export const searchApiResponse = async (request, next = {}) => {
       ? queryObj.mobileNumber
       : mobileNumber;
     queryObj.tenantId = queryObj.tenantId ? queryObj.tenantId : tenantId;
-    console.log("mobileNumber", mobileNumber);
-    console.log("tenedrIDD", tenantId);
+    //console.log("mobileNumber", mobileNumber);
+    //console.log("tenedrIDD", tenantId);
 
-    text = `${text} where FN.tenantid = '${queryObj.tenantId}' AND`;
+    if(queryObj.tenantId == envVariables.EGOV_DEFAULT_STATE_ID)
+      text = `${text} where FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
+    else
+      text = `${text} where FN.tenantid = '${queryObj.tenantId}' AND`;
   } else {
     if (!isEmpty(queryObj)) {
       text = text + " where ";
     }
     if (queryObj.tenantId) {
-      text = `${text} FN.tenantid = '${queryObj.tenantId}' AND`;
+      if(queryObj.tenantId == envVariables.EGOV_DEFAULT_STATE_ID)
+        text = `${text} FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
+      else
+        text = `${text} FN.tenantid = '${queryObj.tenantId}' AND`;
     }
   }
   // if (queryObj.status) {
@@ -169,7 +175,7 @@ export const searchApiResponse = async (request, next = {}) => {
   } else if (!isEmpty(queryObj)) {
     sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)} ORDER BY FN.uuid`;
   }
-  console.log("SQL QUery:" +sqlQuery);
+  //console.log("SQL QUery:" +sqlQuery);
   const dbResponse = await db.query(sqlQuery);
   //console.log("dbResponse"+JSON.stringify(dbResponse));
   if (dbResponse.err) {

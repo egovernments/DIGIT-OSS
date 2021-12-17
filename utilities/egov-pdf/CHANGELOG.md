@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.2 - 2021-12-14
+
+- Added support for download receipt by receipt number 
+ 
 ## 1.1.1 - 2021-07-26
 
 - Added fetch bill api for expired bill

@@ -6,7 +6,7 @@ import ServiceCategoryCount from "./ServiceCategoryCount";
 const ServiceCategory = ({ onAssignmentChange, searchParams, businessServices,clearCheck,setclearCheck }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const [moreStatus, showMoreStatus] = useState(false);
   const { data: Menu, isLoading } = Digit.Hooks.mcollect.useMCollectMDMS(stateId, "BillingService", "BusinessService", "[?(@.type=='Adhoc')]");
 

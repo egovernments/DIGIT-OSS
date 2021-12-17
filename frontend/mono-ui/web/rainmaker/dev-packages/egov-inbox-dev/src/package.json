@@ -1,0 +1,15 @@
+{
+  "name": "egov-inbox",
+  "version": "1.0.0",
+  "private": false,
+  "scripts": {
+    "version-patch": "yarn version --new-version patch",
+    "version-minor": "yarn version --new-version minor",
+    "version-major": "yarn version --new-version major"
+  },
+  "description": "\"# react-tour\"",
+  "main": "index.js",
+  "devDependencies": {},
+  "author": "jagankumar-egov",
+  "license": "MIT"
+}

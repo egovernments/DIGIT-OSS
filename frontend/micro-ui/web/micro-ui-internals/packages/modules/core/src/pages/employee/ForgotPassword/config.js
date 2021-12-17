@@ -1,9 +1,9 @@
 export const loginConfig = [
   {
     texts: {
-      header: "CS_FORGOT_PASSWORD",
-      submitButtonLabel: "CS_CONTINUE",
-      secondaryButtonLabel: "CS_BACK_TO_LOGIN",
+      header: "CORE_COMMON_FORGOT_PASSWORD_LABEL",
+      description: "ES_FORGOT_PASSWORD_DESC",
+      submitButtonLabel: "CORE_COMMON_CONTINUE",
     },
     inputs: [
       {

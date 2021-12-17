@@ -5,6 +5,9 @@
   <groupId>org.egov</groupId>
   <artifactId>egov-telemetry-batch-process</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <properties>
+    <log4j2.version>2.16.0</log4j2.version>
+  </properties
   <dependencies>
     <dependency>
       <groupId>org.apache.spark</groupId>

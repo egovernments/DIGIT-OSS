@@ -23,7 +23,7 @@ const Units = ({ t, config, onSelect, userType, formData, setError, formState, c
       },
     ]
   );
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const [focusIndex, setFocusIndex] = useState({ index: -1 });
   const [loader, setLoader] = useState(true);
 
@@ -102,7 +102,6 @@ const Units = ({ t, config, onSelect, userType, formData, setError, formState, c
         }, {});
         let totalGroundFloorArea = Object.keys(floorWiseAreas).reduce((acc, key) => (floorWiseAreas[key] <= acc ? acc : floorWiseAreas[key]), 0);
 
-        // console.log(floorWiseAreas, totalGroundFloorArea, "areaas");
         if (totalGroundFloorArea > Number(formData?.landarea)) {
           setError(config.key, { type: "landArea extended", message: t("PT_BUILTUPAREA_GRATER_THAN_LANDAREA") });
         } else clearErrors(config.key);
@@ -114,7 +113,6 @@ const Units = ({ t, config, onSelect, userType, formData, setError, formState, c
     let minFloor = units.reduce((min, unit) => Math.min(min, Number(unit.floorNo?.code) || Number(0)), Number(0));
     let maxFloor = units.reduce((max, unit) => Math.max(max, Number(unit.floorNo?.code) || Number(0)), Number(0));
 
-    // let totalGroundFloorArea = units.reduce((acc, { floorNo, builtUpArea }) => acc + (floorNo?.code == 0 ? Number(builtUpArea) : 0), 0);
 
     let floorWiseAreas = units.reduce((acc, { floorNo, builtUpArea }) => {
       if (!floorNo) return acc;
@@ -125,7 +123,6 @@ const Units = ({ t, config, onSelect, userType, formData, setError, formState, c
     }, {});
 
     let totalGroundFloorArea = Object.keys(floorWiseAreas).reduce((acc, key) => (floorWiseAreas[key] <= acc ? acc : floorWiseAreas[key]), 0);
-    // console.log(floorWiseAreas, totalGroundFloorArea, "areaas");
     const continuousFloorsArr = floorListData.filter((e) => {
       let num = Number(e?.code);
       return (num < maxFloor && num > minFloor) || num === maxFloor || num === minFloor;
@@ -172,8 +169,6 @@ const Units = ({ t, config, onSelect, userType, formData, setError, formState, c
       });
     return menu;
   };
-
-  // console.log(usageCategoryMajorMenu(usagecat), subUsageCategoryMenu(usagecat), getfloorlistdata(floorlist), "options inside units");
 
   function goNext() {
     let unitsData = units?.map((unit) => ({
@@ -227,7 +222,6 @@ const Units = ({ t, config, onSelect, userType, formData, setError, formState, c
   }, [formData?.PropertyType]);
 
   useEffect(() => {
-    // console.log(units, "inside units change");
     goNext();
     calculateNumberOfFloors();
   }, [units, formData.PropertyType, formData.landarea]);
@@ -358,7 +352,6 @@ function Unit({
       }
     }
 
-    // console.log(formValue, "on units fromvalue change");
 
     if (Object.keys(localFormState.errors).length && !formState?.errors?.units) {
       setError("units", { type: `${unit.key}`, message: Object.keys(localFormState.errors).join() });

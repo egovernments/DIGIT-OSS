@@ -156,7 +156,7 @@ public class WorkflowNotificationService {
 		}
 		Map<String, String> mobileNumberAndMesssage = getMessageForMobileNumber(mobileNumbersAndNames,
 				sewerageConnectionRequest, message, property);
-		if (message.contains("<receipt download link>"))
+		if (message.contains("{receipt download link}"))
 			mobileNumberAndMesssage = setRecepitDownloadLink(mobileNumberAndMesssage, sewerageConnectionRequest, message, property);
 		Set<String> mobileNumbers = new HashSet<>(mobileNumberAndMesssage.keySet());
 		Map<String, String> mapOfPhoneNoAndUUIDs = fetchUserUUIDs(mobileNumbers, sewerageConnectionRequest.getRequestInfo(),
@@ -203,10 +203,10 @@ public class WorkflowNotificationService {
 			SewerageConnectionRequest sewerageConnectionRequest, Property property) {
 		String messageTemplate = mobileNumberAndMessage.get(mobileNumber);
 		List<ActionItem> items = new ArrayList<>();
-		if (messageTemplate.contains("<Action Button>")) {
-			String code = StringUtils.substringBetween(messageTemplate, "<Action Button>", "</Action Button>");
-			messageTemplate = messageTemplate.replace("<Action Button>", "");
-			messageTemplate = messageTemplate.replace("</Action Button>", "");
+		if (messageTemplate.contains("{Action Button}")) {
+			String code = StringUtils.substringBetween(messageTemplate, "{Action Button}", "{/Action Button}");
+			messageTemplate = messageTemplate.replace("{Action Button}", "");
+			messageTemplate = messageTemplate.replace("{/Action Button}", "");
 			messageTemplate = messageTemplate.replace(code, "");
 			String actionLink = "";
 			if (code.equalsIgnoreCase("Download Application")) {
@@ -299,7 +299,7 @@ public class WorkflowNotificationService {
 		List<SMSRequest> smsRequest = new ArrayList<>();
 		Map<String, String> mobileNumberAndMessage = getMessageForMobileNumber(mobileNumbersAndNames,
 				sewerageConnectionRequest, message, property);
-		if (message.contains("<receipt download link>"))
+		if (message.contains("{receipt download link}"))
 			mobileNumberAndMessage = setRecepitDownloadLink(mobileNumberAndMessage, sewerageConnectionRequest, message, property);
 		mobileNumberAndMessage.forEach((mobileNumber, msg) -> {
 			SMSRequest req = SMSRequest.builder().mobileNumber(mobileNumber).message(msg).category(Category.TRANSACTION).build();
@@ -313,66 +313,66 @@ public class WorkflowNotificationService {
 		Map<String, String> messageToReturn = new HashMap<>();
 		for (Entry<String, String> mobileAndName : mobileNumbersAndNames.entrySet()) {
 			String messageToReplace = message;
-			if (messageToReplace.contains("<Owner Name>"))
-				messageToReplace = messageToReplace.replace("<Owner Name>", mobileAndName.getValue());
-			if (messageToReplace.contains("<Service>"))
-				messageToReplace = messageToReplace.replace("<Service>", SWConstants.SERVICE_FIELD_VALUE_NOTIFICATION);
+			if (messageToReplace.contains("{Owner Name}"))
+				messageToReplace = messageToReplace.replace("{Owner Name}", mobileAndName.getValue());
+			if (messageToReplace.contains("{Service}"))
+				messageToReplace = messageToReplace.replace("{Service}", SWConstants.SERVICE_FIELD_VALUE_NOTIFICATION);
 
-			if (messageToReplace.contains("<Application number>"))
-				messageToReplace = messageToReplace.replace("<Application number>",
+			if (messageToReplace.contains("{Application number}"))
+				messageToReplace = messageToReplace.replace("{Application number}",
 						sewerageConnectionRequest.getSewerageConnection().getApplicationNo());
 
-			if (messageToReplace.contains("<Application download link>"))
-				messageToReplace = messageToReplace.replace("<Application download link>",
+			if (messageToReplace.contains("{Application download link}"))
+				messageToReplace = messageToReplace.replace("{Application download link}",
 						sewerageServicesUtil.getShortenedURL(
 								getApplicationDownloaderLink(sewerageConnectionRequest, property)));
 
-			if (messageToReplace.contains("<mseva URL>"))
-				messageToReplace = messageToReplace.replace("<mseva URL>",
+			if (messageToReplace.contains("{mseva URL}"))
+				messageToReplace = messageToReplace.replace("{mseva URL}",
 						sewerageServicesUtil.getShortenedURL(config.getNotificationUrl()));
 			
-			if (messageToReplace.contains("<Plumber Info>"))
+			if (messageToReplace.contains("{Plumber Info}"))
 				messageToReplace = getMessageForPlumberInfo(sewerageConnectionRequest.getSewerageConnection(), messageToReplace);
 			
-			if (messageToReplace.contains("<SLA>"))
-				messageToReplace = messageToReplace.replace("<SLA>", getSLAForState(
+			if (messageToReplace.contains("{SLA}"))
+				messageToReplace = messageToReplace.replace("{SLA}", getSLAForState(
 						sewerageConnectionRequest, property));
 
-			if (messageToReplace.contains("<mseva app link>"))
-				messageToReplace = messageToReplace.replace("<mseva app link>",
+			if (messageToReplace.contains("{mseva app link}"))
+				messageToReplace = messageToReplace.replace("{mseva app link}",
 						sewerageServicesUtil.getShortenedURL(config.getMSevaAppLink()));
 
-			if (messageToReplace.contains("<View History Link>")) {
+			if (messageToReplace.contains("{View History Link}")) {
 				String historyLink = config.getNotificationUrl() + config.getViewHistoryLink();
 				historyLink = historyLink.replace(mobileNoReplacer, mobileAndName.getKey());
 				historyLink = historyLink.replace(applicationNumberReplacer,
 						sewerageConnectionRequest.getSewerageConnection().getApplicationNo());
 				historyLink = historyLink.replace(tenantIdReplacer, property.getTenantId());
-				messageToReplace = messageToReplace.replace("<View History Link>",
+				messageToReplace = messageToReplace.replace("{View History Link}",
 						sewerageServicesUtil.getShortenedURL(historyLink));
 			}
-			if (messageToReplace.contains("<payment link>")) {
+			if (messageToReplace.contains("{payment link}")) {
 				String paymentLink = config.getNotificationUrl() + config.getApplicationPayLink();
 				paymentLink = paymentLink.replace(mobileNoReplacer, mobileAndName.getKey());
 				paymentLink = paymentLink.replace(consumerCodeReplacer,
 						sewerageConnectionRequest.getSewerageConnection().getApplicationNo());
 				paymentLink = paymentLink.replace(tenantIdReplacer, property.getTenantId());
-				messageToReplace = messageToReplace.replace("<payment link>",
+				messageToReplace = messageToReplace.replace("{payment link}",
 						sewerageServicesUtil.getShortenedURL(paymentLink));
 			}
-			/*if (messageToReplace.contains("<receipt download link>"))
-				messageToReplace = messageToReplace.replace("<receipt download link>",
+			/*if (messageToReplace.contains("{receipt download link}"))
+				messageToReplace = messageToReplace.replace("{receipt download link}",
 						sewerageServicesUtil.getShortenedURL(config.getNotificationUrl()));*/
 
-			if (messageToReplace.contains("<connection details page>")) {
+			if (messageToReplace.contains("{connection details page}")) {
 				String connectionDetaislLink = config.getNotificationUrl() + config.getConnectionDetailsLink();
 				connectionDetaislLink = connectionDetaislLink.replace(connectionNoReplacer,
 						sewerageConnectionRequest.getSewerageConnection().getConnectionNo());
 				connectionDetaislLink = connectionDetaislLink.replace(tenantIdReplacer, property.getTenantId());
-				messageToReplace = messageToReplace.replace("<connection details page>",
+				messageToReplace = messageToReplace.replace("{connection details page}",
 						sewerageServicesUtil.getShortenedURL(connectionDetaislLink));
 			}
-			if(messageToReplace.contains("<Date effective from>")) {
+			if(messageToReplace.contains("{Date effective from}")) {
 				if (sewerageConnectionRequest.getSewerageConnection().getDateEffectiveFrom() != null) {
 					LocalDate date = Instant
 							.ofEpochMilli(sewerageConnectionRequest.getSewerageConnection().getDateEffectiveFrom() > 10 ?
@@ -380,9 +380,9 @@ public class WorkflowNotificationService {
 									sewerageConnectionRequest.getSewerageConnection().getDateEffectiveFrom() * 1000)
 							.atZone(ZoneId.systemDefault()).toLocalDate();
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-					messageToReplace = messageToReplace.replace("<Date effective from>", date.format(formatter));
+					messageToReplace = messageToReplace.replace("{Date effective from}", date.format(formatter));
 				} else {
-					messageToReplace = messageToReplace.replace("<Date effective from>", "");
+					messageToReplace = messageToReplace.replace("{Date effective from}", "");
 				}
 			}
 			messageToReturn.put(mobileAndName.getKey(), messageToReplace);
@@ -406,27 +406,27 @@ public class WorkflowNotificationService {
 		if (!StringUtils.isEmpty(String.valueOf(addDetail.get(SWConstants.DETAILS_PROVIDED_BY)))) {
 			String detailsProvidedBy = String.valueOf(addDetail.get(SWConstants.DETAILS_PROVIDED_BY));
 			if (StringUtils.isEmpty(detailsProvidedBy) || detailsProvidedBy.equalsIgnoreCase(SWConstants.SELF)) {
-				String code = StringUtils.substringBetween(messageTemplate, "<Plumber Info>", "</Plumber Info>");
-				messageTemplate = messageTemplate.replace("<Plumber Info>", "");
-				messageTemplate = messageTemplate.replace("</Plumber Info>", "");
+				String code = StringUtils.substringBetween(messageTemplate, "{Plumber Info}", "{/Plumber Info}");
+				messageTemplate = messageTemplate.replace("{Plumber Info}", "");
+				messageTemplate = messageTemplate.replace("{/Plumber Info}", "");
 				messageTemplate = messageTemplate.replace(code, "");
 			} else {
-				messageTemplate = messageTemplate.replace("<Plumber Info>", "").replace("</Plumber Info>", "");
-				messageTemplate = messageTemplate.replace("<Plumber name>",
+				messageTemplate = messageTemplate.replace("{Plumber Info}", "").replace("{/Plumber Info}", "");
+				messageTemplate = messageTemplate.replace("{Plumber name}",
 						StringUtils.isEmpty(sewerageConnection.getPlumberInfo().get(0).getName()) ? ""
 								: sewerageConnection.getPlumberInfo().get(0).getName());
-				messageTemplate = messageTemplate.replace("<Plumber Licence No.>",
+				messageTemplate = messageTemplate.replace("{Plumber Licence No.}",
 						StringUtils.isEmpty(sewerageConnection.getPlumberInfo().get(0).getLicenseNo()) ? ""
 								: sewerageConnection.getPlumberInfo().get(0).getLicenseNo());
-				messageTemplate = messageTemplate.replace("<Plumber Mobile No.>",
+				messageTemplate = messageTemplate.replace("{Plumber Mobile No.}",
 						StringUtils.isEmpty(sewerageConnection.getPlumberInfo().get(0).getMobileNumber()) ? ""
 								: sewerageConnection.getPlumberInfo().get(0).getMobileNumber());
 			}
 
 		}else{
-			String code = StringUtils.substringBetween(messageTemplate, "<Plumber Info>", "</Plumber Info>");
-			messageTemplate = messageTemplate.replace("<Plumber Info>", "");
-			messageTemplate = messageTemplate.replace("</Plumber Info>", "");
+			String code = StringUtils.substringBetween(messageTemplate, "{Plumber Info}", "{/Plumber Info}");
+			messageTemplate = messageTemplate.replace("{Plumber Info}", "");
+			messageTemplate = messageTemplate.replace("{/Plumber Info}", "");
 			messageTemplate = messageTemplate.replace(code, "");
 		}
 
@@ -611,7 +611,7 @@ public class WorkflowNotificationService {
 				link = link.replace("$receiptNumber", receiptNumber);
 				link = link.replace("$mobile", mobileAndMsg.getKey());
 				link = sewerageServicesUtil.getShortenedURL(link);
-				messageToReplace = messageToReplace.replace("<receipt download link>", link);
+				messageToReplace = messageToReplace.replace("{receipt download link}", link);
 
 				messageToReturn.put(mobileAndMsg.getKey(), messageToReplace);
 			}

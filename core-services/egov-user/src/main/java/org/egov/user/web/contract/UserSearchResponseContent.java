@@ -37,6 +37,7 @@ public class UserSearchResponseContent {
     private String correspondenceAddress;
     private String correspondenceCity;
     private String correspondencePinCode;
+    private String alternatemobilenumber;
 
     @JsonIgnore
     private Set<Address> addresses;
@@ -100,6 +101,7 @@ public class UserSearchResponseContent {
         this.relationship = user.getGuardianRelation();
         this.uuid = user.getUuid();
         this.addresses = user.getAddresses();
+        this.alternatemobilenumber=user.getAlternateMobileNumber();
         mapPermanentAddress(user);
         mapCorrespondenceAddress(user);
     }

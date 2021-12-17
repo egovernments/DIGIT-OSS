@@ -1,4 +1,4 @@
-import { getBreak, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getBreak, getCommonHeader,getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
@@ -113,6 +113,39 @@ const abgSearchAndResult = {
                 sm: 6
               },
               ...header
+            },
+            downloadBillButton: {
+              componentPath: "Button",
+              gridDefination: {
+                xs: 12,
+                sm: 6,
+                align: "right"
+              },
+              visible: true,
+              props: {
+                variant: "contained",
+                color: "primary",
+                style: {
+                  color: "white",
+                  borderRadius: "2px",
+                  width: "250px",
+                  height: "48px"
+                }
+              },
+              children: {
+                ButtonLabel: getLabel({
+                  labelName: "VIEW DOWNLOADS",
+                  labelKey: "ABG_VIEW_DOWNLOADS_HEADER"
+                })
+              },
+              onClickDefination: {
+                action: "page_change",
+                path:
+                  process.env.REACT_APP_SELF_RUNNING === "true"
+                    ? `/egov-ui-framework/abg/billDownload`
+                    : `/abg/billDownload`
+              },
+              visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
             }
           }
         },

@@ -3,7 +3,7 @@ import { FormStep, Dropdown, Loader, CardLabel, RadioButtons, RadioOrSelect } fr
 
 const SelectPitType = ({ t, formData, config, onSelect, userType }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
 
   const [pitType, setPitType] = useState(formData?.pitType);
   const { data: sanitationMenu, isLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PitType");

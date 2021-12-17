@@ -79,6 +79,7 @@ import org.egov.demand.model.TaxHeadMaster;
 import org.egov.demand.model.TaxHeadMasterCriteria;
 import org.egov.demand.model.UpdateBillCriteria;
 import org.egov.demand.model.UpdateBillRequest;
+import org.egov.demand.producer.Producer;
 import org.egov.demand.repository.BillRepositoryV2;
 import org.egov.demand.repository.IdGenRepo;
 import org.egov.demand.repository.ServiceRequestRepository;
@@ -138,7 +139,13 @@ public class BillServicev2 {
 	
 	@Autowired
 	private BillValidator billValidator;
-	
+
+	@Autowired
+	private Producer producer;
+
+	@Value("${kafka.topics.cancel.bill.topic.name}")
+	private String billCancelTopic;
+
 	@Value("${kafka.topics.billgen.topic.name}")
 	private String notifTopicName;
 	
@@ -154,6 +161,7 @@ public class BillServicev2 {
 	public Integer cancelBill(UpdateBillRequest updateBillRequest) {
 		
 		UpdateBillCriteria cancelBillCriteria = updateBillRequest.getUpdateBillCriteria();
+		billValidator.validateBillSearchRequest(cancelBillCriteria);
 		Set<String> consumerCodes = cancelBillCriteria.getConsumerCodes();
 		cancelBillCriteria.setStatusToBeUpdated(BillStatus.CANCELLED);
 
@@ -161,9 +169,29 @@ public class BillServicev2 {
 			
 			throw new CustomException("EG_BS_CANCEL_BILL_ERROR", "Only one consumer code can be provided in the Cancel request");
 		} else {
-
-			return billRepository.updateBillStatus(cancelBillCriteria);
+			int result = billRepository.updateBillStatus(cancelBillCriteria);
+			sendNotificationForBillCancellation(updateBillRequest.getRequestInfo(), cancelBillCriteria);
+			return result;
 		}
+	}
+
+	private void sendNotificationForBillCancellation(RequestInfo requestInfo, UpdateBillCriteria cancelBillCriteria) {
+		Set<String> consumerCodes = cancelBillCriteria.getConsumerCodes();
+		if(CollectionUtils.isEmpty(consumerCodes))
+			return;
+
+		List<BillV2> bills =  billRepository.findBill(BillSearchCriteria.builder()
+				.service(cancelBillCriteria.getBusinessService())
+				.tenantId(cancelBillCriteria.getTenantId())
+				.consumerCode(consumerCodes)
+				.build());
+
+		if (CollectionUtils.isEmpty(bills))
+			return;
+
+		BillRequestV2 req = BillRequestV2.builder().bills(bills).requestInfo(requestInfo).build();
+		producer.push(billCancelTopic, req);
+
 	}
 
 	/**

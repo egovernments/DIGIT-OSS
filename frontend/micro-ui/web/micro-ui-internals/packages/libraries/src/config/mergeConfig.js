@@ -48,7 +48,6 @@ const GetCurrentUpdatableSection = (id, defaultConfigCopy) => {
     for (let i = 0; i < defaultConfigCopy.length; i++) {
       if (defaultConfigCopy[i].id === id) {
         currentUpdatableSection.push(defaultConfigCopy[i]);
-        //console.log("matched", currentUpdatableSection);
       } else if (ifObjectContainsArray(defaultConfigCopy[i]).hasArray) {
         let array = ifObjectContainsArray(defaultConfigCopy[i]).value;
         GetCurrentUpdatableSection(id, array);
@@ -93,7 +92,7 @@ const seachInDefaultConfig = (id, action) => {
 const actionHandler = (action, id, fieldList) => {
   const index = getIndex(id, fieldList);
   if (!action) {
-    console.log("no action found");
+    console.error("no action found");
     return;
   }
   if (action.__action__ === "UPDATE") {

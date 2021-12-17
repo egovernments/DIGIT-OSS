@@ -3,7 +3,7 @@ import { LogoutIcon } from "@egovernments/digit-ui-react-components";
 import TopBar from "./TopBar";
 import SideBar from "./SideBar";
 
-const TopBarSideBar = ({ t, stateInfo, userDetails, CITIZEN, cityDetails, mobileView, handleUserDropdownSelection, logoUrl }) => {
+const TopBarSideBar = ({ t, stateInfo, userDetails, CITIZEN, cityDetails, mobileView, handleUserDropdownSelection, logoUrl, showSidebar = true }) => {
     const [isSidebarOpen, toggleSidebar] = useState(false);
   
     const handleLogout = () => {
@@ -29,7 +29,7 @@ const TopBarSideBar = ({ t, stateInfo, userDetails, CITIZEN, cityDetails, mobile
           handleUserDropdownSelection={handleUserDropdownSelection}
           logoUrl={logoUrl}
         />
-        <SideBar
+        {showSidebar && <SideBar
           t={t}
           CITIZEN={CITIZEN}
           isSidebarOpen={isSidebarOpen}
@@ -38,6 +38,7 @@ const TopBarSideBar = ({ t, stateInfo, userDetails, CITIZEN, cityDetails, mobile
           mobileView={mobileView}
           userDetails={userDetails}
         />
+        }
       </React.Fragment>
     );
   }

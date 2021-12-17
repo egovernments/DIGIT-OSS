@@ -83,6 +83,12 @@ public class LandQueryBuilder {
 			preparedStmtList.add(criteria.getLandUId());
 		}
 		
+		if (criteria.getLocality() != null) {
+                    addClauseIfRequired(preparedStmtList, builder);
+                    builder.append(" landInfoaddress.locality = ? ");
+                    preparedStmtList.add(criteria.getLocality());
+                }
+		
 		return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
 
 	}
