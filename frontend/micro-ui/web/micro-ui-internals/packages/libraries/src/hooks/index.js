@@ -170,6 +170,7 @@ import useNOCDetails from "./noc/useNOCDetails";
 import useNOCInbox from "./noc/useInbox";
 
 import WSSearchMdmsTypes from "./ws/WSSearchMdmsTypes";
+import usewsTenants from "./ws/useTenants";
 
 
 const pgr = {
@@ -345,7 +346,8 @@ const noc = {
 }
 
 const ws = {
-  WSSearchMdmsTypes
+  WSSearchMdmsTypes,
+  usewsTenants
 }
 
 const Hooks = {

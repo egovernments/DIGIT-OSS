@@ -18,7 +18,7 @@ const WSModule = ({ stateCode, userType, tenants }) => {
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
 
-  Digit.SessionStorage.set("OBPS_TENANTS", tenants);
+  Digit.SessionStorage.set("WS_TENANTS", tenants);
 
   if (isLoading) {
     return <Loader />;
