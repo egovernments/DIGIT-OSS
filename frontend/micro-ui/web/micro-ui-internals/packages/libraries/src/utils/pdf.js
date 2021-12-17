@@ -423,8 +423,8 @@ const downloadPdf = (blob, fileName) => {
 
 /* Download Receipts */
 
-export const downloadReceipt = async (consumerCode, businessService, pdfKey = "consolidatedreceipt") => {
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+export const downloadReceipt = async (consumerCode, businessService, pdfKey = "consolidatedreceipt",tenantId) => {
+  tenantId = tenantId ? tenantId : Digit.ULBService.getCurrentTenantId();
   const response = await Digit.ReceiptsService.receipt_download(businessService, consumerCode, tenantId, pdfKey);
   const responseStatus = parseInt(response.status, 10);
   if (responseStatus === 201 || responseStatus === 200) {

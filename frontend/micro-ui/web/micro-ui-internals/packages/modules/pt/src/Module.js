@@ -38,6 +38,7 @@ import SearchPropertyCitizen from "./pages/citizen/SearchProperty/searchProperty
 import SearchResultCitizen from "./pages/citizen/SearchResults";
 import PTCheckPage from "./pages/citizen/Create/CheckPage";
 import PTAcknowledgement from "./pages/citizen/Create/PTAcknowledgement";
+import { PTMyPayments } from "./pages/citizen/MyPayments";
 
 import PropertyInformation from "./pages/citizen/MyProperties/propertyInformation";
 import PTWFCaption from "./pageComponents/PTWFCaption";
@@ -112,6 +113,7 @@ const componentsToRegister = {
   PTRegistrationDocument,
   UnderStateAquire,
   TransferProof,
+  PTMyPayments,
 };
 
 const addComponentsToRegistry = () => {
@@ -152,6 +154,10 @@ export const PTLinks = ({ matchPath, userType }) => {
     {
       link: `/digit-ui/citizen/payment/my-bills/PT`,
       i18nKey: t("CS_TITLE_MY_BILLS"),
+    },
+    {
+      link: `${matchPath}/property/my-payments`,
+      i18nKey: t("PT_MY_PAYMENTS_HEADER"),
     },
     {
       link: `${matchPath}/property/new-application`,

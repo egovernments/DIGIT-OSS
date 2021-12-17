@@ -858,6 +858,12 @@ export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   return str;
 };
 
+export const DownloadReceipt = async (consumerCode, tenantId, businessService, pdfKey = "consolidatedreceipt") => {
+  tenantId = tenantId ? tenantId : Digit.ULBService.getCurrentTenantId();
+  await Digit.Utils.downloadReceipt(consumerCode, businessService, 'consolidatedreceipt', tenantId);
+
+};
+
 export const checkIsAnArray = (obj = []) => {
   return obj && Array.isArray(obj) ? true : false;
 };
