@@ -123,7 +123,7 @@ const SelectPTUnits = ({ t, config, onSelect, userType, formData }) => {
   function selectUsageCategory(i, value) {
     let units = [...fields];
     units[i].usageCategory = value;
-
+units[i].unitType="";
     setFields(units);
   }
   function selectFloor(i, value) {
@@ -172,7 +172,7 @@ const SelectPTUnits = ({ t, config, onSelect, userType, formData }) => {
       units=units?.filter(e=>e.floorNo!=currentFloor);
       unitsdata=[...units,...unitsdata];
     }
-    if(currentFloor===formData?.noOfFloors?.code){
+    if(currentFloor===formData?.noOfFloors?.code||!isFloor){
       onSelect(config.key, unitsdata);
     }else{
       onSelect(config.key, unitsdata,false,currentFloor+1,true);
@@ -227,7 +227,7 @@ const SelectPTUnits = ({ t, config, onSelect, userType, formData }) => {
                   t={t}
                   optionKey="i18nKey"
                   isMandatory={config.isMandatory}
-                  option={mdmsData?.UsageSubCategory}
+                  option={mdmsData?.UsageSubCategory?.filter(category=>category.usageCategoryMinor===field?.usageCategory?.code)}
                   selected={field?.unitType}
                   select={(e) => selectSubUsageCategory(index, e)}
                 />

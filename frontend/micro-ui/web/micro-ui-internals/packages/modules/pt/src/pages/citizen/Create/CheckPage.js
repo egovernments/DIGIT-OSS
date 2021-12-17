@@ -9,7 +9,7 @@ import {
   StatusTable,
   SubmitBar,
 } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import React, { Fragment,useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import {
@@ -66,6 +66,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
     isEditProperty,
     isUpdateProperty,
   } = value;
+  console.log(value,'value');
   const typeOfApplication = !isEditProperty && !isUpdateProperty ? `new-application` : `edit-application`;
   let flatplotsize;
   if (isPropertyselfoccupied(selfOccupied?.i18nKey)) {
@@ -271,17 +272,59 @@ const CheckPage = ({ onSubmit, value = {} }) => {
         </div>
         <CardSubHeader>{t("PT_ASSESMENT_INFO_SUB_HEADER")}</CardSubHeader>
         <StatusTable>
-          <Row
+          {/* <Row
             label={t("PT_RESIDENTIAL_PROP_LABEL")}
             text={`${t(checkForNA(isResdential?.i18nKey))}`}
             actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/isResidential`} />}
-          />
+          /> */}
           <Row
             label={t("PT_ASSESMENT1_PROPERTY_TYPE")}
             text={`${t(checkForNA(PropertyType?.i18nKey))}`}
             actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/property-type`} />}
           />
-          {!isPropertyVacant(PropertyType?.i18nKey) && !isPropertyFlatorPartofBuilding(PropertyType?.i18nKey) && (
+          {PropertyType?.code=== "VACANT"&&<Row
+            label={t("PT_ASSESMENT1_PLOT_SIZE")}
+            text={`${landarea?.floorarea}`}
+            actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/PtUnits`} />}
+          />}
+          {PropertyType?.code!== "VACANT"
+&&units.sort((x,y)=>x.floorNo-y.floorNo).map((unit,unitIndex)=>{
+            return <>
+            {units.length>1&&   <CardSubHeader>{t(`PT_UNIT-${unitIndex}`)}</CardSubHeader>
+}
+            <Row
+            label={t("PT_ASSESMENT1_PLOT_SIZE")}
+            text={`${unit?.constructionDetail?.builtUpArea}`}
+            actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/PtUnits`} />}
+          />
+           <Row
+            label={t("PT_ASSESMENT_INFO_OCCUPLANCY")}
+            text={t(`PROPERTYTAX_OCCUPANCYTYPE_${unit?.occupancyType}`)}
+            actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/PtUnits`} />}
+          />
+            <Row
+            label={t("PT_FORM2_USAGE_TYPE")}
+            text={t(`PROPERTYTAX_BILLING_SLAB_${unit?.usageCategory?.split('.').length>2?unit?.usageCategory?.split('.')[1]:unit?.usageCategory?.split('.')[0]}`)}
+            actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/PtUnits`} />}
+          />   {unit?.unitType&&<Row
+            label={t("PT_FORM2_SUB_USAGE_TYPE")}
+            text={t(`PROPERTYTAX_BILLING_SLAB_${unit?.unitType}`)}
+            actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/PtUnits`} />}
+          />}
+            <Row
+            label={t("PT_FLOOR_NO")}
+            text={`${unit?.floorNo}`}
+            actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/PtUnits`} />}
+          />
+            {unit?.arv&&<Row
+            label={t("PT_PROPERTY_ANNUAL_RENT_LABEL")}
+            text={`${unit?.arv}`}
+            actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/PtUnits`} />}
+          />}
+          
+            </>
+          })}
+          {/* {!isPropertyVacant(PropertyType?.i18nKey) && !isPropertyFlatorPartofBuilding(PropertyType?.i18nKey) && (
             <Row
               label={t("PT_ASSESMENT_INFO_NO_OF_FLOOR")}
               text={`${t(checkForNA(noOfFloors?.i18nKey))}`}
@@ -315,18 +358,18 @@ const CheckPage = ({ onSubmit, value = {} }) => {
               text={`${t(checkForNA(units[0]?.plotSize))} ${(units[0]?.plotSize && "sq.ft") || ""}`}
               actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/floordetails/0`} />}
             />
-          )}
+          )} */}
         </StatusTable>
-        {!isPropertyVacant(PropertyType?.i18nKey) && isPropertyFlatorPartofBuilding(PropertyType?.i18nKey) && (
+        {/* {!isPropertyVacant(PropertyType?.i18nKey) && isPropertyFlatorPartofBuilding(PropertyType?.i18nKey) && (
           <CardSubHeader>{`${t(Floorno?.i18nKey)} ${t("PT_DETAILS_HEADER")}`}</CardSubHeader>
-        )}
-        {!isPropertyVacant(PropertyType?.i18nKey) && isPropertyFlatorPartofBuilding(PropertyType?.i18nKey) && (
+        )} */}
+        {/* {!isPropertyVacant(PropertyType?.i18nKey) && isPropertyFlatorPartofBuilding(PropertyType?.i18nKey) && (
           <StatusTable>
-            {/* <Row
-              label={t("PT_ASSESMENT1_PLOT_SIZE")}
-              text={`${t(checkForNA(units[0]?.plotSize))} ${(units[0]?.plotSize && "sq.ft") || ""}`}
-              actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/${typeOfApplication}/floordetails/0" />}
-            /> */}
+            // {/* <Row
+            //   label={t("PT_ASSESMENT1_PLOT_SIZE")}
+            //   text={`${t(checkForNA(units[0]?.plotSize))} ${(units[0]?.plotSize && "sq.ft") || ""}`}
+            //   actionButton={<ActionButton jumpTo="/digit-ui/citizen/pt/property/${typeOfApplication}/floordetails/0" />}
+            // /> 
             <Row
               label={t("PT_ASSESMENT_INFO_OCCUPLANCY")}
               //text={`${t(checkForNA(units[0]?.builtUpArea))} ${(units[0]?.builtUpArea && "sq.ft") || ""}`}
@@ -368,8 +411,8 @@ const CheckPage = ({ onSubmit, value = {} }) => {
               />
             )}
           </StatusTable>
-        )}
-        <div>
+        )} */}
+        {/* <div>
           {!isPropertyVacant(PropertyType?.i18nKey) &&
             !isPropertyFlatorPartofBuilding(PropertyType?.i18nKey) &&
             units &&
@@ -425,8 +468,8 @@ const CheckPage = ({ onSubmit, value = {} }) => {
                 </StatusTable>
               </div>
             ))}
-        </div>
-        <div>
+        </div> */}
+        {/* <div>
           {(isthere1Basement(noOofBasements?.i18nKey) || isthere2Basement(noOofBasements?.i18nKey)) && (
             <div>
               <CardSubHeader>
@@ -527,7 +570,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
               </StatusTable>
             </div>
           )}
-        </div>
+        </div> */}
         <CheckBox
           label={t("PT_FINAL_DECLARATION_MESSAGE")}
           onChange={setdeclarationhandler}
