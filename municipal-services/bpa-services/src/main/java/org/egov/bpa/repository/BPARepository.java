@@ -40,7 +40,7 @@ public class BPARepository {
 	 *            The bpa create request
 	 */
 	public void save(BPARequest bpaRequest) {
-		producer.push(config.getSaveTopic(), bpaRequest);
+		producer.push(bpaRequest.getBPA().getTenantId(),config.getSaveTopic(), bpaRequest);
 	}
 
 	/**
@@ -62,10 +62,10 @@ public class BPARepository {
 			bpaForStatusUpdate = bpa;
 		}
 		if (bpaForUpdate != null)
-			producer.push(config.getUpdateTopic(), new BPARequest(requestInfo, bpaForUpdate));
+			producer.push(bpaRequest.getBPA().getTenantId(), config.getUpdateTopic(), new BPARequest(requestInfo, bpaForUpdate));
 
 		if (bpaForStatusUpdate != null)
-			producer.push(config.getUpdateWorkflowTopic(), new BPARequest(requestInfo, bpaForStatusUpdate));
+			producer.push(bpaRequest.getBPA().getTenantId(),config.getUpdateWorkflowTopic(), new BPARequest(requestInfo, bpaForStatusUpdate));
 
 	}
 

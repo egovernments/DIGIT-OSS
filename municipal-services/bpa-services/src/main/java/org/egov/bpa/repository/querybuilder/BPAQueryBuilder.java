@@ -13,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 @Component
 public class BPAQueryBuilder {
 
+
     @Autowired
     private BPAConfiguration config;
 
@@ -21,9 +22,9 @@ public class BPAQueryBuilder {
     private static final String QUERY = "SELECT bpa.*,bpadoc.*,bpa.id as bpa_id,bpa.tenantid as bpa_tenantId,bpa.lastModifiedTime as "
             + "bpa_lastModifiedTime,bpa.createdBy as bpa_createdBy,bpa.lastModifiedBy as bpa_lastModifiedBy,bpa.createdTime as "
             + "bpa_createdTime,bpa.additionalDetails,bpa.landId as bpa_landId, bpadoc.id as bpa_doc_id, bpadoc.additionalDetails as doc_details, bpadoc.documenttype as bpa_doc_documenttype,bpadoc.filestoreid as bpa_doc_filestore"
-            + " FROM eg_bpa_buildingplan bpa"
+            + " FROM {schema}.eg_bpa_buildingplan bpa"
             + LEFT_OUTER_JOIN_STRING
-            + "eg_bpa_document bpadoc ON bpadoc.buildingplanid = bpa.id";;
+            + "{schema}.eg_bpa_document bpadoc ON bpadoc.buildingplanid = bpa.id";;
 
     private final String paginationWrapper = "SELECT * FROM "
             + "(SELECT *, DENSE_RANK() OVER (ORDER BY bpa_lastModifiedTime DESC) offset_ FROM " + "({})"
@@ -254,4 +255,6 @@ public class BPAQueryBuilder {
     private String addCountWrapper(String query) {
         return countWrapper.replace("{INTERNAL_QUERY}", query);
     }
+
+	
 }

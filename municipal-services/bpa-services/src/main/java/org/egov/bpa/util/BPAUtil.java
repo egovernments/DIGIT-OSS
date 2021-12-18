@@ -44,7 +44,7 @@ public class BPAUtil {
 
 	@Autowired
 	private ServiceRequestRepository serviceRequestRepository;
-
+	
 	@Autowired
 	public BPAUtil(BPAConfiguration config, ServiceRequestRepository serviceRequestRepository) {
 		this.config = config;
@@ -275,6 +275,25 @@ public class BPAUtil {
 		}
 		return businessSrvCode;
 		
+	}
+	
+	/**
+	 * Method to fetch the state name from the tenantId
+	 *
+	 * @param query
+	 * @param tenantId
+	 * @return
+	 */
+	public String replaceSchemaPlaceholder(String query, String tenantId) {
+
+		String finalQuery = null;
+		if (tenantId.contains(".")) {
+			String schemaName = tenantId.split("\\.")[1];
+			finalQuery = query.replace(BPAConstants.SCHEMA_REPLACE_STRING, schemaName);
+		} else {
+			finalQuery = query.replace(BPAConstants.SCHEMA_REPLACE_STRING.concat("."), "");
+		}
+		return finalQuery;
 	}
 
 }

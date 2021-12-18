@@ -381,4 +381,6 @@ public class BPAConstants {
 
 	public static final String BPA_BUSINESSSERVICE = "BPA";
 
+	public static String SCHEMA_REPLACE_STRING = "{schema}";
+
 }

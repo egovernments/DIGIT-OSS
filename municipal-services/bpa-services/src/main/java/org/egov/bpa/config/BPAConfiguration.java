@@ -339,4 +339,11 @@ public class BPAConfiguration {
 
 	@Value("${egov.shortener.url}")
 	private String shortenerURL;
+	
+	@Value("${state.level.tenantid.length}")
+	private Integer stateLevelTenantIdLength;
+
+	@Value("${is.environment.central.instance}")
+	private Boolean isEnvironmentCentralInstance;
+
 }

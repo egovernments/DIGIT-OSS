@@ -200,6 +200,12 @@ public class BPAValidator {
 			List<String> allowedParams = Arrays.asList(allowedParamStr.split(","));
 			validateSearchParams(criteria, allowedParams);
 		}
+		if(config.getIsEnvironmentCentralInstance() && criteria.getTenantId() == null)
+			throw new CustomException(BPAErrorConstants.INVALID_SEARCH," TenantId is mandatory for search ");
+		else if(config.getIsEnvironmentCentralInstance() && criteria.getTenantId().split("\\.").length < config.getStateLevelTenantIdLength())
+			throw new CustomException(BPAErrorConstants.INVALID_SEARCH," TenantId should be mandatorily " + config.getStateLevelTenantIdLength() + " levels for search");
+
+	
 	}
 
 	/**
