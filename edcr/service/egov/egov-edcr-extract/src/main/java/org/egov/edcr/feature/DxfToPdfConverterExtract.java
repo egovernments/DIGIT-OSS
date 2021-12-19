@@ -105,7 +105,7 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
 
                     buildDimension(dxfDocument, dimensions, standardViolations);
 
-                    if (standardViolations != null && standardViolations.length() > 0)
+                    if (standardViolations.length() > 0)
                         edcrPdfDetail.setStandardViolations(standardViolations.toString());
 
                     DXFVariable psltScale = dxfDocument.getDXFHeader().getVariable("$PSLTSCALE");
@@ -295,7 +295,7 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
             if (entity.getKey().equalsIgnoreCase(DXFConstants.ENTITY_TYPE_INSERT)) {
                 List insertEntites = dxfLayer.getDXFEntities(DXFConstants.ENTITY_TYPE_INSERT);
 
-                if (insertEntites != null && !insertEntites.isEmpty())
+                if (!insertEntites.isEmpty())
                     for (Object o : insertEntites) {
                         DXFInsert insert = (DXFInsert) o;
                         if (insert.getScaleX() < 0 || insert.getScaleY() < 0)
@@ -306,7 +306,7 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
                     errorBuilder = errorBuilder.append(blk).append(",");
 
                 String insertError = errorBuilder.toString();
-                if (insertError != null && !isBlank(insertError))
+                if (isNotBlank(insertError))
                     errors.add(entity.getValue() + insertError.substring(0, insertError.length() - 1) + ".");
             }
 
@@ -322,7 +322,7 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
 
     private void buildText(List texts, StringBuilder standardViolations) {
 
-        if (texts != null && !texts.isEmpty()) {
+        if (!texts.isEmpty()) {
             long issueCount = 0;
             StringBuilder errorMText = new StringBuilder();
             Iterator iterator = texts.iterator();
@@ -365,7 +365,7 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
 
     private void buildMtext(List mtexts, StringBuilder standardViolations) {
 
-        if (mtexts != null && !mtexts.isEmpty()) {
+        if (!mtexts.isEmpty()) {
             String text = "";
 
             long issueCount = 0;
@@ -412,7 +412,7 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
 
     private void buildDimension(DXFDocument dxfDocument, List dimensions, StringBuilder standardViolations) {
 
-        if (dimensions != null && !dimensions.isEmpty()) {
+        if (!dimensions.isEmpty()) {
             long issueCount = 0;
             Iterator iterator = dimensions.iterator();
             StringBuilder mText = new StringBuilder();
@@ -455,7 +455,7 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
                 }
             }
 
-            if (mText != null && mText.length() > 0)
+            if (mText.length() > 0)
                 standardViolations
                         .append("Line weight defined for " + (issueCount > 5 ? " dimensions " : " dimension "))
                         .append(mText.toString(), 0, mText.toString().length() - 1)

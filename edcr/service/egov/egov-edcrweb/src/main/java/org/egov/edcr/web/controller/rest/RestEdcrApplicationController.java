@@ -47,6 +47,8 @@
 
 package org.egov.edcr.web.controller.rest;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,7 +81,6 @@ import org.egov.infra.microservice.contract.ResponseInfo;
 import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.infra.microservice.models.UserInfo;
 import org.egov.infra.utils.FileStoreUtils;
-import org.egov.infra.utils.StringUtils;
 import org.egov.infra.web.rest.error.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -154,7 +155,7 @@ public class RestEdcrApplicationController {
         try {
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
             ErrorDetail edcRes = edcrValidator.validate(edcr);
-            if (edcRes != null && StringUtils.isNotBlank(edcRes.getErrorMessage()))
+            if (edcRes != null && isNotBlank(edcRes.getErrorMessage()))
                 return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
             ErrorDetail errorResponses = (edcrRestService.validateEdcrRequest(edcr, planFile));
             if (errorResponses != null)
@@ -186,7 +187,7 @@ public class RestEdcrApplicationController {
         try {
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
             ErrorDetail edcRes = edcrValidator.validate(edcr);
-            if (edcRes != null && StringUtils.isNotBlank(edcRes.getErrorMessage()))
+            if (edcRes != null && isNotBlank(edcRes.getErrorMessage()))
                 return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
             ErrorDetail errorResponses = (edcrRestService.validateEdcrOcRequest(edcr, planFile));
 
@@ -221,7 +222,7 @@ public class RestEdcrApplicationController {
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
         try {
-            List<ErrorDetail> errorResponses = new ArrayList<ErrorDetail>();
+            List<ErrorDetail> errorResponses = new ArrayList<>();
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
             if(userInfo != null) {
                 UserInfo userInfoReq = new ObjectMapper().readValue(userInfo, UserInfo.class);
@@ -233,7 +234,7 @@ public class RestEdcrApplicationController {
                 edcr.getRequestInfo().setUserInfo(enrichUser);
             }
             ErrorDetail edcRes = edcrValidator.validate(edcr);
-            if (edcRes != null && StringUtils.isNotBlank(edcRes.getErrorMessage()))
+            if (edcRes != null && isNotBlank(edcRes.getErrorMessage()))
                 return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
             List<ErrorDetail> errors = edcrRestService.validateEdcrMandatoryFields(edcr);
             if (!errors.isEmpty())
@@ -243,7 +244,7 @@ public class RestEdcrApplicationController {
             String serviceType = edcr.getApplicationSubType();
             Map<String, List<Object>> masterData = new HashMap<>();
             Boolean mdmsEnabled = mdmsConfiguration.getMdmsEnabled();
-            if (mdmsEnabled != null && mdmsEnabled) {
+            if (mdmsEnabled) {
                 Object mdmsData = bpaMdmsUtil.mDMSCall(new RequestInfo(), edcr.getTenantId());
                 HashMap<String, String> data = new HashMap<>();
                 data.put("applicationType", applicationType);
@@ -296,10 +297,10 @@ public class RestEdcrApplicationController {
     public ResponseEntity<?> scrutinyDetails(@ModelAttribute EdcrRequest edcrRequest,
             @RequestBody @Valid RequestInfoWrapper requestInfoWrapper) {
         ErrorDetail edcReqRes = edcrValidator.validate(edcrRequest);
-        if (edcReqRes != null && StringUtils.isNotBlank(edcReqRes.getErrorMessage()))
+        if (edcReqRes != null && isNotBlank(edcReqRes.getErrorMessage()))
             return new ResponseEntity<>(edcReqRes, HttpStatus.BAD_REQUEST);
         ErrorDetail edcRes = edcrValidator.validate(requestInfoWrapper);
-        if (edcRes != null && StringUtils.isNotBlank(edcRes.getErrorMessage()))
+        if (edcRes != null && isNotBlank(edcRes.getErrorMessage()))
             return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
         List<EdcrDetail> edcrDetail = edcrRestService.fetchEdcr(edcrRequest, requestInfoWrapper);
         if (!edcrDetail.isEmpty() && edcrDetail.get(0).getErrors() != null) {
@@ -324,7 +325,7 @@ public class RestEdcrApplicationController {
         try {
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
             ErrorDetail edcRes = edcrValidator.validate(edcr);
-            if (edcRes != null && StringUtils.isNotBlank(edcRes.getErrorMessage()))
+            if (edcRes != null && isNotBlank(edcRes.getErrorMessage()))
                 return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
             ErrorDetail errorResponses = edcrRestService.validatePlanFile(planFile);
             if (errorResponses != null)
@@ -394,10 +395,10 @@ public class RestEdcrApplicationController {
     public ResponseEntity<?> ocComparisonReport(@ModelAttribute ComparisonRequest comparisonRequest,
             @RequestBody @Valid RequestInfoWrapper requestInfoWrapper) {
         ErrorDetail comparision = edcrValidator.validate(comparisonRequest);
-        if (comparision != null && StringUtils.isNotBlank(comparision.getErrorMessage()))
+        if (comparision != null && isNotBlank(comparision.getErrorMessage()))
             return new ResponseEntity<>(comparision, HttpStatus.BAD_REQUEST);
         ErrorDetail edcRes = edcrValidator.validate(requestInfoWrapper);
-        if (edcRes != null && StringUtils.isNotBlank(edcRes.getErrorMessage()))
+        if (edcRes != null && isNotBlank(edcRes.getErrorMessage()))
             return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
 
         List<ErrorDetail> errors = ocComparisonService.validateEdcrMandatoryFields(comparisonRequest);

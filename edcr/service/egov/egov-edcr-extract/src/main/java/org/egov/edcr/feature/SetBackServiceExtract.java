@@ -1,5 +1,6 @@
 package org.egov.edcr.feature;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.egov.edcr.utility.DcrConstants.MORETHANONEPOLYLINEDEFINED;
 import static org.egov.edcr.utility.DcrConstants.OBJECTNOTDEFINED;
 
@@ -24,13 +25,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class SetBackServiceExtract extends FeatureExtract {
 
-    private static final Logger LOG = Logger.getLogger(SetBackServiceExtract.class);
+    private static final String LAYER_NAME_LEVEL_NAME_PREFIX = "LAYER_NAME_LEVEL_NAME_PREFIX";
+	private static final String LAYER_NAME_BLOCK_NAME_PREFIX = "LAYER_NAME_BLOCK_NAME_PREFIX";
+	private static final String MIN_DISTANCE = "_MIN_DISTANCE";
+	private static final Logger LOG = Logger.getLogger(SetBackServiceExtract.class);
     @Autowired
     private LayerNames layerNames;
     @Autowired
     private MinDistance minDistance;
 
-    public static String ERR_MIN_DISTANCE = "Minimum distance is not defined in layer %s";
+    private static final String ERR_MIN_DISTANCE = "Minimum distance is not defined in layer %s";
     
     @Override
     public PlanDetail extract(PlanDetail pl) {
@@ -66,27 +70,25 @@ public class SetBackServiceExtract extends FeatureExtract {
         for (Block block : pl.getBlocks()) {
             LOG.info("Block....   " + block.getName());
 
-            // extractBasementFootPrint(doc, block);
-
             // based on foot prints provided, set back will be decide in general rule.
             for (SetBack setBack : block.getSetBacks())
                 if (setBack.getLevel() < 0)
                     extractBasementSetBacks(pl, doc, block, setBack);
                 else {
-                    yardName = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getName() + "_"
-                            + layerNames.getLayerName("LAYER_NAME_LEVEL_NAME_PREFIX") + setBack.getLevel() + "_"
+                    yardName = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getName() + "_"
+                            + layerNames.getLayerName(LAYER_NAME_LEVEL_NAME_PREFIX) + setBack.getLevel() + "_"
                             + layerNames.getLayerName("LAYER_NAME_FRONT_YARD");
                     setFrontYardDetails(pl, doc, setBack, yardName);
-                    yardName = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getName() + "_"
-                            + layerNames.getLayerName("LAYER_NAME_LEVEL_NAME_PREFIX") + setBack.getLevel() + "_"
+                    yardName = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getName() + "_"
+                            + layerNames.getLayerName(LAYER_NAME_LEVEL_NAME_PREFIX) + setBack.getLevel() + "_"
                             + layerNames.getLayerName("LAYER_NAME_REAR_YARD");
                     setRearYardDetails(pl, doc, setBack, yardName);
-                    yardName = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getName() + "_"
-                            + layerNames.getLayerName("LAYER_NAME_LEVEL_NAME_PREFIX") + setBack.getLevel() + "_"
+                    yardName = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getName() + "_"
+                            + layerNames.getLayerName(LAYER_NAME_LEVEL_NAME_PREFIX) + setBack.getLevel() + "_"
                             + layerNames.getLayerName("LAYER_NAME_SIDE_YARD_1");
                     setSideYard1Details(pl, doc, setBack, yardName);
-                    yardName = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getName() + "_"
-                            + layerNames.getLayerName("LAYER_NAME_LEVEL_NAME_PREFIX") + setBack.getLevel() + "_"
+                    yardName = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getName() + "_"
+                            + layerNames.getLayerName(LAYER_NAME_LEVEL_NAME_PREFIX) + setBack.getLevel() + "_"
                             + layerNames.getLayerName("LAYER_NAME_SIDE_YARD_2");
                     setSideYard2Details(pl, doc, yardName, setBack);
                 }
@@ -103,10 +105,10 @@ public class SetBackServiceExtract extends FeatureExtract {
 
         if (layerPresent) {
             YardDetail yard = getYard(pl, doc, yardName, setBack.getLevel());
-            if (yard != null && yard.getPolyLine() != null) {
+            if (yard.getPolyLine() != null) {
                 setBack.setSideYard2(yard);
                 if (pl.getDrawingPreference() != null &&
-                        org.egov.infra.utils.StringUtils.isNotBlank(pl.getDrawingPreference().getUom())
+                        isNotBlank(pl.getDrawingPreference().getUom())
                         && (DxfFileConstants.INCH_UOM.equalsIgnoreCase(pl.getDrawingPreference().getUom())
                                 || DxfFileConstants.FEET_UOM.equalsIgnoreCase(pl.getDrawingPreference().getUom()))) {
                     List<BigDecimal> yardWidthDistance = Util.getListOfDimensionByColourCode(pl, yardName,
@@ -114,7 +116,7 @@ public class SetBackServiceExtract extends FeatureExtract {
                     if (!yardWidthDistance.isEmpty()) {
                         yard.setMinimumDistance(Collections.min(yardWidthDistance));
                     } else {
-                        pl.addError(yardName + "_MIN_DISTANCE", String.format(ERR_MIN_DISTANCE, yardName));
+                        pl.addError(yardName + MIN_DISTANCE, String.format(ERR_MIN_DISTANCE, yardName));
                     }
                 } else {
                     yard.setMinimumDistance(
@@ -144,9 +146,9 @@ public class SetBackServiceExtract extends FeatureExtract {
         List<DXFLWPolyline> frontYardLines = Util.getPolyLinesByLayer(doc, yardName);
 
         // VALIDATE WHETHER ONE SINGLE POLYLINE PRESENT.
-        if (frontYardLines != null && frontYardLines.size() > 1)
+        if (frontYardLines.size() > 1)
             pl.addError("", edcrMessageSource.getMessage(MORETHANONEPOLYLINEDEFINED, new String[] { yardName }, null));
-        else if (frontYardLines != null && !frontYardLines.isEmpty()) {
+        else if (!frontYardLines.isEmpty()) {
             yard.setPolyLine(frontYardLines.get(0));
             yard.setArea(Util.getPolyLineArea(yard.getPolyLine()));
             yard.setPresentInDxf(true);
@@ -158,33 +160,32 @@ public class SetBackServiceExtract extends FeatureExtract {
     }
 
         private void extractBasementSetBacks(PlanDetail pl, DXFDocument doc, Block block, SetBack setBack) {
-                String bsmntYardName = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getNumber() + "_"
-                                + layerNames.getLayerName("LAYER_NAME_LEVEL_NAME_PREFIX") + setBack.getLevel() + "_"
+                String bsmntYardName = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getNumber() + "_"
+                                + layerNames.getLayerName(LAYER_NAME_LEVEL_NAME_PREFIX) + setBack.getLevel() + "_"
                                 + layerNames.getLayerName("LAYER_NAME_BSMNT_FRONT_YARD");
                 setFrontYardDetails(pl, doc, setBack, bsmntYardName);
-                bsmntYardName = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getNumber() + "_"
-                                + layerNames.getLayerName("LAYER_NAME_LEVEL_NAME_PREFIX") + setBack.getLevel() + "_"
+                bsmntYardName = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getNumber() + "_"
+                                + layerNames.getLayerName(LAYER_NAME_LEVEL_NAME_PREFIX) + setBack.getLevel() + "_"
                                 + layerNames.getLayerName("LAYER_NAME_BSMNT_REAR_YARD");
                 setRearYardDetails(pl, doc, setBack, bsmntYardName);
-                bsmntYardName = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getNumber() + "_"
-                                + layerNames.getLayerName("LAYER_NAME_LEVEL_NAME_PREFIX") + setBack.getLevel() + "_"
+                bsmntYardName = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getNumber() + "_"
+                                + layerNames.getLayerName(LAYER_NAME_LEVEL_NAME_PREFIX) + setBack.getLevel() + "_"
                                 + layerNames.getLayerName("LAYER_NAME_BSMNT_SIDE_YARD_1");
                 setSideYard1Details(pl, doc, setBack, bsmntYardName);
-                bsmntYardName = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getNumber() + "_"
-                                + layerNames.getLayerName("LAYER_NAME_LEVEL_NAME_PREFIX") + setBack.getLevel() + "_"
+                bsmntYardName = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getNumber() + "_"
+                                + layerNames.getLayerName(LAYER_NAME_LEVEL_NAME_PREFIX) + setBack.getLevel() + "_"
                                 + layerNames.getLayerName("LAYER_NAME_BSMNT_SIDE_YARD_2");
                 setSideYard2Details(pl, doc, bsmntYardName, setBack);
         }
 
     private void setSideYard1Details(PlanDetail pl, DXFDocument doc, SetBack setBack, String yardName) {
-        boolean layerPresent;
-        layerPresent = doc.containsDXFLayer(yardName);
+    	boolean layerPresent = doc.containsDXFLayer(yardName);
         if (layerPresent) {
             YardDetail sideYard1 = getYard(pl, doc, yardName, setBack.getLevel());
-            if (sideYard1 != null && sideYard1.getPolyLine() != null) {
+            if (sideYard1.getPolyLine() != null) {
                 setBack.setSideYard1(sideYard1);
                 if (pl.getDrawingPreference() != null &&
-                        org.egov.infra.utils.StringUtils.isNotBlank(pl.getDrawingPreference().getUom())
+                        isNotBlank(pl.getDrawingPreference().getUom())
                         && (DxfFileConstants.INCH_UOM.equalsIgnoreCase(pl.getDrawingPreference().getUom())
                                 || DxfFileConstants.FEET_UOM.equalsIgnoreCase(pl.getDrawingPreference().getUom()))) {
                     List<BigDecimal> yardWidthDistance = Util.getListOfDimensionByColourCode(pl, yardName,
@@ -192,7 +193,7 @@ public class SetBackServiceExtract extends FeatureExtract {
                     if (!yardWidthDistance.isEmpty()) {
                         sideYard1.setMinimumDistance(Collections.min(yardWidthDistance));
                     } else {
-                        pl.addError(yardName + "_MIN_DISTANCE", String.format(ERR_MIN_DISTANCE, yardName));
+                        pl.addError(yardName + MIN_DISTANCE, String.format(ERR_MIN_DISTANCE, yardName));
                     }
                 } else {
                     sideYard1.setMinimumDistance(
@@ -212,10 +213,10 @@ public class SetBackServiceExtract extends FeatureExtract {
         layerPresent = doc.containsDXFLayer(yardName);
         if (layerPresent) {
             YardDetail rearYard = getYard(pl, doc, yardName, setBack.getLevel());
-            if (rearYard != null && rearYard.getPolyLine() != null) {
+            if (rearYard.getPolyLine() != null) {
                 setBack.setRearYard(rearYard);
                 if (pl.getDrawingPreference() != null &&
-                        org.egov.infra.utils.StringUtils.isNotBlank(pl.getDrawingPreference().getUom())
+                        isNotBlank(pl.getDrawingPreference().getUom())
                         && (DxfFileConstants.INCH_UOM.equalsIgnoreCase(pl.getDrawingPreference().getUom())
                                 || DxfFileConstants.FEET_UOM.equalsIgnoreCase(pl.getDrawingPreference().getUom()))) {
                     List<BigDecimal> yardWidthDistance = Util.getListOfDimensionByColourCode(pl, yardName,
@@ -223,7 +224,7 @@ public class SetBackServiceExtract extends FeatureExtract {
                     if (!yardWidthDistance.isEmpty()) {
                         rearYard.setMinimumDistance(Collections.min(yardWidthDistance));
                     } else {
-                        pl.addError(yardName + "_MIN_DISTANCE", String.format(ERR_MIN_DISTANCE, yardName));
+                        pl.addError(yardName + MIN_DISTANCE, String.format(ERR_MIN_DISTANCE, yardName));
                     }
                 } else {
                     rearYard.setMinimumDistance(
@@ -238,10 +239,9 @@ public class SetBackServiceExtract extends FeatureExtract {
         boolean layerPresent = doc.containsDXFLayer(yardName);
         if (layerPresent) {
             YardDetail frontYard = getYard(pl, doc, yardName, setBack.getLevel());
-            if (frontYard != null && frontYard.getPolyLine() != null) {
+            if (frontYard.getPolyLine() != null) {
                 setBack.setFrontYard(frontYard);
-                if (pl.getDrawingPreference() != null &&
-                        org.egov.infra.utils.StringUtils.isNotBlank(pl.getDrawingPreference().getUom())
+                if (isNotBlank(pl.getDrawingPreference().getUom())
                         && (DxfFileConstants.INCH_UOM.equalsIgnoreCase(pl.getDrawingPreference().getUom())
                                 || DxfFileConstants.FEET_UOM.equalsIgnoreCase(pl.getDrawingPreference().getUom()))) {
                     List<BigDecimal> yardWidthDistance = Util.getListOfDimensionByColourCode(pl, yardName,
@@ -249,7 +249,7 @@ public class SetBackServiceExtract extends FeatureExtract {
                     if (!yardWidthDistance.isEmpty()) {
                         frontYard.setMinimumDistance(Collections.min(yardWidthDistance));
                     } else {
-                        pl.addError(yardName + "_MIN_DISTANCE", String.format(ERR_MIN_DISTANCE, yardName));
+                        pl.addError(yardName + MIN_DISTANCE, String.format(ERR_MIN_DISTANCE, yardName));
                     }
                 } else {
                     frontYard.setMinimumDistance(

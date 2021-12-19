@@ -28,14 +28,11 @@ public class FetchCondition extends ConditionStyleExpression implements CustomEx
 
             Object currentValue = fields.get(fieldName);
             if (currentValue instanceof String) {
-                String s = (String) currentValue;
-                if (s != null) {
-                    condition = colorValue.equals(currentValue);
-                }
+                condition = colorValue.equals(currentValue);
             }
 
         } catch (ClassCastException e) {
-            LOG.error("Error occurred while checking the object type", e.getMessage());
+            LOG.error(String.format("Error occurred while checking the object type %s", e.getMessage()));
         }
         return Boolean.valueOf(condition);
     }
