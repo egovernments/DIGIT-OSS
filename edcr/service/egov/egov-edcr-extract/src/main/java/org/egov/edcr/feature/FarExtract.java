@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
@@ -25,9 +25,6 @@ import org.egov.common.entity.edcr.Occupancy;
 import org.egov.common.entity.edcr.Stair;
 import org.egov.common.entity.edcr.SubFeatureColorCode;
 import org.egov.common.entity.edcr.TypicalFloor;
-import org.egov.commons.mdms.BpaMdmsUtil;
-import org.egov.commons.mdms.config.MdmsConfiguration;
-import org.egov.commons.mdms.validator.MDMSValidator;
 import org.egov.commons.service.OccupancyService;
 import org.egov.commons.service.SubFeatureColorCodeService;
 import org.egov.commons.service.SubOccupancyService;
@@ -40,10 +37,6 @@ import org.egov.edcr.entity.blackbox.StairDetail;
 import org.egov.edcr.service.LayerNames;
 import org.egov.edcr.utility.DcrConstants;
 import org.egov.edcr.utility.Util;
-import org.egov.infra.admin.master.entity.City;
-import org.egov.infra.admin.master.service.CityService;
-import org.egov.infra.config.core.ApplicationThreadLocals;
-import org.egov.infra.microservice.models.RequestInfo;
 import org.kabeja.dxf.DXFLWPolyline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,7 +44,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class FarExtract extends FeatureExtract {
 
-    private static final Logger LOG = Logger.getLogger(FarExtract.class);
+    private static final String LAYER_NAME_CRPT_UP_AREA = "LAYER_NAME_CRPT_UP_AREA";
+	private static final String LAYER_NAME_CRPT_AREA_DEDUCT = "LAYER_NAME_CRPT_AREA_DEDUCT";
+	private static final String LAYER_NAME_EXISTING_PREFIX = "LAYER_NAME_EXISTING_PREFIX";
+	private static final String LAYER_NAME_BUILT_UP_AREA = "LAYER_NAME_BUILT_UP_AREA";
+	private static final String LAYER_NAME_BUILT_UP_AREA_DEDUCT = "LAYER_NAME_BUILT_UP_AREA_DEDUCT";
+	private static final String LAYER_NAME_FLOOR_NAME_PREFIX = "LAYER_NAME_FLOOR_NAME_PREFIX";
+	private static final String LAYER_NAME_BLOCK_NAME_PREFIX = "LAYER_NAME_BLOCK_NAME_PREFIX";
+	private static final Logger LOG = Logger.getLogger(FarExtract.class);
     @Autowired
     private OccupancyService occupancyService;
     @Autowired
@@ -62,14 +62,15 @@ public class FarExtract extends FeatureExtract {
     private SubFeatureColorCodeService subFeatureColorCodeService;
     @Autowired
     private LayerNames layerNames;
-    @Autowired
-    private MdmsConfiguration mdmsConfiguration;
-    @Autowired
-    private BpaMdmsUtil bpaMdmsUtil;
-    @Autowired
-    private MDMSValidator mDMSValidator;
-    @Autowired
-    private CityService cityService;
+	/*
+	 * @Autowired private MdmsConfiguration mdmsConfiguration;
+	 * 
+	 * @Autowired private BpaMdmsUtil bpaMdmsUtil;
+	 * 
+	 * @Autowired private MDMSValidator mDMSValidator;
+	 * 
+	 * @Autowired private CityService cityService;
+	 */
 
     private static final String VALIDATION_WRONG_COLORCODE_FLOORAREA = "msg.error.wrong.colourcode.floorarea";
     public static final String RULE_31_1 = "31(1)";
@@ -84,9 +85,9 @@ public class FarExtract extends FeatureExtract {
     @Override
     public PlanDetail extract(PlanDetail pl) {
 
-        String farDeductByFloor = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + "%s" + "_"
-                + layerNames.getLayerName("LAYER_NAME_FLOOR_NAME_PREFIX") + "%s" + "_"
-                + layerNames.getLayerName("LAYER_NAME_BUILT_UP_AREA_DEDUCT");
+        String farDeductByFloor = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + "%s" + "_"
+                + layerNames.getLayerName(LAYER_NAME_FLOOR_NAME_PREFIX) + "%s" + "_"
+                + layerNames.getLayerName(LAYER_NAME_BUILT_UP_AREA_DEDUCT);
 
         loadRequiredMasterData(pl);
         if (LOG.isDebugEnabled())
@@ -103,13 +104,13 @@ public class FarExtract extends FeatureExtract {
             LOG.error(" Working on Block  " + block.getNumber());
             List<String> typicals = new ArrayList<>();
             List<DXFLWPolyline> polyLinesByLayer;
-            String layerRegEx = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getNumber() + "_"
-                    + layerNames.getLayerName("LAYER_NAME_FLOOR_NAME_PREFIX") + "-?\\d+_"
-                    + layerNames.getLayerName("LAYER_NAME_BUILT_UP_AREA");
-            List<String> layerNames = Util.getLayerNamesLike(pl.getDoc(), layerRegEx);
+            String layerRegEx = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getNumber() + "_"
+                    + layerNames.getLayerName(LAYER_NAME_FLOOR_NAME_PREFIX) + "-?\\d+_"
+                    + layerNames.getLayerName(LAYER_NAME_BUILT_UP_AREA);
+            List<String> builtupAreaLayerNames = Util.getLayerNamesLike(pl.getDoc(), layerRegEx);
             int floorNo;
             FloorDetail floor;
-            for (String s : layerNames) {
+            for (String s : builtupAreaLayerNames) {
                 String typical = "";
                 LOG.error("Working on Block  " + block.getNumber() + " For layer Name " + s);
                 polyLinesByLayer = Util.getPolyLinesByLayer(pl.getDoc(), s);
@@ -214,25 +215,25 @@ public class FarExtract extends FeatureExtract {
                             Floor newFloor = (Floor) modelFloor.clone();
                             newFloor.setNumber(no);
                             b.getBuilding().getFloors().add(newFloor);
-                        } catch (Exception e) {
-
+                        } catch (CloneNotSupportedException e) {
+                        	LOG.error(e.getMessage());
                         }
                 }
         }
 
         // get Existing Builtup area
         for (Block block : pl.getBlocks()) {
-            String layerRegExForExistingPlan = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX")
-                    + block.getNumber() + "_" + layerNames.getLayerName("LAYER_NAME_FLOOR_NAME_PREFIX") + "-?\\d+_"
-                    + layerNames.getLayerName("LAYER_NAME_BUILT_UP_AREA")
-                    + layerNames.getLayerName("LAYER_NAME_EXISTING_PREFIX");
+            String layerRegExForExistingPlan = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX)
+                    + block.getNumber() + "_" + layerNames.getLayerName(LAYER_NAME_FLOOR_NAME_PREFIX) + "-?\\d+_"
+                    + layerNames.getLayerName(LAYER_NAME_BUILT_UP_AREA)
+                    + layerNames.getLayerName(LAYER_NAME_EXISTING_PREFIX);
             List<String> layerNamesList = Util.getLayerNamesLike(pl.getDoc(), layerRegExForExistingPlan);
             Floor floor;
             for (String layer : layerNamesList) {
                 List<DXFLWPolyline> polylines = Util.getPolyLinesByLayer(pl.getDoc(), layer);
                 if (polylines.isEmpty())
                     continue;
-                int floorNo = Integer.valueOf(layer.split("_")[3]);
+                int floorNo = Integer.parseInt(layer.split("_")[3]);
                 if (block.getBuilding().getFloorNumber(floorNo) == null) {
                     floor = new FloorDetail();
                     floor.setNumber(floorNo);
@@ -280,7 +281,8 @@ public class FarExtract extends FeatureExtract {
         for (Block block : pl.getBlocks()) {
             Building building = block.getBuilding();
             if (building != null && !building.getFloors().isEmpty()) {
-                Floor floor = building.getFloors().stream().max(Comparator.comparing(Floor::getNumber)).get();
+                Optional<Floor> maxFloor = building.getFloors().stream().max(Comparator.comparing(Floor::getNumber));
+				Floor floor = maxFloor.isPresent() ? maxFloor.get() : null;
                 if (floor != null)
                     floor.setTerrace(checkTerrace(floor));
             }
@@ -328,10 +330,10 @@ public class FarExtract extends FeatureExtract {
     }
 
     private void addExistingCarpetArea(PlanDetail pl, Block block, Floor floor) {
-        String existingCarpetAreaLayer = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getNumber()
-                + "_" + layerNames.getLayerName("LAYER_NAME_FLOOR_NAME_PREFIX") + floor.getNumber()
-                + layerNames.getLayerName("LAYER_NAME_CRPT_UP_AREA")
-                + layerNames.getLayerName("LAYER_NAME_EXISTING_PREFIX");
+        String existingCarpetAreaLayer = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getNumber()
+                + "_" + layerNames.getLayerName(LAYER_NAME_FLOOR_NAME_PREFIX) + floor.getNumber()
+                + layerNames.getLayerName(LAYER_NAME_CRPT_UP_AREA)
+                + layerNames.getLayerName(LAYER_NAME_EXISTING_PREFIX);
         List<DXFLWPolyline> polylines = Util.getPolyLinesByLayer(pl.getDoc(), existingCarpetAreaLayer);
 
         /*
@@ -356,10 +358,10 @@ public class FarExtract extends FeatureExtract {
 
         // existing deduction
 
-        String existingCarpetAreaDeductByFloor = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + "%s" + "_"
-                + layerNames.getLayerName("LAYER_NAME_FLOOR_NAME_PREFIX") + "%s" + "_"
-                + layerNames.getLayerName("LAYER_NAME_CRPT_AREA_DEDUCT")
-                + layerNames.getLayerName("LAYER_NAME_EXISTING_PREFIX");
+        String existingCarpetAreaDeductByFloor = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + "%s" + "_"
+                + layerNames.getLayerName(LAYER_NAME_FLOOR_NAME_PREFIX) + "%s" + "_"
+                + layerNames.getLayerName(LAYER_NAME_CRPT_AREA_DEDUCT)
+                + layerNames.getLayerName(LAYER_NAME_EXISTING_PREFIX);
 
         String deductLayerName = String.format(existingCarpetAreaDeductByFloor, block.getNumber(), floor.getNumber());
         List<DXFLWPolyline> bldDeduct = Util.getPolyLinesByLayer(pl.getDoc(), deductLayerName);
@@ -380,9 +382,9 @@ public class FarExtract extends FeatureExtract {
     }
 
     private void addCarpetArea(PlanDetail pl, Block block, Floor floor) {
-        String carpetAreaLayer = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getNumber() + "_"
-                + layerNames.getLayerName("LAYER_NAME_FLOOR_NAME_PREFIX") + floor.getNumber() + "_"
-                + layerNames.getLayerName("LAYER_NAME_CRPT_UP_AREA");
+        String carpetAreaLayer = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getNumber() + "_"
+                + layerNames.getLayerName(LAYER_NAME_FLOOR_NAME_PREFIX) + floor.getNumber() + "_"
+                + layerNames.getLayerName(LAYER_NAME_CRPT_UP_AREA);
         LOG.error("Working on Block  " + block.getNumber() + " For layer Name " + carpetAreaLayer);
         List<DXFLWPolyline> polyLinesByLayer = Util.getPolyLinesByLayer(pl.getDoc(), carpetAreaLayer);
         /*
@@ -408,9 +410,9 @@ public class FarExtract extends FeatureExtract {
         }
 
         // find carpet deduction
-        String carpetAreaDeductByFloor = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + "%s" + "_"
-                + layerNames.getLayerName("LAYER_NAME_FLOOR_NAME_PREFIX") + "%s" + "_"
-                + layerNames.getLayerName("LAYER_NAME_CRPT_AREA_DEDUCT");
+        String carpetAreaDeductByFloor = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + "%s" + "_"
+                + layerNames.getLayerName(LAYER_NAME_FLOOR_NAME_PREFIX) + "%s" + "_"
+                + layerNames.getLayerName(LAYER_NAME_CRPT_AREA_DEDUCT);
 
         String deductLayerName = String.format(carpetAreaDeductByFloor, block.getNumber(), floor.getNumber());
 
@@ -529,8 +531,8 @@ public class FarExtract extends FeatureExtract {
     }
 
     private void extractFloorHeight(PlanDetail pl, Block block, Floor floor) {
-        String floorHeightLayerName = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getNumber() + "_"
-                + layerNames.getLayerName("LAYER_NAME_FLOOR_NAME_PREFIX") + floor.getNumber() + "_"
+        String floorHeightLayerName = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getNumber() + "_"
+                + layerNames.getLayerName(LAYER_NAME_FLOOR_NAME_PREFIX) + floor.getNumber() + "_"
                 + layerNames.getLayerName("LAYER_NAME_FLOOR_HEIGHT_PREFIX");
         List<BigDecimal> flrHeights = Util.getListOfDimensionValueByLayer(pl, floorHeightLayerName);
         floor.setFloorHeights(flrHeights);
@@ -546,7 +548,7 @@ public class FarExtract extends FeatureExtract {
 
     private Boolean checkTerrace(Floor floor) {
 
-        BigDecimal totalStairArea = BigDecimal.ZERO;
+        BigDecimal totalStairArea;
         BigDecimal fireStairArea = BigDecimal.ZERO;
         BigDecimal generalStairArea = BigDecimal.ZERO;
         BigDecimal liftArea = BigDecimal.ZERO;

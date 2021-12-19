@@ -3,7 +3,6 @@ package org.egov.edcr.service;
 import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import org.springframework.stereotype.Service;
@@ -22,18 +21,20 @@ import net.sf.jasperreports.engine.JasperPrint;
 @Service
 public class JasperReportService {
 
-    public InputStream exportPdf(final JasperPrint jasperPrint) throws JRException, IOException {
+    private static final String COLUMN_RESULT_CSS = "ColumnResultCss";
+	private static final String DETAIL = "detail";
+	private static final String COLUMN_CSS = "ColumnCss";
+
+	public InputStream exportPdf(final JasperPrint jasperPrint) throws JRException {
         ByteArrayOutputStream outputBytes = new ByteArrayOutputStream(1 * 1024 * 1024);
         JasperExportManager.exportReportToPdfStream(jasperPrint, outputBytes);
-        InputStream inputStream = new ByteArrayInputStream(outputBytes.toByteArray());
-        // closeStream(reportStream);
-        return inputStream;
+        return new ByteArrayInputStream(outputBytes.toByteArray());
     }
 
    
 
     public Style getConcurrenceColumnStyle() {
-        final Style columnStyle = new Style("ColumnCss");
+        final Style columnStyle = new Style(COLUMN_CSS);
         columnStyle.setBorderLeft(Border.THIN());
         columnStyle.setBorderRight(Border.THIN());
         columnStyle.setTextColor(Color.black);
@@ -46,7 +47,7 @@ public class JasperReportService {
     }
     
     public Style getBudgetReportDetailStyle() {
-        final Style detailStyle = new Style("detail");
+        final Style detailStyle = new Style(DETAIL);
         detailStyle.setBorderLeft(Border.THIN());
         detailStyle.setBorderRight(Border.THIN());
         detailStyle.setBorderTop(Border.THIN());
@@ -58,7 +59,7 @@ public class JasperReportService {
     }
     
     public Style getDetailStyle() {
-        final Style detailStyle = new Style("detail");
+        final Style detailStyle = new Style(DETAIL);
         detailStyle.setBorderLeft(Border.THIN());
         detailStyle.setBorderRight(Border.THIN());
         detailStyle.setBorderTop(Border.THIN());
@@ -72,7 +73,7 @@ public class JasperReportService {
     }
     
     public Style getDetailStyle(Color color) {
-        final Style detailStyle = new Style("detail");
+        final Style detailStyle = new Style(DETAIL);
         detailStyle.setBorderLeft(Border.THIN());
         detailStyle.setBorderRight(Border.THIN());
         detailStyle.setBorderTop(Border.THIN());
@@ -100,7 +101,7 @@ public class JasperReportService {
     }
 
     public Style getColumnStyle() {
-        final Style columnStyle = new Style("ColumnCss");
+        final Style columnStyle = new Style(COLUMN_CSS);
         columnStyle.setBorderLeft(Border.THIN());
         columnStyle.setBorderRight(Border.THIN());
         columnStyle.setBorderBottom(Border.THIN());
@@ -159,7 +160,7 @@ public class JasperReportService {
     }
 
     public Style getVerifiedColumnStyle() {
-        final Style columnStyle = new Style("ColumnCss");
+        final Style columnStyle = new Style(COLUMN_CSS);
         columnStyle.setBorderLeft(Border.THIN());
         columnStyle.setBorderRight(Border.THIN());
         columnStyle.setTextColor(Color.black);
@@ -226,7 +227,7 @@ public class JasperReportService {
 
     public Style getAcceptedResultStyle() {
 
-        final Style columnResultStyle = new Style("ColumnResultCss");
+        final Style columnResultStyle = new Style(COLUMN_RESULT_CSS);
         columnResultStyle.setBorderLeft(Border.THIN());
         columnResultStyle.setBorderRight(Border.THIN());
         columnResultStyle.setTextColor(Color.GREEN);
@@ -238,7 +239,7 @@ public class JasperReportService {
 
     public Style getNotAcceptedResultStyle() {
 
-        final Style columnResultStyle = new Style("ColumnResultCss");
+        final Style columnResultStyle = new Style(COLUMN_RESULT_CSS);
         columnResultStyle.setBorderLeft(Border.THIN());
         columnResultStyle.setBorderRight(Border.THIN());
         columnResultStyle.setTextColor(Color.RED);
@@ -250,7 +251,7 @@ public class JasperReportService {
 
     public Style getVerifyResultStyle() {
 
-        final Style columnResultStyle = new Style("ColumnResultCss");
+        final Style columnResultStyle = new Style(COLUMN_RESULT_CSS);
         columnResultStyle.setBorderLeft(Border.THIN());
         columnResultStyle.setBorderRight(Border.THIN());
         columnResultStyle.setTextColor(Color.RED);

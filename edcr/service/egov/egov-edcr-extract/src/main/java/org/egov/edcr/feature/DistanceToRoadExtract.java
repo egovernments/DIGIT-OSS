@@ -30,7 +30,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DistanceToRoadExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(DistanceToRoadExtract.class);
+    private static final String LAYER_NAME_SHORTEST_DISTANCE_TO_ROAD = "LAYER_NAME_SHORTEST_DISTANCE_TO_ROAD";
+	private static final String REG_EXP_D = "[^\\d.]";
+	private static final Logger LOG = Logger.getLogger(DistanceToRoadExtract.class);
     @Autowired
     private LayerNames layerNames;
 
@@ -161,34 +163,38 @@ public class DistanceToRoadExtract extends FeatureExtract {
         // Adding multiple road distances into single notified road/non notified
         // road/culdesac/lane road.
         for (BigDecimal notifyRoadDistnce : notifiedRoadDistance)
-            if (!pl.getNotifiedRoads().isEmpty())
-                if (layerNames.getLayerName("LAYER_NAME_SHORTEST_DISTANCE_TO_ROAD").equalsIgnoreCase(type))
+            if (!pl.getNotifiedRoads().isEmpty()) {
+                if (layerNames.getLayerName(LAYER_NAME_SHORTEST_DISTANCE_TO_ROAD).equalsIgnoreCase(type))
                     pl.getNotifiedRoads().get(0).addShortestDistanceToRoad(notifyRoadDistnce);
                 else
                     pl.getNotifiedRoads().get(0).addDistancesFromCenterToPlot(notifyRoadDistnce);
+            }
         for (BigDecimal nonNotifyRoadDistnce : nonNotifiedRoadDistance)
-            if (!pl.getNonNotifiedRoads().isEmpty())
-                if (layerNames.getLayerName("LAYER_NAME_SHORTEST_DISTANCE_TO_ROAD").equalsIgnoreCase(type))
+            if (!pl.getNonNotifiedRoads().isEmpty()) {
+                if (layerNames.getLayerName(LAYER_NAME_SHORTEST_DISTANCE_TO_ROAD).equalsIgnoreCase(type))
                     pl.getNonNotifiedRoads().get(0).addShortestDistanceToRoad(nonNotifyRoadDistnce);
                 else
                     pl.getNonNotifiedRoads().get(0).addDistancesFromCenterToPlot(nonNotifyRoadDistnce);
+            }
         for (BigDecimal culdesacRdDistance : culdesacRoadDistance)
-            if (!pl.getCuldeSacRoads().isEmpty())
-                if (layerNames.getLayerName("LAYER_NAME_SHORTEST_DISTANCE_TO_ROAD").equalsIgnoreCase(type))
+            if (!pl.getCuldeSacRoads().isEmpty()) {
+                if (layerNames.getLayerName(LAYER_NAME_SHORTEST_DISTANCE_TO_ROAD).equalsIgnoreCase(type))
                     pl.getCuldeSacRoads().get(0).addShortestDistanceToRoad(culdesacRdDistance);
                 else
                     pl.getCuldeSacRoads().get(0).addDistancesFromCenterToPlot(culdesacRdDistance);
+            }
         for (BigDecimal laneDistnce : laneDistance)
-            if (!pl.getLaneRoads().isEmpty())
-                if (layerNames.getLayerName("LAYER_NAME_SHORTEST_DISTANCE_TO_ROAD").equalsIgnoreCase(type))
+            if (!pl.getLaneRoads().isEmpty()) {
+                if (layerNames.getLayerName(LAYER_NAME_SHORTEST_DISTANCE_TO_ROAD).equalsIgnoreCase(type))
                     pl.getLaneRoads().get(0).addShortestDistanceToRoad(laneDistnce);
                 else
                     pl.getLaneRoads().get(0).addDistancesFromCenterToPlot(laneDistnce);
+            }
     }
 
     private void extractShortestDistanceToPlot(DXFDocument doc, PlanDetail pl) {
         List<DXFDimension> shortestDistanceDimension = Util.getDimensionsByLayer(doc,
-                layerNames.getLayerName("LAYER_NAME_SHORTEST_DISTANCE_TO_ROAD"));
+                layerNames.getLayerName(LAYER_NAME_SHORTEST_DISTANCE_TO_ROAD));
         List<RoadOutput> shortDistaineToPlot = new ArrayList<>();
 
         shortDistaineToPlot = roadDistanceWithColourCode(doc, shortestDistanceDimension, shortDistaineToPlot);
@@ -210,7 +216,7 @@ public class DistanceToRoadExtract extends FeatureExtract {
         }
 
         prepareRoadDetails(pl, notifiedRoadDistance, nonNotifiedRoadDistance, culdesacRoadDistance, laneDistance,
-                layerNames.getLayerName("LAYER_NAME_SHORTEST_DISTANCE_TO_ROAD"));
+                layerNames.getLayerName(LAYER_NAME_SHORTEST_DISTANCE_TO_ROAD));
     }
 
     private List<RoadOutput> roadDistanceWithColourCode(DXFDocument doc,
@@ -243,11 +249,11 @@ public class DistanceToRoadExtract extends FeatureExtract {
                             if (length >= 1) {
                                 int index = length - 1;
                                 text2 = textSplit[index];
-                                text2 = text2.replaceAll("[^\\d.]", "");
+                                text2 = text2.replaceAll(REG_EXP_D, "");
                             } else
-                                text2 = text2.replaceAll("[^\\d.]", "");
+                                text2 = text2.replaceAll(REG_EXP_D, "");
                         } else
-                            text2 = text2.replaceAll("[^\\d.]", "");
+                            text2 = text2.replaceAll(REG_EXP_D, "");
 
                         if (!text2.isEmpty()) {
                             value = BigDecimal.valueOf(Double.parseDouble(text2));

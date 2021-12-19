@@ -51,7 +51,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 @Service
 public class PlanService {
-    private static final String APPLICATION_PDF = "application/pdf";
+    private static final String TEXT_PLAIN = "text/plain";
+	private static final String NOT_ACCEPTED = "Not Accepted";
+	private static final String ACCEPTED = "Accepted";
+	private static final String APPLICATION_PDF = "application/pdf";
 	private static final String FILESTORE_MODULECODE = "Digit DCR";
 	private static final Logger LOG = Logger.getLogger(PlanService.class);
     @Autowired
@@ -177,7 +180,7 @@ public class PlanService {
             mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
             mapper.writeValue(f, plan);
             detail.setPlanDetailFileStore(
-                    fileStoreService.store(f, f.getName(), "text/plain", DcrConstants.APPLICATION_MODULE_TYPE));
+                    fileStoreService.store(f, f.getName(), TEXT_PLAIN, DcrConstants.APPLICATION_MODULE_TYPE));
             oos.flush();
         } catch (IOException e) {
             LOG.error("Unable to serialize!!!!!!", e);
@@ -322,11 +325,11 @@ public class PlanService {
             EdcrApplicationDetail edcrApplicationDetail = edcrApplication.getEdcrApplicationDetails().get(0);
 
             if (Boolean.TRUE.equals(plan.getEdcrPassed())) {
-                edcrApplicationDetail.setStatus("Accepted");
-                edcrApplication.setStatus("Accepted");
+                edcrApplicationDetail.setStatus(ACCEPTED);
+                edcrApplication.setStatus(ACCEPTED);
             } else {
-                edcrApplicationDetail.setStatus("Not Accepted");
-                edcrApplication.setStatus("Not Accepted");
+                edcrApplicationDetail.setStatus(NOT_ACCEPTED);
+                edcrApplication.setStatus(NOT_ACCEPTED);
             }
             edcrApplicationDetail.setCreatedDate(new Date());
             edcrApplicationDetail.setReportOutputId(reportOutput);

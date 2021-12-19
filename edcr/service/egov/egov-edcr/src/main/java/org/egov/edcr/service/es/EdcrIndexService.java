@@ -23,7 +23,13 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 @Service
 @Transactional(readOnly = true)
 public class EdcrIndexService {
-	private static final String url = "/edcr/edcrapplication/view/%s";
+	private static final String ABORTED = "Aborted";
+
+	private static final String NOT_ACCEPTED = "Not Accepted";
+
+	private static final String ACCEPTED = "Accepted";
+
+	private static final String URL = "/edcr/edcrapplication/view/%s";
 
 	@Autowired
 	private CityService cityService;
@@ -31,14 +37,14 @@ public class EdcrIndexService {
 	@Autowired
 	private EdcrIndexRepository edcrIndexRepository;
 	
-	   @Value("${elasticsearch.enable}")
-		private Boolean enable;
+    @Value("${elasticsearch.enable}")
+	private Boolean enable;
 
 	@Autowired
 	private ApplicationIndexService applicationIndexService;
 	   
 	public EdcrIndex createEdcrIndex(final EdcrApplication edcrApp) {
-		if(enable){
+		if(Boolean.TRUE.equals(enable)){
 		final City cityWebsite = cityService.getCityByURL(ApplicationThreadLocals.getDomainName());
 		EdcrIndex edcrIndex = new EdcrIndex();
 		edcrIndex.setId(cityWebsite.getCode() + "-" + edcrApp.getApplicationNumber());
@@ -81,17 +87,16 @@ public class EdcrIndexService {
 	}
 	
 	 public void updateIndexes(final EdcrApplication edcrApplication, String applctnType) {
-		 if(enable)
-		 {
+		 if(Boolean.TRUE.equals(enable)) {
 		   ApplicationIndex applicationIndex = applicationIndexService.findByApplicationNumber(edcrApplication
 	                .getApplicationNumber());
 	        if (applicationIndex != null && edcrApplication.getId() != null){
 	        	ApprovalStatus status = null;
-	        	if(edcrApplication.getStatus().equals("Accepted")){
+	        	if(edcrApplication.getStatus().equals(ACCEPTED)){
 	        		status = ApprovalStatus.APPROVED;
 	        	}
-	        	else if(edcrApplication.getStatus().equals("Not Accepted")
-						|| edcrApplication.getStatus().equals("Aborted")) {
+	        	else if(edcrApplication.getStatus().equals(NOT_ACCEPTED)
+						|| edcrApplication.getStatus().equals(ABORTED)) {
 					status = ApprovalStatus.REJECTED;
 				}
 	        	applicationIndex.setStatus(edcrApplication.getStatus());
@@ -99,14 +104,13 @@ public class EdcrIndexService {
 	        	applicationIndex.setApplicationType(applctnType);
 	            applicationIndexService.updateApplicationIndex(applicationIndex);
 	            createEdcrIndex(edcrApplication);
-	        }
-	        else {
+	        } else {
 	        	ApprovalStatus status = null;
-	        	if(edcrApplication.getStatus().equals("Accepted")){
+	        	if(edcrApplication.getStatus().equals(ACCEPTED)){
 	        		status = ApprovalStatus.APPROVED;
 	        	}
-	        	else if(edcrApplication.getStatus().equals("Not Accepted")
-						|| edcrApplication.getStatus().equals("Aborted")){
+	        	else if(edcrApplication.getStatus().equals(NOT_ACCEPTED)
+						|| edcrApplication.getStatus().equals(ABORTED)){
 	        		status = ApprovalStatus.REJECTED;
 	        	}
 	            applicationIndex = ApplicationIndex.builder().withModuleName(DcrConstants.APPLICATION_MODULE_TYPE)
@@ -117,7 +121,7 @@ public class EdcrIndexService {
 	                    .withConsumerCode(edcrApplication.getApplicationNumber())
 	                    .withClosed(ClosureStatus.YES)
 	                    .withApproved(status)
-	                    .withUrl(String.format(url, edcrApplication.getApplicationNumber()))
+	                    .withUrl(String.format(URL, edcrApplication.getApplicationNumber()))
 	                    .withChannel(Source.CITIZENPORTAL.name())
 	                    .withApplicationType(applctnType)
 	                    .build();
@@ -133,11 +137,11 @@ public class EdcrIndexService {
 	                .getApplicationNumber());
 	        if (applicationIndex != null && edcrApplication.getId() != null){
 	        	ApprovalStatus status = null;
-	        	if(edcrApplication.getStatus().equals("Accepted")){
+	        	if(edcrApplication.getStatus().equals(ACCEPTED)){
 	        		status = ApprovalStatus.APPROVED;
 	        	}
-	        	else if(edcrApplication.getStatus().equals("Not Accepted")
-						|| edcrApplication.getStatus().equals("Aborted")) {
+	        	else if(edcrApplication.getStatus().equals(NOT_ACCEPTED)
+						|| edcrApplication.getStatus().equals(ABORTED)) {
 					status = ApprovalStatus.REJECTED;
 				}
 	        	applicationIndex.setStatus(edcrApplication.getStatus());
@@ -148,11 +152,11 @@ public class EdcrIndexService {
 	        }
 	        else {
 	        	ApprovalStatus status = null;
-	        	if(edcrApplication.getStatus().equals("Accepted")){
+	        	if(edcrApplication.getStatus().equals(ACCEPTED)){
 	        		status = ApprovalStatus.APPROVED;
 	        	}
-	        	else if(edcrApplication.getStatus().equals("Not Accepted")
-						|| edcrApplication.getStatus().equals("Aborted")){
+	        	else if(edcrApplication.getStatus().equals(NOT_ACCEPTED)
+						|| edcrApplication.getStatus().equals(ABORTED)){
 	        		status = ApprovalStatus.REJECTED;
 	        	}
 	            applicationIndex = ApplicationIndex.builder().withModuleName(DcrConstants.APPLICATION_MODULE_TYPE)
@@ -163,7 +167,7 @@ public class EdcrIndexService {
 	                    .withConsumerCode(edcrApplication.getApplicationNumber())
 	                    .withClosed(ClosureStatus.YES)
 	                    .withApproved(status)
-	                    .withUrl(String.format(url, edcrApplication.getApplicationNumber()))
+	                    .withUrl(String.format(URL, edcrApplication.getApplicationNumber()))
 	                    .withChannel(Source.THIRDPARTY.name())
 	                    .withApplicationType(applctnType)
 	                    .build();
