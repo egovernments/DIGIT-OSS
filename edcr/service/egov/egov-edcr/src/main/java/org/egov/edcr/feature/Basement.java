@@ -68,8 +68,8 @@ public class Basement extends FeatureProcess {
     private static final Logger LOG = Logger.getLogger(Basement.class);
     private static final String RULE_46_6A = "46-6a";
     private static final String RULE_46_6C = "46-6c";
-    public static final String BASEMENT_DESCRIPTION_ONE = "Height from the floor to the soffit of the roof slab or ceiling";
-    public static final String BASEMENT_DESCRIPTION_TWO = "Minimum height of the ceiling of upper basement above ground level";
+    private static final String BASEMENT_DESCRIPTION_ONE = "Height from the floor to the soffit of the roof slab or ceiling";
+    private static final String BASEMENT_DESCRIPTION_TWO = "Minimum height of the ceiling of upper basement above ground level";
 
     @Override
     public Plan validate(Plan pl) {

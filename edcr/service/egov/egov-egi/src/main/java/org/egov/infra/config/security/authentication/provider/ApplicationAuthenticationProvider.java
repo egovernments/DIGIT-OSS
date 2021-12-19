@@ -78,7 +78,7 @@ public class ApplicationAuthenticationProvider extends DaoAuthenticationProvider
     private static final String ACCOUNT_LOCKED_MSG_KEY = "AbstractUserDetailsAuthenticationProvider.locked";
     private static final String ACCOUNT_LOCKED_DEFAULT_MSG = "User account is locked";
     private static final String TOO_MANY_ATTEMPTS_MSG_FORMAT = "Too many attempts [%d]";
-    private static final String INVALID_CAPTCHA_MSG_FORMAT = "%s - Recaptcha Invalid";
+    //private static final String INVALID_CAPTCHA_MSG_FORMAT = "%s - Recaptcha Invalid";
     private static final String CAPTCHA_FIELD = "j_captcha_response";
     private static final String RECAPTCHA_FIELD = "g-recaptcha-response";
 

@@ -1,8 +1,8 @@
 package org.egov.edcr.feature;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.service.LayerNames;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RoofTankExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(RoofTankExtract.class);
     @Autowired
     private LayerNames layerNames;
 
@@ -23,14 +22,16 @@ public class RoofTankExtract extends FeatureExtract {
 
     @Override
     public PlanDetail extract(PlanDetail planDetail) {
-        BigDecimal minHeight, increasedHeight;
+        BigDecimal minHeight;
+        BigDecimal increasedHeight;
 
         for (Block block : planDetail.getBlocks()) {
             block.setRoofTanks(Util.getListOfDimensionValueByLayer(planDetail,
                     String.format(layerNames.getLayerName("LAYER_NAME_ROOF_TANK"), block.getNumber())));
 
             if (block.getRoofTanks() != null && !block.getRoofTanks().isEmpty()) {
-                minHeight = block.getRoofTanks().stream().reduce(BigDecimal::min).get();
+                Optional<BigDecimal> roofTankHght = block.getRoofTanks().stream().reduce(BigDecimal::min);
+				minHeight = roofTankHght.isPresent() ? roofTankHght.get() : BigDecimal.ZERO;
                 if (minHeight.compareTo(new BigDecimal(1)) > 0) {
                     increasedHeight = block.getBuilding().getBuildingHeight()
                             .subtract(block.getBuilding().getDeclaredBuildingHeight());

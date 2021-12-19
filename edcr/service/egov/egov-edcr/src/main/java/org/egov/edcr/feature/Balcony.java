@@ -53,6 +53,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
@@ -79,6 +80,7 @@ public class Balcony extends FeatureProcess {
 
     @Override
     public Plan process(Plan plan) {
+    	LOG.info("***Processing balcony****");
         for (Block block : plan.getBlocks()) {
             if (block.getBuilding() != null) {
 
@@ -103,7 +105,8 @@ public class Balcony extends FeatureProcess {
                         for (org.egov.common.entity.edcr.Balcony balcony : balconies) {
                             boolean isAccepted = false;
                             List<BigDecimal> widths = balcony.getWidths();
-                            BigDecimal minWidth = widths.isEmpty() ? BigDecimal.ZERO : widths.stream().reduce(BigDecimal::min).get();
+                            Optional<BigDecimal> minWidths = widths.stream().reduce(BigDecimal::min);
+							BigDecimal minWidth = minWidths.isPresent() ? minWidths.get() : BigDecimal.ZERO;
                             minWidth = minWidth.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS,
                                     DcrConstants.ROUNDMODE_MEASUREMENTS);
                             if (minWidth.compareTo(ONE_POINTTWO.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS,

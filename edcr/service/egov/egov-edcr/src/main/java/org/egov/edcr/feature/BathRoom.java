@@ -68,7 +68,7 @@ public class BathRoom extends FeatureProcess {
 
 	private static final Logger LOG = Logger.getLogger(BathRoom.class);
 	private static final String RULE_41_IV = "41-iv";
-	public static final String BATHROOM_DESCRIPTION = "Bathroom";
+	private static final String BATHROOM_DESCRIPTION = "Bathroom";
 
 	@Override
 	public Plan validate(Plan pl) {
@@ -78,7 +78,7 @@ public class BathRoom extends FeatureProcess {
 
 	@Override
 	public Plan process(Plan pl) {
-
+		LOG.info("*****Processing Bathroom*****");
 		ScrutinyDetail scrutinyDetail = new ScrutinyDetail();
 		scrutinyDetail.setKey("Common_Bathroom");
 		scrutinyDetail.addColumnHeading(1, RULE_NO);
@@ -91,7 +91,9 @@ public class BathRoom extends FeatureProcess {
 		details.put(RULE_NO, RULE_41_IV);
 		details.put(DESCRIPTION, BATHROOM_DESCRIPTION);
 
-		BigDecimal minHeight = BigDecimal.ZERO, totalArea = BigDecimal.ZERO, minWidth = BigDecimal.ZERO;
+		BigDecimal minHeight = BigDecimal.ZERO;
+		BigDecimal totalArea = BigDecimal.ZERO;
+		BigDecimal minWidth = BigDecimal.ZERO;
 
 		for (Block b : pl.getBlocks()) {
 			if (b.getBuilding() != null && b.getBuilding().getFloors() != null
@@ -122,9 +124,9 @@ public class BathRoom extends FeatureProcess {
 							}
 						}
 
-						if (minHeight.compareTo(new BigDecimal(2.4)) >= 0
-								&& totalArea.compareTo(new BigDecimal(1.8)) >= 0
-								&& minWidth.compareTo(new BigDecimal(1.2)) >= 0) {
+						if (minHeight.compareTo(BigDecimal.valueOf(2.4)) >= 0
+								&& totalArea.compareTo(BigDecimal.valueOf(1.8)) >= 0
+								&& minWidth.compareTo(BigDecimal.valueOf(1.2)) >= 0) {
 
 							details.put(REQUIRED, "Height >= 2.4, Total Area >= 1.8, Width >= 1.2");
 							details.put(PROVIDED, "Height >= " + minHeight + ", Total Area >= " + totalArea
