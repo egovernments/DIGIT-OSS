@@ -112,6 +112,7 @@ public class EmployeeValidator {
 	 */
 	public void validateSearchRequest(RequestInfo requestInfo, EmployeeSearchCriteria criteria) {
 		Map<String, String> errorMap = new HashMap<>();
+		System.out.println("\n user-->"+requestInfo.getUserInfo().toString());
 		if(criteria.isCriteriaEmpty(criteria)) {
 			String[] roles = propertiesManager.getOpenSearchEnabledRoles().split(",");
 			List<String> reqroles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
