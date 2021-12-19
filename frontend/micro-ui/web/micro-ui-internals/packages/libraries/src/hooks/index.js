@@ -169,7 +169,9 @@ import useSurveySubmitResponse from "./surveys/useSubmitResponse";
 import useSurveyInbox from "./surveys/useSurveyInbox";
 
 import useNOCDetails from "./noc/useNOCDetails";
-import useNOCInbox from "./noc/useInbox"
+import useNOCInbox from "./noc/useInbox";
+
+import WSSearchMdmsTypes from "./ws/WSSearchMdmsTypes";
 
 const pgr = {
   useComplaintDetails,
@@ -345,6 +347,10 @@ const noc = {
   useInbox: useNOCInbox
 }
 
+const ws = {
+  WSSearchMdmsTypes
+}
+
 const Hooks = {
   useSessionStorage,
   useQueryParams,
@@ -385,7 +391,8 @@ const Hooks = {
   events,
   engagement,
   survey,
-  noc
+  noc,
+  ws
 };
 
 export default Hooks;

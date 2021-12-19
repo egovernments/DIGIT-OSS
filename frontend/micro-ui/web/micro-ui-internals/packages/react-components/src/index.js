@@ -131,7 +131,8 @@ import {
   EventsIconSolid,
   SurveyIconSolid,
   DustbinIcon,
-  InfoBannerIcon
+  InfoBannerIcon,
+  WSICon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -359,6 +360,7 @@ export {
   DateRange,
   EditIcon,
   SearchIcon,
-  DeleteIcon
+  DeleteIcon,
+  WSICon
 };
 
