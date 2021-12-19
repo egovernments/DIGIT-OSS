@@ -30,7 +30,7 @@ public class AmendmentDetails implements Comparable<AmendmentDetails> {
 	}
 
 	public AmendmentDetails() {
-		// Invariant
+		// default instance
 	}
 
 	@Override

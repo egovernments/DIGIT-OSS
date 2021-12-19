@@ -65,7 +65,7 @@ public class AccessoryBuildingServiceExtract extends FeatureExtract {
                     accessoryBuilding.setArea(totalArea);
                     String accessoryBlockHeightText = Util.getMtextByLayerName(doc, layerName);
                     if (accessoryBlockHeightText != null && !accessoryBlockHeightText.isEmpty()) {
-                        String stringArray[] = accessoryBlockHeightText.split("=", 2);
+                        String[] stringArray = accessoryBlockHeightText.split("=", 2);
                         if (stringArray[0] != null && !stringArray[0].isEmpty()) {
                             String text = stringArray[0].replaceAll("[^\\d.]", "");
                             if (text != null && text.equals(accessoryBlock.getNumber()) && stringArray[1] != null
@@ -175,7 +175,7 @@ public class AccessoryBuildingServiceExtract extends FeatureExtract {
 
         if (shortestDistanceCentralLineRoadDimension != null && !shortestDistanceCentralLineRoadDimension.isEmpty())
             for (Object dxfEntity : shortestDistanceCentralLineRoadDimension) {
-                BigDecimal value = BigDecimal.ZERO;
+                BigDecimal value;
 
                 DXFDimension line = (DXFDimension) dxfEntity;
                 String dimensionBlock = line.getDimensionBlock();

@@ -92,7 +92,7 @@ public class EgovMicroServiceStore implements FileStoreService {
 
     private static final String FILESTORE_V1_FILES = "filestore/v1/files";
 
-    private static final Logger LOG = getLogger(LocalDiskFileStoreService.class);
+    private static final Logger LOG = getLogger(EgovMicroServiceStore.class);
 
     private String url;
 
@@ -125,11 +125,11 @@ public class EgovMicroServiceStore implements FileStoreService {
                 LOG.debug(String.format("Uploaded file   %s   with size  %s ", file.getName(), file.length()));
 
             headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-            MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+            MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
             map.add("file", new FileSystemResource(file.getName()));
             map.add("tenantId", ApplicationThreadLocals.getTenantID());
             map.add("module", moduleName);
-            HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<MultiValueMap<String, Object>>(map,
+            HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(map,
                     headers);
             ResponseEntity<StorageResponse> result = restTemplate.postForEntity(url, request, StorageResponse.class);
             FileStoreMapper fileMapper = new FileStoreMapper(result.getBody().getFiles().get(0).getFileStoreId(),
@@ -170,17 +170,17 @@ public class EgovMicroServiceStore implements FileStoreService {
                 LOG.debug(String.format("Uploading .....  %s    with size %s   ", f.getName(), f.length()));
 
             headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-            MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+            MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
             map.add("file", new FileSystemResource(f.getName()));
             map.add("tenantId", ApplicationThreadLocals.getTenantID());
             map.add("module", moduleName);
-            HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<MultiValueMap<String, Object>>(map,
+            HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(map,
                     headers);
             ResponseEntity<StorageResponse> result = restTemplate.postForEntity(url, request, StorageResponse.class);
             FileStoreMapper fileMapper = new FileStoreMapper(result.getBody().getFiles().get(0).getFileStoreId(),
                     fileName);
             if (LOG.isDebugEnabled())
-                LOG.debug(String.format("Upload completed for  %s   with filestoreid   ", f.getName(),
+                LOG.debug(String.format("Upload completed for  %s   with filestoreid  %s ", f.getName(),
                         fileMapper.getFileStoreId()));
 
             fileMapper.setContentType(mimeType);
@@ -211,7 +211,6 @@ public class EgovMicroServiceStore implements FileStoreService {
     public File fetch(String fileStoreId, String moduleName) {
 
         fileStoreId = normalizeString(fileStoreId);
-        moduleName = normalizeString(moduleName);
         String urls = url + "/id?tenantId=" + ApplicationThreadLocals.getTenantID() + "&fileStoreId=" + fileStoreId;
         if (LOG.isDebugEnabled())
             LOG.debug(String.format("fetch file fron url   %s   ", urls));

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.apache.log4j.Logger;
@@ -32,11 +31,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ExtractService {
+	private static final String UNSUPPORTED_FONT_IS_USED = "Unsupported font is used";
 	@Autowired
 	private CustomImplProvider specificRuleService;
 	@Autowired
-        private AppConfigValueService appConfigValueService;
-	private Logger LOG = Logger.getLogger(ExtractService.class);
+    private AppConfigValueService appConfigValueService;
+	private static final Logger LOG = Logger.getLogger(ExtractService.class);
 
 	       
 	public Plan extract(File dxfFile, Amendment amd, Date scrutinyDate, List<PlanFeature> features) {
@@ -47,7 +47,6 @@ public class ExtractService {
 		planDetail.setDoc(doc);
 		planDetail.setPlanInformation(pi);
 		planDetail.setApplicationDate(scrutinyDate);
-		Map<String, String> cityDetails = specificRuleService.getCityDetails();
         
                 if (doc.getDXFHeader().getVariable("$INSUNITS") != null) {
                     String unitValue = doc.getDXFHeader().getVariable("$INSUNITS").getValue("70");
@@ -70,7 +69,7 @@ public class ExtractService {
          * planDetail.getErrors().put("length factor", "The dimension length factor is not 1."); } }
          */
 		if (planDetail.getErrors().size() > 0)
-			return (Plan) planDetail;
+			return planDetail;
 
 		List<AppConfigValues> appConfigValueList = appConfigValueService.getConfigValuesByModuleAndKey(
                         DcrConstants.APPLICATION_MODULE_TYPE, DcrConstants.STRICTLY_VALIDATE_DIMENSION);
@@ -147,7 +146,7 @@ public class ExtractService {
 		}
 		Date end=new Date();
 		LOG.info("Ending fetch extract api"+end);
-		return (Plan) planDetail;
+		return planDetail;
 
 	}
 
@@ -157,13 +156,12 @@ public class ExtractService {
 			parser.parse(file.getPath(), DXFParser.DEFAULT_ENCODING);
 		} catch (ParseException e) {
             LOG.error("Error in gettting default parser", e);
-            // throw e;
 
             StackTraceElement[] stackTrace = e.getStackTrace();
             for (StackTraceElement ele : stackTrace) {
                 if (ele.toString().toLowerCase().contains("font")) {
                     throw new ValidationException(
-                            Arrays.asList(new ValidationError("Unsupported font is used", "Unsupported font is used")));
+                            Arrays.asList(new ValidationError(UNSUPPORTED_FONT_IS_USED, UNSUPPORTED_FONT_IS_USED)));
                 }
             }
 
@@ -172,21 +170,12 @@ public class ExtractService {
             for (StackTraceElement ele : stackTrace) {
                 if (ele.toString().toLowerCase().contains("font")) {
                     throw new ValidationException(
-                            Arrays.asList(new ValidationError("Unsupported font is used", "Unsupported font is used")));
-                }
-            }
-        } catch (Exception e) {
-            StackTraceElement[] stackTrace = e.getStackTrace();
-            for (StackTraceElement ele : stackTrace) {
-                if (ele.toString().toLowerCase().contains("font")) {
-                    throw new ValidationException(
-                            Arrays.asList(new ValidationError("Unsupported font is used", "Unsupported font is used")));
+                            Arrays.asList(new ValidationError(UNSUPPORTED_FONT_IS_USED, UNSUPPORTED_FONT_IS_USED)));
                 }
             }
         }
 		// Extract DXF Data
-		DXFDocument doc = parser.getDocument();
-		return doc;
+		return parser.getDocument();
 	}
 
 }
