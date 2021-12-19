@@ -123,31 +123,6 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           },
         },
         {
-          label: "PT_SELECT_LOCALITY",
-          type: "custom",
-          isMandatory: true,
-          populators: {
-            name: "locality",
-            defaultValue: formValue?.locality,
-            rules: { required: true },
-            customProps: {},
-            component: (props, customProps) => (
-              <Localities
-                selectLocality={(d) => {
-                  props.onChange(d);
-                }}
-                tenantId={cityCode}
-                boundaryType="revenue"
-                keepNull={false}
-                optionCardStyles={{ height: "600px", overflow: "auto", zIndex: "10" }}
-                selected={formValue?.locality}
-                disable={!cityCode}
-                disableLoader={true}
-              />
-            ),
-          },
-        },
-        {
           label: mobileNumber.label,
           type: mobileNumber.type,
           populators: {
@@ -209,8 +184,6 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
                 {...customProps}
                 selectedOption={props.value}
                 onSelect={(d) => {
-                  console.log(d, history);
-                  console.log(props, customProps);
                   props?.setValue("city", {});
                   props?.setValue("locality", {});
                   props?.setValue("mobileNumber", "");
@@ -405,8 +378,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   if (error) {
     !showToast && setShowToast({ error: true, label: error?.response?.data?.Errors?.[0]?.code || error });
   }
-
-  if (action === 1) {
+  if (action == 1) {
     config[0].body = [...config[0].body1];
   }
 
