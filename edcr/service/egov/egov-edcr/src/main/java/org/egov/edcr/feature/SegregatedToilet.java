@@ -47,6 +47,8 @@
 
 package org.egov.edcr.feature;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
@@ -59,15 +61,14 @@ import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
 import org.egov.common.entity.edcr.ScrutinyDetail;
 import org.egov.edcr.constants.DxfFileConstants;
-import org.egov.infra.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SegregatedToilet extends FeatureProcess {
 
     private static final String RULE_59_10  = "59-10-i";
-    public static final String SEGREGATEDTOILET_DESCRIPTION = "Num. of segregated toilets";
-    public static final String SEGREGATEDTOILET_DIMENSION_DESCRIPTION = "Segregated toilet distance from main entrance";
+    private static final String SEGREGATEDTOILET_DESCRIPTION = "Num. of segregated toilets";
+    private static final String SEGREGATEDTOILET_DIMENSION_DESCRIPTION = "Segregated toilet distance from main entrance";
 
     @Override
     public Plan validate(Plan pl) {
@@ -113,7 +114,7 @@ public class SegregatedToilet extends FeatureProcess {
 
         if (pl.getVirtualBuilding() != null && (pl.getVirtualBuilding().getMostRestrictiveFarHelper() != null
                 && pl.getVirtualBuilding().getMostRestrictiveFarHelper().getType() != null
-                && ((StringUtils.isNotBlank(pl.getVirtualBuilding().getMostRestrictiveFarHelper().getType().getCode())
+                && ((isNotBlank(pl.getVirtualBuilding().getMostRestrictiveFarHelper().getType().getCode())
                 && DxfFileConstants.A
                         .equals(pl.getVirtualBuilding().getMostRestrictiveFarHelper().getType().getCode())
                 && maxHeightOfBuilding.compareTo(new BigDecimal(15)) >= 0)

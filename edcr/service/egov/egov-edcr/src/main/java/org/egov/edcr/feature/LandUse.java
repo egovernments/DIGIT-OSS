@@ -47,6 +47,8 @@
 
 package org.egov.edcr.feature;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,7 +57,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Occupancy;
@@ -63,15 +64,13 @@ import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
 import org.egov.edcr.constants.DxfFileConstants;
 import org.egov.edcr.utility.Util;
-import org.egov.infra.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LandUse extends FeatureProcess {
 
-    private static final Logger LOG = Logger.getLogger(LandUse.class);
     private static final String RULE_28 = "28";
-    public static final BigDecimal ROAD_WIDTH_TWELVE_POINTTWO = BigDecimal.valueOf(12.2);
+    private static final BigDecimal ROAD_WIDTH_TWELVE_POINTTWO = BigDecimal.valueOf(12.2);
     private static final String ROAD_WIDTH = "Road Width";
 
     @Override
@@ -91,7 +90,7 @@ public class LandUse extends FeatureProcess {
     private void validateCommercialZone(Plan pl, HashMap<String, String> errors) {
 
         for (Block block : pl.getBlocks()) {
-            StringBuffer floorNos = new StringBuffer();
+            StringBuilder floorNos = new StringBuilder();
             boolean isAccepted = false;
             String blkNo = block.getNumber();
             scrutinyDetail.addColumnHeading(1, RULE_NO);
@@ -104,7 +103,7 @@ public class LandUse extends FeatureProcess {
 
             BigDecimal roadWidth = pl.getPlanInformation().getRoadWidth();
             if (pl.getPlanInformation() != null && roadWidth != null
-                    && StringUtils.isNotBlank(pl.getPlanInformation().getLandUseZone())
+                    && isNotBlank(pl.getPlanInformation().getLandUseZone())
                     && DxfFileConstants.COMMERCIAL.equalsIgnoreCase(pl.getPlanInformation().getLandUseZone())
                     && Util.roundOffTwoDecimal(roadWidth).compareTo(ROAD_WIDTH_TWELVE_POINTTWO) >= 0) {
 
@@ -124,10 +123,8 @@ public class LandUse extends FeatureProcess {
                         }
                     }
 
-                    if (occupancyTypes.size() > 0) {
-                        if (occupancyTypes.contains(DxfFileConstants.F)) {
+                    if (!occupancyTypes.isEmpty() && occupancyTypes.contains(DxfFileConstants.F)) {
                             floorNos.append(floor.getNumber()).append(",");
-                        }
                     }
                 }
 

@@ -81,11 +81,11 @@ public class SetBackService extends FeatureProcess {
         HashMap<String, String> errors = new HashMap<>();
         // Assumption: if height of one level, should be less than next level. this condition not validated.as in each level user
         // can define different height.
-        BigDecimal heightOfBuilding = BigDecimal.ZERO;
+        BigDecimal heightOfBuilding;
         for (Block block : pl.getBlocks()) {
             heightOfBuilding = block.getBuilding().getBuildingHeight();
             int i = 0;
-            if (!block.getCompletelyExisting()) {
+            if (Boolean.FALSE.equals(block.getCompletelyExisting())) {
                 for (SetBack setback : block.getSetBacks()) {
                     i++;
                     // if height not defined other than 0 level , then throw error.

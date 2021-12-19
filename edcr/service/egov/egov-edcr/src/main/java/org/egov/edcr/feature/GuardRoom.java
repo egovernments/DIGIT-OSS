@@ -53,9 +53,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -65,7 +65,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class GuardRoom extends FeatureProcess {
 
-	private static final Logger LOGGER = Logger.getLogger(Parking.class);
 	private static final String RULE_48_A = "48-A";
 	public static final String GUARD_ROOM_DIMENSION_DESCRIPTION = "Guard Room Dimension";
 	public static final String GUARD_ROOM_AREA_DESCRIPTION = "Guard Room Area";
@@ -88,10 +87,10 @@ public class GuardRoom extends FeatureProcess {
 		scrutinyDetail.addColumnHeading(5, STATUS);
 		Map<String, String> details = new HashMap<>();
 		HashMap<String, String> errors = new HashMap<>();
-		BigDecimal minHeight = BigDecimal.ZERO;
-		BigDecimal minWidth = BigDecimal.ZERO;
-		BigDecimal minArea = BigDecimal.ZERO;
-		BigDecimal minCabinHeight = BigDecimal.ZERO;
+		BigDecimal minHeight;
+		BigDecimal minWidth;
+		BigDecimal minArea;
+		BigDecimal minCabinHeight;
 
 		if (pl.getGuardRoom() != null && !pl.getGuardRoom().getGuardRooms().isEmpty()) {
 
@@ -106,10 +105,14 @@ public class GuardRoom extends FeatureProcess {
 
 			if (cabinHeightList != null && !cabinHeightList.isEmpty()) {
 
-				minHeight = heightList.stream().reduce(BigDecimal::min).get();
-				minWidth = widthList.stream().reduce(BigDecimal::min).get();
-				minArea = atreaList.stream().reduce(BigDecimal::min).get();
-				minCabinHeight = cabinHeightList.stream().reduce(BigDecimal::min).get();
+				Optional<BigDecimal> height = heightList.stream().reduce(BigDecimal::min);
+				minHeight = height.isPresent() ? height.get() : BigDecimal.ZERO;
+				Optional<BigDecimal> width = widthList.stream().reduce(BigDecimal::min);
+				minWidth = width.isPresent() ? width.get() : BigDecimal.ZERO;
+				Optional<BigDecimal> area = atreaList.stream().reduce(BigDecimal::min);
+				minArea = area.isPresent() ? area.get() : BigDecimal.ZERO;
+				Optional<BigDecimal> cabinHeight = cabinHeightList.stream().reduce(BigDecimal::min);
+				minCabinHeight = cabinHeight.isPresent() ? cabinHeight.get() : BigDecimal.ZERO;
 
 				if (minHeight.compareTo(new BigDecimal("4")) >= 0 && minWidth.compareTo(new BigDecimal("3")) >= 0) {
 					details.put(RULE_NO, RULE_48_A);

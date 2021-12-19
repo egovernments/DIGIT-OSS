@@ -1,6 +1,5 @@
 package org.egov.edcr.feature;
 
-import static org.egov.edcr.constants.DxfFileConstants.COLOR_KEY_COMMON_WATER_CLOSET;
 import static org.egov.edcr.constants.DxfFileConstants.COLOR_KEY_FEMALE_WATER_CLOSET;
 import static org.egov.edcr.constants.DxfFileConstants.COLOR_KEY_MALE_WATER_CLOSET;
 

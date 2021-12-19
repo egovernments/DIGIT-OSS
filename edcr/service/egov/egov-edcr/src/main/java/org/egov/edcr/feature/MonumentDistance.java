@@ -47,27 +47,27 @@
 
 package org.egov.edcr.feature;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
 import org.egov.common.entity.edcr.ScrutinyDetail;
-import org.egov.infra.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MonumentDistance extends FeatureProcess {
 
-	private static final Logger LOG = Logger.getLogger(MonumentDistance.class);
 	private static final String RULE_20 = "20";
-	public static final String MONUMENT_DESCRIPTION = "Distance from monument";
+	private static final String MONUMENT_DESCRIPTION = "Distance from monument";
 
 	@Override
 	public Plan validate(Plan pl) {
@@ -92,19 +92,20 @@ public class MonumentDistance extends FeatureProcess {
 		details.put(RULE_NO, RULE_20);
 		details.put(DESCRIPTION, MONUMENT_DESCRIPTION);
 
-		BigDecimal minDistanceFromMonument = BigDecimal.ZERO;
+		BigDecimal minDistanceFromMonument;
 		BigDecimal maxHeightOfBuilding = BigDecimal.ZERO;
 		List<BigDecimal> distancesFromMonument = pl.getDistanceToExternalEntity().getMonuments();
 		List<Block> blocks = pl.getBlocks();
 		Block maxBuildingHeightBlock = new Block();
 
-		if (StringUtils.isNotBlank(pl.getPlanInformation().getBuildingNearMonument())
+		if (isNotBlank(pl.getPlanInformation().getBuildingNearMonument())
 				&& "YES".equalsIgnoreCase(pl.getPlanInformation().getBuildingNearMonument())) {
 			if (!distancesFromMonument.isEmpty()) {
 
-				minDistanceFromMonument = distancesFromMonument.stream().reduce(BigDecimal::min).get();
+				Optional<BigDecimal> minDisFromMonument = distancesFromMonument.stream().reduce(BigDecimal::min);
+				minDistanceFromMonument = minDisFromMonument.isPresent() ? minDisFromMonument.get() : BigDecimal.ZERO;
 
-				if (StringUtils.isNotBlank(pl.getPlanInformation().getNocNearMonument())
+				if (isNotBlank(pl.getPlanInformation().getNocNearMonument())
 						&& "YES".equalsIgnoreCase(pl.getPlanInformation().getNocNearMonument())) {
 					details.put(DISTANCE, ">300");
 					details.put(PERMITTED, "Permitted with NOC");

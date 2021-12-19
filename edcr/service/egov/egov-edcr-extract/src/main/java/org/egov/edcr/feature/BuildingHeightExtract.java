@@ -55,7 +55,7 @@ public class BuildingHeightExtract extends FeatureExtract {
         HashMap<String, String> errors = new HashMap<>();
         if (!Util.isSmallPlot(pl))
             for (Block block : pl.getBlocks())
-                if (!block.getCompletelyExisting()) {
+                if (Boolean.FALSE.equals(block.getCompletelyExisting())) {
                     if (block.getBuilding() != null && (block.getBuilding().getBuildingHeight() == null ||
                             block.getBuilding().getBuildingHeight().compareTo(BigDecimal.ZERO) <= 0)) {
                         errors.put(BUILDING_HEIGHT + block.getNumber(),

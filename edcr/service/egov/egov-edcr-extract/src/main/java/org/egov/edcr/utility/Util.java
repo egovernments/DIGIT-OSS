@@ -849,10 +849,11 @@ public class Util {
                         dxflwPolylines.add(dxflwPolyline);
                     }
 
-                } else {
-                    // TODO: add what if polylines not found
-
-                }
+				} /*
+					 * else { // TODO: add what if polylines not found
+					 * 
+					 * }
+					 */
         }
         return dxflwPolylines;
 

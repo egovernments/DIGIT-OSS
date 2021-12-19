@@ -53,7 +53,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Measurement;
@@ -66,9 +65,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class WaterClosets extends FeatureProcess {
 
-	private static final Logger LOG = Logger.getLogger(WaterClosets.class);
 	private static final String RULE_41_IV = "41-iv";
-	public static final String WATERCLOSETS_DESCRIPTION = "Water Closets";
+	private static final String WATERCLOSETS_DESCRIPTION = "Water Closets";
 
 	@Override
 	public Plan validate(Plan pl) {
@@ -91,7 +89,9 @@ public class WaterClosets extends FeatureProcess {
 		details.put(RULE_NO, RULE_41_IV);
 		details.put(DESCRIPTION, WATERCLOSETS_DESCRIPTION);
 
-		BigDecimal minHeight = BigDecimal.ZERO, totalArea = BigDecimal.ZERO, minWidth = BigDecimal.ZERO;
+		BigDecimal minHeight = BigDecimal.ZERO;
+		BigDecimal totalArea = BigDecimal.ZERO;
+		BigDecimal minWidth = BigDecimal.ZERO;
 
 		for (Block b : pl.getBlocks()) {
 			if (b.getBuilding() != null && b.getBuilding().getFloors() != null
@@ -122,8 +122,8 @@ public class WaterClosets extends FeatureProcess {
 							}
 						}
 
-						if (minHeight.compareTo(new BigDecimal(2.4)) >= 0
-								&& totalArea.compareTo(new BigDecimal(1.2)) >= 0
+						if (minHeight.compareTo(BigDecimal.valueOf(2.4)) >= 0
+								&& totalArea.compareTo(BigDecimal.valueOf(1.2)) >= 0
 								&& minWidth.compareTo(new BigDecimal(1)) >= 0) {
 
 							details.put(REQUIRED, "Height >= 2.4, Total Area >= 1.2, Width >= 1");

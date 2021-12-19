@@ -55,7 +55,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Circle;
 import org.egov.common.entity.edcr.Floor;
@@ -67,7 +66,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SpiralStair extends FeatureProcess {
-	private static final Logger LOG = Logger.getLogger(SpiralStair.class);
 	private static final String FLOOR = "Floor";
 	private static final String EXPECTED_DIAMETER = "1.50";
 	private static final String RULE42_5_IV = "42-5-iv";
@@ -75,7 +73,7 @@ public class SpiralStair extends FeatureProcess {
 
 	@Override
 	public Plan process(Plan plan) {
-		blk: for (Block block : plan.getBlocks()) {
+		for (Block block : plan.getBlocks()) {
 			if (block.getBuilding() != null && !block.getBuilding().getOccupancies().isEmpty()) {
 				/*
 				 * if (Util.checkExemptionConditionForBuildingParts(block) ||
@@ -102,13 +100,13 @@ public class SpiralStair extends FeatureProcess {
 
 					List<org.egov.common.entity.edcr.SpiralStair> spiralStairs = floor.getSpiralStairs();
 
-					if (spiralStairs.size() != 0) {
+					if (!spiralStairs.isEmpty()) {
 						boolean valid = false;
 
 						for (org.egov.common.entity.edcr.SpiralStair spiralStair : spiralStairs) {
 							List<Circle> spiralPolyLines = spiralStair.getCircles();
 
-							if (!(Boolean) typicalFloorValues.get("isTypicalRepititiveFloor")) {
+							if (Boolean.FALSE.equals(typicalFloorValues.get("isTypicalRepititiveFloor"))) {
 								if (Util.roundOffTwoDecimal(block.getBuilding().getBuildingHeight())
 										.compareTo(Util.roundOffTwoDecimal(BigDecimal.valueOf(10))) > 0
 										&& !spiralPolyLines.isEmpty()) {

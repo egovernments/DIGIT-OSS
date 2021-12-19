@@ -47,7 +47,6 @@
 
 package org.egov.edcr.feature;
 
-import static org.egov.edcr.constants.DxfFileConstants.A_AF;
 import static org.egov.edcr.constants.DxfFileConstants.A_R;
 
 import java.math.BigDecimal;
@@ -78,7 +77,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class RampService extends FeatureProcess {
 
-    private static final String SUBRULE_50_C_4_B = " 50-c-4-b";
+    private static final String BLOCK2 = "Block_";
+	private static final String SUBRULE_50_C_4_B = " 50-c-4-b";
     private static final String SUBRULE_40 = "40";
     /*
      * private static final String SUBRULE_40_A1 = "40A(1)"; private static final String SUBRULE_40_A_7_DESC =
@@ -121,7 +121,7 @@ public class RampService extends FeatureProcess {
         OccupancyTypeHelper mostRestrictiveOccupancyType = pl.getVirtualBuilding().getMostRestrictiveFarHelper();
 
         if (pl != null && !pl.getBlocks().isEmpty()) {
-            blk: for (Block block : pl.getBlocks()) {
+            for (Block block : pl.getBlocks()) {
                 /*
                  * if (block.getBuilding() != null && !block.getBuilding().getOccupancies().isEmpty()) { if
                  * (Util.checkExemptionConditionForBuildingParts(block)) { continue blk; } List<OccupancyType> occupancyTypeList =
@@ -151,9 +151,9 @@ public class RampService extends FeatureProcess {
                             pl.addErrors(errors);
                         }
                     } else {
-                        errors.put(String.format("DA Ramp", block.getNumber()),
+                        errors.put(String.format("DA Ramp %s", block.getNumber()),
                                 edcrMessageSource.getMessage(DcrConstants.OBJECTNOTDEFINED,
-                                        new String[] { String.format("DA Ramp",
+                                        new String[] { String.format("DA Ramp %s",
                                                 block.getNumber()) },
                                         LocaleContextHolder.getLocale()));
                         pl.addErrors(errors);
@@ -191,7 +191,7 @@ public class RampService extends FeatureProcess {
                 scrutinyDetail.addColumnHeading(3, REQUIRED);
                 scrutinyDetail.addColumnHeading(4, PROVIDED);
                 scrutinyDetail.addColumnHeading(5, STATUS);
-                scrutinyDetail.setKey("Block_" + block.getNumber() + "_" + "DA Ramp - Defined or not");
+                scrutinyDetail.setKey(BLOCK2 + block.getNumber() + "_" + "DA Ramp - Defined or not");
 
                 ScrutinyDetail scrutinyDetail1 = new ScrutinyDetail();
                 scrutinyDetail1.addColumnHeading(1, RULE_NO);
@@ -199,7 +199,7 @@ public class RampService extends FeatureProcess {
                 scrutinyDetail1.addColumnHeading(3, REQUIRED);
                 scrutinyDetail1.addColumnHeading(4, PROVIDED);
                 scrutinyDetail1.addColumnHeading(5, STATUS);
-                scrutinyDetail1.setKey("Block_" + block.getNumber() + "_" + "DA Ramp - Slope width");
+                scrutinyDetail1.setKey(BLOCK2 + block.getNumber() + "_" + "DA Ramp - Slope width");
 
                 ScrutinyDetail scrutinyDetail2 = new ScrutinyDetail();
                 scrutinyDetail2.addColumnHeading(1, RULE_NO);
@@ -207,7 +207,7 @@ public class RampService extends FeatureProcess {
                 scrutinyDetail2.addColumnHeading(3, REQUIRED);
                 scrutinyDetail2.addColumnHeading(4, PROVIDED);
                 scrutinyDetail2.addColumnHeading(5, STATUS);
-                scrutinyDetail2.setKey("Block_" + block.getNumber() + "_" + "DA Ramp - Maximum Slope");
+                scrutinyDetail2.setKey(BLOCK2 + block.getNumber() + "_" + "DA Ramp - Maximum Slope");
 
                 ScrutinyDetail scrutinyDetail3 = new ScrutinyDetail();
                 scrutinyDetail3.addColumnHeading(1, RULE_NO);
@@ -216,7 +216,7 @@ public class RampService extends FeatureProcess {
                 scrutinyDetail3.addColumnHeading(4, PROVIDED);
                 scrutinyDetail3.addColumnHeading(5, STATUS);
                 scrutinyDetail3.setSubHeading("Minimum number of da rooms");
-                scrutinyDetail3.setKey("Block_" + block.getNumber() + "_" + "DA Room");
+                scrutinyDetail3.setKey(BLOCK2 + block.getNumber() + "_" + "DA Room");
 
                 ScrutinyDetail scrutinyDetail4 = new ScrutinyDetail();
                 scrutinyDetail4.addColumnHeading(1, RULE_NO);
@@ -225,7 +225,7 @@ public class RampService extends FeatureProcess {
                 scrutinyDetail4.addColumnHeading(4, REQUIRED);
                 scrutinyDetail4.addColumnHeading(5, PROVIDED);
                 scrutinyDetail4.addColumnHeading(6, STATUS);
-                scrutinyDetail4.setKey("Block_" + block.getNumber() + "_" + "Ramp - Minimum Width");
+                scrutinyDetail4.setKey(BLOCK2 + block.getNumber() + "_" + "Ramp - Minimum Width");
 
                 ScrutinyDetail scrutinyDetail5 = new ScrutinyDetail();
                 scrutinyDetail5.addColumnHeading(1, RULE_NO);
@@ -234,7 +234,7 @@ public class RampService extends FeatureProcess {
                 scrutinyDetail5.addColumnHeading(4, REQUIRED);
                 scrutinyDetail5.addColumnHeading(5, PROVIDED);
                 scrutinyDetail5.addColumnHeading(6, STATUS);
-                scrutinyDetail5.setKey("Block_" + block.getNumber() + "_" + "Ramp - Maximum Slope");
+                scrutinyDetail5.setKey(BLOCK2 + block.getNumber() + "_" + "Ramp - Maximum Slope");
 
                 OccupancyTypeHelper mostRestrictiveOccupancyType = pl.getVirtualBuilding().getMostRestrictiveFarHelper();
                 if (block.getBuilding() != null && !block.getBuilding().getOccupancies().isEmpty()) {
@@ -252,10 +252,10 @@ public class RampService extends FeatureProcess {
                      * setReportOutputDetails(pl, SUBRULE_40_A1, SUBRULE_40_A_1_DESC, "", DcrConstants.OBJECTNOTDEFINED_DESC,
                      * Result.Not_Accepted.getResultVal(), scrutinyDetail); break; } } } }
                      */
-                    if (pl.getPlot() != null && !Util.checkExemptionConditionForSmallPlotAtBlkLevel(pl.getPlot(), block)
-                            && mostRestrictiveOccupancyType != null && mostRestrictiveOccupancyType.getSubtype() != null
-                            && !A_R.equalsIgnoreCase(mostRestrictiveOccupancyType.getSubtype().getCode())) {
-                        if (!block.getDARamps().isEmpty()) {
+					if (pl.getPlot() != null && !Util.checkExemptionConditionForSmallPlotAtBlkLevel(pl.getPlot(), block)
+							&& mostRestrictiveOccupancyType != null && mostRestrictiveOccupancyType.getSubtype() != null
+							&& !A_R.equalsIgnoreCase(mostRestrictiveOccupancyType.getSubtype().getCode())
+							&& !block.getDARamps().isEmpty()) {
                             boolean isSlopeDefined = false;
                             for (DARamp daRamp : block.getDARamps()) {
                                 if (daRamp != null && daRamp.getSlope() != null
@@ -278,15 +278,14 @@ public class RampService extends FeatureProcess {
                                         RoundingMode.HALF_UP);
                                 for (DARamp daRamp : block.getDARamps()) {
                                     BigDecimal slope = daRamp.getSlope();
-                                    if (slope != null && slope.compareTo(BigDecimal.valueOf(0)) > 0
-                                            && expectedSlope != null) {
-                                        if (slope.compareTo(expectedSlope) <= 0) {
-                                            valid = true;
-                                            mapOfRampNumberAndSlopeValues.put("daRampNumber", daRamp.getNumber().toString());
-                                            mapOfRampNumberAndSlopeValues.put("slope", slope.toString());
-                                            break;
-                                        }
-                                    }
+									if (slope != null && slope.compareTo(BigDecimal.valueOf(0)) > 0
+											&& expectedSlope != null && slope.compareTo(expectedSlope) <= 0) {
+										valid = true;
+										mapOfRampNumberAndSlopeValues.put("daRampNumber",
+												daRamp.getNumber().toString());
+										mapOfRampNumberAndSlopeValues.put("slope", slope.toString());
+										break;
+									}
                                 }
                                 if (valid) {
                                     setReportOutputDetails(pl, SUBRULE_50_C_4_B,
@@ -302,8 +301,6 @@ public class RampService extends FeatureProcess {
                                             scrutinyDetail2);
                                 }
                             }
-
-                        }
                     }
 
                     if (block.getBuilding().getBuildingHeight().compareTo(new BigDecimal(15)) > 0) {
@@ -335,7 +332,7 @@ public class RampService extends FeatureProcess {
                                  * String.valueOf(noOfDaRooms), Result.Not_Accepted.getResultVal(), scrutinyDetail3); } } } } } }
                                  */
                                 for (Ramp ramp : floor.getRamps()) {
-                                    if (ramp.getRampClosed()) {
+                                    if (Boolean.TRUE.equals(ramp.getRampClosed())) {
                                         List<BigDecimal> rampWidths = new ArrayList<>();
                                         List<BigDecimal> rampLengths = new ArrayList<>();
                                         for (Measurement measurement : ramp.getRamps()) {
@@ -374,7 +371,7 @@ public class RampService extends FeatureProcess {
                                             BigDecimal rampSlope = ramp.getFloorHeight().divide(rampTotalLength, 2,
                                                     RoundingMode.HALF_UP);
                                             ramp.setSlope(rampSlope);
-                                            BigDecimal expectedSlope = BigDecimal.ZERO;
+                                            BigDecimal expectedSlope;
                                             if (mostRestrictiveFarHelper != null && ((mostRestrictiveFarHelper.getType() != null
                                                     && mostRestrictiveFarHelper.getType()
                                                             .getCode().equalsIgnoreCase(DxfFileConstants.C))
@@ -394,7 +391,7 @@ public class RampService extends FeatureProcess {
                                             valid = false;
                                             Map<String, Object> typicalFloorValues = Util.getTypicalFloorValues(block, floor,
                                                     isTypicalRepititiveFloor);
-                                            if (!(Boolean) typicalFloorValues.get("isTypicalRepititiveFloor")) {
+                                            if (Boolean.FALSE.equals(typicalFloorValues.get("isTypicalRepititiveFloor"))) {
                                                 if (rampSlope.compareTo(expectedSlope) <= 0) {
                                                     valid = true;
                                                 }

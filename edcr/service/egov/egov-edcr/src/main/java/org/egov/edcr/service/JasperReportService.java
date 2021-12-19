@@ -3,6 +3,7 @@ package org.egov.edcr.service;
 import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class JasperReportService {
 	private static final String DETAIL = "detail";
 	private static final String COLUMN_CSS = "ColumnCss";
 
-	public InputStream exportPdf(final JasperPrint jasperPrint) throws JRException {
+	public InputStream exportPdf(final JasperPrint jasperPrint) throws JRException, IOException {
         ByteArrayOutputStream outputBytes = new ByteArrayOutputStream(1 * 1024 * 1024);
         JasperExportManager.exportReportToPdfStream(jasperPrint, outputBytes);
         return new ByteArrayInputStream(outputBytes.toByteArray());

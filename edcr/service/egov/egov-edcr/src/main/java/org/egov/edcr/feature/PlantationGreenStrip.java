@@ -48,8 +48,6 @@
 package org.egov.edcr.feature;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -61,7 +59,6 @@ import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
 import org.egov.common.entity.edcr.ScrutinyDetail;
-import org.egov.common.entity.edcr.SetBack;
 import org.egov.edcr.utility.DcrConstants;
 import org.springframework.stereotype.Service;
 

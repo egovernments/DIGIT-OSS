@@ -47,13 +47,10 @@
 
 package org.egov.edcr.feature;
 
-import static org.egov.edcr.utility.DcrConstants.BUILDING_HEIGHT;
 import static org.egov.edcr.utility.DcrConstants.DECIMALDIGITS_MEASUREMENTS;
 import static org.egov.edcr.utility.DcrConstants.HEIGHT_OF_BUILDING;
-import static org.egov.edcr.utility.DcrConstants.OBJECTNOTDEFINED;
 import static org.egov.edcr.utility.DcrConstants.ROUNDMODE_MEASUREMENTS;
 import static org.egov.edcr.utility.DcrConstants.SECURITY_ZONE;
-import static org.egov.edcr.utility.DcrConstants.SHORTESTDISTINACETOBUILDINGFOOTPRINT;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -70,7 +67,6 @@ import org.egov.common.entity.edcr.NotifiedRoad;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
 import org.egov.common.entity.edcr.ScrutinyDetail;
-import org.egov.edcr.service.ProcessHelper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -117,7 +113,6 @@ public class BuildingHeight extends FeatureProcess {
 
     private void checkBuildingHeight(Plan Plan) {
         String subRule = SUB_RULE_32_1A;
-        String rule = HEIGHT_OF_BUILDING;
 
         BigDecimal maximumDistanceToRoad = BigDecimal.ZERO;
 
@@ -148,10 +143,10 @@ public class BuildingHeight extends FeatureProcess {
                 }
             // Show for each block height
             if (exptectedDistance != null && exptectedDistance.compareTo(BigDecimal.ZERO) > 0) {
-                String actualResult = getLocaleMessage(RULE_ACTUAL_KEY, actualDistance.toString());
+                String actualResult = getLocaleMessage(RULE_ACTUAL_KEY, String.valueOf(actualDistance));
                 String expectedResult = getLocaleMessage(RULE_EXPECTED_KEY, exptectedDistance.toString());
 
-                if (actualDistance.compareTo(exptectedDistance) > 0) {
+                if (actualDistance != null && actualDistance.compareTo(exptectedDistance) > 0) {
                     Map<String, String> details = new HashMap<>();
                     details.put(RULE_NO, subRule);
                     details.put(DESCRIPTION, HEIGHT_OF_BUILDING + " for Block " + block.getNumber());

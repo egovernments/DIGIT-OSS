@@ -17,13 +17,14 @@ import org.egov.edcr.service.LayerNames;
 import org.egov.edcr.utility.Util;
 import org.kabeja.dxf.DXFCircle;
 import org.kabeja.dxf.DXFLWPolyline;
-import org.kabeja.dxf.DXFPolyline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RainWaterHarvestingExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(RainWaterHarvestingExtract.class);
+    private static final String REPLACE_TEXT = "[^\\d.]";
+	private static final String LAYER_NAME_RAINWATER_HARWESTING = "LAYER_NAME_RAINWATER_HARWESTING";
+	private static final Logger LOG = Logger.getLogger(RainWaterHarvestingExtract.class);
     @Autowired
     private LayerNames layerNames;
 
@@ -33,7 +34,7 @@ public class RainWaterHarvestingExtract extends FeatureExtract {
             LOG.info("Starting of Rain Water Harvesting Extract......");
         // Rain water harvesting Utility
         List<DXFLWPolyline> rainWaterHarvesting = Util.getPolyLinesByLayer(pl.getDoc(),
-                layerNames.getLayerName("LAYER_NAME_RAINWATER_HARWESTING"));
+                layerNames.getLayerName(LAYER_NAME_RAINWATER_HARWESTING));
         if (rainWaterHarvesting != null && !rainWaterHarvesting.isEmpty())
             for (DXFLWPolyline pline : rainWaterHarvesting) {
                 Measurement measurement = new MeasurementDetail(pline, true);
@@ -49,7 +50,7 @@ public class RainWaterHarvestingExtract extends FeatureExtract {
             }
 
         List<DXFCircle> rainWaterHarvestingCircle = Util.getPolyCircleByLayer(pl.getDoc(),
-                layerNames.getLayerName("LAYER_NAME_RAINWATER_HARWESTING"));
+                layerNames.getLayerName(LAYER_NAME_RAINWATER_HARWESTING));
         if (rainWaterHarvestingCircle != null && !rainWaterHarvestingCircle.isEmpty())
             for (DXFCircle pline : rainWaterHarvestingCircle) {
                 RainWaterHarvesting rwh = new RainWaterHarvesting();
@@ -59,9 +60,9 @@ public class RainWaterHarvestingExtract extends FeatureExtract {
                 pl.getUtility().addRainWaterHarvest(rwh);
             }
 
-        if (pl.getDoc().containsDXFLayer(layerNames.getLayerName("LAYER_NAME_RAINWATER_HARWESTING"))) {
+        if (pl.getDoc().containsDXFLayer(layerNames.getLayerName(LAYER_NAME_RAINWATER_HARWESTING))) {
             String tankCapacity = Util.getMtextByLayerName(pl.getDoc(),
-                    layerNames.getLayerName("LAYER_NAME_RAINWATER_HARWESTING"),
+                    layerNames.getLayerName(LAYER_NAME_RAINWATER_HARWESTING),
                     layerNames.getLayerName("LAYER_NAME_RWH_CAPACITY_L"));
             if (tankCapacity != null && !tankCapacity.isEmpty())
                 try {
@@ -72,22 +73,22 @@ public class RainWaterHarvestingExtract extends FeatureExtract {
                         if (length >= 1) {
                             int index = length - 1;
                             tankCapacity = textSplit[index];
-                            tankCapacity = tankCapacity.replaceAll("[^\\d.]", "");
+                            tankCapacity = tankCapacity.replaceAll(REPLACE_TEXT, "");
                         } else
-                            tankCapacity = tankCapacity.replaceAll("[^\\d.]", "");
+                            tankCapacity = tankCapacity.replaceAll(REPLACE_TEXT, "");
                     } else
-                        tankCapacity = tankCapacity.replaceAll("[^\\d.]", "");
+                        tankCapacity = tankCapacity.replaceAll(REPLACE_TEXT, "");
 
                     if (!tankCapacity.isEmpty())
                         pl.getUtility().setRainWaterHarvestingTankCapacity(BigDecimal.valueOf(Double.parseDouble(tankCapacity)));
 
                 } catch (NumberFormatException e) {
-                    pl.addError(layerNames.getLayerName("LAYER_NAME_RAINWATER_HARWESTING"),
+                    pl.addError(layerNames.getLayerName(LAYER_NAME_RAINWATER_HARWESTING),
                             "Rain water Harwesting tank capity value contains non numeric character.");
                 }
         }
 
-        String rwhLayerPattern = layerNames.getLayerName("LAYER_NAME_RAINWATER_HARWESTING") + "_+\\d";
+        String rwhLayerPattern = layerNames.getLayerName(LAYER_NAME_RAINWATER_HARWESTING) + "_+\\d";
 
         List<String> rwhLayers = Util.getLayerNamesLike(pl.getDoc(), rwhLayerPattern);
 
@@ -108,14 +109,14 @@ public class RainWaterHarvestingExtract extends FeatureExtract {
                             if (length >= 1) {
                                 int index = length - 1;
                                 tankCapacity = textSplit[index];
-                                tankCapacity = tankCapacity.replaceAll("[^\\d.]", "");
+                                tankCapacity = tankCapacity.replaceAll(REPLACE_TEXT, "");
                             } else
-                                tankCapacity = tankCapacity.replaceAll("[^\\d.]", "");
+                                tankCapacity = tankCapacity.replaceAll(REPLACE_TEXT, "");
                         } else
-                            tankCapacity = tankCapacity.replaceAll("[^\\d.]", "");
+                            tankCapacity = tankCapacity.replaceAll(REPLACE_TEXT, "");
 
                     } catch (NumberFormatException e) {
-                        pl.addError(layerNames.getLayerName("LAYER_NAME_RAINWATER_HARWESTING"),
+                        pl.addError(layerNames.getLayerName(LAYER_NAME_RAINWATER_HARWESTING),
                                 "Rain water Harwesting tank capity value contains non numeric character.");
                     }
 

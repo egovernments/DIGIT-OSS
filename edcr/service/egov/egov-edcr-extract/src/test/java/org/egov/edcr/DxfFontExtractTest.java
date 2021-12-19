@@ -1,7 +1,8 @@
 
 package org.egov.edcr;
 
-import org.apache.log4j.Logger;
+import java.io.IOException;
+
 import org.egov.edcr.feature.DxfFontExtract;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,11 +13,10 @@ import org.mockito.runners.MockitoJUnit44Runner;
 
 public class DxfFontExtractTest extends BaseTest {
 
-	private static final Logger LOG = Logger.getLogger(DxfFontExtractTest.class);
 	DxfFontExtract dxfFontExtract = new DxfFontExtract();
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws IOException {
 		dxfFile = "RASHIDA.dxf";
 		super.setUp();
 	}

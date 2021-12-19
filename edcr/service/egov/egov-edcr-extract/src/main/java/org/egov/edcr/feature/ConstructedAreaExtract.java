@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Measurement;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ConstructedAreaExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(ConstructedAreaExtract.class);
 
     @Autowired
     private LayerNames layerNames;
@@ -66,7 +64,7 @@ public class ConstructedAreaExtract extends FeatureExtract {
                                 floor.setConstructedAreas(constructedAreas);
 
                                 List<BigDecimal> areaList = constructedAreas.stream()
-                                        .map(constructedArea -> constructedArea.getArea()).collect(Collectors.toList());
+                                        .map(Measurement::getArea).collect(Collectors.toList());
                                 BigDecimal constructedArea = areaList.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
 
                                 blockConstructedArea = blockConstructedArea.add(constructedArea);

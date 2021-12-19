@@ -4,7 +4,7 @@ public class DxfFileConstants {
 
     public static final String DEPTH_CUTTING = "DEPTH_CUTTING_MORE_THAN_1.5_M";
     public static final String GOVERNMENT_AIDED = "WHETHER_GOVT_OR_AIDED_SCHOOL";
-    public static String CRZ_ZONE = "CRZ";
+    public static final String CRZ_ZONE = "CRZ";
     public static final String PLOT_AREA = "PLOT_AREA_M2";
     public static final Object ARCHITECT_NAME = "ARCHITECT_NAME";
     public static final String FLOOR_HEIGHT = "FLR_HT_M";

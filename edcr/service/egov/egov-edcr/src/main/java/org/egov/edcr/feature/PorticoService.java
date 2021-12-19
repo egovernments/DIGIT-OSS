@@ -67,7 +67,7 @@ public class PorticoService extends FeatureProcess {
 	
 	private static final String SUBRULE_PORTICO = "PORTICO";
 	private static final String SUBRULE_PORTICO_MAX_LENGTHDESCRIPTION = "Maximum Portico length for portico %s ";
-    public static final String PORTICO_DISTANCETO_EXTERIORWALL = "Block %s Portico %s Portico distance to exteriorwall";
+	private static final String PORTICO_DISTANCETO_EXTERIORWALL = "Block %s Portico %s Portico distance to exteriorwall";
 
     @Override
     public Plan validate(Plan plan) {

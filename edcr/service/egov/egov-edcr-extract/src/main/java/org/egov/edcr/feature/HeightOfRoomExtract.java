@@ -23,6 +23,7 @@ import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.service.LayerNames;
 import org.egov.edcr.utility.Util;
 import org.kabeja.dxf.DXFLWPolyline;
+import org.kabeja.dxf.DXFPolyline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -83,7 +84,7 @@ public class HeightOfRoomExtract extends FeatureExtract {
 
                                 if (!acRoomHeightMap.isEmpty() || !acRoomPolyLines.isEmpty()) {
                                     boolean isClosed = acRoomPolyLines.stream()
-                                            .allMatch(dxflwPolyline -> dxflwPolyline.isClosed());
+                                            .allMatch(DXFPolyline::isClosed);
 
                                     Room acRoom = new Room();
                                     String[] roomNo = acRoomLayer.split("_");
@@ -94,7 +95,7 @@ public class HeightOfRoomExtract extends FeatureExtract {
 
                                     List<RoomHeight> acRoomHeights = new ArrayList<>();
                                     if (!acRoomPolyLines.isEmpty()) {
-                                        List<Measurement> acRooms = new ArrayList<Measurement>();
+                                        List<Measurement> acRooms = new ArrayList<>();
                                         acRoomPolyLines.stream().forEach(arp -> {
                                             Measurement m = new MeasurementDetail(arp, true);
                                             if (!acRoomHeightMap.isEmpty() && acRoomHeightMap.containsKey(m.getColorCode())) {
@@ -177,7 +178,7 @@ public class HeightOfRoomExtract extends FeatureExtract {
                                 if (!roomHeightMap.isEmpty() || !roomPolyLines.isEmpty()) {
 
                                     boolean isClosed = roomPolyLines.stream()
-                                            .allMatch(dxflwPolyline -> dxflwPolyline.isClosed());
+                                            .allMatch(DXFPolyline::isClosed);
 
                                     Room room = new Room();
                                     String[] roomNo = regularRoomLayer.split("_");
@@ -188,7 +189,7 @@ public class HeightOfRoomExtract extends FeatureExtract {
 
                                     List<RoomHeight> roomHeights = new ArrayList<>();
                                     if (!roomPolyLines.isEmpty()) {
-                                        List<Measurement> rooms = new ArrayList<Measurement>();
+                                        List<Measurement> rooms = new ArrayList<>();
                                         roomPolyLines.stream().forEach(rp -> {
                                             Measurement m = new MeasurementDetail(rp, true);
                                             if (!roomHeightMap.isEmpty() && roomHeightMap.containsKey(m.getColorCode())) {
