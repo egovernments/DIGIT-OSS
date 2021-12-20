@@ -133,6 +133,8 @@ public class ApplicationTenantResolverFilter implements Filter {
     }
 
     private void prepareRestService(MultiReadRequestWrapper customRequest, HttpSession session) {
+        
+        boolean isEnvironmentCentralInstance = environmentSettings.getProperty("is.environment.central.instance", Boolean.class);
         if (tenants == null || tenants.isEmpty()) {
             tenants = tenantUtils.tenantsMap();
         }
@@ -141,25 +143,83 @@ public class ApplicationTenantResolverFilter implements Filter {
         // LOG.info("***********Enter to set tenant id and custom header**************" + req.getRequestURL().toString());
         String requestURL = new StringBuilder().append(ApplicationThreadLocals.getDomainURL())
                 .append(customRequest.getRequestURI()).toString();
-        if (requestURL.contains(tenants.get("state"))
+        LOG.debug("All tenants from config" + tenants);
+        LOG.info("tenants.get(state))" + tenants.get("state"));
+        LOG.info("Inside method to set tenant id and custom header");
+        String tenantFromBody = StringUtils.EMPTY;
+        tenantFromBody = setCustomHeader(requestURL, tenantFromBody, customRequest);
+        LOG.info("Tenant from Body***" + tenantFromBody);
+        String fullTenant = customRequest.getParameter("tenantId");
+        LOG.info("fullTenant***" + fullTenant);
+        if (StringUtils.isBlank(fullTenant)) {
+            fullTenant = tenantFromBody;
+        }
+        String[] tenantArr = fullTenant.split("\\.");
+        String stateName;
+        if(isEnvironmentCentralInstance) {
+            if (tenantArr.length == 3 || tenantArr.length == 2) {
+                ApplicationThreadLocals.setStateName(tenantArr[1]);
+                stateName = tenantArr[1];
+            } else {
+                    ApplicationThreadLocals.setStateName(tenantArr[0]);
+                    stateName = "state";
+            }
+        } else {
+            stateName = "state";
+        }
+
+        if (requestURL.contains(tenants.get(stateName))
                 && (requestURL.contains("/edcr/") && (requestURL.contains("/rest/")
                         || requestURL.contains("/oauth/")))) {
-
-            LOG.debug("All tenants from config" + tenants);
-            LOG.info("tenants.get(state))" + tenants.get("state"));
-            LOG.info("Inside method to set tenant id and custom header");
-            String tenantFromBody = StringUtils.EMPTY;
-            tenantFromBody = setCustomHeader(requestURL, tenantFromBody, customRequest);
-            LOG.info("Tenant from Body***" + tenantFromBody);
-            String fullTenant = customRequest.getParameter("tenantId");
-            LOG.info("fullTenant***" + fullTenant);
-            if (StringUtils.isBlank(fullTenant)) {
-                fullTenant = tenantFromBody;
-            }
             if (StringUtils.isBlank(fullTenant)) {
                 throw new ApplicationRestException("incorrect_request", "RestUrl does not contain tenantId: " + fullTenant);
             }
-            String tenant = fullTenant.substring(fullTenant.lastIndexOf('.') + 1, fullTenant.length());
+            ApplicationThreadLocals.setFullTenantID(fullTenant);
+            String tenant;
+            if(isEnvironmentCentralInstance) {
+                if (tenantArr.length == 3) {
+                    tenant = tenantArr[1];
+                    ApplicationThreadLocals.setStateName(stateName);
+                    ApplicationThreadLocals.setCityName(tenantArr[2]);
+                    ApplicationThreadLocals.setFilestoreTenantID(fullTenant);
+                    /* To support backward compatibility of rule processing,
+                     * some dummy value is setting for district name, citycode and ULB grade
+                     */
+                    ApplicationThreadLocals.setCityCode(tenantArr[2]);
+                    ApplicationThreadLocals.setDistrictName(tenantArr[2]);
+                    ApplicationThreadLocals.setGrade(tenantArr[2]);
+                } else if (tenantArr.length == 2) {
+                    tenant = tenantArr[1];
+                    ApplicationThreadLocals.setCityName(tenant);
+                    ApplicationThreadLocals.setCityCode(tenant);
+                    ApplicationThreadLocals.setDistrictName(tenant);
+                    ApplicationThreadLocals.setGrade(tenant);
+                    ApplicationThreadLocals.setFilestoreTenantID(tenant);
+                } else {
+                    tenant = tenantArr[0];
+                    ApplicationThreadLocals.setFilestoreTenantID(tenant);
+                }
+            } else {
+                if (tenantArr.length == 3) {
+                    tenant = tenantArr[1];
+                    ApplicationThreadLocals.setStateName(stateName);
+                    ApplicationThreadLocals.setCityName(tenantArr[2]);
+                    ApplicationThreadLocals.setFilestoreTenantID(fullTenant);
+                    /* To support backward compatibility of rule processing,
+                     * some dummy value is setting for district name, citycode and ULB grade
+                     */
+                    ApplicationThreadLocals.setCityCode(tenantArr[2]);
+                    ApplicationThreadLocals.setDistrictName(tenantArr[2]);
+                    ApplicationThreadLocals.setGrade(tenantArr[2]);
+                } else if (tenantArr.length == 2) {
+                    tenant = tenantArr[1];
+                    ApplicationThreadLocals.setFilestoreTenantID(tenant);
+                } else {
+                    tenant = tenantArr[0];
+                    ApplicationThreadLocals.setFilestoreTenantID(tenant);
+                }
+            }
+            
             LOG.info("tenant***" + tenant);
             LOG.info("tenant from rest request =" + tenant);
             LOG.info("City Code from session " + (String) session.getAttribute(CITY_CODE_KEY));
@@ -168,7 +228,7 @@ public class ApplicationTenantResolverFilter implements Filter {
             if (tenant.equalsIgnoreCase("generic") || tenant.equalsIgnoreCase("state")) {
                 ApplicationThreadLocals.setTenantID(tenant);
                 found = true;
-            } else if (tenant.equalsIgnoreCase(stateCity.getCode())) {
+            } else if (stateCity != null && tenant.equalsIgnoreCase(stateCity.getCode())) {
                 ApplicationThreadLocals.setTenantID("state");
                 found = true;
             } else {
