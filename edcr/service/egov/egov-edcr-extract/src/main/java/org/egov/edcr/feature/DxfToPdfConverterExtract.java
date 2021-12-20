@@ -63,6 +63,7 @@ import org.kabeja.dxf.helpers.StyledTextParagraph;
 import org.kabeja.math.MathUtils;
 import org.kabeja.xml.SAXSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -95,6 +96,8 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
     private MDMSValidator mdmsValidator;
     @Autowired
     private CityService cityService;
+    @Value("${is.environment.central.instance}")
+    private String isEnvironmentCentralInstance;
 
     @Override
     public PlanDetail extract(PlanDetail planDetail) {
@@ -103,7 +106,12 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
         boolean mdmsDxfToPdfEnabled = false;
         if (mdmsEnabled != null && mdmsEnabled) {
             City stateCity = cityService.fetchStateCityDetails();
-            String tenantID = ApplicationThreadLocals.getTenantID();
+            String[] tenantArr = ApplicationThreadLocals.getFullTenantID().split("\\.");
+            String tenantID;
+            if(Boolean.TRUE.equals(Boolean.valueOf(isEnvironmentCentralInstance))) {
+                tenantID = tenantArr[0].concat(".").concat(tenantArr[1]);
+            } else
+                tenantID = tenantArr[0];
             Object mdmsData = edcrMdmsUtil.mDMSCall(new RequestInfo(),
                     new StringBuilder().append(stateCity.getCode()).append(".").append(tenantID).toString());
 
