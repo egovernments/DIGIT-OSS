@@ -94,6 +94,9 @@ public class FileStoreMapper extends AbstractPersistable<Long> {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate = new Date();
+    
+    @SafeHtml
+    private String tenantId;
 
     protected FileStoreMapper() {
         // For JPA
@@ -160,4 +163,13 @@ public class FileStoreMapper extends AbstractPersistable<Long> {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+    
 }

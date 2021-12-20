@@ -71,13 +71,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Plan implements Serializable {
 
     private static final long serialVersionUID = 7276648029097296311L;
+    
+    private String tenantId;
 
+    Map<String, String> planInfoProperties = new HashMap<>();
+    
     /**
      * Plan scrutiny report status. Values true mean "Accepted" and False mean "Not Accepted". Default value false. On plan
      * scrutiny, if all the rules are success then value is true.
      */
-    Map<String, String> planInfoProperties = new HashMap<>();
-
     private Boolean edcrPassed = false;
     // Submission date of plan scrutiny.
     private Date applicationDate;
@@ -197,9 +199,18 @@ public class Plan implements Serializable {
     private transient Map<String, String> noObjectionCertificates = new HashMap<>();
     private List<String> nocDeptCodes = new ArrayList<String>();
     private HashMap<String, String> featureAmendments = new LinkedHashMap<>();
+    @JsonIgnore
     private transient Map<String, List<Object>> mdmsMasterData;
     private transient Boolean mainDcrPassed = false;
     private List<ICT> icts = new ArrayList<>();
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
 
     public List<BigDecimal> getCanopyDistanceFromPlotBoundary() {
         return canopyDistanceFromPlotBoundary;
