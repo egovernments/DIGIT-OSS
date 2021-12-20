@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.echallan.config.ChallanConfiguration;
 import org.egov.echallan.model.Challan;
 import org.egov.echallan.model.ChallanRequest;
@@ -21,6 +23,7 @@ import org.egov.echallan.util.CommonUtils;
 import org.egov.echallan.web.models.collection.Bill;
 import org.egov.echallan.web.models.collection.PaymentDetail;
 import org.egov.echallan.web.models.collection.PaymentRequest;
+import org.egov.tracer.model.CustomException;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,7 +67,7 @@ public class ChallanRepository {
     private ChallanCountRowMapper countRowMapper;
 
     @Autowired
-    private CommonUtils utils;
+    private MultiStateInstanceUtil centralInstanceutil;
 
     @Autowired
     public ChallanRepository(Producer producer, ChallanConfiguration config,ChallanQueryBuilder queryBuilder,
@@ -103,7 +106,13 @@ public class ChallanRepository {
     public List<Challan> getChallans(SearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getChallanSearchQuery(criteria, preparedStmtList);
-        query = utils.replaceSchemaPlaceholder(query, criteria.getTenantId());
+        try {
+            query = centralInstanceutil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+        } catch (InvalidTenantIdException e) {
+            throw new CustomException("ECHALLAN_AS_TENANTID_ERROR",
+                    "TenantId length is not sufficient to replace query schema in a multi state instance");
+        }
+
         List<Challan> challans =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         return challans;
     }
@@ -120,7 +129,13 @@ public class ChallanRepository {
         });
 
         String query = FILESTOREID_UPDATE_SQL;
-        query = utils.replaceSchemaPlaceholder(query, challans.get(0).getTenantId());
+        try {
+            query = centralInstanceutil.replaceSchemaPlaceholder(query, challans.get(0).getTenantId());
+        } catch (InvalidTenantIdException e) {
+            throw new CustomException("ECHALLAN_AS_TENANTID_ERROR",
+                    "TenantId length is not sufficient to replace query schema in a multi state instance");
+        }
+
         jdbcTemplate.batchUpdate(query,rows);
 		
 	}
@@ -158,7 +173,12 @@ public class ChallanRepository {
         	        );
 		}
         String query = CANCEL_RECEIPT_UPDATE_SQL;
-        query = utils.replaceSchemaPlaceholder(query, tenantId);
+        try {
+            query = centralInstanceutil.replaceSchemaPlaceholder(query, tenantId);
+        } catch (InvalidTenantIdException e) {
+            throw new CustomException("ECHALLAN_AS_TENANTID_ERROR",
+                    "TenantId length is not sufficient to replace query schema in a multi state instance");
+        }
         jdbcTemplate.batchUpdate(query,rows);
 		
 	}
@@ -174,7 +194,14 @@ public class ChallanRepository {
         List<Object> preparedStmtList = new ArrayList<>();
 
         String query = queryBuilder.getChallanCountQuery(tenantId, preparedStmtList);
-        query = utils.replaceSchemaPlaceholder(query, tenantId);
+
+        try {
+            query = centralInstanceutil.replaceSchemaPlaceholder(query, tenantId);
+        } catch (InvalidTenantIdException e) {
+            throw new CustomException("ECHALLAN_AS_TENANTID_ERROR",
+                    "TenantId length is not sufficient to replace query schema in a multi state instance");
+        }
+
         try {
             response=jdbcTemplate.query(query, preparedStmtList.toArray(),countRowMapper);
         }catch(Exception e) {

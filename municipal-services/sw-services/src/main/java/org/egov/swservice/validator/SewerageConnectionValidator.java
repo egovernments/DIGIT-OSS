@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.swservice.config.SWConfiguration;
 import org.egov.swservice.web.models.SearchCriteria;
 import org.egov.swservice.web.models.SewerageConnection;
@@ -29,6 +30,9 @@ public class SewerageConnectionValidator {
 
 	@Autowired
 	private SWConfiguration configs;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 
 	/**Used strategy pattern for avoiding multiple if else condition
@@ -119,10 +123,10 @@ public class SewerageConnectionValidator {
 	}
 
 	public void validateSearch(SearchCriteria criteria){
-		if(configs.getIsEnvironmentCentralInstance() && criteria.getTenantId() == null)
+		if(centralInstanceUtil.getIsEnvironmentCentralInstance() && criteria.getTenantId() == null)
 			throw new CustomException("EG_SW_INVALID_SEARCH"," TenantId is mandatory for search ");
-		else if(configs.getIsEnvironmentCentralInstance() && criteria.getTenantId().split("\\.").length < configs.getStateLevelTenantIdLength())
-			throw new CustomException("EG_SW_INVALID_SEARCH"," TenantId should be mandatorily " + configs.getStateLevelTenantIdLength() + " levels for search");
+		else if(centralInstanceUtil.getIsEnvironmentCentralInstance() && criteria.getTenantId().split("\\.").length < centralInstanceUtil.getStateLevelTenantIdLength())
+			throw new CustomException("EG_SW_INVALID_SEARCH"," TenantId should be mandatorily " + centralInstanceUtil.getStateLevelTenantIdLength() + " levels for search");
 
 	}
 }

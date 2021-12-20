@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.swservice.config.SWConfiguration;
 import org.egov.swservice.repository.rowmapper.OpenSewerageRowMapper;
 import org.egov.swservice.util.SewerageServicesUtil;
@@ -18,6 +20,7 @@ import org.egov.swservice.producer.SewarageConnectionProducer;
 import org.egov.swservice.repository.builder.SWQueryBuilder;
 import org.egov.swservice.repository.rowmapper.SewerageRowMapper;
 import org.egov.swservice.util.SWConstants;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -48,7 +51,7 @@ public class SewerageDaoImpl implements SewerageDao {
 	private SWConfiguration swConfiguration;
 
 	@Autowired
-	private SewerageServicesUtil utils;
+	private MultiStateInstanceUtil centralInstanceutil;
 
 	@Value("${egov.sewarageservice.createconnection.topic}")
 	private String createSewarageConnection;
@@ -68,7 +71,13 @@ public class SewerageDaoImpl implements SewerageDao {
 		if (query == null)
 			return Collections.emptyList();
 
-		query = utils.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		try {
+			query = centralInstanceutil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("SW_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
+
 		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
 		List<SewerageConnection> sewerageConnectionList = new ArrayList<>();
 		if(isOpenSearch)

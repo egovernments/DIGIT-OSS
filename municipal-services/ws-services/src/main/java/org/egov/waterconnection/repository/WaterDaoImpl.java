@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
+import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.repository.rowmapper.OpenWaterRowMapper;
@@ -50,7 +53,7 @@ public class WaterDaoImpl implements WaterDao {
 	private WSConfiguration wsConfiguration;
 
 	@Autowired
-	private WaterServicesUtil utils;
+	private MultiStateInstanceUtil centralInstanceutil;
 
 	@Value("${egov.waterservice.createwaterconnection.topic}")
 	private String createWaterConnection;
@@ -72,7 +75,13 @@ public class WaterDaoImpl implements WaterDao {
 		String query = wsQueryBuilder.getSearchQueryString(criteria, preparedStatement, requestInfo);
 		if (query == null)
 			return Collections.emptyList();
-		query = utils.replaceSchemaPlaceholder(query, criteria.getTenantId());
+
+		try {
+			query = centralInstanceutil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("WS_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 
 		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
 		

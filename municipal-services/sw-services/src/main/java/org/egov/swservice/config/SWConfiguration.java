@@ -188,12 +188,6 @@ public class SWConfiguration {
 
 	// central-instance configs
 
-	@Value("${state.level.tenantid.length}")
-	private Integer stateLevelTenantIdLength;
-
-	@Value("${is.environment.central.instance}")
-	private Boolean isEnvironmentCentralInstance;
-
 	@Value("#{${egov.ui.app.host.map}}")
 	private Map<String, String> uiAppHostMap;
 

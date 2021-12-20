@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.swservice.config.SWConfiguration;
 import org.egov.swservice.service.UserService;
 import org.egov.swservice.util.SewerageServicesUtil;
@@ -28,6 +29,9 @@ public class SWQueryBuilder {
 	
 	@Autowired
     private UserService userService;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 	private static final String INNER_JOIN_STRING = "INNER JOIN";
 	private static final String LEFT_OUTER_JOIN_STRING = " LEFT OUTER JOIN ";
@@ -117,9 +121,8 @@ public class SWQueryBuilder {
 		
 		if (!StringUtils.isEmpty(criteria.getTenantId())) {
 			String tenantId = criteria.getTenantId();
-			int tenantLevel = tenantId.split("\\.").length;
 			addClauseIfRequired(preparedStatement, query);
-			if(tenantLevel <= config.getStateLevelTenantIdLength()){
+			if(centralInstanceUtil.isTenantIdStateLevel(tenantId)){
 				query.append(" conn.tenantid LIKE ? ");
 				preparedStatement.add(criteria.getTenantId() + '%');
 			}

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
@@ -61,6 +62,9 @@ public class PdfFileStoreService {
 
 	@Autowired
 	private NotificationUtil notificationUtil;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 	String tenantIdReplacer = "$tenantId";
 	String fileStoreIdsReplacer = "$.filestoreIds";
@@ -127,7 +131,7 @@ public class PdfFileStoreService {
 			waterObject.put(slaDate, slaDays.add(new BigDecimal(System.currentTimeMillis())));
 			String[] tenantDetails = property.getTenantId().split("\\.");
 			String tenantId = property.getTenantId();
-			if(tenantDetails.length > config.getStateLevelTenantIdLength()){
+			if(tenantDetails.length > centralInstanceUtil.getStateLevelTenantIdLength()){
 				tenantId = tenantDetails[0] + "." + tenantDetails[1];
 			}
 			if(tenantDetails.length > 1)

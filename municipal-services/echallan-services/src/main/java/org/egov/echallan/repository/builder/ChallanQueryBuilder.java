@@ -2,6 +2,7 @@ package org.egov.echallan.repository.builder;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.echallan.config.ChallanConfiguration;
 import org.egov.echallan.model.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class ChallanQueryBuilder {
     public ChallanQueryBuilder(ChallanConfiguration config) {
         this.config = config;
     }
+
+    @Autowired
+    private MultiStateInstanceUtil centralInstanceUtil;
 
     private static final String INNER_JOIN_STRING = " INNER JOIN ";
 
@@ -68,10 +72,9 @@ public class ChallanQueryBuilder {
 
             if (criteria.getTenantId() != null) {
                 String tenantId = criteria.getTenantId();
-                int tenantLevel = tenantId.split("\\.").length;
                 addClauseIfRequired(preparedStmtList, builder);
 
-                if(tenantLevel <= config.getStateLevelTenantIdLength()){
+                if(centralInstanceUtil.isTenantIdStateLevel(tenantId)){
                     builder.append(" challan.tenantid LIKE ? ");
                     preparedStmtList.add(criteria.getTenantId() + '%');
                 }
@@ -172,8 +175,7 @@ public class ChallanQueryBuilder {
 
     public String getChallanCountQuery(String tenantId, List <Object> preparedStmtList ) {
         StringBuilder builder = new StringBuilder(CHALLAN_COUNT_QUERY);
-        int tenantLevel = tenantId.split("\\.").length;
-        if(tenantLevel <= config.getStateLevelTenantIdLength()){
+        if(centralInstanceUtil.isTenantIdStateLevel(tenantId)){
             builder.append("LIKE ? ");
             preparedStmtList.add(tenantId+"%");
         }

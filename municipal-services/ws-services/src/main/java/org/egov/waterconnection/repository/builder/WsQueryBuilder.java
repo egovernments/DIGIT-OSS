@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.egov.common.utils.MultiStateInstanceUtil;
+
 
 import static org.egov.waterconnection.constants.WCConstants.SEARCH_TYPE_CONNECTION;
 
@@ -28,6 +30,10 @@ public class WsQueryBuilder {
 	
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
+
 
 	private static final String INNER_JOIN_STRING = "INNER JOIN";
     private static final String LEFT_OUTER_JOIN_STRING = " LEFT OUTER JOIN ";
@@ -128,9 +134,8 @@ public class WsQueryBuilder {
 
 		if (!StringUtils.isEmpty(criteria.getTenantId())) {
 			String tenantId = criteria.getTenantId();
-			int tenantLevel = tenantId.split("\\.").length;
 			addClauseIfRequired(preparedStatement, query);
-			if (tenantLevel <= config.getStateLevelTenantIdLength()) {
+			if (centralInstanceUtil.isTenantIdStateLevel(tenantId)) {
 				query.append(" conn.tenantid LIKE ? ");
 				preparedStatement.add(criteria.getTenantId() + '%');
 			}
