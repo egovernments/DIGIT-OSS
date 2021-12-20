@@ -15,6 +15,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @Builder
+//class is not used anywhere..no need to declare variables as private
 public class BankAccount   {
   private Long id;
 

@@ -1,0 +1,40 @@
+
+F
+java:S3740¾"/Provide the parametrized type for this generic.(ÂÏ§¥
+K
+java:S3740¿"/Provide the parametrized type for this generic.(â¼Äæüÿÿÿÿ
+K
+java:S3740Å"/Provide the parametrized type for this generic.(§¸²Áýÿÿÿÿ
+K
+java:S3740Æ"/Provide the parametrized type for this generic.(áºƒüÿÿÿÿ
+F
+java:S3740Ç"/Provide the parametrized type for this generic.(ªþæÈ
+K
+java:S3740Ñ"/Provide the parametrized type for this generic.(Öª¡™þÿÿÿÿ
+m
+java:S3776>"RRefactor this method to reduce its Cognitive Complexity from 38 to the 15 allowed.(½ãÉ·þÿÿÿÿ
+V	java:S125S"<This block of commented-out lines of code should be removed.(®Ð‰ýÿÿÿÿ
+Q	java:S125]"<This block of commented-out lines of code should be removed.(Õ‡Ï™
+G
+java:S1602j",Remove useless curly braces around statement(§ìð‰úÿÿÿÿ
+Q	java:S125x"<This block of commented-out lines of code should be removed.(€õ©
+W	java:S125„"<This block of commented-out lines of code should be removed.(½ãÉ·þÿÿÿÿ
+\
+java:S1117­"@Rename "objectMapper" which hides the field declared at line 45.(¡ôó‰ùÿÿÿÿ
+F
+java:S1481¯"*Remove this unused "array" local variable.(¶Á„Ïÿÿÿÿÿ
+F
+java:S2093µ"*Change this "try" to a try-with-resources.(¡»¢üùÿÿÿÿ
+k
+java:S1858Í"O"districtCode" is already a string, there's no need to call "toString()" on it.(Òÿü‹üÿÿÿÿ
+f
+java:S1858Î"O"districtCode" is already a string, there's no need to call "toString()" on it.(ï¤®Ì
+f
+java:S1858Ï"O"districtCode" is already a string, there's no need to call "toString()" on it.( Ôö
+f
+java:S1858Ó"O"districtCode" is already a string, there's no need to call "toString()" on it.(”œ§Å
+l	java:S117¿"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(â¼Äæüÿÿÿÿ
+W
+java:S2259»"@A "NullPointerException" could be thrown; "br" is nullable here.(µÖ€’
+[
+java:S2259À"DA "NullPointerException" could be thrown; "sample" is nullable here.(ðì”§

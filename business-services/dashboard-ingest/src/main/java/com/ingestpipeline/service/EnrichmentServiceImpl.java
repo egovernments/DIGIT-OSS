@@ -41,6 +41,7 @@ import com.ingestpipeline.util.JSONUtil;
  *
  */
 @Service(Constants.Qualifiers.ENRICHMENT_SERVICE)
+//class not used
 public class EnrichmentServiceImpl implements EnrichmentService {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(EnrichmentServiceImpl.class);

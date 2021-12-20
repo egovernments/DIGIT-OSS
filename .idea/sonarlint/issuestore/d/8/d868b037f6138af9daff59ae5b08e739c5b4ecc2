@@ -1,0 +1,6 @@
+
+O
+java:S2864s"4Iterate over the "entrySet" instead of the "keySet".(˜Ø òûÿÿÿÿ
+k	java:S117n"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(›‘Í™øÿÿÿÿ
+[
+java:S2259¿"?A "NullPointerException" could be thrown; "d" is nullable here.(Ä¢Ãÿÿÿÿÿ

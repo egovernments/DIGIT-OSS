@@ -60,6 +60,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Scheme {
 
+//    not used
     private Long id;
 
     private String code;

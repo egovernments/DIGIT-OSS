@@ -1,0 +1,6 @@
+
+t
+java:S2293~"YReplace the type specification in this constructor call with the diamond operator ("<>").(¨×É—ÿÿÿÿÿ
+f	java:S117|"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ô°õ
+~
+java:S1488"bImmediately return this expression instead of assigning it to the temporary variable "resultList".(ÉÄå¼ÿÿÿÿÿ

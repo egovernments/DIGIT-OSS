@@ -7,6 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @EqualsAndHashCode
+//class variables are not used
 public class BusinessAccountDetails {
 	private Long id;
 

@@ -10,7 +10,11 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class FiscalPeriodSearchContract extends FiscalPeriodContract { private String ids; 
-private String  sortBy; 
-private Integer pageSize; 
+private String  sortBy;
+
+// pageSize not used
+private Integer pageSize;
+
+//not used
 private Integer offset; 
 } 

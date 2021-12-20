@@ -67,6 +67,7 @@ public class Receipt {
     @NotNull
     private String tenantId;
 
+//    not used
     private String transactionId;
 
     // Read only, populated during search

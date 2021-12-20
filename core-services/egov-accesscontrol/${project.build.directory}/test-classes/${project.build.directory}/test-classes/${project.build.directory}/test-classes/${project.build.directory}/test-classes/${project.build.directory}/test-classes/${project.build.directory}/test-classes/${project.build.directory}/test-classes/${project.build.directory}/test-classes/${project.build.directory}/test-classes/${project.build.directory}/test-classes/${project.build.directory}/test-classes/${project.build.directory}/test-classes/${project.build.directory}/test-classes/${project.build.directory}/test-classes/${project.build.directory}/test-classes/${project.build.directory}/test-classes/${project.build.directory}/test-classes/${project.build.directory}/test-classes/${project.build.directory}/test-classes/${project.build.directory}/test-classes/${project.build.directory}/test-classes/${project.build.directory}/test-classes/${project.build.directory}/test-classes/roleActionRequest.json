@@ -1,0 +1,35 @@
+{
+   	"RequestInfo": {
+       "apiId" : "emp",
+       "ver" : "1.0",
+       "ts" : "10-03-2017 00:00:00",
+       "action" : "create",
+       "did" : "1",
+       "key" : "abcdkey",
+       "msgId" : "20170310130900",
+       "requesterId" : "rajesh",
+       "authToken" : "edffbd58-d322-4294-965b-fba0d1352e8a",
+       "userInfo" :{
+       "id" : "1"
+       
+       }
+        
+   },
+   
+   "role" : {
+   	
+   	"code" : "TEST"
+   },
+   
+   "actions" : [
+   	{
+   		
+   		"name" : "test1"
+   	},{
+   		
+   		"name" : "test2"
+   	}
+],
+   
+   "tenantId" : "default"
+}

@@ -1,0 +1,17 @@
+{
+  "responseInfo": {
+    "apiId" : null,
+    "ver" : null,
+    "msgId" : null
+  },
+  "roles": [
+    {
+      "name": "Citizen",
+      "description": "Citizen of a demography"
+    },
+    {
+      "name": "Employee",
+      "description": "Employee of an org"
+    }
+  ]
+}

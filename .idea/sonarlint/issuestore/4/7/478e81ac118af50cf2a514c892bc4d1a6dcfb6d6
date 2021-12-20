@@ -1,0 +1,11 @@
+
+C
+java:S1602¼",Remove useless curly braces around statement(ÈŸ‹ò
+Q
+java:S1144„"5Remove this unused private "getMobileNumbers" method.(ñº½Âşÿÿÿÿ
+†
+java:S1488¥"jImmediately return this expression instead of assigning it to the temporary variable "userDetailResponse".(şšíƒûÿÿÿÿ
+
+java:S1488½"jImmediately return this expression instead of assigning it to the temporary variable "userDetailResponse".(æ÷ÿÉ
+[
+java:S2259ô"?A "NullPointerException" could be thrown; "d" is nullable here.(Ä¢Ãÿÿÿÿÿ

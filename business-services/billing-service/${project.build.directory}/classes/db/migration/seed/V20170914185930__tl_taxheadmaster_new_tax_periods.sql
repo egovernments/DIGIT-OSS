@@ -1,0 +1,5 @@
+INSERT INTO egbs_taxperiod(id,service,code,fromdate,todate,financialYear, createddate, lastmodifieddate, createdby, lastmodifiedby, tenantid,periodcycle) values (NEXTVAL('seq_egbs_taxperiod'),'TRADELICENSE','TL201819', (SELECT EXTRACT(EPOCH FROM TIMESTAMP  '2018-04-01') * 1000),(SELECT EXTRACT(EPOCH FROM TIMESTAMP  '2019-03-31') * 1000),'2018-2019',1504081044000,1504081044000,1,1,'default','ANNUAL');
+INSERT INTO egbs_taxperiod(id,service,code,fromdate,todate,financialYear, createddate, lastmodifieddate, createdby, lastmodifiedby, tenantid,periodcycle) values (NEXTVAL('seq_egbs_taxperiod'),'TRADELICENSE','TL201920', (SELECT EXTRACT(EPOCH FROM TIMESTAMP  '2019-04-01') * 1000),(SELECT EXTRACT(EPOCH FROM TIMESTAMP  '2020-03-31') * 1000),'2019-2020',1504081044000,1504081044000,1,1,'default','ANNUAL');
+
+UPDATE egbs_taxheadmaster SET validtill = (SELECT EXTRACT(EPOCH FROM TIMESTAMP  '2020-03-31') * 1000) where code = 'NEWTRADELICENSEFEE' and tenantid = 'default';
+UPDATE egbs_glcodemaster SET todate = (SELECT EXTRACT(EPOCH FROM TIMESTAMP  '2020-03-31') * 1000) where taxhead = 'NEWTRADELICENSEFEE' and tenantid = 'default';

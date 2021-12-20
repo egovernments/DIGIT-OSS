@@ -1,0 +1,11 @@
+
+Q	java:S125S"<This block of commented-out lines of code should be removed.(¼ø€†
+H
+java:S1874é",Remove this use of "Date"; it is deprecated.(Æû’üÿÿÿÿ
+W	java:S125ú"<This block of commented-out lines of code should be removed.(û±†æıÿÿÿÿ
+H
+java:S1874¿",Remove this use of "Date"; it is deprecated.(Æû’üÿÿÿÿ
+L
+java:S1068\"6Remove this unused "PAGINATION_WRAPPER" private field.(ˆÌ’
+K
+java:S1144’"4Remove this unused private "addWrapperQuery" method.(×—´

@@ -1,0 +1,31 @@
+
+`	java:S112T"FDefine and throw a dedicated exception instead of using a generic one.(Ìƒ²‡ûÿÿÿÿ
+`	java:S112b"FDefine and throw a dedicated exception instead of using a generic one.(ú¢¾Éûÿÿÿÿ
+[	java:S112m"FDefine and throw a dedicated exception instead of using a generic one.(»ÖÕ
+`	java:S112x"FDefine and throw a dedicated exception instead of using a generic one.(ùĞ×Œıÿÿÿÿ
+a	java:S112ƒ"FDefine and throw a dedicated exception instead of using a generic one.(¬ÀÏ«ûÿÿÿÿ
+\	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(ÖªÑÍ
+\	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(åâº…
+\	java:S112¦"FDefine and throw a dedicated exception instead of using a generic one.(õÏ§ğ
+\	java:S112­"FDefine and throw a dedicated exception instead of using a generic one.(ã°Çı
+a	java:S112´"FDefine and throw a dedicated exception instead of using a generic one.(¤Ãø‹ùÿÿÿÿ
+\	java:S112º"FDefine and throw a dedicated exception instead of using a generic one.(äÃİ
+a	java:S112À"FDefine and throw a dedicated exception instead of using a generic one.(‚Ì•Âûÿÿÿÿ
+a	java:S112Ë"FDefine and throw a dedicated exception instead of using a generic one.(ã²Ãšùÿÿÿÿ
+a	java:S112Õ"FDefine and throw a dedicated exception instead of using a generic one.(¿äïûÿÿÿÿ
+\	java:S112á"FDefine and throw a dedicated exception instead of using a generic one.( «•¸
+\	java:S112ê"FDefine and throw a dedicated exception instead of using a generic one.(ú³
+a	java:S112ô"FDefine and throw a dedicated exception instead of using a generic one.(ƒ†¨¾şÿÿÿÿ
+\	java:S112ı"FDefine and throw a dedicated exception instead of using a generic one.(úùßî
+[	java:S112‰"FDefine and throw a dedicated exception instead of using a generic one.(Ô¬ÕG
+a	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(Üµ¯øÿÿÿÿ
+a	java:S112—"FDefine and throw a dedicated exception instead of using a generic one.(ÀÈ¸ıÿÿÿÿ
+a	java:S112Ì"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
+P
+java:S4719;":Replace Charset.forName() call with StandardCharsets.UTF_8(€Æş°
+u
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(°èì•øÿÿÿÿ
+u
+java:S2293¬"YReplace the type specification in this constructor call with the diamond operator ("<>").(°èì•øÿÿÿÿ
+o
+java:S2293½"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ö‹è)

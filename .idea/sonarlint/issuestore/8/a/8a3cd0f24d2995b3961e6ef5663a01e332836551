@@ -1,0 +1,14 @@
+
+M
+java:S1172|"2Remove this unused method parameter "requestInfo".(ÇĞ¬âúÿÿÿÿ
+B
+java:S1659}"-Declare "messageTemplate" on a separate line.(ûèÑ[
+`
+java:S1871"IThis case's code block is the same as the block for the case on line 132.(Ùƒ§Ê
+`
+java:S1871‰"IThis case's code block is the same as the block for the case on line 132.(ÔÙÌ
+e
+java:S1871“"IThis case's code block is the same as the block for the case on line 132.(›ª§ûøÿÿÿÿ
+=	java:S131ƒ""Add a default case to this switch.(¢ŞÑÃúÿÿÿÿ
+}
+java:S1488o"bImmediately return this expression instead of assigning it to the temporary variable "jsonString".(®°êîøÿÿÿÿ

@@ -58,6 +58,7 @@ import java.util.Set;
 @Setter
 @Builder
 @ToString
+//class variables not used
 public class Instrument {
 
     /*

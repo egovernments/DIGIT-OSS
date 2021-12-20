@@ -1,0 +1,37 @@
+
+K
+java:S3740ü"/Provide the parametrized type for this generic.(ÀÊá¼ÿÿÿÿÿ
+K
+java:S3740"/Provide the parametrized type for this generic.(¢ã²÷ûÿÿÿÿ
+H
+java:S1135X"2Complete the task associated to this TODO comment.(šÎÕÍ
+M
+java:S1135z"2Complete the task associated to this TODO comment.(şßŸ¤ùÿÿÿÿ
+W	java:S125ƒ"<This block of commented-out lines of code should be removed.(åÛ§«ùÿÿÿÿ
+W	java:S125Í"<This block of commented-out lines of code should be removed.(‰“œ¢øÿÿÿÿ
+N
+java:S1135å"2Complete the task associated to this TODO comment.(şßŸ¤ùÿÿÿÿ
+N
+java:S1172"2Remove this unused method parameter "requestInfo".(ÅØÎ„üÿÿÿÿ
+E
+java:S1481Ã")Remove this unused "flag" local variable.(¡¾¿íùÿÿÿÿ
+W	java:S125Ä"<This block of commented-out lines of code should be removed.(¿ÜÕ¡úÿÿÿÿ
+R	java:S125¡"<This block of commented-out lines of code should be removed.(óêÌ“
+O
+java:S1144’"3Remove this unused private "getCitizenRole" method.(öİ”Şıÿÿÿÿ
+P
+java:S1144Ş":Remove this unused private "createEmpVehicleOwner" method.(Éü€
+O
+java:S1144—"8Remove this unused private "addDsoDefaultFields" method.(şã¨µ
+
+java:S1488Ñ"jImmediately return this expression instead of assigning it to the temporary variable "userDetailResponse".(æ÷ÿÉ
+ƒ
+java:S1488¦"lImmediately return this expression instead of assigning it to the temporary variable "vendorDetailResponse".(œÍÆ…
+‡
+java:S1488İ"kImmediately return this expression instead of assigning it to the temporary variable "ownerDetailResponse".(¹ûƒ¬ÿÿÿÿÿ
+‚
+java:S1488„"kImmediately return this expression instead of assigning it to the temporary variable "ownerDetailResponse".(ç–äŒ
+^
+java:S3973¨"GUse indentation to denote the code conditionally executed by this "if".(Ä
+[
+java:S2259ş"?A "NullPointerException" could be thrown; "d" is nullable here.(Ä¢Ãÿÿÿÿÿ

@@ -60,6 +60,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
+
+//except name none of them is used
 public class InstrumentType{
 
 	/*

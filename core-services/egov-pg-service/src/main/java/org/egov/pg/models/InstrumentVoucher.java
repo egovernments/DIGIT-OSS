@@ -47,6 +47,8 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
+
+//class variables not used
 public class InstrumentVoucher {
 
     /*

@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Builder
+
+//class variables not used
 public class InstrumentTypeProperty {
 
     @NotNull

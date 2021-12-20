@@ -54,6 +54,8 @@ import lombok.Setter;
 @NoArgsConstructor
 
 @JsonPropertyOrder({ "id", "instrumentType", "accountCode" })
+
+//class variables not used
 public class InstrumentAccountCodeContract extends AuditableContract {
 
     /*

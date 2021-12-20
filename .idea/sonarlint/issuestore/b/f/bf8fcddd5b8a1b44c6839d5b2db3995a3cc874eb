@@ -1,0 +1,128 @@
+
+\	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(êÆ£æ
+\	java:S112ª"FDefine and throw a dedicated exception instead of using a generic one.(êÆ£æ
+a	java:S112Ô"FDefine and throw a dedicated exception instead of using a generic one.(¿ÌÕ¡ûÿÿÿÿ
+\	java:S112Û"FDefine and throw a dedicated exception instead of using a generic one.(êÆ£æ
+E
+java:S3740("/Provide the parametrized type for this generic.(â‰¡Ñ
+J
+java:S3740s"/Provide the parametrized type for this generic.(§ÍÂ÷ûÿÿÿÿ
+t
+java:S1845¨"]Rename method "getByIdQuery" to prevent any misunderstanding/clash with field "getByIdQuery".(Ü•ÙÃ
+3
+java:S2386"Make this member "protected".(ªƒöÑ
+8
+java:S2386"Make this member "protected".(©ÛË±ıÿÿÿÿ
+8
+java:S2386"Make this member "protected".(‘ÉÃùÿÿÿÿ
+8
+java:S2386"Make this member "protected".(É˜×ûÿÿÿÿ
+3
+java:S2386"Make this member "protected".(ÍËŞ‘
+8
+java:S2386 "Make this member "protected".(ƒÖÙœıÿÿÿÿ
+3
+java:S2386!"Make this member "protected".(íŒßã
+v
+java:S1149ƒ"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ı‹€È
+{
+java:S1149¬"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(âùÙâøÿÿÿÿ
+{
+java:S1149á"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(…Œ¶Òÿÿÿÿÿ
+{
+java:S1149â"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(Ñİˆûÿÿÿÿ
+X
+java:S1854=";Remove this useless assignment to local variable "string6".(ß©Õÿ8ÉÜÃ£×/
+]
+java:S1854;";Remove this useless assignment to local variable "string5".(Íî—üÿÿÿÿ8¾Î¾£×/
+]
+java:S18549";Remove this useless assignment to local variable "string4".(°ó‘íşÿÿÿÿ8Ù¸£×/
+]
+java:S18547";Remove this useless assignment to local variable "string3".(Á–Ÿùüÿÿÿÿ8ÿö¨£×/
+F
+java:S1481/"0Remove this unused "insertQuery" local variable.(ÕŠ£”
+K
+java:S14811"0Remove this unused "searchQuery" local variable.(–«ó°ûÿÿÿÿ
+>	java:S108B")Either remove or fill this block of code.(”ı¾
+Q	java:S125P"<This block of commented-out lines of code should be removed.(º¤éë
+R	java:S125ª"<This block of commented-out lines of code should be removed.(¡ñ“£
+C
+java:S3011ã",This accessibility update should be removed.(â·Ò
+?	java:S108ğ")Either remove or fill this block of code.(”ı¾
+W	java:S125ó"<This block of commented-out lines of code should be removed.(éï†—ûÿÿÿÿ
+H
+java:S3011÷",This accessibility update should be removed.(Í”úÆùÿÿÿÿ
+N
+java:S1135ú"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ
+N
+java:S1135ı"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ
+T	java:S106­"9Replace this use of System.out or System.err by a logger.(ø•íÍúÿÿÿÿ
+i
+java:S1858¾"M"countQuery" is already a string, there's no need to call "toString()" on it.(÷Ä§®úÿÿÿÿ
+Z
+java:S1854Æ">Remove this useless assignment to local variable "sortByList".(Ò©ß¦úÿÿÿÿ
+n
+java:S3776Ù"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(÷ú÷Ñıÿÿÿÿ
+Z
+java:S1854Û">Remove this useless assignment to local variable "sortByList".(Ò©ß¦úÿÿÿÿ
+[
+java:S1854ù"?Remove this useless assignment to local variable "batchValues".(€Òö«ıÿÿÿÿ
+L
+java:S1481ù"0Remove this unused "batchValues" local variable.(€Òö«ıÿÿÿÿ
+W	java:S125û"<This block of commented-out lines of code should be removed.(“Ä‰øÿÿÿÿ
+B
+java:S1481†"&Remove this unused "i" local variable.(ùó›Ìøÿÿÿÿ
+D
+java:S1125™"(Remove the unnecessary boolean literals.(ĞËö°øÿÿÿÿ
+[
+java:S1854¢"?Remove this useless assignment to local variable "batchValues".(€Òö«ıÿÿÿÿ
+L
+java:S1481¢"0Remove this unused "batchValues" local variable.(€Òö«ıÿÿÿÿ
+W	java:S125¤"<This block of commented-out lines of code should be removed.(“Ä‰øÿÿÿÿ
+B
+java:S1481°"&Remove this unused "i" local variable.(ùó›Ìøÿÿÿÿ
+D
+java:S1125Ã"(Remove the unnecessary boolean literals.(ĞËö°øÿÿÿÿ
+R	java:S125ÿ"<This block of commented-out lines of code should be removed.(»âú
+o
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(ªƒöÑ
+t
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(©ÛË±ıÿÿÿÿ
+t
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(‘ÉÃùÿÿÿÿ
+u
+java:S2293Æ"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ò©ß¦úÿÿÿÿ
+u
+java:S2293Û"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ò©ß¦úÿÿÿÿ
+s	java:S135}"YReduce the total number of break and continue statements in this loop to use at most one.(º‹ÒÒşÿÿÿÿ
+o	java:S135Á"YReduce the total number of break and continue statements in this loop to use at most one.(¶Ôü¶
+f	java:S117("QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(â‰¡Ñ
+k	java:S117)"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(€½â¿øÿÿÿÿ
+A
+java:S5411ë"*Use the primitive boolean expression here.(Âğéü
+k
+java:S2259"H"NullPointerException" will be thrown when invoking method "getValue()".(‡ûò¹øÿÿÿÿ8†ûü×/
+f
+java:S2259¯"H"NullPointerException" will be thrown when invoking method "getValue()".(ôâì8…†ûü×/
+k
+java:S2259ó"H"NullPointerException" will be thrown when invoking method "getValue()".(ô¾ò½ùÿÿÿÿ8ˆ†ûü×/
+e
+java:S2259ğ"H"NullPointerException" will be thrown when invoking method "getValue()".(‡âÌ18ş…ûü×/
+f
+java:S2259®"H"NullPointerException" will be thrown when invoking method "getValue()".(——ğ˜8‰†ûü×/
+k
+java:S2259“"H"NullPointerException" will be thrown when invoking method "getValue()".(‡ûò¹øÿÿÿÿ8††ûü×/
+k
+java:S2259½"H"NullPointerException" will be thrown when invoking method "getValue()".(‡ûò¹øÿÿÿÿ8ˆ†ûü×/
+b
+java:S2259÷"?A "NullPointerException" could be thrown; "f" is nullable here.(Í”úÆùÿÿÿÿ8Şåùü×/
+e
+java:S2259…"H"NullPointerException" will be thrown when invoking method "getValue()".(ÒŸa8‡†ûü×/
+k
+java:S2259·"H"NullPointerException" will be thrown when invoking method "getValue()".(‡ûò¹øÿÿÿÿ8Œ†ûü×/
+e
+java:S2259ö"H"NullPointerException" will be thrown when invoking method "getValue()".(‡âÌ18†ûü×/
+k
+java:S2259º"H"NullPointerException" will be thrown when invoking method "getValue()".(ÙÆù¢üÿÿÿÿ8…†ûü×/
+k
+java:S2259"H"NullPointerException" will be thrown when invoking method "getValue()".(ÙÆù¢üÿÿÿÿ8††ûü×/

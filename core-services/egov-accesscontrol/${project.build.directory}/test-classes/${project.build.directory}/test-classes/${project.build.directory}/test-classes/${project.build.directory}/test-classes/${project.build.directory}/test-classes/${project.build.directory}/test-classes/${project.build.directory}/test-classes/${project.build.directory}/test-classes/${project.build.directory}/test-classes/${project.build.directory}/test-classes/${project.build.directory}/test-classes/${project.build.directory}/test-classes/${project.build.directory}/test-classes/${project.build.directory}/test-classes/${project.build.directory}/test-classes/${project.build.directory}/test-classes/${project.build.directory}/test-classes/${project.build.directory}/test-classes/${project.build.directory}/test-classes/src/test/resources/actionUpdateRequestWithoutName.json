@@ -1,0 +1,33 @@
+{
+  "RequestInfo": {
+    "apiId" : null,
+    "ver" : null,
+    "msgId" : null,
+    "userInfo":{
+       	"id":"1"
+       }
+    
+  },
+  "actions": [
+    {
+      "id": 1,
+      "url": "/createcomplaint",
+      "displayName" : "Create Complaint",
+      "enabled": true,
+      "orderNumber": 1,
+      "createdBy": 1,
+      "lastModifiedBy": 1
+      
+    },
+    {
+      "id": 2,
+      "url": "/updatecomplaint",
+      "displayName" : "Update Complaint",
+      "enabled": true,
+      "orderNumber": 2,
+      "createdBy": 1,
+      "lastModifiedBy": 1
+     
+    }
+  ]
+}

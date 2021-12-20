@@ -1,0 +1,64 @@
+
+K
+java:S3740’"/Provide the parametrized type for this generic.(É¨°­ùÿÿÿÿ
+F
+java:S3740Å"/Provide the parametrized type for this generic.(ıÓ©ü
+K
+java:S3740È"/Provide the parametrized type for this generic.(üîêéıÿÿÿÿ
+Q	java:S125i"<This block of commented-out lines of code should be removed.(¯ê™’
+Y	java:S125†"<This block of commented-out lines of code should be removed.(¯ê™’8ÛŒÜşÖ/
+R
+java:S1854†";Remove this useless assignment to local variable "vehicle".(µâ°‚
+W
+java:S1854š";Remove this useless assignment to local variable "dsoUser".(©ï´úÿÿÿÿ
+D
+java:S1172˜"-Remove this unused method parameter "oldFSM".(÷’Ü¸
+H
+java:S1481š",Remove this unused "dsoUser" local variable.(©ï´úÿÿÿÿ
+I
+java:S1172¢"-Remove this unused method parameter "oldFSM".(Óöˆÿÿÿÿÿ
+M
+java:S1854Ö"7Remove this useless assignment to local variable "fsm".(–ğ 
+C
+java:S1172Õ"-Remove this unused method parameter "oldFSM".(¸Œ¤4
+>
+java:S1481Ö"(Remove this unused "fsm" local variable.(–ğ 
+N
+java:S1135ä"2Complete the task associated to this TODO comment.(Ê‰¼÷şÿÿÿÿ
+T
+java:S1172ç"=Remove these unused method parameters "fsmRequest", "oldFSM".(®±êë
+^	java:S125è"<This block of commented-out lines of code should be removed.(÷±¶¢ÿÿÿÿÿ8…õİşÖ/
+I
+java:S1135é"2Complete the task associated to this TODO comment.(‘óâ»
+D
+java:S1172ì"-Remove this unused method parameter "oldFSM".(“æï
+^	java:S125í"<This block of commented-out lines of code should be removed.(÷±¶¢ÿÿÿÿÿ8¢çŞşÖ/
+T
+java:S1172ô"=Remove these unused method parameters "fsmRequest", "oldFSM".(«…ƒ‘
+^	java:S125õ"<This block of commented-out lines of code should be removed.(÷±¶¢ÿÿÿÿÿ8—÷ßşÖ/
+N
+java:S1135ö"2Complete the task associated to this TODO comment.(“ëñùÿÿÿÿ
+d	java:S100ş"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¦º‰
+i
+java:S3776ş"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(¦º‰
+P
+java:S1854‚"9Remove this useless assignment to local variable "uuids".(ÎËï‹
+M
+java:S1854·"7Remove this useless assignment to local variable "fsm".(–ğ 
+D
+java:S1172µ"-Remove this unused method parameter "oldFSM".(—²‰£
+>
+java:S1481·"(Remove this unused "fsm" local variable.(–ğ 
+N
+java:S1172¼"2Remove this unused method parameter "requestInfo".(¼¦»˜øÿÿÿÿ
+I
+java:S1172Ò"2Remove this unused method parameter "requestInfo".(ÅğŒ
+u
+java:S2293•"YReplace the type specification in this constructor call with the diamond operator ("<>").(¢òÁÿÿÿÿÿ
+p
+java:S2293‚"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÎËï‹
+K
+java:S1066Ş"/Merge this if statement with the enclosing one.(µ¦áÀıÿÿÿÿ
+g	java:S117à"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ŠöĞ¿
+{
+java:S1488â"_Immediately return this expression instead of assigning it to the temporary variable "listFSM".(‘¥é—úÿÿÿÿ

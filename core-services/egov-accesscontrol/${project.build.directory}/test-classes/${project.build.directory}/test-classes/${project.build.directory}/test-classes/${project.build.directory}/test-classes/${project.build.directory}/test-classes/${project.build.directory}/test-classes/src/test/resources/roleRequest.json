@@ -1,0 +1,24 @@
+{
+  "RequestInfo" : {
+    "apiId" : "apiId",
+    "ver" : "ver",
+    "msgId" : "msgId"
+  },
+  
+  "roles":[
+   	{
+   	"name":"test1",
+   	"code" :"testonecode",
+   	"description" :"test1description"
+
+   	},{
+ 
+ 	"name":"test2",
+   	"code" :"testtwocode",
+   	"description" :"test2codedescription"
+   		
+   	}
+   ]
+  
+  
+}

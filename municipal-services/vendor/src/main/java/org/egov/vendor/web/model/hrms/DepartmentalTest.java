@@ -22,6 +22,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @Setter
 @ToString
+
+//class variables not used
 public class DepartmentalTest {
 
 	private String id;

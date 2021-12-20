@@ -39,6 +39,20 @@ public class ChartOfAccountJdbcRepositoryTest {
 	@Autowired
         private ChartOfAccountDetailJdbcRepository chartOfAccountDetailJdbcRepository;
 
+	private String note="glcode";
+
+	private String bcr="budgetCheckRequired";
+
+	private String string="default";
+
+	private String des="description";
+
+	private String fr="functionRequired";
+
+	private String mc="majorCode";
+
+	private static final String STRING1="SELECT * FROM egf_chartofaccount";
+
 	@Before
 	public void setUp() throws Exception {
 		chartOfAccountJdbcRepository = new ChartOfAccountJdbcRepository(namedParameterJdbcTemplate,chartOfAccountDetailJdbcRepository);
@@ -50,12 +64,12 @@ public class ChartOfAccountJdbcRepositoryTest {
 	public void testCreate() {
 		ChartOfAccountEntity chartOfAccountEntity = getChartOfAccountEntity();
 		ChartOfAccountEntity actualResult =chartOfAccountJdbcRepository.create(chartOfAccountEntity);
-		List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_chartofaccount",
+		List<Map<String, Object>> result = namedParameterJdbcTemplate.query(STRING1,
 				new ChartOfAccountResultExtractor());
 		Map<String, Object> row = result.get(0);
 		assertThat(row.get("name")).isEqualTo(actualResult.getName());
-		assertThat(row.get("glcode")).isEqualTo(actualResult.getGlcode());
-		assertThat(row.get("budgetCheckRequired")).isEqualTo(actualResult.getBudgetCheckRequired());
+		assertThat(row.get(note)).isEqualTo(actualResult.getGlcode());
+		assertThat(row.get(bcr)).isEqualTo(actualResult.getBudgetCheckRequired());
 	}
 	
 	@Test
@@ -63,11 +77,11 @@ public class ChartOfAccountJdbcRepositoryTest {
 	public void testUpdate() {
 		ChartOfAccountEntity chartOfAccountEntity = getChartOfAccountEntity();
 		ChartOfAccountEntity actualResult =chartOfAccountJdbcRepository.update(chartOfAccountEntity);
-		List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_chartofaccount",
+		List<Map<String, Object>> result = namedParameterJdbcTemplate.query(STRING1,
 				new ChartOfAccountResultExtractor());
 		Map<String, Object> row = result.get(0);
 		assertThat(row.get("name")).isEqualTo(actualResult.getName());
-		assertThat(row.get("glcode")).isEqualTo(actualResult.getGlcode());
+		assertThat(row.get(note)).isEqualTo(actualResult.getGlcode());
 	}
 	
 	@Test
@@ -75,7 +89,7 @@ public class ChartOfAccountJdbcRepositoryTest {
 	public void testSearch() {
 		Pagination<ChartOfAccount> page = (Pagination<ChartOfAccount>) chartOfAccountJdbcRepository.search(getChartOfAccountSearch());
 		assertThat(page.getPagedData().get(0).getName()).isEqualTo("name");
-		assertThat(page.getPagedData().get(0).getGlcode()).isEqualTo("glcode");
+		assertThat(page.getPagedData().get(0).getGlcode()).isEqualTo(note);
 		assertThat(page.getPagedData().get(0).getBudgetCheckRequired()).isEqualTo(true);
 	}
 	
@@ -84,18 +98,18 @@ public class ChartOfAccountJdbcRepositoryTest {
 	public void testFindById() {
 		ChartOfAccountEntity chartOfAccountEntity = getChartOfAccountEntity();
 		ChartOfAccountEntity actualResult =chartOfAccountJdbcRepository.findById(chartOfAccountEntity);
-		List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_chartofaccount",
+		List<Map<String, Object>> result = namedParameterJdbcTemplate.query(STRING1,
 				new ChartOfAccountResultExtractor());
 		assertThat(result.get(0).get("id")).isEqualTo("2");
 		assertThat(result.get(0).get("name")).isEqualTo("name");
-		assertThat(result.get(0).get("glcode")).isEqualTo("glcode");
+		assertThat(result.get(0).get(note)).isEqualTo(note);
 	}
 	
 /*	@Test
 	public void testFindByAccountCodePurposeId() {
 		ChartOfAccountEntity chartOfAccountEntity = getChartOfAccountEntity();
 		ChartOfAccountEntity actualResult =chartOfAccountJdbcRepository.findByAccountCodePurposeId(chartOfAccountEntity);
-		List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_chartofaccount",
+		List<Map<String, Object>> result = namedParameterJdbcTemplate.query(STRING1,
 				new ChartOfAccountResultExtractor());
 		assertThat(result.get(0).get("id")).isEqualTo("2");
 		assertThat(result.get(0).get("name")).isEqualTo("name");
@@ -114,7 +128,7 @@ public class ChartOfAccountJdbcRepositoryTest {
 		chartOfAccountEntity.setClassification(chartOfAccount.getClassification());
 		chartOfAccountEntity.setFunctionRequired(chartOfAccount.getFunctionRequired());
 		chartOfAccountEntity.setBudgetCheckRequired(chartOfAccount.getBudgetCheckRequired());
-		chartOfAccountEntity.setTenantId("default");
+		chartOfAccountEntity.setTenantId(string);
 		chartOfAccountEntity.setCreatedBy("1");
 		chartOfAccountEntity.setLastModifiedBy("1");
 		return chartOfAccountEntity;
@@ -122,11 +136,11 @@ public class ChartOfAccountJdbcRepositoryTest {
 	
 	private ChartOfAccount getChartOfAccountDomain() {
 		ChartOfAccount chartOfAccount = ChartOfAccount.builder().id("B")
-				.glcode("glcode").name("name")
-				.description("description").isActiveForPosting(true)
+				.glcode(note).name("name")
+				.description(des).isActiveForPosting(true)
 				.type('B').classification((long) 123456).functionRequired(true)
 				.budgetCheckRequired(true).build();
-		chartOfAccount.setTenantId("default");
+		chartOfAccount.setTenantId(string);
 		return chartOfAccount;
 	}
 	
@@ -138,20 +152,20 @@ public class ChartOfAccountJdbcRepositoryTest {
 				Map<String, Object> row = new HashMap<String, Object>() {
 					{
 						put("id", resultSet.getString("id"));
-						put("glcode", resultSet.getString("glcode"));
+						put(note, resultSet.getString(note));
 						put("name", resultSet.getString("name"));
 						put("accountCodePurposeId", resultSet.getString("accountCodePurposeId"));
-						put("description", resultSet.getString("description"));
+						put(des, resultSet.getString(des));
 						put("isActiveForPosting", resultSet.getBoolean("isActiveForPosting"));
 						put("parentId", resultSet.getString("parentId"));
 						put("type", resultSet.getString("type"));
-						put("functionRequired", resultSet.getString("functionRequired"));
-						put("budgetCheckRequired", resultSet.getString("budgetCheckRequired"));
-						put("majorCode", resultSet.getString("majorCode"));
+						put(fr, resultSet.getString(fr));
+						put(bcr, resultSet.getString(bcr));
+						put(mc, resultSet.getString(mc));
 						put("isSubLedger", resultSet.getString("isSubLedger"));
-						put("functionRequired", resultSet.getBoolean("functionRequired"));
-						put("budgetCheckRequired", resultSet.getBoolean("budgetCheckRequired"));
-						put("majorCode", resultSet.getString("majorCode"));
+						put(fr, resultSet.getBoolean(fr));
+						put(bcr, resultSet.getBoolean(bcr));
+						put(mc, resultSet.getString(mc));
 					}
 				};
 
@@ -166,28 +180,28 @@ public class ChartOfAccountJdbcRepositoryTest {
 		chartOfAccountSearch.setId("2");
 		//chartOfAccountSearch.setGlcode("glcode");
 		chartOfAccountSearch.setName("name");
-		chartOfAccountSearch.setDescription("description");
+		chartOfAccountSearch.setDescription(des);
 		chartOfAccountSearch.setIsActiveForPosting(true);
 		chartOfAccountSearch.setType(Character.valueOf('B'));
 		chartOfAccountSearch.setClassification(123456l);
 		chartOfAccountSearch.setBudgetCheckRequired(true);
 		chartOfAccountSearch.setIsSubLedger(true);
-		chartOfAccountSearch.setMajorCode("majorcode");
+		chartOfAccountSearch.setMajorCode(mc);
 		chartOfAccountSearch.setFunctionRequired(true);
 		chartOfAccountSearch.setAccountCodePurpose(getAccountCodePurpose());
 		chartOfAccountSearch.setParentId(getParent());
 		chartOfAccountSearch.setPageSize(500);
 		chartOfAccountSearch.setOffset(0);
 		chartOfAccountSearch.setSortBy("name desc");
-		chartOfAccountSearch.setTenantId("default");
+		chartOfAccountSearch.setTenantId(string);
 		return chartOfAccountSearch;
 	}
 	
 	private ChartOfAccount getParent(){
-		return ChartOfAccount.builder().id("1").glcode("glcode").name("name")
+		return ChartOfAccount.builder().id("1").glcode(note).name("name")
 				.isActiveForPosting(true).type(Character.valueOf('B')).classification(123456l)
 				.isSubLedger(true).accountCodePurpose(getAccountCodePurpose()).budgetCheckRequired(true)
-				.majorCode("majorcode").functionRequired(true).build();
+				.majorCode(mc).functionRequired(true).build();
 	}
 	
 	private AccountCodePurpose getAccountCodePurpose(){

@@ -1,0 +1,48 @@
+
+\	java:S112´"FDefine and throw a dedicated exception instead of using a generic one.(Šöº
+i
+java:S3776Æ"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(¥Õœò
+T
+java:S1854Ç"8Remove this useless assignment to local variable "bpas".(ŸÕ«¤øÿÿÿÿ
+H
+java:S1602†",Remove useless curly braces around statement(‹©¸Ğüÿÿÿÿ
+n
+java:S3776—"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÀÃºÂşÿÿÿÿ
+H
+java:S1602¼",Remove useless curly braces around statement(öâãıÿÿÿÿ
+N
+java:S1854Ğ"7Remove this useless assignment to local variable "bpa".(ğÓåõ
+N
+java:S1172Ï"2Remove this unused method parameter "requestInfo".(‹Ëæ–øÿÿÿÿ
+F
+java:S2093Ù"*Change this "try" to a try-with-resources.(¡»¢üùÿÿÿÿ
+H
+java:S1874",Remove this use of "Date"; it is deprecated.(Ğ¿Ìòøÿÿÿÿ
+u
+java:S2293Ù"YReplace the type specification in this constructor call with the diamond operator ("<>").(³Ïóıÿÿÿÿ
+p
+java:S2293÷"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÎËï‹
+u
+java:S2293„"YReplace the type specification in this constructor call with the diamond operator ("<>").(³Ïóıÿÿÿÿ
+p
+java:S2293 "YReplace the type specification in this constructor call with the diamond operator ("<>").(¨úÊé
+u
+java:S2293º"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÂÀ±†úÿÿÿÿ
+p
+java:S2293ˆ"YReplace the type specification in this constructor call with the diamond operator ("<>").(Â‚÷Œ
+F
+java:S1066Œ"/Merge this if statement with the enclosing one.(ùàÖÊ
+r
+java:S1488"[Immediately return this expression instead of assigning it to the temporary variable "bpa".(ßèÛ·
+a
+java:S1226é"EIntroduce a new variable instead of reusing the parameter "document".(Ô÷Ÿ¨ùÿÿÿÿ
+e
+java:S2259ä"IA "NullPointerException" could be thrown; "writeStream" is nullable here.(ÏîÔ³ıÿÿÿÿ
+d
+java:S2259æ"HA "NullPointerException" could be thrown; "readStream" is nullable here.(ªû¼´ÿÿÿÿÿ
+e
+java:S2095İ"IUse try-with-resources or close this "InputStream" in a "finally" clause.(¡Éíøÿÿÿÿÿ
+e
+java:S2095Ú"NUse try-with-resources or close this "FileOutputStream" in a "finally" clause.(Â£˜ê
+`
+java:S2583¥"DChange this condition so that it does not always evaluate to "false"(ÓËÙàüÿÿÿÿ

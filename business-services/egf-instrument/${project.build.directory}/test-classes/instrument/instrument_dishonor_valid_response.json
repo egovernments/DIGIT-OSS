@@ -1,0 +1,15 @@
+    "instruments": [
+        {
+            "id": "726bb79942b24a75815fc11172cef45e",
+            "transactionNumber": "transactionNumber",
+            "amount": 1,
+            "transactionType": "Debit",
+            "financialStatus": {
+                "id": "a167095b-5a73-4e61-b489-af31f053c4e1",
+                "moduleType": "Instrument",
+                "code": "Deposited"
+            },
+            "serialNo":"serialNo",
+            "tenantId": "default"
+        }
+    ]

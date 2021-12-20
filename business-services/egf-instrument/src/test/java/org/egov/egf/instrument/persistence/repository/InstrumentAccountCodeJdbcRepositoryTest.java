@@ -44,6 +44,16 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    private String string1="default";
+
+    private String string2="instrumentTypeId";
+
+    private String string3="accountCodeId";
+
+    private String string4="glcode";
+
+    private static final String STRING5="SELECT * FROM egf_instrumentAccountCode";
+
     @Before
     public void setUp() throws Exception {
         instrumentAccountCodeJdbcRepository = new InstrumentAccountCodeJdbcRepository(namedParameterJdbcTemplate, jdbcTemplate);
@@ -55,14 +65,14 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
 
         InstrumentAccountCodeEntity instrumentAccountCode = InstrumentAccountCodeEntity.builder().instrumentTypeId("1")
                 .accountCodeId("1").build();
-        instrumentAccountCode.setTenantId("default");
+        instrumentAccountCode.setTenantId(string1);
         InstrumentAccountCodeEntity actualResult = instrumentAccountCodeJdbcRepository.create(instrumentAccountCode);
 
-        List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_instrumentAccountCode",
+        List<Map<String, Object>> result = namedParameterJdbcTemplate.query(STRING5,
                 new InstrumentAccountCodeResultExtractor());
         Map<String, Object> row = result.get(0);
-        assertThat(row.get("instrumentTypeId")).isEqualTo(actualResult.getInstrumentTypeId());
-        assertThat(row.get("accountCodeId")).isEqualTo(actualResult.getAccountCodeId());
+        assertThat(row.get(string2)).isEqualTo(actualResult.getInstrumentTypeId());
+        assertThat(row.get(string3)).isEqualTo(actualResult.getAccountCodeId());
 
     }
 
@@ -72,15 +82,15 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
     public void test_update() {
 
         InstrumentAccountCodeEntity instrumentAccountCode = InstrumentAccountCodeEntity.builder().instrumentTypeId("name")
-                .accountCodeId("glcode").build();
-        instrumentAccountCode.setTenantId("default");
+                .accountCodeId(string4).build();
+        instrumentAccountCode.setTenantId(string1);
         InstrumentAccountCodeEntity actualResult = instrumentAccountCodeJdbcRepository.update(instrumentAccountCode);
 
-        List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_instrumentAccountCode",
+        List<Map<String, Object>> result = namedParameterJdbcTemplate.query(STRING5,
                 new InstrumentAccountCodeResultExtractor());
         Map<String, Object> row = result.get(0);
-        assertThat(row.get("instrumentTypeId")).isEqualTo(actualResult.getInstrumentTypeId());
-        assertThat(row.get("accountCodeId")).isEqualTo(actualResult.getAccountCodeId());
+        assertThat(row.get(string2)).isEqualTo(actualResult.getInstrumentTypeId());
+        assertThat(row.get(string3)).isEqualTo(actualResult.getAccountCodeId());
 
     }
 
@@ -90,11 +100,11 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
     public void test_delete() {
 
         InstrumentAccountCodeEntity instrumentAccountCode = InstrumentAccountCodeEntity.builder().id("1").instrumentTypeId("name")
-                .accountCodeId("glcode").build();
-        instrumentAccountCode.setTenantId("default");
+                .accountCodeId(string4).build();
+        instrumentAccountCode.setTenantId(string1);
         InstrumentAccountCodeEntity actualResult = instrumentAccountCodeJdbcRepository.delete(instrumentAccountCode);
 
-        List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_instrumentAccountCode",
+        List<Map<String, Object>> result = namedParameterJdbcTemplate.query(STRING5,
                 new InstrumentAccountCodeResultExtractor());
         assertTrue("Result set length is zero", result.size() == 0);
     }
@@ -106,7 +116,7 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
 
         Pagination<InstrumentAccountCode> page = (Pagination<InstrumentAccountCode>) instrumentAccountCodeJdbcRepository
                 .search(getInstrumentAccountCodeSearch());
-        assertThat(page.getPagedData().get(0).getAccountCode().getGlcode()).isEqualTo("glcode");
+        assertThat(page.getPagedData().get(0).getAccountCode().getGlcode()).isEqualTo(string4);
         assertThat(page.getPagedData().get(0).getInstrumentType().getName()).isEqualTo("name");
 
     }
@@ -128,9 +138,9 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
     public void test_find_by_id() {
 
         InstrumentAccountCodeEntity instrumentAccountCodeEntity = InstrumentAccountCodeEntity.builder().id("1").build();
-        instrumentAccountCodeEntity.setTenantId("default");
+        instrumentAccountCodeEntity.setTenantId(string1);
         InstrumentAccountCodeEntity result = instrumentAccountCodeJdbcRepository.findById(instrumentAccountCodeEntity);
-        assertThat(result.getAccountCodeId()).isEqualTo("glcode");
+        assertThat(result.getAccountCodeId()).isEqualTo(string4);
         assertThat(result.getInstrumentTypeId()).isEqualTo("name");
 
     }
@@ -141,7 +151,7 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
     public void test_find_by_invalid_id_should_return_null() {
 
         InstrumentAccountCodeEntity instrumentAccountCodeEntity = InstrumentAccountCodeEntity.builder().id("5").build();
-        instrumentAccountCodeEntity.setTenantId("default");
+        instrumentAccountCodeEntity.setTenantId(string1);
         InstrumentAccountCodeEntity result = instrumentAccountCodeJdbcRepository.findById(instrumentAccountCodeEntity);
         assertNull(result);
 
@@ -169,7 +179,7 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
         search.setOffset(null);
         Pagination<InstrumentAccountCode> page = (Pagination<InstrumentAccountCode>) instrumentAccountCodeJdbcRepository
                 .search(getInstrumentAccountCodeSearch());
-        assertThat(page.getPagedData().get(0).getAccountCode().getGlcode()).isEqualTo("glcode");
+        assertThat(page.getPagedData().get(0).getAccountCode().getGlcode()).isEqualTo(string4);
         assertThat(page.getPagedData().get(0).getInstrumentType().getName()).isEqualTo("name");
 
     }
@@ -182,8 +192,8 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
                 Map<String, Object> row = new HashMap<String, Object>() {
                     {
                         put("id", resultSet.getString("id"));
-                        put("instrumentTypeId", resultSet.getString("instrumentTypeId"));
-                        put("accountCodeId", resultSet.getString("accountCodeId"));
+                        put(string2, resultSet.getString(string2));
+                        put(string3, resultSet.getString(string3));
                         put("createdBy", resultSet.getString("createdBy"));
                         put("createdDate", resultSet.getString("createdDate"));
                         put("lastModifiedBy", resultSet.getString("lastModifiedBy"));
@@ -215,7 +225,7 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
         instrumentAccountCodeSearch.setId("1");
         instrumentAccountCodeSearch.setIds("1");
         instrumentAccountCodeSearch.setInstrumentType(InstrumentType.builder().name("name").build());
-        instrumentAccountCodeSearch.setAccountCode(ChartOfAccountContract.builder().glcode("glcode").build());
+        instrumentAccountCodeSearch.setAccountCode(ChartOfAccountContract.builder().glcode(string4).build());
         instrumentAccountCodeSearch.setPageSize(500);
         instrumentAccountCodeSearch.setOffset(0);
         instrumentAccountCodeSearch.setSortBy("accountCodeId desc");

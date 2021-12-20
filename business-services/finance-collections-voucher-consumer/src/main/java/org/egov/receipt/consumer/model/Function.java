@@ -58,6 +58,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
+//except code none of them is used
 public class Function {
 
     private Long id;

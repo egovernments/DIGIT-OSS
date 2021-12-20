@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class FinancialConfigurationValueJdbcRepository extends JdbcRepository {
     private static final Logger LOG = LoggerFactory.getLogger(FinancialConfigurationValueJdbcRepository.class);
+    private String string1=" and ";
 
     static {
         LOG.debug("init financialConfigurationValue");
@@ -74,21 +75,21 @@ public class FinancialConfigurationValueJdbcRepository extends JdbcRepository {
         // implement jdbc specfic search
         if (financialConfigurationValueSearchEntity.getTenantId() != null) {
             if (params.length() > 0) {
-                params.append(" and ");
+                params.append(string1);
             }
             params.append("tenantId =:tenantId");
             paramValues.put("tenantId", financialConfigurationValueSearchEntity.getTenantId());
         }
         if (financialConfigurationValueSearchEntity.getId() != null) {
             if (params.length() > 0) {
-                params.append(" and ");
+                params.append(string1);
             }
             params.append("id =:id");
             paramValues.put("id", financialConfigurationValueSearchEntity.getId());
         }
         if (financialConfigurationValueSearchEntity.getFinancialConfigurationId() != null) {
             if (params.length() > 0) {
-                params.append(" and ");
+                params.append(string1);
             }
             params.append("financialConfigurationId =:financialConfiguration");
             paramValues.put("financialConfiguration",
@@ -96,14 +97,14 @@ public class FinancialConfigurationValueJdbcRepository extends JdbcRepository {
         }
         if (financialConfigurationValueSearchEntity.getValue() != null) {
             if (params.length() > 0) {
-                params.append(" and ");
+                params.append(string1);
             }
             params.append("value =:value");
             paramValues.put("value", financialConfigurationValueSearchEntity.getValue());
         }
         if (financialConfigurationValueSearchEntity.getEffectiveFrom() != null) {
             if (params.length() > 0) {
-                params.append(" and ");
+                params.append(string1);
             }
             params.append("effectiveFrom =:effectiveFrom");
             paramValues.put("effectiveFrom", financialConfigurationValueSearchEntity.getEffectiveFrom());

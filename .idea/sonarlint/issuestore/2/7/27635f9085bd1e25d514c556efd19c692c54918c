@@ -1,0 +1,26 @@
+
+z
+java:S1149{"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(£®öØşÿÿÿÿ
+W
+java:S1126n"AReplace this if-then-else statement by a single return statement.(Œê€„
+W
+java:S1854y"<Remove this useless assignment to local variable "roleList".(›§Ş¢üÿÿÿÿ
+d
+java:S5361„"HReplace this call to "replaceAll()" by a call to the "replace()" method.(İ³Àµûÿÿÿÿ
+f
+java:S1858†"J"rFilter" is already a string, there's no need to call "toString()" on it.(¼ü‰Åûÿÿÿÿ
+N
+java:S1135Ô"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+R	java:S125Ø"<This block of commented-out lines of code should be removed.(£³ø‰
+o
+java:S2293i"YReplace the type specification in this constructor call with the diamond operator ("<>").(¼°‹Ÿ
+t
+java:S2293y"YReplace the type specification in this constructor call with the diamond operator ("<>").(›§Ş¢üÿÿÿÿ
+u
+java:S2293 "YReplace the type specification in this constructor call with the diamond operator ("<>").(º¡Èşÿÿÿÿ
+u
+java:S2293¡"YReplace the type specification in this constructor call with the diamond operator ("<>").(€Öãúÿÿÿÿ
+u
+java:S2293À"YReplace the type specification in this constructor call with the diamond operator ("<>").(›§Ş¢üÿÿÿÿ
+g
+java:S1192C"LDefine a constant instead of duplicating this literal "description" 4 times.(§‰×Íûÿÿÿÿ

@@ -1,0 +1,13 @@
+
+t
+java:S3776L"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(»¯¹œıÿÿÿÿ8ëèœâÖ/
+X	java:S125R"<This block of commented-out lines of code should be removed.(µ‰§8¯Ò¡âÖ/
+o
+java:S3776o"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(øÇÊ8ŒôœâÖ/
+Y
+java:S2696©"6Make the enclosing method "static" or remove this set.(ƒ” åÿÿÿÿÿ8•ôœâÖ/
+K	java:S108½")Either remove or fill this block of code.(Æ¸Û‚øÿÿÿÿ8™ôœâÖ/
+v
+java:S2293u"YReplace the type specification in this constructor call with the diamond operator ("<>").(¡ªÊ8›ôœâÖ/
+Œ
+java:S1319L"jThe type of "errorList" should be an interface such as "List" rather than the implementation "LinkedList".(»¯¹œıÿÿÿÿ8åéœâÖ/

@@ -1,0 +1,1 @@
+DELETE FROM eg_ms_role;

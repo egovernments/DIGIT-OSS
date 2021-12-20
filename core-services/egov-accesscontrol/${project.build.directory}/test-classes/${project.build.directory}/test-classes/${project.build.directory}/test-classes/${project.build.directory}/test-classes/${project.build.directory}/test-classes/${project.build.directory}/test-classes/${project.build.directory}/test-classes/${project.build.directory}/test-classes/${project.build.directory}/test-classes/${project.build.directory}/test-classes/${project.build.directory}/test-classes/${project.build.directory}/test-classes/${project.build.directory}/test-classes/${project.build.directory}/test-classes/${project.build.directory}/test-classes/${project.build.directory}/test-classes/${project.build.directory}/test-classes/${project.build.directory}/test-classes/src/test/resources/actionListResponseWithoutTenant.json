@@ -1,0 +1,18 @@
+[
+    {
+        "responseInfo": null,
+        "error": {
+            "code": 400,
+            "message": "Action is invalid",
+            "description": null,
+            "errorFields": [
+                {
+                    "code": "accesscontrol.0001",
+                    "message": "Tenant Id is required",
+                    "field": "tenantId"
+                }
+            ],
+            "fields": null
+        }
+    }
+]

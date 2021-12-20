@@ -54,6 +54,10 @@ public class MetadataServiceImpl implements MetadataService {
     @Value("${egov.mdms.search.endpoint}")
     private String mdmsSearchEndpoint;
 
+	private String string1="roleName";
+
+	private String string2="roleId";
+
 	@Override
 	public ArrayNode getDashboardConfiguration(String dashboardId, String catagory, List<RoleDto> roleIds) throws AINException, IOException {
 
@@ -72,9 +76,9 @@ public class MetadataServiceImpl implements MetadataService {
 		ArrayNode rolesArray = (ArrayNode) roleMappingNode.findValue(Constants.DashBoardConfig.ROLES);
 		ArrayNode dbArray = JsonNodeFactory.instance.arrayNode();
 		for(JsonNode role: rolesArray){
-			logger.info("role name: " + role.get("roleName"));
-			logger.info("role ID: " + role.get("roleId"));
-			String roleId = role.get("roleId").asText();
+			logger.info("role name: " + role.get(string1));
+			logger.info("role ID: " + role.get(string2));
+			String roleId = role.get(string2).asText();
 
 			//Object roleId = roleIds.stream().filter(x -> role.get(Constants.DashBoardConfig.ROLE_ID).asLong() == (x.getId())).findAny().orElse(null);
 			if (null != roleId) {
@@ -110,8 +114,8 @@ public class MetadataServiceImpl implements MetadataService {
 							copyDashboard.set(Constants.DashBoardConfig.TITLE, title);
 
 							copyDashboard.set(Constants.DashBoardConfig.VISUALISATIONS, visArray);
-							copyDashboard.set("roleId", role.get("roleId"));
-							copyDashboard.set("roleName", role.get("roleName"));
+							copyDashboard.set(string2, role.get(string2));
+							copyDashboard.set(string1, role.get(string1));
 
 						}//);
 						dbArray.add(copyDashboard);
@@ -132,7 +136,7 @@ public class MetadataServiceImpl implements MetadataService {
 		ArrayNode dbArray = JsonNodeFactory.instance.arrayNode();
 
 		rolesArray.forEach(role -> {
-			Object roleId = roleIds.stream().filter(x -> role.get("roleId").asLong() == (x.getId())).findAny().orElse(null);
+			Object roleId = roleIds.stream().filter(x -> role.get(string2).asLong() == (x.getId())).findAny().orElse(null);
 			System.out.println("roleId = "+roleId);
 
 			if (null != roleId) {

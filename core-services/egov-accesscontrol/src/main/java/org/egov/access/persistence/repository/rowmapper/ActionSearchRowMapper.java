@@ -14,21 +14,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class ActionSearchRowMapper implements RowMapper<Action> {
 
+	private String string1="servicecode";
 
 	public Map<String, List<Action>> actionMap = new HashMap<String, List<Action>>();
 
 	@Override
 	public Action mapRow(final ResultSet rs, final int rowNum) throws SQLException {
 
-		if (!actionMap.containsKey(rs.getString("servicecode"))) {
+		if (!actionMap.containsKey(rs.getString(string1))) {
 
 			List<Action> actionList = new ArrayList<Action>();
 
-			actionMap.put(rs.getString("servicecode"), prepareActionObject(rs, actionList));
+			actionMap.put(rs.getString(string1), prepareActionObject(rs, actionList));
 
-		} else if (actionMap.containsKey(rs.getString("servicecode"))) {
+		} else if (actionMap.containsKey(rs.getString(string1))) {
 
-			List<Action> actionList = actionMap.get(rs.getString("servicecode"));
+			List<Action> actionList = actionMap.get(rs.getString(string1));
 
 			prepareActionObject(rs, actionList);
 		}
@@ -41,7 +42,7 @@ public class ActionSearchRowMapper implements RowMapper<Action> {
 		action.setId(rs.getLong("id"));
 		action.setUrl(rs.getString("url"));
 		action.setName(rs.getString("name"));
-		action.setServiceCode(rs.getString("servicecode"));
+		action.setServiceCode(rs.getString(string1));
 		action.setDisplayName(rs.getString("displayname"));
 		action.setEnabled(rs.getBoolean("enabled"));
 		action.setParentModule(rs.getString("parentmodule"));

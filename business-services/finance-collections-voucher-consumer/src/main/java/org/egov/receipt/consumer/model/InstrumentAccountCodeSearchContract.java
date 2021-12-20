@@ -49,6 +49,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
+//class variables not used
 public class InstrumentAccountCodeSearchContract extends InstrumentAccountCodeContract {
     private String ids;
     private String sortBy;

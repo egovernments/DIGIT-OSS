@@ -1,0 +1,16 @@
+
+h	java:S1000"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¦ç¤Âıÿÿÿÿ
+Q	java:S1258"<This block of commented-out lines of code should be removed.(ÏÖ‰¬
+Q	java:S125@"<This block of commented-out lines of code should be removed.(óğ£
+B
+java:S1125T"'Remove the unnecessary boolean literal.(êÖĞñüÿÿÿÿ
+B
+java:S1125f"'Remove the unnecessary boolean literal.(êÖĞñüÿÿÿÿ
+Q	java:S125o"<This block of commented-out lines of code should be removed.(ñåä
+Q	java:S125q"<This block of commented-out lines of code should be removed.(²ĞØ
+t
+java:S2293I"YReplace the type specification in this constructor call with the diamond operator ("<>").(Í¼·ùÿÿÿÿ
+t
+java:S2293["YReplace the type specification in this constructor call with the diamond operator ("<>").(Í¼·ùÿÿÿÿ
+t
+java:S2293m"YReplace the type specification in this constructor call with the diamond operator ("<>").(Í¼·ùÿÿÿÿ

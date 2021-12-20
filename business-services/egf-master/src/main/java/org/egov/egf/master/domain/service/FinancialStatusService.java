@@ -31,6 +31,10 @@ public class FinancialStatusService {
 	@Autowired
 	private SmartValidator validator;
 
+    private String string1="financialstatuses";
+
+    private String string2="financialStatus";
+
 	private BindingResult validate(List<FinancialStatus> financialstatuses, String method, BindingResult errors) {
 
                 try {
@@ -41,24 +45,24 @@ public class FinancialStatusService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (financialstatuses == null) {
-                            throw new InvalidDataException("financialstatuses", ErrorCode.NOT_NULL.getCode(),
+                            throw new InvalidDataException(string1, ErrorCode.NOT_NULL.getCode(),
                                     null);
                         }
                         for (FinancialStatus financialStatus : financialstatuses) {
                             validator.validate(financialStatus, errors);
                             if (!financialStatusRepository.uniqueCheck("name", financialStatus)) {
-                                errors.addError(new FieldError("financialStatus", "name", financialStatus.getName(), false,
+                                errors.addError(new FieldError(string2 , "name", financialStatus.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                             if (!financialStatusRepository.uniqueCheck("code", financialStatus)) {
-                                errors.addError(new FieldError("financialStatus", "code", financialStatus.getCode(), false,
+                                errors.addError(new FieldError(string2, "code", financialStatus.getCode(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
                         break;
                     case Constants.ACTION_UPDATE:
                         if (financialstatuses == null) {
-                            throw new InvalidDataException("financialstatuses", ErrorCode.NOT_NULL.getCode(),
+                            throw new InvalidDataException(string1, ErrorCode.NOT_NULL.getCode(),
                                     null);
                         }
                         for (FinancialStatus financialStatus : financialstatuses) {
@@ -67,18 +71,18 @@ public class FinancialStatusService {
                             }
                             validator.validate(financialStatus, errors);
                             if (!financialStatusRepository.uniqueCheck("name", financialStatus)) {
-                                errors.addError(new FieldError("financialStatus", "name", financialStatus.getName(), false,
+                                errors.addError(new FieldError(string2 , "name", financialStatus.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                             if (!financialStatusRepository.uniqueCheck("code", financialStatus)) {
-                                errors.addError(new FieldError("financialStatus", "code", financialStatus.getCode(), false,
+                                errors.addError(new FieldError(string2 , "code", financialStatus.getCode(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
                         break;
                     case Constants.ACTION_SEARCH:
                         if (financialstatuses == null) {
-                            throw new InvalidDataException("financialstatuses", ErrorCode.NOT_NULL.getCode(),
+                            throw new InvalidDataException(string1, ErrorCode.NOT_NULL.getCode(),
                                     null);
                         }
                         for (FinancialStatus financialstatus : financialstatuses) {

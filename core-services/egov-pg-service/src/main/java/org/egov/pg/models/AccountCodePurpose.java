@@ -17,4 +17,3 @@ public class AccountCodePurpose {
 
     private String name = null;
 }
-

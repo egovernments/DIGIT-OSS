@@ -1,0 +1,9 @@
+
+X	java:S125"<This block of commented-out lines of code should be removed.(çµÀ°8«ÒÀşÖ/
+]	java:S125L"<This block of commented-out lines of code should be removed.(ÿ¾ÿêúÿÿÿÿ8¶ÒÀşÖ/
+p
+java:S3776š"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(Ø±“Ğ8ÅÒÀşÖ/
+R
+java:S1066­"/Merge this if statement with the enclosing one.(ŠéÂûÿÿÿÿ8ÕÒÀşÖ/
+z
+java:S1488F"]Immediately return this expression instead of assigning it to the temporary variable "query".(™å×Ê8àÒÀşÖ/

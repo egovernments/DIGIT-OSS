@@ -1,4 +1,4 @@
-package org.egov.encryption.masking;
+/*package org.egov.encryption.masking;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -16,3 +16,4 @@ public class MaskingServiceTest {
 
 
 }
+*/

@@ -1,0 +1,19 @@
+
+[	java:S1125"FDefine and throw a dedicated exception instead of using a generic one.(Ððž¢
+[	java:S112@"FDefine and throw a dedicated exception instead of using a generic one.(ÆýÚÿ
+`	java:S112K"FDefine and throw a dedicated exception instead of using a generic one.(äáíÄøÿÿÿÿ
+`	java:S112W"FDefine and throw a dedicated exception instead of using a generic one.(ÖŠ»ºýÿÿÿÿ
+„
+java:S11305"nRemove the declaration of thrown exception 'java.io.IOException' which is a subclass of 'java.lang.Exception'.(Ððž¢
+c	java:S100@"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÆýÚÿ
+„
+java:S1130@"nRemove the declaration of thrown exception 'java.io.IOException' which is a subclass of 'java.lang.Exception'.(ÆýÚÿ
+‰
+java:S1130K"nRemove the declaration of thrown exception 'java.io.IOException' which is a subclass of 'java.lang.Exception'.(äáíÄøÿÿÿÿ
+h	java:S100W"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÖŠ»ºýÿÿÿÿ
+‰
+java:S1130W"nRemove the declaration of thrown exception 'java.io.IOException' which is a subclass of 'java.lang.Exception'.(ÖŠ»ºýÿÿÿÿ
+t
+java:S2293j"YReplace the type specification in this constructor call with the diamond operator ("<>").(¤« ¾üÿÿÿÿ
+t
+java:S2293~"YReplace the type specification in this constructor call with the diamond operator ("<>").(¤« ¾üÿÿÿÿ

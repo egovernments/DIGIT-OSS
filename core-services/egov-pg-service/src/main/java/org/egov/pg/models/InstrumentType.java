@@ -52,6 +52,8 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+
+//class variables not used
 public class InstrumentType {
 
     /*

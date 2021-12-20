@@ -1,0 +1,9 @@
+
+h	java:S100."NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¦ç¤Âýÿÿÿÿ
+c	java:S1009"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÏÖ‰¬
+F
+java:S1068$"*Remove this unused "strin2" private field.(¥ìë8†äº¯×/
+M
+java:S1144@"2Remove this unused private "getBoundaries" method.(´¤Ø£ÿÿÿÿÿ
+t
+java:S2293B"YReplace the type specification in this constructor call with the diamond operator ("<>").(°½Äºúÿÿÿÿ

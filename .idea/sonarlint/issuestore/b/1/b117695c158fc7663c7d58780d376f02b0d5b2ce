@@ -1,0 +1,45 @@
+
+K
+java:S3740Ü"/Provide the parametrized type for this generic.(ÀÊá¼ÿÿÿÿÿ
+K
+java:S3740ª"/Provide the parametrized type for this generic.(ÀÊá¼ÿÿÿÿÿ
+m
+java:S3776L"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(÷ü²¾ıÿÿÿÿ
+V	java:S125a"<This block of commented-out lines of code should be removed.(¨ç¾ïşÿÿÿÿ
+i
+java:S3776—"RRefactor this method to reduce its Cognitive Complexity from 29 to the 15 allowed.(ÛæÈ
+W	java:S125ê"<This block of commented-out lines of code should be removed.(åÛ§«ùÿÿÿÿ
+W	java:S125¯"<This block of commented-out lines of code should be removed.(‰“œ¢øÿÿÿÿ
+W	java:S125ş"<This block of commented-out lines of code should be removed.(åÛ§«ùÿÿÿÿ
+I
+java:S1172Ê"2Remove this unused method parameter "requestInfo".(áİ·¹
+E
+java:S1481ñ")Remove this unused "flag" local variable.(¡¾¿íùÿÿÿÿ
+W	java:S125ò"<This block of commented-out lines of code should be removed.(¿ÜÕ¡úÿÿÿÿ
+Q	java:S125Æ"<This block of commented-out lines of code should be removed.(Ş½İB
+O
+java:S1144ú"3Remove this unused private "getCitizenRole" method.(öİ”Şıÿÿÿÿ
+U
+java:S1144Á"9Remove this unused private "createEmpVendorOwner" method.(£–À»üÿÿÿÿ
+K
+java:S1144"4Remove this unused private "createEmpDriver" method.(Œ«Ö
+O
+java:S1144Ä"8Remove this unused private "addDsoDefaultFields" method.(şã¨µ
+u
+java:S2293œ"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÀÕè›ûÿÿÿÿ
+p
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(üöÃõ
+™
+java:S1192á"Define a constant instead of duplicating this literal "Dob, relationShip, relation ship name and gender are mandaotry !" 4 times.(úÅË¡
+
+java:S1488³"jImmediately return this expression instead of assigning it to the temporary variable "userDetailResponse".(æ÷ÿÉ
+ƒ
+java:S1488Ó"lImmediately return this expression instead of assigning it to the temporary variable "vendorDetailResponse".(œÍÆ…
+‡
+java:S1488‹"kImmediately return this expression instead of assigning it to the temporary variable "ownerDetailResponse".(¹ûƒ¬ÿÿÿÿÿ
+‚
+java:S1488²"kImmediately return this expression instead of assigning it to the temporary variable "ownerDetailResponse".(ç–äŒ
+
+java:S1488º"kImmediately return this expression instead of assigning it to the temporary variable "ownerDetailResponse".(¹ÿ:
+[
+java:S2259¬"?A "NullPointerException" could be thrown; "d" is nullable here.(Ä¢Ãÿÿÿÿÿ

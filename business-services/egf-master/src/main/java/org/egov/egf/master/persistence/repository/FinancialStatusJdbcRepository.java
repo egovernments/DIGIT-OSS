@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class FinancialStatusJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(FinancialStatusJdbcRepository.class);
+	private String string1=" and ";
 
 	static {
 		LOG.debug("init financialStatus");
@@ -72,42 +73,42 @@ public class FinancialStatusJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
 		if (financialStatusSearchEntity.getTenantId() != null) {
                     if (params.length() > 0) {
-                        params.append(" and ");
+                        params.append(string1);
                     }
                     params.append("tenantId =:tenantId");
                     paramValues.put("tenantId", financialStatusSearchEntity.getTenantId());
                 }
 		if (financialStatusSearchEntity.getId() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("id =:id");
 			paramValues.put("id", financialStatusSearchEntity.getId());
 		}
 		if (financialStatusSearchEntity.getIds() != null) {
                           if (params.length() > 0) {
-                                  params.append(" and ");
+                                  params.append(string1);
                           }
                           params.append("id in(:ids) ");
                           paramValues.put("ids", new ArrayList<String>(Arrays.asList(financialStatusSearchEntity.getIds().split(","))));
                 }
 		if (financialStatusSearchEntity.getModuleType() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("moduleType =:moduleType");
 			paramValues.put("moduleType", financialStatusSearchEntity.getModuleType());
 		}
 		if (financialStatusSearchEntity.getCode() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("code =:code");
 			paramValues.put("code", financialStatusSearchEntity.getCode());
 		}
 		if (financialStatusSearchEntity.getDescription() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("description =:description");
 			paramValues.put("description", financialStatusSearchEntity.getDescription());

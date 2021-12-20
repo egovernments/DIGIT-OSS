@@ -1,0 +1,11 @@
+
+h	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ş×ŒÛùÿÿÿÿ
+h	java:S100'"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(È¶Ò€øÿÿÿÿ
+c	java:S100@"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¼¶·
+M
+java:S1068
+"+Remove this unused "STRING1" private field.(­Ùôäşÿÿÿÿ8ØÕ‡²×/
+\
+java:S1192+"FDefine a constant instead of duplicating this literal "code1" 4 times.(œ¬ÈÇ
+a
+java:S1192)"FDefine a constant instead of duplicating this literal "en_IN" 4 times.(ßºÌÌùÿÿÿÿ

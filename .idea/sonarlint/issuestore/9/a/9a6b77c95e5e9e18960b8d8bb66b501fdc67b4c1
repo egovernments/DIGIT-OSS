@@ -1,0 +1,25 @@
+
+F
+java:S3740¾"/Provide the parametrized type for this generic.(ß÷˜ó
+K
+java:S3740š"/Provide the parametrized type for this generic.(ı–Áúşÿÿÿÿ
+7
+java:S1170F"!Make this final field static too.(Ò·Ôæ
+6
+java:S1170H"!Make this final field static too.(Øœ
+m
+java:S3776T"RRefactor this method to reduce its Cognitive Complexity from 43 to the 15 allowed.(Äø±áúÿÿÿÿ
+B
+java:S1659U"-Declare "messageTemplate" on a separate line.(ûèÑ[
+i
+java:S1172ß"RRemove these unused method parameters "requestInfo", "fsm", "localizationMessage".(õ
+I
+java:S1135á"2Complete the task associated to this TODO comment.(åĞ·
+8
+java:S1116»"Remove this empty statement.(Û¯Èèüÿÿÿÿ
+d
+java:S1192F"NDefine a constant instead of duplicating this literal "receiptNumber" 3 times.(Ò·Ôæ
+v
+java:S1488à"_Immediately return this expression instead of assigning it to the temporary variable "message".(¥Õç·
+~
+java:S1488ï"bImmediately return this expression instead of assigning it to the temporary variable "jsonString".(®°êîøÿÿÿÿ

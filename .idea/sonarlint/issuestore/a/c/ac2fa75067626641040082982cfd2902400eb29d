@@ -1,0 +1,12 @@
+
+`	java:S1129"FDefine and throw a dedicated exception instead of using a generic one.(‚ëô¡şÿÿÿÿ
+[
+java:S1854d"@Remove this useless assignment to local variable "actualResult".(€÷ÜÍûÿÿÿÿ
+L
+java:S1481d"1Remove this unused "actualResult" local variable.(€÷ÜÍûÿÿÿÿ
+Q	java:S125m"<This block of commented-out lines of code should be removed.(Í‘ Â
+B
+java:S3599˜",Use another way to initialize this instance.(ñËüd
+u
+java:S1171™"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ
+R	java:S125µ"<This block of commented-out lines of code should be removed.(Ì˜«ª

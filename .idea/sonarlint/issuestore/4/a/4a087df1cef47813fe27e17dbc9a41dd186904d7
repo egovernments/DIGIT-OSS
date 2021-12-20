@@ -1,0 +1,14 @@
+
+P
+java:S1172"5Remove this unused method parameter "vehicleRequest".(ˆÿ≠‡˛ˇˇˇˇ
+M
+java:S1135"2Complete the task associated to this TODO comment.(ª†Êûˇˇˇˇˇ
+S
+java:S1117/">Rename "mdmsResMap" which hides the field declared at line 22.(πØÿ;
+l
+java:S2159O"VRemove this call to "equals"; comparisons between unrelated types always return false.(ûêÓÜ
+_
+java:S1192O"IDefine a constant instead of duplicating this literal "capacity" 3 times.(ûêÓÜ
+k	java:S117K"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(∏®£ˆ˛ˇˇˇˇ
+S
+java:S1155J">Use isEmpty() to check whether the collection is empty or not.(ÕÎ‡{

@@ -42,7 +42,6 @@ public class InstrumentQueueRepository {
 
         case "create":
             topicMap.put("instrument_create", request);
-            System.out.println("push create topic" + request);
             break;
         case "update":
             topicMap.put("instrument_update", request);
@@ -62,8 +61,6 @@ public class InstrumentQueueRepository {
         if (!request.getInstruments().isEmpty()) {
 
             topicMap.put("instrument_persisted", request);
-
-            System.out.println("push search topic" + request);
 
         }
 

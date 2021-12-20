@@ -53,6 +53,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+
+//class not used
 public class InstrumentAccountCodeReq {
 	@NotNull
     @JsonProperty("tenantId")

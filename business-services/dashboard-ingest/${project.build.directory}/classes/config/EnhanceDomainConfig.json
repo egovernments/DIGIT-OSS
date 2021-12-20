@@ -1,0 +1,31 @@
+{
+  "domainConfig": [
+    {
+      "id": "1",
+      "domain": "PT",
+      "indexName": "property-assessments",
+      "documentType": "",
+      "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"Data.propertyId\":\"value\"}}]}}}",
+      "targetReferences": [
+        {
+          "fieldName": "propertyId",
+          "argument": "Data.propertyId",
+          "dataType": "String",
+          "value": "$value",
+          "seperator": " ",
+          "expression": "propertyId"
+        }
+      ],
+      "sourceReferences": [
+        {
+          "fieldName": "consumerCode",
+          "argument": "paymentDetails.bill.consumerCode",
+          "dataType": "String",
+          "value": "$value",
+          "seperator": ":",
+          "expression": "propertyId"
+        }
+      ]
+    }
+  ]
+}

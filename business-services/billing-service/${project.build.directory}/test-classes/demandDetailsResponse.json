@@ -1,0 +1,22 @@
+{
+    "ResponseInfo": {
+        "apiId": "apiId",
+        "ver": "ver"
+   },
+  "DemandDetails": [
+                {
+                    "id": null,
+                    "demandId": null,
+                    "taxHeadMasterCode" : "0002",
+                    "taxAmount": 100,
+                    "collectionAmount": 0
+               },
+                {
+                    "id": null,
+                    "demandId": null,
+                    "taxHeadMasterCode" : "0003",
+                    "taxAmount": 200,
+                    "collectionAmount": 0
+                }
+            ]
+}

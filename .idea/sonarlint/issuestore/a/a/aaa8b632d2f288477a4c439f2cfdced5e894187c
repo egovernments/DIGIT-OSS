@@ -1,0 +1,41 @@
+
+K
+java:S3740¼"/Provide the parametrized type for this generic.(ÜßñÌÿÿÿÿÿ
+E
+java:S3740Í"/Provide the parametrized type for this generic.(ÿÑ«B
+K
+java:S3740Î"/Provide the parametrized type for this generic.(°‡°›þÿÿÿÿ
+K
+java:S3740Î"/Provide the parametrized type for this generic.(°‡°›þÿÿÿÿ
+m
+java:S3776B"RRefactor this method to reduce its Cognitive Complexity from 35 to the 15 allowed.(ÛŽßªüÿÿÿÿ
+B
+java:S1602F",Remove useless curly braces around statement(ÔÆþ«
+V	java:S125I"<This block of commented-out lines of code should be removed.(¡ÎØ±ûÿÿÿÿ
+P	java:S125\"<This block of commented-out lines of code should be removed.(öÀÌb
+W	java:S125Ç"<This block of commented-out lines of code should be removed.(è™ˆ¬ûÿÿÿÿ
+R	java:S125Ì"<This block of commented-out lines of code should be removed.(„Æ‚´
+8	java:S131Ù""Add a default case to this switch.(žçÂ
+H
+java:S1602å",Remove useless curly braces around statement(­ÛœËøÿÿÿÿ
+8	java:S131”""Add a default case to this switch.(“Í“…
+H
+java:S1602¦",Remove useless curly braces around statement(–½Àãþÿÿÿÿ
+C
+java:S1602Ö",Remove useless curly braces around statement(ÈŸ‹ò
+Q
+java:S1144ã"5Remove this unused private "getMobileNumbers" method.(œ­×Žþÿÿÿÿ
+a
+java:S1301Q"KReplace this "switch" statement by "if" statements to increase readability.(žçÂ
+a
+java:S1301y"KReplace this "switch" statement by "if" statements to increase readability.(“Í“…
+b
+java:S1301Ù"KReplace this "switch" statement by "if" statements to increase readability.(žçÂ
+b
+java:S1301”"KReplace this "switch" statement by "if" statements to increase readability.(“Í“…
+
+java:S1488¾"jImmediately return this expression instead of assigning it to the temporary variable "userDetailResponse".(æ÷ÿÉ
+†
+java:S1488ù"jImmediately return this expression instead of assigning it to the temporary variable "userDetailResponse".(þšíƒûÿÿÿÿ
+[
+java:S2259ì"?A "NullPointerException" could be thrown; "d" is nullable here.(Ä¢Ãÿÿÿÿÿ

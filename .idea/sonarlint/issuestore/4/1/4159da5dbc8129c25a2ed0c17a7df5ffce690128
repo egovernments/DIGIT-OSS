@@ -1,0 +1,29 @@
+
+F
+java:S3740"/Provide the parametrized type for this generic.(í…°£
+E
+java:S3740œ"/Provide the parametrized type for this generic.(ÿÑ«B
+K
+java:S3740"/Provide the parametrized type for this generic.(°‡°›þÿÿÿÿ
+K
+java:S3740"/Provide the parametrized type for this generic.(°‡°›þÿÿÿÿ
+P	java:S125>"<This block of commented-out lines of code should be removed.(öÀÌb
+P	java:S125Y"<This block of commented-out lines of code should be removed.(öÀÌb
+R	java:S125ì"<This block of commented-out lines of code should be removed.(®®óÉ
+F
+java:S1172ã"/Remove this unused method parameter "tenantId".(¸‚û
+W	java:S125î"<This block of commented-out lines of code should be removed.(¶Ù«ªûÿÿÿÿ
+Q
+java:S1144˜":Remove this unused private "addNonUpdatableFields" method.(£Ù…‡
+O
+java:S1144Ó"3Remove this unused private "setOwnerFields" method.(­©œ£ÿÿÿÿÿ
+L
+java:S1144ã"5Remove this unused private "searchByUserName" method.(¸‚û
+P
+java:S1144‚"4Remove this unused private "isUserUpdatable" method.(†ü£ÿýÿÿÿÿ
+
+java:S1488"jImmediately return this expression instead of assigning it to the temporary variable "userDetailResponse".(æ÷ÿÉ
+†
+java:S1488Ê"jImmediately return this expression instead of assigning it to the temporary variable "userDetailResponse".(þšíƒûÿÿÿÿ
+[
+java:S2259¼"?A "NullPointerException" could be thrown; "d" is nullable here.(Ä¢Ãÿÿÿÿÿ

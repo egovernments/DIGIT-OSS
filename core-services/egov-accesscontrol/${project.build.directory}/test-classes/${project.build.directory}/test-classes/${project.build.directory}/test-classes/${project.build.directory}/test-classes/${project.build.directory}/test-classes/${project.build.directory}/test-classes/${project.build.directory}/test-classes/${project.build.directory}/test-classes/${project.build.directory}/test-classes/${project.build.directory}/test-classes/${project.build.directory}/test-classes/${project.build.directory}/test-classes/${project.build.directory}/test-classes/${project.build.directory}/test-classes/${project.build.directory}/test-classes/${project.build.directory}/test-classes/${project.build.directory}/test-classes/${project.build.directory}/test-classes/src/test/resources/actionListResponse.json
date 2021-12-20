@@ -1,0 +1,59 @@
+{
+    "responseInfo": {
+        "apiId": "org.egov.accesscontrol",
+        "ver": "1.0",
+        "ts": "Thu Mar 09 18:30:00 UTC 2017",
+        "resMsgId": "uief87324",
+        "msgId": "20170310130900",
+        "status": "200 OK"
+    },
+    "modules": [
+        {
+            "id": 74,
+            "name": "ess",
+            "subModules": [],
+            "actionList": [
+                {
+                    "id": 268,
+                    "name": "ESS Leave Application",
+                    "url": "/app/hr/leavemaster/apply-leave.html",
+                    "displayName": "Apply Leave",
+                    "orderNumber": null,
+                    "queryParams": null,
+                    "parentModule": null,
+                    "enabled": false,
+                    "serviceCode": "ESS",
+                    "tenantId": null,
+                    "createdDate": null,
+                    "createdBy": null,
+                    "lastModifiedDate": null,
+                    "lastModifiedBy": null
+                },
+                {
+                    "id": 267,
+                    "name": "View ESS Employee",
+                    "url": "/app/hr/employee/create.html",
+                    "displayName": "My Details",
+                    "orderNumber": null,
+                    "queryParams": null,
+                    "parentModule": null,
+                    "enabled": false,
+                    "serviceCode": "ESS",
+                    "tenantId": null,
+                    "createdDate": null,
+                    "createdBy": null,
+                    "lastModifiedDate": null,
+                    "lastModifiedBy": null
+                }
+            ],
+            "code": "ESS",
+            "contextRoot": null,
+            "displayName": "Employee Self Service",
+            "parentModule": null,
+            "tenant": null,
+            "orderNumber": null,
+            "tenantId": null,
+            "enabled": false
+        }
+    ]
+}

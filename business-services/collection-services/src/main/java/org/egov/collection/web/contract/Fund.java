@@ -7,6 +7,8 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+
+//class variables not used
 public class Fund   {
   private Long id;
 

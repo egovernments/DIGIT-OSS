@@ -52,6 +52,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+//none of them is used
 public class SubScheme {
 
     private String id;

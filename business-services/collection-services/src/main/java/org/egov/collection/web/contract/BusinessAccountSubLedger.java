@@ -9,6 +9,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode
+//class variables are not used
 public class BusinessAccountSubLedger {
 
 	private Long id;

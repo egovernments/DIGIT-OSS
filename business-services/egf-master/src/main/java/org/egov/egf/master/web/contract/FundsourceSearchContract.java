@@ -8,6 +8,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
+//pagesize and offset are not used
 public class FundsourceSearchContract extends FundsourceContract { private String ids; 
 private String  sortBy; 
 private Integer pageSize; 

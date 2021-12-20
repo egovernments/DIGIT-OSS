@@ -1,0 +1,16 @@
+
+E
+java:S3740N"/Provide the parametrized type for this generic.(è‡§é
+u	java:S116J"`Rename this field "PERIOD_VALIDATE_QUERY" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(–Ž™›
+<
+java:S1170B"!Make this final field static too.(ÜºÃñûÿÿÿÿ
+<
+java:S1170F"!Make this final field static too.(ä‚šýûÿÿÿÿ
+7
+java:S1170J"!Make this final field static too.(–Ž™›
+h
+java:S3776V"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(£„¡Ø
+S
+java:S1854¤"<Remove this useless assignment to local variable "currDate".(áÙ“Î
+D
+java:S1481¤"-Remove this unused "currDate" local variable.(áÙ“Î

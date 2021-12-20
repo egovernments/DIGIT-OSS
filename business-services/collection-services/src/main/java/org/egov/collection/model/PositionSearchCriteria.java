@@ -55,6 +55,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
+
+//class variables not used
 public class PositionSearchCriteria {
 
 	private String tenantId;

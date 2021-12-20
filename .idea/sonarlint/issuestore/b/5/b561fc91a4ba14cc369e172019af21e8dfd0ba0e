@@ -1,0 +1,23 @@
+
+[	java:S112U"FDefine and throw a dedicated exception instead of using a generic one.(›±÷¤
+`	java:S112z"FDefine and throw a dedicated exception instead of using a generic one.(Ø³ð´üÿÿÿÿ
+F
+java:S3010="+Remove this assignment of "resourceLoader".(‹àòÅûÿÿÿÿ
+P
+java:S2209="5Change this instance-reference to a static reference.(‹àòÅûÿÿÿÿ
+g
+java:S3776h"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(ôÀª~
+t
+java:S2293B"YReplace the type specification in this constructor call with the diamond operator ("<>").(üý–´ûÿÿÿÿ
+n
+java:S2293X"YReplace the type specification in this constructor call with the diamond operator ("<>").(©¬€
+u
+java:S2293“"YReplace the type specification in this constructor call with the diamond operator ("<>").(¯Á­Øûÿÿÿÿ
+Q
+java:S1141"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ
+T
+java:S1155r">Use isEmpty() to check whether the collection is empty or not.(Ò‘ÔÐ
+Y
+java:S1155y">Use isEmpty() to check whether the collection is empty or not.(ƒ÷Ø•üÿÿÿÿ
+J
+java:S1444""4Make this "public static resourceLoader" field final(ñþôÊ

@@ -10,6 +10,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+//class variables are not used
 public class ChartOfAccount   {
   private Long id;
 
