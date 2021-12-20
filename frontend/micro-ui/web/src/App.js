@@ -14,6 +14,7 @@ import { initReceiptsComponents, ReceiptsModule } from "@egovernments/digit-ui-m
 import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
 import { initNOCComponents } from "@egovernments/digit-ui-module-noc";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
+import { initWSComponents } from "@egovernments/digit-ui-module-ws"; 
 import {initCustomisationComponents} from "./Customisations";
 
 initLibraries();
@@ -45,6 +46,7 @@ initReceiptsComponents();
 initOBPSComponents();
 initNOCComponents();
 initEngagementComponents();
+initWSComponents();
 
 initCustomisationComponents();
 
