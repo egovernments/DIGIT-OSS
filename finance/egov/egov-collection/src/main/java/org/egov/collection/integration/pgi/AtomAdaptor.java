@@ -150,10 +150,9 @@ public class AtomAdaptor implements PaymentGatewayAdaptor {
                 + receiptHeader.getConsumerCode().replace("-", "").replace("/", ""))));
         LOGGER.info("First request ATOM: " + formData);
         UrlEncodedFormEntity urlEncodedFormEntity = null;
-        try {
+        try(final CloseableHttpClient httpclient = HttpClients.createDefault();) {
             urlEncodedFormEntity = new UrlEncodedFormEntity(formData);
             httpPost.setEntity(urlEncodedFormEntity);
-            final CloseableHttpClient httpclient = HttpClients.createDefault();
             CloseableHttpResponse response = httpclient.execute(httpPost);
             HttpEntity responseAtom = response.getEntity();
             BufferedReader reader = new BufferedReader(new InputStreamReader(responseAtom.getContent()));
@@ -256,7 +255,7 @@ public class AtomAdaptor implements PaymentGatewayAdaptor {
     public PaymentResponse createOfflinePaymentRequest(final OnlinePayment onlinePayment) throws ApplicationException, ClientProtocolException, IOException, JAXBException {
         LOGGER.debug("Inside AtomAdaptor createOfflinePaymentRequest");
         PaymentResponse atomResponse = new DefaultPaymentResponse();
-        try {
+        try(final CloseableHttpClient httpclient = HttpClients.createDefault();) {
             final HttpPost httpPost = new HttpPost(collectionApplicationProperties.atomReconcileUrl());
             final List<NameValuePair> formData = new ArrayList<>(0);
             formData.add(
@@ -270,7 +269,7 @@ public class AtomAdaptor implements PaymentGatewayAdaptor {
             LOGGER.debug("ATOM  Reconcilation request : " + formData);
             UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(formData);
             httpPost.setEntity(urlEncodedFormEntity);
-            final CloseableHttpClient httpclient = HttpClients.createDefault();
+            
             CloseableHttpResponse response = httpclient.execute(httpPost);
             HttpEntity responseAtom = response.getEntity();
             BufferedReader reader = new BufferedReader(new InputStreamReader(responseAtom.getContent()));

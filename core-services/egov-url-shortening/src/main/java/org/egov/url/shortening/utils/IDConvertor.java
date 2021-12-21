@@ -16,7 +16,7 @@ public class IDConvertor {
     private static HashMap<Character, Integer> charToIndexTable;
     private static List<Character> indexToCharTable;
 
-    private void initializeCharToIndexTable() {
+    private static void initializeCharToIndexTable() {
         charToIndexTable = new HashMap<>();
         // 0->a, 1->b, ..., 25->z, ..., 52->0, 61->9
         for (int i = 0; i < 26; ++i) {
@@ -36,7 +36,7 @@ public class IDConvertor {
         }
     }
 
-    private void initializeIndexToCharTable() {
+    private static void initializeIndexToCharTable() {
         // 0->a, 1->b, ..., 25->z, ..., 52->0, 61->9
         indexToCharTable = new ArrayList<>();
         for (int i = 0; i < 26; ++i) {

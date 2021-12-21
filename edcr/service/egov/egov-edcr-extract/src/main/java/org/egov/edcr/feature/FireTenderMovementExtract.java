@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.FireTenderMovement;
 import org.egov.common.entity.edcr.Measurement;
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class FireTenderMovementExtract extends FeatureExtract {
 
-    private static final Logger LOG = Logger.getLogger(FireTenderMovementExtract.class);
     final Ray rayCasting = new Ray(new Point(-1.123456789, -1.987654321, 0d));
     @Autowired
     private LayerNames layerNames;
@@ -60,28 +58,28 @@ public class FireTenderMovementExtract extends FeatureExtract {
                         if (setBack.getFrontYard() != null) {
                             Boolean checkSetBackInside = checkSetBackInside(fireTenderMovementPolyLines, errors,
                                     setBack.getFrontYard());
-                            if (!checkSetBackInside)
+                            if (Boolean.FALSE.equals(checkSetBackInside))
                                 errors.add("Front Setback");
                         }
 
                         if (setBack.getRearYard() != null) {
                             Boolean checkSetBackInside = checkSetBackInside(fireTenderMovementPolyLines, errors,
                                     setBack.getRearYard());
-                            if (!checkSetBackInside)
+                            if (Boolean.FALSE.equals(checkSetBackInside))
                                 errors.add("Rear Setback");
                         }
 
                         if (setBack.getSideYard1() != null) {
                             Boolean checkSetBackInside = checkSetBackInside(fireTenderMovementPolyLines, errors,
                                     setBack.getSideYard1());
-                            if (!checkSetBackInside)
+                            if (Boolean.FALSE.equals(checkSetBackInside))
                                 errors.add("Side Setback 1");
                         }
 
                         if (setBack.getSideYard2() != null) {
                             Boolean checkSetBackInside = checkSetBackInside(fireTenderMovementPolyLines, errors,
                                     setBack.getSideYard2());
-                            if (!checkSetBackInside)
+                            if (Boolean.FALSE.equals(checkSetBackInside))
                                 errors.add("Side Setback 2");
                         }
 

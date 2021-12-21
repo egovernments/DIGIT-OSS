@@ -80,17 +80,17 @@ public class ReadUtil {
 	private static Boolean useNumbers;
 
 	@Value("${filename.length}")
-	public void setFilenameLength(Integer filenameLengthValue) {
+	public static void setFilenameLength(Integer filenameLengthValue) {
 		ReadUtil.filenameLength = filenameLengthValue;
 	}
 
 	@Value("${filename.useletters}")
-	public void setUseLetters(Boolean useLettersValue) {
+	public static void setUseLetters(Boolean useLettersValue) {
 		ReadUtil.useLetters = useLettersValue;
 	}
 
 	@Value("${filename.usenumbers}")
-	public void setUseNumbers(Boolean useNumbersValue) {
+	public static void setUseNumbers(Boolean useNumbersValue) {
 		ReadUtil.useNumbers = useNumbersValue;
 	}
 

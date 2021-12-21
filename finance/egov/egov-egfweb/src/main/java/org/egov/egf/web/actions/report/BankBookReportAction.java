@@ -524,6 +524,7 @@ public class BankBookReportAction extends BaseFormAction {
 									}
 
 							} catch (final NumberFormatException ex) {
+								LOG.error("Number format exception.");
 							}
 					bankBookEntry.setChequeDetail(voucherStr);
 					entries.add(bankBookEntry);

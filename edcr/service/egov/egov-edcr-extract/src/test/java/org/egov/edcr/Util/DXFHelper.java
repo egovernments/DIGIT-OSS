@@ -3,7 +3,6 @@ package org.egov.edcr.Util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +10,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 public class DXFHelper {
+	private static final Logger LOG = Logger.getLogger(DXFHelper.class);
 	public static void main(String[] args) {
 		DXFHelper rc = new DXFHelper();
 		String filePath = "/home/mani/Workspaces/bpa/eGov-Kozhikode-Implementation/egov/egov-edcr/src/test/resources/Sanity.dxf";
@@ -26,12 +28,12 @@ public class DXFHelper {
 	    {
 	    	end.add(s);
 	    }
-		try {
+		try (InputStream is = new FileInputStream(filePath);
+				BufferedReader buf = new BufferedReader(new InputStreamReader(is));) {
 			int i = 0;
 			File f = new File(filePath);
 			String fileAsString = null;
-			InputStream is = new FileInputStream(filePath);
-			BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+			
 			String line = buf.readLine();
 			StringBuilder sb = new StringBuilder();
 			File fout = new File(
@@ -41,26 +43,26 @@ public class DXFHelper {
 			FileWriter rt = new FileWriter(fout);
 			while (line != null) {
 				/*
-				 * if(line.contains(having)) { System.out.println(line); }
+				 * if(line.contains(having)) { LOG.info(line); }
 				 */
 				if (line.equals(start)) {
 					sb = new StringBuilder();
 					sb.append(line).append("\n");
 					line = buf.readLine();
-					// System.out.println(line+" -----"+i++);
+					// LOG.info(line+" -----"+i++);
 					while (line != null && !end.toString().contains(line)) {
-						// System.out.println(line+" "+i);
+						// LOG.info(line+" "+i);
 						sb.append(line).append("\n");
 						line = buf.readLine();
 						if (line != null && end.toString().contains(line)) {
-							System.out.println(line +"   "+end.toString());
+							LOG.info(line +"   "+end.toString());
 						}
 					}
 					// rt.write(sb.toString()+"
 					// &&&&&&&&&&&"+sb.toString().contains(having));
 					if (sb.toString().contains(having)) {
 						result.add(sb.toString());
-						System.out.println("******************found " + i++);
+						LOG.info("******************found " + i++);
 					}
 				}else
 				line = buf.readLine();
@@ -70,7 +72,7 @@ public class DXFHelper {
 
 			is.close();
 			// fileAsString = sb.toString();
-			// System.out.println("Contents : " + fileAsString);
+			// LOG.info("Contents : " + fileAsString);
 
 			for (String s : result)
 				rt.write(s);
@@ -78,12 +80,8 @@ public class DXFHelper {
 
 			rt.close();
 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error(e.getMessage());
 		}
 		return result;
 

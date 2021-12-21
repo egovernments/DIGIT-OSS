@@ -50,7 +50,7 @@ public abstract class JdbcRepository {
 
             TABLE_NAME = (String) T.getDeclaredField("TABLE_NAME").get(null);
         } catch (Exception e) {
-
+            LOG.error("Illegal Argument exception occurred: " + e.getMessage());
         }
         insertFields.addAll(fetchFields(T));
         uniqueFields.add("id");
@@ -158,7 +158,6 @@ public abstract class JdbcRepository {
 
     public static String getByIdQuery(String tableName, List<String> uniqueFields) {
         String uQuery = "select * from  :tableName where  :uniqueField ";
-        // StringBuilder fieldNameAndParams = new StringBuilder();
         StringBuilder uniqueFieldNameAndParams = new StringBuilder();
         int i = 0;
 
@@ -230,6 +229,7 @@ public abstract class JdbcRepository {
             try {
                 f = getField(ob, s);
             } catch (Exception e) {
+                LOG.error("No Such field exception occurred: " + e.getMessage());
             }
             /*
              * try { f = ob.getClass().getSuperclass().getDeclaredField(s); } catch (NoSuchFieldException e1) {

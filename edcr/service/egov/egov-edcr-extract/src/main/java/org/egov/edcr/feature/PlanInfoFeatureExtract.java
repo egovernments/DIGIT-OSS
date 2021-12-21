@@ -1,6 +1,5 @@
 package org.egov.edcr.feature;
 
-import static org.egov.edcr.constants.DxfFileConstants.OPENING_ABOVE_2_1_ON_REAR_LESS_1M;
 import static org.egov.edcr.constants.DxfFileConstants.OPENING_ABOVE_2_1_ON_SIDE_LESS_1M;
 import static org.egov.edcr.utility.DcrConstants.OBJECTNOTDEFINED;
 
@@ -29,9 +28,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PlanInfoFeatureExtract extends FeatureExtract {
+	private static final String MATCH_NUMBERS = "\\d+_";
+	private static final String LAYER_NAME_BUILDING_FOOT_PRINT = "LAYER_NAME_BUILDING_FOOT_PRINT";
+	private static final String LAYER_NAME_LEVEL_NAME_PREFIX = "LAYER_NAME_LEVEL_NAME_PREFIX";
+	private static final String LAYER_NAME_BLOCK_NAME_PREFIX = "LAYER_NAME_BLOCK_NAME_PREFIX";
+	private static final String LAYER_NAME_PLOT_BOUNDARY = "LAYER_NAME_PLOT_BOUNDARY";
+	private static final String LAYER_NAME_MECHANICAL_PARKING = "LAYER_NAME_MECHANICAL_PARKING";
+	private static final String LAYER_NAME_EXISTING_FLOOR_AREA_TO_BE_DEMOLISHED = "LAYER_NAME_EXISTING_FLOOR_AREA_TO_BE_DEMOLISHED";
 	private static final Logger LOG = Logger.getLogger(PlanInfoFeatureExtract.class);
 	public static final String MSG_ERROR_MANDATORY = "msg.error.mandatory.object.not.defined";
-	private String digitsRegex = "[^\\d.]";
+	private static final String DIGITS_REGEX = "[^\\d.]";
 	private static final BigDecimal ONEHUDREDTWENTYFIVE = BigDecimal.valueOf(125);
 	@Autowired
 	private LayerNames layerNames;
@@ -68,22 +74,22 @@ public class PlanInfoFeatureExtract extends FeatureExtract {
 
 	private void extractPlotDetails(PlanDetail pl) {
 		List<DXFLWPolyline> plotBoundaries = Util.getPolyLinesByLayer(pl.getDoc(),
-				layerNames.getLayerName("LAYER_NAME_PLOT_BOUNDARY"));
+				layerNames.getLayerName(LAYER_NAME_PLOT_BOUNDARY));
 		if (!plotBoundaries.isEmpty()) {
 			DXFLWPolyline plotBndryPolyLine = plotBoundaries.get(0);
 			((PlotDetail) pl.getPlot()).setPolyLine(plotBndryPolyLine);
 			pl.getPlot().setPlotBndryArea(Util.getPolyLineArea(plotBndryPolyLine));
 		} else
-			pl.addError(layerNames.getLayerName("LAYER_NAME_PLOT_BOUNDARY"),
-					getLocaleMessage(OBJECTNOTDEFINED, layerNames.getLayerName("LAYER_NAME_PLOT_BOUNDARY")));
+			pl.addError(layerNames.getLayerName(LAYER_NAME_PLOT_BOUNDARY),
+					getLocaleMessage(OBJECTNOTDEFINED, layerNames.getLayerName(LAYER_NAME_PLOT_BOUNDARY)));
 	}
 
 	private void extractBuildingFootprint(PlanDetail pl) {
 
 		List<DXFLWPolyline> polyLinesByLayer;
-		String buildingFootPrint = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + "\\d+_"
-				+ layerNames.getLayerName("LAYER_NAME_LEVEL_NAME_PREFIX") + "\\d+_"
-				+ layerNames.getLayerName("LAYER_NAME_BUILDING_FOOT_PRINT");
+		String buildingFootPrint = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + MATCH_NUMBERS
+				+ layerNames.getLayerName(LAYER_NAME_LEVEL_NAME_PREFIX) + MATCH_NUMBERS
+				+ layerNames.getLayerName(LAYER_NAME_BUILDING_FOOT_PRINT);
 		List<String> layerNames1 = Util.getLayerNamesLike(pl.getDoc(), buildingFootPrint);
 		for (String s : layerNames1) {
 			polyLinesByLayer = Util.getPolyLinesByLayer(pl.getDoc(), s);
@@ -93,7 +99,7 @@ public class PlanInfoFeatureExtract extends FeatureExtract {
 						new String[] { s }, null));
 				pl.addErrors(errors);
 			}
-			if (!polyLinesByLayer.isEmpty())
+			if (!polyLinesByLayer.isEmpty()) {
 				if (pl.getBlockByName(s.split("_")[1]) == null) {
 					Block block = new Block();
 					block.setName(s.split("_")[1]);
@@ -118,16 +124,16 @@ public class PlanInfoFeatureExtract extends FeatureExtract {
 					block.getSetBacks().add(setBack);
 
 				}
-
+			}
 		}
 
 		if (pl.getBlocks().isEmpty())
-			pl.addError(layerNames.getLayerName("LAYER_NAME_BUILDING_FOOT_PRINT"),
+			pl.addError(layerNames.getLayerName(LAYER_NAME_BUILDING_FOOT_PRINT),
 					getEdcrMessageSource().getMessage(DcrConstants.OBJECTNOTDEFINED,
-							new String[] { layerNames.getLayerName("LAYER_NAME_BUILDING_FOOT_PRINT") }, null));
+							new String[] { layerNames.getLayerName(LAYER_NAME_BUILDING_FOOT_PRINT) }, null));
 
 		for (Block b : pl.getBlocks()) {
-			String layerName = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + b.getNumber() + "_"
+			String layerName = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + b.getNumber() + "_"
 					+ layerNames.getLayerName("LAYER_NAME_HEIGHT_OF_BUILDING");
 			BigDecimal height = Util.getSingleDimensionValueByLayer(pl.getDoc(), layerName, pl);
 			b.setHeight(height);
@@ -141,11 +147,11 @@ public class PlanInfoFeatureExtract extends FeatureExtract {
 	private void extractBuildingBasementFootprint(PlanDetail pl) {
 
 		List<DXFLWPolyline> polyLinesByLayer;
-		String basementFootPrint = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + "\\d+_"
-				+ layerNames.getLayerName("LAYER_NAME_LEVEL_NAME_PREFIX") + "-\\d+_"
+		String basementFootPrint = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + MATCH_NUMBERS
+				+ layerNames.getLayerName(LAYER_NAME_LEVEL_NAME_PREFIX) + "-\\d+_"
 				+ layerNames.getLayerName("LAYER_NAME_BSMNT_FOOT_PRINT");
-		List<String> layerNames = Util.getLayerNamesLike(pl.getDoc(), basementFootPrint);
-		for (String s : layerNames) {
+		List<String> layerNamess = Util.getLayerNamesLike(pl.getDoc(), basementFootPrint);
+		for (String s : layerNamess) {
 			polyLinesByLayer = Util.getPolyLinesByLayer(pl.getDoc(), s);
 			if (polyLinesByLayer.size() > 1) {
 				HashMap<String, String> errors = new HashMap<>();
@@ -153,7 +159,7 @@ public class PlanInfoFeatureExtract extends FeatureExtract {
 						new String[] { s }, null));
 				pl.addErrors(errors);
 			}
-			if (!polyLinesByLayer.isEmpty())
+			if (!polyLinesByLayer.isEmpty()) {
 				if (pl.getBlockByName(s.split("_")[1]) == null) {
 					Block block = new Block();
 					block.setName(s.split("_")[1]);
@@ -178,7 +184,7 @@ public class PlanInfoFeatureExtract extends FeatureExtract {
 					block.getSetBacks().add(setBack);
 
 				}
-
+			}
 		}
 	}
 
@@ -199,7 +205,7 @@ public class PlanInfoFeatureExtract extends FeatureExtract {
 			plot.setPresentInDxf(false);
 			pl.setPlot(plot);
 		} else {
-			plotArea = plotArea.replaceAll(digitsRegex, "");
+			plotArea = plotArea.replaceAll(DIGITS_REGEX, "");
 			BigDecimal numericValue = getNumericValue(plotArea, pl, DxfFileConstants.PLOT_AREA);
 			if (numericValue != null) {
 				pi.setPlotArea(numericValue);
@@ -213,36 +219,34 @@ public class PlanInfoFeatureExtract extends FeatureExtract {
 
 		String noOfSeats = planInfoProperties.get(DxfFileConstants.SEATS_SP_RESI);
 		if (StringUtils.isNotBlank(noOfSeats)) {
-			noOfSeats = noOfSeats.replaceAll("[^\\d.]", "");
+			noOfSeats = noOfSeats.replaceAll(DIGITS_REGEX, "");
 			if (getNumericValue(noOfSeats, pl, DxfFileConstants.SEATS_SP_RESI) != null)
 				pi.setNoOfSeats(getNumericValue(noOfSeats, pl, DxfFileConstants.SEATS_SP_RESI).intValue());
 		}
 
-		String noOfMechanicalParking = planInfoProperties.get(layerNames.getLayerName("LAYER_NAME_MECHANICAL_PARKING"));
+		String noOfMechanicalParking = planInfoProperties.get(layerNames.getLayerName(LAYER_NAME_MECHANICAL_PARKING));
 		if (StringUtils.isNotBlank(noOfMechanicalParking)) {
-			noOfMechanicalParking = noOfMechanicalParking.replaceAll("[^\\d.]", "");
+			noOfMechanicalParking = noOfMechanicalParking.replaceAll(DIGITS_REGEX, "");
 			if (getNumericValue(noOfMechanicalParking, pl,
-					layerNames.getLayerName("LAYER_NAME_MECHANICAL_PARKING")) != null)
+					layerNames.getLayerName(LAYER_NAME_MECHANICAL_PARKING)) != null)
 				pi.setNoOfMechanicalParking(getNumericValue(noOfMechanicalParking, pl,
-						layerNames.getLayerName("LAYER_NAME_MECHANICAL_PARKING")).intValue());
+						layerNames.getLayerName(LAYER_NAME_MECHANICAL_PARKING)).intValue());
 		}
 
 		String demolitionArea = planInfoProperties
-				.get(layerNames.getLayerName("LAYER_NAME_EXISTING_FLOOR_AREA_TO_BE_DEMOLISHED"));
+				.get(layerNames.getLayerName(LAYER_NAME_EXISTING_FLOOR_AREA_TO_BE_DEMOLISHED));
 		if (StringUtils.isNotBlank(demolitionArea)) {
-			demolitionArea = demolitionArea.replaceAll(digitsRegex, "");
+			demolitionArea = demolitionArea.replaceAll(DIGITS_REGEX, "");
 			if (getNumericValue(demolitionArea, pl,
-					layerNames.getLayerName("LAYER_NAME_EXISTING_FLOOR_AREA_TO_BE_DEMOLISHED")) != null)
+					layerNames.getLayerName(LAYER_NAME_EXISTING_FLOOR_AREA_TO_BE_DEMOLISHED)) != null)
 				pi.setDemolitionArea(getNumericValue(demolitionArea, pl,
-						layerNames.getLayerName("LAYER_NAME_EXISTING_FLOOR_AREA_TO_BE_DEMOLISHED")));
+						layerNames.getLayerName(LAYER_NAME_EXISTING_FLOOR_AREA_TO_BE_DEMOLISHED)));
 		}
 
 		String singleFamilyBldg = planInfoProperties.get(DxfFileConstants.SINGLE_FAMILY_BLDG);
-		if (StringUtils.isNotBlank(singleFamilyBldg))
-			if (singleFamilyBldg.equalsIgnoreCase(DcrConstants.YES))
-				pi.setSingleFamilyBuilding(true);
-			else
-				pi.setSingleFamilyBuilding(false);
+		if (StringUtils.isNotBlank(singleFamilyBldg)) {
+			pi.setSingleFamilyBuilding(singleFamilyBldg.equalsIgnoreCase(DcrConstants.YES));
+		}
 
 		String crzZone = planInfoProperties.get(DxfFileConstants.CRZ_ZONE);
 		if (StringUtils.isNotBlank(crzZone)) {
@@ -399,7 +403,7 @@ public class PlanInfoFeatureExtract extends FeatureExtract {
 				 * DxfFileConstants.ACCESS_WIDTH + " is invalid .Text in dxf file is " + s); }
 				 */
 
-				accessWidth = accessWidth.replaceAll(digitsRegex, "");
+				accessWidth = accessWidth.replaceAll(DIGITS_REGEX, "");
 				pi.setAccessWidth(getNumericValue(accessWidth, pl, DxfFileConstants.ACCESS_WIDTH));
 
 			}
@@ -414,7 +418,7 @@ public class PlanInfoFeatureExtract extends FeatureExtract {
 			pi.setAccessWidth(BigDecimal.ZERO);
 
 		String depthCutting = planInfoProperties.get(DxfFileConstants.DEPTH_CUTTING);
-		if (StringUtils.isNotBlank(depthCutting))
+		if (StringUtils.isNotBlank(depthCutting)) {
 			if (depthCutting.equalsIgnoreCase(DcrConstants.YES)) {
 				pi.setDepthCutting(true);
 				//pi.setDepthCuttingDesc(DcrConstants.YES);
@@ -424,9 +428,9 @@ public class PlanInfoFeatureExtract extends FeatureExtract {
 			} else
 				pl.addError(DxfFileConstants.DEPTH_CUTTING,
 						DxfFileConstants.DEPTH_CUTTING + " cannot be accepted , should be either YES/NO.");
-
+		}
 		String governmentAided = planInfoProperties.get(DxfFileConstants.GOVERNMENT_AIDED);
-		if (StringUtils.isNotBlank(governmentAided))
+		if (StringUtils.isNotBlank(governmentAided)) {
 			if (governmentAided.equalsIgnoreCase(DcrConstants.YES))
 				pi.setGovernmentOrAidedSchool(true);
 			else if (governmentAided.equalsIgnoreCase(DcrConstants.NO))
@@ -434,17 +438,17 @@ public class PlanInfoFeatureExtract extends FeatureExtract {
 			else
 				pl.addError(DxfFileConstants.GOVERNMENT_AIDED,
 						DxfFileConstants.GOVERNMENT_AIDED + " cannot be accepted , should be either YES/NO.");
-
+		}
 		String noOfBeds = planInfoProperties.get(DxfFileConstants.NO_OF_BEDS);
 		if (StringUtils.isNotBlank(noOfBeds)) {
-			noOfBeds = noOfBeds.replaceAll(digitsRegex, "");
+			noOfBeds = noOfBeds.replaceAll(DIGITS_REGEX, "");
 			if (getNumericValue(noOfBeds, pl, DxfFileConstants.NO_OF_BEDS.toString()) != null)
 				pi.setNoOfBeds(BigDecimal.valueOf(Integer.valueOf(noOfBeds)));
 		}
 
 		String roadWidth = planInfoProperties.get(DxfFileConstants.ROAD_WIDTH);
 		if (StringUtils.isNotBlank(roadWidth)) {
-			roadWidth = roadWidth.replaceAll(digitsRegex, "");
+			roadWidth = roadWidth.replaceAll(DIGITS_REGEX, "");
 			BigDecimal roadWidthValue = getNumericValue(roadWidth, pl, DxfFileConstants.ROAD_WIDTH);
 			pi.setRoadWidth(roadWidthValue);
 		} else
@@ -453,7 +457,7 @@ public class PlanInfoFeatureExtract extends FeatureExtract {
 
 		String roadLength = planInfoProperties.get(DxfFileConstants.ROAD_LENGTH);
 		if (StringUtils.isNotBlank(roadLength)) {
-			roadLength = roadLength.replaceAll(digitsRegex, "");
+			roadLength = roadLength.replaceAll(DIGITS_REGEX, "");
 			BigDecimal roadLengthValue = getNumericValue(roadLength, pl, DxfFileConstants.ROAD_LENGTH);
 			pi.setRoadLength(roadLengthValue);
 		} /*
@@ -471,7 +475,7 @@ public class PlanInfoFeatureExtract extends FeatureExtract {
 
 		String plotDepth = planInfoProperties.get(DxfFileConstants.AVG_PLOT_DEPTH);
 		if (StringUtils.isNotBlank(plotDepth)) {
-			plotDepth = plotDepth.replaceAll(digitsRegex, "");
+			plotDepth = plotDepth.replaceAll(DIGITS_REGEX, "");
 			BigDecimal plotDepthValue = getNumericValue(plotDepth, pl, DxfFileConstants.AVG_PLOT_DEPTH);
 			pi.setDepthOfPlot(plotDepthValue);
 		} else
@@ -480,7 +484,7 @@ public class PlanInfoFeatureExtract extends FeatureExtract {
 
 		String plotWidth = planInfoProperties.get(DxfFileConstants.AVG_PLOT_WIDTH);
 		if (StringUtils.isNotBlank(plotWidth)) {
-			plotWidth = plotWidth.replaceAll(digitsRegex, "");
+			plotWidth = plotWidth.replaceAll(DIGITS_REGEX, "");
 			BigDecimal plotWidthValue = getNumericValue(plotWidth, pl, DxfFileConstants.AVG_PLOT_WIDTH);
 			pi.setWidthOfPlot(plotWidthValue);
 		} else

@@ -50,6 +50,11 @@ package org.egov.infra.web.taglib;
 
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyTagSupport;
+
+import org.apache.log4j.Logger;
+
+import groovy.util.logging.Log;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -59,6 +64,8 @@ public class ExtraFieldTag extends BodyTagSupport {
 	/**
 	 * 
 	 */
+    private static final Logger LOGGER = Logger.getLogger(ExtraFieldTag.class);
+
 	private static final long serialVersionUID = 1L;
 	private Map extraFieldMap = null;
 
@@ -99,7 +106,7 @@ public class ExtraFieldTag extends BodyTagSupport {
 			out.print(extString);
 		} catch (final Exception ioe) {
 			
-
+            LOGGER.error("Exception in doEndTag.");
 		}
 
 		return EVAL_PAGE;

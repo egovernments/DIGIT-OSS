@@ -971,9 +971,7 @@ public class BudgetProposalAction extends GenericWorkFlowAction {
             asstFMU = true;
             final BudgetDetail approvedBd = (BudgetDetail) persistenceService
                     .find(" from  BudgetDetail where budget=? and approvedAmount>0 ", topBudget);
-            if (approvedBd != null) {
-            } else {
-            }
+            
         } else if (empAssignment.getDesignation().getName().equalsIgnoreCase("CHIEF ACCOUNTS OFFICER"))
             asstFMU = true;
 

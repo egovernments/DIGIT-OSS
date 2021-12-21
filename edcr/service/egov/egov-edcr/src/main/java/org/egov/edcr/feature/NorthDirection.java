@@ -47,24 +47,24 @@
 
 package org.egov.edcr.feature;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
 import org.egov.common.entity.edcr.ScrutinyDetail;
-import org.egov.infra.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
 public class NorthDirection extends FeatureProcess {
 
-	private static final Logger LOG = Logger.getLogger(NorthDirection.class);
 	private static final String RULE_5_4_I_I = "5-4-i-i";
-	public static final String NORTH_DIRECTION_DESCRIPTION = "North Direction";
+	private static final String NORTH_DIRECTION_DESCRIPTION = "North Direction";
 
 	@Override
 	public Plan validate(Plan pl) {
@@ -90,14 +90,14 @@ public class NorthDirection extends FeatureProcess {
 			errors.put("NORTH_DIRECTION", "NORTH_DIRECTION layer is not provided");
 			pl.addErrors(errors);
 		} else if (pl.getDrawingPreference().getNorthDirection().getDirections() != null && !pl.getDrawingPreference().getNorthDirection().getDirections().isEmpty()
-				&& StringUtils.isNotBlank(pl.getDrawingPreference().getNorthDirection().getDirection())
+				&& isNotBlank(pl.getDrawingPreference().getNorthDirection().getDirection())
 				&& pl.getDrawingPreference().getNorthDirection().getDirection().contains("N")) {
 			details.put(PROVIDED, "North directions provided");
 			details.put(STATUS, Result.Accepted.getResultVal());
 			scrutinyDetail.getDetail().add(details);
 			pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
 		} else {
-			if (StringUtils.isBlank(pl.getDrawingPreference().getNorthDirection().getDirection())
+			if (isBlank(pl.getDrawingPreference().getNorthDirection().getDirection())
 					|| !pl.getDrawingPreference().getNorthDirection().getDirection().contains("N"))
 				details.put(PROVIDED, "Mtext in NORTH_DIRECTION layer does not contains 'N' character");
 			else

@@ -53,13 +53,12 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
-import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
 import org.egov.common.entity.edcr.ScrutinyDetail;
-import org.egov.infra.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -80,7 +79,7 @@ public class SepticTank extends FeatureProcess {
 
 	@Override
 	public Plan process(Plan pl) {
-
+		LOG.info("Processing Septic Tank");
 		ScrutinyDetail scrutinyDetail = new ScrutinyDetail();
 		scrutinyDetail.setKey("Common_Septic Tank ");
 		scrutinyDetail.addColumnHeading(1, RULE_NO);
@@ -95,23 +94,27 @@ public class SepticTank extends FeatureProcess {
 			boolean validBuildingDistance = false;
 
 			if (!septicTank.getDistanceFromWaterSource().isEmpty()) {
-				BigDecimal minDistWaterSrc = septicTank.getDistanceFromWaterSource().stream().reduce(BigDecimal::min)
-						.get();
+				Optional<BigDecimal> distances = septicTank.getDistanceFromWaterSource().stream().reduce(BigDecimal::min);
+				BigDecimal minDistWaterSrc = BigDecimal.ZERO;
+				if(distances.isPresent())
+					minDistWaterSrc = distances.get();
 				if (minDistWaterSrc != null && minDistWaterSrc.compareTo(MIN_DIS_WATERSRC) >= 0) {
 					validWaterSrcDistance = true;
 				}
 				buildResult(pl, scrutinyDetail, validWaterSrcDistance, DISTANCE_FROM_WATERSOURCE, ">= 18",
-						minDistWaterSrc.toString());
+						String.valueOf(minDistWaterSrc));
 			}
 
 			if (!septicTank.getDistanceFromBuilding().isEmpty()) {
-				BigDecimal minDistBuilding = septicTank.getDistanceFromBuilding().stream().reduce(BigDecimal::min)
-						.get();
+				Optional<BigDecimal> minDistsBuilding = septicTank.getDistanceFromBuilding().stream().reduce(BigDecimal::min);
+				BigDecimal minDistBuilding = BigDecimal.ZERO;
+				if(minDistsBuilding.isPresent())
+					minDistBuilding = minDistsBuilding.get();
 				if (minDistBuilding != null && minDistBuilding.compareTo(MIN_DIS_BUILDING) >= 0) {
 					validBuildingDistance = true;
 				}
 				buildResult(pl, scrutinyDetail, validBuildingDistance, DISTANCE_FROM_BUILDING, ">= 6",
-						minDistBuilding.toString());
+						String.valueOf(minDistBuilding));
 			}
 		}
 

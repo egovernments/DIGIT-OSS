@@ -50,7 +50,6 @@ package org.egov.edcr.security.oauth2.config;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
@@ -101,34 +100,32 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     }
 
     private void configurePatterns(HttpSecurity http) {
-
-        getSecuredResourceFromResource().getResources().forEach(record -> {
-            try {
-                ExpressionUrlAuthorizationConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = http.authorizeRequests()
-                        .antMatchers(record.getUrl());
-                if (StringUtils.isNotEmpty(record.getRoles()))
-                    authorizedUrl.access(record.getRoles());
-                else
-                    authorizedUrl.authenticated();
-            } catch (Exception e) {
-                LOGGER.error("Exception occured while configuring: ", e);
-            }
-        });
+    	SecuredResource securedResource= getSecuredResourceFromResource();
+		if (securedResource != null) {
+			securedResource.getResources().forEach(resource -> {
+				try {
+					ExpressionUrlAuthorizationConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = http
+							.authorizeRequests().antMatchers(resource.getUrl());
+					if (StringUtils.isNotEmpty(resource.getRoles()))
+						authorizedUrl.access(resource.getRoles());
+					else
+						authorizedUrl.authenticated();
+				} catch (Exception e) {
+					LOGGER.error("Exception occured while configuring: ", e);
+				}
+			});
+		}
     }
 
     private SecuredResource getSecuredResourceFromResource() {
         final ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
         mapper.configure(SerializationConfig.Feature.AUTO_DETECT_FIELDS, true);
-        InputStream inputStream = null;
-        try {
-        	inputStream = getResourcesConfig().getInputStream();
+        try (InputStream inputStream = getResourcesConfig().getInputStream()) {
             return mapper.readValue(inputStream,
                     SecuredResource.class);
         } catch (IOException e) {
             LOGGER.error("Exception occured while reading data: ", e);
-        } finally {
-			IOUtils.closeQuietly(inputStream);
         }
         return null;
     }

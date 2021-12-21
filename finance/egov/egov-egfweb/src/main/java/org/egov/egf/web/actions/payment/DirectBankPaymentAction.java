@@ -245,6 +245,7 @@ public class DirectBankPaymentAction extends BasePaymentAction {
                 date = df.parse(cutOffDateconfigValue.get(0).getValue());
                 cutOffDate = formatter.format(date);
             } catch (final ParseException e) {
+            	LOGGER.error("Parse exception");
 
             }
         voucherHeader.reset();
@@ -316,7 +317,7 @@ public class DirectBankPaymentAction extends BasePaymentAction {
                         date = sdf.parse(cutOffDate);
                         cutOffDate1 = formatter1.format(date);
                     } catch (final ParseException e) {
-
+                    	LOGGER.error("Parse exception");
                     }
                 if (cutOffDate1 != null && voucherDate.compareTo(cutOffDate1) <= 0
                         && FinancialConstants.CREATEANDAPPROVE.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {

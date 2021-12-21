@@ -98,16 +98,13 @@ public class RainWaterHarvesting extends FeatureProcess {
                 ? pl.getVirtualBuilding().getMostRestrictiveFarHelper()
                 : null;
 
-        if (mostRestrictiveFarHelper != null && mostRestrictiveFarHelper.getType() != null) {
-            if (DxfFileConstants.A.equalsIgnoreCase(mostRestrictiveFarHelper.getType().getCode()) &&
-                    plotArea.compareTo(HUNDRED) >= 0) {
-                addOutput(pl, errors, subRule, subRuleDesc);
-            } else if (DxfFileConstants.F.equalsIgnoreCase(mostRestrictiveFarHelper.getType().getCode())) {
-                addOutput(pl, errors, subRule, subRuleDesc);
-            } else if (DxfFileConstants.G.equalsIgnoreCase(mostRestrictiveFarHelper.getType().getCode())) {
-                addOutput(pl, errors, subRule, subRuleDesc);
-            }    
-        }
+		if (mostRestrictiveFarHelper != null && mostRestrictiveFarHelper.getType() != null
+				&& ((DxfFileConstants.A.equalsIgnoreCase(mostRestrictiveFarHelper.getType().getCode())
+						&& plotArea.compareTo(HUNDRED) >= 0)
+				|| DxfFileConstants.F.equalsIgnoreCase(mostRestrictiveFarHelper.getType().getCode())
+				|| DxfFileConstants.G.equalsIgnoreCase(mostRestrictiveFarHelper.getType().getCode()))) {
+			addOutput(pl, errors, subRule, subRuleDesc);
+		}  
 
         /*
          * if (plotArea.compareTo(HUNDRED) >= 0) { validateRWH(pl, errors); if (pl.getUtility() != null &&

@@ -75,9 +75,9 @@ public class Solar extends FeatureProcess {
     @Override
     public Plan validate(Plan pl) {
         HashMap<String, String> errors = new HashMap<>();
-        if (pl != null && pl.getUtility() != null) {
             // solar water heating defined or not
-            if (pl.getVirtualBuilding() != null && !pl.getVirtualBuilding().getOccupancies().isEmpty()) {
+			if (pl != null && pl.getUtility() != null && pl.getVirtualBuilding() != null
+					&& !pl.getVirtualBuilding().getOccupancies().isEmpty()) {
                 for (OccupancyType occupancyType : pl.getVirtualBuilding().getOccupancies()) {
                     if (occupancyType.equals(OccupancyType.OCCUPANCY_A1)
                             && pl.getVirtualBuilding().getTotalBuitUpArea() != null
@@ -106,8 +106,6 @@ public class Solar extends FeatureProcess {
                     }
                 }
             }
-        }
-
         return pl;
     }
 
@@ -130,7 +128,6 @@ public class Solar extends FeatureProcess {
                         && pl.getVirtualBuilding().getTotalBuitUpArea() != null
                         && pl.getVirtualBuilding().getTotalBuitUpArea().compareTo(FOURHUNDRED) > 0) {
                     processSolar(pl, rule, subRule, subRuleDesc);
-                    break;
                 } else if ((occupancyType.equals(OccupancyType.OCCUPANCY_A4) || occupancyType.equals(OccupancyType.OCCUPANCY_A2)
                         ||
                         occupancyType.equals(OccupancyType.OCCUPANCY_A3) || occupancyType.equals(OccupancyType.OCCUPANCY_C) ||
@@ -140,7 +137,6 @@ public class Solar extends FeatureProcess {
                         && pl.getVirtualBuilding().getTotalBuitUpArea() != null
                         && pl.getVirtualBuilding().getTotalBuitUpArea().compareTo(BigDecimal.valueOf(500)) > 0) {
                     processSolar(pl, rule, subRule, subRuleDesc);
-                    break;
                 }
             }
         }
@@ -151,11 +147,9 @@ public class Solar extends FeatureProcess {
         if (!pl.getUtility().getSolar().isEmpty()) {
             setReportOutputDetailsWithoutOccupancy(pl, subRule, subRuleDesc, "", OBJECTDEFINED_DESC,
                     Result.Accepted.getResultVal());
-            return;
         } else {
             setReportOutputDetailsWithoutOccupancy(pl, subRule, subRuleDesc, "", OBJECTNOTDEFINED_DESC,
                     Result.Not_Accepted.getResultVal());
-            return;
         }
     }
 

@@ -89,7 +89,7 @@ public class Parking extends FeatureProcess {
 
     private static final String OUT_OF = "Out of ";
     private static final String SLOT_HAVING_GT_4_PTS = " number of polygon not having only 4 points.";
-    private static final String LOADING_UNLOADING_DESC = "Minimum required Loading/Unloading area";
+    //private static final String LOADING_UNLOADING_DESC = "Minimum required Loading/Unloading area";
     private static final String MINIMUM_AREA_OF_EACH_DA_PARKING = " Minimum width of Each Special parking";
     private static final String SP_PARKING_SLOT_AREA = "Special Parking Area";
     private static final String NO_VIOLATION_OF_AREA = "No violation of area in ";
@@ -98,7 +98,7 @@ public class Parking extends FeatureProcess {
     private static final String PARKING = " parking ";
     private static final String NUMBERS = " Numbers ";
     private static final String MECHANICAL_PARKING = "Mechanical parking";
-    private static final String MAX_ALLOWED_MECH_PARK = "Maximum allowed mechanical parking";
+    //private static final String MAX_ALLOWED_MECH_PARK = "Maximum allowed mechanical parking";
     private static final String TWO_WHEELER_PARK_AREA = "Two Wheeler Parking Area";
     private static final String LOADING_UNLOADING_AREA = "Loading Unloading Area";
     private static final String SP_PARKING = "Special parking";
@@ -111,7 +111,7 @@ public class Parking extends FeatureProcess {
     private static final double PARKING_SLOT_HEIGHT = 5;
     private static final double SP_PARK_SLOT_MIN_SIDE = 3.6;
     private static final String DA_PARKING_MIN_AREA = " 3.60 M ";
-    public static final String NO_OF_UNITS = "No of apartment units";
+    //private static final String NO_OF_UNITS = "No of apartment units";
     private static final double TWO_WHEEL_PARKING_AREA_WIDTH = 1.5;
     private static final double TWO_WHEEL_PARKING_AREA_HEIGHT = 2.0;
     private static final double MECH_PARKING_WIDTH = 2.7;
@@ -128,15 +128,15 @@ public class Parking extends FeatureProcess {
     private static final String SUB_RULE_40_2_DESCRIPTION = "Parking space";
     private static final String SUB_RULE_40_10 = "40-10";
     private static final String SUB_RULE_40_10_DESCRIPTION = "Visitor’s Parking";
-    public static final String OPEN_PARKING_DIM_DESC = "Open parking ECS dimension ";
-    public static final String COVER_PARKING_DIM_DESC = "Cover parking ECS dimension ";
-    public static final String BSMNT_PARKING_DIM_DESC = "Basement parking ECS dimension ";
-    public static final String VISITOR_PARKING = "Visitor parking";
-    public static final String SPECIAL_PARKING_DIM_DESC = "Special parking ECS dimension ";
-    public static final String TWO_WHEELER_DIM_DESC = "Two wheeler parking dimension ";
-    public static final String MECH_PARKING_DESC = "Mechanical parking dimension ";
-    public static final String MECH_PARKING_DIM_DESC = "All Mechanical parking polylines should have dimension 2.7*5.5 m²";
-    public static final String MECH_PARKING_DIM_DESC_NA = " mechanical parking polyines does not have dimensions 2.7*5.5 m²";
+    private static final String OPEN_PARKING_DIM_DESC = "Open parking ECS dimension ";
+    private static final String COVER_PARKING_DIM_DESC = "Cover parking ECS dimension ";
+    private static final String BSMNT_PARKING_DIM_DESC = "Basement parking ECS dimension ";
+    //private static final String VISITOR_PARKING = "Visitor parking";
+    private static final String SPECIAL_PARKING_DIM_DESC = "Special parking ECS dimension ";
+    private static final String TWO_WHEELER_DIM_DESC = "Two wheeler parking dimension ";
+    private static final String MECH_PARKING_DESC = "Mechanical parking dimension ";
+    private static final String MECH_PARKING_DIM_DESC = "All Mechanical parking polylines should have dimension 2.7*5.5 m²";
+    private static final String MECH_PARKING_DIM_DESC_NA = " mechanical parking polyines does not have dimensions 2.7*5.5 m²";
     
     private static final String PARKING_VIOLATED_DIM = " parking violated dimension.";
     private static final String PARKING_AREA_DIM = "1.5 M x 2 M";
@@ -385,18 +385,18 @@ public class Parking extends FeatureProcess {
                 maxHeightOfBuilding = block.getBuilding().getBuildingHeight();
             }
         }
-        if (maxHeightOfBuilding.compareTo(new BigDecimal(15)) >= 0
-                || (pl.getPlot() != null && pl.getPlot().getArea().compareTo(new BigDecimal(500)) > 0)) {
+        if (maxHeightOfBuilding.compareTo(BigDecimal.valueOf(15)) >= 0
+                || (pl.getPlot() != null && pl.getPlot().getArea().compareTo(BigDecimal.valueOf(500)) > 0)) {
             if (pl.getParkingDetails().getValidSpecialSlots() == 0) {
                 pl.addError(SUB_RULE_40_11, getLocaleMessage(DcrConstants.OBJECTNOTDEFINED, SP_PARKING));
             } else {
                 for (Measurement m : pl.getParkingDetails().getSpecial()) {
-                    if (m.getMinimumSide().compareTo(new BigDecimal(0)) > 0
-                            && m.getMinimumSide().compareTo(new BigDecimal(3.6)) >= 0) {
+                    if (m.getMinimumSide().compareTo(BigDecimal.valueOf(0)) > 0
+                            && m.getMinimumSide().compareTo(BigDecimal.valueOf(3.6)) >= 0) {
                         setReportOutputDetails(pl, SUB_RULE_40_11, SP_PARKING, 1 + NUMBERS,
                                 pl.getParkingDetails().getValidSpecialSlots() + NUMBERS,
                                 Result.Accepted.getResultVal());
-                    } else if (m.getMinimumSide().compareTo(new BigDecimal(0)) > 0) {
+                    } else if (m.getMinimumSide().compareTo(BigDecimal.valueOf(0)) > 0) {
                         setReportOutputDetails(pl, SUB_RULE_40_11, SP_PARKING, 1 + NUMBERS,
                                 pl.getParkingDetails().getValidSpecialSlots() + NUMBERS,
                                 Result.Not_Accepted.getResultVal());
@@ -511,7 +511,7 @@ public class Parking extends FeatureProcess {
                 failedCount++;
         }
         pl.getParkingDetails().setValidCarParkingSlots(parkingCount - failedCount);
-        if (parkingCount > 0)
+        if (parkingCount > 0) {
             if (failedCount > 0) {
                 if (helper.totalRequiredCarParking.intValue() == pl.getParkingDetails().getValidCarParkingSlots()) {
                     setReportOutputDetails(pl, SUB_RULE_40, SUB_RULE_34_1_DESCRIPTION,
@@ -529,6 +529,7 @@ public class Parking extends FeatureProcess {
                         PARKING_MIN_AREA + MIN_AREA_EACH_CAR_PARKING, NO_VIOLATION_OF_AREA + parkingCount + PARKING,
                         Result.Accepted.getResultVal());
             }
+        }
         int openParkCount = pl.getParkingDetails().getOpenCars().size();
         int openFailedCount = 0;
         int openSuccess = 0;
@@ -540,7 +541,7 @@ public class Parking extends FeatureProcess {
                 openFailedCount++;
         }
         pl.getParkingDetails().setValidOpenCarSlots(openParkCount - openFailedCount);
-        if (openParkCount > 0)
+        if (openParkCount > 0) {
             if (openFailedCount > 0) {
                 if (helper.totalRequiredCarParking.intValue() == pl.getParkingDetails().getValidOpenCarSlots()) {
                     setReportOutputDetails(pl, SUB_RULE_40, OPEN_PARKING_DIM_DESC,
@@ -558,7 +559,7 @@ public class Parking extends FeatureProcess {
                         PARKING_MIN_AREA + MIN_AREA_EACH_CAR_PARKING, NO_VIOLATION_OF_AREA + openParkCount + PARKING,
                         Result.Accepted.getResultVal());
             }
-
+        }
         int coverParkCount = pl.getParkingDetails().getCoverCars().size();
         int coverFailedCount = 0;
         int coverSuccess = 0;
@@ -570,7 +571,7 @@ public class Parking extends FeatureProcess {
                 coverFailedCount++;
         }
         pl.getParkingDetails().setValidCoverCarSlots(coverParkCount - coverFailedCount);
-        if (coverParkCount > 0)
+        if (coverParkCount > 0) {
             if (coverFailedCount > 0) {
                 if (helper.totalRequiredCarParking.intValue() == pl.getParkingDetails().getValidCoverCarSlots()) {
                     setReportOutputDetails(pl, SUB_RULE_40, COVER_PARKING_DIM_DESC,
@@ -588,6 +589,7 @@ public class Parking extends FeatureProcess {
                         PARKING_MIN_AREA + MIN_AREA_EACH_CAR_PARKING, NO_VIOLATION_OF_AREA + coverParkCount + PARKING,
                         Result.Accepted.getResultVal());
             }
+        }
 
         // Validate dimension of basement
         int bsmntParkCount = pl.getParkingDetails().getBasementCars().size();
@@ -601,7 +603,7 @@ public class Parking extends FeatureProcess {
                 bsmntFailedCount++;
         }
         pl.getParkingDetails().setValidBasementCarSlots(bsmntParkCount - bsmntFailedCount);
-        if (bsmntParkCount > 0)
+        if (bsmntParkCount > 0) {
             if (bsmntFailedCount > 0) {
                 if (helper.totalRequiredCarParking.intValue() == pl.getParkingDetails().getValidBasementCarSlots()) {
                     setReportOutputDetails(pl, SUB_RULE_40, BSMNT_PARKING_DIM_DESC,
@@ -619,6 +621,7 @@ public class Parking extends FeatureProcess {
                         PARKING_MIN_AREA + MIN_AREA_EACH_CAR_PARKING, NO_VIOLATION_OF_AREA + bsmntParkCount + PARKING,
                         Result.Accepted.getResultVal());
             }
+        }
 
     }
 
@@ -634,7 +637,7 @@ public class Parking extends FeatureProcess {
                 specialFailedCount++;
         }
         pl.getParkingDetails().setValidSpecialSlots(specialParkCount - specialFailedCount);
-        if (specialParkCount > 0)
+        if (specialParkCount > 0) {
             if (specialFailedCount > 0) {
                 if (helper.daParking.intValue() == pl.getParkingDetails().getValidSpecialSlots()) {
                     setReportOutputDetails(pl, SUB_RULE_40_8, SP_PARKING_SLOT_AREA,
@@ -652,6 +655,7 @@ public class Parking extends FeatureProcess {
                         DA_PARKING_MIN_AREA + MINIMUM_AREA_OF_EACH_DA_PARKING,
                         NO_VIOLATION_OF_AREA + specialParkCount + PARKING, Result.Accepted.getResultVal());
             }
+        }
     }
     
     private void checkDimensionForTwoWheelerParking(Plan pl, ParkingHelper helper) {

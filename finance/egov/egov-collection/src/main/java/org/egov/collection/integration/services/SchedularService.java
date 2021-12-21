@@ -261,7 +261,7 @@ public class SchedularService {
                     modulo);
 
             LOGGER.debug("Thread ID = " + Thread.currentThread().getId() + ": got " + reconcileList.size() + " results.");
-            if (reconcileList != null && !reconcileList.isEmpty()) {
+            if (!reconcileList.isEmpty()) {
                 for (final OnlinePayment onlinePaymentObj : reconcileList) {
                     LOGGER.info("SBIMOPS Receiptid::::" + onlinePaymentObj.getReceiptHeader().getId());
                     PaymentResponse paymentResponse = sbimopsAdaptor.createOfflinePaymentRequest(onlinePaymentObj);

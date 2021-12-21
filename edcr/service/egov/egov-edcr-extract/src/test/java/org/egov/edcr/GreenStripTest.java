@@ -1,9 +1,10 @@
 package org.egov.edcr;
 
+import java.io.IOException;
+
 import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Measurement;
-import org.egov.edcr.feature.FarExtract;
 import org.egov.edcr.feature.PlantationGreenStripExtract;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +19,7 @@ public class GreenStripTest extends BaseTest {
     PlantationGreenStripExtract feature = new PlantationGreenStripExtract();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws IOException {
         dxfFile = "medium_mumty.dxf";
         super.setUp();
     }
@@ -31,10 +32,10 @@ public class GreenStripTest extends BaseTest {
         for (Block b : pl.getBlocks()) {
 
             Measurement measurement = b.getPlantationGreenStripes().get(0);
-            System.out.println(measurement.getMinimumSide());
-            System.out.println(measurement.getLength());
-            System.out.println(measurement.getWidth());
-            System.out.println(measurement.getHeight());
+            LOG.info(measurement.getMinimumSide());
+            LOG.info(measurement.getLength());
+            LOG.info(measurement.getWidth());
+            LOG.info(measurement.getHeight());
         }
 
     }

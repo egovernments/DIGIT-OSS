@@ -1,8 +1,8 @@
 package org.egov.edcr.feature;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.service.LayerNames;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class StairCoverExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(StairCoverExtract.class);
     @Autowired
     private LayerNames layerNames;
 
@@ -23,13 +22,15 @@ public class StairCoverExtract extends FeatureExtract {
 
     @Override
     public PlanDetail extract(PlanDetail planDetail) {
-        BigDecimal minHeight, increasedHeight;
+        BigDecimal minHeight;
+        BigDecimal increasedHeight;
         for (Block block : planDetail.getBlocks()) {
             block.setStairCovers(Util.getListOfDimensionValueByLayer(planDetail,
                     String.format(layerNames.getLayerName("LAYER_NAME_STAIR_COVER"), block.getNumber())));
 
             if (block.getStairCovers() != null && !block.getStairCovers().isEmpty()) {
-                minHeight = block.getStairCovers().stream().reduce(BigDecimal::min).get();
+                Optional<BigDecimal> stairMinHght = block.getStairCovers().stream().reduce(BigDecimal::min);
+				minHeight = stairMinHght.isPresent() ? stairMinHght.get() : BigDecimal.ZERO;
                 if (minHeight.compareTo(new BigDecimal(3)) > 0) {
                     increasedHeight = block.getBuilding().getBuildingHeight()
                             .subtract(block.getBuilding().getDeclaredBuildingHeight());

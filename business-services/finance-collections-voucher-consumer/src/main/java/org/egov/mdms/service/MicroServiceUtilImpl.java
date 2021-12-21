@@ -149,8 +149,6 @@ public class MicroServiceUtilImpl implements MicroServiceUtil{
         try {
        		Map postForObject = mapper.convertValue(serviceRequestRepository.fetchResult(mdmsUrl, mdmsrequest, tenantId), Map.class);
        		finSerMdms.setFinanceServiceMdmsData(postForObject);
-        } catch (ServiceCallException e) {
-			
         } catch (Exception e) {
         	throw new VoucherCustomException(ProcessStatus.FAILED,"Error Occured While calling the URL : "+mdmsUrl);
 		}

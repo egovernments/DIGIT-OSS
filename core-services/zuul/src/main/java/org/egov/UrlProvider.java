@@ -35,7 +35,7 @@ public class UrlProvider {
     private String preHookUrls;
 
 
-    private Map<String, String> getUrlToUrlMapping(String config) {
+    private static Map<String, String> getUrlToUrlMapping(String config) {
         String[] urlArray;
         Map<String, String> map = new HashMap<>();
         if (StringUtils.isEmpty(config))
@@ -72,7 +72,7 @@ public class UrlProvider {
     }
 
     @PostConstruct
-    public void loadUrls() {
+    public static void loadUrls() {
         urlPostHooksMap = getUrlToUrlMapping(postHookUrls);
         urlPreHooksMap = getUrlToUrlMapping(preHookUrls);
 

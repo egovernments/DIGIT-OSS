@@ -4,7 +4,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,12 +20,18 @@ import org.egov.edcr.service.LayerNames;
 import org.egov.edcr.utility.Util;
 import org.kabeja.dxf.DXFLWPolyline;
 import org.kabeja.dxf.DXFLine;
+import org.kabeja.dxf.DXFPolyline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class VehicleRampExtract extends FeatureExtract {
-    @Autowired
+    private static final String VEHICLE_RAMP = "_VEHICLE_RAMP";
+	private static final String FLR = "_FLR_";
+	private static final String BLK = "BLK_";
+	private static final String REPLACE_TEXT = "[^\\d.]";
+	private static final String MATCH_NO = "_+\\d";
+	@Autowired
     private LayerNames layerNames;
 
     @Override
@@ -35,23 +40,27 @@ public class VehicleRampExtract extends FeatureExtract {
             for (Block block : pl.getBlocks())
                 if (block.getBuilding() != null && !block.getBuilding().getFloors().isEmpty())
                     outside: for (Floor floor : block.getBuilding().getFloors()) {
-                        if (!block.getTypicalFloor().isEmpty())
-                            for (TypicalFloor tp : block.getTypicalFloor())
-                                if (tp.getRepetitiveFloorNos().contains(floor.getNumber()))
-                                    for (Floor allFloors : block.getBuilding().getFloors())
-                                        if (allFloors.getNumber().equals(tp.getModelFloorNo()))
-                                            if (!allFloors.getVehicleRamps().isEmpty()) {
-                                                floor.setVehicleRamps(allFloors.getVehicleRamps());
-                                                continue outside;
-                                            }
+                        if (!block.getTypicalFloor().isEmpty()) {
+                            for (TypicalFloor tp : block.getTypicalFloor()) {
+                                if (tp.getRepetitiveFloorNos().contains(floor.getNumber())) {
+                                    for (Floor allFloors : block.getBuilding().getFloors()) {
+										if (allFloors.getNumber().equals(tp.getModelFloorNo())
+												&& !allFloors.getVehicleRamps().isEmpty()) {
+											floor.setVehicleRamps(allFloors.getVehicleRamps());
+											continue outside;
+										}
+                                    }
+                                }
+                            }
+                        }
 
                         String vehicleRampRegex = String.format(layerNames.getLayerName("LAYER_NAME_VEHICLE_RAMP"),
-                                block.getNumber(), floor.getNumber()) + "_+\\d";
+                                block.getNumber(), floor.getNumber()) + MATCH_NO;
                        
-                        String vehicleRampFlightRegex = "BLK_" + block.getNumber() + "_FLR_" + floor.getNumber() + "_VEHICLE_RAMP"
-                                + "_+\\d" + "_FLIGHT" + "_+\\d";
+                        String vehicleRampFlightRegex = BLK + block.getNumber() + FLR + floor.getNumber() + VEHICLE_RAMP
+                                + MATCH_NO + "_FLIGHT" + MATCH_NO;
                         
-                        String vehicleRampWidthRegex = "BLK_" + block.getNumber() + "_FLR_" + floor.getNumber() + "_VEHICLE_RAMP";
+                        String vehicleRampWidthRegex = BLK + block.getNumber() + FLR + floor.getNumber() + VEHICLE_RAMP;
                         
                         List<String> vehicleRampLayer = Util.getLayerNamesLike(pl.getDoc(), vehicleRampRegex);
                         
@@ -79,7 +88,8 @@ public class VehicleRampExtract extends FeatureExtract {
 		    if (splitLayer[5] != null && !splitLayer[5].isEmpty() && !polylines.isEmpty()) {
 		        Flight flight= new Flight();
 		        
-		        String rampNo = "1",flightNo= "1";
+		        String rampNo = "1";
+		        String flightNo= "1";
 		        if (layerLength == 9){
 		            rampNo = splitLayer[6];
 		            flightNo=splitLayer[8];
@@ -96,7 +106,7 @@ public class VehicleRampExtract extends FeatureExtract {
 		            vehicleRamp.setNumber(Integer.valueOf(rampNo));
 		       	 
 		   	     List<BigDecimal> dimensions = Util.getListOfDimensionValueByLayer(pl, vehicleRampWidthRegex+"_"+rampNo+"_WIDTH");
-		   	     if (!dimensions.isEmpty() && dimensions.size()>=1){  
+		   	     if (!dimensions.isEmpty()){  
 		   	    	 vehicleRamp.setWidth(dimensions.get(0));
 		   	    	 flight.setWidthOfFlights(dimensions);
 		   	     }
@@ -104,7 +114,7 @@ public class VehicleRampExtract extends FeatureExtract {
 		        }
 		
 		        boolean isClosed = polylines.stream()
-		                .allMatch(dxflwPolyline -> dxflwPolyline.isClosed());
+		                .allMatch(DXFPolyline::isClosed);
 		        flight.setFlightClosed(isClosed);
 		        
 		        for (DXFLWPolyline rampPline : polylines) {
@@ -128,7 +138,7 @@ public class VehicleRampExtract extends FeatureExtract {
 		    	
 		       for(DXFLine lines: fireStairLines)
 		       {
-		    	  // System.out.println(" Line lengths ((((((((((((( " + lines.getLength());
+		    	  // LOG.info(" Line lengths ((((((((((((( " + lines.getLength());
 		    	   //flight.setLengthOfFlights(lines.getLength());
 		    	   flight.setLength(BigDecimal.valueOf(lines.getLength()));
 		       }
@@ -139,9 +149,9 @@ public class VehicleRampExtract extends FeatureExtract {
 				if (!isBlank(rampHeight)) {
 					if (rampHeight.contains("="))
 						rampHeight = rampHeight.split("=")[1] != null
-								? rampHeight.split("=")[1].replaceAll("[^\\d.]", "") : "";
+								? rampHeight.split("=")[1].replaceAll(REPLACE_TEXT, "") : "";
 					else
-						rampHeight = rampHeight.replaceAll("[^\\d.]", "");
+						rampHeight = rampHeight.replaceAll(REPLACE_TEXT, "");
 
 					if (!isBlank(rampHeight)) {
 						BigDecimal height = BigDecimal.valueOf(Double.parseDouble(rampHeight));
@@ -173,7 +183,7 @@ public class VehicleRampExtract extends FeatureExtract {
 		        if (NumberUtils.isDigits(rampNo))
 		            vehicleRamp.setNumber(Integer.valueOf(rampNo));
 		        boolean isClosed = polylines.stream()
-		                .allMatch(dxflwPolyline -> dxflwPolyline.isClosed());
+		                .allMatch(DXFPolyline::isClosed);
 		        vehicleRamp.setRampClosed(isClosed);
 		        List<Measurement> vehicleRampPolyLine = polylines.stream()
 		                .map(dxflwPolyline -> new MeasurementDetail(dxflwPolyline, true))
@@ -186,10 +196,10 @@ public class VehicleRampExtract extends FeatureExtract {
 		        if (!isBlank(floorHeight)) {
 		            if (floorHeight.contains("="))
 		                floorHeight = floorHeight.split("=")[1] != null
-		                        ? floorHeight.split("=")[1].replaceAll("[^\\d.]", "")
+		                        ? floorHeight.split("=")[1].replaceAll(REPLACE_TEXT, "")
 		                        : "";
 		            else
-		                floorHeight = floorHeight.replaceAll("[^\\d.]", "");
+		                floorHeight = floorHeight.replaceAll(REPLACE_TEXT, "");
 
 		            if (!isBlank(floorHeight)) {
 		                BigDecimal height = BigDecimal.valueOf(Double.parseDouble(floorHeight));
@@ -211,8 +221,8 @@ public class VehicleRampExtract extends FeatureExtract {
 				String[] slopeDividendAndDivisor = slopeText.toUpperCase().split("IN", 2);
 				if (slopeDividendAndDivisor != null && slopeDividendAndDivisor.length == 2
 						&& slopeDividendAndDivisor[0] != null && slopeDividendAndDivisor[1] != null) {
-					slopeDividendAndDivisor[0] = slopeDividendAndDivisor[0].replaceAll("[^\\d.]", "");
-					slopeDividendAndDivisor[1] = slopeDividendAndDivisor[1].replaceAll("[^\\d.]", "");
+					slopeDividendAndDivisor[0] = slopeDividendAndDivisor[0].replaceAll(REPLACE_TEXT, "");
+					slopeDividendAndDivisor[1] = slopeDividendAndDivisor[1].replaceAll(REPLACE_TEXT, "");
 					slope = BigDecimal.valueOf(Double.valueOf(slopeDividendAndDivisor[0])).divide(
 							BigDecimal.valueOf(Double.valueOf(slopeDividendAndDivisor[1])), 2, RoundingMode.HALF_UP);
 				}

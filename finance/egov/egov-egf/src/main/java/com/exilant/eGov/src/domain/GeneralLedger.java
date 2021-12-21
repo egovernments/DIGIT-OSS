@@ -154,8 +154,7 @@ public class GeneralLedger {
         } catch (final ParseException e) {
             LOGGER.error(e.getMessage(), e);
             throw taskExc;
-        } finally {
-        }
+        } 
 
     }
 
@@ -321,6 +320,7 @@ public class GeneralLedger {
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("hmCopy------>" + hmFinal);
         } finally {
+        	LOGGER.info("hmCopy------>" + hmFinal);
         }
         return hmFinal;
     }
@@ -412,6 +412,7 @@ public class GeneralLedger {
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("hmCopy------>" + hmFinal);
         } finally {
+        	LOGGER.debug("hmCopy------>" + hmFinal);
         }
         return hmFinal;
     }

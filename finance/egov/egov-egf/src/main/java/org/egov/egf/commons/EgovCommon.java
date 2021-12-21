@@ -504,7 +504,7 @@ public class EgovCommon {
             throw new ApplicationRuntimeException("Exception occured while getting Instrument details-" + e.getMessage());
         }
 
-        return resultList == null || resultList.isEmpty() ? null : resultList;
+        return resultList.isEmpty() ? null : resultList;
             }
 
 	@SuppressWarnings("unchecked")

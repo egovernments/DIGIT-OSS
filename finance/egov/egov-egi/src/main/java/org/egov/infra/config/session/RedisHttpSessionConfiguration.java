@@ -62,10 +62,14 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
 import static org.egov.infra.security.utils.SecurityConstants.SESSION_COOKIE_NAME;
 import static org.egov.infra.security.utils.SecurityConstants.SESSION_COOKIE_PATH;
 
+import org.apache.log4j.Logger;
+
 @Configuration
 @EnableRedisHttpSession
 public class RedisHttpSessionConfiguration {
 
+	private static final Logger LOGGER = Logger.getLogger(RedisHttpSessionConfiguration.class);
+			 
 	@Value("${secure.cookie}")
     private boolean secureCookie;
 	
@@ -92,7 +96,7 @@ public class RedisHttpSessionConfiguration {
 
     @Bean
     public UserSessionDestroyListener httpSessionEventPublisher() {
-        System.out.println("****************************** UserSessionDestroyListener object created *******************");
+    	LOGGER.info("****************************** UserSessionDestroyListener object created *******************");
         return new UserSessionDestroyListener();
     }
 }

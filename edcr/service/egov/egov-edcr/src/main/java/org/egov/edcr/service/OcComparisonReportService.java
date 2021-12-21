@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -73,8 +74,16 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @Service
 public class OcComparisonReportService {
 
-    private static final Logger LOG = Logger.getLogger(OcComparisonReportService.class);
-    public static final String STATUS = "Status";
+    private static final String BLOCK2 = "Block_";
+	private static final String FLOOR2 = "Floor";
+	private static final String STATUS2 = "Status";
+	private static final String DEVIATION_IN = "Deviation in %";
+	private static final String NOT_ACCEPTED = "Not Accepted";
+	private static final String ACCEPTED = "Accepted";
+	private static final String REMARKS = "Remarks_";
+	private static final String GENERATE_REPORT = "Generate Report.......";
+	private static final Logger LOG = Logger.getLogger(OcComparisonReportService.class);
+    public static final String STATUS = STATUS2;
     public static final String BLOCK = "Block";
     public static final BigDecimal DEVIATION_VALUE = BigDecimal.valueOf(5);
     @Autowired
@@ -146,7 +155,7 @@ public class OcComparisonReportService {
         Set<String> common = new TreeSet<>();
         Map<String, ScrutinyDetail> allMap = new HashMap<>();
         Map<String, Set<String>> blocks = new TreeMap<>();
-        LOG.info("Generate Report.......");
+        LOG.info(GENERATE_REPORT);
         for (ScrutinyDetail sd : scrutinyDetails) {
             LOG.info(sd.getKey());
             LOG.info(sd.getHeading());
@@ -196,9 +205,9 @@ public class OcComparisonReportService {
                 if (allMap.get(blkName + blkFeature).getRemarks() != null) {
                     drb.addConcatenatedReport(
                             createFooterSubreport("Remarks :  " + allMap.get(blkName + blkFeature).getRemarks(),
-                                    "Remarks_" + blkName + blkFeature));
+                                    REMARKS + blkName + blkFeature));
                     featureFooter.add(allMap.get(blkName + blkFeature).getRemarks());
-                    valuesMap.put("Remarks_" + blkName + blkFeature, featureFooter);
+                    valuesMap.put(REMARKS + blkName + blkFeature, featureFooter);
 
                 }
 
@@ -227,7 +236,7 @@ public class OcComparisonReportService {
             }
         drb.setTemplateFile("/reports/templates/oc_comparison_report.jrxml");
         drb.setMargins(5, 0, 33, 20);
-        String endStatus = finalReportStatus ? "Accepted" : "Not Accepted";
+        String endStatus = finalReportStatus ? ACCEPTED : NOT_ACCEPTED;
         valuesMap.put("reportStatus", endStatus);
         comparisonDetail.setStatus(endStatus);
 
@@ -249,8 +258,6 @@ public class OcComparisonReportService {
 
     public InputStream generatePreOcComparisonReport(EdcrApplicationDetail ocDcr,
             EdcrApplicationDetail permitDcr, OcComparisonDetail comparisonDetail) {
-
-        Plan ocPlan = ocDcr.getPlan();
 
         FileStoreMapper permitFileMapper = permitDcr.getPlanDetailFileStore();
         File permitFile = permitFileMapper != null ? fileStoreService.fetch(
@@ -297,7 +304,7 @@ public class OcComparisonReportService {
         Set<String> common = new TreeSet<>();
         Map<String, ScrutinyDetail> allMap = new HashMap<>();
         Map<String, Set<String>> blocks = new TreeMap<>();
-        LOG.info("Generate Report.......");
+        LOG.info(GENERATE_REPORT);
         for (ScrutinyDetail sd : scrutinyDetails) {
             LOG.info(sd.getKey());
             LOG.info(sd.getHeading());
@@ -347,9 +354,9 @@ public class OcComparisonReportService {
                 if (allMap.get(blkName + blkFeature).getRemarks() != null) {
                     drb.addConcatenatedReport(
                             createFooterSubreport("Remarks :  " + allMap.get(blkName + blkFeature).getRemarks(),
-                                    "Remarks_" + blkName + blkFeature));
+                                    REMARKS + blkName + blkFeature));
                     featureFooter.add(allMap.get(blkName + blkFeature).getRemarks());
-                    valuesMap.put("Remarks_" + blkName + blkFeature, featureFooter);
+                    valuesMap.put(REMARKS + blkName + blkFeature, featureFooter);
 
                 }
 
@@ -378,7 +385,7 @@ public class OcComparisonReportService {
             }
         drb.setTemplateFile("/reports/templates/oc_comparison_report.jrxml");
         drb.setMargins(5, 0, 33, 20);
-        String endStatus = finalReportStatus ? "Accepted" : "Not Accepted";
+        String endStatus = finalReportStatus ? ACCEPTED : NOT_ACCEPTED;
         valuesMap.put("reportStatus", endStatus);
         comparisonDetail.setStatus(endStatus);
 
@@ -423,7 +430,7 @@ public class OcComparisonReportService {
         Set<String> common = new TreeSet<>();
         Map<String, ScrutinyDetail> allMap = new HashMap<>();
         Map<String, Set<String>> blocks = new TreeMap<>();
-        LOG.info("Generate Report.......");
+        LOG.info(GENERATE_REPORT);
         for (ScrutinyDetail sd : scrutinyDetails) {
             LOG.info(sd.getKey());
             LOG.info(sd.getHeading());
@@ -627,7 +634,7 @@ public class OcComparisonReportService {
 
                             if (ocFloors != null && !ocFloors.isEmpty()) {
                                 for (Floor floor : ocFloors) {
-                                    if (floor.getNumber() == permitFloor.getNumber()) {
+                                    if (Objects.equals(floor.getNumber(), permitFloor.getNumber())) {
                                         ocFloor = floor;
                                     }
                                 }
@@ -698,11 +705,10 @@ public class OcComparisonReportService {
 
     private BigDecimal getDeviation(BigDecimal ocValue, BigDecimal permitValue) {
         BigDecimal numerator = ocValue.subtract(permitValue).multiply(BigDecimal.valueOf(100));
-        BigDecimal finalValue = permitValue.compareTo(BigDecimal.ZERO) > 0
+        return permitValue.compareTo(BigDecimal.ZERO) > 0
                 ? numerator.divide(permitValue, DECIMALDIGITS_MEASUREMENTS,
                         ROUNDMODE_MEASUREMENTS)
                 : numerator;
-        return finalValue;
     }
 
     private List<ScrutinyDetail> buildReportObject(List<OcComparisonBlockDetail> ocComparison) {
@@ -713,51 +719,51 @@ public class OcComparisonReportService {
             Map<String, String> bldngHgts = new HashMap<>();
 
             ScrutinyDetail bltUpAreaSd = new ScrutinyDetail();
-            bltUpAreaSd.setKey("Block_" + blockDetail.getNumber() + "_" + "BuiltUp Area");
-            bltUpAreaSd.addColumnHeading(1, "Floor");
+            bltUpAreaSd.setKey(BLOCK2 + blockDetail.getNumber() + "_" + "BuiltUp Area");
+            bltUpAreaSd.addColumnHeading(1, FLOOR2);
             bltUpAreaSd.addColumnHeading(2, "Oc built up area");
             bltUpAreaSd.addColumnHeading(3, "Permit built up area");
-            bltUpAreaSd.addColumnHeading(4, "Deviation in %");
-            bltUpAreaSd.addColumnHeading(5, "Status");
+            bltUpAreaSd.addColumnHeading(4, DEVIATION_IN);
+            bltUpAreaSd.addColumnHeading(5, STATUS2);
 
             ScrutinyDetail floorAreaSd = new ScrutinyDetail();
-            floorAreaSd.setKey("Block_" + blockDetail.getNumber() + "_" + "Floor Area");
-            floorAreaSd.addColumnHeading(1, "Floor");
+            floorAreaSd.setKey(BLOCK2 + blockDetail.getNumber() + "_" + "Floor Area");
+            floorAreaSd.addColumnHeading(1, FLOOR2);
             floorAreaSd.addColumnHeading(2, "Oc floor area");
             floorAreaSd.addColumnHeading(3, "Permit floor area");
-            floorAreaSd.addColumnHeading(4, "Deviation in %");
-            floorAreaSd.addColumnHeading(5, "Status");
+            floorAreaSd.addColumnHeading(4, DEVIATION_IN);
+            floorAreaSd.addColumnHeading(5, STATUS2);
 
             ScrutinyDetail crptAreaSd = new ScrutinyDetail();
-            crptAreaSd.setKey("Block_" + blockDetail.getNumber() + "_" + "Carpet Area");
-            crptAreaSd.addColumnHeading(1, "Floor");
+            crptAreaSd.setKey(BLOCK2 + blockDetail.getNumber() + "_" + "Carpet Area");
+            crptAreaSd.addColumnHeading(1, FLOOR2);
             crptAreaSd.addColumnHeading(2, "Oc carpet area");
             crptAreaSd.addColumnHeading(3, "Permit carpet area");
-            crptAreaSd.addColumnHeading(4, "Deviation in %");
-            crptAreaSd.addColumnHeading(5, "Status");
+            crptAreaSd.addColumnHeading(4, DEVIATION_IN);
+            crptAreaSd.addColumnHeading(5, STATUS2);
 
             ScrutinyDetail floors = new ScrutinyDetail();
-            floors.setKey("Block_" + blockDetail.getNumber() + "_" + "Number of Floors");
+            floors.setKey(BLOCK2 + blockDetail.getNumber() + "_" + "Number of Floors");
             floors.addColumnHeading(1, "Oc Floors");
             floors.addColumnHeading(2, "Permit Floors");
-            floors.addColumnHeading(3, "Status");
+            floors.addColumnHeading(3, STATUS2);
 
             floorNos.put("Oc Floors", blockDetail.getNoOfFloorsOc().toString());
             floorNos.put("Permit Floors", blockDetail.getNoOfFloorsPermit().toString());
-            floorNos.put("Status",
+            floorNos.put(STATUS2,
                     blockDetail.getNoOfFloorsOc() > blockDetail.getNoOfFloorsPermit() ? Result.Not_Accepted.getResultVal()
                             : Result.Accepted.getResultVal());
             floors.getDetail().add(floorNos);
 
             ScrutinyDetail bldngHgt = new ScrutinyDetail();
-            bldngHgt.setKey("Block_" + blockDetail.getNumber() + "_" + "Height of building");
+            bldngHgt.setKey(BLOCK2 + blockDetail.getNumber() + "_" + "Height of building");
             bldngHgt.addColumnHeading(1, "Oc building height");
             bldngHgt.addColumnHeading(2, "Permit building height");
-            bldngHgt.addColumnHeading(3, "Status");
+            bldngHgt.addColumnHeading(3, STATUS2);
 
             bldngHgts.put("Oc building height", blockDetail.getHghtFromGroundOc().toString() + "m");
             bldngHgts.put("Permit building height", blockDetail.getHgtFromGroundPermit().toString() + "m");
-            bldngHgts.put("Status",
+            bldngHgts.put(STATUS2,
                     blockDetail.getHghtFromGroundOc().compareTo(blockDetail.getHgtFromGroundPermit()) > 0
                             ? Result.Not_Accepted.getResultVal()
                             : Result.Accepted.getResultVal());
@@ -770,33 +776,33 @@ public class OcComparisonReportService {
                     Map<String, String> flrAreaDetails = new HashMap<>();
                     Map<String, String> crptAreaDetails = new HashMap<>();
 
-                    bltUpAreaDetails.put("Floor", floor.getNumber().toString());
+                    bltUpAreaDetails.put(FLOOR2, floor.getNumber().toString());
                     bltUpAreaDetails.put("Oc built up area", floor.getOcBltUpArea().toString() + "m²");
                     bltUpAreaDetails.put("Permit built up area", floor.getPermitBltUpArea().toString() + "m²");
                     BigDecimal bltUpAreaDeviation = floor.getBltUpAreaDeviation();
-                    bltUpAreaDetails.put("Deviation in %", bltUpAreaDeviation.toString());
+                    bltUpAreaDetails.put(DEVIATION_IN, bltUpAreaDeviation.toString());
 
-                    bltUpAreaDetails.put("Status",
+                    bltUpAreaDetails.put(STATUS2,
                             bltUpAreaDeviation.compareTo(DEVIATION_VALUE) > 0 ? Result.Not_Accepted.getResultVal()
                                     : Result.Accepted.getResultVal());
                     bltUpAreaSd.getDetail().add(bltUpAreaDetails);
 
-                    flrAreaDetails.put("Floor", floor.getNumber().toString());
+                    flrAreaDetails.put(FLOOR2, floor.getNumber().toString());
                     flrAreaDetails.put("Oc floor area", floor.getOcFloorArea().toString() + "m²");
                     flrAreaDetails.put("Permit floor area", floor.getPermitFloorArea().toString() + "m²");
                     BigDecimal flrAreaDeviation = floor.getFloorAreaDeviation();
-                    flrAreaDetails.put("Deviation in %", flrAreaDeviation.toString());
-                    flrAreaDetails.put("Status",
+                    flrAreaDetails.put(DEVIATION_IN, flrAreaDeviation.toString());
+                    flrAreaDetails.put(STATUS2,
                             flrAreaDeviation.compareTo(DEVIATION_VALUE) > 0 ? Result.Not_Accepted.getResultVal()
                                     : Result.Accepted.getResultVal());
                     floorAreaSd.getDetail().add(flrAreaDetails);
 
-                    crptAreaDetails.put("Floor", floor.getNumber().toString());
+                    crptAreaDetails.put(FLOOR2, floor.getNumber().toString());
                     crptAreaDetails.put("Oc carpet area", floor.getOcCarpetArea().toString() + "m²");
                     crptAreaDetails.put("Permit carpet area", floor.getPermitCarpetArea().toString() + "m²");
                     BigDecimal crptAreaDeviation = floor.getCarpetAreaDeviation();
-                    crptAreaDetails.put("Deviation in %", crptAreaDeviation.toString());
-                    crptAreaDetails.put("Status",
+                    crptAreaDetails.put(DEVIATION_IN, crptAreaDeviation.toString());
+                    crptAreaDetails.put(STATUS2,
                             crptAreaDeviation.compareTo(DEVIATION_VALUE) > 0 ? Result.Not_Accepted.getResultVal()
                                     : Result.Accepted.getResultVal());
                     crptAreaSd.getDetail().add(crptAreaDetails);
@@ -840,19 +846,19 @@ public class OcComparisonReportService {
             qrCodeValue = qrCodeValue.append("Service Type : ").append(serviceType).append("\n");
         }
 
-        qrCodeValue = qrCodeValue.append("Report Status :").append(reportStatus ? "Accepted" : "Not Accepted")
+        qrCodeValue = qrCodeValue.append("Report Status :").append(reportStatus ? ACCEPTED : NOT_ACCEPTED)
                 .append("\n");
         return qrCodeValue.toString();
     }
 
     private List<ConditionalStyle> getConditonalStyles() {
         List<ConditionalStyle> conditionalStyles = new ArrayList<>();
-        FetchCondition fc = new FetchCondition(STATUS, "Not Accepted");
+        FetchCondition fc = new FetchCondition(STATUS, NOT_ACCEPTED);
 
         ConditionalStyle cs = new ConditionalStyle(fc, reportService.getDetailStyle(Color.RED));
         conditionalStyles.add(cs);
 
-        fc = new FetchCondition(STATUS, "Accepted");
+        fc = new FetchCondition(STATUS, ACCEPTED);
 
         cs = new ConditionalStyle(fc, reportService.getDetailStyle(new Color(0, 128, 0)));
         conditionalStyles.add(cs);
