@@ -15,6 +15,7 @@ import {
   loadPtBillData,
   loadUlbLogo
 } from "./receiptTransformer";
+import { downloadPdfFile } from "egov-ui-kit/utils/api" 
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -256,9 +257,10 @@ export const downloadMultipleBills = async (
       queryStr.push({ key: "consumerCode", value: consumerCode });
     }
     /*
-to download all bulk pdf directly egov-pdf
+to download all bulk pdf directly egov-pdf  */
      downloadPdfFile(DOWNLOADRECEIPT.GET.URL,'post',queryStr,{},{},false, `${businesService}_${locality}`); //{ Bill: bills }
-  */
+   /*
+to download all bulk pdf through jobs 
     const resp = await httpRequest(
       "post",
       DOWNLOADRECEIPT.GET.URL,
@@ -280,6 +282,7 @@ to download all bulk pdf directly egov-pdf
         )
       );
     }
+    */
   } catch (error) {
     console.log(error);
     dispatch(toggleSnackbar(true, error.message, "error"));
