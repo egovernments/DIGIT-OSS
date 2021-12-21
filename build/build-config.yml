@@ -345,6 +345,13 @@ config:
         image-name: "xstate-chatbot"
       - work-dir: "core-services/xstate-chatbot/nodejs/db"
         image-name: "xstate-chatbot-db"
+
+  - name: "builds/digit-dev/core-services/xstate-webchat"
+    build:
+      - work-dir: "core-services/xstate-webchat/nodejs"
+        image-name: "xstate-webchat"
+      - work-dir: "core-services/xstate-webchat/nodejs/db"
+        image-name: "xstate-webchat-db"
         
 #Municipal Services
 
