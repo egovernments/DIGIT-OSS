@@ -18,6 +18,8 @@ import java.util.List;
 public class ExceptionUtils {
     private static final Logger logger = LoggerFactory.getLogger(ExceptionUtils.class);
     private static final String SEND_ERROR_FILTER_RAN = "sendErrorFilter.ran";
+    private static final String CODE_CUSTOM_EXCEPTION = "CustomException";
+    private static final String INVALID_ACCESS_TOKEN_EXCEPTION = "InvalidAccessTokenException";
 
     private static String getObjectJSONString(Object obj) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(obj);
@@ -53,7 +55,7 @@ public class ExceptionUtils {
 
     public static void setCustomException(HttpStatus status, String message)  {
         try {
-            _setExceptionBody(status, getErrorInfoObject("CustomException", message, message));
+            _setExceptionBody(status, getErrorInfoObject(CODE_CUSTOM_EXCEPTION, message, message));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -82,7 +84,7 @@ public class ExceptionUtils {
     }
 
     public static void raiseCustomException(HttpStatus status, String message) {
-        throw new RuntimeException(new CustomException(message, status.value(), "CustomException"));
+        throw new RuntimeException(new CustomException(message, status.value(), CODE_CUSTOM_EXCEPTION));
     }
 
     public static void raiseErrorFilterException( RequestContext ctx) {
@@ -97,7 +99,7 @@ public class ExceptionUtils {
                 } else if (ctx.getResponseStatusCode() == HttpStatus.BAD_REQUEST.value()) {
                     String existingResponse = Utils.getResponseBody(ctx);
 
-                    if (existingResponse != null && existingResponse.contains("InvalidAccessTokenException"))
+                    if (existingResponse != null && existingResponse.contains(INVALID_ACCESS_TOKEN_EXCEPTION))
                         _setExceptionBody(HttpStatus.UNAUTHORIZED, existingResponse);
                 }
                 return;
@@ -117,17 +119,17 @@ public class ExceptionUtils {
                 _setExceptionBody(HttpStatus.INTERNAL_SERVER_ERROR, getErrorInfoObject(exceptionName, exceptionMessage, exceptionMessage));
             } else if (exceptionName.equalsIgnoreCase("HttpClientErrorException")) {
                 String existingResponse = ((HttpClientErrorException) e).getResponseBodyAsString();
-                if (existingResponse.contains("InvalidAccessTokenException"))
+                if (existingResponse.contains(INVALID_ACCESS_TOKEN_EXCEPTION))
                     _setExceptionBody(HttpStatus.UNAUTHORIZED, existingResponse);
                 else
                     _setExceptionBody(((HttpClientErrorException) e).getStatusCode(), existingResponse);
-            } else if (exceptionName.equalsIgnoreCase("InvalidAccessTokenException")) {
+            } else if (exceptionName.equalsIgnoreCase(INVALID_ACCESS_TOKEN_EXCEPTION)) {
                 _setExceptionBody(HttpStatus.UNAUTHORIZED, getErrorInfoObject(exceptionName, exceptionMessage, exceptionMessage));
             } else if (exceptionName.equalsIgnoreCase("RateLimitExceededException")) {
                 _setExceptionBody(HttpStatus.TOO_MANY_REQUESTS, getErrorInfoObject(exceptionName, "Rate limit exceeded", null));
             }else if (exceptionName.equalsIgnoreCase("JsonParseException")) {
                 _setExceptionBody(HttpStatus.BAD_REQUEST, getErrorInfoObject(exceptionName, "Bad request", null));
-            }else if (exceptionName.equalsIgnoreCase("CustomException")) {
+            }else if (exceptionName.equalsIgnoreCase(CODE_CUSTOM_EXCEPTION)) {
                 CustomException ce = (CustomException)e;
                 _setExceptionBody(HttpStatus.valueOf(ce.nStatusCode), getErrorInfoObject(exceptionName, exceptionMessage, exceptionMessage));
             } else {

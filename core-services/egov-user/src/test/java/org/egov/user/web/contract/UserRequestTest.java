@@ -13,6 +13,10 @@ import static org.junit.Assert.*;
 
 public class UserRequestTest {
 
+    private static final String ASSERT_THAT_POST_OFFICE = "post office";
+    private static final String ASSERT_EQUALS_EN_IN = "en_IN";
+    private static final String ASSERT_EQUALS_CITIZEN = "CITIZEN";
+
     @Test
     public void test_domain_to_contract_conversion() {
         User domainUser = getUser();
@@ -29,10 +33,10 @@ public class UserRequestTest {
         assertThat(userRequestContract.getAltContactNumber()).isEqualTo(domainUser.getAltContactNumber());
         assertThat(userRequestContract.getPan()).isEqualTo(domainUser.getPan());
         assertThat(userRequestContract.getAadhaarNumber()).isEqualTo(domainUser.getAadhaarNumber());
-        assertThat(userRequestContract.getPermanentAddress()).isEqualTo("post office");
+        assertThat(userRequestContract.getPermanentAddress()).isEqualTo(ASSERT_THAT_POST_OFFICE);
         assertThat(userRequestContract.getPermanentCity()).isEqualTo("city/town/village 1");
         assertThat(userRequestContract.getPermanentPinCode()).isEqualTo("pincode 1");
-        assertThat(userRequestContract.getCorrespondenceAddress()).isEqualTo("post office");
+        assertThat(userRequestContract.getCorrespondenceAddress()).isEqualTo(ASSERT_THAT_POST_OFFICE);
         assertThat(userRequestContract.getCorrespondenceCity()).isEqualTo("city/town/village 2");
         assertThat(userRequestContract.getCorrespondencePinCode()).isEqualTo("pincode 2");
         assertThat(userRequestContract.getActive()).isEqualTo(domainUser.getActive());
@@ -76,7 +80,7 @@ public class UserRequestTest {
         assertTrue(userForCreate.getActive());
         assertEquals(expectedDate, userForCreate.getDob().toString());
         assertEquals(expectedDate, userForCreate.getPasswordExpiryDate().toString());
-        assertEquals("en_IN", userForCreate.getLocale());
+        assertEquals(ASSERT_EQUALS_EN_IN, userForCreate.getLocale());
         assertEquals(UserType.CITIZEN, userForCreate.getType());
         assertFalse(userForCreate.getAccountLocked());
         assertEquals("signature", userForCreate.getSignature());
@@ -90,7 +94,7 @@ public class UserRequestTest {
         assertNotEquals(expectedDate, userForCreate.getCreatedDate().toString());
         final Set<Role> roles = userForCreate.getRoles();
         assertEquals(1, roles.size());
-        assertEquals("CITIZEN", roles.iterator().next().getCode());
+        assertEquals(ASSERT_EQUALS_CITIZEN, roles.iterator().next().getCode());
         assertEquals("ap.public", userForCreate.getTenantId());
         assertEquals("otpreference1", userForCreate.getOtpReference());
         assertEquals("!abcd1234", userForCreate.getPassword());
@@ -98,8 +102,8 @@ public class UserRequestTest {
 
     private UserRequest buildUserRequest() {
         Set<RoleRequest> roles = new HashSet<>();
-        roles.add(RoleRequest.builder().code("CITIZEN").build());
-        roles.add(RoleRequest.builder().code("CITIZEN").build());
+        roles.add(RoleRequest.builder().code(ASSERT_EQUALS_CITIZEN).build());
+        roles.add(RoleRequest.builder().code(ASSERT_EQUALS_CITIZEN).build());
         return getUserBuilder(roles).build();
     }
 
@@ -119,7 +123,7 @@ public class UserRequestTest {
                 .active(Boolean.TRUE)
                 .dob(dateToTest)
                 .pwdExpiryDate(dateToTest)
-                .locale("en_IN")
+                .locale(ASSERT_EQUALS_EN_IN)
                 .type(UserType.CITIZEN)
                 .accountLocked(Boolean.FALSE)
                 .signature("signature")
@@ -156,7 +160,7 @@ public class UserRequestTest {
                 .active(true)
                 .dob(date)
                 .passwordExpiryDate(date)
-                .locale("en_IN")
+                .locale(ASSERT_EQUALS_EN_IN)
                 .type(UserType.CITIZEN)
                 .accountLocked(false)
                 .roles(getListOfRoles())
@@ -177,7 +181,7 @@ public class UserRequestTest {
         return Address.builder()
                 .type(AddressType.PERMANENT)
                 .city("city/town/village 1")
-                .address("post office")
+                .address(ASSERT_THAT_POST_OFFICE)
                 .pinCode("pincode 1")
                 .build();
     }
@@ -186,7 +190,7 @@ public class UserRequestTest {
         return Address.builder()
                 .type(AddressType.CORRESPONDENCE)
                 .city("city/town/village 2")
-                .address("post office")
+                .address(ASSERT_THAT_POST_OFFICE)
                 .pinCode("pincode 2")
                 .build();
     }

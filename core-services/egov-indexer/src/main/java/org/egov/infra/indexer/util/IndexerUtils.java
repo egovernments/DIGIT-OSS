@@ -83,6 +83,8 @@ public class IndexerUtils {
 
 	private ObjectMapper mapper = new ObjectMapper();
 
+	private static final String LOG_DATA = "Data:";
+
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
 	/**
@@ -450,7 +452,7 @@ public class IndexerUtils {
 							tranformedArray.put(context.jsonString());
 						} catch (Exception e) {
 							log.error("Exception while transforiming data: ", e);
-							log.info("Data: " + kafkaJsonArray.get(i));
+							log.info(LOG_DATA + " " + kafkaJsonArray.get(i));
 							continue;
 						}
 					} else {
@@ -488,7 +490,7 @@ public class IndexerUtils {
 					context.put(expression, expressionArray[expressionArray.length - 1], "XXXXXXXX");
 				} catch (Exception e) {
 					log.error("Exception while masking field: ", e);
-					log.error("Data: " + context.jsonString());
+					log.error(LOG_DATA + " " + context.jsonString());
 				}
 			}
 			return context;
@@ -536,7 +538,7 @@ public class IndexerUtils {
 			encodedString = getObjectMapper().writeValueAsString(stringToBeEncoded);
 		} catch (Exception e) {
 			log.error("Exception while encoding non ascii characters ", e);
-			log.error("Data: " + stringToBeEncoded);
+			log.error(LOG_DATA + " " + stringToBeEncoded);
 			encodedString = stringToBeEncoded;
 		}
 		return encodedString;

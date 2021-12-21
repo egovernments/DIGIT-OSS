@@ -46,6 +46,7 @@ public class AssessmentValidator {
 	@Autowired
 	private PropertyConfiguration config;
 
+	private static final String CUSTOM_EXCEPTION_INVALID_REQUEST = "INVALID_REQUEST";
 
 	public void validateAssessmentCreate(AssessmentRequest assessmentRequest, Property property) {
 		Map<String, String> errorMap = new HashMap<>();
@@ -107,7 +108,7 @@ public class AssessmentValidator {
 	private void validateCreateRequest(Assessment assessment, Property property){
 
 		if(!property.getStatus().equals(Status.ACTIVE))
-			throw new CustomException("INVALID_REQUEST","Assessment cannot be done on inactive or property in workflow");
+			throw new CustomException(CUSTOM_EXCEPTION_INVALID_REQUEST,"Assessment cannot be done on inactive or property in workflow");
 
 	}
 
@@ -125,7 +126,7 @@ public class AssessmentValidator {
 		}
 
 		if(!property.getStatus().equals(Status.ACTIVE))
-			errorMap.put("INVALID_REQUEST","Assessment cannot be done on inactive or property in workflow");
+			errorMap.put(CUSTOM_EXCEPTION_INVALID_REQUEST,"Assessment cannot be done on inactive or property in workflow");
 
 		/*Set<String> existingUnitUsages = new HashSet<>();
 		Set<String> existingDocs = new HashSet<>();
@@ -284,25 +285,25 @@ public class AssessmentValidator {
 		Map<String, String> errorMap = new HashMap<>();
 
 		if(isWorkflowTriggered && assessment.getWorkflow()==null)
-			errorMap.put("INVALID_REQUEST","Workflow object is invalid");
+			errorMap.put(CUSTOM_EXCEPTION_INVALID_REQUEST,"Workflow object is invalid");
 
 		if(isWorkflowTriggered && assessment.getWorkflow()!=null && assessment.getWorkflow().getAction()==null)
-			errorMap.put("INVALID_REQUEST","Workflow object is invalid");
+			errorMap.put(CUSTOM_EXCEPTION_INVALID_REQUEST,"Workflow object is invalid");
 
 		if(assessmentFromDB!=null && assessmentFromDB.getStatus().equals(Status.INWORKFLOW)){
 			if(!assessment.getStatus().equals(Status.INWORKFLOW))
 				throw new CustomException("INVALID_STATUS","The status of the assessment is incorrect");
 
 			if(assessment.getWorkflow()==null)
-				errorMap.put("INVALID_REQUEST","The workflow object is not valid");
+				errorMap.put(CUSTOM_EXCEPTION_INVALID_REQUEST,"The workflow object is not valid");
 			else {
 				if(assessment.getWorkflow().getAction()==null)
-					errorMap.put("INVALID_REQUEST","Action cannot be null");
+					errorMap.put(CUSTOM_EXCEPTION_INVALID_REQUEST,"Action cannot be null");
 			}
 		}
 
 		if(assessment.getStatus().equals(Status.INWORKFLOW) && assessment.getWorkflow()==null){
-			errorMap.put("INVALID_REQUEST","Workflow cannot be null");
+			errorMap.put(CUSTOM_EXCEPTION_INVALID_REQUEST,"Workflow cannot be null");
 		}
 
 		if(!CollectionUtils.isEmpty(errorMap))
@@ -326,7 +327,7 @@ public class AssessmentValidator {
 		List<Assessment> assessments = assessmentRepository.getAssessments(criteria);
 
 		if(!CollectionUtils.isEmpty(assessments))
-			throw new CustomException("INVALID_REQUEST","The property has other assessment in workflow");
+			throw new CustomException(CUSTOM_EXCEPTION_INVALID_REQUEST,"The property has other assessment in workflow");
 
 	}
 

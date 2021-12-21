@@ -28,6 +28,7 @@ public class UserService {
     @Autowired
     private AppProperties appProperties;
 
+    private static final String PUT_TYPE_CITIZEN = "CITIZEN";
 
     public User createOrSearchUser(TransactionRequest transactionRequest) {
         List<User> userList = new ArrayList<>();
@@ -63,7 +64,7 @@ public class UserService {
         request.put("RequestInfo", requestInfo);
         request.put("name", name);
         request.put("mobileNumber", phoneNo);
-        request.put("type", "CITIZEN");
+        request.put("type", PUT_TYPE_CITIZEN);
         request.put("tenantid", tenantId.split("\\.")[0]);
         StringBuilder url = new StringBuilder();
         url.append(appProperties.getUserServiceHost()).append(appProperties.getUserServiceSearchPath());
@@ -91,7 +92,7 @@ public class UserService {
         Map<String, Object> user = new HashMap<>();
         Map<String, Object> role = new HashMap<>();
         List<Map> roles = new ArrayList<>();
-        role.put("code", "CITIZEN");
+        role.put("code", PUT_TYPE_CITIZEN);
         role.put("name", "Citizen");
         role.put("tenantId", transaction.getTenantId().split("\\.")[0]);
         roles.add(role);
@@ -100,7 +101,7 @@ public class UserService {
         user.put("mobileNumber", transaction.getUser().getMobileNumber());
         user.put("userName", transaction.getUser().getName());
         user.put("active", true);
-        user.put("type", "CITIZEN");
+        user.put("type", PUT_TYPE_CITIZEN);
         user.put("tenantId", transaction.getTenantId().split("\\.")[0]);
         user.put("roles", roles);
 

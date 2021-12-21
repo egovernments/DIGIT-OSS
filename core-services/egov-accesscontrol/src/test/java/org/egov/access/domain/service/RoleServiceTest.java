@@ -28,6 +28,10 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 @RunWith(MockitoJUnitRunner.class)
 public class RoleServiceTest {
 
+	private static final String EMPLOYEE_NAME = "Employee";
+	private static final String EMPLOYEE_DESCRIPTION = "Employee of an org";
+	private static final String ANOTHER_EMPLOYEE_NAME = "Another Employee";
+
 	@Mock
 	private BaseRepository repository;
 
@@ -62,8 +66,8 @@ public class RoleServiceTest {
 
 	private List<Object> getRoles() {
 		List<Object> roles = new ArrayList<>();
-		Role role1 = Role.builder().id(1L).name("Employee").code("EMP").description("Employee of an org").build();
-		Role role2 = Role.builder().id(1L).name("Another Employee").code("EMP").description("Employee of an org")
+		Role role1 = Role.builder().id(1L).name(EMPLOYEE_NAME).code("EMP").description(EMPLOYEE_DESCRIPTION).build();
+		Role role2 = Role.builder().id(1L).name(ANOTHER_EMPLOYEE_NAME).code("EMP").description(EMPLOYEE_DESCRIPTION)
 				.build();
 		roles.add(role1);
 		roles.add(role2);
@@ -76,8 +80,8 @@ public class RoleServiceTest {
 		RoleRequest roleRequest = new RoleRequest();
 
 		List<Role> roles = new ArrayList<>();
-		Role role1 = Role.builder().id(1L).name("Employee").code("EMP").description("Employee of an org").build();
-		Role role2 = Role.builder().id(1L).name("Another Employee").code("EMP").description("Employee of an org")
+		Role role1 = Role.builder().id(1L).name(EMPLOYEE_NAME).code("EMP").description(EMPLOYEE_DESCRIPTION).build();
+		Role role2 = Role.builder().id(1L).name(ANOTHER_EMPLOYEE_NAME).code("EMP").description(EMPLOYEE_DESCRIPTION)
 				.build();
 		roles.add(role1);
 		roles.add(role2);
@@ -100,8 +104,8 @@ public class RoleServiceTest {
 		RoleRequest roleRequest = new RoleRequest();
 
 		List<Role> roles = new ArrayList<>();
-		Role role1 = Role.builder().id(1L).name("Employee").code("EMP").description("Employee of an org").build();
-		Role role2 = Role.builder().id(1L).name("Another Employee").code("EMP").description("Employee of an org")
+		Role role1 = Role.builder().id(1L).name(EMPLOYEE_NAME).code("EMP").description(EMPLOYEE_DESCRIPTION).build();
+		Role role2 = Role.builder().id(1L).name(ANOTHER_EMPLOYEE_NAME).code("EMP").description(EMPLOYEE_DESCRIPTION)
 				.build();
 		roles.add(role1);
 		roles.add(role2);

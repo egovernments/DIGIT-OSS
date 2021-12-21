@@ -59,7 +59,7 @@ public class ReindexConsumerConfig implements ApplicationRunner {
 	private IndexerApplicationRunnerImpl runner;
     
     
-    public String[] topics = {};
+    private String[] topics = {};
     
      
     @Override
