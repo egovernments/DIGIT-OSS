@@ -964,16 +964,16 @@ components:
         nodeType:
           type: string
           enum:
-          - ARRAY
-          - BINARY
-          - BOOLEAN
-          - MISSING
-          - NULL
-          - NUMBER
-          - OBJECT
-          - POJO
-          - STRING
-        null:
+            - ARRAY
+            - BINARY
+            - BOOLEAN
+            - MISSING
+            - null
+            - NUMBER
+            - OBJECT
+            - POJO
+            - STRING
+        'null':
           type: boolean
         number:
           type: boolean
@@ -1018,7 +1018,7 @@ components:
         name:
           type: string
       additionalProperties:
-            $ref: '#/components/schemas/Link'
+        $ref: '#/components/schemas/Link'
     OwnerInfo:
       title: OwnerInfo
       required:
@@ -1180,11 +1180,11 @@ components:
     ProcessInstance:
       title: ProcessInstance
       required:
-      - action
-      - businessId
-      - businessService
-      - moduleName
-      - tenantId
+        - action
+        - businessId
+        - businessService
+        - moduleName
+        - tenantId
       type: object
       properties:
         action:
@@ -1232,18 +1232,32 @@ components:
         - creationReason
       type: object
       properties:
+        id:
+          type: string
+          description: Unique Identifier of the Property for internal reference.
+        tenantId:
+          type: string
+          description: tenant id of the Property
         accountId:
           type: string
           description: UUID of the user to which the property will be associated
+        propertyId:
+          type: string
+          description: Unique Identifier of the Property.
+        oldPropertyId:
+          type: string
+          description: Old upic no of the Property. ULBs have the existing property in their system/manual records with their identification number, they want to continue the old reference number in this case the same identification number will be captured here.
         acknowldgementNumber:
           type: string
           description: Acknowldgement number given to citizen on submitting the application for creation or modification of the property.
-        additionalDetails:
-          $ref: '#/components/schemas/JsonNode'
+        propertyType:
+          type: string
+          description: Type of a property like Private, Vacant Land, State Government, Central Government etc.
+        surveyId:
+          type: string
+          description: survey id of the Property
         address:
           $ref: '#/components/schemas/Address'
-        auditDetails:
-          $ref: '#/components/schemas/AuditDetails'
         channel:
           type: string
           enum:
@@ -1252,6 +1266,12 @@ components:
             - CITIZEN
             - DATA_ENTRY
             - MIGRATION
+        source:
+          type: string
+          enum:
+            - MUNICIPAL_RECORDS
+            - FIELD_SURVEY
+            - WATER_CHARGES
         creationReason:
           type: string
           enum:
@@ -1268,15 +1288,21 @@ components:
           items:
             $ref: '#/components/schemas/Document'
             description: The documents attached by owner for exemption.
-        id:
-          type: string
-          description: Unique Identifier of the Property for internal reference.
         institution:
           $ref: '#/components/schemas/Institution'
         landArea:
           type: number
           description: Land area of the property in sq ft
           format: double
+        superBuiltUpArea:
+          type: number
+          description: super builtup area of the complete property
+        units:
+          type: array
+          items:
+            $ref: '#/components/schemas/Unit'
+        usageCategory:
+          type: string
         linkedProperties:
           type: array
           items:
@@ -1287,9 +1313,6 @@ components:
           type: integer
           description: no of floors in the property
           format: int64
-        oldPropertyId:
-          type: string
-          description: Old upic no of the Property. ULBs have the existing property in their system/manual records with their identification number, they want to continue the old reference number in this case the same identification number will be captured here.
         owners:
           type: array
           items:
@@ -1298,18 +1321,6 @@ components:
         ownershipCategory:
           type: string
           description: The type of ownership of the property.
-        propertyId:
-          type: string
-          description: Unique Identifier of the Property.
-        propertyType:
-          type: string
-          description: Type of a property like Private, Vacant Land, State Government, Central Government etc.
-        source:
-          type: string
-          enum:
-            - MUNICIPAL_RECORDS
-            - FIELD_SURVEY
-            - WATER_CHARGES
         status:
           type: string
           enum:
@@ -1318,23 +1329,12 @@ components:
             - INWORKFLOW
             - CANCELLED
             - REJECTED
-        superBuiltUpArea:
-          type: number
-          description: super builtup area of the complete property
-        surveyId:
-          type: string
-          description: survey id of the Property
-        tenantId:
-          type: string
-          description: tenant id of the Property
-        units:
-          type: array
-          items:
-            $ref: '#/components/schemas/Unit'
-        usageCategory:
-          type: string
         workflow:
           $ref: '#/components/schemas/ProcessInstance'
+        auditDetails:
+          $ref: '#/components/schemas/AuditDetails'
+        additionalDetails:
+          $ref: '#/components/schemas/JsonNode'
     PropertyRequest:
       title: PropertyRequest
       type: object
