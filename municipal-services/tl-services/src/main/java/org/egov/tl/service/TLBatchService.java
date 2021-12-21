@@ -71,8 +71,6 @@ public class TLBatchService {
 
         List <String> workflowCodes = Arrays.asList(config.getTlBusinessServices().split("\\s*,\\s*"));
 
-        Map<String,Long>tenantIdToReminderPeriod = tradeUtil.getTenantIdToReminderPeriod(requestInfo);
-
         tenantIdsFromRepository.forEach(tenantIdFromRepository->{
 
         	try {
@@ -80,6 +78,8 @@ public class TLBatchService {
         	Long validTill = System.currentTimeMillis();
 
         	if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER)) {
+        		
+        		Map<String,Long>tenantIdToReminderPeriod = tradeUtil.getTenantIdToReminderPeriod(requestInfo);
         		
         		if(tenantIdToReminderPeriod.containsKey(tenantIdFromRepository)) { 
         			validTill = validTill + tenantIdToReminderPeriod.get(tenantIdFromRepository);
