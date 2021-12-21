@@ -67,7 +67,7 @@ public class NotificationService {
 		ProcessInstance wf = property.getWorkflow();
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
 		state = getStateFromWf(wf, configs.getIsMutationWorkflowEnabled());
-		String localisedState = getLocalisedState(wf.getState().getState(), completeMsgs);
+		String localisedState = getLocalisedState(wf, completeMsgs);
 
 		switch (state) {
 
@@ -124,7 +124,7 @@ public class NotificationService {
 		Boolean isCreate =  CreationReason.CREATE.equals(property.getCreationReason());
 		String state = getStateFromWf(wf, configs.getIsWorkflowEnabled());
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
-		String localisedState = getLocalisedState(wf.getState().getState(), completeMsgs);
+		String localisedState = getLocalisedState(wf, completeMsgs);
 		switch (state) {
 
 		case WF_NO_WORKFLOW:
@@ -237,7 +237,12 @@ public class NotificationService {
 		return msg;
 	}
 	
-	private String getLocalisedState(String state, String completeMsgs) {
+	private String getLocalisedState(ProcessInstance workflow, String completeMsgs) {
+		
+		String state ="";
+		if(configs.getIsWorkflowEnabled()) {
+			state = workflow.getState().getState();
+		}
 		
 		switch (state) {
 			
