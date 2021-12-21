@@ -76,6 +76,7 @@ class PGRService {
       let message = localisationService.getMessageBundleForCode(localisationPrefix + complaintCategory.toUpperCase());
       messageBundle[complaintCategory] = message;
     }
+    complaintCategories= ['Not Receiving OTP',  'Unable to Proceed Forward','Bill Amount is incorrect',  'Application Process taking long time', 'Application is getting rejected', 'Others'];
     return { complaintCategories, messageBundle };
   }
   async fetchComplaintItemsForCategory(category, tenantId) {

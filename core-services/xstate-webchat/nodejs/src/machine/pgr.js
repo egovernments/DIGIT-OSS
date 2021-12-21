@@ -107,7 +107,7 @@ const pgr = {
                           actions: assign((context, event) => {
                             let { complaintCategories, messageBundle } = event.data;
                             let preamble = dialog.get_message(messages.fileComplaint.complaintType2Step.category.question.preamble, context.user.locale);
-                            let { prompt, grammer } = dialog.constructListPromptAndGrammer(complaintCategories, messageBundle, context.user.locale);
+                            let { prompt, grammer } = dialog.constructContextGrammer(complaintCategories, messageBundle, context.user.locale);
                             context.grammer = grammer; // save the grammer in context to be used in next step
                             dialog.sendMessage(context, preamble);
                           }),
@@ -162,14 +162,30 @@ const pgr = {
                         id: 'fetchComplaintItemsForCategory',
                         onDone: {
                           actions: assign((context, event) => {
-                         //   let { complaintItems, messageBundle } = event.data;
+                           let { complaintItems, messageBundle } = event.data;
                          //   let preamble = dialog.get_message(messages.fileComplaint.complaintType2Step.item.question.no_otp, context.user.locale);
                          //   let localisationPrefix = 'CS_COMPLAINT_TYPE_';
                          //   let complaintType = localisationService.getMessageBundleForCode(localisationPrefix + context.slots.pgr.complaint.toUpperCase());
                          //   preamble = preamble.replace('{{complaint}}', dialog.get_message(complaintType, context.user.locale));
                          //   let { prompt, grammer } = dialog.constructListPromptAndGrammer(complaintItems, messageBundle, context.user.locale, false, true);
                          //   context.grammer = grammer; // save the grammer in context to be used in next step
-                            dialog.sendMessage(context, dialog.get_message(messages.fileComplaint.complaintType2Step.item.question.no_otp, context.user.locale));
+                            console.log('messages.fileComplaint.complaintType2Step.item.question.'+context.slots.pgr.complaint);
+                            if(context.slots.pgr.complaint == 'Not Receiving OTP'){
+                             // let { complaintItems, messageBundle } = event.data;
+                              complaintItems=['Please enter your mobile number'];
+                              let { prompt, grammer } = dialog.constructContextGrammer(complaintItems, messageBundle, context.user.locale);
+                              context.grammer = grammer
+                              dialog.sendMessage(context, dialog.get_message(messages.fileComplaint.complaintType2Step.item.question.no_otp, context.user.locale));
+                            }else if (context.slots.pgr.complaint =='Unable to Proceed Forward'){
+                              //unable_to_proceed
+                              dialog.sendMessage(context, dialog.get_message(messages.fileComplaint.complaintType2Step.item.question.unable_to_proceed, context.user.locale));
+                            }else if (context.slots.pgr.complaint == 'Please enter your mobile number'){
+                              complaintItems=['Persist Complaint'];
+                              let { prompt, grammer } = dialog.constructContextGrammer(complaintItems, messageBundle, context.user.locale);
+                              context.grammer = grammer;
+                              dialog.sendMessage(context, dialog.get_message(messages.fileComplaint.complaintType2Step.item.question.let_us_know_about_complaint, context.user.locale));
+                            }
+                            
                           })
                         },
                         onError: {
@@ -190,12 +206,17 @@ const pgr = {
                           cond: (context) => context.intention == dialog.INTENTION_GOBACK
                         },
                         {
-                          target: '#other',
+                          target: '#persistComplaint',
+                          cond: (context) => context.intention == 'Persist Complaint'
+                        },
+                        {
+                          target: '#complaintItem',
                           cond: (context) => context.intention != dialog.INTENTION_UNKOWN,
                           actions: assign((context, event) => {
                             context.slots.pgr["complaint"] = context.intention;
                           })
                         },
+                        
                         {
                           target: 'error'
                         }
@@ -357,6 +378,10 @@ let messages = {
             en_IN: { message: 'Let us know about your complaint', step: 'last', option: [{ key: '1', value: '', type: 'textarea' }] },
             hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'intermediate', option: [{ key: '1', value: '', type: 'textarea' }] }
           },
+          let_us_know_about_complaint: {
+            en_IN: { message: 'Let us know about your complaint', step: 'last', option: [{ key: '1', value: '', type: 'textarea' }] },
+            hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'intermediate', option: [{ key: '1', value: '', type: 'textarea' }] }
+        }
         }
       },
     }, // complaintType2Step

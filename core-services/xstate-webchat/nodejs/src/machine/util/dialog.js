@@ -49,6 +49,29 @@ function constructListPromptAndGrammer(keys, message_bundle, locale, more = fals
   });
   return {prompt, grammer};
 }
+
+
+function constructContextGrammer(keys, message_bundle, locale) {
+  var prompt = '';
+  var grammer = [];
+   
+  keys.forEach((element, index) => {
+    let value = undefined;
+    if (value === undefined) {
+      value = element;
+    }
+    var numberAsString = (index+1).toString();
+    if(numberAsString.length ===1)
+      prompt+= `\n*${index+1}.*  ` + value;
+    else
+      prompt+= `\n*${index+1}.* ` + value;
+
+    grammer.push({intention: element, recognize: [(index+1).toString()]});
+  });
+
+  return {prompt, grammer};
+}
+
 function constructLiteralGrammer(keys, message_bundle, locale) {
   var grammer = [];
   keys.forEach((element) => {
@@ -104,4 +127,4 @@ let global_messages = {
   },
 }
 
-module.exports = { get_input, get_message, get_intention, INTENTION_UNKOWN, INTENTION_MORE, INTENTION_GOBACK, global_messages, constructListPromptAndGrammer, constructLiteralGrammer, validateInputType, sendMessage };
+module.exports = { get_input, get_message, get_intention, INTENTION_UNKOWN, INTENTION_MORE, INTENTION_GOBACK, global_messages, constructListPromptAndGrammer, constructLiteralGrammer, validateInputType, sendMessage,constructContextGrammer };
