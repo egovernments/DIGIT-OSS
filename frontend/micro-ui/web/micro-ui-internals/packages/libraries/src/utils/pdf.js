@@ -423,14 +423,15 @@ const downloadPdf = (blob, fileName) => {
 
 /* Download Receipts */
 
-export const downloadReceipt = async (consumerCode, businessService, pdfKey = "consolidatedreceipt",tenantId) => {
-  tenantId = tenantId ? tenantId : Digit.ULBService.getCurrentTenantId();
-  const response = await Digit.ReceiptsService.receipt_download(businessService, consumerCode, tenantId, pdfKey);
+export const downloadReceipt = async (consumerCode, businessService, pdfKey = "consolidatedreceipt",tenantId=Digit.ULBService.getCurrentTenantId(),receiptNumber=null) => {
+  const response = await Digit.ReceiptsService.receipt_download(businessService, consumerCode, tenantId, pdfKey,receiptNumber);
   const responseStatus = parseInt(response.status, 10);
   if (responseStatus === 201 || responseStatus === 200) {
-    downloadPdf(new Blob([response.data], { type: "application/pdf" }), `consumer-${consumerCode}.pdf`);
+    let filename=receiptNumber?`receiptNumber-${receiptNumber}.pdf`: `consumer-${consumerCode}.pdf`;
+    downloadPdf(new Blob([response.data], { type: "application/pdf" }),filename);
   }
 };
+
 export const getFileUrl = (linkText = "") => {
   const linkList = linkText && typeof linkText=="string" && linkText.split(",") || [];
   let fileURL = '';
