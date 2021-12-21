@@ -4,7 +4,7 @@
     "main": "src/app.js",
     "scripts": {
         "start": "node --inspect src/app.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "mocha --timeout 10000"
     },
     "author": "rushang7",
     "license": "ISC",
@@ -30,5 +30,10 @@
         "uuid-random": "^1.3.2",
         "websocket": "^1.0.34",
         "xstate": "^4.13.0"
+    },
+    "devDependencies": {
+        "mocha": "^2.2.5",
+        "should": "^7.0.2",
+        "supertest": "^1.0.1"
     }
 }
