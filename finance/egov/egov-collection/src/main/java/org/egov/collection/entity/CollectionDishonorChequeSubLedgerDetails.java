@@ -131,7 +131,7 @@ public class CollectionDishonorChequeSubLedgerDetails extends BaseModel {
             return false;
         final CollectionDishonorChequeSubLedgerDetails other = (CollectionDishonorChequeSubLedgerDetails) obj;
         if (detailKey == null && detailType == null) {
-            if (detailKey != null || detailType != null)
+            
                 return false;
         } else if (!(detailKey == other.detailKey && detailType == other.detailType))
             return false;

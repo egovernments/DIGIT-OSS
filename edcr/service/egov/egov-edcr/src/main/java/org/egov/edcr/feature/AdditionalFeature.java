@@ -47,6 +47,8 @@
 
 package org.egov.edcr.feature;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.egov.edcr.utility.DcrConstants.DECIMALDIGITS_MEASUREMENTS;
 import static org.egov.edcr.utility.DcrConstants.ROUNDMODE_MEASUREMENTS;
 
@@ -56,9 +58,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.OccupancyTypeHelper;
 import org.egov.common.entity.edcr.Plan;
@@ -68,18 +70,21 @@ import org.egov.common.entity.edcr.SetBack;
 import org.egov.common.entity.edcr.Yard;
 import org.egov.edcr.constants.DxfFileConstants;
 import org.egov.edcr.utility.DcrConstants;
-import org.egov.infra.utils.StringUtils;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AdditionalFeature extends FeatureProcess {
-    private static final Logger LOG = Logger.getLogger(AdditionalFeature.class);
 
-    private static final String RULE_38 = "38";
+    private static final String RULE_55_4_A = "55-4-a";
+	private static final String SEGREGATION_OF_WASTE_DETAILS = "Segregation of waste details";
+	private static final String SEGREGATION_OF_WASTE = "Segregation of Waste";
+	private static final String BLOCK_US = "Block_";
+	private static final String FIRE_PROTECTION_AND_FIRE_SAFETY_REQUIREMENTS = "Fire Protection And Fire Safety Requirements";
+	private static final String RULE_38 = "38";
     private static final String RULE_39 = "39";
     private static final String RULE_41_I_A = "41-i-a";
-    private static final String RULE_41_I_B = "41-i-b";
+    //private static final String RULE_41_I_B = "41-i-b";
     private static final String RULE_47 = "47";
     private static final String RULE_50 = "50";
     private static final String RULE_56 = "56";
@@ -113,24 +118,24 @@ public class AdditionalFeature extends FeatureProcess {
      * BigDecimal.valueOf(30.5);
      */
 
-    public static final String OLD = "OLD";
-    public static final String NEW = "NEW";
-    public static final String OLD_AREA_ERROR = "road width old area";
-    public static final String NEW_AREA_ERROR = "road width new area";
-    public static final String OLD_AREA_ERROR_MSG = "No construction shall be permitted if the road width is less than 2.4m for old area.";
-    public static final String NEW_AREA_ERROR_MSG = "No construction shall be permitted if the road width is less than 6.1m for new area.";
-    public static final String NO_OF_FLOORS = "Maximum number of floors allowed";
-    public static final String HEIGHT_BUILDING = "Maximum height of building allowed";
-    public static final String MIN_PLINTH_HEIGHT = " >= 0.45";
-    public static final String MIN_PLINTH_HEIGHT_DESC = "Minimum plinth height";
-    public static final String MAX_BSMNT_CELLAR = "Number of basement/cellar allowed";
-    public static final String MIN_INT_COURT_YARD = "0.15";
-    public static final String MIN_INT_COURT_YARD_DESC = "Minimum interior courtyard";
-    public static final String BARRIER_FREE_ACCESS_FOR_PHYSICALLY_CHALLENGED_PEOPLE_DESC = "Barrier free access for physically challenged people";
-    public static final String GREEN_BUILDINGS_AND_SUSTAINABILITY_PROVISIONS_ERROR_CODE = "Green buildings and sustainability provisions";
-    public static final String GREEN_BUILDINGS_AND_SUSTAINABILITY_PROVISIONS_ERROR_MSG = "Green buildings and sustainability provision should be YES";
-    public static final String GREEN_BUILDINGS_AND_SUSTAINABILITY = "Green buildings and sustainability provisions";
-    public static final String FIRE_PROTECTION_AND_FIRE_SAFETY_REQUIREMENTS_DESC = "Fire Protection And Fire Safety Requirements";
+    private static final String OLD = "OLD";
+    private static final String NEW = "NEW";
+    private static final String OLD_AREA_ERROR = "road width old area";
+    private static final String NEW_AREA_ERROR = "road width new area";
+    private static final String OLD_AREA_ERROR_MSG = "No construction shall be permitted if the road width is less than 2.4m for old area.";
+    private static final String NEW_AREA_ERROR_MSG = "No construction shall be permitted if the road width is less than 6.1m for new area.";
+    private static final String NO_OF_FLOORS = "Maximum number of floors allowed";
+    private static final String HEIGHT_BUILDING = "Maximum height of building allowed";
+    private static final String MIN_PLINTH_HEIGHT = " >= 0.45";
+    private static final String MIN_PLINTH_HEIGHT_DESC = "Minimum plinth height";
+    private static final String MAX_BSMNT_CELLAR = "Number of basement/cellar allowed";
+    //private static final String MIN_INT_COURT_YARD = "0.15";
+    //private static final String MIN_INT_COURT_YARD_DESC = "Minimum interior courtyard";
+    private static final String BARRIER_FREE_ACCESS_FOR_PHYSICALLY_CHALLENGED_PEOPLE_DESC = "Barrier free access for physically challenged people";
+    private static final String GREEN_BUILDINGS_AND_SUSTAINABILITY_PROVISIONS_ERROR_CODE = "Green buildings and sustainability provisions";
+    private static final String GREEN_BUILDINGS_AND_SUSTAINABILITY_PROVISIONS_ERROR_MSG = "Green buildings and sustainability provision should be YES";
+    //private static final String GREEN_BUILDINGS_AND_SUSTAINABILITY = "Green buildings and sustainability provisions";
+    private static final String FIRE_PROTECTION_AND_FIRE_SAFETY_REQUIREMENTS_DESC = FIRE_PROTECTION_AND_FIRE_SAFETY_REQUIREMENTS;
 
     @Override
     public Plan validate(Plan pl) {
@@ -139,15 +144,13 @@ public class AdditionalFeature extends FeatureProcess {
         List<Block> blocks = pl.getBlocks();
 
         for (Block block : blocks) {
-            if (block.getBuilding() != null) {
-                if (block.getBuilding().getBuildingHeight().compareTo(BigDecimal.ZERO) == 0) {
+            if (block.getBuilding() != null && block.getBuilding().getBuildingHeight().compareTo(BigDecimal.ZERO) == 0) {
                     errors.put(String.format(DcrConstants.BLOCK_BUILDING_HEIGHT, block.getNumber()),
                             edcrMessageSource.getMessage(DcrConstants.OBJECTNOTDEFINED,
                                     new String[] {
                                             String.format(DcrConstants.BLOCK_BUILDING_HEIGHT, block.getNumber()) },
                                     LocaleContextHolder.getLocale()));
                     pl.addErrors(errors);
-                }
             }
         }
 
@@ -169,7 +172,7 @@ public class AdditionalFeature extends FeatureProcess {
         String typeOfArea = pl.getPlanInformation().getTypeOfArea();
         BigDecimal roadWidth = pl.getPlanInformation().getRoadWidth();
 
-        if (StringUtils.isNotBlank(typeOfArea) && roadWidth != null) {
+        if (isNotBlank(typeOfArea) && roadWidth != null) {
             validateNumberOfFloors(pl, errors, typeOfArea, roadWidth);
             validateHeightOfBuilding(pl, errors, typeOfArea, roadWidth);
         }
@@ -185,14 +188,14 @@ public class AdditionalFeature extends FeatureProcess {
     }
 
     private void validateFireDeclaration(Plan pl, HashMap<String, String> errors) {
-        ScrutinyDetail scrutinyDetail = getNewScrutinyDetail("Fire Protection And Fire Safety Requirements");
+        ScrutinyDetail scrutinyDetail = getNewScrutinyDetail(FIRE_PROTECTION_AND_FIRE_SAFETY_REQUIREMENTS);
         OccupancyTypeHelper mostRestrictiveOccupancyType = pl.getVirtualBuilding() != null
                 ? pl.getVirtualBuilding().getMostRestrictiveFarHelper()
                 : null;
         if (pl.getBlocks() != null && !pl.getBlocks().isEmpty()) {
             for (Block b : pl.getBlocks()) {
                 if (b.getBuilding() != null && (b.getBuilding().getIsHighRise()
-                        || isCommercialAbv750sqm(pl, mostRestrictiveOccupancyType)))
+                        || isCommercialAbv750sqm(pl, mostRestrictiveOccupancyType))) {
                     if (pl.getPlanInformation() != null
                             && !pl.getPlanInformation().getFireProtectionAndFireSafetyRequirements().isEmpty()) {
                         Map<String, String> details = new HashMap<>();
@@ -213,6 +216,7 @@ public class AdditionalFeature extends FeatureProcess {
                         scrutinyDetail.getDetail().add(details);
                         pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
                     }
+                }
             }
         }
 
@@ -249,7 +253,7 @@ public class AdditionalFeature extends FeatureProcess {
                 Map<String, String> details = new HashMap<>();
                 details.put(RULE_NO, RULE_50);
                 details.put(DESCRIPTION, BARRIER_FREE_ACCESS_FOR_PHYSICALLY_CHALLENGED_PEOPLE_DESC);
-                details.put(PERMISSIBLE, "YES");
+                details.put(PERMISSIBLE, DcrConstants.YES);
                 details.put(PROVIDED, pl.getPlanInformation().getBarrierFreeAccessForPhyChlngdPpl());
                 details.put(STATUS, Result.Not_Accepted.getResultVal());
                 scrutinyDetail.getDetail().add(details);
@@ -265,9 +269,9 @@ public class AdditionalFeature extends FeatureProcess {
 
             boolean isAccepted = false;
             ScrutinyDetail scrutinyDetail = getNewScrutinyDetailRoadArea(
-                    "Block_" + block.getNumber() + "_" + "Number of Floors");
+                    BLOCK_US + block.getNumber() + "_" + "Number of Floors");
             BigDecimal floorAbvGround = block.getBuilding().getFloorsAboveGround();
-            String requiredFloorCount = StringUtils.EMPTY;
+            String requiredFloorCount = EMPTY;
 
             if (typeOfArea.equalsIgnoreCase(OLD)) {
                 if (roadWidth.compareTo(ROAD_WIDTH_TWO_POINTFOUR) < 0) {
@@ -333,7 +337,7 @@ public class AdditionalFeature extends FeatureProcess {
                    */
             }
 
-            if (errors.isEmpty() && StringUtils.isNotBlank(requiredFloorCount)) {
+            if (errors.isEmpty() && isNotBlank(requiredFloorCount)) {
                 Map<String, String> details = new HashMap<>();
                 details.put(RULE_NO, RULE_38);
                 details.put(DESCRIPTION, NO_OF_FLOORS);
@@ -356,8 +360,8 @@ public class AdditionalFeature extends FeatureProcess {
             boolean isAccepted = false;
             String ruleNo = RULE_38;
             ScrutinyDetail scrutinyDetail = getNewScrutinyDetailRoadArea(
-                    "Block_" + block.getNumber() + "_" + "Height of Building");
-            String requiredBuildingHeight = StringUtils.EMPTY;
+                    BLOCK_US + block.getNumber() + "_" + "Height of Building");
+            String requiredBuildingHeight = EMPTY;
             BigDecimal buildingHeight = block.getBuilding().getBuildingHeight();
 
             if (typeOfArea.equalsIgnoreCase(OLD)) {
@@ -437,7 +441,7 @@ public class AdditionalFeature extends FeatureProcess {
 
             }
 
-            if (errors.isEmpty() && StringUtils.isNotBlank(requiredBuildingHeight)) {
+            if (errors.isEmpty() && isNotBlank(requiredBuildingHeight)) {
                 Map<String, String> details = new HashMap<>();
                 details.put(RULE_NO, ruleNo);
                 details.put(DESCRIPTION, HEIGHT_BUILDING);
@@ -471,11 +475,12 @@ public class AdditionalFeature extends FeatureProcess {
             boolean isAccepted = false;
             BigDecimal minPlinthHeight = BigDecimal.ZERO;
             String blkNo = block.getNumber();
-            ScrutinyDetail scrutinyDetail = getNewScrutinyDetail("Block_" + blkNo + "_" + "Plinth");
+            ScrutinyDetail scrutinyDetail = getNewScrutinyDetail(BLOCK_US + blkNo + "_" + "Plinth");
             List<BigDecimal> plinthHeights = block.getPlinthHeight();
 
             if (!plinthHeights.isEmpty()) {
-                minPlinthHeight = plinthHeights.stream().reduce(BigDecimal::min).get();
+                Optional<BigDecimal> minPlightHght = plinthHeights.stream().reduce(BigDecimal::min);
+				minPlinthHeight = minPlightHght.isPresent() ? minPlightHght.get() : BigDecimal.ZERO;
                 if (minPlinthHeight.compareTo(BigDecimal.valueOf(0.45)) >= 0) {
                     isAccepted = true;
                 }
@@ -504,7 +509,7 @@ public class AdditionalFeature extends FeatureProcess {
             boolean isAccepted = false;
             String allowedBsmnt = null;
             String blkNo = block.getNumber();
-            ScrutinyDetail scrutinyDetail = getNewScrutinyDetail("Block_" + blkNo + "_" + "Basement/Cellar");
+            ScrutinyDetail scrutinyDetail = getNewScrutinyDetail(BLOCK_US + blkNo + "_" + "Basement/Cellar");
             List<SetBack> setBacks = block.getSetBacks();
             List<SetBack> basementSetbacks = setBacks.stream().filter(setback -> setback.getLevel() < 0)
                     .collect(Collectors.toList());
@@ -520,7 +525,7 @@ public class AdditionalFeature extends FeatureProcess {
                                 || DxfFileConstants.F.equalsIgnoreCase(mostRestrictiveFarHelper.getType().getCode()))
                         && pl.getPlot() != null
                         && pl.getPlot().getArea().compareTo(BigDecimal.valueOf(PLOTAREA_300)) <= 0) {
-                    isAccepted = basementSetbacks.size() <= 1 ? true : false;
+                    isAccepted = basementSetbacks.size() <= 1;
                     allowedBsmnt = "1";
                 } else if (mostRestrictiveFarHelper != null && mostRestrictiveFarHelper.getType() != null
                         && mostRestrictiveFarHelper.getSubtype() != null
@@ -528,7 +533,7 @@ public class AdditionalFeature extends FeatureProcess {
                                 || DxfFileConstants.A_R
                                         .equalsIgnoreCase(mostRestrictiveFarHelper.getSubtype().getCode())
                                 || DxfFileConstants.F.equalsIgnoreCase(mostRestrictiveFarHelper.getType().getCode()))) {
-                    isAccepted = basementSetbacks.size() <= 2 ? true : false;
+                    isAccepted = basementSetbacks.size() <= 2;
                     allowedBsmnt = "2";
                 }
 
@@ -557,7 +562,7 @@ public class AdditionalFeature extends FeatureProcess {
         scrutinyDetail.addColumnHeading(5, STATUS);
         if (pl.getPlot() != null && pl.getPlot().getArea().compareTo(BigDecimal.valueOf(PLOTAREA_100)) >= 0) {
 
-            if (StringUtils.isNotBlank(pl.getPlanInformation().getProvisionsForGreenBuildingsAndSustainability())
+            if (isNotBlank(pl.getPlanInformation().getProvisionsForGreenBuildingsAndSustainability())
                     && pl.getPlanInformation().getProvisionsForGreenBuildingsAndSustainability().equals("YES")) {
 
                 if (mostRestrictiveFarHelper != null && mostRestrictiveFarHelper.getType() != null
@@ -643,10 +648,10 @@ public class AdditionalFeature extends FeatureProcess {
 
     private void validate4a(Plan pl, ScrutinyDetail scrutinyDetail) {
         if (pl.getUtility().getSegregationOfWaste() != null && !pl.getUtility().getSegregationOfWaste().isEmpty()) {
-            addDetails(scrutinyDetail, "55-4-a", "Segregation of Waste", "Segregation of waste details",
+            addDetails(scrutinyDetail, RULE_55_4_A, SEGREGATION_OF_WASTE, SEGREGATION_OF_WASTE_DETAILS,
                     "Provided segregation of waste details", Result.Accepted.getResultVal());
         } else {
-            addDetails(scrutinyDetail, "55-4-a", "Segregation of Waste", "Segregation of waste details",
+            addDetails(scrutinyDetail, RULE_55_4_A, SEGREGATION_OF_WASTE, SEGREGATION_OF_WASTE_DETAILS,
                     "Not provided segregation of waste details", Result.Not_Accepted.getResultVal());
         }
     }

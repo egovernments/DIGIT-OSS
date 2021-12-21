@@ -204,6 +204,7 @@ public class BudgetSearchAndModify extends BudgetSearchAction {
         super.prepare();
         if (parameters.containsKey("action") && Constants.MODIFY.equals(parameters.get("action")[0]))
             if (budgetDetail.getId() != null) {
+            	LOGGER.info("Budget detail id: "+ budgetDetail.getId());
 
             } else
                 for (int i = 0; i < savedbudgetDetailList.size(); i++)

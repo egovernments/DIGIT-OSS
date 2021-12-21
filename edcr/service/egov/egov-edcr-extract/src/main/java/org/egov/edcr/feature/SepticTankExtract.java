@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.SepticTank;
 import org.egov.edcr.constants.DxfFileConstants;
 import org.egov.edcr.entity.blackbox.MeasurementDetail;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SepticTankExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(SepticTankExtract.class);
 
     @Override
     public PlanDetail validate(PlanDetail planDetail) {

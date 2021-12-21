@@ -2189,6 +2189,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
         try {
             sequenceNumber = databaseSequenceProvider.getNextSequence("seq_eg_wf_states");
         } catch (final SQLGrammarException e) {
+        	LOGGER.error("Exception in setting budget details.");
         }
         stateId = Long.valueOf(sequenceNumber.toString());
 
@@ -2212,6 +2213,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
             try {
                 sequenceNumber = databaseSequenceProvider.getNextSequence("seq_egf_budgetgroup");
             } catch (final SQLGrammarException e) {
+            	LOGGER.error("Exception in creating budget group.");
             }
 
             Long.valueOf(sequenceNumber.toString());

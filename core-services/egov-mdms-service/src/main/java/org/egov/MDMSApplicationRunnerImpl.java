@@ -160,7 +160,7 @@ public class MDMSApplicationRunnerImpl {
         }
     }
 
-    public void readMdmsConfigFiles(String masterConfigUrl) {
+    public static void readMdmsConfigFiles(String masterConfigUrl) {
         log.info("Loading master configs from: " + masterConfigUrl);
         Resource resource = resourceLoader.getResource(masterConfigUrl);
         InputStream inputStream = null;
@@ -186,7 +186,8 @@ public class MDMSApplicationRunnerImpl {
                 try {
                     isMergeAllowed = JsonPath.read(objectMapper.writeValueAsString(masterData),
                             MDMSConstants.MERGE_FILES);
-                } catch (Exception ignored) {
+                } catch (Exception e) {
+                    log.error("Encountered an Exception : " + e.getMessage());
                 }
             }
         }

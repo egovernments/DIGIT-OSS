@@ -19,7 +19,7 @@ public class IngestTestClient {
          
         if(usersMap!=null){
             for(LinkedHashMap<String, Object> map : usersMap){
-                System.out.println("User : id="+map.get("id")+", Name="+map.get("name")+", Age="+map.get("age")+", Salary="+map.get("salary"));;
+                Logger("User : id="+map.get("id")+", Name="+map.get("name")+", Age="+map.get("age")+", Salary="+map.get("salary"));;
             }
         }else{
             Logger("No user exist----------");

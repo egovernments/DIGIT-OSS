@@ -1,12 +1,5 @@
 package org.egov.edcr.Util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.egov.common.entity.edcr.PlanFeature;
-import org.egov.edcr.feature.CoverageExtract;
-import org.egov.edcr.feature.PlanInfoFeatureExtract;
-
 public class FeatureList {
 	
 	/* public List<Class> getFeatures() {

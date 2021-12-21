@@ -151,7 +151,7 @@ public class MigrationService {
 			if (null != bill_v1.getAdditionalDetails())
 				jsonNode = mapper.readTree(bill_v1.getAdditionalDetails().toString());
 		} catch (IOException e) {
-
+			log.error("IO Exception in reading additional details object: ",e);
 		}
 
 		List<BillDetail> billdetails = getNewBillDetails(bill_v1.getBillDetails(), auditDetails, bill_v1.getId()); 

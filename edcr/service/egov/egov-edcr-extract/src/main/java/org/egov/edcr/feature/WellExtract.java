@@ -27,7 +27,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class WellExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(WellExtract.class);
+    private static final String LAYER_NAME_WELL = "LAYER_NAME_WELL";
+	private static final Logger LOG = Logger.getLogger(WellExtract.class);
     @Autowired
     private LayerNames layerNames;
 
@@ -36,12 +37,12 @@ public class WellExtract extends FeatureExtract {
         if (LOG.isDebugEnabled())
             LOG.debug("Starting of Well Extract......");
         // Well Utility
-        if (pl.getDoc().containsDXFLayer(layerNames.getLayerName("LAYER_NAME_WELL"))) {
+        if (pl.getDoc().containsDXFLayer(layerNames.getLayerName(LAYER_NAME_WELL))) {
             List<DXFCircle> wellCircle = Util.getPolyCircleByLayer(pl.getDoc(),
-                    layerNames.getLayerName("LAYER_NAME_WELL"));
+                    layerNames.getLayerName(LAYER_NAME_WELL));
             List<DXFLWPolyline> wellPolygon = new ArrayList<>();
             if (wellCircle.isEmpty())
-                wellPolygon = Util.getPolyLinesByLayer(pl.getDoc(), layerNames.getLayerName("LAYER_NAME_WELL"));
+                wellPolygon = Util.getPolyLinesByLayer(pl.getDoc(), layerNames.getLayerName(LAYER_NAME_WELL));
             if (!wellCircle.isEmpty())
                 for (DXFCircle circle : wellCircle) {
                     WellUtility well = new WellUtility();
@@ -84,7 +85,7 @@ public class WellExtract extends FeatureExtract {
 
         if (null != shortestDistanceCentralLineRoadDimension && !shortestDistanceCentralLineRoadDimension.isEmpty())
             for (Object dxfEntity : shortestDistanceCentralLineRoadDimension) {
-                BigDecimal value = BigDecimal.ZERO;
+                BigDecimal value;
 
                 DXFDimension line = (DXFDimension) dxfEntity;
                 String dimensionBlock = line.getDimensionBlock();

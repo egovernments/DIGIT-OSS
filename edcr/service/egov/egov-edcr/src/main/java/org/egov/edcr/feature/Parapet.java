@@ -52,8 +52,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -63,7 +63,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class Parapet extends FeatureProcess {
 
-	private static final Logger LOG = Logger.getLogger(Parapet.class);
 	private static final String RULE_41_V = "41-v";
 	public static final String PARAPET_DESCRIPTION = "Parapet";
 
@@ -88,13 +87,14 @@ public class Parapet extends FeatureProcess {
 		details.put(RULE_NO, RULE_41_V);
 		details.put(DESCRIPTION, PARAPET_DESCRIPTION);
 
-		BigDecimal minHeight = BigDecimal.ZERO;
+		BigDecimal minHeight;
 
 		for (Block b : pl.getBlocks()) {
 			if (b.getParapets() != null && !b.getParapets().isEmpty()) {
-				minHeight = b.getParapets().stream().reduce(BigDecimal::min).get();
+				Optional<BigDecimal> minparapetHght = b.getParapets().stream().reduce(BigDecimal::min);
+				minHeight = minparapetHght.isPresent() ? minparapetHght.get() : BigDecimal.ZERO;
 
-				if (minHeight.compareTo(new BigDecimal(1.2)) >= 0 && minHeight.compareTo(new BigDecimal(1.5)) <= 0) {
+				if (minHeight.compareTo(BigDecimal.valueOf(1.2)) >= 0 && minHeight.compareTo(BigDecimal.valueOf(1.5)) <= 0) {
 
 					details.put(REQUIRED, "Height >= 1.2 and height <= 1.5");
 					details.put(PROVIDED, "Height >= " + minHeight + " and height <= " + minHeight);

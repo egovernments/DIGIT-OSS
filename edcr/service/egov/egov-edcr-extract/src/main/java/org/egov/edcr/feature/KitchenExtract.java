@@ -39,11 +39,11 @@ public class KitchenExtract extends FeatureExtract {
                             for (TypicalFloor tp : block.getTypicalFloor())
                                 if (tp.getRepetitiveFloorNos().contains(floor.getNumber()))
                                     for (Floor allFloors : block.getBuilding().getFloors())
-                                        if (allFloors.getNumber().equals(tp.getModelFloorNo()))
-                                            if (allFloors.getKitchen() != null) {
-                                                floor.setKitchen(allFloors.getKitchen());
-                                                continue outside;
-                                            }
+										if (allFloors.getNumber().equals(tp.getModelFloorNo())
+												&& allFloors.getKitchen() != null) {
+											floor.setKitchen(allFloors.getKitchen());
+											continue outside;
+										}
 
                         List<DXFLWPolyline> kitchenPolyLines = new ArrayList<>();
 

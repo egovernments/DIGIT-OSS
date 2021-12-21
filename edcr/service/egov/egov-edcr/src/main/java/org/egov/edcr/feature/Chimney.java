@@ -52,8 +52,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -63,7 +63,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class Chimney extends FeatureProcess {
 
-	private static final Logger LOG = Logger.getLogger(Chimney.class);
+
 	private static final String RULE_44_D = "44-d";
 	public static final String CHIMNEY_DESCRIPTION = "Chimney";
 
@@ -87,14 +87,14 @@ public class Chimney extends FeatureProcess {
 		Map<String, String> details = new HashMap<>();
 		details.put(RULE_NO, RULE_44_D);
 
-		BigDecimal minHeight = BigDecimal.ZERO;
+		BigDecimal minHeight;
 
 		for (Block b : pl.getBlocks()) {
-			minHeight = BigDecimal.ZERO;
 			if (b.getChimneys() != null && !b.getChimneys().isEmpty()) {
-				minHeight = b.getChimneys().stream().reduce(BigDecimal::min).get();
+				Optional<BigDecimal> minHgt = b.getChimneys().stream().reduce(BigDecimal::min);
+				minHeight = minHgt.isPresent() ? minHgt.get() : BigDecimal.ZERO;
 
-				if (minHeight.compareTo(new BigDecimal(1)) <= 0) {
+				if (minHeight.compareTo(BigDecimal.valueOf(1)) <= 0) {
 					details.put(DESCRIPTION, CHIMNEY_DESCRIPTION);
 					details.put(VERIFIED, "Verified whether chimney height is <= 1 meters");
 					details.put(ACTION, "Not included chimney height(" + minHeight + ") to building height");

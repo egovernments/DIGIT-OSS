@@ -170,7 +170,7 @@ public class BalanceSheetService extends ReportService {
                 }
         } catch (final HibernateException exp)
         {
-
+           LOGGER.error("Exception in addOpeningBalancePrevYear.");
         }
     }
 

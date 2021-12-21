@@ -101,7 +101,7 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 	}
 
 
-	public void readFiles() {
+	public static void readFiles() {
 		ConcurrentHashMap<String, Mapping> mappingsMap = new ConcurrentHashMap<>();
 		ConcurrentHashMap<String, List<Mapping>> versionsMap = new ConcurrentHashMap<>();
 		ConcurrentHashMap<String, List<String>> topicsMap = new ConcurrentHashMap<>();

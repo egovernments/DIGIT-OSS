@@ -102,9 +102,9 @@ public class PositionHierarchyService {
             return positionHierarchyRepository.getListOfPositionHeirarchyByFromPositionAndObjectTypeAndSubType(fromPositionId, objectId, objectSubType);
         else if (fromPositionId == 0 && objectId != 0 && objectSubType != null)
             return positionHierarchyRepository.getPosHirByObjectTypeAndObjectSubType(objectId, objectSubType);
-        else if (fromPositionId != 0 && objectId != 0 && objectSubType == null)
+        else if (fromPositionId != 0 && objectId != 0 )
             return positionHierarchyRepository.getListOfPositionHeirarchyByFromPositionAndObjectType(fromPositionId, objectId);
-        else if (fromPositionId == 0 && objectId != 0 && objectSubType == null)
+        else if (fromPositionId == 0 && objectId != 0 )
             return positionHierarchyRepository.getListOfPositionHeirarchyByObjectType(objectId);
         else return Collections.emptyList();
     }

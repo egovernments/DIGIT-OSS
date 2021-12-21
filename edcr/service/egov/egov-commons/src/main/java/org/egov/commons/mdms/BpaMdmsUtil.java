@@ -17,7 +17,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BpaMdmsUtil {
-    private RestCallService serviceRequestRepository;
+    private static final String FILTER_CONDITION = "$.[?(@.active==true)]";
+	private RestCallService serviceRequestRepository;
     private MdmsConfiguration mdmsConfiguration;
 
     public BpaMdmsUtil(RestCallService serviceRequestRepository, MdmsConfiguration mdmsConfiguration) {
@@ -40,17 +41,17 @@ public class BpaMdmsUtil {
         
         MasterDetail masterDetailOccupancyType = new MasterDetail();
         masterDetailOccupancyType.setName("OccupancyType");
-        masterDetailOccupancyType.setFilter("$.[?(@.active==true)]");
+        masterDetailOccupancyType.setFilter(FILTER_CONDITION);
         bpaMasterDtls.add(masterDetailOccupancyType);
         
         MasterDetail masterDetailSubOccupancyType = new MasterDetail();
         masterDetailSubOccupancyType.setName("SubOccupancyType");
-        masterDetailSubOccupancyType.setFilter("$.[?(@.active==true)]");
+        masterDetailSubOccupancyType.setFilter(FILTER_CONDITION);
         bpaMasterDtls.add(masterDetailSubOccupancyType);
         
         MasterDetail masterDetailUsages = new MasterDetail();
         masterDetailUsages.setName("Usages");
-        masterDetailUsages.setFilter("$.[?(@.active==true)]");
+        masterDetailUsages.setFilter(FILTER_CONDITION);
         bpaMasterDtls.add(masterDetailUsages);
         
         /*
@@ -81,8 +82,7 @@ public class BpaMdmsUtil {
     public Object mDMSCall(RequestInfo requestInfo, String tenantId) {
         MdmsCriteriaReq mdmsCriteriaReq = getBpaMDMSRequest(requestInfo,
                 tenantId);
-        Object result = serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
-        return result;
+        return serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
     }
 
     public StringBuilder getMdmsSearchUrl() {

@@ -538,7 +538,7 @@ public class JournalVoucherService {
                 voucherNumberPrefix = FinancialConstants.PENBILL_VOUCHERNO_TYPE;
                 break;
             default: // if subtype is invalid then use type
-                if (voucherNumberPrefix == null)
+                
                     voucherNumberPrefix = checkWithVoucherType(type);
                 break;
         }

@@ -56,6 +56,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -81,14 +82,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class Sanitation extends FeatureProcess {
-    public static final String MSG_ERROR_MANDATORY = "msg.error.mandatory.object.not.defined";
-    public static final String FEMALE = "Female ";
-    public static final String MALE = "Male ";
-    public static final String BLOCK = "Block ";
-    public static final String SANITY_RULE_DESC = "Sanity facility for Occupancy ";
-    public static final String NEWLINE = "\n";
-    public static final String SANITATION = "Sanitation";
-    public static final String BLOCK_U_S = "Block_";
+    private static final String COUNT = " - Count";
+	private static final String POLYLINE_NOT_HAVING_ONLY_4_POINTS_IN_BLOCK = " polyline not having only 4 points in block";
+	private static final String NUMBER_OF = " number of ";
+	private static final String SANITY = "Sanity_";
+	private static final String MSG_ERROR_MANDATORY = "msg.error.mandatory.object.not.defined";
+    private static final String FEMALE = "Female ";
+    private static final String MALE = "Male ";
+    private static final String BLOCK = "Block ";
+    private static final String SANITY_RULE_DESC = "Sanity facility for Occupancy ";
+    private static final String NEWLINE = "\n";
+    private static final String SANITATION_DESC = "Sanitation";
+    private static final String BLOCK_U_S = "Block_";
     private static final String WITH = " with ";
     private static final String BLDG_PART_WATER_CLOSET = "Water Closet";
     private static final String BLDG_PART_SPECIAL_WATER_CLOSET = "Special Water Closet";
@@ -117,19 +122,19 @@ public class Sanitation extends FeatureProcess {
      */
     private static final String RULE_38_1 = "38-1";
     private static final String NOOFBEDS = "No Of Beds";
-    public static final String RULE_55_12 = "55-12";
-    public static final String RULE_40_A_4 = "40A-4";
-    public static final String RULE_54_6 = "54-6";
-    public static final BigDecimal MINAREAOFSPWC = BigDecimal.valueOf(2.625);
-    public static final BigDecimal MINDIMENSIONOFSPWC = BigDecimal.valueOf(1.5);
-    public static final String MINIMUM_AREA_SPWC = "2.625 M2";
-    public static final String MINIMUM_DIMENSION_SPWC = "1.5 M";
+    private static final String RULE_55_12 = "55-12";
+    private static final String RULE_40_A_4 = "40A-4";
+    private static final String RULE_54_6 = "54-6";
+    private static final BigDecimal MINAREAOFSPWC = BigDecimal.valueOf(2.625);
+    private static final BigDecimal MINDIMENSIONOFSPWC = BigDecimal.valueOf(1.5);
+    private static final String MINIMUM_AREA_SPWC = "2.625 M2";
+    private static final String MINIMUM_DIMENSION_SPWC = "1.5 M";
 
     @Override
     public Plan validate(Plan pl) {
 
         for (Block b : pl.getBlocks()) {
-            if (!b.getCompletelyExisting()) {
+            if (Boolean.FALSE.equals(b.getCompletelyExisting())) {
 
                 int totalSpecialWC = 0;
                 int totalWashBasins = 0;
@@ -209,6 +214,9 @@ public class Sanitation extends FeatureProcess {
                                     BLDG_PART_URINAL, b.getNumber()));
                         }
                         break;
+                     default:
+                    	 // occupancy is not allowed
+                    	 break;
                     }
                   }
                 }
@@ -261,8 +269,8 @@ public class Sanitation extends FeatureProcess {
                 }
             }
             if (count > 0) {
-                pl.addError("Sanity_" + BLDG_PART_URINAL + b.getNumber(), count + " number of " + BLDG_PART_URINAL
-                        + " polyline not having only 4 points in block" + b.getNumber());
+                pl.addError(SANITY + BLDG_PART_URINAL + b.getNumber(), count + NUMBER_OF + BLDG_PART_URINAL
+                        + POLYLINE_NOT_HAVING_ONLY_4_POINTS_IN_BLOCK + b.getNumber());
 
             }
         }
@@ -278,8 +286,8 @@ public class Sanitation extends FeatureProcess {
                 }
             }
             if (count > 0) {
-                pl.addError("Sanity_" + BLDG_PART_WATER_CLOSET + b.getNumber(), count + " number of "
-                        + BLDG_PART_WATER_CLOSET + " polyline not having only 4 points in block" + b.getNumber());
+                pl.addError(SANITY + BLDG_PART_WATER_CLOSET + b.getNumber(), count + NUMBER_OF
+                        + BLDG_PART_WATER_CLOSET + POLYLINE_NOT_HAVING_ONLY_4_POINTS_IN_BLOCK + b.getNumber());
 
             }
         }
@@ -302,8 +310,8 @@ public class Sanitation extends FeatureProcess {
                 }
             }
             if (count > 0) {
-                pl.addError("Sanity_" + BLDG_PART_BATHROOM + b.getNumber(), count + " number of " + BLDG_PART_BATHROOM
-                        + " polyline not having only 4 points in block" + b.getNumber());
+                pl.addError(SANITY + BLDG_PART_BATHROOM + b.getNumber(), count + NUMBER_OF + BLDG_PART_BATHROOM
+                        + POLYLINE_NOT_HAVING_ONLY_4_POINTS_IN_BLOCK + b.getNumber());
 
             }
         }
@@ -317,8 +325,8 @@ public class Sanitation extends FeatureProcess {
             }
 
             if (count > 0) {
-                pl.addError("Sanity_" + MALE_BATH_WITH_WC + b.getNumber(), count + " number of " + MALE_BATH_WITH_WC
-                        + " polyline not having only 4 points in block" + b.getNumber());
+                pl.addError(SANITY + MALE_BATH_WITH_WC + b.getNumber(), count + NUMBER_OF + MALE_BATH_WITH_WC
+                        + POLYLINE_NOT_HAVING_ONLY_4_POINTS_IN_BLOCK + b.getNumber());
             }
         }
     }
@@ -371,7 +379,7 @@ public class Sanitation extends FeatureProcess {
         Boolean allStatus = true;
         Boolean accepted = true;
         for (Block b : pl.getBlocks()) {
-            if (!b.getCompletelyExisting()) {
+            if (Boolean.FALSE.equals(b.getCompletelyExisting())) {
 
                 LOG.info("Starting  Sanitation of ....." + b.getNumber());
                 /*
@@ -379,14 +387,14 @@ public class Sanitation extends FeatureProcess {
                  * is either Residential or Commercial then sanitation process not require.
                  */
 
-                ScrutinyDetail scrutinyDetail = getNewScrutinyDetail(BLOCK_U_S + b.getNumber() + "_" + SANITATION);
+                ScrutinyDetail scrutinyDetail = getNewScrutinyDetail(BLOCK_U_S + b.getNumber() + "_" + SANITATION_DESC);
                 SanityHelper helper = new SanityHelper();
                 Map<Integer, Integer> requiredSpWcMap = new ConcurrentHashMap<>();
                 Map<Integer, Integer> providedSpWcMap = new ConcurrentHashMap<>();
                 Map<Integer, Integer> failedAreaSpWcMap = new ConcurrentHashMap<>();
                 Map<Integer, Integer> failedDimensionSpWcMap = new ConcurrentHashMap<>();
                 for (Occupancy type : b.getBuilding().getTotalArea()) {
-                    double carpetArea = 0d;
+                    double carpetArea;
                     if (type.getCarpetArea() != null && type.getCarpetArea().doubleValue() > 0) {
                         carpetArea = type.getCarpetArea().doubleValue();
                     } else {
@@ -403,7 +411,7 @@ public class Sanitation extends FeatureProcess {
 
                     case DxfFileConstants.A:
                     case DxfFileConstants.A_AF:
-                        if (b.getResidentialBuilding())
+                        if (Boolean.TRUE.equals(b.getResidentialBuilding()))
                             accepted = processSpecialWaterClosetForResidential(b, helper, scrutinyDetail,
                                     requiredSpWcMap, providedSpWcMap, failedAreaSpWcMap, failedDimensionSpWcMap);
                         break;
@@ -542,7 +550,7 @@ public class Sanitation extends FeatureProcess {
 
                         helper.ruleNo.add("56(3C)");
                         helper.ruleDescription = SANITY_RULE_DESC + o.getCode();
-                        if ((o.equals(DxfFileConstants.F) || o.equals(DxfFileConstants.F_K)))
+                        if ((o.getCode().equals(DxfFileConstants.F) || o.getCode().equals(DxfFileConstants.F_K)))
                             processSpecialWaterCloset(b, requiredSpWcMap, providedSpWcMap, failedAreaSpWcMap,
                                     failedDimensionSpWcMap);
 
@@ -599,9 +607,11 @@ public class Sanitation extends FeatureProcess {
                         // accepted = processSanity(pl, b, floorArea, helper,
                         // scrutinyDetail, type);
                         break;
-
+                    default:
+                    	// No validation
+                    	break;
                     }
-                    if (!accepted) {
+                    if (Boolean.FALSE.equals(accepted)) {
                         allStatus = false;
                     }
 
@@ -700,7 +710,7 @@ public class Sanitation extends FeatureProcess {
         for (Floor f : block.getBuilding().getFloors()) {
             if (f.getNumber().intValue() < 0)
                 continue;
-            if (!f.getTerrace() && f.getNumber() % 3 == 0) {
+            if (Boolean.TRUE.equals(!f.getTerrace()) && f.getNumber() % 3 == 0) {
                 if (requiredSpWcMap.containsKey(f.getNumber()))
                     continue;
                 else
@@ -803,7 +813,7 @@ public class Sanitation extends FeatureProcess {
 
                 expected = "" + totalWCExpected.intValue();
                 actual = "" + totalWCActual.intValue();
-                description = BLDG_PART_WATER_CLOSET + " - Count";
+                description = BLDG_PART_WATER_CLOSET + COUNT;
                 if (totalWCExpected.intValue() > totalWCActual.intValue()) {
                     addReportDetail(helper.ruleNo, description, expected, actual, Result.Not_Accepted.getResultVal(),
                             detail);
@@ -816,7 +826,7 @@ public class Sanitation extends FeatureProcess {
         }
         if (helper.urinal > 0) {
             helper.urinal = Math.ceil(helper.urinal);
-            description = BLDG_PART_URINAL + " - Count";
+            description = BLDG_PART_URINAL + COUNT;
             Integer urinalActual = sanityDetails.getUrinals().size();
             expected = "" + helper.urinal.intValue();
             actual = "" + urinalActual.intValue();
@@ -839,7 +849,7 @@ public class Sanitation extends FeatureProcess {
             for (Floor f : b.getBuilding().getFloors()) {
                 actualWash += f.getWashBasins().size();
             }
-            description = BLDG_PART_WASHBASIN + " - Count";
+            description = BLDG_PART_WASHBASIN + COUNT;
             Double totalWashExpected = Math.ceil(helper.maleWash + helper.femaleWash);
             expected = "" + totalWashExpected.intValue();
             actual = "" + actualWash;
@@ -855,7 +865,7 @@ public class Sanitation extends FeatureProcess {
         }
 
         if (helper.maleBath > 0 || helper.femaleBath > 0) {
-            description = BLDG_PART_BATHROOM + " - Count";
+            description = BLDG_PART_BATHROOM + COUNT;
             int maleBathActual = sanityDetails.getMaleBathRooms().size()
                     + sanityDetails.getMaleRoomsWithWaterCloset().size();
             int femaleBathActual = sanityDetails.getFemaleBathRooms().size()
@@ -903,7 +913,8 @@ public class Sanitation extends FeatureProcess {
     }
 
     private boolean checkDimension(Integer required, ScrutinyDetail scrutinyDetail, List<Measurement> list,
-            double minSide, double minArea, String type, String desc, String ruleNum) {
+            double minSide, double minArea, String type, String description, String ruleNum) {
+    	String desc;
         if (!list.isEmpty()) {
             int wcNotMeetingSide = checkDimensionSide(list, minSide);
             int wcNotMeetingArea = checkDimensionArea(list, minArea);
@@ -958,9 +969,11 @@ public class Sanitation extends FeatureProcess {
     private int checkDimensionSide(List<Measurement> measurements, Double minValue) {
         int failedCount = 0;
         for (Measurement m : measurements) {
-            if (minValue == 0) {
-
-            }
+			/*
+			 * if (minValue == 0) {
+			 * 
+			 * }
+			 */
             double minSide = m.getMinimumSide()
                     .setScale(DcrConstants.ONE_DECIMALDIGITS_MEASUREMENTS, DcrConstants.ROUNDMODE_MEASUREMENTS)
                     .doubleValue();
@@ -1015,11 +1028,11 @@ public class Sanitation extends FeatureProcess {
                 failedDimensionCount++;
             }
 
-            if (providedSpecialWc == failedAreaCount) {
+            if (Objects.equals(providedSpecialWc, failedAreaCount)) {
                 failedAreaSpWcMap.put(flrNo, failedAreaCount);
             }
 
-            if (providedSpecialWc == failedDimensionCount) {
+            if (Objects.equals(providedSpecialWc, failedDimensionCount)) {
                 failedDimensionSpWcMap.put(flrNo, failedAreaCount);
             }
 

@@ -131,7 +131,7 @@ public class DishonorChequeSubLedgerDetails extends BaseModel {
             return false;
         final DishonorChequeSubLedgerDetails other = (DishonorChequeSubLedgerDetails) obj;
         if (detailKeyId == null && detailTypeId == null) {
-            if (detailKeyId != null || detailTypeId != null)
+            
                 return false;
         } else if (!(detailKeyId == other.detailKeyId && detailTypeId == other.detailTypeId))
             return false;

@@ -185,15 +185,17 @@ public class ChartOfAccountsHibernateDAO implements ChartOfAccountsDAO {
         int detailTypeId = 0;
         ResultSet rs;
         String qryDetailType = "Select detailtypeid from chartofaccountdetail where glcodeid=(select id from chartofaccounts where glcode=?)";
-        PreparedStatement st = connection.prepareStatement(qryDetailType);
-        st.setString(1, glCode);
-        rs = st.executeQuery();
-        if (rs.next()) {
-            detailTypeId = rs.getInt(1);
-        }
-        rs.close();
-        st.close();
-        return detailTypeId;
+        
+		try (PreparedStatement st = connection.prepareStatement(qryDetailType);) {
+			st.setString(1, glCode);
+			rs = st.executeQuery();
+			if (rs.next()) {
+				detailTypeId = rs.getInt(1);
+			}
+			rs.close();
+		}
+
+		return detailTypeId;
     }
 
     @Deprecated

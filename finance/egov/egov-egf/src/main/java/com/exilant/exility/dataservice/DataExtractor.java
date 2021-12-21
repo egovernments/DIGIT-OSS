@@ -116,11 +116,9 @@ public class DataExtractor {
         ResultSetMetaData metaData = null;
         String[][] dataValues = null;
 
-        try
-        {
-
-            final PreparedStatement pststement = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY);
+		try (final PreparedStatement pststement = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_READ_ONLY);) {
+ 
             ResultSet rs = null;
             String[] columnNames = null;
             try {
@@ -246,10 +244,9 @@ public class DataExtractor {
         int columnCount = 0;
         ResultSetMetaData metaData = null;
 
-        try
-        {
-            final PreparedStatement pststement = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY);
+		try (final PreparedStatement pststement = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_READ_ONLY);) {
+
             final ResultSet rs = pststement.executeQuery();
             metaData = rs.getMetaData();
             columnCount = metaData.getColumnCount();// Gets the Column Count in the ResultSet

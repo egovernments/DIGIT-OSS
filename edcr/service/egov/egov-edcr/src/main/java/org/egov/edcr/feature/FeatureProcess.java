@@ -102,9 +102,9 @@ public abstract class FeatureProcess {
 	public String getAmendmentsRefNumber(Date applicationDate) {
 		String refNumber = "";
 		Map<String, Date> amendments = getAmendments();
-		for (String key : amendments.keySet()) {
-			if (applicationDate != null && applicationDate.compareTo(amendments.get(key)) >= 0) {
-				refNumber = key;
+		for (Map.Entry<String, Date> map : amendments.entrySet()) {
+			if (applicationDate != null && applicationDate.compareTo(map.getValue()) >= 0) {
+				refNumber = map.getKey();
 			}
 		}
 

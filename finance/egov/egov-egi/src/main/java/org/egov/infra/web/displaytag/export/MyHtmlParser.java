@@ -83,7 +83,7 @@ public class MyHtmlParser {
 			parser.parse(r, new HTMLParseLister(), true);
 			r.close();
 		} catch (final IOException e) {
-
+            e.printStackTrace();
 		}
 		return getOutText();
 

@@ -709,7 +709,7 @@ public class PendingTDSReportAction extends BaseFormAction {
             entityType = egovCommon.getEntityType(entry.getEgRemittanceGldtl().getGeneralledgerdetail().getDetailTypeId(),
                     detailKeyId);
         } catch (final ApplicationException e) {
-
+          LOGGER.error("Exception in create TDS");
         }
         return entityType;
     }

@@ -54,6 +54,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
@@ -73,7 +74,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FireStair extends FeatureProcess {
-    private static final Logger LOG = Logger.getLogger(FireStair.class);
+    private static final String FLOOR2 = " floor ";
+	private static final String FIRE_STAIR_LANDING_NOT_DEFINED_IN_BLK = "Fire Stair landing not defined in blk ";
+	private static final String FIRE_STAIR = " fire stair ";
+	private static final String BLOCK_UNDERSCORE_DESC = "Block_";
+	private static final String TYPICAL_FLOORS = "typicalFloors";
+	private static final String IS_TYPICAL_REPITITIVE_FLOOR = "isTypicalRepititiveFloor";
+	private static final Logger LOG = Logger.getLogger(FireStair.class);
     private static final String FLOOR = "Floor";
     private static final String RULE42_5_II = "42-5-iii-f";
     private static final String EXPECTED_NO_OF_RISE = "12";
@@ -110,7 +117,7 @@ public class FireStair extends FeatureProcess {
                 scrutinyDetail2.addColumnHeading(4, PERMISSIBLE);
                 scrutinyDetail2.addColumnHeading(5, PROVIDED);
                 scrutinyDetail2.addColumnHeading(6, STATUS);
-                scrutinyDetail2.setKey("Block_" + block.getNumber() + "_" + "Fire Stair - Width");
+                scrutinyDetail2.setKey(BLOCK_UNDERSCORE_DESC + block.getNumber() + "_" + "Fire Stair - Width");
 
                 ScrutinyDetail scrutinyDetail3 = new ScrutinyDetail();
                 scrutinyDetail3.addColumnHeading(1, RULE_NO);
@@ -119,7 +126,7 @@ public class FireStair extends FeatureProcess {
                 scrutinyDetail3.addColumnHeading(4, PERMISSIBLE);
                 scrutinyDetail3.addColumnHeading(5, PROVIDED);
                 scrutinyDetail3.addColumnHeading(6, STATUS);
-                scrutinyDetail3.setKey("Block_" + block.getNumber() + "_" + "Fire Stair - Tread width");
+                scrutinyDetail3.setKey(BLOCK_UNDERSCORE_DESC + block.getNumber() + "_" + "Fire Stair - Tread width");
 
                 ScrutinyDetail scrutinyDetailRise = new ScrutinyDetail();
                 scrutinyDetailRise.addColumnHeading(1, RULE_NO);
@@ -128,7 +135,7 @@ public class FireStair extends FeatureProcess {
                 scrutinyDetailRise.addColumnHeading(4, PERMISSIBLE);
                 scrutinyDetailRise.addColumnHeading(5, PROVIDED);
                 scrutinyDetailRise.addColumnHeading(6, STATUS);
-                scrutinyDetailRise.setKey("Block_" + block.getNumber() + "_" + "Fire Stair - Number of risers");
+                scrutinyDetailRise.setKey(BLOCK_UNDERSCORE_DESC + block.getNumber() + "_" + "Fire Stair - Number of risers");
 
                 ScrutinyDetail scrutinyDetailLanding = new ScrutinyDetail();
                 scrutinyDetailLanding.addColumnHeading(1, RULE_NO);
@@ -137,7 +144,7 @@ public class FireStair extends FeatureProcess {
                 scrutinyDetailLanding.addColumnHeading(4, PERMISSIBLE);
                 scrutinyDetailLanding.addColumnHeading(5, PROVIDED);
                 scrutinyDetailLanding.addColumnHeading(6, STATUS);
-                scrutinyDetailLanding.setKey("Block_" + block.getNumber() + "_" + "Fire Stair - Mid landing");
+                scrutinyDetailLanding.setKey(BLOCK_UNDERSCORE_DESC + block.getNumber() + "_" + "Fire Stair - Mid landing");
 
                 ScrutinyDetail scrutinyDetailAbutBltUp = new ScrutinyDetail();
                 scrutinyDetailAbutBltUp.addColumnHeading(1, RULE_NO);
@@ -145,7 +152,7 @@ public class FireStair extends FeatureProcess {
                 scrutinyDetailAbutBltUp.addColumnHeading(3, DESCRIPTION);
                 scrutinyDetailAbutBltUp.addColumnHeading(4, PROVIDED);
                 scrutinyDetailAbutBltUp.addColumnHeading(5, STATUS);
-                scrutinyDetailAbutBltUp.setKey("Block_" + block.getNumber() + "_" + "Fire Stair - Abutting External Wall");
+                scrutinyDetailAbutBltUp.setKey(BLOCK_UNDERSCORE_DESC + block.getNumber() + "_" + "Fire Stair - Abutting External Wall");
 
                 // int spiralStairCount = 0;
                 OccupancyTypeHelper mostRestrictiveOccupancyType = plan.getVirtualBuilding() != null ? plan.getVirtualBuilding().getMostRestrictiveFarHelper(): null ;
@@ -158,7 +165,7 @@ public class FireStair extends FeatureProcess {
                 // block.getBuilding().getFloorsAboveGround();
                 List<String> fireStairAbsent = new ArrayList<>();
                 for (Floor floor : floors) {
-                    if (!floor.getTerrace()) {
+                    if (Boolean.FALSE.equals(floor.getTerrace())) {
                         boolean isTypicalRepititiveFloor = false;
                         Map<String, Object> typicalFloorValues = Util.getTypicalFloorValues(block, floor,
                                 isTypicalRepititiveFloor);
@@ -186,16 +193,16 @@ public class FireStair extends FeatureProcess {
                                             fireStair, landings, errors);
                                 } else {
                                     errors.put(
-                                            "Fire Stair landing not defined in blk " + block.getNumber() + " floor "
-                                                    + floor.getNumber() + " fire stair " + fireStair.getNumber(),
-                                            "Fire Stair landing not defined in blk " + block.getNumber() + " floor "
-                                                    + floor.getNumber() + " fire stair " + fireStair.getNumber());
+                                            FIRE_STAIR_LANDING_NOT_DEFINED_IN_BLK + block.getNumber() + FLOOR2
+                                                    + floor.getNumber() + FIRE_STAIR + fireStair.getNumber(),
+                                            FIRE_STAIR_LANDING_NOT_DEFINED_IN_BLK + block.getNumber() + FLOOR2
+                                                    + floor.getNumber() + FIRE_STAIR + fireStair.getNumber());
                                     plan.addErrors(errors);
                                 }
                             }
                         } else {
-                            if (block.getBuilding().getIsHighRise()) {
-                                fireStairAbsent.add("Block " + block.getNumber() + " floor " + floor.getNumber());
+                            if (Boolean.TRUE.equals(block.getBuilding().getIsHighRise())) {
+                                fireStairAbsent.add("Block " + block.getNumber() + FLOOR2 + floor.getNumber());
                             }
                         }
 
@@ -209,7 +216,7 @@ public class FireStair extends FeatureProcess {
                     }
                 }
 
-                if (block.getBuilding().getIsHighRise() && fireStairCount == 0) {
+                if (Boolean.TRUE.equals(block.getBuilding().getIsHighRise()) && fireStairCount == 0) {
                     errors.put("FireStair not defined in blk " + block.getNumber(), "FireStair not defined in block "
                             + block.getNumber() + ", it is mandatory for building with height more than 15m.");
                     plan.addErrors(errors);
@@ -250,20 +257,21 @@ public class FireStair extends FeatureProcess {
         for (StairLanding landing : landings) {
             List<BigDecimal> widths = landing.getWidths();
             if(!widths.isEmpty()) {
-            BigDecimal landingWidth = widths.stream().reduce(BigDecimal::min).get();
-            BigDecimal minWidth = BigDecimal.ZERO;
+            Optional<BigDecimal> minWidths = widths.stream().reduce(BigDecimal::min);
+			BigDecimal landingWidth = minWidths.isPresent() ? minWidths.get() : BigDecimal.ZERO;
+            BigDecimal minWidth;
             boolean valid = false;
 
-            if (!(Boolean) typicalFloorValues.get("isTypicalRepititiveFloor")) {
+            if (Boolean.FALSE.equals(typicalFloorValues.get(IS_TYPICAL_REPITITIVE_FLOOR))) {
                 minWidth = Util.roundOffTwoDecimal(landingWidth);
                 BigDecimal minimumWidth = BigDecimal.valueOf(1);
 
                 if (minWidth.compareTo(minimumWidth) >= 0) {
                     valid = true;
                 }
-                String value = typicalFloorValues.get("typicalFloors") != null
-                        ? (String) typicalFloorValues.get("typicalFloors")
-                        : " floor " + floor.getNumber();
+                String value = typicalFloorValues.get(TYPICAL_FLOORS) != null
+                        ? (String) typicalFloorValues.get(TYPICAL_FLOORS)
+                        : FLOOR2 + floor.getNumber();
 
                 if (valid) {
                     setReportOutputDetailsFloorStairWise(plan, RULE42_5_II, value,
@@ -279,10 +287,10 @@ public class FireStair extends FeatureProcess {
             }
             }else {
                 errors.put(
-                        "Fire Stair landing width not defined in blk " + block.getNumber() + " floor "
-                                + floor.getNumber() + " fire stair " + fireStair.getNumber(),
-                        "Fire Stair landing width not defined in blk " + block.getNumber() + " floor "
-                                + floor.getNumber() + " fire stair " + fireStair.getNumber());
+                        "Fire Stair landing width not defined in blk " + block.getNumber() + FLOOR2
+                                + floor.getNumber() + FIRE_STAIR + fireStair.getNumber(),
+                        "Fire Stair landing width not defined in blk " + block.getNumber() + FLOOR2
+                                + floor.getNumber() + FIRE_STAIR + fireStair.getNumber());
                 plan.addErrors(errors);
             }
         }
@@ -306,11 +314,11 @@ public class FireStair extends FeatureProcess {
                 String flightLayerName = String.format(DxfFileConstants.LAYER_FIRESTAIR_FLIGHT, block.getNumber(),
                         floor.getNumber(), fireStair.getNumber(), flight.getNumber());
 
-                if (!floor.getTerrace()) {
-                    if (flightPolyLines != null && flightPolyLines.size() > 0) {
-                        if (flightPolyLineClosed) {
-                            if (flightWidths != null && flightWidths.size() > 0) {
-                                minFlightWidth = validateWidth(plan, scrutinyDetail2, floor, block,
+                if (Boolean.FALSE.equals(floor.getTerrace())) {
+                    if (flightPolyLines != null && !flightPolyLines.isEmpty()) {
+                        if (Boolean.TRUE.equals(flightPolyLineClosed)) {
+                            if (flightWidths != null && !flightWidths.isEmpty()) {
+                                validateWidth(plan, scrutinyDetail2, floor, block,
                                         typicalFloorValues, fireStair, flight, flightWidths, minFlightWidth,
                                         mostRestrictiveOccupancyType);
 
@@ -326,11 +334,10 @@ public class FireStair extends FeatureProcess {
                              * BLK_n_FLR_i_FIRESTAIR_k_FLIGHT)
                              */
 
-                            if (flightLengths != null && flightLengths.size() > 0) {
+                            if (flightLengths != null && !flightLengths.isEmpty()) {
                                 try {
-                                    minTread = validateTread(plan, errors, block, scrutinyDetail3, floor,
-                                            typicalFloorValues, fireStair, flight, flightLengths, minTread,
-                                            mostRestrictiveOccupancyType);
+                                    validateTread(plan, errors, block, scrutinyDetail3, floor,
+                                            typicalFloorValues, fireStair, flight, flightLengths, minTread);
                                 } catch (ArithmeticException e) {
                                     LOG.info("Denominator is zero");
                                 }
@@ -397,20 +404,21 @@ public class FireStair extends FeatureProcess {
             Map<String, Object> typicalFloorValues, org.egov.common.entity.edcr.FireStair fireStair, Flight flight,
             List<BigDecimal> flightWidths, BigDecimal minFlightWidth,
             OccupancyTypeHelper mostRestrictiveOccupancyType) {
-        BigDecimal flightPolyLine = flightWidths.stream().reduce(BigDecimal::min).get();
+        Optional<BigDecimal> minFlightWidths = flightWidths.stream().reduce(BigDecimal::min);
+		BigDecimal flightPolyLine = minFlightWidths.isPresent() ? minFlightWidths.get() : BigDecimal.ZERO;
 
         boolean valid = false;
 
-        if (!(Boolean) typicalFloorValues.get("isTypicalRepititiveFloor")) {
+        if (Boolean.FALSE.equals(typicalFloorValues.get(IS_TYPICAL_REPITITIVE_FLOOR))) {
             minFlightWidth = Util.roundOffTwoDecimal(flightPolyLine);
             BigDecimal minimumWidth = BigDecimal.valueOf(1);
 
             if (minFlightWidth.compareTo(minimumWidth) >= 0) {
                 valid = true;
             }
-            String value = typicalFloorValues.get("typicalFloors") != null
-                    ? (String) typicalFloorValues.get("typicalFloors")
-                    : " floor " + floor.getNumber();
+            String value = typicalFloorValues.get(TYPICAL_FLOORS) != null
+                    ? (String) typicalFloorValues.get(TYPICAL_FLOORS)
+                    : FLOOR2 + floor.getNumber();
 
             if (valid) {
                 setReportOutputDetailsFloorStairWise(plan, RULE42_5_II, value,
@@ -446,7 +454,7 @@ public class FireStair extends FeatureProcess {
     private BigDecimal validateTread(Plan plan, HashMap<String, String> errors, Block block,
             ScrutinyDetail scrutinyDetail3, Floor floor, Map<String, Object> typicalFloorValues,
             org.egov.common.entity.edcr.FireStair fireStair, Flight flight, List<BigDecimal> flightLengths,
-            BigDecimal minTread, OccupancyTypeHelper mostRestrictiveOccupancyType) {
+            BigDecimal minTread) {
         BigDecimal totalLength = flightLengths.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
 
         totalLength = Util.roundOffTwoDecimal(totalLength);
@@ -468,15 +476,15 @@ public class FireStair extends FeatureProcess {
 
                 boolean valid = false;
 
-                if (!(Boolean) typicalFloorValues.get("isTypicalRepititiveFloor")) {
+                if (Boolean.FALSE.equals(typicalFloorValues.get(IS_TYPICAL_REPITITIVE_FLOOR))) {
 
                     if (Util.roundOffTwoDecimal(minTread).compareTo(Util.roundOffTwoDecimal(requiredTread)) >= 0) {
                         valid = true;
                     }
 
-                    String value = typicalFloorValues.get("typicalFloors") != null
-                            ? (String) typicalFloorValues.get("typicalFloors")
-                            : " floor " + floor.getNumber();
+                    String value = typicalFloorValues.get(TYPICAL_FLOORS) != null
+                            ? (String) typicalFloorValues.get(TYPICAL_FLOORS)
+                            : FLOOR2 + floor.getNumber();
                     if (valid) {
                         setReportOutputDetailsFloorStairWise(plan, RULE42_5_II, value,
                                 String.format(TREAD_DESCRIPTION, fireStair.getNumber(), flight.getNumber()),
@@ -514,14 +522,14 @@ public class FireStair extends FeatureProcess {
             org.egov.common.entity.edcr.FireStair fireStair, BigDecimal noOfRises) {
         boolean valid = false;
 
-        if (!(Boolean) typicalFloorValues.get("isTypicalRepititiveFloor")) {
+        if (Boolean.FALSE.equals(typicalFloorValues.get(IS_TYPICAL_REPITITIVE_FLOOR))) {
             if (Util.roundOffTwoDecimal(noOfRises).compareTo(Util.roundOffTwoDecimal(BigDecimal.valueOf(12))) <= 0) {
                 valid = true;
             }
 
-            String value = typicalFloorValues.get("typicalFloors") != null
-                    ? (String) typicalFloorValues.get("typicalFloors")
-                    : " floor " + floor.getNumber();
+            String value = typicalFloorValues.get(TYPICAL_FLOORS) != null
+                    ? (String) typicalFloorValues.get(TYPICAL_FLOORS)
+                    : FLOOR2 + floor.getNumber();
             if (valid) {
                 setReportOutputDetailsFloorStairWise(plan, RULE42_5_II, value,
                         String.format(NO_OF_RISER_DESCRIPTION, fireStair.getNumber(), flight.getNumber()),

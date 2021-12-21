@@ -240,7 +240,7 @@ public class TrialBalanceAction extends BaseFormAction {
 			try {
 				dt = sdf.parse(sDate);
 			} catch (ParseException e1) {
-
+				LOGGER.error("Parse exception.");
 			}
 
 			CFinancialYear finYearByDate = financialYearDAO.getFinYearByDate(dt);
@@ -248,7 +248,7 @@ public class TrialBalanceAction extends BaseFormAction {
 			try {
 				dd = sdf.parse(eDate);
 			} catch (ParseException e1) {
-
+				LOGGER.error("Parse exception.");
 			}
 			String endFormat = formatter.format(dd);
 			String endDate1 = formatter.format(finYearByDate.getEndingDate());
@@ -635,7 +635,7 @@ public class TrialBalanceAction extends BaseFormAction {
 
         } catch (final NumberFormatException e) {
 
-
+          LOGGER.error("Number format exception.");
         }
 
     }

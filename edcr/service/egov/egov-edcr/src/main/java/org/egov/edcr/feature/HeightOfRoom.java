@@ -58,6 +58,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
@@ -76,7 +77,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class HeightOfRoom extends FeatureProcess {
 
-    private static final String SUBRULE_41_II_A = "41-ii-a";
+    private static final String TYPICAL_FLOORS = "typicalFloors";
+	private static final String SUBRULE_41_II_A = "41-ii-a";
     private static final String SUBRULE_41_II_B = "41-ii-b";
 
     private static final String SUBRULE_41_II_A_AC_DESC = "Minimum height of ac room";
@@ -129,7 +131,7 @@ public class HeightOfRoom extends FeatureProcess {
                             List<BigDecimal> roomAreas = new ArrayList<>();
                             List<BigDecimal> roomWidths = new ArrayList<>();
                             BigDecimal minimumHeight = BigDecimal.ZERO;
-                            BigDecimal totalArea = BigDecimal.ZERO;
+                            BigDecimal totalArea;
                             BigDecimal minWidth = BigDecimal.ZERO;
                             String subRule = null;
                             String subRuleDesc = null;
@@ -142,7 +144,7 @@ public class HeightOfRoom extends FeatureProcess {
                             else if(G.equalsIgnoreCase(mostRestrictiveOccupancy.getType().getCode()))
                                 color = DxfFileConstants.COLOR_INDUSTRIAL_ROOM;
 
-                            if (floor.getAcRooms() != null && floor.getAcRooms().size()>0) {
+                            if (floor.getAcRooms() != null && !floor.getAcRooms().isEmpty()) {
                                 List<BigDecimal> residentialAcRoomHeights = new ArrayList<>();
                                 
                                 List<RoomHeight> acHeights  = new ArrayList<>();
@@ -170,7 +172,8 @@ public class HeightOfRoom extends FeatureProcess {
                                 }
 
                                 if (!residentialAcRoomHeights.isEmpty()) {
-                                    BigDecimal minHeight = residentialAcRoomHeights.stream().reduce(BigDecimal::min).get();
+                                    Optional<BigDecimal> acRoomHght = residentialAcRoomHeights.stream().reduce(BigDecimal::min);
+									BigDecimal minHeight = acRoomHght.isPresent() ? acRoomHght.get() : BigDecimal.ZERO;
 
                                     if (!G.equalsIgnoreCase(mostRestrictiveOccupancy.getType().getCode()))
                                         minimumHeight = MINIMUM_HEIGHT_2_4;
@@ -196,7 +199,7 @@ public class HeightOfRoom extends FeatureProcess {
 
                             }
 
-                            if (floor.getRegularRooms() != null  && floor.getRegularRooms().size()>0) {
+                            if (floor.getRegularRooms() != null  && !floor.getRegularRooms().isEmpty()) {
                             	
 								List<BigDecimal> residentialRoomHeights = new ArrayList<>();
 
@@ -224,7 +227,8 @@ public class HeightOfRoom extends FeatureProcess {
 								}
 
                                 if (!residentialRoomHeights.isEmpty()) {
-                                    BigDecimal minHeight = residentialRoomHeights.stream().reduce(BigDecimal::min).get();
+                                    Optional<BigDecimal> resiRoomHght = residentialRoomHeights.stream().reduce(BigDecimal::min);
+									BigDecimal minHeight = resiRoomHght.isPresent() ? resiRoomHght.get() : BigDecimal.ZERO;
 
                                     if (!G.equalsIgnoreCase(mostRestrictiveOccupancy.getType().getCode()))
                                         minimumHeight = MINIMUM_HEIGHT_2_75;
@@ -252,7 +256,8 @@ public class HeightOfRoom extends FeatureProcess {
 
                             if (!roomAreas.isEmpty()) {
                                 totalArea = roomAreas.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-                                BigDecimal minRoomWidth = roomWidths.stream().reduce(BigDecimal::min).get();
+                                Optional<BigDecimal> minRoomWidthh = roomWidths.stream().reduce(BigDecimal::min);
+								BigDecimal minRoomWidth = minRoomWidthh.isPresent() ? minRoomWidthh.get() : BigDecimal.ZERO;
                                 if (roomAreas.size() == 1) {
                                     minimumHeight = MINIMUM_AREA_9_5;
                                     minWidth = MINIMUM_WIDTH_2_4;
@@ -285,14 +290,14 @@ public class HeightOfRoom extends FeatureProcess {
 
     private void buildResult(Plan pl, Floor floor, BigDecimal expected, String subRule, String subRuleDesc,
             BigDecimal actual, boolean valid, Map<String, Object> typicalFloorValues) {
-        if (!(Boolean) typicalFloorValues.get("isTypicalRepititiveFloor")
+        if (Boolean.TRUE.equals(!(Boolean) typicalFloorValues.get("isTypicalRepititiveFloor")
                 && expected.compareTo(BigDecimal.valueOf(0)) > 0 &&
-                subRule != null && subRuleDesc != null) {
+                subRule != null) && subRuleDesc != null) {
             if (actual.compareTo(expected) >= 0) {
                 valid = true;
             }
-            String value = typicalFloorValues.get("typicalFloors") != null
-                    ? (String) typicalFloorValues.get("typicalFloors")
+            String value = typicalFloorValues.get(TYPICAL_FLOORS) != null
+                    ? (String) typicalFloorValues.get(TYPICAL_FLOORS)
                     : " floor " + floor.getNumber();
             if (valid) {
                 setReportOutputDetails(pl, subRule, subRuleDesc, value,

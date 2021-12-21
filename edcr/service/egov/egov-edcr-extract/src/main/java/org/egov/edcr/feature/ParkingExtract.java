@@ -37,7 +37,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ParkingExtract extends FeatureExtract {
-    private static final Logger LOGGER = Logger.getLogger(ParkingExtract.class);
+    private static final String LAYER_NAME_FLOOR_NAME_PREFIX = "LAYER_NAME_FLOOR_NAME_PREFIX";
+	private static final String LAYER_NAME_BLOCK_NAME_PREFIX = "LAYER_NAME_BLOCK_NAME_PREFIX";
+	private static final Logger LOGGER = Logger.getLogger(ParkingExtract.class);
     private static final String DA_PARKING = "DA parking";
     final Ray rayCasting = new Ray(new Point(-1.123456789, -1.987654321, 0d));
 
@@ -50,13 +52,13 @@ public class ParkingExtract extends FeatureExtract {
             LOGGER.debug("Starting of Parking Extract......");
         for (Block block : pl.getBlocks()) {
             for (Floor floor : block.getBuilding().getFloors()) {
-                String layerRegEx = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getNumber() + "_"
-                        + layerNames.getLayerName("LAYER_NAME_FLOOR_NAME_PREFIX") + floor.getNumber() + "_"
+                String layerRegEx = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getNumber() + "_"
+                        + layerNames.getLayerName(LAYER_NAME_FLOOR_NAME_PREFIX) + floor.getNumber() + "_"
                         + layerNames.getLayerName("LAYER_NAME_UNITFA");
                 List<DXFLWPolyline> occupancyUnits = Util.getPolyLinesByLayer(pl.getDoc(), layerRegEx);
                 extractByLayer(pl, pl.getDoc(), block, floor, occupancyUnits);
-                String coveredParkLayer = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getNumber()
-                        + "_" + layerNames.getLayerName("LAYER_NAME_FLOOR_NAME_PREFIX") + floor.getNumber() + "_"
+                String coveredParkLayer = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getNumber()
+                        + "_" + layerNames.getLayerName(LAYER_NAME_FLOOR_NAME_PREFIX) + floor.getNumber() + "_"
                         + layerNames.getLayerName("LAYER_NAME_COVERED_PARKING");
                 List<String> covereredParkLayerNames = Util.getLayerNamesLike(pl.getDoc(), coveredParkLayer);
                 for (String s : covereredParkLayerNames)
@@ -66,8 +68,8 @@ public class ParkingExtract extends FeatureExtract {
                         else
                             floor.getParking().getCoverCars().add(new MeasurementDetail(coveredPark, true));
                     });
-                String stiltParkLayer = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getNumber()
-                        + "_" + layerNames.getLayerName("LAYER_NAME_FLOOR_NAME_PREFIX") + floor.getNumber() + "_"
+                String stiltParkLayer = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getNumber()
+                        + "_" + layerNames.getLayerName(LAYER_NAME_FLOOR_NAME_PREFIX) + floor.getNumber() + "_"
                         + layerNames.getLayerName("LAYER_NAME_STILT");
                 List<BigDecimal> heightFromFloorToBottomOfBeam = Util.getListOfDimensionValueByLayer(pl, stiltParkLayer);
                 floor.setHeightFromFloorToBottomOfBeam(heightFromFloorToBottomOfBeam);
@@ -77,7 +79,7 @@ public class ParkingExtract extends FeatureExtract {
                             stiltPark -> floor.getParking().getStilts().add(new MeasurementDetail(stiltPark, true)));
             }
 
-            String hallLayer = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getNumber() + "_"
+            String hallLayer = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getNumber() + "_"
                     + layerNames.getLayerName("LAYER_NAME_UNITFA_HALL") + "_" + "\\d";
             List<String> layerNames1 = Util.getLayerNamesLike(pl.getDoc(), hallLayer);
             for (String s : layerNames1) {
@@ -96,7 +98,7 @@ public class ParkingExtract extends FeatureExtract {
                 }
             }
 
-            String dinningLayer = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getNumber() + "_"
+            String dinningLayer = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getNumber() + "_"
                     + layerNames.getLayerName("LAYER_NAME_UNITFA_DINING") + "_" + "\\d";
             List<String> layerNames2 = Util.getLayerNamesLike(pl.getDoc(), dinningLayer);
             for (String s : layerNames2)
@@ -157,7 +159,7 @@ public class ParkingExtract extends FeatureExtract {
 
     @Override
     public PlanDetail validate(PlanDetail pl) {
-        if (pl.getStrictlyValidateDimension()) {
+        if (Boolean.TRUE.equals(pl.getStrictlyValidateDimension())) {
             validateDuplicate(pl);
         }
         return pl;
@@ -181,8 +183,8 @@ public class ParkingExtract extends FeatureExtract {
                 i++;
                 Polygon polygon = Util.getPolygon(flrUnitPLine);
                 BigDecimal deduction = BigDecimal.ZERO;
-                String deductLayerName = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getNumber()
-                        + "_" + layerNames.getLayerName("LAYER_NAME_FLOOR_NAME_PREFIX") + floor.getNumber() + "_"
+                String deductLayerName = layerNames.getLayerName(LAYER_NAME_BLOCK_NAME_PREFIX) + block.getNumber()
+                        + "_" + layerNames.getLayerName(LAYER_NAME_FLOOR_NAME_PREFIX) + floor.getNumber() + "_"
                         + layerNames.getLayerName("LAYER_NAME_UNITFA_DEDUCT");
                 for (DXFLWPolyline occupancyDeduct : Util.getPolyLinesByLayer(doc, deductLayerName)) {
                     boolean contains = false;
@@ -195,7 +197,7 @@ public class ParkingExtract extends FeatureExtract {
                             MeasurementDetail measurement = new MeasurementDetail();
                             measurement.setPolyLine(occupancyDeduct);
                             measurement.setArea(Util.getPolyLineArea(occupancyDeduct));
-                            floorUnit.getArea().subtract(Util.getPolyLineArea(occupancyDeduct));
+                            floorUnit.setArea(floorUnit.getArea().subtract(Util.getPolyLineArea(occupancyDeduct)));
                             floorUnit.getDeductions().add(measurement);
                         }
                     }
@@ -291,7 +293,7 @@ public class ParkingExtract extends FeatureExtract {
                         Point m1Point = m1Next.getPoint();
 
                         if (Util.pointsEquals(mPoint, m1Point)) {
-                            System.out.println("duplicate points = " + mPoint + ", "+ m1Point);
+                        	LOGGER.info("duplicate points = " + mPoint + ", "+ m1Point);
                             duplicatePoint++;
                         }
 

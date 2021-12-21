@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
-import org.egov.common.entity.edcr.Measurement;
 import org.egov.common.entity.edcr.Passage;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.service.LayerNames;
@@ -23,12 +22,12 @@ public class PassageServiceExtract extends FeatureExtract {
 	@Autowired
 	private LayerNames layerNames;
 	private static final Logger LOG = Logger.getLogger(PassageServiceExtract.class);
+	private static final String LAYER_PASSAGE="LAYER_NAME_PASSAGE";
+	private static final String LAYER_PASSAGESTAIR="LAYER_NAME_PASSAGE_STAIR";
 
 	@Override
 	public PlanDetail extract(PlanDetail planDetail) {
 		
-		String LAYER_PASSAGE="LAYER_NAME_PASSAGE";
-		String LAYER_PASSAGESTAIR="LAYER_NAME_PASSAGE_STAIR";
 		List<Block> blocks = planDetail.getBlocks();
 		Map<String, Integer> passageColors = planDetail.getSubFeatureColorCodesMaster().get("Passage");
 		Map<String, Integer> passageStairColors = planDetail.getSubFeatureColorCodesMaster().get("PassageStair");

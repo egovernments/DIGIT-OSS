@@ -601,8 +601,6 @@ kcore-services/egov-common-masters/src/main/java/org/egov/commons/model/Business
 _business-services/dashboard-ingest/src/main/java/com/ingestpipeline/service/ElasticService.java,d/c/dc108474c927878c4677871b50f54a016a5065f6
 ú
 lbusiness-services/egf-master/src/test/java/org/egov/egf/master/domain/repository/RecoveryRepositoryTest.java,2/0/201ec2b54c4be043550e947ddbe2742c40fb16b8
-x
-Hbusiness-services/egf-master/src/main/java/org/egov/SetThreadLocals.java,6/0/607a08b2f682763bf5bf9cf01f8459748b6dea7c
 ñ
 fmunicipal-services/property-services/src/main/java/org/egov/pt/web/controllers/PropertyController.java,9/1/916be9c68b3ebf0e5eb7bf7ba869b9c8311a6005
 ñ
@@ -685,8 +683,6 @@ mcore-services/egov-accesscontrol/src/test/java/org/egov/access/persistence/repo
 dcore-services/egov-accesscontrol/src/test/java/org/egov/access/domain/service/ActionServiceTest.java,d/6/d636d11152fa48859ff56a5abef9431004937647
 ï
 ecore-services/egov-user/src/test/java/org/egov/user/persistence/repository/AddressRepositoryTest.java,8/2/82ea948fd20639354342236acff4565efa82d838
-é
-^business-services/billing-service/src/test/java/org/egov/demand/billingservice/mappertest.java,9/0/90a4d03c63e40d46e294d3900f91405f4cd40146
 ù
 mbusiness-services/dashboard-analytics/src/main/java/com/tarento/analytics/helper/PercentageComputedField.java,0/9/09e7cff9c6c0350bddf14b001cae116903fe8fac
 ã
@@ -695,8 +691,6 @@ mbusiness-services/dashboard-analytics/src/main/java/com/tarento/analytics/helpe
 icore-services/egov-accesscontrol/src/test/java/org/egov/access/domain/model/ActionSearchCriteriaTest.java,c/6/c6def96225849ba79a91832bd99ccd07b3d90a33
 ô
 ibusiness-services/dashboard-analytics/src/main/java/com/tarento/analytics/helper/ComputedFieldHelper.java,4/0/409dab981edadba67d1d777e36b11c3dedee5c6d
-Å
-Qmunicipal-services/tl-calculator/src/test/java/org/egov/tlcalculator/testing.java,8/6/86e25b0e7fec855342292141639afe2fbbbfe4ac
 ó
 gcore-services/egov-accesscontrol/src/test/java/org/egov/access/web/controller/ActionControllerTest.java,4/7/47fb7a6b605d96e1376f96e8fff727df6bdac251
 è
@@ -723,8 +717,6 @@ jbusiness-services/egf-master/src/main/java/org/egov/egf/master/web/requests/Acc
 Rfinance/egov/egov-egf/src/main/java/org/egov/model/masters/AccountCodePurpose.java,a/7/a7b7ec211165f5ac5a14e7569c21c6e650c8d753
 Ü
 Vcore-services/egov-pg-service/src/main/java/org/egov/pg/models/AccountCodePurpose.java,5/f/5f6a6c91c61d9243e08fe82ce5d13a4d1db30162
-¢
-rcore-services/egov-notification-mail/src/main/java/org/egov/web/notification/mail/service/ConsoleEmailService.java,0/7/0728efb700ea505b868ee624a834c146ec1b3232
 õ
 kbusiness-services/egf-master/src/main/java/org/egov/egf/master/web/requests/AccountCodePurposeResponse.java,2/f/2f1b36168710f0c92af16a004e6d6025b9e2d2be
 ò

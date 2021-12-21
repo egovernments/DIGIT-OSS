@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.common.entity.edcr.Parapet;
@@ -20,8 +19,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ParapetExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(ParapetExtract.class);
-    @Autowired
+
+	@Autowired
     private LayerNames layerNames;
 
     @Override

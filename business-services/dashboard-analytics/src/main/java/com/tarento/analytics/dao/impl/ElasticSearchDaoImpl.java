@@ -143,7 +143,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 					+ string1  + elapsedTime);
 			return response.getSource();
 		} catch (IOException ex) {
-
+			logger.error("Error while execution in Elasticsearch", ex);
 		} finally {
 			try {
 				client.close();

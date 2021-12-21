@@ -24,10 +24,10 @@ public class SetThreadLocals {
      * under that.
      */
 
-//    @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
-//    public void inWebLayer() {
-//        System.out.print("---Before Method Execution---inWebLayer()");
-//    }
+    @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
+    public void inWebLayer() {
+        Logger("---Before Method Execution---inWebLayer()");
+    }
 
     @Before(value = "inWebLayer() ")
     public void logMethodAcceptionEntityAnnotatedBean(JoinPoint jp) {
@@ -67,7 +67,6 @@ public class SetThreadLocals {
 
     @AfterReturning(value = "inWebLayer()")
     public void logMethodAcceptionEntityAnnotatedBeanAfter(JoinPoint jp) {
-//        System.out.print("---After Method Execution---inWebLayer()");
         ApplicationThreadLocals.clearValues();
 
     }
