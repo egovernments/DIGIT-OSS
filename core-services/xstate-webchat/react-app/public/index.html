@@ -1,0 +1,126 @@
+
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/@progress/kendo-theme-material@latest/dist/all.css"></link>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+    body {
+        position: relative;
+    }
+    
+    html,
+    body {
+        height: 100%;
+    }
+    
+    my-app {
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        min-height: 80px;
+        box-sizing: border-box;
+        padding: 30px;
+    }
+    
+    @keyframes k-loading-animation  {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+    
+    .k-i-loading.k-example-loading {
+        font-size: 64px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: rgb(144,152,165);
+    }
+    
+    .k-i-loading.k-example-loading::before,
+    .k-i-loading.k-example-loading::after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: inline-block;
+        content: "";
+        box-sizing: inherit;
+        border-radius: 50%;
+        border-width: .05em;
+        border-style: solid;
+        border-color: currentColor;
+        border-top-color: transparent;
+        border-bottom-color: transparent;
+        background-color: transparent;
+    }
+    .k-icon.k-i-loading.k-example-loading::before,
+    .k-icon.k-i-loading::after {
+        content: "";
+    }
+    
+    .k-i-loading.k-example-loading::before {
+        margin-top: -0.5em;
+        margin-left: -0.5em;
+        width: 1em;
+        height: 1em;
+        animation: k-loading-animation .7s linear infinite;
+    }
+    
+    .k-i-loading.k-example-loading::after {
+        margin-top: -0.25em;
+        margin-left: -0.25em;
+        width: .5em;
+        height: .5em;
+        animation: k-loading-animation reverse 1.4s linear infinite;
+    }
+    
+    .example-wrapper { 
+        min-height: 280px; 
+        align-content: flex-start; 
+    }
+    .example-wrapper p, .example-col p {
+        margin: 20px 0 10px; 
+    }
+    .example-wrapper p:first-child, .example-col p:first-child { 
+        margin-top: 0; 
+    }
+    .example-col { 
+        display: inline-block; 
+        vertical-align: top; 
+        padding-right: 20px; 
+        padding-bottom: 20px;
+    }
+    .example-config {
+        margin: 0 0 20px; 
+        padding: 20px; 
+        background-color: rgba(0,0,0,.03);
+        border: 1px solid rgba(0,0,0,.08); 
+    }
+    .event-log { 
+        margin: 0; 
+        padding: 0; 
+        max-height: 100px; 
+        overflow-y: auto; 
+        list-style-type: none; 
+        border: 1px solid rgba(0,0,0,.08); 
+        background-color: white; 
+    }
+    .event-log li {
+        margin: 0; 
+        padding: .3em; 
+        line-height: 1.2em; 
+        border-bottom: 1px solid rgba(0,0,0,.08); 
+    }
+    .event-log li:last-child { 
+        margin-bottom: -1px;
+    }
+    </style>
+</head>
+<body>
+    <my-app>
+        <span class="k-icon k-i-loading"></span>
+    </my-app>
+</body>
