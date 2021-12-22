@@ -8,6 +8,7 @@ import CitizenHome from "./Home";
 import LanguageSelection from "./Home/LanguageSelection";
 import LocationSelection from "./Home/LocationSelection";
 import Login from "./Login";
+import CFModule from "../../../../cf/src/Module";
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
@@ -57,6 +58,19 @@ const Home = ({
     );
   });
 
+  const cfRoutes = () => {
+    return (
+      <React.Fragment>
+        <Route path={`${path}/cf-home`}>
+          <CFModule userType="citizen" stateCode={stateCode} isUserRegistered={false} />
+        </Route>
+        <Route path={`${path}/cf`}>
+          <CFModule userType="citizen" stateCode={stateCode} isUserRegistered={false} />
+        </Route>
+      </React.Fragment>
+    )
+  }
+
   return (
     <div className={classname}>
       <TopBarSideBar
@@ -99,6 +113,8 @@ const Home = ({
           {appRoutes}
 
           {ModuleLevelLinkHomePages}
+
+          {cfRoutes()}
         </Switch>
       </div>
       <div className="citizen-home-footer" style={window.location.href.includes("citizen/obps") ? { zIndex: "-1" } : {}}>
