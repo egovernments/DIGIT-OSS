@@ -5,6 +5,7 @@ import static java.util.Objects.isNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.wf.config.WorkflowConfig;
@@ -60,7 +61,6 @@ public class WorkflowQueryBuilder {
     private static final String COUNT_WRAPPER = "select count(DISTINCT wf_id) from ({INTERNAL_QUERY}) as count";
     private static final String COUNT_WRAPPER_ESCALATED = "select count(DISTINCT businessid) from ({INTERNAL_QUERY}) as count";
     private static final String COUNT_WRAPPER_INBOX = " select count(DISTINCT id) from ({INTERNAL_QUERY}) as count" ;
-
     private static final String BASE_QUERY = "select businessId from (" +
             "  SELECT *,RANK () OVER (PARTITION BY businessId ORDER BY createdtime  DESC) rank_number " +
             " FROM eg_wf_processinstance_v2 ";
@@ -501,6 +501,13 @@ public class WorkflowQueryBuilder {
             builder.append(" AND asg = ? ");
             preparedStmtList.add(requestInfo.getUserInfo().getUuid());
         }
+
+        if(!ObjectUtils.isEmpty(criteria.getIsEscalatedCount())) {
+            if (!criteria.getIsEscalatedCount()) {
+                addPagination(builder,preparedStmtList,criteria);
+            }
+        }
+
         return builder.toString();
     }
 
@@ -552,13 +559,6 @@ public class WorkflowQueryBuilder {
         }
 
         query.append( ") wf  WHERE rank_number = 1 AND wf.escalated = true ");
-
-            if(!ObjectUtils.isEmpty(criteria.getIsEscalatedCount())) {
-                if (!criteria.getIsEscalatedCount()) {
-                addPagination(query,preparedStmtList,criteria);
-                }
-            }
-
         return query.toString();
     }
 
