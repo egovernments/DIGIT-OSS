@@ -2,10 +2,8 @@ package org.egov.pt.service;
 
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.apache.http.client.utils.URIBuilder;
 import org.egov.common.contract.request.RequestInfo;
@@ -19,6 +17,7 @@ import org.egov.pt.models.event.EventRequest;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.util.NotificationUtil;
 import org.egov.pt.web.contracts.AssessmentRequest;
+import org.egov.pt.web.contracts.EmailRequest;
 import org.egov.pt.web.contracts.SMSRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -70,12 +69,6 @@ public class AssessmentNotificationService {
         BigDecimal dueAmount = billResponse.getBill().get(0).getTotalAmount();
 
         List<SMSRequest> smsRequests = enrichSMSRequest(topicName, assessmentRequest, property);
-        
-        if (dueAmount!=null && dueAmount.compareTo(BigDecimal.ZERO)>0) {
-        	enrichSMSRequestForDues(smsRequests,assessmentRequest,property);
-        	
-        }
-        
         util.sendSMS(smsRequests);
 
         Boolean isActionReq = false;
@@ -84,6 +77,28 @@ public class AssessmentNotificationService {
 
         List<Event> events = util.enrichEvent(smsRequests, requestInfo, tenantId, property, isActionReq);
         util.sendEventNotification(new EventRequest(requestInfo, events));
+
+        if (dueAmount!=null && dueAmount.compareTo(BigDecimal.ZERO)>0) {
+
+            List<String> configuredChannelNames =  util.fetchChannelList(new RequestInfo(), tenantId, PT_BUSINESSSERVICE, ACTION_FOR_DUES);
+            List<SMSRequest> smsRequestsList = new ArrayList<>();
+            enrichSMSRequestForDues(smsRequestsList, assessmentRequest, property);
+
+            if(configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
+                util.sendSMS(smsRequestsList);
+            }
+
+            if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
+                Boolean isActionRequired = true;
+                List<Event> eventsList = util.enrichEvent(smsRequestsList, requestInfo, tenantId, property, isActionRequired);
+                util.sendEventNotification(new EventRequest(requestInfo, eventsList));
+            }
+
+            if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL) ){
+                List<EmailRequest> emailRequests = util.createEmailRequestFromSMSRequests(requestInfo,smsRequests,tenantId);
+                util.sendEmail(emailRequests);
+            }
+            }
     }
 
 
