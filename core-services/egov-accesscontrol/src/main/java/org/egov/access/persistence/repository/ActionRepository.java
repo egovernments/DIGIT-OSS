@@ -40,7 +40,16 @@
 
 package org.egov.access.persistence.repository;
 
-import com.jayway.jsonpath.JsonPath;
+import java.io.UnsupportedEncodingException;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import org.egov.access.domain.model.Action;
 import org.egov.access.persistence.repository.querybuilder.ActionQueryBuilder;
 import org.egov.access.persistence.repository.rowmapper.ActionSearchRowMapper;
@@ -49,6 +58,7 @@ import org.egov.access.web.contract.action.ActionRequest;
 import org.egov.access.web.contract.action.ActionService;
 import org.egov.access.web.contract.action.Module;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -65,10 +75,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.UnsupportedEncodingException;
-import java.sql.Date;
-import java.util.*;
-import java.util.Map.Entry;
+import com.jayway.jsonpath.JsonPath;
 
 @Repository
 public class ActionRepository {
@@ -100,9 +107,12 @@ public class ActionRepository {
 	private String actionMaster;
 	@Value("${mdms.actionstest.path}")
 	private String actionTestPath;
-	
-	
 
+
+	
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
+	
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
@@ -544,29 +554,20 @@ public List<Action> getAllMDMSActions(ActionRequest actionRequest) throws JSONEx
 		actSearchFilter = actSearchFilter.replaceAll("\\$actionid", actionids.toString());
 		actFilter = actFilter.replaceAll("\\$enabled", enabled.toString());
 		
-
-		
-		 MdmsCriteriaReq actionmcq = new MdmsCriteriaReq();
-			List<MasterDetail> actionmasterDetails = new ArrayList<MasterDetail>();
-			List<ModuleDetail> actionmoduleDetail = new ArrayList<ModuleDetail>();
-			actionmcq.setRequestInfo(getRInfo());
-			MdmsCriteria actionmc = new MdmsCriteria();
-			 if(tenantid.contains(".")){
-				 String[] stateid = tenantid.split("\\.");
-				 actionmc.setTenantId(stateid[0]);
-				 
-			 } else {
-				 actionmc.setTenantId(tenantid);
-				 
-			 }
-			 if(actionRequest.getEnabled() != null){
+		MdmsCriteriaReq actionmcq = new MdmsCriteriaReq();
+		List<MasterDetail> actionmasterDetails = new ArrayList<MasterDetail>();
+		List<ModuleDetail> actionmoduleDetail = new ArrayList<ModuleDetail>();
+		actionmcq.setRequestInfo(getRInfo());
+		MdmsCriteria actionMasterCriteria = new MdmsCriteria();
+		actionMasterCriteria.setTenantId(centralInstanceUtil.getStateLevelTenant(tenantid));
+		if (actionRequest.getEnabled() != null) {
 			getMdmsActionCriteria(actionRequest, actFilter, actionmcq, actionmasterDetails, actionmoduleDetail,
-					actionmc);
-			 } else {
-				 getMdmsActionCriteria(actionRequest, actSearchFilter, actionmcq, actionmasterDetails, actionmoduleDetail,
-							actionmc); 
-			 }
-		
+					actionMasterCriteria);
+		} else {
+			getMdmsActionCriteria(actionRequest, actSearchFilter, actionmcq, actionmasterDetails, actionmoduleDetail,
+					actionMasterCriteria);
+		}
+
 		actionres = restTemplate.postForObject(url, actionmcq,String.class);
 		String jsonpath = "";
 		if(actionRequest.getActionMaster() != null){
@@ -585,6 +586,7 @@ public List<Action> getAllMDMSActions(ActionRequest actionRequest) throws JSONEx
 	}
 
 private MdmsCriteriaReq getRoleActionMDMSCriteria(ActionRequest actionRequest, String roleFilter) {
+	
 	MdmsCriteriaReq mcq = new MdmsCriteriaReq();
 	List<MasterDetail> masterDetails = new ArrayList<MasterDetail>();
 	List<ModuleDetail> moduleDetail = new ArrayList<ModuleDetail>();
@@ -691,7 +693,6 @@ private List<Action> convertToAction(ActionRequest actionRequest,JSONArray actio
 				ri.setDid("did");
 				ri.setKey("key");
 				ri.setMsgId("msgId");
-				ri.setRequesterId("requestId");
 		return ri;
 	}
 	

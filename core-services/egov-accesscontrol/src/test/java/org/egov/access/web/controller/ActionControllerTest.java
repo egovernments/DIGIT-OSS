@@ -1,23 +1,21 @@
 package org.egov.access.web.controller;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import org.egov.access.Resources;
 import org.egov.access.TestConfiguration;
-import org.egov.access.domain.criteria.ValidateActionCriteria;
 import org.egov.access.domain.model.Action;
-import org.egov.access.domain.model.ActionValidation;
 import org.egov.access.domain.service.ActionService;
-import org.egov.access.web.contract.action.Module;
 import org.egov.access.web.contract.action.ActionRequest;
+import org.egov.access.web.contract.action.Module;
 import org.egov.access.web.contract.factory.ResponseInfoFactory;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.response.ResponseInfo;
@@ -216,7 +214,9 @@ public class ActionControllerTest {
 				.thenReturn(responseInfo);
 
 		responseInfo.setApiId("org.egov.accesscontrol");
-		responseInfo.setTs("Thu Mar 09 18:30:00 UTC 2017");
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(2017,03,9,18,30);
+		responseInfo.setTs(calendar.getTimeInMillis());
 		responseInfo.setResMsgId("uief87324");
 
 		mockMvc.perform(post("/v1/actions/_update").contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -253,7 +253,9 @@ public class ActionControllerTest {
 		ResponseInfo responseInfo = ResponseInfo.builder().build();
 
 		responseInfo.setApiId("org.egov.accesscontrol");
-		responseInfo.setTs("Thu Mar 09 18:30:00 UTC 2017");
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(2017,03,9,18,30);
+		responseInfo.setTs(calendar.getTimeInMillis());
 		responseInfo.setMsgId("20170310130900");
 		responseInfo.setResMsgId("uief87324");
 		responseInfo.setVer("1.0");
