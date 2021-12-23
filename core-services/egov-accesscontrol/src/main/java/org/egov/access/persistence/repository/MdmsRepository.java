@@ -43,7 +43,7 @@ public class MdmsRepository {
     private RestTemplate restTemplate;
 
     @Value("${egov.mdms.host}${egov.mdms.path}")
-    private String url;
+    private String mdmsUrl;
 
     @Value("${mdms.roleactionmodule.name}")
     private String roleActionModule;
@@ -103,7 +103,7 @@ public class MdmsRepository {
         HttpEntity<MdmsCriteriaReq> request = new HttpEntity<>(mcq, headers);
 
         @SuppressWarnings("unchecked")
-        Map<String, Map<String, List>> response = (Map<String, Map<String, List>>) restTemplate.postForObject(url, request,
+        Map<String, Map<String, List>> response = (Map<String, Map<String, List>>) restTemplate.postForObject(mdmsUrl, request,
                 Map.class).get("MdmsRes");
 
         if(isNull(response.get(roleActionModule)) || isNull(response.get(roleActionModule).get(roleActionMaster))
