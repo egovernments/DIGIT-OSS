@@ -4,15 +4,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
@@ -121,6 +114,13 @@ public class WorkflowNotificationService {
 				}
 			}
 			}
+			if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)){
+				if (config.getIsEmailNotificationEnabled() != null && config.getIsEmailNotificationEnabled()) {
+					List<EmailRequest> emailRequests = getEmailRequest(request, topic, property, applicationStatus);
+					if (!CollectionUtils.isEmpty(emailRequests)) {
+						notificationUtil.sendEmail(emailRequests);
+					}
+				}}
 
 		} catch (Exception ex) {
 			log.error("Error occured while processing the record from topic : " + topic, ex);
@@ -326,8 +326,7 @@ public class WorkflowNotificationService {
 			return Collections.emptyList();
 		}
 		Map<String, String> mobileNumbersAndNames = new HashMap<>();
-		if(reqType==0 || reqType==1)
-		{
+
 			//Send the notification to all owners
 			property.getOwners().forEach(owner -> {
 				if (owner.getMobileNumber() != null)
@@ -348,25 +347,6 @@ public class WorkflowNotificationService {
 				mobileNumbersAndNames.put(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), sewerageConnectionRequest.getRequestInfo().getUserInfo().getName());
 			}
 
-		}
-		if(reqType==2) {
-			//Send the notification to primary owner
-			property.getOwners().forEach(owner -> {
-				if (owner.getMobileNumber() != null)
-					if (owner.getIsPrimaryOwner() != null && owner.getIsPrimaryOwner())
-						mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
-			});
-
-
-			//send the notification to the connection holders
-			if(!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders())) {
-				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().forEach(holder -> {
-					if (!StringUtils.isEmpty(holder.getMobileNumber())) {
-						mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
-					}
-				});
-			}
-		}
 		List<SMSRequest> smsRequest = new ArrayList<>();
 		Map<String, String> mobileNumberAndMessage = getMessageForMobileNumber(mobileNumbersAndNames,
 				sewerageConnectionRequest, message, property);
@@ -379,6 +359,78 @@ public class WorkflowNotificationService {
 		return smsRequest;
 	}
 
+	/**
+	 * Creates email request for each owner
+	 *
+	 * @param sewerageConnectionRequest Sewerage Connection Request
+	 * @param topic Topic Name
+	 * @param property Property Object
+	 * @param applicationStatus Application Status
+	 * @return List of EmailRequest
+	 */
+	private List<EmailRequest> getEmailRequest(SewerageConnectionRequest sewerageConnectionRequest, String topic,
+											   Property property, String applicationStatus) {
+		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
+				sewerageConnectionRequest.getRequestInfo());
+		int reqType = SWConstants.UPDATE_APPLICATION;
+		if ((!sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION))
+				&& sewerageServicesUtil.isModifyConnectionRequest(sewerageConnectionRequest)) {
+			reqType = SWConstants.MODIFY_CONNECTION;
+		}
+		String message = notificationUtil.getCustomizedMsgForEmail(
+				sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction(), applicationStatus,
+				localizationMessage, reqType);
+		if (message == null) {
+			log.info("No message Found For Topic : " + topic);
+			return Collections.emptyList();
+		}
+		Map<String, String> mobileNumbersAndNames = new HashMap<>();
+		Set<String> mobileNumbers = new HashSet<>();
+
+		//Send the notification to all owners
+		property.getOwners().forEach(owner -> {
+			if (owner.getMobileNumber() != null)
+				mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
+			mobileNumbers.add(owner.getMobileNumber());
+		});
+
+		//send the notification to the connection holders
+		if (!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders())) {
+			sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().forEach(holder -> {
+				if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+					mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+					mobileNumbers.add(holder.getMobileNumber());
+
+				}
+			});
+		}
+		//Send the notification to applicant
+		if(!StringUtils.isEmpty(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
+		{
+			mobileNumbersAndNames.put(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), sewerageConnectionRequest.getRequestInfo().getUserInfo().getName());
+			mobileNumbers.add(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber());
+
+		}
+
+		Map<String, String> mobileNumberAndMessage = getMessageForMobileNumber(mobileNumbersAndNames,
+				sewerageConnectionRequest, message, property);
+
+		Map<String,String> mobileNumberAndEmailId = notificationUtil.fetchUserEmailIds(mobileNumbers,sewerageConnectionRequest.getRequestInfo(),sewerageConnectionRequest.getSewerageConnection().getTenantId());
+
+		if (message.contains("{receipt download link}"))
+			mobileNumberAndMessage = setRecepitDownloadLink(mobileNumberAndMessage, sewerageConnectionRequest, message, property);
+
+		List<EmailRequest> emailRequest = new LinkedList<>();
+		for (Map.Entry<String, String> entryset : mobileNumberAndEmailId.entrySet()) {
+			String customizedMsg = mobileNumberAndMessage.get(entryset.getKey());
+			String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
+			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
+			EmailRequest email = new EmailRequest(sewerageConnectionRequest.getRequestInfo(),emailobj);
+			emailRequest.add(email);
+		}
+		return emailRequest;
+	}
 	public Map<String, String> getMessageForMobileNumber(Map<String, String> mobileNumbersAndNames,
 			SewerageConnectionRequest sewerageConnectionRequest, String message, Property property) {
 		Map<String, String> messageToReturn = new HashMap<>();
@@ -392,6 +444,9 @@ public class WorkflowNotificationService {
 			if (messageToReplace.contains("{Application number}"))
 				messageToReplace = messageToReplace.replace("{Application number}",
 						sewerageConnectionRequest.getSewerageConnection().getApplicationNo());
+
+			if (messageToReplace.contains("{Connection number}"))
+				messageToReplace = messageToReplace.replace("{Connection number}",  sewerageConnectionRequest.getSewerageConnection().getConnectionNo());
 
 			if (messageToReplace.contains("{Application download link}"))
 				messageToReplace = messageToReplace.replace("{Application download link}",
