@@ -1,0 +1,21 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: daily
+spec:
+  schedule: "1 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: daily
+            image: talele08/api-cronjob-image-4
+            command: ["python3","cronJobAPIConfig.py"]
+            args: ["daily"]  
+            env:
+              - name: JOB_NAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.name
+          restartPolicy: OnFailure            
