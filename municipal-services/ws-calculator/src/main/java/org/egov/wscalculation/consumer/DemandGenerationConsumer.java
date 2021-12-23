@@ -22,6 +22,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
+
+import static org.egov.wscalculation.constants.WSCalculationConstant.TENANTID_MDC_STRING;
 
 @Slf4j
 @Component
@@ -54,9 +57,14 @@ public class DemandGenerationConsumer {
 			"${egov.watercalculatorservice.createdemand.topic}" }, containerFactory = "kafkaListenerContainerFactoryBatch")
 	public void listen(final List<Message<?>> records) {
 		CalculationReq calculationReq = mapper.convertValue(records.get(0).getPayload(), CalculationReq.class);
+		String tenantId = calculationReq.getCalculationCriteria().get(0).getTenantId();
+		
+		// Adding in MDC so that tracer can add it in header
+		MDC.put(TENANTID_MDC_STRING, tenantId);
 		Map<String, Object> masterMap = mDataService.loadMasterData(calculationReq.getRequestInfo(),
 				calculationReq.getCalculationCriteria().get(0).getTenantId());
 		List<CalculationCriteria> calculationCriteria = new ArrayList<>();
+
 		records.forEach(record -> {
 			try {
 				CalculationReq calcReq = mapper.convertValue(record.getPayload(), CalculationReq.class);

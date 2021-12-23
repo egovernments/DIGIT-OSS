@@ -1,6 +1,7 @@
 package org.egov.pgr.producer;
 
 import lombok.extern.slf4j.Slf4j;
+import org.egov.pgr.config.PGRConfiguration;
 import org.egov.tracer.kafka.CustomKafkaTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -13,7 +14,19 @@ public class Producer {
     @Autowired
     private CustomKafkaTemplate<String, Object> kafkaTemplate;
 
-    public void push(String topic, Object value) {
-        kafkaTemplate.send(topic, value);
+    @Autowired
+    private PGRConfiguration configs;
+
+    public void push(String tenantId, String topic, Object value) {
+
+        String updatedTopic = topic;
+        if (configs.getIsEnvironmentCentralInstance()) {
+
+            String[] tenants = tenantId.split("\\.");
+            if (tenants.length > 1)
+                updatedTopic = tenants[1].concat("-").concat(topic);
+        }
+        log.info("The Kafka topic for the tenantId : " + tenantId + " is : " + updatedTopic);
+        kafkaTemplate.send(updatedTopic, value);
     }
 }

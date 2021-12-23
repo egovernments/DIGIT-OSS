@@ -5,6 +5,7 @@ import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.ReadContext;
 
+import org.egov.tracer.model.CustomException;
 import org.springframework.web.client.RestTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +17,7 @@ import org.egov.echallan.repository.ServiceRequestRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 
 import java.math.BigDecimal;
@@ -75,9 +77,9 @@ public class NotificationUtil {
 
 	private String getCancelMsg(RequestInfo requestInfo,Challan challan, String message) {
 		 HashMap<String, String> businessMsg  =  fetchContentFromLocalization(requestInfo,challan.getTenantId(),MODULE,formatCodes(challan.getBusinessService()));
-		 message = message.replace("<citizen>",challan.getCitizen().getName());
-	     message = message.replace("<challanno>", challan.getChallanNo());
-	     message = message.replace("<service>", businessMsg.get(MSG_KEY));
+		 message = message.replace("{citizen}",challan.getCitizen().getName());
+	     message = message.replace("{challanno}", challan.getChallanNo());
+	     message = message.replace("{service}", businessMsg.get(MSG_KEY));
 	     return message;
 	}
 	
@@ -97,29 +99,30 @@ public class NotificationUtil {
 		
 		Calendar tocal = Calendar.getInstance();
 		tocal.setTimeInMillis((long) challan.getTaxPeriodTo());
-        message = message.replace("<citizen>",challan.getCitizen().getName());
-        message = message.replace("<challanno>", challan.getChallanNo());
-        message = message.replace("<service>", businessMsg.get(MSG_KEY));
-        message = message.replace("<fromdate>", " "+ fromcal.get(Calendar.DATE) + "/" + (fromcal.get(Calendar.MONTH)+1) + "/" + fromcal.get(Calendar.YEAR)+ " ".toUpperCase());
-        message = message.replace("<todate>", " "+ tocal.get(Calendar.DATE) + "/" + (tocal.get(Calendar.MONTH)+1) + "/" + tocal.get(Calendar.YEAR)+ " ".toUpperCase());
+        message = message.replace("{citizen}",challan.getCitizen().getName());
+        message = message.replace("{challanno}", challan.getChallanNo());
+        message = message.replace("{service}", businessMsg.get(MSG_KEY));
+        message = message.replace("{fromdate}", " "+ fromcal.get(Calendar.DATE) + "/" + (fromcal.get(Calendar.MONTH)+1) + "/" + fromcal.get(Calendar.YEAR)+ " ".toUpperCase());
+        message = message.replace("{todate}", " "+ tocal.get(Calendar.DATE) + "/" + (tocal.get(Calendar.MONTH)+1) + "/" + tocal.get(Calendar.YEAR)+ " ".toUpperCase());
 
         
-        message = message.replace("<duedate>", " "+ cal.get(Calendar.DATE) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(Calendar.YEAR)+ " ".toUpperCase());
-        message = message.replace("<amount>", amountToBePaid.toString());
-        String UIHost = config.getUiAppHost();
+        message = message.replace("{duedate}", " "+ cal.get(Calendar.DATE) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(Calendar.YEAR)+ " ".toUpperCase());
+        message = message.replace("{amount}", amountToBePaid.toString());
+        String UIHost = getHost(challan.getTenantId());
 		String paymentPath = config.getPayLinkSMS();
 		paymentPath = paymentPath.replace("$consumercode",challan.getChallanNo());
 		paymentPath = paymentPath.replace("$tenantId",challan.getTenantId());
 		paymentPath = paymentPath.replace("$businessservice",challan.getBusinessService());
 		String finalPath = UIHost + paymentPath;
-		message = message.replace("<Link>",getShortenedUrl(finalPath));
+		message = message.replace("{Link}",getShortenedUrl(finalPath));
 
         return message;
     }
 	
 	private HashMap<String, String> fetchContentFromLocalization(RequestInfo requestInfo, String tenantId, String module, String code) {
 		if (config.getIsLocalizationStateLevel())
-			tenantId = tenantId.split("\\.")[0];
+			tenantId = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
+
 		String message = null;
 		String templateId = null;
 		HashMap<String, String> msgDetail = new HashMap<String, String>();
@@ -225,7 +228,7 @@ public class NotificationUtil {
 	public StringBuilder getUri(String tenantId, RequestInfo requestInfo) {
 
 		if (config.getIsLocalizationStateLevel())
-			tenantId = tenantId.split("\\.")[0];
+			tenantId = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
 		
 		String locale = NOTIFICATION_LOCALE;
 		if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
@@ -250,6 +253,22 @@ public class NotificationUtil {
 		builder.append("&businessService=");
 		builder.append(challan.getBusinessService());
 		return builder;
+	}
+
+	public String getHost(String tenantId){
+		log.info("INCOMING TENANTID FOR NOTIF HOST: " + tenantId);
+		Integer tenantLength = tenantId.split("\\.").length;
+		String topLevelTenant = tenantId;
+		if(tenantLength == 3){
+			topLevelTenant = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
+		}
+		log.info(config.getUiAppHostMap().toString());
+		log.info(topLevelTenant);
+		String host = config.getUiAppHostMap().get(topLevelTenant);
+		if(ObjectUtils.isEmpty(host)){
+			throw new CustomException("EG_NOTIF_HOST_ERR", "No host found for tenantid: " + topLevelTenant);
+		}
+		return host;
 	}
 	
 }

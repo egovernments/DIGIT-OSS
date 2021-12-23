@@ -1,24 +1,33 @@
 package org.egov.collection.consumer;
 
+import static org.egov.collection.config.CollectionServiceConstants.BUSINESSSERVICELOCALIZATION_CODE_PREFIX;
+import static org.egov.collection.config.CollectionServiceConstants.BUSINESSSERVICE_LOCALIZATION_MODULE;
+import static org.egov.collection.config.CollectionServiceConstants.COLLECTION_LOCALIZATION_MODULE;
+import static org.egov.collection.config.CollectionServiceConstants.LOCALIZATION_CODES_JSONPATH;
+import static org.egov.collection.config.CollectionServiceConstants.LOCALIZATION_MSGS_JSONPATH;
+import static org.egov.collection.config.CollectionServiceConstants.WF_MT_STATUS_CANCELLED_CODE;
+import static org.egov.collection.config.CollectionServiceConstants.WF_MT_STATUS_DEPOSITED_CODE;
+import static org.egov.collection.config.CollectionServiceConstants.WF_MT_STATUS_DISHONOURED_CODE;
+import static org.egov.collection.config.CollectionServiceConstants.WF_MT_STATUS_OPEN_CODE;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.producer.CollectionProducer;
 import org.egov.collection.web.contract.Bill;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.collection.config.ApplicationProperties;
-
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,8 +36,6 @@ import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
-
-import static org.egov.collection.config.CollectionServiceConstants.*;
 
 @Slf4j
 @Component
@@ -67,7 +74,7 @@ public class CollectionNotificationConsumer{
                 HashMap<String, Object> request = new HashMap<>();
                 request.put("mobileNumber", mobNo);
                 request.put("message", message);
-                producer.producer(applicationProperties.getSmsTopic(), request);
+                producer.push(payment.getTenantId(), applicationProperties.getSmsTopic(), request);
             } else {
                 log.error("Message not configured! No notification will be sent.");
             }

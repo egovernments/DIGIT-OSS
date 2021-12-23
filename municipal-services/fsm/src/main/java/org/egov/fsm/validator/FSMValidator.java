@@ -35,6 +35,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.cedarsoftware.util.GraphComparator;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
@@ -164,10 +166,16 @@ public class FSMValidator {
 			allowedParamStr = config.getAllowedCitizenSearchParameters();
 		else if (requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE))
 			allowedParamStr = config.getAllowedEmployeeSearchParameters();
+		
+		else if (requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.SYSTEM))
+			allowedParamStr = config.getAllowedEmployeeSearchParameters();
+		
 		else
+		{
+			
 			throw new CustomException(FSMErrorConstants.INVALID_SEARCH,
 					"The userType: " + requestInfo.getUserInfo().getType() + " does not have any search config");
-
+		}
 		if (StringUtils.isEmpty(allowedParamStr) && !criteria.isEmpty())
 			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "No search parameters are expected");
 		else {
@@ -340,9 +348,16 @@ public class FSMValidator {
 
 		List<Map<String,Object>> tripAountAllowed = JsonPath.read(mdmsData, FSMConstants.FSM_TRIP_AMOUNT_OVERRIDE_ALLOWED);
 		
+
+		Map<String, String> additionalDetails=null;
 		
-		Map<String, String> additionalDetails = fsm.getAdditionalDetails() != null ? (Map<String,String>)fsm.getAdditionalDetails()
+		try {
+		
+		 additionalDetails = fsm.getAdditionalDetails() != null ? (Map<String,String>)fsm.getAdditionalDetails()
 				: new HashMap<String, String>();
+		}catch (Exception e) {
+		log.info("format is wrong", e.getMessage());
+		}
 		if(!CollectionUtils.isEmpty(tripAountAllowed) &&  additionalDetails.get("tripAmount") == null   ) {
 			throw new CustomException(FSMErrorConstants.INVALID_TRIP_AMOUNT," tripAmount is invalid");
 		}else if(!CollectionUtils.isEmpty(tripAountAllowed)){

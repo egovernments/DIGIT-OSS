@@ -1,7 +1,9 @@
 package org.egov.pgr.repository.rowmapper;
 
+import org.egov.pgr.config.PGRConfiguration;
 import org.egov.pgr.web.models.RequestSearchCriteria;
 import org.egov.tracer.model.CustomException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -15,6 +17,13 @@ import java.util.Set;
 public class PGRQueryBuilder {
 
 
+    private PGRConfiguration config;
+
+    @Autowired
+    public PGRQueryBuilder(PGRConfiguration config) {
+        this.config = config;
+    }
+
     private static final String QUERY_ALIAS =   "ser.id as ser_id,ads.id as ads_id," +
                                                 "ser.tenantId as ser_tenantId,ads.tenantId as ads_tenantId," +
                                                 "ser.additionaldetails as ser_additionaldetails,ads.additionaldetails as ads_additionaldetails," +
@@ -25,7 +34,7 @@ public class PGRQueryBuilder {
 
 
     private static final String QUERY = "select ser.*,ads.*," + QUERY_ALIAS+
-                                        " from eg_pgr_service_v2 ser INNER JOIN eg_pgr_address_v2 ads" +
+                                        " from {schema}.eg_pgr_service_v2 ser INNER JOIN {schema}.eg_pgr_address_v2 ads" +
                                         " ON ads.parentId = ser.id ";
 
     private static final String COUNT_WRAPPER = "select count(*) from ({INTERNAL_QUERY}) as count";
@@ -49,7 +58,7 @@ public class PGRQueryBuilder {
 
                 String[] tenantIdChunks = tenantId.split("\\.");
 
-                if (tenantIdChunks.length == 1) {
+                if (tenantIdChunks.length == config.getStateLevelTenantIdLength()) {
                     addClauseIfRequired(preparedStmtList, builder);
                     builder.append(" ser.tenantid LIKE ? ");
                     preparedStmtList.add(criteria.getTenantId() + '%');

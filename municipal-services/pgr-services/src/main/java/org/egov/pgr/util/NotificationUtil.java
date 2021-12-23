@@ -44,7 +44,7 @@ public class NotificationUtil {
     public StringBuilder getUri(String tenantId, RequestInfo requestInfo, String module) {
 
         if (config.getIsLocalizationStateLevel())
-            tenantId = tenantId.split("\\.")[0];
+            tenantId = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
 
         String locale = NOTIFICATION_LOCALE;
         if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
@@ -78,14 +78,14 @@ public class NotificationUtil {
      * Send the SMSRequest on the SMSNotification kafka topic
      * @param smsRequestList The list of SMSRequest to be sent
      */
-    public void sendSMS(List<SMSRequest> smsRequestList) {
+    public void sendSMS(String tenantId, List<SMSRequest> smsRequestList) {
         if (config.getIsSMSEnabled()) {
             if (CollectionUtils.isEmpty(smsRequestList)) {
                 log.info("Messages from localization couldn't be fetched!");
                 return;
             }
             for (SMSRequest smsRequest : smsRequestList) {
-                producer.push(config.getSmsNotifTopic(), smsRequest);
+                producer.push(tenantId,config.getSmsNotifTopic(), smsRequest);
                 log.info("Messages: " + smsRequest.getMessage());
             }
         }
@@ -96,8 +96,8 @@ public class NotificationUtil {
      *
      * @param request EventRequest Object
      */
-    public void sendEventNotification(EventRequest request) {
-        producer.push(config.getSaveUserEventsTopic(), request);
+    public void sendEventNotification(String tenantId, EventRequest request) {
+        producer.push(tenantId,config.getSaveUserEventsTopic(), request);
     }
 
     public String getShortnerURL(String actualURL) {

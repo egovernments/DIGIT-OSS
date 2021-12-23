@@ -603,6 +603,11 @@ config:
     build:
       - work-dir: "utilities/certificate-verification"
         image-name: "certificate-verification"
+  - name: "builds/digit-dev/utilities/demo-utility"
+    build:
+      - work-dir: "utilities/demo-utility"
+        image-name: "demo-utility"
+        dockerfile: "build/maven/Dockerfile"      
 
 # Frontend
 
@@ -649,7 +654,7 @@ config:
 
   - name: builds/digit-dev/frontend/micro-ui/digit-ui
     build:
-      - work-dir: frontend/micro-ui/
+      - work-dir: .
         dockerfile: frontend/micro-ui/web/docker/Dockerfile
         image-name: digit-ui
   
@@ -657,13 +662,14 @@ config:
   
   - name: builds/digit-dev/edcr/dcr-client/egov-dcr
     build:
-      - work-dir: digit-dev/edcr/client/egov
+      - work-dir: edcr/client/egov
+        dockerfile: edcr/client/Dockerfile
         image-name: egov-edcr
-        dockerfile: digit-dev/edcr/client/Dockerfile
         
   - name: builds/digit-dev/edcr/dcr-service/egov-dcr
     build:
-      - work-dir: digit-dev/edcr/service/egov
+      - work-dir: edcr/service/egov
+        dockerfile: edcr/service/Dockerfile
         image-name: egov-edcr
-        dockerfile: digit-dev/edcr/service/Dockerfile      
+              
 

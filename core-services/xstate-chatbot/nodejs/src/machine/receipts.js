@@ -692,10 +692,12 @@ const receipts = {
                 var receiptIndex = context.receipts.slots.receiptNumber;
                 var consumerCode;
                 var businessService;
+                var tenantId;
                 if(context.receipts.slots.searchresults)
                   consumerCode = context.receipts.slots.searchresults[receiptIndex-1].id;
                   businessService = context.receipts.slots.searchresults[receiptIndex-1].businessService;
-                return receiptService.multipleRecordReceipt(context.user,businessService,consumerCode,null,false);
+                  tenantId = context.receipts.slots.searchresults[receiptIndex-1].tenantId;
+                return receiptService.multipleRecordReceipt(context.user,businessService,consumerCode,null, tenantId,false);
               },
               onDone:[
                 {
@@ -911,7 +913,7 @@ const receipts = {
                   else {
                         businessService = receiptData.businessService;
                         transactionNumber = receiptData.transactionNumber;
-                        let payment = await receiptService.multipleRecordReceipt(context.user,businessService,null,transactionNumber, true);
+                        let payment = await receiptService.multipleRecordReceipt(context.user,businessService,null,transactionNumber, receiptData.tenantId, true);
                         await receiptService.getPdfFilestoreId(businessService, payment, context.user);
                         await new Promise(resolve => setTimeout(resolve, 3000));
                         dialog.sendMessage(context, dialog.get_message(messages.lastState,context.user.locale));

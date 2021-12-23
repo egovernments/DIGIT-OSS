@@ -1,15 +1,16 @@
 package org.egov.filters.pre;
 
-import com.netflix.zuul.ZuulFilter;
-import com.netflix.zuul.context.RequestContext;
+import static org.egov.constants.RequestContextConstants.RBAC_BOOLEAN_FLAG_NAME;
+import static org.egov.constants.RequestContextConstants.SKIP_RBAC;
+
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashSet;
-
-import static org.egov.constants.RequestContextConstants.RBAC_BOOLEAN_FLAG_NAME;
-import static org.egov.constants.RequestContextConstants.SKIP_RBAC;
+import com.netflix.zuul.ZuulFilter;
+import com.netflix.zuul.context.RequestContext;
 
 /**
  *  3rd pre filter to get executed.
@@ -18,12 +19,12 @@ import static org.egov.constants.RequestContextConstants.SKIP_RBAC;
 public class RbacPreCheckFilter extends ZuulFilter {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private HashSet<String> openEndpointsWhitelist;
-    private HashSet<String> anonymousEndpointsWhitelist;
+    private List<String> openEndpointsWhitelist;
+    private List<String> anonymousEndpointsWhitelist;
 
     @Autowired
-    public RbacPreCheckFilter(HashSet<String> openEndpointsWhitelist,
-                              HashSet<String> anonymousEndpointsWhitelist) {
+    public RbacPreCheckFilter(List<String> openEndpointsWhitelist,
+                              List<String> anonymousEndpointsWhitelist) {
         this.openEndpointsWhitelist = openEndpointsWhitelist;
         this.anonymousEndpointsWhitelist = anonymousEndpointsWhitelist;
     }

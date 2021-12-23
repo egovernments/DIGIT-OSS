@@ -8,9 +8,16 @@ import java.util.Date;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.v1.ReceiptSearchCriteria_v1;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CollectionQueryBuilder_v1 {
+	
+	@Autowired
+	private ApplicationProperties configs;
 
     private static final String SELECT_RECEIPTS_SQL = "Select rh.id as rh_id,rh.payername as rh_payername,rh" +
             ".payerAddress as rh_payerAddress, rh.payerEmail as rh_payerEmail, rh.payermobile as rh_payermobile, rh" +
@@ -59,8 +66,7 @@ public class CollectionQueryBuilder_v1 {
             " result) result_offset " +
             "WHERE offset_ > :offset AND offset_ <= :limit";
 
-    @SuppressWarnings("rawtypes")
-    public static String getReceiptSearchQuery(ReceiptSearchCriteria_v1 searchCriteria,
+    public String getReceiptSearchQuery(ReceiptSearchCriteria_v1 searchCriteria,
                                                Map<String, Object> preparedStatementValues) {
         StringBuilder selectQuery = new StringBuilder(SELECT_RECEIPTS_SQL);
 
@@ -81,12 +87,12 @@ public class CollectionQueryBuilder_v1 {
 
 
     @SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
-    private static void addWhereClause(StringBuilder selectQuery, Map<String, Object> preparedStatementValues,
+    private void addWhereClause(StringBuilder selectQuery, Map<String, Object> preparedStatementValues,
                                        ReceiptSearchCriteria_v1 searchCriteria) {
 
         if (StringUtils.isNotBlank(searchCriteria.getTenantId())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            if(searchCriteria.getTenantId().split("\\.").length > 1) {
+            if(searchCriteria.getTenantId().split("\\.").length > configs.getStateLevelTenantIdLength()) {
                 selectQuery.append(" rh.tenantId =:tenantId");
                 preparedStatementValues.put("tenantId", searchCriteria.getTenantId());
             }

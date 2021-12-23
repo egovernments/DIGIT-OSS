@@ -33,7 +33,8 @@ export const directMapping = async (
   dataconfig,
   variableTovalueMap,
   requestInfo,
-  unregisteredLocalisationCodes
+  unregisteredLocalisationCodes,
+  headers
 ) => {
   var directArr = [];
   var localisationCodes = [];
@@ -341,7 +342,8 @@ export const directMapping = async (
     let resposnseMap = await findLocalisation(
       requestInfo,
       localisationModules,
-      localisationCodes
+      localisationCodes,
+      headers
     );
   
     resposnseMap.messages.map((item) => {

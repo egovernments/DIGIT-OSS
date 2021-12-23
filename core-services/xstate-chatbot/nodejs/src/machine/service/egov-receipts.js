@@ -4,6 +4,7 @@ const moment = require("moment-timezone");
 const localisationService = require('../util/localisation-service');
 const dialog = require('../util/dialog');
 const pdfService = require('../util/pdf-service');
+const paymentStatusConsumer = require('./payment-status-update-event');
 
 let supportedServiceForLocality = "{\"TL\" : \"tl-services\",\"FIRENOC\" : \"fireNoc\",\"WS\" : \"ws-services\",\"SW\" : \"sw-services\",\"PT\" : \"PT\",\"BPA\" : \"bpa-services\"}";
 
@@ -248,7 +249,8 @@ class ReceiptService {
             date: transactionDate,
             businessService: businessService,
             transactionNumber: result.transactionNumber,
-            fileStoreId: result.fileStoreId
+            fileStoreId: result.fileStoreId,
+            tenantId: tenantId
           }
           Payments['Payments'].push(data);
           lookup.push(consumerCode);
@@ -394,7 +396,7 @@ class ReceiptService {
           return await this.findreceiptsList(user,service,user.locale);
     }
 
-    async multipleRecordReceipt(user,service,consumerCodes,transactionNumber, forPdf){ 
+    async multipleRecordReceipt(user,service,consumerCodes,transactionNumber, tenantId, forPdf){ 
       
       let requestBody = {
         RequestInfo: {
@@ -407,12 +409,26 @@ class ReceiptService {
       let paymentUrl = config.egovServices.egovServicesHost + searchEndpoint;
       paymentUrl =  paymentUrl + '?tenantId=' + config.rootTenantId;
       paymentUrl+='&';
-      if(forPdf)
+      if(forPdf){
         paymentUrl +='transactionNumber='+transactionNumber;
-      else
+        paymentUrl+='&mobileNumber='+user.mobileNumber;
+      }
+        
+      else{
         paymentUrl +='consumerCodes='+consumerCodes;
+        let isOwner = false;
+        if(service === 'PT')
+          isOwner = await paymentStatusConsumer.getPTOwnerDetails(consumerCodes, tenantId, user.mobileNumber, user.authToken);
 
-      paymentUrl+='&mobileNumber='+user.mobileNumber;
+        if(service === 'WS' || service === 'SW')
+          isOwner = await paymentStatusConsumer.getWnsOwnerDeatils(consumerCodes, tenantId, service, user.mobileNumber, user.authToken);
+
+
+        if(!isOwner)
+        paymentUrl+='&mobileNumber='+user.mobileNumber;
+      }
+        
+
 
       let options = {
         method: 'POST',

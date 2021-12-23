@@ -14,6 +14,8 @@ import org.springframework.util.CollectionUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.egov.wf.util.WorkflowConstants.SCHEMA_REPLACE_STRING;
+
 
 @Component
 public class WorkflowUtil {
@@ -264,7 +266,7 @@ public class WorkflowUtil {
             Boolean isStatelevelRolePresent = false;
 
             for (String tenantId : tenantIds) {
-                if (tenantId.equalsIgnoreCase(config.getStateLevelTenantId())){
+                if (isTenantStateLevel(tenantId)){
                     isStatelevelRolePresent = true;
                     break;
                 }
@@ -294,7 +296,7 @@ public class WorkflowUtil {
                  * applications having tenantId either pb.amritsar or pb.jalandhar and status in the list statuses
                  *
                  */
-                if(!isStatelevelRolePresent && tenantKey.equalsIgnoreCase(config.getStateLevelTenantId())){
+                if(!isStatelevelRolePresent && isTenantStateLevel(tenantKey)){
                     for (String tenantId : tenantIds){
                         tenantSpecificStatuses.addAll(statuses.stream().map(s -> tenantId+":"+s).collect(Collectors.toList()));
                     }
@@ -465,10 +467,35 @@ public class WorkflowUtil {
     }
 
 
+    private Boolean isTenantStateLevel(String tenantId){
+
+        if(tenantId.split("\\.").length == 2)
+            return true;
+        else return false;
+
+    }
 
 
 
 
+    /**
+     * Method to fetch the state name from the tenantId
+     *
+     * @param query
+     * @param tenantId
+     * @return
+     */
+    public String replaceSchemaPlaceholder(String query, String tenantId) {
+
+        String finalQuery = null;
+        if (tenantId.contains(".")) {
+            String schemaName = tenantId.split("\\.")[1];
+            finalQuery = query.replace(SCHEMA_REPLACE_STRING, schemaName);
+        } else {
+            finalQuery = query.replace(SCHEMA_REPLACE_STRING.concat("."), "");
+        }
+        return finalQuery;
+    }
 
 
 

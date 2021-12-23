@@ -29,7 +29,7 @@ public class MDMSValidator {
 	public void validateMdmsData(FSMRequest fsmRequest, Object mdmsData) {
 
 		this.mdmsResMap  = getAttributeValues(mdmsData);
-		String[] masterArray = { FSMConstants.MDMS_PROPERTY_TYPE, FSMConstants.MDMS_APPLICATION_CHANNEL, FSMConstants.MDMS_SANITATION_TYPE, FSMConstants.MDMS_VEHICLE_MAKE_MODEL, FSMConstants.MDMS_PIT_TYPE,FSMConstants.MDMS_CONFIG,FSMConstants.MDMS_SLUM_NAME };
+		String[] masterArray = { FSMConstants.MDMS_PROPERTY_TYPE, FSMConstants.MDMS_APPLICATION_CHANNEL, FSMConstants.MDMS_SANITATION_TYPE, FSMConstants.MDMS_VEHICLE_MAKE_MODEL, FSMConstants.MDMS_PIT_TYPE,FSMConstants.MDMS_CONFIG,FSMConstants.MDMS_SLUM_NAME, FSMConstants.MDMS_APPLICATION_TYPE };
 
 		validateIfMasterPresent(masterArray,this.mdmsResMap);
 	

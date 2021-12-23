@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.web.models.EventRequest;
@@ -20,6 +21,7 @@ import org.springframework.util.CollectionUtils;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
 
 @Component
 @Slf4j
@@ -45,7 +47,7 @@ public class NotificationUtil {
 	public StringBuilder getUri(String tenantId, RequestInfo requestInfo) {
 
 		if (config.getIsLocalizationStateLevel())
-			tenantId = tenantId.split("\\.")[0];
+			tenantId = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
 
 		String locale = WCConstants.NOTIFICATION_LOCALE;
 		if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
@@ -101,14 +103,14 @@ public class NotificationUtil {
 	 * Send the SMSRequest on the SMSNotification kafka topic
 	 * @param smsRequestList The list of SMSRequest to be sent
 	 */
-	public void sendSMS(List<SMSRequest> smsRequestList) {
+	public void sendSMS(List<SMSRequest> smsRequestList, String tenantId) {
 		if (config.getIsSMSEnabled()) {
 			if (CollectionUtils.isEmpty(smsRequestList)) {
 				log.info("Messages from localization couldn't be fetched!");
 				return;
 			}
 			for (SMSRequest smsRequest : smsRequestList) {
-				producer.push(config.getSmsNotifTopic(), smsRequest);
+				producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
 				log.info("Messages: " + smsRequest.getMessage());
 			}
 		}
@@ -163,9 +165,25 @@ public class NotificationUtil {
 	 * 
 	 * @param request EventRequest Object
 	 */
-	public void sendEventNotification(EventRequest request) {
+	public void sendEventNotification(EventRequest request, String tenantId) {
 		log.info("Event: " + request.toString());
-		producer.push(config.getSaveUserEventsTopic(), request);
+		producer.push(tenantId ,config.getSaveUserEventsTopic(), request);
+	}
+
+	public String getHost(String tenantId){
+		log.info("INCOMING TENANTID FOR NOTIF HOST: " + tenantId);
+		Integer tenantLength = tenantId.split("\\.").length;
+		String topLevelTenant = tenantId;
+		if(tenantLength == 3){
+			topLevelTenant = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
+		}
+		log.info(config.getUiAppHostMap().toString());
+		log.info(topLevelTenant);
+		String host = config.getUiAppHostMap().get(topLevelTenant);
+		if(ObjectUtils.isEmpty(host)){
+			throw new CustomException("EG_NOTIF_HOST_ERR", "No host found for tenantid: " + topLevelTenant);
+		}
+		return host;
 	}
 	
 

@@ -8,9 +8,13 @@ import java.util.stream.Collectors;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
+import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.repository.rowmapper.OpenWaterRowMapper;
+import org.egov.waterconnection.util.WaterServicesUtil;
 import org.egov.waterconnection.web.models.SearchCriteria;
 import org.egov.waterconnection.web.models.WaterConnection;
 import org.egov.waterconnection.web.models.WaterConnectionRequest;
@@ -48,6 +52,9 @@ public class WaterDaoImpl implements WaterDao {
 	@Autowired
 	private WSConfiguration wsConfiguration;
 
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceutil;
+
 	@Value("${egov.waterservice.createwaterconnection.topic}")
 	private String createWaterConnection;
 
@@ -56,7 +63,7 @@ public class WaterDaoImpl implements WaterDao {
 	
 	@Override
 	public void saveWaterConnection(WaterConnectionRequest waterConnectionRequest) {
-		waterConnectionProducer.push(createWaterConnection, waterConnectionRequest);
+		waterConnectionProducer.push(waterConnectionRequest.getWaterConnection().getTenantId(),createWaterConnection, waterConnectionRequest);
 	}
 
 	@Override
@@ -66,9 +73,16 @@ public class WaterDaoImpl implements WaterDao {
 		List<WaterConnection> waterConnectionList = new ArrayList<>();
 		List<Object> preparedStatement = new ArrayList<>();
 		String query = wsQueryBuilder.getSearchQueryString(criteria, preparedStatement, requestInfo);
-		
 		if (query == null)
 			return Collections.emptyList();
+
+		try {
+			query = centralInstanceutil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("WS_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
+
 		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
 		
 		if(isOpenSearch)
@@ -85,9 +99,9 @@ public class WaterDaoImpl implements WaterDao {
 	@Override
 	public void updateWaterConnection(WaterConnectionRequest waterConnectionRequest, boolean isStateUpdatable) {
 		if (isStateUpdatable) {
-			waterConnectionProducer.push(updateWaterConnection, waterConnectionRequest);
+			waterConnectionProducer.push(waterConnectionRequest.getWaterConnection().getTenantId(),updateWaterConnection, waterConnectionRequest);
 		} else {
-			waterConnectionProducer.push(wsConfiguration.getWorkFlowUpdateTopic(), waterConnectionRequest);
+			waterConnectionProducer.push(waterConnectionRequest.getWaterConnection().getTenantId(),wsConfiguration.getWorkFlowUpdateTopic(), waterConnectionRequest);
 		}
 	}
 	
@@ -98,7 +112,7 @@ public class WaterDaoImpl implements WaterDao {
 	 */
 	public void postForMeterReading(WaterConnectionRequest waterConnectionRequest) {
 		log.info("Posting request to kafka topic - " + wsConfiguration.getCreateMeterReading());
-		waterConnectionProducer.push(wsConfiguration.getCreateMeterReading(), waterConnectionRequest);
+		waterConnectionProducer.push(waterConnectionRequest.getWaterConnection().getTenantId(),wsConfiguration.getCreateMeterReading(), waterConnectionRequest);
 	}
 
 	/**
@@ -109,7 +123,7 @@ public class WaterDaoImpl implements WaterDao {
 	public void pushForEditNotification(WaterConnectionRequest waterConnectionRequest) {
 		if (!WCConstants.EDIT_NOTIFICATION_STATE
 				.contains(waterConnectionRequest.getWaterConnection().getProcessInstance().getAction())) {
-			waterConnectionProducer.push(wsConfiguration.getEditNotificationTopic(), waterConnectionRequest);
+			waterConnectionProducer.push(waterConnectionRequest.getWaterConnection().getTenantId(),wsConfiguration.getEditNotificationTopic(), waterConnectionRequest);
 		}
 	}
 	
@@ -119,7 +133,7 @@ public class WaterDaoImpl implements WaterDao {
 	 * @param waterConnectionRequest
 	 */
 	public void enrichFileStoreIds(WaterConnectionRequest waterConnectionRequest) {
-		waterConnectionProducer.push(wsConfiguration.getFileStoreIdsTopic(), waterConnectionRequest);
+		waterConnectionProducer.push(waterConnectionRequest.getWaterConnection().getTenantId(),wsConfiguration.getFileStoreIdsTopic(), waterConnectionRequest);
 	}
 	
 	/**
@@ -128,7 +142,7 @@ public class WaterDaoImpl implements WaterDao {
 	 * @param waterConnectionRequest
 	 */
 	public void saveFileStoreIds(WaterConnectionRequest waterConnectionRequest) {
-		waterConnectionProducer.push(wsConfiguration.getSaveFileStoreIdsTopic(), waterConnectionRequest);
+		waterConnectionProducer.push(waterConnectionRequest.getWaterConnection().getTenantId(),wsConfiguration.getSaveFileStoreIdsTopic(), waterConnectionRequest);
 	}
 
 	public Boolean isSearchOpen(User userInfo) {

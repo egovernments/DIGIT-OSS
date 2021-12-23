@@ -133,7 +133,8 @@ const createPdfBinary = async (
   totalobjectcount,
   userid,
   documentType,
-  moduleName
+  moduleName,
+  headers
 ) => {
   try {
     let noOfDefinitions = listDocDefinition.length;
@@ -167,7 +168,8 @@ const createPdfBinary = async (
             totalobjectcount,
             userid,
             documentType,
-            moduleName
+            moduleName,
+            headers
           ),
           uploadFiles(
             dbInsertSingleRecords,
@@ -186,7 +188,8 @@ const createPdfBinary = async (
             totalobjectcount,
             userid,
             documentType,
-            moduleName
+            moduleName,
+            headers
           )
       });
     }
@@ -217,7 +220,8 @@ const uploadFiles = async (
   totalobjectcount,
   userid,
   documentType,
-  moduleName
+  moduleName,
+  headers
 ) => {
   let convertedListDocDefinition = [];
   let listOfFilestoreIds = [];
@@ -259,7 +263,7 @@ const uploadFiles = async (
     doc.on("end", function () {
       // console.log("enddddd "+cr++);
       var data = Buffer.concat(chunks);
-      fileStoreAPICall(filename, tenantId, data)
+      fileStoreAPICall(filename, tenantId, data, headers)
         .then((result) => {
           listOfFilestoreIds.push(result);
           if (!isconsolidated) {
@@ -393,6 +397,9 @@ app.post(
       let tenantId = req.query.tenantId;
       var formatconfig = formatConfigMap[key];
       var dataconfig = dataConfigMap[key];
+      var headers = JSON.parse(JSON.stringify(req.headers));
+      headers['tenantId']=headers.tenantid;
+
       logger.info("received createnosave request on key: " + key);
       requestInfo = get(req.body, "RequestInfo");
       //
@@ -410,7 +417,8 @@ app.post(
           requestInfo,
           true,
           formatconfig,
-          dataconfig
+          dataconfig,
+          headers
         );
         // restoring footer function
         formatConfigByFile[0].footer = convertFooterStringtoFunctionIfExist(formatconfig.footer);
@@ -457,6 +465,24 @@ app.post(
       let isconsolidated = req.query.isconsolidated;
       let entityid = req.query.entityid;
       requestInfo = get(req.body, "RequestInfo");
+
+      if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE && tenantid == null){
+        let error = {"PDF_INVALID_SEARCH":" TenantId is mandatory for search "};
+        res.status(400);
+        res.json({
+          ResponseInfo: requestInfo,
+          message: error,
+        });
+      }
+      else if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE && tenantid.split('.').length < envVariables.STATE_LEVEL_TENANTID_LENGTH){
+        let error = {"PDF_INVALID_SEARCH":" TenantId should be mandatorily " + envVariables.STATE_LEVEL_TENANTID_LENGTH + " levels for search"};
+        res.status(400);
+        res.json({
+          ResponseInfo: requestInfo,
+          message: error,
+        });
+      }
+
       if (
         (jobid == undefined || jobid.trim() == "") &&
         (entityid == undefined || entityid.trim() == "")
@@ -529,12 +555,16 @@ app.post(
   "/pdf-service/v1/_clearUnrigesteredCodes",
   asyncHandler(async (req, res) => {
     let requestInfo;
+    var headers = JSON.parse(JSON.stringify(req.headers));
+    headers['tenantId']=headers.tenantid;
+
     try {
       requestInfo = get(req.body, "RequestInfo");
       let resposnseMap = await findLocalisation(
         requestInfo,
         [],
-        unregisteredLocalisationCodes
+        unregisteredLocalisationCodes,
+        headers
       );
 
       resposnseMap.messages.map((item) => {
@@ -678,6 +708,18 @@ export const createAndSave = async (
   var documentType = get(dataconfig, "documentType", "");
   var moduleName = get(dataconfig, "DataConfigs.moduleName", "");
 
+  var headers;
+  if(req.headers){
+    headers = JSON.parse(JSON.stringify(req.headers));
+    headers['tenantId']=headers.tenantid;
+  }
+  else{
+    headers = {
+      tenantId:tenantId
+    };
+  }
+
+
   var valid = validateRequest(req, res, key, tenantId, requestInfo);
   if (valid) {
     let [formatConfigByFile, totalobjectcount, entityIds] = await prepareBegin(
@@ -686,7 +728,8 @@ export const createAndSave = async (
       requestInfo,
       false,
       formatconfig,
-      dataconfig
+      dataconfig,
+      headers
     );
 
     // logger.info(`Applied templating engine on ${moduleObjectsArray.length} objects output will be in ${formatConfigByFile.length} files`);
@@ -708,7 +751,8 @@ export const createAndSave = async (
       totalobjectcount,
       userid,
       documentType,
-      moduleName
+      moduleName,
+      headers
     ).catch((err) => {
       logger.error(err.stack || err);
       errorCallback({
@@ -839,7 +883,8 @@ const prepareBegin = async (
   requestInfo,
   returnFileInResponse,
   formatconfig,
-  dataconfig
+  dataconfig,
+  headers
 ) => {
   var baseKeyPath = get(dataconfig, "DataConfigs.baseKeyPath");
   var entityIdPath = get(dataconfig, "DataConfigs.entityIdPath");
@@ -857,7 +902,8 @@ const prepareBegin = async (
     baseKeyPath,
     requestInfo,
     returnFileInResponse,
-    entityIdPath
+    entityIdPath,
+    headers
   );
 };
 
@@ -867,7 +913,8 @@ const handlelogic = async (
   moduleObject,
   dataconfig,
   isCommonTableBorderRequired,
-  requestInfo
+  requestInfo,
+  headers
 ) => {
   let variableTovalueMap = {};
   //direct mapping service
@@ -877,7 +924,8 @@ const handlelogic = async (
       dataconfig,
       variableTovalueMap,
       requestInfo,
-      unregisteredLocalisationCodes
+      unregisteredLocalisationCodes,
+      headers
     ),
     //external API mapping
     externalAPIMapping(
@@ -886,7 +934,8 @@ const handlelogic = async (
       dataconfig,
       variableTovalueMap,
       requestInfo,
-      unregisteredLocalisationCodes
+      unregisteredLocalisationCodes,
+      headers
     ),
   ]);
   await generateQRCodes(moduleObject, dataconfig, variableTovalueMap);
@@ -909,7 +958,8 @@ const prepareBulk = async (
   baseKeyPath,
   requestInfo,
   returnFileInResponse,
-  entityIdPath
+  entityIdPath,
+  headers
 ) => {
   let isCommonTableBorderRequired = get(
     dataconfig,
@@ -953,7 +1003,8 @@ const prepareBulk = async (
         moduleObject,
         dataconfig,
         isCommonTableBorderRequired,
-        requestInfo
+        requestInfo,
+        headers
       );
 
       formatObjectArrayObject.push(formatObject["content"]);

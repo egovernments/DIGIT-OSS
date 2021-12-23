@@ -1,25 +1,35 @@
 package org.egov.filters.pre;
 
+import static org.egov.constants.RequestContextConstants.AUTH_BOOLEAN_FLAG_NAME;
+import static org.egov.constants.RequestContextConstants.AUTH_TOKEN_KEY;
+import static org.egov.constants.RequestContextConstants.CURRENT_REQUEST_SANITIZED_BODY;
+import static org.egov.constants.RequestContextConstants.CURRENT_REQUEST_SANITIZED_BODY_STR;
+import static org.egov.constants.RequestContextConstants.USER_INFO_FIELD_NAME;
+import static org.egov.constants.RequestContextConstants.USER_INFO_KEY;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.egov.Utils.ExceptionUtils;
+import org.egov.Utils.UserUtils;
+import org.egov.Utils.Utils;
+import org.egov.common.utils.MultiStateInstanceUtil;
+import org.egov.contract.User;
+import org.egov.model.RequestBodyInspector;
+import org.egov.wrapper.CustomRequestWrapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.ObjectUtils;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import org.egov.Utils.*;
-import org.egov.contract.User;
-import org.egov.model.RequestBodyInspector;
-import org.egov.wrapper.CustomRequestWrapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.util.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-
-import static org.egov.constants.RequestContextConstants.*;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *  2nd pre filter to get executed.
@@ -27,6 +37,7 @@ import static org.egov.constants.RequestContextConstants.*;
  *  If its not present in the open list then the auth token is retrieved from the request body.
  *  For a restricted endpoint if auth token is not present then an error response is returned.
  */
+@Slf4j
 public class AuthPreCheckFilter extends ZuulFilter {
     private static final String AUTH_TOKEN_RETRIEVE_FAILURE_MESSAGE = "Retrieving of auth token failed";
     private static final String OPEN_ENDPOINT_MESSAGE = "Routing to an open endpoint: {}";
@@ -42,21 +53,21 @@ public class AuthPreCheckFilter extends ZuulFilter {
     private static final String NO_REQUEST_INFO_FIELD_MESSAGE = "No request-info field in request body for: {}";
     private static final String AUTH_TOKEN_REQUEST_BODY_FIELD_NAME = "authToken";
     private static final String FAILED_TO_SERIALIZE_REQUEST_BODY_MESSAGE = "Failed to serialize requestBody";
-    private HashSet<String> openEndpointsWhitelist;
-    private HashSet<String> mixedModeEndpointsWhitelist;
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    
+    private List<String> openEndpointsWhitelist;
+    private List<String> mixedModeEndpointsWhitelist;
     private final ObjectMapper objectMapper;
     private UserUtils userUtils;
-
-
-    public AuthPreCheckFilter(HashSet<String> openEndpointsWhitelist,
-                              HashSet<String> mixedModeEndpointsWhitelist,
-                              UserUtils userUtils) {
-        this.openEndpointsWhitelist = openEndpointsWhitelist;
-        this.mixedModeEndpointsWhitelist = mixedModeEndpointsWhitelist;
-        this.userUtils = userUtils;
-        objectMapper = new ObjectMapper();
-    }
+    private MultiStateInstanceUtil centralInstanceUtil;
+	public AuthPreCheckFilter(List<String> openEndpointsWhitelist, List<String> mixedModeEndpointsWhitelist,
+			UserUtils userUtils, MultiStateInstanceUtil centralInstanceUtil) {
+		
+		this.openEndpointsWhitelist = openEndpointsWhitelist;
+		this.mixedModeEndpointsWhitelist = mixedModeEndpointsWhitelist;
+		this.userUtils = userUtils;
+		this.centralInstanceUtil = centralInstanceUtil;
+		objectMapper = new ObjectMapper();
+	}
 
     @Override
     public String filterType() {
@@ -78,13 +89,13 @@ public class AuthPreCheckFilter extends ZuulFilter {
         String authToken;
         if (openEndpointsWhitelist.contains(getRequestURI())) {
             setShouldDoAuth(false);
-            logger.info(OPEN_ENDPOINT_MESSAGE, getRequestURI());
+            log.info(OPEN_ENDPOINT_MESSAGE, getRequestURI());
             return null;
         }
         try {
             authToken = getAuthTokenFromRequest();
         } catch (IOException e) {
-            logger.error(AUTH_TOKEN_RETRIEVE_FAILURE_MESSAGE, e);
+            log.error(AUTH_TOKEN_RETRIEVE_FAILURE_MESSAGE, e);
             ExceptionUtils.RaiseException(e);
             return null;
         }
@@ -92,16 +103,16 @@ public class AuthPreCheckFilter extends ZuulFilter {
         RequestContext.getCurrentContext().set(AUTH_TOKEN_KEY, authToken);
         if (authToken == null) {
             if (mixedModeEndpointsWhitelist.contains(getRequestURI())) {
-                logger.info(ROUTING_TO_ANONYMOUS_ENDPOINT_MESSAGE, getRequestURI());
+                log.info(ROUTING_TO_ANONYMOUS_ENDPOINT_MESSAGE, getRequestURI());
                 setShouldDoAuth(false);
                 setAnonymousUser();
             } else {
-                logger.info(ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE, getRequestURI());
+                log.info(ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE, getRequestURI());
                 ExceptionUtils.raiseCustomException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_MESSAGE);
                 return null;
             }
         } else {
-            logger.info(PROCEED_ROUTING_MESSAGE, getRequestURI());
+            log.info(PROCEED_ROUTING_MESSAGE, getRequestURI());
             setShouldDoAuth(true);
         }
         return null;
@@ -141,7 +152,7 @@ public class AuthPreCheckFilter extends ZuulFilter {
         @SuppressWarnings("unchecked")
         HashMap<String, Object> requestInfo = requestBodyInspector.getRequestInfo();
         if (requestInfo == null) {
-            logger.info(NO_REQUEST_INFO_FIELD_MESSAGE, getRequestURI());
+            log.info(NO_REQUEST_INFO_FIELD_MESSAGE, getRequestURI());
             return null;
         }
         String authToken = (String) requestInfo.get(AUTH_TOKEN_REQUEST_BODY_FIELD_NAME);
@@ -166,7 +177,7 @@ public class AuthPreCheckFilter extends ZuulFilter {
             ctx.set(CURRENT_REQUEST_SANITIZED_BODY_STR, requestSanitizedBody);
             requestWrapper.setPayload(requestSanitizedBody);
         } catch (JsonProcessingException e) {
-            logger.error(FAILED_TO_SERIALIZE_REQUEST_BODY_MESSAGE, e);
+            log.error(FAILED_TO_SERIALIZE_REQUEST_BODY_MESSAGE, e);
             ExceptionUtils.RaiseException(e);
         }
         ctx.setRequest(requestWrapper);
@@ -196,9 +207,33 @@ public class AuthPreCheckFilter extends ZuulFilter {
     }
 
     private void setAnonymousUser(){
-        User systemUser = userUtils.fetchSystemUser();
-        RequestContext ctx = RequestContext.getCurrentContext();
-        ctx.set(USER_INFO_KEY, systemUser);;
+    	
+    	RequestContext ctx = RequestContext.getCurrentContext();
+    	String tenantId = getStateLevelTenantForHost(ctx);
+        User systemUser = userUtils.fetchSystemUser(tenantId);
+        ctx.set(USER_INFO_KEY, systemUser);
     }
+
+	/**
+	 * method to fetch state level tenant-id based on whether the server is a
+	 * multi-state instance or single-state instance
+	 * 
+	 * @param ctx
+	 * @return
+	 */
+	private String getStateLevelTenantForHost(RequestContext ctx) {
+		String tenantId = "";
+    	if(centralInstanceUtil.getIsEnvironmentCentralInstance()) {
+    		
+    		String host = ctx.getRequest().getRequestURL().toString()
+    				.replace(getRequestURI(), "")
+    				.replace("https://", "")
+    				.replace("http://", "");
+    		tenantId = userUtils.getStateLevelTenantMap().get(host);
+    	}else {
+    		tenantId = userUtils.getStateLevelTenant();
+    	}
+		return tenantId;
+	}
 
 }

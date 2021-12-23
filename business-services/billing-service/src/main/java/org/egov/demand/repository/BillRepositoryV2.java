@@ -50,6 +50,7 @@ public class BillRepositoryV2 {
 		
 		List<Object> preparedStatementValues = new ArrayList<>();
 		String queryStr = billQueryBuilder.getBillQuery(billCriteria, preparedStatementValues);
+		queryStr = Util.replaceSchemaPlaceholder(queryStr, billCriteria.getTenantId());
 		log.debug("query:::"+queryStr+"  preparedStatementValues::"+preparedStatementValues);
 		return jdbcTemplate.query(queryStr, preparedStatementValues.toArray(), searchBillRowMapper);
 	}
@@ -58,8 +59,8 @@ public class BillRepositoryV2 {
 	public void saveBill(BillRequestV2 billRequest){
 		
 		List<BillV2> bills = billRequest.getBills();
-		
-		jdbcTemplate.batchUpdate(BillQueryBuilder.INSERT_BILL_QUERY, new BatchPreparedStatementSetter() {
+		String sqlBill = Util.replaceSchemaPlaceholder(BillQueryBuilder.INSERT_BILL_QUERY, billRequest.getBills().get(0).getTenantId());
+		jdbcTemplate.batchUpdate(sqlBill, new BatchPreparedStatementSetter() {
 			
 			@Override
 			public void setValues(PreparedStatement ps, int index) throws SQLException {
@@ -111,8 +112,8 @@ public class BillRepositoryV2 {
 				billAccountDetails.addAll(billDetail.getBillAccountDetails());
 			}
 		}
-
-		jdbcTemplate.batchUpdate(BillQueryBuilder.INSERT_BILLDETAILS_QUERY, new BatchPreparedStatementSetter() {
+		String sqlBillDetails = Util.replaceSchemaPlaceholder(BillQueryBuilder.INSERT_BILLDETAILS_QUERY, billRequest.getBills().get(0).getTenantId());
+		jdbcTemplate.batchUpdate(sqlBillDetails, new BatchPreparedStatementSetter(){
 
 			@Override
 			public void setValues(PreparedStatement ps, int index) throws SQLException {
@@ -157,8 +158,8 @@ public class BillRepositoryV2 {
 	}
 
 	public void saveBillAccountDetail(List<BillAccountDetailV2> billAccountDetails, AuditDetails auditDetails) {
-
-		jdbcTemplate.batchUpdate(BillQueryBuilder.INSERT_BILLACCOUNTDETAILS_QUERY, new BatchPreparedStatementSetter() {
+		String sqlBillAccount = Util.replaceSchemaPlaceholder(BillQueryBuilder.INSERT_BILLACCOUNTDETAILS_QUERY, billAccountDetails.get(0).getTenantId());
+		jdbcTemplate.batchUpdate(sqlBillAccount, new BatchPreparedStatementSetter() {
 
 			@Override
 			public void setValues(PreparedStatement ps, int index) throws SQLException {
@@ -227,6 +228,7 @@ public class BillRepositoryV2 {
 		
 		List<Object> preparedStmtList = new ArrayList<>();
 		String queryStr = billQueryBuilder.getBillStatusUpdateQuery(updateBillCriteria, preparedStmtList);
+		queryStr = Util.replaceSchemaPlaceholder(queryStr, updateBillCriteria.getTenantId());
 		return jdbcTemplate.update(queryStr, preparedStmtList.toArray());
 	}
 	

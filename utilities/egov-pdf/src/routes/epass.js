@@ -20,6 +20,10 @@ router.get('/', asyncMiddleware(async function(req, res, next) {
   var tenantId = req.query.tenantId;
   var uuid = req.query.uuid;
   var hash = req.query.hash;
+  var requestinfo = req.body;
+  var headers = JSON.parse(JSON.stringify(req.headers));
+  headers['tenantId']=headers.tenantid;
+
 
   if (!tenantId || !uuid) {
     return renderError(res,"tenantId and uuid are mandatory to generate the pass")
@@ -28,7 +32,7 @@ router.get('/', asyncMiddleware(async function(req, res, next) {
   try {
     var resPass 
     try {
-      resPass = await search_epass(uuid, tenantId);
+      resPass = await search_epass(uuid, tenantId, requestinfo, headers);
     } catch (ex) {
       
       if (ex.response && ex.response.data)
@@ -53,7 +57,7 @@ router.get('/', asyncMiddleware(async function(req, res, next) {
       
       var pdfResponse;
       try{
-        pdfResponse = await create_pdf(tenantId, config.pdf.epass_pdf_template, passes);
+        pdfResponse = await create_pdf(tenantId, config.pdf.epass_pdf_template, passes, requestinfo, headers);
       } catch (ex) {
         
         if (ex.response && ex.response.data)

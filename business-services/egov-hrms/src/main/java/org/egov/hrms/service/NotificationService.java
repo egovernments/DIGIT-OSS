@@ -11,6 +11,7 @@ import org.egov.hrms.model.SMSRequest;
 import org.egov.hrms.producer.HRMSProducer;
 import org.egov.hrms.repository.RestCallRepository;
 import org.egov.hrms.utils.HRMSConstants;
+import org.egov.hrms.utils.HRMSUtils;
 import org.egov.hrms.web.contract.EmployeeRequest;
 import org.egov.hrms.web.contract.RequestInfoWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class NotificationService {
 
 	@Autowired
 	private RestTemplate restTemplate;
+
+	@Autowired
+	private HRMSUtils hrmsUtils;
 
 	@Value("${kafka.topics.notification.sms}")
     private String smsTopic;
@@ -66,6 +70,8 @@ public class NotificationService {
 	 */
 	public void sendNotification(EmployeeRequest request, Map<String, String> pwdMap) {
 		String message = getMessage(request,HRMSConstants.HRMS_EMP_CREATE_LOCLZN_CODE);
+		String tenantId = request.getEmployees().get(0).getTenantId();
+
 		if(StringUtils.isEmpty(message)) {
 			log.info("SMS content has not been configured for this case");
 			return;
@@ -73,7 +79,7 @@ public class NotificationService {
 		for(Employee employee: request.getEmployees()) {
 			message = buildMessage(employee, message, pwdMap);
 			SMSRequest smsRequest = SMSRequest.builder().mobileNumber(employee.getUser().getMobileNumber()).message(message).build();
-			producer.push(smsTopic, smsRequest);
+			producer.push(hrmsUtils.getTenantSpecificTopic(smsTopic, tenantId), smsRequest);
 		}
 	}
 

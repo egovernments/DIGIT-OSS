@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.egov.collection.repository.querybuilder.RemittanceQueryBuilder;
 import org.egov.collection.repository.rowmapper.RemittanceResultSetExtractor;
+import org.egov.collection.util.Utils;
 import org.egov.collection.web.contract.Remittance;
 import org.egov.collection.web.contract.RemittanceDetail;
 import org.egov.collection.web.contract.RemittanceInstrument;
@@ -71,6 +72,7 @@ public class RemittanceRepository {
     public List<Remittance> fetchRemittances(RemittanceSearchRequest remittanceSearchRequest) {
         Map<String, Object> preparedStatementValues = new HashMap<>();
         String query = RemittanceQueryBuilder.getRemittanceSearchQuery(remittanceSearchRequest, preparedStatementValues);
+        query = Utils.replaceSchemaPlaceholder(query, remittanceSearchRequest.getTenantId());
         log.debug(query);
         List<Remittance> remittances = namedParameterJdbcTemplate.query(query, preparedStatementValues,
                 remittanceResultSetExtractor);

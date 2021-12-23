@@ -6,13 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.egov.collection.model.Instrument;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.producer.CollectionProducer;
 import org.egov.collection.web.contract.Bill;
-import org.egov.collection.web.contract.BillDetail;
 //import org.egov.collection.web.contract.Receipt;
 //import org.egov.collection.web.contract.ReceiptReq;
 import org.egov.common.contract.request.RequestInfo;
@@ -22,7 +20,6 @@ import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
@@ -137,7 +134,7 @@ public class NotificationConsumer {
 						request.put("mobileNumber", phNo);
 						request.put("message", message);
 
-						producer.producer(smsTopic, request);
+						producer.push(receipt.getTenantId(), smsTopic, request);
 					} else {
 						log.error("No message configured! Notification will not be sent.");
 					}

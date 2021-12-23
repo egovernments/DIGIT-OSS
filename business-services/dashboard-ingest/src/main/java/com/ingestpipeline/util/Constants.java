@@ -40,17 +40,6 @@ public interface Constants {
 
 	public static String ALLOWED_METHODS_GET = "GET";
 	public static String ALLOWED_METHODS_POST = "POST";
-
-	public interface KafkaTopics {
-		public static final String INGEST_DATA = "ingestData";
-		public static final String VALID_DATA = "validData";
-		public static final String TRANSFORMED_DATA = "transformedData";
-		public static final String ERROR_INTENT = "DataError";
-		public static final String TOPIC_ONE = "topicOne"; 
-		public static final String TOPIC_TWO = "topicTwo"; 
-		public static final String TOPIC_THREE = "topicThree"; 
-		public static final String TOPIC_FOUR = "topicFour"; 
-	}
 	
 	public interface BeanContainerFactory { 
 		public static final String INCOMING_KAFKA_LISTENER = "incomingKafkaListenerContainerFactory"; 

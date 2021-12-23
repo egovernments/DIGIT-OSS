@@ -80,3 +80,14 @@ export const generateFireNOCSearchURL = (tenantId, applicationNumber) => {
 
   return url;
 };
+
+export const replaceSchemaPlaceholder = (query, tenantId) => {
+  let finalQuery = null;
+	if (tenantId.includes('.')) {
+		let schemaName = tenantId.split('.')[1];
+		finalQuery = query.replace(/{schema}/g, schemaName);
+	} else {
+			finalQuery = query.replace(/{schema}./g, "");
+	}
+	return finalQuery;
+};

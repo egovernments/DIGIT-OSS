@@ -7,7 +7,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
@@ -20,13 +23,15 @@ import org.egov.pt.repository.rowmapper.PropertyAuditRowMapper;
 import org.egov.pt.repository.rowmapper.PropertyRowMapper;
 import org.egov.pt.service.UserService;
 import org.egov.pt.util.PropertyUtil;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
-import com.google.common.collect.Sets;
 import org.springframework.util.ObjectUtils;
+
+import com.google.common.collect.Sets;
 
 @Repository
 public class PropertyRepository {
@@ -49,6 +54,9 @@ public class PropertyRepository {
 	@Autowired
 	private PropertyUtil util;
 	
+	@Autowired
+	private MultiStateInstanceUtil centralUtil;
+	
     @Autowired
     private UserService userService;
     
@@ -56,6 +64,12 @@ public class PropertyRepository {
 
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getPropertyIdsQuery(ownerIds, tenantId, preparedStmtList);
+		try {
+			query = centralUtil.replaceSchemaPlaceholder(query, tenantId);
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_PT_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		return jdbcTemplate.queryForList(query, preparedStmtList.toArray(), String.class);
 	}
 
@@ -63,6 +77,12 @@ public class PropertyRepository {
 
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getPropertySearchQuery(criteria, preparedStmtList, isPlainSearch, false);
+		try {
+			query = centralUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		if (isApiOpen)
 			return jdbcTemplate.query(query, preparedStmtList.toArray(), openRowMapper);
 		else
@@ -73,12 +93,24 @@ public class PropertyRepository {
 
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getPropertySearchQuery(criteria, preparedStmtList, false, true);
+		try {
+			query = centralUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>());
 	}
 
 	public List<Property> getPropertiesForBulkSearch(PropertyCriteria criteria, Boolean isPlainSearch) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getPropertyQueryForBulkSearch(criteria, preparedStmtList, isPlainSearch);
+		try {
+			query = centralUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 	}
 
@@ -96,7 +128,7 @@ public class PropertyRepository {
 	public List<String> fetchIds(PropertyCriteria criteria, Boolean isPlainSearch) {
 		
 		List<Object> preparedStmtList = new ArrayList<>();
-		String basequery = "select id from eg_pt_property";
+		String basequery = "select id from {schema}.eg_pt_property";
 		StringBuilder builder = new StringBuilder(basequery);
 		if(isPlainSearch)
 		{
@@ -119,7 +151,14 @@ public class PropertyRepository {
 		builder.append(orderbyClause);
 		preparedStmtList.add(criteria.getOffset());
 		preparedStmtList.add(criteria.getLimit());
-		return jdbcTemplate.query(builder.toString(), preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
+		String query;
+		try {
+			query = centralUtil.replaceSchemaPlaceholder(builder.toString(), criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
+		return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
 	}
 	/**
 	 * Returns list of properties based on the given propertyCriteria with owner
@@ -158,6 +197,12 @@ public class PropertyRepository {
 	private List<Property> getPropertyAudit(PropertyCriteria criteria) {
 
 		String query = queryBuilder.getpropertyAuditQuery();
+		try {
+			query = centralUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		return jdbcTemplate.query(query, criteria.getPropertyIds().toArray(), auditRowMapper);
 	}
 

@@ -1,28 +1,33 @@
 package org.egov.Utils;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Collections;
+import java.util.Map;
+
 import org.egov.contract.User;
 import org.egov.model.UserDetailResponse;
 import org.egov.model.UserSearchRequest;
-import org.egov.tracer.model.CustomException;
-import org.egov.tracer.model.ServiceCallException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Repository
 public class UserUtils {
-
-
+	
+	@Getter
+    @Value("#{${egov.statelevel.tenant.map:{}}}")
+    private Map<String, String> stateLevelTenantMap;
+    
+	@Getter
     @Value("${egov.statelevel.tenant}")
     private String stateLevelTenant;
 
@@ -42,13 +47,13 @@ public class UserUtils {
 
 
     @Cacheable(value = "systemUser" , sync = true)
-    public User fetchSystemUser(){
+    public User fetchSystemUser(String tenantId){
 
         UserSearchRequest userSearchRequest =new UserSearchRequest();
         userSearchRequest.setRoleCodes(Collections.singletonList("ANONYMOUS"));
         userSearchRequest.setUserType("SYSTEM");
         userSearchRequest.setPageSize(1);
-        userSearchRequest.setTenantId(stateLevelTenant);
+		userSearchRequest.setTenantId(tenantId);
 
         StringBuilder uri = new StringBuilder(userSearchURI);
         User user = null;

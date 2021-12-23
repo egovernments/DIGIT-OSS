@@ -269,7 +269,7 @@ public class PropertyUtil extends CommonUtils {
 
 	public JSONObject getWnsPTworkflowConfig(PropertyRequest request){
 		List<String> masterName = Arrays.asList( "PTWorkflow");
-		Map<String, List<String>> codes = getAttributeValues(configs.getStateLevelTenantId(), PTConstants.MDMS_PT_MOD_NAME,masterName , "$.*",PTConstants.JSONPATH_CODES, request.getRequestInfo());
+		Map<String, List<String>> codes = getAttributeValues(request.getProperty().getTenantId(), PTConstants.MDMS_PT_MOD_NAME,masterName , "$.*",PTConstants.JSONPATH_CODES, request.getRequestInfo());
 		JSONObject obj = new JSONObject(codes);
 		JSONArray configArray = obj.getJSONArray("PTWorkflow");
 		JSONObject response = new JSONObject();
@@ -279,6 +279,4 @@ public class PropertyUtil extends CommonUtils {
 		}
 		return response;
 	}
-
-
 }

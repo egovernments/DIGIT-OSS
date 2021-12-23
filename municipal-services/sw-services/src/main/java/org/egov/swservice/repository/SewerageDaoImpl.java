@@ -8,8 +8,11 @@ import java.util.stream.Collectors;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.swservice.config.SWConfiguration;
 import org.egov.swservice.repository.rowmapper.OpenSewerageRowMapper;
+import org.egov.swservice.util.SewerageServicesUtil;
 import org.egov.swservice.web.models.SearchCriteria;
 import org.egov.swservice.web.models.SewerageConnection;
 import org.egov.swservice.web.models.SewerageConnectionRequest;
@@ -17,6 +20,7 @@ import org.egov.swservice.producer.SewarageConnectionProducer;
 import org.egov.swservice.repository.builder.SWQueryBuilder;
 import org.egov.swservice.repository.rowmapper.SewerageRowMapper;
 import org.egov.swservice.util.SWConstants;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -46,6 +50,9 @@ public class SewerageDaoImpl implements SewerageDao {
 	@Autowired
 	private SWConfiguration swConfiguration;
 
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceutil;
+
 	@Value("${egov.sewarageservice.createconnection.topic}")
 	private String createSewarageConnection;
 
@@ -54,7 +61,7 @@ public class SewerageDaoImpl implements SewerageDao {
 
 	@Override
 	public void saveSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest) {
-		sewarageConnectionProducer.push(createSewarageConnection, sewerageConnectionRequest);
+		sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),createSewarageConnection, sewerageConnectionRequest);
 	}
 
 	@Override
@@ -63,6 +70,14 @@ public class SewerageDaoImpl implements SewerageDao {
 		String query = swQueryBuilder.getSearchQueryString(criteria, preparedStatement, requestInfo);
 		if (query == null)
 			return Collections.emptyList();
+
+		try {
+			query = centralInstanceutil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("SW_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
+
 		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
 		List<SewerageConnection> sewerageConnectionList = new ArrayList<>();
 		if(isOpenSearch)
@@ -87,9 +102,9 @@ public class SewerageDaoImpl implements SewerageDao {
 	public void updateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest,
 			boolean isStateUpdatable) {
 		if (isStateUpdatable) {
-			sewarageConnectionProducer.push(updateSewarageConnection, sewerageConnectionRequest);
+			sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),updateSewarageConnection, sewerageConnectionRequest);
 		} else {
-			sewarageConnectionProducer.push(swConfiguration.getWorkFlowUpdateTopic(), sewerageConnectionRequest);
+			sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),swConfiguration.getWorkFlowUpdateTopic(), sewerageConnectionRequest);
 		}
 	}
 
@@ -101,7 +116,7 @@ public class SewerageDaoImpl implements SewerageDao {
 	public void pushForEditNotification(SewerageConnectionRequest sewerageConnectionRequest) {
 		if (!SWConstants.EDIT_NOTIFICATION_STATE
 				.contains(sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())) {
-			sewarageConnectionProducer.push(swConfiguration.getEditNotificationTopic(), sewerageConnectionRequest);
+			sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),swConfiguration.getEditNotificationTopic(), sewerageConnectionRequest);
 		}
 	}
 
@@ -111,7 +126,7 @@ public class SewerageDaoImpl implements SewerageDao {
 	 * @param sewerageConnectionRequest - Sewerage Connection Request Object
 	 */
 	public void enrichFileStoreIds(SewerageConnectionRequest sewerageConnectionRequest) {
-		sewarageConnectionProducer.push(swConfiguration.getFileStoreIdsTopic(), sewerageConnectionRequest);
+		sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),swConfiguration.getFileStoreIdsTopic(), sewerageConnectionRequest);
 	}
 
 	/**
@@ -120,7 +135,7 @@ public class SewerageDaoImpl implements SewerageDao {
 	 * @param sewerageConnectionRequest - Sewerage Connection Request Object
 	 */
 	public void saveFileStoreIds(SewerageConnectionRequest sewerageConnectionRequest) {
-		sewarageConnectionProducer.push(swConfiguration.getSaveFileStoreIdsTopic(), sewerageConnectionRequest);
+		sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),swConfiguration.getSaveFileStoreIdsTopic(), sewerageConnectionRequest);
 	}
 
 }

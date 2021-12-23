@@ -98,7 +98,7 @@ public class NotificationService {
 										message(msgDetail.get(NotificationUtil.MSG_KEY)).
 										templateId(msgDetail.get(NotificationUtil.TEMPLATE_KEY)).
 										users(users).build();
-								producer.push(config.getSmsNotifTopic(), smsRequest);
+								producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
 							} else {
 								log.error("No message configured! Notification will not be sent.");
 							}
@@ -115,7 +115,7 @@ public class NotificationService {
 				if(config.getIsUserEventEnabled()) {
 					EventRequest eventRequest = getEventsForChallan(challanRequest,isSave);
 					if(null != eventRequest)
-						sendEventNotification(eventRequest);
+						sendEventNotification(eventRequest, challanRequest.getChallan().getTenantId());
 				}
 			}
 			
@@ -157,7 +157,7 @@ public class NotificationService {
         						.replace("$applicationNo", challan.getChallanNo())
         						.replace("$tenantId", challan.getTenantId())
         						.replace("$businessService", challan.getBusinessService());
-           actionLink = config.getUiAppHost() + actionLink;
+           actionLink = util.getHost(tenantId) + actionLink;
            ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
            items.add(item);
            action = Action.builder().actionUrls(items).build();
@@ -183,7 +183,7 @@ public class NotificationService {
 		uri.append(mdmsHost).append(mdmsUrl);
 		if(StringUtils.isEmpty(tenantId))
 			return masterData;
-		MdmsCriteriaReq request = getRequestForEvents(requestInfo, tenantId.split("\\.")[0]);
+		MdmsCriteriaReq request = getRequestForEvents(requestInfo, tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1]);
 		try {
 			Object response = restTemplate.postForObject(uri.toString(), request, Map.class);
 			masterData = JsonPath.read(response, BUSINESSSERVICE_CODES_JSONPATH);
@@ -236,8 +236,8 @@ public class NotificationService {
 	
 	
 
-	public void sendEventNotification(EventRequest request) {
-		producer.push(config.getSaveUserEventsTopic(), request);
+	public void sendEventNotification(EventRequest request, String tenantId) {
+		producer.push(tenantId, config.getSaveUserEventsTopic(), request);
 	}
 
 }

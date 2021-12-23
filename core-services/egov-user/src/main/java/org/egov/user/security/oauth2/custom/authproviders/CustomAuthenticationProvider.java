@@ -1,9 +1,23 @@
 package org.egov.user.security.oauth2.custom.authproviders;
 
-import lombok.extern.slf4j.Slf4j;
+import static java.util.Objects.isNull;
+import static org.egov.user.config.UserServiceConstants.IP_HEADER_NAME;
+import static org.springframework.util.StringUtils.isEmpty;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.MDC;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.tracer.model.CustomException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.ServiceCallException;
+import org.egov.user.config.UserServiceConstants;
 import org.egov.user.domain.exception.DuplicateUserNameException;
 import org.egov.user.domain.exception.UserNotFoundException;
 import org.egov.user.domain.model.SecureUser;
@@ -23,14 +37,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.Objects.isNull;
-import static org.egov.user.config.UserServiceConstants.IP_HEADER_NAME;
-import static org.springframework.util.StringUtils.isEmpty;
+import lombok.extern.slf4j.Slf4j;
 
 @Component("customAuthProvider")
 @Slf4j
@@ -44,7 +51,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     // TODO Remove default error handling provided by TokenEndpoint.class
 
     private UserService userService;
-
+    
+    @Autowired
+    private MultiStateInstanceUtil centraInstanceUtil;
+    
     @Autowired
     private EncryptionDecryptionUtil encryptionDecryptionUtil;
 
@@ -77,6 +87,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         String tenantId = details.get("tenantId");
         String userType = details.get("userType");
+		/*
+		 * Central instance tenant MDC enanchement
+		 */
+		if (centraInstanceUtil.getIsEnvironmentCentralInstance()) {
+			MDC.put(UserServiceConstants.TENANTID_MDC_STRING, tenantId);
+		}
 
         if (isEmpty(tenantId)) {
             throw new OAuth2Exception("TenantId is mandatory");

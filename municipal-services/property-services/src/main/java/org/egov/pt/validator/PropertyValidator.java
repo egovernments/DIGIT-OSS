@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.ConstructionDetail;
 import org.egov.pt.models.GeoLocation;
@@ -53,6 +54,9 @@ public class PropertyValidator {
 
     @Autowired
     private PropertyConfiguration configs;
+    
+    @Autowired
+    private MultiStateInstanceUtil centralInstanceUtil;
     
     @Autowired
     private PropertyService service;
@@ -562,6 +566,16 @@ public class PropertyValidator {
     public void validatePropertyCriteria(PropertyCriteria criteria,RequestInfo requestInfo) {
     	
 		List<String> allowedParams = null;
+		
+		if (centralInstanceUtil.getIsEnvironmentCentralInstance() && criteria.getTenantId() == null) {
+			
+			throw new CustomException("EG_PT_INVALID_SEARCH", " TenantId is mandatory for search ");
+		} else if (centralInstanceUtil.getIsEnvironmentCentralInstance()
+				&& criteria.getTenantId().split("\\.").length < centralInstanceUtil.getStateLevelTenantIdLength()) {
+			
+			throw new CustomException("EG_PT_INVALID_SEARCH",
+					" TenantId should be mandatorily " + centralInstanceUtil.getStateLevelTenantIdLength() + " levels for search");
+		}
 
 		User user = requestInfo.getUserInfo();
 		String userType = user.getType();
@@ -598,9 +612,6 @@ public class PropertyValidator {
 		}
 		
 		else {
-			
-			if(criteria.getTenantId() == null)
-				throw new CustomException("EG_PT_INVALID_SEARCH"," TenantId is mandatory for search by " + userType);
 			
 			if(criteria.getTenantId() != null && isCriteriaEmpty)
 				throw new CustomException("EG_PT_INVALID_SEARCH"," Search is not allowed on empty Criteria, Atleast one criteria should be provided with tenantId for " + userType);

@@ -48,6 +48,7 @@ import java.util.Map;
 import org.egov.collection.model.BankAccountServiceMapping;
 import org.egov.collection.model.BankAccountServiceMappingSearchCriteria;
 import org.egov.collection.repository.querybuilder.BankAccountServiceQueryBuilder;
+import org.egov.collection.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -101,6 +102,7 @@ public class BankAccountMappingRepository {
 
         Map<String, Object> paramValues = new HashMap<>();
         String searchQuery = bankAccountServiceQueryBuilder.BankAccountServiceMappingSearchQuery(searchCriteria, paramValues);
+        searchQuery = Utils.replaceSchemaPlaceholder(searchQuery, searchCriteria.getTenantId());
         List<BankAccountServiceMapping> bankAccountServiceMappings = new ArrayList<BankAccountServiceMapping>();
         BeanPropertyRowMapper rowMapper = new BeanPropertyRowMapper(BankAccountServiceMapping.class);
 

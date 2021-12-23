@@ -117,6 +117,7 @@ public class SewerageServiceImpl implements SewerageService {
 	 * @return List of matching sewerage connection
 	 */
 	public List<SewerageConnection> search(SearchCriteria criteria, RequestInfo requestInfo) {
+		sewerageConnectionValidator.validateSearch(criteria);
 		List<SewerageConnection> sewerageConnectionList = getSewerageConnectionsList(criteria, requestInfo);
 		if(!StringUtils.isEmpty(criteria.getSearchType()) &&
 				criteria.getSearchType().equals(SWConstants.SEARCH_TYPE_CONNECTION)){
@@ -168,7 +169,8 @@ public class SewerageServiceImpl implements SewerageService {
 				sewerageConnectionRequest.getSewerageConnection().getTenantId(),
 				sewerageConnectionRequest.getRequestInfo());
 		SewerageConnection searchResult = getConnectionForUpdateRequest(
-				sewerageConnectionRequest.getSewerageConnection().getId(), sewerageConnectionRequest.getRequestInfo());
+				sewerageConnectionRequest.getSewerageConnection().getTenantId(),sewerageConnectionRequest.getSewerageConnection().getId(),
+				sewerageConnectionRequest.getRequestInfo());
 		enrichmentService.enrichUpdateSewerageConnection(sewerageConnectionRequest);
 		actionValidator.validateUpdateRequest(sewerageConnectionRequest, businessService, previousApplicationStatus);
 		sewerageConnectionValidator.validateUpdate(sewerageConnectionRequest, searchResult);
@@ -192,10 +194,11 @@ public class SewerageServiceImpl implements SewerageService {
 	 * @param requestInfo - Request Info Object
 	 * @return sewerage connection
 	 */
-	public SewerageConnection getConnectionForUpdateRequest(String id, RequestInfo requestInfo) {
+	public SewerageConnection getConnectionForUpdateRequest(String tenantId,String id, RequestInfo requestInfo) {
 		SearchCriteria criteria = new SearchCriteria();
 		Set<String> ids = new HashSet<>(Arrays.asList(id));
 		criteria.setIds(ids);
+		criteria.setTenantId(tenantId);
 		List<SewerageConnection> connections = getSewerageConnectionsList(criteria, requestInfo);
 		if (CollectionUtils.isEmpty(connections)) {
 			StringBuilder builder = new StringBuilder();
@@ -212,7 +215,8 @@ public class SewerageServiceImpl implements SewerageService {
 	 */
 	private List<SewerageConnection> getAllSewerageApplications(SewerageConnectionRequest sewerageConnectionRequest) {
 		SearchCriteria criteria = SearchCriteria.builder()
-				.connectionNumber(sewerageConnectionRequest.getSewerageConnection().getConnectionNo()).build();
+				.connectionNumber(sewerageConnectionRequest.getSewerageConnection().getConnectionNo())
+				.tenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId()).build();
 		return search(criteria, sewerageConnectionRequest.getRequestInfo());
 	}
 
@@ -234,7 +238,8 @@ public class SewerageServiceImpl implements SewerageService {
 				sewerageConnectionRequest.getSewerageConnection().getTenantId(),
 				sewerageConnectionRequest.getRequestInfo());
 		SewerageConnection searchResult = getConnectionForUpdateRequest(
-				sewerageConnectionRequest.getSewerageConnection().getId(), sewerageConnectionRequest.getRequestInfo());
+				sewerageConnectionRequest.getSewerageConnection().getTenantId() ,sewerageConnectionRequest.getSewerageConnection().getId(),
+				sewerageConnectionRequest.getRequestInfo());
 		enrichmentService.enrichUpdateSewerageConnection(sewerageConnectionRequest);
 		actionValidator.validateUpdateRequest(sewerageConnectionRequest, businessService, previousApplicationStatus);
 		sewerageConnectionValidator.validateUpdate(sewerageConnectionRequest, searchResult);

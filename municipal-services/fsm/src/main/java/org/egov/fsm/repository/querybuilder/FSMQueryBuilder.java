@@ -26,9 +26,13 @@ public class FSMQueryBuilder {
 			+ "	 LEFT OUTER JOIN  eg_fsm_pit_detail fsm_pit on fsm_pit.fsm_id = fsm.id";
 
 	private final String paginationWrapper = "{} {orderby} {pagination}";
-
 	
+	public static final String GET_PERIODIC_ELGIABLE_APPLICATIONS="select applicationno from eg_fsm_application ";
 
+	public static final String GET_UNIQUE_TENANTS="select distinct(tenantid) from eg_fsm_application";
+
+	public static final String GET_APPLICATION_LIST="select applicationno from eg_fsm_application where oldapplicationno=? and tenantid=?";
+	
 	public String getFSMSearchQuery(FSMSearchCriteria criteria, String dsoId, List<Object> preparedStmtList) {
 
 		StringBuilder builder = new StringBuilder(Query);
@@ -73,6 +77,21 @@ public class FSMQueryBuilder {
 			addClauseIfRequired(preparedStmtList, builder);
 			builder.append(" fsm.id IN (").append(createQuery(ids)).append(")");
 			addToPreparedStatement(preparedStmtList, ids);
+
+		}
+		
+		if (criteria.getApplicationType()!=null) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" fsm.applicationType=? ");
+			preparedStmtList.add(criteria.getApplicationType());
+
+		}
+		
+		List<String> oldApplicationNo = criteria.getOldApplicationNos();
+		if (!CollectionUtils.isEmpty(oldApplicationNo)) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" fsm.oldApplicationNo IN (").append(createQuery(oldApplicationNo)).append(")");
+			addToPreparedStatement(preparedStmtList, oldApplicationNo);
 
 		}
 

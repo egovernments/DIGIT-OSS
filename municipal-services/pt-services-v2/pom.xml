@@ -78,7 +78,12 @@
       <version>0.0.2-SNAPSHOT</version>
     </dependency>
   </dependencies>
-  <repositories>
+  <repositories> 
+ 		<repository>
+			<id>repo.egovernments.org</id>
+			<name>eGov DIGIT Releases Repository</name>
+			<url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
+		</repository>
     <repository>
       <id>repo.egovernments.org</id>
       <name>eGov ERP Releases Repository</name>
