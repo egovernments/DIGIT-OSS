@@ -144,6 +144,22 @@ public class NotificationUtil {
 	}
 
 	/**
+	 *
+	 * @param applicationStatus
+	 * @param localizationMessage
+	 * @return Email message template
+	 */
+	public String getCustomizedMsgForEmail(String action, String applicationStatus, String localizationMessage, int reqType) {
+		StringBuilder builder = new StringBuilder();
+		if (reqType == SWConstants.UPDATE_APPLICATION) {
+			builder.append("SW_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_EMAIL_MESSAGE");
+		}
+		if (reqType == SWConstants.MODIFY_CONNECTION) {
+			builder.append("SW_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_EMAIL_MESSAGE");
+		}
+		return getMessageTemplate(builder.toString(), localizationMessage);
+	}
+	/**
 	 * @param action - Action Type
 	 * @param applicationStatus - Application Status
 	 * @param localizationMessage - Localized Message
