@@ -83,14 +83,14 @@ public class RbacFilter extends ZuulFilter {
             ExceptionUtils.raiseCustomException(HttpStatus.UNAUTHORIZED, "User information not found. Can't execute RBAC filter");
         }
 
-        Set<String> tenantId = validateRequestAndSetRequestTenantId();
+        Set<String> tenantIds = validateRequestAndSetRequestTenantId();
 
-        ctx.set(CURRENT_REQUEST_TENANTID, String.join(",", tenantId));
+        ctx.set(CURRENT_REQUEST_TENANTID, String.join(",", tenantIds));
 
         AuthorizationRequest request = AuthorizationRequest.builder()
             .roles(new HashSet<>(user.getRoles()))
             .uri(requestUri)
-            .tenantIds(tenantId)
+            .tenantIds(tenantIds)
             .build();
 
         return isUriAuthorized(request);

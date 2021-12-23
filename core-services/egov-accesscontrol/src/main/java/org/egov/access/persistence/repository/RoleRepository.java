@@ -219,7 +219,6 @@ private List<Role> convertToRole(JSONArray roleArray)
 				ri.setDid("did");
 				ri.setKey("key");
 				ri.setMsgId("msgId");
-				ri.setRequesterId("requestId");
 		return ri;
 	}
 

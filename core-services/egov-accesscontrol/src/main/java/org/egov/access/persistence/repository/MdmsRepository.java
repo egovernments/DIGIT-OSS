@@ -1,7 +1,15 @@
 package org.egov.access.persistence.repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import static java.util.Objects.isNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.egov.access.domain.model.Action;
 import org.egov.access.domain.model.ActionContainer;
 import org.egov.access.domain.model.RoleAction;
@@ -20,10 +28,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static java.util.Objects.isNull;
+import lombok.extern.slf4j.Slf4j;
 
 @Repository
 @Slf4j
@@ -91,7 +98,7 @@ public class MdmsRepository {
         mcq.setMdmsCriteria(mc);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("tenantid", tenantId);
+        headers.set("tenantId", tenantId);
 
         HttpEntity<MdmsCriteriaReq> request = new HttpEntity<>(mcq, headers);
 

@@ -1,6 +1,16 @@
 package org.egov.access.domain.service;
 
-import lombok.extern.slf4j.Slf4j;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.egov.access.domain.criteria.ActionSearchCriteria;
 import org.egov.access.domain.criteria.ValidateActionCriteria;
 import org.egov.access.domain.model.Action;
@@ -15,17 +25,17 @@ import org.egov.access.persistence.repository.querybuilder.ActionFinderQueryBuil
 import org.egov.access.persistence.repository.querybuilder.ValidateActionQueryBuilder;
 import org.egov.access.persistence.repository.rowmapper.ActionRowMapper;
 import org.egov.access.persistence.repository.rowmapper.ActionValidationRowMapper;
+import org.egov.access.util.AccessControlConstants;
 import org.egov.access.util.Utils;
 import org.egov.access.web.contract.action.ActionRequest;
 import org.egov.access.web.contract.action.Module;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import java.io.UnsupportedEncodingException;
-import java.util.*;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -36,6 +46,9 @@ public class ActionService {
 	private ActionRepository actionRepository;
 
 	private MdmsRepository mdmsRepository;
+	
+	@Autowired
+	private MultiStateInstanceUtil multiStateInstanceUtil;
 
 	@Autowired
 	public ActionService(BaseRepository repository, ActionRepository actionRepository, MdmsRepository mdmsRepository) {
@@ -89,7 +102,7 @@ public class ActionService {
 
 		return actionRepository.getAllMDMSActions(actionRequest);
 	}
-
+	
 	/**
 	 * Authorize the request
 	 *
@@ -99,13 +112,13 @@ public class ActionService {
 	public boolean isAuthorized(AuthorizationRequest authorizeRequest){
 
 		String inputTenantId = authorizeRequest.getTenantIds().iterator().next();
-
-		List<String> listOfMdmsTenantIdsToCheck = fetchListOfTenantIdsForAuthorizationCheck(inputTenantId);
+		List<String> roles = authorizeRequest.getRoles().stream().map(Role::getCode).collect(Collectors.toList());
+		List<String> listOfMdmsTenantIdsToCheck = new ArrayList<>(fetchListOfTenantIdsForAuthorizationCheck(inputTenantId, roles));
+		Collections.sort(listOfMdmsTenantIdsToCheck, Collections.reverseOrder(Comparator.comparing(String::length)));
 
 		boolean isAuthorized = false;
 
 		for(String tenantId : listOfMdmsTenantIdsToCheck) {
-			log.info("Checking for: " + tenantId);
 			if(isAuthorizedOnGivenTenantLevel(authorizeRequest, tenantId)){
 				isAuthorized = true;
 				break;
@@ -115,18 +128,24 @@ public class ActionService {
 		return isAuthorized;
 	}
 
-	private List<String> fetchListOfTenantIdsForAuthorizationCheck(String tenantId){
-		List<String> listOfMdmsTenantIdsToCheck = new ArrayList<>();
-		// Adding city specific tenant Id
+	private Set<String> fetchListOfTenantIdsForAuthorizationCheck(String tenantId, List<String> roles){
+		
+		Set<String> listOfMdmsTenantIdsToCheck = new LinkedHashSet<>();
+		
+		/*
+		 *  Adding city specific tenant Id
+		 *  
+		 *  Then state Level tenant-id based on index from central instance configs
+		 *  
+		 *  Then index 0 for national level in case of central server deployment
+		 */
 		listOfMdmsTenantIdsToCheck.add(tenantId);
-		// Adding state specific tenant Id
-		if(tenantId.contains("."))
-			listOfMdmsTenantIdsToCheck.add(tenantId.substring(0, tenantId.lastIndexOf(".")));
-		// Adding country central instance specific tenant Id
-		if(tenantId.contains("."))
-			listOfMdmsTenantIdsToCheck.add(tenantId.split("\\.", 2)[0]);
+		listOfMdmsTenantIdsToCheck.add(multiStateInstanceUtil.getStateLevelTenant(tenantId));
+		if (multiStateInstanceUtil.getIsEnvironmentCentralInstance()
+				&& roles.contains(AccessControlConstants.CITIZNE_ROLE_CODE))
+			listOfMdmsTenantIdsToCheck.add(tenantId.split("\\.")[0]);
 
-		log.info(listOfMdmsTenantIdsToCheck.toString());
+		log.info("The list of tenants for auth" + listOfMdmsTenantIdsToCheck);
 
 		return listOfMdmsTenantIdsToCheck;
 	}
@@ -158,13 +177,12 @@ public class ActionService {
 	}
 
 	private Set<String> getApplicableRoles(AuthorizationRequest authorizationRequest){
+		
 		Set<String> requestTenantIds = authorizationRequest.getTenantIds();
-		String centralInstanceLevelTenantId = getCentralInstanceLevelTenant(requestTenantIds.iterator().next());
 		String tenantId = requestTenantIds.iterator().next();
-		String stateLevelTenantId = "";
-		if(tenantId.contains(".")){
-			stateLevelTenantId = tenantId.substring(0, tenantId.lastIndexOf("."));
-		}
+		String centralInstanceLevelTenantId = getCentralInstanceLevelTenant(tenantId);
+		String stateLevelTenantId = multiStateInstanceUtil.getStateLevelTenant(tenantId);
+
 		Set<Role> roles = authorizationRequest.getRoles();
 		Set<Role> applicableRoles = new HashSet<>();
 
