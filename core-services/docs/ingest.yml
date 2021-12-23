@@ -1,0 +1,200 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Data Ingest
+  description: |
+    ### API specs for Data ingest in DSS for National Dashboard ###
+    The API provides a way to ingest key performance metrics for modules in the DSS system so as to provide a combined view of all states data metrics in National Dashboards`
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+x-module: DSS
+x-common-path: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml'
+paths:
+  /data/_ingest:
+    post:
+      summary: Ingests data in DSS system
+      description: Ingest data metrics for given module
+      tags:
+      - Data Ingest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngestRequest'
+        description: Request schema.
+        required: true
+      responses:
+        '202':
+          description: Data ingested successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IngestResponse'
+        '400':
+          description: Failed to ingest the data
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+  /masterdata/_ingest:
+    post:
+      summary: Ingests master data in DSS system
+      description: Ingest data master data like target metrics for given module
+      tags:
+      - Master Data Ingest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MasterDataRequest'
+        description: Request schema.
+        required: true
+      responses:
+        '202':
+          description: Data ingested successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MasterDataResponse'
+        '400':
+          description: Failed to ingest the data
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'              
+components:
+  schemas:
+    Data:
+      type: object
+      description: 'Data object containing metrics that are to be ingested for DSS Dashboards'
+      properties:
+        date:
+          type: string
+          description: Date of data ingestion in dd-MM-yyyy format
+          example: "30-01-2022"
+        module:
+          type: string
+          description: Module for which data is ingested
+          example: PT
+        ward:
+          type: string
+          description: WardId of the data 
+          minLength: 1
+          maxLength: 64
+          example: "Ajit Nagar"
+        tenantId:
+          type: string
+          description: TenantId (ULB code) of the data 
+          minLength: 1
+          maxLength: 64
+          example: "pb.amritsar"
+        DDR:
+          type: string
+          description: The Region or District 
+          minLength: 1
+          maxLength: 64
+          example: "Amritsar-MC"          
+        state:
+          type: string
+          description: Name of the state which is pushing data
+          example: Punjab
+          minLength: 1
+          maxLength: 64  
+        metrics:
+          type: object
+          description: Key-value pairs of metric_names to metric_values
+          example: '{"tenantId":"pb.amritsar","state":"Punjab","ward":"Ajit Nagar","transactions":2345,"totalApplications":2100,"assessedProperties":1400,"totalCollection":[{"groupBy":"UsageCategory","buckets":{"RESIDENTIAL":8000,"COMMERCIAL":7500,"INDUSTRIAL":8700}}],"propertyTax":[{"groupBy":"UsageCategory","buckets":{"RESIDENTIAL":1000,"COMMERCIAL":1500,"INDUSTRIAL":2300}}],"cess":[{"groupBy":"UsageCategory","buckets":{"RESIDENTIAL":500,"COMMERCIAL":1000,"INDUSTRIAL":1300}}],"rebate":[{"groupBy":"UsageCategory","buckets":{"RESIDENTIAL":100,"COMMERCIAL":0,"INDUSTRIAL":0}}],"penalty":[{"groupBy":"UsageCategory","buckets":{"RESIDENTIAL":500,"COMMERCIAL":700,"INDUSTRIAL":1000}}],"interest":[{"groupBy":"UsageCategory","buckets":{"RESIDENTIAL":300,"COMMERCIAL":600,"INDUSTRIAL":1100}}]}'
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/AuditDetails'
+      required:
+      - date
+      - module
+      - tenantId
+      - ward
+      - DDR
+      - state
+      - metrics
+    IngestRequest:
+      type: object
+      description: Request object to ingest data in DSS system
+      properties:
+        RequestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/RequestHeader'
+        Data:
+          $ref: '#/components/schemas/Data'
+      required:
+      - RequestInfo
+      - Data
+
+    IngestResponse:
+      type: object
+      description: Response object 
+      properties:
+        responseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ResponseHeader'
+          
+
+    MasterData:
+      type: object
+      description: 'Data object containing static master data to be ingested for DSS Dashboards'
+      properties:
+        financialYear:
+          type: string
+          description: Financial Year for which the master data is configured
+          example: "2022-23"
+        module:
+          type: string
+          description: Module for which data is ingested
+          example: PT
+        tenantId:
+          type: string
+          description: TenantId (ULB code) of the data 
+          minLength: 1
+          maxLength: 64
+          example: "pb.amritsar"
+        DDR:
+          type: string
+          description: The Region or District 
+          minLength: 1
+          maxLength: 64
+          example: "Amritsar-MC"  
+        state:
+          type: string
+          description: Name of the state which is pushing data
+          example: Punjab
+          minLength: 1
+          maxLength: 64  
+        metrics:
+          type: object
+          description: Key-value pairs of metric_names to metric_values
+          example: '{"Total Target Collection": 5000000; "WS Target Collection" : 800000}'
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/AuditDetails'
+      required:
+      - date
+      - module
+      - tenantId
+      - state
+      - metrics
+
+    MasterDataRequest:
+      type: object
+      description: Request object to ingest data in DSS system
+      properties:
+        RequestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/RequestHeader'
+        Data:
+          $ref: '#/components/schemas/MasterData'
+      required:
+      - RequestInfo
+      - Data
+
+    MasterDataResponse:
+      type: object
+      description: Response object 
+      properties:
+        responseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ResponseHeader'      
+           
+   
