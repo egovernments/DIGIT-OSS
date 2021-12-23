@@ -99,88 +99,88 @@ const ptMachine = Machine({
 let messages = {
     sevamenu: {
         question: {
-            en_IN: { message: 'Please select what you need help with?', step: 'intermediate', option: [{ key: '1', value: 'Raise a complaint', type: 'button' }, { key: '2', value: 'Provide Feedback', type: 'button' }, { key: '3', value: 'Rate the service', type: 'button' }] },
-            hi_IN: { message: 'कृपया चुनें कि आपको किसमें सहायता चाहिए?।', step: 'intermediate', option: [{ key: '1', value: 'शिकायत दर्ज करें।', type: 'button' }, { key: '2', value: 'अपनी राय बताएं।', type: 'button' }, { key: '3', value: 'सेवा को रेट करें।', type: 'button' }] }
+            en_IN: { message: 'Please select what you need help with?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Raise a complaint' }, { key: '2', value: 'Provide Feedback'  }, { key: '3', value: 'Rate the service'  }] },
+            hi_IN: { message: 'कृपया चुनें कि आपको किसमें सहायता चाहिए?।', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'शिकायत दर्ज करें।'  }, { key: '2', value: 'अपनी राय बताएं।'  }, { key: '3', value: 'सेवा को रेट करें।'  }] }
         },
         complainttype: {
-            en_IN: { step: 'intermediate', option: [{ key: '1', value: 'Not Receiving OTP', type: 'button' }, { key: '2', value: 'Unable to Proceed Forward', type: 'button' }, { key: '3', value: 'Bill Amount is incorrect', type: 'button' }, { key: '4', value: 'Application Process taking long time', type: 'button' }, { key: '5', value: 'Application is getting rejected', type: 'button' }, { key: '6', value: 'Others', type: 'button' }] },
-            hi_IN: { step: 'intermediate', option: [{ key: '1', value: 'ओटीपी प्राप्त नहीं हो रहा है', type: 'button' }, { key: '2', value: 'आगे बढ़ने में असमर्थ', type: 'button' }, { key: '3', value: 'बिल राशि गलत है', type: 'button' }, { key: '4', value: 'आवेदन प्रक्रिया में लंबा समय लग रहा है', type: 'button' }, { key: '5', value: 'आवेदन खारिज हो रहा है', type: 'button' }, { key: '6', value: 'अन्य', type: 'button' }] }
+            en_IN: { step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Not Receiving OTP'  }, { key: '2', value: 'Unable to Proceed Forward'  }, { key: '3', value: 'Bill Amount is incorrect'  }, { key: '4', value: 'Application Process taking long time'  }, { key: '5', value: 'Application is getting rejected'  }, { key: '6', value: 'Others'  }] },
+            hi_IN: { step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'ओटीपी प्राप्त नहीं हो रहा है'  }, { key: '2', value: 'आगे बढ़ने में असमर्थ'  }, { key: '3', value: 'बिल राशि गलत है'  }, { key: '4', value: 'आवेदन प्रक्रिया में लंबा समय लग रहा है'  }, { key: '5', value: 'आवेदन खारिज हो रहा है'  }, { key: '6', value: 'अन्य'  }] }
         },
         feedbackrating: {
-            en_IN: { step: 'intermediate', option: [{ key: '1', value: 'Star Rating 1', type: 'button' }, { key: '2', value: 'Star Rating 2', type: 'button' }, { key: '3', value: 'Star Rating 3', type: 'button' }, { key: '4', value: 'Star Rating 4', type: 'button' }, { key: '5', value: 'Star Rating 5', type: 'button' }] },
-            hi_IN: { step: 'intermediate', option: [{ key: '1', value: '१ स्टार रेटिंग', type: 'button' }, { key: '2', value: '२ स्टार रेटिंग', type: 'button' }, { key: '3', value: '३ स्टार रेटिंग', type: 'button' }, { key: '4', value: '४ स्टार रेटिंग', type: 'button' }, { key: '5', value: '५ स्टार रेटिंग', type: 'button' }] }
+            en_IN: { step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Star Rating 1'  }, { key: '2', value: 'Star Rating 2'  }, { key: '3', value: 'Star Rating 3'  }, { key: '4', value: 'Star Rating 4'  }, { key: '5', value: 'Star Rating 5'  }] },
+            hi_IN: { step: 'intermediate', optionType: 'button', option: [{ key: '1', value: '१ स्टार रेटिंग'  }, { key: '2', value: '२ स्टार रेटिंग'  }, { key: '3', value: '३ स्टार रेटिंग'  }, { key: '4', value: '४ स्टार रेटिंग'  }, { key: '5', value: '५ स्टार रेटिंग'  }] }
         },
         complainttype1: {
-            en_IN: { message: 'Please enter your phone number', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] },
-            hi_IN: { message: 'कृपया अपना फोन नंबर दर्ज करें।', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] }
+            en_IN: { message: 'Please enter your phone number', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''  }] },
+            hi_IN: { message: 'कृपया अपना फोन नंबर दर्ज करें।', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''  }] }
         },
         complainttype1_1: {
-            en_IN: { message: 'Let us know about your complaint', step: 'last', option: [{ key: '1', value: '', type: 'textarea' }] },
-            hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'intermediate', option: [{ key: '1', value: '', type: 'textarea' }] }
+            en_IN: { message: 'Let us know about your complaint', step: 'last', optionType: 'textarea', option: [{ key: '1', value: ''  }] },
+            hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'last', optionType: 'textarea', option: [{ key: '1', value: ''  }] }
         },
         complainttype2: {
-            en_IN: { step: 'intermediate', option: [{ key: '1', value: 'Application is stuck and not moving forward', type: 'button' }, { key: '2', value: 'Application is showing unexpected error', type: 'button' }, { key: '3', value: 'Necessary Option not found', type: 'button' }] },
-            hi_IN: { step: 'intermediate', option: [{ key: '1', value: 'आवेदन अटका हुआ है और आगे नहीं बढ़ रहा है', type: 'button' }, { key: '2', value: 'आवेदन अनपेक्षित त्रुटि दिखा रहा है', type: 'button' }, { key: '3', value: 'आवश्यक विकल्प नहीं मिला', type: 'button' }] }
+            en_IN: { step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Application is stuck and not moving forward'  }, { key: '2', value: 'Application is showing unexpected error'  }, { key: '3', value: 'Necessary Option not found'  }] },
+            hi_IN: { step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'आवेदन अटका हुआ है और आगे नहीं बढ़ रहा है'  }, { key: '2', value: 'आवेदन अनपेक्षित त्रुटि दिखा रहा है'  }, { key: '3', value: 'आवश्यक विकल्प नहीं मिला'  }] }
         },
         complainttype2_1: {
-            en_IN: { message: 'Please enter your phone number', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] },
-            hi_IN: { message: 'कृपया अपना फोन नंबर दर्ज करें।', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] }
+            en_IN: { message: 'Please enter your phone number', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''  }] },
+            hi_IN: { message: 'कृपया अपना फोन नंबर दर्ज करें।', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''  }] }
         },
         complainttype2_1_1: {
-            en_IN: { message: 'Let us know about your complaint', step: 'last', option: [{ key: '1', value: '', type: 'textarea' }] },
-            hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'intermediate', option: [{ key: '1', value: '', type: 'textarea' }] }
+            en_IN: { message: 'Let us know about your complaint', step: 'last', optionType: 'textarea', option: [{ key: '1', value: ''  }] },
+            hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'last', optionType: 'textarea', option: [{ key: '1', value: ''  }] }
         },
         complainttype3: {
-            en_IN: { message: 'Please enter your mobile number', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] },
-            hi_IN: { message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] }
+            en_IN: { message: 'Please enter your mobile number', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''  }] },
+            hi_IN: { message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''  }] }
         },
         complainttype3_1: {
-            en_IN: { message: 'Please select  your property from the below list which you want to report', step: 'intermediate', option: [{ key: '1', value: '', type: 'button' }] },
-            hi_IN: { message: 'कृपया नीचे दी गई सूची में से अपनी संपत्ति का चयन करें जिसकी आप रिपोर्ट करना चाहते हैं', step: 'intermediate', option: [{ key: '1', value: '', type: 'button' }] }
+            en_IN: { message: 'Please select  your property from the below list which you want to report', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: ''  }] },
+            hi_IN: { message: 'कृपया नीचे दी गई सूची में से अपनी संपत्ति का चयन करें जिसकी आप रिपोर्ट करना चाहते हैं', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: ''  }] }
         },
         complainttype3_1_1: {
-            en_IN: { message: 'Last Bill Generated <Bill_ID> is Rs. <Amount>. Do you want to report this as incorrect?', step: 'intermediate', option: [{ key: '1', value: 'Yes', type: 'radio' }, { key: '2', value: 'No', type: 'radio' }] },
-            hi_IN: { message: 'अंतिम सृजित बिल <Bill_ID> रुपये है। <राशि>. क्या आप इसे गलत के रूप में रिपोर्ट करना चाहते हैं?', step: 'intermediate', option: [{ key: '1', value: '', type: 'button' }] }
+            en_IN: { message: 'Last Bill Generated <Bill_ID> is Rs. <Amount>. Do you want to report this as incorrect?', step: 'intermediate', optionType: 'radio', option: [{ key: '1', value: 'Yes' }, { key: '2', value: 'No' }] },
+            hi_IN: { message: 'अंतिम सृजित बिल <Bill_ID> रुपये है। <राशि>. क्या आप इसे गलत के रूप में रिपोर्ट करना चाहते हैं?', step: 'intermediate', optionType: 'radio', option: [{ key: '1', value: 'हां' }, { key: '2', value: 'नहीं' }] }
         },
         complainttype3_1_1_1: {
-            en_IN: { message: 'Let us know about your complaint', step: 'last', option: [{ key: '1', value: '', type: 'textarea' }] },
-            hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'intermediate', option: [{ key: '1', value: '', type: 'textarea' }] }
+            en_IN: { message: 'Let us know about your complaint', step: 'last', optionType: 'textarea', option: [{ key: '1', value: ''  }] },
+            hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'last', optionType: 'textarea', option: [{ key: '1', value: ''  }] }
         },
         complainttype4: {
-            en_IN: { message: 'Please tell us which application is taking time?', step: 'intermediate', option: [{ key: '1', value: 'Property Registration', type: 'button' }, { key: '2', value: 'Mutation', type: 'button' }] },
-            hi_IN: { message: 'कृपया हमें बताएं कि किस आवेदन में समय लग रहा है?', step: 'intermediate', option: [{ key: '1', value: 'संपत्ति पंजीकरण', type: 'button' }, { key: '2', value: 'उत्परिवर्तन', type: 'button' }] }
+            en_IN: { message: 'Please tell us which application is taking time?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Property Registration'  }, { key: '2', value: 'Mutation'  }] },
+            hi_IN: { message: 'कृपया हमें बताएं कि किस आवेदन में समय लग रहा है?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'संपत्ति पंजीकरण'  }, { key: '2', value: 'उत्परिवर्तन'  }] }
         },
         complainttype4_1: {
-            en_IN: { message: 'Please enter the Application ID', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] },
-            hi_IN: { message: 'कृपया आवेदन आईडी दर्ज करें।', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] }
+            en_IN: { message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''  }] },
+            hi_IN: { message: 'कृपया आवेदन आईडी दर्ज करें।', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''  }] }
         },
         complainttype4_1_1: {
-            en_IN: { message: 'Show timeline/status of application. Do you want to raise complaint on this?', step: 'intermediate', option: [{ key: '1', value: 'Yes', type: 'radio' }, { key: '2', value: 'No', type: 'radio' }] },
-            hi_IN: { message: 'आवेदन की समयावधि/स्थिति दिखाएं। क्या आप इस पर शिकायत करना चाहते हैं?', step: 'intermediate', option: [{ key: '1', value: '', type: 'button' }] }
+            en_IN: { message: 'Show timeline/status of application. Do you want to raise complaint on this?', step: 'intermediate', optionType: 'radio', option: [{ key: '1', value: 'Yes' }, { key: '2', value: 'No' }] },
+            hi_IN: { message: 'आवेदन की समयावधि/स्थिति दिखाएं। क्या आप इस पर शिकायत करना चाहते हैं?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'हां' }, { key: '2', value: 'नहीं' }] }
         },
         complainttype4_1_1_1: {
-            en_IN: { message: 'Let us know about your complaint', step: 'last', option: [{ key: '1', value: '', type: 'textarea' }] },
-            hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'intermediate', option: [{ key: '1', value: '', type: 'textarea' }] }
+            en_IN: { message: 'Let us know about your complaint', step: 'last', optionType: 'textarea', option: [{ key: '1', value: ''  }] },
+            hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'intermediate', optionType: 'textarea', option: [{ key: '1', value: ''  }] }
         },
         complainttype5: {
-            en_IN: { message: 'Which Application is getting rejected?', step: 'intermediate', option: [{ key: '1', value: 'Property creation', type: 'button' }, { key: '2', value: 'Mutation', type: 'button' }] },
-            hi_IN: { message: 'कौन सा आवेदन खारिज हो रहा है?', step: 'intermediate', option: [{ key: '1', value: 'संपत्ति निर्माण', type: 'button' }, { key: '2', value: 'उत्परिवर्तन', type: 'button' }] }
+            en_IN: { message: 'Which Application is getting rejected?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Property creation'  }, { key: '2', value: 'Mutation'  }] },
+            hi_IN: { message: 'कौन सा आवेदन खारिज हो रहा है?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'संपत्ति निर्माण'  }, { key: '2', value: 'उत्परिवर्तन'  }] }
         },
         complainttype5_1: {
-            en_IN: { message: 'Please enter the Application ID', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] },
-            hi_IN: { message: 'कृपया आवेदन आईडी दर्ज करें।', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] }
+            en_IN: { message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''  }] },
+            hi_IN: { message: 'कृपया आवेदन आईडी दर्ज करें।', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''  }] }
         },
         complainttype5_1_1: {
-            en_IN: { message: 'Show reason for "rejection". Do you want to raise complaint on this?', step: 'intermediate', option: [{ key: '1', value: 'Yes', type: 'radio' }, { key: '2', value: 'No', type: 'radio' }] },
-            hi_IN: { message: '"अस्वीकृति" का कारण दिखाएं। क्या आप इस पर शिकायत करना चाहते हैं?', step: 'intermediate', option: [{ key: '1', value: '', type: 'button' }] }
+            en_IN: { message: 'Show reason for "rejection". Do you want to raise complaint on this?', step: 'intermediate', optionType: 'radio', option: [{ key: '1', value: 'Yes' }, { key: '2', value: 'No' }] },
+            hi_IN: { message: '"अस्वीकृति" का कारण दिखाएं। क्या आप इस पर शिकायत करना चाहते हैं?', step: 'intermediate', optionType: 'radio', option: [{ key: '1', value: 'हां' }, { key: '2', value: 'नहीं' }] }
         },
         complainttype5_1_1_1: {
-            en_IN: { message: 'Let us know about your complaint', step: 'last', option: [{ key: '1', value: '', type: 'textarea' }] },
-            hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'intermediate', option: [{ key: '1', value: '', type: 'textarea' }] }
+            en_IN: { message: 'Let us know about your complaint', step: 'last', optionType: 'textarea', option: [{ key: '1', value: ''  }] },
+            hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'last', optionType: 'textarea', option: [{ key: '1', value: ''  }] }
         },
         complainttype6: {
-            en_IN: { message: 'Let us know about your complaint', step: 'intermediate', option: [{ key: '1', value: '', type: 'textarea' }] },
-            hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं', step: 'intermediate', option: [{ key: '1', value: '', type: 'textarea' }] }
+            en_IN: { message: 'Let us know about your complaint', step: 'intermediate', optionType: 'textarea', option: [{ key: '1', value: ''  }] },
+            hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं', step: 'intermediate', optionType: 'textarea', option: [{ key: '1', value: ''  }] }
         },
     }
 }
