@@ -1,4 +1,4 @@
-CREATE TABLE eg_chat_state_v2 (
+CREATE TABLE eg_web_chat_state_v2 (
     id SERIAL,
     user_id TEXT,
     active BOOLEAN,
@@ -6,5 +6,5 @@ CREATE TABLE eg_chat_state_v2 (
     PRIMARY KEY (id)
 );
 
-CREATE INDEX IF NOT EXISTS eg_chat_state_idx_user_id_v2 ON eg_chat_state_v2 (user_id);
-CREATE INDEX IF NOT EXISTS eg_chat_state_idx_active_v2 ON eg_chat_state_v2 (active);
+CREATE INDEX IF NOT EXISTS eg_web_chat_state_idx_user_id_v2 ON eg_web_chat_state_v2 (user_id);
+CREATE INDEX IF NOT EXISTS eg_web_chat_state_idx_active_v2 ON eg_web_chat_state_v2 (active);
