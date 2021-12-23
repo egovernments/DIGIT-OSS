@@ -335,9 +335,9 @@ class PGRService {
     let city = slots.city;
     
     requestBody["RequestInfo"]["authToken"] = authToken;
-    requestBody["service"]["tenantId"] = city;
-    requestBody["service"]["address"]["city"] = city;
-    requestBody["service"]["address"]["locality"]["code"] = locality;
+    requestBody["service"]["tenantId"] = 'pb';
+    requestBody["service"]["address"]["city"] = 'Amritsar';
+    requestBody["service"]["address"]["locality"]["code"] = '1200022';
     requestBody["service"]["serviceCode"] = complaintType;
     requestBody["service"]["accountId"] = userId;
 

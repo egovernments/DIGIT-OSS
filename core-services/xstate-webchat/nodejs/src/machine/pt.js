@@ -1,5 +1,5 @@
 const { Machine, assign } = require('xstate');
-const pgr = require('./pgr');
+const citizenComplaint = require('./citizen-complaint');
 const dialog = require('./util/dialog.js');
 
 const ptMachine = Machine({
@@ -61,7 +61,7 @@ const ptMachine = Machine({
           }),
           always: [
             {
-              target: '#pgr',
+              target: '#citizenComplaint',
               cond: (context) => context.intention == 'raise_a_complaint'
             },
             {
@@ -75,7 +75,7 @@ const ptMachine = Machine({
           }),
           always : 'question'
         }, 
-        pgr: pgr
+        citizenComplaint: citizenComplaint
       } 
     }, 
     endstate: {

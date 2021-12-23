@@ -15,7 +15,7 @@ class WebProvider {
                 
             },
             extraInfo: {
-                whatsAppBusinessNumber: requestBody.extraInfo.whatsAppBusinessNumber,
+               // whatsAppBusinessNumber: requestBody.extraInfo.whatsAppBusinessNumber,
                 tenantId: config.rootTenantId
             },
              user: {
