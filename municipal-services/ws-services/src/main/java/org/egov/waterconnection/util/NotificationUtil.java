@@ -161,7 +161,25 @@ public class NotificationUtil {
 		}
 		return getMessageTemplate(builder.toString(), localizationMessage);
 	}
-	
+
+
+	/**
+	 *
+	 * @param applicationStatus
+	 * @param localizationMessage
+	 * @return Email message template
+	 */
+	public String getCustomizedMsgForEmail(String action, String applicationStatus, String localizationMessage, int reqType) {
+		StringBuilder builder = new StringBuilder();
+		if (reqType == WCConstants.UPDATE_APPLICATION) {
+			builder.append("WS_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_EMAIL_MESSAGE");
+		}
+		if (reqType == WCConstants.MODIFY_CONNECTION) {
+			builder.append("WS_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_EMAIL_MESSAGE");
+		}
+		return getMessageTemplate(builder.toString(), localizationMessage);
+	}
+
 	/**
 	 * 
 	 * @param code Code name to fetch the localisation value

@@ -107,6 +107,13 @@ public class WorkflowNotificationService {
                         notificationUtil.sendSMS(smsRequests);
                     }
                 }}
+            if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)){
+                if (config.getIsEmailNotificationEnabled() != null && config.getIsEmailNotificationEnabled()) {
+                    List<EmailRequest> emailRequests = getEmailRequest(request, topic, property, applicationStatus);
+                    if (!CollectionUtils.isEmpty(emailRequests)) {
+                        notificationUtil.sendEmail(emailRequests);
+                    }
+                }}
 
         } catch (Exception ex) {
             log.error("Error occured while processing the record from topic : " + topic, ex);
@@ -321,6 +328,80 @@ public class WorkflowNotificationService {
         return smsRequest;
     }
 
+    /**
+     * Creates email request for each owner
+     *
+     * @param waterConnectionRequest Water Connection Request
+     * @param topic Topic Name
+     * @param property Property Object
+     * @param applicationStatus Application Status
+     * @return List of EmailRequest
+     */
+    private List<EmailRequest> getEmailRequest(WaterConnectionRequest waterConnectionRequest, String topic,
+                                           Property property, String applicationStatus) {
+        String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
+                waterConnectionRequest.getRequestInfo());
+        int reqType = WCConstants.UPDATE_APPLICATION;
+        if ((!waterConnectionRequest.getWaterConnection().getProcessInstance().getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION))
+                && waterServiceUtil.isModifyConnectionRequest(waterConnectionRequest)) {
+            reqType = WCConstants.MODIFY_CONNECTION;
+        }
+        String message = notificationUtil.getCustomizedMsgForEmail(
+                waterConnectionRequest.getWaterConnection().getProcessInstance().getAction(), applicationStatus,
+                localizationMessage, reqType);
+        if (message == null) {
+            log.info("No message Found For Topic : " + topic);
+            return Collections.emptyList();
+        }
+        Map<String, String> mobileNumbersAndNames = new HashMap<>();
+        Set<String> mobileNumbers = new HashSet<>();
+
+        //Send the notification to all owners
+        property.getOwners().forEach(owner -> {
+            if (owner.getMobileNumber() != null)
+                mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
+                mobileNumbers.add(owner.getMobileNumber());
+        });
+
+        //send the notification to the connection holders
+        if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
+            waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
+                if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+                    mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+                    mobileNumbers.add(holder.getMobileNumber());
+
+                }
+            });
+        }
+        //Send the notification to applicant
+        if(!StringUtils.isEmpty(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
+        {
+            mobileNumbersAndNames.put(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), waterConnectionRequest.getRequestInfo().getUserInfo().getName());
+            mobileNumbers.add(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber());
+
+        }
+
+        Map<String, String> mobileNumberAndMessage = getMessageForMobileNumber(mobileNumbersAndNames,
+                waterConnectionRequest, message, property);
+
+        Map<String,String> mobileNumberAndEmailId = notificationUtil.fetchUserEmailIds(mobileNumbers,waterConnectionRequest.getRequestInfo(),waterConnectionRequest.getWaterConnection().getTenantId());
+
+        if (message.contains("{receipt download link}"))
+            mobileNumberAndMessage = setRecepitDownloadLink(mobileNumberAndMessage, waterConnectionRequest, message, property);
+
+        List<EmailRequest> emailRequest = new LinkedList<>();
+        for (Map.Entry<String, String> entryset : mobileNumberAndEmailId.entrySet()) {
+            String customizedMsg = mobileNumberAndMessage.get(entryset.getKey());
+            String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
+            String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+            Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
+            EmailRequest email = new EmailRequest(waterConnectionRequest.getRequestInfo(),emailobj);
+            emailRequest.add(email);
+        }
+        return emailRequest;
+
+    }
+
     public Map<String, String> getMessageForMobileNumber(Map<String, String> mobileNumbersAndNames,
                                                          WaterConnectionRequest waterConnectionRequest, String message, Property property) {
         Map<String, String> messageToReturn = new HashMap<>();
@@ -339,6 +420,9 @@ public class WorkflowNotificationService {
 
             if (messageToReplace.contains("{Application number}"))
                 messageToReplace = messageToReplace.replace("{Application number}", waterConnectionRequest.getWaterConnection().getApplicationNo());
+
+            if (messageToReplace.contains("{Connection number}"))
+                messageToReplace = messageToReplace.replace("{Connection number}",  waterConnectionRequest.getWaterConnection().getConnectionNo());
 
             if (messageToReplace.contains("{Application download link}"))
                 messageToReplace = messageToReplace.replace("{Application download link}",
