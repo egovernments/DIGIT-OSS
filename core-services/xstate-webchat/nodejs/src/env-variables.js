@@ -7,7 +7,7 @@ const envVariables = {
     contextPath: process.env.CONTEXT_PATH || '/xstate-webchat',
     whatsAppProvider: process.env.WHATSAPP_PROVIDER || 'web',
     serviceProvider: process.env.SERVICE_PROVIDER || 'eGov',
-    repoProvider: process.env.REPO_PROVIDER || 'InMemory',
+    repoProvider: process.env.REPO_PROVIDER || 'PostgreSQL',
     whatsAppBusinessNumber: process.env.WHATSAPP_BUSINESS_NUMBER || '917834811114',
     rootTenantId: process.env.ROOT_TENANTID || 'pb',
     supportedLocales: process.env.SUPPORTED_LOCALES || 'en_IN,hi_IN',
@@ -19,7 +19,7 @@ const envVariables = {
     postgresConfig: {
         dbHost: process.env.DB_HOST || 'localhost',
         dbPort: process.env.DB_PORT || '5432',
-        dbName: process.env.DB_NAME || 'chat',
+        dbName: process.env.DB_NAME || 'postgres',
         dbUsername: process.env.DB_USER || 'postgres',
         dbPassword: process.env.DB_PASSWORD || 'postgres'
     },
@@ -64,7 +64,8 @@ const envVariables = {
         receiptdownladlink: process.env.RECEIPT_DOWNLOAD_LINK || 'citizen/withoutAuth/egov-common/download-receipt?status=success&consumerCode=$consumercode&tenantId=$tenantId&receiptNumber=$receiptnumber&businessService=$businessservice&smsLink=true&mobileNo=$mobilenumber&channel=whatsapp&redirectNumber=+$whatsAppBussinessNumber&locale=$locale',
         msgpaylink: process.env.MSG_PAY_LINK || 'citizen/withoutAuth/egov-common/pay?consumerCode=$consumercode&tenantId=$tenantId&businessService=$businessservice&redirectNumber=$redirectNumber&channel=whatsapp&locale=$locale',
         wsOpenSearch: process.env.WS_OPEN_SEARCH || 'citizen/withoutAuth/wns/public-search',
-        ptOpenSearch: process.env.PT_OPEN_SEARCH || 'citizen/withoutAuth/pt-mutation/public-search'
+        ptOpenSearch: process.env.PT_OPEN_SEARCH || 'citizen/withoutAuth/pt-mutation/public-search',
+        maxStarRating: process.env.MAX_STAR_RATING || 5
     },
 
     userService: {

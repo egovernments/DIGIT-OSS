@@ -4,6 +4,7 @@ if(config.serviceProvider === 'eGov') {
     console.log("Using eGov Services");
     module.exports.billService = require('./egov-bill');
     module.exports.receiptService = require('./egov-receipts');
+    module.exports.ratingAndFeedback = require('./rating-feedback');
     if(config.pgrUseCase.pgrVersion == 'v2') {
         console.log('Using PGR v2');
         module.exports.pgrService = require('./egov-pgr');

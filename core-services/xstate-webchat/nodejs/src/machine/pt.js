@@ -1,5 +1,6 @@
 const { Machine, assign } = require('xstate');
 const citizenComplaint = require('./citizen-complaint');
+const serviceRating = require('./serviceRating');
 const dialog = require('./util/dialog.js');
 
 const ptMachine = Machine({
@@ -65,6 +66,14 @@ const ptMachine = Machine({
               cond: (context) => context.intention == 'raise_a_complaint'
             },
             {
+              target: '#serviceRating', 
+              cond: (context) => context.intention == 'provide_feedback'
+            },
+            {
+              target: '#serviceRating', 
+              cond: (context) => context.intention == 'rating'
+            },
+            {
               target: 'error'
             }
           ]
@@ -75,7 +84,8 @@ const ptMachine = Machine({
           }),
           always : 'question'
         }, 
-        citizenComplaint: citizenComplaint
+        citizenComplaint: citizenComplaint,
+        serviceRating: serviceRating
       } 
     }, 
     endstate: {
@@ -188,8 +198,9 @@ let messages = {
 let grammer = {
     menu: {
         question: [
-            { intention: 'raise_a_complaint', recognize: ['1', 'file', 'new'] },
-            { intention: 'provide_feedback', recognize: ['2', 'file', 'new'] }
+            { intention: 'raise_a_complaint', recognize: ['1','raise_a_complaint'] },
+            { intention: 'provide_feedback', recognize: ['2', 'provide_feedback'] },
+            {intention: 'rating', recognize: ['3','rating']}
         ]
     }
 }

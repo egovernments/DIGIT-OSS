@@ -9,7 +9,12 @@ function get_message(bundle, locale = 'en_IN') {
   return (bundle[locale] === undefined)? bundle['en_IN'] : bundle[locale];
 }
 function get_intention(g, event, strict = false) {
-  let utterance = get_input(event);
+  let utterance;
+  if(typeof event.message.input == 'string')
+    utterance = get_input(event);
+  else
+    utterance = get_input(event, false);
+
   function exact(e) {
     return e.recognize.includes(utterance)
   }
@@ -19,8 +24,8 @@ function get_intention(g, event, strict = false) {
   let index = strict? g.findIndex(exact) : g.findIndex(e=>contains(e));
   return (index == -1) ? INTENTION_UNKOWN : g[index].intention;
 }
-function constructListPromptAndGrammer(keys, message_bundle, locale, more = false, goback = false) {
-  var prompt = '';
+function constructListPromptAndGrammer(keys, message_bundle, locale, more = false, goback = false, type = 'button') {
+  var prompt = [];
   var grammer = [];
   if (more) {
     keys = keys.concat([INTENTION_MORE])
@@ -39,11 +44,14 @@ function constructListPromptAndGrammer(keys, message_bundle, locale, more = fals
     if (value === undefined) {
       value = element;
     }
-    var numberAsString = (index+1).toString();
-    if(numberAsString.length ===1)
-      prompt+= `\n*${index+1}.*  ` + value;
-    else
-      prompt+= `\n*${index+1}.* ` + value;
+
+    let data = {
+      key: index+1,
+      value: value,
+      type: type
+    };
+
+    prompt.push(data);
 
     grammer.push({intention: element, recognize: [(index+1).toString()]});
   });
@@ -51,8 +59,8 @@ function constructListPromptAndGrammer(keys, message_bundle, locale, more = fals
 }
 
 
-function constructContextGrammer(keys, message_bundle, locale) {
-  var prompt = '';
+function constructContextGrammer(keys, message_bundle, locale, type = 'button') {
+  var prompt = [];
   var grammer = [];
    
   keys.forEach((element, index) => {
@@ -60,11 +68,13 @@ function constructContextGrammer(keys, message_bundle, locale) {
     if (value === undefined) {
       value = element;
     }
-    var numberAsString = (index+1).toString();
-    if(numberAsString.length ===1)
-      prompt+= `\n*${index+1}.*  ` + value;
-    else
-      prompt+= `\n*${index+1}.* ` + value;
+    let data = {
+      key: index+1,
+      value: value,
+      type: type
+    };
+
+    prompt.push(data);
 
     grammer.push({intention: element, recognize: [(index+1).toString()]});
   });
