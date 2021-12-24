@@ -252,8 +252,8 @@ const DocumentSVG = () => (
   </svg>
 );
 
-const PDFSvg = () => (
-  <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+const PDFSvg = ({className, width = 80, height = 80, style, viewBox="0 0 80 80" }) => (
+  <svg {...{className, width , height, style, viewBox }} fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M46.6667 6.6665H20C16.3334 6.6665 13.3667 9.6665 13.3667 13.3332L13.3334 66.6665C13.3334 70.3332 16.3 73.3332 19.9667 73.3332H60C63.6667 73.3332 66.6667 70.3332 66.6667 66.6665V26.6665L46.6667 6.6665ZM53.3334 59.9998H26.6667V53.3332H53.3334V59.9998ZM53.3334 46.6665H26.6667V39.9998H53.3334V46.6665ZM43.3334 29.9998V11.6665L61.6667 29.9998H43.3334Z"
       fill="#505A5F"
