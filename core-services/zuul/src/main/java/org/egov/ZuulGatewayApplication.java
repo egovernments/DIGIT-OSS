@@ -13,6 +13,7 @@ import org.egov.filters.pre.AuthPreCheckFilter;
 import org.egov.filters.pre.CorrelationIdFilter;
 import org.egov.filters.pre.RbacFilter;
 import org.egov.filters.pre.RbacPreCheckFilter;
+import org.egov.tracer.config.TracerConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -24,6 +25,7 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.cloud.netflix.zuul.filters.ProxyRequestHelper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.client.RestTemplate;
 
@@ -36,6 +38,7 @@ import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.support.SecuredRateL
 @EnableCaching
 @SpringBootApplication
 @PropertySource({"${zuul.routes.filepath}","${zuul.limiter.filepath}"})
+@Import({TracerConfiguration.class, MultiStateInstanceUtil.class})
 public class ZuulGatewayApplication {
     public static void main(String[] args) {
         SpringApplication.run(ZuulGatewayApplication.class, args);

@@ -22,6 +22,7 @@ import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.producer.CollectionProducer;
 import org.egov.collection.web.contract.Bill;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -52,6 +53,9 @@ public class CollectionNotificationConsumer{
 
     @Autowired
     private RestTemplate restTemplate;
+    
+    @Autowired
+    private MultiStateInstanceUtil multiStateInstanceUtil;
 
     @KafkaListener(topics = { "${kafka.topics.payment.create.name}", "${kafka.topics.payment.receiptlink.name}" })
     public void listen(HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic){
@@ -141,7 +145,8 @@ public class CollectionNotificationConsumer{
             locale = applicationProperties.getFallBackLocale();
         StringBuilder uri = new StringBuilder();
         uri.append(applicationProperties.getLocalizationHost()).append(applicationProperties.getLocalizationEndpoint());
-        uri.append("?tenantId=").append(tenantId.split("\\.")[0]).append("&locale=").append(locale).append("&module=").append(module);
+        uri.append("?tenantId=").append(multiStateInstanceUtil.getStateLevelTenant(tenantId))
+        .append("&locale=").append(locale).append("&module=").append(module);
 
         Map<String, Object> request = new HashMap<>();
         request.put("RequestInfo", requestInfo);

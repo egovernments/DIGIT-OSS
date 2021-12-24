@@ -45,7 +45,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.egov.demand.config.ApplicationProperties;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.demand.model.DemandCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -58,13 +58,13 @@ import lombok.extern.slf4j.Slf4j;
 public class DemandQueryBuilder {
 	
 	@Autowired
-	private ApplicationProperties configs;
+	private MultiStateInstanceUtil centralInstaceUtil;
 	
 
-	public static final String PAYMENT_BACKUPDATE_AUDIT_INSERT_QUERY = "INSERT INTO {{SCHEMA}}.egbs_payment_backupdate_audit (paymentid, isbackupdatesuccess, isreceiptcancellation, errorMessage)"
+	public static final String PAYMENT_BACKUPDATE_AUDIT_INSERT_QUERY = "INSERT INTO {schema}.egbs_payment_backupdate_audit (paymentid, isbackupdatesuccess, isreceiptcancellation, errorMessage)"
 			+ " VALUES (?,?,?,?);";
 	
-	public static final String PAYMENT_BACKUPDATE_AUDIT_SEARCH_QUERY = "SELECT paymentid FROM {{SCHEMA}}.egbs_payment_backupdate_audit where paymentid=? AND isbackupdatesuccess=? AND isreceiptcancellation=?;";
+	public static final String PAYMENT_BACKUPDATE_AUDIT_SEARCH_QUERY = "SELECT paymentid FROM {schema}.egbs_payment_backupdate_audit where paymentid=? AND isbackupdatesuccess=? AND isreceiptcancellation=?;";
 
 	public static final String BASE_DEMAND_QUERY = "SELECT dmd.id AS did,dmd.consumercode AS dconsumercode,"
 			+ "dmd.consumertype AS dconsumertype,dmd.businessservice AS dbusinessservice,dmd.payer,"
@@ -79,50 +79,50 @@ public class DemandQueryBuilder {
 			+ "dmdl.taxamount AS dltaxamount,dmdl.collectionamount AS dlcollectionamount,"
 			+ "dmdl.createdby AS dlcreatedby,dmdl.lastModifiedby AS dllastModifiedby,"
 			+ "dmdl.createdtime AS dlcreatedtime,dmdl.lastModifiedtime AS dllastModifiedtime,"
-			+ "dmdl.tenantid AS dltenantid,dmdl.additionaldetails as detailadditionaldetails " + "FROM {{SCHEMA}}.egbs_demand_v1 dmd "
-			+ "INNER JOIN {{SCHEMA}}.egbs_demanddetail_v1 dmdl ON dmd.id=dmdl.demandid " + "AND dmd.tenantid=dmdl.tenantid WHERE ";
+			+ "dmdl.tenantid AS dltenantid,dmdl.additionaldetails as detailadditionaldetails " + "FROM {schema}.egbs_demand_v1 dmd "
+			+ "INNER JOIN {schema}.egbs_demanddetail_v1 dmdl ON dmd.id=dmdl.demandid " + "AND dmd.tenantid=dmdl.tenantid WHERE ";
 
 	public static final String BASE_DEMAND_DETAIL_QUERY = "SELECT "
 			+ "demanddetail.id AS dlid,demanddetail.demandid AS dldemandid,demanddetail.taxheadcode AS dltaxheadcode,"
 			+ "demanddetail.taxamount AS dltaxamount,demanddetail.collectionamount AS dlcollectionamount,"
 			+ "demanddetail.createdby AS dlcreatedby,demanddetail.lastModifiedby AS dllastModifiedby,"
 			+ "demanddetail.createdtime AS dlcreatedtime,demanddetail.lastModifiedtime AS dllastModifiedtime,"
-			+ "demanddetail.tenantid AS dltenantid " + " FROM {{SCHEMA}}.egbs_demanddetail_v1 demanddetail "
-					+ "INNER JOIN {{SCHEMA}}.egbs_demand demand ON demanddetail.demandid=demand.id AND "
+			+ "demanddetail.tenantid AS dltenantid " + " FROM {schema}.egbs_demanddetail_v1 demanddetail "
+					+ "INNER JOIN {schema}.egbs_demand demand ON demanddetail.demandid=demand.id AND "
 					+ "demanddetail.tenantid=demand.tenantid WHERE ";
 
 	public static final String DEMAND_QUERY_ORDER_BY_CLAUSE = "dmd.taxperiodfrom";
 
 	public static final String BASE_DEMAND_DETAIL_QUERY_ORDER_BY_CLAUSE = "dmdl.id";
 
-	public static final String DEMAND_INSERT_QUERY = "INSERT INTO {{SCHEMA}}.egbs_demand_v1 "
+	public static final String DEMAND_INSERT_QUERY = "INSERT INTO {schema}.egbs_demand_v1 "
 			+ "(id,consumerCode,consumerType,businessService,payer,taxPeriodFrom,taxPeriodTo,"
 			+ "minimumAmountPayable,createdby,lastModifiedby,createdtime,lastModifiedtime,tenantid, status, additionaldetails, billexpirytime, fixedBillExpiryDate) "
 			+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
-	public static final String DEMAND_DETAIL_INSERT_QUERY = "INSERT INTO {{SCHEMA}}.egbs_demanddetail_v1 "
+	public static final String DEMAND_DETAIL_INSERT_QUERY = "INSERT INTO {schema}.egbs_demanddetail_v1 "
 			+ "(id,demandid,taxHeadCode,taxamount,collectionamount,"
 			+ "createdby,lastModifiedby,createdtime,lastModifiedtime,tenantid,additionaldetails)" 
 			+ " VALUES (?,?,?,?,?,?,?,?,?,?,?);";
 
-	public static final String DEMAND_UPDATE_QUERY = "UPDATE {{SCHEMA}}.egbs_demand_v1 SET " + "payer=?,taxPeriodFrom=?,"
+	public static final String DEMAND_UPDATE_QUERY = "UPDATE {schema}.egbs_demand_v1 SET " + "payer=?,taxPeriodFrom=?,"
 			+ "taxPeriodTo=?,minimumAmountPayable=?,lastModifiedby=?," + "lastModifiedtime=?,tenantid=?,"
 			+ " status=?,additionaldetails=?,billexpirytime=?,ispaymentcompleted=?, fixedBillExpiryDate=? WHERE id=? AND tenantid=?;";
 	
-	public static final String DEMAND_DETAIL_UPDATE_QUERY = "UPDATE {{SCHEMA}}.egbs_demanddetail_v1 SET taxamount=?,collectionamount=?,"
+	public static final String DEMAND_DETAIL_UPDATE_QUERY = "UPDATE {schema}.egbs_demanddetail_v1 SET taxamount=?,collectionamount=?,"
 			+ "lastModifiedby=?,lastModifiedtime=?, additionaldetails=? WHERE id=? AND demandid=? AND tenantid=?;";
 
-	public static final String DEMAND_AUDIT_INSERT_QUERY = "INSERT INTO {{SCHEMA}}.egbs_demand_v1_audit "
+	public static final String DEMAND_AUDIT_INSERT_QUERY = "INSERT INTO {schema}.egbs_demand_v1_audit "
 			+ "(demandid,consumerCode,consumerType,businessService,payer,taxPeriodFrom,taxPeriodTo,"
 			+ "minimumAmountPayable,createdby,createdtime,tenantid, status, additionaldetails,id,billexpirytime, ispaymentcompleted) "
 			+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
-	public static final String DEMAND_DETAIL_AUDIT_INSERT_QUERY = "INSERT INTO {{SCHEMA}}.egbs_demanddetail_v1_audit "
+	public static final String DEMAND_DETAIL_AUDIT_INSERT_QUERY = "INSERT INTO {schema}.egbs_demanddetail_v1_audit "
 			+ "(demanddetailid,demandid,taxHeadCode,taxamount,collectionamount,"
 			+ "createdby,createdtime,tenantid,additionaldetails,id)" 
 			+ " VALUES (?,?,?,?,?,?,?,?,?,?);";
 	
-	public static final String DEMAND_UPDATE_CONSUMERCODE_QUERY="UPDATE {{SCHEMA}}.egbs_demand_v1 SET consumercode=?, lastmodifiedby=?, lastmodifiedtime=? "
+	public static final String DEMAND_UPDATE_CONSUMERCODE_QUERY="UPDATE {schema}.egbs_demand_v1 SET consumercode=?, lastmodifiedby=?, lastmodifiedtime=? "
 			+ " WHERE tenantid=? AND id IN (";
 	
 
@@ -163,9 +163,8 @@ public class DemandQueryBuilder {
 		StringBuilder demandQuery = new StringBuilder(BASE_DEMAND_QUERY);
 
 		String tenantId = demandCriteria.getTenantId();
-		String[] tenantIdChunks = tenantId.split("\\.");
 		
-		if (tenantIdChunks.length <= configs.getStateLevelTenantIdLength()) {
+		if (centralInstaceUtil.isTenantIdStateLevel(tenantId)) {
 			demandQuery.append(" dmd.tenantid LIKE ? ");
 			preparedStatementValues.add(demandCriteria.getTenantId() + '%');
 		} else {
@@ -173,7 +172,6 @@ public class DemandQueryBuilder {
 			preparedStatementValues.add(demandCriteria.getTenantId());
 		}
 		
-
 		if (demandCriteria.getStatus() != null) {
 
 			addAndClause(demandQuery);

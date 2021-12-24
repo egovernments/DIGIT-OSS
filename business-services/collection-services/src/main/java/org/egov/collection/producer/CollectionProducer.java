@@ -1,7 +1,7 @@
 package org.egov.collection.producer;
 
 
-import org.egov.collection.config.ApplicationProperties;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.kafka.CustomKafkaTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,19 +16,12 @@ public class CollectionProducer {
     private CustomKafkaTemplate<String, Object> kafkaTemplate;
 
     @Autowired
-    private ApplicationProperties configs;
+    private MultiStateInstanceUtil centralInstanceUtil;
 
     public void push(String tenantId, String topic, Object value) {
 
-        String updatedTopic = topic;
-        if (configs.getIsEnvironmentCentralInstance()) {
-
-            String[] tenants = tenantId.split("\\.");
-            if (tenants.length > 1)
-                updatedTopic = tenants[1].concat("-").concat(topic);
-        }
+        String updatedTopic = centralInstanceUtil.getStateSpecificTopicName(tenantId, topic);
         log.info("The Kafka topic for the tenantId : " + tenantId + " is : " + updatedTopic);
-        kafkaTemplate.send(topic, value);
         kafkaTemplate.send(updatedTopic, value);
     }
 

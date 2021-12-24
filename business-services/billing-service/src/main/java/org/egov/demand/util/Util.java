@@ -19,6 +19,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.demand.amendment.model.ProcessInstance;
 import org.egov.demand.amendment.model.ProcessInstanceRequest;
 import org.egov.demand.amendment.model.ProcessInstanceResponse;
@@ -53,6 +54,9 @@ public class Util {
 
 	@Autowired
 	private ApplicationProperties appProps;
+	
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 	
 	@Autowired
 	private ObjectMapper mapper;
@@ -253,8 +257,9 @@ public class Util {
 	public void validateTenantIdForUserType(String tenantId, RequestInfo requestInfo) {
 
 		String userType = requestInfo.getUserInfo().getType();
-		if(Constants.EMPLOYEE_TYPE_CODE.equalsIgnoreCase(userType) && tenantId.split("\\.").length <= 2) {
-			throw new CustomException("EG_BS_INVALID_TENANTID","Employees cannot search based on state level tenantid");
+		if (Constants.EMPLOYEE_TYPE_CODE.equalsIgnoreCase(userType) && centralInstanceUtil.isTenantIdStateLevel(tenantId)) {
+			throw new CustomException("EG_BS_INVALID_TENANTID",
+					"Employees cannot search based on state level tenantid");
 		}
 	}
 	
@@ -345,27 +350,6 @@ public class Util {
 		query.append(")");
 		
 		return query.toString();
-	}
-	
-	/**
-	 * Method to fetch the state name from the tenantId
-	 * 
-	 * @param query
-	 * @param tenantId
-	 * @return
-	 */
-	public static String replaceSchemaPlaceholder(String query, String tenantId){
-		
-		String finalQuery = null;
-		String stateLevelTenant = tenantId;
-		if (stateLevelTenant.contains(".")) {
-			stateLevelTenant = stateLevelTenant.split("\\.")[1];
-			finalQuery = query.replace(Constants.SCHEMA_PLACEHOLDER, stateLevelTenant);
-		} else {
-			stateLevelTenant = "";
-			finalQuery = query.replace(Constants.SCHEMA_PLACEHOLDER.concat("."), stateLevelTenant);
-		}
-		return finalQuery;
 	}
 	
 	private String createPlaceHolderForList(Set<String> ids) {

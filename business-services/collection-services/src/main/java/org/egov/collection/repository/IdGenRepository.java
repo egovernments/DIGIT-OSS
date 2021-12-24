@@ -1,6 +1,11 @@
 package org.egov.collection.repository;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.collection.config.CollectionServiceConstants.COLL_TRANSACTION_FORMAT;
+import static org.egov.collection.config.CollectionServiceConstants.COLL_TRANSACTION_ID_NAME;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.IdGenerationRequest;
 import org.egov.collection.model.IdGenerationResponse;
@@ -13,10 +18,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.egov.collection.config.CollectionServiceConstants.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -57,7 +59,7 @@ public class IdGenRepository {
     public String generateTransactionNumber(RequestInfo requestInfo, String tenantId) {
         log.debug("Attempting to generate Transaction Number from ID Gen");
 
-        String splitTenant = tenantId.contains(".") ? tenantId.split("\\.")[1] : tenantId;
+        String splitTenant = tenantId.contains(".") ? tenantId.split("\\.")[tenantId.length()-1] : tenantId;
         String tenantFormat = COLL_TRANSACTION_FORMAT.replace("{tenant}", splitTenant);
 
 

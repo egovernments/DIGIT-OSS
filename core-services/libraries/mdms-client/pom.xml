@@ -59,11 +59,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.egov.services</groupId>
-			<artifactId>services-common</artifactId>
-			<version>1.1.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>com.jayway.jsonpath</groupId>
 			<artifactId>json-path</artifactId>
 			<version>2.2.0</version>
