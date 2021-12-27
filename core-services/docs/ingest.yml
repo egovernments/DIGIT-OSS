@@ -76,6 +76,7 @@ components:
         module:
           type: string
           description: Module for which data is ingested
+          enum: [PT, PGR, WS, SW, OBPS, FIRENOC, TL, MCOLLECT, COMMON]
           example: PT
         ward:
           type: string
