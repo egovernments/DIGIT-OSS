@@ -247,8 +247,9 @@ public class TLQueryBuilder {
         preparedStmtList.add(System.currentTimeMillis()+renewalPeriod); 
         
         addClauseIfRequired(preparedStmtList, builder);
-        builder.append(" (( tl.status = ? ");
+        builder.append(" (( (tl.status IN (?,?)) ");
         preparedStmtList.add(TLConstants.STATUS_APPROVED); 
+        preparedStmtList.add(TLConstants.STATUS_EXPIRED);
         
         addClauseIfRequired(preparedStmtList, builder);
         
@@ -266,7 +267,7 @@ public class TLQueryBuilder {
         builder.append("OR  ( tl.financialyear= (select max(financialyear) from eg_tl_tradelicense where licensenumber=tl.licensenumber and licensenumber in ( select licensenumber from eg_tl_tradelicense where status=? and financialyear=? ) and status<>?  ) ");
         
         /*set status (approved) and validTo(before current timestamp) conditions*/
-        builder.append(" AND tl.status=? AND tl.validTo <= ? ) ) ");
+        builder.append(" AND (tl.status IN (?,?) ) AND tl.validTo <= ? ) ) ");
         
         preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL); 
         preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL);
@@ -276,6 +277,7 @@ public class TLQueryBuilder {
         preparedStmtList.add(criteria.getFinancialYear());
         preparedStmtList.add(TLConstants.STATUS_REJECTED);
         preparedStmtList.add(TLConstants.STATUS_APPROVED);
+        preparedStmtList.add(TLConstants.STATUS_EXPIRED);
         preparedStmtList.add(System.currentTimeMillis()+renewalPeriod); 
 
 	}
