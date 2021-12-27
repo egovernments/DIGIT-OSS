@@ -9,7 +9,12 @@ function get_message(bundle, locale = 'en_IN') {
   return (bundle[locale] === undefined) ? bundle.en_IN : bundle[locale];
 }
 function get_intention(g, event, strict = false) {
-  const utterance = get_input(event);
+  let utterance;
+  if(typeof event.message.input == 'string')
+    utterance = get_input(event);
+  else
+    utterance = get_input(event, false);
+
   function exact(e) {
     return e.recognize.includes(utterance);
   }
@@ -19,8 +24,8 @@ function get_intention(g, event, strict = false) {
   const index = strict ? g.findIndex(exact) : g.findIndex((e) => contains(e));
   return (index == -1) ? INTENTION_UNKOWN : g[index].intention;
 }
-function constructListPromptAndGrammer(keys, message_bundle, locale, more = false, goback = false) {
-  let prompt = '';
+function constructListPromptAndGrammer(keys, message_bundle, locale, more = false, goback = false, type = 'button') {
+  let prompt = [];
   const grammer = [];
   if (more) {
     keys = keys.concat([INTENTION_MORE]);
@@ -39,7 +44,15 @@ function constructListPromptAndGrammer(keys, message_bundle, locale, more = fals
     if (value === undefined) {
       value = element;
     }
-    prompt += `\n${index + 1}. ${value}`;
+    
+    let data = {
+      key: index+1,
+      value: value,
+      type: type
+    };
+
+    prompt.push(data);
+
     grammer.push({ intention: element, recognize: [(index + 1).toString()] });
   });
   return { prompt, grammer };
@@ -59,17 +72,23 @@ function constructLiteralGrammer(keys, message_bundle, locale) {
   return grammer;
 }
 
-function constructContextGrammer(keys, message_bundle, locale) {
+function constructContextGrammer(keys, message_bundle, locale, type = 'button') {
   var grammer = [];
+  var prompt = [];
   keys.forEach((element, index) => {
-    // let value;
-    // if (message_bundle[element] !== undefined) {
-    //   value = get_message(message_bundle[element], locale);
-    // }
-    // if (value === undefined) {
-    //   value = element;
-    // }
-     grammer.push({intention: element, recognize: [(index+1).toString()]});
+    let value = undefined;
+    if (value === undefined) {
+      value = element;
+    }
+    
+    let data = {
+      key: index+1,
+      value: value,
+      type: type
+    };
+
+    prompt.push(data);
+    grammer.push({intention: element, recognize: [(index+1).toString()]});
   });
 
   return grammer;

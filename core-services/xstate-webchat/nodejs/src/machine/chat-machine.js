@@ -2,6 +2,7 @@ const { Machine, assign } = require('xstate');
 const dialog = require('./util/dialog.js');
 const messages = require('./messages/chat-machine');
 const citizenComplaint = require('./citizen-complaint');
+const serviceRating = require('./serviceRating');
 
 const chatStateMachine = Machine({
   id: 'chatMachine',
@@ -59,6 +60,14 @@ const chatStateMachine = Machine({
               target: '#citizenComplaint'
             },
             {
+              target: '#serviceRating', 
+              cond: (context) => context.intention == 'providefeedback'
+            },
+            {
+              target: '#serviceRating', 
+              cond: (context) => context.intention == 'rateservice'
+            },
+            {
               target: 'error'
             }
           ]
@@ -69,7 +78,8 @@ const chatStateMachine = Machine({
           }),
           always : 'question'
         }, 
-        citizenComplaint: citizenComplaint
+        citizenComplaint: citizenComplaint,
+        serviceRating: serviceRating
       } 
     }, 
     endstate: {

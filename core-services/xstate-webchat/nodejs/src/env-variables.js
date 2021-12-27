@@ -6,7 +6,7 @@ const envVariables = {
   port: process.env.SERVICE_PORT || 8080,
   contextPath: process.env.CONTEXT_PATH || '/xstate-webchat',
   serviceProvider: process.env.SERVICE_PROVIDER || 'eGov',
-  repoProvider: process.env.REPO_PROVIDER || 'InMemory',
+  repoProvider: process.env.REPO_PROVIDER || 'PostgreSQL',
   rootTenantId: process.env.ROOT_TENANTID || 'pb',
   supportedLocales: process.env.SUPPORTED_LOCALES || 'en_IN,hi_IN',
   dateFormat: process.env.DATEFORMAT || 'DD/MM/YYYY',
@@ -15,7 +15,7 @@ const envVariables = {
   postgresConfig: {
     dbHost: process.env.DB_HOST || 'localhost',
     dbPort: process.env.DB_PORT || '5432',
-    dbName: process.env.DB_NAME || 'chat',
+    dbName: process.env.DB_NAME || 'postgres',
     dbUsername: process.env.DB_USER || 'postgres',
     dbPassword: process.env.DB_PASSWORD || 'postgres'
   },
@@ -50,6 +50,7 @@ const envVariables = {
     pgrSearchEndpoint: process.env.PGR_SEARCH_ENDPOINT || 'pgr-services/v2/request/_search',
     pgrv1CreateEndpoint: process.env.PGR_CREATE_ENDPOINT || 'rainmaker-pgr/v1/requests/_create',
     pgrv1SearchEndpoint: process.env.PGR_SEARCH_ENDPOINT || 'rainmaker-pgr/v1/requests/_search',
+    maxStarRating: process.env.MAX_STAR_RATING || 5
 
   },
 

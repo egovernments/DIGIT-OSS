@@ -15,7 +15,8 @@ class WebMessageProcessor {
                 
             },
             extraInfo: {
-                tenantId: config.rootTenantId
+                tenantId: config.rootTenantId,
+                filestoreId: requestBody.extraInfo.filestoreId
             },
              user: {
                 mobileNumber: requestBody.user.mobileNumber
