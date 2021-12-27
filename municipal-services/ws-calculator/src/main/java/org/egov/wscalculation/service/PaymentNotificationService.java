@@ -88,7 +88,7 @@ public class PaymentNotificationService {
 				if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
 					if (mappedRecord.get(serviceName).equalsIgnoreCase(WSCalculationConstant.SERVICE_FIELD_VALUE_WS)) {
 						if (waterConnection == null) {
-							throw new CustomException("WATER_CONNECTION_NOT_FOUND",
+							throw new CustomException("EG_WS_WATER_CONNECTION_NOT_FOUND",
 									"Water Connection are not present for " + mappedRecord.get(consumerCode)
 											+ " connection no");
 						}
@@ -105,7 +105,7 @@ public class PaymentNotificationService {
 				if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
 					if (mappedRecord.get(serviceName).equalsIgnoreCase(WSCalculationConstant.SERVICE_FIELD_VALUE_WS)) {
 						if (waterConnection == null) {
-							throw new CustomException("WATER_CONNECTION_NOT_FOUND",
+							throw new CustomException("EG_WS_WATER_CONNECTION_NOT_FOUND",
 									"Water Connection are not present for " + mappedRecord.get(consumerCode)
 											+ " connection no");
 						}
@@ -280,7 +280,7 @@ public class PaymentNotificationService {
 			return mappedRecord;
 		} catch (Exception ex) {
 			log.error("", ex);
-			throw new CustomException("BILLING_SERVER_ERROR", "Unable to fetch values from billing service");
+			throw new CustomException("EG_WS_BILLING_SERVER_ERROR", "Unable to fetch values from billing service");
 		}
 	}
 
@@ -331,6 +331,15 @@ public class PaymentNotificationService {
 		return mapOfPhoneNoAndUUIDs;
 	}
 
+	/**
+	 * Returns message template with replaced placeholders
+	 * for Bill Generation Success/Failure Notification
+	 *
+	 * @param message - Request Info Object
+	 * @param user -User object notification will be sent to
+	 * @return message after replacing placeholder with values
+	 *
+	 */
 	public String getBillNotificationMessage(String message,Map<String, Object> masterMap,User user) {
 		if (message.contains("{Name}"))
 			message = message.replace("{Name}", user.getName());
@@ -347,7 +356,15 @@ public class PaymentNotificationService {
 	}
 
 
-
+	/**
+	 * Sends Bill Generation Success/Failure Notification
+	 *
+	 * @param requestInfo - Request Info Object
+	 * @param uuid - Uuid of the user notification will be sent to
+	 * @param tenantId - Tenant Id
+	 * @param isSuccess - Whether Bill generation was a success or failure
+	 *
+	 */
 	public void sendBillNotification(RequestInfo requestInfo, String uuid, String tenantId, Map<String, Object> masterMap, Boolean isSuccess) {
 
 		List<String> configuredChannelNames = notificationUtil.fetchChannelList(requestInfo, tenantId, SERVICE_FIELD_VALUE_WS, ACTION_FOR_BILL);
@@ -368,7 +385,7 @@ public class PaymentNotificationService {
 					 messageString = notificationUtil.getMessageTemplate(BILL_FAILURE_MESSAGE_SMS, localizationMessage);
 				}
 				if (messageString == null) {
-					log.info("No message Found For " + WSCalculationConstant.BILL_FAILURE_MESSAGE_SMS+" or "+BILL_SUCCESS_MESSAGE_SMS);
+					log.info("EG_WS No message Found For " + WSCalculationConstant.BILL_FAILURE_MESSAGE_SMS+" or "+BILL_SUCCESS_MESSAGE_SMS);
 					return;
 				}
 
@@ -395,7 +412,7 @@ public class PaymentNotificationService {
 					messageString = notificationUtil.getMessageTemplate(BILL_FAILURE_MESSAGE_EMAIL, localizationMessage);
 				}
 				if (messageString == null) {
-					log.info("No message Found For " + WSCalculationConstant.BILL_SUCCESS_MESSAGE_EMAIL+" or "+BILL_FAILURE_MESSAGE_EMAIL );
+					log.info("EG_WS No message Found For " + WSCalculationConstant.BILL_SUCCESS_MESSAGE_EMAIL+" or "+BILL_FAILURE_MESSAGE_EMAIL );
 					return;
 				}
 				String customizedMsg = getBillNotificationMessage(messageString,masterMap,user);

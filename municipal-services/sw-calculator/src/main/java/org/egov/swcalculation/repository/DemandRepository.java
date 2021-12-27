@@ -48,7 +48,7 @@ public class DemandRepository {
 	        }
 	        catch(IllegalArgumentException e){
 				swCalculationProducer.push(config.getOnDemandFailed(), notificationObj);
-				throw new CustomException("PARSING_ERROR","Failed to parse response of create demand");
+				throw new CustomException("EG_SW_PARSING_ERROR","Failed to parse response of create demand");
 	        }
 	        return response.getDemands();
 	    }
@@ -69,7 +69,7 @@ public class DemandRepository {
 	            response = mapper.convertValue(result,DemandResponse.class);
 	        }
 	        catch(IllegalArgumentException e){
-	            throw new CustomException("PARSING_ERROR","Failed to parse response of update demand");
+	            throw new CustomException("EG_SW_PARSING_ERROR","Failed to parse response of update demand");
 	        }
 	        return response.getDemands();
 

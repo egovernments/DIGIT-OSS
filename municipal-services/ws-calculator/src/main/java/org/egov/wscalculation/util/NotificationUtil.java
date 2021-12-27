@@ -291,6 +291,14 @@ public class NotificationUtil {
 		return mdmsCriteriaReq;
 	}
 
+	/**
+	 * Fetches User Object based on the UUID.
+	 *
+	 * @param uuidstring - UUID of User
+	 * @param requestInfo - Request Info Object
+	 * @param tenantId - Tenant Id
+	 * @return - Returns User object with given UUID
+	 */
 	public User fetchUserByUUID(String uuidstring, RequestInfo requestInfo, String tenantId) {
 		log.info("here- "+uuidstring);
 		StringBuilder uri = new StringBuilder();
@@ -325,16 +333,16 @@ public class NotificationUtil {
 	 */
 	private void parseResponse(LinkedHashMap responeMap,String dobFormat){
 		List<LinkedHashMap> users = (List<LinkedHashMap>)responeMap.get("user");
-		String format1 = "dd-MM-yyyy HH:mm:ss";
+		String formatForDate = "dd-MM-yyyy HH:mm:ss";
 		if(users!=null){
 			users.forEach( map -> {
-						map.put("createdDate",dateTolong((String)map.get("createdDate"),format1));
+						map.put("createdDate",dateTolong((String)map.get("createdDate"),formatForDate));
 						if((String)map.get("lastModifiedDate")!=null)
-							map.put("lastModifiedDate",dateTolong((String)map.get("lastModifiedDate"),format1));
+							map.put("lastModifiedDate",dateTolong((String)map.get("lastModifiedDate"),formatForDate));
 						if((String)map.get("dob")!=null)
 							map.put("dob",dateTolong((String)map.get("dob"),dobFormat));
 						if((String)map.get("pwdExpiryDate")!=null)
-							map.put("pwdExpiryDate",dateTolong((String)map.get("pwdExpiryDate"),format1));
+							map.put("pwdExpiryDate",dateTolong((String)map.get("pwdExpiryDate"),formatForDate));
 					}
 			);
 		}
@@ -347,14 +355,14 @@ public class NotificationUtil {
 	 * @return Long value of date
 	 */
 	private Long dateTolong(String date,String format){
-		SimpleDateFormat f = new SimpleDateFormat(format);
-		Date d = null;
+		SimpleDateFormat simpleDateFormatObject = new SimpleDateFormat(format);
+		Date returnDate = null;
 		try {
-			d = f.parse(date);
+			returnDate = simpleDateFormatObject.parse(date);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return  d.getTime();
+		return  returnDate.getTime();
 	}
 
 }

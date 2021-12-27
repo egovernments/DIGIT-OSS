@@ -160,7 +160,7 @@ public class DemandService {
 			SewerageConnection connection = calculation.getSewerageConnection();
 
 			if (connection == null)
-				throw new CustomException("INVALID_SEWERAGE_CONNECTION",
+				throw new CustomException("EG_SW_INVALID_SEWERAGE_CONNECTION",
 						"Demand cannot be generated for "
 								+ (isForConnectionNO ? calculation.getConnectionNo() : calculation.getApplicationNO())
 								+ " Water Connection with this number does not exist ");
@@ -202,8 +202,13 @@ public class DemandService {
 					.status(StatusEnum.valueOf("ACTIVE")).billExpiryTime(expiryDate).build());
 		}
 		log.info("Demand Object" + demands.toString());
-		DemandNotificationObj notificationObj = DemandNotificationObj.builder().requestInfo(requestInfo).tenantId(calculations.get(0).getTenantId())
-				.sewerageConnetionIds(sewerageConnectionIds).billingCycle((String) masterMap.get(SWCalculationConstant.Billing_Cycle_String)).isSuccess(false).build();
+		String billingcycle = (String) masterMap.get(SWCalculationConstant.Billing_Cycle_String);
+		DemandNotificationObj notificationObj = DemandNotificationObj.builder()
+				.requestInfo(requestInfo)
+				.tenantId(calculations.get(0).getTenantId())
+				.sewerageConnetionIds(sewerageConnectionIds)
+				.billingCycle(billingcycle)
+				.isSuccess(false).build();
 		List<Demand> demandRes = demandRepository.saveDemand(requestInfo, demands,notificationObj);
 		if(isForConnectionNO)
 			fetchBill(demandRes, requestInfo,masterMap);
@@ -227,7 +232,7 @@ public class DemandService {
 				successCount++;
 
 			} catch (Exception ex) {
-				log.error("Fetch Bill Error", ex);
+				log.error("EG_SW Fetch Bill Error", ex);
 				errorMap.add(demand);
 			}
 		}
@@ -331,7 +336,7 @@ public class DemandService {
 				return Collections.emptyList();
 			return response.getDemands();
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("PARSING_ERROR", "Failed to parse response from Demand Search");
+			throw new CustomException("EG_SW_PARSING_ERROR", "Failed to parse response from Demand Search");
 		}
 
 	}
@@ -391,7 +396,7 @@ public class DemandService {
 			List<Demand> searchResult = searchDemand(calculation.getTenantId(), consumerCodes, fromDateSearch,
 					toDateSearch, requestInfo);
 			if (CollectionUtils.isEmpty(searchResult))
-				throw new CustomException("INVALID_DEMAND_UPDATE", "No demand exists for Number: "
+				throw new CustomException("EG_SW_INVALID_DEMAND_UPDATE", "No demand exists for Number: "
 						+ consumerCodes.toString());
 			Demand demand = searchResult.get(0);
 			List<DemandDetail> demandDetails = demand.getDemandDetails();
@@ -672,8 +677,13 @@ public class DemandService {
 				kafkaTemplate.send(configs.getCreateDemand(), calculationReq);
 				sewerageConnetionIds.add(connectionNo);
 			}
-			DemandNotificationObj notificationObj = DemandNotificationObj.builder().requestInfo(requestInfo).tenantId(tenantId)
-					.sewerageConnetionIds(sewerageConnetionIds).billingCycle((String) master.get(SWCalculationConstant.Billing_Cycle_String)).isSuccess(true).build();
+			String billingcycle = (String) master.get(SWCalculationConstant.Billing_Cycle_String);
+			DemandNotificationObj notificationObj = DemandNotificationObj.builder()
+					.requestInfo(requestInfo)
+					.tenantId(tenantId)
+					.sewerageConnetionIds(sewerageConnetionIds)
+					.billingCycle(billingcycle)
+					.isSuccess(true).build();
 			producer.push(configs.getOnDemandSuccess(), notificationObj);
 		}
 	}
@@ -733,7 +743,7 @@ public class DemandService {
 		try {
 			return mapper.convertValue(result, DemandResponse.class).getDemands();
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("PARSING_ERROR", "Failed to parse response from Demand Search");
+			throw new CustomException("EG_SW_PARSING_ERROR", "Failed to parse response from Demand Search");
 		}
 	}
 	
@@ -799,7 +809,7 @@ public class DemandService {
 				List<Demand> searchResult = searchDemandBasedOnConsumerCode(calculation.getTenantId(), consumerCode,
 						requestInfo, businessService);
 				if (CollectionUtils.isEmpty(searchResult))
-					throw new CustomException("INVALID_DEMAND_UPDATE",
+					throw new CustomException("EG_SW_INVALID_DEMAND_UPDATE",
 							"No demand exists for Number: " + consumerCode);
 
 				Collections.sort(searchResult, new Comparator<Demand>() {

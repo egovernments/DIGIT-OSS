@@ -157,7 +157,7 @@ public class DemandService {
 		for (Calculation calculation : calculations) {
 			WaterConnection connection = calculation.getWaterConnection();
 			if (connection == null) {
-				throw new CustomException("INVALID_WATER_CONNECTION", "Demand cannot be generated for "
+				throw new CustomException("EG_WS_INVALID_WATER_CONNECTION", "Demand cannot be generated for "
 						+ (isForConnectionNO ? calculation.getConnectionNo() : calculation.getApplicationNO())
 						+ " Water Connection with this number does not exist ");
 			}
@@ -199,8 +199,13 @@ public class DemandService {
 		}
 
 		log.info("Demand Object" + demands.toString());
-		DemandNotificationObj notificationObj = DemandNotificationObj.builder().requestInfo(requestInfo).tenantId(calculations.get(0).getTenantId())
-				.waterConnectionIds(waterConnectionIds).billingCycle((String) masterMap.get(WSCalculationConstant.Billing_Cycle_String)).isSuccess(false).build();
+		String billingcycle = (String) masterMap.get(SWCalculationConstant.Billing_Cycle_String);
+		DemandNotificationObj notificationObj = DemandNotificationObj.builder()
+				.requestInfo(requestInfo)
+				.tenantId(calculations.get(0).getTenantId())
+				.waterConnectionIds(waterConnectionIds)
+				.billingCycle(billingcycle)
+				.isSuccess(false).build();
 		List<Demand> demandRes = demandRepository.saveDemand(requestInfo, demands,notificationObj);
 		if(isForConnectionNO)
 		fetchBill(demandRes, requestInfo,masterMap);
@@ -341,7 +346,7 @@ public class DemandService {
 		try {
 			return mapper.convertValue(result, DemandResponse.class).getDemands();
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("PARSING_ERROR", "Failed to parse response from Demand Search");
+			throw new CustomException("EG_WS_PARSING_ERROR", "Failed to parse response from Demand Search");
 		}
 
 	}
@@ -385,7 +390,7 @@ public class DemandService {
 		try {
 			return mapper.convertValue(result, DemandResponse.class).getDemands();
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("PARSING_ERROR", "Failed to parse response from Demand Search");
+			throw new CustomException("EG_WS_PARSING_ERROR", "Failed to parse response from Demand Search");
 		}
 	}
 	/**
@@ -498,7 +503,7 @@ public class DemandService {
 			List<Demand> searchResult = searchDemand(calculation.getTenantId(), consumerCodes, fromDateSearch,
 					toDateSearch, requestInfo);
 			if (CollectionUtils.isEmpty(searchResult))
-				throw new CustomException("INVALID_DEMAND_UPDATE", "No demand exists for Number: "
+				throw new CustomException("EG_WS_INVALID_DEMAND_UPDATE", "No demand exists for Number: "
 						+ consumerCodes.toString());
 			Demand demand = searchResult.get(0);
 			demand.setDemandDetails(getUpdatedDemandDetails(calculation, demand.getDemandDetails()));
@@ -687,9 +692,12 @@ public class DemandService {
 				// log.info("Prepared Statement" + calculationRes.toString());
 				waterConnectionIds.add(connectionNo);
 			}
-
-			DemandNotificationObj notificationObj = DemandNotificationObj.builder().requestInfo(requestInfo).tenantId(tenantId)
-					.waterConnectionIds(waterConnectionIds).billingCycle((String) master.get(WSCalculationConstant.Billing_Cycle_String)).isSuccess(true).build();
+			String billingcycle = (String) master.get(SWCalculationConstant.Billing_Cycle_String);
+			DemandNotificationObj notificationObj = DemandNotificationObj.builder().requestInfo(requestInfo)
+					.tenantId(tenantId)
+					.waterConnectionIds(waterConnectionIds)
+					.billingCycle(billingcycle)
+					.isSuccess(true).build();
 
 			log.info("pushing -> "+notificationObj.toString());
 		wsCalculationProducer.push(configs.getOnDemandsSaved(), notificationObj);
@@ -810,7 +818,7 @@ public class DemandService {
 			List<Demand> searchResult = searchDemandBasedOnConsumerCode(calculation.getTenantId(), consumerCode,
 					requestInfo, businessService);
 			if (CollectionUtils.isEmpty(searchResult))
-				throw new CustomException("INVALID_DEMAND_UPDATE",
+				throw new CustomException("EG_WS_INVALID_DEMAND_UPDATE",
 						"No demand exists for Number: " + consumerCode);
 
 			Collections.sort(searchResult, new Comparator<Demand>() {

@@ -59,9 +59,6 @@ public class SWCalculationUtil {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	@Autowired
-	private ObjectMapper mapper;
-
 	@Value("${egov.property.service.host}")
 	private String propertyHost;
 
@@ -364,7 +361,7 @@ public class SWCalculationUtil {
 				RequestInfoWrapper.builder().requestInfo(sewerageConnectionRequest.getRequestInfo()).build());
 		List<Property> propertyList = getPropertyDetails(result);
 		if (CollectionUtils.isEmpty(propertyList)) {
-			throw new CustomException("INVALID_PROPERTY_ID", "Failed to create Sewerage connection. Invalid Property Id");
+			throw new CustomException("EG_SW_INVALID_PROPERTY_ID", "Failed to create Sewerage connection. Invalid Property Id");
 		}
 		return propertyList;
 	}
@@ -377,12 +374,12 @@ public class SWCalculationUtil {
 	public Property getProperty(SewerageConnectionRequest sewerageConnectionRequest) {
 		Optional<Property> propertyList = propertySearch(sewerageConnectionRequest).stream().findFirst();
 		if (!propertyList.isPresent()) {
-			throw new CustomException("INVALID_PROPERTY_ID",
+			throw new CustomException("EG_SW_INVALID_PROPERTY_ID",
 					"Sewerage connection cannot be enriched without property");
 		}
 		Property property = propertyList.get();
 		if (StringUtils.isEmpty(property.getUsageCategory())) {
-			throw new CustomException("INVALID_PROPERTY_USAGE_TYPE",
+			throw new CustomException("EG_SW_INVALID_PROPERTY_USAGE_TYPE",
 					"Sewerage connection cannot be enriched without property usage type");
 		}
 		return property;
@@ -437,7 +434,7 @@ public class SWCalculationUtil {
 			PropertyResponse propertyResponse = objectMapper.convertValue(result, PropertyResponse.class);
 			return propertyResponse.getProperties();
 		} catch (Exception ex) {
-			throw new CustomException("PARSING_ERROR", "The property json cannot be parsed");
+			throw new CustomException("EG_SW_PARSING_ERROR", "The property json cannot be parsed");
 		}
 	}
 
@@ -518,6 +515,14 @@ public class SWCalculationUtil {
 		return mdmsCriteriaReq;
 	}
 
+	/**
+	 * Fetches User Object based on the UUID.
+	 *
+	 * @param uuidstring - UUID of User
+	 * @param requestInfo - Request Info Object
+	 * @param tenantId - Tenant Id
+	 * @return - Returns User object with given UUID
+	 */
 	public User fetchUserByUUID(String uuidstring, RequestInfo requestInfo, String tenantId) {
 		log.info("here- "+uuidstring);
 		StringBuilder uri = new StringBuilder();
@@ -536,7 +541,7 @@ public class SWCalculationUtil {
 			List<LinkedHashMap<String, Object>> users = (List<LinkedHashMap<String, Object>>) responseMap.get("user");
 			String dobFormat = "yyyy-MM-dd";
 			parseResponse(responseMap,dobFormat);
-			user = 	mapper.convertValue(users.get(0), User.class);
+			user = 	objectMapper.convertValue(users.get(0), User.class);
 
 		}catch(Exception e) {
 			log.error("Exception while trying parse user object: ",e);
@@ -551,16 +556,16 @@ public class SWCalculationUtil {
 	 */
 	private void parseResponse(LinkedHashMap responeMap,String dobFormat){
 		List<LinkedHashMap> users = (List<LinkedHashMap>)responeMap.get("user");
-		String format1 = "dd-MM-yyyy HH:mm:ss";
+		String formatForDate = "dd-MM-yyyy HH:mm:ss";
 		if(users!=null){
 			users.forEach( map -> {
-						map.put("createdDate",dateTolong((String)map.get("createdDate"),format1));
+						map.put("createdDate",dateTolong((String)map.get("createdDate"),formatForDate));
 						if((String)map.get("lastModifiedDate")!=null)
-							map.put("lastModifiedDate",dateTolong((String)map.get("lastModifiedDate"),format1));
+							map.put("lastModifiedDate",dateTolong((String)map.get("lastModifiedDate"),formatForDate));
 						if((String)map.get("dob")!=null)
 							map.put("dob",dateTolong((String)map.get("dob"),dobFormat));
 						if((String)map.get("pwdExpiryDate")!=null)
-							map.put("pwdExpiryDate",dateTolong((String)map.get("pwdExpiryDate"),format1));
+							map.put("pwdExpiryDate",dateTolong((String)map.get("pwdExpiryDate"),formatForDate));
 					}
 			);
 		}
@@ -573,14 +578,14 @@ public class SWCalculationUtil {
 	 * @return Long value of date
 	 */
 	private Long dateTolong(String date,String format){
-		SimpleDateFormat f = new SimpleDateFormat(format);
-		Date d = null;
+		SimpleDateFormat simpleDateFormatObject = new SimpleDateFormat(format);
+		Date returnDate = null;
 		try {
-			d = f.parse(date);
+			returnDate = simpleDateFormatObject.parse(date);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return  d.getTime();
+		return  returnDate.getTime();
 	}
 
 }
