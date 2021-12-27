@@ -2,8 +2,8 @@ const messages = {
   complaintMenu: {
     prompt: {
       preamble: {
-        en_IN: { message: 'What is your complaint about?', step: 'intermediate', option: [{ key: '1', value: 'Not Receiving OTP', type: 'button' }, { key: '2', value: 'Unable to Proceed Forward', type: 'button' }, { key: '3', value: 'Bill Amount is incorrect', type: 'button' }, { key: '4', value: 'Application Process taking long time', type: 'button' }, { key: '5', value: 'Application is getting rejected', type: 'button' }, { key: '6', value: 'Others', type: 'button' }] },
-        hi_IN: { message: 'What is your complaint about?', step: 'intermediate', option: [{ key: '1', value: 'ओटीपी प्राप्त नहीं हो रहा है', type: 'button' }, { key: '2', value: 'आगे बढ़ने में असमर्थ', type: 'button' }, { key: '3', value: 'बिल राशि गलत है', type: 'button' }, { key: '4', value: 'आवेदन प्रक्रिया में लंबा समय लग रहा है', type: 'button' }, { key: '5', value: 'आवेदन खारिज हो रहा है', type: 'button' }, { key: '6', value: 'अन्य', type: 'button' }] }
+        en_IN: { message: 'What is your complaint about?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Not Receiving OTP'}, { key: '2', value: 'Unable to Proceed Forward'}, { key: '3', value: 'Bill Amount is incorrect'}, { key: '4', value: 'Application Process taking long time'}, { key: '5', value: 'Application is getting rejected'}, { key: '6', value: 'Others'}] },
+        hi_IN: { message: 'What is your complaint about?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'ओटीपी प्राप्त नहीं हो रहा है'}, { key: '2', value: 'आगे बढ़ने में असमर्थ'}, { key: '3', value: 'बिल राशि गलत है'}, { key: '4', value: 'आवेदन प्रक्रिया में लंबा समय लग रहा है'}, { key: '5', value: 'आवेदन खारिज हो रहा है'}, { key: '6', value: 'अन्य'}] }
       },
       options: {
         list: ['nootp', 'unabletoproceed', 'billincorrect', 'apptakinglong', 'apprejected', 'others'],
@@ -42,72 +42,72 @@ const messages = {
     nootp:{
       nextStep: ['complaintComments'],
       messageBundle:{
-          en_IN: { message: 'Please enter your mobile number', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] },
-          hi_IN: { message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] }
+          en_IN: { message: 'Please enter your mobile number', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] },
+          hi_IN: { message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] }
         
       }
     },
     unabletoproceed:{
       nextStep: ['appstuck','apperor','optionNotFound'],
       messageBundle:{
-        en_IN: {step: 'intermediate', option: [{ key: '1', value: 'Application is stuck and not moving forward', type: 'button' }, { key: '2', value: 'Application is showing unexpected error', type: 'button' }, { key: '3', value: 'Necessary Option not found', type: 'button' }] },
-        hi_IN: {step: 'intermediate', option: [{ key: '1', value: 'Application is stuck and not moving forward', type: 'button' }, { key: '2', value: 'Application is showing unexpected error', type: 'button' }, { key: '3', value: 'Necessary Option not found', type: 'button' }] }
+        en_IN: {step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Application is stuck and not moving forward'}, { key: '2', value: 'Application is showing unexpected error'}, { key: '3', value: 'Necessary Option not found'}] },
+        hi_IN: {step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Application is stuck and not moving forward'}, { key: '2', value: 'Application is showing unexpected error'}, { key: '3', value: 'Necessary Option not found'}] }
       }
     },
     appstuck:{
       nextStep: ['complaintComments'],
       messageBundle:{
-        en_IN: { message: 'Please enter your mobile number', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] },
-        hi_IN: { message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] }
+        en_IN: { message: 'Please enter your mobile number', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] },
+        hi_IN: { message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] }
       }
     },
     apperor:{
       nextStep: ['complaintComments'],
       messageBundle:{
-        en_IN: { message: 'Please enter your mobile number', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] },
-        hi_IN: { message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] }
+        en_IN: { message: 'Please enter your mobile number', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] },
+        hi_IN: { message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] }
       }
     },
     optionNotFound:{
       nextStep: ['complaintComments'],
       messageBundle:{
-        en_IN: { message: 'Please enter your mobile number', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] },
-        hi_IN: { message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] }
+        en_IN: { message: 'Please enter your mobile number', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] },
+        hi_IN: { message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] }
       }
     },
     apptakinglong:{
         nextStep:['propreg','mutation'],
         messageBundle:{
-          en_IN: {message: 'Please tell us which which application is taking time?',step: 'intermediate', option: [{ key: '1', value: 'Property Registration', type: 'button' }, { key: '2', value: 'Mutation', type: 'button' }] },
-          hi_IN: {message: 'Please tell us which which application is taking time?',step: 'intermediate', option: [{ key: '1', value: 'Property Registration', type: 'button' }, { key: '2', value: 'Mutation', type: 'button' }] }
+          en_IN: {message: 'Please tell us which which application is taking time?',step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Property Registration'}, { key: '2', value: 'Mutation'}] },
+          hi_IN: {message: 'Please tell us which which application is taking time?',step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Property Registration'}, { key: '2', value: 'Mutation'}] }
         }
     },
     propreg:{
       nextStep: ['complaintComments'],
       messageBundle:{
-        en_IN: { message: 'Please enter the Application ID', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] },
-        hi_IN: { message: 'Please enter the Application ID', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] }
+        en_IN: { message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] },
+        hi_IN: { message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] }
       }
     },
     mutation:{
         nextStep: ['complaintComments'],
         messageBundle:{
-          en_IN: { message: 'Please enter the Application ID', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] },
-          hi_IN: { message: 'Please enter the Application ID', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] }
+          en_IN: { message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] },
+          hi_IN: { message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] }
         }
     },
     appidSearch:{
         nextStep: ['complaintComments'],
         messageBundle:{
-          en_IN: { message: 'Please enter the Application ID', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] },
-          hi_IN: { message: 'Please enter the Application ID', step: 'intermediate', option: [{ key: '1', value: '', type: 'textbox' }] }
+          en_IN: { message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] },
+          hi_IN: { message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] }
         }
     },
     complaintComments: {
         nextStep: ['persistComplaint'],
         messageBundle:{
-          en_IN: { message: 'Let us know about your complaint', step: 'last', option: [{ key: '1', value: '', type: 'textarea' }] },
-          hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'intermediate', option: [{ key: '1', value: '', type: 'textarea' }] }
+          en_IN: { message: 'Let us know about your complaint', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }] },
+          hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }] }
       },
 
   
