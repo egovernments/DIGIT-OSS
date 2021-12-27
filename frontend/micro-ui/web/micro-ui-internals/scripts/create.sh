@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./scripts/run.sh engagement pgr
+./scripts/run.sh tl

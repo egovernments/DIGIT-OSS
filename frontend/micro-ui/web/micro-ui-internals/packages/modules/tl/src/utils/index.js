@@ -309,8 +309,11 @@ export const convertToTrade = (data = {}) => {
           applicationDocuments: null,
           accessories: data?.TradeDetails?.accessories ? getaccessories(data) : null,
           owners: getownerarray(data),
+          ...data?.owners.owners?.[0]?.designation && data?.owners.owners?.[0]?.designation !== "" ? { institution: {
+            designation: data?.owners.owners?.[0]?.designation
+          }} : {},
           structureType: data?.TradeDetails?.StructureType.code !=="IMMOVABLE" ? data?.TradeDetails?.VehicleType.code : data?.TradeDetails?.BuildingType.code,
-          subOwnerShipCategory: data?.ownershipCategory?.code,
+          subOwnerShipCategory: data?.owners.owners?.[0]?.institutionType.code ? data?.owners.owners?.[0]?.institutionType.code : data?.ownershipCategory?.code,
           tradeUnits: gettradeunits(data),
         },
         tradeName: data?.TradeDetails?.TradeName,

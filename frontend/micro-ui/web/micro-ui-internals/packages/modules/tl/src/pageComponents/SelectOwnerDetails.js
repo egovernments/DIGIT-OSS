@@ -1,30 +1,49 @@
-import React, { useEffect, useState } from "react";
-import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, CheckBox, LinkButton } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState, useMemo } from "react";
+import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, CheckBox, LinkButton, CardHeader } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
+import { getPattern } from "../utils";
 
 const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
+  const {ownershipCategory:{code: keyToSearchOwnershipSubtype}={}} = formData
   let validation = {};
   let isedittrade = window.location.href.includes("edit-application");
   let isrenewtrade = window.location.href.includes("renew-trade");
   const [canmovenext, setCanmovenext] = useState(isedittrade || isrenewtrade?false:true);
   const [name, setName] = useState(formData?.owners?.name || "");
+  
   const [isPrimaryOwner, setisPrimaryOwner] = useState(false);
   const [gender, setGender] = useState(formData?.owners?.gender);
   const [mobilenumber, setMobileNumber] = useState(formData?.owners?.mobilenumber || "");
   const [fields, setFeilds] = useState(
     (formData?.owners && formData?.owners?.owners) || [{ name: "", gender: "", mobilenumber: null, isprimaryowner: false }]
   );
-  let ismultiple = formData?.ownershipCategory?.code.includes("SINGLEOWNER") ? false : true;
+  const [isInstitutional, setInstitutional] = useState(false)
+  const ismultiple = useMemo(() => {
+    if (formData?.ownershipCategory?.code.includes("SINGLEOWNER")) return false
+    if (formData?.ownershipCategory?.code.includes("INSTITUTIONAL")) {
+      setInstitutional(true)
+      return false
+    }
+    else return true
+  },[formData?.ownershipCategory]);
 
   useEffect(() => {
     fields.map((ob) => {
-      if(ob.name && ob.mobilenumber && ob.gender)
-      {
-        setCanmovenext(false);
+      if(isInstitutional){
+        if(ob.institutionName && ob.mobilenumber){
+          setCanmovenext(false);
+        }
+        else{
+          setCanmovenext(true);
+        }
       }
-      else
-      {
-        setCanmovenext(true);
+      else{
+        if(ob.name && ob.mobilenumber && ob.gender){
+          setCanmovenext(false);
+        }
+        else{
+          setCanmovenext(true);
+        }
       }
     })
   },[fields])
@@ -126,6 +145,209 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     { name: "OTHERS", value: "OTHERS", code: "OTHERS" },
     // { name: "Other", value: "OTHER", code: "OTHER" },
   ];
+
+  const { data: institutionOwnershipTypeOptions } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "TradeOwnershipSubType",{ keyToSearchOwnershipSubtype });
+  const [institutionName, setInstitutionName] = useState(formData?.owners?.[0]?.fatherOrHusbandName || "");
+  const [institutionType, setInstitutionType] = useState(formData?.subOwnerShipCategory || "");
+  const [authroizedDesignation, setAuthroizedDesignation] = useState(formData?.institution?.designation || "")
+  const [altContactNo, setAltContactNo] = useState(formData?.owners?.[0]?.altContactNumber || "")
+  const [emailId, setEmailId] = useState(formData?.owners?.[0]?.emailId || "")
+
+  function setInstitutionNameHandler(i, e){
+    let units = [...fields];
+    units[i].institutionName = e.target.value;
+    setInstitutionName(e.target.value)
+    setFeilds(units);
+    if(units[i].mobilenumber && units[i].institutionName && units[i].institutionType){
+      setCanmovenext(false);
+    }
+  }
+  function setInstitutionTypeHandler(i, value){
+    let units = [...fields];
+    units[i].fatherOrHusbandName = value;
+    setInstitutionType(value)
+    setFeilds(units);
+    if(units[i].mobilenumber && units[i].institutionName && units[i].fatherOrHusbandName){
+      setCanmovenext(false);
+    }
+  }
+  function setAltContactNoHandler(i, e){
+    let units = [...fields];
+    units[i].altContactNo = e.target.value;
+    setAltContactNo(e.target.value)
+    setFeilds(units);
+    if(units[i].mobilenumber && units[i].institutionName && units[i].institutionType){
+      setCanmovenext(false);
+    }
+  }
+  function setAuthroizedDesignationHandler(i, e){
+    let units = [...fields];
+    units[i].designation = e.target.value;
+    setAuthroizedDesignation(e.target.value)
+    setFeilds(units);
+    if(units[i].mobilenumber && units[i].institutionName && units[i].institutionType){
+      setCanmovenext(false);
+    }
+  }
+  function setEmailIdHandler(i, e){
+    let units = [...fields];
+    units[i].emailId = e.target.value;
+    setEmailId(e.target.value)
+    setFeilds(units);
+    if(units[i].mobilenumber && units[i].institutionName && units[i].institutionType){
+      setCanmovenext(false);
+    }
+  }
+
+  // useEffect(() => {
+  //   if( institutionName && institutionType && mobilenumber && institutionName !== "" && institutionType !== "" && mobilenumber !== "" ){
+  //     setCanmovenext(false)
+  //     debugger
+  //   } else{
+  //     setCanmovenext(true)
+  //   }
+  // },[institutionName, institutionType, mobilenumber])
+
+  if(isInstitutional === true && ismultiple === false){
+    return (
+      <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext} forcedError={t(error)}>
+        {fields.map((field, index) => {
+          return (
+            <div key={`${field}-${index}`}>
+              <div>
+              <CardLabel>{`${t("TL_INSTITUTION_NAME_LABEL")}*`}</CardLabel>
+              <TextInput
+                t={t}
+                type={"text"}
+                isMandatory={false}
+                optionKey="i18nKey"
+                name="institutionName"
+                value={field.institutionName}
+                onChange={(e) => setInstitutionNameHandler(index, e)}
+                //disable={isUpdateProperty || isEditProperty}
+                {...(validation = {
+                  isRequired: true,
+                  pattern: "^[a-zA-Z-.`' ]*$",
+                  type: "text",
+                  title: t("TL_NAME_ERROR_MESSAGE"),
+                })}
+              />
+              <CardLabel>{`${t("TL_INSTITUTION_TYPE_LABEL")}*`}</CardLabel>
+              <Dropdown
+                t={t}
+                option={institutionOwnershipTypeOptions}
+                selected={institutionType}
+                select={value => {
+                  setInstitutionTypeHandler(index, value)
+                }
+                }
+                optionKey="i18nKey"
+                // value={field.subOwnerShipCategory}
+                // onChange={(e) => setInstitutionName(index, e)}
+              />
+              <CardHeader>{"TL_AUTHORIZED_PERSON_DETAILS"}</CardHeader>
+              <CardLabel>{`${t("TL_NEW_OWNER_DETAILS_NAME_LABEL")}`}</CardLabel>
+              <TextInput
+                t={t}
+                type={"text"}
+                isMandatory={false}
+                optionKey="i18nKey"
+                name="name"
+                value={field.name}
+                onChange={(e) => setOwnerName(index, e)}
+                //disable={isUpdateProperty || isEditProperty}
+                {...(validation = {
+                  // isRequired: true,
+                  pattern: "^[a-zA-Z-.`' ]*$",
+                  type: "text",
+                  title: t("TL_NAME_ERROR_MESSAGE"),
+                })}
+              />
+              <CardLabel>{`${t("TL_NEW_OWNER_DESIG_LABEL")}`}</CardLabel>
+              <TextInput
+                t={t}
+                type={"text"}
+                isMandatory={false}
+                optionKey="i18nKey"
+                name="designation"
+                value={field.designation}
+                onChange={(e) => setAuthroizedDesignationHandler(index, e)}
+                //disable={isUpdateProperty || isEditProperty}
+                {...(validation = {
+                  // isRequired: true,
+                  pattern: "^[a-zA-Z-.`' ]*$",
+                  type: "text",
+                  title: t("TL_NAME_ERROR_MESSAGE"),
+                })}
+              />
+              <CardLabel>{`${t("TL_MOBILE_NUMBER_LABEL")}*`}</CardLabel>
+              <div className="field-container">
+                <span className="employee-card-input employee-card-input--front" style={{ marginTop: "-1px" }}>
+                  +91
+                </span>
+                <TextInput
+                  type={"text"}
+                  t={t}
+                  isMandatory={false}
+                  optionKey="i18nKey"
+                  name="mobilenumber"
+                  value={field.mobilenumber}
+                  onChange={(e) => setMobileNo(index, e)}
+                  //disable={isUpdateProperty || isEditProperty}
+                  {...(validation = {
+                    isRequired: true,
+                    pattern: "[6-9]{1}[0-9]{9}",
+                    type: "tel",
+                    title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
+                  })}
+                />
+              </div>
+              <CardLabel>{`${t("TL_TELEPHONE_NUMBER_LABEL")}`}</CardLabel>
+              <div className="field-container">
+                <span className="employee-card-input employee-card-input--front" style={{ marginTop: "-1px" }}>
+                  +91
+                </span>
+                <TextInput
+                  type={"text"}
+                  t={t}
+                  isMandatory={false}
+                  optionKey="i18nKey"
+                  name="telephone"
+                  value={field.telephone}
+                  onChange={(e) => setAltContactNoHandler(index, e)}
+                  //disable={isUpdateProperty || isEditProperty}
+                  {...(validation = {
+                    // isRequired: true,
+                    pattern: "[6-9]{1}[0-9]{9}",
+                    type: "tel",
+                    title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
+                  })}
+                />
+              </div>
+              <CardLabel>{`${t("NOC_APPLICANT_EMAIL_LABEL")}`}</CardLabel>
+              <TextInput
+                t={t}
+                type={"text"}
+                isMandatory={false}
+                optionKey="i18nKey"
+                name="emailId"
+                value={field.emailId}
+                onChange={(e) => setEmailIdHandler(index, e)}
+                //disable={isUpdateProperty || isEditProperty}
+                {...(validation = {
+                  // isRequired: true,
+                  // pattern: getPattern("Email"),
+                  type: "text",
+                  title: t("TL_EMAIL_ERROR_MESSAGE"),
+                })}
+              />
+            </div>
+            </div>
+          );
+        })}
+      </FormStep>
+    )
+  }
 
   return (
     <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext} forcedError={t(error)}>
