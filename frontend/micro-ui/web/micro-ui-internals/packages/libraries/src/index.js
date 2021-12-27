@@ -22,6 +22,7 @@ import { MdmsService } from "./services/elements/MDMS";
 import { Complaint } from "./services/elements/Complaint";
 import { UserService } from "./services/elements/User";
 import { PTService } from "./services/elements/PT";
+import { WSService } from "./services/elements/WS";
 import { TLService } from "./services/elements/TL";
 import { MCollectService } from "./services/elements/MCollect";
 import HrmsService from "./services/elements/HRMS";
@@ -84,6 +85,7 @@ const initLibraries = () => {
   setupLibraries("ComponentRegistryService", ComponentRegistryService);
   setupLibraries("StoreData", StoreData);
   setupLibraries("EventsServices", EventsServices);
+  setupLibraries("WSService", WSService);
 
   setupLibraries("InboxGeneral", InboxGeneral);
   setupLibraries("ShareFiles", ShareFiles);

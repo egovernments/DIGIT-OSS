@@ -18,7 +18,7 @@ const WSModule = ({ stateCode, userType, tenants }) => {
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
 
-  Digit.SessionStorage.set("OBPS_TENANTS", tenants);
+  Digit.SessionStorage.set("WS_TENANTS", tenants);
 
   if (isLoading) {
     return <Loader />;
@@ -46,6 +46,10 @@ const WSLinks = ({ matchPath, userType }) => {
     {
       link: `${matchPath}/create-application`,
       i18nKey: t("ACTION_TEST_APPLY_NEW_CONNECTION"),
+    },
+    {
+      link: `${matchPath}/search`,
+      i18nKey: t("ACTION_TEXT_WS_SEARCH_AND_PAY"),
     },
   ];
 

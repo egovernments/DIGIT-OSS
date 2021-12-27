@@ -131,6 +131,11 @@ const Urls = {
     create: "/egov-user-event/v1/events/_create",
   },
 
+  ws: {
+    water_search: "/ws-services/wc/_search",
+    sewarage_search : "/sw-services/swc/_search",
+  },
+
   engagement: {
     document: {
       search: "/egov-document-uploader/egov-du/document/_search",

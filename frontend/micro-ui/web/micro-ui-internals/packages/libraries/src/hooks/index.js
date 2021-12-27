@@ -172,6 +172,9 @@ import useNOCDetails from "./noc/useNOCDetails";
 import useNOCInbox from "./noc/useInbox";
 
 import WSSearchMdmsTypes from "./ws/WSSearchMdmsTypes";
+import usewsTenants from "./ws/useTenants";
+import useWaterSearch from "./ws/useWaterSearch";
+import useSewarageSearch from "./ws/useSewarageSearch";
 
 const pgr = {
   useComplaintDetails,
@@ -348,7 +351,10 @@ const noc = {
 }
 
 const ws = {
-  WSSearchMdmsTypes
+  WSSearchMdmsTypes,
+  usewsTenants,
+  useWaterSearch,
+  useSewarageSearch
 }
 
 const Hooks = {
