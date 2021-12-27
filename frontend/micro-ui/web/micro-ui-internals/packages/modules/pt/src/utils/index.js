@@ -256,11 +256,11 @@ export const getSuperBuiltUparea = (data) => {
 
 export const getSuperBuiltUpareafromob = (data) => {
   let builtuparea = 0;
-  data?.units.map((unit)=>{
+  data?.units.map((unit) => {
     builtuparea = builtuparea + unit?.constructionDetail?.builtUpArea;
-  })
+  });
   return builtuparea;
-}
+};
 
 export const getnumberoffloors = (data) => {
   let unitlenght = data?.units?.length;
@@ -463,7 +463,7 @@ export const getunitsindependent = (data) => {
 };
 
 export const setPropertyDetails = (data) => {
-  let unitleghtvalue = getnumberoffloors(data);
+  // let unitleghtvalue = getnumberoffloors(data);
   let propertyDetails = {};
   if (data?.PropertyType?.code?.includes("VACANT")) {
     propertyDetails = {
@@ -476,23 +476,22 @@ export const setPropertyDetails = (data) => {
   } else if (data?.PropertyType?.code?.includes("SHAREDPROPERTY")) {
     /*  update this case tulika*/
     propertyDetails = {
-      units: getunits(data),
-      landArea: data?.floordetails?.plotSize,
+      units: data?.units,
+      landArea: data?.units?.reduce((acc, curr) => Number(curr?.constructionDetail?.builtUpArea) + acc, 0),
       propertyType: data?.PropertyType?.code,
       noOfFloors: 1,
-      superBuiltUpArea: getSuperBuiltUparea(data),
-      usageCategory: getUsageType(data),
+      superBuiltUpArea: data?.units?.reduce((acc, curr) => Number(curr?.constructionDetail?.builtUpArea) + acc, 0),
+      usageCategory: data?.units?.[0]?.usageCategory,
     };
   } else if (data?.PropertyType?.code?.includes("INDEPENDENTPROPERTY")) {
     /*  update this case tulika*/
-    let unitleghtvalue = getnumberoffloors(data);
     propertyDetails = {
-      units: getunitsindependent(data),
-      landArea: data?.units[0]?.plotSize,
+      units: data?.units,
+      landArea: data?.landArea?.floorarea,
       propertyType: data?.PropertyType?.code,
-      noOfFloors: unitleghtvalue,
+      noOfFloors: data?.units.length,
       superBuiltUpArea: null,
-      usageCategory: getUsageType(data),
+      usageCategory: data?.units?.[0]?.usageCategory,
     };
   } else {
     propertyDetails = {
@@ -860,8 +859,7 @@ export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
 
 export const DownloadReceipt = async (consumerCode, tenantId, businessService, pdfKey = "consolidatedreceipt") => {
   tenantId = tenantId ? tenantId : Digit.ULBService.getCurrentTenantId();
-  await Digit.Utils.downloadReceipt(consumerCode, businessService, 'consolidatedreceipt', tenantId);
-
+  await Digit.Utils.downloadReceipt(consumerCode, businessService, "consolidatedreceipt", tenantId);
 };
 
 export const checkIsAnArray = (obj = []) => {

@@ -99,7 +99,7 @@ export const newConfig =[
                 {
                     "route": "info",
                     "component": "PropertyTax",
-                    "nextStep": "isResidential",
+                    "nextStep": "property-type",
                     "hideInEmployee": true,
                     "key": "Documents"
                 },
@@ -175,8 +175,8 @@ export const newConfig =[
                         "submitBarLabel": "PT_COMMONS_NEXT"
                     },
                     "nextStep": {
-                        "COMMON_PROPTYPE_BUILTUP_INDEPENDENTPROPERTY": "number-of-floors",
-                        "COMMON_PROPTYPE_BUILTUP_SHAREDPROPERTY": "provide-floor-no",
+                        "COMMON_PROPTYPE_BUILTUP_INDEPENDENTPROPERTY": "landarea",
+                        "COMMON_PROPTYPE_BUILTUP_SHAREDPROPERTY": "PtUnits",
                         "COMMON_PROPTYPE_VACANT": "area"
                     },
                     "key": "PropertyType",
@@ -191,22 +191,50 @@ export const newConfig =[
                 },
                 {
                     "type": "component",
+                    "route": "PtUnits",
+                    "isMandatory": true,
+                    "component": "SelectPTUnits",
+                    "texts": {
+                        "headerCaption": "",
+                        "header": "PT_FLAT_DETAILS",
+                        "cardText": "PT_FLAT_DETAILS_DESC",
+                        "submitBarLabel": "PT_COMMON_NEXT"
+                    },
+                    "key": "units",
+                    "withoutLabel": true,
+                    "nextStep": "map",
+                    "hideInEmployee": true
+                },
+                {
+                    "type": "component",
+                    "route": "landarea",
+                    "isMandatory": true,
+                    "component": "PTLandArea",
+                    "texts": {
+                        "headerCaption": "",
+                        "header": "PT_FLAT_DETAILS",
+                        "cardText": "PT_FLAT_DETAILS_DESC",
+                        "submitBarLabel": "PT_COMMON_NEXT"
+                    },
+                    "key": "units",
+                    "withoutLabel": true,
+                    "nextStep": "number-of-floors",
+                    "hideInEmployee": true
+                },
+                {
+                    "type": "component",
                     "route": "area",
                     "isMandatory": true,
                     "component": "Area",
                     "texts": {
                         "headerCaption": "",
-                        "header": "PT_ASSESSMENT_FLOW_AREA_HEADER",
-                        "cardText": "PT_SELFOCCUPIED_AREA",
+                        "header": "PT_FLAT_DETAILS",
+                        "cardText": "PT_FLAT_DETAILS_DESC",
                         "submitBarLabel": "PT_COMMON_NEXT"
                     },
                     "key": "units",
                     "withoutLabel": true,
-                    "nextStep": {
-                        "yes": "rental-details",
-                        "no": "provide-sub-usage-type",
-                        "vacant": "map"
-                    },
+                    "nextStep": "map",
                     "hideInEmployee": true
                 },
                 {
@@ -241,7 +269,7 @@ export const newConfig =[
                         "cardText": "",
                         "submitBarLabel": "PT_COMMONS_NEXT"
                     },
-                    "nextStep": "floordetails",
+                    "nextStep": "units",
                     "key": "Floorno",
                     "withoutLabel": true,
                     "hideInEmployee": true
@@ -281,9 +309,9 @@ export const newConfig =[
                         "submitBarLabel": "PT_COMMONS_NEXT"
                     },
                     "nextStep": {
-                        "PT_NO_BASEMENT_OPTION": "floordetails",
-                        "PT_ONE_BASEMENT_OPTION": "floordetails",
-                        "PT_TWO_BASEMENT_OPTION": "floordetails"
+                        "PT_NO_BASEMENT_OPTION": "units",
+                        "PT_ONE_BASEMENT_OPTION": "units",
+                        "PT_TWO_BASEMENT_OPTION": "units"
                     },
                     "key": "noOofBasements",
                     "withoutLabel": true,
@@ -291,15 +319,16 @@ export const newConfig =[
                 },
                 {
                     "type": "component",
-                    "route": "floordetails",
+                    "route": "units",
                     "isMandatory": true,
-                    "component": "GroundFloorDetails",
+                    "component": "SelectPTUnits",
                     "texts": {
                         "headerCaption": "",
-                        "cardText": "PT_PROPERTY_DETAILS_FLOOR_DETAILS_TEXT",
-                        "submitBarLabel": "Next"
+                        "header": "PT_FLAT_DETAILS",
+                        "cardText": "PT_FLAT_DETAILS_DESC",
+                        "submitBarLabel": "PT_COMMON_NEXT"
                     },
-                    "nextStep": "is-this-floor-self-occupied",
+                    "nextStep": "map",
                     "key": "units",
                     "withoutLabel": true,
                     "hideInEmployee": true

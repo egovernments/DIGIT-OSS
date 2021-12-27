@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
 import Area from "./pageComponents/Area";
+import PTLandArea from "./pageComponents/PTLandArea";
 import GroundFloorDetails from "./pageComponents/GroundFloorDetails";
 import IsAnyPartOfThisFloorUnOccupied from "./pageComponents/IsAnyPartOfThisFloorUnOccupied";
 import IsResidential from "./pageComponents/IsResidential";
@@ -41,6 +42,7 @@ import PTAcknowledgement from "./pages/citizen/Create/PTAcknowledgement";
 import PropertySearchForm from './components/search/PropertySearchForm';
 import PropertySearchResults from './components/search/PropertySearchResults';
 import { PTMyPayments } from "./pages/citizen/MyPayments";
+import SelectPTUnits from './pageComponents/SelectPTUnits';
 import PropertyInformation from "./pages/citizen/MyProperties/propertyInformation";
 import PTWFCaption from "./pageComponents/PTWFCaption";
 import PTWFReason from "./pageComponents/PTWFReason";
@@ -66,6 +68,7 @@ import EmptyResultInbox from "./components/empty-result";
 import { TableConfig } from "./config/inbox-table-config";
 
 const componentsToRegister = {
+  PTLandArea,
   PTCheckPage,
   PTAcknowledgement,
   PropertyTax,
@@ -121,6 +124,7 @@ const componentsToRegister = {
   PropertySearchForm,
   PropertySearchResults,
   PTMyPayments,
+  SelectPTUnits
 };
 
 const addComponentsToRegistry = () => {
