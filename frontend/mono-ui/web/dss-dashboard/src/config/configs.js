@@ -1,3 +1,5 @@
+import { stateTenant } from "../utils/commons";
+
 const configs = {
     'DEV_URL': "http://localhost:3000/url",
     'DEMO_API_URL': "",
@@ -5,7 +7,7 @@ const configs = {
     'UPLOAD_URL': '',
     'POWERED_BY': 'Tarento',
     'APP_NAME': '/dashboard/',
-    'FILE_UPLOAD':'/filestore/v1/files',
+    'FILE_UPLOAD':`/filestore/v1/files?tenantId=${stateTenant()}`,
     'FETCH_FILE':'/filestore/v1/files/url',
     'LOCALISATION_URL':"/localization/messages/v1/_search",
     'MDMS': '/egov-mdms-service/v1/_search',
