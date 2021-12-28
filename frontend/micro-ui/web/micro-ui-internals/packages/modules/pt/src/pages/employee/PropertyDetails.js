@@ -1,5 +1,5 @@
-import { Header, LinkLabel, Loader, Modal } from "@egovernments/digit-ui-react-components";
-import _, { property } from "lodash";
+import { EditIcon, Header, LinkLabel, Loader, Modal } from "@egovernments/digit-ui-react-components";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
@@ -29,6 +29,7 @@ const PropertyDetails = () => {
   const [appDetailsToShow, setAppDetailsToShow] = useState({});
   const [enableAudit, setEnableAudit] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showUpdateNo, setShowUpdateNo] = useState(false);
   const PT_CEMP = Digit.UserService.hasAccess(["PT_CEMP"]) || false;
   const [businessService, setBusinessService] = useState("PT.CREATE");
   const history = useHistory();
@@ -52,14 +53,14 @@ const PropertyDetails = () => {
   );
   const mutation = Digit.Hooks.pt.usePropertyAPI(tenantId, false);
 
-  const {  data: UpdateNumberConfig } = Digit.Hooks.useCommonMDMS(Digit.ULBService.getStateId(),"PropertyTax",["UpdateNumber"],{
+  const { data: UpdateNumberConfig } = Digit.Hooks.useCommonMDMS(Digit.ULBService.getStateId(), "PropertyTax", ["UpdateNumber"], {
     select: (data) => {
       return data?.PropertyTax?.UpdateNumber?.[0];
     },
-    retry:false,
-    enable:false
+    retry: false,
+    enable: false,
   });
- 
+
   useEffect(() => {
     if (applicationDetails && !enableAudit) {
       setAppDetailsToShow(_.cloneDeep(applicationDetails));
@@ -100,10 +101,39 @@ const PropertyDetails = () => {
   if (appDetailsToShow?.applicationDetails) {
     appDetailsToShow.applicationDetails = appDetailsToShow?.applicationDetails?.map((e) => {
       if (e.title === "PT_OWNERSHIP_INFO_SUB_HEADER") {
+        if (applicationDetails?.applicationData?.status === "ACTIVE") {
+          e.additionalDetails.owners.map((owner, ind) => {
+            owner.values.map((value) => {
+              if (value.title == "PT_OWNERSHIP_INFO_MOBILE_NO") {
+                value.textStyle = { display: "flex" };
+                value.caption = (
+                  <span
+                    onClick={() => {
+                      setShowModal((prev) => !prev);
+                      setShowUpdateNo({
+                        name: appDetailsToShow?.applicationData?.owners[ind]?.name,
+                        mobileNumber: appDetailsToShow?.applicationData?.owners[ind]?.mobileNumber,
+                        index: ind,
+                      });
+                    }}
+                    style={{ cursor: "pointer", display: "inline-flex", paddingLeft: "20px" }}
+                  >
+                    <EditIcon />
+                  </span>
+                );
+              }
+            });
+          });
+        }
         return {
           ...e,
           Component: () => (
-            <LinkLabel onClick={() => setShowModal((prev) => !prev)} style={{ display: "inline", marginLeft: "25px" }}>
+            <LinkLabel
+              onClick={() => {
+                setShowModal((prev) => !prev);
+              }}
+              style={{ display: "inline", marginLeft: "25px" }}
+            >
               {t("PT_VIEW_HISTORY")}
             </LinkLabel>
           ),
@@ -219,50 +249,59 @@ const PropertyDetails = () => {
       />
       {showModal ? (
         <Modal
-          headerBarMain={<h1 className="heading-m">{t("PTUPNO_HEADER")}</h1>}
-          headerBarEnd={<CloseBtn onClick={() => setShowModal(false)} />}
+          headerBarMain={<h1 className="heading-m">{showUpdateNo ? t("PTUPNO_HEADER") : t("PT_OWNER_HISTORY")}</h1>}
+          headerBarEnd={
+            <CloseBtn
+              onClick={() => {
+                setShowModal(false);
+                setShowUpdateNo(false);
+              }}
+            />
+          }
           hideSubmit={true}
           isDisabled={false}
-          popupStyles={{ width: "50%", marginTop: "auto" }}
+          popupStyles={showUpdateNo ? { width: "50%", marginTop: "auto" } : { width: "75%", marginTop: "75px" }}
         >
+          {showUpdateNo && (
             <UpdatePropertyNumberComponent
-                showPopup={setShowModal}
-                name={"Jagan"}
-                UpdateNumberConfig={UpdateNumberConfig}
-                mobileNumber={"9965664222"}
-                t={t}
-                onValidation={(data, showToast) => {
-                  let newProp = { ...appDetailsToShow?.applicationData };
-                  newProp.owners[0].mobileNumber = data.mobileNumber;
-                  newProp.creationReason = "UPDATE";
-                  newProp.workflow = null;
-                  let newDocObj={...data};
-                  delete newDocObj.mobileNumber
-
-                  
-                  newProp.documents=[...newProp.documents, ...Object.keys(newDocObj).map(key=>({
+              showPopup={setShowModal}
+              name={showUpdateNo?.name}
+              UpdateNumberConfig={UpdateNumberConfig}
+              mobileNumber={showUpdateNo?.mobileNumber}
+              t={t}
+              onValidation={(data, showToast) => {
+                let newProp = { ...appDetailsToShow?.applicationData };
+                newProp.owners[showUpdateNo?.index].mobileNumber = data.mobileNumber;
+                newProp.creationReason = "UPDATE";
+                newProp.workflow = null;
+                let newDocObj = { ...data };
+                delete newDocObj.mobileNumber;
+                newProp.documents = [
+                  ...newProp.documents,
+                  ...Object.keys(newDocObj).map((key) => ({
                     documentType: key,
                     documentUid: newDocObj[key],
                     fileStoreId: newDocObj[key],
-                  }))]
-console.log(newProp)
-mutation.mutate(
-  {
-    Property: newProp,
-  },
-  {
-    onError: () => console.error("error"),
-    onSuccess: async (successRes) => {
-      showToast();
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000);
-    },
-  }
-);
-                }}
-              ></UpdatePropertyNumberComponent>
-          {/* <OwnerHistory propertyId={applicationNumber} userType={"employee"} /> */}
+                  })),
+                ];
+                mutation.mutate(
+                  {
+                    Property: newProp,
+                  },
+                  {
+                    onError: () => console.error("error"),
+                    onSuccess: async (successRes) => {
+                      showToast();
+                      setTimeout(() => {
+                        window.location.reload();
+                      }, 3000);
+                    },
+                  }
+                );
+              }}
+            ></UpdatePropertyNumberComponent>
+          )}
+          {!showUpdateNo && <OwnerHistory propertyId={applicationNumber} userType={"employee"} />}
         </Modal>
       ) : null}
     </div>

@@ -31,10 +31,9 @@ const defaultState = {
 };
 
 const compStateReducer = (state, action) => {
-  console.log(state,action);
   switch (action.type) {
     case "verifiedotp":
-      return { ...state, previousAction: action.type, message: "", disable:false,showToast: false, error: true, warning: false, invalid: true };
+      return { ...state, previousAction: action.type, message: "", disable: false, showToast: false, error: true, warning: false, invalid: true };
     case "verifyotp":
       return { ...state, previousAction: action.type, message: "", disable: true, showToast: false, error: true, warning: false, invalid: false };
     case "otpsent":
@@ -73,42 +72,45 @@ const sendOtp = async (data, stateCode) => {
 };
 
 // TODO make this component to reuse for multiple module
-const UpdateNumber = ({ showPopup, t, onValidation, mobileNumber, name ,UpdateNumberConfig}) => {
+const UpdateNumber = ({ showPopup, t, onValidation, mobileNumber, name, UpdateNumberConfig }) => {
   const stateCode = Digit.ULBService.getStateId();
   const [compState, compStateDispatch] = useReducer(compStateReducer, { ...defaultState, name: name, mobileNumber: mobileNumber });
   const SelectOtp = Digit?.ComponentRegistryService?.getComponent("SelectOtp");
 
-  const onSubmit = useCallback(async (_data) => {
-    compStateDispatch({ type: "resettoast" });
-    
-    let invalidNo=(UpdateNumberConfig?.invalidNumber===_data?.mobileNumber&&"PTUPNO_INVALIDNO_HEADER")||false;
-    invalidNo=_data?.mobileNumber === compState.mobileNumber?"PT_SEC_SAME_NUMBER":invalidNo;
-    if (invalidNo) {
-      compStateDispatch({ type: "warning", value: invalidNo });
-      return;
-    } else {
-      const requestData = { mobileNumber: _data?.mobileNumber, tenantId: stateCode, userType: "CITIZEN" };
-      if (compState.otpSentTo==false) {
-        /* send otp or create user flow */
-        const [res, err] = await sendOtp({ otp: { ...requestData, ...TYPE_LOGIN } }, stateCode);
-        if (err) {
-          const [registerResponse, registerError] = await sendOtp({ otp: { ...requestData, name: compState?.name, ...TYPE_REGISTER } }, stateCode);
-          if (!registerError) {
-            compStateDispatch({ type: "otpsent", value: _data?.mobileNumber, isNewUser: true });
-          }else{
-            compStateDispatch({ type: "error", value: registerError});
+  const onSubmit = useCallback(
+    async (_data) => {
+      compStateDispatch({ type: "resettoast" });
+
+      let invalidNo = (UpdateNumberConfig?.invalidNumber === _data?.mobileNumber && "PTUPNO_INVALIDNO_HEADER") || false;
+      invalidNo = _data?.mobileNumber === compState.mobileNumber ? "PT_SEC_SAME_NUMBER" : invalidNo;
+      if (invalidNo) {
+        compStateDispatch({ type: "warning", value: invalidNo });
+        return;
+      } else {
+        const requestData = { mobileNumber: _data?.mobileNumber, tenantId: stateCode, userType: "CITIZEN" };
+        if (compState.otpSentTo == false) {
+          /* send otp or create user flow */
+          const [res, err] = await sendOtp({ otp: { ...requestData, ...TYPE_LOGIN } }, stateCode);
+          if (err) {
+            const [registerResponse, registerError] = await sendOtp({ otp: { ...requestData, name: compState?.name, ...TYPE_REGISTER } }, stateCode);
+            if (!registerError) {
+              compStateDispatch({ type: "otpsent", value: _data?.mobileNumber, isNewUser: true });
+            } else {
+              compStateDispatch({ type: "error", value: registerError });
+            }
+          } else {
+            compStateDispatch({ type: "otpsent", value: _data?.mobileNumber });
           }
         } else {
-          compStateDispatch({ type: "otpsent", value: _data?.mobileNumber });
+          /* authenticate or register user flow */
+          loginOrRegister(_data, (d) => {
+            compStateDispatch({ type: "success", value: "PT_MOBILE_NUM_UPDATED_SUCCESS" });
+          });
         }
-      } else {
-        /* authenticate or register user flow */
-        loginOrRegister(_data, (d) => {
-          compStateDispatch({ type: "success", value: "PT_MOBILE_NUM_UPDATED_SUCCESS" });
-        });
       }
-    }
-  }, [compState]);
+    },
+    [compState]
+  );
 
   const loginOrRegister = async (_data, onSuccess) => {
     try {
@@ -123,12 +125,15 @@ const UpdateNumber = ({ showPopup, t, onValidation, mobileNumber, name ,UpdateNu
         });
         onValidation && onValidation(_data, onSuccess);
       } else {
-        const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.registerUser({
-          name: compState?.name,
-          username: mobileNumber,
-          otpReference: otp,
-          tenantId: stateCode,
-        }, stateCode);
+        const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.registerUser(
+          {
+            name: compState?.name,
+            username: mobileNumber,
+            otpReference: otp,
+            tenantId: stateCode,
+          },
+          stateCode
+        );
         onValidation && onValidation(_data, onSuccess);
       }
     } catch (err) {
@@ -148,7 +153,7 @@ const UpdateNumber = ({ showPopup, t, onValidation, mobileNumber, name ,UpdateNu
     } else {
       const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } }, stateCode);
     }
-  },[compState]);
+  }, [compState]);
 
   const { register, control, handleSubmit, getValues, reset, formState } = useForm({
     defaultValues: {
@@ -197,10 +202,13 @@ const UpdateNumber = ({ showPopup, t, onValidation, mobileNumber, name ,UpdateNu
             <Controller
               control={control}
               name="otp"
-              rules={ {required: "MANDATORY_OTP",minLength: {
-                value: 6,
-                message: "CORE_COMMON_OTP_ERROR",
-              },}}
+              rules={{
+                required: "MANDATORY_OTP",
+                minLength: {
+                  value: 6,
+                  message: "CORE_COMMON_OTP_ERROR",
+                },
+              }}
               render={(props, customProps) => (
                 <SelectOtp
                   userType="employee"
