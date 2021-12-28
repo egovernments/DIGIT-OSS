@@ -3,6 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { convertEpochToDateDMY } from  "../utils";
+import { useWatch } from "react-hook-form";
 
 const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
     const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
@@ -20,49 +21,31 @@ const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
       register("sortOrder", "DESC")
     },[register])
     const { data: applicationTypes } = Digit.Hooks.tl.useMDMS.applicationTypes(tenantId)
+
+    const applicationType = useWatch({ control, name: "applicationType" });
+
+    let businessServices=[];
+    if(applicationType && applicationType?.code==="RENEWAL")
+    businessServices=["EDITRENEWAL","DIRECTRENEWAL"]
+    else if(applicationType && applicationType?.code==="NEW")
+    businessServices=["NewTL"]
+    else
+    businessServices=["EDITRENEWAL","DIRECTRENEWAL","NewTL"]
+
+    const { data: statusData, isLoading } = Digit.Hooks.useApplicationStatusGeneral({ businessServices, tenantId }, {});
+    let applicationStatuses = []
+
+    statusData && statusData?.otherRoleStates?.map((status) => {
+        let found = applicationStatuses.length>0? applicationStatuses?.some(el => el?.code === status.applicationStatus) : false;  
+        if(!found) applicationStatuses.push({code:status?.applicationStatus, i18nKey:`WF_NEWTL_${(status?.applicationStatus)}`})
+    })
+
+    statusData && statusData?.userRoleStates?.map((status) => {
+        let found = applicationStatuses.length>0? applicationStatuses?.some(el => el?.code === status.applicationStatus) : false;  
+        if(!found) applicationStatuses.push({code:status?.applicationStatus, i18nKey:`WF_NEWTL_${(status?.applicationStatus)}`})
+    })
+
     //need to get from workflow
-    const applicationStatuses = [
-        {
-            code: "CANCELLED",
-            i18nKey: "WF_NEWTL_CANCELLED"
-        },
-        {
-            code: "APPROVED",
-            i18nKey: "WF_NEWTL_APPROVED"
-        },
-        {
-            code: "EXPIRED",
-            i18nKey: "WF_NEWTL_EXPIRED"
-        },
-        {
-            code: "APPLIED",
-            i18nKey: "WF_NEWTL_APPLIED"
-        },
-        {
-            code: "REJECTED",
-            i18nKey: "WF_NEWTL_REJECTED"
-        },
-        {
-            code: "PENDINGPAYMENT",
-            i18nKey: "WF_NEWTL_PENDINGPAYMENT"
-        },
-        {
-            code: "FIELDINSPECTION",
-            i18nKey: "WF_NEWTL_FIELDINSPECTION"
-        },
-        {
-            code: "CITIZENACTIONREQUIRED",
-            i18nKey: "WF_NEWTL_CITIZENACTIONREQUIRED"
-        },
-        {
-            code: "PENDINGAPPROVAL",
-            i18nKey: "WF_NEWTL_PENDINGAPPROVAL"
-        },
-        {
-            code: "INITIATED",
-            i18nKey: "WF_NEWTL_INITIATED"
-        }	
-    ]
     const GetCell = (value) => <span className="cell-text">{value}</span>;
     const columns = useMemo( () => ([
         {
