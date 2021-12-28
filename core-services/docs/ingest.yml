@@ -171,7 +171,7 @@ components:
           description: Key-value pairs of metric_names to metric_values
           example: '{
             "snoForMuninipalCorporation": "1",
-            "ulbName": "Nakodar",
+            "ulbName": "Amritsar",
             "budgetProposedForMunicipalCorporation": 10000000
           }'
         auditDetails:
