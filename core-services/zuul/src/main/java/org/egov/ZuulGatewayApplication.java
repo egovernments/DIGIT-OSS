@@ -46,6 +46,9 @@ public class ZuulGatewayApplication {
 
     @Autowired
     CacheManager cacheManager;
+    
+    @Autowired
+    private MultiStateInstanceUtil multiStateInstanceUtil;
 
     @PostConstruct
     public void evictUserCaches() {
@@ -115,7 +118,7 @@ public class ZuulGatewayApplication {
     @Bean
     public AuthFilter authFilter() {
         final ProxyRequestHelper proxyRequestHelper = new ProxyRequestHelper();
-        return new AuthFilter(proxyRequestHelper, restTemplate, authServiceHost, authServiceUri);
+        return new AuthFilter(proxyRequestHelper, restTemplate, authServiceHost, authServiceUri, multiStateInstanceUtil);
     }
 
     @Bean

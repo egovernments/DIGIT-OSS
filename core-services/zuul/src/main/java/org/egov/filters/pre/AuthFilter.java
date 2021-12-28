@@ -4,6 +4,7 @@ import static org.egov.constants.RequestContextConstants.AUTH_BOOLEAN_FLAG_NAME;
 import static org.egov.constants.RequestContextConstants.AUTH_TOKEN_KEY;
 import static org.egov.constants.RequestContextConstants.CORRELATION_ID_HEADER_NAME;
 import static org.egov.constants.RequestContextConstants.CORRELATION_ID_KEY;
+import static org.egov.constants.RequestContextConstants.REQUEST_TENANT_ID_KEY;
 import static org.egov.constants.RequestContextConstants.TENANTID_MDC;
 import static org.egov.constants.RequestContextConstants.USER_INFO_KEY;
 
@@ -46,15 +47,16 @@ public class AuthFilter extends ZuulFilter {
     @Autowired
     private Utils utils;
     
-    @Autowired
     private MultiStateInstanceUtil centralInstanceUtil;
 
-    public AuthFilter(ProxyRequestHelper helper, RestTemplate restTemplate, String authServiceHost, String authUri) {
-        this.helper = helper;
-        this.restTemplate = restTemplate;
-        this.authServiceHost = authServiceHost;
-        this.authUri = authUri;
-    }
+	public AuthFilter(ProxyRequestHelper helper, RestTemplate restTemplate, String authServiceHost, String authUri,
+			MultiStateInstanceUtil centralInstanceUtil) {
+		this.helper = helper;
+		this.restTemplate = restTemplate;
+		this.authServiceHost = authServiceHost;
+		this.authUri = authUri;
+		this.centralInstanceUtil = centralInstanceUtil;
+	}
 
     @Override
     public String filterType() {
@@ -104,6 +106,8 @@ public class AuthFilter extends ZuulFilter {
         String authURL = String.format("%s%s%s", authServiceHost, authUri, authToken);
         final HttpHeaders headers = new HttpHeaders();
         headers.add(CORRELATION_ID_HEADER_NAME, (String) ctx.get(CORRELATION_ID_KEY));
+		if (centralInstanceUtil.getIsEnvironmentCentralInstance())
+			headers.add(REQUEST_TENANT_ID_KEY, (String) ctx.get(TENANTID_MDC));
         final HttpEntity<Object> httpEntity = new HttpEntity<>(null, headers);
         return restTemplate.postForObject(authURL, httpEntity, User.class);
     }

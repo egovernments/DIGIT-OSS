@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 
 import org.egov.Resources;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.contract.User;
 import org.egov.exceptions.CustomException;
 import org.junit.Before;
@@ -18,6 +19,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.cloud.netflix.zuul.filters.ProxyRequestHelper;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -35,6 +37,9 @@ public class AuthFilterTest {
 
     @Mock
     private ProxyRequestHelper proxyRequestHelper;
+    
+    @Mock
+    private MultiStateInstanceUtil multiStateInstanceUtil;
 
     private AuthFilter authFilter;
 
@@ -45,7 +50,7 @@ public class AuthFilterTest {
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        authFilter = new AuthFilter(proxyRequestHelper, restTemplate, authServiceHost, authUri);
+        authFilter = new AuthFilter(proxyRequestHelper, restTemplate, authServiceHost, authUri, multiStateInstanceUtil);
         RequestContext ctx = RequestContext.getCurrentContext();
         ctx.clear();
         ctx.setRequest(request);
@@ -76,7 +81,7 @@ public class AuthFilterTest {
         ctx.setRequest(request);
         ctx.setResponse(new MockHttpServletResponse());
         String authUrl = String.format("%s%s%s", authServiceHost, authUri, authToken);
-        when(restTemplate.postForObject(eq(authUrl), any(), eq(User.class)))
+        when(restTemplate.postForObject(eq(authUrl), any(HttpEntity.class), eq(User.class)))
             .thenThrow(new HttpClientErrorException(HttpStatus.UNAUTHORIZED));
 
         try {
