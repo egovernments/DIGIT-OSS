@@ -2,13 +2,13 @@ package org.egov.hrms.utils;
 
 import java.security.SecureRandom;
 import java.util.List;
-import java.util.Random;
 
-import lombok.extern.slf4j.Slf4j;
 import org.egov.hrms.web.contract.EmployeeSearchCriteria;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -62,28 +62,6 @@ public class HRMSUtils {
 	public boolean isAssignmentSearchReqd(EmployeeSearchCriteria criteria) {
 		return (! CollectionUtils.isEmpty(criteria.getPositions()) || null != criteria.getAsOnDate()
 				|| !CollectionUtils.isEmpty(criteria.getDepartments()) || !CollectionUtils.isEmpty(criteria.getDesignations()));
-	}
-
-	public String getTenantSpecificTopic(String kafkaTopic, String tenantId) {
-		StringBuilder tenantSpecificTopic = new StringBuilder(getStateLevelTenantId(tenantId));
-		tenantSpecificTopic.append("-");
-		tenantSpecificTopic.append(kafkaTopic);
-		log.info(tenantSpecificTopic.toString());
-		return tenantSpecificTopic.toString();
-	}
-
-	public String replaceSchemaPlaceholderWithTenantId(String query, String stateLevelTenantId) {
-		return query.replace("{{SCHEMA}}", stateLevelTenantId);
-	}
-
-	public String getStateLevelTenantId(String tenantId){
-		StringBuilder stateLevelTenantId = new StringBuilder("");
-		if(tenantId.contains("."))
-			stateLevelTenantId.append(tenantId.split("\\.")[1]);
-		else
-			stateLevelTenantId.append(tenantId);
-
-		return stateLevelTenantId.toString();
 	}
 
 }

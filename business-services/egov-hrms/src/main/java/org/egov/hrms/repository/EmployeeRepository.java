@@ -7,18 +7,18 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
+import org.egov.hrms.model.Employee;
 import org.egov.hrms.utils.HRMSUtils;
 import org.egov.hrms.web.contract.EmployeeSearchCriteria;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import lombok.extern.slf4j.Slf4j;
-
-import org.egov.hrms.model.Employee;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 
 @Repository
 @Slf4j
@@ -26,6 +26,9 @@ public class EmployeeRepository {
 	
 	@Autowired
 	private EmployeeQueryBuilder queryBuilder;
+	
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -60,19 +63,16 @@ public class EmployeeRepository {
 					criteria.setUuids(empUuids);
 			}
 		}
+		
 		String query = queryBuilder.getEmployeeSearchQuery(criteria, preparedStmtList);
-		String tenantId = !ObjectUtils.isEmpty(criteria.getTenantId()) ? criteria.getTenantId() : criteria.getCentralInstanceTenantId();
-		if(ObjectUtils.isEmpty(tenantId))
-			tenantId = headerTenantId;
+		String finalQuery;
+		try {
+			finalQuery = centralInstanceUtil.replaceSchemaPlaceholder(criteria.getTenantId(), query);
+		} catch (InvalidTenantIdException e1) {
+			throw new CustomException("HRMS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");		
+		}
 
-		String finalQuery = "";
-
-		if(!tenantId.contains("."))
-			finalQuery = query.replace("{{SCHEMA}}.", "");
-		else
-			finalQuery = hrmsUtils.replaceSchemaPlaceholderWithTenantId(query, hrmsUtils.getStateLevelTenantId(tenantId));
-
-		//log.info(finalQuery);
 		try {
 			employees = jdbcTemplate.query(finalQuery, preparedStmtList.toArray(),rowMapper);
 		}catch(Exception e) {
@@ -125,13 +125,13 @@ public class EmployeeRepository {
 		List<Object> preparedStmtList = new ArrayList<>();
 
 		String query = queryBuilder.getEmployeeCountQuery(tenantId, preparedStmtList);
-		String finalQuery = "";
-
-		if(!tenantId.contains("."))
-			finalQuery = query.replace("{{SCHEMA}}.", "");
-		else
-			finalQuery = hrmsUtils.replaceSchemaPlaceholderWithTenantId(query, hrmsUtils.getStateLevelTenantId(tenantId));
-
+		String finalQuery;
+		try {
+			finalQuery = centralInstanceUtil.replaceSchemaPlaceholder(query, centralInstanceUtil.getStateLevelTenant(tenantId));
+		} catch (InvalidTenantIdException e1) {
+			throw new CustomException("HRMS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 
 
 		log.info("query; "+finalQuery);
