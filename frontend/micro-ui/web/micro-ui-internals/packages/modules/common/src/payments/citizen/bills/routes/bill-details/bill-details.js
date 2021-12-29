@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import ArrearSummary from "./arrear-summary";
 import BillSumary from "./bill-summary";
-import { stringReplaceAll } from "./utils";
 
 const BillDetails = ({ paymentRules, businessService }) => {
   const { t } = useTranslation();
@@ -14,8 +13,8 @@ const BillDetails = ({ paymentRules, businessService }) => {
   const { workflow: wrkflow, tenantId: _tenantId } = Digit.Hooks.useQueryParams();
   const [bill, setBill] = useState(state?.bill);
   const tenantId = state?.tenantId || _tenantId || Digit.UserService.getUser().info?.tenantId;
-  const { data, isLoading } = state?.bill ? { isLoading: false } : Digit.Hooks.useFetchPayment({ tenantId, businessService, consumerCode : wrkflow === "WNS" ? stringReplaceAll(consumerCode,"+","/") : consumerCode });
-  const { minAmountPayable = wrkflow === "WNS"?100:minAmountPayable, isAdvanceAllowed } = paymentRules;
+  const { data, isLoading } = state?.bill ? { isLoading: false } : Digit.Hooks.useFetchPayment({ tenantId, businessService, consumerCode });
+  const { minAmountPayable, isAdvanceAllowed } = paymentRules;
 
   const billDetails = bill?.billDetails?.sort((a, b) => b.fromPeriod - a.fromPeriod)?.[0] || [];
   const Arrears =
@@ -68,17 +67,14 @@ const BillDetails = ({ paymentRules, businessService }) => {
   }, [paymentType, bill]);
 
   useEffect(() => {
-    let changeAdvanceAllowed = isAdvanceAllowed;
-    if(isAdvanceAllowed && wrkflow === "WNS")
-    changeAdvanceAllowed = false;
-    const allowPayment = minAmountPayable && amount >= minAmountPayable && !changeAdvanceAllowed && amount <= getTotal() && !formError;
+    const allowPayment = minAmountPayable && amount >= minAmountPayable && !isAdvanceAllowed && amount <= getTotal() && !formError;
     if (paymentType != t("CS_PAYMENT_FULL_AMOUNT")) setPaymentAllowed(allowPayment);
     else setPaymentAllowed(true);
   }, [paymentType, amount]);
 
   useEffect(() => {
     if (!bill && data) {
-      let requiredBill = data.Bill.filter((e) => e.consumerCode == (wrkflow === "WNS" ? stringReplaceAll(consumerCode,"+","/") : consumerCode))[0];
+      let requiredBill = data.Bill.filter((e) => e.consumerCode == consumerCode)[0];
       setBill(requiredBill);
     }
   }, [isLoading]);
@@ -90,15 +86,8 @@ const BillDetails = ({ paymentRules, businessService }) => {
         paymentAmount,
         tenantId: billDetails.tenantId,
       });
-    }
-    else if (wrkflow === "WNS") {
-      history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}?workflow=WNS`, {
-        paymentAmount,
-        tenantId: billDetails.tenantId,
-      });
-    }
-     else if (businessService === "PT") {
-      history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}`, {
+    } else if (businessService === "PT") {
+      history.push(`/digit-ui/citizen/payment/billDetails/${businessService}/${consumerCode}/${paymentAmount}`, {
         paymentAmount,
         tenantId: billDetails.tenantId,
         name: bill.payerName,
@@ -128,7 +117,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
       <Header>{t("CS_PAYMENT_BILL_DETAILS")}</Header>
       <Card>
         <div>
-          <KeyNote keyValue={t(label)} note={wrkflow === "WNS" ? stringReplaceAll(consumerCode,"+","/") : consumerCode} />
+          <KeyNote keyValue={t(label)} note={consumerCode} />
           <KeyNote keyValue={t("CS_PAYMENT_BILLING_PERIOD")} note={getBillingPeriod()} />
           <BillSumary billAccountDetails={getBillBreakDown()} total={getTotal()} businessService={businessService} arrears={Arrears} />
           <ArrearSummary bill={bill} />
