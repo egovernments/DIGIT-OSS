@@ -11,7 +11,7 @@ import { getUniqueItemsFromArray, commonTransform, stringReplaceAll,getPattern, 
 const createConsumerDetails = () => ({
   ConsumerName: "",
   mobileNumber: "",
-  key: Date.now(),
+  // key: Date.now(),
 });
 
 const ConsumerDetails = ({ config, onSelect, userType, formData, setError, formState, clearErrors }) => {

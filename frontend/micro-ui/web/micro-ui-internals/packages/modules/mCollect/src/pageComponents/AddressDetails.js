@@ -15,7 +15,7 @@ const createConsumerDetails = (getCities) => ({
   pincode: "",
   mohalla: "",
   city: getCities()[0] ? getCities()[0] : "",
-  key: Date.now(),
+  // key: Date.now(),
 });
 
 const AddressDetails = ({ config, onSelect, userType, formData, setError, formState, clearErrors }) => {
