@@ -59,9 +59,9 @@ public class IdGenRepository {
     public String generateTransactionNumber(RequestInfo requestInfo, String tenantId) {
         log.debug("Attempting to generate Transaction Number from ID Gen");
 
-        String splitTenant = tenantId.contains(".") ? tenantId.split("\\.")[tenantId.length()-1] : tenantId;
+        String[] tenantArray = tenantId.split("\\.");
+        String splitTenant = tenantId.contains(".") ? tenantArray[tenantArray.length-1] : tenantId;
         String tenantFormat = COLL_TRANSACTION_FORMAT.replace("{tenant}", splitTenant);
-
 
         return getId(requestInfo, tenantId, COLL_TRANSACTION_ID_NAME, tenantFormat, 1);
 
