@@ -262,7 +262,7 @@ public class BankAdviceReportAction extends BaseFormAction {
                 if (null != detailTypeMap.get(obj[0])) {
                     tempMap = detailTypeMap.get(obj[0]);
                     // detailKey=tempMap.get((Integer)obj[1]);
-                    if (null != tempMap && tempMap.containsKey(obj[1])) {
+                    if (tempMap.containsKey(obj[1])) {
                         detailKeyAmt = tempMap.get(obj[1]).add(
                                 (((BigDecimal) obj[2]).setScale(2, BigDecimal.ROUND_HALF_EVEN)));
                         tempMap.put(obj[1], detailKeyAmt);
@@ -354,6 +354,7 @@ public class BankAdviceReportAction extends BaseFormAction {
                 LOGGER.error("Exception to get EntityType=" + e.getMessage());
             }
             final BankAdviceReportInfo bankAdviceReportInfo = new BankAdviceReportInfo();
+            if(subDetail!=null)
             bankAdviceReportInfo.setPartyName(subDetail.getName().toUpperCase());
             bankAdviceReportInfo.setAccountNumber(subDetail.getBankaccount());
             bankAdviceReportInfo.setBank(subDetail.getBankname());

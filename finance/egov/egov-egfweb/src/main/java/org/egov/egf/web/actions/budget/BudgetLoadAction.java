@@ -643,7 +643,7 @@ public class BudgetLoadAction extends BaseFormAction {
     }
 
     private String getStrValue(final HSSFCell cell) {
-        if (cell == null && cell.getCellType() == HSSFCell.CELL_TYPE_BLANK)
+        if (cell == null || cell.getCellType() == HSSFCell.CELL_TYPE_BLANK)
             return null;
         double numericCellValue = 0d;
         String strValue = "";
@@ -663,7 +663,7 @@ public class BudgetLoadAction extends BaseFormAction {
     }
 
     private BigDecimal getNumericValue(final HSSFCell cell) {
-        if (cell == null && cell.getCellType() == HSSFCell.CELL_TYPE_BLANK)
+        if (cell == null || cell.getCellType() == HSSFCell.CELL_TYPE_BLANK)
             return null;
         double numericCellValue = 0d;
         BigDecimal bigDecimalValue = BigDecimal.ZERO;

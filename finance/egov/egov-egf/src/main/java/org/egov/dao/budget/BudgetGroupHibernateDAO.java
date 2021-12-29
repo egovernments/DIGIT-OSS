@@ -165,7 +165,7 @@ public class BudgetGroupHibernateDAO implements BudgetGroupDAO {
             final Query qry = session.createQuery(qryStr.toString());
             qry.setLong("financialYearId", Long.valueOf(fiancialyear.getId()));
 
-            if (functionCode != null && !functionCode.equals(""))
+            if (functionCode != null && !functionCode.equals("") && function!=null)
                 qry.setLong("functionId", function.getId());
             budgetHeadList = qry.list();
 
@@ -232,7 +232,7 @@ public class BudgetGroupHibernateDAO implements BudgetGroupDAO {
             session = getCurrentSession();
             final Query qry = session.createQuery(qryStr.toString());
 
-            if (functionCode != null && !functionCode.equals(""))
+            if (functionCode != null && !functionCode.equals("")&&function!=null)
                 qry.setLong("functionId", function.getId());
             budgetHeadList = qry.list();
 

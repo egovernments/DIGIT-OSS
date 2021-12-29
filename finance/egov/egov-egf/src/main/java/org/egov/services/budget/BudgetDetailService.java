@@ -2191,7 +2191,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
         } catch (final SQLGrammarException e) {
         	LOGGER.error("Exception in setting budget details.");
         }
-        stateId = Long.valueOf(sequenceNumber.toString());
+        stateId = Long.valueOf(String.valueOf(sequenceNumber));
 
         persistenceService.getSession().createSQLQuery(BUDGETDETAIL_STATES_INSERT).setLong("stateId", stateId)
                 .executeUpdate();
@@ -2216,7 +2216,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
             	LOGGER.error("Exception in creating budget group.");
             }
 
-            Long.valueOf(sequenceNumber.toString());
+            Long.valueOf(String.valueOf(sequenceNumber));
 
             if (budgetGroup == null) {
                 budgetGroup = new BudgetGroup();
@@ -2567,7 +2567,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
             wfInitiator = getWorkflowInitiator(budgetDetail);
 
         if (FinancialConstants.BUTTONREJECT.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {
-            if (wfInitiator.equals(userAssignment))
+            if (wfInitiator!=null && wfInitiator.equals(userAssignment))
                 budgetDetail.transition().end().withSenderName(user.getName())
                         .withComments(workflowBean.getApproverComments()).withDateInfo(new Date());
             else {

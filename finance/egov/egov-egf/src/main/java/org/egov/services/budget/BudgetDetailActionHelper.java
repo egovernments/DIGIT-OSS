@@ -148,7 +148,7 @@ public class BudgetDetailActionHelper {
             beNextYear.copyFrom(detail);
             beNextYear.setBudget(refBudget);
             beNextYear.setOriginalAmount(beAmounts.get(index));
-            beNextYear.setDocumentNumber(detail.getDocumentNumber());
+            beNextYear.setDocumentNumber(detail!=null ? detail.getDocumentNumber() :0l);
             beNextYear.setAnticipatoryAmount(reCurrentYear.getAnticipatoryAmount());
             beNextYear = budgetDetailService.setRelatedEntitesOn(beNextYear);
             beNextYear.setUniqueNo(budgetDetailService.generateUniqueNo(beNextYear));
