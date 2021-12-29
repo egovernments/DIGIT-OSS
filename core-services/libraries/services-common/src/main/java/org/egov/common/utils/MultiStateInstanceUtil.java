@@ -6,10 +6,14 @@ import org.egov.common.exception.InvalidTenantIdException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Configuration
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class MultiStateInstanceUtil {
 
     // central-instance configs
@@ -98,20 +102,18 @@ public class MultiStateInstanceUtil {
 	 */
 	public String getStateLevelTenant(String tenantId) {
 
-		String stateTenant = "";
 		String[] tenantArray = tenantId.split("\\.");
+		String stateTenant = tenantArray[0];
 
 		if (getIsEnvironmentCentralInstance()) {
 			if (getStateLevelTenantIdLength() < tenantArray.length) {
-				for (int i = 0; i < getStateLevelTenantIdLength(); i++) {
-					stateTenant = stateTenant.concat(tenantArray[i]);
-				}
+				for (int i = 1; i < getStateLevelTenantIdLength(); i++)
+					stateTenant = stateTenant.concat(".").concat(tenantArray[i]);
 			} else {
 				stateTenant = tenantId;
 			}
-			return stateTenant;
 		}
-		return tenantArray[0];
+		return stateTenant;
 	}
 	
 	/**
