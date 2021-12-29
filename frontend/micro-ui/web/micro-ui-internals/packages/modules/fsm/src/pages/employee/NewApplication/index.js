@@ -108,7 +108,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           street,
           city,
           state,
-          pincode,
+          pincode:pincode?pincode:null,
           slumName: slum,
           locality: {
             code: localityCode,

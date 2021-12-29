@@ -51,7 +51,7 @@ const Response = ({ data, onSuccess }) => {
             landmark: landmark?.trim(),
             slumName: slum,
             city: city.name,
-            pincode,
+            pincode:pincode?pincode:null,
             locality: {
               code: locality.code,
               name: locality.name,

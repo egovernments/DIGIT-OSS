@@ -32,7 +32,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     propertyType: applicationData.propertyUsage.split(".")[0],
     subtype: applicationData.propertyUsage,
     address: {
-      pincode: applicationData.address.pincode,
+      pincode: applicationData.address.pincode?applicationData.address.pincode:null,
       locality: {
         ...applicationData.address.locality,
         i18nkey: `${applicationData.tenantId.toUpperCase().split(".").join("_")}_REVENUE_${applicationData.address.locality.code}`,
