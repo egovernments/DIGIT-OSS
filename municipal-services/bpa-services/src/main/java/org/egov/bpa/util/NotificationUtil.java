@@ -467,7 +467,7 @@ public class NotificationUtil {
 		String receiptNumber = getReceiptNumber(bpaRequest);
 		String consumerCode;
 		consumerCode = bpaRequest.getBPA().getApplicationNo();
-			String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
+			String link = config.getUiAppHost() + config.getReceiptDownloadLink();
 			link = link.replace("$consumerCode", consumerCode);
 			link = link.replace("$tenantId", bpaRequest.getBPA().getTenantId());
 			link = link.replace("$businessService", bpaRequest.getBPA().getBusinessService());
