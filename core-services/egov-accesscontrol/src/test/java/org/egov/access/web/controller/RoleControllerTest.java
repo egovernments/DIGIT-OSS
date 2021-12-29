@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.egov.access.Resources;
@@ -175,9 +174,7 @@ public class RoleControllerTest {
 		responseInfo.setApiId("org.egov.accesscontrol");
 		responseInfo.setMsgId("20170310130900");
 		responseInfo.setResMsgId("uief87324");
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(2017,03,9,18,30);
-		responseInfo.setTs(calendar.getTimeInMillis());
+		responseInfo.setTs(1491762629619l);
 		responseInfo.setVer("1.0");
 
 		when(responseInfoFactory.createResponseInfoFromRequestInfo(any(RequestInfo.class), any(Boolean.class)))

@@ -43,37 +43,6 @@ public class ActionControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
-	/*@Test
-	public void testShouldGetActionsForUserRoles() throws Exception {
-		List<String> roleCodesList = new ArrayList<String>();
-		roleCodesList.add("CITIZEN");
-		roleCodesList.add("SUPERUSER");
-		ActionSearchCriteria actionSearchCriteria = ActionSearchCriteria.builder().roleCodes(roleCodesList).build();
-
-		final List<Action> actions = getActions();
-		when(actionService.getActions(actionSearchCriteria)).thenReturn(actions);
-		when(actionService.getAllMDMSActions(actionSearchCriteria)).thenReturn(actions);
-
-		mockMvc.perform(post("/v1/actions/_search").contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content(new Resources().getFileContents("actionRequest.json"))).andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(content().json(new Resources().getFileContents("actionResponse.json")));
-	}*/
-
-	/*@Test
-	public void testActionValidation() throws Exception {
-		ActionValidation actionValidation = ActionValidation.builder().allowed(true).build();
-		ValidateActionCriteria criteria = ValidateActionCriteria.builder()
-				.roleNames(Arrays.asList("Citizen", "Employee")).tenantId("ap.public").actionUrl("/pgr/_statuses")
-				.build();
-		when(actionService.validate(criteria)).thenReturn(actionValidation);
-
-		mockMvc.perform(post("/v1/actions/_validate").contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content(new Resources().getFileContents("validateActionRequest.json"))).andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(content().json(new Resources().getFileContents("validateActionResponse.json")));
-	}*/
-
 	private List<Action> getActions() {
 		List<Action> actions = new ArrayList<Action>();
 		Action action1 = Action.builder().id(1L).displayName("Create Complaint").name("Create Complaint").createdBy(1L)
@@ -214,9 +183,7 @@ public class ActionControllerTest {
 				.thenReturn(responseInfo);
 
 		responseInfo.setApiId("org.egov.accesscontrol");
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(2017,03,9,18,30);
-		responseInfo.setTs(calendar.getTimeInMillis());
+		responseInfo.setTs(1491762625977l);
 		responseInfo.setResMsgId("uief87324");
 
 		mockMvc.perform(post("/v1/actions/_update").contentType(MediaType.APPLICATION_JSON_UTF8)
