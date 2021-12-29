@@ -323,28 +323,16 @@ public class NotificationService {
 			    mobileNumbers.add(owner.getMobileNumber());
 		});
 
-		if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
 			List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 			notifUtil.sendSMS(smsRequests);
-		}
-		if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)){
+
 			Boolean isActionReq = false;
 			if(state.equalsIgnoreCase(PT_CORRECTION_PENDING))
 				isActionReq = true;
 
-			List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 			List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
 			notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
-		}
-		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)){
-			//EMAIL block TBD
-			Map<String, String> mapOfPhnoAndEmail = notifUtil.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
-			String messageTemplate = fetchContentFromLocalization(request.getRequestInfo(), tenantId, "rainmaker-pt", "PT_NOTIFICATION_EMAIL");
-			messageTemplate = messageTemplate.replace("{MESSAGE}",msg);
-			messageTemplate = messageTemplate.replace(NOTIFICATION_OWNERNAME,NOTIFICATION_EMAIL);
-			List<EmailRequest> emailRequests = notifUtil.createEmailRequest(requestInfo,messageTemplate, mapOfPhnoAndEmail);
-			notifUtil.sendEmail(emailRequests);
-		}
+
 	}
 
 	private String fetchContentFromLocalization(RequestInfo requestInfo, String tenantId, String module, String code){
