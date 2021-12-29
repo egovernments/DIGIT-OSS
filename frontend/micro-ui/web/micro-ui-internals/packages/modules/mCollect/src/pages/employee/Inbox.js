@@ -182,6 +182,7 @@ const Inbox = ({
       return (
         <MobileInbox
           data={formedData}
+          defaultSearchParams={initialStates.searchParams}
           isLoading={hookLoading}
           isSearch={!isInbox}
           searchFields={getSearchFields()}
