@@ -338,7 +338,7 @@ public class BPANotificationUtil {
 
         String consumerCode;
         consumerCode = license.getApplicationNumber();
-        String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
+        String link = config.getUiAppHost() + config.getReceiptDownloadLink();
         link = link.replace("$consumerCode", consumerCode);
         link = link.replace("$tenantId", license.getTenantId());
         link = link.replace("$businessService", license.getBusinessService());
