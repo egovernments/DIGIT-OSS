@@ -63,7 +63,7 @@ import StandaloneSearchBar from "./atoms/StandaloneSearchBar";
 import {
   AnnouncementIcon, ArrowDown, ArrowLeft, ArrowRightInbox, Calender, CaseIcon, CitizenTruck, CloseSvg, ComplaintIcon, Details, DocumentSVG, DownloadIcon, DownwardArrow, DropIcon, Ellipsis, EmailIcon, FilterIcon, GetApp, HomeIcon,
   LanguageIcon,
-  LogoutIcon, Person, PersonIcon, Poll, PrintIcon, PropertyHouse, PTIcon, ReceiptIcon, RefreshIcon, RupeeIcon, SearchIconSvg, ShareIcon, ShippingTruck, SortDown,
+  LogoutIcon, Person, RefreshSVG,PersonIcon, Poll, PrintIcon, PropertyHouse, PTIcon, ReceiptIcon, RefreshIcon, RupeeIcon, SearchIconSvg, ShareIcon, ShippingTruck, SortDown,
   SortUp, UpwardArrow, WhatsappIcon, OBPSIcon, EDCRIcon, BPAIcon, BPAHomeIcon,DocumentIcon, HelpIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
@@ -223,6 +223,7 @@ export {
   DownloadIcon,
   Ellipsis,
   RefreshIcon,
+  RefreshSVG,
   Poll,
   Details,
   // Icons
@@ -244,6 +245,7 @@ export {
   CitizenTruck,
   EDCRIcon,
   BPAIcon,
+  RefreshSVG,
   BPAHomeIcon
 };
 
