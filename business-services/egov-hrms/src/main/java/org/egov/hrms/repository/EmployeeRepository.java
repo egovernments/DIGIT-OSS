@@ -67,7 +67,7 @@ public class EmployeeRepository {
 		String query = queryBuilder.getEmployeeSearchQuery(criteria, preparedStmtList);
 		String finalQuery;
 		try {
-			finalQuery = centralInstanceUtil.replaceSchemaPlaceholder(criteria.getTenantId(), query);
+			finalQuery = centralInstanceUtil.replaceSchemaPlaceholder(query, headerTenantId);
 		} catch (InvalidTenantIdException e1) {
 			throw new CustomException("HRMS_TENANTID_ERROR",
 					"TenantId length is not sufficient to replace query schema in a multi state instance");		
