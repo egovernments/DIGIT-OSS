@@ -37,6 +37,7 @@ import { initCustomisationComponents } from "./Customisations";
 import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonPt";
 import { initBillsComponents } from "@egovernments/digit-ui-module-bills";
 // import { initReportsComponents } from "@egovernments/digit-ui-module-reports";
+import { initCFComponents } from "@egovernments/digit-ui-module-cf";
 
 initLibraries();
 
@@ -60,7 +61,9 @@ const enabledModules = [
   "Reports",
   "Bills",
   "SW",
+  "CF",
 ];
+
 window.Digit.ComponentRegistryService.setupRegistry({
   ...paymentConfigs,
   PTModule,
@@ -90,6 +93,7 @@ initWSComponents();
 initCommonPTComponents();
 initBillsComponents();
 // initReportsComponents();
+initCFComponents();
 initCustomisationComponents();
 
 const moduleReducers = (initData) => ({
