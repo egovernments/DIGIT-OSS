@@ -14,7 +14,7 @@
     "prepublish": "yarn build"
   },
   "peerDependencies": {
-    "react": "^17.0.0"
+    "react": "17.0.0"
   },
   "devDependencies": {
     "gh-pages": "^2.2.0",
