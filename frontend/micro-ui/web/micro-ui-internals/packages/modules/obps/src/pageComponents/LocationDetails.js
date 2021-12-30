@@ -36,8 +36,9 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
             ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
             : allCities;
       setcitiesopetions(cities);
-      if(cities && cities.length==0)
+      if(cities && cities.length==0){
       setPinerror("BPA_PIN_NOT_VALID_ERROR");
+      }
     }
 
   }, [pincode]);
@@ -81,7 +82,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   const [selectedLocality, setSelectedLocality] = useState(formData.address.locality || {});
 
   useEffect(() => {
-    if (selectedCity && fetchedLocalities) {
+    if (selectedCity && fetchedLocalities  && !Pinerror) {
       let __localityList = fetchedLocalities;
       let filteredLocalityList = [];
 
@@ -89,11 +90,13 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
         setSelectedLocality(formData.address.locality);
       }
 
-      if (formData?.address?.pincode || pincode) {
+      if ((formData?.address?.pincode || pincode) && !Pinerror) {
         filteredLocalityList = __localityList.filter((obj) => obj.pincode?.find((item) => item == pincode));
-        if (!formData?.address?.locality) setSelectedLocality();
+        if (!formData?.address?.locality && filteredLocalityList.length<=0) setSelectedLocality();
       }
-      setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));
+      if(!localities || (filteredLocalityList.length > 0 && localities.length !== filteredLocalityList.length) || (filteredLocalityList.length <=0 && localities && localities.length !==__localityList.length))
+      {
+        setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));}
 
       if (filteredLocalityList.length === 1) {
         setSelectedLocality(filteredLocalityList[0]);

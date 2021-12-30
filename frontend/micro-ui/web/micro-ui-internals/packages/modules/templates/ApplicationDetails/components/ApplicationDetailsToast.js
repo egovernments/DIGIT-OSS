@@ -27,7 +27,7 @@ function ApplicationDetailsToast({ t, showToast, closeToast, businessService }) 
         label = showToast?.key === "error" ? showToast?.error?.message : t("TL_TL_CANCELLED_MESSAGE_HEAD");
         break;
       default:
-        label = showToast?.key === "error" ? showToast?.error?.message : `ES_${businessService}_${showToast?.action?.action}_UPDATE_SUCCESS`;
+        label = showToast?.key === "error" ? showToast?.error?.message : t(`ES_${businessService}_${showToast?.action?.action}_UPDATE_SUCCESS`);
     }
     return <React.Fragment>{showToast && <Toast error={showToast.key === "error"} label={label} onClose={closeToast} />}</React.Fragment>;
   } else if (businessService?.includes("BPA") || businessService?.includes("BPA_LOW") || businessService?.includes("BPA_OC")) {
@@ -62,7 +62,7 @@ function ApplicationDetailsToast({ t, showToast, closeToast, businessService }) 
         label = showToast?.key === "error" ? showToast?.error?.message : getMessage(["BPA_SENDBACK_SUCCESS_MESSAGE_MAIN"]);
         break;
       default:
-        label = showToast?.key === "error" ? showToast?.error?.message : `ES_${businessService}_${showToast?.action?.action}_UPDATE_SUCCESS`;
+        label = showToast?.key === "error" ? showToast?.error?.message : t(`ES_${businessService}_${showToast?.action?.action}_UPDATE_SUCCESS`);
     }
     return <React.Fragment>{showToast && <Toast error={showToast.key === "error"} label={label} onClose={closeToast} />}</React.Fragment>;
   } else {

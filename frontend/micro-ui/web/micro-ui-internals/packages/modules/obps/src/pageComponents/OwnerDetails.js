@@ -6,6 +6,7 @@ import cloneDeep from "lodash/cloneDeep";
 
 const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     let validation = {};
+    sessionStorage.removeItem("currentPincode");
     let isedittrade = window.location.href.includes("edit-application");
     let isrenewtrade = window.location.href.includes("renew-trade");
     const tenantId = Digit.ULBService.getCurrentTenantId();
