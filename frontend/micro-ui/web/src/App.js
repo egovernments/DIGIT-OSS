@@ -15,11 +15,12 @@ import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
 import { initNOCComponents } from "@egovernments/digit-ui-module-noc";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 import { initWSComponents } from "@egovernments/digit-ui-module-ws"; 
+import { initCFComponents } from "@egovernments/digit-ui-module-cf";
 import {initCustomisationComponents} from "./Customisations";
 
 initLibraries();
 
-const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "MCollect","HRMS", "TL","Receipts" ,"OBPS","NOC","Engagement", "WS"];
+const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "MCollect","HRMS", "TL","Receipts" ,"OBPS","NOC","Engagement", "WS", "CF"];
 window.Digit.ComponentRegistryService.setupRegistry({
   ...paymentConfigs,
   PTModule,
@@ -47,6 +48,7 @@ initOBPSComponents();
 initNOCComponents();
 initEngagementComponents();
 initWSComponents();
+initCFComponents();
 
 initCustomisationComponents();
 
