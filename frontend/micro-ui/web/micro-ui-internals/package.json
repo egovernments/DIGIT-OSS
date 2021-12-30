@@ -40,19 +40,12 @@
     "build:libraries": "cd packages/libraries && yarn build",
     "build:components": "cd packages/react-components && yarn build",
     "build:common": "cd packages/modules/common && yarn build",
-    "build:pt": "cd packages/modules/pt && yarn build",
     "build:core": "cd packages/modules/core && yarn build",
     "build:pgr": "cd packages/modules/pgr && yarn build",
     "build:fsm": "cd packages/modules/fsm && yarn build",
-    "build:dss": "cd packages/modules/dss && yarn build",
-    "build:mcollect": "cd packages/modules/mCollect && yarn build",
-    "build:receipts": "cd packages/modules/receipts && yarn build",
-    "build:tl": "cd packages/modules/tl && yarn build",
-    "build:hrms": "cd packages/modules/hrms && yarn build",
-    "build:obps": "cd packages/modules/obps && yarn build",
+   
     "build:engagement": "cd packages/modules/engagement && yarn build",
-    "build:noc": "cd packages/modules/noc && yarn build",
-    "build:ws": "cd packages/modules/ws && yarn build",
+   
     "deploy:jenkins": "./scripts/jenkins.sh"
   },
   "devDependencies": {
