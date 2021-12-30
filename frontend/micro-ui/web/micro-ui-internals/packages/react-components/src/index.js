@@ -171,6 +171,8 @@ import {
   DeathIcon,
   BirthIcon,
   FirenocIcon,
+  SendIcon,
+  GalleryIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -218,6 +220,18 @@ import OpenLinkContainer from "./atoms/OpenLinkContainer";
 import UploadPitPhoto from "./molecules/UploadPitPhoto";
 import { DownloadBtnCommon } from "./atoms/svgindex";
 import ToggleSwitch from "./atoms/ToggleSwitch";
+
+import ChatBubble from "./atoms/ChatBubble"
+import AvailableOptionItem from "./atoms/AvailableOptionItem"
+import SendButton from "./atoms/SendButton"
+import UserInput from "./molecules/UserInput"
+import StarRating from "./molecules/StarRating"
+import ReplyComponent from "./molecules/ReplyComponent"
+import MultipleSelect from "./molecules/MultipleSelect"
+import GalleryButton from "./molecules/GalleryButton"
+import AvailableOptionsList from "./molecules/AvailableOptionsList"
+
+
 export {
   Phone,
   Body,
@@ -302,6 +316,9 @@ export {
   PopupHeadingLabel,
   ToggleSwitch,
   ULBHomeCard,
+  ChatBubble,
+  AvailableOptionItem,
+  SendButton,
   // Icons
   GetApp,
   ArrowLeft,
@@ -358,6 +375,12 @@ export {
   FilterForm,
   FilterFormField,
   SortAction,
+  UserInput,
+  StarRating,
+  ReplyComponent,
+  MultipleSelect,
+  GalleryButton,
+  AvailableOptionsList,
   // hoc
   FormComposer,
   ResponseComposer,
@@ -446,4 +469,7 @@ export {
   DeathIcon,
   BirthIcon,
   FirenocIcon,
+  SendIcon,
+  GalleryIcon
+
 };

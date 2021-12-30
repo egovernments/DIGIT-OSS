@@ -15,6 +15,7 @@ import ErrorComponent from "../../components/ErrorComponent";
 import FAQsSection from "./FAQs/FAQs";
 import HowItWorks from "./HowItWorks/howItWorks";
 import StaticDynamicCard from "./StaticDynamicComponent/StaticDynamicCard";
+import CFModule from "../../../../cf/src/Module";
 
 const sidebarHiddenFor = [
   "digit-ui/citizen/register/name",
@@ -135,6 +136,19 @@ const Home = ({
     );
   });
 
+  const cfRoutes = () => {
+    return (
+      <React.Fragment>
+        <Route path={`${path}/cf-home`}>
+          <CFModule userType="citizen" stateCode={stateCode} isUserRegistered={false} />
+        </Route>
+        <Route path={`${path}/cf`}>
+          <CFModule userType="citizen" stateCode={stateCode} isUserRegistered={false} />
+        </Route>
+      </React.Fragment>
+    )
+  }
+
   return (
     <div className={classname}>
       <TopBarSideBar
@@ -204,6 +218,10 @@ const Home = ({
             {appRoutes}
             {ModuleLevelLinkHomePages}
           </ErrorBoundary>
+          {ModuleLevelLinkHomePages}
+
+          {cfRoutes()}
+
         </Switch>
       </div>
       <div className="citizen-home-footer" style={window.location.href.includes("citizen/obps") ? { zIndex: "-1" } : {}}>

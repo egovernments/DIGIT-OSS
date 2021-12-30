@@ -1,0 +1,68 @@
+.rightBox {
+    .rating-star-wrap svg{
+      height: 15px;
+    }
+  display: block;
+  padding: 8px 16px;
+  border-radius: 10px;
+  float: right;
+  margin: 5px 15px 2px 5px;
+  max-width: 60%;
+  width: fit-content;
+  color: #505a5f;
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0px;
+  background-color: #feefe7;
+  position: relative;
+}
+.leftBox {
+  display: block;
+  padding: 8px 16px;
+  border-radius: 10px;
+  float: left;
+  margin: 5px 5px 2px 0;
+  max-width: 60%;
+  width: fit-content;
+  color: #505a5f;
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0px;
+  text-align: left;
+  background-color: #eeeeee;
+  position: relative;
+}
+.rightChat {
+  &:before {
+    content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border-left: 10px solid #feefe7;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #feefe7;
+    border-bottom: 10px solid transparent;
+    right: -6px;
+    top: 0px;
+  }
+}
+.leftChat {
+  &:before {
+    content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border-left: 10px solid transparent;
+    border-right: 10px solid #eeeeee;
+    border-top: 10px solid #eeeeee;
+    border-bottom: 10px solid transparent;
+    left: -6px;
+    top: 0px;
+  }
+}
