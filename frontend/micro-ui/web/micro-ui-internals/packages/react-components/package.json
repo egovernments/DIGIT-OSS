@@ -39,13 +39,13 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-router-dom": "5.3.0",
-    "react-scripts": "4.0.1"
+    "react-scripts": "4.0.3"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
-    "@googlemaps/js-api-loader": "^1.11.1",
+    "@googlemaps/js-api-loader": "1.12.8",
     "react-date-range": "^1.3.0",
     "react-hook-form": "7.20.5",
     "react-i18next": "^11.7.3",
