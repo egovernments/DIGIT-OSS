@@ -49,7 +49,7 @@ const citizenComplaint = {
                             cond: (context) => context.intention != dialog.INTENTION_UNKOWN,
                             actions: assign((context, event) => {
                                 context.slots.pgr["complaint"] = context.intention;
-                               // context.slots.pgr["ComplaintType"] = dialog.get_message(messages.complaintMenu.options.messageBundle[context.intention], context.user.locale);
+                               //context.slots.pgr["ComplaintType"] = dialog.get_message(messages.complaintMenu.options.messageBundle[context.intention], context.user.locale);
                             })
                         },
                         {
@@ -150,8 +150,8 @@ const citizenComplaint = {
                         let complaintDetails = event.data;
                         let message = dialog.get_message(messages.persistComplaint, context.user.locale);
                         //Email Notification here
-                        message = message.replace('{{complaintNumber}}', complaintDetails.complaintNumber);
-                        message = message.replace('{{complaintLink}}', complaintDetails.complaintLink);
+                      //  message = message.replace('{1234567890}', complaintDetails.complaintNumber);
+                       // message = message.replace('{{complaintLink}}', complaintDetails.complaintLink);
                         let closingStatement = dialog.get_message(messages.closingStatement, context.user.locale);
                         message = message + closingStatement;
                         dialog.sendMessage(context, message);
