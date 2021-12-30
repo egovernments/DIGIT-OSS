@@ -9,46 +9,46 @@ const chatStateMachine = Machine({
   initial: 'start',
   on: {
     USER_RESET: {
-      target: '#welcome'      
-    }
+      target: '#welcome',
+    },
   },
   states: {
 
     start: {
-        on: {
-          USER_MESSAGE: [
-            {
-              target: '#welcome'
-            }
-          ]
-        }
+      on: {
+        USER_MESSAGE: [
+          {
+            target: '#welcome',
+          },
+        ],
       },
-      welcome: {
-        id: 'welcome',
-        initial: 'preCondition',
-        states: {
-          preCondition: {
-                always: {
-                    target: '#chatmenu'
-                  }
-          }
-        }      
+    },
+    welcome: {
+      id: 'welcome',
+      initial: 'preCondition',
+      states: {
+        preCondition: {
+          always: {
+            target: '#chatmenu',
+          },
+        },
       },
+    },
 
-    chatmenu : { 
+    chatmenu: {
       id: 'chatmenu',
       initial: 'question',
       states: {
         question: {
-          onEntry: assign( (context, event) => {
-            let message = dialog.get_message(messages.menu.prompt.preamble, context.user.locale);
+          onEntry: assign((context, event) => {
+            const message = dialog.get_message(messages.menu.prompt.preamble, context.user.locale);
             const grammer = dialog.constructContextGrammer(messages.menu.prompt.options.list, messages.menu.prompt.options.messageBundle, context.user.locale);
             context.grammer = grammer;
-            dialog.sendMessage(context, message,true);
+            dialog.sendMessage(context, message, true);
           }),
           on: {
-            USER_MESSAGE: 'process'
-          }
+            USER_MESSAGE: 'process',
+          },
         },
         process: {
           onEntry: assign((context, event) => {
@@ -57,46 +57,46 @@ const chatStateMachine = Machine({
           always: [
             {
               cond: (context) => context.intention == 'complaint',
-              target: '#citizenComplaint'
+              target: '#citizenComplaint',
             },
             {
-              target: '#serviceRating', 
-              cond: (context) => context.intention == 'providefeedback'
+              target: '#serviceRating',
+              cond: (context) => context.intention == 'providefeedback',
             },
             {
-              target: '#serviceRating', 
-              cond: (context) => context.intention == 'rateservice'
+              target: '#serviceRating',
+              cond: (context) => context.intention == 'rateservice',
             },
             {
-              target: 'error'
-            }
-          ]
-        }, 
+              target: 'error',
+            },
+          ],
+        },
         error: {
-          onEntry: assign( (context, event) => {
+          onEntry: assign((context, event) => {
             dialog.sendMessage(context, dialog.get_message(dialog.global_messages.error.retry, context.user.locale), true);
           }),
-          always : 'question'
-        }, 
-        citizenComplaint: citizenComplaint,
-        serviceRating: serviceRating
-      } 
-    }, 
+          always: 'question',
+        },
+        citizenComplaint,
+        serviceRating,
+      },
+    },
     endstate: {
       id: 'endstate',
-      always: 'start'
+      always: 'start',
     },
     system_error: {
       id: 'system_error',
       always: {
         target: '#welcome',
         actions: assign((context, event) => {
-          let message = dialog.get_message(dialog.global_messages.system_error, context.user.locale);
+          const message = dialog.get_message(dialog.global_messages.system_error, context.user.locale);
           dialog.sendMessage(context, message, true);
           context.chatInterface.system_error(event.data);
-        })
-      }
-    }
+        }),
+      },
+    },
   }, // states
 }); // Machine
 
