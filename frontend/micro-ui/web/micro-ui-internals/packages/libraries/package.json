@@ -19,7 +19,7 @@
   "devDependencies": {
     "gh-pages": "^2.2.0",
     "microbundle-crl": "^0.13.10",
-    "react-dom": "^17.0.0",
+    "react-dom": "17.0.0",
     "react-scripts": "^4.0.1"
   },
   "dependencies": {
@@ -31,7 +31,7 @@
     "i18next-react-postprocessor": "^3.0.5",
     "jspdf": "^2.3.1",
     "pdfmake": "^0.1.69",
-    "react": "^17.0.0",
+    "react": "17.0.0",
     "react-i18next": "^11.7.3",
     "react-query": "^3.6.1",
     "react-redux": "^7.2.1",

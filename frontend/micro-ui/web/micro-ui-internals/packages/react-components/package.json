@@ -20,7 +20,7 @@
     "deploy-storybook": "npm run build-storybook && surge --project dist-storybook --domain react-components-$npm_package_version.surge.sh"
   },
   "peerDependencies": {
-    "react": "^17.0.0",
+    "react": "17.0.0",
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
@@ -36,8 +36,8 @@
     "husky": ">=4",
     "lint-staged": ">=10",
     "microbundle-crl": "^0.13.10",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
+    "react": "17.0.0",
+    "react-dom": "17.0.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.1"
   },
