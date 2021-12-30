@@ -12,8 +12,10 @@ const ApplicationDetails = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [showOptions, setShowOptions] = useState(false);
   const [dowloadOptions, setDowloadOptions] = useState([]);
+  const { id:appNumber } = useParams();
+  const params = {applicationNumber:appNumber};
   const stateCode = Digit.ULBService.getStateId();
-  const { data: LicenseData, isLoading } = Digit.Hooks.obps.useBPAREGSearch(tenantId, {});
+  const { data: LicenseData, isLoading } = Digit.Hooks.obps.useBPAREGSearch(tenantId,{} ,params);
   let License = LicenseData?.Licenses?.[0];
   const { data: mdmsRes, isLoading: mdmsResIsLoading } = Digit.Hooks.obps.useMDMS(stateCode, "StakeholderRegistraition", "TradeTypetoRoleMapping");
   const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(

@@ -47,6 +47,7 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
                   "emailId": formData?.LicneseDetails?.email,
                   "permanentAddress": formData?.LicneseDetails?.PermanentAddress,
                   "correspondenceAddress": Correspondenceaddress,
+                  "pan":formData?.LicneseDetails?.PanNumber,
                   // "permanentPinCode": "143001"
                 }
               ],
