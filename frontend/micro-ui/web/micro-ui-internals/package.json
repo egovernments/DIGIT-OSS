@@ -41,6 +41,7 @@
     "dev:ws": "cd packages/modules/ws && yarn start",
     "dev:bills": "cd packages/modules/bills && yarn start",
     "dev:reports": "cd packages/modules/reports && yarn start",
+    "dev:cf": "cd packages/modules/cf && yarn start",
     "dev:example": "cd example && yarn start",
     "build": "run-p build:**",
     "build:libraries": "cd packages/libraries && yarn build",
@@ -62,6 +63,7 @@
     "build:ws": "cd packages/modules/ws && yarn build",
     "build:bills": "cd packages/modules/bills && yarn build",
     "buildR:reports": "cd packages/modules/reports && yarn build",
+    "build:cf": "cd packages/modules/cf && yarn build",
     "deploy:jenkins": "./scripts/jenkins.sh"
   },
   "devDependencies": {
