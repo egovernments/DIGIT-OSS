@@ -19,6 +19,7 @@ const TextArea = (props) => {
       minLength={props.minLength}
       maxLength={props.maxLength} 
       autoComplete="off"
+      placeholder={props.placeholder}
     ></textarea>
     {  <p className="cell-text">{props.hintText}</p>}
     </React.Fragment>

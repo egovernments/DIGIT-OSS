@@ -810,6 +810,18 @@ const SearchIcon = ({ className }) => (
   </svg>
 );
 
+const SendIcon = ({ style, fill }) => (
+  <svg style={{transform: 'rotate(45deg)'}} width="29" height="29" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M11 0C4.93 0 0 4.93 0 11C0 17.07 4.93 22 11 22C17.07 22 22 17.07 22 11C22 4.93 17.07 0 11 0ZM14.57 16L11 14.42L7.43 16L7.06 15.63L11 6L14.95 15.63L14.57 16Z" fill="#F47738" />
+  </svg>
+);
+
+const GalleryIcon = ({ style, fill }) => (
+  <svg style={{marginLeft: '8px', marginTop: '4px'}} width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M1.209 8.754H1.87975V9.713H0.25V0.25H11.72V1.86425H10.7607V1.20925H1.209V8.754ZM13.9585 2.432V11.8948H2.4885V2.432H13.9585ZM12.998 3.39075H3.4465V10.9355H12.998V3.39075ZM9.5715 10.415H12.1367L10.094 6.87475L8.81075 9.09725L6.93975 5.85575L4.3075 10.415H8.05075H9.5715ZM8.65975 6.54675C9.09275 6.54675 9.44275 6.1965 9.44275 5.764C9.44275 5.3315 9.09275 4.9815 8.65975 4.9815C8.227 4.9815 7.8765 5.3315 7.8765 5.764C7.8765 6.1965 8.22675 6.54675 8.65975 6.54675Z" fill="#F47738" />
+  </svg>
+);
+
 const DeleteIcon = ({ style, fill }) => (
   <svg style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M1 16C1 17.1 1.9 18 3 18H11C12.1 18 13 17.1 13 16V4H1V16ZM14 1H10.5L9.5 0H4.5L3.5 1H0V3H14V1Z" fill={fill} />
@@ -907,5 +919,7 @@ export {
   PMBIcon,
   GenericFileIcon,
   ArrowLeftWhite,
-  WSICon
+  WSICon,
+  SendIcon,
+  GalleryIcon
 };

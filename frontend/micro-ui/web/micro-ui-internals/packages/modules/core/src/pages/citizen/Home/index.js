@@ -4,45 +4,47 @@ import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom";
 
 const Home = () => {
-    
+
     const { t } = useTranslation()
     const history = useHistory()
     const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code
     const { data: { stateInfo } = {}, isLoading } = Digit.Hooks.useStore.getInitData()
 
     const conditionsToDisableNotificationCountTrigger = () => {
-        if(Digit.UserService?.getUser()?.info?.type === "EMPLOYEE") return false
-        if(!Digit.UserService?.getUser()?.access_token) return false
+        if (Digit.UserService?.getUser()?.info?.type === "EMPLOYEE") return false
+        if (!Digit.UserService?.getUser()?.access_token) return false
         return true
-      }
+    }
 
-    const { data: EventsData, isLoading: EventsDataLoading } = Digit.Hooks.useEvents({tenantId, variant: "whats-new", config:{
-        enabled: conditionsToDisableNotificationCountTrigger()
-    }})
+    const { data: EventsData, isLoading: EventsDataLoading } = Digit.Hooks.useEvents({
+        tenantId, variant: "whats-new", config: {
+            enabled: conditionsToDisableNotificationCountTrigger()
+        }
+    })
 
-    if(!tenantId){
+    if (!tenantId) {
         history.push(`/digit-ui/citizen/select-language`)
     }
 
     const allCitizenServicesProps = {
         header: t("DASHBOARD_CITIZEN_SERVICES_LABEL"),
-        sideOption:{ 
+        sideOption: {
             name: t("DASHBOARD_VIEW_ALL_LABEL"),
             onClick: () => history.push("/digit-ui/citizen/all-services")
         },
         options: [
             {
-                name:  t("ES_PGR_HEADER_COMPLAINT"), 
-                Icon: <ComplaintIcon/>,
+                name: t("ES_PGR_HEADER_COMPLAINT"),
+                Icon: <ComplaintIcon />,
                 onClick: () => history.push("/digit-ui/citizen/pgr-home")
             },
             {
-                name: t("MODULE_PT"), 
+                name: t("MODULE_PT"),
                 Icon: <PTIcon className="fill-path-primary-main" />,
                 onClick: () => history.push("/digit-ui/citizen/pt-home")
             },
             {
-                name: t("MODULE_TL"), 
+                name: t("MODULE_TL"),
                 Icon: <CaseIcon className="fill-path-primary-main" />,
                 onClick: () => history.push("/digit-ui/citizen/tl-home")
             },
@@ -52,37 +54,37 @@ const Home = () => {
             //     onClick: () => history.push("/digit-ui/citizen")
             // },
             {
-                name: t("CS_COMMON_INBOX_BPA"), 
+                name: t("CS_COMMON_INBOX_BPA"),
                 Icon: <OBPSIcon />,
                 onClick: () => history.push("/digit-ui/citizen/obps-home")
             }
         ],
-        styles: { display: "flex", flexWrap: "wrap",  justifyContent: "flex-start", width: "100%"}
+        styles: { display: "flex", flexWrap: "wrap", justifyContent: "flex-start", width: "100%" }
     }
     const allInfoAndUpdatesProps = {
         header: t("CS_COMMON_DASHBOARD_INFO_UPDATES"),
-        sideOption:{ 
+        sideOption: {
             name: t("DASHBOARD_VIEW_ALL_LABEL"),
             onClick: () => console.debug("view all")
         },
         options: [
             {
                 name: t("CS_HEADER_MYCITY"),
-                Icon: <HomeIcon/>,
+                Icon: <HomeIcon />,
             },
             {
                 name: t("EVENTS_EVENTS_HEADER"),
-                Icon: <Calender/>,
+                Icon: <Calender />,
                 onClick: () => history.push("/digit-ui/citizen/engagement/events")
             },
             {
                 name: t("CS_COMMON_DOCUMENTS"),
-                Icon: <DocumentIcon/>,
+                Icon: <DocumentIcon />,
                 onClick: () => history.push("/digit-ui/citizen/engagement/docs")
             },
             {
                 name: t("CS_COMMON_SURVEYS"),
-                Icon: <DocumentIcon/>,
+                Icon: <DocumentIcon />,
                 onClick: () => history.push("/digit-ui/citizen/engagement/SurveyList")
             },
             // {
@@ -90,13 +92,13 @@ const Home = () => {
             //     Icon: <HelpIcon/>
             // }
         ],
-        styles: { display: "flex", flexWrap: "wrap",  justifyContent: "flex-start", width: "100%"}
+        styles: { display: "flex", flexWrap: "wrap", justifyContent: "flex-start", width: "100%" }
     }
 
-    return isLoading ? <Loader/> : <div className="HomePageWrapper">
-        
+    return isLoading ? <Loader /> : <div className="HomePageWrapper">
+
         <div className="BannerWithSearch">
-            <img src={stateInfo?.bannerUrl}/>
+            <img src={stateInfo?.bannerUrl} />
             <div className="Search">
                 <StandaloneSearchBar placeholder={t("CS_COMMON_SEARCH_PLACEHOLDER")} />
             </div>
@@ -114,6 +116,9 @@ const Home = () => {
             </div>
             <WhatsNewCard {...EventsData?.[0]} />
         </div> : null}
+
+        <div style={{ color: '#F47738', marginLeft: '10px' }} onClick={() => history.push("/digit-ui/citizen/cf-home")}>Having an issue/Feedback for us?</div>
+
 
     </div>
 }
