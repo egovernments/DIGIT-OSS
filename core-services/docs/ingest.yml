@@ -6,12 +6,12 @@ info:
     ### API specs for Data ingest in National Dashboard ###
     The API provides a way to ingest key performance metrics for modules in the National Dashboard system so as to provide a combined view of all states data metrics in National Dashboards`
   contact:
-    name: Egovernments Foundation
-    email: contact@egovernments.org
+    name: Client Placeholder
+    email: client@email.com
 x-module: DSS
 x-common-path: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml'
 paths:
-  /dashboard/metric/_ingest:
+  /national-dashboard/metric/_ingest:
     post:
       summary: API to ingest metrics in national dashboards on daily basis
       description: Ingest data metrics for given module
@@ -37,7 +37,7 @@ paths:
             '*/*':
               schema:
                 $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
-  /dashboard/masterdata/_ingest:
+  /national-dashboard/masterdata/_ingest:
     post:
       summary: Ingests master data in DSS system
       description: Ingest data master data like target metrics for given module
