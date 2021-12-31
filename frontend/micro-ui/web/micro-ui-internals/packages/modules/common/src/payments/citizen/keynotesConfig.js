@@ -48,6 +48,7 @@ export const getKeyNotesConfig = (businessService, t) => {
             keyPath: [
               "billDetails",
               (d) => {
+                console.log(d, "in bill details");
                 const { fromPeriod, toPeriod } = d[0];
                 if (fromPeriod && toPeriod) {
                   let from = new Date(fromPeriod).getFullYear().toString();
