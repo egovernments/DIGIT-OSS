@@ -10,9 +10,11 @@ RUN ls -lah
 
 #RUN node web/envs.js
 RUN cd web/ \
+    && rm -rf node_modules \
+    && rm -f yarn.lock \
     && node envs.js \
     &&  ./install-deps.sh \
-    && yarn install \
+    && yarn install --force \
     && yarn build 
 
 FROM nginx:mainline-alpine
