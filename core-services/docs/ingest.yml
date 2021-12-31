@@ -75,7 +75,16 @@ components:
           example: "30-01-2022"
         module:
           type: string
-          description: Module for which data is ingested
+          description: Module code for which data is ingested. Module code mapping is as follows 
+                    "PT" -> "Property Tax",
+                    "TL" -> "Trade License",
+                    "WS" -> "Water and Sewerage",
+                    "OBPS" -> "Online Building Permission System",
+                    "FIRENOC" ->"Fire Noc" ,
+                    "PGR"-> "Public Grievance Redressal",
+                    "MCOLLECT" -> "Miscellaneous Collection",
+                    "COMMON" -> "Common attributes required for overview"
+                  
           enum: [PT, PGR, WS, SW, OBPS, FIRENOC, TL, MCOLLECT, COMMON]
           example: PT
         ward:
