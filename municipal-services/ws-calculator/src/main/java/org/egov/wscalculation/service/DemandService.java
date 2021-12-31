@@ -199,7 +199,7 @@ public class DemandService {
 		}
 
 		log.info("Demand Object" + demands.toString());
-		String billingcycle = (String) masterMap.get(SWCalculationConstant.Billing_Cycle_String);
+		String billingcycle = (String) masterMap.get(WSCalculationConstant.Billing_Cycle_String);
 		DemandNotificationObj notificationObj = DemandNotificationObj.builder()
 				.requestInfo(requestInfo)
 				.tenantId(calculations.get(0).getTenantId())
@@ -692,7 +692,7 @@ public class DemandService {
 				// log.info("Prepared Statement" + calculationRes.toString());
 				waterConnectionIds.add(connectionNo);
 			}
-			String billingcycle = (String) master.get(SWCalculationConstant.Billing_Cycle_String);
+			String billingcycle = (String) master.get(WSCalculationConstant.Billing_Cycle_String);
 			DemandNotificationObj notificationObj = DemandNotificationObj.builder().requestInfo(requestInfo)
 					.tenantId(tenantId)
 					.waterConnectionIds(waterConnectionIds)
