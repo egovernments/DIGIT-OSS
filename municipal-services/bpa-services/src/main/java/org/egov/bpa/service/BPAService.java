@@ -216,8 +216,8 @@ public class BPAService {
 				log.debug("no of bpas retuning by the search query" + bpas.size());
 			} else {
 				bpas = getBPAFromCriteria(criteria, requestInfo, edcrNos);
-				ArrayList<String> landIds = new ArrayList<String>();
-				if (bpas.size() > 0) {	
+				ArrayList<String> landIds = new ArrayList<>();
+				if (!bpas.isEmpty()) {	
 					for (int i = 0; i < bpas.size(); i++) {
 						landIds.add(bpas.get(i).getLandId());
 					}
@@ -246,7 +246,7 @@ public class BPAService {
 		if (criteria.getTenantId() != null) {
 			userSearchRequest.setTenantId(criteria.getTenantId());
 		}
-		List<String> uuids = new ArrayList<String>();
+		List<String> uuids = new ArrayList<>();
 		if (requestInfo.getUserInfo() != null && !StringUtils.isEmpty(requestInfo.getUserInfo().getUuid())) {
 			uuids.add(requestInfo.getUserInfo().getUuid());
 			criteria.setOwnerIds(uuids);
@@ -259,14 +259,9 @@ public class BPAService {
 		}
 		log.debug("Call with multiple to Land::" + landcriteria.getTenantId() + landcriteria.getMobileNumber());
 		ArrayList<LandInfo> landInfos = landService.searchLandInfoToBPA(requestInfo, landcriteria);
-		// With given mobile number if no record exists then return empty response
-		if(landInfos.isEmpty())
-		    return Collections.emptyList();
-		ArrayList<String> landIds = new ArrayList<String>();
-		if (landInfos.size() > 0) {
-			landInfos.forEach(land -> {
-				landIds.add(land.getId());
-			});
+		ArrayList<String> landIds = new ArrayList<>();
+		if (!landInfos.isEmpty()) {
+			landInfos.forEach(land -> landIds.add(land.getId()));
 			criteria.setLandId(landIds);
 		}
 		
@@ -290,7 +285,7 @@ public class BPAService {
 			}
 			if(bpas.get(i).getLandId() != null && bpas.get(i).getLandInfo() == null) {
 				LandSearchCriteria missingLandcriteria = new LandSearchCriteria();
-				List<String> missingLandIds = new ArrayList<String>();
+				List<String> missingLandIds = new ArrayList<>();
 				missingLandIds.add(bpas.get(i).getLandId());
 				missingLandcriteria.setTenantId(bpas.get(0).getTenantId());
 				missingLandcriteria.setIds(missingLandIds);
@@ -316,18 +311,13 @@ public class BPAService {
 		log.debug("Call with mobile number to Land::" + criteria.getMobileNumber());
 		landcriteria.setMobileNumber(criteria.getMobileNumber());
 		ArrayList<LandInfo> landInfo = landService.searchLandInfoToBPA(requestInfo, landcriteria);
-		// With given mobile number if no record exists then return empty response
-		if(landInfo.isEmpty())
-		    return Collections.emptyList();
-		ArrayList<String> landId = new ArrayList<String>();
-		if (landInfo.size() > 0) {
-			landInfo.forEach(land -> {
-				landId.add(land.getId());
-			});
+		ArrayList<String> landId = new ArrayList<>();
+		if (!landInfo.isEmpty()) {
+			landInfo.forEach(land -> landId.add(land.getId()));
 			criteria.setLandId(landId);
 		}
 		bpas = getBPAFromLandId(criteria, requestInfo, null);
-		if (landInfo.size() > 0) {
+		if (!landInfo.isEmpty()) {
 			for (int i = 0; i < bpas.size(); i++) {
 				for (int j = 0; j < landInfo.size(); j++) {
 					if (landInfo.get(j).getId().equalsIgnoreCase(bpas.get(i).getLandId())) {
@@ -667,14 +657,9 @@ public class BPAService {
             if (criteria.getMobileNumber() != null) {
                 landcriteria.setMobileNumber(criteria.getMobileNumber());
                 ArrayList<LandInfo> landInfo = landService.searchLandInfoToBPA(requestInfo, landcriteria);
-                // With given mobile number if no record exists then return count as 0
-                if(landInfo.isEmpty())
-                    return 0;
-                ArrayList<String> landId = new ArrayList<String>();
-                if (landInfo.size() > 0) {
-                        landInfo.forEach(land -> {
-                                landId.add(land.getId());
-                        });
+                ArrayList<String> landId = new ArrayList<>();
+                if (!landInfo.isEmpty()) {
+                        landInfo.forEach(land -> landId.add(land.getId()));
                         criteria.setLandId(landId);
                 } 
             } else {
@@ -687,7 +672,7 @@ public class BPAService {
                     if (criteria.getTenantId() != null) {
                             userSearchRequest.setTenantId(criteria.getTenantId());
                     }
-                    List<String> uuids = new ArrayList<String>();
+                    List<String> uuids = new ArrayList<>();
                     if (requestInfo.getUserInfo() != null && !StringUtils.isEmpty(requestInfo.getUserInfo().getUuid())) {
                             uuids.add(requestInfo.getUserInfo().getUuid());
                             criteria.setOwnerIds(uuids);
@@ -698,14 +683,9 @@ public class BPAService {
                             landcriteria.setMobileNumber(userInfo.getUser().get(0).getMobileNumber());
                     }
                     ArrayList<LandInfo> landInfos = landService.searchLandInfoToBPA(requestInfo, landcriteria);
-                    // With given mobile number if no record exists then return count as 0
-                    if(landInfos.isEmpty())
-                        return 0;
-                    ArrayList<String> landIds = new ArrayList<String>();
-                    if (landInfos.size() > 0) {
-                            landInfos.forEach(land -> {
-                                    landIds.add(land.getId());
-                            });
+                    ArrayList<String> landIds = new ArrayList<>();
+                    if (!landInfos.isEmpty()) {
+                            landInfos.forEach(land -> landIds.add(land.getId()));
                             criteria.setLandId(landIds);
                     }
                 }
