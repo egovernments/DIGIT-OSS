@@ -49,9 +49,9 @@
     "deploy:jenkins": "./scripts/jenkins.sh"
   },
   "devDependencies": {
-    "husky": ">=4.3.6",
+    "husky": "7.0.4",
     "lint-staged": ">=10.5.3",
-    "npm-run-all": "^4.1.5",
+    "npm-run-all": "4.1.5",
     "prettier": "2.1.2"
   },
   "husky": {},
@@ -59,7 +59,7 @@
     "*.{js,css,md}": "prettier --write"
   },
   "dependencies": {
-    "lodash": "^4.17.20",
-    "microbundle-crl": "^0.13.11"
+    "lodash": "4.17.21",
+    "microbundle-crl": "0.13.11"
   }
 }
