@@ -1,7 +1,23 @@
 package org.egov.inbox.service;
 
+import static org.egov.inbox.util.BpaConstants.BPA;
+import static org.egov.inbox.util.BpaConstants.BPAREG;
+import static org.egov.inbox.util.BpaConstants.BPA_APPLICATION_NUMBER_PARAM;
+import static org.egov.inbox.util.BpaConstants.LOCALITY_PARAM;
+import static org.egov.inbox.util.BpaConstants.MOBILE_NUMBER_PARAM;
+import static org.egov.inbox.util.BpaConstants.OFFSET_PARAM;
+import static org.egov.inbox.util.BpaConstants.STATUS_PARAM;
+import static org.egov.inbox.util.NocConstants.NOC;
+import static org.egov.inbox.util.NocConstants.NOC_APPLICATION_NUMBER_PARAM;
+import static org.egov.inbox.util.PTConstants.ACKNOWLEDGEMENT_IDS_PARAM;
+import static org.egov.inbox.util.PTConstants.PT;
+import static org.egov.inbox.util.TLConstants.APPLICATION_NUMBER_PARAM;
+import static org.egov.inbox.util.TLConstants.REQUESTINFO_PARAM;
+import static org.egov.inbox.util.TLConstants.SEARCH_CRITERIA_PARAM;
+import static org.egov.inbox.util.TLConstants.TENANT_ID_PARAM;
+import static org.egov.inbox.util.TLConstants.TL;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,8 +30,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import com.jayway.jsonpath.JsonPath;
-import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.inbox.config.InboxConfiguration;
@@ -37,32 +51,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.gson.JsonObject;
-import org.springframework.web.client.RestTemplate;
+import com.jayway.jsonpath.JsonPath;
 
-import static org.egov.inbox.util.PTConstants.*;
-import static org.egov.inbox.util.TLConstants.REQUESTINFO_PARAM;
-import static org.egov.inbox.util.TLConstants.SEARCH_CRITERIA_PARAM;
-import static org.egov.inbox.util.TLConstants.TENANT_ID_PARAM;
-import static org.egov.inbox.util.TLConstants.APPLICATION_NUMBER_PARAM;
-import static org.egov.inbox.util.TLConstants.TL;
-import static org.egov.inbox.util.BpaConstants.BPA;
-import static org.egov.inbox.util.BpaConstants.BPA_APPLICATION_NUMBER_PARAM;
-import static org.egov.inbox.util.BpaConstants.STATUS_PARAM;
-import static org.egov.inbox.util.BpaConstants.LOCALITY_PARAM;
-import static org.egov.inbox.util.BpaConstants.OFFSET_PARAM;
-import static org.egov.inbox.util.BpaConstants.MOBILE_NUMBER_PARAM;
-import static org.egov.inbox.util.BpaConstants.BPAREG;
-import static org.egov.inbox.util.NocConstants.NOC_APPLICATION_NUMBER_PARAM;
-import static org.egov.inbox.util.NocConstants.NOC;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -140,6 +139,7 @@ public class InboxService {
         
         List<HashMap<String, Object>> bpaCitizenStatusCountMap = new ArrayList<HashMap<String,Object>>();
         List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
+        Map<String, List<String>> tenantAndApplnNumbersMap = new HashMap<>();
         if(processCriteria != null && !ObjectUtils.isEmpty(processCriteria.getModuleName())
                 && processCriteria.getModuleName().equals(BPA) && roles.contains(BpaConstants.CITIZEN)) {
             List<Map<String, String>> tenantWiseApplns = bpaInboxFilterService.fetchTenantWiseApplicationNumbersForCitizenInboxFromSearcher(criteria, moduleSearchCriteria, requestInfo);
@@ -148,7 +148,6 @@ public class InboxService {
                 moduleSearchCriteria.put(MOBILE_NUMBER_PARAM, requestInfo.getUserInfo().getMobileNumber());
                 criteria.setModuleSearchCriteria(moduleSearchCriteria);
             } 
-            Map<String, List<String>> tenantAndApplnNumbersMap = new HashMap<>();
             for(Map<String, String> tenantAppln : tenantWiseApplns) {
                 String tenant = tenantAppln.get("tenantid");
                 String applnNo = tenantAppln.get("applicationno");
@@ -162,16 +161,19 @@ public class InboxService {
                     tenantAndApplnNumbersMap.put(tenant, l);
                 }
             }
-            
+            String inputTenantID = processCriteria.getTenantId();
+            List<String> inputBusinessIds = processCriteria.getBusinessIds();
             for(Map.Entry<String, List<String>> t : tenantAndApplnNumbersMap.entrySet()) {
                 processCriteria.setTenantId(t.getKey());
                 processCriteria.setBusinessIds(t.getValue());
                 bpaCitizenStatusCountMap.addAll(workflowService.getProcessStatusCount(requestInfo, processCriteria));
             }
+            processCriteria.setTenantId(inputTenantID);
+            processCriteria.setBusinessIds(inputBusinessIds);
         }
          String moduleName = processCriteria.getModuleName();
         if(ObjectUtils.isEmpty(processCriteria.getModuleName()) && !ObjectUtils.isEmpty(processCriteria.getBusinessService()) && (processCriteria.getBusinessService().contains("FSM") || processCriteria.getBusinessService().contains("FSM_VEHICLE_TRIP"))) {
-        	processCriteria.setModuleName(processCriteria.getBusinessService().get(0));
+                processCriteria.setModuleName(processCriteria.getBusinessService().get(0));
         }
         List<HashMap<String, Object>> statusCountMap = workflowService.getProcessStatusCount(requestInfo, processCriteria);
         processCriteria.setModuleName(moduleName);
@@ -341,8 +343,46 @@ public class InboxService {
             // processCriteria.setOffset(criteria.getOffset());
             // processCriteria.setLimit(criteria.getLimit());
             processCriteria.setIsProcessCountCall(false);
-
-            ProcessInstanceResponse processInstanceResponse = workflowService.getProcessInstance(processCriteria, requestInfo);
+            ProcessInstanceResponse processInstanceResponse;
+            /*
+             * In BPA, the stakeholder can able to submit applications for multiple cities
+             * and in a single inbox all cities submitted applications need to show.
+             * So tenantwise applications keeping in a map and then get process instance for
+             * the tenantid and application numbers.
+             */
+            if(processCriteria != null && !ObjectUtils.isEmpty(processCriteria.getModuleName())
+                    && processCriteria.getModuleName().equals(BPA) && roles.contains(BpaConstants.CITIZEN)) {
+                Map<String, List<String>> tenantAndApplnNoForProcessInstance = new HashMap<>();
+                for(Object businessId : businessIds) {
+                    for (Map.Entry<String, List<String>> tenantAppln : tenantAndApplnNumbersMap.entrySet()) {
+                        String tenantId = tenantAppln.getKey();
+                        if (tenantAppln.getValue().contains(businessId)
+                                && tenantAndApplnNoForProcessInstance.containsKey(tenantId)) {
+                              List<String> applnNos = tenantAndApplnNoForProcessInstance.get(tenantId);
+                              applnNos.add(String.valueOf(businessId));
+                              tenantAndApplnNoForProcessInstance.put(tenantId, applnNos);
+                          } else {
+                              List<String> businesIds = new ArrayList<>();
+                              businesIds.add(String.valueOf(businessId));
+                              tenantAndApplnNoForProcessInstance.put(tenantId, businesIds);
+                          }
+                      }
+                }
+                ProcessInstanceResponse processInstanceRes = new ProcessInstanceResponse();
+                for(Map.Entry<String, List<String>> appln : tenantAndApplnNoForProcessInstance.entrySet()) {
+                    processCriteria.setTenantId(appln.getKey());
+                    processCriteria.setBusinessIds(appln.getValue());
+                    ProcessInstanceResponse processInstance = workflowService.getProcessInstance(processCriteria, requestInfo);
+                    processInstanceRes.setResponseInfo(processInstance.getResponseInfo());
+                    if(processInstanceRes.getProcessInstances() == null)
+                        processInstanceRes.setProcessInstances(processInstance.getProcessInstances());
+                    else
+                        processInstanceRes.getProcessInstances().addAll(processInstance.getProcessInstances());
+                }
+                processInstanceResponse = processInstanceRes;
+            } else {
+                processInstanceResponse = workflowService.getProcessInstance(processCriteria, requestInfo);
+            }
             List<ProcessInstance> processInstances = processInstanceResponse.getProcessInstances();
             Map<String, ProcessInstance> processInstanceMap = processInstances.stream()
                     .collect(Collectors.toMap(ProcessInstance::getBusinessId, Function.identity()));
