@@ -1,5 +1,4 @@
-// export const WEBSOCKET_URL = 'ws://localhost:9898'
-export const WEBSOCKET_URL = 'ws://dev.digit.org/xstate-webchat'
+export const WEBSOCKET_URL = globalConfigs?.getConfig("xstate-webchat-services") || 'ws://dev.digit.org/xstate-webchat';
 
 export const landingPageSteps = {
     "message": "Please select what you need help with?",
