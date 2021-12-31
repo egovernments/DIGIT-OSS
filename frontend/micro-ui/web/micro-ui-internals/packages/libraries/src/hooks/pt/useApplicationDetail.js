@@ -5,6 +5,7 @@ const useApplicationDetail = (t, tenantId, propertyIds, config = {}, userType, a
   const defaultSelect = (data) => {
     let applicationDetails = data.applicationDetails.map((obj) => {
       const { additionalDetails, title } = obj;
+
       if (title === "PT_OWNERSHIP_INFO_SUB_HEADER") {
         additionalDetails.owners = additionalDetails.owners.filter((e) => e.status === "ACTIVE");
         const values = additionalDetails.documents[0]?.values?.filter((e) => e.status === "ACTIVE");

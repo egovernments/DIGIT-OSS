@@ -13,7 +13,7 @@ export const PTSearch = {
   transformPropertyToApplicationDetails: ({ property: response, t }) => {
     return [
       {
-        title: "PT_PROPERTY_ADDRESS_SUB_HEADER",
+        title: "changed",
         asSectionHeader: true,
         values: [
           { title: "PT_PROPERTY_ADDRESS_PINCODE", value: response?.address?.pincode },

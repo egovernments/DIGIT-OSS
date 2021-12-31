@@ -29,9 +29,10 @@ const AssessmentDetails = () => {
   useEffect(() => {
     // estimate calculation
     ptCalculationEstimateMutate({ Assessment: AssessmentData });
-  }, []);
+    }, []);
 
   useEffect(() => {
+    // applicationDetails.applicationDetails=applicationDetails.applicationDetails.filter(e=>e.title!=="PT_OWNERSHIP_INFO_SUB_HEADER");
     if (applicationDetails) setAppDetailsToShow(_.cloneDeep(applicationDetails));
   }, [applicationDetails]);
 
@@ -42,28 +43,63 @@ const AssessmentDetails = () => {
     role: "PT_CEMP",
     // serviceData: applicationDetails,
   });
-
+  const date=new Date();
   appDetailsToShow?.applicationDetails?.shift();
   appDetailsToShow?.applicationDetails?.unshift({
     title: "PT_ESTIMATE_DETAILS_HEADER",
-    values: [
+    values: [ 
       {
         title: "PT_PROPERTY_PTUID",
-        value: propertyId,
+        value: propertyId,  
+      },
+      // changed from here
+      {
+        title: "Property Address",
+        value: applicationDetails.applicationData.address.doorNo+','+applicationDetails.applicationData.address.locality.area+','+applicationDetails.applicationData.address.locality.name+','+applicationDetails.applicationData.address.city,
       },
       {
         title: "ES_PT_TITLE_BILLING_PERIOD",
         value: location?.state?.Assessment?.financialYear,
       },
+      {
+        title:"Billing Due Date",
+        value:date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear(),
+      },
     ],
-    additionalDetails: {
-      taxHeadEstimatesCalculation: ptCalculationEstimateData?.Calculation[0],
-    },
-  });
-
+    }
+  );
+  console.log(applicationDetails);
+  const link="";
+  // appDetailsToShow?.applicationDetails?.push({
+  //   title:<a href={link}>"Add Rebate/Penalty"</a>,
+  // });
+  appDetailsToShow?.applicationDetails?.push(
+    {
+    title:"Calculation Details",
+    values:[
+        {
+      title:"Calculation Logic<br/>",
+      value:"Property Tax = Built up area on GF * Rates per unit of GF - built up empty land on GF * Rate per unit of GF - empty land 𝝨(built-up on nth floor*Rate per unit of nth floor-built up)",  
+        },
+      ],
+        additionalDetails:{
+        title:"Applicable Charge Slabs",
+        values:[
+          {
+          title:"Ground floor unit-1",
+          value:"2/Sq yards",
+          },
+        ],
+      }
+    }
+  );
+  
+  // applicationDetails.applicationDetails={...applicationDetails.applicationDetails,calculationDetails}
   const closeToast = () => {
     setShowToast(null);
   };
+
+
 
   const handleAssessment = () => {
     if (!queryClient.getQueryData(["PT_ASSESSMENT", propertyId, location?.state?.Assessment?.financialYear])) {
@@ -96,7 +132,8 @@ const AssessmentDetails = () => {
 
   return (
     <div>
-      <Header>{t("PT_ASSESS_PROPERTY")}</Header>
+      {/* <Header>{t("PT_ASSESS_PROPERTY")}</Header> */}
+      <Header>Property Tax Assessment</Header>
       <ApplicationDetailsTemplate
         applicationDetails={appDetailsToShow}
         isLoading={isLoading}
