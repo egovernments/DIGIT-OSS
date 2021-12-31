@@ -1,6 +1,5 @@
-package org.egov.wscalculation.web.models;
+package org.egov.waterconnection.web.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.egov.common.contract.request.RequestInfo;
 
@@ -9,7 +8,9 @@ import org.egov.common.contract.request.RequestInfo;
 @Builder
 @Setter
 @Getter
+@ToString
 public class EmailRequest {
     private RequestInfo requestInfo;
+    
     private Email email;
 }

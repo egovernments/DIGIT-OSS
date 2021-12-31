@@ -1,25 +1,32 @@
 package org.egov.waterconnection.util;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.Filter;
+import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.mdms.model.MasterDetail;
+import org.egov.mdms.model.MdmsCriteria;
+import org.egov.mdms.model.MdmsCriteriaReq;
+import org.egov.mdms.model.ModuleDetail;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
-import org.egov.waterconnection.web.models.EventRequest;
-import org.egov.waterconnection.web.models.SMSRequest;
 import org.egov.waterconnection.producer.WaterConnectionProducer;
 import org.egov.waterconnection.repository.ServiceRequestRepository;
+import org.egov.waterconnection.service.UserService;
+import org.egov.waterconnection.web.models.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.RestTemplate;
 
-import com.jayway.jsonpath.JsonPath;
+import java.util.*;
 
-import lombok.extern.slf4j.Slf4j;
+import static com.jayway.jsonpath.Criteria.where;
+import static com.jayway.jsonpath.Filter.filter;
+import static org.egov.waterconnection.constants.WCConstants.*;
 
 @Component
 @Slf4j
@@ -33,8 +40,15 @@ public class NotificationUtil {
 	
 	@Autowired
 	private WaterConnectionProducer producer;
-	
-	
+
+	@Autowired
+	private RestTemplate restTemplate;
+
+	@Autowired
+	private ObjectMapper mapper;
+
+	@Autowired
+	private UserService userService;
 	/**
 	 * Returns the uri for the localization call
 	 * 
@@ -53,7 +67,7 @@ public class NotificationUtil {
 		StringBuilder uri = new StringBuilder();
 		uri.append(config.getLocalizationHost()).append(config.getLocalizationContextPath())
 				.append(config.getLocalizationSearchEndpoint()).append("?").append("locale=").append(locale)
-				.append("&tenantId=").append(tenantId).append("&module=").append(WCConstants.MODULE);
+				.append("&tenantId=").append(tenantId).append("&module=").append(MODULE);
 
 		return uri;
 	}
@@ -109,7 +123,7 @@ public class NotificationUtil {
 			}
 			for (SMSRequest smsRequest : smsRequestList) {
 				producer.push(config.getSmsNotifTopic(), smsRequest);
-				log.info("Messages: " + smsRequest.getMessage());
+				log.info("SMS Sent! Messages: " + smsRequest.getMessage());
 			}
 		}
 	}
@@ -147,7 +161,25 @@ public class NotificationUtil {
 		}
 		return getMessageTemplate(builder.toString(), localizationMessage);
 	}
-	
+
+
+	/**
+	 *
+	 * @param applicationStatus
+	 * @param localizationMessage
+	 * @return Email message template
+	 */
+	public String getCustomizedMsgForEmail(String action, String applicationStatus, String localizationMessage, int reqType) {
+		StringBuilder builder = new StringBuilder();
+		if (reqType == WCConstants.UPDATE_APPLICATION) {
+			builder.append("WS_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_EMAIL_MESSAGE");
+		}
+		if (reqType == WCConstants.MODIFY_CONNECTION) {
+			builder.append("WS_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_EMAIL_MESSAGE");
+		}
+		return getMessageTemplate(builder.toString(), localizationMessage);
+	}
+
 	/**
 	 * 
 	 * @param code Code name to fetch the localisation value
@@ -167,6 +199,117 @@ public class NotificationUtil {
 		log.info("Event: " + request.toString());
 		producer.push(config.getSaveUserEventsTopic(), request);
 	}
-	
+	public List<EmailRequest> createEmailRequest(WaterConnectionRequest waterConnectionRequest, String message, Map<String, String> mobileNumberToEmailId) {
+
+		List<EmailRequest> emailRequest = new LinkedList<>();
+		for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
+			String customizedMsg = message.replace("XXXX",entryset.getValue());
+			customizedMsg = customizedMsg.replace("{MOBILE_NUMBER}",entryset.getKey());
+//			if (customizedMsg.contains("<RECEIPT_DOWNLOAD_LINK>")) {
+//				String linkToReplace = getRecepitDownloadLink(bpaRequest, entryset.getKey());
+////				log.info("Link to replace - "+linkToReplace);
+//				customizedMsg = customizedMsg.replace("{RECEIPT_DOWNLOAD_LINK}",linkToReplace);
+//			}
+			String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
+			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
+			EmailRequest email = new EmailRequest(waterConnectionRequest.getRequestInfo(),emailobj);
+			emailRequest.add(email);
+		}
+		return emailRequest;
+	}
+
+	/**
+	 * Send the EmailRequest on the EmailNotification kafka topic
+	 *
+	 * @param emailRequestList
+	 *            The list of EmailRequest to be sent
+	 */
+	public void sendEmail(List<EmailRequest> emailRequestList) {
+
+		if (config.getIsEmailNotificationEnabled()) {
+			if (CollectionUtils.isEmpty(emailRequestList))
+				log.info("Messages from localization couldn't be fetched!");
+			for (EmailRequest emailRequest : emailRequestList) {
+				producer.push(config.getEmailNotifTopic(), emailRequest);
+				log.info("Email Request -> "+emailRequest.toString());
+				log.info("EMAIL notification sent!");
+			}
+		}
+	}
+
+	public Map<String, String> fetchUserEmailIds(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
+		Map<String, String> mapOfPhnoAndEmailIds = new HashMap<>();
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
+		Map<String, Object> userSearchRequest = new HashMap<>();
+		userSearchRequest.put("RequestInfo", requestInfo);
+		userSearchRequest.put("tenantId", tenantId);
+		userSearchRequest.put("userType", "CITIZEN");
+		for(String mobileNo: mobileNumbers) {
+			userSearchRequest.put("userName", mobileNo);
+			try {
+				Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest);
+				if(null != user) {
+					if(JsonPath.read(user, "$.user[0].emailId")!=null) {
+						String email = JsonPath.read(user, "$.user[0].emailId");
+						mapOfPhnoAndEmailIds.put(mobileNo, email);
+					}
+				}else {
+					log.error("Service returned null while fetching user for username - "+mobileNo);
+				}
+			}catch(Exception e) {
+				log.error("Exception while fetching user for username - "+mobileNo);
+				log.error("Exception trace: ",e);
+				continue;
+			}
+		}
+		return mapOfPhnoAndEmailIds;
+	}
+
+	public List<String> fetchChannelList(RequestInfo requestInfo, String tenantId, String moduleName, String action){
+		List<String> masterData = new ArrayList<>();
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getMdmsHost()).append(config.getMdmsUrl());
+		if(StringUtils.isEmpty(tenantId))
+			return masterData;
+		MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, tenantId.split("\\.")[0]);
+
+		Filter masterDataFilter = filter(
+				where(MODULECONSTANT).is(moduleName).and(ACTION).is(action)
+		);
+
+		try {
+			Object response = restTemplate.postForObject(uri.toString(), mdmsCriteriaReq, Map.class);
+			masterData = JsonPath.parse(response).read("$.MdmsRes.Channel.channelList[?].channelNames[*]", masterDataFilter);
+		}catch(Exception e) {
+			log.error("Exception while fetching workflow states to ignore: ",e);
+		}
+		return masterData;
+	}
+
+	private MdmsCriteriaReq getMdmsRequestForChannelList(RequestInfo requestInfo, String tenantId){
+		MasterDetail masterDetail = new MasterDetail();
+		masterDetail.setName(WCConstants.CHANNEL_LIST);
+		List<MasterDetail> masterDetailList = new ArrayList<>();
+		masterDetailList.add(masterDetail);
+
+		ModuleDetail moduleDetail = new ModuleDetail();
+		moduleDetail.setMasterDetails(masterDetailList);
+		moduleDetail.setModuleName(CHANNEL);
+		List<ModuleDetail> moduleDetailList = new ArrayList<>();
+		moduleDetailList.add(moduleDetail);
+
+		MdmsCriteria mdmsCriteria = new MdmsCriteria();
+		mdmsCriteria.setTenantId(tenantId);
+		mdmsCriteria.setModuleDetails(moduleDetailList);
+
+		MdmsCriteriaReq mdmsCriteriaReq = new MdmsCriteriaReq();
+		mdmsCriteriaReq.setMdmsCriteria(mdmsCriteria);
+		mdmsCriteriaReq.setRequestInfo(requestInfo);
+
+		return mdmsCriteriaReq;
+	}
+
 
 }

@@ -3,14 +3,8 @@ package org.egov.swcalculation.service;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.swcalculation.config.SWCalculationConfiguration;
@@ -18,19 +12,8 @@ import org.egov.swcalculation.constants.SWCalculationConstant;
 import org.egov.swcalculation.repository.ServiceRequestRepository;
 import org.egov.swcalculation.util.CalculatorUtils;
 import org.egov.swcalculation.util.SWCalculationUtil;
-import org.egov.swcalculation.web.models.Action;
-import org.egov.swcalculation.web.models.ActionItem;
-import org.egov.swcalculation.web.models.Category;
-import org.egov.swcalculation.web.models.DemandNotificationObj;
-import org.egov.swcalculation.web.models.Event;
-import org.egov.swcalculation.web.models.EventRequest;
-import org.egov.swcalculation.web.models.NotificationReceiver;
-import org.egov.swcalculation.web.models.Property;
-import org.egov.swcalculation.web.models.Recepient;
-import org.egov.swcalculation.web.models.SMSRequest;
-import org.egov.swcalculation.web.models.SewerageConnection;
-import org.egov.swcalculation.web.models.SewerageConnectionRequest;
-import org.egov.swcalculation.web.models.Source;
+import org.egov.swcalculation.web.models.*;
+import org.egov.swcalculation.web.models.users.User;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +27,9 @@ import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
+
+import static org.egov.swcalculation.constants.SWCalculationConstant.*;
+import static org.springframework.util.StringUtils.capitalize;
 
 @Slf4j
 @Component
@@ -85,53 +71,64 @@ public class PaymentNotificationService {
 			HashMap<String, String> mappedRecord = mapRecords(context);
 			Map<String, Object> info = (Map<String, Object>) record.get("requestInfo");
 			RequestInfo requestInfo = mapper.convertValue(info, RequestInfo.class);
-   
+
 			List<SewerageConnection> sewerageConnectionList = calculatorUtils.getSewerageConnection(requestInfo,
 					mappedRecord.get(consumerCode), mappedRecord.get(tenantId));
 			int size = sewerageConnectionList.size();
-			SewerageConnection sewerageConnection = sewerageConnectionList.get(size-1);
-			
+			SewerageConnection sewerageConnection = sewerageConnectionList.get(size - 1);
+
 			SewerageConnectionRequest sewerageConnectionRequest = SewerageConnectionRequest.builder()
 					.sewerageConnection(sewerageConnection).requestInfo(requestInfo).build();
 			Property property = sWCalculationUtil.getProperty(sewerageConnectionRequest);
-			
-			if (null != config.getIsUserEventsNotificationEnabled()) {
-				if (config.getIsUserEventsNotificationEnabled()) {
-					if (SWCalculationConstant.SERVICE_FIELD_VALUE_SW.equalsIgnoreCase(mappedRecord.get(serviceName))) {
+
+			List<String> configuredChannelNames = util.fetchChannelList(sewerageConnectionRequest.getRequestInfo(), sewerageConnectionRequest.getSewerageConnection().getTenantId(), SERVICE_FIELD_VALUE_SW, sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction());
+
+			if (configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
+				if (null != config.getIsUserEventsNotificationEnabled()) {
+					if (config.getIsUserEventsNotificationEnabled()) {
+						if (SWCalculationConstant.SERVICE_FIELD_VALUE_SW.equalsIgnoreCase(mappedRecord.get(serviceName))) {
+							if (sewerageConnection == null) {
+								throw new CustomException("EG_SW_INVALID_CONNECTION_NO",
+										"Sewerage Connection are not present for " + mappedRecord.get(consumerCode)
+												+ " connection no");
+							}
+							EventRequest eventRequest = getEventRequest(mappedRecord, sewerageConnectionRequest, topic,
+									property);
+							if (null != eventRequest)
+								util.sendEventNotification(eventRequest);
+
+						}
+					}
+				}
+			}
+
+			if (configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
+				if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
+					if (mappedRecord.get(serviceName).equalsIgnoreCase(SWCalculationConstant.SERVICE_FIELD_VALUE_SW)) {
 						if (sewerageConnection == null) {
-							throw new CustomException("INVALID_CONNECTION_NO",
+							throw new CustomException("EG_SW_INVALID_CONNECTION_ID",
 									"Sewerage Connection are not present for " + mappedRecord.get(consumerCode)
 											+ " connection no");
 						}
-						EventRequest eventRequest = getEventRequest(mappedRecord, sewerageConnectionRequest, topic,
-								property);
-						if (null != eventRequest)
-							util.sendEventNotification(eventRequest);
-
-					}
-				}
-			}
-			if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
-				if (mappedRecord.get(serviceName).equalsIgnoreCase(SWCalculationConstant.SERVICE_FIELD_VALUE_SW)) {
-					if (sewerageConnection == null) {
-						throw new CustomException("INVALID_CONNECTION_ID",
-								"Sewerage Connection are not present for " + mappedRecord.get(consumerCode)
-										+ " connection no");
-					}
-					List<SMSRequest> smsRequests = getSmsRequest(mappedRecord, sewerageConnectionRequest, topic, property);
-					if (smsRequests != null && !CollectionUtils.isEmpty(smsRequests)) {
-						log.info("SMS Notification :: -> " + mapper.writeValueAsString(smsRequests));
-						util.sendSMS(smsRequests);
+						List<SMSRequest> smsRequests = getSmsRequest(mappedRecord, sewerageConnectionRequest, topic, property);
+						if (smsRequests != null && !CollectionUtils.isEmpty(smsRequests)) {
+							log.info("SMS Notification :: -> " + mapper.writeValueAsString(smsRequests));
+							util.sendSMS(smsRequests);
+						}
 					}
 				}
 			}
 		}
-
 		catch (Exception ex) {
-			log.error("Exception while processing record: ", ex);
+			log.error("EG_SW Exception while processing record: ", ex);
 		}
 	}
 
+	/**
+	 * Enriches the smsRequest List with the customized messages
+	 * @param sewerageConnectionRequest The sewerageConnectionRequest from kafka topic
+	 * @return smsRequests List of SMSRequests
+	 */
 	private List<SMSRequest> getSmsRequest(HashMap<String, String> mappedRecord, SewerageConnectionRequest sewerageConnectionRequest,
 			String topic, Property property) {
 		String localizationMessage = util.getLocalizationMessages(mappedRecord.get(tenantId), sewerageConnectionRequest.getRequestInfo());
@@ -153,6 +150,12 @@ public class PaymentNotificationService {
 				}
 			});
 		}
+		//Send the notification to applicant
+		if(!org.apache.commons.lang.StringUtils.isEmpty(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
+		{
+			mobileNumbersAndNames.put(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), sewerageConnectionRequest.getRequestInfo().getUserInfo().getName());
+		}
+
 		Map<String, String> mobileNumberAndMessage = getMessageForMobileNumber(mobileNumbersAndNames, mappedRecord,
 				message);
 		List<SMSRequest> smsRequest = new ArrayList<>();
@@ -179,10 +182,15 @@ public class PaymentNotificationService {
 			receiverList.addAll(mapper.readValue(receiver.toJSONString(),
 					mapper.getTypeFactory().constructCollectionType(List.class, NotificationReceiver.class)));
 		} catch (IOException e) {
-			throw new CustomException("PARSING_ERROR", " Notification Receiver List Can Not Be Parsed!!");
+			throw new CustomException("EG_SW_PARSING_ERROR", " Notification Receiver List Can Not Be Parsed!!");
 		}
 	}
 
+	/**
+	 * Enriches the eventrequest with the customized events
+	 * @param sewerageConnectionRequest The sewerageConnectionRequest from kafka topic
+	 * @return EventRequest object
+	 */
 	private EventRequest getEventRequest(HashMap<String, String> mappedRecord, SewerageConnectionRequest sewerageConnectionRequest,
 			String topic, Property property) {
 
@@ -205,6 +213,11 @@ public class PaymentNotificationService {
 					mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
 				}
 			});
+		}
+		//Send the notification to applicant
+		if(!org.apache.commons.lang.StringUtils.isEmpty(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
+		{
+			mobileNumbersAndNames.put(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), sewerageConnectionRequest.getRequestInfo().getUserInfo().getName());
 		}
 		Map<String, String> mobileNumberAndMessage = getMessageForMobileNumber(mobileNumbersAndNames, mappedRecord,
 				message);
@@ -265,8 +278,8 @@ public class PaymentNotificationService {
 			mappedRecord.put(dueDate,
 					getLatestBillDetails(mapper.writeValueAsString(context.read("$.Bill[0].billDetails"))));
 		} catch (Exception ex) {
-			log.error("Unable to fetch values from bill ",ex);
-			throw new CustomException("INVALID_BILL_DETAILS", "Unable to fetch values from bill");
+			log.error("EG_SW Unable to fetch values from bill ",ex);
+			throw new CustomException("EG_SW_INVALID_BILL_DETAILS", "Unable to fetch values from bill");
 		}
 
 		return mappedRecord;
@@ -338,4 +351,104 @@ public class PaymentNotificationService {
 		return mapOfPhoneNoAndUUIDs;
 	}
 
+	/**
+	 * Returns message template with replaced placeholders
+	 * for Bill Generation Success/Failure Notification
+	 *
+	 * @param message - Request Info Object
+	 * @param user -User object notification will be sent to
+	 * @return message after replacing placeholder with values
+	 *
+	 */
+	public String getBillNotificationMessage(String message,Map<String, Object> masterMap,User user) {
+		if (message.contains("{Name}"))
+			message = message.replace("{Name}", user.getName());
+		if (message.contains("{Service}"))
+			message = message.replace("{Service}", SERVICE_FIELD_VALUE_SW);
+		if (message.contains("{ULB}"))
+			message = message.replace("{ULB}", capitalize(user.getTenantId().split("\\.")[1]));
+		if (message.contains("{billing cycle}"))
+		{String billingCycle = (String) masterMap.get(SWCalculationConstant.Billing_Cycle_String);
+			message = message.replace("{billing cycle}",billingCycle);}
+
+		return message;
+
+	}
+
+	/**
+	 * Sends Bill Generation Success/Failure Notification
+	 *
+	 * @param requestInfo - Request Info Object
+	 * @param uuid - Uuid of the user notification will be sent to
+	 * @param tenantId - Tenant Id
+	 * @param isSuccess - Whether Bill generation was a success or failure
+	 *
+	 */
+	public void sendBillNotification(RequestInfo requestInfo, String uuid, String tenantId, Map<String, Object> masterMap, Boolean isSuccess) {
+
+		List<String> configuredChannelNames = util.fetchChannelList(requestInfo, tenantId, SERVICE_FIELD_VALUE_SW, ACTION_FOR_BILL);
+//		List<String> configuredChannelNames = Arrays.asList(new String[] {"SMS","EMAIL"});
+		User user = util.fetchUserByUUID(uuid, requestInfo, tenantId);
+		if(user == null)
+		{
+			log.info("No user found for uuid - "+ uuid);
+			return;
+		}
+		if (configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
+			if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
+				String localizationMessage = util.getLocalizationMessages(tenantId, requestInfo);
+				String messageString = null;
+				if (isSuccess) {
+					messageString = util.getMessageTemplate(BILL_SUCCESS_MESSAGE_SMS, localizationMessage);
+				} else {
+					messageString = util.getMessageTemplate(BILL_FAILURE_MESSAGE_SMS, localizationMessage);
+				}
+				if (messageString == null) {
+					log.error("EG_SW No message Found For " + SWCalculationConstant.BILL_FAILURE_MESSAGE_SMS+" or "+BILL_SUCCESS_MESSAGE_SMS);
+					return;
+				}
+
+				messageString = getBillNotificationMessage(messageString,masterMap,user);
+				log.info(messageString);
+				SMSRequest req = SMSRequest.builder().mobileNumber(user.getMobileNumber()).message(messageString).category(Category.NOTIFICATION).build();
+				List<SMSRequest> smsRequests = new ArrayList<>();
+				smsRequests.add(req);
+
+				if (!CollectionUtils.isEmpty(smsRequests)) {
+					log.info("SMS Notification :: -> ");
+					util.sendSMS(smsRequests);
+				}
+			}
+		}
+
+		if (configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
+			if (config.getIsMailEnabled() != null && config.getIsMailEnabled()) {
+				String localizationMessage = util.getLocalizationMessages(tenantId, requestInfo);
+				String messageString = null;
+				if (isSuccess) {
+					messageString = util.getMessageTemplate(BILL_SUCCESS_MESSAGE_EMAIL, localizationMessage);
+				} else {
+					messageString = util.getMessageTemplate(BILL_FAILURE_MESSAGE_EMAIL, localizationMessage);
+				}
+				if (messageString == null) {
+					log.error("EG_SW No message Found For " + SWCalculationConstant.BILL_SUCCESS_MESSAGE_EMAIL+" or "+BILL_FAILURE_MESSAGE_EMAIL );
+					return;
+				}
+				String customizedMsg = getBillNotificationMessage(messageString,masterMap,user);
+				String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
+				String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+5);
+				Email emailobj = Email.builder().emailTo(Collections.singleton(user.getEmailId())).isHTML(true).body(body).subject(subject).build();
+				EmailRequest email = new EmailRequest(requestInfo,emailobj);
+
+				List<EmailRequest> emailRequests = new ArrayList<>();
+				emailRequests.add(email);
+
+				if (!CollectionUtils.isEmpty(emailRequests)) {
+					log.info("Email Notification :: -> ");
+					util.sendEmail(emailRequests);
+				}
+			}
+
+		}
+	}
 }

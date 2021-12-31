@@ -1,34 +1,20 @@
 package org.egov.waterconnection.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.util.NotificationUtil;
 import org.egov.waterconnection.util.WaterServicesUtil;
 import org.egov.waterconnection.validator.ValidateProperty;
-import org.egov.waterconnection.web.models.Action;
-import org.egov.waterconnection.web.models.Category;
-import org.egov.waterconnection.web.models.Event;
-import org.egov.waterconnection.web.models.EventRequest;
-import org.egov.waterconnection.web.models.Property;
-import org.egov.waterconnection.web.models.Recepient;
-import org.egov.waterconnection.web.models.SMSRequest;
-import org.egov.waterconnection.web.models.Source;
-import org.egov.waterconnection.web.models.WaterConnectionRequest;
+import org.egov.waterconnection.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.egov.waterconnection.constants.WCConstants.*;
 
@@ -57,21 +43,26 @@ public class EditNotificationService {
 
 	public void sendEditNotification(WaterConnectionRequest request) {
 		try {
-			
+			String applicationStatus = request.getWaterConnection().getApplicationStatus();
+			List<String> configuredChannelNames =  notificationUtil.fetchChannelList(request.getRequestInfo(), request.getWaterConnection().getTenantId(), WATER_SERVICE_BUSINESS_ID, request.getWaterConnection().getProcessInstance().getAction());
+
 			Property property = validateProperty.getOrValidateProperty(request);
-			
-			if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
-				EventRequest eventRequest = getEventRequest(request, property);
-				if (eventRequest != null) {
-					notificationUtil.sendEventNotification(eventRequest);
+
+			if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
+				if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
+					EventRequest eventRequest = getEventRequest(request, property);
+					if (eventRequest != null) {
+						notificationUtil.sendEventNotification(eventRequest);
+					}
 				}
 			}
-			if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
+			if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
+				if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
 				List<SMSRequest> smsRequests = getSmsRequest(request, property);
 				if (!CollectionUtils.isEmpty(smsRequests)) {
 					notificationUtil.sendSMS(smsRequests);
 				}
-			}
+			}}
 		} catch (Exception ex) {
 			log.error("Exception when trying to send notification. ", ex);
 		}
@@ -93,22 +84,31 @@ public class EditNotificationService {
 				message = notificationUtil.getCustomizedMsg(DEFAULT_OBJECT_MODIFY_APP_MSG, localizationMessage);
 		}
 		Map<String, String> mobileNumbersAndNames = new HashMap<>();
-		property.getOwners().forEach(owner -> {
-			if (owner.getMobileNumber() != null)
-				mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
-		});
-		//send the notification to the connection holders
-		if(!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
-			waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
-				if (!StringUtils.isEmpty(holder.getMobileNumber())) {
-					mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
-				}
+
+			//Send the notification to all owners
+			property.getOwners().forEach(owner -> {
+				if (owner.getMobileNumber() != null)
+					mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
 			});
-		}
-		Map<String, String> mobileNumberAndMessage = workflowNotificationService
-				.getMessageForMobileNumber(mobileNumbersAndNames, waterConnectionRequest, message, property);
+
+			//send the notification to the connection holders
+			if(!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
+				waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
+					if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+						mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+					}
+				});
+			}
+			//Send the notification to applicant
+			if(!org.apache.commons.lang.StringUtils.isEmpty(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
+			{
+				mobileNumbersAndNames.put(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), waterConnectionRequest.getRequestInfo().getUserInfo().getName());
+			}
+
+		Map<String, String> mobileNumberAndMessage = workflowNotificationService.getMessageForMobileNumber(mobileNumbersAndNames, waterConnectionRequest, message, property);
 		Set<String> mobileNumbers = mobileNumberAndMessage.keySet().stream().collect(Collectors.toSet());
-		Map<String, String> mapOfPhoneNoAndUUIDs = workflowNotificationService.fetchUserUUIDs(mobileNumbers, waterConnectionRequest.getRequestInfo(),
+		Map<String, String> mapOfPhoneNoAndUUIDs = workflowNotificationService.
+				fetchUserUUIDs(mobileNumbers, waterConnectionRequest.getRequestInfo(),
 				property.getTenantId());
 		if (CollectionUtils.isEmpty(mapOfPhoneNoAndUUIDs.keySet())) {
 			log.info("UUID search failed!");
@@ -153,23 +153,32 @@ public class EditNotificationService {
 				message = notificationUtil.getCustomizedMsg(DEFAULT_OBJECT_MODIFY_SMS_MSG, localizationMessage);
 		}
 		Map<String, String> mobileNumbersAndNames = new HashMap<>();
-		property.getOwners().forEach(owner -> {
-			if (owner.getMobileNumber() != null)
-				mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
-		});
-		//send the notification to the connection holders
-		if(!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
-			waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
-				if (!StringUtils.isEmpty(holder.getMobileNumber())) {
-					mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
-				}
+
+			//Send the notification to all owners
+			property.getOwners().forEach(owner -> {
+				if (owner.getMobileNumber() != null)
+					mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
 			});
-		}
+
+			//send the notification to the connection holders
+			if(!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
+				waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
+					if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+						mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+					}
+				});
+			}
+			//Send the notification to applicant
+			if(!org.apache.commons.lang.StringUtils.isEmpty(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
+			{
+				mobileNumbersAndNames.put(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), waterConnectionRequest.getRequestInfo().getUserInfo().getName());
+			}
+
 		Map<String, String> mobileNumberAndMessage = workflowNotificationService
 				.getMessageForMobileNumber(mobileNumbersAndNames, waterConnectionRequest, message, property);
 		List<SMSRequest> smsRequest = new ArrayList<>();
 		mobileNumberAndMessage.forEach((mobileNumber, msg) -> {
-			SMSRequest req = SMSRequest.builder().mobileNumber(mobileNumber).message(msg).category(Category.TRANSACTION).build();
+			SMSRequest req = SMSRequest.builder().mobileNumber(mobileNumber).message(msg).category(Category.NOTIFICATION).build();
 			smsRequest.add(req);
 		});
 		return smsRequest;

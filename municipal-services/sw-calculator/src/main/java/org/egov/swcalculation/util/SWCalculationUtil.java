@@ -1,31 +1,24 @@
 package org.egov.swcalculation.util;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Optional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import com.jayway.jsonpath.Filter;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.mdms.model.MasterDetail;
+import org.egov.mdms.model.MdmsCriteria;
+import org.egov.mdms.model.MdmsCriteriaReq;
+import org.egov.mdms.model.ModuleDetail;
 import org.egov.swcalculation.config.SWCalculationConfiguration;
 import org.egov.swcalculation.constants.SWCalculationConstant;
-import org.egov.swcalculation.web.models.DemandDetail;
-import org.egov.swcalculation.web.models.DemandDetailAndCollection;
-import org.egov.swcalculation.web.models.DemandNotificationObj;
-import org.egov.swcalculation.web.models.EventRequest;
-import org.egov.swcalculation.web.models.GetBillCriteria;
-import org.egov.swcalculation.web.models.NotificationReceiver;
-import org.egov.swcalculation.web.models.Property;
-import org.egov.swcalculation.web.models.PropertyCriteria;
-import org.egov.swcalculation.web.models.PropertyResponse;
-import org.egov.swcalculation.web.models.RequestInfoWrapper;
-import org.egov.swcalculation.web.models.SMSRequest;
-import org.egov.swcalculation.web.models.SewerageConnectionRequest;
+import org.egov.swcalculation.web.models.*;
 import org.egov.swcalculation.producer.SWCalculationProducer;
 import org.egov.swcalculation.repository.ServiceRequestRepository;
+import org.egov.swcalculation.web.models.users.User;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +30,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.client.RestTemplate;
+
+import static com.jayway.jsonpath.Criteria.where;
+import static com.jayway.jsonpath.Filter.filter;
+import static org.egov.swcalculation.constants.SWCalculationConstant.*;
 
 
 @Component
@@ -57,8 +55,10 @@ public class SWCalculationUtil {
 	
 	@Autowired
 	private ObjectMapper objectMapper;
-	
-	
+
+	@Autowired
+	private RestTemplate restTemplate;
+
 	@Value("${egov.property.service.host}")
 	private String propertyHost;
 
@@ -219,7 +219,7 @@ public class SWCalculationUtil {
 	 * @return message for the specific code
 	 */
 	@SuppressWarnings("unchecked")
-	private String getMessageTemplate(String notificationCode, String localizationMessage) {
+	public String getMessageTemplate(String notificationCode, String localizationMessage) {
 		String path = "$..messages[?(@.code==\"{}\")].message";
 		path = path.replace("{}", notificationCode);
 		String message = null;
@@ -246,10 +246,10 @@ public class SWCalculationUtil {
 	public String getCustomizedMsgForSMS(String topic, String localizationMessage) {
 		String messageString = null;
 		if (topic.equalsIgnoreCase(config.getOnDemandSuccess())) {
-			messageString = getMessageTemplate(SWCalculationConstant.DEMAND_SUCCESS_MESSAGE, localizationMessage);
+			messageString = getMessageTemplate(DEMAND_SUCCESS_MESSAGE_SMS, localizationMessage);
 		}
 		if (topic.equalsIgnoreCase(config.getOnDemandFailed())) {
-			messageString = getMessageTemplate(SWCalculationConstant.DEMAND_FAILURE_MESSAGE, localizationMessage);
+			messageString = getMessageTemplate(DEMAND_FAILURE_MESSAGE_SMS, localizationMessage);
 		}
 		if (topic.equalsIgnoreCase(config.getPayTriggers())) {
 			messageString = getMessageTemplate(SWCalculationConstant.SEWERAGE_CONNECTION_BILL_GENERATION_SMS_MESSAGE,
@@ -257,7 +257,20 @@ public class SWCalculationUtil {
 		}
 		return messageString;
 	}
-	
+
+
+	public String getCustomizedMsgForEmail(String topic, String localizationMessage) {
+		String messageString = null;
+		if (topic.equalsIgnoreCase(config.getOnDemandSuccess())) {
+			messageString = getMessageTemplate(DEMAND_SUCCESS_MESSAGE_EMAIL, localizationMessage);
+		}
+		if (topic.equalsIgnoreCase(config.getOnDemandSuccess())) {
+			messageString = getMessageTemplate(DEMAND_FAILURE_MESSAGE_EMAIL, localizationMessage);
+		}
+		return messageString;
+	}
+
+
 	public String getCustomizedMsgForInApp(String topic, String localizationMessage) {
 		String messageString = null;
 		if (topic.equalsIgnoreCase(config.getOnDemandSuccess())) {
@@ -283,8 +296,8 @@ public class SWCalculationUtil {
 	public String getAppliedMsg(NotificationReceiver receiver, String message, DemandNotificationObj obj) {
 		message = message.replace("{First Name}", receiver.getFirstName() == null ? "" : receiver.getFirstName());
 		message = message.replace("{Last Name}", receiver.getLastName() == null ? "" : receiver.getLastName());
-		message = message.replace("{service name}", receiver.getServiceName() == null ? "" : receiver.getServiceName());
-		message = message.replace("{ULB Name}", receiver.getUlbName() == null ? "" : receiver.getUlbName());
+		message = message.replace("{Service}", receiver.getServiceName() == null ? "" : receiver.getServiceName());
+		message = message.replace("{ULB}", receiver.getUlbName() == null ? "" : receiver.getUlbName());
 		message = message.replace("{billing cycle}", obj.getBillingCycle() == null ? "" : obj.getBillingCycle());
 		return message;
 	}
@@ -305,7 +318,23 @@ public class SWCalculationUtil {
 			}
 		}
 	}
-	
+
+	/**
+	 * Send the SMSRequest on the EmailNotification kafka topic
+	 * @param emailRequestList The list of EmailRequest to be sent
+	 */
+	public void sendEmail(List<EmailRequest> emailRequestList) {
+		if (config.getIsMailEnabled()) {
+			if (CollectionUtils.isEmpty(emailRequestList))
+				log.info("Messages from localization couldn't be fetched!");
+			emailRequestList.forEach(emailRequest -> {
+				producer.push(config.getEmailNotifTopic(), emailRequest);
+				log.info("Email To : " + emailRequest.getEmail() + " Body: " + emailRequest.getEmail().getBody() + " Subject: " + emailRequest.getEmail().getSubject());
+			});
+
+		}
+	}
+
 	/**
 	 * Pushes the event request to Kafka Queue.
 	 * 
@@ -332,7 +361,7 @@ public class SWCalculationUtil {
 				RequestInfoWrapper.builder().requestInfo(sewerageConnectionRequest.getRequestInfo()).build());
 		List<Property> propertyList = getPropertyDetails(result);
 		if (CollectionUtils.isEmpty(propertyList)) {
-			throw new CustomException("INVALID_PROPERTY_ID", "Failed to create Sewerage connection. Invalid Property Id");
+			throw new CustomException("EG_SW_INVALID_PROPERTY_ID", "Failed to create Sewerage connection. Invalid Property Id");
 		}
 		return propertyList;
 	}
@@ -345,12 +374,12 @@ public class SWCalculationUtil {
 	public Property getProperty(SewerageConnectionRequest sewerageConnectionRequest) {
 		Optional<Property> propertyList = propertySearch(sewerageConnectionRequest).stream().findFirst();
 		if (!propertyList.isPresent()) {
-			throw new CustomException("INVALID_PROPERTY_ID",
+			throw new CustomException("EG_SW_INVALID_PROPERTY_ID",
 					"Sewerage connection cannot be enriched without property");
 		}
 		Property property = propertyList.get();
 		if (StringUtils.isEmpty(property.getUsageCategory())) {
-			throw new CustomException("INVALID_PROPERTY_USAGE_TYPE",
+			throw new CustomException("EG_SW_INVALID_PROPERTY_USAGE_TYPE",
 					"Sewerage connection cannot be enriched without property usage type");
 		}
 		return property;
@@ -405,12 +434,158 @@ public class SWCalculationUtil {
 			PropertyResponse propertyResponse = objectMapper.convertValue(result, PropertyResponse.class);
 			return propertyResponse.getProperties();
 		} catch (Exception ex) {
-			throw new CustomException("PARSING_ERROR", "The property json cannot be parsed");
+			throw new CustomException("EG_SW_PARSING_ERROR", "The property json cannot be parsed");
 		}
 	}
 
 	public StringBuilder getPropertyURL() {
 		return new StringBuilder().append(propertyHost).append(searchPropertyEndPoint);
 	}
-	
+
+	public Map<String, String> fetchUserEmailIds(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
+		Map<String, String> mapOfPhnoAndEmailIds = new HashMap<>();
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
+		Map<String, Object> userSearchRequest = new HashMap<>();
+		userSearchRequest.put("RequestInfo", requestInfo);
+		userSearchRequest.put("tenantId", tenantId);
+		userSearchRequest.put("userType", "CITIZEN");
+		for(String mobileNo: mobileNumbers) {
+			userSearchRequest.put("userName", mobileNo);
+			try {
+				Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest);
+				if(null != user) {
+					if(JsonPath.read(user, "$.user[0].emailId")!=null) {
+						String email = JsonPath.read(user, "$.user[0].emailId");
+						mapOfPhnoAndEmailIds.put(mobileNo, email);
+					}
+				}else {
+					log.error("Service returned null while fetching user for username - "+mobileNo);
+				}
+			}catch(Exception e) {
+				log.error("Exception while fetching user for username - "+mobileNo);
+				log.error("Exception trace: ",e);
+				continue;
+			}
+		}
+		return mapOfPhnoAndEmailIds;
+	}
+
+	public List<String> fetchChannelList(RequestInfo requestInfo, String tenantId, String moduleName, String action){
+		List<String> masterData = new ArrayList<>();
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getMdmsHost()).append(config.getMdmsEndPoint());
+		if(StringUtils.isEmpty(tenantId))
+			return masterData;
+		MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, tenantId.split("\\.")[0]);
+
+		Filter masterDataFilter = filter(
+				where(MODULECONSTANT).is(moduleName).and(ACTION).is(action)
+		);
+
+		try {
+			Object response = restTemplate.postForObject(uri.toString(), mdmsCriteriaReq, Map.class);
+			masterData = JsonPath.parse(response).read("$.MdmsRes.Channel.channelList[?].channelNames[*]", masterDataFilter);
+		}catch(Exception e) {
+			log.error("Exception while fetching workflow states to ignore: ",e);
+		}
+		return masterData;
+	}
+
+	private MdmsCriteriaReq getMdmsRequestForChannelList(RequestInfo requestInfo, String tenantId){
+		MasterDetail masterDetail = new MasterDetail();
+		masterDetail.setName(CHANNEL_LIST);
+		List<MasterDetail> masterDetailList = new ArrayList<>();
+		masterDetailList.add(masterDetail);
+
+		ModuleDetail moduleDetail = new ModuleDetail();
+		moduleDetail.setMasterDetails(masterDetailList);
+		moduleDetail.setModuleName(CHANNEL);
+		List<ModuleDetail> moduleDetailList = new ArrayList<>();
+		moduleDetailList.add(moduleDetail);
+
+		MdmsCriteria mdmsCriteria = new MdmsCriteria();
+		mdmsCriteria.setTenantId(tenantId);
+		mdmsCriteria.setModuleDetails(moduleDetailList);
+
+		MdmsCriteriaReq mdmsCriteriaReq = new MdmsCriteriaReq();
+		mdmsCriteriaReq.setMdmsCriteria(mdmsCriteria);
+		mdmsCriteriaReq.setRequestInfo(requestInfo);
+
+		return mdmsCriteriaReq;
+	}
+
+	/**
+	 * Fetches User Object based on the UUID.
+	 *
+	 * @param uuidstring - UUID of User
+	 * @param requestInfo - Request Info Object
+	 * @param tenantId - Tenant Id
+	 * @return - Returns User object with given UUID
+	 */
+	public User fetchUserByUUID(String uuidstring, RequestInfo requestInfo, String tenantId) {
+		log.info("here- "+uuidstring);
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
+		Map<String, Object> userSearchRequest = new HashMap<>();
+		userSearchRequest.put("RequestInfo", requestInfo);
+		userSearchRequest.put("tenantId", tenantId);
+		userSearchRequest.put("userType", "EMPLOYEE");
+		Set<String> uuid = new HashSet<>() ;
+		uuid.add(uuidstring);
+		userSearchRequest.put("uuid", uuid);
+		User user = null;
+		try {
+			LinkedHashMap<String, Object> responseMap = (LinkedHashMap<String, Object>) serviceRequestRepository.fetchResult(uri, userSearchRequest);
+			log.info("responseMap - "+ responseMap.toString());
+			List<LinkedHashMap<String, Object>> users = (List<LinkedHashMap<String, Object>>) responseMap.get("user");
+			String dobFormat = "yyyy-MM-dd";
+			parseResponse(responseMap,dobFormat);
+			user = 	objectMapper.convertValue(users.get(0), User.class);
+
+		}catch(Exception e) {
+			log.error("Exception while trying parse user object: ",e);
+		}
+		log.info(user.toString());
+		return user;
+	}
+
+	/**
+	 * Parses date formats to long for all users in responseMap
+	 * @param responeMap LinkedHashMap got from user api response
+	 */
+	private void parseResponse(LinkedHashMap responeMap,String dobFormat){
+		List<LinkedHashMap> users = (List<LinkedHashMap>)responeMap.get("user");
+		String formatForDate = "dd-MM-yyyy HH:mm:ss";
+		if(users!=null){
+			users.forEach( map -> {
+						map.put("createdDate",dateTolong((String)map.get("createdDate"),formatForDate));
+						if((String)map.get("lastModifiedDate")!=null)
+							map.put("lastModifiedDate",dateTolong((String)map.get("lastModifiedDate"),formatForDate));
+						if((String)map.get("dob")!=null)
+							map.put("dob",dateTolong((String)map.get("dob"),dobFormat));
+						if((String)map.get("pwdExpiryDate")!=null)
+							map.put("pwdExpiryDate",dateTolong((String)map.get("pwdExpiryDate"),formatForDate));
+					}
+			);
+		}
+	}
+
+	/**
+	 * Converts date to long
+	 * @param date date to be parsed
+	 * @param format Format of the date
+	 * @return Long value of date
+	 */
+	private Long dateTolong(String date,String format){
+		SimpleDateFormat simpleDateFormatObject = new SimpleDateFormat(format);
+		Date returnDate = null;
+		try {
+			returnDate = simpleDateFormatObject.parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return  returnDate.getTime();
+	}
+
 }

@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.egov.common.contract.request.RequestInfo;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,18 +15,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class EmailRequest {
-    private String email;
-    private String subject;
-    private String body;
-    @JsonProperty("isHTML")
-    private boolean isHTML;
-
-    public Email toDomain() {
-        return Email.builder()
-				.toAddress(email)
-				.subject(subject)
-				.body(body)
-				.html(isHTML)
-				.build();
-    }
+    private RequestInfo requestInfo;
+    private Email email;
 }

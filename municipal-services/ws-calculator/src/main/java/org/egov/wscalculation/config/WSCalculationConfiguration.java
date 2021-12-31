@@ -100,7 +100,7 @@ public class WSCalculationConfiguration {
 
 	 @Value("${ws.calculator.demand.failed}")
 	 private String onDemandsFailure;
-	 
+
 	 
 	//Localization
 	@Value("${egov.localization.host}")
@@ -197,4 +197,6 @@ public class WSCalculationConfiguration {
 
 	@Value("${workflow.process.search.path}")
 	private String searchWorkflowProcessEndPoint;
+
+
 }

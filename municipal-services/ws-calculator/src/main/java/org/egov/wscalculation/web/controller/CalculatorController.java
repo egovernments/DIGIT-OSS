@@ -1,21 +1,15 @@
 package org.egov.wscalculation.web.controller;
 
 
-import java.util.List;
+import java.util.*;
 
 import javax.validation.Valid;
 
-import org.egov.wscalculation.web.models.AdhocTaxReq;
-import org.egov.wscalculation.web.models.Calculation;
-import org.egov.wscalculation.web.models.CalculationReq;
-import org.egov.wscalculation.web.models.CalculationRes;
-import org.egov.wscalculation.web.models.Demand;
-import org.egov.wscalculation.web.models.DemandResponse;
-import org.egov.wscalculation.web.models.GetBillCriteria;
-import org.egov.wscalculation.web.models.RequestInfoWrapper;
-import org.egov.wscalculation.service.DemandService;
-import org.egov.wscalculation.service.WSCalculationService;
-import org.egov.wscalculation.service.WSCalculationServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import org.egov.wscalculation.config.WSCalculationConfiguration;
+import org.egov.wscalculation.constants.WSCalculationConstant;
+import org.egov.wscalculation.service.*;
+import org.egov.wscalculation.web.models.*;
 import org.egov.wscalculation.util.ResponseInfoFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +25,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 
+@Slf4j
 @Getter
 @Setter
 @Builder
@@ -50,6 +45,14 @@ public class CalculatorController {
 	
 	@Autowired
 	private final ResponseInfoFactory responseInfoFactory;
+
+	@Autowired
+	private final PaymentNotificationService paymentNotificationService;
+
+	@Autowired
+	private WSCalculationConfiguration config;
+	@Autowired
+	private DemandNotificationService demandNotificationService;
 	
 	@PostMapping("/_estimate")
 	public ResponseEntity<CalculationRes> getTaxEstimation(@RequestBody @Valid CalculationReq calculationReq) {
@@ -94,6 +97,5 @@ public class CalculatorController {
 				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(adhocTaxReq.getRequestInfo(), true))
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
-
 	}
 }
