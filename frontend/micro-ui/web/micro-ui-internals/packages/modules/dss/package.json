@@ -14,20 +14,20 @@
     "prepublish": "yarn build"
   },
   "peerDependencies": {
-    "react": "^17.0.0",
-    "react-router-dom": "^5.2.0"
+    "react": "17.0.2",
+     "react-router-dom": "6.1.1"
   },
   "dependencies": {
     "@egovernments/digit-ui-libraries": "^1.3.0",
     "@egovernments/digit-ui-react-components": "^1.3.0",
-    "react": "^17.0.0",
+    "react": "17.0.2",
     "react-date-range": "1.3.0",
-    "react-dom": "^17.0.0",
+    "react-dom": "17.0.2",
     "react-hook-form": "^6.7.0",
     "react-i18next": "^11.7.3",
     "react-query": "^3.6.1",
     "react-redux": "^7.2.1",
-    "react-router-dom": "^5.2.0",
+    "react-router-dom": "6.1.1",
     "react-table": "^7.6.1",
     "react-time-picker": "4.2.0",
     "recharts": "^2.0.9",
