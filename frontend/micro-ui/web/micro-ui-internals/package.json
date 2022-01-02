@@ -42,6 +42,8 @@
     "build:components": "cd packages/react-components && yarn build",
     "build:common": "cd packages/modules/common && yarn build",
     "build:core": "cd packages/modules/core && yarn build",
+    "build:pgr": "cd packages/modules/pgr && yarn build",
+    "build:fsm": "cd packages/modules/fsm && yarn build",
     "deploy:jenkins": "./scripts/jenkins.sh"
   },
   "devDependencies": {
