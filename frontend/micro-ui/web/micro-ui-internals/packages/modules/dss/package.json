@@ -31,7 +31,7 @@
     "react-table": "^7.6.1",
     "react-time-picker": "4.2.0",
     "recharts": "^2.0.9",
-    "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux": "4.1.2",
+    "redux-thunk": "2.4.0"
   }
 }
