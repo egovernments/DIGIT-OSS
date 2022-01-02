@@ -31,6 +31,7 @@ import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 import Inbox from "./pages/employee/Inbox";
 import { NewApplication } from "./pages/employee/NewApplication";
 import Response from "./pages/Response";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 
 
@@ -162,6 +163,21 @@ const FSMModule = ({ stateCode, userType, tenants }) => {
   }
 };
 
+const FSMWrapper = (props)=>{
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 15 * 60 * 1000,
+        cacheTime: 30 * 60 * 1000,
+        retryDelay: attemptIndex => Math.min(1000 * 3 ** attemptIndex, 60000)
+      },
+    },
+  });
+  return  (<QueryClientProvider client={queryClient}>
+  <FSMModule {...props}/>
+  </QueryClientProvider>)
+}
+
 const FSMLinks = ({ matchPath, userType }) => {
   const { t } = useTranslation();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
@@ -256,7 +272,7 @@ const componentsToRegister = {
   SelectSlumName,
   CheckSlum,
   FSMCard,
-  FSMModule,
+  FSMModule:FSMWrapper,
   FSMLinks,
   SelectChannel,
   SelectName,
