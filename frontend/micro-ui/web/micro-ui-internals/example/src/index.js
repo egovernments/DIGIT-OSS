@@ -53,7 +53,8 @@ const initTokens = (stateCode) => {
   const employeeInfo = window.localStorage.getItem("Employee.user-info")
   const employeeTenantId = window.localStorage.getItem("Employee.tenant-id");
 
-  const userTypeInfo = userType === "CITIZEN" || userType === "QACT" ? "citizen" : "employee";
+  const userTypeInfo ="citizen" ;
+
   window.Digit.SessionStorage.set("user_type", userTypeInfo);
   window.Digit.SessionStorage.set("userType", userTypeInfo);
 

@@ -145,12 +145,12 @@ const CitizenApp = ({ path }) => {
   );
 };
 
-const FSMModule = ({ stateCode, userType, tenants }) => {
+const FSMMod = ({ stateCode, userType, tenants }) => {
   const moduleCode = "FSM";
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
-
+console.log("INIT");
   if (isLoading) {
     return <Loader />;
   }
@@ -163,7 +163,7 @@ const FSMModule = ({ stateCode, userType, tenants }) => {
   }
 };
 
-const FSMWrapper = (props)=>{
+const FSMModule = (props)=>{
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -174,7 +174,7 @@ const FSMWrapper = (props)=>{
     },
   });
   return  (<QueryClientProvider client={queryClient}>
-  <FSMModule {...props}/>
+  <FSMMod {...props}/>
   </QueryClientProvider>)
 }
 
@@ -272,14 +272,15 @@ const componentsToRegister = {
   SelectSlumName,
   CheckSlum,
   FSMCard,
-  FSMModule:FSMWrapper,
+  FSMModule,
   FSMLinks,
   SelectChannel,
   SelectName,
   SelectTripData,
 };
-
 export const initFSMComponents = () => {
+  console.log(componentsToRegister,'componentsToRegister');
+
   Object.entries(componentsToRegister).forEach(([key, value]) => {
     Digit.ComponentRegistryService.setComponent(key, value);
   });
