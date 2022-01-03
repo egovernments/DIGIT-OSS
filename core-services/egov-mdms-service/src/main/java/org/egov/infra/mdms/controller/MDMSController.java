@@ -19,7 +19,7 @@ import net.minidev.json.JSONArray;
 @RestController
 @Slf4j
 @RequestMapping(value = "/v1")
-public class MDMSController {
+public class  MDMSController {
 
     @Autowired
     private MDMSService mdmsService;
