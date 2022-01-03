@@ -32,8 +32,8 @@ const AssessmentDetails = () => {
     }, []);
 
   useEffect(() => {
-    // applicationDetails.applicationDetails=applicationDetails.applicationDetails.filter(e=>e.title!=="PT_OWNERSHIP_INFO_SUB_HEADER");
     if (applicationDetails) setAppDetailsToShow(_.cloneDeep(applicationDetails));
+    // applicationDetails.applicationDetails=applicationDetails.applicationDetails.filter(e=>e.title!=="PT_OWNERSHIP_INFO_SUB_HEADER");
   }, [applicationDetails]);
 
   let workflowDetails = Digit.Hooks.useWorkflowDetails({
@@ -44,6 +44,7 @@ const AssessmentDetails = () => {
     // serviceData: applicationDetails,
   });
   const date=new Date();
+
   appDetailsToShow?.applicationDetails?.shift();
   appDetailsToShow?.applicationDetails?.unshift({
     title: "PT_ESTIMATE_DETAILS_HEADER",
@@ -68,7 +69,10 @@ const AssessmentDetails = () => {
     ],
     }
   );
-  console.log(appDetailsToShow,'appDetailsToShow');
+appDetailsToShow?.applicationDetails?.push({
+  belowComponent:()=>{return <a href="" style={{color:"red"}}>Add Rebate/Penality</a>}
+})
+ console.log(appDetailsToShow,'appDetailsToShow');
   const link="";
   // appDetailsToShow?.applicationDetails?.push({
   //   title:<a href={link}>"Add Rebate/Penalty"</a>,
@@ -94,9 +98,9 @@ const AssessmentDetails = () => {
   //     }
   //   }
   // );
-  console.log(appDetailsToShow,'appDetailsToShow2');
+  // );
+  console.log(applicationDetails);
 
-  // applicationDetails.applicationDetails={...applicationDetails.applicationDetails,calculationDetails}
   const closeToast = () => {
     setShowToast(null);
   };
