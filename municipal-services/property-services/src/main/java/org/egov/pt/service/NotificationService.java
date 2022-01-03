@@ -21,6 +21,7 @@ import org.egov.pt.models.event.EventRequest;
 import org.egov.pt.models.workflow.Action;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.util.NotificationUtil;
+import org.egov.pt.util.PTConstants;
 import org.egov.pt.web.contracts.EmailRequest;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.SMSRequest;
@@ -53,11 +54,6 @@ public class NotificationService {
 	@Value("${notification.url}")
 	private String notificationURL;
 
-	@Value("${egov.mdms.host}")
-	private String mdmsHost;
-
-	@Value("${egov.mdms.search.endpoint}")
-	private String mdmsUrl;
 
 	public void sendNotificationForMutation(PropertyRequest propertyRequest) {
 
@@ -148,7 +144,6 @@ public class NotificationService {
 			break;
 		}
 
-		
 		msg = replaceCommonValues(property, msg, localisedState);
 		prepareMsgAndSend(propertyRequest, msg,state);
 	}
@@ -308,36 +303,40 @@ public class NotificationService {
 		Map<String, String> mobileNumberToOwner = new HashMap<>();
 		String tenantId = request.getProperty().getTenantId();
 		String moduleName = request.getProperty().getWorkflow().getModuleName();
-		String action = request.getProperty().getWorkflow().getAction();
-		List<String> configuredChannelNames =  fetchChannelList(new RequestInfo(), tenantId, moduleName, action);
+
+		String action;
+		if(request.getProperty().getWorkflow()!=null)
+			action = request.getProperty().getWorkflow().getAction();
+		else
+			action = WF_NO_WORKFLOW;
+
+		List<String> configuredChannelNames =  notifUtil.fetchChannelList(new RequestInfo(), tenantId, moduleName, action);
 		Set<String> mobileNumbers = new HashSet<>();
 
 		property.getOwners().forEach(owner -> {
 			if (owner.getMobileNumber() != null)
 				mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
 			    mobileNumbers.add(owner.getMobileNumber());
-		});
+		});		//EMAIL block TBD
+//			Map<String, String> mapOfPhnoAndEmail = notifUtil.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
+//			String messageTemplate = fetchContentFromLocalization(request.getRequestInfo(), tenantId, "rainmaker-pt", "PT_NOTIFICATION_EMAIL");
+//			messageTemplate = messageTemplate.replace("{MESSAGE}",msg);
+//			messageTemplate = messageTemplate.replace(NOTIFICATION_OWNERNAME,NOTIFICATION_EMAIL);
+
+		List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 
 		if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
-			List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 			notifUtil.sendSMS(smsRequests);
 		}
 		if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)){
 			Boolean isActionReq = false;
 			if(state.equalsIgnoreCase(PT_CORRECTION_PENDING))
 				isActionReq = true;
-
-			List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 			List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
 			notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
 		}
 		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)){
-			//EMAIL block TBD
-			Map<String, String> mapOfPhnoAndEmail = notifUtil.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
-			String messageTemplate = fetchContentFromLocalization(request.getRequestInfo(), tenantId, "rainmaker-pt", "PT_NOTIFICATION_EMAIL");
-			messageTemplate = messageTemplate.replace("{MESSAGE}",msg);
-			messageTemplate = messageTemplate.replace(NOTIFICATION_OWNERNAME,NOTIFICATION_EMAIL);
-			List<EmailRequest> emailRequests = notifUtil.createEmailRequest(requestInfo,messageTemplate, mapOfPhnoAndEmail);
+			List<EmailRequest> emailRequests = notifUtil.createEmailRequestFromSMSRequests(requestInfo,smsRequests, tenantId);
 			notifUtil.sendEmail(emailRequests);
 		}
 	}
@@ -375,50 +374,6 @@ public class NotificationService {
 		}
 		return message;
 	}
-
-	public List<String> fetchChannelList(RequestInfo requestInfo, String tenantId, String moduleName, String action){
-		List<String> masterData = new ArrayList<>();
-		StringBuilder uri = new StringBuilder();
-		uri.append(mdmsHost).append(mdmsUrl);
-		if(StringUtils.isEmpty(tenantId))
-			return masterData;
-		MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, tenantId.split("\\.")[0]);
-
-		Filter masterDataFilter = filter(
-				where(MODULE).is(moduleName).and(ACTION).is(action)
-		);
-
-		try {
-			Object response = restTemplate.postForObject(uri.toString(), mdmsCriteriaReq, Map.class);
-			masterData = JsonPath.parse(response).read("$.MdmsRes.Channel.channelList[?].channelNames[*]", masterDataFilter);
-		}catch(Exception e) {
-			log.error("Exception while fetching workflow states to ignore: ",e);
-		}
-
-		return masterData;
-	}
-	private MdmsCriteriaReq getMdmsRequestForChannelList(RequestInfo requestInfo, String tenantId){
-		MasterDetail masterDetail = new MasterDetail();
-		masterDetail.setName(CHANNEL_LIST);
-		List<MasterDetail> masterDetailList = new ArrayList<>();
-		masterDetailList.add(masterDetail);
-
-		ModuleDetail moduleDetail = new ModuleDetail();
-		moduleDetail.setMasterDetails(masterDetailList);
-		moduleDetail.setModuleName(CHANNEL);
-		List<ModuleDetail> moduleDetailList = new ArrayList<>();
-		moduleDetailList.add(moduleDetail);
-
-		MdmsCriteria mdmsCriteria = new MdmsCriteria();
-		mdmsCriteria.setTenantId(tenantId);
-		mdmsCriteria.setModuleDetails(moduleDetailList);
-
-		MdmsCriteriaReq mdmsCriteriaReq = new MdmsCriteriaReq();
-		mdmsCriteriaReq.setMdmsCriteria(mdmsCriteria);
-		mdmsCriteriaReq.setRequestInfo(requestInfo);
-
-		return mdmsCriteriaReq;
-	}
 	
 	/*
 	 Method to send notification while updating owner mobile number	 
@@ -453,9 +408,11 @@ public class NotificationService {
 		
 		Property property = request.getProperty();
 		RequestInfo requestInfo = request.getRequestInfo();
-		
+		List<String> configuredChannelNames =  notifUtil.fetchChannelList(requestInfo, request.getProperty().getTenantId(), PTConstants.PT_BUSINESSSERVICE, ACTION_UPDATE_MOBILE);
+		Set<String> mobileNumbers = new HashSet<>();
+
 		property.getOwners().forEach(owner -> {
-			
+
 			if(uuidToMobileNumber.containsKey(owner.getUuid()) && uuidToMobileNumber.get(owner.getUuid())!=owner.getMobileNumber()) {
 				
 				String customizedMsg = msg.replace(PT_OWNER_NAME,owner.getName()).replace(PT_OLD_MOBILENUMBER, uuidToMobileNumber.get(owner.getUuid())).replace(PT_NEW_MOBILENUMBER, owner.getMobileNumber());
@@ -463,23 +420,35 @@ public class NotificationService {
 				
 				mobileNumberToOwner.put(uuidToMobileNumber.get(owner.getUuid()), owner.getName());
 				mobileNumberToOwner.put(owner.getMobileNumber(),owner.getName());
-				
-				List<SMSRequest> smsRequests = notifUtil.createSMSRequest(customizedMsg, mobileNumberToOwner);
-				notifUtil.sendSMS(smsRequests);
+				mobileNumbers.add(uuidToMobileNumber.get(owner.getUuid()));
+				mobileNumbers.add(owner.getMobileNumber());
 
-				Boolean isActionReq = false;		
+				if(configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
+					List<SMSRequest> smsRequests = notifUtil.createSMSRequest(customizedMsg, mobileNumberToOwner);
+					notifUtil.sendSMS(smsRequests);
+				}
 
-				List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
-				notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
-				
-			}
+				if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
+					Boolean isActionReq = true;
+					List<SMSRequest> smsRequests = notifUtil.createSMSRequest(customizedMsg, mobileNumberToOwner);
+					List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
+					notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
+				}
+
+				if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
+					Map<String, String> mapOfPhnoAndEmail = notifUtil.fetchUserEmailIds(mobileNumbers, requestInfo, request.getProperty().getTenantId());
+					List<EmailRequest> emailRequests = notifUtil.createEmailRequest(requestInfo, customizedMsg, mapOfPhnoAndEmail);
+					notifUtil.sendEmail(emailRequests);
+				}
+				}
 		});
 		
 	}
 
 	public void sendNotificationForAlternateNumberUpdate(PropertyRequest request, Property propertyFromSearch,
 			Map<String, String> uuidToAlternateMobileNumber) {
-		
+
+
 		Property property = request.getProperty();
 		String msg = null;
 		
@@ -494,24 +463,35 @@ public class NotificationService {
 		
 		Property property = request.getProperty();
 		RequestInfo requestInfo = request.getRequestInfo();
-		
+		List<String> configuredChannelNames =  notifUtil.fetchChannelList(request.getRequestInfo(), request.getProperty().getTenantId(), PTConstants.PT_BUSINESSSERVICE, PTConstants.ACTION_ALTERNATE_MOBILE);
+		Set<String> mobileNumbers = new HashSet<>();
+
 		property.getOwners().forEach(owner -> {
 
 			if(owner.getAlternatemobilenumber()!=null && !uuidToAlternateMobileNumber.get(owner.getUuid()).equalsIgnoreCase(owner.getAlternatemobilenumber()) ) {	
-				String customizedMsg = msg.replace(PT_OWNER_NAME,owner.getName()).replace(PT_ALTERNATE_NUMBER, owner.getAlternatemobilenumber());
+				String customizedMsgForApp = msg.replace(PT_OWNER_NAME,owner.getName()).replace(PT_ALTERNATE_NUMBER, owner.getAlternatemobilenumber());
+				String customizedMsg =  customizedMsgForApp.replace(VIEW_PROPERTY_CODE,"");
 				Map<String, String> mobileNumberToOwner = new HashMap<>();
-				
 				mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
-				
-				
-				List<SMSRequest> smsRequests = notifUtil.createSMSRequest(customizedMsg, mobileNumberToOwner);
-				notifUtil.sendSMS(smsRequests);
+				mobileNumbers.add(owner.getMobileNumber());
 
-				Boolean isActionReq = false;		
+				if(configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
+					List<SMSRequest> smsRequests = notifUtil.createSMSRequest(customizedMsg, mobileNumberToOwner);
+					notifUtil.sendSMS(smsRequests);
+				}
 
-				List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
-				notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
-				
+				if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
+					Boolean isActionReq = true;
+					List<SMSRequest> smsRequests = notifUtil.createSMSRequest(customizedMsgForApp, mobileNumberToOwner);
+					List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
+					notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
+				}
+
+				if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
+					Map<String, String> mapOfPhnoAndEmail = notifUtil.fetchUserEmailIds(mobileNumbers, requestInfo, request.getProperty().getTenantId());
+					List<EmailRequest> emailRequests = notifUtil.createEmailRequest(requestInfo, customizedMsg, mapOfPhnoAndEmail);
+				 	notifUtil.sendEmail(emailRequests);
+				}
 			}
 		});
 		
