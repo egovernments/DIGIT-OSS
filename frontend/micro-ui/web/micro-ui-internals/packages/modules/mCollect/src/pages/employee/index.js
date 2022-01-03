@@ -51,7 +51,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   return (
     <Switch>
       <React.Fragment>
-        <div className="ground-container" style={{ padding: "10px 0px 0px 30px" }}>
+        <div className="ground-container" /* style={{ padding: "10px 0px 0px 30px" }} */>
           <p className="breadcrumb employee-main-application-details"  style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
             <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
               {t("ES_COMMON_HOME")}

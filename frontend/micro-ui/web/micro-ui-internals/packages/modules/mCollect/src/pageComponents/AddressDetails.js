@@ -140,6 +140,7 @@ const OwnerForm1 = (_props) => {
   const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
   const formValue = watch();
   const { errors } = localFormState;
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   const selectedPincode = useWatch({control: control, name: "pincode", defaultValue:""});
 
@@ -210,7 +211,7 @@ const OwnerForm1 = (_props) => {
 
   const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
   return (
-    <div style={{marginTop:"-50px"}}>
+    <div style={isMobile?{}:{marginTop:"-50px"}}>
       <div style={{ marginBottom: "16px"}}>
         <div>
           <CardLabelError style={errorStyle}>{localFormState.touched.mobileNumber ? errors?.mobileNumber?.message : ""}</CardLabelError>
@@ -242,7 +243,7 @@ const OwnerForm1 = (_props) => {
             </div>
           </LabelFieldPair>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("UC_BLDG_NAME_LABEL")} :`}</CardLabel>
+            <CardLabel className={isMobile?"card-label-APK":"card-label-smaller"}>{`${t("UC_BLDG_NAME_LABEL")} :`}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
@@ -325,7 +326,7 @@ const OwnerForm1 = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.pincode ? errors?.pincode?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("UC_MOHALLA_LABEL")} * :`}</CardLabel>
+            <CardLabel  style={{paddingTop:"10px"}} className="card-label-smaller">{`${t("UC_MOHALLA_LABEL")} * :`}</CardLabel>
             <Controller
               name="mohalla"
               rules={{ required: t("REQUIRED_FIELD") }}

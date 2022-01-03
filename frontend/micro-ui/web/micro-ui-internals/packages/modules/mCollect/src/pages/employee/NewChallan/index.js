@@ -59,6 +59,8 @@ const NewChallan = ({ChallanData}) => {
   const [_formData, setFormData, _clear] = Digit.Hooks.useSessionStorage("store-data", null);
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", {});
+  const isMobile = window.Digit.Utils.browser.isMobile();
+
 
 
   const [showToast, setShowToast] = useState(null);
@@ -220,7 +222,7 @@ const NewChallan = ({ChallanData}) => {
 
   return (
     <div>
-      <div style={{ marginLeft: "15px" }}>
+      <div style={isMobile?{}:{ marginLeft: "15px" }}>
         <Header>{isEdit ? t("UC_UPDATE_CHALLAN"):t("UC_COMMON_HEADER")}</Header>
       </div>
       <FormComposer
