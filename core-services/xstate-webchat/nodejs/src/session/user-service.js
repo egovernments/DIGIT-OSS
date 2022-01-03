@@ -6,10 +6,18 @@ class UserService {
 
   async getUserForMobileNumber(mobileNumber, tenantId) {
     let user = await this.loginOrCreateUser(mobileNumber, tenantId);
-    user.userId = user.userInfo.uuid;
-    user.mobileNumber = mobileNumber;
-    user.name = user.userInfo.name;
-    user.locale = user.userInfo.locale;
+   //Check added for anonmous users
+    if(user!=undefined){
+      user.userId = user.userInfo.uuid;
+      user.mobileNumber = mobileNumber;
+      user.name = user.userInfo.name;
+      user.locale = user.userInfo.locale;
+    }else{
+      //For Anonmous if the profile creation has failed then populate default values in user object
+       user = { locale: 'en_IN', userId: mobileNumber,name:mobileNumber,mobileNumber:mobileNumber};
+     
+    }
+ 
     return user;
   }
 
@@ -19,8 +27,11 @@ class UserService {
       await this.createUser(mobileNumber, tenantId);
       user = await this.loginUser(mobileNumber, tenantId);
     }
-
-    user = await this.enrichuserDetails(user);
+    //Check added to skip enrichuserDetails call for anonymous users
+    if(user!=undefined){
+      user = await this.enrichuserDetails(user);
+    }
+    
     return user;
   }
 

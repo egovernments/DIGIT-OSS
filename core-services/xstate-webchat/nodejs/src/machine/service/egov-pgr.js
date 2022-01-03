@@ -137,54 +137,12 @@ class PGRService {
     return results['ServiceWrappers'];
   }
 
+   //The integration with the backend service for persisting the complaint will be taken up in future sprints. For now only hardoced complaint id will be returned
   async persistComplaint(user, slots, extraInfo) {
-    let requestBody = JSON.parse(pgrCreateRequestBody);
-
-    let authToken = user.authToken;
-    let userId = user.userId;
-    let complaintType = slots.complaint;
-    let locality = slots.locality;
-    let city = slots.city;
-
-    requestBody["RequestInfo"]["authToken"] = authToken;
-    requestBody["service"]["tenantId"] = 'pb';
-    requestBody["service"]["address"]["city"] = 'Amritsar'; //??
-    requestBody["service"]["address"]["locality"]["code"] = '1200022'; //??
-    requestBody["service"]["serviceCode"] = complaintType;
-    requestBody["service"]["accountId"] = userId;
-
-    if (slots.image) {
-      let filestoreId = await this.getFileForFileStoreId(slots.image, city);
-      var content = {
-        documentType: "PHOTO",
-        filestoreId: filestoreId
-      };
-      requestBody["workflow"]["verificationDocuments"].push(content);
+      return {
+      complaintNumber: '03/01/2022/081479',
+      complaintLink: 'https://mseva.org/complaint/132'
     }
-
-
-    var url = config.egovServices.egovServicesHost + config.egovServices.pgrCreateEndpoint;
-
-    var options = {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-
-    let response = await fetch(url, options);
-
-
-    let results;
-    if (response.status === 200) {
-      let responseBody = await response.json();
-      results = await this.preparePGRResult(responseBody, user.locale);
-    } else {
-      console.error('Error in fetching the complaints');
-      return undefined;
-    }
-    return results[0];
   }
 
   async fetchOpenComplaints(user) {

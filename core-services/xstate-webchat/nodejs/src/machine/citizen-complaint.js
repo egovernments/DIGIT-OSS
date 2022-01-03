@@ -17,24 +17,13 @@ const citizenComplaint = {
             initial: 'question',
             states: {
                 question: {
-                    invoke: {
-                        src: (context, event) => pgrService.fetchComplaintCategories(context.extraInfo.tenantId),
-                        id: 'fetchComplaintCategories',
-                        onDone: {
-                            actions: assign((context, event) => {
-                                let { complaintCategories, messageBundle } = event.data;
-                                let message = dialog.get_message(messages.complaintMenu.prompt.preamble, context.user.locale);
-                                const grammer = dialog.constructContextGrammer(messages.complaintMenu.prompt.options.list,
-                                    messages.complaintMenu.prompt.options.messageBundle, context.user.locale);
-                                context.grammer = grammer;
-                                dialog.sendMessage(context, message, true);
-
-                            }),
-                        },
-                        onError: {
-                            target: '#system_error'
-                        }
-                    },
+                        onEntry: assign((context, event) => {
+                        let message = dialog.get_message(messages.complaintMenu.prompt, context.user.locale);
+                        const grammer = dialog.constructContextGrammer(messages.complaintMenu.options.list,
+                                    messages.complaintMenu.options.messageBundle, context.user.locale);
+                        context.grammer = grammer;
+                        dialog.sendMessage(context, message, true);
+                    }),
                     on: {
                         USER_MESSAGE: 'process'
                     }
@@ -49,7 +38,7 @@ const citizenComplaint = {
                             cond: (context) => context.intention != dialog.INTENTION_UNKOWN,
                             actions: assign((context, event) => {
                                 context.slots.pgr["complaint"] = context.intention;
-                               //context.slots.pgr["ComplaintType"] = dialog.get_message(messages.complaintMenu.options.messageBundle[context.intention], context.user.locale);
+                                context.slots.pgr["complaintItem"] = context.intention;
                             })
                         },
                         {
@@ -71,27 +60,15 @@ const citizenComplaint = {
             initial: 'question',
             states: {
                 question: {
-                    invoke: {
-                        src: (context) => pgrService.fetchComplaintItemsForCategory(context.slots.pgr.complaint, context.extraInfo.tenantId),
-                        id: 'fetchComplaintItemsForCategory',
-                        onDone: {
-                            actions: assign((context, event) => {
-                                let { complaintItems, messageBundle } = event.data;
-                                let complaintItem = context.slots.pgr.complaint;
-                                let messageBundleForCode = messages.complaintCategoryItems[complaintItem].messageBundle;
-                                let message = dialog.get_message(messageBundleForCode, context.user.locale);
-                                let nextStepList = messages.complaintCategoryItems[complaintItem].nextStep;
-                                let grammer = dialog.constructContextGrammer(nextStepList, messageBundleForCode, context.user.locale);
-                                context.grammer = grammer;
-                                dialog.sendMessage(context, message, true);
-
-
-                            })
-                        },
-                        onError: {
-                            target: '#system_error'
-                        }
-                    },
+                        onEntry: assign((context, event) => {
+                        let complaintItem = context.slots.pgr.complaintItem;
+                        let messageBundleForCode = messages.complaintCategoryItems[complaintItem].messageBundle;
+                        let message = dialog.get_message(messageBundleForCode, context.user.locale);
+                        let nextStepList = messages.complaintCategoryItems[complaintItem].nextStep;
+                        let grammer = dialog.constructContextGrammer(nextStepList, messageBundleForCode, context.user.locale);
+                        context.grammer = grammer;
+                        dialog.sendMessage(context, message, true);
+                    }),
                     on: {
                         USER_MESSAGE: 'process'
                     }
@@ -109,17 +86,12 @@ const citizenComplaint = {
                         {
                             cond: (context) => context.intention == 'persistComplaint',
                             target: '#persistComplaint',
-                            // actions: assign((context,event)=>{
-                            //     context.slots.pgr["image"]=event.message.input;
-                            //     context.slots.pgr["additionalDetail"]=event.message.input;
-                            // })
-
                         },
                         {
                             cond: (context) => context.intention != dialog.INTENTION_UNKOWN,
                             target: '#complaintItem',
                             actions: assign((context, event) => {
-                                context.slots.pgr["complaint"] = context.intention;
+                                context.slots.pgr["complaintItem"] = context.intention;
                             })
                         },
 
@@ -150,22 +122,13 @@ const citizenComplaint = {
                         let complaintDetails = event.data;
                         let message = dialog.get_message(messages.persistComplaint, context.user.locale);
                         //Email Notification here
-                      //  message = message.replace('{1234567890}', complaintDetails.complaintNumber);
-                       // message = message.replace('{{complaintLink}}', complaintDetails.complaintLink);
-                        let closingStatement = dialog.get_message(messages.closingStatement, context.user.locale);
-                        message = message + closingStatement;
-                        dialog.sendMessage(context, message);
+                         message = message.replace('{{complaintNumber}}', complaintDetails.complaintNumber);
+                         dialog.sendMessage(context, message);
                     })
                 }
             }
         },
-    }, // fileComplaint.states
-
-
-    // pgr.states
-}; // pgr
-
-
-
+    }, 
+}; 
 
 module.exports = citizenComplaint;

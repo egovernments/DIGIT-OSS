@@ -1,7 +1,6 @@
 const messages = {
   complaintMenu: {
-    prompt: {
-      preamble: {
+     prompt: {
         en_IN: { message: 'What is your complaint about?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Not Receiving OTP'}, { key: '2', value: 'Unable to Proceed Forward'}, { key: '3', value: 'Bill Amount is incorrect'}, { key: '4', value: 'Application Process taking long time'}, { key: '5', value: 'Application is getting rejected'}, { key: '6', value: 'Others'}] },
         hi_IN: { message: 'What is your complaint about?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'ओटीपी प्राप्त नहीं हो रहा है'}, { key: '2', value: 'आगे बढ़ने में असमर्थ'}, { key: '3', value: 'बिल राशि गलत है'}, { key: '4', value: 'आवेदन प्रक्रिया में लंबा समय लग रहा है'}, { key: '5', value: 'आवेदन खारिज हो रहा है'}, { key: '6', value: 'अन्य'}] }
       },
@@ -34,7 +33,7 @@ const messages = {
           },
         },
       },
-    },
+    
   },
   
   complaintCategoryItems:{
@@ -103,7 +102,16 @@ const messages = {
           hi_IN: { message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] }
         }
     },
-    complaintComments: {
+  others: {
+      nextStep: ['persistComplaint'],
+      messageBundle:{
+        en_IN: { message: 'Let us know about your complaint', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }] },
+        hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }] }
+    },
+
+
+  },
+  complaintComments: {
         nextStep: ['persistComplaint'],
         messageBundle:{
           en_IN: { message: 'Let us know about your complaint', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }] },
@@ -111,11 +119,11 @@ const messages = {
       },
 
   
-    },
+  },
   },
   persistComplaint: {
-    en_IN: 'Your complaint is registered successfully with mSeva.\n\nThe Complaint No is : *{{complaintNumber}}*\n\nClick on the link below to view and track your complaint:\n{{complaintLink}}\n',
-    hi_IN: 'धन्यवाद! आपने mSeva Punjab के माध्यम से सफलतापूर्वक शिकायत दर्ज की है।\nआपकी शिकायत संख्या: {{complaintNumber}}\n आप नीचे दिए गए लिंक के माध्यम से अपनी शिकायत देख और ट्रैक कर सकते हैं:\n {{complaintLink}}\n'
+    en_IN: 'Complaint created successfully \n Complaint ID: {{complaintNumber}} \n Your Complaint has been registered and one of our representatives will get in touch with you regarding the issue\n',
+    hi_IN: 'धन्यवाद! आपने सफलतापूर्वक शिकायत दर्ज की है।\nआपकी शिकायत संख्या: {{complaintNumber}}\n'
   },
   closingStatement: {
     en_IN: '\nIn case of any help please type and send "mseva"',

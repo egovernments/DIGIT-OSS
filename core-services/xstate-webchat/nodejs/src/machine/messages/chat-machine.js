@@ -1,8 +1,7 @@
 const messages = {
   
   menu: {
-    prompt: {
-      preamble: {
+     prompt: {
         en_IN: { message: 'Please select what you need help with?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Raise a complaint' }, { key: '2', value: 'Provide Feedback'  }, { key: '3', value: 'Rate the service'  }] },
         hi_IN: { message: 'कृपया चुनें कि आपको किसमें सहायता चाहिए?।', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'शिकायत दर्ज करें।'  }, { key: '2', value: 'अपनी राय बताएं।'  }, { key: '3', value: 'सेवा को रेट करें।'  }] }
       },
@@ -23,7 +22,7 @@ const messages = {
           },
         },
       },
-    },
+    
   },
 };
 

@@ -8,4 +8,9 @@ if(config.serviceProvider === 'eGov') {
     }
     module.exports.ratingAndFeedback = require('./rating-feedback');
 }
+else {
+    console.log("Using Dummy Services");
+    module.exports.pgrService = require('./dummy-pgr');
+    
+}
 
