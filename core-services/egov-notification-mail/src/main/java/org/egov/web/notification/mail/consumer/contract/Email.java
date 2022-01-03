@@ -22,6 +22,7 @@ public class Email {
 	private Set<String> emailTo;
 	private String subject;
 	private String body;
+	private String fileStoreId;
 	@JsonProperty("isHTML")
 	private boolean isHTML;
 
