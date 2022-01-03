@@ -2,7 +2,7 @@
   "name": "@egovernments/digit-ui-module-hrms",
   "version": "1.4.0-alpha",
   "description": "HRMS",
-  "license": "MIT",
+  "license": "MIT", 
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/Module.js",
