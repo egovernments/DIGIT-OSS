@@ -20,7 +20,8 @@ const ApplicationDetails = (props) => {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
+console.log(props);
+debugger
   const {
     applicationDetails,
     showToast,
@@ -109,14 +110,11 @@ const ApplicationDetails = (props) => {
   if (isLoading) {
     return <Loader />;
   }
-  // applicationDetails=applicationDetails.applicationDetails.filter(e=>e.title!=="PT_OWNERSHIP_INFO_SUB_HEADER")
-  // console.log(applicationDetails.applicationDetails.filter(e=>e.title!=="PT_OWNERSHIP_INFO_SUB_HEADER"));
   return (
     <React.Fragment>
       {!isLoading ? (
         <React.Fragment>
           <ApplicationDetailsContent
-            // applicationDetails={applicationDetails.applicationData,applicationDetails.applicationDetails[0],applicationDetails.applicationDetails[1]}
             applicationDetails={applicationDetails}
             workflowDetails={workflowDetails}
             isDataLoading={isDataLoading}

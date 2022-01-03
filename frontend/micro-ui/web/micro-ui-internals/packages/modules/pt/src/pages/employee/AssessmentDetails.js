@@ -32,8 +32,8 @@ const AssessmentDetails = () => {
     }, []);
 
   useEffect(() => {
-    // applicationDetails.applicationDetails=applicationDetails.applicationDetails.filter(e=>e.title!=="PT_OWNERSHIP_INFO_SUB_HEADER");
     if (applicationDetails) setAppDetailsToShow(_.cloneDeep(applicationDetails));
+    // applicationDetails.applicationDetails=applicationDetails.applicationDetails.filter(e=>e.title!=="PT_OWNERSHIP_INFO_SUB_HEADER");
   }, [applicationDetails]);
 
   let workflowDetails = Digit.Hooks.useWorkflowDetails({
@@ -44,6 +44,7 @@ const AssessmentDetails = () => {
     // serviceData: applicationDetails,
   });
   const date=new Date();
+
   appDetailsToShow?.applicationDetails?.shift();
   appDetailsToShow?.applicationDetails?.unshift({
     title: "PT_ESTIMATE_DETAILS_HEADER",
@@ -68,33 +69,29 @@ const AssessmentDetails = () => {
     ],
     }
   );
-  console.log(applicationDetails);
-  const link="";
-  // appDetailsToShow?.applicationDetails?.push({
-  //   title:<a href={link}>"Add Rebate/Penalty"</a>,
-  // });
+  appDetailsToShow?.applicationDetails?.push({
+    belowComponent:()=>{return <a href="" style={{color:"red"}}>Add Rebate/Penality</a>}
+  })
   appDetailsToShow?.applicationDetails?.push(
     {
     title:"Calculation Details",
     values:[
         {
-      title:"Calculation Logic<br/>",
+      title:"Calculation Logic",
       value:"Property Tax = Built up area on GF * Rates per unit of GF - built up empty land on GF * Rate per unit of GF - empty land 𝝨(built-up on nth floor*Rate per unit of nth floor-built up)",  
         },
+        {
+            title:"Applicable Charge Slabs",
+            values:[
+                    {
+                    title:"Ground floor unit-1",
+                    value:"2/Sq yards",
+                    }],
+          }
       ],
-        additionalDetails:{
-        title:"Applicable Charge Slabs",
-        values:[
-          {
-          title:"Ground floor unit-1",
-          value:"2/Sq yards",
-          },
-        ],
-      }
     }
   );
-  
-  // applicationDetails.applicationDetails={...applicationDetails.applicationDetails,calculationDetails}
+  console.log(applicationDetails);
   const closeToast = () => {
     setShowToast(null);
   };
