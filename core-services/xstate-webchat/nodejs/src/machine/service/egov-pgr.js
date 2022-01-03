@@ -9,6 +9,7 @@ const path = require('path');
 const dialog = require('../util/dialog');
 const localisationService = require('../util/localisation-service');
 const config = require('../../env-variables');
+const messages = require('../messages/complaint-messages');
 require('url-search-params-polyfill');
 
 const pgrCreateRequestBody = '{"RequestInfo":{"authToken":"","userInfo":{}},"service":{"tenantId":"","serviceCode":"","description":"","accountId":"","source":"whatsapp","address":{"landmark":"","city":"","geoLocation":{"latitude": null, "longitude": null},"locality":{"code":""}}},"workflow":{"action":"APPLY","verificationDocuments":[]}}';
@@ -134,12 +135,73 @@ class PGRService {
   }
 
    //The integration with the backend service for persisting the complaint will be taken up in future sprints. For now only hardoced complaint id will be returned
-  async persistComplaint(user, slots, extraInfo) {
-      return {
+  async persistComplaint(user, slots, extraInfo,locale) {
+    let authToken = user.authToken;
+    let userId = user.userId;
+    let complaintType = dialog.get_message(messages.complaintMenu.options.messageBundle[slots.complaint], locale);
+    return {
       complaintNumber: '03/01/2022/081479',
       complaintLink: 'https://mseva.org/complaint/132'
     }
   }
+
+  // async persistComplaint(user,slots,extraInfo) {
+  //   let requestBody = JSON.parse(pgrCreateRequestBody);
+
+  //   let authToken = user.authToken;
+  //   let userId = user.userId;
+  //   let complaintType = slots.complaint;
+  //   let locality = slots.locality;
+  //   let city = slots.city;
+    
+  //   requestBody["RequestInfo"]["authToken"] = authToken;
+  //   requestBody["service"]["tenantId"] = city;
+  //   requestBody["service"]["address"]["city"] = city;
+  //   requestBody["service"]["address"]["locality"]["code"] = locality;
+  //   requestBody["service"]["serviceCode"] = complaintType;
+  //   requestBody["service"]["accountId"] = userId;
+
+  //   if(slots.geocode){
+  //     let latlng = slots.geocode.substring(1, slots.geocode.length - 1);
+  //     latlng = latlng.split(',');
+  //     requestBody["service"]["address"]["geoLocation"]["latitude"] = latlng[0];
+  //     requestBody["service"]["address"]["geoLocation"]["longitude"] = latlng[1];
+  //   }
+
+  //   if(slots.image){
+  //     let filestoreId = await this.getFileForFileStoreId(slots.image,city);
+  //     var content = {
+  //       documentType: "PHOTO",
+  //       filestoreId:filestoreId
+  //     };
+  //     requestBody["workflow"]["verificationDocuments"].push(content);
+  //   }
+
+
+  //   var url = config.egovServices.egovServicesHost+config.egovServices.pgrCreateEndpoint;
+
+  //   var options = {
+  //     method: 'POST',
+  //     body: JSON.stringify(requestBody),
+  //     headers: {
+  //         'Content-Type': 'application/json'
+  //     }
+  //   }
+
+  //   let response = await fetch(url, options);
+
+
+  //   let results;
+  //   if(response.status === 200) {
+  //     let responseBody = await response.json();
+  //     results = await this.preparePGRResult(responseBody,user.locale);
+  //   } else {
+  //     console.error('Error in fetching the complaints');
+  //     return undefined;
+  //   }
+  //   return results[0];
+  // }
+
 
   async fetchOpenComplaints(user) {
     const requestBody = {

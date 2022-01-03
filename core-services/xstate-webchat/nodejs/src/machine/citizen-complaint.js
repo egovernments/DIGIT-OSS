@@ -8,7 +8,6 @@ const citizenComplaint = {
     initial: 'complaintCategory',
     onEntry: assign((context, event) => {
         context.slots.pgr = {}
-        context.pgr = { slots: {} };
     }),
     states: {
         complaintCategory: {
@@ -85,6 +84,9 @@ const citizenComplaint = {
                         {
                             cond: (context) => context.intention == 'persistComplaint',
                             target: '#persistComplaint',
+                            actions: assign((context, event) => {
+                                context.slots.pgr["complaintItem"] = context.intention;
+                            })
                         },
                         {
                             cond: (context) => context.intention != dialog.INTENTION_UNKOWN,
@@ -114,13 +116,22 @@ const citizenComplaint = {
             id: 'persistComplaint',
             invoke: {
                 id: 'persistComplaint',
-                src: (context) => pgrService.persistComplaint(context.user, context.slots.pgr, context.extraInfo),
+                src: (context) => pgrService.persistComplaint(context.user, context.slots.pgr, context.extraInfo,context.user.locale),
                 onDone: {
                     target: '#endstate',
                     actions: assign((context, event) => {
                         let complaintDetails = event.data;
                         let message = dialog.get_message(messages.persistComplaint, context.user.locale);
                         //Email Notification here
+                        let complaintType='Technical';
+                        let complaintSubType = dialog.get_message(messages.complaintMenu.options.messageBundle[context.slots.pgr.complaint], context.user.locale);
+                        let complaintId=complaintDetails.complaintNumber;
+                        let application_number='';
+                        let phoneNumber=context.user.mobileNumber;
+                        let ComplaintComments=context.extraInfo.comments;
+                        let imageFilestoreId=context.extraInfo.filestoreId;
+                        //Insert the code for pushing email message to the Kafka topic here
+                        //Email notification ends
                          message = message.replace('{{complaintNumber}}', complaintDetails.complaintNumber);
                          dialog.sendMessage(context, message);
                     })
