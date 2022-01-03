@@ -1,5 +1,6 @@
 package org.egov.id.service;
 
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -50,6 +51,9 @@ public class IdGenerationService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private SecureRandom random;
 
     // by default 'idformat' will be taken from MDMS. Change value of 'ismdms.on' to 'false'
     // in application.properties to get data from DB instead.
@@ -353,7 +357,6 @@ public class IdGenerationService {
      * @return randomTxt
      */
     private String generateRandomText(String regex, RequestInfo requestInfo) {
-        Random random = new Random();
         List<String> matchList = new ArrayList<String>();
         int length = 2;// default digits length
         try {
