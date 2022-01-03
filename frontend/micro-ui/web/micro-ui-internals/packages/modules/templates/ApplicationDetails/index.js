@@ -36,7 +36,8 @@ const ApplicationDetails = (props) => {
     moduleCode,
     timelineStatusPrefix,
     forcedActionPrefix,
-    statusAttribute
+    statusAttribute,
+    showTimeline
   } = props;
   useEffect(() => {
     if (showToast) {
@@ -124,6 +125,7 @@ const ApplicationDetails = (props) => {
             businessService={businessService}
             timelineStatusPrefix={timelineStatusPrefix}
             statusAttribute={statusAttribute}
+            showTimeline={showTimeline}
           />
           {showModal ? (
             <ActionModal

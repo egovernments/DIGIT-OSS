@@ -68,32 +68,34 @@ const AssessmentDetails = () => {
     ],
     }
   );
-  console.log(applicationDetails);
+  console.log(appDetailsToShow,'appDetailsToShow');
   const link="";
   // appDetailsToShow?.applicationDetails?.push({
   //   title:<a href={link}>"Add Rebate/Penalty"</a>,
   // });
-  appDetailsToShow?.applicationDetails?.push(
-    {
-    title:"Calculation Details",
-    values:[
-        {
-      title:"Calculation Logic<br/>",
-      value:"Property Tax = Built up area on GF * Rates per unit of GF - built up empty land on GF * Rate per unit of GF - empty land 𝝨(built-up on nth floor*Rate per unit of nth floor-built up)",  
-        },
-      ],
-        additionalDetails:{
-        title:"Applicable Charge Slabs",
-        values:[
-          {
-          title:"Ground floor unit-1",
-          value:"2/Sq yards",
-          },
-        ],
-      }
-    }
-  );
-  
+  // appDetailsToShow?.applicationDetails?.pop();
+  // appDetailsToShow?.applicationDetails?.push(
+  //   {
+  //   title:"Calculation Details",
+  //   values:[
+  //       {
+  //     title:"Calculation Logic<br/>",
+  //     value:"Property Tax = Built up area on GF * Rates per unit of GF - built up empty land on GF * Rate per unit of GF - empty land 𝝨(built-up on nth floor*Rate per unit of nth floor-built up)",  
+  //       },
+  //     ],
+  //       additionalDetails:{
+  //       title:"Applicable Charge Slabs",
+  //       values:[
+  //         {
+  //         title:"Ground floor unit-1",
+  //         value:"2/Sq yards",
+  //         },
+  //       ],
+  //     }
+  //   }
+  // );
+  console.log(appDetailsToShow,'appDetailsToShow2');
+
   // applicationDetails.applicationDetails={...applicationDetails.applicationDetails,calculationDetails}
   const closeToast = () => {
     setShowToast(null);
@@ -126,16 +128,35 @@ const AssessmentDetails = () => {
     history.push(`/digit-ui/employee/payment/collect/PT/${propertyId}`);
   };
 
-  if (ptCalculationEstimateLoading || assessmentLoading) {
+  if (ptCalculationEstimateLoading || assessmentLoading||!applicationDetails?.applicationDetails) {
     return <Loader />;
   }
+
 
   return (
     <div>
       {/* <Header>{t("PT_ASSESS_PROPERTY")}</Header> */}
       <Header>Property Tax Assessment</Header>
       <ApplicationDetailsTemplate
-        applicationDetails={appDetailsToShow}
+        applicationDetails={{...appDetailsToShow,applicationDetails:[...applicationDetails?.applicationDetails?.filter(e=>e?.title!=="PT_OWNERSHIP_INFO_SUB_HEADER"), {
+          title:"Calculation Details",
+          values:[
+              {
+            title:"Calculation Logic<br/>",
+            value:"Property Tax = Built up area on GF * Rates per unit of GF - built up empty land on GF * Rate per unit of GF - empty land 𝝨(built-up on nth floor*Rate per unit of nth floor-built up)",  
+              },
+            ],
+              additionalDetails:{
+              title:"Applicable Charge Slabs",
+              values:[
+                {
+                title:"Ground floor unit-1",
+                value:"2/Sq yards",
+                },
+              ],
+            }
+          }]
+      }}
         isLoading={isLoading}
         isDataLoading={isLoading}
         applicationData={appDetailsToShow?.applicationData}
@@ -153,6 +174,7 @@ const AssessmentDetails = () => {
         closeToast={closeToast}
         timelineStatusPrefix={"ES_PT_COMMON_STATUS_"}
         forcedActionPrefix={"WF_EMPLOYEE_PT.CREATE"}
+        showTimeline={false}
       />
       {!queryClient.getQueryData(["PT_ASSESSMENT", propertyId, location?.state?.Assessment?.financialYear]) ? (
         <ActionBar>
