@@ -1,4 +1,4 @@
-const os = require('os');
+// const os = require('os');
 
 const envVariables = {
   serviceId: process.env.NAME || 'xstate-webchat',
@@ -17,7 +17,7 @@ const envVariables = {
     dbPort: process.env.DB_PORT || '5432',
     dbName: process.env.DB_NAME || 'chat',
     dbUsername: process.env.DB_USER || 'postgres',
-    dbPassword: process.env.DB_PASSWORD || 'postgres'
+    dbPassword: process.env.DB_PASSWORD || 'postgres',
   },
 
   kafka: {
@@ -31,7 +31,7 @@ const envVariables = {
   egovServices: {
     egovServicesHost: process.env.EGOV_SERVICES_HOST || 'https://qa.digit.org/',
     externalHost: process.env.EXTERNAL_HOST || 'https://qa.digit.org/',
-    searcherHost: process.env.EGOV_SEARCHER_HOST || "http://egov-searcher.egov:8080/",
+    searcherHost: process.env.EGOV_SEARCHER_HOST || 'http://egov-searcher.egov:8080/',
 
     userServiceHost: process.env.USER_SERVICE_HOST || 'https://qa.digit.org/',
     userServiceOAuthPath: process.env.USER_SERVICE_OAUTH_PATH || 'user/oauth/token',
@@ -42,15 +42,15 @@ const envVariables = {
     mdmsSearchPath: process.env.MDMS_SEARCH_PATH || 'egov-mdms-service/v1/_search',
     localisationServiceSearchPath: process.env.LOCALISATION_SERVICE_SEARCH_PATH || 'localization/messages/v1/_search',
     billServiceSearchPath: process.env.BILL_SERVICE_SEARCH_PATH || 'billing-service/bill/v2/_fetchbill',
-    egovFilestoreServiceUploadEndpoint: process.env.EGOV_FILESTORE_SERVICE_UPLOAD_ENDPOINT || "filestore/v1/files?module=chatbot",
-    egovFilestoreServiceDownloadEndpoint: process.env.EGOV_FILESTORE_SERVICE_DOWNLOAD_ENDPOINT || "filestore/v1/files/url",
+    egovFilestoreServiceUploadEndpoint: process.env.EGOV_FILESTORE_SERVICE_UPLOAD_ENDPOINT || 'filestore/v1/files?module=chatbot',
+    egovFilestoreServiceDownloadEndpoint: process.env.EGOV_FILESTORE_SERVICE_DOWNLOAD_ENDPOINT || 'filestore/v1/files/url',
     urlShortnerEndpoint: process.env.URL_SHORTNER_ENDPOINT || 'egov-url-shortening/shortener',
     collectonServicSearchEndpoint: process.env.COLLECTION_SERVICE_SEARCH_ENDPOINT || 'collection-services/payments/$module/_search',
     pgrCreateEndpoint: process.env.PGR_CREATE_ENDPOINT || 'pgr-services/v2/request/_create',
     pgrSearchEndpoint: process.env.PGR_SEARCH_ENDPOINT || 'pgr-services/v2/request/_search',
     pgrv1CreateEndpoint: process.env.PGR_CREATE_ENDPOINT || 'rainmaker-pgr/v1/requests/_create',
     pgrv1SearchEndpoint: process.env.PGR_SEARCH_ENDPOINT || 'rainmaker-pgr/v1/requests/_search',
-    maxStarRating: process.env.MAX_STAR_RATING || 5
+    maxStarRating: process.env.MAX_STAR_RATING || 5,
 
   },
 
@@ -67,8 +67,6 @@ const envVariables = {
 
   },
 
-
-
-}
+};
 
 module.exports = envVariables;

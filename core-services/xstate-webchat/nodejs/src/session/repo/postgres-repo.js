@@ -21,12 +21,12 @@ class StateRepository {
       return state;
     }
   }
-  
-  async insertRatingData(id, userId, starRating, feedbackSelectedOptions, comments, filestoreId, createdTime){
+
+  async insertRatingData(id, userId, starRating, feedbackSelectedOptions, comments, filestoreId, createdTime) {
     const query = 'INSERT INTO eg_webchat_service_rating (id, user_id, starrating, feedbackoptions, comments, filestoreid, createdTime) VALUES ($1, $2, $3, $4, $5, $6, $7)';
-    let result = await pool.query(query, [id, userId, starRating, feedbackSelectedOptions, comments, filestoreId, createdTime]);
+    const result = await pool.query(query, [id, userId, starRating, feedbackSelectedOptions, comments, filestoreId, createdTime]);
     return result;
-}
+  }
 }
 
 module.exports = new StateRepository();

@@ -3,7 +3,6 @@ const { pgrService } = require('./service/service-loader');
 const dialog = require('./util/dialog');
 const messages = require('./messages/complaint-messages');
 
-
 const citizenComplaint = {
     id: 'citizenComplaint',
     initial: 'complaintCategory',

@@ -10,10 +10,7 @@ function get_message(bundle, locale = 'en_IN') {
 }
 function get_intention(g, event, strict = false) {
   let utterance;
-  if(typeof event.message.input == 'string')
-    utterance = get_input(event);
-  else
-    utterance = get_input(event, false);
+  if (typeof event.message.input === 'string') { utterance = get_input(event); } else { utterance = get_input(event, false); }
 
   function exact(e) {
     return e.recognize.includes(utterance);
@@ -25,7 +22,7 @@ function get_intention(g, event, strict = false) {
   return (index == -1) ? INTENTION_UNKOWN : g[index].intention;
 }
 function constructListPromptAndGrammer(keys, message_bundle, locale, more = false, goback = false, type = 'button') {
-  let prompt = [];
+  const prompt = [];
   const grammer = [];
   if (more) {
     keys = keys.concat([INTENTION_MORE]);
@@ -44,9 +41,9 @@ function constructListPromptAndGrammer(keys, message_bundle, locale, more = fals
     if (value === undefined) {
       value = element;
     }
-    
-    let data = {
-      key: index+1,
+
+    const data = {
+      key: index + 1,
       value: value,
       type: type
     };
@@ -73,22 +70,22 @@ function constructLiteralGrammer(keys, message_bundle, locale) {
 }
 
 function constructContextGrammer(keys, message_bundle, locale, type = 'button') {
-  var grammer = [];
-  var prompt = [];
+  const grammer = [];
+  const prompt = [];
   keys.forEach((element, index) => {
-    let value = undefined;
+    let value;
     if (value === undefined) {
       value = element;
     }
-    
-    let data = {
-      key: index+1,
+
+    const data = {
+      key: index + 1,
       value: value,
       type: type
     };
 
     prompt.push(data);
-    grammer.push({intention: element, recognize: [(index+1).toString()]});
+    grammer.push({ intention: element, recognize: [(index + 1).toString()] });
   });
 
   return grammer;
@@ -97,14 +94,14 @@ function constructContextGrammer(keys, message_bundle, locale, type = 'button') 
 function validateInputType(event, type) {
   const inputType = event.message.type;
   return inputType === type;
-} 
+}
 function sendMessage(context, message, immediate = true) {
   if (!context.output) {
     context.output = [];
   }
   context.output.push(message);
   if (immediate) {
-    context.chatInterface.toUser(context.user, context.output, context.extraInfo,context.connection);
+    context.chatInterface.toUser(context.user, context.output, context.extraInfo, context.connection);
     context.output = [];
   }
 }
@@ -155,7 +152,7 @@ let global_messages = {
     kn_IN: 'ಇನ್ನಷ್ಟು ನೋಡಿ ...',
     te_IN: 'మరిన్ని వివరాలు ...',
   },
-  [INTENTION_GOBACK]: { 
+  [INTENTION_GOBACK]: {
     en_IN: 'To go back ...',
     hi_IN: 'पीछे जाएं ...',
     ma_IN: 'परत जाण्यासाठी ...',
@@ -166,5 +163,5 @@ let global_messages = {
 };
 
 module.exports = {
-  get_input, get_message, get_intention, INTENTION_UNKOWN, INTENTION_MORE, INTENTION_GOBACK, global_messages, constructListPromptAndGrammer, constructLiteralGrammer, validateInputType, sendMessage,constructContextGrammer
+  get_input, get_message, get_intention, INTENTION_UNKOWN, INTENTION_MORE, INTENTION_GOBACK, global_messages, constructListPromptAndGrammer, constructLiteralGrammer, validateInputType, sendMessage, constructContextGrammer,
 };

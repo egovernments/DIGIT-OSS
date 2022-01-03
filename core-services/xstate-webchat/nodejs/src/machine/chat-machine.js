@@ -33,8 +33,8 @@ const chatStateMachine = createMachine({
             dialog.sendMessage(context, message, true);
           }),
           on: {
-            USER_MESSAGE: 'process'
-          }
+            USER_MESSAGE: 'process',
+          },
         },
         process: {
           onEntry: assign((context, event) => {
@@ -43,7 +43,7 @@ const chatStateMachine = createMachine({
           always: [
             {
               cond: (context) => context.intention == 'complaint',
-              target: '#citizenComplaint'
+              target: '#citizenComplaint',
             },
             {
               target: '#serviceRating',
@@ -70,19 +70,19 @@ const chatStateMachine = createMachine({
     },
     endstate: {
       id: 'endstate',
-      always: 'start'
+      always: 'start',
     },
     system_error: {
       id: 'system_error',
       always: {
         target: 'start',
         actions: assign((context, event) => {
-          let message = dialog.get_message(dialog.global_messages.system_error, context.user.locale);
+          const message = dialog.get_message(dialog.global_messages.system_error, context.user.locale);
           dialog.sendMessage(context, message, true);
           context.chatInterface.system_error(event.data);
-        })
-      }
-    }
+        }),
+      },
+    },
   }, // states
 }); // Machine
 

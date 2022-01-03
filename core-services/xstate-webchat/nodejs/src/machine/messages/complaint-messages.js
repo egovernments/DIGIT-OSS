@@ -35,72 +35,104 @@ const messages = {
       },
     
   },
-  
-  complaintCategoryItems:{
-    
-    nootp:{
+
+  complaintCategoryItems: {
+
+    nootp: {
       nextStep: ['complaintComments'],
-      messageBundle:{
-          en_IN: { message: 'Please enter your mobile number', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] },
-          hi_IN: { message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] }
-        
-      }
+      messageBundle: {
+        en_IN: {
+          message: 'Please enter your mobile number', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+        hi_IN: {
+          message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+
+      },
     },
-    unabletoproceed:{
-      nextStep: ['appstuck','apperor','optionNotFound'],
-      messageBundle:{
-        en_IN: {step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Application is stuck and not moving forward'}, { key: '2', value: 'Application is showing unexpected error'}, { key: '3', value: 'Necessary Option not found'}] },
-        hi_IN: {step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Application is stuck and not moving forward'}, { key: '2', value: 'Application is showing unexpected error'}, { key: '3', value: 'Necessary Option not found'}] }
-      }
+    unabletoproceed: {
+      nextStep: ['appstuck', 'apperor', 'optionNotFound'],
+      messageBundle: {
+        en_IN: { step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Application is stuck and not moving forward' }, { key: '2', value: 'Application is showing unexpected error' }, { key: '3', value: 'Necessary Option not found' }] },
+        hi_IN: { step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Application is stuck and not moving forward' }, { key: '2', value: 'Application is showing unexpected error' }, { key: '3', value: 'Necessary Option not found' }] },
+      },
     },
-    appstuck:{
+    appstuck: {
       nextStep: ['complaintComments'],
-      messageBundle:{
-        en_IN: { message: 'Please enter your mobile number', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] },
-        hi_IN: { message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] }
-      }
+      messageBundle: {
+        en_IN: {
+          message: 'Please enter your mobile number', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+        hi_IN: {
+          message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+      },
     },
-    apperor:{
+    apperor: {
       nextStep: ['complaintComments'],
-      messageBundle:{
-        en_IN: { message: 'Please enter your mobile number', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] },
-        hi_IN: { message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] }
-      }
+      messageBundle: {
+        en_IN: {
+          message: 'Please enter your mobile number', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+        hi_IN: {
+          message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+      },
     },
-    optionNotFound:{
+    optionNotFound: {
       nextStep: ['complaintComments'],
-      messageBundle:{
-        en_IN: { message: 'Please enter your mobile number', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] },
-        hi_IN: { message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] }
-      }
+      messageBundle: {
+        en_IN: {
+          message: 'Please enter your mobile number', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+        hi_IN: {
+          message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+      },
     },
-    apptakinglong:{
-        nextStep:['propreg','mutation'],
-        messageBundle:{
-          en_IN: {message: 'Please tell us which which application is taking time?',step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Property Registration'}, { key: '2', value: 'Mutation'}] },
-          hi_IN: {message: 'Please tell us which which application is taking time?',step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Property Registration'}, { key: '2', value: 'Mutation'}] }
-        }
+    apptakinglong: {
+      nextStep: ['propreg', 'mutation'],
+      messageBundle: {
+        en_IN: {
+          message: 'Please tell us which which application is taking time?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Property Registration' }, { key: '2', value: 'Mutation' }],
+        },
+        hi_IN: {
+          message: 'Please tell us which which application is taking time?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Property Registration' }, { key: '2', value: 'Mutation' }],
+        },
+      },
     },
-    propreg:{
+    propreg: {
       nextStep: ['complaintComments'],
-      messageBundle:{
-        en_IN: { message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] },
-        hi_IN: { message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] }
-      }
+      messageBundle: {
+        en_IN: {
+          message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+        hi_IN: {
+          message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+      },
     },
-    mutation:{
-        nextStep: ['complaintComments'],
-        messageBundle:{
-          en_IN: { message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] },
-          hi_IN: { message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] }
-        }
+    mutation: {
+      nextStep: ['complaintComments'],
+      messageBundle: {
+        en_IN: {
+          message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+        hi_IN: {
+          message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+      },
     },
-    appidSearch:{
-        nextStep: ['complaintComments'],
-        messageBundle:{
-          en_IN: { message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] },
-          hi_IN: { message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: ''}] }
-        }
+    appidSearch: {
+      nextStep: ['complaintComments'],
+      messageBundle: {
+        en_IN: {
+          message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+        hi_IN: {
+          message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+      },
     },
   others: {
       nextStep: ['persistComplaint'],
@@ -127,10 +159,9 @@ const messages = {
   },
   closingStatement: {
     en_IN: '\nIn case of any help please type and send "mseva"',
-    hi_IN: '\nजब भी आपको मेरी सहायता की आवश्यकता हो तो कृपया "mseva" लिखें और भेजें'
-  } 
-  
-  
+    hi_IN: '\nजब भी आपको मेरी सहायता की आवश्यकता हो तो कृपया "mseva" लिखें और भेजें',
+  },
+
 };
 
 module.exports = messages;

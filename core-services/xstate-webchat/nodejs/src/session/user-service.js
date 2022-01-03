@@ -1,9 +1,8 @@
-const config = require('../env-variables');
 const fetch = require('node-fetch');
+const config = require('../env-variables');
 require('url-search-params-polyfill');
 
 class UserService {
-
   async getUserForMobileNumber(mobileNumber, tenantId) {
     let user = await this.loginOrCreateUser(mobileNumber, tenantId);
    //Check added for anonmous users
@@ -23,7 +22,7 @@ class UserService {
 
   async loginOrCreateUser(mobileNumber, tenantId) {
     let user = await this.loginUser(mobileNumber, tenantId);
-    if(user === undefined) {
+    if (user === undefined) {
       await this.createUser(mobileNumber, tenantId);
       user = await this.loginUser(mobileNumber, tenantId);
     }
@@ -36,25 +35,25 @@ class UserService {
   }
 
   async enrichuserDetails(user) {
-    let url = config.egovServices.userServiceHost + config.egovServices.userServiceCitizenDetailsPath + '?access_token=' + user.authToken ;
-    let options = {
+    const url = `${config.egovServices.userServiceHost + config.egovServices.userServiceCitizenDetailsPath}?access_token=${user.authToken}`;
+    const options = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
-      }
-    }
+        'Content-Type': 'application/json',
+      },
+    };
 
-    let response = await fetch(url, options);
-    if(response.status === 200) {
-      let body = await response.json();
+    const response = await fetch(url, options);
+    if (response.status === 200) {
+      const body = await response.json();
       user.userInfo.name = body.name;
       user.userInfo.locale = body.locale;
-    } 
+    }
     return user;
   }
 
   async loginUser(mobileNumber, tenantId) {
-    let data = new URLSearchParams();
+    const data = new URLSearchParams();
     data.append('grant_type', 'password');
     data.append('scope', 'read');
     data.append('password', config.userService.userServiceHardCodedPassword);
@@ -62,65 +61,61 @@ class UserService {
 
     data.append('tenantId', tenantId);
     data.append('username', mobileNumber);
-    
-    let headers = {
+
+    const headers = {
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': config.userService.userLoginAuthorizationHeader
-    }
+      Authorization: config.userService.userLoginAuthorizationHeader,
+    };
 
-    let url = config.egovServices.userServiceHost + config.egovServices.userServiceOAuthPath;
-    let options = {
+    const url = config.egovServices.userServiceHost + config.egovServices.userServiceOAuthPath;
+    const options = {
       method: 'POST',
-      headers: headers,
-      body: data
-    }
+      headers,
+      body: data,
+    };
 
-    let response = await fetch(url, options);
-    if(response.status === 200) {
-      let body = await response.json();
+    const response = await fetch(url, options);
+    if (response.status === 200) {
+      const body = await response.json();
       return {
         authToken: body.access_token,
         refreshToken: body.refresh_token,
-        userInfo: body.UserRequest
-      }
-    } else {
-      return undefined;
+        userInfo: body.UserRequest,
+      };
     }
+    return undefined;
   }
 
   async createUser(mobileNumber, tenantId) {
-    let requestBody = {
+    const requestBody = {
       RequestInfo: {},
       User: {
         otpReference: config.userService.userServiceHardCodedPassword,
         permamnentCity: tenantId,
-        tenantId: tenantId,
-        username: mobileNumber
-      }
-    }
+        tenantId,
+        username: mobileNumber,
+      },
+    };
 
-    let url = config.egovServices.userServiceHost + config.egovServices.userServiceCreateCitizenPath;
-    let options = {
+    const url = config.egovServices.userServiceHost + config.egovServices.userServiceCreateCitizenPath;
+    const options = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(requestBody)
-    }
+      body: JSON.stringify(requestBody),
+    };
 
-    let response = await fetch(url, options);
-    if(response.status === 200) {
-      let responseBody = await response.json();
+    const response = await fetch(url, options);
+    if (response.status === 200) {
+      const responseBody = await response.json();
       return responseBody;
-    } else {
-      let responseBody = await response.json();
-      console.error(JSON.stringify(responseBody));
-      console.error('User Create Error');
-      return undefined;
     }
-
+    const responseBody = await response.json();
+    console.error(JSON.stringify(responseBody));
+    console.error('User Create Error');
+    return undefined;
   }
-
 }
 
 module.exports = new UserService();
