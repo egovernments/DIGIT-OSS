@@ -8,6 +8,15 @@ from dateutil import parser
 
 def mapApplicationChannel(s):
      return  s.capitalize()
+     
+def map_vehicle_status(s):
+    if s == 'SCHEDULED':
+        return 'Scheduled'
+    elif s == 'DISPOSED':
+        return 'Disposed' 
+    elif s == 'WAITING_FOR_DISPOSAL':
+        return 'Waiting for disposal' 
+    
 
 def map_status(s):
     if s == 'CREATED':
@@ -168,13 +177,13 @@ def connect():
         print("Exception occurred while connecting to the database")
         print(exception)
 
-    fsmquery="SELECT fsm.tenantid,fsm.applicationno  as ApplicationId,COALESCE(fsm.applicationStatus,'N/A') as ApplicationStatus,split_part(propertyusage::TEXT,'.', 1) as PropertyType, CASE WHEN split_part(propertyusage::TEXT,'.', 2)!='' THEN split_part(propertyusage::TEXT,'.', 2) ELSE 'N/A' END as PropertySubType,COALESCE(fsm.sanitationType,'N/A') as OnSiteSanitationType, COALESCE(REPLACE(fsmaddress.doorno,',','#'),'N/A') as DoorNumber, COALESCE(REPLACE(fsmaddress.street,',','#'),'N/A') as StreetName, COALESCE(fsmaddress.city,'N/A') as City, COALESCE(fsmaddress.pincode,'N/A') as Pincode, COALESCE(fsmaddress.locality,'N/A') as Locality, COALESCE(fsmaddress.district,'N/A') as District, COALESCE(fsmaddress.state,'N/A') as State, COALESCE(fsmaddress.slumname,'N/A') as SlumName, COALESCE(fsm.source,'N/A') as ApplicationSource,COALESCE(fsmdso.name,'N/A') as DesludgingEntity, COALESCE(fsmgeolocation.longitude,0) as Longitude, COALESCE(fsmgeolocation.latitude,0) as Latitude, CASE WHEN fsmgeolocation.longitude>0 THEN 'Yes' ELSE 'No' end as GeoLocationProvided,  COALESCE(fsmvehicle.registrationNumber,'N/A') as DesludgingVehicleNumber, COALESCE(fsm.vehicleType,'N/A') as VehicleType, COALESCE(fsmvehicle.tankcapicity,0) as VehicleCapacity , COALESCE(fsmvehicleTripdetail.volume,0) as WasteCollected, COALESCE(fsmvehicleTrip.volumeCarried,0) as WasteDumped, to_char((to_timestamp(fsmvehicleTrip.tripstarttime)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as VehicleInDateTime, to_char((to_timestamp(fsmvehicleTrip.tripendtime)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as VehicleOutDateTime,  fsmvehicleTrip.additionaldetails->>'plantCode' as fstpplant, COALESCE(fsmpayment.totalamountpaid,0) as PaymentAmount, COALESCE(fsmpayment.paymentstatus,'N/A') as PaymentStatus,COALESCE(fsmpayment.paymentmode,'N/A') as PaymentSource, COALESCE(fsmpayment.paymentmode,'N/A') as PaymentInstrumentType,to_char((to_timestamp(fsm.createdtime/1000)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as ApplicationSumbitDate  FROM eg_fsm_application as fsm JOIN eg_fsm_address as fsmaddress ON ( fsmaddress.fsm_id = fsm.id ) JOIN eg_fsm_geolocation as fsmgeolocation ON ( fsmaddress.id = fsmgeolocation.address_id ) LEFT JOIN eg_vendor as fsmdso ON ( fsmdso.id = fsm.dso_id)  LEFT JOIN eg_vehicle as fsmvehicle ON ( fsm.vehicle_id = fsmvehicle.id) LEFT JOIN eg_vehicle_trip_detail as fsmvehicleTripdetail ON ( fsmvehicleTripdetail.referenceNo = fsm.applicationNo) LEFT JOIN eg_vehicle_trip as fsmvehicleTrip ON ( fsmvehicleTripdetail.trip_id = fsmvehicleTrip.id) LEFT JOIN egcl_bill as egbill ON ( egbill.consumercode =fsm.applicationno) LEFT JOIN egcl_paymentdetail as paymentdl ON ( paymentdl.billid = egbill.id ) LEFT JOIN egcl_payment as fsmpayment ON ( fsmpayment.id=paymentdl.paymentid) AND fsm.createdtime > {START_TIME} AND fsm.createdtime < {END_TIME}"
+    fsmquery="SELECT fsm.tenantid,fsmvehicleTrip.applicationstatus AS Vehicle_Application_Status, fsm.applicationno  as ApplicationId,COALESCE(fsm.applicationStatus,'N/A') as ApplicationStatus,split_part(propertyusage::TEXT,'.', 1) as PropertyType, CASE WHEN split_part(propertyusage::TEXT,'.', 2)!='' THEN split_part(propertyusage::TEXT,'.', 2) ELSE 'N/A' END as PropertySubType,COALESCE(fsm.sanitationType,'N/A') as OnSiteSanitationType, COALESCE(REPLACE(fsmaddress.doorno,',','#'),'N/A') as DoorNumber, COALESCE(REPLACE(fsmaddress.street,',','#'),'N/A') as StreetName, COALESCE(fsmaddress.city,'N/A') as City, COALESCE(fsmaddress.pincode,'N/A') as Pincode, COALESCE(fsmaddress.locality,'N/A') as Locality, COALESCE(fsmaddress.district,'N/A') as District, COALESCE(fsmaddress.state,'N/A') as State, COALESCE(fsmaddress.slumname,'N/A') as SlumName, COALESCE(fsm.source,'N/A') as ApplicationSource,COALESCE(fsmdso.name,'N/A') as DesludgingEntity, COALESCE(fsmgeolocation.longitude,0) as Longitude, COALESCE(fsmgeolocation.latitude,0) as Latitude, CASE WHEN fsmgeolocation.longitude>0 THEN 'Yes' ELSE 'No' end as GeoLocationProvided,  COALESCE(fsmvehicle.registrationNumber,'N/A') as DesludgingVehicleNumber, COALESCE(fsm.vehicleType,'N/A') as VehicleType, COALESCE(fsmvehicle.tankcapicity,0) as VehicleCapacity , COALESCE(fsmvehicleTripdetail.volume,0) as WasteCollected, COALESCE(fsmvehicleTrip.volumeCarried,0) as WasteDumped, to_char((to_timestamp(fsmvehicleTrip.tripstarttime)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as VehicleInDateTime, to_char((to_timestamp(fsmvehicleTrip.tripendtime)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as VehicleOutDateTime,  fsmvehicleTrip.additionaldetails->>'plantCode' as fstpplant, COALESCE(fsmpayment.totalamountpaid,0) as PaymentAmount, COALESCE(fsmpayment.paymentstatus,'N/A') as PaymentStatus,COALESCE(fsmpayment.paymentmode,'N/A') as PaymentSource, COALESCE(fsmpayment.paymentmode,'N/A') as PaymentInstrumentType,to_char((to_timestamp(fsm.createdtime/1000)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as ApplicationSumbitDate  FROM eg_fsm_application as fsm JOIN eg_fsm_address as fsmaddress ON ( fsmaddress.fsm_id = fsm.id ) JOIN eg_fsm_geolocation as fsmgeolocation ON ( fsmaddress.id = fsmgeolocation.address_id ) LEFT JOIN eg_vendor as fsmdso ON ( fsmdso.id = fsm.dso_id)  LEFT JOIN eg_vehicle as fsmvehicle ON ( fsm.vehicle_id = fsmvehicle.id) LEFT JOIN eg_vehicle_trip_detail as fsmvehicleTripdetail ON ( fsmvehicleTripdetail.referenceNo = fsm.applicationNo) LEFT JOIN eg_vehicle_trip as fsmvehicleTrip ON ( fsmvehicleTripdetail.trip_id = fsmvehicleTrip.id) LEFT JOIN egcl_bill as egbill ON ( egbill.consumercode =fsm.applicationno) LEFT JOIN egcl_paymentdetail as paymentdl ON ( paymentdl.billid = egbill.id ) LEFT JOIN egcl_payment as fsmpayment ON ( fsmpayment.id=paymentdl.paymentid) AND fsm.createdtime > {START_TIME} AND fsm.createdtime < {END_TIME}"
 
     starttime = input('Enter start date (dd-mm-yyyy): ')
     endtime = input('Enter end date (dd-mm-yyyy): ')
     fsmquery = fsmquery.replace('{START_TIME}',dateToEpoch(starttime))
     fsmquery = fsmquery.replace('{END_TIME}',dateToEpoch(endtime))
-
+    
     query = pd.read_sql_query(fsmquery, conn)
     data = pd.DataFrame(query)
     pendingpaymentstatus="select businessid as applicationno, to_char((to_timestamp(createdtime/1000)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as PendingPaymentSumbitDate from eg_wf_processinstance_v2  where businessservice='FSM'  and status in (select uuid from eg_wf_state_v2 where state='PENDING_APPL_FEE_PAYMENT')"
@@ -214,7 +223,7 @@ def connect():
     disposedstatus="select referenceno as applicationno, to_char((to_timestamp(process.createdtime/1000)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as disposedtime from eg_wf_processinstance_v2 as process inner join eg_vehicle_trip_detail as detail  on process.businessid=detail.referenceno where businessservice='FSM_VEHICLE_TRIP' and process.status in (select uuid from eg_wf_state_v2 where state='DISPOSED')"
     disposedstatusQuery=pd.read_sql_query(disposedstatus,conn)
     disposedstatusData=pd.DataFrame(disposedstatusQuery)
-    data.columns=['tenantid','Application ID','Application Status', 'Property Type','Property Sub Type','OnSite Sanitation Type','Door Number','Street Name','City','Pincode','Locality','District','State','Slum Name','Application Source','Desludging Entity','Longitude','Latitude','Geo Location Provided','Desludging Vehicle Number','Vehicle Type','Vehicle Capacity','Waste Collected','Waste Dumped','Vehicle In DateTime','Vehicle  Out DateTime','Fstp Plant Name','Payment Amount','Payment Status','Payment Source','Payment Instrument Type','Application Submitted Time']
+    data.columns=['tenantid','Vehicle_Application_Status','Application ID','Application Status', 'Property Type','Property Sub Type','OnSite Sanitation Type','Door Number','Street Name','City','Pincode','Locality','District','State','Slum Name','Application Source','Desludging Entity','Longitude','Latitude','Geo Location Provided','Desludging Vehicle Number','Vehicle Type','Vehicle Capacity','Waste Collected','Waste Dumped','Vehicle In DateTime','Vehicle  Out DateTime','Fstp Plant Name','Payment Amount','Payment Status','Payment Source','Payment Instrument Type','Application Submitted Time']
     pendingpaymentstatusData.columns=['Application ID','Pending payment Submitted Time']
     assigndsostatusData.columns=['Application ID','Assigned DSO Submitted Time']
     dsorejectstatusData.columns=['Application ID','DSO Rejected Submitted Time']
@@ -226,7 +235,7 @@ def connect():
     completedstatusData.columns=['Application ID','Application Completed Time','Rating']
     scheduledstatusData.columns=['Application ID','Scheduled Time']
     waitingfordisposalstatusData.columns=['Application ID','Waiting for disposalTime']
-    disposedstatusData.columns=['Application ID','Disposed Time']
+    disposedstatusData.columns=['Application ID','Disposed Time']    
     fsmdata = pd.DataFrame()
     fsmdata=pd.merge(data,pendingpaymentstatusData,left_on='Application ID',right_on='Application ID',how='left')
     fsmdata=pd.merge(fsmdata,assigndsostatusData,left_on='Application ID',right_on='Application ID',how='left')
@@ -236,27 +245,27 @@ def connect():
     fsmdata=pd.merge(fsmdata,rejectedstatusData,left_on='Application ID',right_on='Application ID',how='left')
     fsmdata=pd.merge(fsmdata,cancelledstatusData,left_on='Application ID',right_on='Application ID',how='left')
     fsmdata=pd.merge(fsmdata,citizenfeedbackstatusData,left_on='Application ID',right_on='Application ID',how='left')
-    fsmdata=pd.merge(fsmdata,completedstatusData,left_on='Application ID',right_on='Application ID',how='left')
-    fsmdata=pd.merge(fsmdata,scheduledstatusData,left_on='Application ID',right_on='Application ID',how='left')
+    fsmdata=pd.merge(fsmdata,completedstatusData,left_on='Application ID',right_on='Application ID',how='left') 
+    fsmdata=pd.merge(fsmdata,scheduledstatusData,left_on='Application ID',right_on='Application ID',how='left') 
     fsmdata=pd.merge(fsmdata,waitingfordisposalstatusData,left_on='Application ID',right_on='Application ID',how='left')
     fsmdata=pd.merge(fsmdata,disposedstatusData,left_on='Application ID',right_on='Application ID',how='left')
-    fsmdata['Application Status'] = fsmdata['Application Status'].map(map_status)
+    fsmdata['Application Status'] = fsmdata['Application Status'].map(map_status) 
     fsmdata['Property Type']=fsmdata['Property Type'].map(map_propertytype)
     fsmdata['Property Sub Type']=fsmdata['Property Sub Type'].map(map_propertySubType)
-    fsmdata['SLA Planned (In Days)']=2
-    fsmdata=fsmdata.fillna('N/A')
-    fsmdata['Application Source'] =fsmdata['Application Source'].map(mapApplicationChannel)
+    fsmdata['SLA Planned (In Days)']=2 
+    fsmdata=fsmdata.fillna('N/A')  
+    fsmdata['Application Source'] =fsmdata['Application Source'].map(mapApplicationChannel)  
     fsmdata['OnSite Sanitation Type']= fsmdata['OnSite Sanitation Type'].map(map_santationtype)
     fsmdata['Application Completed Time']=fsmdata['Application Completed Time'].replace('N/A', '')
-    fsmdata['Application Submitted Time']=fsmdata['Application Submitted Time'].replace('N/A', '')
+    fsmdata['Application Submitted Time']=fsmdata['Application Submitted Time'].replace('N/A', '') 
     fsmdata['Scheduled Time']=fsmdata['Scheduled Time'].replace('N/A', '')
     fsmdata['Waiting for disposalTime']=fsmdata['Waiting for disposalTime'].replace('N/A', '')
     fsmdata['Disposed Time']=fsmdata['Disposed Time'].replace('N/A', '')
     fsmdata = fsmdata.dropna(axis=0, subset=['Application Submitted Time'])
     fsmdata['SLA achieved'] = (pd.to_datetime(fsmdata['Application Completed Time'])- pd.to_datetime(fsmdata['Application Submitted Time'])).dt.days
-    fsmdata=fsmdata.fillna('N/A')
-    fsmdata['Vehicle Type']=fsmdata['Vehicle Type'].map(map_vehicletype)
-    fsmdata['Payment Status'] =fsmdata['Payment Status'].map(map_paymentsource)
+    fsmdata=fsmdata.fillna('N/A') 
+    fsmdata['Vehicle Type']=fsmdata['Vehicle Type'].map(map_vehicletype)  
+    fsmdata['Payment Status'] =fsmdata['Payment Status'].map(map_paymentsource)  
     fsmdata['State']=fsmdata['State'].map(mapstate)
     fsmdata['District']=fsmdata['City']
     fsmdata['District']=fsmdata['District'].map(mapDistrict)
@@ -266,16 +275,16 @@ def connect():
     fsmdata['Payment Amount']=fsmdata['Payment Amount'].apply(np.int64)
     fsmdata['Rating']=fsmdata['Rating'].replace('N/A','')
     fsmdata['Rating']=fsmdata['Rating'].map(map_rating)
-    fsmdata['Pincode']=fsmdata['Pincode'].replace('N/A','')
+    fsmdata['Pincode']=fsmdata['Pincode'].replace('N/A','') 
     fsmdata['Pincode']=fsmdata['Pincode'].map(map_pincode)
     fsmdata['Longitude']=fsmdata['Longitude'].replace(0,'')
     fsmdata['Latitude']=fsmdata['Latitude'].replace(0,'')
-    fsmdata['Longitude']=fsmdata['Longitude'].map(map_rating)
-    fsmdata['Latitude']=fsmdata['Latitude'].map(map_rating)
+    fsmdata['Longitude']=fsmdata['Longitude'].map(map_rating)    
+    fsmdata['Latitude']=fsmdata['Latitude'].map(map_rating)  
     fsmdata['Slum Name'] = fsmdata['Slum Name'].map(mapslumName)
     fsmdata['Waste Dumped']=fsmdata['Waste Dumped'].apply(np.int64)
     fsmdata['Fstp Plant Name'] = fsmdata['Fstp Plant Name'].map(mapplantname)
-
+    fsmdata['Vehicle_Application_Status'] = fsmdata['Vehicle_Application_Status'].map(map_vehicle_status)
     global uniquetenant
     uniquetenant = fsmdata['tenantid'].unique()
     global accesstoken

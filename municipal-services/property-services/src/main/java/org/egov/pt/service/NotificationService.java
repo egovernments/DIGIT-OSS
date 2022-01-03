@@ -67,7 +67,7 @@ public class NotificationService {
 		ProcessInstance wf = property.getWorkflow();
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
 		state = getStateFromWf(wf, configs.getIsMutationWorkflowEnabled());
-		String localisedState = getLocalisedState(wf.getState().getState(), completeMsgs);
+		String localisedState = getLocalisedState(wf, completeMsgs);
 
 		switch (state) {
 
@@ -124,7 +124,7 @@ public class NotificationService {
 		Boolean isCreate =  CreationReason.CREATE.equals(property.getCreationReason());
 		String state = getStateFromWf(wf, configs.getIsWorkflowEnabled());
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
-		String localisedState = getLocalisedState(wf.getState().getState(), completeMsgs);
+		String localisedState = getLocalisedState(wf, completeMsgs);
 		switch (state) {
 
 		case WF_NO_WORKFLOW:
@@ -237,7 +237,12 @@ public class NotificationService {
 		return msg;
 	}
 	
-	private String getLocalisedState(String state, String completeMsgs) {
+	private String getLocalisedState(ProcessInstance workflow, String completeMsgs) {
+		
+		String state ="";
+		if(configs.getIsWorkflowEnabled()) {
+			state = workflow.getState().getState();
+		}
 		
 		switch (state) {
 			
@@ -318,28 +323,16 @@ public class NotificationService {
 			    mobileNumbers.add(owner.getMobileNumber());
 		});
 
-		if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
 			List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 			notifUtil.sendSMS(smsRequests);
-		}
-		if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)){
+
 			Boolean isActionReq = false;
 			if(state.equalsIgnoreCase(PT_CORRECTION_PENDING))
 				isActionReq = true;
 
-			List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 			List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
 			notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
-		}
-		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)){
-			//EMAIL block TBD
-			Map<String, String> mapOfPhnoAndEmail = notifUtil.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
-			String messageTemplate = fetchContentFromLocalization(request.getRequestInfo(), tenantId, "rainmaker-pt", "PT_NOTIFICATION_EMAIL");
-			messageTemplate = messageTemplate.replace("{MESSAGE}",msg);
-			messageTemplate = messageTemplate.replace(NOTIFICATION_OWNERNAME,NOTIFICATION_EMAIL);
-			List<EmailRequest> emailRequests = notifUtil.createEmailRequest(requestInfo,messageTemplate, mapOfPhnoAndEmail);
-			notifUtil.sendEmail(emailRequests);
-		}
+
 	}
 
 	private String fetchContentFromLocalization(RequestInfo requestInfo, String tenantId, String module, String code){

@@ -467,7 +467,7 @@ public class NotificationUtil {
 		String receiptNumber = getReceiptNumber(bpaRequest);
 		String consumerCode;
 		consumerCode = bpaRequest.getBPA().getApplicationNo();
-			String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
+			String link = config.getUiAppHost() + config.getReceiptDownloadLink();
 			link = link.replace("$consumerCode", consumerCode);
 			link = link.replace("$tenantId", bpaRequest.getBPA().getTenantId());
 			link = link.replace("$businessService", bpaRequest.getBPA().getBusinessService());
@@ -501,7 +501,7 @@ public class NotificationUtil {
 	public String getShortnerURL(String actualURL) {
 		net.minidev.json.JSONObject obj = new net.minidev.json.JSONObject();
 		obj.put(URL, actualURL);
-		String url = config.getNotificationUrl() + config.getShortenerURL();
+		String url = config.getUrlShortnerHost() + config.getShortenerURL();
 
 		Object response = serviceRequestRepository.getShorteningURL(new StringBuilder(url), obj);
 		return response.toString();

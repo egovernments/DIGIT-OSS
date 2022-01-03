@@ -114,7 +114,8 @@ const abgSearchAndResult = {
               },
               ...header
             },
-            downloadBillButton: {
+           /* removed group bill download through job
+           downloadBillButton: {
               componentPath: "Button",
               gridDefination: {
                 xs: 12,
@@ -146,8 +147,8 @@ const abgSearchAndResult = {
                     : `/abg/billDownload`
               },
               visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
-            }
-          }
+            } */
+          } 
         },
         abgSearchCard,
         breakAfterSearch: getBreak(),
