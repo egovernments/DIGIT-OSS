@@ -68,6 +68,11 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         }
     }, [genderTypeData]);
 
+    // useEffect(() => {
+    //     if(showToast) {
+    //         setTimeout(closeToast, 5000);
+    //     }
+    // },[showToast]);
 
     function selectedValue(value) {
         setOwnershipCategory(value);
@@ -169,6 +174,8 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     const getOwnerDetails = async (indexValue, eData) => {
         const ownersCopy = cloneDeep(fields);
         const ownerNo = ownersCopy?.[indexValue]?.mobileNumber || "";
+        setShowToast(null);
+
 
         if (!ownerNo.match(getPattern("MobileNo"))) {
             setShowToast({ key: "true", error: true, message: "ERR_MOBILE_NUMBER_INCORRECT" });
