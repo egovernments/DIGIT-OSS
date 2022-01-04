@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Card, CardHeader, ComplaintIcon, AvailableOptionsList, UserInput, ChatBubble, MultipleSelect, StarRating, ReplyComponent } from "@egovernments/digit-ui-react-components";
-import { landingPageSteps, stepTwo, lastStep, stepThree, stepFour, feedbackStep, ratingStep, WEBSOCKET_URL } from "./config";
+import { WEBSOCKET_URL } from "./config";
 
 const CitizenFeedbackHome = ({ parentRoute }) => {
   const [steps, setSteps] = useState([]);
@@ -9,7 +9,9 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [timeout, setNewTimeout] = useState(250)
   const [initialConnectionOpen, setConnectionOpen] = useState(false)
+  const [isLastStep, setIsLastStep] = useState(false)
   const [stepsData, setStepsData, clearStepsData] = Digit.Hooks.useSessionStorage("CF_STEPS", false);
+  const [successData, setSuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("CF_RESPONSE", false);
   const history = useHistory();
   const messagesEndRef = useRef(null);
   const User = Digit.UserService.getUser();
@@ -38,54 +40,21 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
     });
     console.log('sdcsdcscs98', itemDetails);
     console.log('sdcsdcscs99', itemDetails.key);
-    ws.current.send(JSON.stringify(
-
-      {
-        "message": {
-          "type": "text",
-          "input": itemDetails.key
-        },
-        "user": {
-          "mobileNumber": "7391904467"
-        },
-        "extraInfo": {
-          "whatsAppBusinessNumber": "917834811114",
-          "filestoreId": ""
-        }
+    ws.current.send(JSON.stringify({
+      "message": {
+        "type": "text",
+        "input": itemDetails.key
+      },
+      "user": {
+        "mobileNumber": "7391904467"
+      },
+      "extraInfo": {
+        "whatsAppBusinessNumber": "917834811114",
+        "filestoreId": ""
       }
+    }
     ));
-    // if (message === "Raise a complaint") {
-    //   stepTwo.stepId = currentStep + 2
-    //   updatedSteps.push(stepTwo);
-    // }
-    // if (message === "Not Recieving OTP") {
-    //   stepFour.stepId = currentStep + 2
-    //   updatedSteps.push(stepFour);
-    // }
-    // if (message === "Bill amount is incorrect") {
-    //   stepThree.stepId = currentStep + 2
-    //   updatedSteps.push(stepThree);
-    // }
-    // if (message === 'Provide Feedback') {
-    //   feedbackStep.stepId = currentStep + 2
-    //   updatedSteps.push(feedbackStep)
-    // }
-    // if (message === 'Rate the service') {
-    //   ratingStep.stepId = currentStep + 2
-    //   updatedSteps.push(ratingStep)
-    // }
-    // if (stepDetails.optionType === 'textField' || stepDetails.optionType === 'multiSelect') {
-    //   lastStep.stepId = currentStep + 2
-    //   updatedSteps.push(lastStep)
-    // }
-    // if (stepDetails.optionType === 'stars') {
-    //   stepThree.stepId = currentStep + 2
-    //   updatedSteps.push(stepThree)
-    // }
-    // if (message === 'Yes, Raise the complaint') {
-    //   history.push('/digit-ui/citizen/cf/response')
-    // }
-    // Digit.SessionStorage.set("CF_STEPS", updatedSteps);
+    setStepsData(updatedSteps);
     setCurrentStep(currentStep + 2)
     setSteps([...updatedSteps]);
   };
@@ -101,9 +70,9 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
           return <ReplyComponent stepDetails={data} type="right" />
         default:
           return <>
-            <ChatBubble type="left" >
+            {data.message && <ChatBubble type="left" >
               {data.message}
-            </ChatBubble>
+            </ChatBubble>}
             {renderItems(data)}
           </>
       }
@@ -162,12 +131,22 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
       const message = JSON.parse(ev.data);
       console.log("sdcsdcscs22", steps)
       if (typeof message == "object") {
-        // Digit.SessionStorage.set("CF_STEPS", [...steps, message]);
+        setStepsData([...steps, message]);
         setSteps(steps => [...steps, message]);
       } else {
+        if (message.match("Complaint created successfully")) {
+          setSuccessData({
+            message: message,
+            type: 'Complaint'
+          })
+          history.push(`/digit-ui/citizen/cf/response`);
+        }
         const newMessage = { "message": message, "step": "intermediate", "optionType": "text", "option": [] }
-        // Digit.SessionStorage.set("CF_STEPS", [...steps, newMessage]);
+        setStepsData([...steps, newMessage]);
         setSteps(steps => [...steps, newMessage]);
+      }
+      if (message.step === 'last') {
+        setIsLastStep(isLastStep => true)
       }
     };
 
@@ -206,36 +185,33 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
   };
 
   useEffect(() => {
-    // const prevSteps = Digit.SessionStorage.get("CF_STEPS");
-    // console.log("sdcsdcscs storage", prevSteps)
-    // if (prevSteps && prevSteps.length) {
-    //   const initialStep = prevSteps
-    //   setSteps(initialStep);
-    //   setShowFaq(false)
-    // } else {
-    //   const initialStep = landingPageSteps
-    //   initialStep.stepId = 0
-    //   Digit.SessionStorage.set("CF_STEPS", [initialStep]);
-    //   setSteps([initialStep]);
-    // }
-
-    // return () => {
-    //   clearStepsData()
-    // }
+    const prevSteps = stepsData;
+    console.log("sdcsdcscs storage", prevSteps)
+    if (prevSteps && prevSteps.length) {
+      const initialStep = prevSteps
+      setSteps(initialStep);
+      setShowFaq(false)
+    } else {
+      // const initialStep = landingPageSteps
+      // initialStep.stepId = 0
+      // setStepsData([initialStep]);
+      // setSteps([initialStep]);
+    }
 
     connectWebsocket()
 
     return () => {
       console.log('sdcsdcscs Cleaning up! 🧼');
       ws.current.close();
+      clearStepsData()
     };
   }, []);
 
   useEffect(() => {
     if (messagesEndRef && messagesEndRef.current) {
-      setTimeout(() => {
-        messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 200);
+    //   setTimeout(() => {
+    messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    //   }, 200);
     }
   });
 

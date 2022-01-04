@@ -24,8 +24,8 @@ const BannerPicker = ({ response }) => {
   // if (complaints && complaints.response && complaints.response.responseInfo) {
   return (
     <Banner
-      message={GetActionMessage("DEFAULT")}
-      complaintNumber={'PB-PGR-2021-12-21-003260'}
+      message={response.actionMessage}
+      complaintNumber={response.complaintNumber}
       successful={true}
     />
   );
@@ -36,15 +36,24 @@ const BannerPicker = ({ response }) => {
 
 const Response = (props) => {
   const { t } = useTranslation();
+  const [successData, setSuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("CF_RESPONSE", false);
   // const appState = useSelector((state) => state)["pgr"];
+  let resp = JSON.stringify(successData.message)
+  let temp = resp.split('\\n')
+  let message = temp[2]
+  let response = {
+    actionMessage: temp[0].split('"')[1],
+    complaintNumber: temp[1].split(' Complaint ID: ')[1]
+  }
 
   return (
     <Card>
       <BannerPicker
+        response={response}
         // response={appState}
       />
       <ResponseComposer />
-      <CardText>{t("CS_COMMON_TRACK_COMPLAINT_TEXT")}</CardText>
+      <CardText>{message}</CardText>
       <Link to="/digit-ui/citizen">
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
