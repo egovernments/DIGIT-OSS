@@ -1,6 +1,0 @@
-{
-    "RequestInfo": {
-        "correlationId": "someCorrelationId"
-    },
-    "foo": "bar"
-}
