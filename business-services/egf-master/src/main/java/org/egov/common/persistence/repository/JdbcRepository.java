@@ -231,11 +231,7 @@ public abstract class JdbcRepository {
             try {
                 f = getField(ob, s);
             } catch (Exception e) {
-<<<<<<< HEAD
                 LOG.error("No Such field exception occurred: " + e.getMessage());
-=======
-                LOG.error(" Error occurred while processing");
->>>>>>> 22e40a9f4f ([RAIN-4324] Empty nested block fix)
             }
             /*
              * try { f = ob.getClass().getSuperclass().getDeclaredField(s); } catch (NoSuchFieldException e1) {

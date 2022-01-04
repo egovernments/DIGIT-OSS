@@ -41,8 +41,5 @@ public class MessageWebhook {
         return message;
     }
 
-//    public void recordEvent() {
-//
-//    }
 
 }
