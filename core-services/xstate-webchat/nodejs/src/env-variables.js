@@ -6,7 +6,7 @@ const envVariables = {
   port: process.env.SERVICE_PORT || 8080,
   contextPath: process.env.CONTEXT_PATH || '/xstate-webchat',
   serviceProvider: process.env.SERVICE_PROVIDER || 'eGov',
-  repoProvider: process.env.REPO_PROVIDER || 'InMemory',
+  repoProvider: process.env.REPO_PROVIDER || 'PostgreSQL',
   rootTenantId: process.env.ROOT_TENANTID || 'pb',
   supportedLocales: process.env.SUPPORTED_LOCALES || 'en_IN,hi_IN',
   dateFormat: process.env.DATEFORMAT || 'DD/MM/YYYY',
