@@ -8,7 +8,7 @@ import {
   localStorageGet,
   localStorageSet,
   setLocale,
-  setTenantId
+  setTenantId,
 } from "egov-ui-kit/utils/localStorageUtils";
 import some from "lodash/some";
 import store from "ui-redux/store";
@@ -171,7 +171,7 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
     baseURL: window.location.origin,
     headers: {
       "Content-Type": "multipart/form-data",
-      "auth-token":getAccessToken(),
+      "auth-token": getAccessToken(),
     },
   });
 
@@ -383,46 +383,44 @@ export const commonApiPost = (
 };
 
 const downloadPdf = (blob, fileName) => {
-  if(window.mSewaApp&&window.mSewaApp.isMsewaApp() &&
-      window.mSewaApp.downloadBase64File){
-      var reader = new FileReader();
-      reader.readAsDataURL(blob); 
-      reader.onloadend = function() {
-        var base64data = reader.result;                
-        mSewaApp.downloadBase64File(base64data,fileName)
-      }
-  }else{
-      const link = document.createElement("a");
-      // create a blobURI pointing to our Blob
-      link.href = URL.createObjectURL(blob);
-      link.download = fileName;
-      // some browser needs the anchor to be in the doc
-      document.body.append(link);
-      link.click();
-      link.remove();
-      // in case the Blob uses a lot of memory
-      setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+  if (window.mSewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
+    var reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = function () {
+      var base64data = reader.result;
+      mSewaApp.downloadBase64File(base64data, fileName);
+    };
+  } else {
+    const link = document.createElement("a");
+    // create a blobURI pointing to our Blob
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    // some browser needs the anchor to be in the doc
+    document.body.append(link);
+    link.click();
+    link.remove();
+    // in case the Blob uses a lot of memory
+    setTimeout(() => URL.revokeObjectURL(link.href), 7000);
   }
 };
 
 const printPdf = (blob) => {
-    if(window.mSewaApp&&window.mSewaApp.isMsewaApp() &&
-    window.mSewaApp.downloadBase64File){
+  if (window.mSewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
     var reader = new FileReader();
-    reader.readAsDataURL(blob); 
-    reader.onloadend = function() {
-      var base64data = reader.result;                
-      mSewaApp.downloadBase64File(base64data,fileName)
+    reader.readAsDataURL(blob);
+    reader.onloadend = function () {
+      var base64data = reader.result;
+      mSewaApp.downloadBase64File(base64data, fileName);
+    };
+  } else {
+    const fileURL = URL.createObjectURL(blob);
+    var myWindow = window.open(fileURL);
+    if (myWindow != undefined) {
+      myWindow.addEventListener("load", (event) => {
+        myWindow.focus();
+        myWindow.print();
+      });
     }
-  }else{
-  const fileURL = URL.createObjectURL(blob);
-  var myWindow = window.open(fileURL);
-  if (myWindow != undefined) {
-    myWindow.addEventListener("load", (event) => {
-      myWindow.focus();
-      myWindow.print();
-    });
-  }
   }
 };
 
