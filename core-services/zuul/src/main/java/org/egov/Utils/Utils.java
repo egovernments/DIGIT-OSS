@@ -101,24 +101,16 @@ public class Utils {
                     } else if (node.getNodeType() == JsonNodeType.STRING) {
                         tenants.add(node.asText());
                     }
-                }
-                if( ! tenants.isEmpty())
-                // Filtering null tenantids will be removed once fix is done in TL service.
-                    tenants.forEach(tenant -> {
-                        if (tenant != null && !tenant.equalsIgnoreCase("null"))
-                            tenantIds.add(tenant);
-                    });
-                else{
-                    if (!isNull(queryParams) && queryParams.containsKey(REQUEST_TENANT_ID_KEY) && queryParams.get(REQUEST_TENANT_ID_KEY).length > 0) {
-                        String tenantId = queryParams.get(REQUEST_TENANT_ID_KEY)[0];
-                        if(tenantId.contains(",")){
-                            tenantIds.addAll(Arrays.asList(tenantId.split(",")));
-                        } else
-                            tenantIds.add(tenantId);
-
-                    }
-                }
-
+				}
+				if (!tenants.isEmpty()) {
+					/*
+					 * Filtering null tenantids will be removed once fix is done in TL service.
+					 */
+					tenants.forEach(tenant -> {
+						if (tenant != null && !tenant.equalsIgnoreCase("null"))
+							tenantIds.add(tenant);
+					});
+				} 
             } catch (IOException e) {
                 throw new RuntimeException( new CustomException("REQUEST_PARSE_FAILED", HttpStatus.UNAUTHORIZED.value() ,"Failed to parse request at" +
                     " API gateway"));
@@ -126,11 +118,24 @@ public class Utils {
         }
 
         if (tenantIds.isEmpty()) {
+        	setTenantIdsFromQueryParams(queryParams, tenantIds);
             tenantIds.add(((User) ctx.get(USER_INFO_KEY)).getTenantId());
         }
 
         return tenantIds;
     }
+    
+	private void setTenantIdsFromQueryParams(Map<String, String[]> queryParams, Set<String> tenantIds) {
+		
+		if (!isNull(queryParams) && queryParams.containsKey(REQUEST_TENANT_ID_KEY)
+				&& queryParams.get(REQUEST_TENANT_ID_KEY).length > 0) {
+			String tenantId = queryParams.get(REQUEST_TENANT_ID_KEY)[0];
+			if (tenantId.contains(",")) {
+				tenantIds.addAll(Arrays.asList(tenantId.split(",")));
+			} else
+				tenantIds.add(tenantId);
+		}
+	}
     
     private void stripRequestInfo(ObjectNode requestBody) {
         if (requestBody.has(REQUEST_INFO_FIELD_NAME_PASCAL_CASE))
