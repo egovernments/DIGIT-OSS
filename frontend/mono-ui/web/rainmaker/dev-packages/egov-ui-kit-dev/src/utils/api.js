@@ -388,8 +388,9 @@ const downloadPdf = (blob, fileName) => {
       var reader = new FileReader();
       reader.readAsDataURL(blob); 
       reader.onloadend = function() {
-      var base64data = reader.result;                
-      mSewaApp.downloadBase64File(base64data,fileName)
+        var base64data = reader.result;                
+        mSewaApp.downloadBase64File(base64data,fileName)
+      }
   }else{
       const link = document.createElement("a");
       // create a blobURI pointing to our Blob
@@ -410,8 +411,9 @@ const printPdf = (blob) => {
     var reader = new FileReader();
     reader.readAsDataURL(blob); 
     reader.onloadend = function() {
-    var base64data = reader.result;                
-    mSewaApp.downloadBase64File(base64data,fileName)
+      var base64data = reader.result;                
+      mSewaApp.downloadBase64File(base64data,fileName)
+    }
   }else{
   const fileURL = URL.createObjectURL(blob);
   var myWindow = window.open(fileURL);
