@@ -212,6 +212,9 @@ public class AccountCodePurposeRepository {
 
 	}
 
+	public void uniqueCheck(AccountCodePurpose accountCodePurpose) {
+
+	}
 
 	public Boolean uniqueCheck(String fieldName, AccountCodePurpose accountCodePurpose) {
 		return accountCodePurposeJdbcRepository.uniqueCheck(fieldName,
