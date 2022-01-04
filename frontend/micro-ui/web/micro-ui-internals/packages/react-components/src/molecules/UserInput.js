@@ -6,6 +6,7 @@ import GalleryButton from './GalleryButton';
 function UserInput(props) {
     const [OptionList, setOptionDetails] = useState([]);
     const [textData, setTextData] = useState("");
+    const User = Digit.UserService.getUser();
 
     const styling = {
         position: "absolute",
@@ -85,7 +86,7 @@ function UserInput(props) {
                 </div>
                 {props.stepDetails.step === 'last' && <GalleryButton
                     header=""
-                    tenantId="pb.amritsar"
+                    tenantId={User.info.tenantId}
                     cardText=""
                     onPhotoChange={handleUpload}
                     uploadedImages={null} />}

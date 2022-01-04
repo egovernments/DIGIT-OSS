@@ -38,15 +38,13 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
       stepId: currentStep + 1,
       option: itemDetails.length ? itemDetails : [itemDetails],
     });
-    console.log('sdcsdcscs98', itemDetails);
-    console.log('sdcsdcscs99', itemDetails.key);
     ws.current.send(JSON.stringify({
       "message": {
         "type": "text",
         "input": itemDetails.key
       },
       "user": {
-        "mobileNumber": "7391904467"
+        "mobileNumber": User.info.mobileNumber
       },
       "extraInfo": {
         "whatsAppBusinessNumber": "917834811114",
@@ -63,37 +61,6 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
     console.log("Disabled btn selected")
   }
 
-  const renderMessage = (step) => {
-    return step.map((data) => {
-      switch (data.messageType) {
-        case 'reply':
-          return <ReplyComponent stepDetails={data} type="right" />
-        default:
-          return <>
-            {data.message && <ChatBubble type="left" >
-              {data.message}
-            </ChatBubble>}
-            {renderItems(data)}
-          </>
-      }
-    })
-  }
-
-  const renderItems = (data) => {
-    switch (data.optionType) {
-      case "button":
-        return <AvailableOptionsList stepDetails={data} data={data.option} onItemSelect={data.isDisabled ? onDisableSelect : onItemSelect} />
-      case "textbox":
-      case "textarea":
-        return <UserInput stepDetails={data} data={data.option} handleSubmit={data.isDisabled ? onDisableSelect : onItemSelect} />
-      case 'multiSelect':
-        return <MultipleSelect stepDetails={data} data={data.option} handleSubmit={data.isDisabled ? onDisableSelect : onItemSelect} />
-      case 'stars':
-        return <StarRating stepDetails={data} data={data.option} onRatingSubmit={data.isDisabled ? onDisableSelect : onItemSelect} />
-      default:
-        return <AvailableOptionsList stepDetails={data} data={data.option} onItemSelect={data.isDisabled ? onDisableSelect : onItemSelect} />
-    }
-  }
   console.log("sdcsdcscs345", steps)
   const ws = useRef();
 
@@ -106,47 +73,22 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
       setConnectionOpen(true);
       setNewTimeout(250) // reset timer to 250 on open of websocket connection 
       clearTimeout(connectInterval); // clear Interval on on open of websocket connection
-      console.log("sdcsdcscs00")
-      ws.current.send(JSON.stringify(
-        {
-          "message": {
-            "type": "text",
-            "input": "1"
-          },
-          "user": {
-            "mobileNumber": "7391904467"
-          },
-          "extraInfo": {
-            "whatsAppBusinessNumber": "917834811114",
-            "filestoreId": ""
+      if (stepsData.length) { } else {
+        ws.current.send(JSON.stringify(
+          {
+            "message": {
+              "type": "text",
+              "input": "1"
+            },
+            "user": {
+              "mobileNumber": User.info.mobileNumber
+            },
+            "extraInfo": {
+              "whatsAppBusinessNumber": "917834811114",
+              "filestoreId": ""
+            }
           }
-        }
-      ));
-      console.log("sdcsdcscs01")
-    };
-
-    ws.current.onmessage = (ev) => {
-      console.log("sdcsdcscs1", ev)
-      console.log("sdcsdcscs2", ev.data)
-      const message = JSON.parse(ev.data);
-      console.log("sdcsdcscs22", steps)
-      if (typeof message == "object") {
-        setStepsData([...steps, message]);
-        setSteps(steps => [...steps, message]);
-      } else {
-        if (message.match("Complaint created successfully")) {
-          setSuccessData({
-            message: message,
-            type: 'Complaint'
-          })
-          history.push(`/digit-ui/citizen/cf/response`);
-        }
-        const newMessage = { "message": message, "step": "intermediate", "optionType": "text", "option": [] }
-        setStepsData([...steps, newMessage]);
-        setSteps(steps => [...steps, newMessage]);
-      }
-      if (message.step === 'last') {
-        setIsLastStep(isLastStep => true)
+        ));
       }
     };
 
@@ -192,10 +134,6 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
       setSteps(initialStep);
       setShowFaq(false)
     } else {
-      // const initialStep = landingPageSteps
-      // initialStep.stepId = 0
-      // setStepsData([initialStep]);
-      // setSteps([initialStep]);
     }
 
     connectWebsocket()
@@ -209,11 +147,61 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
 
   useEffect(() => {
     if (messagesEndRef && messagesEndRef.current) {
-    //   setTimeout(() => {
-    messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    //   }, 200);
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
+    ws.current.onmessage = (ev) => {
+      console.log("sdcsdcscs1", ev)
+      const message = JSON.parse(ev.data);
+      console.log("sdcsdcscs22", steps)
+      if (typeof message == "object") {
+        setStepsData([...steps, message]);
+        setSteps(steps => [...steps, message]);
+      } else {
+        if (isLastStep) {
+          setSuccessData(ev.data)
+          history.push(`/digit-ui/citizen/cf/response`);
+        }
+        const newMessage = { "message": message, "step": "intermediate", "optionType": "text", "option": [] }
+        setStepsData([...steps, newMessage]);
+        setSteps(steps => [...steps, newMessage]);
+      }
+      if (message.step === 'last') {
+        setIsLastStep(true)
+      }
+    };
   });
+
+  const renderMessage = (step) => {
+    return step.map((data) => {
+      switch (data.messageType) {
+        case 'reply':
+          return <ReplyComponent stepDetails={data} type="right" />
+        default:
+          return <>
+            {data.message && <ChatBubble type="left" >
+              {data.message}
+            </ChatBubble>}
+            {renderItems(data)}
+          </>
+      }
+    })
+  }
+
+  const renderItems = (data) => {
+    switch (data.optionType) {
+      case "button":
+        return <AvailableOptionsList stepDetails={data} data={data.option} onItemSelect={data.isDisabled ? onDisableSelect : onItemSelect} />
+      case "textbox":
+      case "textarea":
+        return <UserInput stepDetails={data} data={data.option} handleSubmit={data.isDisabled ? onDisableSelect : onItemSelect} />
+      case 'multiSelect':
+        return <MultipleSelect stepDetails={data} data={data.option} handleSubmit={data.isDisabled ? onDisableSelect : onItemSelect} />
+      case 'stars':
+        return <StarRating stepDetails={data} data={data.option} onRatingSubmit={data.isDisabled ? onDisableSelect : onItemSelect} />
+      default:
+        return <AvailableOptionsList stepDetails={data} data={data.option} onItemSelect={data.isDisabled ? onDisableSelect : onItemSelect} />
+    }
+  }
 
   return (
     <>
