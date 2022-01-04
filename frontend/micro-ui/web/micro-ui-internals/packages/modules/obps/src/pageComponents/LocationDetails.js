@@ -79,14 +79,14 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
 
   const [localities, setLocalities] = useState();
 
-  const [selectedLocality, setSelectedLocality] = useState(formData.address.locality || {});
+  const [selectedLocality, setSelectedLocality] = useState(formData.address.locality || null);
 
   useEffect(() => {
     if (selectedCity && fetchedLocalities  && !Pinerror) {
       let __localityList = fetchedLocalities;
       let filteredLocalityList = [];
 
-      if (formData?.address?.locality) {
+      if (formData?.address?.locality && formData?.address?.locality?.code === selectedLocality?.code) {
         setSelectedLocality(formData.address.locality);
       }
 
@@ -96,9 +96,9 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
       }
       if(!localities || (filteredLocalityList.length > 0 && localities.length !== filteredLocalityList.length) || (filteredLocalityList.length <=0 && localities && localities.length !==__localityList.length))
       {
-        setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));}
-
-      if (filteredLocalityList.length === 1) {
+        setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));
+      }
+      if (filteredLocalityList.length === 1 && ((selectedLocality == null) || (selectedLocality && filteredLocalityList[0]?.code !== selectedLocality?.code))) {
         setSelectedLocality(filteredLocalityList[0]);
         sessionStorage.setItem("currLocality", JSON.stringify(filteredLocalityList[0]));
       }
