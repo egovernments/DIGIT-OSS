@@ -2,6 +2,7 @@ const { assign } = require('xstate');
 const { pgrService } = require('./service/service-loader');
 const dialog = require('./util/dialog');
 const messages = require('./messages/complaint-messages');
+const emailNotificationService = require('./service/email-notification');
 
 const citizenComplaint = {
   id: 'citizenComplaint',
@@ -129,6 +130,8 @@ const citizenComplaint = {
             const ComplaintComments = context.extraInfo.comments;
             const imageFilestoreId = context.extraInfo.filestoreId;
             // Insert the code for pushing email message to the Kafka topic here
+            // TODO : Enter email address, location and requestInfo
+            emailNotificationService.sendNewComplaintEmail({}, /*email needed here, */'abc@gmail.com', complaintId, complaintType, complaintSubType, application_number, phoneNumber, /*location, */'Ludhiana', ComplaintComments, imageFilestoreId);
             // Email notification ends
             message = message.replace('{{complaintNumber}}', complaintDetails.complaintNumber);
             dialog.sendMessage(context, message);
