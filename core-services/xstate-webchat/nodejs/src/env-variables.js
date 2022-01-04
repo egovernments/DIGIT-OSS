@@ -26,6 +26,8 @@ const envVariables = {
 
     kafkaConsumerEnabled: process.env.KAFKA_CONSUMER_ENABLED || false,
     kafkaConsumerGroupId: process.env.KAFKA_CONSUMER_GROUP_ID || 'xstate-webchat',
+
+    sendEmailTopic: process.env.CHATBOT_EMAIL_TOPIC || 'egov.core.notification.email',
   },
 
   egovServices: {
