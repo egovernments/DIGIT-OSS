@@ -177,10 +177,10 @@ const messages = {
       nextStep: ['lastbillgenerated'],
       messageBundle: {
         en_IN: {
-          message: 'Please select your property from the below list which you want to report', step: 'intermediate', optionType: 'button', option: [],
+          message: 'Please select your property from the below list which you want to report', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'P1' }, { key: '2', value: 'P2' }],
         },
         hi_IN: {
-          message: 'कृपया नीचे दी गई सूची में से अपनी संपत्ति का चयन करें जिसकी आप रिपोर्ट करना चाहते हैंxdder', step: 'intermediate', optionType: 'button', option: [],
+          message: 'कृपया नीचे दी गई सूची में से अपनी संपत्ति का चयन करें जिसकी आप रिपोर्ट करना चाहते हैंxdder', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'P1' }, { key: '2', value: 'P2' }],
         },
       },
     },
