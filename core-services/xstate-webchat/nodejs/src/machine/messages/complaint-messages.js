@@ -191,7 +191,40 @@ const messages = {
           message: 'Last Bill Generated <Bill ID> is Rs. <Amount>. Do you want to report this as incorrect?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Yes' }, { key: '2', value: 'No' }],
         },
         hi_IN: {
-          message: 'अंतिम उत्पन्न बिल <बिल आईडी> <राशि> रुपये है। क्या आप इसे गलत के रूप में रिपोर्ट करना चाहते हैं?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Yes' }, { key: '2', value: 'No' }],
+          message: 'अंतिम उत्पन्न बिल <बिल आईडी> <राशि> रुपये है। क्या आप इसे गलत के रूप में रिपोर्ट करना चाहते हैं?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'हां' }, { key: '2', value: 'नहीं' }],
+        },
+      },
+    },
+    apprejected: {
+      nextStep: ['propcreation', 'mutation'],
+      messageBundle: {
+        en_IN: {
+          message: 'Which Application is getting rejected?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Property creation' }, { key: '2', value: 'Mutation' }],
+        },
+        hi_IN: {
+          message: 'कौन सा आवेदन खारिज हो रहा है?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'संपत्ति निर्माण' }, { key: '2', value: 'उत्परिवर्तन' }],
+        },
+      },
+    },
+    propcreation: {
+      nextStep: ['rejectionreason'],
+      messageBundle: {
+        en_IN: {
+          message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+        hi_IN: {
+          message: 'कृपया आवेदन आईडी दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+      },
+      rejectionreason: {
+        nextStep: ['complaintComments'],
+        messageBundle: {
+          en_IN: {
+            message: 'Show reason for "rejection". \n Do you want to raise complaint on this?', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: 'Yes' }, { key: '2', value: 'No' }],
+          },
+          hi_IN: {
+            message: '"अस्वीकृति" का कारण दिखाएं। \n क्या आप इस पर शिकायत करना चाहते हैं?', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: 'हां' }, { key: '2', value: 'नहीं' }],
+          },
         },
       },
     },
