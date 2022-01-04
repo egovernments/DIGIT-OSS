@@ -45,10 +45,12 @@ import java.util.List;
 
 import org.egov.boundary.domain.service.BoundaryTypeService;
 import org.egov.boundary.domain.service.HierarchyTypeService;
+import org.egov.boundary.exception.CustomException;
 import org.egov.boundary.web.contract.BoundaryType;
 import org.egov.boundary.web.contract.HierarchyType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -123,6 +125,8 @@ public class CreateBoundaryTypeController {
 			boundaryTypeService.createBoundaryType(boundaryType);
 			redirectAttrs.addFlashAttribute("message", "msg.bndrytype.create.success");
 		}
+		if(ObjectUtils.isEmpty(boundaryType.getId()))
+			throw new CustomException(1l, "EG_BOUNDARY_TYPE_EMPTY_ERR", "Boundary id is not present for the current Boundary Type being created");
 		return "redirect:/boundarytype/view/" + boundaryType.getId();
 	}
 
