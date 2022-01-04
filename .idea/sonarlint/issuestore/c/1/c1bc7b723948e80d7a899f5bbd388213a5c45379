@@ -1,8 +1,0 @@
-
-P
-java:S1117W":Rename "topics" which hides the field declared at line 73.(„”ŽÁ
-;
-java:S2116b"%Use "Arrays.toString(array)" instead.( ª¯¦
-R	java:S125‡"<This block of commented-out lines of code should be removed.(ÀÏÄ
-h
-java:S1104I"RMake topics a static final constant or non-public and provide accessors if needed.(þ¹Ãà

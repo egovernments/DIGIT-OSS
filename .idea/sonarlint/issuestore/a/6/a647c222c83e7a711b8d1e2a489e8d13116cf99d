@@ -1,5 +1,0 @@
-
-f
-java:S1206Q"PThis class overrides "equals()" and should therefore also override "hashCode()".(ЌЬСг
-h
-java:S3776Q"RRefactor this method to reduce its Cognitive Complexity from 23 to the 15 allowed.(ЌЬСг
