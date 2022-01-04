@@ -216,15 +216,15 @@ const messages = {
           message: 'कृपया आवेदन आईडी दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
         },
       },
-      rejectionreason: {
-        nextStep: ['complaintComments'],
-        messageBundle: {
-          en_IN: {
-            message: 'Show reason for "rejection". \n Do you want to raise complaint on this?', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: 'Yes' }, { key: '2', value: 'No' }],
-          },
-          hi_IN: {
-            message: '"अस्वीकृति" का कारण दिखाएं। \n क्या आप इस पर शिकायत करना चाहते हैं?', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: 'हां' }, { key: '2', value: 'नहीं' }],
-          },
+    },
+    rejectionreason: {
+      nextStep: ['complaintComments'],
+      messageBundle: {
+        en_IN: {
+          message: 'Show reason for "rejection". \n Do you want to raise complaint on this?', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: 'Yes' }, { key: '2', value: 'No' }],
+        },
+        hi_IN: {
+          message: '"अस्वीकृति" का कारण दिखाएं। \n क्या आप इस पर शिकायत करना चाहते हैं?', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: 'हां' }, { key: '2', value: 'नहीं' }],
         },
       },
     },
