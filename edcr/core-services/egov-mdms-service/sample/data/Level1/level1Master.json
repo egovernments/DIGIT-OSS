@@ -1,0 +1,11 @@
+{
+  "tenantId": "Level1",
+  "moduleName": "Level1Module",
+  "masterName": "Level2Master",
+  "Level2Master": [
+    {
+      "code": "ABC",
+      "data": "data-ABC"
+    }
+  ]
+}

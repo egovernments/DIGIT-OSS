@@ -5,7 +5,6 @@ import static org.egov.pt.util.PTConstants.ASMT_USER_EVENT_PAY;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_LOCALE;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_MODULENAME;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_OWNERNAME;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_EMAIL;
 import static org.egov.pt.util.PTConstants.PT_BUSINESSSERVICE;
 import static org.egov.pt.util.PTConstants.PT_CORRECTION_PENDING;
 import static org.egov.pt.util.PTConstants.USREVENTS_EVENT_NAME;
@@ -13,7 +12,13 @@ import static org.egov.pt.util.PTConstants.USREVENTS_EVENT_POSTEDBY;
 import static org.egov.pt.util.PTConstants.USREVENTS_EVENT_TYPE;
 import static org.egov.pt.util.PTConstants.VIEW_APPLICATION_CODE;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -29,10 +34,6 @@ import org.egov.pt.models.event.Recepient;
 import org.egov.pt.models.event.Source;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.ServiceRequestRepository;
-import org.egov.pt.web.contracts.Email;
-import org.egov.pt.web.contracts.EmailRequest;
-import org.egov.pt.web.contracts.EmailRequest;
-
 import org.egov.pt.web.contracts.SMSRequest;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
@@ -44,7 +45,6 @@ import org.springframework.web.client.RestTemplate;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
-
 
 @Slf4j
 @Component
@@ -187,7 +187,6 @@ public class NotificationUtil {
                 log.info("Messages from localization couldn't be fetched!");
             for (SMSRequest smsRequest : smsRequestList) {
                 producer.push(config.getSmsNotifTopic(), smsRequest);
-                log.info("Sending SMS notification: ");
                 log.info("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
             }
         }
@@ -236,92 +235,9 @@ public class NotificationUtil {
      * @param request
      */
     public void sendEventNotification(EventRequest request) {
-        log.info("EVENT notification sent!");
         producer.push(config.getSaveUserEventsTopic(), request);
     }
 
-
-    /**
-     * Creates email request for the each owners
-     *
-     * @param message
-     *            The message for the specific tradeLicense
-     * @param mobileNumberToEmailId
-     *            Map of mobileNumber to emailIds
-     * @return List of EmailRequest
-     */
-
-    public List<EmailRequest> createEmailRequest(RequestInfo requestInfo,String message, Map<String, String> mobileNumberToEmailId) {
-
-        List<EmailRequest> emailRequest = new LinkedList<>();
-        for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
-            String customizedMsg = message.replace(NOTIFICATION_EMAIL, entryset.getValue());
-            String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
-            String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
-            Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
-            EmailRequest email = new EmailRequest(requestInfo,emailobj);
-            emailRequest.add(email);
-        }
-        return emailRequest;
-    }
-
-
-    /**
-     * Send the EmailRequest on the EmailNotification kafka topic
-     *
-     * @param emailRequestList
-     *            The list of EmailRequest to be sent
-     */
-    public void sendEmail(List<EmailRequest> emailRequestList) {
-
-        if (config.getIsEmailNotificationEnabled()) {
-            if (CollectionUtils.isEmpty(emailRequestList))
-                log.info("Messages from localization couldn't be fetched!");
-            for (EmailRequest emailRequest : emailRequestList) {
-                producer.push(config.getEmailNotifTopic(), emailRequest);
-                log.info("Sending EMAIL notification: ");
-                log.info("Email Id: " + emailRequest.getEmail().toString());
-            }
-        }
-    }
-
-    /**
-     * Fetches email ids of CITIZENs based on the phone number.
-     *
-     * @param mobileNumbers
-     * @param requestInfo
-     * @param tenantId
-     * @return
-     */
-
-    public Map<String, String> fetchUserEmailIds(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
-        Map<String, String> mapOfPhnoAndEmailIds = new HashMap<>();
-        StringBuilder uri = new StringBuilder();
-        uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
-        Map<String, Object> userSearchRequest = new HashMap<>();
-        userSearchRequest.put("RequestInfo", requestInfo);
-        userSearchRequest.put("tenantId", tenantId);
-        userSearchRequest.put("userType", "CITIZEN");
-        for(String mobileNo: mobileNumbers) {
-            userSearchRequest.put("userName", mobileNo);
-            try {
-                Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest).get();
-                if(null != user) {
-                    if(JsonPath.read(user, "$.user[0].emailId")!=null) {
-                        String email = JsonPath.read(user, "$.user[0].emailId");
-                    mapOfPhnoAndEmailIds.put(mobileNo, email);
-                    }
-                }else {
-                    log.error("Service returned null while fetching user for username - "+mobileNo);
-                }
-            }catch(Exception e) {
-                log.error("Exception while fetching user for username - "+mobileNo);
-                log.error("Exception trace: ",e);
-                continue;
-            }
-        }
-        return mapOfPhnoAndEmailIds;
-    }
     /**
      * Method to shortent the url
      * returns the same url if shortening fails 
@@ -388,7 +304,7 @@ public class NotificationUtil {
 
                if(msg.contains(ASMT_USER_EVENT_PAY)){
                    actionLink = config.getPayLink().replace("$mobile", mobileNumber)
-                           .replace("$propertyId", property.getPropertyId())
+                           .replace("$consumerCode", property.getPropertyId())
                            .replace("$tenantId", property.getTenantId())
                            .replace("$businessService" , PT_BUSINESSSERVICE);
 

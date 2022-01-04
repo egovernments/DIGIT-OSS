@@ -45,13 +45,13 @@ public class DxfFontExtract extends FeatureExtract {
         while (layerIterator.hasNext()) {
             DXFLayer layer = (DXFLayer) layerIterator.next();
             List texts = layer.getDXFEntities(DXFConstants.ENTITY_TYPE_TEXT);
-            if (texts != null && texts.size() > 0)
+            if (texts != null && !texts.isEmpty())
                 getTextStyles(texts, fontStyleUsedInDxf);
             List mTexts = layer.getDXFEntities(DXFConstants.ENTITY_TYPE_MTEXT);
-            if (mTexts != null && mTexts.size() > 0)
+            if (mTexts != null && !mTexts.isEmpty())
                 getMTextStyles(mTexts, fontStyleUsedInDxf);
             List dimensions = layer.getDXFEntities(DXFConstants.ENTITY_TYPE_DIMENSION);
-            if (dimensions != null && dimensions.size() > 0)
+            if (dimensions != null && !dimensions.isEmpty())
                 getFontStyleForDimension(dxfDocument, dimensions, dimensionStyleUsedInDxf);
         }
 
@@ -61,10 +61,10 @@ public class DxfFontExtract extends FeatureExtract {
             dimensionStylePresentInDxf.add(style.getName());
         }
 
-        System.out.println("Styles in dxf : " + fontStylePresentInDxf);
-        System.out.println("Styles used in dxf : " + fontStyleUsedInDxf);
-        System.out.println("Dimension Styles in dxf : " + dimensionStylePresentInDxf);
-        System.out.println("Dimension Styles used in dxf : " + dimensionStyleUsedInDxf);
+        LOG.info("Styles in dxf : " + fontStylePresentInDxf);
+        LOG.info("Styles used in dxf : " + fontStyleUsedInDxf);
+        LOG.info("Dimension Styles in dxf : " + dimensionStylePresentInDxf);
+        LOG.info("Dimension Styles used in dxf : " + dimensionStyleUsedInDxf);
 
         return planDetail;
     }
@@ -76,7 +76,7 @@ public class DxfFontExtract extends FeatureExtract {
 
     private void getTextStyles(List texts, Set<String> fontStyleUsedInDxf) {
 
-        if (texts != null && texts.size() > 0) {
+        if (texts != null && !texts.isEmpty()) {
             Iterator iterator = texts.iterator();
             while (iterator.hasNext()) {
                 DXFText text = (DXFText) iterator.next();
@@ -84,7 +84,7 @@ public class DxfFontExtract extends FeatureExtract {
                 Iterator styledParagraphIterator = text.getTextDocument().getStyledParagraphIterator();
                 while (styledParagraphIterator.hasNext()) {
                     StyledTextParagraph styledTextParagraph = (StyledTextParagraph) styledParagraphIterator.next();
-                    // System.out.println("Text paragraph fonts : " +
+                    // LOG.info("Text paragraph fonts : " +
                     // styledTextParagraph.getFont());
                     fontStyleUsedInDxf.add(styledTextParagraph.getFont());
 
@@ -95,17 +95,17 @@ public class DxfFontExtract extends FeatureExtract {
 
     private void getMTextStyles(List mTexts, Set<String> fontStyleUsedInDxf) {
 
-        if (mTexts != null && mTexts.size() > 0) {
+        if (mTexts != null && !mTexts.isEmpty()) {
             Iterator iterator = mTexts.iterator();
             while (iterator.hasNext()) {
                 DXFMText mText = (DXFMText) iterator.next();
-                // System.out.println("Mtext styles : " + mText.getTextStyle());
+                // LOG.info("Mtext styles : " + mText.getTextStyle());
                 fontStyleUsedInDxf.add(mText.getTextStyle());
 
                 Iterator styledParagraphIterator = mText.getTextDocument().getStyledParagraphIterator();
                 while (styledParagraphIterator.hasNext()) {
                     StyledTextParagraph styledTextParagraph = (StyledTextParagraph) styledParagraphIterator.next();
-                    // System.out.println("MTEXT paragraph fonts : " +
+                    // LOG.info("MTEXT paragraph fonts : " +
                     fontStyleUsedInDxf.add(styledTextParagraph.getFont());
                 }
             }
@@ -115,7 +115,7 @@ public class DxfFontExtract extends FeatureExtract {
     private void getFontStyleForDimension(DXFDocument dxfDocument, List dimensions,
             Set<String> dimensionStyleUsedInDxf) {
 
-        if (dimensions != null && dimensions.size() > 0) {
+        if (dimensions != null && !dimensions.isEmpty()) {
             Iterator iterator = dimensions.iterator();
             List mTexts = new ArrayList<>();
 
@@ -134,16 +134,16 @@ public class DxfFontExtract extends FeatureExtract {
                 }
             }
 
-            if (mTexts != null && mTexts.size() > 0) {
+            if (!mTexts.isEmpty()) {
                 Iterator mTextIterator = mTexts.iterator();
                 while (mTextIterator.hasNext()) {
                     DXFMText mText = (DXFMText) mTextIterator.next();
-                    // System.out.println("Dimension Mtext styles : " + mText.getTextStyle());
+                    // LOG.info("Dimension Mtext styles : " + mText.getTextStyle());
                     dimensionStyleUsedInDxf.add(mText.getTextStyle());
                     Iterator styledParagraphIterator = mText.getTextDocument().getStyledParagraphIterator();
                     while (styledParagraphIterator.hasNext()) {
                         StyledTextParagraph styledTextParagraph = (StyledTextParagraph) styledParagraphIterator.next();
-                        // System.out.println("Dimension Mtext paragraph fonts : " +
+                        // LOG.info("Dimension Mtext paragraph fonts : " +
                         dimensionStyleUsedInDxf.add(styledTextParagraph.getFont());
                     }
                 }

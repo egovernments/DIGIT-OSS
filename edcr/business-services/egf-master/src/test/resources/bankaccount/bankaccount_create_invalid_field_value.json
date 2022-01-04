@@ -1,0 +1,26 @@
+{
+	"requestInfo": {
+		"resMsgId": "placeholder",
+		"status": "200",
+		"apiId": null,
+		"ver": null,
+		"ts": "01-01-2017 01:01:01",
+		"key": null,
+		"userInfo": {
+			"id": 1
+		}
+	},
+   "bankAccounts":[
+      {
+         "fund":{
+            "id":"2",
+            "tenantId":"default"
+         },
+         "accountNumber":"2212",
+         "accountType":"test",
+         "description":"accountNumber",
+         "active":true,
+         "payTo":"tester",
+         "tenantId":"default"
+      }
+   ]

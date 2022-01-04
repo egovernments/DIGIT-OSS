@@ -51,7 +51,12 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 @Service
 public class PlanService {
-    private static final Logger LOG = Logger.getLogger(PlanService.class);
+    private static final String TEXT_PLAIN = "text/plain";
+	private static final String NOT_ACCEPTED = "Not Accepted";
+	private static final String ACCEPTED = "Accepted";
+	private static final String APPLICATION_PDF = "application/pdf";
+	private static final String FILESTORE_MODULECODE = "Digit DCR";
+	private static final Logger LOG = Logger.getLogger(PlanService.class);
     @Autowired
     private PlanFeatureService featureService;
     @Autowired
@@ -71,6 +76,7 @@ public class PlanService {
     @Autowired
     private OcComparisonDetailService ocComparisonDetailService;
 
+    @Transactional
     public Plan process(EdcrApplication dcrApplication, String applicationType) {
         Map<String, String> cityDetails = specificRuleService.getCityDetails();
 
@@ -118,7 +124,7 @@ public class PlanService {
             final List<InputStream> pdfs = new ArrayList<>();
             Path path = fileStoreService.fetchAsPath(
                     dcrApplication.getEdcrApplicationDetails().get(0).getReportOutputId().getFileStoreId(),
-                    "Digit DCR");
+                    FILESTORE_MODULECODE);
             byte[] convertedDigitDcr = null;
             try {
                 convertedDigitDcr = Files.readAllBytes(path);
@@ -128,7 +134,7 @@ public class PlanService {
             ByteArrayInputStream dcrReport = new ByteArrayInputStream(convertedDigitDcr);
             pdfs.add(dcrReport);
 
-            if (plan.getMainDcrPassed()) {
+            if (Boolean.TRUE.equals(plan.getMainDcrPassed())) {
                 OcComparisonDetail ocComparisonE = ocComparisonService.processCombined(processCombinedStatus,
                         edcrApplicationDetail);
 
@@ -136,7 +142,7 @@ public class PlanService {
                         + "-comparison"
                         + ".pdf";
                 final FileStoreMapper fileStoreMapper = fileStoreService.store(ocComparisonE.getOutput(), fileName,
-                        "application/pdf",
+                        APPLICATION_PDF,
                         DcrConstants.FILESTORE_MODULECODE);
                 ocComparisonE.setOcComparisonReport(fileStoreMapper);
                 if (StringUtils.isNotBlank(dcrApplication.getEdcrApplicationDetails().get(0).getDcrNumber())) {
@@ -145,7 +151,7 @@ public class PlanService {
                 ocComparisonDetailService.saveAndFlush(ocComparisonE);
 
                 Path ocPath = fileStoreService.fetchAsPath(ocComparisonE.getOcComparisonReport().getFileStoreId(),
-                        "Digit DCR");
+                        FILESTORE_MODULECODE);
                 byte[] convertedComparison = null;
                 try {
                     convertedComparison = Files.readAllBytes(ocPath);
@@ -174,7 +180,7 @@ public class PlanService {
             mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
             mapper.writeValue(f, plan);
             detail.setPlanDetailFileStore(
-                    fileStoreService.store(f, f.getName(), "text/plain", DcrConstants.APPLICATION_MODULE_TYPE));
+                    fileStoreService.store(f, f.getName(), TEXT_PLAIN, DcrConstants.APPLICATION_MODULE_TYPE));
             oos.flush();
         } catch (IOException e) {
             LOG.error("Unable to serialize!!!!!!", e);
@@ -259,7 +265,7 @@ public class PlanService {
 
             if (amd.getDetails().isEmpty() || index == -1)
                 service = (PlanReportService) specificRuleService.find(beanName);
-            else if (index >= 0) {
+            else if (index >= 0 && amdArray != null) {
                 for (int i = index; i < length; i++) {
 
                     service = (PlanReportService) specificRuleService
@@ -288,7 +294,7 @@ public class PlanService {
                 .fingByDcrApplicationId(edcrApplication.getId());
         final String fileName = edcrApplication.getApplicationNumber() + "-v" + edcrApplicationDetails.size() + ".pdf";
 
-        final FileStoreMapper fileStoreMapper = fileStoreService.store(reportOutputStream, fileName, "application/pdf",
+        final FileStoreMapper fileStoreMapper = fileStoreService.store(reportOutputStream, fileName, APPLICATION_PDF,
                 DcrConstants.FILESTORE_MODULECODE);
 
         buildDocuments(edcrApplication, null, fileStoreMapper, plan);
@@ -318,12 +324,12 @@ public class PlanService {
         if (reportOutput != null) {
             EdcrApplicationDetail edcrApplicationDetail = edcrApplication.getEdcrApplicationDetails().get(0);
 
-            if (plan.getEdcrPassed()) {
-                edcrApplicationDetail.setStatus("Accepted");
-                edcrApplication.setStatus("Accepted");
+            if (Boolean.TRUE.equals(plan.getEdcrPassed())) {
+                edcrApplicationDetail.setStatus(ACCEPTED);
+                edcrApplication.setStatus(ACCEPTED);
             } else {
-                edcrApplicationDetail.setStatus("Not Accepted");
-                edcrApplication.setStatus("Not Accepted");
+                edcrApplicationDetail.setStatus(NOT_ACCEPTED);
+                edcrApplication.setStatus(NOT_ACCEPTED);
             }
             edcrApplicationDetail.setCreatedDate(new Date());
             edcrApplicationDetail.setReportOutputId(reportOutput);
@@ -341,18 +347,19 @@ public class PlanService {
                     pdfDetail.setStandardViolations(edcrPdfDetail.getStandardViolations());
 
                     File convertedPdf = edcrPdfDetail.getConvertedPdf();
-                    if (convertedPdf != null && convertedPdf.length() > 0) {
+                    if (convertedPdf != null) {
                         FileStoreMapper fileStoreMapper = fileStoreService.store(convertedPdf, convertedPdf.getName(),
-                                DcrConstants.PDF_EXT, DcrConstants.FILESTORE_MODULECODE);
+                                APPLICATION_PDF, FILESTORE_MODULECODE);
                         pdfDetail.setConvertedPdf(fileStoreMapper);
-                        pdfDetail.setEdcrApplicationDetail(edcrApplicationDetail);
-                        edcrPdfDetails.add(pdfDetail);
                     }
                 }
             }
 
             if (!edcrPdfDetails.isEmpty()) {
-                edcrApplicationDetail.getEdcrPdfDetails().addAll(edcrPdfDetails);
+                for (org.egov.edcr.entity.EdcrPdfDetail edcrPdfDetail : edcrPdfDetails) {
+                    edcrPdfDetail.setEdcrApplicationDetail(edcrApplicationDetail);
+                }
+
                 edcrPdfDetailService.saveAll(edcrPdfDetails);
             }
 
@@ -380,7 +387,7 @@ public class PlanService {
     private void updateFinalReport(FileStoreMapper fileStoreMapper) {
         try {
             Path path = fileStoreService.fetchAsPath(fileStoreMapper.getFileStoreId(),
-                    "Digit DCR");
+                    FILESTORE_MODULECODE);
 
             PDDocument doc = PDDocument.load(new File(path.toString()));
             for (int i = 0; i < doc.getNumberOfPages(); i++) {

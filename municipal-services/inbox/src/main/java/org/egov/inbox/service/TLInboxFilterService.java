@@ -3,9 +3,7 @@ package org.egov.inbox.service;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.common.contract.request.Role;
 import org.egov.inbox.repository.ServiceRequestRepository;
-import org.egov.inbox.util.BpaConstants;
 import org.egov.inbox.web.model.InboxSearchCriteria;
 import org.egov.inbox.web.model.workflow.ProcessInstanceSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import static org.egov.inbox.util.BpaConstants.BPAREG;
-import static org.egov.inbox.util.BpaConstants.MOBILE_NUMBER_PARAM;
 import static org.egov.inbox.util.TLConstants.*;
 
 @Slf4j
@@ -60,8 +55,6 @@ public class TLInboxFilterService {
         Boolean isSearchResultEmpty = false;
         Boolean isMobileNumberPresent = false;
         List<String> userUUIDs = new ArrayList<>();
-        moduleSearchCriteria = setUserWhenMobileNoIsEmptyForStakeholderRegOfCitizen(criteria, requestInfo, moduleSearchCriteria,
-                processCriteria);
         if(moduleSearchCriteria.containsKey(MOBILE_NUMBER_PARAM)){
             isMobileNumberPresent = true;
         }
@@ -136,19 +129,6 @@ public class TLInboxFilterService {
         return  acknowledgementNumbers;
     }
 
-    private HashMap setUserWhenMobileNoIsEmptyForStakeholderRegOfCitizen(InboxSearchCriteria criteria, RequestInfo requestInfo,
-            HashMap moduleSearchCriteria, ProcessInstanceSearchCriteria processCriteria) {
-        List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
-        if(processCriteria.getModuleName().equals(BPAREG) && roles.contains(BpaConstants.CITIZEN)) {
-            if (moduleSearchCriteria == null || moduleSearchCriteria.isEmpty() || !moduleSearchCriteria.containsKey(MOBILE_NUMBER_PARAM)) {
-                moduleSearchCriteria = new HashMap<>();
-                moduleSearchCriteria.put(MOBILE_NUMBER_PARAM, requestInfo.getUserInfo().getMobileNumber());
-                criteria.setModuleSearchCriteria(moduleSearchCriteria);
-            } 
-        }
-        return moduleSearchCriteria;
-    }
-
     public Integer fetchApplicationCountFromSearcher(InboxSearchCriteria criteria, HashMap<String, String> StatusIdNameMap, RequestInfo requestInfo){
         Integer totalCount = 0;
         HashMap moduleSearchCriteria = criteria.getModuleSearchCriteria();
@@ -156,8 +136,6 @@ public class TLInboxFilterService {
         Boolean isSearchResultEmpty = false;
         Boolean isMobileNumberPresent = false;
         List<String> userUUIDs = new ArrayList<>();
-        moduleSearchCriteria = setUserWhenMobileNoIsEmptyForStakeholderRegOfCitizen(criteria, requestInfo, moduleSearchCriteria,
-                processCriteria);
         if(moduleSearchCriteria.containsKey(MOBILE_NUMBER_PARAM)){
             isMobileNumberPresent = true;
         }

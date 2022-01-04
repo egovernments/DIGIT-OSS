@@ -49,6 +49,7 @@
 package org.egov.infra.gis.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -69,6 +70,9 @@ import org.slf4j.LoggerFactory;
 public class GeoLocationService {
 	
 
+	private static final String TD_TR = "</td></tr>";
+	private static final String B_TD_TD = "</b></td><td>";
+	private static final String TR_TD_B = "<tr><td><b>";
 	private static final Logger	LOGGER	= LoggerFactory.getLogger(GeoLocationService.class);
 	
 	/**
@@ -78,11 +82,11 @@ public class GeoLocationService {
 	 */
 	public static String getMarkerDesc(GeoLocation geoLocation){
 		
-		StringBuffer markerDesc = new StringBuffer(1000);
-		markerDesc.append(null!=geoLocation.getInfo1()?"<tr><td><b>"+geoLocation.getInfo1().substring(0,geoLocation.getInfo1().indexOf("="))+"</b></td><td>"+geoLocation.getInfo1().substring(geoLocation.getInfo1().indexOf("=")+1)+"</td></tr>":"")
-				  .append(null!=geoLocation.getInfo2()?"<tr><td><b>"+geoLocation.getInfo2().substring(0,geoLocation.getInfo2().indexOf("="))+"</b></td><td>"+geoLocation.getInfo2().substring(geoLocation.getInfo2().indexOf("=")+1)+"</td></tr>":"")
-				  .append(null!=geoLocation.getInfo3()?"<tr><td><b>"+geoLocation.getInfo3().substring(0,geoLocation.getInfo3().indexOf("="))+"</b></td><td>"+geoLocation.getInfo3().substring(geoLocation.getInfo3().indexOf("=")+1)+"</td></tr>":"")
-				  .append(null!=geoLocation.getInfo1()?"<tr><td><b>"+geoLocation.getInfo4().substring(0,geoLocation.getInfo4().indexOf("="))+"</b></td><td>"+geoLocation.getInfo4().substring(geoLocation.getInfo4().indexOf("=")+1)+"</td></tr>":"");
+		StringBuilder markerDesc = new StringBuilder(1000);
+		markerDesc.append(null!=geoLocation.getInfo1()?TR_TD_B+geoLocation.getInfo1().substring(0,geoLocation.getInfo1().indexOf("="))+B_TD_TD+geoLocation.getInfo1().substring(geoLocation.getInfo1().indexOf("=")+1)+TD_TR:"")
+				  .append(null!=geoLocation.getInfo2()?TR_TD_B+geoLocation.getInfo2().substring(0,geoLocation.getInfo2().indexOf("="))+B_TD_TD+geoLocation.getInfo2().substring(geoLocation.getInfo2().indexOf("=")+1)+TD_TR:"")
+				  .append(null!=geoLocation.getInfo3()?TR_TD_B+geoLocation.getInfo3().substring(0,geoLocation.getInfo3().indexOf("="))+B_TD_TD+geoLocation.getInfo3().substring(geoLocation.getInfo3().indexOf("=")+1)+TD_TR:"")
+				  .append(null!=geoLocation.getInfo1()?TR_TD_B+geoLocation.getInfo4().substring(0,geoLocation.getInfo4().indexOf("="))+B_TD_TD+geoLocation.getInfo4().substring(geoLocation.getInfo4().indexOf("=")+1)+TD_TR:"");
 		return markerDesc.toString();
 		
 	}
@@ -93,7 +97,7 @@ public class GeoLocationService {
 	 */
 	
 	public static String getMarkerOption(GeoLocation geoLoc){
-		StringBuffer markerOption = new StringBuffer(1000);
+		StringBuilder markerOption = new StringBuilder(1000);
 		markerOption.append("{")
 		.append("position: new google.maps.LatLng('").append(geoLoc.getGeoLatLong().getLatitude()).append("','")
 		.append(geoLoc.getGeoLatLong().getLongitude()).append("'), map: map");
@@ -119,7 +123,7 @@ public class GeoLocationService {
 	 */
 	private static String  putKmlDataToCache(GeoKmlInfo geoKmlInfo){
 		
-		Map<String, Object> cacheDataModelMap= new HashMap<String, Object> ();
+		Map<String, Object> cacheDataModelMap= new HashMap<> ();
 		String kmlDataModelKey = UUID.randomUUID().toString().substring(0, 10); 
 		cacheDataModelMap.put(kmlDataModelKey, geoKmlInfo);
 		/*try {
@@ -137,17 +141,19 @@ public class GeoLocationService {
 	 * @return 
 	 */
 	public static GeoKmlInfo getKmlDataFromCache(String kmlDataModelKey){
-		GeoKmlInfo geoKmlInfo = null;
+		//GeoKmlInfo geoKmlInfo = null;
 		//TODO CACHE
 		/*try {
 			geoKmlInfo =  (GeoKmlInfo) cache.get(GeoLocationConstants.KML_DATA_JBOSS_CACHE_NODE,kmlDataModelKey);
 		} catch (CacheException e) {
 			LOGGER.error(e.getMessage());
 		}*/
-		if(null == geoKmlInfo){
-			LOGGER.error("Could not able to retrive kml data  from cache for the key "+kmlDataModelKey);
-		}
-		return geoKmlInfo;  
+		/*
+		 * if(null == geoKmlInfo){
+		 * LOGGER.error("Could not able to retrive kml data  from cache for the key "
+		 * +kmlDataModelKey); }
+		 */
+		return null;  
 	}
 	
 	/**
@@ -174,7 +180,7 @@ public class GeoLocationService {
 		int totalNoOfColors = colorCodes.size();
 		BigDecimal wardDataMinAmount = Collections.min(wardWiseData.values()).setScale(0, BigDecimal.ROUND_HALF_UP); // to hold the minimum amount in all the wards.
 		BigDecimal wardDataMaxAmount = Collections.max(wardWiseData.values()).setScale(0, BigDecimal.ROUND_HALF_UP); // to hold the maximum amount in all the wards.
-		if((wardDataMaxAmount.subtract(wardDataMinAmount)).compareTo(BigDecimal.valueOf(totalNoOfColors))==-1){
+		if((wardDataMaxAmount.subtract(wardDataMinAmount)).compareTo(BigDecimal.valueOf(totalNoOfColors))< 0){
 			throw new ValidationException(Arrays.asList(new ValidationError("colorrange","no of colors supplied is more than the range of data " +
 					"in the wards")));
 		}
@@ -182,7 +188,7 @@ public class GeoLocationService {
 		BigDecimal rangeSize = getRangeSize(wardDataMinAmount,wardDataMaxAmount,totalNoOfColors);
 		
 		GeoKmlInfo geoKmlInfo = new GeoKmlInfo();
-		Map<String, String> wardWiseKmlColorStyle = new HashMap<String, String>();
+		Map<String, String> wardWiseKmlColorStyle = new HashMap<>();
 		
 		 for ( Map.Entry<String, BigDecimal> entry : wardWiseData.entrySet()) {
 				wardWiseKmlColorStyle.put("style"+entry.getKey(), getStyleColorName(entry.getValue(),wardDataMinAmount,totalNoOfColors,rangeSize));
@@ -206,7 +212,7 @@ public class GeoLocationService {
 	
 	private static Map<String, String> convertToKmlColor(Map<Integer, String> colorMap){
 		
-		 Map<String, String> kmlColorConvertedMap = new HashMap<String, String>();
+		 Map<String, String> kmlColorConvertedMap = new HashMap<>();
 		
 		 for ( Map.Entry<Integer, String> entry : colorMap.entrySet()) {
 			String color = entry.getValue();
@@ -226,7 +232,7 @@ public class GeoLocationService {
 																				Map<Integer, String> colorCodes){
 		int totalNoOfColors = colorCodes.size();
 		
-		Map<String, String> colorRangeMap  = new LinkedHashMap<String, String>(); // map to hold the colour code and the range .
+		Map<String, String> colorRangeMap  = new LinkedHashMap<>(); // map to hold the colour code and the range .
 		
 		BigDecimal rangeStartVal = wardDataMinAmount;
 		BigDecimal rangeEndVal = wardDataMinAmount;
@@ -248,13 +254,12 @@ public class GeoLocationService {
 	}
 	private static String getStyleColorName(BigDecimal wardWiseNos,BigDecimal wardDataMinAmount,Integer totalNoOfColors,BigDecimal rangeSize){
 		
-		return "#color"+(BigDecimal.valueOf(totalNoOfColors).subtract((wardWiseNos.subtract(wardDataMinAmount).subtract(BigDecimal.ONE)).divide(rangeSize,0,BigDecimal.ROUND_DOWN))); 
+		return "#color"+(BigDecimal.valueOf(totalNoOfColors).subtract((wardWiseNos.subtract(wardDataMinAmount).subtract(BigDecimal.ONE)).divide(rangeSize,0,RoundingMode.DOWN))); 
 		
 	}
 	private static BigDecimal getRangeSize( BigDecimal wardDataMinAmount,BigDecimal wardDataMaxAmount,int totalNoOfColors){
 	 
-		BigDecimal rangeSize = (wardDataMaxAmount.subtract(wardDataMinAmount)).divide(BigDecimal.valueOf(totalNoOfColors),BigDecimal.ROUND_HALF_UP);
-		return rangeSize;
+		return (wardDataMaxAmount.subtract(wardDataMinAmount)).divide(BigDecimal.valueOf(totalNoOfColors),RoundingMode.HALF_UP);
 	}
 	
 }

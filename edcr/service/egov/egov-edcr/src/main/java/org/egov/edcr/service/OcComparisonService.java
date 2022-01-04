@@ -29,7 +29,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OcComparisonService {
-    private static final Logger LOG = Logger.getLogger(OcComparisonService.class);
+    private static final String AMENDMENT_SERVICE = "amendmentService";
+
+	private static final String NO_BEAN_DEFINED_FOR_THE_RULE = "No Bean Defined for the Rule ";
+
+	private static final String OC_COMPARISON_REPORT_SERVICE = "OcComparisonReportService";
+
+	private static final Logger LOG = Logger.getLogger(OcComparisonService.class);
     
     public static final String FILE_DOWNLOAD_URL = "%s/edcr/rest/dcr/downloadfile";
 
@@ -59,6 +65,7 @@ public class OcComparisonService {
         return errors;
     }
 
+    @Transactional
     public ComparisonDetail process(ComparisonRequest comparisonRequest) {
         String ocdcrNo = comparisonRequest.getOcdcrNumber();
         String dcrNo = comparisonRequest.getEdcrNumber();
@@ -89,7 +96,7 @@ public class OcComparisonService {
 
             EdcrApplication dcrApplication = ocDcr.getApplication();
 
-            AmendmentService repo = (AmendmentService) specificRuleService.find("amendmentService");
+            AmendmentService repo = (AmendmentService) specificRuleService.find(AMENDMENT_SERVICE);
             Amendment amd = repo.getAmendments();
 
             Date applicationDate = dcrApplication.getApplicationDate();
@@ -119,7 +126,7 @@ public class OcComparisonService {
 
         EdcrApplication dcrApplication = ocDcr.getApplication();
 
-        AmendmentService repo = (AmendmentService) specificRuleService.find("amendmentService");
+        AmendmentService repo = (AmendmentService) specificRuleService.find(AMENDMENT_SERVICE);
         Amendment amd = repo.getAmendments();
 
         Date applicationDate = dcrApplication.getApplicationDate();
@@ -141,7 +148,7 @@ public class OcComparisonService {
 
         EdcrApplication dcrApplication = ocDcr.getApplication();
 
-        AmendmentService repo = (AmendmentService) specificRuleService.find("amendmentService");
+        AmendmentService repo = (AmendmentService) specificRuleService.find(AMENDMENT_SERVICE);
         Amendment amd = repo.getAmendments();
 
         Date applicationDate = dcrApplication.getApplicationDate();
@@ -195,7 +202,7 @@ public class OcComparisonService {
     private InputStream generateOcComparisonReport(Date applicationDate, Amendment amd, EdcrApplicationDetail ocDcr,
             EdcrApplicationDetail permitDcr, OcComparisonDetail detail) {
 
-        String beanName = "OcComparisonReportService";
+        String beanName = OC_COMPARISON_REPORT_SERVICE;
         OcComparisonReportService service = null;
         int index = -1;
         AmendmentDetails[] amdArray = null;
@@ -212,7 +219,7 @@ public class OcComparisonService {
 
             if (amd.getDetails().isEmpty() || index == -1)
                 service = (OcComparisonReportService) specificRuleService.find(beanName);
-            else if (index >= 0) {
+            else if (index >= 0 && amdArray != null) {
                 for (int i = index; i < length; i++) {
 
                     service = (OcComparisonReportService) specificRuleService
@@ -228,7 +235,7 @@ public class OcComparisonService {
             reportStream = service.generateOcComparisonReport(ocDcr, permitDcr, detail);
 
         } catch (BeansException e) {
-            LOG.error("No Bean Defined for the Rule " + beanName);
+            LOG.error(NO_BEAN_DEFINED_FOR_THE_RULE + beanName);
         }
 
         return reportStream;
@@ -237,7 +244,7 @@ public class OcComparisonService {
     private InputStream generatePreOcComparisonReport(Date applicationDate, Amendment amd, EdcrApplicationDetail ocDcr,
             EdcrApplicationDetail permitDcr, OcComparisonDetail detail) {
 
-        String beanName = "OcComparisonReportService";
+        String beanName = OC_COMPARISON_REPORT_SERVICE;
         OcComparisonReportService service = null;
         int index = -1;
         AmendmentDetails[] amdArray = null;
@@ -254,7 +261,7 @@ public class OcComparisonService {
 
             if (amd.getDetails().isEmpty() || index == -1)
                 service = (OcComparisonReportService) specificRuleService.find(beanName);
-            else if (index >= 0) {
+            else if (index >= 0 && amdArray != null) {
                 for (int i = index; i < length; i++) {
 
                     service = (OcComparisonReportService) specificRuleService
@@ -270,7 +277,7 @@ public class OcComparisonService {
             reportStream = service.generatePreOcComparisonReport(ocDcr, permitDcr, detail);
 
         } catch (BeansException e) {
-            LOG.error("No Bean Defined for the Rule " + beanName);
+            LOG.error(NO_BEAN_DEFINED_FOR_THE_RULE + beanName);
         }
 
         return reportStream;
@@ -279,7 +286,7 @@ public class OcComparisonService {
     private OcComparisonDetail getComparisonReportStatus(Date applicationDate, Amendment amd, EdcrApplicationDetail ocDcr,
             EdcrApplicationDetail permitDcr, OcComparisonDetail detail) {
 
-        String beanName = "OcComparisonReportService";
+        String beanName = OC_COMPARISON_REPORT_SERVICE;
         OcComparisonReportService service = null;
         int index = -1;
         AmendmentDetails[] amdArray = null;
@@ -296,7 +303,7 @@ public class OcComparisonService {
 
             if (amd.getDetails().isEmpty() || index == -1)
                 service = (OcComparisonReportService) specificRuleService.find(beanName);
-            else if (index >= 0) {
+            else if (index >= 0 && amdArray != null) {
                 for (int i = index; i < length; i++) {
 
                     service = (OcComparisonReportService) specificRuleService
@@ -312,7 +319,7 @@ public class OcComparisonService {
             service.getComparisonReportStatus(ocDcr, permitDcr, detail);
 
         } catch (BeansException e) {
-            LOG.error("No Bean Defined for the Rule " + beanName);
+            LOG.error(NO_BEAN_DEFINED_FOR_THE_RULE + beanName);
         }
 
         return detail;

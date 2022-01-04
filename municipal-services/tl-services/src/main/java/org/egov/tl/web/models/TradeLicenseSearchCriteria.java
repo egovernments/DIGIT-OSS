@@ -78,15 +78,6 @@ public class TradeLicenseSearchCriteria {
 
     @JsonIgnore
     private List<String> ownerIds;
-    
-    @JsonProperty("RenewalPending")
-    private Boolean RenewalPending;
-    
-    @JsonProperty("onlyMobileNumber")
-    private Boolean onlyMobileNumber;
-    
-    @JsonProperty("financialYear")
-    private String financialYear;
 
 
     public boolean isEmpty() {
@@ -100,14 +91,6 @@ public class TradeLicenseSearchCriteria {
     public boolean tenantIdOnly() {
         return (this.tenantId != null && this.status == null && this.applicationType == null && this.ids == null && this.applicationNumber == null
                 && this.licenseNumbers == null && this.oldLicenseNumber == null && this.mobileNumber == null &&
-                this.fromDate == null && this.toDate == null && this.ownerIds == null && this.locality == null && this.tradeName == null &&
-                this.ownerName == null && this.issuedFrom == null && this.issuedTo == null
-        );
-    }
-    
-    public boolean mobileNumberOnly() {
-    	return (this.tenantId == null && this.status == null && this.applicationType == null && this.ids == null && this.applicationNumber == null
-                && this.licenseNumbers == null && this.oldLicenseNumber == null && this.mobileNumber != null &&
                 this.fromDate == null && this.toDate == null && this.ownerIds == null && this.locality == null && this.tradeName == null &&
                 this.ownerName == null && this.issuedFrom == null && this.issuedTo == null
         );

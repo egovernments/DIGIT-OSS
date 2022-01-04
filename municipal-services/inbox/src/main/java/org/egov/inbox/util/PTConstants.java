@@ -8,7 +8,7 @@ public class PTConstants {
     public static final String TENANT_ID_PARAM = "tenantId";
     public static final String LOCALITY_PARAM = "locality";
     public static final String PROPERTY_ID_PARAM = "propertyId";
-    public static final String PT_APPLICATION_NUMBER_PARAM = "applicationNumber";
+    public static final String APPLICATION_NUMBER_PARAM = "applicationNumber";
     public static final String ASSIGNEE_PARAM = "assignee";
     public static final String STATUS_PARAM = "status";
     public static final String OFFSET_PARAM = "offset";

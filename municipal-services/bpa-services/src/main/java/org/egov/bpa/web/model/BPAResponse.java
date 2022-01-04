@@ -35,9 +35,6 @@ public class BPAResponse   {
 
   @JsonProperty("BPA")
   private List<BPA> BPA;
-  
-  @JsonProperty("Count")
-  private int count;
 
   public BPAResponse responseInfo(ResponseInfo responseInfo) {
     this.responseInfo = responseInfo;

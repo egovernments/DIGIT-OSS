@@ -1,0 +1,16 @@
+{
+   "RequestInfo": {
+       "apiId" : "org.egov.boundary",
+       "ver" : "1.0",
+       "ts" : "10-03-2017 00:00:00",
+       "action" : "search",
+       "did" : "1",
+       "key" : "abcdkey",
+       "msgId" : "20170310130900",
+       "requesterId" : "rajesh",
+       "authToken" : "null",
+       "userInfo":{
+       	"id":"1"
+       }
+   }
+}

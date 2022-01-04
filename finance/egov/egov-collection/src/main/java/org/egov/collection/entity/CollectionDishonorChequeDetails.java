@@ -166,9 +166,9 @@ public class CollectionDishonorChequeDetails extends BaseModel {
         if (getClass() != obj.getClass())
             return false;
         final CollectionDishonorChequeDetails other = (CollectionDishonorChequeDetails) obj;
-        if (debitAmount == null && creditAmount == null) {
-            if (debitAmount != null || creditAmount != null)
-                return false;
+		if (debitAmount == null && creditAmount == null) {
+
+			return false;
         } else if (!(debitAmount.compareTo(other.debitAmount) == 0 && creditAmount.compareTo(other.creditAmount) == 0))
             return false;
         return true;

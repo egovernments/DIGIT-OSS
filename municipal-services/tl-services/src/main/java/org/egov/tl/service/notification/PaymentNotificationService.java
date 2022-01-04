@@ -25,7 +25,8 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
-import static org.egov.tl.util.BPAConstants.*;
+import static org.egov.tl.util.BPAConstants.NOTIFICATION_APPROVED;
+import static org.egov.tl.util.BPAConstants.NOTIFICATION_PENDINGDOCVERIFICATION;
 import static org.egov.tl.util.TLConstants.*;
 
 
@@ -104,14 +105,16 @@ public class PaymentNotificationService {
             if(valMap.get(businessServiceKey).equalsIgnoreCase(config.getBusinessServiceTL())||valMap.get(businessServiceKey).equalsIgnoreCase(config.getBusinessServiceBPA())){
                 TradeLicense license = getTradeLicenseFromConsumerCode(valMap.get(tenantIdKey),valMap.get(consumerCodeKey),
                         requestInfo,valMap.get(businessServiceKey));
-                switch(valMap.get(businessServiceKey)) {
+                switch(valMap.get(businessServiceKey))
+                {
                     case businessService_TL:
                         String applicationType = String.valueOf(license.getApplicationType());
-                        if (applicationType.equals(APPLICATION_TYPE_RENEWAL)) {
+                        if(applicationType.equals(APPLICATION_TYPE_RENEWAL)){
                             String localizationMessages = tlRenewalNotificationUtil.getLocalizationMessages(license.getTenantId(), requestInfo);
                             List<SMSRequest> smsRequests = getSMSRequests(license, valMap, localizationMessages);
                             util.sendSMS(smsRequests, config.getIsTLSMSEnabled());
-                        } else {
+                        }
+                        else{
                             String localizationMessages = util.getLocalizationMessages(license.getTenantId(), requestInfo);
                             List<SMSRequest> smsRequests = getSMSRequests(license, valMap, localizationMessages);
                             util.sendSMS(smsRequests, config.getIsTLSMSEnabled());
@@ -120,62 +123,27 @@ public class PaymentNotificationService {
                         break;
 
                     case businessService_BPA:
-                        String tenantId = license.getTenantId();
-                        String action = license.getAction();
-                        Map<Object, Object> configuredChannelList = tlNotificationService.fetchChannelList(new RequestInfo(), tenantId, businessService_BPA, action);
-                        List<String> configuredChannelNames = (List<String>) configuredChannelList.get(action);
-                        PaymentRequest paymentRequest = mapper.convertValue(record, PaymentRequest.class);
-                        String receiptno = paymentRequest.getPayment().getPaymentDetails().get(0).getReceiptNumber();
-
                         String localizationMessages = bpaNotificationUtil.getLocalizationMessages(license.getTenantId(), requestInfo);
+                        PaymentRequest paymentRequest = mapper.convertValue(record, PaymentRequest.class);
+                        String totalAmountPaid = paymentRequest.getPayment().getTotalAmountPaid().toString();
+                        Map<String, String> mobileNumberToOwner = new HashMap<>();
                         String locMessage = bpaNotificationUtil.getMessageTemplate(NOTIFICATION_PENDINGDOCVERIFICATION, localizationMessages);
-                        String message = bpaNotificationUtil.getReplacedMessage(license, locMessage);
+                        String message = bpaNotificationUtil.getPendingDocVerificationMsg(license, locMessage, localizationMessages, totalAmountPaid);
+                        license.getTradeLicenseDetail().getOwners().forEach(owner -> {
+                            if (owner.getMobileNumber() != null)
+                                mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
+                        });
+                        List<SMSRequest> smsList = new ArrayList<>();
+                        smsList.addAll(util.createSMSRequest(message, mobileNumberToOwner));
+                        util.sendSMS(smsList, config.getIsBPASMSEnabled());
 
-                        if (!CollectionUtils.isEmpty(configuredChannelNames) && configuredChannelNames.contains(CHANNEL_NAME_SMS))
-                           {
-                                Map<String, String> mobileNumberToOwner = new HashMap<>();
-
-                                license.getTradeLicenseDetail().getOwners().forEach(owner -> {
-                                    if (owner.getMobileNumber() != null)
-                                        mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
-                                });
-
-                                List<SMSRequest> smsList = new ArrayList<>();
-                                smsList.addAll(bpaNotificationUtil.createSMSRequestForBPA(message, mobileNumberToOwner,license,receiptno));
-                                util.sendSMS(smsList, config.getIsBPASMSEnabled());
+                        if(null != config.getIsUserEventsNotificationEnabledForBPA()) {
+                            if(config.getIsUserEventsNotificationEnabledForBPA()) {
+                                TradeLicenseRequest tradeLicenseRequest=TradeLicenseRequest.builder().requestInfo(requestInfo).licenses(Collections.singletonList(license)).build();
+                                EventRequest eventRequest = tlNotificationService.getEventsForBPA(tradeLicenseRequest,true, message);
+                                if(null != eventRequest)
+                                    util.sendEventNotification(eventRequest);
                             }
-
-                        if (!CollectionUtils.isEmpty(configuredChannelNames) && configuredChannelNames.contains(CHANNEL_NAME_EVENT))
-                        {
-                            if(null != config.getIsUserEventsNotificationEnabledForBPA()) {
-                                if(config.getIsUserEventsNotificationEnabledForBPA()) {
-                                    TradeLicenseRequest tradeLicenseRequest=TradeLicenseRequest.builder().requestInfo(requestInfo).licenses(Collections.singletonList(license)).build();
-                                    EventRequest eventRequest = bpaNotificationUtil.getEventsForBPA(tradeLicenseRequest,true, message,receiptno);
-                                    if(null != eventRequest)
-                                        util.sendEventNotification(eventRequest);
-                                }
-                            }
-                        }
-
-                        if (!CollectionUtils.isEmpty(configuredChannelNames) && configuredChannelNames.contains(CHANNEL_NAME_EMAIL))
-                        {
-                                    Map<String, String> mobileNumberToEmail = new HashMap<>();
-                                    Set<String> mobileNumbers = new HashSet<>();
-                                    license.getTradeLicenseDetail().getOwners().forEach(owner -> {
-                                        if (owner.getMobileNumber() != null)
-                                            mobileNumbers.add(owner.getMobileNumber());
-                                    });
-
-                                    mobileNumberToEmail = util.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
-
-                                    String locMessageEmail = bpaNotificationUtil.getMessageTemplate(NOTIFICATION_PENDINGDOCVERIFICATION_EMAIL, localizationMessages);
-                                    message = bpaNotificationUtil.getReplacedEmailMessage(license, locMessageEmail);
-
-                                    List<EmailRequest> emailRequestsForBPA = new LinkedList<>();
-                                    emailRequestsForBPA.addAll(bpaNotificationUtil.createEmailRequestForBPA(requestInfo,message, mobileNumberToEmail,license,receiptno));
-                                    if (!CollectionUtils.isEmpty(emailRequestsForBPA))
-                                        util.sendEmail(emailRequestsForBPA, config.getIsEmailNotificationEnabledForBPA());
-
                         }
                         break;
                 }
@@ -313,6 +281,4 @@ public class PaymentNotificationService {
         return licenses.get(0);
 
     }
-
-
 }

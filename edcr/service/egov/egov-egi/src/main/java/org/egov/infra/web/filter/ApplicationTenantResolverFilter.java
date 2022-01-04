@@ -83,18 +83,20 @@ import org.egov.infra.validation.exception.ApplicationRestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ApplicationTenantResolverFilter implements Filter {
 
-    @Autowired
+    private static final String STATE = "state";
+
+	@Autowired
     private EnvironmentSettings environmentSettings;
 
     @Resource(name = "cities")
-    private transient List<String> cities;
+    private List<String> cities;
 
-    public static Map<String, String> tenants = new HashMap<>();
-
-    public static String stateUrl;
+    private Map<String, String> tenants = new HashMap<>();
 
     @Autowired
     private TenantUtils tenantUtils;
@@ -104,21 +106,31 @@ public class ApplicationTenantResolverFilter implements Filter {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationTenantResolverFilter.class);
 
+    public Map<String, String> getTenants() {
+		return tenants;
+	}
+    
+    public void setTenants(Map<String, String> tenants) {
+		this.tenants = tenants;
+	}
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         MultiReadRequestWrapper customRequest = new MultiReadRequestWrapper(req);
         HttpSession session = customRequest.getSession();
-        LOG.info("Request URL-->" + customRequest.getRequestURL());
-        LOG.info("Request URI-->" + customRequest.getRequestURI());
+        if(LOG.isInfoEnabled()) {
+        	LOG.info(String.format("Request URL--> %s", customRequest.getRequestURL()));
+        	LOG.info(String.format("Request URI--> %s", customRequest.getRequestURI()));
+        }
         String domainURL = extractRequestDomainURL(customRequest, false);
         String domainName = extractRequestedDomainName(customRequest);
         ApplicationThreadLocals.setTenantID(environmentSettings.schemaName(domainName));
         ApplicationThreadLocals.setDomainName(domainName);
         ApplicationThreadLocals.setDomainURL(domainURL);
         prepareRestService(customRequest, session);
-        LOG.info("***Tenant ID-->" + ApplicationThreadLocals.getTenantID());
+        if(LOG.isInfoEnabled())
+        	LOG.info(String.format("***Tenant ID--> %s", ApplicationThreadLocals.getTenantID()));
         chain.doFilter(customRequest, response);
     }
 
@@ -141,18 +153,24 @@ public class ApplicationTenantResolverFilter implements Filter {
         // LOG.info("***********Enter to set tenant id and custom header**************" + req.getRequestURL().toString());
         String requestURL = new StringBuilder().append(ApplicationThreadLocals.getDomainURL())
                 .append(customRequest.getRequestURI()).toString();
-        if (requestURL.contains(tenants.get("state"))
+        if (requestURL.contains(tenants.get(STATE))
                 && (requestURL.contains("/edcr/") && (requestURL.contains("/rest/")
                         || requestURL.contains("/oauth/")))) {
-
-            LOG.debug("All tenants from config" + tenants);
-            LOG.info("tenants.get(state))" + tenants.get("state"));
-            LOG.info("Inside method to set tenant id and custom header");
+        	
+        	if(LOG.isDebugEnabled())
+        		LOG.debug(String.format("All tenants from config %s", tenants));
+        	if(LOG.isInfoEnabled()) {
+        		LOG.info(String.format("tenants.get(state)) %s", tenants.get(STATE)));
+                LOG.info("Inside method to set tenant id and custom header");
+        	}
+            
             String tenantFromBody = StringUtils.EMPTY;
             tenantFromBody = setCustomHeader(requestURL, tenantFromBody, customRequest);
-            LOG.info("Tenant from Body***" + tenantFromBody);
             String fullTenant = customRequest.getParameter("tenantId");
-            LOG.info("fullTenant***" + fullTenant);
+            if(LOG.isInfoEnabled()) {
+            	LOG.info(String.format("Tenant from Body*** %s", tenantFromBody));
+            	LOG.info(String.format("fullTenant*** %s", fullTenant));
+            }
             if (StringUtils.isBlank(fullTenant)) {
                 fullTenant = tenantFromBody;
             }
@@ -160,27 +178,28 @@ public class ApplicationTenantResolverFilter implements Filter {
                 throw new ApplicationRestException("incorrect_request", "RestUrl does not contain tenantId: " + fullTenant);
             }
             String tenant = fullTenant.substring(fullTenant.lastIndexOf('.') + 1, fullTenant.length());
-            LOG.info("tenant***" + tenant);
-            LOG.info("tenant from rest request =" + tenant);
-            LOG.info("City Code from session " + (String) session.getAttribute(CITY_CODE_KEY));
+            if(LOG.isInfoEnabled()) {
+	            LOG.info(String.format("tenant*** %s", tenant));
+	            LOG.info(String.format("tenant from rest request = %s", tenant));
+	            LOG.info(String.format("City Code from session %s", (String) session.getAttribute(CITY_CODE_KEY)));
+            }
             boolean found = false;
             City stateCity = cityService.fetchStateCityDetails();
-            if (tenant.equalsIgnoreCase("generic") || tenant.equalsIgnoreCase("state")) {
+            if (tenant.equalsIgnoreCase("generic") || tenant.equalsIgnoreCase(STATE)) {
                 ApplicationThreadLocals.setTenantID(tenant);
                 found = true;
             } else if (tenant.equalsIgnoreCase(stateCity.getCode())) {
-                ApplicationThreadLocals.setTenantID("state");
+                ApplicationThreadLocals.setTenantID(STATE);
                 found = true;
             } else {
-                for (String city : tenants.keySet()) {
-                    LOG.info("Key :" + city + " ,Value :" + tenants.get(city) + "request tenant" + tenant);
+                for (Map.Entry<String, String> city : tenants.entrySet()) {
+                	if(LOG.isInfoEnabled())
+                		LOG.info(String.format("Key : %s ,Value : %s, request tenant %s", city.getKey(), city.getValue(), tenant));
 
-                    if (tenants.get(city).contains(tenant)) {
-                        ApplicationThreadLocals.setTenantID(city);
+                    if (city.getValue().contains(tenant)) {
+                        ApplicationThreadLocals.setTenantID(city.getKey());
                         found = true;
                         break;
-                    } else {
-
                     }
                 }
             }
@@ -220,16 +239,16 @@ public class ApplicationTenantResolverFilter implements Filter {
                 IOUtils.copy(multiReadRequestWrapper.getInputStream(), writer, StandardCharsets.UTF_8);
                 String reqBody = String.valueOf(writer);
                 if (StringUtils.isNoneBlank(reqBody)) {
-                    Pattern p = Pattern.compile("\\{.*?\\}");
+                    Pattern p = Pattern.compile("\\{[^\"]*\\}");
                     Matcher m = p.matcher(reqBody);
                     while (m.find()) {
                         CharSequence charSequence = m.group().subSequence(1, m.group().length() - 1);
                         String[] reqBodyParams = String.valueOf(charSequence).split(",");
                         if (LOG.isDebugEnabled())
-                            LOG.debug("***********Request Body Params**************" + String.valueOf(charSequence));
+                            LOG.debug(String.format("***********Request Body Params**************%s", String.valueOf(charSequence)));
                         for (String param : reqBodyParams) {
                             if (LOG.isDebugEnabled())
-                                LOG.debug("*************************" + param);
+                                LOG.debug(String.format("*************************%s", param));
                             if (param.contains("userInfo") && StringUtils.isNotBlank(tenantAtBody))
                                 break;
 
@@ -240,7 +259,7 @@ public class ApplicationTenantResolverFilter implements Filter {
                                 else
                                     tenantAtBody = tenant[1];
                                 if (LOG.isDebugEnabled())
-                                    LOG.debug("############Tenant From Body######" + tenantAtBody);
+                                    LOG.debug(String.format("############Tenant From Body###### %s", tenantAtBody));
                             } /*
                                * else if (param.contains("authToken")) { String[] authTokenVal = param.split(":"); // Next to
                                * 'bearer' word space is required to differentiate token type and access token String tokenType =

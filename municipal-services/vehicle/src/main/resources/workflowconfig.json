@@ -54,8 +54,7 @@
               "action": "SCHEDULE",
               "nextState": "SCHEDULED",
               "roles": [
-                "FSM_DSO",
-                "FSM_EDITOR_EMP"
+                "FSM_DSO"
               ]
             }
           ]

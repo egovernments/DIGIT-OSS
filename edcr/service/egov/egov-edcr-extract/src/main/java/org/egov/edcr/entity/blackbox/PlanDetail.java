@@ -12,7 +12,7 @@ public class PlanDetail extends Plan {
     private static final long serialVersionUID = 76L;
 
     @JsonIgnore
-    private DXFDocument doc;
+    private transient DXFDocument doc;
 
     public DXFDocument getDoc() {
         return doc;

@@ -91,7 +91,7 @@ public class Event {
 		return new Comparator<Event>() {
 			@Override
 			public int compare(Event o1, Event o2) {
-				return o1.getEventDetails().getFromDate().compareTo(o2.getEventDetails().getFromDate());
+				return o2.getEventDetails().getFromDate().compareTo(o1.getEventDetails().getFromDate());
 			}
 		};
 	}

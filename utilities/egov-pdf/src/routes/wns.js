@@ -13,7 +13,6 @@ var {
   fetch_bill,
   search_billV2,
   search_payment,
-  getPropertyDeatils,
   create_pdf
 } = require("../api");
 
@@ -75,11 +74,6 @@ router.post(
             connection.WaterConnection.length > 0
         ) {
           var consumerCode = bussinessService == "WS"? connection.WaterConnection[0].connectionNo : connection.WaterConnection[0].applicationNo;
-          var propertyId   = connection.WaterConnection[0].propertyId;
-          var propertytoConsumerCodeMap = {};
-          propertytoConsumerCodeMap[propertyId] = [consumerCode];
-          var propertyDetails = await getPropertyDeatils(requestinfo, tenantId, [propertyId], propertytoConsumerCodeMap);
-
           var billresponse;
           try {
             billresponse = await search_billV2(
@@ -95,11 +89,6 @@ router.post(
           
           var bills = billresponse.data;
           if (bills && bills.Bill && bills.Bill.length > 0) {
-            let data = propertyDetails[consumerCode];
-            bills.Bill[0].propertyUniqueId = data.propertyUniqueId;
-            bills.Bill[0].propertyAddress = data.propertyAddress;
-            bills.Bill[0].locality = data.locality;
-
             var pdfResponse;
             var pdfkey = config.pdf.wns_bill;
             try {
@@ -139,11 +128,6 @@ router.post(
             connection.SewerageConnections.length > 0
         ) {
             var consumerCode = bussinessService == "SW"? connection.SewerageConnections[0].connectionNo : connection.SewerageConnections[0].applicationNo;
-            var propertyId   = connection.SewerageConnections[0].propertyId;
-            var propertytoConsumerCodeMap = {};
-            propertytoConsumerCodeMap[propertyId] = [consumerCode];
-            var propertyDetails = await getPropertyDeatils(requestinfo, tenantId, [propertyId], propertytoConsumerCodeMap);
-  
             var billresponse;
           try {
             billresponse = await search_billV2(
@@ -159,11 +143,6 @@ router.post(
           
           var bills = billresponse.data;
           if (bills && bills.Bill && bills.Bill.length > 0) {
-            let data = propertyDetails[consumerCode];
-            bills.Bill[0].propertyUniqueId = data.propertyUniqueId;
-            bills.Bill[0].propertyAddress = data.propertyAddress;
-            bills.Bill[0].locality = data.locality;
-            
             var pdfResponse;
             var pdfkey = config.pdf.wns_bill;
             try {
@@ -385,7 +364,6 @@ router.post(
       var waterBills, sewerageBills;
       var consolidatedResult = {Bill:[]};
       var propertyIdSet = [];
-      var connectionnoToPropertyMap = {};
       if (requestinfo == undefined) {
         return renderError(res, "requestinfo can not be null");
       }
@@ -411,15 +389,8 @@ router.post(
             restWater = restWater.data.WaterConnection;
             if(restWater.length>0){
               for(let water of restWater){
-                if(water.connectionno){
-                  if(!connectionnoToPropertyMap[water.property_id]){
-                    connectionnoToPropertyMap[water.property_id] = [];
-                  }
-                    connectionnoToPropertyMap[water.property_id].push(water.connectionno);
-                }
-                if(!propertyIdSet.includes(water.property_id)){
+                if(!propertyIdSet.includes(water.property_id))
                   propertyIdSet.push(water.property_id);
-                }
               }
             }
 
@@ -432,15 +403,8 @@ router.post(
             restSewerage = restSewerage.data.SewerageConnections;
             if(restSewerage.length>0){
               for(let sewerage of restSewerage){
-                if(sewerage.connectionno){
-                  if(!connectionnoToPropertyMap[sewerage.property_id]){
-                    connectionnoToPropertyMap[sewerage.property_id] = [];
-                  }
-                    connectionnoToPropertyMap[sewerage.property_id].push(sewerage.connectionno);
-                }
-                if(!propertyIdSet.includes(sewerage.property_id)){
-                    propertyIdSet.push(sewerage.property_id);
-                }
+                if(!propertyIdSet.includes(sewerage.property_id))
+                  propertyIdSet.push(sewerage.property_id);
               }   
             }
   
@@ -518,15 +482,8 @@ router.post(
             restWater = restWater.data.WaterConnection;
             if(restWater.length>0){
               for(let water of restWater){
-                if(water.connectionno){
-                  if(!connectionnoToPropertyMap[water.property_id]){
-                    connectionnoToPropertyMap[water.property_id] = [];
-                  }
-                    connectionnoToPropertyMap[water.property_id].push(water.connectionno);
-                }
-                if(!propertyIdSet.includes(water.property_id)){
+                if(!propertyIdSet.includes(water.property_id))
                   propertyIdSet.push(water.property_id);
-                }
               }
             }
 
@@ -582,15 +539,8 @@ router.post(
             restSewerage = restSewerage.data.SewerageConnections;
             if(restSewerage.length>0){
               for(let sewerage of restSewerage){
-                if(sewerage.connectionno){
-                  if(!connectionnoToPropertyMap[sewerage.property_id]){
-                    connectionnoToPropertyMap[sewerage.property_id] = [];
-                  }
-                    connectionnoToPropertyMap[sewerage.property_id].push(sewerage.connectionno);
-                }
-                if(!propertyIdSet.includes(sewerage.property_id)){
+                if(!propertyIdSet.includes(sewerage.property_id))
                   propertyIdSet.push(sewerage.property_id);
-                }
               }   
             }
   
@@ -636,20 +586,12 @@ router.post(
         else{
           return renderError(res, "There is no billfound for the criteria");
         }
-
-        var propertyDetails = await getPropertyDeatils(requestinfo, tenantId, propertyIdSet, connectionnoToPropertyMap);
+  
         if (consolidatedResult && consolidatedResult.Bill && consolidatedResult.Bill.length > 0) {
           var pdfResponse;
           var pdfkey = config.pdf.wns_bill;
           try {
             consolidatedResult.Bill = consolidatedResult.Bill.filter(function(e){return e});
-            for(let i=0;i<consolidatedResult.Bill.length;i++){
-              let consumerCode = consolidatedResult.Bill[i].consumerCode;
-              let data = propertyDetails[consumerCode];
-              consolidatedResult.Bill[i].propertyUniqueId = data.propertyUniqueId;
-              consolidatedResult.Bill[i].propertyAddress = data.propertyAddress;
-              consolidatedResult.Bill[i].locality = data.locality;
-            }
             var billArray = { Bill: consolidatedResult.Bill };
             pdfResponse = await create_pdf(
               tenantId,

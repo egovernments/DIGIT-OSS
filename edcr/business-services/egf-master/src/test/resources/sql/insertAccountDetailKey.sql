@@ -1,0 +1,1 @@
+insert into egf_accountdetailkey (id, key, accountdetailtypeid, createdby, createddate, lastmodifiedby, lastmodifieddate, version, tenantid) values('1', '1', '1', '1', 'now()', '1', 'now()', 0, 'default');

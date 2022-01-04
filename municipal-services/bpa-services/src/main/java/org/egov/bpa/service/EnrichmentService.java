@@ -311,8 +311,7 @@ public class EnrichmentService {
 
 			// Adding owners to assignes list
 			bpa.getLandInfo().getOwners().forEach(ownerInfo -> {
-			        if(ownerInfo.getUuid() != null)
-			            assignes.add(ownerInfo.getUuid());
+				assignes.add(ownerInfo.getUuid());
 			});
 
 			Set<String> registeredUUIDS = userService.getUUidFromUserName(bpa);

@@ -1,0 +1,15 @@
+{
+  "responseInfo": null,
+  "error": {
+    "code": 400,
+    "message": "Otp validation is pending.",
+    "description": null,
+    "fields": [
+      {
+        "code": "core-user.006",
+        "message": "Otp validation is pending.",
+        "field": "User.otpReference"
+      }
+    ]
+  }
+}

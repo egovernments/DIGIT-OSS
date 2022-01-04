@@ -1,11 +1,6 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.1.4 - 2021-12-15
-
-- Enchance the search API to give filtered result for open search request.
-
-
 ## 1.1.3 - 2021-05-11
 
 - Fixed security issue of untrusted data pass as user input.

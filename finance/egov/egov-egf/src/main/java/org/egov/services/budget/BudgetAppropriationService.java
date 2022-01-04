@@ -138,7 +138,7 @@ public class BudgetAppropriationService extends PersistenceService {
 				if (isBudgetCheckNeeded(detail.getGlcodeId())) {
 					final BudgetReportEntry budgetReportEntry = new BudgetReportEntry();
 					populateDataForVoucher(voucher, financialYear, detail, budgetReportEntry);
-					budgetReportEntry.setDepartmentName(dept.getName());
+					budgetReportEntry.setDepartmentName(dept!=null ? dept.getName():"");
 					if (voucher.getFundId() != null)
 						budgetReportEntry.setFundName(voucher.getFundId().getName());
 					list.add(budgetReportEntry);
@@ -189,7 +189,7 @@ public class BudgetAppropriationService extends PersistenceService {
 		final CChartOfAccounts coa = detail.getGlcodeId();
 		final Map<String, Object> budgetDataMap = getRequiredBudgetDataForVoucher(voucher, financialYear, function,
 				coa);
-		budgetReportEntry.setFunctionName(function.getName());
+		budgetReportEntry.setFunctionName(function!=null ? function.getName() : "");
 		budgetReportEntry.setGlCode(coa.getGlcode());
 		budgetReportEntry.setFinancialYear(financialYear.getFinYearRange());
 		BigDecimal budgetedAmtForYear = BigDecimal.ZERO;

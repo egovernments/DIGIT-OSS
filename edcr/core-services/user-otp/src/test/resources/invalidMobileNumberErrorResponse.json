@@ -1,0 +1,15 @@
+{
+  "responseInfo": null,
+  "error": {
+    "code": 400,
+    "message": "OTP request for password reset failed",
+    "description": null,
+    "fields": [
+      {
+        "code": "OTP.MOBILE_NUMBER",
+        "message": "MobileNumber Not Found For This User.",
+        "field": "otp.mobileNumber"
+      }
+    ]
+  }
+}

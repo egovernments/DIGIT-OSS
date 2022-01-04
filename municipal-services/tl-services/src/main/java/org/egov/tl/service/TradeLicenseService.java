@@ -30,8 +30,6 @@ import static org.egov.tracer.http.HttpUtils.isInterServiceCall;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
-import com.jayway.jsonpath.JsonPath;
-
 @Service
 @Slf4j
 public class TradeLicenseService {
@@ -106,7 +104,7 @@ public class TradeLicenseService {
        if(businessServicefromPath==null)
             businessServicefromPath = businessService_TL;
        tlValidator.validateBusinessService(tradeLicenseRequest,businessServicefromPath);
-       Object mdmsData = util.mDMSCall(tradeLicenseRequest.getRequestInfo(), tradeLicenseRequest.getLicenses().get(0).getTenantId());
+       Object mdmsData = util.mDMSCall(tradeLicenseRequest);
        actionValidator.validateCreateRequest(tradeLicenseRequest);
        enrichmentService.enrichTLCreateRequest(tradeLicenseRequest, mdmsData);
        tlValidator.validateCreate(tradeLicenseRequest, mdmsData);
@@ -170,127 +168,14 @@ public class TradeLicenseService {
         tlValidator.validateSearch(requestInfo,criteria,serviceFromPath, isInterServiceCall);
         criteria.setBusinessService(serviceFromPath);
         enrichmentService.enrichSearchCriteriaWithAccountId(requestInfo,criteria);
-        if(criteria.getRenewalPending()!=null && criteria.getRenewalPending()== true ) {
-        	
-        	String currentFinancialYear = "";
-       	    
-            
-            Object mdmsData = util.mDMSCall(requestInfo, criteria.getTenantId() );
-            String jsonPath = TLConstants.MDMS_CURRENT_FINANCIAL_YEAR.replace("{}",businessService_TL);
-            List<Map<String,Object>> jsonOutput =  JsonPath.read(mdmsData, jsonPath);
-            
-            for (int i=0; i<jsonOutput.size();i++) {
-           	 Object startingDate = jsonOutput.get(i).get(TLConstants.MDMS_STARTDATE);
-           	 Object endingDate = jsonOutput.get(i).get(TLConstants.MDMS_ENDDATE);
-           	 Long startTime = (Long)startingDate;
-           	 Long endTime = (Long)endingDate;
-           	 
-           	 if(System.currentTimeMillis()>=startTime && System.currentTimeMillis()<=endTime) {
-           		 currentFinancialYear = jsonOutput.get(i).get(TLConstants.MDMS_FIN_YEAR_RANGE).toString();
-           		 break;
-           	 }
-           	 
-            }
-            
-            
-            criteria.setFinancialYear(currentFinancialYear);
-        	
-        }
-        
          if(criteria.getMobileNumber()!=null || criteria.getOwnerName() != null){
              licenses = getLicensesFromMobileNumber(criteria,requestInfo);
          }
          else {
              licenses = getLicensesWithOwnerInfo(criteria,requestInfo);
          }
-
-         return licenses;       
+       return licenses;
     }
-    
-    private void getLatestRejectedApplication(RequestInfo requestInfo, List<TradeLicense> licenses) {
-    	List <TradeLicense> licensesToBeRemoved = new ArrayList<TradeLicense>();
-    	List <TradeLicense> licensesToBeAdded = new ArrayList<TradeLicense>();
-        
-        for (TradeLicense rejectedLicense : licenses) {
-       	 
-       	 if(rejectedLicense.getStatus().toString().equalsIgnoreCase(TLConstants.STATUS_REJECTED)) {
-       		 TradeLicenseSearchCriteria rejectedCriteria = new TradeLicenseSearchCriteria();
-       		 
-       		 rejectedCriteria.setTenantId(rejectedLicense.getTenantId());
-       		 
-       		 List <String> rejectedLicenseNumbers = new ArrayList<String>();
-       		 rejectedLicenseNumbers.add(rejectedLicense.getLicenseNumber());
-       		 
-       		 rejectedCriteria.setLicenseNumbers(rejectedLicenseNumbers);
-       		 licensesToBeRemoved.add(rejectedLicense);
-       		 
-       		 List <TradeLicense> rejectedLicenses = getLicensesWithOwnerInfo(rejectedCriteria,requestInfo);
-       		 
-       		 TradeLicense latestApplication = rejectedLicense;
-       		 
-       		 for(TradeLicense newLicense: rejectedLicenses) {
-       			 if(latestApplication.getStatus().equalsIgnoreCase(TLConstants.STATUS_REJECTED)) {
-       				 latestApplication = newLicense;
-       			 }
-       			 else {
-       				 if(newLicense.getFinancialYear().toString().compareTo(latestApplication.getFinancialYear().toString())>0 && !newLicense.getStatus().equalsIgnoreCase(TLConstants.STATUS_REJECTED)) {
-       					 latestApplication=newLicense;
-       				 }
-       			 }
-       		 }
-       		 
-       		 if(latestApplication.getFinancialYear().toString().compareTo(rejectedLicense.getFinancialYear().toString()) <0) {
-       			 licensesToBeAdded.add(latestApplication);
-       		 }
-
-       	 }
-       	 
-        }
-        licenses.addAll(licensesToBeAdded);
-        licenses.removeAll(licensesToBeRemoved);
-	}
-
-
-	private void filterRejectedApplications(RequestInfo requestInfo, List<TradeLicense> licenses) {
-    	String currentFinancialYear = "";
-   	    TradeLicenseRequest tradeLicenseRequest = new TradeLicenseRequest();
-        tradeLicenseRequest.setRequestInfo(requestInfo);
-        tradeLicenseRequest.setLicenses(licenses);
-        
-        Object mdmsData = util.mDMSCall(tradeLicenseRequest.getRequestInfo(), tradeLicenseRequest.getLicenses().get(0).getTenantId());
-        String jsonPath = TLConstants.MDMS_CURRENT_FINANCIAL_YEAR.replace("{}",businessService_TL);
-        List<Map<String,Object>> jsonOutput =  JsonPath.read(mdmsData, jsonPath);
-        
-        for (int i=0; i<jsonOutput.size();i++) {
-       	 Object startingDate = jsonOutput.get(i).get(TLConstants.MDMS_STARTDATE);
-       	 Object endingDate = jsonOutput.get(i).get(TLConstants.MDMS_ENDDATE);
-       	 Long startTime = (Long)startingDate;
-       	 Long endTime = (Long)endingDate;
-       	 
-       	 if(System.currentTimeMillis()>=startTime && System.currentTimeMillis()<=endTime) {
-       		 currentFinancialYear = jsonOutput.get(i).get(TLConstants.MDMS_FIN_YEAR_RANGE).toString();
-       		 break;
-       	 }
-       	 
-        }
-        
-        String checker = currentFinancialYear;
-        licenses.removeIf(t->t.getStatus().toString().equalsIgnoreCase(TLConstants.STATUS_REJECTED) && !t.getFinancialYear().toString().equalsIgnoreCase(checker));
-
-	}
-
-	
-	public int countLicenses(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo, String serviceFromPath, HttpHeaders headers){
-		
-		criteria.setBusinessService(serviceFromPath);
-    	enrichmentService.enrichSearchCriteriaWithAccountId(requestInfo,criteria);
-
-
-    	int licenseCount = repository.getLicenseCount(criteria);
-    	
-    	return licenseCount;
-    }
-    
 
     public void checkEndStateAndAddBPARoles(TradeLicenseRequest tradeLicenseRequest) {
         List<String> endstates = tradeUtil.getBPAEndState(tradeLicenseRequest);
@@ -308,15 +193,21 @@ public class TradeLicenseService {
     }
 
     public List<TradeLicense> getLicensesFromMobileNumber(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo){
-    	
         List<TradeLicense> licenses = new LinkedList<>();
-        
-        boolean isEmpty = enrichWithUserDetails(criteria,requestInfo);
-        
-        if(isEmpty) {
-        	return Collections.emptyList();
+        UserDetailResponse userDetailResponse = userService.getUser(criteria,requestInfo);
+        // If user not found with given user fields return empty list
+        if(userDetailResponse.getUser().size()==0){
+            return Collections.emptyList();
         }
-        
+        enrichmentService.enrichTLCriteriaWithOwnerids(criteria,userDetailResponse);
+        licenses = repository.getLicenses(criteria);
+
+        if(licenses.size()==0){
+            return Collections.emptyList();
+        }
+
+        // Add tradeLicenseId of all licenses owned by the user
+        criteria=enrichmentService.getTradeLicenseCriteriaFromIds(licenses);
         //Get all tradeLicenses with ownerInfo enriched from user service
         licenses = getLicensesWithOwnerInfo(criteria,requestInfo);
         return licenses;
@@ -338,24 +229,7 @@ public class TradeLicenseService {
     }
 
 
-    private void removeDuplicates(List<TradeLicense> licenses) {
-    	List <TradeLicense> duplicateLicenses = new ArrayList<TradeLicense>();
-    	
-    	for(TradeLicense license : licenses) {
-    		for(TradeLicense duplicateLicense : licenses) {
-    			if (!license.getApplicationNumber().equalsIgnoreCase(duplicateLicense.getApplicationNumber()) && license.getLicenseNumber().equalsIgnoreCase(duplicateLicense.getLicenseNumber()) &&  duplicateLicense.getFinancialYear().compareTo(license.getFinancialYear())<0 ) {
-    				duplicateLicenses.add(duplicateLicense);
-    			}
-    		}
-    	}
-    	
-    	for (TradeLicense duplicateLicense : duplicateLicenses) {
-    		licenses.removeIf(t->t.getApplicationNumber().equalsIgnoreCase(duplicateLicense.getApplicationNumber()));
-    	}
-		
-	}
-
-	/**
+    /**
      * Returns tradeLicense from db for the update request
      * @param request The update request
      * @return List of tradeLicenses
@@ -388,7 +262,7 @@ public class TradeLicenseService {
         TradeLicense.ApplicationTypeEnum applicationType = licence.getApplicationType();
         List<TradeLicense> licenceResponse = null;
         if(applicationType != null && (applicationType).toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL ) &&
-                licence.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE) && (licence.getStatus().equals(TLConstants.STATUS_APPROVED) || licence.getStatus().equals(TLConstants.STATUS_MANUALLYEXPIRED) || licence.getStatus().equals(TLConstants.STATUS_EXPIRED) )){
+                licence.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE) && licence.getStatus().equals(TLConstants.STATUS_APPROVED)){
             List<TradeLicense> createResponse = create(tradeLicenseRequest, businessServicefromPath);
             licenceResponse =  createResponse;
         }
@@ -396,7 +270,7 @@ public class TradeLicenseService {
             if (businessServicefromPath == null)
                 businessServicefromPath = businessService_TL;
             tlValidator.validateBusinessService(tradeLicenseRequest, businessServicefromPath);
-            Object mdmsData = util.mDMSCall(tradeLicenseRequest.getRequestInfo(), tradeLicenseRequest.getLicenses().get(0).getTenantId());
+            Object mdmsData = util.mDMSCall(tradeLicenseRequest);
             String businessServiceName = null;
             switch (businessServicefromPath) {
                 case businessService_TL:
@@ -412,9 +286,7 @@ public class TradeLicenseService {
             }
             BusinessService businessService = workflowService.getBusinessService(tradeLicenseRequest.getLicenses().get(0).getTenantId(), tradeLicenseRequest.getRequestInfo(), businessServiceName);
             List<TradeLicense> searchResult = getLicensesWithOwnerInfo(tradeLicenseRequest);
-            
-            validateLatestApplicationCancellation(tradeLicenseRequest, businessService);
-
+            actionValidator.validateUpdateRequest(tradeLicenseRequest, businessService);
             enrichmentService.enrichTLUpdateRequest(tradeLicenseRequest, businessService);
             tlValidator.validateUpdate(tradeLicenseRequest, searchResult, mdmsData);
             switch(businessServicefromPath)
@@ -459,31 +331,7 @@ public class TradeLicenseService {
         
     }
 
-    private void validateLatestApplicationCancellation(TradeLicenseRequest tradeLicenseRequest, BusinessService businessService) {
-    	List <TradeLicense> licenses = tradeLicenseRequest.getLicenses();
-        TradeLicenseSearchCriteria criteria = new TradeLicenseSearchCriteria();
-    	
-    	List <String> licenseNumbers = new ArrayList<String>();
-    	
-    	for (TradeLicense license : licenses) {
-    		licenseNumbers.add(license.getLicenseNumber());
-    		
-    	}
-    	
-    	criteria.setTenantId(licenses.get(0).getTenantId());
-    	criteria.setLicenseNumbers(licenseNumbers);
-    	
-    	List<TradeLicense> searchResultForCancellation = getLicensesWithOwnerInfo(criteria,tradeLicenseRequest.getRequestInfo());
-        
-        actionValidator.validateUpdateRequest(tradeLicenseRequest, businessService,searchResultForCancellation);
-		
-	}
-
-
-
-
-
-	public List<TradeLicense> plainSearch(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo){
+    public List<TradeLicense> plainSearch(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo){
         List<TradeLicense> licenses;
         List<String> ids = repository.fetchTradeLicenseIds(criteria);
         if(ids.isEmpty())
@@ -516,36 +364,6 @@ public class TradeLicenseService {
         tlBatchService.getLicensesAndPerformAction(serviceName, jobname, requestInfo);
 
 
-    }
-    
-    public boolean enrichWithUserDetails(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo) {
-    	List<TradeLicense> licenses = new LinkedList<>();
-        UserDetailResponse userDetailResponse = userService.getUser(criteria,requestInfo);
-
-        if(userDetailResponse.getUser().size()==0){
-            return true;
-        }
-        enrichmentService.enrichTLCriteriaWithOwnerids(criteria,userDetailResponse);
-        
-        if(criteria.getOnlyMobileNumber()!=null && criteria.getOnlyMobileNumber() ) {
-        	criteria.setTenantId(null);
-        }
-        
-        licenses = repository.getLicenses(criteria);
-
-        if(licenses.size()==0){
-        	return true;
-        }
-
-        Boolean isRenewalPending = (criteria.getRenewalPending()!=null && criteria.getRenewalPending()==true);
-        
-        criteria=enrichmentService.getTradeLicenseCriteriaFromIds(licenses);
-        
-        if(isRenewalPending) {
-        	criteria.setRenewalPending(true);
-        }
-        
-        return false;
     }
 
 }

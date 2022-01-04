@@ -1,0 +1,215 @@
+serviceMaps:
+ serviceName: User Service
+ mappings:
+ - version: 1.0
+   name: PGR
+   description: Persists grievance details in service table
+   fromTopic: save-pgr-service
+   isTransaction: true
+   queryMaps:
+    - query: INSERT INTO eg_pgr_service(tenantid, servicecode, servicerequestid, description, lat, "long", addressid, address, email, deviceid, accountid, firstname, lastname, phone, attributes, status, source, expectedtime, rating, feedback, landmark, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: services.*
+      jsonMaps:
+
+
+       - jsonPath: $.services.*.tenantId
+
+       - jsonPath: $.services.*.serviceCode
+
+       - jsonPath: $.services.*.serviceRequestId
+
+       - jsonPath: $.services.*.description
+
+       - jsonPath: $.services.*.lat
+
+       - jsonPath: $.services.*.long
+
+       - jsonPath: $.services.*.addressId
+       
+       - jsonPath: $.services.*.address
+
+       - jsonPath: $.services.*.email
+
+       - jsonPath: $.services.*.deviceId
+
+       - jsonPath: $.services.*.accountId
+
+       - jsonPath: $.services.*.firstName
+
+       - jsonPath: $.services.*.lastName
+
+       - jsonPath: $.services.*.phone
+
+       - jsonPath: $.services.*.attributes
+         type: JSON
+         dbType: JSONB
+
+       - jsonPath: $.services.*.status
+
+       - jsonPath: $.services.*.source
+
+       - jsonPath: $.services.*.expectedTime
+
+       - jsonPath: $.services.*.rating
+
+       - jsonPath: $.services.*.feedback
+       
+       - jsonPath: $.services.*.landmark
+
+       - jsonPath: $.services.*.auditDetails.createdBy
+
+       - jsonPath: $.services.*.auditDetails.createdTime
+
+       - jsonPath: $.services.*.auditDetails.lastModifiedBy
+
+       - jsonPath: $.services.*.auditDetails.lastModifiedTime
+
+
+    - query: INSERT INTO eg_pgr_action(uuid, by, "when", action, status, comments, media, assignee, isinternal, tenantid, businesskey) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: actionInfo.*
+      jsonMaps:
+
+       - jsonPath: $.actionInfo.*.uuid
+       
+       - jsonPath: $.actionInfo.*.by
+
+       - jsonPath: $.actionInfo.*.when
+       
+       - jsonPath: $.actionInfo.*.action
+
+       - jsonPath: $.actionInfo.*.status
+
+       - jsonPath: $.actionInfo.*.comments
+
+       - jsonPath: $.actionInfo.*.media
+         type: JSON
+         dbType: JSONB
+
+       - jsonPath: $.actionInfo.*.assignee
+
+       - jsonPath: $.actionInfo.*.isInternal
+
+       - jsonPath: $.actionInfo.*.tenantId
+
+       - jsonPath: $.actionInfo.*.businessKey
+       
+       
+    - query: INSERT INTO eg_pgr_address(uuid, housenoandstreetname, mohalla, landmark, latitude, longitude, city, tenantid, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: services.*
+      jsonMaps:
+
+       - jsonPath: $.services.*.addressDetail.uuid
+       
+       - jsonPath: $.services.*.addressDetail.houseNoAndStreetName
+
+       - jsonPath: $.services.*.addressDetail.mohalla
+       
+       - jsonPath: $.services.*.addressDetail.landmark
+
+       - jsonPath: $.services.*.addressDetail.latitude
+
+       - jsonPath: $.services.*.addressDetail.longitude
+
+       - jsonPath: $.services.*.addressDetail.city
+
+       - jsonPath: $.services.*.addressDetail.tenantId
+
+       - jsonPath: $.services.*.addressDetail.auditDetails.createdBy
+
+       - jsonPath: $.services.*.addressDetail.auditDetails.createdTime
+
+       - jsonPath: $.services.*.addressDetail.auditDetails.lastModifiedBy
+
+       - jsonPath: $.services.*.addressDetail.auditDetails.lastModifiedTime
+       
+
+ - version: 1.0
+   name: Asset
+   description: Persists asset details in eg_asset table
+   fromTopic: update-pgr-service
+   isTransaction: true
+   queryMaps:
+
+    - query: UPDATE eg_pgr_service SET servicecode=?, description=?,lat=?, "long"=?, addressid=?, address=?, email=?, deviceid=?, firstname=?, lastname=?, phone=?, attributes=?,  status=?, source=?, expectedtime=?, feedback=?, rating=?, landmark=?, lastmodifiedby=?, lastmodifiedtime=? WHERE tenantid=? AND servicerequestid=?;
+
+      basePath: services.*
+      jsonMaps:
+
+       - jsonPath: $.services.*.serviceCode
+
+       - jsonPath: $.services.*.description
+
+       - jsonPath: $.services.*.lat
+
+       - jsonPath: $.services.*.long
+
+       - jsonPath: $.services.*.addressId
+       
+       - jsonPath: $.services.*.address
+
+       - jsonPath: $.services.*.email
+
+       - jsonPath: $.services.*.deviceId
+
+       - jsonPath: $.services.*.firstName
+
+       - jsonPath: $.services.*.lastName
+
+       - jsonPath: $.services.*.phone
+
+       - jsonPath: $.services.*.attributes
+         type: JSON
+         dbType: JSONB
+
+       - jsonPath: $.services.*.status
+
+       - jsonPath: $.services.*.source
+
+       - jsonPath: $.services.*.expectedTime
+
+       - jsonPath: $.services.*.feedback
+
+       - jsonPath: $.services.*.rating
+       
+       - jsonPath: $.services.*.landmark
+
+       - jsonPath: $.services.*.auditDetails.lastModifiedBy
+
+       - jsonPath: $.services.*.auditDetails.lastModifiedTime
+
+       - jsonPath: $.services.*.tenantId
+
+       - jsonPath: $.services.*.serviceRequestId
+
+
+    - query: INSERT INTO eg_pgr_action(uuid, by, "when", action, status, comments, media, assignee, isinternal, tenantid, businesskey) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: actionInfo.*
+      jsonMaps:
+
+       - jsonPath: $.actionInfo.*.uuid
+       
+       - jsonPath: $.actionInfo.*.by
+
+       - jsonPath: $.actionInfo.*.when
+       
+       - jsonPath: $.actionInfo.*.action
+
+       - jsonPath: $.actionInfo.*.status
+
+       - jsonPath: $.actionInfo.*.comments
+
+       - jsonPath: $.actionInfo.*.media
+         type: JSON
+         dbType: JSONB
+
+       - jsonPath: $.actionInfo.*.assignee
+
+       - jsonPath: $.actionInfo.*.isInternal
+
+       - jsonPath: $.actionInfo.*.tenantId
+
+       - jsonPath: $.actionInfo.*.businessKey

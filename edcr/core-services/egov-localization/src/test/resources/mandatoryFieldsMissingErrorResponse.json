@@ -1,0 +1,19 @@
+{
+  "errors": [
+    {
+      "code": "NotEmpty",
+      "field": "messages[1].code",
+      "message": "may not be empty"
+    },
+    {
+      "code": "NotEmpty",
+      "field": "messages[1].message",
+      "message": "may not be empty"
+    },
+    {
+      "code": "NotEmpty",
+      "field": "locale",
+      "message": "may not be empty"
+    }
+  ]
+}

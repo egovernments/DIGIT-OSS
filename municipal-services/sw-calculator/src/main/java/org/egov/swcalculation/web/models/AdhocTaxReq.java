@@ -45,8 +45,4 @@ public class AdhocTaxReq {
 	@JsonProperty("consumerCode")
 	private String consumerCode;
 
-	@SafeHtml
-	@JsonProperty("businessService")
-	private String businessService;
-
 }

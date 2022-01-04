@@ -30,7 +30,7 @@ public class TransformController {
 	@PostMapping("_transform")
 	public ResponseEntity<?> transformService(@RequestBody MessageRequest messageRequest) {	
 	
-		Object response = transformService.transform(messageRequest);
+		ServiceResponse response = transformService.transform(messageRequest);
 			
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

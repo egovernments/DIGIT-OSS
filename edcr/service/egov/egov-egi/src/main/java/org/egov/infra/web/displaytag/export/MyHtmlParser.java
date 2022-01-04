@@ -48,12 +48,16 @@
 
 package org.egov.infra.web.displaytag.export;
 
-import javax.swing.text.html.HTMLEditorKit;
-import javax.swing.text.html.parser.ParserDelegator;
 import java.io.IOException;
 import java.io.Reader;
 
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.parser.ParserDelegator;
+
+import org.apache.log4j.Logger;
+
 public class MyHtmlParser {
+	private static final Logger LOG = Logger.getLogger(MyHtmlParser.class);
 	Reader inReader;
 	String outText;
 	Boolean bRemoveSpaces = true;
@@ -83,7 +87,7 @@ public class MyHtmlParser {
 			parser.parse(r, new HTMLParseLister(), true);
 			r.close();
 		} catch (final IOException e) {
-
+			LOG.error(e.getMessage());
 		}
 		return getOutText();
 

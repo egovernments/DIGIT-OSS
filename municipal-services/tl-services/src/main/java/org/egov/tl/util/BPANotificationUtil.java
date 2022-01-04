@@ -7,7 +7,6 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.ServiceRequestRepository;
-import org.egov.tl.service.notification.TLNotificationService;
 import org.egov.tl.web.models.*;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
@@ -18,12 +17,9 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.egov.tl.util.BPAConstants.*;
-import static org.egov.tl.util.TLConstants.BILL_AMOUNT_JSONPATH;
-import static org.egov.tl.util.TLConstants.CHANNEL_NAME_EVENT;
-import static org.springframework.util.StringUtils.capitalize;
+import static org.egov.tl.util.TLConstants.NOTIFICATION_LOCALE;
 
 @Component
 @Slf4j
@@ -35,17 +31,10 @@ public class BPANotificationUtil {
 
     private Producer producer;
 
-    @Autowired
-    private NotificationUtil notificationUtil;
-
-    @Autowired
-    private TLNotificationService tlNotificationService;
-
-
     @Value("${egov.ui.app.host}")
     private String egovhost;
 
-    @Value("${egov.common.pay.bpareg.endpoint}")
+    @Value("${egov.common.pay.endpoint}")
     private String commonPayEndpoint;
 
     @Value("${egov.citizen.home.endpoint}")
@@ -57,7 +46,6 @@ public class BPANotificationUtil {
         this.config = config;
         this.serviceRequestRepository = serviceRequestRepository;
         this.producer = producer;
-
     }
 
     final String receiptNumberKey = "receiptNumber";
@@ -119,12 +107,7 @@ public class BPANotificationUtil {
 
             case ACTION_STATUS_PENDINGPAYMENT:
                 messageTemplate = getMessageTemplate(NOTIFICATION_PENDINGPAYMENT, localizationMessage);
-                message = getReplacedMessage(license, messageTemplate);
-                BigDecimal amountToBePaid =  notificationUtil.getAmountToBePaid(requestInfo, license);
-
-                if (message.contains("{AMOUNT_TO_BE_PAID}")) {
-                    message = message.replace("{AMOUNT_TO_BE_PAID}", amountToBePaid.toString());
-                }
+                message = getPendingPaymentMsg(license, messageTemplate, localizationMessage);
                 break;
 
             // payment notification handled in receipt consumer
@@ -133,125 +116,23 @@ public class BPANotificationUtil {
 
             case ACTION_STATUS_PENDINGAPPROVAL:
                 messageTemplate = getMessageTemplate(NOTIFICATION_PENDINGAPPROVAL, localizationMessage);
-                message = getReplacedMessage(license, messageTemplate);
+                message = getPendingApprovalMsg(license, messageTemplate);
                 break;
 
             case ACTION_STATUS_APPROVED:
                 messageTemplate = getMessageTemplate(NOTIFICATION_APPROVED, localizationMessage);
-                message = getReplacedMessage(license, messageTemplate);
+                message = getApprovedMsg(license, messageTemplate, localizationMessage);
                 break;
 
 
             case ACTION_STATUS_REJECTED:
                 messageTemplate = getMessageTemplate(NOTIFICATION_REJECTED, localizationMessage);
-                message = getReplacedMessage(license, messageTemplate);
+                message = getRejectedMsg(license, messageTemplate);
                 break;
-
-            case ACTION_STATUS_INITIATED:
-                messageTemplate = getMessageTemplate(BPAConstants.NOTIFICATION_PENDINGPAYMENT, localizationMessage);
-                message = getReplacedMessage(license, messageTemplate);
-                amountToBePaid =  notificationUtil.getAmountToBePaid(requestInfo, license);
-
-                if (message.contains("{AMOUNT_TO_BE_PAID}")) {
-                    message = message.replace("{AMOUNT_TO_BE_PAID}", amountToBePaid.toString());
-                }
-                break;
-
-            case ACTION_STATUS_INITIATED_PARTIAL:
-                messageTemplate = getMessageTemplate(BPAConstants.NOTIFICATION_INITIATED, localizationMessage);
-                message = getReplacedMessage(license, messageTemplate);
-                break;
-
         }
 
         return message;
     }
-
-    public String getEmailCustomizedMsg(RequestInfo requestInfo, TradeLicense license, String localizationMessage) {
-
-        String message = null, messageTemplate;
-        String ACTION_STATUS = license.getAction() + "_" + license.getStatus();
-
-        switch (ACTION_STATUS) {
-
-            case ACTION_STATUS_PENDINGPAYMENT:
-                messageTemplate = getMessageTemplate(NOTIFICATION_PENDINGPAYMENT_EMAIL, localizationMessage);
-                message = getReplacedEmailMessage(license, messageTemplate);
-                BigDecimal amountToBePaid = notificationUtil.getAmountToBePaid(requestInfo, license);
-
-                if (message.contains("{AMOUNT_TO_BE_PAID}")) {
-                    message = message.replace("{AMOUNT_TO_BE_PAID}", amountToBePaid.toString());
-                }
-                break;
-
-            // payment notification handled in receipt consumer
-//            case ACTION_STATUS_PENDINGDOCVERIFICATION:
-//                break;
-
-            case ACTION_STATUS_PENDINGAPPROVAL:
-                messageTemplate = getMessageTemplate(NOTIFICATION_PENDINGAPPROVAL_EMAIL, localizationMessage);
-                message = getReplacedEmailMessage(license, messageTemplate);
-                break;
-
-            case ACTION_STATUS_APPROVED:
-                messageTemplate = getMessageTemplate(NOTIFICATION_APPROVED_EMAIL, localizationMessage);
-                message = getReplacedEmailMessage(license, messageTemplate);
-                break;
-
-            case ACTION_STATUS_REJECTED:
-                messageTemplate = getMessageTemplate(NOTIFICATION_REJECTED_EMAIL, localizationMessage);
-                message = getReplacedEmailMessage(license, messageTemplate);
-                break;
-
-            case ACTION_STATUS_INITIATED:
-                messageTemplate = getMessageTemplate(NOTIFICATION_PENDINGPAYMENT_EMAIL, localizationMessage);
-                message = getReplacedEmailMessage(license, messageTemplate);
-                amountToBePaid =  notificationUtil.getAmountToBePaid(requestInfo, license);
-
-                if (message.contains("{AMOUNT_TO_BE_PAID}")) {
-                    message = message.replace("{AMOUNT_TO_BE_PAID}", amountToBePaid.toString());
-                }
-                break;
-
-            case ACTION_STATUS_INITIATED_PARTIAL:
-                messageTemplate = getMessageTemplate(NOTIFICATION_INITIATED_EMAIL, localizationMessage);
-                message = getReplacedEmailMessage(license, messageTemplate);
-                break;
-
-        }
-
-        return message;
-    }
-
-    public String getReplacedEmailMessage(TradeLicense license, String messageTemplate) {
-        String message = messageTemplate.replace("{APPLICATION_NUMBER}",license.getApplicationNumber());
-
-        if(license.getTenantId().split("\\.").length!=1)
-            message = message.replace("{ULB}", capitalize(license.getTenantId().split("\\.")[1]));
-        message = message.replace("{PORTAL_LINK}",egovhost+citizenHomeEndpoint);
-
-        if(license.getTradeLicenseDetail().getTradeUnits().get(0).getTradeType().split("\\.").length!=1)
-            message = message.replace("{TRADE_TYPE}",license.getTradeLicenseDetail().getTradeUnits().get(0).getTradeType().split("\\.")[0]);
-        else
-            message = message.replace("{TRADE_TYPE}",license.getTradeLicenseDetail().getTradeUnits().get(0).getTradeType());
-
-        //CCC - Designaion configurable according to ULB
-        // message = message.replace("CCC","");
-
-        for(OwnerInfo owner :license.getTradeLicenseDetail().getOwners())
-        {
-            if(owner.getIsPrimaryOwner()!=null && owner.getIsPrimaryOwner())
-            {
-                message = message.replace("{STAKEHOLDER_NAME}",owner.getName());
-            }
-        }
-
-        if(message.contains("{STAKEHOLDER_NAME}"))
-            message = message.replace("{STAKEHOLDER_NAME}",license.getTradeLicenseDetail().getOwners().get(0).getName());
-
-        return message;
-    }
-
 
     /**
      * Extracts message for the specific code
@@ -277,131 +158,55 @@ public class BPANotificationUtil {
      * Creates customized message for apply
      *
      * @param license tenantId of the tradeLicense
-     * @param messageTemplate Message from localization for apply
+     * @param message Message from localization for apply
      * @return customized message for apply
      */
-    public String getReplacedMessage(TradeLicense license, String messageTemplate) {
-        String message = messageTemplate.replace("{APPLICATION_NUMBER}",license.getApplicationNumber());
-
-        if(license.getTradeLicenseDetail().getTradeUnits().get(0).getTradeType().split("\\.").length!=1)
-            message = message.replace("{TRADE_TYPE}",license.getTradeLicenseDetail().getTradeUnits().get(0).getTradeType().split("\\.")[0]);
-        else
-            message = message.replace("{TRADE_TYPE}",license.getTradeLicenseDetail().getTradeUnits().get(0).getTradeType());
-
-        for(OwnerInfo owner :license.getTradeLicenseDetail().getOwners())
-        {
-            if(owner.getIsPrimaryOwner()!=null && owner.getIsPrimaryOwner())
-            {
-                message = message.replace("{STAKEHOLDER_NAME}",owner.getName());
-            }
-        }
-        if(message.contains("{STAKEHOLDER_NAME}"))
-            message = message.replace("{STAKEHOLDER_NAME}",license.getTradeLicenseDetail().getOwners().get(0).getName());
-
-        if(message.contains("{PORTAL_LINK}"))
-            message = message.replace("{PORTAL_LINK}",egovhost+citizenHomeEndpoint);
-
-
-        if(message.contains("{PAYMENT_LINK}"))
-        {
-            String payEndpoint = commonPayEndpoint.replace("$applicationNo", license.getApplicationNumber()).replace("$tenantId", license.getTenantId());
-            message = message.replace("{PAYMENT_LINK}", notificationUtil.getShortenedUrl(egovhost + payEndpoint));
-        }
+    private String getPendingPaymentMsg(TradeLicense license, String message, String localizationMessage) {
+        message = message.replace("<2>", license.getApplicationNumber());
+        String licensetype = license.getTradeLicenseDetail().getTradeUnits().get(0).getTradeType();
+        message = message.replace("<3>", getMessageTemplate(TRADE_LOCALISATION_PREFIX + licensetype.split("\\.")[0], localizationMessage));
+        message = message.replace("<4>", getMessageTemplate(TRADE_LOCALISATION_PREFIX + licensetype.replace(".", "_"), localizationMessage));
+        String payEndpoint = commonPayEndpoint.replace("$applicationNo", license.getApplicationNumber()).replace("$tenantId", license.getTenantId());
+        message = message.replace("<5>", egovhost + payEndpoint);
         return message;
     }
 
-    public List<EmailRequest> createEmailRequestForBPA(RequestInfo requestInfo,String message, Map<String, String> mobileNumberToEmailId, TradeLicense license,String receiptno) {
 
-        List<EmailRequest> emailRequest = new LinkedList<>();
-        for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
-            String customizedMsg = message.replace("{RECEIPT_DOWNLOAD_LINK}",getRecepitDownloadLink(license,entryset.getKey(),receiptno));
-            customizedMsg = customizedMsg.replace("{MOBILE_NUMBER}",entryset.getKey());
-            String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
-            String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
-            Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
-            EmailRequest email = new EmailRequest(requestInfo,emailobj);
-            emailRequest.add(email);
-        }
-        return emailRequest;
+    public String getPendingDocVerificationMsg(TradeLicense license, String message, String localizationMessage, String totalAmountPaid) {
+        message = message.replace("<2>", totalAmountPaid);
+        message = message.replace("<3>", egovhost + citizenHomeEndpoint);
+        return message;
     }
 
-    public List<SMSRequest> createSMSRequestForBPA(String message, Map<String, String> mobileNumberToOwnerName,TradeLicense license,String receiptno) {
-        List<SMSRequest> smsRequest = new LinkedList<>();
-        for (Map.Entry<String, String> entryset : mobileNumberToOwnerName.entrySet()) {
-            String customizedMsg = message.replace("{RECEIPT_DOWNLOAD_LINK}", getRecepitDownloadLink(license,entryset.getKey(),receiptno));
-            smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
-        }
-        return smsRequest;
+    /**
+     * Creates customized message for approved
+     *
+     * @param license tenantId of the tradeLicense
+     * @param message Message from localization for approved
+     * @return customized message for approved
+     */
+    private String getApprovedMsg(TradeLicense license, String message, String localizationMessage) {
+        message = message.replace("<2>", license.getApplicationNumber());
+        String licensetype = license.getTradeLicenseDetail().getTradeUnits().get(0).getTradeType();
+        message = message.replace("<3>", getMessageTemplate(TRADE_LOCALISATION_PREFIX + licensetype.split("\\.")[0], localizationMessage));
+        message = message.replace("<4>", getMessageTemplate(TRADE_LOCALISATION_PREFIX + licensetype.replace(".", "_"), localizationMessage));
+        return message;
     }
 
-    public String getRecepitDownloadLink(TradeLicense license, String mobileno,String receiptNumber) {
-
-        String consumerCode;
-        consumerCode = license.getApplicationNumber();
-        String link = config.getUiAppHost() + config.getReceiptDownloadLink();
-        link = link.replace("$consumerCode", consumerCode);
-        link = link.replace("$tenantId", license.getTenantId());
-        link = link.replace("$businessService", license.getBusinessService());
-        link = link.replace("$receiptNumber", receiptNumber);
-        link = link.replace("$mobile", mobileno);
-        link = notificationUtil.getShortenedUrl(link);
-//        log.info(link);
-        return link;
+    private String getRejectedMsg(TradeLicense license, String message) {
+        message = message.replace("<2>", license.getApplicationNumber());
+        return message;
     }
 
-    public EventRequest getEventsForBPA(TradeLicenseRequest request, boolean isStatusPaid, String message,String receiptno) {
-        if(message == null)
-            return null;
-
-        List<Event> events = new ArrayList<>();
-        TradeLicense license = request.getLicenses().get(0);
-
-        Map<String,String > mobileNumberToOwner = new HashMap<>();
-        license.getTradeLicenseDetail().getOwners().forEach(owner -> {
-            if(owner.getMobileNumber()!=null)
-                mobileNumberToOwner.put(owner.getMobileNumber(),owner.getName());
-        });
-
-        List<SMSRequest> smsRequests = createSMSRequestForBPA(message, mobileNumberToOwner,license,receiptno);
-        Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
-        Map<String, String> mapOfPhnoAndUUIDs = tlNotificationService.fetchUserUUIDs(mobileNumbers, request.getRequestInfo(), request.getLicenses().get(0).getTenantId());
-        if (CollectionUtils.isEmpty(mapOfPhnoAndUUIDs.keySet())) {
-            log.info("UUID search failed!");
-            return null;
-        }
-        Map<String,String > mobileNumberToMsg = smsRequests.stream().collect(Collectors.toMap(SMSRequest::getMobileNumber, SMSRequest::getMessage));
-        for(String mobile: mobileNumbers) {
-            if(null == mapOfPhnoAndUUIDs.get(mobile) || null == mobileNumberToMsg.get(mobile)) {
-                log.error("No UUID/SMS for mobile {} skipping event", mobile);
-                continue;
-            }
-            List<String> toUsers = new ArrayList<>();
-            toUsers.add(mapOfPhnoAndUUIDs.get(mobile));
-            Recepient recepient = Recepient.builder().toUsers(toUsers).toRoles(null).build();
-            List<String> payTriggerList = Arrays.asList(config.getPayTriggers().split("[,]"));
-            Action action = null;
-            if(payTriggerList.contains(license.getStatus()) && !isStatusPaid) {
-                List<ActionItem> items = new ArrayList<>();
-                String actionLink = config.getPayLink().replace("$mobile", mobile)
-                        .replace("$applicationNo", license.getApplicationNumber())
-                        .replace("$tenantId", license.getTenantId())
-                        .replace("$businessService", license.getBusinessService());;
-                actionLink = config.getUiAppHost() + actionLink;
-                ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
-                items.add(item);
-                action = Action.builder().actionUrls(items).build();
-            }
-
-            events.add(Event.builder().tenantId(license.getTenantId()).description(mobileNumberToMsg.get(mobile))
-                    .eventType(BPAConstants.USREVENTS_EVENT_TYPE).name(BPAConstants.USREVENTS_EVENT_NAME)
-                    .postedBy(BPAConstants.USREVENTS_EVENT_POSTEDBY).source(Source.WEBAPP).recepient(recepient)
-                    .eventDetails(null).actions(action).build());
-            }
-        if(!CollectionUtils.isEmpty(events)) {
-                return EventRequest.builder().requestInfo(request.getRequestInfo()).events(events).build();
-                }else {
-                return null;
-                }
-       }
-
+    /**
+     * Creates customized message for rejected
+     *
+     * @param license tenantId of the tradeLicense
+     * @param message Message from localization for rejected
+     * @return customized message for rejected
+     */
+    private String getPendingApprovalMsg(TradeLicense license, String message) {
+        message = message.replace("<2>", license.getApplicationNumber());
+        return message;
     }
+}

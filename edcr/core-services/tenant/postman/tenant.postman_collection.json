@@ -1,0 +1,51 @@
+{
+	"variables": [],
+	"info": {
+		"name": "tenant",
+		"_postman_id": "0eff21b3-8b25-7ef0-6877-74050358331b",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Tenant",
+			"request": {
+				"url": "http://localhost:8092/tenant/v1/tenant/_create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"requestInfo\": {},\n  \"tenant\": {\n    \"code\": \"AP.KAKINADA\",\n    \"description\": \"description\",\n    \"logoId\": \"logoId\",\n    \"imageId\": \"imageId\",\n    \"domainUrl\": \"domainUrl\",\n    \"type\": \"CITY\",\n    \"city\": {\n      \"name\": \"name\",\n      \"localName\": \"localname\",\n      \"districtCode\": \"ABC\",\n      \"districtName\": \"districtname\",\n      \"regionName\": \"regionname\",\n      \"longitude\": 35.456,\n      \"latitude\": 75.443\n    }\n  }\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve tenants using code",
+			"request": {
+				"url": "http://localhost:8092/tenant/v1/tenant/_search?code=AP.KAKINADA",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"requestInfo\": {}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

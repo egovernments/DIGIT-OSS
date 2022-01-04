@@ -1,0 +1,19 @@
+UploadDefinitions: 
+ moduleName: swm
+ summary: solid waste managment module
+ version: 1.0.0
+ definitions:
+ - defName: create vendor-create case
+   apiRequest: {"RequestInfo":{"action": "create","did": "","msgId": null,"authToken": "1d837b4c-573a-49e4-be42-3d8879d7cfcc","apiId": null,"ver": null,"ts": "","key": null,"userInfo":{"id":1}},"vendors":[{"tenantId":"default","name":"Vendor Name1","registrationNo":"registrationNo3", "details":"detailsasdfghjkl","servicedLocations" :[{"code":"99"},{"code":"99"}],"supplier" :{"email":"contractor email","tinNumber":"contractor tinNumber","gst":"contractor gst 4","mobileNo":"0000000000","contactNo":"1111111111","faxNumber":"2222222222","address":"contractor address","registrationNo":"contractor registrationNo"},"agreementDocument":{"fileStoreId":"fileStoreId"},"servicesOffered":[{"code":"Collection"},{"code": "Segregation"}]}]} 
+   
+   headerJsonPathMap: {"XYZ":["$.vendors.*.name"],"XYZ1":["$.vendors.*.registrationNo"],"XYZ2":["$.vendors.*.details"],"XYZ3":["$.vendors.*.servicedLocations.*.code"],"XYZ4":["$.vendors.*.supplier.email"],"XYZ5":["$.vendors.*.supplier.tinNumber"],"XYZ6":["$.vendors.*.gst"],"XYZ7":["$.vendors.*.supplier.mobileNo"],"XYZ8":["$.vendors.*.supplier.contactNo"],"XYZ9":["$.vendors.*.supplier.faxNumber"],"XYZ1a":["$.vendors.*.supplier.address"],"XYZ2a":["$.vendors.*.supplier.registrationNo"],"XYZ3a":["$.vendors.*.agreementDocument"],"XYZ4a":["$.vendors.*.servicesOffered.*.code"],}
+
+   isBulkApi: true
+   arrayPath: $.vendors.*
+   isParentChild: true
+   uniqueParentKeys: ["Case No"]
+   tenantIdPaths: ["$.vendors.*.tenantId"]
+   uniqueKeysForInnerObject: []
+   uri: /lcms-services/legalcase/case/_dataentry
+   additionalResFields:
+   templateFileName: swm_vendorCreate.xls

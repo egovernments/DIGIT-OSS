@@ -1,0 +1,11 @@
+{
+  "responseInfo": {
+  },
+  "user": [
+    {
+      "name": "foo",
+      "userName": "userName",
+      "fatherOrHusbandName": "name of relative"
+    }
+  ]
+}

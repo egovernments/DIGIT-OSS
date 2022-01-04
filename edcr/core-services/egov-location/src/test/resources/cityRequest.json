@@ -1,0 +1,14 @@
+{
+	"RequestInfo": {},
+	"City":
+	{	"id" :"1",
+		"name":"Kurnool",
+		"code":"KC",
+		"districtCode":"KC01",
+		"districtName":"Kurnool District",
+		"grade":"Grade A",
+		"domainURL":"Localhost",
+		"regionName":"Kurnool Region",
+		"tenantId":"ap.public"
+	}
+}

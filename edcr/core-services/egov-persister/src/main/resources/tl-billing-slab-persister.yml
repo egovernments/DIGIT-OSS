@@ -1,0 +1,80 @@
+serviceMaps:
+ serviceName: TL Calculator
+ mappings:
+ - version: 1.0
+   name: tl-calculator
+   description: Persists the billing slabs of tl into db
+   fromTopic: save-tl-billingslab
+   isTransaction: true
+   queryMaps:
+    - query: INSERT INTO eg_tl_billingSlab(id, tenantid, licensetype, structuretype, tradetype, accessorycategory, type, uom, fromUom, toUom, rate, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, cast(? as double precision), cast(? as double precision), ?, ?, ?, ?, ?);
+      basePath: billingSlab.*
+      jsonMaps:
+
+       - jsonPath: $.billingSlab.*.id
+
+       - jsonPath: $.billingSlab.*.tenantId
+
+       - jsonPath: $.billingSlab.*.licenseType
+
+       - jsonPath: $.billingSlab.*.structureType
+
+       - jsonPath: $.billingSlab.*.tradeType
+
+       - jsonPath: $.billingSlab.*.accessoryCategory
+
+       - jsonPath: $.billingSlab.*.type
+
+       - jsonPath: $.billingSlab.*.uom
+
+       - jsonPath: $.billingSlab.*.fromUom
+
+       - jsonPath: $.billingSlab.*.toUom
+
+       - jsonPath: $.billingSlab.*.rate
+              
+       - jsonPath: $.billingSlab.*.auditDetails.createdBy
+
+       - jsonPath: $.billingSlab.*.auditDetails.createdTime
+
+       - jsonPath: $.billingSlab.*.auditDetails.lastModifiedBy
+
+       - jsonPath: $.billingSlab.*.auditDetails.lastModifiedTime
+       
+       
+ - version: 1.0
+   name: tl-calculator
+   description: Updates the billing slabs of tl into db
+   fromTopic: update-tl-billingslab
+   isTransaction: true
+   queryMaps:
+    - query: UPDATE eg_tl_billingSlab SET licensetype=?, structuretype=?, tradetype=?, accessorycategory=?, type=?, uom=?, fromUom=?, toUom=?, rate=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=? AND tenantid=?;
+
+      basePath: billingSlab.*
+      jsonMaps:
+
+       - jsonPath: $.billingSlab.*.licenseType
+
+       - jsonPath: $.billingSlab.*.structureType
+
+       - jsonPath: $.billingSlab.*.tradeType
+
+       - jsonPath: $.billingSlab.*.accessoryCategory
+
+       - jsonPath: $.billingSlab.*.type
+
+       - jsonPath: $.billingSlab.*.uom
+
+       - jsonPath: $.billingSlab.*.fromUom
+
+       - jsonPath: $.billingSlab.*.toUom
+
+       - jsonPath: $.billingSlab.*.rate
+
+       - jsonPath: $.billingSlab.*.auditDetails.lastModifiedBy
+
+       - jsonPath: $.billingSlab.*.auditDetails.lastModifiedTime
+       
+       - jsonPath: $.billingSlab.*.id
+
+       - jsonPath: $.billingSlab.*.tenantId

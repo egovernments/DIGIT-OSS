@@ -1,0 +1,21 @@
+{
+  "ResponseInfo": {
+    "apiId": null,
+    "ver": null,
+    "ts": null,
+    "resMsgId": null,
+    "msgId": null
+  },
+  "BusinessServiceDetails": [
+    {
+      "id": "1",
+      "tenantId": "ap.kurnool",
+      "businessService": "Test Business Service",
+      "collectionModesNotAllowed": [],
+      "partPaymentAllowed": false,
+      "callBackForApportioning": false,
+      "callBackApportionURL": null,
+      "auditDetails": null
+    }
+  ]
+}

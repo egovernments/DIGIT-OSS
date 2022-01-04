@@ -1,0 +1,40 @@
+{
+    "ResponseInfo": {
+        "apiId": "emp",
+        "ver": null,
+        "ts": null,
+        "resMsgId": null,
+        "msgId": null,
+        "status": "201 CREATED"
+    },
+    "BoundaryType": [
+        {
+            "id": "120",
+            "name": "Test1234",
+            "code": "BNDRYTYPE",
+            "hierarchyType": {
+                "id": 3,
+                "name": "ADMINISTRATION",
+                "code": "ADMIN",
+                "localName": null,
+                "tenantId": "default",
+                "createdBy": 1,
+                "createdDate": 1262304000000,
+                "lastModifiedBy": 1,
+                "lastModifiedDate": 1420070400000,
+                "version": 0,
+                "new": false
+            },
+            "parent": null,
+            "hierarchy": 12,
+            "localName": null,
+            "parentName": null,
+            "childBoundaryTypes": null,
+            "tenantId": "default",
+            "createdBy": 1,
+            "createdDate": 1508284800000,
+            "lastModifiedBy": 1,
+            "lastModifiedDate": 1508284800000
+        }
+    ]
+}

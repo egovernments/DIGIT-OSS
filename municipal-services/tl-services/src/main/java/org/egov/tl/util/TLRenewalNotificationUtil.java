@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static org.egov.tl.util.TLConstants.*;
-import static org.springframework.util.StringUtils.capitalize;
 
 @Component
 @Slf4j
@@ -123,92 +122,6 @@ public class TLRenewalNotificationUtil {
         return message;
     }
 
-    public String getEmailCustomizedMsg(RequestInfo requestInfo, TradeLicense license, String localizationMessage) {
-        String message = null, messageTemplate;
-        String ACTION_STATUS = license.getAction() + "_" + license.getStatus();
-        switch (ACTION_STATUS) {
-
-            case ACTION_STATUS_INITIATED:
-                messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_INITIATED + "." + "email", localizationMessage);
-                message = getReplacedMessage(license, messageTemplate);
-                break;
-
-            case ACTION_STATUS_APPLIED:
-                messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_APPLIED + "." + "email", localizationMessage);
-                message = getReplacedMessage(license, messageTemplate);
-                break;
-
-            case ACTION_STATUS_FIELDINSPECTION:
-                messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_FIELD_INSPECTION + "." + "email", localizationMessage);
-                message = getReplacedMessage(license, messageTemplate);
-                break;
-
-            case ACTION_STATUS_PENDINGAPPROVAL:
-                messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_PENDINGAPPROVAL + "." + "email", localizationMessage);
-                message = getReplacedMessage(license, messageTemplate);
-                break;
-
-            case ACTION_STATUS_REJECTED:
-                messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_REJECTED + "." + "email", localizationMessage);
-                message = getReplacedMessage(license, messageTemplate);
-                break;
-
-            case ACTION_STATUS_RENEWAL_APPROVED:
-                BigDecimal amountToBePaid = getAmountToBePaid(requestInfo, license);
-                messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_APPROVED + "." + "email", localizationMessage);
-                message = getReplacedMessage(license, messageTemplate);
-                if (message.contains("{AMOUNT_TO_BE_PAID}")) {
-                    message = message.replace("{AMOUNT_TO_BE_PAID}", amountToBePaid.toString());
-                }
-                break;
-
-            case ACTION_STATUS_RENEWAL_INITIATE_APPROVED:
-                BigDecimal amountToBePaid2 = getAmountToBePaid(requestInfo, license);
-                messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_APPROVED + "." + "email", localizationMessage);
-                message = getReplacedMessage(license, messageTemplate);
-                if (message.contains("{AMOUNT_TO_BE_PAID}")) {
-                    message = message.replace("{AMOUNT_TO_BE_PAID}", amountToBePaid2.toString());
-                }
-                break;
-
-            /*
-             * case ACTION_STATUS_PAID : messageTemplate =
-             * getMessageTemplate(TLConstants.NOTIFICATION_PAID,localizationMessage);
-             * message = getApprovalPendingMsg(license,messageTemplate); break;
-             */
-
-            case ACTION_SENDBACKTOCITIZEN_FIELDINSPECTION:
-                messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_SENDBACK_CITIZEN + "." + "email", localizationMessage);
-                message = getReplacedMessage(license, messageTemplate);
-                break;
-
-            case ACTION_FORWARD_CITIZENACTIONREQUIRED:
-                messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_FORWARD_CITIZEN + "." + "email", localizationMessage);
-                message = getReplacedMessage(license, messageTemplate);
-                break;
-
-            case ACTION_CANCEL_CANCELLED:
-                messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_CANCELLED + "." + "email", localizationMessage);
-                message = getReplacedMessage(license, messageTemplate);
-                break;
-        }
-
-        return message;
-    }
-
-    private String getReplacedMessage(TradeLicense license, String messageTemplate) {
-        String message = messageTemplate.replace("YYYY", license.getBusinessService());
-        message = message.replace("ZZZZ", license.getApplicationNumber());
-
-        if (message.contains("RRRR")) {
-            message = message.replace("RRRR", license.getLicenseNumber());
-        }
-        message = message.replace("XYZ", capitalize(license.getTenantId().split("\\.")[1]));
-        message = message.replace("{PORTAL_LINK}",config.getUiAppHost());
-        //CCC - Designaion configurable according to ULB
-        // message = message.replace("CCC","");
-        return message;
-    }
     /**
      * Extracts message for the specific code
      *
@@ -507,7 +420,7 @@ public class TLRenewalNotificationUtil {
                 log.info("Messages from localization couldn't be fetched!");
             for (SMSRequest smsRequest : smsRequestList) {
                 producer.push(config.getSmsNotifTopic(), smsRequest);
-                log.info("SMS Sent! MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
+                log.info("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
             }
         }
     }

@@ -21,56 +21,55 @@ import org.hibernate.validator.constraints.SafeHtml;
 @Builder
 public class NocSearchCriteria {
 
-    @NotNull
-    @SafeHtml
-    @JsonProperty("tenantId")
-    private String tenantId;
+	    @NotNull
+		@SafeHtml
+	    @JsonProperty("tenantId")
+	    private String tenantId;
 
-    @JsonProperty("ids")
-    private List<String> ids;
+	    @JsonProperty("ids")
+	    private List<String> ids;
 
-    @SafeHtml
-    @JsonProperty("applicationNo")
-    private String applicationNo;
+		@SafeHtml
+	    @JsonProperty("applicationNo")
+	    private String applicationNo;
 
-    @SafeHtml
-    @JsonProperty("nocNo")
-    private String nocNo;
+		@SafeHtml
+		@JsonProperty("nocNo")
+	    private String nocNo;
 
-    @SafeHtml
-    @JsonProperty("source")
-    private String source;
+		@SafeHtml
+		@JsonProperty("source")
+	    private String source;
 
-    @SafeHtml
-    @JsonProperty("nocType")
-    private String nocType;
+		@SafeHtml
+		@JsonProperty("nocType")
+	    private String nocType;
 
-    @SafeHtml
-    @JsonProperty("sourceRefId")
-    private String sourceRefId;
+		@SafeHtml
+		@JsonProperty("sourceRefId")
+	    private String sourceRefId;
+	    
+	    @JsonProperty("offset")
+	    private Integer offset;
 
-    @JsonProperty("offset")
-    private Integer offset;
+	    @JsonProperty("limit")
+	    private Integer limit; 
+	    
+	    @JsonIgnore
+	    private List<String> ownerIds;
 
-    @JsonProperty("limit")
-    private Integer limit;
+	    @JsonProperty("accountId")
+	    private List<String> accountId; 
 
-    @JsonIgnore
-    private List<String> ownerIds;
+	    public boolean isEmpty() {
+	        return (this.tenantId == null && this.ids == null && this.applicationNo == null
+	                && this.nocNo == null && this.accountId == null	                
+	        );
+	    }
 
-    @JsonProperty("accountId")
-    private List<String> accountId;
-    
-    @JsonProperty("status")
-    private List<String> status;
-
-    public boolean isEmpty() {
-        return (this.tenantId == null && this.ids == null && this.applicationNo == null
-                && this.nocNo == null && this.accountId == null && this.status == null);
-    }
-
-    public boolean tenantIdOnly() {
-        return (this.tenantId == null && this.ids == null && this.applicationNo == null
-                && this.nocNo == null && this.accountId == null && this.status == null);
-    }
+	    public boolean tenantIdOnly() {
+	        return (this.tenantId == null && this.ids == null && this.applicationNo == null
+	                && this.nocNo == null && this.accountId == null  
+	        );
+	    }
 }

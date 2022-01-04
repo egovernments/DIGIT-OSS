@@ -79,7 +79,7 @@ public class DeviceListActivity extends Activity {
                 setResult(Activity.RESULT_OK, mBackIntent);
                 finish();
             } catch (Exception ex) {
-
+                Log.e("Execption occured: ",ex);
             }
         }
     };

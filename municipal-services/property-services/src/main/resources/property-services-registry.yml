@@ -537,8 +537,6 @@ serviceMaps:
 
       - jsonPath: $.Property.units.*.id
 
-    
-
 
   - version: 1.0
     description: Update documents in  EG_PT_PROPERTY ltable

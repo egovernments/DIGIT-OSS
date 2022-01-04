@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Balcony;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BalconyExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(BalconyExtract.class);
 
     @Override
     public PlanDetail validate(PlanDetail planDetail) {
@@ -30,8 +28,8 @@ public class BalconyExtract extends FeatureExtract {
         for (Block block : planDetail.getBlocks())
             for (Floor floor : block.getBuilding().getFloors()) {
                 List<Balcony> balconies = new ArrayList<>();
-                String balconylayerPattern = "BLK_" + block.getNumber() + "_FLR_" + floor.getNumber() + "_BALCONY_"
-                        + "\\d{1,2}";
+                String balconylayerPattern = "BLK_" + block.getNumber() + "_FLR_" + floor.getNumber() + "_BALCONY"
+                        + "_+\\d";
 
                 List<String> balconyLayers = Util.getLayerNamesLike(planDetail.getDoc(), balconylayerPattern);
 

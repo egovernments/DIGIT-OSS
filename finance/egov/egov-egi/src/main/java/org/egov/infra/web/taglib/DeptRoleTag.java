@@ -48,6 +48,8 @@
 
 package org.egov.infra.web.taglib;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author Manas
  */
@@ -68,6 +70,8 @@ public class DeptRoleTag extends BodyTagSupport {
 	/**
 	 * 
 	 */
+    private static final Logger LOGGER = Logger.getLogger(DeptRoleTag.class);
+
 	private static final long serialVersionUID = 1L;
 	private List name = new ArrayList();
 	private List labels = new ArrayList();
@@ -174,7 +178,7 @@ public class DeptRoleTag extends BodyTagSupport {
 			out.print(deptRoleSelect);
 			out.print(this.getScript(deptRoleStr));
 		} catch (final Exception ioe) {
-			
+			LOGGER.error("Exception");
 
 		}
 

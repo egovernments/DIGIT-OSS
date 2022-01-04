@@ -476,8 +476,8 @@ public class BudgetReAppropriationModifyAction extends BaseFormAction {
                         "from BudgetReAppropriation where reAppropriationMisc.id=?", misc.getId());
                 actionName = actionName.replace(",", "").replace(" ", "").trim();
                 setEnablingAmounts(misc);
-                if (actionName != null && "forward".equalsIgnoreCase(actionName.trim()) || actionName.contains("approv")
-                        || actionName.contains("eject") || actionName.contains("ancel")) {  // if mode is approve move the object
+                if (actionName != null && ("forward".equalsIgnoreCase(actionName.trim()) || actionName.contains("approv")
+                        || actionName.contains("eject") || actionName.contains("ancel"))) {  // if mode is approve move the object
                     for (final BudgetReAppropriation detail : reApps)
                         setAmounts(detail, getReAppById(detail.getId(), savedBudgetReAppropriationList));
                     misc = approve(misc, reApps);
@@ -489,7 +489,7 @@ public class BudgetReAppropriationModifyAction extends BaseFormAction {
                     addActionMessage(getText("budget.reapp.saved"));
                 }
             }
-            if ("END".equalsIgnoreCase(misc.getCurrentState().getValue()))
+            if ("END".equalsIgnoreCase(misc!=null ? misc.getCurrentState().getValue() : ""))
                 for (final BudgetReAppropriation entry : misc.getBudgetReAppropriations())
                     budgetReAppropriationService.updatePlanningBudget(entry);
         }

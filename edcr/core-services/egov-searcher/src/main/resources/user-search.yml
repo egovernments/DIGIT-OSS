@@ -1,0 +1,79 @@
+SearchDefinitions:
+ moduleName: user
+ summary: User Services Report
+ version: 1.0.0
+ definitions:
+ - name: usersearch
+   query: 
+    baseQuery: select row_to_json(userreq) from (select id,salutation,locale,username,password,tenantid,name,gender,mobilenumber,emailid,aadhaarnumber,active,type,(select array_to_json(array_agg(row_to_json(roles))) from 
+               (select id,name,code,description from eg_role,eg_userrole where code= eg_userrole.rolecode and eg_user.id = eg_userrole.userid) roles) as roles,(select row_to_json(userdetails) 
+               from (select firstname,middlename,lastname,dob,altcontactnumber,fathername,husbandname,bloodgroup,pan,photo,(select array_to_json(array_agg(row_to_json(addresses))) 
+               from (select type as addressType,address,city,pincode from eg_user_address where eg_user_address.userid=eg_user.id and eg_user_address.tenantid = eg_user.tenantid) addresses) as addresses 
+               from eg_user_details where eg_user_details.userid = eg_user.id) userdetails) as userDetails from eg_user $where) userreq    
+    groupBy:    
+    orderBy: id,DESC
+   searchParams:
+    condition: AND
+    params:
+    - name: tenantid
+      isMandatory: true
+      jsonPath: $.searchCriteria.tenantId
+    - name: id
+      isMandatory: false
+      jsonPath: $.searchCriteria.id
+    - name: userName
+      isMandatory: false
+      jsonPath: $.searchCriteria.userName
+    - name: active
+      isMandatory: false
+      jsonPath: $.searchCriteria.active  
+    - name: name
+      isMandatory: false
+      jsonPath: $.searchCriteria.name
+    - name: mobileNumber
+      isMandatory: false
+      jsonPath: $.searchCriteria.mobileNumber
+    - name: aadhaarnumber
+      isMandatory: false
+      jsonPath: $.searchCriteria.aadhaarNumber      
+    - name: pan
+      isMandatory: false
+      jsonPath: $.searchCriteria.pan
+    - name: emailid
+      isMandatory: false
+      jsonPath: $.searchCriteria.emailId   
+    - name: type
+      isMandatory: false
+      jsonPath: $.searchCriteria.type
+    - name: lastmodifiedtime
+      isMandatory: false
+      jsonPath: $.searchCriteria.lastChangedSince
+   output:
+    jsonFormat: {"ResponseInfo": {},"users": []}
+    outJsonPath: $.users
+    responseInfoPath: $.ResponseInfo
+    
+ - name: userotpsearch
+   query: 
+    baseQuery: select row_to_json(otpreq) 
+               from (select userid,tenantid,otpnumber,otpidentity,createdtime,lastmodifiedtime from eg_userotp $where) otpreq     
+    groupBy:    
+    orderBy: userid,DESC
+   searchParams:
+    condition: AND
+    params:
+    - name: userid
+      isMandatory: true
+      jsonPath: $.searchCriteria.userId
+    - name: otpnumber
+      isMandatory: true
+      jsonPath: $.searchCriteria.otp
+   output:
+     jsonFormat: {"otps": []}
+     outJsonPath: $.otps
+     responseInfoPath: $.ResponseInfo
+       
+
+  
+
+

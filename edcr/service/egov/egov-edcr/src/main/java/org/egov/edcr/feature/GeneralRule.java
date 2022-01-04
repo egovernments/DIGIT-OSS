@@ -6,10 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.egov.common.entity.edcr.Plan;
-import org.egov.common.entity.edcr.ScrutinyDetail;
 import org.egov.infra.utils.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
@@ -17,11 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class GeneralRule extends FeatureProcess {
     public static final String MSG_ERROR_MANDATORY = "msg.error.mandatory.object.not.defined";
-    @Autowired
-    @Qualifier("parentMessageSource")
-    protected MessageSource edcrMessageSource;
-    // Dont use class variable like this .
-    protected ScrutinyDetail scrutinyDetail = new ScrutinyDetail();
+    
+ 
     public static final String STATUS = "Status";
 
     public static final String PROVIDED = "Provided";
@@ -34,6 +28,7 @@ public class GeneralRule extends FeatureProcess {
 
     public static final String RULE_NO = "Byelaw";
 
+    @Override
     public String getLocaleMessage(String code, String... args) {
         return edcrMessageSource.getMessage(code, args, LocaleContextHolder.getLocale());
 
@@ -61,23 +56,23 @@ public class GeneralRule extends FeatureProcess {
 
     }
 
+    @Override
     public MessageSource getEdcrMessageSource() {
         return edcrMessageSource;
     }
 
+    @Override
     public void setEdcrMessageSource(MessageSource edcrMessageSource) {
         this.edcrMessageSource = edcrMessageSource;
     }
 
     @Override
     public Plan validate(Plan pl) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Plan process(Plan pl) {
-        // TODO Auto-generated method stub
         return null;
     }
 

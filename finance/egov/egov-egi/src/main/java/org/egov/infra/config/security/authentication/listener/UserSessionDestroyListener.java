@@ -48,6 +48,7 @@
 
 package org.egov.infra.config.security.authentication.listener;
 
+import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.service.UserService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.security.audit.entity.LoginAudit;
@@ -71,6 +72,8 @@ import static org.egov.infra.utils.ApplicationConstant.USERID_KEY;
 
 public class UserSessionDestroyListener implements HttpSessionListener {
 
+	private static final Logger LOGGER = Logger.getLogger(UserSessionDestroyListener.class);
+			
     @Autowired
     private LoginAuditService loginAuditService;
 
@@ -95,7 +98,7 @@ public class UserSessionDestroyListener implements HttpSessionListener {
     @Override
     public void sessionDestroyed(HttpSessionEvent event) {
         String sessionId = event.getSession().getId();
-        System.out.println("***********sessionDestroyed Event****** "+sessionId);
+        LOGGER.info("***********sessionDestroyed Event****** "+sessionId);
         if (redisTemplate.hasKey(sessionId)) {
             Object auth_token = redisTemplate.opsForHash().get(sessionId, "auth_token");
             if (auth_token != null) {

@@ -1,0 +1,2 @@
+DELETE FROM eg_user;
+ALTER SEQUENCE seq_eg_user RESTART WITH 1;

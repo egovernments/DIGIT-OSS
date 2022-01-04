@@ -1,0 +1,16 @@
+{
+    "responseInfo": null,
+    "error": {
+        "code": 400,
+        "message": "BoundaryRequest is invalid",
+        "description": null,
+        "errorFields": [
+            {
+                "code": "boundary.0028",
+                "message": "Code is required",
+                "field": "code"
+            }
+        ],
+        "fields": null
+    }
+}

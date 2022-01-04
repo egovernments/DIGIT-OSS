@@ -130,7 +130,6 @@ public class FSMUtil {
 		fsmMasterDtls.add(MasterDetail.builder().name(FSMConstants.MDMS_CONFIG).filter(activeFilter).build());
 		fsmMasterDtls.add(MasterDetail.builder().name(FSMConstants.MDMS_SLUM_NAME).filter(activeFilter).build());
 		fsmMasterDtls.add(MasterDetail.builder().name(FSMConstants.MDMS_FSTP_PLANT_INFO).filter(activeFilter).build());
-		fsmMasterDtls.add(MasterDetail.builder().name(FSMConstants.MDMS_APPLICATION_TYPE).filter(activeFilter).build());
 		
 		ModuleDetail fsmMasterMDtl = ModuleDetail.builder().masterDetails(fsmMasterDtls)
 				.moduleName(FSMConstants.FSM_MODULE_CODE).build();
@@ -186,7 +185,7 @@ public class FSMUtil {
         if(CollectionUtils.isEmpty(userRoles))
             return false;
 
-       flag =userRoles.contains(role);
+       userRoles.contains(role);
         return flag;
     }
     
@@ -210,32 +209,4 @@ public class FSMUtil {
         });
         return tenantIdToUserRoles;
     }
-    
-    /***
-     * This method will  return specfic master data of fsm module based on input 
-     * @param mastername
-     * @param tenantId
-     * @param requestInfo
-     * @return object
-     */
-	public Object getMasterData(String mastername, String tenantId, RequestInfo requestInfo) {
-		MasterDetail masterDetail = MasterDetail.builder().name(mastername).build();
-		List<MasterDetail> masterDetailList = new ArrayList<MasterDetail>();
-		masterDetailList.add(masterDetail);
-		ModuleDetail moduleDetail = ModuleDetail.builder().masterDetails(masterDetailList)
-				.moduleName(FSMConstants.FSM_MODULE_CODE).build();
-
-		List<ModuleDetail> moduleDetails = new LinkedList<>();
-		moduleDetails.add(moduleDetail);
-
-		MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(moduleDetails).tenantId(tenantId).build();
-
-		MdmsCriteriaReq mdmsCriteriaReq = MdmsCriteriaReq.builder().mdmsCriteria(mdmsCriteria).requestInfo(requestInfo)
-				.build();
-		Object result = serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
-		
-		
-		return result;
-
-	}
 }

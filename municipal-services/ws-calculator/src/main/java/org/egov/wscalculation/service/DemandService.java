@@ -44,9 +44,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
 
-import static org.egov.wscalculation.constants.WSCalculationConstant.ONE_TIME_FEE_SERVICE_FIELD;
-import static org.egov.wscalculation.constants.WSCalculationConstant.SERVICE_FIELD_VALUE_WS;
-
 @Service
 @Slf4j
 public class DemandService {
@@ -197,7 +194,7 @@ public class DemandService {
 			BigDecimal minimumPayableAmount = isForConnectionNO ? configs.getMinimumPayableAmount()
 					: calculation.getTotalAmount();
 			String businessService = isForConnectionNO ? configs.getBusinessService()
-					: ONE_TIME_FEE_SERVICE_FIELD;
+					: WSCalculationConstant.ONE_TIME_FEE_SERVICE_FIELD;
 
 			addRoundOffTaxHead(calculation.getTenantId(), demandDetails);
 
@@ -381,10 +378,10 @@ public class DemandService {
 	 * @return List of Demand
 	 */
 	private List<Demand> searchDemandBasedOnConsumerCode(String tenantId, String consumerCode,
-			RequestInfo requestInfo, String businessService) {
+			RequestInfo requestInfo) {
 		String uri = getDemandSearchURLForDemandId().toString();
 		uri = uri.replace("{1}", tenantId);
-		uri = uri.replace("{2}", businessService);
+		uri = uri.replace("{2}", configs.getBusinessService());
 		uri = uri.replace("{3}", consumerCode);
 		Object result = serviceRequestRepository.fetchResult(new StringBuilder(uri),
 				RequestInfoWrapper.builder().requestInfo(requestInfo).build());
@@ -402,7 +399,7 @@ public class DemandService {
 	 */
 	public StringBuilder getDemandSearchURL(String tenantId, Set<String> consumerCodes, Long taxPeriodFrom, Long taxPeriodTo) {
 		StringBuilder url = new StringBuilder(configs.getBillingServiceHost());
-		String businessService = taxPeriodFrom == null  ? ONE_TIME_FEE_SERVICE_FIELD : configs.getBusinessService();
+		String businessService = taxPeriodFrom == null  ? WSCalculationConstant.ONE_TIME_FEE_SERVICE_FIELD : configs.getBusinessService();
 		url.append(configs.getDemandSearchEndPoint());
 		url.append("?");
 		url.append("tenantId=");
@@ -463,7 +460,7 @@ public class DemandService {
 
 		String tenantId = getBillCriteria.getTenantId();
 
-		List<TaxPeriod> taxPeriods = mstrDataService.getTaxPeriodList(requestInfoWrapper.getRequestInfo(), tenantId, SERVICE_FIELD_VALUE_WS);
+		List<TaxPeriod> taxPeriods = mstrDataService.getTaxPeriodList(requestInfoWrapper.getRequestInfo(), tenantId, WSCalculationConstant.SERVICE_FIELD_VALUE_WS);
 		
 		consumerCodeToDemandMap.forEach((id, demand) ->{
 			if (demand.getStatus() != null
@@ -785,12 +782,12 @@ public class DemandService {
 	 * @param calculations - List of Calculation to update the Demand
 	 * @return List of calculation
 	 */
-	public List<Calculation> updateDemandForAdhocTax(RequestInfo requestInfo, List<Calculation> calculations, String businessService) {
+	public List<Calculation> updateDemandForAdhocTax(RequestInfo requestInfo, List<Calculation> calculations) {
 		List<Demand> demands = new LinkedList<>();
 		for (Calculation calculation : calculations) {
 			String consumerCode = calculation.getConnectionNo();
 			List<Demand> searchResult = searchDemandBasedOnConsumerCode(calculation.getTenantId(), consumerCode,
-					requestInfo, businessService);
+					requestInfo);
 			if (CollectionUtils.isEmpty(searchResult))
 				throw new CustomException("INVALID_DEMAND_UPDATE",
 						"No demand exists for Number: " + consumerCode);

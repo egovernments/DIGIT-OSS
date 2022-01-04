@@ -1,10 +1,6 @@
 
 All notable changes to this module will be documented in this file.
 
-## 1.1.7 - 2021-09-24
-
-- No workflow option enabled for update and mutation
-
 ## 1.1.6 - 2021-07-23
 
 - Added fuzzy search functionality

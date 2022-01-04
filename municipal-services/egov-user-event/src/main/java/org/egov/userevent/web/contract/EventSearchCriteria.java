@@ -48,8 +48,7 @@ public class EventSearchCriteria {
 	private Integer limit;
 	
 	private Boolean isCitizenSearch;
-
-	private Boolean isEventsCountCall = false;
+	
 	
 	public Boolean isEmpty(EventSearchCriteria eventSearchCriteria) {
 		if(CollectionUtils.isEmpty(eventSearchCriteria.getIds()) && CollectionUtils.isEmpty(eventSearchCriteria.getPostedBy())

@@ -53,6 +53,8 @@ import org.egov.infra.reporting.engine.ReportService;
 import org.egov.infra.reporting.engine.jasper.JasperReportService;
 import org.egov.infra.web.rest.handler.RestErrorHandler;
 import org.egov.infra.web.rest.handler.RestTemplateLoggerInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,7 +71,6 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -95,6 +96,8 @@ import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_TIME_ZONE_
 @Configuration
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class ApplicationConfiguration {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationConfiguration.class);
 
     @Resource(name = "tenants")
     private List<String> tenants;
@@ -168,7 +171,7 @@ public class ApplicationConfiguration {
     
     @Bean
     public RestTemplate restTemplate(){
-        System.out.println("************************* RestTemplate object created*********************");
+    	LOG.info("************************* RestTemplate object created*********************");
 
         SimpleClientHttpRequestFactory simpleCFactory = new  SimpleClientHttpRequestFactory();
         simpleCFactory.setOutputStreaming(false);

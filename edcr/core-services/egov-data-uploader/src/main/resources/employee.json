@@ -1,0 +1,191 @@
+{
+  "moduleName": "HR-Employee",
+  "Definitions": [
+    {
+      "name": "hr-employee-create",
+      "templateFileName": "Employee_Create_Template.xls",
+      "uniqueParentKeys": ["Mobile"],
+      "isParentChild": true,
+      "requests": [
+        {
+          "url": "/egov-mdms-service/v1/_search",
+          "apiRequest": {
+            "RequestInfo": {
+              "apiId": "org.egov.pgr"
+            },
+            "MdmsCriteria": {
+              "tenantId": "pb.amritsar",
+              "moduleDetails": [
+                {
+                  "moduleName": "common-masters",
+                  "masterDetails": [
+                    {
+                      "name": "Department",
+                      "filter": "[?(@.code == 'ADM')]"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "excelHeadersToRequestMap": {
+            "Department": [
+              "$.MdmsCriteria.moduleDetails.*.masterDetails.*.filter"
+            ]
+          },
+          "additionalResFields": {
+            "$.MdmsRes.common-masters.Department.*.code": "Department Name"
+          },
+          "prevResponseToRequestMap": {},
+          "tenantIdPaths": [
+            "$.MdmsCriteria.tenantId"
+          ]
+        },
+        {
+          "url": "/hr-employee-v2/employees/_create",
+          "apiRequest": {
+            "RequestInfo": {
+              "apiId": "org.egov.eis",
+              "ver": "1.0",
+              "ts": null,
+              "action": "asd",
+              "did": "4354648646",
+              "key": "xyz",
+              "msgId": null,
+              "correlationId": null,
+              "authToken": "67f947e9-3af5-490f-8e10-d35d0b9fd0d0"
+            },
+            "Employee": {
+              "dateOfAppointment": null,
+              "dateOfJoining": null,
+              "dateOfRetirement": null,
+              "employeeStatus": "7",
+              "recruitmentMode": null,
+              "recruitmentType": null,
+              "recruitmentQuota": null,
+              "retirementAge": null,
+              "dateOfResignation": null,
+              "dateOfTermination": null,
+              "employeeType": "1",
+              "assignments": [
+                {
+                  "fromDate": "01/04/2018",
+                  "toDate": "31/03/2020",
+                  "department": "REV",
+                  "designation": 59,
+                  "position": 4,
+                  "isPrimary": true,
+                  "fund": null,
+                  "function": null,
+                  "functionary": null,
+                  "grade": null,
+                  "hod": [],
+                  "govtOrderNumber": null,
+                  "documents": null
+                }
+              ],
+              "jurisdictions": ["2"],
+              "motherTongue": null,
+              "religion": null,
+              "community": null,
+              "category": null,
+              "physicallyDisabled": false,
+              "transferredEmployee": false,
+              "medicalReportProduced": true,
+              "languagesKnown": [],
+              "maritalStatus": "UNMARRIED",
+              "passportNo": null,
+              "gpfNo": null,
+              "group": null,
+              "placeOfBirth": null,
+              "documents": [],
+              "serviceHistory": [],
+              "probation": [],
+              "regularisation": [],
+              "technical": [],
+              "education": [],
+              "test": [],
+              "user": {
+                "roles": [
+                  {
+                    "code": "EMPLOYEE",
+                    "name": "EMPLOYEE",
+                    "tenantId": "pb.amritsar"
+                  }
+                ],
+                "userName": "qaemployeeone",
+                "name": "Ramakrishna",
+                "gender": "MALE",
+                "mobileNumber": "9999999991",
+                "emailId": null,
+                "altContactNumber": null,
+                "pan": null,
+                "aadhaarNumber": null,
+                "permanentAddress": "kurnool",
+                "permanentCity": "AP",
+                "permanentPinCode": "560102",
+                "correspondenceCity": "Bangalore",
+                "correspondencePinCode": "560102",
+                "correspondenceAddress": "pb.amritsar",
+                "active": true,
+                "dob": "01/07/2000",
+                "locale": null,
+                "signature": "fghdfgewfg374823",
+                "fatherOrHusbandName": null,
+                "bloodGroup": null,
+                "identificationMark": null,
+                "photo": null,
+                "type": "EMPLOYEE",
+                "password": "12345678",
+                "tenantId": "pb.amritsar"
+              },
+              "tenantId": "pb.amritsar"
+            }
+          },
+          "excelHeadersToRequestMap": {
+            "Employee Name": [
+              "$.Employee.user.name"
+            ],
+            "Gender": [
+              "$.Employee.user.gender"
+            ],
+            "Mobile": [
+                "$.Employee.user.mobileNumber"
+            ],
+            "DOB": [
+              "$.Employee.user.dob"
+            ],
+            "Start Date": [
+              "$.Employee.assignments.*.fromDate"
+            ],
+            "End Date": [
+              "$.Employee.assignments.*.endDate"
+            ],
+            "Department": [
+              "$.Employee.assignments.*.department"
+            ],
+            "Designation": [
+              "$.Employee.assignments.*.designation"
+            ],
+            "Primary": [
+              "$.Employee.assignments.*.isPrimary"
+            ],
+            "Date of Appointment": [
+                "$.Employee.dateOfAppointment"
+            ],
+            "Code": [
+              "$.Employee.user.userName",
+              "$.Employee.code"
+            ]
+          },
+          "additionalResFields": {
+          },
+          "prevResponseToRequestMap": {
+            "$.MdmsRes.common-masters.Department.*.code": ["$.Employee.assignments.*.department"]
+          },
+          "tenantIdPaths": ["$.Employee.tenantId", "$.Employee.user.tenantId"]
+        }
+      ]
+    }
+  ]
+}

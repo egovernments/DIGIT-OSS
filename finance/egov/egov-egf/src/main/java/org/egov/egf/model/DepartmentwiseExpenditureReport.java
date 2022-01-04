@@ -47,6 +47,7 @@
  */
 package org.egov.egf.model;
 
+import org.apache.log4j.Logger;
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.Fund;
 
@@ -62,6 +63,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class DepartmentwiseExpenditureReport {
+	
+    private static final Logger LOGGER = Logger.getLogger(DepartmentwiseExpenditureReport.class);
 
     private String departmentName;
     private Integer fundId;
@@ -243,6 +246,7 @@ public class DepartmentwiseExpenditureReport {
         for (final DepartmentwiseExpenditureResult obj : getCurrentyearDepartmentList())
             if (obj.getDepartmentNm().equals(entry.getDepartmentNm())) {
 
+            	LOGGER.info("Department name: " + entry.getDepartmentNm());
             }
 
     }

@@ -515,7 +515,7 @@ public class BudgetProposalDetailAction extends BaseBudgetDetailAction {
         // forwardBudget(budgetComment, userId); //for BE
 
         if (parameters.get(ACTIONNAME)[0].contains("approv")) {
-            if (topBudget.getState().getValue().equals("END"))
+            if (topBudget!=null && topBudget.getState().getValue().equals("END"))
                 addActionMessage(getMessage("budgetdetail.approved.end"));
             else
                 addActionMessage(getMessage("budgetdetail.approved")

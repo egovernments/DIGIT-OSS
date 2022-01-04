@@ -71,7 +71,5 @@ public class EventResponse {
 		
 	private List<Event> events;
 
-	@JsonProperty("totalCount")
-	private Integer totalCount;
 
 }

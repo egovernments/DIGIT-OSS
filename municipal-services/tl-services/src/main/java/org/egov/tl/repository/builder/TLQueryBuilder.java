@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.tl.config.TLConfiguration;
-import org.egov.tl.util.TLConstants;
 import org.egov.tl.web.models.*;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
@@ -39,9 +38,6 @@ public class TLQueryBuilder {
 
     @Value("${egov.receipt.businessserviceBPA}")
     private String businessServiceBPA;
-    
-    @Value("${renewal.pending.interval}")
-    private long renewalPeriod;
 
     private static final String QUERY = "SELECT tl.*,tld.*,tlunit.*,tlacc.*,tlowner.*," +
             "tladdress.*,tlapldoc.*,tlverdoc.*,tlownerdoc.*,tlinsti.*,tl.id as tl_id,tl.tenantid as tl_tenantId,tl.lastModifiedTime as " +
@@ -82,16 +78,12 @@ public class TLQueryBuilder {
               "({})" +
               " result) result_offset " +
               "WHERE offset_ > ? AND offset_ <= ?";
-      
-      private final String countWrapper = "SELECT COUNT(DISTINCT(tl_id)) FROM ({INTERNAL_QUERY}) as license_count";
-      
-      public static final String TENANTIDQUERY="select distinct(tenantid) from eg_tl_tradelicense";
 
 
 
 
 
-    public String getTLSearchQuery(TradeLicenseSearchCriteria criteria, List<Object> preparedStmtList, boolean isCount) {
+    public String getTLSearchQuery(TradeLicenseSearchCriteria criteria, List<Object> preparedStmtList) {
 
         StringBuilder builder = new StringBuilder(QUERY);
 
@@ -110,9 +102,8 @@ public class TLQueryBuilder {
                 addBusinessServiceClause(criteria,preparedStmtList,builder);
                 builder.append(" AND tlowner.active = ? )");
                 preparedStmtList.add(true);
-            }            
+            }
         }
-        
         else {
 
             if (criteria.getTenantId() != null) {
@@ -194,13 +185,6 @@ public class TLQueryBuilder {
                 builder.append("  tl.validTo <= ? ");
                 preparedStmtList.add(criteria.getValidTo());
             }
-            
-            
-            if(criteria.getRenewalPending()!=null && criteria.getRenewalPending()) {     
-
-            	addRenewalCriteria(builder,preparedStmtList,criteria);
-
-            }
 
             if(criteria.getLocality() != null) {
                 addClauseIfRequired(preparedStmtList, builder);
@@ -230,66 +214,11 @@ public class TLQueryBuilder {
 
        // enrichCriteriaForUpdateSearch(builder,preparedStmtList,criteria);
 
-        if(!isCount) {
-        	return addPaginationWrapper(builder.toString(),preparedStmtList,criteria);
-        }
-        
-        else {
-        	return addCountWrapper(builder.toString());
-        }
+        return addPaginationWrapper(builder.toString(),preparedStmtList,criteria);
     }
 
 
-    private void addRenewalCriteria(StringBuilder builder, List<Object> preparedStmtList, TradeLicenseSearchCriteria criteria) {
-    	
-    	addClauseIfRequired(preparedStmtList, builder);
-        builder.append(" ((  tl.validTo <= ? ");
-        preparedStmtList.add(System.currentTimeMillis()+renewalPeriod); 
-        
-        addClauseIfRequired(preparedStmtList, builder);
-        builder.append(" (( (tl.status IN (?,?)) ");
-        preparedStmtList.add(TLConstants.STATUS_APPROVED); 
-        preparedStmtList.add(TLConstants.STATUS_EXPIRED);
-        
-        addClauseIfRequired(preparedStmtList, builder);
-        
-        /* SELECT NewTL applications which do not have any renewal applications yet */
-        builder.append(" (tl.licensenumber NOT IN (SELECT licensenumber from eg_tl_tradelicense WHERE UPPER(applicationtype) = ? AND licensenumber IS NOT NULL)  OR (");    
-        
-        /*SELECT applications which have application type as renewal, and having the latest financial year among all the renewal application
-         * for that particular license number*/
-        builder.append(" tl.applicationtype = ? and ? > tl.financialyear AND tl.financialyear = (select max(financialyear) from eg_tl_tradelicense where licensenumber=tl.licensenumber)    )))");
-        
-        /* SELECT applications which are manually expired after their real expiry date, and which is having the latest financial year from among all the applications for that particular license number*/
-        builder.append(" OR ( tl.status = ? AND tl.financialyear = (select max(financialyear) from eg_tl_tradelicense where licensenumber=tl.licensenumber)  )))  ");
-        
-        /* SELECT those applications for which there exist a rejected application for the current financial year, and financial year of this application should be just before that of the rejected application*/
-        builder.append("OR  ( tl.financialyear= (select max(financialyear) from eg_tl_tradelicense where licensenumber=tl.licensenumber and licensenumber in ( select licensenumber from eg_tl_tradelicense where status=? and financialyear=? ) and status<>?  ) ");
-        
-        /*set status (approved) and validTo(before current timestamp) conditions*/
-        builder.append(" AND (tl.status IN (?,?) ) AND tl.validTo <= ? ) ) ");
-        
-        preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL); 
-        preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL);
-        preparedStmtList.add(Integer.toString(Calendar.getInstance().get(Calendar.YEAR)));        
-        preparedStmtList.add(TLConstants.STATUS_MANUALLYEXPIRED);
-        preparedStmtList.add(TLConstants.STATUS_REJECTED);
-        preparedStmtList.add(criteria.getFinancialYear());
-        preparedStmtList.add(TLConstants.STATUS_REJECTED);
-        preparedStmtList.add(TLConstants.STATUS_APPROVED);
-        preparedStmtList.add(TLConstants.STATUS_EXPIRED);
-        preparedStmtList.add(System.currentTimeMillis()+renewalPeriod); 
-
-	}
-
-	private String addCountWrapper(String query) {
-		
-    	String finalQuery = countWrapper.replace("{INTERNAL_QUERY}",query );
-		return finalQuery;
-	}
-
-
-	private void addBusinessServiceClause(TradeLicenseSearchCriteria criteria,List<Object> preparedStmtList,StringBuilder builder){
+    private void addBusinessServiceClause(TradeLicenseSearchCriteria criteria,List<Object> preparedStmtList,StringBuilder builder){
         if ((criteria.getBusinessService() == null) || (businessServiceTL.equals(criteria.getBusinessService()))) {
             addClauseIfRequired(preparedStmtList, builder);
             builder.append(" (tl.businessservice=? or tl.businessservice isnull) ");

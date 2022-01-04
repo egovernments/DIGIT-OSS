@@ -25,6 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 
@@ -42,6 +45,8 @@ public class EnrichmentService {
 
 	@Autowired
 	private WorkflowService workflowService;
+
+	public static final Logger logger = LoggerFactory.getLogger(EnrichmentService.class);
 
 	/**
 	 * Enriches the nocReuqest object with puplating the id field with the uuids and
@@ -66,7 +71,7 @@ public class EnrichmentService {
 		if (!ObjectUtils.isEmpty(nocRequest.getNoc().getWorkflow())
 				&& !StringUtils.isEmpty(nocRequest.getNoc().getWorkflow().getAction())
 				&& nocRequest.getNoc().getWorkflow().getAction().equals(NOCConstants.ACTION_INITIATE)) {
-
+				logger.info("Workflow action: "+ NOCConstants.ACTION_INITIATE);
 		}
 	}
 

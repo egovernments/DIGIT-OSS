@@ -156,39 +156,31 @@ public class PropertyValidator {
         if(request.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
             validateAssessees(request,propertyFromSearch, errorMap);
 
-        Boolean isstateUpdatable =  false;
-        
+		if (configs.getIsWorkflowEnabled() && request.getProperty().getWorkflow() == null)
+			throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for update process");
+
 		// third variable is needed only for mutation
 		List<String> fieldsUpdated = diffService.getUpdatedFields(property, propertyFromSearch, "");
 		
-		if (configs.getIsWorkflowEnabled()) {
-
-			if (request.getProperty().getWorkflow() == null)
-				throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for update process");
-			
-			/*
-			 * update and mutation open state are same currently - Creation reason will change for begining of a workflow
-			 */
-			if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
-					&& propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
-				fieldsUpdated.remove("creationReason");
-				isstateUpdatable = true;
-
-			} else {
-
-				State currentState = workflowService.getCurrentState(request.getRequestInfo(), property.getTenantId(),
-						property.getAcknowldgementNumber());
-				BusinessService businessService = workflowService.getBusinessService(property.getTenantId(),
-						property.getWorkflow().getBusinessService(), request.getRequestInfo());
-				isstateUpdatable = workflowService.isStateUpdatable(currentState.getState(), businessService);
-			}
+		
+		Boolean isstateUpdatable =  false;
+		/*
+		 *  update and mutation open state are same currently
+		 *  
+		 *  creation reason will change for begining of a workflow 
+		 */
+		if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
+				&& propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
+			fieldsUpdated.remove("creationReason");
+			isstateUpdatable = true;
 
 		} else {
-			/*
-			 * Creation reason will always change if worklfow is disabled
-			 */
-			isstateUpdatable = true;
-			fieldsUpdated.remove("creationReason");
+
+			State currentState = workflowService.getCurrentState(request.getRequestInfo(), property.getTenantId(),
+					property.getAcknowldgementNumber());
+			BusinessService businessService = workflowService.getBusinessService(property.getTenantId(),
+					property.getWorkflow().getBusinessService(), request.getRequestInfo());
+			isstateUpdatable = workflowService.isStateUpdatable(currentState.getState(), businessService);
 		}
 
 		// third variable is needed only for mutation
@@ -206,6 +198,9 @@ public class PropertyValidator {
          */
 		List<String> searchOwnerUuids = propertyFromSearch.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toList());
 		List<String> uuidsNotFound = new ArrayList<>();
+//
+//		if(!property.getWorkflow().getBusinessService().equalsIgnoreCase(configs.getUpdatePTWfName()))
+//			errorMap.put("EG_PT_UPDATE_PROPERTY_WF_ERROR", "Invalid Workflow name for update, please provide the proper workflow information");
 
 		if (!CollectionUtils.isEmpty(uuidsNotFound))
 			errorMap.put("EG_PT_UPDATE_OWNER_UUID_ERROR", "Invalid owners found in request : " + uuidsNotFound);
@@ -302,6 +297,9 @@ public class PropertyValidator {
     private void validateFields(PropertyRequest request, Map<String, String> errorMap) {
 
     	Property property = request.getProperty();
+    	
+//    	if(configs.getIsWorkflowEnabled() && null == property.getWorkflow())
+//    		errorMap.put("EG_PR_WF_NOT_NULL", "Wokflow is enabled for create please provide the necessary info in workflow field in property");
    	
 		if (property.getAddress().getGeoLocation() == null)
 			property.getAddress().setGeoLocation(new GeoLocation());
@@ -564,7 +562,7 @@ public class PropertyValidator {
     public void validatePropertyCriteria(PropertyCriteria criteria,RequestInfo requestInfo) {
     	
 		List<String> allowedParams = null;
-		
+
 		User user = requestInfo.getUserInfo();
 		String userType = user.getType();
 		Boolean isUserCitizen = "CITIZEN".equalsIgnoreCase(userType);
@@ -592,7 +590,7 @@ public class PropertyValidator {
 				&& null == criteria.getOldPropertyId();
 		
 		if (isUserCitizen) {
-			
+
 			if (isCriteriaEmpty)
 				criteria.setMobileNumber(user.getMobileNumber());
 			
@@ -668,24 +666,21 @@ public class PropertyValidator {
 				throw new CustomException("EG_PT_MUTATION_UNPAID_ERROR", "Property has to be completely paid for before initiating the mutation process");
 		}
 		
+		if (configs.getIsMutationWorkflowEnabled() && request.getProperty().getWorkflow() == null)
+			throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for mutation process");
+		
 		List<String> fieldsUpdated = diffService.getUpdatedFields(property, propertyFromSearch, PTConstants.MUTATION_PROCESS_CONSTANT);
-		// only editable field in mutation other than owners, additional details.
+		// only editable field in mutation other than owners, additinal details.
 		fieldsUpdated.remove("ownershipCategory");
 		
-		if (configs.getIsMutationWorkflowEnabled()) {
-			if (request.getProperty().getWorkflow() == null)
-				throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for mutation process");
-
-			if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
-					&& propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
-				fieldsUpdated.remove("creationReason");
-			}
-		}else {
-			/*
-			 * if workflow is diabled then creationreason will change for every request
-			 */
+		if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
+				&& propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
 			fieldsUpdated.remove("creationReason");
 		}
+		
+//		Boolean isstateUpdatable = workflowService
+//				.getCurrentState(request.getRequestInfo(), property.getTenantId(), property.getAcknowldgementNumber())
+//				.getIsStateUpdatable();
 
 		if (!CollectionUtils.isEmpty(fieldsUpdated))
 			throw new CustomException("EG_PT_MUTATION_ERROR",
@@ -697,19 +692,10 @@ public class PropertyValidator {
 			
 			reasonForTransfer = (String) additionalDetails.get("reasonForTransfer");
 			docNo = (String) additionalDetails.get("documentNumber");
-			
-			String docDateString = String.valueOf(additionalDetails.get("documentDate"));
-			if(!StringUtils.isEmpty(docDateString) && !"null".equalsIgnoreCase(docDateString))
-			docDate = Long.valueOf(docDateString);
-			
-			String docValString = String.valueOf(additionalDetails.get("documentValue"));
-			if(!StringUtils.isEmpty(docValString) && !"null".equalsIgnoreCase(docValString))
-			docVal = Double.valueOf(docValString);
-			
-			String marketValString = String.valueOf(additionalDetails.get("marketValue"));
-			if(!StringUtils.isEmpty(marketValString) && !"null".equalsIgnoreCase(marketValString))
-			marketVal = Double.valueOf(marketValString);
-			
+			docDate = Long.valueOf(String.valueOf(additionalDetails.get("documentDate")));
+			docVal = Double.valueOf(String.valueOf(additionalDetails.get("documentValue")));
+			marketVal = Double.valueOf(String.valueOf(additionalDetails.get("marketValue")));
+
 		} catch (PathNotFoundException e) {
 			throw new CustomException("EG_PT_MUTATION_FIELDS_ERROR", "Mandatory fields Missing for mutation, please provide the following information in additionalDetails : "
 							+ "reasonForTransfer, documentNumber, documentDate, documentValue and marketValue");
@@ -760,6 +746,9 @@ public class PropertyValidator {
 
 		if (!statusSet.contains(Status.ACTIVE))
 			errorMap.put("EG_PT_MUTATION_ALL_OWNER_INACTIVE_ERROR", "At the least one owner object should be ACTIVE");
+
+		if (!CollectionUtils.isEmpty(uuidsNotFound))
+			errorMap.put("EG_PT_UPDATE_OWNER_ERROR", "Invalid owners found in request : " + uuidsNotFound);
 
 		if (!propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 			
@@ -817,73 +806,6 @@ public class PropertyValidator {
 
 		if (!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);
-	}
-
-	public Property validateAlternateMobileNumberInformation(PropertyRequest request) {
-		
-		Map<String, String> errorMap = new HashMap<>();
-		Property property = request.getProperty();
-		validateIds(request, errorMap);	
-		
-		PropertyCriteria criteria = getPropertyCriteriaForSearch(request);
-        List<Property> propertiesFromSearchResponse = service.searchProperty(criteria, request.getRequestInfo());
-        boolean ifPropertyExists=PropertyExists(propertiesFromSearchResponse);
-		if (!ifPropertyExists) {
-			throw new CustomException("EG_PT_PROPERTY_NOT_FOUND", "The property to be updated does not exist in the system");
-		}
-
-		List <String> alternateNumbersinRequest = new ArrayList<String>();
-		for(OwnerInfo owner : property.getOwners()) {
-			if(owner.getAlternatemobilenumber()!=null) {
-				alternateNumbersinRequest.add(owner.getAlternatemobilenumber());
-			}
-		}
-		
-		if(alternateNumbersinRequest.isEmpty()) {
-			throw new CustomException("EG_PT_ALTERNATE_NUMBERS_NOT_FOUND", "The alternate mobile number details are null");
-		}
-		
-		Property propertyFromSearch = propertiesFromSearchResponse.get(0);	
-
-		Map<String, String> userToAlternateNumberMap = new HashMap<String,String>(); 
-		
-		for(OwnerInfo owner : propertyFromSearch.getOwners()) {
-			userToAlternateNumberMap.put(owner.getUuid(), owner.getAlternatemobilenumber());
-		}
-		
-		boolean isAlternateNumberSame = true;
-		
-		for(OwnerInfo owner : property.getOwners()) {
-			if(userToAlternateNumberMap.get(owner.getUuid())!=null && userToAlternateNumberMap.get(owner.getUuid()).equals(owner.getAlternatemobilenumber()) ) {
-					isAlternateNumberSame = true;
-			}
-			
-			else {
-				isAlternateNumberSame=false;
-				break;
-			}
-		}
-		
-		if(isAlternateNumberSame) {
-			throw new CustomException("EG_PT_ALTERNATE_EXISTS", "The alternate mobile number already exists for the owner");
-		}
-		
-		for(OwnerInfo owner : property.getOwners()) {
-			if(!userToAlternateNumberMap.containsKey(owner.getUuid())) {
-				throw new CustomException("EG_PT_OWNER_DOES_NOT_EXIST", "New owner can not be added while updating alternate mobile number details");
-			}
-			
-			else {
-				
-				if(owner.getMobileNumber().equals(owner.getAlternatemobilenumber())) {
-					throw new CustomException("EG_PT_ALTERNATE_EXISTS", "The alternate mobile number should not be same as primary number");
-				}
-			}
-		}
-		
-		if(!property.getStatus().equals(Status.ACTIVE)) {throw new CustomException("EG_PT_ALTERNATE_INACTIVE","Alternate number details cannot be updated if status is not active");}
-		
-		return propertyFromSearch;
 	}
 
 }

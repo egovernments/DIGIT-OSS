@@ -90,12 +90,6 @@ export const createWorkFlow = async body => {
     };
   });
   
-  var systemPaymentRole = {
-    code: "SYSTEM_PAYMENT",
-    tenantId: body.FireNOCs[0].tenantId
-  };
-  body.RequestInfo.userInfo.roles.push(systemPaymentRole);
-  
   let requestBody = {
     RequestInfo: body.RequestInfo,
     ProcessInstances: processInstances

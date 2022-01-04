@@ -132,17 +132,4 @@ public class NOCService {
 		return nocList.get(0);
 	}
 	
-	/**
-         * entry point from controller,applies the quired fileters and encrich search criteria and
-         * return the noc application count the search criteria
-         * @param nocRequest
-         * @return
-         */
-        public Integer getNocCount(NocSearchCriteria criteria, RequestInfo requestInfo) {
-                /*List<String> uuids = new ArrayList<String>();
-                uuids.add(requestInfo.getUserInfo().getUuid());
-                criteria.setAccountId(uuids);*/
-                return nocRepository.getNocCount(criteria);
-        }
-	
 }

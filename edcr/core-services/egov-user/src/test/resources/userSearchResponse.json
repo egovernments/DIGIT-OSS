@@ -1,0 +1,48 @@
+{
+  "responseInfo": {
+    "apiId": null,
+    "ver": null,
+    "ts": null,
+    "resMsgId": null,
+    "msgId": null,
+    "status": "200"
+  },
+  "user": [
+    {
+      "id": 1,
+      "userName": "userName",
+      "salutation": "salutation",
+      "name": "name",
+      "gender": "FEMALE",
+      "mobileNumber": "mobileNumber1",
+      "emailId": "email",
+      "altContactNumber": "mobileNumber2",
+      "pan": "pan",
+      "aadhaarNumber": "aadhaarNumber",
+      "permanentAddress": "post office",
+      "permanentCity": "city1",
+      "permanentPinCode": "pincode 1",
+      "correspondenceAddress": "sub district",
+      "correspondenceCity": "city2",
+      "correspondencePinCode": "pincode 2",
+      "active": true,
+      "locale": "en_IN",
+      "type": "CITIZEN",
+      "accountLocked": false,
+      "fatherOrHusbandName": "name of relative",
+      "signature": "7a9d7f12-bdcb-4487-9d43-709838a0ad39",
+      "bloodGroup": "A+",
+      "photo": "3b26fb49-e43d-401b-899a-f8f0a1572de0",
+      "identificationMark": "identification mark",
+      "createdBy": 1,
+      "lastModifiedBy": 1,
+      "tenantId": "",
+      "roles": [
+        {
+          "code": "roleCode",
+          "name": "name of the role 1"
+        }
+      ]
+    }
+  ]
+}

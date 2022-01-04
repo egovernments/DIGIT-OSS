@@ -100,7 +100,7 @@ public class BPALandService {
 
 		log.debug(
 				"Searching with the params::" + landcriteria.getIds() + "with mobileNo" + landcriteria.getMobileNumber()
-						+ "with landUid" + landcriteria.getLandUId() + "with Ids" + landcriteria.getIds()+ "with localities" + landcriteria.getLocality());
+						+ "with landUid" + landcriteria.getLandUId() + "with Ids" + landcriteria.getIds());
 		StringBuilder url = getLandSerchURLWithParams(requestInfo, landcriteria);
 
 		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
@@ -126,6 +126,7 @@ public class BPALandService {
 	 * @return
 	 */
 	private StringBuilder getLandSerchURLWithParams(RequestInfo requestInfo, LandSearchCriteria landcriteria) {
+		// TODO Auto-generated method stub
 		StringBuilder uri = new StringBuilder(config.getLandInfoHost());
 		uri.append(config.getLandInfoSearch());
 		uri.append("?tenantId=");
@@ -146,11 +147,6 @@ public class BPALandService {
 			landSearchCriteria.setMobileNumber(landcriteria.getMobileNumber());
 			uri.append("&").append("&mobileNumber=");
 			uri.append(landcriteria.getMobileNumber());
-		}
-		if(landcriteria.getLocality() != null) {
-		    landSearchCriteria.setLocality(landcriteria.getLocality());
-                    uri.append("&").append("&locality=");
-                    uri.append(landcriteria.getLocality());
 		}
 		return uri;
 	}

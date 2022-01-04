@@ -1,6 +1,5 @@
 package org.egov.edcr.feature;
 
-import static org.egov.edcr.constants.DxfFileConstants.OPENING_ABOVE_2_1_ON_REAR_LESS_1M;
 import static org.egov.edcr.constants.DxfFileConstants.OPENING_ABOVE_2_1_ON_SIDE_LESS_1M;
 import static org.egov.edcr.utility.DcrConstants.OBJECTNOTDEFINED;
 
@@ -20,7 +19,6 @@ import org.egov.edcr.constants.DxfFileConstants;
 import org.egov.edcr.entity.blackbox.MeasurementDetail;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.entity.blackbox.PlotDetail;
-import org.egov.edcr.service.LayerNames;
 import org.egov.edcr.utility.DcrConstants;
 import org.egov.edcr.utility.Util;
 import org.kabeja.dxf.DXFLWPolyline;
@@ -29,12 +27,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PlanInfoFeatureExtractLocalTest extends FeatureExtract {
+	private static final String MATCH_NUMBERS = "\\d+_";
+	private static final String BLDG_FOOT_PRINT = "BLDG_FOOT_PRINT";
 	private static final Logger LOG = Logger.getLogger(PlanInfoFeatureExtractLocalTest.class);
 	public static final String MSG_ERROR_MANDATORY = "msg.error.mandatory.object.not.defined";
 	private String digitsRegex = "[^\\d.]";
 	private static final BigDecimal ONEHUDREDTWENTYFIVE = BigDecimal.valueOf(125);
-	@Autowired
-	private LayerNames layerNames;
 	@Autowired
 	private Util util;
 
@@ -88,7 +86,7 @@ public class PlanInfoFeatureExtractLocalTest extends FeatureExtract {
 		 * layerNames.getLayerName("LAYER_NAME_LEVEL_NAME_PREFIX") + "\\d+_" +
 		 * layerNames.getLayerName("LAYER_NAME_BUILDING_FOOT_PRINT");
 		 */
-		String buildingFootPrint = "BLK_" + "\\d+_" + "LVL_" + "\\d+_" +  "BLDG_FOOT_PRINT";
+		String buildingFootPrint = "BLK_" + MATCH_NUMBERS + "LVL_" + MATCH_NUMBERS +  BLDG_FOOT_PRINT;
 		List<String> layerNames1 = Util.getLayerNamesLike(pl.getDoc(), buildingFootPrint);
 		for (String s : layerNames1) {
 			polyLinesByLayer = Util.getPolyLinesByLayer(pl.getDoc(), s);
@@ -98,7 +96,7 @@ public class PlanInfoFeatureExtractLocalTest extends FeatureExtract {
 						new String[] { s }, null));
 				pl.addErrors(errors);
 			}
-			if (!polyLinesByLayer.isEmpty())
+			if (!polyLinesByLayer.isEmpty()) {
 				if (pl.getBlockByName(s.split("_")[1]) == null) {
 					Block block = new Block();
 					block.setName(s.split("_")[1]);
@@ -123,13 +121,14 @@ public class PlanInfoFeatureExtractLocalTest extends FeatureExtract {
 					block.getSetBacks().add(setBack);
 
 				}
+			}
 
 		}
 
 		if (pl.getBlocks().isEmpty())
-			pl.addError("BLDG_FOOT_PRINT",
+			pl.addError(BLDG_FOOT_PRINT,
 					getEdcrMessageSource().getMessage(DcrConstants.OBJECTNOTDEFINED,
-							new String[] { "BLDG_FOOT_PRINT" }, null));
+							new String[] { BLDG_FOOT_PRINT }, null));
 
 		for (Block b : pl.getBlocks()) {
 			String layerName = "BLK" + b.getNumber() + "_"
@@ -146,11 +145,11 @@ public class PlanInfoFeatureExtractLocalTest extends FeatureExtract {
 	private void extractBuildingBasementFootprint(PlanDetail pl) {
 
 		List<DXFLWPolyline> polyLinesByLayer;
-		String basementFootPrint = "BLK_" + "\\d+_"
+		String basementFootPrint = "BLK_" + MATCH_NUMBERS
 				+ "LVL_" + "-\\d+_"
 				+ "BSMNT_FOOT_PRINT";
-		List<String> layerNames = Util.getLayerNamesLike(pl.getDoc(), basementFootPrint);
-		for (String s : layerNames) {
+		List<String> basementLayerName = Util.getLayerNamesLike(pl.getDoc(), basementFootPrint);
+		for (String s : basementLayerName) {
 			polyLinesByLayer = Util.getPolyLinesByLayer(pl.getDoc(), s);
 			if (polyLinesByLayer.size() > 1) {
 				HashMap<String, String> errors = new HashMap<>();
@@ -158,7 +157,7 @@ public class PlanInfoFeatureExtractLocalTest extends FeatureExtract {
 						new String[] { s }, null));
 				pl.addErrors(errors);
 			}
-			if (!polyLinesByLayer.isEmpty())
+			if (!polyLinesByLayer.isEmpty()) {
 				if (pl.getBlockByName(s.split("_")[1]) == null) {
 					Block block = new Block();
 					block.setName(s.split("_")[1]);
@@ -183,7 +182,7 @@ public class PlanInfoFeatureExtractLocalTest extends FeatureExtract {
 					block.getSetBacks().add(setBack);
 
 				}
-
+			}
 		}
 	}
 
@@ -247,10 +246,7 @@ public class PlanInfoFeatureExtractLocalTest extends FeatureExtract {
 
 		String singleFamilyBldg = planInfoProperties.get(DxfFileConstants.SINGLE_FAMILY_BLDG);
 		if (StringUtils.isNotBlank(singleFamilyBldg))
-			if (singleFamilyBldg.equalsIgnoreCase(DcrConstants.YES))
-				pi.setSingleFamilyBuilding(true);
-			else
-				pi.setSingleFamilyBuilding(false);
+			pi.setSingleFamilyBuilding(singleFamilyBldg.equalsIgnoreCase(DcrConstants.YES));
 
 		String crzZone = planInfoProperties.get(DxfFileConstants.CRZ_ZONE);
 		if (StringUtils.isNotBlank(crzZone)) {
@@ -422,7 +418,7 @@ public class PlanInfoFeatureExtractLocalTest extends FeatureExtract {
 			pi.setAccessWidth(BigDecimal.ZERO);
 
 		String depthCutting = planInfoProperties.get(DxfFileConstants.DEPTH_CUTTING);
-		if (StringUtils.isNotBlank(depthCutting))
+		if (StringUtils.isNotBlank(depthCutting)) {
 			if (depthCutting.equalsIgnoreCase(DcrConstants.YES)) {
 				pi.setDepthCutting(true);
 				//pi.setDepthCuttingDesc(DcrConstants.YES);
@@ -432,9 +428,9 @@ public class PlanInfoFeatureExtractLocalTest extends FeatureExtract {
 			} else
 				pl.addError(DxfFileConstants.DEPTH_CUTTING,
 						DxfFileConstants.DEPTH_CUTTING + " cannot be accepted , should be either YES/NO.");
-
+		}
 		String governmentAided = planInfoProperties.get(DxfFileConstants.GOVERNMENT_AIDED);
-		if (StringUtils.isNotBlank(governmentAided))
+		if (StringUtils.isNotBlank(governmentAided)) {
 			if (governmentAided.equalsIgnoreCase(DcrConstants.YES))
 				pi.setGovernmentOrAidedSchool(true);
 			else if (governmentAided.equalsIgnoreCase(DcrConstants.NO))
@@ -442,7 +438,7 @@ public class PlanInfoFeatureExtractLocalTest extends FeatureExtract {
 			else
 				pl.addError(DxfFileConstants.GOVERNMENT_AIDED,
 						DxfFileConstants.GOVERNMENT_AIDED + " cannot be accepted , should be either YES/NO.");
-
+		}
 		String noOfBeds = planInfoProperties.get(DxfFileConstants.NO_OF_BEDS);
 		if (StringUtils.isNotBlank(noOfBeds)) {
 			noOfBeds = noOfBeds.replaceAll(digitsRegex, "");
@@ -695,10 +691,6 @@ public class PlanInfoFeatureExtractLocalTest extends FeatureExtract {
 
 	public void setUtil(Util util) {
 		this.util = util;
-	}
-
-	public void setLayerNames(LayerNames layerNames) {
-		this.layerNames = layerNames;
 	}
 
 }

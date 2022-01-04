@@ -72,8 +72,6 @@ public class PTConstants {
     public static final String NOTIFICATION_PAYMENT_PARTIAL_OFFLINE = "PT_NOTIFICATION_PAYMENT_PARTIAL_OFFLINE";
 
     public static final String NOTIFICATION_PAYMENT_PARTIAL_ONLINE = "PT_NOTIFICATION_PAYMENT_PARTIAL_ONLINE";
-    
-    public static final String DUES_NOTIFICATION = "DUES_NOTIFICATION";
 
     public static final String NOTIFICATION_OLDPROPERTYID_ABSENT = "pt.oldpropertyid.absent";
 
@@ -132,8 +130,6 @@ public class PTConstants {
 	
 	public static final String MUTATION_PROCESS_CONSTANT = "MUTATION";
 	
-	public static final String ALTERNATE_PROCESS_CONSTANT = "ALTERNATE";
-	
 	public static final String PREVIOUS_PROPERTY_PREVIOUD_UUID = "previousPropertyUuid";
 	
 	
@@ -185,10 +181,6 @@ public class PTConstants {
 	
 	public static final String MT_NO_WORKFLOW = "PT_NOTIF_WF_MT_NONE";
 	
-	public static final String PT_UPDATE_OWNER_NUMBER = "PT_UPDATE_OWNER_NUMBER";
-	
-	public static final String PT_UPDATE_ALTERNATE_NUMBER = "PT_UPDATE_ALTERNATE_NUMBER";
-	
 	/* update */
 	public static final String WF_UPDATE_STATUS_OPEN_CODE  = "PT_NOTIF_WF_OPEN";
 	
@@ -221,8 +213,6 @@ public class PTConstants {
 
     public static final String NOTIFICATION_OWNERNAME = "{OWNER_NAME}";
 
-    public static final String NOTIFICATION_EMAIL = "{EMAIL_ID}";
-
     public static final String NOTIFICATION_STATUS = "{STATUS}";
     
     public static final String NOTIFICATION_UPDATED_CREATED_REPLACE = "{updated/created}";
@@ -241,14 +231,6 @@ public class PTConstants {
 
 
     public static final String NOTIFICATION_PROPERTYID = "{PROPERTYID}";
-    
-    public static final String PT_OWNER_NAME = "{ownername}";
-    
-    public static final String PT_ALTERNATE_NUMBER = "{alternatenumber}";
-    
-    public static final String PT_OLD_MOBILENUMBER = "{oldmobilenumber}";
-    
-    public static final String PT_NEW_MOBILENUMBER = "{newmobilenumber}";
     
     // PROPERTY & MUTATION
     public static final String NOTIFICATION_APPID =  "{APPID}";
@@ -338,30 +320,6 @@ public class PTConstants {
 
     public static final String ES_DATA_PROPERTYID_PATH = "$.propertyId";
 
-    public static final String CHANNEL_NAME_SMS = "SMS";
-
-    public static final String CHANNEL_NAME_EVENT = "EVENT";
-
-    public static final String CHANNEL_NAME_EMAIL = "EMAIL";
-
-    public static final String MODULE = "module";
-
-    public static final String ACTION = "action";
-
-    public static final String CHANNEL_LIST = "channelList";
-
-    public static final String CHANNEL = "Channel";
-
-    public static final String LOCALIZATION_CODES_JSONPATH = "$.messages.*.code";
-  
-    public static final String LOCALIZATION_MSGS_JSONPATH = "$.messages.*.message";
-
-  //EVENT PAY
-    public static final String EVENT_PAY_TENANTID = "$tenantId";
-
-    public static final String EVENT_PAY_BUSINESSSERVICE = "$businessService";
-
-    public static final String EVENT_PAY_PROPERTYID = "$propertyId";
 
 }
 

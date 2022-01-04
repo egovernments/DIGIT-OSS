@@ -1,0 +1,91 @@
+{
+	"variables": [],
+	"info": {
+		"name": "InstrumentPositive",
+		"_postman_id": "ba7cac8b-86e4-87b3-fc4e-d3e91166cdd9",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:8480/egf-instrument/instruments/_create",
+			"request": {
+				"url": "localhost:8480/egf-instrument/instruments/_create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"requestInfo\":{\n      \"resMsgId\":\"placeholder\",\n      \"status\":\"200\",\n      \"apiId\":null,\n      \"ver\":null,\n      \"ts\":\"01-01-2017 01:01:01\",\n      \"key\":null,\n      \"authToken\":\"\",\n      \"userInfo\":{\n         \"id\":1\n      }\n   },\n   \"instruments\":[\n      {\n         \"id\":\"hello\",\n         \"transactionNumber\":\"transactionNumber\",\n         \"transactionDate\":\"23-08-2017\",\n         \"amount\":100,\n         \"payee\":\"payee\",\n         \"transactionType\":\"Credit\",\n         \"bank\":{\n            \"id\":10,\n            \"code\":\"10\",\n            \"name\":\"nameupdate\",\n            \"description\":\"descriptionupdate\",\n            \"active\":true,\n            \"type\":\"typeupdate\",\n            \"tenantId\":\"default\"\n         },\n         \"bankAccount\":{\n         \t\"id\":\"1\",\n            \"bankBranch\":{\n               \"id\":\"1\",\n               \"bank\":{\n                  \"id\":10000,\n                  \"code\":\"10\",\n                  \"name\":\"neameupdate\",\n                  \"description\":\"descriptionupdate\",\n                  \"active\":true,\n                  \"type\":\"typeupdate\",\n                  \"tenantId\":\"default\"\n               },\n               \"code\":\"Rajesh\",\n               \"name\":\"Rajesh\",\n               \"active\":true,\n               \"micr\":\"Rajesh\",\n               \"tenantId\":\"default\"\n            },\n            \"chartOfAccount\":{\n               \"id\":\"1223\",\n               \"tenantId\":\"default\"\n            },\n            \"fund\":{\n               \"id\":\"1\",\n               \"tenantId\":\"default\"\n            },\n            \"accountNumber\":\"000000000001\",\n            \"accountType\":\"OTHER SCHEDULED BANKS\",\n            \"active\":true,\n            \"type\":\"RECEIPTS_PAYMENTS\",\n            \"tenantId\":\"default\"\n         },\n         \"instrumentType\":{\n            \"id\":\"f3ae954c-74b0-47d9-9c17-088362c31e35\",\n            \"name\":\"DD\",\n            \"active\":\"true\",\n            \"tenantId\":\"default\"\n         },\n         \"serialNo\":\"serialNo\",\n         \"tenantId\":\"default\"\n      }\n   ]\n}"
+				},
+				"description": "Positive : DD Instrument Type, create Instrument success"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8480/egf-instrument/instruments/_create",
+			"request": {
+				"url": "localhost:8480/egf-instrument/instruments/_create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"requestInfo\":{\n      \"resMsgId\":\"placeholder\",\n      \"status\":\"200\",\n      \"apiId\":null,\n      \"ver\":null,\n      \"ts\":\"01-01-2017 01:01:01\",\n      \"key\":null,\n      \"authToken\":\"\",\n      \"userInfo\":{\n         \"id\":1\n      }\n   },\n   \"instruments\":[\n      {\n         \"id\":\"hello\",\n         \"transactionNumber\":\"transactionNumber\",\n         \"transactionDate\":\"23-08-2017\",\n         \"amount\":100,\n         \"payee\":\"payee\",\n         \"transactionType\":\"Credit\",\n         \"bank\":{\n            \"id\":10,\n            \"code\":\"10\",\n            \"name\":\"nameupdate\",\n            \"description\":\"descriptionupdate\",\n            \"active\":true,\n            \"type\":\"typeupdate\",\n            \"tenantId\":\"default\"\n         },\n         \"bankAccount\":{\n         \t\"id\":\"1\",\n            \"bankBranch\":{\n               \"id\":\"1\",\n               \"bank\":{\n                  \"id\":10000,\n                  \"code\":\"10\",\n                  \"name\":\"neameupdate\",\n                  \"description\":\"descriptionupdate\",\n                  \"active\":true,\n                  \"type\":\"typeupdate\",\n                  \"tenantId\":\"default\"\n               },\n               \"code\":\"Rajesh\",\n               \"name\":\"Rajesh\",\n               \"active\":true,\n               \"micr\":\"Rajesh\",\n               \"tenantId\":\"default\"\n            },\n            \"chartOfAccount\":{\n               \"id\":\"1223\",\n               \"tenantId\":\"default\"\n            },\n            \"fund\":{\n               \"id\":\"1\",\n               \"tenantId\":\"default\"\n            },\n            \"accountNumber\":\"000000000001\",\n            \"accountType\":\"OTHER SCHEDULED BANKS\",\n            \"active\":true,\n            \"type\":\"RECEIPTS_PAYMENTS\",\n            \"tenantId\":\"default\"\n         },\n         \"instrumentType\":{\n            \"id\":\"f3ae954c-74b0-47d9-9c17-088362c31e35\",\n            \"name\":\"Cheque\",\n            \"active\":\"true\",\n            \"tenantId\":\"default\"\n         },\n         \"serialNo\":\"serialNo\",\n         \"tenantId\":\"default\"\n      }\n   ]\n}"
+				},
+				"description": "Positive : Cheque InstrumentType, Instrument Create success"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8480/egf-instrument/instruments/_create",
+			"request": {
+				"url": "localhost:8480/egf-instrument/instruments/_create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"requestInfo\":{\n      \"resMsgId\":\"placeholder\",\n      \"status\":\"200\",\n      \"apiId\":null,\n      \"ver\":null,\n      \"ts\":\"01-01-2017 01:01:01\",\n      \"key\":null,\n      \"authToken\":\"\",\n      \"userInfo\":{\n         \"id\":1\n      }\n   },\n   \"instruments\":[\n      {\n         \"id\":\"hello\",\n         \"transactionNumber\":\"transactionNumber\",\n         \"transactionDate\":\"24-08-2017\",\n         \"amount\":100,\n         \"payee\":\"payee\",\n         \"transactionType\":\"Credit\",\n         \"bank\":{\n            \"id\":10,\n            \"code\":\"10\",\n            \"name\":\"nameupdate\",\n            \"description\":\"descriptionupdate\",\n            \"active\":true,\n            \"type\":\"typeupdate\",\n            \"tenantId\":\"default\"\n         },\n         \"bankAccount\":{\n         \t\"id\":\"1\",\n            \"bankBranch\":{\n               \"id\":\"1\",\n               \"bank\":{\n                  \"id\":10000,\n                  \"code\":\"10\",\n                  \"name\":\"neameupdate\",\n                  \"description\":\"descriptionupdate\",\n                  \"active\":true,\n                  \"type\":\"typeupdate\",\n                  \"tenantId\":\"default\"\n               },\n               \"code\":\"Rajesh\",\n               \"name\":\"Rajesh\",\n               \"active\":true,\n               \"micr\":\"Rajesh\",\n               \"tenantId\":\"default\"\n            },\n            \"chartOfAccount\":{\n               \"id\":\"1223\",\n               \"tenantId\":\"default\"\n            },\n            \"fund\":{\n               \"id\":\"1\",\n               \"tenantId\":\"default\"\n            },\n            \"accountNumber\":\"000000000001\",\n            \"accountType\":\"OTHER SCHEDULED BANKS\",\n            \"active\":true,\n            \"type\":\"RECEIPTS_PAYMENTS\",\n            \"tenantId\":\"default\"\n         },\n         \"instrumentType\":{\n            \"id\":\"f3ae954c-74b0-47d9-9c17-088362c31e35\",\n            \"name\":\"Cash\",\n            \"active\":\"true\",\n            \"tenantId\":\"default\"\n         },\n         \"serialNo\":\"serialNo\",\n         \"tenantId\":\"default\"\n      }\n   ]\n}"
+				},
+				"description": "Positive : Cash InstrumentType, Instrument Create success"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8480/egf-instrument/instruments/_create",
+			"request": {
+				"url": "localhost:8480/egf-instrument/instruments/_create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"requestInfo\":{\n      \"resMsgId\":\"placeholder\",\n      \"status\":\"200\",\n      \"apiId\":null,\n      \"ver\":null,\n      \"ts\":\"01-01-2017 01:01:01\",\n      \"key\":null,\n      \"authToken\":\"\",\n      \"userInfo\":{\n         \"id\":1\n      }\n   },\n   \"instruments\":[\n      {\n         \"id\":\"hello\",\n         \"transactionNumber\":\"transactionNumber\",\n         \"transactionDate\":\"23-08-2017\",\n         \"amount\":100,\n         \"payee\":\"payee\",\n         \"transactionType\":\"Credit\",\n         \"bank\":{\n            \"id\":10,\n            \"code\":\"10\",\n            \"name\":\"nameupdate\",\n            \"description\":\"descriptionupdate\",\n            \"active\":true,\n            \"type\":\"typeupdate\",\n            \"tenantId\":\"default\"\n         },\n         \"bankAccount\":{\n         \t\"id\":\"1\",\n            \"bankBranch\":{\n               \"id\":\"1\",\n\n               \"code\":\"Rajesh\",\n               \"name\":\"Rajesh\",\n               \"active\":true,\n               \"micr\":\"Rajesh\",\n               \"tenantId\":\"default\"\n            },\n            \"chartOfAccount\":{\n               \"id\":\"1223\",\n               \"tenantId\":\"default\"\n            },\n            \"fund\":{\n               \"id\":\"1\",\n               \"tenantId\":\"default\"\n            },\n            \"accountNumber\":\"000000000001\",\n            \"accountType\":\"OTHER SCHEDULED BANKS\",\n            \"active\":true,\n            \"type\":\"RECEIPTS_PAYMENTS\",\n            \"tenantId\":\"default\"\n         },\n         \"instrumentType\":{\n            \"id\":\"f3ae954c-74b0-47d9-9c17-088362c31e35\",\n            \"name\":\"BankChallan\",\n            \"active\":\"true\",\n            \"tenantId\":\"default\"\n         },\n         \"serialNo\":\"serialNo\",\n         \"tenantId\":\"default\"\n      }\n   ]\n}"
+				},
+				"description": "Positive : BankChallan InstrumentType, Instrument create success"
+			},
+			"response": []
+		}
+	]
+}

@@ -62,7 +62,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.dcr.helper.OccupancyHelperDetail;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -72,7 +71,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoadWidth extends FeatureProcess {
 
-    private static final Logger LOG = Logger.getLogger(RoadWidth.class);
     private static final String RULE_34 = "34-1";
     public static final String ROADWIDTH_DESCRIPTION = "Minimum Road Width";
     public static final BigDecimal TWELVE_POINT_TWENTY = BigDecimal.valueOf(12.20);

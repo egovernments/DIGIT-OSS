@@ -82,6 +82,5 @@ public class FSMErrorConstants {
 	public static final String FSTP_EMPLOYEE_MAP_EXISTS_ERROR ="FSTP_EMPLOYEE_MAP_EXISTS_ERROR";
 	public static final String FSTP_EMPLOYEE_INVALID_ERROR ="FSTP_EMPLOYEE_INVALID_ERROR";
 	public static final String INVALID_FSTP_CODE ="INVALID_FSTP_CODE";
-	public static final String INVALID_VEHICLE_ASSIGN_ACTION = "INVALID_VEHICLE_ASSIGN_ACTION";
 
 }

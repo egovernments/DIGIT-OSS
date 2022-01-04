@@ -53,12 +53,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Building;
 import org.egov.common.entity.edcr.Floor;
+import org.egov.common.entity.edcr.Measurement;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
 import org.egov.common.entity.edcr.ScrutinyDetail;
@@ -67,9 +68,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class OverHangs extends FeatureProcess {
 
-    private static final Logger LOG = Logger.getLogger(OverHangs.class);
     private static final String RULE_45 = "45";
-    public static final String OVERHANGS_DESCRIPTION = "Minimum width of chajja";
+    private static final String OVERHANGS_DESCRIPTION = "Minimum width of chajja";
     private static final String FLOOR = "Floor";
 
     @Override
@@ -85,7 +85,7 @@ public class OverHangs extends FeatureProcess {
         details.put(RULE_NO, RULE_45);
         details.put(DESCRIPTION, OVERHANGS_DESCRIPTION);
 
-        BigDecimal minWidth = BigDecimal.ZERO;
+        BigDecimal minWidth;
 
         for (Block b : pl.getBlocks()) {
 
@@ -101,10 +101,11 @@ public class OverHangs extends FeatureProcess {
             if (building != null) {
                 for (Floor floor : building.getFloors()) {
                     if (floor.getOverHangs() != null && !floor.getOverHangs().isEmpty()) {
-                        List<BigDecimal> widths = floor.getOverHangs().stream().map(overhang -> overhang.getWidth())
+                        List<BigDecimal> widths = floor.getOverHangs().stream().map(Measurement::getWidth)
                                 .collect(Collectors.toList());
 
-                        minWidth = widths.stream().reduce(BigDecimal::min).get();
+                        Optional<BigDecimal> minWidthh = widths.stream().reduce(BigDecimal::min);
+						minWidth = minWidthh.isPresent() ? minWidthh.get() : BigDecimal.ZERO;
 
                         if (minWidth.compareTo(new BigDecimal("0.75")) > 0) {
                             details.put(FLOOR, floor.getNumber().toString());

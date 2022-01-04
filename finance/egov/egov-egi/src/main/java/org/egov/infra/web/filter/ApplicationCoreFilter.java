@@ -173,6 +173,7 @@ public class ApplicationCoreFilter implements Filter {
             }
         }else
         {
+        	LOGGER.info("User Id: "+ session.getAttribute(USERID_KEY));
         }
         
     }

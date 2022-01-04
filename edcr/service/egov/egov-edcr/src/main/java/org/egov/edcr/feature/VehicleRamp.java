@@ -69,10 +69,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class VehicleRamp extends FeatureProcess {
 
+	private static final String MINIMUM_4M_WIDTH = "Minimum 4m width";
+	private static final String SLOPE_1 = "Slope 1:";
+	private static final String FLIGHT2 = "Flight ";
+	private static final String FLOOR2 = "Floor ";
+	private static final String VEHICLE_RAMP = "Vehicle Ramp";
 	private static final String SUBRULE_40_8 = "40-8";
-	private static final String DESCRIPTION = "Vehicle Ramp";
+	private static final String DESCRIPTION = VEHICLE_RAMP;
 	private static final String FLOOR = "Floor";
-	private static final String FLIGHT = "Flight";
 	@Override
 	public Plan validate(Plan pl) {
 		for (Block block : pl.getBlocks()) {
@@ -109,14 +113,16 @@ public class VehicleRamp extends FeatureProcess {
 		}
 		HashMap<String, String> errors = new HashMap<>();
 		BigDecimal totalProvidedCarParkArea = coverParkingArea.add(basementParkingArea);
-		BigDecimal vehicleRampTotalLength, vehicleRampSlope, minWidth = BigDecimal.ZERO;
-		List<BigDecimal> vehicleRampLengths = new ArrayList<>();
-		boolean valid, valid1, valid2;
+		/*
+		 * BigDecimal vehicleRampTotalLength, vehicleRampSlope, minWidth =
+		 * BigDecimal.ZERO; List<BigDecimal> vehicleRampLengths = new ArrayList<>();
+		 * boolean valid, valid1, valid2;
+		 */
 		Map<String, String> details = new HashMap<>();
 		details.put(RULE_NO, SUBRULE_40_8);
 		details.put(DESCRIPTION, DESCRIPTION);
-		if (totalProvidedCarParkArea != null && totalProvidedCarParkArea.compareTo(BigDecimal.ZERO) > 0) {
-			if (pl != null && !pl.getBlocks().isEmpty()) {
+		if (totalProvidedCarParkArea != null && totalProvidedCarParkArea.compareTo(BigDecimal.ZERO) > 0 && pl != null
+				&& !pl.getBlocks().isEmpty()) {
 				for (Block block : pl.getBlocks()) {
 					scrutinyDetail = new ScrutinyDetail();
 					scrutinyDetail.addColumnHeading(1, RULE_NO);
@@ -125,7 +131,7 @@ public class VehicleRamp extends FeatureProcess {
 					scrutinyDetail.addColumnHeading(4, REQUIRED);
 					scrutinyDetail.addColumnHeading(5, PROVIDED);
 					scrutinyDetail.addColumnHeading(6, STATUS);
-					scrutinyDetail.setKey("Vehicle Ramp");
+					scrutinyDetail.setKey(VEHICLE_RAMP);
 
 					if (block.getBuilding() != null && !block.getBuilding().getFloors().isEmpty()) {
 						for (Floor floor : block.getBuilding().getFloors()) {
@@ -145,7 +151,6 @@ public class VehicleRamp extends FeatureProcess {
 
 				}
 			}
-		}
 
 		return pl;
 	}
@@ -176,15 +181,15 @@ public class VehicleRamp extends FeatureProcess {
 
 						} else {
 							if (vehicleRamp.getWidth().compareTo(new BigDecimal(4)) >= 0) {
-								details.put(FLOOR, "Floor " + floor.getNumber());
-								details.put(REQUIRED, "Minimum 4m width");
+								details.put(FLOOR, FLOOR2 + floor.getNumber());
+								details.put(REQUIRED, MINIMUM_4M_WIDTH);
 								details.put(PROVIDED, vehicleRamp.getWidth().toString());
 								details.put(STATUS, Result.Accepted.getResultVal());
 								scrutinyDetail.getDetail().add(details);
 								pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
 							} else {
-								details.put(FLOOR, "Floor " + floor.getNumber());
-								details.put(REQUIRED, "Minimum 4m width");
+								details.put(FLOOR, FLOOR2 + floor.getNumber());
+								details.put(REQUIRED, MINIMUM_4M_WIDTH);
 								details.put(PROVIDED, vehicleRamp.getWidth().toString());
 								details.put(STATUS, Result.Not_Accepted.getResultVal());
 								scrutinyDetail.getDetail().add(details);
@@ -202,32 +207,32 @@ public class VehicleRamp extends FeatureProcess {
 								if (flight.getColorCode() == 1 || flight.getColorCode() == 2) {
 									if (flight.getColorCode() == 1) {
 										if (vehicleRampSlope.compareTo(BigDecimal.valueOf(10)) >= 0) {
-											details.put(FLOOR, "Flight " + flight.getNumber());
+											details.put(FLOOR, FLIGHT2 + flight.getNumber());
 											details.put(REQUIRED, "Slope 1:10");
-											details.put(PROVIDED, "Slope 1:" + vehicleRampSlope);
+											details.put(PROVIDED, SLOPE_1 + vehicleRampSlope);
 											details.put(STATUS, Result.Accepted.getResultVal());
 											scrutinyDetail.getDetail().add(details);
 											pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
 										} else {
-											details.put(FLOOR, "Flight " + flight.getNumber());
+											details.put(FLOOR, FLIGHT2 + flight.getNumber());
 											details.put(REQUIRED, "Slope 1:10");
-											details.put(PROVIDED, "Slope 1:" + vehicleRampSlope);
+											details.put(PROVIDED, SLOPE_1 + vehicleRampSlope);
 											details.put(STATUS, Result.Not_Accepted.getResultVal());
 											scrutinyDetail.getDetail().add(details);
 											pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
 										}
 									} else if (flight.getColorCode() == 2) {
 										if (vehicleRampSlope.compareTo(BigDecimal.valueOf(12)) >= 0) {
-											details.put(FLOOR, "Flight " + flight.getNumber());
+											details.put(FLOOR, FLIGHT2 + flight.getNumber());
 											details.put(REQUIRED, "Slope 1:12");
-											details.put(PROVIDED, "Slope 1:" + vehicleRampSlope);
+											details.put(PROVIDED, SLOPE_1 + vehicleRampSlope);
 											details.put(STATUS, Result.Accepted.getResultVal());
 											scrutinyDetail.getDetail().add(details);
 											pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
 										} else {
-											details.put(FLOOR, "Flight " + flight.getNumber());
+											details.put(FLOOR, FLIGHT2 + flight.getNumber());
 											details.put(REQUIRED, "Slope 1:12");
-											details.put(PROVIDED, "Slope 1:" + vehicleRampSlope);
+											details.put(PROVIDED, SLOPE_1 + vehicleRampSlope);
 											details.put(STATUS, Result.Not_Accepted.getResultVal());
 											scrutinyDetail.getDetail().add(details);
 											pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
@@ -250,7 +255,7 @@ public class VehicleRamp extends FeatureProcess {
 				}
 
 			} else {
-				errors.put("Vehicle Ramp", "Either ramp or mechanical lift is required");
+				errors.put(VEHICLE_RAMP, "Either ramp or mechanical lift is required");
 				pl.addErrors(errors);
 
 			}
@@ -270,7 +275,7 @@ public class VehicleRamp extends FeatureProcess {
 		 
 		  
 		for (org.egov.common.entity.edcr.VehicleRamp vehicleRamp : floor.getVehicleRamps()) {
-			if (vehicleRamp.getRampClosed()) {
+			if (Boolean.TRUE.equals(vehicleRamp.getRampClosed())) {
 				vehicleRampLengths = new ArrayList<>();
 				for (Measurement measurement : vehicleRamp.getRamps()) {
 					vehicleRampLengths.add(measurement.getHeight());
@@ -307,28 +312,28 @@ public class VehicleRamp extends FeatureProcess {
 							}
 						}
 
-						if (minWidth.compareTo(new BigDecimal(5.4)) >= 0
+						if (minWidth.compareTo(BigDecimal.valueOf(5.4)) >= 0
 								&& vehicleRamp.getSlope() != null
-								&& vehicleRamp.getSlope().compareTo(new BigDecimal(0.12)) <= 0) {
+								&& vehicleRamp.getSlope().compareTo(BigDecimal.valueOf(0.12)) <= 0) {
 							valid = true;
 						}
 
-						if (valid1 && minWidth.compareTo(new BigDecimal(3.6)) >= 0
+						if (valid1 && minWidth.compareTo(BigDecimal.valueOf(3.6)) >= 0
 								&& vehicleRamp.getSlope() != null
-								&& vehicleRamp.getSlope().compareTo(new BigDecimal(0.12)) <= 0) {
+								&& vehicleRamp.getSlope().compareTo(BigDecimal.valueOf(0.12)) <= 0) {
 							valid2 = true;
 						}
 
-						if (!valid1 && minWidth.compareTo(new BigDecimal(3.6)) >= 0
+						if (!valid1 && minWidth.compareTo(BigDecimal.valueOf(3.6)) >= 0
 								&& vehicleRamp.getSlope() != null
-								&& vehicleRamp.getSlope().compareTo(new BigDecimal(0.12)) <= 0) {
+								&& vehicleRamp.getSlope().compareTo(BigDecimal.valueOf(0.12)) <= 0) {
 							valid1 = true;
 						}
 
 					}
 
 					if (valid || (valid1 && valid2)) {
-						details.put(FLOOR, "Floor " + floor.getNumber());
+						details.put(FLOOR, FLOOR2 + floor.getNumber());
 						details.put(REQUIRED,
 								"At least two vehicle ramps of minimum 3.6 m width or one vehicle ramp of minimum 5.4 m width and in maximum 1:8 slope");
 						details.put(PROVIDED, valid ? "Provided vehicle ramp with minimum 5.4 width"
@@ -337,7 +342,7 @@ public class VehicleRamp extends FeatureProcess {
 						scrutinyDetail.getDetail().add(details);
 						pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
 					} else {
-						details.put(FLOOR, "Floor " + floor.getNumber());
+						details.put(FLOOR, FLOOR2 + floor.getNumber());
 						details.put(REQUIRED,
 								"At least two vehicle ramps of minimum 3.6 m width or one vehicle ramp of minimum 5.4 m width and in maximum 1:8 slope");
 						details.put(PROVIDED,
@@ -350,7 +355,7 @@ public class VehicleRamp extends FeatureProcess {
 				}
 
 			} else {
-				errors.put("Vehicle Ramp", "Either ramp or mechanical lift is required");
+				errors.put(VEHICLE_RAMP, "Either ramp or mechanical lift is required");
 				pl.addErrors(errors);
 
 			}

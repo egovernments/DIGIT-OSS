@@ -89,8 +89,8 @@ public class PtInboxFilterService {
             if(moduleSearchCriteria.containsKey(PROPERTY_ID_PARAM)){
                 searchCriteria.put(PROPERTY_ID_PARAM, moduleSearchCriteria.get(PROPERTY_ID_PARAM));
             }
-            if(moduleSearchCriteria.containsKey(PT_APPLICATION_NUMBER_PARAM)) {
-                searchCriteria.put(PT_APPLICATION_NUMBER_PARAM, moduleSearchCriteria.get(PT_APPLICATION_NUMBER_PARAM));
+            if(moduleSearchCriteria.containsKey(APPLICATION_NUMBER_PARAM)) {
+                searchCriteria.put(APPLICATION_NUMBER_PARAM, moduleSearchCriteria.get(APPLICATION_NUMBER_PARAM));
             }
 
             // Accomodating process search criteria in searcher request
@@ -169,8 +169,8 @@ public class PtInboxFilterService {
             if(moduleSearchCriteria.containsKey(PROPERTY_ID_PARAM)){
                 searchCriteria.put(PROPERTY_ID_PARAM, moduleSearchCriteria.get(PROPERTY_ID_PARAM));
             }
-            if(moduleSearchCriteria.containsKey(PT_APPLICATION_NUMBER_PARAM)) {
-                searchCriteria.put(PT_APPLICATION_NUMBER_PARAM, moduleSearchCriteria.get(PT_APPLICATION_NUMBER_PARAM));
+            if(moduleSearchCriteria.containsKey(APPLICATION_NUMBER_PARAM)) {
+                searchCriteria.put(APPLICATION_NUMBER_PARAM, moduleSearchCriteria.get(APPLICATION_NUMBER_PARAM));
             }
 
             // Accomodating process search criteria in searcher request

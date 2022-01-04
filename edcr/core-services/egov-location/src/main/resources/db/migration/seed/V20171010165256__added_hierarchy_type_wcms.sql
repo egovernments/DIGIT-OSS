@@ -1,0 +1,2 @@
+INSERT INTO eg_hierarchy_type (id, name, code, createddate, lastmodifieddate, createdby, lastmodifiedby, version, localname,tenantid) 
+VALUES (nextval('SEQ_EG_HIERARCHY_TYPE'), 'REVENUE_WC', 'REVENUE_WC', now(), now(), 1, 1, 0,NULL,'default');

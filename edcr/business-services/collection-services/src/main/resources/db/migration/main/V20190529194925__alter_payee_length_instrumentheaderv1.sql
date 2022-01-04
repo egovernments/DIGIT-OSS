@@ -1,0 +1,1 @@
+ALTER TABLE egcl_instrumentheader_v1 alter column payee TYPE character varying(256)

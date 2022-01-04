@@ -1,0 +1,34 @@
+{
+	"requestInfo": {
+		"resMsgId": "placeholder",
+		"status": "200",
+		"apiId": null,
+		"ver": null,
+		"ts": "01-01-2017 01:01:01",
+		"key": null,
+		"userInfo": {
+			"id": 1
+		}
+	},
+	"bankBranches": [
+		{
+			"bank": {
+				"id": 1
+			},
+			"code": "code",
+			"name": "name",
+			"address": "Bangalore",
+			"address2": "Bangalore",
+			"city": "Bangalore",
+			"state": "Bangalore",
+			"pincode": "Bangalore",
+			"phone": "Bangalore",
+			"fax": "Bangalore",
+			"contactPerson": "Bangalore",
+			"active": true,
+			"description": "Bangalore",
+			"micr": "Bangalore",
+			"tenantId": "default"
+		}
+	]
+}

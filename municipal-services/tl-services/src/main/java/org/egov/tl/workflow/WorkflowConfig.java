@@ -50,8 +50,6 @@ public class WorkflowConfig {
         map.put(ACTION_APPROVE, STATUS_APPROVED);
         map.put(ACTION_REJECT, STATUS_REJECTED);
         map.put(ACTION_CANCEL, STATUS_CANCELLED);
-        map.put(ACTION_EXPIRE, STATUS_EXPIRED);
-        map.put(ACTION_MANUALLYEXPIRE, STATUS_MANUALLYEXPIRED);
 
         actionStatusMap = Collections.unmodifiableMap(map);
     }

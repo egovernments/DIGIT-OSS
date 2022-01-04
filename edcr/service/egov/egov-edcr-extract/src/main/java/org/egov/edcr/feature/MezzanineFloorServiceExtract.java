@@ -20,7 +20,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MezzanineFloorServiceExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(MezzanineFloorServiceExtract.class);
+    private static final String LAYER_NAME_MEZZANINE_FLOOR_BLT_UP_AREA = "LAYER_NAME_MEZZANINE_FLOOR_BLT_UP_AREA";
+	private static final Logger LOG = Logger.getLogger(MezzanineFloorServiceExtract.class);
     @Autowired
     private LayerNames layerNames;
 
@@ -33,20 +34,24 @@ public class MezzanineFloorServiceExtract extends FeatureExtract {
             for (Block block : pl.getBlocks())
                 if (block.getBuilding() != null && !block.getBuilding().getFloors().isEmpty())
                     outside: for (Floor floor : block.getBuilding().getFloors()) {
-                        if (!block.getTypicalFloor().isEmpty())
-                            for (TypicalFloor tp : block.getTypicalFloor())
-                                if (tp.getRepetitiveFloorNos().contains(floor.getNumber()))
-                                    for (Floor allFloors : block.getBuilding().getFloors())
-                                        if (allFloors.getNumber().equals(tp.getModelFloorNo()))
-                                            if (!allFloors.getMezzanineFloor().isEmpty()
-                                                    || !allFloors.getHalls().isEmpty()) {
-                                                floor.setMezzanineFloor(allFloors.getMezzanineFloor());
-                                                floor.setHalls(allFloors.getHalls());
-                                                continue outside;
-                                            }
+                        if (!block.getTypicalFloor().isEmpty()) {
+                            for (TypicalFloor tp : block.getTypicalFloor()) {
+                                if (tp.getRepetitiveFloorNos().contains(floor.getNumber())) {
+                                    for (Floor allFloors : block.getBuilding().getFloors()) {
+										if (allFloors.getNumber().equals(tp.getModelFloorNo())
+												&& !allFloors.getMezzanineFloor().isEmpty()
+												|| !allFloors.getHalls().isEmpty()) {
+											floor.setMezzanineFloor(allFloors.getMezzanineFloor());
+											floor.setHalls(allFloors.getHalls());
+											continue outside;
+										}
+                                    }
+                                }
+                            }
+                        }
                         // extract mezzanine data
                         String mezzanineLayerNameRegExp = String.format(
-                                layerNames.getLayerName("LAYER_NAME_MEZZANINE_FLOOR_BLT_UP_AREA"), block.getNumber(),
+                                layerNames.getLayerName(LAYER_NAME_MEZZANINE_FLOOR_BLT_UP_AREA), block.getNumber(),
                                 floor.getNumber(), "+\\d");
 
                         List<String> mezzanineLayerNames = Util.getLayerNamesLike(pl.getDoc(),
@@ -61,12 +66,12 @@ public class MezzanineFloorServiceExtract extends FeatureExtract {
                                     occupancy.setIsMezzanine(true);
                                     List<DXFLWPolyline> mezzaninePolyLines = Util.getPolyLinesByLayer(pl.getDoc(),
                                             String.format(
-                                                    layerNames.getLayerName("LAYER_NAME_MEZZANINE_FLOOR_BLT_UP_AREA"),
+                                                    layerNames.getLayerName(LAYER_NAME_MEZZANINE_FLOOR_BLT_UP_AREA),
                                                     block.getNumber(), floor.getNumber(),
                                                     occupancy.getMezzanineNumber()));
                                     List<BigDecimal> heights = Util.getListOfDimensionValueByLayer(pl,
                                             String.format(
-                                                    layerNames.getLayerName("LAYER_NAME_MEZZANINE_FLOOR_BLT_UP_AREA"),
+                                                    layerNames.getLayerName(LAYER_NAME_MEZZANINE_FLOOR_BLT_UP_AREA),
                                                     block.getNumber(), floor.getNumber(),
                                                     occupancy.getMezzanineNumber()));
                                     if (!heights.isEmpty())

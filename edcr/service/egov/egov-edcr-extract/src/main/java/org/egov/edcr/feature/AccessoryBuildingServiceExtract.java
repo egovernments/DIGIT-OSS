@@ -2,6 +2,7 @@ package org.egov.edcr.feature;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,8 +20,13 @@ import org.egov.edcr.entity.blackbox.MeasurementDetail;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.service.LayerNames;
 import org.egov.edcr.utility.Util;
+import org.kabeja.dxf.DXFBlock;
+import org.kabeja.dxf.DXFConstants;
+import org.kabeja.dxf.DXFDimension;
 import org.kabeja.dxf.DXFDocument;
+import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFLWPolyline;
+import org.kabeja.dxf.DXFMText;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +65,7 @@ public class AccessoryBuildingServiceExtract extends FeatureExtract {
                     accessoryBuilding.setArea(totalArea);
                     String accessoryBlockHeightText = Util.getMtextByLayerName(doc, layerName);
                     if (accessoryBlockHeightText != null && !accessoryBlockHeightText.isEmpty()) {
-                        String stringArray[] = accessoryBlockHeightText.split("=", 2);
+                        String[] stringArray = accessoryBlockHeightText.split("=", 2);
                         if (stringArray[0] != null && !stringArray[0].isEmpty()) {
                             String text = stringArray[0].replaceAll("[^\\d.]", "");
                             if (text != null && text.equals(accessoryBlock.getNumber()) && stringArray[1] != null
@@ -112,7 +118,8 @@ public class AccessoryBuildingServiceExtract extends FeatureExtract {
 
     private void extractDistanceOfAccessoryBlockToRoads(PlanDetail pl, DXFDocument doc) {
         String layerAccShortestDist = layerNames.getLayerName("LAYER_NAME_ACCESSORY_SHORTEST_DISTANCE");
-        List<RoadOutput> distancesWithColorCode = extractDistanceWithColourCode(pl, layerAccShortestDist);
+        List<DXFDimension> dimensionList = Util.getDimensionsByLayer(doc, layerAccShortestDist);
+        List<RoadOutput> distancesWithColorCode = extractDistanceWithColourCode(doc, dimensionList);
         List<BigDecimal> notifiedRoadDistances = new ArrayList<>();
         List<BigDecimal> nonNotifiedRoadDistances = new ArrayList<>();
         List<BigDecimal> culdesacRoadDistances = new ArrayList<>();
@@ -162,15 +169,38 @@ public class AccessoryBuildingServiceExtract extends FeatureExtract {
         return pl;
     }
 
-    private List<RoadOutput> extractDistanceWithColourCode(PlanDetail pl, String layerName) {
+    private List<RoadOutput> extractDistanceWithColourCode(DXFDocument doc,
+            List<DXFDimension> shortestDistanceCentralLineRoadDimension) {
         List<RoadOutput> roadOutputs = new ArrayList<>();
-        Map<Integer, List<BigDecimal>> distancesWithColor = Util.extractAndMapDimensionValuesByColorCode(pl, layerName);
-        if (!distancesWithColor.isEmpty())
-            for (Map.Entry<Integer, List<BigDecimal>> distanceByColor : distancesWithColor.entrySet()) {
-                RoadOutput roadOutput = new RoadOutput();
-                roadOutput.distance = distanceByColor.getValue().get(0);
-                roadOutput.colourCode = String.valueOf(distanceByColor.getKey());
-                roadOutputs.add(roadOutput);
+
+        if (shortestDistanceCentralLineRoadDimension != null && !shortestDistanceCentralLineRoadDimension.isEmpty())
+            for (Object dxfEntity : shortestDistanceCentralLineRoadDimension) {
+                BigDecimal value;
+
+                DXFDimension line = (DXFDimension) dxfEntity;
+                String dimensionBlock = line.getDimensionBlock();
+                DXFBlock dxfBlock = doc.getDXFBlock(dimensionBlock);
+                Iterator dxfEntitiesIterator = dxfBlock.getDXFEntitiesIterator();
+                while (dxfEntitiesIterator.hasNext()) {
+                    DXFEntity e = (DXFEntity) dxfEntitiesIterator.next();
+                    if (e.getType().equals(DXFConstants.ENTITY_TYPE_MTEXT)) {
+                        DXFMText text = (DXFMText) e;
+                        String text2 = text.getText();
+                        if (text2.contains(";"))
+                            text2 = text2.split(";")[1];
+                        else
+                            text2 = text2.replaceAll("[^\\d`.]", "");
+
+                        if (!text2.isEmpty()) {
+                            value = BigDecimal.valueOf(Double.parseDouble(text2));
+                            RoadOutput roadOutput = new RoadOutput();
+                            roadOutput.distance = value;
+                            roadOutput.colourCode = String.valueOf(line.getColor());
+                            roadOutputs.add(roadOutput);
+                        }
+
+                    }
+                }
             }
         return roadOutputs;
     }

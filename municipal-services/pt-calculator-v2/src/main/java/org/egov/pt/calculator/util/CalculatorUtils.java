@@ -97,7 +97,7 @@ public class CalculatorUtils {
     private static String timeZone;
 
     @Value("${id.timezone}")
-    public  void setTimeZone(String zone){
+    public static void setTimeZone(String zone){
         CalculatorUtils.timeZone = zone;
     }
 

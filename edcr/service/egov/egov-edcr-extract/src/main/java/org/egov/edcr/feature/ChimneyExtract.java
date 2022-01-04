@@ -3,9 +3,9 @@ package org.egov.edcr.feature;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Chimney;
 import org.egov.common.entity.edcr.Measurement;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ChimneyExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(ChimneyExtract.class);
     @Autowired
     private LayerNames layerNames;
 
@@ -31,14 +30,16 @@ public class ChimneyExtract extends FeatureExtract {
 
     @Override
     public PlanDetail extract(PlanDetail planDetail) {
-        BigDecimal minHeight, increasedHeight;
+        BigDecimal minHeight;
+        BigDecimal increasedHeight;
         for (Block block : planDetail.getBlocks()) {
             String layerName = String.format(layerNames.getLayerName("LAYER_NAME_CHIMNEY"), block.getNumber());
             block.setChimneys(Util.getListOfDimensionValueByLayer(planDetail,
                     layerName));
 
             if (block.getChimneys() != null && !block.getChimneys().isEmpty()) {
-                minHeight = block.getChimneys().stream().reduce(BigDecimal::min).get();
+                Optional<BigDecimal> chimneyHght = block.getChimneys().stream().reduce(BigDecimal::min);
+				minHeight = chimneyHght.isPresent() ? chimneyHght.get() : BigDecimal.ZERO;
 
                 if (minHeight.compareTo(new BigDecimal(1)) > 0) {
                     increasedHeight = block.getBuilding().getBuildingHeight()

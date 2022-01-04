@@ -176,7 +176,6 @@ public class DcrConstants {
     public static final String EDCR_SERVICE_PLAN = "EDCR_SERVICE_PLAN";
 
     public static final String EDCR_DXF_PDF = "EDCR_DXF_PDF";
-    public static final String DXF_PDF_CONVERSION_ENABLED = "DXF_PDF_CONVERSION_ENABLED";
 
     public static final String EXISTING = "Existing";
     public static final String PROPOSED = "Proposed";
@@ -188,11 +187,6 @@ public class DcrConstants {
     public static final String DIMENSION_LINES_STANDARD = "Dimension lines standard";
     public static final String DIMENSION_EDITED = "Dimension edited";
     public static final String STRICTLY_VALIDATE_DIMENSION = "EDCR_STRICTLY_VALIDATE_DIMENSION";
-    public static final String STRICTLY_VALIDATE_BLDG_HGHT_DIMENSION = "EDCR_STRICTLY_VALIDATE_BLDG_HEIGHT_DIMENSION";
-    public static final String MDMS_STRICTLY_VALIDATE_DIMENSION = "STRICTLY_VALIDATE_DIMENSION";
-    public static final String MDMS_STRICTLY_VALIDATE_BLDG_HGHT_DIMENSION = "STRICTLY_VALIDATE_BLDG_HEIGHT_DIMENSION";
-    public static final String MDMS_EDCR_MODULE = "EDCR";
     public static final String PORTICO_DISTANCETO_EXTERIORWALL = "Block %s Portico %s Portico distance to exteriorwall";
-    public static final String PDF_EXT = "application/pdf";
 
 }

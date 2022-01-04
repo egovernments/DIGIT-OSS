@@ -60,22 +60,9 @@ public class NOCRepository {
 	 */
 	public List<Noc> getNocData(NocSearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
-		String query = queryBuilder.getNocSearchQuery(criteria, preparedStmtList, false);
+		String query = queryBuilder.getNocSearchQuery(criteria, preparedStmtList);
 		List<Noc> nocList = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 		return nocList;
 	}
-	
-	/**
-         * using the queryBulider query the data on applying the search criteria and return the count 
-         * parsing throw row mapper
-         * @param criteria
-         * @return
-         */
-        public Integer getNocCount(NocSearchCriteria criteria) {
-                List<Object> preparedStmtList = new ArrayList<>();
-                String query = queryBuilder.getNocSearchQuery(criteria, preparedStmtList, true);
-                int count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
-                return count;
-        }
 
 }

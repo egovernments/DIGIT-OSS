@@ -1,13 +1,6 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.1.5
-
-- Fixed the scrutiny report is not downloaded on permit order download
-- Save application type and service type and validate on saving
-- Enhance search API - Added filters for application type, service type, multiple application numbers search
-- Return total applications count in the search API response
-
 ## 1.1.4
 
 - Fixed the inbox related assignee issue

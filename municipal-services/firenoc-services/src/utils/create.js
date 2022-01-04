@@ -96,7 +96,6 @@ export const addUUIDAndAuditDetails = async (request, method = "_update") => {
           RequestInfo,
           userSearchReqCriteria
         );
-        
         if (get(userSearchResponse, "user", []).length > 0) {
         userResponse = await userService.updateUser(RequestInfo, {
         ...userSearchResponse.user[0],

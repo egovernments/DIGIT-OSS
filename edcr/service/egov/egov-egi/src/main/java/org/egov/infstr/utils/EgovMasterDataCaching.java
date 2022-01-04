@@ -113,7 +113,7 @@ public class EgovMasterDataCaching {
         final String domainName = ApplicationThreadLocals.getDomainName();
         final String applName = temp[0];
         List<Object> dataList = null;
-        HashMap<String, Object> cacheValuesHashMap = new HashMap<String, Object>();
+        HashMap<String, Object> cacheValuesHashMap = new HashMap<>();
 
         try {
             cacheValuesHashMap = (HashMap<String, Object>) CACHE_MANAGER.getCache()
@@ -149,7 +149,7 @@ public class EgovMasterDataCaching {
                                 "Query should be mentioned for " + type + " in " + applName + CONFIG_FILE_SUFFIX);
                 } else
                     throw new ApplicationRuntimeException("This type (" + type + ") is not supported for " + sqlTagName);
-                final HashMap<String, Object> hm = new HashMap<String, Object>();
+                final HashMap<String, Object> hm = new HashMap<>();
                 hm.put(sqlTagName, dataList);
                 CACHE_MANAGER.getCache().put(applName + PATH_DELIM + domainName + PATH_DELIM + sqlTagName, hm);
             } else
@@ -170,7 +170,7 @@ public class EgovMasterDataCaching {
 
     public Map getMap(final String sqlTagName) throws ApplicationRuntimeException {
         Map dataMap = new HashMap();
-        final String temp[] = sqlTagName.split("-");
+        final String[] temp = sqlTagName.split("-");
         final String applName = temp[0];
         final String domainName = ApplicationThreadLocals.getDomainName();
         final String type = EGovConfig.getProperty(applName + CONFIG_FILE_SUFFIX, "type", EMPTY, SQL_TAG_PREFIX + sqlTagName)
@@ -184,7 +184,6 @@ public class EgovMasterDataCaching {
                     while (itr.hasNext()) {
                         obj = (LabelValueBean) itr.next();
                         dataMap.put(Integer.toString(obj.getId()), obj.getName());
-                        obj = null;
                     }
                 }
             } else if (type.equalsIgnoreCase(HQL_QUERY_TYPE))
@@ -204,7 +203,7 @@ public class EgovMasterDataCaching {
                 else
                     throw new ApplicationRuntimeException(
                             "ClassName and MethodName should be mentioned for " + type + " in " + applName + CONFIG_FILE_SUFFIX);
-                final HashMap<String, Object> hm = new HashMap<String, Object>();
+                final HashMap<String, Object> hm = new HashMap<>();
                 hm.put(sqlTagName, dataMap);
                 CACHE_MANAGER.getCache().put(applName + PATH_DELIM + domainName + PATH_DELIM + sqlTagName, hm);
             } else
@@ -228,7 +227,7 @@ public class EgovMasterDataCaching {
 
     public static void removeFromCache(final String sqlTagName) throws ApplicationRuntimeException {
         try {
-            final String temp[] = sqlTagName.split("-");
+            final String[] temp = sqlTagName.split("-");
             final String domainName = ApplicationThreadLocals.getDomainName();
             final String applName = temp[0];
             CACHE_MANAGER.getCache().remove(applName + PATH_DELIM + domainName + PATH_DELIM + sqlTagName);
@@ -320,17 +319,17 @@ public class EgovMasterDataCaching {
      */
 
     private Class[] loadMethodParameter(final String parametertype[]) throws ApplicationRuntimeException {
-        Class[] class_name = null;
+        Class[] className = null;
         try {
             if (!parametertype[0].trim().equalsIgnoreCase(EMPTY)) {
-                class_name = new Class[parametertype.length];
+                className = new Class[parametertype.length];
                 for (int i = 0; i < parametertype.length; i++)
-                    class_name[i] = Class.forName(parametertype[i]);
+                    className[i] = Class.forName(parametertype[i]);
             }
         } catch (final ClassNotFoundException e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching loadMethodParameter", e);
         }
-        return class_name;
+        return className;
     }
 
     /**
@@ -343,24 +342,24 @@ public class EgovMasterDataCaching {
 
     private Object[] loadMethodArguments(final String parametertype[], final String parametervalue[])
             throws ApplicationRuntimeException {
-        Object[] obj_name = null;
+        Object[] objName = null;
         try {
             if (!parametertype[0].trim().equalsIgnoreCase(EMPTY)) {
-                obj_name = new Object[parametervalue.length];
+                objName = new Object[parametervalue.length];
                 for (int i = 0; i < parametertype.length; i++)
                     if (parametertype[i].trim().equalsIgnoreCase("java.lang.Integer"))
-                        obj_name[i] = Integer.valueOf(parametervalue[i]);
+                        objName[i] = Integer.valueOf(parametervalue[i]);
                     else if (parametertype[i].trim().equalsIgnoreCase("java.lang.Double"))
-                        obj_name[i] = Double.valueOf(parametervalue[i]);
+                        objName[i] = Double.valueOf(parametervalue[i]);
                     else if (parametertype[i].trim().equalsIgnoreCase("java.lang.String"))
-                        obj_name[i] = parametervalue[i];
+                        objName[i] = parametervalue[i];
                     else
                         throw new ApplicationRuntimeException("This " + parametertype[i] + " datatype is not supported");
             }
         } catch (final IllegalArgumentException e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching loadMethodArguments", e);
         }
-        return obj_name;
+        return objName;
     }
 
     /**

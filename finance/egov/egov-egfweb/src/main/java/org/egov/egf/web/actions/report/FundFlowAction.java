@@ -543,7 +543,7 @@ public class FundFlowAction extends BaseFormAction {
 
         concurrancePaymentList = fundFlowService.getConcurrancePayments(
                 asOnDate, fund);
-
+ 
         for (final FundFlowBean fBean : paymentList)
             for (final FundFlowBean fop : concurrancePaymentList)
                 if (fBean.getAccountNumber().equalsIgnoreCase(
@@ -699,16 +699,16 @@ public class FundFlowAction extends BaseFormAction {
     private List<FundFlowBean> merge(List<FundFlowBean> receiptList2,
             final List<FundFlowBean> paymentList2) {
 
-        final List<FundFlowBean> finalList = new ArrayList<FundFlowBean>();
+        final List<FundFlowBean> finalList = new ArrayList<>();
         if (receiptList2 == null)
-            receiptList2 = new ArrayList<FundFlowBean>();
+            receiptList2 = new ArrayList<>();
         for (final FundFlowBean fBean : receiptList2) {
-            boolean insert = true;
+            boolean insert=true;
             if (fBean.getAccountNumber().contains("Total")) {
                 insert = false;
                 continue;
             }
-            if (insert == true)
+            if (insert)
                 finalList.add(fBean);
         }
         if (LOGGER.isInfoEnabled())

@@ -104,6 +104,9 @@ public class ApplicationCoreFilter implements Filter {
 
     @Value("${app.version}_${app.build.no}")
     private String applicationRelease;
+    
+    @Autowired
+    private ApplicationTenantResolverFilter tenantResolverFilter;
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationCoreFilter.class);
 
@@ -114,17 +117,17 @@ public class ApplicationCoreFilter implements Filter {
         try {
             prepareUserSession(session);
             prepareApplicationThreadLocal(session);
-            prepareRestService(request, session);
+            prepareRestService(request);
             chain.doFilter(request, resp);
         } finally {
             ApplicationThreadLocals.clearValues();
         }
     }
 
-    private void prepareRestService(HttpServletRequest req, HttpSession session) {
+    private void prepareRestService(HttpServletRequest req) {
         String requestURL = new StringBuilder().append(ApplicationThreadLocals.getDomainURL())
                 .append(req.getRequestURI()).toString();
-        if (requestURL.contains(ApplicationTenantResolverFilter.tenants.get("state"))
+        if (requestURL.contains(tenantResolverFilter.getTenants().get("state"))
                 && (requestURL.contains("/rest/") || requestURL.contains("/oauth/"))) {
             prepareThreadLocal(ApplicationThreadLocals.getTenantID());
 
@@ -171,7 +174,6 @@ public class ApplicationCoreFilter implements Filter {
 
     private void prepareThreadLocal(String tenant) {
         ApplicationThreadLocals.setTenantID(tenant);
-        // ApplicationThreadLocals.setUserId(this.userService.getUserByUsername(this.userName).getId());
 
         // TODO: get the city by tenant
         City city = this.cityService.findAll().get(0);
@@ -183,15 +185,14 @@ public class ApplicationCoreFilter implements Filter {
             ApplicationThreadLocals.setStateName(clientId);
             ApplicationThreadLocals.setGrade(city.getGrade());
             ApplicationThreadLocals.setDomainName(city.getDomainURL());
-            // ApplicationThreadLocals.setDomainURL("https://"+city.getDomainURL());
+            CityPreferences cityPreferences = city.getPreferences();
+            if (cityPreferences != null)
+                ApplicationThreadLocals.setMunicipalityName(cityPreferences.getMunicipalityName());
+            else
+                LOG.warn("City preferences not set for {}", city.getName());
         } else {
             LOG.warn("Unable to find the city");
         }
-        CityPreferences cityPreferences = city.getPreferences();
-        if (cityPreferences != null)
-            ApplicationThreadLocals.setMunicipalityName(cityPreferences.getMunicipalityName());
-        else
-            LOG.warn("City preferences not set for {}", city.getName());
     }
 
     @Override

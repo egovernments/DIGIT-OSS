@@ -5,8 +5,6 @@ import java.util.Arrays;
 
 import org.springframework.stereotype.Component;
 
-import com.jayway.jsonpath.Configuration;
-
 @Component
 public class FSMConstants {
 
@@ -60,7 +58,6 @@ public class FSMConstants {
 	public static final String MDMS_VEHICLE_MAKE_MODEL = "VehicleMakeModel";
 	public static final String MDMS_SLUM_NAME = "Slum";
 	public static final String MDMS_VEHICLE_TYPE = "VehicleType";
-	public static final String MDMS_APPLICATION_TYPE = "ApplicationType";
 
 
 	// FINANCIAL YEAR
@@ -148,19 +145,6 @@ public class FSMConstants {
 	public static final String RECEIPT_KEY = "fsm-receipt";
 	
 	public static final String MDMS_FSTP_PLANT_INFO = "FSTPPlantInfo";
-
-	public static final String PERIODIC_MASTER_NAME = "PeriodicService";
-
-	public static final String PERIODIC_SERVICE_PATH = "$.MdmsRes.FSM.PeriodicService";
-
-	public static final String COMPLETED = "COMPLETED";
-
-	public static final String ADHOC_SERVICE = "Adhoc Service";
-
-	public static final String PERIODIC_SERVICE = "PERIODIC";
-
-	public static final String SYSTEM ="SYSTEM";
-
 
 
 

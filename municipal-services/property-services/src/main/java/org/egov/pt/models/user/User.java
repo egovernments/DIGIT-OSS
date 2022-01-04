@@ -199,11 +199,6 @@ public class User   {
         @SafeHtml
         @JsonProperty("tenantId")
         private String tenantId;
-        
-        @Size(max=50)
-        @SafeHtml
-        @JsonProperty("alternatemobilenumber")
-        private String alternatemobilenumber;
 
 
         public User addRolesItem(Role rolesItem) {

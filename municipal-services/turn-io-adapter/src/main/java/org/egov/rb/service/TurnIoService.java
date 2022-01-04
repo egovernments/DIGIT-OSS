@@ -140,13 +140,14 @@ public class TurnIoService {
 
 	}
 
-	public String prepareMessage(String serviceRequetId, String mobileNumber) throws Exception {
+	public String prepareMessage(org.egov.rb.pgrmodels.Service service, String mobileNumber) throws Exception {
 		String message = successMessage;
-		String encodedPath = URLEncoder.encode(serviceRequetId, "UTF-8");
+		String complaintNumber = service.getServiceRequestId();
+		String encodedPath = URLEncoder.encode(complaintNumber, "UTF-8");
 		String url = propertyConfiguration.getEgovExternalHost() + "citizen/otpLogin?mobileNo=" + mobileNumber
 				+ "&redirectTo=complaint-details/" + encodedPath;
 		String shortenedURL = urlShorteningSevice.shortenURL(url);
-		message = message.replace("{{complaintNumber}}", serviceRequetId).replace("{{complaintLink}}", shortenedURL);
+		message = message.replace("{{complaintNumber}}", complaintNumber).replace("{{complaintLink}}", shortenedURL);
 		return message;
 	}
 
@@ -158,17 +159,18 @@ public class TurnIoService {
 	 * @throws UnsupportedEncodingException
 	 */
 
-	public String prepareServiceRequestStatusMessage(String serviceCode,String status,String mobilenumber,String serviceRequestId,RequestInfo requestInfo ) throws Exception
+	public String prepareServiceRequestStatusMessage(ServiceRequest serviceRequest) throws Exception
 			 {
 		String message = statusUpdateMessage;
-		String serviceName = getServiceName(requestInfo, serviceCode);
-		String encodedPath = URLEncoder.encode(serviceRequestId, "UTF-8");
+		org.egov.rb.pgrmodels.Service service = serviceRequest.getServices().get(0);
+		String serviceName = getServiceName(serviceRequest.getRequestInfo(), service.getServiceCode());
+		String encodedPath = URLEncoder.encode(service.getServiceRequestId(), "UTF-8");
 		String url = propertyConfiguration.getEgovExternalHost() + "citizen/otpLogin?mobileNo="
-				+ mobilenumber + "&redirectTo=complaint-details/" + encodedPath;
+				+ service.getPhone() + "&redirectTo=complaint-details/" + encodedPath;
 		String shortenedURL = urlShorteningSevice.shortenURL(url);
 		message = message.replace("{{complaintType}}", serviceName)
-				.replace("{{complaintNumber}}", serviceRequestId)
-				.replace("{{status}}", status).replace("{{link}}", shortenedURL);
+				.replace("{{complaintNumber}}", service.getServiceRequestId())
+				.replace("{{status}}", service.getStatus().toString()).replace("{{link}}", shortenedURL);
 
 		return message;
 	}

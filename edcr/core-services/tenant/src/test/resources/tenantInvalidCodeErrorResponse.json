@@ -1,0 +1,15 @@
+{
+    "responseInfo": null,
+    "error": {
+        "code": 400,
+        "message": "Tenant Code Does Not Exit",
+        "description": null,
+        "fields": [
+            {
+                "code": "TENANT.TENANT_CODE_DOES_NOT_EXIT",
+                "message": "Tenant Code Does Not Exit",
+                "field": "code"
+            }
+        ]
+    }
+}

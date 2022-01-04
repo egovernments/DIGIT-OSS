@@ -49,7 +49,7 @@ public class EdcrApplicationService {
     private static final String NEW_SCRTNY = "New Plan Scrutiny";
     public static final String ULB_NAME = "ulbName";
     public static final String ABORTED = "Aborted";
-    private static Logger LOG = Logger.getLogger(EdcrApplicationService.class);
+    private static final Logger LOG = Logger.getLogger(EdcrApplicationService.class);
     @Autowired
     protected SecurityUtils securityUtils;
 
@@ -84,7 +84,6 @@ public class EdcrApplicationService {
     @Transactional
     public EdcrApplication create(final EdcrApplication edcrApplication) {
 
-        // edcrApplication.setApplicationDate(new Date("01/01/2020"));
         edcrApplication.setApplicationDate(new Date());
         edcrApplication.setApplicationNumber(applicationNumberGenerator.generate());
         edcrApplication.setSavedDxfFile(saveDXF(edcrApplication));
@@ -116,8 +115,7 @@ public class EdcrApplicationService {
     }
 
     private Plan callDcrProcess(EdcrApplication edcrApplication, String applicationType) {
-        Plan planDetail = new Plan();
-        planDetail = planService.process(edcrApplication, applicationType);
+    	Plan planDetail = planService.process(edcrApplication, applicationType);
         updateFile(planDetail, edcrApplication);
         edcrApplicationDetailService.saveAll(edcrApplication.getEdcrApplicationDetails());
 
@@ -126,7 +124,9 @@ public class EdcrApplicationService {
 
     private File saveDXF(EdcrApplication edcrApplication) {
         FileStoreMapper fileStoreMapper = addToFileStore(edcrApplication.getDxfFile());
-        File dxfFile = fileStoreService.fetch(fileStoreMapper.getFileStoreId(), FILESTORE_MODULECODE);
+        File dxfFile = null;
+        if(fileStoreMapper != null)
+        	dxfFile = fileStoreService.fetch(fileStoreMapper.getFileStoreId(), FILESTORE_MODULECODE);
         planService.buildDocuments(edcrApplication, fileStoreMapper, null, null);
         List<EdcrApplicationDetail> edcrApplicationDetails = edcrApplication.getEdcrApplicationDetails();
         edcrApplicationDetails.get(0).setStatus(ABORTED);
@@ -137,7 +137,9 @@ public class EdcrApplicationService {
 
     public File savePlanDXF(final MultipartFile file) {
         FileStoreMapper fileStoreMapper = addToFileStore(file);
-        return fileStoreService.fetch(fileStoreMapper.getFileStoreId(), FILESTORE_MODULECODE);
+        if(fileStoreMapper != null)
+        	return fileStoreService.fetch(fileStoreMapper.getFileStoreId(), FILESTORE_MODULECODE);
+        return null;
     }
 
     private FileStoreMapper addToFileStore(final MultipartFile file) {
@@ -179,7 +181,7 @@ public class EdcrApplicationService {
         return edcrApplicationRepository.findByTransactionNumberAndThirdPartyUserCode(transactionNo, userCode);
     }
 
-    public List<EdcrApplication> search(EdcrApplication edcrApplication) {
+    public List<EdcrApplication> search() {
         return edcrApplicationRepository.findAll();
     }
 
@@ -228,7 +230,7 @@ public class EdcrApplicationService {
     }
 
     private static String readFile(File srcFile) {
-        String fileAsString = null;
+        String fileAsString = "";
         try {
             String canonicalPath = srcFile.getCanonicalPath();
             if (!canonicalPath.equals(srcFile.getPath()))

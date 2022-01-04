@@ -94,12 +94,10 @@ public class OccupancyService {
             }
         } else {
             SubOccupancy subOccupancy;
-            if (list == null) {
-                subOccupancy = subOccupancyRepository.findByName(occupancyName);
-                List<Usage> usages = usagesRepository
-                        .findBySubOccupancyAndIsActiveTrueOrderByOrderNumberAsc(subOccupancy);
-                usagesList.addAll(usages);
-            }
+            subOccupancy = subOccupancyRepository.findByName(occupancyName);
+            List<Usage> usages = usagesRepository
+                    .findBySubOccupancyAndIsActiveTrueOrderByOrderNumberAsc(subOccupancy);
+            usagesList.addAll(usages);
         }
 
         return usagesList;

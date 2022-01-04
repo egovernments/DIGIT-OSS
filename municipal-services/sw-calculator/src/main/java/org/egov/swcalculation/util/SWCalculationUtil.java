@@ -281,11 +281,11 @@ public class SWCalculationUtil {
 	 * @return - Returns updated mesage
 	 */
 	public String getAppliedMsg(NotificationReceiver receiver, String message, DemandNotificationObj obj) {
-		message = message.replace("{First Name}", receiver.getFirstName() == null ? "" : receiver.getFirstName());
-		message = message.replace("{Last Name}", receiver.getLastName() == null ? "" : receiver.getLastName());
-		message = message.replace("{service name}", receiver.getServiceName() == null ? "" : receiver.getServiceName());
-		message = message.replace("{ULB Name}", receiver.getUlbName() == null ? "" : receiver.getUlbName());
-		message = message.replace("{billing cycle}", obj.getBillingCycle() == null ? "" : obj.getBillingCycle());
+		message = message.replace("<First Name>", receiver.getFirstName() == null ? "" : receiver.getFirstName());
+		message = message.replace("<Last Name>", receiver.getLastName() == null ? "" : receiver.getLastName());
+		message = message.replace("<service name>", receiver.getServiceName() == null ? "" : receiver.getServiceName());
+		message = message.replace("<ULB Name>", receiver.getUlbName() == null ? "" : receiver.getUlbName());
+		message = message.replace("<billing cycle>", obj.getBillingCycle() == null ? "" : obj.getBillingCycle());
 		return message;
 	}
 

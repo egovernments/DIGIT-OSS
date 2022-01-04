@@ -1,11 +1,6 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.0.4
-
-- Add locality search filter
-- Return empty response when search with mobile number if land owner is not present
-
 ## 1.0.3
 
 - Fixed the land search issue. For a citizen, showing all applications which are created by other citizens when he has not submitted any application.
