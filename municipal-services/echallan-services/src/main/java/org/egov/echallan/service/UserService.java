@@ -52,13 +52,17 @@ public class UserService {
 	@Value("${egov.user.update.path}")
 	private String userUpdateEndpoint;
 
+	private static final String CODE_CITIZEN = "CITIZEN";
+	private static final String GET_LAST_MODIFIED_DATE = "lastModifiedDate";
+	private static final String GET_PWD_EXPIRY_DATE = "pwdExpiryDate";
+
 	public void createUser(ChallanRequest request) {
 
 		Challan challan = request.getChallan();
 		RequestInfo requestInfo = request.getRequestInfo();
 		UserInfo userInfo = challan.getCitizen();
 		Role role = Role.builder()
-				.code("CITIZEN")
+				.code(CODE_CITIZEN)
 				.name("Citizen")
 				.build();
 		
@@ -92,7 +96,7 @@ public class UserService {
         userSearchRequest.setTenantId(challan.getTenantId().split("\\.")[0]);
         userSearchRequest.setRequestInfo(requestInfo);
         userSearchRequest.setActive(true);
-        userSearchRequest.setUserType("CITIZEN");
+        userSearchRequest.setUserType(CODE_CITIZEN);
         userSearchRequest.setUuid(Arrays.asList(challan.getAccountId()));
         StringBuilder uri = new StringBuilder(userHost).append(userSearchEndpoint);
         return userCall(userSearchRequest,uri);
@@ -114,12 +118,12 @@ public class UserService {
 		 userInfo.setActive(true);
 		 userInfo.setTenantId(tenantId.split("\\.")[0]);
 		 userInfo.setRoles(Collections.singletonList(role));
-		 userInfo.setType("CITIZEN");
+		 userInfo.setType(CODE_CITIZEN);
 	    }
 	
 	 public  UserDetailResponse searchByUserName(String userName,String tenantId){
 	        UserSearchRequest userSearchRequest = new UserSearchRequest();
-	        userSearchRequest.setUserType("CITIZEN");
+	        userSearchRequest.setUserType(CODE_CITIZEN);
 	        userSearchRequest.setUserName(userName);
 	        userSearchRequest.setTenantId(tenantId);
 	        StringBuilder uri = new StringBuilder(userHost).append(userSearchEndpoint);
@@ -140,7 +144,7 @@ public class UserService {
 	        userSearchRequest.setTenantId(criteria.getTenantId());
 	        userSearchRequest.setMobileNumber(criteria.getMobileNumber());
 	        userSearchRequest.setActive(true);
-	        userSearchRequest.setUserType("CITIZEN");
+	        userSearchRequest.setUserType(CODE_CITIZEN);
 	        if(!CollectionUtils.isEmpty(criteria.getUserIds()))
 	            userSearchRequest.setUuid(criteria.getUserIds());
 	        return userSearchRequest;
@@ -177,12 +181,12 @@ public class UserService {
 	            users.forEach( map -> {
 	            	
 	                        map.put("createdDate",dateTolong((String)map.get("createdDate"),format1));
-	                        if((String)map.get("lastModifiedDate")!=null)
-	                            map.put("lastModifiedDate",dateTolong((String)map.get("lastModifiedDate"),format1));
+	                        if((String)map.get(GET_LAST_MODIFIED_DATE)!=null)
+	                            map.put(GET_LAST_MODIFIED_DATE,dateTolong((String)map.get(GET_LAST_MODIFIED_DATE),format1));
 	                        if((String)map.get("dob")!=null)
 	                            map.put("dob",dateTolong((String)map.get("dob"),dobFormat));
-	                        if((String)map.get("pwdExpiryDate")!=null)
-	                            map.put("pwdExpiryDate",dateTolong((String)map.get("pwdExpiryDate"),format1));
+	                        if((String)map.get(GET_PWD_EXPIRY_DATE)!=null)
+	                            map.put(GET_PWD_EXPIRY_DATE,dateTolong((String)map.get(GET_PWD_EXPIRY_DATE),format1));
 	                    }
 	            );
 	        }

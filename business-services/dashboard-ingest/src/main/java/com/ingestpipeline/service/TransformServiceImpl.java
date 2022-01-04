@@ -39,8 +39,7 @@ public class TransformServiceImpl implements TransformService {
 	@Override
 	public Boolean transformData(Map incomingData) {
 		String dataContext = incomingData.get(Constants.DATA_CONTEXT).toString(); 
-		String dataContextVersion = incomingData.get(Constants.DATA_CONTEXT_VERSION).toString(); 
-		ObjectMapper mapper = new ObjectMapper(); 
+		String dataContextVersion = incomingData.get(Constants.DATA_CONTEXT_VERSION).toString();
 		List chainrSpecJSON = null ;
 		InputStream inputStream = null;
 		try {

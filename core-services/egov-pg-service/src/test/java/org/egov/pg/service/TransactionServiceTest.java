@@ -42,6 +42,13 @@ public class TransactionServiceTest {
 
     private TransactionService transactionService;
 
+    private static final String ORDER_ID = "ORDERID";
+    private static final String ORDER_0012 = "ORDER0012";
+    private static final String PROPERTY_TAX_PAYMENT = "Property Tax Payment";
+    private static final String PAYTM = "PAYTM";
+    private static final String ABCD_123 = "ABCD123";
+    private static final String PT_001 = "PT_001";
+
     @Mock
     private Producer producer;
 
@@ -70,7 +77,7 @@ public class TransactionServiceTest {
     public void setUp() {
         user = User.builder().userName("USER001").mobileNumber("9XXXXXXXXX").name("XYZ").tenantId("pb").emailId("").build();
         requestInfo = new RequestInfo("", "", 0L, "", "", "", "", "", "", null);
-        lenient().when(gatewayService.getTxnId(any(Map.class))).thenReturn(Optional.of("ORDERID"));
+        lenient().when(gatewayService.getTxnId(any(Map.class))).thenReturn(Optional.of(ORDER_ID));
         lenient().doNothing().when(producer).push(any(String.class), any(Object.class));
         lenient().doNothing().when(enrichmentService).enrichCreateTransaction(any(TransactionRequest.class));
 
@@ -91,9 +98,9 @@ public class TransactionServiceTest {
 
 
         Transaction txn = Transaction.builder().txnAmount("100")
-                .billId("ORDER0012")
-                .productInfo("Property Tax Payment")
-                .gateway("PAYTM")
+                .billId(ORDER_0012)
+                .productInfo(PROPERTY_TAX_PAYMENT)
+                .gateway(PAYTM)
                 .build();
         TransactionRequest transactionRequest = new TransactionRequest(requestInfo, txn);
 
@@ -113,9 +120,9 @@ public class TransactionServiceTest {
     @Test(expected = CustomException.class)
     public void initiateTransactionFailTest(){
         Transaction txn = Transaction.builder().txnAmount("100")
-                .billId("ORDER0012")
-                .productInfo("Property Tax Payment")
-                .gateway("ABCD123")
+                .billId(ORDER_0012)
+                .productInfo(PROPERTY_TAX_PAYMENT)
+                .gateway(ABCD_123)
                 .build();
         TransactionRequest transactionRequest = new TransactionRequest(requestInfo, txn);
 
@@ -131,9 +138,9 @@ public class TransactionServiceTest {
     @Test
     public void initiateTransactionSkipGatewayTest(){
         Transaction txn = Transaction.builder().txnAmount("100")
-                .billId("ORDER0012")
-                .productInfo("Property Tax Payment")
-                .gateway("ABCD123")
+                .billId(ORDER_0012)
+                .productInfo(PROPERTY_TAX_PAYMENT)
+                .gateway(ABCD_123)
                 .txnAmount("0")
                 .build();
         TransactionRequest transactionRequest = new TransactionRequest(requestInfo, txn);
@@ -154,14 +161,14 @@ public class TransactionServiceTest {
      */
     @Test
     public void getTransactionsSuccessTest(){
-        Transaction txn = Transaction.builder().txnId("PT_001")
+        Transaction txn = Transaction.builder().txnId(PT_001)
                 .txnAmount("100")
                 .tenantId("pb")
-                .billId("ORDER0012")
-                .productInfo("Property Tax Payment")
-                .gateway("ABCD123")
+                .billId(ORDER_0012)
+                .productInfo(PROPERTY_TAX_PAYMENT)
+                .gateway(ABCD_123)
                 .build();
-        TransactionCriteria criteria = TransactionCriteria.builder().tenantId("pb").txnId("PT_001").build();
+        TransactionCriteria criteria = TransactionCriteria.builder().tenantId("pb").txnId(PT_001).build();
 
         when(transactionRepository.fetchTransactions(criteria)).thenReturn(Collections.singletonList(txn));
         assertEquals(1, transactionService.getTransactions(criteria).size());
@@ -175,7 +182,7 @@ public class TransactionServiceTest {
      */
     @Test(expected = CustomException.class)
     public void getTransactionsFailTest(){
-        TransactionCriteria criteria = TransactionCriteria.builder().tenantId("pb").txnId("PT_001").build();
+        TransactionCriteria criteria = TransactionCriteria.builder().tenantId("pb").txnId(PT_001).build();
         when(transactionRepository.fetchTransactions(criteria)).thenThrow(new TransientDataAccessResourceException("test"));
 
         transactionService.getTransactions(criteria);
@@ -184,30 +191,30 @@ public class TransactionServiceTest {
     @Test
     public void updateTransactionSuccessTest() {
 
-        Transaction txnStatus = Transaction.builder().txnId("PT_001")
+        Transaction txnStatus = Transaction.builder().txnId(PT_001)
                 .txnAmount("100")
-                .billId("ORDER0012")
+                .billId(ORDER_0012)
                 .txnStatus(Transaction.TxnStatusEnum.PENDING)
-                .productInfo("Property Tax Payment")
-                .gateway("PAYTM")
+                .productInfo(PROPERTY_TAX_PAYMENT)
+                .gateway(PAYTM)
                 .build();
 
-        Transaction finalTxnStatus = Transaction.builder().txnId("PT_001")
+        Transaction finalTxnStatus = Transaction.builder().txnId(PT_001)
                 .txnAmount("100.00")
-                .billId("ORDER0012")
+                .billId(ORDER_0012)
                 .txnStatus(Transaction.TxnStatusEnum.SUCCESS)
-                .productInfo("Property Tax Payment")
-                .gateway("PAYTM")
+                .productInfo(PROPERTY_TAX_PAYMENT)
+                .gateway(PAYTM)
                 .build();
 
         when(validator.validateUpdateTxn(any(Map.class))).thenReturn(txnStatus);
         when(validator.skipGateway(any(Transaction.class))).thenReturn(false);
         when(validator.shouldGenerateReceipt(any(Transaction.class), any(Transaction.class))).thenReturn(true);
-        when(gatewayService.getLiveStatus(txnStatus, Collections.singletonMap("ORDERID", "PT_001"))).thenReturn(finalTxnStatus);
+        when(gatewayService.getLiveStatus(txnStatus, Collections.singletonMap(ORDER_ID, PT_001))).thenReturn(finalTxnStatus);
 
 
         assertEquals(transactionService.updateTransaction(requestInfo, Collections.singletonMap
-                ("ORDERID", "PT_001")).get(0).getTxnStatus(), Transaction.TxnStatusEnum.SUCCESS);
+                (ORDER_ID, PT_001)).get(0).getTxnStatus(), Transaction.TxnStatusEnum.SUCCESS);
     }
 
     /**
@@ -219,7 +226,7 @@ public class TransactionServiceTest {
 
         when(validator.validateUpdateTxn(any(Map.class))).thenThrow(new CustomException("MISSING_TXN_ID", "Cannot process request, missing transaction id"));
 
-        transactionService.updateTransaction(requestInfo, Collections.singletonMap("abc", "PT_001"));
+        transactionService.updateTransaction(requestInfo, Collections.singletonMap("abc", PT_001));
 
     }
 
@@ -231,6 +238,6 @@ public class TransactionServiceTest {
 
         when(validator.validateUpdateTxn(any(Map.class))).thenThrow(new CustomException("TXN_NOT_FOUND", "Transaction not found"));
 
-        transactionService.updateTransaction(requestInfo, Collections.singletonMap("abc", "PT_001"));
+        transactionService.updateTransaction(requestInfo, Collections.singletonMap("abc", PT_001));
     }
 }

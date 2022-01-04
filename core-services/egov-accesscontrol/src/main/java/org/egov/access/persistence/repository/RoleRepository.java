@@ -37,6 +37,8 @@ public class RoleRepository {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(RoleRepository.class);
 
+	private static final String DESCRIPTION_KEY = "description";
+
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
@@ -64,7 +66,7 @@ public class RoleRepository {
 		List<Map<String, Object>> batchValues = new ArrayList<>(roles.size());
 		for (Role role : roles) {
 			batchValues.add(new MapSqlParameterSource("name", role.getName()).addValue("code", role.getCode())
-					.addValue("description", role.getDescription())
+					.addValue(DESCRIPTION_KEY, role.getDescription())
 					.addValue("createdby", Long.valueOf(roleRequest.getRequestInfo().getUserInfo().getId()))
 					.addValue("createddate", new Date(new java.util.Date().getTime()))
 					.addValue("lastmodifiedby", Long.valueOf(roleRequest.getRequestInfo().getUserInfo().getId()))
@@ -88,7 +90,7 @@ public class RoleRepository {
 
 		for (Role role : roles) {
 			batchValues.add(new MapSqlParameterSource("name", role.getName()).addValue("code", role.getCode())
-					.addValue("description", role.getDescription())
+					.addValue(DESCRIPTION_KEY, role.getDescription())
 					.addValue("lastmodifiedby", Long.valueOf(roleRequest.getRequestInfo().getUserInfo().getId()))
 					.addValue("lastmodifieddate", new Date(new java.util.Date().getTime())).getValues());
 		}
@@ -198,8 +200,8 @@ private List<Role> convertToRole(JSONArray roleArray)
 		if(roleArray.getJSONObject(i).has("name")){
 		role.setName(roleArray.getJSONObject(i).getString("name"));
 		} else {role.setName("");}
-		if(roleArray.getJSONObject(i).has("description")){
-		role.setDescription(roleArray.getJSONObject(i).getString("description"));
+		if(roleArray.getJSONObject(i).has(DESCRIPTION_KEY)){
+		role.setDescription(roleArray.getJSONObject(i).getString(DESCRIPTION_KEY));
 		} else {role.setDescription("");}
 		roleList.add(role);
 	}

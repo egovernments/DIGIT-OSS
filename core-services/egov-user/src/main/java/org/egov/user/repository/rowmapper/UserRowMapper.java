@@ -12,6 +12,8 @@ import java.sql.SQLException;
 
 public class UserRowMapper implements RowMapper<User> {
 
+    private static final String GET_GENDER = "gender";
+
     @Override
     public User mapRow(final ResultSet rs, final int rowNum) throws SQLException {
         final User user = User.builder().id(rs.getLong("id")).tenantId(rs.getString("tenantid")).title(rs.getString("title")).salutation(rs.getString("salutation"))
@@ -36,13 +38,13 @@ public class UserRowMapper implements RowMapper<User> {
             }
         }
 
-        if (rs.getInt("gender") == 1) {
+        if (rs.getInt(GET_GENDER) == 1) {
             user.setGender(Gender.FEMALE);
-        } else if (rs.getInt("gender") == 2) {
+        } else if (rs.getInt(GET_GENDER) == 2) {
             user.setGender(Gender.MALE);
-        } else if (rs.getInt("gender") == 3) {
+        } else if (rs.getInt(GET_GENDER) == 3) {
             user.setGender(Gender.OTHERS);
-        } else if (rs.getInt("gender") == 4) {
+        } else if (rs.getInt(GET_GENDER) == 4) {
             user.setGender(Gender.TRANSGENDER);
         }
         for (GuardianRelation guardianRelation : GuardianRelation.values()) {

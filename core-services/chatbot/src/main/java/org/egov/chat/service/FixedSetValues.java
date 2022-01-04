@@ -27,6 +27,12 @@ public class FixedSetValues {
 
     private String nextKeywordSymbol = "0";
     private String nextKeyword = "Next";
+    private static final String BATCH_SIZE_KEY = "batchSize";
+    private static final String ALL_VALUES_KEY = "allValues";
+    private static final String OFFSET_KEY = "offset";
+    private static final String VALUE_KEY = "value";
+    private static final String DISPLAY_VALUES_AS_OPTIONS_KEY = "displayValuesAsOptions";
+    private static final String MULTIPLE_ANSWERS_KEY = "multipleAnswers";
 
     @Autowired
     private ValueFetcher valueFetcher;
@@ -41,25 +47,25 @@ public class FixedSetValues {
 
     public JsonNode getAllValidValues(JsonNode config, EgovChat chatNode) {
         ObjectNode questionDetails = objectMapper.createObjectNode();
-        if (config.get("values").get("batchSize") != null)
-            questionDetails.put("batchSize", config.get("values").get("batchSize").asInt());
+        if (config.get("values").get(BATCH_SIZE_KEY) != null)
+            questionDetails.put(BATCH_SIZE_KEY, config.get("values").get(BATCH_SIZE_KEY).asInt());
         else
-            questionDetails.put("batchSize", Integer.MAX_VALUE);
+            questionDetails.put(BATCH_SIZE_KEY, Integer.MAX_VALUE);
 
         ArrayNode validValues = valueFetcher.getAllValidValues(config, objectMapper.valueToTree(chatNode));
         ArrayNode values = objectMapper.valueToTree(validValues);
-        questionDetails.putArray("allValues").addAll(values);
+        questionDetails.putArray(ALL_VALUES_KEY).addAll(values);
 
         return questionDetails;
     }
 
     public JsonNode getNextSet(JsonNode questionDetails) {
-        Integer batchSize = questionDetails.get("batchSize").asInt();
-        ArrayNode allValues = (ArrayNode) questionDetails.get("allValues");
+        Integer batchSize = questionDetails.get(BATCH_SIZE_KEY).asInt();
+        ArrayNode allValues = (ArrayNode) questionDetails.get(ALL_VALUES_KEY);
 
         Integer newOffset;
-        if (questionDetails.has("offset")) {
-            Integer previousOffset = questionDetails.get("offset").asInt();
+        if (questionDetails.has(OFFSET_KEY)) {
+            Integer previousOffset = questionDetails.get(OFFSET_KEY).asInt();
             if (previousOffset + batchSize > allValues.size())
                 return null;
             newOffset = previousOffset + batchSize;
@@ -74,7 +80,7 @@ public class FixedSetValues {
         for (int i = newOffset; i < upperLimit; i++) {
             ObjectNode value = objectMapper.createObjectNode();
             value.put("index", i + 1);
-            value.set("value", allValues.get(i));
+            value.set(VALUE_KEY, allValues.get(i));
             nextSet.add(value);
         }
 
@@ -82,31 +88,31 @@ public class FixedSetValues {
             ObjectNode value = objectMapper.createObjectNode();
             value.put("index", nextKeywordSymbol);
             ObjectNode nextKeywordLocaliztionJson = objectMapper.createObjectNode();
-            nextKeywordLocaliztionJson.put("value", nextKeyword);
-            value.set("value", nextKeywordLocaliztionJson);
+            nextKeywordLocaliztionJson.put(VALUE_KEY, nextKeyword);
+            value.set(VALUE_KEY, nextKeywordLocaliztionJson);
             nextSet.add(value);
         }
 
-        ((ObjectNode) questionDetails).put("offset", newOffset);
+        ((ObjectNode) questionDetails).put(OFFSET_KEY, newOffset);
         ((ObjectNode) questionDetails).set("askedValues", nextSet);
 
         return questionDetails;
     }
 
     public EgovChat extractAnswer(JsonNode config, EgovChat chatNode) throws IOException {
-        boolean displayValuesAsOptions = config.get("displayValuesAsOptions") != null && config.get("displayValuesAsOptions").asBoolean();
-        boolean multipleAnswersAllowed = config.get("multipleAnswers") != null && config.get("multipleAnswers").asBoolean();
+        boolean displayValuesAsOptions = config.get(DISPLAY_VALUES_AS_OPTIONS_KEY) != null && config.get(DISPLAY_VALUES_AS_OPTIONS_KEY).asBoolean();
+        boolean multipleAnswersAllowed = config.get(MULTIPLE_ANSWERS_KEY) != null && config.get(MULTIPLE_ANSWERS_KEY).asBoolean();
 
         String answer = chatNode.getMessage().getRawInput();
         ConversationState conversationState = getConversationStateForChat(chatNode);
         JsonNode questionDetails = conversationState.getQuestionDetails();
 
-        ArrayNode allValues = (ArrayNode) questionDetails.get("allValues");
+        ArrayNode allValues = (ArrayNode) questionDetails.get(ALL_VALUES_KEY);
         ArrayNode validValues = allValues.deepCopy();
 
         if (displayValuesAsOptions) {
-            Integer offset = questionDetails.get("offset").asInt();
-            Integer batchSize = questionDetails.get("batchSize").asInt();
+            Integer offset = questionDetails.get(OFFSET_KEY).asInt();
+            Integer batchSize = questionDetails.get(BATCH_SIZE_KEY).asInt();
             Integer upperLimit = Math.min(offset + batchSize, allValues.size());
             validValues = objectMapper.createArrayNode();
             for (int i = 0; i < upperLimit; i++) {
@@ -126,8 +132,8 @@ public class FixedSetValues {
                 log.debug("answerLocalizationCode  : " + answerLocalizationCode);
                 if (answerLocalizationCode.has("code"))
                     value = answerLocalizationCode.get("code").asText();
-                else if (answerLocalizationCode.has("value"))
-                    value = answerLocalizationCode.get("value").asText();
+                else if (answerLocalizationCode.has(VALUE_KEY))
+                    value = answerLocalizationCode.get(VALUE_KEY).asText();
                 answers.add(valueFetcher.getCodeForValue(config, chatNode, value));
             }
             finalAnswer = "";
@@ -164,8 +170,8 @@ public class FixedSetValues {
             log.debug("answerLocalizationCode  : " + answerLocalizationCode);
             if (answerLocalizationCode.has("code"))
                 finalAnswer = answerLocalizationCode.get("code").asText();
-            else if (answerLocalizationCode.has("value"))
-                finalAnswer = answerLocalizationCode.get("value").asText();
+            else if (answerLocalizationCode.has(VALUE_KEY))
+                finalAnswer = answerLocalizationCode.get(VALUE_KEY).asText();
             log.debug("Final Answer : " + finalAnswer);
             finalAnswer = valueFetcher.getCodeForValue(config, chatNode, finalAnswer);
         }
@@ -200,15 +206,15 @@ public class FixedSetValues {
 
     public boolean isValid(JsonNode config, EgovChat chatNode) throws IOException {
         try {
-            boolean displayValuesAsOptions = config.get("displayValuesAsOptions") != null && config.get("displayValuesAsOptions").asBoolean();
-            boolean multipleAnswersAllowed = config.get("multipleAnswers") != null && config.get("multipleAnswers").asBoolean();
+            boolean displayValuesAsOptions = config.get(DISPLAY_VALUES_AS_OPTIONS_KEY) != null && config.get(DISPLAY_VALUES_AS_OPTIONS_KEY).asBoolean();
+            boolean multipleAnswersAllowed = config.get(MULTIPLE_ANSWERS_KEY) != null && config.get(MULTIPLE_ANSWERS_KEY).asBoolean();
 
             String answer = chatNode.getMessage().getRawInput();
 
             ConversationState conversationState = getConversationStateForChat(chatNode);
             JsonNode questionDetails = conversationState.getQuestionDetails();
 
-            ArrayNode allValues = (ArrayNode) questionDetails.get("allValues");
+            ArrayNode allValues = (ArrayNode) questionDetails.get(ALL_VALUES_KEY);
 
             if (multipleAnswersAllowed && checkIfInputContainsMultipleChoices(answer)) {
                 ArrayNode validValues = getValidValuesForQuestionDetails(questionDetails);
@@ -241,9 +247,9 @@ public class FixedSetValues {
     }
 
     ArrayNode getValidValuesForQuestionDetails(JsonNode questionDetails) {
-        ArrayNode allValues = (ArrayNode) questionDetails.get("allValues");
-        Integer offset = questionDetails.get("offset").asInt();
-        Integer batchSize = questionDetails.get("batchSize").asInt();
+        ArrayNode allValues = (ArrayNode) questionDetails.get(ALL_VALUES_KEY);
+        Integer offset = questionDetails.get(OFFSET_KEY).asInt();
+        Integer batchSize = questionDetails.get(BATCH_SIZE_KEY).asInt();
         Integer upperLimit = Math.min(offset + batchSize, allValues.size());
         ArrayNode validValues = objectMapper.createArrayNode();
         for (int i = 0; i < upperLimit; i++) {

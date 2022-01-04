@@ -23,6 +23,8 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
 
     private ObjectMapper objectMapper;
 
+    private static final String GET_GENDER = "gender";
+
     @Autowired
     UserResultSetExtractor(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
@@ -67,13 +69,13 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
                     }
                 }
 
-                if (rs.getInt("gender") == 1) {
+                if (rs.getInt(GET_GENDER) == 1) {
                     user.setGender(Gender.FEMALE);
-                } else if (rs.getInt("gender") == 2) {
+                } else if (rs.getInt(GET_GENDER) == 2) {
                     user.setGender(Gender.MALE);
-                } else if (rs.getInt("gender") == 3) {
+                } else if (rs.getInt(GET_GENDER) == 3) {
                     user.setGender(Gender.OTHERS);
-                } else if (rs.getInt("gender") == 4) {
+                } else if (rs.getInt(GET_GENDER) == 4) {
                     user.setGender(Gender.TRANSGENDER);
                 }
                 for (GuardianRelation guardianRelation : GuardianRelation.values()) {

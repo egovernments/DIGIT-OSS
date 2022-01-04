@@ -40,6 +40,9 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 		this.full_count = full_count;
 	}
 
+	private static final String GET_STRING_TENANT_ID = "tenantid";
+	private static final String GET_STRING_ADDITIONAL_DETAILS = "additionalDetails";
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List<FSM> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -52,10 +55,10 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 			String id = rs.getString("fsm_id");
 			String applicationNo = rs.getString("applicationno");
 			currentfsm = fmsMap.get(id);
-			String tenantId = rs.getString("tenantid");
+			String tenantId = rs.getString(GET_STRING_TENANT_ID);
 			String accountId = rs.getString("accountId");
 			String description = rs.getString("description");
-			String additionalDetails = rs.getString("additionalDetails");
+			String additionalDetails = rs.getString(GET_STRING_ADDITIONAL_DETAILS);
 			String source = rs.getString("source");
 			String sanitationtype = rs.getString("sanitationtype");
 			String propertyUsage = rs.getString("propertyUsage");
@@ -75,7 +78,7 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 					lastModifiedTime = null;
 				}
 				currentfsm = FSM.builder().id(id).applicationNo(applicationNo).tenantId(tenantId)
-						.description(description).accountId(accountId).additionalDetails(getAdditionalDetail("additionalDetails",rs))
+						.description(description).accountId(accountId).additionalDetails(getAdditionalDetail(GET_STRING_ADDITIONAL_DETAILS,rs))
 						.source(source).sanitationtype(sanitationtype).propertyUsage(propertyUsage).noOfTrips(noOfTrips)
 						.vehicleId(vehicleId).applicationStatus(applicationStatus).dsoId(dsoid).possibleServiceDate(possiblesrvdate).vehicleType(vehicleType).completedOn(compeletedOn)
 						.build();
@@ -112,11 +115,11 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 				.plotNo(rs.getString("plotno")).district(rs.getString("district")).region(rs.getString("region"))
 				.state(rs.getString("state")).country(rs.getString("country")).landmark(rs.getString("landmark"))
 				.geoLocation(geoLocation).pincode(rs.getString("pincode")).doorNo(rs.getString("doorno")).id(rs.getString("fsm_address_id"))
-				.additionalDetails(rs.getString("additionalDetails")).street(rs.getString("street")).slumName(rs.getString("slumname")).tenantId(rs.getString("tenantid")).locality(locality).auditDetails(auditdetails)
+				.additionalDetails(rs.getString(GET_STRING_ADDITIONAL_DETAILS)).street(rs.getString("street")).slumName(rs.getString("slumname")).tenantId(rs.getString(GET_STRING_TENANT_ID)).locality(locality).auditDetails(auditdetails)
 				.build();
 
 		PitDetail pitDetail = PitDetail.builder().height(rs.getDouble("height")).width(rs.getDouble("width")).diameter(rs.getDouble("diameter"))
-				.length(rs.getDouble("length")).distanceFromRoad(rs.getDouble("distanceFromRoad")).id(rs.getString("fsm_pit_id")).tenantId(rs.getString("tenantid")).build();
+				.length(rs.getDouble("length")).distanceFromRoad(rs.getDouble("distanceFromRoad")).id(rs.getString("fsm_pit_id")).tenantId(rs.getString(GET_STRING_TENANT_ID)).build();
 		
 		
 		

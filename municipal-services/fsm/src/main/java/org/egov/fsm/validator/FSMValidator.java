@@ -58,6 +58,10 @@ public class FSMValidator {
 	@Autowired
 	private FSMToFSMAuditUtilConverter converter;
 
+	private static final String ERROR_APPLICANT_NAME_MOBILE_NUMBER_MANDATORY = "Applicant Name and mobile number mandatory";
+	private static final String ERROR_TENANT_ID_MANDATORY_SEARCH = "TenantId is mandatory in search";
+	private static final String ERROR_APPLICATION_STATUS_SEARCH_NOT_ALLOWED = "Search on applicationStatus is not allowed";
+
 	public void validateCreate(FSMRequest fsmRequest, Object mdmsData) {
 		mdmsValidator.validateMdmsData(fsmRequest, mdmsData);
 		FSM fsm = fsmRequest.getFsm();
@@ -65,7 +69,7 @@ public class FSMValidator {
 			
 			// when user is created for the citizen but name is mepty
 			if( fsm.getCitizen() != null && StringUtils.isEmpty(fsm.getCitizen().getName()) && StringUtils.isEmpty(fsmRequest.getRequestInfo().getUserInfo().getName()) ) {
-				throw new CustomException(FSMErrorConstants.INVALID_APPLICANT_ERROR,"Applicant Name and mobile number mandatory");
+				throw new CustomException(FSMErrorConstants.INVALID_APPLICANT_ERROR,ERROR_APPLICANT_NAME_MOBILE_NUMBER_MANDATORY);
 			}
 			// ui does not pass citizen in fsm but userInfo in the request is citizen
 			if(fsm.getCitizen() == null || StringUtils.isEmpty(fsm.getCitizen().getName()) || StringUtils.isEmpty(fsm.getCitizen().getMobileNumber() )) {
@@ -88,7 +92,7 @@ public class FSMValidator {
 		}else if( fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE)) {
 			User applicant = fsm.getCitizen();
 			if( applicant == null ||  StringUtils.isEmpty(applicant.getName()) || StringUtils.isEmpty(applicant.getMobileNumber())) {
-				throw new CustomException(FSMErrorConstants.INVALID_APPLICANT_ERROR,"Applicant Name and mobile number mandatory");
+				throw new CustomException(FSMErrorConstants.INVALID_APPLICANT_ERROR,ERROR_APPLICANT_NAME_MOBILE_NUMBER_MANDATORY);
 			}
 			
 			
@@ -103,7 +107,7 @@ public class FSMValidator {
 		}else {
 			// incase of anonymous user, citizen is mandatory
 			if(fsm.getCitizen() == null || StringUtils.isEmpty(fsm.getCitizen().getName()) || StringUtils.isEmpty(fsm.getCitizen().getMobileNumber() )) {
-				throw new CustomException(FSMErrorConstants.INVALID_APPLICANT_ERROR,"Applicant Name and mobile number mandatory");
+				throw new CustomException(FSMErrorConstants.INVALID_APPLICANT_ERROR,ERROR_APPLICANT_NAME_MOBILE_NUMBER_MANDATORY);
 			}
 			
 			if(!StringUtils.isEmpty(fsm.getSource())) {
@@ -150,13 +154,13 @@ public class FSMValidator {
 
 		if (!requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.CITIZEN) && !criteria.tenantIdOnly()
 				&& criteria.getTenantId() == null)
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
+			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, ERROR_TENANT_ID_MANDATORY_SEARCH);
 
 		if (requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.CITIZEN) && !criteria.isEmpty()
 				&& !criteria.tenantIdOnly() && criteria.getTenantId() == null) 
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
+			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, ERROR_TENANT_ID_MANDATORY_SEARCH);
 		if(criteria.getTenantId() == null)
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
+			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, ERROR_TENANT_ID_MANDATORY_SEARCH);
 			
 		String allowedParamStr = null;
 
@@ -231,15 +235,15 @@ public class FSMValidator {
 		}
 
 		if (CollectionUtils.isEmpty(criteria.getApplicationStatus()) && !allowedParams.contains("applicationStatus")) {
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on applicationStatus is not allowed");
+			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, ERROR_APPLICATION_STATUS_SEARCH_NOT_ALLOWED);
 		}
 
 		if (CollectionUtils.isEmpty(criteria.getLocality()) && !allowedParams.contains("locality")) {
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on applicationStatus is not allowed");
+			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, ERROR_APPLICATION_STATUS_SEARCH_NOT_ALLOWED);
 		}
 
 		if (CollectionUtils.isEmpty(criteria.getOwnerIds()) && !allowedParams.contains("ownerIds")) {
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on applicationStatus is not allowed");
+			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, ERROR_APPLICATION_STATUS_SEARCH_NOT_ALLOWED);
 		}
 
 	}
@@ -426,7 +430,7 @@ public class FSMValidator {
 	
 	public void validateAudit(FSMAuditSearchCriteria criteria) {
 		if(criteria.getTenantId()==null) {
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
+			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, ERROR_TENANT_ID_MANDATORY_SEARCH);
 		}
 		else {
 			 if(StringUtils.isEmpty(criteria.getApplicationNo()) && StringUtils.isEmpty(criteria.getId())) {
