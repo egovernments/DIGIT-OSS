@@ -409,16 +409,26 @@ function createContentForDetailsWithLengthOfOneAndThree(values, data, column1, c
 // </button>,
 
 const downloadPdf = (blob, fileName) => {
-  const link = document.createElement("a");
-  // create a blobURI pointing to our Blob
-  link.href = URL.createObjectURL(blob);
-  link.download = fileName;
-  // some browser needs the anchor to be in the doc
-  document.body.append(link);
-  link.click();
-  link.remove();
-  // in case the Blob uses a lot of memory
-  setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+  if(window.mSewaApp&&window.mSewaApp.isMsewaApp() &&
+      window.mSewaApp.downloadBase64File){
+      var reader = new FileReader();
+      reader.readAsDataURL(blob); 
+      reader.onloadend = function() {
+        var base64data = reader.result;                
+        mSewaApp.downloadBase64File(base64data,fileName)
+      }
+  }else{
+      const link = document.createElement("a");
+      // create a blobURI pointing to our Blob
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      // some browser needs the anchor to be in the doc
+      document.body.append(link);
+      link.click();
+      link.remove();
+      // in case the Blob uses a lot of memory
+      setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+  }
 };
 
 /* Download Receipts */
