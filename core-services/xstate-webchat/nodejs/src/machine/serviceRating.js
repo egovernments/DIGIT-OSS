@@ -227,7 +227,6 @@ const serviceRating = {
       states: {
         question: {
           onEntry: assign((context, event) => {
-            const commentMessage = [];
             const preamble = dialog.get_message(messages.rating.comment, context.user.locale);
             const commentQuestion = {
               message: preamble,
@@ -235,17 +234,8 @@ const serviceRating = {
               optionType: 'textarea',
               option: [{ key: '1', value: '' }],
             };
-            commentMessage.push(commentQuestion);
 
-            const imageQuestion = {
-              message: dialog.get_message(messages.rating.Image, context.user.locale),
-              step: 'last',
-              optionType: 'image',
-              option: [{ key: '1', value: dialog.get_message(messages.rating.Gallery, context.user.locale), type: 'button' }, { key: '2', value: dialog.get_message(messages.rating.Screenshot, context.user.locale), type: 'button' }],
-            };
-            commentMessage.push(imageQuestion);
-
-            dialog.sendMessage(context, commentMessage);
+            dialog.sendMessage(context, commentQuestion);
           }),
           on: {
             USER_MESSAGE: 'process',

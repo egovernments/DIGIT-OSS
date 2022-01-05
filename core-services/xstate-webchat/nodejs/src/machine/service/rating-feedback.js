@@ -5,7 +5,7 @@ require('url-search-params-polyfill');
 
 class RatingAndFeedback {
   async fetchMdmsData(tenantId, moduleName, masterName, filterPath) {
-    const url = `https://dev.digit.org/${config.egovServices.mdmsSearchPath}`;
+    const url = config.egovServices.egovServicesHost + config.egovServices.mdmsSearchPath;
     const request = {
       RequestInfo: {},
       MdmsCriteria: {

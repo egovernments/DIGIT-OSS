@@ -1,39 +1,43 @@
  const messages = {
   complaintMenu: {
-     prompt: {
-        en_IN: { message: 'What is your complaint about?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Not Receiving OTP'}, { key: '2', value: 'Unable to Proceed Forward'}, { key: '3', value: 'Bill Amount is incorrect'}, { key: '4', value: 'Application Process taking long time'}, { key: '5', value: 'Application is getting rejected'}, { key: '6', value: 'Others'}] },
-        hi_IN: { message: 'What is your complaint about?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'ओटीपी प्राप्त नहीं हो रहा है'}, { key: '2', value: 'आगे बढ़ने में असमर्थ'}, { key: '3', value: 'बिल राशि गलत है'}, { key: '4', value: 'आवेदन प्रक्रिया में लंबा समय लग रहा है'}, { key: '5', value: 'आवेदन खारिज हो रहा है'}, { key: '6', value: 'अन्य'}] }
+    prompt: {
+      en_IN: {
+        message: 'What is your complaint about?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Not Receiving OTP' }, { key: '2', value: 'Unable to Proceed Forward' }, { key: '3', value: 'Bill Amount is incorrect' }, { key: '4', value: 'Application Process taking long time' }, { key: '5', value: 'Application is getting rejected' }, { key: '6', value: 'Others' }],
       },
-      options: {
-        list: ['nootp', 'unabletoproceed', 'billincorrect', 'apptakinglong', 'apprejected', 'others'],
-        messageBundle: {
-          nootp: {
-            en_IN: 'Not Receiving OTP',
-            hi_IN: 'कोविड में अपना ख्याल कैसे रखें?',
-          },
-          unabletoproceed: {
-            en_IN: 'Unable to Proceed Forward',
-            hi_IN: 'फतेह किट का इस्तेमाल कैसे करें',
-          },
-          billincorrect: {
-            en_IN: 'Bill Amount is incorrect',
-            hi_IN: 'कोविड बेड की उपलब्धता के बारे में जानकारी',
-          },
-          apptakinglong: {
-            en_IN: 'Application Process taking long time',
-            hi_IN: 'टीकाकरण केंद्रों की जानकारी',
-          },
-          apprejected: {
-            en_IN: 'Application is getting rejected?',
-            hi_IN: 'टीकाकरण के लिए मुझे कहां पंजीकरण कराना चाहिए?',
-          },
-          others: {
-            en_IN: 'Others',
-            hi_IN: 'काले फंगस के बारे में विस्तृत जानकारी और क्या करें और क्या न करें',
-          },
+      hi_IN: {
+        message: 'What is your complaint about?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'ओटीपी प्राप्त नहीं हो रहा है' }, { key: '2', value: 'आगे बढ़ने में असमर्थ' }, { key: '3', value: 'बिल राशि गलत है' }, { key: '4', value: 'आवेदन प्रक्रिया में लंबा समय लग रहा है' }, { key: '5', value: 'आवेदन खारिज हो रहा है' }, { key: '6', value: 'अन्य' }],
+      },
+    },
+    options: {
+      list: ['nootp', 'unabletoproceed', 'billincorrect', 'apptakinglong', 'apprejected', 'others'],
+      messageBundle: {
+        nootp: {
+          en_IN: 'Not Receiving OTP',
+          hi_IN: 'कोविड में अपना ख्याल कैसे रखें?',
+        },
+        unabletoproceed: {
+          en_IN: 'Unable to Proceed Forward',
+          hi_IN: 'फतेह किट का इस्तेमाल कैसे करें',
+        },
+        billincorrect: {
+          en_IN: 'Bill Amount is incorrect',
+          hi_IN: 'कोविड बेड की उपलब्धता के बारे में जानकारी',
+        },
+        apptakinglong: {
+          en_IN: 'Application Process taking long time',
+          hi_IN: 'टीकाकरण केंद्रों की जानकारी',
+        },
+        apprejected: {
+          en_IN: 'Application is getting rejected?',
+          hi_IN: 'टीकाकरण के लिए मुझे कहां पंजीकरण कराना चाहिए?',
+        },
+        others: {
+          en_IN: 'Others',
+          hi_IN: 'काले फंगस के बारे में विस्तृत जानकारी और क्या करें और क्या न करें',
         },
       },
-    
+    },
+
   },
 
   complaintCategoryItems: {
@@ -130,7 +134,7 @@
         hi_IN: {message: 'Application Timeline', step: 'intermediate', optionType: 'timelineStatus', option: [{ key: '1', value: 'Yes' },{key:'2',value: 'No'}],appstatus:'',sub_message:' Do you want to raise a complaint on this?'},
       },
     },
-  others: {
+    others: {
       nextStep: ['persistComplaint'],
       messageBundle:{
         en_IN: { message: 'Let us know about your complaint', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }] },
@@ -147,7 +151,7 @@
   },
   persistComplaint: {
     en_IN: 'Complaint created successfully \n Complaint ID: {{complaintNumber}} \n Your Complaint has been registered and one of our representatives will get in touch with you regarding the issue\n',
-    hi_IN: 'धन्यवाद! आपने सफलतापूर्वक शिकायत दर्ज की है।\nआपकी शिकायत संख्या: {{complaintNumber}}\n'
+    hi_IN: 'धन्यवाद! आपने सफलतापूर्वक शिकायत दर्ज की है।\nआपकी शिकायत संख्या: {{complaintNumber}}\n',
   },
   closingStatement: {
     en_IN: '\nIn case of any help please type and send "mseva"',
