@@ -1,7 +1,7 @@
 import { CardText, Loader, PDFSvg } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { pdfDocumentName, pdfDownloadLink, getDocumentsName } from "../utils";
+import { pdfDocumentName, pdfDownloadLink, getDocumentsName,stringReplaceAll } from "../utils";
 
 function OBPSDocument({ value = {}, Code, index, isNOC = false, svgStyles = { width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }, isStakeHolder = false }) {
   const { t } = useTranslation();
@@ -45,8 +45,8 @@ function OBPSDocument({ value = {}, Code, index, isNOC = false, svgStyles = { wi
                     <div style={{ display: "flex", justifyContent: "center" }}>
                       <PDFSvg />
                     </div>
-                    {isStakeHolder ? <p style={{ marginTop: "8px", textAlign: "center", color: "#505A5F" }}>{document?.fileName ? `${document?.fileName}` : `${t(`ES_COMMON_DOC_DOCUMENT`)} - ${index + 1}`}</p> : null}
-                    {!isStakeHolder ? <p style={{ marginTop: "8px", textAlign: "center" }}>{`${t(Code)}`}</p> : null}
+                    {isStakeHolder ? <p style={{ marginTop: "8px", textAlign: "center", color: "#505A5F" }}>{t(`BPAREG_HEADER_${stringReplaceAll(Code?.toUpperCase(), ".", "_")}`)}</p> : null}  {/* document?.fileName ? `${document?.fileName}` : `${t(`ES_COMMON_DOC_DOCUMENT`)} - ${index + 1}` */}
+                    {!isStakeHolder ? <p style={{ marginTop: "8px", textAlign: "center", color: "#505A5F"  }}>{`${t(Code)}`}</p> : null}
                   </a>
                 );
               })}

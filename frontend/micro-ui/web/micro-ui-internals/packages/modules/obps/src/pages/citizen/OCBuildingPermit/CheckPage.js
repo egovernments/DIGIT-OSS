@@ -201,17 +201,17 @@ const CheckPage = ({ onSubmit, value }) => {
           {/* <Row className="border-none" label={`${t("BPA_UPLOADED_PLAN_DIAGRAM")}`}></Row> */}
           <CardSubHeader>{t("BPA_UPLOADED_PLAN_DIAGRAM")}:</CardSubHeader>
           <LinkButton
-            label={ <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" /> }
+            label={ <PDFSvg /> }
             onClick={() => routeTo(datafromAPI?.updatedDxfFile)}
           />
-          <p style={{ marginTop: "8px", textAlign: "Left" }}>{t(`Uploaded Plan.DXF`)}</p>
+           <p style={{ marginTop: "8px", marginBottom: "20px", textAlign:"Left", fontSize: "16px", lineHeight: "19px", color: "#505A5F", fontWeight: "400" }}>{t(`BPA_UPLOADED_PLAN_DXF`)}</p>
           {/* <Row className="border-none" label={`${t("BPA_SCRUNTINY_REPORT_OUTPUT")}`} ></Row> */}
           <CardSubHeader>{t("BPA_SCRUNTINY_REPORT_OUTPUT")}:</CardSubHeader>
           <LinkButton
-            label={ <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" /> }
+            label={ <PDFSvg /> }
             onClick={() => routeTo(datafromAPI?.planReport)}
           />
-          <p style={{ marginTop: "8px", textAlign: "Left" }}>{t(`Scrutiny Report.PDF`)}</p>
+            <p style={{ marginTop: "8px", marginBottom: "20px", textAlign:"Left", fontSize: "16px", lineHeight: "19px", color: "#505A5F", fontWeight: "400" }}>{t(`BPA_SCRUTINY_REPORT_PDF`)}</p>
         </StatusTable>
         <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
         <CardSubHeader>{`${t("BPA_BUILDING_EXTRACT_HEADER")}:`}</CardSubHeader>

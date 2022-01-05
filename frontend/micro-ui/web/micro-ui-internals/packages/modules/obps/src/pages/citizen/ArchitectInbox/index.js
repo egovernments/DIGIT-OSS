@@ -169,7 +169,7 @@ const Inbox = ({ tenants, parentRoute }) => {
   if (isMobile) {
     return (
       <React.Fragment>
-        <h2 style={headerStyle} >{`${t("OBPS_ARCH_INBOX")} ( ${bpaInboxData?.totalCount || 0} )`}</h2>
+        <h2 style={headerStyle} >{`${t("ES_COMMON_OBPS_INBOX_LABEL")} ( ${bpaInboxData?.totalCount || 0} )`}</h2>
         <MobileInbox
           bparegData={[]}
           edcrData={[]}
