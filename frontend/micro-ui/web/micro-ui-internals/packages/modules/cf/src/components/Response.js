@@ -44,6 +44,10 @@ const Response = (props) => {
       actionMessage: resp[0].split('"')[1],
       complaintNumber: resp[1].split(': ')[1]
     }
+  } else {
+    let temp = successData.split('"')
+    message = temp[1]
+    response.actionMessage = 'Feedback Submitted Successfully'
   }
 
   return (
@@ -54,7 +58,7 @@ const Response = (props) => {
       <ResponseComposer />
       <CardText>{message}</CardText>
       <Link to="/digit-ui/citizen">
-        <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
+        <SubmitBar label={"Back To Home"} />
       </Link>
     </Card>
   );
