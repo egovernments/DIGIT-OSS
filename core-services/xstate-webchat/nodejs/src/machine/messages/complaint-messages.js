@@ -1,4 +1,4 @@
-const messages = {
+ const messages = {
   complaintMenu: {
      prompt: {
         en_IN: { message: 'What is your complaint about?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Not Receiving OTP'}, { key: '2', value: 'Unable to Proceed Forward'}, { key: '3', value: 'Bill Amount is incorrect'}, { key: '4', value: 'Application Process taking long time'}, { key: '5', value: 'Application is getting rejected'}, { key: '6', value: 'Others'}] },
@@ -102,7 +102,7 @@ const messages = {
       },
     },
     propreg: {
-      nextStep: ['complaintComments'],
+      nextStep: ['appidSearch'],
       messageBundle: {
         en_IN: {
           message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
@@ -113,7 +113,7 @@ const messages = {
       },
     },
     mutation: {
-      nextStep: ['complaintComments'],
+      nextStep: ['appidSearch'],
       messageBundle: {
         en_IN: {
           message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
@@ -124,14 +124,10 @@ const messages = {
       },
     },
     appidSearch: {
-      nextStep: ['complaintComments'],
+      nextStep: ['Yes','No'],
       messageBundle: {
-        en_IN: {
-          message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
-        },
-        hi_IN: {
-          message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
-        },
+        en_IN: {message: 'Application Timeline', step: 'intermediate', optionType: 'timelineStatus', option: [{ key: '1', value: 'Yes' },{key:'2',value: 'No'}],appstatus:'',sub_message:' Do you want to raise a complaint on this?'},
+        hi_IN: {message: 'Application Timeline', step: 'intermediate', optionType: 'timelineStatus', option: [{ key: '1', value: 'Yes' },{key:'2',value: 'No'}],appstatus:'',sub_message:' Do you want to raise a complaint on this?'},
       },
     },
   others: {
@@ -140,8 +136,6 @@ const messages = {
         en_IN: { message: 'Let us know about your complaint', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }] },
         hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }] }
     },
-
-
   },
   complaintComments: {
         nextStep: ['persistComplaint'],
@@ -149,8 +143,6 @@ const messages = {
           en_IN: { message: 'Let us know about your complaint', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }] },
           hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }] }
       },
-
-  
   },
   },
   persistComplaint: {

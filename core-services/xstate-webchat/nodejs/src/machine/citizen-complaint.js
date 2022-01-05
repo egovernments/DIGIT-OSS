@@ -1,5 +1,6 @@
 const { assign } = require('xstate');
 const { pgrService } = require('./service/service-loader');
+const { workFlowService } = require('./service/service-loader');
 const dialog = require('./util/dialog');
 const messages = require('./messages/complaint-messages');
 
@@ -82,6 +83,13 @@ const citizenComplaint = {
 
                         },
                         {
+                            cond: (context) => context.intention == 'appidSearch',
+                            target: '#appidSearch',
+                            actions: assign((context, event) => {
+                                context.slots.pgr["complaintItem"] = context.intention;
+                            })
+                        },
+                        {
                             cond: (context) => context.intention == 'persistComplaint',
                             target: '#persistComplaint',
                             actions: assign((context, event) => {
@@ -110,7 +118,66 @@ const citizenComplaint = {
             } // states of complaintItem
         }, // complaintItem
 
+        appidSearch: {
+            id: 'appidSearch',
+            invoke: {
+                id: 'fetchappStatus',
+                src: (context) => workFlowService.getApplicationStatus(context.user,context.extraInfo.applicationId),
+                onDone: {
+                    target: '#appidSubmit',
+                    actions: assign((context, event) => {
+                        let complaintDetails = event.data;
+                        let appstatus=[{ status:'Pending',date: new Date}];
+                        let message = dialog.get_message(messages.complaintCategoryItems.appidSearch.messageBundle, context.user.locale);
+                        message.appstatus=appstatus;
+                        let nextStepList = messages.complaintCategoryItems[context.intention].nextStep;
+                        let messageBundleForCode = '';
+                        let grammer = dialog.constructContextGrammer(nextStepList, messageBundleForCode, context.user.locale);
+                        context.grammer = grammer;
+                        dialog.sendMessage(context, message);
+                    })
+                }
+            }
+        },
 
+        appidSubmit: {
+            id: 'appidSubmit',
+            initial: 'wait',
+            states: {
+                wait: {
+                       on: {USER_MESSAGE: 'process' }
+                }, 
+                process: {
+                    onEntry: assign((context, event) => {
+                        context.intention = dialog.get_intention(context.grammer, event, true)
+                    }),
+                    always: [
+                        {
+                            cond: (context) => context.intention == 'Yes',
+                            target: '#complaintItem',
+                            actions: assign((context, event) => {
+                                //Here we need to push Complaint Comments to the context to ask for user comments
+                                context.slots.pgr["complaintItem"] = 'complaintComments';
+                            })
+                        },
+                        {
+                            cond: (context) => context.intention == 'No',
+                            target: '#endstate'
+
+                        },
+                       {
+                            target: 'error'
+                       }
+                    ]
+                }, // process
+                error: {
+                    onEntry: assign((context, event) => {
+                        dialog.sendMessage(context, dialog.get_message(dialog.global_messages.error.retry, context.user.locale), true);
+                    }),
+                    always: 'wait',
+                } 
+            } 
+        }, 
 
         persistComplaint: {
             id: 'persistComplaint',
