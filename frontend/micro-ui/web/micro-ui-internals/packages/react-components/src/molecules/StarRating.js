@@ -25,7 +25,7 @@ const StarRating = (props) => {
   }, [])
 
   return (
-    OptionList.map((i) => (
+    // OptionList.map((i) => (
       <div style={{
         border: "1px solid #d6d5d4",
         backgroundColor: "#fafafa",
@@ -37,7 +37,7 @@ const StarRating = (props) => {
       }}>
         <Rating styles={{ width: "90%", marginBottom: "0px" }} currentRating={rating} maxRating={5} onFeedback={(e, ref, i) => feedback(e, ref, i)} />
       </div>
-    ))
+    // ))
   );
 };
 
