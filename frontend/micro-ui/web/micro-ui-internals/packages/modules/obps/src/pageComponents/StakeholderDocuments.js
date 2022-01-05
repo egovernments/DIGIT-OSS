@@ -23,6 +23,11 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     const isCitizenUrl = Digit.Utils.browser.isMobile()?true:false;
     let isopenlink = window.location.href.includes("/openlink/");
 
+    if(isopenlink)  
+    window.onunload = function () {
+      sessionStorage.removeItem("Digit.BUILDING_PERMIT");
+    }
+
     const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateId, "StakeholderRegistraition", "TradeTypetoRoleMapping");
     
 

@@ -16,6 +16,11 @@ const PermanentAddress = ({ t, config, onSelect, value, userType, formData }) =>
   //   let mdmsFinancialYear = fydata["egf-master"] ? fydata["egf-master"].FinancialYear.filter(y => y.module === "TL") : [];
   //   let FY = mdmsFinancialYear && mdmsFinancialYear.length > 0 && mdmsFinancialYear.sort((x, y) => y.endingDate - x.endingDate)[0]?.code;
 
+  if(isopenlink)  
+  window.onunload = function () {
+    sessionStorage.removeItem("Digit.BUILDING_PERMIT");
+  }
+
 
   function selectPermanentAddress(e) {
     setPermanentAddress(e.target.value);
