@@ -2,10 +2,13 @@ import React, { Fragment, useEffect, useState } from 'react';
 import TextArea from '../atoms/TextArea';
 import CustomButton from '../atoms/SendButton';
 import GalleryButton from './GalleryButton';
+import Toast from '../atoms/Toast';
 
 function UserInput(props) {
     const [OptionList, setOptionDetails] = useState([]);
     const [textData, setTextData] = useState("");
+    const [fileStoreIds, setFileStoreIds] = useState([]);
+    const [showToast, setShowToast] = useState(null);
     const User = Digit.UserService.getUser();
 
     const styling = {
@@ -19,16 +22,37 @@ function UserInput(props) {
     }
 
     const handleSubmit = () => {
-        if (textData != "") {
+        let isTextValid = true
+        if (props.stepDetails.message && props.stepDetails.message.includes('mobile number')) {
+            if (textData.length !== 10 || !(new RegExp(/^[0-9]*$/).test(textData))) {
+                isTextValid = false
+                setShowToast({ key: true, label: "Please enter 10 digits" })
+                setTimeout(() => {
+                    setShowToast(null)
+                }, 2000);
+            }
+        } else if (props.stepDetails.message && props.stepDetails.message.includes('Application ID')) {
+            if (textData.length === 20 && new RegExp(/^[A-Za-z0-9-]*$/).test(textData)) { } else {
+                isTextValid = false
+                setShowToast({ key: true, label: 'Valid Application Id must me of 20 characters with allowed special character "-"' })
+                setTimeout(() => {
+                    setShowToast(null)
+                }, 2000);
+            }
+        }
+        if (textData != "" && isTextValid) {
+            let fileStoreId = ''
+            if (fileStoreIds.length) {
+                fileStoreId = fileStoreIds.toString()
+            }
             const itemDetails = {
                 key: "1",
                 value: textData,
-                type: "button"
+                type: "button",
+                fileStoreId: fileStoreId
             }
             props.handleSubmit(props.stepDetails, itemDetails)
             console.log(textData)
-        } else {
-            console.log("none")
         }
     }
 
@@ -37,7 +61,7 @@ function UserInput(props) {
     }
 
     const handleUpload = (img) => {
-        console.log(img)
+        setFileStoreIds(img)
     }
 
     useEffect(() => {
@@ -90,6 +114,15 @@ function UserInput(props) {
                     cardText=""
                     onPhotoChange={handleUpload}
                     uploadedImages={null} />}
+                {showToast && (
+                    <Toast
+                        error={showToast.key}
+                        label={showToast.label}
+                        onClose={() => {
+                            setShowToast(null);
+                        }}
+                    />
+                )}
             </>
         ))
     );

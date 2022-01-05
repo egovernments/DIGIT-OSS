@@ -14,7 +14,7 @@ function AvailableOptionsList(props) {
 
     return (
         <div className="availableOptionList">
-            {OptionList.map((i) => {
+            {OptionList && OptionList.map((i) => {
                 return <AvailableOptionItem title={i.value} action={() => selectItem(i)} />
             })}
         </div>

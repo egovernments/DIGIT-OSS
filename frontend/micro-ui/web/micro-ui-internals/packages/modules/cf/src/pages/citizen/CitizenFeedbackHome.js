@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Card, CardHeader, ComplaintIcon, AvailableOptionsList, UserInput, ChatBubble, MultipleSelect, StarRating, ReplyComponent } from "@egovernments/digit-ui-react-components";
-import { WEBSOCKET_URL } from "./config";
+import { Card, CardHeader, ComplaintIcon, AvailableOptionsList, UserInput, ChatBubble, MultipleSelect, StarRating, ReplyComponent, Accordion } from "@egovernments/digit-ui-react-components";
+import { accordionData, WEBSOCKET_URL } from "./config";
 
 const CitizenFeedbackHome = ({ parentRoute }) => {
   const [steps, setSteps] = useState([]);
@@ -15,7 +15,6 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
   const history = useHistory();
   const messagesEndRef = useRef(null);
   const User = Digit.UserService.getUser();
-  console.log("sdcsdcscs user", User)
 
   const onItemSelect = (stepDetails, itemDetails) => {
     if (showFaq) {
@@ -48,7 +47,7 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
       },
       "extraInfo": {
         "whatsAppBusinessNumber": "917834811114",
-        "filestoreId": ""
+        "filestoreId": itemDetails.fileStoreId ? itemDetails.fileStoreId : ''
       }
     }
     ));
@@ -61,7 +60,6 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
     console.log("Disabled btn selected")
   }
 
-  console.log("sdcsdcscs345", steps)
   const ws = useRef();
 
   const connectWebsocket = () => {
@@ -69,7 +67,6 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
     ws.current = new WebSocket(WEBSOCKET_URL);
 
     ws.current.onopen = () => {
-      console.log('sdcsdcscs Connection opened!');
       setConnectionOpen(true);
       setNewTimeout(250) // reset timer to 250 on open of websocket connection 
       clearTimeout(connectInterval); // clear Interval on on open of websocket connection
@@ -93,7 +90,6 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
     };
 
     ws.current.onclose = (ev) => {
-      console.log("sdcsdcscs3", ev)
       if (ev.code === 4000) {
         // navigate('/kicked', { state: { kickReason: ev.reason } });
       }
@@ -122,13 +118,11 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
   }
 
   const check = () => {
-    console.log("sdcsdcscs5", initialConnectionOpen)
     if (initialConnectionOpen && (!ws || ws.current.readyState == WebSocket.CLOSED)) { connectWebsocket(); } //check if websocket instance is closed, if so call `connect` function.
   };
 
   useEffect(() => {
     const prevSteps = stepsData;
-    console.log("sdcsdcscs storage", prevSteps)
     if (prevSteps && prevSteps.length) {
       const initialStep = prevSteps
       setSteps(initialStep);
@@ -139,7 +133,6 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
     connectWebsocket()
 
     return () => {
-      console.log('sdcsdcscs Cleaning up! 🧼');
       ws.current.close();
       clearStepsData()
     };
@@ -150,9 +143,7 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     ws.current.onmessage = (ev) => {
-      console.log("sdcsdcscs1", ev)
       const message = JSON.parse(ev.data);
-      console.log("sdcsdcscs22", steps)
       if (typeof message == "object") {
         setStepsData([...steps, message]);
         setSteps(steps => [...steps, message]);
@@ -229,6 +220,12 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
       {showFaq && (
         <Card>
           <p style={{ color: '#F47738', fontSize: '20px' }}>FAQs</p>
+
+          <div className="accordion">
+            {accordionData.map(({ title, children }) => (
+              <Accordion title={title} children={children} />
+            ))}
+          </div>
         </Card>
       )}
     </>

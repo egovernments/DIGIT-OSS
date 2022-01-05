@@ -172,7 +172,8 @@ import {
   BirthIcon,
   FirenocIcon,
   SendIcon,
-  GalleryIcon
+  GalleryIcon,
+  ArrowIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -230,6 +231,7 @@ import ReplyComponent from "./molecules/ReplyComponent"
 import MultipleSelect from "./molecules/MultipleSelect"
 import GalleryButton from "./molecules/GalleryButton"
 import AvailableOptionsList from "./molecules/AvailableOptionsList"
+import Accordion from "./atoms/Accordion";
 
 
 export {
@@ -319,6 +321,7 @@ export {
   ChatBubble,
   AvailableOptionItem,
   SendButton,
+  Accordion,
   // Icons
   GetApp,
   ArrowLeft,
@@ -470,6 +473,7 @@ export {
   BirthIcon,
   FirenocIcon,
   SendIcon,
-  GalleryIcon
+  GalleryIcon,
+  ArrowIcon
 
 };

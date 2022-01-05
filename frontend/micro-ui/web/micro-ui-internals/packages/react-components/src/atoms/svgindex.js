@@ -1080,6 +1080,12 @@ const InboxIcon = () => (
   </svg>
 );
 
+const ArrowIcon = ({ style, fill }) => (
+  <svg style={style} width="12" height="16" viewBox="0 0 13 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0.879883 2.12L8.75988 10L0.879883 17.88L2.99988 20L12.9999 10L2.99988 0L0.879883 2.12Z" fill="#F47738"/>
+  </svg>
+)
+
 export {
   AnnouncementIcon,
   ReceiptIcon,
@@ -1202,5 +1208,6 @@ export {
   BirthIcon,
   DeathIcon,
   SendIcon,
-  GalleryIcon
+  GalleryIcon,
+  ArrowIcon
 };
