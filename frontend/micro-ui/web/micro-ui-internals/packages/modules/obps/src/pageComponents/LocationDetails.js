@@ -260,7 +260,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
             optionKey="i18nkey"
             onSelect={selectLocality}
             t={t}
-            //isDependent={true}
+            isDependent={true}
             labelKey=""
           //disabled={isEdit}
           />

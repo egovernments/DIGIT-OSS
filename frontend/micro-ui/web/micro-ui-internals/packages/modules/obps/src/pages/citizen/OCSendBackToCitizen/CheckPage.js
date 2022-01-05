@@ -235,16 +235,16 @@ const CheckPage = ({ onSubmit, value }) => {
       </Card>
       <Card style={{paddingRight:"16px"}}>
         <CardHeader>{t("BPA_STEPPER_SCRUTINY_DETAILS_HEADER")}</CardHeader>
-        <CardSubHeader>{t(value?.uiFlow?.flow === "OCBPA" ? "BPA_OC_EDCR_NO_LABEL" : "BPA_EDCR_DETAILS")}:</CardSubHeader>
+        <CardSubHeader>{t(value?.uiFlow?.flow === "OCBPA" ? "BPA_OC_EDCR_NO_LABEL" : "BPA_EDCR_DETAILS")}</CardSubHeader>
         <StatusTable style={{ border: "none" }}>
           <Row className="border-none" label={t("BPA_EDCR_NO_LABEL")} text={data?.scrutinyNumber?.edcrNumber || t("CS_NA")}></Row>
-          <CardSubHeader>{t("BPA_UPLOADED_PLAN_DIAGRAM")}:</CardSubHeader>
+          <CardSubHeader>{t("BPA_UPLOADED_PLAN_DIAGRAM")}</CardSubHeader>
           <LinkButton
             label={<PDFSvg />}
             onClick={() => routeTo(datafromAPI?.updatedDxfFile)}
           />
           <p style={{ marginTop: "8px", marginBottom: "20px", textAlign:"Left", fontSize: "16px", lineHeight: "19px", color: "#505A5F", fontWeight: "400" }}>{t(`BPA_UPLOADED_PLAN_DXF`)}</p>
-          <CardSubHeader>{t("BPA_SCRUNTINY_REPORT_OUTPUT")}:</CardSubHeader>
+          <CardSubHeader>{t("BPA_SCRUNTINY_REPORT_OUTPUT")}</CardSubHeader>
           <LinkButton
             label={<PDFSvg />}
             onClick={() => routeTo(datafromAPI?.planReport)}
@@ -259,16 +259,16 @@ const CheckPage = ({ onSubmit, value }) => {
           <Row className="border-none" label={t("BPA_HEIGHT_FROM_GROUND_LEVEL_FROM_MUMTY")} text={`${datafromAPI?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight} mtrs`}></Row>
         </StatusTable>
         <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
-        <CardSubHeader>{t("BPA_OCC_SUBOCC_HEADER")}:</CardSubHeader>
+        <CardSubHeader>{t("BPA_OCC_SUBOCC_HEADER")}</CardSubHeader>
         {datafromAPI?.planDetail?.blocks.map((block, index) => (
           <div key={index}>
             <CardSubHeader style={{marginTop:"15px"}}>{t("BPA_BLOCK_SUBHEADER")} {index + 1}</CardSubHeader>
             <StatusTable >
-              <Row className="border-none" label={t("BPA_SUB_OCCUPANCY_LABEL")} text={getBlockSubOccupancy(index) === "" ? t("CS_NA") : getBlockSubOccupancy(index)}></Row>
+              <Row className="border-none" textStyle={{wordBreak:"break-word"}} label={t("BPA_SUB_OCCUPANCY_LABEL")} text={getBlockSubOccupancy(index) === "" ? t("CS_NA") : getBlockSubOccupancy(index)}></Row>
             </StatusTable>
             <div style={{ overflow: "scroll" }}>
               <Table
-                className="customTable table-fixed-first-column"
+                className="customTable table-fixed-first-column table-border-style"
                 t={t}
                 disableSort={false}
                 autoSort={true}
@@ -286,7 +286,7 @@ const CheckPage = ({ onSubmit, value }) => {
             </div>
           </div>))}
           <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
-        <CardSubHeader>{t("BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL")}:</CardSubHeader>
+        <CardSubHeader>{t("BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL")}</CardSubHeader>
         <StatusTable style={{ border: "none" }}>
           <Row className="border-none" label={t("BPA_APPLICATION_DEMOLITION_AREA_LABEL")} text={datafromAPI?.planDetail?.planInformation?.demolitionArea ? `${datafromAPI?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : t("CS_NA")}></Row>
         </StatusTable>
@@ -337,7 +337,7 @@ const CheckPage = ({ onSubmit, value }) => {
         <CardHeader>{t("BPA_NOC_DETAILS_SUMMARY")}</CardHeader>
         {nocDocuments && nocDocuments?.NocDetails.map((noc, index) => (
           <div key={index} style={nocDocuments?.NocDetails?.length > 1 ? { marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", maxWidth: "960px", minWidth: "280px" } : {}}>
-            <CardSectionHeader style={{ marginBottom: "24px" }}>{`${t(`BPA_${noc?.nocType}_HEADER`)}:`}</CardSectionHeader>
+            <CardSectionHeader style={{ marginBottom: "24px" }}>{`${t(`BPA_${noc?.nocType}_HEADER`)}`}</CardSectionHeader>
             <StatusTable>
               <Row className="border-none" label={t(`BPA_${noc?.nocType}_LABEL`)} text={noc?.applicationNo} />
               <Row className="border-none" label={t(`BPA_NOC_STATUS`)} text={t(`${noc?.applicationStatus}`)} textStyle={noc?.applicationStatus == "APPROVED" || noc?.applicationStatus == "AUTO_APPROVED" ? { color: "#00703C" } : { color: "#D4351C" }} />
@@ -348,7 +348,7 @@ const CheckPage = ({ onSubmit, value }) => {
         ))}
         </Card>
       <Card>
-        <CardSubHeader>{t("BPA_SUMMARY_FEE_EST")}:</CardSubHeader>
+        <CardSubHeader>{t("BPA_SUMMARY_FEE_EST")}</CardSubHeader>
         <StatusTable>
           {reciept_data?.Payments?.[0]?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.billAccountDetails.map((bill, index) => (
             <div key={index}>

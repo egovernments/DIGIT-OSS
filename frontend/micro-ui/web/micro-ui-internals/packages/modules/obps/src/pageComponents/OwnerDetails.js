@@ -27,7 +27,10 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     );
 
     useEffect(() => {
+        var flag=0;
         fields.map((ob) => {
+            if(ob.isPrimaryOwner)
+            flag=1;
             if (ob.name && ob.mobileNumber && ob.gender) {
                 setCanmovenext(false);
             }
@@ -35,11 +38,18 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 setCanmovenext(true);
             }
         })
+        if(!canmovenext && ownershipCategory && !(ownershipCategory?.code.includes("SINGLEOWNER")))
+        {
+            if(flag==1)
+            setCanmovenext(false);
+            else
+            setCanmovenext(true);
+        }
     }, [fields])
 
     useEffect(() => {
         const values = cloneDeep(fields);
-        if (ownershipCategory && !ismultiple && values?.length > 1) setFeilds([values[0]]);
+        if (ownershipCategory && !ismultiple && values?.length > 1) setFeilds([{...values[0],isPrimaryOwner:true}]);
     }, [ownershipCategory])
 
     const { isLoading, data: ownerShipCategories } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["OwnerShipCategory"]);
@@ -90,6 +100,10 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         const values = [...fields];
         if (values.length != 1) {
             values.splice(index, 1);
+            if(values.length == 1)
+            {
+                values[0] = {...values[0], isPrimaryOwner:true}
+            }
             setFeilds(values);
         }
 
