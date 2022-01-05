@@ -3,8 +3,7 @@ const pdfMake = require("pdfmake/build/pdfmake.js");
 // const pdfFonts = require("pdfmake/build/vfs_fonts.js");
 // pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-
-let pdfFonts =  {
+let pdfFonts = {
   //   Roboto: {
   //     normal: "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf",
   //     bold: "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf"
@@ -18,12 +17,12 @@ let pdfFonts =  {
     bold: "Hind-Bold.ttf",
   },
   pn_IN: {
-    normal:  'BalooPaaji2-Regular.ttf',
-    bold:'BalooPaaji2-Bold.ttf',
+    normal: "BalooPaaji2-Regular.ttf",
+    bold: "BalooPaaji2-Bold.ttf",
   },
   od_IN: {
-    normal: 'BalooBhaina2-Regular.ttf',
-    bold: 'BalooBhaina2-Bold.ttf',
+    normal: "BalooBhaina2-Regular.ttf",
+    bold: "BalooBhaina2-Bold.ttf",
   },
   hi_IN: {
     normal: "Hind-Regular.ttf",
@@ -32,7 +31,7 @@ let pdfFonts =  {
 };
 pdfMake.vfs = Fonts;
 
-pdfMake.fonts =pdfFonts;
+pdfMake.fonts = pdfFonts;
 
 const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
   if (
@@ -75,24 +74,24 @@ const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, headin
     email.length <= 15
       ? 190
       : email.length <= 20
-        ? 150
-        : email.length <= 25
-          ? 130
-          : email.length <= 30
-            ? 90
-            : email.length <= 35
-              ? 50
-              : email.length <= 40
-                ? 10
-                : email.length <= 45
-                  ? 0
-                  : email.length <= 50
-                    ? -20
-                    : email.length <= 55
-                      ? -70
-                      : email.length <= 60
-                        ? -100
-                        : -60;
+      ? 150
+      : email.length <= 25
+      ? 130
+      : email.length <= 30
+      ? 90
+      : email.length <= 35
+      ? 50
+      : email.length <= 40
+      ? 10
+      : email.length <= 45
+      ? 0
+      : email.length <= 50
+      ? -20
+      : email.length <= 55
+      ? -70
+      : email.length <= 60
+      ? -100
+      : -60;
 
   const dd = {
     pageMargins: [40, 80, 40, 30],
@@ -158,8 +157,8 @@ const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, headin
   };
   pdfMake.vfs = Fonts;
   let locale = Digit.SessionStorage.get("locale") || "en_IN";
-  let Hind = pdfFonts[locale]|| pdfFonts["Hind"];
-  pdfMake.fonts ={Hind:{...Hind}};
+  let Hind = pdfFonts[locale] || pdfFonts["Hind"];
+  pdfMake.fonts = { Hind: { ...Hind } };
   const generatedPDF = pdfMake.createPdf(dd);
   downloadPDFFileUsingBase64(generatedPDF, "acknowledgement.pdf");
 };
@@ -409,65 +408,82 @@ function createContentForDetailsWithLengthOfOneAndThree(values, data, column1, c
 // </button>,
 
 const downloadPdf = (blob, fileName) => {
-  const link = document.createElement("a");
-  // create a blobURI pointing to our Blob
-  link.href = URL.createObjectURL(blob);
-  link.download = fileName;
-  // some browser needs the anchor to be in the doc
-  document.body.append(link);
-  link.click();
-  link.remove();
-  // in case the Blob uses a lot of memory
-  setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+  if (window.mSewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
+    var reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = function () {
+      var base64data = reader.result;
+      window.mSewaApp.downloadBase64File(base64data, fileName);
+    };
+  } else {
+    const link = document.createElement("a");
+    // create a blobURI pointing to our Blob
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    // some browser needs the anchor to be in the doc
+    document.body.append(link);
+    link.click();
+    link.remove();
+    // in case the Blob uses a lot of memory
+    setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+  }
 };
 
 /* Download Receipts */
 
-export const downloadReceipt = async (consumerCode, businessService, pdfKey = "consolidatedreceipt",tenantId=Digit.ULBService.getCurrentTenantId(),receiptNumber=null) => {
-  const response = await Digit.ReceiptsService.receipt_download(businessService, consumerCode, tenantId, pdfKey,receiptNumber);
+export const downloadReceipt = async (
+  consumerCode,
+  businessService,
+  pdfKey = "consolidatedreceipt",
+  tenantId = Digit.ULBService.getCurrentTenantId(),
+  receiptNumber = null
+) => {
+  const response = await Digit.ReceiptsService.receipt_download(businessService, consumerCode, tenantId, pdfKey, receiptNumber);
   const responseStatus = parseInt(response.status, 10);
   if (responseStatus === 201 || responseStatus === 200) {
-    let filename=receiptNumber?`receiptNumber-${receiptNumber}.pdf`: `consumer-${consumerCode}.pdf`;
-    downloadPdf(new Blob([response.data], { type: "application/pdf" }),filename);
+    let filename = receiptNumber ? `receiptNumber-${receiptNumber}.pdf` : `consumer-${consumerCode}.pdf`;
+    downloadPdf(new Blob([response.data], { type: "application/pdf" }), filename);
   }
 };
 
 export const getFileUrl = (linkText = "") => {
-  const linkList = linkText && typeof linkText=="string" && linkText.split(",") || [];
-  let fileURL = '';
-  linkList && linkList.map(link => {
-    if (!link.includes('large') && !link.includes('medium') && !link.includes('small')) {
-      fileURL = link;
-    }
-  })
+  const linkList = (linkText && typeof linkText == "string" && linkText.split(",")) || [];
+  let fileURL = "";
+  linkList &&
+    linkList.map((link) => {
+      if (!link.includes("large") && !link.includes("medium") && !link.includes("small")) {
+        fileURL = link;
+      }
+    });
   return fileURL;
-}
-
+};
 
 /* Use this util function to download the file from any s3 links */
-export const downloadPDFFromLink = async (link, openIn = '_blank') => {
-
+export const downloadPDFFromLink = async (link, openIn = "_blank") => {
   var response = await fetch(link, {
     responseType: "arraybuffer",
     headers: {
       "Content-Type": "application/json",
-      Accept: "application/pdf"
-    }, "method": "GET",
-    "mode": "cors"
-  }).then(res => res.blob());
-  var a = document.createElement("a");
-  document.body.appendChild(a);
-  a.style = "display: none";
-  let url = window.URL.createObjectURL(response);
-  a.href = url;
-  a.download = decodeURIComponent(
-    link
-      .split("?")[0]
-      .split("/")
-      .pop()
-      .slice(13)
-  );
-  a.click();
-  window.URL.revokeObjectURL(url);
-
-}
+      Accept: "application/pdf",
+    },
+    method: "GET",
+    mode: "cors",
+  }).then((res) => res.blob());
+  if (window.mSewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
+    var reader = new FileReader();
+    reader.readAsDataURL(response);
+    reader.onloadend = function () {
+      var base64data = reader.result;
+      window.mSewaApp.downloadBase64File(base64data, decodeURIComponent(link.split("?")[0].split("/").pop().slice(13)));
+    };
+  } else {
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    let url = window.URL.createObjectURL(response);
+    a.href = url;
+    a.download = decodeURIComponent(link.split("?")[0].split("/").pop().slice(13));
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+};

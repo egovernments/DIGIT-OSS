@@ -1,7 +1,9 @@
-import { useQuery } from "react-query"
+import { useQuery,useQueryClient } from "react-query";
 
 const useBPAREGSearch = (tenantId, filters, params, config = {}) => {
-  return useQuery(['BPA_REG_SEARCH', tenantId, filters], () => Digit.OBPSService.BPAREGSearch(tenantId, filters, params), config)
+  const client = useQueryClient();
+
+  return {...useQuery(['BPA_REG_SEARCH', tenantId, filters], () => Digit.OBPSService.BPAREGSearch(tenantId, filters, params), config),revalidate: () => client.removeQueries(['BPA_REG_SEARCH', tenantId, filters])}
 }
 
 export default useBPAREGSearch;
