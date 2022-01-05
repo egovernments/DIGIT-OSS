@@ -15,8 +15,7 @@ pdfMake.fonts = {
 };
 
 export const AcknowledgementReceipt = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt) => {
-  console.log("details--" + details);
-  console.log(generalMDMSDataById);
+
   let data;
   let { owners, address, propertyDetails, header, propertyId } = details;
   let dateArray = new Date(propertyDetails[0].assessmentDate).toDateString().split(" ");
@@ -52,7 +51,6 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
   };
 
   const transform = (value, masterName) => {
-    // console.log(generalMDMSDataById);
     if (value) {
       return generalMDMSDataById && generalMDMSDataById[masterName] ? generalMDMSDataById[masterName][value].code : "NA";
     } else {

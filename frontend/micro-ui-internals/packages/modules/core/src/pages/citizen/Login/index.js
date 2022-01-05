@@ -37,7 +37,6 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
         setErrorTO(null);
       }
       errorTimeout = setTimeout(() => {
-        console.log("clearing err");
         setError("");
       }, 5000);
       setErrorTO(errorTimeout);
@@ -152,7 +151,6 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
       }
     } catch (err) {
       setIsOtpValid(false);
-      console.log(err);
     }
   };
 

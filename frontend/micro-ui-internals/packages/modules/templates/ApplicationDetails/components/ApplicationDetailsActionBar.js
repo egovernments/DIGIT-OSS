@@ -7,7 +7,6 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
   const user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
 
-  // console.log(userRoles, "inside actionBara");
   let actions = workflowDetails?.data?.actionState?.nextActions?.filter((e) => {
     return userRoles.some((role) => e.roles?.includes(role)) || !e.roles;
   });

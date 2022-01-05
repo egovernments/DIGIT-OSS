@@ -128,7 +128,6 @@ const mapStateToProps = (state, ownprops) => {
       value = valuesArray;
     }
   }
-  // console.log(value, suggestions);
   return { value, jsonPath, suggestions, localizationLabels };
 };
 

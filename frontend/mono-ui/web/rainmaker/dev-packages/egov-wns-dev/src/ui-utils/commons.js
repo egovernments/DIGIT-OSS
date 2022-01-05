@@ -69,7 +69,6 @@ export const updateTradeDetails = async requestBody => {
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
     alert(1);
-    console.log(label, labelKey)
     if (labelKey) {
         let translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
         if (!translatedLabel || labelKey === translatedLabel) {
@@ -1259,7 +1258,6 @@ export const getMdmsDataForMeterStatus = async (dispatch) => {
             [],
             mdmsBody
         );
-        // console.log(payload.MdmsRes)
         let data = payload.MdmsRes['ws-services-calculation'].MeterStatus.map(ele => {
             return { code: ele }
         })
@@ -1770,7 +1768,6 @@ export const downloadBill = (receiptQueryString, mode) => {
 
                 payloadReceiptDetails.Bill[0].billDetails.sort((a, b) => b.toPeriod - a.toPeriod);
                 httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], requestBody).then((payloadbillingPeriod) => {
-                    console.log(payloadbillingPeriod);
                     let waterMeteredDemandExipryDate = 0, waterNonMeteredDemandExipryDate = 0, sewerageNonMeteredDemandExpiryDate = 0;
                     const service = (payloadReceiptDetails.Bill && payloadReceiptDetails.Bill.length > 0 && payloadReceiptDetails.Bill[0].businessService) ? payloadReceiptDetails.Bill[0].businessService : 'WS';
                     if (service === 'WS' &&
@@ -1997,14 +1994,12 @@ export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
                 if (states.length > 0) {
                     for (var j = 0; j < states.length; j++) {
                         if (states[j]['state'] && states[j]['state'] !== undefined && states[j]['state'] !== null && states[j]['state'] !== "" && states[j]['state'] === 'PENDING_FOR_CONNECTION_ACTIVATION') {
-                            //console.log(states[j]['sla']);
                             wnsConnection[0].sla = states[j]['sla'] / 86400000;
                             findSLA = true;
                             break;
                         }
                     }
                 }
-                //console.log(i);
             }
             let connectionExecutionDate = new Date(wnsConnection[0].connectionExecutionDate);
             wnsConnection[0].slaDate = connectionExecutionDate.setDate(connectionExecutionDate.getDate() + wnsConnection[0].sla);

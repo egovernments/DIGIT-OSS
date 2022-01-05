@@ -4499,7 +4499,6 @@ export const prepareNocFinalCards = async (state, dispatch, isVisibleTrue) => {
       }
     });
   });
-  console.log('nocDocsFromMdms', nocDocsFromMdms);
 
   let documentsList = [],
     finalDoc = {},
@@ -4658,7 +4657,6 @@ const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocum
     {}
   );
   let cardReadOnly = getEditableUserRoleforNoc(state, isVisibleTrue);
-  console.log(cardReadOnly);
   //let cardReadOnly = false;
   if (documentCards && documentCards.length > 0) {
     cards = documentCards[0].cards;
@@ -4986,7 +4984,6 @@ export const prepareDocsInEmployee = (state, dispatch, action, appState, uploade
       dispatch(prepareFinalObject("documentsContract", finalDocuments));
     }
   }
-  console.log('requiredDocsFromMdms', finalDocuments)
   prepareFinalCards(state, dispatch, documentsPreview, finalDocuments, isVisibleTrue);
 };
 

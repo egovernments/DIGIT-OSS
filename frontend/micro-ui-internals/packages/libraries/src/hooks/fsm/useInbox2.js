@@ -101,7 +101,6 @@ const combineResponses = (applicationDetails, workflowInstances) => {
     tenantId: application.tenantId,
     totalCount: application.totalCount,
   }));
-  // console.log("find combine Response here", applicationDetails, workflowInstances, response)
 
   return response;
 };

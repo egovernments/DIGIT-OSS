@@ -76,7 +76,6 @@ class Playground extends React.Component {
             updateScreen(edit, "edit");
           }}
           onSelect={select => {
-            console.log(select);
           }}
         />
       </Div>

@@ -207,7 +207,6 @@ export const getBill = async (queryObject, dispatch) => {
         "error"
       )
     );
-    console.log(error, "fetxh");
   }
 };
 

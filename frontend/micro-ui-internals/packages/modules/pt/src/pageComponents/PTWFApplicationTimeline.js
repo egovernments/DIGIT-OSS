@@ -90,6 +90,8 @@ const PTWFApplicationTimeline = (props) => {
             </Link>
           </div>
         );
+      default:
+        return null;
     }
   };
 

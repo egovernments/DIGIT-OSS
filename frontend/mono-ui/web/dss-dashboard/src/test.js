@@ -10,17 +10,6 @@ let previous        = moment(current).subtract(1, 'quarter');
 let previousStartOf = moment(previous).startOf('quarter');
 let previousEndOf   = moment(previous).  endOf('quarter').add(1, 'day');
 
-/*console.log(
-  'current ', 
-  currentStartOf.format('DD-MM-YYYY'),
-  currentEndOf  .format('DD-MM-YYYY')
-)
-
-console.log(
-  'previous', 
-  previousStartOf.format('DD-MM-YYYY'),
-  previousEndOf  .format('DD-MM-YYYY')
-)*/
 
 console.log(
 	'Current FY',

@@ -852,7 +852,6 @@ export const resetFields = (state, dispatch) => {
 //     );
 //     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
 //   } catch (e) {
-//     console.log(e);
 //   }
 // };
 
