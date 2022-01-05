@@ -18,14 +18,7 @@ function MultipleSelect(props) {
     const saveData = (e) => {
         e.preventDefault();
         if (itemInfo.length) {
-            let itemArray = []
-            itemInfo.map((data) => {
-                itemArray.push(data.key)
-            })
-            let itemDetails = {
-                key: itemArray.toString()
-              }
-            props.handleSubmit(props.stepDetails, itemDetails)
+            props.handleSubmit(props.stepDetails, itemInfo)
         }
     }
 
