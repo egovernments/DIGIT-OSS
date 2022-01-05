@@ -29,15 +29,15 @@ function UserInput(props) {
                 setShowToast({ key: true, label: "Please enter 10 digits" })
                 setTimeout(() => {
                     setShowToast(null)
-                }, 2000);
+                }, 3000);
             }
         } else if (props.stepDetails.message && props.stepDetails.message.includes('Application ID')) {
-            if (textData.length === 20 && new RegExp(/^[A-Za-z0-9-]*$/).test(textData)) { } else {
+            if (textData.length <= 20 && new RegExp(/^[A-Za-z0-9-]*$/).test(textData)) { } else {
                 isTextValid = false
-                setShowToast({ key: true, label: 'Valid Application Id must me of 20 characters with allowed special character "-"' })
+                setShowToast({ key: true, label: 'It should be alpha numeric with only allowed hyphen special character and length 20 characters' })
                 setTimeout(() => {
                     setShowToast(null)
-                }, 2000);
+                }, 4000);
             }
         }
         if (textData != "" && isTextValid) {

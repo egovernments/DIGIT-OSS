@@ -12,14 +12,20 @@ function MultipleSelect(props) {
         color: "#F47738",
         border: "none",
         outline: "none",
-        marginTop: "-7px"
+        marginTop: "2px"
     }
 
     const saveData = (e) => {
         e.preventDefault();
-        console.log(itemInfo)
         if (itemInfo.length) {
-            props.handleSubmit(props.stepDetails, itemInfo)
+            let itemArray = []
+            itemInfo.map((data) => {
+                itemArray.push(data.key)
+            })
+            let itemDetails = {
+                key: itemArray.toString()
+              }
+            props.handleSubmit(props.stepDetails, itemDetails)
         }
     }
 
