@@ -1,4 +1,4 @@
- const messages = {
+const messages = {
   complaintMenu: {
     prompt: {
       en_IN: {
@@ -128,26 +128,104 @@
       },
     },
     appidSearch: {
-      nextStep: ['Yes','No'],
+      nextStep: ['Yes', 'No'],
       messageBundle: {
-        en_IN: {message: 'Application Timeline', step: 'intermediate', optionType: 'timelineStatus', option: [{ key: '1', value: 'Yes' },{key:'2',value: 'No'}],appstatus:'',sub_message:' Do you want to raise a complaint on this?'},
-        hi_IN: {message: 'Application Timeline', step: 'intermediate', optionType: 'timelineStatus', option: [{ key: '1', value: 'Yes' },{key:'2',value: 'No'}],appstatus:'',sub_message:' Do you want to raise a complaint on this?'},
+        en_IN: {
+          message: 'Application Timeline', step: 'intermediate', optionType: 'timelineStatus', option: [{ key: '1', value: 'Yes' }, { key: '2', value: 'No' }], appstatus: '', sub_message: ' Do you want to raise a complaint on this?',
+        },
+        hi_IN: {
+          message: 'Application Timeline', step: 'intermediate', optionType: 'timelineStatus', option: [{ key: '1', value: 'Yes' }, { key: '2', value: 'No' }], appstatus: '', sub_message: ' Do you want to raise a complaint on this?',
+        },
       },
     },
     others: {
       nextStep: ['persistComplaint'],
-      messageBundle:{
-        en_IN: { message: 'Let us know about your complaint', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }] },
-        hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }] }
-    },
-  },
-  complaintComments: {
-        nextStep: ['persistComplaint'],
-        messageBundle:{
-          en_IN: { message: 'Let us know about your complaint', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }] },
-          hi_IN: { message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }] }
+      messageBundle: {
+        en_IN: {
+          message: 'Let us know about your complaint', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }],
+        },
+        hi_IN: {
+          message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }],
+        },
       },
-  },
+    },
+    complaintComments: {
+      nextStep: ['persistComplaint'],
+      messageBundle: {
+        en_IN: {
+          message: 'Let us know about your complaint', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }],
+        },
+        hi_IN: {
+          message: 'हमें अपनी शिकायत के बारे में बताएं।', step: 'last', optionType: 'textarea', option: [{ key: '1', value: '' }],
+        },
+      },
+    },
+    billincorrect: {
+      nextStep: ['selectproperty'],
+      messageBundle: {
+        en_IN: {
+          message: 'Please enter your mobile number', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+        hi_IN: {
+          message: 'अपना मोबाइल नंबर दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+      },
+    },
+    selectproperty: {
+      nextStep: ['lastbillgenerated'],
+      messageBundle: {
+        en_IN: {
+          message: 'Please select your property from the below list which you want to report', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'P1' }, { key: '2', value: 'P2' }],
+        },
+        hi_IN: {
+          message: 'कृपया नीचे दी गई सूची में से अपनी संपत्ति का चयन करें जिसकी आप रिपोर्ट करना चाहते हैंxdder', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'P1' }, { key: '2', value: 'P2' }],
+        },
+      },
+    },
+    lastbillgenerated: {
+      nextStep: ['complaintComments'],
+      messageBundle: {
+        en_IN: {
+          message: 'Last Bill Generated <Bill ID> is Rs. <Amount>. Do you want to report this as incorrect?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Yes' }, { key: '2', value: 'No' }],
+        },
+        hi_IN: {
+          message: 'अंतिम उत्पन्न बिल <बिल आईडी> <राशि> रुपये है। क्या आप इसे गलत के रूप में रिपोर्ट करना चाहते हैं?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'हां' }, { key: '2', value: 'नहीं' }],
+        },
+      },
+    },
+    apprejected: {
+      nextStep: ['propcreation', 'mutation'],
+      messageBundle: {
+        en_IN: {
+          message: 'Which Application is getting rejected?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Property creation' }, { key: '2', value: 'Mutation' }],
+        },
+        hi_IN: {
+          message: 'कौन सा आवेदन खारिज हो रहा है?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'संपत्ति निर्माण' }, { key: '2', value: 'उत्परिवर्तन' }],
+        },
+      },
+    },
+    propcreation: {
+      nextStep: ['rejectionreason'],
+      messageBundle: {
+        en_IN: {
+          message: 'Please enter the Application ID', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+        hi_IN: {
+          message: 'कृपया आवेदन आईडी दर्ज करें', step: 'intermediate', optionType: 'textbox', option: [{ key: '1', value: '' }],
+        },
+      },
+    },
+    rejectionreason: {
+      nextStep: ['complaintComments'],
+      messageBundle: {
+        en_IN: {
+          message: 'Application got rejected due to some Technical reason. \n Do you want to raise complaint on this?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Yes' }, { key: '2', value: 'No' }],
+        },
+        hi_IN: {
+          message: 'किसी तकनीकी कारण से आवेदन खारिज हो गया। \n क्या आप इस पर शिकायत करना चाहते हैं?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'हां' }, { key: '2', value: 'नहीं' }],
+        },
+      },
+    },
   },
   persistComplaint: {
     en_IN: 'Complaint created successfully \n Complaint ID: {{complaintNumber}} \n Your Complaint has been registered and one of our representatives will get in touch with you regarding the issue\n',
