@@ -10,6 +10,8 @@ const useTLGenderMDMS = (tenantId, moduleCode, type, config = {}) => {
   switch (type) {
     case "GenderType":
       return useTLGenders();
+    default:
+      return null;
   }
 };
 

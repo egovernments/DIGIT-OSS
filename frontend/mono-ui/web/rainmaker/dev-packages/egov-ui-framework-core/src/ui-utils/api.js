@@ -1,12 +1,12 @@
 import axios from "axios";
-import commonConfig from "config/common.js";
+import { fetchFromLocalStorage, addQueryArg, getDateInEpoch, isPublicSearch } from "./commons";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getAccessToken, getLocale, getTenantId
-} from "egov-ui-kit/utils/localStorageUtils";
-import some from "lodash/some";
 import store from "../ui-redux/store";
-import { addQueryArg, isPublicSearch } from "./commons";
+import {
+  getAccessToken,
+  getTenantId,
+  getLocale
+} from "egov-ui-kit/utils/localStorageUtils";
 
 const instance = axios.create({
   baseURL: window.location.origin,
@@ -28,9 +28,9 @@ const wrapRequestBody = (requestBody, action) => {
     requesterId: "",
     authToken: authToken
   };
-  if (isPublicSearch()) delete RequestInfo.authToken;
+  if(isPublicSearch()) delete RequestInfo.authToken;
   return Object.assign(
-    { },
+    {},
     {
       RequestInfo
     },
@@ -43,7 +43,7 @@ export const httpRequest = async (
   endPoint,
   action,
   queryObject = [],
-  requestBody = { },
+  requestBody = {},
   headers = []
 ) => {
   store.dispatch(toggleSpinner());
@@ -54,16 +54,6 @@ export const httpRequest = async (
       headers
     });
 
-
-  /* Fix for central instance to send tenantID in all query params  */
-  const tenantId = process.env.REACT_APP_NAME === "Citizen" ? commonConfig.tenantId:(endPoint&&endPoint.includes("mdms")?commonConfig.tenantId:getTenantId()) || commonConfig.tenantId ;
-  if (!some(queryObject, ["key", "tenantId"])) {
-    commonConfig.singleInstance&&endPoint&&!endPoint.includes("tenantId")&&queryObject &&
-      queryObject.push({
-        key: "tenantId",
-        value: tenantId,
-      });
-  }
   endPoint = addQueryArg(endPoint, queryObject);
   var response;
   try {
@@ -146,8 +136,8 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
   store.dispatch(toggleSpinner());
   const tenantId = getTenantId()
     ? ulbLevel
-      ? commonConfig.tenantId
-      : commonConfig.tenantId
+      ? getTenantId().split(".")[0]
+      : getTenantId().split(".")[0]
     : "";
   const uploadInstance = axios.create({
     baseURL: window.location.origin,
@@ -164,9 +154,7 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
   const requestBody = prepareForm(requestParams);
 
   try {
-//else no tensnt info
-let tenantInfo =commonConfig.singleInstance?`?tenantId=${commonConfig.tenantId}`:"";
-    const response = await uploadInstance.post(`${endPoint}${tenantInfo}`, requestBody);
+    const response = await uploadInstance.post(endPoint, requestBody);
     const responseStatus = parseInt(response.status, 10);
     let fileStoreIds = [];
     store.dispatch(toggleSpinner());

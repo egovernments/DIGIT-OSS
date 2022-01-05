@@ -102,7 +102,6 @@ const mapStateToProps = (state, ownprops) => {
 	let { jsonPath, callBack, value, oldValue } = ownprops;
 	if(jsonPath === 'gender'){
 		value = value && value.toUpperCase();
-		oldValue = oldValue && oldValue.toUpperCase();
 	}
 	if (oldValue) {
 		 if(value !== oldValue){

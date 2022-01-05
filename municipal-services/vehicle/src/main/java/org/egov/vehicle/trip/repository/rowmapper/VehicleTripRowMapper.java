@@ -27,7 +27,7 @@ public class VehicleTripRowMapper implements ResultSetExtractor<List<VehicleTrip
 	@Autowired
 	private ObjectMapper mapper;
 	
-	public int fullCount=0;
+	private int fullCount=0;
 
 	public int getFullCount() {
 		return fullCount;

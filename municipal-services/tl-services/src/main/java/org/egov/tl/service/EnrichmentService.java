@@ -84,6 +84,8 @@ public class EnrichmentService {
                             accessory.setActive(true);
                         });
                     break;
+                default:
+                    break;
             }
             tradeLicense.getTradeLicenseDetail().getAddress().setTenantId(tradeLicense.getTenantId());
             tradeLicense.getTradeLicenseDetail().getAddress().setId(UUID.randomUUID().toString());
@@ -141,6 +143,8 @@ public class EnrichmentService {
             case businessService_TL:
                 boundaryService.getAreaType(tradeLicenseRequest, config.getHierarchyTypeCode());
                 break;
+            default:
+                break;
         }
     }
 
@@ -187,6 +191,8 @@ public class EnrichmentService {
 
             case businessService_BPA:
                 applicationNumbers = getIdList(requestInfo, tenantId, config.getApplicationNumberIdgenNameBPA(), config.getApplicationNumberIdgenFormatBPA(), request.getLicenses().size());
+                break;
+            default:
                 break;
         }
         ListIterator<String> itr = applicationNumbers.listIterator();
@@ -347,6 +353,8 @@ public class EnrichmentService {
                 case businessService_BPA:
                     license.setStatus(STATUS_INITIATED);
                     break;
+                default:
+                    break;
             }
         });
     }
@@ -468,6 +476,8 @@ public class EnrichmentService {
                     case businessService_BPA:
                         licenseNumbers = getIdList(requestInfo, tenantId, config.getLicenseNumberIdgenNameBPA(), config.getLicenseNumberIdgenFormatBPA(), count);
                         break;
+                    default:
+                        break;
                 }
                 ListIterator<String> itr = licenseNumbers.listIterator();
 
@@ -534,6 +544,8 @@ public class EnrichmentService {
         switch (businessService) {
             case businessService_TL:
                 enrichBoundary(new TradeLicenseRequest(requestInfo, licenses));
+                break;
+            default:
                 break;
         }
         UserDetailResponse userDetailResponse = userService.getUser(searchCriteria,requestInfo);

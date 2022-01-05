@@ -39,6 +39,10 @@ public class ValueFirstRequestFormatter implements RequestFormatter {
     @Autowired
     private FileStore fileStore;
 
+    private static final String MEDIA_TYPE_IMAGE = "image";
+    private static final String PUT_CONTENT_TYPE = "contentType";
+    private static final String PUT_RAW_INPUT = "rawInput";
+
     @Override
     public String getStreamName() {
         return "valuefirst-request-transform";
@@ -51,7 +55,7 @@ public class ValueFirstRequestFormatter implements RequestFormatter {
                 return true;
 
             String mediaType = inputRequest.at(ValueFirstPointerConstants.mediaType).asText();
-            if (mediaType.equalsIgnoreCase("text") || mediaType.equalsIgnoreCase("image")) {
+            if (mediaType.equalsIgnoreCase("text") || mediaType.equalsIgnoreCase(MEDIA_TYPE_IMAGE)) {
                 return true;
             }
             else if(!StringUtils.isEmpty(mediaType)){
@@ -82,8 +86,8 @@ public class ValueFirstRequestFormatter implements RequestFormatter {
         user.set("mobileNumber", TextNode.valueOf(mobileNumber));
 
         ObjectNode message = objectMapper.createObjectNode();
-        message.put("contentType", "text");
-        message.put("rawInput", "missedCall");
+        message.put(PUT_CONTENT_TYPE, "text");
+        message.put(PUT_RAW_INPUT, "missedCall");
 
         ObjectNode extraInfo = objectMapper.createObjectNode();
         extraInfo.put("recipient", valueFirstWAMobNo);
@@ -108,15 +112,15 @@ public class ValueFirstRequestFormatter implements RequestFormatter {
         ObjectNode message = objectMapper.createObjectNode();
 
         if (mediaType.equalsIgnoreCase("text")) {
-            message.put("contentType", "text");
-            message.set("rawInput", inputRequest.at(ValueFirstPointerConstants.textContent));
-        } else if (mediaType.equalsIgnoreCase("image")) {
-            message.put("contentType", "image");
+            message.put(PUT_CONTENT_TYPE, "text");
+            message.set(PUT_RAW_INPUT, inputRequest.at(ValueFirstPointerConstants.textContent));
+        } else if (mediaType.equalsIgnoreCase(MEDIA_TYPE_IMAGE)) {
+            message.put(PUT_CONTENT_TYPE, MEDIA_TYPE_IMAGE);
             String imageInBase64String = inputRequest.at(ValueFirstPointerConstants.mediaData).asText();
-            message.put("rawInput", fileStore.convertFromBase64AndStore(imageInBase64String));
+            message.put(PUT_RAW_INPUT, fileStore.convertFromBase64AndStore(imageInBase64String));
         } else if (!StringUtils.isEmpty(mediaType)) {
-            message.put("contentType", "not_supported");
-            message.put("rawInput", "");
+            message.put(PUT_CONTENT_TYPE, "not_supported");
+            message.put(PUT_RAW_INPUT, "");
         }
 
         ObjectNode extraInfo = objectMapper.createObjectNode();

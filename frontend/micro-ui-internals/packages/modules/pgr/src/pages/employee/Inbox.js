@@ -37,7 +37,6 @@ const Inbox = () => {
   };
 
   const handleFilterChange = (filterParam) => {
-    console.log("handleFilterChange", { ...searchParams, filters: filterParam });
     setSearchParams({ ...searchParams, filters: filterParam });
   };
 

@@ -1,39 +1,23 @@
 import commonConfig from "config/common.js";
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,
-  toggleSnackbar,
-  toggleSpinner
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import {
-  getFileUrlFromAPI,
-  getTransformedLocale
-} from "egov-ui-framework/ui-utils/commons";
-import {
-  downloadPdf,
-  getPaymentSearchAPI,
-  openPdf,
-  printPdf
-} from "egov-ui-kit/utils/commons";
+import { getFileUrlFromAPI, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { downloadPdf, getPaymentSearchAPI, openPdf, printPdf } from "egov-ui-kit/utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import {
-  searchAndDownloadPdf,
-  searchAndPrintPdf
-} from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import { searchAndDownloadPdf, searchAndPrintPdf } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
-  let modifiedArray = originalArray.filter((element) => {
+  let modifiedArray = originalArray.filter(element => {
     return element.hasOwnProperty(key) || !element.hasOwnProperty("isDeleted");
   });
-  modifiedArray = modifiedArray.map((element) => {
+  modifiedArray = modifiedArray.map(element => {
     if (element.hasOwnProperty("isDeleted")) {
       element["isActive"] = false;
     }
@@ -127,7 +111,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         state,
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.BuildingType",
         []
-      ).filter((buildingType) => {
+      ).filter(buildingType => {
         return buildingType.code === building.usageType;
       });
       requiredUoms = get(requiredUoms, "[0].uom", []);
@@ -140,19 +124,19 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
             "NO_OF_BASEMENTS",
             "PLOT_SIZE",
             "BUILTUP_AREA",
-            "HEIGHT_OF_BUILDING",
-          ],
-        ]),
+            "HEIGHT_OF_BUILDING"
+          ]
+        ])
       ];
       let finalUoms = [];
-      allUoms.forEach((uom) => {
+      allUoms.forEach(uom => {
         let value = get(building.uomsMap, uom);
         value &&
           finalUoms.push({
             code: uom,
             value: parseInt(value),
             isActiveUom: requiredUoms.includes(uom) ? true : false,
-            active: true,
+            active: true
           });
       });
 
@@ -178,12 +162,12 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 
       set(payload[0], `fireNOCDetails.buildings[${index}].uoms`, [
         ...finalUoms,
-        ...oldUoms,
+        ...oldUoms
       ]);
 
       // Set building documents
       let uploadedDocs = [];
-      jp.query(reduxDocuments, "$.*").forEach((doc) => {
+      jp.query(reduxDocuments, "$.*").forEach(doc => {
         if (doc.documents && doc.documents.length > 0) {
           if (
             doc.documentSubCode &&
@@ -195,8 +179,8 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
                 {
                   tenantId: tenantId,
                   documentType: doc.documentSubCode,
-                  fileStoreId: doc.documents[0].fileStoreId,
-                },
+                  fileStoreId: doc.documents[0].fileStoreId
+                }
               ];
             }
           }
@@ -212,7 +196,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     // Set owners & other documents
     let ownerDocuments = [];
     let otherDocuments = [];
-    jp.query(reduxDocuments, "$.*").forEach((doc) => {
+    jp.query(reduxDocuments, "$.*").forEach(doc => {
       if (doc.documents && doc.documents.length > 0) {
         if (doc.documentType === "OWNER") {
           ownerDocuments = [
@@ -222,8 +206,8 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
               documentType: doc.documentSubCode
                 ? doc.documentSubCode
                 : doc.documentCode,
-              fileStoreId: doc.documents[0].fileStoreId,
-            },
+              fileStoreId: doc.documents[0].fileStoreId
+            }
           ];
         } else if (!doc.documentSubCode) {
           // SKIP BUILDING PLAN DOCS
@@ -232,8 +216,8 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
             {
               tenantId: tenantId,
               documentType: doc.documentCode,
-              fileStoreId: doc.documents[0].fileStoreId,
-            },
+              fileStoreId: doc.documents[0].fileStoreId
+            }
           ];
         }
       }
@@ -313,12 +297,12 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.FireNoc.Documents",
     []
   );
-  documents = documents.filter((item) => {
+  documents = documents.filter(item => {
     return item.active;
   });
   let documentsContract = [];
   let tempDoc = {};
-  documents.forEach((doc) => {
+  documents.forEach(doc => {
     let card = {};
     card["code"] = doc.documentType;
     card["title"] = doc.documentType;
@@ -326,7 +310,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     tempDoc[doc.documentType] = card;
   });
 
-  documents.forEach((doc) => {
+  documents.forEach(doc => {
     // Handle the case for multiple muildings
     if (
       doc.code === "BUILDING.BUILDING_PLAN" &&
@@ -339,13 +323,13 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
         []
       );
 
-      buildingsData.forEach((building) => {
+      buildingsData.forEach(building => {
         let card = {};
         card["name"] = building.name;
         card["code"] = doc.code;
         card["hasSubCards"] = true;
         card["subCards"] = [];
-        doc.options.forEach((subDoc) => {
+        doc.options.forEach(subDoc => {
           let subCard = {};
           subCard["name"] = subDoc.code;
           subCard["required"] = subDoc.required ? true : false;
@@ -362,10 +346,10 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
         let dropdown = {};
         dropdown.label = "NOC_SELECT_DOC_DD_LABEL";
         dropdown.required = true;
-        dropdown.menu = doc.dropdownData.filter((item) => {
+        dropdown.menu = doc.dropdownData.filter(item => {
           return item.active;
         });
-        dropdown.menu = dropdown.menu.map((item) => {
+        dropdown.menu = dropdown.menu.map(item => {
           return { code: item.code, label: getTransformedLocale(item.code) };
         });
         card["dropdown"] = dropdown;
@@ -374,7 +358,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     }
   });
 
-  Object.keys(tempDoc).forEach((key) => {
+  Object.keys(tempDoc).forEach(key => {
     documentsContract.push(tempDoc[key]);
   });
 
@@ -385,14 +369,14 @@ export const prepareDocumentsUploadRedux = (state, dispatch) => {
   const {
     documentsList,
     documentsUploadRedux = {},
-    prepareFinalObject,
+    prepareFinalObject
   } = this.props;
   let index = 0;
-  documentsList.forEach((docType) => {
+  documentsList.forEach(docType => {
     docType.cards &&
-      docType.cards.forEach((card) => {
+      docType.cards.forEach(card => {
         if (card.subCards) {
-          card.subCards.forEach((subCard) => {
+          card.subCards.forEach(subCard => {
             let oldDocType = get(
               documentsUploadRedux,
               `[${index}].documentType`
@@ -413,7 +397,7 @@ export const prepareDocumentsUploadRedux = (state, dispatch) => {
               documentsUploadRedux[index] = {
                 documentType: docType.code,
                 documentCode: card.name,
-                documentSubCode: subCard.name,
+                documentSubCode: subCard.name
               };
             }
             index++;
@@ -428,7 +412,7 @@ export const prepareDocumentsUploadRedux = (state, dispatch) => {
               isDocumentRequired: card.required,
               isDocumentTypeRequired: card.dropdown
                 ? card.dropdown.required
-                : false,
+                : false
             };
           }
         }
@@ -438,7 +422,7 @@ export const prepareDocumentsUploadRedux = (state, dispatch) => {
   prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
 };
 
-export const furnishNocResponse = (response) => {
+export const furnishNocResponse = response => {
   // Handle applicant ownership dependent dropdowns
   let ownershipType = get(
     response,
@@ -455,7 +439,7 @@ export const furnishNocResponse = (response) => {
   buildings.forEach((building, index) => {
     let uoms = get(building, "uoms", []);
     let uomMap = {};
-    uoms.forEach((uom) => {
+    uoms.forEach(uom => {
       uomMap[uom.code] = `${uom.value}`;
     });
     set(
@@ -504,102 +488,54 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
   }
 };
 
-export const downloadReceiptFromFilestoreID = (
-  fileStoreId,
-  mode,
-  tenantId,
-  showConfirmation = false
-) => {
+export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId,showConfirmation=false) => {
   getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
     if (fileRes && !fileRes[fileStoreId]) {
-      console.error("ERROR IN DOWNLOADING RECEIPT");
+      console.error('ERROR IN DOWNLOADING RECEIPT');
       return;
     }
-    if (mode === "download") {
-      if (
-        localStorage.getItem("pay-channel") &&
-        localStorage.getItem("pay-redirectNumber")
-      ) {
-        setTimeout(() => {
-          const weblink =
-            "https://api.whatsapp.com/send?phone=" +
-            localStorage.getItem("pay-redirectNumber") +
-            "&text=" +
-            ``;
-          window.location.href = weblink;
-        }, 1500);
+    if (mode === 'download') {
+      if(localStorage.getItem('pay-channel')&&localStorage.getItem('pay-redirectNumber')){
+        setTimeout(()=>{
+          const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('pay-redirectNumber') + "&text=" + ``;
+          window.location.href = weblink
+        },1500)
       }
       downloadPdf(fileRes[fileStoreId]);
-      if (showConfirmation) {
-        if (
-          localStorage.getItem("receipt-channel") == "whatsapp" &&
-          localStorage.getItem("receipt-redirectNumber") != ""
-        ) {
+      if(showConfirmation){
+        if(localStorage.getItem('receipt-channel')=='whatsapp'&&localStorage.getItem('receipt-redirectNumber')!=''){
           setTimeout(() => {
-            const weblink =
-              "https://api.whatsapp.com/send?phone=" +
-              localStorage.getItem("receipt-redirectNumber") +
-              "&text=" +
-              ``;
-            window.location.href = weblink;
-          }, 1500);
+            const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('receipt-redirectNumber') + "&text=" + ``;
+            window.location.href = weblink
+          }, 1500)
         }
-        store.dispatch(
-          toggleSnackbar(
-            true,
-            {
-              labelName: "Success in Receipt Generation",
-              labelKey: "SUCCESS_IN_GENERATION_RECEIPT",
-            },
-            "success"
-          )
-        );
+        store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
+      , "success"));
       }
-    } else if (mode === "open") {
-      if (
-        localStorage.getItem("pay-channel") &&
-        localStorage.getItem("pay-redirectNumber")
-      ) {
-        setTimeout(() => {
-          const weblink =
-            "https://api.whatsapp.com/send?phone=" +
-            localStorage.getItem("pay-redirectNumber") +
-            "&text=" +
-            ``;
-          window.location.href = weblink;
-        }, 1500);
+    } else if (mode === 'open') {
+      if(localStorage.getItem('pay-channel')&&localStorage.getItem('pay-redirectNumber')){
+        setTimeout(()=>{
+          const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('pay-redirectNumber') + "&text=" + ``;
+          window.location.href = weblink
+        },1500)
       }
-      openPdf(fileRes[fileStoreId], "_self");
-      if (showConfirmation) {
-        if (
-          localStorage.getItem("receipt-channel") == "whatsapp" &&
-          localStorage.getItem("receipt-redirectNumber") != ""
-        ) {
+      openPdf(fileRes[fileStoreId], '_self')
+      if(showConfirmation){
+        if(localStorage.getItem('receipt-channel')=='whatsapp'&&localStorage.getItem('receipt-redirectNumber')!=''){
           setTimeout(() => {
-            const weblink =
-              "https://api.whatsapp.com/send?phone=" +
-              localStorage.getItem("receipt-redirectNumber") +
-              "&text=" +
-              ``;
-            window.location.href = weblink;
-          }, 1500);
+            const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('receipt-redirectNumber') + "&text=" + ``;
+            window.location.href = weblink
+          }, 1500)
         }
-        store.dispatch(
-          toggleSnackbar(
-            true,
-            {
-              labelName: "Success in Receipt Generation",
-              labelKey: "SUCCESS_IN_GENERATION_RECEIPT",
-            },
-            "success"
-          )
-        );
+        store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
+      , "success"));
       }
-    } else {
+    }
+    else {
       printPdf(fileRes[fileStoreId]);
     }
   });
-};
+}
 
 /*  Download version with pdf service  */
 /* export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state,showConfirmation=false) => {
@@ -676,162 +612,70 @@ export const downloadReceiptFromFilestoreID = (
 } */
 
 /*  Download version with egov-pdf service  */
-export const download = (
-  receiptQueryString,
-  mode = "download",
-  configKey = "consolidatedreceipt",
-  pdfModule = "PAYMENT",
-  state,
-  showConfirmation = false
-) => {
-  if (
-    state &&
-    process.env.REACT_APP_NAME === "Citizen" &&
-    configKey === "consolidatedreceipt"
-  ) {
-    const uiCommonPayConfig = get(
-      state.screenConfiguration.preparedFinalObject,
-      "commonPayInfo"
-    );
-    configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt");
+export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", pdfModule="PAYMENT",state,showConfirmation=false) => {
+  if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
+    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
+    configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
   }
-  let onSuccess = () => {
-    console.info("Success in Receipt Generation");
-  };
+  let onSuccess=()=>{
+    console.info('Success in Receipt Generation');
+  }
 
   try {
-    let businessService = "";
-    receiptQueryString &&
-      Array.isArray(receiptQueryString) &&
-      receiptQueryString.map((query) => {
-        if (query.key == "businessService") {
-          businessService = query.value;
+    let businessService = '';
+    receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.map(query => {
+      if (query.key == "businessService") {
+        businessService = query.value;
+      }
+    })
+    receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
+    httpRequest("post", getPaymentSearchAPI(businessService), "_search", receiptQueryString).then((payloadReceiptDetails) => {
+    if(showConfirmation){
+      onSuccess=()=>{
+        console.info('Success in Receipt Generation');
+        if(localStorage.getItem('receipt-channel')=='whatsapp'&&localStorage.getItem('receipt-redirectNumber')!=''){
+          setTimeout(() => {
+            const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('receipt-redirectNumber') + "&text=" + ``;
+            window.location.href = weblink
+          }, 1500)
         }
-      });
-    receiptQueryString =
-      receiptQueryString &&
-      Array.isArray(receiptQueryString) &&
-      receiptQueryString.filter((query) => query.key != "businessService");
-    httpRequest(
-      "post",
-      getPaymentSearchAPI(businessService),
-      "_search",
-      receiptQueryString
-    ).then((payloadReceiptDetails) => {
-      if (showConfirmation) {
-        onSuccess = () => {
-          console.info("Success in Receipt Generation");
-          if (
-            localStorage.getItem("receipt-channel") == "whatsapp" &&
-            localStorage.getItem("receipt-redirectNumber") != ""
-          ) {
-            setTimeout(() => {
-              const weblink =
-                "https://api.whatsapp.com/send?phone=" +
-                localStorage.getItem("receipt-redirectNumber") +
-                "&text=" +
-                ``;
-              window.location.href = weblink;
-            }, 1500);
-          }
-          store.dispatch(
-            toggleSnackbar(
-              true,
-              {
-                labelName: "Success in Receipt Generation",
-                labelKey: "SUCCESS_IN_GENERATION_RECEIPT",
-              },
-              "success"
-            )
-          );
-        };
+        store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
+      , "success"));
       }
 
-      if (
-        payloadReceiptDetails &&
-        payloadReceiptDetails.Payments &&
-        payloadReceiptDetails.Payments.length == 0
-      ) {
-        console.log("Could not find any receipts");
-        store.dispatch(
-          toggleSnackbar(
-            true,
-            {
-              labelName: "Receipt not Found",
-              labelKey: "ERR_RECEIPT_NOT_FOUND",
-            },
-            "error"
-          )
-        );
-        return;
-      }
-      const queryStr = [
-        {
-          key: "consumerCode",
-          value: get(
-            payloadReceiptDetails,
-            "Payments[0].paymentDetails[0].bill.consumerCode"
-          ),
-        },
-        {
-          key: "bussinessService",
-          value: get(
-            payloadReceiptDetails,
-            "Payments[0].paymentDetails[0].businessService"
-          ),
-        },
-        {
-          key: "tenantId",
-          value: get(
-            payloadReceiptDetails,
-            "Payments[0].paymentDetails[0].tenantId"
-          ),
-        },
-      ];
-      mode == "download"
-        ? downloadConReceipt(
-            queryStr,
-            configKey,
-            pdfModule,
-            `RECEIPT-${get(
-              payloadReceiptDetails,
-              "Payments[0].paymentDetails[0].receiptNumber"
-            )}.pdf`,
-            onSuccess
-          )
-        : printConReceipt(queryStr, configKey, pdfModule);
-    });
-  } catch (exception) {
-    console.log("Some Error Occured while downloading Receipt!");
-    store.dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Error in Receipt Generation",
-          labelKey: "ERR_IN_GENERATION_RECEIPT",
-        },
-        "error"
-      )
-    );
+    }
+
+    if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
+      console.log("Could not find any receipts");
+      store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
+        , "error"));
+      return;
+    }
+    const queryStr = [
+      { key: "consumerCode", value: get(payloadReceiptDetails,"Payments[0].paymentDetails[0].bill.consumerCode" )},
+      { key: "bussinessService", value: get(payloadReceiptDetails,"Payments[0].paymentDetails[0].businessService" )},
+      { key: "tenantId", value: get(payloadReceiptDetails,"Payments[0].paymentDetails[0].tenantId" ) }
+    ]
+    mode=='download'? downloadConReceipt(queryStr,configKey,pdfModule,`RECEIPT-${get(payloadReceiptDetails,"Payments[0].paymentDetails[0].receiptNumber")}.pdf`,onSuccess):printConReceipt(queryStr,configKey,pdfModule);  
+ })
+ } catch (exception) {
+    console.log('Some Error Occured while downloading Receipt!');
+    store.dispatch(toggleSnackbar(true, { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
+      , "error"));
   }
-};
+}
 
-export const downloadBill = async (
-  consumerCode,
-  tenantId,
-  configKey = "consolidatedbill",
-  url = "egov-searcher/bill-genie/billswithaddranduser/_get"
-) => {
+export const downloadBill = async (consumerCode, tenantId, configKey = "consolidatedbill", url = "egov-searcher/bill-genie/billswithaddranduser/_get") => {
   const searchCriteria = {
     consumerCode,
-    tenantId,
-  };
+    tenantId
+  }
   const FETCHBILL = {
     GET: {
       URL: url,
       ACTION: "_get",
-    },
-  };
+    }
+  }
   const DOWNLOADRECEIPT = {
     GET: {
       URL: "/pdf-service/v1/_create",
@@ -839,36 +683,24 @@ export const downloadBill = async (
     },
   };
   try {
-    const billResponse = await httpRequest(
-      "post",
-      FETCHBILL.GET.URL,
-      FETCHBILL.GET.ACTION,
-      [],
-      { searchCriteria }
-    );
-    const oldFileStoreId = get(billResponse.Bills[0], "fileStoreId");
+    const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [], { searchCriteria });
+    const oldFileStoreId = get(billResponse.Bills[0], "fileStoreId")
     if (oldFileStoreId) {
-      downloadReceiptFromFilestoreID(oldFileStoreId, "download");
-    } else {
+      downloadReceiptFromFilestoreID(oldFileStoreId, 'download')
+    }
+    else {
       const queryStr = [
         { key: "key", value: configKey },
-        { key: "tenantId", value: commonConfig.tenantId },
-      ];
-      const pfResponse = await httpRequest(
-        "post",
-        DOWNLOADRECEIPT.GET.URL,
-        DOWNLOADRECEIPT.GET.ACTION,
-        queryStr,
-        { Bill: billResponse.Bills },
-        { Accept: "application/pdf" },
-        { responseType: "arraybuffer" }
-      );
-      downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], "download");
+        { key: "tenantId", value: commonConfig.tenantId }
+      ]
+      const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+      downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
     }
   } catch (error) {
     console.log(error);
   }
-};
+
+}
 
 export const downloadMultipleBill = async (bills = [], configKey) => {
   try {
@@ -880,42 +712,35 @@ export const downloadMultipleBill = async (bills = [], configKey) => {
     };
     const queryStr = [
       { key: "key", value: configKey },
-      { key: "tenantId", value: commonConfig.tenantId },
-    ];
-    const pfResponse = await httpRequest(
-      "post",
-      DOWNLOADRECEIPT.GET.URL,
-      DOWNLOADRECEIPT.GET.ACTION,
-      queryStr,
-      { Bill: bills },
-      { Accept: "application/pdf" },
-      { responseType: "arraybuffer" }
-    );
-    downloadMultipleFileFromFilestoreIds(pfResponse.filestoreIds,"download",commonConfig.tenantId)
+      { key: "tenantId", value: commonConfig.tenantId }
+    ]
+    const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+    downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
   } catch (error) {
     console.log(error);
-  }
-};
 
-export const downloadMultipleFileFromFilestoreIds = (
-  fileStoreIds = [],
-  mode,
-  tenantId
-) => {
-  getFileUrlFromAPI(fileStoreIds.join(","), tenantId).then(async (fileRes) => {
-    fileStoreIds.map((fileStoreId) => {
-      if (mode === "download") {
+  }
+
+}
+
+
+export const downloadMultipleFileFromFilestoreIds = (fileStoreIds = [], mode, tenantId) => {
+  getFileUrlFromAPI(fileStoreIds.join(','), tenantId).then(async (fileRes) => {
+    fileStoreIds.map(fileStoreId => {
+      if (mode === 'download') {
         downloadPdf(fileRes[fileStoreId]);
-      } else if (mode === "open") {
-        openPdf(fileRes[fileStoreId], "_self");
-      } else {
+      } else if (mode === 'open') {
+        openPdf(fileRes[fileStoreId], '_self')
+      }
+      else {
         printPdf(fileRes[fileStoreId]);
       }
-    });
+    })
   });
-};
+}
 
-export const downloadChallan = async (queryStr, mode = "download") => {
+export const downloadChallan = async (queryStr, mode = 'download') => {
+
   const DOWNLOADRECEIPT = {
     GET: {
       URL: "/egov-pdf/download/UC/mcollect-challan",
@@ -923,55 +748,35 @@ export const downloadChallan = async (queryStr, mode = "download") => {
     },
   };
   try {
-    httpRequest(
-      "post",
-      DOWNLOADRECEIPT.GET.URL,
-      DOWNLOADRECEIPT.GET.ACTION,
-      queryStr,
-      {
-        Accept: commonConfig.singleInstance ? "*/*" : "application/json",
-      },
-      { responseType: "arraybuffer" }
-    ).then((res) => {
-      res.filestoreIds[0];
-      if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-        res.filestoreIds.map((fileStoreId) => {
-          downloadReceiptFromFilestoreID(fileStoreId, mode);
-        });
-      } else {
-        console.log("Error In Acknowledgement form Download");
-      }
-    });
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId, mode)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
+      });
   } catch (exception) {
-    alert("Some Error Occured while downloading Acknowledgement form!");
+    alert('Some Error Occured while downloading Acknowledgement form!');
   }
-};
 
-export const downloadConReceipt = (
-  queryObj,
-  receiptKey = "consolidatedreceipt",
-  pdfModule = "PAYMENT",
-  fileName,
-  onSuccess
-) => {
-  queryObj && queryObj.push({ key: "pdfKey", value: receiptKey });
-  pdfModule = "PAYMENT"; // Temporary fix to download receipts from common pays
-  receiptKey = pdfModule == "PAYMENT" ? "consolidatedreceipt" : receiptKey;
-  searchAndDownloadPdf(
-    `/egov-pdf/download/${pdfModule}/${receiptKey}`,
-    queryObj,
-    fileName,
-    onSuccess
-  );
-};
+}
 
-export const printConReceipt = (
-  queryObj,
-  receiptKey = "consolidatedreceipt",
-  pdfModule = "PAYMENT"
-) => {
-  queryObj && queryObj.push({ key: "pdfKey", value: receiptKey });
-  pdfModule = "PAYMENT";
-  receiptKey = pdfModule == "PAYMENT" ? "consolidatedreceipt" : receiptKey;
-  searchAndPrintPdf(`/egov-pdf/download/${pdfModule}/${receiptKey}`, queryObj);
-};
+
+
+export const downloadConReceipt =(queryObj,receiptKey='consolidatedreceipt',pdfModule='PAYMENT',fileName,onSuccess)=>{
+  queryObj&&queryObj.push(  { key: "pdfKey", value: receiptKey});
+  pdfModule='PAYMENT';   // Temporary fix to download receipts from common pays
+  receiptKey=pdfModule=='PAYMENT'?"consolidatedreceipt":receiptKey;
+  searchAndDownloadPdf(`/egov-pdf/download/${pdfModule}/${receiptKey}`,queryObj,fileName,onSuccess)
+}
+
+export const printConReceipt =(queryObj,receiptKey='consolidatedreceipt',pdfModule='PAYMENT')=>{
+  queryObj&&queryObj.push(  { key: "pdfKey", value: receiptKey});
+  pdfModule='PAYMENT';
+  receiptKey=pdfModule=='PAYMENT'?"consolidatedreceipt":receiptKey;
+  searchAndPrintPdf(`/egov-pdf/download/${pdfModule}/${receiptKey}`,queryObj)
+}

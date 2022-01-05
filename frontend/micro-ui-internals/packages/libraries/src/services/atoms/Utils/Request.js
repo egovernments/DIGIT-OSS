@@ -45,9 +45,7 @@ export const Request = async ({
   userDownload = false,
   noRequestInfo = false,
 }) => {
-  // console.log("params:", params);
-  // console.log("in request", method);
-  // console.log("url:", url);
+
   if (method.toUpperCase() === "POST") {
     data.RequestInfo = {
       apiId: "Rainmaker",
@@ -77,8 +75,6 @@ export const Request = async ({
 
   let key = "";
   if (useCache) {
-    // console.log("find request params here",JSON.stringify(params, null, 0));
-    // console.log("find request data here",JSON.stringify(data, null, 0));
     key = `${method.toUpperCase()}.${url}.${btoa(escape(JSON.stringify(params, null, 0)))}.${btoa(escape(JSON.stringify(data, null, 0)))}`;
     const value = window.Digit.RequestCache[key];
     if (value) {

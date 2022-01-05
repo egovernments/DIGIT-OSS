@@ -20,7 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MDMSValidator {
 	private Map<String, List<String>> mdmsResMap ;
-	
+
+	private static final String DATA_CONTAINS_KEY_CAPACITY = "capacity";
+
 		// TODO Auto-generated method stub
 	public void validateMdmsData(VehicleRequest vehicleRequest, Object mdmsData) {
 
@@ -76,8 +78,8 @@ public class MDMSValidator {
 			if (!(Data.get("code").equals(vehicleType))) {
 				errorMap.put(VehicleErrorConstants.INVALID_VEHICLE_TYPE, "Vehicle is invalid");
 			}
-			if(Data.containsKey("capacity") && !(Data.get("capacity").equals(capacity))) {
-				String tankCapacity = Data.get("capacity");
+			if(Data.containsKey(DATA_CONTAINS_KEY_CAPACITY) && !(Data.get(DATA_CONTAINS_KEY_CAPACITY).equals(capacity))) {
+				String tankCapacity = Data.get(DATA_CONTAINS_KEY_CAPACITY);
 				vehicleRequest.getVehicle().setTankCapacity(Double.parseDouble(tankCapacity));
 			}
 		} else {

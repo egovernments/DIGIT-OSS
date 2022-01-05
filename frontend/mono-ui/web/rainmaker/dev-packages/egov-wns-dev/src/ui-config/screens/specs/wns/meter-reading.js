@@ -134,7 +134,6 @@ const setAutopopulatedvalues = async (state, dispatch) => {
 }
 
 
-// console.log('123', queryValueAN)
 const showHideCard = (booleanHideOrShow, dispatch) => {
     dispatch(
         handleField(

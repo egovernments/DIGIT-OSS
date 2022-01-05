@@ -16,7 +16,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import variables from '../../../../styles/variables';
 import { isMobile } from 'react-device-detect';
 import Chip from '@material-ui/core/Chip';
-import { getLocaleLabels, getTenantId,stateTenant } from '../../../../utils/commons';
+import { getLocaleLabels, getTenantId } from '../../../../utils/commons';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" style={{ color: 'grey' }} />;
@@ -62,9 +62,9 @@ const theme = createMuiTheme({
 const localaliseTenant = ((tenant, type) => {
     let prefix = 'DSS_'
     if (type == "DDRS") {
-        prefix = `TENANT_TENANTS_${stateTenant()}_` ;
+        prefix = `TENANT_TENANTS_${getTenantId().split('.')[0]}_` ;
     } else if (type == "ULBS") {
-        prefix = `TENANT_TENANTS_${stateTenant()}_` ; 
+        prefix = `TENANT_TENANTS_${getTenantId().split('.')[0]}_` ; 
     }
     return getLocaleLabels(`${prefix}${tenant.toUpperCase()}`);
 })

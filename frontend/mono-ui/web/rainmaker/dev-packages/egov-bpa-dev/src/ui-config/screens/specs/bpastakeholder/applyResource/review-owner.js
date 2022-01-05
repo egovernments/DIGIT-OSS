@@ -38,7 +38,7 @@ export const reviewOwnerDOB = getLabelWithValue(
 export const reviewOwnerPhoneNo = getLabelWithValue(
   {
     labelName: "Mobile No.",
-    labelKey: "BPA_APPLICANT_MOBILE_NO_LABEL"
+    labelKey: "BPA_APPLICANT_DOB_LABEL"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber",

@@ -1,4 +1,3 @@
-import commonConfig from "config/common.js";
 import {
   getCommonCard,
   getCommonContainer,
@@ -68,7 +67,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
 
             let requestBody = {
               MdmsCriteria: {
-                tenantId: commonConfig.tenantId,
+                tenantId: action.value.split(".")[0],
                 moduleDetails: [
                   {
                     moduleName: "BillingService",
@@ -226,7 +225,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
             const serviceData = get(
               state.screenConfiguration,
               "preparedFinalObject.applyScreenMdmsData.nestedServiceData",
-              { }
+              {}
             );
             if (action.value) {
 
@@ -397,7 +396,7 @@ const setTaxHeadFields = (action, state, dispatch) => {
   const taxHeadMasters = get(
     state.screenConfiguration,
     "preparedFinalObject.applyScreenMdmsData.BillingService.TaxHeadMaster",
-    { }
+    {}
   );
   const matchingTaxHeads = taxHeadMasters.filter(
     (item) => item.service === action.value
@@ -412,7 +411,7 @@ const setTaxHeadFields = (action, state, dispatch) => {
     const taxFields = get(
       state.screenConfiguration,
       "screenConfig.newCollection.components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children",
-      { }
+      {}
     );
     const taxFieldKeys = Object.keys(taxFields).filter((item) =>
       item.startsWith("taxheadField_")

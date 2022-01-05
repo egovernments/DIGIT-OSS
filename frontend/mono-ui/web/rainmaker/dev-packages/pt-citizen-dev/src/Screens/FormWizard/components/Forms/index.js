@@ -97,9 +97,6 @@ const OwnerInformation = ({
             <div className="col-sm-6">
               <Field fieldKey="ownerMobile" field={fields["ownerMobile"]} handleFieldChange={handleFieldChange} disabled={disabled} />
             </div>
-            <div className="col-sm-6">
-              <Field fieldKey="ownerAlterMobile" field={fields["ownerAlterMobile"]} handleFieldChange={handleFieldChange} disabled={disabled} />
-            </div>
             <div style={{ padding: 0 }} className="col-sm-6">
               <div className="col-sm-6">
                 <Field fieldKey="ownerGuardian" field={fields["ownerGuardian"]} handleFieldChange={handleFieldChange} disabled={disabled} />
@@ -117,7 +114,7 @@ const OwnerInformation = ({
                 className="ownerCategory"
               />
             </div>
-            <div className="col-sm-6 ownerCategoryIdType" style={{  display: "flex", alignItems: "center" }}>
+            <div className="col-sm-6 ownerCategoryIdType" style={{ paddingBottom: "4px", display: "flex", alignItems: "center" }}>
               <Field
                 fieldKey="ownerCategoryIdType"
                 field={fields["ownerCategoryIdType"]}
@@ -137,9 +134,11 @@ const OwnerInformation = ({
             </div>
             <div className="col-sm-6" style={{ paddingBottom: "4px", paddingTop: "2px" }}>
               <Field fieldKey="ownerEmail" field={fields["ownerEmail"]} handleFieldChange={handleFieldChange} disabled={disabled} />
-            </div> 
+            </div>
             <div className="col-sm-6" style={{ paddingBottom: "8px" }}>
               <Field fieldKey="ownerAddress" field={fields["ownerAddress"]} handleFieldChange={handleFieldChange} disabled={disabled} />
+            </div>
+            <div>
               <Field
                 fieldKey="isSameAsPropertyAddress"
                 field={fields.isSameAsPropertyAddress}
@@ -147,9 +146,6 @@ const OwnerInformation = ({
                 disabled={disabled}
                 containerClassName="property-corr"
               />
-            </div>
-            <div>
-            
             </div>
           </div>
         </div>
@@ -174,7 +170,6 @@ const InstitutionAuthority = ({ form, formKey, handleFieldChange, cardTitle, for
             <div className="name-address">
               <Field fieldKey="name" field={fields["name"]} handleFieldChange={handleFieldChange} disabled={disabled} />
               <Field fieldKey="mobile" field={fields["mobile"]} handleFieldChange={handleFieldChange} disabled={disabled} />
-              <Field fieldKey="alterMobile" field={fields["alterMobile"]} handleFieldChange={handleFieldChange} disabled={disabled} />
               <Field fieldKey="email" field={fields["email"]} handleFieldChange={handleFieldChange} disabled={disabled} />
             </div>
             <div className="address">

@@ -1,14 +1,12 @@
 import axios from "axios";
 import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest as httpRequestNew } from "egov-ui-framework/ui-utils/api";
 import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { TENANT } from "egov-ui-kit/utils/endPoints";
 import { getAccessToken, getTenantId, getUserInfo, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
-import { searchAndDownloadPdf, searchAndPrintPdf } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import Label from "egov-ui-kit/utils/translationNode";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
@@ -67,50 +65,41 @@ export const hyphenSeperatedDateTime = (d) => {
 };
 
 export const getSingleCodeObject = (dataKey, tempObj, MDMSdata, keys) => {
-  keys.forEach((key) => {
+  keys.forEach(key => {
     let splittedKey = key.split(".");
     tempObj[splittedKey[splittedKey.length - 1]] = MDMSdata[dataKey][key];
     tempObj[splittedKey[splittedKey.length - 1]].code = splittedKey[splittedKey.length - 1];
-  });
+  })
   return tempObj;
-};
+}
 
 export const getCategoryObject = (categoryCode, MDMSdata, dataKey, key, parentKey, parentKeyValue) => {
-  let tempObj = {};
+  let tempObj = {}
   tempObj[categoryCode] = MDMSdata[dataKey][key];
   tempObj[categoryCode].code = categoryCode;
   tempObj[categoryCode][parentKey] = parentKeyValue;
   return tempObj;
-};
+}
 
 export const getUsageCategory = (dataKey, tempObj, MDMSdata, keys) => {
-  keys.forEach((key) => {
+  keys.forEach(key => {
     let splittedKey = key.split(".");
     let categoryCode = splittedKey.pop();
     if (splittedKey.length === 0) {
       tempObj["UsageCategoryMajor"] = { ...tempObj["UsageCategoryMajor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key) };
     } else if (splittedKey.length === 1) {
-      tempObj["UsageCategoryMinor"] = {
-        ...tempObj["UsageCategoryMinor"],
-        ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategoryMajor", splittedKey[splittedKey.length - 1]),
-      };
+      tempObj["UsageCategoryMinor"] = { ...tempObj["UsageCategoryMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategoryMajor", splittedKey[splittedKey.length - 1]) };
     } else if (splittedKey.length === 2) {
-      tempObj["UsageCategorySubMinor"] = {
-        ...tempObj["UsageCategorySubMinor"],
-        ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategoryMinor", splittedKey[splittedKey.length - 1]),
-      };
+      tempObj["UsageCategorySubMinor"] = { ...tempObj["UsageCategorySubMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategoryMinor", splittedKey[splittedKey.length - 1]) };
     } else if (splittedKey.length === 3) {
-      tempObj["UsageCategoryDetail"] = {
-        ...tempObj["UsageCategoryDetail"],
-        ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategorySubMinor", splittedKey[splittedKey.length - 1]),
-      };
+      tempObj["UsageCategoryDetail"] = { ...tempObj["UsageCategoryDetail"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategorySubMinor", splittedKey[splittedKey.length - 1]) };
     }
   });
   return tempObj;
-};
+}
 
 export const getTransformedDropdown = (MDMSdata, dataKeys) => {
-  dataKeys.forEach((dataKey) => {
+  dataKeys.forEach(dataKey => {
     if (MDMSdata && MDMSdata.hasOwnProperty(dataKey)) {
       let keys = MDMSdata[dataKey] && Object.keys(MDMSdata[dataKey]);
       let tempObj = {};
@@ -124,7 +113,7 @@ export const getTransformedDropdown = (MDMSdata, dataKeys) => {
     }
   });
   return MDMSdata;
-};
+}
 
 export const generalMDMSDataRequestObj = (tenantId) => {
   let requestBody = {
@@ -164,12 +153,21 @@ export const generalMDMSDataRequestObj = (tenantId) => {
     },
   };
   return requestBody;
-};
+}
 
 export const getGeneralMDMSDataDropdownName = () => {
-  let keys = ["Floor", "OccupancyType", "OwnerShipCategory", "OwnerType", "PropertySubType", "PropertyType", "SubOwnerShipCategory", "UsageCategory"];
+  let keys = [
+    "Floor",
+    "OccupancyType",
+    "OwnerShipCategory",
+    "OwnerType",
+    "PropertySubType",
+    "PropertyType",
+    "SubOwnerShipCategory",
+    "UsageCategory"
+  ];
   return keys;
-};
+}
 
 export const getQueryArg = (url, name) => {
   if (!url) url = window.location.href;
@@ -306,16 +304,20 @@ export const mapCompIDToName = (IDObj, compID) => {
 
 export const getDateFromEpoch = (epoch) => {
   const dateObj = new Date(epoch);
-  const year = dateObj.getFullYear().toString().slice(2, 4);
+  const year = dateObj
+    .getFullYear()
+    .toString()
+    .slice(2, 4);
   const month = getMonthName(dateObj.getMonth() + 1);
   const day = dateObj.getDate();
   return day + "-" + month + "-" + year;
 };
 
-export const epochToDate = (et) => {
+export const epochToDate = et => {
   if (!et) return null;
   var date = new Date(Math.round(Number(et)));
-  var formattedDate = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+  var formattedDate =
+    date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
   return formattedDate;
 };
 
@@ -334,7 +336,7 @@ export const addBodyClass = (path) => {
   try {
     document.body.classList.forEach((className) => document.body.classList.remove(className));
     bodyClass && document.body.classList.add(bodyClass);
-  } catch (error) {}
+  } catch (error) { }
 };
 
 export const prepareFormData = (form) => {
@@ -388,7 +390,7 @@ export const fetchImages = (actionArray) => {
 // };
 
 export const getCityNameByCode = (code, localizationLabels) => {
-  const tenantId = code && code.replace(".", "_").toUpperCase();
+  const tenantId = code && code.replace('.', '_').toUpperCase();
   return code && getTranslatedLabel(`TENANT_TENANTS_${tenantId}`, localizationLabels);
 };
 
@@ -513,11 +515,7 @@ export const flatten = (arr) => {
 };
 
 export const getTenantForLatLng = async (lat, lng) => {
-  let queryObjList = [
-    { key: "lat", value: lat },
-    { key: "lng", value: lng },
-    { key: "tenantId", value: commonConfig.tenantId },
-  ];
+  let queryObjList = [{ key: "lat", value: lat }, { key: "lng", value: lng }, { key: "tenantId", value: commonConfig.tenantId }];
   let response;
   if (lat && lng) {
     try {
@@ -596,10 +594,10 @@ export const transformComplaintForComponent = (complaints, role, employeeById, c
         role === "citizen"
           ? displayStatus(complaintDetail.status, complaintDetail.assignee, complaintDetail.actions.filter((complaint) => complaint.status)[0].action)
           : getTransformedStatus(complaintDetail.status) === "CLOSED"
-          ? complaintDetail.rating
-            ? displayStatus(`${complaintDetail.rating}/5`)
-            : displayStatus(complaintDetail.actions[0].status)
-          : displayStatus(
+            ? complaintDetail.rating
+              ? displayStatus(`${complaintDetail.rating}/5`)
+              : displayStatus(complaintDetail.actions[0].status)
+            : displayStatus(
               returnSLAStatus(
                 getPropertyFromObj(categoriesById, complaintDetail.serviceCode, "slaHours", "NA"),
                 getLatestCreationTime(complaintDetail)
@@ -617,7 +615,7 @@ export const startSMSRecevier = () => {
     if (typeof androidAppProxy !== "undefined") {
       window.androidAppProxy.requestSMS();
     }
-  } catch (error) {}
+  } catch (error) { }
 };
 
 export const upperCaseFirst = (word) => {
@@ -646,11 +644,11 @@ export const fetchDropdownData = async (dispatch, dataFetchConfig, formKey, fiel
       const payloadSpec = await httpRequest(url, action, queryParams || [], requestBody);
       const dropdownData = boundary
         ? // ? jp.query(payloadSpec, dataFetchConfig.dataPath)
-          payloadSpec.TenantBoundary[0].boundary
+        payloadSpec.TenantBoundary[0].boundary
         : dataFetchConfig.dataPath.reduce((dropdownData, path) => {
-            dropdownData = [...dropdownData, ...get(payloadSpec, path)];
-            return dropdownData;
-          }, []);
+          dropdownData = [...dropdownData, ...get(payloadSpec, path)];
+          return dropdownData;
+        }, []);
       const ddData =
         dropdownData &&
         dropdownData.length > 0 &&
@@ -721,10 +719,6 @@ export const hasTokenExpired = (status, data) => {
 };
 
 const getEndpointfromUrl = (url, name) => {
-  if(url&&url.includes("digit-ui")  )
-  {
-    return url;
-  }
   let result = url.split(`${name}=`)[1];
   return result;
 };
@@ -736,7 +730,9 @@ const getTimeFormat = (epochTime) => {
   return Format.toString() + ":" + epochTime.toString().split(":")[1] + " " + Period;
 };
 const getDateFormat = (epochTime) => {
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+    "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
   epochTime = new Date(epochTime);
   const day = epochTime.getDate();
   const Month = epochTime.getMonth();
@@ -748,14 +744,7 @@ const getEventSLA = (item) => {
   let sla;
 
   if (item.eventType === "EVENTSONGROUND") {
-    const disp =
-      getDateFormat(item.eventDetails.fromDate) +
-      " " +
-      getTimeFormat(item.eventDetails.fromDate) +
-      "-" +
-      getDateFormat(item.eventDetails.toDate) +
-      " " +
-      getTimeFormat(item.eventDetails.toDate);
+    const disp = getDateFormat(item.eventDetails.fromDate) + " " + getTimeFormat(item.eventDetails.fromDate) + "-" + getDateFormat(item.eventDetails.toDate) + " " + getTimeFormat(item.eventDetails.toDate);
     sla = (
       // <div style={{ display: "flex" }}>
       //   <Icon name="access-time" action="device" viewBox="0 0 24 24" style={{ height: "20px", width: "35px" }} />
@@ -780,17 +769,31 @@ const getEventSLA = (item) => {
 };
 
 const getEventDate = (eventDate) => {
-  const month = new Date(eventDate).toString().split(" ")[1].toUpperCase();
+  const month = new Date(eventDate)
+    .toString()
+    .split(" ")[1]
+    .toUpperCase();
   const day = new Date(eventDate).getDate();
   return month + ":" + day;
 };
+
+
+
 
 const setDocuments = (fileUrl) => {
   return {
     title: "",
     link: (fileUrl && fileUrl.split(",")[0]) || "",
     linkText: "View",
-    name: decodeURIComponent(fileUrl.split(",")[0].split("?")[0].split("/").pop().slice(13)) || `Document`,
+    name:
+      decodeURIComponent(
+        fileUrl
+          .split(",")[0]
+          .split("?")[0]
+          .split("/")
+          .pop()
+          .slice(13)
+      ) || `Document`,
   };
 };
 
@@ -818,9 +821,9 @@ export const getTransformedNotifications = async (notifications) => {
       buttons:
         item.actions && item.actions.actionUrls
           ? item.actions.actionUrls.map((actionUrls) => ({
-              label: actionUrls.code,
-              route: getEndpointfromUrl(actionUrls.actionUrl, "redirectTo"),
-            }))
+            label: actionUrls.code,
+            route: getEndpointfromUrl(actionUrls.actionUrl, "redirectTo"),
+          }))
           : [],
       eventDate: (item.eventDetails && getEventDate(item.eventDetails.fromDate)) || "",
       eventToDate: (item.eventDetails && getEventDate(item.eventDetails.toDate)) || "",
@@ -852,7 +855,7 @@ export const getTransformedNotifications = async (notifications) => {
 
 export const onNotificationClick = async (history) => {
   try {
-    const permanentCity = JSON.parse(getUserInfo()).permanentCity;
+    const permanentCity = JSON.parse(getUserInfo()).permanentCity
     let queryObject = [
       {
         key: "tenantId",
@@ -882,7 +885,9 @@ export const onNotificationClick = async (history) => {
 
 export const getTotalAmountDue = (payload) => {
   return payload && payload.Bill && payload.Bill.length > 0 && payload.Bill[0].totalAmount ? payload.Bill[0].totalAmount : 0;
-};
+}
+
+
 
 export const setRoute = (link) => {
   // let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
@@ -891,46 +896,50 @@ export const setRoute = (link) => {
   //     ? moduleName + link
   //     : link;
 
-  routeTo(link);
-};
+  routeTo(link)
+}
+
 
 export const navigateToApplication = (businessService, propsHistory, applicationNo, tenantId, propertyId) => {
-  if (businessService == "PT.MUTATION") {
+  if (businessService == 'PT.MUTATION') {
     setRoute(`/pt-mutation/search-preview?applicationNumber=${applicationNo}&propertyId=${propertyId}&tenantId=${tenantId}`);
-  } else if (businessService == "PT.CREATE") {
+  } else if (businessService == 'PT.CREATE') {
     setRoute(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=property`);
-  } else if (businessService == "PT.UPDATE") {
-    setRoute(
-      `/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=updateProperty`
-    );
-  } else if (businessService == "PT.LEGACY") {
+  } else if (businessService == 'PT.UPDATE') {
+    setRoute(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=updateProperty`);
+  } else if (businessService == 'PT.LEGACY') {
     setRoute(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=legacy`);
   } else {
     setRoute(getPropertyInfoScreenUrl(propertyId, tenantId));
   }
-};
+}
 
 export const getApplicationType = async (applicationNumber, tenantId, creationReason) => {
   const queryObject = [
     { key: "businessIds", value: applicationNumber },
     { key: "history", value: true },
-    { key: "tenantId", value: tenantId },
+    { key: "tenantId", value: tenantId }
   ];
   try {
     if (creationReason) {
-      if (creationReason == "MUTATION") {
-        return "PT.MUTATION";
-      } else if (creationReason == "CREATE") {
-        return "PT.CREATE";
-      } else if (creationReason == "LEGACY_ENTRY") {
-        return "PT.LEGACY";
-      } else if (creationReason == "UPDATE") {
-        return "PT.UPDATE";
-      } else {
-        return "NA";
+      if (creationReason == 'MUTATION') {
+        return 'PT.MUTATION';
+      } else if (creationReason == 'CREATE') {
+        return 'PT.CREATE';
+      } else if (creationReason == 'LEGACY_ENTRY') {
+        return 'PT.LEGACY';
+      } else if (creationReason == 'UPDATE') {
+        return 'PT.UPDATE';
+      }
+      else {
+        return 'NA';
       }
     } else {
-      const payload = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", queryObject);
+      const payload = await httpRequest(
+        "egov-workflow-v2/egov-wf/process/_search",
+        "_search",
+        queryObject
+      );
       if (payload && payload.ProcessInstances.length > 0) {
         return payload.ProcessInstances[0].businessService;
       }
@@ -938,7 +947,7 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
   } catch (e) {
     console.log(e);
   }
-};
+}
 
 export const isDocumentValid = (docUploaded, requiredDocCount) => {
   const totalDocsKeys = Object.keys(docUploaded) || [];
@@ -959,162 +968,140 @@ export const isDocumentValid = (docUploaded, requiredDocCount) => {
     }
   }
   return isValid;
-};
+}
 
 export const getMohallaData = (payload, tenantId) => {
-  return (
-    payload &&
-    payload.TenantBoundary[0] &&
-    payload.TenantBoundary[0].boundary &&
-    payload.TenantBoundary[0].boundary.reduce((result, item) => {
-      result.push({
-        ...item,
-        name: `${tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${item.code.toUpperCase().replace(/[._:-\s\/]/g, "_")}`,
-      });
-      return result;
-    }, [])
-  );
-};
+  return payload && payload.TenantBoundary[0] && payload.TenantBoundary[0].boundary && payload.TenantBoundary[0].boundary.reduce((result, item) => {
+    result.push({
+      ...item,
+      name: `${tenantId
+        .toUpperCase()
+        .replace(
+          /[.]/g,
+          "_"
+        )}_REVENUE_${item.code
+          .toUpperCase()
+          .replace(/[._:-\s\/]/g, "_")}`
+    });
+    return result;
+  }, []);
+}
 
-export const downloadPdf = (link, openIn = "_blank") => {
+
+
+export const downloadPdf = (link, openIn = '_blank') => {
   var win = window.open(link, openIn);
   if (win) {
     win.focus();
   }
-};
+}
 
 export const printPdf = async (link) => {
   var response = await axios.get(link, {
     responseType: "arraybuffer",
     headers: {
       "Content-Type": "application/json",
-      Accept: "application/pdf",
-    },
+      Accept: "application/pdf"
+    }
   });
   const file = new Blob([response.data], { type: "application/pdf" });
   const fileURL = URL.createObjectURL(file);
   var myWindow = window.open(fileURL);
   if (myWindow != undefined) {
-    myWindow.addEventListener("load", (event) => {
+    myWindow.addEventListener("load", event => {
       myWindow.focus();
       myWindow.print();
     });
   }
-};
+}
 
-export const openPdf = async (link, openIn = "_blank") => {
+
+export const openPdf = async (link, openIn = '_blank') => {
   if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp()) {
-    downloadPdf(link, "_self");
+    downloadPdf(link, '_self');
   } else {
     var response = await axios.get(link, {
       responseType: "arraybuffer",
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/pdf",
-      },
+        Accept: "application/pdf"
+      }
     });
     const file = new Blob([response.data], { type: "application/pdf" });
     const fileURL = URL.createObjectURL(file);
     var myWindow = window.open(fileURL, openIn);
     if (myWindow != undefined) {
-      myWindow.addEventListener("load", (event) => {
+      myWindow.addEventListener("load", event => {
         myWindow.focus();
       });
     }
   }
-};
+}
 
 export const getModuleName = () => {
   const pathName = window.location.pathname;
-  if (pathName.indexOf("inbox") > -1) {
-    return "rainmaker-common";
-  } else if (pathName.indexOf("dss") > -1) {
-    return "rainmaker-dss";
-  } else if (pathName.indexOf("receipts") > -1) {
-    return "rainmaker-receipts";
-  } else if (pathName.indexOf("property-tax") > -1 || pathName.indexOf("rainmaker-pt") > -1 || pathName.indexOf("pt-mutation") > -1) {
-    return "rainmaker-pt,rainmaker-pgr";
-  } else if (pathName.indexOf("pt-common-screens") > -1 || pathName.indexOf("pt-mutation/public-search") > -1) {
-    return "rainmaker-pt";
-  } else if (
-    pathName.indexOf("complaint") > -1 ||
-    pathName.indexOf("pgr") > -1 ||
-    pathName.indexOf("resolve-success") > -1 ||
-    pathName.indexOf("employee-directory") > -1 ||
-    pathName.indexOf("reopen-acknowledgement") > -1 ||
-    pathName.indexOf("feedback") > -1 ||
-    pathName.indexOf("request-reassign") > -1 ||
-    pathName.indexOf("reassign-success") > -1
-  ) {
-    return "rainmaker-pgr";
-  } else if (pathName.indexOf("wns") > -1 || pathName.indexOf("wns/public-search") > -1) {
-    return "rainmaker-ws";
-  } else if (
-    pathName.indexOf("tradelicense") > -1 ||
-    pathName.indexOf("rainmaker-tl") > -1 ||
-    pathName.indexOf("tradelicence") > -1 ||
-    pathName.indexOf("tradelicense-citizen") > -1
-  ) {
-    return "rainmaker-tl";
-  } else if (pathName.indexOf("hrms") > -1) {
-    return "rainmaker-hr";
-  } else if (pathName.indexOf("bill-amend") > -1) {
-    return "rainmaker-bill-amend,rainmaker-abg";
-  } else if (pathName.indexOf("fire-noc") > -1) {
-    return "rainmaker-noc,rainmaker-pgr";
-  } else if (pathName.indexOf("dss/home") > -1) {
-    return "rainmaker-dss";
-  } else if (pathName.indexOf("language-selection") > -1) {
-    return "rainmaker-common";
-  } else if (pathName.indexOf("login") > -1) {
-    return "rainmaker-common";
-  } else if (pathName.indexOf("pay") > -1) {
-    return "rainmaker-noc";
-  } else if (pathName.indexOf("abg") > -1) {
-    return "rainmaker-abg";
-  } else if (pathName.indexOf("bills") > -1) {
-    return "rainmaker-ws,rainmaker-abg,rainmaker-bills";
-  } else if (pathName.indexOf("uc") > -1) {
-    return "rainmaker-uc";
-  } else if (pathName.indexOf("pgr-home") > -1 || pathName.indexOf("rainmaker-pgr") > -1) {
-    return "rainmaker-pgr";
-  } else if (
-    pathName.indexOf("bpastakeholder") > -1 ||
-    pathName.indexOf("edcrscrutiny") > -1 ||
-    pathName.indexOf("egov-bpa") > -1 ||
-    pathName.indexOf("oc-bpa") > -1
-  ) {
-    return "rainmaker-bpa,rainmaker-bpareg";
-  } else if (pathName.indexOf("noc") > -1) {
-    return "rainmaker-common-noc";
-  } else {
+  if (pathName.indexOf("inbox") > -1) { return "rainmaker-common"; }
+  else if (pathName.indexOf("dss") > -1) { return "rainmaker-dss"; }
+  else if (pathName.indexOf("receipts") > -1) { return "rainmaker-receipts"; }
+  else if (pathName.indexOf("property-tax") > -1 || pathName.indexOf("rainmaker-pt") > -1 || pathName.indexOf("pt-mutation") > -1) { return "rainmaker-pt,rainmaker-pgr"; }
+  else if (pathName.indexOf("pt-common-screens") > -1 || pathName.indexOf("pt-mutation/public-search") > -1) { return "rainmaker-pt"; }
+  else if (pathName.indexOf("complaint") > -1 || pathName.indexOf("pgr") > -1 || pathName.indexOf("resolve-success") > -1 || pathName.indexOf("employee-directory") > -1 || pathName.indexOf("reopen-acknowledgement") > -1 || pathName.indexOf("feedback") > -1 || pathName.indexOf("request-reassign") > -1 || pathName.indexOf("reassign-success") > -1) { return "rainmaker-pgr"; }
+  else if (pathName.indexOf("wns") > -1 || pathName.indexOf("wns/public-search") > -1) { return "rainmaker-ws"; }
+  else if (pathName.indexOf("tradelicense") > -1 || pathName.indexOf("rainmaker-tl") > -1 || pathName.indexOf("tradelicence") > -1 || pathName.indexOf("tradelicense-citizen") > -1) { return "rainmaker-tl"; }
+  else if (pathName.indexOf("hrms") > -1) { return "rainmaker-hr"; }
+  else if (pathName.indexOf("bill-amend") > -1) { return "rainmaker-bill-amend,rainmaker-abg"; }
+  else if (pathName.indexOf("fire-noc") > -1) { return "rainmaker-noc,rainmaker-pgr"; }
+  else if (pathName.indexOf("dss/home") > -1) { return "rainmaker-dss"; }
+  else if (pathName.indexOf("language-selection") > -1) { return "rainmaker-common"; }
+  else if (pathName.indexOf("login") > -1) { return "rainmaker-common"; }
+  else if (pathName.indexOf("pay") > -1) { return "rainmaker-noc"; }
+  else if (pathName.indexOf("abg") > -1) { return "rainmaker-abg"; }
+  else if (pathName.indexOf("bills") > -1) { return "rainmaker-ws,rainmaker-abg,rainmaker-bills"; }
+  else if (pathName.indexOf("uc") > -1) { return "rainmaker-uc"; }
+  else if (pathName.indexOf("pgr-home") > -1 || pathName.indexOf("rainmaker-pgr") > -1) { return "rainmaker-pgr"; }
+  else if (pathName.indexOf("bpastakeholder") > -1 || pathName.indexOf("edcrscrutiny") > -1 ||
+    pathName.indexOf("egov-bpa") > -1 || pathName.indexOf("oc-bpa") > -1) { return "rainmaker-bpa,rainmaker-bpareg"; }
+  else if (pathName.indexOf("noc") > -1) { return "rainmaker-common-noc"; }
+  else {
     return "rainmaker-common";
   }
-};
+}
 
 export const businessServiceInfo = async (mdmsBody, businessService) => {
-  const payload = await httpRequest("/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+  const payload = await httpRequest(
+    "/egov-mdms-service/v1/_search",
+    "_search",
+    [],
+    mdmsBody
+  );
   let businessServiceInfoItem = null;
   const businessServiceArray = payload.MdmsRes.BillingService.BusinessService;
-  businessServiceArray &&
-    businessServiceArray.map((item) => {
-      if (item.code == businessService) {
-        businessServiceInfoItem = item;
-      }
-    });
+  businessServiceArray && businessServiceArray.map(item => {
+    if (item.code == businessService) {
+      businessServiceInfoItem = item;
+    }
+  });
   return businessServiceInfoItem;
-};
+}
 
 export const searchConsumer = async (items, queryObject) => {
-  const payload = await httpRequest(`/${items.fetchConsumerUrl}`, "_search", queryObject);
-  let consumerDetails = payload && payload.WaterConnection ? payload.WaterConnection : payload.SewerageConnections;
+  const payload = await httpRequest(
+    `/${items.fetchConsumerUrl}`,
+    "_search",
+    queryObject
+  );
+  let consumerDetails =  payload && payload.WaterConnection ? payload.WaterConnection : payload.SewerageConnections;
   return consumerDetails;
-};
+}
 
 export const fetchConsumerBill = async (items, queryObject) => {
-  const response = await httpRequest(`/${items.fecthBillUrl}`, "_search", queryObject);
+  const response = await httpRequest(
+    `/${items.fecthBillUrl}`,
+    "_search",
+    queryObject
+  );
   return response && response.Bill && response.Bill[0];
-};
+}
 
 export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessService) => {
   let mdmsBody = {
@@ -1123,10 +1110,10 @@ export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessSer
       moduleDetails: [
         {
           moduleName: "BillingService",
-          masterDetails: [{ name: "BusinessService" }],
-        },
-      ],
-    },
+          masterDetails: [{ name: "BusinessService" }]
+        }
+      ]
+    }
   };
   try {
     const businessServiceItem = await businessServiceInfo(mdmsBody, businessService);
@@ -1136,76 +1123,25 @@ export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessSer
   }
 };
 
-export const getPaymentSearchAPI = (businessService = "", isCitizenbusinessService = false) => {
-  if (businessService == "-1") {
-    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
-  } else if (process.env.REACT_APP_NAME === "Citizen" && !isCitizenbusinessService) {
+
+
+
+export const getPaymentSearchAPI = (businessService='')=>{
+  if(businessService=='-1'){
+    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
+  }else if (process.env.REACT_APP_NAME === "Citizen") {
     return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
   }
   return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
-};
+}
 
 export const getFetchBillAPI = () => {
-  return `${FETCHBILL.GET.URL}`;
-};
+  return `${FETCHBILL.GET.URL}`
+}
 
-// const userObject=JSON.parse(localStorage.getItem("citizen.userRequestObject"))||{};
-// return {user:[userObject]};
 
-export const getUserSearchedResponse = () => {
-  let userObject = JSON.parse(localStorage.getItem("citizen.userRequestObject")) || {};
-  if (process.env.REACT_APP_NAME == "Citizen" && commonConfig.singleInstance) {
-    userObject = convertUserForSingleInstance(userObject);
-  }
-  return { user: [userObject] };
-};
 
-export const getResultUrl = (moduleName, reportName) => {
-  let reportResultUrl = `/report/${moduleName}/${reportName}/_get`;
-  return reportResultUrl;
-};
-export const translate = (locale_text) => {
-  return locale_text;
-};
-
-export const downloadWNSBill = (queryObj, fileName) => {
-  searchAndDownloadPdf("/egov-pdf/download/WNS/wnsbill", queryObj, fileName);
-};
-
-export const printWNSBill = (queryObj) => {
-  searchAndPrintPdf("/egov-pdf/download/WNS/wnsbill", queryObj);
-};
-
-const wnsBill = (consumerCode, tenantId, service) => {
-  const query = [
-    { key: "applicationNumber", value: consumerCode },
-    { key: "tenantId", value: tenantId },
-    { key: "bussinessService", value: service },
-  ];
-  downloadWNSBill(query, `${service}-BILL-${consumerCode}.pdf`);
-};
-
-export const downloadWNSBillFromConsumer = async (consumerCode, tenantId, service) => {
-  let serviceURL = service == "WS" ? "ws-services/wc/_search" : "sw-services/swc/_search";
-  let response = await httpRequestNew(
-    "post",
-    `${serviceURL}?tenantId=${tenantId}&isConnectionSearch=true&connectionNumber=${consumerCode}`,
-    "_search",
-    [],
-    {}
-  );
-  if (response && response.WaterConnection && response.WaterConnection.length > 0) {
-    wnsBill(response.WaterConnection[0].applicationNo, tenantId, service);
-  } else if (response && response.SewerageConnections && response.SewerageConnections.length > 0) {
-    wnsBill(response.SewerageConnections[0].applicationNo, tenantId, service);
-  }
-};
-
-/* TO CONVERT USER TO CENTRAL INSTANCE */
-export const convertUserForSingleInstance = (user = {}) => {
-  let tenantId = commonConfig.tenantId;
-  localStorage.setItem("Citizen.tenant-id", tenantId);
-  localStorage.setItem("tenant-id", tenantId);
-  user.tenantId = tenantId;
-  return { ...user };
-};
+export const getUserSearchedResponse =()=>{
+  const userObject=JSON.parse(localStorage.getItem("citizen.userRequestObject"))||{};
+  return {user:[userObject]};
+}

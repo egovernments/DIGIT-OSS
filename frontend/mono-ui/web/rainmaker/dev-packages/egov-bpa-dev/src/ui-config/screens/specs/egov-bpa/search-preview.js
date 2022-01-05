@@ -342,7 +342,7 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
   if(riskType === "LOW") {
     let lowAppPaymentPayload = await httpRequest(
       "post",
-      getPaymentSearchAPI("BPA.LOW_RISK_PERMIT_FEE", true),
+      getPaymentSearchAPI("BPA.LOW_RISK_PERMIT_FEE"),
       "",
       queryObject
     );
@@ -352,7 +352,7 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     for(let fee = 0; fee < businessServicesList.length; fee++ ) {
       let lowAppPaymentPayload = await httpRequest(
         "post",
-        getPaymentSearchAPI(businessServicesList[fee], true),
+        getPaymentSearchAPI(businessServicesList[fee]),
         "",
         queryObject
       );

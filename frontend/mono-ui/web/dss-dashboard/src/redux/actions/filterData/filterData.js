@@ -1,7 +1,6 @@
 /**
  * Dashboard API
  */
- import { stateTenant } from '../../../utils/commons';
 import API from './apis/api';
 import C from './constants';
 
@@ -36,7 +35,8 @@ export default class FIlterAPI extends API {
     }
 
     apiEndPoint(page) {
-        let tenent = stateTenant()|| '';
+        let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[0] : ''
+
         return `${super.apiEndPoint()}/v1/_get?masterName=tenants&moduleName=tenant&tenantId=` + tenent
     }
 

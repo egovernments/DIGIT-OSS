@@ -1,7 +1,6 @@
 import axios from "axios";
-import commonConfig from "config/common.js";
-import { addQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getAccessToken, getLocale, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { fetchFromLocalStorage, addQueryArg, getDateInEpoch } from "egov-ui-framework/ui-utils/commons";
+import { getAccessToken, getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
 const instance = axios.create({
   baseURL: window.location.origin,
@@ -24,7 +23,7 @@ const wrapRequestBody = (requestBody, action) => {
     authToken,
   };
   return Object.assign(
-    { },
+    {},
     {
       RequestInfo,
     },
@@ -32,7 +31,7 @@ const wrapRequestBody = (requestBody, action) => {
   );
 };
 
-export const httpRequest = async (method = "get", endPoint, action, queryObject = [], requestBody = { }, headers = []) => {
+export const httpRequest = async (method = "get", endPoint, action, queryObject = [], requestBody = {}, headers = []) => {
   let apiError = "Api Error";
 
   if (headers)
@@ -107,7 +106,7 @@ export const prepareForm = (params) => {
 
 export const uploadFile = async (endPoint, module, file, ulbLevel) => {
   // Bad idea to fetch from local storage, change as feasible
-  const tenantId = getTenantId() ? (ulbLevel ? commonConfig.tenantId : commonConfig.tenantId) : "";
+  const tenantId = getTenantId() ? (ulbLevel ? getTenantId().split(".")[0] : getTenantId().split(".")[0]) : "";
   const uploadInstance = axios.create({
     baseURL: window.location.origin,
     headers: {

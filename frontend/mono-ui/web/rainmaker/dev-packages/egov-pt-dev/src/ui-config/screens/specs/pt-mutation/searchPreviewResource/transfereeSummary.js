@@ -56,16 +56,7 @@ export const transfereeSummaryDetails={
         "Property.ownersTemp[0].mobileNumber",
       callBack: checkValueForNA
     }
-  ), AlterMobile: getLabelWithValue(
-        {
-          labelName: "Mobile No.",
-          labelKey: "PT_FORM3_ALT_MOBILE_NO"
-        },
-        {
-          jsonPath: "Property.ownersTemp[0].alternatemobilenumber",
-          callBack: checkValueForNA
-        }
-      ), ownerEmail: getLabelWithValue(
+  ), ownerEmail: getLabelWithValue(
     {
       labelName: "Email",
       labelKey: "PT_OWNERSHIP_INFO_EMAIL_ID"
@@ -199,16 +190,6 @@ export const transfereeInstitutionSummaryDetails={
       callBack: checkValueForNA
     }
   ),
-  AlterMobile: getLabelWithValue(
-        {
-          labelName: "Mobile No.",
-          labelKey: "PT_FORM3_ALT_MOBILE_NO"
-        },
-        {
-          jsonPath: "Property.ownersTemp[0].alternatemobilenumber",
-          callBack: checkValueForNA
-        }
-      ),
   officialAddress: getLabelWithValue(
     {
       labelName: "Official Correspondence Address",

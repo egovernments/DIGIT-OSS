@@ -239,7 +239,7 @@ const getAllFileStoreIds = async ProcessInstances => {
 
 
 export const getFileUrl = (linkText = "") => {
-  const linkList = linkText && typeof linkText=="string" && linkText.split(",") || [];
+  const linkList = linkText.split(",");
   let fileURL = '';
   linkList && linkList.map(link => {
     if (!link.includes('large') && !link.includes('medium') && !link.includes('small')) {
@@ -384,7 +384,7 @@ export const acceptedFiles = acceptedExt => {
   return acceptedFileTypes;
 };
 
-export const handleFileUpload = (event, handleDocument, props,afterFileSelected,ifError) => {
+export const handleFileUpload = (event, handleDocument, props,afterFileSelected) => {
   const S3_BUCKET = {
     endPoint: "filestore/v1/files"
   };
@@ -406,27 +406,23 @@ export const handleFileUpload = (event, handleDocument, props,afterFileSelected,
         uploadDocument = false;
       }
       if (uploadDocument) {
-        afterFileSelected && typeof afterFileSelected == 'function' && afterFileSelected();
-        try {
-          if (file.type.match(/^image\//)) {
-            const fileStoreId = await uploadFile(
-              S3_BUCKET.endPoint,
-              moduleName,
-              file,
-              commonConfig.tenantId
-            );
-            handleDocument(file, fileStoreId);
-          } else {
-            const fileStoreId = await uploadFile(
-              S3_BUCKET.endPoint,
-              moduleName,
-              file,
-              commonConfig.tenantId
-            );
-            handleDocument(file, fileStoreId);
-          }
-        } catch (e) {
-          ifError && typeof ifError == 'function' && ifError();
+        afterFileSelected&&typeof afterFileSelected=='function'&&afterFileSelected()
+        if (file.type.match(/^image\//)) {
+          const fileStoreId = await uploadFile(
+            S3_BUCKET.endPoint,
+            moduleName,
+            file,
+            commonConfig.tenantId
+          );
+          handleDocument(file, fileStoreId);
+        } else {
+          const fileStoreId = await uploadFile(
+            S3_BUCKET.endPoint,
+            moduleName,
+            file,
+            commonConfig.tenantId
+          );
+          handleDocument(file, fileStoreId);
         }
       }
     });

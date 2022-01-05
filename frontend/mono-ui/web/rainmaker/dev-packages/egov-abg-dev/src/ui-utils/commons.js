@@ -126,31 +126,6 @@ export const getGroupBillSearch = async (dispatch, searchScreenObject) => {
   }
 };
 
-export const getBulkPdfRecords = async (dispatch, queryObject=[]) => {
-  try {
-    dispatch(toggleSpinner());
-    const response = await httpRequest(
-      "post",
-      "pdf-service/v1/_getBulkPdfRecordsDetails",
-      "",
-      queryObject,
-      {  }
-    );
-    dispatch(toggleSpinner());
-    return response;
-  } catch (error) {
-    dispatch(toggleSpinner());
-    console.error(error);
-    store.dispatch(
-      toggleSnackbar(
-        true,
-        { labelName: error.message, labelCode: error.message },
-        "error"
-      )
-    );
-  }
-};
-
 const setDocsForEditFlow = async (state, dispatch) => {
   const applicationDocuments = get(
     state.screenConfiguration.preparedFinalObject,

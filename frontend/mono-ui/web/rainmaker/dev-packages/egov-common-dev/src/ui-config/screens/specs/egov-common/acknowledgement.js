@@ -163,11 +163,6 @@ const getAcknowledgementCard = (
             },
             number: receiptNumber,
           }),
-          linkComponent: {
-            uiFramework: "custom-atoms-local",
-            componentPath: "LinkComponent",
-            moduleName: "egov-common",
-          },
         },
       },
       paymentFooter: paymentFooter(
@@ -199,11 +194,6 @@ const getAcknowledgementCard = (
                 : `EMPLOYEE_FAILURE_${transBusinessService}_PAYMENT_MESSAGE_DETAIL`,
             },
           }),
-          linkComponent: {
-            uiFramework: "custom-atoms-local",
-            componentPath: "LinkComponent",
-            moduleName: "egov-common",
-          }
         },
       },
       paymentFooter: paymentFooter(

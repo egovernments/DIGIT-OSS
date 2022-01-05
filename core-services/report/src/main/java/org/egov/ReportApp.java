@@ -48,6 +48,10 @@ public class ReportApp implements EnvironmentAware {
     private static ReportDefinitions reportDefinitions;
 
     public static void setReportDefinitions(ReportDefinitions reportDefinitions) {
+    private static final String LOG_YAML_LOCATION = "The Yaml Location is : ";
+    private static final String LOG_SKIP_REPORT_DEFINITION = "Skipping the report definition ";
+
+    public void setReportDefinitions(ReportDefinitions reportDefinitions) {
         ReportApp.reportDefinitions = reportDefinitions;
     }
 
@@ -116,24 +120,24 @@ public class ReportApp implements EnvironmentAware {
 
                 if (moduleName.equals("common")) {
                     if (moduleYaml[1].startsWith("https")) {
-                        log.info("The Yaml Location is : " + yamlLocation);
+                        log.info(LOG_YAML_LOCATION + yamlLocation);
                         URL oracle = new URL(moduleYaml[1]);
                         try {
                             rd = mapper.readValue(new InputStreamReader(oracle.openStream()), ReportDefinitions.class);
                         } catch (Exception e) {
-                            log.info("Skipping the report definition " + yamlLocation);
+                            log.info(LOG_SKIP_REPORT_DEFINITION + yamlLocation);
                             log.error("Error while loading report definition: " + e.getMessage());
                         }
                         localrd.addAll(rd.getReportDefinitions());
 
                     } else if (moduleYaml[1].startsWith("file://")) {
-                        log.info("The Yaml Location is : " + yamlLocation);
+                        log.info(LOG_YAML_LOCATION + yamlLocation);
                         Resource yamlResource = resourceLoader.getResource(moduleYaml[1].toString());
                         File yamlFile = yamlResource.getFile();
                         try {
                             rd = mapper.readValue(yamlFile, ReportDefinitions.class);
                         } catch (Exception e) {
-                            log.info("Skipping the report definition " + yamlLocation);
+                            log.info(LOG_SKIP_REPORT_DEFINITION + yamlLocation);
                             log.error("Error while loading report definition: " + e.getMessage());
                         }
                         localrd.addAll(rd.getReportDefinitions());
@@ -142,24 +146,24 @@ public class ReportApp implements EnvironmentAware {
 
                 } else {
                     if (moduleYaml[0].equals(moduleName) && moduleYaml[1].startsWith("https")) {
-                        log.info("The Yaml Location is : " + moduleYaml[1]);
+                        log.info(LOG_YAML_LOCATION + moduleYaml[1]);
                         URL oracle = new URL(moduleYaml[1]);
                         try {
                             rd = mapper.readValue(new InputStreamReader(oracle.openStream()), ReportDefinitions.class);
                         } catch (Exception e) {
-                            log.info("Skipping the report definition " + yamlLocation);
+                            log.info(LOG_SKIP_REPORT_DEFINITION + yamlLocation);
                             throw new CustomException("REPORT_DEF_LOAD_ERROR", e.getMessage());
                         }
                         localrd.addAll(rd.getReportDefinitions());
 
                     } else if (moduleYaml[0].equals(moduleName) && moduleYaml[1].startsWith("file://")) {
-                        log.info("The Yaml Location is : " + moduleYaml[1]);
+                        log.info(LOG_YAML_LOCATION + moduleYaml[1]);
                         Resource yamlResource = resourceLoader.getResource(moduleYaml[1].toString());
                         File yamlFile = yamlResource.getFile();
                         try {
                             rd = mapper.readValue(yamlFile, ReportDefinitions.class);
                         } catch (Exception e) {
-                            log.info("Skipping the report definition " + moduleYaml[1]);
+                            log.info(LOG_SKIP_REPORT_DEFINITION + moduleYaml[1]);
                             throw new CustomException("REPORT_DEF_LOAD_ERROR", e.getMessage());
                         }
                         localrd.addAll(rd.getReportDefinitions());

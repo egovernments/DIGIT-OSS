@@ -491,7 +491,7 @@ class TableData extends Component {
       };
 
       let row3 = { text: <Label label={get(item, 'assignes[0].name', 'NA')} color="#000000" /> };
-      let row4 = { text: Math.round(sla), badge: true, isEscalatedApplication: item.isEscalatedApplication || item.escalated  };
+      let row4 = { text: Math.round(sla), badge: true, isEscalatedApplication: item.isEscalatedApplication  };
       let row5 = { historyButton: true };
 
       let localityDropdown = { label: getLocaleLabels("", row1.text.props.label, localizationLabels), value: row1.text.props.label };
@@ -569,27 +569,17 @@ class TableData extends Component {
 
   getBussinessServiceData() {
     let businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
-    const list = ["NewTL","EDITRENEWAL","DIRECTRENEWAL","NewWS1","NewSW1","ModifySWConnection","ModifyWSConnection","BPA","BPA_LOW","BPA_OC","AIRPORT_NOC_OFFLINE","FIRE_NOC_SRV","PT.CREATE","PT.UPDATE","PT.MUTATION","PT.LEGACY","DEACTIVATE-PT.LEGACY","DEACTIVATE-PT.MUTATION","DEACTIVATE-PT.CREATEWITHWNS","FIRENOC","PGR"];
-    // businessServiceData = businessServiceData ? businessServiceData : this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }, { key: "businessServices", value: list }]);;
-    businessServiceData = this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }, { key: "businessServices", value: list }]);;
+    businessServiceData = businessServiceData ? businessServiceData : this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);;
     return businessServiceData;
   }
   getMaxSLA() {
-    // const businessServiceData = this.getBussinessServiceData();
-    // let businessServiceSla = {}
-    // businessServiceData && Array.isArray(businessServiceData) && businessServiceData.map(eachRow => {
-    //   businessServiceSla[eachRow.businessService.toUpperCase()] = this.convertMillisecondsToDays(eachRow.businessServiceSla);
-    // })
-    // this.setState({ businessServiceSla });
-    // return businessServiceSla;
-    this.getBussinessServiceData().then((businessServiceData, err) => {
-      let businessServiceSla = {}
-      businessServiceData && Array.isArray(businessServiceData) && businessServiceData.map(eachRow => {
-        businessServiceSla[eachRow.businessService.toUpperCase()] = this.convertMillisecondsToDays(eachRow.businessServiceSla);
-      })
-      this.setState({ businessServiceSla });
-      return businessServiceSla;
-    }).catch((e) => { });
+    const businessServiceData = this.getBussinessServiceData();
+    let businessServiceSla = {}
+    businessServiceData && Array.isArray(businessServiceData) && businessServiceData.map(eachRow => {
+      businessServiceSla[eachRow.businessService.toUpperCase()] = this.convertMillisecondsToDays(eachRow.businessServiceSla);
+    })
+    this.setState({ businessServiceSla });
+    return businessServiceSla;
   }
   setBusinessServiceDataToLocalStorage = async (queryObject) => {
     const { toggleSnackbarAndSetText } = this.props;

@@ -64,7 +64,6 @@ const renderSearchConnectionTable = async (state, dispatch) => {
         }
         //Read metered & non-metered demand expiry date and assign value.
         payloadbillingPeriod = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
-        console.log(payloadbillingPeriod);
       } catch (err) { console.log(err) }
       let getSearchResult = getSearchResults(queryObject)
       let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
@@ -320,7 +319,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
 
 
 
-export const handleAddress = (element) => {
+const handleAddress = (element) => {
   let city = (
     element.property &&
     element.property !== "NA" &&

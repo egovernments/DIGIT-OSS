@@ -129,6 +129,9 @@ public class BPANotificationUtil {
                 messageTemplate = getMessageTemplate(NOTIFICATION_REJECTED, localizationMessage);
                 message = getRejectedMsg(license, messageTemplate);
                 break;
+
+            default:
+                break;
         }
 
         return message;

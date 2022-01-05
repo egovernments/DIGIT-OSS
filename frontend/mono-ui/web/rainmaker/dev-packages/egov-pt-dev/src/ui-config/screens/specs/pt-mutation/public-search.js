@@ -23,20 +23,12 @@ const getMDMSData = async dispatch => {
       tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
-          "moduleName": "PropertyTax",
-          "masterDetails": [
-
+          moduleName: "tenant",
+          masterDetails: [
             {
-              "name": "UpdateNumber"
-            }
-          ]
-        }, {
-          "moduleName": "tenant",
-          "masterDetails": [
-            {
-              "name": "tenants"
+              name: "tenants"
             },
-            { "name": "citymodule" }
+            { name: "citymodule" }
           ]
         }
       ]
@@ -52,7 +44,6 @@ const getMDMSData = async dispatch => {
     );
     payload.MdmsRes.tenant.tenants =
       payload.MdmsRes.tenant.citymodule[1].tenants;
-    // console.log("payload--", payload)
     payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.tenants.sort((t1, t2) => t1.code.localeCompare(t2.code))
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
     await getBusinessServiceMdmsData(dispatch, commonConfig.tenantId, "PT");
@@ -92,11 +83,6 @@ const screenConfig = {
         //     msevaLogo: msevaLogo
         //   }
         // },
-          linkComponent: {
-            uiFramework: "custom-atoms-local",
-            componentPath: "LinkComponent",
-            moduleName: "egov-pt",
-          },
         searchPropertyDetails,
         breakAfterSearch3: getBreak(),
         searchPropertyTable,

@@ -147,7 +147,6 @@ const OwnerCitizen = (props) => {
   }, [allowMultipleOwners]);
 
   useEffect(() => {
-    // console.log(pathname.split(path)[1], lastPath, lastPath !== pathname.split(path)[1], "this is the path");
     if (lastPath !== pathname.split(path)[1]) {
       setLastPath(pathname.split(path)[1]);
     }

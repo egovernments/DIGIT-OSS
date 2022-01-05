@@ -334,7 +334,6 @@ const downloadprintMenu = (state, dispatch, applicationNumber, tenantId, status)
             callBack: () => {
 
               const receiptData = generateMiniReceipt(state);
-              console.log("Mini Receipt:", JSON.stringify(receiptData));
               try {
                 window.Android && window.Android.sendPrintData("printData", JSON.stringify(receiptData));
               } catch (e) {
@@ -366,7 +365,6 @@ const downloadprintMenu = (state, dispatch, applicationNumber, tenantId, status)
             callBack: () => {
               const challanData = generateMiniChallan(state);
               try {
-                console.log("printData", JSON.stringify(challanData));
                 window.Android && window.Android.sendPrintData("printData", JSON.stringify(challanData));
               } catch (e) {
                 console.log(e);

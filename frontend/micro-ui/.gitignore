@@ -1,16 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+web/digit-ui-internals
 .env
 .eslintcache
 
-# yarn $
-.yarn
-yarn.lock
-.yarnrc.yml
-
 # dependencies
 node_modules
-.yarn
 /.pnp
 .pnp.js
 
@@ -19,7 +14,7 @@ node_modules
 
 # production
 /web/build
-dist
+
 # misc
 .DS_Store
 .env.local

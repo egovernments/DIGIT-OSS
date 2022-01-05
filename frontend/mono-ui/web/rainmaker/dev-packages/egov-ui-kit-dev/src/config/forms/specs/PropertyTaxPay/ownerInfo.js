@@ -1,12 +1,11 @@
-import {
-  getPattern
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
-import { handleFieldChange, setFieldProperty } from "egov-ui-kit/redux/form/actions";
-import { getOwnerCategory } from "egov-ui-kit/utils/PTCommon";
+import { getOwnerCategoryByYear ,getOwnerCategory} from "egov-ui-kit/utils/PTCommon";
+import { setDependentFields } from "./utils/enableDependentFields";
 import get from "lodash/get";
 import set from "lodash/set";
-import { setDependentFields } from "./utils/enableDependentFields";
+import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/actions";
+import { getPattern
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 
 const formConfig = {
   name: "ownerInfo",
@@ -19,7 +18,7 @@ const formConfig = {
       hintText: "PT_FORM3_OWNER_NAME_PLACEHOLDER",
       required: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      pattern: getPattern("Name"),
+      pattern:getPattern("Name") ,
       errorMessage: "PT_NAME_ERROR_MESSAGE",
     },
     ownerMobile: {
@@ -29,17 +28,7 @@ const formConfig = {
       floatingLabelText: "PT_FORM3_MOBILE_NO",
       hintText: "PT_FORM3_MOBILE_NO_PLACEHOLDER",
       required: true,
-      pattern: getPattern("MobileNo"),
-      errorMessage: "PT_MOBILE_NUMBER_ERROR_MESSAGE",
-      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-    }, ownerAlterMobile: {
-      id: "ownerAlterMobile",
-      jsonPath: "Properties[0].propertyDetails[0].owners[0].alternatemobilenumber",
-      type: "textfield",
-      floatingLabelText: "PT_FORM3_ALT_MOBILE_NO",
-      hintText: "PT_FORM3_ALT_MOBILE_NO_PLACEHOLDER",
-      required: false,
-      pattern: getPattern("MobileNo"),
+      pattern: getPattern("MobileNo") ,
       errorMessage: "PT_MOBILE_NUMBER_ERROR_MESSAGE",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     },
@@ -49,7 +38,7 @@ const formConfig = {
       type: "textfield",
       floatingLabelText: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME",
       hintText: "PT_FORM3_GUARDIAN_PLACEHOLDER",
-      pattern: getPattern("Name"),
+      pattern:getPattern("Name") ,
       required: true,
       errorMessage: "PT_NAME_ERROR_MESSAGE",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
@@ -97,7 +86,7 @@ const formConfig = {
       localePrefix: { moduleName: "PropertyTax", masterName: "OwnerType" },
       jsonPath: "Properties[0].propertyDetails[0].owners[0].ownerType",
       type: "AutocompleteDropdown",
-      defaultSort: false,
+      defaultSort:false,
       floatingLabelText: "PT_FORM3_SPECIAL_CATEGORY",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       dropDownData: [],
@@ -131,7 +120,7 @@ const formConfig = {
         documentTypes && documentTypes.length > 0 && documentTypes.forEach(data => { data.label = getLocaleLabels(`PROPERTYTAX_OWNERTYPEDOCUMENT_${data.value}`, `PROPERTYTAX_OWNERTYPEDOCUMENT_${data.value}`) });
         dispatch(setFieldProperty(formKey, "ownerCategoryIdType", "dropDownData", documentTypes));
         dispatch(handleFieldChange(formKey, "ownerCategoryIdType", get(documentTypes, "[0].value", "")));
-        dispatch(setFieldProperty(formKey, "ownerCategoryIdType", "value", get(documentTypes, "[0].value", "")));
+        dispatch(setFieldProperty(formKey, "ownerCategoryIdType", "value", get(documentTypes, "[0].value", "")));       
         switch (value) {
           case "NONE":
             dispatch(handleFieldChange(formKey, "ownerCategoryId", null));
@@ -254,7 +243,7 @@ const formConfig = {
             .join(", ")
             .replace(/^(,\s)+|(,\s)+$/g, "")
             .replace(/(,\s){2,}/g, ", ")
-            .replace(":", "");
+            .replace(":","");
           dispatch(setFieldProperty(formKey, "ownerAddress", "value", correspondingAddress));
           dispatch(handleFieldChange(formKey, "ownerAddress", correspondingAddress));
         } else {

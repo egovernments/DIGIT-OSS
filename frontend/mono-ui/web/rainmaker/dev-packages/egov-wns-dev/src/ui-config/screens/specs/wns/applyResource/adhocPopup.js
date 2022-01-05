@@ -6,7 +6,7 @@ import {
   getCommonSubHeader,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { showHideAdhocPopup, showHideAdhocPopupAndValues } from "../../utils";
+import { showHideAdhocPopup } from "../../utils";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { serviceConst } from "../../../../../ui-utils/commons";
@@ -37,8 +37,6 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     }
   }
 
-  localStorage.setItem("WS_ADDITIONAL_DETAILS_FOR_DATA", JSON.stringify(WSRequestBody[0]));
-  localStorage.setItem("IS_WS_ADDITIONAL_DETAILS_FOR_DATA", JSON.stringify(true));
   dispatch(prepareFinalObject("WaterConnection[0]", WSRequestBody[0]));
   dispatch(prepareFinalObject("WaterConnectionTemp[0]", cloneDeep(WSRequestBody[0])));
   set(WSRequestBody[0], "action", "ADHOC");
@@ -77,6 +75,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     window.location.href,
     showHideAdhocPopup(state, dispatch, "search-preview", false),
   );
+
 };
 
 const updateAdhoc = (state, dispatch) => {
@@ -192,7 +191,12 @@ export const adhocPopup = getCommonContainer({
             onClickDefination: {
               action: "condition",
               callBack: (state, dispatch) => {
-                showHideAdhocPopupAndValues(state, dispatch, "search-preview");
+                const WaterConnectionTemp = cloneDeep( get(state.screenConfiguration.preparedFinalObject, "WaterConnectionTemp[0].additionalDetails"));
+                let isAdhocOrRebateValue = true;
+                const adhocAmount = get(WaterConnectionTemp, "adhocPenalty", null);
+                const rebateAmount = get(WaterConnectionTemp, "adhocRebate", null);
+                if(adhocAmount || rebateAmount) { isAdhocOrRebateValue = false }
+                showHideAdhocPopup(state, dispatch, "search-preview", isAdhocOrRebateValue, WaterConnectionTemp);
               }
             }
           }
@@ -393,7 +397,12 @@ export const adhocPopup = getCommonContainer({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            showHideAdhocPopupAndValues(state, dispatch, "search-preview");
+            const WaterConnectionTemp = cloneDeep( get(state.screenConfiguration.preparedFinalObject, "WaterConnectionTemp[0].additionalDetails"));
+            let isAdhocOrRebateValue = true;
+            const adhocAmount = get(WaterConnectionTemp, "adhocPenalty", null);
+            const rebateAmount = get(WaterConnectionTemp, "adhocRebate", null);
+            if(adhocAmount || rebateAmount) { isAdhocOrRebateValue = false }
+            showHideAdhocPopup(state, dispatch, "search-preview", isAdhocOrRebateValue, WaterConnectionTemp);
           }
         }
       },

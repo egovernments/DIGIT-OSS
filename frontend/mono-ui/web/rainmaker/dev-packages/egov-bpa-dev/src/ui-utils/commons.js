@@ -1,26 +1,38 @@
-import commonConfig from "config/common.js";
+import {
+  getCheckBoxJsonpath,
+  getSafetyNormsJson,
+  getHygeneLevelJson,
+  getLocalityHarmedJson
+} from "../ui-config/screens/specs/utils";
+import {
+  getTranslatedLabel,
+  updateDropDowns,
+  setOrganizationVisibility
+} from "../ui-config/screens/specs/utils";
+import store from "ui-redux/store";
+import get from "lodash/get";
+import set from "lodash/set";
+import {
+  getQueryArg,
+  getFileUrlFromAPI,
+  getFileUrl
+} from "egov-ui-framework/ui-utils/commons";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getMultiUnits } from "egov-ui-framework/ui-utils/commons";
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
   toggleSnackbar,
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getFileUrl, getFileUrlFromAPI, getMultiUnits, getQueryArg
-} from "egov-ui-framework/ui-utils/commons";
-import { downloadPdf, printPdf } from "egov-ui-kit/utils/commons";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import jp from "jsonpath";
-import get from "lodash/get";
-import set from "lodash/set";
-import store from "ui-redux/store";
-import {
-  edcrDetailsToBpaDetails, getCheckBoxJsonpath, getHygeneLevelJson,
-  getLocalityHarmedJson, getSafetyNormsJson, getTranslatedLabel, setOrganizationVisibility, updateDropDowns
-} from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import jp from "jsonpath";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { edcrDetailsToBpaDetails } from "../ui-config/screens/specs/utils"
+import { downloadPdf, printPdf } from "egov-ui-kit/utils/commons";
+
 
 export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
   getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
@@ -36,7 +48,7 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
 export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state) => {
   if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
-    configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
+    configKey = get(uiCommonPayConfig, "receiptKey","consolidatedreceipt")
   }
   const FETCHRECEIPT = {
     GET: {
@@ -54,7 +66,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
       const queryStr = [
         { key: "key", value: configKey },
-        { key: "tenantId", value: commonConfig.tenantId }
+        { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
       ]
       if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
         console.log("Could not find any receipts");
@@ -129,18 +141,18 @@ export const getSearchResults = async queryObject => {
 
 export const getBpaSearchResults = async queryObject => {
   try {
-    if (queryObject && queryObject.length) {
+    if(queryObject && queryObject.length) {
       let isTenantId = true;
       queryObject.forEach(obj => {
-        if (obj.key === "tenantId") {
+        if(obj.key === "tenantId"){
           isTenantId = false
         }
       })
-      if (isTenantId) {
-        queryObject.push({ key: "tenantId", value: getTenantId() })
+      if(isTenantId) {
+        queryObject.push({key : "tenantId", value: getTenantId()})
       }
     } else {
-      queryObject = [{ key: "tenantId", value: getTenantId() }];
+      queryObject = [{key : "tenantId", value: getTenantId()}];
     }
     const response = await httpRequest(
       "post",
@@ -190,18 +202,18 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
 
 export const getAppSearchResults = async (queryObject, dispatch) => {
   try {
-    if (queryObject && queryObject.length) {
+    if(queryObject && queryObject.length) {
       let isTenantId = true;
       queryObject.forEach(obj => {
-        if (obj.key === "tenantId") {
+        if(obj.key === "tenantId"){
           isTenantId = false
         }
       })
-      if (isTenantId) {
-        queryObject.push({ key: "tenantId", value: getTenantId() })
+      if(isTenantId) {
+        queryObject.push({key : "tenantId", value: getTenantId()})
       }
     } else {
-      queryObject = [{ key: "tenantId", value: getTenantId() }];
+      queryObject = [{key : "tenantId", value: getTenantId()}];
     }
     const response = await httpRequest(
       "post",
@@ -276,70 +288,70 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
   );
 
   let documnts = [];
-  if (documentsUpdalod) {
-    Object.keys(documentsUpdalod).forEach(function (key) {
-      documnts.push(documentsUpdalod[key])
-    });
-  }
-
-  let nocDocumentsUpload = get(
+ if(documentsUpdalod) {
+  Object.keys(documentsUpdalod).forEach(function(key) {
+    documnts.push(documentsUpdalod[key])
+  });
+ }
+  
+  let nocDocumentsUpload = get (
     state,
     "screenConfiguration.preparedFinalObject.nocDocumentsUploadRedux"
   );
-
-  if (nocDocumentsUpload) {
-    Object.keys(nocDocumentsUpload).forEach(function (key) {
+  
+  if(nocDocumentsUpload) {
+    Object.keys(nocDocumentsUpload).forEach(function(key) {
       documnts.push(nocDocumentsUpload[key])
     });
   }
-
+  
   let requiredDocuments = [];
   if (documnts && documnts.length > 0) {
     documnts.forEach(documents => {
-      if (documents && documents.documents) {
-        documents.documents.forEach(docItem => {
-          if (documents.dropDownValues && documents.dropDownValues.value) {
-            let doc = { };
-            doc.documentType = documents.dropDownValues.value;
-            doc.fileStoreId = docItem.fileStoreId;
-            doc.fileStore = docItem.fileStoreId;
-            doc.fileName = docItem.fileName;
-            doc.fileUrl = docItem.fileUrl;
-            doc.additionalDetails = docItem.additionalDetails;
-            BPADocs && BPADocs.forEach(bpaDc => {
-              if (bpaDc.fileStoreId === docItem.fileStoreId) {
-                doc.id = bpaDc.id;
-              }
-            });
-            requiredDocuments.push(doc);
+    if(documents && documents.documents){
+      documents.documents.forEach(docItem =>{
+        if(documents.dropDownValues && documents.dropDownValues.value) {
+        let doc = {};
+        doc.documentType = documents.dropDownValues.value;
+        doc.fileStoreId = docItem.fileStoreId;
+        doc.fileStore = docItem.fileStoreId;
+        doc.fileName = docItem.fileName;
+        doc.fileUrl = docItem.fileUrl;
+        doc.additionalDetails = docItem.additionalDetails;
+        BPADocs && BPADocs.forEach(bpaDc => {
+          if(bpaDc.fileStoreId ===  docItem.fileStoreId) {
+            doc.id = bpaDc.id;
           }
-        })
+        });
+        requiredDocuments.push(doc);
       }
-    });
+      })
+    }
+  });
 
-    documnts.forEach(documents => {
-      if (documents && documents.previewdocuments) {
-        documents.previewdocuments.forEach(pDoc => {
-          let doc = { };
-          // if(documents.dropDownValues) {
-          // doc.documentType = documents.dropDownValues.value;
-          // }
-          doc.documentType = pDoc.dropDownValues;
-          doc.fileStoreId = pDoc.fileStoreId;
-          doc.fileStore = pDoc.fileStoreId;
-          doc.fileName = pDoc.fileName;
-          doc.fileUrl = pDoc.fileUrl;
-          BPADocs && BPADocs.forEach(bpaDc => {
-            if (bpaDc.fileStoreId === pDoc.fileStoreId) {
-              doc.id = bpaDc.id;
-            }
-          });
-          requiredDocuments.push(doc);
-        })
-      }
-    });
+  documnts.forEach(documents => {
+    if(documents && documents.previewdocuments){
+      documents.previewdocuments.forEach(pDoc =>{
+        let doc = {};
+        // if(documents.dropDownValues) {
+        // doc.documentType = documents.dropDownValues.value;
+        // }
+        doc.documentType = pDoc.dropDownValues;
+        doc.fileStoreId = pDoc.fileStoreId;
+        doc.fileStore = pDoc.fileStoreId;
+        doc.fileName = pDoc.fileName;
+        doc.fileUrl = pDoc.fileUrl;
+        BPADocs && BPADocs.forEach(bpaDc => {
+          if(bpaDc.fileStoreId ===  pDoc.fileStoreId) {
+            doc.id = bpaDc.id;
+          }
+        });
+        requiredDocuments.push(doc);
+      })
+    }
+  });
 
-  }
+}
 
 
   let subOccupancyData = get(
@@ -355,13 +367,13 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       block.occupancyType.forEach(occType => {
         arry.push(occType.value);
       })
-    blocks[index] = { };
+    blocks[index] = {};
     blocks[index].blockIndex = index;
-    blocks[index].usageCategory = { };
+    blocks[index].usageCategory = {};
     blocks[index].usageCategory = arry.join();
     blocks[index].floorNo = block.floorNo;
     blocks[index].unitType = "Block";
-    if (BPADetails.landInfo.unit && BPADetails.landInfo.unit[index] && BPADetails.landInfo.unit[index].id) {
+    if(BPADetails.landInfo.unit && BPADetails.landInfo.unit[index] && BPADetails.landInfo.unit[index].id) {
       blocks[index].id = BPADetails.landInfo.unit[index].id;
     }
   })
@@ -400,7 +412,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       }
       set(payload, "documents", documents);
       set(payload, "workflow.varificationDocuments", null);
-    } else if (method === 'CREATE') {
+    } else if( method === 'CREATE') {
       documents = null;
     }
 
@@ -424,15 +436,15 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     });
 
     let authOwners = [];
-    let multiOwners = get(payload, "landInfo.owners", []);
-    if (multiOwners && multiOwners.length > 0) {
+    let multiOwners = get (payload, "landInfo.owners", []);
+    if(multiOwners && multiOwners.length > 0) {
       multiOwners.forEach(owner => {
-        if (owner && owner.isDeleted != false) {
+        if(owner && owner.isDeleted != false) {
           authOwners.push(owner);
         }
       })
     }
-
+    
     set(payload, "landInfo.owners", authOwners);
     let response;
     if (method === "CREATE") {
@@ -477,9 +489,9 @@ export const prepareDocumentsUploadData = (state, dispatch, isOC) => {
     []
   );
 
-  let bpaDetails = get(
+  let bpaDetails = get (
     state,
-    "screenConfiguration.preparedFinalObject.BPA", { }
+    "screenConfiguration.preparedFinalObject.BPA", {}
   );
 
   let documents = []
@@ -487,73 +499,73 @@ export const prepareDocumentsUploadData = (state, dispatch, isOC) => {
    * @TODO optimize logic further
    */
   applicationDocuments.forEach(doc => {
-    if ((doc.WFState == "INITIATED" && doc.RiskType === bpaDetails.riskType && doc.ServiceType === bpaDetails.serviceType && doc.applicationType === bpaDetails.applicationType)) {
+    if( (doc.WFState == "INITIATED" && doc.RiskType === bpaDetails.riskType && doc.ServiceType === bpaDetails.serviceType && doc.applicationType === bpaDetails.applicationType)) { 
       documents.push(doc.docTypes);
     }
   });
 
-  if (documents[0] && documents[0].length > 0) {
+  if(documents[0] && documents[0].length > 0) {
     let documentsList = [];
-    documents[0].forEach(doc => {
-      let code = doc.code;
-      doc.dropDownValues = [];
-      documentsDropDownValues.forEach(value => {
-        let values = value.code.slice(0, code.length);
-        if (code === values) {
-          doc.hasDropdown = true;
-          doc.dropDownValues.push(value);
-        }
+  documents[0].forEach(doc => {
+    let code = doc.code;
+    doc.dropDownValues = [];
+    documentsDropDownValues.forEach(value => {
+      let values = value.code.slice(0, code.length);
+      if (code === values) {
+        doc.hasDropdown = true;
+        doc.dropDownValues.push(value);
+      }
+    });
+    documentsList.push(doc);
+  });
+  const bpaDocuments = documentsList;
+  let documentsContract = [];
+  let tempDoc = {};
+
+  bpaDocuments.forEach(doc => {
+    let card = {};
+    card["code"] = doc.code.split(".")[0];
+    card["title"] = doc.code.split(".")[0];
+    card["cards"] = [];
+    tempDoc[doc.code.split(".")[0]] = card;
+  });
+  bpaDocuments.forEach(doc => {
+    let card = {};
+    card["name"] = doc.code;
+    card["code"] = doc.code;
+    if(bpaDetails && bpaDetails.documents && bpaDetails.documents.length > 0) {
+      card["required"] = false;
+    }
+    else {
+    card["required"] = doc.required ? true : false;      
+    };
+    if (doc.hasDropdown && doc.dropDownValues) {
+      let dropDownValues = {};
+      dropDownValues.label = "BPA_SELECT_DOCS_LABEL";
+      dropDownValues.required = doc.required ? true : false;
+      dropDownValues.menu = doc.dropDownValues.filter(item => {
+        return item.active;
       });
-      documentsList.push(doc);
-    });
-    const bpaDocuments = documentsList;
-    let documentsContract = [];
-    let tempDoc = { };
+      dropDownValues.menu = dropDownValues.menu.map(item => {
+        return { code: item.code, label: item.code };
+      });
+      card["dropDownValues"] = dropDownValues;
+    }
+    tempDoc[doc.code.split(".")[0]].cards.push(card);
+  });
 
-    bpaDocuments.forEach(doc => {
-      let card = { };
-      card["code"] = doc.code.split(".")[0];
-      card["title"] = doc.code.split(".")[0];
-      card["cards"] = [];
-      tempDoc[doc.code.split(".")[0]] = card;
-    });
-    bpaDocuments.forEach(doc => {
-      let card = { };
-      card["name"] = doc.code;
-      card["code"] = doc.code;
-      if (bpaDetails && bpaDetails.documents && bpaDetails.documents.length > 0) {
-        card["required"] = false;
-      }
-      else {
-        card["required"] = doc.required ? true : false;
-      };
-      if (doc.hasDropdown && doc.dropDownValues) {
-        let dropDownValues = { };
-        dropDownValues.label = "BPA_SELECT_DOCS_LABEL";
-        dropDownValues.required = doc.required ? true : false;
-        dropDownValues.menu = doc.dropDownValues.filter(item => {
-          return item.active;
-        });
-        dropDownValues.menu = dropDownValues.menu.map(item => {
-          return { code: item.code, label: item.code };
-        });
-        card["dropDownValues"] = dropDownValues;
-      }
-      tempDoc[doc.code.split(".")[0]].cards.push(card);
-    });
+  Object.keys(tempDoc).forEach(key => {
+    documentsContract.push(tempDoc[key]);
+  });
 
-    Object.keys(tempDoc).forEach(key => {
-      documentsContract.push(tempDoc[key]);
-    });
-
-    dispatch(prepareFinalObject("documentsContract", documentsContract));
+  dispatch(prepareFinalObject("documentsContract", documentsContract));
   }
 };
 
 export const prepareNOCUploadData = async (state, dispatch) => {
-
-
-  let documents = await getNocDocuments(state);
+  
+  
+  let documents = await getNocDocuments(state);  
   let documentsList = await mapDropdownValues(documents, state);
 
   // nocData.forEach(nocDoc => {
@@ -567,10 +579,10 @@ export const prepareNOCUploadData = async (state, dispatch) => {
   // });
   const nocDocuments = documentsList;
   let documentsContract = [];
-  let tempDoc = { };
-  if (nocDocuments && nocDocuments.length > 0) {
+  let tempDoc = {};
+  if ( nocDocuments && nocDocuments.length > 0) {
     nocDocuments.forEach(doc => {
-      let card = { };
+      let card = {};
       // card["code"] = doc.documentType;
       // card["title"] = doc.documentType;
       card["code"] = doc.documentType.split(".")[0];
@@ -579,14 +591,14 @@ export const prepareNOCUploadData = async (state, dispatch) => {
       tempDoc[doc.documentType.split(".")[0]] = card;
     });
     nocDocuments.forEach(doc => {
-      let card = { };
+      let card = {};
       card["name"] = doc.documentType;
       card["code"] = doc.documentType;
       card["nocType"] = doc.nocType;
       card["additionalDetails"] = doc.additionalDetails;
       card["required"] = doc.required ? true : false;
       if (doc.hasDropdown && doc.dropDownValues) {
-        let dropDownValues = { };
+        let dropDownValues = {};
         dropDownValues.label = "BPA_SELECT_DOCS_LABEL";
         dropDownValues.required = doc.required;
         dropDownValues.menu = doc.dropDownValues.filter(item => {
@@ -601,7 +613,7 @@ export const prepareNOCUploadData = async (state, dispatch) => {
     });
   }
 
-  if (tempDoc) {
+  if(tempDoc) {
     Object.keys(tempDoc).forEach(key => {
       documentsContract.push(tempDoc[key]);
     });
@@ -611,14 +623,14 @@ export const prepareNOCUploadData = async (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "Noc",
     []
-  ))
+  )) 
 
-  let finalCards = [];
-  documentsContract.length > 0 && documentsContract[0].cards && documentsContract[0].cards.map(docs => {
+  let finalCards = [];  
+  documentsContract.length>0 && documentsContract[0].cards && documentsContract[0].cards.map(docs => {
     Noc && Noc.map(upDocs => {
-      if (docs.nocType === upDocs.nocType) {
-        docs.documents = upDocs.documents;
-        let card = {
+      if(docs.nocType === upDocs.nocType) {
+        docs.documents =  upDocs.documents;
+        let card ={
           code: docs.code,
           name: docs.code,
           nocType: docs.nocType,
@@ -628,7 +640,7 @@ export const prepareNOCUploadData = async (state, dispatch) => {
           additionalDetails: docs.additionalDetails,
           readOnly: false
         };
-        finalCards.push(card);
+        finalCards.push(card);       
       }
     })
   })
@@ -640,13 +652,13 @@ export const prepareNOCUploadData = async (state, dispatch) => {
 /**
  * This method will be called to get teh noc documents matched with noctyps and applicationType
  */
-const getNocDocuments = (state) => {
+const getNocDocuments = (state) =>{
   let applicationDocuments = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.NOC.DocumentTypeMapping",
     []
   );
-
+ 
   let Noc = get(
     state,
     "screenConfiguration.preparedFinalObject.Noc",
@@ -654,66 +666,66 @@ const getNocDocuments = (state) => {
   );
   let documents = [];
   Noc.forEach(nocDoc => {
-
-    applicationDocuments && applicationDocuments.length > 0 &&
-      applicationDocuments.forEach(doc => {
-        if (doc.applicationType === nocDoc.applicationType && doc.nocType === nocDoc.nocType) {
-          let linkDetails = { };
-          let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
-          let url = `${window.location.origin}/noc/search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}&isFromBPA=true`;
-          if (process.env.NODE_ENV === "production") {
-            if (checkingApp) {
-              url = `${window.location.origin}/${checkingApp}/noc/search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}&isFromBPA=true`;
-            }
+    
+    applicationDocuments && applicationDocuments.length > 0 && 
+    applicationDocuments.forEach(doc =>{
+      if(doc.applicationType === nocDoc.applicationType && doc.nocType === nocDoc.nocType) {
+        let linkDetails = {};
+        let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
+        let url = `${window.location.origin}/noc/search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}&isFromBPA=true`;
+        if (process.env.NODE_ENV === "production") {
+          if (checkingApp) {
+            url = `${window.location.origin}/${checkingApp}/noc/search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}&isFromBPA=true`;
           }
-          if (nocDoc.applicationStatus === "CREATED" || nocDoc.applicationStatus === null) {
-            url = "";
-          }
-          linkDetails.labelName = "BPA_SEARCH_APPLICATION_NO_LABEL"
-          linkDetails.value = url;
-          linkDetails.valueName = nocDoc.applicationNo;
-          doc.docTypes[0].nocType = doc.nocType;
-          doc.docTypes[0].additionalDetails = {
-            submissionDetails: nocDoc.additionalDetails,
-            applicationStatus: nocDoc.applicationStatus,
-            linkDetails: linkDetails,
-            appNumberLink: nocDoc.applicationNo,
-            nocNo: nocDoc.nocNo,
-            approvedRejectedOn: get(nocDoc, "auditDetails.lastModifiedTime", "")
-          }
-          documents.push(doc.docTypes[0]);
         }
-      });
+        if(nocDoc.applicationStatus === "CREATED" || nocDoc.applicationStatus === null) {
+          url = "";
+        }
+        linkDetails.labelName = "BPA_SEARCH_APPLICATION_NO_LABEL"
+        linkDetails.value = url;
+        linkDetails.valueName = nocDoc.applicationNo;
+        doc.docTypes[0].nocType = doc.nocType;
+        doc.docTypes[0].additionalDetails = {
+          submissionDetails: nocDoc.additionalDetails,
+          applicationStatus: nocDoc.applicationStatus,
+          linkDetails: linkDetails,
+          appNumberLink: nocDoc.applicationNo,
+          nocNo: nocDoc.nocNo,
+          approvedRejectedOn: get(nocDoc,"auditDetails.lastModifiedTime", "")
+        }
+        documents.push(doc.docTypes[0]);    
+      }
+    });
   });
-  return documents;
+ return documents;
 }
 
 /**
  * This method will be called to map mdms dropdown values
  * @param {*} documents 
  */
-const mapDropdownValues = (documents, state) => {
+const mapDropdownValues = (documents, state) =>{
   let documentsDropDownValues = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
     []
   );
-  let documentsList = [];
+  let documentsList = [];  
   if (documents && documents.length > 0) {
     documents.map(doc => {
-      let code = doc.documentType;
-      let nocType = doc.nocType;
+      let code = doc.documentType; 
+      let nocType = doc.nocType;    
       doc.dropDownValues = [];
       documentsDropDownValues.forEach(value => {
-        let values = value.code.slice(0, code.length);
-        if (code === values) {
-          doc.hasDropdown = true;
-          doc.dropDownValues.push(value);
-        }
-      });
-      documentsList.push(doc);
+      let values = value.code.slice(0, code.length);
+      if (code === values) {
+        doc.hasDropdown = true;
+        doc.dropDownValues.push(value);
+      }
+    });
+    documentsList.push(doc);    
     })
-  }
+  }  
   return documentsList;
 
 }
@@ -722,14 +734,14 @@ const mapDropdownValues = (documents, state) => {
  * This method will be called to update filestore
  * @param {*} fileData 
  */
-const fetchFileDetails = fileData => {
-  fileData && fileData.length > 0 && fileData.forEach(async (items) => {
-    if (items.documents && items.documents.length > 0) {
+const fetchFileDetails = fileData =>{
+  fileData && fileData.length>0 && fileData.forEach( async (items) => {
+    if(items.documents && items.documents.length>0){
       let fileStoreIds = jp.query(items.documents, "$.*.fileStoreId");
       let fileUrls =
-        fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : { };
-      items.documents.map((docs, index) => {
-        docs["fileName"] =
+        fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+        items.documents.map((docs, index) => {
+          docs["fileName"] =
           (fileUrls[docs.fileStoreId] &&
             decodeURIComponent(
               getFileUrl(fileUrls[docs.fileStoreId])
@@ -738,8 +750,8 @@ const fetchFileDetails = fileData => {
                 .pop()
                 .slice(13)
             )) ||
-          `Document - ${index + 1}`;
-      })
+            `Document - ${index + 1}`;
+        })
     }
   });
   return fileData;
@@ -763,13 +775,13 @@ const setDocsForEditFlow = async (state, dispatch) => {
     "Licenses[0].tradeLicenseDetail.applicationDocuments",
     []
   );
-  let uploadedDocuments = { };
+  let uploadedDocuments = {};
   let fileStoreIds =
     applicationDocuments && applicationDocuments.length > 0 &&
     applicationDocuments.map(item => item.fileStoreId).join(",");
   let fileUrlPayload =
     fileStoreIds && fileStoreIds.length > 0 && (await getFileUrlFromAPI(fileStoreIds));
-  if (fileUrlPayload && fileUrlPayload.fileStoreIds) delete fileUrlPayload.fileStoreIds;
+  if(fileUrlPayload && fileUrlPayload.fileStoreIds) delete fileUrlPayload.fileStoreIds;
   applicationDocuments &&
     applicationDocuments.forEach((item, index) => {
       uploadedDocuments[index] = [
@@ -820,8 +832,8 @@ export const updatePFOforSearchResults = async (
   const payload = !isPreviouslyEdited
     ? await getSearchResults(queryObject)
     : {
-      Licenses: get(state.screenConfiguration.preparedFinalObject, "Licenses")
-    };
+        Licenses: get(state.screenConfiguration.preparedFinalObject, "Licenses")
+      };
   getQueryArg(window.location.href, "action") === "edit" &&
     (await setDocsForEditFlow(state, dispatch));
   if (payload) {
@@ -964,7 +976,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     set(queryObject[0], "businessService", "BPAREG");
 
     let tenantId = getTenantId();
-    if ((tenantId == "null") || (tenantId == null)) {
+    if((tenantId == "null") || (tenantId == null)) {
       tenantId = process.env.REACT_APP_DEFAULT_TENANT_ID;
     }
 
@@ -1005,9 +1017,9 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       //   queryObject[0].tradeLicenseDetail &&
       //   queryObject[0].tradeLicenseDetail.applicationDocuments
       // ) {
-      if (activeIndex === 2) {
-        action = "APPLY";
-      }
+        if (activeIndex === 2) {
+          action = "APPLY";
+        }
       //   let docs = []; 
       //   let bparegDocuments = queryObject[0].tradeLicenseDetail.applicationDocuments;
       //  if(bparegDocuments && bparegDocuments.length > 0) {
@@ -1023,46 +1035,46 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         "screenConfiguration.preparedFinalObject.bparegDocumentDetailsUploadRedux",
         []
       );
-
+    
       let documnts = [];
-      if (documentsUpdalod) {
-        Object.keys(documentsUpdalod).forEach(function (key) {
-          documnts.push(documentsUpdalod[key])
-        });
-      }
+     if(documentsUpdalod) {
+      Object.keys(documentsUpdalod).forEach(function(key) {
+        documnts.push(documentsUpdalod[key])
+      });
+     }
 
-      if (documents && documents.length && documnts && documnts.length) {
-        documents.forEach(upDocs => {
-          documnts.forEach(reduxDocs => {
-            if (reduxDocs && upDocs &&
-              reduxDocs.documentCode === upDocs.documentType) {
-              reduxDocs.documents[0].id = upDocs.id;
-            }
-          })
+     if(documents && documents.length && documnts && documnts.length) {
+      documents.forEach(upDocs => {
+        documnts.forEach(reduxDocs => {
+          if(reduxDocs && upDocs &&
+            reduxDocs.documentCode === upDocs.documentType) {
+            reduxDocs.documents[0].id = upDocs.id;
+          }
         })
-      }
-
+       })
+     }
+      
       let requiredDocuments = [];
       if (documnts && documnts.length > 0) {
         documnts.forEach(documents => {
-          if (documents && documents.documents) {
-            let doc = { };
-            doc.fileStoreId = documents.documents[0].fileStoreId;
-            doc.fileStore = documents.documents[0].fileStoreId;
-            doc.fileName = documents.documents[0].fileName;
-            doc.fileUrl = documents.documents[0].fileUrl;
-            doc.documentType = documents.documentCode;
-            doc.tenantId = tenantId;
-            if (documents.documents[0].id) {
-              doc.id = documents.documents[0].id;
-            }
-            requiredDocuments.push(doc);
+        if(documents && documents.documents){
+          let doc = {};
+          doc.fileStoreId = documents.documents[0].fileStoreId;
+          doc.fileStore = documents.documents[0].fileStoreId;
+          doc.fileName = documents.documents[0].fileName;
+          doc.fileUrl = documents.documents[0].fileUrl;
+          doc.documentType = documents.documentCode;
+          doc.tenantId = tenantId;
+          if(documents.documents[0].id) {
+            doc.id = documents.documents[0].id;
           }
-        })
-      }
-      if (requiredDocuments && requiredDocuments.length) {
-        queryObject[0].tradeLicenseDetail.applicationDocuments = requiredDocuments;
-      }
+          requiredDocuments.push(doc);
+        }
+      })
+    }
+    if(requiredDocuments && requiredDocuments.length) {
+      queryObject[0].tradeLicenseDetail.applicationDocuments = requiredDocuments;
+    }
       // else if (
       //   queryObject[0].tradeLicenseDetail &&
       //   queryObject[0].tradeLicenseDetail.applicationDocuments &&
@@ -1074,7 +1086,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       // ) {
       //   action = "APPLY";
       // }
-      let searchResponse = { };
+      let searchResponse = {};
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       if (!isEditFlow) {
@@ -1099,11 +1111,11 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         searchResponse = { Licenses: queryObject };
       } else {
         let stakeHolderDetails = searchResponse.Licenses;
-        if (stakeHolderDetails && stakeHolderDetails[0] && stakeHolderDetails[0].tradeLicenseDetail) {
+        if(stakeHolderDetails && stakeHolderDetails[0] && stakeHolderDetails[0].tradeLicenseDetail) {
           let owners = stakeHolderDetails[0].tradeLicenseDetail.owners;
           let dob = convertEchToDate(owners[0].dob);
           stakeHolderDetails[0].tradeLicenseDetail.owners[0].dob = dob;
-        }
+        } 
         dispatch(prepareFinalObject("Licenses", stakeHolderDetails));
         await setDocsForEditFlow(state, dispatch);
       }
@@ -1134,11 +1146,11 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       if (!response) {
       }
       let stakeHolderDetails = response.Licenses;
-      if (stakeHolderDetails && stakeHolderDetails[0] && stakeHolderDetails[0].tradeLicenseDetail) {
+      if(stakeHolderDetails && stakeHolderDetails[0] && stakeHolderDetails[0].tradeLicenseDetail) {
         let owners = stakeHolderDetails[0].tradeLicenseDetail.owners;
         let dob = convertEchToDate(owners[0].dob);
         stakeHolderDetails[0].tradeLicenseDetail.owners[0].dob = dob;
-      }
+      } 
       dispatch(prepareFinalObject("Licenses", stakeHolderDetails));
       createOwnersBackup(dispatch, response);
     }
@@ -1283,9 +1295,9 @@ const updateNocApplication = async (state, dispatch, bpaAction) => {
         [],
         { Noc: Noc[data] }
       );
-      if (get(response, "ResponseInfo.status") == "successful") {
+      if(get(response, "ResponseInfo.status") == "successful") {
         count++;
-        if (Noc.length == count) {
+        if(Noc.length == count) {
           return "successful"
         }
       }
@@ -1391,7 +1403,7 @@ export const createUpdateOCBpaApplication = async (state, dispatch, status) => {
       if (documents && documents.documents) {
         documents.documents.forEach(docItem => {
           if (documents.dropDownValues && documents.dropDownValues.value) {
-            let doc = { };
+            let doc = {};
             doc.documentType = documents.dropDownValues.value;
             doc.fileStoreId = docItem.fileStoreId;
             doc.fileStore = docItem.fileStoreId;
@@ -1412,7 +1424,7 @@ export const createUpdateOCBpaApplication = async (state, dispatch, status) => {
     documnts.forEach(documents => {
       if (documents && documents.previewdocuments) {
         documents.previewdocuments.forEach(pDoc => {
-          let doc = { };
+          let doc = {};
           doc.documentType = pDoc.dropDownValues;
           doc.fileStoreId = pDoc.fileStoreId;
           doc.fileStore = pDoc.fileStoreId;
@@ -1429,7 +1441,7 @@ export const createUpdateOCBpaApplication = async (state, dispatch, status) => {
     });
   }
 
-  // will use this later
+ // will use this later
   // let subOccupancyData = get(
   //   state, "screenConfiguration.preparedFinalObject.edcr.blockDetail"
   // );
@@ -1545,18 +1557,18 @@ export const submitOCBpaApplication = async (state, dispatch) => {
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   if (response) {
-    if (get(response, "BPA[0].status" === "DOC_VERIFICATION_INPROGRESS")) {
+    if(get(response, "BPA[0].status" === "DOC_VERIFICATION_INPROGRESS")) {
       const acknowledgementUrl =
-        process.env.REACT_APP_SELF_RUNNING === "true"
-          ? `/egov-ui-framework/oc-bpa/acknowledgement?purpose=apply_skip&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
-          : `/oc-bpa/acknowledgement?purpose=apply_skip&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-      dispatch(setRoute(acknowledgementUrl));
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/oc-bpa/acknowledgement?purpose=apply_skip&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/oc-bpa/acknowledgement?purpose=apply_skip&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+    dispatch(setRoute(acknowledgementUrl));
     } else {
       const acknowledgementUrl =
-        process.env.REACT_APP_SELF_RUNNING === "true"
-          ? `/egov-ui-framework/oc-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
-          : `/oc-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-      dispatch(setRoute(acknowledgementUrl));
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/oc-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/oc-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+    dispatch(setRoute(acknowledgementUrl));
     }
   }
 };
@@ -1595,9 +1607,9 @@ export const nocapplicationUpdate = (state) => {
         [],
         { Noc: Noc[data] }
       );
-      if (get(response, "ResponseInfo.status") == "successful") {
+      if(get(response, "ResponseInfo.status") == "successful") {
         count++;
-        if (Noc.length == count) {
+        if(Noc.length == count) {
           return "successful"
         }
       }

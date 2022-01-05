@@ -127,6 +127,8 @@ const CustomTable = ({ data, onSearch, setChartData }) => {
         return "(Lac)"
       case "Cr":
         return "(Cr)";
+      default:
+        return null;
     }
   }
 

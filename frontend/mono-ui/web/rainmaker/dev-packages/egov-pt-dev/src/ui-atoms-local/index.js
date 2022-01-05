@@ -60,13 +60,7 @@ const Button = Loadable({
   loading: () => <Loading />
 });
 
-const LinkComponent = Loadable({
-  loader: () => import("./LinkComponent"),
-  loading: () => <Loading />
-});
-
 export {
-  LinkComponent,
   TestAtoms,
   ApplicationNoContainer,
   Checkbox,

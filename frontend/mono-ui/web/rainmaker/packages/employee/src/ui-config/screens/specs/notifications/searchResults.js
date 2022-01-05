@@ -1,8 +1,10 @@
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { epochToYmd, getStatusKey, getUserDataFromUuid, transformById } from "egov-ui-framework/ui-utils/commons";
+import {
+  epochToYmd, getStatusKey, getUserDataFromUuid,
+  transformById
+} from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
 import get from "lodash/get";
 import React from "react";
 import { getEpochForDate, getEventsByType, sortByEpoch } from "../utils";
@@ -56,7 +58,7 @@ export const searchApiCall = async (state, dispatch) => {
 };
 
 const onRowClick = (rowData) => {
-  routeTo(`create?uuid=${rowData[7]}&tenantId=${rowData[6]}`);
+  window.location.href = `create?uuid=${rowData[7]}&tenantId=${rowData[6]}`;
 };
 
 export const searchResults = () => {
@@ -65,6 +67,7 @@ export const searchResults = () => {
     componentPath: "Table",
     visible: false,
     props: {
+
       columns: [
         { labelName: "Message", labelKey: "EVENTS_MESSAGE_LABEL" },
         { labelName: "Posting Date", labelKey: "EVENTS_POSTING_DATE_LABEL" },
@@ -76,9 +79,11 @@ export const searchResults = () => {
           labelKey: "EVENTS_STATUS_LABEL",
           options: {
             filter: false,
-            customBodyRender: (value) => (
+            customBodyRender: value => (
               <LabelContainer
-                style={value === "ACTIVE" ? { color: "green" } : { color: "red" }}
+                style={
+                  value === "ACTIVE" ? { color: "green" } : { color: "red" }
+                }
                 labelKey={getStatusKey(value).labelKey}
                 labelName={getStatusKey(value).labelName}
               />

@@ -30,7 +30,6 @@ const serviceTypeChange = (reqObj) => {
 
   if (!demandId && value) {
     const taxHeads = setTaxHeadFields(value, state, dispatch);
-    console.log(taxHeads);
   }
 
 }
@@ -321,7 +320,6 @@ export const newCollectionDetailsCard = getCommonCard(
         //     );
         //     if (!demandId && action.value) {
         //       const taxHeads = setTaxHeadFields(action, state, dispatch);
-        //       console.log(taxHeads);
         //     }
         //   }
         // },

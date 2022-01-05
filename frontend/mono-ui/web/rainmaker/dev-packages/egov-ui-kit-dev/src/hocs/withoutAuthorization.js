@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 // import AppBar from "@material-ui/core/AppBar";
 import "./index.css";
-import { getLocale, getTenantId, getUserInfo, setStoredModulesList, setLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, getTenantId, getUserInfo, setStoredModulesList, setModule } from "egov-ui-kit/utils/localStorageUtils";
 import digitLogo from "egov-ui-kit/assets/images/Digit_logo.png";
 import Label from "egov-ui-kit/utils/translationNode";
 import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
@@ -78,9 +78,7 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
         }
       }
       if(isPublicSearch()){
-        const locale=getQueryArg(window.location.href, "locale") || 'en_IN';
-        setLocale(locale);
-        this.onLanguageChange(locale);
+        this.onLanguageChange(getQueryArg(window.location.href, "locale")||'en_IN');
       }
     }
 

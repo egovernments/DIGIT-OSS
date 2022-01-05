@@ -1,7 +1,7 @@
-import Grid from "@material-ui/core/Grid";
 import React from "react";
-import Card from "../../../components/Card";
 import Label from "../../../utils/translationNode";
+import Card from "../../../components/Card";
+import Grid from "@material-ui/core/Grid";
 import "./index.css";
 
 class SingleProperty extends React.Component {
@@ -36,7 +36,7 @@ class SingleProperty extends React.Component {
                     <Label label="PT_SEARCHPROPERTY_TABEL_PID" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
                   </Grid>
                   <Grid item xs={6}>
-                    {item.propertyId}
+                    {item.propertyId} 
                   </Grid>
                 </Grid>
                 <Grid container style={{ marginBottom: 12 }}>
@@ -68,11 +68,11 @@ class SingleProperty extends React.Component {
                     <Label label="PT_SEARCHPROPERTY_TABEL_STATUS" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
                   </Grid>
                   <Grid item xs={6}>
-                    {item.status}
+                  {item.status} 
                   </Grid>
                 </Grid>
-
-                {/*                
+                
+{/*                
                 <div onClick={onActionClick ? onActionClick : () => this.onCardClick(item)}>
                   <Label label={action} textTransform={"uppercase"} color="#fe7a51" fontSize={14} labelStyle={{ textTransform: "uppercase" }} />
                 </div> */}

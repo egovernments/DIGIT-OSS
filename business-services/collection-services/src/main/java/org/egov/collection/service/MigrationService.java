@@ -110,7 +110,7 @@ public class MigrationService {
                     
                     long endtime = System.currentTimeMillis();
                     long elapsetime = endtime - startTime;
-                    System.out.println("\n\nBatch Elapsed Time--->"+elapsetime+"\n\n");
+                    log.info("\n\nBatch Elapsed Time--->"+elapsetime+"\n\n");
                 }
         }
 

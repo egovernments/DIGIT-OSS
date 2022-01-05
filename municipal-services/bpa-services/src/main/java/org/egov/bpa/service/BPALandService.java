@@ -33,6 +33,8 @@ public class BPALandService {
 	@Autowired
 	private ObjectMapper mapper;
 
+	private static final String RESPONSE_MAP_LAND_INFO = "LandInfo";
+
 	/**
 	 * create landInfo calling land-services/_create api and update the landid to
 	 * the BPA
@@ -55,7 +57,7 @@ public class BPALandService {
 		}
 		ArrayList<LandInfo> landInfo = new ArrayList<LandInfo>();
 
-		landInfo = (ArrayList<LandInfo>) responseMap.get("LandInfo");
+		landInfo = (ArrayList<LandInfo>) responseMap.get(RESPONSE_MAP_LAND_INFO);
 		LandInfo landData = mapper.convertValue(landInfo.get(0), LandInfo.class);
 		bpaRequest.getBPA().setLandInfo(landData);
 		bpaRequest.getBPA().setLandId(landData.getId());
@@ -82,7 +84,7 @@ public class BPALandService {
 		}
 		ArrayList<LandInfo> landInfo = new ArrayList<LandInfo>();
 
-		landInfo = (ArrayList<LandInfo>) responseMap.get("LandInfo");
+		landInfo = (ArrayList<LandInfo>) responseMap.get(RESPONSE_MAP_LAND_INFO);
 		LandInfo landData = mapper.convertValue(landInfo.get(0), LandInfo.class);
 		bpaRequest.getBPA().setLandInfo(landData);
 		bpaRequest.getBPA().setLandId(landData.getId());
@@ -107,8 +109,8 @@ public class BPALandService {
 		LinkedHashMap responseMap = null;
 		responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(url, requestInfoWrapper);
 		ArrayList<LandInfo> landInfo = new ArrayList<LandInfo>();
-		if (responseMap != null && responseMap.get("LandInfo") != null)
-			landInfo = (ArrayList<LandInfo>) responseMap.get("LandInfo");
+		if (responseMap != null && responseMap.get(RESPONSE_MAP_LAND_INFO) != null)
+			landInfo = (ArrayList<LandInfo>) responseMap.get(RESPONSE_MAP_LAND_INFO);
 		ArrayList<LandInfo> landData = new ArrayList<LandInfo>();
 		if (landInfo.size() > 0) {
 			for (int i = 0; i < landInfo.size(); i++) {

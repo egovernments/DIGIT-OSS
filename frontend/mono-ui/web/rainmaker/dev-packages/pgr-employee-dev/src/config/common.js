@@ -3,8 +3,7 @@ const commonConfig = {
   tenantId: globalConfigExists()
     ? window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID")
     : process.env.REACT_APP_DEFAULT_TENANT_ID,
-  forgotPasswordTenant: "pb.amritsar",
-  singleInstance:globalConfigExists()?(window.globalConfigs.getConfig('ENABLE_SINGLEINSTANCE')||false):false
+  forgotPasswordTenant: "pb.amritsar"
 };
 
 function globalConfigExists() {

@@ -99,10 +99,6 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   }
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    console.log("Error Loged",error);
-  },[error]);
-
   const goNext = () => {
     setError(null);
     if(ismultiple == true && fields.length==1)

@@ -28,13 +28,11 @@
 }
 
 .service-label-cont .label-text {
-  overflow: visible;
-  white-space: break-spaces;
-  line-height: 20px!important;
+  word-break: inherit;
+  word-wrap: inherit;
 }
 
 @media only screen and (min-width: 768px) {
-
   .service-module-style {
     height: 140px !important;
   }
@@ -42,8 +40,5 @@
   .service-icon {
     width: 45px !important;
     height: 45px !important;
-  }
-  .service-label-cont .label-text {
-    line-height: 14px!important;
   }
 }

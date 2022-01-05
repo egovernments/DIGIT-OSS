@@ -4,7 +4,6 @@ import get from "lodash/get";
 import { fetchBill, getGroupBillSearch } from "../../../../../ui-utils/commons";
 import { validateFields } from "../../utils";
 import { convertEpochToDate } from "../../utils/index";
-import { httpRequest, multiHttpRequest } from "egov-ui-kit/utils/api";
 
 
 export const searchApiCall = async (state, dispatch) => {
@@ -97,7 +96,7 @@ export const searchApiCall = async (state, dispatch) => {
       return;
     }
     searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Citizen" ? tenantId : getTenantId();
-    const responseFromAPI = await getGroupBillSearch(dispatch, {...searchScreenObject,billActive:"ACTIVE"});
+    const responseFromAPI = await getGroupBillSearch(dispatch, searchScreenObject);
     let bills = (responseFromAPI && responseFromAPI.Bills) || [];
     bills = bills.filter(bill => bill.status === "ACTIVE");
     let expiredConsumers = []
@@ -109,29 +108,8 @@ export const searchApiCall = async (state, dispatch) => {
       }
     })
     if (expiredConsumers.length > 0) {
-      let requestBodies = []
-      let endpoints = []
-      let queries = []
-
-      const consumerIds = [...expiredConsumers];
-      for (let i = 0; i <= expiredConsumers.length + 200; i += 200) {
-        let acknowledgementId = consumerIds.splice(0, 200);
-        if (acknowledgementId && acknowledgementId.length > 0) {
-          queries.push([{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: acknowledgementId.join(',') }, { key: "businessService", value: searchScreenObject.businesService }])
-          requestBodies.push({})
-          endpoints.push("/billing-service/bill/v2/_fetchbill");
-        }
-      }
-      
-     let billMap=[]
-      const resp = await multiHttpRequest(endpoints, "_fetchBill", queries, requestBodies)
-      resp && resp.map(res => {
-        if (res && res.Bill) {
-          let bill = res.Bill;
-          billMap = [...billMap, ...bill];
-        } 
-      });
-      billMap.map(bill => {
+      const fetchbillResponse = await fetchBill([{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: expiredConsumers.join(',') }, { key: "businessService", value: searchScreenObject.businesService }], dispatch, false)
+      fetchbillResponse.Bill.map(bill => {
         billObject[bill.consumerCode] = bill;
       })
     }

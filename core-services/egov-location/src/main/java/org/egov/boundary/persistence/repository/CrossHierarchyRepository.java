@@ -63,6 +63,10 @@ public class CrossHierarchyRepository {
 
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	private JdbcTemplate jdbcTemplate;
+	private static final String PARAMETER_PARENT = "parent";
+	private static final String PARAMETER_TENANT_ID = "tenantId";
+	private static final String PARAMETER_PARENT_TYPE = "parenttype";
+	private static final String PARAMETER_CHILD_TYPE = "childtype";
 
 	@Autowired
 	public CrossHierarchyRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate) {
@@ -78,8 +82,8 @@ public class CrossHierarchyRepository {
 
 	public List<CrossHierarchy> findCrossHierarchiesByParentIdAndTenantId(final Long id, final String tenantId) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
-		parametersMap.put("parent", id);
-		parametersMap.put("tenantId", tenantId);
+		parametersMap.put(PARAMETER_PARENT, id);
+		parametersMap.put(PARAMETER_TENANT_ID, tenantId);
 		List<CrossHierarchy> crossHierarchyList = namedParameterJdbcTemplate.query(
 				CrossHierarchyQueryBuilder.getCrossHierarchiesByParentIdAndTenantId(), parametersMap,
 				new CrossHierarchyRowMapper());
@@ -91,20 +95,20 @@ public class CrossHierarchyRepository {
 		crossHierarchy.setId(getNextSequence());
 		parametersMap.put("id", crossHierarchy.getId());
 		if (crossHierarchy.getParent() != null && crossHierarchy.getParent().getId() != null) {
-			parametersMap.put("parent", crossHierarchy.getParent().getId());
+			parametersMap.put(PARAMETER_PARENT, crossHierarchy.getParent().getId());
 		}
 		if (crossHierarchy.getChild() != null && crossHierarchy.getChild().getId() != null) {
 			parametersMap.put("child", crossHierarchy.getChild().getId());
 		}
 		if (crossHierarchy.getParentType() != null && crossHierarchy.getParentType().getId() != null) {
-			parametersMap.put("parenttype", Long.valueOf(crossHierarchy.getParentType().getId()));
+			parametersMap.put(PARAMETER_PARENT_TYPE, Long.valueOf(crossHierarchy.getParentType().getId()));
 		} else {
-			parametersMap.put("parenttype", crossHierarchy.getParentType());
+			parametersMap.put(PARAMETER_PARENT_TYPE, crossHierarchy.getParentType());
 		}
 		if (crossHierarchy.getChildType() != null && crossHierarchy.getChildType().getId() != null) {
-			parametersMap.put("childtype", Long.valueOf(crossHierarchy.getChildType().getId()));
+			parametersMap.put(PARAMETER_CHILD_TYPE, Long.valueOf(crossHierarchy.getChildType().getId()));
 		} else {
-			parametersMap.put("childtype", crossHierarchy.getChildType());
+			parametersMap.put(PARAMETER_CHILD_TYPE, crossHierarchy.getChildType());
 		}
 		parametersMap.put("tenantid", crossHierarchy.getTenantId());
 		parametersMap.put("code", crossHierarchy.getCode());
@@ -120,20 +124,20 @@ public class CrossHierarchyRepository {
 
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
 		if (crossHierarchy.getParent() != null && crossHierarchy.getParent().getId() != null) {
-			parametersMap.put("parent", crossHierarchy.getParent().getId());
+			parametersMap.put(PARAMETER_PARENT, crossHierarchy.getParent().getId());
 		}
 		if (crossHierarchy.getChild() != null && crossHierarchy.getChild().getId() != null) {
 			parametersMap.put("child", crossHierarchy.getChild().getId());
 		}
 		if (crossHierarchy.getParentType() != null && crossHierarchy.getParentType().getId() != null) {
-			parametersMap.put("parenttype", Long.valueOf(crossHierarchy.getParentType().getId()));
+			parametersMap.put(PARAMETER_PARENT_TYPE, Long.valueOf(crossHierarchy.getParentType().getId()));
 		} else {
-			parametersMap.put("parenttype", crossHierarchy.getParentType());
+			parametersMap.put(PARAMETER_PARENT_TYPE, crossHierarchy.getParentType());
 		}
 		if (crossHierarchy.getChildType() != null && crossHierarchy.getChildType().getId() != null) {
-			parametersMap.put("childtype", Long.valueOf(crossHierarchy.getChildType().getId()));
+			parametersMap.put(PARAMETER_CHILD_TYPE, Long.valueOf(crossHierarchy.getChildType().getId()));
 		} else {
-			parametersMap.put("childtype", crossHierarchy.getChildType());
+			parametersMap.put(PARAMETER_CHILD_TYPE, crossHierarchy.getChildType());
 		}
 		parametersMap.put("tenantid", crossHierarchy.getTenantId());
 		parametersMap.put("code", crossHierarchy.getCode());
@@ -151,7 +155,7 @@ public class CrossHierarchyRepository {
 		parametersMap.put("hierarchyTypeName", hierarchyTypeName);
 		parametersMap.put("parenthierarchyTypeName", parenthierarchyTypeName);
 		parametersMap.put("name", name);
-		parametersMap.put("tenantId", tenantId);
+		parametersMap.put(PARAMETER_TENANT_ID, tenantId);
 		List<CrossHierarchy> crossHierarchyList = namedParameterJdbcTemplate.query(
 				CrossHierarchyQueryBuilder.getActiveBoundariesByNameAndBndryTypeNameAndHierarchyTypeNameAndTenantId(),
 				parametersMap, new CrossHierarchyLocationNameRowMapper());
@@ -162,7 +166,7 @@ public class CrossHierarchyRepository {
 	public CrossHierarchy findByIdAndTenantId(Long id, String tenantId) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
 		parametersMap.put("id", id);
-		parametersMap.put("tenantId", tenantId);
+		parametersMap.put(PARAMETER_TENANT_ID, tenantId);
 		CrossHierarchy crossHierarchy = null;
 		List<CrossHierarchy> crossHierarchyList = namedParameterJdbcTemplate.query(
 				CrossHierarchyQueryBuilder.getCrossHierarchyByIdAndTenant(), parametersMap,
@@ -172,7 +176,7 @@ public class CrossHierarchyRepository {
 		}
 		if (crossHierarchy != null) {
 			Map<String, Object> parametersMap1 = new HashMap<String, Object>();
-			parametersMap1.put("tenantId", tenantId);
+			parametersMap1.put(PARAMETER_TENANT_ID, tenantId);
 			List<Boundary> boundaryList = namedParameterJdbcTemplate.query(
 					CrossHierarchyQueryBuilder.getCrossHierarchyChildernByParentIdAndTenant(), parametersMap1,
 					new BoundaryMapper());
@@ -191,13 +195,13 @@ public class CrossHierarchyRepository {
 
 	public List<CrossHierarchy> findAllByTenantId(String tenantId) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
-		parametersMap.put("tenantId", tenantId);
+		parametersMap.put(PARAMETER_TENANT_ID, tenantId);
 		List<CrossHierarchy> crossHierarchyList = namedParameterJdbcTemplate.query(
 				CrossHierarchyQueryBuilder.getAllCrossHierarchyByTenantId(), parametersMap,
 				new CrossHierarchyRowMapper());
 		if (crossHierarchyList != null && !crossHierarchyList.isEmpty()) {
 			Map<String, Object> parametersMap1 = new HashMap<String, Object>();
-			parametersMap1.put("tenantId", tenantId);
+			parametersMap1.put(PARAMETER_TENANT_ID, tenantId);
 			List<Boundary> boundaryList = namedParameterJdbcTemplate.query(
 					CrossHierarchyQueryBuilder.getCrossHierarchyChildernByParentIdAndTenant(), parametersMap1,
 					new BoundaryMapper());
@@ -219,7 +223,7 @@ public class CrossHierarchyRepository {
 	public CrossHierarchy findByCodeAndTenantId(String code, String tenantId) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
 		parametersMap.put("code", code);
-		parametersMap.put("tenantId", tenantId);
+		parametersMap.put(PARAMETER_TENANT_ID, tenantId);
 		CrossHierarchy crossHierarchy = null;
 		List<CrossHierarchy> crossHierarchyList = namedParameterJdbcTemplate.query(
 				CrossHierarchyQueryBuilder.getCrossHierarchyByCodeAndTenant(), parametersMap,
@@ -229,7 +233,7 @@ public class CrossHierarchyRepository {
 		}
 		if (crossHierarchy != null) {
 			Map<String, Object> parametersMap1 = new HashMap<String, Object>();
-			parametersMap1.put("tenantId", tenantId);
+			parametersMap1.put(PARAMETER_TENANT_ID, tenantId);
 			List<Boundary> boundaryList = namedParameterJdbcTemplate.query(
 					CrossHierarchyQueryBuilder.getCrossHierarchyChildernByParentIdAndTenant(), parametersMap1,
 					new BoundaryMapper());

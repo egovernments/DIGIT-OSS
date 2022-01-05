@@ -6,7 +6,6 @@ import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import { set } from "lodash";
 import pdfMake from "pdfmake/build/pdfmake";
 import { downloadPdfFile } from "../api";
-import { getLocale } from "../localStorageUtils";
 import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
 import logoNotFound from './logoNotFound.png';
 import pdfFonts from "./vfs_fonts";
@@ -29,34 +28,11 @@ const font = {
         bold: 'Cambay-Regular.ttf',
         italics: 'Roboto-Regular.ttf',
         bolditalics: 'Cambay-Regular.ttf',
+
     },
     Roboto: {
         normal: 'Roboto-Regular.ttf',
         bold: 'Roboto-Regular.ttf',
-        italics: 'Roboto-Regular.ttf',
-        bolditalics: 'Roboto-Regular.ttf',
-    },
-    en_IN: {
-        normal: 'Roboto-Regular.ttf',
-        bold: 'Roboto-Regular.ttf',
-        italics: 'Roboto-Regular.ttf',
-        bolditalics: 'Roboto-Regular.ttf',
-    },
-    hi_IN: {
-        normal: 'Cambay-Regular.ttf',
-        bold: 'Cambay-Regular.ttf',
-        italics: 'Roboto-Regular.ttf',
-        bolditalics: 'Cambay-Regular.ttf',
-    },
-    pn_IN: {
-        normal: 'BalooPaaji2-Regular.ttf',
-        bold: 'BalooPaaji2-Bold.ttf',
-        italics: 'Roboto-Regular.ttf',
-        bolditalics: 'Roboto-Regular.ttf',
-    },
-    od_IN: {
-        normal: 'BalooBhaina2-Regular.ttf',
-        bold: 'BalooBhaina2-Bold.ttf',
         italics: 'Roboto-Regular.ttf',
         bolditalics: 'Roboto-Regular.ttf',
     }
@@ -327,7 +303,7 @@ const getCustomCard = (body = [], width = [], layout = {}, color = 'grey') => {
         "layout": layout
     }
 }
-const totalAmount = (arr, itmKey = 'value') => {
+const totalAmount = (arr,itmKey='value') => {
     return arr
         .map(item => (item[itmKey] && !isNaN(Number(item[itmKey])) ? Number(item[itmKey]) : 0))
         .reduce((prev, next) => prev + next, 0);
@@ -429,7 +405,7 @@ export const getEstimateCardDetailsBillAmend = (fees = [], color, firstRowEnable
             row.push(getLabel(getLocaleLabels(fee.name.labelName, fee.name.labelKey), i == 0 ? "value" : 'header'))
             // row.push(getLabel(' ', 'header'));
             row.push({ ...getLabel(customForBillamend ? getLocaleLabels(fee.value1) : fee.value1, i == 0 ? "value" : 'header'), "alignment": "right" })
-
+            
             row.push({ ...getLabel(customForBillamend ? getLocaleLabels(fee.value) : fee.value, i == 0 ? "value" : 'header'), "alignment": "right" })
             row.push({ ...getLabel(customForBillamend ? getLocaleLabels(fee.value2) : fee.value2, i == 0 ? "value" : 'header'), "alignment": "right" })
             // customForBillamend?{}:row.push(getLabel(' ', 'header')) ;
@@ -443,22 +419,22 @@ export const getEstimateCardDetailsBillAmend = (fees = [], color, firstRowEnable
     })
     if (lastRowEnable) {
         rowLast.push(getLabel(getLocaleLabels('TL_COMMON_TOTAL_AMT', 'TL_COMMON_TOTAL_AMT'), 'totalAmount'))
-        customForBillamend ? rowLast.push({ ...getLabel(totalAmount(fees, 'value1'), 'totalAmount'), "alignment": "right" }) : {}
-        if (customForBillamend) {
-            rowLast.push({ ...getLabel(total, 'totalAmount'), "alignment": "right" })
+        customForBillamend ?rowLast.push( { ...getLabel(totalAmount(fees,'value1'), 'totalAmount'), "alignment": "right" }) : {}
+        if(customForBillamend){
+            rowLast.push({ ...getLabel(total, 'totalAmount'), "alignment": "right" }) 
         }
-        rowLast.push({ ...getLabel(customForBillamend ? totalAmount(fees, 'value2') : total, 'totalAmount'), "alignment": "right" })
+        rowLast.push({ ...getLabel(customForBillamend?totalAmount(fees,'value2'):total, 'totalAmount'), "alignment": "right" })
         customForBillamend ? {} : rowLast.push(getLabel(' ', 'header'));
         card.push(rowLast);
     }
 
 
-    estimateCard = getCustomCard(card, customForBillamend && fees[0].value1 && fees[0].value2 ? [
+    estimateCard = getCustomCard(card, customForBillamend&&fees[0].value1&&fees[0].value2? [
         125,
         125,
         125,
         125
-    ] : [250, 150, 108], tableborder, color)
+    ]:[250, 150, 108], tableborder, color)
 
     return estimateCard;
 }
@@ -551,7 +527,7 @@ export const generatePDF = (logo, applicationData = {}, fileName, isCustomforBil
 
     data = {
         defaultStyle: {
-            font: 'Camby'
+            font: "Camby"
         },
         content: [
 
@@ -763,10 +739,9 @@ export const generatePDF = (logo, applicationData = {}, fileName, isCustomforBil
                 }
         }
     })
-    let locale = getLocale() || 'en_IN';
-    let Camby = font[locale] || font["Camby"];
+
     pdfMake.vfs = vfs;
-    pdfMake.fonts = { ...font, Camby: { ...Camby } };
+    pdfMake.fonts = font;
     try {
         if (fileName != 'print') {
             const pdfData = pdfMake.createPdf(data);
@@ -827,11 +802,11 @@ export const printPDFFileUsingBase64 = (receiptPDF, filename) => {
     }
 };
 
-export const searchAndDownloadPdf = (url, queryObj, fileName, onSuccess) => {
-    downloadPdfFile(url, 'post', queryObj, {}, {}, false, fileName, onSuccess);
+export const searchAndDownloadPdf=(url,queryObj,fileName,onSuccess)=>{
+    downloadPdfFile(url,'post',queryObj,{},{},false,fileName,onSuccess);
 }
 
-export const searchAndPrintPdf = (url, queryObj) => {
-    downloadPdfFile(url, 'post', queryObj, {}, {}, false, 'print');
+export const searchAndPrintPdf=(url,queryObj)=>{
+    downloadPdfFile(url,'post',queryObj,{},{},false,'print');
 }
 
