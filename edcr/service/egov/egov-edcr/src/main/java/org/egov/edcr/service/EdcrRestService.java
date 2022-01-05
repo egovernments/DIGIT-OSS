@@ -424,7 +424,6 @@ public class EdcrRestService {
             userId = userInfo.getUuid();
         else if (userInfo != null && StringUtils.isNoneBlank(userInfo.getId()))
             userId = userInfo.getId();
-        boolean isStakeholder = false;
         // When the user is ANONYMOUS, then search application by edcrno or transaction
         // number
         if (userInfo != null && StringUtils.isNoneBlank(userId) && userInfo.getPrimaryrole() != null
@@ -433,8 +432,6 @@ public class EdcrRestService {
             LOG.info("****Roles***" + roles);
             if (roles.contains("ANONYMOUS"))
                 userId = "";
-            if(roles.contains("CITIZEN") && roles.size() > 1)
-                isStakeholder =  true;
         }
         if (edcrRequest.getLimit() == null)
             edcrRequest.setLimit(-1);
@@ -446,6 +443,10 @@ public class EdcrRestService {
                 && edcrRequest.getFromDate() == null && edcrRequest.getToDate() == null
                 && isBlank(edcrRequest.getApplicationNumber())
                 && isNotBlank(edcrRequest.getTenantId());
+        
+        boolean isStakeholder = edcrRequest != null && (isNotBlank(edcrRequest.getAppliactionType())
+                || isNotBlank(edcrRequest.getApplicationSubType()) || isNotBlank(edcrRequest.getStatus())
+                || edcrRequest.getFromDate() != null || edcrRequest.getToDate() != null);
 
         City stateCity = cityService.fetchStateCityDetails();
 
@@ -518,7 +519,6 @@ public class EdcrRestService {
         else if (userInfo != null && StringUtils.isNoneBlank(userInfo.getId()))
             userId = userInfo.getId();
         
-        boolean isStakeholder = false;
         // When the user is ANONYMOUS, then search application by edcrno or transaction
         // number
         if (userInfo != null && StringUtils.isNoneBlank(userId) && userInfo.getPrimaryrole() != null
@@ -527,8 +527,6 @@ public class EdcrRestService {
             LOG.info("****Roles***" + roles);
             if (roles.contains("ANONYMOUS"))
                 userId = "";
-            if(roles.contains("CITIZEN") && roles.size() > 1)
-                isStakeholder =  true;
         }
         boolean onlyTenantId = edcrRequest != null && isBlank(edcrRequest.getEdcrNumber())
                 && isBlank(edcrRequest.getTransactionNumber()) && isBlank(edcrRequest.getAppliactionType())
@@ -536,6 +534,10 @@ public class EdcrRestService {
                 && edcrRequest.getFromDate() == null && edcrRequest.getToDate() == null
                 && isBlank(edcrRequest.getApplicationNumber())
                 && isNotBlank(edcrRequest.getTenantId());
+        
+        boolean isStakeholder = edcrRequest != null && (isNotBlank(edcrRequest.getAppliactionType())
+                || isNotBlank(edcrRequest.getApplicationSubType()) || isNotBlank(edcrRequest.getStatus())
+                || edcrRequest.getFromDate() != null || edcrRequest.getToDate() != null);
 
         City stateCity = cityService.fetchStateCityDetails();
         if (edcrRequest != null && edcrRequest.getTenantId().equalsIgnoreCase(stateCity.getCode())) {
