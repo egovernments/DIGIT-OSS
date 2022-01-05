@@ -69,7 +69,7 @@ const useArchitectInbox = ({ tenantId, filters, withEDCRData = true, isTotalCoun
               applicationType:application?.businessObject?.additionalDetails?.applicationType,
               serviceType:application?.businessObject?.additionalDetails?.serviceType,
               locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
-              status: application.businessObject.status,
+              status: application?.ProcessInstance?.state?.state,
               state:  application?.ProcessInstance?.state?.state,
               owner: application.ProcessInstance?.assigner?.name,
               applicantName: application?.businessObject?.landInfo?.owners?.length == 1 ? application?.businessObject?.landInfo?.owners?.[0]?.name : application?.businessObject?.landInfo?.owners?.filter(owner => owner.isPrimaryOwner)?.[0]?.name,

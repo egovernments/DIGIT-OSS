@@ -236,7 +236,7 @@ function SelectDocument({
                 optionKey="i18nKey"
                 select={handleSelectDocument}
             />
-            <MultiUploadWrapper
+            {selectedDocument?.code ? <MultiUploadWrapper
                 module="BPA"
                 tenantId={tenantId}
                 getFormState={getData}
@@ -244,7 +244,7 @@ function SelectDocument({
                 allowedMaxSizeInMB={5}
                 setuploadedstate={uploadedFilesPreFill}
                 t={t}
-            />
+            /> : null}
         {doc?.uploadedDocuments?.length && <PropertyDocuments isSendBackFlow={true} documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
         </div>
     );
