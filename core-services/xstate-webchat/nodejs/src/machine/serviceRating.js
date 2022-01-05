@@ -46,15 +46,12 @@ const serviceRating = {
         question: {
           onEntry: assign((context, event) => {
             const preamble = dialog.get_message(messages.rating.question, context.user.locale);
-            const { maxStarRating } = config.egovServices;
-            const optionList = [];
-            for (let i = 0; i < maxStarRating; i++) { optionList.push('*'); }
-            const { prompt, grammer } = dialog.constructContextGrammer(optionList, null, context.user.locale, 'starRating');
 
             const starRatingQuestion = {
               message: preamble,
               step: 'intermediate',
-              option: prompt,
+              optionType: "stars",
+              option: []
             };
             dialog.sendMessage(context, starRatingQuestion);
           }),
@@ -106,6 +103,7 @@ const serviceRating = {
                 const feedbackMessage = {
                   message: preamble,
                   step: 'intermediate',
+                  optionType: "multiSelect",
                   option: prompt,
                 };
 
