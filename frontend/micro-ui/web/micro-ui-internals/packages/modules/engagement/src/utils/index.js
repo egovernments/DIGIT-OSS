@@ -43,7 +43,6 @@ export const openUploadedDocument = async (filestoreId, name) => {
   const url = await getFileUrl(filestoreId);
   if (window.mSewaApp && window.mSewaApp.isMsewaApp()) {
     let newW = window.open(url, "_blank");
-    newW.document.title = name;
   } else {
     w.location = url;
     w.document.title = name;
@@ -57,7 +56,6 @@ export const openDocumentLink = (docLink, title) => {
   }
   if (window.mSewaApp && window.mSewaApp.isMsewaApp()) {
     let newW = window.open(docLink, "_blank");
-    newW.document.title = name;
   } else {
     const w = window.open("", "_blank");
     w.location = docLink;
