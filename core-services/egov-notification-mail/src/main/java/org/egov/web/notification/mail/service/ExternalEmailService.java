@@ -4,10 +4,10 @@ import javax.activation.DataSource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import lombok.Value;
 import org.egov.web.notification.mail.config.ApplicationConfiguration;
 import org.egov.web.notification.mail.consumer.contract.Email;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.FileSystemResource;
@@ -21,10 +21,15 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 
 @Service
 @ConditionalOnProperty(value = "mail.enabled", havingValue = "true")
@@ -32,6 +37,9 @@ import java.net.URL;
 public class ExternalEmailService implements EmailService {
 
 	ApplicationConfiguration applicationConfiguration;
+
+	@Value("${egov.fileStore.host}")
+	private String FILESTORE_HOST;
 
 	@Autowired
 	private Environment env;
@@ -70,14 +78,23 @@ public class ExternalEmailService implements EmailService {
 			helper.setSubject(email.getSubject());
 			helper.setText(email.getBody(), true);
 
-			String tenantId = applicationConfiguration.getStateTenantId();
-			String localhost = env.getProperty("egov.fileStore.host");
-//			Need to fill uri
-			String uri = String.format("%s/v1/files/id?%s&%s",localhost, email.getFileStoreId(), tenantId);
-//			RestTemplate restTemplate = new RestTemplate();
-			InputStream inputStream = new URL(uri).openStream();
-			DataSource file = (DataSource) inputStream;
-			helper.addAttachment(file.getName(), file);
+			String uri = String.format("%s/filestore/v1/files/id?tenantId=%s&fileStoreId=%s", FILESTORE_HOST, email.getTenantId(), email.getFileStoreId());
+			URL url = new URL(uri);
+			URLConnection con = url.openConnection();
+			String fieldValue = con.getHeaderField("Content-Disposition");
+			if (fieldValue == null || ! fieldValue.contains("filename=\"")) {
+				// no file name there -> throw exception ...
+			}
+			String filename = fieldValue.substring(fieldValue.indexOf("filename=\"") + 10, fieldValue.length() - 1);
+			File download = new File(System.getProperty("java.io.tmpdir"), filename);
+			ReadableByteChannel rbc = Channels.newChannel(con.getInputStream());
+			FileOutputStream fos = new FileOutputStream(download);
+			try {
+				fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+			} finally {
+				fos.close();
+			}
+			helper.addAttachment(filename, download);
 
 		} catch (MessagingException | MalformedURLException e) {
 			log.error(EXCEPTION_MESSAGE, e);
