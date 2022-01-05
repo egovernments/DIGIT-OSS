@@ -21,7 +21,6 @@ import lombok.ToString;
 @Setter
 @ToString
 
-//class variables not used
 public class ServiceHistory {
 
 	private String id;

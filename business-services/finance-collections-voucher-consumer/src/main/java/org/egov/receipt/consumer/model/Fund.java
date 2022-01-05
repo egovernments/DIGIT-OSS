@@ -59,7 +59,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
-//except code none of them is used
 public class Fund {
 
     private Long id;

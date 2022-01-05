@@ -62,7 +62,6 @@ import lombok.Setter;
 
 @JsonPropertyOrder({ "id", "name", "code", "identifier", "level", "parentId", "isParent", "active" })
 
-//class variables not used
 public class FundContract extends AuditableContract {
 
 	private Long id;

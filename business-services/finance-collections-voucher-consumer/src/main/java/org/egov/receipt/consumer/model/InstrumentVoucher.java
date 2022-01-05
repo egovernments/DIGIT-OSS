@@ -57,7 +57,6 @@ public class InstrumentVoucher {
 	 * voucher
 	 */
 
-//	not used
 	private Instrument instrument;
 
 	/*

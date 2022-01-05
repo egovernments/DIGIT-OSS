@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BathRoomWaterClosetsExtract extends FeatureExtract {
+    private static final Logger LOG = Logger.getLogger(BathRoomWaterClosetsExtract.class);
     @Autowired
     private LayerNames layerNames;
 

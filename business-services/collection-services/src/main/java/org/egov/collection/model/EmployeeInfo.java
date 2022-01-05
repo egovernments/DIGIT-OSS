@@ -54,7 +54,6 @@ import java.util.List;
 @Setter
 @ToString
 
-//class variables not used
 public class EmployeeInfo {
 
 	private Long id;

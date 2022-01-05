@@ -48,7 +48,6 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @ToString
-//except id none of them is used
 public class EgModules {
 	private Integer id;
 	private String name;

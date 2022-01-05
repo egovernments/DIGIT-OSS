@@ -49,7 +49,6 @@ import javax.validation.constraints.Max;
 @NoArgsConstructor
 @Data
 
-//class not used
 public class PaginationContract {
 
     public static final int DEFAULT_PAGE_SIZE = 500;

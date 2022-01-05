@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 
-//class not used
 public class DemandDue {
 
 	private ConsolidatedTax consolidatedTax;

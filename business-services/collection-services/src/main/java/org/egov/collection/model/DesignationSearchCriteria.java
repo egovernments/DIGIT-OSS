@@ -54,7 +54,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @EqualsAndHashCode
 
-//class not used
 public class DesignationSearchCriteria {
 	
 	@JsonProperty("RequestInfo")

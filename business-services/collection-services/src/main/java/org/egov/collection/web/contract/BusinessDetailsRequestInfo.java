@@ -20,7 +20,6 @@ import lombok.ToString;
 @Builder
 @EqualsAndHashCode
 @ToString
-//class variables not used
 public class BusinessDetailsRequestInfo {
 
 	private Long id;

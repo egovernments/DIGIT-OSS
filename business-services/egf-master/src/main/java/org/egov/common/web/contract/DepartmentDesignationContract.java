@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 
-//class variables not used
 public class DepartmentDesignationContract {
 
 	private Long id;

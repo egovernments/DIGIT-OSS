@@ -8,10 +8,8 @@ import lombok.Data;
 
 @Data
 public class FundSearchEntity extends FundEntity {
-//	not used
 	private Date fromDate;
 
-//	not used
 	private Date toDate;
 	private Integer pageSize;
 	private Integer offset = 0;

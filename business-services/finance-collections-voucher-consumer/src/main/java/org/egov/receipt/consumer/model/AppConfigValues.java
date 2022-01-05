@@ -50,7 +50,6 @@ import lombok.ToString;
 @ToString
 public class AppConfigValues {
 
-    //    not used
     private String id;
 
     private String value;

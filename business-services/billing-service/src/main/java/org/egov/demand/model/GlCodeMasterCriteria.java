@@ -20,7 +20,6 @@ import lombok.ToString;
 @ToString
 @Builder
 
-//class not used
 public class GlCodeMasterCriteria {
 
 	@NotNull

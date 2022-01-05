@@ -16,7 +16,6 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 
-//class is not useed anywhere
 public class BusinessDetails {
 	private Long id;
 

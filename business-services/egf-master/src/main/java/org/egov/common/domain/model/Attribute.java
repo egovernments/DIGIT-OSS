@@ -18,23 +18,18 @@ public class Attribute {
 
 	public static final String DATATYPE = "String";
 
-//	not used
 	@JsonProperty("variable")
 	private Boolean variable;
 
-//	not used
 	@JsonProperty("code")
 	private String code;
 
-//	not used
 	@JsonProperty("datatype")
 	private String datatype;
 
-//	not used
 	@JsonProperty("required")
 	private Boolean required;
 
-//	not used
 	@JsonProperty("datatypeDescription")
 	private String datatypeDescription;
 

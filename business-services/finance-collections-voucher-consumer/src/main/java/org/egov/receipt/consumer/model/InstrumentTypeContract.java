@@ -58,7 +58,6 @@ import lombok.Setter;
 
 @JsonPropertyOrder({ "id", "name", "description", "active", "instrumentTypeProperties" })
 
-//class variables not used
 public class InstrumentTypeContract extends AuditableContract {
 
     /*

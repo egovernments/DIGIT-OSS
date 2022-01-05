@@ -54,7 +54,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 
-//class not used
 public class DemandCriteria {
 
 	@NotNull

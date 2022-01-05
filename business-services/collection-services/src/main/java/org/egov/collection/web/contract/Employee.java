@@ -47,7 +47,6 @@ import java.util.List;
 
 @Getter
 @Setter
-//none of them is used
 public class Employee {
 
     private Long id;

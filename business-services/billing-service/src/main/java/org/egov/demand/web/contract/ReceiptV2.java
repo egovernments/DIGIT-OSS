@@ -27,7 +27,6 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 
-//class variables not used
 public class ReceiptV2 {
 
 	private String tenantId;

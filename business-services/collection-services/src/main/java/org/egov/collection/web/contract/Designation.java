@@ -46,7 +46,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 
-//class variables not used
 public class Designation {
 
     private Long id;

@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FundSearch extends Fund {
 
-//	not used
 	private Date fromDate;
 	
 	private Integer pageSize;

@@ -52,7 +52,6 @@ import lombok.Setter;
 @Setter
 @Builder
 
-//class not used
 public class ECSType {
 
     /*

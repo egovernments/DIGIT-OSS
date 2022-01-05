@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 
-//class variables not used
 public class Designation {
 
 	@NotNull

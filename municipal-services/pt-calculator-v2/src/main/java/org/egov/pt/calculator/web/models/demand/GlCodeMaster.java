@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 
-//class variables not used
 public class GlCodeMaster {
 
 	private String id;

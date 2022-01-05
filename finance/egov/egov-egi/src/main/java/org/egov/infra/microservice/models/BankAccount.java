@@ -41,7 +41,6 @@ package org.egov.infra.microservice.models;
 
 import org.hibernate.validator.constraints.SafeHtml;
 
-;
 
 public class BankAccount {
 

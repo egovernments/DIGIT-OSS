@@ -55,7 +55,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 
-//class variables not used
 public class ModuleDetail {
     private String moduleName;
     private List<MasterDetail> masterDetails;

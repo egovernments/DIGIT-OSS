@@ -23,7 +23,6 @@ import lombok.ToString;
 @Setter
 @ToString
 
-//class variables not used
 public class DepartmentalTest {
 
 	private String id;

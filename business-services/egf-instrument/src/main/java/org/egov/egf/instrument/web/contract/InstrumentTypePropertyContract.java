@@ -21,7 +21,6 @@ import lombok.Setter;
 
 @JsonPropertyOrder({ "transactionType", "reconciledOncreate", "statusOnCreate", "statusOnUpdate", "statusOnReconcile" })
 
-//class not used
 public class InstrumentTypePropertyContract extends AuditableContract {
 
     private String id;

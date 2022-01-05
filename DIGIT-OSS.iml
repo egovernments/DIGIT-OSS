@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="EclipseModuleManager">
+    <libelement value="jar://$MODULE_DIR$/edcr/service/egov/egov-edcr-extract/lib/batik-custom/batik-all/1.0/batik-all-1.0.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/edcr/service/egov/egov-edcr-extract/lib/kabeja-svg-custom/kabeja-svg/0.4/kabeja-svg-0.4.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/edcr/service/egov/egov-edcr-extract/lib/pdf-transcoder-custom/pdf-transcoder/1.1/pdf-transcoder-1.1.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/finance/egov/egov-collectionweb/src/main/webapp/WEB-INF/lib/PGIMerchantComponent.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/frontend/mono-ui/web/rainmaker-webview/gradle/wrapper/gradle-wrapper.jar!/" />
+    <src_description expected_position="1">
+      <src_folder value="file://$MODULE_DIR$/business-services/billing-service/src/main/java" expected_position="1" />
+      <src_folder value="file://$MODULE_DIR$/business-services/billing-service/src/test/java" expected_position="2" />
+      <src_folder value="file://$MODULE_DIR$/business-services/collection-services/src/main/java" expected_position="3" />
+      <src_folder value="file://$MODULE_DIR$/business-services/collection-services/src/main/java/org/egov/collection/model" expected_position="4" />
+      <src_folder value="file://$MODULE_DIR$/business-services/collection-services/src/main/java/org/egov/collection/repository" expected_position="5" />
+      <src_folder value="file://$MODULE_DIR$/business-services/collection-services/src/main/java/org/egov/collection/repository/querybuilder" expected_position="6" />
+      <src_folder value="file://$MODULE_DIR$/business-services/collection-services/src/main/java/org/egov/collection/repository/rowmapper" expected_position="7" />
+      <src_folder value="file://$MODULE_DIR$/business-services/collection-services/src/main/java/org/egov/collection/service" expected_position="8" />
+      <src_folder value="file://$MODULE_DIR$/business-services/collection-services/src/main/java/org/egov/collection/util" expected_position="9" />
+      <src_folder value="file://$MODULE_DIR$/business-services/collection-services/src/main/java/org/egov/collection/web/controller" expected_position="10" />
+      <src_folder value="file://$MODULE_DIR$/business-services/collection-services/src/test/java" expected_position="11" />
+      <src_folder value="file://$MODULE_DIR$/business-services/dashboard-analytics/src/main/java" expected_position="12" />
+      <src_folder value="file://$MODULE_DIR$/business-services/dashboard-ingest/src/main/java" expected_position="13" />
+      <src_folder value="file://$MODULE_DIR$/business-services/dashboard-ingest/src/test/java" expected_position="14" />
+      <src_folder value="file://$MODULE_DIR$/business-services/egf-instrument/src/main/java" expected_position="15" />
+      <src_folder value="file://$MODULE_DIR$/business-services/egf-instrument/src/test/java" expected_position="16" />
+      <src_folder value="file://$MODULE_DIR$/business-services/egf-instrument/src/test/java/org/egov/egf/instrument/web/mapper" expected_position="17" />
+      <src_folder value="file://$MODULE_DIR$/business-services/egf-master/src/main/java" expected_position="18" />
+      <src_folder value="file://$MODULE_DIR$/business-services/egf-master/src/test/java" expected_position="19" />
+      <src_folder value="file://$MODULE_DIR$/business-services/egov-apportion-service/src/main/java" expected_position="20" />
+      <src_folder value="file://$MODULE_DIR$/business-services/egov-apportion-service/src/test/java" expected_position="21" />
+      <src_folder value="file://$MODULE_DIR$/business-services/egov-hrms/src/main/java" expected_position="22" />
+      <src_folder value="file://$MODULE_DIR$/business-services/finance-collections-voucher-consumer/src/main/java" expected_position="23" />
+      <src_folder value="file://$MODULE_DIR$/business-services/finance-collections-voucher-consumer/src/test/java" expected_position="24" />
+      <src_folder value="file://$MODULE_DIR$/core-services/chatbot/src/main/java" expected_position="25" />
+      <src_folder value="file://$MODULE_DIR$/core-services/chatbot/src/test/java" expected_position="26" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-accesscontrol/src/main/java" expected_position="27" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-accesscontrol/src/test/java" expected_position="28" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-common-masters/src/main/java" expected_position="29" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-common-masters/src/test/java" expected_position="30" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-data-uploader/src/main/java" expected_position="31" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-data-uploader/src/test/java" expected_position="32" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-enc-service/src/main/java" expected_position="33" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-enc-service/src/test/java" expected_position="34" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-filestore/src/main/java" expected_position="35" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-filestore/src/test/java" expected_position="36" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-idgen/src/main/java" expected_position="37" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-indexer/src/main/java" expected_position="38" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-localization/src/main/java" expected_position="39" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-localization/src/test/java" expected_position="40" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-location/src/main/java" expected_position="41" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-location/src/test/java" expected_position="42" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-mdms-service/src/main/java" expected_position="43" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-notification-mail/src/main/java" expected_position="44" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-notification-mail/src/test/java/org/egov/web/notification/mail/consumer" expected_position="45" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-notification-mail/src/test/java/org/egov/web/notification/mail/consumer/contract" expected_position="46" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-notification-mail/src/test/java/org/egov/web/notification/mail/service/email" expected_position="47" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-notification-sms/src/main/java" expected_position="48" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-otp/src/main/java" expected_position="49" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-otp/src/test/java" expected_position="50" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-persister/src/main/java" expected_position="51" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-pg-service/src/main/java" expected_position="52" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-pg-service/src/test/java" expected_position="53" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-searcher/src/main/java" expected_position="54" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-searcher/src/test/java" expected_position="55" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-searcher/src/test/java/org/egov/controller" expected_position="56" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-telemetry/egov-telemetry-batch-process/src/main/java" expected_position="57" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-telemetry/egov-telemetry-kafka-streams/src/main/java" expected_position="58" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-url-shortening/src/main/java" expected_position="59" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-user/src/main/java" expected_position="60" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-user/src/test/java" expected_position="61" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-user/src/test/java/org/egov/user/Encryption" expected_position="62" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-workflow-v2/src/main/java" expected_position="63" />
+      <src_folder value="file://$MODULE_DIR$/core-services/egov-workflow-v2/src/test/java" expected_position="64" />
+      <src_folder value="file://$MODULE_DIR$/core-services/libraries/enc-client/src/main/java" expected_position="65" />
+      <src_folder value="file://$MODULE_DIR$/core-services/libraries/enc-client/src/test/java" expected_position="66" />
+      <src_folder value="file://$MODULE_DIR$/core-services/libraries/mdms-client/src/main/java" expected_position="67" />
+      <src_folder value="file://$MODULE_DIR$/core-services/libraries/services-common/src/main/java" expected_position="68" />
+      <src_folder value="file://$MODULE_DIR$/core-services/libraries/tracer/src/main/java" expected_position="69" />
+      <src_folder value="file://$MODULE_DIR$/core-services/libraries/tracer/src/test/java" expected_position="70" />
+      <src_folder value="file://$MODULE_DIR$/core-services/report/src/main/java" expected_position="71" />
+      <src_folder value="file://$MODULE_DIR$/core-services/report/src/test/java" expected_position="72" />
+      <src_folder value="file://$MODULE_DIR$/core-services/report/src/test/java/org/egov/controller" expected_position="73" />
+      <src_folder value="file://$MODULE_DIR$/core-services/tenant/src/main/java" expected_position="74" />
+      <src_folder value="file://$MODULE_DIR$/core-services/tenant/src/test/java" expected_position="75" />
+      <src_folder value="file://$MODULE_DIR$/core-services/user-otp/src/main/java" expected_position="76" />
+      <src_folder value="file://$MODULE_DIR$/core-services/user-otp/src/test/java" expected_position="77" />
+      <src_folder value="file://$MODULE_DIR$/core-services/user-otp/src/test/java/org/egov/persistence/repository" expected_position="78" />
+      <src_folder value="file://$MODULE_DIR$/core-services/zuul/src/main/java" expected_position="79" />
+      <src_folder value="file://$MODULE_DIR$/core-services/zuul/src/test/java" expected_position="80" />
+      <src_folder value="file://$MODULE_DIR$/edcr/client/egov/egov-client-impl/src/main/java" expected_position="81" />
+      <src_folder value="file://$MODULE_DIR$/edcr/service/egov/egov-commons/src/main/java" expected_position="82" />
+      <src_folder value="file://$MODULE_DIR$/edcr/service/egov/egov-edcr-extract/src/main/java" expected_position="83" />
+      <src_folder value="file://$MODULE_DIR$/edcr/service/egov/egov-edcr-extract/src/test/java" expected_position="84" />
+      <src_folder value="file://$MODULE_DIR$/edcr/service/egov/egov-edcr-extract/src/test/java/org/egov/edcr" expected_position="85" />
+      <src_folder value="file://$MODULE_DIR$/edcr/service/egov/egov-edcr/src/main/java" expected_position="86" />
+      <src_folder value="file://$MODULE_DIR$/edcr/service/egov/egov-edcrweb/src/main/java" expected_position="87" />
+      <src_folder value="file://$MODULE_DIR$/edcr/service/egov/egov-egi/src/main/java" expected_position="88" />
+      <src_folder value="file://$MODULE_DIR$/edcr/service/egov/egov-egi/src/test/java" expected_position="89" />
+      <src_folder value="file://$MODULE_DIR$/edcr/service/egov/egov-egiweb/src/main/java" expected_position="90" />
+      <src_folder value="file://$MODULE_DIR$/edcr/service/egov/egov-egiweb/src/test/java" expected_position="91" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-collection/src/main/java" expected_position="92" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-collection/src/test/java" expected_position="93" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-collectionweb/src/main/java" expected_position="94" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-collectionweb/src/test/java" expected_position="95" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-commons/src/main/java" expected_position="96" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-commons/src/test/java" expected_position="97" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-commonsweb/src/main/java" expected_position="98" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-egf/src/main/java" expected_position="99" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-egfweb/src/main/java" expected_position="100" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-egi/src/main/java" expected_position="101" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-egi/src/test/java" expected_position="102" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-egiweb/src/main/java" expected_position="103" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-egiweb/src/test/java" expected_position="104" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-eis/src/main/java" expected_position="105" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-eis/src/test/java" expected_position="106" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-eisweb/src/main/java" expected_position="107" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-portal/src/main/java" expected_position="108" />
+      <src_folder value="file://$MODULE_DIR$/finance/egov/egov-portalweb/src/main/java" expected_position="109" />
+      <src_folder value="file://$MODULE_DIR$/frontend/mono-ui/web/rainmaker-webview/src/androidTest/java" expected_position="110" />
+      <src_folder value="file://$MODULE_DIR$/frontend/mono-ui/web/rainmaker-webview/src/main/java" expected_position="111" />
+      <src_folder value="file://$MODULE_DIR$/frontend/mono-ui/web/rainmaker-webview/src/main/java/org/egovernment/mseva" expected_position="112" />
+      <src_folder value="file://$MODULE_DIR$/frontend/mono-ui/web/rainmaker-webview/src/test/java" expected_position="113" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/bpa-calculator/src/main/java" expected_position="114" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/bpa-services/src/main/java" expected_position="115" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/echallan-calculator/src/main/java" expected_position="116" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/echallan-services/src/main/java" expected_position="117" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/egov-user-event/src/main/java" expected_position="118" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/fsm-calculator/src/main/java" expected_position="119" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/fsm/src/main/java" expected_position="120" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/inbox/src/main/java" expected_position="121" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/land-services/src/main/java" expected_position="122" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/noc-services/src/main/java" expected_position="123" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/pgr-services/src/main/java" expected_position="124" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/pgr-services/src/test/java" expected_position="125" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/property-services/src/main/java" expected_position="126" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/property-services/src/main/resources" expected_position="127" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/pt-calculator-v2/src/main/java" expected_position="128" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/pt-calculator-v2/src/main/java/org/egov/pt/calculator/service" expected_position="129" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/pt-services-v2/src/main/java" expected_position="130" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/pt-services-v2/src/test/java" expected_position="131" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/pt-services-v2/src/test/java/org/egov/pt/service" expected_position="132" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/pt-services-v2/src/test/java/org/egov/pt/web/controller" expected_position="133" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/rainmaker-pgr/src/main/java" expected_position="134" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/rainmaker-pgr/src/test/java" expected_position="135" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/rainmaker-pgr/src/test/java/org/egov/pgr/service" expected_position="136" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/sw-calculator/src/main/java" expected_position="137" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/sw-services/src/main/java" expected_position="138" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/tl-calculator/src/main/java" expected_position="139" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/tl-calculator/src/test/java" expected_position="140" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/tl-services/src/main/java" expected_position="141" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/tl-services/src/test/java" expected_position="142" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/turn-io-adapter/src/main/java" expected_position="143" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/turn-io-adapter/src/test/java" expected_position="144" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/vehicle/src/main/java" expected_position="145" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/vendor/src/main/java" expected_position="146" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/ws-calculator/src/main/java" expected_position="147" />
+      <src_folder value="file://$MODULE_DIR$/municipal-services/ws-services/src/main/java" expected_position="148" />
+      <src_folder value="file://$MODULE_DIR$/utilities/android-studio-bluetooth-printer/app/build/generated/not_namespaced_r_class_sources/debug/processDebugResources/r" expected_position="149" />
+      <src_folder value="file://$MODULE_DIR$/utilities/android-studio-bluetooth-printer/app/build/generated/source/buildConfig/debug" expected_position="150" />
+      <src_folder value="file://$MODULE_DIR$/utilities/android-studio-bluetooth-printer/app/src/androidTest/java" expected_position="151" />
+      <src_folder value="file://$MODULE_DIR$/utilities/android-studio-bluetooth-printer/app/src/main/java" expected_position="152" />
+      <src_folder value="file://$MODULE_DIR$/utilities/case-management/src/main/java" expected_position="153" />
+      <src_folder value="file://$MODULE_DIR$/utilities/case-management/src/test/java" expected_position="154" />
+      <src_folder value="file://$MODULE_DIR$/utilities/data-upload/src/main/java" expected_position="155" />
+      <src_folder value="file://$MODULE_DIR$/utilities/data-upload/src/test/java" expected_position="156" />
+      <src_folder value="file://$MODULE_DIR$/utilities/egov-custom-consumer/src/main/java" expected_position="157" />
+      <src_folder value="file://$MODULE_DIR$/utilities/egov-weekly-impact-notifier/src/main/java" expected_position="158" />
+    </src_description>
+  </component>
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/core-services/egov-common-masters/target/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/business-services/billing-service/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/billing-service/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/collection-services/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/collection-services/src/main/java/org/egov/collection/model" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/collection-services/src/main/java/org/egov/collection/repository" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/collection-services/src/main/java/org/egov/collection/repository/querybuilder" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/collection-services/src/main/java/org/egov/collection/repository/rowmapper" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/collection-services/src/main/java/org/egov/collection/service" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/collection-services/src/main/java/org/egov/collection/util" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/collection-services/src/main/java/org/egov/collection/web/controller" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/collection-services/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/dashboard-analytics/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/dashboard-ingest/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/dashboard-ingest/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/egf-instrument/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/egf-instrument/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/egf-instrument/src/test/java/org/egov/egf/instrument/web/mapper" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/egf-master/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/egf-master/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/egov-apportion-service/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/egov-apportion-service/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/egov-hrms/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/finance-collections-voucher-consumer/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/business-services/finance-collections-voucher-consumer/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/chatbot/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/chatbot/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-accesscontrol/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-accesscontrol/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-common-masters/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-common-masters/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-data-uploader/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-data-uploader/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-enc-service/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-enc-service/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-filestore/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-filestore/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-idgen/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-indexer/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-localization/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-localization/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-location/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-location/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-mdms-service/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-notification-mail/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-notification-mail/src/test/java/org/egov/web/notification/mail/consumer" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-notification-mail/src/test/java/org/egov/web/notification/mail/consumer/contract" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-notification-mail/src/test/java/org/egov/web/notification/mail/service/email" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-notification-sms/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-otp/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-otp/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-persister/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-pg-service/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-pg-service/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-searcher/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-searcher/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-searcher/src/test/java/org/egov/controller" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-telemetry/egov-telemetry-batch-process/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-telemetry/egov-telemetry-kafka-streams/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-url-shortening/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-user/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-user/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-user/src/test/java/org/egov/user/Encryption" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-workflow-v2/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/egov-workflow-v2/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/libraries/enc-client/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/libraries/enc-client/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/libraries/mdms-client/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/libraries/services-common/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/libraries/tracer/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/libraries/tracer/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/report/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/report/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/report/src/test/java/org/egov/controller" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/tenant/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/tenant/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/user-otp/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/user-otp/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/user-otp/src/test/java/org/egov/persistence/repository" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/zuul/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core-services/zuul/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/edcr/client/egov/egov-client-impl/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/edcr/service/egov/egov-commons/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/edcr/service/egov/egov-edcr-extract/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/edcr/service/egov/egov-edcr-extract/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/edcr/service/egov/egov-edcr-extract/src/test/java/org/egov/edcr" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/edcr/service/egov/egov-edcr/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/edcr/service/egov/egov-edcrweb/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/edcr/service/egov/egov-egi/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/edcr/service/egov/egov-egi/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/edcr/service/egov/egov-egiweb/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/edcr/service/egov/egov-egiweb/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-collection/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-collection/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-collectionweb/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-collectionweb/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-commons/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-commons/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-commonsweb/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-egf/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-egfweb/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-egi/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-egi/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-egiweb/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-egiweb/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-eis/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-eis/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-eisweb/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-portal/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/egov/egov-portalweb/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/frontend/mono-ui/web/rainmaker-webview/src/androidTest/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/frontend/mono-ui/web/rainmaker-webview/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/frontend/mono-ui/web/rainmaker-webview/src/main/java/org/egovernment/mseva" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/frontend/mono-ui/web/rainmaker-webview/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/bpa-calculator/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/bpa-services/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/echallan-calculator/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/echallan-services/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/egov-user-event/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/fsm-calculator/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/fsm/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/inbox/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/land-services/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/noc-services/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/pgr-services/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/pgr-services/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/property-services/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/property-services/src/main/resources" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/pt-calculator-v2/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/pt-calculator-v2/src/main/java/org/egov/pt/calculator/service" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/pt-services-v2/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/pt-services-v2/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/pt-services-v2/src/test/java/org/egov/pt/service" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/pt-services-v2/src/test/java/org/egov/pt/web/controller" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/rainmaker-pgr/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/rainmaker-pgr/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/rainmaker-pgr/src/test/java/org/egov/pgr/service" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/sw-calculator/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/sw-services/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/tl-calculator/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/tl-calculator/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/tl-services/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/tl-services/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/turn-io-adapter/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/turn-io-adapter/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/vehicle/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/vendor/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/ws-calculator/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/municipal-services/ws-services/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/utilities/android-studio-bluetooth-printer/app/build/generated/not_namespaced_r_class_sources/debug/processDebugResources/r" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/utilities/android-studio-bluetooth-printer/app/build/generated/source/buildConfig/debug" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/utilities/android-studio-bluetooth-printer/app/src/androidTest/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/utilities/android-studio-bluetooth-printer/app/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/utilities/case-management/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/utilities/case-management/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/utilities/data-upload/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/utilities/data-upload/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/utilities/egov-custom-consumer/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/utilities/egov-weekly-impact-notifier/src/main/java" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="batik-all-1.0.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/edcr/service/egov/egov-edcr-extract/lib/batik-custom/batik-all/1.0/batik-all-1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="kabeja-svg-0.4.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/edcr/service/egov/egov-edcr-extract/lib/kabeja-svg-custom/kabeja-svg/0.4/kabeja-svg-0.4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="pdf-transcoder-1.1.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/edcr/service/egov/egov-edcr-extract/lib/pdf-transcoder-custom/pdf-transcoder/1.1/pdf-transcoder-1.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="PGIMerchantComponent.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/finance/egov/egov-collectionweb/src/main/webapp/WEB-INF/lib/PGIMerchantComponent.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="gradle-wrapper.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/frontend/mono-ui/web/rainmaker-webview/gradle/wrapper/gradle-wrapper.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+  </component>
+</module>

@@ -15,7 +15,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 
-//class variables are not used
 public class ChartOfAccount {
     private Long id;
 

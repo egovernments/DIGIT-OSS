@@ -12,7 +12,6 @@ import lombok.ToString;
 @ToString
 @Builder
 
-// no variable is used
 public class BankBranch   {
   private Long id;
 

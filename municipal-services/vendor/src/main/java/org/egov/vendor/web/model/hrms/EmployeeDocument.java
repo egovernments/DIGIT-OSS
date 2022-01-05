@@ -24,7 +24,6 @@ import lombok.ToString;
 @ToString
 @Builder
 
-//class variables not used
 public class EmployeeDocument {
 
 	private String id;

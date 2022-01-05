@@ -14,11 +14,6 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 public class ReceiptResponse_v1  {
-
-
-//    public ReceiptResponse_v1() {
-//    }
-
     @JsonProperty("ResponseInfo")
     private ResponseInfo responseInfo;
 

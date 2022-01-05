@@ -48,7 +48,6 @@ import lombok.*;
 @NoArgsConstructor
 @Setter
 
-//class variables not used
 public class EnumData {
 	private String key;
 	private Object object; 
