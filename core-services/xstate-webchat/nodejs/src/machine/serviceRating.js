@@ -170,6 +170,7 @@ const serviceRating = {
                 const feedbackMessage = {
                   message: preamble,
                   step: 'intermediate',
+                  optionType: "multiSelect",
                   option: prompt,
                 };
 
