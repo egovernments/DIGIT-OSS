@@ -42,14 +42,10 @@ export const openUploadedDocument = async (filestoreId, name) => {
   const w = window.open("", "_blank");
   const url = await getFileUrl(filestoreId);
   if (window.mSewaApp && window.mSewaApp.isMsewaApp()) {
-      console.log(url,'url');
-    let newW = window.open(url, "_blank");
-    setTimeout(()=>{
-        console.log(url,'url-timeout');
-
-        window.location.href=url;
-
-    },2000);
+    window.open(url, "_blank");
+    setTimeout(() => {
+      window.location.href = url;
+    }, 1000);
   } else {
     w.location = url;
     w.document.title = name;
@@ -62,14 +58,10 @@ export const openDocumentLink = (docLink, title) => {
     return;
   }
   if (window.mSewaApp && window.mSewaApp.isMsewaApp()) {
-    console.log(docLink,'url');
-    let newW = window.open(docLink, "_blank");
-    setTimeout(()=>{
-        console.log(docLink,'url-timeout');
-
-        window.location.href=docLink;
-
-    },2000);
+    window.open(docLink, "_blank");
+    setTimeout(() => {
+      window.location.href = docLink;
+    }, 1000);
   } else {
     const w = window.open("", "_blank");
     w.location = docLink;
@@ -85,7 +77,6 @@ export const downloadDocument = async (filestoreId, title) => {
 
   const fileUrl = await getFileUrl(filestoreId);
   if (fileUrl) {
-      console.log(fileUrl,'fileurl');
     Digit.Utils.downloadPDFFromLink(fileUrl);
   } else {
     console.error("Invalid Filestoreid or no file found to download");
