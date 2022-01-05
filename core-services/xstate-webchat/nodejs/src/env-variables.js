@@ -26,6 +26,8 @@ const envVariables = {
 
     kafkaConsumerEnabled: process.env.KAFKA_CONSUMER_ENABLED || false,
     kafkaConsumerGroupId: process.env.KAFKA_CONSUMER_GROUP_ID || 'xstate-webchat',
+
+    sendEmailTopic: process.env.CHATBOT_EMAIL_TOPIC || 'egov.core.notification.email',
   },
 
   egovServices: {
@@ -50,6 +52,7 @@ const envVariables = {
     pgrSearchEndpoint: process.env.PGR_SEARCH_ENDPOINT || 'pgr-services/v2/request/_search',
     pgrv1CreateEndpoint: process.env.PGR_CREATE_ENDPOINT || 'rainmaker-pgr/v1/requests/_create',
     pgrv1SearchEndpoint: process.env.PGR_SEARCH_ENDPOINT || 'rainmaker-pgr/v1/requests/_search',
+    egovWorkflowSearchPath: process.env.WORKFLOW_SEARCH_PATH || 'egov-workflow-v2/egov-wf/process/_search',
     maxStarRating: process.env.MAX_STAR_RATING || 5,
 
   },
