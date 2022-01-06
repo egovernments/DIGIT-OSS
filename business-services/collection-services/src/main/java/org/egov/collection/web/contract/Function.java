@@ -7,6 +7,8 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+
+//class not used
 public class Function   {
 
   private Long id;

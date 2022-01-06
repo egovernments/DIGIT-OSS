@@ -52,6 +52,8 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @Setter
+
+// all the getter and setter methods are not used
 public class Attribute {
 
     private Boolean variable;

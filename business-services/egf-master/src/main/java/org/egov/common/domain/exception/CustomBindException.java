@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class CustomBindException extends RuntimeException {
 
+//	not used
 	private static final long serialVersionUID = 8861914629969408745L;
 
 	private BindingResult errors;

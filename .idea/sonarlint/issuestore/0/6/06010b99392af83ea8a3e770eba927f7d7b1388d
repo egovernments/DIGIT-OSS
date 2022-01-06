@@ -1,0 +1,12 @@
+
+O
+java:S1068·"3Remove this unused "billDescription" private field.(“ï¦÷øÿÿÿÿ
+J
+java:S1068¹".Remove this unused "expiryDate" private field.(·¬èÐýÿÿÿÿ
+I
+java:S1068»"2Remove this unused "displayMessage" private field.(ûÔ¬ü
+R
+java:S1068½";Remove this unused "callBackForApportioning" private field.(è”®›
+N
+java:S1068¿"7Remove this unused "cancellationRemarks" private field.(ÚÑ×È
+b	java:S101J"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(Ìðéþ

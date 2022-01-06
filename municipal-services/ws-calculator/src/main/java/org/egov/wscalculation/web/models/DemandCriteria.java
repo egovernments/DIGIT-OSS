@@ -53,6 +53,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
+//class is not used
 public class DemandCriteria {
 
 	@NotNull

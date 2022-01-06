@@ -1,0 +1,26 @@
+
+o	java:S116)"URename this field "AssmtUtils" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ê‰²ıÿÿÿÿ
+V	java:S1255"<This block of commented-out lines of code should be removed.( ÀÌÍşÿÿÿÿ
+V	java:S125A"<This block of commented-out lines of code should be removed.( ÀÌÍşÿÿÿÿ
+L
+java:S1172k"1Remove this unused method parameter "assessment".(¢ï¾‚ıÿÿÿÿ
+R	java:S125‚"<This block of commented-out lines of code should be removed.(’”¬ı
+?	java:S108·")Either remove or fill this block of code.(á¢–¬
+i
+java:S3776Ì"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(ˆ€ü¹
+C
+java:S1602ş",Remove useless curly braces around statement(Ğ¥¾´
+T	java:S106Š"9Replace this use of System.out or System.err by a logger.(³úãèşÿÿÿÿ
+T	java:S106‹"9Replace this use of System.out or System.err by a logger.(‹ŠŒ”ûÿÿÿÿ
+i
+java:S3776™"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(üÔšÎ
+P
+java:S1144ø"4Remove this unused private "validateUnitIds" method.(Ö•íÚûÿÿÿÿ
+k
+java:S1192n"PDefine a constant instead of duplicating this literal "INVALID_REQUEST" 8 times.(Òë‰äøÿÿÿÿ
+K
+java:S1066Õ"/Merge this if statement with the enclosing one.(£èËŠÿÿÿÿÿ
+K
+java:S1066Ú"/Merge this if statement with the enclosing one.(ñÄ¢ªüÿÿÿÿ
+j
+java:S2259 "NA "NullPointerException" could be thrown; "assessmentFromDB" is nullable here.(À†ÂÀüÿÿÿÿ

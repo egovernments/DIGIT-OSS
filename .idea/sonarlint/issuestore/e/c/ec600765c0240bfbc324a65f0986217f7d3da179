@@ -1,0 +1,26 @@
+
+r
+java:S1450"\Remove the "appProperties" field and declare it as a local variable in the relevant methods.(Îž‰û
+€
+java:S1450&"eRemove the "elasticsearchConnector" field and declare it as a local variable in the relevant methods.(Ï×âùúÿÿÿÿ
+U
+java:S1118":Add a private constructor to hide the implicit public one.( õß·úÿÿÿÿ
+V	java:S125+"<This block of commented-out lines of code should be removed.(Ç¼ºìýÿÿÿÿ
+[
+java:S1659k"EDeclare "platform" and all following declarations on a separate line.(–™‘ç
+P
+java:S6213m":Rename this variable to not match a restricted identifier.(‚ÉÂú
+Q
+java:S6213Š":Rename this variable to not match a restricted identifier.(‚ÉÂú
+b
+java:S2153¢"FRemove the boxing to "Long"; The argument is already of the same type.(ú“Ó‡ûÿÿÿÿ
+Q
+java:S6213©":Rename this variable to not match a restricted identifier.(‚ÉÂú
+\
+java:S1192T"FDefine a constant instead of duplicating this literal "$.ets" 4 times.(“Ãý·
+u
+java:S1488c"_Immediately return this expression instead of assigning it to the temporary variable "session".(óÀÍü
+u
+java:S1104""_Make totalSessionCounter a static final constant or non-public and provide accessors if needed.(´Äí
+O
+java:S1444""9Make this "public static totalSessionCounter" field final(´Äí

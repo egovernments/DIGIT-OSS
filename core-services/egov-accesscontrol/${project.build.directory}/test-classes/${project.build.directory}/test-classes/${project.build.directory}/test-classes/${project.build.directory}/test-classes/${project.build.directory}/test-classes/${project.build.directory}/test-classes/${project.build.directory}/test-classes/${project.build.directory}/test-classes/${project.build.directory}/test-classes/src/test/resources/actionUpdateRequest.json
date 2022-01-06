@@ -1,0 +1,36 @@
+{
+  "RequestInfo": {
+    "apiId" : null,
+    "ver" : null,
+    "msgId" : null,
+    "ts" : "10-03-2017 00:00:00",
+        "userInfo":{
+       	"id":"1"
+       }
+  },
+  "actions": [
+    {
+      "id": 1,
+      "name": "test1",
+      "url": "/test",
+      "displayName" : "Create  Test",
+      "enabled": true,
+      "orderNumber": 1,
+      "createdBy": 1,
+      "lastModifiedBy": 1,
+      "tenantId" : "default"
+      
+    },
+    {
+      "id": 2,
+      "name": "test2",
+      "url": "/test/test2",
+      "displayName" : "Update Test",
+      "enabled": true,
+      "orderNumber": 2,
+      "createdBy": 1,
+      "lastModifiedBy": 1,
+      "tenantId" : "default"
+    }
+  ]
+}

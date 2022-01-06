@@ -1,0 +1,85 @@
+{
+    "tenantId": null,
+    "ResponseInfo": {
+        "apiId": "org.egov.collection",
+        "ver": "1.0",
+        "resMsgId": "uief87324",
+        "msgId": "654654",
+        "status": "200"
+    },
+    "Receipt": [
+        {
+            "tenantId": "default",
+            "transactionId": "10127859476354",
+            "Bill": [ {
+                "id": null,
+                "payeeName": "abc",
+                "payeeAddress": "abc nagara",
+                "payeeEmail": "abc567@gmail.com",
+                "isActive": null,
+                "isCancelled": null,
+                "paidBy": "abc",
+                "billDetails": [
+                    {
+                        "id": "1",
+                        "bill": null,
+                        "billDate": null,
+                        "billDescription": null,
+                        "billNumber": "REF1234",
+                        "consumerCode": "CON12343556",
+                        "consumerType": "Good",
+                        "minimumAmount": 125.00,
+                        "totalAmount": 150.00,
+                        "collectionModesNotAllowed": [
+                            "Bill based"
+                        ],
+                        "tenantId": "default",
+                        "businessService": "TL",
+                        "displayMessage": "receipt created successfully",
+                        "callBackForApportioning": null,
+                        "receiptNumber": "REC1234",
+                        "receiptDate": 1454371200000,
+                        "receiptType": "ADHOC",
+                        "channel": "567hfghr",
+                        "voucherHeader": "VOUHEAD",
+                        "collectionType": "COUNTER",
+                        "boundary": "67",
+                        "reasonForCancellation": "Data entry mistake",
+                        "amountPaid": null,
+                        "cancellationRemarks": "payee name data entered is not proper",
+                        "status": "CREATED",
+                        "billAccountDetails": [
+                            {
+                                "glcode": "456",
+                                "order": null,
+                                "accountDescription": null,
+                                "isActualDemand": true,
+                                "id": "1",
+                                "tenantId": "default",
+                                "billDetail": "1",
+                                "creditAmount": 800.0,
+                                "debitAmount": 600.0,
+                                "purpose": "REBATE"
+                            },
+                            {
+                                "glcode": "490",
+                                "order": null,
+                                "accountDescription": null,
+                                "isActualDemand": true,
+                                "id": "2",
+                                "tenantId": "default",
+                                "billDetail": "1",
+                                "creditAmount": 800.0,
+                                "debitAmount": 700.0,
+                                "purpose": "REBATE"
+                            }
+                        ]
+                    }
+                ],
+                "tenantId": "default"
+            } ],
+            "auditDetails": null
+         
+        }
+    ]
+}

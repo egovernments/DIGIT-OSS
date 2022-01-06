@@ -54,6 +54,8 @@ public class AccountEntityRepositoryTest {
 
     private RequestInfo requestInfo = new RequestInfo();
 
+    private String string="default";
+
     @Before
     public void setup() {
         accountEntityRepositoryWithKafka = new AccountEntityRepository(accountEntityJdbcRepository, accountEntityQueueRepository,
@@ -211,7 +213,7 @@ public class AccountEntityRepositoryTest {
         accountEntity.setName("name");
         accountEntity.setActive(true);
         accountEntity.setAccountDetailType(getAccountDetaialType());
-        accountEntity.setTenantId("default");
+        accountEntity.setTenantId(string);
         return accountEntity;
     }
 
@@ -247,7 +249,7 @@ public class AccountEntityRepositoryTest {
     private List<AccountEntity> getAccountEntitys() {
         List<AccountEntity> accountEntities = new ArrayList<>();
         AccountEntity accountEntity = AccountEntity.builder().id("1").name("name").code("code").accountDetailType(getAccountDetaialType()).active(true).build();
-        accountEntity.setTenantId("default");
+        accountEntity.setTenantId(string);
         accountEntities.add(accountEntity);
         return accountEntities;
     }
@@ -264,7 +266,7 @@ public class AccountEntityRepositoryTest {
 
         AccountDetailType accountDetailType = AccountDetailType.builder().id("1").name("name").tableName("table")
                 .fullyQualifiedName("abc/table").build();
-        accountDetailType.setTenantId("default");
+        accountDetailType.setTenantId(string);
         return accountDetailType;
     }
 }

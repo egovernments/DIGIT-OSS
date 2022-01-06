@@ -1,0 +1,15 @@
+
+h	java:S116'"NRename this field "LOG" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(„¼éÂÿÿÿÿÿ
+m
+java:S3776*"RRefactor this method to reduce its Cognitive Complexity from 52 to the 15 allowed.(ÐÇúªÿÿÿÿÿ
+]	java:S1252"<This block of commented-out lines of code should be removed.(ËÏ™ßüÿÿÿÿ8ÁÙ±ÿÖ/
+V	java:S125C"<This block of commented-out lines of code should be removed.(Šù›Žÿÿÿÿÿ
+i
+java:S3776š"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(¥ó¬™
+\
+java:S2147²"ECombine this catch with the one at line 170, which has the same body.(”ý¾
+R	java:S125 "<This block of commented-out lines of code should be removed.(ø¿ëó
+p
+java:S1192¦"YDefine a constant instead of duplicating this literal "Unsupported font is used" 6 times.(Í·¬
+r
+java:S1488¼"[Immediately return this expression instead of assigning it to the temporary variable "doc".(¸µ±‚

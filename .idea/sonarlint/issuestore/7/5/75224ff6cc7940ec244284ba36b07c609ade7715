@@ -1,0 +1,12 @@
+
+?
+java:S1481v"*Remove this unused "index" local variable.(Úß‚e
+V	java:S125z"<This block of commented-out lines of code should be removed.(ýÂüÃýÿÿÿÿ
+2
+java:S3626š"Remove this redundant jump.(ûÁÝ…
+j
+java:S3776ž"SRefactor this method to reduce its Cognitive Complexity from 101 to the 15 allowed.(…Ø„ñ
+e
+java:S1192Õ"IDefine a constant instead of duplicating this literal "')].code" 5 times.(ðÖˆÄøÿÿÿÿ
+K
+java:S1066Ô"/Merge this if statement with the enclosing one.(Å¬üÕøÿÿÿÿ

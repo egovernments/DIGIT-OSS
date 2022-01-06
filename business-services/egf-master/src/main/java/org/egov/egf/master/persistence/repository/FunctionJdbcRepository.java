@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 public class FunctionJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(FunctionJdbcRepository.class);
 
+	private String string1=" and ";
+
 	static {
 		LOG.debug("init function");
 		init(FunctionEntity.class);
@@ -69,56 +71,56 @@ public class FunctionJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
 		if (functionSearchEntity.getTenantId() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("tenantId =:tenantId");
 			paramValues.put("tenantId", functionSearchEntity.getTenantId());
 		}
 		if (functionSearchEntity.getId() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("id =:id");
 			paramValues.put("id", functionSearchEntity.getId());
 		}
 		if (functionSearchEntity.getIds() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("id in(:ids) ");
 			paramValues.put("ids", new ArrayList<String>(Arrays.asList(functionSearchEntity.getIds().split(","))));
 		}
 		if (functionSearchEntity.getName() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("name =:name");
 			paramValues.put("name", functionSearchEntity.getName());
 		}
 		if (functionSearchEntity.getCode() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("code =:code");
 			paramValues.put("code", functionSearchEntity.getCode());
 		}
 		if (functionSearchEntity.getLevel() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("level =:level");
 			paramValues.put("level", functionSearchEntity.getLevel());
 		}
 		if (functionSearchEntity.getActive() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("active =:active");
 			paramValues.put("active", functionSearchEntity.getActive());
 		}
 		if (functionSearchEntity.getParentId() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("parentId =:parentId");
 			paramValues.put("parentId", functionSearchEntity.getParentId());

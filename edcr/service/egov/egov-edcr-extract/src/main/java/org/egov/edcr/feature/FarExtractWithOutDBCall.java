@@ -118,7 +118,7 @@ public class FarExtractWithOutDBCall extends FeatureExtract {
 			 */
             String layerRegEx = "BLK_" + block.getNumber() + "_" + "FLR_" + "-?\\d+_" + "BLT_UP_AREA";
             List<String> layerNames = Util.getLayerNamesLike(pl.getDoc(), layerRegEx);
-            Door d = new Door();
+//            Door d = new Door();
             int floorNo;
             FloorDetail floor;
             for (String s : layerNames) {

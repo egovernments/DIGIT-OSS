@@ -60,6 +60,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Functionary {
 
+//    not used
     private Long id;
 
     private String code;

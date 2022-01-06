@@ -9,6 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
+//pagesize and offset is not used
 public class SubSchemeSearchContract extends SubSchemeContract { private String ids; 
 private String  sortBy; 
 private Integer pageSize; 

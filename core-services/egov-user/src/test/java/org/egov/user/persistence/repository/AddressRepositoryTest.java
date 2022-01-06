@@ -35,6 +35,12 @@ public class AddressRepositoryTest {
     @InjectMocks
     private AddressRepository addressRepository;
 
+    private String string1="ap.public";
+
+    private String string2="address";
+
+    private String string3="pinCode";
+
     @Before
     public void before() {
         addressRepository = new AddressRepository(namedParameterJdbcTemplate, jdbcTemplate);
@@ -46,25 +52,25 @@ public class AddressRepositoryTest {
         final Address domainAddress = Address.builder()
                 .city("city")
                 .userId(1l)
-                .tenantId("ap.public")
-                .address("address")
-                .pinCode("pinCode")
+                .tenantId(string1)
+                .address(string2)
+                .pinCode(string3)
                 .type(AddressType.CORRESPONDENCE)
                 .build();
 
-        final Address createdAddress = addressRepository.create(domainAddress, 1L, "ap.public");
+        final Address createdAddress = addressRepository.create(domainAddress, 1L, string1);
 
         assertNotNull(createdAddress);
-        assertEquals("address", createdAddress.getAddress());
+        assertEquals(string2, createdAddress.getAddress());
         assertEquals("city", createdAddress.getCity());
-        assertEquals("pinCode", createdAddress.getPinCode());
+        assertEquals(string3, createdAddress.getPinCode());
         assertEquals(AddressType.CORRESPONDENCE, createdAddress.getType());
     }
 
     @Test
     @Sql(scripts = {"/sql/clearAddresses.sql", "/sql/clearUserRoles.sql", "/sql/clearUsers.sql", "/sql/createUsers.sql", "/sql/createAddresses.sql"})
     public void test_should_return_addresses_for_given_user_id_and_tenant() {
-        final List<Address> actualAddresses = addressRepository.find(1L, "ap.public");
+        final List<Address> actualAddresses = addressRepository.find(1L, string1);
 
         assertNotNull(actualAddresses);
         assertEquals(2, actualAddresses.size());
@@ -74,7 +80,7 @@ public class AddressRepositoryTest {
     @Sql(scripts = {"/sql/clearAddresses.sql", "/sql/clearUserRoles.sql", "/sql/clearUsers.sql", "/sql/createUsers.sql", "/sql/createAddresses.sql"})
     public void test_should_delete_all_associated_addresses() {
         final List<Address> domainAddresses = Collections.emptyList();
-        addressRepository.update(domainAddresses, 1L, "ap.public");
+        addressRepository.update(domainAddresses, 1L, string1);
     }
 
     @Test
@@ -84,7 +90,7 @@ public class AddressRepositoryTest {
                 .type(AddressType.CORRESPONDENCE)
                 .build();
         final List<Address> domainAddresses = Collections.singletonList(domainAddress1);
-        addressRepository.update(domainAddresses, 1L, "ap.public");
+        addressRepository.update(domainAddresses, 1L, string1);
     }
 
     @Test
@@ -92,9 +98,9 @@ public class AddressRepositoryTest {
     public void test_should_save_new_addresses() {
         final Address domainAddress1 = Address.builder()
                 .type(AddressType.CORRESPONDENCE)
-                .pinCode("pinCode")
+                .pinCode(string3)
                 .city("city")
-                .address("address")
+                .address(string2)
                 .build();
         final Address domainAddress2 = Address.builder()
                 .type(AddressType.PERMANENT)
@@ -103,7 +109,7 @@ public class AddressRepositoryTest {
                 .pinCode("pin1")
                 .build();
         final List<Address> domainAddresses = Arrays.asList(domainAddress1, domainAddress2);
-        addressRepository.update(domainAddresses, 1L, "ap.public");
+        addressRepository.update(domainAddresses, 1L, string1);
 
     }
 
@@ -117,7 +123,7 @@ public class AddressRepositoryTest {
                 .address("new address")
                 .build();
         final List<Address> domainAddresses = Collections.singletonList(domainAddress1);
-        addressRepository.update(domainAddresses, 1L, "ap.public");
+        addressRepository.update(domainAddresses, 1L, string1);
     }
 
 

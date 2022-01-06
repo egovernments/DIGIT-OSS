@@ -46,12 +46,12 @@ public class BillingSlabValidator {
 
 	public void validateCreate(BillingSlabRequest request) {
 		validateInputs(request);
-		List<Object> preparedStmtList = new ArrayList<>();
-		String query = queryBuilder.getBillingSlabCombinationCountQuery(
+//		List<Object> preparedStmtList = new ArrayList<>();
+/*		String query = queryBuilder.getBillingSlabCombinationCountQuery(
 				request.getBillingSlab().getTenantId(),
 				request.getBillingSlab().getCapacityFrom(),
 				request.getBillingSlab().getCapacityTo(), request.getBillingSlab().getPropertyType(),
-				request.getBillingSlab().getSlum().toString(), preparedStmtList);
+				request.getBillingSlab().getSlum().toString(), preparedStmtList);*/
 		
 		BillingSlabSearchCriteria searchCriteria = BillingSlabSearchCriteria.builder().propertyType( request.getBillingSlab().getPropertyType()).tenantId(request.getBillingSlab().getTenantId()).capacity(request.getBillingSlab().getCapacityFrom().doubleValue()).slum(SlumEnum.valueOf(request.getBillingSlab().getSlum().toString())).build();
 		List<BillingSlab> billingSlabs= repository.getBillingSlabData(searchCriteria);

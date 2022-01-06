@@ -16,6 +16,8 @@ import java.util.List;
 @Getter
 @ToString
 @EqualsAndHashCode(of = {"receiptNumber"})
+
+//class variables not used
 public class Receipt {
 
     @NotNull

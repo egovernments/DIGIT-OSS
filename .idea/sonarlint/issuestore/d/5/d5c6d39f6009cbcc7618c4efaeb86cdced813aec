@@ -1,0 +1,21 @@
+
+u	java:S116'"[Rename this field "MERCHANT_URL_PAY" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(–ŠÍğşÿÿÿÿ
+s	java:S116("^Rename this field "MERCHANT_URL_STATUS" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ìòé÷
+p	java:S116)"VRename this field "MERCHANT_ID" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï°şşÿÿÿÿ
+m	java:S116*"XRename this field "SECURE_SECRET" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(å©Ğ
+m	java:S116+"SRename this field "AMA_USER" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ø­Ú–üÿÿÿÿ
+l	java:S116,"RRename this field "AMA_PWD" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Êùúãşÿÿÿÿ
+t	java:S116."ZRename this field "VPC_ACCESS_CODE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÿ±ƒêûÿÿÿÿ
+k	java:S116/"VRename this field "VPC_VERSION" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ô™Ÿä
+o	java:S1160"ZRename this field "VPC_COMMAND_PAY" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(÷ÕÜã
+w	java:S1161"]Rename this field "VPC_COMMAND_STATUS" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ê–äåùÿÿÿÿ
+k	java:S1163"QRename this field "LOCALE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(úÆªŸøÿÿÿÿ
+m	java:S1164"SRename this field "CURRENCY" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(äçÆÖûÿÿÿÿ
+f	java:S1169"QRename this field "ACTIVE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‘†¨
+N
+java:S1135Î"2Complete the task associated to this TODO comment.(ˆÜà¿ûÿÿÿÿ
+K
+java:S10687"0Remove this unused "objectMapper" private field.(«çœšşÿÿÿÿ
+K
+java:S1066€"/Merge this if statement with the enclosing one.(µªõáúÿÿÿÿ
+e	java:S117p"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(´ÁĞ

@@ -83,6 +83,7 @@ public class BillDetail {
 	@JsonProperty("isAdvanceAllowed")
 	private Boolean isAdvanceAllowed;
 
+//	not used
 	@JsonProperty("additionalDetails")
 	private Object additionalDetails;
 

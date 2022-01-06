@@ -53,6 +53,8 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @ToString
+
+//class variables not used
 public class EmployeeInfo {
 
 	private Long id;

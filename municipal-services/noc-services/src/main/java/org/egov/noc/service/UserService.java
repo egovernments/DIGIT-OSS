@@ -31,6 +31,10 @@ public class UserService {
 	@Autowired
 	private ObjectMapper mapper;
 
+	private String string1="lastModifiedDate";
+
+	private String string2="pwdExpiryDate";
+
 	/**
 	 * Call search in user service based on ownerids from criteria
 	 * 
@@ -106,12 +110,12 @@ public class UserService {
 		if (users != null) {
 			users.forEach(map -> {
 				map.put("createdDate", dateTolong((String) map.get("createdDate"), format1));
-				if ((String) map.get("lastModifiedDate") != null)
-					map.put("lastModifiedDate", dateTolong((String) map.get("lastModifiedDate"), format1));
+				if ((String) map.get(string1) != null)
+					map.put(string1, dateTolong((String) map.get(string1), format1));
 				if ((String) map.get("dob") != null)
 					map.put("dob", dateTolong((String) map.get("dob"), dobFormat));
-				if ((String) map.get("pwdExpiryDate") != null)
-					map.put("pwdExpiryDate", dateTolong((String) map.get("pwdExpiryDate"), format1));
+				if ((String) map.get(string2) != null)
+					map.put(string2, dateTolong((String) map.get(string2), format1));
 			});
 		}
 	}

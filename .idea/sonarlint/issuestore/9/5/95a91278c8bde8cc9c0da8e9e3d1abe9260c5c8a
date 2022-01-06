@@ -1,0 +1,13 @@
+
+C
+java:S1602Ç",Remove useless curly braces around statement(ÈŸ‹ò
+t
+java:S2293."YReplace the type specification in this constructor call with the diamond operator ("<>").(¢òÁÿÿÿÿÿ
+o
+java:S2293/"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÎËï‹
+€
+java:S1488U"jImmediately return this expression instead of assigning it to the temporary variable "userDetailResponse".(æ÷ÿÉ
+†
+java:S1488“"jImmediately return this expression instead of assigning it to the temporary variable "userDetailResponse".(şšíƒûÿÿÿÿ
+[
+java:S2259„"?A "NullPointerException" could be thrown; "d" is nullable here.(Ä¢Ãÿÿÿÿÿ

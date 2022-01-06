@@ -1,0 +1,9 @@
+
+`	java:S112q"FDefine and throw a dedicated exception instead of using a generic one.(éºð¡ýÿÿÿÿ
+a	java:S112…"FDefine and throw a dedicated exception instead of using a generic one.(éºð¡ýÿÿÿÿ
+n
+java:S3776ü"RRefactor this method to reduce its Cognitive Complexity from 32 to the 15 allowed.(öº‹Øøÿÿÿÿ
+i
+java:S3776Ì"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(‘§«ê
+`
+java:S2259…"DA "NullPointerException" could be thrown; "owners" is nullable here.(•ß¹Þüÿÿÿÿ

@@ -63,6 +63,7 @@ const Download = {
       const pdf = getPDF(canvas);
       const jpegImage = canvas.toDataURL("image/jpeg");
       const imgProps = pdf.getImageProperties(jpegImage);
+//      MARGIN NOT USED
       const margin = 0.1;
       const pageHeight = 295;
       // const pdfWidth = pdf.internal.pageSize.width * (1 - margin);

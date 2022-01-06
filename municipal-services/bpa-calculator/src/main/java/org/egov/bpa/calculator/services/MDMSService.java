@@ -43,6 +43,10 @@ public class MDMSService {
 
 	@Autowired
 	private EDCRService edcrService;
+
+    private String string1="serviceType";
+
+    private String string2="applicationType";
 	
     public Object mDMSCall(CalculationReq calculationReq,String tenantId){
         MdmsCriteriaReq mdmsCriteriaReq = getMDMSRequest(calculationReq,tenantId);
@@ -112,16 +116,16 @@ public class MDMSService {
     		if (StringUtils.isEmpty(applicationType)) {
     			applicationType.add("permit");
     		}
-    		additionalDetails.put("serviceType", serviceType.get(0).toString());
-    		additionalDetails.put("applicationType", applicationType.get(0).toString());
+    		additionalDetails.put(string1, serviceType.get(0).toString());
+    		additionalDetails.put(string2 , applicationType.get(0).toString());
             
     		
-            log.debug("applicationType is " + additionalDetails.get("applicationType"));
-            log.debug("serviceType is " + additionalDetails.get("serviceType"));
-            String filterExp = "$.[?((@.applicationType == '"+ additionalDetails.get("applicationType")+"' || @.applicationType === 'ALL' ) &&  @.feeType == '"+feeType+"')]";
+            log.debug("applicationType is " + additionalDetails.get(string2));
+            log.debug("serviceType is " + additionalDetails.get(string1));
+            String filterExp = "$.[?((@.applicationType == '"+ additionalDetails.get(string2)+"' || @.applicationType === 'ALL' ) &&  @.feeType == '"+feeType+"')]";
             List<Object> calTypes = JsonPath.read(jsonOutput, filterExp);
             
-            filterExp = "$.[?(@.serviceType == '"+ additionalDetails.get("serviceType")+"' || @.serviceType === 'ALL' )]";
+            filterExp = "$.[?(@.serviceType == '"+ additionalDetails.get(string1)+"' || @.serviceType === 'ALL' )]";
             calTypes = JsonPath.read(calTypes, filterExp);
             
             filterExp = "$.[?(@.riskType == '"+bpa.getRiskType()+"' || @.riskType === 'ALL' )]";

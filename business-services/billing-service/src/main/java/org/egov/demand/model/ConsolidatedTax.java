@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+
+//class variables are not used
 public class ConsolidatedTax {
 
 	private Double arrearsDemand;

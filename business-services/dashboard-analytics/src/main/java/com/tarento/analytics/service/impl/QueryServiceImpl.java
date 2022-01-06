@@ -62,8 +62,6 @@ public class QueryServiceImpl implements QueryService {
 	@Autowired
     private ConfigurationLoader configurationLoader;
 
-	private static final Map<Integer, String> WeekDayMap = createMap();
-
 	private static Map<Integer, String> createMap() {
 		Map<Integer, String> result = new HashMap<Integer, String>();
 		result.put(1, "SUN");

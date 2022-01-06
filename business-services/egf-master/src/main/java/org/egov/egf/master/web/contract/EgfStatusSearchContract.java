@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
+//class not used
 public class EgfStatusSearchContract extends EgfStatusContract {
 	private Integer pageSize;
 	private Integer offset;

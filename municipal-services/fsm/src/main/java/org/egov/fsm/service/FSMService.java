@@ -101,6 +101,7 @@ public class FSMService {
 	private FSMRepository repository;
 	public FSM create(FSMRequest fsmRequest) {
 		RequestInfo requestInfo = fsmRequest.getRequestInfo();
+//		TENANT_ID IS NOT USED
 //		String tenantId = fsmRequest.getFsm().getTenantId().split("\\.")[0];
 		Object mdmsData = util.mDMSCall(requestInfo, fsmRequest.getFsm().getTenantId());
 		if (fsmRequest.getFsm().getTenantId().split("\\.").length == 1) {
@@ -356,12 +357,12 @@ public class FSMService {
 	}
 	
 	private void handleAdditionalPayRequest(FSMRequest fsmRequest, FSM oldFSM) {
-		FSM fsm = fsmRequest.getFsm();
+//		FSM fsm = fsmRequest.getFsm();
 		//TODO if additionalcharge is allowed then allow this action and then call calculator
 	}
 	
 	private void handleRejectCancel(FSMRequest fsmRequest, FSM oldFSM) {
-		FSM fsm = fsmRequest.getFsm();
+//		FSM fsm = fsmRequest.getFsm();
 		Workflow workflow = fsmRequest.getWorkflow();
 		if(!StringUtils.hasLength(workflow.getComments())) {
 			throw new CustomException(FSMErrorConstants.INVALID_COMMENT_CANCEL_REJECT," Comment is mandatory to reject or cancel the application !.");
@@ -369,7 +370,7 @@ public class FSMService {
 	}
 
 	private void handleSendBack(FSMRequest fsmRequest, FSM oldFSM) {
-		FSM fsm = fsmRequest.getFsm();
+//		FSM fsm = fsmRequest.getFsm();
 		//TODO based on the old application Status DSO or vehicle has to removed
 	}
 	/**

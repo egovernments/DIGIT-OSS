@@ -55,13 +55,13 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 			String tenantId = rs.getString("tenantid");
 			String accountId = rs.getString("accountId");
 			String description = rs.getString("description");
-			String additionalDetails = rs.getString("additionalDetails");
+//			String additionalDetails = rs.getString("additionalDetails");
 			String source = rs.getString("source");
 			String sanitationtype = rs.getString("sanitationtype");
 			String propertyUsage = rs.getString("propertyUsage");
 			int noOfTrips = rs.getInt("noOfTrips");
 			String applicationStatus = rs.getString("applicationStatus");
-			String status = rs.getString("status");
+//			String status = rs.getString("status");
 			String vehicleId = rs.getString("vehicle_id");
 			String vehicleType = rs.getString("vehicletype");
 			String dsoid = rs.getString("dso_id");
@@ -94,7 +94,7 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 	private void addChildrenToProperty(ResultSet rs, FSM fsm) throws SQLException {
 
 		// TODO add all the child data Vehicle, Pit, address
-		String tenantId = fsm.getTenantId(); 
+		String tenantId = fsm.getTenantId();
 		
 		AuditDetails auditdetails = AuditDetails.builder().createdBy(rs.getString("createdBy"))
 				.createdTime(rs.getLong("createdTime")).lastModifiedBy(rs.getString("lastModifiedBy"))

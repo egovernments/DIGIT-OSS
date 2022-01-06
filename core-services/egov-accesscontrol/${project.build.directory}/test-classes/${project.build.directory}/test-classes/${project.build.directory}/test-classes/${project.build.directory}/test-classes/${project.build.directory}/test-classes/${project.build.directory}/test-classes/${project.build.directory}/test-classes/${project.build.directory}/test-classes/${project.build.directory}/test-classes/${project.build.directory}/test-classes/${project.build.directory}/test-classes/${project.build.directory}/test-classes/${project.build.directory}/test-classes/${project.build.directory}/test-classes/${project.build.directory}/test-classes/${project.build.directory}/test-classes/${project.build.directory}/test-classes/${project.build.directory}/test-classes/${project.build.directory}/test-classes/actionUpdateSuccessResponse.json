@@ -1,0 +1,40 @@
+{
+    "responseInfo": {
+        "apiId": "org.egov.accesscontrol",
+        "ver": null,
+        "ts": "Thu Mar 09 18:30:00 UTC 2017",
+        "resMsgId": "uief87324",
+        "msgId": null,
+        "status": "200 OK"
+    },
+    "actions": [
+        {
+            "id": 1,
+            "name": "test1",
+            "url": "/test",
+            "queryParams": null,
+            "parentModule": null,
+            "displayName": "Create  Test",
+            "orderNumber": 1,
+            "serviceCode": null,
+            "createdDate": null,
+            "createdBy": 1,
+            "lastModifiedDate": null,
+            "lastModifiedBy": 1
+        },
+        {
+            "id": 2,
+            "name": "test2",
+            "url": "/test/test2",
+            "queryParams": null,
+            "parentModule": null,
+            "displayName": "Update Test",
+            "orderNumber": 2,
+            "serviceCode": null,
+            "createdDate": null,
+            "createdBy": 1,
+            "lastModifiedDate": null,
+            "lastModifiedBy": 1
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+
+Q	java:S125"<This block of commented-out lines of code should be removed.(Œ¡ûµ
+Q
+java:S1854/";Remove this useless assignment to local variable "tenants".(Ÿ·Ô·
+B
+java:S3599@",Use another way to initialize this instance.(±‘Â
+o
+java:S1171@"YMove the contents of this initializer to a standard constructor or to field initializers.(±‘Â
+B
+java:S3599N",Use another way to initialize this instance.(±‘Â
+o
+java:S1171N"YMove the contents of this initializer to a standard constructor or to field initializers.(±‘Â
+B
+java:S3599j",Use another way to initialize this instance.(±‘Â
+o
+java:S1171j"YMove the contents of this initializer to a standard constructor or to field initializers.(±‘Â
+H
+java:S3599†",Use another way to initialize this instance.(‚©¿˜ıÿÿÿÿ
+u
+java:S1171†"YMove the contents of this initializer to a standard constructor or to field initializers.(‚©¿˜ıÿÿÿÿ

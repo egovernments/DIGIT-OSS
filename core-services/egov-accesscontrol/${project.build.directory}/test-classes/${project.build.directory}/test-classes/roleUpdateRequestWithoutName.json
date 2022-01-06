@@ -1,0 +1,32 @@
+{
+   "RequestInfo": {
+       "apiId" : "emp",
+       "ver" : "1.0",
+       "ts" : "10-03-2017 00:00:00",
+       "action" : "create",
+       "did" : "1",
+       "key" : "abcdkey",
+       "msgId" : "20170310130900",
+       "requesterId" : "rajesh",
+       "authToken" : "42c3c27a-8887-4cd7-9804-41dfe6140a1e",
+       "userInfo":{
+       	"id":"1"
+       }
+       
+   },
+   "roles":[
+   	{
+   
+   	"code" :"testonecode112234324",
+   	"description" :"test1description"
+
+   	},{
+ 
+ 
+   	"code" :"testtwocode11234354",
+   	"description" :"test2codedescription"
+   		
+   	}
+   ]
+
+}

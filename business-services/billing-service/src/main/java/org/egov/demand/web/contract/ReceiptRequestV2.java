@@ -56,6 +56,7 @@ import java.util.List;
 @Setter
 @ToString
 @Builder
+//class is not used
 public class ReceiptRequestV2 {
 
     private String tenantId;

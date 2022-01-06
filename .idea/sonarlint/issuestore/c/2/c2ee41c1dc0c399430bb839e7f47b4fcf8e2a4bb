@@ -1,0 +1,9 @@
+
+u
+java:S1149="_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(™šªÚ
+{
+java:S1149—"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(øô»´ýÿÿÿÿ
+m
+java:S37766"RRefactor this method to reduce its Cognitive Complexity from 29 to the 15 allowed.(ù˜²¸þÿÿÿÿ
+e
+java:S1858š"N"searchQuery" is already a string, there's no need to call "toString()" on it.(»Ý÷›

@@ -1,0 +1,7 @@
+
+]
+java:S1854$"BRemove this useless assignment to local variable "challanRequest".(Ÿü«ùÿÿÿÿ
+U
+java:S6213!":Rename this variable to not match a restricted identifier.(å´´Óşÿÿÿÿ
+~
+java:S1319!"cThe type of "record" should be an interface such as "Map" rather than the implementation "HashMap".(å´´Óşÿÿÿÿ

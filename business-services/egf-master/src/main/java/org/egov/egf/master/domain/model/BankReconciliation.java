@@ -57,6 +57,7 @@ import lombok.Setter;
 @Builder
 @EqualsAndHashCode(exclude = { "bankAccount" }, callSuper = false)
 
+// class is not used anywhere..no need to declare variables as private
 public class BankReconciliation extends Auditable {
 
 	private String id;

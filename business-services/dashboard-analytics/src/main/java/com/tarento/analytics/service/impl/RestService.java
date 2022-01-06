@@ -39,6 +39,8 @@ public class RestService {
     @Autowired
     private RetryTemplate retryTemplate;
 
+    private String string1="RestTemplate response :- ";
+
 
     /**
      * search on Elastic search for a search query
@@ -61,7 +63,7 @@ public class RestService {
         try {
             ResponseEntity<Object> response = retryTemplate.postForEntity(url, requestEntity);
             responseNode = new ObjectMapper().convertValue(response.getBody(), JsonNode.class);
-            LOGGER.info("RestTemplate response :- "+responseNode);
+            LOGGER.info(string1+responseNode);
 
         } catch (HttpClientErrorException e) {
             e.printStackTrace();
@@ -95,7 +97,7 @@ public class RestService {
         try {
             ResponseEntity<Object> response = retryTemplate.postForEntity(uri,requestEntity);
             responseNode = new ObjectMapper().convertValue(response.getBody(), JsonNode.class);
-            LOGGER.info("RestTemplate response :- "+responseNode);
+            LOGGER.info(string1+responseNode);
 
         } catch (HttpClientErrorException e) {
             LOGGER.error("post client exception: " + e.getMessage());
@@ -121,7 +123,7 @@ public class RestService {
         try {
             ResponseEntity<Object> response = retryTemplate.getForEntity(uri, headerEntity);
             responseNode = new ObjectMapper().convertValue(response.getBody(), JsonNode.class);
-            LOGGER.info("RestTemplate response :- "+responseNode);
+            LOGGER.info(string1+responseNode);
 
         } catch (HttpClientErrorException e) {
             LOGGER.error("get client exception: " + e.getMessage());

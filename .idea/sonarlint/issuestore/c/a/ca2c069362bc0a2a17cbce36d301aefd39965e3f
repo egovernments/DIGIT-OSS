@@ -1,0 +1,15 @@
+
+G
+java:S16029",Remove useless curly braces around statement(ý’Ñðüÿÿÿÿ
+G
+java:S1602?",Remove useless curly braces around statement(ý’Ñðüÿÿÿÿ
+Z
+java:S1854i"?Remove this useless assignment to local variable "requestInfo".(á¶ëƒýÿÿÿÿ
+K
+java:S1481i"0Remove this unused "requestInfo" local variable.(á¶ëƒýÿÿÿÿ
+z
+java:S1488Õ"cImmediately return this expression instead of assigning it to the temporary variable "idToUserMap".(Æ‡’’
+f
+java:S2259S"PA "NullPointerException" could be thrown; "userDetailResponse" is nullable here.(Ó“¦Í
+k
+java:S2259o"PA "NullPointerException" could be thrown; "userDetailResponse" is nullable here.(À€“¼üÿÿÿÿ

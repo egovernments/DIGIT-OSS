@@ -1,0 +1,8 @@
+
+`	java:S112P"FDefine and throw a dedicated exception instead of using a generic one.(Öð‚Òøÿÿÿÿ
+H
+java:S2885"-Make "amdDateFormatter" an instance variable.(Ü°™Óýÿÿÿÿ
+V	java:S125"<This block of commented-out lines of code should be removed.(ŒŒÕÿÿÿÿÿ
+S	java:S106b"9Replace this use of System.out or System.err by a logger.(ÊŒòúøÿÿÿÿ
+S	java:S106c"9Replace this use of System.out or System.err by a logger.(ü”Õ£ýÿÿÿÿ
+k	java:S117K"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÎòÃÕüÿÿÿÿ

@@ -1,0 +1,17 @@
+
+G
+java:S1602n",Remove useless curly braces around statement(€­±¡ıÿÿÿÿ
+[
+java:S1854‰"?Remove this useless assignment to local variable "requestInfo".(¾¹şşÿÿÿÿ
+Q
+java:S6213…":Rename this variable to not match a restricted identifier.(ÛÚµô
+N
+java:S1135†"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+L
+java:S1481‰"0Remove this unused "requestInfo" local variable.(¾¹şşÿÿÿÿ
+Y	java:S125Œ"<This block of commented-out lines of code should be removed.(Ï›¿¯8ôŠ€ÿÖ/
+z
+java:S1319…"cThe type of "record" should be an interface such as "Map" rather than the implementation "HashMap".(ÛÚµô
+f	java:S117z"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¿—ËŞ
+{
+java:S1488e"`Immediately return this expression instead of assigning it to the temporary variable "challans".(äØ·¢ûÿÿÿÿ

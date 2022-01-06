@@ -59,6 +59,8 @@ import lombok.Setter;
 @NoArgsConstructor
 
 @JsonPropertyOrder({ "id", "name", "code", "identifier", "level", "parentId", "isParent", "active" })
+
+//none of them is used
 public class FundContract extends AuditableContract {
 
 	private Long id;

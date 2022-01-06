@@ -22,6 +22,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
+//class variables are not used
 public class DeactivationDetails {
 	
 	private String id;

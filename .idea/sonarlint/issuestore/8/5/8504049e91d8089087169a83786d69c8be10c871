@@ -1,0 +1,49 @@
+
+Z
+java:S1854j"?Remove this useless assignment to local variable "assignments".(Şşàşÿÿÿÿ
+X
+java:S1854‹"ARemove this useless assignment to local variable "jurisdictions".(˜ğ­µ
+C
+java:S1125’"'Remove the unnecessary boolean literal.(Ìñšİùÿÿÿÿ
+C
+java:S1125š"'Remove the unnecessary boolean literal.(å©ãúÿÿÿÿ
+[
+java:S1854®"DRemove this useless assignment to local variable "educationDetails".(ÇûäÊ
+>
+java:S1125´"'Remove the unnecessary boolean literal.(áÌ¤ˆ
+C
+java:S1125»"'Remove the unnecessary boolean literal.(‰·¾€ıÿÿÿÿ
+P
+java:S1854Ï"9Remove this useless assignment to local variable "tests".(µÑÙ›
+>
+java:S1125Ö"'Remove the unnecessary boolean literal.(Î¬ªï
+C
+java:S1125İ"'Remove the unnecessary boolean literal.(Œ“¹—şÿÿÿÿ
+W
+java:S1854ñ";Remove this useless assignment to local variable "history".(ÍÑôÁıÿÿÿÿ
+Y
+java:S1854’"=Remove this useless assignment to local variable "documents".(¼’¤ıÿÿÿÿ
+\
+java:S1854²"@Remove this useless assignment to local variable "deactDetails".(ê ôÌüÿÿÿÿ
+W
+java:S1854Ï"@Remove this useless assignment to local variable "reactDetails".(÷¿º
+t
+java:S2293l"YReplace the type specification in this constructor call with the diamond operator ("<>").(î‹®Âøÿÿÿÿ
+p
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(—Ò¥
+p
+java:S2293°"YReplace the type specification in this constructor call with the diamond operator ("<>").(Õàßˆ
+u
+java:S2293Ñ"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ú¢İÇÿÿÿÿÿ
+p
+java:S2293ó"YReplace the type specification in this constructor call with the diamond operator ("<>").(¿†’Œ
+o
+java:S2293”"YReplace the type specification in this constructor call with the diamond operator ("<>").(ŠÅÊ)
+p
+java:S2293´"YReplace the type specification in this constructor call with the diamond operator ("<>").(ç¥‰•
+u
+java:S2293Ñ"YReplace the type specification in this constructor call with the diamond operator ("<>").(îÍ™ùÿÿÿÿ
+F
+java:S1066º"/Merge this if statement with the enclosing one.(×”¨Á
+F
+java:S1066×"/Merge this if statement with the enclosing one.(® Éğ

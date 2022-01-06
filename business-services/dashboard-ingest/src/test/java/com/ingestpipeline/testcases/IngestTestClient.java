@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.springframework.web.client.RestTemplate;
+import org.slf4j.Logger;
  
 
 public class IngestTestClient {
@@ -13,8 +14,6 @@ public class IngestTestClient {
     /* GET */
     @SuppressWarnings("unchecked")
     private static void listAllUsers(){
-        System.out.println("Testing listAllUsers API-----------");
-         
         RestTemplate restTemplate = new RestTemplate();
         List<LinkedHashMap<String, Object>> usersMap = restTemplate.getForObject(REST_SERVICE_URI+"/user/", List.class);
          
@@ -23,13 +22,12 @@ public class IngestTestClient {
                 System.out.println("User : id="+map.get("id")+", Name="+map.get("name")+", Age="+map.get("age")+", Salary="+map.get("salary"));;
             }
         }else{
-            System.out.println("No user exist----------");
+            Logger("No user exist----------");
         }
     }
      
     /* DELETE */
     private static void deleteUser() {
-        System.out.println("Testing delete User API----------");
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.delete(REST_SERVICE_URI+"/user/3");
     }
@@ -37,7 +35,6 @@ public class IngestTestClient {
  
     /* DELETE */
     private static void deleteAllUsers() {
-        System.out.println("Testing all delete Users API----------");
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.delete(REST_SERVICE_URI+"/user/");
     }

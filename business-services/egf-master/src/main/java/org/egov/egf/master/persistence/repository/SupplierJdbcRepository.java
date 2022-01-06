@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 public class SupplierJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(SupplierJdbcRepository.class);
 
+	private String string1=" and ";
+
 	static {
 		LOG.debug("init supplier");
 		init(SupplierEntity.class);
@@ -69,112 +71,112 @@ public class SupplierJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
 	        if (supplierSearchEntity.getTenantId() != null) {
 	                if (params.length() > 0) {
-	                    params.append(" and ");
+	                    params.append(string1);
 	                }
 	                params.append("tenantId =:tenantId");
 	                paramValues.put("tenantId", supplierSearchEntity.getTenantId());
 	        }
 		if (supplierSearchEntity.getId() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("id =:id");
 			paramValues.put("id", supplierSearchEntity.getId());
 		}
 		if (supplierSearchEntity.getIds() != null) {
                           if (params.length() > 0) {
-                                  params.append(" and ");
+                                  params.append(string1);
                           }
                           params.append("id in(:ids) ");
                           paramValues.put("ids", new ArrayList<String>(Arrays.asList(supplierSearchEntity.getIds().split(","))));
                 }
 		if (supplierSearchEntity.getCode() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("code =:code");
 			paramValues.put("code", supplierSearchEntity.getCode());
 		}
 		if (supplierSearchEntity.getName() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("name =:name");
 			paramValues.put("name", supplierSearchEntity.getName());
 		}
 		if (supplierSearchEntity.getAddress() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("address =:address");
 			paramValues.put("address", supplierSearchEntity.getAddress());
 		}
 		if (supplierSearchEntity.getMobile() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("mobile =:mobile");
 			paramValues.put("mobile", supplierSearchEntity.getMobile());
 		}
 		if (supplierSearchEntity.getEmail() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("email =:email");
 			paramValues.put("email", supplierSearchEntity.getEmail());
 		}
 		if (supplierSearchEntity.getDescription() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("description =:description");
 			paramValues.put("description", supplierSearchEntity.getDescription());
 		}
 		if (supplierSearchEntity.getActive() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("active =:active");
 			paramValues.put("active", supplierSearchEntity.getActive());
 		}
 		if (supplierSearchEntity.getPanNo() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("panNo =:panNo");
 			paramValues.put("panNo", supplierSearchEntity.getPanNo());
 		}
 		if (supplierSearchEntity.getTinNo() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("tinNo =:tinNo");
 			paramValues.put("tinNo", supplierSearchEntity.getTinNo());
 		}
 		if (supplierSearchEntity.getRegistationNo() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("registationNo =:registationNo");
 			paramValues.put("registationNo", supplierSearchEntity.getRegistationNo());
 		}
 		if (supplierSearchEntity.getBankAccountId() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("bankAccountId =:bankAccount");
 			paramValues.put("bankAccount", supplierSearchEntity.getBankAccountId());
 		}
 		if (supplierSearchEntity.getIfscCode() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("ifscCode =:ifscCode");
 			paramValues.put("ifscCode", supplierSearchEntity.getIfscCode());
 		}
 		if (supplierSearchEntity.getBankId() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("bankId =:bank");
 			paramValues.put("bank", supplierSearchEntity.getBankId());

@@ -53,6 +53,7 @@ import java.util.List;
 @NoArgsConstructor
 public class BankAccountResponse {
 
+//    not used
     private ResponseInfo responseInfo;
 
     private List<BankAccount> bankAccounts;

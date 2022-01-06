@@ -1,0 +1,9 @@
+
+u
+java:S11497"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(™šªÚ
+g
+java:S37760"RRefactor this method to reduce its Cognitive Complexity from 27 to the 15 allowed.(­‰ØY
+j
+java:S1858"N"searchQuery" is already a string, there's no need to call "toString()" on it.(›‘“¨øÿÿÿÿ
+`
+java:S3973"IUse indentation to denote the code conditionally executed by this "else".(ÔÍØ

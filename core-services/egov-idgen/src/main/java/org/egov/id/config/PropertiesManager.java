@@ -16,6 +16,8 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @SuppressWarnings("unused")
+
+//none of them is used
 public class PropertiesManager {
 
 	@Autowired

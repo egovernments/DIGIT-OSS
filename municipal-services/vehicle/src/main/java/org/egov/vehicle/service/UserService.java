@@ -60,6 +60,11 @@ public class UserService {
 	@Autowired
 	private Constants constants;
 
+	private String string1="IllegalArgumentException";
+
+	private String string2="lastModifiedDate";
+
+	private String string3="pwdExpiryDate";
 	/**
 	 * 
 	 * @param vendorRequest
@@ -204,7 +209,7 @@ public class UserService {
 			UserDetailResponse userDetailResponse = mapper.convertValue(responseMap, UserDetailResponse.class);
 			return userDetailResponse;
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in userCall");
+			throw new CustomException(string1, "ObjectMapper not able to convertValue in userCall");
 		}
 	}
 	/**
@@ -254,7 +259,7 @@ public class UserService {
 			}
 			return newOwner;
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("IllegalArgumentException",
+			throw new CustomException(string1,
 					"ObjectMapper not able to convertValue in create vendor owner");
 		}
 	}
@@ -344,7 +349,7 @@ public class UserService {
 			UserDetailResponse ownerDetailResponse = mapper.convertValue(responseMap, UserDetailResponse.class);
 			return ownerDetailResponse;
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in ownerCall");
+			throw new CustomException(string1, "ObjectMapper not able to convertValue in ownerCall");
 		}
 
 	}
@@ -356,12 +361,12 @@ public class UserService {
 		if (owners != null) {
 			owners.forEach(map -> {
 				map.put("createdDate", dateTolong((String) map.get("createdDate"), format1));
-				if ((String) map.get("lastModifiedDate") != null)
-					map.put("lastModifiedDate", dateTolong((String) map.get("lastModifiedDate"), format1));
+				if ((String) map.get(string2) != null)
+					map.put(string2, dateTolong((String) map.get(string2), format1));
 				if ((String) map.get("dob") != null)
 					map.put("dob", dateTolong((String) map.get("dob"), dobFormat));
-				if ((String) map.get("pwdExpiryDate") != null)
-					map.put("pwdExpiryDate", dateTolong((String) map.get("pwdExpiryDate"), format1));
+				if ((String) map.get(string3) != null)
+					map.put(string3, dateTolong((String) map.get(string3), format1));
 			});
 		}
 	}

@@ -23,6 +23,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Setter
 @ToString
+//id,auditdetails and isactive is not used
 public class Jurisdiction {
 
     private String id;

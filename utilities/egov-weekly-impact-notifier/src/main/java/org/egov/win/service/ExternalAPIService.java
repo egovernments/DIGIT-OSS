@@ -48,7 +48,6 @@ public class ExternalAPIService {
 		} catch (Exception e) {
 			throw new CustomException("EMAILER_DATA_RETREIVAL_FAILED", "Failed to retrieve data from the db");
 		}
-		System.out.println("data for: "+ defName+ " is"+data);
 		return data;
 
 	}

@@ -1,0 +1,11 @@
+
+`	java:S1120"FDefine and throw a dedicated exception instead of using a generic one.(‚ëô¡þÿÿÿÿ
+c	java:S100^"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Êÿ²Ž
+b	java:S100g"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÜšñK
+h	java:S100r"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‡–õ’ÿÿÿÿÿ
+b	java:S100}"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ñ»êE
+d	java:S100‡"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ûòÍ‹
+B
+java:S3599™",Use another way to initialize this instance.(ñËüd
+u
+java:S1171š"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ

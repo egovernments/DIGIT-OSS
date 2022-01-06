@@ -53,6 +53,14 @@ public class RecoveryRepositoryTest {
 
     private RequestInfo requestInfo = new RequestInfo();
 
+    private String string1="30492234547";
+
+    private String string2="ritesh";
+
+    private String string3="default";
+
+
+
     @Before
     public void setup() {
         recoveryRepositoryWithKafka = new RecoveryRepository(recoveryQueueRepository, financialConfigurationService, "yes", recoveryJdbcRepository,
@@ -186,8 +194,8 @@ public class RecoveryRepositoryTest {
     }
 
     private RecoveryContract getRecoveryContract() {
-        return RecoveryContract.builder().id("1").name("name").code("code").type("M").accountNumber("30492234547").active(true).
-                remittanceMode('M').remitted("ritesh").build();
+        return RecoveryContract.builder().id("1").name("name").code("code").type("M").accountNumber(string1).active(true).
+                remittanceMode('M').remitted(string2 ).build();
     }
 
     private RecoveryEntity getRecoveryEntity() {
@@ -212,10 +220,10 @@ public class RecoveryRepositoryTest {
         recovery.setName("name");
         recovery.setActive(true);
         recovery.setType("M");
-        recovery.setAccountNumber("30492234547");
+        recovery.setAccountNumber(string1);
         recovery.setRemittanceMode('M');
-        recovery.setRemitted("ritesh");
-        recovery.setTenantId("default");
+        recovery.setRemitted(string2);
+        recovery.setTenantId(string3 );
         return recovery;
     }
 
@@ -250,9 +258,9 @@ public class RecoveryRepositoryTest {
 
     private List<Recovery> getRecoverys() {
         List<Recovery> recoverys = new ArrayList<Recovery>();
-        Recovery recovery = Recovery.builder().id("1").name("name").code("code").type("M").accountNumber("30492234547").active(true).
-                remittanceMode('M').remitted("ritesh").build();
-        recovery.setTenantId("default");
+        Recovery recovery = Recovery.builder().id("1").name("name").code("code").type("M").accountNumber(string1).active(true).
+                remittanceMode('M').remitted(string2).build();
+        recovery.setTenantId(string3);
         recovery.setChartOfAccount(getChartOfAccount());
         recoverys.add(recovery);
         return recoverys;
@@ -272,7 +280,7 @@ public class RecoveryRepositoryTest {
                 .description("description").isActiveForPosting(true)
                 .type('A').classification((long) 123456)
                 .functionRequired(true).budgetCheckRequired(true).build();
-        chartOfAccount.setTenantId("default");
+        chartOfAccount.setTenantId(string3);
         return chartOfAccount;
     }
 }

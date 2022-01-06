@@ -1,0 +1,17 @@
+
+P	java:S125U"<This block of commented-out lines of code should be removed.(ö É	
+P	java:S125f"<This block of commented-out lines of code should be removed.(ö É	
+R
+java:S1144R"<Remove this unused private "getTaxHeadMasterRequest" method.(ÊÁìâ
+T
+java:S1144c">Remove this unused private "getBusinessServiceRequest" method.(·õÜ†
+y
+java:S1488*"^Immediately return this expression instead of assigning it to the temporary variable "result".(£¶»¤úÿÿÿÿ
+}
+java:S1488="gImmediately return this expression instead of assigning it to the temporary variable "mdmsCriteriaReq".(Á²²È
+
+java:S1488W"dImmediately return this expression instead of assigning it to the temporary variable "tlModuleDtls".(¨Éˆñùÿÿÿÿ
+
+java:S1488h"dImmediately return this expression instead of assigning it to the temporary variable "tlModuleDtls".(¨Éˆñùÿÿÿÿ
+
+java:S1488~"dImmediately return this expression instead of assigning it to the temporary variable "tlModuleDtls".(¨Éˆñùÿÿÿÿ

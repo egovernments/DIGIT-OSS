@@ -72,6 +72,8 @@ public class PaymentValidator {
     
     private ServiceRequestRepository serviceRequestRepository;
 
+    private String string1="INVALID_PAYMENTDETAIL";
+
 
     @Autowired
     public PaymentValidator(PaymentRepository paymentRepository, PaymentWorkflowService paymentWorkflowService,
@@ -372,7 +374,7 @@ public class PaymentValidator {
 
         // Total amount to be paid should be same in bill and paymentDetail
         if (paymentDetail.getTotalDue().compareTo(bill.getTotalAmount()) != 0)
-            errorMap.put("INVALID_PAYMENTDETAIL",
+            errorMap.put(string1 ,
                     "The amount to be paid is mismatching with bill for paymentDetial with bill id: " + bill.getId());
 
 
@@ -383,34 +385,34 @@ public class PaymentValidator {
         // Amount to be paid should be greater than minimum collection amount
         if (bill.getMinimumAmountToBePaid() != null
                 && paymentDetail.getTotalAmountPaid().compareTo(bill.getMinimumAmountToBePaid()) == -1)
-            errorMap.put("INVALID_PAYMENTDETAIL",
+            errorMap.put(string1 ,
                     "The amount to be paid cannot be less than minimum amount to be paid");
 
         // In case of partial payment checks if it is allowed in bill
         if ((bill.getPartPaymentAllowed() == null || !bill.getPartPaymentAllowed())
                 && paymentDetail.getTotalAmountPaid().compareTo(bill.getTotalAmount()) == -1)
-            errorMap.put("INVALID_PAYMENTDETAIL", "The amount to be paid is less than amount due");
+            errorMap.put(string1 , "The amount to be paid is less than amount due");
 
         // In case of advance payment checks if it is allowed in bill
         if ((bill.getIsAdvanceAllowed() == null || !bill.getIsAdvanceAllowed())
                 && paymentDetail.getTotalAmountPaid().compareTo(bill.getTotalAmount()) == 1)
-            errorMap.put("INVALID_PAYMENTDETAIL", "The amount to be paid is more than amount due");
+            errorMap.put(string1 , "The amount to be paid is more than amount due");
 
         // Checks if the payment mode is allowed by the bill
         if (!CollectionUtils.isEmpty(bill.getCollectionModesNotAllowed())
                 && bill.getCollectionModesNotAllowed().contains(paymentMode))
-            errorMap.put("INVALID_PAYMENTDETAIL",
+            errorMap.put(string1 ,
                     "The paymentMode: " + paymentMode + " is not allowed for the bill: " + bill.getId());
 
         // Checks if the amount paid is positive integer
         if (!Utils.isPositiveInteger(paymentDetail.getTotalAmountPaid()))
-            errorMap.put("INVALID_PAYMENTDETAIL",
+            errorMap.put(string1 ,
                     "The amount paid for the paymentDetail with bill number: " + paymentDetail.getBillId());
 
         // Zero amount payment is allowed only if bill amount is not positive
         if (paymentDetail.getTotalAmountPaid().compareTo(BigDecimal.ZERO) == 0
                 && bill.getTotalAmount().compareTo(BigDecimal.ZERO) > 0)
-            errorMap.put("INVALID_PAYMENTDETAIL",
+            errorMap.put(string1 ,
                     "The amount paid for the paymentDetail with bill number: " + paymentDetail.getBillId());
 
         // Checks if the amount to be paid is fractional
@@ -419,7 +421,7 @@ public class PaymentValidator {
 
         // Checks if the amount paid is fractional
         if ((paymentDetail.getTotalAmountPaid().remainder(BigDecimal.ONE)).doubleValue() != 0)
-            errorMap.put("INVALID_PAYMENTDETAIL", "The amount paid cannot be fractional");
+            errorMap.put(string1, "The amount paid cannot be fractional");
 
         // Checks if the bill is expired
         bill.getBillDetails().forEach(billDetail -> {

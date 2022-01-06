@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PGRCustomIndexConsumerConfig implements ApplicationRunner {
 
-	public static KafkaMessageListenerContainer<String, String> kafkContainer;
+	private KafkaMessageListenerContainer<String, String> kafkContainer;
 	
 	@Value("${spring.kafka.bootstrap.servers}")
     private String brokerAddress;
@@ -68,7 +68,8 @@ public class PGRCustomIndexConsumerConfig implements ApplicationRunner {
     
     @Autowired
     private PGRCustomIndexMessageListener indexerMessageListener;
-    
+
+//	USED LOCALLY..NO NEED TO DECLARE AS PUBLIC
     public String[] topics = {};
     
      

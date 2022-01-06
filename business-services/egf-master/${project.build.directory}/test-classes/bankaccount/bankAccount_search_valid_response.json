@@ -1,0 +1,18 @@
+    "bankAccounts": [
+        {
+            "id": "1",
+            "bankBranch": {
+                "id": "1"
+            },
+            "chartOfAccount": {
+                "id": "1"
+            },
+            "fund": {
+                "id": "2"
+            },
+            "accountNumber": "0004",
+            "accountType": "test",
+            "active": true,
+            "tenantId": "default"
+        }
+    ]

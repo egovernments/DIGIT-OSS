@@ -46,9 +46,8 @@ public class RecoveryServiceTest {
     private RequestInfo requestInfo = new RequestInfo();
     private List<Recovery> recoverys = new ArrayList<>();
 
-    @Before
-    public void setup() {
-    }
+    private  String string1="default";
+
 
     @Test
     public final void test_create() {
@@ -103,7 +102,7 @@ public class RecoveryServiceTest {
     private List<Recovery> getRecoverys() {
         List<Recovery> recoverys = new ArrayList<Recovery>();
         Recovery recovery = Recovery.builder().name("name").code("code").type("M").mode('M').remittanceMode('M').active(true).build();
-        recovery.setTenantId("default");
+        recovery.setTenantId(string1 );
         recovery.setChartOfAccount(getCOAccount());
         recovery.setRemitted("S");
         recovery.setIfscCode("SBIN0005532");
@@ -116,7 +115,7 @@ public class RecoveryServiceTest {
     private ChartOfAccount getCOAccount() {
         ChartOfAccount chartOfAccount = new ChartOfAccount();
         chartOfAccount.setGlcode("341");
-        chartOfAccount.setTenantId("default");
+        chartOfAccount.setTenantId(string1 );
         return chartOfAccount;
     }
 
@@ -125,7 +124,7 @@ public class RecoveryServiceTest {
         recoverySearch.setPageSize(0);
         recoverySearch.setOffset(0);
         recoverySearch.setSortBy("Sort");
-        recoverySearch.setTenantId("default");
+        recoverySearch.setTenantId(string1 );
         return recoverySearch;
     }
 
@@ -147,7 +146,7 @@ public class RecoveryServiceTest {
                 .description("DefaultDescription").isActiveForPosting(true)
                 .type('B').classification((long) 123456)
                 .functionRequired(true).budgetCheckRequired(true).build();
-        chartOfAccount.setTenantId("default");
+        chartOfAccount.setTenantId(string1 );
         chartOfAccounts.add(chartOfAccount);
         return chartOfAccounts;
     }

@@ -1,0 +1,20 @@
+
+F
+java:S3740œ"/Provide the parametrized type for this generic.(¬¥Âª
+K
+java:S2200²"/Only the sign of the result should be examined.(óËçÜùÿÿÿÿ
+n
+java:S3776é"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(‘”´†ıÿÿÿÿ
+R	java:S125"<This block of commented-out lines of code should be removed.(Ï¾’Ü
+R	java:S125’"<This block of commented-out lines of code should be removed.(°Ü¯Û
+n
+java:S3776¨"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(é»Ù“øÿÿÿÿ
+O	java:S106Ä"9Replace this use of System.out or System.err by a logger.( ÓÉÅ
+R	java:S125Ê"<This block of commented-out lines of code should be removed.(­•¢Ú
+R	java:S125Ï"<This block of commented-out lines of code should be removed.(ç×Â´
+n
+java:S1192…"RDefine a constant instead of duplicating this literal "BILLINGSLAB ERROR" 4 times.(™Áº¬øÿÿÿÿ
+N
+java:S3655÷"7Call "Optional#isPresent()" before accessing the value.(àËûÁ
+N
+java:S3655ó"7Call "Optional#isPresent()" before accessing the value.(ĞöÊ‡

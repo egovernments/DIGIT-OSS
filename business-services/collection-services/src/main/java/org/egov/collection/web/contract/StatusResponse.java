@@ -49,6 +49,9 @@ import org.egov.common.contract.response.ResponseInfo;
 import java.util.List;
 
 @Setter
+
+
+//class not used
 public class StatusResponse {
 
     private String tenantId;

@@ -35,6 +35,36 @@ public class PaymentQueryBuilder {
     @Autowired
     private ApplicationProperties config;
 
+    private String string1="tenantid";
+
+    private String string2="instrumentStatus";
+
+    private String string3="ifsccode";
+
+    private String string4="additionaldetails";
+
+    private String string5="payerid";
+
+    private String string6="createdby";
+
+    private String string7="createdtime";
+
+    private String string8="lastmodifiedby";
+
+    private String string9="lastmodifiedtime";
+
+    private String string10="receiptnumber";
+
+    private String string11 = "businessservice";
+
+    private String string12 = "billid";
+
+    private String string13 = "manualreceiptnumber";
+
+    private String string14="manualreceiptdate";
+
+    private String string15 = "status";
+
     public static final String SELECT_PAYMENT_SQL = "SELECT py.*,pyd.*," +
             "py.id as py_id,py.tenantId as py_tenantId,py.totalAmountPaid as py_totalAmountPaid,py.createdBy as py_createdBy,py.createdtime as py_createdtime," +
             "py.lastModifiedBy as py_lastModifiedBy,py.lastmodifiedtime as py_lastmodifiedtime,py.additionalDetails as py_additionalDetails," +
@@ -192,7 +222,7 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", payment.getId());
-        sqlParameterSource.addValue("tenantid", payment.getTenantId());
+        sqlParameterSource.addValue(string1, payment.getTenantId());
         sqlParameterSource.addValue("totaldue", payment.getTotalDue());
         sqlParameterSource.addValue("totalamountpaid", payment.getTotalAmountPaid());
         sqlParameterSource.addValue("transactionnumber", payment.getTransactionNumber());
@@ -200,20 +230,20 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("paymentmode", payment.getPaymentMode().toString());
         sqlParameterSource.addValue("instrumentdate", payment.getInstrumentDate());
         sqlParameterSource.addValue("instrumentnumber", payment.getInstrumentNumber());
-        sqlParameterSource.addValue("instrumentStatus", payment.getInstrumentStatus().toString());
-        sqlParameterSource.addValue("ifsccode", payment.getIfscCode());
-        sqlParameterSource.addValue("additionaldetails", getJsonb(payment.getAdditionalDetails()));
+        sqlParameterSource.addValue(string2 , payment.getInstrumentStatus().toString());
+        sqlParameterSource.addValue(string3 , payment.getIfscCode());
+        sqlParameterSource.addValue(string4 , getJsonb(payment.getAdditionalDetails()));
         sqlParameterSource.addValue("paidby", payment.getPaidBy());
         sqlParameterSource.addValue("mobilenumber", payment.getMobileNumber());
         sqlParameterSource.addValue("payername", payment.getPayerName());
         sqlParameterSource.addValue("payeraddress", payment.getPayerAddress());
         sqlParameterSource.addValue("payeremail", payment.getPayerEmail());
-        sqlParameterSource.addValue("payerid", payment.getPayerId());
+        sqlParameterSource.addValue(string5, payment.getPayerId());
         sqlParameterSource.addValue("paymentstatus", payment.getPaymentStatus().toString());
-        sqlParameterSource.addValue("createdby", payment.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createdtime", payment.getAuditDetails().getCreatedTime());
-        sqlParameterSource.addValue("lastmodifiedby", payment.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifiedtime", payment.getAuditDetails().getLastModifiedTime());
+        sqlParameterSource.addValue(string6 , payment.getAuditDetails().getCreatedBy());
+        sqlParameterSource.addValue(string7 , payment.getAuditDetails().getCreatedTime());
+        sqlParameterSource.addValue(string8 , payment.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue(string9 , payment.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
 
@@ -224,22 +254,22 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", paymentDetail.getId());
-        sqlParameterSource.addValue("tenantid", paymentDetail.getTenantId());
+        sqlParameterSource.addValue(string1, paymentDetail.getTenantId());
         sqlParameterSource.addValue("paymentid", paymentId);
         sqlParameterSource.addValue("due", paymentDetail.getTotalDue());
         sqlParameterSource.addValue("amountpaid", paymentDetail.getTotalAmountPaid());
-        sqlParameterSource.addValue("receiptnumber", paymentDetail.getReceiptNumber());
-        sqlParameterSource.addValue("businessservice", paymentDetail.getBusinessService());
-        sqlParameterSource.addValue("billid", paymentDetail.getBillId());
-        sqlParameterSource.addValue("additionaldetails", getJsonb(paymentDetail.getAdditionalDetails()));
+        sqlParameterSource.addValue(string10 , paymentDetail.getReceiptNumber());
+        sqlParameterSource.addValue(string11 , paymentDetail.getBusinessService());
+        sqlParameterSource.addValue(string12 , paymentDetail.getBillId());
+        sqlParameterSource.addValue(string4, getJsonb(paymentDetail.getAdditionalDetails()));
         sqlParameterSource.addValue("receiptdate", paymentDetail.getReceiptDate());
         sqlParameterSource.addValue("receipttype", paymentDetail.getReceiptType());
-        sqlParameterSource.addValue("manualreceiptnumber", paymentDetail.getManualReceiptNumber());
-        sqlParameterSource.addValue("manualreceiptdate", paymentDetail.getManualReceiptDate());
-        sqlParameterSource.addValue("createdby", paymentDetail.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createdtime", paymentDetail.getAuditDetails().getCreatedTime());
-        sqlParameterSource.addValue("lastmodifiedby", paymentDetail.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifiedtime", paymentDetail.getAuditDetails().getLastModifiedTime());
+        sqlParameterSource.addValue(string13 , paymentDetail.getManualReceiptNumber());
+        sqlParameterSource.addValue(string14 , paymentDetail.getManualReceiptDate());
+        sqlParameterSource.addValue(string6 , paymentDetail.getAuditDetails().getCreatedBy());
+        sqlParameterSource.addValue(string7 , paymentDetail.getAuditDetails().getCreatedTime());
+        sqlParameterSource.addValue(string8 , paymentDetail.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue(string9 , paymentDetail.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
 
@@ -252,24 +282,24 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", bill.getId());
-        sqlParameterSource.addValue("status", bill.getStatus().toString());
+        sqlParameterSource.addValue(string15 , bill.getStatus().toString());
         sqlParameterSource.addValue("iscancelled", bill.getIsCancelled());
-        sqlParameterSource.addValue("additionaldetails",getJsonb(bill.getAdditionalDetails()));
-        sqlParameterSource.addValue("tenantid", bill.getTenantId());
+        sqlParameterSource.addValue(string4 ,getJsonb(bill.getAdditionalDetails()));
+        sqlParameterSource.addValue(string1 , bill.getTenantId());
         sqlParameterSource.addValue("collectionmodesnotallowed", StringUtils.join(bill.getCollectionModesNotAllowed(),","));
         sqlParameterSource.addValue("partpaymentallowed", bill.getPartPaymentAllowed());
         sqlParameterSource.addValue("isadvanceallowed", bill.getIsAdvanceAllowed());
         sqlParameterSource.addValue("minimumamounttobepaid", bill.getMinimumAmountToBePaid());
-        sqlParameterSource.addValue("businessservice", bill.getBusinessService());
+        sqlParameterSource.addValue(string11 , bill.getBusinessService());
         sqlParameterSource.addValue("totalamount", bill.getTotalAmount());
         sqlParameterSource.addValue("consumercode", bill.getConsumerCode());
         sqlParameterSource.addValue("billnumber", bill.getBillNumber());
         sqlParameterSource.addValue("billdate", bill.getBillDate());
         sqlParameterSource.addValue("reasonforcancellation", bill.getReasonForCancellation());
-        sqlParameterSource.addValue("createdby", bill.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createdtime", bill.getAuditDetails().getCreatedTime());
-        sqlParameterSource.addValue("lastmodifiedby", bill.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifiedtime", bill.getAuditDetails().getLastModifiedTime());
+        sqlParameterSource.addValue(string6 , bill.getAuditDetails().getCreatedBy());
+        sqlParameterSource.addValue(string7 , bill.getAuditDetails().getCreatedTime());
+        sqlParameterSource.addValue(string8 , bill.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue(string9 , bill.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
     }
@@ -280,19 +310,19 @@ public class PaymentQueryBuilder {
 
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
         sqlParameterSource.addValue("id", billDetail.getId());
-        sqlParameterSource.addValue("tenantid", billDetail.getTenantId());
+        sqlParameterSource.addValue(string1 , billDetail.getTenantId());
         sqlParameterSource.addValue("demandid", billDetail.getDemandId());
-        sqlParameterSource.addValue("billid", billDetail.getBillId());
+        sqlParameterSource.addValue(string12 , billDetail.getBillId());
         sqlParameterSource.addValue("amount", billDetail.getAmount());
         sqlParameterSource.addValue("amountpaid", billDetail.getAmountPaid());
         sqlParameterSource.addValue("fromperiod", billDetail.getFromPeriod());
         sqlParameterSource.addValue("toperiod", billDetail.getToPeriod());
-        sqlParameterSource.addValue("additionaldetails", getJsonb(billDetail.getAdditionalDetails()));
+        sqlParameterSource.addValue(string4 , getJsonb(billDetail.getAdditionalDetails()));
         sqlParameterSource.addValue("channel", billDetail.getChannel());
         sqlParameterSource.addValue("voucherheader", billDetail.getVoucherHeader());
         sqlParameterSource.addValue("boundary", billDetail.getBoundary());
-        sqlParameterSource.addValue("manualreceiptnumber", billDetail.getManualReceiptNumber());
-        sqlParameterSource.addValue("manualreceiptdate", billDetail.getManualReceiptDate());
+        sqlParameterSource.addValue(string13 , billDetail.getManualReceiptNumber());
+        sqlParameterSource.addValue(string14 , billDetail.getManualReceiptDate());
         sqlParameterSource.addValue("collectiontype", billDetail.getCollectionType());
         sqlParameterSource.addValue("billdescription", billDetail.getBillDescription());
         sqlParameterSource.addValue("expirydate", billDetail.getExpiryDate());
@@ -308,7 +338,7 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", billAccountDetail.getId());
-        sqlParameterSource.addValue("tenantid", billAccountDetail.getTenantId());
+        sqlParameterSource.addValue(string1 , billAccountDetail.getTenantId());
         sqlParameterSource.addValue("billdetailid", billAccountDetail.getBillDetailId());
         sqlParameterSource.addValue("demanddetailid", billAccountDetail.getDemandDetailId());
         sqlParameterSource.addValue("order", billAccountDetail.getOrder());
@@ -316,7 +346,7 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("adjustedamount", billAccountDetail.getAdjustedAmount());
         sqlParameterSource.addValue("isactualdemand", billAccountDetail.getIsActualDemand());
         sqlParameterSource.addValue("taxheadcode", billAccountDetail.getTaxHeadCode());
-        sqlParameterSource.addValue("additionaldetails", getJsonb(billAccountDetail.getAdditionalDetails()));
+        sqlParameterSource.addValue(string4 , getJsonb(billAccountDetail.getAdditionalDetails()));
 
         return sqlParameterSource;
     }
@@ -324,8 +354,8 @@ public class PaymentQueryBuilder {
     public String getPaymentCountQuery (String tenantId, String businessService, Map<String, Object> preparedStatementValues) {
     	
     	  StringBuilder selectQuery = new StringBuilder(SELECT_COUNT_PAYMENT_SQL);
-    	  preparedStatementValues.put("businessservice", businessService);
-    	  preparedStatementValues.put("tenantid", tenantId);
+    	  preparedStatementValues.put(string11 , businessService);
+    	  preparedStatementValues.put(string1 , tenantId);
     	  
     	return selectQuery.toString();
     }
@@ -385,11 +415,11 @@ public class PaymentQueryBuilder {
             addClauseIfRequired(preparedStatementValues, selectQuery);
             if(searchCriteria.getTenantId().split("\\.").length > 1) {
                 selectQuery.append(" py_inner.tenantId =:tenantId");
-                preparedStatementValues.put("tenantId", searchCriteria.getTenantId());
+                preparedStatementValues.put(string1 , searchCriteria.getTenantId());
             }
             else {
                 selectQuery.append(" py_inner.tenantId LIKE :tenantId");
-                preparedStatementValues.put("tenantId", searchCriteria.getTenantId() + "%");
+                preparedStatementValues.put(string1 , searchCriteria.getTenantId() + "%");
             }
 
         }
@@ -403,7 +433,7 @@ public class PaymentQueryBuilder {
         if (!CollectionUtils.isEmpty(searchCriteria.getStatus())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
             selectQuery.append(" UPPER(py_inner.paymentstatus) in (:status)");
-            preparedStatementValues.put("status",
+            preparedStatementValues.put(string15 ,
                     searchCriteria.getStatus()
                             .stream()
                             .map(String::toUpperCase)
@@ -414,7 +444,7 @@ public class PaymentQueryBuilder {
         if (!CollectionUtils.isEmpty(searchCriteria.getInstrumentStatus())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
             selectQuery.append(" UPPER(py_inner.instrumentStatus) in (:instrumentStatus)");
-            preparedStatementValues.put("instrumentStatus",
+            preparedStatementValues.put(string2 ,
                     searchCriteria.getInstrumentStatus()
                             .stream()
                             .map(String::toUpperCase)
@@ -466,7 +496,7 @@ public class PaymentQueryBuilder {
         if (!CollectionUtils.isEmpty(searchCriteria.getPayerIds())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
             selectQuery.append(" py_inner.payerid IN (:payerid)  ");
-            preparedStatementValues.put("payerid", searchCriteria.getPayerIds());
+            preparedStatementValues.put(string5, searchCriteria.getPayerIds());
         }
 
         addPaymentDetailWhereClause(selectQuery, preparedStatementValues, searchCriteria);
@@ -511,22 +541,22 @@ public class PaymentQueryBuilder {
         if (!CollectionUtils.isEmpty(searchCriteria.getBusinessServices())) {
             addClauseIfRequired(paymentDetailPreparedStatementValues, paymentDetailQuery);
             paymentDetailQuery.append(" pyd.businessService IN (:businessService)  ");
-            preparedStatementValues.put("businessService", searchCriteria.getBusinessServices());
-            paymentDetailPreparedStatementValues.put("businessService", searchCriteria.getBusinessServices());
+            preparedStatementValues.put(string11 , searchCriteria.getBusinessServices());
+            paymentDetailPreparedStatementValues.put(string11 , searchCriteria.getBusinessServices());
         }
 
         if (!CollectionUtils.isEmpty(searchCriteria.getBillIds())) {
             addClauseIfRequired(paymentDetailPreparedStatementValues, paymentDetailQuery);
             paymentDetailQuery.append(" pyd.billid in (:billid)");
-            preparedStatementValues.put("billid", searchCriteria.getBillIds());
-            paymentDetailPreparedStatementValues.put("billid", searchCriteria.getBillIds());
+            preparedStatementValues.put(string12 , searchCriteria.getBillIds());
+            paymentDetailPreparedStatementValues.put(string12 , searchCriteria.getBillIds());
         }
 
         if (searchCriteria.getReceiptNumbers() != null && !searchCriteria.getReceiptNumbers().isEmpty()) {
             addClauseIfRequired(paymentDetailPreparedStatementValues, paymentDetailQuery);
             paymentDetailQuery.append(" pyd.receiptNumber IN (:receiptnumber)  ");
-            preparedStatementValues.put("receiptnumber", searchCriteria.getReceiptNumbers());
-            paymentDetailPreparedStatementValues.put("receiptnumber", searchCriteria.getReceiptNumbers());
+            preparedStatementValues.put(string10 , searchCriteria.getReceiptNumbers());
+            paymentDetailPreparedStatementValues.put(string10 , searchCriteria.getReceiptNumbers());
         }
 
         if (!paymentDetailPreparedStatementValues.isEmpty()){
@@ -594,13 +624,13 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", bill.getId());
-        sqlParameterSource.addValue("status", bill.getStatus());
+        sqlParameterSource.addValue(string15 , bill.getStatus());
         sqlParameterSource.addValue("iscancelled", bill.getIsCancelled());
-        sqlParameterSource.addValue("additionaldetails", getJsonb(bill.getAdditionalDetails()));
-        sqlParameterSource.addValue("status", bill.getStatus().toString());
+        sqlParameterSource.addValue(string4 , getJsonb(bill.getAdditionalDetails()));
+        sqlParameterSource.addValue(string15 , bill.getStatus().toString());
         sqlParameterSource.addValue("reasonforcancellation", bill.getReasonForCancellation());
-        sqlParameterSource.addValue("lastmodifiedby", bill.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifiedtime", bill.getAuditDetails().getLastModifiedTime());
+        sqlParameterSource.addValue(string8 , bill.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue(string9, bill.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
     }
@@ -610,9 +640,9 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", paymentDetail.getId());
-        sqlParameterSource.addValue("additionaldetails",getJsonb(paymentDetail.getAdditionalDetails()));
-        sqlParameterSource.addValue("lastmodifiedby", paymentDetail.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifiedtime", paymentDetail.getAuditDetails().getLastModifiedTime());
+        sqlParameterSource.addValue(string4 ,getJsonb(paymentDetail.getAdditionalDetails()));
+        sqlParameterSource.addValue(string8 , paymentDetail.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue(string9 , paymentDetail.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
 
@@ -623,11 +653,11 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", payment.getId());
-        sqlParameterSource.addValue("instrumentstatus", payment.getInstrumentStatus().toString());
+        sqlParameterSource.addValue(string2 , payment.getInstrumentStatus().toString());
         sqlParameterSource.addValue("paymentstatus", payment.getPaymentStatus().toString());
-        sqlParameterSource.addValue("additionaldetails", getJsonb(payment.getAdditionalDetails()));
-        sqlParameterSource.addValue("lastmodifiedby", payment.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifiedtime", payment.getAuditDetails().getLastModifiedTime());
+        sqlParameterSource.addValue(string4 , getJsonb(payment.getAdditionalDetails()));
+        sqlParameterSource.addValue(string8 , payment.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue(string9 , payment.getAuditDetails().getLastModifiedTime());
         
         return sqlParameterSource;
 
@@ -645,9 +675,9 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("payeraddress", payment.getPayerAddress());
         sqlParameterSource.addValue("payeremail", payment.getPayerEmail());
         sqlParameterSource.addValue("payername", payment.getPayerName());
-        sqlParameterSource.addValue("additionalDetails", getJsonb(payment.getAdditionalDetails()));
-        sqlParameterSource.addValue("lastmodifiedby", payment.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifiedtime", payment.getAuditDetails().getLastModifiedTime());
+        sqlParameterSource.addValue(string4 , getJsonb(payment.getAdditionalDetails()));
+        sqlParameterSource.addValue(string8 , payment.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue(string9 , payment.getAuditDetails().getLastModifiedTime());
 
 
         return sqlParameterSource;
@@ -659,9 +689,9 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", paymentDetail.getId());
-        sqlParameterSource.addValue("additionalDetails", getJsonb(paymentDetail.getAdditionalDetails()));
-        sqlParameterSource.addValue("lastmodifiedby", paymentDetail.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifiedtime", paymentDetail.getAuditDetails().getLastModifiedTime());
+        sqlParameterSource.addValue(string4 , getJsonb(paymentDetail.getAdditionalDetails()));
+        sqlParameterSource.addValue(string8 , paymentDetail.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue(string9 , paymentDetail.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
 
@@ -673,11 +703,11 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", bill.getId());
-        sqlParameterSource.addValue("additionaldetails", getJsonb(bill.getAdditionalDetails()) );
-        sqlParameterSource.addValue("createdby", bill.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createdtime", bill.getAuditDetails().getCreatedTime());
-        sqlParameterSource.addValue("lastmodifiedby", bill.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifiedtime", bill.getAuditDetails().getLastModifiedTime());
+        sqlParameterSource.addValue(string4 , getJsonb(bill.getAdditionalDetails()) );
+        sqlParameterSource.addValue(string6 , bill.getAuditDetails().getCreatedBy());
+        sqlParameterSource.addValue(string7 , bill.getAuditDetails().getCreatedTime());
+        sqlParameterSource.addValue(string8 , bill.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue(string9 , bill.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
     }
@@ -687,16 +717,16 @@ public class PaymentQueryBuilder {
 
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
         sqlParameterSource.addValue("id", billDetail.getId());
-        sqlParameterSource.addValue("additionaldetails", getJsonb(billDetail.getAdditionalDetails()));
+        sqlParameterSource.addValue(string4 , getJsonb(billDetail.getAdditionalDetails()));
         sqlParameterSource.addValue("voucherheader", billDetail.getVoucherHeader());
-        sqlParameterSource.addValue("manualreceiptnumber", billDetail.getManualReceiptNumber());
-        sqlParameterSource.addValue("manualreceiptdate", billDetail.getManualReceiptDate());
+        sqlParameterSource.addValue(string13 , billDetail.getManualReceiptNumber());
+        sqlParameterSource.addValue(string14 , billDetail.getManualReceiptDate());
         sqlParameterSource.addValue("billdescription", billDetail.getBillDescription());
         sqlParameterSource.addValue("displaymessage", billDetail.getDisplayMessage());
-        sqlParameterSource.addValue("createdby", billDetail.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createdtime", billDetail.getAuditDetails().getCreatedTime());
-        sqlParameterSource.addValue("lastmodifiedby", billDetail.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifiedtime", billDetail.getAuditDetails().getLastModifiedTime());
+        sqlParameterSource.addValue(string6 , billDetail.getAuditDetails().getCreatedBy());
+        sqlParameterSource.addValue(string7 , billDetail.getAuditDetails().getCreatedTime());
+        sqlParameterSource.addValue(string8 , billDetail.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue(string9 , billDetail.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
     }
@@ -727,11 +757,11 @@ public class PaymentQueryBuilder {
             addClauseIfRequired(preparedStatementValues, selectQuery);
             if(searchCriteria.getTenantId().split("\\.").length > 1) {
                 selectQuery.append(" py.tenantId =:tenantId");
-                preparedStatementValues.put("tenantId", searchCriteria.getTenantId());
+                preparedStatementValues.put(string1 , searchCriteria.getTenantId());
             }
             else {
                 selectQuery.append(" py.tenantId LIKE :tenantId");
-                preparedStatementValues.put("tenantId", searchCriteria.getTenantId() + "%");
+                preparedStatementValues.put(string1 , searchCriteria.getTenantId() + "%");
             }
 
         }
@@ -745,7 +775,7 @@ public class PaymentQueryBuilder {
         if (!CollectionUtils.isEmpty(searchCriteria.getStatus())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
             selectQuery.append(" UPPER(py.paymentstatus) in (:status)");
-            preparedStatementValues.put("status",
+            preparedStatementValues.put(string15 ,
                     searchCriteria.getStatus()
                             .stream()
                             .map(String::toUpperCase)
@@ -756,7 +786,7 @@ public class PaymentQueryBuilder {
         if (!CollectionUtils.isEmpty(searchCriteria.getInstrumentStatus())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
             selectQuery.append(" UPPER(py.instrumentStatus) in (:instrumentStatus)");
-            preparedStatementValues.put("instrumentStatus",
+            preparedStatementValues.put(string2 ,
                     searchCriteria.getInstrumentStatus()
                             .stream()
                             .map(String::toUpperCase)
@@ -808,7 +838,7 @@ public class PaymentQueryBuilder {
         if (!CollectionUtils.isEmpty(searchCriteria.getPayerIds())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
             selectQuery.append(" py.payerid IN (:payerid)  ");
-            preparedStatementValues.put("payerid", searchCriteria.getPayerIds());
+            preparedStatementValues.put(string5, searchCriteria.getPayerIds());
         }
 
         addPaymentDetailWhereClause(selectQuery, preparedStatementValues, searchCriteria);
@@ -819,8 +849,8 @@ public class PaymentQueryBuilder {
 
 	public static MapSqlParameterSource getParametersForBankDetailUpdate(JsonNode additionalDetails, String ifsccode) {
 		MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-		sqlParameterSource.addValue("additionaldetails", getJsonb(additionalDetails));
-		sqlParameterSource.addValue("ifsccode", ifsccode);
+		sqlParameterSource.addValue(string4 , getJsonb(additionalDetails));
+		sqlParameterSource.addValue(string3 , ifsccode);
 		return sqlParameterSource;
 
 	}
@@ -831,16 +861,9 @@ public class PaymentQueryBuilder {
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode objectNode = mapper.createObjectNode();
 		objectNode.set("bankDetails", additionalDetails);
-		sqlParameterSource.addValue("additionaldetails", getJsonb(objectNode));
-		sqlParameterSource.addValue("ifsccode", ifsccode);
+		sqlParameterSource.addValue(string4 , getJsonb(objectNode));
+		sqlParameterSource.addValue(string3 , ifsccode);
 		return sqlParameterSource;
 
 	}
-
-
-
-
-
-
-
 }

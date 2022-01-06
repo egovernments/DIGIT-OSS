@@ -1,0 +1,50 @@
+
+F
+java:S3740¶"/Provide the parametrized type for this generic.(Ú›İ
+h
+java:S3776="RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(¾Í„ñ
+N
+java:S1135"2Complete the task associated to this TODO comment.(ØÙ„ùÿÿÿÿ
+n
+java:S3776»"RRefactor this method to reduce its Cognitive Complexity from 28 to the 15 allowed.(Ã¸ª…úÿÿÿÿ
+H
+java:S1602´",Remove useless curly braces around statement(ÄÂÿÿÿÿÿ
+H
+java:S1602Ë",Remove useless curly braces around statement(Ú²»şÿÿÿÿ
+W
+java:S1854İ";Remove this useless assignment to local variable "tripAmt".(œã—õÿÿÿÿÿ
+E
+java:S1905İ")Remove this unnecessary cast to "String".(œã—õÿÿÿÿÿ
+H
+java:S1481İ",Remove this unused "tripAmt" local variable.(œã—õÿÿÿÿÿ
+S
+java:S1854ñ"<Remove this useless assignment to local variable "locality".(Œ±ëü
+D
+java:S1481ñ"-Remove this unused "locality" local variable.(Œ±ëü
+R	java:S125ö"<This block of commented-out lines of code should be removed.(îŠè
+H
+java:S1602€",Remove useless curly braces around statement(¹á¥ºùÿÿÿÿ
+F
+java:S1172—"/Remove this unused method parameter "mdmsData".(²ØÊ‡
+H
+java:S1602š",Remove useless curly braces around statement(ıœ™°ûÿÿÿÿ
+I
+java:S1135¦"2Complete the task associated to this TODO comment.(ÓÏ¾‹
+n
+java:S3776´"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(éÑ‚ïùÿÿÿÿ
+O
+java:S1144—"8Remove this unused private "setFieldsFromSearch" method.(²ØÊ‡
+p
+java:S2293Ø"YReplace the type specification in this constructor call with the diamond operator ("<>").(Â‚÷Œ
+w
+java:S1192™"`Define a constant instead of duplicating this literal "TenantId is mandatory in search" 4 times.(‰Ø¸Ë
+
+java:S1192D"kDefine a constant instead of duplicating this literal "Applicant Name and mobile number mandatory" 3 times.(‡ ãƒ
+‡
+java:S1192é"kDefine a constant instead of duplicating this literal "Search on applicationStatus is not allowed" 3 times.(õ˜‰ùûÿÿÿÿ
+F
+java:S1066é"/Merge this if statement with the enclosing one.(ìª‰ï
+U
+java:S1155¹">Use isEmpty() to check whether the collection is empty or not.(Äêµµ
+U
+java:S1155¹">Use isEmpty() to check whether the collection is empty or not.(Äêµµ

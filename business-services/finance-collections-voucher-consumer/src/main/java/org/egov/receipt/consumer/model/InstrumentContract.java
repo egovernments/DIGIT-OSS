@@ -129,6 +129,7 @@ public class InstrumentContract {
      */
     private FinancialStatus financialStatus;
 
+//    not used
     private String remittanceVoucherId;
 
     /*

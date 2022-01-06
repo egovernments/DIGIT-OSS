@@ -50,6 +50,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
+//class not used
 public class DemandDetailCriteria {
 	
 	@NotNull

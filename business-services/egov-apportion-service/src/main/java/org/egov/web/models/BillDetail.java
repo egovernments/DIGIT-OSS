@@ -33,6 +33,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+//id,amount,amountPaid,toPeriod,FromPeriod,billaccountDetails only used
 public class BillDetail {
 
         @JsonProperty("id")

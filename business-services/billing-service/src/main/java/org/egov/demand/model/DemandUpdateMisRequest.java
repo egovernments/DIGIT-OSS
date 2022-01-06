@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
+//class not used
 public class DemandUpdateMisRequest {
 
 	@NotNull
