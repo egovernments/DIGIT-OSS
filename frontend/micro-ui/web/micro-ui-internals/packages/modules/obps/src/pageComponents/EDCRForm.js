@@ -1,7 +1,7 @@
 import { CardLabel, Dropdown, FormStep, Loader, TextInput, Toast, UploadFile } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { getPattern, stringReplaceAll } from "../utils";
+import { getPattern, stringReplaceAll, sortDropdownNames  } from "../utils";
 
 const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner, isShowToast, isSubmitBtnDisable }) => {
     const { pathname: url } = useLocation();
@@ -45,7 +45,8 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
                 data.i18nKey = `TENANT_TENANTS_${stringReplaceAll(data?.code?.toUpperCase(), ".", "_")}`;
             })
             if (Array.isArray(list?.[0]?.tenants)) list?.[0]?.tenants.reverse();
-            setCitymoduleList(list?.[0]?.tenants);
+            let sortTenants = sortDropdownNames(list?.[0]?.tenants, "code", t)
+            setCitymoduleList(sortTenants);
         }
     }, [citymodules]);
 

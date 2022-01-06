@@ -148,6 +148,7 @@ const OwnerForm1 = (_props) => {
   const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
   const formValue = watch();
   const { errors } = localFormState;
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   
   const selectedCategory = useWatch({control: control, name: "category", defaultValue:""});
@@ -244,7 +245,7 @@ const OwnerForm1 = (_props) => {
 
   const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
   return (
-    <div style={{marginTop:"-50px"}}>
+    <div  style={isMobile?{}:{marginTop:"-50px"}}>
       <div style={{ marginBottom: "16px" }}>
         <div>
         <CardSectionHeader>{t("SERVICEDETAILS")}</CardSectionHeader>
@@ -275,7 +276,7 @@ const OwnerForm1 = (_props) => {
             />
         </LabelFieldPair>
         <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("UC_SERVICE_CATEGORY_LABEL")} * :`}</CardLabel>
+            <CardLabel className={isMobile?"card-label-APK":"card-label-smaller"}>{`${t("UC_SERVICE_CATEGORY_LABEL")} * :`}</CardLabel>
             <Controller
               name="category"
               rules={{ required: t("REQUIRED_FIELD") }}
@@ -371,7 +372,7 @@ const OwnerForm1 = (_props) => {
           {TaxHeadMasterFields && TaxHeadMasterFields.length>0 && TaxHeadMasterFields.map((tax) => 
           <div>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t(stringReplaceAll(tax?.name,".","_"))} * :`}</CardLabel>
+            <CardLabel className={isMobile?"card-label-APK":"card-label-smaller"}>{`${t(stringReplaceAll(tax?.name,".","_"))} * :`}</CardLabel>
             <div className="field">
               <Controller
                 control={control}

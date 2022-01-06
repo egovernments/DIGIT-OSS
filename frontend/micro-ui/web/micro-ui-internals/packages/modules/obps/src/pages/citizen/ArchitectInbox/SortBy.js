@@ -30,7 +30,7 @@ const SortBy = (props) => {
           <div className="heading">
             <div className="filter-label">
             <SortSvg />
-              {t("SORT_BY")}:
+              {t("SORT_BY")}
               <span className="clear-search" onClick={clearAll} style={{ border: "1px solid #e0e0e0", padding: "6px" }}>
                 <svg width="17" height="17" viewBox="0 0 16 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path

@@ -15,6 +15,11 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
   let isopenlink = window.location.href.includes("/openlink/");
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
+  if(isopenlink)  
+  window.onunload = function () {
+    sessionStorage.removeItem("Digit.BUILDING_PERMIT");
+  }
+
   function selectChecked(e) {
     if (isAddressSame == false) {
       setisAddressSame(true);
@@ -47,6 +52,7 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
                   "emailId": formData?.LicneseDetails?.email,
                   "permanentAddress": formData?.LicneseDetails?.PermanentAddress,
                   "correspondenceAddress": Correspondenceaddress,
+                  "pan":formData?.LicneseDetails?.PanNumber,
                   // "permanentPinCode": "143001"
                 }
               ],

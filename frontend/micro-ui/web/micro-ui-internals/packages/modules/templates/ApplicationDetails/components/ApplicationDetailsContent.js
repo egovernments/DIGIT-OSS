@@ -103,31 +103,33 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
               <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>
             ) : (
               <React.Fragment>
-                <CardSectionHeader style={(index == 0 && checkLocation) ? { marginBottom: "16px" } : { marginBottom: "16px", marginTop: "32px" }}>
-                  {isNocLocation ? `${t(detail.title)}:` : t(detail.title)}
+                <CardSectionHeader style={index == 0 && checkLocation ? { marginBottom: "16px" } : { marginBottom: "16px", marginTop: "32px" }}>
+                  {isNocLocation ? `${t(detail.title)}` : t(detail.title)}
                   {detail?.Component ? <detail.Component /> : null}
                 </CardSectionHeader>
               </React.Fragment>
             )}
             {/* TODO, Later will move to classes */}
             <StatusTable style={getTableStyles()}>
-              {detail?.title && !(detail?.title.includes("NOC" )) && detail?.values?.map((value, index) => {
-                if (value.map === true && value.value !== "N/A") {
-                  return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
-                }
-                return (
-                  <Row
-                    key={t(value.title)}
-                    label={(isNocLocation || isBPALocation) ? `${t(value.title)}:` : t(value.title)}
-                    text={value?.skip ? value.value : (getTranslatedValues(value?.value , value?.isNotTranslated) || "N/A")}
-                    last={index === detail?.values?.length - 1}
-                    caption={value.caption}
-                    className="border-none"
-                    // TODO, Later will move to classes
-                    rowContainerStyle={getRowStyles()}
-                  />
-                );
-              })}
+              {detail?.title &&
+                !detail?.title.includes("NOC") &&
+                detail?.values?.map((value, index) => {
+                  if (value.map === true && value.value !== "N/A") {
+                    return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
+                  }
+                  return (
+                    <Row
+                      key={t(value.title)}
+                      label={isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
+                      text={value?.skip ? value.value : getTranslatedValues(value?.value, value?.isNotTranslated) || "N/A"}
+                      last={index === detail?.values?.length - 1}
+                      caption={value.caption}
+                      className="border-none"
+                      // TODO, Later will move to classes
+                      rowContainerStyle={getRowStyles()}
+                    />
+                  );
+                })}
             </StatusTable>
           </div>
           {detail?.belowComponent && <detail.belowComponent />}

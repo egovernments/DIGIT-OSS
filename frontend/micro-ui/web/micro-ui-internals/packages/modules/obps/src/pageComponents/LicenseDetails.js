@@ -22,6 +22,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   let isOpenLinkFlow = window.location.href.includes("openlink");
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
+  if(isOpenLinkFlow)  
+    window.onunload = function () {
+      sessionStorage.removeItem("Digit.BUILDING_PERMIT");
+    }
+  
   const { isLoading, data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
 
   let menu = [];

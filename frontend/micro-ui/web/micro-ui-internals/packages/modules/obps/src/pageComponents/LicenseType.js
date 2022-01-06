@@ -21,6 +21,11 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   let isopenlink = window.location.href.includes("/openlink/");
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
+  if(isopenlink)  
+    window.onunload = function () {
+      sessionStorage.removeItem("Digit.BUILDING_PERMIT");
+    }
+
 
   function getLicenseType() {
     let list = [];

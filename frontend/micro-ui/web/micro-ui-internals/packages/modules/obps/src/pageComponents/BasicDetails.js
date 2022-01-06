@@ -35,7 +35,13 @@ const BasicDetails = ({ formData, onSelect, config }) => {
   }, showToast)
 
   const handleKeyPress = (event) => {
+    if(!scrutinyNumber?.edcrNumber) return;
     if (event.key === "Enter") {
+    if (basicData?.edcrNumber) {
+      let data = basicData;
+      data.entredKey = "Enter"
+      setBasicData(data);
+    }
       setBasicData(null);
       refetch();
       refetchBPASearch()
@@ -47,7 +53,13 @@ const BasicDetails = ({ formData, onSelect, config }) => {
   };
 
   const handleSearch = (event) => {
-    setBasicData(null)
+    if(!scrutinyNumber?.edcrNumber) return;
+    if(basicData?.edcrNumber) {
+      let data = basicData;
+      data.entredKey = "Enter"
+      setBasicData(data);
+    }
+    setBasicData(null);
     refetch();
     refetchBPASearch();
   }
@@ -90,7 +102,7 @@ const BasicDetails = ({ formData, onSelect, config }) => {
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_RISK_TYPE_LABEL`)} text={t(`WF_BPA_${riskType}`)} />
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL`)} text={basicData?.planDetail?.planInformation?.applicantName} />
         </StatusTable>
-        {riskType ? <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={handleSubmit} /> : <Loader/>}
+        {riskType ? <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={handleSubmit} disabled={!scrutinyNumber?.edcrNumber?.length}/> : <Loader/>}
       </Card>
       }
     </div>

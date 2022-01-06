@@ -40,7 +40,7 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
   }
 
   const MenuItem = ({ option, index }) => (
-    <div key={index}>
+    <div key={index} style={isOBPSMultiple ? (index%2 !== 0 ?{background : "#EEEEEE"}:{}):{}}>
       <input
         type="checkbox"
         value={option[optionsKey]}

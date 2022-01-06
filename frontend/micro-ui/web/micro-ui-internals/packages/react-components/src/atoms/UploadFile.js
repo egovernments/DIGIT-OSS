@@ -85,9 +85,13 @@ const UploadFile = (props) => {
   const { t } = useTranslation();
   const inpRef = useRef();
   const [hasFile, setHasFile] = useState(false);
+  const [prevSate, setprevSate] = useState(null);
   let extraStyles = {};
   const handleChange = () => {
-    if (inpRef.current.files[0]) setHasFile(true);
+    if (inpRef.current.files[0])
+    { setHasFile(true);
+      setprevSate(inpRef.current.files[0])
+    }
     else setHasFile(false);
   };
   switch (props.extraStyleName) {
@@ -106,10 +110,19 @@ const UploadFile = (props) => {
     props.onDelete();
   };
 
+  const handleEmpty = () => {
+    if(inpRef.current.files.length <= 0 && prevSate !== null)
+    { inpRef.current.value = "";
+      props.onDelete();
+    }
+  };
+
   if (props.uploadMessage && inpRef.current.value) {
     handleDelete();
     setHasFile(false);
   }
+
+  useEffect(() => handleEmpty(), [inpRef?.current?.files])
 
   useEffect(() => handleChange(), [props.message]);
 

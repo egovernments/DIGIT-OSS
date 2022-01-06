@@ -11,7 +11,7 @@ import { getUniqueItemsFromArray, commonTransform, stringReplaceAll,getPattern, 
 const createConsumerDetails = () => ({
   ConsumerName: "",
   mobileNumber: "",
-  key: Date.now(),
+  // key: Date.now(),
 });
 
 const ConsumerDetails = ({ config, onSelect, userType, formData, setError, formState, clearErrors }) => {
@@ -97,6 +97,7 @@ const OwnerForm1 = (_props) => {
   const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
   const formValue = watch();
   const { errors } = localFormState;
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   
 
@@ -144,7 +145,7 @@ const OwnerForm1 = (_props) => {
         <div>
         <CardSectionHeader>{t("CONSUMERDETAILS")}</CardSectionHeader>
         <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("UC_CONS_NAME_LABEL")} * :`}</CardLabel>
+            <CardLabel className={isMobile?"card-label-APK":"card-label-smaller"}>{`${t("UC_CONS_NAME_LABEL")} * :`}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
@@ -172,7 +173,7 @@ const OwnerForm1 = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.ConsumerName ? errors?.ConsumerName?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("UC_MOBILE_NUMBER")} * :`}</CardLabel>
+            <CardLabel style={{paddingTop:"10px"}} className="card-label-smaller">{`${t("UC_MOBILE_NUMBER")} * :`}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
