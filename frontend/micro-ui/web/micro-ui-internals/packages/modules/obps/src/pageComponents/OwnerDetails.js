@@ -302,6 +302,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                             result.BPA[0].address = result?.BPA?.[0]?.landInfo?.address;
                             result.BPA[0].address.city = formData.address.city;
                             result.BPA[0].address.locality = formData.address.locality;
+                            result.BPA[0].placeName = formData?.address?.placeName;
                             result.BPA[0].data = formData.data;
                             result.BPA[0].BlockIds = getBlockIds(result.BPA[0].landInfo.unit);
                             result.BPA[0].subOccupancy= formData?.subOccupancy;

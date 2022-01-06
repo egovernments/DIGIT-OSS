@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import GIS from "./GIS";
 import Timeline from "../components/Timeline";
+import { stringReplaceAll } from "../utils";
 
 const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner, isShowToast }) => {
   let currCity = JSON.parse(sessionStorage.getItem("currentCity")) || { };
@@ -20,7 +21,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city  || currCity || null);
   const [street, setStreet] = useState(formData?.address?.street || "");
   const [landmark, setLandmark] = useState(formData?.address?.landmark || formData?.address?.Landmark || "");
-  const [placeName, setplaceName] = useState(formData?.address?.placeName || "");
+  const [placeName, setplaceName] = useState(formData?.address?.placeName || formData?.placeName || "");
   //const { isLoading, data: citymodules } = Digit.Hooks.obps.useMDMS(stateId, "tenant", ["citymodule"]);
   let [cities, setcitiesopetions] = useState(allCities);
   let validation = { };
@@ -103,7 +104,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
         sessionStorage.setItem("currLocality", JSON.stringify(filteredLocalityList[0]));
       }
     }
-  }, [selectedCity, formData?.pincode, fetchedLocalities, pincode]);
+  }, [selectedCity, formData?.pincode, fetchedLocalities, pincode,geoLocation]);
 
 
   const handleGIS = () => {
@@ -124,6 +125,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
     address.street = street;
     address.Landmark = landmark;
     address.geoLocation = geoLocation;
+    address.placeName = placeName;
     onSelect(config.key, address);
   };
 
@@ -134,6 +136,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
     setgeoLocation(geoLocation);
     setplaceName(placeName);
     setIsOpen(false);
+    setPinerror(null);
   }
   function selectPincode(e) {
     setPinerror(null);
@@ -246,7 +249,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
         onSelect={selectCity}
         t={t}
         isDependent={true}
-        labelKey="TENANT_TENANTS"
+        //labelKey="TENANT_TENANTS"
         disabled={true}
       />}
       {!isOpen && selectedCity && localities && (
@@ -261,7 +264,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
             onSelect={selectLocality}
             t={t}
             isDependent={true}
-            labelKey=""
+            labelKey={`${stringReplaceAll(selectedCity?.code,".","_").toUpperCase()}_REVENUE`}
           //disabled={isEdit}
           />
         </span>
