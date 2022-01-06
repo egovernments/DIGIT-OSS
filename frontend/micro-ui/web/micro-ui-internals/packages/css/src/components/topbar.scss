@@ -95,6 +95,8 @@
 
 .cp {
   cursor: pointer;
+  display: flex;
+  align-items: end;
 }
 .citizen {
   .right {
