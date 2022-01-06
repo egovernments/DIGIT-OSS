@@ -17,7 +17,8 @@ const ScruntinyDetails = ({ scrutinyDetails }) => {
         <StatusTable>
           <div>
             {scrutinyDetails?.values?.map((value, index) => {
-              return <Row className="border-none" textStyle={value?.value === "Paid"?{color:"darkgreen"}:{}} key={`${value.title}`} label={`${t(`${value.title}`)}`} text={getTextValues(value)} labelStyle={value?.isHeader ? {fontSize: "20px"} : {}}/>
+              if (value?.isUnit) return <Row className="border-none" textStyle={value?.value === "Paid"?{color:"darkgreen"}:{}} key={`${value.title}`} label={`${t(`${value.title}`)}`} text={value?.value ? `${getTextValues(value)} ${t(value?.isUnit)}` : t("NA")} labelStyle={value?.isHeader ? {fontSize: "20px"} : {}}/>
+              else return <Row className="border-none" textStyle={value?.value === "Paid"?{color:"darkgreen"}:{}} key={`${value.title}`} label={`${t(`${value.title}`)}`} text={getTextValues(value)} labelStyle={value?.isHeader ? {fontSize: "20px"} : {}}/>
             })}
             {scrutinyDetails?.permit?.map((value,ind) => {
               return <CardLabel style={{fontWeight:"400"}}>{value?.title}</CardLabel>

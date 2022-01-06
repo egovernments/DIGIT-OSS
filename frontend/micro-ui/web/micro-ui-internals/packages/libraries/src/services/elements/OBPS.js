@@ -405,7 +405,7 @@ export const OBPSService = {
       asSectionHeader: true,
       isCommon: true,
       values: [
-        { title: "BPA_BOUNDARY_PLOT_AREA_LABEL", value: `${edcr?.planDetail?.planInformation?.plotArea} sq.ft` || "NA", isNotTranslated: true   },
+        { title: "BPA_BOUNDARY_PLOT_AREA_LABEL", value: `${edcr?.planDetail?.planInformation?.plotArea}`, isNotTranslated: true, isUnit: "BPA_SQ_FT_LABEL" },
         { title: "BPA_PLOT_NUMBER_LABEL", value: edcr?.planDetail?.planInformation?.plotNo || "NA", isNotTranslated: true  },
         { title: "BPA_KHATHA_NUMBER_LABEL", value: edcr?.planDetail?.planInformation?.khataNo || "NA", isNotTranslated: true  },
         { title: "BPA_HOLDING_NUMBER_LABEL", value: BPA?.additionalDetails?.holdingNo || "NA", isNotTranslated: true  },
@@ -436,9 +436,9 @@ export const OBPSService = {
       additionalDetails: {
         values: [
           { title: "BPA_BUILDING_EXTRACT_HEADER", value : " ", isHeader: true},
-          { title: "BPA_BUILTUP_AREA_HEADER", value: edcr?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea || "NA"},
+          { title: "BPA_TOTAL_BUILT_UP_AREA_HEADER", value: edcr?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea, isUnit: "BPA_SQ_MTRS_LABEL"},
           { title: "BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL", value: edcr?.planDetail?.blocks?.[0]?.building?.totalFloors || "NA" },
-          { title: "BPA_HEIGHT_FROM_GROUND_LEVEL", value: edcr?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeigh || "NA" }
+          { title: "BPA_HEIGHT_FROM_GROUND_LEVEL", value: edcr?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeigh ,  isUnit: "BPA_MTRS_LABEL" }
         ],
         scruntinyDetails: []
       }
@@ -451,7 +451,7 @@ export const OBPSService = {
       additionalDetails: {
         values: [
           { title: "BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL", value : " ", isHeader: true},
-          { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr?.planDetail?.planInformation?.demolitionArea ? `${edcr?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : "NA" } 
+          { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr?.planDetail?.planInformation?.demolitionArea, isUnit: "BPA_SQ_MTRS_LABEL" } 
         ],
         scruntinyDetails: []
       }

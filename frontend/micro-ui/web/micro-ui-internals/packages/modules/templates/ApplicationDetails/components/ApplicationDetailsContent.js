@@ -83,13 +83,19 @@ function ApplicationDetailsContent({
 
   const getMainDivStyles = () => {
     if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
-      return { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" };
+      return { lineHeight: "19px", maxWidth: "950px", minWidth: "280px" };
     } else if (checkLocation) {
       return { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" };
     } else {
       return {};
     }
   };
+
+  const getTextValue = (value) => {
+    if (value?.skip) return value.value;
+    else if(value?.isUnit) return value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("N/A");
+    else return value?.value ? getTranslatedValues(value?.value, value?.isNotTranslated) : t("N/A");
+  }
 
   return (
     <Card style={{ position: "relative" }} className={"employeeCard-override"}>
@@ -118,7 +124,7 @@ function ApplicationDetailsContent({
                     <Row
                       key={t(value.title)}
                       label={isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
-                      text={value?.skip ? value.value : getTranslatedValues(value?.value, value?.isNotTranslated) || "N/A"}
+                      text={getTextValue(value)}
                       last={index === detail?.values?.length - 1}
                       caption={value.caption}
                       className="border-none"

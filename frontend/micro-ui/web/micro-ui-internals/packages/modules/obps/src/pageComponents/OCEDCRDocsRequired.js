@@ -22,8 +22,8 @@ const OCEDCRDocsRequired = ({ onSelect, onSkip, config }) => {
     <Fragment>
       <Card>
         <CardHeader>{t(`BPA_OC_NEW_BUILDING_CONSTRUCTION_LABEL`)}</CardHeader>
-        <CitizenInfoLabel text={t(`OBPS_OCEDCR_DOCS_REQUIRED_TIME`)} showInfo={false} />
-        <CardText style={{ color: "#0B0C0C", marginTop: "12px" }}>{t(`OBPS_OCEDCR_BUILDING_PERMIT_DESCRIPTION`)}</CardText>
+        {/* <CitizenInfoLabel text={t(`OBPS_OCEDCR_DOCS_REQUIRED_TIME`)} showInfo={false} /> */}
+        <CardText style={{ color: "#0B0C0C", marginTop: "12px", fontSize: "16px", fontWeight: "400", lineHeight: "24px" }}>{t(`OBPS_OCEDCR_BUILDING_PERMIT_DESCRIPTION`)}</CardText>
         <Fragment>
           {data?.map((doc, index) => (
             <CardLabel style={{ fontWeight: 700 }} key={index}>
