@@ -1,17 +1,60 @@
 .cfPopup{
-    align-items: center;
+    align-items: end;
+}
+
+.cfPopupCard{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 93%;
 }
 
 .cfPopupText{
     text-align: center;
+    margin-bottom: 40px;
+    font-size: 19px;
+    color: #505A5F;
 }
 
 .cfPopupButtonDiv{
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     margin-top: 20px;
+    bottom: 7%;
+    position: absolute;
+    width: 100%;
+    left: 0;
+}
+
+.cfPopupTextButton{
+    width: 150px;
+    color: rgb(244, 119, 56);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .cfPopupButton{
-    width: 90px;
+    width: 150px;
+
+    .submit-bar {
+        width: inherit;
+    }
 }
+
+.cfPopupImage{
+    text-align: center;
+}
+
+.cfPopupClose {
+    position: relative;
+    top: -30%;
+    right: -92%;
+}
+
+@media screen and (max-width : 768px){
+    .cfPopupButtonDiv{
+        left: 0;
+        bottom: 35px;
+    }
+  }

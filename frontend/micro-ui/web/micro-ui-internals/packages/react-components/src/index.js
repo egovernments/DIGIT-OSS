@@ -173,7 +173,8 @@ import {
   FirenocIcon,
   SendIcon,
   GalleryIcon,
-  ArrowIcon
+  ArrowIcon,
+  RatingPopupImage
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -474,6 +475,7 @@ export {
   FirenocIcon,
   SendIcon,
   GalleryIcon,
-  ArrowIcon
+  ArrowIcon,
+  RatingPopupImage
 
 };

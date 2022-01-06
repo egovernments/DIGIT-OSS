@@ -23,18 +23,21 @@ function UserInput(props) {
 
     const handleSubmit = () => {
         let isTextValid = true
+        let itemName = 'textArea'
         if (props.stepDetails.message && props.stepDetails.message.includes('mobile number')) {
+            itemName = 'mobile number'
             if (textData.length !== 10 || !(new RegExp(/^[0-9]*$/).test(textData))) {
                 isTextValid = false
-                setShowToast({ key: true, label: "Please enter 10 digits" })
+                setShowToast({ key: true, label: "Invalid Phone Number. Please enter a new Number and try again." })
                 setTimeout(() => {
                     setShowToast(null)
                 }, 3000);
             }
         } else if (props.stepDetails.message && props.stepDetails.message.includes('Application ID')) {
+            itemName = 'Application ID'
             if (textData.length <= 20 && new RegExp(/^[A-Za-z0-9-]*$/).test(textData)) { } else {
                 isTextValid = false
-                setShowToast({ key: true, label: 'It should be alpha numeric with only allowed hyphen special character and length 20 characters' })
+                setShowToast({ key: true, label: 'Invalid Application ID. Please enter a new Application ID and try again.' })
                 setTimeout(() => {
                     setShowToast(null)
                 }, 4000);
@@ -46,10 +49,11 @@ function UserInput(props) {
                 fileStoreId = fileStoreIds.toString()
             }
             const itemDetails = {
-                key: "1",
+                key: textData,
                 value: textData,
                 type: "button",
-                fileStoreId: fileStoreId
+                fileStoreId: fileStoreId,
+                itemName: itemName
             }
             props.handleSubmit(props.stepDetails, itemDetails)
             console.log(textData)

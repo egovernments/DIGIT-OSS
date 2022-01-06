@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Card, CardHeader, ComplaintIcon, AvailableOptionsList, UserInput, ChatBubble, MultipleSelect, StarRating, ReplyComponent, Accordion, PopUp, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Card, CardHeader, ComplaintIcon, AvailableOptionsList, UserInput, ChatBubble, MultipleSelect, StarRating, ReplyComponent, Accordion, PopUp, SubmitBar, RatingPopupImage, CloseSvg, Close } from "@egovernments/digit-ui-react-components";
 import { accordionData, PLAYSTORE_URL, WEBSOCKET_URL } from "./config";
 
 const CitizenFeedbackHome = ({ parentRoute }) => {
@@ -48,6 +48,19 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
       })
       input = temp
     } else input = itemDetails.key
+    let comments = ''
+    let applicationId = ''
+    let mobileNumber = ''
+    if (itemDetails.itemName && itemDetails.itemName === 'mobile number') {
+      mobileNumber = itemDetails.key
+      input = '1'
+    } else if (itemDetails.itemName && itemDetails.itemName === 'Application ID') {
+      applicationId = itemDetails.key
+      input = '1'
+    } else if (itemDetails.itemName && itemDetails.itemName === 'textArea') {
+      comments = itemDetails.key
+      input = '1'
+    }
     const request = {
       "message": {
         "type": "text",
@@ -58,7 +71,10 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
       },
       "extraInfo": {
         "whatsAppBusinessNumber": "917834811114",
-        "filestoreId": itemDetails.fileStoreId ? itemDetails.fileStoreId : ''
+        "filestoreId": itemDetails.fileStoreId ? itemDetails.fileStoreId : '',
+        "comments": comments,
+        "applicationId": applicationId,
+        "mobileNumber": mobileNumber
       }
     }
     ws.current.send(JSON.stringify(request));
@@ -257,13 +273,15 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
       )}
       {popup && (
         <PopUp className="cfPopup">
-          <Card style={{ height: 'fit-content' }}>
-            <p className="cfPopupText">Would you also like to rate us on playstore/Appstore?</p>
+          <div className="popup-module cfPopupCard">
+            <div className="cfPopupClose" onClick={() => handlePopupClose(false)} ><CloseSvg /></div>
+            <p className="cfPopupText">Would you also like to rate us on Playstore / Appstore?</p>
+            <div className="cfPopupImage"><RatingPopupImage style={{ display: 'inline-block' }} /></div>
             <div className="cfPopupButtonDiv">
+              <div className="cfPopupTextButton" onClick={() => handlePopupClose(false)}>Not Now</div>
               <div className="cfPopupButton" onClick={() => handlePopupClose(true)}><SubmitBar label={"Yes"} /></div>
-              <div className="cfPopupButton" onClick={() => handlePopupClose(false)}><SubmitBar label={"No"} /></div>
             </div>
-          </Card>
+          </div>
         </PopUp>
       )}
     </>
