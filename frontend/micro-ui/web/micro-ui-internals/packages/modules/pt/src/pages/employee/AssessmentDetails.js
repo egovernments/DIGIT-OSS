@@ -116,7 +116,7 @@ const AssessmentDetails = () => {
     history.push(`/digit-ui/employee/payment/collect/PT/${propertyId}`);
   };
 
-  if (ptCalculationEstimateLoading || assessmentLoading) {
+  if (ptCalculationEstimateLoading || assessmentLoading||!applicationDetails?.applicationDetails) {
     return <Loader />;
   }
 

@@ -29,7 +29,7 @@ import PermissionCheck from "./PermissionCheck";
 import BPADocuments from "./BPADocuments";
 import InspectionReport from "./InspectionReport";
 
-function ApplicationDetailsContent({ applicationDetails, workflowDetails, isDataLoading, applicationData, businessService, timelineStatusPrefix,statusAttribute="status" }) {
+function ApplicationDetailsContent({ applicationDetails, workflowDetails, isDataLoading, applicationData, businessService, timelineStatusPrefix,statusAttribute="status" ,showTimeline=true}) {
   const { t } = useTranslation();
 
 
@@ -160,7 +160,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
           )}
         </React.Fragment>
       ))}
-      {workflowDetails?.data?.timeline?.length > 0 && (
+      {showTimeline&&workflowDetails?.data?.timeline?.length > 0 && (
         <React.Fragment>
           <BreakLine />
           {(workflowDetails?.isLoading || isDataLoading) && <Loader />}
