@@ -15,6 +15,8 @@ const renderUnits = (t, denomination) => {
       return `(${t("DSS_LAC")})`;
     case "Cr":
       return `(${t("DSS_CR")})`;
+    default:
+      return null;
   }
 };
 

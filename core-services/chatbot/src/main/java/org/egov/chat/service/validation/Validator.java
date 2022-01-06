@@ -16,9 +16,11 @@ public class Validator {
     @Autowired
     private FixedSetValues fixedSetValues;
 
+    private static final String CONFIG_GET_VALIDATION_REQUIRED = "validationRequired";
+
     public boolean isValid(JsonNode config, EgovChat chatNode) {
         try {
-            if (!(config.get("validationRequired") != null && config.get("validationRequired").asText()
+            if (!(config.get(CONFIG_GET_VALIDATION_REQUIRED) != null && config.get(CONFIG_GET_VALIDATION_REQUIRED).asText()
                     .equalsIgnoreCase("true"))) {
                 chatNode.getMessage().setValid(true);
                 return true;
@@ -29,7 +31,7 @@ public class Validator {
                 return false;
             }
 
-            if (config.get("validationRequired") != null && config.get("validationRequired").asText().equalsIgnoreCase("true")) {
+            if (config.get(CONFIG_GET_VALIDATION_REQUIRED) != null && config.get(CONFIG_GET_VALIDATION_REQUIRED).asText().equalsIgnoreCase("true")) {
                 if (config.get("typeOfValues") != null) {
                     String validatorType = config.get("typeOfValues").asText();
                     if (validatorType.equalsIgnoreCase("FixedSetValues")) {

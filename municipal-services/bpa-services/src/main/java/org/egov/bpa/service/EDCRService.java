@@ -38,6 +38,10 @@ public class EDCRService {
 
 	private BPAConfiguration config;
 
+	private static final String URI_APPEND_TENANT_ID = "tenantId=";
+	private static final String URI_APPEND_EDCR_NUMBER = "edcrNumber=";
+	private static final String ERROR_INVALID_EDCR_NUMBER = " EDCR Number is Invalid";
+
 	@Autowired
 	private MDMSValidator mdmsValidator;
 
@@ -78,8 +82,8 @@ public class EDCRService {
 		}
 		
 		uri.append(config.getGetPlanEndPoint());
-		uri.append("?").append("tenantId=").append(bpa.getTenantId());
-		uri.append("&").append("edcrNumber=").append(edcrNo);
+		uri.append("?").append(URI_APPEND_TENANT_ID).append(bpa.getTenantId());
+		uri.append("&").append(URI_APPEND_EDCR_NUMBER).append(edcrNo);
 		RequestInfo edcrRequestInfo = new RequestInfo();
 		BeanUtils.copyProperties(request.getRequestInfo(), edcrRequestInfo);
 		Map<String, List<String>> masterData = mdmsValidator.getAttributeValues(mdmsData);
@@ -88,7 +92,7 @@ public class EDCRService {
 			responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri,
 					new RequestInfoWrapper(edcrRequestInfo));
 		} catch (ServiceCallException se) {
-			throw new CustomException(BPAErrorConstants.EDCR_ERROR, " EDCR Number is Invalid");
+			throw new CustomException(BPAErrorConstants.EDCR_ERROR, ERROR_INVALID_EDCR_NUMBER);
 		}
 
 		if (CollectionUtils.isEmpty(responseMap))
@@ -178,8 +182,8 @@ public class EDCRService {
 		BPA bpa = bpaRequest.getBPA();
 		StringBuilder uri = new StringBuilder(config.getEdcrHost());
 		uri.append(config.getGetPlanEndPoint());
-		uri.append("?").append("tenantId=").append(bpa.getTenantId());
-		uri.append("&").append("edcrNumber=").append(bpaRequest.getBPA().getEdcrNumber());
+		uri.append("?").append(URI_APPEND_TENANT_ID).append(bpa.getTenantId());
+		uri.append("&").append(URI_APPEND_EDCR_NUMBER).append(bpaRequest.getBPA().getEdcrNumber());
 		RequestInfo edcrRequestInfo = new RequestInfo();
 		BeanUtils.copyProperties(bpaRequest.getRequestInfo(), edcrRequestInfo);
 		LinkedHashMap responseMap = null;
@@ -187,7 +191,7 @@ public class EDCRService {
 			responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri,
 					new RequestInfoWrapper(edcrRequestInfo));
 		} catch (ServiceCallException se) {
-			throw new CustomException(BPAErrorConstants.EDCR_ERROR, " EDCR Number is Invalid");
+			throw new CustomException(BPAErrorConstants.EDCR_ERROR, ERROR_INVALID_EDCR_NUMBER);
 		}
 
 		String jsonString = new JSONObject(responseMap).toString();
@@ -210,8 +214,8 @@ public class EDCRService {
 		StringBuilder uri = new StringBuilder(config.getEdcrHost());
 
 		uri.append(config.getGetPlanEndPoint());
-		uri.append("?").append("tenantId=").append(bpa.getTenantId());
-		uri.append("&").append("edcrNumber=").append(edcrNo);
+		uri.append("?").append(URI_APPEND_TENANT_ID).append(bpa.getTenantId());
+		uri.append("&").append(URI_APPEND_EDCR_NUMBER).append(edcrNo);
 		RequestInfo edcrRequestInfo = new RequestInfo();
 		BeanUtils.copyProperties(requestInfo, edcrRequestInfo);
 		LinkedHashMap responseMap = null;
@@ -219,7 +223,7 @@ public class EDCRService {
 			responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri,
 					new RequestInfoWrapper(edcrRequestInfo));
 		} catch (ServiceCallException se) {
-			throw new CustomException(BPAErrorConstants.EDCR_ERROR, " EDCR Number is Invalid");
+			throw new CustomException(BPAErrorConstants.EDCR_ERROR, ERROR_INVALID_EDCR_NUMBER);
 		}
 
 		if (CollectionUtils.isEmpty(responseMap))
@@ -256,7 +260,7 @@ public class EDCRService {
 
 		StringBuilder uri = new StringBuilder(config.getEdcrHost());
 		uri.append(config.getGetPlanEndPoint());
-		uri.append("?").append("tenantId=").append(searchCriteria.getTenantId());
+		uri.append("?").append(URI_APPEND_TENANT_ID).append(searchCriteria.getTenantId());
 		RequestInfo edcrRequestInfo = new RequestInfo();
 		BeanUtils.copyProperties(requestInfo, edcrRequestInfo);
 		LinkedHashMap responseMap = null;

@@ -108,7 +108,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 @Transactional(readOnly = true)
 public class EdcrRestService {
-    private static final String MSG_UNQ_TRANSACTION_NUMBER = "Transaction Number should be unique";
+    private static final String BUILDING_OC_PLAN_SCRUTINY = "BUILDING_OC_PLAN_SCRUTINY";
+
+	private static final String BUILDING_PLAN_SCRUTINY = "BUILDING_PLAN_SCRUTINY";
+
+	private static final String MSG_UNQ_TRANSACTION_NUMBER = "Transaction Number should be unique";
 
     private static final String REQ_BODY_REQUIRED = "Required request body is missing";
 
@@ -120,7 +124,7 @@ public class EdcrRestService {
 
     private static final String BPA_05 = "BPA-05";
 
-    private static Logger LOG = Logger.getLogger(EdcrApplicationService.class);
+    private static final Logger LOG = Logger.getLogger(EdcrRestService.class);
 
     public static final String FILE_DOWNLOAD_URL = "%s/edcr/rest/dcr/downloadfile";
 
@@ -234,9 +238,9 @@ public class EdcrRestService {
             if (mdmsEnabled != null && mdmsEnabled) {
                 if (ApplicationType.PERMIT.getApplicationTypeVal()
                         .equalsIgnoreCase(edcrApplnDtl.getApplication().getApplicationType().getApplicationTypeVal())) {
-                    edcrDetail.setAppliactionType("BUILDING_PLAN_SCRUTINY");
+                    edcrDetail.setAppliactionType(BUILDING_PLAN_SCRUTINY);
                 } else {
-                    edcrDetail.setAppliactionType("BUILDING_OC_PLAN_SCRUTINY");
+                    edcrDetail.setAppliactionType(BUILDING_OC_PLAN_SCRUTINY);
                 }
             } else
                 edcrDetail.setAppliactionType(applicationType.getApplicationTypeVal());
@@ -346,7 +350,7 @@ public class EdcrRestService {
 
     @SuppressWarnings("unchecked")
     public List<EdcrDetail> fetchEdcr(final EdcrRequest edcrRequest, final RequestInfoWrapper reqInfoWrapper) {
-        List<EdcrApplicationDetail> edcrApplications = new ArrayList<>();
+        List<EdcrApplicationDetail> edcrApplications;
         UserInfo userInfo = reqInfoWrapper.getRequestInfo() == null ? null : reqInfoWrapper.getRequestInfo().getUserInfo();
         String userId = "";
         if (userInfo != null && StringUtils.isNoneBlank(userInfo.getUuid()))
@@ -409,15 +413,17 @@ public class EdcrRestService {
 
                 String appliactionType = edcrRequest.getAppliactionType();
                 if (isNotBlank(appliactionType)) {
-                    ApplicationType applicationType = null;
-                    if ("BUILDING_PLAN_SCRUTINY".equalsIgnoreCase(appliactionType)) {
+                    ApplicationType applicationType;
+                    if (BUILDING_PLAN_SCRUTINY.equalsIgnoreCase(appliactionType)) {
                         applicationType = ApplicationType.PERMIT;
-                    } else if ("BUILDING_OC_PLAN_SCRUTINY".equalsIgnoreCase(appliactionType)) {
+                    } else if (BUILDING_OC_PLAN_SCRUTINY.equalsIgnoreCase(appliactionType)) {
                         applicationType = ApplicationType.OCCUPANCY_CERTIFICATE;
                     } else if ("Permit".equalsIgnoreCase(appliactionType)) {
                         applicationType = ApplicationType.PERMIT;
                     } else if ("Occupancy certificate".equalsIgnoreCase(appliactionType)) {
                         applicationType = ApplicationType.OCCUPANCY_CERTIFICATE;
+                    } else {
+                    	applicationType = ApplicationType.PERMIT;
                     }
                     queryStr.append("and appln.applicationType=:applicationtype ");
                     params.put("applicationtype", applicationType.toString());
@@ -462,9 +468,9 @@ public class EdcrRestService {
 
             if (edcrRequest != null && isNotBlank(appliactionType)) {
                 ApplicationType applicationType = null;
-                if ("BUILDING_PLAN_SCRUTINY".equalsIgnoreCase(appliactionType)) {
+                if (BUILDING_PLAN_SCRUTINY.equalsIgnoreCase(appliactionType)) {
                     applicationType = ApplicationType.PERMIT;
-                } else if ("BUILDING_OC_PLAN_SCRUTINY".equalsIgnoreCase(appliactionType)) {
+                } else if (BUILDING_OC_PLAN_SCRUTINY.equalsIgnoreCase(appliactionType)) {
                     applicationType = ApplicationType.OCCUPANCY_CERTIFICATE;
                 }
                 if ("Permit".equalsIgnoreCase(appliactionType)) {
@@ -686,7 +692,7 @@ public class EdcrRestService {
                 ts = requestInfo.getTs().toString();
             msgId = requestInfo.getMsgId();
         }
-        String responseStatus = success ? "successful" : "failed";
+        String responseStatus = Boolean.TRUE.equals(success) ? "successful" : "failed";
 
         return new ResponseInfo(apiId, ver, ts, resMsgId, msgId, responseStatus);
     }

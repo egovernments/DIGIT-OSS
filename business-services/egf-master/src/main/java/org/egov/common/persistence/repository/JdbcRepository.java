@@ -44,15 +44,13 @@ public abstract class JdbcRepository {
         List<String> updateFields = new ArrayList<>();
         List<String> uniqueFields = new ArrayList<>();
 
-        String insertQuery = "";
         String updateQuery = "";
-        String searchQuery = "";
 
         try {
 
             TABLE_NAME = (String) T.getDeclaredField("TABLE_NAME").get(null);
         } catch (Exception e) {
-
+            LOG.error("Illegal Argument exception occurred: " + e.getMessage());
         }
         insertFields.addAll(fetchFields(T));
         uniqueFields.add("id");
@@ -160,7 +158,6 @@ public abstract class JdbcRepository {
 
     public static String getByIdQuery(String tableName, List<String> uniqueFields) {
         String uQuery = "select * from  :tableName where  :uniqueField ";
-        // StringBuilder fieldNameAndParams = new StringBuilder();
         StringBuilder uniqueFieldNameAndParams = new StringBuilder();
         int i = 0;
 
@@ -232,6 +229,7 @@ public abstract class JdbcRepository {
             try {
                 f = getField(ob, s);
             } catch (Exception e) {
+                LOG.error("No Such field exception occurred: " + e.getMessage());
             }
             /*
              * try { f = ob.getClass().getSuperclass().getDeclaredField(s); } catch (NoSuchFieldException e1) {
@@ -373,7 +371,6 @@ public abstract class JdbcRepository {
 
         String obName = ob.getClass().getSimpleName();
         List<String> identifierFields = allIdentitiferFields.get(obName);
-        List<Map<String, Object>> batchValues = new ArrayList<>();
 
         // batchValues.get(0).putAll(paramValues(ob, allIdentitiferFields.get(obName)));
         Map<String, Object> paramValues = new HashMap<>();
@@ -386,7 +383,6 @@ public abstract class JdbcRepository {
         StringBuffer uniqueQuery = new StringBuffer(
                 "select count(*) as count from " + table + " where " + fieldName + "=:fieldValue");
         paramValues.put("fieldValue", getValue(getField(ob, fieldName), ob));
-        int i = 0;
         for (String s : identifierFields) {
 
             if (s.equalsIgnoreCase("tenantId")) {
@@ -414,7 +410,6 @@ public abstract class JdbcRepository {
 
         String obName = ob.getClass().getSimpleName();
         List<String> identifierFields = allIdentitiferFields.get(obName);
-        List<Map<String, Object>> batchValues = new ArrayList<>();
 
         // batchValues.get(0).putAll(paramValues(ob, allIdentitiferFields.get(obName)));
         Map<String, Object> paramValues = new HashMap<>();
@@ -428,7 +423,6 @@ public abstract class JdbcRepository {
                 + "=:firstFieldValue" + " and " + secondFieldName + "=:secondFieldValue");
         paramValues.put("firstFieldValue", getValue(getField(ob, firstFieldName), ob));
         paramValues.put("secondFieldValue", getValue(getField(ob, secondFieldName), ob));
-        int i = 0;
         for (String s : identifierFields) {
 
             if (s.equalsIgnoreCase("tenantId")) {

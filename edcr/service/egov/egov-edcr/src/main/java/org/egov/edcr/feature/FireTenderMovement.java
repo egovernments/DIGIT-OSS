@@ -53,10 +53,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
+import org.egov.common.entity.edcr.Measurement;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
 import org.egov.common.entity.edcr.ScrutinyDetail;
@@ -65,7 +66,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FireTenderMovement extends FeatureProcess {
-    private static final Logger LOG = Logger.getLogger(FireTenderMovement.class);
     private static final BigDecimal FIFTEEN = BigDecimal.valueOf(15);
     private static final BigDecimal THREE_POINTSIXSIX = BigDecimal.valueOf(3.66);
     private static final String RULE_36_3 = "36-3";
@@ -95,8 +95,9 @@ public class FireTenderMovement extends FeatureProcess {
                 org.egov.common.entity.edcr.FireTenderMovement fireTenderMovement = block.getFireTenderMovement();
                 if (fireTenderMovement != null) {
                     List<BigDecimal> widths = fireTenderMovement.getFireTenderMovements().stream()
-                            .map(fireTenderMovmnt -> fireTenderMovmnt.getWidth()).collect(Collectors.toList());
-                    BigDecimal minWidth = widths.stream().reduce(BigDecimal::min).get();
+                            .map(Measurement::getWidth).collect(Collectors.toList());
+                    Optional<BigDecimal> minWidthh = widths.stream().reduce(BigDecimal::min);
+					BigDecimal minWidth = minWidthh.isPresent() ? minWidthh.get() : BigDecimal.ZERO;
                     BigDecimal providedWidth = minWidth.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS,
                             DcrConstants.ROUNDMODE_MEASUREMENTS);
                     Boolean isAccepted = providedWidth.compareTo(THREE_POINTSIXSIX) >= 0;
@@ -106,12 +107,12 @@ public class FireTenderMovement extends FeatureProcess {
                     details.put(DESCRIPTION, "Width of fire tender movement");
                     details.put(PERMISSIBLE, ">= " + THREE_POINTSIXSIX.toString());
                     details.put(PROVIDED, providedWidth.toString());
-                    details.put(STATUS, isAccepted ? Result.Accepted.getResultVal() : Result.Not_Accepted.getResultVal());
+                    details.put(STATUS, Boolean.TRUE.equals(isAccepted) ? Result.Accepted.getResultVal() : Result.Not_Accepted.getResultVal());
                     scrutinyDetail.getDetail().add(details);
                     plan.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
 
                     if (!fireTenderMovement.getErrors().isEmpty()) {
-                        StringBuffer yardNames = new StringBuffer();
+                        StringBuilder yardNames = new StringBuilder();
 
                         for (String yardName : fireTenderMovement.getErrors()) {
                             yardNames = yardNames.append(yardName).append(", ");

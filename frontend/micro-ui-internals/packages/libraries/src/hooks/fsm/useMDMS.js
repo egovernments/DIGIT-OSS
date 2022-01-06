@@ -107,6 +107,8 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
       return usePreFieldsConfig();
     case "PostFieldsConfig":
       return usePostFieldsConfig();
+    default:
+        return null;
   }
 };
 

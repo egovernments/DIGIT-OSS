@@ -156,7 +156,7 @@ public class JournalBookReportAction extends BaseFormAction {
         prepareResultList();
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("JournalBookAction | list | End");
-        if (journalBookDisplayList.isEmpty() && journalBookDisplayList == null)
+        if (journalBookDisplayList.isEmpty())
         {
             addActionMessage("No records found.");
         }
@@ -224,7 +224,7 @@ public class JournalBookReportAction extends BaseFormAction {
             startDate = sdf.parse(journalBookReport.getStartDate());
             endDate = sdf.parse(journalBookReport.getEndDate());
         } catch (ParseException e) {
-
+            LOGGER.error("Parse exception");
         }
         StringBuilder subQuery = new StringBuilder();
         if (journalBookReport.getFund_id() != null && !journalBookReport.getFund_id().equals("")) {

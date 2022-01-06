@@ -52,8 +52,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Measurement;
@@ -65,11 +65,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class Verandah extends FeatureProcess {
 
-	private static final Logger LOG = Logger.getLogger(Verandah.class);
+	private static final String AT_FLOOR = " at floor ";
 	private static final String RULE_43A = "43A";
 	private static final String RULE_43 = "43";
 
-	public static final String VERANDAH_DESCRIPTION = "Verandah";
+	private static final String VERANDAH_DESCRIPTION = "Verandah";
 
 	@Override
 	public Plan validate(Plan pl) {
@@ -95,10 +95,11 @@ public class Verandah extends FeatureProcess {
 					if (f.getVerandah() != null && f.getVerandah().getMeasurements() != null
 							&& !f.getVerandah().getMeasurements().isEmpty()) {
 
-						BigDecimal minVerandaWidth = f.getVerandah().getMeasurements().stream()
-								.map(Measurement::getWidth).reduce(BigDecimal::min).get();
-						BigDecimal minVerandDepth = f.getVerandah().getHeightOrDepth().stream().reduce(BigDecimal::min)
-								.get();
+						Optional<BigDecimal> varandhWidth = f.getVerandah().getMeasurements().stream()
+										.map(Measurement::getWidth).reduce(BigDecimal::min);
+						BigDecimal minVerandaWidth = varandhWidth.isPresent() ? varandhWidth.get() : BigDecimal.ZERO;
+						Optional<BigDecimal> varandhDepth = f.getVerandah().getHeightOrDepth().stream().reduce(BigDecimal::min);
+						BigDecimal minVerandDepth = varandhDepth.isPresent() ? varandhDepth.get() : BigDecimal.ZERO;
 
 						if (minVerandaWidth.compareTo(BigDecimal.ZERO) > 0) {
 							Map<String, String> details = new HashMap<>();
@@ -107,14 +108,14 @@ public class Verandah extends FeatureProcess {
 
 							if (minVerandaWidth.compareTo(BigDecimal.valueOf(1.8)) >= 0) {
 								details.put(REQUIRED, "Minimum width 1.8m   ");
-								details.put(PROVIDED, "Width area " + minVerandaWidth + " at floor " + f.getNumber());
+								details.put(PROVIDED, "Width area " + minVerandaWidth + AT_FLOOR + f.getNumber());
 								details.put(STATUS, Result.Accepted.getResultVal());
 								scrutinyDetail.getDetail().add(details);
 								pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
 
 							} else {
 								details.put(REQUIRED, "Minimum width 1.8m   ");
-								details.put(PROVIDED, "Width area " + minVerandaWidth + " at floor " + f.getNumber());
+								details.put(PROVIDED, "Width area " + minVerandaWidth + AT_FLOOR + f.getNumber());
 								details.put(STATUS, Result.Not_Accepted.getResultVal());
 								scrutinyDetail.getDetail().add(details);
 								pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
@@ -126,14 +127,14 @@ public class Verandah extends FeatureProcess {
 							details.put(DESCRIPTION, VERANDAH_DESCRIPTION);
 							if (minVerandDepth.compareTo(BigDecimal.valueOf(3.66)) <= 0) {
 								details.put(REQUIRED, "Minimum depth not more than 3.66 m ");
-								details.put(PROVIDED, " Depth area  " + minVerandDepth + " at floor " + f.getNumber());
+								details.put(PROVIDED, " Depth area  " + minVerandDepth + AT_FLOOR + f.getNumber());
 								details.put(STATUS, Result.Accepted.getResultVal());
 								scrutinyDetail.getDetail().add(details);
 								pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
 
 							} else {
 								details.put(REQUIRED, "Minimum depth not more than 3.66 m ");
-								details.put(PROVIDED, " Depth area  " + minVerandDepth + " at floor " + f.getNumber());
+								details.put(PROVIDED, " Depth area  " + minVerandDepth + AT_FLOOR + f.getNumber());
 								details.put(STATUS, Result.Not_Accepted.getResultVal());
 								scrutinyDetail.getDetail().add(details);
 								pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);

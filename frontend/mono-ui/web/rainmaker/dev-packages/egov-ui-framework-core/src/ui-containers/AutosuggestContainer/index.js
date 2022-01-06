@@ -177,7 +177,6 @@ const mapStateToProps = (state, ownprops) => {
   
    }   
 
-  // console.log(value, suggestions);
   return { value, jsonPath, suggestions, localizationLabels, errorText,locale };
 };
 

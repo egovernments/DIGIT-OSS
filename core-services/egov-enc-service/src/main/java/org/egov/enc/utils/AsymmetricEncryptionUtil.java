@@ -20,12 +20,12 @@ public class AsymmetricEncryptionUtil {
     private static String asymmetricEncryptionMethod;
 
     @Autowired
-    public void setAsymmetricEncryptionMethod(@Value("${method.asymmetric}") String method) {
+    public static void setAsymmetricEncryptionMethod(@Value("${method.asymmetric}") String method) {
         asymmetricEncryptionMethod = method;
     }
 
     @Autowired
-    public AsymmetricEncryptionUtil() { init(); }
+    private AsymmetricEncryptionUtil() { init(); }
 
     //Initialize Security Provider to BouncyCastleProvider
     public static void init() {

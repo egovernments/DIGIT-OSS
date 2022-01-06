@@ -168,6 +168,7 @@ public class DayBookReportAction extends BaseFormAction {
             startDate = formatter.parse(dayBookReport.getStartDate());
             endDate = formatter.parse(dayBookReport.getEndDate());
         } catch (ParseException e) {
+        	LOGGER.error("Parse exception");
 
         }
         StringBuilder query = new StringBuilder("SELECT voucherdate as vdate, TO_CHAR(voucherdate, 'dd-Mon-yyyy')  AS  voucherdate, vouchernumber as vouchernumber ,")

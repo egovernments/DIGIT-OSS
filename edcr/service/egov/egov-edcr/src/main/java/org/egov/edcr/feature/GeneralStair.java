@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
@@ -26,7 +27,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GeneralStair extends FeatureProcess {
-    private static final Logger LOG = Logger.getLogger(GeneralStair.class);
+    private static final String IS_TYPICAL_REPITITIVE_FLOOR = "isTypicalRepititiveFloor";
+	private static final String TYPICAL_FLOORS = "typicalFloors";
+	private static final String STAIR = " stair ";
+	private static final String BLOCK2 = "Block_";
+	private static final Logger LOG = Logger.getLogger(GeneralStair.class);
     private static final String FLOOR = "Floor";
     private static final String RULE42_5_II = "42-5-ii";
     private static final String EXPECTED_NO_OF_RISER = "12";
@@ -49,7 +54,7 @@ public class GeneralStair extends FeatureProcess {
     public Plan process(Plan plan) {
         // validate(planDetail);
         HashMap<String, String> errors = new HashMap<>();
-        blk: for (Block block : plan.getBlocks()) {
+        for (Block block : plan.getBlocks()) {
             int generalStairCount = 0;
 
             if (block.getBuilding() != null) {
@@ -64,7 +69,7 @@ public class GeneralStair extends FeatureProcess {
                 scrutinyDetail2.addColumnHeading(4, PERMISSIBLE);
                 scrutinyDetail2.addColumnHeading(5, PROVIDED);
                 scrutinyDetail2.addColumnHeading(6, STATUS);
-                scrutinyDetail2.setKey("Block_" + block.getNumber() + "_" + "General Stair - Width");
+                scrutinyDetail2.setKey(BLOCK2 + block.getNumber() + "_" + "General Stair - Width");
 
                 ScrutinyDetail scrutinyDetail3 = new ScrutinyDetail();
                 scrutinyDetail3.addColumnHeading(1, RULE_NO);
@@ -73,7 +78,7 @@ public class GeneralStair extends FeatureProcess {
                 scrutinyDetail3.addColumnHeading(4, PERMISSIBLE);
                 scrutinyDetail3.addColumnHeading(5, PROVIDED);
                 scrutinyDetail3.addColumnHeading(6, STATUS);
-                scrutinyDetail3.setKey("Block_" + block.getNumber() + "_" + "General Stair - Tread width");
+                scrutinyDetail3.setKey(BLOCK2 + block.getNumber() + "_" + "General Stair - Tread width");
 
                 ScrutinyDetail scrutinyDetailRise = new ScrutinyDetail();
                 scrutinyDetailRise.addColumnHeading(1, RULE_NO);
@@ -82,7 +87,7 @@ public class GeneralStair extends FeatureProcess {
                 scrutinyDetailRise.addColumnHeading(4, PERMISSIBLE);
                 scrutinyDetailRise.addColumnHeading(5, PROVIDED);
                 scrutinyDetailRise.addColumnHeading(6, STATUS);
-                scrutinyDetailRise.setKey("Block_" + block.getNumber() + "_" + "General Stair - Number of risers");
+                scrutinyDetailRise.setKey(BLOCK2 + block.getNumber() + "_" + "General Stair - Number of risers");
 
                 ScrutinyDetail scrutinyDetailLanding = new ScrutinyDetail();
                 scrutinyDetailLanding.addColumnHeading(1, RULE_NO);
@@ -91,7 +96,7 @@ public class GeneralStair extends FeatureProcess {
                 scrutinyDetailLanding.addColumnHeading(4, PERMISSIBLE);
                 scrutinyDetailLanding.addColumnHeading(5, PROVIDED);
                 scrutinyDetailLanding.addColumnHeading(6, STATUS);
-                scrutinyDetailLanding.setKey("Block_" + block.getNumber() + "_" + "General Stair - Mid landing");
+                scrutinyDetailLanding.setKey(BLOCK2 + block.getNumber() + "_" + "General Stair - Mid landing");
 
                 OccupancyTypeHelper mostRestrictiveOccupancyType = block.getBuilding() != null
                         ? block.getBuilding().getMostRestrictiveFarHelper()
@@ -105,7 +110,7 @@ public class GeneralStair extends FeatureProcess {
                 List<String> stairAbsent = new ArrayList<>();
                 // BigDecimal floorSize = block.getBuilding().getFloorsAboveGround();
                 for (Floor floor : floors) {
-                    if (!floor.getTerrace()) {
+                    if (Boolean.FALSE.equals(floor.getTerrace())) {
 
                         boolean isTypicalRepititiveFloor = false;
                         Map<String, Object> typicalFloorValues = Util.getTypicalFloorValues(block, floor,
@@ -132,10 +137,10 @@ public class GeneralStair extends FeatureProcess {
                                         errors.put(
                                                 "General Stair landing not defined in block " + block.getNumber() + " floor "
                                                         + floor.getNumber()
-                                                        + " stair " + generalStair.getNumber(),
+                                                        + STAIR + generalStair.getNumber(),
                                                 "General Stair landing not defined in block " + block.getNumber() + " floor "
                                                         + floor.getNumber()
-                                                        + " stair " + generalStair.getNumber());
+                                                        + STAIR + generalStair.getNumber());
                                         plan.addErrors(errors);
                                     }
 
@@ -176,19 +181,20 @@ public class GeneralStair extends FeatureProcess {
         for (StairLanding landing : landings) {
             List<BigDecimal> widths = landing.getWidths();
             if(!widths.isEmpty()) {
-            BigDecimal landingWidth = widths.stream().reduce(BigDecimal::min).get();
-            BigDecimal minWidth = BigDecimal.ZERO;
+            Optional<BigDecimal> minWidthh = widths.stream().reduce(BigDecimal::min);
+			BigDecimal landingWidth = minWidthh.isPresent() ? minWidthh.get() : BigDecimal.ZERO;
+            BigDecimal minWidth;
             boolean valid = false;
 
-            if (!(Boolean) typicalFloorValues.get("isTypicalRepititiveFloor")) {
+            if (Boolean.FALSE.equals(typicalFloorValues.get(IS_TYPICAL_REPITITIVE_FLOOR))) {
                 minWidth = Util.roundOffTwoDecimal(landingWidth);
                 BigDecimal minimumWidth = getRequiredWidth(block, mostRestrictiveOccupancyType);
 
                 if (minWidth.compareTo(minimumWidth) >= 0) {
                     valid = true;
                 }
-                String value = typicalFloorValues.get("typicalFloors") != null
-                        ? (String) typicalFloorValues.get("typicalFloors")
+                String value = typicalFloorValues.get(TYPICAL_FLOORS) != null
+                        ? (String) typicalFloorValues.get(TYPICAL_FLOORS)
                         : " floor " + floor.getNumber();
 
                 if (valid) {
@@ -211,10 +217,10 @@ public class GeneralStair extends FeatureProcess {
                 errors.put(
                         "General Stair landing width not defined in block " + block.getNumber() + " floor "
                                 + floor.getNumber()
-                                + " stair " + generalStair.getNumber(),
+                                + STAIR + generalStair.getNumber(),
                         "General Stair landing width not defined in block " + block.getNumber() + " floor "
                                 + floor.getNumber()
-                                + " stair " + generalStair.getNumber());
+                                + STAIR + generalStair.getNumber());
                 plan.addErrors(errors);
             }
         }
@@ -237,10 +243,10 @@ public class GeneralStair extends FeatureProcess {
                         block.getNumber(), floor.getNumber(), generalStair.getNumber(),
                         flight.getNumber());
 
-                if (flightPolyLines != null && flightPolyLines.size() > 0) {
-                    if (flightPolyLineClosed) {
-                        if (flightWidths != null && flightWidths.size() > 0) {
-                            minFlightWidth = validateWidth(plan, scrutinyDetail2, floor, block,
+                if (flightPolyLines != null && !flightPolyLines.isEmpty()) {
+                    if (Boolean.TRUE.equals(flightPolyLineClosed)) {
+                        if (flightWidths != null && !flightWidths.isEmpty()) {
+                            validateWidth(plan, scrutinyDetail2, floor, block,
                                     typicalFloorValues, generalStair, flight, flightWidths,
                                     minFlightWidth,
                                     mostRestrictiveOccupancyType);
@@ -256,9 +262,9 @@ public class GeneralStair extends FeatureProcess {
                          * in layer BLK_n_FLR_i_STAIR_k_FLIGHT - number of lines in layer BLK_n_FLR_i_STAIR_k_FLIGHT)
                          */
 
-                        if (flightLengths != null && flightLengths.size() > 0) {
+                        if (flightLengths != null && !flightLengths.isEmpty()) {
                             try {
-                                minTread = validateTread(plan, errors, block, scrutinyDetail3,
+                                validateTread(plan, errors, block, scrutinyDetail3,
                                         floor, typicalFloorValues, generalStair, flight, flightLengths,
                                         minTread,
                                         mostRestrictiveOccupancyType);
@@ -310,19 +316,20 @@ public class GeneralStair extends FeatureProcess {
             Map<String, Object> typicalFloorValues, org.egov.common.entity.edcr.GeneralStair generalStair, Flight flight,
             List<BigDecimal> flightWidths, BigDecimal minFlightWidth,
             OccupancyTypeHelper mostRestrictiveOccupancyType) {
-        BigDecimal flightPolyLine = flightWidths.stream().reduce(BigDecimal::min).get();
+        Optional<BigDecimal> minFlightWidthh = flightWidths.stream().reduce(BigDecimal::min);
+		BigDecimal flightPolyLine = minFlightWidthh.isPresent() ? minFlightWidthh.get() : BigDecimal.ZERO;
 
         boolean valid = false;
 
-        if (!(Boolean) typicalFloorValues.get("isTypicalRepititiveFloor")) {
+        if (Boolean.FALSE.equals(typicalFloorValues.get(IS_TYPICAL_REPITITIVE_FLOOR))) {
             minFlightWidth = Util.roundOffTwoDecimal(flightPolyLine);
             BigDecimal minimumWidth = getRequiredWidth(block, mostRestrictiveOccupancyType);
 
             if (minFlightWidth.compareTo(minimumWidth) >= 0) {
                 valid = true;
             }
-            String value = typicalFloorValues.get("typicalFloors") != null
-                    ? (String) typicalFloorValues.get("typicalFloors")
+            String value = typicalFloorValues.get(TYPICAL_FLOORS) != null
+                    ? (String) typicalFloorValues.get(TYPICAL_FLOORS)
                     : " floor " + floor.getNumber();
 
             if (valid) {
@@ -390,14 +397,14 @@ public class GeneralStair extends FeatureProcess {
 
                 boolean valid = false;
 
-                if (!(Boolean) typicalFloorValues.get("isTypicalRepititiveFloor")) {
+                if (Boolean.FALSE.equals(typicalFloorValues.get(IS_TYPICAL_REPITITIVE_FLOOR))) {
 
                     if (Util.roundOffTwoDecimal(minTread).compareTo(Util.roundOffTwoDecimal(requiredTread)) >= 0) {
                         valid = true;
                     }
 
-                    String value = typicalFloorValues.get("typicalFloors") != null
-                            ? (String) typicalFloorValues.get("typicalFloors")
+                    String value = typicalFloorValues.get(TYPICAL_FLOORS) != null
+                            ? (String) typicalFloorValues.get(TYPICAL_FLOORS)
                             : " floor " + floor.getNumber();
                     if (valid) {
                         setReportOutputDetailsFloorStairWise(plan, RULE42_5_II, value,
@@ -439,13 +446,13 @@ public class GeneralStair extends FeatureProcess {
             org.egov.common.entity.edcr.GeneralStair generalStair, Flight flight, BigDecimal noOfRises) {
         boolean valid = false;
 
-        if (!(Boolean) typicalFloorValues.get("isTypicalRepititiveFloor")) {
+        if (Boolean.FALSE.equals(typicalFloorValues.get(IS_TYPICAL_REPITITIVE_FLOOR))) {
             if (Util.roundOffTwoDecimal(noOfRises).compareTo(Util.roundOffTwoDecimal(BigDecimal.valueOf(12))) <= 0) {
                 valid = true;
             }
 
-            String value = typicalFloorValues.get("typicalFloors") != null
-                    ? (String) typicalFloorValues.get("typicalFloors")
+            String value = typicalFloorValues.get(TYPICAL_FLOORS) != null
+                    ? (String) typicalFloorValues.get(TYPICAL_FLOORS)
                     : " floor " + floor.getNumber();
             if (valid) {
                 setReportOutputDetailsFloorStairWise(plan, RULE42_5_II, value,

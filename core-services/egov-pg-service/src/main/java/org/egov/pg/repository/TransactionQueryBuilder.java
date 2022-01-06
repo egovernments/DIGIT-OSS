@@ -16,6 +16,8 @@ class TransactionQueryBuilder {
     private TransactionQueryBuilder() {
     }
 
+    private static final String BUILDER_APPEND = " AND ";
+
     static String getPaymentSearchQueryByCreatedTimeRange(TransactionCriteria transactionCriteria, List<Object> preparedStmtList) {
         String query = buildQuery(transactionCriteria, preparedStmtList);
         query = addOrderByClause(query);
@@ -35,11 +37,11 @@ class TransactionQueryBuilder {
         if (!preparedQuery.contains("WHERE"))
             builder.append(" WHERE ");
         else
-            builder.append(" AND ");
+            builder.append(BUILDER_APPEND);
 
         builder.append(" pg.created_time >= ? ");
         preparedStmtList.add(startTime);
-        builder.append(" AND ");
+        builder.append(BUILDER_APPEND);
         builder.append(" pg.created_time <= ? ");
         preparedStmtList.add(endTime);
 
@@ -93,7 +95,7 @@ class TransactionQueryBuilder {
                 preparedStmtList.add(entry.getValue());
 
                 if (iterator.hasNext())
-                    builder.append(" AND ");
+                    builder.append(BUILDER_APPEND);
             }
         }
 

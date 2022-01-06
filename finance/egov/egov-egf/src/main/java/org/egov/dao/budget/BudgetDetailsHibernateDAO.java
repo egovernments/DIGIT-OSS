@@ -721,7 +721,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
 			final String[] values = StringUtils.split(appConfigValues.getValue(), ",");
 			for (final String value : values)
 				if (value.equals("department")) {
-					if (departmentCode == null || departmentCode == "0" || departmentCode == "")
+					if (departmentCode == null || "0".equals(departmentCode)  || "".equals(departmentCode))
 						throw new ValidationException(EMPTY_STRING, "Department is required");
 					else {
 						query.append(" and bd.executingDepartment=:departmentCode");
@@ -1710,7 +1710,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
 			if (bd.getApprovedAmount() != null)
 				approvedAmt = bd.getApprovedAmount();
 			approvedAmt = approvedAmt.add(bd.getApprovedReAppropriationsTotal());
-			if (null != deptBudget && deptBudget.containsKey(deptName)) {
+			if (deptBudget.containsKey(deptName)) {
 				approvedAmt = deptBudget.get(deptName).add(approvedAmt);
 				deptBudget.put(deptName, approvedAmt);
 			} else
@@ -2386,7 +2386,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
 				final String[] values = StringUtils.split(appConfigValues.getValue(), ",");
 				for (final String value : values)
 					if (value.equals("department")) {
-						if (deptCode == null || deptCode == "0")
+						if (deptCode == null || "0".equals(deptCode))
 							throw new ValidationException(EMPTY_STRING, "Department is required");
 						else {
 							query.append(" and bmis.departmentcode=:deptCode");

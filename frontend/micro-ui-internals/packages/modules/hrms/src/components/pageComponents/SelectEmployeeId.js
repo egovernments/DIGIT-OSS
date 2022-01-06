@@ -5,7 +5,6 @@ import { useLocation } from "react-router-dom";
 const SelectEmployeeId = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
   const { pathname: url } = useLocation();
   const isEdit = window.location.pathname.includes("/edit/");
-  // console.log("find errors here", errors)
   const inputs = [
     {
       label: "HR_EMP_ID_LABEL",

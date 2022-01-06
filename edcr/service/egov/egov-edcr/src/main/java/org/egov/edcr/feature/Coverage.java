@@ -101,6 +101,7 @@ public class Coverage extends FeatureProcess {
 
     @Override
     public Plan process(Plan pl) {
+    	LOG.info("***Processing coverage****");
         validate(pl);
         BigDecimal totalCoverage = BigDecimal.ZERO;
         BigDecimal totalCoverageArea = BigDecimal.ZERO;

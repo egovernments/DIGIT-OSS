@@ -21,7 +21,6 @@ import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.entity.blackbox.PlotDetail;
 import org.egov.edcr.entity.blackbox.YardDetail;
 import org.egov.edcr.service.LayerNames;
-import org.egov.edcr.utility.Util;
 import org.kabeja.dxf.DXFDocument;
 import org.kabeja.dxf.DXFLWPolyline;
 import org.kabeja.dxf.DXFLine;
@@ -34,7 +33,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class MinDistance {
 
-    @Autowired
+    private static final String POINTS_OF = "Points of ";
+	private static final String NOT_PROPERLY_ON = " not properly on ";
+	private static final String IS_NOT_CLOSED = " is not closed ";
+	private static final String EITHER = "Either ";
+	private static final String LAYER_NAME_BUILDING_FOOT_PRINT = "LAYER_NAME_BUILDING_FOOT_PRINT";
+	private static final String LAYER_NAME_PLOT_BOUNDARY = "LAYER_NAME_PLOT_BOUNDARY";
+	private static final String LAYER_NAME_BSMNT_FOOT_PRINT = "LAYER_NAME_BSMNT_FOOT_PRINT";
+	private static final String SET_BACK_CALCULATION_ERROR = "Set back calculation Error";
+	@Autowired
     private LayerNames layerNames;
     private static final Logger LOG = Logger.getLogger(MinDistance.class);
 
@@ -68,28 +75,28 @@ public class MinDistance {
         }
         LOG.info("yard Area  " + yard.getArea());
 
-        if (level.equals(-1) && (plotBoundary == null || buildFoorPrint == null || yard == null)) {
-            pl.getErrors().put("Set back calculation Error",
-                    "Either" + layerNames.getLayerName("LAYER_NAME_BSMNT_FOOT_PRINT") + ","
-                            + layerNames.getLayerName("LAYER_NAME_PLOT_BOUNDARY") + " or " + name + " is not found");
+        if (Integer.valueOf(level) == -1 && (plotBoundary == null || buildFoorPrint == null || yard == null)) {
+            pl.getErrors().put(SET_BACK_CALCULATION_ERROR,
+            		EITHER + layerNames.getLayerName(LAYER_NAME_BSMNT_FOOT_PRINT) + ","
+                            + layerNames.getLayerName(LAYER_NAME_PLOT_BOUNDARY) + " or " + name + " is not found");
             return BigDecimal.ZERO.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS);
         } else if (plotBoundary == null || buildFoorPrint == null || yard == null) {
-            pl.getErrors().put("Set back calculation Error",
-                    "Either " + layerNames.getLayerName("LAYER_NAME_BUILDING_FOOT_PRINT") + ","
-                            + layerNames.getLayerName("LAYER_NAME_PLOT_BOUNDARY") + " or " + name
+            pl.getErrors().put(SET_BACK_CALCULATION_ERROR,
+                    EITHER + layerNames.getLayerName(LAYER_NAME_BUILDING_FOOT_PRINT) + ","
+                            + layerNames.getLayerName(LAYER_NAME_PLOT_BOUNDARY) + " or " + name
                             + " is not found at level " + split[3]);
             return BigDecimal.ZERO.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS);
         }
 
-        if (level.equals(-1) && (plotBoundary == null || buildFoorPrint == null || yardPolyline == null)) {
-            pl.getErrors().put("Set back calculation Error",
-                    "Either " + layerNames.getLayerName("LAYER_NAME_BSMNT_FOOT_PRINT") + ","
-                            + layerNames.getLayerName("LAYER_NAME_PLOT_BOUNDARY") + " or " + name + " is not found ");
+        if (Integer.valueOf(level) == -1 && (plotBoundary == null || buildFoorPrint == null || yardPolyline == null)) {
+            pl.getErrors().put(SET_BACK_CALCULATION_ERROR,
+                    EITHER + layerNames.getLayerName(LAYER_NAME_BSMNT_FOOT_PRINT) + ","
+                            + layerNames.getLayerName(LAYER_NAME_PLOT_BOUNDARY) + " or " + name + " is not found ");
             return BigDecimal.ZERO.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS);
         } else if (plotBoundary == null || buildFoorPrint == null || yardPolyline == null) {
-            pl.getErrors().put("Set back calculation Error",
-                    "Either " + layerNames.getLayerName("LAYER_NAME_BUILDING_FOOT_PRINT") + ","
-                            + layerNames.getLayerName("LAYER_NAME_PLOT_BOUNDARY") + " or " + name + " is not found ");
+            pl.getErrors().put(SET_BACK_CALCULATION_ERROR,
+                    EITHER + layerNames.getLayerName(LAYER_NAME_BUILDING_FOOT_PRINT) + ","
+                            + layerNames.getLayerName(LAYER_NAME_PLOT_BOUNDARY) + " or " + name + " is not found ");
             return BigDecimal.ZERO.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS);
         }
 
@@ -105,17 +112,17 @@ public class MinDistance {
 
         if (!plotBoundary.isClosed())
             pl.getErrors().put("Plot boundary not closed",
-                    layerNames.getLayerName("LAYER_NAME_PLOT_BOUNDARY") + " is not closed ");
+                    layerNames.getLayerName(LAYER_NAME_PLOT_BOUNDARY) + IS_NOT_CLOSED);
 
-        if (level.equals(-1) && !buildFoorPrint.isClosed())
+        if (Integer.valueOf(level) == -1 && !buildFoorPrint.isClosed())
             pl.getErrors().put("Building basement foot print not closed",
-                    layerNames.getLayerName("LAYER_NAME_BSMNT_FOOT_PRINT") + " is not closed ");
+                    layerNames.getLayerName(LAYER_NAME_BSMNT_FOOT_PRINT) + IS_NOT_CLOSED);
         else if (!buildFoorPrint.isClosed())
             pl.getErrors().put("Building foot print not closed",
-                    layerNames.getLayerName("LAYER_NAME_BUILDING_FOOT_PRINT") + " is not closed ");
+                    layerNames.getLayerName(LAYER_NAME_BUILDING_FOOT_PRINT) + IS_NOT_CLOSED);
 
         if (!yardPolyline.isClosed())
-            pl.getErrors().put(name + " not closed", name + " is not closed ");
+            pl.getErrors().put(name + " not closed", name + IS_NOT_CLOSED);
 
         if (!plotBoundary.isClosed() || !buildFoorPrint.isClosed() || !yardPolyline.isClosed())
             return BigDecimal.ZERO.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS);
@@ -186,7 +193,7 @@ public class MinDistance {
 
                         yardOutSidePoints.add(yardEdge);
                         LOG.debug("Adding yardEdge to outside points in  pointsOnPlot pointsEqualsWith2PercentError");
-                        pointAdded = true;
+                        //pointAdded = true;
                         break;
                     }
 
@@ -217,12 +224,12 @@ public class MinDistance {
             }
             // Now check yard edge on the plot points
 
-            if (!insidePointAdded && footPrintPoints.contains(yardEdge)) {
+            if (Boolean.TRUE.equals(!insidePointAdded) && footPrintPoints.contains(yardEdge)) {
                 yardInSidePoints.add(yardEdge);
                 insidePointAdded = true;
                 LOG.debug("Adding yardEdge to inside points in  footPrint contains");
             }
-            if (!insidePointAdded)
+            if (Boolean.FALSE.equals(insidePointAdded))
                 for (Point p : footPrintPoints)
                     if (Util.pointsEquals(p, yardEdge)) {
                         yardInSidePoints.add(yardEdge);
@@ -231,12 +238,12 @@ public class MinDistance {
                         break;
                     }
 
-            if (!insidePointAdded)
+            if (Boolean.FALSE.equals(insidePointAdded))
                 for (Point p : footPrintPoints)
                     if (Util.pointsEqualsWith2PercentError(p, yardEdge)) {
 
                         yardInSidePoints.add(yardEdge);
-                        insidePointAdded = true;
+                        //insidePointAdded = true;
                         LOG.debug("Adding yardEdge to inside points in  footPrint pointsEqualsWith2PercentError");
                         break;
                     }
@@ -285,16 +292,17 @@ public class MinDistance {
 
         List<Point> insidePoints = Util.findPointsOnPolylines(yardInSidePoints, yardLines, pl, name);
 
-        if (yardInSidePoints.isEmpty() || yardInSidePoints.size() == 1)
-            if (level.equals(-1))
-                pl.getErrors().put("Set back calculation error for basementfootprint " + name, "Points of " + name
-                        + " not properly on " + layerNames.getLayerName("LAYER_NAME_BSMNT_FOOT_PRINT"));
+        if (yardInSidePoints.isEmpty() || yardInSidePoints.size() == 1) {
+            if (Integer.valueOf(level) == -1)
+                pl.getErrors().put("Set back calculation error for basementfootprint " + name, POINTS_OF + name
+                        + NOT_PROPERLY_ON + layerNames.getLayerName(LAYER_NAME_BSMNT_FOOT_PRINT));
             else
-                pl.getErrors().put("Set back calculation error for footprint" + name, "Points of " + name
-                        + " not properly on " + layerNames.getLayerName("LAYER_NAME_BUILDING_FOOT_PRINT"));
+                pl.getErrors().put("Set back calculation error for footprint" + name, POINTS_OF + name
+                        + NOT_PROPERLY_ON + layerNames.getLayerName(LAYER_NAME_BUILDING_FOOT_PRINT));
+        }
         if (outsidePoints.isEmpty() || outsidePoints.size() == 1)
             pl.getErrors().put("Set back calculation error for boundary" + name,
-                    "Points of " + name + " not properly on " + layerNames.getLayerName("LAYER_NAME_PLOT_BOUNDARY"));
+                    POINTS_OF + name + NOT_PROPERLY_ON + layerNames.getLayerName(LAYER_NAME_PLOT_BOUNDARY));
 
         double distance = 0;
         Map<Double, DXFLine> map = new HashMap<>();
@@ -371,7 +379,7 @@ public class MinDistance {
 
     public static Double getSideForMean(List<Point> yardInSidePoints, List<Point> yardOutSidePoints, Yard yard1) {
         DXFLWPolyline yard = ((YardDetail) yard1).getPolyLine();
-        Double distance = 0d;
+        Double distance;
         Point firstPoint = null;
         Point lastPoint = null;
         BigDecimal maxDistance = BigDecimal.ZERO;
@@ -453,7 +461,7 @@ public class MinDistance {
             LOG.debug("Height1 = " + height1);
             LOG.debug("Height2 = " + height2);
             LOG.debug("");
-            Double sideDistance = 0d;
+            Double sideDistance;
             double minWidth = Math.min(width1, width2);
             double minHeight = Math.min(height1, height2);
 
@@ -516,7 +524,7 @@ public class MinDistance {
             next = point1;
 
         }
-        if (next != null && first != null && !Util.pointsEquals(first.getPoint(), next.getPoint())) {
+        if (next != null && !Util.pointsEquals(first.getPoint(), next.getPoint())) {
             // if (next!=null && first!=null) {
             DXFLine line = new DXFLine();
             line.setStartPoint(next.getPoint());

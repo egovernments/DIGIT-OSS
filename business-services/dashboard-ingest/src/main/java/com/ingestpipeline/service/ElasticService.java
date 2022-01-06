@@ -203,7 +203,6 @@ public class ElasticService implements IESService {
 		//LOGGER.info(" new request body json ### " +request);
 
 		HttpEntity<String> requestEntity = new HttpEntity<>(request.toString(), headers);
-		ArrayNode hitNodes = null;
 
 		try {
 			ResponseEntity<Object> response = retryTemplate.postForEntity(url.toString(), requestEntity);
@@ -224,7 +223,6 @@ public class ElasticService implements IESService {
 	@Override
 	public Boolean push(TargetData requestBody) throws Exception {
 
-		Long currentDateTime = new Date().getTime();
 		String url = indexerServiceHost + targetIndexName + DOC_TYPE + requestBody.getId();
 
 		HttpHeaders headers = new HttpHeaders();
@@ -236,7 +234,6 @@ public class ElasticService implements IESService {
 		JsonNode request = new ObjectMapper().convertValue(requestBody, JsonNode.class);
 
 		HttpEntity<String> requestEntity = new HttpEntity<>(request.toString(), headers);
-		ArrayNode hitNodes = null;
 
 		try {
 			ResponseEntity<Object> response = retryTemplate.postForEntity(url, requestEntity);
@@ -295,8 +292,6 @@ public class ElasticService implements IESService {
 							} else { 
 								dataObjectNode= dataNode.get("Data");
 							}
-	    					Map<Object, Object> dataMap = new Gson().fromJson(dataObjectNode.toString(), new TypeToken<HashMap<Object, Object>>() {}.getType()
-	    						);
 							ingestService.ingestToPipeline(
 									setIncomingData(scrollSearchParams.get(Constants.DataContexts.CONTEXT), dataContextVersion, dataObjectNode));
 	    				}
@@ -413,8 +408,6 @@ public class ElasticService implements IESService {
 					} else { 
 						dataObjectNode= dataNode.get("Data");
 					}
-					Map<Object, Object> dataMap = new Gson().fromJson(dataObjectNode.toString(), new TypeToken<HashMap<Object, Object>>() {}.getType()
-						);
 					ingestService.ingestToPipeline(
 							setIncomingData(scrollSearchParams.get(Constants.DataContexts.CONTEXT), dataContextVersion, dataObjectNode));
 				}

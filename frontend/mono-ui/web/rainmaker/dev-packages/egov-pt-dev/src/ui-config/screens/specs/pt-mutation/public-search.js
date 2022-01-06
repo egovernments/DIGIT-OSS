@@ -44,7 +44,6 @@ const getMDMSData = async dispatch => {
     );
     payload.MdmsRes.tenant.tenants =
       payload.MdmsRes.tenant.citymodule[1].tenants;
-    // console.log("payload--", payload)
     payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.tenants.sort((t1, t2) => t1.code.localeCompare(t2.code))
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
     await getBusinessServiceMdmsData(dispatch, commonConfig.tenantId, "PT");

@@ -296,7 +296,7 @@ public class BudgetAppropriationRegisterReportAction extends BaseFormAction {
                     .setResultTransformer(Transformers.aliasToBean(BudgetAppDisplay.class));
             query=setParameterForBudgetAppDisplay(query,dtAsOnDate,dStartDate);
         }
-        budgetAppropriationRegisterList = query.list();
+        budgetAppropriationRegisterList = query!=null ? query.list() : Collections.emptyList();
 
         List<BudgetAppDisplay> budgetApprRegNewList = new ArrayList<BudgetAppDisplay>();
         final List<BudgetAppDisplay> budgetApprRegUpdatedList1 = new ArrayList<BudgetAppDisplay>();

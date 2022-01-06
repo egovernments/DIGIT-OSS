@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class OpenStairServiceExtract extends FeatureExtract {
 
-    @Override
+    private static final String REG_EXP_D = "[^\\d.]";
+
+	@Override
     public PlanDetail extract(PlanDetail pl) {
         for (Block block : pl.getBlocks())
             extractOpenStairs(pl.getDoc(), block, pl);
@@ -69,11 +71,11 @@ public class OpenStairServiceExtract extends FeatureExtract {
                                         if (length >= 1) {
                                             int index = length - 1;
                                             text2 = textSplit[index];
-                                            text2 = text2.replaceAll("[^\\d.]", "");
+                                            text2 = text2.replaceAll(REG_EXP_D, "");
                                         } else
-                                            text2 = text2.replaceAll("[^\\d.]", "");
+                                            text2 = text2.replaceAll(REG_EXP_D, "");
                                     } else
-                                        text2 = text2.replaceAll("[^\\d.]", "");
+                                        text2 = text2.replaceAll(REG_EXP_D, "");
 
                                     if (!text2.isEmpty()) {
                                         value = getNumericValue(text2, planDetail, openStairName);

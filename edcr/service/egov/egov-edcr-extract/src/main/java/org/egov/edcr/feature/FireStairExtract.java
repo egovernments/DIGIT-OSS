@@ -29,6 +29,7 @@ import org.kabeja.dxf.DXFDocument;
 import org.kabeja.dxf.DXFLWPolyline;
 import org.kabeja.dxf.DXFLayer;
 import org.kabeja.dxf.DXFLine;
+import org.kabeja.dxf.DXFPolyline;
 import org.kabeja.dxf.DXFVertex;
 import org.kabeja.dxf.helpers.Point;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,11 +61,11 @@ public class FireStairExtract extends FeatureExtract {
 			for (TypicalFloor tp : block.getTypicalFloor())
 				if (tp.getRepetitiveFloorNos().contains(floor.getNumber()))
 					for (Floor allFloors : block.getBuilding().getFloors())
-						if (allFloors.getNumber().equals(tp.getModelFloorNo()))
-							if (!allFloors.getFireStairs().isEmpty()) {
-								floor.setFireStairs(allFloors.getFireStairs());
-								return;
-							}
+						if (allFloors.getNumber().equals(tp.getModelFloorNo())
+								&& !allFloors.getFireStairs().isEmpty()) {
+							floor.setFireStairs(allFloors.getFireStairs());
+							return;
+						}
 
 		// Layer name convention BLK_n_FLR_i_FIRESTAIR_k
 		String fireEscapeStairNamePattern = "BLK_" + block.getNumber() + "_FLR_" + floor.getNumber() + "_FIRESTAIR"
@@ -121,8 +122,8 @@ public class FireStairExtract extends FeatureExtract {
 
 						List<DXFLWPolyline> builtUpAreaPolyLines = ((FloorDetail) floor).getBuiltUpAreaPolyLine();
 
-						if (builtUpAreaPolyLines != null && builtUpAreaPolyLines.size() > 0
-								&& fireStairPolyLines != null && fireStairPolyLines.size() > 0)
+						if (builtUpAreaPolyLines != null && !builtUpAreaPolyLines.isEmpty()
+								&& fireStairPolyLines != null && !fireStairPolyLines.isEmpty())
 							for (DXFLWPolyline builtUpPolyLine : builtUpAreaPolyLines) {
 								Polygon builtUpPolygon = Util.getPolygon(builtUpPolyLine);
 
@@ -172,7 +173,7 @@ public class FireStairExtract extends FeatureExtract {
 
 			List<DXFLWPolyline> landingPolyLines = Util.getPolyLinesByLayer(doc, landingLayer);
 
-			boolean isClosed = landingPolyLines.stream().allMatch(dxflwPolyline -> dxflwPolyline.isClosed());
+			boolean isClosed = landingPolyLines.stream().allMatch(DXFPolyline::isClosed);
 
 			stairLanding.setLandingClosed(isClosed);
 
@@ -216,7 +217,7 @@ public class FireStairExtract extends FeatureExtract {
 				List<DXFLWPolyline> fireStairFlightPolyLines = Util.getPolyLinesByLayer(doc, flightLayer);
 
 				boolean isClosed = fireStairFlightPolyLines.stream()
-						.allMatch(dxflwPolyline -> dxflwPolyline.isClosed());
+						.allMatch(DXFPolyline::isClosed);
 
 				flight.setFlightClosed(isClosed);
 

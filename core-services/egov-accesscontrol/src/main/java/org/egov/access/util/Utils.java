@@ -11,7 +11,7 @@ public class Utils {
 
 
     public static boolean isRegexUri(String url) {
-        return url.contains(OPENING_BRACES) & url.contains(CLOSING_BRACES);
+        return url.contains(OPENING_BRACES) && url.contains(CLOSING_BRACES);
     }
 
     public static boolean isRegexUriMatch(String actionUri, String requestUri){

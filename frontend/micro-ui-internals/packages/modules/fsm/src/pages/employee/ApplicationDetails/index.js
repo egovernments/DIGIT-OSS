@@ -41,7 +41,6 @@ const ApplicationDetails = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(null);
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
-  // console.log("find DSO here", DSO)
 
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(t, tenantId, applicationNumber);
   const { isLoading: isDataLoading, isSuccess, data: applicationData } = Digit.Hooks.fsm.useSearch(
@@ -102,7 +101,6 @@ const ApplicationDetails = (props) => {
       case "ADDITIONAL_PAY_REQUEST":
         return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
       default:
-        console.log("default case");
         break;
     }
   }, [selectedAction]);
@@ -131,10 +129,8 @@ const ApplicationDetails = (props) => {
   };
 
   const submitAction = (data) => {
-    // console.log("find submit action data here", data);
     mutate(data, {
       onError: (error, variables) => {
-        // console.log("find error here",error)
         setShowToast({ key: "error", action: error });
         setTimeout(closeToast, 5000);
       },
@@ -150,7 +146,6 @@ const ApplicationDetails = (props) => {
   };
 
   const getTimelineCaptions = (checkpoint) => {
-    // console.log("tl", checkpoint);
     const __comment = checkpoint?.comment?.split("~");
     const reason = __comment ? __comment[0] : null;
     const reason_comment = __comment ? __comment[1] : null;
@@ -274,7 +269,6 @@ const ApplicationDetails = (props) => {
               </Fragment>
             )}
           </Card>
-          {/* {console.log("above show modal", showModal)} */}
           {showModal ? (
             <ActionModal
               t={t}

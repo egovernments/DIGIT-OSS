@@ -46,8 +46,6 @@ const saveData = async (state, dispatch) => {
         var selectedDate = new Date(new Date(data.currentReadingDate).toDateString());
         let fromDate = new Date(data.billingPeriod.split(' - ')[0].replace(/(\d{2})\/(\d{2})\/(\d{4})/,"$2/$1/$3"));
         let toDate = new Date(new Date().toDateString());
-        //console.log("*****************************");
-        //console.log( "CurrentReadingDate -> " + selectedDate+ ", FromDate -> " + fromDate + ", ToDate-> " + toDate);
         if(!(selectedDate > fromDate && selectedDate <= toDate))
         {
             dispatch(
@@ -81,8 +79,7 @@ const saveData = async (state, dispatch) => {
         var selectedDate = new Date(new Date(data.currentReadingDate).toDateString());
         let fromDate = new Date(data.billingPeriod.split(' - ')[0].replace(/(\d{2})\/(\d{2})\/(\d{4})/,"$2/$1/$3"));
         let toDate = new Date(new Date().toDateString());
-        //console.log("*****************************");
-        //console.log( "CurrentReadingDate -> " + selectedDate+ ", FromDate -> " + fromDate + ", ToDate-> " + toDate);
+        
         if(!(selectedDate > fromDate && selectedDate <= toDate))
         {
             dispatch(
@@ -104,7 +101,6 @@ const saveData = async (state, dispatch) => {
 
 
     let lastReadingDate = get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReadingDate")
-    // console.log(lastReadingDate, "lastReadingDate")
     if (lastReadingDate !== undefined && lastReadingDate !== null && lastReadingDate !== '') {
         data.lastReadingDate = get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].currentReadingDate");
     } else {
@@ -146,7 +142,6 @@ const saveData = async (state, dispatch) => {
             dispatch,
             "meter-reading"
         );
-        // console.log(data.consumption, consumption)
         if (data.consumption === undefined || data.currentReading === null || data.consumption === '') {
             return;
         }
@@ -162,7 +157,6 @@ const saveData = async (state, dispatch) => {
     if (data.consumption) {
         delete data.consumption
     }
-    // console.log(data)
     data.tenantId = getQueryArg(window.location.href, "tenantId")
     createMeterReading(dispatch, data)
 

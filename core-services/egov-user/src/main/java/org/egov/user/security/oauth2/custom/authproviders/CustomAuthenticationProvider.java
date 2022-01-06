@@ -45,6 +45,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private UserService userService;
 
+    private static final String PARAMETER_TENANT_ID = "tenantId";
+
+    private static final String ERROR_INVALID_LOGIN_CREDENTIALS= "Invalid login credentials";
+
     @Autowired
     private EncryptionDecryptionUtil encryptionDecryptionUtil;
 
@@ -75,7 +79,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         final LinkedHashMap<String, String> details = (LinkedHashMap<String, String>) authentication.getDetails();
 
-        String tenantId = details.get("tenantId");
+        String tenantId = details.get(PARAMETER_TENANT_ID);
         String userType = details.get("userType");
 
         if (isEmpty(tenantId)) {
@@ -103,10 +107,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         } catch (UserNotFoundException e) {
             log.error("User not found", e);
-            throw new OAuth2Exception("Invalid login credentials");
+            throw new OAuth2Exception(ERROR_INVALID_LOGIN_CREDENTIALS);
         } catch (DuplicateUserNameException e) {
             log.error("Fatal error, user conflict, more than one user found", e);
-            throw new OAuth2Exception("Invalid login credentials");
+            throw new OAuth2Exception(ERROR_INVALID_LOGIN_CREDENTIALS);
 
         }
 
@@ -159,7 +163,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             // Fetch Real IP after being forwarded by reverse proxy
             userService.handleFailedLogin(user, request.getHeader(IP_HEADER_NAME), requestInfo);
 
-            throw new OAuth2Exception("Invalid login credentials");
+            throw new OAuth2Exception(ERROR_INVALID_LOGIN_CREDENTIALS);
         }
 
     }
@@ -194,9 +198,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         final LinkedHashMap<String, String> details = (LinkedHashMap<String, String>) authentication.getDetails();
 
         System.out.println("details------->" + details);
-        System.out.println("tenantId in CustomAuthenticationProvider------->" + details.get("tenantId"));
+        System.out.println("tenantId in CustomAuthenticationProvider------->" + details.get(PARAMETER_TENANT_ID));
 
-        final String tenantId = details.get("tenantId");
+        final String tenantId = details.get(PARAMETER_TENANT_ID);
         if (isEmpty(tenantId)) {
             throw new OAuth2Exception("TenantId is mandatory");
         }

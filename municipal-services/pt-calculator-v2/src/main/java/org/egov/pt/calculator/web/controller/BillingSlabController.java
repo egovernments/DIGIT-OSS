@@ -37,7 +37,8 @@ public class BillingSlabController {
 
 	@Autowired
 	private MutationBillingSlabValidator mutationbillingSlabValidator;
-	
+
+	private static final String LOG_DEBUG_CREATION_TIME = " the time taken for create in ms: {}";
 
 	/**
 	 * endpoint to create billing-slabs
@@ -53,7 +54,7 @@ public class BillingSlabController {
 		billingSlabValidator.validateCreate(billingSlabReq);
 		BillingSlabRes billingSlabRes = service.createBillingSlab(billingSlabReq);
 		long endTime = System.currentTimeMillis();
-		log.debug(" the time taken for create in ms: {}", endTime - startTime);
+		log.debug(LOG_DEBUG_CREATION_TIME, endTime - startTime);
 		return new ResponseEntity<>(billingSlabRes, HttpStatus.CREATED);
 	}
 	
@@ -71,7 +72,7 @@ public class BillingSlabController {
 		billingSlabValidator.validateUpdate(billingSlabReq);
 		BillingSlabRes billingSlabRes = service.updateBillingSlab(billingSlabReq);
 		long endTime = System.currentTimeMillis();
-		log.debug(" the time taken for create in ms: {}", endTime - startTime);
+		log.debug(LOG_DEBUG_CREATION_TIME, endTime - startTime);
 		return new ResponseEntity<>(billingSlabRes, HttpStatus.CREATED);
 	}
 	
@@ -89,7 +90,7 @@ public class BillingSlabController {
 		long startTime = System.currentTimeMillis();
 		BillingSlabRes billingSlabRes = service.searchBillingSlabs(requestInfo, billingSlabSearcCriteria);
 		long endTime = System.currentTimeMillis();
-		log.debug(" the time taken for create in ms: {}", endTime - startTime);
+		log.debug(LOG_DEBUG_CREATION_TIME, endTime - startTime);
 		return new ResponseEntity<>(billingSlabRes, HttpStatus.OK);
 	}
 
@@ -106,7 +107,7 @@ public class BillingSlabController {
 		mutationbillingSlabValidator.validateCreate(mutationbillingSlabReq);
 		MutationBillingSlabRes billingSlabRes = mutationService.createBillingSlab(mutationbillingSlabReq);
 		long endTime = System.currentTimeMillis();
-		log.debug(" the time taken for create in ms: {}", endTime - startTime);
+		log.debug(LOG_DEBUG_CREATION_TIME, endTime - startTime);
 		return new ResponseEntity<>(billingSlabRes, HttpStatus.CREATED);
 	}
 
@@ -123,7 +124,7 @@ public class BillingSlabController {
 		mutationbillingSlabValidator.validateUpdate(billingSlabReq);
 		MutationBillingSlabRes billingSlabRes = mutationService.updateBillingSlab(billingSlabReq);
 		long endTime = System.currentTimeMillis();
-		log.debug(" the time taken for create in ms: {}", endTime - startTime);
+		log.debug(LOG_DEBUG_CREATION_TIME, endTime - startTime);
 		return new ResponseEntity<>(billingSlabRes, HttpStatus.CREATED);
 	}
 
@@ -140,7 +141,7 @@ public class BillingSlabController {
 		long startTime = System.currentTimeMillis();
 		MutationBillingSlabRes billingSlabRes = mutationService.searchBillingSlabs(requestInfo, billingSlabSearcCriteria);
 		long endTime = System.currentTimeMillis();
-		log.debug(" the time taken for create in ms: {}", endTime - startTime);
+		log.debug(LOG_DEBUG_CREATION_TIME, endTime - startTime);
 		return new ResponseEntity<>(billingSlabRes, HttpStatus.OK);
 	}
 

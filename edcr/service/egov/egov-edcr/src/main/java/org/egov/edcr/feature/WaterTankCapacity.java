@@ -50,6 +50,7 @@ package org.egov.edcr.feature;
 import static org.egov.edcr.utility.DcrConstants.IN_LITRE;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -63,8 +64,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class WaterTankCapacity extends FeatureProcess {
-    private static final String RULE_59_10_vii = "59-10-vii";
-    private static final String RULE_59_10_vii_DESCRIPTION = "Water tank capacity";
+    private static final String RULE_59_10_VII = "59-10-vii";
+    private static final String RULE_59_10_VII_DESCRIPTION = "Water tank capacity";
     private static final String WATER_TANK_CAPACITY = "Minimum capacity of Water tank";
     private static final BigDecimal TWELVE_POINTFIVE = BigDecimal.valueOf(12.5);
     private static final BigDecimal ONEHUNDRED_THIRTYFIVE = BigDecimal.valueOf(135);
@@ -83,9 +84,9 @@ public class WaterTankCapacity extends FeatureProcess {
         scrutinyDetail.addColumnHeading(4, PROVIDED);
         scrutinyDetail.addColumnHeading(5, STATUS);
         scrutinyDetail.setKey("Common_Water tank capacity");
-        String subRule = RULE_59_10_vii;
-        String subRuleDesc = RULE_59_10_vii_DESCRIPTION;
-        BigDecimal expectedWaterTankCapacity = BigDecimal.ZERO;
+        String subRule = RULE_59_10_VII;
+        String subRuleDesc = RULE_59_10_VII_DESCRIPTION;
+        BigDecimal expectedWaterTankCapacity;
 
         if (pl.getUtility() != null && pl.getVirtualBuilding() != null
                 && pl.getUtility().getWaterTankCapacity() != null) {
@@ -96,7 +97,7 @@ public class WaterTankCapacity extends FeatureProcess {
             BigDecimal noOfPersons = totalBuitUpArea.divide(TWELVE_POINTFIVE, DcrConstants.DECIMALDIGITS_MEASUREMENTS,
                     DcrConstants.ROUNDMODE_MEASUREMENTS);
             expectedWaterTankCapacity = ONEHUNDRED_THIRTYFIVE
-                    .multiply(noOfPersons.setScale(0, BigDecimal.ROUND_HALF_UP));
+                    .multiply(noOfPersons.setScale(0, RoundingMode.HALF_UP));
             expectedWaterTankCapacity = expectedWaterTankCapacity.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS,
                     DcrConstants.ROUNDMODE_MEASUREMENTS);
             BigDecimal providedWaterTankCapacity = pl.getUtility().getWaterTankCapacity();
@@ -114,7 +115,7 @@ public class WaterTankCapacity extends FeatureProcess {
     private void processWaterTankCapacity(Plan plan, String rule, String subRule, String subRuleDesc,
             BigDecimal expectedWaterTankCapacity, Boolean valid) {
         if (expectedWaterTankCapacity.compareTo(BigDecimal.valueOf(0)) > 0) {
-            if (valid) {
+            if (Boolean.TRUE.equals(valid)) {
                 setReportOutputDetails(plan, subRule, WATER_TANK_CAPACITY,
                         expectedWaterTankCapacity.toString(),
                         plan.getUtility().getWaterTankCapacity().toString(),

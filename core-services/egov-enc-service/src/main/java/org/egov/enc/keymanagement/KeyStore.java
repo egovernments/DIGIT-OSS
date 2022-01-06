@@ -63,7 +63,7 @@ public class KeyStore implements ApplicationRunner {
     }
 
     //Reset and Initialize all the keys and HashMaps from the database
-    public void refreshKeys() throws Exception {
+    public static void refreshKeys() throws Exception {
         tenantIds = (ArrayList<String>) keyRepository.fetchDistinctTenantIds();
 
         symmetricKeys = (ArrayList<SymmetricKey>) this.keyRepository.fetchSymmetricKeys();

@@ -108,20 +108,23 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         InMemoryClientDetailsServiceBuilder serviceBuilder = clients.inMemory();
-        getSecuredClientFromResource().getClients().forEach(client -> {
-            try {
-                if (LOGGER.isDebugEnabled())
-                    LOGGER.debug("Client Id:" + client.getClientId());
-                serviceBuilder.withClient(client.getClientId()).secret(client.getClientSecret())
-                        .authorizedGrantTypes(GRANT_TYPE_AUTHORIZATION_CODE, GRANT_TYPE_REFRESH_TOKEN,
-                                GRANT_TYPE_PASSWORD)
-                        .scopes(SCOPE_READ, SCOPE_WRITE).resourceIds(RESOURCE_ID)
-                        .accessTokenValiditySeconds(client.getAccessTokenValidity() * 60)
-                        .refreshTokenValiditySeconds(client.getRefreshTokenValidity() * 60);
-            } catch (Exception e) {
-                LOGGER.error("Exception occured while configuring: ", e);
-            }
-        });
+        SecuredClient securedClient= getSecuredClientFromResource();
+        if (securedClient != null) {
+        	securedClient.getClients().forEach(client -> {
+                try {
+                    if (LOGGER.isDebugEnabled())
+                        LOGGER.debug("Client Id:" + client.getClientId());
+                    serviceBuilder.withClient(client.getClientId()).secret(client.getClientSecret())
+                            .authorizedGrantTypes(GRANT_TYPE_AUTHORIZATION_CODE, GRANT_TYPE_REFRESH_TOKEN,
+                                    GRANT_TYPE_PASSWORD)
+                            .scopes(SCOPE_READ, SCOPE_WRITE).resourceIds(RESOURCE_ID)
+                            .accessTokenValiditySeconds(client.getAccessTokenValidity() * 60)
+                            .refreshTokenValiditySeconds(client.getRefreshTokenValidity() * 60);
+                } catch (Exception e) {
+                    LOGGER.error("Exception occured while configuring: ", e);
+                }
+            });
+        }
     }
 
     @Override

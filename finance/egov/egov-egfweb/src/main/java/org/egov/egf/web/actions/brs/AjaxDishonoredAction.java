@@ -48,6 +48,7 @@
 
 package org.egov.egf.web.actions.brs;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
@@ -78,7 +79,7 @@ public class AjaxDishonoredAction extends BaseFormAction {
 
     @Action(value = "/brs/ajaxDishonored-populateAccountCodes")
     public String populateAccountCodes() {
-        if (bankBranchId != "-1" && bankBranchId != null && bankBranchId != "") {
+        if (!"-1".equals(bankBranchId) && bankBranchId != null && !"".equals(bankBranchId)) {
             final String id[] = bankBranchId.split("-");
             final String branchId = id[1];
             bankAccountList = persistenceService.findAllBy("select ba from Bankaccount ba "

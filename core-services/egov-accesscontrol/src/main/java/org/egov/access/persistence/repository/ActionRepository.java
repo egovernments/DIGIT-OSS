@@ -464,7 +464,7 @@ public class ActionRepository {
 					path = getPath(action.getServiceCode(), allServiceList);
 				}
 
-				if (path != "") {
+				if (!path.equals("")) {
 					path = path + "." + action.getName();
 					String[] output = path.split("\\.");
 
@@ -708,7 +708,7 @@ private List<Action> convertToAction(ActionRequest actionRequest,JSONArray actio
 					path = module.getName();
 					return path;
 
-				} else if (module.getParentModule() != null && module.getParentModule() != "") {
+				} else if (module.getParentModule() != null && !module.getParentModule().equals("")) {
 
 					path = module.getName();
 
@@ -728,7 +728,7 @@ private List<Action> convertToAction(ActionRequest actionRequest,JSONArray actio
 
 			for (Module loopmodule : modules) {
 
-				if ((loopmodule.getParentModule() == null || loopmodule.getParentModule() == "")
+				if ((loopmodule.getParentModule() == null || loopmodule.getParentModule().equals(""))
 						&& module.getParentModule() != null
 						&& module.getParentModule().equals(loopmodule.getId().toString())) {
 
@@ -736,7 +736,7 @@ private List<Action> convertToAction(ActionRequest actionRequest,JSONArray actio
 					return path;
 
 				} else {
-					if (loopmodule.getParentModule() != null && loopmodule.getParentModule() != ""
+					if (loopmodule.getParentModule() != null && !loopmodule.getParentModule().equals("")
 							&& module.getParentModule().equals(loopmodule.getId().toString())) {
 
 						String path1 = "";
@@ -744,7 +744,7 @@ private List<Action> convertToAction(ActionRequest actionRequest,JSONArray actio
 
 						String path2 = getCompletePath(loopmodule, path1, modules);
 
-						if (path2 != "") {
+						if (!path2.equals("")) {
 							path = path2 + path;
 
 						}

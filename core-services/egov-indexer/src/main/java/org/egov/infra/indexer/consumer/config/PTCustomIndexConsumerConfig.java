@@ -61,7 +61,7 @@ public class PTCustomIndexConsumerConfig implements ApplicationRunner {
 	@Autowired
 	private IndexerApplicationRunnerImpl runner;
     
-    public String[] topics = {};
+    private String[] topics = {};
     
      
     @Override
@@ -129,7 +129,7 @@ public class PTCustomIndexConsumerConfig implements ApplicationRunner {
          return new KafkaMessageListenerContainer<>(consumerFactory(), properties); 
     }
         
-    public boolean startContainer(){
+    public static boolean startContainer(){
     	KafkaMessageListenerContainer<String, String> container = null;
     	try {
 			    container = container();

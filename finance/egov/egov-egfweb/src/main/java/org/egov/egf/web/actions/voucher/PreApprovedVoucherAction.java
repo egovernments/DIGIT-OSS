@@ -292,7 +292,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
                 date = df.parse(cutOffDateconfigValue.get(0).getValue());
                 cutOffDate = formatter.format(date);
             } catch (ParseException e) {
-
+                 LOGGER.error("Parse exception");
             }
         }
         egBillregister = (EgBillregister) getPersistenceService().find(" from EgBillregister where id=?",
@@ -372,7 +372,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
             List<AppConfigValues> cutOffDateconfigValue = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
                     "DataEntryCutOffDate");
             if (cutOffDateconfigValue != null && !cutOffDateconfigValue.isEmpty()) {
-                if (null == model || null == model.getId() || model.getCurrentState().getValue().endsWith("NEW")) {
+                if (null == model.getId() || model.getCurrentState().getValue().endsWith("NEW")) {
                     validActions = Arrays.asList(FORWARD, FinancialConstants.CREATEANDAPPROVE);
                 } else {
                     if (model.getCurrentState() != null) {
@@ -382,7 +382,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
                     }
                 }
             } else {
-                if (null == model || null == model.getId() || model.getCurrentState().getValue().endsWith("NEW")) {
+                if (null == model.getId() || model.getCurrentState().getValue().endsWith("NEW")) {
                     validActions = Arrays.asList(FORWARD);
                 } else {
                     if (model.getCurrentState() != null) {
@@ -655,7 +655,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
                     date = sdf.parse(cutOffDate);
                     cutOffDate1 = formatter1.format(date);
                 } catch (ParseException e) {
-
+                	LOGGER.error("Parse exception");
                 }
             }
             if (cutOffDate1 != null && voucherDate.compareTo(cutOffDate1) <= 0

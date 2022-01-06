@@ -1,13 +1,13 @@
 
 package org.egov.edcr;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.feature.DimensionMeasurement;
 import org.egov.edcr.utility.DcrConstants;
 import org.junit.Before;
@@ -34,7 +34,7 @@ public class DimensionMeasurementTest extends BaseTest {
 	DimensionMeasurement e = new DimensionMeasurement();
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws IOException {
 		dxfFile = "Dimensions.dxf";
 		super.setUp();
 	}
@@ -47,7 +47,6 @@ public class DimensionMeasurementTest extends BaseTest {
 	}
 
 	@Test
-
 	public final void testExtract2() {
 		DXFDocument doc = pl.getDoc();
 		Iterator dxfLayerIterator = doc.getDXFLayerIterator();
@@ -66,14 +65,14 @@ public class DimensionMeasurementTest extends BaseTest {
 					List<BigDecimal> dims = new ArrayList<>();
 					BigDecimal dim=BigDecimal.ZERO;
 					String text2 = "0";
-					System.out.println(" ==================================================== "); 
-					System.out.println("Layer = " + dxfLayer.getName() + " Id :" + dimension.getID() + "   Inset pt:   "
+					LOG.info(" ==================================================== "); 
+					LOG.info("Layer = " + dxfLayer.getName() + " Id :" + dimension.getID() + "   Inset pt:   "
 							+ dimension.getInsertPoint());
 					String dimensionBlock = dimension.getDimensionBlock();
 					DXFBlock dxfBlock = doc.getDXFBlock(dimensionBlock);
 
 					DXFDimensionStyle dxfDimensionStyle = doc.getDXFDimensionStyle(dimension.getDimensionStyleID());
-					System.out.println(
+					LOG.info(
 							"Property 42---" + dxfDimensionStyle.getProperty(DXFDimensionStyle.PROPERTY_DIMEXO));
 
 					Iterator entitiesIterator = dxfBlock.getDXFEntitiesIterator();
@@ -86,7 +85,7 @@ public class DimensionMeasurementTest extends BaseTest {
 							BigDecimal dub1=new BigDecimal(line.getLength());
 							dub1=dub1.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS, DcrConstants.ROUNDMODE_MEASUREMENTS);
 							dims.add(dub1);
-							System.out.println("line length=" + line.getLength());
+							LOG.info("line length=" + line.getLength());
 						}
 						if (e.getType().equals(DXFConstants.ENTITY_TYPE_MTEXT)) {
 							DXFMText text = (DXFMText) e;
@@ -110,16 +109,16 @@ public class DimensionMeasurementTest extends BaseTest {
 								} else
 									text2 = text2.replaceAll("[^\\d.]", "");
 							}
-							System.out.println("Text2= " + text2);
+							LOG.info("Text2= " + text2);
 						}
 
 					}
 					BigDecimal dub=new BigDecimal(text2);
 					dim= dub.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS, DcrConstants.ROUNDMODE_MEASUREMENTS);
 					if (dims.contains(dim) ){
-						System.out.println("\n Accepted Dimension found " + dim +" List: "+dims +"\n");
+						LOG.info("\n Accepted Dimension found " + dim +" List: "+dims +"\n");
 					} else {
-						System.out.println("\nEdited Dimension found " + dim+" List:"+dims +"\n");
+						LOG.info("\nEdited Dimension found " + dim+" List:"+dims +"\n");
 					}
 				}
 			}

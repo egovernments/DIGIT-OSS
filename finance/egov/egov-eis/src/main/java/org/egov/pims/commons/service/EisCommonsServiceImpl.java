@@ -400,7 +400,7 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 				{
 					subQry+= " where ev.functionary =:functionaryId";
 				}
-				else if(deptId!=null && deptId!=0 && functionaryId!=null && functionaryId!=0 )
+				else if(deptId!=null && deptId!=0 && functionaryId!=null)
 				{
 					subQry+= " where ev.deptId = :deptId and ev.functionary =:functionaryId";
 				}

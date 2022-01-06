@@ -662,7 +662,6 @@ const getReceiptData = (transformedData, ulbLogo) => {
 };
 
 const getCertificateData = (transformedData, ulbLogo) => {
-console.log(transformedData);
   var tlCertificateData = {
     defaultStyle: {
       font: "Camby"
@@ -1020,7 +1019,6 @@ console.log(transformedData);
 };
 
 const generateReceipt = async (state, dispatch, type) => {
-//  console.log("Transformed Data--",transformedData);
   pdfMakeCustom.vfs = pdfFonts.vfs;
   pdfMakeCustom.fonts = {
     Camby:{

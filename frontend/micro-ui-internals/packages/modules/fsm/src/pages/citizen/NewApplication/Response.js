@@ -72,7 +72,6 @@ const Response = ({ data, onSuccess }) => {
         onSuccess,
       });
     } catch (err) {
-      console.log(err);
     }
   }, []);
 

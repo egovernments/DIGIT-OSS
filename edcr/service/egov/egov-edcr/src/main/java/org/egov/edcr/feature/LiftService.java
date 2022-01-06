@@ -53,13 +53,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Lift;
 import org.egov.common.entity.edcr.Measurement;
-import org.egov.common.entity.edcr.OccupancyType;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
 import org.egov.common.entity.edcr.ScrutinyDetail;
@@ -69,14 +67,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class LiftService extends FeatureProcess {
 
-    private static final String SUBRULE_48_DESC = "Minimum number of lifts for block %s";
+    //private static final String SUBRULE_48_DESC = "Minimum number of lifts for block %s";
     private static final String SUBRULE_48 = "48";
     private static final String REMARKS = "Remarks";
     private static final String SUBRULE_48_DESCRIPTION = "Minimum number of lifts";
-    private static final String SUBRULE_40A_3 = "40A-3";
-    private static final String SUBRULE_118 = "118";
-    private static final String SUBRULE_118_DESCRIPTION = "Minimum dimension Of lift %s on floor %s";
-    private static final String SUBRULE_118_DESC = "Minimum dimension Of lift";
+    //private static final String SUBRULE_40A_3 = "40A-3";
+    //private static final String SUBRULE_118 = "118";
+    //private static final String SUBRULE_118_DESCRIPTION = "Minimum dimension Of lift %s on floor %s";
+    //private static final String SUBRULE_118_DESC = "Minimum dimension Of lift";
 
     @Override
     public Plan validate(Plan plan) {
@@ -103,7 +101,7 @@ public class LiftService extends FeatureProcess {
     public Plan process(Plan plan) {
         // validate(plan);
         if (plan != null && !plan.getBlocks().isEmpty()) {
-            blk: for (Block block : plan.getBlocks()) {
+            for (Block block : plan.getBlocks()) {
                 scrutinyDetail = new ScrutinyDetail();
                 scrutinyDetail.addColumnHeading(1, RULE_NO);
                 scrutinyDetail.addColumnHeading(2, DESCRIPTION);
@@ -135,7 +133,7 @@ public class LiftService extends FeatureProcess {
                      * To be added Rule 48 Lift shall be provided for buildings above 15 m. height in case of apartments, group
                      * housing, commercial, institutional and office buildings
                      */
-                    if (block.getBuilding().getIsHighRise() &&
+                    if (Boolean.TRUE.equals(block.getBuilding().getIsHighRise()) &&
                             (DxfFileConstants.A_AF
                                     .equals(plan.getVirtualBuilding().getMostRestrictiveFarHelper().getSubtype()
                                             .getCode())
@@ -154,7 +152,7 @@ public class LiftService extends FeatureProcess {
                                 .compareTo(noOfLiftsRqrd) >= 0) {
                             valid = true;
                         }
-                        if (valid) {
+                        if (Boolean.TRUE.equals(valid)) {
                             setReportOutputDetails(plan, SUBRULE_48, SUBRULE_48_DESCRIPTION,
                                     noOfLiftsRqrd.toString(), block.getNumberOfLifts(), Result.Accepted.getResultVal(),
                                     "", scrutinyDetail);

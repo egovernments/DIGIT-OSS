@@ -47,15 +47,16 @@
 
 package org.egov.edcr.feature;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.egov.edcr.constants.DxfFileConstants.A;
 import static org.egov.edcr.constants.DxfFileConstants.A_AF;
+import static org.egov.edcr.constants.DxfFileConstants.A_PO;
 import static org.egov.edcr.constants.DxfFileConstants.A_R;
 import static org.egov.edcr.constants.DxfFileConstants.B;
 import static org.egov.edcr.constants.DxfFileConstants.D;
 import static org.egov.edcr.constants.DxfFileConstants.F;
 import static org.egov.edcr.constants.DxfFileConstants.G;
 import static org.egov.edcr.constants.DxfFileConstants.I;
-import static org.egov.edcr.constants.DxfFileConstants.A_PO;
 import static org.egov.edcr.utility.DcrConstants.OBJECTNOTDEFINED;
 import static org.egov.edcr.utility.DcrConstants.SIDE_YARD1_DESC;
 import static org.egov.edcr.utility.DcrConstants.SIDE_YARD2_DESC;
@@ -76,13 +77,14 @@ import org.egov.common.entity.edcr.ScrutinyDetail;
 import org.egov.common.entity.edcr.SetBack;
 import org.egov.common.entity.edcr.Yard;
 import org.egov.edcr.constants.DxfFileConstants;
-import org.egov.infra.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SideYardService extends GeneralRule {
 
-    private static final BigDecimal SIDEVALUE_ONE = BigDecimal.valueOf(1);
+    private static final String BASEMENT_SIDE_YARD = "Basement Side Yard";
+	private static final String BLOCK2 = "Block_";
+	private static final BigDecimal SIDEVALUE_ONE = BigDecimal.valueOf(1);
     private static final BigDecimal SIDEVALUE_ONE_TWO = BigDecimal.valueOf(1.2);
     private static final BigDecimal SIDEVALUE_ONEPOINTFIVE = BigDecimal.valueOf(1.5);
     private static final BigDecimal SIDEVALUE_ONEPOINTEIGHT = BigDecimal.valueOf(1.8);
@@ -116,9 +118,9 @@ public class SideYardService extends GeneralRule {
     private static final String SIDE_YARD_2_NOTDEFINED = "side2yardNodeDefined";
     private static final String SIDE_YARD_1_NOTDEFINED = "side1yardNodeDefined";
 
-    public static final String BSMT_SIDE_YARD_DESC = "Basement Side Yard";
+    private static final String BSMT_SIDE_YARD_DESC = BASEMENT_SIDE_YARD;
     private static final int PLOTAREA_300 = 300;
-    public static final BigDecimal ROAD_WIDTH_TWELVE_POINTTWO = BigDecimal.valueOf(12.2);
+    private static final BigDecimal ROAD_WIDTH_TWELVE_POINTTWO = BigDecimal.valueOf(12.2);
 
     private class SideYardResult {
         String rule;
@@ -188,13 +190,14 @@ public class SideYardService extends GeneralRule {
                                     ? sideYard1.getHeight()
                                     : sideYard2.getHeight();
                         } else {
-                            buildingHeight = sideYard1 != null && sideYard1.getHeight() != null
-                                    && sideYard1.getHeight().compareTo(BigDecimal.ZERO) > 0
-                                            ? sideYard1.getHeight()
-                                            : sideYard2 != null && sideYard2.getHeight() != null
-                                                    && sideYard2.getHeight().compareTo(BigDecimal.ZERO) > 0
-                                                            ? sideYard2.getHeight()
-                                                            : block.getBuilding().getBuildingHeight();
+                        	if(sideYard1 != null && sideYard1.getHeight() != null
+                                    && sideYard1.getHeight().compareTo(BigDecimal.ZERO) > 0)
+                        		buildingHeight = sideYard1.getHeight();
+                        	else if(sideYard2 != null && sideYard2.getHeight() != null
+                                                    && sideYard2.getHeight().compareTo(BigDecimal.ZERO) > 0)
+                        		buildingHeight = sideYard2.getHeight();
+                        	else
+                        		buildingHeight = block.getBuilding().getBuildingHeight();
                         }
 
                         double minlength = 0;
@@ -220,10 +223,10 @@ public class SideYardService extends GeneralRule {
 
                         if (buildingHeight != null && (minlength > 0 || max > 0)) {
                             for (final Occupancy occupancy : block.getBuilding().getTotalArea()) {
-                                scrutinyDetail.setKey("Block_" + block.getName() + "_" + "Side Setback");
+                                scrutinyDetail.setKey(BLOCK2 + block.getName() + "_" + "Side Setback");
 
                                 if (setback.getLevel() < 0) {
-                                    scrutinyDetail.setKey("Block_" + block.getName() + "_" + "Basement Side Yard");
+                                    scrutinyDetail.setKey(BLOCK2 + block.getName() + "_" + BASEMENT_SIDE_YARD);
 
                                     checkSideYardBasement(pl, block.getBuilding(), buildingHeight, block.getName(),
                                             setback.getLevel(), plot, minlength, max, minMeanlength, maxMeanLength,
@@ -319,8 +322,7 @@ public class SideYardService extends GeneralRule {
             pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
         }
 
-        if (errors.isEmpty()) {
-            if (sideYard2Result != null) {
+            if (errors.isEmpty() && sideYard2Result != null) {
                 Map<String, String> detailsSideYard2 = new HashMap<>();
                 detailsSideYard2.put(RULE_NO, sideYard2Result.subRule);
                 detailsSideYard2.put(LEVEL,
@@ -331,7 +333,6 @@ public class SideYardService extends GeneralRule {
                 detailsSideYard2.put(FIELDVERIFIED, MINIMUMLABEL);
                 detailsSideYard2.put(PERMISSIBLE, sideYard2Result.expectedDistance.toString());
                 detailsSideYard2.put(PROVIDED, sideYard2Result.actualDistance.toString());
-                // }
                 if (sideYard2Result.status) {
                     detailsSideYard2.put(STATUS, Result.Accepted.getResultVal());
                 } else {
@@ -341,13 +342,12 @@ public class SideYardService extends GeneralRule {
                 scrutinyDetail.getDetail().add(detailsSideYard2);
                 pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
             }
-        }
     }
 
     private void exemptSideYardForAAndF(final Plan pl, Block block, SideYardResult sideYard1Result,
             SideYardResult sideYard2Result) {
         for (final Occupancy occupancy : block.getBuilding().getTotalArea()) {
-            scrutinyDetail.setKey("Block_" + block.getName() + "_" + "Side Setback");
+            scrutinyDetail.setKey(BLOCK2 + block.getName() + "_" + "Side Setback");
             if (occupancy.getTypeHelper().getType() != null
                     && A.equalsIgnoreCase(occupancy.getTypeHelper().getType().getCode())
                     || F.equalsIgnoreCase(occupancy.getTypeHelper().getType().getCode())) {
@@ -396,7 +396,7 @@ public class SideYardService extends GeneralRule {
                 || A_AF.equalsIgnoreCase(mostRestrictiveOccupancy.getSubtype().getCode())
                 || A_PO.equalsIgnoreCase(mostRestrictiveOccupancy.getSubtype().getCode()))) {
             if (pl.getPlanInformation() != null && pl.getPlanInformation().getRoadWidth() != null
-                    && StringUtils.isNotBlank(pl.getPlanInformation().getLandUseZone())
+                    && isNotBlank(pl.getPlanInformation().getLandUseZone())
                     && DxfFileConstants.COMMERCIAL.equalsIgnoreCase(pl.getPlanInformation().getLandUseZone())
                     && pl.getPlanInformation().getRoadWidth().compareTo(ROAD_WIDTH_TWELVE_POINTTWO) < 0) {
                 checkCommercialUptoSixteen(blockName, level, min, max, minMeanlength, maxMeanLength,
@@ -469,18 +469,18 @@ public class SideYardService extends GeneralRule {
             double maxMeanLength, final OccupancyTypeHelper mostRestrictiveOccupancy, SideYardResult sideYard1Result,
             SideYardResult sideYard2Result) {
 
-        String rule = SIDE_YARD_DESC;
+        String rule;
         String subRule = RULE_47;
         Boolean valid2 = false;
         Boolean valid1 = false;
-        BigDecimal side2val = BigDecimal.ZERO;
-        BigDecimal side1val = BigDecimal.ZERO;
+        BigDecimal side2val;
+        BigDecimal side1val;
 
-        if ((mostRestrictiveOccupancy.getSubtype() != null
-                && A_R.equalsIgnoreCase(mostRestrictiveOccupancy.getSubtype().getCode())
-                || A_PO.equalsIgnoreCase(mostRestrictiveOccupancy.getSubtype().getCode()))
-                || F.equalsIgnoreCase(mostRestrictiveOccupancy.getType().getCode())) {
-            if (plot.getArea().compareTo(BigDecimal.valueOf(PLOTAREA_300)) <= 0) {
+		if ((mostRestrictiveOccupancy.getSubtype() != null
+				&& (A_R.equalsIgnoreCase(mostRestrictiveOccupancy.getSubtype().getCode())
+						|| A_PO.equalsIgnoreCase(mostRestrictiveOccupancy.getSubtype().getCode()))
+				|| F.equalsIgnoreCase(mostRestrictiveOccupancy.getType().getCode()))
+				&& plot.getArea().compareTo(BigDecimal.valueOf(PLOTAREA_300)) <= 0) {
                 side2val = SIDEVALUE_THREE;
                 side1val = SIDEVALUE_THREE;
 
@@ -497,7 +497,6 @@ public class SideYardService extends GeneralRule {
                 compareSideYard1Result(blockName, side1val, BigDecimal.valueOf(max), BigDecimal.ZERO,
                         BigDecimal.valueOf(maxMeanLength), mostRestrictiveOccupancy, sideYard1Result, valid1, subRule,
                         rule, level);
-            }
         }
     }
 
@@ -645,7 +644,7 @@ public class SideYardService extends GeneralRule {
                 || A_AF.equalsIgnoreCase(mostRestrictiveOccupancy.getSubtype().getCode())
                 || A_PO.equalsIgnoreCase(mostRestrictiveOccupancy.getSubtype().getCode())) {
             if (pl.getPlanInformation() != null && pl.getPlanInformation().getRoadWidth() != null
-                    && StringUtils.isNotBlank(pl.getPlanInformation().getLandUseZone())
+                    && isNotBlank(pl.getPlanInformation().getLandUseZone())
                     && DxfFileConstants.COMMERCIAL.equalsIgnoreCase(pl.getPlanInformation().getLandUseZone())
                     && pl.getPlanInformation().getRoadWidth().compareTo(ROAD_WIDTH_TWELVE_POINTTWO) < 0) {
                 checkCommercialUptoSixteen(blockName, level, min, max, minMeanlength, maxMeanLength,
@@ -729,7 +728,7 @@ public class SideYardService extends GeneralRule {
                 || A_AF.equalsIgnoreCase(mostRestrictiveOccupancy.getSubtype().getCode())
                 || A_PO.equalsIgnoreCase(mostRestrictiveOccupancy.getSubtype().getCode())) {
             if (pl.getPlanInformation() != null && pl.getPlanInformation().getRoadWidth() != null
-                    && StringUtils.isNotBlank(pl.getPlanInformation().getLandUseZone())
+                    && isNotBlank(pl.getPlanInformation().getLandUseZone())
                     && DxfFileConstants.COMMERCIAL.equalsIgnoreCase(pl.getPlanInformation().getLandUseZone())
                     && pl.getPlanInformation().getRoadWidth().compareTo(ROAD_WIDTH_TWELVE_POINTTWO) < 0) {
                 checkCommercialUptoSixteen(blockName, level, min, max, minMeanlength, maxMeanLength,
@@ -752,7 +751,7 @@ public class SideYardService extends GeneralRule {
             SideYardResult sideYard1Result, SideYardResult sideYard2Result, String rule, String subRule, Boolean valid2,
             Boolean valid1, BigDecimal side2val, BigDecimal side1val, BigDecimal widthOfPlot) {
         if (widthOfPlot.compareTo(BigDecimal.valueOf(10)) <= 0) {
-            // NIL
+            // NIL, no need to provide side yard
         } else if (widthOfPlot.compareTo(BigDecimal.valueOf(10)) > 0
                 && widthOfPlot.compareTo(BigDecimal.valueOf(15)) <= 0) {
             side2val = SIDEVALUE_TWO;
@@ -968,7 +967,7 @@ public class SideYardService extends GeneralRule {
     private void validateSideYardRule(final Plan pl) {
 
         for (Block block : pl.getBlocks()) {
-            if (!block.getCompletelyExisting()) {
+            if (Boolean.FALSE.equals(block.getCompletelyExisting())) {
                 Boolean sideYardDefined = false;
                 for (SetBack setback : block.getSetBacks()) {
                     if (setback.getSideYard1() != null
@@ -979,7 +978,7 @@ public class SideYardService extends GeneralRule {
                         sideYardDefined = true;
                     }
                 }
-                if (!sideYardDefined) {
+                if (Boolean.FALSE.equals(sideYardDefined)) {
                     HashMap<String, String> errors = new HashMap<>();
                     errors.put(SIDE_YARD_DESC,
                             prepareMessage(OBJECTNOTDEFINED, SIDE_YARD_DESC + " for Block " + block.getName()));

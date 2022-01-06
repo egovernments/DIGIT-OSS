@@ -52,8 +52,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -63,7 +63,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoofTank extends FeatureProcess {
 
-	private static final Logger LOG = Logger.getLogger(RoofTank.class);
 	private static final String RULE_44_A = "44-A";
 	public static final String ROOFTANK_DESCRIPTION = "Roof Tanks";
 
@@ -87,12 +86,12 @@ public class RoofTank extends FeatureProcess {
 		Map<String, String> details = new HashMap<>();
 		details.put(RULE_NO, RULE_44_A);
 
-		BigDecimal minHeight = BigDecimal.ZERO;
+		BigDecimal minHeight;
 
 		for (Block b : pl.getBlocks()) {
-			minHeight = BigDecimal.ZERO;
 			if (b.getRoofTanks() != null && !b.getRoofTanks().isEmpty()) {
-				minHeight = b.getRoofTanks().stream().reduce(BigDecimal::min).get();
+				Optional<BigDecimal> rooftankHght = b.getRoofTanks().stream().reduce(BigDecimal::min);
+				minHeight = rooftankHght.isPresent() ? rooftankHght.get() : BigDecimal.ZERO;
 
 				if (minHeight.compareTo(new BigDecimal(1)) <= 0) {
 					details.put(DESCRIPTION, ROOFTANK_DESCRIPTION);

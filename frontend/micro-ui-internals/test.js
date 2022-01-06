@@ -1,19 +1,16 @@
 const middleWare_1 = (data, _break, _next) => {
   data.a = "a";
-  console.log(data);
   _next(data);
 };
 
 const middleWare_2 = (data, _break, _next) => {
   data.b = "b";
-  console.log(data);
   //   _break();
   _next(data);
 };
 
 const middleWare_3 = (data, _break, _next) => {
   data.c = "c";
-  console.log(data);
   _next(data);
 };
 

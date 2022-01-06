@@ -19,7 +19,9 @@ import org.kabeja.dxf.DXFVertex;
 import org.kabeja.dxf.helpers.Point;
 
 public class PrintUtil {
-    private static final Logger LOG = Logger.getLogger(PrintUtil.class);
+    private static final String BY_LAYER = "ByLayer";
+	private static final String AC_DB_ENTITY = "AcDbEntity";
+	private static final Logger LOG = Logger.getLogger(PrintUtil.class);
     public static final String POINT_PRECISION = "ALL";
 
     public static void print(Map<String, String> map) {
@@ -60,11 +62,11 @@ public class PrintUtil {
                 sb.append("5").append("\n");
                 sb.append("47").append("\n");
                 sb.append("100").append("\n");
-                sb.append("AcDbEntity").append("\n");
+                sb.append(AC_DB_ENTITY).append("\n");
                 sb.append("8").append("\n");
                 sb.append(layerName).append("\n");
                 sb.append("6").append("\n");
-                sb.append("ByLayer").append("\n");
+                sb.append(BY_LAYER).append("\n");
                 sb.append("62").append("\n");
                 sb.append(color).append("\n");
                 sb.append("370").append("\n");
@@ -150,11 +152,11 @@ public class PrintUtil {
         sb.append("5").append("\n");
         sb.append("49").append("\n");
         sb.append("100").append("\n");
-        sb.append("AcDbEntity").append("\n");
+        sb.append(AC_DB_ENTITY).append("\n");
         sb.append("8").append("\n");
         sb.append(layerName).append("\n");
         sb.append("6").append("\n");
-        sb.append("ByLayer").append("\n");
+        sb.append(BY_LAYER).append("\n");
         sb.append("62").append("\n");
         sb.append("256").append("\n");
         sb.append("370").append("\n");
@@ -176,15 +178,14 @@ public class PrintUtil {
         StringBuilder sb = new StringBuilder();
         // sb.append("Printing lines for dxf");
         sb.append("LWPOLYLINE").append("\n");
-        ;
         sb.append("5").append("\n");
         sb.append("47").append("\n");
         sb.append("100").append("\n");
-        sb.append("AcDbEntity").append("\n");
+        sb.append(AC_DB_ENTITY).append("\n");
         sb.append("8").append("\n");
         sb.append(layerName).append("\n");
         sb.append("6").append("\n");
-        sb.append("ByLayer").append("\n");
+        sb.append(BY_LAYER).append("\n");
         sb.append("62").append("\n");
         sb.append("256").append("\n");
         sb.append("370").append("\n");
@@ -211,8 +212,7 @@ public class PrintUtil {
     }
 
     public static void print(DXFLWPolyline yard, String name) {
-        if (LOG.isDebugEnabled())
-            if (yard != null) {
+            if (LOG.isDebugEnabled() && yard != null) {
                 Iterator vertexIterator = yard.getVertexIterator();
                 LOG.debug("Points on the " + name);
                 LOG.debug("Max x: " + yard.getBounds().getMaximumX() + " Min x:" + yard.getBounds().getMinimumX());

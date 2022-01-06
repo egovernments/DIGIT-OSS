@@ -47,25 +47,25 @@
 
 package org.egov.edcr.feature;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
 import org.egov.common.entity.edcr.ScrutinyDetail;
-import org.egov.infra.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GovtBuildingDistance extends FeatureProcess {
 
-	private static final Logger LOG = Logger.getLogger(GovtBuildingDistance.class);
 	private static final String RULE_21 = "21";
 	public static final String GOVTBUILDING_DESCRIPTION = "Distance from Government Building";
 
@@ -92,16 +92,17 @@ public class GovtBuildingDistance extends FeatureProcess {
 		details.put(RULE_NO, RULE_21);
 		details.put(DESCRIPTION, GOVTBUILDING_DESCRIPTION);
 
-		BigDecimal minDistanceFromGovtBuilding = BigDecimal.ZERO;
+		BigDecimal minDistanceFromGovtBuilding;
 		BigDecimal maxHeightOfBuilding = BigDecimal.ZERO;
 		List<BigDecimal> distancesFromGovtBuilding = pl.getDistanceToExternalEntity().getGovtBuildings();
 		List<Block> blocks = pl.getBlocks();
 
-		if (StringUtils.isNotBlank(pl.getPlanInformation().getBuildingNearGovtBuilding())
+		if (isNotBlank(pl.getPlanInformation().getBuildingNearGovtBuilding())
 				&& "YES".equalsIgnoreCase(pl.getPlanInformation().getBuildingNearGovtBuilding())) {
 			if (!distancesFromGovtBuilding.isEmpty()) {
 
-				minDistanceFromGovtBuilding = distancesFromGovtBuilding.stream().reduce(BigDecimal::min).get();
+				Optional<BigDecimal> minWidth = distancesFromGovtBuilding.stream().reduce(BigDecimal::min);
+				minDistanceFromGovtBuilding = minWidth.isPresent() ? minWidth.get() : BigDecimal.ZERO;
 
 				for (Block b : blocks) {
 					if (b.getBuilding().getBuildingHeight().compareTo(maxHeightOfBuilding) > 0) {

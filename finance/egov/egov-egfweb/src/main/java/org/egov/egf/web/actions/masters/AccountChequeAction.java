@@ -289,7 +289,8 @@ public class AccountChequeAction extends BaseFormAction {
                     trash.add(cd);
 
         for (final ChequeDetail cd : trash)
-            chequeDetailsList.remove(cd);
+        	if(chequeDetailsList!=null)
+             chequeDetailsList.remove(cd);
         trash.clear();
     }
     

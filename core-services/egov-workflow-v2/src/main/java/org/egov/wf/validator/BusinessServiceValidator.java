@@ -14,6 +14,9 @@ public class BusinessServiceValidator {
 
     private BusinessServiceRepository repository;
 
+    private static final String INVALID_BUSINESS_SERVICE_ERROR_KEY = "INVALID BUSINESSSERVICE";
+    private static final String IS_DUPLICATE_ERROR_KEY = "is duplicate";
+
     @Autowired
     public BusinessServiceValidator(BusinessServiceRepository repository) {
         this.repository = repository;
@@ -51,16 +54,16 @@ public class BusinessServiceValidator {
 
         request.getBusinessServices().forEach(businessService -> {
             if(businessServices.contains(businessService))
-                errorMap.put("INVALID BUSINESSSERVICE","BusinessService: "+businessService.getBusinessService()+" is duplicate");
+                errorMap.put(INVALID_BUSINESS_SERVICE_ERROR_KEY,"BusinessService: "+businessService.getBusinessService()+" "+IS_DUPLICATE_ERROR_KEY);
             else businessServices.add(businessService);
             businessService.getStates().forEach(state -> {
                 if(states.contains(state))
-                    errorMap.put("INVALID STATE","State: "+state.getState()+" is duplicate");
+                    errorMap.put("INVALID STATE","State: "+state.getState()+" "+IS_DUPLICATE_ERROR_KEY);
                 else states.add(state);
                 if(!CollectionUtils.isEmpty(state.getActions()))
                     state.getActions().forEach(action -> {
                         if(actions.contains(action))
-                            errorMap.put("INVALID ACTION","Action: "+action.getAction()+" is duplicate");
+                            errorMap.put("INVALID ACTION","Action: "+action.getAction()+" "+IS_DUPLICATE_ERROR_KEY);
                         else actions.add(action);
                     });
             });
@@ -84,14 +87,14 @@ public class BusinessServiceValidator {
 
         if(isCreate && !CollectionUtils.isEmpty(businessServicesFromDB)){
             businessServicesFromDB.forEach(businessService -> {
-                errorMap.put("INVALID BUSINESSSERVICE","The businessService: "+businessService.getBusinessService()+
+                errorMap.put(INVALID_BUSINESS_SERVICE_ERROR_KEY,"The businessService: "+businessService.getBusinessService()+
                 " for tenantId: "+businessService.getTenantId()+" already exists");
             });
         }
         else if(!isCreate){
             if(businessServicesFromDB.size()!=request.getBusinessServices().size())
                 businessServicesFromDB.forEach(businessService -> {
-                    errorMap.put("INVALID BUSINESSSERVICE","The businessService: "+businessService.getBusinessService()+
+                    errorMap.put(INVALID_BUSINESS_SERVICE_ERROR_KEY,"The businessService: "+businessService.getBusinessService()+
                             " for tenantId: "+businessService.getTenantId()+" does not exists");
                 });
             validateIds(request.getBusinessServices(),businessServicesFromDB);

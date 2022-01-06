@@ -1287,10 +1287,10 @@ public class MicroserviceUtils {
         if (null != access_token && redisTemplate.hasKey(access_token)) {
             sessionId = (String) redisTemplate.opsForHash().get(sessionId, sessionId);
             if (sessionId != null) {
-                System.out.println("***********sessionId**** " + sessionId);
+            	LOGGER.info("***********sessionId**** " + sessionId);
                 redisTemplate.delete(sessionId);
-                System.out.println("spring:session:sessions:" + sessionId);
-                System.out.println("spring:session:sessions:expires:" + sessionId);
+                LOGGER.info("spring:session:sessions:" + sessionId);
+                LOGGER.info("spring:session:sessions:expires:" + sessionId);
                 redisTemplate.delete("spring:session:sessions:" + sessionId);
                 redisTemplate.delete("spring:session:sessions:expires:" + sessionId);
                 redisTemplate.opsForHash().delete(access_token, sessionId);
@@ -1495,10 +1495,11 @@ public class MicroserviceUtils {
             }
             Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
             if (postForObject != null) {
-                return list = mapper.convertValue(
+                list = mapper.convertValue(
                         JsonPath.read(postForObject, "$.MdmsRes.BillingService.BusinessService"),
                         new TypeReference<List<BusinessService>>() {
                         });
+                return list;
             }
         } catch (RestClientException e) {
             LOGGER.error("ERROR occurred while fetching business service details in getBusinessServiceByCodes method: ",

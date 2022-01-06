@@ -13,7 +13,6 @@ let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 const tenant = getTenantId();
 
-//console.log(captureMutationDetails);
 
 const getMDMSData = async (action, dispatch) => {
   const moduleDetails = [
@@ -86,7 +85,6 @@ const getMDMSData = async (action, dispatch) => {
 
 
 
-    // console.log("payload--", payload)
     // dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
     //   if (process.env.REACT_APP_NAME != "Citizen") {
     //     dispatch(

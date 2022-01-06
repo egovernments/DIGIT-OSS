@@ -83,12 +83,10 @@ export const Search = {
     const vehicleCapacity = _vehicle?.capacity;
 
     const demandDetails = await PaymentService.demandSearch(tenantId, applicationNos, "FSM.TRIP_CHARGES");
-    // console.log("find demand detail here", demandDetails)
     const amountPerTrip =
       response?.additionalDetails && response?.additionalDetails.tripAmount
         ? response.additionalDetails.tripAmount
         : demandDetails?.Demands[0]?.demandDetails[0]?.taxAmount || "N/A";
-    // const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
     const totalAmount = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.taxAmount)?.reduce((a, b) => a + b) || "N/A";
 
     const employeeResponse = [

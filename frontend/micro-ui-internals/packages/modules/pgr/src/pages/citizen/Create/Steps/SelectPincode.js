@@ -26,12 +26,10 @@ const SelectPincode = ({ t, config, onSelect, value }) => {
   const goNext = async (data) => {
     var foundValue = tenants.find((obj) => obj.pincode?.find((item) => item == data?.pincode));
     if (foundValue) {
-      // console.log("find found value here", foundValue)
       Digit.SessionStorage.set("city_complaint", foundValue);
       let response = await Digit.LocationService.getLocalities(foundValue.code);
       let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
       const filteredLocalities = __localityList.filter((obj) => obj.pincode?.find((item) => item == data.pincode));
-      // console.log("find pincode filtered localities here", filteredLocalities);
       // Digit.SessionStorage.set("selected_localities", filteredLocalities?.length > 0 ? filteredLocalities : __localityList);
       onSelect({ ...data, city_complaint: foundValue });
     } else {

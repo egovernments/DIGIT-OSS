@@ -213,8 +213,7 @@ public class AccountCodePurposeRepository {
 	}
 
 	public void uniqueCheck(AccountCodePurpose accountCodePurpose) {
-		if (accountCodePurpose.getClass().isAnnotationPresent(Unique.class) == true) {
-		}
+
 	}
 
 	public Boolean uniqueCheck(String fieldName, AccountCodePurpose accountCodePurpose) {

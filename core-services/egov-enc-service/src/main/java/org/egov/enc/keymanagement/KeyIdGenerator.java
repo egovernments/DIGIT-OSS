@@ -32,7 +32,7 @@ public class KeyIdGenerator implements ApplicationRunner {
         secureRandom = new SecureRandom();
     }
 
-    public void refreshKeyIds() {
+    public static void refreshKeyIds() {
         presentKeyIds = keyStore.getKeyIds();
     }
 

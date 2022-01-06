@@ -2,7 +2,7 @@ package org.egov.edcr.utility.math;
 
 public class PerpendicualarCal {
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         getPerpendicularDistance();
     }
 
@@ -28,7 +28,7 @@ public class PerpendicualarCal {
         double lambda = dx * (x3 - x1) + dy * (y3 - y1);
         double x4 = dx * lambda + x1;
         double y4 = dy * lambda + y1;
-        System.out.println(x4 + "," + y4);
+        //LOG.info(x4 + "," + y4);
 
     }
 

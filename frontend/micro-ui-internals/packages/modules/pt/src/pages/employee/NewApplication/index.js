@@ -120,20 +120,10 @@ const NewApplication = () => {
       };
     }
 
-    // console.log(
-    //   data,
-    //   data?.documents?.documents?.find((e) => e.documentType?.includes("OWNER.IDENTITYPROOF")),
-    //   formData,
-    //   "hot fixes"
-    // );
-
-    // console.log(formData, "new application created");
-    // setFormData(formData)
 
     history.replace("/digit-ui/employee/pt/response", { Property: formData }); //current wala
 
-    // history.push("/digit-ui/employee/pt/response", { Property: formData });
-    // history.push("/digit-ui/employee/pt/response", { Property: _formData });
+
   };
   const configs = newConfig;
 

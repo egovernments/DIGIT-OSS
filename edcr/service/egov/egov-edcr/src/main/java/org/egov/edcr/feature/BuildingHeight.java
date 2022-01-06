@@ -47,13 +47,10 @@
 
 package org.egov.edcr.feature;
 
-import static org.egov.edcr.utility.DcrConstants.BUILDING_HEIGHT;
 import static org.egov.edcr.utility.DcrConstants.DECIMALDIGITS_MEASUREMENTS;
 import static org.egov.edcr.utility.DcrConstants.HEIGHT_OF_BUILDING;
-import static org.egov.edcr.utility.DcrConstants.OBJECTNOTDEFINED;
 import static org.egov.edcr.utility.DcrConstants.ROUNDMODE_MEASUREMENTS;
 import static org.egov.edcr.utility.DcrConstants.SECURITY_ZONE;
-import static org.egov.edcr.utility.DcrConstants.SHORTESTDISTINACETOBUILDINGFOOTPRINT;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -70,7 +67,6 @@ import org.egov.common.entity.edcr.NotifiedRoad;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
 import org.egov.common.entity.edcr.ScrutinyDetail;
-import org.egov.edcr.service.ProcessHelper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -103,7 +99,7 @@ public class BuildingHeight extends FeatureProcess {
     }
 
     @Override
-    public Plan process(Plan Plan) {
+    public Plan process(Plan plan) {
 
         /*
          * validate(Plan); scrutinyDetail = new ScrutinyDetail(); scrutinyDetail.setKey("Common_Height of Building");
@@ -112,12 +108,11 @@ public class BuildingHeight extends FeatureProcess {
          * scrutinyDetail.addColumnHeading(5, STATUS); if (!ProcessHelper.isSmallPlot(Plan)) { checkBuildingHeight(Plan); }
          * checkBuildingInSecurityZoneArea(Plan);
          */
-        return Plan;
+        return plan;
     }
 
     private void checkBuildingHeight(Plan Plan) {
         String subRule = SUB_RULE_32_1A;
-        String rule = HEIGHT_OF_BUILDING;
 
         BigDecimal maximumDistanceToRoad = BigDecimal.ZERO;
 
@@ -129,14 +124,12 @@ public class BuildingHeight extends FeatureProcess {
             BigDecimal maximumDistanceToRoadEdge = BigDecimal.ZERO;
             BigDecimal maximumSetBackToBuildingLine = BigDecimal.ZERO;
             BigDecimal exptectedDistance = BigDecimal.ZERO;
-            BigDecimal actualDistance = BigDecimal.ZERO;
 
             // Get Maximum distance to road Edge
             maximumDistanceToRoadEdge = getMaximumDistanceFromRoadEdge(maximumDistanceToRoadEdge, block);
             maximumSetBackToBuildingLine = getMaximumDistanceFromSetBackToBuildingLine(maximumSetBackToBuildingLine, block);
-            actualDistance = block.getBuilding().getBuildingHeight();
-            if (maximumDistanceToRoadEdge != null) {
-                if (maximumDistanceToRoad.compareTo(TWELVE) <= 0) {
+            BigDecimal actualDistance = block.getBuilding().getBuildingHeight() == null ? BigDecimal.ZERO : block.getBuilding().getBuildingHeight();
+            if (maximumDistanceToRoadEdge != null && maximumDistanceToRoad.compareTo(TWELVE) <= 0) {
 
                     if (maximumSetBackToBuildingLine != null && maximumSetBackToBuildingLine.compareTo(BigDecimal.ZERO) > 0) {
                         exptectedDistance = maximumDistanceToRoadEdge
@@ -148,13 +141,12 @@ public class BuildingHeight extends FeatureProcess {
                                 .setScale(DECIMALDIGITS_MEASUREMENTS, ROUNDMODE_MEASUREMENTS);
 
                 }
-            }
             // Show for each block height
-            if (exptectedDistance.compareTo(BigDecimal.ZERO) > 0) {
-                String actualResult = getLocaleMessage(RULE_ACTUAL_KEY, actualDistance.toString());
+            if (exptectedDistance != null && exptectedDistance.compareTo(BigDecimal.ZERO) > 0) {
+                String actualResult = getLocaleMessage(RULE_ACTUAL_KEY, String.valueOf(actualDistance));
                 String expectedResult = getLocaleMessage(RULE_EXPECTED_KEY, exptectedDistance.toString());
 
-                if (actualDistance.compareTo(exptectedDistance) > 0) {
+                if (actualDistance != null && actualDistance.compareTo(exptectedDistance) > 0) {
                     Map<String, String> details = new HashMap<>();
                     details.put(RULE_NO, subRule);
                     details.put(DESCRIPTION, HEIGHT_OF_BUILDING + " for Block " + block.getNumber());
@@ -181,7 +173,7 @@ public class BuildingHeight extends FeatureProcess {
 
     private void checkBuildingInSecurityZoneArea(Plan Plan) {
 
-        if (Plan.getPlanInformation().getSecurityZone()) {
+        if (Boolean.TRUE.equals(Plan.getPlanInformation().getSecurityZone())) {
             BigDecimal maxBuildingHeight = BigDecimal.ZERO;
             for (Block block : Plan.getBlocks()) {
                 if (maxBuildingHeight.compareTo(BigDecimal.ZERO) == 0 ||
@@ -265,31 +257,27 @@ public class BuildingHeight extends FeatureProcess {
         return distanceFromSetbackToBuildingLine;
     }
 
-    private BigDecimal getMaximimShortestdistanceFromRoad(Plan Plan, BigDecimal maximumDistanceToRoad) {
-        if (Plan.getNonNotifiedRoads() != null)
-            for (NonNotifiedRoad nonnotifiedRoad : Plan.getNonNotifiedRoads())
+    private BigDecimal getMaximimShortestdistanceFromRoad(Plan plan, BigDecimal maximumDistanceToRoad) {
+        if (plan.getNonNotifiedRoads() != null)
+            for (NonNotifiedRoad nonnotifiedRoad : plan.getNonNotifiedRoads())
                 for (BigDecimal shortDistance : nonnotifiedRoad.getShortestDistanceToRoad())
-                    if (shortDistance.compareTo(maximumDistanceToRoad) > 0) {
+                    if (shortDistance.compareTo(maximumDistanceToRoad) > 0)
                         maximumDistanceToRoad = shortDistance;
-                    }
-        if (Plan.getNotifiedRoads() != null)
-            for (NotifiedRoad notifiedRoad : Plan.getNotifiedRoads())
+        if (plan.getNotifiedRoads() != null)
+            for (NotifiedRoad notifiedRoad : plan.getNotifiedRoads())
                 for (BigDecimal shortDistance : notifiedRoad.getShortestDistanceToRoad())
-                    if (shortDistance.compareTo(maximumDistanceToRoad) > 0) {
+                    if (shortDistance.compareTo(maximumDistanceToRoad) > 0)
                         maximumDistanceToRoad = shortDistance;
-                    }
-        if (Plan.getCuldeSacRoads() != null)
-            for (CulDeSacRoad culdRoad : Plan.getCuldeSacRoads())
+        if (plan.getCuldeSacRoads() != null)
+            for (CulDeSacRoad culdRoad : plan.getCuldeSacRoads())
                 for (BigDecimal shortDistance : culdRoad.getShortestDistanceToRoad())
-                    if (shortDistance.compareTo(maximumDistanceToRoad) > 0) {
+                    if (shortDistance.compareTo(maximumDistanceToRoad) > 0)
                         maximumDistanceToRoad = shortDistance;
-                    }
-        if (Plan.getLaneRoads() != null)
-            for (Lane lane : Plan.getLaneRoads())
+        if (plan.getLaneRoads() != null)
+            for (Lane lane : plan.getLaneRoads())
                 for (BigDecimal shortDistance : lane.getShortestDistanceToRoad())
-                    if (shortDistance.compareTo(maximumDistanceToRoad) > 0) {
+                    if (shortDistance.compareTo(maximumDistanceToRoad) > 0)
                         maximumDistanceToRoad = shortDistance;
-                    }
         return maximumDistanceToRoad;
     }
 

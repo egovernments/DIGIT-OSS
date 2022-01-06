@@ -104,21 +104,29 @@ public class UserRequest {
     private GuardianRelation relationship;
 
     @SafeHtml
+    @Size(max = 36)
     private String signature;
 
     @SafeHtml
+    @Size(max = 32)
     private String bloodGroup;
 
     @SafeHtml
+    @Size(max = 36)
     private String photo;
 
     @SafeHtml
+    @Size(max = 300)
     private String identificationMark;
+
     private Long createdBy;
+
+    @Size(max = 64)
     private String password;
 
     @SafeHtml
     private String otpReference;
+
     private Long lastModifiedBy;
 
     @Pattern(regexp = UserServiceConstants.PATTERN_TENANT)

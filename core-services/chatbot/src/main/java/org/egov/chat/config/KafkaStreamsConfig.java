@@ -47,7 +47,7 @@ public class KafkaStreamsConfig {
         return (Properties) defaultStreamConfiguration.clone();
     }
 
-    private void initDefaultStreamConfiguration() {
+    private static void initDefaultStreamConfiguration() {
         defaultStreamConfiguration = new Properties();
         defaultStreamConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, applicationProperties.getKafkaHost());
         defaultStreamConfiguration.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
@@ -63,7 +63,7 @@ public class KafkaStreamsConfig {
         return jsonSerde;
     }
 
-    private void initJsonSerde() {
+    private static void initJsonSerde() {
         Serializer<JsonNode> jsonSerializer = new JsonSerializer();
         Deserializer<JsonNode> jsonDeserializer = new JsonDeserializer();
         jsonSerde = Serdes.serdeFrom(jsonSerializer, jsonDeserializer);

@@ -47,12 +47,14 @@
 
 package org.egov.edcr.feature;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.egov.edcr.constants.DxfFileConstants.A_R;
 import static org.egov.edcr.utility.DcrConstants.DECIMALDIGITS_MEASUREMENTS;
 import static org.egov.edcr.utility.DcrConstants.ROUNDMODE_MEASUREMENTS;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -72,19 +74,19 @@ import org.egov.common.entity.edcr.ScrutinyDetail;
 import org.egov.edcr.constants.DxfFileConstants;
 import org.egov.edcr.service.ProcessHelper;
 import org.egov.edcr.utility.DcrConstants;
-import org.egov.infra.utils.StringUtils;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ExitWidth extends FeatureProcess {
 
-    private static final String EXIT_WIDTH_DESC = "Exit Width";
-    // private static final String SUB_RULE_DESCRIPTION = "Minimum exit width";
-    public static final BigDecimal VAL_0_75 = BigDecimal.valueOf(0.75);
-    public static final BigDecimal VAL_1_2 = BigDecimal.valueOf(1.2);
+    private static final String BLOCK2 = "Block_";
+	private static final String IS_TYPICAL_REPITITIVE_FLOOR = "isTypicalRepititiveFloor";
+	private static final String TYPICAL_FLOORS = "typicalFloors";
+	private static final String EXIT_WIDTH_DESC = "Exit Width";
+	private static final BigDecimal VAL_0_75 = BigDecimal.valueOf(0.75);
+    private static final BigDecimal VAL_1_2 = BigDecimal.valueOf(1.2);
     private static final String SUBRULE_42_3 = "42-3";
-    // private static final String SUB_RULE_OCCUPANTS_DESCRIPTION = "Maximum number of occupants that can be allowed through";
     private static final String OCCUPANCY = "Occupancy";
     private static final String EXIT_WIDTH = "Exit Width";
     private static final String FLOOR = "Floor";
@@ -121,7 +123,6 @@ public class ExitWidth extends FeatureProcess {
     public Plan process(Plan pl) {
 
         String rule = EXIT_WIDTH_DESC;
-        String subRule = null;
         validateExitWidth(pl);
         if (!pl.getBlocks().isEmpty()) {
             blk: for (Block block : pl.getBlocks()) {
@@ -132,7 +133,7 @@ public class ExitWidth extends FeatureProcess {
                 scrutinyDetail.addColumnHeading(4, REQUIRED);
                 scrutinyDetail.addColumnHeading(5, PROVIDED);
                 scrutinyDetail.addColumnHeading(6, STATUS);
-                scrutinyDetail.setKey("Block_" + block.getNumber() + "_" +
+                scrutinyDetail.setKey(BLOCK2 + block.getNumber() + "_" +
                         "Exit Width- Minimum Exit Width");
                 ScrutinyDetail scrutinyDetail2 = new ScrutinyDetail();
                 scrutinyDetail2.addColumnHeading(1, RULE_NO);
@@ -140,7 +141,7 @@ public class ExitWidth extends FeatureProcess {
                 scrutinyDetail2.addColumnHeading(3, REQUIRED);
                 scrutinyDetail2.addColumnHeading(4, PROVIDED);
                 scrutinyDetail2.addColumnHeading(5, STATUS);
-                scrutinyDetail2.setKey("Block_" + block.getNumber() + "_" +
+                scrutinyDetail2.setKey(BLOCK2 + block.getNumber() + "_" +
                         "Exit Width- Maximum Occupant Load");
                 if (block.getBuilding() != null && !block.getBuilding().getFloors().isEmpty()) {
                     if (ProcessHelper.checkExemptionConditionForBuildingParts(block)) {
@@ -154,17 +155,16 @@ public class ExitWidth extends FeatureProcess {
                         if (!flr.getOccupancies().isEmpty()) {
                             for (Occupancy occupancy : flr.getOccupancies()) {
                                 Map<String, Object> occupancyTypeValueMap = new HashMap<>();
-                                String occupancyTypeHelper = StringUtils.EMPTY;
+                                String occupancyTypeHelper = EMPTY;
                                 OccupancyHelperDetail occupancyHelperDetail = null;
                                 if (occupancy.getTypeHelper().getSubtype() != null) {
                                     occupancyHelperDetail = occupancy.getTypeHelper().getSubtype();
                                     occupancyTypeHelper = occupancy.getTypeHelper().getSubtype().getCode();
-                                } else if (occupancy.getTypeHelper() != null) {
-                                    if (occupancy.getTypeHelper().getType() != null) {
-                                        occupancyHelperDetail = occupancy.getTypeHelper().getType();
-                                        occupancyTypeHelper = occupancy.getTypeHelper().getType().getCode();
-                                    }
-                                }
+								} else if (occupancy.getTypeHelper() != null
+										&& occupancy.getTypeHelper().getType() != null) {
+									occupancyHelperDetail = occupancy.getTypeHelper().getType();
+									occupancyTypeHelper = occupancy.getTypeHelper().getType().getCode();
+								}
                                 if (occupancyTypeHelper.equals(DxfFileConstants.A)
                                         || occupancyTypeHelper.equals(DxfFileConstants.A_R) ||
                                         occupancyTypeHelper.equals(DxfFileConstants.A_SR)
@@ -176,7 +176,7 @@ public class ExitWidth extends FeatureProcess {
                                     value = VAL_1_2;
                                 }
                                 if(occupancyHelperDetail != null)
-                                occupancyTypeValueMap.put(OCCUPANCY, occupancyHelperDetail.getName());
+                                	occupancyTypeValueMap.put(OCCUPANCY, occupancyHelperDetail.getName());
                                 occupancyTypeValueMap.put(EXIT_WIDTH, value);
                                 occupancyTypeValueListMap.add(occupancyTypeValueMap);
                             }
@@ -191,12 +191,10 @@ public class ExitWidth extends FeatureProcess {
                                             (BigDecimal) mostRestrictiveOccupancyAndMaxValueMap.get(EXIT_WIDTH)) == 0) {
                                         if (mostRestrictiveOccupancyAndMaxValueMap.get(OCCUPANCY) != null && !(occupancyValueMap.get(OCCUPANCY))
                                                 .equals(mostRestrictiveOccupancyAndMaxValueMap.get(OCCUPANCY))) {
-                                            SortedSet<String> uniqueOccupancies = new TreeSet<>();
+                                            
                                             String[] occupancyString = (occupancyValueMap.get(OCCUPANCY) + " , " +
                                                     mostRestrictiveOccupancyAndMaxValueMap.get(OCCUPANCY)).split(" , ");
-                                            for (String str : occupancyString) {
-                                                uniqueOccupancies.add(str);
-                                            }
+                                            SortedSet<String> uniqueOccupancies = new TreeSet<>(Arrays.asList(occupancyString));
                                             String occupancyStr = removeDuplicates(uniqueOccupancies);
                                             mostRestrictiveOccupancyAndMaxValueMap.put(OCCUPANCY, occupancyStr);
                                         }
@@ -207,7 +205,7 @@ public class ExitWidth extends FeatureProcess {
                                         mostRestrictiveOccupancyAndMaxValueMap.putAll(occupancyValueMap);
                                     }
                                 }
-                                validateExitWidth(flr, pl, subRule, rule,
+                                validateExitWidth(flr, pl, rule,
                                         block, (BigDecimal) mostRestrictiveOccupancyAndMaxValueMap.get(EXIT_WIDTH),
                                         (String) mostRestrictiveOccupancyAndMaxValueMap.get(OCCUPANCY));
                             }
@@ -216,7 +214,7 @@ public class ExitWidth extends FeatureProcess {
                             BigDecimal occupantLoad = BigDecimal.ZERO;
                             BigDecimal maxOccupantsAllowedThrghExits = BigDecimal.ZERO;
                             BigDecimal occupantLoadDivisonFactor;
-                            String occupancyTypeHelper = StringUtils.EMPTY;
+                            String occupancyTypeHelper = EMPTY;
                             if (occupancy.getTypeHelper() != null) {
                                 if (occupancy.getTypeHelper().getSubtype() != null) {
                                     occupancyTypeHelper = occupancy.getTypeHelper().getSubtype().getCode();
@@ -329,7 +327,7 @@ public class ExitWidth extends FeatureProcess {
                                     minimumOfMaxOccupantsAllowedThrghExits = occupantsAllowedThroughExits;
                                 }
                             }
-                            validateRuleOccupantLoad(rule, subRule,
+                            validateRuleOccupantLoad(
                                     totalOccupantLoadForAFloor, minimumOfMaxOccupantsAllowedThrghExits, pl, block, flr,
                                     scrutinyDetail2);
                         }
@@ -341,20 +339,20 @@ public class ExitWidth extends FeatureProcess {
         return pl;
     }
 
-    private void validateRuleOccupantLoad(String rule, String subRule, BigDecimal occupantLoadInAFlr,
+    private void validateRuleOccupantLoad(BigDecimal occupantLoadInAFlr,
             BigDecimal maxOccupantsAllowedThrghExits, Plan pl, Block block, Floor floor, ScrutinyDetail scrutinyDetail2) {
         boolean valid = false;
         boolean isTypicalRepititiveFloor = false;
+        String subRule = SUBRULE_42_3;
         if (maxOccupantsAllowedThrghExits != null && occupantLoadInAFlr != null
                 && maxOccupantsAllowedThrghExits.compareTo(BigDecimal.ZERO) > 0
                 && occupantLoadInAFlr.compareTo(BigDecimal.ZERO) > 0) {
             Map<String, Object> typicalFloorValues = ProcessHelper.getTypicalFloorValues(block, floor, isTypicalRepititiveFloor);
-            if (!(Boolean) typicalFloorValues.get("isTypicalRepititiveFloor")) {
+            if (Boolean.FALSE.equals(typicalFloorValues.get(IS_TYPICAL_REPITITIVE_FLOOR))) {
                 if (maxOccupantsAllowedThrghExits.compareTo(occupantLoadInAFlr) >= 0) {
                     valid = true;
-                    subRule = SUBRULE_42_3;
                 }
-                String value = typicalFloorValues.get("typicalFloors") != null ? (String) typicalFloorValues.get("typicalFloors")
+                String value = typicalFloorValues.get(TYPICAL_FLOORS) != null ? (String) typicalFloorValues.get(TYPICAL_FLOORS)
                         : " floor " + floor.getNumber();
                 if (valid) {
                     setReportOutputDetailsWithoutOccupancy(pl, subRule, value, occupantLoadInAFlr.toString(),
@@ -409,7 +407,7 @@ public class ExitWidth extends FeatureProcess {
                         ROUNDMODE_MEASUREMENTS).doubleValue()));
     }
 
-    private void validateExitWidth(Floor floor, Plan pl, String subRule, String rule, Block block, BigDecimal value,
+    private void validateExitWidth(Floor floor, Plan pl, String rule, Block block, BigDecimal value,
             String occupancyType) {
         // calculate minimum of exit widths provided and validate for that.
         boolean isTypicalRepititiveFloor = false;
@@ -421,23 +419,23 @@ public class ExitWidth extends FeatureProcess {
                 }
             }
             Map<String, Object> typicalFloorValues = ProcessHelper.getTypicalFloorValues(block, floor, isTypicalRepititiveFloor);
-            if (!(Boolean) typicalFloorValues.get("isTypicalRepititiveFloor")) {
+            if (Boolean.FALSE.equals(typicalFloorValues.get(IS_TYPICAL_REPITITIVE_FLOOR))) {
                 Boolean valid = false;
-                subRule = SUBRULE_42_3;
+                String subRuleNo = SUBRULE_42_3;
                 if (minimumExitWidth.compareTo(value) >= 0) {
                     valid = true;
                 }
-                String typclFloor = typicalFloorValues.get("typicalFloors") != null
-                        ? (String) typicalFloorValues.get("typicalFloors")
+                String typclFloor = typicalFloorValues.get(TYPICAL_FLOORS) != null
+                        ? (String) typicalFloorValues.get(TYPICAL_FLOORS)
                         : " floor " + floor.getNumber();
-                if (valid) {
-                    setReportOutputDetails(pl, subRule, typclFloor, occupancyType, value + DcrConstants.IN_METER,
+                if (Boolean.TRUE.equals(valid)) {
+                    setReportOutputDetails(pl, subRuleNo, typclFloor, occupancyType, value + DcrConstants.IN_METER,
                             minimumExitWidth + DcrConstants.IN_METER,
                             Result.Accepted.getResultVal());
                 } else {
-                    setReportOutputDetails(pl, subRule, typclFloor, occupancyType, value + DcrConstants.IN_METER,
+                    setReportOutputDetails(pl, subRuleNo, typclFloor, occupancyType, value + DcrConstants.IN_METER,
                             minimumExitWidth + DcrConstants.IN_METER,
-                            Result.Accepted.getResultVal());
+                            Result.Not_Accepted.getResultVal());
                 }
             }
         }

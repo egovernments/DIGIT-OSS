@@ -56,6 +56,7 @@ import org.springframework.stereotype.Repository;
 public class HierarchyTypeRepository {
 
 	private static String SELECT_NEXT_HIERARCHY_TYPE_SEQUENCE = "select nextval('seq_eg_hierarchy_type')";
+	private static final String PARAMETER_TENANT_ID = "tenantid";
 
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -76,7 +77,7 @@ public class HierarchyTypeRepository {
 		HierarchyType hierarchyType = null;
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
 		parametersMap.put("name", name);
-		parametersMap.put("tenantid", tenantId);
+		parametersMap.put(PARAMETER_TENANT_ID, tenantId);
 		List<HierarchyType> hierarchyTypeList = namedParameterJdbcTemplate.query(
 				HierarchyTypeQueryBuilder.getHierarchyTypeByNameAndTenantId(), parametersMap,
 				new HierarchyTypeRowMapper());
@@ -99,7 +100,7 @@ public class HierarchyTypeRepository {
 		HierarchyType hierarchyType = null;
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
 		parametersMap.put("code", code);
-		parametersMap.put("tenantid", tenantId);
+		parametersMap.put(PARAMETER_TENANT_ID, tenantId);
 		List<HierarchyType> hierarchyTypeList = namedParameterJdbcTemplate.query(
 				HierarchyTypeQueryBuilder.getHierarchyTypeByCodeAndTenantId(), parametersMap,
 				new HierarchyTypeRowMapper());
@@ -113,7 +114,7 @@ public class HierarchyTypeRepository {
 		HierarchyType hierarchyType = null;
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
 		parametersMap.put("id", id);
-		parametersMap.put("tenantid", tenantId);
+		parametersMap.put(PARAMETER_TENANT_ID, tenantId);
 		List<HierarchyType> hierarchyTypeList = namedParameterJdbcTemplate.query(
 				HierarchyTypeQueryBuilder.getHierarchyTypeByIdAndTenantId(), parametersMap,
 				new HierarchyTypeRowMapper());
@@ -125,7 +126,7 @@ public class HierarchyTypeRepository {
 
 	public List<HierarchyType> findAllByTenantId(String tenantId) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
-		parametersMap.put("tenantid", tenantId);
+		parametersMap.put(PARAMETER_TENANT_ID, tenantId);
 		List<HierarchyType> hierarchyTypeList = namedParameterJdbcTemplate.query(
 				HierarchyTypeQueryBuilder.getAllHierarchyTypeByTenantId(), parametersMap, new HierarchyTypeRowMapper());
 		return hierarchyTypeList;
@@ -143,7 +144,7 @@ public class HierarchyTypeRepository {
 		parametersMap.put("lastmodifiedby", 1);
 		parametersMap.put("version", 0);
 		parametersMap.put("localname", hierarchyType.getLocalName());
-		parametersMap.put("tenantid", hierarchyType.getTenantId());
+		parametersMap.put(PARAMETER_TENANT_ID, hierarchyType.getTenantId());
 		namedParameterJdbcTemplate.update(HierarchyTypeQueryBuilder.getHierarchyTypeInsertquery(), parametersMap);
 		return hierarchyType;
 	}
@@ -155,7 +156,7 @@ public class HierarchyTypeRepository {
 		parametersMap.put("lastmodifiedby", 1);
 		parametersMap.put("localname", hierarchyType.getLocalName());
 		parametersMap.put("code", hierarchyType.getCode());
-		parametersMap.put("tenantid", hierarchyType.getTenantId());
+		parametersMap.put(PARAMETER_TENANT_ID, hierarchyType.getTenantId());
 		namedParameterJdbcTemplate.update(HierarchyTypeQueryBuilder.getHierarchyTypeupdatequery(), parametersMap);
 		return hierarchyType;
 	}

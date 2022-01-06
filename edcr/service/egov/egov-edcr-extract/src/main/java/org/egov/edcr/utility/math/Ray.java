@@ -44,10 +44,10 @@ public class Ray {
             final Point p2) {
 
         return Line2D.linesIntersect(
-                Double.valueOf(rayStartPoint.getX()).floatValue(), Double.valueOf(rayStartPoint.getY()).floatValue(),
-                Double.valueOf(testPoint.getX()).floatValue(), Double.valueOf(testPoint.getY()).floatValue(),
-                Double.valueOf(p1.getX()).floatValue(), Double.valueOf(p1.getY()).floatValue(),
-                Double.valueOf(p2.getX()).floatValue(), Double.valueOf(p2.getY()).floatValue());
+                rayStartPoint.getX(), rayStartPoint.getY(),
+                testPoint.getX(), testPoint.getY(),
+                p1.getX(), p1.getY(),
+                p2.getX(), p2.getY());
     }
 
     // our cheap rectangle collision method.

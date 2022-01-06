@@ -14,7 +14,6 @@ const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl,history,
 
   
   const tick =(leftTime) => {
-  //  console.log(leftTime);
   }
 
 
