@@ -1383,6 +1383,9 @@ public class MicroserviceUtils {
         String ulbGrade = "";
         List<ModuleDetail> moduleDetailList = new ArrayList<>();
         String tenentId = getTenentId();
+        if(tenentId==null){
+        	tenentId="";
+        }
         try {
             this.prepareModuleDetails(moduleDetailList, "tenant", "tenants", "code", tenentId, String.class);
             Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailList, true, null, null), Map.class);
@@ -1615,7 +1618,7 @@ public class MicroserviceUtils {
     }
 
     public InstrumentAccountCode getInstrumentAccountGlCodeByType(String type) {
-        List<InstrumentAccountCode> list = null;
+        List<InstrumentAccountCode> list = new ArrayList<>();
         List<ModuleDetail> moduleDetailsList = new ArrayList<>();
         this.prepareModuleDetails(moduleDetailsList, "FinanceModule", "InstrumentGLcodeMapping", "instrumenttype", type,
                 String.class);

@@ -169,7 +169,7 @@ public class CollectionDishonorChequeDetails extends BaseModel {
 		if (debitAmount == null && creditAmount == null) {
 
 			return false;
-        } else if (!(debitAmount.compareTo(other.debitAmount) == 0 && creditAmount.compareTo(other.creditAmount) == 0))
+        } else if (!(debitAmount!=null && debitAmount.compareTo(other.debitAmount) == 0 && creditAmount.compareTo(other.creditAmount) == 0))
             return false;
         return true;
     }

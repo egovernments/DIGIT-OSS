@@ -271,7 +271,7 @@ public class ServiceDetailsAction extends BaseFormAction {
             serviceTypeMap.remove(CollectionConstants.SERVICE_TYPE_BILLING);
         }
         return BEFOREMODIFY;
-    }
+    }	
 
     @SuppressWarnings("unchecked")
     @ValidationErrorPage(value = BEFOREMODIFY)

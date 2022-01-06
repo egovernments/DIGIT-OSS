@@ -446,7 +446,7 @@ public class ExpenseBillService {
             egBillregister.transition().progressWithStateCopy().withSenderName(user.getUsername() + "::" + user.getName())
                     .withComments(approvalComent)
                     .withStateValue(stateValue).withDateInfo(currentDate.toDate())
-                    .withOwner(wfInitiator.getPosition())
+                    .withOwner(wfInitiator==null ? null :wfInitiator.getPosition())
                     .withNextAction("")
                     .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME);
         } else {
@@ -693,8 +693,8 @@ public class ExpenseBillService {
             
     		org.egov.pims.commons.Designation designation = new org.egov.pims.commons.Designation();
             Designation _desg = this.getDesignationDetails(emplist.get(0).getAssignments().get(0).getDesignation());
-            designation.setCode(_desg.getCode());
-            designation.setName(_desg.getName());
+            designation.setCode(_desg==null ? null: _desg.getCode());
+            designation.setName(_desg==null ? null: _desg.getName());
             assignment.setDesignation(designation);
             
             org.egov.infra.admin.master.entity.Department department = new org.egov.infra.admin.master.entity.Department();

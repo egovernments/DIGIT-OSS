@@ -428,7 +428,7 @@ public class GeneralLedgerHibernateDAO  implements GeneralLedgerDAO {
 			if (!(schemeId == null || schemeId.equals("")) && (subSchemeId == null || subSchemeId.equals(""))) {
 				qry.setString("schemeId", schemeId);
 			}
-			if (!(schemeId == null || schemeId.equals("")) && !(subSchemeId == null) || subSchemeId.equals("")) {
+			if (!(schemeId == null || schemeId.equals("")) && !(subSchemeId == null) || "".equals(subSchemeId)) {
 				qry.setString("schemeId", schemeId);
 				qry.setString("subSchemeId", subSchemeId);
 			}

@@ -268,7 +268,7 @@ public class CommnFunctions
                 txnBalancehasmap.put(accntCode, txnBalance);
             } else
                 ((HashMap) txnBalancehasmap.get(accntCode)).put(fund, amt);
-            if (firstElement.equals(element))
+            if (element.equals(firstElement))
                 break;
             /** Storing GLCode and (fund-amount paired HashMap) pairs into HashMap **/
             txnBalancehasmap.put(accntCode, txnBalance);

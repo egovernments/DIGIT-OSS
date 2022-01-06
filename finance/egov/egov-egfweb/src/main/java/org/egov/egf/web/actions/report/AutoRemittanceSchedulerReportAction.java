@@ -186,10 +186,10 @@ public class AutoRemittanceSchedulerReportAction extends SearchFormAction {
             reportBean.setScheduleType(schStringType);
             final String glcode = (String) row[4];
             String recCoa = "";
-            if (StringUtils.isNotEmpty(glcode)) {
-                final CChartOfAccounts ca = null;// chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(glcode);
-                recCoa = ca.getGlcode() + "-" + ca.getName();
-            }
+			if (StringUtils.isNotEmpty(glcode)) {
+				final CChartOfAccounts ca = null;// chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(glcode);
+				recCoa = ca == null ? " " : ca.getGlcode() + "-" + ca.getName();
+			}
             reportBean.setRecoveryCoa(recCoa);
             final String stat = (String) row[5];
             if (stat.equalsIgnoreCase("success")) {

@@ -514,10 +514,12 @@ public class ContingentBillAction extends BaseBillAction {
                  * voucherHeader.getVouchermis().setFunction(function); }
                  */
                 validateFields();
+                if(cbill!=null){
                 cbill = updateBill(cbill);
                 validateLedgerAndSubledger();
                 recreateCheckList(cbill);
                 forwardBill(cbill);
+                }
 
             } catch (final ValidationException e) {
                 LOGGER.error("Inside catch block" + e.getMessage());
@@ -538,10 +540,11 @@ public class ContingentBillAction extends BaseBillAction {
 
         EgBillregister cbill = null;
         cbill = (EgBillregister) persistenceService.find("from Cbill where id=?", billRegisterId);
-        if (cbill != null && cbill.getState() != null)
+        if(cbill!=null){
+        if ( cbill.getState() != null)
             if (!validateOwner(cbill.getState()))
                 throw new ApplicationRuntimeException("Invalid Aceess");
-        if (parameters.get(ACTION_NAME)[0].contains("reject"))
+        if (parameters.get(ACTION_NAME)[0].contains("reject") )
             cbill.getCreatedBy();
         // billRegisterWorkflowService.transition(parameters.get(ACTION_NAME)[0]+"|"+userId, cbill,parameters.get("comments")[0]);
         cbill.transition().end().withOwner(getPosition()).withComments(parameters.get("comments")[0]);
@@ -557,6 +560,7 @@ public class ContingentBillAction extends BaseBillAction {
         persistenceService.persist(cbill);
         persistenceService.getSession().flush();
         addActionMessage(getText("cbill.cancellation.succesful"));
+        }
     }
 
     private void removeEmptyRows() {
@@ -588,6 +592,7 @@ public class ContingentBillAction extends BaseBillAction {
                 else if (vd.getSubledgerCode() == null || vd.getSubledgerCode().equals(""))
                     trash.add(vd);
         for (final VoucherDetails vd : trash)
+        	if(billDetailsTableSubledger!=null)
             billDetailsTableSubledger.remove(vd);
 
     }

@@ -812,10 +812,12 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
 
         if (billingService == null && serviceDetails.getServiceType().equals(CollectionConstants.SERVICE_TYPE_BILLING))
             return false;
-        else
+        else 
             try {
+            	if(billingService!=null)
                 billingService.updateReceiptDetails(billReceipts);
                 return true;
+            	
             } catch (ValidationException e) {
                 LOGGER.error("Validation error occurred while updating receipt details ", e);
                 throw e;
@@ -825,6 +827,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
                 LOGGER.error(errMsg, e);
                 throw new ApplicationRuntimeException(errMsg, e);
             }
+        
     }
 
     public String getAdditionalInfoForReceipt(final String serviceCode, final BillReceiptInfo billReceipt) {

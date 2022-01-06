@@ -1800,7 +1800,7 @@ public class CollectionObjectFactory {
 
 	public ReceiptHeader createReceiptHeaderForChallan() throws NumberFormatException {
 		// ReceiptPayeeDetails payee = createReceiptPayeeDetails();
-		ReceiptHeader receiptHeader = null; // TODO: Fix the issue by getting
+		ReceiptHeader receiptHeader = new ReceiptHeader(); // TODO: Fix the issue by getting
 											// ReceiptHeader
 											// //payee.getReceiptHeaders().iterator().next();
 		// receiptHeader.setReceiptPayeeDetails(payee);
