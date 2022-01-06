@@ -30,7 +30,7 @@ const OBPSDocumentsEmp = ({ t, config, onSelect, userType, formData, setError: s
 
   const goNext = () => {
     let data = formData;
-    data && data?.FieldReports && data?.FieldReports.length > 0 && documents.length > 0 ? data.FieldReports[indexx] = { ...data.FieldReports[indexx], Documents: documents } : "";
+    data && data?.FieldReports && data?.FieldReports.length > 0 && documents?.length > 0 ? data.FieldReports[indexx] = { ...data.FieldReports[indexx], Documents: documents } : "";
     data && data?.FieldReports && data?.FieldReports.length > 0 && documents.length > 0 ? setFieldReports(data.FieldReports) : "";
   };
 
@@ -99,6 +99,7 @@ function SelectDocument({
   function selectfile(e, key) {
     e && setSelectedDocument({ documentType: key });
     e && setFile(e.file);
+    e && setUploadedFile(e?.fileStoreId?.fileStoreId);
   }
 
   function getData(e, key) {
@@ -144,6 +145,7 @@ function SelectDocument({
           return prev;
         }
         const filteredDocumentsByFileStoreId = prev?.filter((item) => item?.fileStoreId !== uploadedFile);
+        const filteredDocumentByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.documentType);
         if (selectedDocument?.id) {
           return [
             ...filteredDocumentsByFileStoreId,
@@ -154,15 +156,20 @@ function SelectDocument({
               id: selectedDocument?.id
             },
           ];
-        } else {
-          return [
-            ...filteredDocumentsByFileStoreId,
+        } 
+        else{
+        let UniqueDocTypeTempArray =[];
+        newArray.map((ob) => {
+          UniqueDocTypeTempArray.push( 
+            //...filteredDocumentsByFileStoreId,
             {
               documentType: selectedDocument?.documentType,
-              fileStoreId: uploadedFile,
-              tenantId: tenantId
+              fileStoreId: ob?.fileStoreId?.fileStoreId,
+              tenantId: ob?.fileStoreId?.tenantId,
             },
-          ];
+          );
+          })
+          return [...filteredDocumentByDocumentType, ...UniqueDocTypeTempArray];
         }
       });
     }
@@ -181,29 +188,29 @@ function SelectDocument({
     }
   }, [uploadedFile, selectedDocument, isHidden]);
 
-  useEffect(() => {
-    (async () => {
-      setError(null);
-      if (file) {
-        if (file.size >= 5242880) {
-          setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
-        } else {
-          try {
-            setUploadedFile(null);
-            const response = await Digit.UploadServices.Filestorage("TL", file, Digit.ULBService.getStateId());
-            if (response?.data?.files?.length > 0) {
-              setUploadedFile(response?.data?.files[0]?.fileStoreId);
-            } else {
-              setError(t("CS_FILE_UPLOAD_ERROR"));
-            }
-          } catch (err) {
-            console.error("Modal -> err ", err);
-            setError(t("CS_FILE_UPLOAD_ERROR"));
-          }
-        }
-      }
-    })();
-  }, [file]);
+  // useEffect(() => {
+  //   (async () => {
+  //     setError(null);
+  //     if (file) {
+  //       if (file.size >= 5242880) {
+  //         setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+  //       } else {
+  //         try {
+  //           setUploadedFile(null);
+  //           const response = await Digit.UploadServices.Filestorage("TL", file, Digit.ULBService.getStateId());
+  //           if (response?.data?.files?.length > 0) {
+  //             setUploadedFile(response?.data?.files[0]?.fileStoreId);
+  //           } else {
+  //             setError(t("CS_FILE_UPLOAD_ERROR"));
+  //           }
+  //         } catch (err) {
+  //           console.error("Modal -> err ", err);
+  //           setError(t("CS_FILE_UPLOAD_ERROR"));
+  //         }
+  //       }
+  //     }
+  //   })();
+  // }, [file]);
 
   useEffect(() => {
     if (doc && formData?.documents?.documents?.length > 0) {

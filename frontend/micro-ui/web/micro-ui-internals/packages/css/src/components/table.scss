@@ -74,7 +74,8 @@
       position: sticky;
       background: #fff;
       left: 0;
-   
+      border-right: 1px solid #b1b4b6;
+      border-top-left-radius: 4px;
     }
    }
    tbody {
@@ -83,6 +84,7 @@
       background: #fff;
       color: #f47738;
       left: 0;
+      border-right: 1px solid #b1b4b6;
     }
    }
 }

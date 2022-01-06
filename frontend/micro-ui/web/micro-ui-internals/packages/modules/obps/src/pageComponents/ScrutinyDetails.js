@@ -235,9 +235,9 @@ const clearall = (num) => {
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_BUILDING_EXTRACT_HEADER")}</CardSubHeader>
       <StatusTable  style={{border:"none"}}>
-      <Row className="border-none" label={t("BPA_BUILTUP_AREA_HEADER")} text={data?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea}></Row>
+      <Row className="border-none" label={t("BPA_TOTAL_BUILT_UP_AREA_HEADER")} text={data?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea ? `${data?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea} ${t("BPA_SQ_MTRS_LABEL")}` : t("NA")}></Row>
       <Row className="border-none" label={t("BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL")} text={data?.planDetail?.blocks?.[0]?.building?.totalFloors}></Row>
-      <Row className="border-none" label={t("BPA_HEIGHT_FROM_GROUND_LEVEL_FROM_MUMTY")} text={`${data?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight} mtrs`}></Row>
+      <Row className="border-none" label={t("BPA_HEIGHT_FROM_GROUND_LEVEL_FROM_MUMTY")} text={data?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight ? `${data?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeight} ${t("BPA_MTRS_LABEL")}` : t("NA")}></Row>
       </StatusTable>
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_OCC_SUBOCC_HEADER")}</CardSubHeader>
@@ -295,7 +295,7 @@ const clearall = (num) => {
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardSubHeader>{t("BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL")}</CardSubHeader>
       <StatusTable  style={{border:"none"}}>
-      <Row label={t("BPA_APPLICATION_DEMOLITION_AREA_LABEL")} text={data?.planDetail?.planInformation?.demolitionArea?`${data?.planDetail?.planInformation?.demolitionArea} sq.mtrs`:t("CS_NA")}></Row>
+      <Row label={t("BPA_APPLICATION_DEMOLITION_AREA_LABEL")} text={data?.planDetail?.planInformation?.demolitionArea?`${data?.planDetail?.planInformation?.demolitionArea} ${t("BPA_SQ_MTRS_LABEL")}`:t("CS_NA")}></Row>
       </StatusTable>
       </FormStep>
       {showToast && <Toast

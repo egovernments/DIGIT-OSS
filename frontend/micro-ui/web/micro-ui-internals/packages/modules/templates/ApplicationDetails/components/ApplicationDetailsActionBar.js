@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { SubmitBar, ActionBar, Menu } from "@egovernments/digit-ui-react-components";
 
-function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, setDisplayMenu, businessService, forcedActionPrefix }) {
+function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, setDisplayMenu, businessService, forcedActionPrefix,ActionBarStyle={} }) {
   const { t } = useTranslation();
   const user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
@@ -14,7 +14,7 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
   return (
     <React.Fragment>
       {!workflowDetails?.isLoading && actions?.length > 0 && (
-        <ActionBar>
+        <ActionBar style={{...ActionBarStyle}}>
           {displayMenu && workflowDetails?.data?.actionState?.nextActions ? (
             <Menu
               localeKeyPrefix={forcedActionPrefix || `WF_EMPLOYEE_${businessService?.toUpperCase()}`}

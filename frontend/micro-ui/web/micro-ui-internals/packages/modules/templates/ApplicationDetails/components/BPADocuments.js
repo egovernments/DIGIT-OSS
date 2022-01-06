@@ -198,7 +198,7 @@ function SelectDocument({
                 checkEnablingDocs ?
                     <div style={{ marginTop: "20px" }}>
                         <LabelFieldPair>
-                            <CardLabel>{doc?.required ? `${t(doc?.code)}* ` : `${t(doc?.code)}`}</CardLabel>
+                            <CardLabel style={{marginTop:"-10px"}}>{doc?.required ? `${t(doc?.code)}* ` : `${t(doc?.code)}`}</CardLabel>
                             <Dropdown
                                 className="form-field"
                                 t={t}

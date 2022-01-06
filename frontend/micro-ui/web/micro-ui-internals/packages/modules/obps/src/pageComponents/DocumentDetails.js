@@ -103,7 +103,7 @@ function SelectDocument({
     const [selectedDocument, setSelectedDocument] = useState(
         filteredDocument
             ? { ...filteredDocument, active: true, code: filteredDocument?.documentType, i18nKey: filteredDocument?.documentType }
-            : doc?.dropdownData?.length === 1
+            : doc?.dropdownData?.length > 0
                 ? doc?.dropdownData[0]
                 : {}
     );

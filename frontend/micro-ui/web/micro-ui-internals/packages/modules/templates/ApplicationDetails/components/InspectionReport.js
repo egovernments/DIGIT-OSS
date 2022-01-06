@@ -29,7 +29,7 @@ function InspectionReport({ fiReport, isCitizen=false }) {
                     <div style={{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "950px", minWidth: "280px", marginBottom: "24px" }}>
                         <StatusTable>
                             <Row className="border-none" label={fiReport?.length == 1 ? `${t(`BPA_FI_REPORT`)}` : `${t(`BPA_FI_REPORT`)} - ${index + 1}`} text={""} />
-                            <Row className="border-none" label={`${t(`BPA_FI_DATE_LABEL`)}`} text={fiData?.date ? fiData?.date : "NA"} />
+                            <Row className="border-none" label={`${t(`BPA_FI_DATE_LABEL`)}`} text={fiData?.date ? (fiData.date.includes("-")?  `${fiData.date?.split("-")[2]}/${fiData.date?.split("-")[1]}/${fiData.date?.split("-")[0]}` : fiData?.date) : "NA"} />
                             <Row className="border-none" label={`${t(`BPA_FI_TIME_LABEL`)}`} text={fiData?.time ? fiData?.time : "NA"} />
                             {fiData?.questions?.length &&
                                 fiData?.questions?.map((qstn) =>

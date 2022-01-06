@@ -11,7 +11,7 @@ import {
   EmailIcon,
   WhatsappIcon,
 } from "@egovernments/digit-ui-react-components";
-import { startOfYear, endOfYear, format, addMonths, endOfToday } from "date-fns";
+import { startOfYear, getMonth, format, addMonths, endOfToday, subYears } from "date-fns";
 import Filters from "../components/Filters";
 import Layout from "../components/Layout";
 import FilterContext from "../components/FilterContext";
@@ -19,9 +19,18 @@ import { useParams } from "react-router-dom";
 
 const key = 'DSS_FILTERS';
 
+function addFinancialYearAccordingToCurrentDate () {
+  const currentDate = new Date()
+  if(getMonth(currentDate) > 3){
+    return addMonths(startOfYear(currentDate), 3)
+  } else {
+    return addMonths(subYears(startOfYear(currentDate), 1),3)
+  }
+}
+
 const getInitialRange = () => {
   const data = Digit.SessionStorage.get(key);
-  const startDate = data?.range?.startDate ? new Date(data?.range?.startDate) : addMonths(startOfYear(new Date()), 3);
+  const startDate = data?.range?.startDate ? new Date(data?.range?.startDate) : addFinancialYearAccordingToCurrentDate()
   const endDate = data?.range?.endDate ? new Date(data?.range?.endDate) : endOfToday();
   const title = `${format(startDate, "MMM d, yyyy")} - ${format(endDate, "MMM d, yyyy")}`;
   const duration = Digit.Utils.dss.getDuration(startDate, endDate);
