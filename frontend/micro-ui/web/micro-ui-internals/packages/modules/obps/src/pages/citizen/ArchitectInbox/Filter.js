@@ -23,7 +23,6 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
   const clearAll = () => {setSearchParams({applicationType: [], applicationStatus:[]});
   onFilterChange({});
 };
-
   return (
     <React.Fragment>
       <div className="filter">
