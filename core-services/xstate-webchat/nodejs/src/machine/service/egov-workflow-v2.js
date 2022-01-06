@@ -1,14 +1,12 @@
 const fetch = require('node-fetch');
-const fs = require('fs');
 const config = require('../../env-variables');
+const moment = require('moment');
 const messages = require('../messages/complaint-messages');
 require('url-search-params-polyfill');
 
 class WorkFlowService {
 
   async getApplicationStatus(user,applicationId) {
-    //let appId = 'PB-AC-2021-02-17-011746';
-    let tenanatid_suffix = '.amritsar';
     const requestBody = {
       RequestInfo: {
         authToken: user.authToken,
@@ -16,7 +14,7 @@ class WorkFlowService {
     };
 
     let url = config.egovServices.egovServicesHost + config.egovServices.egovWorkflowSearchPath;
-    url = `${url}?tenantId=${config.rootTenantId}.amritsar`;
+    url = `${url}?tenantId=${user.userInfo.permanentCity}`;
     url += '&';
     url += `businessIds=${applicationId}`;
 
@@ -32,19 +30,25 @@ class WorkFlowService {
     const response = await fetch(url, options);
     let results;
     if (response.status === 200) {
-      const responseBody = await response.json();
-      let processInstances = responseBody.ProcessInstances;
-      for (let processInstance of processInstances) {
-        let applicationStatus = processInstance.state.applicationStatus;
-        results = applicationStatus;
-        break;
-      }
-    } else {
-      console.error('Error in fetching the complaints');
-      return [];
-    }
+          const responseBody = await response.json();
+          results = await this.prepareAppTimelineResult(responseBody);
+      } 
     return results;
   }
-}
 
+  async prepareAppTimelineResult(responseBody){
+    var results = {};
+    results['AppStatus'] = [];
+    let processInstances = responseBody.ProcessInstances;
+      for (let processInstance of processInstances) {
+            let applicationDate = moment(processInstance.auditDetails.lastModifiedTime).tz(config.timeZone).format(config.dateFormat);
+            var data ={
+              status: processInstance.state.applicationStatus,
+              date: applicationDate
+            }
+            results['AppStatus'].push(data);
+      }
+      return results;
+  }
+}
 module.exports = new WorkFlowService();

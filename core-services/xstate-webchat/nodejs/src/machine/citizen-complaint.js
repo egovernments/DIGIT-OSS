@@ -112,7 +112,7 @@ const citizenComplaint = {
         }, // process
         error: {
           onEntry: assign((context, event) => {
-            dialog.sendMessage(context, dialog.get_message(dialog.global_messages.error.retry, context.user.locale), false);
+            dialog.sendMessage(context, dialog.get_message(dialog.global_messages.error.retry, context.user.locale), true);
           }),
           always: 'question',
         }, // error
@@ -127,10 +127,8 @@ const citizenComplaint = {
                 onDone: {
                     target: '#appidSubmit',
                     actions: assign((context, event) => {
-                        let complaintDetails = event.data;
-                        let appstatus=[{ status:'Pending',date: new Date}];
                         let message = dialog.get_message(messages.complaintCategoryItems.appidSearch.messageBundle, context.user.locale);
-                        message.appstatus=appstatus;
+                        message.appstatus=event.data.AppStatus;
                         let nextStepList = messages.complaintCategoryItems[context.intention].nextStep;
                         let messageBundleForCode = '';
                         let grammer = dialog.constructContextGrammer(nextStepList, messageBundleForCode, context.user.locale);

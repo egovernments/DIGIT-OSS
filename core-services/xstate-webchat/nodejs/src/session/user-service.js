@@ -4,51 +4,25 @@ require('url-search-params-polyfill');
 
 class UserService {
   async getUserForMobileNumber(mobileNumber, tenantId) {
-    let user = await this.loginOrCreateUser(mobileNumber, tenantId);
-   //Check added for anonmous users
-    if(user!=undefined){
+    let user = await this.loginUser(mobileNumber, tenantId);
+    console.log("reformattedMessage:: ", user.utf8Data);
+    //Check added for anonmous users
+    if (user != undefined) {
       user.userId = user.userInfo.uuid;
       user.mobileNumber = mobileNumber;
       user.name = user.userInfo.name;
       user.locale = user.userInfo.locale;
-    }else{
+    } else {
       //For Anonmous if the profile creation has failed then populate default values in user object
-       user = { locale: 'en_IN', userId: mobileNumber,name:mobileNumber,mobileNumber:mobileNumber};
-     
-    }
- 
-    return user;
-  }
+      user = {
+        locale: 'en_IN',
+        userId: mobileNumber,
+        name: mobileNumber,
+        mobileNumber: mobileNumber
+      };
 
-  async loginOrCreateUser(mobileNumber, tenantId) {
-    let user = await this.loginUser(mobileNumber, tenantId);
-    if (user === undefined) {
-      await this.createUser(mobileNumber, tenantId);
-      user = await this.loginUser(mobileNumber, tenantId);
     }
-    //Check added to skip enrichuserDetails call for anonymous users
-    if(user!=undefined){
-      user = await this.enrichuserDetails(user);
-    }
-    
-    return user;
-  }
 
-  async enrichuserDetails(user) {
-    const url = `${config.egovServices.userServiceHost + config.egovServices.userServiceCitizenDetailsPath}?access_token=${user.authToken}`;
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-
-    const response = await fetch(url, options);
-    if (response.status === 200) {
-      const body = await response.json();
-      user.userInfo.name = body.name;
-      user.userInfo.locale = body.locale;
-    }
     return user;
   }
 
@@ -86,36 +60,6 @@ class UserService {
     return undefined;
   }
 
-  async createUser(mobileNumber, tenantId) {
-    const requestBody = {
-      RequestInfo: {},
-      User: {
-        otpReference: config.userService.userServiceHardCodedPassword,
-        permamnentCity: tenantId,
-        tenantId,
-        username: mobileNumber,
-      },
-    };
 
-    const url = config.egovServices.userServiceHost + config.egovServices.userServiceCreateCitizenPath;
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody),
-    };
-
-    const response = await fetch(url, options);
-    if (response.status === 200) {
-      const responseBody = await response.json();
-      return responseBody;
-    }
-    const responseBody = await response.json();
-    console.error(JSON.stringify(responseBody));
-    console.error('User Create Error');
-    return undefined;
-  }
 }
-
 module.exports = new UserService();
