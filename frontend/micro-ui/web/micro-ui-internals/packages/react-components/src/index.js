@@ -136,7 +136,8 @@ import {
   WSICon,
   SendIcon,
   GalleryIcon,
-  ArrowIcon
+  ArrowIcon,
+  RatingPopupImage
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -391,7 +392,8 @@ export {
   WSICon,
   SendIcon,
   GalleryIcon,
-  ArrowIcon
+  ArrowIcon,
+  RatingPopupImage
 
 };
 
