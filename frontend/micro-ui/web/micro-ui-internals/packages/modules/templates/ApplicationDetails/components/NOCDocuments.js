@@ -84,7 +84,7 @@ function SelectDocument({
       <div style={{/*  border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", display: "flex" */ }}>
         <LabelFieldPair>
           <CardLabel>{doc?.required ? `${t("TL_BUTTON_UPLOAD FILE")}*` : `${t("TL_BUTTON_UPLOAD FILE")}`}</CardLabel>
-          <div className="field" style={{width: "70%"}}>
+          <div className="field" style={{width: "65%"}}>
             <MultiUploadWrapper
               module="NOC"
               tenantId={tenantId}

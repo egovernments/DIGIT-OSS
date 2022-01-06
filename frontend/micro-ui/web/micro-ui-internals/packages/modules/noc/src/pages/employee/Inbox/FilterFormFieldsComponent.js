@@ -53,7 +53,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
           control={controlFilterForm}
           render={(props) => {
             return <>
-              <div className="filter-label">{t("BUSINESS_SERVICE")}</div>
+              <div className="filter-label sub-filter-label">{t("BUSINESS_SERVICE")}</div>
                 <RadioButtons
                   onSelect={(e) => {
                     setFilterFormValue("applicationStatus",[]);
@@ -82,7 +82,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
               label={`${t(`WF_${status.businessservice}_${status.applicationstatus.split('_').pop()}`)} (${status.count})`}
             />}),[props.value, statuses, selectedBusinessService])
           return <>
-            <div className="filter-label">{t("ACTION_TEST_APPLICATION_STATUS")}</div>
+            <div className="filter-label sub-filter-label">{t("ACTION_TEST_APPLICATION_STATUS")}</div>
             {isInboxLoading ? <Loader /> : <>{renderStatusCheckBoxes}</>}
           </>
         }}

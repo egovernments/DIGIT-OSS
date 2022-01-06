@@ -7,7 +7,7 @@ const Status = ({ statuses, onAssignmentChange, searchParams }) => {
   // const [applicationStatus, setApplicationStatus] = useState(statuses);
   return (
     <div className="status-container">
-      <div className="filter-label">{t("ES_INBOX_STATUS")}</div>
+      <div className="filter-label sub-filter-label">{t("ES_INBOX_STATUS")}</div>
       {statuses?.map((option, index) => (
         <StatusCount key={index} onAssignmentChange={onAssignmentChange} searchParams={searchParams} status={option}  />
       ))}

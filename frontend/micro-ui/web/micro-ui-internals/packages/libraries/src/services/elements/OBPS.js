@@ -320,7 +320,7 @@ export const OBPSService = {
         title: "BPA_FI_REPORT",
         asSectionHeader: true,
         values: [
-          { title: "BPA_FI_DATE_LABEL", value: ob.date },
+          { title: "BPA_FI_DATE_LABEL", value: ob.date.includes("-")? `${ob.date?.split("-")[2]}/${ob.date?.split("-")[1]}/${ob.date?.split("-")[0]}`:ob.date },
           { title: "BPA_FI_TIME_LABEL", value: ob.time },
         ]
       });

@@ -36,7 +36,8 @@ const ApplicationDetails = (props) => {
     moduleCode,
     timelineStatusPrefix,
     forcedActionPrefix,
-    statusAttribute
+    statusAttribute,
+    ActionBarStyle,
   } = props;
   useEffect(() => {
     if (showToast) {
@@ -148,6 +149,7 @@ const ApplicationDetails = (props) => {
             setDisplayMenu={setDisplayMenu}
             businessService={businessService}
             forcedActionPrefix={forcedActionPrefix}
+            ActionBarStyle={ActionBarStyle}
           />
         </React.Fragment>
       ) : (
