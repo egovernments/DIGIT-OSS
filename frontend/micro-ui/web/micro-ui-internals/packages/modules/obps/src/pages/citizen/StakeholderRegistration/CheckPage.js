@@ -13,8 +13,14 @@ import {
     const match = useRouteMatch();
     let user = Digit.UserService.getUser()
     const tenantId = user &&  user?.info && user?.info?.permanentCity ? user?.info?.permanentCity : Digit.ULBService.getCurrentTenantId();
+    const tenant = Digit.ULBService.getStateId();
     let isopenlink = window.location.href.includes("/openlink/");
     const isCitizenUrl = Digit.Utils.browser.isMobile()?true:false;
+
+    if(isopenlink)  
+    window.onunload = function () {
+      sessionStorage.removeItem("Digit.BUILDING_PERMIT");
+    }
 
     const { result, formData, documents} = value;
     let consumerCode=value?.result?.Licenses[0].applicationNumber;
@@ -23,7 +29,7 @@ import {
 
 
       const {data:paymentDetails} = Digit.Hooks.obps.useBPAREGgetbill(
-        { businessService: "BPAREG", ...fetchBillParams, tenantId: tenantId },
+        { businessService: "BPAREG", ...fetchBillParams, tenantId: tenant ? tenant : tenantId.split(".")[0] },
         {
           enabled: consumerCode ? true : false,
           retry: false,
@@ -33,7 +39,7 @@ import {
       let routeLink = isopenlink?`/digit-ui/citizen/obps/openlink/stakeholder/apply`:`/digit-ui/citizen/obps/stakeholder/apply`;
 
       function routeTo(jumpTo) {
-        location.href=jumpTo;
+        history.push(jumpTo);
     }
 
 
@@ -130,7 +136,7 @@ import {
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
       <CardHeader>{t("BPA_COMMON_TOTAL_AMT")}</CardHeader> 
       <CardHeader>₹ {paymentDetails?.billResponse?.Bill?.[0]?.billDetails[0]?.amount}</CardHeader> 
-      <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} />
+      <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} disabled={paymentDetails?.billResponse?.Bill?.[0]?.billDetails[0]?.amount?false:true} />
       </Card>
     </div>
     </div>

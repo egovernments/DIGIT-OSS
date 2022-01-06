@@ -225,7 +225,7 @@ const InspectionReportForm = (_props) => {
                     ) : null}
                     <CardSectionHeader>{allFieldReport?.length > 1 ? `${t("BPA_FI_REPORT")}-${index + 1}` : `${t("BPA_FI_REPORT")}`}</CardSectionHeader>
                     <LabelFieldPair style={{ paddingLeft: "16px" }}>
-                        <CardLabel style={{ marginTop: "0px", marginRight: "30px" }} className="card-label-smaller">{`${t("BPA_FI_DATE_LABEL")} * :`}</CardLabel>
+                        <CardLabel style={{ marginTop: "0px", marginRight: "30px" }} className="card-label-smaller">{`${t("BPA_FI_DATE_LABEL")} * `}</CardLabel>
                         <div className="field" style={{ width: "70%" }}>
                             <Controller
                                 name="InspectionDate"
@@ -242,7 +242,7 @@ const InspectionReportForm = (_props) => {
                         </div>
                     </LabelFieldPair>
                     <LabelFieldPair style={{ paddingLeft: "16px" }}>
-                        <CardLabel style={{ marginTop: "0px", marginRight: "30px" }} className="card-label-smaller">{`${t("ES_COMMON_TIME")} * :`}</CardLabel>
+                        <CardLabel style={{ marginTop: "0px", marginRight: "30px" }} className="card-label-smaller">{`${t("ES_COMMON_TIME")} * `}</CardLabel>
                         <div className="field" style={{ width: "70%" }}>
                             <Controller
                                 name="InspectionTime"
@@ -263,7 +263,7 @@ const InspectionReportForm = (_props) => {
                     {questionList && questionList.map((ob, ind) => (
                         <div key={ind} className="fieldInsepctionInsideWrapper" style={{ maxWidth: "100%" }}>
                             <LabelFieldPair>
-                                <CardLabel style={{ marginRight: "30px" }} className="card-label-smaller">{`${t(ob.question)}*:`}</CardLabel>
+                                <CardLabel style={{ marginRight: "30px" }} className="card-label-smaller">{`${t(ob.question)}*`}</CardLabel>
                                 <div className="field" style={{ width: "70%", maxWidth: "70%" }}>
                                     <Controller
                                         control={control}

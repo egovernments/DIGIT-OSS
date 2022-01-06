@@ -4,6 +4,7 @@ import * as dss from "./dss";
 import * as locale from "./locale";
 import * as obps from "./obps";
 import PDFUtil, { downloadReceipt ,downloadPDFFromLink ,getFileUrl} from "./pdf";
+import getFileTypeFromFileStoreURL from "./fileType";
 
 const GetParamFromUrl = (key, fallback, search) => {
   if (typeof window !== "undefined") {
@@ -226,6 +227,7 @@ export default {
   downloadReceipt,
   downloadPDFFromLink,
   getFileUrl,
+  getFileTypeFromFileStoreURL,
   browser: BrowserUtil,
   locale,
   date,

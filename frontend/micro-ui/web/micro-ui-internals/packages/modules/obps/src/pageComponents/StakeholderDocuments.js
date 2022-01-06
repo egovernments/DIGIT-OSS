@@ -23,6 +23,11 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     const isCitizenUrl = Digit.Utils.browser.isMobile()?true:false;
     let isopenlink = window.location.href.includes("/openlink/");
 
+    if(isopenlink)  
+    window.onunload = function () {
+      sessionStorage.removeItem("Digit.BUILDING_PERMIT");
+    }
+
     const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateId, "StakeholderRegistraition", "TradeTypetoRoleMapping");
     
 
@@ -220,7 +225,7 @@ function SelectDocument({
                 }}
                 message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
                 error={error}
-                inputStyles={{top:"0%"}}
+                inputStyles={{top:"0%",maxHeight:""}}
                 Multistyle={isCitizenUrl?{marginTop:"-15px",position:"absolute"}:{marginTop:"-11px",position:"absolute"}}
             />
         </div>

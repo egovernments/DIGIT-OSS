@@ -32,9 +32,9 @@ const DocumentDetails = ({ documents }) => {
               <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-start", alignContent: "center" }}>
                 <a target="_blank" href={pdfFiles[filestoreId]?.split(",")[0]} style={{ minWidth: "100px", marginRight: "10px", maxWidth: "100px", height: "auto" }} key={index}>
                   <div style={{ display: "flex", justifyContent: "center" }}>
-                    <PDFSvg style={{ background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />
+                    <PDFSvg />
                   </div>
-                  <p style={{ marginTop: "8px", textAlign: "center", color: "#505A5F" }}>{t(document?.title)}</p>
+                  <p style={{ marginTop: "8px", textAlign: "center", color: "#505A5F", fontWeight: "400", lineHeight: "19px", fontSize: "16px" }}>{t(document?.title)}</p>
                 </a>
               </div>
             )}

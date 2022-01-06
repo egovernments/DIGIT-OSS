@@ -83,7 +83,7 @@ function SelectDocument({
   return (
       <div style={{/*  border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", display: "flex" */ }}>
         <LabelFieldPair>
-          <CardLabel>{doc?.required ? `${t("TL_BUTTON_UPLOAD FILE")}*:` : `${t("TL_BUTTON_UPLOAD FILE")}:`}</CardLabel>
+          <CardLabel>{doc?.required ? `${t("TL_BUTTON_UPLOAD FILE")}*` : `${t("TL_BUTTON_UPLOAD FILE")}`}</CardLabel>
           <div className="field" style={{width: "70%"}}>
             <MultiUploadWrapper
               module="NOC"
@@ -163,13 +163,13 @@ const NOCDocuments = ({ t, noc, docs, isNoc, applicationData,NOCdata, bpaActions
   return (
     <div style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", maxWidth:"950px"/*  display: "flex" */ }}>
       <StatusTable>
-      <Row label={isEmployee ? `${t(`BPA_${noc?.nocType}_HEADER`)}:` : t(`BPA_${noc?.nocType}_HEADER`)} />
+      <Row label={isEmployee ? `${t(`BPA_${noc?.nocType}_HEADER`)}` : t(`BPA_${noc?.nocType}_HEADER`)} />
       {NOCdata && NOCdata.map((noc,index) => {
         if (noc?.value) {
           if (noc?.field == "STATUS") {
-            return <Row label={isEmployee ? `${t(noc?.title)}:` : t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} textStyle = {(noc?.value == "APPROVED" || noc?.value == "AUTO_APPROVED") ? {color: "#00703C"} : {color : "#D4351C"}}/>
+            return <Row label={isEmployee ? `${t(noc?.title)}` : t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} textStyle = {(noc?.value == "APPROVED" || noc?.value == "AUTO_APPROVED") ? {color: "#00703C"} : {color : "#D4351C"}}/>
           } else {
-            return <Row label={isEmployee ? `${t(noc?.title)}:` : t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} />
+            return <Row label={isEmployee ? `${t(noc?.title)}` : t(noc?.title)} text={noc?.value?t(noc?.value):t("CS_NA")} />
           }
         }
       })}

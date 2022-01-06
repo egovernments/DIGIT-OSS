@@ -11,6 +11,8 @@ const ApplicationTable = ({
   onSort,
   onNextPage,
   onPrevPage,
+  onFirstPage,
+  onLastPage,
   onPageSizeChange,
   pageSizeLimit,
   sortParams,
@@ -25,6 +27,8 @@ const ApplicationTable = ({
       getCellProps={getCellProps}
       onNextPage={onNextPage}
       onPrevPage={onPrevPage}
+      onLastPage={onLastPage}
+      onFirstPage={onFirstPage}
       pageSizeLimit={pageSizeLimit}
       disableSort={disableSort}
       onPageSizeChange={onPageSizeChange}

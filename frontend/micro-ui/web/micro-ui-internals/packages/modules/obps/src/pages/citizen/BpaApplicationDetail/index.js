@@ -396,9 +396,9 @@ const BpaApplicationDetail = () => {
                       <Row className="border-none" label={t(scrutiny?.title)} />
                       <LinkButton
                         onClick={() => downloadDiagram(scrutiny?.value)}
-                        label={<PDFSvg style={{ background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />}>
+                        label={<PDFSvg />}>
                       </LinkButton>
-                      <Row className="border-none" label={t(scrutiny?.text)} labelStyle={{ fontSize: "14px", color: "#505A5F", fontWeight: "400" }} />
+                      <p style={{ marginTop: "8px", marginBottom: "20px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#505A5F", fontWeight: "400" }}>{t(scrutiny?.text)}</p>
                     </Fragment>
                   )) : null}
 
