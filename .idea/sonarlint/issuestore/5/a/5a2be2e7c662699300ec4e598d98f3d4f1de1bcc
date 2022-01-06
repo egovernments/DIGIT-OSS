@@ -1,0 +1,8 @@
+
+V	java:S125D"<This block of commented-out lines of code should be removed.(…şşıùÿÿÿÿ
+…
+java:S14882"jImmediately return this expression instead of assigning it to the temporary variable "userDetailResponse".(òöª¨ùÿÿÿÿ
+…
+java:S1488\"jImmediately return this expression instead of assigning it to the temporary variable "userDetailResponse".(é‚„ùÿÿÿÿ
+[
+java:S2259Œ"?A "NullPointerException" could be thrown; "d" is nullable here.(Ä¢Ãÿÿÿÿÿ

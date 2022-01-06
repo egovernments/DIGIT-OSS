@@ -1,0 +1,16 @@
+
+[	java:S112B"FDefine and throw a dedicated exception instead of using a generic one.(Ğğ¢
+`	java:S112S"FDefine and throw a dedicated exception instead of using a generic one.(äáíÄøÿÿÿÿ
+[	java:S112e"FDefine and throw a dedicated exception instead of using a generic one.(º“‚¢
+„
+java:S1130B"nRemove the declaration of thrown exception 'java.io.IOException' which is a subclass of 'java.lang.Exception'.(Ğğ¢
+‰
+java:S1130S"nRemove the declaration of thrown exception 'java.io.IOException' which is a subclass of 'java.lang.Exception'.(äáíÄøÿÿÿÿ
+„
+java:S1130e"nRemove the declaration of thrown exception 'java.io.IOException' which is a subclass of 'java.lang.Exception'.(º“‚¢
+t
+java:S2293q"YReplace the type specification in this constructor call with the diamond operator ("<>").(“©Ê¬ıÿÿÿÿ
+u
+java:S2293€"YReplace the type specification in this constructor call with the diamond operator ("<>").(“©Ê¬ıÿÿÿÿ
+u
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(“©Ê¬ıÿÿÿÿ

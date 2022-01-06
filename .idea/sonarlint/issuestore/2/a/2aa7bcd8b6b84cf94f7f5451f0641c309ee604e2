@@ -1,0 +1,7 @@
+
+g
+java:S3776j"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(ã×ÿ
+a	java:S128ˆ"LEnd this switch case with an unconditional break, return or throw statement.(æÏ˜
+V	java:S125p"<This block of commented-out lines of code should be removed.(¡ìÀËýÿÿÿÿ
+a
+java:S1192t"LDefine a constant instead of duplicating this literal "instruments" 3 times.(âÑ›b

@@ -1,0 +1,150 @@
+
+o	java:S115'"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(æ·ñô
+u
+java:S3008"ZRename this field "UNAUTHORIZED_ID" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Òå±ıÿÿÿÿ
+p
+java:S3008"URename this field "SUCCESS_ID" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ĞĞìğÿÿÿÿÿ
+k
+java:S3008"URename this field "FAILURE_ID" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(õëÚ
+r
+java:S3008"WRename this field "UNAUTHORIZED" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(„€¬¡úÿÿÿÿ
+l
+java:S3008"WRename this field "PROCESS_FAIL" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ó•™q
+h
+java:S3008"RRename this field "SUCCESS" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ş’÷é
+8
+java:S23861"Make this member "protected".(öÜ—·ùÿÿÿÿ
+8
+java:S23862"Make this member "protected".(Å©çÉÿÿÿÿÿ
+8
+java:S23863"Make this member "protected".(«ßÏÑıÿÿÿÿ
+Y
+java:S12145"CMove constants defined in this interfaces to another class or enum.(ï–Àâ
+[
+java:S11246"EReorder the modifiers to comply with the Java Language Specification.(ó­² 
+[
+java:S11247"EReorder the modifiers to comply with the Java Language Specification.(¿¦€Ù
+`
+java:S11248"EReorder the modifiers to comply with the Java Language Specification.(Ğßûÿÿÿÿ
+`
+java:S11249"EReorder the modifiers to comply with the Java Language Specification.(œ¹É×øÿÿÿÿ
+[
+java:S1124:"EReorder the modifiers to comply with the Java Language Specification.(Ïÿ¸Ë
+Y
+java:S1214="CMove constants defined in this interfaces to another class or enum.(¾ò€§
+`
+java:S1124>"EReorder the modifiers to comply with the Java Language Specification.(¦Û¸ùÿÿÿÿ
+[
+java:S1124?"EReorder the modifiers to comply with the Java Language Specification.(Äˆ›ê
+^
+java:S1214B"CMove constants defined in this interfaces to another class or enum.(ùœ£Çüÿÿÿÿ
+`
+java:S1124C"EReorder the modifiers to comply with the Java Language Specification.(ÑñµŞüÿÿÿÿ
+X
+java:S1214F"CMove constants defined in this interfaces to another class or enum.(œÿğ
+[
+java:S1124G"EReorder the modifiers to comply with the Java Language Specification.(¨ ¢¢
+`
+java:S1124H"EReorder the modifiers to comply with the Java Language Specification.(íÔ³Ğÿÿÿÿÿ
+`
+java:S1124I"EReorder the modifiers to comply with the Java Language Specification.(ŞîÀÕùÿÿÿÿ
+`
+java:S1124J"EReorder the modifiers to comply with the Java Language Specification.(šÖ´ïşÿÿÿÿ
+[
+java:S1124K"EReorder the modifiers to comply with the Java Language Specification.(ñš­ï
+[
+java:S1124L"EReorder the modifiers to comply with the Java Language Specification.(áØ ß
+`
+java:S1124M"EReorder the modifiers to comply with the Java Language Specification.(Àİ¨€ÿÿÿÿÿ
+[
+java:S1124N"EReorder the modifiers to comply with the Java Language Specification.(åà‰õ
+`
+java:S1124O"EReorder the modifiers to comply with the Java Language Specification.(¢¬¯íûÿÿÿÿ
+`
+java:S1124P"EReorder the modifiers to comply with the Java Language Specification.(ÿÌêøşÿÿÿÿ
+[
+java:S1124Q"EReorder the modifiers to comply with the Java Language Specification.(ø¿–Ü
+[
+java:S1124R"EReorder the modifiers to comply with the Java Language Specification.(Šéø©
+`
+java:S1124S"EReorder the modifiers to comply with the Java Language Specification.(½ëä¿úÿÿÿÿ
+`
+java:S1124T"EReorder the modifiers to comply with the Java Language Specification.(¡ª²‚şÿÿÿÿ
+`
+java:S1124U"EReorder the modifiers to comply with the Java Language Specification.(ğÖ½‘ûÿÿÿÿ
+^
+java:S1214Y"CMove constants defined in this interfaces to another class or enum.(•Şåúüÿÿÿÿ
+`
+java:S1124Z"EReorder the modifiers to comply with the Java Language Specification.(¢¬¯íûÿÿÿÿ
+[
+java:S1124["EReorder the modifiers to comply with the Java Language Specification.(ßÉÅ×
+^
+java:S1214^"CMove constants defined in this interfaces to another class or enum.(¤æŸüÿÿÿÿ
+`
+java:S1124_"EReorder the modifiers to comply with the Java Language Specification.(¨ÓÇ‚úÿÿÿÿ
+[
+java:S1124`"EReorder the modifiers to comply with the Java Language Specification.(îİòä
+Y
+java:S1214c"CMove constants defined in this interfaces to another class or enum.(™¡€Ê
+[
+java:S1124d"EReorder the modifiers to comply with the Java Language Specification.(Ğ–°
+`
+java:S1124e"EReorder the modifiers to comply with the Java Language Specification.(ÿ‘ó ùÿÿÿÿ
+[
+java:S1124f"EReorder the modifiers to comply with the Java Language Specification.(±·çÖ
+Z
+java:S1124g"EReorder the modifiers to comply with the Java Language Specification.(³ğâ@
+`
+java:S1124h"EReorder the modifiers to comply with the Java Language Specification.(ö³µ—üÿÿÿÿ
+[
+java:S1124i"EReorder the modifiers to comply with the Java Language Specification.(Ì¹åÈ
+`
+java:S1124j"EReorder the modifiers to comply with the Java Language Specification.(ğĞš³üÿÿÿÿ
+^
+java:S1214m"CMove constants defined in this interfaces to another class or enum.(¼æÅßùÿÿÿÿ
+`
+java:S1124n"EReorder the modifiers to comply with the Java Language Specification.(«³©øÿÿÿÿ
+`
+java:S1124o"EReorder the modifiers to comply with the Java Language Specification.(’¬—‰üÿÿÿÿ
+`
+java:S1124p"EReorder the modifiers to comply with the Java Language Specification.(ãéÖòùÿÿÿÿ
+`
+java:S1124q"EReorder the modifiers to comply with the Java Language Specification.( Ì…¬úÿÿÿÿ
+`
+java:S1124r"EReorder the modifiers to comply with the Java Language Specification.(ƒäàşÿÿÿÿ
+`
+java:S1124s"EReorder the modifiers to comply with the Java Language Specification.(–¥ùÿÿÿÿ
+o	java:S115x"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(Ñ‚’ö
+o	java:S115x"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(Ñ‚’ö
+o	java:S115x"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(Ñ‚’ö
+o	java:S115x"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(Ñ‚’ö
+^
+java:S1214z"CMove constants defined in this interfaces to another class or enum.(ÍëÏşÿÿÿÿ
+`
+java:S1124{"EReorder the modifiers to comply with the Java Language Specification.(îö³üÿÿÿÿ
+N
+java:S2885ƒ"2Make "DASHBOARD_DATE_FORMAT" an instance variable.(ğ¢¯üÿÿÿÿ
+v
+java:S1104"[Make UNAUTHORIZED_ID a static final constant or non-public and provide accessors if needed.(Òå±ıÿÿÿÿ
+q
+java:S1104"VMake SUCCESS_ID a static final constant or non-public and provide accessors if needed.(ĞĞìğÿÿÿÿÿ
+l
+java:S1104"VMake FAILURE_ID a static final constant or non-public and provide accessors if needed.(õëÚ
+s
+java:S1104"XMake UNAUTHORIZED a static final constant or non-public and provide accessors if needed.(„€¬¡úÿÿÿÿ
+m
+java:S1104"XMake PROCESS_FAIL a static final constant or non-public and provide accessors if needed.(ó•™q
+i
+java:S1104"SMake SUCCESS a static final constant or non-public and provide accessors if needed.(Ş’÷é
+P
+java:S1444"5Make this "public static UNAUTHORIZED_ID" field final(Òå±ıÿÿÿÿ
+K
+java:S1444"0Make this "public static SUCCESS_ID" field final(ĞĞìğÿÿÿÿÿ
+F
+java:S1444"0Make this "public static FAILURE_ID" field final(õëÚ
+M
+java:S1444"2Make this "public static UNAUTHORIZED" field final(„€¬¡úÿÿÿÿ
+G
+java:S1444"2Make this "public static PROCESS_FAIL" field final(ó•™q
+C
+java:S1444"-Make this "public static SUCCESS" field final(Ş’÷é

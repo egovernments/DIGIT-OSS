@@ -52,6 +52,19 @@ public class ChartOfAccountDetailControllerTest {
 	@Captor
 	private ArgumentCaptor<ChartOfAccountDetailRequest> captor;
 
+<<<<<<< HEAD
+=======
+	private static final String DEFAULT="default";
+
+	private static final String FINAL="final";
+
+	private static final String CODE_83="830bf3dc60504244babfe228bdf80bac";
+
+	private static final String CODE_E6="e647d2406902400cbf3cee71a4befb35";
+
+	private static final String CODE_4F="4ff38860184f4f348fa9b9a9ebb25c53";
+
+>>>>>>> suggested changes done
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -110,11 +123,19 @@ public class ChartOfAccountDetailControllerTest {
 
 		List<ChartOfAccountDetail> chartOfAccountDetails = new ArrayList<ChartOfAccountDetail>();
 		ChartOfAccountDetail chartOfAccountDetail = ChartOfAccountDetail.builder().build();
+<<<<<<< HEAD
 		ChartOfAccount chartOfAccount = ChartOfAccount.builder().id("830bf3dc60504244babfe228bdf80bac").glcode("1201").name("finalfdf").description("accountNumber").build();
 		chartOfAccount.setTenantId("default");
 		AccountDetailType accountDetailType = AccountDetailType.builder().id("e647d2406902400cbf3cee71a4befb35").name("final").description("final").tableName("final").active(true).fullyQualifiedName("final").build();
 		accountDetailType.setTenantId("default");
 		chartOfAccountDetail.setTenantId("default");
+=======
+		ChartOfAccount chartOfAccount = ChartOfAccount.builder().id(CODE_83).glcode("1201").name("finalfdf").description("accountNumber").build();
+		chartOfAccount.setTenantId(DEFAULT);
+		AccountDetailType accountDetailType = AccountDetailType.builder().id().name(FINAL).description(FINAL).tableName(FINAL).active(true).fullyQualifiedName(FINAL).build();
+		accountDetailType.setTenantId(DEFAULT);
+		chartOfAccountDetail.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
 		chartOfAccountDetail.setChartOfAccount(chartOfAccount);
 		chartOfAccountDetail.setAccountDetailType(accountDetailType);
 		chartOfAccountDetails.add(chartOfAccountDetail);

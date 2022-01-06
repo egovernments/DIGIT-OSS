@@ -1,0 +1,10 @@
+
+m
+java:S3776U"RRefactor this method to reduce its Cognitive Complexity from 32 to the 15 allowed.(Ùšü‹þÿÿÿÿ
+V	java:S125["<This block of commented-out lines of code should be removed.(¡ìÀËýÿÿÿÿ
+e
+java:S1192_"JDefine a constant instead of duplicating this literal "functions" 3 times.(Â¿Ìªøÿÿÿÿ
+_
+java:S1192d"IDefine a constant instead of duplicating this literal "function" 4 times.(Æû…›
+F
+java:S1066™"/Merge this if statement with the enclosing one.(Ëâü‰

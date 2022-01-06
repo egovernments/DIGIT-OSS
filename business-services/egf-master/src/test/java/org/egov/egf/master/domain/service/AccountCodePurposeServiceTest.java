@@ -40,6 +40,11 @@ public class AccountCodePurposeServiceTest {
 	private BindingResult errors = new BeanPropertyBindingResult(null, null);
 	private RequestInfo requestInfo = new RequestInfo();
 	private List<AccountCodePurpose> accountCodePurposes = new ArrayList<>();
+<<<<<<< HEAD
+=======
+	private static final String DEFAULT="default";
+
+>>>>>>> suggested changes done
 
 	@Before
 	public void setup() {
@@ -102,7 +107,11 @@ public class AccountCodePurposeServiceTest {
 	private List<AccountCodePurpose> getAccountCodePurposes() {
 		List<AccountCodePurpose> accountCodePurposes = new ArrayList<AccountCodePurpose>();
 		AccountCodePurpose accountCodePurpose = AccountCodePurpose.builder().id("1").name("name").build();
+<<<<<<< HEAD
 		accountCodePurpose.setTenantId("default");
+=======
+		accountCodePurpose.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
 		accountCodePurposes.add(accountCodePurpose);
 		return accountCodePurposes;
 	}
@@ -112,13 +121,21 @@ public class AccountCodePurposeServiceTest {
 		accountCodePurposeSearch.setPageSize(0);
 		accountCodePurposeSearch.setOffset(0);
 		accountCodePurposeSearch.setSortBy("Sort");
+<<<<<<< HEAD
 		accountCodePurposeSearch.setTenantId("default");
+=======
+		accountCodePurposeSearch.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
 		return accountCodePurposeSearch;
 	}
 
 	private AccountCodePurpose getAccountCodePurpose() {
 		AccountCodePurpose accountCodePurpose = AccountCodePurpose.builder().id("1").name("name").build();
+<<<<<<< HEAD
 		accountCodePurpose.setTenantId("default");
+=======
+		accountCodePurpose.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
 		return accountCodePurpose;
 	}
 

@@ -1,0 +1,25 @@
+
+[	java:S112["FDefine and throw a dedicated exception instead of using a generic one.(¾±î
+[	java:S112n"FDefine and throw a dedicated exception instead of using a generic one.(ıßØÅ
+\	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(²¿¿
+\	java:S112‘"FDefine and throw a dedicated exception instead of using a generic one.(¾£Èå
+a	java:S112¡"FDefine and throw a dedicated exception instead of using a generic one.(Öıáùÿÿÿÿÿ
+a	java:S112´"FDefine and throw a dedicated exception instead of using a generic one.(«ş¿ÿûÿÿÿÿ
+\	java:S112æ"FDefine and throw a dedicated exception instead of using a generic one.(ÍÌƒİ
+a	java:S112ù"FDefine and throw a dedicated exception instead of using a generic one.(¤ª‚½üÿÿÿÿ
+a	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(½ïÕïûÿÿÿÿ
+a	java:S112Ÿ"FDefine and throw a dedicated exception instead of using a generic one.(ü¬œøùÿÿÿÿ
+P	java:S1251"<This block of commented-out lines of code should be removed.(×¬ä
+Q	java:S125B"<This block of commented-out lines of code should be removed.(²»ò¬
+o
+java:S2293P"YReplace the type specification in this constructor call with the diamond operator ("<>").(ßÙÆ 
+p
+java:S2293¶"YReplace the type specification in this constructor call with the diamond operator ("<>").(ßÙÆ 
+u
+java:S2293±"YReplace the type specification in this constructor call with the diamond operator ("<>").(¬¤Èùÿÿÿÿ
+w
+java:S1192š"TDefine a constant instead of duplicating this literal "/v1/actions/_update" 4 times.(¯„œØıÿÿÿÿ8ùàª¤ã/
+o
+java:S1192ˆ"QDefine a constant instead of duplicating this literal "/v1/actions/_get" 3 times.(‘ı¤¢8ùàª¤ã/
+v
+java:S1192f"TDefine a constant instead of duplicating this literal "/v1/actions/_create" 3 times.(ş›°øúÿÿÿÿ8ùàª¤ã/

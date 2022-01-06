@@ -1,0 +1,12 @@
+
+T
+java:S1854"7Remove this useless assignment to local variable "max".(»—Ìè8ÎÅ¯½æ/
+X
+java:S1854"6Remove this useless assignment to local variable "d1".(µ«Äİøÿÿÿÿ8Ôï¯½æ/
+I
+java:S1481"'Remove this unused "d1" local variable.(µ«Äİøÿÿÿÿ8Öï¯½æ/
+E
+java:S1481"(Remove this unused "max" local variable.(»—Ìè8ÒÅ¯½æ/
+b	java:S101	"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(çÏàÁ
+f
+java:S3655"PCall "Optional#isPresent()" or "!Optional#isEmpty()" before accessing the value.(»—Ìè

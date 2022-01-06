@@ -1,0 +1,27 @@
+
+A
+java:S1068"&Remove this unused "id" private field.(şÓî«şÿÿÿÿ
+>
+java:S1068"(Remove this unused "name" private field.(Ë¥¼
+B
+java:S1068"'Remove this unused "url" private field.(«Œåùÿÿÿÿ
+J
+java:S1068"/Remove this unused "queryParams" private field.(¸Ö«¢øÿÿÿÿ
+E
+java:S1068"0Remove this unused "parentModule" private field.(î”T
+E
+java:S1068"/Remove this unused "displayName" private field.(¦Àç¨
+A
+java:S1068"+Remove this unused "enabled" private field.(­ÀåÛ
+E
+java:S1068"/Remove this unused "orderNumber" private field.(î…òè
+E
+java:S1068"/Remove this unused "serviceCode" private field.(òÚÖ
+H
+java:S1068"-Remove this unused "createdBy" private field.(ëğñıÿÿÿÿ
+O
+java:S1068 "4Remove this unused "lastModifiedDate" private field.(•ìöÆüÿÿÿÿ
+H
+java:S1068""2Remove this unused "lastModifiedBy" private field.(½²¦Ì
+t
+java:S2293%"YReplace the type specification in this constructor call with the diamond operator ("<>").(ˆä´Õúÿÿÿÿ

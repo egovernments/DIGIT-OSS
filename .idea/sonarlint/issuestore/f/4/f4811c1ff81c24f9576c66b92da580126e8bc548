@@ -1,0 +1,17 @@
+
+E
+java:S3740 "/Provide the parametrized type for this generic.(—•›e
+F
+java:S3740¡"/Provide the parametrized type for this generic.(£¯ƒ
+M
+java:S3740¡"/Provide the parametrized type for this generic.(£¯ƒ8±ô–½æ/
+d
+java:S1854’"ARemove this useless assignment to local variable "financialYear".(åí×úÿÿÿÿ8Ã°—½æ/
+U
+java:S1481’"2Remove this unused "financialYear" local variable.(åí×úÿÿÿÿ8È°—½æ/
+o
+java:S2293m"YReplace the type specification in this constructor call with the diamond operator ("<>").(—ãª
+Z
+java:S1155Š">Use isEmpty() to check whether the collection is empty or not.(°ÛŠšùÿÿÿÿ
+y
+java:S14885"^Immediately return this expression instead of assigning it to the temporary variable "result".(É×ø³ÿÿÿÿÿ

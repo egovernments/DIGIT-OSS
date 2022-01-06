@@ -1,0 +1,10 @@
+
+m
+java:S3776U"RRefactor this method to reduce its Cognitive Complexity from 32 to the 15 allowed.(°¼…Ôùÿÿÿÿ
+V	java:S125["<This block of commented-out lines of code should be removed.(¡ìÀËýÿÿÿÿ
+a
+java:S1192_"MDefine a constant instead of duplicating this literal "bankbranches" 3 times.(‚¨
+f
+java:S1192d"KDefine a constant instead of duplicating this literal "bankBranch" 4 times.(–é¹ìùÿÿÿÿ
+F
+java:S1066™"/Merge this if statement with the enclosing one.(ýî×Œ

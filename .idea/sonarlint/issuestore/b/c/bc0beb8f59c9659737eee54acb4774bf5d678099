@@ -1,0 +1,12 @@
+
+F
+java:S3740å"/Provide the parametrized type for this generic.(ÀÔßë
+a
+java:S1854Á"ERemove this useless assignment to local variable "isAppendAndClause".(ôØÆ“úÿÿÿÿ
+W	java:S125£"<This block of commented-out lines of code should be removed.(¸£¨ºûÿÿÿÿ
+R	java:S125¯"<This block of commented-out lines of code should be removed.(éÒªÝ
+R	java:S125Æ"<This block of commented-out lines of code should be removed.(‡¡ÜŽ
+a
+java:S1854ô"ERemove this useless assignment to local variable "isAppendAndClause".(ôØÆ“úÿÿÿÿ
+U
+java:S3400¨"9Remove this method and declare a constant for this value.(‡á°©ûÿÿÿÿ

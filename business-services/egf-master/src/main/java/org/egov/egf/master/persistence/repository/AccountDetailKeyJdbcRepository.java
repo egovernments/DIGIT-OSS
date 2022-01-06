@@ -44,6 +44,10 @@ public class AccountDetailKeyJdbcRepository extends JdbcRepository {
 	}
 
 	public Pagination<AccountDetailKey> search(AccountDetailKeySearch domain) {
+<<<<<<< HEAD
+=======
+		private static final String AND=" and ";
+>>>>>>> suggested changes done
 		AccountDetailKeySearchEntity accountDetailKeySearchEntity = new AccountDetailKeySearchEntity();
 		accountDetailKeySearchEntity.toEntity(domain);
 
@@ -69,35 +73,55 @@ public class AccountDetailKeyJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
                 if (accountDetailKeySearchEntity.getTenantId() != null) {
                     if (params.length() > 0) {
+<<<<<<< HEAD
                         params.append(" and ");
+=======
+                        params.append(AND);
+>>>>>>> suggested changes done
                     }
                     params.append("tenantId =:tenantId");
                     paramValues.put("tenantId", accountDetailKeySearchEntity.getTenantId());
                 }
 		if (accountDetailKeySearchEntity.getId() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("id =:id");
 			paramValues.put("id", accountDetailKeySearchEntity.getId());
 		}
 		if (accountDetailKeySearchEntity.getIds() != null) {
                     if (params.length() > 0) {
+<<<<<<< HEAD
                             params.append(" and ");
+=======
+                            params.append(AND);
+>>>>>>> suggested changes done
                     }
                     params.append("id in(:ids) ");
                     paramValues.put("ids", new ArrayList<String>(Arrays.asList(accountDetailKeySearchEntity.getIds().split(","))));
                 }
 		if (accountDetailKeySearchEntity.getKey() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("key =:key");
 			paramValues.put("key", accountDetailKeySearchEntity.getKey());
 		}
 		if (accountDetailKeySearchEntity.getAccountDetailTypeId() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("accountDetailTypeId =:accountDetailType");
 			paramValues.put("accountDetailType", accountDetailKeySearchEntity.getAccountDetailTypeId());

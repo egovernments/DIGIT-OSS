@@ -1,0 +1,6 @@
+
+Q	java:S125-"<This block of commented-out lines of code should be removed.(°ÁúÌ
+K
+java:S1068".Remove this unused "PERCENTAGE" private field.(µù¤¬8úš•Ÿã/
+m
+java:S1192'"PUse already-defined constant 'PERCENTAGE' instead of duplicating its value here.(¥€¨£8¬”Ÿã/

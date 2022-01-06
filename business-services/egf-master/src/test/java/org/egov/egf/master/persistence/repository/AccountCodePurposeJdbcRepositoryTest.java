@@ -36,6 +36,10 @@ public class AccountCodePurposeJdbcRepositoryTest {
 	private AccountCodePurposeJdbcRepository accountCodePurposeJdbcRepository;
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+<<<<<<< HEAD
+=======
+	private static final String DEFAULT="default";
+>>>>>>> suggested changes done
 
 	@Before
 	public void setUp() throws Exception {
@@ -47,7 +51,11 @@ public class AccountCodePurposeJdbcRepositoryTest {
 	public void test_create() {
 
 		AccountCodePurposeEntity accountCodePurpose = AccountCodePurposeEntity.builder().id("1").name("name").build();
+<<<<<<< HEAD
 		accountCodePurpose.setTenantId("default");
+=======
+		accountCodePurpose.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
 		AccountCodePurposeEntity actualResult = accountCodePurposeJdbcRepository.create(accountCodePurpose);
 
 		List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_accountCodePurpose",
@@ -72,7 +80,11 @@ public class AccountCodePurposeJdbcRepositoryTest {
 	public void test_update() {
 
 		AccountCodePurposeEntity accountCodePurpose = AccountCodePurposeEntity.builder().id("1").name("nameU").build();
+<<<<<<< HEAD
 		accountCodePurpose.setTenantId("default");
+=======
+		accountCodePurpose.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
 		AccountCodePurposeEntity actualResult = accountCodePurposeJdbcRepository.update(accountCodePurpose);
 
 		List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_accountCodePurpose",
@@ -108,7 +120,11 @@ public class AccountCodePurposeJdbcRepositoryTest {
 	public void test_find_by_id() {
 
 		AccountCodePurposeEntity accountCodePurposeEntity = AccountCodePurposeEntity.builder().id("1").build();
+<<<<<<< HEAD
 		accountCodePurposeEntity.setTenantId("default");
+=======
+		accountCodePurposeEntity.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
 		AccountCodePurposeEntity result = accountCodePurposeJdbcRepository.findById(accountCodePurposeEntity);
 		assertThat(result.getId()).isEqualTo("1");
 		assertThat(result.getName()).isEqualTo("name");
@@ -120,7 +136,11 @@ public class AccountCodePurposeJdbcRepositoryTest {
 	public void test_find_by_invalid_id_should_return_null() {
 
 		AccountCodePurposeEntity accountCodePurposeEntity = AccountCodePurposeEntity.builder().id("5").build();
+<<<<<<< HEAD
 		accountCodePurposeEntity.setTenantId("default");
+=======
+		accountCodePurposeEntity.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
 		AccountCodePurposeEntity result = accountCodePurposeJdbcRepository.findById(accountCodePurposeEntity);
 		assertNull(result);
 

@@ -44,6 +44,17 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+<<<<<<< HEAD
+=======
+    private static final String DEFAULT="default";
+
+    private static final String INSTRUMENT_TYPE_ID="instrumentTypeId";
+
+    private static final String ACCOUNT_CODE_ID="accountCodeId";
+
+    private static final String GL_CODE="glcode";
+
+>>>>>>> suggested changes done
     @Before
     public void setUp() throws Exception {
         instrumentAccountCodeJdbcRepository = new InstrumentAccountCodeJdbcRepository(namedParameterJdbcTemplate, jdbcTemplate);
@@ -72,8 +83,13 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
     public void test_update() {
 
         InstrumentAccountCodeEntity instrumentAccountCode = InstrumentAccountCodeEntity.builder().instrumentTypeId("name")
+<<<<<<< HEAD
                 .accountCodeId("glcode").build();
         instrumentAccountCode.setTenantId("default");
+=======
+                .accountCodeId(GL_CODE).build();
+        instrumentAccountCode.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
         InstrumentAccountCodeEntity actualResult = instrumentAccountCodeJdbcRepository.update(instrumentAccountCode);
 
         List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_instrumentAccountCode",
@@ -90,8 +106,13 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
     public void test_delete() {
 
         InstrumentAccountCodeEntity instrumentAccountCode = InstrumentAccountCodeEntity.builder().id("1").instrumentTypeId("name")
+<<<<<<< HEAD
                 .accountCodeId("glcode").build();
         instrumentAccountCode.setTenantId("default");
+=======
+                .accountCodeId(GL_CODE).build();
+        instrumentAccountCode.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
         InstrumentAccountCodeEntity actualResult = instrumentAccountCodeJdbcRepository.delete(instrumentAccountCode);
 
         List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_instrumentAccountCode",
@@ -106,7 +127,11 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
 
         Pagination<InstrumentAccountCode> page = (Pagination<InstrumentAccountCode>) instrumentAccountCodeJdbcRepository
                 .search(getInstrumentAccountCodeSearch());
+<<<<<<< HEAD
         assertThat(page.getPagedData().get(0).getAccountCode().getGlcode()).isEqualTo("glcode");
+=======
+        assertThat(page.getPagedData().get(0).getAccountCode().getGlcode()).isEqualTo(GL_CODE);
+>>>>>>> suggested changes done
         assertThat(page.getPagedData().get(0).getInstrumentType().getName()).isEqualTo("name");
 
     }
@@ -130,7 +155,11 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
         InstrumentAccountCodeEntity instrumentAccountCodeEntity = InstrumentAccountCodeEntity.builder().id("1").build();
         instrumentAccountCodeEntity.setTenantId("default");
         InstrumentAccountCodeEntity result = instrumentAccountCodeJdbcRepository.findById(instrumentAccountCodeEntity);
+<<<<<<< HEAD
         assertThat(result.getAccountCodeId()).isEqualTo("glcode");
+=======
+        assertThat(result.getAccountCodeId()).isEqualTo(GL_CODE);
+>>>>>>> suggested changes done
         assertThat(result.getInstrumentTypeId()).isEqualTo("name");
 
     }
@@ -169,7 +198,11 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
         search.setOffset(null);
         Pagination<InstrumentAccountCode> page = (Pagination<InstrumentAccountCode>) instrumentAccountCodeJdbcRepository
                 .search(getInstrumentAccountCodeSearch());
+<<<<<<< HEAD
         assertThat(page.getPagedData().get(0).getAccountCode().getGlcode()).isEqualTo("glcode");
+=======
+        assertThat(page.getPagedData().get(0).getAccountCode().getGlcode()).isEqualTo(GL_CODE);
+>>>>>>> suggested changes done
         assertThat(page.getPagedData().get(0).getInstrumentType().getName()).isEqualTo("name");
 
     }
@@ -215,7 +248,11 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
         instrumentAccountCodeSearch.setId("1");
         instrumentAccountCodeSearch.setIds("1");
         instrumentAccountCodeSearch.setInstrumentType(InstrumentType.builder().name("name").build());
+<<<<<<< HEAD
         instrumentAccountCodeSearch.setAccountCode(ChartOfAccountContract.builder().glcode("glcode").build());
+=======
+        instrumentAccountCodeSearch.setAccountCode(ChartOfAccountContract.builder().glcode(GL_CODE).build());
+>>>>>>> suggested changes done
         instrumentAccountCodeSearch.setPageSize(500);
         instrumentAccountCodeSearch.setOffset(0);
         instrumentAccountCodeSearch.setSortBy("accountCodeId desc");

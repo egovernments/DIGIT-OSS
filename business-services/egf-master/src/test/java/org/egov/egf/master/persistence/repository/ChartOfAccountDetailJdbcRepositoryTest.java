@@ -38,8 +38,17 @@ public class ChartOfAccountDetailJdbcRepositoryTest {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
 	@Autowired
-        private AccountDetailTypeJdbcRepository accountDetailTypeJdbcRepository;
+	private AccountDetailTypeJdbcRepository accountDetailTypeJdbcRepository;
 
+<<<<<<< HEAD
+=======
+	private static final String CHART_OF_ACCOUNT_ID="chartofaccountid";
+
+	private static final String DEFAULT="default";
+
+	private static final String ACCOUNT_DETAIL_TYPE_ID="accountdetailtypeid";
+
+>>>>>>> suggested changes done
 	@Before
 	public void setUp() throws Exception {
 		chartOfAccountDetailJdbcRepository = new ChartOfAccountDetailJdbcRepository(
@@ -61,8 +70,13 @@ public class ChartOfAccountDetailJdbcRepositoryTest {
 				"SELECT * FROM egf_chartofaccountdetail",
 				new ChartOfAccountDetailResultExtractor());
 		assertThat(result.get(0).get("id")).isEqualTo("1");
+<<<<<<< HEAD
 		assertThat(result.get(0).get("chartofaccountid")).isEqualTo("1");
 		assertThat(result.get(0).get("accountdetailtypeid")).isEqualTo("1");
+=======
+		assertThat(result.get(0).get(CHART_OF_ACCOUNT_ID)).isEqualTo("1");
+		assertThat(result.get(0).get(ACCOUNT_DETAIL_TYPE_ID)).isEqualTo("1");
+>>>>>>> suggested changes done
 	
 	}
 
@@ -81,8 +95,13 @@ public class ChartOfAccountDetailJdbcRepositoryTest {
 				"SELECT * FROM egf_chartofaccountdetail order by id asc",
 				new ChartOfAccountDetailResultExtractor());
 		assertThat(result.get(0).get("id")).isEqualTo("1");
+<<<<<<< HEAD
 		assertThat(result.get(0).get("chartofaccountid")).isEqualTo("1");
 		assertThat(result.get(0).get("accountdetailtypeid")).isEqualTo("1");
+=======
+		assertThat(result.get(0).get(CHART_OF_ACCOUNT_ID)).isEqualTo("1");
+		assertThat(result.get(0).get(ACCOUNT_DETAIL_TYPE_ID)).isEqualTo("1");
+>>>>>>> suggested changes done
 	
 	}
 
@@ -116,8 +135,13 @@ public class ChartOfAccountDetailJdbcRepositoryTest {
 				"SELECT * FROM egf_chartofaccountdetail",
 				new ChartOfAccountDetailResultExtractor());
 		assertThat(result.get(0).get("id")).isEqualTo("1");
+<<<<<<< HEAD
 		assertThat(result.get(0).get("chartofaccountid")).isEqualTo("1");
 		assertThat(result.get(0).get("accountdetailtypeid")).isEqualTo("1");
+=======
+		assertThat(result.get(0).get(CHART_OF_ACCOUNT_ID)).isEqualTo("1");
+		assertThat(result.get(0).get(ACCOUNT_DETAIL_TYPE_ID)).isEqualTo("1");
+>>>>>>> suggested changes done
 	}
 
 	class ChartOfAccountDetailResultExtractor implements
@@ -130,8 +154,13 @@ public class ChartOfAccountDetailJdbcRepositoryTest {
 				Map<String, Object> row = new HashMap<String, Object>() {
 					{
 						put("id", resultSet.getString("id"));
+<<<<<<< HEAD
 						put("chartofaccountid", resultSet.getString("chartofaccountid"));
 						put("accountdetailtypeid", resultSet.getString("accountdetailtypeid"));
+=======
+						put(CHART_OF_ACCOUNT_ID, resultSet.getString(CHART_OF_ACCOUNT_ID));
+						put(ACCOUNT_DETAIL_TYPE_ID, resultSet.getString(ACCOUNT_DETAIL_TYPE_ID));
+>>>>>>> suggested changes done
 						put("createdby", resultSet.getString("createdby"));
 						put("createddate", resultSet.getString("createddate"));
 						put("lastmodifiedby", resultSet.getBoolean("lastmodifiedby"));

@@ -1,0 +1,57 @@
+
+`	java:S112-"FDefine and throw a dedicated exception instead of using a generic one.(‚ëô¡şÿÿÿÿ
+J
+java:S3740:"/Provide the parametrized type for this generic.(À¶”ûÿÿÿÿ
+J
+java:S3740:"/Provide the parametrized type for this generic.(À¶”ûÿÿÿÿ
+J
+java:S3740W"/Provide the parametrized type for this generic.(À¶”ûÿÿÿÿ
+J
+java:S3740W"/Provide the parametrized type for this generic.(À¶”ûÿÿÿÿ
+D
+java:S3740X"/Provide the parametrized type for this generic.(Ø‚>
+D
+java:S3740X"/Provide the parametrized type for this generic.(Ø‚>
+K
+java:S3740‚"/Provide the parametrized type for this generic.(À¶”ûÿÿÿÿ
+K
+java:S3740‚"/Provide the parametrized type for this generic.(À¶”ûÿÿÿÿ
+E
+java:S3740ƒ"/Provide the parametrized type for this generic.(Ø‚>
+E
+java:S3740ƒ"/Provide the parametrized type for this generic.(Ø‚>
+K
+java:S3740¬"/Provide the parametrized type for this generic.(À¶”ûÿÿÿÿ
+K
+java:S3740¬"/Provide the parametrized type for this generic.(À¶”ûÿÿÿÿ
+E
+java:S3740Ğ"/Provide the parametrized type for this generic.(ÿÑ«B
+K
+java:S3740Ñ"/Provide the parametrized type for this generic.(°‡°›şÿÿÿÿ
+K
+java:S3740Ñ"/Provide the parametrized type for this generic.(°‡°›şÿÿÿÿ
+Z
+java:S1854_"DRemove this useless assignment to local variable "emptyResponseMap".(ŠÂ½Ğ
+J
+java:S1481X"5Remove this unused "emptyResponseMap" local variable.(Ø‚>
+V	java:S125i"<This block of commented-out lines of code should be removed.(€¥¾çùÿÿÿÿ
+[
+java:S1854Š"DRemove this useless assignment to local variable "emptyResponseMap".(ŠÂ½Ğ
+K
+java:S1481ƒ"5Remove this unused "emptyResponseMap" local variable.(Ø‚>
+‹
+java:S1192^"pDefine a constant instead of duplicating this literal "src/test/resources/EmptyUserDetailResponse.json" 4 times.(èø·üÿÿÿÿ
+y
+java:S1192="^Define a constant instead of duplicating this literal "src/test/PropertyRequest.json" 4 times.(¶¬é¶ûÿÿÿÿ
+
+java:S1192>"kDefine a constant instead of duplicating this literal "src/test/resources/UserDetailResponse.json" 6 times.(äŠ«ˆ
+\
+java:S2259 "EA "NullPointerException" could be thrown; "request" is nullable here.(©Ä›Õ
+\
+java:S2259¼"EA "NullPointerException" could be thrown; "request" is nullable here.(©Ä›Õ
+[
+java:S2259v"EA "NullPointerException" could be thrown; "request" is nullable here.(©Ä›Õ
+[
+java:S2259K"EA "NullPointerException" could be thrown; "request" is nullable here.(©Ä›Õ
+[
+java:S2259ê"?A "NullPointerException" could be thrown; "d" is nullable here.(Ä¢Ãÿÿÿÿÿ

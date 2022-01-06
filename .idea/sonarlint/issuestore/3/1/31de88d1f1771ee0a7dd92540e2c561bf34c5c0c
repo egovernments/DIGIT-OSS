@@ -1,0 +1,9 @@
+
+o	java:S100E"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‰¿ûŸùÿÿÿÿ8Œßë¢ã/
+i	java:S100Z"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(­•—S8ßë¢ã/
+h
+java:S1117b"FRename "accountDetailTypes" which hides the field declared at line 42.(Îàƒúÿÿÿÿ8ßë¢ã/
+V
+java:S1144s"9Remove this unused private "getAccountDetailType" method.(íìÖ™8’ßë¢ã/
+{
+java:S2293b"YReplace the type specification in this constructor call with the diamond operator ("<>").(Îàƒúÿÿÿÿ8’ßë¢ã/

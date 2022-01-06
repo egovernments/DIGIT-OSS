@@ -1,0 +1,9 @@
+
+o
+java:S3008."YRename this field "CORRELATION_ID" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ù˜£
+.
+java:S51640"Call "remove()" on "id".(‘ˆş
+p
+java:S1104."ZMake CORRELATION_ID a static final constant or non-public and provide accessors if needed.(ù˜£
+J
+java:S1444."4Make this "public static CORRELATION_ID" field final(ù˜£

@@ -21,6 +21,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountCodePurposeJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(AccountCodePurposeJdbcRepository.class);
+<<<<<<< HEAD
+=======
+	private static final String AND=" and ";
+>>>>>>> suggested changes done
 
 	static {
 		LOG.debug("init accountCodePurpose");
@@ -71,28 +75,44 @@ public class AccountCodePurposeJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
 	        if (accountCodePurposeSearchEntity.getTenantId() != null) {
 	              if (params.length() > 0) {
+<<<<<<< HEAD
 	                  params.append(" and ");
+=======
+	                  params.append(AND);
+>>>>>>> suggested changes done
 	              }
 	              params.append("tenantId =:tenantId");
 	              paramValues.put("tenantId", accountCodePurposeSearchEntity.getTenantId());
 	        }
 		if (accountCodePurposeSearchEntity.getId() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("id =:id");
 			paramValues.put("id", accountCodePurposeSearchEntity.getId());
 		}
 		if (accountCodePurposeSearchEntity.getIds() != null) {
                           if (params.length() > 0) {
+<<<<<<< HEAD
                                   params.append(" and ");
+=======
+                                  params.append(AND);
+>>>>>>> suggested changes done
                           }
                           params.append("id in(:ids) ");
                           paramValues.put("ids", new ArrayList<String>(Arrays.asList(accountCodePurposeSearchEntity.getIds().split(","))));
                 }
 		if (accountCodePurposeSearchEntity.getName() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("name =:name");
 			paramValues.put("name", accountCodePurposeSearchEntity.getName());

@@ -1,0 +1,98 @@
+
+{
+java:S1149û"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(£®öØşÿÿÿÿ
+v
+java:S1149š"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ı¿ŒÉ
+]
+java:S1126ª"AReplace this if-then-else statement by a single return statement.(¦Ó¤Øıÿÿÿÿ
+]
+java:S1126½"AReplace this if-then-else statement by a single return statement.(¦Ó¤Øıÿÿÿÿ
+Q
+java:S6213ê":Rename this variable to not match a restricted identifier.(ÙÍ³Ä
+E
+java:S5413¨")Verify that "remove()" is used correctly.(˜ï÷ƒùÿÿÿÿ
+n
+java:S3776°"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(íğŠßùÿÿÿÿ
+Z
+java:S1854ù">Remove this useless assignment to local variable "actionList".(¬¤Èùÿÿÿÿ
+\
+java:S1854É"@Remove this useless assignment to local variable "actionsArray".(£öèˆıÿÿÿÿ
+d
+java:S5361"HReplace this call to "replaceAll()" by a call to the "replace()" method.(à‚Ğ¹ÿÿÿÿÿ
+_
+java:S5361£"HReplace this call to "replaceAll()" by a call to the "replace()" method.(µÖ¼Ø
+_
+java:S5361¤"HReplace this call to "replaceAll()" by a call to the "replace()" method.(Ú°ü¸
+d
+java:S5361¥"HReplace this call to "replaceAll()" by a call to the "replace()" method.(‡ç¦Éıÿÿÿÿ
+n
+java:S3776ù"RRefactor this method to reduce its Cognitive Complexity from 40 to the 15 allowed.(¤¶§Œúÿÿÿÿ
+:
+java:S2129‰"Remove this "Long" constructor(Ğ€Ó³şÿÿÿÿ
+H
+java:S1874‰",Remove this use of "Long"; it is deprecated.(Ğ€Ó³şÿÿÿÿ
+N
+java:S1135°"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+R	java:S125´"<This block of commented-out lines of code should be removed.(£³ø‰
+i
+java:S3776Ù"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(…Üêƒ
+p
+java:S2293¥"YReplace the type specification in this constructor call with the diamond operator ("<>").(¼°‹Ÿ
+p
+java:S2293¶"YReplace the type specification in this constructor call with the diamond operator ("<>").(¼°‹Ÿ
+p
+java:S2293Ê"YReplace the type specification in this constructor call with the diamond operator ("<>").(¼°‹Ÿ
+p
+java:S2293ç"YReplace the type specification in this constructor call with the diamond operator ("<>").(¬¦Â
+p
+java:S2293î"YReplace the type specification in this constructor call with the diamond operator ("<>").(¼°‹Ÿ
+p
+java:S2293Œ"YReplace the type specification in this constructor call with the diamond operator ("<>").(¼°‹Ÿ
+u
+java:S2293ã"YReplace the type specification in this constructor call with the diamond operator ("<>").(¥ó‚ùüÿÿÿÿ
+u
+java:S2293é"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ñ£ê²ÿÿÿÿÿ
+o
+java:S2293ı"YReplace the type specification in this constructor call with the diamond operator ("<>").(á¤Ö
+o
+java:S2293•"YReplace the type specification in this constructor call with the diamond operator ("<>").(á¤Ö
+u
+java:S2293Ä"YReplace the type specification in this constructor call with the diamond operator ("<>").(¬¤Èùÿÿÿÿ
+u
+java:S2293ù"YReplace the type specification in this constructor call with the diamond operator ("<>").(¬¤Èùÿÿÿÿ
+p
+java:S2293ª"YReplace the type specification in this constructor call with the diamond operator ("<>").(‘ï£
+u
+java:S2293«"YReplace the type specification in this constructor call with the diamond operator ("<>").(‚ªÖøÿÿÿÿ
+u
+java:S2293Ñ"YReplace the type specification in this constructor call with the diamond operator ("<>").(º¡Èşÿÿÿÿ
+u
+java:S2293Ò"YReplace the type specification in this constructor call with the diamond operator ("<>").(€Öãúÿÿÿÿ
+u
+java:S2293û"YReplace the type specification in this constructor call with the diamond operator ("<>").(¬¤Èùÿÿÿÿ
+¢
+java:S1192’"ŠDefine a constant instead of duplicating this literal " SELECT s1.id,s1.code, s1.name, s1.parentmodule,s1.displayname,s1.enabled" 4 times.(ëè£¯
+g	java:S117£"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(àÁ¤–
+g	java:S117´"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(®Ê‚’
+Z
+java:S1155É">Use isEmpty() to check whether the collection is empty or not.(Åêÿüÿÿÿÿ
+Z
+java:S1155Ï">Use isEmpty() to check whether the collection is empty or not.(«ÁšÍùÿÿÿÿ
+U
+java:S1155¡">Use isEmpty() to check whether the collection is empty or not.(¶—´
+Z
+java:S1155¾">Use isEmpty() to check whether the collection is empty or not.(Åêÿüÿÿÿÿ
+U
+java:S1155Û">Use isEmpty() to check whether the collection is empty or not.(¶—´
+2
+java:S1643ã"Use a StringBuilder instead.(Í‘4
+2
+java:S1643ë"Use a StringBuilder instead.(Í‘4
+8
+java:S1643ğ"Use a StringBuilder instead.(ö²‹ªşÿÿÿÿ
+}
+java:S1488Ú"aImmediately return this expression instead of assigning it to the temporary variable "actionMap".(š¬“øÿÿÿÿ
+u
+java:S1488û"_Immediately return this expression instead of assigning it to the temporary variable "modules".(æ‡Á
+}
+java:S1488±"fImmediately return this expression instead of assigning it to the temporary variable "allServiceList".(ñ×¶

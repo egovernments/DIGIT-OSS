@@ -1,0 +1,36 @@
+
+W
+java:S1075"ARefactor your code to get this URI from a customizable parameter.(ğ•æ¤
+o
+java:S1104"YMake timestampPath a static final constant or non-public and provide accessors if needed.(ğ•æ¤
+
+java:S1104"fMake missedCallFromMobileNumber a static final constant or non-public and provide accessors if needed.(ŒãÕĞùÿÿÿÿ
+y
+java:S1104	"^Make missedCallToNumber a static final constant or non-public and provide accessors if needed.(ÿ‰ğöûÿÿÿÿ
+w
+java:S1104"aMake recipientMobileNumber a static final constant or non-public and provide accessors if needed.(¶•©¹
+w
+java:S1104"\Make userMobileNumber a static final constant or non-public and provide accessors if needed.(‚ÒåÌøÿÿÿÿ
+k
+java:S1104"UMake mediaType a static final constant or non-public and provide accessors if needed.(ˆ‘—Ñ
+l
+java:S1104"WMake textContent a static final constant or non-public and provide accessors if needed.(ÁäC
+k
+java:S1104"UMake mediaData a static final constant or non-public and provide accessors if needed.(ø—‹®
+I
+java:S1444"3Make this "public static timestampPath" field final(ğ•æ¤
+[
+java:S1444"@Make this "public static missedCallFromMobileNumber" field final(ŒãÕĞùÿÿÿÿ
+S
+java:S1444	"8Make this "public static missedCallToNumber" field final(ÿ‰ğöûÿÿÿÿ
+Q
+java:S1444";Make this "public static recipientMobileNumber" field final(¶•©¹
+Q
+java:S1444"6Make this "public static userMobileNumber" field final(‚ÒåÌøÿÿÿÿ
+E
+java:S1444"/Make this "public static mediaType" field final(ˆ‘—Ñ
+F
+java:S1444"1Make this "public static textContent" field final(ÁäC
+E
+java:S1444"/Make this "public static mediaData" field final(ø—‹®
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¬¤¿

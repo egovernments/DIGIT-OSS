@@ -17,6 +17,10 @@ import java.util.*;
 @Service
 public class FinancialConfigurationJdbcRepository extends JdbcRepository {
     private static final Logger LOG = LoggerFactory.getLogger(FinancialConfigurationJdbcRepository.class);
+<<<<<<< HEAD
+=======
+    private final String AND=" and ";
+>>>>>>> suggested changes done
 
     static {
         LOG.debug("init financialConfiguration");
@@ -69,35 +73,55 @@ public class FinancialConfigurationJdbcRepository extends JdbcRepository {
         // implement jdbc specfic search
         if (financialConfigurationSearchEntity.getTenantId() != null) {
             if (params.length() > 0) {
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             }
             params.append("tenantId =:tenantId");
             paramValues.put("tenantId", financialConfigurationSearchEntity.getTenantId());
         }
         if (financialConfigurationSearchEntity.getId() != null) {
             if (params.length() > 0) {
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             }
             params.append("id =:id");
             paramValues.put("id", financialConfigurationSearchEntity.getId());
         }
         if (financialConfigurationSearchEntity.getIds() != null) {
             if (params.length() > 0) {
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             }
             params.append("id in(:ids) ");
             paramValues.put("ids", new ArrayList<String>(Arrays.asList(financialConfigurationSearchEntity.getIds().split(","))));
         }
         if (financialConfigurationSearchEntity.getName() != null) {
             if (params.length() > 0) {
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             }
             params.append("name =:name");
             paramValues.put("name", financialConfigurationSearchEntity.getName());
         }
         if (financialConfigurationSearchEntity.getDescription() != null) {
             if (params.length() > 0) {
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             }
             params.append("description =:description");
             paramValues.put("description", financialConfigurationSearchEntity.getDescription());
@@ -105,7 +129,11 @@ public class FinancialConfigurationJdbcRepository extends JdbcRepository {
 
         if (financialConfigurationSearchEntity.getModule() != null) {
             if (params.length() > 0) {
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             }
             params.append("module =:module");
             paramValues.put("module", financialConfigurationSearchEntity.getModule());

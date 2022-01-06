@@ -1,0 +1,18 @@
+
+V	java:S125S"<This block of commented-out lines of code should be removed.(Æ»‰¹üÿÿÿÿ
+B
+java:S1602k",Remove useless curly braces around statement(ìÕ‘Î
+B
+java:S1602q",Remove useless curly braces around statement(ìÕ‘Î
+B
+java:S1602}",Remove useless curly braces around statement(ìÕ‘Î
+H
+java:S1602ª",Remove useless curly braces around statement(Ø•¼¨üÿÿÿÿ
+H
+java:S1602à",Remove useless curly braces around statement(˜’—Áüÿÿÿÿ
+^
+java:S1612à"BReplace this lambda with method reference 'preparedStmtList::add'.(˜’—Áüÿÿÿÿ
+O
+java:S1068'"4Remove this unused "grievanceService" private field.(³«Šêûÿÿÿÿ
+}
+java:S1488ó"aImmediately return this expression instead of assigning it to the temporary variable "tenantIds".(¡ß·–ÿÿÿÿÿ

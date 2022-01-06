@@ -1,0 +1,10 @@
+
+O
+java:S6213+":Rename this variable to not match a restricted identifier.(ˆ“«h
+V	java:S1253"<This block of commented-out lines of code should be removed.(ëç’æþÿÿÿÿ
+O
+java:S6213C":Rename this variable to not match a restricted identifier.(ˆ“«h
+7
+java:S1116c"Remove this empty statement.(Åñ­õþÿÿÿÿ
+k
+java:S3655`"PCall "response.isPresent()" or "!response.isEmpty()" before accessing the value.(Þ¸ÞŸùÿÿÿÿ

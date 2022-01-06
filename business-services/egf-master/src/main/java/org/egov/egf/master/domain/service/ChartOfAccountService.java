@@ -36,6 +36,15 @@ public class ChartOfAccountService {
 	@Autowired
 	private AccountCodePurposeRepository accountCodePurposeRepository;
 
+<<<<<<< HEAD
+=======
+	private static final String CHART_OF_ACCOUNTS="chartofaccounts";
+
+	private static final String CHART_OF_ACCOUNT="chartOfAccount";
+
+	private static final String GL_CODE="glcode";
+
+>>>>>>> suggested changes done
 	private BindingResult validate(List<ChartOfAccount> chartofaccounts, String method, BindingResult errors) {
 
                 try {
@@ -54,8 +63,13 @@ public class ChartOfAccountService {
                                 errors.addError(new FieldError("chartOfAccount", "name", chartOfAccount.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
+<<<<<<< HEAD
                             if (!chartOfAccountRepository.uniqueCheck("glcode", chartOfAccount)) {
                                 errors.addError(new FieldError("chartOfAccount", "glcode", chartOfAccount.getGlcode(), false,
+=======
+                            if (!chartOfAccountRepository.uniqueCheck(GL_CODE , chartOfAccount)) {
+                                errors.addError(new FieldError(CHART_OF_ACCOUNT , GL_CODE , chartOfAccount.getGlcode(), false,
+>>>>>>> suggested changes done
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
@@ -73,8 +87,13 @@ public class ChartOfAccountService {
                                 errors.addError(new FieldError("chartOfAccount", "name", chartOfAccount.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
+<<<<<<< HEAD
                             if (!chartOfAccountRepository.uniqueCheck("glcode", chartOfAccount)) {
                                 errors.addError(new FieldError("chartOfAccount", "glcode", chartOfAccount.getGlcode(), false,
+=======
+                            if (!chartOfAccountRepository.uniqueCheck(GL_CODE , chartOfAccount)) {
+                                errors.addError(new FieldError(CHART_OF_ACCOUNT , GL_CODE , chartOfAccount.getGlcode(), false,
+>>>>>>> suggested changes done
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }

@@ -39,6 +39,21 @@ public class ChartOfAccountJdbcRepositoryTest {
 	@Autowired
         private ChartOfAccountDetailJdbcRepository chartOfAccountDetailJdbcRepository;
 
+<<<<<<< HEAD
+=======
+	private static final String GL_CODE="glcode";
+
+	private static final String BUDGET_CHECK_REQUIRED="budgetCheckRequired";
+
+	private static final String DEFAULT="default";
+
+	private static final String DESCRIPTION="description";
+
+	private static final String FUNCTIONAL_REQUIRED="functionRequired";
+
+	private static final String MAJOR_CODE="majorCode";
+
+>>>>>>> suggested changes done
 	@Before
 	public void setUp() throws Exception {
 		chartOfAccountJdbcRepository = new ChartOfAccountJdbcRepository(namedParameterJdbcTemplate,chartOfAccountDetailJdbcRepository);
@@ -54,8 +69,13 @@ public class ChartOfAccountJdbcRepositoryTest {
 				new ChartOfAccountResultExtractor());
 		Map<String, Object> row = result.get(0);
 		assertThat(row.get("name")).isEqualTo(actualResult.getName());
+<<<<<<< HEAD
 		assertThat(row.get("glcode")).isEqualTo(actualResult.getGlcode());
 		assertThat(row.get("budgetCheckRequired")).isEqualTo(actualResult.getBudgetCheckRequired());
+=======
+		assertThat(row.get(GL_CODE)).isEqualTo(actualResult.getGlcode());
+		assertThat(row.get(BUDGET_CHECK_REQUIRED)).isEqualTo(actualResult.getBudgetCheckRequired());
+>>>>>>> suggested changes done
 	}
 	
 	@Test
@@ -67,7 +87,11 @@ public class ChartOfAccountJdbcRepositoryTest {
 				new ChartOfAccountResultExtractor());
 		Map<String, Object> row = result.get(0);
 		assertThat(row.get("name")).isEqualTo(actualResult.getName());
+<<<<<<< HEAD
 		assertThat(row.get("glcode")).isEqualTo(actualResult.getGlcode());
+=======
+		assertThat(row.get(GL_CODE)).isEqualTo(actualResult.getGlcode());
+>>>>>>> suggested changes done
 	}
 	
 	@Test
@@ -75,7 +99,11 @@ public class ChartOfAccountJdbcRepositoryTest {
 	public void testSearch() {
 		Pagination<ChartOfAccount> page = (Pagination<ChartOfAccount>) chartOfAccountJdbcRepository.search(getChartOfAccountSearch());
 		assertThat(page.getPagedData().get(0).getName()).isEqualTo("name");
+<<<<<<< HEAD
 		assertThat(page.getPagedData().get(0).getGlcode()).isEqualTo("glcode");
+=======
+		assertThat(page.getPagedData().get(0).getGlcode()).isEqualTo(GL_CODE);
+>>>>>>> suggested changes done
 		assertThat(page.getPagedData().get(0).getBudgetCheckRequired()).isEqualTo(true);
 	}
 	
@@ -88,7 +116,11 @@ public class ChartOfAccountJdbcRepositoryTest {
 				new ChartOfAccountResultExtractor());
 		assertThat(result.get(0).get("id")).isEqualTo("2");
 		assertThat(result.get(0).get("name")).isEqualTo("name");
+<<<<<<< HEAD
 		assertThat(result.get(0).get("glcode")).isEqualTo("glcode");
+=======
+		assertThat(result.get(0).get(GL_CODE)).isEqualTo(GL_CODE);
+>>>>>>> suggested changes done
 	}
 	
 /*	@Test
@@ -122,8 +154,13 @@ public class ChartOfAccountJdbcRepositoryTest {
 	
 	private ChartOfAccount getChartOfAccountDomain() {
 		ChartOfAccount chartOfAccount = ChartOfAccount.builder().id("B")
+<<<<<<< HEAD
 				.glcode("glcode").name("name")
 				.description("description").isActiveForPosting(true)
+=======
+				.glcode(GL_CODE).name("name")
+				.description(DESCRIPTION).isActiveForPosting(true)
+>>>>>>> suggested changes done
 				.type('B').classification((long) 123456).functionRequired(true)
 				.budgetCheckRequired(true).build();
 		chartOfAccount.setTenantId("default");
@@ -138,7 +175,11 @@ public class ChartOfAccountJdbcRepositoryTest {
 				Map<String, Object> row = new HashMap<String, Object>() {
 					{
 						put("id", resultSet.getString("id"));
+<<<<<<< HEAD
 						put("glcode", resultSet.getString("glcode"));
+=======
+						put(GL_CODE, resultSet.getString(GL_CODE));
+>>>>>>> suggested changes done
 						put("name", resultSet.getString("name"));
 						put("accountCodePurposeId", resultSet.getString("accountCodePurposeId"));
 						put("description", resultSet.getString("description"));
@@ -184,7 +225,11 @@ public class ChartOfAccountJdbcRepositoryTest {
 	}
 	
 	private ChartOfAccount getParent(){
+<<<<<<< HEAD
 		return ChartOfAccount.builder().id("1").glcode("glcode").name("name")
+=======
+		return ChartOfAccount.builder().id("1").glcode(GL_CODE).name("name")
+>>>>>>> suggested changes done
 				.isActiveForPosting(true).type(Character.valueOf('B')).classification(123456l)
 				.isSubLedger(true).accountCodePurpose(getAccountCodePurpose()).budgetCheckRequired(true)
 				.majorCode("majorcode").functionRequired(true).build();

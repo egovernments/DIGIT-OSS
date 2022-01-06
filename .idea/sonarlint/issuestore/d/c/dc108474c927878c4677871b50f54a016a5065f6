@@ -1,0 +1,75 @@
+
+F
+java:S3740­"/Provide the parametrized type for this generic.(’ÛÑ
+F
+java:S3740®"/Provide the parametrized type for this generic.(ÅÆñ›
+K
+java:S3740›"/Provide the parametrized type for this generic.(ú ÛÒÿÿÿÿÿ
+F
+java:S3740Å"/Provide the parametrized type for this generic.(’ÛÑ
+F
+java:S3740Æ"/Provide the parametrized type for this generic.(ÅÆñ›
+K
+java:S3740Ú"/Provide the parametrized type for this generic.(¤İîÁúÿÿÿÿ
+K
+java:S3740Û"/Provide the parametrized type for this generic.(„¥Ğìùÿÿÿÿ
+K
+java:S3740İ"/Provide the parametrized type for this generic.(®ÇĞŠøÿÿÿÿ
+K
+java:S3740İ"/Provide the parametrized type for this generic.(®ÇĞŠøÿÿÿÿ
+F
+java:S3740á"/Provide the parametrized type for this generic.(’ÛÑ
+F
+java:S3740ƒ"/Provide the parametrized type for this generic.(’ÛÑ
+K
+java:S3740…"/Provide the parametrized type for this generic.(„¥Ğìùÿÿÿÿ
+K
+java:S3740†"/Provide the parametrized type for this generic.(®ÇĞŠøÿÿÿÿ
+K
+java:S3740†"/Provide the parametrized type for this generic.(®ÇĞŠøÿÿÿÿ
+K
+java:S3740"/Provide the parametrized type for this generic.(ú ÛÒÿÿÿÿÿ
+h	java:S1162"SRename this field "DOC_PATH" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ê›ø¼
+q	java:S116X"PRename this field "TOTAL" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ö„ø¥ÿÿÿÿÿ8‡ü³Ÿã/
+y	java:S116Z"XRename this field "ERROR_MESSAGE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(á—îÕúÿÿÿÿ8‡ü³Ÿã/
+C
+java:S1170X"!Make this final field static too.(Ö„ø¥ÿÿÿÿÿ8ˆü³Ÿã/
+C
+java:S1170Z"!Make this final field static too.(á—îÕúÿÿÿÿ8ˆü³Ÿã/
+V	java:S125."<This block of commented-out lines of code should be removed.(øâš‘ùÿÿÿÿ
+W	java:S125‡"<This block of commented-out lines of code should be removed.(ƒëÀÉùÿÿÿÿ
+W	java:S125À"<This block of commented-out lines of code should be removed.(Ó ö·ıÿÿÿÿ
+R	java:S125Ï"<This block of commented-out lines of code should be removed.(†£®‘
+R	java:S125Ú"<This block of commented-out lines of code should be removed.(†€éˆ
+W	java:S125Ü"<This block of commented-out lines of code should be removed.(ÿíÏŞûÿÿÿÿ
+R	java:S125õ"<This block of commented-out lines of code should be removed.(„Ô½Â
+i
+java:S3776ƒ"RRefactor this method to reduce its Cognitive Complexity from 23 to the 15 allowed.(øİêÁ
+[
+java:S1854"?Remove this useless assignment to local variable "documentMap".(¢Ä™ûÿÿÿÿÿ
+>
+java:S1905È"'Remove this unnecessary cast to "List".(¾ÔÕ•
+T
+java:S1854İ"8Remove this useless assignment to local variable "hits".(®ÇĞŠøÿÿÿÿ
+n
+java:S3776í"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(”Ò†ùÿÿÿÿ
+T
+java:S1854†"8Remove this useless assignment to local variable "hits".(®ÇĞŠøÿÿÿÿ
+;
+java:S1168ú"$Return an empty map instead of null.(¥¹ï
+p
+java:S2293ƒ"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ô­¾Œ
+p
+java:S2293‹"YReplace the type specification in this constructor call with the diamond operator ("<>").(ò×£«
+Q
+java:S1141”"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ
+?
+java:S1604Œ"(Make this anonymous inner class a lambda(ÉãÃ®
+b
+java:S2259"FA "NullPointerException" could be thrown; "dataNode" is nullable here.(·Ï½´ûÿÿÿÿ
+b
+java:S2259©"FA "NullPointerException" could be thrown; "dataNode" is nullable here.(·Ï½´ûÿÿÿÿ
+Z
+java:S2583‰"DChange this condition so that it does not always evaluate to "false"(Ş¾–B
+P
+java:S3516ƒ"9Refactor this method to not always return the same value.(øİêÁ

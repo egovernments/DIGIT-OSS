@@ -1,0 +1,19 @@
+
+F
+java:S3740×"/Provide the parametrized type for this generic.(É®µ¥
+K
+java:S3740æ"/Provide the parametrized type for this generic.(ÿŒëºùÿÿÿÿ
+h
+java:S37765"RRefactor this method to reduce its Cognitive Complexity from 64 to the 15 allowed.(üé”ˆ
+K
+java:S1068"5Remove this unused "requestRepository" private field.(§øõ
+W
+java:S1068"<Remove this unused "serviceRequestRepository" private field.(‚¨¼òÿÿÿÿÿ
+E
+java:S1144Å".Remove this unused private "getUomMap" method.(‹©èĞ
+J
+java:S1066b"/Merge this if statement with the enclosing one.(ÿ“•„ûÿÿÿÿ
+D
+java:S1066w"/Merge this if statement with the enclosing one.(©¸Ë>
+a
+java:S1301H"KReplace this "switch" statement by "if" statements to increase readability.(“Í“…

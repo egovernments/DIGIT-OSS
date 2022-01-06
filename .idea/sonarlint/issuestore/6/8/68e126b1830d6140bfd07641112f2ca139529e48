@@ -1,0 +1,51 @@
+
+F
+java:S3740¬"/Provide the parametrized type for this generic.(º¯Ú¡
+E
+java:S3740"/Provide the parametrized type for this generic.(€­¶8
+7
+java:S1170."!Make this final field static too.(Ò·Ôæ
+6
+java:S11700"!Make this final field static too.(Øœ
+B
+java:S1659<"-Declare "messageTemplate" on a separate line.(ûèÑ[
+<	java:S131>""Add a default case to this switch.(‘ìÿÿÿÿÿ
+Q	java:S125L"<This block of commented-out lines of code should be removed.(äìºŞ
+R	java:S125¼"<This block of commented-out lines of code should be removed.(ıôµÌ
+W	java:S125Í"<This block of commented-out lines of code should be removed.(Ÿ‚ï€ùÿÿÿÿ
+W	java:S125Ş"<This block of commented-out lines of code should be removed.(Ÿ‚ï€ùÿÿÿÿ
+W	java:S125‰"<This block of commented-out lines of code should be removed.(Ÿ‚ï€ùÿÿÿÿ
+C
+java:S1659Ó"-Declare "messageTemplate" on a separate line.(ûèÑ[
+R	java:S125Ô"<This block of commented-out lines of code should be removed.(»‚©—
+R	java:S125×"<This block of commented-out lines of code should be removed.(à£Î¤
+8
+java:S1116«"Remove this empty statement.(Û¯Èèüÿÿÿÿ
+V
+java:S1144İ":Remove this unused private "getApprovalPendingMsg" method.(¶ÁÅÛşÿÿÿÿ
+k	java:S117="QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÚŠî‰ıÿÿÿÿ
+l	java:S117ò"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(šÀ£Øùÿÿÿÿ
+~
+java:S1488®"bImmediately return this expression instead of assigning it to the temporary variable "jsonString".(®°êîøÿÿÿÿ
+j
+java:S2259B"O"NullPointerException" will be thrown when invoking method "getInitiatedMsg()".(ıÅŠ‘úÿÿÿÿ
+g
+java:S2259g"Q"NullPointerException" will be thrown when invoking method "getCitizenForward()".(¯»è
+j
+java:S2259l"O"NullPointerException" will be thrown when invoking method "getCancelledMsg()".(·•Ÿ€ûÿÿÿÿ
+i
+java:S2259Ø"MA "NullPointerException" could be thrown; "messageTemplate" is nullable here.(‹†ü¦üÿÿÿÿ
+i
+java:S2259X"N"NullPointerException" will be thrown when invoking method "getRejectedMsg()".(èÀüÿÿÿÿ
+m
+java:S2259b"R"NullPointerException" will be thrown when invoking method "getCitizenSendBack()".(‘€Ø¢úÿÿÿÿ
+d
+java:S2259ú"MA "NullPointerException" could be thrown; "messageTemplate" is nullable here.(ı…—’
+i
+java:S2259é"MA "NullPointerException" could be thrown; "messageTemplate" is nullable here.(‹†ü¦üÿÿÿÿ
+p
+java:S2259]"U"NullPointerException" will be thrown when invoking method "getFieldInspectionMsg()".(÷ŞÊŒùÿÿÿÿ
+i
+java:S2259S"N"NullPointerException" will be thrown when invoking method "getApprovedMsg()".(ş›÷‡øÿÿÿÿ
+h
+java:S2259G"M"NullPointerException" will be thrown when invoking method "getAppliedMsg()".(†¡ßûÿÿÿÿ

@@ -1,0 +1,21 @@
+
+Q	java:S125"<This block of commented-out lines of code should be removed.(çµÀ°
+H
+java:S6126:"2Replace this String concatenation with Text block.(Ôª½ï
+V	java:S125L"<This block of commented-out lines of code should be removed.(ÿ¾ÿêúÿÿÿÿ
+M
+java:S6126R"2Replace this String concatenation with Text block.(á³¾¥ÿÿÿÿÿ
+M
+java:S6126d"2Replace this String concatenation with Text block.(§ÂÄáùÿÿÿÿ
+H
+java:S6126r"2Replace this String concatenation with Text block.(¦ßİÌ
+I
+java:S6126"2Replace this String concatenation with Text block.(¤Åğ¢
+I
+java:S6126Œ"2Replace this String concatenation with Text block.(âÊÖ²
+i
+java:S3776š"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(Ø±“Ğ
+K
+java:S1066­"/Merge this if statement with the enclosing one.(ŠéÂûÿÿÿÿ
+s
+java:S1488F"]Immediately return this expression instead of assigning it to the temporary variable "query".(™å×Ê

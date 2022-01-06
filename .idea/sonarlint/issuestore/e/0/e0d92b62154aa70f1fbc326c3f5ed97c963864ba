@@ -1,0 +1,15 @@
+
+`	java:S112I"FDefine and throw a dedicated exception instead of using a generic one.(äáíÄøÿÿÿÿ
+[	java:S112["FDefine and throw a dedicated exception instead of using a generic one.(º“‚¢
+‰
+java:S1130I"nRemove the declaration of thrown exception 'java.io.IOException' which is a subclass of 'java.lang.Exception'.(äáíÄøÿÿÿÿ
+Q	java:S1257"<This block of commented-out lines of code should be removed.(Ğğ¢
+„
+java:S1130["nRemove the declaration of thrown exception 'java.io.IOException' which is a subclass of 'java.lang.Exception'.(º“‚¢
+Q	java:S125l"<This block of commented-out lines of code should be removed.(ÆıÚÿ
+t
+java:S2293x"YReplace the type specification in this constructor call with the diamond operator ("<>").(ûÏŠÇøÿÿÿÿ
+u
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(ûÏŠÇøÿÿÿÿ
+c
+java:S1192W"HDefine a constant instead of duplicating this literal "default" 3 times.(ı¦ÀÈıÿÿÿÿ

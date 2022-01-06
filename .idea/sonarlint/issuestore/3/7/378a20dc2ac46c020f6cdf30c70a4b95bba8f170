@@ -1,0 +1,11 @@
+
+2
+java:S1116"Remove this empty statement.(áÔôø
+E
+java:S1197*"*Move the array designators [] to the type.(¡şÏÖøÿÿÿÿ
+Q	java:S125."<This block of commented-out lines of code should be removed.(€Ÿë¸
+Q	java:S1250"<This block of commented-out lines of code should be removed.(…ËŞ 
+D
+java:S1144"/Remove this unused private "deleteUser" method.(Á·™,
+N
+java:S1144%"3Remove this unused private "deleteAllUsers" method.(Óñ€ùûÿÿÿÿ

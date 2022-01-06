@@ -1,0 +1,11 @@
+
+u
+java:S11494"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(™ªΪ
+m
+java:S3776-"RRefactor this method to reduce its Cognitive Complexity from 27 to the 15 allowed.(ΤΎ¦ωÿÿÿÿ
+e
+java:S1858"N"searchQuery" is already a string, there's no need to call "toString()" on it.(»έχ›
+I
+java:S1068"'Remove this unused "AND" private field.(Οόÿÿÿÿ8·®π΅γ/
+k
+java:S1192I"IUse already-defined constant 'AND' instead of duplicating its value here.(—Τ¶υύÿÿÿÿ8«υο΅γ/

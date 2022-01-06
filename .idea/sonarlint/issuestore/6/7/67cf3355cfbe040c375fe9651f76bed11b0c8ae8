@@ -1,0 +1,22 @@
+
+\	java:S112û"FDefine and throw a dedicated exception instead of using a generic one.(‹¹³Ê
+X
+java:S1126ž"AReplace this if-then-else statement by a single return statement.(­ÿ¡ü
+M
+java:S5261Ò"1Add explicit curly braces to avoid dangling else.(¶ô¡æýÿÿÿÿ
+n
+java:S3776•"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(ÊÕì†ýÿÿÿÿ
+N
+java:S1135´"2Complete the task associated to this TODO comment.(€¡ÄÂøÿÿÿÿ
+X
+java:S1126½"AReplace this if-then-else statement by a single return statement.(¼ÙØý
+u
+java:S2293–"YReplace the type specification in this constructor call with the diamond operator ("<>").(°½Äºúÿÿÿÿ
+u
+java:S2293«"YReplace the type specification in this constructor call with the diamond operator ("<>").(×ªê˜þÿÿÿÿ
+u
+java:S2293Ø"YReplace the type specification in this constructor call with the diamond operator ("<>").(¸Ó¯ƒþÿÿÿÿ
+b
+java:S1192ã"FDefine a constant instead of duplicating this literal "/gis/" 3 times.(Ô¸¨Ðþÿÿÿÿ
+`
+java:S2259Ë"DA "NullPointerException" could be thrown; "parent" is nullable here.(†Œ‹Ïÿÿÿÿÿ

@@ -1,0 +1,13 @@
+
+w
+java:S30086"\Rename this field "DEFAULT_PAGE_SIZE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(§úıÿÿÿÿ
+t
+java:S30087"^Rename this field "DEFAULT_PAGE_OFFSET" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÃÒŠ
+K
+java:S10689"0Remove this unused "totalResults" private field.(˜÷®›şÿÿÿÿ
+I
+java:S1068;".Remove this unused "totalPages" private field.(–û®øÿÿÿÿ
+J
+java:S1068@"/Remove this unused "currentPage" private field.(ıİ¹şÿÿÿÿ
+@
+java:S1068B"*Remove this unused "offset" private field.(ĞÔØ£

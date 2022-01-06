@@ -1,0 +1,23 @@
+
+[	java:S1126"FDefine and throw a dedicated exception instead of using a generic one.(Ğğ¢
+[	java:S112A"FDefine and throw a dedicated exception instead of using a generic one.(ÆıÚÿ
+`	java:S112L"FDefine and throw a dedicated exception instead of using a generic one.(äáíÄøÿÿÿÿ
+`	java:S112X"FDefine and throw a dedicated exception instead of using a generic one.(ÖŠ»ºıÿÿÿÿ
+„
+java:S11306"nRemove the declaration of thrown exception 'java.io.IOException' which is a subclass of 'java.lang.Exception'.(Ğğ¢
+c	java:S100A"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÆıÚÿ
+„
+java:S1130A"nRemove the declaration of thrown exception 'java.io.IOException' which is a subclass of 'java.lang.Exception'.(ÆıÚÿ
+‰
+java:S1130L"nRemove the declaration of thrown exception 'java.io.IOException' which is a subclass of 'java.lang.Exception'.(äáíÄøÿÿÿÿ
+h	java:S100X"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÖŠ»ºıÿÿÿÿ
+‰
+java:S1130X"nRemove the declaration of thrown exception 'java.io.IOException' which is a subclass of 'java.lang.Exception'.(ÖŠ»ºıÿÿÿÿ
+H
+java:S10680"+Remove this unused "DEFAULT" private field.(ÄÏÛ8Óóí£ã/
+t
+java:S2293k"YReplace the type specification in this constructor call with the diamond operator ("<>").(¤« ¾üÿÿÿÿ
+t
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(¤« ¾üÿÿÿÿ
+i
+java:S1192m"MUse already-defined constant 'DEFAULT' instead of duplicating its value here.(¬ÖŠT8À¯í£ã/

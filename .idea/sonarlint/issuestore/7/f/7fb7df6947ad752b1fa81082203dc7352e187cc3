@@ -1,0 +1,106 @@
+
+a	java:S112Î"FDefine and throw a dedicated exception instead of using a generic one.(ü•²ƒþÿÿÿÿ
+E
+java:S3740c"/Provide the parametrized type for this generic.(ÿÎ™Ä
+E
+java:S3740c"/Provide the parametrized type for this generic.(ÿÎ™Ä
+F
+java:S3740Š"/Provide the parametrized type for this generic.(àˆÓü
+{
+java:S1149â"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ú‡«Åýÿÿÿÿ
+v
+java:S1149ç"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰
+v
+java:S1149ˆ"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(í…Ò‰
+{
+java:S1149 "_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(º€Ìðþÿÿÿÿ
+{
+java:S1149Á"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(º€Ìðþÿÿÿÿ
+{
+java:S1149Â"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(±Ëñ¸ýÿÿÿÿ
+{
+java:S1149Ã"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(¬ÖÏÑüÿÿÿÿ
+{
+java:S1149…"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(º€Ìðþÿÿÿÿ
+{
+java:S1149†"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(±Ëñ¸ýÿÿÿÿ
+u
+java:S1149§"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ò÷â
+{
+java:S1149¨"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(Œì °ýÿÿÿÿ
+C
+java:S11725"-Remove this unused method parameter "userId".(Ø™‘ó
+^
+java:S5361J"HReplace this call to "replaceAll()" by a call to the "replace()" method.(ÞÐœ›
+^
+java:S5361L"HReplace this call to "replaceAll()" by a call to the "replace()" method.(àƒ•ü
+h
+java:S3776V"RRefactor this method to reduce its Cognitive Complexity from 91 to the 15 allowed.(©éÊÅ
+Q	java:S125`"<This block of commented-out lines of code should be removed.(– ¨÷
+P	java:S125e"<This block of commented-out lines of code should be removed.(‹‰„
+M
+java:S1135j"2Complete the task associated to this TODO comment.(ÕÌ®þÿÿÿÿ
+c
+java:S5361n"HReplace this call to "replaceAll()" by a call to the "replace()" method.(âñ‚íùÿÿÿÿ
+^
+java:S5361z"HReplace this call to "replaceAll()" by a call to the "replace()" method.(ª©´¦
+^
+java:S5361"HReplace this call to "replaceAll()" by a call to the "replace()" method.(“ÉèÆ
+d
+java:S5361€"HReplace this call to "replaceAll()" by a call to the "replace()" method.(¡ÙÀ§ÿÿÿÿÿ
+_
+java:S5361ƒ"HReplace this call to "replaceAll()" by a call to the "replace()" method.(÷çªì
+^
+java:S5361„"HReplace this call to "replaceAll()" by a call to the "replace()" method.(øÙß.
+_
+java:S5361¥"HReplace this call to "replaceAll()" by a call to the "replace()" method.(ô»
+D
+java:S1481‹"(Remove this unused "key" local variable.(ïö»¯üÿÿÿÿ
+U
+java:S1854 "9Remove this useless assignment to local variable "query".(º€Ìðþÿÿÿÿ
+K
+java:S1172"/Remove this unused method parameter "tenantId".(Ú¨ŠÑøÿÿÿÿ
+i
+java:S3776º"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(ÁÝ§Á
+U
+java:S1854Á"9Remove this useless assignment to local variable "query".(º€Ìðþÿÿÿÿ
+F
+java:S1172º"/Remove this unused method parameter "tenantId".(ÁÝ§Á
+T
+java:S1481Ù"8Remove this unused "alteredOrderByQuery" local variable.(ïµž¬úÿÿÿÿ
+U
+java:S1854…"9Remove this useless assignment to local variable "query".(º€Ìðþÿÿÿÿ
+K
+java:S1172þ"/Remove this unused method parameter "tenantId".(èø¢ýøÿÿÿÿ
+d
+java:S5361”"HReplace this call to "replaceAll()" by a call to the "replace()" method.(ä¾“Õÿÿÿÿÿ
+h
+java:S3776§"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(ò÷â
+O
+java:S1854·"8Remove this useless assignment to local variable "list".(ßÌ€ë
+n
+java:S3776Î"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(ü•²ƒþÿÿÿÿ
+N
+java:S1854Ö"7Remove this useless assignment to local variable "map".(ƒ¢Œó
+W
+java:S1854á";Remove this useless assignment to local variable "jsonMap".(ÞÊ·®üÿÿÿÿ
+N
+java:S1854ƒ"7Remove this useless assignment to local variable "map".(ƒ¢Œó
+N
+java:S1135¢"2Complete the task associated to this TODO comment.(» æžÿÿÿÿÿ
+R	java:S125¦"<This block of commented-out lines of code should be removed.(£³ø‰
+W	java:S125¬"<This block of commented-out lines of code should be removed.(”Þé”üÿÿÿÿ
+P
+java:S1144¶"4Remove this unused private "getMapperConfig" method.(ôãŸ÷üÿÿÿÿ
+u
+java:S2293‰"YReplace the type specification in this constructor call with the diamond operator ("<>").(œÅå›ûÿÿÿÿ
+K
+java:S1066´"/Merge this if statement with the enclosing one.(ËÆ÷ãüÿÿÿÿ
+Z
+java:S1155º">Use isEmpty() to check whether the collection is empty or not.(É€°Îøÿÿÿÿ
+
+java:S4165«"cRemove this useless assignment; "query" already holds the assigned value along all execution paths.(¸Ûµœùÿÿÿÿ
+
+java:S4165É"cRemove this useless assignment; "query" already holds the assigned value along all execution paths.(¸Ûµœùÿÿÿÿ
+
+java:S4165Œ"cRemove this useless assignment; "query" already holds the assigned value along all execution paths.(¸Ûµœùÿÿÿÿ

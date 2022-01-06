@@ -38,6 +38,13 @@ public class BankBranchJdbcRepositoryTest {
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+<<<<<<< HEAD
+=======
+	private static final String DEFAULT="default";
+
+	private static final String DESCRIPTION="description";
+
+>>>>>>> suggested changes done
 	@Before
 	public void setUp() throws Exception {
 		bankBranchJdbcRepository = new BankBranchJdbcRepository(namedParameterJdbcTemplate);
@@ -154,7 +161,11 @@ public class BankBranchJdbcRepositoryTest {
 						put("id", resultSet.getString("id"));
 						put("code", resultSet.getString("code"));
 						put("name", resultSet.getString("name"));
+<<<<<<< HEAD
 						put("description", resultSet.getString("description"));
+=======
+						put(DESCRIPTION, resultSet.getString(DESCRIPTION));
+>>>>>>> suggested changes done
 						put("active", resultSet.getBoolean("active"));
 					}
 				};
@@ -186,7 +197,11 @@ public class BankBranchJdbcRepositoryTest {
 		bankBranch.setCode("code");
 		bankBranch.setName("name");
 		bankBranch.setAddress("address");
+<<<<<<< HEAD
 		bankBranch.setDescription("description");
+=======
+		bankBranch.setDescription(DESCRIPTION);
+>>>>>>> suggested changes done
 		bankBranch.setActive(true);
 		bankBranch.setTenantId("default");
 		return bankBranch;
@@ -197,7 +212,11 @@ public class BankBranchJdbcRepositoryTest {
 		bank.setId("1");
 		bank.setCode("code");
 		bank.setName("name");
+<<<<<<< HEAD
 		bank.setDescription("description");
+=======
+		bank.setDescription(DESCRIPTION);
+>>>>>>> suggested changes done
 		bank.setType("type");
 		bank.setActive(true);
 		bank.setTenantId("default");

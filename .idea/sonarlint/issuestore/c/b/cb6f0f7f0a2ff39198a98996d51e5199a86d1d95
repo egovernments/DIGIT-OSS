@@ -1,0 +1,25 @@
+
+n
+java:S3776€"RRefactor this method to reduce its Cognitive Complexity from 59 to the 15 allowed.(ç®¤Žøÿÿÿÿ
+W	java:S125†"<This block of commented-out lines of code should be removed.(¡ìÀËýÿÿÿÿ
+R	java:S125”"<This block of commented-out lines of code should be removed.(–Œ“±
+W	java:S125š"<This block of commented-out lines of code should be removed.(‡²Ãõýÿÿÿÿ
+W	java:S125¦"<This block of commented-out lines of code should be removed.(ÞÂÿÆøÿÿÿÿ
+W	java:S125®"<This block of commented-out lines of code should be removed.(¾©­×ýÿÿÿÿ
+R	java:S125º"<This block of commented-out lines of code should be removed.(•§Ú¸
+Q	java:S125ò"<This block of commented-out lines of code should be removed.(’›ÁB
+R	java:S125ù"<This block of commented-out lines of code should be removed.(æÄÕ‚
+R	java:S125‚"<This block of commented-out lines of code should be removed.(ËòÓ÷
+R	java:S125Ž"<This block of commented-out lines of code should be removed.(ûí–ã
+c
+java:S1854»"LRemove this useless assignment to local variable "financialStatusContract1".(…Ä–
+I
+java:S1172°"-Remove this unused method parameter "errors".(¿ƒÑ«üÿÿÿÿ
+c
+java:S1854Ï"LRemove this useless assignment to local variable "financialStatusContract1".(…Ä–
+D
+java:S1172Ä"-Remove this unused method parameter "errors".(éú
+b
+java:S1192Š"LDefine a constant instead of duplicating this literal "instruments" 3 times.(âÑ›b
+o
+java:S1192â"SUse already-defined constant 'ACTION_CREATE' instead of duplicating its value here.(“îî‘þÿÿÿÿ

@@ -26,6 +26,11 @@ public class ChartOfAccountDetailJdbcRepository extends JdbcRepository {
 
     private final AccountDetailTypeJdbcRepository accountDetailTypeJdbcRepository;
 
+<<<<<<< HEAD
+=======
+    private static final String AND=" and ";
+
+>>>>>>> suggested changes done
     static {
         LOG.debug("init chartOfAccountDetail");
         init(ChartOfAccountDetailEntity.class);
@@ -77,21 +82,33 @@ public class ChartOfAccountDetailJdbcRepository extends JdbcRepository {
         // implement jdbc specfic search
         if (chartOfAccountDetailSearchEntity.getTenantId() != null) {
             if (params.length() > 0) {
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             }
             params.append("tenantId =:tenantId");
             paramValues.put("tenantId", chartOfAccountDetailSearchEntity.getTenantId());
         }
         if (chartOfAccountDetailSearchEntity.getId() != null) {
             if (params.length() > 0) {
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             }
             params.append("id =:id");
             paramValues.put("id", chartOfAccountDetailSearchEntity.getId());
         }
         if (chartOfAccountDetailSearchEntity.getIds() != null) {
             if (params.length() > 0) {
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             }
             params.append("id in(:ids) ");
             paramValues.put("ids", new ArrayList<String>(Arrays.asList(chartOfAccountDetailSearchEntity.getIds().split(","))));
@@ -99,7 +116,11 @@ public class ChartOfAccountDetailJdbcRepository extends JdbcRepository {
 
         if (chartOfAccountDetailSearchEntity.getChartOfAccountIds() != null) {
             if (params.length() > 0) {
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             }
             params.append("chartOfAccountId in(:chartOfAccountIds) ");
             paramValues.put("chartOfAccountIds",
@@ -107,14 +128,22 @@ public class ChartOfAccountDetailJdbcRepository extends JdbcRepository {
         }
         if (chartOfAccountDetailSearchEntity.getChartOfAccountId() != null) {
             if (params.length() > 0) {
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             }
             params.append("chartOfAccountId =:chartOfAccount");
             paramValues.put("chartOfAccount", chartOfAccountDetailSearchEntity.getChartOfAccountId());
         }
         if (chartOfAccountDetailSearchEntity.getAccountDetailTypeId() != null) {
             if (params.length() > 0) {
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             }
             params.append("accountDetailTypeId =:accountDetailType");
             paramValues.put("accountDetailType", chartOfAccountDetailSearchEntity.getAccountDetailTypeId());

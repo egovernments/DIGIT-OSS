@@ -1,0 +1,14 @@
+
+h
+java:S37766"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(èÙ¹ñ
+I
+java:S1172˜"2Remove this unused method parameter "requestInfo".(«íÝí
+W	java:S125Ù"<This block of commented-out lines of code should be removed.(‰“œ¢øÿÿÿÿ
+
+java:S1488Ý"jImmediately return this expression instead of assigning it to the temporary variable "userDetailResponse".(æ÷ÿÉ
+†
+java:S1488›"jImmediately return this expression instead of assigning it to the temporary variable "userDetailResponse".(þšíƒûÿÿÿÿ
+k
+java:S2259C"PA "NullPointerException" could be thrown; "userDetailResponse" is nullable here.(ø´Õ²üÿÿÿÿ
+[
+java:S2259Œ"?A "NullPointerException" could be thrown; "d" is nullable here.(Ä¢Ãÿÿÿÿÿ

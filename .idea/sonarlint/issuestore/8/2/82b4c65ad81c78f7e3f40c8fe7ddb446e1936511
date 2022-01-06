@@ -1,0 +1,9 @@
+
+U
+java:S18540"@Remove this useless assignment to local variable "calculations".(¼õñ{
+Q
+java:S1854i"<Remove this useless assignment to local variable "response".(Õ‰2
+B
+java:S1481i"-Remove this unused "response" local variable.(Õ‰2
+n
+java:S22930"YReplace the type specification in this constructor call with the diamond operator ("<>").(¼õñ{

@@ -44,9 +44,13 @@ public class FunctionServiceTest {
 	private RequestInfo requestInfo = new RequestInfo();
 	private List<Function> functions = new ArrayList<>();
 
+<<<<<<< HEAD
 	@Before
 	public void setup() {
 	}
+=======
+	private static final String DEFAULT="default";
+>>>>>>> suggested changes done
 
 	@Test
 	public final void testCreate() {

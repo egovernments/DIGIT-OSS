@@ -1,0 +1,23 @@
+
+o	java:S116)"URename this field "AssmtUtils" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ê‰²ıÿÿÿÿ
+V	java:S1256"<This block of commented-out lines of code should be removed.( ÀÌÍşÿÿÿÿ
+V	java:S125B"<This block of commented-out lines of code should be removed.( ÀÌÍşÿÿÿÿ
+L
+java:S1172l"1Remove this unused method parameter "assessment".(¢ï¾‚ıÿÿÿÿ
+R	java:S125ƒ"<This block of commented-out lines of code should be removed.(’”¬ı
+i
+java:S3776É"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(ˆ€ü¹
+C
+java:S1602û",Remove useless curly braces around statement(Ğ¥¾´
+i
+java:S3776”"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(üÔšÎ
+P
+java:S1144õ"4Remove this unused private "validateUnitIds" method.(Ö•íÚûÿÿÿÿ
+K
+java:S1066³"/Merge this if statement with the enclosing one.(¿ì«ùÿÿÿÿ
+K
+java:S1066Ò"/Merge this if statement with the enclosing one.(£èËŠÿÿÿÿÿ
+K
+java:S1066×"/Merge this if statement with the enclosing one.(ñÄ¢ªüÿÿÿÿ
+j
+java:S2259¡"NA "NullPointerException" could be thrown; "assessmentFromDB" is nullable here.(À†ÂÀüÿÿÿÿ

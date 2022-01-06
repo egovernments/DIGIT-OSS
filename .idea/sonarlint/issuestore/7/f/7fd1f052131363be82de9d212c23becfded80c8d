@@ -1,0 +1,17 @@
+
+U
+java:S11185":Add a private constructor to hide the implicit public one.(“³±ûÿÿÿÿ
+`
+java:S11247"EReorder the modifiers to comply with the Java Language Specification.(„­–™üÿÿÿÿ
+`
+java:S11248"EReorder the modifiers to comply with the Java Language Specification.(ÿˆŒóúÿÿÿÿ
+[
+java:S11249"EReorder the modifiers to comply with the Java Language Specification.(»üöŠ
+J
+java:S2885„".Make "DD_MON_YYYYFORMAT" an instance variable.(âØ²úÿÿÿÿ
+C
+java:S2885…",Make "DDMMYYYYFORMAT1" an instance variable.(–İÅ
+C
+java:S2885†",Make "DDMMYYYYFORMAT2" an instance variable.(ššú
+l
+java:S1192„"PUse already-defined constant 'DATEFORMAT' instead of duplicating its value here.(âØ²úÿÿÿÿ

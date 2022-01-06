@@ -1,0 +1,22 @@
+
+G
+java:S3599/",Use another way to initialize this instance.(ò¦Õ¨ÿÿÿÿÿ
+t
+java:S11710"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ
+B
+java:S3599<",Use another way to initialize this instance.(¶§ô
+t
+java:S1171="YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ
+B
+java:S1602…",Remove useless curly braces around statement(†È’3
+R	java:S125’"<This block of commented-out lines of code should be removed.(Ã³ñÙ
+W	java:S125Ë"<This block of commented-out lines of code should be removed.(î’Öàûÿÿÿÿ
+R	java:S125‘"<This block of commented-out lines of code should be removed.(ÐØßÜ
+`
+java:S1134È"DTake the required action to fix the issue indicated by this comment.(¯ÒÖïûÿÿÿÿ
+[
+java:S1134Ý"DTake the required action to fix the issue indicated by this comment.(¹Ù”‡
+w
+java:S1488™"`Immediately return this expression instead of assigning it to the temporary variable "response".(š’ÔÃ
+v
+java:S1488Ë"_Immediately return this expression instead of assigning it to the temporary variable "address".(çáÐÙ

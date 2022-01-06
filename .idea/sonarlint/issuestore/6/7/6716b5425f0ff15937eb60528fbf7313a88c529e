@@ -1,0 +1,15 @@
+
+^
+java:S6355"HAdd 'since' and/or 'forRemoval' arguments to the @Deprecated annotation.(õˆúš
+K
+java:S1133"5Do not forget to remove this deprecated code someday.(íŸÉÛ
+>
+java:S1123"(Add the missing @deprecated Javadoc tag.(íŸÉÛ
+P
+java:S1118":Add a private constructor to hide the implicit public one.(íŸÉÛ
+m
+java:S37764"RRefactor this method to reduce its Cognitive Complexity from 27 to the 15 allowed.(ÌÁˆµşÿÿÿÿ
+@
+java:S1197‘"*Move the array designators [] to the type.(»‹É?
+@
+java:S1197–"*Move the array designators [] to the type.(»‹É?

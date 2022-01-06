@@ -19,6 +19,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class FinancialYearJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(FinancialYearJdbcRepository.class);
+<<<<<<< HEAD
+=======
+	private static final String AND=" and ";
+>>>>>>> suggested changes done
 
 	static {
 		LOG.debug("init financialYear");
@@ -62,70 +66,110 @@ public class FinancialYearJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
 		if (financialYearSearchEntity.getTenantId() != null) {
                     if (params.length() > 0) {
+<<<<<<< HEAD
                         params.append(" and ");
+=======
+                        params.append(AND);
+>>>>>>> suggested changes done
                     }
                     params.append("tenantId =:tenantId");
                     paramValues.put("tenantId", financialYearSearchEntity.getTenantId());
                 }
 		if (financialYearSearchEntity.getId() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("id =:id");
 			paramValues.put("id", financialYearSearchEntity.getId());
 		}
 		if (financialYearSearchEntity.getFinYearRange() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("finYearRange =:finYearRange");
 			paramValues.put("finYearRange", financialYearSearchEntity.getFinYearRange());
 		}
 		if (financialYearSearchEntity.getStartingDate() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("startingDate =:startingDate");
 			paramValues.put("startingDate", financialYearSearchEntity.getStartingDate());
 		}
 		if (financialYearSearchEntity.getEndingDate() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("endingDate =:endingDate");
 			paramValues.put("endingDate", financialYearSearchEntity.getEndingDate());
 		}
 		if (financialYearSearchEntity.getActive() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("active =:active");
 			paramValues.put("active", financialYearSearchEntity.getActive());
 		}
 		if (financialYearSearchEntity.getIsActiveForPosting() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("isActiveForPosting =:isActiveForPosting");
 			paramValues.put("isActiveForPosting", financialYearSearchEntity.getIsActiveForPosting());
 		}
 		if (financialYearSearchEntity.getIsClosed() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("isClosed =:isClosed");
 			paramValues.put("isClosed", financialYearSearchEntity.getIsClosed());
 		}
 		if (financialYearSearchEntity.getTransferClosingBalance() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("transferClosingBalance =:transferClosingBalance");
 			paramValues.put("transferClosingBalance", financialYearSearchEntity.getTransferClosingBalance());
 		}
 		if (financialYearSearchEntity.getAsOnDate() != null) {
 		    if (params.length() > 0) {
+<<<<<<< HEAD
 		        params.append(" and ");
+=======
+		        params.append(AND);
+>>>>>>> suggested changes done
 		    }
 		    params.append("startingDate <=:asOnDate and endingDate >= :asOnDate");
 		    paramValues.put("asOnDate", financialYearSearchEntity.getAsOnDate());

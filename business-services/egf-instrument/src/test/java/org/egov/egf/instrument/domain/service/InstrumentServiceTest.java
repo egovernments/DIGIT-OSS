@@ -72,6 +72,20 @@ public class InstrumentServiceTest {
 
     private RequestInfo requestInfo = new RequestInfo();
 
+<<<<<<< HEAD
+=======
+    private static final String CHEQUE="cheque";
+
+    private static final String ONLINE="online";
+
+    private static final String BANK_CHALLAN="bankchallan";
+
+    private static final String DESCRIPTION="description";
+
+    private static final String ACCOUNT_NUMBER="accountNumber";
+
+    private static final String DEFAULT="default";
+>>>>>>> suggested changes done
     @Before
     public void setup() {
         instrumentService = new InstrumentService(validator, instrumentRepository,
@@ -888,7 +902,11 @@ public class InstrumentServiceTest {
     private List<Instrument> getInstruments() {
         List<Instrument> instruments = new ArrayList<Instrument>();
         InstrumentType it = InstrumentType.builder().name("dd").build();
+<<<<<<< HEAD
         it.setTenantId("default");
+=======
+        it.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
         Instrument instrument = Instrument.builder().amount(BigDecimal.ONE).id("1")
                 .payee("payee")
                 .bank(BankContract.builder().code("code").description("description").active(true)
@@ -902,7 +920,11 @@ public class InstrumentServiceTest {
                 .instrumentType(it)
                 .transactionNumber("1")
                 .transactionDate(new Date()).build();
+<<<<<<< HEAD
         instrument.setTenantId("default");
+=======
+        instrument.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
         instruments.add(instrument);
         return instruments;
     }
@@ -910,7 +932,11 @@ public class InstrumentServiceTest {
     private List<Instrument> getInstrumentss() {
         List<Instrument> instruments = new ArrayList<Instrument>();
         Instrument instrument = Instrument.builder().build();
+<<<<<<< HEAD
         instrument.setTenantId("default");
+=======
+        instrument.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
         instruments.add(instrument);
         return instruments;
     }
@@ -918,15 +944,24 @@ public class InstrumentServiceTest {
     private List<InstrumentContract> getInstrumentContracts() {
         List<InstrumentContract> instrumentContracts = new ArrayList<InstrumentContract>();
         InstrumentContract instrumentContract = InstrumentContract.builder().build();
+<<<<<<< HEAD
         instrumentContract.setTenantId("default");
+=======
+        instrumentContract.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
         instrumentContracts.add(instrumentContract);
         return instrumentContracts;
     }
 
     private List<InstrumentType> getInstrumentTypes() {
         List<InstrumentType> lits = new ArrayList<>();
+<<<<<<< HEAD
         InstrumentType it = InstrumentType.builder().name("cheque").build();
         it.setTenantId("default");
+=======
+        InstrumentType it = InstrumentType.builder().name(CHEQUE).build();
+        it.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
         lits.add(it);
         return lits;
     }

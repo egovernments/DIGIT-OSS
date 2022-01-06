@@ -1,0 +1,39 @@
+
+t	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(Õı¿Òúÿÿÿÿ
+o	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ª·û«
+Y
+java:S1214"CMove constants defined in this interfaces to another class or enum.(İš½à
+W
+java:S1075"ARefactor your code to get this URI from a customizable parameter.(‡ä’œ
+Y
+java:S1214"CMove constants defined in this interfaces to another class or enum.(Åí
+Y
+java:S1214,"CMove constants defined in this interfaces to another class or enum.(¾ò€§
+^
+java:S12147"CMove constants defined in this interfaces to another class or enum.(×£¡ûÿÿÿÿ
+Y
+java:S1214;"CMove constants defined in this interfaces to another class or enum.(…’·‹
+^
+java:S1214@"CMove constants defined in this interfaces to another class or enum.(Ë¯ı¾ÿÿÿÿÿ
+^
+java:S1214F"CMove constants defined in this interfaces to another class or enum.(ö—™†úÿÿÿÿ
+Y
+java:S1214N"CMove constants defined in this interfaces to another class or enum.(×º€´
+X
+java:S1214a"CMove constants defined in this interfaces to another class or enum.(ïÜŸH
+Y
+java:S2386b">Move "errorCodeMessageMap" to a class and lower its visibility(­éäîûÿÿÿÿ
+G
+java:S3599b",Use another way to initialize this instance.(­éäîûÿÿÿÿ
+t
+java:S1171b"YMove the contents of this initializer to a standard constructor or to field initializers.(­éäîûÿÿÿÿ
+Y
+java:S1214j"CMove constants defined in this interfaces to another class or enum.(ÅÁÒÛ
+^
+java:S1214m"CMove constants defined in this interfaces to another class or enum.(¤Ñ•çúÿÿÿÿ
+o
+java:S1192e"TUse already-defined constant 'TRANSFORM_DATA' instead of duplicating its value here.(§¦Ì‡ùÿÿÿÿ
+g
+java:S1192f"QUse already-defined constant 'ENRICH_DATA' instead of duplicating its value here.(³”Ã¼
+i
+java:S1192d"SUse already-defined constant 'VALIDATE_DATA' instead of duplicating its value here.(äİêç

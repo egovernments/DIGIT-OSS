@@ -1,0 +1,9 @@
+
+i
+java:S3776¯"RRefactor this method to reduce its Cognitive Complexity from 28 to the 15 allowed.(†œ¨Á
+R
+java:S2200æ"/Only the sign of the result should be examined.(óËçÜùÿÿÿÿ8é¤ïµæ/
+R
+java:S2200ö"/Only the sign of the result should be examined.(óËçÜùÿÿÿÿ8ë¤ïµæ/
+o
+java:S2293¹"YReplace the type specification in this constructor call with the diamond operator ("<>").(îÆ–

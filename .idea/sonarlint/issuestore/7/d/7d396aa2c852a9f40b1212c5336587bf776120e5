@@ -1,0 +1,15 @@
+
+K
+java:S3740¥"/Provide the parametrized type for this generic.(ËÙ¤¤ùÿÿÿÿ
+V	java:S125H"<This block of commented-out lines of code should be removed.(ªÿ¥¹üÿÿÿÿ
+V	java:S125T"<This block of commented-out lines of code should be removed.(Ò…·ñøÿÿÿÿ
+G
+java:S1172`",Remove this unused method parameter "owner".(ôÊÎþÿÿÿÿ
+J
+java:S1144`"/Remove this unused private "userExists" method.(ôÊÎþÿÿÿÿ
+†
+java:S1488‹"jImmediately return this expression instead of assigning it to the temporary variable "userDetailResponse".(þšíƒûÿÿÿÿ
+
+java:S1488§"jImmediately return this expression instead of assigning it to the temporary variable "userDetailResponse".(æ÷ÿÉ
+[
+java:S2259Ô"?A "NullPointerException" could be thrown; "d" is nullable here.(Ä¢Ãÿÿÿÿÿ

@@ -1,0 +1,95 @@
+
+a	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(²ÛµÌÿÿÿÿÿ
+a	java:S112Ô"FDefine and throw a dedicated exception instead of using a generic one.(£§æïÿÿÿÿÿ
+a	java:S112İ"FDefine and throw a dedicated exception instead of using a generic one.(‘ÉÎìüÿÿÿÿ
+a	java:S112æ"FDefine and throw a dedicated exception instead of using a generic one.(Ñ¹‘½ıÿÿÿÿ
+a	java:S112ğ"FDefine and throw a dedicated exception instead of using a generic one.(˜ÈÈŞúÿÿÿÿ
+a	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(Áà£şÿÿÿÿ
+a	java:S112Í"FDefine and throw a dedicated exception instead of using a generic one.(€©Ãûÿÿÿÿ
+\	java:S112ã"FDefine and throw a dedicated exception instead of using a generic one.(€Ñàõ
+a	java:S112ö"FDefine and throw a dedicated exception instead of using a generic one.(µÚäØúÿÿÿÿ
+\	java:S112Š"FDefine and throw a dedicated exception instead of using a generic one.(›İ¬É
+\	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(· Çø
+g	java:S116<"MRename this field "ID" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(åÈûşøÿÿÿÿ
+e	java:S116="PRename this field "EMAIL" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¶©¡Ì
+i	java:S116>"TRename this field "USER_NAME" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ã²Û
+n	java:S116?"TRename this field "TENANT_ID" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÈÇ¥şÿÿÿÿ
+7
+java:S1170="!Make this final field static too.(¶©¡Ì
+7
+java:S1170>"!Make this final field static too.(ã²Û
+<
+java:S1170?"!Make this final field static too.(ÈÇ¥şÿÿÿÿ
+<
+java:S1170@"!Make this final field static too.(³áÃ•ùÿÿÿÿ
+<
+java:S1170A"!Make this final field static too.(©É³ûÿÿÿÿ
+²
+java:S1845"šRename method "test_should_create_a_valid_citizen_WithOtp" to prevent any misunderstanding/clash with method "test_should_create_a_valid_citizen_withotp".(· Çø
+h	java:S100P"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ôù©òıÿÿÿÿ
+c	java:S100\"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(øß‘Ë
+h	java:S100g"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ì•¯ßùÿÿÿÿ
+c	java:S100u"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(øºŸÚ
+d	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ûãĞÅ
+i	java:S100‘"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÙÛ•ƒúÿÿÿÿ
+i	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(²ÛµÌÿÿÿÿÿ
+N
+java:S1135«"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+i	java:S100´"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(İÈ¸ƒúÿÿÿÿ
+d	java:S100Å"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(È Ï¾
+i	java:S100Ô"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£§æïÿÿÿÿÿ
+i	java:S100İ"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‘ÉÎìüÿÿÿÿ
+i	java:S100æ"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ñ¹‘½ıÿÿÿÿ
+i	java:S100ğ"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(˜ÈÈŞúÿÿÿÿ
+d	java:S100ù"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(­‘§
+i	java:S100ˆ"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(éÆ¾²şÿÿÿÿ
+i	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Áà£şÿÿÿÿ
+R	java:S125–"<This block of commented-out lines of code should be removed.(½Ûš
+d	java:S100¦"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÎÈœ­
+c	java:S100®"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(³¬¿r
+c	java:S100¸"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(˜¯ÃS
+d	java:S100Ã"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(øæ­¹
+d	java:S100Ğ"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ô®Ğ
+i	java:S100â"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©à©ºøÿÿÿÿ
+i	java:S100ô"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ĞÒáùÿÿÿÿ
+d	java:S100…"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‹–
+d	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(üÁÓğ
+i	java:S100Ÿ"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ê¹ä•üÿÿÿÿ
+W	java:S125­"<This block of commented-out lines of code should be removed.(ñ÷ÍÔùÿÿÿÿ
+d	java:S100²"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¹ç—ó
+d	java:S100Ä"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‘ßè‡
+i	java:S100Í"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(€©Ãûÿÿÿÿ
+d	java:S100ã"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(€Ñàõ
+i	java:S100ö"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(µÚäØúÿÿÿÿ
+d	java:S100Š"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(›İ¬É
+d	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(· Çø
+R	java:S125 "<This block of commented-out lines of code should be removed.(§²ùÀ
+i	java:S100µ"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ô¡öÀıÿÿÿÿ
+H
+java:S1068?"-Remove this unused "TENANT_ID" private field.(ÈÇ¥şÿÿÿÿ
+I
+java:S1144Ù"2Remove this unused private "getUserObject" method.(ú™Ê¸
+t
+java:S2293R"YReplace the type specification in this constructor call with the diamond operator ("<>").(è¾Î´ûÿÿÿÿ
+t
+java:S2293^"YReplace the type specification in this constructor call with the diamond operator ("<>").(è¾Î´ûÿÿÿÿ
+t
+java:S1192—"XDefine a constant instead of duplicating this literal "existingPasswordEncoded" 4 times.(Ù«İÿÿÿÿÿ
+m
+java:S1192Ö"QDefine a constant instead of duplicating this literal "existingPassword" 6 times.(şâøşÿÿÿÿ
+c
+java:S1192é"LDefine a constant instead of duplicating this literal "nEwP@ssw0rd" 4 times.(¬Û æ
+_
+java:S1192†"IDefine a constant instead of duplicating this literal "default" 22 times.(ÑÖ†~
+^
+java:S1192¸"GDefine a constant instead of duplicating this literal "123456" 4 times.(ÃÖŞô
+c
+java:S1192Õ"LDefine a constant instead of duplicating this literal "newPassword" 5 times.(ºöı’
+e
+java:S1192¤"IDefine a constant instead of duplicating this literal "P@ssw0rd" 7 times.(¬Íæ«úÿÿÿÿ
+a
+java:S1192‡"JDefine a constant instead of duplicating this literal "P@assw0rd" 3 times.(Õ´óÎ
+d
+java:S1192?"IDefine a constant instead of duplicating this literal "tenantId" 5 times.(ÈÇ¥şÿÿÿÿ
+ˆ
+java:S1488®"lImmediately return this expression instead of assigning it to the temporary variable "otpValidationRequest".(à‰úíøÿÿÿÿ

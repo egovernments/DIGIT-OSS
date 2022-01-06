@@ -39,6 +39,13 @@ public class AmendmentRepository {
 	
 	@Autowired
 	private AmendmentQueryBuilder amendmentQueryBuilder;
+<<<<<<< HEAD
+=======
+
+	private static final String AMENDMENT_ID="amendmentid";
+
+	private static final String STATUS="status";
+>>>>>>> suggested changes done
 	
 	@Transactional
 	public void saveAmendment (AmendmentRequest amendmentRequest) {
@@ -92,7 +99,11 @@ public class AmendmentRepository {
 		mapSqlParameterSource.addValue("consumercode", amendment.getConsumerCode());
 		mapSqlParameterSource.addValue("amendmentreason", amendment.getAmendmentReason().toString());
 		mapSqlParameterSource.addValue("reasondocumentnumber", amendment.getReasonDocumentNumber());
+<<<<<<< HEAD
 		mapSqlParameterSource.addValue("status", amendment.getStatus().toString());
+=======
+		mapSqlParameterSource.addValue(STATUS, amendment.getStatus().toString());
+>>>>>>> suggested changes done
 		mapSqlParameterSource.addValue("effectivetill", amendment.getEffectiveTill());
 		mapSqlParameterSource.addValue("effectivefrom", amendment.getEffectiveFrom());
 		mapSqlParameterSource.addValue("amendeddemandid", amendment.getAmendedDemandId());
@@ -132,7 +143,11 @@ public class AmendmentRepository {
 			documentParamMap.addValue("documenttype", document.getDocumentType());
 			documentParamMap.addValue("filestoreid", document.getFileStoreId());
 			documentParamMap.addValue("documentuid", document.getDocumentUid());
+<<<<<<< HEAD
 			documentParamMap.addValue("status", "ACTIVE");
+=======
+			documentParamMap.addValue(STATUS, "ACTIVE");
+>>>>>>> suggested changes done
 			documentsParamMapList.add(documentParamMap);
 		}
 
@@ -147,7 +162,11 @@ public class AmendmentRepository {
 			AuditDetails auditDetails = amendmentUpdate.getAuditDetails();
 			MapSqlParameterSource updateParamMap = new MapSqlParameterSource();
 
+<<<<<<< HEAD
 			updateParamMap.addValue("status", amendmentUpdate.getStatus().toString());
+=======
+			updateParamMap.addValue(STATUS, amendmentUpdate.getStatus().toString());
+>>>>>>> suggested changes done
 			updateParamMap.addValue("amendeddemandid", amendmentUpdate.getAmendedDemandId());
 			updateParamMap.addValue("lastmodifiedby", auditDetails.getLastModifiedBy());
 			updateParamMap.addValue("lastmodifiedtime", auditDetails.getLastModifiedTime());

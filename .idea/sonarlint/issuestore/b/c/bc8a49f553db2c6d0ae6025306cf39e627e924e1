@@ -1,0 +1,33 @@
+
+\
+java:S1126="AReplace this if-then-else statement by a single return statement.(ÿ”Ùâûÿÿÿÿ
+g
+java:S1104"QMake codes a static final constant or non-public and provide accessors if needed.(×Š²Å
+l
+java:S1104"QMake names a static final constant or non-public and provide accessors if needed.(Ú½œûÿÿÿÿ
+r
+java:S1104"WMake departments a static final constant or non-public and provide accessors if needed.(œá‚Ïûÿÿÿÿ
+s
+java:S1104 "XMake designations a static final constant or non-public and provide accessors if needed.(ÚÕı™ùÿÿÿÿ
+i
+java:S1104""TMake asOnDate a static final constant or non-public and provide accessors if needed.(ˆŠ”V
+g
+java:S1104$"QMake roles a static final constant or non-public and provide accessors if needed.(»˜şš
+j
+java:S1104&"OMake ids a static final constant or non-public and provide accessors if needed.(áÑîÙøÿÿÿÿ
+w
+java:S1104("\Make employeestatuses a static final constant or non-public and provide accessors if needed.(ÖğÂÌûÿÿÿÿ
+t
+java:S1104*"YMake employeetypes a static final constant or non-public and provide accessors if needed.(Šğ‚šşÿÿÿÿ
+g
+java:S1104,"QMake uuids a static final constant or non-public and provide accessors if needed.(ºÑŒ
+k
+java:S1104."UMake positions a static final constant or non-public and provide accessors if needed.(ùÌÎ½
+j
+java:S11040"TMake isActive a static final constant or non-public and provide accessors if needed.(Ğ¤Ş”
+g
+java:S11045"QMake phone a static final constant or non-public and provide accessors if needed.(«ç”¤
+h
+java:S11047"RMake offset a static final constant or non-public and provide accessors if needed.(ñŸÕä
+g
+java:S11049"QMake limit a static final constant or non-public and provide accessors if needed.(·¹À†

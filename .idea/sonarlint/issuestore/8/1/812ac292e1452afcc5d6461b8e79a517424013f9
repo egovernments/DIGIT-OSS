@@ -1,0 +1,26 @@
+
+`	java:S1126"FDefine and throw a dedicated exception instead of using a generic one.(‚ëô¡þÿÿÿÿ
+[	java:S112:"FDefine and throw a dedicated exception instead of using a generic one.(«¤ÜÕ
+[	java:S112>"FDefine and throw a dedicated exception instead of using a generic one.(Ððž¢
+g	java:S112R"FDefine and throw a dedicated exception instead of using a generic one.(äáíÄøÿÿÿÿ8ÉŸ‘·æ/
+b	java:S112i"FDefine and throw a dedicated exception instead of using a generic one.(º“‚¢8ÉŸ‘·æ/
+£
+java:S11866"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(‚ëô¡þÿÿÿÿ8ÊŸ‘·æ/
+ž
+java:S1186:"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(«¤ÜÕ8ÊŸ‘·æ/
+„
+java:S1130>"nRemove the declaration of thrown exception 'java.io.IOException' which is a subclass of 'java.lang.Exception'.(Ððž¢
+‰
+java:S1130R"nRemove the declaration of thrown exception 'java.io.IOException' which is a subclass of 'java.lang.Exception'.(äáíÄøÿÿÿÿ
+„
+java:S1130i"nRemove the declaration of thrown exception 'java.io.IOException' which is a subclass of 'java.lang.Exception'.(º“‚¢
+t
+java:S2293v"YReplace the type specification in this constructor call with the diamond operator ("<>").(Úó©˜ûÿÿÿÿ
+u
+java:S2293‚"YReplace the type specification in this constructor call with the diamond operator ("<>").(Úó©˜ûÿÿÿÿ
+b
+java:S1192K"GDefine a constant instead of duplicating this literal "GLCode" 4 times.(§®‹ëûÿÿÿÿ
+^
+java:S1192M"HDefine a constant instead of duplicating this literal "default" 4 times.(ÊÄóà
+i
+java:S1192`"SDefine a constant instead of duplicating this literal "DefaultDescription" 3 times.(‹Ã›ù

@@ -1,0 +1,18 @@
+
+£
+java:S11862"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(œô«İıÿÿÿÿ8’É·æ/
+c	java:S100Z"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¹öáô
+V	java:S125b"<This block of commented-out lines of code should be removed.(ÀóÃ½ÿÿÿÿÿ
+W	java:S125"<This block of commented-out lines of code should be removed.(íé¸ˆøÿÿÿÿ
+_
+java:S1117’"CRename "chartOfAccounts" which hides the field declared at line 47.(Úó©˜ûÿÿÿÿ
+Z
+java:S1144‹">Remove this unused private "getChartOfAccountContract" method.(ª²ÃÌÿÿÿÿÿ
+I
+java:S1144"2Remove this unused private "getPagination" method.(öö”
+u
+java:S2293’"YReplace the type specification in this constructor call with the diamond operator ("<>").(Úó©˜ûÿÿÿÿ
+^
+java:S1192€"HDefine a constant instead of duplicating this literal "default" 4 times.(¹‰ès
+x
+java:S1488Œ"\Immediately return this expression instead of assigning it to the temporary variable "coac".(Şéïøÿÿÿÿ

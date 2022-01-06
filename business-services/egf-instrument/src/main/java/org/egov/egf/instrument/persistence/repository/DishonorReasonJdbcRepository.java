@@ -25,6 +25,11 @@ import org.springframework.stereotype.Service;
 public class DishonorReasonJdbcRepository extends JdbcRepository {
     private static final Logger LOG = LoggerFactory.getLogger(DishonorReasonJdbcRepository.class);
 
+<<<<<<< HEAD
+=======
+    private final String AND=" and ";
+
+>>>>>>> suggested changes done
     static {
         LOG.debug("init dishonorrReason");
         init(DishonorReasonEntity.class);
@@ -84,37 +89,61 @@ public class DishonorReasonJdbcRepository extends JdbcRepository {
         // implement jdbc specfic search
         if (dishonorReasonSearchEntity.getTenantId() != null) {
             if (params.length() > 0)
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             params.append("tenantId =:tenantId");
             paramValues.put("tenantId", dishonorReasonSearchEntity.getTenantId());
         }
         if (dishonorReasonSearchEntity.getId() != null) {
             if (params.length() > 0)
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             params.append("id =:id");
             paramValues.put("id", dishonorReasonSearchEntity.getId());
         }
         if (dishonorReasonSearchEntity.getReason() != null) {
             if (params.length() > 0)
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             params.append("reason =:reason");
             paramValues.put("reason", dishonorReasonSearchEntity.getReason());
         }
         if (dishonorReasonSearchEntity.getRemarks() != null) {
             if (params.length() > 0)
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             params.append("remarks =:remarks");
             paramValues.put("remarks", dishonorReasonSearchEntity.getRemarks());
         }
         if (dishonorReasonSearchEntity.getIds() != null) {
             if (params.length() > 0)
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             params.append("id in (:ids)");
             paramValues.put("ids", dishonorReasonSearchEntity.getIds());
         }
         if (dishonorReasonSearchEntity.getInstrumentid() != null) {
             if (params.length() > 0)
+<<<<<<< HEAD
                 params.append(" and ");
+=======
+                params.append(AND);
+>>>>>>> suggested changes done
             params.append("instrumentid in (:instrumentids)");
             paramValues.put("instrumentids", new ArrayList<String>(Arrays.asList(dishonorReasonSearchEntity.getInstrumentid().split(","))));
         }

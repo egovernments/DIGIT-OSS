@@ -22,6 +22,11 @@ import org.springframework.stereotype.Service;
 public class BankJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(BankJdbcRepository.class);
 
+<<<<<<< HEAD
+=======
+	private static final String AND = " and ";
+
+>>>>>>> suggested changes done
 	static {
 		LOG.debug("init bank");
 		init(BankEntity.class);
@@ -69,56 +74,88 @@ public class BankJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
 		if (bankSearchEntity.getTenantId() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("tenantId =:tenantId");
 			paramValues.put("tenantId", bankSearchEntity.getTenantId());
 		}
 		if (bankSearchEntity.getId() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("id =:id");
 			paramValues.put("id", bankSearchEntity.getId());
 		}
 		if (bankSearchEntity.getIds() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("id in(:ids) ");
 			paramValues.put("ids", new ArrayList<String>(Arrays.asList(bankSearchEntity.getIds().split(","))));
 		}
 		if (bankSearchEntity.getCode() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("code =:code");
 			paramValues.put("code", bankSearchEntity.getCode());
 		}
 		if (bankSearchEntity.getName() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("name =:name");
 			paramValues.put("name", bankSearchEntity.getName());
 		}
 		if (bankSearchEntity.getDescription() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("description =:description");
 			paramValues.put("description", bankSearchEntity.getDescription());
 		}
 		if (bankSearchEntity.getActive() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("active =:active");
 			paramValues.put("active", bankSearchEntity.getActive());
 		}
 		if (bankSearchEntity.getType() != null) {
 			if (params.length() > 0) {
+<<<<<<< HEAD
 				params.append(" and ");
+=======
+				params.append(AND);
+>>>>>>> suggested changes done
 			}
 			params.append("type =:type");
 			paramValues.put("type", bankSearchEntity.getType());

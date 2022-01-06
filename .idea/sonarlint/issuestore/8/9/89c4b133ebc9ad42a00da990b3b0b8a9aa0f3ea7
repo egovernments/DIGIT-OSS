@@ -1,0 +1,14 @@
+
+h
+java:S3776""RRefactor this method to reduce its Cognitive Complexity from 38 to the 15 allowed.(üøý¨
+V	java:S125("<This block of commented-out lines of code should be removed.(¡ìÀËýÿÿÿÿ
+i
+java:S11921"NDefine a constant instead of duplicating this literal "financialYear" 6 times.(žÍ¥Ôùÿÿÿÿ
+a
+java:S11928"KDefine a constant instead of duplicating this literal "endingdate" 4 times.(æõëÜ
+e
+java:S1192,"ODefine a constant instead of duplicating this literal "financialyears" 3 times.(êÈ—Á
+h
+java:S11920"MDefine a constant instead of duplicating this literal "finYearRange" 4 times.(ƒ·…ýÿÿÿÿ
+b
+java:S11924"MDefine a constant instead of duplicating this literal "startingdate" 4 times.(™òœ!

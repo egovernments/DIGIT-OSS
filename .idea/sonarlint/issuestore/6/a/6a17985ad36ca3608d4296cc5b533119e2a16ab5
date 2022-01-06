@@ -1,0 +1,10 @@
+
+[	java:S112."FDefine and throw a dedicated exception instead of using a generic one.(‚³÷”
+q	java:S116""\Rename this field "RESOURCE_LOCATION" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ä¿þÙ
+V	java:S125$"<This block of commented-out lines of code should be removed.(ªîß×ùÿÿÿÿ
+U
+java:S4719Z":Replace Charset.forName() call with StandardCharsets.UTF_8(Ï­Å¥ùÿÿÿÿ
+|
+java:S1488J"aImmediately return this expression instead of assigning it to the temporary variable "resources".(°•¤Úýÿÿÿÿ
+V
+java:S2259b"@A "NullPointerException" could be thrown; "is" is nullable here.(þÑù

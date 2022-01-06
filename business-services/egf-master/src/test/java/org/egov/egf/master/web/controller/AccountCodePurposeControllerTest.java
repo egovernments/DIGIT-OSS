@@ -48,6 +48,11 @@ public class AccountCodePurposeControllerTest {
 
 	private RequestJsonReader resources = new RequestJsonReader();
 
+<<<<<<< HEAD
+=======
+	private static final String DEFAULT="default";
+
+>>>>>>> suggested changes done
 	@Test
 	public void testCreate() throws IOException, Exception {
 		when(accountCodePurposeService.create(any(List.class), any(BindingResult.class), any(RequestInfo.class)))
@@ -62,7 +67,11 @@ public class AccountCodePurposeControllerTest {
 
 		final List<AccountCodePurpose> actualRequest = captor.getValue();
 		assertEquals("name", actualRequest.get(0).getName());
+<<<<<<< HEAD
 		assertEquals("default", actualRequest.get(0).getTenantId());
+=======
+		assertEquals(DEFAULT, actualRequest.get(0).getTenantId());
+>>>>>>> suggested changes done
 	}
 
 	@Test
@@ -90,7 +99,11 @@ public class AccountCodePurposeControllerTest {
 
 		final List<AccountCodePurpose> actualRequest = captor.getValue();
 		assertEquals("nameU", actualRequest.get(0).getName());
+<<<<<<< HEAD
 		assertEquals("default", actualRequest.get(0).getTenantId());
+=======
+		assertEquals(DEFAULT, actualRequest.get(0).getTenantId());
+>>>>>>> suggested changes done
 	}
 
 	@Test
@@ -116,7 +129,11 @@ public class AccountCodePurposeControllerTest {
 	private List<AccountCodePurpose> getAccountCodePurposes() {
 		List<AccountCodePurpose> accountCodePurposes = new ArrayList<AccountCodePurpose>();
 		AccountCodePurpose accountCodePurpose = AccountCodePurpose.builder().id("1").name("name").build();
+<<<<<<< HEAD
 		accountCodePurpose.setTenantId("default");
+=======
+		accountCodePurpose.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
 		accountCodePurposes.add(accountCodePurpose);
 		return accountCodePurposes;
 	}
@@ -124,7 +141,11 @@ public class AccountCodePurposeControllerTest {
 	private List<AccountCodePurpose> getUpdateAccountCodePurposes() {
 		List<AccountCodePurpose> accountCodePurposes = new ArrayList<AccountCodePurpose>();
 		AccountCodePurpose accountCodePurpose = AccountCodePurpose.builder().id("1").name("nameU").build();
+<<<<<<< HEAD
 		accountCodePurpose.setTenantId("default");
+=======
+		accountCodePurpose.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
 		accountCodePurposes.add(accountCodePurpose);
 		return accountCodePurposes;
 	}

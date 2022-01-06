@@ -1,0 +1,107 @@
+
+c	java:S112ø"FDefine and throw a dedicated exception instead of using a generic one.(­Íâ•8¬ÿ ã/
+c	java:S112Ÿ"FDefine and throw a dedicated exception instead of using a generic one.(­Íâ•8¬ÿ ã/
+a	java:S112È"FDefine and throw a dedicated exception instead of using a generic one.(¿ÌÕ¡ûÿÿÿÿ
+c	java:S112Ï"FDefine and throw a dedicated exception instead of using a generic one.(­Íâ•8­ÿ ã/
+E
+java:S3740."/Provide the parametrized type for this generic.(â‰¡Ñ
+J
+java:S3740k"/Provide the parametrized type for this generic.(§ÍÂ÷ûÿÿÿÿ
+t
+java:S1845 "]Rename method "getByIdQuery" to prevent any misunderstanding/clash with field "getByIdQuery".(Ü•ÙÃ
+3
+java:S2386"Make this member "protected".(ªƒöÑ
+8
+java:S2386"Make this member "protected".(©ÛË±ıÿÿÿÿ
+8
+java:S2386"Make this member "protected".(‘ÉÃùÿÿÿÿ
+8
+java:S2386"Make this member "protected".(É˜×ûÿÿÿÿ
+3
+java:S2386"Make this member "protected".(ÍËŞ‘
+8
+java:S2386 "Make this member "protected".(ƒÖÙœıÿÿÿÿ
+3
+java:S2386!"Make this member "protected".(íŒßã
+v
+java:S1149ú"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ı‹€È
+‚
+java:S1149¡"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(·Ü×úÿÿÿÿ8¶ÿ ã/
+{
+java:S1149Õ"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(…Œ¶Òÿÿÿÿÿ
+{
+java:S1149Ö"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(Ñİˆûÿÿÿÿ
+Q	java:S125H"<This block of commented-out lines of code should be removed.(º¤éë
+c
+java:S1858g"A"replace" returns a string, there's no need to call "toString()".(²çÙæøÿÿÿÿ8Áÿ ã/
+d
+java:S1858›"A"replace" returns a string, there's no need to call "toString()".(ÛÙåúÿÿÿÿ8Êÿ ã/
+d
+java:S1858®"A"replace" returns a string, there's no need to call "toString()".(¥ùğ¹ùÿÿÿÿ8Íÿ ã/
+C
+java:S3011Ú",This accessibility update should be removed.(â·Ò
+W	java:S125ë"<This block of commented-out lines of code should be removed.(éï†—ûÿÿÿÿ
+H
+java:S3011ï",This accessibility update should be removed.(Í”úÆùÿÿÿÿ
+N
+java:S1135ò"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ
+N
+java:S1135õ"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ
+Y	java:S125€"<This block of commented-out lines of code should be removed.(Ãõõ×8Õÿ ã/
+i
+java:S1858¶"M"countQuery" is already a string, there's no need to call "toString()" on it.(÷Ä§®úÿÿÿÿ
+Z
+java:S1854¾">Remove this useless assignment to local variable "sortByList".(Ò©ß¦úÿÿÿÿ
+n
+java:S3776Ñ"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(÷ú÷Ñıÿÿÿÿ
+Z
+java:S1854Ó">Remove this useless assignment to local variable "sortByList".(Ò©ß¦úÿÿÿÿ
+W	java:S125ò"<This block of commented-out lines of code should be removed.(“Ä‰øÿÿÿÿ
+D
+java:S1125"(Remove the unnecessary boolean literals.(ĞËö°øÿÿÿÿ
+W	java:S125™"<This block of commented-out lines of code should be removed.(“Ä‰øÿÿÿÿ
+D
+java:S1125·"(Remove the unnecessary boolean literals.(ĞËö°øÿÿÿÿ
+R	java:S125ó"<This block of commented-out lines of code should be removed.(»âú
+o
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(ªƒöÑ
+t
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(©ÛË±ıÿÿÿÿ
+t
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(‘ÉÃùÿÿÿÿ
+u
+java:S2293¾"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ò©ß¦úÿÿÿÿ
+u
+java:S2293Ó"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ò©ß¦úÿÿÿÿ
+s	java:S135u"YReduce the total number of break and continue statements in this loop to use at most one.(º‹ÒÒşÿÿÿÿ
+o	java:S135¸"YReduce the total number of break and continue statements in this loop to use at most one.(¶Ôü¶
+f	java:S117."QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(â‰¡Ñ
+k	java:S117/"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(€½â¿øÿÿÿÿ
+A
+java:S5411ã"*Use the primitive boolean expression here.(Âğéü
+k
+java:S2259‰"H"NullPointerException" will be thrown when invoking method "getValue()".(‡ûò¹øÿÿÿÿ8´Ã—¡ã/
+e
+java:S2259ä"H"NullPointerException" will be thrown when invoking method "getValue()".(‡âÌ18·Ã—¡ã/
+k
+java:S2259±"H"NullPointerException" will be thrown when invoking method "getValue()".(‡ûò¹øÿÿÿÿ8¶Ã—¡ã/
+f
+java:S2259£"H"NullPointerException" will be thrown when invoking method "getValue()".(——ğ˜8·Ã—¡ã/
+k
+java:S2259ƒ"H"NullPointerException" will be thrown when invoking method "getValue()".(‡ûò¹øÿÿÿÿ8¹Ã—¡ã/
+e
+java:S2259ê"H"NullPointerException" will be thrown when invoking method "getValue()".(‡âÌ18¹Ã—¡ã/
+b
+java:S2259ï"?A "NullPointerException" could be thrown; "f" is nullable here.(Í”úÆùÿÿÿÿ8³Ã—¡ã/
+e
+java:S2259ü"H"NullPointerException" will be thrown when invoking method "getValue()".(ÒŸa8µÃ—¡ã/
+k
+java:S2259«"H"NullPointerException" will be thrown when invoking method "getValue()".(‡ûò¹øÿÿÿÿ8¶Ã—¡ã/
+f
+java:S2259¤"H"NullPointerException" will be thrown when invoking method "getValue()".(ôâì8Õ¤”¡ã/
+k
+java:S2259ç"H"NullPointerException" will be thrown when invoking method "getValue()".(ô¾ò½ùÿÿÿÿ8²Ã—¡ã/
+k
+java:S2259®"H"NullPointerException" will be thrown when invoking method "getValue()".(ÙÆù¢üÿÿÿÿ8²Ã—¡ã/
+k
+java:S2259†"H"NullPointerException" will be thrown when invoking method "getValue()".(ÙÆù¢üÿÿÿÿ8¸Ã—¡ã/

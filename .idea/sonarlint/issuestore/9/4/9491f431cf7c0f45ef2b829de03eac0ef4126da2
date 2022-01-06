@@ -1,0 +1,15 @@
+
+m
+java:S3776%"RRefactor this method to reduce its Cognitive Complexity from 27 to the 15 allowed.(ÈŽˆ¿ýÿÿÿÿ
+n
+java:S1192<"SDefine a constant instead of duplicating this literal "DEDUP_STORAGE_TIME" 4 times.(¾öÞ÷ûÿÿÿÿ
+i
+java:S1192*"SDefine a constant instead of duplicating this literal "REPLICATION_FACTOR" 4 times.(ùÞö³
+k
+java:S1192("UDefine a constant instead of duplicating this literal "NUMBER_OF_PARTITIONS" 4 times.(ŒùäÞ
+E
+java:S1066N"/Merge this if statement with the enclosing one.(¸ä³ª
+J
+java:S1066R"/Merge this if statement with the enclosing one.(Š»º“þÿÿÿÿ
+J
+java:S1066"/Merge this if statement with the enclosing one.(ÆÈÓåüÿÿÿÿ

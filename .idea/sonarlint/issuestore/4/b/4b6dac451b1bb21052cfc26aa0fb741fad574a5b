@@ -1,0 +1,19 @@
+
+t	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(×Û‘ÿÿÿÿÿ
+t	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(¤İæıÿÿÿÿ
+o	java:S115	"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(œæéŸ
+t	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(×éƒšüÿÿÿÿ
+t	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ìÈ¹©ÿÿÿÿÿ
+o	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(–Ï¥Œ
+`
+java:S1124"EReorder the modifiers to comply with the Java Language Specification.(×Û‘ÿÿÿÿÿ
+`
+java:S1124"EReorder the modifiers to comply with the Java Language Specification.(¤İæıÿÿÿÿ
+[
+java:S1124	"EReorder the modifiers to comply with the Java Language Specification.(œæéŸ
+`
+java:S1124"EReorder the modifiers to comply with the Java Language Specification.(×éƒšüÿÿÿÿ
+`
+java:S1124"EReorder the modifiers to comply with the Java Language Specification.(ìÈ¹©ÿÿÿÿÿ
+[
+java:S1124"EReorder the modifiers to comply with the Java Language Specification.(–Ï¥Œ

@@ -1,0 +1,15 @@
+
+E
+java:S3740-"/Provide the parametrized type for this generic.(ýþ¾ù
+E
+java:S3740B"/Provide the parametrized type for this generic.(ýþ¾ù
+W
+java:S11268"AReplace this if-then-else statement by a single return statement.(Ó¼åÇ
+W
+java:S1126N"AReplace this if-then-else statement by a single return statement.(Ó¼åÇ
+d
+java:S11922"IDefine a constant instead of duplicating this literal "Error : " 6 times.(›Â²úùÿÿÿÿ
+W
+java:S22598"AA "NullPointerException" could be thrown; "map" is nullable here.(Ó¼åÇ
+W
+java:S2259N"AA "NullPointerException" could be thrown; "map" is nullable here.(Ó¼åÇ

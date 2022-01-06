@@ -48,6 +48,11 @@ public class DashboardController {
 	@Autowired
 	private AmazonS3ClientService amazonS3ClientService;
 
+<<<<<<< HEAD
+=======
+	private static final String MESSAGE="message";
+
+>>>>>>> suggested changes done
 /*    @Autowired
 	private ClientService clientService;*/
 
@@ -60,11 +65,19 @@ public class DashboardController {
 		Map<String, String> response = new HashMap<>();
 		try{
 			String imgUrl = this.amazonS3ClientService.uploadFileToS3Bucket(file, true);
+<<<<<<< HEAD
 			response.put("message", "file [" + file.getOriginalFilename() + "] uploading request submitted successfully.");
 			response.put("url", imgUrl);
 		}catch (Exception e){
 			logger.error("S3 file upload : "+e.getMessage());
 			response.put("message", e.getMessage());
+=======
+			response.put(MESSAGE , "file [" + file.getOriginalFilename() + "] uploading request submitted successfully.");
+			response.put("url", imgUrl);
+		}catch (Exception e){
+			logger.error("S3 file upload : "+e.getMessage());
+			response.put(MESSAGE , e.getMessage());
+>>>>>>> suggested changes done
 			response.put("url", "");
 		}
 
@@ -77,10 +90,17 @@ public class DashboardController {
 		Map<String, String> response = new HashMap<>();
 		try{
 			this.amazonS3ClientService.deleteFileFromS3Bucket(fileName);
+<<<<<<< HEAD
 			response.put("message", "file [" + fileName + "] removing request submitted successfully.");
 		}catch (Exception e ){
 			logger.error("S3 file upload : "+e.getMessage());
 			response.put("message", e.getMessage());
+=======
+			response.put(MESSAGE , "file [" + fileName + "] removing request submitted successfully.");
+		}catch (Exception e ){
+			logger.error("S3 file upload : "+e.getMessage());
+			response.put(MESSAGE , e.getMessage());
+>>>>>>> suggested changes done
 
 		}
 		return response;

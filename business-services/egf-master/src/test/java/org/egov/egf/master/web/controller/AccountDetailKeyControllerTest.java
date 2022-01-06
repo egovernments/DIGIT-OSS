@@ -48,6 +48,10 @@ public class AccountDetailKeyControllerTest {
 	private ArgumentCaptor<List<AccountDetailKey>> captor;
 
 	private RequestJsonReader resources = new RequestJsonReader();
+<<<<<<< HEAD
+=======
+	private static final String DEFAULT="default";
+>>>>>>> suggested changes done
 
 	@Test
 	public void testCreate() throws IOException, Exception {
@@ -63,7 +67,11 @@ public class AccountDetailKeyControllerTest {
 
 		final List<AccountDetailKey> actualRequest = captor.getValue();
 		assertEquals("1", actualRequest.get(0).getKey());
+<<<<<<< HEAD
 		assertEquals("default", actualRequest.get(0).getTenantId());
+=======
+		assertEquals(DEFAULT, actualRequest.get(0).getTenantId());
+>>>>>>> suggested changes done
 	}
 
 	@Test
@@ -92,7 +100,11 @@ public class AccountDetailKeyControllerTest {
 		final List<AccountDetailKey> actualRequest = captor.getValue();
 		assertEquals("2", actualRequest.get(0).getKey());
 		assertEquals("1", actualRequest.get(0).getAccountDetailType().getId());
+<<<<<<< HEAD
 		assertEquals("default", actualRequest.get(0).getTenantId());
+=======
+		assertEquals(DEFAULT, actualRequest.get(0).getTenantId());
+>>>>>>> suggested changes done
 	}
 
 	@Test
@@ -119,7 +131,11 @@ public class AccountDetailKeyControllerTest {
 		List<AccountDetailKey> accountDetailKies = new ArrayList<AccountDetailKey>();
 		AccountDetailKey accountDetailKey = AccountDetailKey.builder().id("1").key("1")
 				.accountDetailType(getAccountDetailType()).build();
+<<<<<<< HEAD
 		accountDetailKey.setTenantId("default");
+=======
+		accountDetailKey.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
 		accountDetailKies.add(accountDetailKey);
 		return accountDetailKies;
 	}
@@ -128,7 +144,11 @@ public class AccountDetailKeyControllerTest {
 		List<AccountDetailKey> accountDetailKies = new ArrayList<AccountDetailKey>();
 		AccountDetailKey accountDetailKey = AccountDetailKey.builder().id("1").key("2")
 				.accountDetailType(getAccountDetailType()).build();
+<<<<<<< HEAD
 		accountDetailKey.setTenantId("default");
+=======
+		accountDetailKey.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
 		accountDetailKies.add(accountDetailKey);
 		return accountDetailKies;
 	}
@@ -136,7 +156,11 @@ public class AccountDetailKeyControllerTest {
 	private AccountDetailType getAccountDetailType() {
 		AccountDetailType accountDetailType = AccountDetailType.builder().id("1").name("name").tableName("contractor")
 				.fullyQualifiedName("abc/acb").active(true).build();
+<<<<<<< HEAD
 		accountDetailType.setTenantId("default");
+=======
+		accountDetailType.setTenantId(DEFAULT);
+>>>>>>> suggested changes done
 		return accountDetailType;
 	}
 }

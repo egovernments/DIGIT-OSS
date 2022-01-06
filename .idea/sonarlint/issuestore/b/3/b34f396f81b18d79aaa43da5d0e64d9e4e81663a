@@ -1,0 +1,39 @@
+
+`	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(Ô‚Ãøÿÿÿÿ
+`	java:S112 "FDefine and throw a dedicated exception instead of using a generic one.(İ¡…œùÿÿÿÿ
+[	java:S112."FDefine and throw a dedicated exception instead of using a generic one.(™™ò¬
+`	java:S112="FDefine and throw a dedicated exception instead of using a generic one.(Šà³ëûÿÿÿÿ
+h	java:S100K"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÉèË÷øÿÿÿÿ
+h	java:S100["NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(øÌ·ûÿÿÿÿ
+b	java:S100l"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾©…:
+i	java:S100€"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Úƒ¡ üÿÿÿÿ
+d	java:S100‰"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ä”Ü
+i	java:S100’"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(áÉ¯Íøÿÿÿÿ
+d	java:S100œ"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(µòè
+d	java:S100¨"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¼¸æ
+i	java:S100´"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(÷ÒÜ°úÿÿÿÿ
+d	java:S100Á"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‘æ‹Á
+d	java:S100Î"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(²˜ë
+i	java:S100Ù"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾¤õİşÿÿÿÿ
+d	java:S100ã"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(œÉ¹‰
+i	java:S100í"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(·Ãúæüÿÿÿÿ
+d	java:S100ö"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£„µİ
+i	java:S100‘"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ò†Ÿ¾ÿÿÿÿÿ
+i	java:S100›"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ï² ·úÿÿÿÿ
+i	java:S100¥"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(âçÈëøÿÿÿÿ
+i	java:S100µ"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ãàş¶üÿÿÿÿ
+d	java:S100Ê"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‚ò˜
+i
+java:S1192º"MDefine a constant instead of duplicating this literal "mobileNumber" 3 times.(Çü‡ııÿÿÿÿ
+b
+java:S1192#"GDefine a constant instead of duplicating this literal "foolan" 7 times.(ò·¦Åûÿÿÿÿ
+`
+java:S1192A"KDefine a constant instead of duplicating this literal "9988776655" 5 times.(³§‚
+^
+java:S1192c"HDefine a constant instead of duplicating this literal "default" 3 times.(ƒÊ•Ã
+`
+java:S1192m"JDefine a constant instead of duplicating this literal "roleCode1" 3 times.(ê“³Ş
+d
+java:S1192ï"MDefine a constant instead of duplicating this literal "otpReference" 3 times.(¢Â¹Â
+b
+java:S1192"LDefine a constant instead of duplicating this literal "foolan_devi" 7 times.(ªÍÍõ

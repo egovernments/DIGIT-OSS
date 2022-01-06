@@ -1,0 +1,65 @@
+
+[
+java:S1068"@Remove this unused "earlyReconcileJobRunInterval" private field.(©¯™†ùÿÿÿÿ
+F
+java:S1068"0Remove this unused "saveTxnTopic" private field.(ãû°ï
+H
+java:S1068"2Remove this unused "updateTxnTopic" private field.(”Æœ
+O
+java:S1068"4Remove this unused "saveTxnDumpTopic" private field.(áöáıÿÿÿÿ
+L
+java:S1068"6Remove this unused "updateTxnDumpTopic" private field.(×éÈ€
+B
+java:S1068"-Remove this unused "idGenHost" private field.(êèıW
+H
+java:S1068"-Remove this unused "idGenPath" private field.(±”ƒ½ùÿÿÿÿ
+C
+java:S1068"-Remove this unused "idGenName" private field.(‡–×¯
+E
+java:S1068!"/Remove this unused "idGenFormat" private field.(Ø–ìÀ
+T
+java:S1068#"9Remove this unused "collectionServiceHost" private field.(µĞò´ÿÿÿÿÿ
+Z
+java:S1068%"?Remove this unused "collectionServiceCreatePath" private field.(Ê¸ëùÿÿÿÿ
+W
+java:S1068'"ARemove this unused "collectionServiceValidatePath" private field.(¯Ğ›£
+K
+java:S1068)"5Remove this unused "paymentCreatePath" private field.(üë¾«
+M
+java:S1068+"7Remove this unused "paymentValidatePath" private field.(ïéÚÀ
+N
+java:S1068-"3Remove this unused "bankAccountHost" private field.(³±øøÿÿÿÿ
+N
+java:S1068/"3Remove this unused "bankAccountPath" private field.(ºäçâùÿÿÿÿ
+N
+java:S10681"3Remove this unused "userServiceHost" private field.(”ò°«ÿÿÿÿÿ
+T
+java:S10683"9Remove this unused "userServiceCreatePath" private field.(Öªæ¥ÿÿÿÿÿ
+T
+java:S10685"9Remove this unused "userServiceSearchPath" private field.(ñ«úÔıÿÿÿÿ
+S
+java:S10687"8Remove this unused "isUserCreationEnable" private field.(ôú€©şÿÿÿÿ
+J
+java:S10689"/Remove this unused "isSMSEnable" private field.(«‘ÿºüÿÿÿÿ
+W
+java:S1068;"<Remove this unused "isLocalizationStateLevel" private field.(¦Â¶Ëÿÿÿÿÿ
+J
+java:S1068="4Remove this unused "localizationHost" private field.(¢ï¦ë
+Q
+java:S1068?";Remove this unused "localizationContextPath" private field.(äúÁ¾
+T
+java:S1068A">Remove this unused "localizationSearchEndpoint" private field.(¸èÍ
+G
+java:S1068C"1Remove this unused "smsNotifTopic" private field.(÷Ì¨
+Q
+java:S1068E"6Remove this unused "applicationPayLink" private field.(˜ òúÿÿÿÿ
+N
+java:S1068G"3Remove this unused "urlShortnerHost" private field.(ı¥ü¹ıÿÿÿÿ
+R
+java:S1068I"7Remove this unused "urlShortnerEndpoint" private field.(ù”úşÿÿÿÿ
+Q
+java:S1068K"6Remove this unused "billingServiceHost" private field.(âàçúÿÿÿÿ
+V
+java:S1068M"@Remove this unused "billingServiceSearchEndpoint" private field.(–î´·
+J
+java:S1068O"4Remove this unused "notificationHost" private field.(ä½Îí

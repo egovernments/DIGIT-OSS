@@ -1,0 +1,14 @@
+
+`	java:S1127"FDefine and throw a dedicated exception instead of using a generic one.(‚ëô¡şÿÿÿÿ
+[
+java:S1854b"@Remove this useless assignment to local variable "actualResult".(€÷ÜÍûÿÿÿÿ
+L
+java:S1481b"1Remove this unused "actualResult" local variable.(€÷ÜÍûÿÿÿÿ
+Q	java:S125k"<This block of commented-out lines of code should be removed.(Í‘ Â
+B
+java:S3599–",Use another way to initialize this instance.(ñËüd
+u
+java:S1171—"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ
+R	java:S125³"<This block of commented-out lines of code should be removed.(çÊ‹
+|
+java:S1192A"aDefine a constant instead of duplicating this literal "SELECT * FROM egf_chartofaccount" 3 times.(Äô«¦øÿÿÿÿ

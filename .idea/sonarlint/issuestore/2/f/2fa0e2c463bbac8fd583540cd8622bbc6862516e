@@ -1,0 +1,16 @@
+
+`	java:S112T"FDefine and throw a dedicated exception instead of using a generic one.(¼ÿ¾¹ÿÿÿÿÿ
+`	java:S112X"FDefine and throw a dedicated exception instead of using a generic one.(œÇÖúÿÿÿÿ
+H
+java:S6126"2Replace this String concatenation with Text block.(æï²Á
+:
+java:S11686"$Return an empty map instead of null.(¥¹ï
+c	java:S100A"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(íŞ‘£
+h	java:S100E"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÚÅ£®úÿÿÿÿ
+h	java:S100S"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ü†¨™şÿÿÿÿ
+m
+java:S3776["RRefactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.(ÿ”¼óÿÿÿÿÿ
+V	java:S125\"<This block of commented-out lines of code should be removed.(ôÚëàøÿÿÿÿ
+B
+java:S1905q",Remove this unnecessary cast to "Throwable".(›­§›
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(úÑÕÑÿÿÿÿÿ

@@ -1,0 +1,13 @@
+
+T
+java:S1481N"2Remove this unused "expectedQuery" local variable.(Èˆ•üÿÿÿÿ8£È¢õâ/
+ş
+java:S1192"âDefine a constant instead of duplicating this literal "a_url, a.servicecode AS a_servicecode, a.queryparams AS a_queryparams, a.parentmodule AS a_parentmodule, a.displayname AS a_displayname, a.enabled AS a_enabled, " 4 times.(âµƒœøÿÿÿÿ
+Ô
+java:S1192"¸Define a constant instead of duplicating this literal "ra.actionid AS ra_action, ra.rolecode AS ra_rolecode FROM eg_action AS a JOIN eg_roleaction AS ra ON a.id = ra.actionid" 4 times.(‡ßî½üÿÿÿÿ
+Ø
+java:S1192"¼Define a constant instead of duplicating this literal " AS a_lastmodifiedby, a.lastmodifieddate AS a_lastmodifieddate,a.ordernumber AS a_ordernumber, ra.tenantid AS ra_tenantid, " 4 times.(ùãºöÿÿÿÿÿ
+¥
+java:S1192"Define a constant instead of duplicating this literal " a.createdby AS a_createdby, a.createddate AS a_createddate, a.lastmodifiedby" 4 times.(Àæ¥š
+
+java:S1192"zDefine a constant instead of duplicating this literal "SELECT distinct a.id AS a_id, a.name AS a_name, a.url AS " 4 times.(Òº·¨

@@ -1,0 +1,139 @@
+
+F
+java:S3740š"/Provide the parametrized type for this generic.(·ßÚ
+>
+java:S3010r"(Remove this assignment of "elasticHost".(êî«ù
+C
+java:S3010s"(Remove this assignment of "elasticPort".(Ï¥œ²ÿÿÿÿÿ
+>
+java:S3010t"#Remove this assignment of "client".(½ô´üÿÿÿÿ
+K
+java:S2209r"5Change this instance-reference to a static reference.(êî«ù
+P
+java:S2209s"5Change this instance-reference to a static reference.(Ï¥œ²ÿÿÿÿÿ
+P
+java:S2209t"5Change this instance-reference to a static reference.(½ô´üÿÿÿÿ
+O
+java:S1117z":Rename "client" which hides the field declared at line 87.(û†…@
+N
+java:S1135—"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ
+P
+java:S1117 ":Rename "client" which hides the field declared at line 87.(û†…@
+N
+java:S1135¿"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ
+i
+java:S3776Ç"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(ºÆÜâ
+P
+java:S1117È":Rename "client" which hides the field declared at line 87.(û†…@
+W	java:S125Í"<This block of commented-out lines of code should be removed.(ƒ¹ûåúÿÿÿÿ
+W	java:S125ù"<This block of commented-out lines of code should be removed.(ıŒ…Æûÿÿÿÿ
+N
+java:S1135Š"2Complete the task associated to this TODO comment.(ÕÌ®şÿÿÿÿ
+i
+java:S3776’"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(Ú¦ÉŸ
+G
+java:S1481­"+Remove this unused "entryS" local variable.(¢¨»ÿÿÿÿÿ
+R	java:S125²"<This block of commented-out lines of code should be removed.(ûÔ˜·
+n
+java:S3776ê"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(¯Ø²ˆÿÿÿÿÿ
+^
+java:S6201î"BReplace this instanceof check and cast with 'instanceof List list'(‰¤òİúÿÿÿÿ
+^
+java:S6201î"BReplace this instanceof check and cast with 'instanceof List list'(‰¤òİúÿÿÿÿ
+^
+java:S6201î"BReplace this instanceof check and cast with 'instanceof List list'(‰¤òİúÿÿÿÿ
+b
+java:S6201Œ"FReplace this instanceof check and cast with 'instanceof String string'(ùâœ­şÿÿÿÿ
+N
+java:S1135ª"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+j
+java:S3776Ë"SRefactor this method to reduce its Cognitive Complexity from 137 to the 15 allowed.(éÕá›
+_
+java:S1854ş"CRemove this useless assignment to local variable "aggregationName".(†¬Áûÿÿÿÿ
+_
+java:S1854Š"CRemove this useless assignment to local variable "aggregationName".(†¬Áûÿÿÿÿ
+_
+java:S1854—"CRemove this useless assignment to local variable "aggregationName".(†¬Áûÿÿÿÿ
+_
+java:S1854¥"CRemove this useless assignment to local variable "aggregationName".(†¬Áûÿÿÿÿ
+W
+java:S1854·"@Remove this useless assignment to local variable "countAggName".(Œêğò
+Z
+java:S1854Ä">Remove this useless assignment to local variable "sumAggName".(ÒÚ¼üÿÿÿÿ
+Z
+java:S1854Ï">Remove this useless assignment to local variable "avgAggName".(ª¨¤ ıÿÿÿÿ
+\
+java:S1854Ú"@Remove this useless assignment to local variable "countAggName".(ûüµŠÿÿÿÿÿ
+^
+java:S1854å"BRemove this useless assignment to local variable "subTermAggName".(ƒÙÆÎúÿÿÿÿ
+]
+java:S1854ş"ARemove this useless assignment to local variable "subSumAggName".(Æˆ€ùÿÿÿÿ
+[
+java:S1854‡"ERemove this useless assignment to local variable "subTermAggBuilder".(ó”¼f
+_
+java:S1854’"CRemove this useless assignment to local variable "subCountAggName".(ç¡€Ûúÿÿÿÿ
+a
+java:S1854›"ERemove this useless assignment to local variable "subTermAggBuilder".(ùµâ¥øÿÿÿÿ
+W	java:S125Û"<This block of commented-out lines of code should be removed.(ÚåÃçûÿÿÿÿ
+W	java:S125º"<This block of commented-out lines of code should be removed.(¿³ï½øÿÿÿÿ
+R	java:S125¾"<This block of commented-out lines of code should be removed.(¾½ç•
+?
+java:S1125ğ"(Remove the unnecessary boolean literals.(­³Øö
+n
+java:S3776¯	"RRefactor this method to reduce its Cognitive Complexity from 67 to the 15 allowed.(Ä‹ÇÓÿÿÿÿÿ
+W	java:S125¨"<This block of commented-out lines of code should be removed.(Éï¨çùÿÿÿÿ
+W	java:S125ß"<This block of commented-out lines of code should be removed.(¿³ï½øÿÿÿÿ
+R	java:S125â"<This block of commented-out lines of code should be removed.(¾½ç•
+L
+java:S1068O"1Remove this unused "alternateHost" private field.(‰ÍªÄÿÿÿÿÿ
+L
+java:S1068P"1Remove this unused "alternatePort" private field.(ŸïÉËúÿÿÿÿ
+Z
+java:S1068S"?Remove this unused "transactionElasticIndexName" private field.(èµ§œıÿÿÿÿ
+X
+java:S1068T"=Remove this unused "transactionElasticDocType" private field.(şáï»ùÿÿÿÿ
+U
+java:S1068U":Remove this unused "ratingElasticIndexName" private field.(øğ¼ûúÿÿÿÿ
+N
+java:S1068V"8Remove this unused "ratingElasticDocType" private field.(šÖ‰Õ
+I
+java:S1144 "3Remove this unused private "getConstraints" method.(ªœ 
+O
+java:S1144Ë"3Remove this unused private "buildTermQuery" method.(Çâ†Ìüÿÿÿÿ
+P
+java:S1144Ó"4Remove this unused private "buildMatchQuery" method.(‘Ç“¹ÿÿÿÿÿ
+O
+java:S1144ù"8Remove this unused private "buildAvgAggregation" method.(„ÿ
+a
+java:S1144ƒ"ERemove this unused private "buildSubTermForNestedAggregation" method.(©ËÙ®üÿÿÿÿ
+q
+java:S1144 "URemove this unused private "buildSubCummulativeSumAggreationForDateHistogram" method.(·¶¶‡ıÿÿÿÿ
+a
+java:S1144§"JRemove this unused private "buildSubAvgAggreationForDateHistogram" method.(¹ô»÷
+R
+java:S1144Ê";Remove this unused private "buildSubSumAggregation" method.(Äâ´º
+W
+java:S1144Ï";Remove this unused private "buildSubAvgAggregation" method.(Òëö¢ıÿÿÿÿ
+P
+java:S1144Ü"9Remove this unused private "addFilterOnBoolQuery" method.(ÂÓäÒ
+T
+java:S1144ä"8Remove this unused private "addMatchOnBoolQuery" method.(éºşûÿÿÿÿ
+V
+java:S1144 ":Remove this unused private "getClientForAlternate" method.(Ã·œ¢úÿÿÿÿ
+e
+java:S1192œ"IDefine a constant instead of duplicating this literal "interval" 4 times.(„€êÜøÿÿÿÿ
+K
+java:S1066ğ	"/Merge this if statement with the enclosing one.(£—µ•üÿÿÿÿ
+F
+java:S5411Œ
+"*Use the primitive boolean expression here.(ÄªÜŞøÿÿÿÿ
+\
+java:S2259˜"EA "NullPointerException" could be thrown; "termMap" is nullable here.(‡¤’
+c
+java:S2259ÿ"GA "NullPointerException" could be thrown; "nestedMap" is nullable here.(äîÌ×øÿÿÿÿ
+`
+java:S2259‹"DA "NullPointerException" could be thrown; "sumMap" is nullable here.(ÀÎä¯şÿÿÿÿ
+`
+java:S2259¶"IA "NullPointerException" could be thrown; "countAggMap" is nullable here.(ÒºØú
+`
+java:S2259¦"JA "NullPointerException" could be thrown; "histogramMap" is nullable here.(ŞøÊ8

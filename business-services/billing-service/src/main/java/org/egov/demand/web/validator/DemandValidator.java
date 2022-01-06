@@ -93,6 +93,11 @@ public class DemandValidator implements Validator {
 	@Autowired
 	private DemandRepository demandRepository;
 
+<<<<<<< HEAD
+=======
+	private static final String DEMANDS="Demands";
+
+>>>>>>> suggested changes done
 	@Override
 	public boolean supports(Class<?> clazz) {
 

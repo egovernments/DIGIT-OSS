@@ -57,6 +57,11 @@ public class TaxPeriodQueryBuilder {
 
     private static final Logger logger = LoggerFactory.getLogger(TaxPeriodRepository.class);
 
+<<<<<<< HEAD
+=======
+	private static final String AND="' and ";
+
+>>>>>>> suggested changes done
     private static final String BASE_QUERY = "SELECT * FROM EGBS_TAXPERIOD taxperiod ";
 
     public final String insertQuery = "INSERT INTO public.egbs_taxperiod(id, service, code, fromdate, todate,"
