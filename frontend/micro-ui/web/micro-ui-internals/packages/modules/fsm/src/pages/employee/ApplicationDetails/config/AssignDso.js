@@ -32,7 +32,7 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
     form: [
       {
         body: [
-          {
+          vehicle ? {
             label: t("ES_FSM_ACTION_VEHICLE_TYPE"),
             isMandatory: true,
             type: "dropdown",
@@ -48,7 +48,7 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
                 t={t}
               />
             ),
-          },
+          }: {},
           {
             label: t("ES_FSM_ACTION_DSO_NAME"),
             isMandatory: true,
