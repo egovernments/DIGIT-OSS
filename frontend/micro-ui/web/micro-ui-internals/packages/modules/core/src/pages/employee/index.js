@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
+import { Redirect, Route, Switch, useRouteMatch,useLocation } from "react-router-dom";
 import { AppModules } from "../../components/AppModules";
 import TopBarSideBar from "../../components/TopBarSideBar";
 import ChangePassword from "./ChangePassword";
@@ -25,9 +25,12 @@ const EmployeeApp = ({
 }) => {
   const { t } = useTranslation();
   const { path } = useRouteMatch();
+  const location = useLocation();
+  const showLanguageChange=location?.pathname?.includes("language-selection");
   useEffect(() => {
     Digit.UserService.setType("employee");
   }, []);
+  
   return (
     <div className="employee">
       <Switch>
@@ -42,6 +45,7 @@ const EmployeeApp = ({
             handleUserDropdownSelection={handleUserDropdownSelection}
             logoUrl={logoUrl}
             showSidebar={false}
+            showLanguageChange={!showLanguageChange}
           />
           <div className="loginContainer" style={{ "--banner-url": `url(${stateInfo?.bannerUrl})` }}>
             <Switch>
