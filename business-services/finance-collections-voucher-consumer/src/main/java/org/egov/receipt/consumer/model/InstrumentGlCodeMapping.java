@@ -50,7 +50,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-//validfrom and validto not used
 public class InstrumentGlCodeMapping {
 private String instrumenttype;
 private String glcode;

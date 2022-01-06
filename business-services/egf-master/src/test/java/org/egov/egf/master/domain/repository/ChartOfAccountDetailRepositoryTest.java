@@ -50,12 +50,6 @@ public class ChartOfAccountDetailRepositoryTest {
     @Mock
     private FinancialConfigurationService financialConfigurationService;
 
-    private String string="default";
-
-    private String des="description";
-
-
-
     @Test
     public void testFindById() {
         ChartOfAccountDetailEntity chartOfAccountDetailEntity = getChartOfAccountDetailEntity();
@@ -129,34 +123,34 @@ public class ChartOfAccountDetailRepositoryTest {
     private ChartOfAccount getChartOfAccount() {
         ChartOfAccount chartOfAccount = ChartOfAccount.builder().id("1")
                 .glcode("glcode").name("name")
-                .description(des).isActiveForPosting(true)
+                .description("description").isActiveForPosting(true)
                 .type('A').classification((long) 123456)
                 .functionRequired(true).budgetCheckRequired(true).build();
-        chartOfAccount.setTenantId(string);
+        chartOfAccount.setTenantId("default");
         return chartOfAccount;
     }
 
     private ChartOfAccountContract getChartOfAccountContract() {
         ChartOfAccountContract chartOfAccountContract = ChartOfAccountContract.builder().id("1")
                 .glcode("glcode").name("name")
-                .description(des).isActiveForPosting(true)
+                .description("description").isActiveForPosting(true)
                 .type('A').classification((long) 123456)
                 .functionRequired(true).budgetCheckRequired(true).build();
-        chartOfAccountContract.setTenantId(string);
+        chartOfAccountContract.setTenantId("default");
         return chartOfAccountContract;
     }
 
     private AccountDetailType getAccountDetailType() {
         AccountDetailType accountDetailType = AccountDetailType.builder().id("1")
-                .name("name").description(des).active(true).build();
-        accountDetailType.setTenantId(string);
+                .name("name").description("description").active(true).build();
+        accountDetailType.setTenantId("default");
         return accountDetailType;
     }
 
     private AccountDetailTypeContract getAccountDetailTypeContract() {
         AccountDetailTypeContract accountDetailTypeContract = AccountDetailTypeContract.builder().id("1")
-                .name("name").description(des).active(true).build();
-        accountDetailTypeContract.setTenantId(string);
+                .name("name").description("description").active(true).build();
+        accountDetailTypeContract.setTenantId("default");
         return accountDetailTypeContract;
     }
 

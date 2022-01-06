@@ -79,7 +79,7 @@ public class MDMSApplicationRunnerImpl {
         if (listOfFiles != null) {
             for (File file : listOfFiles) {
                 if (file.isFile()) {
-//                    String name = file.getName();
+                    String name = file.getName();
                     String fileExtension = FilenameUtils.getExtension(file.getAbsolutePath()).toLowerCase();
 
 

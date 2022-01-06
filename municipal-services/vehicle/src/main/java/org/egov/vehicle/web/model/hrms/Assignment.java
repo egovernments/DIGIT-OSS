@@ -25,7 +25,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Assignment {
-	//not used
+
 	private String id;
 
 	private Long position;
@@ -39,19 +39,14 @@ public class Assignment {
 	@NotNull
 	private Long fromDate;
 
-//	not used
 	private Long toDate;
 
-//	not used
 	private String govtOrderNumber;
-
-//	not used
+	
 	private String tenantid;
 
-//	not used
 	private  String reportingTo;
 
-//	not used
 	@JsonProperty("isHOD")
 	private Boolean isHOD;
 	
@@ -59,7 +54,6 @@ public class Assignment {
 	@JsonProperty("isCurrentAssignment")
 	private Boolean isCurrentAssignment;
 
-//	not used
 	private AuditDetails auditDetails;
 
 }

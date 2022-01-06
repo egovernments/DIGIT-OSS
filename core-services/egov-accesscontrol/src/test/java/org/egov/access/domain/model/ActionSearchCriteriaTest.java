@@ -11,12 +11,10 @@ import static org.junit.Assert.assertNotEquals;
 
 public class ActionSearchCriteriaTest {
 
-	private String string1="CITIZEN";
-
 	@Test
 	public void testForEqualsAndHashCode() {
 		List<String> roleCodesList = new ArrayList<String>();
-		roleCodesList.add(string1);
+		roleCodesList.add("CITIZEN");
 		roleCodesList.add("SUPERUSER");
 		ActionSearchCriteria searchCriteria1 = ActionSearchCriteria.builder().roleCodes(roleCodesList).build();
 		ActionSearchCriteria searchCriteria2 = ActionSearchCriteria.builder().roleCodes(roleCodesList).build();
@@ -28,11 +26,11 @@ public class ActionSearchCriteriaTest {
 	@Test
 	public void testForNotEqualObjects() {
 		List<String> roleCodesList1 = new ArrayList<String>();
-		roleCodesList1.add(string1);
+		roleCodesList1.add("CITIZEN");
 		roleCodesList1.add("SUPERUSER");
 		ActionSearchCriteria searchCriteria1 = ActionSearchCriteria.builder().roleCodes(roleCodesList1).build();
 		List<String> roleCodesList2 = new ArrayList<String>();
-		roleCodesList2.add(string1);
+		roleCodesList2.add("CITIZEN");
 		roleCodesList2.add("TEST");
 		ActionSearchCriteria searchCriteria2 = ActionSearchCriteria.builder().roleCodes(roleCodesList2).build();
 

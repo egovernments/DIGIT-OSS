@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-
-//class variables not used
 public class DepartmentDesignation {
 
 	private Long id;

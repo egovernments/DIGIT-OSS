@@ -1,8 +1,0 @@
-
-X	java:S125"<This block of commented-out lines of code should be removed.(èµÖ8¼­Êõ×/
-A
-java:S1481%"&Remove this unused "i" local variable.(ùó›Ìøÿÿÿÿ
-G
-java:S30115",This accessibility update should be removed.(Í”úÆùÿÿÿÿ
-X	java:S125F"<This block of commented-out lines of code should be removed.(”€ÎÁ8 —Èõ×/
-s	java:S135,"YReduce the total number of break and continue statements in this loop to use at most one.(”¢ÿııÿÿÿÿ

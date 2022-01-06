@@ -48,7 +48,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-//except accountNumber none of them is used
 public class BankAccount {
 
     private Long id;

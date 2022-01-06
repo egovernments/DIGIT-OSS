@@ -11,7 +11,6 @@ import java.util.List;
 @Setter
 @Getter
 @Builder
-//none of the variables are used
 public class BusinessDetailsRequest {
 
     private String tenantId;

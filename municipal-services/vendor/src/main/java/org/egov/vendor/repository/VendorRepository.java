@@ -47,6 +47,7 @@ public class VendorRepository {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = vendorQueryBuilder.getVendorSearchQuery(vendorSearchCriteria, preparedStmtList);
 		List<Vendor> vendorData = jdbcTemplate.query(query, preparedStmtList.toArray(), vendorrowMapper);
+		System.out.println("query is " + query);
 		return vendorData;
 	}
 

@@ -36,12 +36,6 @@ public class ChartOfAccountService {
 	@Autowired
 	private AccountCodePurposeRepository accountCodePurposeRepository;
 
-	private String string1="chartofaccounts";
-
-	private String string2="chartOfAccount";
-
-	private String string3="glcode";
-
 	private BindingResult validate(List<ChartOfAccount> chartofaccounts, String method, BindingResult errors) {
 
                 try {
@@ -52,23 +46,23 @@ public class ChartOfAccountService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (chartofaccounts == null) {
-                            throw new InvalidDataException(string1 , ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException("chartofaccounts", ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (ChartOfAccount chartOfAccount : chartofaccounts) {
                             validator.validate(chartOfAccount, errors);
                             if (!chartOfAccountRepository.uniqueCheck("name", chartOfAccount)) {
-                                errors.addError(new FieldError(string2 , "name", chartOfAccount.getName(), false,
+                                errors.addError(new FieldError("chartOfAccount", "name", chartOfAccount.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
-                            if (!chartOfAccountRepository.uniqueCheck(string3 , chartOfAccount)) {
-                                errors.addError(new FieldError(string2 , string3 , chartOfAccount.getGlcode(), false,
+                            if (!chartOfAccountRepository.uniqueCheck("glcode", chartOfAccount)) {
+                                errors.addError(new FieldError("chartOfAccount", "glcode", chartOfAccount.getGlcode(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
                         break;
                     case Constants.ACTION_UPDATE:
                         if (chartofaccounts == null) {
-                            throw new InvalidDataException(string1 , ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException("chartofaccounts", ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (ChartOfAccount chartOfAccount : chartofaccounts) {
                             if (chartOfAccount.getId() == null) {
@@ -76,18 +70,18 @@ public class ChartOfAccountService {
                             }
                             validator.validate(chartOfAccount, errors);
                             if (!chartOfAccountRepository.uniqueCheck("name", chartOfAccount)) {
-                                errors.addError(new FieldError(string2 , "name", chartOfAccount.getName(), false,
+                                errors.addError(new FieldError("chartOfAccount", "name", chartOfAccount.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
-                            if (!chartOfAccountRepository.uniqueCheck(string3 , chartOfAccount)) {
-                                errors.addError(new FieldError(string2 , string3 , chartOfAccount.getGlcode(), false,
+                            if (!chartOfAccountRepository.uniqueCheck("glcode", chartOfAccount)) {
+                                errors.addError(new FieldError("chartOfAccount", "glcode", chartOfAccount.getGlcode(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
                         break;
                     case Constants.ACTION_SEARCH:
                         if (chartofaccounts == null) {
-                            throw new InvalidDataException(string1 , ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException("chartofaccounts", ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (ChartOfAccount chartofaccount : chartofaccounts) {
                             if (chartofaccount.getTenantId() == null) {

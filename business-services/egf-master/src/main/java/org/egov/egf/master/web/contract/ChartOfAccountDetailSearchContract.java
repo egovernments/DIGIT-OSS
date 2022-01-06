@@ -9,7 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
-//only sortBy is used
 public class ChartOfAccountDetailSearchContract extends ChartOfAccountDetailContract { private String ids; 
 private String  sortBy; 
 private Integer pageSize; 

@@ -143,6 +143,7 @@ public class NotificationUtil {
 		request.put("RequestInfo", requestInfo);
 		try {
 			result = restTemplate.postForObject(uri.toString(), request, Map.class);
+			System.out.println("result=="+result);
 			Configuration suppressExceptionConfiguration = Configuration.defaultConfiguration().addOptions(Option.SUPPRESS_EXCEPTIONS);
 		    ReadContext jsonData = JsonPath.using(suppressExceptionConfiguration).parse(result);
 
@@ -203,6 +204,7 @@ public class NotificationUtil {
 	private String getMessageTemplate(String notificationCode, String localizationMessage) {
 		String path = "$..messages[?(@.code==\"{}\")].message";
 		path = path.replace("{}", notificationCode);
+		System.out.println("notificationCode=="+notificationCode);
 		String message = null;
 		try {
 			Object messageObj = JsonPath.parse(localizationMessage).read(path);

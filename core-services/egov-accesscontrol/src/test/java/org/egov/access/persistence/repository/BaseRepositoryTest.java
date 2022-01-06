@@ -34,16 +34,12 @@ public class BaseRepositoryTest {
 	@Autowired
 	private BaseRepository baseRepository;
 
-	private String string1="Citizen";
-
-	private String string2="ap.public";
-
 	@Test
 	@Sql(scripts = { "/sql/clearAction.sql", "/sql/clearRole.sql", "/sql/insertActionData.sql",
 			"/sql/insertRoleData.sql" })
 	public void testActionValidationWhenAllowed() {
 		ValidateActionCriteria criteria = ValidateActionCriteria.builder()
-				.roleNames(Arrays.asList(string1, "Super User")).tenantId(string2).actionUrl("/pgr/receivingmode")
+				.roleNames(Arrays.asList("Citizen", "Super User")).tenantId("ap.public").actionUrl("/pgr/receivingmode")
 				.build();
 
 		ValidateActionQueryBuilder queryBuilder = new ValidateActionQueryBuilder(criteria);
@@ -56,7 +52,7 @@ public class BaseRepositoryTest {
 
 	public void testActionValidationWhenNotAllowed() {
 		ValidateActionCriteria criteria = ValidateActionCriteria.builder().roleNames(Arrays.asList("Employee"))
-				.tenantId(string2).actionUrl("/pgr/receivingmode").build();
+				.tenantId("ap.public").actionUrl("/pgr/receivingmode").build();
 
 		ValidateActionQueryBuilder queryBuilder = new ValidateActionQueryBuilder(criteria);
 
@@ -69,12 +65,12 @@ public class BaseRepositoryTest {
 	@Test
 	@Sql(scripts = { "/sql/clearRole.sql", "/sql/insertRoleData.sql" })
 	public void testRoleFinderForGivenCodes() throws Exception {
-		RoleSearchCriteria roleSearchCriteria = RoleSearchCriteria.builder().codes(Arrays.asList(string1, "EMPLOYEE"))
+		RoleSearchCriteria roleSearchCriteria = RoleSearchCriteria.builder().codes(Arrays.asList("CITIZEN", "EMPLOYEE"))
 				.build();
 		RoleFinderQueryBuilder queryBuilder = new RoleFinderQueryBuilder(roleSearchCriteria);
 		List<Role> roles = (List<Role>) (List<?>) baseRepository.run(queryBuilder, new RoleRowMapper());
 		assertEquals(2, roles.size());
-		assertEquals(string1, roles.get(0).getName());
+		assertEquals("Citizen", roles.get(0).getName());
 		assertEquals("Citizen who can raise complaint", roles.get(0).getDescription());
 	}
 
@@ -85,7 +81,7 @@ public class BaseRepositoryTest {
 		RoleFinderQueryBuilder queryBuilder = new RoleFinderQueryBuilder(roleSearchCriteria);
 		List<Role> roles = (List<Role>) (List<?>) baseRepository.run(queryBuilder, new RoleRowMapper());
 		assertEquals(3, roles.size());
-		assertEquals(string1, roles.get(0).getName());
+		assertEquals("Citizen", roles.get(0).getName());
 		assertEquals("Employee", roles.get(1).getName());
 		assertEquals("Super User", roles.get(2).getName());
 	}
@@ -93,8 +89,8 @@ public class BaseRepositoryTest {
 	@Test
 	@Sql(scripts = { "/sql/clearAction.sql", "/sql/insertActionData.sql" })
 	public void testShouldReturnActionForUserRole() throws Exception {
-		ActionSearchCriteria actionSearchCriteria = ActionSearchCriteria.builder().tenantId(string2)
-				.roleCodes(Arrays.asList(string1, "SUPERUSER")).build();
+		ActionSearchCriteria actionSearchCriteria = ActionSearchCriteria.builder().tenantId("ap.public")
+				.roleCodes(Arrays.asList("CITIZEN", "SUPERUSER")).build();
 		ActionFinderQueryBuilder queryBuilder = new ActionFinderQueryBuilder(actionSearchCriteria);
 		List<Action> actions = (List<Action>) (List<?>) baseRepository.run(queryBuilder, new ActionRowMapper());
 		assertEquals(8, actions.size());
@@ -102,7 +98,7 @@ public class BaseRepositoryTest {
 		assertEquals("Get ComplaintType by type,count and tenantId", actions.get(0).getName());
 		assertEquals("/pgr/services", actions.get(0).getUrl());
 		assertEquals("Get ComplaintType by type,count and tenantId", actions.get(0).getDisplayName());
-		assertEquals(string2, actions.get(0).getTenantId());
+		assertEquals("ap.public", actions.get(0).getTenantId());
 		assertEquals(Integer.valueOf(5), actions.get(0).getOrderNumber());
 		assertEquals(false, actions.get(0).isEnabled());
 		assertEquals(Long.valueOf(1), actions.get(0).getCreatedBy());

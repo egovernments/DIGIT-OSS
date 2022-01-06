@@ -10,6 +10,10 @@ import java.util.Map;
 public class EgovChatDesearilizer implements Deserializer<EgovChat> {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Override
+    public void configure(Map<String, ?> map, boolean b) {
+
+    }
 
     @Override
     public EgovChat deserialize(String s, byte[] bytes) {
@@ -26,4 +30,8 @@ public class EgovChatDesearilizer implements Deserializer<EgovChat> {
         return egovChat;
     }
 
+    @Override
+    public void close() {
+
+    }
 }

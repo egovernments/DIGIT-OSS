@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 public class FundJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(FundJdbcRepository.class);
 
-	private String string1=" and ";
-
 	static {
 		LOG.debug("init fund");
 		init(FundEntity.class);
@@ -75,49 +73,49 @@ public class FundJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
 		if (fundSearchEntity.getTenantId() != null) {
 			if (params.length() > 0) {
-				params.append(string1);
+				params.append(" and ");
 			}
 			params.append("tenantId =:tenantId");
 			paramValues.put("tenantId", fundSearchEntity.getTenantId());
 		}
 		if (fundSearchEntity.getId() != null) {
 			if (params.length() > 0) {
-				params.append(string1);
+				params.append(" and ");
 			}
 			params.append("id =:id");
 			paramValues.put("id", fundSearchEntity.getId());
 		}
 		if (fundSearchEntity.getCode() != null) {
 			if (params.length() > 0) {
-				params.append(string1);
+				params.append(" and ");
 			}
 			params.append("code =:code");
 			paramValues.put("code", fundSearchEntity.getCode());
 		}
 		if (fundSearchEntity.getName() != null) {
 			if (params.length() > 0) {
-				params.append(string1);
+				params.append(" and ");
 			}
 			params.append("name =:name");
 			paramValues.put("name", fundSearchEntity.getName());
 		}
 		if (fundSearchEntity.getIdentifier() != null) {
 			if (params.length() > 0) {
-				params.append(string1);
+				params.append(" and ");
 			}
 			params.append("description =:description");
 			paramValues.put("description", fundSearchEntity.getIdentifier());
 		}
 		if (fundSearchEntity.getActive() != null) {
 			if (params.length() > 0) {
-				params.append(string1);
+				params.append(" and ");
 			}
 			params.append("active =:active");
 			paramValues.put("active", fundSearchEntity.getActive());
 		}
 		if (fundSearchEntity.getLevel() != null) {
 			if (params.length() > 0) {
-				params.append(string1);
+				params.append(" and ");
 			}
 			params.append("type =:type");
 			paramValues.put("type", fundSearchEntity.getLevel());

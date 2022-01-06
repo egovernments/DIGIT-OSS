@@ -30,14 +30,6 @@ public class CollectionResultSetExtractor_v1 implements ResultSetExtractor<List<
 
     private ObjectMapper objectMapper;
 
-    private String string="rh_id";
-
-    private String string1="rh_tenantId";
-
-    private String string2="ins_instrumentstatus";
-
-
-
     @Autowired
     CollectionResultSetExtractor_v1(ObjectMapper objectMapper){
         this.objectMapper = objectMapper;
@@ -49,7 +41,7 @@ public class CollectionResultSetExtractor_v1 implements ResultSetExtractor<List<
         Map<String, Receipt_v1> receipts = new LinkedHashMap<>();
 
         while(resultSet.next()){
-            String receiptHeader = resultSet.getString(string);
+            String receiptHeader = resultSet.getString("rh_id");
             Receipt_v1 receipt;
 
             if(!receipts.containsKey(receiptHeader)){
@@ -62,7 +54,7 @@ public class CollectionResultSetExtractor_v1 implements ResultSetExtractor<List<
                         .collectionModesNotAllowed(resultSet.getString("rh_collModesNotAllwd") != null
                                 ? Arrays.asList(resultSet.getString("rh_collModesNotAllwd").split("\\s*,\\s*"))
                                 : Collections.emptyList())
-                        .tenantId(resultSet.getString(string1))
+                        .tenantId(resultSet.getString("rh_tenantId"))
                         .businessService(resultSet.getString("rh_businessDetails"))
                         .receiptNumber(resultSet.getString("rh_receiptNumber"))
                         .receiptType(resultSet.getString("rh_receiptType"))
@@ -91,13 +83,13 @@ public class CollectionResultSetExtractor_v1 implements ResultSetExtractor<List<
                         .build();
 
                 Bill_v1 billInfo = Bill_v1.builder()
-                        .id(resultSet.getString(string))
+                        .id(resultSet.getString("rh_id"))
                         .payerName(resultSet.getString("rh_payername"))
                         .payerAddress(resultSet.getString("rh_payerAddress"))
                         .payerEmail(resultSet.getString("rh_payerEmail"))
                         .mobileNumber(resultSet.getString("rh_payermobile"))
                         .paidBy(resultSet.getString("rh_paidBy"))
-                        .tenantId(resultSet.getString(string1))
+                        .tenantId(resultSet.getString("rh_tenantId"))
                         .billDetails(Collections.singletonList(billDetail))
                         .build();
 
@@ -131,11 +123,11 @@ public class CollectionResultSetExtractor_v1 implements ResultSetExtractor<List<
                         .tenantId(resultSet.getString("ins_tenantid"))
                         .build();
 
-                if(resultSet.getString(string2).equals("NEW")) {
+                if(resultSet.getString("ins_instrumentstatus").equals("NEW")) {
                     instrument.setInstrumentStatus(InstrumentStatusEnum.TO_BE_SUBMITTED);
-                }else if((resultSet.getString(string2).equals("CANCELLED"))){
+                }else if((resultSet.getString("ins_instrumentstatus").equals("CANCELLED"))){
                     instrument.setInstrumentStatus(InstrumentStatusEnum.CANCELLED);
-                }else if((resultSet.getString(string2).equals("DEPOSITED"))){
+                }else if((resultSet.getString("ins_instrumentstatus").equals("DEPOSITED"))){
                     instrument.setInstrumentStatus(InstrumentStatusEnum.REMITTED);
                 }
 
@@ -147,7 +139,7 @@ public class CollectionResultSetExtractor_v1 implements ResultSetExtractor<List<
                         .build();
 
                 receipt = Receipt_v1.builder()
-                        .tenantId(resultSet.getString(string1))
+                        .tenantId(resultSet.getString("rh_tenantId"))
                         .bill(Collections.singletonList(billInfo))
                         .receiptNumber(billDetail.getReceiptNumber())
                         .consumerCode(billDetail.getConsumerCode())
@@ -184,7 +176,7 @@ public class CollectionResultSetExtractor_v1 implements ResultSetExtractor<List<
                 .id(resultSet.getString("rd_id"))
                 .isActualDemand((Boolean) resultSet.getObject("rd_isActualDemand"))
                 .tenantId(resultSet.getString("rd_tenantId"))
-                .billDetail(resultSet.getString(string))
+                .billDetail(resultSet.getString("rh_id"))
                 .order(resultSet.getInt("rd_ordernumber"))
                 .purpose(!StringUtils.isEmpty(resultSet.getString("rd_purpose")) ?
                         Purpose.valueOf(resultSet.getString("rd_purpose")) : null)

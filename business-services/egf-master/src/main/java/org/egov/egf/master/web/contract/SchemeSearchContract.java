@@ -10,9 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class SchemeSearchContract extends SchemeContract { private String ids; 
-private String  sortBy;
-//not used
-private Integer pageSize;
-//not used
+private String  sortBy; 
+private Integer pageSize; 
 private Integer offset; 
 } 

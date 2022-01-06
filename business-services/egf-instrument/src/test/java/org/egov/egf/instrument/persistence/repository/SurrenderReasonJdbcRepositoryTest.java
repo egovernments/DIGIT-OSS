@@ -42,12 +42,6 @@ public class SurrenderReasonJdbcRepositoryTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private String string1="description";
-
-    private String string2="default";
-
-    private String string3="SELECT * FROM egf_surrenderReason";
-
     @Before
     public void setUp() throws Exception {
         surrenderReasonJdbcRepository = new SurrenderReasonJdbcRepository(namedParameterJdbcTemplate, jdbcTemplate);
@@ -58,15 +52,15 @@ public class SurrenderReasonJdbcRepositoryTest {
     public void test_create() {
 
         SurrenderReasonEntity surrenderReason = SurrenderReasonEntity.builder().id("1").name("name")
-                .description(string1).build();
-        surrenderReason.setTenantId(string2);
+                .description("description").build();
+        surrenderReason.setTenantId("default");
         SurrenderReasonEntity actualResult = surrenderReasonJdbcRepository.create(surrenderReason);
 
-        List<Map<String, Object>> result = namedParameterJdbcTemplate.query(string3,
+        List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_surrenderReason",
                 new SurrenderReasonResultExtractor());
         Map<String, Object> row = result.get(0);
         assertThat(row.get("name")).isEqualTo(actualResult.getName());
-        assertThat(row.get(string1)).isEqualTo(actualResult.getDescription());
+        assertThat(row.get("description")).isEqualTo(actualResult.getDescription());
 
     }
 
@@ -76,15 +70,15 @@ public class SurrenderReasonJdbcRepositoryTest {
     public void test_update() {
 
         SurrenderReasonEntity surrenderReason = SurrenderReasonEntity.builder().id("1").name("name")
-                .description(string1).build();
-        surrenderReason.setTenantId(string2);
+                .description("description").build();
+        surrenderReason.setTenantId("default");
         SurrenderReasonEntity actualResult = surrenderReasonJdbcRepository.update(surrenderReason);
 
-        List<Map<String, Object>> result = namedParameterJdbcTemplate.query(string3,
+        List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_surrenderReason",
                 new SurrenderReasonResultExtractor());
         Map<String, Object> row = result.get(0);
         assertThat(row.get("name")).isEqualTo(actualResult.getName());
-        assertThat(row.get(string1)).isEqualTo(actualResult.getDescription());
+        assertThat(row.get("description")).isEqualTo(actualResult.getDescription());
 
     }
 
@@ -94,11 +88,11 @@ public class SurrenderReasonJdbcRepositoryTest {
     public void test_delete() {
 
         SurrenderReasonEntity surrenderReason = SurrenderReasonEntity.builder().id("1").name("name")
-                .description(string1).build();
-        surrenderReason.setTenantId(string2);
+                .description("description").build();
+        surrenderReason.setTenantId("default");
         SurrenderReasonEntity actualResult = surrenderReasonJdbcRepository.delete(surrenderReason);
 
-        List<Map<String, Object>> result = namedParameterJdbcTemplate.query(string3,
+        List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_surrenderReason",
                 new SurrenderReasonResultExtractor());
         assertTrue("Result set length is zero", result.size() == 0);
     }
@@ -111,7 +105,7 @@ public class SurrenderReasonJdbcRepositoryTest {
         Pagination<SurrenderReason> page = (Pagination<SurrenderReason>) surrenderReasonJdbcRepository
                 .search(getSurrenderReasonSearch());
         assertThat(page.getPagedData().get(0).getName()).isEqualTo("name");
-        assertThat(page.getPagedData().get(0).getDescription()).isEqualTo(string1);
+        assertThat(page.getPagedData().get(0).getDescription()).isEqualTo("description");
 
     }
 
@@ -132,10 +126,10 @@ public class SurrenderReasonJdbcRepositoryTest {
     public void test_find_by_id() {
 
         SurrenderReasonEntity surrenderReasonEntity = SurrenderReasonEntity.builder().id("1").build();
-        surrenderReasonEntity.setTenantId(string2);
+        surrenderReasonEntity.setTenantId("default");
         SurrenderReasonEntity result = surrenderReasonJdbcRepository.findById(surrenderReasonEntity);
         assertThat(result.getName()).isEqualTo("name");
-        assertThat(result.getDescription()).isEqualTo(string1);
+        assertThat(result.getDescription()).isEqualTo("description");
 
     }
 
@@ -145,7 +139,7 @@ public class SurrenderReasonJdbcRepositoryTest {
     public void test_find_by_invalid_id_should_return_null() {
 
         SurrenderReasonEntity surrenderReasonEntity = SurrenderReasonEntity.builder().id("5").build();
-        surrenderReasonEntity.setTenantId(string2);
+        surrenderReasonEntity.setTenantId("default");
         SurrenderReasonEntity result = surrenderReasonJdbcRepository.findById(surrenderReasonEntity);
         assertNull(result);
 
@@ -174,7 +168,7 @@ public class SurrenderReasonJdbcRepositoryTest {
         Pagination<SurrenderReason> page = (Pagination<SurrenderReason>) surrenderReasonJdbcRepository
                 .search(getSurrenderReasonSearch());
         assertThat(page.getPagedData().get(0).getName()).isEqualTo("name");
-        assertThat(page.getPagedData().get(0).getDescription()).isEqualTo(string1);
+        assertThat(page.getPagedData().get(0).getDescription()).isEqualTo("description");
 
     }
 
@@ -187,7 +181,7 @@ public class SurrenderReasonJdbcRepositoryTest {
                     {
                         put("id", resultSet.getString("id"));
                         put("name", resultSet.getString("name"));
-                        put(string1, resultSet.getString(string1));
+                        put("description", resultSet.getString("description"));
                         put("createdBy", resultSet.getString("createdBy"));
                         put("createdDate", resultSet.getString("createdDate"));
                         put("lastModifiedBy", resultSet.getString("lastModifiedBy"));
@@ -206,7 +200,7 @@ public class SurrenderReasonJdbcRepositoryTest {
         SurrenderReasonSearch surrenderReasonSearch = new SurrenderReasonSearch();
         surrenderReasonSearch.setId("id");
         surrenderReasonSearch.setName("name");
-        surrenderReasonSearch.setDescription(string1);
+        surrenderReasonSearch.setDescription("description");
         surrenderReasonSearch.setTenantId("tenantId");
         surrenderReasonSearch.setPageSize(500);
         surrenderReasonSearch.setOffset(0);
@@ -219,7 +213,7 @@ public class SurrenderReasonJdbcRepositoryTest {
         surrenderReasonSearch.setId("1");
         surrenderReasonSearch.setIds("1");
         surrenderReasonSearch.setName("name");
-        surrenderReasonSearch.setDescription(string1);
+        surrenderReasonSearch.setDescription("description");
         surrenderReasonSearch.setPageSize(500);
         surrenderReasonSearch.setOffset(0);
         surrenderReasonSearch.setSortBy("name desc");

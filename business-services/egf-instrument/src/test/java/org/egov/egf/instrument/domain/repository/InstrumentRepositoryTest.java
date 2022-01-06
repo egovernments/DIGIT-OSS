@@ -61,12 +61,6 @@ public class InstrumentRepositoryTest {
 
     private RequestInfo requestInfo = new RequestInfo();
 
-    private String string1="transactionNumber";
-
-    private String string2="serialNo";
-
-    private String string3="default";
-
     @Before
     public void setup() {
         instrumentRepositoryWithKafka = new InstrumentRepository(instrumentJdbcRepository, instrumentQueueRepository,
@@ -296,22 +290,22 @@ public class InstrumentRepositoryTest {
     private Instrument getInstrumentDomin() {
         Instrument instrumentDetail = new Instrument();
         instrumentDetail.setAmount(BigDecimal.ONE);
-        instrumentDetail.setTransactionNumber(string1);
-        instrumentDetail.setSerialNo(string2);
+        instrumentDetail.setTransactionNumber("transactionNumber");
+        instrumentDetail.setSerialNo("serialNo");
         instrumentDetail.setTransactionType(TransactionType.Credit);
         instrumentDetail.setInstrumentType(InstrumentType.builder().id("instrumentTypeId").build());
-        instrumentDetail.setTenantId(string3);
+        instrumentDetail.setTenantId("default");
         return instrumentDetail;
     }
 
     private InstrumentEntity getInstrumentEntity() {
         InstrumentEntity entity = new InstrumentEntity();
         entity.setAmount(BigDecimal.ONE);
-        entity.setTransactionNumber(string1);
-        entity.setSerialNo(string2);
+        entity.setTransactionNumber("transactionNumber");
+        entity.setSerialNo("serialNo");
         entity.setTransactionType(TransactionType.Credit.name());
         entity.setInstrumentTypeId("instrumentTypeId");
-        entity.setTenantId(string3);
+        entity.setTenantId("default");
         return entity;
     }
 
@@ -325,10 +319,10 @@ public class InstrumentRepositoryTest {
 
     private List<Instrument> getInstruments() {
         List<Instrument> instruments = new ArrayList<Instrument>();
-        Instrument instrument = Instrument.builder().transactionNumber(string1).amount(BigDecimal.ONE)
-                .transactionType(TransactionType.Credit).serialNo(string2)
+        Instrument instrument = Instrument.builder().transactionNumber("transactionNumber").amount(BigDecimal.ONE)
+                .transactionType(TransactionType.Credit).serialNo("serialNo")
                 .instrumentType(InstrumentType.builder().active(true).name("instrumenttype").build()).build();
-        instrument.setTenantId(string3);
+        instrument.setTenantId("default");
         instruments.add(instrument);
         return instruments;
     }

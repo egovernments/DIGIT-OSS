@@ -54,13 +54,10 @@ public class ChartOfAccountDetailServiceTest {
 
 	private List<ChartOfAccountDetail> chartOfAccountDetails = new ArrayList<>();
 
-	private String des="description";
+	@Before
+	public void setup() {
 
-	private String string="default";
-
-
-
-
+	}
 	
 	@Test
 	public final void testFetchRelated() {
@@ -134,17 +131,17 @@ public class ChartOfAccountDetailServiceTest {
 	private ChartOfAccount getChartOfAccount(){
 		ChartOfAccount chartOfAccount = ChartOfAccount.builder()
 				.glcode("glcode").name("name")
-				.description(des).isActiveForPosting(true)
+				.description("description").isActiveForPosting(true)
 				.type('A').classification((long) 123456)
 				.functionRequired(true).budgetCheckRequired(true).build();
-		chartOfAccount.setTenantId(string);
+		chartOfAccount.setTenantId("default");
 		return chartOfAccount;
 	}
 	
 	private AccountDetailType getAccountDetailType(){
 		AccountDetailType accountDetailType = AccountDetailType.builder()
-				.name("name").description(des).active(true).build();
-		accountDetailType.setTenantId(string);
+				.name("name").description("description").active(true).build();
+		accountDetailType.setTenantId("default");
 		return accountDetailType;
 	}
 	
@@ -162,8 +159,8 @@ public class ChartOfAccountDetailServiceTest {
 	
 	private AccountDetailTypeContract getAccountDetailTypeContract(){
 		AccountDetailTypeContract accountDetailTypeContract = AccountDetailTypeContract.builder()
-				.name("name").description(des).active(true).build();
-		accountDetailTypeContract.setTenantId(string);
+				.name("name").description("description").active(true).build();
+		accountDetailTypeContract.setTenantId("default");
 		return accountDetailTypeContract;
 	}
 	
@@ -172,7 +169,7 @@ public class ChartOfAccountDetailServiceTest {
 		chartOfAccountDetailSearch.setPageSize(0);
 		chartOfAccountDetailSearch.setOffset(0);
 		chartOfAccountDetailSearch.setSortBy("Sort");
-		chartOfAccountDetailSearch.setTenantId(string);
+		chartOfAccountDetailSearch.setTenantId("default");
 		return chartOfAccountDetailSearch;
 	}
 }

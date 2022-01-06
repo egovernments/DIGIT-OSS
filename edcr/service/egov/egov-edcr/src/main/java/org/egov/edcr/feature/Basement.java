@@ -63,7 +63,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class Basement extends FeatureProcess {
-//  private static final Logger LOG = Logger.getLogger(Basement.class);
+
+    private static final Logger LOG = Logger.getLogger(Basement.class);
     private static final String RULE_46_6A = "46-6a";
     private static final String RULE_46_6C = "46-6c";
     public static final String BASEMENT_DESCRIPTION_ONE = "Height from the floor to the soffit of the roof slab or ceiling";

@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @EqualsAndHashCode
 @ToString
-//class variables are not used
+
 public class BusinessDetailsRequestInfo {
 
 	private Long id;

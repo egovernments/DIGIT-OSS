@@ -1,4 +1,4 @@
-    package org.egov.boundary.domain.service;
+package org.egov.boundary.domain.service;
 
 import org.egov.boundary.persistence.repository.MdmsRepository;
 import org.junit.Before;
@@ -20,6 +20,11 @@ public class MDMSServiceTest {
         this.mdmsService = new MdmsService(mdmsRepository);
     }
 
+    //TODO Test cases for service, repository
+    @Test
+    public void testFetchGeography() {
 
+
+    }
 
 }

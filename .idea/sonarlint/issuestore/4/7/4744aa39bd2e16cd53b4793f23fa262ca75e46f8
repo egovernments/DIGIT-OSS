@@ -1,7 +1,0 @@
-
-h	java:S100I"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‰¿ûŸùÿÿÿÿ
-b	java:S100^"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(­•—S
-]
-java:S1117f"GRename "accountCodePurposes" which hides the field declared at line 42.(¥’ìÙ
-o
-java:S2293f"YReplace the type specification in this constructor call with the diamond operator ("<>").(¥’ìÙ

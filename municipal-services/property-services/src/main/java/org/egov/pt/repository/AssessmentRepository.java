@@ -34,7 +34,7 @@ public class AssessmentRepository {
 	
 	public List<Assessment> getAssessments(AssessmentSearchCriteria criteria){
 		Map<String, Object> preparedStatementValues = new HashMap<>();
-		List<Assessment> assessments ;
+		List<Assessment> assessments = new ArrayList<>();
 		String query = queryBuilder.getSearchQuery(criteria, preparedStatementValues);
 		log.info("Query: "+query);
 		log.debug("preparedStatementValues: "+preparedStatementValues);

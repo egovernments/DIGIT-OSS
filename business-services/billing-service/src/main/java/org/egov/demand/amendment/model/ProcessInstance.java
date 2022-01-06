@@ -110,7 +110,6 @@ public class ProcessInstance   {
         return this;
         }
 
-
         public ProcessInstance addNextActionsItem(Action nextActionsItem) {
             if (this.nextActions == null) {
             this.nextActions = new ArrayList<>();

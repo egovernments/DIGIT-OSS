@@ -54,16 +54,15 @@ public class IdGenerationService {
     // by default 'idformat' will be taken from MDMS. Change value of 'ismdms.on' to 'false'
     // in application.properties to get data from DB instead.
     @Value("${idformat.from.mdms}")
-
-    private boolean idFormatFromMDMS;
+    public boolean idFormatFromMDMS;
 
     //By default the auto create sequence is disabled
     @Value("${autocreate.new.seq}")
-    private boolean autoCreateNewSeq;
+    public boolean autoCreateNewSeq;
 
 
     //default count value
-    private Integer defaultCount = 1;
+    public Integer defaultCount = 1;
 
 
     /**
@@ -109,7 +108,7 @@ public class IdGenerationService {
      */
     private List generateIdFromIdRequest(IdRequest idRequest, RequestInfo requestInfo) throws Exception {
 
-//        List<String> generatedId = new LinkedList<>();
+        List<String> generatedId = new LinkedList<>();
         boolean autoCreateNewSeqFlag = false;
         if (!StringUtils.isEmpty(idRequest.getIdName()))
         {

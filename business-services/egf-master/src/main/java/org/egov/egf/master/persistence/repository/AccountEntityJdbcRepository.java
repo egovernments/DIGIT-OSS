@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountEntityJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(AccountEntityJdbcRepository.class);
-	private String string=" and ";
 
 	static {
 		LOG.debug("init accountEntity");
@@ -70,56 +69,56 @@ public class AccountEntityJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
 		if (accountEntitySearchEntity.getTenantId() != null) {
                     if (params.length() > 0) {
-                        params.append(string);
+                        params.append(" and ");
                     }
                     params.append("tenantId =:tenantId");
                     paramValues.put("tenantId", accountEntitySearchEntity.getTenantId());
                 }
 		if (accountEntitySearchEntity.getId() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("id =:id");
 			paramValues.put("id", accountEntitySearchEntity.getId());
 		}
 	        if (accountEntitySearchEntity.getIds() != null) {
 	              if (params.length() > 0) {
-	                      params.append(string);
+	                      params.append(" and ");
 	              }
 	              params.append("id in(:ids) ");
 	              paramValues.put("ids", new ArrayList<String>(Arrays.asList(accountEntitySearchEntity.getIds().split(","))));
 	        }
 		if (accountEntitySearchEntity.getAccountDetailTypeId() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("accountDetailTypeId =:accountDetailType");
 			paramValues.put("accountDetailType", accountEntitySearchEntity.getAccountDetailTypeId());
 		}
 		if (accountEntitySearchEntity.getCode() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("code =:code");
 			paramValues.put("code", accountEntitySearchEntity.getCode());
 		}
 		if (accountEntitySearchEntity.getName() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("name =:name");
 			paramValues.put("name", accountEntitySearchEntity.getName());
 		}
 		if (accountEntitySearchEntity.getActive() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("active =:active");
 			paramValues.put("active", accountEntitySearchEntity.getActive());
 		}
 		if (accountEntitySearchEntity.getDescription() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("description =:description");
 			paramValues.put("description", accountEntitySearchEntity.getDescription());

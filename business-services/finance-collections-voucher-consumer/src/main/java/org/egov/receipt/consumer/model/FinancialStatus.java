@@ -55,7 +55,6 @@ import lombok.Setter;
 @NoArgsConstructor
 
 @JsonPropertyOrder({ "id", "moduleType", "code", "description" })
-//except code none of them is used
 public class FinancialStatus {
 
     private String id;

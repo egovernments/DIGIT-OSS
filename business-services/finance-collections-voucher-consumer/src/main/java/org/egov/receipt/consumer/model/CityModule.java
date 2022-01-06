@@ -51,8 +51,6 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-
-//class not used
 public class CityModule {
 private String module;
 private String code;

@@ -47,7 +47,7 @@ public class ExtractService {
 		planDetail.setDoc(doc);
 		planDetail.setPlanInformation(pi);
 		planDetail.setApplicationDate(scrutinyDate);
-//		Map<String, String> cityDetails = specificRuleService.getCityDetails();
+		Map<String, String> cityDetails = specificRuleService.getCityDetails();
         
                 if (doc.getDXFHeader().getVariable("$INSUNITS") != null) {
                     String unitValue = doc.getDXFHeader().getVariable("$INSUNITS").getValue("70");

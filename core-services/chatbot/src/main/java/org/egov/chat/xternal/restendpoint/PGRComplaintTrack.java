@@ -62,7 +62,7 @@ public class PGRComplaintTrack implements RestEndpoint {
 
     @Override
     public ObjectNode getMessageForRestCall(ObjectNode params) throws Exception {
-//        String tenantId = params.get("tenantId").asText();
+        String tenantId = params.get("tenantId").asText();
         String authToken = params.get("authToken").asText();
         String mobileNumber = params.get("mobileNumber").asText();
         DocumentContext userInfo = JsonPath.parse(params.get("userInfo").asText());

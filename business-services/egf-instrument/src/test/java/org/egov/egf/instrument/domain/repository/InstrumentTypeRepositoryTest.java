@@ -50,10 +50,6 @@ public class InstrumentTypeRepositoryTest {
     @Mock
     private InstrumentTypeESRepository instrumentTypeESRepository;
 
-    private String string1="description";
-
-    private String string2="default";
-
     @Before
     public void setup() {
         instrumentTypeRepositoryWithKafka = new InstrumentTypeRepository(instrumentTypeJdbcRepository,
@@ -263,8 +259,8 @@ public class InstrumentTypeRepositoryTest {
         InstrumentType instrumentTypeDetail = new InstrumentType();
         instrumentTypeDetail.setActive(true);
         instrumentTypeDetail.setName("name");
-        instrumentTypeDetail.setDescription(string1);
-        instrumentTypeDetail.setTenantId(string2);
+        instrumentTypeDetail.setDescription("description");
+        instrumentTypeDetail.setTenantId("default");
         return instrumentTypeDetail;
     }
 
@@ -272,8 +268,8 @@ public class InstrumentTypeRepositoryTest {
         InstrumentTypeEntity entity = new InstrumentTypeEntity();
         entity.setActive(true);
         entity.setName("name");
-        entity.setDescription(string1);
-        entity.setTenantId(string2);
+        entity.setDescription("description");
+        entity.setTenantId("default");
         return entity;
     }
 
@@ -287,9 +283,9 @@ public class InstrumentTypeRepositoryTest {
 
     private List<InstrumentType> getInstrumentTypes() {
         List<InstrumentType> instrumentTypes = new ArrayList<InstrumentType>();
-        InstrumentType instrumentType = InstrumentType.builder().name("name").description(string1).active(true)
+        InstrumentType instrumentType = InstrumentType.builder().name("name").description("description").active(true)
                 .build();
-        instrumentType.setTenantId(string2);
+        instrumentType.setTenantId("default");
         instrumentTypes.add(instrumentType);
         return instrumentTypes;
     }

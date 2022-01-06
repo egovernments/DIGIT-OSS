@@ -1,16 +1,0 @@
-
-[	java:S112A"FDefine and throw a dedicated exception instead of using a generic one.(±Á„²
-[	java:S112V"FDefine and throw a dedicated exception instead of using a generic one.(¨¥£
-`	java:S112}"FDefine and throw a dedicated exception instead of using a generic one.(÷ı¹µüÿÿÿÿ
-a	java:S112±"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
-c	java:S100A"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(±Á„²
-c	java:S100V"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¨¥£
-7
-java:S1116l"Remove this empty statement.(Åñ­õşÿÿÿÿ
-h	java:S100}"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(÷ı¹µüÿÿÿÿ
-S
-java:S1854”"<Remove this useless assignment to local variable "category".(ØÇ²–
-D
-java:S1481”"-Remove this unused "category" local variable.(ØÇ²–
-o
-java:S2293q"YReplace the type specification in this constructor call with the diamond operator ("<>").(·Áı

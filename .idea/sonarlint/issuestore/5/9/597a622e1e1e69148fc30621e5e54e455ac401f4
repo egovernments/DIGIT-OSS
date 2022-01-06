@@ -1,10 +1,0 @@
-
-[	java:S112S"FDefine and throw a dedicated exception instead of using a generic one.(“Ú²“
-Q	java:S125"<This block of commented-out lines of code should be removed.(ÇƒÊ
-M
-java:S1135A"2Complete the task associated to this TODO comment.(ÕÌ®þÿÿÿÿ
-V	java:S125\"<This block of commented-out lines of code should be removed.(ÃžŸÁüÿÿÿÿ
-K
-java:S1068)"0Remove this unused "objectMapper" private field.(«çœšþÿÿÿÿ
-@
-java:S54113"*Use the primitive boolean expression here.(¢È°‘

@@ -40,12 +40,6 @@ public class ChartOfAccountDetailJdbcRepositoryTest {
 	@Autowired
         private AccountDetailTypeJdbcRepository accountDetailTypeJdbcRepository;
 
-	private String coai="chartofaccountid";
-
-	private String string="default";
-
-	private String message="accountdetailtypeid";
-
 	@Before
 	public void setUp() throws Exception {
 		chartOfAccountDetailJdbcRepository = new ChartOfAccountDetailJdbcRepository(
@@ -67,8 +61,8 @@ public class ChartOfAccountDetailJdbcRepositoryTest {
 				"SELECT * FROM egf_chartofaccountdetail",
 				new ChartOfAccountDetailResultExtractor());
 		assertThat(result.get(0).get("id")).isEqualTo("1");
-		assertThat(result.get(0).get(coai)).isEqualTo("1");
-		assertThat(result.get(0).get(message)).isEqualTo("1");
+		assertThat(result.get(0).get("chartofaccountid")).isEqualTo("1");
+		assertThat(result.get(0).get("accountdetailtypeid")).isEqualTo("1");
 	
 	}
 
@@ -87,8 +81,8 @@ public class ChartOfAccountDetailJdbcRepositoryTest {
 				"SELECT * FROM egf_chartofaccountdetail order by id asc",
 				new ChartOfAccountDetailResultExtractor());
 		assertThat(result.get(0).get("id")).isEqualTo("1");
-		assertThat(result.get(0).get(coai)).isEqualTo("1");
-		assertThat(result.get(0).get(message)).isEqualTo("1");
+		assertThat(result.get(0).get("chartofaccountid")).isEqualTo("1");
+		assertThat(result.get(0).get("accountdetailtypeid")).isEqualTo("1");
 	
 	}
 
@@ -122,8 +116,8 @@ public class ChartOfAccountDetailJdbcRepositoryTest {
 				"SELECT * FROM egf_chartofaccountdetail",
 				new ChartOfAccountDetailResultExtractor());
 		assertThat(result.get(0).get("id")).isEqualTo("1");
-		assertThat(result.get(0).get(coai)).isEqualTo("1");
-		assertThat(result.get(0).get(message)).isEqualTo("1");
+		assertThat(result.get(0).get("chartofaccountid")).isEqualTo("1");
+		assertThat(result.get(0).get("accountdetailtypeid")).isEqualTo("1");
 	}
 
 	class ChartOfAccountDetailResultExtractor implements
@@ -136,8 +130,8 @@ public class ChartOfAccountDetailJdbcRepositoryTest {
 				Map<String, Object> row = new HashMap<String, Object>() {
 					{
 						put("id", resultSet.getString("id"));
-						put(coai, resultSet.getString(coai));
-						put(message, resultSet.getString(message));
+						put("chartofaccountid", resultSet.getString("chartofaccountid"));
+						put("accountdetailtypeid", resultSet.getString("accountdetailtypeid"));
 						put("createdby", resultSet.getString("createdby"));
 						put("createddate", resultSet.getString("createddate"));
 						put("lastmodifiedby", resultSet.getBoolean("lastmodifiedby"));
@@ -159,7 +153,7 @@ public class ChartOfAccountDetailJdbcRepositoryTest {
 		chartOfAccountDetailEntity.setId(chartOfAccountDetail.getId());
 		chartOfAccountDetailEntity.setChartOfAccountId(chartOfAccountDetail.getChartOfAccount().getId());
 		chartOfAccountDetailEntity.setAccountDetailTypeId(chartOfAccountDetail.getAccountDetailType().getId());
-		chartOfAccountDetailEntity.setTenantId(string);
+		chartOfAccountDetailEntity.setTenantId("default");
 		return chartOfAccountDetailEntity;
 	}
 
@@ -168,7 +162,7 @@ public class ChartOfAccountDetailJdbcRepositoryTest {
 				.builder().id("14632342").accountDetailType(getAccountDetailType()).chartOfAccount(getChartOfAccount()).build();
 		chartOfAccountDetail.setChartOfAccount(getChartOfAccount());
 		chartOfAccountDetail.setAccountDetailType(getAccountDetailType());
-		chartOfAccountDetail.setTenantId(string);
+		chartOfAccountDetail.setTenantId("default");
 		return chartOfAccountDetail;
 	}
 
@@ -178,7 +172,7 @@ public class ChartOfAccountDetailJdbcRepositoryTest {
 				.isActiveForPosting(true).type('A')
 				.classification((long) 123456).functionRequired(true)
 				.budgetCheckRequired(true).build();
-		chartOfAccount.setTenantId(string);
+		chartOfAccount.setTenantId("default");
 		return chartOfAccount;
 	}
 
@@ -186,7 +180,7 @@ public class ChartOfAccountDetailJdbcRepositoryTest {
 		AccountDetailType accountDetailType = AccountDetailType.builder()
 				.id("1").name("name").description("description").active(true)
 				.build();
-		accountDetailType.setTenantId(string);
+		accountDetailType.setTenantId("default");
 		return accountDetailType;
 	}
 
@@ -196,7 +190,7 @@ public class ChartOfAccountDetailJdbcRepositoryTest {
 		chartOfAccountDetailSearch.setPageSize(500);
 		chartOfAccountDetailSearch.setOffset(0);
 		chartOfAccountDetailSearch.setSortBy("id asc");
-		chartOfAccountDetailSearch.setTenantId(string);
+		chartOfAccountDetailSearch.setTenantId("default");
 		return chartOfAccountDetailSearch;
 	}
 }

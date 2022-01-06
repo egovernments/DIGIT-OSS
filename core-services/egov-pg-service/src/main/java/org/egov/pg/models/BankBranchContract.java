@@ -54,8 +54,6 @@ import javax.validation.constraints.Pattern;
 
 @JsonPropertyOrder({"id", "code", "name", "bank", "address", "address2", "city", "state", "pincode", "phone", "fax",
         "contactPerson", "active", "description", "micr", "bankAccounts"})
-
-//none of the variable is used
 public class BankBranchContract extends AuditableContract {
 
     private Long id;

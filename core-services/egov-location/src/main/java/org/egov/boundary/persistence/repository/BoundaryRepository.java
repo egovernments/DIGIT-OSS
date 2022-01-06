@@ -88,10 +88,6 @@ public class BoundaryRepository {
 
 	private static final String SELECT_NEXT_BOUNDARY_SEQUENCE = "select nextval('seq_eg_boundary')";
 
-	private String string1="parent";
-
-	private String string2="tenantId";
-
 	private Long getNextSequence() {
 		return jdbcTemplate.queryForObject(SELECT_NEXT_BOUNDARY_SEQUENCE, Long.class);
 	}
@@ -103,9 +99,9 @@ public class BoundaryRepository {
 		parametersMap.put("id", boundary.getId());
 		parametersMap.put("boundarynum", boundary.getBoundaryNum());
 		if (boundary.getParent() != null && boundary.getParent().getId() != null) {
-			parametersMap.put(string1, boundary.getParent().getId());
+			parametersMap.put("parent", boundary.getParent().getId());
 		} else {
-			parametersMap.put(string1, boundary.getParent());
+			parametersMap.put("parent", boundary.getParent());
 		}
 		parametersMap.put("name", boundary.getName());
 		parametersMap.put("code", boundary.getCode());
@@ -119,7 +115,7 @@ public class BoundaryRepository {
 		parametersMap.put("latitude", boundary.getLatitude());
 		parametersMap.put("materializedpath", boundary.getMaterializedPath());
 		parametersMap.put("ishistory", boundary.isHistory());
-		parametersMap.put(string2, boundary.getTenantId());
+		parametersMap.put("tenantid", boundary.getTenantId());
 		parametersMap.put("createddate", new Date());
 		parametersMap.put("lastmodifieddate", new Date());
 		parametersMap.put("createdby", 1);
@@ -133,9 +129,9 @@ public class BoundaryRepository {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
 		parametersMap.put("boundarynum", boundary.getBoundaryNum());
 		if (boundary.getParent() != null && boundary.getParent().getId() != null) {
-			parametersMap.put(string1, boundary.getParent().getId());
+			parametersMap.put("parent", boundary.getParent().getId());
 		} else {
-			parametersMap.put(string1, boundary.getParent());
+			parametersMap.put("parent", boundary.getParent());
 		}
 		parametersMap.put("name", boundary.getName());
 		parametersMap.put("boundarytype", Long.valueOf(boundary.getBoundaryType().getId()));
@@ -150,7 +146,7 @@ public class BoundaryRepository {
 		parametersMap.put("lastmodifieddate", new Date());
 		parametersMap.put("lastmodifiedby", 1);
 		parametersMap.put("code", boundary.getCode());
-		parametersMap.put(string2, boundary.getTenantId());
+		parametersMap.put("tenantid", boundary.getTenantId());
 		namedParameterJdbcTemplate.update(BoundaryQueryBuilder.getBoundaryUpdateQuery(), parametersMap);
 		return findByTenantIdAndCode(boundary.getTenantId(), boundary.getCode());
 	}
@@ -158,7 +154,7 @@ public class BoundaryRepository {
 	public Boundary findByTenantIdAndId(String tenantId, Long id) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
 		Boundary boundary = null;
-		parametersMap.put(string2, tenantId);
+		parametersMap.put("tenantId", tenantId);
 		parametersMap.put("id", id);
 		List<Boundary> boundaryList = namedParameterJdbcTemplate.query(BoundaryQueryBuilder.getBoundaryByIdAndTenant(),
 				parametersMap, new BoundaryRowMapper());
@@ -170,7 +166,7 @@ public class BoundaryRepository {
 
 	public List<Boundary> findByTenantIdAndCodes(String tenantId, List<String> codes) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
-		parametersMap.put(string2, tenantId);
+		parametersMap.put("tenantId", tenantId);
 		parametersMap.put("codes", codes);
 		List<Boundary> boundaryList = namedParameterJdbcTemplate
 				.query(BoundaryQueryBuilder.getBoundaryByCodesAndTenant(), parametersMap, new BoundaryRowMapper());
@@ -183,7 +179,7 @@ public class BoundaryRepository {
 	public Boundary findByTenantIdAndCode(String tenantId, String code) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
 		Boundary boundary = null;
-		parametersMap.put(string2, tenantId);
+		parametersMap.put("tenantId", tenantId);
 		parametersMap.put("code", code);
 		List<Boundary> boundaryList = namedParameterJdbcTemplate
 				.query(BoundaryQueryBuilder.getBoundaryByCodeAndTenant(), parametersMap, new BoundaryRowMapper());
@@ -195,7 +191,7 @@ public class BoundaryRepository {
 
 	public List<Boundary> findAllByTenantId(String tenantId) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
-		parametersMap.put(string2, tenantId);
+		parametersMap.put("tenantId", tenantId);
 		List<Boundary> boundaryList = namedParameterJdbcTemplate.query(BoundaryQueryBuilder.getAllByTenantId(),
 				parametersMap, new BoundaryRowMapper());
 		boundaryList = setBoundariesWithParents(boundaryList);
@@ -206,7 +202,7 @@ public class BoundaryRepository {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
 		parametersMap.put("id", boundaryTypeId);
 		parametersMap.put("boundaryNum", boundaryNum);
-		parametersMap.put(string2, tenantId);
+		parametersMap.put("tenantId", tenantId);
 		List<Boundary> BoundaryList = namedParameterJdbcTemplate.query(
 				BoundaryQueryBuilder.getBoundarieByBoundaryTypeAndBoundaryNumAndTenantId(), parametersMap,
 				new BoundaryRowMapper());
@@ -217,7 +213,7 @@ public class BoundaryRepository {
 			final String tenantId) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
 		parametersMap.put("boundaryTypeId", boundaryTypeId);
-		parametersMap.put(string2, tenantId);
+		parametersMap.put("tenantId", tenantId);
 		List<Boundary> boundaryList = namedParameterJdbcTemplate.query(
 				BoundaryQueryBuilder.getAllBoundarieByBoundaryTypeAndTenantId(), parametersMap,
 				new BoundaryRowMapper());
@@ -235,7 +231,7 @@ public class BoundaryRepository {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
 		parametersMap.put("boundaryTypeName", boundaryTypeName);
 		parametersMap.put("hierarchyTypeName", hierarchyTypeName);
-		parametersMap.put(string2, tenantId);
+		parametersMap.put("tenantId", tenantId);
 		List<Boundary> BoundaryList = namedParameterJdbcTemplate.query(
 				BoundaryQueryBuilder.getBoundariesByBndryTypeNameAndHierarchyTypeNameAndTenantId(), parametersMap,
 				new BoundaryIdRowMapper());
@@ -254,7 +250,7 @@ public class BoundaryRepository {
 
 	public List<Boundary> getAllBoundaryByTenantIdAndTypeIds(String tenantId, List<Long> boundaryTypeIds) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
-		parametersMap.put(string2, tenantId);
+		parametersMap.put("tenantId", tenantId);
 		parametersMap.put("boundaryTypeIds", boundaryTypeIds);
 		List<Boundary> boundaryList = namedParameterJdbcTemplate.query(
 				BoundaryQueryBuilder.getAllBoundaryByTenantIdAndTypeIds(), parametersMap, new BoundaryRowMapper());
@@ -269,7 +265,7 @@ public class BoundaryRepository {
 
 	public List<Boundary> findAllBoundariesByIdsAndTenant(final String tenantId, final List<Long> boundaryIds) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
-		parametersMap.put(string2, tenantId);
+		parametersMap.put("tenantId", tenantId);
 		parametersMap.put("boundaryIds", boundaryIds);
 		List<Boundary> boundaryList = namedParameterJdbcTemplate
 				.query(BoundaryQueryBuilder.findAllBoundariesByIdsAndTenant(), parametersMap, new BoundaryRowMapper());

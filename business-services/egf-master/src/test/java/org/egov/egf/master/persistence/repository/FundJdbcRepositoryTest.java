@@ -37,10 +37,6 @@ public class FundJdbcRepositoryTest {
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	private String string1="default";
-
-	private String string2="parentId";
-
 	@Before
 	public void setUp() throws Exception {
 		fundJdbcRepository = new FundJdbcRepository(namedParameterJdbcTemplate);
@@ -52,7 +48,7 @@ public class FundJdbcRepositoryTest {
 
 		FundEntity fund = FundEntity.builder().id("2374257").code("code").name("name").active(true).level(1l)
 				.parentId("1").identifier('F').build();
-		fund.setTenantId(string1);
+		fund.setTenantId("default");
 		FundEntity actualResult = fundJdbcRepository.create(fund);
 
 		List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_fund",
@@ -61,7 +57,7 @@ public class FundJdbcRepositoryTest {
 		assertThat(row.get("id")).isEqualTo(actualResult.getId());
 		assertThat(row.get("name")).isEqualTo(actualResult.getName());
 		assertThat(row.get("code")).isEqualTo(actualResult.getCode());
-		assertThat(row.get(string2)).isEqualTo(actualResult.getParentId());
+		assertThat(row.get("parentId")).isEqualTo(actualResult.getParentId());
 
 	}
 
@@ -81,7 +77,7 @@ public class FundJdbcRepositoryTest {
 
 		FundEntity fund = FundEntity.builder().code("codeU").name("nameU").active(true).level(1l)
 				.identifier('F').id("2").build();
-		fund.setTenantId(string1);
+		fund.setTenantId("default");
 		FundEntity actualResult = fundJdbcRepository.update(fund);
 
 		List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_fund",
@@ -109,7 +105,7 @@ public class FundJdbcRepositoryTest {
 	public void test_find_by_id() {
 
 		FundEntity fundEntity = FundEntity.builder().id("2").build();
-		fundEntity.setTenantId(string1);
+		fundEntity.setTenantId("default");
 		FundEntity result = fundJdbcRepository.findById(fundEntity);
 		assertThat(result.getId()).isEqualTo("2");
 		assertThat(result.getName()).isEqualTo("name");
@@ -122,7 +118,7 @@ public class FundJdbcRepositoryTest {
 	public void test_find_by_invalid_id_should_return_null() {
 
 		FundEntity fundEntity = FundEntity.builder().id("5").build();
-		fundEntity.setTenantId(string1);
+		fundEntity.setTenantId("default");
 		FundEntity result = fundJdbcRepository.findById(fundEntity);
 		assertNull(result);
 
@@ -170,7 +166,7 @@ public class FundJdbcRepositoryTest {
 						put("lastModifiedBy", resultSet.getString("lastModifiedBy"));
 						put("lastModifiedDate", resultSet.getString("lastModifiedDate"));
 						put("identifier", resultSet.getString("identifier"));
-						put(string2, resultSet.getString(string2));
+						put("parentId", resultSet.getString("parentId"));
 
 					}
 				};

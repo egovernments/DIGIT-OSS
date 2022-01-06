@@ -7,10 +7,7 @@ import java.util.Date;
 
 @Data
 public class RecoverySearchEntity extends RecoveryEntity {
-//	not used
 	private Date fromDate;
-
-//	not used
 	private Date toDate;
 	private Integer pageSize;
 	private Integer offset = 0;

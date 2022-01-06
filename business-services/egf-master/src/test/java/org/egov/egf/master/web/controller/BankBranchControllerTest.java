@@ -51,11 +51,13 @@ public class BankBranchControllerTest {
 	@Captor
 	private ArgumentCaptor<List<BankBranch>> captor;
 
-	private String string="default";
+	@Before
+	public void setUp() throws Exception {
+	}
 
-	private String place="Bangalore";
-
-
+	@After
+	public void tearDown() throws Exception {
+	}
 
 	@Test
 	public void testCreate() throws IOException, Exception {
@@ -72,7 +74,7 @@ public class BankBranchControllerTest {
 
 		final List<BankBranch> actualRequest = captor.getValue();
 		assertEquals("code", actualRequest.get(0).getCode());
-		assertEquals(string , actualRequest.get(0).getTenantId());
+		assertEquals("default", actualRequest.get(0).getTenantId());
 		assertEquals(true, actualRequest.get(0).getActive());
 	}
 
@@ -91,7 +93,7 @@ public class BankBranchControllerTest {
 
 		final List<BankBranch> actualRequest = captor.getValue();
 		assertEquals("1", actualRequest.get(0).getBank().getId());
-		assertEquals(string , actualRequest.get(0).getTenantId());
+		assertEquals("default", actualRequest.get(0).getTenantId());
 		assertEquals(true, actualRequest.get(0).getActive());
 	}
 
@@ -128,11 +130,11 @@ public class BankBranchControllerTest {
 	private List<BankBranch> getBankBranches() {
 		List<BankBranch> bankBranches = new ArrayList<BankBranch>();
 		Bank bank = Bank.builder().id("1").build();
-		BankBranch bankBranch = BankBranch.builder().bank(bank).code("code").name("name").address(place)
-				.address2(place).city(place).state(place).pincode(place).phone(place)
-				.fax(place).contactPerson(place).active(true).description(place).micr(place)
+		BankBranch bankBranch = BankBranch.builder().bank(bank).code("code").name("name").address("Bangalore")
+				.address2("Bangalore").city("Bangalore").state("Bangalore").pincode("Bangalore").phone("Bangalore")
+				.fax("Bangalore").contactPerson("Bangalore").active(true).description("Bangalore").micr("Bangalore")
 				.build();
-		bankBranch.setTenantId(string);
+		bankBranch.setTenantId("default");
 		bankBranches.add(bankBranch);
 		return bankBranches;
 	}
@@ -141,10 +143,10 @@ public class BankBranchControllerTest {
 		List<BankBranch> bankBranches = new ArrayList<BankBranch>();
 		Bank bank = Bank.builder().id("1").build();
 		BankBranch bankBranch = BankBranch.builder().bank(bank).code("codeupdate").name("nameupdate")
-				.address(place).address2(place).city(place).state(place).pincode(place)
-				.phone(place).fax(place).contactPerson(place).active(true).description(place)
-				.micr(place).build();
-		bankBranch.setTenantId(string);
+				.address("Bangalore").address2("Bangalore").city("Bangalore").state("Bangalore").pincode("Bangalore")
+				.phone("Bangalore").fax("Bangalore").contactPerson("Bangalore").active(true).description("Bangalore")
+				.micr("Bangalore").build();
+		bankBranch.setTenantId("default");
 		bankBranches.add(bankBranch);
 		return bankBranches;
 	}

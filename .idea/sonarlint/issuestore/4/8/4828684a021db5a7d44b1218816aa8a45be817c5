@@ -1,9 +1,0 @@
-
-`	java:S1126"FDefine and throw a dedicated exception instead of using a generic one.(‚ëô¡şÿÿÿÿ
-R
-java:S1117C"7Rename "doc" which hides the field declared at line 34.(ÅÏ³—øÿÿÿÿ
-M
-java:S1117P"7Rename "doc" which hides the field declared at line 34.(¢Áäò
-Q	java:S125O"<This block of commented-out lines of code should be removed.(Ó¶µñ
-c
-java:S2095<"MUse try-with-resources or close this "FileInputStream" in a "finally" clause.(ãË‰’

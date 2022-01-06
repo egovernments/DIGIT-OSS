@@ -53,7 +53,8 @@ public class HolidayTypeRowMapper implements RowMapper<HolidayType> {
 
     @Override
     public HolidayType mapRow(ResultSet rs, int rowNum) throws SQLException {
-//        final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
         HolidayType holidayType = new HolidayType();
         holidayType.setId(rs.getLong("id"));
         holidayType.setName(rs.getString("name"));

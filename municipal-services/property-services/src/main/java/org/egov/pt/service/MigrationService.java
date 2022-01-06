@@ -167,12 +167,16 @@ public class MigrationService {
 
         for(int i= 0;i<tenantList.size();i++){
             MigrationCount migrationCount = getMigrationCountForTenant(tenantList.get(i));
+            System.out.println("\n\nMigration count--->"+migrationCount.toString()+"\n\n");
             if(ObjectUtils.isEmpty(migrationCount) || migrationCount.getId() == null){
                 propertyCriteria.setTenantId(tenantList.get(i));
                 resultMap = initiatemigration(requestInfoWrapper, propertyCriteria,masters,errorMap);
             }
             else{
                 long count = getTenantCount(tenantList.get(i));
+
+                System.out.println("\n\ntenant--->"+tenantList.get(i)+"\n\n");
+                System.out.println("\n\ncount--->"+count+"\n\n");
 
                 if(migrationCount.getRecordCount() >= count)
                     continue;
@@ -230,6 +234,7 @@ public class MigrationService {
 
             startBatch = startBatch+batchSizeInput;
             propertyCriteria.setOffset(Long.valueOf(startBatch));
+            System.out.println("Property Count which pushed into kafka topic:"+count2);
         }
         propertyCriteria.setOffset(Long.valueOf(batchOffset));
         return responseMap;

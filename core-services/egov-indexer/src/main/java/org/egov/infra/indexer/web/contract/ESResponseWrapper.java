@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ESResponseWrapper {
 	
-	private ResponseInfo responseInfo;
-
-	private Object esResponse;
+	public ResponseInfo responseInfo;
+	
+	public Object esResponse;
 
 }

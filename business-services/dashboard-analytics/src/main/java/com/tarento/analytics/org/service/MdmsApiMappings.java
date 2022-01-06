@@ -27,8 +27,9 @@ import static com.tarento.analytics.constant.Constants.TENANTID_PLACEHOLDER;
 public class MdmsApiMappings {
 
     private boolean isTranslate = Boolean.FALSE;
-    private static final String TESTING_ID = "pb.testing";
-    private static final String MDMS_CITY_NAME_CONFIG_FILE_NAME = "TenantCodeNameMappings.json";
+    private final String TESTING_ID = "pb.testing";
+    private final String NAME = "name";
+    private final String MDMS_CITY_NAME_CONFIG_FILE_NAME = "TenantCodeNameMappings.json";
 
     private static Logger logger = LoggerFactory.getLogger(MdmsApiMappings.class);
 

@@ -196,6 +196,7 @@ public class FSMValidator {
 			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on limit is not allowed");
 
 		if (criteria.getApplicationNos() != null && !allowedParams.contains("applicationNos")) {
+			System.out.println("app..... " + criteria.getApplicationNos());
 			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on applicationNo is not allowed");
 		}
 		if (criteria.getFromDate() != null && !allowedParams.contains("fromDate") && criteria.getToDate() != null
@@ -419,6 +420,7 @@ public class FSMValidator {
 	}
 	
 	public void validateWorkflowActions(FSMRequest fsmRequest) {
+		FSM fsm = fsmRequest.getFsm();
 		// TODO Validate the the current workflow action is valid according to business
 	}
 	

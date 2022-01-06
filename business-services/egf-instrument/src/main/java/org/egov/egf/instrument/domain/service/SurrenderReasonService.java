@@ -29,8 +29,6 @@ public class SurrenderReasonService {
     public static final String ACTION_EDIT = "edit";
     public static final String ACTION_SEARCH = "search";
 
-    private String string1="surrenderreasons";
-
     @Autowired
     private SurrenderReasonRepository surrenderReasonRepository;
 
@@ -118,7 +116,7 @@ public class SurrenderReasonService {
                 break;
             case ACTION_CREATE:
                 if (surrenderreasons == null)
-                    throw new InvalidDataException(string1, ErrorCode.NOT_NULL.getCode(), null);
+                    throw new InvalidDataException("surrenderreasons", ErrorCode.NOT_NULL.getCode(), null);
                 for (SurrenderReason surrenderReason : surrenderreasons) {
                     validator.validate(surrenderReason, errors);
                     if (!surrenderReasonRepository.uniqueCheck("name", surrenderReason))
@@ -128,7 +126,7 @@ public class SurrenderReasonService {
                 break;
             case ACTION_UPDATE:
                 if (surrenderreasons == null)
-                    throw new InvalidDataException(string1, ErrorCode.NOT_NULL.getCode(), null);
+                    throw new InvalidDataException("surrenderreasons", ErrorCode.NOT_NULL.getCode(), null);
                 for (SurrenderReason surrenderReason : surrenderreasons) {
                     if (surrenderReason.getId() == null)
                         throw new InvalidDataException("id", ErrorCode.MANDATORY_VALUE_MISSING.getCode(),
@@ -140,7 +138,7 @@ public class SurrenderReasonService {
                 }
             case ACTION_DELETE:
                 if (surrenderreasons == null)
-                    throw new InvalidDataException(string1, ErrorCode.NOT_NULL.getCode(), null);
+                    throw new InvalidDataException("surrenderreasons", ErrorCode.NOT_NULL.getCode(), null);
                 for (SurrenderReason surrenderreason : surrenderreasons)
                     if (surrenderreason.getId() == null)
                         throw new InvalidDataException("id", ErrorCode.MANDATORY_VALUE_MISSING.getCode(),

@@ -42,6 +42,7 @@ public class InstrumentTypeQueueRepository {
 
         case "create":
             topicMap.put("instrumenttype_create", request);
+            System.out.println("push create topic" + request);
             break;
         case "update":
             topicMap.put("instrumenttype_update", request);
@@ -61,6 +62,9 @@ public class InstrumentTypeQueueRepository {
         if (!request.getInstrumentTypes().isEmpty()) {
 
             topicMap.put("instrumenttype_persisted", request);
+
+            System.out.println("push search topic" + request);
+
         }
 
         financialInstrumentProducer.sendMessage(completedTopic, instrumentTypeCompletedKey, topicMap);

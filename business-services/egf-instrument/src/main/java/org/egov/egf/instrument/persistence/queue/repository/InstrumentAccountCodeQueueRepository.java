@@ -42,6 +42,7 @@ public class InstrumentAccountCodeQueueRepository {
 
         case "create":
             topicMap.put("instrumentaccountcode_create", request);
+            System.out.println("push create topic" + request);
             break;
         case "update":
             topicMap.put("instrumentaccountcode_update", request);
@@ -61,6 +62,8 @@ public class InstrumentAccountCodeQueueRepository {
         if (!request.getInstrumentAccountCodes().isEmpty()) {
 
             topicMap.put("instrumentaccountcode_persisted", request);
+
+            System.out.println("push search topic" + request);
 
         }
 

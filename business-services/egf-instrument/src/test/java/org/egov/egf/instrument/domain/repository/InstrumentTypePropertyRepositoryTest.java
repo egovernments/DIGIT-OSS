@@ -25,8 +25,6 @@ public class InstrumentTypePropertyRepositoryTest {
     @Mock
     private InstrumentTypePropertyJdbcRepository instrumentTypePropertyJdbcRepository;
 
-    private String string1="statusId";
-
     @Test
     public void test_find_by_id() {
         InstrumentTypePropertyEntity entity = getInstrumentTypePropertyEntity();
@@ -96,9 +94,9 @@ public class InstrumentTypePropertyRepositoryTest {
         InstrumentTypeProperty instrumentTypePropertyDetail = new InstrumentTypeProperty();
         instrumentTypePropertyDetail.setTransactionType(TransactionType.Credit);
         instrumentTypePropertyDetail.setReconciledOncreate(true);
-        instrumentTypePropertyDetail.setStatusOnCreate(FinancialStatusContract.builder().id(string1).build());
-        instrumentTypePropertyDetail.setStatusOnReconcile(FinancialStatusContract.builder().id(string1).build());
-        instrumentTypePropertyDetail.setStatusOnUpdate(FinancialStatusContract.builder().id(string1).build());
+        instrumentTypePropertyDetail.setStatusOnCreate(FinancialStatusContract.builder().id("statusId").build());
+        instrumentTypePropertyDetail.setStatusOnReconcile(FinancialStatusContract.builder().id("statusId").build());
+        instrumentTypePropertyDetail.setStatusOnUpdate(FinancialStatusContract.builder().id("statusId").build());
         instrumentTypePropertyDetail.setTenantId("default");
         return instrumentTypePropertyDetail;
     }
@@ -107,9 +105,9 @@ public class InstrumentTypePropertyRepositoryTest {
         InstrumentTypePropertyEntity entity = new InstrumentTypePropertyEntity();
         entity.setTransactionType(TransactionType.Credit.name());
         entity.setReconciledOncreate(true);
-        entity.setStatusOnCreateId(string1);
-        entity.setStatusOnReconcileId(string1);
-        entity.setStatusOnUpdateId(string1);
+        entity.setStatusOnCreateId("statusId");
+        entity.setStatusOnReconcileId("statusId");
+        entity.setStatusOnUpdateId("statusId");
         entity.setTenantId("default");
         return entity;
     }

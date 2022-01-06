@@ -34,7 +34,6 @@ public class FinancialConfigurationService {
 	
 	@Value("${fetch_data_from}")
 	private String fetchDataFrom;
-    private String string1="financialconfigurations";
 
 	private BindingResult validate(List<FinancialConfiguration> financialconfigurations, String method,
 			BindingResult errors) {
@@ -47,7 +46,7 @@ public class FinancialConfigurationService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (financialconfigurations == null) {
-                            throw new InvalidDataException(string1, ErrorCode.NOT_NULL.getCode(),
+                            throw new InvalidDataException("financialconfigurations", ErrorCode.NOT_NULL.getCode(),
                                     null);
                         }
                         for (FinancialConfiguration financialConfiguration : financialconfigurations) {
@@ -60,7 +59,7 @@ public class FinancialConfigurationService {
                         break;
                     case Constants.ACTION_UPDATE:
                         if (financialconfigurations == null) {
-                            throw new InvalidDataException(string1 , ErrorCode.NOT_NULL.getCode(),
+                            throw new InvalidDataException("financialconfigurations", ErrorCode.NOT_NULL.getCode(),
                                     null);
                         }
                         for (FinancialConfiguration financialConfiguration : financialconfigurations) {
@@ -77,7 +76,7 @@ public class FinancialConfigurationService {
                         break;
                     case Constants.ACTION_SEARCH:
                         if (financialconfigurations == null) {
-                            throw new InvalidDataException(string1 , ErrorCode.NOT_NULL.getCode(),
+                            throw new InvalidDataException("financialconfigurations", ErrorCode.NOT_NULL.getCode(),
                                     null);
                         }
                         for (FinancialConfiguration financialconfiguration : financialconfigurations) {

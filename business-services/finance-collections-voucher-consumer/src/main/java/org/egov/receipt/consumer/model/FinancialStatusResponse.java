@@ -47,8 +47,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Data;
 
 @JsonInclude(value = Include.NON_NULL)
-
-//class not used
 public @Data class FinancialStatusResponse {
     private List<FinancialStatus> financialStatuses;
 }
