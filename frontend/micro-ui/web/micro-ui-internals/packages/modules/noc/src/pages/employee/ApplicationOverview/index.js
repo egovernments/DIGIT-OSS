@@ -151,7 +151,7 @@ const ApplicationOverview = () => {
             maxWidth: "950px",
             minWidth: "280px"
           }}>
-            <CardSectionHeader style={{ marginBottom: "16px" }}>{`${t(`NOC_MAIN_${stringReplaceAll(nocDocumentsList?.[0]?.code, ".", "_")}_LABEL`)}:`}</CardSectionHeader>
+            <CardSectionHeader style={{ marginBottom: "16px", fontSize: "20px" }}>{`${t(`NOC_MAIN_${stringReplaceAll(nocDocumentsList?.[0]?.code, ".", "_")}_LABEL`)}:`}</CardSectionHeader>
             <StatusTable style={{ position: "relative", marginTop: "19px" }}>
               <Row className="border-none" label={`${t(`NOC_${nocDataDetails?.[0]?.nocType}_APPLICATION_LABEL`)}:`} text={t(nocDataDetails?.[0]?.applicationNo) || "NA"} />
               <Row className="border-none" label={`${t("NOC_STATUS_LABEL")}:`} text={t(status) || "NA"} textStyle={nocDataDetails?.[0]?.applicationStatus == "APPROVED" || nocDataDetails?.[0]?.applicationStatus == "AUTO_APPROVED" ? {color : "#00703C"} : {color: "#D4351C"}}/>
@@ -167,7 +167,7 @@ const ApplicationOverview = () => {
                   <div style={{ display: "flex", justifyContent: "center" }}>
                       <PDFSvg />
                     </div>
-                  <p style={{ marginTop: "8px", fontWeight: "bold", textAlign: "center", width: "100px", color: "#505A5F" }}>{t(stringReplaceAll(value?.documentType, ".", "_"))/* t(value?.title ? value?.title : decodeURIComponent( pdfFiles[value.fileStoreId]?.split(",")?.[0]?.split("?")?.[0]?.split("/")?.pop()?.slice(13))) */}</p>
+                  <p style={{ marginTop: "8px", fontWeight: "bold", textAlign: "center", width: "100px", color: "#505A5F" }}>{t(`NOC_MAIN_${stringReplaceAll(nocDocumentsList?.[0]?.code, ".", "_")}_LABEL`)/* t(value?.title ? value?.title : decodeURIComponent( pdfFiles[value.fileStoreId]?.split(",")?.[0]?.split("?")?.[0]?.split("/")?.pop()?.slice(13))) */}</p>
                 </a>
               ))}
             </div> : <div><p>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</p></div>}
@@ -213,7 +213,7 @@ const ApplicationOverview = () => {
   return (
     <div className={"employee-main-application-details"}>
       <div>
-        <Header>{t("NOC_APP_OVER_VIEW_HEADER")}</Header>
+        <Header styles={{fontSize: "32px"}}>{t("NOC_APP_OVER_VIEW_HEADER")}</Header>
       </div>
       <ApplicationDetailsTemplate
         applicationDetails={appDetails}

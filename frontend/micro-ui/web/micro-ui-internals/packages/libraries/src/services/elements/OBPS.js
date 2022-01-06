@@ -419,7 +419,7 @@ export const OBPSService = {
       isBackGroundColor: true,
       additionalDetails: {
         values: [
-          { title: "BPA_EDCR_DETAILS", value: " " },
+          { title: "BPA_EDCR_DETAILS", value: " ", isHeader: true },
           { title: BPA?.businessService !== "BPA_OC" ? "BPA_EDCR_NO_LABEL" : "BPA_OC_EDCR_NO_LABEL", value: BPA?.edcrNumber || "NA" },
         ],
         scruntinyDetails: [
@@ -435,7 +435,7 @@ export const OBPSService = {
       isBackGroundColor: true,
       additionalDetails: {
         values: [
-          { title: "BPA_BUILDING_EXTRACT_HEADER", value : " "},
+          { title: "BPA_BUILDING_EXTRACT_HEADER", value : " ", isHeader: true},
           { title: "BPA_BUILTUP_AREA_HEADER", value: edcr?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea || "NA"},
           { title: "BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL", value: edcr?.planDetail?.blocks?.[0]?.building?.totalFloors || "NA" },
           { title: "BPA_HEIGHT_FROM_GROUND_LEVEL", value: edcr?.planDetail?.blocks?.[0]?.building?.declaredBuildingHeigh || "NA" }
@@ -450,7 +450,7 @@ export const OBPSService = {
       isBackGroundColor: true,
       additionalDetails: {
         values: [
-          { title: "BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL", value : " "},
+          { title: "BPA_APP_DETAILS_DEMOLITION_DETAILS_LABEL", value : " ", isHeader: true},
           { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr?.planDetail?.planInformation?.demolitionArea ? `${edcr?.planDetail?.planInformation?.demolitionArea} sq.mtrs` : "NA" } 
         ],
         scruntinyDetails: []
@@ -463,7 +463,7 @@ export const OBPSService = {
       isTitleRepeat: true,
       additionalDetails: {
         values: [
-          { title: "BPA_OCC_SUBOCC_HEADER", value : " "} 
+          { title: "BPA_OCC_SUBOCC_HEADER", value : " ", isHeader: true} 
         ],
         subOccupancyTableDetails: [
           { title: "BPA_APPLICATION_DEMOLITION_AREA_LABEL", value: edcr },

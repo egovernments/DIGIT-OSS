@@ -97,7 +97,7 @@ function ApplicationDetailsContent({
         <React.Fragment key={index}>
           <div style={getMainDivStyles()}>
             {index === 0 && !detail.asSectionHeader ? (
-              <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>
+              <CardSubHeader style={{ marginBottom: "16px", fontSize: "24px" }}>{t(detail.title)}</CardSubHeader>
             ) : (
               <React.Fragment>
                 <CardSectionHeader style={index == 0 && checkLocation ? { marginBottom: "16px" } : { marginBottom: "16px", marginTop: "32px" }}>

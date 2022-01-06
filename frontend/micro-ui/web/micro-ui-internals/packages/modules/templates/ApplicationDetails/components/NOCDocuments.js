@@ -163,7 +163,7 @@ const NOCDocuments = ({ t, noc, docs, isNoc, applicationData,NOCdata, bpaActions
   return (
     <div style={{ border: "1px solid #D6D5D4", padding: "16px 0px 16px 8px", background: "#FAFAFA", borderRadius: "5px", marginBottom: "24px", maxWidth:"950px"/*  display: "flex" */ }}>
       <StatusTable>
-      <Row label={isEmployee ? `${t(`BPA_${noc?.nocType}_HEADER`)}` : t(`BPA_${noc?.nocType}_HEADER`)} />
+      <Row label={isEmployee ? `${t(`BPA_${noc?.nocType}_HEADER`)}` : t(`BPA_${noc?.nocType}_HEADER`)} labelStyle={{fontSize: "20px"}}/>
       {NOCdata && NOCdata.map((noc,index) => {
         if (noc?.value) {
           if (noc?.field == "STATUS") {
