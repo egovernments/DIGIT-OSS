@@ -2,25 +2,11 @@ import React, { useCallback, useMemo, useEffect } from "react"
 import { useForm, Controller } from "react-hook-form";
 import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
-import { convertEpochToDateDMY, stringReplaceAll } from "../utils";
+import { convertEpochToDateDMY, stringReplaceAll } from "../../utils";
+import SearchFields from "./SearchFields";
+import MobileSearchApplication from "./MobileSearchApplication";
 
 const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
-  let applications = {};
-  let validation = {};
-  //   const applicationsList = data;
-  //   let newapplicationlist = [];
-  //   if (applicationsList && applicationsList.length > 0) {
-  //       applicationsList.filter((response) => response.licenseNumber).map((ob) => {
-  //           if (applications[ob.licenseNumber]) {
-  //               if (applications[ob.licenseNumber].applicationDate < ob.applicationDate)
-  //                   applications[ob.licenseNumber] = ob
-  //           }
-  //           else
-  //               applications[ob.licenseNumber] = ob;
-  //       })
-  //       newapplicationlist = Object.values(applications);
-  //       newapplicationlist = newapplicationlist ? newapplicationlist.filter(ele => ele.financialYear != "2021-22" && (ele.status == "EXPIRED" || ele.status == "APPROVED")) : [];
-  //   }
 
     const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
         defaultValues: {
@@ -40,6 +26,33 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
       register("status", "")
       register("RenewalPending", true)
     },[register])
+
+    const onSort = useCallback((args) => {
+      if (args.length === 0) return
+      setValue("sortBy", args.id)
+      setValue("sortOrder", args.desc ? "DESC" : "ASC")
+    }, [])
+
+
+    function onPageSizeChange(e){
+      setValue("limit",Number(e.target.value))
+      handleSubmit(onSubmit)()
+    }
+
+    function nextPage () {
+        setValue("offset", getValues("offset") + getValues("limit"))
+        handleSubmit(onSubmit)()
+    }
+    function previousPage () {
+        setValue("offset", getValues("offset") - getValues("limit") )
+        handleSubmit(onSubmit)()
+    }
+
+    const isMobile = window.Digit.Utils.browser.isMobile();
+
+    if (isMobile) {
+      return <MobileSearchApplication {...{ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit }}/>
+    }
 
     const GetCell = (value) => <span className="cell-text">{value}</span>;
     const columns = useMemo( () => ([
@@ -87,85 +100,9 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
         }
       ]), [] )
 
-    const onSort = useCallback((args) => {
-        if (args.length === 0) return
-        setValue("sortBy", args.id)
-        setValue("sortOrder", args.desc ? "DESC" : "ASC")
-    }, [])
-
-
-    function onPageSizeChange(e){
-      setValue("limit",Number(e.target.value))
-      handleSubmit(onSubmit)()
-    }
-
-    function nextPage () {
-        setValue("offset", getValues("offset") + getValues("limit"))
-        handleSubmit(onSubmit)()
-    }
-    function previousPage () {
-        setValue("offset", getValues("offset") - getValues("limit") )
-        handleSubmit(onSubmit)()
-    }
-
     return <React.Fragment>
-            <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-            <SearchField>
-                <label>{t("TL_TRADE_LICENSE_LABEL")}</label>
-                <TextInput name="licenseNumbers" inputRef={register({})} />
-            </SearchField>
-            <SearchField>
-                <label>{t("TL_TRADE_OWNER_S_NUMBER_LABEL")}</label>
-                <TextInput name="mobileNumber" inputRef={register({})} 
-                type="mobileNumber"
-                componentInFront={<div className="employee-card-input employee-card-input--front">+91</div>} 
-                maxlength={10}
-            {...(validation = {
-                  pattern: "[6-9]{1}[0-9]{9}",
-                  type: "tel",
-                  title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
-                })}/>
-            </SearchField>
-            <SearchField>
-                <label>{t("TL_SEARCH_TRADE_LICENSE_ISSUED_FROM")}</label>
-                <Controller
-                  render={(props) => <DatePicker date={props.value} onChange={props.onChange} />}
-                  name="fromDate"
-                  control={control}
-                />
-            </SearchField>
-            <SearchField>
-                <label>{t("TL_SEARCH_TRADE_LICENSE_ISSUED_TO")}</label>
-                <Controller
-                    render={(props) => <DatePicker date={props.value} onChange={props.onChange} />}
-                    name="toDate"
-                    control={control}
-                  />
-            </SearchField>
-            <SearchField>
-                <label>{t("TL_LOCALIZATION_TRADE_NAME")}</label>
-                <TextInput name="tradeName" inputRef={register({})}/>
-            </SearchField>
-            <SearchField className="submit">
-                <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
-                <p onClick={() => 
-                  {
-                    reset({ 
-                      licenseNumbers: "", 
-                      mobileNumber: "", 
-                      fromDate: "",
-                      toDate: "",
-                      offset: 0,
-                      limit: 10,
-                      sortBy: "commencementDate",
-                      sortOrder: "DESC",
-                      status: "",
-                      RenewalPending: true
-                  });
-                  previousPage ();
-                  }
-                }>{t(`ES_COMMON_CLEAR_ALL`)}</p>
-            </SearchField>
+        <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
+          <SearchFields {...{register, control, reset, tenantId, t}} />
         </SearchForm>
         {data?.display ?<Card style={{ marginTop: 20 }}>
             {
