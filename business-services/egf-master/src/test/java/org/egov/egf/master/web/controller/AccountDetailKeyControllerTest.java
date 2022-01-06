@@ -48,7 +48,7 @@ public class AccountDetailKeyControllerTest {
 	private ArgumentCaptor<List<AccountDetailKey>> captor;
 
 	private RequestJsonReader resources = new RequestJsonReader();
-	private static final String MESSAGE="default";
+	private static final String DEFAULT="default";
 
 	@Test
 	public void testCreate() throws IOException, Exception {
@@ -64,7 +64,7 @@ public class AccountDetailKeyControllerTest {
 
 		final List<AccountDetailKey> actualRequest = captor.getValue();
 		assertEquals("1", actualRequest.get(0).getKey());
-		assertEquals(MESSAGE, actualRequest.get(0).getTenantId());
+		assertEquals(DEFAULT, actualRequest.get(0).getTenantId());
 	}
 
 	@Test
@@ -93,7 +93,7 @@ public class AccountDetailKeyControllerTest {
 		final List<AccountDetailKey> actualRequest = captor.getValue();
 		assertEquals("2", actualRequest.get(0).getKey());
 		assertEquals("1", actualRequest.get(0).getAccountDetailType().getId());
-		assertEquals(MESSAGE, actualRequest.get(0).getTenantId());
+		assertEquals(DEFAULT, actualRequest.get(0).getTenantId());
 	}
 
 	@Test
@@ -120,7 +120,7 @@ public class AccountDetailKeyControllerTest {
 		List<AccountDetailKey> accountDetailKies = new ArrayList<AccountDetailKey>();
 		AccountDetailKey accountDetailKey = AccountDetailKey.builder().id("1").key("1")
 				.accountDetailType(getAccountDetailType()).build();
-		accountDetailKey.setTenantId(MESSAGE);
+		accountDetailKey.setTenantId(DEFAULT);
 		accountDetailKies.add(accountDetailKey);
 		return accountDetailKies;
 	}
@@ -129,7 +129,7 @@ public class AccountDetailKeyControllerTest {
 		List<AccountDetailKey> accountDetailKies = new ArrayList<AccountDetailKey>();
 		AccountDetailKey accountDetailKey = AccountDetailKey.builder().id("1").key("2")
 				.accountDetailType(getAccountDetailType()).build();
-		accountDetailKey.setTenantId(MESSAGE);
+		accountDetailKey.setTenantId(DEFAULT);
 		accountDetailKies.add(accountDetailKey);
 		return accountDetailKies;
 	}
@@ -137,7 +137,7 @@ public class AccountDetailKeyControllerTest {
 	private AccountDetailType getAccountDetailType() {
 		AccountDetailType accountDetailType = AccountDetailType.builder().id("1").name("name").tableName("contractor")
 				.fullyQualifiedName("abc/acb").active(true).build();
-		accountDetailType.setTenantId(MESSAGE);
+		accountDetailType.setTenantId(DEFAULT);
 		return accountDetailType;
 	}
 }

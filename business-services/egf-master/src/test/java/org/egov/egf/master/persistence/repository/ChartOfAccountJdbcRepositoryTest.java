@@ -39,7 +39,7 @@ public class ChartOfAccountJdbcRepositoryTest {
 	@Autowired
         private ChartOfAccountDetailJdbcRepository chartOfAccountDetailJdbcRepository;
 
-	private static final String NOTE="glcode";
+	private static final String GL_CODE="glcode";
 
 	private static final String BUDGET_CHECK_REQUIRED="budgetCheckRequired";
 
@@ -66,7 +66,7 @@ public class ChartOfAccountJdbcRepositoryTest {
 				new ChartOfAccountResultExtractor());
 		Map<String, Object> row = result.get(0);
 		assertThat(row.get("name")).isEqualTo(actualResult.getName());
-		assertThat(row.get(NOTE)).isEqualTo(actualResult.getGlcode());
+		assertThat(row.get(GL_CODE)).isEqualTo(actualResult.getGlcode());
 		assertThat(row.get(BUDGET_CHECK_REQUIRED)).isEqualTo(actualResult.getBudgetCheckRequired());
 	}
 	
@@ -79,7 +79,7 @@ public class ChartOfAccountJdbcRepositoryTest {
 				new ChartOfAccountResultExtractor());
 		Map<String, Object> row = result.get(0);
 		assertThat(row.get("name")).isEqualTo(actualResult.getName());
-		assertThat(row.get(NOTE)).isEqualTo(actualResult.getGlcode());
+		assertThat(row.get(GL_CODE)).isEqualTo(actualResult.getGlcode());
 	}
 	
 	@Test
@@ -87,7 +87,7 @@ public class ChartOfAccountJdbcRepositoryTest {
 	public void testSearch() {
 		Pagination<ChartOfAccount> page = (Pagination<ChartOfAccount>) chartOfAccountJdbcRepository.search(getChartOfAccountSearch());
 		assertThat(page.getPagedData().get(0).getName()).isEqualTo("name");
-		assertThat(page.getPagedData().get(0).getGlcode()).isEqualTo(NOTE);
+		assertThat(page.getPagedData().get(0).getGlcode()).isEqualTo(GL_CODE);
 		assertThat(page.getPagedData().get(0).getBudgetCheckRequired()).isEqualTo(true);
 	}
 	
@@ -100,7 +100,7 @@ public class ChartOfAccountJdbcRepositoryTest {
 				new ChartOfAccountResultExtractor());
 		assertThat(result.get(0).get("id")).isEqualTo("2");
 		assertThat(result.get(0).get("name")).isEqualTo("name");
-		assertThat(result.get(0).get(NOTE)).isEqualTo(NOTE);
+		assertThat(result.get(0).get(GL_CODE)).isEqualTo(GL_CODE);
 	}
 	
 /*	@Test
@@ -134,7 +134,7 @@ public class ChartOfAccountJdbcRepositoryTest {
 	
 	private ChartOfAccount getChartOfAccountDomain() {
 		ChartOfAccount chartOfAccount = ChartOfAccount.builder().id("B")
-				.glcode(NOTE).name("name")
+				.glcode(GL_CODE).name("name")
 				.description(DESCRIPTION).isActiveForPosting(true)
 				.type('B').classification((long) 123456).functionRequired(true)
 				.budgetCheckRequired(true).build();
@@ -150,7 +150,7 @@ public class ChartOfAccountJdbcRepositoryTest {
 				Map<String, Object> row = new HashMap<String, Object>() {
 					{
 						put("id", resultSet.getString("id"));
-						put(NOTE, resultSet.getString(NOTE));
+						put(GL_CODE, resultSet.getString(GL_CODE));
 						put("name", resultSet.getString("name"));
 						put("accountCodePurposeId", resultSet.getString("accountCodePurposeId"));
 						put(DESCRIPTION, resultSet.getString(DESCRIPTION));
@@ -196,7 +196,7 @@ public class ChartOfAccountJdbcRepositoryTest {
 	}
 	
 	private ChartOfAccount getParent(){
-		return ChartOfAccount.builder().id("1").glcode(NOTE).name("name")
+		return ChartOfAccount.builder().id("1").glcode(GL_CODE).name("name")
 				.isActiveForPosting(true).type(Character.valueOf('B')).classification(123456l)
 				.isSubLedger(true).accountCodePurpose(getAccountCodePurpose()).budgetCheckRequired(true)
 				.majorCode(MAJOR_CODE).functionRequired(true).build();

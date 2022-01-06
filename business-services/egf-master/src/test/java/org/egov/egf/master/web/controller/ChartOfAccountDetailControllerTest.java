@@ -54,7 +54,7 @@ public class ChartOfAccountDetailControllerTest {
 
 	private static final String DEFAULT="default";
 
-	private static final String MESSAGE="final";
+	private static final String FINAL="final";
 
 	private static final String CODE_83="830bf3dc60504244babfe228bdf80bac";
 
@@ -122,7 +122,7 @@ public class ChartOfAccountDetailControllerTest {
 		ChartOfAccountDetail chartOfAccountDetail = ChartOfAccountDetail.builder().build();
 		ChartOfAccount chartOfAccount = ChartOfAccount.builder().id(CODE_83).glcode("1201").name("finalfdf").description("accountNumber").build();
 		chartOfAccount.setTenantId(DEFAULT);
-		AccountDetailType accountDetailType = AccountDetailType.builder().id().name(MESSAGE).description(MESSAGE).tableName(MESSAGE).active(true).fullyQualifiedName(MESSAGE).build();
+		AccountDetailType accountDetailType = AccountDetailType.builder().id().name(FINAL).description(FINAL).tableName(FINAL).active(true).fullyQualifiedName(FINAL).build();
 		accountDetailType.setTenantId(DEFAULT);
 		chartOfAccountDetail.setTenantId(DEFAULT);
 		chartOfAccountDetail.setChartOfAccount(chartOfAccount);

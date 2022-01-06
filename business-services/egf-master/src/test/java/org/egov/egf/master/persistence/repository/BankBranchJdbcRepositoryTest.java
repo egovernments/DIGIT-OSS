@@ -40,7 +40,7 @@ public class BankBranchJdbcRepositoryTest {
 
 	private static final String DEFAULT="default";
 
-	private static final String MESSAGE="description";
+	private static final String DESCRIPTION="description";
 
 	@Before
 	public void setUp() throws Exception {
@@ -158,7 +158,7 @@ public class BankBranchJdbcRepositoryTest {
 						put("id", resultSet.getString("id"));
 						put("code", resultSet.getString("code"));
 						put("name", resultSet.getString("name"));
-						put(MESSAGE, resultSet.getString(MESSAGE));
+						put(DESCRIPTION, resultSet.getString(DESCRIPTION));
 						put("active", resultSet.getBoolean("active"));
 					}
 				};
@@ -190,7 +190,7 @@ public class BankBranchJdbcRepositoryTest {
 		bankBranch.setCode("code");
 		bankBranch.setName("name");
 		bankBranch.setAddress("address");
-		bankBranch.setDescription(MESSAGE);
+		bankBranch.setDescription(DESCRIPTION);
 		bankBranch.setActive(true);
 		bankBranch.setTenantId(DEFAULT);
 		return bankBranch;
@@ -201,7 +201,7 @@ public class BankBranchJdbcRepositoryTest {
 		bank.setId("1");
 		bank.setCode("code");
 		bank.setName("name");
-		bank.setDescription(MESSAGE);
+		bank.setDescription(DESCRIPTION);
 		bank.setType("type");
 		bank.setActive(true);
 		bank.setTenantId(DEFAULT);

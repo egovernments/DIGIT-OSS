@@ -33,7 +33,7 @@ public class InstrumentJdbcRepository extends JdbcRepository {
     private final InstrumentVoucherJdbcRepository instrumentVoucherJdbcRepository;
     private final DishonorReasonJdbcRepository dishonorReasonJdbcRepository;
 
-    private static final String MESSAGE=" and ";
+    private static final String AND=" and ";
 
     static {
         LOG.debug("init instrument");
@@ -92,97 +92,97 @@ public class InstrumentJdbcRepository extends JdbcRepository {
         // implement jdbc specfic search
         if (instrumentSearchEntity.getTenantId() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("tenantId =:tenantId");
             paramValues.put("tenantId", instrumentSearchEntity.getTenantId());
         }
         if (instrumentSearchEntity.getId() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("id =:id");
             paramValues.put("id", instrumentSearchEntity.getId());
         }
         if (instrumentSearchEntity.getTransactionNumber() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("transactionNumber =:transactionNumber");
             paramValues.put("transactionNumber", instrumentSearchEntity.getTransactionNumber());
         }
         if (instrumentSearchEntity.getTransactionDate() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("transactionDate =:transactionDate");
             paramValues.put("transactionDate", instrumentSearchEntity.getTransactionDate());
         }
         if (instrumentSearchEntity.getAmount() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("amount =:amount");
             paramValues.put("amount", instrumentSearchEntity.getAmount());
         }
         if (instrumentSearchEntity.getInstrumentTypeId() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("instrumentTypeid =:instrumentType");
             paramValues.put("instrumentType", instrumentSearchEntity.getInstrumentTypeId());
         }
         if (instrumentSearchEntity.getBankId() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("bankid =:bank");
             paramValues.put("bank", instrumentSearchEntity.getBankId());
         }
         if (instrumentSearchEntity.getBranchName() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("branchName =:branchName");
             paramValues.put("branchName", instrumentSearchEntity.getBranchName());
         }
         if (instrumentSearchEntity.getBankAccountId() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("bankAccountid =:bankAccount");
             paramValues.put("bankAccount", instrumentSearchEntity.getBankAccountId());
         }
         if (instrumentSearchEntity.getFinancialStatusId() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("financialStatusid =:financialStatus");
             paramValues.put("financialStatus", instrumentSearchEntity.getFinancialStatusId());
         }
         if (instrumentSearchEntity.getRemittanceVoucherId() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("remittanceVoucherId =:remittanceVoucherId");
             paramValues.put("remittanceVoucherId", instrumentSearchEntity.getRemittanceVoucherId());
         }
         if (instrumentSearchEntity.getTransactionType() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("transactionType =:transactionType");
             paramValues.put("transactionType", instrumentSearchEntity.getTransactionType());
         }
         if (instrumentSearchEntity.getPayee() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("payee =:payee");
             paramValues.put("payee", instrumentSearchEntity.getPayee());
         }
         if (instrumentSearchEntity.getDrawer() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("drawer =:drawer");
             paramValues.put("drawer", instrumentSearchEntity.getDrawer());
         }
         if (instrumentSearchEntity.getSurrenderReasonId() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("surrenderReasonid =:surrenderReason");
             paramValues.put("surrenderReason", instrumentSearchEntity.getSurrenderReasonId());
         }
         if (instrumentSearchEntity.getSerialNo() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("serialNo =:serialNo");
             paramValues.put("serialNo", instrumentSearchEntity.getSerialNo());
         }
@@ -200,7 +200,7 @@ public class InstrumentJdbcRepository extends JdbcRepository {
                 }
                 if (!idList.isEmpty()) {
                     if (params.length() > 0)
-                        params.append(MESSAGE);
+                        params.append(AND);
                     params.append("id in (:ids)");
                     paramValues.put("ids", idList);
                 }
@@ -209,27 +209,27 @@ public class InstrumentJdbcRepository extends JdbcRepository {
 
         if (instrumentSearchEntity.getIds() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("id in (:ids)");
             paramValues.put("ids", new ArrayList<String>(Arrays.asList(instrumentSearchEntity.getIds().split(","))));
         }
         if (instrumentSearchEntity.getFinancialStatuses() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("financialStatusId in (:financialStatuses)");
             paramValues.put("financialStatuses",
                     new ArrayList<String>(Arrays.asList(instrumentSearchEntity.getFinancialStatuses().split(","))));
         }
         if (instrumentSearchEntity.getInstrumentTypes() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(AND);
             params.append("instrumentTypeId in (:instrumentTypes)");
             paramValues.put("instrumentTypes",
                     new ArrayList<String>(Arrays.asList(instrumentSearchEntity.getInstrumentTypes().split(","))));
         }
         if (instrumentSearchEntity.getTransactionFromDate() != null && instrumentSearchEntity.getTransactionToDate() != null) {
             if (params.length() > 0)
-                params.append(MESSAGE);
+                params.append(ANDAND);
             params.append("transactionDate >= :fromDate and transactionDate <= :toDate");
             paramValues.put("fromDate", instrumentSearchEntity.getTransactionFromDate());
             paramValues.put("toDate", instrumentSearchEntity.getTransactionToDate());

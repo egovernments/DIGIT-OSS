@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class BankJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(BankJdbcRepository.class);
 
-	private static final String MESSAGE = " and ";
+	private static final String AND = " and ";
 
 	static {
 		LOG.debug("init bank");
@@ -71,56 +71,56 @@ public class BankJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
 		if (bankSearchEntity.getTenantId() != null) {
 			if (params.length() > 0) {
-				params.append(MESSAGE);
+				params.append(AND);
 			}
 			params.append("tenantId =:tenantId");
 			paramValues.put("tenantId", bankSearchEntity.getTenantId());
 		}
 		if (bankSearchEntity.getId() != null) {
 			if (params.length() > 0) {
-				params.append(MESSAGE);
+				params.append(AND);
 			}
 			params.append("id =:id");
 			paramValues.put("id", bankSearchEntity.getId());
 		}
 		if (bankSearchEntity.getIds() != null) {
 			if (params.length() > 0) {
-				params.append(MESSAGE);
+				params.append(AND);
 			}
 			params.append("id in(:ids) ");
 			paramValues.put("ids", new ArrayList<String>(Arrays.asList(bankSearchEntity.getIds().split(","))));
 		}
 		if (bankSearchEntity.getCode() != null) {
 			if (params.length() > 0) {
-				params.append(MESSAGE);
+				params.append(AND);
 			}
 			params.append("code =:code");
 			paramValues.put("code", bankSearchEntity.getCode());
 		}
 		if (bankSearchEntity.getName() != null) {
 			if (params.length() > 0) {
-				params.append(MESSAGE);
+				params.append(AND);
 			}
 			params.append("name =:name");
 			paramValues.put("name", bankSearchEntity.getName());
 		}
 		if (bankSearchEntity.getDescription() != null) {
 			if (params.length() > 0) {
-				params.append(MESSAGE);
+				params.append(AND);
 			}
 			params.append("description =:description");
 			paramValues.put("description", bankSearchEntity.getDescription());
 		}
 		if (bankSearchEntity.getActive() != null) {
 			if (params.length() > 0) {
-				params.append(MESSAGE);
+				params.append(AND);
 			}
 			params.append("active =:active");
 			paramValues.put("active", bankSearchEntity.getActive());
 		}
 		if (bankSearchEntity.getType() != null) {
 			if (params.length() > 0) {
-				params.append(MESSAGE);
+				params.append(AND);
 			}
 			params.append("type =:type");
 			paramValues.put("type", bankSearchEntity.getType());

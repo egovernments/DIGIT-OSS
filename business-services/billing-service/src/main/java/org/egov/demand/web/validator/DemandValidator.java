@@ -93,9 +93,7 @@ public class DemandValidator implements Validator {
 	@Autowired
 	private DemandRepository demandRepository;
 
-	private final String MESSAGE="Demands[";
-
-	private final String DEMANDS="Demands";
+	private static final String DEMANDS="Demands";
 
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -179,7 +177,7 @@ public class DemandValidator implements Validator {
 		for (Demand demand : oldDemands) {
 			Demand dbDemand = demandMap.get(demand.getId());
 			if (dbDemand == null)
-				errors.rejectValue(MESSAGE + index + "].id", "DEMAND_INVALID_ID",
+				errors.rejectValue("Demands[" + index + "].id", "DEMAND_INVALID_ID",
 						"the given demandId value is invalid and cannot be updated");
 			else {
 				for (DemandDetail demandDetail : dbDemand.getDemandDetails()) {
@@ -222,7 +220,7 @@ public class DemandValidator implements Validator {
 				for (Demand demandFromMap : dbDemandMap.get(demand.getConsumerCode())) {
 					if (demand.getTaxPeriodFrom().equals(demandFromMap.getTaxPeriodFrom())
 							&& demand.getTaxPeriodTo().equals(demandFromMap.getTaxPeriodTo()))
-						errors.rejectValue(MESSAGE + index + "].consumerCode", "DEMAND_DUPLICATE_CONSUMERCODE",
+						errors.rejectValue("Demands[" + index + "].consumerCode", "DEMAND_DUPLICATE_CONSUMERCODE",
 								"the consumerCode value : " + demand.getConsumerCode() + " with tax period from "
 										+ demand.getTaxPeriodFrom() + " and tax period to " + demand.getTaxPeriodTo()
 										+ " already exists for businessService: " + demand.getBusinessService());
@@ -291,13 +289,13 @@ public class DemandValidator implements Validator {
 							isToPeriodAvailable = true;
 					}
 					if (!(isFromPeriodAvailable && isToPeriodAvailable))
-						errors.rejectValue(MESSAGE + index + "]", "DEMAND_BAD_TAXPERIOD",
+						errors.rejectValue("Demands[" + index + "]", "DEMAND_BAD_TAXPERIOD",
 								"the given taxPeriod value periodFrom : '" + demand.getTaxPeriodFrom()
 										+ "and periodTo : " + demand.getTaxPeriodTo()
 										+ "'in Demand is invalid, please give a valid taxPeriod");
 				}
 			} else {
-				errors.rejectValue(MESSAGE + index + "].businessService", "DEMAND_BAD_BUSINESS_SERVICE_TAXPERIOD",
+				errors.rejectValue("Demands[" + index + "].businessService", "DEMAND_BAD_BUSINESS_SERVICE_TAXPERIOD",
 						"no taxperiods found for value of Demand.businessService : " + demand.getBusinessService()
 								+ " please give a valid businessService code");
 			}

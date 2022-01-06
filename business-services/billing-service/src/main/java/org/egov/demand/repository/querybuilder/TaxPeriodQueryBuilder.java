@@ -57,8 +57,6 @@ public class TaxPeriodQueryBuilder {
 
     private static final Logger logger = LoggerFactory.getLogger(TaxPeriodRepository.class);
 
-	private static final String MESSAGE=" AND service IN ";
-
 	private static final String AND="' and ";
 
     private static final String BASE_QUERY = "SELECT * FROM EGBS_TAXPERIOD taxperiod ";
@@ -109,15 +107,15 @@ public class TaxPeriodQueryBuilder {
 			if (service != null && !service.isEmpty() && service.size() == 1 && periodCycle!=null) {
 				selectQuery.append(
 						" AND (fromdate >=  CASE WHEN ((SELECT fromdate FROM egbs_taxperiod WHERE tenantId =? AND ( ? BETWEEN fromdate AND  todate)  "
-								+ MESSAGE + getQueryForCollection(service) + " AND periodcycle=?) NOTNULL) "
+								+ " AND service IN " + getQueryForCollection(service) + " AND periodcycle=?) NOTNULL) "
 								+ "THEN "
 								+ "( SELECT fromdate FROM egbs_taxperiod WHERE tenantId =? AND ( ? BETWEEN fromdate AND  todate)" 
-								+ MESSAGE+ getQueryForCollection(service) + " AND periodcycle=?) "
+								+ " AND service IN "+ getQueryForCollection(service) + " AND periodcycle=?) "
 								+ "ELSE " 
 								+ "(SELECT min(fromdate) FROM egbs_taxperiod WHERE tenantId =?)"
 								+ " END"
 								+ " AND todate <= ( SELECT todate FROM egbs_taxperiod WHERE tenantId = ? AND (? BETWEEN fromdate AND  todate) "
-								+ MESSAGE + getQueryForCollection(service) + " AND periodcycle=?))");
+								+ " AND service IN " + getQueryForCollection(service) + " AND periodcycle=?))");
 				
 				preparedStatementValues.add(tenantId);
 				preparedStatementValues.add(taxPeriodCriteria.getFromDate());

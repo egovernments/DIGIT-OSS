@@ -46,8 +46,6 @@ public class FunctionServiceTest {
 
 	private static final String DEFAULT="default";
 
-
-
 	@Test
 	public final void testCreate() {
 		when(functionRepository.findById(any(Function.class))).thenReturn(getParentFunction());

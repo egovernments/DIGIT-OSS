@@ -40,7 +40,7 @@ public class ChartOfAccountService {
 
 	private static final String CHART_OF_ACCOUNT="chartOfAccount";
 
-	private static final String gl_code="glcode";
+	private static final String GL_CODE="glcode";
 
 	private BindingResult validate(List<ChartOfAccount> chartofaccounts, String method, BindingResult errors) {
 
@@ -60,8 +60,8 @@ public class ChartOfAccountService {
                                 errors.addError(new FieldError(CHART_OF_ACCOUNT , "name", chartOfAccount.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
-                            if (!chartOfAccountRepository.uniqueCheck(gl_code , chartOfAccount)) {
-                                errors.addError(new FieldError(CHART_OF_ACCOUNT , gl_code , chartOfAccount.getGlcode(), false,
+                            if (!chartOfAccountRepository.uniqueCheck(GL_CODE , chartOfAccount)) {
+                                errors.addError(new FieldError(CHART_OF_ACCOUNT , GL_CODE , chartOfAccount.getGlcode(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
@@ -79,8 +79,8 @@ public class ChartOfAccountService {
                                 errors.addError(new FieldError(CHART_OF_ACCOUNT , "name", chartOfAccount.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
-                            if (!chartOfAccountRepository.uniqueCheck(gl_code , chartOfAccount)) {
-                                errors.addError(new FieldError(CHART_OF_ACCOUNT , gl_code , chartOfAccount.getGlcode(), false,
+                            if (!chartOfAccountRepository.uniqueCheck(GL_CODE , chartOfAccount)) {
+                                errors.addError(new FieldError(CHART_OF_ACCOUNT , GL_CODE , chartOfAccount.getGlcode(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }

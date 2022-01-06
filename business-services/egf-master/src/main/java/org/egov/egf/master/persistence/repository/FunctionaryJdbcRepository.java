@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class FunctionaryJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(FunctionaryJdbcRepository.class);
 
-	private static final String MESSAGE=" and ";
+	private static final String AND=" and ";
 
 	static {
 		LOG.debug("init functionary");
@@ -71,42 +71,42 @@ public class FunctionaryJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
 		if (functionarySearchEntity.getTenantId() != null) {
                     if (params.length() > 0) {
-                        params.append(MESSAGE);
+                        params.append(AND);
                     }
                     params.append("tenantId =:tenantId");
                     paramValues.put("tenantId", functionarySearchEntity.getTenantId());
                 }
 		if (functionarySearchEntity.getId() != null) {
 			if (params.length() > 0) {
-				params.append(MESSAGE);
+				params.append(AND);
 			}
 			params.append("id =:id");
 			paramValues.put("id", functionarySearchEntity.getId());
 		}
 		if (functionarySearchEntity.getIds() != null) {
                           if (params.length() > 0) {
-                                  params.append(MESSAGE);
+                                  params.append(AND);
                           }
                           params.append("id in(:ids) ");
                           paramValues.put("ids", new ArrayList<String>(Arrays.asList(functionarySearchEntity.getIds().split(","))));
                 }
 		if (functionarySearchEntity.getCode() != null) {
 			if (params.length() > 0) {
-				params.append(MESSAGE);
+				params.append(AND);
 			}
 			params.append("code =:code");
 			paramValues.put("code", functionarySearchEntity.getCode());
 		}
 		if (functionarySearchEntity.getName() != null) {
 			if (params.length() > 0) {
-				params.append(MESSAGE);
+				params.append(AND);
 			}
 			params.append("name =:name");
 			paramValues.put("name", functionarySearchEntity.getName());
 		}
 		if (functionarySearchEntity.getActive() != null) {
 			if (params.length() > 0) {
-				params.append(MESSAGE);
+				params.append(AND);
 			}
 			params.append("active =:active");
 			paramValues.put("active", functionarySearchEntity.getActive());
