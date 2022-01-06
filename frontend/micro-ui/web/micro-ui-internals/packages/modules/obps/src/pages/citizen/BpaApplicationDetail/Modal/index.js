@@ -124,7 +124,7 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action, applicat
       {termsData ?
         <div>
           <div style={{ padding: "10px" }}>
-            {config?.data && config?.data?.map((value, index) => <div>{`${index + 1}. ${value}`}</div>)}
+            {config?.data && config?.data?.map((value, index) => <div>{`${value}`}</div>)}
           </div>
           <div style={{display: "flex", justifyContent: "center"}}>
             <ButtonSelector label={t("BPA_GO_BACK_LABEL")} onSubmit={closeModal} style={{minWidth: "240px"}}/>
