@@ -22,6 +22,7 @@ const TopBar = ({
     userOptions,
     handleUserDropdownSelection,
     logoUrl,
+    showLanguageChange=true
   } ) => {
     
     const CitizenHomePageTenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code
@@ -92,7 +93,7 @@ const TopBar = ({
       </p>)}
         {!mobileView && <div className={mobileView ? "right" : "flex-right right w-80 column-gap-15"} style={!loggedin?{width:'80%'}:{}}>
           <div className="left">
-            <ChangeLanguage dropdown={true} />
+           {showLanguageChange&& <ChangeLanguage dropdown={true} />}
           </div>
           {userDetails?.access_token && (
             <div className="left">
