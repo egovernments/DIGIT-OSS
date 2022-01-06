@@ -85,13 +85,19 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
   }
 
   const getMainDivStyles = () => {
-    if(window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
-      return  { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" }
+    if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
+      return { lineHeight: "19px", maxWidth: "950px", minWidth: "280px" };
     } else if (checkLocation) {
       return  { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" }
     } else {
       return {}
     }
+  }
+
+  const getTextValue = (value) => {
+    if (value?.skip) return value.value;
+    else if(value?.isUnit) return value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("N/A");
+    else return value?.value ? getTranslatedValues(value?.value, value?.isNotTranslated) : t("N/A");
   }
 
   return (
@@ -100,7 +106,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
         <React.Fragment key={index}>
           <div style={getMainDivStyles()}>
             {index === 0 && !detail.asSectionHeader ? (
-              <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>
+              <CardSubHeader style={{ marginBottom: "16px", fontSize: "24px" }}>{t(detail.title)}</CardSubHeader>
             ) : (
               <React.Fragment>
                 <CardSectionHeader style={index == 0 && checkLocation ? { marginBottom: "16px" } : { marginBottom: "16px", marginTop: "32px" }}>
@@ -121,7 +127,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
                     <Row
                       key={t(value.title)}
                       label={isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
-                      text={value?.skip ? value.value : getTranslatedValues(value?.value, value?.isNotTranslated) || "N/A"}
+                      text={getTextValue(value)}
                       last={index === detail?.values?.length - 1}
                       caption={value.caption}
                       className="border-none"

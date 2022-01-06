@@ -48,7 +48,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
             )}
           </div>
           {loadingApplicationTypes ? <Loader/> : <div>
-            <div className="filter-label">{t("BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL")}</div>
+            <div className="filter-label sub-filter-label">{t("BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL")}</div>
             {/* <Dropdown t={t} option={applicationTypes} selected={_searchParams?.applicationType} optionKey={"i18nKey"} select={(arg) => handleChange({ applicationType: arg })} /> */}
             {applicationTypes.map(applicationType => {
                 return <CheckBox
@@ -68,7 +68,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
             <Dropdown t={t} option={filteredServiceTypes} optionKey={"i18nKey"} selected={_searchParams?.serviceType} select={(arg) => handleChange({ serviceType: arg })} />
           </div> : null} */}
           {availableBusinessServicesOptions?.length > 0 ? <div>
-            <div className="filter-label">{t("ES_INBOX_RISK_TYPE")}</div>
+            <div className="filter-label sub-filter-label">{t("ES_INBOX_RISK_TYPE")}</div>
             <RadioButtons
                 onSelect={(e) => handleChange({businessService: e.code})}
                 selectedOption={availableBusinessServicesOptions.filter((option) => option.code === _searchParams?.businessService)[0]}

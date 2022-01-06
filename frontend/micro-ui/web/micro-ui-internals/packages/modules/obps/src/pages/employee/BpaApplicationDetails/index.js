@@ -352,6 +352,7 @@ const BpaApplicationDetail = () => {
         businessService={workflowDetails?.data?.applicationBusinessService ? workflowDetails?.data?.applicationBusinessService : data?.applicationData?.businessService}
         moduleCode="BPA"
         showToast={showToast}
+        ActionBarStyle={{paddingRight:"50px"}}
         setShowToast={setShowToast}
         closeToast={closeToast}
         statusAttribute={"state"}

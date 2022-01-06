@@ -1,4 +1,4 @@
-import { CardHeader, Header, Toast, Card, StatusTable, Row, Loader, Menu, PDFSvg, SubmitBar, LinkButton, ActionBar, CheckBox, MultiLink, CardText } from "@egovernments/digit-ui-react-components";
+import { CardHeader, Header, Toast, Card, StatusTable, Row, Loader, Menu, PDFSvg, SubmitBar, LinkButton, ActionBar, CheckBox, MultiLink, CardText, CardSubHeader } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useQueryClient } from "react-query";
@@ -356,7 +356,7 @@ const BpaApplicationDetail = () => {
   return (
     <Fragment>
       <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
-        <Header style={{marginLeft: "0px"}}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
+        <Header styles={{fontSize: "32px"}}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
         {dowloadOptions && dowloadOptions.length > 0 && <MultiLink
           className="multilinkWrapper"
           onHeadClick={() => setShowOptions(!showOptions)}
@@ -371,19 +371,23 @@ const BpaApplicationDetail = () => {
           <div>
             {!detail?.isNotAllowed ? <Card key={index} style={!detail?.additionalDetails?.fiReport && detail?.title === "" ? { marginTop: "-30px" } : {}}>
 
-              {!detail?.isTitleVisible ? <CardHeader>{t(detail?.title)}</CardHeader> : null}
+              {!detail?.isTitleVisible ? <CardSubHeader style={{fontSize: "24px"}}>{t(detail?.title)}</CardSubHeader> : null}
               
               <div style={detail?.isBackGroundColor ? { marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", maxWidth: "950px", minWidth: "280px" } : {}}>
 
               <StatusTable>
                 {/* to get common values */}
-                {(detail?.isCommon && detail?.values?.length > 0) ? detail?.values?.map((value) => (
-                  <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
-                )) : null}
-
+                {(detail?.isCommon && detail?.values?.length > 0) ? detail?.values?.map((value) => {
+                  if (value?.isUnit) return <Row className="border-none" label={t(value?.title)} text={value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("CS_NA")} />
+                  else return <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
+                }) : null}
                 {/* to get additional common values */}
                 {detail?.additionalDetails?.values?.length > 0 ? detail?.additionalDetails?.values?.map((value) => (
-                    !detail?.isTitleRepeat ? <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} /> : null 
+                    <div>
+                    {!detail?.isTitleRepeat && !value?.isHeader && !value?.isUnit ? <Row className="border-none" label={t(value?.title)} text={value?.value ? getTranslatedValues(value?.value, value?.isNotTranslated) : t("CS_NA")} /> : null}
+                    {!detail?.isTitleRepeat && value?.isUnit ? <Row className="border-none" label={t(value?.title)} text={value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("CS_NA")} /> : null}
+                    {!detail?.isTitleRepeat && value?.isHeader ? <CardSubHeader style={{fontSize: "20px"}}>{t(value?.title)}</CardSubHeader> : null}
+                    </div>
                 )) : null}
 
                 {/* to get subOccupancyValues values */}
@@ -414,10 +418,10 @@ const BpaApplicationDetail = () => {
 
                 {/* to get Document values */}
                 {(detail?.isDocumentDetails && detail?.additionalDetails?.obpsDocuments?.[0]?.values) && (
-                  <Fragment>
-                    <Row className="border-none" label={t(detail?.additionalDetails?.obpsDocuments?.[0].title)} />
+                  <div style={{marginTop: "-8px"}}>
+                    {/* <Row className="border-none" label={t(detail?.additionalDetails?.obpsDocuments?.[0].title)} /> */}
                     <DocumentDetails documents={getOrderedDocs(detail?.additionalDetails?.obpsDocuments?.[0]?.values)} />
-                  </Fragment>
+                  </div>
                 )}
 
                 {/* to get FieldInspection values */}
@@ -427,7 +431,7 @@ const BpaApplicationDetail = () => {
                 {detail?.additionalDetails?.noc?.length > 0 ? detail?.additionalDetails?.noc.map((nocob, ind) => (
                   <div key={ind} style={{ marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", maxWidth: "960px", minWidth: "280px" }}>
                     <StatusTable>
-                      <Row className="border-none" label={t(`${`BPA_${detail?.additionalDetails?.data?.nocType}_HEADER`}`)}></Row>
+                      <Row className="border-none" label={t(`${`BPA_${detail?.additionalDetails?.data?.nocType}_HEADER`}`)} labelStyle={{fontSize: "20px"}}></Row>
                       <Row className="border-none" label={t(`${detail?.values?.[0]?.title}`)} textStyle={{ marginLeft: "10px" }} text={getTranslatedValues(detail?.values?.[0]?.value, detail?.values?.[0]?.isNotTranslated)} />
                       <Row className="border-none" label={t(`${detail?.values?.[1]?.title}`)} textStyle={detail?.values?.[1]?.value == "APPROVED" || detail?.values?.[1]?.value == "AUTO_APPROVED" ? { marginLeft: "10px", color: "#00703C" } : { marginLeft: "10px", color: "#D4351C" }} text={getTranslatedValues(detail?.values?.[1]?.value, detail?.values?.[1]?.isNotTranslated)} />
                       { detail?.values?.[2]?.value ? <Row className="border-none" label={t(`${detail?.values?.[2]?.title}`)} textStyle={{ marginLeft: "10px" }} text={getTranslatedValues(detail?.values?.[2]?.value, detail?.values?.[2]?.isNotTranslated)} /> : null }
