@@ -18,7 +18,6 @@ public class InstrumentMapper {
 
     private InstrumentTypeMapper typeMapper = new InstrumentTypeMapper();
     private SurrenderReasonMapper srMapper = new SurrenderReasonMapper();
-//    not used
     private DishonorReasonMapper drMapper = new DishonorReasonMapper();
 
     public Instrument toDomain(InstrumentContract contract) {

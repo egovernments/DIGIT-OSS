@@ -57,10 +57,6 @@ public class TaxPeriodQueryBuilder {
 
     private static final Logger logger = LoggerFactory.getLogger(TaxPeriodRepository.class);
 
-	private String string1=" AND service IN ";
-
-	private String string2="' and ";
-
     private static final String BASE_QUERY = "SELECT * FROM EGBS_TAXPERIOD taxperiod ";
 
     public final String insertQuery = "INSERT INTO public.egbs_taxperiod(id, service, code, fromdate, todate,"
@@ -109,15 +105,15 @@ public class TaxPeriodQueryBuilder {
 			if (service != null && !service.isEmpty() && service.size() == 1 && periodCycle!=null) {
 				selectQuery.append(
 						" AND (fromdate >=  CASE WHEN ((SELECT fromdate FROM egbs_taxperiod WHERE tenantId =? AND ( ? BETWEEN fromdate AND  todate)  "
-								+ string1 + getQueryForCollection(service) + " AND periodcycle=?) NOTNULL) "
+								+ " AND service IN " + getQueryForCollection(service) + " AND periodcycle=?) NOTNULL) "
 								+ "THEN "
 								+ "( SELECT fromdate FROM egbs_taxperiod WHERE tenantId =? AND ( ? BETWEEN fromdate AND  todate)" 
-								+ string1+ getQueryForCollection(service) + " AND periodcycle=?) "
+								+ " AND service IN "+ getQueryForCollection(service) + " AND periodcycle=?) "
 								+ "ELSE " 
 								+ "(SELECT min(fromdate) FROM egbs_taxperiod WHERE tenantId =?)"
 								+ " END"
 								+ " AND todate <= ( SELECT todate FROM egbs_taxperiod WHERE tenantId = ? AND (? BETWEEN fromdate AND  todate) "
-								+ string1 + getQueryForCollection(service) + " AND periodcycle=?))");
+								+ " AND service IN " + getQueryForCollection(service) + " AND periodcycle=?))");
 				
 				preparedStatementValues.add(tenantId);
 				preparedStatementValues.add(taxPeriodCriteria.getFromDate());
@@ -170,11 +166,11 @@ public class TaxPeriodQueryBuilder {
 		
 			if (StringUtils.isNotBlank(taxPeriod.getService()))
 				whereClause = whereClause.append(" taxperiod.service = '").append(taxPeriod.getService())
-						.append(string2);
+						.append("' and ");
 			if (StringUtils.isNotBlank(taxPeriod.getCode()))
-				whereClause = whereClause.append(" taxperiod.code = '").append(taxPeriod.getCode()).append(string2);
+				whereClause = whereClause.append(" taxperiod.code = '").append(taxPeriod.getCode()).append("' and ");
 			if ("edit".equalsIgnoreCase(mode))
-				whereClause = whereClause.append(" taxperiod.id != '").append(taxPeriod.getId()).append(string2);
+				whereClause = whereClause.append(" taxperiod.id != '").append(taxPeriod.getId()).append("' and ");
 			if (StringUtils.isNotBlank(taxPeriod.getTenantId()))
 				whereClause = whereClause.append(" taxperiod.tenantId = '").append(taxPeriod.getTenantId())
 						.append("' and (( ");

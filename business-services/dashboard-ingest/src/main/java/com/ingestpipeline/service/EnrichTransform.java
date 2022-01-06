@@ -32,7 +32,6 @@ public class EnrichTransform {
     private static final String CONFIGROOT = "config/";
     private static final String VERSION = "v1";
     private static final String ENHANCE = "enhance";
-    private static final String string1="_source";
 
 
 
@@ -54,7 +53,7 @@ public class EnrichTransform {
             LOGGER.info("ChainrSpecJSON::" + chainrSpecJSON);
             Chainr chainr = Chainr.fromSpec( chainrSpecJSON );
 
-            Object indexData = rawResponseNode.keySet().contains(string1) ? ((Map)rawResponseNode.get(string1)).get("Data") : null;
+            Object indexData = rawResponseNode.keySet().contains("_source") ? ((Map)rawResponseNode.get("_source")).get("Data") : null;
             transNode = indexData!= null ? chainr.transform(indexData) : null;
 
 		} catch (Exception e) {
@@ -89,7 +88,7 @@ public class EnrichTransform {
             for (Object object : rawResponseList) {
             	if(object instanceof Map) {
             		Map rawResponseNode = (Map) object;
-            		Object indexData = rawResponseNode.keySet().contains(string1) ? ((Map)rawResponseNode.get(string1)).get("Data") : null;
+            		Object indexData = rawResponseNode.keySet().contains("_source") ? ((Map)rawResponseNode.get("_source")).get("Data") : null;
                     transNode = indexData!= null ? chainr.transform(indexData) : null;
                     response.add(transNode);
             	}

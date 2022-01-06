@@ -48,8 +48,6 @@ public class FunctionControllerTest {
 
 	private RequestJsonReader resources = new RequestJsonReader();
 
-	private String string1="default";
-
 	@Test
 	public void testCreate() throws IOException, Exception {
 		when(functionService.create(any(List.class), any(BindingResult.class), any(RequestInfo.class)))
@@ -65,7 +63,7 @@ public class FunctionControllerTest {
 		final List<Function> actualRequest = captor.getValue();
 		assertEquals("name", actualRequest.get(0).getName());
 		assertEquals("code", actualRequest.get(0).getCode());
-		assertEquals(string1, actualRequest.get(0).getTenantId());
+		assertEquals("default", actualRequest.get(0).getTenantId());
 	}
 
 	@Test
@@ -94,7 +92,7 @@ public class FunctionControllerTest {
 		final List<Function> actualRequest = captor.getValue();
 		assertEquals("nameU", actualRequest.get(0).getName());
 		assertEquals("codeU", actualRequest.get(0).getCode());
-		assertEquals(string1, actualRequest.get(0).getTenantId());
+		assertEquals("default", actualRequest.get(0).getTenantId());
 	}
 
 	@Test
@@ -119,7 +117,7 @@ public class FunctionControllerTest {
 	private List<Function> getFunctions() {
 		List<Function> functions = new ArrayList<Function>();
 		Function function = Function.builder().name("name").code("code").level(1).active(true).build();
-		function.setTenantId(string1);
+		function.setTenantId("default");
 		functions.add(function);
 		return functions;
 	}
@@ -127,7 +125,7 @@ public class FunctionControllerTest {
 	private List<Function> getUpdateFunctions() {
 		List<Function> functions = new ArrayList<Function>();
 		Function function = Function.builder().name("nameU").code("codeU").active(true).id("1").level(2).build();
-		function.setTenantId(string1);
+		function.setTenantId("default");
 		functions.add(function);
 		return functions;
 	}

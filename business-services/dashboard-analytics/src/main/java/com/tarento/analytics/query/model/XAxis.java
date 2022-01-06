@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class XAxis {
 
-	private Map<String, Object> aggregation;
+	public 	Map<String, Object> aggregation;
 
 	public Map<String, Object> getAggregation() {
 		return aggregation;
@@ -13,4 +13,6 @@ public class XAxis {
 	public void setAggregation(Map<String, Object> aggregation) {
 		this.aggregation = aggregation;
 	}
+
+
 }

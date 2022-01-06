@@ -38,12 +38,6 @@ public class AccountEntityJdbcRepositoryTest {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private String entity="entity";
-
-    private String string="default";
-
-    private String account="accountDetailTypeId";
-
     @Before
     public void setUp() throws Exception {
         accountEntityJdbcRepository = new AccountEntityJdbcRepository(namedParameterJdbcTemplate);
@@ -54,8 +48,8 @@ public class AccountEntityJdbcRepositoryTest {
     public void test_create() {
 
         AccountEntityEntity accountEntity = AccountEntityEntity.builder().id("1").code("code").name("name").active(true)
-                .accountDetailTypeId(getAccountDetaialType().getId()).description(entity).build();
-        accountEntity.setTenantId(string);
+                .accountDetailTypeId(getAccountDetaialType().getId()).description("entity").build();
+        accountEntity.setTenantId("default");
         AccountEntityEntity actualResult = accountEntityJdbcRepository.create(accountEntity);
 
         List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_accountEntity",
@@ -64,7 +58,7 @@ public class AccountEntityJdbcRepositoryTest {
         assertThat(row.get("id")).isEqualTo(actualResult.getId());
         assertThat(row.get("name")).isEqualTo(actualResult.getName());
         assertThat(row.get("code")).isEqualTo(actualResult.getCode());
-        assertThat(row.get(account)).isEqualTo(actualResult.getAccountDetailTypeId());
+        assertThat(row.get("accountDetailTypeId")).isEqualTo(actualResult.getAccountDetailTypeId());
 
     }
 
@@ -73,7 +67,7 @@ public class AccountEntityJdbcRepositoryTest {
     public void test_create_with_tenantId_null() {
 
         AccountEntityEntity accountEntity = AccountEntityEntity.builder().code("code").name("name").active(true)
-                .accountDetailTypeId(getAccountDetaialType().getId()).description(entity).build();
+                .accountDetailTypeId(getAccountDetaialType().getId()).description("entity").build();
         accountEntityJdbcRepository.create(accountEntity);
 
     }
@@ -83,8 +77,8 @@ public class AccountEntityJdbcRepositoryTest {
     public void test_update() {
 
         AccountEntityEntity accountEntity = AccountEntityEntity.builder().code("codeU").name("nameU").active(true).id("1")
-                .accountDetailTypeId(getAccountDetaialType().getId()).description(entity).build();
-        accountEntity.setTenantId(string);
+                .accountDetailTypeId(getAccountDetaialType().getId()).description("entity").build();
+        accountEntity.setTenantId("default");
         AccountEntityEntity actualResult = accountEntityJdbcRepository.update(accountEntity);
 
         List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_accountEntity",
@@ -123,7 +117,7 @@ public class AccountEntityJdbcRepositoryTest {
     public void test_find_by_id() {
 
         AccountEntityEntity accountEntityEntity = AccountEntityEntity.builder().id("1").build();
-        accountEntityEntity.setTenantId(string);
+        accountEntityEntity.setTenantId("default");
         AccountEntityEntity result = accountEntityJdbcRepository.findById(accountEntityEntity);
         assertThat(result.getId()).isEqualTo("1");
         assertThat(result.getName()).isEqualTo("name");
@@ -136,7 +130,7 @@ public class AccountEntityJdbcRepositoryTest {
     public void test_find_by_invalid_id_should_return_null() {
 
         AccountEntityEntity accountEntityEntity = AccountEntityEntity.builder().id("5").build();
-        accountEntityEntity.setTenantId(string);
+        accountEntityEntity.setTenantId("default");
         AccountEntityEntity result = accountEntityJdbcRepository.findById(accountEntityEntity);
         assertNull(result);
 
@@ -174,7 +168,7 @@ public class AccountEntityJdbcRepositoryTest {
         accountEntitySearch.setCode("code");
         accountEntitySearch.setActive(true);
         accountEntitySearch.setAccountDetailType(getAccountDetaialType());
-        accountEntitySearch.setDescription(entity);
+        accountEntitySearch.setDescription("entity");
         accountEntitySearch.setPageSize(500);
         accountEntitySearch.setOffset(0);
         accountEntitySearch.setSortBy("name desc");
@@ -185,7 +179,7 @@ public class AccountEntityJdbcRepositoryTest {
 
         AccountDetailType accountDetailType = AccountDetailType.builder().id("1").name("name").tableName("table")
                 .fullyQualifiedName("abc/table").build();
-        accountDetailType.setTenantId(string);
+        accountDetailType.setTenantId("default");
         return accountDetailType;
     }
 
@@ -200,7 +194,7 @@ public class AccountEntityJdbcRepositoryTest {
                         put("name", resultSet.getString("name"));
                         put("code", resultSet.getString("code"));
                         put("active", resultSet.getBoolean("active"));
-                        put(account, resultSet.getString(account));
+                        put("accountDetailTypeId", resultSet.getString("accountDetailTypeId"));
                         put("createdBy", resultSet.getString("createdBy"));
                         put("createdDate", resultSet.getString("createdDate"));
                         put("lastModifiedBy", resultSet.getString("lastModifiedBy"));

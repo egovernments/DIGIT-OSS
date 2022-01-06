@@ -44,9 +44,9 @@ public class FunctionServiceTest {
 	private RequestInfo requestInfo = new RequestInfo();
 	private List<Function> functions = new ArrayList<>();
 
-	private String string1="default";
-
-
+	@Before
+	public void setup() {
+	}
 
 	@Test
 	public final void testCreate() {
@@ -116,7 +116,7 @@ public class FunctionServiceTest {
 		expextedResult.add(getParentFunction());
 		List<Function> functions = new ArrayList<>();
 		functions.add(getFunction());
-		ApplicationThreadLocals.setTenantId(string1);
+		ApplicationThreadLocals.setTenantId("default");
 		when(functionRepository.findById(any(Function.class))).thenReturn(null);
 		functionService.fetchRelated(functions);
 	}
@@ -124,7 +124,7 @@ public class FunctionServiceTest {
 	private List<Function> getFunctions() {
 		List<Function> functions = new ArrayList<Function>();
 		Function function = Function.builder().id("1").name("name").code("code").level(1).parentId(getParentFunction()).active(true).build();
-		function.setTenantId(string1);
+		function.setTenantId("default");
 		functions.add(function);
 		return functions;
 	}
@@ -134,14 +134,14 @@ public class FunctionServiceTest {
 		functionSearch.setPageSize(0);
 		functionSearch.setOffset(0);
 		functionSearch.setSortBy("Sort");
-		functionSearch.setTenantId(string1);
+		functionSearch.setTenantId("default");
 		return functionSearch;
 	}
 
 	private Function getFunction() {
 		Function function = Function.builder().id("1").name("function").code("001").active(true)
 				.parentId(getParentFunction()).level(1).build();
-		function.setTenantId(string1);
+		function.setTenantId("default");
 		return function;
 	}
 

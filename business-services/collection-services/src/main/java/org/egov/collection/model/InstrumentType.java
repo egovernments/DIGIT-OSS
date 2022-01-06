@@ -58,8 +58,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-
-//except name none of them  is used
 public class InstrumentType{
 
 	/*

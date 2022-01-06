@@ -108,6 +108,7 @@ public class CustomControllerAdvice {
 		errRes.setResponseInfo(responseInfo);
 		org.egov.common.web.contract.Error error = new org.egov.common.web.contract.Error();
 		error.setCode(ex.getMessageKey());
+		System.out.println(ErrorCode.getError("non.unique.value"));
 		if (ErrorCode.getError(ex.getMessageKey()) != null) {
 			String message = MessageFormat.format(ErrorCode.getError(ex.getMessageKey()).getMessage(),
 					ex.getFieldName(), ex.getFieldValue());

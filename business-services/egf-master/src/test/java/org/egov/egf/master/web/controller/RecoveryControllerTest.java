@@ -47,8 +47,6 @@ public class RecoveryControllerTest {
 
     private RequestJsonReader resources = new RequestJsonReader();
 
-    private String string1 = "default";
-
     @Test
     public void testCreate() throws IOException, Exception {
         when(recoveryService.create(any(List.class), any(BindingResult.class), any(RequestInfo.class)))
@@ -105,7 +103,7 @@ public class RecoveryControllerTest {
     private List<Recovery> getRecoverys() {
         List<Recovery> recoverys = new ArrayList<Recovery>();
         Recovery recovery = Recovery.builder().name("name").code("code").type("M").mode('M').remittanceMode('M').active(true).build();
-        recovery.setTenantId(string1 );
+        recovery.setTenantId("default");
         recovery.setChartOfAccount(getCOAccount());
         recovery.setRemitted("S");
         recovery.setIfscCode("SBIN0005532");
@@ -118,14 +116,14 @@ public class RecoveryControllerTest {
     private ChartOfAccount getCOAccount() {
         ChartOfAccount chartOfAccount = new ChartOfAccount();
         chartOfAccount.setGlcode("341");
-        chartOfAccount.setTenantId(string1 );
+        chartOfAccount.setTenantId("default");
         return chartOfAccount;
     }
 
     private List<Recovery> getUpdateRecoverys() {
         List<Recovery> recoverys = new ArrayList<Recovery>();
         Recovery recovery = Recovery.builder().name("nameU").code("codeU").type("M").mode('M').remittanceMode('M').active(true).build();
-        recovery.setTenantId(string1 );
+        recovery.setTenantId("default");
         recovery.setChartOfAccount(getCOAccount());
         recovery.setRemitted("S");
         recovery.setIfscCode("SBIN0005532");

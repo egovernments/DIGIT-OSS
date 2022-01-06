@@ -42,14 +42,6 @@ public class InstrumentTypeJdbcRepositoryTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private String string1="description";
-
-    private String string2="default";
-
-    private String string3="active";
-
-    private static final String STRING4="SELECT * FROM egf_instrumentType";
-
     @Before
     public void setUp() throws Exception {
         instrumentTypeJdbcRepository = new InstrumentTypeJdbcRepository(namedParameterJdbcTemplate, jdbcTemplate);
@@ -59,17 +51,17 @@ public class InstrumentTypeJdbcRepositoryTest {
     @Sql(scripts = { "/sql/instrumenttype/clearInstrumentType.sql" })
     public void test_create() {
 
-        InstrumentTypeEntity instrumentType = InstrumentTypeEntity.builder().id("1").name("name").description(string1)
+        InstrumentTypeEntity instrumentType = InstrumentTypeEntity.builder().id("1").name("name").description("description")
                 .active(true).build();
-        instrumentType.setTenantId(string2);
+        instrumentType.setTenantId("default");
         InstrumentTypeEntity actualResult = instrumentTypeJdbcRepository.create(instrumentType);
 
-        List<Map<String, Object>> result = namedParameterJdbcTemplate.query(STRING4,
+        List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_instrumentType",
                 new InstrumentTypeResultExtractor());
         Map<String, Object> row = result.get(0);
         assertThat(row.get("name")).isEqualTo(actualResult.getName());
-        assertThat(row.get(string1)).isEqualTo(actualResult.getDescription());
-        assertThat(row.get(string3)).isEqualTo(actualResult.getActive());
+        assertThat(row.get("description")).isEqualTo(actualResult.getDescription());
+        assertThat(row.get("active")).isEqualTo(actualResult.getActive());
 
     }
 
@@ -78,17 +70,17 @@ public class InstrumentTypeJdbcRepositoryTest {
             "/sql/instrumenttype/insertInstrumentTypeData.sql" })
     public void test_update() {
 
-        InstrumentTypeEntity instrumentType = InstrumentTypeEntity.builder().id("1").name("name").description(string1)
+        InstrumentTypeEntity instrumentType = InstrumentTypeEntity.builder().id("1").name("name").description("description")
                 .active(true).build();
-        instrumentType.setTenantId(string2);
+        instrumentType.setTenantId("default");
         InstrumentTypeEntity actualResult = instrumentTypeJdbcRepository.update(instrumentType);
 
-        List<Map<String, Object>> result = namedParameterJdbcTemplate.query(STRING4,
+        List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_instrumentType",
                 new InstrumentTypeResultExtractor());
         Map<String, Object> row = result.get(0);
         assertThat(row.get("name")).isEqualTo(actualResult.getName());
-        assertThat(row.get(string1)).isEqualTo(actualResult.getDescription());
-        assertThat(row.get(string3)).isEqualTo(actualResult.getActive());
+        assertThat(row.get("description")).isEqualTo(actualResult.getDescription());
+        assertThat(row.get("active")).isEqualTo(actualResult.getActive());
 
     }
 
@@ -97,12 +89,12 @@ public class InstrumentTypeJdbcRepositoryTest {
             "/sql/instrumenttype/insertInstrumentTypeData.sql" })
     public void test_delete() {
 
-        InstrumentTypeEntity instrumentType = InstrumentTypeEntity.builder().id("1").name("name").description(string1)
+        InstrumentTypeEntity instrumentType = InstrumentTypeEntity.builder().id("1").name("name").description("description")
                 .active(true).build();
-        instrumentType.setTenantId(string2);
+        instrumentType.setTenantId("default");
         InstrumentTypeEntity actualResult = instrumentTypeJdbcRepository.delete(instrumentType);
 
-        List<Map<String, Object>> result = namedParameterJdbcTemplate.query(STRING4,
+        List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_instrumentType",
                 new InstrumentTypeResultExtractor());
         assertTrue("Result set length is zero", result.size() == 0);
     }
@@ -116,7 +108,7 @@ public class InstrumentTypeJdbcRepositoryTest {
                 .search(getInstrumentTypeSearch());
         assertThat(page.getPagedData().get(0).getActive()).isEqualTo(true);
         assertThat(page.getPagedData().get(0).getName()).isEqualTo("name");
-        assertThat(page.getPagedData().get(0).getDescription()).isEqualTo(string1);
+        assertThat(page.getPagedData().get(0).getDescription()).isEqualTo("description");
 
     }
 
@@ -137,10 +129,10 @@ public class InstrumentTypeJdbcRepositoryTest {
     public void test_find_by_id() {
 
         InstrumentTypeEntity instrumentTypeEntity = InstrumentTypeEntity.builder().id("1").build();
-        instrumentTypeEntity.setTenantId(string2);
+        instrumentTypeEntity.setTenantId("default");
         InstrumentTypeEntity result = instrumentTypeJdbcRepository.findById(instrumentTypeEntity);
         assertThat(result.getName()).isEqualTo("name");
-        assertThat(result.getDescription()).isEqualTo(string1);
+        assertThat(result.getDescription()).isEqualTo("description");
         assertThat(result.getActive()).isEqualTo(true);
 
     }
@@ -151,7 +143,7 @@ public class InstrumentTypeJdbcRepositoryTest {
     public void test_find_by_invalid_id_should_return_null() {
 
         InstrumentTypeEntity instrumentTypeEntity = InstrumentTypeEntity.builder().id("5").build();
-        instrumentTypeEntity.setTenantId(string2);
+        instrumentTypeEntity.setTenantId("default");
         InstrumentTypeEntity result = instrumentTypeJdbcRepository.findById(instrumentTypeEntity);
         assertNull(result);
 
@@ -181,7 +173,7 @@ public class InstrumentTypeJdbcRepositoryTest {
                 .search(getInstrumentTypeSearch());
         assertThat(page.getPagedData().get(0).getActive()).isEqualTo(true);
         assertThat(page.getPagedData().get(0).getName()).isEqualTo("name");
-        assertThat(page.getPagedData().get(0).getDescription()).isEqualTo(string1);
+        assertThat(page.getPagedData().get(0).getDescription()).isEqualTo("description");
 
     }
 
@@ -194,8 +186,8 @@ public class InstrumentTypeJdbcRepositoryTest {
                     {
                         put("id", resultSet.getString("id"));
                         put("name", resultSet.getString("name"));
-                        put(string1, resultSet.getString(string1));
-                        put(string3, resultSet.getBoolean(string3));
+                        put("description", resultSet.getString("description"));
+                        put("active", resultSet.getBoolean("active"));
                         put("createdBy", resultSet.getString("createdBy"));
                         put("createdDate", resultSet.getString("createdDate"));
                         put("lastModifiedBy", resultSet.getString("lastModifiedBy"));
@@ -214,7 +206,7 @@ public class InstrumentTypeJdbcRepositoryTest {
         InstrumentTypeSearch instrumentTypeSearch = new InstrumentTypeSearch();
         instrumentTypeSearch.setId("id");
         instrumentTypeSearch.setName("name");
-        instrumentTypeSearch.setDescription(string1);
+        instrumentTypeSearch.setDescription("description");
         instrumentTypeSearch.setActive(true);
         instrumentTypeSearch.setTenantId("tenantId");
         instrumentTypeSearch.setPageSize(500);
@@ -228,7 +220,7 @@ public class InstrumentTypeJdbcRepositoryTest {
         instrumentTypeSearch.setId("1");
         instrumentTypeSearch.setIds("1");
         instrumentTypeSearch.setName("name");
-        instrumentTypeSearch.setDescription(string1);
+        instrumentTypeSearch.setDescription("description");
         instrumentTypeSearch.setActive(true);
         instrumentTypeSearch.setPageSize(500);
         instrumentTypeSearch.setOffset(0);

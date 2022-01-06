@@ -21,8 +21,6 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-
-//class variables not used
 public class ReactivationDetails {
 	
 	private String id;

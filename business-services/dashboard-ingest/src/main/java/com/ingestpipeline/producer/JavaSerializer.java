@@ -24,6 +24,14 @@ public class JavaSerializer implements Serializer<Object> {
         }
     }
 
+    @Override
+    public void configure(Map<String, ?> configs, boolean isKey) {
 
+    }
+
+    @Override
+    public void close() {
+
+    }
 
 }

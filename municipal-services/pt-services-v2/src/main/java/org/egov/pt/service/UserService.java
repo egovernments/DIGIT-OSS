@@ -42,12 +42,6 @@ public class UserService {
     @Value("${egov.user.update.path}")
     private String userUpdateEndpoint;
 
-    private String string1="CITIZEN";
-
-    private String string2="lastModifiedDate";
-
-    private String string3="pwdExpiryDate";
-
     /**
      * Creates user of the owners of property if it is not created already
      * @param request PropertyRequest received for creating properties
@@ -107,7 +101,7 @@ public class UserService {
         owner.setActive(true);
         owner.setTenantId(tenantId.split("\\.")[0]);
         owner.setRoles(Collections.singletonList(role));
-        owner.setType(string1);
+        owner.setType("CITIZEN");
         owner.setCreatedDate(null);
         owner.setCreatedBy(null );
         owner.setLastModifiedDate(null);
@@ -116,8 +110,8 @@ public class UserService {
 
     private Role getCitizenRole(){
         Role role = new Role();
-        role.setCode(string1);
-        role.setName(string1);
+        role.setCode("CITIZEN");
+        role.setName("Citizen");
         return role;
     }
 
@@ -172,7 +166,7 @@ public class UserService {
         userSearchRequest.setRequestInfo(requestInfo);
         userSearchRequest.setTenantId(tenantId);
         // Should this be hardcoded?
-        userSearchRequest.setUserType(string1);
+        userSearchRequest.setUserType("CITIZEN");
         Set<String> availableMobileNumbers = new HashSet<>();
 
         listOfMobileNumbers.forEach(mobilenumber -> {
@@ -234,12 +228,12 @@ public class UserService {
         if(users!=null){
             users.forEach( map -> {
                         map.put("createdDate",dateTolong((String)map.get("createdDate"),format1));
-                        if((String)map.get(string2)!=null)
-                            map.put(string2,dateTolong((String)map.get(string2),format1));
+                        if((String)map.get("lastModifiedDate")!=null)
+                            map.put("lastModifiedDate",dateTolong((String)map.get("lastModifiedDate"),format1));
                         if((String)map.get("dob")!=null)
                             map.put("dob",dateTolong((String)map.get("dob"),dobFormat));
-                        if((String)map.get(string3)!=null)
-                            map.put(string3,dateTolong((String)map.get(string3),format1));
+                        if((String)map.get("pwdExpiryDate")!=null)
+                            map.put("pwdExpiryDate",dateTolong((String)map.get("pwdExpiryDate"),format1));
                     }
             );
         }
@@ -294,7 +288,7 @@ public class UserService {
         userSearchRequest.setMobileNumber(criteria.getMobileNumber());
         userSearchRequest.setName(criteria.getName());
         userSearchRequest.setActive(true);
-        userSearchRequest.setUserType(string1);
+        userSearchRequest.setUserType("CITIZEN");
         return userSearchRequest;
     }
 
@@ -335,7 +329,7 @@ public class UserService {
 
         Role role = getCitizenRole();
         // If user is creating assessment, userInfo object from requestInfo is assigned as citizenInfo
-        if(requestInfo.getUserInfo().getType().equalsIgnoreCase(string1))
+        if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
         {   request.getProperties().forEach(property -> {
             property.getPropertyDetails().forEach(propertyDetail -> {
                 propertyDetail.setCitizenInfo(new OwnerInfo(requestInfo.getUserInfo()));
@@ -377,7 +371,7 @@ public class UserService {
 
     private UserDetailResponse searchByUserName(String userName,String tenantId){
         UserSearchRequest userSearchRequest = new UserSearchRequest();
-        userSearchRequest.setUserType(string1);
+        userSearchRequest.setUserType("CITIZEN");
         userSearchRequest.setUserName(userName);
         userSearchRequest.setTenantId(tenantId);
         StringBuilder uri = new StringBuilder(userHost).append(userSearchEndpoint);

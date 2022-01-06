@@ -278,7 +278,7 @@ public class InboxService {
 			
 			ProcessInstanceResponse processInstanceResponse = workflowService.getProcessInstance(processCriteria, requestInfo);
 			List<ProcessInstance> processInstances = processInstanceResponse.getProcessInstances();
-//			HashMap<String,List<String>> businessSrvIdsMap = new HashMap<String, List<String>>();
+			HashMap<String,List<String>> businessSrvIdsMap = new HashMap<String, List<String>>();
 			Map<String, ProcessInstance> processInstanceMap = processInstances.stream().collect(  Collectors.toMap(ProcessInstance::getBusinessId, Function.identity()));
 			moduleSearchCriteria = new HashMap<String,String>();
 			if(CollectionUtils.isEmpty(srvMap) ) {

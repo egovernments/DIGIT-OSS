@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class WorkflowConstants {
 
-   public static final String MDMS_WORKFLOW = "Workflow";
+    public WorkflowConstants() {}
+
+    public static final String MDMS_WORKFLOW = "Workflow";
 
     public static final String WF_JSONPATH_CODE = "$.MdmsRes.Workflow.BusinessService[?(@.businessService=='{name}')]";
 

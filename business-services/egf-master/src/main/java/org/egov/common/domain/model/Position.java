@@ -3,7 +3,6 @@ package org.egov.common.domain.model;
 import lombok.Data;
 
 @Data
-//class variables not used
 public class Position {
 
 	private Long id;

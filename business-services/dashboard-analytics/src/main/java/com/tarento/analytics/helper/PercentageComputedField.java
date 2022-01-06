@@ -27,8 +27,6 @@ public class PercentageComputedField implements IComputedField<Data>{
     @Autowired
     private ComputeHelperFactory computeHelperFactory;
 
-    private String string1="percentage";
-
     @Override
     public void set(AggregateRequestDto requestDto, String postAggrTheoryName){
         this.aggregateRequestDto = requestDto;
@@ -42,7 +40,7 @@ public class PercentageComputedField implements IComputedField<Data>{
 
             if (plotMap.get(fields.get(0)).getValue() == 0.0 || plotMap.get(fields.get(1)).getValue() == 0.0) {
 
-                data.getPlots().add(new Plot(newField, 0.0, string1 ));
+                data.getPlots().add(new Plot(newField, 0.0, "percentage"));
             } else {
                 double wholeValue = plotMap.get(fields.get(1)).getValue();
                 double fieldValue = plotMap.get(fields.get(0)).getValue() / plotMap.get(fields.get(1)).getValue() * 100;
@@ -56,13 +54,13 @@ public class PercentageComputedField implements IComputedField<Data>{
                     wholeValue = computeHelper.compute(aggregateRequestDto, wholeValue);
                 }
                 data.getPlots().stream().filter(plot -> fields.get(1).equalsIgnoreCase(plot.getName())).findAny().orElse(null).setValue(wholeValue);
-                data.getPlots().add(new Plot(newField, fieldValue, string1));
+                data.getPlots().add(new Plot(newField, fieldValue, "percentage"));
             }
 
         } catch (Exception e) {
             // throw new RuntimeException("Computed field configuration not correctly provided");
             logger.error("percentage could not be computed " +e.getMessage());
-            data.getPlots().add(new Plot(newField, 0.0, string1));
+            data.getPlots().add(new Plot(newField, 0.0, "percentage"));
         }
 
     }

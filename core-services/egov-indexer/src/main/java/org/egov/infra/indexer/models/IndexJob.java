@@ -23,7 +23,7 @@ public class IndexJob {
 	public String requesterId;
 	
 	public ConfigKeyEnum typeOfJob;
-
+	
 	public String oldIndex;
 	
 	public String newIndex;
@@ -31,8 +31,7 @@ public class IndexJob {
 	public StatusEnum jobStatus;
 	
 	public Long totalTimeTakenInMS;
-
-
+	
 	public Integer recordsToBeIndexed;
 	
 	public Integer totalRecordsIndexed;

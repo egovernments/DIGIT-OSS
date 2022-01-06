@@ -54,8 +54,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-
-//class not used
 public class FilterRequest {
 	private List<Long> id;
     private String code;

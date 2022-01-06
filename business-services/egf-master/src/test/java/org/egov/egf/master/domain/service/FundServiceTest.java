@@ -41,7 +41,9 @@ public class FundServiceTest {
 	private RequestInfo requestInfo = new RequestInfo();
 	private List<Fund> funds = new ArrayList<>();
 
-
+	@Before
+	public void setup() {
+	}
 
 	/*@Test
 	public final void testCreate() {

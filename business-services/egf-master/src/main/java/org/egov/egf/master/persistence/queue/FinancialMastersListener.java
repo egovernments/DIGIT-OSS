@@ -162,12 +162,6 @@ public class FinancialMastersListener {
 	@Autowired
 	private RecoveryService recoveryService;
 
-	private String string1="bankbranch_create";
-
-	private String string2="bankbranch_persisted";
-
-	private String string3="bankbranch_update";
-
 	@KafkaListener(id = "${kafka.topics.egf.masters.validated.id}", topics = "${kafka.topics.egf.masters.validated.topic}", groupId = "${kafka.topics.egf.masters.validated.group}")
 	public void process(Map<String, Object> mastersMap) {
 		// implement the details here
@@ -202,9 +196,9 @@ public class FinancialMastersListener {
 					mastersMap);
 		}
 		
-		if (mastersMap.get(string1) != null) {
+		if (mastersMap.get("bankbranch_create") != null) {
 			BankBranchRequest request = objectMapper.convertValue(
-					mastersMap.get(string1), BankBranchRequest.class);
+					mastersMap.get("bankbranch_create"), BankBranchRequest.class);
 			ModelMapper mapper = new ModelMapper();
 			for (BankBranchContract bankBranchContract : request.getBankBranches()) {
 				BankBranch domain = mapper.map(bankBranchContract, BankBranch.class);
@@ -212,14 +206,14 @@ public class FinancialMastersListener {
 			}
 
 			mastersMap.clear();
-			mastersMap.put(string2, request);
+			mastersMap.put("bankbranch_persisted", request);
 			financialProducer.sendMessage(completedTopic, bankBranchCompletedKey,
 					mastersMap);
 		}
-		if (mastersMap.get(string3) != null) {
+		if (mastersMap.get("bankbranch_update") != null) {
 
 			BankBranchRequest request = objectMapper.convertValue(
-					mastersMap.get(string3), BankBranchRequest.class);
+					mastersMap.get("bankbranch_update"), BankBranchRequest.class);
 
 			ModelMapper mapper = new ModelMapper();
 			for (BankBranchContract bankBranchContract : request.getBankBranches()) {
@@ -227,7 +221,7 @@ public class FinancialMastersListener {
 				bankBranchService.update(domain);
 			}
 			mastersMap.clear();
-			mastersMap.put(string2, request);
+			mastersMap.put("bankbranch_persisted", request);
 			financialProducer.sendMessage(completedTopic, bankBranchCompletedKey,
 					mastersMap);
 		}
@@ -892,9 +886,9 @@ public class FinancialMastersListener {
 					financialConfigurationCompletedKey, mastersMap);
 		}
 		
-		if (mastersMap.get(string1) != null) {
+		if (mastersMap.get("bankbranch_create") != null) {
 	            BankBranchRequest request = objectMapper.convertValue(
-	                    mastersMap.get(string1), BankBranchRequest.class);
+	                    mastersMap.get("bankbranch_create"), BankBranchRequest.class);
 	            ModelMapper mapper = new ModelMapper();
 	            for (BankBranchContract bankBranchContract : request.getBankBranches()) {
 	                BankBranch domain = mapper.map(bankBranchContract, BankBranch.class);
@@ -902,14 +896,14 @@ public class FinancialMastersListener {
 	            }
 
 	            mastersMap.clear();
-	            mastersMap.put(string2, request);
+	            mastersMap.put("bankbranch_persisted", request);
 	            financialProducer.sendMessage(completedTopic, bankBranchCompletedKey,
 	                    mastersMap);
 	        }
-	        if (mastersMap.get(string3) != null) {
+	        if (mastersMap.get("bankbranch_update") != null) {
 
 	            BankBranchRequest request = objectMapper.convertValue(
-	                    mastersMap.get(string3), BankBranchRequest.class);
+	                    mastersMap.get("bankbranch_update"), BankBranchRequest.class);
 
 	            ModelMapper mapper = new ModelMapper();
 	            for (BankBranchContract bankBranchContract : request.getBankBranches()) {
@@ -918,7 +912,7 @@ public class FinancialMastersListener {
 	            }
 
 	            mastersMap.clear();
-	            mastersMap.put(string2, request);
+	            mastersMap.put("bankbranch_persisted", request);
 	            financialProducer.sendMessage(completedTopic, bankBranchCompletedKey,
 	                    mastersMap);
 	        }

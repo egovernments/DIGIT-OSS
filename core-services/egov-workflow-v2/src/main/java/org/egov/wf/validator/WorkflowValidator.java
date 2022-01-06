@@ -133,7 +133,6 @@ public class WorkflowValidator {
             Boolean isRoleAvailable = util.isRoleAvailable(roles,action.getRoles());
             Boolean isStateChanging = (action.getCurrentState().equalsIgnoreCase( action.getNextState())) ? false : true;
             List<String> transitionRoles = getRolesFromState(processStateAndAction.getCurrentState());
-//            ISROLEAVALIABLEFORTRANSITION NOT USED
             Boolean isRoleAvailableForTransition = util.isRoleAvailable(roles,transitionRoles);
             Boolean isAssigneeUserInfo = false;
 

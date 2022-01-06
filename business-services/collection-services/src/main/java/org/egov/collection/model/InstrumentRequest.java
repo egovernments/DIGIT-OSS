@@ -10,6 +10,5 @@ import java.util.List;
 public class InstrumentRequest {
 	private RequestInfo requestInfo = new RequestInfo();
 	private List<Instrument> instruments = new ArrayList<>();
-//	not used
     private String ids;
 }

@@ -28,8 +28,6 @@ public class EmployeeCountRowMapper implements ResultSetExtractor<Map<String,Str
 	@Autowired
 	private ObjectMapper mapper;
 
-	private String string="count";
-
 	@Override
 	/**
 	 * Maps ResultSet to Employee POJO.
@@ -41,10 +39,10 @@ public class EmployeeCountRowMapper implements ResultSetExtractor<Map<String,Str
 		int inactiveEmployee = 0;
 		while(rs.next()) {
 			if(rs.getBoolean("active"))
-				activeEmployee = activeEmployee + rs.getInt(string);
+				activeEmployee = activeEmployee + rs.getInt("count");
 			else
-				inactiveEmployee = inactiveEmployee + rs.getInt(string);
-			totalEmployee = totalEmployee + rs.getInt(string);
+				inactiveEmployee = inactiveEmployee + rs.getInt("count");
+			totalEmployee = totalEmployee + rs.getInt("count");
 		}
 		if(totalEmployee==0){
 			response.put("activeEmployee","0");
@@ -55,4 +53,6 @@ public class EmployeeCountRowMapper implements ResultSetExtractor<Map<String,Str
 		response.put("totalEmployee", String.valueOf(totalEmployee));
 		return response;
 	}
+
+
 }

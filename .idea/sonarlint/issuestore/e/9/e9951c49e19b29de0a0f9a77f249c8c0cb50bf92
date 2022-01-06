@@ -1,7 +1,0 @@
-
-J
-java:S3740_"/Provide the parametrized type for this generic.(êŠÒÊúÿÿÿÿ
-W
-java:S1854#"<Remove this useless assignment to local variable "userList".(Ú«§ºÿÿÿÿÿ
-e
-java:S2259N"JA "NullPointerException" could be thrown; "userResponse" is nullable here.(éçêòúÿÿÿÿ

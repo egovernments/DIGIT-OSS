@@ -30,12 +30,6 @@ public class UserService {
     private ServiceRequestRepository serviceRequestRepository;
     private Configuration config;
 
-    private String string1="CITIZEN";
-
-    private String string2="lastModifiedDate";
-
-    private String string3="pwdExpiryDate";
-
 
     @Autowired
     public UserService(ObjectMapper mapper, ServiceRequestRepository serviceRequestRepository, Configuration configuration) {
@@ -55,7 +49,7 @@ public class UserService {
             user.setActive(false);
             user.setTenantId(config.getRootTenantId());
             user.setRoles(Collections.singletonList(role));
-            user.setType(string1);
+            user.setType("CITIZEN");
             user.setUserName(getUsername(mobile));
             user.setPermanentCity(config.getRootTenantId());
 
@@ -169,7 +163,7 @@ public class UserService {
         userSearchRequest.setTenantId(config.getRootTenantId());
         userSearchRequest.setRequestInfo(requestInfo);
         userSearchRequest.setActive(false);
-        userSearchRequest.setUserType(string1);
+        userSearchRequest.setUserType("CITIZEN");
         userSearchRequest.setUserName(getUsername(mobileNumber));
         StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserSearchEndpoint());
         UserDetailResponse userDetailResponse =  userCall(userSearchRequest, uri);
@@ -188,7 +182,7 @@ public class UserService {
         UserSearchRequest userSearchRequest = new UserSearchRequest();
         userSearchRequest.setRequestInfo(requestInfo);
         userSearchRequest.setTenantId(config.getRootTenantId());
-        userSearchRequest.setUserType(string1);
+        userSearchRequest.setUserType("CITIZEN");
         Set<String> availableMobileNumbers = new HashSet<>();
 
         mobileNumbers.forEach(mobilenumber -> {
@@ -230,7 +224,7 @@ public class UserService {
         user.setActive(false);
         user.setTenantId(config.getRootTenantId());
         user.setRoles(Collections.singletonList(role));
-        user.setType(string1);
+        user.setType("CITIZEN");
         user.setUserName(modelCase.getCaseId());
         user.setPermanentCity(modelCase.getTenantId());
 //        setUserName(user);
@@ -246,8 +240,8 @@ public class UserService {
      */
     private Role getCitizenRole() {
         Role role = new Role();
-        role.setCode(string1);
-        role.setName(string1);
+        role.setCode("CITIZEN");
+        role.setName("Citizen");
         return role;
     }
 
@@ -287,12 +281,12 @@ public class UserService {
         if (users != null) {
             users.forEach(map -> {
                         map.put("createdDate", dateTolong((String) map.get("createdDate"), format1));
-                        if ((String) map.get(string2) != null)
-                            map.put(string2, dateTolong((String) map.get(string2), format1));
+                        if ((String) map.get("lastModifiedDate") != null)
+                            map.put("lastModifiedDate", dateTolong((String) map.get("lastModifiedDate"), format1));
                         if ((String) map.get("dob") != null)
                             map.put("dob", dateTolong((String) map.get("dob"), dobFormat));
-                        if ((String) map.get(string3) != null)
-                            map.put(string3, dateTolong((String) map.get(string3), format1));
+                        if ((String) map.get("pwdExpiryDate") != null)
+                            map.put("pwdExpiryDate", dateTolong((String) map.get("pwdExpiryDate"), format1));
                     }
             );
         }
@@ -346,7 +340,7 @@ public class UserService {
         userSearchRequest.setTenantId(config.getRootTenantId());
         userSearchRequest.setMobileNumber(criteria.getMobileNumber());
         userSearchRequest.setActive(false);
-        userSearchRequest.setUserType(string1);
+        userSearchRequest.setUserType("CITIZEN");
 
         return userSearchRequest;
     }
@@ -354,7 +348,7 @@ public class UserService {
 
     private UserDetailResponse searchByUserName(String userName, String tenantId) {
         UserSearchRequest userSearchRequest = new UserSearchRequest();
-        userSearchRequest.setUserType(string1);
+        userSearchRequest.setUserType("CITIZEN");
         userSearchRequest.setUserName(userName);
         userSearchRequest.setTenantId(config.getRootTenantId());
         StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserSearchEndpoint());

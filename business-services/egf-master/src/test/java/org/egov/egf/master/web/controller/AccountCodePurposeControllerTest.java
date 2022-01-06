@@ -48,8 +48,6 @@ public class AccountCodePurposeControllerTest {
 
 	private RequestJsonReader resources = new RequestJsonReader();
 
-	private String message="default";
-
 	@Test
 	public void testCreate() throws IOException, Exception {
 		when(accountCodePurposeService.create(any(List.class), any(BindingResult.class), any(RequestInfo.class)))
@@ -64,7 +62,7 @@ public class AccountCodePurposeControllerTest {
 
 		final List<AccountCodePurpose> actualRequest = captor.getValue();
 		assertEquals("name", actualRequest.get(0).getName());
-		assertEquals(message, actualRequest.get(0).getTenantId());
+		assertEquals("default", actualRequest.get(0).getTenantId());
 	}
 
 	@Test
@@ -92,7 +90,7 @@ public class AccountCodePurposeControllerTest {
 
 		final List<AccountCodePurpose> actualRequest = captor.getValue();
 		assertEquals("nameU", actualRequest.get(0).getName());
-		assertEquals(message, actualRequest.get(0).getTenantId());
+		assertEquals("default", actualRequest.get(0).getTenantId());
 	}
 
 	@Test
@@ -118,7 +116,7 @@ public class AccountCodePurposeControllerTest {
 	private List<AccountCodePurpose> getAccountCodePurposes() {
 		List<AccountCodePurpose> accountCodePurposes = new ArrayList<AccountCodePurpose>();
 		AccountCodePurpose accountCodePurpose = AccountCodePurpose.builder().id("1").name("name").build();
-		accountCodePurpose.setTenantId(message);
+		accountCodePurpose.setTenantId("default");
 		accountCodePurposes.add(accountCodePurpose);
 		return accountCodePurposes;
 	}
@@ -126,7 +124,7 @@ public class AccountCodePurposeControllerTest {
 	private List<AccountCodePurpose> getUpdateAccountCodePurposes() {
 		List<AccountCodePurpose> accountCodePurposes = new ArrayList<AccountCodePurpose>();
 		AccountCodePurpose accountCodePurpose = AccountCodePurpose.builder().id("1").name("nameU").build();
-		accountCodePurpose.setTenantId(message);
+		accountCodePurpose.setTenantId("default");
 		accountCodePurposes.add(accountCodePurpose);
 		return accountCodePurposes;
 	}

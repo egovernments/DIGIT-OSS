@@ -22,8 +22,6 @@ import java.util.Map;
 public class RecoveryJdbcRepository extends JdbcRepository {
     private static final Logger LOG = LoggerFactory.getLogger(RecoveryJdbcRepository.class);
 
-    private String string1=" and ";
-
     static {
         LOG.debug("init recovery");
         init(RecoveryEntity.class);
@@ -71,35 +69,35 @@ public class RecoveryJdbcRepository extends JdbcRepository {
         // implement jdbc specfic search
         if (recoverySearchEntity.getTenantId() != null) {
             if (params.length() > 0) {
-                params.append(string1 );
+                params.append(" and ");
             }
             params.append("tenantId =:tenantId");
             paramValues.put("tenantId", recoverySearchEntity.getTenantId());
         }
         if (recoverySearchEntity.getId() != null) {
             if (params.length() > 0) {
-                params.append(string1 );
+                params.append(" and ");
             }
             params.append("id =:id");
             paramValues.put("id", recoverySearchEntity.getId());
         }
         if (recoverySearchEntity.getCode() != null) {
             if (params.length() > 0) {
-                params.append(string1);
+                params.append(" and ");
             }
             params.append("code =:code");
             paramValues.put("code", recoverySearchEntity.getCode());
         }
         if (recoverySearchEntity.getName() != null) {
             if (params.length() > 0) {
-                params.append(string1);
+                params.append(" and ");
             }
             params.append("name =:name");
             paramValues.put("name", recoverySearchEntity.getName());
         }
         if (recoverySearchEntity.getActive() != null) {
             if (params.length() > 0) {
-                params.append(string1);
+                params.append(" and ");
             }
             params.append("active =:active");
             paramValues.put("active", recoverySearchEntity.getActive());

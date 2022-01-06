@@ -56,8 +56,6 @@ public class InstrumentVoucher {
 	 * instrumentHeaderId is the reference of the instrument attached to a
 	 * voucher
 	 */
-
-//	not used
 	private Instrument instrument;
 
 	/*

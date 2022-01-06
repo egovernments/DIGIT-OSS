@@ -34,10 +34,8 @@ public class BillSearchCriteria {
 	@Default
 	private Boolean retrieveOldest = false;
 
-//	not used
 	private Boolean isActive;
 
-//	not used
 	private Boolean isCancelled;
 
 	private Set<String> consumerCode;
@@ -51,10 +49,8 @@ public class BillSearchCriteria {
 	@Default
 	private boolean isOrderBy = false;
 
-//	not used
 	private Long size;
 
-//	not used
 	private Long offset;
 
 	@Email

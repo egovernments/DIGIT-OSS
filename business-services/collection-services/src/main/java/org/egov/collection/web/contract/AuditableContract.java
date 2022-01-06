@@ -49,7 +49,6 @@ import lombok.Data;
 
 @Data
 @JsonPropertyOrder({ "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate", "tenantId" })
-//none of the getter and setter are used
 public class AuditableContract {
 
 	private Long createdBy;

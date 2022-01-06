@@ -10,7 +10,6 @@ import java.util.List;
 @Getter
 @Setter
 public class InstrumentResponse {
-//    not used
     private ResponseInfo responseInfo;
     private List<Instrument> instruments;
 }

@@ -10,11 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class BudgetGroupSearchContract extends BudgetGroupContract { private String ids; 
-private String  sortBy;
-
-//not used
-private Integer pageSize;
-
-//not used
+private String  sortBy; 
+private Integer pageSize; 
 private Integer offset; 
 } 

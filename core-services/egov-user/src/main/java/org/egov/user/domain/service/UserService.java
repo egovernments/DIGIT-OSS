@@ -93,10 +93,6 @@ public class UserService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private String string1="password";
-
-    private String string2="UserRequest";
-
     public UserService(UserRepository userRepository, OtpRepository otpRepository, FileStoreRepository fileRepository,
                        PasswordEncoder passwordEncoder, EncryptionDecryptionUtil encryptionDecryptionUtil, TokenStore tokenStore,
                        @Value("${default.password.expiry.in.days}") int defaultPasswordExpiryInDays,
@@ -286,10 +282,10 @@ public class UserService {
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
             map.add("username", user.getUsername());
             if (!isEmpty(password))
-                map.add(string1, password);
+                map.add("password", password);
             else
-                map.add(string1, user.getPassword());
-            map.add("grant_type", string1);
+                map.add("password", user.getPassword());
+            map.add("grant_type", "password");
             map.add("scope", "read");
             map.add("tenantId", user.getTenantId());
             map.add("isInternal", "true");
@@ -366,11 +362,11 @@ public class UserService {
                 user.getUsername());
 
         for (OAuth2AccessToken token : tokens) {
-            if (token.getAdditionalInformation() != null && token.getAdditionalInformation().containsKey(string2)) {
-                if (token.getAdditionalInformation().get(string2) instanceof org.egov.user.web.contract.auth.User) {
+            if (token.getAdditionalInformation() != null && token.getAdditionalInformation().containsKey("UserRequest")) {
+                if (token.getAdditionalInformation().get("UserRequest") instanceof org.egov.user.web.contract.auth.User) {
                     org.egov.user.web.contract.auth.User userInfo =
                             (org.egov.user.web.contract.auth.User) token.getAdditionalInformation().get(
-                                    string2);
+                                    "UserRequest");
                     if (user.getUsername().equalsIgnoreCase(userInfo.getUserName()) && user.getTenantId().equalsIgnoreCase(userInfo.getTenantId())
                             && user.getType().equals(UserType.fromValue(userInfo.getType())))
                         tokenStore.removeAccessToken(token);

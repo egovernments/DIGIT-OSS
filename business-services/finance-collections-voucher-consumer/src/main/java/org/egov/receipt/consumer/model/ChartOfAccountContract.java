@@ -59,7 +59,6 @@ import lombok.Setter;
 
 @JsonPropertyOrder({ "id", "glcode", "name", "accountCodePurpose", "description", "isActiveForPosting", "parentId",
 		"type", "classification", "functionRequired", "budgetCheckRequired", "majorCode", "isSubLedger" })
-//class variables are not used
 public class ChartOfAccountContract extends AuditableContract {
 
 	private String id;

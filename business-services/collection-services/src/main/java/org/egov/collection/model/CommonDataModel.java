@@ -49,7 +49,6 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 @EqualsAndHashCode
-//class is not used
 public class CommonDataModel {
 
 	private Long id;

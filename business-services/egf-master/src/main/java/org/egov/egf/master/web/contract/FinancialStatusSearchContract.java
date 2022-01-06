@@ -9,7 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
-//none of them is used
 public class FinancialStatusSearchContract extends FinancialStatusContract { private String ids; 
 private String  sortBy; 
 private Integer pageSize; 

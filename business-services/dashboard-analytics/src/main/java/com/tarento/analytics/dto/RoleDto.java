@@ -2,15 +2,15 @@ package com.tarento.analytics.dto;
 
 public class RoleDto {
 
-	private Long id;
+	public Long id;
 
 	public String description;
 
-	private String name;
+	public String name;
 
 	public String orgId;
 
-//	public boolean isSuperAdmin;
+	public boolean isSuperAdmin;
 
 	public String getOrgId() {
 		return orgId;

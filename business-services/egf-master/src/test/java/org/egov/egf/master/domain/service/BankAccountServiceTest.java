@@ -63,9 +63,10 @@ public class BankAccountServiceTest {
 
 	private RequestInfo requestInfo = new RequestInfo();
 
-	private String string="default";
+	@Before
+	public void setup() {
 
-
+	}
 
 	@Test
 	public final void testCreate() {
@@ -162,13 +163,13 @@ public class BankAccountServiceTest {
 
 	private Bank getBank() {
 		Bank bank = Bank.builder().id("1").code("code").description("description").build();
-		bank.setTenantId(string);
+		bank.setTenantId("default");
 		return bank;
 	}
 
 	private BankBranch getBankBranch() {
 		BankBranch bankBranch = BankBranch.builder().code("code").build();
-		bankBranch.setTenantId(string);
+		bankBranch.setTenantId("default");
 		bankBranch.setBank(getBank());
 		return bankBranch;
 	}
@@ -180,13 +181,13 @@ public class BankAccountServiceTest {
 				.functionRequired(true).budgetCheckRequired(true).build();
 		chartOfAccount.setAccountCodePurpose(getAccountCodePurpose());
 		chartOfAccount.setParentId(parent);
-		chartOfAccount.setTenantId(string);
+		chartOfAccount.setTenantId("default");
 		return chartOfAccount;
 	}
 
 	private AccountCodePurpose getAccountCodePurpose() {
 		AccountCodePurpose acp = AccountCodePurpose.builder().id("id").name("name").build();
-		acp.setTenantId(string);
+		acp.setTenantId("default");
 		return acp;
 	}
 
@@ -201,7 +202,7 @@ public class BankAccountServiceTest {
 
 	private BankAccountSearch getBankAccountSearch() {
 		BankAccountSearch bankAccountSearch = new BankAccountSearch();
-		bankAccountSearch.setTenantId(string);
+		bankAccountSearch.setTenantId("default");
 		bankAccountSearch.setPageSize(0);
 		bankAccountSearch.setOffset(0);
 		bankAccountSearch.setSortBy("Sort");

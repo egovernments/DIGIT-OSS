@@ -16,8 +16,6 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
-//class variables not used
 public class MasterDetail {
 
 	@Size(max=256)

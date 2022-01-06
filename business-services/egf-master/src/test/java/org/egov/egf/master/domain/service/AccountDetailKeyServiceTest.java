@@ -46,7 +46,10 @@ public class AccountDetailKeyServiceTest {
 	private BindingResult errors = new BeanPropertyBindingResult(null, null);
 	private RequestInfo requestInfo = new RequestInfo();
 	private List<AccountDetailKey> accountDetailKies = new ArrayList<>();
-	private String string="default";
+
+	@Before
+	public void setup() {
+	}
 
 	@Test
 	public final void testCreate() {
@@ -125,7 +128,7 @@ public class AccountDetailKeyServiceTest {
 		List<AccountDetailKey> accountDetailKies = new ArrayList<AccountDetailKey>();
 		AccountDetailKey accountDetailKey = AccountDetailKey.builder().id("1").key("1")
 				.accountDetailType(getAccountDetailType()).build();
-		accountDetailKey.setTenantId(string);
+		accountDetailKey.setTenantId("default");
 		accountDetailKies.add(accountDetailKey);
 		return accountDetailKies;
 	}
@@ -135,21 +138,21 @@ public class AccountDetailKeyServiceTest {
 		accountDetailKeySearch.setPageSize(0);
 		accountDetailKeySearch.setOffset(0);
 		accountDetailKeySearch.setSortBy("Sort");
-		accountDetailKeySearch.setTenantId(string);
+		accountDetailKeySearch.setTenantId("default");
 		return accountDetailKeySearch;
 	}
 
 	private AccountDetailKey getAccountDetailKey() {
 		AccountDetailKey accountDetailKey = AccountDetailKey.builder().id("1").key("1")
 				.accountDetailType(getAccountDetailType()).build();
-		accountDetailKey.setTenantId(string);
+		accountDetailKey.setTenantId("default");
 		return accountDetailKey;
 	}
 
 	private AccountDetailType getAccountDetailType() {
 		AccountDetailType accountDetailType = AccountDetailType.builder().id("1").name("name").tableName("contractor")
 				.fullyQualifiedName("abc/acb").active(true).build();
-		accountDetailType.setTenantId(string);
+		accountDetailType.setTenantId("default");
 		return accountDetailType;
 	}
 }

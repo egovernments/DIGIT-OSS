@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-
 @Setter
 @Getter
 @ToString
@@ -17,3 +16,4 @@ public class AccountCodePurpose {
 
     private String name = null;
 }
+

@@ -1,27 +1,0 @@
-
-J
-java:S37409"/Provide the parametrized type for this generic.(ßó‚ãÿÿÿÿÿ
-E
-java:S3740J"/Provide the parametrized type for this generic.(´È¨»
-U
-java:S1854š"9Remove this useless assignment to local variable "paths".(©À‚¶ÿÿÿÿÿ
-U
-java:S1854Ì"9Remove this useless assignment to local variable "paths".(©À‚¶ÿÿÿÿÿ
-³
-java:S1192"—Define a constant instead of duplicating this literal "\"action\":\"create\",\"did\":\"\",\"key\":\"\",\"msg_id\":\"\",\"requester_id\":\"\"," 5 times.(‹Ï‰žúÿÿÿÿ
-c
-java:S1192š"GDefine a constant instead of duplicating this literal "*/name" 3 times.(©À‚¶ÿÿÿÿÿ
-®
-java:S1192„"–Define a constant instead of duplicating this literal "\"key\":70,\"tenantId\":\"pb.amritsar\",\"userId\":126,\"addressType\":\"PERMANENT\"," 4 times.(¡Î€å
-k
-java:S1192š"ODefine a constant instead of duplicating this literal "*/mobileNumber" 3 times.(©À‚¶ÿÿÿÿÿ
-™
-java:S1192"~Define a constant instead of duplicating this literal "{\"RequestInfo\":{\"api_id\":\"1\",\"ver\":\"1\",\"ts\":null," 5 times.(’¨õËùÿÿÿÿ
-³
-java:S1192"œDefine a constant instead of duplicating this literal "\"auth_token\":null},\"User\":{\"userName\":\"ajay\",\"name\":\"ajay\",\"gender\":\"male\"," 3 times.(ÈïŒŽ
-o
-java:S1192›"SDefine a constant instead of duplicating this literal "*/guardianRelation" 3 times.(åüÿÏüÿÿÿÿ
-¸
-java:S1192ƒ" Define a constant instead of duplicating this literal "\"address\":\"785515|Bx2Y0nTfdnqyHQKAUs6+0WAFy0PgJY7CpVpvyhkoACD7ZTI=\",\"type\":\"PERMANENT\"," 4 times.(Ä â‰
-»
-java:S1192 "ŸDefine a constant instead of duplicating this literal "\"mobileNumber\":\"12312312\",\"active\":true,\"type\":\"CITIZEN\",\"password\":\"password\"}}" 3 times.(ÛÈð³øÿÿÿÿ

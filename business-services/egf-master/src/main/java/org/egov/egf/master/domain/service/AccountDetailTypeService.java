@@ -32,8 +32,6 @@ public class AccountDetailTypeService {
 	@Autowired
 	private SmartValidator validator;
 
-	private String string="accountdetailtypes";
-
 	@Transactional
 	public List<AccountDetailType> create(List<AccountDetailType> accountDetailTypes, BindingResult errors,
 			RequestInfo requestInfo) {
@@ -93,7 +91,7 @@ public class AccountDetailTypeService {
 				break;
 			case Constants.ACTION_CREATE:
 				if (accountdetailtypes == null) {
-					throw new InvalidDataException(string, ErrorCode.NOT_NULL.getCode(), null);
+					throw new InvalidDataException("accountdetailtypes", ErrorCode.NOT_NULL.getCode(), null);
 				}
 				for (AccountDetailType accountDetailType : accountdetailtypes) {
 					validator.validate(accountDetailType, errors);
@@ -105,7 +103,7 @@ public class AccountDetailTypeService {
 				break;
 			case Constants.ACTION_UPDATE:
 				if (accountdetailtypes == null) {
-					throw new InvalidDataException(string, ErrorCode.NOT_NULL.getCode(), null);
+					throw new InvalidDataException("accountdetailtypes", ErrorCode.NOT_NULL.getCode(), null);
 				}
 				for (AccountDetailType accountDetailType : accountdetailtypes) {
 					if (accountDetailType.getId() == null) {
@@ -121,7 +119,7 @@ public class AccountDetailTypeService {
 				break;
 			case Constants.ACTION_SEARCH:
 				if (accountdetailtypes == null) {
-					throw new InvalidDataException(string, ErrorCode.NOT_NULL.getCode(), null);
+					throw new InvalidDataException("accountdetailtypes", ErrorCode.NOT_NULL.getCode(), null);
 				}
 				for (AccountDetailType accountdetailtype : accountdetailtypes) {
 					if (accountdetailtype.getTenantId() == null) {

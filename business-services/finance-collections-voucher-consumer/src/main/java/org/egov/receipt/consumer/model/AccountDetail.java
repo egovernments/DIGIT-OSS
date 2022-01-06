@@ -1,4 +1,3 @@
-
 /*
  *    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
  *    accountability and the service delivery of the government  organizations.
@@ -65,6 +64,7 @@ import lombok.Setter;
 public class AccountDetail {
 
     private Long id;
+
     private Long orderId;
 
     private String glcode;

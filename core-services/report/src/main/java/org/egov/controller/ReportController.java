@@ -45,6 +45,7 @@ public class ReportController {
     public ResponseEntity<?> create(@PathVariable("moduleName") String moduleName, @RequestBody @Valid final MetaDataRequest metaDataRequest,
                                     final BindingResult errors) {
         try {
+            System.out.println("The Module Name from the URI is :" + moduleName);
             MetadataResponse mdr = reportService.getMetaData(metaDataRequest, moduleName);
             return reportService.getSuccessResponse(mdr, metaDataRequest.getRequestInfo(), metaDataRequest.getTenantId());
         } catch (CustomException ex) {
@@ -111,6 +112,7 @@ public class ReportController {
     public ResponseEntity<?> createv1(@PathVariable("moduleName") String moduleName, @RequestBody @Valid final MetaDataRequest metaDataRequest,
                                       final BindingResult errors) {
         try {
+            System.out.println("The Module Name from the URI is :" + moduleName);
             MetadataResponse mdr = reportService.getMetaData(metaDataRequest, moduleName);
             return reportService.getSuccessResponse(mdr, metaDataRequest.getRequestInfo(), metaDataRequest.getTenantId());
         } catch (Exception e) {

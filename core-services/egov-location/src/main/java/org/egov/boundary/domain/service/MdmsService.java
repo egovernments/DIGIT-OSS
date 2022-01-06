@@ -30,7 +30,7 @@ import static org.egov.boundary.util.BoundaryConstants.*;
 @Service
 public class MdmsService {
 
-   private static final Logger LOG = LoggerFactory.getLogger(MdmsService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MdmsService.class);
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper().disable(DeserializationFeature
             .FAIL_ON_UNKNOWN_PROPERTIES);
 

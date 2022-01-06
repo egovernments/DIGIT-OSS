@@ -101,7 +101,7 @@ public class MessageControllerTest {
             .messageIdentity(messageIdentity2)
             .message("kannada message for logout")
             .build();
-//       List<Message> expectedMessages = Arrays.asList(message1, message2);
+        List<Message> expectedMessages = Arrays.asList(message1, message2);
         mockMvc.perform(post("/messages/v1/_create")
             .content(getFileContents("createMessageRequest.json"))
             .contentType(MediaType.APPLICATION_JSON_UTF8))

@@ -23,38 +23,38 @@ import javax.validation.constraints.Size;
 @Builder
 public class EmployeeSearchCriteria {
 	
-	private List<String> codes;
+	public List<String> codes;
 	
-	private List<String> names;
+	public List<String> names;
 	
-	private List<String> departments;
+	public List<String> departments;
 	
-	private List<String> designations;
+	public List<String> designations;
 	
-	private Long asOnDate;
+	public Long asOnDate;
 
-	private List<String> roles;
+	public List<String> roles;
 	
-	private List<Long> ids;
+	public List<Long> ids;
 	
-	private List<String> employeestatuses;
+	public List<String> employeestatuses;
 	
-	private List<String> employeetypes;
+	public List<String> employeetypes;
 	
-	private List<String> uuids;
+	public List<String> uuids;
 	
-	private List<Long> positions;
+	public List<Long> positions;
 	
-	private Boolean isActive;
+	public Boolean isActive;
 
 	@Size(max = 250)
-	private String tenantId;
+	public String tenantId;
 	
-	private String phone;
+	public String phone;
 
-	private Integer offset;
+	public Integer offset;
 	
-	private Integer limit;
+	public Integer limit;
 	
 	
 	public boolean isCriteriaEmpty(EmployeeSearchCriteria criteria) {

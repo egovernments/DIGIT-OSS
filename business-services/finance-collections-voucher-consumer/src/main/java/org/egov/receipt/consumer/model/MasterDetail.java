@@ -54,8 +54,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-
-//class variables not used
 public class MasterDetail implements Serializable{
     private String name;
     private String filter;

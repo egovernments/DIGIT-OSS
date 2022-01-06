@@ -19,10 +19,6 @@ public class SurrenderReasonMapperTest {
     @InjectMocks
     private SurrenderReasonMapper surrenderReasonMapper;
 
-    private String string1="description";
-
-    private String string2="tenantId";
-
     @Before
     public void setup() {
         surrenderReasonMapper = new SurrenderReasonMapper();
@@ -92,11 +88,11 @@ public class SurrenderReasonMapperTest {
         SurrenderReason surrenderReason = new SurrenderReason();
 
         surrenderReason.setId("id");
-        surrenderReason.setDescription(string1);
+        surrenderReason.setDescription("description");
         surrenderReason.setName("name");
         surrenderReason.setCreatedBy(User.builder().id(1l).build());
         surrenderReason.setLastModifiedBy(User.builder().id(1l).build());
-        surrenderReason.setTenantId(string2);
+        surrenderReason.setTenantId("tenantId");
 
         return surrenderReason;
     }
@@ -106,11 +102,11 @@ public class SurrenderReasonMapperTest {
         SurrenderReasonContract contract = new SurrenderReasonContract();
 
         contract.setId("id");
-        contract.setDescription(string1);
+        contract.setDescription("description");
         contract.setName("name");
         contract.setCreatedBy(User.builder().id(1l).build());
         contract.setLastModifiedBy(User.builder().id(1l).build());
-        contract.setTenantId(string2);
+        contract.setTenantId("tenantId");
 
         return contract;
     }
@@ -120,11 +116,11 @@ public class SurrenderReasonMapperTest {
         SurrenderReasonSearch surrenderReasonSearch = new SurrenderReasonSearch();
 
         surrenderReasonSearch.setId("id");
-        surrenderReasonSearch.setDescription(string1);
+        surrenderReasonSearch.setDescription("description");
         surrenderReasonSearch.setName("name");
         surrenderReasonSearch.setCreatedBy(User.builder().id(1l).build());
         surrenderReasonSearch.setLastModifiedBy(User.builder().id(1l).build());
-        surrenderReasonSearch.setTenantId(string2);
+        surrenderReasonSearch.setTenantId("tenantId");
         surrenderReasonSearch.setPageSize(1);
         surrenderReasonSearch.setOffset(1);
 
@@ -136,11 +132,11 @@ public class SurrenderReasonMapperTest {
         SurrenderReasonSearchContract contract = new SurrenderReasonSearchContract();
 
         contract.setId("id");
-        contract.setDescription(string1);
+        contract.setDescription("description");
         contract.setName("name");
         contract.setCreatedBy(User.builder().id(1l).build());
         contract.setLastModifiedBy(User.builder().id(1l).build());
-        contract.setTenantId(string2);
+        contract.setTenantId("tenantId");
         contract.setPageSize(1);
         contract.setOffset(1);
 

@@ -52,14 +52,6 @@ public class BusinessCategoryControllerTest {
 	@MockBean
 	private ResponseInfoFact responseInfoFactory;
 
-	private String string1="Trade Licence";
-
-	private String string2="default";
-
-	private String string3="org.egov.collection";
-
-	private String string4="654654";
-
 	@Test
     @Ignore
 	public void test_should_create_business_category() throws Exception {
@@ -68,9 +60,9 @@ public class BusinessCategoryControllerTest {
 		when(responseInfoFactory.createResponseInfoFromRequestInfo(any(RequestInfo.class), eq(true)))
 				.thenReturn(getResponseInfo());
 
-		when(serviceCategoryService.getBusinessCategoryByNameAndTenantId(string1, string2, 1L, false))
+		when(serviceCategoryService.getBusinessCategoryByNameAndTenantId("Trade Licence", "default", 1L, false))
 				.thenReturn(true);
-		when(serviceCategoryService.getBusinessCategoryByCodeAndTenantId("TL", string2, 1L, false)).thenReturn(true);
+		when(serviceCategoryService.getBusinessCategoryByCodeAndTenantId("TL", "default", 1L, false)).thenReturn(true);
 		when(serviceCategoryService.createAsync(getBusinessCategoryRequest())).thenReturn(getBusinessCategoryRequest());
 
 		mockMvc.perform(post("/businessCategory/_create").contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -88,9 +80,9 @@ public class BusinessCategoryControllerTest {
 				.thenReturn(getResponseInfoInCaseOfFailure());
 		when(responseInfoFactory.createResponseInfoFromRequestInfo(any(RequestInfo.class), eq(true)))
 				.thenReturn(getResponseInfo());
-		when(serviceCategoryService.getBusinessCategoryByNameAndTenantId(string1, string2, 1L, true))
+		when(serviceCategoryService.getBusinessCategoryByNameAndTenantId("Trade Licence", "default", 1L, true))
 				.thenReturn(true);
-		when(serviceCategoryService.getBusinessCategoryByCodeAndTenantId("TLM", string2, 1L, true)).thenReturn(true);
+		when(serviceCategoryService.getBusinessCategoryByCodeAndTenantId("TLM", "default", 1L, true)).thenReturn(true);
 		when(serviceCategoryService.updateAsync(getBusinessCategoryRequestForUpdate()))
 				.thenReturn(getBusinessCategoryRequestForUpdate());
 		mockMvc.perform(post("/businessCategory/_update")
@@ -103,8 +95,8 @@ public class BusinessCategoryControllerTest {
 
 	private BusinessCategoryRequest getBusinessCategoryRequestForUpdate() {
 		User userInfo = User.builder().id(1L).build();
-		RequestInfo requestInfo = RequestInfo.builder().apiId(string3).ver("1.0").action("POST")
-				.did("4354648646").key("xyz").msgId(string4).authToken("345678f").userInfo(userInfo).build();
+		RequestInfo requestInfo = RequestInfo.builder().apiId("org.egov.collection").ver("1.0").action("POST")
+				.did("4354648646").key("xyz").msgId("654654").authToken("345678f").userInfo(userInfo).build();
         ;
         return BusinessCategoryRequest.builder().requestInfo(requestInfo).businessCategory(getBusinessCategory()).build();
 	}
@@ -112,9 +104,9 @@ public class BusinessCategoryControllerTest {
     private List<org.egov.commons.web.contract.BusinessCategory> getBusinessCategory() {
         List<org.egov.commons.web.contract.BusinessCategory> categories = new ArrayList<org.egov.commons.web.contract.BusinessCategory>();
         org.egov.commons.web.contract.BusinessCategory category1 = org.egov.commons.web.contract.BusinessCategory
-                .builder().id(1L).code("TLM").name(string1).active(true).tenantId(string2).build();
+                .builder().id(1L).code("TLM").name("Trade Licence").active(true).tenantId("default").build();
         org.egov.commons.web.contract.BusinessCategory category2 = org.egov.commons.web.contract.BusinessCategory
-                .builder().id(2L).code("PT").name("Property Tax").active(true).tenantId(string2).build();
+                .builder().id(2L).code("PT").name("Property Tax").active(true).tenantId("default").build();
         categories.add(category1);
         categories.add(category2);
         return  categories;
@@ -137,36 +129,36 @@ public class BusinessCategoryControllerTest {
 	}
 
 	private ResponseInfo getResponseInfoInCaseOfFailure() {
-		return ResponseInfo.builder().apiId(string3).ver("1.0").resMsgId("uief87324").msgId(string4)
+		return ResponseInfo.builder().apiId("org.egov.collection").ver("1.0").resMsgId("uief87324").msgId("654654")
 				.status("failed").build();
 	}
 
 	private BusinessCategoryRequest getBusinessCategoryRequest() {
 		User userInfo = User.builder().id(1L).build();
-		RequestInfo requestInfo = RequestInfo.builder().apiId(string3).ver("1.0").action("POST")
-				.did("4354648646").key("xyz").msgId(string4).authToken("345678f").userInfo(userInfo).build();
+		RequestInfo requestInfo = RequestInfo.builder().apiId("org.egov.collection").ver("1.0").action("POST")
+				.did("4354648646").key("xyz").msgId("654654").authToken("345678f").userInfo(userInfo).build();
 		org.egov.commons.web.contract.BusinessCategory category = org.egov.commons.web.contract.BusinessCategory
-				.builder().id(1L).code("TL").name(string1).active(true).tenantId(string2).build();
+				.builder().id(1L).code("TL").name("Trade Licence").active(true).tenantId("default").build();
 		return BusinessCategoryRequest.builder().requestInfo(requestInfo).businessCategory(getBusinessCategory()).build();
 	}
 
 	private List<BusinessCategory> getListOfModelBusinessCategories() {
-		BusinessCategory category1 = BusinessCategory.builder().id(3L).code("TL").name(string1).isactive(true)
-				.tenantId(string2).build();
+		BusinessCategory category1 = BusinessCategory.builder().id(3L).code("TL").name("Trade Licence").isactive(true)
+				.tenantId("default").build();
 		BusinessCategory category2 = BusinessCategory.builder().id(2L).code("MR").name("Marriage Registration")
-				.isactive(true).tenantId(string2).build();
+				.isactive(true).tenantId("default").build();
 		BusinessCategory category3 = BusinessCategory.builder().id(1L).code("CL").name("Collection").isactive(true)
-				.tenantId(string2).build();
+				.tenantId("default").build();
 		return Arrays.asList(category1, category2, category3);
 	}
 
 	private BusinessCategoryCriteria getBusinessCriteria() {
 		return BusinessCategoryCriteria.builder().id(1L).active(true).sortBy("code")
-				.sortOrder("desc").tenantId(string2).build();
+				.sortOrder("desc").tenantId("default").build();
 	}
 
 	private ResponseInfo getResponseInfo() {
-		return ResponseInfo.builder().apiId(string3).ver("1.0").resMsgId("uief87324").msgId(string4)
+		return ResponseInfo.builder().apiId("org.egov.collection").ver("1.0").resMsgId("uief87324").msgId("654654")
 				.status("successful").build();
 	}
 

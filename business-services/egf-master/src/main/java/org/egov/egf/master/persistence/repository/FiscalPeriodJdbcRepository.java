@@ -22,8 +22,6 @@ import org.springframework.stereotype.Service;
 public class FiscalPeriodJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(FiscalPeriodJdbcRepository.class);
 
-	private String string1=" and ";
-
 	static {
 		LOG.debug("init fiscalPeriod");
 		init(FiscalPeriodEntity.class);
@@ -71,70 +69,70 @@ public class FiscalPeriodJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
 		if (fiscalPeriodSearchEntity.getTenantId() != null) {
                     if (params.length() > 0) {
-                        params.append(string1);
+                        params.append(" and ");
                     }
                     params.append("tenantId =:tenantId");
                     paramValues.put("tenantId", fiscalPeriodSearchEntity.getTenantId());
                 }
 		if (fiscalPeriodSearchEntity.getId() != null) {
 			if (params.length() > 0) {
-				params.append(string1);
+				params.append(" and ");
 			}
 			params.append("id =:id");
 			paramValues.put("id", fiscalPeriodSearchEntity.getId());
 		}
 		if (fiscalPeriodSearchEntity.getIds() != null) {
                           if (params.length() > 0) {
-                                  params.append(string1);
+                                  params.append(" and ");
                           }
                           params.append("id in(:ids) ");
                           paramValues.put("ids", new ArrayList<String>(Arrays.asList(fiscalPeriodSearchEntity.getIds().split(","))));
                 }
 		if (fiscalPeriodSearchEntity.getName() != null) {
 			if (params.length() > 0) {
-				params.append(string1);
+				params.append(" and ");
 			}
 			params.append("name =:name");
 			paramValues.put("name", fiscalPeriodSearchEntity.getName());
 		}
 		if (fiscalPeriodSearchEntity.getFinancialYearId() != null) {
 			if (params.length() > 0) {
-				params.append(string1);
+				params.append(" and ");
 			}
 			params.append("financialYearId =:financialYear");
 			paramValues.put("financialYear", fiscalPeriodSearchEntity.getFinancialYearId());
 		}
 		if (fiscalPeriodSearchEntity.getStartingDate() != null) {
 			if (params.length() > 0) {
-				params.append(string1);
+				params.append(" and ");
 			}
 			params.append("startingDate =:startingDate");
 			paramValues.put("startingDate", fiscalPeriodSearchEntity.getStartingDate());
 		}
 		if (fiscalPeriodSearchEntity.getEndingDate() != null) {
 			if (params.length() > 0) {
-				params.append(string1);
+				params.append(" and ");
 			}
 			params.append("endingDate =:endingDate");
 			paramValues.put("endingDate", fiscalPeriodSearchEntity.getEndingDate());
 		}
 		if (fiscalPeriodSearchEntity.getActive() != null) {
 			if (params.length() > 0) {
-				params.append(string1);
+				params.append(" and ");
 			}
 			params.append("active =:active");
 			paramValues.put("active", fiscalPeriodSearchEntity.getActive());
 		}
 		if (fiscalPeriodSearchEntity.getIsActiveForPosting() != null) {
 			if (params.length() > 0) {
-				params.append(string1);
+				params.append(" and ");
 			}
 			params.append("isActiveForPosting =:isActiveForPosting");
 			paramValues.put("isActiveForPosting", fiscalPeriodSearchEntity.getIsActiveForPosting());
 		}
 		if (fiscalPeriodSearchEntity.getIsClosed() != null) {
 			if (params.length() > 0) {
-				params.append(string1);
+				params.append(" and ");
 			}
 			params.append("isClosed =:isClosed");
 			paramValues.put("isClosed", fiscalPeriodSearchEntity.getIsClosed());

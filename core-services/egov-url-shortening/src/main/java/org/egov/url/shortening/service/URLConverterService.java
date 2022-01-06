@@ -42,7 +42,8 @@ public class URLConverterService {
 
     @Autowired
     public URLConverterService(List<URLRepository> urlRepositories, ObjectMapper objectMapper) {
-    	this.urlRepositories = urlRepositories;
+    	System.out.println(urlRepositories);
+    	this.urlRepositories = urlRepositories;   
     	this.objectMapper = objectMapper;
     }
     

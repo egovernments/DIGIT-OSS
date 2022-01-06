@@ -11,7 +11,6 @@ import java.util.Date;
 @EqualsAndHashCode
 @ToString
 
-//class not used
 public class BusinessDetails {
 	private Long id;
 

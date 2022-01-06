@@ -1,4 +1,4 @@
-/*package org.egov;
+package org.egov;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,4 +14,3 @@ public class EgovTenantApplicationTests {
 	}
 
 }
-*/

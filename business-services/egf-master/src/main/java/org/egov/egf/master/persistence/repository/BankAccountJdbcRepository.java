@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class BankAccountJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(BankAccountJdbcRepository.class);
-	private String string=" and ";
 
 	static {
 		LOG.debug("init bankAccount");
@@ -70,84 +69,84 @@ public class BankAccountJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
 		if (bankAccountSearchEntity.getTenantId() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("tenantId =:tenantId");
 			paramValues.put("tenantId", bankAccountSearchEntity.getTenantId());
 		}
 		if (bankAccountSearchEntity.getId() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("id =:id");
 			paramValues.put("id", bankAccountSearchEntity.getId());
 		}
 		if (bankAccountSearchEntity.getIds() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("id in(:ids) ");
 			paramValues.put("ids", new ArrayList<String>(Arrays.asList(bankAccountSearchEntity.getIds().split(","))));
 		}
 		if (bankAccountSearchEntity.getBankBranchId() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("bankBranchId =:bankBranch");
 			paramValues.put("bankBranch", bankAccountSearchEntity.getBankBranchId());
 		}
 		if (bankAccountSearchEntity.getChartOfAccountId() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("chartOfAccountId =:chartOfAccount");
 			paramValues.put("chartOfAccount", bankAccountSearchEntity.getChartOfAccountId());
 		}
 		if (bankAccountSearchEntity.getFundId() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("fundId =:fund");
 			paramValues.put("fund", bankAccountSearchEntity.getFundId());
 		}
 		if (bankAccountSearchEntity.getAccountNumber() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("accountNumber =:accountNumber");
 			paramValues.put("accountNumber", bankAccountSearchEntity.getAccountNumber());
 		}
 		if (bankAccountSearchEntity.getAccountType() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("accountType =:accountType");
 			paramValues.put("accountType", bankAccountSearchEntity.getAccountType());
 		}
 		if (bankAccountSearchEntity.getDescription() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("description =:description");
 			paramValues.put("description", bankAccountSearchEntity.getDescription());
 		}
 		if (bankAccountSearchEntity.getActive() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("active =:active");
 			paramValues.put("active", bankAccountSearchEntity.getActive());
 		}
 		if (bankAccountSearchEntity.getPayTo() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("payTo =:payTo");
 			paramValues.put("payTo", bankAccountSearchEntity.getPayTo());
 		}
 		if (bankAccountSearchEntity.getType() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("type =:type");
 			paramValues.put("type", bankAccountSearchEntity.getType().toString());

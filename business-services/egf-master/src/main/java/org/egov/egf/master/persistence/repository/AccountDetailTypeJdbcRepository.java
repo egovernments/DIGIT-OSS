@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountDetailTypeJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(AccountDetailTypeJdbcRepository.class);
-	private String string=" and ";
 
 	static {
 		LOG.debug("init accountDetailType");
@@ -70,21 +69,21 @@ public class AccountDetailTypeJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
 		if (accountDetailTypeSearchEntity.getTenantId() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("tenantId =:tenantId");
 			paramValues.put("tenantId", accountDetailTypeSearchEntity.getTenantId());
 		}
 		if (accountDetailTypeSearchEntity.getId() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("id =:id");
 			paramValues.put("id", accountDetailTypeSearchEntity.getId());
 		}
 		if (accountDetailTypeSearchEntity.getIds() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("id in(:ids) ");
 			paramValues.put("ids",
@@ -92,35 +91,35 @@ public class AccountDetailTypeJdbcRepository extends JdbcRepository {
 		}
 		if (accountDetailTypeSearchEntity.getName() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("name =:name");
 			paramValues.put("name", accountDetailTypeSearchEntity.getName());
 		}
 		if (accountDetailTypeSearchEntity.getDescription() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("description =:description");
 			paramValues.put("description", accountDetailTypeSearchEntity.getDescription());
 		}
 		if (accountDetailTypeSearchEntity.getTablename() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("tableName =:tableName");
 			paramValues.put("tableName", accountDetailTypeSearchEntity.getTablename());
 		}
 		if (accountDetailTypeSearchEntity.getActive() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("active =:active");
 			paramValues.put("active", accountDetailTypeSearchEntity.getActive());
 		}
 		if (accountDetailTypeSearchEntity.getFullyQualifiedName() != null) {
 			if (params.length() > 0) {
-				params.append(string);
+				params.append(" and ");
 			}
 			params.append("fullyQualifiedName =:fullyQualifiedName");
 			paramValues.put("fullyQualifiedName", accountDetailTypeSearchEntity.getFullyQualifiedName());

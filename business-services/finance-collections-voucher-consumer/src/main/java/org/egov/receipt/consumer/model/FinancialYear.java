@@ -60,8 +60,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
-//class variables not used
 public class FinancialYear {
 
     private Long id;

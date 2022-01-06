@@ -35,8 +35,6 @@ public class FiscalPeriodService {
 	@Autowired
 	private FinancialYearRepository financialYearRepository;
 
-    private String string1="fiscalperiods";
-
 	private BindingResult validate(List<FiscalPeriod> fiscalperiods, String method, BindingResult errors) {
 
                 try {
@@ -47,7 +45,7 @@ public class FiscalPeriodService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (fiscalperiods == null) {
-                            throw new InvalidDataException(string1, ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException("fiscalperiods", ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (FiscalPeriod fiscalPeriod : fiscalperiods) {
                             validator.validate(fiscalPeriod, errors);
@@ -59,7 +57,7 @@ public class FiscalPeriodService {
                         break;
                     case Constants.ACTION_UPDATE:
                         if (fiscalperiods == null) {
-                            throw new InvalidDataException(string1, ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException("fiscalperiods", ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (FiscalPeriod fiscalPeriod : fiscalperiods) {
                             if (fiscalPeriod.getId() == null) {
@@ -74,7 +72,7 @@ public class FiscalPeriodService {
                         break;
                     case Constants.ACTION_SEARCH:
                         if (fiscalperiods == null) {
-                            throw new InvalidDataException(string1, ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException("fiscalperiods", ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (FiscalPeriod fiscalperiod : fiscalperiods) {
                             if (fiscalperiod.getTenantId() == null) {

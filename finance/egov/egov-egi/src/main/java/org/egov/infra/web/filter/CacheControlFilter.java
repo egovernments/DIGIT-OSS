@@ -107,4 +107,7 @@ public class CacheControlFilter implements Filter {
 		chain.doFilter(request, httpServletResponse);
 	}
 
+	@Override
+	public void destroy() {
+	}
 }

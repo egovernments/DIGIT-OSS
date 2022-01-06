@@ -61,10 +61,6 @@ public class BoundaryTypeRepository {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	private JdbcTemplate jdbcTemplate;
 
-	private String string1="parent";
-
-	private String string2="tenantId";
-
 	@Autowired
 	public BoundaryTypeRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate) {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
@@ -82,16 +78,16 @@ public class BoundaryTypeRepository {
 		boundaryType.setId(String.valueOf(getNextSequence()));
 		parametersMap.put("id", Long.valueOf(boundaryType.getId()));
 		if (boundaryType.getParent() != null && boundaryType.getParent().getId() != null) {
-			parametersMap.put(string1, boundaryType.getParent().getId());
+			parametersMap.put("parent", boundaryType.getParent().getId());
 		} else {
-			parametersMap.put(string1, boundaryType.getParent());
+			parametersMap.put("parent", boundaryType.getParent());
 		}
 		parametersMap.put("hierarchy", boundaryType.getHierarchy());
 		parametersMap.put("code", boundaryType.getCode());
 		parametersMap.put("name", boundaryType.getName());
 		parametersMap.put("hierarchytype", boundaryType.getHierarchyType().getId());
 		parametersMap.put("localname", boundaryType.getLocalName());
-		parametersMap.put(string2, boundaryType.getTenantId());
+		parametersMap.put("tenantid", boundaryType.getTenantId());
 		parametersMap.put("createddate", new Date());
 		parametersMap.put("lastmodifieddate", new Date());
 		parametersMap.put("createdby", 1);
@@ -103,9 +99,9 @@ public class BoundaryTypeRepository {
 	public BoundaryType update(BoundaryType boundaryType) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
 		if (boundaryType.getParent() != null && boundaryType.getParent().getId() != null) {
-			parametersMap.put(string1, Long.valueOf(boundaryType.getParent().getId()));
+			parametersMap.put("parent", Long.valueOf(boundaryType.getParent().getId()));
 		} else {
-			parametersMap.put(string1, boundaryType.getParent());
+			parametersMap.put("parent", boundaryType.getParent());
 		}
 		parametersMap.put("hierarchy", boundaryType.getHierarchy());
 		parametersMap.put("name", boundaryType.getName());
@@ -114,7 +110,7 @@ public class BoundaryTypeRepository {
 		parametersMap.put("lastmodifieddate", new Date());
 		parametersMap.put("lastmodifiedby", 1);
 		parametersMap.put("code", boundaryType.getCode());
-		parametersMap.put(string2, boundaryType.getTenantId());
+		parametersMap.put("tenantid", boundaryType.getTenantId());
 		namedParameterJdbcTemplate.update(BoundaryTypeQueryBuilder.getBoundaryTypeUpdatequery(), parametersMap);
 		return findByTenantIdAndCode(boundaryType.getTenantId(), boundaryType.getCode());
 	}
@@ -122,7 +118,7 @@ public class BoundaryTypeRepository {
 	public BoundaryType findByIdAndTenantId(Long id, String tenantId) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
 		BoundaryType boundaryType = null;
-		parametersMap.put(string2, tenantId);
+		parametersMap.put("tenantId", tenantId);
 		parametersMap.put("id", id);
 		List<BoundaryType> boundaryTypeList = namedParameterJdbcTemplate.query(
 				BoundaryTypeQueryBuilder.getBoundaryTypeByIdAndTenant(), parametersMap, new BoundaryTypeRowMapper());
@@ -134,7 +130,7 @@ public class BoundaryTypeRepository {
 
 	public List<BoundaryType> findAllByTenantId(String tenantId) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
-		parametersMap.put(string2, tenantId);
+		parametersMap.put("tenantId", tenantId);
 		List<BoundaryType> boundaryTypeList = namedParameterJdbcTemplate
 				.query(BoundaryTypeQueryBuilder.getAllByTenantId(), parametersMap, new BoundaryTypeRowMapper());
 		boundaryTypeList = setBoundaryTypesWithParents(boundaryTypeList);
@@ -143,7 +139,7 @@ public class BoundaryTypeRepository {
 
 	public List<BoundaryType> findAllByTenantIdAndName(String tenantId, String name) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
-		parametersMap.put(string2, tenantId);
+		parametersMap.put("tenantId", tenantId);
 		parametersMap.put("name", name);
 		List<BoundaryType> boundaryTypeList = namedParameterJdbcTemplate.query(
 				BoundaryTypeQueryBuilder.getAllByTByTenantIdAndName(), parametersMap, new BoundaryTypeRowMapper());
@@ -157,7 +153,7 @@ public class BoundaryTypeRepository {
 
 	public BoundaryType findByTenantIdAndCode(String tenantId, String code) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
-		parametersMap.put(string2, tenantId);
+		parametersMap.put("tenantId", tenantId);
 		parametersMap.put("code", code);
 		BoundaryType boundaryType = null;
 		List<BoundaryType> boundaryTypeList = namedParameterJdbcTemplate.query(
@@ -175,7 +171,7 @@ public class BoundaryTypeRepository {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
 		parametersMap.put("boundaryTypename", boundaryTypename);
 		parametersMap.put("hierarchyTypeName", hierarchyTypeName);
-		parametersMap.put(string2, tenantId);
+		parametersMap.put("tenantId", tenantId);
 		BoundaryType boundaryType = null;
 		List<BoundaryType> boundaryTypeList = namedParameterJdbcTemplate.query(
 				BoundaryTypeQueryBuilder.getAllByTByNameAndHierarchyTypeName(), parametersMap,
@@ -194,7 +190,7 @@ public class BoundaryTypeRepository {
 			final String tenantId) {
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
 		parametersMap.put("hierarchyTypeName", hierarchyTypeName);
-		parametersMap.put(string2, tenantId);
+		parametersMap.put("tenantId", tenantId);
 		List<BoundaryType> boundaryTypeList = namedParameterJdbcTemplate.query(
 				BoundaryTypeQueryBuilder.getAllByHierarchyTypeAndTenant(), parametersMap,
 				new BoundaryTypeNameRowMapper());
