@@ -31,19 +31,18 @@ public class SessionProcessor {
     private static Producer producer;
     private static Configuration configuration;
 
-    private static final String READ_ETS = "$.ets";
-
     public static Integer totalSessionCounter;
 
     private static List<String> existingUserIds;
 
     private static ElasticsearchConnector elasticsearchConnector;
 
-    private static PathProcessor pathProcessor;
+   private static PathProcessor pathProcessor;
 
-    public SessionProcessor() {
-        init();
-    }
+//    CONSTRUCTOR SHOULD NOT BE THERE
+//    public SessionProcessor() {
+//        init();
+//    }
 
     public static void init() {
         appProperties = new AppProperties();
@@ -82,8 +81,8 @@ public class SessionProcessor {
         String lastRecord = new JSONObject(sessionContent.get(sessionContent.size() - 1)).toString();
         String deviceId = JsonPath.using(configuration).parse(firstRecord).read("$.context.did");
 
-        Long startTime = JsonPath.using(configuration).parse(firstRecord).read(READ_ETS);
-        Long endTime = JsonPath.using(configuration).parse(lastRecord).read(READ_ETS);
+        Long startTime = JsonPath.using(configuration).parse(firstRecord).read("$.ets");
+        Long endTime = JsonPath.using(configuration).parse(lastRecord).read("$.ets");
         String timestamp = getTimestamp(startTime);
 
         String userId = getUserId(sessionContent);
@@ -125,9 +124,9 @@ public class SessionProcessor {
     private static SessionDetails buildSessionDetails(List<Map<String, Object>> sessionContent) {
 
         Long startTime = JsonPath.using(configuration).parse(new JSONObject(sessionContent.get(0)).toString())
-                .read(READ_ETS);
+                .read("$.ets");
         Long endTime = JsonPath.using(configuration).parse(new
-                JSONObject(sessionContent.get(sessionContent.size() - 1)).toString()).read(READ_ETS);
+                JSONObject(sessionContent.get(sessionContent.size() - 1)).toString()).read("$.ets");
         Long duration = endTime - startTime;
 
         String exitPage = JsonPath.using(configuration).parse(new

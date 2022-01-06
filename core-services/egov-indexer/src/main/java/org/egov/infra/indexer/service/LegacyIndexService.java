@@ -215,7 +215,7 @@ public class LegacyIndexService {
                                 } else {
                                     if (count > size) {
                                         count = (count - size) + presentCount;
-                                    }else if(count.equals(size)) {
+                                    }else if(count == size) {
                                         count = presentCount;
                                     }
                                     log.info("Size Count FINAL: " + count);

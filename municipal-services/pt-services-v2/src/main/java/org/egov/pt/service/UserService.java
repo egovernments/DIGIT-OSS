@@ -42,9 +42,11 @@ public class UserService {
     @Value("${egov.user.update.path}")
     private String userUpdateEndpoint;
 
-    private static final String CODE_CITIZEN = "CITIZEN";
-    private static final String GET_LAST_MODIFIED_DATE = "lastModifiedDate";
-    private static final String GET_PWD_EXPIRY_DATE = "pwdExpiryDate";
+    private static final String CITIZEN="CITIZEN";
+
+    private static final String LAST_MODIFIED_DATE="lastModifiedDate";
+
+    private static final String PWD_EXPIRY_DATE="pwdExpiryDate";
 
     /**
      * Creates user of the owners of property if it is not created already
@@ -105,7 +107,7 @@ public class UserService {
         owner.setActive(true);
         owner.setTenantId(tenantId.split("\\.")[0]);
         owner.setRoles(Collections.singletonList(role));
-        owner.setType(CODE_CITIZEN);
+        owner.setType(CITIZEN);
         owner.setCreatedDate(null);
         owner.setCreatedBy(null );
         owner.setLastModifiedDate(null);
@@ -114,8 +116,8 @@ public class UserService {
 
     private Role getCitizenRole(){
         Role role = new Role();
-        role.setCode(CODE_CITIZEN);
-        role.setName("Citizen");
+        role.setCode(CITIZEN);
+        role.setName(CITIZEN);
         return role;
     }
 
@@ -170,7 +172,7 @@ public class UserService {
         userSearchRequest.setRequestInfo(requestInfo);
         userSearchRequest.setTenantId(tenantId);
         // Should this be hardcoded?
-        userSearchRequest.setUserType(CODE_CITIZEN);
+        userSearchRequest.setUserType(CITIZEN);
         Set<String> availableMobileNumbers = new HashSet<>();
 
         listOfMobileNumbers.forEach(mobilenumber -> {
@@ -232,12 +234,12 @@ public class UserService {
         if(users!=null){
             users.forEach( map -> {
                         map.put("createdDate",dateTolong((String)map.get("createdDate"),format1));
-                        if((String)map.get(GET_LAST_MODIFIED_DATE)!=null)
-                            map.put(GET_LAST_MODIFIED_DATE,dateTolong((String)map.get(GET_LAST_MODIFIED_DATE),format1));
+                        if((String)map.get(LAST_MODIFIED_DATE)!=null)
+                            map.put(LAST_MODIFIED_DATE,dateTolong((String)map.get(LAST_MODIFIED_DATE),format1));
                         if((String)map.get("dob")!=null)
                             map.put("dob",dateTolong((String)map.get("dob"),dobFormat));
-                        if((String)map.get(GET_PWD_EXPIRY_DATE)!=null)
-                            map.put(GET_PWD_EXPIRY_DATE,dateTolong((String)map.get(GET_PWD_EXPIRY_DATE),format1));
+                        if((String)map.get(PWD_EXPIRY_DATE)!=null)
+                            map.put(PWD_EXPIRY_DATE,dateTolong((String)map.get(PWD_EXPIRY_DATE),format1));
                     }
             );
         }
@@ -292,7 +294,7 @@ public class UserService {
         userSearchRequest.setMobileNumber(criteria.getMobileNumber());
         userSearchRequest.setName(criteria.getName());
         userSearchRequest.setActive(true);
-        userSearchRequest.setUserType(CODE_CITIZEN);
+        userSearchRequest.setUserType(CITIZEN);
         return userSearchRequest;
     }
 
@@ -333,7 +335,7 @@ public class UserService {
 
         Role role = getCitizenRole();
         // If user is creating assessment, userInfo object from requestInfo is assigned as citizenInfo
-        if(requestInfo.getUserInfo().getType().equalsIgnoreCase(CODE_CITIZEN))
+        if(requestInfo.getUserInfo().getType().equalsIgnoreCase(CITIZEN))
         {   request.getProperties().forEach(property -> {
             property.getPropertyDetails().forEach(propertyDetail -> {
                 propertyDetail.setCitizenInfo(new OwnerInfo(requestInfo.getUserInfo()));
@@ -375,7 +377,7 @@ public class UserService {
 
     private UserDetailResponse searchByUserName(String userName,String tenantId){
         UserSearchRequest userSearchRequest = new UserSearchRequest();
-        userSearchRequest.setUserType(CODE_CITIZEN);
+        userSearchRequest.setUserType(CITIZEN);
         userSearchRequest.setUserName(userName);
         userSearchRequest.setTenantId(tenantId);
         StringBuilder uri = new StringBuilder(userHost).append(userSearchEndpoint);

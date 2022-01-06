@@ -42,9 +42,7 @@ public class MDMSValidator {
 
 	@Value("${egov.mdms.search.endpoint}")
 	private String mdmsEndpoint;
-
-	private static final String ATTRIBUTES_FILTER_CODE = "$.*.code";
-
+    
 	/**
 	 * Validate Master data for given request
 	 * 
@@ -73,10 +71,10 @@ public class MDMSValidator {
 			List<String> names = new ArrayList<>(Arrays.asList(WCConstants.MDMS_WC_CONNECTION_TYPE,
 					WCConstants.MDMS_WC_CONNECTION_CATEGORY, WCConstants.MDMS_WC_WATER_SOURCE));
 			Map<String, List<String>> codes = getAttributeValues(tenantId, WCConstants.MDMS_WC_MOD_NAME, names,
-					ATTRIBUTES_FILTER_CODE, jsonPath, request.getRequestInfo());
+					"$.*.code", jsonPath, request.getRequestInfo());
 			List<String> taxModelnames = new ArrayList<>(Arrays.asList(WCConstants.WC_ROADTYPE_MASTER));
 			Map<String, List<String>> codeFromCalculatorMaster = getAttributeValues(tenantId, WCConstants.WS_TAX_MODULE,
-					taxModelnames, ATTRIBUTES_FILTER_CODE, taxjsonPath, request.getRequestInfo());
+					taxModelnames, "$.*.code", taxjsonPath, request.getRequestInfo());
 
 			// merge codes
 			String[] finalmasterNames = {WCConstants.MDMS_WC_CONNECTION_TYPE, WCConstants.MDMS_WC_CONNECTION_CATEGORY,
@@ -174,7 +172,7 @@ public class MDMSValidator {
 		// calling property related master
 		List<String> propertyModuleMasters = new ArrayList<>(Arrays.asList(WCConstants.PROPERTY_OWNERTYPE));
 		Map<String, List<String>> codesFromPropetyMasters = getAttributeValues(request.getWaterConnection().getTenantId(),
-				WCConstants.PROPERTY_MASTER_MODULE, propertyModuleMasters, ATTRIBUTES_FILTER_CODE,
+				WCConstants.PROPERTY_MASTER_MODULE, propertyModuleMasters, "$.*.code",
 				WCConstants.PROPERTY_JSONPATH_ROOT, request.getRequestInfo());
 		// merge codes
 		String[] finalmasterNames = {WCConstants.PROPERTY_OWNERTYPE};
@@ -212,10 +210,10 @@ public class MDMSValidator {
 			List<String> names = new ArrayList<>(Arrays.asList(WCConstants.MDMS_WC_CONNECTION_TYPE,
 					WCConstants.MDMS_WC_CONNECTION_CATEGORY, WCConstants.MDMS_WC_WATER_SOURCE));
 			Map<String, List<String>> codes = getAttributeValues(tenantId, WCConstants.MDMS_WC_MOD_NAME, names,
-					ATTRIBUTES_FILTER_CODE, jsonPath, request.getRequestInfo());
+					"$.*.code", jsonPath, request.getRequestInfo());
 			List<String> taxModelnames = new ArrayList<>(Arrays.asList(WCConstants.WC_ROADTYPE_MASTER));
 			Map<String, List<String>> codeFromCalculatorMaster = getAttributeValues(tenantId, WCConstants.WS_TAX_MODULE,
-					taxModelnames, ATTRIBUTES_FILTER_CODE, taxjsonPath, request.getRequestInfo());
+					taxModelnames, "$.*.code", taxjsonPath, request.getRequestInfo());
 			// merge codes
 			String[] finalmasterNames = {WCConstants.MDMS_WC_CONNECTION_TYPE, WCConstants.MDMS_WC_CONNECTION_CATEGORY,
 					WCConstants.MDMS_WC_WATER_SOURCE, WCConstants.WC_ROADTYPE_MASTER};

@@ -46,8 +46,6 @@ public class EditNotificationService {
 //            case businessService_BPA:
 //                util.sendSMS(smsRequests,config.getIsBPASMSEnabled());
 //                break;
-            default:
-                break;
         }
     }
 

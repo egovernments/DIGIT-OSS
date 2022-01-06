@@ -26,11 +26,6 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class UserRepositoryTest {
 
-    private static final String SEARCH_CONTENT_TEST_EMAIL = "test@gmail.com";
-    private static final String SEARCH_CONTENT_MOBILE_NUMBER = "123456789";
-    private static final String FETCH_USER_TENANT_ID = "tenantId";
-    private static final String FETCH_USER_CITIZEN = "CITIZEN";
-
     @InjectMocks
     private UserRepository userRepository;
 
@@ -47,16 +42,16 @@ public class UserRepositoryTest {
     @Test
     public void test_should_create_user() {
         List<UserSearchResponseContent> list = new ArrayList<UserSearchResponseContent>();
-        UserSearchResponseContent searchContent = new UserSearchResponseContent(1l, SEARCH_CONTENT_TEST_EMAIL, SEARCH_CONTENT_MOBILE_NUMBER);
+        UserSearchResponseContent searchContent = new UserSearchResponseContent(1l, "test@gmail.com", "123456789");
         list.add(searchContent);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("user", list);
 
         when(restTemplate.postForObject(any(String.class), any(UserSearchRequest.class), eq(Map.class)))
                 .thenReturn(map);
-        User actualUser = userRepository.fetchUser(SEARCH_CONTENT_MOBILE_NUMBER, FETCH_USER_TENANT_ID, FETCH_USER_CITIZEN);
+        User actualUser = userRepository.fetchUser("123456789", "tenantId", "CITIZEN");
 
-        final User expectedUser = new User(1L, SEARCH_CONTENT_TEST_EMAIL, SEARCH_CONTENT_MOBILE_NUMBER);
+        final User expectedUser = new User(1L, "test@gmail.com", "123456789");
 
         assertEquals(expectedUser, actualUser);
     }
@@ -64,43 +59,43 @@ public class UserRepositoryTest {
     @Test
     public void test_should_notcreateuser_whenresponse_isnull() {
         List<UserSearchResponseContent> list = new ArrayList<UserSearchResponseContent>();
-        UserSearchResponseContent searchContent = new UserSearchResponseContent(1l, SEARCH_CONTENT_TEST_EMAIL, SEARCH_CONTENT_MOBILE_NUMBER);
+        UserSearchResponseContent searchContent = new UserSearchResponseContent(1l, "test@gmail.com", "123456789");
         list.add(searchContent);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("user", list);
 
         when(restTemplate.postForObject(any(String.class), any(UserSearchRequest.class), eq(Map.class)))
                 .thenReturn(null);
-        User actualUser = userRepository.fetchUser(SEARCH_CONTENT_MOBILE_NUMBER, FETCH_USER_TENANT_ID, FETCH_USER_CITIZEN);
+        User actualUser = userRepository.fetchUser("123456789", "tenantId", "CITIZEN");
         assertEquals(actualUser, null);
     }
 
     @Test
     public void test_should_throw_exception_when_userIsNotFound() {
         List<UserSearchResponseContent> list = new ArrayList<UserSearchResponseContent>();
-        UserSearchResponseContent searchContent = new UserSearchResponseContent(1l, SEARCH_CONTENT_TEST_EMAIL, SEARCH_CONTENT_MOBILE_NUMBER);
+        UserSearchResponseContent searchContent = new UserSearchResponseContent(1l, "test@gmail.com", "123456789");
         list.add(searchContent);
         Map<String, Object> map = new HashMap<String, Object>();
 
         when(restTemplate.postForObject(any(String.class), any(UserSearchRequest.class), eq(Map.class)))
                 .thenReturn(map);
-        User actualUser = userRepository.fetchUser(SEARCH_CONTENT_MOBILE_NUMBER, FETCH_USER_TENANT_ID, FETCH_USER_CITIZEN);
+        User actualUser = userRepository.fetchUser("123456789", "tenantId", "CITIZEN");
         assertEquals(actualUser, null);
     }
 
     @Test
     public void test_should_notmatch_create_user_And_expecteduser() {
         List<UserSearchResponseContent> list = new ArrayList<UserSearchResponseContent>();
-        UserSearchResponseContent searchContent = new UserSearchResponseContent(1l, SEARCH_CONTENT_TEST_EMAIL, SEARCH_CONTENT_MOBILE_NUMBER);
+        UserSearchResponseContent searchContent = new UserSearchResponseContent(1l, "test@gmail.com", "123456789");
         list.add(searchContent);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("user", list);
 
         when(restTemplate.postForObject(any(String.class), any(UserSearchRequest.class), eq(Map.class)))
                 .thenReturn(map);
-        User actualUser = userRepository.fetchUser(SEARCH_CONTENT_MOBILE_NUMBER, FETCH_USER_TENANT_ID, FETCH_USER_CITIZEN);
+        User actualUser = userRepository.fetchUser("123456789", "tenantId", "CITIZEN");
 
-        final User expectedUser = new User(2L, "test123@gmail.com", SEARCH_CONTENT_MOBILE_NUMBER);
+        final User expectedUser = new User(2L, "test123@gmail.com", "123456789");
 
         assertNotEquals(expectedUser, actualUser);
     }

@@ -41,6 +41,12 @@ public class AccountDetailTypeServiceTest {
 	private RequestInfo requestInfo = new RequestInfo();
 	private List<AccountDetailType> accountDetailTypes = new ArrayList<>();
 
+	private static final String CONTRACTOR="contractor";
+
+	private static final String ABC_CONTRACTOR="abc/contractor";
+
+	private static final String DEFAULT="default";
+
 	@Before
 	public void setup() {
 	}
@@ -59,8 +65,8 @@ public class AccountDetailTypeServiceTest {
 
 	@Test
 	public final void testCreateInvalid() {
-		AccountDetailType accountDetailType1 = AccountDetailType.builder().id("a").tableName("contractor")
-				.fullyQualifiedName("abc/contractor").active(true).build();
+		AccountDetailType accountDetailType1 = AccountDetailType.builder().id("a").tableName(CONTRACTOR)
+				.fullyQualifiedName(ABC_CONTRACTOR).active(true).build();
 		accountDetailTypes.add(accountDetailType1);
 		when(accountDetailTypeRepository.uniqueCheck(any(String.class), any(AccountDetailType.class))).thenReturn(true);
 		accountDetailTypeService.create(accountDetailTypes, errors, requestInfo);
@@ -97,9 +103,9 @@ public class AccountDetailTypeServiceTest {
 
 	private List<AccountDetailType> getAccountDetailTypes() {
 		List<AccountDetailType> accountDetailTypes = new ArrayList<AccountDetailType>();
-		AccountDetailType accountDetailType = AccountDetailType.builder().id("1").name("name").tableName("contractor")
-				.fullyQualifiedName("abc/contractor").active(true).build();
-		accountDetailType.setTenantId("default");
+		AccountDetailType accountDetailType = AccountDetailType.builder().id("1").name("name").tableName(CONTRACTOR)
+				.fullyQualifiedName(ABC_CONTRACTOR).active(true).build();
+		accountDetailType.setTenantId(DEFAULT);
 		accountDetailTypes.add(accountDetailType);
 		return accountDetailTypes;
 	}
@@ -109,14 +115,14 @@ public class AccountDetailTypeServiceTest {
 		accountDetailTypeSearch.setPageSize(0);
 		accountDetailTypeSearch.setOffset(0);
 		accountDetailTypeSearch.setSortBy("Sort");
-		accountDetailTypeSearch.setTenantId("default");
+		accountDetailTypeSearch.setTenantId(DEFAULT);
 		return accountDetailTypeSearch;
 	}
 
 	private AccountDetailType getAccountDetailType() {
 		AccountDetailType accountDetailType = AccountDetailType.builder().id("1").name("name").active(true)
-				.tableName("contractor").fullyQualifiedName("abc/contractor").build();
-		accountDetailType.setTenantId("default");
+				.tableName(CONTRACTOR).fullyQualifiedName(ABC_CONTRACTOR).build();
+		accountDetailType.setTenantId(DEFAULT);
 		return accountDetailType;
 	}
 

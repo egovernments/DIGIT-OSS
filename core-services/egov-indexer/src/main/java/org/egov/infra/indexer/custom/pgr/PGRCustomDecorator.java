@@ -63,6 +63,7 @@ public class PGRCustomDecorator {
 						if(!StringUtils.isEmpty(action.getAssignee())) {
 							object.setAssignee(action.getAssignee());
 						}
+
 						break;
 					}else if(action.getBy().contains("Employee")) {
 						object.setAssignee(action.getBy().split(":")[0]);

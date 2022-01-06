@@ -56,6 +56,12 @@ public class AxisGateway implements Gateway {
 
     private final boolean ACTIVE;
 
+    private static final String VPC_MERCH_TXN_REF="vpc_MerchTxnRef";
+
+    private static final String VPC_AMOUNT="vpc_Amount";
+
+    private static final String VPC_SECURE_HASH="vpc_SecureHash";
+
     /**
      * Initialize by populating all required config parameters
      *
@@ -93,16 +99,16 @@ public class AxisGateway implements Gateway {
         fields.put("vpc_Locale", LOCALE);
         fields.put("vpc_Currency", CURRENCY);
         fields.put("vpc_ReturnURL", transaction.getCallbackUrl());
-        fields.put("vpc_MerchTxnRef", transaction.getTxnId());
+        fields.put(VPC_MERCH_TXN_REF, transaction.getTxnId());
         fields.put("vpc_OrderInfo", (String) transaction.getAdditionalFields().get(BANK_ACCOUNT_NUMBER));
-        fields.put("vpc_Amount", String.valueOf(Utils.formatAmtAsPaise(transaction.getTxnAmount())));
+        fields.put(VPC_AMOUNT, String.valueOf(Utils.formatAmtAsPaise(transaction.getTxnAmount())));
 
         String secureHash = AxisUtils.SHAhashAllFields(fields, SECURE_SECRET);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         fields.forEach(params::add);
 
-        params.add("vpc_SecureHash", secureHash);
+        params.add(VPC_SECURE_HASH, secureHash);
         String ENCRYPTION_TYPE = "SHA256";
         params.add("vpc_SecureHashType", ENCRYPTION_TYPE);
 
@@ -114,8 +120,8 @@ public class AxisGateway implements Gateway {
 
     @Override
     public Transaction fetchStatus(Transaction currentStatus, Map<String, String> params) {
-        String checksum = params.get("vpc_SecureHash");
-        params.remove("vpc_SecureHash");
+        String checksum = params.get(VPC_SECURE_HASH);
+        params.remove(VPC_SECURE_HASH);
         params.remove("vpc_SecureHashType");
 
         if (!StringUtils.isEmpty(checksum)) {
@@ -145,7 +151,7 @@ public class AxisGateway implements Gateway {
 
     @Override
     public String transactionIdKeyInResponse() {
-        return "vpc_MerchTxnRef";
+        return VPC_MERCH_TXN_REF;
     }
 
     private Transaction fetchStatusFromGateway(Transaction currentStatus) {
@@ -158,7 +164,7 @@ public class AxisGateway implements Gateway {
         fields.put("vpc_Command", VPC_COMMAND_STATUS);
         fields.put("vpc_AccessCode", VPC_ACCESS_CODE);
         fields.put("vpc_Merchant", MERCHANT_ID);
-        fields.put("vpc_MerchTxnRef", txnRef);
+        fields.put(VPC_MERCH_TXN_REF, txnRef);
         fields.put("vpc_User", AMA_USER);
         fields.put("vpc_Password", AMA_PWD);
 
@@ -290,7 +296,7 @@ public class AxisGateway implements Gateway {
             status = Transaction.TxnStatusEnum.SUCCESS;
             return Transaction.builder()
                     .txnId(currentStatus.getTxnId())
-                    .txnAmount(Utils.convertPaiseToRupee(resp.get("vpc_Amount").get(0)))
+                    .txnAmount(Utils.convertPaiseToRupee(resp.get(VPC_AMOUNT).get(0)))
                     .txnStatus(status)
                     .gatewayTxnId(resp.get("vpc_TransactionNo").get(0))
                     .gatewayPaymentMode(resp.get("vpc_Card").get(0))
@@ -302,7 +308,7 @@ public class AxisGateway implements Gateway {
             status = Transaction.TxnStatusEnum.FAILURE;
             return Transaction.builder()
                     .txnId(currentStatus.getTxnId())
-                    .txnAmount(Utils.convertPaiseToRupee(resp.get("vpc_Amount").get(0)))
+                    .txnAmount(Utils.convertPaiseToRupee(resp.get(VPC_AMOUNT).get(0)))
                     .txnStatus(status)
                     .gatewayTxnId(resp.get("vpc_TransactionNo").get(0))
                     .gatewayStatusCode(respCode)

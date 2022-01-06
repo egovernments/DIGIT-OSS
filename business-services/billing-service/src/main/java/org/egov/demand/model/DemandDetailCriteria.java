@@ -50,6 +50,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class DemandDetailCriteria {
 	
 	@NotNull

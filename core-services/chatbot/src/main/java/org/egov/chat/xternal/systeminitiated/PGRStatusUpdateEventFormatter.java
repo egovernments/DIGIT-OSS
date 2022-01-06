@@ -53,14 +53,6 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
 
     private String citizenKeywordLocalization = "chatbot.template.citizen";
 
-    private static final String EXTRA_INFO_KEY = "extraInfo";
-
-    private static final String FIELD_NAME_RECIPIENT_KEY = "recipient";
-
-    private static final String FIELD_NAME_TEMPLATE_ID_KEY = "templateId";
-
-    private static final String PARAMS_KEY = "params";
-
     @Value("${state.level.tenant.id}")
     private String stateLevelTenantId;
     @Value("${egov.external.host}")
@@ -137,7 +129,7 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
                 ObjectNode userChatNodeForStatusUpdate = createChatNodeForUser(event);
                 if(StringUtils.isEmpty(status) && StringUtils.isEmpty(action) && !StringUtils.isEmpty(comments)) {
                     ObjectNode userChatNodeForComment = userChatNodeForStatusUpdate.deepCopy();
-                    userChatNodeForComment.set(EXTRA_INFO_KEY, createResponseForComment(event, comments, citizenName));
+                    userChatNodeForComment.set("extraInfo", createResponseForComment(event, comments, citizenName));
                     chatNodes.add(userChatNodeForComment);
                 }
                 JsonNode extraInfo = null;
@@ -159,7 +151,7 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
                     }
                 }
                 if (extraInfo != null) {
-                    userChatNodeForStatusUpdate.set(EXTRA_INFO_KEY, extraInfo);
+                    userChatNodeForStatusUpdate.set("extraInfo", extraInfo);
                     chatNodes.add(userChatNodeForStatusUpdate);
                 }
             }
@@ -177,8 +169,8 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
         user.put("userId", uuid);
         chatNode.set("user", user);
         ObjectNode extraInfo = objectMapper.createObjectNode();
-        extraInfo.put(FIELD_NAME_RECIPIENT_KEY, sourceWhatsAppNumber);
-        chatNode.set(EXTRA_INFO_KEY, extraInfo);
+        extraInfo.put("recipient", sourceWhatsAppNumber);
+        chatNode.set("extraInfo", extraInfo);
         return chatNode;
     }
 
@@ -260,9 +252,9 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
         params.add(complaintCategory);
         params.add(serviceRequestId);
         params.add(comment);
-        extraInfo.put(FIELD_NAME_TEMPLATE_ID_KEY, commentTemplateId);
-        extraInfo.put(FIELD_NAME_RECIPIENT_KEY, sourceWhatsAppNumber);
-        extraInfo.set(PARAMS_KEY, params);
+        extraInfo.put("templateId", commentTemplateId);
+        extraInfo.put("recipient", sourceWhatsAppNumber);
+        extraInfo.set("params", params);
         return extraInfo;
     }
 
@@ -280,9 +272,9 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
         params.add(serviceRequestId);
         params.add(assigneeName);
         params.add(complaintURL);
-        extraInfo.put(FIELD_NAME_TEMPLATE_ID_KEY, assignedCitizenTemplateId);
-        extraInfo.put(FIELD_NAME_RECIPIENT_KEY, sourceWhatsAppNumber);
-        extraInfo.set(PARAMS_KEY, params);
+        extraInfo.put("templateId", assignedCitizenTemplateId);
+        extraInfo.put("recipient", sourceWhatsAppNumber);
+        extraInfo.set("params", params);
         return extraInfo;
     }
 
@@ -321,9 +313,9 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
         params.add(complaintCategory);
         params.add(serviceRequestId);
         params.add(rejectReason);
-        extraInfo.put(FIELD_NAME_TEMPLATE_ID_KEY, rejectTemplateId);
-        extraInfo.put(FIELD_NAME_RECIPIENT_KEY, sourceWhatsAppNumber);
-        extraInfo.set(PARAMS_KEY, params);
+        extraInfo.put("templateId", rejectTemplateId);
+        extraInfo.put("recipient", sourceWhatsAppNumber);
+        extraInfo.set("params", params);
         return extraInfo;
     }
 
@@ -338,9 +330,9 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
         params.add(complaintCategory);
         params.add(serviceRequestId);
         params.add(complaintURL);
-        extraInfo.put(FIELD_NAME_TEMPLATE_ID_KEY, resolvedTemplateId);
-        extraInfo.put(FIELD_NAME_RECIPIENT_KEY, sourceWhatsAppNumber);
-        extraInfo.set(PARAMS_KEY, params);
+        extraInfo.put("templateId", resolvedTemplateId);
+        extraInfo.put("recipient", sourceWhatsAppNumber);
+        extraInfo.set("params", params);
         return extraInfo;
     }
 
@@ -358,9 +350,9 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
         params.add(serviceRequestId);
         params.add(assigneeName);
         params.add(complaintURL);
-        extraInfo.put(FIELD_NAME_TEMPLATE_ID_KEY, reassignAssignedTemplateId);
-        extraInfo.put(FIELD_NAME_RECIPIENT_KEY, sourceWhatsAppNumber);
-        extraInfo.set(PARAMS_KEY, params);
+        extraInfo.put("templateId", reassignAssignedTemplateId);
+        extraInfo.put("recipient", sourceWhatsAppNumber);
+        extraInfo.set("params", params);
         return extraInfo;
     }
 

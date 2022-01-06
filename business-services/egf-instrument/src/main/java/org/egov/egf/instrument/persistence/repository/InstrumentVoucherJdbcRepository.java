@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 public class InstrumentVoucherJdbcRepository extends JdbcRepository {
     private static final Logger LOG = LoggerFactory.getLogger(InstrumentVoucherJdbcRepository.class);
 
+    private static final String MESSAGE=" and ";
+
     static {
         LOG.debug("init instrumentVoucher");
         init(InstrumentVoucherEntity.class);
@@ -76,14 +78,14 @@ public class InstrumentVoucherJdbcRepository extends JdbcRepository {
         // implement jdbc specfic search
         if (instrumentVoucherSearchEntity.getTenantId() != null) {
             if (params.length() > 0)
-                params.append(" and ");
+                params.append(MESSAGE);
             params.append("tenantId =:tenantId");
             paramValues.put("tenantId", instrumentVoucherSearchEntity.getTenantId());
         }
 
         if (instrumentVoucherSearchEntity.getInstruments() != null) {
             if (params.length() > 0)
-                params.append(" and ");
+                params.append(MESSAGE);
             params.append("instrumentId in (:instruments)");
             paramValues.put("instruments",
                     new ArrayList<String>(Arrays.asList(instrumentVoucherSearchEntity.getInstruments().split(","))));
@@ -91,7 +93,7 @@ public class InstrumentVoucherJdbcRepository extends JdbcRepository {
 
         if (instrumentVoucherSearchEntity.getReceiptIds() != null) {
             if (params.length() > 0)
-                params.append(" and ");
+                params.append(MESSAGE);
             params.append("receiptHeaderId in (:receiptIds)");
             paramValues.put("receiptIds",
                     new ArrayList<String>(Arrays.asList(instrumentVoucherSearchEntity.getReceiptIds().split(","))));

@@ -32,9 +32,11 @@ public class UserService {
 	@Autowired
 	private ObjectMapper mapper;
 
-	private static final String CODE_CITIZEN = "CITIZEN";
-	private static final String GET_LAST_MODIFIED_DATE = "lastModifiedDate";
-	private static final String GET_PWD_EXPIRY_DATE = "pwdExpiryDate";
+	private static final String CITIZEN="CITIZEN";
+
+	private static final String LAST_MODIFIED_DATE="lastModifiedDate";
+
+	private static final String PWD_EXPIRY_DATE="pwdExpiryDate";
 
 	/**
 	 * Creates user of the connection holders of sewerage connection if it is not
@@ -96,7 +98,7 @@ public class UserService {
 	 * @return Role
 	 */
 	private Role getCitizenRole() {
-		return Role.builder().code(CODE_CITIZEN).name("Citizen").build();
+		return Role.builder().code(CITIZEN).name(CITIZEN).build();
 	}
 
 	/**
@@ -112,7 +114,7 @@ public class UserService {
 		StringBuilder uri = new StringBuilder(configuration.getUserHost())
 				.append(configuration.getUserSearchEndpoint());
 		UserSearchRequest userSearchRequest = UserSearchRequest.builder()
-				.requestInfo(sewerageConnectionRequest.getRequestInfo()).userType(CODE_CITIZEN)
+				.requestInfo(sewerageConnectionRequest.getRequestInfo()).userType(CITIZEN)
 				.tenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId()).build();
 		Set<String> availableMobileNumbers = new HashSet<>();
 		listOfMobileNumbers.forEach(mobilenumber -> {
@@ -169,12 +171,12 @@ public class UserService {
 		if (null != users) {
 			users.forEach(map -> {
 				map.put("createdDate", dateTolong((String) map.get("createdDate"), format1));
-				if ((String) map.get(GET_LAST_MODIFIED_DATE) != null)
-					map.put(GET_LAST_MODIFIED_DATE, dateTolong((String) map.get(GET_LAST_MODIFIED_DATE), format1));
+				if ((String) map.get(LAST_MODIFIED_DATE) != null)
+					map.put(LAST_MODIFIED_DATE, dateTolong((String) map.get(LAST_MODIFIED_DATE), format1));
 				if ((String) map.get("dob") != null)
 					map.put("dob", dateTolong((String) map.get("dob"), dobFormat));
-				if ((String) map.get(GET_PWD_EXPIRY_DATE) != null)
-					map.put(GET_PWD_EXPIRY_DATE, dateTolong((String) map.get(GET_PWD_EXPIRY_DATE), format1));
+				if ((String) map.get(PWD_EXPIRY_DATE) != null)
+					map.put(PWD_EXPIRY_DATE, dateTolong((String) map.get(PWD_EXPIRY_DATE), format1));
 			});
 		}
 	}
@@ -209,7 +211,7 @@ public class UserService {
 		holderInfo.setStatus(Status.ACTIVE);
 		holderInfo.setTenantId(tenantId);
 		holderInfo.setRoles(Collections.singletonList(role));
-		holderInfo.setType(CODE_CITIZEN);
+		holderInfo.setType(CITIZEN);
 		holderInfo.setCreatedDate(null);
 		holderInfo.setCreatedBy(null);
 		holderInfo.setLastModifiedDate(null);
@@ -243,7 +245,7 @@ public class UserService {
 	 * @return
 	 */
 	public UserSearchRequest getBaseUserSearchRequest(String tenantId, RequestInfo requestInfo) {
-		return UserSearchRequest.builder().requestInfo(requestInfo).userType(CODE_CITIZEN).tenantId(tenantId).active(true)
+		return UserSearchRequest.builder().requestInfo(requestInfo).userType(CITIZEN).tenantId(tenantId).active(true)
 				.build();
 	}
 
@@ -324,7 +326,7 @@ public class UserService {
 	public Set<String> getUUIDForUsers(String mobileNumber, String tenantId, RequestInfo requestInfo) {
 		//TenantId is not mandatory when Citizen searches. So it can be empty. Refer the value from UserInfo
 		tenantId = StringUtils.isEmpty(tenantId) ? requestInfo.getUserInfo().getTenantId() : tenantId;
-		UserSearchRequest userSearchRequest = UserSearchRequest.builder().requestInfo(requestInfo).userType(CODE_CITIZEN)
+		UserSearchRequest userSearchRequest = UserSearchRequest.builder().requestInfo(requestInfo).userType(CITIZEN)
 				.tenantId(tenantId).mobileNumber(mobileNumber).build();
 		return getUsersUUID(userSearchRequest);
 	}

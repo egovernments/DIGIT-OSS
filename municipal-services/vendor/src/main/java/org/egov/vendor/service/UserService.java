@@ -62,11 +62,11 @@ public class UserService {
 	@Autowired
 	private ObjectMapper mapper;
 
-	private static final String ERROR_MANDATORY_PARAMETERS = "Dob, relationShip, relation ship name and gender are mandaotry !";
-	private static final String ILLEGAL_ARGUMENT_EXCEPTION = "IllegalArgumentException";
-	private static final String GET_LAST_MODIFIED_DATE = "lastModifiedDate";
-	private static final String GET_PWD_EXPIRY_DATE = "pwdExpiryDate";
+	private static final String ILLEGAL_ARGUMENT_EXCEPTION="IllegalArgumentException";
 
+	private static final String LAST_MODIFIED_DATE="lastModifiedDate";
+
+	private static final String PWD_EXPIRY_DATE="pwdExpiryDate";
 
 	/**
 	 * 
@@ -222,7 +222,7 @@ public class UserService {
 
 		if (!isUserValid(owner)) {
 			throw new CustomException(VendorErrorConstants.INVALID_OWNER_ERROR,
-					ERROR_MANDATORY_PARAMETERS);
+					"Dob, relationShip, relation ship name and gender are mandaotry !");
 		}
 
 		if (owner.getRoles() != null) {
@@ -322,7 +322,7 @@ public class UserService {
 
 		if (!isUserValid(owner)) {
 			throw new CustomException(VendorErrorConstants.INVALID_OWNER_ERROR,
-					ERROR_MANDATORY_PARAMETERS);
+					"Dob, relationShip, relation ship name and gender are mandaotry !");
 		}
 
 		if (owner.getRoles() != null) {
@@ -371,7 +371,7 @@ public class UserService {
 
 		if (!isUserValid(driver)) {
 			throw new CustomException(VendorErrorConstants.INVALID_DRIVER_ERROR,
-					ERROR_MANDATORY_PARAMETERS);
+					"Dob, relationShip, relation ship name and gender are mandaotry !");
 		}
 		if (driver.getRoles() != null) {
 			driver.getRoles().add(getRolObj(config.getDsoDriver(), config.getDsoDriverRoleName()));
@@ -401,7 +401,7 @@ public class UserService {
 
 		if (!isUserValid(driver)) {
 			throw new CustomException(VendorErrorConstants.INVALID_DRIVER_ERROR,
-					ERROR_MANDATORY_PARAMETERS);
+					"Dob, relationShip, relation ship name and gender are mandaotry !");
 		}
 		if (driver.getRoles() != null) {
 			driver.getRoles().add(getRolObj(config.getDsoDriver(), config.getDsoDriverRoleName()));
@@ -535,12 +535,12 @@ public class UserService {
 		if (owners != null) {
 			owners.forEach(map -> {
 				map.put("createdDate", dateTolong((String) map.get("createdDate"), format1));
-				if ((String) map.get(GET_LAST_MODIFIED_DATE) != null)
-					map.put(GET_LAST_MODIFIED_DATE, dateTolong((String) map.get(GET_LAST_MODIFIED_DATE), format1));
+				if ((String) map.get(LAST_MODIFIED_DATE) != null)
+					map.put(LAST_MODIFIED_DATE, dateTolong((String) map.get(LAST_MODIFIED_DATE), format1));
 				if ((String) map.get("dob") != null)
 					map.put("dob", dateTolong((String) map.get("dob"), dobFormat));
-				if ((String) map.get(GET_PWD_EXPIRY_DATE) != null)
-					map.put(GET_PWD_EXPIRY_DATE, dateTolong((String) map.get(GET_PWD_EXPIRY_DATE), format1));
+				if ((String) map.get(PWD_EXPIRY_DATE) != null)
+					map.put(PWD_EXPIRY_DATE, dateTolong((String) map.get(PWD_EXPIRY_DATE), format1));
 			});
 		}
 	}

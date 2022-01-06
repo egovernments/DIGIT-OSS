@@ -59,8 +59,6 @@ public class InboxService {
 	
 	private WorkflowService workflowService;
 
-	private static final String SEARCH_CRITERIA_PUT_TENANT_ID = "tenantId";
-
 	@Autowired
 	private PtInboxFilterService ptInboxFilterService;
 
@@ -107,7 +105,7 @@ public class InboxService {
 			throw new CustomException(ErrorConstants.MODULE_SEARCH_INVLAID,"Bussiness Service is mandatory for module search");
 		}
 		if( !CollectionUtils.isEmpty(moduleSearchCriteria)) {
-			moduleSearchCriteria.put(SEARCH_CRITERIA_PUT_TENANT_ID, criteria.getTenantId());
+			moduleSearchCriteria.put("tenantId", criteria.getTenantId());
 			moduleSearchCriteria.put("offset", criteria.getOffset());
 			moduleSearchCriteria.put("limit", criteria.getLimit());
 			List<BusinessService> bussinessSrvs = new ArrayList<BusinessService>();
@@ -280,7 +278,7 @@ public class InboxService {
 			
 			ProcessInstanceResponse processInstanceResponse = workflowService.getProcessInstance(processCriteria, requestInfo);
 			List<ProcessInstance> processInstances = processInstanceResponse.getProcessInstances();
-			HashMap<String,List<String>> businessSrvIdsMap = new HashMap<String, List<String>>();
+//			HashMap<String,List<String>> businessSrvIdsMap = new HashMap<String, List<String>>();
 			Map<String, ProcessInstance> processInstanceMap = processInstances.stream().collect(  Collectors.toMap(ProcessInstance::getBusinessId, Function.identity()));
 			moduleSearchCriteria = new HashMap<String,String>();
 			if(CollectionUtils.isEmpty(srvMap) ) {
@@ -288,7 +286,7 @@ public class InboxService {
 			}
 			String businessIdParam = srvMap.get("businessIdProperty");
 			moduleSearchCriteria.put(srvMap.get("applNosParam"),StringUtils.arrayToDelimitedString( processInstanceMap.keySet().toArray(),","));
-			moduleSearchCriteria.put(SEARCH_CRITERIA_PUT_TENANT_ID, criteria.getTenantId());
+			moduleSearchCriteria.put("tenantId", criteria.getTenantId());
 			//moduleSearchCriteria.put("offset", criteria.getOffset());
 			moduleSearchCriteria.put("limit", -1);
 			businessObjects = fetchModuleObjects(moduleSearchCriteria,businessServiceName,criteria.getTenantId(),requestInfo,srvMap);
@@ -316,7 +314,7 @@ public class InboxService {
 		uri.append(userHost).append(userSearchEndpoint);
 		Map<String, Object> userSearchRequest = new HashMap<>();
 		userSearchRequest.put("RequestInfo", requestInfo);
-		userSearchRequest.put(SEARCH_CRITERIA_PUT_TENANT_ID, tenantId);
+		userSearchRequest.put("tenantId", tenantId);
 		userSearchRequest.put("userType", "CITIZEN");
 		userSearchRequest.put("userName", mobileNumber);
 		String uuid = "";
@@ -363,7 +361,7 @@ public class InboxService {
 		url.append("?tenantId=").append(tenantId);
 		Set<String> searchParams = moduleSearchCriteria.keySet();
 		searchParams.forEach((param)->{
-			if(!param.equalsIgnoreCase(SEARCH_CRITERIA_PUT_TENANT_ID)) {
+			if(!param.equalsIgnoreCase("tenantId")) {
 				if(moduleSearchCriteria.get(param) instanceof Collection){
 					url.append("&").append(param).append("=");
 					url.append(StringUtils.arrayToDelimitedString(((Collection<?>) moduleSearchCriteria.get(param)).toArray(), ","));

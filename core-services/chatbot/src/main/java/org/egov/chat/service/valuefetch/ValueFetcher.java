@@ -28,14 +28,12 @@ public class ValueFetcher {
     @Autowired
     private MessageRepository messageRepository;
 
-    private static final String CONFIG_GET_VALUES = "values";
-
     public ArrayNode getAllValidValues(JsonNode config, JsonNode chatNode) {
         ArrayNode validValues = objectMapper.createArrayNode();
 
-        if (config.get(CONFIG_GET_VALUES).isArray()) {
+        if (config.get("values").isArray()) {
             validValues = getValuesFromArrayNode(config);
-        } else if (config.get(CONFIG_GET_VALUES).isObject()) {
+        } else if (config.get("values").isObject()) {
             validValues = getValuesFromExternalSource(config, chatNode);
         }
 
@@ -43,7 +41,7 @@ public class ValueFetcher {
     }
 
     public String getCodeForValue(JsonNode config, EgovChat chatNode, String answer) {
-        if (config.get(CONFIG_GET_VALUES).isArray()) {
+        if (config.get("values").isArray()) {
             return answer;
         } else {
             ExternalValueFetcher externalValueFetcher = getExternalValueFetcher(config);
@@ -62,7 +60,7 @@ public class ValueFetcher {
 
     ArrayNode getValuesFromArrayNode(JsonNode config) {
         ArrayNode validValues = objectMapper.createArrayNode();
-        for (JsonNode jsonNode : config.get(CONFIG_GET_VALUES)) {
+        for (JsonNode jsonNode : config.get("values")) {
             ObjectNode value = objectMapper.createObjectNode();
             value.put("value", jsonNode.asText());
             validValues.add(value);
@@ -82,7 +80,7 @@ public class ValueFetcher {
         ObjectMapper mapper = new ObjectMapper(new JsonFactory());
         ObjectNode params = mapper.createObjectNode();
 
-        ObjectNode paramConfigurations = (ObjectNode) config.get(CONFIG_GET_VALUES).get("params");
+        ObjectNode paramConfigurations = (ObjectNode) config.get("values").get("params");
         Iterator<String> paramKeys = paramConfigurations.fieldNames();
 
         while (paramKeys.hasNext()) {
@@ -109,7 +107,7 @@ public class ValueFetcher {
     }
 
     ExternalValueFetcher getExternalValueFetcher(JsonNode config) {
-        String className = config.get(CONFIG_GET_VALUES).get("class").asText();
+        String className = config.get("values").get("class").asText();
         for (ExternalValueFetcher externalValueFetcher : externalValueFetchers) {
             if (externalValueFetcher.getClass().getName().equalsIgnoreCase(className))
                 return externalValueFetcher;

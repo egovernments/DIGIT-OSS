@@ -7,7 +7,6 @@ import javax.annotation.PostConstruct;
 import org.egov.tracer.model.CustomException;
 import org.egov.url.shortening.model.ShortenRequest;
 import org.egov.url.shortening.repository.URLRepository;
-import org.egov.url.shortening.utils.HashIdConverter;
 import org.egov.url.shortening.utils.IDConvertor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,16 +37,12 @@ public class URLConverterService {
     
     @Value("${server.contextPath}")
     private String serverContextPath;
-
-    @Autowired
-    private HashIdConverter hashIdConverter;
     
     private ObjectMapper objectMapper;
 
     @Autowired
     public URLConverterService(List<URLRepository> urlRepositories, ObjectMapper objectMapper) {
-    	System.out.println(urlRepositories);
-    	this.urlRepositories = urlRepositories;   
+    	this.urlRepositories = urlRepositories;
     	this.objectMapper = objectMapper;
     }
     
@@ -63,7 +58,7 @@ public class URLConverterService {
     public String shortenURL(ShortenRequest shortenRequest) {
         LOGGER.info("Shortening {}", shortenRequest.getUrl());
         Long id = urlRepository.incrementID();
-        String uniqueID = hashIdConverter.createHashStringForId(id);
+        String uniqueID = IDConvertor.createUniqueID(id);
         try {
 			urlRepository.saveUrl("url:"+id, shortenRequest);
 		} catch (JsonProcessingException e) {
@@ -86,10 +81,7 @@ public class URLConverterService {
     }
 
     public String getLongURLFromID(String uniqueID) throws Exception {
-        Long dictionaryKey = hashIdConverter.getIdForString(uniqueID);
-        // To support previously generated dictionary keys
-        if(dictionaryKey == null)
-            dictionaryKey = IDConvertor.getDictionaryKeyFromUniqueID(uniqueID);
+        Long dictionaryKey = IDConvertor.getDictionaryKeyFromUniqueID(uniqueID);
         String longUrl = urlRepository.getUrl(dictionaryKey);
         LOGGER.info("Converting shortened URL back to {}", longUrl);
         if(longUrl.isEmpty())

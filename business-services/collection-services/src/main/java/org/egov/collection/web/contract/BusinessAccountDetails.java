@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class BusinessAccountDetails {
+
 	private Long id;
 
 	private Long businessDetails;

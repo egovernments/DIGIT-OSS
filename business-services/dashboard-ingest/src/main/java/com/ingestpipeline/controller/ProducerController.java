@@ -28,6 +28,8 @@ public class ProducerController {
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
 
+    private static final String PUBLISHED_MESSAGE="Published successfully";
+
     @PostMapping("/update/publish")
     public ResponseEntity<Response> publish(@RequestBody String body){
         LOGGER.info("publishing request body "+body);
@@ -41,8 +43,8 @@ public class ProducerController {
                 kafkaTemplate.send(topic, topickey, node);
 
             }
-            LOGGER.info("Published successfully");
-            return new ResponseEntity<Response>(new Response("sucessful", "Published successfully"), HttpStatus.OK);
+            LOGGER.info(PUBLISHED_MESSAGE );
+            return new ResponseEntity<Response>(new Response("sucessful", PUBLISHED_MESSAGE ), HttpStatus.OK);
 
         } catch (Exception e){
             LOGGER.error("Published failed "+ e.getMessage());
@@ -61,8 +63,8 @@ public class ProducerController {
         try{
             JsonNode node = new ObjectMapper().readTree(body);
             kafkaTemplate.send(testTopic, testKey, node.get("data"));
-            LOGGER.info("Published successfully");
-            return "Published successfully";
+            LOGGER.info(PUBLISHED_MESSAGE );
+            return PUBLISHED_MESSAGE ;
 
         } catch (Exception e){
             LOGGER.error("Published failed "+ e.getMessage());

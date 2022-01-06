@@ -3,6 +3,7 @@ package org.egov.common.web.contract;
 import lombok.Data;
 
 @Data
+
 public class PositionContract {
 
     private Long id;

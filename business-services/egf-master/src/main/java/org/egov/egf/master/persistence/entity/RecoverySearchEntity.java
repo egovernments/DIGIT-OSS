@@ -8,6 +8,7 @@ import java.util.Date;
 @Data
 public class RecoverySearchEntity extends RecoveryEntity {
 	private Date fromDate;
+
 	private Date toDate;
 	private Integer pageSize;
 	private Integer offset = 0;

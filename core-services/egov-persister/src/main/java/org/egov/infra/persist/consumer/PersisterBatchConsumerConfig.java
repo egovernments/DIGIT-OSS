@@ -60,8 +60,6 @@ public class PersisterBatchConsumerConfig {
     @Value("${persister.batch.size}")
     private Integer batchSize;
 
-    private static final String LOG_CONTAINER_COULDNT_BE_STARTED = "Container couldn't be started: ";
-
     @PostConstruct
     public void setTopics() {
         topicMap.getTopicMap().keySet().forEach(topic -> {
@@ -128,7 +126,7 @@ public class PersisterBatchConsumerConfig {
         try {
             container = container();
         } catch (Exception e) {
-            log.error(LOG_CONTAINER_COULDNT_BE_STARTED, e);
+            log.error("Container couldn't be started: ", e);
             return false;
         }
         container.start();
@@ -142,7 +140,7 @@ public class PersisterBatchConsumerConfig {
         try {
             container = container();
         } catch (Exception e) {
-            log.error(LOG_CONTAINER_COULDNT_BE_STARTED, e);
+            log.error("Container couldn't be started: ", e);
             return false;
         }
         container.stop();
@@ -156,7 +154,7 @@ public class PersisterBatchConsumerConfig {
         try {
             container = container();
         } catch (Exception e) {
-            log.error(LOG_CONTAINER_COULDNT_BE_STARTED, e);
+            log.error("Container couldn't be started: ", e);
             return false;
         }
         container.start();

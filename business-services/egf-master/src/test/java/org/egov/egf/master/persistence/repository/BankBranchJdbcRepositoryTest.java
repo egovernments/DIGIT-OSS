@@ -38,6 +38,10 @@ public class BankBranchJdbcRepositoryTest {
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+	private static final String DEFAULT="default";
+
+	private static final String MESSAGE="description";
+
 	@Before
 	public void setUp() throws Exception {
 		bankBranchJdbcRepository = new BankBranchJdbcRepository(namedParameterJdbcTemplate);
@@ -80,7 +84,7 @@ public class BankBranchJdbcRepositoryTest {
 	@Sql(scripts = { "/sql/clearBankBranch.sql", "/sql/insertBankBranch.sql" })
 	public void testFindById() {
 		BankBranchEntity bankBranchEntity = BankBranchEntity.builder().id("2").build();
-		bankBranchEntity.setTenantId("default");
+		bankBranchEntity.setTenantId(DEFAULT);
 		BankBranchEntity result = bankBranchJdbcRepository.findById(bankBranchEntity);
 		assertThat(result.getId()).isEqualTo("2");
 		assertThat(result.getName()).isEqualTo("name");
@@ -112,7 +116,7 @@ public class BankBranchJdbcRepositoryTest {
 	public void test_find_by_invalid_id_should_return_null() {
 
 		BankBranchEntity bankBranchEntity = BankBranchEntity.builder().id("5").build();
-		bankBranchEntity.setTenantId("default");
+		bankBranchEntity.setTenantId(DEFAULT);
 		BankBranchEntity result = bankBranchJdbcRepository.findById(bankBranchEntity);
 		assertNull(result);
 
@@ -154,7 +158,7 @@ public class BankBranchJdbcRepositoryTest {
 						put("id", resultSet.getString("id"));
 						put("code", resultSet.getString("code"));
 						put("name", resultSet.getString("name"));
-						put("description", resultSet.getString("description"));
+						put(MESSAGE, resultSet.getString(MESSAGE));
 						put("active", resultSet.getBoolean("active"));
 					}
 				};
@@ -186,9 +190,9 @@ public class BankBranchJdbcRepositoryTest {
 		bankBranch.setCode("code");
 		bankBranch.setName("name");
 		bankBranch.setAddress("address");
-		bankBranch.setDescription("description");
+		bankBranch.setDescription(MESSAGE);
 		bankBranch.setActive(true);
-		bankBranch.setTenantId("default");
+		bankBranch.setTenantId(DEFAULT);
 		return bankBranch;
 	}
 
@@ -197,10 +201,10 @@ public class BankBranchJdbcRepositoryTest {
 		bank.setId("1");
 		bank.setCode("code");
 		bank.setName("name");
-		bank.setDescription("description");
+		bank.setDescription(MESSAGE);
 		bank.setType("type");
 		bank.setActive(true);
-		bank.setTenantId("default");
+		bank.setTenantId(DEFAULT);
 		return bank;
 	}
 

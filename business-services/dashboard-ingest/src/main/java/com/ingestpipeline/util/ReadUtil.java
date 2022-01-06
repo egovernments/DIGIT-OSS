@@ -79,6 +79,8 @@ public class ReadUtil {
 
 	private static Boolean useNumbers;
 
+	private static final String SEPARATOR="file.separator";
+
 	@Value("${filename.length}")
 	public static void setFilenameLength(Integer filenameLengthValue) {
 		ReadUtil.filenameLength = filenameLengthValue;
@@ -98,7 +100,7 @@ public class ReadUtil {
 	private static String UPLOADED_FOLDER = "";
 	public static Path path;
 	public static File uploadFile = new File(
-			System.getProperty("user.dir") + System.getProperty("file.separator") + "uploads");
+			System.getProperty("user.dir") + System.getProperty(SEPARATOR ) + "uploads");
 
 	public static JSONArray getFiletoDirectory(MultipartFile file) throws Exception {
 		byte[] bytes = file.getBytes();
@@ -113,7 +115,7 @@ public class ReadUtil {
 		String fileName =  System.currentTimeMillis() + randomString;
 		String extension = FilenameUtils.getExtension(orignalFileName);
 
-		path = Paths.get(UPLOADED_FOLDER + System.getProperty("file.separator") + fileName + '.' + extension);
+		path = Paths.get(UPLOADED_FOLDER + System.getProperty(SEPARATOR ) + fileName + '.' + extension);
 		Files.write(path, bytes);
 		JSONArray fileIntoJsonArray = readFilefromDirectory();
 		String jsonArrayFileName = fileName + ".json";
@@ -158,6 +160,7 @@ public class ReadUtil {
 
 	private static JSONArray getSheetToJsonObject(Workbook workbook, Sheet sheet) {
 		String workbookSheetName = sheet.getSheetName();
+		int workbookSheetIndex = workbook.getSheetIndex(workbookSheetName);
 		Object financialYear = null;
 		int firstRowNum = sheet.getFirstRowNum(), lastRowNum = sheet.getLastRowNum(),
 				ulbFirstRowNumber = Constants.HEADER_ROW + 2, ulbDestRowNumber = -1;
@@ -200,6 +203,8 @@ public class ReadUtil {
 		List<Object> sheetHeaderList = new LinkedList<Object>();
 		List<String> customHeaderList = new LinkedList<String>();
 		Map<String, Object> customHeaderMap = new LinkedHashMap<String, Object>();
+		JSONArray getMunicipalCityToJsonArray = new JSONArray();
+		Map<Integer, List<String>> lastRowRecord = new LinkedHashMap<Integer, List<String>>();
 		customHeaderList.add("Sheet Name");
 		customHeaderList.add("Financial Year");
 		customHeaderList.add("Timestamp");
@@ -209,6 +214,7 @@ public class ReadUtil {
 		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:S");
 		Date dateobj = new Date();
 		customHeaderMap.put(customHeaderList.get(2), df.format(dateobj));
+		JSONObject customHeaderJsonObject = new JSONObject();
 		JSONArray municipalCitiesIntoJsonArray = new JSONArray();
 		for (Map.Entry<Integer, List<Object>> itrRowRecordMap : rowRecordMap.entrySet()) {
 			if (itrRowRecordMap.getKey() == Constants.HEADER_ROW) {
@@ -216,6 +222,7 @@ public class ReadUtil {
 			}
 			if (itrRowRecordMap.getKey() >= ulbFirstRowNumber) {
 				JSONObject municipalCitiesIntoJsonObject = new JSONObject();
+				Map<String, String> mc = new LinkedHashMap<String, String>();
 				municipalCity.put(itrRowRecordMap.getKey(), itrRowRecordMap.getValue());
 				for (Map.Entry<String, Object> itrCustomHeaderMap : customHeaderMap.entrySet()) {
 					municipalCitiesIntoJsonObject.accumulate(itrCustomHeaderMap.getKey().toString(),
@@ -310,6 +317,7 @@ public class ReadUtil {
 			if (cellRow >= firstRow && cellRow <= lastRow) {
 				if (cellColumn >= firstCol && cellColumn <= lastCol) {
 					retVal = lastCol - firstCol + 1;
+					Row row = sheet.getRow(i);
 					if (retVal > 0) {
 						for (int j = firstRow; j <= lastRow; j++) {
 							for (int k = firstCol; k <= lastCol; k++) {
@@ -368,7 +376,7 @@ public class ReadUtil {
 
 	private static void writeJsonArrayToFile(JSONArray data, String fileName) throws IOException {
 		String currentWorkingFolder = System.getProperty("user.dir"),
-				filePathSeperator = System.getProperty("file.separator"),
+				filePathSeperator = System.getProperty(SEPARATOR ),
 				filePath = currentWorkingFolder + filePathSeperator + fileName;
 		BufferedWriter bufferedWriter = null;
 		try {

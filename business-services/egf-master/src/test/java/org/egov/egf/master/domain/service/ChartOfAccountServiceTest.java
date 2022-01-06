@@ -46,10 +46,9 @@ public class ChartOfAccountServiceTest {
 
 	private List<ChartOfAccount> chartOfAccounts = new ArrayList<>();
 
-	@Before
-	public void setup() {
+	private static final String DEFAULT="default";
 
-	}
+
 
 	@Test
 	public final void testFetchRelated() {
@@ -125,14 +124,14 @@ public class ChartOfAccountServiceTest {
 				.budgetCheckRequired(true).build();
 		chartOfAccount.setAccountCodePurpose(getAccountCodePurpose());
 		chartOfAccount.setParentId(parent);
-		chartOfAccount.setTenantId("default");
+		chartOfAccount.setTenantId(DEFAULT);
 		return chartOfAccount;
 	}
 
 	private AccountCodePurpose getAccountCodePurpose() {
 		AccountCodePurpose acp = AccountCodePurpose.builder().id("id")
 				.name("name").build();
-		acp.setTenantId("default");
+		acp.setTenantId(DEFAULT);
 		return acp;
 	}
 	
@@ -149,7 +148,7 @@ public class ChartOfAccountServiceTest {
 				.description("DefaultDescription").isActiveForPosting(true)
 				.type('B').classification((long) 123456)
 				.functionRequired(true).budgetCheckRequired(true).build();
-		chartOfAccount.setTenantId("default");
+		chartOfAccount.setTenantId(DEFAULT);
 		chartOfAccounts.add(chartOfAccount);
 		return chartOfAccounts;
 	}
@@ -170,7 +169,7 @@ public class ChartOfAccountServiceTest {
 		chartOfAccountSearch.setPageSize(0);
 		chartOfAccountSearch.setOffset(0);
 		chartOfAccountSearch.setSortBy("Sort");
-		chartOfAccountSearch.setTenantId("default");
+		chartOfAccountSearch.setTenantId(DEFAULT);
 		return chartOfAccountSearch;
 	}
 

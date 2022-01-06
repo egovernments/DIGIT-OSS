@@ -38,6 +38,14 @@ public class InstrumentVoucherJdbcRepositoryTest {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    private static final String DEFAULT="default";
+
+    private static final String INSTRUMENT_ID="instrumentId";
+
+    private static final String VOUCHER_HEADER_ID="voucherHeaderId";
+
+    private static final String RECEIPT_HEADER_ID="receiptHeaderId";
+
     @Before
     public void setUp() throws Exception {
         instrumentVoucherJdbcRepository = new InstrumentVoucherJdbcRepository(namedParameterJdbcTemplate);
@@ -49,16 +57,16 @@ public class InstrumentVoucherJdbcRepositoryTest {
 
         InstrumentVoucherEntity instrumentVoucher = InstrumentVoucherEntity.builder().id("1").instrumentId("1")
                 .voucherHeaderId("1").receiptHeaderId("1").build();
-        instrumentVoucher.setTenantId("default");
+        instrumentVoucher.setTenantId(DEFAULT);
         InstrumentVoucherEntity actualResult = instrumentVoucherJdbcRepository.create(instrumentVoucher);
 
         List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_instrumentVoucher",
                 new InstrumentVoucherResultExtractor());
         Map<String, Object> row = result.get(0);
 
-        assertThat(row.get("instrumentId")).isEqualTo(actualResult.getInstrumentId());
-        assertThat(row.get("voucherHeaderId")).isEqualTo(actualResult.getVoucherHeaderId());
-        assertThat(row.get("receiptHeaderId")).isEqualTo(actualResult.getReceiptHeaderId());
+        assertThat(row.get(INSTRUMENT_ID)).isEqualTo(actualResult.getInstrumentId());
+        assertThat(row.get(VOUCHER_HEADER_ID)).isEqualTo(actualResult.getVoucherHeaderId());
+        assertThat(row.get(RECEIPT_HEADER_ID)).isEqualTo(actualResult.getReceiptHeaderId());
 
     }
 
@@ -69,16 +77,16 @@ public class InstrumentVoucherJdbcRepositoryTest {
 
         InstrumentVoucherEntity instrumentVoucher = InstrumentVoucherEntity.builder().id("1").instrumentId("1")
                 .voucherHeaderId("1").receiptHeaderId("1").build();
-        instrumentVoucher.setTenantId("default");
+        instrumentVoucher.setTenantId(DEFAULT);
         InstrumentVoucherEntity actualResult = instrumentVoucherJdbcRepository.update(instrumentVoucher);
 
         List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_instrumentVoucher",
                 new InstrumentVoucherResultExtractor());
         Map<String, Object> row = result.get(0);
 
-        assertThat(row.get("instrumentId")).isEqualTo(actualResult.getInstrumentId());
-        assertThat(row.get("voucherHeaderId")).isEqualTo(actualResult.getVoucherHeaderId());
-        assertThat(row.get("receiptHeaderId")).isEqualTo(actualResult.getReceiptHeaderId());
+        assertThat(row.get(INSTRUMENT_ID)).isEqualTo(actualResult.getInstrumentId());
+        assertThat(row.get(VOUCHER_HEADER_ID)).isEqualTo(actualResult.getVoucherHeaderId());
+        assertThat(row.get(RECEIPT_HEADER_ID)).isEqualTo(actualResult.getReceiptHeaderId());
 
     }
 
@@ -88,7 +96,7 @@ public class InstrumentVoucherJdbcRepositoryTest {
     public void test_find_by_id() {
 
         InstrumentVoucherEntity instrumentVoucherEntity = InstrumentVoucherEntity.builder().id("1").build();
-        instrumentVoucherEntity.setTenantId("default");
+        instrumentVoucherEntity.setTenantId(DEFAULT);
         InstrumentVoucherEntity result = instrumentVoucherJdbcRepository.findById(instrumentVoucherEntity);
 
         assertThat(result.getInstrumentId()).isEqualTo("1");
@@ -103,7 +111,7 @@ public class InstrumentVoucherJdbcRepositoryTest {
     public void test_find_by_invalid_id_should_return_null() {
 
         InstrumentVoucherEntity instrumentVoucherEntity = InstrumentVoucherEntity.builder().id("5").build();
-        instrumentVoucherEntity.setTenantId("default");
+        instrumentVoucherEntity.setTenantId(DEFAULT);
         InstrumentVoucherEntity result = instrumentVoucherJdbcRepository.findById(instrumentVoucherEntity);
         assertNull(result);
 
@@ -160,9 +168,9 @@ public class InstrumentVoucherJdbcRepositoryTest {
                 Map<String, Object> row = new HashMap<String, Object>() {
                     {
                         put("id", resultSet.getString("id"));
-                        put("instrumentId", resultSet.getString("instrumentId"));
-                        put("voucherHeaderId", resultSet.getString("voucherHeaderId"));
-                        put("receiptHeaderId", resultSet.getString("receiptHeaderId"));
+                        put(INSTRUMENT_ID, resultSet.getString(INSTRUMENT_ID));
+                        put(VOUCHER_HEADER_ID, resultSet.getString(VOUCHER_HEADER_ID));
+                        put(RECEIPT_HEADER_ID, resultSet.getString(RECEIPT_HEADER_ID));
                         put("createdBy", resultSet.getString("createdBy"));
                         put("createdDate", resultSet.getString("createdDate"));
                         put("lastModifiedBy", resultSet.getString("lastModifiedBy"));
@@ -180,8 +188,8 @@ public class InstrumentVoucherJdbcRepositoryTest {
     private InstrumentVoucherSearch getInstrumentVoucherSearch1() {
         InstrumentVoucherSearch instrumentVoucherSearch = new InstrumentVoucherSearch();
         instrumentVoucherSearch.setInstrument(Instrument.builder().id("id").build());
-        instrumentVoucherSearch.setReceiptHeaderId("receiptHeaderId");
-        instrumentVoucherSearch.setVoucherHeaderId("voucherHeaderId");
+        instrumentVoucherSearch.setReceiptHeaderId(RECEIPT_HEADER_ID);
+        instrumentVoucherSearch.setVoucherHeaderId(string3);
         instrumentVoucherSearch.setTenantId("tenantId");
         instrumentVoucherSearch.setPageSize(500);
         instrumentVoucherSearch.setOffset(0);

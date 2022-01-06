@@ -172,8 +172,9 @@ public class BillingServiceConsumer {
 	 */
 	private void setBillRequestFromPayment(Map<String, Object> consumerRecord, BillRequestV2 billReq, boolean isReceiptCancelled) throws JsonProcessingException {
 		
-		DocumentContext context = JsonPath.parse(objectMapper.writeValueAsString(consumerRecord));
-
+		DocumentContext context = null;
+		
+		context = JsonPath.parse(objectMapper.writeValueAsString(consumerRecord));
 
 		String paymentId = objectMapper.convertValue(context.read("$.Payment.id"), String.class);
 		List<BigDecimal> amtPaidList = Arrays.asList(objectMapper.convertValue(context.read("$.Payment.paymentDetails.*.totalAmountPaid"), BigDecimal[].class));

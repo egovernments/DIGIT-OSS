@@ -52,6 +52,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 
 @JsonPropertyOrder({"id", "chartOfAccount", "accountDetailType"})
+
 public class ChartOfAccountDetailContract extends AuditableContract {
 
     private Long id;

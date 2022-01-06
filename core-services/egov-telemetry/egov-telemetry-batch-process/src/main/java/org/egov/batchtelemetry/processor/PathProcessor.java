@@ -29,7 +29,6 @@ public class PathProcessor {
 
 
     private List<InputPath> inputPaths;
-    private static final String CITIZEN_KEY = "/citizen";
 
     public PathProcessor(AppProperties appProperties) {
 
@@ -50,12 +49,12 @@ public class PathProcessor {
         inputNodes = new ArrayList<>();
         inputNodes.add(InputNode.builder().nodeName("/citizen/user/login").url("/citizen/user/login").build());
         inputNodes.add(InputNode.builder().nodeName("/citizen/user/otp").url("/citizen/user/otp").build());
-        inputNodes.add(InputNode.builder().nodeName(CITIZEN_KEY).url(CITIZEN_KEY).build());
+        inputNodes.add(InputNode.builder().nodeName("/citizen").url("/citizen").build());
 
         inputPaths.add(InputPath.builder().pathId("path-1").inputNodes(inputNodes).build());
 
         inputNodes = new ArrayList<>();
-        inputNodes.add(InputNode.builder().nodeName(CITIZEN_KEY).url(CITIZEN_KEY).build());
+        inputNodes.add(InputNode.builder().nodeName("/citizen").url("/citizen").build());
         inputNodes.add(InputNode.builder().nodeName("/citizen/property-tax").url("/citizen/property-tax").build());
 
         inputPaths.add(InputPath.builder().pathId("path-2").inputNodes(inputNodes).build());

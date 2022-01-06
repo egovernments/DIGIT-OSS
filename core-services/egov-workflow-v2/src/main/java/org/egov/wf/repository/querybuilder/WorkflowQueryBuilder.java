@@ -18,8 +18,6 @@ public class WorkflowQueryBuilder {
 
     private WorkflowConfig config;
 
-    private static final String REPLACE_INTERNAL_QUERY = "{INTERNAL_QUERY}";
-
     @Autowired
     public WorkflowQueryBuilder(WorkflowConfig config) {
         this.config = config;
@@ -358,11 +356,11 @@ public class WorkflowQueryBuilder {
         if(statuCount) {
         	countQuery = "select  count(DISTINCT cq.id),cq.applicationStatus,cq.businessservice,cq.PI_STATUS as statusId from  ( select ppi.id,ppi.businessservice,ppst.applicationstatus,ppi.status as PI_STATUS FROM eg_wf_processinstance_v2 ppi  JOIN eg_wf_state_v2 ppst ON ( ppst.uuid =ppi.status ) WHERE ppi.id IN ({INTERNAL_QUERY}) ) cq GROUP BY cq.applicationStatus,cq.businessservice,cq.PI_STATUS";
 
-            countQuery = countQuery.replace(REPLACE_INTERNAL_QUERY, query);
+            countQuery = countQuery.replace("{INTERNAL_QUERY}", query);
         }else {
         	 countQuery = "select count(DISTINCT id) from ({INTERNAL_QUERY}) as count";
 
-             countQuery = countQuery.replace(REPLACE_INTERNAL_QUERY, query);
+             countQuery = countQuery.replace("{INTERNAL_QUERY}", query);
         }
 
         return countQuery;
@@ -387,7 +385,7 @@ public class WorkflowQueryBuilder {
      * @return
      */
     private String addCountWrapper(String query){
-        String countQuery = COUNT_WRAPPER.replace(REPLACE_INTERNAL_QUERY, query);
+        String countQuery = COUNT_WRAPPER.replace("{INTERNAL_QUERY}", query);
         return countQuery;
     }
 
@@ -461,7 +459,7 @@ public class WorkflowQueryBuilder {
      * @return
      */
     private String addStatusCountWrapper(String query){
-        String countQuery = STATUS_COUNT_WRAPPER.replace(REPLACE_INTERNAL_QUERY, query);
+        String countQuery = STATUS_COUNT_WRAPPER.replace("{INTERNAL_QUERY}", query);
         return countQuery;
     }
 }
