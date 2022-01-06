@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Card, CardHeader, ComplaintIcon, AvailableOptionsList, UserInput, ChatBubble, MultipleSelect, StarRating, ReplyComponent, Accordion } from "@egovernments/digit-ui-react-components";
-import { accordionData, WEBSOCKET_URL } from "./config";
+import { Card, CardHeader, ComplaintIcon, AvailableOptionsList, UserInput, ChatBubble, MultipleSelect, StarRating, ReplyComponent, Accordion, PopUp, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { accordionData, PLAYSTORE_URL, WEBSOCKET_URL } from "./config";
 
 const CitizenFeedbackHome = ({ parentRoute }) => {
   const [steps, setSteps] = useState([]);
@@ -10,6 +10,8 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
   const [timeout, setNewTimeout] = useState(250)
   const [initialConnectionOpen, setConnectionOpen] = useState(false)
   const [isLastStep, setIsLastStep] = useState(false)
+  const [popup, setPopup] = useState(false);
+  const [feedbackPopup, setFeedbackPopup] = useState(false);
   const [stepsData, setStepsData, clearStepsData] = Digit.Hooks.useSessionStorage("CF_STEPS", false);
   const [successData, setSuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("CF_RESPONSE", false);
   const history = useHistory();
@@ -37,10 +39,19 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
       stepId: currentStep + 1,
       option: itemDetails.length ? itemDetails : [itemDetails],
     });
-    ws.current.send(JSON.stringify({
+    if (stepDetails.optionType === "stars" && parseInt(itemDetails.key) >= 4) setFeedbackPopup(true)
+    let input = ''
+    if (itemDetails.length) {
+      let temp = []
+      itemDetails.map((data) => {
+        temp.push(data.key)
+      })
+      input = temp
+    } else input = itemDetails.key
+    const request = {
       "message": {
         "type": "text",
-        "input": itemDetails.key
+        "input": input
       },
       "user": {
         "mobileNumber": User.info.mobileNumber
@@ -50,7 +61,7 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
         "filestoreId": itemDetails.fileStoreId ? itemDetails.fileStoreId : ''
       }
     }
-    ));
+    ws.current.send(JSON.stringify(request));
     setStepsData(updatedSteps);
     setCurrentStep(currentStep + 2)
     setSteps([...updatedSteps]);
@@ -58,6 +69,22 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
 
   const onDisableSelect = () => {
     console.log("Disabled btn selected")
+  }
+
+  const handlePopupOpen = (stepDetails, itemDetails) => {
+    if (feedbackPopup && isLastStep) {
+      setPopup({ stepDetails: stepDetails, itemDetails: itemDetails })
+    } else {
+      onItemSelect(stepDetails, itemDetails)
+    }
+  }
+
+  const handlePopupClose = (redirect) => {
+    setPopup(false)
+    if (redirect) {
+      window.open(PLAYSTORE_URL);
+    }
+    onItemSelect(popup.stepDetails, popup.itemDetails)
   }
 
   const ws = useRef();
@@ -184,7 +211,7 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
         return <AvailableOptionsList stepDetails={data} data={data.option} onItemSelect={data.isDisabled ? onDisableSelect : onItemSelect} />
       case "textbox":
       case "textarea":
-        return <UserInput stepDetails={data} data={data.option} handleSubmit={data.isDisabled ? onDisableSelect : onItemSelect} />
+        return <UserInput stepDetails={data} data={data.option} handleSubmit={data.isDisabled ? onDisableSelect : handlePopupOpen} />
       case 'multiSelect':
         return <MultipleSelect stepDetails={data} data={data.option} handleSubmit={data.isDisabled ? onDisableSelect : onItemSelect} />
       case 'stars':
@@ -227,6 +254,17 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
             ))}
           </div>
         </Card>
+      )}
+      {popup && (
+        <PopUp className="cfPopup">
+          <Card style={{ height: 'fit-content' }}>
+            <p className="cfPopupText">Would you also like to rate us on playstore/Appstore?</p>
+            <div className="cfPopupButtonDiv">
+              <div className="cfPopupButton" onClick={() => handlePopupClose(true)}><SubmitBar label={"Yes"} /></div>
+              <div className="cfPopupButton" onClick={() => handlePopupClose(false)}><SubmitBar label={"No"} /></div>
+            </div>
+          </Card>
+        </PopUp>
       )}
     </>
   );

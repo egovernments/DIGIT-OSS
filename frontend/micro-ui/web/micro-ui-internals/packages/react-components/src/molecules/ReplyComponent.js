@@ -19,7 +19,7 @@ const ReplyComponent = (props) => {
     return (
         props.stepDetails.option.map((data) => (
             <ChatBubble type="right" >
-                {renderChild(props.stepDetails.type, data.value)}
+                {renderChild(props.stepDetails.optionType, data.value)}
             </ChatBubble>
         ))
     );
