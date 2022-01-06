@@ -119,11 +119,12 @@ const ApplicationDetails = () => {
             <Fragment>
               <div>
                 <CardSectionHeader>{t(`BPAREG_HEADER_${stringReplaceAll(document?.documentType?.toUpperCase(), ".", "_")}`)}</CardSectionHeader>
-                {document?.info ? <div style={{fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px"}}>{`${t(document?.info)}`}</div> : null}
+                {document?.info ? <div style={{fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px", margin: "10px 0px"}}>{`${t(document?.info)}`}</div> : null}
                 <a target="_blank" href={documents[document.fileStoreId]?.split(",")[0]}>
-                  <PDFSvg style={{background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />
+                  <PDFSvg />
                 </a>
-                {decodeURIComponent( documents[document.fileStoreId]?.split(",")[0]?.split("?")[0]?.split("/")?.pop()?.slice(13))}
+                <p style={{ marginTop: "8px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#505A5F", fontWeight: "400" }}>{t(`BPAREG_HEADER_${stringReplaceAll(document?.documentType?.toUpperCase(), ".", "_")}`)}</p>
+                {/* <p style={{ marginTop: "8px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#505A5F", fontWeight: "400" }}>{decodeURIComponent( documents[document.fileStoreId]?.split(",")[0]?.split("?")[0]?.split("/")?.pop()?.slice(13))}</p> */}
               </div>
               {License?.tradeLicenseDetail?.applicationDocuments?.length != index + 1 ? <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/> : null }
             </Fragment>

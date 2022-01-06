@@ -410,7 +410,7 @@ const printPdf = (blob) => {
     reader.readAsDataURL(blob);
     reader.onloadend = function () {
       var base64data = reader.result;
-      mSewaApp.downloadBase64File(base64data, fileName);
+      mSewaApp.downloadBase64File(base64data, 'download.pdf');
     };
   } else {
     const fileURL = URL.createObjectURL(blob);

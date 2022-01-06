@@ -265,15 +265,18 @@ public class EgovMicroServiceStore implements FileStoreService {
         String urls = url + "/id?tenantId=" + ApplicationThreadLocals.getTenantID() + "&fileStoreId=" + fileStoreId;
         if (LOG.isDebugEnabled())
             LOG.debug(String.format("fetch file fron url   %s   ", urls));
-
-        RequestCallback requestCallback = request -> request.getHeaders()
-                .setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM, MediaType.ALL));
         Path path = Paths.get("/tmp/" + RandomUtils.nextLong());
-        ResponseExtractor<Void> responseExtractor = response -> {
-            Files.copy(response.getBody(), path);
-            return null;
-        };
-        restTemplate.execute(URI.create(urls), HttpMethod.GET, requestCallback, responseExtractor);
+        try {
+            RequestCallback requestCallback = request -> request.getHeaders()
+                    .setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM, MediaType.ALL));
+            ResponseExtractor<Void> responseExtractor = response -> {
+                Files.copy(response.getBody(), path);
+                return null;
+            };
+            restTemplate.execute(URI.create(urls), HttpMethod.GET, requestCallback, responseExtractor);
+        } catch (RestClientException e) {
+            LOG.error(String.format("Error occurred while fetching file %s", e.getMessage()));
+        }
 
         LOG.debug("fetch completed....   ");
         return path.toFile();
@@ -315,16 +318,19 @@ public class EgovMicroServiceStore implements FileStoreService {
         String tenant = StringUtils.isEmpty(tenantId) ? ApplicationThreadLocals.getTenantID() : tenantId;
         String urls = url + "/id?tenantId=" + tenant + "&fileStoreId=" + fileStoreId;
         LOG.info(String.format("fetch file from url   %s   ", urls));
-
-        RequestCallback requestCallback = request -> request.getHeaders()
-                .setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM, MediaType.ALL));
         Path path = Paths.get("/tmp/" + RandomUtils.nextLong());
-        ResponseExtractor<Void> responseExtractor = response -> {
-            Files.copy(response.getBody(), path);
-            return null;
-        };
-        restTemplate.execute(URI.create(urls), HttpMethod.GET, requestCallback, responseExtractor);
-
+        try {
+            RequestCallback requestCallback = request -> request.getHeaders()
+                    .setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM, MediaType.ALL));
+            ResponseExtractor<Void> responseExtractor = response -> {
+                Files.copy(response.getBody(), path);
+                return null;
+            };
+            restTemplate.execute(URI.create(urls), HttpMethod.GET, requestCallback, responseExtractor);
+        } catch (RestClientException e) {
+            LOG.error(String.format("Error occurred while fetching file %s", e.getMessage()));
+        }
+        
         LOG.debug("fetch completed....   ");
         return path.toFile();
     }

@@ -153,49 +153,49 @@ const OCeDCRScrutiny = ({ t, config, onSelect, userType, formData, ownerIndex = 
                 >
                     <StatusTable>
                         <Row
-                            label={`${t("REPORT_FSM_RESULT_APPLICANTNAME")}:`}
+                            label={`${t("REPORT_FSM_RESULT_APPLICANTNAME")}`}
                             text={t(permitEdcrData?.applicantName)}
                             className="border-none"
                         />
                         <Row
-                            label={`${t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}:`}
+                            label={`${t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}`}
                             text={t(permitEdcrData?.applicationSubType)}
                             className="border-none"
                         />
                         <Row
-                            label={`${t("EDCR_TOTAL_BUILD_UP_AREA_LABEL")}:`}
+                            label={`${t("EDCR_TOTAL_BUILD_UP_AREA_LABEL")}`}
                             text={t(permitEdcrData?.planDetail?.virtualBuilding?.totalBuitUpArea)}
                             className="border-none"
                         />
                         <Row
-                            label={`${t("EDCR_BUILDING_HEIGHT_LABEL")}:`}
+                            label={`${t("EDCR_BUILDING_HEIGHT_LABEL")}`}
                             text={t(permitEdcrData?.planDetail?.blocks[0]?.building?.buildingHeight)}
                             className="border-none"
                         />
                         <Row
-                            label={`${t("BPA_ARCHITECT_NAME_LABEL")}:`}
+                            label={`${t("BPA_ARCHITECT_NAME_LABEL")}`}
                             text={t(permitEdcrData?.appliedBy)}
                         />
                     </StatusTable>
                     <h1 style={{ fontSize: "18px", lineHeight: "21px", fontWeight: "700", padding: "16px 0px" }}>{`${t("BPA_PERMIT_EDCR_DETAILS_LABEL")}`}</h1>
                     <StatusTable>
                         <Row
-                            label={`${t("BPA_EDCR_NO_LABEL")}:`}
+                            label={`${t("BPA_EDCR_NO_LABEL")}`}
                             text={t(permitEdcrData?.edcrNumber)}
                             className="border-none"
                         />
                     </StatusTable>
-                    <h1 style={{ fontSize: "18px", lineHeight: "21px", fontWeight: "700", padding: "16px 0px" }}>{`${t("BPA_UPLOADED_PLAN_DIAGRAM_LABEL")}:`}</h1>
+                    <h1 style={{ fontSize: "18px", lineHeight: "21px", fontWeight: "700", padding: "16px 0px" }}>{`${t("BPA_UPLOADED_PLAN_DIAGRAM_LABEL")}`}</h1>
                     <a target="_" href={permitEdcrData?.updatedDxfFile} style={{ minWidth: "160px", marginRight: "20px" }} key={permitEdcrData?.updatedDxfFile}>
                         {/**TODO : refactor it to send height,weight as part of styles object instead of passing seperately */}
-                        <PDFSvg width={140} height={140} style={{ background: "#f6f6f6", padding: "8px" }} />
-                        <p style={{ marginTop: "8px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#505A5F" }}>{t("BPA_UPLOADED_PLAN_DXF")}</p>
+                        <PDFSvg />
+                        <p style={{ marginTop: "8px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#505A5F", fontWeight: "400" }}>{t("BPA_UPLOADED_PLAN_DXF")}</p>
                     </a>
-                    <h1 style={{ fontSize: "18px", lineHeight: "21px", fontWeight: "700", padding: "16px 0px" }}>{`${t("BPA_SCRUTINY_REPORT_OUTPUT_LABEL")}:`}</h1>
+                    <h1 style={{ fontSize: "18px", lineHeight: "21px", fontWeight: "700", padding: "16px 0px" }}>{`${t("BPA_SCRUTINY_REPORT_OUTPUT_LABEL")}`}</h1>
                     <a target="_" href={permitEdcrData?.planReport} style={{ minWidth: "160px", marginRight: "20px" }} key={permitEdcrData?.planReport}>
                         {/**TODO : refactor it to send height,weight as part of styles object instead of passing seperately */}
-                        <PDFSvg width={140} height={140} style={{ background: "#f6f6f6", padding: "8px" }} />
-                        <p style={{ marginTop: "8px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#505A5F" }}>{t("BPA_SCRUTINY_REPORT_PDF")}</p>
+                        <PDFSvg />
+                        <p style={{ marginTop: "8px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#505A5F", fontWeight: "400" }}>{t("BPA_SCRUTINY_REPORT_PDF")}</p>
                     </a>
                     <div onClick={routeToNextPage}>
                         <SubmitBar label={t("BPA_PROCEED_OC_SCRUTINY_LABEL")} />

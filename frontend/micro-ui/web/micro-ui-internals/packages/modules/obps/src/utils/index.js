@@ -105,6 +105,7 @@ export const getBPAFormData = async (data, mdmsData, history, t) => {
 
   data.BlockIds = getBlockIds(data?.landInfo?.unit);
   data.address = data?.landInfo?.address;
+  data.address.locality["i18nkey"] = `${t(`${stringReplaceAll(data?.landInfo?.address?.tenantId,".","_").toUpperCase()}_REVENUE_${data?.landInfo?.address?.locality?.code}`)}`;
   data.data = {
     scrutinyNumber: { edcrNumber: APIScrutinyDetails?.edcrNumber },
     applicantName: APIScrutinyDetails?.planDetail?.planInformation?.applicantName,

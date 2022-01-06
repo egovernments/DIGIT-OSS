@@ -67,6 +67,15 @@ public class CoreIndexConsumerConfig implements ApplicationRunner {
 
 	@Value("${pgr.batch.create.topic.name}")
 	private String pgrServicesBatchCreateTopic;
+
+	@Value("${egov.indexer.bpa.create.topic.name}")
+	private String bpaCreateTopic;
+
+	@Value("${egov.indexer.bpa.update.topic.name}")
+	private String bpaUpdateTopic;
+
+	@Value("${egov.indexer.bpa.update.workflow.topic.name}")
+	private String bpaUpdateWorkflowTopic;
 	
     @Autowired
     private StoppingErrorHandler stoppingErrorHandler;
@@ -91,7 +100,7 @@ public class CoreIndexConsumerConfig implements ApplicationRunner {
     }
     
     public String setTopics(){
-    	String[] excludeArray = {pgrCreateTopic, pgrUpdateTopic, ptCreateTopic, ptUpdateTopic, pgrServicesCreateTopic, pgrServicesBatchCreateTopic};
+    	String[] excludeArray = {pgrCreateTopic, pgrUpdateTopic, ptCreateTopic, ptUpdateTopic, pgrServicesCreateTopic, pgrServicesBatchCreateTopic,bpaCreateTopic,bpaUpdateTopic,bpaUpdateWorkflowTopic};
     	int noOfExculdedTopics = 0;
     	List<String> topicsList = runner.getTopicMaps().get(ConfigKeyEnum.INDEX.toString());
     	for(String excludeTopic: excludeArray) {

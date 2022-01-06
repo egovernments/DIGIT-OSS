@@ -81,7 +81,7 @@ const SubOccupancyTable = ({ edcrDetails, applicationData }) => {
       let splitArray = values[index]?.usageCategory?.split(',');
       if (splitArray?.length) {
         const returnValueArray = splitArray.map(data => data ? `${t(`BPA_SUBOCCUPANCYTYPE_${stringReplaceAll(data?.toUpperCase(), "-", "_")}`)}` : "NA");
-        returnValue = returnValueArray.join(',')
+        returnValue = returnValueArray.join(', ')
       }
     }
     return returnValue ? returnValue : "NA";
@@ -92,7 +92,7 @@ const SubOccupancyTable = ({ edcrDetails, applicationData }) => {
       <div style={{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "950px", minWidth: "280px" }}>
         <StatusTable>
           {edcrDetails?.values?.map((value, index) => {
-            return <Row className="border-none" labelStyle={{width: "100%"}} key={`${value.title}:`} label={`${t(`${value.title}`)}:`} text={value?.value ? value?.value : ""} />
+            return <Row className="border-none" labelStyle={{width: "100%"}} key={`${value.title}`} label={`${t(`${value.title}`)}`} text={value?.value ? value?.value : ""} />
           })}
         </StatusTable>
 
@@ -100,11 +100,11 @@ const SubOccupancyTable = ({ edcrDetails, applicationData }) => {
           <div key={index} style={edcrDetails?.subOccupancyTableDetails?.[0]?.value?.planDetail?.blocks?.length > 0 ? {marginBottom: "30px", background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "950px", minWidth: "280px"} : {marginBottom: "30px"}}>
             <CardSubHeader style={{ marginBottom: "8px", paddingBottom: "9px", color: "#0B0C0C", fontSize: "16px", lineHeight: "19px" }}>{t("BPA_BLOCK_SUBHEADER")} {index + 1}</CardSubHeader>
             <StatusTable>
-              <Row className="border-none" label={`${t("BPA_SUB_OCCUPANCY_LABEL")}:`} text={getSubOccupancyValues(index)}></Row>
+              <Row className="border-none" textStyle={{wordBreak:"break-word"}} label={`${t("BPA_SUB_OCCUPANCY_LABEL")}`} text={getSubOccupancyValues(index)}></Row>
             </StatusTable>
             <div style={window.location.href.includes("citizen") || isMobile?{overflow:"scroll"}:{ maxWidth: "950px", maxHeight: "280px" }}>
               <Table
-                className="customTable table-fixed-first-column"
+                className="customTable table-fixed-first-column table-border-style"
                 t={t}
                 disableSort={false}
                 autoSort={true}

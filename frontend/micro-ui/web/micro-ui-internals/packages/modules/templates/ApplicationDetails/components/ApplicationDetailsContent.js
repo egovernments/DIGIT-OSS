@@ -101,7 +101,7 @@ function ApplicationDetailsContent({
             ) : (
               <React.Fragment>
                 <CardSectionHeader style={index == 0 && checkLocation ? { marginBottom: "16px" } : { marginBottom: "16px", marginTop: "32px" }}>
-                  {isNocLocation ? `${t(detail.title)}:` : t(detail.title)}
+                  {isNocLocation ? `${t(detail.title)}` : t(detail.title)}
                   {detail?.Component ? <detail.Component /> : null}
                 </CardSectionHeader>
               </React.Fragment>
@@ -117,7 +117,7 @@ function ApplicationDetailsContent({
                   return (
                     <Row
                       key={t(value.title)}
-                      label={isNocLocation || isBPALocation ? `${t(value.title)}:` : t(value.title)}
+                      label={isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
                       text={value?.skip ? value.value : getTranslatedValues(value?.value, value?.isNotTranslated) || "N/A"}
                       last={index === detail?.values?.length - 1}
                       caption={value.caption}

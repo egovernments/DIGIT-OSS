@@ -220,8 +220,8 @@ function SelectDocument({
       <LabelFieldPair>
         <CardLabel className="card-label-smaller">
           {doc?.documentType != "OLDLICENCENO" ?
-            `${t(`${doc?.documentType.replaceAll(".", "_")}`)}*:` :
-            `${t(`${doc?.documentType.replaceAll(".", "_")}`)}:`}
+            `${t(`${doc?.documentType.replaceAll(".", "_")}`)}*` :
+            `${t(`${doc?.documentType.replaceAll(".", "_")}`)}`}
         </CardLabel>
         <div className="field" style={{ width: "70%" }}>
           <MultiUploadWrapper
