@@ -1,0 +1,25 @@
+.btn-galleryButton{
+    background: #FAFAFA;
+    border: 1px solid #D6D5D4;
+    border-radius: 8px;
+    padding: 4px 40px;
+    margin: 8px 0px;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    justify-content: center;
+}
+
+.input-galleryButton{
+    display: none;
+}
+
+.text-galleryButton{
+    color: #F47738;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+}

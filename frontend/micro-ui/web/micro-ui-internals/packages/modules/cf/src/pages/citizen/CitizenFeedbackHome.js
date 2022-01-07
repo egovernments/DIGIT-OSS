@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Card, CardHeader, ComplaintIcon, AvailableOptionsList, UserInput, ChatBubble, MultipleSelect, StarRating, ReplyComponent, Accordion, PopUp, SubmitBar, RatingPopupImage, CloseSvg, Close } from "@egovernments/digit-ui-react-components";
 import { accordionData, PLAYSTORE_URL, WEBSOCKET_URL } from "./config";
+import { Timeline } from "@egovernments/digit-ui-react-components";
 
 const CitizenFeedbackHome = ({ parentRoute }) => {
   const [steps, setSteps] = useState([]);
@@ -77,6 +78,7 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
         "mobileNumber": mobileNumber
       }
     }
+    // for sending request in web socket
     ws.current.send(JSON.stringify(request));
     setStepsData(updatedSteps);
     setCurrentStep(currentStep + 2)
@@ -166,15 +168,16 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
 
   useEffect(() => {
     const prevSteps = stepsData;
+    // to check if there is previous step already in session storage
     if (prevSteps && prevSteps.length) {
       const initialStep = prevSteps
       setSteps(initialStep);
       setShowFaq(false)
     } else {
     }
-
+  // for websocket connection  
     connectWebsocket()
-
+  // clearing steps when closing web socket connection
     return () => {
       ws.current.close();
       clearStepsData()
@@ -185,6 +188,7 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
     if (messagesEndRef && messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
+    // for get message response to the websocket
     ws.current.onmessage = (ev) => {
       const message = JSON.parse(ev.data);
       if (typeof message == "object") {
@@ -221,6 +225,7 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
     })
   }
 
+  // Render component according to option type
   const renderItems = (data) => {
     switch (data.optionType) {
       case "button":
@@ -232,6 +237,16 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
         return <MultipleSelect stepDetails={data} data={data.option} handleSubmit={data.isDisabled ? onDisableSelect : onItemSelect} />
       case 'stars':
         return <StarRating stepDetails={data} data={data.option} onRatingSubmit={data.isDisabled ? onDisableSelect : onItemSelect} />
+      case 'timelineStatus':
+        return <>
+          <ChatBubble type="left" >
+            <Timeline stepDetails={data} data={data.option} />
+          </ChatBubble>
+          <ChatBubble type="left" >
+            {data.sub_message}
+          </ChatBubble>
+          <AvailableOptionsList stepDetails={data} data={data.option} onItemSelect={data.isDisabled ? onDisableSelect : onItemSelect} />
+        </>
       default:
         return <AvailableOptionsList stepDetails={data} data={data.option} onItemSelect={data.isDisabled ? onDisableSelect : onItemSelect} />
     }
