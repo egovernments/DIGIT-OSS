@@ -33,6 +33,20 @@ public class InstrumentTypePropertyJdbcRepositoryTest {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    private static final String CREDIT="Credit";
+
+    private static final String DEFAULT="default";
+
+    private static final String TRANSACTION_TYPE="transactionType";
+
+    private static final String RECONCILED_ON_CREATE="reconciledOncreate";
+
+    private static final String STATUS_ON_CREATED="statusOnCreateId";
+
+    private static final String STATUS_ON_RECONCILE_ID="statusOnReconcileId";
+
+    private static final String STATUS_ON_UPDATE_ID="statusOnUpdateId";
+
     @Before
     public void setUp() throws Exception {
         instrumentTypePropertyJdbcRepository = new InstrumentTypePropertyJdbcRepository(namedParameterJdbcTemplate);
@@ -43,20 +57,20 @@ public class InstrumentTypePropertyJdbcRepositoryTest {
     public void test_create() {
 
         InstrumentTypePropertyEntity instrumentTypeProperty = InstrumentTypePropertyEntity.builder().id("1")
-                .transactionType("Credit").reconciledOncreate(true).statusOnCreateId("1").statusOnReconcileId("1")
+                .transactionType(CREDIT).reconciledOncreate(true).statusOnCreateId("1").statusOnReconcileId("1")
                 .statusOnUpdateId("1").build();
-        instrumentTypeProperty.setTenantId("default");
+        instrumentTypeProperty.setTenantId(DEFAULT);
         InstrumentTypePropertyEntity actualResult = instrumentTypePropertyJdbcRepository.create(instrumentTypeProperty);
 
         List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_instrumentTypeProperty",
                 new InstrumentTypePropertyResultExtractor());
         Map<String, Object> row = result.get(0);
 
-        assertThat(row.get("transactionType")).isEqualTo(actualResult.getTransactionType());
-        assertThat(row.get("reconciledOncreate")).isEqualTo(actualResult.getReconciledOncreate());
-        assertThat(row.get("statusOnCreateId")).isEqualTo(actualResult.getStatusOnCreateId());
-        assertThat(row.get("statusOnReconcileId")).isEqualTo(actualResult.getStatusOnReconcileId());
-        assertThat(row.get("statusOnUpdateId")).isEqualTo(actualResult.getStatusOnUpdateId());
+        assertThat(row.get(TRANSACTION_TYPE)).isEqualTo(actualResult.getTransactionType());
+        assertThat(row.get(RECONCILED_ON_CREATE)).isEqualTo(actualResult.getReconciledOncreate());
+        assertThat(row.get(STATUS_ON_CREATED)).isEqualTo(actualResult.getStatusOnCreateId());
+        assertThat(row.get(STATUS_ON_RECONCILE_ID)).isEqualTo(actualResult.getStatusOnReconcileId());
+        assertThat(row.get(STATUS_ON_UPDATE_ID)).isEqualTo(actualResult.getStatusOnUpdateId());
 
     }
 
@@ -66,20 +80,20 @@ public class InstrumentTypePropertyJdbcRepositoryTest {
     public void test_update() {
 
         InstrumentTypePropertyEntity instrumentTypeProperty = InstrumentTypePropertyEntity.builder().id("1")
-                .transactionType("Credit").reconciledOncreate(true).statusOnCreateId("1").statusOnReconcileId("1")
+                .transactionType(CREDIT).reconciledOncreate(true).statusOnCreateId("1").statusOnReconcileId("1")
                 .statusOnUpdateId("1").build();
-        instrumentTypeProperty.setTenantId("default");
+        instrumentTypeProperty.setTenantId(DEFAULT);
         InstrumentTypePropertyEntity actualResult = instrumentTypePropertyJdbcRepository.update(instrumentTypeProperty);
 
         List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_instrumentTypeProperty",
                 new InstrumentTypePropertyResultExtractor());
         Map<String, Object> row = result.get(0);
 
-        assertThat(row.get("transactionType")).isEqualTo(actualResult.getTransactionType());
-        assertThat(row.get("reconciledOncreate")).isEqualTo(actualResult.getReconciledOncreate());
-        assertThat(row.get("statusOnCreateId")).isEqualTo(actualResult.getStatusOnCreateId());
-        assertThat(row.get("statusOnReconcileId")).isEqualTo(actualResult.getStatusOnReconcileId());
-        assertThat(row.get("statusOnUpdateId")).isEqualTo(actualResult.getStatusOnUpdateId());
+        assertThat(row.get(TRANSACTION_TYPE)).isEqualTo(actualResult.getTransactionType());
+        assertThat(row.get(RECONCILED_ON_CREATE)).isEqualTo(actualResult.getReconciledOncreate());
+        assertThat(row.get(STATUS_ON_CREATED)).isEqualTo(actualResult.getStatusOnCreateId());
+        assertThat(row.get(STATUS_ON_RECONCILE_ID)).isEqualTo(actualResult.getStatusOnReconcileId());
+        assertThat(row.get(STATUS_ON_UPDATE_ID)).isEqualTo(actualResult.getStatusOnUpdateId());
 
     }
 
@@ -90,11 +104,11 @@ public class InstrumentTypePropertyJdbcRepositoryTest {
 
         InstrumentTypePropertyEntity instrumentTypePropertyEntity = InstrumentTypePropertyEntity.builder().id("1")
                 .build();
-        instrumentTypePropertyEntity.setTenantId("default");
+        instrumentTypePropertyEntity.setTenantId(DEFAULT);
         InstrumentTypePropertyEntity result = instrumentTypePropertyJdbcRepository
                 .findById(instrumentTypePropertyEntity);
 
-        assertThat(result.getTransactionType()).isEqualTo("Credit");
+        assertThat(result.getTransactionType()).isEqualTo(CREDIT);
         assertThat(result.getReconciledOncreate()).isEqualTo(true);
         assertThat(result.getStatusOnCreateId()).isEqualTo("created");
         assertThat(result.getStatusOnReconcileId()).isEqualTo("reconciled");
@@ -109,7 +123,7 @@ public class InstrumentTypePropertyJdbcRepositoryTest {
 
         InstrumentTypePropertyEntity instrumentTypePropertyEntity = InstrumentTypePropertyEntity.builder().id("5")
                 .build();
-        instrumentTypePropertyEntity.setTenantId("default");
+        instrumentTypePropertyEntity.setTenantId(DEFAULT);
         InstrumentTypePropertyEntity result = instrumentTypePropertyJdbcRepository
                 .findById(instrumentTypePropertyEntity);
         assertNull(result);
@@ -159,11 +173,11 @@ public class InstrumentTypePropertyJdbcRepositoryTest {
                 Map<String, Object> row = new HashMap<String, Object>() {
                     {
                         put("id", resultSet.getString("id"));
-                        put("transactionType", resultSet.getString("transactionType"));
-                        put("reconciledOncreate", resultSet.getBoolean("reconciledOncreate"));
-                        put("statusOnCreateId", resultSet.getString("statusOnCreateId"));
-                        put("statusOnUpdateId", resultSet.getString("statusOnUpdateId"));
-                        put("statusOnReconcileId", resultSet.getString("statusOnReconcileId"));
+                        put(TRANSACTION_TYPE, resultSet.getString(TRANSACTION_TYPE));
+                        put(RECONCILED_ON_CREATE, resultSet.getBoolean(RECONCILED_ON_CREATE));
+                        put(STATUS_ON_CREATED, resultSet.getString(STATUS_ON_CREATED));
+                        put(STATUS_ON_UPDATE_ID, resultSet.getString(STATUS_ON_UPDATE_ID));
+                        put(STATUS_ON_RECONCILE_ID, resultSet.getString(STATUS_ON_RECONCILE_ID));
                         put("createdBy", resultSet.getString("createdBy"));
                         put("createdDate", resultSet.getString("createdDate"));
                         put("lastModifiedBy", resultSet.getString("lastModifiedBy"));

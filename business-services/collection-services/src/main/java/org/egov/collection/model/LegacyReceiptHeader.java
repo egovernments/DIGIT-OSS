@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 @Getter
 @Setter
+
 public class LegacyReceiptHeader {
     
     public static final String SEQ_LEGACY_RECEIPT_HEADER = "SEQ_LEGACY_RECEIPT_HEADER";

@@ -47,6 +47,7 @@ public class AccountDetailTypeControllerTest {
 	private ArgumentCaptor<List<AccountDetailType>> captor;
 
 	private RequestJsonReader resources = new RequestJsonReader();
+	private static final String DEFAULT="default";
 
 	@Test
 	public void testCreate() throws IOException, Exception {
@@ -63,7 +64,7 @@ public class AccountDetailTypeControllerTest {
 		final List<AccountDetailType> actualRequest = captor.getValue();
 		assertEquals("name", actualRequest.get(0).getName());
 		assertEquals("contractor", actualRequest.get(0).getTableName());
-		assertEquals("default", actualRequest.get(0).getTenantId());
+		assertEquals(DEFAULT, actualRequest.get(0).getTenantId());
 	}
 
 	@Test
@@ -92,7 +93,7 @@ public class AccountDetailTypeControllerTest {
 		final List<AccountDetailType> actualRequest = captor.getValue();
 		assertEquals("nameU", actualRequest.get(0).getName());
 		assertEquals("abc/contractorU", actualRequest.get(0).getFullyQualifiedName());
-		assertEquals("default", actualRequest.get(0).getTenantId());
+		assertEquals(DEFAULT, actualRequest.get(0).getTenantId());
 	}
 
 	@Test
@@ -119,7 +120,7 @@ public class AccountDetailTypeControllerTest {
 		List<AccountDetailType> accountDetailTypes = new ArrayList<AccountDetailType>();
 		AccountDetailType accountDetailType = AccountDetailType.builder().id("1").name("name").tableName("contractor")
 				.fullyQualifiedName("abc/contractor").active(true).build();
-		accountDetailType.setTenantId("default");
+		accountDetailType.setTenantId(DEFAULT);
 		accountDetailTypes.add(accountDetailType);
 		return accountDetailTypes;
 	}
@@ -128,7 +129,7 @@ public class AccountDetailTypeControllerTest {
 		List<AccountDetailType> accountDetailTypes = new ArrayList<AccountDetailType>();
 		AccountDetailType accountDetailType = AccountDetailType.builder().id("1").name("nameU").tableName("contractorU")
 				.fullyQualifiedName("abc/contractorU").active(true).build();
-		accountDetailType.setTenantId("default");
+		accountDetailType.setTenantId(DEFAULT);
 		accountDetailTypes.add(accountDetailType);
 		return accountDetailTypes;
 	}

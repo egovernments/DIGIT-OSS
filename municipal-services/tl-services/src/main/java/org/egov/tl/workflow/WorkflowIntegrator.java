@@ -124,8 +124,6 @@ public class WorkflowIntegrator {
 						obj.put(BUSINESSSERVICEKEY, tradeType);
 						obj.put(MODULENAMEKEY, BPAMODULENAMEVALUE);
 						break;
-					default:
-						break;
 				}
 				obj.put(ACTIONKEY, license.getAction());
 				obj.put(COMMENTKEY, license.getComment());

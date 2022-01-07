@@ -60,10 +60,11 @@ public class UserService {
 	@Autowired
 	private Constants constants;
 
-	private static final String GET_LAST_MODIFIED_DATE = "lastModifiedDate";
-	private static final String GET_PWD_EXPIRY_DATE = "pwdExpiryDate";
-	private static final String ILLEGAL_ARGUMENT_EXCEPTION = "IllegalArgumentException";
+	private static final String ILLEGAL_ARGUMENT_EXCEPTION="IllegalArgumentException";
 
+	private static final String LAST_MODIFIED_DATE="lastModifiedDate";
+
+	private static final String PWD_EXPIRY_DATE="pwdExpiryDate";
 	/**
 	 * 
 	 * @param vendorRequest
@@ -360,12 +361,12 @@ public class UserService {
 		if (owners != null) {
 			owners.forEach(map -> {
 				map.put("createdDate", dateTolong((String) map.get("createdDate"), format1));
-				if ((String) map.get(GET_LAST_MODIFIED_DATE) != null)
-					map.put(GET_LAST_MODIFIED_DATE, dateTolong((String) map.get(GET_LAST_MODIFIED_DATE), format1));
+				if ((String) map.get(LAST_MODIFIED_DATE) != null)
+					map.put(LAST_MODIFIED_DATE, dateTolong((String) map.get(LAST_MODIFIED_DATE), format1));
 				if ((String) map.get("dob") != null)
 					map.put("dob", dateTolong((String) map.get("dob"), dobFormat));
-				if ((String) map.get(GET_PWD_EXPIRY_DATE) != null)
-					map.put(GET_PWD_EXPIRY_DATE, dateTolong((String) map.get(GET_PWD_EXPIRY_DATE), format1));
+				if ((String) map.get(PWD_EXPIRY_DATE) != null)
+					map.put(PWD_EXPIRY_DATE, dateTolong((String) map.get(PWD_EXPIRY_DATE), format1));
 			});
 		}
 	}

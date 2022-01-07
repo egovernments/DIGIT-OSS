@@ -86,6 +86,7 @@ public class AccountCodePurposeService {
 	}
 
 	private BindingResult validate(List<AccountCodePurpose> accountcodepurposes, String method, BindingResult errors) {
+		private String message="accountcodepurposes";
 
 		try {
 			switch (method) {
@@ -95,7 +96,7 @@ public class AccountCodePurposeService {
 				break;
 			case ACTION_CREATE:
 				if (accountcodepurposes == null) {
-					throw new InvalidDataException("accountcodepurposes", ErrorCode.NOT_NULL.getCode(), null);
+					throw new InvalidDataException(message, ErrorCode.NOT_NULL.getCode(), null);
 				}
 				for (AccountCodePurpose accountCodePurpose : accountcodepurposes) {
 					validator.validate(accountCodePurpose, errors);
@@ -109,7 +110,7 @@ public class AccountCodePurposeService {
 				break;
 			case ACTION_UPDATE:
 				if (accountcodepurposes == null) {
-					throw new InvalidDataException("accountcodepurposes", ErrorCode.NOT_NULL.getCode(), null);
+					throw new InvalidDataException(message, ErrorCode.NOT_NULL.getCode(), null);
 				}
 				for (AccountCodePurpose accountCodePurpose : accountcodepurposes) {
 					if (accountCodePurpose.getId() == null) {
@@ -127,7 +128,7 @@ public class AccountCodePurposeService {
 				break;
 			case Constants.ACTION_SEARCH:
 				if (accountcodepurposes == null) {
-					throw new InvalidDataException("accountcodepurposes", ErrorCode.NOT_NULL.getCode(), null);
+					throw new InvalidDataException(message, ErrorCode.NOT_NULL.getCode(), null);
 				}
 				for (AccountCodePurpose accountcodepurpose : accountcodepurposes) {
 					if (accountcodepurpose.getTenantId() == null) {

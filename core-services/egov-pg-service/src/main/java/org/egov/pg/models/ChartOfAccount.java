@@ -14,6 +14,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class ChartOfAccount {
     private Long id;
 

@@ -15,19 +15,8 @@ public class mappertest {
 
 	@Test
 	public void name() throws SQLException {
-
-
 		List L = new LinkedList();
-
 		L.add(new BigDecimal(1));
 		L.add(2);
-
-		System.out.println(L.get(1).getClass());
-
 	}
-
-
-
-
-
 }

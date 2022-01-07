@@ -59,20 +59,20 @@ public class OpenTracingConfiguration {
                 span.setTag(CORRELATION_ID_OPENTRACING_FORMAT, MDC.get(CORRELATION_ID_MDC));
             }
 
-            @Override
-            public void onResponse(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Span span) {
-
-            }
-
-            @Override
-            public void onError(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Throwable throwable, Span span) {
-
-            }
-
-            @Override
-            public void onTimeout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, long l, Span span) {
-
-            }
+//            @Override
+//            public void onResponse(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Span span) {
+//
+//            }
+//
+//            @Override
+//            public void onError(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Throwable throwable, Span span) {
+//
+//            }
+//
+//            @Override
+//            public void onTimeout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, long l, Span span) {
+//
+//            }
         });
 
         return decorators;

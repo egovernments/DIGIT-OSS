@@ -31,8 +31,9 @@ public class UserService {
 	@Autowired
 	private ObjectMapper mapper;
 
-	private static final String GET_LAST_MODIFIED_DATE = "lastModifiedDate";
-	private static final String GET_PWD_EXPIRY_DATE = "pwdExpiryDate";
+	private static final String LAST_MODIFIED_DATE="lastModifiedDate";
+
+	private static final String PWD_EXPIRY_DATE="pwdExpiryDate";
 
 	/**
 	 * Call search in user service based on ownerids from criteria
@@ -109,12 +110,12 @@ public class UserService {
 		if (users != null) {
 			users.forEach(map -> {
 				map.put("createdDate", dateTolong((String) map.get("createdDate"), format1));
-				if ((String) map.get(GET_LAST_MODIFIED_DATE) != null)
-					map.put(GET_LAST_MODIFIED_DATE, dateTolong((String) map.get(GET_LAST_MODIFIED_DATE), format1));
+				if ((String) map.get(LAST_MODIFIED_DATE) != null)
+					map.put(LAST_MODIFIED_DATE, dateTolong((String) map.get(LAST_MODIFIED_DATE), format1));
 				if ((String) map.get("dob") != null)
 					map.put("dob", dateTolong((String) map.get("dob"), dobFormat));
-				if ((String) map.get(GET_PWD_EXPIRY_DATE) != null)
-					map.put(GET_PWD_EXPIRY_DATE, dateTolong((String) map.get(GET_PWD_EXPIRY_DATE), format1));
+				if ((String) map.get(PWD_EXPIRY_DATE) != null)
+					map.put(PWD_EXPIRY_DATE, dateTolong((String) map.get(PWD_EXPIRY_DATE), format1));
 			});
 		}
 	}

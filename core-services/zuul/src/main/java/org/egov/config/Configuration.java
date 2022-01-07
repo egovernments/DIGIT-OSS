@@ -14,7 +14,6 @@ import org.springframework.web.client.RestTemplate;
 @org.springframework.context.annotation.Configuration
 public class Configuration {
 
-    public static final String TOO_MANY_REQUESTS_EXCEPTION_KEY = "TOO_MANY_REQUESTS";
 
     @Bean
     public RestTemplate restTemplate() {
@@ -31,17 +30,17 @@ public class Configuration {
         return new DefaultRateLimiterErrorHandler() {
             @Override
             public void handleSaveError(String key, Exception e) {
-                throw new RuntimeException( new CustomException(TOO_MANY_REQUESTS_EXCEPTION_KEY, HttpStatus.TOO_MANY_REQUESTS.toString()));
+                throw new RuntimeException( new CustomException("TOO_MANY_REQUESTS", HttpStatus.TOO_MANY_REQUESTS.toString()));
             }
 
             @Override
             public void handleFetchError(String key, Exception e) {
-                throw new RuntimeException( new CustomException(TOO_MANY_REQUESTS_EXCEPTION_KEY, HttpStatus.TOO_MANY_REQUESTS.toString()));
+                throw new RuntimeException( new CustomException("TOO_MANY_REQUESTS", HttpStatus.TOO_MANY_REQUESTS.toString()));
             }
 
             @Override
             public void handleError(String msg, Exception e) {
-                throw new RuntimeException( new CustomException(TOO_MANY_REQUESTS_EXCEPTION_KEY, HttpStatus.TOO_MANY_REQUESTS.toString()));
+                throw new RuntimeException( new CustomException("TOO_MANY_REQUESTS", HttpStatus.TOO_MANY_REQUESTS.toString()));
             }
         };
     }

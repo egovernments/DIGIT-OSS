@@ -14,7 +14,7 @@ The egov-idgen service generates new id based on the id formats passed. The appl
 
 Link to the swagger API contract yaml and editor link like below
 
-http://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/egov-services/master/docs/idgen/contracts/v1-0-0.yml#!/
+https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/core-services/docs/idgen-contract.yml#!/
 
 
 ## Service Details

@@ -9,6 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+
 public class LegacyReceiptDetails {
     public static final Object SEQ_LEGACY_RECEIPT_DETAILS = "seq_legacy_receipt_details";
 

@@ -31,10 +31,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionValidatorTest {
 
-    private static final String MOBILE_NUMBER = "9999999999";
-    private static final String PB_PG_001 = "PB_PG_001";
-    private static final String TRANSACTION_ID = "transactionId";
-
     @Mock
     private TransactionRepository transactionRepository;
 
@@ -75,7 +71,7 @@ public class TransactionValidatorTest {
 
     @Test
     public void validateCreateTxnSuccess() {
-        User user = User.builder().userName("").name("XYZ").uuid("").tenantId("").mobileNumber(MOBILE_NUMBER).build();
+        User user = User.builder().userName("").name("XYZ").uuid("").tenantId("").mobileNumber("9999999999").build();
         RequestInfo requestInfo = RequestInfo.builder().userInfo(user).build();
         TransactionRequest transactionRequest = new TransactionRequest(requestInfo, txn);
 
@@ -92,7 +88,7 @@ public class TransactionValidatorTest {
      */
     @Test
     public void validateCreateTxnByValidatingProvReceipt() {
-        User user = User.builder().userName("").name("XYZ").uuid("").tenantId("").mobileNumber(MOBILE_NUMBER).build();
+        User user = User.builder().userName("").name("XYZ").uuid("").tenantId("").mobileNumber("9999999999").build();
         RequestInfo requestInfo = RequestInfo.builder().userInfo(user).build();
         TransactionRequest transactionRequest = new TransactionRequest(requestInfo, txn);
 
@@ -109,7 +105,7 @@ public class TransactionValidatorTest {
      */
     @Test(expected = CustomException.class)
     public void validateCreateTxnDuplicateOrder() {
-        User user = User.builder().userName("").name("XYZ").uuid("").tenantId("").mobileNumber(MOBILE_NUMBER).build();
+        User user = User.builder().userName("").name("XYZ").uuid("").tenantId("").mobileNumber("9999999999").build();
         RequestInfo requestInfo = RequestInfo.builder().userInfo(user).build();
         TransactionRequest transactionRequest = new TransactionRequest(requestInfo, txn);
 
@@ -125,7 +121,7 @@ public class TransactionValidatorTest {
      */
     @Test(expected = CustomException.class)
     public void validateCreateTxnInvalidGateway() {
-        User user = User.builder().userName("").name("XYZ").uuid("").tenantId("").mobileNumber(MOBILE_NUMBER).build();
+        User user = User.builder().userName("").name("XYZ").uuid("").tenantId("").mobileNumber("9999999999").build();
         RequestInfo requestInfo = RequestInfo.builder().userInfo(user).build();
         TransactionRequest transactionRequest = new TransactionRequest(requestInfo, txn);
 
@@ -146,11 +142,11 @@ public class TransactionValidatorTest {
                 .gateway("PAYTM")
                 .build();
 
-        when(gatewayService.getTxnId(any(Map.class))).thenReturn(Optional.of(PB_PG_001));
+        when(gatewayService.getTxnId(any(Map.class))).thenReturn(Optional.of("PB_PG_001"));
         when(transactionRepository.fetchTransactions(any(TransactionCriteria.class))).thenReturn(Collections.singletonList
                 (txnStatus));
 
-        validator.validateUpdateTxn(Collections.singletonMap(TRANSACTION_ID, PB_PG_001));
+        validator.validateUpdateTxn(Collections.singletonMap("transactionId", "PB_PG_001"));
 
     }
 
@@ -162,7 +158,7 @@ public class TransactionValidatorTest {
 
         when(gatewayService.getTxnId(any(Map.class))).thenReturn(Optional.empty());
 
-        validator.validateUpdateTxn(Collections.singletonMap(TRANSACTION_ID, PB_PG_001));
+        validator.validateUpdateTxn(Collections.singletonMap("transactionId", "PB_PG_001"));
     }
 
     /**
@@ -171,10 +167,10 @@ public class TransactionValidatorTest {
     @Test(expected = CustomException.class)
     public void validateUpdateTxnInvalidId() {
 
-        when(gatewayService.getTxnId(any(Map.class))).thenReturn(Optional.of(PB_PG_001));
+        when(gatewayService.getTxnId(any(Map.class))).thenReturn(Optional.of("PB_PG_001"));
         when(transactionRepository.fetchTransactions(any(TransactionCriteria.class))).thenReturn(Collections.emptyList());
 
-        validator.validateUpdateTxn(Collections.singletonMap(TRANSACTION_ID, PB_PG_001));
+        validator.validateUpdateTxn(Collections.singletonMap("transactionId", "PB_PG_001"));
     }
 
 }

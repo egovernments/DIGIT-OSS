@@ -62,8 +62,6 @@ public class QueryServiceImpl implements QueryService {
 	@Autowired
     private ConfigurationLoader configurationLoader;
 
-	private static final Map<Integer, String> WeekDayMap = createMap();
-
 	private static Map<Integer, String> createMap() {
 		Map<Integer, String> result = new HashMap<Integer, String>();
 		result.put(1, "SUN");
@@ -197,7 +195,7 @@ public class QueryServiceImpl implements QueryService {
 				Map<String, Object> propertiesMap = (HashMap<String, Object>)itrQuery.getValue();
 				labelMap.put(itrQuery.getKey(), propertiesMap.get(ElasticProperties.Query.LABEL.toLowerCase()).toString());
 			}
-		} catch (Exception e) {
+		} catch (Exception e) { 
 			logger.error("Encountered an Exception : " + e.getMessage());
 		}
 	}
@@ -451,6 +449,7 @@ public class QueryServiceImpl implements QueryService {
 			SearchRequest searchRequest = elasticSearchDao.buildElasticSearchQuery(dictator);
 			JsonNode querySegment = mapper.readTree(searchRequest.source().toString());
 			objectNode = (ObjectNode) querySegment;
+			JsonNode aggrNode = mapper.readTree(aggrQuery).get(Constants.JsonPaths.AGGS);
 			objectNode.put(Constants.JsonPaths.AGGS, mapper.readTree(aggrQuery).get(Constants.JsonPaths.AGGS));
 		} catch (Exception ex) {
 			logger.error("Encountered an Exception while parsing the JSON : " + ex.getMessage());

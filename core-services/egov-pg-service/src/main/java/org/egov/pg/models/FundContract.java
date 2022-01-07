@@ -55,6 +55,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 
 @JsonPropertyOrder({"id", "name", "code", "identifier", "level", "parentId", "isParent", "active"})
+
 public class FundContract extends AuditableContract {
 
     private Long id;

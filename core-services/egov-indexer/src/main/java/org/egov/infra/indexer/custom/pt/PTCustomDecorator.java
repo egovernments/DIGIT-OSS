@@ -26,10 +26,7 @@ public class PTCustomDecorator {
 	
 	@Autowired
 	private RestTemplate restTemplate;
-
-	private static final String LOG_INFO_REQUEST = "Request: " ;
-
-	private static final String LOG_INFO_URI = "URI: ";
+	
 	/**
 	 * Transforms data by adding consumer codes at the root level, this is needed for denormalization later on.
 	 * 
@@ -70,20 +67,20 @@ public class PTCustomDecorator {
 						property.getAuditDetails().setCreatedBy((response.getProperties().get(0).getAuditDetails().getCreatedBy()));
 					}else {
 						log.info("Zero properties returned from the service!");
-						log.info(LOG_INFO_REQUEST+apiRequest);
-						log.info(LOG_INFO_URI+uri);
+						log.info("Request: "+apiRequest);
+						log.info("URI: "+uri);
 						return null;
 					}
 				}else {
 					log.info("NULL returned from service!");
-					log.info(LOG_INFO_REQUEST+apiRequest);
-					log.info(LOG_INFO_URI+uri);
+					log.info("Request: "+apiRequest);
+					log.info("URI: "+uri);
 					return null;
 				}
 			}catch(Exception e) {
 				log.error("Exception while fetching properties: ",e);
-				log.info(LOG_INFO_REQUEST+apiRequest);
-				log.info(LOG_INFO_URI+uri);
+				log.info("Request: "+apiRequest);
+				log.info("URI: "+uri);
 				return null;
 			}
 			

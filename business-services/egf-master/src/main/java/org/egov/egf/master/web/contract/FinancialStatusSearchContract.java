@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class FinancialStatusSearchContract extends FinancialStatusContract { private String ids; 
+public class FinancialStatusSearchContract extends FinancialStatusContract { private String ids;
 private String  sortBy; 
 private Integer pageSize; 
 private Integer offset; 

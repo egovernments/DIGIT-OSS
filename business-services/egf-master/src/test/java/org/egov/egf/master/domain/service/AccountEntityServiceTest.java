@@ -47,9 +47,8 @@ public class AccountEntityServiceTest {
     private RequestInfo requestInfo = new RequestInfo();
     private List<AccountEntity> accountEntities = new ArrayList<>();
 
-    @Before
-    public void setup() {
-    }
+    private static final String DEFAULT="default";
+
 
     @Test
     public final void testCreate() {
@@ -126,7 +125,7 @@ public class AccountEntityServiceTest {
     private List<AccountEntity> getAccountEntitys() {
         List<AccountEntity> accountEntities = new ArrayList<AccountEntity>();
         AccountEntity accountEntity = AccountEntity.builder().id("1").name("name").code("code").accountDetailType(getAccountDetaialType()).active(true).build();
-        accountEntity.setTenantId("default");
+        accountEntity.setTenantId(DEFAULT);
         accountEntities.add(accountEntity);
         return accountEntities;
     }
@@ -136,14 +135,14 @@ public class AccountEntityServiceTest {
         accountEntitySearch.setPageSize(0);
         accountEntitySearch.setOffset(0);
         accountEntitySearch.setSortBy("Sort");
-        accountEntitySearch.setTenantId("default");
+        accountEntitySearch.setTenantId(DEFAULT);
         return accountEntitySearch;
     }
 
     private AccountEntity getAccountEntity() {
         AccountEntity accountEntity = AccountEntity.builder().id("1").name("accountEntity").code("001").active(true)
                 .accountDetailType(getAccountDetaialType()).build();
-        accountEntity.setTenantId("default");
+        accountEntity.setTenantId(DEFAULT);
         return accountEntity;
     }
 
@@ -151,7 +150,7 @@ public class AccountEntityServiceTest {
 
         AccountDetailType accountDetailType = AccountDetailType.builder().id("1").name("name").tableName("table")
                 .fullyQualifiedName("abc/table").build();
-        accountDetailType.setTenantId("default");
+        accountDetailType.setTenantId(DEFAULT);
         return accountDetailType;
     }
 }

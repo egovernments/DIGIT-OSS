@@ -43,6 +43,7 @@ public class BankAccountService {
 	private BankBranchRepository bankBranchRepository;
 	@Autowired
 	private FundRepository fundRepository;
+	private static final String BANK_ACCOUNTS= "bankaccounts";
 
 	@Transactional
 	public List<BankAccount> create(List<BankAccount> bankAccounts, BindingResult errors, RequestInfo requestInfo) {
@@ -101,7 +102,7 @@ public class BankAccountService {
 				break;
 			case Constants.ACTION_CREATE:
 				if (bankaccounts == null) {
-					throw new InvalidDataException("bankaccounts", ErrorCode.NOT_NULL.getCode(), null);
+					throw new InvalidDataException(BANK_ACCOUNTS, ErrorCode.NOT_NULL.getCode(), null);
 				}
 				for (BankAccount bankAccount : bankaccounts) {
 					validator.validate(bankAccount, errors);
@@ -113,7 +114,7 @@ public class BankAccountService {
 				break;
 			case Constants.ACTION_UPDATE:
 				if (bankaccounts == null) {
-					throw new InvalidDataException("bankaccounts", ErrorCode.NOT_NULL.getCode(), null);
+					throw new InvalidDataException(BANK_ACCOUNTS, ErrorCode.NOT_NULL.getCode(), null);
 				}
 				for (BankAccount bankAccount : bankaccounts) {
 					if (bankAccount.getId() == null) {
@@ -129,7 +130,7 @@ public class BankAccountService {
 				break;
 			case Constants.ACTION_SEARCH:
 				if (bankaccounts == null) {
-					throw new InvalidDataException("bankaccounts", ErrorCode.NOT_NULL.getCode(), null);
+					throw new InvalidDataException(BANK_ACCOUNTS, ErrorCode.NOT_NULL.getCode(), null);
 				}
 				for (BankAccount bankaccount : bankaccounts) {
 					if (bankaccount.getTenantId() == null) {

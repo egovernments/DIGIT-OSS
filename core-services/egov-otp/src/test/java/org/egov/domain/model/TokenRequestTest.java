@@ -9,18 +9,15 @@ import static org.junit.Assert.assertTrue;
 
 public class TokenRequestTest {
 
-    private static final String TOKEN_REQUEST_IDENTITY = "identity";
-    private static final String TOKEN_REQUEST_TENANT = "tenant";
-
     @Test
     public void test_should_not_throw_validation_exception_when_mandatory_fields_are_present() {
-        final TokenRequest token = new TokenRequest(TOKEN_REQUEST_IDENTITY, TOKEN_REQUEST_TENANT);
+        final TokenRequest token = new TokenRequest("identity", "tenant");
         token.validate();
     }
 
     @Test(expected = InvalidTokenRequestException.class)
     public void test_should_throw_validation_exception_when_identity_not_present() {
-        final TokenRequest token = new TokenRequest(null, TOKEN_REQUEST_TENANT);
+        final TokenRequest token = new TokenRequest(null, "tenant");
 
         assertTrue(token.isIdentityAbsent());
         token.validate();
@@ -28,7 +25,7 @@ public class TokenRequestTest {
 
     @Test(expected = InvalidTokenRequestException.class)
     public void test_should_throw_validation_exception_when_tenant_not_present() {
-        final TokenRequest token = new TokenRequest(TOKEN_REQUEST_IDENTITY, null);
+        final TokenRequest token = new TokenRequest("identity", null);
 
         assertTrue(token.isTenantIdAbsent());
         token.validate();
@@ -36,7 +33,7 @@ public class TokenRequestTest {
 
     @Test
     public void test_should_generate_5_digit_token() {
-        final TokenRequest token = new TokenRequest(TOKEN_REQUEST_IDENTITY, TOKEN_REQUEST_TENANT);
+        final TokenRequest token = new TokenRequest("identity", "tenant");
 
         assertNotNull(token.generateToken());
         assertEquals(5, token.generateToken().length());

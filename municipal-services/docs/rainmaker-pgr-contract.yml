@@ -1,0 +1,394 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Public Grievance Redressal
+  description: |
+
+    ### API specs for PGR ###
+    Application to Raise Grivances and track the progress.
+    . It allows any citizen registered in the system to raise a complaint (based on the   Service definition provided in the master data, Please Refer MDMS service to        Service Definition master) for any ulb belonging to the state.
+    . Notifications will be provided on progress of the complaint in evevry step. 
+    . Feedback can be provided by the citizen once the complint is resolved.
+    . If not satisfied the citizen can reopen the complaint.
+    
+  contact:
+    name: info
+host: egov-micro-dev.egovernments.org
+schemes:
+  - https
+basePath: /rainmaker-pgr/v2
+paths:
+  /requests/_search:
+    post:
+      summary: Get service requests
+      description: |
+        Gets the list of service requests for a particular ULB based on search criteria.
+        - name: group
+          in: query
+          description: Attribute of service config, it indicate the "Department" for which service type is defined.
+          required: false
+          type: string
+          format: varchar
+        - name: serviceCode
+          in: query
+          description: Allows search for service type - comma separated list.
+          type: array
+          items:
+            type: string
+          format: varchar
+        - name: startDate
+          in: query
+          description: Earliest epoch time to include in search - request created time |
+          required: false
+          type: integer
+          format: int64
+        - name: endDate
+          in: query
+          description: Latest epoch time to include in search -  request created time |
+           If search is on start date then end date is mandatory, if end date is null then server will take current date as end date.
+          required: false
+          type: integer
+          format: int64
+        - name: lastUpdatedSince
+          in: query
+          description: searches all requests that have been modified/created since last modified epoch time as provided here
+          required: false
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Successful response sorted by reverse chrnological order of creation
+          schema:
+            $ref: '#/definitions/ServiceResponse'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-0.yml#/definitions/ErrorRes'
+      tags:
+        - Service Request
+  /requests/_create:
+    post:
+      summary: Create service requests
+      description: Create new service requests - supports batch -  please note that in case of errors entire batch is rejected
+      parameters:
+        - name: serviceRequest
+          in: body
+          description: RequestInfo + ServiceRequest array for updation
+          required: true
+          schema:
+            $ref: '#/definitions/ServiceRequest'
+      tags:
+        - Service Request
+      responses:
+        '200':
+          description: Service Request Created
+          schema:
+            $ref: '#/definitions/ServiceResponse'
+        '400':
+          description: Response Info + List of errors
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-0.yml#/definitions/ErrorRes'
+  /requests/_update:
+    post:
+      summary: Update service requests
+      description: Updates service request - supports batch - please note that in case of errors entire batch is rejected
+      parameters:
+        - name: serviceRequest
+          in: body
+          description: RequestInfo + ServiceRequest array for updation
+          required: true
+          schema:
+            $ref: '#/definitions/ServiceRequest'
+      tags:
+        - Service Request
+      responses:
+        '200':
+          description: Service Request updated
+          schema:
+            $ref: '#/definitions/ServiceResponse'
+        '400':
+          description: Response Info + List of errors
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-0.yml#/definitions/ErrorRes'
+definitions:
+  ServiceDef:
+    type: object
+    description: |
+
+      This will be the MDMS data.
+
+      Defines the structure of a service provided by the administration. This is based on Open311 standard, but extends it in follwoing important ways -
+
+      1. metadata is changed from boolean to strign and represents a valid swgger 2.0 definition url of the metadata definition. If this is null then it is assumed taht service does not have any metadata, else the metadata is defined in the OpenAPI definition. This allows for a well structured powerful metadata definition.
+
+      2. Due to this ServiceRequest object has been enhanced to include metadata values (aka attribute value in Open311) as an JSON object.
+    properties:
+      tenantId:
+        type: string
+        description: The unique identifier for Service - this is equivalent to jurisdiction_id in Open311. As the platform intends to be multi tenanted - this is always required
+        minLength: 2
+        maxLength: 50
+      serviceCode:
+        type: string
+        description: The unique identifier for Service
+        minLength: 2
+        maxLength: 64
+      serviceName:
+        type: string
+        description: Service name.
+        minLength: 2
+        maxLength: 100
+      description:
+        type: string
+        description: Services description.
+        minLength: 2
+        maxLength: 500
+      metadata:
+        type: string
+        description: Schema url to valid OpenAPI swagger difinition. As described in the definition above these are the additional service specific attributes defined as a swagger definition
+      type:
+        type: string
+        description: realtime (Currently we only support real time srevices)
+        enum:
+          - realtime
+          - batch
+          - blackbox
+      keywords:
+        type: string
+        description: 'tags for this service, we can provide multiple keywords as dot(.) seprated.'
+      group:
+        type: string
+        description: This field we will use to capture department.
+      slaHours:
+        type: number
+        description: Service Level Agreement in hours for Service.
+    required:
+      - tenantId
+      - serviceName
+      - serviceCode
+  Service:
+    type: object
+    description: |
+      Instance of Service request raised for a particular service. As per extension propsed in the Service definition "attributes" carry the input values requried by metadata definition in the structure as described by the corresponding schema.
+
+      * Any one of 'address' or '(lat and lang)' or 'addressid' is mandatory
+    properties:
+      citizen:
+       $ref: '#/definitions/Citizen'
+      tenantId:
+        type: string
+        description: The unique identifier for Service - this is equivalent to jurisdiction_id in Open311. As the platform intends to be multi tenanted - this is always required
+        minLength: 2
+        maxLength: 50
+      serviceCode:
+        type: string
+        description: Code of the service being requested (as per the service definition)
+        minLength: 2
+        maxLength: 64
+      serviceRequestId:
+        type: string
+        readOnly: true
+        description: The server generated unique ID of the service request.
+        minLength: 2
+        maxLength: 64
+      description:
+        type: string
+        description: A full description of the request provided by the user
+        minLength: 2
+        maxLength: 250
+      lat:
+        type: integer
+        description: Latitude of the location.
+      long:
+        type: integer
+        description: Longitude of location.
+      address:
+        type: string
+        description: Human readable address or description of location.
+        minLength: 2
+        maxLength: 256
+      addressId:
+        type: string
+        description: The internal address ID used by a tenant master address repository or other addressing system - for eGov it can be boundary id in the boundary service
+      email:
+        type: string
+        description: The email address of the person submitting the request.
+        minLength: 5
+        maxLength: 50
+      deviceId:
+        type: string
+        description: The unique device ID of the device submitting the request.
+      accountId:
+        type: string
+        description: userid of the user requesting the srervice - in our case it may be same as phone as we are using mobile number as the userid
+        minLength: 2
+        maxLength: 64
+      firstName:
+        type: string
+        description: The given name of the person submitting the request.
+        minLength: 2
+        maxLength: 32
+      lastName:
+        type: string
+        description: The family name of the person submitting the request.
+        minLength: 2
+        maxLength: 32
+      phone:
+        type: string
+        description: The phone number of the person submitting the request.
+        maxLength: 12
+      attributes:
+        type: object
+        description: This is the json object that will carry the actual input (whereever the metadata requries input). Structure should be same as the schema definition provided in the metadata of the service (schema compliance check to be performed at client/server)
+      status:
+        type: string
+        description: The current status of the service request.
+        enum:
+          - New
+          - InProgress
+          - Closed
+          - Cancelled
+          - Rejected
+      source:
+        type: string
+        description: 'source of the complaint - Text, Mobile app, Phone, CSC, WhatsApp'
+        enum:
+          - sms
+          - email
+          - ivr
+          - mobileapp
+          - whatsapp
+          - csc
+          - web
+      expectedTime:
+        type: integer
+        format: int64
+        description: epoch of the time object is last modified.
+        x-format: dd/mm/yyyy HH-MM-SS
+      feedback:
+        type: string
+        description: FeedBack of the service by citizen.
+        minLength: 2
+        maxLength: 64
+      rating:
+        type: string
+        description: Rating about service from 1 to 5.
+      landmark:
+        type: string
+        description: land mark close to the adress
+        minLength: 2
+        maxLength: 50
+      auditDetails:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-0.yml#/definitions/AuditDetails'
+    required:
+      - tenantId
+      - serviceCode
+      - phone
+  ActionInfo:
+    type: object
+    description: Capture the details of action on service request.
+    properties:
+      tenantId:
+        type: string
+        description: The unique identifier for Service - this is equivalent to jurisdiction_id in Open311. As the platform intends to be multi tenanted - this is always required
+        minLength: 2
+        maxLength: 50
+      by:
+        type: string
+        description: 'who made the Action Citizen/Employee, it''s a combination of userid and role delimited by colon (ex- userid:citizen).'
+        readOnly: true
+      isInternal:
+        type: string
+        description: If employee is making an action with isInteral as true then server will not return that action info to citizen search result.
+      when:
+        type: integer
+        format: int64
+        description: epoch time of when the action made.
+        x-format: dd/mm/yyyy HH-MM-SS
+        readOnly: true
+      businessKey:
+        type: string
+        readOnly: true
+        description: The server generated unique ID of the service request.
+        minLength: 2
+        maxLength: 64
+      action:
+        type: string
+        description: 'Action will be Reject, Approve, Reassign, Forward.'
+      status:
+        type: string
+        readOnly: true
+        description: Each action will have a mapping with status at server side.
+      assignee:
+        type: string
+        description: user id of the employee to whom request id need to be assigne.
+      media:
+        type: array
+        maximum: 10
+        items:
+          type: string
+      comment:
+        type: string
+        description: Capture the comments made by Employee/Citizen.
+  ServiceRequest:
+    type: object
+    description: Request object to fetch the report data
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-0.yml#/definitions/RequestInfo'
+      services:
+        type: array
+        maximum: 100
+        items:
+          $ref: '#/definitions/Service'
+      actionInfo:
+        type: array
+        maximum: 100
+        items:
+          $ref: '#/definitions/ActionInfo'
+    required:
+      - RequestInfo
+      - services
+  ServiceResponse:
+    type: object
+    description: Response to the service request
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-0.yml#/definitions/ResponseInfo'
+      services:
+        type: array
+        maximum: 100
+        items:
+          $ref: '#/definitions/Service'
+      actionHistory:
+        type: array
+        maximum: 100
+        items:
+          $ref: '#/definitions/ActionHistory'
+    required:
+      - ResponseInfo
+      - services
+  ActionHistory:
+    type: object
+    description: Each Object of action History will point to the Service.
+    properties:
+      actions:
+        type: array
+        maximum: 100
+        items:
+          $ref: '#/definitions/ActionInfo'
+  Citizen:
+    type: object
+    description: Capture the details of Citizen on service request when csr creates the complaint.
+    properties:
+      tenantId:
+        type: string
+        description: The unique identifier for Service - this is equivalent to jurisdiction_id in Open311. As the platform intends to be multi tenanted - this is always required
+        minLength: 2
+        maxLength: 50
+      name:
+        type: string
+        description: name of the citizen on behalf of whom the complaint is being created
+      mobileNumber:
+        type: string
+        description: mobile number of the citizen.

@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 public class ReportController {
 
-    private ReportDefinitions reportDefinitions;
+    public ReportDefinitions reportDefinitions;
 
     @Autowired
     public ReportController(ReportDefinitions reportDefinitions) {
@@ -40,16 +40,11 @@ public class ReportController {
     @Autowired
     public static ResourceLoader resourceLoader;
 
-    private static final String LOG_ERROR_IN_GETTING_DATA = "Error in getting report data";
-    private static final String EXCEPTION_ERROR_IN_RETRIEVING_DATA = "ERROR_IN_RETRIEVING_REPORT_DATA";
-
-
     @PostMapping("/{moduleName}/metadata/_get")
     @ResponseBody
     public ResponseEntity<?> create(@PathVariable("moduleName") String moduleName, @RequestBody @Valid final MetaDataRequest metaDataRequest,
                                     final BindingResult errors) {
         try {
-            System.out.println("The Module Name from the URI is :" + moduleName);
             MetadataResponse mdr = reportService.getMetaData(metaDataRequest, moduleName);
             return reportService.getSuccessResponse(mdr, metaDataRequest.getRequestInfo(), metaDataRequest.getTenantId());
         } catch (CustomException ex) {
@@ -72,11 +67,11 @@ public class ReportController {
             ReportResponse reportResponse = reportService.getReportData(reportRequest, moduleName, reportRequest.getReportName(), reportRequest.getRequestInfo().getAuthToken());
             return new ResponseEntity<>(reportResponse, HttpStatus.OK);
         } catch (CustomException e) {
-            log.error(LOG_ERROR_IN_GETTING_DATA, e);
+            log.error("Error in getting report data", e);
             throw e;
         } catch (Exception e) {
-            log.error(LOG_ERROR_IN_GETTING_DATA, e);
-            throw new CustomException(EXCEPTION_ERROR_IN_RETRIEVING_DATA, e.getMessage());
+            log.error("Error in getting report data", e);
+            throw new CustomException("ERROR_IN_RETRIEVING_REPORT_DATA", e.getMessage());
         }
     }
 
@@ -116,12 +111,11 @@ public class ReportController {
     public ResponseEntity<?> createv1(@PathVariable("moduleName") String moduleName, @RequestBody @Valid final MetaDataRequest metaDataRequest,
                                       final BindingResult errors) {
         try {
-            System.out.println("The Module Name from the URI is :" + moduleName);
             MetadataResponse mdr = reportService.getMetaData(metaDataRequest, moduleName);
             return reportService.getSuccessResponse(mdr, metaDataRequest.getRequestInfo(), metaDataRequest.getTenantId());
         } catch (Exception e) {
-            log.error(LOG_ERROR_IN_GETTING_DATA, e);
-            throw new CustomException(EXCEPTION_ERROR_IN_RETRIEVING_DATA, e.getMessage());
+            log.error("Error in getting report data", e);
+            throw new CustomException("ERROR_IN_RETRIEVING_REPORT_DATA", e.getMessage());
         }
     }
 
@@ -134,7 +128,7 @@ public class ReportController {
             return reportService.getReportDataSuccessResponse(reportResponse, reportRequest.getRequestInfo(), reportRequest.getTenantId());
         } catch (Exception e) {
             log.error("Error in getting Report data ver1", e);
-            throw new CustomException(EXCEPTION_ERROR_IN_RETRIEVING_DATA, e.getMessage());
+            throw new CustomException("ERROR_IN_RETRIEVING_REPORT_DATA", e.getMessage());
         }
     }
 

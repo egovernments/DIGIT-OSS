@@ -14,7 +14,7 @@ NA
 
 ### Swagger API Contract
 
-http://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/core-services/gopesh67-patch-8/docs/url-shortening_contract.yml#!/
+https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/core-services/docs/url-shortening_contract.yml#!/
 
 ## Service Details
 The egov-url-shortening is used to compress long urls. The converted short urls contains id, which is used by this service to identify and get longer urls. When user opens

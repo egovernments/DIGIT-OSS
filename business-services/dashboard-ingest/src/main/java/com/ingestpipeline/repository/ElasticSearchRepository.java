@@ -25,6 +25,8 @@ public class ElasticSearchRepository {
 	public static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchRepository.class);
 
     private final RestTemplate restTemplate;
+
+	private final String MESSAGE="Error : ";
     
 	public ElasticSearchRepository(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
@@ -44,11 +46,11 @@ public class ElasticSearchRepository {
 			map = restTemplate.exchange(url, HttpMethod.PUT,
 					new HttpEntity<>(object, headers), Map.class);
 		} catch (final HttpClientErrorException httpClientErrorException) {
-			LOGGER.error("Error : " + httpClientErrorException);
+			LOGGER.error(MESSAGE + httpClientErrorException);
 		} catch (HttpServerErrorException httpServerErrorException) {
-			LOGGER.error("Error : " + httpServerErrorException);
+			LOGGER.error(MESSAGE + httpServerErrorException);
 		} catch (Exception e) {
-			LOGGER.error("Error : " + e);
+			LOGGER.error(MESSAGE + e);
 		}
 		if (map != null && map.getStatusCode() != null && (map.getStatusCode() == HttpStatus.OK) || (map.getStatusCode() == HttpStatus.CREATED)) {
 			return true;

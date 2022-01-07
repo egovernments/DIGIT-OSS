@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 public class Attribute {
 
 	public static final String DATATYPE = "String";
+
 	@JsonProperty("variable")
 	private Boolean variable;
 

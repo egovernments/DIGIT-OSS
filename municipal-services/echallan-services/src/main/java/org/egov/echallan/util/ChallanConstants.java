@@ -51,6 +51,6 @@ public class ChallanConstants {
     public static final String LOCALITY_CODE_PATH = "$.TenantBoundary.[*].boundary[?(@.label==\"Locality\")].code";
 
 
-    public ChallanConstants() {}
+//    public ChallanConstants() {}
 
 }

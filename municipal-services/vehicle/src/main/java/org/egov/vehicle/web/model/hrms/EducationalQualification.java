@@ -22,6 +22,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Setter
 @ToString
+
 public class EducationalQualification {
 	private String id;
 

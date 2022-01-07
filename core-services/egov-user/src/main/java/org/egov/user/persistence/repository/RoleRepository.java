@@ -33,8 +33,6 @@ public class RoleRepository {
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 
-    private static final String TENANT_ID_KEY = "tenantId";
-
     @Value("${mdms.roles.filter}")
     private String roleFilter;
 
@@ -68,7 +66,7 @@ public class RoleRepository {
 
         final Map<String, Object> parametersMap = new HashMap<String, Object>();
         parametersMap.put("userId", userId);
-        parametersMap.put(TENANT_ID_KEY, tenantId);
+        parametersMap.put("tenantId", tenantId);
         List<Role> roleList = namedParameterJdbcTemplate.query(RoleQueryBuilder.GET_ROLES_BY_ID_TENANTID, parametersMap,
                 new UserRoleRowMapper());
         List<Long> roleIdList = new ArrayList<Long>();
@@ -83,7 +81,7 @@ public class RoleRepository {
 
             final Map<String, Object> Map = new HashMap<String, Object>();
             Map.put("id", roleIdList);
-            Map.put(TENANT_ID_KEY, tenantid);
+            Map.put("tenantId", tenantid);
 
             roles = namedParameterJdbcTemplate.query(RoleQueryBuilder.GET_ROLES_BY_ROLEIDS, Map, new RoleRowMapper());
         }
@@ -102,7 +100,7 @@ public class RoleRepository {
 
         final Map<String, Object> parametersMap = new HashMap<String, Object>();
         parametersMap.put("code", code);
-        parametersMap.put(TENANT_ID_KEY, tenantId);
+        parametersMap.put("tenantId", tenantId);
         Role role = null;
         List<Role> roleList = namedParameterJdbcTemplate
                 .query(RoleQueryBuilder.GET_ROLE_BYTENANT_ANDCODE, parametersMap, new RoleRowMapper());

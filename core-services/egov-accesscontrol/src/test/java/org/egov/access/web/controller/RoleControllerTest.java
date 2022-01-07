@@ -44,9 +44,6 @@ public class RoleControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
-	private static final String POST_CREATE_KEY = "/v1/roles/_create";
-	private static final String POST_UPDATE_KEY = "/v1/roles/_update";
-
 	/*@Test
 	public void testShouldGetRolesForCodes() throws Exception {
 		List<Role> roles = getRoles();
@@ -85,7 +82,7 @@ public class RoleControllerTest {
 		when(responseInfoFactory.createResponseInfoFromRequestInfo(any(RequestInfo.class), any(Boolean.class)))
 				.thenReturn(responseInfo);
 
-		mockMvc.perform(post(POST_CREATE_KEY).contentType(MediaType.APPLICATION_JSON_UTF8)
+		mockMvc.perform(post("/v1/roles/_create").contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(new Resources().getFileContents("roleRequest.json"))).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(content().json(new Resources().getFileContents("roleResponse.json")));
@@ -104,7 +101,7 @@ public class RoleControllerTest {
 		when(responseInfoFactory.createResponseInfoFromRequestInfo(any(RequestInfo.class), any(Boolean.class)))
 				.thenReturn(responseInfo);
 
-		mockMvc.perform(post(POST_CREATE_KEY).contentType(MediaType.APPLICATION_JSON_UTF8)
+		mockMvc.perform(post("/v1/roles/_create").contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(new Resources().getFileContents("roleRequestWithoutRoles.json")))
 				.andExpect(status().isBadRequest()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(content().json(new Resources().getFileContents("roleResponseWithoutRoles.json")));
@@ -121,7 +118,7 @@ public class RoleControllerTest {
 		when(responseInfoFactory.createResponseInfoFromRequestInfo(any(RequestInfo.class), any(Boolean.class)))
 				.thenReturn(responseInfo);
 
-		mockMvc.perform(post(POST_CREATE_KEY).contentType(MediaType.APPLICATION_JSON_UTF8)
+		mockMvc.perform(post("/v1/roles/_create").contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(new Resources().getFileContents("roleCreateRequestWithWrongRequestInfo.json")))
 				.andExpect(status().isBadRequest());
 	}
@@ -138,7 +135,7 @@ public class RoleControllerTest {
 		when(responseInfoFactory.createResponseInfoFromRequestInfo(any(RequestInfo.class), any(Boolean.class)))
 				.thenReturn(responseInfo);
 
-		mockMvc.perform(post(POST_UPDATE_KEY).contentType(MediaType.APPLICATION_JSON_UTF8)
+		mockMvc.perform(post("/v1/roles/_update").contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(new Resources().getFileContents("roleUpdateRequest.json"))).andExpect(status().isBadRequest())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(content().json(new Resources().getFileContents("roleUpdateResponse.json")));
@@ -155,7 +152,7 @@ public class RoleControllerTest {
 		when(responseInfoFactory.createResponseInfoFromRequestInfo(any(RequestInfo.class), any(Boolean.class)))
 				.thenReturn(responseInfo);
 
-		mockMvc.perform(post(POST_UPDATE_KEY).contentType(MediaType.APPLICATION_JSON_UTF8)
+		mockMvc.perform(post("/v1/roles/_update").contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(new Resources().getFileContents("roleCreateRequestWithWrongRequestInfo.json")))
 				.andExpect(status().isBadRequest());
 	}
@@ -186,7 +183,7 @@ public class RoleControllerTest {
 		when(responseInfoFactory.createResponseInfoFromRequestInfo(any(RequestInfo.class), any(Boolean.class)))
 				.thenReturn(responseInfo);
 
-		mockMvc.perform(post(POST_UPDATE_KEY).contentType(MediaType.APPLICATION_JSON_UTF8)
+		mockMvc.perform(post("/v1/roles/_update").contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(new Resources().getFileContents("roleUpdateRequest.json"))).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(content().json(new Resources().getFileContents("roleUpdateSuccessResponse.json")));
@@ -205,7 +202,7 @@ public class RoleControllerTest {
 		when(responseInfoFactory.createResponseInfoFromRequestInfo(any(RequestInfo.class), any(Boolean.class)))
 				.thenReturn(responseInfo);
 
-		mockMvc.perform(post(POST_UPDATE_KEY).contentType(MediaType.APPLICATION_JSON_UTF8)
+		mockMvc.perform(post("/v1/roles/_update").contentType(MediaType.APPLICATION_JSON_UTF8)
 				.content(new Resources().getFileContents("roleUpdateRequestWithoutName.json")))
 				.andExpect(status().isBadRequest()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(content().json(new Resources().getFileContents("roleUpdateResponseWithoutName.json")));

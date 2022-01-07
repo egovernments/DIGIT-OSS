@@ -11,6 +11,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @Builder
+
 public class BankBranch   {
   private Long id;
 

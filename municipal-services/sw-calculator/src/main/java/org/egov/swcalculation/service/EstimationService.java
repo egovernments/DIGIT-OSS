@@ -47,8 +47,6 @@ public class EstimationService {
 	@Autowired
 	private SWCalculationUtil sWCalculationUtil;
 
-	private static final String CUSTOM_EXCEPTION_INVALID_BILLING_SLAB = "INVALID_BILLING_SLAB";
-
 	/**
 	 * Generates a List of Tax head estimates with tax head code, tax head
 	 * category and the amount to be collected for the key.
@@ -124,7 +122,7 @@ public class EstimationService {
 			Map<String, JSONArray> billingSlabMaster, ArrayList<String> billingSlabIds, RequestInfo requestInfo) {
 		BigDecimal sewerageCharge = BigDecimal.ZERO;
 		if (billingSlabMaster.get(SWCalculationConstant.SW_BILLING_SLAB_MASTER) == null)
-			throw new CustomException(CUSTOM_EXCEPTION_INVALID_BILLING_SLAB, "Billing Slab are Empty");
+			throw new CustomException("INVALID_BILLING_SLAB", "Billing Slab are Empty");
 		List<BillingSlab> mappingBillingSlab;
 		try {
 			mappingBillingSlab = mapper.readValue(
@@ -142,9 +140,9 @@ public class EstimationService {
 				requestInfo);
 
 		if (billingSlabs == null || billingSlabs.isEmpty())
-			throw new CustomException(CUSTOM_EXCEPTION_INVALID_BILLING_SLAB, "Billing Slab are Empty");
+			throw new CustomException("INVALID_BILLING_SLAB", "Billing Slab are Empty");
 		if (billingSlabs.size() > 1)
-			throw new CustomException(CUSTOM_EXCEPTION_INVALID_BILLING_SLAB,
+			throw new CustomException("INVALID_BILLING_SLAB",
 					"More than one billing slab found");
 		// Add Billing Slab Ids
 		billingSlabIds.add(billingSlabs.get(0).getId());

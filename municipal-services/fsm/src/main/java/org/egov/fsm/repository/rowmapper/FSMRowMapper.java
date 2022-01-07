@@ -40,9 +40,6 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 		this.full_count = full_count;
 	}
 
-	private static final String GET_STRING_TENANT_ID = "tenantid";
-	private static final String GET_STRING_ADDITIONAL_DETAILS = "additionalDetails";
-
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List<FSM> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -55,16 +52,16 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 			String id = rs.getString("fsm_id");
 			String applicationNo = rs.getString("applicationno");
 			currentfsm = fmsMap.get(id);
-			String tenantId = rs.getString(GET_STRING_TENANT_ID);
+			String tenantId = rs.getString("tenantid");
 			String accountId = rs.getString("accountId");
 			String description = rs.getString("description");
-			String additionalDetails = rs.getString(GET_STRING_ADDITIONAL_DETAILS);
+//			String additionalDetails = rs.getString("additionalDetails");
 			String source = rs.getString("source");
 			String sanitationtype = rs.getString("sanitationtype");
 			String propertyUsage = rs.getString("propertyUsage");
 			int noOfTrips = rs.getInt("noOfTrips");
 			String applicationStatus = rs.getString("applicationStatus");
-			String status = rs.getString("status");
+//			String status = rs.getString("status");
 			String vehicleId = rs.getString("vehicle_id");
 			String vehicleType = rs.getString("vehicletype");
 			String dsoid = rs.getString("dso_id");
@@ -78,7 +75,7 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 					lastModifiedTime = null;
 				}
 				currentfsm = FSM.builder().id(id).applicationNo(applicationNo).tenantId(tenantId)
-						.description(description).accountId(accountId).additionalDetails(getAdditionalDetail(GET_STRING_ADDITIONAL_DETAILS,rs))
+						.description(description).accountId(accountId).additionalDetails(getAdditionalDetail("additionalDetails",rs))
 						.source(source).sanitationtype(sanitationtype).propertyUsage(propertyUsage).noOfTrips(noOfTrips)
 						.vehicleId(vehicleId).applicationStatus(applicationStatus).dsoId(dsoid).possibleServiceDate(possiblesrvdate).vehicleType(vehicleType).completedOn(compeletedOn)
 						.build();
@@ -97,7 +94,7 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 	private void addChildrenToProperty(ResultSet rs, FSM fsm) throws SQLException {
 
 		// TODO add all the child data Vehicle, Pit, address
-		String tenantId = fsm.getTenantId(); 
+		String tenantId = fsm.getTenantId();
 		
 		AuditDetails auditdetails = AuditDetails.builder().createdBy(rs.getString("createdBy"))
 				.createdTime(rs.getLong("createdTime")).lastModifiedBy(rs.getString("lastModifiedBy"))
@@ -115,11 +112,11 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 				.plotNo(rs.getString("plotno")).district(rs.getString("district")).region(rs.getString("region"))
 				.state(rs.getString("state")).country(rs.getString("country")).landmark(rs.getString("landmark"))
 				.geoLocation(geoLocation).pincode(rs.getString("pincode")).doorNo(rs.getString("doorno")).id(rs.getString("fsm_address_id"))
-				.additionalDetails(rs.getString(GET_STRING_ADDITIONAL_DETAILS)).street(rs.getString("street")).slumName(rs.getString("slumname")).tenantId(rs.getString(GET_STRING_TENANT_ID)).locality(locality).auditDetails(auditdetails)
+				.additionalDetails(rs.getString("additionalDetails")).street(rs.getString("street")).slumName(rs.getString("slumname")).tenantId(rs.getString("tenantid")).locality(locality).auditDetails(auditdetails)
 				.build();
 
 		PitDetail pitDetail = PitDetail.builder().height(rs.getDouble("height")).width(rs.getDouble("width")).diameter(rs.getDouble("diameter"))
-				.length(rs.getDouble("length")).distanceFromRoad(rs.getDouble("distanceFromRoad")).id(rs.getString("fsm_pit_id")).tenantId(rs.getString(GET_STRING_TENANT_ID)).build();
+				.length(rs.getDouble("length")).distanceFromRoad(rs.getDouble("distanceFromRoad")).id(rs.getString("fsm_pit_id")).tenantId(rs.getString("tenantid")).build();
 		
 		
 		

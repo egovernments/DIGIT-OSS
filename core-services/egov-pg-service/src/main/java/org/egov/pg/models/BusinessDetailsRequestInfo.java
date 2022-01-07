@@ -13,7 +13,6 @@ import java.util.List;
 @Builder
 @EqualsAndHashCode
 @ToString
-
 public class BusinessDetailsRequestInfo {
 
 	private Long id;

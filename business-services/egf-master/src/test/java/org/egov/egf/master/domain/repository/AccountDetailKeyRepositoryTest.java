@@ -62,6 +62,8 @@ public class AccountDetailKeyRepositoryTest {
 
 	private RequestInfo requestInfo = new RequestInfo();
 
+	private static final String DEFAULT="default";
+
 	@Before
 	public void setup() {
 		accountDetailKeyRepositoryWithKafka = new AccountDetailKeyRepository(accountDetailKeyJdbcRepository,
@@ -216,7 +218,7 @@ public class AccountDetailKeyRepositoryTest {
 		accountDetailKey.setId("1");
 		accountDetailKey.setKey("1");
 		accountDetailKey.setAccountDetailType(getAccountDetailType());
-		accountDetailKey.setTenantId("default");
+		accountDetailKey.setTenantId(DEFAULT);
 		return accountDetailKey;
 	}
 
@@ -253,7 +255,7 @@ public class AccountDetailKeyRepositoryTest {
 		List<AccountDetailKey> accountDetailKies = new ArrayList<AccountDetailKey>();
 		AccountDetailKey accountDetailKey = AccountDetailKey.builder().id("1").key("1")
 				.accountDetailType(getAccountDetailType()).build();
-		accountDetailKey.setTenantId("default");
+		accountDetailKey.setTenantId(DEFAULT);
 		accountDetailKies.add(accountDetailKey);
 		return accountDetailKies;
 	}
@@ -269,14 +271,14 @@ public class AccountDetailKeyRepositoryTest {
 	private AccountDetailTypeContract getAccountDetailTypeContract() {
 		AccountDetailTypeContract accountDetailType = AccountDetailTypeContract.builder().id("1").name("name")
 				.tableName("contractor").fullyQualifiedName("abc/acb").active(true).build();
-		accountDetailType.setTenantId("default");
+		accountDetailType.setTenantId(DEFAULT);
 		return accountDetailType;
 	}
 
 	private AccountDetailType getAccountDetailType() {
 		AccountDetailType accountDetailType = AccountDetailType.builder().id("1").name("name").tableName("contractor")
 				.fullyQualifiedName("abc/acb").active(true).build();
-		accountDetailType.setTenantId("default");
+		accountDetailType.setTenantId(DEFAULT);
 		return accountDetailType;
 	}
 }

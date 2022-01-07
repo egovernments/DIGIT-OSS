@@ -58,6 +58,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class Fund {
 
     private Long id;

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class BankBranchJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(BankBranchJdbcRepository.class);
+	private static final String MESSAGE=" and ";
 
 	static {
 		LOG.debug("init bankBranch");
@@ -69,119 +70,119 @@ public class BankBranchJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
 		if (bankBranchSearchEntity.getTenantId() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("tenantId =:tenantId");
 			paramValues.put("tenantId", bankBranchSearchEntity.getTenantId());
 		}
 		if (bankBranchSearchEntity.getId() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("id =:id");
 			paramValues.put("id", bankBranchSearchEntity.getId());
 		}
 		if (bankBranchSearchEntity.getIds() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("id in(:ids) ");
 			paramValues.put("ids", new ArrayList<String>(Arrays.asList(bankBranchSearchEntity.getIds().split(","))));
 		}
 		if (bankBranchSearchEntity.getBankId() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("bankId =:bank");
 			paramValues.put("bank", bankBranchSearchEntity.getBankId());
 		}
 		if (bankBranchSearchEntity.getCode() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("code =:code");
 			paramValues.put("code", bankBranchSearchEntity.getCode());
 		}
 		if (bankBranchSearchEntity.getName() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("name =:name");
 			paramValues.put("name", bankBranchSearchEntity.getName());
 		}
 		if (bankBranchSearchEntity.getAddress() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("address =:address");
 			paramValues.put("address", bankBranchSearchEntity.getAddress());
 		}
 		if (bankBranchSearchEntity.getAddress2() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("address2 =:address2");
 			paramValues.put("address2", bankBranchSearchEntity.getAddress2());
 		}
 		if (bankBranchSearchEntity.getCity() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("city =:city");
 			paramValues.put("city", bankBranchSearchEntity.getCity());
 		}
 		if (bankBranchSearchEntity.getState() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("state =:state");
 			paramValues.put("state", bankBranchSearchEntity.getState());
 		}
 		if (bankBranchSearchEntity.getPincode() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("pincode =:pincode");
 			paramValues.put("pincode", bankBranchSearchEntity.getPincode());
 		}
 		if (bankBranchSearchEntity.getPhone() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("phone =:phone");
 			paramValues.put("phone", bankBranchSearchEntity.getPhone());
 		}
 		if (bankBranchSearchEntity.getFax() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("fax =:fax");
 			paramValues.put("fax", bankBranchSearchEntity.getFax());
 		}
 		if (bankBranchSearchEntity.getContactPerson() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("contactPerson =:contactPerson");
 			paramValues.put("contactPerson", bankBranchSearchEntity.getContactPerson());
 		}
 		if (bankBranchSearchEntity.getActive() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("active =:active");
 			paramValues.put("active", bankBranchSearchEntity.getActive());
 		}
 		if (bankBranchSearchEntity.getDescription() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("description =:description");
 			paramValues.put("description", bankBranchSearchEntity.getDescription());
 		}
 		if (bankBranchSearchEntity.getMicr() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(MESSAGE);
 			}
 			params.append("micr =:micr");
 			paramValues.put("micr", bankBranchSearchEntity.getMicr());

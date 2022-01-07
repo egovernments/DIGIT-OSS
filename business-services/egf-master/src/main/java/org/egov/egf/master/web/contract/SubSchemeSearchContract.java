@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class SubSchemeSearchContract extends SubSchemeContract { private String ids; 
+public class SubSchemeSearchContract extends SubSchemeContract { private String ids;
 private String  sortBy; 
 private Integer pageSize; 
 private Integer offset; 

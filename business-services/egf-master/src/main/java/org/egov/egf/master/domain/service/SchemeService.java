@@ -35,6 +35,10 @@ public class SchemeService {
 	@Autowired
 	private FundRepository fundRepository;
 
+    private static final String SCHEMES="schemes";
+
+    private static final String SCHEME="scheme";
+
 	private BindingResult validate(List<Scheme> schemes, String method, BindingResult errors) {
 
                 try {
@@ -45,23 +49,23 @@ public class SchemeService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (schemes == null) {
-                            throw new InvalidDataException("schemes", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(SCHEMES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Scheme scheme : schemes) {
                             validator.validate(scheme, errors);
                             if (!schemeRepository.uniqueCheck("name", scheme)) {
-                                errors.addError(new FieldError("scheme", "name", scheme.getName(), false,
+                                errors.addError(new FieldError(SCHEME, "name", scheme.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                             if (!schemeRepository.uniqueCheck("code", scheme)) {
-                                errors.addError(new FieldError("scheme", "code", scheme.getCode(), false,
+                                errors.addError(new FieldError(SCHEME, "code", scheme.getCode(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
                         break;
                     case Constants.ACTION_UPDATE:
                         if (schemes == null) {
-                            throw new InvalidDataException("schemes", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(SCHEMES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Scheme scheme : schemes) {
                             if (scheme.getId() == null) {
@@ -69,18 +73,18 @@ public class SchemeService {
                             }
                             validator.validate(scheme, errors);
                             if (!schemeRepository.uniqueCheck("name", scheme)) {
-                                errors.addError(new FieldError("scheme", "name", scheme.getName(), false,
+                                errors.addError(new FieldError(SCHEME, "name", scheme.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                             if (!schemeRepository.uniqueCheck("code", scheme)) {
-                                errors.addError(new FieldError("scheme", "code", scheme.getCode(), false,
+                                errors.addError(new FieldError(SCHEME, "code", scheme.getCode(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
                         break;
                     case Constants.ACTION_SEARCH:
                         if (schemes == null) {
-                            throw new InvalidDataException("schemes", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(SCHEMES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Scheme scheme : schemes) {
                             if (scheme.getTenantId() == null) {

@@ -41,8 +41,6 @@ public class PhonepeGateway implements Gateway {
 
     private RestTemplate restTemplate;
 
-    private static final String HTTPS_KEY = "https";
-
     @Autowired
     public PhonepeGateway(RestTemplate restTemplate, ObjectMapper objectMapper, Environment environment) {
         this.restTemplate = restTemplate;
@@ -84,7 +82,7 @@ public class PhonepeGateway implements Gateway {
 //            httpHeaders.add("X-CALLBACK-URL", CALLBACK_SERVER_URL);
 //            httpHeaders.add("X-CALLBACK-MODE", "POST");
 
-            String uri = UriComponentsBuilder.newInstance().scheme(HTTPS_KEY).host(MERCHANT_HOST).path(MERCHANT_PATH_DEBIT)
+            String uri = UriComponentsBuilder.newInstance().scheme("https").host(MERCHANT_HOST).path(MERCHANT_PATH_DEBIT)
                     .build()
                     .toUriString();
 
@@ -95,7 +93,7 @@ public class PhonepeGateway implements Gateway {
             URI redirectPath = restTemplate.postForLocation(uri, httpEntity);
 
 
-            return new URI(HTTPS_KEY, MERCHANT_HOST, redirectPath.getPath(), redirectPath.getQuery(), null);
+            return new URI("https", MERCHANT_HOST, redirectPath.getPath(), redirectPath.getQuery(), null);
 
         } catch (JsonProcessingException | URISyntaxException | NoSuchAlgorithmException e) {
             log.error("Phonepe Checksum generation failed", e);
@@ -123,7 +121,7 @@ public class PhonepeGateway implements Gateway {
 
             HttpEntity<String> httpEntity = new HttpEntity<>("", httpHeaders);
 
-            String uri = UriComponentsBuilder.newInstance().scheme(HTTPS_KEY).host(MERCHANT_HOST).path(path.toString())
+            String uri = UriComponentsBuilder.newInstance().scheme("https").host(MERCHANT_HOST).path(path.toString())
                     .build()
                     .toUriString();
 

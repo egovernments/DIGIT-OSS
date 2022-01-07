@@ -20,7 +20,6 @@ import lombok.ToString;
 @Builder
 @EqualsAndHashCode
 @ToString
-
 public class BusinessDetailsRequestInfo {
 
 	private Long id;

@@ -45,6 +45,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
+
 public @Data class InstrumentAccountCodeResponse {
     private ResponseInfo responseInfo;
     private List<InstrumentAccountCodeContract> instrumentAccountCodes;

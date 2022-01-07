@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class OnlinePayment {
 
     private Long id;

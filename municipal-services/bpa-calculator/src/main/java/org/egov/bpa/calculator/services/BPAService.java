@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
-import org.springframework.util.ObjectUtils;
 
 @Service
 public class BPAService {
@@ -55,10 +54,6 @@ public class BPAService {
 			bpaResponse = mapper.convertValue(responseMap, BPAResponse.class);
 		} catch (IllegalArgumentException e) {
 			throw new CustomException(BPACalculatorConstants.PARSING_ERROR, "Error while parsing response of TradeLicense Search");
-		}
-
-		if(ObjectUtils.isEmpty(bpaResponse) || (!ObjectUtils.isEmpty(bpaResponse) && CollectionUtils.isEmpty(bpaResponse.getBPA()))){
-			throw new CustomException("EG_BPA_RESPONSE_ERR", "BPA search returned empty results");
 		}
 
 		return bpaResponse.getBPA().get(0);

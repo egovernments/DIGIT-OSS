@@ -47,7 +47,6 @@ public class DataUploadUtils {
 	private static final Logger logger = LoggerFactory.getLogger(DataUploadUtils.class);
 	private DateFormat format = new SimpleDateFormat("dd/MM/YYYY");
 	private DataFormatter dataFormatter = new DataFormatter();
-    private static final String INVALID_FORMAT_FIELD_TYPE = "field type";
 	
 	@Value("${internal.file.folder.path}")
 	private String internalFolderPath;
@@ -68,7 +67,7 @@ public class DataUploadUtils {
         } else if (cell.getCellTypeEnum() == CellType.BLANK || cell.getCellTypeEnum() == CellType._NONE) {
             return 0;
         } else {
-            throw new InvalidFormatException("Cannot read int from a " + cell.getCellTypeEnum().toString() + " " + INVALID_FORMAT_FIELD_TYPE);
+            throw new InvalidFormatException("Cannot read int from a " + cell.getCellTypeEnum().toString() + " field type");
         }
     }
 
@@ -84,7 +83,7 @@ public class DataUploadUtils {
             return "";
         }
         else {
-            throw new InvalidFormatException("Cannot read string from a " + cell.getCellTypeEnum().toString() + " " + INVALID_FORMAT_FIELD_TYPE);
+            throw new InvalidFormatException("Cannot read string from a " + cell.getCellTypeEnum().toString() + " field type");
         }
     }
 
@@ -99,14 +98,14 @@ public class DataUploadUtils {
             } else if (val.equals("false") || val.equals("no") || val.equals("off") || val.isEmpty()) {
                 return false;
             } else {
-                throw new InvalidFormatException("Unsupported boolean value " + cell.getStringCellValue() + " " + INVALID_FORMAT_FIELD_TYPE);
+                throw new InvalidFormatException("Unsupported boolean value " + cell.getStringCellValue() + " field type");
             }
         } else if (cell.getCellTypeEnum() == CellType.BOOLEAN) {
             return cell.getBooleanCellValue();
         } else if (cell.getCellTypeEnum() == CellType.BLANK || cell.getCellTypeEnum() == CellType._NONE) {
             return false;
         } else {
-            throw new InvalidFormatException("Cannot read bool from a " + cell.getCellTypeEnum().toString() + " " + INVALID_FORMAT_FIELD_TYPE);
+            throw new InvalidFormatException("Cannot read bool from a " + cell.getCellTypeEnum().toString() + " field type");
         }
     }
 

@@ -52,6 +52,16 @@ public class ChartOfAccountDetailControllerTest {
 	@Captor
 	private ArgumentCaptor<ChartOfAccountDetailRequest> captor;
 
+	private static final String DEFAULT="default";
+
+	private static final String MESSAGE="final";
+
+	private static final String CODE_83="830bf3dc60504244babfe228bdf80bac";
+
+	private static final String CODE_E6="e647d2406902400cbf3cee71a4befb35";
+
+	private static final String CODE_4F="4ff38860184f4f348fa9b9a9ebb25c53";
+
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -73,8 +83,8 @@ public class ChartOfAccountDetailControllerTest {
 		verify(chartOfAccountDetailService).addToQue(captor.capture());
 		
 		final ChartOfAccountDetailRequest actualRequest = captor.getValue();
-		assertEquals("830bf3dc60504244babfe228bdf80bac", actualRequest.getChartOfAccountDetails().get(0).getChartOfAccount().getId());
-		assertEquals("e647d2406902400cbf3cee71a4befb35", actualRequest.getChartOfAccountDetails().get(0).getAccountDetailType().getId());
+		assertEquals(CODE_83, actualRequest.getChartOfAccountDetails().get(0).getChartOfAccount().getId());
+		assertEquals(CODE_E6 , actualRequest.getChartOfAccountDetails().get(0).getAccountDetailType().getId());
 	}
 
 	@Test
@@ -90,8 +100,8 @@ public class ChartOfAccountDetailControllerTest {
 		verify(chartOfAccountDetailService).addToQue(captor.capture());
 		
 		final ChartOfAccountDetailRequest actualRequest = captor.getValue();
-		assertEquals("4ff38860184f4f348fa9b9a9ebb25c53", actualRequest.getChartOfAccountDetails().get(0).getId());
-		assertEquals("830bf3dc60504244babfe228bdf80bac", actualRequest.getChartOfAccountDetails().get(0).getChartOfAccount().getId());
+		assertEquals(CODE_4F , actualRequest.getChartOfAccountDetails().get(0).getId());
+		assertEquals(CODE_83 , actualRequest.getChartOfAccountDetails().get(0).getChartOfAccount().getId());
 		assertEquals("9ed569220386455fb3b1f1a81535396d", actualRequest.getChartOfAccountDetails().get(0).getAccountDetailType().getId());
 }
 
@@ -110,11 +120,11 @@ public class ChartOfAccountDetailControllerTest {
 
 		List<ChartOfAccountDetail> chartOfAccountDetails = new ArrayList<ChartOfAccountDetail>();
 		ChartOfAccountDetail chartOfAccountDetail = ChartOfAccountDetail.builder().build();
-		ChartOfAccount chartOfAccount = ChartOfAccount.builder().id("830bf3dc60504244babfe228bdf80bac").glcode("1201").name("finalfdf").description("accountNumber").build();
-		chartOfAccount.setTenantId("default");
-		AccountDetailType accountDetailType = AccountDetailType.builder().id("e647d2406902400cbf3cee71a4befb35").name("final").description("final").tableName("final").active(true).fullyQualifiedName("final").build();
-		accountDetailType.setTenantId("default");
-		chartOfAccountDetail.setTenantId("default");
+		ChartOfAccount chartOfAccount = ChartOfAccount.builder().id(CODE_83).glcode("1201").name("finalfdf").description("accountNumber").build();
+		chartOfAccount.setTenantId(DEFAULT);
+		AccountDetailType accountDetailType = AccountDetailType.builder().id().name(MESSAGE).description(MESSAGE).tableName(MESSAGE).active(true).fullyQualifiedName(MESSAGE).build();
+		accountDetailType.setTenantId(DEFAULT);
+		chartOfAccountDetail.setTenantId(DEFAULT);
 		chartOfAccountDetail.setChartOfAccount(chartOfAccount);
 		chartOfAccountDetail.setAccountDetailType(accountDetailType);
 		chartOfAccountDetails.add(chartOfAccountDetail);
@@ -124,21 +134,21 @@ public class ChartOfAccountDetailControllerTest {
 	private List<ChartOfAccountDetail> getChartOfAccountDetailsSearch(){
 
 		List<ChartOfAccountDetail> chartOfAccountDetails = new ArrayList<ChartOfAccountDetail>();
-		ChartOfAccountDetail chartOfAccountDetail1 = ChartOfAccountDetail.builder().id("4ff38860184f4f348fa9b9a9ebb25c53").build();
+		ChartOfAccountDetail chartOfAccountDetail1 = ChartOfAccountDetail.builder().id(CODE_4F).build();
 		ChartOfAccountDetail chartOfAccountDetail2 = ChartOfAccountDetail.builder().id("9bea76ae70e04164a1f98df7b996ba0f").build();
 		ChartOfAccountDetail chartOfAccountDetail3 = ChartOfAccountDetail.builder().id("cabf5df544af4253a1cc26aa80e57270").build();
-		ChartOfAccount chartOfAccount1 = ChartOfAccount.builder().id("830bf3dc60504244babfe228bdf80bac").build();
-		ChartOfAccount chartOfAccount2 = ChartOfAccount.builder().id("830bf3dc60504244babfe228bdf80bac").build();
-		ChartOfAccount chartOfAccount3 = ChartOfAccount.builder().id("830bf3dc60504244babfe228bdf80bac").build();
-		chartOfAccount1.setTenantId("default");
-		chartOfAccount2.setTenantId("default");
-		chartOfAccount3.setTenantId("default");
-		AccountDetailType accountDetailType1 = AccountDetailType.builder().id("e647d2406902400cbf3cee71a4befb35").build();
-		AccountDetailType accountDetailType2 = AccountDetailType.builder().id("e647d2406902400cbf3cee71a4befb35").build();
-		AccountDetailType accountDetailType3 = AccountDetailType.builder().id("e647d2406902400cbf3cee71a4befb35").build();
-		chartOfAccountDetail1.setTenantId("default");
-		chartOfAccountDetail2.setTenantId("default");
-		chartOfAccountDetail3.setTenantId("default");
+		ChartOfAccount chartOfAccount1 = ChartOfAccount.builder().id(CODE_83).build();
+		ChartOfAccount chartOfAccount2 = ChartOfAccount.builder().id(CODE_83).build();
+		ChartOfAccount chartOfAccount3 = ChartOfAccount.builder().id(CODE_83).build();
+		chartOfAccount1.setTenantId(DEFAULT);
+		chartOfAccount2.setTenantId(DEFAULT);
+		chartOfAccount3.setTenantId(DEFAULT);
+		AccountDetailType accountDetailType1 = AccountDetailType.builder().id(CODE_E6).build();
+		AccountDetailType accountDetailType2 = AccountDetailType.builder().id(CODE_E6).build();
+		AccountDetailType accountDetailType3 = AccountDetailType.builder().id(CODE_E6).build();
+		chartOfAccountDetail1.setTenantId(DEFAULT);
+		chartOfAccountDetail2.setTenantId(DEFAULT);
+		chartOfAccountDetail3.setTenantId(DEFAULT);
 		chartOfAccountDetail1.setChartOfAccount(chartOfAccount1);
 		chartOfAccountDetail1.setAccountDetailType(accountDetailType1);
 		chartOfAccountDetail2.setChartOfAccount(chartOfAccount2);
@@ -153,14 +163,14 @@ public class ChartOfAccountDetailControllerTest {
 	
 	private List<ChartOfAccountDetail> getUpdatedChartOfAccountDetails(){
 		List<ChartOfAccountDetail> chartOfAccountDetails = new ArrayList<ChartOfAccountDetail>();
-		ChartOfAccountDetail chartOfAccountDetail = ChartOfAccountDetail.builder().id("4ff38860184f4f348fa9b9a9ebb25c53").build();
-		ChartOfAccount chartOfAccount = ChartOfAccount.builder().id("830bf3dc60504244babfe228bdf80bac")
+		ChartOfAccountDetail chartOfAccountDetail = ChartOfAccountDetail.builder().id(CODE_4F).build();
+		ChartOfAccount chartOfAccount = ChartOfAccount.builder().id(CODE_83)
 				.glcode("updatedglcode").name("name")
 				.description("description").isActiveForPosting(true)
 				.type('B').classification((long) 123456)
 				.functionRequired(true).budgetCheckRequired(true).build();
-		chartOfAccount.setTenantId("default");
-		chartOfAccountDetail.setTenantId("default");
+		chartOfAccount.setTenantId(DEFAULT);
+		chartOfAccountDetail.setTenantId(DEFAULT);
 		AccountDetailType accountDetailType = AccountDetailType.builder().id("9ed569220386455fb3b1f1a81535396d").build();
 		chartOfAccountDetail.setChartOfAccount(chartOfAccount);
 		chartOfAccountDetail.setAccountDetailType(accountDetailType);
