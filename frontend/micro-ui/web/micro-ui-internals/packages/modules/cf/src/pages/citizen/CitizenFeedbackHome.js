@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Card, CardHeader, ComplaintIcon, AvailableOptionsList, UserInput, ChatBubble, MultipleSelect, StarRating, ReplyComponent, Accordion, PopUp, SubmitBar, RatingPopupImage, CloseSvg, Close } from "@egovernments/digit-ui-react-components";
-import { accordionData, PLAYSTORE_URL, WEBSOCKET_URL } from "./config";
+import { PLAYSTORE_URL, WEBSOCKET_URL } from "./config";
 import { Timeline } from "@egovernments/digit-ui-react-components";
 
 const CitizenFeedbackHome = ({ parentRoute }) => {
@@ -18,6 +18,7 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
   const history = useHistory();
   const messagesEndRef = useRef(null);
   const User = Digit.UserService.getUser();
+  const { data: faqData, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "XstateWebChatbot", "FrequentlyAskedQuestions", {});
 
   const onItemSelect = (stepDetails, itemDetails) => {
     if (showFaq) {
@@ -280,8 +281,8 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
           <p style={{ color: '#F47738', fontSize: '20px' }}>FAQs</p>
 
           <div className="accordion">
-            {accordionData.map(({ title, children }) => (
-              <Accordion title={title} children={children} />
+            {faqData && faqData.XstateWebChatbot && faqData.XstateWebChatbot.FrequentlyAskedQuestions.map(({ question, answer }) => (
+              <Accordion title={question} children={answer} />
             ))}
           </div>
         </Card>
