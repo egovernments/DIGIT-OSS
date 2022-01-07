@@ -40,7 +40,7 @@ const CheckPage = ({ onSubmit, value }) => {
   if (value?.uiFlow?.flow === "OCBPA") routeLink = `/digit-ui/citizen/obps/sendbacktocitizen/ocbpa/${value?.tenantId}/${value?.applicationNo}`;
   if (value.businessService === "BPA_LOW") BusinessService = "BPA.LOW_RISK_PERMIT_FEE";
   else if (value.businessService === "BPA") BusinessService = "BPA.NC_APP_FEE";
-  else BusinessService = "BPA.NC_APP_FEE";
+  else BusinessService = "BPA.NC_OC_APP_FEE";
 
   let isEditApplication = window.location.href.includes("editApplication")|| window.location.href.includes("sendbacktocitizen");
   let val;
