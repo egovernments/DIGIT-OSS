@@ -380,6 +380,8 @@ public class InboxService {
                         processInstanceRes.getProcessInstances().addAll(processInstance.getProcessInstances());
                 }
                 processInstanceResponse = processInstanceRes;
+                if(processInstanceResponse.getProcessInstances() == null)
+                    processInstanceResponse.setProcessInstances(Collections.emptyList());
             } else {
                 processInstanceResponse = workflowService.getProcessInstance(processCriteria, requestInfo);
             }

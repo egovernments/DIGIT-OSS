@@ -190,7 +190,6 @@ public class EdcrRestService {
             edcrApplication.setPlanPermitNumber(edcrRequest.getPermitNumber());
 
         if (edcrRequest.getPermitDate() != null) {
-            edcrApplication.setApplicationDate(edcrRequest.getPermitDate());
             edcrApplication.setPermitApplicationDate(edcrRequest.getPermitDate());
         }
 

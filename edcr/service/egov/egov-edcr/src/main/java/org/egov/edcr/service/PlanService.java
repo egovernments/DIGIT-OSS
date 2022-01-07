@@ -128,13 +128,16 @@ public class PlanService {
             ByteArrayInputStream dcrReport = new ByteArrayInputStream(convertedDigitDcr);
             pdfs.add(dcrReport);
 
-            if (plan.getMainDcrPassed()) {
+            if (Boolean.TRUE.equals(plan.getMainDcrPassed())) {
                 OcComparisonDetail ocComparisonE = ocComparisonService.processCombined(processCombinedStatus,
                         edcrApplicationDetail);
 
-                final String fileName = ocComparisonE.getOcdcrNumber() + "-" + ocComparisonE.getDcrNumber()
-                        + "-comparison"
-                        + ".pdf";
+                String fileName;
+                if(StringUtils.isBlank(ocComparisonE.getOcdcrNumber()))
+                    fileName = ocComparisonE.getDcrNumber() + "-comparison" + ".pdf";
+                else
+                    fileName = ocComparisonE.getOcdcrNumber() + "-" + ocComparisonE.getDcrNumber() +
+                        "-comparison" + ".pdf";
                 final FileStoreMapper fileStoreMapper = fileStoreService.store(ocComparisonE.getOutput(), fileName,
                         "application/pdf",
                         DcrConstants.FILESTORE_MODULECODE);

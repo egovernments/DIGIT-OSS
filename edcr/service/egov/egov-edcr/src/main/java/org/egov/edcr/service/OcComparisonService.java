@@ -320,7 +320,11 @@ public class OcComparisonService {
     
     @Transactional
     public void saveComparisonReport(OcComparisonDetail detail, InputStream reportOutputStream) {
-        final String fileName = detail.getOcdcrNumber() + "-" + detail.getDcrNumber() +
+        String fileName;
+        if(StringUtils.isBlank(detail.getOcdcrNumber()))
+            fileName = detail.getDcrNumber() + "-comparison" + ".pdf";
+        else
+            fileName = detail.getOcdcrNumber() + "-" + detail.getDcrNumber() +
                 "-comparison" + ".pdf";
         final FileStoreMapper fileStoreMapper = fileStoreService.store(reportOutputStream, fileName, "application/pdf",
                 DcrConstants.FILESTORE_MODULECODE);
