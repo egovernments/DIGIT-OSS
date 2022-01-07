@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { SubmitBar, ActionBar, Menu } from "@egovernments/digit-ui-react-components";
 
-function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, setDisplayMenu, businessService, forcedActionPrefix,ActionBarStyle={} }) {
+function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, setDisplayMenu, businessService, forcedActionPrefix,ActionBarStyle={},MenuStyle={} }) {
   const { t } = useTranslation();
   const user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
@@ -22,6 +22,7 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
               optionKey={"action"}
               t={t}
               onSelect={onActionSelect}
+              style={MenuStyle}
             />
           ) : null}
           <SubmitBar label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />

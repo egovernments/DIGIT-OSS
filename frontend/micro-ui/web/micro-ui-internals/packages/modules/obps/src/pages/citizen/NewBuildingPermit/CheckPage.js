@@ -29,7 +29,7 @@ import {
     improvedDoc.map((ob) => { ob["isNotDuplicate"] = false; });
     improvedDoc.filter((ele,ind)=>improvedDoc.findIndex((elee)=>elee.documentType===ele.documentType)===ind).map(obj=>obj.isNotDuplicate=true);
     const { data:datafromAPI, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId,value?.data?.scrutinyNumber, {
-        enabled: true
+        enabled: value?.data?.scrutinyNumber?true:false,
       })
     let consumerCode=value?.applicationNo;
     const fetchBillParams = { consumerCode };

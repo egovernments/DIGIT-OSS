@@ -60,6 +60,7 @@ const BpaApplicationDetail = () => {
 
 
   useEffect(async() => {
+    if(data?.applicationData?.tenantId && data?.applicationData?.applicationNo)
     businessService.length > 0 && businessService.map((buss,index) => {
       let res = Digit.PaymentService.recieptSearch(data?.applicationData?.tenantId, buss, {consumerCodes: data?.applicationData?.applicationNo}).then((value) => {
 
