@@ -36,9 +36,10 @@ const EmployeeHome = ({ modules }) => {
   );
 };
 
-export const AppHome = ({ userType, modules }) => {
+ const  AppHome = ({ userType, modules }) => {
   if (userType === "citizen") {
     return <CitizenHome modules={modules} />;
   }
   return <EmployeeHome modules={modules} />;
 };
+export default AppHome;

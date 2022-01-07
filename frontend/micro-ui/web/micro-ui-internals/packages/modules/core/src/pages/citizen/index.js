@@ -2,12 +2,15 @@ import { BackButton } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
-import { AppHome } from "../../components/Home";
-import TopBarSideBar from "../../components/TopBarSideBar";
-import CitizenHome from "./Home";
-import LanguageSelection from "./Home/LanguageSelection";
-import LocationSelection from "./Home/LocationSelection";
-import Login from "./Login";
+
+const LanguageSelection = React.lazy(() => import("./Home/LanguageSelection"));
+const LocationSelection = React.lazy(() => import("./Home/LocationSelection"));
+const Login = React.lazy(() => import("./Login"));
+const CitizenHome = React.lazy(() => import("./Home"));
+const TopBarSideBar = React.lazy(() => import("../../components/TopBarSideBar"));
+const AppHome = React.lazy(() => import("../../components/Home"));
+
+
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));

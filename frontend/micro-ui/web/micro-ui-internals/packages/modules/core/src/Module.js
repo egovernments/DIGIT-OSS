@@ -1,12 +1,13 @@
-import React from "react";
+import React, { Suspense } from 'react';
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
 import { getI18n } from "react-i18next";
 import { Body, Loader } from "@egovernments/digit-ui-react-components";
-import { DigitApp } from "./App";
 
 import getStore from "./redux/store";
+
+const DigitApp = React.lazy(() => import('./App'));
 
 const DigitUIWrapper = ({ stateCode, enabledModules, moduleReducers }) => {
   const { isLoading, data: initData } = Digit.Hooks.useInitStore(stateCode, enabledModules);
@@ -50,9 +51,16 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
   return (
     <div>
       <QueryClientProvider client={queryClient}>
+      <Suspense fallback={<div>Loading TRYOUT...
+        <Loader />
+        <Loader />
+        TRYOUT
+        <Loader />
+      </div>}>
         <ComponentProvider.Provider value={registry}>
           <DigitUIWrapper stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />
         </ComponentProvider.Provider>
+        </Suspense>
       </QueryClientProvider>
     </div>
   );

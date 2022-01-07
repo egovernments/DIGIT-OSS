@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import { Redirect, Route, Switch, useHistory, useLocation } from "react-router-dom";
-import EmployeeApp from "./pages/employee"
-import CitizenApp from "./pages/citizen"
 
-export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
+const EmployeeApp = React.lazy(() => import("./pages/employee"));
+const CitizenApp = React.lazy(() => import("./pages/citizen"));
+
+const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const history = useHistory();
   const { pathname } = useLocation();
 
@@ -68,3 +69,4 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
     </Switch>
   );
 };
+export default DigitApp;

@@ -1,12 +1,14 @@
 import React, { useContext, useEffect } from "react";
 import { Route, Switch, useRouteMatch, Redirect, useLocation } from "react-router-dom";
 
-import { AppHome } from "./Home";
-import Login from "../pages/citizen/Login";
-import EmployeeLogin from "../pages/employee/Login/index";
-import ChangePassword from "../pages/employee/ChangePassword/index";
-import ForgotPassword from "../pages/employee/ForgotPassword/index";
-import LanguageSelection from "../pages/employee/LanguageSelection";
+
+const LanguageSelection = React.lazy(() => import("../pages/employee/LanguageSelection"));
+const ForgotPassword = React.lazy(() => import("../pages/employee/ForgotPassword/index"));
+const EmployeeLogin = React.lazy(() => import("../pages/employee/Login/index"));
+const Login = React.lazy(() => import("../pages/citizen/Login"));
+const ChangePassword = React.lazy(() => import("../pages/employee/ChangePassword/index"));
+const AppHome = React.lazy(() => import("./Home"));
+
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes?.map?.((item) => item.code).includes(tenant.code));
