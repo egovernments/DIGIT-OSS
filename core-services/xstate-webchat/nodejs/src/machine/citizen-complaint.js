@@ -92,6 +92,13 @@ const citizenComplaint = {
                             })
                         },
                         {
+                          cond: (context) => context.intention == 'rejectionreason',
+                          target: '#rejectionreason',
+                          actions: assign((context, event) => {
+                            context.slots.pgr.complaintItem = context.intention;
+                          }),
+                        },
+                        {
                             cond: (context) => context.intention == 'persistComplaint',
                             target: '#persistComplaint',
                             actions: assign((context, event) => {
@@ -320,7 +327,73 @@ const citizenComplaint = {
           },
         },
 
-
+        rejectionreason: {
+          id: 'rejectionreason',
+          invoke: {
+            id: 'rejectionreason',
+            src: (context) => workFlowService.getApplicationStatus(context.user, context.extraInfo.applicationId),
+            onDone: {
+              target: '#rejectionprocessing',
+              actions: assign((context, event) => {
+                let message = dialog.get_message(messages.complaintCategoryItems.rejectionreason.messageBundle, context.user.locale);
+                const appStatus = String(event.data.AppStatus[0].status);
+                const uptMsg = message.message.replace('{{rejectionReason}}', appStatus);
+                message.message = uptMsg;
+                const nextStepList = messages.complaintCategoryItems[context.intention].nextStep;
+                const messageBundleForCode = '';
+                const grammer = dialog.constructContextGrammer(nextStepList, messageBundleForCode, context.user.locale);
+                context.grammer = grammer;
+                dialog.sendMessage(context, message);
+              }),
+            },
+          },
+        },
+    
+        rejectionprocessing: {
+          id:'rejectionprocessing',
+          initial: 'question',
+          initial: 'question',
+          states:{
+            question: {
+              onEntry: assign((context, event) => {
+                
+              }),
+              on: {
+                USER_MESSAGE: 'process',
+              },
+            },
+            process:{
+              onEntry: assign((context, event) => {
+                context.intention = dialog.get_intention(grammers.confirmation.choice, event);
+              }),
+              always: [
+                {
+                    cond: (context) => context.intention == 'Yes',
+                    target: '#complaintItem',
+                    actions: assign((context, event) => {
+                        context.slots.pgr["complaintItem"] = 'complaintComments';
+                    })
+                },
+                {
+                    cond: (context) => context.intention == 'No',
+                    target: '#endstate'
+                },
+               {
+                    target: 'error'
+               }
+              ]
+            },
+            error: {
+              onEntry: assign((context, event) => {
+                  dialog.sendMessage(context, dialog.get_message(dialog.global_messages.error.retry, context.user.locale), true);
+              }),
+              always: 'wait',
+            },
+            wait: {
+              on: {USER_MESSAGE: 'process' }
+            }, 
+          },
+        },
         persistComplaint: {
             id: 'persistComplaint',
             invoke: {

@@ -217,10 +217,10 @@ const messages = {
       },
     },
     rejectionreason: {
-      nextStep: ['complaintComments'],
+      nextStep: ['Yes', 'No'],
       messageBundle: {
         en_IN: {
-          message: 'Application got rejected due to some Technical reason. \n Do you want to raise complaint on this?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Yes' }, { key: '2', value: 'No' }],
+          message: 'Application got rejected due to {{rejectionReason}}. \n Do you want to raise complaint on this?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'Yes' }, { key: '2', value: 'No' }],
         },
         hi_IN: {
           message: 'किसी तकनीकी कारण से आवेदन खारिज हो गया। \n क्या आप इस पर शिकायत करना चाहते हैं?', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'हां' }, { key: '2', value: 'नहीं' }],
@@ -250,4 +250,3 @@ const grammers = {
 
 module.exports.messages = messages;
 module.exports.grammers = grammers;
-
