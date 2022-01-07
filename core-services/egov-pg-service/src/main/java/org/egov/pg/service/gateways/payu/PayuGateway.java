@@ -47,12 +47,6 @@ public class PayuGateway implements Gateway {
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 
-    private static final String TARGET_TXN_ID = "txnid";
-    private static final String TARGET_AMOUNT = "amount";
-    private static final String TARGET_PRODUCT_INFO = "productinfo";
-    private static final String TARGET_FIRST_NAME = "firstname";
-    private static final String TARGET_EMAIL = "email";
-
     @Autowired
     public PayuGateway(RestTemplate restTemplate, Environment environment, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
@@ -72,21 +66,21 @@ public class PayuGateway implements Gateway {
         String hashSequence = "key|txnid|amount|productinfo|firstname|email|||||||||||";
         hashSequence = hashSequence.concat(MERCHANT_SALT);
         hashSequence = hashSequence.replace("key", MERCHANT_KEY);
-        hashSequence = hashSequence.replace(TARGET_TXN_ID, transaction.getTxnId());
-        hashSequence = hashSequence.replace(TARGET_AMOUNT, Utils.formatAmtAsRupee(transaction.getTxnAmount()));
-        hashSequence = hashSequence.replace(TARGET_PRODUCT_INFO, transaction.getProductInfo());
-        hashSequence = hashSequence.replace(TARGET_FIRST_NAME, transaction.getUser().getName());
-        hashSequence = hashSequence.replace(TARGET_EMAIL, Objects.toString(transaction.getUser().getEmailId(), ""));
+        hashSequence = hashSequence.replace("txnid", transaction.getTxnId());
+        hashSequence = hashSequence.replace("amount", Utils.formatAmtAsRupee(transaction.getTxnAmount()));
+        hashSequence = hashSequence.replace("productinfo", transaction.getProductInfo());
+        hashSequence = hashSequence.replace("firstname", transaction.getUser().getName());
+        hashSequence = hashSequence.replace("email", Objects.toString(transaction.getUser().getEmailId(), ""));
 
         String hash = hashCal(hashSequence);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("key", MERCHANT_KEY);
-        params.add(TARGET_TXN_ID, transaction.getTxnId());
-        params.add(TARGET_AMOUNT, Utils.formatAmtAsRupee(transaction.getTxnAmount()));
-        params.add(TARGET_PRODUCT_INFO, transaction.getProductInfo());
-        params.add(TARGET_FIRST_NAME, transaction.getUser().getName());
-        params.add(TARGET_EMAIL, Objects.toString(transaction.getUser().getEmailId(), ""));
+        params.add("txnid", transaction.getTxnId());
+        params.add("amount", Utils.formatAmtAsRupee(transaction.getTxnAmount()));
+        params.add("productinfo", transaction.getProductInfo());
+        params.add("firstname", transaction.getUser().getName());
+        params.add("email", Objects.toString(transaction.getUser().getEmailId(), ""));
         params.add("phone", transaction.getUser().getMobileNumber());
         params.add("surl", transaction.getCallbackUrl());
         params.add("furl", transaction.getCallbackUrl());
@@ -133,11 +127,11 @@ public class PayuGateway implements Gateway {
             hashSequence = hashSequence.replace("udf3", resp.getUdf3());
             hashSequence = hashSequence.replace("udf2", resp.getUdf2());
             hashSequence = hashSequence.replace("udf1", resp.getUdf1());
-            hashSequence = hashSequence.replace(TARGET_EMAIL, resp.getEmail());
-            hashSequence = hashSequence.replace(TARGET_FIRST_NAME, resp.getFirstname());
-            hashSequence = hashSequence.replace(TARGET_PRODUCT_INFO, resp.getProductinfo());
-            hashSequence = hashSequence.replace(TARGET_AMOUNT, resp.getTransaction_amount());
-            hashSequence = hashSequence.replace(TARGET_TXN_ID, resp.getTxnid());
+            hashSequence = hashSequence.replace("email", resp.getEmail());
+            hashSequence = hashSequence.replace("firstname", resp.getFirstname());
+            hashSequence = hashSequence.replace("productinfo", resp.getProductinfo());
+            hashSequence = hashSequence.replace("amount", resp.getTransaction_amount());
+            hashSequence = hashSequence.replace("txnid", resp.getTxnid());
             String hash = hashCal(hashSequence);
 
             if(checksum.equalsIgnoreCase(hash)){
@@ -164,7 +158,7 @@ public class PayuGateway implements Gateway {
 
     @Override
     public String transactionIdKeyInResponse() {
-        return TARGET_TXN_ID;
+        return "txnid";
     }
 
 

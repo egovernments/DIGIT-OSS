@@ -50,13 +50,7 @@ public class BankControllerTest {
 	@Captor
 	private ArgumentCaptor<List<Bank>> captor;
 
-	@Before
-	public void setUp() throws Exception {
-	}
 
-	@After
-	public void tearDown() throws Exception {
-	}
 
 	/*@Test
 	public void testCreate() throws IOException, Exception {

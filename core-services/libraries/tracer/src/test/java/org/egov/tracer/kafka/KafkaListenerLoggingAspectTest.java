@@ -29,10 +29,6 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = {TracerConfiguration.class, TestConfiguration.class})
 public class KafkaListenerLoggingAspectTest {
 
-    private static final String REQUEST_INFO = "RequestInfo";
-    private static final String ACTUAL_TOPIC = "actualTopic";
-    private static final String REQUEST_INFO_BAR = "{\"RequestInfo\": { \"foo\": \"bar\"}}";
-
     private static final String TEST_CORRELATION_ID = "testCorrelationId";
     @Rule
     public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
@@ -64,7 +60,7 @@ public class KafkaListenerLoggingAspectTest {
         final HashMap<String, Object> payload = new HashMap<>();
         final HashMap<String, Object> requestInfo = new HashMap<>();
         requestInfo.put("correlationId", TEST_CORRELATION_ID);
-        payload.put(REQUEST_INFO, requestInfo);
+        payload.put("RequestInfo", requestInfo);
 
         kafkaListenerWithOnlyPayloadAnnotatedHashMap.bar(payload);
 
@@ -75,7 +71,7 @@ public class KafkaListenerLoggingAspectTest {
         final HashMap<String, Object> payload = new HashMap<>();
         final HashMap<String, Object> requestInfo = new HashMap<>();
         requestInfo.put("foo", "abc");
-        payload.put(REQUEST_INFO, requestInfo);
+        payload.put("RequestInfo", requestInfo);
 
         kafkaListenerWithOnlyPayloadAnnotatedHashMap.bar(payload);
 
@@ -87,7 +83,7 @@ public class KafkaListenerLoggingAspectTest {
         final HashMap<String, Object> payload = new HashMap<>();
         final HashMap<String, Object> requestInfo = new HashMap<>();
         requestInfo.put("foo", "abc");
-        payload.put(REQUEST_INFO, requestInfo);
+        payload.put("RequestInfo", requestInfo);
         when(tracerProperties.isRequestLoggingEnabled()).thenReturn(false);
 
         kafkaListenerWithOnlyPayloadAnnotatedHashMap.bar(payload);
@@ -101,7 +97,7 @@ public class KafkaListenerLoggingAspectTest {
         final HashMap<String, Object> payload = new HashMap<>();
         final HashMap<String, Object> requestInfo = new HashMap<>();
         requestInfo.put("foo", "abc");
-        payload.put(REQUEST_INFO, requestInfo);
+        payload.put("RequestInfo", requestInfo);
         when(tracerProperties.isRequestLoggingEnabled()).thenReturn(true);
 
         kafkaListenerWithOnlyPayloadAnnotatedHashMap.bar(payload);
@@ -115,24 +111,24 @@ public class KafkaListenerLoggingAspectTest {
     public void test_should_retrieve_correlation_id_from_string_payload_and_set_to_context() {
         final String payload = "{\"RequestInfo\": { \"correlationId\": \"testCorrelationId\"}}";
 
-        kafkaListenerStringPayloadWithTopicHeaderAnnotation.bar(payload, ACTUAL_TOPIC);
+        kafkaListenerStringPayloadWithTopicHeaderAnnotation.bar(payload, "actualTopic");
 
     }
 
     @Test
     public void test_should_set_random_correlation_id_to_context_when_string_payload_does_not_have_correlation_id_field() {
-        final String payload = REQUEST_INFO_BAR;
+        final String payload = "{\"RequestInfo\": { \"foo\": \"bar\"}}";
 
-        kafkaListenerStringPayloadWithTopicHeaderAnnotation.bar(payload, ACTUAL_TOPIC);
+        kafkaListenerStringPayloadWithTopicHeaderAnnotation.bar(payload, "actualTopic");
 
     }
 
     @Test
     @Ignore
     public void test_should_print_detailed_log_with_stringified_body_and_topic_name() {
-        final String payload = REQUEST_INFO_BAR;
+        final String payload = "{\"RequestInfo\": { \"foo\": \"bar\"}}";
         when(tracerProperties.isRequestLoggingEnabled()).thenReturn(true);
-        kafkaListenerStringPayloadWithTopicHeaderAnnotation.bar(payload, ACTUAL_TOPIC);
+        kafkaListenerStringPayloadWithTopicHeaderAnnotation.bar(payload, "actualTopic");
 
         final String expectedMessage = "Received message from topic: actualTopic with body " + payload;
         assertTrue(systemOutRule.getLog().contains(expectedMessage));
@@ -144,7 +140,7 @@ public class KafkaListenerLoggingAspectTest {
         final HashMap<String, Object> payload = new HashMap<>();
         final HashMap<String, Object> requestInfo = new HashMap<>();
         requestInfo.put("foo", "abc");
-        payload.put(REQUEST_INFO, requestInfo);
+        payload.put("RequestInfo", requestInfo);
 
         kafkaListenerWithoutPayloadAnnotationAndWithoutTopicHeaderAnnotation.bar(payload);
 
@@ -156,7 +152,7 @@ public class KafkaListenerLoggingAspectTest {
         final HashMap<String, Object> payload = new HashMap<>();
         final HashMap<String, Object> requestInfo = new HashMap<>();
         requestInfo.put("foo", "abc");
-        payload.put(REQUEST_INFO, requestInfo);
+        payload.put("RequestInfo", requestInfo);
 
         kafkaListenerWithoutPayloadAnnotationAndWithoutTopicHeaderAnnotation.bar(payload);
 
@@ -167,7 +163,7 @@ public class KafkaListenerLoggingAspectTest {
     @Test
     @Ignore
     public void test_should_print_detailed_log_with_stringified_body_and_unavailable_topic_name() {
-        final String payload = REQUEST_INFO_BAR;
+        final String payload = "{\"RequestInfo\": { \"foo\": \"bar\"}}";
         when(tracerProperties.isRequestLoggingEnabled()).thenReturn(true);
 
         kafkaListenerStringPayloadWithNonTopicHeaderAnnotation.bar(payload, 3);

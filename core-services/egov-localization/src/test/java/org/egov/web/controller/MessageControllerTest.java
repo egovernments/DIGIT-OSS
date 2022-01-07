@@ -36,7 +36,6 @@ public class MessageControllerTest {
 
     private static final String TENANT_ID = "default";
     private static final String LOCALE = "kn_IN";
-    private static final String FILE_NAME_MESSAGE_RESPONSE_JSON = "messagesResponse.json";
 
     @Autowired
     private MockMvc mockMvc;
@@ -58,7 +57,7 @@ public class MessageControllerTest {
             .param("locale", LOCALE))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-            .andExpect(content().json(getFileContents(FILE_NAME_MESSAGE_RESPONSE_JSON)));
+            .andExpect(content().json(getFileContents("messagesResponse.json")));
     }
 
     @Test
@@ -76,12 +75,12 @@ public class MessageControllerTest {
             .param("locale", LOCALE))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-            .andExpect(content().json(getFileContents(FILE_NAME_MESSAGE_RESPONSE_JSON)));
+            .andExpect(content().json(getFileContents("messagesResponse.json")));
     }
 
     @Test
     public void test_should_save_new_messages() throws Exception {
-        final Tenant defaultTenant = new Tenant(TENANT_ID);
+        final Tenant defaultTenant = new Tenant("default");
         final MessageIdentity messageIdentity1 = MessageIdentity.builder()
             .code("wcms.create.connection.login")
             .locale("kr_IN")
@@ -102,13 +101,13 @@ public class MessageControllerTest {
             .messageIdentity(messageIdentity2)
             .message("kannada message for logout")
             .build();
-        List<Message> expectedMessages = Arrays.asList(message1, message2);
+//       List<Message> expectedMessages = Arrays.asList(message1, message2);
         mockMvc.perform(post("/messages/v1/_create")
             .content(getFileContents("createMessageRequest.json"))
             .contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-            .andExpect(content().json(getFileContents(FILE_NAME_MESSAGE_RESPONSE_JSON)));
+            .andExpect(content().json(getFileContents("messagesResponse.json")));
 
         verify(messageService).create(eq(defaultTenant), anyListOf(Message.class), eq(new AuthenticatedUser(1L)));
     }
@@ -137,7 +136,7 @@ public class MessageControllerTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(content().json(getFileContents("createNewMessageResponse.json")));
         verify(messageService)
-            .updateMessagesForModule(eq(new Tenant(TENANT_ID)), anyListOf(Message.class),
+            .updateMessagesForModule(eq(new Tenant("default")), anyListOf(Message.class),
                 eq(new AuthenticatedUser(1L)));
     }
 
@@ -192,7 +191,7 @@ public class MessageControllerTest {
     private List<Message> getModelMessages() {
         final MessageIdentity messageIdentity1 = MessageIdentity.builder()
             .code("wcms.create.connection.login")
-            .locale(LOCALE)
+            .locale("kn_IN")
             .module("wcms")
             .tenant(new Tenant(TENANT_ID))
             .build();
@@ -202,7 +201,7 @@ public class MessageControllerTest {
             .build();
         final MessageIdentity messageIdentity2 = MessageIdentity.builder()
             .code("wcms.create.connection.logout")
-            .locale(LOCALE)
+            .locale("kn_IN")
             .module("wcms")
             .tenant(new Tenant(TENANT_ID))
             .build();

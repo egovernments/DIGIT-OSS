@@ -189,9 +189,6 @@ public class DemandService {
                         taxPeriodTo = taxPeriods.get(TLCalculatorConstants.MDMS_ENDDATE);
                         break;
                     }
-                default :
-                    break;
-
             }
             addRoundOffTaxHead(calculation.getTenantId(), demandDetails);
             List<String> combinedBillingSlabs = new LinkedList<>();
@@ -215,8 +212,6 @@ public class DemandService {
                 case businessService_BPA:
                     singleDemand.setConsumerType("bpaStakeHolderReg");
                     singleDemand.setBusinessService(config.getBusinessServiceBPA());
-                    break;
-                default:
                     break;
             }
             demands.add(singleDemand);

@@ -37,8 +37,9 @@ public class UserService {
 	@Autowired
 	private ObjectMapper mapper;
 
-	private static final String GET_LAST_MODIFIED_DATE = "lastModifiedDate";
-	private static final String GET_PWD_EXPIRY_DATE = "pwdExpiryDate";
+	private String string1="lastModifiedDate";
+
+	private String string2="pwdExpiryDate";
 
 	public UserDetailResponse getUsersForBpas(List<BPA> bpas) {
 		UserSearchRequest userSearchRequest = new UserSearchRequest();
@@ -101,12 +102,12 @@ public class UserService {
 		if (users != null) {
 			users.forEach(map -> {
 				map.put("createdDate", dateTolong((String) map.get("createdDate"), format1));
-				if ((String) map.get(GET_LAST_MODIFIED_DATE) != null)
-					map.put(GET_LAST_MODIFIED_DATE, dateTolong((String) map.get(GET_LAST_MODIFIED_DATE), format1));
+				if ((String) map.get(string1) != null)
+					map.put(string1, dateTolong((String) map.get(string1), format1));
 				if ((String) map.get("dob") != null)
 					map.put("dob", dateTolong((String) map.get("dob"), dobFormat));
-				if ((String) map.get(GET_PWD_EXPIRY_DATE) != null)
-					map.put(GET_PWD_EXPIRY_DATE, dateTolong((String) map.get(GET_PWD_EXPIRY_DATE), format1));
+				if ((String) map.get(string2) != null)
+					map.put(string2, dateTolong((String) map.get(string2), format1));
 			});
 		}
 	}

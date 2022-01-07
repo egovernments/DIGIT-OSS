@@ -50,6 +50,10 @@ public class SurrenderReasonRepositoryTest {
     @Mock
     private SurrenderReasonESRepository surrenderReasonESRepository;
 
+    private String string1="description";
+
+    private String string2="default";
+
     @Before
     public void setup() {
         surrenderReasonRepositoryWithKafka = new SurrenderReasonRepository(surrenderReasonJdbcRepository,
@@ -250,16 +254,16 @@ public class SurrenderReasonRepositoryTest {
     private SurrenderReason getSurrenderReasonDomin() {
         SurrenderReason surrenderReasonDetail = new SurrenderReason();
         surrenderReasonDetail.setName("name");
-        surrenderReasonDetail.setDescription("description");
-        surrenderReasonDetail.setTenantId("default");
+        surrenderReasonDetail.setDescription(string1);
+        surrenderReasonDetail.setTenantId(string2);
         return surrenderReasonDetail;
     }
 
     private SurrenderReasonEntity getSurrenderReasonEntity() {
         SurrenderReasonEntity entity = new SurrenderReasonEntity();
         entity.setName("name");
-        entity.setDescription("description");
-        entity.setTenantId("default");
+        entity.setDescription(string1);
+        entity.setTenantId(string2);
         return entity;
     }
 
@@ -273,8 +277,8 @@ public class SurrenderReasonRepositoryTest {
 
     private List<SurrenderReason> getSurrenderReasons() {
         List<SurrenderReason> surrenderReasons = new ArrayList<SurrenderReason>();
-        SurrenderReason surrenderReason = SurrenderReason.builder().name("name").description("description").build();
-        surrenderReason.setTenantId("default");
+        SurrenderReason surrenderReason = SurrenderReason.builder().name("name").description(string1).build();
+        surrenderReason.setTenantId(string2);
         surrenderReasons.add(surrenderReason);
         return surrenderReasons;
     }

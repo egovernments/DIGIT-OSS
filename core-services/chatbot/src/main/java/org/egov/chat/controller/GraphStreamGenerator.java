@@ -35,7 +35,6 @@ public class GraphStreamGenerator {
 
     String rootFolder = "graph/";
     String fileExtension = ".yaml";
-    private static final String SEND_MESSAGE_KEY = "send-message";
 
 
     public void generateGraphStreams() throws IOException {
@@ -65,7 +64,7 @@ public class GraphStreamGenerator {
 
                 createStepStream.createQuestionStreamForConfig(config,
                         topicNameGetter.getQuestionTopicNameForNode(node),
-                        SEND_MESSAGE_KEY);
+                        "send-message");
 
             } else if (nodeType.equalsIgnoreCase("branch")) {
                 String answerInputTopicName = topicNameGetter.getAnswerInputTopicNameForNode(node);
@@ -79,13 +78,13 @@ public class GraphStreamGenerator {
 
                 createBranchStream.createQuestionStreamForConfig(config,
                         topicNameGetter.getQuestionTopicNameForNode(node),
-                        SEND_MESSAGE_KEY);
+                        "send-message");
             } else if (nodeType.equalsIgnoreCase("endpoint")) {
 
                 String questionTopicName = topicNameGetter.getQuestionTopicNameForNode(node);
                 kafkaTopicCreater.createTopic(questionTopicName);
                 createEndpointStream.createEndpointStream(config, questionTopicName,
-                        SEND_MESSAGE_KEY);
+                        "send-message");
             }
         }
     }

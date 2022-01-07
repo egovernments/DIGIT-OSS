@@ -6,6 +6,7 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 
 @Data
+
 public class DesignationContract {
 
 	@NotNull

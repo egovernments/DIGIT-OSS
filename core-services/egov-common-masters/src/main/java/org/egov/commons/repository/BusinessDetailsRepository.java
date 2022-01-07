@@ -62,19 +62,17 @@ public class BusinessDetailsRepository {
 	public static final String GET_BUSINESS_ACCOUNT_DETAILS_BY_ID_AND_TENANTID = "Select * from eg_business_"
 			+ "accountdetails where id =? and tenantId=?";
 
-	public static final String GET_ALL_FROM_EG_BUSINESSDETAILS = "Select * from eg_businessdetails";
-
-	public static final String GET_BUSINESSDETAILS_BY_CODE_AND_TENANTID = GET_ALL_FROM_EG_BUSINESSDETAILS
+	public static final String GET_BUSINESSDETAILS_BY_CODE_AND_TENANTID = "Select * from eg_businessdetails"
 			+ " where code=? and tenantid=?";
 
 	private static final String DELETE_BUSINESS_ACCOUNT_SUBLEDGER_DETAILS = "Delete from eg_business_subledgerinfo"
 			+ " where id IN (:id) and tenantId=:tenantId";
 
-	private static final String GET_DETAILS_BY_NAME_AND_TENANTID = GET_ALL_FROM_EG_BUSINESSDETAILS
+	private static final String GET_DETAILS_BY_NAME_AND_TENANTID = "Select * from eg_businessdetails"
 			+ " where name=? and tenantId=?";
-	private static final String GET_DETAILS_BY_NAME_TENANTID_AND_ID = GET_ALL_FROM_EG_BUSINESSDETAILS
+	private static final String GET_DETAILS_BY_NAME_TENANTID_AND_ID = "Select * from eg_businessdetails"
 			+ " where name=? and tenantId=? and id != ?";
-	private static final String GET_BUSINESSDETAILS_BY_CODE_AND_TENANTID_AND_ID = GET_ALL_FROM_EG_BUSINESSDETAILS
+	private static final String GET_BUSINESSDETAILS_BY_CODE_AND_TENANTID_AND_ID = "Select * from eg_businessdetails"
 			+ " where code=? and tenantId=? and id != ?";
 
 	public void createBusinessDetails(List<BusinessDetails> businessDetails) {
@@ -96,7 +94,7 @@ public class BusinessDetailsRepository {
                     .addValue("vouchercreation", businessdetail.getVoucherCreation()).addValue("isVoucherApproved", businessdetail.getIsVoucherApproved())
                     .addValue("fund", businessdetail.getFund()).addValue("department", businessdetail.getDepartment()).addValue("fundSource", businessdetail.getFundSource())
                     .addValue("functionary", businessdetail.getFunctionary()).addValue("businessCategory", businessdetail.getBusinessCategory()).addValue("function", businessdetail.getFunction())
-                    .addValue("callBackForApportioning", businessdetail.getCallBackForApportioning()).addValue(TENANT, businessdetail.getTenantId())
+                    .addValue("callBackForApportioning", businessdetail.getCallBackForApportioning()).addValue("tenantId", businessdetail.getTenantId())
                     .addValue("createdBy", businessdetail.getCreatedBy()).addValue("createdDate", new Date().getTime())
                     .addValue("lastModifiedBy", businessdetail.getCreatedBy()).addValue("lastModifiedDate", new Date().getTime())
                     .getValues());
@@ -104,7 +102,7 @@ public class BusinessDetailsRepository {
             for(BusinessAccountDetails businessAccountDetails : businessdetail.getAccountDetails()) {
                 accountDetailsBatchValues.add(new MapSqlParameterSource().addValue("businessDetails", businessDetailsSequence)
                         .addValue("chartOfAccount", businessAccountDetails.getChartOfAccount()).addValue("amount", businessAccountDetails.getAmount())
-                        .addValue(TENANT, businessAccountDetails.getTenantId()).getValues());
+                        .addValue("tenantId", businessAccountDetails.getTenantId()).getValues());
                 accountDetailsSize++;
                 //TO DO : When subledger is enabled on UI FIX IT
                 /*for(BusinessAccountSubLedgerDetails subLedgerDetails : businessAccountDetails.getSubledgerDetails()) {
@@ -143,13 +141,13 @@ public class BusinessDetailsRepository {
                     .addValue("vouchercreation", businessdetail.getVoucherCreation()).addValue("isVoucherApproved", businessdetail.getIsVoucherApproved())
                     .addValue("fund", businessdetail.getFund()).addValue("department", businessdetail.getDepartment()).addValue("fundSource", businessdetail.getFundSource())
                     .addValue("functionary", businessdetail.getFunctionary()).addValue("businessCategory", businessdetail.getBusinessCategory()).addValue("function", businessdetail.getFunction())
-                    .addValue("callBackForApportioning", businessdetail.getCallBackForApportioning()).addValue(TENANT, businessdetail.getTenantId())
+                    .addValue("callBackForApportioning", businessdetail.getCallBackForApportioning()).addValue("tenantId", businessdetail.getTenantId())
                     .addValue("lastModifiedBy", businessdetail.getCreatedBy()).addValue("lastModifiedDate", new Date().getTime())
                     .getValues());
             for(BusinessAccountDetails businessAccountDetails : businessdetail.getAccountDetails()) {
                 accountDetailsBatchValues.add(new MapSqlParameterSource().addValue("id", businessAccountDetails.getId()).addValue("businessDetails", businessdetail.getId())
                         .addValue("chartOfAccount", businessAccountDetails.getChartOfAccount()).addValue("amount", businessAccountDetails.getAmount())
-                        .addValue(TENANT, businessAccountDetails.getTenantId()).getValues());
+                        .addValue("tenantId", businessAccountDetails.getTenantId()).getValues());
                 accountDetailsSize++;
             }
         }
@@ -220,7 +218,7 @@ public class BusinessDetailsRepository {
 
 		else {
 			businessDetailsId = subledgerModel.getBusinessAccountDetail().getId();
-			Object obj[] = new Object[] { generateSequence(SEQUENCEFORSUBLEDGER), subledgerModel.getAmount(),
+			Object obj[] = new Object[] { generateSequence("SEQ_EG_BUSINESS_SUBLEDGERINFO"), subledgerModel.getAmount(),
 					businessDetailsId, subledgerModel.getAccountDetailKey(), subledgerModel.getAccountDetailType(),
 					subledgerModel.getTenantId() };
 		//	jdbcTemplate.update(INSERT_BUSINESS_ACCOUNT_SUBLEDGER_DETAILS, obj);

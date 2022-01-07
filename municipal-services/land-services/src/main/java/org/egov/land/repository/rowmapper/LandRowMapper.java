@@ -31,8 +31,6 @@ import com.google.gson.Gson;
 @Component
 public class LandRowMapper implements ResultSetExtractor<List<LandInfo>> {
 
-	private static final String GET_STRING_ADDITIONAL_DETAILS = "additionalDetails";
-
 	@Override
 	public List<LandInfo> extractData(ResultSet rs) throws SQLException, DataAccessException {
 
@@ -48,8 +46,8 @@ public class LandRowMapper implements ResultSetExtractor<List<LandInfo>> {
 					lastModifiedTime = null;
 				}
 
-				Object additionalDetails = new Gson().fromJson(rs.getString(GET_STRING_ADDITIONAL_DETAILS).equals("{}")
-						|| rs.getString(GET_STRING_ADDITIONAL_DETAILS).equals("null") ? null : rs.getString(GET_STRING_ADDITIONAL_DETAILS),
+				Object additionalDetails = new Gson().fromJson(rs.getString("additionalDetails").equals("{}")
+						|| rs.getString("additionalDetails").equals("null") ? null : rs.getString("additionalDetails"),
 						Object.class);
 
 				AuditDetails auditdetails = AuditDetails.builder().createdBy(rs.getString("landInfo_createdBy"))

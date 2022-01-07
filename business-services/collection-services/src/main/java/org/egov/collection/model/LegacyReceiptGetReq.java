@@ -11,6 +11,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+
 public class LegacyReceiptGetReq {
     private List<String> receiptNumbers;
 

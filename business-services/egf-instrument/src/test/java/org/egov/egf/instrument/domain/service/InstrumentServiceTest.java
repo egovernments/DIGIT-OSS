@@ -72,6 +72,17 @@ public class InstrumentServiceTest {
 
     private RequestInfo requestInfo = new RequestInfo();
 
+    private String string1="cheque";
+
+    private String string2="online";
+
+    private String string3="bankchallan";
+
+    private String string4="description";
+
+    private String string5="accountNumber";
+
+    private String string6="default";
     @Before
     public void setup() {
         instrumentService = new InstrumentService(validator, instrumentRepository,
@@ -164,10 +175,10 @@ public class InstrumentServiceTest {
     public final void test_create_cheque() {
 
         List<Instrument> expextedResult = getInstruments();
-        expextedResult.get(0).getInstrumentType().setName("cheque");
+        expextedResult.get(0).getInstrumentType().setName(string1);
 
         Pagination<InstrumentType> pit = getInstrumentType();
-        pit.getPagedData().get(0).setName("cheque");
+        pit.getPagedData().get(0).setName(string1);
 
         when(instrumentTypeRepository.search(any(InstrumentTypeSearch.class))).thenReturn(pit);
         when(bankContractRepository.findById(any(BankContract.class), Matchers.anyObject())).thenReturn(getBankContract());
@@ -190,11 +201,11 @@ public class InstrumentServiceTest {
     public final void test_create_cheque_null_transnumber() {
 
         List<Instrument> expextedResult = getInstruments();
-        expextedResult.get(0).getInstrumentType().setName("cheque");
+        expextedResult.get(0).getInstrumentType().setName(string1);
         expextedResult.get(0).setTransactionNumber(null);
 
         Pagination<InstrumentType> pit = getInstrumentType();
-        pit.getPagedData().get(0).setName("cheque");
+        pit.getPagedData().get(0).setName(string1);
 
         when(instrumentTypeRepository.search(any(InstrumentTypeSearch.class))).thenReturn(pit);
         when(bankContractRepository.findById(any(BankContract.class), Matchers.anyObject())).thenReturn(getBankContract());
@@ -217,11 +228,11 @@ public class InstrumentServiceTest {
     public final void test_create_cheque_null_bankdetails() {
 
         List<Instrument> expextedResult = getInstruments();
-        expextedResult.get(0).getInstrumentType().setName("cheque");
+        expextedResult.get(0).getInstrumentType().setName(string1);
         expextedResult.get(0).setBank(null);
 
         Pagination<InstrumentType> pit = getInstrumentType();
-        pit.getPagedData().get(0).setName("cheque");
+        pit.getPagedData().get(0).setName(string1);
 
         when(instrumentTypeRepository.search(any(InstrumentTypeSearch.class))).thenReturn(pit);
         when(bankContractRepository.findById(any(BankContract.class), Matchers.anyObject())).thenReturn(getBankContract());
@@ -326,10 +337,10 @@ public class InstrumentServiceTest {
     public final void test_create_online() {
 
         List<Instrument> expextedResult = getInstruments();
-        expextedResult.get(0).getInstrumentType().setName("online");
+        expextedResult.get(0).getInstrumentType().setName(string2);
 
         Pagination<InstrumentType> pit = getInstrumentType();
-        pit.getPagedData().get(0).setName("online");
+        pit.getPagedData().get(0).setName(string2);
 
         when(instrumentTypeRepository.search(any(InstrumentTypeSearch.class))).thenReturn(pit);
         when(bankContractRepository.findById(any(BankContract.class), anyObject())).thenReturn(getBankContract());
@@ -352,11 +363,11 @@ public class InstrumentServiceTest {
     public final void test_create_online_null_transnumber() {
 
         List<Instrument> expextedResult = getInstruments();
-        expextedResult.get(0).getInstrumentType().setName("online");
+        expextedResult.get(0).getInstrumentType().setName(string2);
         expextedResult.get(0).setTransactionNumber(null);
 
         Pagination<InstrumentType> pit = getInstrumentType();
-        pit.getPagedData().get(0).setName("online");
+        pit.getPagedData().get(0).setName(string2);
 
         when(instrumentTypeRepository.search(any(InstrumentTypeSearch.class))).thenReturn(pit);
         when(bankContractRepository.findById(any(BankContract.class), anyObject())).thenReturn(getBankContract());
@@ -379,10 +390,10 @@ public class InstrumentServiceTest {
     public final void test_create_bankchallan() {
 
         List<Instrument> expextedResult = getInstruments();
-        expextedResult.get(0).getInstrumentType().setName("bankchallan");
+        expextedResult.get(0).getInstrumentType().setName(string3);
 
         Pagination<InstrumentType> pit = getInstrumentType();
-        pit.getPagedData().get(0).setName("bankchallan");
+        pit.getPagedData().get(0).setName(string3);
 
         when(instrumentTypeRepository.search(any(InstrumentTypeSearch.class))).thenReturn(pit);
         when(bankContractRepository.findById(any(BankContract.class), Matchers.anyObject())).thenReturn(getBankContract());
@@ -405,11 +416,11 @@ public class InstrumentServiceTest {
     public final void test_create_bankchallan_null_transnumber() {
 
         List<Instrument> expextedResult = getInstruments();
-        expextedResult.get(0).getInstrumentType().setName("bankchallan");
+        expextedResult.get(0).getInstrumentType().setName(string3);
         expextedResult.get(0).setTransactionNumber(null);
 
         Pagination<InstrumentType> pit = getInstrumentType();
-        pit.getPagedData().get(0).setName("bankchallan");
+        pit.getPagedData().get(0).setName(string3);
 
         when(instrumentTypeRepository.search(any(InstrumentTypeSearch.class))).thenReturn(pit);
         when(bankContractRepository.findById(any(BankContract.class), anyObject())).thenReturn(getBankContract());
@@ -432,11 +443,11 @@ public class InstrumentServiceTest {
     public final void test_create_bankchallan_null_bankdetails() {
 
         List<Instrument> expextedResult = getInstruments();
-        expextedResult.get(0).getInstrumentType().setName("bankchallan");
+        expextedResult.get(0).getInstrumentType().setName(string3);
         expextedResult.get(0).setBank(null);
 
         Pagination<InstrumentType> pit = getInstrumentType();
-        pit.getPagedData().get(0).setName("bankchallan");
+        pit.getPagedData().get(0).setName(string3);
 
         when(instrumentTypeRepository.search(any(InstrumentTypeSearch.class))).thenReturn(pit);
         when(bankContractRepository.findById(any(BankContract.class), anyObject())).thenReturn(getBankContract());
@@ -459,11 +470,11 @@ public class InstrumentServiceTest {
     public final void test_create_bankchallan_null_bankaccountdetails() {
 
         List<Instrument> expextedResult = getInstruments();
-        expextedResult.get(0).getInstrumentType().setName("bankchallan");
+        expextedResult.get(0).getInstrumentType().setName(string3);
         expextedResult.get(0).setBankAccount(null);
 
         Pagination<InstrumentType> pit = getInstrumentType();
-        pit.getPagedData().get(0).setName("bankchallan");
+        pit.getPagedData().get(0).setName(string3);
 
         when(instrumentTypeRepository.search(any(InstrumentTypeSearch.class))).thenReturn(pit);
         when(bankContractRepository.findById(any(BankContract.class), anyObject())).thenReturn(getBankContract());
@@ -484,17 +495,17 @@ public class InstrumentServiceTest {
     }
 
     private SurrenderReason getSurrenderReason() {
-        return SurrenderReason.builder().name("name").description("description").id("1")
+        return SurrenderReason.builder().name("name").description(string4).id("1")
                 .build();
     }
 
     private BankAccountContract getBankAccountContract() {
-        return BankAccountContract.builder().accountNumber("accountNumber")
-                .description("description").active(true).id("1").build();
+        return BankAccountContract.builder().accountNumber(string5)
+                .description(string4).active(true).id("1").build();
     }
 
     private BankContract getBankContract() {
-        return BankContract.builder().code("code").description("description").active(true)
+        return BankContract.builder().code("code").description(string4).active(true)
                 .id("1").build();
     }
 
@@ -677,7 +688,7 @@ public class InstrumentServiceTest {
 
         List<Instrument> instruments = getInstrumentss();
         Pagination<InstrumentType> expextedResult = new Pagination<>();
-        InstrumentType it = InstrumentType.builder().name("name").description("description").active(true).id("1")
+        InstrumentType it = InstrumentType.builder().name("name").description(string4).active(true).id("1")
                 .build();
         expextedResult.setPagedData(new ArrayList<>());
         expextedResult.getPagedData().add(it);
@@ -695,7 +706,7 @@ public class InstrumentServiceTest {
 
         List<Instrument> instruments = getInstrumentss();
 
-        BankContract expextedResult = BankContract.builder().id("id").description("description").active(true)
+        BankContract expextedResult = BankContract.builder().id("id").description(string4).active(true)
                 .id("1").build();
 
         instruments.get(0).setBank(expextedResult);
@@ -712,8 +723,8 @@ public class InstrumentServiceTest {
 
         List<Instrument> instruments = getInstrumentss();
 
-        BankAccountContract expextedResult = BankAccountContract.builder().accountNumber("accountNumber")
-                .description("description").active(true).id("1").build();
+        BankAccountContract expextedResult = BankAccountContract.builder().accountNumber(string5)
+                .description(string4).active(true).id("1").build();
 
         instruments.get(0).setBankAccount(expextedResult);
 
@@ -731,7 +742,7 @@ public class InstrumentServiceTest {
         List<Instrument> instruments = getInstrumentss();
 
         FinancialStatusContract expextedResult = FinancialStatusContract.builder().name("name")
-                .description("description").id("1").build();
+                .description(string4).id("1").build();
 
         instruments.get(0).setFinancialStatus(expextedResult);
 
@@ -748,7 +759,7 @@ public class InstrumentServiceTest {
 
         List<Instrument> instruments = getInstrumentss();
 
-        SurrenderReason expextedResult = SurrenderReason.builder().name("name").description("description").id("1")
+        SurrenderReason expextedResult = SurrenderReason.builder().name("name").description(string4).id("1")
                 .build();
 
         instruments.get(0).setSurrenderReason(expextedResult);
@@ -765,7 +776,7 @@ public class InstrumentServiceTest {
 
         List<Instrument> instruments = getInstrumentss();
         Pagination<InstrumentType> expextedResult = new Pagination<>();
-        InstrumentType it = InstrumentType.builder().name("name").description("description").active(true).id("1")
+        InstrumentType it = InstrumentType.builder().name("name").description(string4).active(true).id("1")
                 .build();
         expextedResult.setPagedData(new ArrayList<>());
         expextedResult.getPagedData().add(it);
@@ -817,7 +828,7 @@ public class InstrumentServiceTest {
         List<Instrument> instruments = getInstrumentss();
 
         FinancialStatusContract expextedResult = FinancialStatusContract.builder().name("name")
-                .description("description").id("1").build();
+                .description(string4).id("1").build();
 
         instruments.get(0).setFinancialStatus(expextedResult);
 
@@ -833,7 +844,7 @@ public class InstrumentServiceTest {
 
         List<Instrument> instruments = getInstrumentss();
 
-        SurrenderReason expextedResult = SurrenderReason.builder().name("name").description("description").id("1").build();
+        SurrenderReason expextedResult = SurrenderReason.builder().name("name").description(string4).id("1").build();
 
         instruments.get(0).setSurrenderReason(expextedResult);
 
@@ -888,21 +899,21 @@ public class InstrumentServiceTest {
     private List<Instrument> getInstruments() {
         List<Instrument> instruments = new ArrayList<Instrument>();
         InstrumentType it = InstrumentType.builder().name("dd").build();
-        it.setTenantId("default");
+        it.setTenantId(string6);
         Instrument instrument = Instrument.builder().amount(BigDecimal.ONE).id("1")
                 .payee("payee")
-                .bank(BankContract.builder().code("code").description("description").active(true)
+                .bank(BankContract.builder().code("code").description(string4).active(true)
                         .id("1").build())
-                .bankAccount(BankAccountContract.builder().accountNumber("accountNumber")
-                        .description("description").active(true).id("1").build())
+                .bankAccount(BankAccountContract.builder().accountNumber(string5)
+                        .description(string4).active(true).id("1").build())
                 .financialStatus(FinancialStatusContract.builder().name("name")
-                        .description("description").id("1").build())
-                .surrenderReason(SurrenderReason.builder().name("name").description("description").id("1")
+                        .description(string4).id("1").build())
+                .surrenderReason(SurrenderReason.builder().name("name").description(string4).id("1")
                         .build())
                 .instrumentType(it)
                 .transactionNumber("1")
                 .transactionDate(new Date()).build();
-        instrument.setTenantId("default");
+        instrument.setTenantId(string6);
         instruments.add(instrument);
         return instruments;
     }
@@ -910,7 +921,7 @@ public class InstrumentServiceTest {
     private List<Instrument> getInstrumentss() {
         List<Instrument> instruments = new ArrayList<Instrument>();
         Instrument instrument = Instrument.builder().build();
-        instrument.setTenantId("default");
+        instrument.setTenantId(string6);
         instruments.add(instrument);
         return instruments;
     }
@@ -918,15 +929,15 @@ public class InstrumentServiceTest {
     private List<InstrumentContract> getInstrumentContracts() {
         List<InstrumentContract> instrumentContracts = new ArrayList<InstrumentContract>();
         InstrumentContract instrumentContract = InstrumentContract.builder().build();
-        instrumentContract.setTenantId("default");
+        instrumentContract.setTenantId(string6);
         instrumentContracts.add(instrumentContract);
         return instrumentContracts;
     }
 
     private List<InstrumentType> getInstrumentTypes() {
         List<InstrumentType> lits = new ArrayList<>();
-        InstrumentType it = InstrumentType.builder().name("cheque").build();
-        it.setTenantId("default");
+        InstrumentType it = InstrumentType.builder().name(string1).build();
+        it.setTenantId(string6);
         lits.add(it);
         return lits;
     }

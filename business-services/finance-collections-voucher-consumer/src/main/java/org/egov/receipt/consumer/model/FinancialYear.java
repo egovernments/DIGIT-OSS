@@ -60,6 +60,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class FinancialYear {
 
     private Long id;

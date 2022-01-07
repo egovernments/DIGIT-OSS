@@ -25,13 +25,6 @@ public class MdmsService {
 
     private Map<String, String> ddrTenantMapping = new HashMap<>();
 
-    private static final String TENANT_MAPPING_PUT_PATIALA_DDR = "Patiala-DDR";
-    private static final String TENANT_MAPPING_PUT_BATHINDA_DDR = "Bathinda-DDR";
-    private static final String TENANT_MAPPING_PUT_FEROZEPUR_DDR = "Ferozepur-DDR";
-    private static final String TENANT_MAPPING_PUT_LUDHIANA_DDR = "Ludhiana-DDR";
-    private static final String TENANT_MAPPING_PUT_JALANDHAR_DDR = "Jalandhar-DDR";
-
-
     @Value("${egov.mdms.host}")
     private String mdmsServiceHost;
     
@@ -46,6 +39,16 @@ public class MdmsService {
 
     @Value("${egov.statelevel.tenantId}")
     private  String stateLevelTenantId ;
+
+    private String string1="Patiala-DDR";
+
+    private String string2="Bathinda-DDR";
+
+    private String string3="Ferozepur-DDR";
+
+    private String string4="Ludhiana-DDR";
+
+    private String string5="Jalandhar-DDR";
 
     @PostConstruct
     public void loadMdmsService() throws Exception{
@@ -79,29 +82,29 @@ public class MdmsService {
     private void getDefaultMapping(){
 
         ddrTenantMapping.put("1", "Amritsar-DDR");
-        ddrTenantMapping.put("2", TENANT_MAPPING_PUT_PATIALA_DDR);
-        ddrTenantMapping.put("3", TENANT_MAPPING_PUT_BATHINDA_DDR);
-        ddrTenantMapping.put("4", TENANT_MAPPING_PUT_FEROZEPUR_DDR);
-        ddrTenantMapping.put("5", TENANT_MAPPING_PUT_LUDHIANA_DDR);
-        ddrTenantMapping.put("6", TENANT_MAPPING_PUT_FEROZEPUR_DDR);
-        ddrTenantMapping.put("7", TENANT_MAPPING_PUT_FEROZEPUR_DDR);
+        ddrTenantMapping.put("2", string1);
+        ddrTenantMapping.put("3", string2);
+        ddrTenantMapping.put("4", string3);
+        ddrTenantMapping.put("5", string4);
+        ddrTenantMapping.put("6", string3);
+        ddrTenantMapping.put("7", string3);
         ddrTenantMapping.put("8", "Amritsar-DDR");
-        ddrTenantMapping.put("9", TENANT_MAPPING_PUT_JALANDHAR_DDR);
-        ddrTenantMapping.put("10", TENANT_MAPPING_PUT_JALANDHAR_DDR);
+        ddrTenantMapping.put("9", string5);
+        ddrTenantMapping.put("10", string5);
 
-        ddrTenantMapping.put("11", TENANT_MAPPING_PUT_JALANDHAR_DDR);
-        ddrTenantMapping.put("12", TENANT_MAPPING_PUT_LUDHIANA_DDR);
-        ddrTenantMapping.put("13", TENANT_MAPPING_PUT_BATHINDA_DDR);
-        ddrTenantMapping.put("14", TENANT_MAPPING_PUT_FEROZEPUR_DDR);
-        ddrTenantMapping.put("15", TENANT_MAPPING_PUT_PATIALA_DDR);
-        ddrTenantMapping.put("16", TENANT_MAPPING_PUT_BATHINDA_DDR);
-        ddrTenantMapping.put("17", TENANT_MAPPING_PUT_JALANDHAR_DDR);
+        ddrTenantMapping.put("11", string5);
+        ddrTenantMapping.put("12", string4);
+        ddrTenantMapping.put("13", string2);
+        ddrTenantMapping.put("14", string3);
+        ddrTenantMapping.put("15", string1);
+        ddrTenantMapping.put("16", string2);
+        ddrTenantMapping.put("17", string5);
         ddrTenantMapping.put("18", "Pathankot-MC");
-        ddrTenantMapping.put("19", TENANT_MAPPING_PUT_PATIALA_DDR);
-        ddrTenantMapping.put("20", TENANT_MAPPING_PUT_LUDHIANA_DDR);
-        ddrTenantMapping.put("21", TENANT_MAPPING_PUT_PATIALA_DDR);
-        ddrTenantMapping.put("22", TENANT_MAPPING_PUT_BATHINDA_DDR);
-        ddrTenantMapping.put("140001", TENANT_MAPPING_PUT_LUDHIANA_DDR);
+        ddrTenantMapping.put("19", string1);
+        ddrTenantMapping.put("20", string4);
+        ddrTenantMapping.put("21", string1);
+        ddrTenantMapping.put("22", string2);
+        ddrTenantMapping.put("140001", string4);
 
     }
 

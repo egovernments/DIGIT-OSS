@@ -28,10 +28,13 @@ public class UserService {
     @Autowired
     private ApplicationProperties properties;
 
-	private static final String PUT_REQUEST_INFO = "RequestInfo";
-	private static final String PUT_USER_NAME = "userName";
-	private static final String PUT_TYPE_CITIZEN = "CITIZEN";
-	private static final String PUT_TENANT_ID = "tenantId";
+	private String string1="RequestInfo";
+
+	private String string2="userName";
+
+	private String string3="CITIZEN";
+
+	private String string4="tenantId";
 	
     /**
      * Fetched user based on phone number.
@@ -45,10 +48,10 @@ public class UserService {
 		Map<String, Object> request = new HashMap<>();
 		UserResponse userResponse = null;
 		Map<String, String> response = new HashMap<>();
-		request.put(PUT_REQUEST_INFO, requestInfo);
-		request.put(PUT_USER_NAME, phoneNo);
-		request.put("type", PUT_TYPE_CITIZEN);
-		request.put("tenantid", tenantId.split("\\.")[0]);
+		request.put(string1, requestInfo);
+		request.put(string2, phoneNo);
+		request.put("type", string3);
+		request.put(string4, tenantId.split("\\.")[0]);
 		StringBuilder url = new StringBuilder();
 		url.append(properties.getUserHost()).append(properties.getUserSearchEnpoint());
 		try {
@@ -78,21 +81,21 @@ public class UserService {
 		Map<String, Object> user = new HashMap<>();
 		Map<String, Object> role = new HashMap<>();
 		List<Map> roles = new ArrayList<>();
-		role.put("code", PUT_TYPE_CITIZEN);
-		role.put("name", "Citizen");
-		role.put(PUT_TENANT_ID, bill.getTenantId().split("\\.")[0]);
+		role.put("code", string3);
+		role.put("name", string3);
+		role.put(string4, bill.getTenantId().split("\\.")[0]);
 		roles.add(role);
 		
 		user.put("name", bill.getPaidBy());
 		user.put("mobileNumber", bill.getMobileNumber());
-		user.put(PUT_USER_NAME, bill.getMobileNumber());
+		user.put(string2, bill.getMobileNumber());
 		user.put("active", true);
-		user.put("type", PUT_TYPE_CITIZEN);
-		user.put(PUT_TENANT_ID, bill.getTenantId().split("\\.")[0]);
+		user.put("type", string3);
+		user.put(string4, bill.getTenantId().split("\\.")[0]);
 		user.put("permanentAddress", bill.getPayerAddress());
 		user.put("roles", roles);
 
-		request.put(PUT_REQUEST_INFO, requestInfo);
+		request.put(string1, requestInfo);
 		request.put("user", user);
 
 		UserResponse response = null;
@@ -115,21 +118,21 @@ public class UserService {
 		Map<String, Object> user = new HashMap<>();
 		Map<String, Object> role = new HashMap<>();
 		List<Map> roles = new ArrayList<>();
-		role.put("code", PUT_TYPE_CITIZEN);
-		role.put("name", "Citizen");
-		role.put(PUT_TENANT_ID, payment.getTenantId().split("\\.")[0]);
+		role.put("code", string3);
+		role.put("name", string3);
+		role.put(string4, payment.getTenantId().split("\\.")[0]);
 		roles.add(role);
 
 		user.put("name", payment.getPaidBy());
 		user.put("mobileNumber", payment.getMobileNumber());
-		user.put(PUT_USER_NAME, payment.getMobileNumber());
+		user.put(string2, payment.getMobileNumber());
 		user.put("active", true);
-		user.put("type", PUT_TYPE_CITIZEN);
-		user.put(PUT_TENANT_ID, payment.getTenantId().split("\\.")[0]);
+		user.put("type", string3);
+		user.put(string4, payment.getTenantId().split("\\.")[0]);
 		user.put("permanentAddress", payment.getPayerAddress());
 		user.put("roles", roles);
 
-		request.put(PUT_REQUEST_INFO, requestInfo);
+		request.put(string1, requestInfo);
 		request.put("user", user);
 
 		UserResponse response = null;

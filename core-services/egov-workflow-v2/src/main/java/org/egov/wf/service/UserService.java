@@ -30,8 +30,10 @@ public class UserService {
 
     private ObjectMapper mapper;
 
-    private static final String MAP_GET_LAST_MODIFIED_DATE = "lastModifiedDate";
-    private static final String MAP_GET_PWD_EXPIRY_DATE = "pwdExpiryDate";
+    private String string1="lastModifiedDate";
+
+    private String string2="pwdExpiryDate";
+
 
     @Autowired
     public UserService(WorkflowConfig config, ServiceRequestRepository serviceRequestRepository, ObjectMapper mapper) {
@@ -112,12 +114,12 @@ public class UserService {
         if(users!=null){
             users.forEach( map -> {
                         map.put("createdDate",dateTolong((String)map.get("createdDate"),format1));
-                        if((String)map.get(MAP_GET_LAST_MODIFIED_DATE)!=null)
-                            map.put(MAP_GET_LAST_MODIFIED_DATE,dateTolong((String)map.get(MAP_GET_LAST_MODIFIED_DATE),format1));
+                        if((String)map.get(string1)!=null)
+                            map.put(string1,dateTolong((String)map.get(string1),format1));
                         if((String)map.get("dob")!=null)
                             map.put("dob",dateTolong((String)map.get("dob"),dobFormat));
-                        if((String)map.get(MAP_GET_PWD_EXPIRY_DATE)!=null)
-                            map.put(MAP_GET_PWD_EXPIRY_DATE,dateTolong((String)map.get(MAP_GET_PWD_EXPIRY_DATE),format1));
+                        if((String)map.get(string2)!=null)
+                            map.put(string2,dateTolong((String)map.get(string2),format1));
                     }
             );
         }

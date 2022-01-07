@@ -38,6 +38,7 @@ public interface Constants {
 	public static String DATE_FORMAT = "yyyy.MM.dd G 'at' HH:mm:ss z";
 	public static String INDIAN_TIMEZONE = "IST";
 
+
 	public static String ALLOWED_METHODS_GET = "GET";
 	public static String ALLOWED_METHODS_POST = "POST";
 
@@ -81,13 +82,11 @@ public interface Constants {
 		public static final String BILLING = "billing" ; 
 		public static final String PAYMENT = "payment" ; 
 	}
-	
 	public static String DATA_CONTEXT = "dataContext";
 	public static String DATA_CONTEXT_VERSION = "dataContextVersion";
 	public static String DATA_OBJECT = "dataObject";
 
 	public static String ERROR_IN_PIPEINE = "errorPipeline";
-	
 	public static int HEADER_ROW = 1;
 	public static String MUNICIPAL_CORPORATIONS = "Municipal Corporations";
 	public static String ES_INDEX_COLLECTION = "collectionsindex-v1";

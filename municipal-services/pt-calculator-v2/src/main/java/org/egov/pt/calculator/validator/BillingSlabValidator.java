@@ -114,6 +114,7 @@ public class BillingSlabValidator {
 
 		if (!CollectionUtils.isEmpty(dbSlabs)) {
 			for (int i = 0; i < incomingSlabs.size(); i++) {
+//				INDEX VARIABLE IS NOT USED AT ALL
 				Integer index = null;
 				if (dbSlabs.contains(incomingSlabs.get(i))) {
 					log.info("Equals passed!");

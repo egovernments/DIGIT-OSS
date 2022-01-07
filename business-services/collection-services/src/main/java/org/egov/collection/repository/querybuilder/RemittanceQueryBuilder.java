@@ -53,6 +53,11 @@ public class RemittanceQueryBuilder {
             " result) result_offset " +
             "WHERE offset_ > :offset AND offset_ <= :limit";
 
+    private String string1="tenantid";
+
+    private String string2="remittance";
+
+
     public static MapSqlParameterSource getParametersForRemittance(Remittance remittance) {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
@@ -66,7 +71,7 @@ public class RemittanceQueryBuilder {
         sqlParameterSource.addValue("reasonfordelay", remittance.getReasonForDelay());
         sqlParameterSource.addValue("status", remittance.getStatus());
         sqlParameterSource.addValue("bankaccount", remittance.getBankaccount());
-        sqlParameterSource.addValue("tenantid", remittance.getTenantId());
+        sqlParameterSource.addValue(string1 , remittance.getTenantId());
         sqlParameterSource.addValue("createdby", Long.parseLong(remittance.getAuditDetails().getCreatedBy()));
         sqlParameterSource.addValue("createddate", remittance.getAuditDetails().getCreatedTime());
         sqlParameterSource.addValue("lastmodifiedby", Long.parseLong(remittance.getAuditDetails().getLastModifiedBy()));
@@ -80,11 +85,11 @@ public class RemittanceQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", remittanceDetails.getId());
-        sqlParameterSource.addValue("remittance", remittanceDetails.getRemittance());
+        sqlParameterSource.addValue(string2, remittanceDetails.getRemittance());
         sqlParameterSource.addValue("chartofaccount", remittanceDetails.getChartOfAccount());
         sqlParameterSource.addValue("creditamount", remittanceDetails.getCreditAmount());
         sqlParameterSource.addValue("debitamount", remittanceDetails.getDebitAmount());
-        sqlParameterSource.addValue("tenantid", remittanceDetails.getTenantId());
+        sqlParameterSource.addValue(string1 , remittanceDetails.getTenantId());
 
         return sqlParameterSource;
 
@@ -94,10 +99,10 @@ public class RemittanceQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", remittanceInstrument.getId());
-        sqlParameterSource.addValue("remittance", remittanceInstrument.getRemittance());
+        sqlParameterSource.addValue(string2, remittanceInstrument.getRemittance());
         sqlParameterSource.addValue("instrument", remittanceInstrument.getInstrument());
         sqlParameterSource.addValue("reconciled", remittanceInstrument.getReconciled());
-        sqlParameterSource.addValue("tenantid", remittanceInstrument.getTenantId());
+        sqlParameterSource.addValue(string1 , remittanceInstrument.getTenantId());
 
         return sqlParameterSource;
 
@@ -107,9 +112,9 @@ public class RemittanceQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", remittanceReceipt.getId());
-        sqlParameterSource.addValue("remittance", remittanceReceipt.getRemittance());
+        sqlParameterSource.addValue(string2, remittanceReceipt.getRemittance());
         sqlParameterSource.addValue("receipt", remittanceReceipt.getReceipt());
-        sqlParameterSource.addValue("tenantid", remittanceReceipt.getTenantId());
+        sqlParameterSource.addValue(string1 , remittanceReceipt.getTenantId());
 
         return sqlParameterSource;
 
@@ -133,7 +138,7 @@ public class RemittanceQueryBuilder {
         if (StringUtils.isNotBlank(searchCriteria.getTenantId())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
             selectQuery.append(" rem.tenantId =:tenantId");
-            preparedStatementValues.put("tenantId", searchCriteria.getTenantId());
+            preparedStatementValues.put(string1 , searchCriteria.getTenantId());
 
         }
 

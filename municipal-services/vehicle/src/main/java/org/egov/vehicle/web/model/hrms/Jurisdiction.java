@@ -23,6 +23,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Setter
 @ToString
+
 public class Jurisdiction {
 
     private String id;

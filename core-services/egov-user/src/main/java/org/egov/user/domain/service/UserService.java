@@ -65,9 +65,6 @@ public class UserService {
     private EncryptionDecryptionUtil encryptionDecryptionUtil;
     private TokenStore tokenStore;
 
-    private static final String MAP_ADD_PASSWORD = "password";
-    private static final String GET_USER_REQUEST = "UserRequest";
-
     @Value("${egov.user.host}")
     private String userHost;
 
@@ -95,6 +92,10 @@ public class UserService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    private String string1="password";
+
+    private String string2="UserRequest";
 
     public UserService(UserRepository userRepository, OtpRepository otpRepository, FileStoreRepository fileRepository,
                        PasswordEncoder passwordEncoder, EncryptionDecryptionUtil encryptionDecryptionUtil, TokenStore tokenStore,
@@ -285,10 +286,10 @@ public class UserService {
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
             map.add("username", user.getUsername());
             if (!isEmpty(password))
-                map.add(MAP_ADD_PASSWORD, password);
+                map.add(string1, password);
             else
-                map.add(MAP_ADD_PASSWORD, user.getPassword());
-            map.add("grant_type", MAP_ADD_PASSWORD);
+                map.add(string1, user.getPassword());
+            map.add("grant_type", string1);
             map.add("scope", "read");
             map.add("tenantId", user.getTenantId());
             map.add("isInternal", "true");
@@ -365,11 +366,11 @@ public class UserService {
                 user.getUsername());
 
         for (OAuth2AccessToken token : tokens) {
-            if (token.getAdditionalInformation() != null && token.getAdditionalInformation().containsKey(GET_USER_REQUEST)) {
-                if (token.getAdditionalInformation().get(GET_USER_REQUEST) instanceof org.egov.user.web.contract.auth.User) {
+            if (token.getAdditionalInformation() != null && token.getAdditionalInformation().containsKey(string2)) {
+                if (token.getAdditionalInformation().get(string2) instanceof org.egov.user.web.contract.auth.User) {
                     org.egov.user.web.contract.auth.User userInfo =
                             (org.egov.user.web.contract.auth.User) token.getAdditionalInformation().get(
-                                    GET_USER_REQUEST);
+                                    string2);
                     if (user.getUsername().equalsIgnoreCase(userInfo.getUserName()) && user.getTenantId().equalsIgnoreCase(userInfo.getTenantId())
                             && user.getType().equals(UserType.fromValue(userInfo.getType())))
                         tokenStore.removeAccessToken(token);

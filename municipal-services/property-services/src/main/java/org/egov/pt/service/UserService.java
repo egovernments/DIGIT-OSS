@@ -58,9 +58,11 @@ public class UserService {
     @Value("${egov.user.update.path}")
     private String userUpdateEndpoint;
 
-	private static final String CODE_CITIZEN = "CITIZEN";
-	private static final String GET_LAST_MODIFIED_DATE = "lastModifiedDate";
-	private static final String GET_PWD_EXPIRY_DATE = "pwdExpiryDate";
+	private String string1="CITIZEN";
+
+	private String string2="lastModifiedDate";
+
+	private String string3="pwdExpiryDate";
 
     /**
      * Creates user of the owners of property if it is not created already
@@ -199,7 +201,7 @@ public class UserService {
         owner.setActive(true);
         owner.setTenantId(tenantId);
         owner.setRoles(Collections.singletonList(role));
-        owner.setType(CODE_CITIZEN);
+        owner.setType(string1);
         owner.setCreatedDate(null);
         owner.setCreatedBy(null );
         owner.setLastModifiedDate(null);
@@ -209,8 +211,8 @@ public class UserService {
     private Role getCitizenRole() {
     	
 		return Role.builder()
-				.code(CODE_CITIZEN)
-				.name("Citizen")
+				.code(string1)
+				.name(string1)
 				.build();
 	}
 
@@ -263,7 +265,7 @@ public class UserService {
         
         UserSearchRequest userSearchRequest = UserSearchRequest.builder()
         		.requestInfo(requestInfo)
-        		.userType(CODE_CITIZEN)
+        		.userType(string1)
 				.tenantId(tenantId)
 				.build();
         
@@ -342,12 +344,12 @@ public class UserService {
             users.forEach( map -> {
             	
                         map.put("createdDate",dateTolong((String)map.get("createdDate"),format1));
-                        if((String)map.get(GET_LAST_MODIFIED_DATE)!=null)
-                            map.put(GET_LAST_MODIFIED_DATE,dateTolong((String)map.get(GET_LAST_MODIFIED_DATE),format1));
+                        if((String)map.get(string2)!=null)
+                            map.put(string2,dateTolong((String)map.get(string2),format1));
                         if((String)map.get("dob")!=null)
                             map.put("dob",dateTolong((String)map.get("dob"),dobFormat));
-                        if((String)map.get(GET_PWD_EXPIRY_DATE)!=null)
-                            map.put(GET_PWD_EXPIRY_DATE,dateTolong((String)map.get(GET_PWD_EXPIRY_DATE),format1));
+                        if((String)map.get(string3)!=null)
+                            map.put(string3,dateTolong((String)map.get(string3),format1));
                     }
             );
         }
@@ -424,7 +426,7 @@ public class UserService {
     	
 		return UserSearchRequest.builder()
 				.requestInfo(requestInfo)
-				.userType(CODE_CITIZEN)
+				.userType(string1)
 				.tenantId(tenantId)
 				.active(true)
 				.build();
@@ -458,7 +460,7 @@ public class UserService {
 
 	private UserDetailResponse searchByUserName(String userName,String tenantId){
 		UserSearchRequest userSearchRequest = new UserSearchRequest();
-		userSearchRequest.setUserType(CODE_CITIZEN);
+		userSearchRequest.setUserType(string1);
 		userSearchRequest.setUserName(userName);
 		userSearchRequest.setTenantId(tenantId);
 		return getUser(userSearchRequest);

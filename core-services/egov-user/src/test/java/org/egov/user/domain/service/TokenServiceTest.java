@@ -28,8 +28,6 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class TokenServiceTest {
 
-    private static final String EXPECTED_ACTIONS_DEFAULT = "default";
-
     @InjectMocks
     private TokenService tokenService;
 
@@ -47,7 +45,7 @@ public class TokenServiceTest {
         SecureUser secureUser = new SecureUser(getUser());
         when(oAuth2Authentication.getPrincipal()).thenReturn(secureUser);
         final List<Action> expectedActions = getActions();
-        when(actionRestRepository.getActionByRoleCodes(getRoleCodes(), EXPECTED_ACTIONS_DEFAULT)).thenReturn(expectedActions);
+        when(actionRestRepository.getActionByRoleCodes(getRoleCodes(), "default")).thenReturn(expectedActions);
         UserDetail actualUserDetails = tokenService.getUser(accessToken);
 
         assertEquals(secureUser, actualUserDetails.getSecureUser());
@@ -77,7 +75,7 @@ public class TokenServiceTest {
                 .type("EMPLOYEE")
                 .active(Boolean.TRUE)
                 .roles(getRoles())
-                .tenantId(EXPECTED_ACTIONS_DEFAULT)
+                .tenantId("default")
                 .build();
     }
 
@@ -85,7 +83,7 @@ public class TokenServiceTest {
         org.egov.user.domain.model.Role roleModel = org.egov.user.domain.model.Role.builder()
                 .name("Employee")
                 .code("Employee")
-                .tenantId(EXPECTED_ACTIONS_DEFAULT)
+                .tenantId("default")
                 .build();
 
         return Collections.singleton(new Role(roleModel));

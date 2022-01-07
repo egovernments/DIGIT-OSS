@@ -38,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LegacyIndexConsumerConfig implements ApplicationRunner {
 
-	public static KafkaMessageListenerContainer<String, String> kafkContainer;
+	private KafkaMessageListenerContainer<String, String> kafkContainer;
 	
 	@Value("${spring.kafka.bootstrap.servers}")
     private String brokerAddress;
@@ -63,8 +63,8 @@ public class LegacyIndexConsumerConfig implements ApplicationRunner {
     
 	@Autowired
 	private IndexerApplicationRunnerImpl runner;
-    
-    public String[] topics = {};
+
+    private String[] topics = {};
     
      
     @Override

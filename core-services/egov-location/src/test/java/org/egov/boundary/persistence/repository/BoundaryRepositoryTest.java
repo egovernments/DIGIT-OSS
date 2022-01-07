@@ -32,6 +32,10 @@ public class BoundaryRepositoryTest {
 	
 	@Autowired
 	private MdmsRepository mdmsRepository;
+
+	private String string1="default";
+
+	private String string2="Srikakulam  Municipality";
 	
 	
 	@Before
@@ -43,23 +47,23 @@ public class BoundaryRepositoryTest {
 	@Sql(scripts = { "/sql/clearBoundary.sql", "/sql/createBoundary.sql" })
 	public void test_should_fetch_boundaries_for_boundarytype_and_hierarchytype_name() {
 		final List<Boundary> boundarys = boundaryRepository
-				.getBoundariesByBndryTypeNameAndHierarchyTypeNameAndTenantId("City", "ADMINISTRATION", "default");
-		assertEquals("Srikakulam  Municipality", boundarys.get(0).getName());
+				.getBoundariesByBndryTypeNameAndHierarchyTypeNameAndTenantId("City", "ADMINISTRATION", string1);
+		assertEquals(string2, boundarys.get(0).getName());
 	}
 
 /*	@Test
 	@Sql(scripts = { "/sql/clearBoundary.sql", "/sql/createBoundary.sql" })
 	public void test_should_fetch_boundaries_for_boundarytype_and_tenantid() {
-		final List<Boundary> boundarys = boundaryRepository.getAllBoundariesByBoundaryTypeIdAndTenantId(1l, "default");
-		assertEquals("Srikakulam  Municipality", boundarys.get(0).getName());
+		final List<Boundary> boundarys = boundaryRepository.getAllBoundariesByBoundaryTypeIdAndTenantId(1l, string1);
+		assertEquals(string2, boundarys.get(0).getName());
 	}*/
 
 /*	@Test
 	@Sql(scripts = { "/sql/clearBoundary.sql", "/sql/createBoundary.sql" })
 	@Transactional
 	public void test_should_fetch_boundaries_for_id_and_tenantid() {
-		final List<Boundary> boundarys = boundaryRepository.getBoundariesByIdAndTenantId(1l, "default");
-		assertEquals("Srikakulam  Municipality", boundarys.get(0).getName());
+		final List<Boundary> boundarys = boundaryRepository.getBoundariesByIdAndTenantId(1l, string1);
+		assertEquals(string2, boundarys.get(0).getName());
 	}*/
    
 	@Test
@@ -68,15 +72,15 @@ public class BoundaryRepositoryTest {
 		
 		List<Long> list = new ArrayList<Long>();
 		list.add(1l);
-		List<Boundary> boundarys = boundaryRepository.findAllBoundariesByIdsAndTenant("default", list);
+		List<Boundary> boundarys = boundaryRepository.findAllBoundariesByIdsAndTenant(string1, list);
 		
 		assertTrue(boundarys.size() == 1);
 		assertTrue(boundarys!=null);
 		assertTrue(boundarys.get(0).getId() == 1);
-		assertTrue(boundarys.get(0).getName().equals("Srikakulam  Municipality"));
+		assertTrue(boundarys.get(0).getName().equals(string2));
 		assertTrue(boundarys.get(0).getBoundaryNum().equals(1l));
 		assertTrue(boundarys.get(0).getBoundaryType().getId().equals("1"));
-		assertTrue(boundarys.get(0).getLocalName().equals("Srikakulam  Municipality"));
+		assertTrue(boundarys.get(0).getLocalName().equals(string2));
 		assertTrue(boundarys.get(0).isHistory() == false);
 	}
 	
@@ -86,15 +90,15 @@ public class BoundaryRepositoryTest {
 		
 		List<Long> list = new ArrayList<Long>();
 		list.add(1l);
-		List<Boundary> boundarys = boundaryRepository.getAllBoundaryByTenantIdAndTypeIds("default",list);
+		List<Boundary> boundarys = boundaryRepository.getAllBoundaryByTenantIdAndTypeIds(string1,list);
 		
 		assertTrue(boundarys.size() == 1);
 		assertTrue(boundarys!=null);
 		assertTrue(boundarys.get(0).getId() == 1);
-		assertTrue(boundarys.get(0).getName().equals("Srikakulam  Municipality"));
+		assertTrue(boundarys.get(0).getName().equals(string2));
 		assertTrue(boundarys.get(0).getBoundaryNum().equals(1l));
 		assertTrue(boundarys.get(0).getBoundaryType().getId().equals("1"));
-		assertTrue(boundarys.get(0).getLocalName().equals("Srikakulam  Municipality"));
+		assertTrue(boundarys.get(0).getLocalName().equals(string2));
 		assertTrue(boundarys.get(0).isHistory() == false);
 	}
 	
@@ -104,15 +108,15 @@ public class BoundaryRepositoryTest {
 		
 		List<Long> list = new ArrayList<Long>();
 		list.add(1l);
-		//List<Boundary> boundarys = boundaryRepository.getAllBoundaryByTenantAndNumAndTypeAndTypeIds("default",list,list,list);
+		//List<Boundary> boundarys = boundaryRepository.getAllBoundaryByTenantAndNumAndTypeAndTypeIds(string1,list,list,list);
 		
 		/*assertTrue(boundarys.size() == 1);
 		assertTrue(boundarys!=null);
 		assertTrue(boundarys.get(0).getId() == 1);
-		assertTrue(boundarys.get(0).getName().equals("Srikakulam  Municipality"));
+		assertTrue(boundarys.get(0).getName().equals(string2));
 		assertTrue(boundarys.get(0).getBoundaryNum().equals(1l));
 		assertTrue(boundarys.get(0).getBoundaryType().getId().equals(1l));
-		assertTrue(boundarys.get(0).getLocalName().equals("Srikakulam  Municipality"));
+		assertTrue(boundarys.get(0).getLocalName().equals(string2));
 		assertTrue(boundarys.get(0).isHistory() == false);
 		assertTrue(boundarys.get(0).getBoundaryType().getId() == "1l");
 		assertTrue(boundarys.get(0).getBoundaryType().getName().equals("City"));

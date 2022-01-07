@@ -42,6 +42,8 @@ public class InstrumentAccountCodeService {
 
     private InstrumentTypeRepository instrumentTypeRepository;
 
+    private String string1="instrumentaccountcodes";
+
     @Autowired
     public InstrumentAccountCodeService(SmartValidator validator,
             InstrumentAccountCodeRepository instrumentAccountCodeRepository,
@@ -128,7 +130,7 @@ public class InstrumentAccountCodeService {
                 break;
             case ACTION_CREATE:
                 if (instrumentaccountcodes == null)
-                    throw new InvalidDataException("instrumentaccountcodes", ErrorCode.NOT_NULL.getCode(), null);
+                    throw new InvalidDataException(string1 , ErrorCode.NOT_NULL.getCode(), null);
                 for (InstrumentAccountCode instrumentAccountCode : instrumentaccountcodes) {
                     validator.validate(instrumentAccountCode, errors);
                     if (!instrumentAccountCodeRepository.uniqueCheck("instrumentTypeId", instrumentAccountCode))
@@ -139,7 +141,7 @@ public class InstrumentAccountCodeService {
                 break;
             case ACTION_UPDATE:
                 if (instrumentaccountcodes == null)
-                    throw new InvalidDataException("instrumentaccountcodes", ErrorCode.NOT_NULL.getCode(), null);
+                    throw new InvalidDataException(string1 , ErrorCode.NOT_NULL.getCode(), null);
                 for (InstrumentAccountCode instrumentAccountCode : instrumentaccountcodes) {
                     if (instrumentAccountCode.getId() == null)
                         throw new InvalidDataException("id", ErrorCode.MANDATORY_VALUE_MISSING.getCode(),
@@ -153,7 +155,7 @@ public class InstrumentAccountCodeService {
                 break;
             case ACTION_DELETE:
                 if (instrumentaccountcodes == null)
-                    throw new InvalidDataException("instrumentaccountcodes", ErrorCode.NOT_NULL.getCode(), null);
+                    throw new InvalidDataException(string1 , ErrorCode.NOT_NULL.getCode(), null);
                 for (InstrumentAccountCode instrumentaccountcode : instrumentaccountcodes)
                     if (instrumentaccountcode.getId() == null)
                         throw new InvalidDataException("id", ErrorCode.MANDATORY_VALUE_MISSING.getCode(),

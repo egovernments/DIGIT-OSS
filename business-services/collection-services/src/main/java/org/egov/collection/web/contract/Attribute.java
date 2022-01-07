@@ -52,6 +52,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @Setter
+
 public class Attribute {
 
     private Boolean variable;

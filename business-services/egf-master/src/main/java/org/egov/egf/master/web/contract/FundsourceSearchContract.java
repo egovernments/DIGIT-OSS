@@ -8,7 +8,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class FundsourceSearchContract extends FundsourceContract { private String ids; 
+public class FundsourceSearchContract extends FundsourceContract { private String ids;
 private String  sortBy; 
 private Integer pageSize; 
 private Integer offset; 

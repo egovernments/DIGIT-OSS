@@ -53,6 +53,8 @@ import lombok.ToString;
 public class OnlineGLCodeMapping {
 private String servicecode;
 private String glcode;
+
 private Long validFrom;
+
 private Long validTo;
 }

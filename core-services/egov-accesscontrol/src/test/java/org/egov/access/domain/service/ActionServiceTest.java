@@ -53,6 +53,8 @@ public class ActionServiceTest {
 	@Mock
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplat;
 
+	private String string1="/test";
+
 	@Before
 	public void before() {
 
@@ -123,9 +125,9 @@ public class ActionServiceTest {
 	@Test
 	public void testCheckCombinationOfUrlAndqueryparamsExist() {
 
-		when(actionRepository.checkCombinationOfUrlAndqueryparamsExist("/test", "tenant")).thenReturn(false);
+		when(actionRepository.checkCombinationOfUrlAndqueryparamsExist(string1, "tenant")).thenReturn(false);
 
-		Boolean exist = actionService.checkCombinationOfUrlAndqueryparamsExist("/test", "tenant");
+		Boolean exist = actionService.checkCombinationOfUrlAndqueryparamsExist(string1, "tenant");
 
 		assertThat(exist == false);
 	}
@@ -208,7 +210,7 @@ public class ActionServiceTest {
 		Action action2 = new Action();
 
 		action1.setName("test");
-		action1.setUrl("/test");
+		action1.setUrl(string1);
 		action1.setDisplayName("TEST");
 		action1.setTenantId("default");
 		action1.setServiceCode("TEST");

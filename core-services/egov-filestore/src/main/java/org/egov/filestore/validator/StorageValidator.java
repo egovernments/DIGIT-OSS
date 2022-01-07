@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class StorageValidator {
 
 	private FileStoreConfig fileStoreConfig;
-	private static final String EXCEPTION_INVALID_INPUT = "EG_FILESTORE_INVALID_INPUT";
+
 	
 	@Autowired
 	public StorageValidator(FileStoreConfig fileStoreConfig) {
@@ -36,7 +36,7 @@ public class StorageValidator {
 	
 	private void validateFileExtention(String extension) {
 		if(!fileStoreConfig.getAllowedFormatsMap().containsKey(extension)) {
-			throw new CustomException(EXCEPTION_INVALID_INPUT,"Inalvid input provided for file : " + extension + ", please upload any of the allowed formats : " + fileStoreConfig.getAllowedKeySet());
+			throw new CustomException("EG_FILESTORE_INVALID_INPUT","Inalvid input provided for file : " + extension + ", please upload any of the allowed formats : " + fileStoreConfig.getAllowedKeySet());
 		}
 	}
 	
@@ -54,7 +54,7 @@ public class StorageValidator {
 		}
 		
 		if (!fileStoreConfig.getAllowedFormatsMap().get(extension).contains(inputFormat)) {
-			throw new CustomException(EXCEPTION_INVALID_INPUT, "Inalvid input provided for file, the extension does not match the file format. Please upload any of the allowed formats : "
+			throw new CustomException("EG_FILESTORE_INVALID_INPUT", "Inalvid input provided for file, the extension does not match the file format. Please upload any of the allowed formats : "
 							+ fileStoreConfig.getAllowedKeySet());
 		}
 	}
@@ -67,7 +67,7 @@ public class StorageValidator {
 
 
 		if (!fileStoreConfig.getAllowedFormatsMap().get(extension).contains(contentType)) {
-			throw new CustomException(EXCEPTION_INVALID_INPUT, "Invalid Content Type");
+			throw new CustomException("EG_FILESTORE_INVALID_INPUT", "Invalid Content Type");
 		}
 	}
 

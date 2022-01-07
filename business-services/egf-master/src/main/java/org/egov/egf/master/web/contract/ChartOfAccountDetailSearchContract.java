@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class ChartOfAccountDetailSearchContract extends ChartOfAccountDetailContract { private String ids; 
+public class ChartOfAccountDetailSearchContract extends ChartOfAccountDetailContract { private String ids;
 private String  sortBy; 
 private Integer pageSize; 
 private Integer offset; 

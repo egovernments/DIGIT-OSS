@@ -22,6 +22,8 @@ public class InstrumentAccountCodeMapperTest {
     @InjectMocks
     private InstrumentAccountCodeMapper instrumentAccountCodeMapper;
 
+    private String string1="tenantId";
+
     @Before
     public void setup() {
         instrumentAccountCodeMapper = new InstrumentAccountCodeMapper();
@@ -96,7 +98,7 @@ public class InstrumentAccountCodeMapperTest {
         instrumentAccountCode.setAccountCode(ChartOfAccountContract.builder().id("id").build());
         instrumentAccountCode.setCreatedBy(User.builder().id(1l).build());
         instrumentAccountCode.setLastModifiedBy(User.builder().id(1l).build());
-        instrumentAccountCode.setTenantId("tenantId");
+        instrumentAccountCode.setTenantId(string1);
 
         return instrumentAccountCode;
     }
@@ -110,7 +112,7 @@ public class InstrumentAccountCodeMapperTest {
         contract.setAccountCode(ChartOfAccountContract.builder().id("id").build());
         contract.setCreatedBy(User.builder().id(1l).build());
         contract.setLastModifiedBy(User.builder().id(1l).build());
-        contract.setTenantId("tenantId");
+        contract.setTenantId(string1);
 
         return contract;
     }
@@ -124,7 +126,7 @@ public class InstrumentAccountCodeMapperTest {
         instrumentAccountCodeSearch.setAccountCode(ChartOfAccountContract.builder().id("id").build());
         instrumentAccountCodeSearch.setCreatedBy(User.builder().id(1l).build());
         instrumentAccountCodeSearch.setLastModifiedBy(User.builder().id(1l).build());
-        instrumentAccountCodeSearch.setTenantId("tenantId");
+        instrumentAccountCodeSearch.setTenantId(string1);
         instrumentAccountCodeSearch.setPageSize(1);
         instrumentAccountCodeSearch.setOffset(1);
 
@@ -140,7 +142,7 @@ public class InstrumentAccountCodeMapperTest {
         contract.setAccountCode(ChartOfAccountContract.builder().id("id").build());
         contract.setCreatedBy(User.builder().id(1l).build());
         contract.setLastModifiedBy(User.builder().id(1l).build());
-        contract.setTenantId("tenantId");
+        contract.setTenantId(string1);
         contract.setPageSize(1);
         contract.setOffset(1);
 

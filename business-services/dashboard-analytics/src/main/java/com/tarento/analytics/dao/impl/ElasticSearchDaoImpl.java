@@ -88,6 +88,8 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 	private static RestHighLevelClient alternateClient;
 	private String indexName;
 	private String docType;
+	private static final String string=" for Type ";
+	private static final String string1=" ,Total time elapsed = ";
 
 	public String getIndexName() {
 		return indexName;
@@ -119,7 +121,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 	public Map<String, Object> getDataByIdentifier(String index, String type, String identifier) {
 		RestHighLevelClient client = elasticSearchClient.getClient();
 		long startTime = System.currentTimeMillis();
-		logger.info("ElasticSearchUtil getDataByIdentifier method started at ==" + startTime + " for Type " + type);
+		logger.info("ElasticSearchUtil getDataByIdentifier method started at ==" + startTime + string + type);
 		GetResponse response = null;
 
 		try {
@@ -137,8 +139,8 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 			}
 			long stopTime = System.currentTimeMillis();
 			long elapsedTime = stopTime - startTime;
-			logger.info("ElasticSearchUtil getDataByIdentifier method end at ==" + stopTime + " for Type " + type
-					+ " ,Total time elapsed = " + elapsedTime);
+			logger.info("ElasticSearchUtil getDataByIdentifier method end at ==" + stopTime + string + type
+					+ string1  + elapsedTime);
 			return response.getSource();
 		} catch (IOException ex) {
 			logger.error("Error while execution in Elasticsearch", ex);
@@ -158,7 +160,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 		RestHighLevelClient client = elasticSearchClient.getClient();
 
 		long startTime = System.currentTimeMillis();
-		logger.info("ElasticSearchUtil searchData method started at ==" + startTime + " for Type " + type);
+		logger.info("ElasticSearchUtil searchData method started at ==" + startTime + string + type);
 		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
 		Iterator<Entry<String, Object>> itr = searchData.entrySet().iterator();
 		while (itr.hasNext()) {
@@ -181,8 +183,8 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 		long stopTime = System.currentTimeMillis();
 		long elapsedTime = stopTime - startTime;
 
-		logger.info("ElasticSearchUtil searchData method end at ==" + stopTime + " for Type " + type
-				+ " ,Total time elapsed = " + elapsedTime);
+		logger.info("ElasticSearchUtil searchData method end at ==" + stopTime + string + type
+				+ string1 + elapsedTime);
 		try {
 			client.close();
 		} catch (IOException e) {
@@ -242,6 +244,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 		}
 
 		searchSourceBuilder.query(query);
+		List finalFacetList = new ArrayList();
 
 		if (null != searchDTO.getFacets() && !searchDTO.getFacets().isEmpty()) {
 			// addAggregations(searchSourceBuilder, searchDTO.getFacets());
@@ -253,9 +256,11 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 
 		try {
 			response = client.search(searchReq);
+			long count = 0;
 
 			if (response != null) {
 				SearchHits hits = response.getHits();
+				count = hits.getTotalHits();
 				for (SearchHit hit : hits) {
 					esSource.add(hit.getSourceAsMap());
 				}
@@ -275,6 +280,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 		for (Map.Entry<String, Object> entry : aggregations.entrySet()) {
 
 			String key = entry.getKey();
+			Map<String, Object> aggregationInfo = (Map<String, Object>) entry.getValue();
 			for (Map.Entry<String, Object> en : aggregations.entrySet()) {
 				if ("DATE_HISTOGRAM".equalsIgnoreCase(en.getKey())) {
 					Map<String, String> aggsVal = (Map<String, String>) en.getValue();
@@ -312,7 +318,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 		}
 		long stopTime = System.currentTimeMillis();
 		long elapsedTime = stopTime - startTime;
-		logger.info("ElasticSearchUtil addAggregations method end at ==" + stopTime + " ,Total time elapsed = "
+		logger.info("ElasticSearchUtil addAggregations method end at ==" + stopTime + string1
 				+ elapsedTime);
 	}
 
@@ -333,7 +339,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 		}
 		long stopTime = System.currentTimeMillis();
 		long elapsedTime = stopTime - startTime;
-		logger.info("ElasticSearchUtil addAdditionalProperties method end at ==" + stopTime + " ,Total time elapsed = "
+		logger.info("ElasticSearchUtil addAdditionalProperties method end at ==" + stopTime + string1
 				+ elapsedTime);
 	}
 

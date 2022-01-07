@@ -37,8 +37,7 @@ public class KafkaTemplateLoggingInterceptors<K,V> implements ConsumerIntercepto
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public KafkaTemplateLoggingInterceptors() {
-    }
+
 
     @Override
     public ConsumerRecords<K, V> onConsume(ConsumerRecords<K, V> consumerRecords) {
@@ -60,10 +59,7 @@ public class KafkaTemplateLoggingInterceptors<K,V> implements ConsumerIntercepto
         return consumerRecords;
     }
 
-    @Override
-    public void onCommit(Map<TopicPartition, OffsetAndMetadata> map) {
 
-    }
 
     @Override
     public ProducerRecord<K, V> onSend(ProducerRecord<K, V> producerRecord) {
@@ -88,15 +84,9 @@ public class KafkaTemplateLoggingInterceptors<K,V> implements ConsumerIntercepto
         }
     }
 
-    @Override
-    public void close() {
 
-    }
 
-    @Override
-    public void configure(Map<String, ?> map) {
 
-    }
 
     private String getMessageBodyAsJsonString(Object value) {
         try {

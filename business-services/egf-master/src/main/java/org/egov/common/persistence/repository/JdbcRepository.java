@@ -44,30 +44,42 @@ public abstract class JdbcRepository {
         List<String> updateFields = new ArrayList<>();
         List<String> uniqueFields = new ArrayList<>();
 
+        String insertQuery = "";
         String updateQuery = "";
+        String searchQuery = "";
+
+        private String string1="TABLE_NAME";
+
+        private String string2="tenantId";
+
+        private String string3=":tableName";
+
+        private String string4=" and ";
+
+        private String string5="Not able to get Table_name from entity";
+
+        private String string6=" where ";
 
         try {
 
-            TABLE_NAME = (String) T.getDeclaredField("TABLE_NAME").get(null);
+            TABLE_NAME = (String) T.getDeclaredField(string1).get(null);
         } catch (Exception e) {
             LOG.error("Illegal Argument exception occurred: " + e.getMessage());
         }
         insertFields.addAll(fetchFields(T));
         uniqueFields.add("id");
-        uniqueFields.add("tenantId");
+        uniqueFields.add(string2);
         insertFields.removeAll(uniqueFields);
         allInsertQuery.put(T.getSimpleName(), insertQuery(insertFields, TABLE_NAME, uniqueFields));
         updateFields.addAll(insertFields);
         updateFields.remove("createdBy");
         updateQuery = updateQuery(updateFields, TABLE_NAME, uniqueFields);
-        System.out.println(T.getSimpleName() + "--------" + insertFields);
         allInsertFields.put(T.getSimpleName(), insertFields);
         allUpdateFields.put(T.getSimpleName(), updateFields);
         allIdentitiferFields.put(T.getSimpleName(), uniqueFields);
         // allInsertQuery.put(T.getSimpleName(), insertQuery);
         allUpdateQuery.put(T.getSimpleName(), updateQuery);
         getByIdQuery.put(T.getSimpleName(), getByIdQuery(TABLE_NAME, uniqueFields));
-        System.out.println(allInsertQuery);
     }
 
     public static String insertQuery(List<String> fields, String tableName, List<String> uniqueFields) {
@@ -95,11 +107,8 @@ public abstract class JdbcRepository {
             i++;
         }
 
-        System.out.println(fields);
-        System.out.println(uniqueFields);
         iQuery = iQuery.replace(":fields", fieldNames.toString()).replace(":params", paramNames.toString())
-                .replace(":tableName", tableName).toString();
-        System.out.println(tableName + "----" + iQuery);
+                .replace(string3, tableName).toString();
         return iQuery;
     }
 
@@ -143,7 +152,7 @@ public abstract class JdbcRepository {
         i = 0;
         for (String s : uniqueFields) {
             if (i > 0) {
-                uniqueFieldNameAndParams.append(" and ");
+                uniqueFieldNameAndParams.append(string4);
 
             }
             uniqueFieldNameAndParams.append(s).append("=").append(":").append(s);
@@ -151,7 +160,7 @@ public abstract class JdbcRepository {
         }
 
         uQuery = uQuery.replace(":fields", fieldNameAndParams.toString())
-                .replace(":uniqueField", uniqueFieldNameAndParams.toString()).replace(":tableName", tableName)
+                .replace(":uniqueField", uniqueFieldNameAndParams.toString()).replace(string3, tableName)
                 .toString();
         return uQuery;
     }
@@ -163,14 +172,14 @@ public abstract class JdbcRepository {
 
         for (String s : uniqueFields) {
             if (i > 0) {
-                uniqueFieldNameAndParams.append(" and ");
+                uniqueFieldNameAndParams.append(string4);
 
             }
             uniqueFieldNameAndParams.append(s).append("=").append(":").append(s);
             i++;
         }
 
-        uQuery = uQuery.replace(":uniqueField", uniqueFieldNameAndParams.toString()).replace(":tableName", tableName)
+        uQuery = uQuery.replace(":uniqueField", uniqueFieldNameAndParams.toString()).replace(string3 , tableName)
                 .toString();
         return uQuery;
     }
@@ -199,7 +208,6 @@ public abstract class JdbcRepository {
     }
 
     public static Field getField(Object obj, String s) {
-        System.out.println(s);
         Field declaredField = null;
         Object ob1 = obj;
         while (declaredField == null) {
@@ -253,7 +261,6 @@ public abstract class JdbcRepository {
 
     @Transactional
     public Object create(Object ob) {
-        // System.out.println(allInsertQuery);
         ((AuditableEntity) ob).setCreatedDate(new Date());
         ((AuditableEntity) ob).setLastModifiedDate(new Date());
 
@@ -261,8 +268,6 @@ public abstract class JdbcRepository {
         List<Map<String, Object>> batchValues = new ArrayList<>();
         batchValues.add(paramValues(ob, allInsertFields.get(obName)));
         batchValues.get(0).putAll(paramValues(ob, allIdentitiferFields.get(obName)));
-        System.out.println(obName + "----" + allInsertQuery.get(obName));
-        System.out.println(namedParameterJdbcTemplate);
         namedParameterJdbcTemplate.batchUpdate(allInsertQuery.get(obName),
                 batchValues.toArray(new Map[batchValues.size()]));
         return ob;
@@ -270,7 +275,6 @@ public abstract class JdbcRepository {
 
     @Transactional
     public Object update(Object ob) {
-        System.out.println(allUpdateQuery);
         ((AuditableEntity) ob).setCreatedDate(new Date());
         ((AuditableEntity) ob).setLastModifiedDate(new Date());
 
@@ -278,7 +282,6 @@ public abstract class JdbcRepository {
         List<Map<String, Object>> batchValues = new ArrayList<>();
         batchValues.add(paramValues(ob, allUpdateFields.get(obName)));
         batchValues.get(0).putAll(paramValues(ob, allIdentitiferFields.get(obName)));
-        System.out.println(obName + "----" + allUpdateQuery.get(obName));
         namedParameterJdbcTemplate.batchUpdate(allUpdateQuery.get(obName),
                 batchValues.toArray(new Map[batchValues.size()]));
         return ob;
@@ -371,29 +374,31 @@ public abstract class JdbcRepository {
 
         String obName = ob.getClass().getSimpleName();
         List<String> identifierFields = allIdentitiferFields.get(obName);
+        List<Map<String, Object>> batchValues = new ArrayList<>();
 
         // batchValues.get(0).putAll(paramValues(ob, allIdentitiferFields.get(obName)));
         Map<String, Object> paramValues = new HashMap<>();
         String table = "";
         try {
-            table = FieldUtils.readDeclaredField(ob, "TABLE_NAME").toString();
+            table = FieldUtils.readDeclaredField(ob, string1).toString();
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Not able to get Table_name from entity" + obName);
+            throw new RuntimeException(string5 + obName);
         }
         StringBuffer uniqueQuery = new StringBuffer(
-                "select count(*) as count from " + table + " where " + fieldName + "=:fieldValue");
+                "select count(*) as count from " + table + string6 + fieldName + "=:fieldValue");
         paramValues.put("fieldValue", getValue(getField(ob, fieldName), ob));
+        int i = 0;
         for (String s : identifierFields) {
 
-            if (s.equalsIgnoreCase("tenantId")) {
-                uniqueQuery.append(" and ");
+            if (s.equalsIgnoreCase(string2)) {
+                uniqueQuery.append(string4);
                 uniqueQuery.append(s).append("=").append(":").append(s);
                 // implement fallback here
                 paramValues.put(s, getValue(getField(ob, s), ob));
                 continue;
             }
             if (getValue(getField(ob, s), ob) != null) {
-                uniqueQuery.append(" and ");
+                uniqueQuery.append(string4);
                 uniqueQuery.append(s).append("!=").append(":").append(s);
                 paramValues.put(s, getValue(getField(ob, s), ob));
             }
@@ -410,30 +415,32 @@ public abstract class JdbcRepository {
 
         String obName = ob.getClass().getSimpleName();
         List<String> identifierFields = allIdentitiferFields.get(obName);
+        List<Map<String, Object>> batchValues = new ArrayList<>();
 
         // batchValues.get(0).putAll(paramValues(ob, allIdentitiferFields.get(obName)));
         Map<String, Object> paramValues = new HashMap<>();
         String table = "";
         try {
-            table = FieldUtils.readDeclaredField(ob, "TABLE_NAME").toString();
+            table = FieldUtils.readDeclaredField(ob, string1).toString();
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Not able to get Table_name from entity" + obName);
+            throw new RuntimeException(string5 + obName);
         }
-        StringBuffer uniqueQuery = new StringBuffer("select count(*) as count from " + table + " where " + firstFieldName
-                + "=:firstFieldValue" + " and " + secondFieldName + "=:secondFieldValue");
+        StringBuffer uniqueQuery = new StringBuffer("select count(*) as count from " + table + string6 + firstFieldName
+                + "=:firstFieldValue" + string4 + secondFieldName + "=:secondFieldValue");
         paramValues.put("firstFieldValue", getValue(getField(ob, firstFieldName), ob));
         paramValues.put("secondFieldValue", getValue(getField(ob, secondFieldName), ob));
+        int i = 0;
         for (String s : identifierFields) {
 
-            if (s.equalsIgnoreCase("tenantId")) {
-                uniqueQuery.append(" and ");
+            if (s.equalsIgnoreCase(string2)) {
+                uniqueQuery.append(string4);
                 uniqueQuery.append(s).append("=").append(":").append(s);
                 // implement fallback here
                 paramValues.put(s, getValue(getField(ob, s), ob));
                 continue;
             }
             if (getValue(getField(ob, s), ob) != null) {
-                uniqueQuery.append(" and ");
+                uniqueQuery.append(string4);
                 uniqueQuery.append(s).append("!=").append(":").append(s);
                 paramValues.put(s, getValue(getField(ob, s), ob));
             }
@@ -463,9 +470,9 @@ public abstract class JdbcRepository {
 
         String table = "";
         try {
-            table = FieldUtils.readDeclaredField(entity, "TABLE_NAME").toString();
+            table = FieldUtils.readDeclaredField(entity, string1).toString();
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Not able to get Table_name from entity" + obName);
+            throw new RuntimeException(string5 + obName);
         }
         paramValues.put("tablename", table);
         paramValues.put("reason", reason);
@@ -476,14 +483,13 @@ public abstract class JdbcRepository {
         backupQuery.append(
                 "insert into " + backupTable + " select '1',:tablename,id,tenantid,:reason,row_to_json(" + table + "),now() "
                         + " from " + table + " where tenantid=:tenantId and id=:id ");
-        System.out.println("query.............." + backupQuery);
         namedParameterJdbcTemplate.batchUpdate(backupQuery.toString(), batchValues.toArray(new Map[batchValues.size()]));
-        deleteQuery.append("delete from  " + table + " where ");
+        deleteQuery.append("delete from  " + table + string6 );
         int i = 0;
         for (String s : identifierFields) {
             if (i != 0)
-                deleteQuery.append(" and ");
-            if (s.equalsIgnoreCase("tenantId")) {
+                deleteQuery.append(string4);
+            if (s.equalsIgnoreCase(string2)) {
 
                 deleteQuery.append(s).append("=").append(":").append(s);
                 // implement fallback here

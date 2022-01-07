@@ -19,6 +19,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Builder
+
 public class GlCodeMasterCriteria {
 
 	@NotNull

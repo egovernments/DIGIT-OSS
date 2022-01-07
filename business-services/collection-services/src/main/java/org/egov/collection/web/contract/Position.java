@@ -45,6 +45,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+
 public class Position {
 
     private Long id;

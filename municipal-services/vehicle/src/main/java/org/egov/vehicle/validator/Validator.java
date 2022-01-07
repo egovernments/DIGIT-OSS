@@ -39,8 +39,6 @@ public class Validator {
 	
 	@Autowired
 	private VehicleRepository repository;
-
-	private static final String TENANT_ID_MANDATORY = "TenantId is mandatory in search";
 	
 	public void validateCreate(VehicleRequest vehicleRequest, Object mdmsData) {
 
@@ -82,13 +80,13 @@ public class Validator {
 
 		if (!requestInfo.getUserInfo().getType().equalsIgnoreCase(Constants.CITIZEN) && !criteria.tenantIdOnly()
 				&& criteria.getTenantId() == null)
-			throw new CustomException(VehicleErrorConstants.INVALID_SEARCH, TENANT_ID_MANDATORY);
+			throw new CustomException(VehicleErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
 
 		if (requestInfo.getUserInfo().getType().equalsIgnoreCase(Constants.CITIZEN) && !criteria.isEmpty()
 				&& !criteria.tenantIdOnly() && criteria.getTenantId() == null) 
-			throw new CustomException(VehicleErrorConstants.INVALID_SEARCH, TENANT_ID_MANDATORY);
+			throw new CustomException(VehicleErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
 		if(criteria.getTenantId() == null)
-			throw new CustomException(VehicleErrorConstants.INVALID_SEARCH, TENANT_ID_MANDATORY);
+			throw new CustomException(VehicleErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
 			
 		String allowedParamStr = null;
 

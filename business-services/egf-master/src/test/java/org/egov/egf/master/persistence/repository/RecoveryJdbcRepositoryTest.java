@@ -38,6 +38,14 @@ public class RecoveryJdbcRepositoryTest {
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+	private String string1="2374257";
+
+	private String string2="30492234547";
+
+	private String string3="ifsccode";
+
+	private String string4="default";
+
 	@Before
 	public void setUp() throws Exception {
 		recoveryJdbcRepository = new RecoveryJdbcRepository(namedParameterJdbcTemplate);
@@ -47,9 +55,9 @@ public class RecoveryJdbcRepositoryTest {
 	@Sql(scripts = { "/sql/clearRecovery.sql" })
 	public void test_create() {
 
-		RecoveryEntity recovery = RecoveryEntity.builder().id("2374257").code("code").name("name").active(true)
-				.mode('M').accountNumber("30492234547").flat(100.00).ifscCode("ifsccode").chartOfAccountId("1").remittanceMode('M').remitted("test").build();
-		recovery.setTenantId("default");
+		RecoveryEntity recovery = RecoveryEntity.builder().id(string1 ).code("code").name("name").active(true)
+				.mode('M').accountNumber(string2 ).flat(100.00).ifscCode(string3 ).chartOfAccountId("1").remittanceMode('M').remitted("test").build();
+		recovery.setTenantId(string4 );
 		RecoveryEntity actualResult = recoveryJdbcRepository.create(recovery);
 
 		List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_recovery",
@@ -64,8 +72,8 @@ public class RecoveryJdbcRepositoryTest {
 	@Sql(scripts = { "/sql/clearRecovery.sql" })
 	public void test_create_with_tenantId_null() {
 
-		RecoveryEntity recovery = RecoveryEntity.builder().id("2374257").code("code").name("name").active(true)
-				.mode('M').accountNumber("30492234547").flat(100.00).ifscCode("ifsccode").chartOfAccountId("1").remittanceMode('M').remitted("test").build();
+		RecoveryEntity recovery = RecoveryEntity.builder().id(string1 ).code("code").name("name").active(true)
+				.mode('M').accountNumber(string2).flat(100.00).ifscCode(string3).chartOfAccountId("1").remittanceMode('M').remitted("test").build();
 		recoveryJdbcRepository.create(recovery);
 
 	}
@@ -74,9 +82,9 @@ public class RecoveryJdbcRepositoryTest {
 	@Sql(scripts = { "/sql/clearRecovery.sql", "/sql/insertRecoveryData.sql" })
 	public void test_update() {
 
-		RecoveryEntity recovery = RecoveryEntity.builder().id("2374257").code("code").name("name").active(true)
-				.mode('M').accountNumber("30492234547").flat(100.00).ifscCode("ifsccode").chartOfAccountId("1").remittanceMode('M').remitted("test").build();
-		recovery.setTenantId("default");
+		RecoveryEntity recovery = RecoveryEntity.builder().id(string1 ).code("code").name("name").active(true)
+				.mode('M').accountNumber(string2).flat(100.00).ifscCode(string3).chartOfAccountId("1").remittanceMode('M').remitted("test").build();
+		recovery.setTenantId(string4);
 		RecoveryEntity actualResult = recoveryJdbcRepository.update(recovery);
 
 		List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_recovery",
@@ -103,10 +111,10 @@ public class RecoveryJdbcRepositoryTest {
 	@Sql(scripts = { "/sql/clearRecovery.sql", "/sql/insertRecoveryData.sql" })
 	public void test_find_by_id() {
 
-		RecoveryEntity recoveryEntity = RecoveryEntity.builder().id("2374257").build();
-		recoveryEntity.setTenantId("default");
+		RecoveryEntity recoveryEntity = RecoveryEntity.builder().id(string1 ).build();
+		recoveryEntity.setTenantId(string4);
 		RecoveryEntity result = recoveryJdbcRepository.findById(recoveryEntity);
-		assertThat(result.getId()).isEqualTo("2374257");
+		assertThat(result.getId()).isEqualTo(string1 );
 		assertThat(result.getName()).isEqualTo("name");
 		assertThat(result.getCode()).isEqualTo("code");
 
@@ -117,7 +125,7 @@ public class RecoveryJdbcRepositoryTest {
 	public void test_find_by_invalid_id_should_return_null() {
 
 		RecoveryEntity recoveryEntity = RecoveryEntity.builder().id("5").build();
-		recoveryEntity.setTenantId("default");
+		recoveryEntity.setTenantId(string4);
 		RecoveryEntity result = recoveryJdbcRepository.findById(recoveryEntity);
 		assertNull(result);
 
@@ -188,7 +196,7 @@ public class RecoveryJdbcRepositoryTest {
 				.isActiveForPosting(true).type('A')
 				.classification((long) 123456).functionRequired(true)
 				.budgetCheckRequired(true).build();
-		chartOfAccount.setTenantId("default");
+		chartOfAccount.setTenantId(string4 );
 		return chartOfAccount;
 	}
 }

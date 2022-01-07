@@ -31,14 +31,12 @@ public class PostChatController {
     @Value("${update.pgr.service.topic}")
     private String updatePGRServiceTopic;
 
-    private static final String SEND_MESSAGE_LOCALIZED_KEY = "send-message-localized";
-
     @PostConstruct
     public void init() {
-        pgrStatusUpdateEventFormatter.startStream(updatePGRServiceTopic, SEND_MESSAGE_LOCALIZED_KEY);
+        pgrStatusUpdateEventFormatter.startStream(updatePGRServiceTopic, "send-message-localized");
         kafkaTopicCreater.createTopic("send-message");
-        kafkaTopicCreater.createTopic(SEND_MESSAGE_LOCALIZED_KEY);
-        localizationStream.startStream("send-message", SEND_MESSAGE_LOCALIZED_KEY);
+        kafkaTopicCreater.createTopic("send-message-localized");
+        localizationStream.startStream("send-message", "send-message-localized");
     }
 
 

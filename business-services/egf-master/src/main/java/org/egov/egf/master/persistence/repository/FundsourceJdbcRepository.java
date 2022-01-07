@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 public class FundsourceJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(FundsourceJdbcRepository.class);
 
+	private String string1=" and ";
+
 	static {
 		LOG.debug("init fundsource");
 		init(FundsourceEntity.class);
@@ -69,70 +71,70 @@ public class FundsourceJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
 	        if (fundsourceSearchEntity.getTenantId() != null) {
 	            if (params.length() > 0) {
-	                params.append(" and ");
+	                params.append(string1);
 	            }
 	            params.append("tenantId =:tenantId");
 	            paramValues.put("tenantId", fundsourceSearchEntity.getTenantId());
 	        }
 		if (fundsourceSearchEntity.getId() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("id =:id");
 			paramValues.put("id", fundsourceSearchEntity.getId());
 		}
 		if (fundsourceSearchEntity.getIds() != null) {
                           if (params.length() > 0) {
-                                  params.append(" and ");
+                                  params.append(string1);
                           }
                           params.append("id in(:ids) ");
                           paramValues.put("ids", new ArrayList<String>(Arrays.asList(fundsourceSearchEntity.getIds().split(","))));
                 }
 		if (fundsourceSearchEntity.getCode() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("code =:code");
 			paramValues.put("code", fundsourceSearchEntity.getCode());
 		}
 		if (fundsourceSearchEntity.getName() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("name =:name");
 			paramValues.put("name", fundsourceSearchEntity.getName());
 		}
 		if (fundsourceSearchEntity.getType() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("type =:type");
 			paramValues.put("type", fundsourceSearchEntity.getType());
 		}
 		if (fundsourceSearchEntity.getParentId() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("parentId =:fundSource");
 			paramValues.put("fundSource", fundsourceSearchEntity.getParentId());
 		}
 		if (fundsourceSearchEntity.getLlevel() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("llevel =:llevel");
 			paramValues.put("llevel", fundsourceSearchEntity.getLlevel());
 		}
 		if (fundsourceSearchEntity.getActive() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("active =:active");
 			paramValues.put("active", fundsourceSearchEntity.getActive());
 		}
 		if (fundsourceSearchEntity.getIsParent() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(string1);
 			}
 			params.append("isParent =:isParent");
 			paramValues.put("isParent", fundsourceSearchEntity.getIsParent());

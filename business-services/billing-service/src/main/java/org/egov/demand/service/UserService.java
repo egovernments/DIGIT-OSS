@@ -29,8 +29,9 @@ public class UserService {
     @Autowired
     private ApplicationProperties properties;
 
-	private static final String PUT_TYPE_CITIZEN = "CITIZEN";
-	private static final String PUT_TENANT_ID = "tenantId";
+	private String string1="CITIZEN";
+
+	private String string2="tenantId";
 	
     /**
      * Fetched user based on phone number.
@@ -47,9 +48,9 @@ public class UserService {
 		Map<String, String> response = new HashMap<>();
 		request.put("RequestInfo", requestInfo);
 		request.put("userName", phoneNo);
-		request.put("type", PUT_TYPE_CITIZEN);
+		request.put("type", string1);
 		request.put("name", name);
-		request.put(PUT_TENANT_ID, tenantId.split("\\.")[0]);
+		request.put(string2, tenantId.split("\\.")[0]);
 		
 		StringBuilder url = new StringBuilder();
 		url.append(properties.getUserServiceHostName()).append(properties.getUserServiceSearchPath());
@@ -79,17 +80,17 @@ public class UserService {
 		Map<String, String> role = new HashMap<>();
 		
 		List<Map<String, String>> roles = new ArrayList<>();
-		role.put("code", PUT_TYPE_CITIZEN);
-		role.put("name", "Citizen");
-		role.put(PUT_TENANT_ID, demand.getTenantId().split("\\.")[0]);
+		role.put("code", string1);
+		role.put("name", string1);
+		role.put(string2, demand.getTenantId().split("\\.")[0]);
 		roles.add(role);
 
 		user.put("name", payer.getName());
 		user.put("mobileNumber", payer.getMobileNumber());
 		user.put("userName", UUID.randomUUID().toString());
 		user.put("active", true);
-		user.put("type", PUT_TYPE_CITIZEN);
-		user.put(PUT_TENANT_ID, demand.getTenantId().split("\\.")[0]);
+		user.put("type", string1);
+		user.put(string2, demand.getTenantId().split("\\.")[0]);
 		user.put("roles", roles);
 
 		request.put("RequestInfo", requestInfo);

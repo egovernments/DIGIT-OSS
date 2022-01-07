@@ -16,6 +16,7 @@ import java.util.List;
 @Getter
 @ToString
 @EqualsAndHashCode(of = {"receiptNumber"})
+
 public class Receipt {
 
     @NotNull

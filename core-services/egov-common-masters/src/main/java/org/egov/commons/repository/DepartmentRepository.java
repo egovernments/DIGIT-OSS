@@ -64,9 +64,7 @@ public class DepartmentRepository {
 	@Autowired
 	private DepartmentQueryBuilder departmentQueryBuilder;
 
-	private static final String SELECT_FROM_DEPARTMENT_QUERY = "Select * from eg_department";
-
-	public static final String INSERT_DEPARTMENT_QUERY = "INSERT INTO eg_department"
+	public static final String INSERT_DEPATMENT_QUERY = "INSERT INTO eg_department"
 			+ "(id, name, code, active, tenantid,createdBy,createdDate,lastModifiedBy,lastModifiedDate)"
 			+ " VALUES(?,?,?,?,?,?,?,?,?)";
 
@@ -74,13 +72,13 @@ public class DepartmentRepository {
 	public static final String UPDATE_DEPARTMENT = "Update eg_department"
 			+ " set name=?,active=?,lastModifiedBy=?,lastModifiedDate=?"
 			+ " where code=? and tenantId=?";
-	public static final String GET_DEPARTMENT_BY_NAME_TENANTID_AND_ID = SELECT_FROM_DEPARTMENT_QUERY
+	public static final String GET_DEPARTMENT_BY_NAME_TENANTID_AND_ID = "Select * from eg_department"
 			+ " where name=? and tenantId=? and id != ?";
-	public static final String GET_DEPARTMENT_BY_NAME_AND_TENANTID = SELECT_FROM_DEPARTMENT_QUERY
+	public static final String GET_DEPARTMENT_BY_NAME_AND_TENANTID = "Select * from eg_department"
 			+ " where name=? and tenantId=? ";
-	public static final String GET_DEPARTMENT_BY_CODE_AND_TENANTID_AND_ID = SELECT_FROM_DEPARTMENT_QUERY
+	public static final String GET_DEPARTMENT_BY_CODE_AND_TENANTID_AND_ID = "Select * from eg_department"
 			+ " where code=? and tenantId=? and id != ?";
-	public static final String GET_DEPARTMENT_BY_CODE_AND_TENANTID = SELECT_FROM_DEPARTMENT_QUERY
+	public static final String GET_DEPARTMENT_BY_CODE_AND_TENANTID = "Select * from eg_department"
 			+ " where code=? and tenantId=?";
 
 
@@ -97,7 +95,7 @@ public class DepartmentRepository {
 				, department.getActive(), department.getTenantId(), userId
 				, new Date(new java.util.Date().getTime()),
 				userId, new Date(new java.util.Date().getTime())};
-		jdbcTemplate.update(INSERT_DEPARTMENT_QUERY, obj);
+		jdbcTemplate.update(INSERT_DEPATMENT_QUERY, obj);
 
 	}
 

@@ -234,10 +234,10 @@ public class VoucherServiceImpl implements VoucherService {
 		voucher.setServiceName(bsCode);
 		voucher.setReferenceDocument(receiptNumber);
 		String functionaryCode = businessService.getFunctionary() != null
-				&& !StringUtils.isEmpty(businessService.getFunctionary()) ? businessService.getFunctionary() : null;
+				& !StringUtils.isEmpty(businessService.getFunctionary()) ? businessService.getFunctionary() : null;
 		voucher.getFunctionary().setCode(functionaryCode);
 		voucher.setScheme(new Scheme());
-		String schemeCode = businessService.getScheme() != null && !StringUtils.isEmpty(businessService.getScheme())
+		String schemeCode = businessService.getScheme() != null & !StringUtils.isEmpty(businessService.getScheme())
 				? businessService.getScheme() : null;
 		voucher.getScheme().setCode(schemeCode);
 		voucher.setDescription(businessServiceName + " Receipt");
@@ -504,7 +504,7 @@ public class VoucherServiceImpl implements VoucherService {
 		if(serviceCode != null && !serviceCode.isEmpty()){
 			url.append("servicecode=").append(serviceCode);
 		}
-		if(referenceDoc != null && !referenceDoc.isEmpty()){
+		if(referenceDoc != null & !referenceDoc.isEmpty()){
 			url.append("&referencedocument=").append(URLEncoder.encode(referenceDoc,"UTF-8"));
 		}
 				

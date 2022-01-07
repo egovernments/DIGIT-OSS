@@ -137,7 +137,7 @@ public class ChallanRepository {
 		RequestInfo requestInfo = paymentRequest.getRequestInfo();
 
 		List<PaymentDetail> paymentDetails = paymentRequest.getPayment().getPaymentDetails();
-		String tenantId = paymentRequest.getPayment().getTenantId();
+//		String tenantId = paymentRequest.getPayment().getTenantId();
 		List<Object[]> rows = new ArrayList<>();
 		for (PaymentDetail paymentDetail : paymentDetails) {
 			Bill bill = paymentDetail.getBill();

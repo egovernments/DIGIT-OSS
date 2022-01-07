@@ -1,6 +1,5 @@
 package org.egov.id.service;
 
-import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -52,21 +51,19 @@ public class IdGenerationService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private SecureRandom random;
-
     // by default 'idformat' will be taken from MDMS. Change value of 'ismdms.on' to 'false'
     // in application.properties to get data from DB instead.
     @Value("${idformat.from.mdms}")
-    public boolean idFormatFromMDMS;
+
+    private boolean idFormatFromMDMS;
 
     //By default the auto create sequence is disabled
     @Value("${autocreate.new.seq}")
-    public boolean autoCreateNewSeq;
+    private boolean autoCreateNewSeq;
 
 
     //default count value
-    public Integer defaultCount = 1;
+    private Integer defaultCount = 1;
 
 
     /**
@@ -112,7 +109,7 @@ public class IdGenerationService {
      */
     private List generateIdFromIdRequest(IdRequest idRequest, RequestInfo requestInfo) throws Exception {
 
-        List<String> generatedId = new LinkedList<>();
+//        List<String> generatedId = new LinkedList<>();
         boolean autoCreateNewSeqFlag = false;
         if (!StringUtils.isEmpty(idRequest.getIdName()))
         {
@@ -297,7 +294,7 @@ public class IdGenerationService {
                 SimpleDateFormat formatter = new SimpleDateFormat(yearPattern.trim());
                 formattedYear = formatter.format(date);
 
-                if (financialYearPatternArray[0].equals(yearPattern)) {
+                if (financialYearPatternArray[0] == yearPattern) {
                     if (month > 3) {
                         preYear = Integer.valueOf(formattedYear);
                     } else {
@@ -357,6 +354,7 @@ public class IdGenerationService {
      * @return randomTxt
      */
     private String generateRandomText(String regex, RequestInfo requestInfo) {
+        Random random = new Random();
         List<String> matchList = new ArrayList<String>();
         int length = 2;// default digits length
         try {
