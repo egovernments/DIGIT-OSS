@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const ApplicationLinks = ({ linkPrefix }) => {
+const ApplicationLinks = ({ linkPrefix, classNameForMobileView="" }) => {
   const { t } = useTranslation();
 
   const allLinks = [
@@ -50,7 +50,7 @@ const ApplicationLinks = ({ linkPrefix }) => {
 
   return (
     <Card className="employeeCard filter">
-      <div className="complaint-links-container">
+      <div className={`complaint-links-container ${classNameForMobileView}`}>
         {GetLogo()}
         <div className="body">
           {links.map(({ link, text }, index) => (
