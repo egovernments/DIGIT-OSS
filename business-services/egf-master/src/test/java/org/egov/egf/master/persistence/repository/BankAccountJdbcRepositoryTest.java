@@ -41,7 +41,8 @@ public class BankAccountJdbcRepositoryTest {
 	private BankAccountJdbcRepository bankAccountJdbcRepository;
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
+	private static final String ACCOUNT_NUMBER="accountNumber";
+	private static final String DEFAULT="default";
 	@Before
 	public void setUp() throws Exception {
 		bankAccountJdbcRepository = new BankAccountJdbcRepository(namedParameterJdbcTemplate);
@@ -55,7 +56,7 @@ public class BankAccountJdbcRepositoryTest {
 		List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_bankaccount",
 				new BankAccountResultExtractor());
 		Map<String, Object> row = result.get(0);
-		assertThat(row.get("accountNumber")).isEqualTo(actualResult.getAccountNumber());
+		assertThat(row.get(ACCOUNT_NUMBER)).isEqualTo(actualResult.getAccountNumber());
 	}
 
 	@Test
@@ -66,7 +67,7 @@ public class BankAccountJdbcRepositoryTest {
 		List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_bankaccount",
 				new BankAccountResultExtractor());
 		Map<String, Object> row = result.get(0);
-		assertThat(row.get("accountNumber")).isEqualTo(actualResult.getAccountNumber());
+		assertThat(row.get(ACCOUNT_NUMBER)).isEqualTo(actualResult.getAccountNumber());
 	}
 
 	@Test
@@ -82,7 +83,7 @@ public class BankAccountJdbcRepositoryTest {
 	@Sql(scripts = { "/sql/clearBankAccount.sql", "/sql/insertBankAccount.sql" })
 	public void testFindById() {
 		BankAccountEntity bankAccountEntity = BankAccountEntity.builder().id("1").build();
-		bankAccountEntity.setTenantId("default");
+		bankAccountEntity.setTenantId(DEFAULT);
 		BankAccountEntity result = bankAccountJdbcRepository.findById(bankAccountEntity);
 		assertThat(result.getId()).isEqualTo("1");
 	}
@@ -112,7 +113,7 @@ public class BankAccountJdbcRepositoryTest {
 	public void test_find_by_invalid_id_should_return_null() {
 
 		BankAccountEntity bankAccountEntity = BankAccountEntity.builder().id("5").build();
-		bankAccountEntity.setTenantId("default");
+		bankAccountEntity.setTenantId(DEFAULT);
 		BankAccountEntity result = bankAccountJdbcRepository.findById(bankAccountEntity);
 		assertNull(result);
 
@@ -151,7 +152,7 @@ public class BankAccountJdbcRepositoryTest {
 				Map<String, Object> row = new HashMap<String, Object>() {
 					{
 						put("id", resultSet.getString("id"));
-						put("accountNumber", resultSet.getString("accountNumber"));
+						put(ACCOUNT_NUMBER, resultSet.getString(ACCOUNT_NUMBER));
 						put("bankBranchId", resultSet.getString("bankBranchId"));
 						put("coa", resultSet.getString("chartOfAccountId"));
 						put("fund", resultSet.getBoolean("fundId"));
@@ -192,7 +193,7 @@ public class BankAccountJdbcRepositoryTest {
 		bankAccount.setChartOfAccount(getCOA());
 		bankAccount.setFund(getFund());
 		bankAccount.setActive(true);
-		bankAccount.setTenantId("default");
+		bankAccount.setTenantId(DEFAULT);
 		bankAccount.setAccountType("Payment");
 		bankAccount.setDescription("bank account");
 		bankAccount.setPayTo("abc");
@@ -212,7 +213,7 @@ public class BankAccountJdbcRepositoryTest {
 		bank.setDescription("description");
 		bank.setType("type");
 		bank.setActive(true);
-		bank.setTenantId("default");
+		bank.setTenantId(DEFAULT);
 		return bank;
 	}
 

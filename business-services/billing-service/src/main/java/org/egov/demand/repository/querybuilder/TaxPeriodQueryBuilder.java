@@ -59,7 +59,9 @@ public class TaxPeriodQueryBuilder {
 
     private static final String BASE_QUERY = "SELECT * FROM EGBS_TAXPERIOD taxperiod ";
 
-    public final String insertQuery = "INSERT INTO public.egbs_taxperiod(id, service, code, fromdate, todate,"
+	private static final String AND="' and ";
+
+	public final String insertQuery = "INSERT INTO public.egbs_taxperiod(id, service, code, fromdate, todate,"
     		+ " financialyear, createddate,lastmodifieddate, createdby, lastmodifiedby, tenantid, periodcycle)"
     		+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
@@ -166,11 +168,11 @@ public class TaxPeriodQueryBuilder {
 		
 			if (StringUtils.isNotBlank(taxPeriod.getService()))
 				whereClause = whereClause.append(" taxperiod.service = '").append(taxPeriod.getService())
-						.append("' and ");
+						.append(AND);
 			if (StringUtils.isNotBlank(taxPeriod.getCode()))
-				whereClause = whereClause.append(" taxperiod.code = '").append(taxPeriod.getCode()).append("' and ");
+				whereClause = whereClause.append(" taxperiod.code = '").append(taxPeriod.getCode()).append(AND);
 			if ("edit".equalsIgnoreCase(mode))
-				whereClause = whereClause.append(" taxperiod.id != '").append(taxPeriod.getId()).append("' and ");
+				whereClause = whereClause.append(" taxperiod.id != '").append(taxPeriod.getId()).append(AND);
 			if (StringUtils.isNotBlank(taxPeriod.getTenantId()))
 				whereClause = whereClause.append(" taxperiod.tenantId = '").append(taxPeriod.getTenantId())
 						.append("' and (( ");

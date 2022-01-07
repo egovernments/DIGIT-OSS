@@ -117,9 +117,7 @@ public class FundController {
     @ResponseStatus(HttpStatus.OK)
     public FundResponse search(@ModelAttribute FundSearchContract fundSearchContract, @RequestBody RequestInfo requestInfo,
             BindingResult errors,@RequestParam String tenantId) {
-    	
-    	System.out.println("requestInfo in FundController Search "+requestInfo.toString());
-    	System.out.println("requestInfo in FundController Search "+requestInfo.getAuthToken());
+
     	ModelMapper mapper = new ModelMapper();
         FundSearch domain = new FundSearch();
         mapper.map(fundSearchContract, domain);

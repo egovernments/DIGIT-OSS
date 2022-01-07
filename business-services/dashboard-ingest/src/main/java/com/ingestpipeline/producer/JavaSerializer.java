@@ -23,15 +23,4 @@ public class JavaSerializer implements Serializer<Object> {
             throw new IllegalStateException("Can't serialize object: " + data, e);
         }
     }
-
-    @Override
-    public void configure(Map<String, ?> configs, boolean isKey) {
-
-    }
-
-    @Override
-    public void close() {
-
-    }
-
 }
