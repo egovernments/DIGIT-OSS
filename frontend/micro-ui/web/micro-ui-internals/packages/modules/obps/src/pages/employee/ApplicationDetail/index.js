@@ -13,6 +13,7 @@ const ApplicationDetail = () => {
   const [showToast, setShowToast] = useState(null);
   const [showOptions, setShowOptions] = useState(false);
   const { isLoading, data: applicationDetails } = Digit.Hooks.obps.useLicenseDetails(state, { applicationNumber: id, tenantId: state }, {});
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   const {
     isLoading: updatingApplication,
@@ -66,7 +67,8 @@ const ApplicationDetail = () => {
         moduleCode="BPAREG"
         showToast={showToast}
         setShowToast={setShowToast}
-        ActionBarStyle={{}} //paddingRight:"50px"
+        ActionBarStyle={isMobile?{}:{paddingRight:"50px"}}
+        MenuStyle={isMobile?{}:{right:"50px"}}
         closeToast={closeToast}
         timelineStatusPrefix={"WF_NEWTL_"}
       />

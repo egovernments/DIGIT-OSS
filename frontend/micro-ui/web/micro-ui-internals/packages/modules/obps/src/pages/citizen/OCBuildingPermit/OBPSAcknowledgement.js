@@ -7,7 +7,7 @@ import {convertToNocObject,convertToBPAObject} from "../../../utils/index";
 const GetActionMessage = (props) => {
   const { t } = useTranslation();
   if (props.isSuccess) {
-    return !window.location.href.includes("editApplication") ? t("CS_BPA_APPLICATION_SUCCESS") : t("CS_PROPERTY_UPDATE_APPLICATION_SUCCESS");
+    return !window.location.href.includes("editApplication") ? t("CS_OCBPA_APPLICATION_SUCCESS") : t("CS_PROPERTY_UPDATE_APPLICATION_SUCCESS");
   } else if (props.isLoading) {
     return !window.location.href.includes("editApplication") ? t("CS_BPA_APPLICATION_PENDING") : t("CS_PROPERTY_UPDATE_APPLICATION_PENDING");
   } else if (!props.isSuccess) {
@@ -25,7 +25,7 @@ const BannerPicker = (props) => {
     <Banner
       message={GetActionMessage(props)}
       applicationNumber={props.data?.BPA[0].applicationNo}
-      info={props.isSuccess ? props.t("BPA_STAKEHOLDER_NO") : ""}
+      info={props.isSuccess ? props.t("BPA_OC_PERMIT_NO") : ""}
       successful={props.isSuccess}
     />
   );

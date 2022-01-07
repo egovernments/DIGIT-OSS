@@ -40,7 +40,7 @@ const CheckPage = ({ onSubmit, value }) => {
   if (value?.uiFlow?.flow === "OCBPA") routeLink = `/digit-ui/citizen/obps/sendbacktocitizen/ocbpa/${value?.tenantId}/${value?.applicationNo}`;
   if (value.businessService === "BPA_LOW") BusinessService = "BPA.LOW_RISK_PERMIT_FEE";
   else if (value.businessService === "BPA") BusinessService = "BPA.NC_APP_FEE";
-  else BusinessService = "BPA.NC_APP_FEE";
+  else BusinessService = "BPA.NC_OC_APP_FEE";
 
   let isEditApplication = window.location.href.includes("editApplication")|| window.location.href.includes("sendbacktocitizen");
   let val;
@@ -252,7 +252,7 @@ const CheckPage = ({ onSubmit, value }) => {
         <p style={{ marginTop: "8px", marginBottom: "20px", textAlign:"Left", fontSize: "16px", lineHeight: "19px", color: "#505A5F", fontWeight: "400" }}>{t(`BPA_SCRUTINY_REPORT_PDF`)}</p>
         </StatusTable>
         <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
-        <CardSubHeader>{t("BPA_BUILDING_EXTRACT_HEADER")}</CardSubHeader>
+        <CardSubHeader>{value?.uiFlow?.flow === "OCBPA" ? t("BPA_ACTUAL_BUILDING_EXTRACT_HEADER") : t("BPA_BUILDING_EXTRACT_HEADER")}</CardSubHeader>
         <StatusTable>
           <Row className="border-none" label={t("BPA_TOTAL_BUILT_UP_AREA_HEADER")} text={datafromAPI?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea ? `${datafromAPI?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea} ${t("BPA_SQ_MTRS_LABEL")}` : t("NA")}></Row>
           <Row className="border-none" label={t("BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL")} text={datafromAPI?.planDetail?.blocks?.[0]?.building?.totalFloors}></Row>

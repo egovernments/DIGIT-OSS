@@ -10,7 +10,8 @@ import {
   Table, 
   CardSectionHeader,
   EditIcon,
-  PDFSvg
+  PDFSvg,
+  Loader
 } from "@egovernments/digit-ui-react-components";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -51,8 +52,14 @@ const CheckPage = ({ onSubmit, value }) => {
   improvedDoc.filter((ele,ind)=>improvedDoc.findIndex((elee)=>elee.documentType===ele.documentType)===ind).map(obj=>obj.isNotDuplicate=true);
 
   const { data: datafromAPI, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId, value?.data?.scrutinyNumber, {
-    enabled: true
+    enabled: value?.data?.scrutinyNumber?true:false,
   })
+  
+  if(isLoading)
+  {
+    return <Loader />
+  }
+  
   let consumerCode = value?.applicationNo;
   const fetchBillParams = { consumerCode };
 
@@ -160,7 +167,7 @@ const CheckPage = ({ onSubmit, value }) => {
 
   return (
     <React.Fragment>
-      <Timeline currentStep={uiFlow?.flow === "OCBPA" ? 2 : 1} flow= {uiFlow?.flow === "OCBPA" ? "OCBPA" : ""}/>
+      <Timeline currentStep={4} flow= {uiFlow?.flow === "OCBPA" ? "OCBPA" : ""}/>
       <Header>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
       <Card style={{paddingRight:"16px"}}>
         <StatusTable>
@@ -214,7 +221,7 @@ const CheckPage = ({ onSubmit, value }) => {
             <p style={{ marginTop: "8px", marginBottom: "20px", textAlign:"Left", fontSize: "16px", lineHeight: "19px", color: "#505A5F", fontWeight: "400" }}>{t(`BPA_SCRUTINY_REPORT_PDF`)}</p>
         </StatusTable>
         <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
-        <CardSubHeader>{`${t("BPA_BUILDING_EXTRACT_HEADER")}`}</CardSubHeader>
+        <CardSubHeader>{`${t("BPA_ACTUAL_BUILDING_EXTRACT_HEADER")}`}</CardSubHeader>
         <StatusTable>
           <Row className="border-none" label={`${t("BPA_TOTAL_BUILT_UP_AREA_HEADER")}`} text={datafromAPI?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea ? `${datafromAPI?.planDetail?.blocks?.[0]?.building?.totalBuitUpArea} ${t("BPA_SQ_MTRS_LABEL")}` : t("NA")}></Row>
           <Row className="border-none" label={`${t("BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL")}`} text={datafromAPI?.planDetail?.blocks?.[0]?.building?.totalFloors}></Row>
@@ -307,7 +314,7 @@ const CheckPage = ({ onSubmit, value }) => {
         <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
         <CardHeader>{t("BPA_COMMON_TOTAL_AMT")}</CardHeader>
         <CardHeader>₹ {paymentDetails?.Bill?.[0]?.billDetails[0]?.amount || "0"}</CardHeader>
-        <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} />
+        <SubmitBar label={t("BPA_SEND_TO_CITIZEN_LABEL")} onSubmit={onSubmit} />
       </Card>
     </React.Fragment>
   );

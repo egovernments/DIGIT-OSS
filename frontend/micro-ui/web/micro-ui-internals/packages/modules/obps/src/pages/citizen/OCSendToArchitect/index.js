@@ -56,6 +56,8 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t,OCData) =
     registrationDetails: data?.additionalDetails?.registrationDetails,
     riskType: Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks),
     serviceType:data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType,
+    edcrDetails: APIScrutinyDetails,
+    scrutinyNumber: { edcrNumber: APIScrutinyDetails?.edcrNumber },
   }
 
   data["PrevStateDocuments"] = data?.documents;

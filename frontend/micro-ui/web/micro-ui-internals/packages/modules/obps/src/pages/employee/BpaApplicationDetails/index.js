@@ -23,6 +23,7 @@ const BpaApplicationDetail = () => {
   const [error, setError] = useState(null);
   const [payments, setpayments] = useState([]);
   const stateId = Digit.ULBService.getStateId();
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
 
@@ -352,7 +353,8 @@ const BpaApplicationDetail = () => {
         businessService={workflowDetails?.data?.applicationBusinessService ? workflowDetails?.data?.applicationBusinessService : data?.applicationData?.businessService}
         moduleCode="BPA"
         showToast={showToast}
-        ActionBarStyle={{}} //paddingRight:"50px"
+        ActionBarStyle={isMobile?{}:{paddingRight:"50px"}}
+        MenuStyle={isMobile?{}:{right:"50px"}}
         setShowToast={setShowToast}
         closeToast={closeToast}
         statusAttribute={"state"}
