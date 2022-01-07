@@ -704,5 +704,11 @@ config:
       - work-dir: edcr/service/egov
         dockerfile: edcr/service/Dockerfile
         image-name: egov-edcr
-              
-
+        
+ #Finance
+   
+  - name: builds/digit-dev/finance/egov-finance
+      build:
+        - work-dir: finance/egov
+          image-name: egov-finance
+          dockerfile: finance/Dockerfile
