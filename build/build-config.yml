@@ -708,7 +708,7 @@ config:
  #Finance
    
   - name: builds/digit-dev/finance/egov-finance
-      build:
-        - work-dir: finance/egov
-          image-name: egov-finance
-          dockerfile: finance/Dockerfile
+    build:
+      - work-dir: finance/egov
+        image-name: egov-finance
+        dockerfile: finance/Dockerfile
