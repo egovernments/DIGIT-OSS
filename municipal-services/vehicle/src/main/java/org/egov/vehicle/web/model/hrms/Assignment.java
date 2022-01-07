@@ -25,7 +25,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Assignment {
-
 	private String id;
 
 	private Long position;
@@ -42,7 +41,7 @@ public class Assignment {
 	private Long toDate;
 
 	private String govtOrderNumber;
-	
+
 	private String tenantid;
 
 	private  String reportingTo;
@@ -55,5 +54,4 @@ public class Assignment {
 	private Boolean isCurrentAssignment;
 
 	private AuditDetails auditDetails;
-
 }

@@ -27,7 +27,6 @@ import java.util.Map;
 public class LocalityValueFetcher implements ExternalValueFetcher {
 
     private static final Logger logger = LoggerFactory.getLogger(LocalityValueFetcher.class);
-    private static final String TENANT_ID_KEY = "tenantId";
 
     @Autowired
     private RestTemplate restTemplate;
@@ -66,7 +65,7 @@ public class LocalityValueFetcher implements ExternalValueFetcher {
     @Override
     public String createExternalLinkForParams(ObjectNode params) {
         String mobile = params.get("recipient").asText();
-        String tenantId = params.get(TENANT_ID_KEY).asText();
+        String tenantId = params.get("tenantId").asText();
 
         String url = egovExternalHost + localityOptionsPath + "?phone=" + mobile + "&tenantId=" + tenantId;
         String shortenedURL = urlShorteningSevice.shortenURL(url);
@@ -74,12 +73,12 @@ public class LocalityValueFetcher implements ExternalValueFetcher {
     }
 
     private ObjectNode fetchValues(ObjectNode params) {
-        String tenantId = params.get(TENANT_ID_KEY).asText();
+        String tenantId = params.get("tenantId").asText();
         String authToken = params.get("authToken").asText();
 
         UriComponentsBuilder uriComponents = UriComponentsBuilder.fromUriString(locationServiceHost + locationServiceSearchPath);
         defaultQueryParams.forEach((key, value) -> uriComponents.queryParam(key, value));
-        uriComponents.queryParam(TENANT_ID_KEY, tenantId);
+        uriComponents.queryParam("tenantId", tenantId);
 
         String url = uriComponents.buildAndExpand().toUriString();
 

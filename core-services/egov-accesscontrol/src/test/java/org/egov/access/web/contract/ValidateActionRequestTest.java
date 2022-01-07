@@ -14,14 +14,11 @@ import static org.junit.Assert.assertEquals;
 
 public class ValidateActionRequestTest {
 
-	private static final String ROLE_NAME = "role name";
-	private static final String TENANT_ID = "tenantId";
-
 	@Test
 	public void testThatValidateActionRequestContractContainsInfoAboutRequestInfoAndValidateAction() {
 		RequestInfo requestInfo = RequestInfo.builder().build();
-		RoleContract role = RoleContract.builder().name(ROLE_NAME).build();
-		TenantRoleContract tenantRole = TenantRoleContract.builder().roles(Arrays.asList(role)).tenantId(TENANT_ID)
+		RoleContract role = RoleContract.builder().name("role name").build();
+		TenantRoleContract tenantRole = TenantRoleContract.builder().roles(Arrays.asList(role)).tenantId("tenantId")
 				.build();
 		ValidateActionContract validateAction = ValidateActionContract.builder().tenantRole(tenantRole).actionUrl("url")
 				.build();
@@ -36,8 +33,8 @@ public class ValidateActionRequestTest {
 	@Test
 	public void testToDomainReturnsActionValidationCriteria() {
 		RequestInfo requestInfo = RequestInfo.builder().build();
-		RoleContract role = RoleContract.builder().name(ROLE_NAME).build();
-		TenantRoleContract tenantRole = TenantRoleContract.builder().roles(Arrays.asList(role)).tenantId(TENANT_ID)
+		RoleContract role = RoleContract.builder().name("role name").build();
+		TenantRoleContract tenantRole = TenantRoleContract.builder().roles(Arrays.asList(role)).tenantId("tenantId")
 				.build();
 		ValidateActionContract validateAction = ValidateActionContract.builder().tenantRole(tenantRole).actionUrl("url")
 				.build();
@@ -46,8 +43,8 @@ public class ValidateActionRequestTest {
 				.validateAction(validateAction).build();
 		ValidateActionCriteria criteria = validateActionRequest.toDomain();
 
-		assertEquals(Arrays.asList(ROLE_NAME), criteria.getRoleNames());
-		assertEquals(TENANT_ID, criteria.getTenantId());
+		assertEquals(Arrays.asList("role name"), criteria.getRoleNames());
+		assertEquals("tenantId", criteria.getTenantId());
 		assertEquals("url", criteria.getActionUrl());
 
 	}

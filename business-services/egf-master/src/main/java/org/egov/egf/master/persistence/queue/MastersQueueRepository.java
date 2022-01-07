@@ -156,7 +156,6 @@ public class MastersQueueRepository {
     public void add(Map<String, Object> topicMap) {
 
         for (Map.Entry<String, Object> entry : topicMap.entrySet()) {
-            System.out.println(entry.getKey() + "/" + entry.getValue());
             key = entry.getKey().split("_")[0];
 
             if (key.equalsIgnoreCase("fund")) {
@@ -255,7 +254,6 @@ public class MastersQueueRepository {
     public void addToSearch(Map<String, Object> topicMap) {
 
         for (Map.Entry<String, Object> entry : topicMap.entrySet()) {
-            System.out.println(entry.getKey() + "/" + entry.getValue());
             key = entry.getKey().split("_")[0];
 
             if (key.equalsIgnoreCase("fund")) {

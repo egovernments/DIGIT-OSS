@@ -23,9 +23,6 @@ public class MessageCacheRepositoryTest {
 
     private static final String MESSAGE_HASH_KEY = "messages";
     private static final String COMPUTED_MESSAGE_HASH_KEY = "computedMessages";
-    private static final String LOCALE_EN_IN = "en_IN";
-    private static final String MESSAGE_CACHE_KEY_EN_IN_ABC = "en_IN:a.b.c";
-
     @Mock
     private StringRedisTemplate stringRedisTemplate;
 
@@ -43,33 +40,33 @@ public class MessageCacheRepositoryTest {
     @Test
     public void test_should_delete_messages_cached_from_db_for_a_given_tenant_and_locale() {
         final Tenant tenant = new Tenant("a.b.c");
-        final String locale = LOCALE_EN_IN;
+        final String locale = "en_IN";
 
         cacheRepository.bustCacheEntry(locale, tenant);
 
-        final String messageCacheKey = MESSAGE_CACHE_KEY_EN_IN_ABC;
+        final String messageCacheKey = "en_IN:a.b.c";
         verify(hashOperations).delete(MESSAGE_HASH_KEY, messageCacheKey);
     }
 
     @Test
     public void test_should_delete_computed_messages_cached_from_db_for_a_given_locale_tenant_and_its_derived_tenants() {
         final Tenant tenant = new Tenant("a.b");
-        final String locale = LOCALE_EN_IN;
+        final String locale = "en_IN";
         final List<Object> cacheKeys =
-            Arrays.asList("mr_IN:a.b", "en_IN:a.b", "mr_IN:a.b.c", MESSAGE_CACHE_KEY_EN_IN_ABC, "mr_IN:a.b.d", "en_IN:a.b.d", "en_IN:d.e");
+            Arrays.asList("mr_IN:a.b", "en_IN:a.b", "mr_IN:a.b.c", "en_IN:a.b.c", "mr_IN:a.b.d", "en_IN:a.b.d", "en_IN:d.e");
         when(hashOperations.keys(COMPUTED_MESSAGE_HASH_KEY)).thenReturn(new HashSet<>(cacheKeys));
 
         cacheRepository.bustCacheEntry(locale, tenant);
 
         verify(hashOperations).delete(COMPUTED_MESSAGE_HASH_KEY, "en_IN:a.b");
-        verify(hashOperations).delete(COMPUTED_MESSAGE_HASH_KEY, MESSAGE_CACHE_KEY_EN_IN_ABC);
+        verify(hashOperations).delete(COMPUTED_MESSAGE_HASH_KEY, "en_IN:a.b.c");
         verify(hashOperations).delete(COMPUTED_MESSAGE_HASH_KEY, "en_IN:a.b.d");
     }
 
     @Test
     public void test_should_delete_all_computed_messages_cached_from_db_when_tenant_is_default() {
         final Tenant tenant = new Tenant("default");
-        final String locale = LOCALE_EN_IN;
+        final String locale = "en_IN";
 
         cacheRepository.bustCacheEntry(locale, tenant);
 

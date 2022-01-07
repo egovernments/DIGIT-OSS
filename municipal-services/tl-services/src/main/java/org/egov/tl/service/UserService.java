@@ -41,11 +41,11 @@ public class UserService{
 
     private TLRepository repository;
 
-    private static final String CODE_CITIZEN = "CITIZEN";
+    private static final String CITIZEN="CITIZEN";
 
-    private static final String GET_LAST_MODIFIED_DATE = "lastModifiedDate";
+    private static final String LAST_MODIFIED_DATE="lastModifiedDate";
 
-    private static final String GET_PWD_EXPIRY_DATE = "pwdExpiryDate";
+    private static final String PWD_EXPIRY_DATE="pwdExpiryDate";
 
     @Autowired
     public UserService(ObjectMapper mapper, ServiceRequestRepository serviceRequestRepository, TLConfiguration config,TradeUtil tradeUtil,TLRepository repository) {
@@ -231,7 +231,7 @@ public class UserService{
         UserSearchRequest userSearchRequest = new UserSearchRequest();
         userSearchRequest.setRequestInfo(requestInfo);
         userSearchRequest.setTenantId(tenantId);
-        userSearchRequest.setUserType(CODE_CITIZEN);
+        userSearchRequest.setUserType(CITIZEN);
         Set<String> availableMobileNumbers = new HashSet<>();
 
         listOfMobileNumbers.forEach(mobilenumber -> {
@@ -272,7 +272,7 @@ public class UserService{
         owner.setActive(true);
         owner.setTenantId(tenantId.split("\\.")[0]);
         owner.setRoles(Collections.singletonList(role));
-        owner.setType(CODE_CITIZEN);
+        owner.setType(CITIZEN);
         switch (businessService)
         {
             // for mseva notifications
@@ -289,8 +289,8 @@ public class UserService{
      */
     private Role getCitizenRole(String tenantId){
         Role role = new Role();
-        role.setCode(CODE_CITIZEN);
-        role.setName("Citizen");
+        role.setCode(CITIZEN);
+        role.setName(CITIZEN);
         role.setTenantId(getStateLevelTenant(tenantId));
         return role;
     }
@@ -336,12 +336,12 @@ public class UserService{
         if(users!=null){
             users.forEach( map -> {
                         map.put("createdDate",dateTolong((String)map.get("createdDate"),format1));
-                        if((String)map.get(GET_LAST_MODIFIED_DATE)!=null)
-                            map.put(GET_LAST_MODIFIED_DATE,dateTolong((String)map.get(GET_LAST_MODIFIED_DATE),format1));
+                        if((String)map.get(LAST_MODIFIED_DATE)!=null)
+                            map.put(LAST_MODIFIED_DATE,dateTolong((String)map.get(LAST_MODIFIED_DATE),format1));
                         if((String)map.get("dob")!=null)
                             map.put("dob",dateTolong((String)map.get("dob"),dobFormat));
-                        if((String)map.get(GET_PWD_EXPIRY_DATE)!=null)
-                            map.put(GET_PWD_EXPIRY_DATE,dateTolong((String)map.get(GET_PWD_EXPIRY_DATE),format1));
+                        if((String)map.get(PWD_EXPIRY_DATE)!=null)
+                            map.put(PWD_EXPIRY_DATE,dateTolong((String)map.get(PWD_EXPIRY_DATE),format1));
                     }
             );
         }
@@ -392,7 +392,7 @@ public class UserService{
         userSearchRequest.setMobileNumber(criteria.getMobileNumber());
         userSearchRequest.setName(criteria.getOwnerName());
         userSearchRequest.setActive(true);
-        userSearchRequest.setUserType(CODE_CITIZEN);
+        userSearchRequest.setUserType(CITIZEN);
         if(!CollectionUtils.isEmpty(criteria.getOwnerIds()))
             userSearchRequest.setUuid(criteria.getOwnerIds());
         return userSearchRequest;
@@ -402,7 +402,7 @@ public class UserService{
 
     private UserDetailResponse searchByUserName(String userName,String tenantId){
         UserSearchRequest userSearchRequest = new UserSearchRequest();
-        userSearchRequest.setUserType(CODE_CITIZEN);
+        userSearchRequest.setUserType(CITIZEN);
         userSearchRequest.setUserName(userName);
         userSearchRequest.setTenantId(tenantId);
         StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserSearchEndpoint());

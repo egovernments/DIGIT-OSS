@@ -22,6 +22,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Setter
 @ToString
+
 public class DepartmentalTest {
 
 	private String id;

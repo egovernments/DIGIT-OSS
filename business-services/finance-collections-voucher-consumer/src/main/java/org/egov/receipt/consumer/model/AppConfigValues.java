@@ -49,6 +49,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class AppConfigValues {
-private String id;
-private String value;
+
+    private String id;
+
+    private String value;
 }

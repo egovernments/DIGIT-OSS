@@ -9,8 +9,6 @@ import static org.junit.Assert.*;
 
 public class RequestBodyInspectorTest {
 
-    private static final String REQUEST_INFO = "requestInfo";
-
     @Test
     public void test_should_return_request_info_when_request_info_container_field_name_has_pascal_case() {
         final HashMap<String, Object> requestBody = new HashMap<>();
@@ -26,7 +24,7 @@ public class RequestBodyInspectorTest {
     public void test_should_return_request_info_when_request_info_container_field_name_has_camel_case() {
         final HashMap<String, Object> requestBody = new HashMap<>();
         final HashMap<Object, Object> requestInfoBody = new HashMap<>();
-        requestBody.put(REQUEST_INFO, requestInfoBody);
+        requestBody.put("requestInfo", requestInfoBody);
 
         final RequestBodyInspector requestBodyInspector = new RequestBodyInspector(requestBody);
 
@@ -54,7 +52,7 @@ public class RequestBodyInspectorTest {
     public void test_should_update_request_info() {
         final HashMap<String, Object> requestBody = new HashMap<>();
         final HashMap<Object, Object> originalRequestInfoBody = new HashMap<>();
-        requestBody.put(REQUEST_INFO, originalRequestInfoBody);
+        requestBody.put("requestInfo", originalRequestInfoBody);
 
         final RequestBodyInspector requestBodyInspector = new RequestBodyInspector(requestBody);
 
@@ -65,7 +63,7 @@ public class RequestBodyInspectorTest {
 
         final HashMap<String, Object> actualRequestBody = requestBodyInspector.getRequestBody();
         final HashMap<String, Object> actualRequestInfo =
-            (HashMap<String, Object>) actualRequestBody.get(REQUEST_INFO);
+            (HashMap<String, Object>) actualRequestBody.get("requestInfo");
         assertNotNull(actualRequestInfo);
         assertTrue(actualRequestInfo.containsKey("foo"));
     }

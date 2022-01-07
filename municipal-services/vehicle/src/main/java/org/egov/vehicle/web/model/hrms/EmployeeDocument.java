@@ -23,6 +23,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
+
 public class EmployeeDocument {
 
 	private String id;

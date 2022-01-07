@@ -25,22 +25,20 @@ public class BusinessCategoryRepository {
 	public static final String UPDATE_SERVICECATEGORY="Update eg_businesscategory"
 			+" set name=?,code=?,active=?,tenantId=?,lastModifiedBy=?,lastModifiedDate=?"
 			+ " where id=?";
-
-    public static final String GET_ALL_FROM_EG_BUSINESSCATEGORY = "Select * from eg_businesscategory";
 	
-	public static final String GET_CATEGORY_BY_NAME_AND_TENANTID= GET_ALL_FROM_EG_BUSINESSCATEGORY
+	public static final String GET_CATEGORY_BY_NAME_AND_TENANTID="Select * from eg_businesscategory"
 			+" where name=? and tenantId=?";
 	
-	public static final String GET_CATEGORY_BY_CODE_AND_TENANTID=GET_ALL_FROM_EG_BUSINESSCATEGORY
+	public static final String GET_CATEGORY_BY_CODE_AND_TENANTID="Select * from eg_businesscategory"
 			+" where code=? and tenantId=?";
 	
-	public static final String GET_CATEGORY_BY_ID_AND_TENANTID=GET_ALL_FROM_EG_BUSINESSCATEGORY
+	public static final String GET_CATEGORY_BY_ID_AND_TENANTID="Select * from eg_businesscategory"
 			+" where id=? and tenantId=?";
 
-	private static final String GET_CATEGORY_BY_CODE_TENANTID_AND_ID =GET_ALL_FROM_EG_BUSINESSCATEGORY
+	private static final String GET_CATEGORY_BY_CODE_TENANTID_AND_ID ="Select * from eg_businesscategory"
 			+" where code=? and tenantId=? and id != ?";
 
-	private static final String GET_CATEGORY_BY_NAME_TENANTID_AND_ID = GET_ALL_FROM_EG_BUSINESSCATEGORY
+	private static final String GET_CATEGORY_BY_NAME_TENANTID_AND_ID = "Select * from eg_businesscategory"
 			+" where name=? and tenantId=? and id != ?";
     @Autowired 
     private JdbcTemplate jdbcTemplate;

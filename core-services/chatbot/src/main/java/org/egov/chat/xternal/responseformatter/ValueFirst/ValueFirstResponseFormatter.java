@@ -55,13 +55,10 @@ public class ValueFirstResponseFormatter implements ResponseFormatter {
     @Autowired
     private FileStore fileStore;
 
-    private static final String PUT_IMAGE = "image";
-    private static final String REQUEST_SET_SMS_TEXT = "$.SMS[0].@TEXT";
-
     private Map<String, String> mimeTypeToAttachmentTypeMapping = new HashMap<String, String>() {{
         put("application/pdf", "document");
-        put("image/jpeg", PUT_IMAGE);
-        put("image/png", PUT_IMAGE);
+        put("image/jpeg", "image");
+        put("image/png", "image");
     }};
 
     @Override
@@ -145,20 +142,20 @@ public class ValueFirstResponseFormatter implements ResponseFormatter {
                 request = JsonPath.parse(valueFirstTextMessageRequestBody);
                 String message = response.at(ChatNodeJsonPointerConstants.responseText).asText();
                 String encodedMessage = URLEncoder.encode(message, "UTF-8");
-                request.set(REQUEST_SET_SMS_TEXT, encodedMessage);
+                request.set("$.SMS[0].@TEXT", encodedMessage);
             } else if (type.equalsIgnoreCase("contactcard")) {
                 request = JsonPath.parse(valueFirstTextMessageRequestBody);
                 String message = response.at(ChatNodeJsonPointerConstants.responseText).asText();
                 String encodedMessage = URLEncoder.encode(message, "UTF-8");
-                request.set(REQUEST_SET_SMS_TEXT, encodedMessage);
-            } else if (type.equalsIgnoreCase(PUT_IMAGE)) {
+                request.set("$.SMS[0].@TEXT", encodedMessage);
+            } else if (type.equalsIgnoreCase("image")) {
                 String fileStoreId = response.at(ChatNodeJsonPointerConstants.fileStoreId).asText();
                 File file = fileStore.getFileForFileStoreId(fileStoreId);
                 String base64Image = fileStore.getBase64EncodedStringOfFile(file);
                 file.delete();
                 request = JsonPath.parse(valueFirstImageMessageRequestBody);
                 String message = response.at(ChatNodeJsonPointerConstants.responseText).asText();
-                request.set(REQUEST_SET_SMS_TEXT, base64Image);
+                request.set("$.SMS[0].@TEXT", base64Image);
                 request.set("$.SMS[0].@CAPTION", message);
                 String uniqueImageMessageId = UUID.randomUUID().toString();
                 request.set("$.SMS[0].@ID", uniqueImageMessageId);

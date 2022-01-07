@@ -7,15 +7,12 @@ import static org.junit.Assert.assertTrue;
 
 public class ValidateRequestTest {
 
-    private static final String VALIDATE_REQUEST_IDENTITY = "identity";
-    private static final String VALIDATE_REQUEST_TENANT = "tenant";
-
     @Test(expected = InvalidTokenValidateRequestException.class)
     public void test_should_throw_validation_exception_when_tenant_id_is_not_present() {
         final ValidateRequest validateRequest = ValidateRequest.builder()
                 .otp("otp")
                 .tenantId(null)
-                .identity(VALIDATE_REQUEST_IDENTITY)
+                .identity("identity")
                 .build();
 
         assertTrue(validateRequest.isTenantIdAbsent());
@@ -26,7 +23,7 @@ public class ValidateRequestTest {
     public void test_should_throw_validation_exception_when_identity_is_not_present() {
         final ValidateRequest validateRequest = ValidateRequest.builder()
                 .otp("otp")
-                .tenantId(VALIDATE_REQUEST_TENANT)
+                .tenantId("tenant")
                 .identity(null)
                 .build();
 
@@ -38,8 +35,8 @@ public class ValidateRequestTest {
     public void test_should_throw_validation_exception_when_otp_is_not_present() {
         final ValidateRequest validateRequest = ValidateRequest.builder()
                 .otp(null)
-                .tenantId(VALIDATE_REQUEST_TENANT)
-                .identity(VALIDATE_REQUEST_IDENTITY)
+                .tenantId("tenant")
+                .identity("identity")
                 .build();
 
         assertTrue(validateRequest.isOtpAbsent());
@@ -50,8 +47,8 @@ public class ValidateRequestTest {
     public void test_should_not_throw_validation_exception_when_request_has_mandatory_parameters() {
         final ValidateRequest validateRequest = ValidateRequest.builder()
                 .otp("otp")
-                .tenantId(VALIDATE_REQUEST_TENANT)
-                .identity(VALIDATE_REQUEST_IDENTITY)
+                .tenantId("tenant")
+                .identity("identity")
                 .build();
 
         validateRequest.validate();

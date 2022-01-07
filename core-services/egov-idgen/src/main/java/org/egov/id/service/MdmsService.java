@@ -36,7 +36,8 @@ public class MdmsService {
     private static final String formatMaster = "IdFormat";
     private static final String formatModule = "common-masters";
 
-    private static final String CUSTOM_EXCEPTION_PARSING_ERROR = "PARSING ERROR";
+    private static final String PARSING_ERROR="PARSING ERROR";
+
 
     public MdmsResponse getMasterData(RequestInfo requestInfo, String tenantId,
                                       Map<String, List<MasterDetail>> masterDetails) {
@@ -69,12 +70,12 @@ public class MdmsService {
                 cityCode = getCity.get(tenantMaster);
             }
             if(cityCode== null){
-                throw new CustomException(CUSTOM_EXCEPTION_PARSING_ERROR, "City code is Null/not valid");
+                throw new CustomException(PARSING_ERROR, "City code is Null/not valid");
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
             log.error("Error occurred while fetching city code", e);
-            throw new CustomException(CUSTOM_EXCEPTION_PARSING_ERROR, "Failed to get citycode from MDMS");
+            throw new CustomException(PARSING_ERROR, "Failed to get citycode from MDMS");
         }
         return cityCode;
     }
@@ -98,7 +99,7 @@ public class MdmsService {
         } catch (Exception e) {
             // TODO Auto-generated catch block
             log.error("Error while fetching id format", e);
-            throw new CustomException(CUSTOM_EXCEPTION_PARSING_ERROR, "Failed to get formatid from MDMS");
+            throw new CustomException(PARSING_ERROR, "Failed to get formatid from MDMS");
         }
         return idFormat;
     }
@@ -164,7 +165,7 @@ public class MdmsService {
         } catch (Exception e) {
             // TODO Auto-generated catch block
             log.error("MDMS Fetch failed", e);
-            throw new CustomException(CUSTOM_EXCEPTION_PARSING_ERROR, "Failed to get citycode/formatid from MDMS");
+            throw new CustomException(PARSING_ERROR, "Failed to get citycode/formatid from MDMS");
         }
         Map<String, String> mdmsCallMap = new HashMap();
         mdmsCallMap.put(formatMaster, idFormatFromMdms);

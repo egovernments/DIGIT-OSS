@@ -31,6 +31,10 @@ public class BoundaryServiceTest {
 
 	private BoundaryService boundaryService;
 
+	private static final String TENANT_ID="tenantId";
+
+	private static final String DEFAULT="default";
+
 	@Before
 	public void before() {
 		boundaryService = new BoundaryService(boundaryTypeService,
@@ -42,19 +46,19 @@ public class BoundaryServiceTest {
 	public void test_should_fetch_boundaries_for_boundarytype_and_hierarchytype_name() {
 
 		boundaryService.getBoundariesByBndryTypeNameAndHierarchyTypeNameAndTenantId("Ward", "ADMINISTRATION",
-				"tenantId");
+				TENANT_ID);
 
 		verify(boundaryRepository).getBoundariesByBndryTypeNameAndHierarchyTypeNameAndTenantId("Ward", "ADMINISTRATION",
-				"tenantId");
+				TENANT_ID);
 	}
 
 	@Test
 	@Transactional
 	public void test_should_fetch_boundaries_for_boundarytype_and_tenantid() {
 
-		boundaryService.getAllBoundariesByBoundaryTypeIdAndTenantId(1l, "tenantId");
+		boundaryService.getAllBoundariesByBoundaryTypeIdAndTenantId(1l, TENANT_ID);
 
-		verify(boundaryRepository).getAllBoundariesByBoundaryTypeIdAndTenantId(1l, "tenantId");
+		verify(boundaryRepository).getAllBoundariesByBoundaryTypeIdAndTenantId(1l, TENANT_ID);
 	}
 
 	private List<Boundary> getBoundaries() {
@@ -66,14 +70,14 @@ public class BoundaryServiceTest {
 		boundary1.setId(1l);
 		boundary1.setName("Srikakulam  Municipality");
 		boundary1.setBoundaryNum(1l);
-		boundary1.setTenantId("default");
+		boundary1.setTenantId(DEFAULT);
 
 		BoundaryType bt1 = new BoundaryType();
 
 		bt1.setId("1l");
 		bt1.setName("City");
 		bt1.setHierarchy(1l);
-		bt1.setTenantId("default");
+		bt1.setTenantId(DEFAULT);
 		boundary1.setBoundaryType(bt1);
 
 		Boundary boundary2 = Boundary.builder().build();
@@ -81,7 +85,7 @@ public class BoundaryServiceTest {
 		boundary2.setId(2l);
 		boundary2.setName("Zone-1");
 		boundary2.setBoundaryNum(1l);
-		boundary2.setTenantId("default");
+		boundary2.setTenantId(DEFAULT);
 
 		boundary2.setParent(boundary1);
 
@@ -90,7 +94,7 @@ public class BoundaryServiceTest {
 		bt2.setId("3l");
 		bt2.setName("Zone");
 		bt2.setHierarchy(3l);
-		bt2.setTenantId("default");
+		bt2.setTenantId(DEFAULT);
 		boundary2.setBoundaryType(bt2);
 
 		boundaries.add(boundary1);

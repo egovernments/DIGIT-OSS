@@ -23,12 +23,6 @@ public class RequestEnrichmentFilterTest {
     private RequestEnrichmentFilter filter;
     private Resources resources = new Resources();
 
-    private static final String EXPECTED_CORREALTION_ID = "someCorrelationId";
-    private static final String CURRENT_CONTEXT_CORRELATION_ID = "CORRELATION_ID";
-    private static final String SET_REQUEST_URI_CREATE = "http://foo/bar/v1/_create";
-    private static final String CURRENT_CONTEXT_USER_INFO = "USER_INFO";
-    private static final String SET_TENANT_ID_DEFAULT = "default";
-
     @Before
     public void before() {
         filter = new RequestEnrichmentFilter();
@@ -51,8 +45,8 @@ public class RequestEnrichmentFilterTest {
         final MockHttpServletRequest request = new MockHttpServletRequest();
         request.setMethod("GET");
         currentContext.setRequest(request);
-        final String expectedCorrelationId = EXPECTED_CORREALTION_ID;
-        currentContext.set(CURRENT_CONTEXT_CORRELATION_ID, expectedCorrelationId);
+        final String expectedCorrelationId = "someCorrelationId";
+        currentContext.set("CORRELATION_ID", expectedCorrelationId);
 
         filter.run();
 
@@ -66,13 +60,13 @@ public class RequestEnrichmentFilterTest {
         final RequestContext currentContext = RequestContext.getCurrentContext();
         final MockHttpServletRequest request = new MockHttpServletRequest();
         request.setMethod("POST");
-        request.setRequestURI(SET_REQUEST_URI_CREATE);
+        request.setRequestURI("http://foo/bar/v1/_create");
         request.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         request.setContent(getContent("postRequestFromConsumer.json"));
         currentContext.setRequest(request);
-        final String expectedCorrelationId = EXPECTED_CORREALTION_ID;
-        currentContext.set(CURRENT_CONTEXT_CORRELATION_ID, expectedCorrelationId);
-        currentContext.set(CURRENT_CONTEXT_USER_INFO, null);
+        final String expectedCorrelationId = "someCorrelationId";
+        currentContext.set("CORRELATION_ID", expectedCorrelationId);
+        currentContext.set("USER_INFO", null);
 
         filter.run();
 
@@ -85,13 +79,13 @@ public class RequestEnrichmentFilterTest {
         final RequestContext currentContext = RequestContext.getCurrentContext();
         final MockHttpServletRequest request = new MockHttpServletRequest();
         request.setMethod("POST");
-        request.setRequestURI(SET_REQUEST_URI_CREATE);
+        request.setRequestURI("http://foo/bar/v1/_create");
         request.setContent(getContent("postRequestFromConsumer.json"));
         request.setContentType(MediaType.APPLICATION_JSON_VALUE);
         currentContext.setRequest(request);
-        final String expectedCorrelationId = EXPECTED_CORREALTION_ID;
-        currentContext.set(CURRENT_CONTEXT_CORRELATION_ID, expectedCorrelationId);
-        currentContext.set(CURRENT_CONTEXT_USER_INFO, getUser());
+        final String expectedCorrelationId = "someCorrelationId";
+        currentContext.set("CORRELATION_ID", expectedCorrelationId);
+        currentContext.set("USER_INFO", getUser());
 
         filter.run();
 
@@ -106,8 +100,8 @@ public class RequestEnrichmentFilterTest {
         request.setMethod("GET");
         request.setRequestURI("http://foo/bar/v1/_search");
         currentContext.setRequest(request);
-        currentContext.set(CURRENT_CONTEXT_CORRELATION_ID, EXPECTED_CORREALTION_ID);
-        currentContext.set(CURRENT_CONTEXT_USER_INFO, getUser());
+        currentContext.set("CORRELATION_ID", "someCorrelationId");
+        currentContext.set("USER_INFO", getUser());
 
         filter.run();
 
@@ -121,12 +115,12 @@ public class RequestEnrichmentFilterTest {
         final RequestContext currentContext = RequestContext.getCurrentContext();
         final MockHttpServletRequest request = new MockHttpServletRequest();
         request.setMethod("POST");
-        request.setRequestURI(SET_REQUEST_URI_CREATE);
+        request.setRequestURI("http://foo/bar/v1/_create");
         request.setContent(getContent("postRequestWithoutRequestInfoFromConsumer.json"));
         currentContext.setRequest(request);
-        final String expectedCorrelationId = EXPECTED_CORREALTION_ID;
-        currentContext.set(CURRENT_CONTEXT_CORRELATION_ID, expectedCorrelationId);
-        currentContext.set(CURRENT_CONTEXT_USER_INFO, getUser());
+        final String expectedCorrelationId = "someCorrelationId";
+        currentContext.set("CORRELATION_ID", expectedCorrelationId);
+        currentContext.set("USER_INFO", getUser());
 
         filter.run();
 
@@ -142,18 +136,18 @@ public class RequestEnrichmentFilterTest {
         mockUser.setName("name");
         mockUser.setMobileNumber("1234567890");
         mockUser.setEmailId("fu@bar.com");
-        mockUser.setTenantId(SET_TENANT_ID_DEFAULT);
+        mockUser.setTenantId("default");
         mockUser.setType("EMPLOYEE");
         Role mockRole1 = new Role();
         mockRole1.setId(1L);
         mockRole1.setName("Employee");
         mockRole1.setCode("EMPLOYEE");
-        mockRole1.setTenantId(SET_TENANT_ID_DEFAULT);
+        mockRole1.setTenantId("default");
         Role mockRole2 = new Role();
         mockRole2.setId(2L);
         mockRole2.setName("ULB Operator");
         mockRole2.setCode("ULB");
-        mockRole2.setTenantId(SET_TENANT_ID_DEFAULT);
+        mockRole2.setTenantId("default");
         List<Role> roles = new ArrayList<>();
         roles.add(mockRole1);
         roles.add(mockRole2);

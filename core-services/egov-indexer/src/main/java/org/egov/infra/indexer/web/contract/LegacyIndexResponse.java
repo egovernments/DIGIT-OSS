@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LegacyIndexResponse {
 	
-	public ResponseInfo responseInfo;
+	private ResponseInfo responseInfo;
 	
-	public String url;
+	private String url;
 			
-	public String message;
+	private String message;
 	
-	public String jobId;
+	private String jobId;
 
 }

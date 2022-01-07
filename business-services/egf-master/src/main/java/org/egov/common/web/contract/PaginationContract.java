@@ -52,8 +52,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class PaginationContract {
 
-	public static int DEFAULT_PAGE_SIZE = 500;
-	public static int DEFAULT_PAGE_OFFSET = 0;
+	public static final int DEFAULT_PAGE_SIZE = 500;
+	public static final int DEFAULT_PAGE_OFFSET = 0;
 
 	private Integer totalResults;
 

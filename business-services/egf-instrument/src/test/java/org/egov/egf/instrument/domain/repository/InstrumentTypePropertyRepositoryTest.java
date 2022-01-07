@@ -25,6 +25,8 @@ public class InstrumentTypePropertyRepositoryTest {
     @Mock
     private InstrumentTypePropertyJdbcRepository instrumentTypePropertyJdbcRepository;
 
+    private static final String STATUS_ID="statusId";
+
     @Test
     public void test_find_by_id() {
         InstrumentTypePropertyEntity entity = getInstrumentTypePropertyEntity();
@@ -94,9 +96,9 @@ public class InstrumentTypePropertyRepositoryTest {
         InstrumentTypeProperty instrumentTypePropertyDetail = new InstrumentTypeProperty();
         instrumentTypePropertyDetail.setTransactionType(TransactionType.Credit);
         instrumentTypePropertyDetail.setReconciledOncreate(true);
-        instrumentTypePropertyDetail.setStatusOnCreate(FinancialStatusContract.builder().id("statusId").build());
-        instrumentTypePropertyDetail.setStatusOnReconcile(FinancialStatusContract.builder().id("statusId").build());
-        instrumentTypePropertyDetail.setStatusOnUpdate(FinancialStatusContract.builder().id("statusId").build());
+        instrumentTypePropertyDetail.setStatusOnCreate(FinancialStatusContract.builder().id(STATUS_ID).build());
+        instrumentTypePropertyDetail.setStatusOnReconcile(FinancialStatusContract.builder().id(STATUS_ID).build());
+        instrumentTypePropertyDetail.setStatusOnUpdate(FinancialStatusContract.builder().id(STATUS_ID).build());
         instrumentTypePropertyDetail.setTenantId("default");
         return instrumentTypePropertyDetail;
     }
@@ -105,9 +107,9 @@ public class InstrumentTypePropertyRepositoryTest {
         InstrumentTypePropertyEntity entity = new InstrumentTypePropertyEntity();
         entity.setTransactionType(TransactionType.Credit.name());
         entity.setReconciledOncreate(true);
-        entity.setStatusOnCreateId("statusId");
-        entity.setStatusOnReconcileId("statusId");
-        entity.setStatusOnUpdateId("statusId");
+        entity.setStatusOnCreateId(STATUS_ID);
+        entity.setStatusOnReconcileId(STATUS_ID);
+        entity.setStatusOnUpdateId(STATUS_ID);
         entity.setTenantId("default");
         return entity;
     }

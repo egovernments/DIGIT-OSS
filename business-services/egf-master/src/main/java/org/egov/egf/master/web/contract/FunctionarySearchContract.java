@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class FunctionarySearchContract extends FunctionaryContract { private String ids; 
+public class FunctionarySearchContract extends FunctionaryContract { private String ids;
 private String  sortBy; 
 private Integer pageSize; 
 private Integer offset; 

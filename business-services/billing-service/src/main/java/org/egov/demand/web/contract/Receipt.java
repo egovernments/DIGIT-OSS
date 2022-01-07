@@ -26,6 +26,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode
+
 public class Receipt {
 
 	private String tenantId;

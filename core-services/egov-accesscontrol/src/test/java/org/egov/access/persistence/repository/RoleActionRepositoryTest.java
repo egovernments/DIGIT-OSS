@@ -31,10 +31,6 @@ public class RoleActionRepositoryTest {
 	@Mock
 	private NamedParameterJdbcTemplate namedParamJdbcTemplat;
 
-	private static final String CITIZEN_KEY = "CITIZEN";
-	private static final String RECEIVING_MODE_KEY = "Get all ReceivingMode";
-	private static final String DEFAULT_KEY = "default";
-
 	@Test
 	@Sql(scripts = { "/sql/clearRole.sql", "/sql/clearAction.sql", "/sql/insertRoleData.sql",
 			"/sql/insertActionData.sql" })
@@ -42,11 +38,11 @@ public class RoleActionRepositoryTest {
 
 		RoleActionsRequest roleRequest = new RoleActionsRequest();
 
-		Role role = Role.builder().code(CITIZEN_KEY).build();
+		Role role = Role.builder().code("CITIZEN").build();
 
 		Action action1 = new Action();
 
-		action1.setName(RECEIVING_MODE_KEY);
+		action1.setName("Get all ReceivingMode");
 
 		Action action2 = new Action();
 
@@ -59,7 +55,7 @@ public class RoleActionRepositoryTest {
 		roleRequest.setRole(role);
 
 		roleRequest.setActions(actions);
-		roleRequest.setTenantId(DEFAULT_KEY);
+		roleRequest.setTenantId("default");
 
 		roleRequest.setRequestInfo(getRequestInfo());
 
@@ -67,11 +63,11 @@ public class RoleActionRepositoryTest {
 
 		assertThat(roleActions.size()).isEqualTo(2);
 
-		assertThat(roleActions.get(0).getRoleCode().equals(CITIZEN_KEY));
+		assertThat(roleActions.get(0).getRoleCode().equals("CITIZEN"));
 
-		assertThat(roleActions.get(1).getRoleCode().equals(CITIZEN_KEY));
+		assertThat(roleActions.get(1).getRoleCode().equals("CITIZEN"));
 
-		assertThat(roleActions.get(1).getRoleCode().equals(DEFAULT_KEY));
+		assertThat(roleActions.get(1).getRoleCode().equals("default"));
 
 	}
 
@@ -84,7 +80,7 @@ public class RoleActionRepositoryTest {
 
 		Action action1 = new Action();
 
-		action1.setName(RECEIVING_MODE_KEY);
+		action1.setName("Get all ReceivingMode");
 
 		Action action2 = new Action();
 
@@ -96,7 +92,7 @@ public class RoleActionRepositoryTest {
 		actions.add(action2);
 
 		roleRequest.setActions(actions);
-		roleRequest.setTenantId(DEFAULT_KEY);
+		roleRequest.setTenantId("default");
 
 		roleRequest.setRequestInfo(getRequestInfo());
 
@@ -113,9 +109,9 @@ public class RoleActionRepositoryTest {
 
 		RoleActionsRequest roleRequest = new RoleActionsRequest();
 
-		Role role = Role.builder().code(CITIZEN_KEY).build();
+		Role role = Role.builder().code("CITIZEN").build();
 
-		roleRequest.setTenantId(DEFAULT_KEY);
+		roleRequest.setTenantId("default");
 
 		roleRequest.setRequestInfo(getRequestInfo());
 
@@ -136,9 +132,9 @@ public class RoleActionRepositoryTest {
 
 		List<Action> actions = new ArrayList<Action>();
 
-		Role role = Role.builder().code(CITIZEN_KEY).build();
+		Role role = Role.builder().code("CITIZEN").build();
 
-		roleRequest.setTenantId(DEFAULT_KEY);
+		roleRequest.setTenantId("default");
 
 		roleRequest.setRequestInfo(getRequestInfo());
 
@@ -159,7 +155,7 @@ public class RoleActionRepositoryTest {
 
 		RoleActionsRequest roleActionRequest = new RoleActionsRequest();
 
-		Action action1 = Action.builder().name(RECEIVING_MODE_KEY).build();
+		Action action1 = Action.builder().name("Get all ReceivingMode").build();
 		Action action2 = Action.builder().name("Get all CompaintTypeCategory").build();
 
 		List<Action> list = new ArrayList<Action>();
@@ -205,7 +201,7 @@ public class RoleActionRepositoryTest {
 
 		Role role = Role.builder().code("PGR").build();
 
-		Action action1 = Action.builder().name(RECEIVING_MODE_KEY).build();
+		Action action1 = Action.builder().name("Get all ReceivingMode").build();
 		Action action2 = Action.builder().name("Get all CompaintTypeCategory").build();
 
 		List<Action> list = new ArrayList<Action>();

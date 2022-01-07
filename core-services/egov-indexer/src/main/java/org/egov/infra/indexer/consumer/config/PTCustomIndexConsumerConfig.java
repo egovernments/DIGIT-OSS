@@ -61,7 +61,7 @@ public class PTCustomIndexConsumerConfig implements ApplicationRunner {
 	@Autowired
 	private IndexerApplicationRunnerImpl runner;
     
-    private String[] topics = {};
+    public String[] topics = {};
     
      
     @Override

@@ -20,6 +20,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Setter
 @ToString
+
 public class ServiceHistory {
 
 	private String id;

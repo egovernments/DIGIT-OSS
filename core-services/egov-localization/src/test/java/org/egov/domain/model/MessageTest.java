@@ -7,17 +7,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class MessageTest {
-
-    private static final String MODULE_KEY = "module";
-    public static final String EN_IN_KEY = "en_IN";
-    public static final String CODE1_KEY = "code1";
-
+    private static final String STRING1="module";
     @Test
     public void test_equality_should_be_true_when_both_instances_of_message_have_same_field_values() {
         final MessageIdentity messageIdentity1 = MessageIdentity.builder()
             .tenant(new Tenant("tenant"))
             .locale("locale")
-            .module(MODULE_KEY)
+            .module(string1)
             .code("code")
             .build();
         final Message message1 = Message.builder()
@@ -28,7 +24,7 @@ public class MessageTest {
         final MessageIdentity messageIdentity2 = MessageIdentity.builder()
             .tenant(new Tenant("tenant"))
             .locale("locale")
-            .module(MODULE_KEY)
+            .module(string1)
             .code("code")
             .build();
         final Message message2 = Message.builder()
@@ -42,9 +38,9 @@ public class MessageTest {
     @Test
     public void test_should_return_true_when_given_tenant_is_more_specific_than_other_tenant() {
         final MessageIdentity messageIdentity1 = MessageIdentity.builder()
-            .locale(EN_IN_KEY)
-            .module(MODULE_KEY)
-            .code(CODE1_KEY)
+            .locale("en_IN")
+            .module(string1)
+            .code("code1")
             .tenant(new Tenant("mh.panvel"))
             .build();
         final Message message1 = Message.builder()
@@ -52,9 +48,9 @@ public class MessageTest {
             .messageIdentity(messageIdentity1)
             .build();
         final MessageIdentity messageIdentity2 = MessageIdentity.builder()
-            .locale(EN_IN_KEY)
-            .module(MODULE_KEY)
-            .code(CODE1_KEY)
+            .locale("en_IN")
+            .module(string1)
+            .code("code1")
             .tenant(new Tenant("mh"))
             .build();
         final Message message2 = Message.builder()
@@ -67,9 +63,9 @@ public class MessageTest {
     @Test
     public void test_should_return_false_when_given_tenant_is_less_specific_than_other_tenant() {
         final MessageIdentity messageIdentity1 = MessageIdentity.builder()
-            .locale(EN_IN_KEY)
-            .module(MODULE_KEY)
-            .code(CODE1_KEY)
+            .locale("en_IN")
+            .module(string1)
+            .code("code1")
             .tenant(new Tenant("mh.panvel"))
             .build();
         final Message message1 = Message.builder()
@@ -77,9 +73,9 @@ public class MessageTest {
             .messageIdentity(messageIdentity1)
             .build();
         final MessageIdentity messageIdentity2 = MessageIdentity.builder()
-            .locale(EN_IN_KEY)
-            .module(MODULE_KEY)
-            .code(CODE1_KEY)
+            .locale("en_IN")
+            .module(string1)
+            .code("code1")
             .tenant(new Tenant("mh"))
             .build();
         final Message message2 = Message.builder()

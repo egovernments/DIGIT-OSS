@@ -197,6 +197,6 @@ public class ErrorConstants {
 	public static final String CITIZEN_TYPE_CODE = "CITIZEN";
 
 	public static final String HRMS_INVALID_SEARCH_CITIZEN_CODE = "ERR_HRMS_INVALID_SEARCH_CITIZEN";
-	public static final String HRMS_INVALID_SEARCH_CITIZEN_MSG = "Citizen are not allowed to access employee search with Ids.";
+	public static final String HRMS_INVALID_SEARCH_CITIZEN_MSG = "Citizen are not allowed to access employee search.";
 
 }

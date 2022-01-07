@@ -48,8 +48,6 @@ public class RoleController {
 
 	private RoleService roleService;
 
-	private static final String OBJECT_KEY = " Object";
-
 	@Autowired
 	private ResponseInfoFactory responseInfoFactory;
 
@@ -186,7 +184,7 @@ public class RoleController {
 			if (roleRequest.getRoles().get(i).getName() == null || roleRequest.getRoles().get(i).getName().isEmpty()) {
 				final ErrorField errorField = ErrorField.builder().code(AccessControlConstants.ROLE_NAME_MANDATORY_CODE)
 						.message(AccessControlConstants.ROLE_NAME_MANADATORY_ERROR_MESSAGE + " in " + (i + 1)
-								+ OBJECT_KEY)
+								+ " Object")
 						.field(AccessControlConstants.ROLE_NAME_MANADATORY_FIELD_NAME).build();
 				errorFields.add(errorField);
 			}
@@ -199,7 +197,7 @@ public class RoleController {
 			if (roleService.checkRoleNameDuplicationValidationErrors(roleRequest.getRoles().get(i).getName())) {
 				final ErrorField errorField = ErrorField.builder().code(AccessControlConstants.ROLE_NAME_DUPLICATE_CODE)
 						.message(
-								AccessControlConstants.ROLE_NAME_DUPLICATE_ERROR_MESSAGE + " in " + (i + 1) + OBJECT_KEY)
+								AccessControlConstants.ROLE_NAME_DUPLICATE_ERROR_MESSAGE + " in " + (i + 1) + " Object")
 						.field(AccessControlConstants.ROLE_NAME_DUPLICATEFIELD_NAME).build();
 				errorFields.add(errorField);
 			}
@@ -214,7 +212,7 @@ public class RoleController {
 				final ErrorField errorField = ErrorField.builder()
 						.code(AccessControlConstants.ROLE_NAME_DOES_NOT_EXIT_CODE)
 						.message(AccessControlConstants.ROLE_NAME_DOES_NOT_EXIT_ERROR_MESSAGE + " in " + (i + 1)
-								+ OBJECT_KEY)
+								+ " Object")
 						.field(AccessControlConstants.ROLE_NAME_DOES_NOT_EXIT_FIELD_NAME).build();
 				errorFields.add(errorField);
 			}
