@@ -177,7 +177,7 @@ export default class AlternateMobileDialog extends React.Component {
         } else {
           this.setMessage("PT_MOBILE_NUM_UPDATED_SUCCESS", "SUCCESS", true);
           setTimeout(() => {
-            window.location.reload();
+            window.location.href.includes('withoutAuth')?this.props.closeDialog():window.location.reload();
           }, 2500);
         }
       })
