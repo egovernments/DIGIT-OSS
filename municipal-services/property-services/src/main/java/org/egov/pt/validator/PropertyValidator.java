@@ -574,10 +574,12 @@ public class PropertyValidator {
 			throw new CustomException("EG_PT_INVALID_SEARCH", "Inbox search has been disabled for property service");
 		}
 		
-		if(propertyUtil.isPropertySearchOpen(user)) {
-			
-			if(StringUtils.isEmpty(criteria.getLocality()))
-					throw new CustomException("EG_PT_INVALID_SEARCH"," locality is mandatory for open search");
+		if (propertyUtil.isPropertySearchOpen(user)) {
+
+			if (StringUtils.isEmpty(criteria.getMobileNumber()) && CollectionUtils.isEmpty(criteria.getPropertyIds())
+					&& StringUtils.isEmpty(criteria.getLocality()))
+				throw new CustomException("EG_PT_INVALID_SEARCH",
+						" locality is mandatory for open search when PropertyId OR MobileNumber is not provided");
 		}
 		
 		
