@@ -881,7 +881,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
                 && !commonBean.getAccountNumberId().equals(""))
             bankaccount = (Bankaccount) persistenceService.find("from Bankaccount where id=?",
                     Long.valueOf(commonBean.getAccountNumberId()));
-        if (bankaccount.getBankbranch().getId() != null)
+        if (bankaccount!=null && bankaccount.getBankbranch().getId() != null)
             addDropdownData("accNumList",
                     bankAccountService.getBankAccounts(voucherHeader.getFundId().getId(),
                             bankaccount.getBankbranch().getId(), bankaccount.getBankbranch().getBank().getId(),

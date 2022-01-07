@@ -1326,7 +1326,7 @@ public class BudgetReportAction extends BaseFormAction {
         if (departmentBudget)
             path = WORKINGCOPYFORFINALAPPROVER;
         paramMap.put("financialYearForRE", financialYearForRE.getFinYearRange());
-        paramMap.put("financialYearForBE", financialYearForBE.getFinYearRange());
+        paramMap.put("financialYearForBE", financialYearForBE==null?"" : financialYearForBE.getFinYearRange());
         paramMap.put("heading", " FUNCTIONWISE  BUDGET SUMMARY ");
         return paramMap;
 
@@ -1520,7 +1520,9 @@ public class BudgetReportAction extends BaseFormAction {
             BigDecimal tempApprAmnt = budgetDetail.getApprovedAmount() == null ? BigDecimal.ZERO : budgetDetail.getApprovedAmount();
             approvedAmount = approvedAmount.add(tempApprAmnt);
             BigDecimal tempReAppAmnt = reAppropriationMap.get(budgetDetail.getId()) == null ? BigDecimal.ZERO : reAppropriationMap.get(budgetDetail.getId());
+            if(reAppAmount!=null){
             reAppAmount = reAppAmount.add(tempReAppAmnt);
+            }
             if ("RE".equalsIgnoreCase(isBeRe) && !getConsiderReAppropriationAsSeperate())
             {
                 row.setAmount(approvedAmount.add(reAppAmount == null ? BigDecimal.ZERO : reAppAmount));
@@ -1901,7 +1903,7 @@ public class BudgetReportAction extends BaseFormAction {
                     bv.setNarration(glName);
                     bv.setDeptCode(beDetail.getExecutingDepartment());
                     bv.setGlCode(glcode);
-                    bv.setFunctionCode(reDetail.getFunction().getCode());
+                    bv.setFunctionCode(reDetail==null?"":reDetail.getFunction().getCode());
                     bv.setReProposalAmount(reDetail.getOriginalAmount());
                     bv.setReRecomAmount(reDetail.getApprovedAmount());
                     bv.setRowStyle("typerow");
@@ -2024,7 +2026,7 @@ public class BudgetReportAction extends BaseFormAction {
      */
     private CFinancialYear getFinYear(final String option) {
         final Calendar cal = Calendar.getInstance();
-        CFinancialYear finYear = null;
+        CFinancialYear finYear =null;
         if (option.equalsIgnoreCase("previous")) {
             cal.setTime(budgetReport.getFinancialYear().getStartingDate());
             cal.add(Calendar.DATE, -1);

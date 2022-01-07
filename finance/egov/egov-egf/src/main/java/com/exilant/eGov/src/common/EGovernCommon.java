@@ -452,7 +452,7 @@ public class EGovernCommon extends AbstractTask {
         if (list == null || list.size() == 0)
             if (LOGGER.isDebugEnabled()) LOGGER.debug("Else resultset in getAccountBalance...");
 
-        if(list!=null || list.size() > 0)
+        if(list!=null && list.size() > 0)
         {
         	opeAvailable=new BigDecimal(list.get(0).toString());
         }

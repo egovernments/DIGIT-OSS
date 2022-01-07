@@ -69,7 +69,7 @@ public class ContractVoucherService {
             errorDetails.setErrorCode("EGF-VOUCHER-1");
             errorDetails.setErrorMessage("Please send valid JSON request");
             errors.add(errorDetails);
-        }
+        }else{
         
         Voucher  voucher = request.getVouchers().get(0);
         
@@ -86,6 +86,7 @@ public class ContractVoucherService {
         }
         
         validateVoucherDate(voucher, errors, errorDetails, request);
+        }
      
         return errors;
     }

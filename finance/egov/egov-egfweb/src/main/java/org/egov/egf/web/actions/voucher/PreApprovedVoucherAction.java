@@ -849,14 +849,14 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
                 errors.add(new ValidationError("exp", "Invalid User"));
                 throw new ValidationException(errors);
             }
-        if (LOGGER.isDebugEnabled())
+        if (LOGGER.isDebugEnabled() && voucherHeader!=null)
             LOGGER.debug("Voucherheader==" + voucherHeader.getId() + ", actionname=" + parameters.get(ACTIONNAME)[0]);
         Long userId = null;
         if (parameters.get("actionName")[0].contains("approve"))
             userId = Long.valueOf(
                     parameters.get("approverUserId") != null ? Integer.valueOf(parameters.get("approverUserId")[0])
                             : ApplicationThreadLocals.getUserId().intValue());
-        else
+        else if(voucherHeader!=null)
             userId = voucherHeader.getCreatedBy();
 
         if (LOGGER.isDebugEnabled())

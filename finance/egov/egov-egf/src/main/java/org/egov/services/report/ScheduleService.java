@@ -419,7 +419,7 @@ class ChartOfAccount {
     public boolean equals(final Object obj) {
         try {
             final ChartOfAccount other = (ChartOfAccount) obj;
-            return glCode.equals(other.glCode);
+            return glCode.equals(other==null?null : other.glCode);
         } catch (final Exception e) {
             LOGGER.error("Failed :" + e.getMessage(), e);
             return false;

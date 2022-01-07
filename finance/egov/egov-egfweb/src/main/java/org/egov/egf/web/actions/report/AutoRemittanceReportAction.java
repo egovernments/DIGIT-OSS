@@ -418,7 +418,7 @@ public class AutoRemittanceReportAction extends BaseFormAction {
             paramMap.put("bankBranch", bankbranch.getBranchname());
 
         }
-        if (null != bankaccount && null != bankaccount.getId() && bankaccount.getId() != -1)
+        if (null != bankaccount && null != bankaccount.getId() && bankaccount.getId() != -1 && bankbranch!=null)
         {
             bankaccount = (Bankaccount) persistenceService.find("from Bankaccount where id =?", bankbranch.getId());
             paramMap.put("bankAccountNum", bankaccount.getAccountnumber());

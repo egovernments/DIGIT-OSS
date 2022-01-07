@@ -624,9 +624,9 @@ public class TrialBalanceAction extends BaseFormAction {
                     totalStr = numberToString(total.toString()) + " Dr";
                 tbTotal.addToAmountMap(key, totalStr);
 
-                if (totalCreditAmount != null && totalCreditAmount.signum() == -1)
+                if (totalCreditAmount != null && totalCreditAmount.signum() == -1 && total!=null)
                     totalStr = numberToString(total.abs().toString()) + " Cr";
-                else if (totalCreditAmount != null && totalCreditAmount.signum() == 1)
+                else if (totalCreditAmount != null && totalCreditAmount.signum() == 1 && total!=null)
                     totalStr = numberToString(total.toString()) + " Dr";
                 tbTotal.setAmount1(totalStr);
             }

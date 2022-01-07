@@ -438,11 +438,15 @@ public class UpdateContractorBillController extends BaseBillController {
                         egBillregister, null, mode, workFlowAction);
 
             final String approverName = String.valueOf(request.getParameter(APPROVER_NAME));
+            if(updatedEgBillregister!=null){
             final String approverDetails = financialUtils.getApproverDetails(workFlowAction,
                     updatedEgBillregister.getState(), updatedEgBillregister.getId(), approvalPosition, approverName);
 
             return "redirect:/contractorbill/success?approverDetails=" + approverDetails + "&billNumber="
                     + updatedEgBillregister.getBillnumber();
+            }
+            else 
+            	return "redirect:/contractorbill/success";
         }
     }
 

@@ -344,7 +344,7 @@ public class XMLLoader extends DefaultHandler {
         MyErrorHandler(final PrintStream out) {
             this.out = out;
         }
-
+        
         /**
          * Returns a string describing parse exception details
          */

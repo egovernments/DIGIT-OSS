@@ -110,7 +110,7 @@ public class VoucherReport {
                         LOGGER.debug("Error" + e.getMessage(), e);
                 }
 
-                return entityType.getCode() + "/" + entityType.getEntityDescription();
+				return (entityType == null ? " " : (entityType.getCode()) + "/" + entityType.getEntityDescription());
             }
         }
         return "";
@@ -125,7 +125,7 @@ public class VoucherReport {
             }
         } else if (voucherDetail != null && voucherDetail.getVoucherHeaderId() != null
                 && voucherDetail.getVoucherHeaderId().getVouchermis().getFunction() != null) {
-            final CFunction function = fetchFunction(generalLedger.getFunctionId());
+            final CFunction function = fetchFunction(generalLedger==null ? null : generalLedger.getFunctionId());
             return function == null ? "" : function.getName();
         }
         return "";

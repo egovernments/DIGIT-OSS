@@ -333,7 +333,7 @@ public class ScriptService  {
     		currentDate =  asOnDate;
 
         Script script = scriptCache.get(scriptName);
-        if (script != null && new DateTime(script.getPeriod().getEndDate()).isAfter(new DateTime(asOnDate.getTime())))
+        if (script != null && asOnDate!=null && new DateTime(script.getPeriod().getEndDate()).isAfter(new DateTime(asOnDate.getTime())))
             // Script found in cache and is still valid
             return script;
 

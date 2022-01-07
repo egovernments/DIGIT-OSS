@@ -317,7 +317,7 @@ public class RemittanceServiceImpl extends RemittanceService {
         switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
         case "V2":
         case "VERSION2":
-            if (!paymentIdSet.isEmpty()) {
+            if (paymentIdSet!=null && !paymentIdSet.isEmpty()) {
                 if (paymentSearchEndPointEnabled) {
                     final List<String> serviceCodeList = new ArrayList<>(0);
                     if (!receiptList.isEmpty()) {

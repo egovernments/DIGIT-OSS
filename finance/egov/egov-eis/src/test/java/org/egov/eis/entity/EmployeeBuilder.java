@@ -49,6 +49,8 @@ package org.egov.eis.entity;
 
 import java.lang.reflect.Field;
 
+import org.egov.infra.exception.ApplicationRuntimeException;
+
 public class EmployeeBuilder {
 
     private final Employee employee;
@@ -85,7 +87,7 @@ public class EmployeeBuilder {
             idField.setAccessible(true);
             idField.set(employee, id);
         } catch (final Exception e) {
-            throw new RuntimeException(e);
+            throw new ApplicationRuntimeException(e.getMessage());
         }
         return this;
     }

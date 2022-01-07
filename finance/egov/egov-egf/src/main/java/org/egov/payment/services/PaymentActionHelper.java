@@ -423,7 +423,7 @@ public class PaymentActionHelper {
             wfInitiator = getWorkflowInitiator(paymentheader);
 
         if (FinancialConstants.BUTTONREJECT.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {
-            if (wfInitiator.equals(userAssignment)) {
+            if (wfInitiator!=null && wfInitiator.equals(userAssignment)) {
                 paymentheader.transition().end().withSenderName(user.getName())
                         .withComments(workflowBean.getApproverComments())
                         .withDateInfo(currentDate.toDate());
@@ -431,7 +431,7 @@ public class PaymentActionHelper {
                 final String stateValue = FinancialConstants.WORKFLOW_STATE_REJECTED;
                 paymentheader.transition().progressWithStateCopy().withSenderName(user.getName()).withComments(workflowBean.getApproverComments())
                         .withStateValue(stateValue).withDateInfo(currentDate.toDate())
-                        .withOwner(wfInitiator.getPosition()).withNextAction(FinancialConstants.WF_STATE_EOA_Approval_Pending);
+                        .withOwner(wfInitiator==null? null : wfInitiator.getPosition()).withNextAction(FinancialConstants.WF_STATE_EOA_Approval_Pending);
             }
 
         } else if (FinancialConstants.BUTTONAPPROVE.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {

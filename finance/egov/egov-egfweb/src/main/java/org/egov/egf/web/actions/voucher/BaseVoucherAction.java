@@ -591,7 +591,7 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 					else {
 						final CFunction function = null;// (CFunction)persistenceService.get(CFunction.class,Long.valueOf(functionId));
 						addActionError(getText("journalvoucher.subledger.entrymissingFunc",
-								new String[] { map.get("glcode").toString(), function.getName() }));
+								new String[] { map.get("glcode").toString(), function ==null? "": function.getName()}));
 					}
 					return true;
 				} else if (subledAmtmap.get(glcodeIdAndFuncId)

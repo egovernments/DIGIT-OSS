@@ -1311,6 +1311,7 @@ public class EmployeeServiceImpl implements EmployeeServiceOld {
                                 "from Assignment ev  where ev.position.id = :posId and ((ev.toDate is null ) or (ev.fromDate <= :fromDate AND ev.toDate >= :fromDate))");
 
             }
+            if(qry!=null){
             if (posId != null) {
                 qry.setInteger("posId", posId);
 
@@ -1332,6 +1333,7 @@ public class EmployeeServiceImpl implements EmployeeServiceOld {
 
             if (qry.list() != null && !qry.list().isEmpty()) {
                 b = true;
+            }
             }
 
         } catch (HibernateException he) {

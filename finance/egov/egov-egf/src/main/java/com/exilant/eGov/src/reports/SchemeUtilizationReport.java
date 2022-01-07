@@ -115,7 +115,7 @@ public class SchemeUtilizationReport
             if (LOGGER.isInfoEnabled())
                 LOGGER.info("For Opening balance Scheme and Sub scheme wise procedure  start");
 
-            final CallableStatement cstmt = con.prepareCall("{? = call EGF_REPORT.OPBALSCHEMEREPORT(?,?,?,?)}");
+            final CallableStatement cstmt =  con.prepareCall("{? = call EGF_REPORT.OPBALSCHEMEREPORT(?,?,?,?)}");
             cstmt.setFetchSize(1000);
             // This fix is for Phoenix Migration.
             // cstmt.registerOutParameter(1,OracleTypes.CURSOR);

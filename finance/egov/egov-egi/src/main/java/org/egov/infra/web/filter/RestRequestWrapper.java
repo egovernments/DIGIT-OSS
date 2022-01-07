@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.io.IOUtils;
+import org.egov.infra.exception.ApplicationRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +50,7 @@ public class RestRequestWrapper extends HttpServletRequestWrapper {
             
             @Override
             public void setReadListener(ReadListener readListener) {
-                throw new RuntimeException("Not implemented");
+                throw new ApplicationRuntimeException("Not implemented");
             }
             
             @Override
