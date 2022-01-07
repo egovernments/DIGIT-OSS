@@ -49,7 +49,7 @@ export const NOCSearch = {
       values: [
         { title: "NOC_APP_NO_LABEL", value: bpaResponse?.[0]?.applicationNo || "NA" },
         { title: "NOC_MODULE_SOURCE_LABEL", value: t(response?.source) || "NA" },
-        { title: "NOC_APPLICATION_TYPE_LABEL", value: t(edcrResponse?.appliactionType) || "NA" },
+        { title: "NOC_APPLICATION_TYPE_LABEL", value: edcrResponse?.appliactionType ? t(`WF_BPA_${edcrResponse?.appliactionType}`) : "NA" },
         { title: "NOC_SERVICE_TYPE_LABEL", value: t(edcrResponse?.applicationSubType) || "NA" }
       ]
     };
