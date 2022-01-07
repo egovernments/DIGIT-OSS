@@ -233,6 +233,7 @@ import MultipleSelect from "./molecules/MultipleSelect"
 import GalleryButton from "./molecules/GalleryButton"
 import AvailableOptionsList from "./molecules/AvailableOptionsList"
 import Accordion from "./atoms/Accordion";
+import Timeline from "./molecules/Timeline";
 
 
 export {
@@ -385,6 +386,7 @@ export {
   MultipleSelect,
   GalleryButton,
   AvailableOptionsList,
+  Timeline,
   // hoc
   FormComposer,
   ResponseComposer,

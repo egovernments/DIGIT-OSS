@@ -46,6 +46,7 @@ function MultipleSelect(props) {
         setItemList(props.data)
     }, [])
 
+    // component containing multi select checkbox option
     return (
         itemList.length ? <form className="textAreaContainer" onSubmit={saveData}>
             <ul style={{ listStyleType: "none" }}>

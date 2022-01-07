@@ -108,37 +108,21 @@ const ImageUploadHandler = (props) => {
     }
     const hiddenFileInput = React.useRef(null);
 
+    // Upload photo from storage by clicking the button 
+    // and can view preview in pop down gallery
     return (
         <React.Fragment>
             <div className="imageUploadWrapper" style={{ width: "75%", display: !imageFile ? "none" : "block", marginTop: "8px" }}>
                 <UploadImages onUpload={getImage} onDelete={deleteImage} thumbnails={uploadedImagesThumbs ? uploadedImagesThumbs.map((o) => o.image) : []} />
             </div>
-            <button className='btn-container' onClick={handleUpload}
-                style={{
-                    background: "#FAFAFA",
-                    border: "1px solid #D6D5D4",
-                    borderRadius: "8px",
-                    padding: "4px 40px",
-                    margin: "8px 0px",
-                    cursor: "pointer",
-                    outline: "none",
-                    display: "flex",
-                    justifyContent: "center"
-
-                }}> <input
+            <button className='btn-galleryButton' onClick={handleUpload}>
+                <input
+                    className="input-galleryButton"
                     type="file"
                     ref={hiddenFileInput}
                     onChange={getImage}
-                    style={{ display: 'none' }} />
-                <p style={{
-                    color: "#F47738",
-                    fontFamily: "Roboto",
-                    fontStyle: "normal",
-                    fontWeight: "normal",
-                    fontSize: "13px",
-                    display: "flex",
-                    justifyContent: "center",
-                }}>Gallery</p>
+                />
+                <p className="text-galleryButton">Gallery</p>
                 <GalleryIcon />
 
             </button>

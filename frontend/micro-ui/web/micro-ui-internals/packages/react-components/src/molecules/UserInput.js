@@ -3,6 +3,7 @@ import TextArea from '../atoms/TextArea';
 import CustomButton from '../atoms/SendButton';
 import GalleryButton from './GalleryButton';
 import Toast from '../atoms/Toast';
+import TextInput from '../atoms/TextInput';
 
 function UserInput(props) {
     const [OptionList, setOptionDetails] = useState([]);
@@ -11,10 +12,20 @@ function UserInput(props) {
     const [showToast, setShowToast] = useState(null);
     const User = Digit.UserService.getUser();
 
-    const styling = {
+    const textAreaStyling = {
         position: "absolute",
         bottom: "11%",
         right: "6%",
+        fontSize: "30px",
+        color: "#F47738",
+        border: "none",
+        outline: "none",
+    }
+
+    const textInputStyling = {
+        position: "absolute",
+        bottom: "24%",
+        right: "4%",
         fontSize: "30px",
         color: "#F47738",
         border: "none",
@@ -76,42 +87,54 @@ function UserInput(props) {
         setOptionDetails(props.data)
     }, [])
 
+    
+// render multi line text Area in case of comment 
+// and single line text area for mobile number and Application ID
     return (
         OptionList.map((i) => (
             <>
-                <div style={{
-                    background: "#FAFAFA",
-                    border: "1px solid #D6D5D4",
-                    borderRadius: "8px",
-                    boxSizing: "border-box",
-                    height: "fit-content",
-                    width: "75%",
-                    padding: "10px",
-                    position: "relative",
-                }}>
+                <div className='userInputContainer'>
                     <p style={{
                         color: "#505A5F",
                         marginBottom: "5px",
                         fontSize: "13px"
                     }}>{i.value}</p>
-
-                    <TextArea onChange={handleChange}
-                        style={{
-                            resize: "none",
-                            borderRadius: "8px",
-                            height: "102px",
-                            border: "1px solid #FFFFFF",
-                            background: "#FFFFFF",
-                            width: "100%",
-                            boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.16)",
-                            overflow: "hidden",
-                            margin: "0px",
-                        }}
-                        placeholder="Type here"
-                    />
-
-                    <CustomButton action={handleSubmit} buttonStyle={styling} />
+                    {props.stepDetails.optionType === "textarea" ?
+                        <>
+                            <TextArea onChange={handleChange}
+                                style={{
+                                    resize: "none",
+                                    borderRadius: "8px",
+                                    height: "102px",
+                                    border: "1px solid #FFFFFF",
+                                    background: "#FFFFFF",
+                                    width: "100%",
+                                    boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.16)",
+                                    overflow: "hidden",
+                                    margin: "0px",
+                                }}
+                                placeholder="Type here"
+                            />
+                            <CustomButton action={handleSubmit} buttonStyle={textAreaStyling} /> </> :
+                        <>
+                            <TextInput onChange={handleChange} placeholder={"Type here"} style={{
+                                borderRadius: "8px",
+                                border: "1px solid #FFFFFF",
+                                background: "#FFFFFF",
+                                width: "100%",
+                                boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.16)",
+                                overflow: "hidden",
+                                margin: "0px",
+                            }} onKeyPress={event => {
+                                if (event.key === 'Enter') {
+                                    handleSubmit()
+                                }
+                            }}></TextInput>
+                            <CustomButton action={handleSubmit} buttonStyle={textInputStyling} />
+                        </>
+                    }
                 </div>
+
                 {props.stepDetails.step === 'last' && <GalleryButton
                     header=""
                     tenantId={User.info.tenantId}
