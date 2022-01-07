@@ -66,7 +66,7 @@ const ApplicationDetail = () => {
         moduleCode="BPAREG"
         showToast={showToast}
         setShowToast={setShowToast}
-        ActionBarStyle={{paddingRight:"50px"}}
+        ActionBarStyle={{}} //paddingRight:"50px"
         closeToast={closeToast}
         timelineStatusPrefix={"WF_NEWTL_"}
       />

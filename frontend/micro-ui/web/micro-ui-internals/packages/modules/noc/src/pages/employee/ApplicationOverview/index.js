@@ -224,7 +224,7 @@ const ApplicationOverview = () => {
         workflowDetails={workflowDetails}
         businessService={workflowDetails?.data?.applicationBusinessService ? workflowDetails?.data?.applicationBusinessService : applicationDetails?.applicationData?.businessService}
         moduleCode="NOC"
-        ActionBarStyle={{paddingRight:"50px"}}
+        ActionBarStyle={{}} //paddingRight:"50px"
         showToast={showToast}
         setShowToast={setShowToast}
         closeToast={closeToast}
