@@ -160,7 +160,8 @@ if(window.location.pathname.includes('withoutAuth')){
 
     render() {
         const { property = {}, showWarning, propertyNumbers, open, documents } = this.state;
-        return property && property.status == "ACTIVE" && <div>
+        const isWithoutAuth = window.location.href.includes('withoutAuth');
+        return property && property.status == "ACTIVE" && isWithoutAuth && <div>
             {showWarning && VerifyButton(this.props.type, this.toggleDialog)}
             {open && <AlternateMobileDialog
                 open={open}
