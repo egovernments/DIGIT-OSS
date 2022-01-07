@@ -156,7 +156,7 @@ class ShowField extends Component {
     };
     rTable = $("#reportTable").DataTable({
       dom:
-        "<'&nbsp''row'<'col-sm-2 col-xs-12 text-center'l><'col-sm-4 col-xs-12 text-center'f><'col-sm-6 col-xs-12 text-center'B>><'row margin0'<'col-sm-12't>><'&nbsp''row'<'col-sm-5 col-xs-12'i><'col-sm-7 col-xs-12'p>>",
+        "<'&nbsp''row'<'col-sm-2 col-xs-12 text-center unique-jk-report-btns'l><'col-sm-4 col-xs-12 text-center unique-jk-report-btns'f><'col-sm-6 col-xs-12 text-center unique-jk-report-btns'B>><'row margin0'<'col-sm-12 unique-jk-report-btns't>><'&nbsp''row'<'col-sm-5 col-xs-12'i><'col-sm-7 col-xs-12'p>>",
       displayStart: displayStart,
       buttons: self.getExportOptions(),
       searching: true,
@@ -168,6 +168,10 @@ class ShowField extends Component {
           targets: 0,
         },
       ],
+      
+        orderCellsTop: true,
+        fixedHeader: true,
+        responsive: true,      
       fixedColumns: true,
       scrollY: 400,
       aLengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],

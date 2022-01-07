@@ -109,6 +109,9 @@
 @media only screen and (max-width: 704px) {
   #reportTable_wrapper {
     overflow: scroll;
+    .col-xs-12 .text-center{
+      position: unset;
+          }
   }
 }
 
