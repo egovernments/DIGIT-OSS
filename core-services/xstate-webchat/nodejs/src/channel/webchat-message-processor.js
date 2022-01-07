@@ -25,7 +25,6 @@ class WebMessageProcessor {
             }
 
         }
-        console.log("reformattedMessage:: ", reformattedMessage);
         return reformattedMessage;
     }
 

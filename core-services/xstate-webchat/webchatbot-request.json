@@ -1,0 +1,14 @@
+{
+    "message":{
+        "type": "text",
+        "input": "1"
+    },
+    "user":{
+        "mobileNumber": "7391904467"
+    },
+    "extraInfo":{
+        "filestoreId": "917834811114",
+        "applicationId":"PB-MT-107-000754",
+        "comments": "User complaint comments"
+    }
+}
