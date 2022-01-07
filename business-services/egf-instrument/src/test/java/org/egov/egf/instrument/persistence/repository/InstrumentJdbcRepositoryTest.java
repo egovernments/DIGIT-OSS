@@ -57,6 +57,36 @@ public class InstrumentJdbcRepositoryTest {
     @Autowired
     private DishonorReasonJdbcRepository dishonorReasonJdbcRepository;
 
+    private static final String ACCOUNT_NUMBER="accountNumber";
+
+    private static final String BRANCH_NAME="branchName";
+
+    private static final String DRAWER="drawer";
+
+    private static final String PAYEE="payee";
+
+    private static final String SERIAL_NO="serialNo";
+
+    private static final String TRANSACTION_NUMBER="transactionNumber";
+
+    private static final String CREDIT="Credit";
+
+    private static final String DEFAULT="default";
+
+    private static final String AMOUNT="amount";
+
+    private static final String BANK_ID="bankId";
+
+    private static final String BANK_ACCOUNT_ID="bankAccountId";
+
+    private static final String FINANCIAL_STATUS_ID="financialStatusId";
+
+    private static final String INSTRUMENT_TYPE_ID="instrumentTypeId";
+
+    private static final String SURRENDER_REASON_ID="surrenderReasonId";
+
+    private static final String TRANSACTION_TYPE="transactionType";
+
     @Before
     public void setUp() throws Exception {
         instrumentJdbcRepository = new InstrumentJdbcRepository(namedParameterJdbcTemplate, jdbcTemplate,
@@ -68,29 +98,29 @@ public class InstrumentJdbcRepositoryTest {
     public void test_create() {
 
         InstrumentEntity instrument = InstrumentEntity.builder().id("1").amount(BigDecimal.ONE)
-                .bankAccountId("accountNumber").bankId("code").branchName("branchName").drawer("drawer")
-                .financialStatusId("1").instrumentTypeId("name").payee("payee").serialNo("serialNo")
-                .surrenderReasonId("1").transactionNumber("transactionNumber").transactionDate(new Date())
-                .transactionType("Credit").build();
-        instrument.setTenantId("default");
+                .bankAccountId(ACCOUNT_NUMBER).bankId("code").branchName(BRANCH_NAME).drawer(DRAWER)
+                .financialStatusId("1").instrumentTypeId("name").payee(PAYEE).serialNo(SERIAL_NO)
+                .surrenderReasonId("1").transactionNumber(TRANSACTION_NUMBER).transactionDate(new Date())
+                .transactionType(CREDIT).build();
+        instrument.setTenantId(DEFAULT);
         InstrumentEntity actualResult = instrumentJdbcRepository.create(instrument);
 
         List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_instrument",
                 new InstrumentResultExtractor());
         Map<String, Object> row = result.get(0);
 
-        assertThat(row.get("amount").toString()).isEqualTo("1.00");
-        assertThat(row.get("bankId")).isEqualTo(actualResult.getBankId());
-        assertThat(row.get("bankAccountId")).isEqualTo(actualResult.getBankAccountId()); 
-        assertThat(row.get("branchName")).isEqualTo(actualResult.getBranchName());
-        assertThat(row.get("drawer")).isEqualTo(actualResult.getDrawer());
-        assertThat(row.get("financialStatusId")).isEqualTo(actualResult.getFinancialStatusId());
-        assertThat(row.get("instrumentTypeId")).isEqualTo(actualResult.getInstrumentTypeId());
-        assertThat(row.get("payee")).isEqualTo(actualResult.getPayee());
-        assertThat(row.get("serialNo")).isEqualTo(actualResult.getSerialNo());
-        assertThat(row.get("surrenderReasonId")).isEqualTo(actualResult.getSurrenderReasonId());
-        assertThat(row.get("transactionNumber")).isEqualTo(actualResult.getTransactionNumber());
-        assertThat(row.get("transactionType")).isEqualTo(actualResult.getTransactionType());
+        assertThat(row.get(AMOUNT).toString()).isEqualTo("1.00");
+        assertThat(row.get(BANK_ID)).isEqualTo(actualResult.getBankId());
+        assertThat(row.get(BANK_ACCOUNT_ID)).isEqualTo(actualResult.getBankAccountId());
+        assertThat(row.get(BRANCH_NAME)).isEqualTo(actualResult.getBranchName());
+        assertThat(row.get(DRAWER)).isEqualTo(actualResult.getDrawer());
+        assertThat(row.get(FINANCIAL_STATUS_ID)).isEqualTo(actualResult.getFinancialStatusId());
+        assertThat(row.get(INSTRUMENT_TYPE_ID)).isEqualTo(actualResult.getInstrumentTypeId());
+        assertThat(row.get(PAYEE)).isEqualTo(actualResult.getPayee());
+        assertThat(row.get(SERIAL_NO)).isEqualTo(actualResult.getSerialNo());
+        assertThat(row.get(SURRENDER_REASON_ID)).isEqualTo(actualResult.getSurrenderReasonId());
+        assertThat(row.get(TRANSACTION_NUMBER)).isEqualTo(actualResult.getTransactionNumber());
+        assertThat(row.get(TRANSACTION_TYPE)).isEqualTo(actualResult.getTransactionType());
 
     }
 
@@ -99,28 +129,28 @@ public class InstrumentJdbcRepositoryTest {
     public void test_update() {
 
         InstrumentEntity instrument = InstrumentEntity.builder().id("1").amount(BigDecimal.ONE).bankAccountId("1")
-                .bankId("1").branchName("branchName").drawer("drawer").financialStatusId("1").instrumentTypeId("1")
-                .payee("payee").serialNo("serialNo").surrenderReasonId("1").transactionNumber("transactionNumber")
-                .transactionDate(new Date()).transactionType("Credit").build();
-        instrument.setTenantId("default");
+                .bankId("1").branchName(BRANCH_NAME).drawer(DRAWER).financialStatusId("1").instrumentTypeId("1")
+                .payee(PAYEE).serialNo(SERIAL_NO).surrenderReasonId("1").transactionNumber(TRANSACTION_NUMBER)
+                .transactionDate(new Date()).transactionType(CREDIT).build();
+        instrument.setTenantId(DEFAULT);
         InstrumentEntity actualResult = instrumentJdbcRepository.update(instrument);
 
         List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_instrument",
                 new InstrumentResultExtractor());
         Map<String, Object> row = result.get(0);
 
-        assertThat(row.get("amount").toString()).isEqualTo("1.00");
-        assertThat(row.get("bankId")).isEqualTo(actualResult.getBankId());
-        assertThat(row.get("bankAccountId")).isEqualTo(actualResult.getBankAccountId());
-        assertThat(row.get("branchName")).isEqualTo(actualResult.getBranchName());
-        assertThat(row.get("drawer")).isEqualTo(actualResult.getDrawer());
-        assertThat(row.get("financialStatusId")).isEqualTo(actualResult.getFinancialStatusId());
-        assertThat(row.get("instrumentTypeId")).isEqualTo(actualResult.getInstrumentTypeId());
-        assertThat(row.get("payee")).isEqualTo(actualResult.getPayee());
-        assertThat(row.get("serialNo")).isEqualTo(actualResult.getSerialNo());
-        assertThat(row.get("surrenderReasonId")).isEqualTo(actualResult.getSurrenderReasonId());
-        assertThat(row.get("transactionNumber")).isEqualTo(actualResult.getTransactionNumber());
-        assertThat(row.get("transactionType")).isEqualTo(actualResult.getTransactionType());
+        assertThat(row.get(AMOUNT).toString()).isEqualTo("1.00");
+        assertThat(row.get(BANK_ID)).isEqualTo(actualResult.getBankId());
+        assertThat(row.get(BANK_ACCOUNT_ID)).isEqualTo(actualResult.getBankAccountId());
+        assertThat(row.get(BRANCH_NAME)).isEqualTo(actualResult.getBranchName());
+        assertThat(row.get(DRAWER)).isEqualTo(actualResult.getDrawer());
+        assertThat(row.get(FINANCIAL_STATUS_ID)).isEqualTo(actualResult.getFinancialStatusId());
+        assertThat(row.get(INSTRUMENT_TYPE_ID)).isEqualTo(actualResult.getInstrumentTypeId());
+        assertThat(row.get(PAYEE)).isEqualTo(actualResult.getPayee());
+        assertThat(row.get(SERIAL_NO)).isEqualTo(actualResult.getSerialNo());
+        assertThat(row.get(SURRENDER_REASON_ID)).isEqualTo(actualResult.getSurrenderReasonId());
+        assertThat(row.get(TRANSACTION_NUMBER)).isEqualTo(actualResult.getTransactionNumber());
+        assertThat(row.get(TRANSACTION_TYPE)).isEqualTo(actualResult.getTransactionType());
 
     }
 
@@ -132,15 +162,15 @@ public class InstrumentJdbcRepositoryTest {
 
         assertThat(page.getPagedData().get(0).getAmount()).isEqualTo("1.00");
         assertThat(page.getPagedData().get(0).getBank().getId()).isEqualTo("code");
-        assertThat(page.getPagedData().get(0).getBankAccount().getAccountNumber()).isEqualTo("accountNumber");
-        assertThat(page.getPagedData().get(0).getBranchName()).isEqualTo("branchName");
-        assertThat(page.getPagedData().get(0).getDrawer()).isEqualTo("drawer");
+        assertThat(page.getPagedData().get(0).getBankAccount().getAccountNumber()).isEqualTo(ACCOUNT_NUMBER);
+        assertThat(page.getPagedData().get(0).getBranchName()).isEqualTo(BRANCH_NAME);
+        assertThat(page.getPagedData().get(0).getDrawer()).isEqualTo(DRAWER);
         assertThat(page.getPagedData().get(0).getFinancialStatus().getId()).isEqualTo("1");
         assertThat(page.getPagedData().get(0).getInstrumentType().getName()).isEqualTo("name");
-        assertThat(page.getPagedData().get(0).getPayee()).isEqualTo("payee");
-        assertThat(page.getPagedData().get(0).getSerialNo()).isEqualTo("serialNo");
+        assertThat(page.getPagedData().get(0).getPayee()).isEqualTo(PAYEE);
+        assertThat(page.getPagedData().get(0).getSerialNo()).isEqualTo(SERIAL_NO);
         assertThat(page.getPagedData().get(0).getSurrenderReason().getId()).isEqualTo("1");
-        assertThat(page.getPagedData().get(0).getTransactionNumber()).isEqualTo("transactionNumber");
+        assertThat(page.getPagedData().get(0).getTransactionNumber()).isEqualTo(TRANSACTION_NUMBER);
         assertThat(page.getPagedData().get(0).getTransactionType()).isEqualTo(TransactionType.Credit);
     }
 
@@ -158,21 +188,21 @@ public class InstrumentJdbcRepositoryTest {
     public void test_find_by_id() {
 
         InstrumentEntity instrumentEntity = InstrumentEntity.builder().id("1").build();
-        instrumentEntity.setTenantId("default");
+        instrumentEntity.setTenantId(DEFAULT);
         InstrumentEntity result = instrumentJdbcRepository.findById(instrumentEntity);
 
         assertThat(result.getAmount()).isEqualTo("1.00");
         assertThat(result.getBankId()).isEqualTo("code");
-        assertThat(result.getBankAccountId()).isEqualTo("accountNumber");
-        assertThat(result.getBranchName()).isEqualTo("branchName");
-        assertThat(result.getDrawer()).isEqualTo("drawer");
+        assertThat(result.getBankAccountId()).isEqualTo(ACCOUNT_NUMBER);
+        assertThat(result.getBranchName()).isEqualTo(BRANCH_NAME);
+        assertThat(result.getDrawer()).isEqualTo(DRAWER);
         assertThat(result.getFinancialStatusId()).isEqualTo("1");
         assertThat(result.getInstrumentTypeId()).isEqualTo("name");
-        assertThat(result.getPayee()).isEqualTo("payee");
-        assertThat(result.getSerialNo()).isEqualTo("serialNo");
+        assertThat(result.getPayee()).isEqualTo(PAYEE);
+        assertThat(result.getSerialNo()).isEqualTo(SERIAL_NO);
         assertThat(result.getSurrenderReasonId()).isEqualTo("1");
-        assertThat(result.getTransactionNumber()).isEqualTo("transactionNumber");
-        assertThat(result.getTransactionType()).isEqualTo("Credit");
+        assertThat(result.getTransactionNumber()).isEqualTo(TRANSACTION_NUMBER);
+        assertThat(result.getTransactionType()).isEqualTo(CREDIT);
 
     }
 
@@ -181,7 +211,7 @@ public class InstrumentJdbcRepositoryTest {
     public void test_find_by_invalid_id_should_return_null() {
 
         InstrumentEntity instrumentEntity = InstrumentEntity.builder().id("5").build();
-        instrumentEntity.setTenantId("default");
+        instrumentEntity.setTenantId(DEFAULT);
         InstrumentEntity result = instrumentJdbcRepository.findById(instrumentEntity);
         assertNull(result);
 
@@ -209,15 +239,15 @@ public class InstrumentJdbcRepositoryTest {
 
         assertThat(page.getPagedData().get(0).getAmount()).isEqualTo("1.00");
         assertThat(page.getPagedData().get(0).getBank().getId()).isEqualTo("code");
-        assertThat(page.getPagedData().get(0).getBankAccount().getAccountNumber()).isEqualTo("accountNumber");
-        assertThat(page.getPagedData().get(0).getBranchName()).isEqualTo("branchName");
-        assertThat(page.getPagedData().get(0).getDrawer()).isEqualTo("drawer");
+        assertThat(page.getPagedData().get(0).getBankAccount().getAccountNumber()).isEqualTo(ACCOUNT_NUMBER);
+        assertThat(page.getPagedData().get(0).getBranchName()).isEqualTo(BRANCH_NAME);
+        assertThat(page.getPagedData().get(0).getDrawer()).isEqualTo(DRAWER);
         assertThat(page.getPagedData().get(0).getFinancialStatus().getId()).isEqualTo("1");
         assertThat(page.getPagedData().get(0).getInstrumentType().getName()).isEqualTo("name");
-        assertThat(page.getPagedData().get(0).getPayee()).isEqualTo("payee");
-        assertThat(page.getPagedData().get(0).getSerialNo()).isEqualTo("serialNo");
+        assertThat(page.getPagedData().get(0).getPayee()).isEqualTo(PAYEE);
+        assertThat(page.getPagedData().get(0).getSerialNo()).isEqualTo(SERIAL_NO);
         assertThat(page.getPagedData().get(0).getSurrenderReason().getId()).isEqualTo("1");
-        assertThat(page.getPagedData().get(0).getTransactionNumber()).isEqualTo("transactionNumber");
+        assertThat(page.getPagedData().get(0).getTransactionNumber()).isEqualTo(TRANSACTION_NUMBER);
         assertThat(page.getPagedData().get(0).getTransactionType()).isEqualTo(TransactionType.Credit);
 
     }
@@ -230,18 +260,18 @@ public class InstrumentJdbcRepositoryTest {
                 Map<String, Object> row = new HashMap<String, Object>() {
                     {
                         put("id", resultSet.getString("id"));
-                        put("amount", resultSet.getString("amount"));
-                        put("bankId", resultSet.getString("bankId"));
-                        put("bankAccountId", resultSet.getString("bankAccountId"));
-                        put("branchName", resultSet.getString("branchName"));
-                        put("drawer", resultSet.getString("drawer"));
-                        put("financialStatusId", resultSet.getString("financialStatusId"));
-                        put("instrumentTypeId", resultSet.getString("instrumentTypeId"));
-                        put("payee", resultSet.getString("payee"));
-                        put("serialNo", resultSet.getString("serialNo"));
-                        put("transactionNumber", resultSet.getString("transactionNumber"));
-                        put("transactionType", resultSet.getString("transactionType"));
-                        put("surrenderReasonId", resultSet.getString("surrenderReasonId"));
+                        put(AMOUNT, resultSet.getString(AMOUNT));
+                        put(BANK_ID, resultSet.getString(BANK_ID));
+                        put(BANK_ACCOUNT_ID, resultSet.getString(BANK_ACCOUNT_ID));
+                        put(BRANCH_NAME, resultSet.getString(BRANCH_NAME));
+                        put(DRAWER, resultSet.getString(DRAWER));
+                        put(FINANCIAL_STATUS_ID, resultSet.getString(FINANCIAL_STATUS_ID));
+                        put(INSTRUMENT_TYPE_ID, resultSet.getString(INSTRUMENT_TYPE_ID));
+                        put(PAYEE, resultSet.getString(PAYEE));
+                        put(SERIAL_NO, resultSet.getString(SERIAL_NO));
+                        put(TRANSACTION_NUMBER, resultSet.getString(TRANSACTION_NUMBER));
+                        put(TRANSACTION_TYPE, resultSet.getString(TRANSACTION_TYPE));
+                        put(SURRENDER_REASON_ID, resultSet.getString(SURRENDER_REASON_ID));
                         put("createdBy", resultSet.getString("createdBy"));
                         put("createdDate", resultSet.getString("createdDate"));
                         put("lastModifiedBy", resultSet.getString("lastModifiedBy"));
@@ -262,18 +292,18 @@ public class InstrumentJdbcRepositoryTest {
         instrumentSearch.setAmount(BigDecimal.ONE);
         instrumentSearch.setBank(BankContract.builder().id("1").build());
         instrumentSearch.setBankAccount(BankAccountContract.builder().id("1").build());
-        instrumentSearch.setBranchName("branchName");
-        instrumentSearch.setDrawer("drawer");
+        instrumentSearch.setBranchName(BRANCH_NAME);
+        instrumentSearch.setDrawer(DRAWER);
         instrumentSearch.setFinancialStatus(FinancialStatusContract.builder().id("1").build());
         instrumentSearch.setRemittanceVoucherId("1");
         instrumentSearch.setInstrumentType(InstrumentType.builder().id("1").build());
-        instrumentSearch.setPayee("payee");
-        instrumentSearch.setSerialNo("serialNo");
+        instrumentSearch.setPayee(PAYEE);
+        instrumentSearch.setSerialNo(SERIAL_NO);
         instrumentSearch.setSurrenderReason(SurrenderReason.builder().id("1").build());
-        instrumentSearch.setTransactionNumber("transactionNumber");
+        instrumentSearch.setTransactionNumber(TRANSACTION_NUMBER);
         instrumentSearch.setTransactionType(TransactionType.Credit);
         instrumentSearch.setReceiptIds("1");
-        instrumentSearch.setTenantId("default");
+        instrumentSearch.setTenantId(DEFAULT);
         instrumentSearch.setPageSize(500);
         instrumentSearch.setOffset(0);
         instrumentSearch.setSortBy("id desc");
@@ -286,18 +316,18 @@ public class InstrumentJdbcRepositoryTest {
         instrumentSearch.setIds("1");
         instrumentSearch.setAmount(BigDecimal.ONE);
         instrumentSearch.setBank(BankContract.builder().id("code").build());
-        instrumentSearch.setBankAccount(BankAccountContract.builder().accountNumber("accountNumber").build());
-        instrumentSearch.setBranchName("branchName");
-        instrumentSearch.setDrawer("drawer");
+        instrumentSearch.setBankAccount(BankAccountContract.builder().accountNumber(ACCOUNT_NUMBER).build());
+        instrumentSearch.setBranchName(BRANCH_NAME);
+        instrumentSearch.setDrawer(DRAWER);
         instrumentSearch.setFinancialStatus(FinancialStatusContract.builder().id("1").build());
         instrumentSearch.setFinancialStatuses("1");
         instrumentSearch.setRemittanceVoucherId("1");
         instrumentSearch.setInstrumentType(InstrumentType.builder().name("name").build());
         instrumentSearch.setInstrumentTypes("name");
-        instrumentSearch.setPayee("payee");
-        instrumentSearch.setSerialNo("serialNo");
+        instrumentSearch.setPayee(PAYEE);
+        instrumentSearch.setSerialNo(SERIAL_NO);
         instrumentSearch.setSurrenderReason(SurrenderReason.builder().id("1").build());
-        instrumentSearch.setTransactionNumber("transactionNumber");
+        instrumentSearch.setTransactionNumber(TRANSACTION_NUMBER);
         instrumentSearch.setTransactionType(TransactionType.Credit);
         instrumentSearch.setReceiptIds("1");
         try {
@@ -310,7 +340,7 @@ public class InstrumentJdbcRepositoryTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        instrumentSearch.setTenantId("default");
+        instrumentSearch.setTenantId(DEFAULT);
         instrumentSearch.setPageSize(500);
         instrumentSearch.setOffset(0);
         instrumentSearch.setSortBy("id desc");

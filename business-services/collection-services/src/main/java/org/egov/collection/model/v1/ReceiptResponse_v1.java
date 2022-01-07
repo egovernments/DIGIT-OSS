@@ -15,8 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ReceiptResponse_v1  {
 
-    public ReceiptResponse_v1() {
-    }
 
     @JsonProperty("ResponseInfo")
     private ResponseInfo responseInfo;

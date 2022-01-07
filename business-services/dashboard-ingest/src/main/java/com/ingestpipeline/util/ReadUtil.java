@@ -79,6 +79,8 @@ public class ReadUtil {
 
 	private static Boolean useNumbers;
 
+	private static final String SEPARATOR="file.separator";
+
 	@Value("${filename.length}")
 	public static void setFilenameLength(Integer filenameLengthValue) {
 		ReadUtil.filenameLength = filenameLengthValue;
@@ -98,7 +100,7 @@ public class ReadUtil {
 	private static String UPLOADED_FOLDER = "";
 	public static Path path;
 	public static File uploadFile = new File(
-			System.getProperty("user.dir") + System.getProperty("file.separator") + "uploads");
+			System.getProperty("user.dir") + System.getProperty(SEPARATOR) + "uploads");
 
 	public static JSONArray getFiletoDirectory(MultipartFile file) throws Exception {
 		byte[] bytes = file.getBytes();
@@ -113,7 +115,7 @@ public class ReadUtil {
 		String fileName =  System.currentTimeMillis() + randomString;
 		String extension = FilenameUtils.getExtension(orignalFileName);
 
-		path = Paths.get(UPLOADED_FOLDER + System.getProperty("file.separator") + fileName + '.' + extension);
+		path = Paths.get(UPLOADED_FOLDER + System.getProperty(SEPARATOR) + fileName + '.' + extension);
 		Files.write(path, bytes);
 		JSONArray fileIntoJsonArray = readFilefromDirectory();
 		String jsonArrayFileName = fileName + ".json";
@@ -368,7 +370,7 @@ public class ReadUtil {
 
 	private static void writeJsonArrayToFile(JSONArray data, String fileName) throws IOException {
 		String currentWorkingFolder = System.getProperty("user.dir"),
-				filePathSeperator = System.getProperty("file.separator"),
+				filePathSeperator = System.getProperty(SEPARATOR),
 				filePath = currentWorkingFolder + filePathSeperator + fileName;
 		BufferedWriter bufferedWriter = null;
 		try {

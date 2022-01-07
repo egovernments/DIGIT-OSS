@@ -39,6 +39,10 @@ public class AmendmentRepository {
 	
 	@Autowired
 	private AmendmentQueryBuilder amendmentQueryBuilder;
+
+	private static final String AMENDMENT_ID="amendmentid";
+
+	private static final String MESSAGE="status";
 	
 	@Transactional
 	public void saveAmendment (AmendmentRequest amendmentRequest) {
@@ -87,12 +91,12 @@ public class AmendmentRepository {
 
 		mapSqlParameterSource.addValue("id", amendment.getId());
 		mapSqlParameterSource.addValue("tenantid", amendment.getTenantId());
-		mapSqlParameterSource.addValue("amendmentid", amendment.getAmendmentId());
+		mapSqlParameterSource.addValue(AMENDMENT_ID, amendment.getAmendmentId());
 		mapSqlParameterSource.addValue("businessservice", amendment.getBusinessService());
 		mapSqlParameterSource.addValue("consumercode", amendment.getConsumerCode());
 		mapSqlParameterSource.addValue("amendmentreason", amendment.getAmendmentReason().toString());
 		mapSqlParameterSource.addValue("reasondocumentnumber", amendment.getReasonDocumentNumber());
-		mapSqlParameterSource.addValue("status", amendment.getStatus().toString());
+		mapSqlParameterSource.addValue(MESSAGE, amendment.getStatus().toString());
 		mapSqlParameterSource.addValue("effectivetill", amendment.getEffectiveTill());
 		mapSqlParameterSource.addValue("effectivefrom", amendment.getEffectiveFrom());
 		mapSqlParameterSource.addValue("amendeddemandid", amendment.getAmendedDemandId());
@@ -113,7 +117,7 @@ public class AmendmentRepository {
 
 			MapSqlParameterSource taxDetailParamMap = new MapSqlParameterSource();
 			taxDetailParamMap.addValue("id", detail.getId());
-			taxDetailParamMap.addValue("amendmentid", amendmentId);
+			taxDetailParamMap.addValue(AMENDMENT_ID, amendmentId);
 			taxDetailParamMap.addValue("taxheadcode", detail.getTaxHeadMasterCode());
 			taxDetailParamMap.addValue("taxamount", detail.getTaxAmount());
 			taxDetailParamMapList.add(taxDetailParamMap);
@@ -128,11 +132,11 @@ public class AmendmentRepository {
 
 			MapSqlParameterSource documentParamMap = new MapSqlParameterSource();
 			documentParamMap.addValue("id", document.getId());
-			documentParamMap.addValue("amendmentid", amendmentId);
+			documentParamMap.addValue(AMENDMENT_ID, amendmentId);
 			documentParamMap.addValue("documenttype", document.getDocumentType());
 			documentParamMap.addValue("filestoreid", document.getFileStoreId());
 			documentParamMap.addValue("documentuid", document.getDocumentUid());
-			documentParamMap.addValue("status", "ACTIVE");
+			documentParamMap.addValue(MESSAGE, "ACTIVE");
 			documentsParamMapList.add(documentParamMap);
 		}
 
@@ -147,13 +151,13 @@ public class AmendmentRepository {
 			AuditDetails auditDetails = amendmentUpdate.getAuditDetails();
 			MapSqlParameterSource updateParamMap = new MapSqlParameterSource();
 
-			updateParamMap.addValue("status", amendmentUpdate.getStatus().toString());
+			updateParamMap.addValue(MESSAGE, amendmentUpdate.getStatus().toString());
 			updateParamMap.addValue("amendeddemandid", amendmentUpdate.getAmendedDemandId());
 			updateParamMap.addValue("lastmodifiedby", auditDetails.getLastModifiedBy());
 			updateParamMap.addValue("lastmodifiedtime", auditDetails.getLastModifiedTime());
 			updateParamMap.addValue("additionaldetails", util.getPGObject(amendmentUpdate.getAdditionalDetails()));
 			updateParamMap.addValue("tenantid", amendmentUpdate.getTenantId());
-			updateParamMap.addValue("amendmentid", amendmentUpdate.getAmendmentId());
+			updateParamMap.addValue(AMENDMENT_ID, amendmentUpdate.getAmendmentId());
 			updateParamMapList.add(updateParamMap);
 		}
 		return updateParamMapList;

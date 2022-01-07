@@ -22,6 +22,7 @@ public class ComputedFieldHelper {
 
     private AggregateRequestDto aggregateRequestDto;
     private String postAggrTheoryName;
+    private static final String PERCENTAGE="percentage";
 
     public void set(AggregateRequestDto requestDto, String postAggrTheoryName){
 
@@ -35,7 +36,7 @@ public class ComputedFieldHelper {
 
             if (plotMap.get(partField).getValue() == 0.0 || plotMap.get(wholeField).getValue() == 0.0) {
 
-                data.getPlots().add(new Plot(newfield, 0.0, "percentage"));
+                data.getPlots().add(new Plot(newfield, 0.0, PERCENTAGE));
             } else {
                 double wholeValue = plotMap.get(wholeField).getValue();
                 double fieldValue = plotMap.get(partField).getValue() / plotMap.get(wholeField).getValue() * 100;
@@ -48,13 +49,13 @@ public class ComputedFieldHelper {
 
                 }
                 data.getPlots().stream().filter(plot -> wholeField.equalsIgnoreCase(plot.getName())).findAny().orElse(null).setValue(wholeValue);
-                data.getPlots().add(new Plot(newfield, fieldValue, "percentage"));
+                data.getPlots().add(new Plot(newfield, fieldValue, PERCENTAGE));
 
             }
 
 
         } catch (Exception e) {
-            data.getPlots().add(new Plot(newfield, 0.0, "percentage"));
+            data.getPlots().add(new Plot(newfield, 0.0, PERCENTAGE));
         }
     }
 

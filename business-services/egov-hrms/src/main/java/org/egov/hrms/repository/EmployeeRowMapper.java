@@ -28,6 +28,29 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 	@Autowired
 	private ObjectMapper mapper;
 
+	private static final String ASSIGNMENT_UUID="assignment_uuid";
+
+	private static final String ROWMAPPER_ERROR="ROWMAPPER_ERROR";
+
+	private static final String JURISDICTION_ISACTIVE="jurisdiction_isactive";
+
+	private static final String JURISDICTION_UUID="jurisdiction_uuid";
+
+	private static final String EDUCATION_ISACTIVE="education_isactive";
+
+	private static final String EDUCATION_UUID="education_uuid";
+
+	private static final String DEPTTEST_ISACTIVE="depttest_isactive";
+
+	private static final String DEPTTEST_UUID="depttest_uuid";
+
+	private static final String HISTORY_UUID="history_uuid";
+
+	private static final String DOCS_UUID="docs_uuid";
+
+	private static final String DEACT_UUID="deact_uuid";
+
+	private static final String REACT_UUID="react_uuid";
 	@Override
 	/**
 	 * Maps ResultSet to Employee POJO.
@@ -86,11 +109,11 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 				assignments = currentEmployee.getAssignments();
 			
 			List<String> ids = assignments.stream().map(Assignment::getId).collect(Collectors.toList());
-			if(!StringUtils.isEmpty(rs.getString("assignment_uuid")) && !ids.contains(rs.getString("assignment_uuid"))) {
+			if(!StringUtils.isEmpty(rs.getString(ASSIGNMENT_UUID)) && !ids.contains(rs.getString(ASSIGNMENT_UUID))) {
 				AuditDetails auditDetails = AuditDetails.builder().createdBy(rs.getString("assignment_createdby")).createdDate(rs.getLong("assignment_createddate"))
 						.lastModifiedBy(rs.getString("assignment_lastmodifiedby")).lastModifiedDate(rs.getLong("assignment_lastmodifieddate")).build();
 				
-				Assignment assignment = Assignment.builder().id(rs.getString("assignment_uuid")).position(rs.getLong("assignment_position")).department(rs.getString("assignment_department"))
+				Assignment assignment = Assignment.builder().id(rs.getString(ASSIGNMENT_UUID)).position(rs.getLong("assignment_position")).department(rs.getString("assignment_department"))
 				.designation(rs.getString("assignment_designation")).fromDate(rs.getLong("assignment_fromdate")).toDate(null == rs.getObject("assignment_todate")? null : rs.getLong("assignment_todate"))
 			    .govtOrderNumber(rs.getString("assignment_govtordernumber")).reportingTo(rs.getString("assignment_reportingto")).isHOD(rs.getBoolean("assignment_ishod"))
 				.isCurrentAssignment(rs.getBoolean("assignment_iscurrentassignment")).tenantid(rs.getString("assignment_tenantid")).auditDetails(auditDetails).build();
@@ -100,7 +123,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 			currentEmployee.setAssignments(assignments);
 		}catch(Exception e) {
 			log.error("Error in row mapper while mapping Assignments: ",e);
-			throw new CustomException("ROWMAPPER_ERROR","Error in row mapper while mapping Assignments");
+			throw new CustomException(ROWMAPPER_ERROR,"Error in row mapper while mapping Assignments");
 		}
 	}
 	
@@ -119,15 +142,15 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 				jurisdictions = currentEmployee.getJurisdictions();
 			
 			List<String> ids = jurisdictions.stream().map(Jurisdiction::getId).collect(Collectors.toList());
-			Boolean isActive =  rs.getBoolean("jurisdiction_isactive") !=false;
-			if(isActive && !StringUtils.isEmpty(rs.getString("jurisdiction_uuid")) && !ids.contains(rs.getString("jurisdiction_uuid"))) {
+			Boolean isActive =  rs.getBoolean(JURISDICTION_ISACTIVE) !=false;
+			if(isActive && !StringUtils.isEmpty(rs.getString(JURISDICTION_UUID)) && !ids.contains(rs.getString(JURISDICTION_UUID))) {
 				AuditDetails auditDetails = AuditDetails.builder().createdBy(rs.getString("jurisdiction_createdby")).createdDate(rs.getLong("jurisdiction_createddate"))
 						.lastModifiedBy(rs.getString("jurisdiction_lastmodifiedby")).lastModifiedDate(rs.getLong("jurisdiction_lastmodifieddate")).build();
 				
-				Jurisdiction jurisdiction = Jurisdiction.builder().id(rs.getString("jurisdiction_uuid")).hierarchy(rs.getString("jurisdiction_hierarchy"))
+				Jurisdiction jurisdiction = Jurisdiction.builder().id(rs.getString(JURISDICTION_UUID)).hierarchy(rs.getString("jurisdiction_hierarchy"))
 						.boundary(rs.getString("jurisdiction_boundary")).boundaryType(rs.getString("jurisdiction_boundarytype"))
 						.tenantId(rs.getString("jurisdiction_tenantid"))
-						.isActive(null == rs.getObject("jurisdiction_isactive")?true:rs.getBoolean("jurisdiction_isactive"))
+						.isActive(null == rs.getObject(JURISDICTION_ISACTIVE)?true:rs.getBoolean(JURISDICTION_ISACTIVE))
 						.auditDetails(auditDetails).build();
 				
 				jurisdictions.add(jurisdiction);
@@ -135,7 +158,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 			currentEmployee.setJurisdictions(jurisdictions);
 		}catch(Exception e) {
 			log.error("Error in row mapper while mapping Jurisdictions: ",e);
-			throw new CustomException("ROWMAPPER_ERROR","Error in row mapper while mapping Jurisdictions");
+			throw new CustomException(ROWMAPPER_ERROR,"Error in row mapper while mapping Jurisdictions");
 		}
 	}
 	
@@ -153,14 +176,14 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 			else
 				educationDetails = currentEmployee.getEducation();
 			List<String> ids = educationDetails.stream().map(EducationalQualification::getId).collect(Collectors.toList());
-			Boolean isActive =rs.getBoolean("education_isactive") !=false;
-			if( isActive &&!StringUtils.isEmpty( rs.getString("education_uuid")) && !ids.contains(rs.getString("education_uuid"))) {
+			Boolean isActive =rs.getBoolean(EDUCATION_ISACTIVE) !=false;
+			if( isActive &&!StringUtils.isEmpty( rs.getString(EDUCATION_UUID)) && !ids.contains(rs.getString(EDUCATION_UUID))) {
 				AuditDetails auditDetails = AuditDetails.builder().createdBy(rs.getString("education_createdby")).createdDate(rs.getLong("education_createddate"))
 						.lastModifiedBy(rs.getString("education_lastmodifiedby")).lastModifiedDate(rs.getLong("education_lastmodifieddate")).build();
-				EducationalQualification education = EducationalQualification.builder().id(rs.getString("education_uuid")).qualification(rs.getString("education_qualification")).stream(rs.getString("education_stream"))
+				EducationalQualification education = EducationalQualification.builder().id(rs.getString(EDUCATION_UUID)).qualification(rs.getString("education_qualification")).stream(rs.getString("education_stream"))
 						.yearOfPassing(rs.getLong("education_yearofpassing")).university(rs.getString("education_university")).remarks(rs.getString("education_remarks"))
 						.tenantId(rs.getString("education_tenantid"))
-						.isActive(null == rs.getObject("education_isactive")?true:rs.getBoolean("education_isactive"))
+						.isActive(null == rs.getObject(EDUCATION_ISACTIVE)?true:rs.getBoolean(EDUCATION_ISACTIVE))
 						.auditDetails(auditDetails).build();
 				
 				educationDetails.add(education);
@@ -168,7 +191,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 			currentEmployee.setEducation(educationDetails);
 		}catch(Exception e) {
 			log.error("Error in row mapper while mapping Educational Details: ",e);
-			throw new CustomException("ROWMAPPER_ERROR","Error in row mapper while mapping Educational Details");
+			throw new CustomException(ROWMAPPER_ERROR,"Error in row mapper while mapping Educational Details");
 		}
 	}
 	
@@ -187,14 +210,14 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 				tests = currentEmployee.getTests();
 			
 			List<String> ids = tests.stream().map(DepartmentalTest::getId).collect(Collectors.toList());
-			Boolean isActive = rs.getBoolean("depttest_isactive") !=false;
-			if(isActive  && !StringUtils.isEmpty(rs.getString("depttest_uuid")) && !ids.contains(rs.getString("depttest_uuid"))) {
+			Boolean isActive = rs.getBoolean(DEPTTEST_ISACTIVE) !=false;
+			if(isActive  && !StringUtils.isEmpty(rs.getString(DEPTTEST_UUID)) && !ids.contains(rs.getString(DEPTTEST_UUID))) {
 				AuditDetails auditDetails = AuditDetails.builder().createdBy(rs.getString("depttest_createdby")).createdDate(rs.getLong("depttest_createddate"))
 						.lastModifiedBy(rs.getString("depttest_lastmodifiedby")).lastModifiedDate(rs.getLong("depttest_lastmodifieddate")).build();
 				
-				DepartmentalTest test = DepartmentalTest.builder().id(rs.getString("depttest_uuid")).test(rs.getString("depttest_test")).yearOfPassing(rs.getLong("depttest_yearofpassing"))
+				DepartmentalTest test = DepartmentalTest.builder().id(rs.getString(DEPTTEST_UUID)).test(rs.getString("depttest_test")).yearOfPassing(rs.getLong("depttest_yearofpassing"))
 						.remarks(rs.getString("depttest_remarks")).tenantId(rs.getString("depttest_tenantid"))
-						.isActive(null == rs.getObject("depttest_isactive")?true:rs.getBoolean("depttest_isactive"))
+						.isActive(null == rs.getObject(DEPTTEST_ISACTIVE)?true:rs.getBoolean(DEPTTEST_ISACTIVE))
 						.auditDetails(auditDetails).build();
 				
 				tests.add(test);
@@ -202,7 +225,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 			currentEmployee.setTests(tests);
 		}catch(Exception e) {
 			log.error("Error in row mapper while mapping Departmental Tests: ",e);
-			throw new CustomException("ROWMAPPER_ERROR","Error in row mapper while mapping Departmental Tests");
+			throw new CustomException(ROWMAPPER_ERROR,"Error in row mapper while mapping Departmental Tests");
 		}
 	}
 	
@@ -221,11 +244,11 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 				history = currentEmployee.getServiceHistory();
 			
 			List<String> ids = history.stream().map(ServiceHistory::getId).collect(Collectors.toList());
-			if(!StringUtils.isEmpty(rs.getString("history_uuid")) && !ids.contains(rs.getString("history_uuid"))) {
+			if(!StringUtils.isEmpty(rs.getString(HISTORY_UUID)) && !ids.contains(rs.getString(HISTORY_UUID))) {
 				AuditDetails auditDetails = AuditDetails.builder().createdBy(rs.getString("history_createdby")).createdDate(rs.getLong("history_createddate"))
 						.lastModifiedBy(rs.getString("history_lastmodifiedby")).lastModifiedDate(rs.getLong("history_lastmodifieddate")).build();
 				
-				ServiceHistory service = ServiceHistory.builder().id(rs.getString("history_uuid")).serviceStatus(rs.getString("history_servicestatus")).serviceFrom(rs.getLong("history_servicefrom"))
+				ServiceHistory service = ServiceHistory.builder().id(rs.getString(HISTORY_UUID)).serviceStatus(rs.getString("history_servicestatus")).serviceFrom(rs.getLong("history_servicefrom"))
 						.serviceTo(null == rs.getObject("history_serviceto")? null :rs.getLong("history_serviceto")).orderNo(rs.getString("history_ordernumber")).isCurrentPosition(rs.getBoolean("history_iscurrentposition"))
 						.location(rs.getString("history_location")).tenantId(rs.getString("history_tenantid")).auditDetails(auditDetails).build();
 				
@@ -234,7 +257,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 			currentEmployee.setServiceHistory(history);
 		}catch(Exception e) {
 			log.error("Error in row mapper while mapping Service History: ",e);
-			throw new CustomException("ROWMAPPER_ERROR","Error in row mapper while mapping Service History");
+			throw new CustomException(ROWMAPPER_ERROR,"Error in row mapper while mapping Service History");
 		}
 	
 	}
@@ -254,10 +277,10 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 				documents = currentEmployee.getDocuments();
 			
 			List<String> ids = documents.stream().map(EmployeeDocument::getId).collect(Collectors.toList());
-			if(!StringUtils.isEmpty(rs.getString("docs_uuid")) && !ids.contains(rs.getString("docs_uuid")) ) {
+			if(!StringUtils.isEmpty(rs.getString(DOCS_UUID)) && !ids.contains(rs.getString(DOCS_UUID)) ) {
 				AuditDetails auditDetails = AuditDetails.builder().createdBy(rs.getString("docs_createdby")).createdDate(rs.getLong("docs_createddate"))
 						.lastModifiedBy(rs.getString("docs_lastmodifiedby")).lastModifiedDate(rs.getLong("docs_lastmodifieddate")).build();
-				EmployeeDocument document = EmployeeDocument.builder().id(rs.getString("docs_uuid")).documentId(rs.getString("docs_documentid"))
+				EmployeeDocument document = EmployeeDocument.builder().id(rs.getString(DOCS_UUID)).documentId(rs.getString("docs_documentid"))
 						.documentName(rs.getString("docs_documentname")).referenceType(rs.getString("docs_referencetype") != null ? EmployeeDocumentReferenceType.valueOf(rs.getString("docs_referencetype")): null)
 						.referenceId(rs.getString("docs_referenceid")).tenantId(rs.getString("docs_tenantid")).auditDetails(auditDetails).build();
 				
@@ -266,7 +289,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 			currentEmployee.setDocuments(documents);
 		}catch(Exception e) {
 			log.error("Error in row mapper while mapping document: ",e);
-			throw new CustomException("ROWMAPPER_ERROR","Error in row mapper while mapping document");
+			throw new CustomException(ROWMAPPER_ERROR,"Error in row mapper while mapping document");
 
 		}
 	}
@@ -286,12 +309,12 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 				deactDetails = currentEmployee.getDeactivationDetails();
 			
 			List<String> ids = deactDetails.stream().map(DeactivationDetails::getId).collect(Collectors.toList());
-			if(!StringUtils.isEmpty(rs.getString("deact_uuid")) && !ids.contains(rs.getString("deact_uuid")) ) {
-				if(rs.getString("deact_uuid")!=null){
+			if(!StringUtils.isEmpty(rs.getString(DEACT_UUID)) && !ids.contains(rs.getString(DEACT_UUID)) ) {
+				if(rs.getString(DEACT_UUID)!=null){
 					AuditDetails auditDetails = AuditDetails.builder().createdBy(rs.getString("deact_createdby")).createdDate(rs.getLong("deact_createddate"))
 							.lastModifiedBy(rs.getString("deact_lastmodifiedby")).lastModifiedDate(rs.getLong("deact_lastmodifieddate")).build();
 
-					DeactivationDetails deactDetail = DeactivationDetails.builder().id(rs.getString("deact_uuid")).reasonForDeactivation(rs.getString("deact_reasonfordeactivation"))
+					DeactivationDetails deactDetail = DeactivationDetails.builder().id(rs.getString(DEACT_UUID)).reasonForDeactivation(rs.getString("deact_reasonfordeactivation"))
 							.effectiveFrom(rs.getLong("deact_effectivefrom")).orderNo(rs.getString("deact_ordernumber")).remarks(rs.getString("deact_remarks")!= null ? (rs.getString("deact_remarks")) : null)
 							.tenantId(rs.getString("deact_tenantid")).auditDetails(auditDetails).build();
 
@@ -302,7 +325,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 
 		}catch(Exception e) {
 			log.error("Error in row mapper while mapping deactivation details: ",e);
-			throw new CustomException("ROWMAPPER_ERROR","Error in row mapper while mapping deactivation details");
+			throw new CustomException(ROWMAPPER_ERROR,"Error in row mapper while mapping deactivation details");
 		}
 	}
 
@@ -315,12 +338,12 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 				reactDetails = currentEmployee.getReactivationDetails();
 
 			List<String> ids = reactDetails.stream().map(ReactivationDetails::getId).collect(Collectors.toList());
-			if(!StringUtils.isEmpty(rs.getString("react_uuid")) && !ids.contains(rs.getString("react_uuid")) ) {
-				if(rs.getString("react_uuid")!=null){
+			if(!StringUtils.isEmpty(rs.getString(REACT_UUID)) && !ids.contains(rs.getString(REACT_UUID)) ) {
+				if(rs.getString(REACT_UUID)!=null){
 					AuditDetails auditDetails = AuditDetails.builder().createdBy(rs.getString("react_createdby")).createdDate(rs.getLong("react_createddate"))
 							.lastModifiedBy(rs.getString("react_lastmodifiedby")).lastModifiedDate(rs.getLong("react_lastmodifieddate")).build();
 
-					ReactivationDetails reactDetail = ReactivationDetails.builder().id(rs.getString("react_uuid")).reasonForReactivation(rs.getString("react_reasonforreactivation"))
+					ReactivationDetails reactDetail = ReactivationDetails.builder().id(rs.getString(REACT_UUID)).reasonForReactivation(rs.getString("react_reasonforreactivation"))
 							.effectiveFrom(rs.getLong("react_effectivefrom")).orderNo(rs.getString("react_ordernumber")).remarks(rs.getString("react_remarks")!= null ? (rs.getString("react_remarks")) : null)
 							.tenantId(rs.getString("react_tenantid")).auditDetails(auditDetails).build();
 
@@ -331,7 +354,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 
 		}catch(Exception e) {
 			log.error("Error in row mapper while mapping reactivation details ",e);
-			throw new CustomException("ROWMAPPER_ERROR","Error in row mapper while mapping reactivation details");
+			throw new CustomException(ROWMAPPER_ERROR,"Error in row mapper while mapping reactivation details");
 		}
 	}
 

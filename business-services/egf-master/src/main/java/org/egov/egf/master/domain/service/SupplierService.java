@@ -39,6 +39,8 @@ public class SupplierService {
 	@Autowired
 	private BankRepository bankRepository;
 
+	private static final String SUPPLIERS="suppliers";
+
 	private BindingResult validate(List<Supplier> suppliers, String method, BindingResult errors) {
 
                 try {
@@ -49,7 +51,7 @@ public class SupplierService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (suppliers == null) {
-                            throw new InvalidDataException("suppliers", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(SUPPLIERS, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Supplier supplier : suppliers) {
                             validator.validate(supplier, errors);
@@ -61,7 +63,7 @@ public class SupplierService {
                         break;
                     case Constants.ACTION_UPDATE:
                         if (suppliers == null) {
-                            throw new InvalidDataException("suppliers", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(SUPPLIERS, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Supplier supplier : suppliers) {
                             if (supplier.getId() == null) {
@@ -76,7 +78,7 @@ public class SupplierService {
                         break;
                     case Constants.ACTION_SEARCH:
                         if (suppliers == null) {
-                            throw new InvalidDataException("suppliers", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(SUPPLIERS, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Supplier supplier : suppliers) {
                             if (supplier.getTenantId() == null) {

@@ -42,7 +42,6 @@ public class SurrenderReasonQueueRepository {
 
         case "create":
             topicMap.put("surrenderreason_create", request);
-            System.out.println("push create topic" + request);
             break;
         case "update":
             topicMap.put("surrenderreason_update", request);
@@ -63,7 +62,6 @@ public class SurrenderReasonQueueRepository {
 
             topicMap.put("surrenderreason_persisted", request);
 
-            System.out.println("push search topic" + request);
 
         }
 

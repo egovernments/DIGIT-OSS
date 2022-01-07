@@ -2,7 +2,7 @@ package com.ingestpipeline.testcases;
  
 import java.util.LinkedHashMap;
 import java.util.List;
-
+import org.slf4j.Logger;
 import org.springframework.web.client.RestTemplate;
  
 
@@ -13,17 +13,15 @@ public class IngestTestClient {
     /* GET */
     @SuppressWarnings("unchecked")
     private static void listAllUsers(){
-        System.out.println("Testing listAllUsers API-----------");
-         
         RestTemplate restTemplate = new RestTemplate();
         List<LinkedHashMap<String, Object>> usersMap = restTemplate.getForObject(REST_SERVICE_URI+"/user/", List.class);
          
         if(usersMap!=null){
             for(LinkedHashMap<String, Object> map : usersMap){
-                System.out.println("User : id="+map.get("id")+", Name="+map.get("name")+", Age="+map.get("age")+", Salary="+map.get("salary"));;
+                Logger("User : id="+map.get("id")+", Name="+map.get("name")+", Age="+map.get("age")+", Salary="+map.get("salary"));;
             }
         }else{
-            System.out.println("No user exist----------");
+            Logger("No user exist----------");
         }
     }
      

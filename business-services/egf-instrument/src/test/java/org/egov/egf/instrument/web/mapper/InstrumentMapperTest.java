@@ -34,6 +34,20 @@ public class InstrumentMapperTest {
     @InjectMocks
     private InstrumentMapper instrumentMapper;
 
+    private static final String BRANCH_NAME="branchName";
+
+    private static final String DRAWER="drawer";
+
+    private static final String VOUCHER_HEADER_ID="voucherHeaderId";
+
+    private static final String PAYEE="payee";
+
+    private static final String SERIAL_NO="serialNo";
+
+    private static final String TRANSACTION_NUMBER="transactionNumber";
+
+    private static final String TENANT_ID="tenantId";
+
     @Before
     public void setup() {
         instrumentMapper = new InstrumentMapper();
@@ -167,8 +181,8 @@ public class InstrumentMapperTest {
         instrument.setAmount(BigDecimal.ONE);
         instrument.setBank(BankContract.builder().id("id").build());
         instrument.setBankAccount(BankAccountContract.builder().id("id").build());
-        instrument.setBranchName("branchName");
-        instrument.setDrawer("drawer");
+        instrument.setBranchName(BRANCH_NAME);
+        instrument.setDrawer(DRAWER);
         instrument.setFinancialStatus(FinancialStatusContract.builder().code("code").build());
         instrument.setInstrumentType(InstrumentType.builder().id("id").build());
         instrument.setSurrenderReason(SurrenderReason.builder().id("id").build());
@@ -176,17 +190,17 @@ public class InstrumentMapperTest {
         List<InstrumentVoucher> instrumentVouchers = new ArrayList<>();
 
         instrumentVouchers.add(InstrumentVoucher.builder().instrument(Instrument.builder().id("id").build())
-                .voucherHeaderId("voucherHeaderId").build());
+                .voucherHeaderId(VOUCHER_HEADER_ID).build());
 
         instrument.setInstrumentVouchers(instrumentVouchers);
 
-        instrument.setPayee("payee");
-        instrument.setSerialNo("serialNo");
-        instrument.setTransactionNumber("transactionNumber");
+        instrument.setPayee(PAYEE);
+        instrument.setSerialNo(SERIAL_NO);
+        instrument.setTransactionNumber(TRANSACTION_NUMBER);
         instrument.setTransactionType(TransactionType.Credit);
         instrument.setCreatedBy(User.builder().id(1l).build());
         instrument.setLastModifiedBy(User.builder().id(1l).build());
-        instrument.setTenantId("tenantId");
+        instrument.setTenantId(TENANT_ID);
 
         return instrument;
     }
@@ -199,8 +213,8 @@ public class InstrumentMapperTest {
         contract.setAmount(BigDecimal.ONE);
         contract.setBank(BankContract.builder().id("id").build());
         contract.setBankAccount(BankAccountContract.builder().id("id").build());
-        contract.setBranchName("branchName");
-        contract.setDrawer("drawer");
+        contract.setBranchName(BRANCH_NAME);
+        contract.setDrawer(DRAWER);
         contract.setFinancialStatus(FinancialStatusContract.builder().code("code").build());
         contract.setInstrumentType(InstrumentTypeContract.builder().id("id").build());
         contract.setSurrenderReason(SurrenderReasonContract.builder().id("id").build());
@@ -208,17 +222,17 @@ public class InstrumentMapperTest {
         List<InstrumentVoucherContract> instrumentVouchers = new ArrayList<>();
 
         instrumentVouchers.add(InstrumentVoucherContract.builder()
-                .instrument("id").voucherHeaderId("voucherHeaderId").build());
+                .instrument("id").voucherHeaderId(VOUCHER_HEADER_ID).build());
 
         contract.setInstrumentVouchers(instrumentVouchers);
 
-        contract.setPayee("payee");
-        contract.setSerialNo("serialNo");
-        contract.setTransactionNumber("transactionNumber");
+        contract.setPayee(PAYEE);
+        contract.setSerialNo(SERIAL_NO);
+        contract.setTransactionNumber(TRANSACTION_NUMBER);
         contract.setTransactionType(TransactionTypeContract.Credit);
         contract.setCreatedBy(User.builder().id(1l).build());
         contract.setLastModifiedBy(User.builder().id(1l).build());
-        contract.setTenantId("tenantId");
+        contract.setTenantId(TENANT_ID);
 
         return contract;
     }
@@ -231,8 +245,8 @@ public class InstrumentMapperTest {
         instrumentSearch.setAmount(BigDecimal.ONE);
         instrumentSearch.setBank(BankContract.builder().id("id").build());
         instrumentSearch.setBankAccount(BankAccountContract.builder().id("id").build());
-        instrumentSearch.setBranchName("branchName");
-        instrumentSearch.setDrawer("drawer");
+        instrumentSearch.setBranchName(BRANCH_NAME);
+        instrumentSearch.setDrawer(DRAWER);
         instrumentSearch.setFinancialStatus(FinancialStatusContract.builder().code("code").build());
         instrumentSearch.setInstrumentType(InstrumentType.builder().id("id").build());
         instrumentSearch.setSurrenderReason(SurrenderReason.builder().id("id").build());
@@ -240,17 +254,17 @@ public class InstrumentMapperTest {
         List<InstrumentVoucher> instrumentVouchers = new ArrayList<>();
 
         instrumentVouchers.add(InstrumentVoucher.builder().instrument(Instrument.builder().id("id").build())
-                .voucherHeaderId("voucherHeaderId").build());
+                .voucherHeaderId(VOUCHER_HEADER_ID).build());
 
         instrumentSearch.setInstrumentVouchers(instrumentVouchers);
 
-        instrumentSearch.setPayee("payee");
-        instrumentSearch.setSerialNo("serialNo");
-        instrumentSearch.setTransactionNumber("transactionNumber");
+        instrumentSearch.setPayee(PAYEE);
+        instrumentSearch.setSerialNo(SERIAL_NO);
+        instrumentSearch.setTransactionNumber(TRANSACTION_NUMBER);
         instrumentSearch.setTransactionType(TransactionType.Credit);
         instrumentSearch.setCreatedBy(User.builder().id(1l).build());
         instrumentSearch.setLastModifiedBy(User.builder().id(1l).build());
-        instrumentSearch.setTenantId("tenantId");
+        instrumentSearch.setTenantId(TENANT_ID);
         instrumentSearch.setPageSize(1);
         instrumentSearch.setOffset(1);
 
@@ -265,8 +279,8 @@ public class InstrumentMapperTest {
         contract.setAmount(BigDecimal.ONE);
         contract.setBank(BankContract.builder().id("id").build());
         contract.setBankAccount(BankAccountContract.builder().id("id").build());
-        contract.setBranchName("branchName");
-        contract.setDrawer("drawer");
+        contract.setBranchName(BRANCH_NAME);
+        contract.setDrawer(DRAWER);
         contract.setFinancialStatus(FinancialStatusContract.builder().code("code").build());
         contract.setInstrumentType(InstrumentTypeContract.builder().id("id").build());
         contract.setSurrenderReason(SurrenderReasonContract.builder().id("id").build());
@@ -274,17 +288,17 @@ public class InstrumentMapperTest {
         List<InstrumentVoucherContract> instrumentVouchers = new ArrayList<>();
 
         instrumentVouchers.add(InstrumentVoucherContract.builder()
-                .instrument("id").voucherHeaderId("voucherHeaderId").build());
+                .instrument("id").voucherHeaderId(VOUCHER_HEADER_ID).build());
 
         contract.setInstrumentVouchers(instrumentVouchers);
 
-        contract.setPayee("payee");
-        contract.setSerialNo("serialNo");
-        contract.setTransactionNumber("transactionNumber");
+        contract.setPayee(PAYEE);
+        contract.setSerialNo(SERIAL_NO);
+        contract.setTransactionNumber(TRANSACTION_NUMBER);
         contract.setTransactionType(TransactionTypeContract.Credit);
         contract.setCreatedBy(User.builder().id(1l).build());
         contract.setLastModifiedBy(User.builder().id(1l).build());
-        contract.setTenantId("tenantId");
+        contract.setTenantId(TENANT_ID);
         contract.setPageSize(1);
         contract.setOffset(1);
 

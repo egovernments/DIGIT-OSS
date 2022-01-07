@@ -100,8 +100,12 @@ public class ActionRepository {
 	private String actionMaster;
 	@Value("${mdms.actionstest.path}")
 	private String actionTestPath;
-	
-	
+
+	private static final String QUERY_PARAMS="queryparams";
+
+	private static final String ENABLED="enabled";
+
+	private static final String TENANT_ID="tenantid";
 
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -119,9 +123,9 @@ public class ActionRepository {
 		List<Map<String, Object>> batchValues = new ArrayList<>(actions.size());
 		for (Action action : actions) {
 			batchValues.add(new MapSqlParameterSource("name", action.getName()).addValue("url", action.getUrl())
-					.addValue("servicecode", action.getServiceCode()).addValue("queryparams", action.getQueryParams())
+					.addValue("servicecode", action.getServiceCode()).addValue(QUERY_PARAMS, action.getQueryParams())
 					.addValue("parentmodule", action.getParentModule()).addValue("ordernumber", action.getOrderNumber())
-					.addValue("displayname", action.getDisplayName()).addValue("enabled", action.isEnabled())
+					.addValue("displayname", action.getDisplayName()).addValue(ENABLED, action.isEnabled())
 					.addValue("createdby", Long.valueOf(actionRequest.getRequestInfo().getUserInfo().getId()))
 					.addValue("lastmodifiedby", Long.valueOf(actionRequest.getRequestInfo().getUserInfo().getId()))
 					.addValue("createddate", new Date(new java.util.Date().getTime()))
@@ -142,9 +146,9 @@ public class ActionRepository {
 		List<Map<String, Object>> batchValues = new ArrayList<>(actions.size());
 		for (Action action : actions) {
 			batchValues.add(new MapSqlParameterSource("url", action.getUrl())
-					.addValue("servicecode", action.getServiceCode()).addValue("queryparams", action.getQueryParams())
+					.addValue("servicecode", action.getServiceCode()).addValue(QUERY_PARAMS, action.getQueryParams())
 					.addValue("parentmodule", action.getParentModule()).addValue("ordernumber", action.getOrderNumber())
-					.addValue("displayname", action.getDisplayName()).addValue("enabled", action.isEnabled())
+					.addValue("displayname", action.getDisplayName()).addValue(ENABLED, action.isEnabled())
 					.addValue("lastmodifiedby", Long.valueOf(actionRequest.getRequestInfo().getUserInfo().getId()))
 					.addValue("lastmodifieddate", new Date(new java.util.Date().getTime()))
 					.addValue("name", action.getName()).getValues());
@@ -178,7 +182,7 @@ public class ActionRepository {
 		final Map<String, Object> parametersMap = new HashMap<String, Object>();
 
 		parametersMap.put("url", url);
-		parametersMap.put("queryparams", queryParams);
+		parametersMap.put(QUERY_PARAMS, queryParams);
 
 		SqlRowSet sqlRowSet = namedParameterJdbcTemplate.queryForRowSet(Query, parametersMap);
 
@@ -198,13 +202,13 @@ public class ActionRepository {
 		final Map<String, Object> parametersMap = new HashMap<String, Object>();
 
 		parametersMap.put("code", actionRequest.getRoleCodes());
-		parametersMap.put("tenantid", actionRequest.getTenantId());
+		parametersMap.put(TENANT_ID, actionRequest.getTenantId());
 
 		String query = "select id,name,displayname,servicecode,url,queryparams,enabled,parentmodule,ordernumber from eg_action action where id IN(select actionid from eg_roleaction roleaction where roleaction.rolecode IN ( select code from eg_ms_role where code in (:code)) and roleaction.tenantid =:tenantid and action.id = roleaction.actionid )";
 
 		if (actionRequest.getEnabled() != null) {
 			query = query + " and enabled =:enabled ORDER BY id ASC";
-			parametersMap.put("enabled", actionRequest.getEnabled());
+			parametersMap.put(ENABLED, actionRequest.getEnabled());
 		} else {
 			query = query + " ORDER BY id ASC";
 		}
@@ -234,13 +238,13 @@ public class ActionRepository {
 		final Map<String, Object> parametersMap = new HashMap<String, Object>();
 
 		parametersMap.put("codes", codes);
-		parametersMap.put("tenantid", actionRequest.getTenantId());
+		parametersMap.put(TENANT_ID, actionRequest.getTenantId());
 
 		String query = "select id,name,code,parentmodule,displayname,enabled from service service where service.code in (:codes) and tenantid=:tenantid";
 
 		if (actionRequest.getEnabled() != null) {
 			query = query + " and enabled =:enabled ";
-			parametersMap.put("enabled", actionRequest.getEnabled());
+			parametersMap.put(ENABLED, actionRequest.getEnabled());
 		}
 
 		LOGGER.info("services Query : " + query);
@@ -264,7 +268,7 @@ public class ActionRepository {
 		final Map<String, Object> parametersMap = new HashMap<String, Object>();
 
 		parametersMap.put("moduleCodes", moduleCodes);
-		parametersMap.put("tenantid", actionRequest.getTenantId());
+		parametersMap.put(TENANT_ID, actionRequest.getTenantId());
 
 		allservicesQueryBuilder.append("(WITH RECURSIVE nodes(id,code,name,parentmodule,displayname,enabled) AS ("
 				+ " SELECT s1.id,s1.code, s1.name, s1.parentmodule,s1.displayname,s1.enabled"
@@ -273,7 +277,7 @@ public class ActionRepository {
 				+ " FROM nodes s2, service s1 WHERE CAST(s1.parentmodule as bigint) = s2.id");
 
 		if (actionRequest.getEnabled() != null) {
-			parametersMap.put("enabled", actionRequest.getEnabled());
+			parametersMap.put(ENABLED, actionRequest.getEnabled());
 
 			allservicesQueryBuilder.append(" and s1.tenantid =:tenantid and s1.enabled =:enabled )");
 
@@ -288,7 +292,7 @@ public class ActionRepository {
 				+ " SELECT s1.id,s1.code, s1.name, s1.parentmodule,s1.displayname,s1.enabled"
 				+ " FROM nodes s2, service s1 WHERE CAST(s2.parentmodule as bigint) = s1.id");
 		if (actionRequest.getEnabled() != null) {
-			parametersMap.put("enabled", actionRequest.getEnabled());
+			parametersMap.put(ENABLED, actionRequest.getEnabled());
 
 			allservicesQueryBuilder
 					.append(" and s1.tenantid =:tenantid and s1.enabled =:enabled ) SELECT * FROM nodes )");
@@ -637,8 +641,8 @@ private List<Action> convertToAction(ActionRequest actionRequest,JSONArray actio
 		if(actionsArray.getJSONObject(i).has("url")){
 		act.setUrl(actionsArray.getJSONObject(i).getString("url"));
 		} else {act.setUrl("");}
-		if(actionsArray.getJSONObject(i).has("enabled")){
-		act.setEnabled(actionsArray.getJSONObject(i).getBoolean("enabled"));
+		if(actionsArray.getJSONObject(i).has(ENABLED)){
+		act.setEnabled(actionsArray.getJSONObject(i).getBoolean(ENABLED));
 		} else {act.setEnabled(false);}
 		if(actionsArray.getJSONObject(i).has("id")){
 		act.setId(actionsArray.getJSONObject(i).getLong("id"));
@@ -655,8 +659,8 @@ private List<Action> convertToAction(ActionRequest actionRequest,JSONArray actio
 		if(actionsArray.getJSONObject(i).has("path")){
 		act.setPath(actionsArray.getJSONObject(i).getString("path"));
 		} else {act.setPath("");}
-		if(actionsArray.getJSONObject(i).has("queryParams")){
-		act.setQueryParams(actionsArray.getJSONObject(i).get("queryParams").toString());
+		if(actionsArray.getJSONObject(i).has(QUERY_PARAMS)){
+		act.setQueryParams(actionsArray.getJSONObject(i).get(QUERY_PARAMS).toString());
 		} else {act.setQueryParams("");}
 		if(actionsArray.getJSONObject(i).has("serviceCode")){
 		act.setServiceCode(actionsArray.getJSONObject(i).getString("serviceCode"));

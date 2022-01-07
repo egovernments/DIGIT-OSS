@@ -54,6 +54,10 @@ public class MetadataServiceImpl implements MetadataService {
     @Value("${egov.mdms.search.endpoint}")
     private String mdmsSearchEndpoint;
 
+	private static final String ROLE_NAME="roleName";
+
+	private static final String ROLE_ID="roleId";
+
 	@Override
 	public ArrayNode getDashboardConfiguration(String dashboardId, String catagory, List<RoleDto> roleIds) throws AINException, IOException {
 
@@ -72,9 +76,9 @@ public class MetadataServiceImpl implements MetadataService {
 		ArrayNode rolesArray = (ArrayNode) roleMappingNode.findValue(Constants.DashBoardConfig.ROLES);
 		ArrayNode dbArray = JsonNodeFactory.instance.arrayNode();
 		for(JsonNode role: rolesArray){
-			logger.info("role name: " + role.get("roleName"));
-			logger.info("role ID: " + role.get("roleId"));
-			String roleId = role.get("roleId").asText();
+			logger.info("role name: " + role.get(ROLE_NAME));
+			logger.info("role ID: " + role.get(ROLE_ID));
+			String roleId = role.get(ROLE_ID).asText();
 
 			//Object roleId = roleIds.stream().filter(x -> role.get(Constants.DashBoardConfig.ROLE_ID).asLong() == (x.getId())).findAny().orElse(null);
 			if (null != roleId) {
@@ -110,8 +114,8 @@ public class MetadataServiceImpl implements MetadataService {
 							copyDashboard.set(Constants.DashBoardConfig.TITLE, title);
 
 							copyDashboard.set(Constants.DashBoardConfig.VISUALISATIONS, visArray);
-							copyDashboard.set("roleId", role.get("roleId"));
-							copyDashboard.set("roleName", role.get("roleName"));
+							copyDashboard.set(ROLE_ID, role.get(ROLE_ID));
+							copyDashboard.set(ROLE_NAME, role.get(ROLE_NAME));
 
 						}//);
 						dbArray.add(copyDashboard);

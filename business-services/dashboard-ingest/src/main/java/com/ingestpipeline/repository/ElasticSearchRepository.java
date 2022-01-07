@@ -30,6 +30,8 @@ public class ElasticSearchRepository {
 		this.restTemplate = restTemplate;
 	}
 
+	private static final String ERROR="Error : ";
+
 	/**
 	 * Based on the Transaction Index Data Obtained and the URL with Headers, this method will put the Data obtained on the
 	 * Elastic Search Database and returns the response in the form of Positive or Negative outcome (True Or False) 
@@ -44,11 +46,11 @@ public class ElasticSearchRepository {
 			map = restTemplate.exchange(url, HttpMethod.PUT,
 					new HttpEntity<>(object, headers), Map.class);
 		} catch (final HttpClientErrorException httpClientErrorException) {
-			LOGGER.error("Error : " + httpClientErrorException);
+			LOGGER.error(ERROR + httpClientErrorException);
 		} catch (HttpServerErrorException httpServerErrorException) {
-			LOGGER.error("Error : " + httpServerErrorException);
+			LOGGER.error(ERROR + httpServerErrorException);
 		} catch (Exception e) {
-			LOGGER.error("Error : " + e);
+			LOGGER.error(ERROR + e);
 		}
 		if (map != null && map.getStatusCode() != null && (map.getStatusCode() == HttpStatus.OK) || (map.getStatusCode() == HttpStatus.CREATED)) {
 			return true;
