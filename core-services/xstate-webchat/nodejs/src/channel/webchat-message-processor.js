@@ -18,10 +18,8 @@ class WebMessageProcessor {
                 tenantId: config.rootTenantId,
                 filestoreId: requestBody.extraInfo.filestoreId,
                 applicationId: requestBody.extraInfo.applicationId,
-                comments:requestBody.extraInfo.comments
-            },
-             user: {
-                mobileNumber: requestBody.user.mobileNumber
+                comments:requestBody.extraInfo.comments,
+                mobileNumber: requestBody.extraInfo.mobileNumber
             }
 
         }

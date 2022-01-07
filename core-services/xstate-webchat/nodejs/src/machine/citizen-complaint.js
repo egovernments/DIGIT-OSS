@@ -1,8 +1,8 @@
 const { assign } = require('xstate');
 const { pgrService } = require('./service/service-loader');
-const { workFlowService } = require('./service/service-loader');
+const { workFlowService, propertyService } = require('./service/service-loader');
 const dialog = require('./util/dialog');
-const messages = require('./messages/complaint-messages');
+const { messages, grammers } = require('./messages/complaint-messages');
 const emailNotificationService = require('./service/email-notification');
 
 const citizenComplaint = {
@@ -75,13 +75,14 @@ const citizenComplaint = {
         }, // question
         process: {
           onEntry: assign((context, event) => {
-            context.intention = dialog.get_intention(context.grammer, event, true);
+            let a = dialog.get_intention(context.grammer, event, true);
+            context.intention = a;
+            
           }),
           always: [
-            {
-              cond: (context) => context.intention == dialog.INTENTION_GOBACK,
-              target: '#complaintCategory',
-
+                        {
+                            cond: (context) => context.intention == dialog.INTENTION_GOBACK,
+                            target: '#complaintCategory',
                         },
                         {
                             cond: (context) => context.intention == 'appidSearch',
@@ -98,16 +99,22 @@ const citizenComplaint = {
                             })
                         },
                         {
+                          cond: (context) => context.intention == 'selectproperty',
+                          target: '#selectProperty',
+                          actions: assign((context, event) => {
+                              context.slots.pgr["mobileNumber"] = context.intention;
+                          })
+                        },
+                        {
                             cond: (context) => context.intention != dialog.INTENTION_UNKOWN,
                             target: '#complaintItem',
                             actions: assign((context, event) => {
                                 context.slots.pgr["complaintItem"] = context.intention;
                             })
                         },
-
-            {
-              target: 'error',
-            },
+                        {
+                          target: 'error',
+                        },
           ],
         }, // process
         error: {
@@ -177,6 +184,142 @@ const citizenComplaint = {
                 } 
             } 
         }, 
+        
+        selectProperty:{
+          id: 'selectProperty',
+            invoke: {
+                id: 'fetchPropertyData',
+                src: (context) => propertyService.getPropertyData(context.extraInfo.mobileNumber,context.user),
+                onDone: {
+                    target: '#lastbillgenerated',
+                    actions: assign((context, event) => {
+                        let billDetails = event.data;
+                        let messageBundleForCode = messages.complaintCategoryItems['selectproperty'].messageBundle;
+                        let message = dialog.get_message(messageBundleForCode, context.user.locale);
+                        message.option.length=0;
+                        for(let i = 0; i<billDetails.length;i++){
+                          let option = {
+                            key: i+1,
+                            value: billDetails[i].id
+                          };
+                          message.option.push(option);
+                        }
+                        dialog.sendMessage(context, message, true);
+                        context.slots.pgr["billDetails"] = billDetails;  
+                    })
+                }
+            }
+
+        },
+
+        lastbillgenerated:{
+          id:'lastbillgenerated',
+          initial: 'question',
+          states:{
+            question: {
+              onEntry: assign((context, event) => {
+                
+              }),
+              on: {
+                USER_MESSAGE: 'process',
+              },
+            },
+
+            process: {
+              onEntry: assign((context, event) => {
+               let input = parseInt(event.message.input);
+               let billSize = context.slots.pgr["billDetails"].length;
+               let isValid = input>0 && input <= billSize ? true : false;
+               context.message = {
+                 isValid: isValid,
+                 messageContent: input
+               };
+              }),
+              always: [
+                {
+                  target: '#billComplaintProcess',
+                  cond: (context) => context.message.isValid
+                }
+              ],
+            }
+          },
+        },
+
+        billComplaintProcess: {
+          id:'billComplaintProcess',
+          initial: 'question',
+          states:{
+            question: {
+              onEntry: assign((context, event) => {
+                let messageBundleForCode = messages.complaintCategoryItems['lastbillgenerated'].messageBundle;
+                let message = dialog.get_message(messageBundleForCode, context.user.locale);
+                let data = context.slots.pgr.billDetails[context.message.messageContent - 1];
+                message.message = message.message.replace('<Bill ID>', data.billNumber);
+                message.message = message.message.replace('<Amount>',data.dueAmount);
+
+                dialog.sendMessage(context, message, true);
+              }),
+              on: {
+                USER_MESSAGE: 'process',
+              },
+            },
+            process:{
+              onEntry: assign((context, event) => {
+                context.intention = dialog.get_intention(grammers.confirmation.choice, event);
+              }),
+              always: [
+                {
+                  target: '#complaintComments',
+                  cond: (context) => ( context.intention == 'No' || context.intention == 'Yes'),
+                  actions: assign((context, event) => {
+                    context.slots.pgr["raisebillComplaintChoice"] = context.intention;
+                  })
+                },
+                {
+                  target: 'error',
+                  cond: (context, event) => context.intention === dialog.INTENTION_UNKOWN,
+                },
+              ],
+            },
+            error: {
+              onEntry: assign((context, event) => {
+                  dialog.sendMessage(context, dialog.get_message(dialog.global_messages.error.retry, context.user.locale), true);
+              }),
+              always: 'wait',
+            },
+            wait: {
+              on: {USER_MESSAGE: 'process' }
+            }, 
+
+          },  
+        },
+        complaintComments: {
+          id: 'complaintComments',
+          initial: 'question',
+          states: {
+            question: {
+              onEntry: assign((context, event) => {
+                let messageBundleForCode = messages.complaintCategoryItems['complaintComments'].messageBundle;
+                let message = dialog.get_message(messageBundleForCode, context.user.locale);
+                dialog.sendMessage(context, message, true);
+              }),
+              on: {
+                USER_MESSAGE: 'process',
+              },
+            }, // question
+            process: {
+              onEntry: assign((context, event) => {
+                context.slots.pgr['comments'] = event.extraInfo.comments;
+                context.slots.pgr['filestoreId'] = event.extraInfo.filestoreId;
+              }),
+              always: {
+                target: '#persistComplaint',
+              },
+    
+            },
+          },
+        },
+
 
         persistComplaint: {
             id: 'persistComplaint',

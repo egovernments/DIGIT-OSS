@@ -175,13 +175,14 @@ const messages = {
       nextStep: ['lastbillgenerated'],
       messageBundle: {
         en_IN: {
-          message: 'Please select your property from the below list which you want to report', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'P1' }, { key: '2', value: 'P2' }],
+          message: 'Please select your property from the below list which you want to report', step: 'intermediate', optionType: 'button', option: [],
         },
         hi_IN: {
-          message: 'कृपया नीचे दी गई सूची में से अपनी संपत्ति का चयन करें जिसकी आप रिपोर्ट करना चाहते हैंxdder', step: 'intermediate', optionType: 'button', option: [{ key: '1', value: 'P1' }, { key: '2', value: 'P2' }],
+          message: 'कृपया नीचे दी गई सूची में से अपनी संपत्ति का चयन करें जिसकी आप रिपोर्ट करना चाहते हैंxdder', step: 'intermediate', optionType: 'button', option: [],
         },
       },
     },
+
     lastbillgenerated: {
       nextStep: ['complaintComments'],
       messageBundle: {
@@ -238,4 +239,15 @@ const messages = {
 
 };
 
-module.exports = messages;
+const grammers = {
+  confirmation: {
+    choice: [
+      { intention: 'Yes', recognize: ['1', 'Yes', 'yes'] },
+      { intention: 'No', recognize: ['2', 'No', 'no'] },
+    ],
+  },
+};
+
+module.exports.messages = messages;
+module.exports.grammers = grammers;
+

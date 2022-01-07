@@ -8,6 +8,7 @@ if (config.serviceProvider === 'eGov') {
   }
   module.exports.ratingAndFeedback = require('./rating-feedback');
   module.exports.workFlowService = require('./egov-workflow-v2');
+  module.exports.propertyService = require('./egov-property');
 }
 else {
     console.log("Using Dummy Services");

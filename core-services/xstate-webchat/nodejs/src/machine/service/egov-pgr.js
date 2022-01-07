@@ -9,7 +9,7 @@ const path = require('path');
 const dialog = require('../util/dialog');
 const localisationService = require('../util/localisation-service');
 const config = require('../../env-variables');
-const messages = require('../messages/complaint-messages');
+const { messages, grammers } = require('../messages/complaint-messages');
 require('url-search-params-polyfill');
 
 const pgrCreateRequestBody = '{"RequestInfo":{"authToken":"","userInfo":{}},"service":{"tenantId":"","serviceCode":"","description":"","accountId":"","source":"whatsapp","address":{"landmark":"","city":"","geoLocation":{"latitude": null, "longitude": null},"locality":{"code":""}}},"workflow":{"action":"APPLY","verificationDocuments":[]}}';
