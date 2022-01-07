@@ -33,11 +33,8 @@ var consumerGroup = new kafka.ConsumerGroup(options, [
   envVariables.KAFKA_TOPICS_RECEIPT_CREATE
 ]);
 
-console.log("Consumer ");
 
 consumerGroup.on("message", function(message) {
-  console.log("consumer-topic", message.topic);
-  // console.log("consumer-value", JSON.parse(message.value));
   const value = JSON.parse(message.value);
 
   let payloads = [];
@@ -63,10 +60,8 @@ consumerGroup.on("message", function(message) {
     //   requestPayload
     // }).then(
     //   function(response) {
-    //     console.log(response);
     //   },
     //   function(error) {
-    //     console.log(error);
     //   }
     // );
   };
@@ -159,7 +154,6 @@ consumerGroup.on("message", function(message) {
         topic,
         messages: JSON.stringify(smsRequest)
       });
-      // console.log("smsRequest",smsRequest);
       if (smsRequest.message) {
         events.push({
           tenantId: tenantId,
@@ -173,14 +167,12 @@ consumerGroup.on("message", function(message) {
         });
       }
     }
-    // console.log("events",events);
     if (events.length > 0) {
       sendEventNotificaiton();
     }
   };
   const FireNOCPaymentStatus = async value => {
     try {
-      //console.log("Consumer Payment data"+JSON.stringify(value));
       const { Payment, RequestInfo } = value;
       let tenantId = get(Payment, "tenantId");
       const { paymentDetails } = Payment;
@@ -199,7 +191,6 @@ consumerGroup.on("message", function(message) {
             const body = { RequestInfo };
             const searchRequest = { body, query };
             const searchResponse = await searchApiResponse(searchRequest);
-            //console.log("search response: "+JSON.stringify(searchResponse));
             const { FireNOCs } = searchResponse;
             if (!FireNOCs.length) {
               throw "FIRENOC Search error";
@@ -219,14 +210,11 @@ consumerGroup.on("message", function(message) {
             for(var index =0; index < RequestInfo.userInfo.roles.length;index++){
               let tenantId = get(RequestInfo.userInfo,"tenantId");
               set(RequestInfo.userInfo.roles[index],"tenantId",tenantId);
-              //console.log("Workflow TenantId",get(body.RequestInfo.userInfo.roles[index],"tenantId"));
             }
 
             const updateBody = { RequestInfo, FireNOCs };
             const updateRequest = { body: updateBody };
-            //console.log("update Request: "+JSON.stringify(updateRequest));
             const updateResponse = await updateApiResponse(updateRequest, false);
-            //console.log("update Response: "+JSON.stringify(updateResponse));
           }
         }
       }
@@ -257,7 +245,6 @@ consumerGroup.on("message", function(message) {
 
     // case envVariables.KAFKA_TOPICS_RECEIPT_CREATE:
     //   {
-    //     console.log("reciept hit");
     //   }
     //   break;
     case envVariables.KAFKA_TOPICS_RECEIPT_CREATE:
@@ -269,19 +256,15 @@ consumerGroup.on("message", function(message) {
 
   producer.send(payloads, function(err, data) {
     if (!err) {
-      console.log(data);
     } else {
-      console.log(err);
     }
   });
 });
 
 consumerGroup.on("error", function(err) {
-  console.log("Error:", err);
 });
 
 consumerGroup.on("offsetOutOfRange", function(err) {
-  console.log("offsetOutOfRange:", err);
 });
 
 export default consumerGroup;

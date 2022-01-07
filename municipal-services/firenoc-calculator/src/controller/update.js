@@ -8,7 +8,6 @@ import some from "lodash/some";
 import { constants } from "../config/constants";
 
 const update = async (req, res, next) => {
-  console.log("update");
   let errors = validateBillingSlabReq(req.body);
   if (errors.length <= 0) errors = await updateValidate(req.body, errors);
 

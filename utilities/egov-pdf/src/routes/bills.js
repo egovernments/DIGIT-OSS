@@ -34,14 +34,12 @@ var router = express.Router();
          resBill = await search_billV2(tenantId, consumerCode, bussinessService, requestinfo);
        } catch (ex) {
          
-         if (ex.response && ex.response.data) console.log(ex.response.data);
          return renderError(res, "Failed to query details of the bill");
        }
        var bills = resBill.data;
        var pdfkey = config.pdf.consolidated_bill_template;
 
        if (bills && bills.Bill && bills.Bill.length > 0) {
-           console.log("Hi");
          var pdfResponse;
          try {
            var billArray = { Bill: bills.Bill };
@@ -53,7 +51,6 @@ var router = express.Router();
            );
          } catch (ex) {
            
-           if (ex.response && ex.response.data) console.log(ex.response.data);
            return renderError(res, "Failed to generate PDF for the bill");
          }
          
@@ -95,7 +92,6 @@ var router = express.Router();
           billAmendment = await search_amendment(tenantId, amendmentId, bussinessService, requestinfo);
         } catch (ex) {
           
-          if (ex.response && ex.response.data) console.log(ex.response.data);
           return renderError(res, "Failed to query details of the bill amendment");
         }
         var amendment = billAmendment.data;
@@ -113,7 +109,6 @@ var router = express.Router();
             );
           } catch (ex) {
             
-            if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(res, "Failed to generate PDF for the bill amendment");
           }
           

@@ -142,7 +142,6 @@ class ValueFirstWhatsAppProvider {
                 return true;
 
         } catch (error) {
-            console.error("Invalid request");
         }
         return false;
     };
@@ -205,7 +204,6 @@ class ValueFirstWhatsAppProvider {
 
         let fromMobileNumber = "91"+extraInfo.whatsAppBusinessNumber;
         if(!fromMobileNumber)
-            console.error("Receipient number can not be empty");
 
         let requestBody = JSON.parse(valueFirstRequestBody);
         requestBody["USER"]["@USERNAME"] = config.valueFirstWhatsAppProvider.valueFirstUsername;
@@ -293,7 +291,6 @@ class ValueFirstWhatsAppProvider {
         if(response.status === 200){
             let messageBack = await response.json();
             if(messageBack.MESSAGEACK.Err){
-                console.error(messageBack.MESSAGEACK.Err.Desc);
                 return messageBack;
             }
 
@@ -301,7 +298,6 @@ class ValueFirstWhatsAppProvider {
             return messageBack
         }         
         else {
-            console.error('Error in sending message');
             return undefined;
           }
     }    

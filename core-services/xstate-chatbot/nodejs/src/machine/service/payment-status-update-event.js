@@ -26,10 +26,8 @@ class PaymentStatusUpdateEventFormatter{
 
             self.paymentStatusMessage(paymentRequest)
             .then(() => {
-                console.log("payment message sent to citizen");        // TODO: Logs to be removed
             })
             .catch(error => {
-                console.error('error while sending event message');
                 console.error(error.stack || error);
             });
 
@@ -44,10 +42,8 @@ class PaymentStatusUpdateEventFormatter{
           if(status === 'FAILURE' && transactionRequest.Transaction.additionalDetails.isWhatsapp){
               self.prepareTransactionFailedMessage(transactionRequest)
               .then(() => {
-                console.log("transaction failed message sent to citizen");        // TODO: Logs to be removed
               })
               .catch(error => {
-                console.error('error while sending event message');
                 console.error(error.stack || error);
             });
           } 

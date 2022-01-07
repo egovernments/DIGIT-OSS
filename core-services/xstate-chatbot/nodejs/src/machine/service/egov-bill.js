@@ -348,10 +348,7 @@ class BillService {
       pendingBillSize=results.length;
       
     } 
-    /*else {
-      console.error('Error in fetching the bill');
-      return undefined;
-    }*/
+    
     
     if(totalBillSize==0){
       return {                        
@@ -516,7 +513,6 @@ class BillService {
     if(response.status === 200) {
       localitySearchResults = await response.json();
     } else {
-      console.error('Error in fetching the Locality data');
       return undefined;
     }
 

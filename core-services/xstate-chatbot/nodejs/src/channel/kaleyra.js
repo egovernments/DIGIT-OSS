@@ -46,7 +46,6 @@ class KaleyraWhatsAppProvider {
 
       return reformattedMessage;
     } catch(err) {
-      console.error('Error while processing message from user: ' + err);
       return undefined;
     }
   }

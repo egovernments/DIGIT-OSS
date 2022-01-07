@@ -6,10 +6,8 @@ const fetch = require("node-fetch");
 
 class RemindersService {
   async triggerReminders() {
-    console.log('Sending reminders to people');
     let userIdList = await repoProvider.getUserId(true);
     await this.sendMessages(userIdList);
-    console.log('Reminders execution end');
   }
 
   async sendMessages(userIdList) {

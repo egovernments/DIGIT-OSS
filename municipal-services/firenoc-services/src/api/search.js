@@ -27,8 +27,6 @@ export const searchApiResponse = async (request, next = {}) => {
     FireNOCs: []
   };
   const queryObj = JSON.parse(JSON.stringify(request.query));
-  console.log("request", request.query);
-  console.log("Query object:"+JSON.stringify(queryObj));
   let errors = validateFireNOCSearchModel(queryObj);
   if (errors.length > 0) {
     next({
@@ -40,7 +38,6 @@ export const searchApiResponse = async (request, next = {}) => {
     });
     return;
   }
-  // console.log(queryObj);
   let text =
     "SELECT FN.uuid as FID,FN.tenantid,FN.fireNOCNumber,FN.provisionfirenocnumber,FN.oldfirenocnumber,FN.dateofapplied,FN.createdBy,FN.createdTime,FN.lastModifiedBy,FN.lastModifiedTime,FD.uuid as firenocdetailsid,FD.action,FD.applicationnumber,FD.fireNOCType,FD.applicationdate,FD.financialYear,FD.firestationid,FD.issuedDate,FD.validFrom,FD.validTo,FD.action,FD.status,FD.channel,FD.propertyid,FD.noofbuildings,FD.additionaldetail,FBA.uuid as puuid,FBA.doorno as pdoorno,FBA.latitude as platitude,FBA.longitude as plongitude,FBA.buildingName as pbuildingname,FBA.addressnumber as paddressnumber,FBA.pincode as ppincode,FBA.locality as plocality,FBA.city as pcity,FBA.street as pstreet,FB.uuid as buildingid ,FB.name as buildingname,FB.usagetype,FO.uuid as ownerid,FO.ownertype,FO.applicantcategory,FO.useruuid,FO.relationship,FUOM.uuid as uomuuid,FUOM.code,FUOM.value,FUOM.activeuom,FBD.uuid as documentuuid,FUOM.active,FBD.documentType,FBD.filestoreid,FBD.documentuid,FBD.createdby as documentCreatedBy,FBD.lastmodifiedby as documentLastModifiedBy,FBD.createdtime as documentCreatedTime,FBD.lastmodifiedtime as documentLastModifiedTime FROM eg_fn_firenoc FN JOIN eg_fn_firenocdetail FD ON (FN.uuid = FD.firenocuuid) JOIN eg_fn_address FBA ON (FD.uuid = FBA.firenocdetailsuuid) JOIN eg_fn_owner FO ON (FD.uuid = FO.firenocdetailsuuid) JOIN eg_fn_buidlings FB ON (FD.uuid = FB.firenocdetailsuuid) JOIN eg_fn_buildinguoms FUOM ON (FB.uuid = FUOM.buildinguuid) LEFT OUTER JOIN eg_fn_buildingdocuments FBD on(FB.uuid = FBD.buildinguuid)";
   // FBD.active=true AND FO.active=true AND FUOM.active=true AND";
@@ -59,8 +56,6 @@ export const searchApiResponse = async (request, next = {}) => {
       ? queryObj.mobileNumber
       : mobileNumber;
     queryObj.tenantId = queryObj.tenantId ? queryObj.tenantId : tenantId;
-    console.log("mobileNumber", mobileNumber);
-    console.log("tenedrIDD", tenantId);
 
     text = `${text} where FN.tenantid = '${queryObj.tenantId}' AND`;
   } else {
@@ -77,15 +72,11 @@ export const searchApiResponse = async (request, next = {}) => {
   const queryKeys = Object.keys(queryObj);
   let sqlQuery = text;
   if (queryObj.hasOwnProperty("mobileNumber")) {
-    // console.log("mobile number");
     let userSearchResponse = await searchByMobileNumber(
       queryObj.mobileNumber,
       envVariables.EGOV_DEFAULT_STATE_ID
     );
-    // console.log(userSearchResponse);
     let searchUserUUID = get(userSearchResponse, "user.0.uuid");
-    // if (searchUserUUID) {
-    //   // console.log(searchUserUUID);
     var userSearchResponseJson = JSON.parse(JSON.stringify(userSearchResponse));  
     var userUUIDArray =[];
     for(var i =0;i<userSearchResponseJson.user.length;i++){
@@ -129,7 +120,6 @@ export const searchApiResponse = async (request, next = {}) => {
     // }
   }
   if (queryObj.hasOwnProperty("ids")) {
-    // console.log(queryObj.ids.split(","));
     let ids = queryObj.ids.split(",");
     for (var i = 0; i < ids.length; i++) {
       if (ids.length > 1) {
@@ -169,13 +159,9 @@ export const searchApiResponse = async (request, next = {}) => {
   } else if (!isEmpty(queryObj)) {
     sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)} ORDER BY FN.uuid`;
   }
-  console.log("SQL QUery:" +sqlQuery);
   const dbResponse = await db.query(sqlQuery);
-  //console.log("dbResponse"+JSON.stringify(dbResponse));
   if (dbResponse.err) {
-    console.log(err.stack);
   } else {
-     //console.log(JSON.stringify(dbResponse.rows));
     response.FireNOCs =
       dbResponse.rows && !isEmpty(dbResponse.rows)
         ? await mergeSearchResults(
@@ -189,9 +175,7 @@ export const searchApiResponse = async (request, next = {}) => {
 
   // , async (err, dbRes) => {
   //   if (err) {
-  //     console.log(err.stack);
   //   } else {
-  //     // console.log(JSON.stringify(res.rows));
   //     response.FireNOCs =
   //       dbRes.rows && !isEmpty(dbRes.rows)
   //         ? await mergeSearchResults(
