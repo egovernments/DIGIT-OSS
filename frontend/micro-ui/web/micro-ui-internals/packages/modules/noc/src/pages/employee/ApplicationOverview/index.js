@@ -33,6 +33,7 @@ const ApplicationOverview = () => {
   const [nocDocuments, setNocDocuments] = useState([]);
   const [pdfFiles, setPdfFiles] = useState({});
   const [filesArray, setFilesArray] = useState(() => []);
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
 
   const { isLoading: nocDocsLoading, data: nocDocs } = Digit.Hooks.obps.useMDMS(state, "NOC", ["DocumentTypeMapping"]);
@@ -224,7 +225,8 @@ const ApplicationOverview = () => {
         workflowDetails={workflowDetails}
         businessService={workflowDetails?.data?.applicationBusinessService ? workflowDetails?.data?.applicationBusinessService : applicationDetails?.applicationData?.businessService}
         moduleCode="NOC"
-        ActionBarStyle={{}} //paddingRight:"50px"
+        ActionBarStyle={isMobile?{}:{paddingRight:"50px"}}
+        MenuStyle={isMobile?{}:{right:"50px"}}
         showToast={showToast}
         setShowToast={setShowToast}
         closeToast={closeToast}
