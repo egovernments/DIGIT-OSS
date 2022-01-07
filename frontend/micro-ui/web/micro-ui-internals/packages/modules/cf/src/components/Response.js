@@ -4,20 +4,9 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ResponseComposer } from "@egovernments/digit-ui-react-components";
 
-const GetActionMessage = ({ action }) => {
-  const { t } = useTranslation();
-  switch (action) {
-    case "REOPEN":
-      return t(`CS_COMMON_COMPLAINT_REOPENED`);
-    case "RATE":
-      return t("CS_COMMON_THANK_YOU");
-    default:
-      return t(`CS_COMMON_COMPLAINT_SUBMITTED`);
-  }
-};
-
 const BannerPicker = ({ response }) => {
 
+  // Commented for now to handle failure case
   // if (complaints && complaints.response && complaints.response.responseInfo) {
   return (
     <Banner
@@ -47,7 +36,7 @@ const Response = (props) => {
   } else {
     let temp = successData.split('"')
     message = temp[1]
-    response.actionMessage = 'Feedback Submitted Successfully'
+    response.actionMessage = t('CF_FEEDBACK_SUCCESS')
   }
 
   return (
@@ -58,7 +47,7 @@ const Response = (props) => {
       <ResponseComposer />
       <CardText>{message}</CardText>
       <Link to="/digit-ui/citizen">
-        <SubmitBar label={"Back To Home"} />
+        <SubmitBar label={t("CF_GO_TO_HOME")} />
       </Link>
     </Card>
   );

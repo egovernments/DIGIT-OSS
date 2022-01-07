@@ -1,14 +1,8 @@
 import React, { useEffect } from "react";
-
-// import getRootReducer from "./redux/reducers";
 import CitizenApp from "./pages/citizen";
-
-import { ComplaintIcon, CitizenHomeCard, Loader } from "@egovernments/digit-ui-react-components";
-// import { PGR_CITIZEN_CREATE_COMPLAINT } from "./constants/Citizen";
+import { Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import CitizenFeedbackHome from "./pages/citizen/CitizenFeedbackHome";
-// import { LOCALE } from "./constants/Localization";
-// export const PGRReducers = getRootReducer;
 
 const CFModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "CF";
@@ -23,20 +17,16 @@ const CFModule = ({ stateCode, userType, tenants }) => {
 
   if (userType === "citizen") {
     return <CitizenApp />;
-  } else {
-    // return <EmployeeApp />;
   }
 };
 
 const CFLinks = ({ matchPath }) => {
   const { t } = useTranslation();
-  // const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_CREATE_COMPLAINT, {});
 
   useEffect(() => {
-    // clearParams();
   }, []);
 
-  return <CitizenFeedbackHome header={t("CS_COMMON_HOME_COMPLAINTS")} />;
+  return <CitizenFeedbackHome />;
 };
 
 const componentsToRegister = {

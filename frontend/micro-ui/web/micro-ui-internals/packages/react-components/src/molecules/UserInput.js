@@ -4,6 +4,7 @@ import CustomButton from '../atoms/SendButton';
 import GalleryButton from './GalleryButton';
 import Toast from '../atoms/Toast';
 import TextInput from '../atoms/TextInput';
+import { useTranslation } from "react-i18next";
 
 function UserInput(props) {
     const [OptionList, setOptionDetails] = useState([]);
@@ -11,6 +12,7 @@ function UserInput(props) {
     const [fileStoreIds, setFileStoreIds] = useState([]);
     const [showToast, setShowToast] = useState(null);
     const User = Digit.UserService.getUser();
+    const { t } = useTranslation();
 
     const textAreaStyling = {
         position: "absolute",
@@ -39,7 +41,7 @@ function UserInput(props) {
             itemName = 'mobile number'
             if (textData.length !== 10 || !(new RegExp(/^[0-9]*$/).test(textData))) {
                 isTextValid = false
-                setShowToast({ key: true, label: "Invalid Phone Number. Please enter a new Number and try again." })
+                setShowToast({ key: true, label: t('CF_INVALID_PHONE_NUMBER') })
                 setTimeout(() => {
                     setShowToast(null)
                 }, 3000);
@@ -48,7 +50,7 @@ function UserInput(props) {
             itemName = 'Application ID'
             if (textData.length <= 20 && new RegExp(/^[A-Za-z0-9-]*$/).test(textData)) { } else {
                 isTextValid = false
-                setShowToast({ key: true, label: 'Invalid Application ID. Please enter a new Application ID and try again.' })
+                setShowToast({ key: true, label: t('CF_INVALID_APPLICATION_ID') })
                 setTimeout(() => {
                     setShowToast(null)
                 }, 4000);
@@ -87,9 +89,9 @@ function UserInput(props) {
         setOptionDetails(props.data)
     }, [])
 
-    
-// render multi line text Area in case of comment 
-// and single line text area for mobile number and Application ID
+
+    // render multi line text Area in case of comment 
+    // and single line text area for mobile number and Application ID
     return (
         OptionList.map((i) => (
             <>
@@ -113,23 +115,25 @@ function UserInput(props) {
                                     overflow: "hidden",
                                     margin: "0px",
                                 }}
-                                placeholder="Type here"
+                                placeholder={t('CF_TEXT_AREA_PLACEHOLDER')}
                             />
                             <CustomButton action={handleSubmit} buttonStyle={textAreaStyling} /> </> :
                         <>
-                            <TextInput onChange={handleChange} placeholder={"Type here"} style={{
-                                borderRadius: "8px",
-                                border: "1px solid #FFFFFF",
-                                background: "#FFFFFF",
-                                width: "100%",
-                                boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.16)",
-                                overflow: "hidden",
-                                margin: "0px",
-                            }} onKeyPress={event => {
-                                if (event.key === 'Enter') {
-                                    handleSubmit()
-                                }
-                            }}></TextInput>
+                            <TextInput onChange={handleChange}
+                                placeholder={t('CF_TEXT_AREA_PLACEHOLDER')}
+                                style={{
+                                    borderRadius: "8px",
+                                    border: "1px solid #FFFFFF",
+                                    background: "#FFFFFF",
+                                    width: "100%",
+                                    boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.16)",
+                                    overflow: "hidden",
+                                    margin: "0px",
+                                }} onKeyPress={event => {
+                                    if (event.key === 'Enter') {
+                                        handleSubmit()
+                                    }
+                                }}></TextInput>
                             <CustomButton action={handleSubmit} buttonStyle={textInputStyling} />
                         </>
                     }

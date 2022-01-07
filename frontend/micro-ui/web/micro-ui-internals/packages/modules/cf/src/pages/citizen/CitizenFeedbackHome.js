@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { Card, CardHeader, ComplaintIcon, AvailableOptionsList, UserInput, ChatBubble, MultipleSelect, StarRating, ReplyComponent, Accordion, PopUp, SubmitBar, RatingPopupImage, CloseSvg, Close } from "@egovernments/digit-ui-react-components";
 import { PLAYSTORE_URL, WEBSOCKET_URL } from "./config";
 import { Timeline } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
 
 const CitizenFeedbackHome = ({ parentRoute }) => {
   const [steps, setSteps] = useState([]);
@@ -19,6 +20,7 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
   const messagesEndRef = useRef(null);
   const User = Digit.UserService.getUser();
   const { data: faqData, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "XstateWebChatbot", "FrequentlyAskedQuestions", {});
+  const { t } = useTranslation();
 
   const onItemSelect = (stepDetails, itemDetails) => {
     if (showFaq) {
@@ -267,7 +269,7 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
               lineHeight: "40px",
               textAlign: "center",
               color: "#505A5F"
-            }}>Feedback Bot</div>
+            }}>{t('CF_MAIN_HEADING')}</div>
           </CardHeader>
         </div>
         <ChatBubble type="left" >
@@ -278,7 +280,7 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
       </Card>
       {showFaq && (
         <Card>
-          <p style={{ color: '#F47738', fontSize: '20px' }}>FAQs</p>
+          <p style={{ color: '#F47738', fontSize: '20px' }}>{t('CF_FAQ_HEADING')}</p>
 
           <div className="accordion">
             {faqData && faqData.XstateWebChatbot && faqData.XstateWebChatbot.FrequentlyAskedQuestions.map(({ question, answer }) => (
@@ -291,11 +293,11 @@ const CitizenFeedbackHome = ({ parentRoute }) => {
         <PopUp className="cfPopup">
           <div className="popup-module cfPopupCard">
             <div className="cfPopupClose" onClick={() => handlePopupClose(false)} ><CloseSvg /></div>
-            <p className="cfPopupText">Would you also like to rate us on Playstore / Appstore?</p>
+            <p className="cfPopupText">{t('CF_RATE_POPUP_TEXT')}</p>
             <div className="cfPopupImage"><RatingPopupImage style={{ display: 'inline-block' }} /></div>
             <div className="cfPopupButtonDiv">
-              <div className="cfPopupTextButton" onClick={() => handlePopupClose(false)}>Not Now</div>
-              <div className="cfPopupButton" onClick={() => handlePopupClose(true)}><SubmitBar label={"Yes"} /></div>
+              <div className="cfPopupTextButton" onClick={() => handlePopupClose(false)}>{t('CF_RATE_POPUP_TEXT_NO')}</div>
+              <div className="cfPopupButton" onClick={() => handlePopupClose(true)}><SubmitBar label={t('CF_RATE_POPUP_TEXT_YES')} /></div>
             </div>
           </div>
         </PopUp>
