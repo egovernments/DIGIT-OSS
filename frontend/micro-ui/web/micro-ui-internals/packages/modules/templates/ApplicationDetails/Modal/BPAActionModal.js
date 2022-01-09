@@ -122,7 +122,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       refinedQues.push({
         "remarks": data[`Remarks_${i}`],
         "question": data?.questionList[i].question,
-        "value": data[`question_${i}`].code,
+        "value": data?.[`question_${i}`]?.code,
       })
     }
     return refinedQues;
