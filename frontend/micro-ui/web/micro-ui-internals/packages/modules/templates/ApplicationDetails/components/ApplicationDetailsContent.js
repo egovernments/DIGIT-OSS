@@ -36,7 +36,18 @@ function ApplicationDetailsContent({
         source: applicationData?.channel || "",
       };
       return <TLCaption data={caption} />;
-    } else {
+    } 
+    else if(window.location.href.includes("/obps/"))
+    {
+      const caption = {
+        date: checkpoint?.auditDetails?.lastModified,
+        name: checkpoint?.assignes?.[0]?.name,
+        mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
+        comment: t(checkpoint?.comment),
+      };
+      return <TLCaption data={caption} />;
+    }
+    else {
       const caption = {
         date: Digit.DateUtils?.ConvertTimestampToDate(applicationData?.auditDetails?.lastModifiedTime),
         // name: checkpoint?.assigner?.name,

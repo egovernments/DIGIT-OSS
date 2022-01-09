@@ -190,6 +190,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         comment: data?.comments?.length > 0 ? data?.comments : null,
         comments: data?.comments?.length > 0 ? data?.comments : null,
         assignee: !selectedApprover?.uuid ? null : [selectedApprover?.uuid],
+        assignes: !selectedApprover?.uuid ? null : [selectedApprover?.uuid],
         varificationDocuments: uploadedFile
         ? [
           {
