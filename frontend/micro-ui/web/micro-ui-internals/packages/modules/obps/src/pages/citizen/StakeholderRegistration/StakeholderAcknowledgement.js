@@ -43,7 +43,7 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
   const { tenants } = storeData || {};
   let isOpenLinkFlow = window.location.href.includes("openlink");
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
-  const licenseType = mutation?.data?.data?.Licenses?.[0]?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0] || "ARCHITECT";
+  const licenseType = mutation?.data?.Licenses?.[0]?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0] || "ARCHITECT";
 
 
   useEffect(() => {

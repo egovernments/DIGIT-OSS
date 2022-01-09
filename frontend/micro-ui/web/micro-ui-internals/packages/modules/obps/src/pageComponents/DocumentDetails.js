@@ -28,7 +28,6 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
      };
     const onSkip = () => onSelect();
     function onAdd() { }
-
     useEffect(() => {
         const allRequiredDocumentsCode = bpaTaxDocuments.filter( e => e.required).map(e => e.code)
 
@@ -84,7 +83,7 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
     );
 }
 
-function SelectDocument({
+const SelectDocument = React.memo(function MyComponent({
     t,
     document: doc,
     setDocuments,
@@ -95,7 +94,6 @@ function SelectDocument({
     formData,
     PrevStateDocuments
 }) {
-
     const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0] || PrevStateDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0];
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const [selectedDocument, setSelectedDocument] = useState(
@@ -114,11 +112,12 @@ function SelectDocument({
     const handleSelectDocument = (value) => {
         if(filteredDocument?.documentType){
             filteredDocument.documentType=value?.code;
-            let newDoc=[ ... documents?.filter((item) => !item?.documentType?.includes(doc?.code)),filteredDocument]
+            let currDocs=documents?.filter((item) => item?.documentType?.includes(doc?.code));
+            currDocs.map(doc=>doc.documentType=value?.code);
+            let newDoc=[ ...documents?.filter((item) => !item?.documentType?.includes(doc?.code)),...currDocs]
             setDocuments(newDoc);
         }
-        setSelectedDocument(value)
-    
+        setSelectedDocument(value);
     };
 
     function selectfile(e, key) {
@@ -254,7 +253,6 @@ function SelectDocument({
         {doc?.uploadedDocuments?.length && <PropertyDocuments isSendBackFlow={true} documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
         </div>
     );
-
-}
+    });
 
 export default DocumentDetails;

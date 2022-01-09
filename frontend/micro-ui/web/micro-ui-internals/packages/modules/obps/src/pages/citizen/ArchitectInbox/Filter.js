@@ -14,7 +14,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
   
   const onStatusChange = (e, type) => {
     if (e.target.checked) setSearchParams({..._searchParams, applicationStatus: [..._searchParams?.applicationStatus, type] });
-    else setSearchParams({..._searchParams, applicationStatus: _searchParams?.applicationStatus.filter((option) => type.name !== option.name) });
+    else setSearchParams({..._searchParams, applicationStatus: _searchParams?.applicationStatus.filter((option) => type !== option) });
   };
 
   const handleChange = (option) => {

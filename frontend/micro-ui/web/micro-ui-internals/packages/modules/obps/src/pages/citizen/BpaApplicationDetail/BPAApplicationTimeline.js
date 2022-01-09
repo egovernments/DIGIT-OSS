@@ -22,8 +22,9 @@ const BPAApplicationTimeline = (props) => {
     }  
     else {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.lastModifiedTime),
-        name: checkpoint?.assigner?.name,
+        date: checkpoint?.auditDetails?.lastModified,
+        name: checkpoint?.assignes?.[0]?.name,
+        mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
         comment: t(checkpoint?.comment),
       };
       return <BPACaption data={caption} />;

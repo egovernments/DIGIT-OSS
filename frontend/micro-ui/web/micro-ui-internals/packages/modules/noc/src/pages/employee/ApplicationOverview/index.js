@@ -320,7 +320,7 @@ function SelectDocument({
             multiple={true}
         /> */}
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller" style={{fontWeight: "700", width: "50%"}}>{`${t("NOC_UPLOAD_FILE_LABEL")}:`}</CardLabel>
+        <CardLabel className="card-label-smaller" style={{fontWeight: "700", width: "50%"}}>{`${t("NOC_UPLOAD_FILE_LABEL")}`}</CardLabel>
         <div className="field">
           <MultiUploadWrapper
             module="NOC"
