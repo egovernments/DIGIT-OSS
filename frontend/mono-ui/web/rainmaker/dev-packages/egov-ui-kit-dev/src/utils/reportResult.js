@@ -123,6 +123,7 @@ class ShowField extends Component {
           doc.content[0].text = [];
           doc.content[0].text.push({ text: "mSeva System Reports\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
+          console.log(doc);
         },
         className: "report-pdf-button",
       },
@@ -133,6 +134,9 @@ class ShowField extends Component {
         title: xlsTitle,
         messageTop: tabLabel,
         footer: true,
+        customize: function (doc) {
+          console.log(doc);
+        },
         className: "report-excel-button",
       }
     ];
