@@ -50,14 +50,14 @@ import {
     <div style={isopenlink?{ width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}>
     {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
     <Timeline currentStep={4} flow="STAKEHOLDER" />
-    <Header>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
+    <Header styles={{fontSize: "32px"}}>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
     <Card>
         <StatusTable>
           <Row className="border-none" label={t(`BPA_APPLICATION_NUMBER_LABEL`)} text={result?.Licenses?.[0]?.applicationNumber?result?.Licenses?.[0]?.applicationNumber:""} />
         </StatusTable>
     </Card>
     <Card>
-    <CardHeader>{t(`BPA_LICENSE_DETAILS_LABEL`)}</CardHeader>
+    <CardHeader styles={{fontSize: "24px"}}>{t(`BPA_LICENSE_DETAILS_LABEL`)}</CardHeader>
     <LinkButton
               label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
               style={{ width: "100px", display:"inline" }}
@@ -69,14 +69,14 @@ import {
         </StatusTable>
     </Card>
     <Card>
-    <CardHeader>{t(`BPA_LICENSE_DET_CAPTION`)}</CardHeader>
+    <CardHeader styles={{fontSize: "24px"}}>{t(`BPA_LICENSE_DET_CAPTION`)}</CardHeader>
     <LinkButton
               label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
               style={{ width: "100px", display:"inline" }}
               onClick={() => routeTo(`${routeLink}/license-details`)}
            />
         <StatusTable>
-          <Row className="border-none" label={t(`BPA_APPLICANT_NAME_LABEL`)} textStyle={{marginLeft:"9px"}} text={t(formData?.LicneseDetails?.name)} />
+          <Row className="border-none" label={t(`BPA_APPLICANT_NAME_LABEL`)} textStyle={{paddingLeft:"12px"}} text={t(formData?.LicneseDetails?.name)} />
           <Row className="border-none" label={t(`BPA_APPLICANT_GENDER_LABEL`)} text={t(formData?.LicneseDetails?.gender.i18nKey)}/>
           <Row className="border-none" label={t(`BPA_OWNER_MOBILE_NO_LABEL`)} text={formData?.LicneseDetails?.mobileNumber}/>
           <Row className="border-none" label={t(`BPA_APPLICANT_EMAIL_LABEL`)} text={formData?.LicneseDetails?.email || t("CS_NA")}/>
@@ -85,7 +85,7 @@ import {
     </Card>
     <Card>
     <div style={{marginRight:"24px"}}>
-    <CardHeader>{t(`BPA_LICENSEE_PERMANENT_LABEL`)}</CardHeader>
+    <CardHeader styles={{fontSize: "24px"}}>{t(`BPA_LICENSEE_PERMANENT_LABEL`)}</CardHeader>
     </div>
     <LinkButton
               label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
@@ -96,7 +96,7 @@ import {
     </Card>
     <Card>
     <div style={{marginRight:"24px"}}>
-    <CardHeader>{t(`BPA_COMMUNICATION_ADDRESS_HEADER_DETAILS`)}</CardHeader>
+    <CardHeader styles={{fontSize: "24px"}}>{t(`BPA_COMMUNICATION_ADDRESS_HEADER_DETAILS`)}</CardHeader>
     </div>
     <LinkButton
               label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
@@ -106,7 +106,7 @@ import {
     <Row className="border-none" text={t(value?.Correspondenceaddress)} />
     </Card>
     <Card>
-      <CardHeader>{t("BPA_DOC_DETAILS_SUMMARY")}</CardHeader>
+      <CardHeader styles={{fontSize: "24px"}}>{t("BPA_DOC_DETAILS_SUMMARY")}</CardHeader>
       <LinkButton
               label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
               style={{ width: "100px", display:"inline" }}
@@ -114,7 +114,7 @@ import {
            />
       {documents?.documents.map((doc, index) => (
         <div key={index}>
-        <CardSectionHeader>{t(`BPAREG_HEADER_${doc?.documentType?.replace('.', '_')}`)}</CardSectionHeader>
+        <CardSectionHeader styles={{fontSize: "18px"}}>{t(`BPAREG_HEADER_${doc?.documentType?.replace('.', '_')}`)}</CardSectionHeader>
         {doc?.info ? <div style={{fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px"}}>{`${t(doc?.info)}`}</div> : null}
         <StatusTable>
         <OBPSDocument value={value} Code={doc?.documentType} index={index} isNOC={false} svgStyles={{}} isStakeHolder={true}/> 
@@ -124,7 +124,7 @@ import {
       ))}
       </Card>
       <Card>
-      <CardHeader>{t("BPA_SUMMARY_FEE_EST")}</CardHeader>
+      <CardHeader styles={{fontSize: "24px"}}>{t("BPA_SUMMARY_FEE_EST")}</CardHeader>
       <StatusTable>
       {paymentDetails?.billResponse?.Bill[0]?.billDetails[0]?.billAccountDetails.map((bill,index)=>(
         <div key={index}>
@@ -134,7 +134,7 @@ import {
       <Row className="border-none" label={t(`BPA_COMMON_TOTAL_AMT`)} text={`₹ ${paymentDetails?.billResponse?.Bill?.[0]?.billDetails[0]?.amount}`|| t("CS_NA")} />
        </StatusTable>
       <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/>
-      <CardHeader>{t("BPA_COMMON_TOTAL_AMT")}</CardHeader> 
+      <CardHeader styles={{fontSize: "24px"}}>{t("BPA_COMMON_TOTAL_AMT")}</CardHeader> 
       <CardHeader>₹ {paymentDetails?.billResponse?.Bill?.[0]?.billDetails[0]?.amount}</CardHeader> 
       <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} disabled={paymentDetails?.billResponse?.Bill?.[0]?.billDetails[0]?.amount?false:true} />
       </Card>
