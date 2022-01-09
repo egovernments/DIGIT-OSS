@@ -8,6 +8,9 @@
       &:first-child {
         min-width: 256px;
       }
+      &:nth-child(2){
+        min-width: 200px
+      }
     }
   }
 

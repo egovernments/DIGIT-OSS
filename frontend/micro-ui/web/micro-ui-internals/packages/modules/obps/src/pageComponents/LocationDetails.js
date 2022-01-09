@@ -37,7 +37,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
             ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
             : allCities;
       setcitiesopetions(cities);
-      if(cities && cities.length==0){
+      if((cities && cities.length==0 || (cities.length == 1 && cities?.[0].code !== selectedCity?.code))){
       setPinerror("BPA_PIN_NOT_VALID_ERROR");
       }
     }
@@ -58,7 +58,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
 
   useEffect(() => {
     if (cities) {
-      if (cities.length === 1) {
+      if (cities.length === 1 && cities?.[0].code === selectedCity?.code) {
         setSelectedCity(cities[0]);
         sessionStorage.setItem("currentCity", JSON.stringify(cities[0]));
       }

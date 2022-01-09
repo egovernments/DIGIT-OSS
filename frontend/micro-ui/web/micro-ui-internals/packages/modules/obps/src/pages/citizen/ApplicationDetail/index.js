@@ -68,7 +68,7 @@ const ApplicationDetails = () => {
   return (
     <Fragment>
       <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
-      <Header>{t("BPA_TASK_DETAILS_HEADER")}</Header>
+      <Header styles={{fontSize: "32px"}}>{t("BPA_TASK_DETAILS_HEADER")}</Header>
       {reciept_data?.Payments?.length > 0 && 
         // <div style={{right: "3%", top: "20px", position: "absolute"}}>
         <MultiLink
@@ -86,7 +86,7 @@ const ApplicationDetails = () => {
           </StatusTable>
         </Card>
         <Card>
-          <CardHeader>{t(`BPA_LICENSE_DETAILS_LABEL`)}</CardHeader>
+          <CardHeader styles={{fontSize: "24px"}}>{t(`BPA_LICENSE_DETAILS_LABEL`)}</CardHeader>
           <StatusTable>
             <Row className="border-none" label={t(`BPA_LICENSE_TYPE`)} text={t(`TRADELICENSE_TRADETYPE_${License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split('.')[0]}`)} />
             {License?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType.includes('ARCHITECT') && 
@@ -95,7 +95,7 @@ const ApplicationDetails = () => {
           </StatusTable>
         </Card>
         <Card>
-          <CardHeader>{t(`BPA_LICENSE_DET_CAPTION`)}</CardHeader>
+          <CardHeader styles={{fontSize: "24px"}}>{t(`BPA_LICENSE_DET_CAPTION`)}</CardHeader>
           <StatusTable>
             <Row className="border-none" label={t(`BPA_APPLICANT_NAME_LABEL`)} text={t(License?.tradeLicenseDetail?.owners?.[0]?.name)} />
             <Row className="border-none" label={t(`BPA_APPLICANT_GENDER_LABEL`)} text={t(License?.tradeLicenseDetail?.owners?.[0]?.gender)}/>
@@ -105,20 +105,20 @@ const ApplicationDetails = () => {
           </StatusTable>
         </Card>
         <Card>
-          <CardHeader>{t(`BPA_LICENSEE_PERMANENT_LABEL`)}</CardHeader>
+          <CardHeader styles={{fontSize: "24px"}}>{t(`BPA_LICENSEE_PERMANENT_LABEL`)}</CardHeader>
           <Row className="border-none" text={License?.tradeLicenseDetail?.owners?.[0]?.permanentAddress || t("CS_NA")} />
         </Card>
         <Card>
-          <CardHeader>{t(`BPA_CORRESPONDANCE_ADDRESS_LABEL`)}</CardHeader>
+          <CardHeader styles={{fontSize: "24px"}}>{t(`BPA_CORRESPONDANCE_ADDRESS_LABEL`)}</CardHeader>
           <Row className="border-none" text={License?.tradeLicenseDetail?.owners?.[0]?.correspondenceAddress || t("CS_NA")} />
         </Card>
         {License?.tradeLicenseDetail?.applicationDocuments?.length>0 && <Card>
-          <CardHeader>{t("BPA_DOC_DETAILS_SUMMARY")}</CardHeader>
+          <CardHeader styles={{fontSize: "24px"}}>{t("BPA_DOC_DETAILS_SUMMARY")}</CardHeader>
           {License?.tradeLicenseDetail?.applicationDocuments?.map((document, index) => {
             return (
             <Fragment>
               <div>
-                <CardSectionHeader>{t(`BPAREG_HEADER_${stringReplaceAll(document?.documentType?.toUpperCase(), ".", "_")}`)}</CardSectionHeader>
+                <CardSectionHeader styles={{fontSize: "18px"}}>{t(`BPAREG_HEADER_${stringReplaceAll(document?.documentType?.toUpperCase(), ".", "_")}`)}</CardSectionHeader>
                 {document?.info ? <div style={{fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px", margin: "10px 0px"}}>{`${t(document?.info)}`}</div> : null}
                 <a target="_blank" href={documents[document.fileStoreId]?.split(",")[0]}>
                   <PDFSvg />

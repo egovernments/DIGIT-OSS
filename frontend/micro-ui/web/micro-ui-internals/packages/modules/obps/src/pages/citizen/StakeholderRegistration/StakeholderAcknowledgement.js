@@ -43,6 +43,7 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
   const { tenants } = storeData || {};
   let isOpenLinkFlow = window.location.href.includes("openlink");
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
+  const licenseType = mutation?.data?.data?.Licenses?.[0]?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0] || "ARCHITECT";
 
 
   useEffect(() => {
@@ -78,7 +79,7 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
         {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
         <Card>
           <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
-          {mutation.isSuccess && <CardText>{t("CS_FILE_STAKEHOLDER_RESPONSE")}</CardText>}
+          {mutation.isSuccess && <CardText>{`${t(`TRADELICENSE_TRADETYPE_${licenseType}`)}${t(`CS_FILE_STAKEHOLDER_RESPONSE`)}`}</CardText>}
           {!mutation.isSuccess && <CardText>{t("CS_FILE_PROPERTY_FAILED_RESPONSE")}</CardText>}
           {(mutation.isSuccess && !isOpenLinkFlow) && <Link to={{
             pathname: `/digit-ui/citizen/payment/collect/${mutation.data.Licenses[0].businessService}/${mutation.data.Licenses[0].applicationNumber}/${mutation.data.Licenses[0].tenantId}?tenantId=${mutation.data.Licenses[0].tenantId}`,

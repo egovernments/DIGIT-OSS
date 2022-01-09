@@ -13,7 +13,6 @@ import Timeline from "../components/Timeline";
 import PropertyDocuments from "../../../templates/ApplicationDetails/components/PropertyDocuments";
 
 const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
-    const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateId = Digit.ULBService.getStateId();
     const [documents, setDocuments] = useState(formData?.documents?.documents || []);
     const [error, setError] = useState(null);
@@ -21,7 +20,6 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
     const [checkRequiredFields, setCheckRequiredFields] = useState(false);
     const checkingFlow = formData?.uiFlow?.flow;
     const {data: bpaTaxDocuments, isLoading} = Digit.Hooks.obps.useBPATaxDocuments(stateId, formData, formData?.PrevStateDocuments || []);
-
     const handleSubmit = () => {
         let document = formData.documents;
         let documentStep;
@@ -113,7 +111,15 @@ function SelectDocument({
     const [uploadedfileArray, setuploadedfileArray] = useState([]);
     const [fileArray, setfileArray] = useState([] || formData?.documents?.documents.filter((ob) => ob.documentType === selectedDocument.code) );
 
-    const handleSelectDocument = (value) => setSelectedDocument(value);
+    const handleSelectDocument = (value) => {
+        if(filteredDocument?.documentType){
+            filteredDocument.documentType=value?.code;
+            let newDoc=[ ... documents?.filter((item) => !item?.documentType?.includes(doc?.code)),filteredDocument]
+            setDocuments(newDoc);
+        }
+        setSelectedDocument(value)
+    
+    };
 
     function selectfile(e, key) {
         e && setFile(e.file);
@@ -236,7 +242,7 @@ function SelectDocument({
                 optionKey="i18nKey"
                 select={handleSelectDocument}
             />
-            {selectedDocument?.code ? <MultiUploadWrapper
+          <MultiUploadWrapper
                 module="BPA"
                 tenantId={tenantId}
                 getFormState={getData}
@@ -244,7 +250,7 @@ function SelectDocument({
                 allowedMaxSizeInMB={5}
                 setuploadedstate={uploadedFilesPreFill}
                 t={t}
-            /> : null}
+            /> 
         {doc?.uploadedDocuments?.length && <PropertyDocuments isSendBackFlow={true} documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
         </div>
     );

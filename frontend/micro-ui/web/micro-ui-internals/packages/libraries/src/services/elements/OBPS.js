@@ -380,8 +380,8 @@ export const OBPSService = {
     PermitConditions={};
     
     if(BPA?.approvalNo) {
-      applicationDetailsInfo?.values?.push({ title: "BPA_PERMIT_NUMBER_LABEL", value: BPA?.approvalNo || "NA"  });
-      applicationDetailsInfo?.values?.push({ title: "BPA_PERMIT_VALIDITY", value: BPA?.additionalDetails?.validityDate ? `${format(new Date(BPA?.applicationDate), 'dd/MM/yyyy')} - ${format(new Date(BPA?.additionalDetails?.validityDate), 'dd/MM/yyyy')}` : "NA"  });
+      applicationDetailsInfo?.values?.push({ title: BPA?.businessService !== "BPA_OC" ?  "BPA_PERMIT_NUMBER_LABEL":"BPA_OC_PERMIT_NUMBER_LABEL", value: BPA?.approvalNo || "NA"  });
+      applicationDetailsInfo?.values?.push({ title: BPA?.businessService !== "BPA_OC" ? "BPA_PERMIT_VALIDITY" : "BPA_OC_PERMIT_VALIDITY", value: BPA?.additionalDetails?.validityDate ? `${format(new Date(BPA?.applicationDate), 'dd/MM/yyyy')} - ${format(new Date(BPA?.additionalDetails?.validityDate), 'dd/MM/yyyy')}` : "NA"  });
     }
 
 

@@ -214,7 +214,7 @@ function SelectDocument({
     return (
         <div style={{ marginBottom: "24px" }}>
             <CardLabel style={{marginBottom: "10px"}}>{doc?.required ? `${t(`BPAREG_HEADER_${doc?.code?.replace('.', '_')}`)} *` : `${t(`BPAREG_HEADER_${doc?.code?.replace('.', '_')}`)}`}</CardLabel>
-            {doc?.info ? <div style={{fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px"}}>{`${t(doc?.info)}`}</div> : null}
+            {doc?.info ? <div style={{fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px", marginBottom: "10px"}}>{`${t(doc?.info)}`}</div> : null}
             <UploadFile
                 extraStyleName={"propertyCreate"}
                 accept=".jpg,.png,.pdf"
