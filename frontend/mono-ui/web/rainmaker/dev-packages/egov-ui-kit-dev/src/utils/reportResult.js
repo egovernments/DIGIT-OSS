@@ -476,8 +476,11 @@ class ShowField extends Component {
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
           if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
             const pdfData = pdfMake.createPdf(doc);
-            downloadPDFFileUsingBase64(pdfData, _this.state.reportName);
+            downloadPDFFileUsingBase64(pdfData, `${_this.state.reportName}.pdf`);
+            return;
+
           }
+          
         },
         className: "report-pdf-button",
       },
@@ -497,8 +500,9 @@ class ShowField extends Component {
             };
             _addToZip(zip, doc);
             zip.generateAsync(zipConfig).then(function (blob) {
-              saveAs(blob, _this.state.reportName);
+              downloadPDFFileUsingBase64(blob,`${_this.state.reportName}.xlsx`);
             });
+            return;
           }
         },
         className: "report-excel-button",

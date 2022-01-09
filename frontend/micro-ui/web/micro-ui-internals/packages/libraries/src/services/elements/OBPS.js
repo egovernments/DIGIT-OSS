@@ -261,8 +261,8 @@ export const OBPSService = {
     const filter = { approvalNo: edcr?.permitNumber};
     const bpaResponse = await OBPSService.BPASearch(tenantId, { ...filter });
        const comparisionRep = {
-         ocdcrNumber: BPA?.edcrNumber,
-         edcrNumber: bpaResponse?.BPA?.[0]?.edcrNumber
+         ocdcrNumber: BPA?.edcrNumber.includes("OCDCR")? BPA?.edcrNumber:bpaResponse?.BPA?.[0]?.edcrNumber,
+         edcrNumber: bpaResponse?.BPA?.[0]?.edcrNumber.includes("OCDCR")? BPA?.edcrNumber: bpaResponse?.BPA?.[0]?.edcrNumber
       }
     const comparisionReport = await OBPSService.comparisionReport(BPA?.tenantId, { ...comparisionRep });
 

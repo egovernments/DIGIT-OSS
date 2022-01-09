@@ -122,7 +122,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       refinedQues.push({
         "remarks": data[`Remarks_${i}`],
         "question": data?.questionList[i].question,
-        "value": data[`question_${i}`].code,
+        "value": data?.[`question_${i}`]?.code,
       })
     }
     return refinedQues;
@@ -190,6 +190,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         comment: data?.comments?.length > 0 ? data?.comments : null,
         comments: data?.comments?.length > 0 ? data?.comments : null,
         assignee: !selectedApprover?.uuid ? null : [selectedApprover?.uuid],
+        assignes: !selectedApprover?.uuid ? null : [selectedApprover?.uuid],
         varificationDocuments: uploadedFile
         ? [
           {
