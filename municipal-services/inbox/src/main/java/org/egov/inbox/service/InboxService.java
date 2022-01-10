@@ -3,9 +3,11 @@ package org.egov.inbox.service;
 import static org.egov.inbox.util.BpaConstants.BPA;
 import static org.egov.inbox.util.BpaConstants.BPAREG;
 import static org.egov.inbox.util.BpaConstants.BPA_APPLICATION_NUMBER_PARAM;
+import static org.egov.inbox.util.BpaConstants.COUNT;
 import static org.egov.inbox.util.BpaConstants.LOCALITY_PARAM;
 import static org.egov.inbox.util.BpaConstants.MOBILE_NUMBER_PARAM;
 import static org.egov.inbox.util.BpaConstants.OFFSET_PARAM;
+import static org.egov.inbox.util.BpaConstants.STATUS_ID;
 import static org.egov.inbox.util.BpaConstants.STATUS_PARAM;
 import static org.egov.inbox.util.NocConstants.NOC;
 import static org.egov.inbox.util.NocConstants.NOC_APPLICATION_NUMBER_PARAM;
@@ -139,48 +141,13 @@ public class InboxService {
         
         List<HashMap<String, Object>> bpaCitizenStatusCountMap = new ArrayList<HashMap<String,Object>>();
         List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
-        Map<String, List<String>> tenantAndApplnNumbersMap = new HashMap<>();
-        if(processCriteria != null && !ObjectUtils.isEmpty(processCriteria.getModuleName())
-                && processCriteria.getModuleName().equals(BPA) && roles.contains(BpaConstants.CITIZEN)) {
-            List<Map<String, String>> tenantWiseApplns = bpaInboxFilterService.fetchTenantWiseApplicationNumbersForCitizenInboxFromSearcher(criteria, moduleSearchCriteria, requestInfo);
-            if (moduleSearchCriteria == null || moduleSearchCriteria.isEmpty()) {
-                moduleSearchCriteria = new HashMap<>();
-                moduleSearchCriteria.put(MOBILE_NUMBER_PARAM, requestInfo.getUserInfo().getMobileNumber());
-                criteria.setModuleSearchCriteria(moduleSearchCriteria);
-            } 
-            for(Map<String, String> tenantAppln : tenantWiseApplns) {
-                String tenant = tenantAppln.get("tenantid");
-                String applnNo = tenantAppln.get("applicationno");
-                if(tenantAndApplnNumbersMap.containsKey(tenant)) {
-                    List<String> applnNos = tenantAndApplnNumbersMap.get(tenant);
-                    applnNos.add(applnNo);
-                    tenantAndApplnNumbersMap.put(tenant, applnNos);
-                } else {
-                    List<String> l = new ArrayList<>();
-                    l.add(applnNo);
-                    tenantAndApplnNumbersMap.put(tenant, l);
-                }
-            }
-            String inputTenantID = processCriteria.getTenantId();
-            List<String> inputBusinessIds = processCriteria.getBusinessIds();
-            for(Map.Entry<String, List<String>> t : tenantAndApplnNumbersMap.entrySet()) {
-                processCriteria.setTenantId(t.getKey());
-                processCriteria.setBusinessIds(t.getValue());
-                bpaCitizenStatusCountMap.addAll(workflowService.getProcessStatusCount(requestInfo, processCriteria));
-            }
-            processCriteria.setTenantId(inputTenantID);
-            processCriteria.setBusinessIds(inputBusinessIds);
-        }
+        
          String moduleName = processCriteria.getModuleName();
         if(ObjectUtils.isEmpty(processCriteria.getModuleName()) && !ObjectUtils.isEmpty(processCriteria.getBusinessService()) && (processCriteria.getBusinessService().contains("FSM") || processCriteria.getBusinessService().contains("FSM_VEHICLE_TRIP"))) {
                 processCriteria.setModuleName(processCriteria.getBusinessService().get(0));
         }
         List<HashMap<String, Object>> statusCountMap = workflowService.getProcessStatusCount(requestInfo, processCriteria);
         processCriteria.setModuleName(moduleName);
-        if(!bpaCitizenStatusCountMap.isEmpty()) {
-            statusCountMap = bpaCitizenStatusCountMap;
-            processCriteria.setBusinessIds(Collections.emptyList());
-        }
         processCriteria.setStatus(inputStatuses);
         processCriteria.setAssignee(assigneeUuid.toString());
         List<String> businessServiceName = processCriteria.getBusinessService();
@@ -225,6 +192,88 @@ public class InboxService {
                             StringUtils.arrayToDelimitedString(StatusIdNameMap.values().toArray(), ","));
                 }
 
+            }
+            
+            Map<String, List<String>> tenantAndApplnNumbersMap = new HashMap<>();
+            if(processCriteria != null && !ObjectUtils.isEmpty(processCriteria.getModuleName())
+                    && processCriteria.getModuleName().equals(BPA) && roles.contains(BpaConstants.CITIZEN)) {
+                List<Map<String, String>> tenantWiseApplns = bpaInboxFilterService.fetchTenantWiseApplicationNumbersForCitizenInboxFromSearcher(criteria, StatusIdNameMap, requestInfo);
+                if (moduleSearchCriteria == null || moduleSearchCriteria.isEmpty()) {
+                    moduleSearchCriteria = new HashMap<>();
+                    moduleSearchCriteria.put(MOBILE_NUMBER_PARAM, requestInfo.getUserInfo().getMobileNumber());
+                    criteria.setModuleSearchCriteria(moduleSearchCriteria);
+                } 
+                for(Map<String, String> tenantAppln : tenantWiseApplns) {
+                    String tenant = tenantAppln.get("tenantid");
+                    String applnNo = tenantAppln.get("applicationno");
+                    if(tenantAndApplnNumbersMap.containsKey(tenant)) {
+                        List<String> applnNos = tenantAndApplnNumbersMap.get(tenant);
+                        applnNos.add(applnNo);
+                        tenantAndApplnNumbersMap.put(tenant, applnNos);
+                    } else {
+                        List<String> l = new ArrayList<>();
+                        l.add(applnNo);
+                        tenantAndApplnNumbersMap.put(tenant, l);
+                    }
+                }
+                String inputTenantID = processCriteria.getTenantId();
+                List<String> inputBusinessIds = processCriteria.getBusinessIds();
+                List<String> inputStatus = processCriteria.getStatus();
+                if(!StatusIdNameMap.isEmpty())
+                    processCriteria
+                            .setStatus(StatusIdNameMap.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toList()));
+                for(Map.Entry<String, List<String>> t : tenantAndApplnNumbersMap.entrySet()) {
+                    processCriteria.setTenantId(t.getKey());
+                    processCriteria.setBusinessIds(t.getValue());
+                    List<HashMap<String, Object>> tenantWiseStatusCount = workflowService.getProcessStatusCount(requestInfo, processCriteria);
+                    if(bpaCitizenStatusCountMap.isEmpty()) {
+                        bpaCitizenStatusCountMap.addAll(tenantWiseStatusCount);
+                    } else {
+                        for (HashMap<String, Object> tenantStatusMap : tenantWiseStatusCount) {
+                            for (HashMap<String, Object> bpaStatusMap : bpaCitizenStatusCountMap) {
+                                if (bpaStatusMap.containsValue(tenantStatusMap.get(STATUS_ID))) {
+                                    bpaStatusMap.put(COUNT, Integer.parseInt(String.valueOf(bpaStatusMap.get(COUNT)))
+                                            + Integer.parseInt(String.valueOf(tenantStatusMap.get(COUNT))));
+                                }
+                            }
+                        }
+                    }
+                }
+                statusCountMap = bpaCitizenStatusCountMap;
+                processCriteria.setTenantId(inputTenantID);
+                processCriteria.setBusinessIds(inputBusinessIds);
+                processCriteria.setStatus(inputStatus);
+            }
+            
+            /*
+             * In the WF statuscount API, locality based fileter is not supported.
+             * To support status wise count based on locality, with status and locality API
+             * is called and those count will be set in statuscount response.
+             */
+            if(processCriteria != null && !ObjectUtils.isEmpty(processCriteria.getModuleName())
+                    && processCriteria.getModuleName().equals(BPA)) {
+                if(moduleSearchCriteria.get(LOCALITY_PARAM) != null) {
+                    for(Map<String, Object> statusWiseCount : statusCountMap) {
+                        List<String> statusList = new ArrayList<>();
+                        statusList.add(String.valueOf(statusWiseCount.get(STATUS_ID)));
+                        criteria.getProcessSearchCriteria().setStatus(statusList);
+                        Integer count = bpaInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
+                        if(count == 0) {
+                            statusWiseCount.clear();
+                        } else {
+                            statusWiseCount.put(COUNT, count); 
+                        }
+                    }
+                    criteria.getProcessSearchCriteria().setStatus(inputStatuses);
+                }
+                if(!statusCountMap.isEmpty()) {
+                    List<HashMap<String, Object>> bpaInboxStatusCountMap = new ArrayList<>();
+                    for (HashMap<String, Object> bpaLoclalityStatusCount : statusCountMap) {
+                        if (!bpaLoclalityStatusCount.isEmpty())
+                            bpaInboxStatusCountMap.add(bpaLoclalityStatusCount);
+                    }
+                    statusCountMap = bpaInboxStatusCountMap;
+                }
             }
 
             // }

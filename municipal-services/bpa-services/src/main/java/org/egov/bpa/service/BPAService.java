@@ -447,7 +447,7 @@ public class BPAService {
 
                         if (bpa.getWorkflow().getComments() == null || bpa.getWorkflow().getComments().isEmpty()) {
                                 throw new CustomException(BPAErrorConstants.BPA_UPDATE_ERROR_COMMENT_REQUIRED,
-                                                "Comment is mandaotory, please provide the comments ");
+                                                "Comment is mandatory, please provide the comments ");
                         }
                         nocService.handleBPARejectedStateForNoc(bpaRequest);
 
