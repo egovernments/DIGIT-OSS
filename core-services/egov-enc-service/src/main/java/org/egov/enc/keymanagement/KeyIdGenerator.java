@@ -21,7 +21,7 @@ public class KeyIdGenerator implements ApplicationRunner {
     private static ArrayList<Integer> presentKeyIds;
 
     @Autowired
-    private KeyStore keyStore;
+    private static KeyStore keyStore;
 
     @Autowired
     private AppProperties appProperties;
