@@ -46,7 +46,7 @@ const OBPSDocumentsEmp = ({ t, config, onSelect, userType, formData, setError: s
     <div>
       {finalTlDocumentsList?.map((document, index) => {
         return (
-          <div style={{ paddingLeft: "16px" }}>
+          <div >
           <SelectDocument
             key={index}
             document={document}
@@ -224,13 +224,13 @@ function SelectDocument({
   }, [doc])
   return (
     <div style={{ marginBottom: "24px" }}>
-      <LabelFieldPair>
-        <CardLabel className="card-label-smaller">
+      <LabelFieldPair style={{width :"100%"}}>
+        <CardLabel className="card-label-smaller" style={{width :"100%"}}>
           {doc?.documentType != "OLDLICENCENO" ?
             `${t(`${doc?.documentType.replaceAll(".", "_")}`)}*` :
             `${t(`${doc?.documentType.replaceAll(".", "_")}`)}`}
         </CardLabel>
-        <div className="field" style={{ width: "70%" }}>
+        <div className="field" style={{ width: "100%" }}>
           <MultiUploadWrapper
             module="BPA"
             tenantId={tenantId}

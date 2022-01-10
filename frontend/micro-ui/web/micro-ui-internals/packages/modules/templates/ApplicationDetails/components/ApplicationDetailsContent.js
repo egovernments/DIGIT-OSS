@@ -117,7 +117,7 @@ function ApplicationDetailsContent({
               <CardSubHeader style={{ marginBottom: "16px", fontSize: "24px" }}>{t(detail.title)}</CardSubHeader>
             ) : (
               <React.Fragment>
-                <CardSectionHeader style={index == 0 && checkLocation ? { marginBottom: "16px" } : { marginBottom: "16px", marginTop: "32px" }}>
+                <CardSectionHeader style={index == 0 && checkLocation ? { marginBottom: "16px",fontSize: "24px" } : { marginBottom: "16px", marginTop: "32px", fontSize: "24px" }}>
                   {isNocLocation ? `${t(detail.title)}` : t(detail.title)}
                   {detail?.Component ? <detail.Component /> : null}
                 </CardSectionHeader>
