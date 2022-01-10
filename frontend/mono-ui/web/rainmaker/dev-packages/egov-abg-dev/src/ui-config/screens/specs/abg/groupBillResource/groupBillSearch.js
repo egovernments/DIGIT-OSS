@@ -395,8 +395,18 @@ export const mergeDownloadButton = {
               height: "60px", 
               backgroundColor: "#FE7A51",
               color: "#ffffff", 
-              marginRight: 10,
-              width: "368px"
+              // marginRight: 10,
+              // width: "368px"
+              // width: "329px",
+              minWidth: "260px",
+              maxWidth: "415px",
+              width: "100%",
+              menuListStyle: {
+                minWidth: "260px",
+                maxWidth: "415px",
+                width: "92%",
+                zIndex:100
+              }
             } },
           menu: []
         }
