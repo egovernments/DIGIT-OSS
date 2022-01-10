@@ -5,6 +5,7 @@ import { PrivateRoute, BackButton } from "@egovernments/digit-ui-react-component
 import WSCreate from "./WSCreate/index"
 import SearchConnectionComponent from "./SearchConnection";
 import SearchResultsComponent from "./SearchResults";
+import { WSMyApplications } from "./WSMyApplications";
 
 const App = ({ path }) => {
   const location = useLocation()
@@ -16,6 +17,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/create-application`} component={WSCreate} />
         <Route path={`${path}/search`} component={SearchConnectionComponent} />
         <Route path={`${path}/search-results`} component={SearchResultsComponent} />
+        <Route path={`${path}/my-application`} component={WSMyApplications} />
       </Switch>
     </React.Fragment>
   )
