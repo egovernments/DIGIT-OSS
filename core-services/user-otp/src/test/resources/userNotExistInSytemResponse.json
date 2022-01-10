@@ -6,8 +6,8 @@
         "description": null,
         "fields": [
             {
-                "code": "OTP.UNKNOWN_USER",
-                "message": "User not Found With this UserName",
+                "code": "OTP.UNKNOWN_CREDENTIAL",
+                "message": "No such username or password",
                 "field": "otp.mobileNumber"
             }
         ]
