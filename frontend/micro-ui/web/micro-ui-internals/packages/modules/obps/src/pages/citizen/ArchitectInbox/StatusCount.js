@@ -9,7 +9,8 @@ const StatusCount = ({ status, searchParams, onAssignmentChange }) => {
     <CheckBox
       onChange={(e) => onAssignmentChange(e, status?.statusid)}
       checked={searchParams?.applicationStatus?.filter((e) => e === status.statusid).length !== 0 ? true : false}
-      label={`${t(`CS_COMMON_INBOX_${status?.businessservice}`)} - ${t(status.applicationstatus)} (${count || 0})`}
+      // label={`${t(`CS_COMMON_INBOX_${status?.businessservice}`)} - ${t(status.applicationstatus)} (${count || 0})`}
+      label={`${t(`WF_STATE_${status.businessservice}_${status.applicationstatus}`)} (${count || 0})`}
     />
   );
 };
