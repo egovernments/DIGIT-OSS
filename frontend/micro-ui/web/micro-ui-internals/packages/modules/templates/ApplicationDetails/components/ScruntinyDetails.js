@@ -18,7 +18,7 @@ const ScruntinyDetails = ({ scrutinyDetails }) => {
           <div>
             {scrutinyDetails?.values?.map((value, index) => {
               if (value?.isUnit) return <Row className="border-none" textStyle={value?.value === "Paid"?{color:"darkgreen"}:{}} key={`${value.title}`} label={`${t(`${value.title}`)}`} text={value?.value ? `${getTextValues(value)} ${t(value?.isUnit)}` : t("NA")} labelStyle={value?.isHeader ? {fontSize: "20px"} : {}}/>
-              else return <Row className="border-none" textStyle={value?.value === "Paid"?{color:"darkgreen"}:{}} key={`${value.title}`} label={`${t(`${value.title}`)}`} text={getTextValues(value)} labelStyle={value?.isHeader ? {fontSize: "20px"} : {}}/>
+              else return <Row className="border-none" textStyle={value?.value === "Paid"?{color:"darkgreen"}:{}} key={`${value.title}`} label={`${t(`${value.title}`)}`} text={getTextValues(value)} labelStyle={value?.isHeader ? {fontSize: "20px",width:"150%"} : {}}/>
             })}
             {scrutinyDetails?.permit?.map((value,ind) => {
               return <CardLabel style={{fontWeight:"400"}}>{value?.title}</CardLabel>
@@ -28,7 +28,7 @@ const ScruntinyDetails = ({ scrutinyDetails }) => {
             {scrutinyDetails?.scruntinyDetails?.map((report, index) => {
               return (
                 <Fragment>
-                  <Row className="border-none" label={`${t(report?.title)}`} />
+                  <Row className="border-none" label={`${t(report?.title)}`} labelStyle={{width:"150%"}} />
                   <a href={report?.value}> <PDFSvg /> </a>
                   <p style={{ margin: "8px 0px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#505A5F" }}>{t(report?.text)}</p>
                 </Fragment>
