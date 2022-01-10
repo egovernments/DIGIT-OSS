@@ -25,6 +25,9 @@ public class DigressionConsumer implements KafkaConsumer {
 							   @Header(KafkaHeaders.RECEIVED_TOPIC) final String topic) {
 		try {
 			LOGGER.info("##KafkaMessageAlert## : key:" + topic + ":" + "value:" + incomingData.size());
-	}
+	} catch (final Exception e) {
+			LOGGER.error("Exception Encountered while processing the received message : " + e.getMessage());
+		}
 
+	}
 }
