@@ -347,7 +347,6 @@ config:
     build:
       - work-dir: "core-services/nlp-engine"
         image-name: "nlp-engine"
-        dockerfile: "nlp-engine/Dockerfile"
 
   - name: "builds/digit-dev/core-services/xstate-chatbot"
     build:
