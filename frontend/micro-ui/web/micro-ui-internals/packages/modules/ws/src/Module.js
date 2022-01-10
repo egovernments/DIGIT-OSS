@@ -51,6 +51,10 @@ const WSLinks = ({ matchPath, userType }) => {
       link: `${matchPath}/search`,
       i18nKey: t("ACTION_TEXT_WS_SEARCH_AND_PAY"),
     },
+    {
+      link: `${matchPath}/my-application`,
+      i18nKey: t("ACTION_TEXT_WS_MY_APPLICATION"),
+    },
   ];
 
   return <CitizenHomeCard header={t("ACTION_TEST_WATER_AND_SEWERAGE")} links={links} Icon={() => <WSICon />} />
