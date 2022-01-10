@@ -62,7 +62,6 @@ router.post(
             }
           
         } catch (ex) {
-          if (ex.response && ex.response.data) console.log(ex.response.data);
           return renderError(res, "Failed to query details of water and sewerage application");
         }
 
@@ -83,7 +82,6 @@ router.post(
               requestinfo
             );
           } catch (ex) {
-            if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(res, `Failed to query bills for water application`);
           }
           
@@ -106,7 +104,6 @@ router.post(
               if(bussinessService == 'WS.ONE_TIME_FEE')
                 errorMessage = "Failed to generate PDF for water one time fees bill"; 
 
-              if (ex.response && ex.response.data) console.log(ex.response.data);
               return renderError(
                 res,
                 errorMessage
@@ -137,7 +134,6 @@ router.post(
               requestinfo
             );
           } catch (ex) {
-            if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(res, `Failed to query bills for sewerage application`);
           }
           
@@ -160,7 +156,6 @@ router.post(
               if(bussinessService == 'SW.ONE_TIME_FEE')
                 errorMessage = "Failed to generate PDF for sewerage one time fees bill"; 
 
-              if (ex.response && ex.response.data) console.log(ex.response.data);
               return renderError(
                 res,
                 errorMessage
@@ -226,7 +221,6 @@ router.post(
             }
           
         } catch (ex) {
-          if (ex.response && ex.response.data) console.log(ex.response.data);
           return renderError(res, "Failed to query details of water and sewerage application");
         }
         var connection = restWns.data;
@@ -246,7 +240,6 @@ router.post(
                 bussinessService
               );
           } catch (ex) {
-            if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(res, `Failed to query receipt for water application`);
           }
           
@@ -268,7 +261,6 @@ router.post(
               if(bussinessService == 'WS.ONE_TIME_FEE')
                 errorMessage = "Failed to generate PDF for water one time fees receipt"; 
 
-              if (ex.response && ex.response.data) console.log(ex.response.data);
               return renderError(
                 res,
                 errorMessage
@@ -299,7 +291,6 @@ router.post(
                 bussinessService
               );
           } catch (ex) {
-            if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(res, `Failed to query receipt for sewerage application`);
           }
           
@@ -321,7 +312,6 @@ router.post(
               if(bussinessService == 'SW.ONE_TIME_FEE')
                 errorMessage = "Failed to generate PDF for sewerage one time fees receipt"; 
 
-              if (ex.response && ex.response.data) console.log(ex.response.data);
               return renderError(
                 res,
                 errorMessage
@@ -410,7 +400,6 @@ router.post(
   
           }
           catch (ex) {
-            if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(res, "Failed to query details of water and sewerage connection");
           }
   
@@ -461,7 +450,6 @@ router.post(
   
           }
           catch (ex) {
-            if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(res, `Failed to query bills for water and sewerage connection`);
           }
   
@@ -489,7 +477,6 @@ router.post(
 
           }
           catch (ex) {
-            if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(res, "Failed to query details of water connection");
           }
           
@@ -520,7 +507,6 @@ router.post(
             }
           }
           catch (ex) {
-            if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(res, `Failed to query bills for water connection`);
           }
         }
@@ -546,7 +532,6 @@ router.post(
   
           }
           catch (ex) {
-            if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(res, "Failed to query details of sewerage connection");
           }
   
@@ -577,7 +562,6 @@ router.post(
   
           }
           catch (ex) {
-            if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(res, `Failed to query bills for sewerage connection`);
           }
   
@@ -601,7 +585,6 @@ router.post(
             );
           } catch (ex) {
             let errorMessage= "Failed to generate PDF"; 
-            if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(
               res,
               errorMessage
