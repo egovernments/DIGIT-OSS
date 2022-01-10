@@ -78,7 +78,7 @@ const Filters = ({ t, ulbTenants, isOpen, closeFilters, showDateRange = true, sh
       )}
       {showDDR && (
         <div className="filters-input">
-          <div>{t("ES_DSS_DDR")}</div>
+          <div className="mbsm">{t("ES_DSS_DDR")}</div>
           <MultiSelectDropdown
             options={ulbTenants?.ddr}
             optionsKey="ddrKey"
@@ -91,7 +91,7 @@ const Filters = ({ t, ulbTenants, isOpen, closeFilters, showDateRange = true, sh
       )}
       {showUlb && (
         <div className="filters-input">
-          <div>{t("ES_DSS_ULB")}</div>
+          <div className="mbsm">{t("ES_DSS_ULB")}</div>
           <MultiSelectDropdown
             options={ulbTenants?.ulb}
             optionsKey="ulbKey"

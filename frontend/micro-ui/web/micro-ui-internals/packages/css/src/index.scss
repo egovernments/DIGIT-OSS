@@ -152,11 +152,15 @@
 }
 
 .mrlg{
-  @apply mr-lg
+  @apply mr-lg;
 }
 
 .mrsm{
-  @apply mr-sm
+  @apply mr-sm;
+}
+
+.mbsm{
+  @apply mb-sm;
 }
 
 .home-link {

@@ -62,6 +62,9 @@ const TextField = (props) => {
       onClick={props.onClick}
       onFocus={broadcastToOpen}
       onBlur={(e) => {
+       if( props.selectedVal!=props.filterVal){
+        setValue(props.selectedVal)
+       };
         broadcastToClose();
         props?.onBlur?.(e);
       }}
@@ -90,7 +93,6 @@ const Dropdown = (props) => {
   const hasCustomSelector = props.customSelector ? true : false;
   const t = props.t || translateDummy;
   // const [outsideClicked, setOutsideClicked] = useState(false);
-
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);
