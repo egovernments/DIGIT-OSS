@@ -3,6 +3,7 @@ package org.egov.inbox.service;
 import static org.egov.inbox.util.BpaConstants.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -146,8 +147,8 @@ public class BPAInboxFilterService {
         return applicationNumbers;
     }
 
-    private Map<String, Object> getSearchCriteria(InboxSearchCriteria criteria, HashMap<String, String> StatusIdNameMap,
-            RequestInfo requestInfo, HashMap<String, Object> moduleSearchCriteria,
+    private Map<String, Object> getSearchCriteria(InboxSearchCriteria criteria, Map<String, String> statusIdNameMap,
+            RequestInfo requestInfo, Map<String, Object> moduleSearchCriteria,
             ProcessInstanceSearchCriteria processCriteria, List<String> userUUIDs, List<String> userRoles) {
         Map<String, Object> searchCriteria = new HashMap<>();
 
@@ -160,7 +161,8 @@ public class BPAInboxFilterService {
             searchCriteria.put(USERID_PARAM, userUUIDs);
         }
         if (moduleSearchCriteria != null && moduleSearchCriteria.containsKey(LOCALITY_PARAM)) {
-            searchCriteria.put(LOCALITY_PARAM, moduleSearchCriteria.get(LOCALITY_PARAM));
+            List<String> localities = Arrays.asList(String.valueOf(moduleSearchCriteria.get(LOCALITY_PARAM)).split(","));
+            searchCriteria.put(LOCALITY_PARAM, localities);
         }
         if (moduleSearchCriteria != null && moduleSearchCriteria.containsKey(APPROVAL_NUMBER_PARAM)) {
             searchCriteria.put(APPROVAL_NUMBER_PARAM, moduleSearchCriteria.get(APPROVAL_NUMBER_PARAM));
@@ -182,9 +184,9 @@ public class BPAInboxFilterService {
         if (!ObjectUtils.isEmpty(processCriteria.getStatus())) {
             searchCriteria.put(STATUS_PARAM, processCriteria.getStatus());
         } else {
-            if (StatusIdNameMap != null && StatusIdNameMap.values().size() > 0) {
+            if (statusIdNameMap != null && statusIdNameMap.values().size() > 0) {
                 if (CollectionUtils.isEmpty(processCriteria.getStatus())) {
-                    searchCriteria.put(STATUS_PARAM, StatusIdNameMap.keySet());
+                    searchCriteria.put(STATUS_PARAM, statusIdNameMap.keySet());
                 }
             }
         }
@@ -286,8 +288,8 @@ public class BPAInboxFilterService {
     }
 
     public List<Map<String, String>> fetchTenantWiseApplicationNumbersForCitizenInboxFromSearcher(InboxSearchCriteria criteria,
-            HashMap<String, String> StatusIdNameMap, RequestInfo requestInfo) {
-        List<Map<String, String>> tenantWiseApplns = new ArrayList<Map<String, String>>();
+            Map<String, String> statusIdNameMap, RequestInfo requestInfo) {
+        List<Map<String, String>> tenantWiseApplns = new ArrayList<>();
         HashMap<String, Object> moduleSearchCriteria = criteria.getModuleSearchCriteria();
         ProcessInstanceSearchCriteria processCriteria = criteria.getProcessSearchCriteria();
         Boolean isSearchResultEmpty = false;
@@ -298,15 +300,15 @@ public class BPAInboxFilterService {
             moduleSearchCriteria = new HashMap<>();
             moduleSearchCriteria.put(MOBILE_NUMBER_PARAM, requestInfo.getUserInfo().getMobileNumber());
         } 
-        if (isMobileNumberPresent) {
+        if (Boolean.TRUE.equals(isMobileNumberPresent)) {
             String tenantId = criteria.getTenantId();
             String mobileNumber = String.valueOf(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM));
             Map<String, List<String>> userDetails = fetchUserUUID(mobileNumber, requestInfo, tenantId);
             userUUIDs = userDetails.get(USER_UUID);
             citizenRoles = userDetails.get(USER_ROLES);
-            Boolean isUserPresentForGivenMobileNumber = CollectionUtils.isEmpty(userUUIDs) ? false : true;
-            isSearchResultEmpty = !isMobileNumberPresent || !isUserPresentForGivenMobileNumber;
-            if (isSearchResultEmpty) {
+            Boolean isUserPresentForGivenMobileNumber = !CollectionUtils.isEmpty(userUUIDs);
+            isSearchResultEmpty = !isUserPresentForGivenMobileNumber;
+            if (Boolean.TRUE.equals(isSearchResultEmpty)) {
                 userUUIDs.add(requestInfo.getUserInfo().getUuid());
                 List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
                 citizenRoles.addAll(roles);
@@ -316,11 +318,11 @@ public class BPAInboxFilterService {
            * citizenRoles.addAll(requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList())); }
            */
 
-        if (!isSearchResultEmpty) {
+        if (Boolean.FALSE.equals(isSearchResultEmpty)) {
             Object result = null;
 
             Map<String, Object> searcherRequest = new HashMap<>();
-            Map<String, Object> searchCriteria = getSearchCriteria(criteria, StatusIdNameMap, requestInfo,
+            Map<String, Object> searchCriteria = getSearchCriteria(criteria, statusIdNameMap, requestInfo,
                     moduleSearchCriteria, processCriteria, userUUIDs, citizenRoles);
 
             searcherRequest.put(REQUESTINFO_PARAM, requestInfo);
