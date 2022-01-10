@@ -18,13 +18,13 @@ import lombok.extern.slf4j.Slf4j;
 public class AzureClientFacade implements ApplicationRunner{
 	
 	@Value("${azure.defaultEndpointsProtocol}")
-	private String defaultEndpointsProtocol;
+	private static String defaultEndpointsProtocol;
 	
 	@Value("${azure.accountName}")
-	private String accountName;
+	private static String accountName;
 	
 	@Value("${azure.accountKey}")
-	private String accountKey;
+	private static String accountKey;
 	
 	@Value("${isAzureStorageEnabled}")
 	private Boolean isAzureEnabled;
