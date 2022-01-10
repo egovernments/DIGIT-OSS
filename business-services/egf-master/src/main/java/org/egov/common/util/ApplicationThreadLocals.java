@@ -38,7 +38,6 @@ public class ApplicationThreadLocals {
         if (!tenants.contains("default"))
             tenants.add("default");
         threadLocal.set(tenantId);
-        System.out.print(tenants);
         ApplicationThreadLocals.fallBackTenantId = threadLocal;
     }
 

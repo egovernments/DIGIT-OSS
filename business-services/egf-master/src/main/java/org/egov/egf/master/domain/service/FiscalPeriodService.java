@@ -35,7 +35,9 @@ public class FiscalPeriodService {
 	@Autowired
 	private FinancialYearRepository financialYearRepository;
 
-	private BindingResult validate(List<FiscalPeriod> fiscalperiods, String method, BindingResult errors) {
+    private static final String FISCAL_PERIODS="fiscalperiods";
+
+    private BindingResult validate(List<FiscalPeriod> fiscalperiods, String method, BindingResult errors) {
 
                 try {
                     switch (method) {
@@ -45,7 +47,7 @@ public class FiscalPeriodService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (fiscalperiods == null) {
-                            throw new InvalidDataException("fiscalperiods", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(FISCAL_PERIODS, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (FiscalPeriod fiscalPeriod : fiscalperiods) {
                             validator.validate(fiscalPeriod, errors);
@@ -57,7 +59,7 @@ public class FiscalPeriodService {
                         break;
                     case Constants.ACTION_UPDATE:
                         if (fiscalperiods == null) {
-                            throw new InvalidDataException("fiscalperiods", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(FISCAL_PERIODS, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (FiscalPeriod fiscalPeriod : fiscalperiods) {
                             if (fiscalPeriod.getId() == null) {
@@ -72,7 +74,7 @@ public class FiscalPeriodService {
                         break;
                     case Constants.ACTION_SEARCH:
                         if (fiscalperiods == null) {
-                            throw new InvalidDataException("fiscalperiods", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(FISCAL_PERIODS, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (FiscalPeriod fiscalperiod : fiscalperiods) {
                             if (fiscalperiod.getTenantId() == null) {

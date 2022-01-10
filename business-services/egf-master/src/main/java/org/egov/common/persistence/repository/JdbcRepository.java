@@ -32,6 +32,12 @@ public abstract class JdbcRepository {
     public static final Map<String, String> allSearchQuery = new HashMap<>();
     public static final Map<String, String> getByIdQuery = new HashMap<>();
     private static final Logger LOG = LoggerFactory.getLogger(JdbcRepository.class);
+    private static final String TABLE_NAME="TABLE_NAME";
+    private static final String TENANT_ID="tenantId";
+    private static final String NAME=":tableName";
+    private static final String AND=" and ";
+    private static final String MESSAGE="Not able to get Table_name from entity";
+    private static final String WHERE=" where ";
     @Autowired
     public JdbcTemplate jdbcTemplate;
     @Autowired
@@ -48,26 +54,24 @@ public abstract class JdbcRepository {
 
         try {
 
-            TABLE_NAME = (String) T.getDeclaredField("TABLE_NAME").get(null);
+            TABLE_NAME = (String) T.getDeclaredField(TABLE_NAME).get(null);
         } catch (Exception e) {
             LOG.error("Illegal Argument exception occurred: " + e.getMessage());
         }
         insertFields.addAll(fetchFields(T));
         uniqueFields.add("id");
-        uniqueFields.add("tenantId");
+        uniqueFields.add(TENANT_ID);
         insertFields.removeAll(uniqueFields);
         allInsertQuery.put(T.getSimpleName(), insertQuery(insertFields, TABLE_NAME, uniqueFields));
         updateFields.addAll(insertFields);
         updateFields.remove("createdBy");
         updateQuery = updateQuery(updateFields, TABLE_NAME, uniqueFields);
-        System.out.println(T.getSimpleName() + "--------" + insertFields);
         allInsertFields.put(T.getSimpleName(), insertFields);
         allUpdateFields.put(T.getSimpleName(), updateFields);
         allIdentitiferFields.put(T.getSimpleName(), uniqueFields);
         // allInsertQuery.put(T.getSimpleName(), insertQuery);
         allUpdateQuery.put(T.getSimpleName(), updateQuery);
         getByIdQuery.put(T.getSimpleName(), getByIdQuery(TABLE_NAME, uniqueFields));
-        System.out.println(allInsertQuery);
     }
 
     public static String insertQuery(List<String> fields, String tableName, List<String> uniqueFields) {
@@ -95,11 +99,8 @@ public abstract class JdbcRepository {
             i++;
         }
 
-        System.out.println(fields);
-        System.out.println(uniqueFields);
         iQuery = iQuery.replace(":fields", fieldNames.toString()).replace(":params", paramNames.toString())
-                .replace(":tableName", tableName).toString();
-        System.out.println(tableName + "----" + iQuery);
+                .replace(NAME, tableName).toString();
         return iQuery;
     }
 
@@ -143,7 +144,7 @@ public abstract class JdbcRepository {
         i = 0;
         for (String s : uniqueFields) {
             if (i > 0) {
-                uniqueFieldNameAndParams.append(" and ");
+                uniqueFieldNameAndParams.append(AND);
 
             }
             uniqueFieldNameAndParams.append(s).append("=").append(":").append(s);
@@ -151,7 +152,7 @@ public abstract class JdbcRepository {
         }
 
         uQuery = uQuery.replace(":fields", fieldNameAndParams.toString())
-                .replace(":uniqueField", uniqueFieldNameAndParams.toString()).replace(":tableName", tableName)
+                .replace(":uniqueField", uniqueFieldNameAndParams.toString()).replace(NAME, tableName)
                 .toString();
         return uQuery;
     }
@@ -163,14 +164,14 @@ public abstract class JdbcRepository {
 
         for (String s : uniqueFields) {
             if (i > 0) {
-                uniqueFieldNameAndParams.append(" and ");
+                uniqueFieldNameAndParams.append(AND);
 
             }
             uniqueFieldNameAndParams.append(s).append("=").append(":").append(s);
             i++;
         }
 
-        uQuery = uQuery.replace(":uniqueField", uniqueFieldNameAndParams.toString()).replace(":tableName", tableName)
+        uQuery = uQuery.replace(":uniqueField", uniqueFieldNameAndParams.toString()).replace(NAME, tableName)
                 .toString();
         return uQuery;
     }
@@ -199,7 +200,6 @@ public abstract class JdbcRepository {
     }
 
     public static Field getField(Object obj, String s) {
-        System.out.println(s);
         Field declaredField = null;
         Object ob1 = obj;
         while (declaredField == null) {
@@ -261,8 +261,6 @@ public abstract class JdbcRepository {
         List<Map<String, Object>> batchValues = new ArrayList<>();
         batchValues.add(paramValues(ob, allInsertFields.get(obName)));
         batchValues.get(0).putAll(paramValues(ob, allIdentitiferFields.get(obName)));
-        System.out.println(obName + "----" + allInsertQuery.get(obName));
-        System.out.println(namedParameterJdbcTemplate);
         namedParameterJdbcTemplate.batchUpdate(allInsertQuery.get(obName),
                 batchValues.toArray(new Map[batchValues.size()]));
         return ob;
@@ -270,7 +268,6 @@ public abstract class JdbcRepository {
 
     @Transactional
     public Object update(Object ob) {
-        System.out.println(allUpdateQuery);
         ((AuditableEntity) ob).setCreatedDate(new Date());
         ((AuditableEntity) ob).setLastModifiedDate(new Date());
 
@@ -278,7 +275,6 @@ public abstract class JdbcRepository {
         List<Map<String, Object>> batchValues = new ArrayList<>();
         batchValues.add(paramValues(ob, allUpdateFields.get(obName)));
         batchValues.get(0).putAll(paramValues(ob, allIdentitiferFields.get(obName)));
-        System.out.println(obName + "----" + allUpdateQuery.get(obName));
         namedParameterJdbcTemplate.batchUpdate(allUpdateQuery.get(obName),
                 batchValues.toArray(new Map[batchValues.size()]));
         return ob;
@@ -295,7 +291,6 @@ public abstract class JdbcRepository {
 
         final String delQuery = "delete from " + tableName + " where tenantId = '" + tenantId + "' and " + fieldName + " = '"
                 + fieldValue + "'";
-        System.out.println("Delete query" + "----" + delQuery);
         jdbcTemplate.execute(delQuery);
     }
 
@@ -376,24 +371,24 @@ public abstract class JdbcRepository {
         Map<String, Object> paramValues = new HashMap<>();
         String table = "";
         try {
-            table = FieldUtils.readDeclaredField(ob, "TABLE_NAME").toString();
+            table = FieldUtils.readDeclaredField(ob, TABLE_NAME).toString();
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Not able to get Table_name from entity" + obName);
+            throw new RuntimeException(MESSAGE + obName);
         }
         StringBuffer uniqueQuery = new StringBuffer(
-                "select count(*) as count from " + table + " where " + fieldName + "=:fieldValue");
+                "select count(*) as count from " + table + WHERE + fieldName + "=:fieldValue");
         paramValues.put("fieldValue", getValue(getField(ob, fieldName), ob));
         for (String s : identifierFields) {
 
-            if (s.equalsIgnoreCase("tenantId")) {
-                uniqueQuery.append(" and ");
+            if (s.equalsIgnoreCase(TENANT_ID)) {
+                uniqueQuery.append(AND);
                 uniqueQuery.append(s).append("=").append(":").append(s);
                 // implement fallback here
                 paramValues.put(s, getValue(getField(ob, s), ob));
                 continue;
             }
             if (getValue(getField(ob, s), ob) != null) {
-                uniqueQuery.append(" and ");
+                uniqueQuery.append(AND);
                 uniqueQuery.append(s).append("!=").append(":").append(s);
                 paramValues.put(s, getValue(getField(ob, s), ob));
             }
@@ -415,25 +410,25 @@ public abstract class JdbcRepository {
         Map<String, Object> paramValues = new HashMap<>();
         String table = "";
         try {
-            table = FieldUtils.readDeclaredField(ob, "TABLE_NAME").toString();
+            table = FieldUtils.readDeclaredField(ob, TABLE_NAME).toString();
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Not able to get Table_name from entity" + obName);
+            throw new RuntimeException(MESSAGE + obName);
         }
-        StringBuffer uniqueQuery = new StringBuffer("select count(*) as count from " + table + " where " + firstFieldName
-                + "=:firstFieldValue" + " and " + secondFieldName + "=:secondFieldValue");
+        StringBuffer uniqueQuery = new StringBuffer("select count(*) as count from " + table + WHERE + firstFieldName
+                + "=:firstFieldValue" + AND + secondFieldName + "=:secondFieldValue");
         paramValues.put("firstFieldValue", getValue(getField(ob, firstFieldName), ob));
         paramValues.put("secondFieldValue", getValue(getField(ob, secondFieldName), ob));
         for (String s : identifierFields) {
 
-            if (s.equalsIgnoreCase("tenantId")) {
-                uniqueQuery.append(" and ");
+            if (s.equalsIgnoreCase(TENANT_ID)) {
+                uniqueQuery.append(AND);
                 uniqueQuery.append(s).append("=").append(":").append(s);
                 // implement fallback here
                 paramValues.put(s, getValue(getField(ob, s), ob));
                 continue;
             }
             if (getValue(getField(ob, s), ob) != null) {
-                uniqueQuery.append(" and ");
+                uniqueQuery.append(AND);
                 uniqueQuery.append(s).append("!=").append(":").append(s);
                 paramValues.put(s, getValue(getField(ob, s), ob));
             }
@@ -463,9 +458,9 @@ public abstract class JdbcRepository {
 
         String table = "";
         try {
-            table = FieldUtils.readDeclaredField(entity, "TABLE_NAME").toString();
+            table = FieldUtils.readDeclaredField(entity, TABLE_NAME).toString();
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Not able to get Table_name from entity" + obName);
+            throw new RuntimeException(MESSAGE + obName);
         }
         paramValues.put("tablename", table);
         paramValues.put("reason", reason);
@@ -476,14 +471,13 @@ public abstract class JdbcRepository {
         backupQuery.append(
                 "insert into " + backupTable + " select '1',:tablename,id,tenantid,:reason,row_to_json(" + table + "),now() "
                         + " from " + table + " where tenantid=:tenantId and id=:id ");
-        System.out.println("query.............." + backupQuery);
         namedParameterJdbcTemplate.batchUpdate(backupQuery.toString(), batchValues.toArray(new Map[batchValues.size()]));
-        deleteQuery.append("delete from  " + table + " where ");
+        deleteQuery.append("delete from  " + table + WHERE);
         int i = 0;
         for (String s : identifierFields) {
             if (i != 0)
-                deleteQuery.append(" and ");
-            if (s.equalsIgnoreCase("tenantId")) {
+                deleteQuery.append(AND);
+            if (s.equalsIgnoreCase(TENANT_ID)) {
 
                 deleteQuery.append(s).append("=").append(":").append(s);
                 // implement fallback here

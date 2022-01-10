@@ -35,7 +35,9 @@ public class SubSchemeService {
 	@Autowired
 	private SchemeRepository schemeRepository;
 
-	private BindingResult validate(List<SubScheme> subschemes, String method, BindingResult errors) {
+    private static final String SUB_SCHEMES="subschemes";
+
+    private BindingResult validate(List<SubScheme> subschemes, String method, BindingResult errors) {
 
                 try {
                     switch (method) {
@@ -45,7 +47,7 @@ public class SubSchemeService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (subschemes == null) {
-                            throw new InvalidDataException("subschemes", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(SUB_SCHEMES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (SubScheme subScheme : subschemes) {
                             validator.validate(subScheme, errors);
@@ -57,7 +59,7 @@ public class SubSchemeService {
                         break;
                     case Constants.ACTION_UPDATE:
                         if (subschemes == null) {
-                            throw new InvalidDataException("subschemes", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(SUB_SCHEMES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (SubScheme subScheme : subschemes) {
                             if (subScheme.getId() == null) {
@@ -72,7 +74,7 @@ public class SubSchemeService {
                         break;
                     case Constants.ACTION_SEARCH:
                         if (subschemes == null) {
-                            throw new InvalidDataException("subschemes", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(SUB_SCHEMES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (SubScheme subscheme : subschemes) {
                             if (subscheme.getTenantId() == null) {

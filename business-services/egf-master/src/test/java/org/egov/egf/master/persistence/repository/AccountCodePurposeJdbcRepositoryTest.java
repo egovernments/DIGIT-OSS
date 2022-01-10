@@ -36,6 +36,7 @@ public class AccountCodePurposeJdbcRepositoryTest {
 	private AccountCodePurposeJdbcRepository accountCodePurposeJdbcRepository;
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	private static final String DEFAULT="default";
 
 	@Before
 	public void setUp() throws Exception {
@@ -47,7 +48,7 @@ public class AccountCodePurposeJdbcRepositoryTest {
 	public void test_create() {
 
 		AccountCodePurposeEntity accountCodePurpose = AccountCodePurposeEntity.builder().id("1").name("name").build();
-		accountCodePurpose.setTenantId("default");
+		accountCodePurpose.setTenantId(DEFAULT);
 		AccountCodePurposeEntity actualResult = accountCodePurposeJdbcRepository.create(accountCodePurpose);
 
 		List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_accountCodePurpose",
@@ -72,7 +73,7 @@ public class AccountCodePurposeJdbcRepositoryTest {
 	public void test_update() {
 
 		AccountCodePurposeEntity accountCodePurpose = AccountCodePurposeEntity.builder().id("1").name("nameU").build();
-		accountCodePurpose.setTenantId("default");
+		accountCodePurpose.setTenantId(DEFAULT);
 		AccountCodePurposeEntity actualResult = accountCodePurposeJdbcRepository.update(accountCodePurpose);
 
 		List<Map<String, Object>> result = namedParameterJdbcTemplate.query("SELECT * FROM egf_accountCodePurpose",
@@ -108,7 +109,7 @@ public class AccountCodePurposeJdbcRepositoryTest {
 	public void test_find_by_id() {
 
 		AccountCodePurposeEntity accountCodePurposeEntity = AccountCodePurposeEntity.builder().id("1").build();
-		accountCodePurposeEntity.setTenantId("default");
+		accountCodePurposeEntity.setTenantId(DEFAULT);
 		AccountCodePurposeEntity result = accountCodePurposeJdbcRepository.findById(accountCodePurposeEntity);
 		assertThat(result.getId()).isEqualTo("1");
 		assertThat(result.getName()).isEqualTo("name");
@@ -120,7 +121,7 @@ public class AccountCodePurposeJdbcRepositoryTest {
 	public void test_find_by_invalid_id_should_return_null() {
 
 		AccountCodePurposeEntity accountCodePurposeEntity = AccountCodePurposeEntity.builder().id("5").build();
-		accountCodePurposeEntity.setTenantId("default");
+		accountCodePurposeEntity.setTenantId(DEFAULT);
 		AccountCodePurposeEntity result = accountCodePurposeJdbcRepository.findById(accountCodePurposeEntity);
 		assertNull(result);
 

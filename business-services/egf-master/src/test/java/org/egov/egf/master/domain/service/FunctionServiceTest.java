@@ -43,10 +43,8 @@ public class FunctionServiceTest {
 	private BindingResult errors = new BeanPropertyBindingResult(null, null);
 	private RequestInfo requestInfo = new RequestInfo();
 	private List<Function> functions = new ArrayList<>();
+	private static final String DEFAULT="default";
 
-	@Before
-	public void setup() {
-	}
 
 	@Test
 	public final void testCreate() {
@@ -116,7 +114,7 @@ public class FunctionServiceTest {
 		expextedResult.add(getParentFunction());
 		List<Function> functions = new ArrayList<>();
 		functions.add(getFunction());
-		ApplicationThreadLocals.setTenantId("default");
+		ApplicationThreadLocals.setTenantId(DEFAULT);
 		when(functionRepository.findById(any(Function.class))).thenReturn(null);
 		functionService.fetchRelated(functions);
 	}
@@ -124,7 +122,7 @@ public class FunctionServiceTest {
 	private List<Function> getFunctions() {
 		List<Function> functions = new ArrayList<Function>();
 		Function function = Function.builder().id("1").name("name").code("code").level(1).parentId(getParentFunction()).active(true).build();
-		function.setTenantId("default");
+		function.setTenantId(DEFAULT);
 		functions.add(function);
 		return functions;
 	}
@@ -134,14 +132,14 @@ public class FunctionServiceTest {
 		functionSearch.setPageSize(0);
 		functionSearch.setOffset(0);
 		functionSearch.setSortBy("Sort");
-		functionSearch.setTenantId("default");
+		functionSearch.setTenantId(DEFAULT);
 		return functionSearch;
 	}
 
 	private Function getFunction() {
 		Function function = Function.builder().id("1").name("function").code("001").active(true)
 				.parentId(getParentFunction()).level(1).build();
-		function.setTenantId("default");
+		function.setTenantId(DEFAULT);
 		return function;
 	}
 

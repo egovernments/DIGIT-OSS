@@ -35,7 +35,9 @@ public class FinancialConfigurationService {
 	@Value("${fetch_data_from}")
 	private String fetchDataFrom;
 
-	private BindingResult validate(List<FinancialConfiguration> financialconfigurations, String method,
+    private final static String FINANCIAL_CONFIGURATIONS="financialconfigurations";
+
+    private BindingResult validate(List<FinancialConfiguration> financialconfigurations, String method,
 			BindingResult errors) {
 
                 try {
@@ -46,7 +48,7 @@ public class FinancialConfigurationService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (financialconfigurations == null) {
-                            throw new InvalidDataException("financialconfigurations", ErrorCode.NOT_NULL.getCode(),
+                            throw new InvalidDataException(FINANCIAL_CONFIGURATIONS, ErrorCode.NOT_NULL.getCode(),
                                     null);
                         }
                         for (FinancialConfiguration financialConfiguration : financialconfigurations) {
@@ -59,7 +61,7 @@ public class FinancialConfigurationService {
                         break;
                     case Constants.ACTION_UPDATE:
                         if (financialconfigurations == null) {
-                            throw new InvalidDataException("financialconfigurations", ErrorCode.NOT_NULL.getCode(),
+                            throw new InvalidDataException(FINANCIAL_CONFIGURATIONS, ErrorCode.NOT_NULL.getCode(),
                                     null);
                         }
                         for (FinancialConfiguration financialConfiguration : financialconfigurations) {
@@ -76,7 +78,7 @@ public class FinancialConfigurationService {
                         break;
                     case Constants.ACTION_SEARCH:
                         if (financialconfigurations == null) {
-                            throw new InvalidDataException("financialconfigurations", ErrorCode.NOT_NULL.getCode(),
+                            throw new InvalidDataException(FINANCIAL_CONFIGURATIONS, ErrorCode.NOT_NULL.getCode(),
                                     null);
                         }
                         for (FinancialConfiguration financialconfiguration : financialconfigurations) {

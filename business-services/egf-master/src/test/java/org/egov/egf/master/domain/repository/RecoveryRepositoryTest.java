@@ -51,6 +51,12 @@ public class RecoveryRepositoryTest {
     @Captor
     private ArgumentCaptor<Map<String, Object>> captor;
 
+    private static final String NUMBER="30492234547";
+
+    private static final String NAME="ritesh";
+
+    private static final String DEFAULT="default";
+
     private RequestInfo requestInfo = new RequestInfo();
 
     @Before
@@ -186,8 +192,8 @@ public class RecoveryRepositoryTest {
     }
 
     private RecoveryContract getRecoveryContract() {
-        return RecoveryContract.builder().id("1").name("name").code("code").type("M").accountNumber("30492234547").active(true).
-                remittanceMode('M').remitted("ritesh").build();
+        return RecoveryContract.builder().id("1").name("name").code("code").type("M").accountNumber(NUMBER).active(true).
+                remittanceMode('M').remitted(NAME).build();
     }
 
     private RecoveryEntity getRecoveryEntity() {
@@ -212,10 +218,10 @@ public class RecoveryRepositoryTest {
         recovery.setName("name");
         recovery.setActive(true);
         recovery.setType("M");
-        recovery.setAccountNumber("30492234547");
+        recovery.setAccountNumber(NUMBER);
         recovery.setRemittanceMode('M');
-        recovery.setRemitted("ritesh");
-        recovery.setTenantId("default");
+        recovery.setRemitted(NAME);
+        recovery.setTenantId(DEFAULT);
         return recovery;
     }
 
@@ -250,9 +256,9 @@ public class RecoveryRepositoryTest {
 
     private List<Recovery> getRecoverys() {
         List<Recovery> recoverys = new ArrayList<Recovery>();
-        Recovery recovery = Recovery.builder().id("1").name("name").code("code").type("M").accountNumber("30492234547").active(true).
-                remittanceMode('M').remitted("ritesh").build();
-        recovery.setTenantId("default");
+        Recovery recovery = Recovery.builder().id("1").name("name").code("code").type("M").accountNumber(NUMBER).active(true).
+                remittanceMode('M').remitted(NAME).build();
+        recovery.setTenantId(DEFAULT);
         recovery.setChartOfAccount(getChartOfAccount());
         recoverys.add(recovery);
         return recoverys;
@@ -272,7 +278,7 @@ public class RecoveryRepositoryTest {
                 .description("description").isActiveForPosting(true)
                 .type('A').classification((long) 123456)
                 .functionRequired(true).budgetCheckRequired(true).build();
-        chartOfAccount.setTenantId("default");
+        chartOfAccount.setTenantId(DEFAULT);
         return chartOfAccount;
     }
 }

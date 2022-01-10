@@ -40,10 +40,8 @@ public class AccountCodePurposeServiceTest {
 	private BindingResult errors = new BeanPropertyBindingResult(null, null);
 	private RequestInfo requestInfo = new RequestInfo();
 	private List<AccountCodePurpose> accountCodePurposes = new ArrayList<>();
+	private static final String DEFAULT="default";
 
-	@Before
-	public void setup() {
-	}
 
 	@Test
 	public final void testCreate() {
@@ -102,7 +100,7 @@ public class AccountCodePurposeServiceTest {
 	private List<AccountCodePurpose> getAccountCodePurposes() {
 		List<AccountCodePurpose> accountCodePurposes = new ArrayList<AccountCodePurpose>();
 		AccountCodePurpose accountCodePurpose = AccountCodePurpose.builder().id("1").name("name").build();
-		accountCodePurpose.setTenantId("default");
+		accountCodePurpose.setTenantId(DEFAULT);
 		accountCodePurposes.add(accountCodePurpose);
 		return accountCodePurposes;
 	}
@@ -112,13 +110,13 @@ public class AccountCodePurposeServiceTest {
 		accountCodePurposeSearch.setPageSize(0);
 		accountCodePurposeSearch.setOffset(0);
 		accountCodePurposeSearch.setSortBy("Sort");
-		accountCodePurposeSearch.setTenantId("default");
+		accountCodePurposeSearch.setTenantId(DEFAULT);
 		return accountCodePurposeSearch;
 	}
 
 	private AccountCodePurpose getAccountCodePurpose() {
 		AccountCodePurpose accountCodePurpose = AccountCodePurpose.builder().id("1").name("name").build();
-		accountCodePurpose.setTenantId("default");
+		accountCodePurpose.setTenantId(DEFAULT);
 		return accountCodePurpose;
 	}
 

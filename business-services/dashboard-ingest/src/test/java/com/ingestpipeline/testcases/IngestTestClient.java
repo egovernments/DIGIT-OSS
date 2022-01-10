@@ -3,27 +3,30 @@ package com.ingestpipeline.testcases;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.ingestpipeline.consumer.DigressionConsumer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
  
 
 public class IngestTestClient {
  
     public static final String REST_SERVICE_URI = "http://localhost:8081/ingest/api";
-     
+    public static final Logger LOGGER = LoggerFactory.getLogger(IngestTestClient.class);
+
+
     /* GET */
     @SuppressWarnings("unchecked")
     private static void listAllUsers(){
-        System.out.println("Testing listAllUsers API-----------");
-         
         RestTemplate restTemplate = new RestTemplate();
         List<LinkedHashMap<String, Object>> usersMap = restTemplate.getForObject(REST_SERVICE_URI+"/user/", List.class);
          
         if(usersMap!=null){
             for(LinkedHashMap<String, Object> map : usersMap){
-                System.out.println("User : id="+map.get("id")+", Name="+map.get("name")+", Age="+map.get("age")+", Salary="+map.get("salary"));;
+                LOGGER.info("User : id="+map.get("id")+", Name="+map.get("name")+", Age="+map.get("age")+", Salary="+map.get("salary"));;
             }
         }else{
-            System.out.println("No user exist----------");
+            LOGGER.info("No user exist----------");
         }
     }
      

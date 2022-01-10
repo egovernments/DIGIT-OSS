@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SubSchemeJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(SubSchemeJdbcRepository.class);
+	private static final String AND=" and ";
 
 	static {
 		LOG.debug("init subScheme");
@@ -69,70 +70,70 @@ public class SubSchemeJdbcRepository extends JdbcRepository {
 		// implement jdbc specfic search
 	        if (subSchemeSearchEntity.getTenantId() != null) {
 	                  if (params.length() > 0) {
-	                      params.append(" and ");
+	                      params.append(AND);
 	                  }
 	                  params.append("tenantId =:tenantId");
 	                  paramValues.put("tenantId", subSchemeSearchEntity.getTenantId());
 	        }
 		if (subSchemeSearchEntity.getId() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(AND);
 			}
 			params.append("id =:id");
 			paramValues.put("id", subSchemeSearchEntity.getId());
 		}
 		if (subSchemeSearchEntity.getIds() != null) {
                           if (params.length() > 0) {
-                                  params.append(" and ");
+                                  params.append(AND);
                           }
                           params.append("id in(:ids) ");
                           paramValues.put("ids", new ArrayList<String>(Arrays.asList(subSchemeSearchEntity.getIds().split(","))));
                 }
 		if (subSchemeSearchEntity.getSchemeId() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(AND);
 			}
 			params.append("schemeId =:scheme");
 			paramValues.put("scheme", subSchemeSearchEntity.getSchemeId());
 		}
 		if (subSchemeSearchEntity.getCode() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(AND);
 			}
 			params.append("code =:code");
 			paramValues.put("code", subSchemeSearchEntity.getCode());
 		}
 		if (subSchemeSearchEntity.getName() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(AND);
 			}
 			params.append("name =:name");
 			paramValues.put("name", subSchemeSearchEntity.getName());
 		}
 		if (subSchemeSearchEntity.getValidFrom() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(AND);
 			}
 			params.append("validFrom =:validFrom");
 			paramValues.put("validFrom", subSchemeSearchEntity.getValidFrom());
 		}
 		if (subSchemeSearchEntity.getValidTo() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(AND);
 			}
 			params.append("validTo =:validTo");
 			paramValues.put("validTo", subSchemeSearchEntity.getValidTo());
 		}
 		if (subSchemeSearchEntity.getActive() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(AND);
 			}
 			params.append("active =:active");
 			paramValues.put("active", subSchemeSearchEntity.getActive());
 		}
 		if (subSchemeSearchEntity.getDepartmentId() != null) {
 			if (params.length() > 0) {
-				params.append(" and ");
+				params.append(AND);
 			}
 			params.append("departmentId =:departmentId");
 			paramValues.put("departmentId", subSchemeSearchEntity.getDepartmentId());

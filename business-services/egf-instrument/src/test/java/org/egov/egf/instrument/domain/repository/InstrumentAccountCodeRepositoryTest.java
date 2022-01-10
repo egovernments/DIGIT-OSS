@@ -52,6 +52,8 @@ public class InstrumentAccountCodeRepositoryTest {
 
     private RequestInfo requestInfo = new RequestInfo();
 
+    private static final String DEFAULT="default";
+
     @Before
     public void setup() {
         instrumentAccountCodeRepositoryWithKafka = new InstrumentAccountCodeRepository(
@@ -268,7 +270,7 @@ public class InstrumentAccountCodeRepositoryTest {
         InstrumentAccountCode instrumentAccountCodeDetail = new InstrumentAccountCode();
         instrumentAccountCodeDetail.setAccountCode(ChartOfAccountContract.builder().id("accountCodeId").build());
         instrumentAccountCodeDetail.setInstrumentType(InstrumentType.builder().id("instrumentTypeId").build());
-        instrumentAccountCodeDetail.setTenantId("default");
+        instrumentAccountCodeDetail.setTenantId(DEFAULT);
         return instrumentAccountCodeDetail;
     }
 
@@ -276,7 +278,7 @@ public class InstrumentAccountCodeRepositoryTest {
         InstrumentAccountCodeEntity entity = new InstrumentAccountCodeEntity();
         entity.setAccountCodeId("accountCodeId");
         entity.setInstrumentTypeId("instrumentTypeId");
-        entity.setTenantId("default");
+        entity.setTenantId(DEFAULT);
         return entity;
     }
 
@@ -293,7 +295,7 @@ public class InstrumentAccountCodeRepositoryTest {
         InstrumentAccountCode instrumentAccountCode = InstrumentAccountCode.builder()
                 .instrumentType(InstrumentType.builder().active(true).id("instrumenttypeid").build())
                 .accountCode(ChartOfAccountContract.builder().id("accountcodeid").build()).build();
-        instrumentAccountCode.setTenantId("default");
+        instrumentAccountCode.setTenantId(DEFAULT);
         instrumentAccountCodes.add(instrumentAccountCode);
         return instrumentAccountCodes;
     }
