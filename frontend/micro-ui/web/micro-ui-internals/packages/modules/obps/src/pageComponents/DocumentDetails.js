@@ -94,6 +94,7 @@ const SelectDocument = React.memo(function MyComponent({
     formData,
     PrevStateDocuments
 }) {
+
     const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0] || PrevStateDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0];
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const [selectedDocument, setSelectedDocument] = useState(
@@ -110,7 +111,7 @@ const SelectDocument = React.memo(function MyComponent({
     const [fileArray, setfileArray] = useState([] || formData?.documents?.documents.filter((ob) => ob.documentType === selectedDocument.code) );
 
     const handleSelectDocument = (value) => {
-        if(filteredDocument?.documentType){
+        if(filteredDocument?.documentType && !(doc?.uploadedDocuments?.length)){
             filteredDocument.documentType=value?.code;
             let currDocs=documents?.filter((item) => item?.documentType?.includes(doc?.code));
             currDocs.map(doc=>doc.documentType=value?.code);
@@ -149,6 +150,11 @@ const SelectDocument = React.memo(function MyComponent({
                 ...newfiles,
             ]
             setDocuments(__documents)
+        }else if(e?.length==0){
+            const __documents = [
+                ...documents.filter(e => e.documentType !== key ),
+            ]
+            setDocuments(__documents);
         }
     
         newArr?.map((ob) => {
