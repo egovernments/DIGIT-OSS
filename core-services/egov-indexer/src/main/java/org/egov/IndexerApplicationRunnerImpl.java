@@ -34,7 +34,7 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 	public static ResourceLoader resourceLoader;
 
 	@Value("${egov.indexer.yml.repo.path}")
-	private String yamllist;
+	private static String yamllist;
 
 	public static final Logger logger = LoggerFactory.getLogger(IndexerApplicationRunnerImpl.class);
 
@@ -45,7 +45,7 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 	public static ConcurrentHashMap<String, List<String>> topicMap = new ConcurrentHashMap<>();
 
 	@Autowired
-	private ApplicationContext applicationContext;
+	private static ApplicationContext applicationContext;
 
 	@Override
 	public void run(final ApplicationArguments applicationArguments) throws Exception {
@@ -62,7 +62,7 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 	}
 
 	//file types to be resolved have to be passed as comma separated types.
-	public List<String> resolveAllConfigFolders(List<String> listOfFiles, String fileTypesToResolve) {
+	public static List<String> resolveAllConfigFolders(List<String> listOfFiles, String fileTypesToResolve) {
 		List<String> fileList = new ArrayList<String>();
 		List<String> fileTypes = Arrays.asList(fileTypesToResolve.split("[,]"));
 
@@ -78,7 +78,7 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 		return fileList;
 	}
 
-	public List<String> getFilesInFolder(String baseFolderPath,List<String> fileTypes) {
+	public static List<String> getFilesInFolder(String baseFolderPath, List<String> fileTypes) {
 		File folder = new File(baseFolderPath);
 
 		if (!folder.exists())

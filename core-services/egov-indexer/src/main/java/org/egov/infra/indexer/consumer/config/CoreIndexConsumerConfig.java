@@ -153,7 +153,7 @@ public class CoreIndexConsumerConfig implements ApplicationRunner {
          return new KafkaMessageListenerContainer<>(consumerFactory(), properties); 
     }
         
-    public static boolean startContainer(){
+    public boolean startContainer(){
     	KafkaMessageListenerContainer<String, String> container = null;
     	try {
 			    container = container();
