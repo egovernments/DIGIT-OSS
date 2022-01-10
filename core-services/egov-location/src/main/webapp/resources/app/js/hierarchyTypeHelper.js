@@ -26,7 +26,6 @@ function callAjaxSearch() {
 				},
 				"fnRowCallback": function (row, data, index) {
 						$(row).on('click', function() {
-				console.log(data.id);
 				window.open('//egb/hierarchytype/'+ $('#mode').val() +'/'+data.id,'','width=800, height=600');
 			});
 				 },

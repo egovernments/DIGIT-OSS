@@ -348,7 +348,6 @@ class ReceiptService {
         if(responseBody.Payments.length>0)
           results=await this.preparePaymentResult(responseBody,user.authToken,locale,false);
       } else {
-        console.error('Error in fetching the payment data');
         return [];
       }
       
@@ -434,7 +433,6 @@ class ReceiptService {
           results=await this.preparePaymentResult(responseBody, user.authToken, user.locale,true);
         }
       } else {
-        console.error('Error in fetching the payment data');
         return undefined;
       }
 
@@ -512,7 +510,6 @@ class ReceiptService {
       if(response.status === 200) {
         localitySearchResults = await response.json();
       } else {
-        console.error('Error in fetching the Locality data');
         return undefined;
       }
   

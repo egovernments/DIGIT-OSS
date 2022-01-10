@@ -28,9 +28,7 @@ class UserProfileService {
       let responseBody = await response.json();
       return responseBody;
     } else {
-      console.error('Error Updating the user profile');
       let responseBody = await response.json();
-      console.error(JSON.stringify(responseBody));
       return undefined;
     }
   }

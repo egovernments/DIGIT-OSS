@@ -83,7 +83,6 @@ class DummyBillService {
 
   async fetchBillsForUser(user, locale) {
     let randomUserBehaviour = parseInt(Math.random() * 5);
-    console.log(randomUserBehaviour);
 
     let results = [
       {
@@ -155,7 +154,6 @@ class DummyBillService {
   }
 
   async fetchBillsForParam(user, service, paramOption, paramInput) {
-      console.log(`Received params: ${user}, ${service}, ${paramOption}, ${paramInput}`);
       let billsForUser = await this.fetchBillsForUser(user);
       return billsForUser.pendingBills;
   }

@@ -128,7 +128,7 @@ public class PGRCustomIndexConsumerConfig implements ApplicationRunner {
     }
 
      
-    public KafkaMessageListenerContainer<String, String> container() throws Exception { 
+    public KafkaMessageListenerContainer<String, String> container() throws Exception {
     	 setTopics();
     	 ContainerProperties properties = new ContainerProperties(this.topics); // set more properties
 //    	 properties.setPauseEnabled(true);
@@ -140,7 +140,7 @@ public class PGRCustomIndexConsumerConfig implements ApplicationRunner {
          return new KafkaMessageListenerContainer<>(consumerFactory(), properties); 
     }
         
-    public static boolean startContainer(){
+    public boolean startContainer(){
     	KafkaMessageListenerContainer<String, String> container = null;
     	try {
 			    container = container();

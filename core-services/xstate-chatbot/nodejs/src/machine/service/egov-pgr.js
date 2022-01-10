@@ -230,7 +230,6 @@ class PGRService {
         return { predictedCityCode, predictedCity, isCityDataMatch };
       }
     } else {
-      console.error('Error in fetching the city');
       return { predictedCityCode, predictedCity, isCityDataMatch};
     }
 
@@ -280,7 +279,6 @@ class PGRService {
       }
     }
     else {
-      console.error('Error in fetching the locality');
       return { predictedLocalityCode, predictedLocality, isLocalityDataMatch };
     }
 
@@ -375,7 +373,6 @@ class PGRService {
       let responseBody = await response.json();
       results = await this.preparePGRResult(responseBody,user.locale);
     } else {
-      console.error('Error in fetching the complaints');
       return undefined;
     }
     return results[0];
@@ -408,7 +405,6 @@ class PGRService {
       let responseBody = await response.json();
       results=await this.preparePGRResult(responseBody,user.locale);
     } else {
-      console.error('Error in fetching the complaints');
       return [];
     }
 

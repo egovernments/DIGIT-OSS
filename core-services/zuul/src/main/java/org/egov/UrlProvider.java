@@ -22,17 +22,17 @@ public class UrlProvider {
 
 
     @Autowired
-    private ResourceLoader resourceLoader;
+    private static ResourceLoader resourceLoader;
 
     private static Map<String, String> urlPostHooksMap;
 
     @Value("${url.posthook.lists}")
-    private String postHookUrls;
+    private static String postHookUrls;
 
     private static Map<String, String> urlPreHooksMap;
 
     @Value("${url.prehook.lists}")
-    private String preHookUrls;
+    private static String preHookUrls;
 
 
     private static Map<String, String> getUrlToUrlMapping(String config) {

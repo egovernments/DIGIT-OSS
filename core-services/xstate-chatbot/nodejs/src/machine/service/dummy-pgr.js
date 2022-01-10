@@ -118,7 +118,6 @@ class DummyPGRService {
         return {complaintTypes, messageBundle};
     }
     async persistComplaint(bundle) {
-      console.log('Saving complaint to service: ' + JSON.stringify(bundle));
       return {
         complaintNumber: '04/11/2020/081479',
         complaintLink: 'https://mseva.org/complaint/132'
