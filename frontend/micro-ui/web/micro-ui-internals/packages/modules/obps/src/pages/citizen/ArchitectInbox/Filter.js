@@ -20,8 +20,10 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
   const handleChange = (option) => {
     setSearchParams(old=>({...old,...option}));
   };
-  const clearAll = () => {setSearchParams({applicationType: [], applicationStatus:[]});
-  onFilterChange({});
+  const clearAll = () => {
+
+  setSearchParams({...searchParams,applicationType: [], applicationStatus:[]});
+  onFilterChange({applicationStatus:[]});
 };
   return (
     <React.Fragment>

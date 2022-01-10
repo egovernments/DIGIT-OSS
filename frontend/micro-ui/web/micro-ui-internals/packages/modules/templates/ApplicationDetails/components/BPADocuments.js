@@ -197,8 +197,8 @@ function SelectDocument({
             {
                 checkEnablingDocs ?
                     <div style={{ marginTop: "20px" }}>
-                        <LabelFieldPair>
-                            <CardLabel style={{marginTop:"-10px"}}>{doc?.required ? `${t(doc?.code)}* ` : `${t(doc?.code)}`}</CardLabel>
+                        <LabelFieldPair style={{width: "100%"}}>
+                            <CardLabel style={{marginTop:"-10px", width :"100%"}}>{doc?.required ? `${t(doc?.code)}* ` : `${t(doc?.code)}`}</CardLabel>
                             <Dropdown
                                 className="form-field"
                                 t={t}
@@ -207,12 +207,12 @@ function SelectDocument({
                                 selected={selectedDocument}
                                 optionKey="i18nKey"
                                 select={handleSelectDocument}
-                                style={{width: "70%"}}
+                                style={{width: "100%"}}
                             />
                         </LabelFieldPair>
-                        <LabelFieldPair>
-                            <CardLabel className="card-label-smaller"></CardLabel>
-                            <div className="field"  style={{width: "70%"}}>
+                        <LabelFieldPair style={{width: "100%"}}>
+                            <CardLabel className="card-label-smaller" style={{ width :"100%"}}></CardLabel>
+                            <div className="field"  style={{width: "100%"}}>
                                 <MultiUploadWrapper
                                     module="BPA"
                                     tenantId={tenantId}

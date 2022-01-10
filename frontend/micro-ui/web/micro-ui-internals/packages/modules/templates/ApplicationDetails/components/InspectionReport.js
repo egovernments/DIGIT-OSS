@@ -23,12 +23,12 @@ function InspectionReport({ fiReport, isCitizen=false }) {
     return (
         <React.Fragment>
             <div style={{ marginTop: "10px" }}>
-            {isCitizen?<CardHeader>{`${t(`BPA_FI_REPORT`)}`}</CardHeader>:
-            <CardSectionHeader>{`${t(`BPA_FI_REPORT`)}`}</CardSectionHeader>}
+            {isCitizen?<CardHeader style={{fontSize: "24px"}}>{`${t(`BPA_FI_REPORT`)}`}</CardHeader>:
+            <CardSectionHeader style={{fontSize: "24px"}}>{`${t(`BPA_FI_REPORT`)}`}</CardSectionHeader>}
                 {fiReport.map((fiData, index) =>
                     <div style={{ background: "#FAFAFA", border: "1px solid #D6D5D4", padding: "8px", borderRadius: "4px", maxWidth: "950px", minWidth: "280px", marginBottom: "24px" }}>
                         <StatusTable>
-                            <Row className="border-none" label={fiReport?.length == 1 ? `${t(`BPA_FI_REPORT`)}` : `${t(`BPA_FI_REPORT`)} - ${index + 1}`} text={""} />
+                            <CardSectionHeader style={{fontSize: "20px"}}>{fiReport?.length == 1 ? `${t(`BPA_FI_REPORT`)}` : `${t(`BPA_FI_REPORT`)} - ${index + 1}`}</CardSectionHeader>
                             <Row className="border-none" label={`${t(`BPA_FI_DATE_LABEL`)}`} text={fiData?.date ? (fiData.date.includes("-")?  `${fiData.date?.split("-")[2]}/${fiData.date?.split("-")[1]}/${fiData.date?.split("-")[0]}` : fiData?.date) : "NA"} />
                             <Row className="border-none" label={`${t(`BPA_FI_TIME_LABEL`)}`} text={fiData?.time ? fiData?.time : "NA"} />
                             {fiData?.questions?.length &&

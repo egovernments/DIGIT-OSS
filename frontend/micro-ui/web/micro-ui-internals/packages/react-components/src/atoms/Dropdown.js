@@ -67,6 +67,10 @@ const TextField = (props) => {
        };
         broadcastToClose();
         props?.onBlur?.(e);
+        props.setFilter("");
+        if( props.selectedVal!==props.filterVal){
+          setValue(props.selectedVal||"");
+         }
       }}
       onKeyDown={keyChange}
       readOnly={props.disable}
@@ -228,6 +232,9 @@ return (
                     </div>
                   );
                 })}
+                {filteredOption&&filteredOption.length===0&&    <div className={`cp profile-dropdown--item display: flex `} style={ { }} key={'-1'} > 
+                      {<span> {props.t ? props.t("CMN_NOOPTION") : "CMN_NOOPTION"}</span>}
+                    </div>}
           </div>
         ) : (
           <div className="options-card" style={{...props.optionCardStyles,overflow:"scroll",maxHeight:'350px'}} id="jk-dropdown-unique" ref={optionRef}>
