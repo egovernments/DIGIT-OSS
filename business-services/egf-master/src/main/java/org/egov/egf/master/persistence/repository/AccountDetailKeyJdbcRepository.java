@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountDetailKeyJdbcRepository extends JdbcRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(AccountDetailKeyJdbcRepository.class);
+	private String message=" and ";
 
 	static {
 		LOG.debug("init accountDetailKey");
@@ -44,7 +45,6 @@ public class AccountDetailKeyJdbcRepository extends JdbcRepository {
 	}
 
 	public Pagination<AccountDetailKey> search(AccountDetailKeySearch domain) {
-		private String message=" and ";
 		AccountDetailKeySearchEntity accountDetailKeySearchEntity = new AccountDetailKeySearchEntity();
 		accountDetailKeySearchEntity.toEntity(domain);
 

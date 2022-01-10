@@ -122,7 +122,7 @@ public class ChartOfAccountDetailControllerTest {
 		ChartOfAccountDetail chartOfAccountDetail = ChartOfAccountDetail.builder().build();
 		ChartOfAccount chartOfAccount = ChartOfAccount.builder().id(CODE_83).glcode("1201").name("finalfdf").description("accountNumber").build();
 		chartOfAccount.setTenantId(DEFAULT);
-		AccountDetailType accountDetailType = AccountDetailType.builder().id().name(MESSAGE).description(MESSAGE).tableName(MESSAGE).active(true).fullyQualifiedName(MESSAGE).build();
+		AccountDetailType accountDetailType = AccountDetailType.builder().id(CODE_E6).name(MESSAGE).description(MESSAGE).tableName(MESSAGE).active(true).fullyQualifiedName(MESSAGE).build();
 		accountDetailType.setTenantId(DEFAULT);
 		chartOfAccountDetail.setTenantId(DEFAULT);
 		chartOfAccountDetail.setChartOfAccount(chartOfAccount);

@@ -35,6 +35,7 @@ public class AccountCodePurposeService {
 
 	@Autowired
 	private SmartValidator validator;
+	private String message="accountcodepurposes";
 
 	@Transactional
 	public List<AccountCodePurpose> create(List<AccountCodePurpose> accountCodePurposes, BindingResult errors,
@@ -86,8 +87,6 @@ public class AccountCodePurposeService {
 	}
 
 	private BindingResult validate(List<AccountCodePurpose> accountcodepurposes, String method, BindingResult errors) {
-		private String message="accountcodepurposes";
-
 		try {
 			switch (method) {
 			case ACTION_VIEW:
