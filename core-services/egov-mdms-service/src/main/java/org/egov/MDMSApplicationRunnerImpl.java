@@ -38,7 +38,7 @@ import net.minidev.json.JSONArray;
 public class MDMSApplicationRunnerImpl {
 
     @Autowired
-    public ResourceLoader resourceLoader;
+    public static ResourceLoader resourceLoader;
 
     @Value("${egov.mdms.conf.path}")
     public String mdmsFileDirectory;
@@ -53,7 +53,7 @@ public class MDMSApplicationRunnerImpl {
 
     private static Map<String, Map<String, Object>> masterConfigMap = new HashMap<>();
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    static ObjectMapper objectMapper = new ObjectMapper();
 
     @PostConstruct
     public void run() {
