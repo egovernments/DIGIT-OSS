@@ -26,7 +26,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData,config }) => {
   const [floorData, setfloorData] = useState([]);
   let scrutinyNumber=`DCR82021WY7QW`;
   let user = Digit.UserService.getUser();
-  const tenantId = user.info.permanentCity;
+  const tenantId = user.info.permanentCity || Digit.ULBService.getCurrentTenantId();
   const checkingFlow = formData?.uiFlow?.flow;
   const [showToast, setShowToast] = useState(null);
   const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId,formData?.data?.scrutinyNumber, {
