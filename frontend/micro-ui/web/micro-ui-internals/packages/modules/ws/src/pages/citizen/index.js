@@ -6,6 +6,7 @@ import WSCreate from "./WSCreate/index"
 import SearchConnectionComponent from "./SearchConnection";
 import SearchResultsComponent from "./SearchResults";
 import { WSMyApplications } from "./WSMyApplications";
+import WSApplicationDetails from "./WSApplicationDetails";
 
 const App = ({ path }) => {
   const location = useLocation()
@@ -18,6 +19,7 @@ const App = ({ path }) => {
         <Route path={`${path}/search`} component={SearchConnectionComponent} />
         <Route path={`${path}/search-results`} component={SearchResultsComponent} />
         <Route path={`${path}/my-application`} component={WSMyApplications} />
+        <Route path={`${path}/connection/application/:acknowledgementIds`} component={WSApplicationDetails} />
       </Switch>
     </React.Fragment>
   )
