@@ -3,7 +3,6 @@ import { generateBill } from "../services/demandService";
 import { validateBillReq } from "../utils/modelValidation";
 
 const getbill = async (req, res, next) => {
-  console.log("getbill");
   const queryObj = JSON.parse(JSON.stringify(req.query));
 
   let errors = validateBillReq(queryObj);

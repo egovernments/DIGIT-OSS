@@ -55,14 +55,12 @@ swaggerTools.initializeMiddleware(swaggerDoc, middleware => {
   app.use(middleware.swaggerUi());
   let serverPort = envVariables.SERVER_PORT;
   app.server.listen(serverPort, () => {
-    console.log("port is ", serverPort);
   });
 });
 app.use("/", api(pool));
 
 //error handler middleware
 app.use((err, req, res, next) => {
-  console.log(err);
   if (!err.errorType) {
     res.status(err.status).json(err.data);
   } else if (err.errorType == "custom") {

@@ -159,16 +159,12 @@ const createUser = async (requestInfo, owner, tenantId) => {
         ...owner
       });
     } else {
-      // console.log("user not found");
 
       owner = addDefaultUserDetails(tenantId, owner);
-      // console.log("userSearchResponse.user[0]", userSearchResponse.user[0]);
-      // console.log("owner", owner);
       userCreateResponse = await userService.createUser(requestInfo, {
         ...userSearchResponse.user[0],
         ...owner
       });
-      // console.log("Create passed");
     }
   } else {
     //uuid present
@@ -182,7 +178,6 @@ const createUser = async (requestInfo, owner, tenantId) => {
         ...userSearchResponse.user[0],
         ...owner
       });
-      // console.log("Update passed");
     }
   }
   return userCreateResponse;

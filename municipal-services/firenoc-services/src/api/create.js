@@ -43,7 +43,6 @@ export const createApiResponse = async ({ body }, res, next) => {
     "MdmsRes.firenoc.boundary",
     get(locationResponse, "TenantBoundary.0.boundary")
   );
-  // console.log(JSON.stringify(locationResponse));
   //model validator
   let errors = validateFireNOCModel(body, mdms);
   if (errors.length > 0) {
@@ -57,11 +56,8 @@ export const createApiResponse = async ({ body }, res, next) => {
     return;
   }
 
-  // console.log(JSON.stringify(mdms));
   body = await addUUIDAndAuditDetails(body, "_create");
-  console.log("Created Body:  "+JSON.stringify(body));
   let workflowResponse = await createWorkFlow(body);
-  // console.log(JSON.stringify(workflowResponse));
 
   //need to implement notification
   //calculate call
@@ -79,8 +75,6 @@ export const createApiResponse = async ({ body }, res, next) => {
     FireNOCs: body.FireNOCs
   };
 
-  producer.send(payloads, function(err, data) {
-    if (err) console.log(err);
-  });
+  producer.send(payloads, function(err, data) {});
   return response;
 };

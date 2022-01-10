@@ -36,7 +36,6 @@ export const addIDGenId = async (requestInfo, idRequests) => {
     RequestInfo: requestInfo,
     idRequests
   };
-  // console.log(JSON.stringify(requestBody));
   let idGenResponse = await httpRequest({
     hostURL: envVariables.EGOV_IDGEN_HOST,
     endPoint: `${envVariables.EGOV_IDGEN_CONTEXT_PATH}${
@@ -44,7 +43,6 @@ export const addIDGenId = async (requestInfo, idRequests) => {
     }`,
     requestBody
   });
-  // console.log("idgenresponse",idGenResponse);
   return get(idGenResponse, "idResponses[0].id");
 };
 
@@ -52,7 +50,6 @@ export const getLocationDetails = async (requestInfo, tenantId) => {
   let requestBody = {
     RequestInfo: requestInfo
   };
-  // console.log(JSON.stringify(requestBody));
   let locationResponse = await httpRequest({
     hostURL: envVariables.EGOV_LOCATION_HOST,
     endPoint: `${envVariables.EGOV_LOCATION_CONTEXT_PATH}${
@@ -64,7 +61,6 @@ export const getLocationDetails = async (requestInfo, tenantId) => {
     }&tenantId=${tenantId}`,
     requestBody
   });
-  // console.log("idgenresponse",locationResponse);
   return locationResponse;
 };
 
@@ -94,13 +90,11 @@ export const createWorkFlow = async body => {
     RequestInfo: body.RequestInfo,
     ProcessInstances: processInstances
   };
-  //console.log("Workflow requestBody", JSON.stringify(requestBody));
   let workflowResponse = await httpRequest({
     hostURL: envVariables.EGOV_WORKFLOW_HOST,
     endPoint: envVariables.EGOV_WORKFLOW_TRANSITION_ENDPOINT,
     requestBody
   });
-  // console.log("workflowResponse", JSON.stringify(workflowResponse));
   return workflowResponse;
 };
 

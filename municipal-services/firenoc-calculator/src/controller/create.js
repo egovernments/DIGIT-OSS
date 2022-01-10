@@ -9,7 +9,6 @@ import some from "lodash/some";
 import { constants } from "../config/constants";
 
 const create = async (req, res, next) => {
-  console.log("create");
 
   let errors = [];
   errors = validateBillingSlabReq(req.body);
@@ -40,9 +39,7 @@ const create = async (req, res, next) => {
     }
   ];
 
-  producer.send(payloads, function(err, data) {
-    if (err) console.log("err", err);
-  });
+  producer.send(payloads, function(err, data) {});
   res.send(createResponse);
 };
 
