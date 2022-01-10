@@ -129,7 +129,7 @@ const DateRange = ({ values, onFilterChange, t }) => {
 
   return (
     <>
-      <div>{t(`ES_DSS_DATE_RANGE`)}</div>
+      <div className="mbsm">{t(`ES_DSS_DATE_RANGE`)}</div>
       <div className="employee-select-wrap" ref={wrapperRef}>
         <div className="select">
           <input className="employee-select-wrap--elipses" type="text" value={values?.title ? `${values?.title}` : ""} readOnly />
