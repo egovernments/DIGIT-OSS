@@ -224,9 +224,9 @@ const InspectionReportForm = (_props) => {
                         />
                     ) : null}
                     <CardSectionHeader>{allFieldReport?.length > 1 ? `${t("BPA_FI_REPORT")}-${index + 1}` : `${t("BPA_FI_REPORT")}`}</CardSectionHeader>
-                    <LabelFieldPair style={{ paddingLeft: "16px" }}>
-                        <CardLabel style={{ marginTop: "0px", marginRight: "30px" }} className="card-label-smaller">{`${t("BPA_FI_DATE_LABEL")} * `}</CardLabel>
-                        <div className="field" style={{ width: "70%" }}>
+                    <LabelFieldPair style={{ width: "100%" }}>
+                        <CardLabel style={{ marginTop: "0px", width: "100%" }} className="card-label-smaller">{`${t("BPA_FI_DATE_LABEL")} * `}</CardLabel>
+                        <div className="field" style={{ width: "100%" }}>
                             <Controller
                                 name="InspectionDate"
                                 rules={{ required: t("REQUIRED_FIELD") }}
@@ -241,9 +241,9 @@ const InspectionReportForm = (_props) => {
                             />
                         </div>
                     </LabelFieldPair>
-                    <LabelFieldPair style={{ paddingLeft: "16px" }}>
-                        <CardLabel style={{ marginTop: "0px", marginRight: "30px" }} className="card-label-smaller">{`${t("ES_COMMON_TIME")} * `}</CardLabel>
-                        <div className="field" style={{ width: "70%" }}>
+                    <LabelFieldPair style={{ width: "100%" }}>
+                        <CardLabel style={{ marginTop: "0px", width: "100%" }} className="card-label-smaller">{`${t("ES_COMMON_TIME")} * `}</CardLabel>
+                        <div className="field" style={{ width: "100%" }}>
                             <Controller
                                 name="InspectionTime"
                                 rules={{ required: t("REQUIRED_FIELD") }}
@@ -262,9 +262,9 @@ const InspectionReportForm = (_props) => {
                     <CardSectionHeader>{t("BPA_CHECK_LIST_DETAILS")}</CardSectionHeader>
                     {questionList && questionList.map((ob, ind) => (
                         <div key={ind} className="fieldInsepctionInsideWrapper" style={{ maxWidth: "100%" }}>
-                            <LabelFieldPair>
-                                <CardLabel style={{ marginRight: "30px" }} className="card-label-smaller">{`${t(ob.question)}*`}</CardLabel>
-                                <div className="field" style={{ width: "70%", maxWidth: "70%" }}>
+                            <LabelFieldPair style={{width :"100%"}}>
+                                <CardLabel style={{ marginRight: "30px", width :"100%" }} className="card-label-smaller">{`${t(ob.question)}*`}</CardLabel>
+                                <div className="field" style={{ width: "100%" }}>
                                     <Controller
                                         control={control}
                                         name={`question_${ind}`}
@@ -288,9 +288,9 @@ const InspectionReportForm = (_props) => {
                                     />
                                 </div>
                             </LabelFieldPair>
-                            <LabelFieldPair>
-                                <CardLabel style={{ marginRight: "30px" }} className="card-label-smaller">{t("BPA_ENTER_REMARKS")}</CardLabel>
-                                <div className="field" style={{ width: "70%", maxWidth: "70%" }}>
+                            <LabelFieldPair style={{width :"100%"}}>
+                                <CardLabel style={{ marginRight: "30px", width : "100%" }} className="card-label-smaller">{t("BPA_ENTER_REMARKS")}</CardLabel>
+                                <div className="field" style={{ width: "100%" }}>
                                     <Controller
                                         control={control}
                                         name={`Remarks_${ind}`}

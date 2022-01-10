@@ -15,7 +15,7 @@ const BPAApplicationTimeline = (props) => {
   const getTimelineCaptions = (checkpoint) => {
     if (checkpoint.state === "INITIATE") {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails?.createdTime),
+        date: Digit.DateUtils.ConvertEpochToDate(props.application?.auditDetails?.createdTime),
         source: props.application?.tradeLicenseDetail?.channel || "",
       };
       return <BPACaption data={caption} />;

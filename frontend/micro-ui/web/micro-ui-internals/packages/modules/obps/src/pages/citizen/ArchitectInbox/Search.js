@@ -30,10 +30,22 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
     }
   }
 
-  const clearSearch = () => {
-    reset({});
-    onSearch({})
-  };
+  // const clearSearch = () => {
+  //   reset({});
+  //   onSearch({})
+  // };
+
+  function clearSearch() {
+    const resetValues = searchFields.reduce((acc, field) => ({ ...acc, [field?.name]: "" }), {});
+    reset(resetValues);
+    const _newParams = { ...searchParams };
+    _newParams.delete = [];
+    searchFields.forEach((e) => {
+      _newParams.delete.push(e?.name);
+    });
+    onSubmitInput({applicationNo:null});
+    
+  }
 
   const clearAll = (mobileView) => {
     const mobileViewStyles = mobileView ? { margin: 0 } : {};
@@ -76,14 +88,19 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
               </div>
             ))}
             {type === "desktop" && <SubmitBar style={{ marginTop: "56px" }} className="submit-bar-search" label={t("ES_COMMON_SEARCH")} submit />}
+            {type === "desktop" && !mobileView && (
+                  <span style={{ paddingTop: "65px",marginLeft:"-75px" }} className="clear-search">
+                    {clearAll()}
+                  </span>
+                )}
           </div>
         </div>
       </div>
       {(type === "mobile" || mobileView) && (
         <ActionBar className="clear-search-container">
-          {/* <button className="clear-search" style={{ flex: 1 }}>
+          <button className="clear-search" style={{ flex: 1 }}>
             {clearAll(mobileView)}
-          </button> */}
+          </button>
           <SubmitBar disabled={!!Object.keys(formState.errors).length} label={t("ES_COMMON_SEARCH")} style={{ flex: 1 }} submit={true} />
         </ActionBar>
       )}
