@@ -22,11 +22,11 @@ public class SymmetricEncryptionUtil {
     private static String symmetricEncryptionMethod;
 
     @Autowired
-    public static void setSymmetricEncryptionMethod(@Value("${method.symmetric}") String method) {
+    public void setSymmetricEncryptionMethod(@Value("${method.symmetric}") String method) {
         symmetricEncryptionMethod = method;
     }
 
-    private SymmetricEncryptionUtil() { init(); }
+    public SymmetricEncryptionUtil() { init(); }
 
     //Initialize Security Provider to BouncyCastleProvider
     public static void init() { Security.addProvider(new BouncyCastleProvider()); }

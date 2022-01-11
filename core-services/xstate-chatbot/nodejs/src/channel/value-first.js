@@ -203,8 +203,7 @@ class ValueFirstWhatsAppProvider {
         let userMobile = user.mobileNumber;
 
         let fromMobileNumber = "91"+extraInfo.whatsAppBusinessNumber;
-        if(!fromMobileNumber)
-
+        
         let requestBody = JSON.parse(valueFirstRequestBody);
         requestBody["USER"]["@USERNAME"] = config.valueFirstWhatsAppProvider.valueFirstUsername;
         requestBody["USER"]["@PASSWORD"] = config.valueFirstWhatsAppProvider.valueFirstPassword;
