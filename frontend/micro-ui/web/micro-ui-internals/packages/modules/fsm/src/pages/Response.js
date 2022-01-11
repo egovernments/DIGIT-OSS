@@ -66,7 +66,7 @@ const Response = (props) => {
   const queryClient = useQueryClient();
 
   const paymentAccess = Digit.UserService.hasAccess("FSM_COLLECTOR");
-  // console.log("find payment Roles here", paymentAccess)
+  // // console.log("find payment Roles here", paymentAccess)
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
@@ -78,7 +78,7 @@ const Response = (props) => {
 
   const localityCode = mutation?.data?.fsm[0].address?.locality?.code;
   const slumCode = mutation?.data?.fsm[0].address?.slumName;
-  // console.log("find mutation here", mutation);
+  // // console.log("find mutation here", mutation);
   // debugger
   const slum = Digit.Hooks.fsm.useSlum(mutation?.data?.fsm[0]?.tenantId, slumCode, localityCode, {
     enabled: slumCode ? true : false,
@@ -102,7 +102,7 @@ const Response = (props) => {
       queryClient.clear();
     };
     if (state.key === "update") {
-      // console.log("find state here", state.applicationData, state.action)
+      // // console.log("find state here", state.applicationData, state.action)
       mutation.mutate(
         {
           fsm: state.applicationData,
@@ -116,7 +116,7 @@ const Response = (props) => {
         }
       );
     } else {
-      // console.log("find state here", state);
+      // // console.log("find state here", state);
       mutation.mutate(state, {
         onSuccess,
       });
@@ -124,8 +124,8 @@ const Response = (props) => {
   }, []);
 
   const displayText = (action) => {
-    // console.log("find new application action here", action)
-    // console.log("find mutation error here", mutation)
+    // // console.log("find new application action here", action)
+    // // console.log("find mutation error here", mutation)
     if (mutation.isSuccess) {
       switch (action) {
         case "SUBMIT_FEEDBACK":

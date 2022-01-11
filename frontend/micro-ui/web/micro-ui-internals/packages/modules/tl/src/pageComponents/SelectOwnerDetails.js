@@ -100,7 +100,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log("Error Loged",error);
+    // console.log("Error Loged",error);
   },[error]);
 
   const goNext = () => {

@@ -32,7 +32,7 @@ const createComplaint = ({
     mobileNumber,
     name,
   });
-  console.log("from actions", response);
+  // console.log("from actions", response);
   dispatch({
     type: CREATE_COMPLAINT,
     payload: response,

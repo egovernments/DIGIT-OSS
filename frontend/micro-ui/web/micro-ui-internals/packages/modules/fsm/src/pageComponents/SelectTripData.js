@@ -26,13 +26,13 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         .filter((item, pos, self) => self.indexOf(item) == pos)
         .filter((i) => i);
 
-      // console.log("find vehicle menu here", allVehicles, __vehicleMenu)
+      // // console.log("find vehicle menu here", allVehicles, __vehicleMenu)
 
       setVehicleMenu(__vehicleMenu);
     }
   }, [dsoData, vehicleData]);
 
-  // console.log("find vendro data here", dsoData, vehicleData)
+  // // console.log("find vendro data here", dsoData, vehicleData)
 
   const inputs = [
     {
@@ -78,16 +78,16 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   function selectVehicle(value) {
     setVehicle(value);
     onSelect(config.key, { ...formData[config.key], vehicleType: value });
-    console.log("find value here", value, formData);
+    // console.log("find value here", value, formData);
   }
 
   function setValue(object) {
     onSelect(config.key, { ...formData[config.key], ...object });
-    // console.log("find value here", formData);
+    // // console.log("find value here", formData);
   }
   useEffect(() => {
     (async () => {
-      // console.log("abcd1",vehicle, formData?.propertyType , formData?.subtype)
+      // // console.log("abcd1",vehicle, formData?.propertyType , formData?.subtype)
 
       if (formData?.tripData?.vehicleType !== vehicle) {
         setVehicle(formData?.tripData?.vehicleType);
@@ -95,7 +95,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
 
       if (formData?.propertyType && formData?.subtype && formData?.address && formData?.tripData?.vehicleType?.code) {
         const { capacity } = formData?.tripData?.vehicleType;
-        // console.log("find bill slab form data", formData)
+        // // console.log("find bill slab form data", formData)
         const { slum: slumDetails } = formData.address;
         const slum = slumDetails ? "YES" : "NO";
         const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, {
@@ -106,13 +106,13 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
 
         const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
         if (billSlab?.price) {
-          console.log("find bill slab here", billSlab.price);
+          // console.log("find bill slab here", billSlab.price);
           setValue({
             amountPerTrip: billSlab.price,
             amount: billSlab.price * formData.tripData.noOfTrips,
           });
           setError(false);
-          // console.log("find formdata here", formData);
+          // // console.log("find formdata here", formData);
         } else {
           setValue({
             amountPerTrip: "",
@@ -122,7 +122,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         }
       }
     })();
-    // console.log("find form data here helllo", formData);
+    // // console.log("find form data here helllo", formData);
   }, [formData?.propertyType, formData?.subtype, formData?.address, formData?.tripData?.vehicleType?.code]);
 
   return isVehicleMenuLoading && isDsoLoading ? (

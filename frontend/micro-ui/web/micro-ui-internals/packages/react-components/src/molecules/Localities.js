@@ -4,7 +4,7 @@ import Dropdown from "../atoms/Dropdown";
 import { useTranslation } from "react-i18next";
 
 const Localities = ({ selectLocality, tenantId, boundaryType, keepNull, selected, optionCardStyles, style, disable, disableLoader, sortFn }) => {
-  // console.log("find localities here", tenantId)
+  // // console.log("find localities here", tenantId)
   const { t } = useTranslation();
 
   const { data: tenantlocalties, isLoading } = Digit.Hooks.useBoundaryLocalities(tenantId, boundaryType, { enabled: !disable }, t);

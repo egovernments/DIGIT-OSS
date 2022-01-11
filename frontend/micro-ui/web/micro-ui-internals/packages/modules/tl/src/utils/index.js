@@ -542,7 +542,7 @@ export const convertToEditTrade = (data, fy = []) => {
       }
     ]
   }
-  console.log("formdata", formdata);
+  // console.log("formdata", formdata);
   return formdata;
 }
 

@@ -10,9 +10,9 @@ const MCollectAcknowledgement = () => {
   const [params, setParams] = useState({});
   const { isEdit } = Digit.Hooks.useQueryParams();
   useEffect(() => {
-    // console.log(location.pathname); // result: '/secondpage'
+    // // console.log(location.pathname); // result: '/secondpage'
     setParams(func.getQueryStringParams(location.search)); // result: '?query=abc'
-    // console.log(location); // result: 'some_value'
+    // // console.log(location); // result: 'some_value'
   }, [location]);
   const { t } = useTranslation();
 

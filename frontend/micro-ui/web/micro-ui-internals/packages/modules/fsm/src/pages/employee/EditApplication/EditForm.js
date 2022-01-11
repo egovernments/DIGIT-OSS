@@ -50,11 +50,11 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     // // setNoOfTrips(formData?.noOfTrips || 1);
 
     // (async () => {
-    //   // console.log("abcd1",vehicle, formData?.propertyType , formData?.subtype)
+    //   // // console.log("abcd1",vehicle, formData?.propertyType , formData?.subtype)
 
     //   if (formData?.propertyType && formData?.subtype && formData?.address && vehicle?.code && !kill) {
     //     const { capacity } = vehicle;
-    //     // console.log("find bill slab form data", formData)
+    //     // // console.log("find bill slab form data", formData)
     //     const { slum: slumDetails } = formData.address;
     //     const slum = slumDetails ? "YES" : "NO";
     //     const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, {
@@ -66,13 +66,13 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     //     const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
     //     if (billSlab?.price) {
     //       setKill(true);
-    //       console.log("find bill slab here", billSlab.price);
+    //       // console.log("find bill slab here", billSlab.price);
     //       setValue("amountPerTrip", billSlab.price);
     //       setValue("amount", billSlab.price * formData.noOfTrips);
     //     }
     //   }
     // })();
-    // // console.log("abcd2",vehicle, formData?.propertyType , formData?.subtype)
+    // // // console.log("abcd2",vehicle, formData?.propertyType , formData?.subtype)
     if (
       formData?.propertyType &&
       formData?.subtype &&
@@ -170,7 +170,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     Digit.SessionStorage.set("city_property", null);
     Digit.SessionStorage.set("selected_localities", null);
     Digit.SessionStorage.set("locality_property", null);
-    // console.log("find form data here", formData);
+    // // console.log("find form data here", formData);
     history.replace("/digit-ui/employee/fsm/response", {
       applicationData: formData,
       key: "update",

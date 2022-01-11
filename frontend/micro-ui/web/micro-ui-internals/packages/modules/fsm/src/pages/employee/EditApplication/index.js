@@ -18,7 +18,7 @@ const EditApplication = ({ parentUrl, heading }) => {
   );
 
   const { isLoading: isVehicleMenuLoading, data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
-  // console.log("find vehicle menu", vehicleMenu)
+  // // console.log("find vehicle menu", vehicleMenu)
   const { isLoading: isChannelMenuLoading, data: channelMenu } = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "ApplicationChannel");
   const { data: sanitationMenu, isLoading: sanitationTypeloading } = Digit.Hooks.fsm.useMDMS(state, "FSM", "PitType");
 

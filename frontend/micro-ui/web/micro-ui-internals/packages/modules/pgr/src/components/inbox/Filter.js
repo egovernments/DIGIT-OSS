@@ -83,7 +83,7 @@ const Filter = (props) => {
     }
 
     Digit.inboxFilterCount = count;
-    // console.log("pgrQuery::::>", pgrQuery, "wfQuery::::>", wfQuery);
+    // // console.log("pgrQuery::::>", pgrQuery, "wfQuery::::>", wfQuery);
   }, [pgrfilters, wfFilters]);
 
   const ifExists = (list, key) => {

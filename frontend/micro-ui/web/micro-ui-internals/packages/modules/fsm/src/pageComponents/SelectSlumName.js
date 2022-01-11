@@ -7,7 +7,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
   const [slum, setSlum] = useState();
   const slumTenantId = formData?.address?.city ? formData?.address?.city.code : tenantId;
   const { data: slumData, isLoading: slumDataLoading } = Digit.Hooks.fsm.useMDMS(slumTenantId, "FSM", "Slum");
-  // console.log("find slum data here", locality,slumData && slumData[locality]), formData?.address?.locality;
+  // // console.log("find slum data here", locality,slumData && slumData[locality]), formData?.address?.locality;
 
   const [slumMenu, setSlumMenu] = useState();
 
@@ -24,9 +24,9 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
 
   useEffect(() => {
     const locality = formData?.address?.locality?.code;
-    // console.log("find locality code here", locality)
+    // // console.log("find locality code here", locality)
     if (userType === "employee" && !slumDataLoading && slumData) {
-      // console.log("find slum data here", slumData[locality], formData)
+      // // console.log("find slum data here", slumData[locality], formData)
       const optionalSlumData = slumData[locality]
         ? [
             {
@@ -48,9 +48,9 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
               .map((key) => slumData[key])
               .reduce((prev, curr) => [...prev, ...curr]),
           ];
-      // console.log("find slum dta here", optionalSlumData)
+      // // console.log("find slum dta here", optionalSlumData)
       setSlumMenu(optionalSlumData);
-      // console.log("ok setting slum name to none",{
+      // // console.log("ok setting slum name to none",{
       //   code: null,
       //   active: true,
       //   name: "Not residing in slum area",
@@ -67,11 +67,11 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
       }
     }
     if (userType !== "employee" && !slumDataLoading && slumData) {
-      // console.log("find citizen slum menu here", slumData, slumData[locality], formData)
+      // // console.log("find citizen slum menu here", slumData, slumData[locality], formData)
       const allSlum = Object.keys(slumData)
         .map((key) => slumData[key])
         .reduce((prev, curr) => [...prev, ...curr]);
-      // console.log("find slum data here", slumData, allSlum)
+      // // console.log("find slum data here", slumData, allSlum)
       slumData[locality] ? setSlumMenu(slumData[locality]) : setSlumMenu(allSlum);
     }
   }, [slumDataLoading, formData?.address?.locality?.code]);

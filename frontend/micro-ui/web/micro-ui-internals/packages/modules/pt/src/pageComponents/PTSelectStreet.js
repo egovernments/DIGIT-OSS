@@ -68,7 +68,7 @@ const PTSelectStreet = ({ t, config, onSelect, userType, formData, formState, se
 
   useEffect(() => {
     if (userType === "employee") {
-      //   console.log(formState.errors[config.key]?.type, "inside form errors");
+      //   // console.log(formState.errors[config.key]?.type, "inside form errors");
       if (Object.keys(errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, errors)) setError(config.key, { type: errors });
       else if (!Object.keys(errors).length && formState.errors[config.key]) clearErrors(config.key);
     }
@@ -79,7 +79,7 @@ const PTSelectStreet = ({ t, config, onSelect, userType, formData, formState, se
     const part = {};
     keys.forEach((key) => (part[key] = formData[config.key]?.[key]));
 
-    // console.log(formValue, part, formData[config.key], errors, "inside form value change");
+    // // console.log(formValue, part, formData[config.key], errors, "inside form value change");
     if (!_.isEqual(formValue, part)) {
       onSelect(config.key, { ...formData[config.key], ...formValue });
       trigger();

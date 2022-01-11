@@ -5,7 +5,7 @@ import { convertEpochToDate } from "../Utils/index";
 
 const SelectDateofEmployment = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
   const { pathname: url } = useLocation();
-  // console.log("find errors here", errors)
+  // // console.log("find errors here", errors)
   const inputs = [
     {
       label: "HR_APPOINTMENT_DATE_LABEL",

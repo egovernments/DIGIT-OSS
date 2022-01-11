@@ -79,7 +79,7 @@ export const CreateComplaint = () => {
         uploadedImages: _uploadImages,
       };
 
-      // console.log("this is the request data", data);
+      // // console.log("this is the request data", data);
       await dispatch(createComplaint(data));
       await client.refetchQueries(["complaintsList"]);
       history.push(`${match.path}/response`);
@@ -88,7 +88,7 @@ export const CreateComplaint = () => {
 
   const handleSelect = (data) => {
     // console.clear();
-    console.log("DATA selected", data);
+    // console.log("DATA selected", data);
     setParams({ ...params, ...data });
     goNext();
   };

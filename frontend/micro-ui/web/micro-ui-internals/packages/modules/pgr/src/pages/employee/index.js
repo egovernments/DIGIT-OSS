@@ -37,7 +37,7 @@ const Complaint = () => {
     },
   };
   function popupCall(option) {
-    console.log("option", option);
+    // console.log("option", option);
     setDisplayMenu(false);
     setPopup(true);
   }

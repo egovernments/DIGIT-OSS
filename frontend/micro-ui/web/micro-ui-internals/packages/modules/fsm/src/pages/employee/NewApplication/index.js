@@ -36,8 +36,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   const onFormValueChange = (setValue, formData) => {
     // setNoOfTrips(formData?.noOfTrips || 1);
-    // console.log("abcd2",vehicle, formData?.propertyType , formData?.subtype)
-    // console.log("find form data here helllo", formData);
+    // // console.log("abcd2",vehicle, formData?.propertyType , formData?.subtype)
+    // // console.log("find form data here helllo", formData);
     if (
       formData?.propertyType &&
       formData?.subtype &&
@@ -69,7 +69,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
   // }, [propertyType, subType, vehicle]);
 
   const onSubmit = (data) => {
-    console.log("find submit data", data);
+    // console.log("find submit data", data);
     const applicationChannel = data.channel;
     const sanitationtype = data?.pitType?.code;
     const pitDimension = data?.pitDetail;

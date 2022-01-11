@@ -7,7 +7,7 @@ const Status = ({ onAssignmentChange, fsmfilters, mergedRoleDetails, statusMap }
   const { t } = useTranslation();
 
   const { data: applicationsWithCount, isLoading } = Digit.Hooks.fsm.useApplicationStatus(true, true, statusMap);
-  // console.log("find application stats", applicationsWithCount)
+  // // console.log("find application stats", applicationsWithCount)
 
   const [moreStatus, showMoreStatus] = useState(false);
 
@@ -19,7 +19,7 @@ const Status = ({ onAssignmentChange, fsmfilters, mergedRoleDetails, statusMap }
     (application) => !finalApplicationWithCount.find((listedApplication) => listedApplication.code === application.code)
   );
 
-  // console.log("find role status from here", applicationsWithCount , mergedRoleDetails, finalApplicationWithCount, moreApplicationWithCount);
+  // // console.log("find role status from here", applicationsWithCount , mergedRoleDetails, finalApplicationWithCount, moreApplicationWithCount);
   if (isLoading) {
     return <Loader />;
   }

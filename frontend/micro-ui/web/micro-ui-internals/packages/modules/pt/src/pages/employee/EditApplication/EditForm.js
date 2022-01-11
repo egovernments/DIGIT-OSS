@@ -59,7 +59,7 @@ const EditForm = ({ applicationData }) => {
     if (state?.workflow?.action === "OPEN") {
       formData.units = formData.units.filter(unit => unit.active);
     }
-    // console.log(formData, "in submit");
+    // // console.log(formData, "in submit");
     history.push("/digit-ui/employee/pt/response", { Property: formData, key: "UPDATE", action: "SUBMIT" });
   };
 

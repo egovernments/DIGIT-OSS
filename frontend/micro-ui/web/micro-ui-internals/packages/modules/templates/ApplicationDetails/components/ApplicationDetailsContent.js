@@ -42,7 +42,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
     }
   };
 
-  // console.log(applicationDetails?.applicationDetails, "inside app details content");
+  // // console.log(applicationDetails?.applicationDetails, "inside app details content");
   const checkLocation = window.location.href.includes("employee/tl");
   return (
     <Card style={{ position: "relative" }}>

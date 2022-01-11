@@ -14,7 +14,7 @@ export const useFetchCitizenBillsForBuissnessService = ({ businessService, ...fi
     {
       refetchOnMount: true,
       // retry: (failureCount, error) => {
-      //   console.log("retried from hook");
+      //   // console.log("retried from hook");
       //   if (error?.response?.data?.Errors?.[0]?.code === "EG_BS_BILL_NO_DEMANDS_FOUND") return false;
       //   else return failureCount < 1;
       // },
@@ -44,7 +44,7 @@ export const useFetchBillsForBuissnessService = ({ tenantId, businessService, ..
     () => Digit.PaymentService.fetchBill(_tenantId, params),
     {
       retry: (count, err) => {
-        console.log(err, "inside the payment hook");
+        // console.log(err, "inside the payment hook");
         return false;
       },
       ...config,

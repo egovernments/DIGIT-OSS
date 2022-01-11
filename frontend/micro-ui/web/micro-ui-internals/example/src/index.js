@@ -112,7 +112,6 @@ const initTokens = (stateCode) => {
 
   const token = window.sessionStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
 
-  // console.log(token);
 
   const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
 
@@ -172,7 +171,6 @@ const moduleReducers = (initData) => ({
   initTokens(stateCode);
 
   const registry = window?.Digit.ComponentRegistryService.getRegistry();
-  console.log(registry);
   ReactDOM.render(<DigitUI stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />, document.getElementById("root"));
 };
 

@@ -22,7 +22,7 @@ const EmployeeForgotPassword = () => {
     )
   );
 
-  console.log({ params });
+  // console.log({ params });
   return (
     <Switch>
       <AppContainer>

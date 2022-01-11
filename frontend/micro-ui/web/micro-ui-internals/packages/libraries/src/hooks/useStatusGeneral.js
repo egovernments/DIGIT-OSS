@@ -19,7 +19,7 @@ const useApplicationStatusGeneral = ({ businessServices = [], tenantId }, config
       states = [...states, ...service.states.map((e) => ({ ...e, stateBusinessService: service.businessService }))];
     });
 
-    // console.log(JSON.stringify(data.filter((service) => service.business === "PT").map((e) => e.businessService)));
+    // // console.log(JSON.stringify(data.filter((service) => service.business === "PT").map((e) => e.businessService)));
 
     const addRoleToState = (state) => {
       const roles = state.actions?.map((act) => act.roles).flat();

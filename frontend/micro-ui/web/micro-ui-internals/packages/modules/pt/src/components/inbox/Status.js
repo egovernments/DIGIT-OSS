@@ -32,7 +32,7 @@ const Status = ({ onAssignmentChange, searchParams, businessServices, statusMap,
   //         else acc[state.state]?.push(state);
   //         return acc;
   //       }, {});
-  //      console.log(statusData, a, "status data");
+  //      // console.log(statusData, a, "status data");
   //   }
   // }, [statusData]);
 

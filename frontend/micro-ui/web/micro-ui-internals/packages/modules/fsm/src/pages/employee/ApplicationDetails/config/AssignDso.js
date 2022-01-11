@@ -55,7 +55,7 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
             type: "dropdown",
             populators: (
               <React.Fragment>
-                {/* {console.log("find get dso here",getFilteredDsoData(), getFilteredDsoData() && !getFilteredDsoData().length )} */}
+                {/* {// console.log("find get dso here",getFilteredDsoData(), getFilteredDsoData() && !getFilteredDsoData().length )} */}
                 {getFilteredDsoData(dsoData, vehicle) && !getFilteredDsoData(dsoData, vehicle).length ? (
                   <CardLabelError>{t("ES_COMMON_NO_DSO_AVAILABLE_WITH_SUCH_VEHICLE")}</CardLabelError>
                 ) : null}

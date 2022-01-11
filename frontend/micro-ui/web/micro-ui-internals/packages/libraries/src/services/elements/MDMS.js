@@ -751,7 +751,7 @@ const GetVehicleType = (MdmsRes) =>
 
 const GetSlumLocalityMapping = (MdmsRes, tenantId) =>
   MdmsRes["FSM"].Slum.filter((type) => type.active).reduce((prev, curr) => {
-    // console.log("find prev",prev, curr)
+    // // console.log("find prev",prev, curr)
     return prev[curr.locality]
       ? {
           ...prev,
@@ -1092,7 +1092,7 @@ const debouncedCall = ({ serviceName, url, data, useCache, params }, resolve, re
       mergedData[params.tenantId] = {};
       let callPromises = [...mergedPromises[params.tenantId]];
       mergedPromises[params.tenantId] = [];
-      // console.log("calling merged mdms service", callData);
+      // // console.log("calling merged mdms service", callData);
       ServiceRequest({
         serviceName,
         url,
@@ -1113,7 +1113,7 @@ const debouncedCall = ({ serviceName, url, data, useCache, params }, resolve, re
     mergedPromises[params.tenantId] = [];
   }
   mergedPromises[params.tenantId].push({ resolve, reject });
-  // console.log("debouncing mdms", JSON.stringify(data, null, 2), JSON.stringify(mergedData[params.tenantId], null, 2));
+  // // console.log("debouncing mdms", JSON.stringify(data, null, 2), JSON.stringify(mergedData[params.tenantId], null, 2));
 };
 
 export const MdmsService = {

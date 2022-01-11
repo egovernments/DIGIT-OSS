@@ -19,7 +19,7 @@ const DesktopInbox = (props) => {
   };
 
   function goTo(id) {
-    // console.log("id", id);
+    // // console.log("id", id);
     // history.push("/digit-ui/employee/fsm/complaint/details/" + id);
   }
 
@@ -57,7 +57,7 @@ const DesktopInbox = (props) => {
           Header: t("ES_APPLICATION_DETAILS_PROPERTY_TYPE"),
           accessor: (row) => {
             const key = t(`PROPERTYTYPE_MASTERS_${row.propertyUsage.split(".")[0]}`);
-            // console.log(PropertyType.data && PropertyType.data[key]);
+            // // console.log(PropertyType.data && PropertyType.data[key]);
             return key;
           },
           disableSortBy: true,

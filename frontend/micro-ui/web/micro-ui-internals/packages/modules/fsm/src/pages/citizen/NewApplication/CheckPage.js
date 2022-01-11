@@ -31,7 +31,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const history = useHistory();
 
   const { address, propertyType, subtype, pitType, pitDetail } = value;
-  // console.log("find values here ", value)
+  // // console.log("find values here ", value)
 
   const pitDetailValues = pitDetail ? Object.values(pitDetail).filter((value) => !!value) : null;
 

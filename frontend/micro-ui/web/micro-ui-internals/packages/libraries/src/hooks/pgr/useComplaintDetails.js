@@ -29,7 +29,7 @@ const isEmptyOrNull = (obj) => obj === undefined || obj === null || Object.keys(
 
 const transformDetails = ({ id, service, workflow, thumbnails, complaintType }) => {
   const { Customizations, SessionStorage } = window.Digit;
-  // console.log("find customizations here", Customizations, SessionStorage);
+  // // console.log("find customizations here", Customizations, SessionStorage);
   const role = (SessionStorage.get("user_type") || "CITIZEN").toUpperCase();
   const customDetails = Customizations?.PGR?.getComplaintDetailsTableRows
     ? Customizations.PGR.getComplaintDetailsTableRows({ id, service, role })
@@ -64,7 +64,7 @@ const fetchComplaintDetails = async (tenantId, id) => {
     const details = transformDetails({ id, service, workflow, thumbnails, complaintType });
     return details;
   } else {
-    console.log("error fetching complaint details or service defs");
+    // console.log("error fetching complaint details or service defs");
     return {};
   }
 };

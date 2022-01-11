@@ -113,7 +113,7 @@ export const PTSearch = {
   applicationDetails: async (t, tenantId, propertyIds, userType, args) => {
     const filter = { propertyIds, ...args };
     const response = await PTSearch.application(tenantId, filter);
-    // console.log(response, "from hook");
+    // // console.log(response, "from hook");
 
     return {
       tenantId: response.tenantId,

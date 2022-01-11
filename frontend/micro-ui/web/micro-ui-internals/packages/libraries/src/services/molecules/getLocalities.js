@@ -7,7 +7,7 @@ export const getLocalities = {
     return (await LocationService.getLocalities(tenant)).TenantBoundary[0];
   },
   revenue: async (tenant) => {
-    // console.log("find me here", tenant)
+    // // console.log("find me here", tenant)
     await StoreService.defaultData(tenant, tenant, Digit.StoreData.getCurrentLanguage());
     return (await LocationService.getRevenueLocalities(tenant)).TenantBoundary[0];
   },

@@ -17,7 +17,7 @@ const getLocalities = (tenantBoundry) => {
     ...boundaryObj,
     i18nkey: adminCode + "_" + boundaryObj.code,
   }));
-  // console.log("find translation data here", localitiesWithLocalizationKeys)
+  // // console.log("find translation data here", localitiesWithLocalizationKeys)
   // let I18nKeyMessage = getI18nKeys(localitiesWithLocalizationKeys);
   // LocalizationService.updateResources("en_IN", I18nKeyMessage);
   return localitiesWithLocalizationKeys;

@@ -57,7 +57,7 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
         onSuccess,
       });
     } catch (err) {
-      console.log(err, "inside ack");
+      // console.log(err, "inside ack");
     }
   }, []);
 

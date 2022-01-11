@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 
 const SelectName = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
   const { pathname: url } = useLocation();
-  // console.log("find errors here", errors)
+  // // console.log("find errors here", errors)
   const editScreen = url.includes("/modify-application/");
   const inputs = [
     {
@@ -34,7 +34,7 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
 
   function setValue(value, input) {
     onSelect(config.key, { ...formData[config.key], [input]: value });
-    console.log("find value here", value, input, formData);
+    // console.log("find value here", value, input, formData);
   }
 
   return (

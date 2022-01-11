@@ -35,7 +35,7 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
       await Digit.UserService.sendOtp(requestData, data.city.code);
       history.push(`/digit-ui/employee/change-password?mobile_number=${data.mobileNumber}&tenantId=${data.city.code}`);
     } catch (err) {
-      console.log({ err });
+      // console.log({ err });
       alert(err?.response?.data?.error_description || "Invalid login credentials!");
     }
   };
@@ -44,7 +44,7 @@ const ForgotPassword = ({ config: propsConfig, t }) => {
     history.replace("/digit-ui/employee/login");
   };
 
-  console.log({ propsConfig });
+  // console.log({ propsConfig });
   const [userId, city] = propsConfig.inputs;
   const config = [
     {

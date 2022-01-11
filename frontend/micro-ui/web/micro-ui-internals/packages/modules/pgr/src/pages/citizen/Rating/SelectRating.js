@@ -9,7 +9,7 @@ const SelectRating = ({ parentRoute }) => {
   const { t } = useTranslation();
   const { id } = useParams();
   const dispatch = useDispatch();
-  // console.log("parent route", parentRoute);
+  // // console.log("parent route", parentRoute);
   const history = useHistory();
 
   let tenantId = Digit.ULBService.getCurrentTenantId();
@@ -26,7 +26,7 @@ const SelectRating = ({ parentRoute }) => {
         comments: data.comments,
         verificationDocuments: [],
       };
-      // console.log("updtaed complaint details", complaintDetails);
+      // // console.log("updtaed complaint details", complaintDetails);
       updateComplaint({ service: complaintDetails.service, workflow: complaintDetails.workflow });
       history.push(`${parentRoute}/response`);
     }

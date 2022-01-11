@@ -16,7 +16,7 @@ const CheckSlum = ({ t, config, onSelect, userType, formData }) => {
   }
 
   // useEffect(() => {
-  //   // console.log("find slum data here", slumData && slumData[locality])
+  //   // // console.log("find slum data here", slumData && slumData[locality])
   //   if (slumData && (!slumData[locality] || slumData[locality].length === 0)) {
   //     onSelect(config.key, { slumArea: { code: false, i18nKey: "CS_COMMON_NO" } }, true);
   //   }

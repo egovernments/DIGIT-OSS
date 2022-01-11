@@ -17,7 +17,7 @@ const ShareFiles = {
   getShortener: async (tenantId, data) => {
     const fileUploadId = await UploadServices.Filestorage("DSS", data, tenantId);
     const fileUrl = await UploadServices.Filefetch([fileUploadId.data.files[0].fileStoreId], fileUploadId.data.files[0].tenantId);
-    // console.log("fileUploadId", fileUploadId, fileUrl)
+    // // console.log("fileUploadId", fileUploadId, fileUrl)
     return UrlShortener(fileUrl.data[fileUploadId.data.files[0].fileStoreId].split(",")[0]);
   },
 

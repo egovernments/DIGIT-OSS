@@ -18,7 +18,7 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
     t
   );
   const [localities, setLocalities] = useState(null);
-  // console.log("find localities here", localities);
+  // // console.log("find localities here", localities);
 
   const [selectedLocality, setSelectedLocality] = useState(() => {
     const { locality_complaint } = value;
@@ -27,10 +27,10 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
 
   useEffect(() => {
     if (selectedCity && fetchedLocalities) {
-      // console.log("find the selected city data here", selectedCity, value, fetchedLocalities)
+      // // console.log("find the selected city data here", selectedCity, value, fetchedLocalities)
       const { pincode } = value;
       let __localityList = pincode ? fetchedLocalities.filter((city) => city["pincode"] == pincode) : fetchedLocalities;
-      // console.log("address __localityList", __localityList);
+      // // console.log("address __localityList", __localityList);
       setLocalities(__localityList);
       // Digit.SessionStorage.set("selected_localities", __localityList);
     }

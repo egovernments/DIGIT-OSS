@@ -56,7 +56,7 @@ export const TableConfig = (t) => ({
       {
         Header: t("ES_SEARCH_PROPERTY_STATUS"),
         Cell: ({ row }) => {
-          // console.log(row.original?.searchData?.status,">>>>>>>>>")
+          // // console.log(row.original?.searchData?.status,">>>>>>>>>")
           return GetCell(t(row.original?.searchData?.status));
         },
         disableSortBy: true,
@@ -106,7 +106,7 @@ export const TableConfig = (t) => ({
       {
         Header: t("ES_INBOX_OWNER"),
         Cell: ({ row }) => {
-          // console.log(row.original?.searchData["owner"]);
+          // // console.log(row.original?.searchData["owner"]);
           return GetCell(`${row.original?.searchData?.["owners"]?.[0].name}`);
         },
         mobileCell: (original) => GetMobCell(original?.searchData?.["owners"]?.[0].name),

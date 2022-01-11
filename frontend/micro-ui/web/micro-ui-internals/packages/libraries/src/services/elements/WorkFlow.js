@@ -24,8 +24,8 @@ export const WorkflowService = {
   },
 
   getDetailsById: async ({ tenantId, id, moduleCode, role }) => {
-    // console.log("getWorkflowDetails", tenantId, id, moduleCode, role);
-    // console.log(Digit);
+    // // console.log("getWorkflowDetails", tenantId, id, moduleCode, role);
+    // // console.log(Digit);
     const workflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
     const applicationProcessInstance = cloneDeep(workflow?.ProcessInstances);
     const businessServiceResponse = (await Digit.WorkflowService.init(tenantId, moduleCode))?.BusinessServices[0]?.states;

@@ -5,7 +5,7 @@ import { CheckBox } from "@egovernments/digit-ui-react-components";
 const StatusCount = ({ status, searchParams, onAssignmentChange, statusMap, businessServices }) => {
   const { t } = useTranslation();
 
-  // console.log(
+  // // console.log(
   //   status,
   //   statusMap?.find((e) => e.statusid === status.uuid),
   //   "inside status count"

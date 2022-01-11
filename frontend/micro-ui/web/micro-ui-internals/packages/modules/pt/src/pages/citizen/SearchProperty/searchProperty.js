@@ -101,7 +101,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
             component: (props, customProps) => (
               <Localities
                 selectLocality={(d) => {
-                  // console.log(d, "locality changed");
+                  // // console.log(d, "locality changed");
                   props.onChange(d);
                 }}
                 tenantId={cityCode}

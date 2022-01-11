@@ -31,7 +31,7 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
       await Digit.UserService.sendOtp(requestData, tenantId);
       alert("OTP resend successfull");
     } catch (err) {
-      console.log({ err });
+      // console.log({ err });
       alert(err?.response?.data?.error_description || "Invalid login credentials!");
     }
   };
@@ -49,7 +49,7 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
         type: getUserType().toUpperCase(),
       };
       const response = await Digit.UserService.changePassword(requestData, tenantId);
-      console.log({ response });
+      // console.log({ response });
       navigateToLogin();
     } catch (err) {
       alert(err?.response?.data?.Errors[0]?.message || "Something went wrong!");

@@ -42,15 +42,15 @@ export const BillList = ({ billsList, currentPath, businessService }) => {
         billableApplicationsObj[app[keyForConsumerCode]] = app;
       });
 
-      //console.log("from PT", billableProps);
+      //// console.log("from PT", billableProps);
 
       billsList.forEach((bill) => {
         billsListObj[bill.consumerCode] = bill;
       });
-      //console.log("from PT", billsListObj);
+      //// console.log("from PT", billsListObj);
 
       const newBillsList = billableIDs.map((e) => ({ ...billsListObj[e], ...billableApplicationsObj[e] }));
-      //console.log(newBillsList);
+      //// console.log(newBillsList);
       setApplicationList(newBillsList);
     }
   }, [searchResult.data, getKeyNotesConfig]);

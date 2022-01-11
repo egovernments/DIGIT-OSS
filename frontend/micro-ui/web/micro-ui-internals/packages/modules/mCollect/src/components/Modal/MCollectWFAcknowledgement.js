@@ -9,9 +9,9 @@ const MCollectWFAcknowledgement = () => {
   const location = useLocation();
   const [params, setParams] = useState({});
   useEffect(() => {
-    // console.log(location.pathname); // result: '/secondpage'
+    // // console.log(location.pathname); // result: '/secondpage'
     setParams(func.getQueryStringParams(location.search)); // result: '?query=abc'
-    // console.log(location); // result: 'some_value'
+    // // console.log(location); // result: 'some_value'
   }, [location]);
   const { t } = useTranslation();
   function proceedToPayment() {}
