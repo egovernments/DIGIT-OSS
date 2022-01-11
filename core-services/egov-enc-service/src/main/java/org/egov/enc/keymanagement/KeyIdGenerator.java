@@ -21,7 +21,7 @@ public class KeyIdGenerator implements ApplicationRunner {
     private static ArrayList<Integer> presentKeyIds;
 
     @Autowired
-    private static KeyStore keyStore;
+    private KeyStore keyStore;
 
     @Autowired
     private AppProperties appProperties;
@@ -32,7 +32,7 @@ public class KeyIdGenerator implements ApplicationRunner {
         secureRandom = new SecureRandom();
     }
 
-    public static void refreshKeyIds() {
+    public void refreshKeyIds() {
         presentKeyIds = keyStore.getKeyIds();
     }
 

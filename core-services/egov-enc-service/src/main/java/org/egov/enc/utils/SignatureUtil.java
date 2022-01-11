@@ -13,12 +13,12 @@ public class SignatureUtil {
     public static String signatureMethod;
 
     @Autowired
-    public static void setSymmetricEncryptionMethod(@Value("${method.signature}") String method) {
+    public void setSymmetricEncryptionMethod(@Value("${method.signature}") String method) {
         signatureMethod = method;
     }
 
     @Autowired
-    private SignatureUtil() { init(); }
+    public SignatureUtil() { init(); }
 
     //Initialize Security Provider to BouncyCastleProvider
     public static void init() {
