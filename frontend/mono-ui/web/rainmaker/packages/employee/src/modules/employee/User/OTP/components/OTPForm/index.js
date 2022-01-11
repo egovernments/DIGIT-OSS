@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Card, TextField, Image } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
-import logo from "egov-ui-kit/assets/images/logo_black.png"
+import logo from "egov-ui-kit/assets/images/nugp_logo.png";
 import "./index.css";
 
 const OTPForm = ({ handleFieldChange, toggleSnackbarAndSetText, form, resendOTP, phoneNumber }) => {

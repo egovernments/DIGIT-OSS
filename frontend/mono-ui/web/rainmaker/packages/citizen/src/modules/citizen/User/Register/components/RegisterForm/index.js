@@ -7,7 +7,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import { CityPicker } from "modules/common";
 import Hidden from "@material-ui/core/Hidden";
 import { startSMSRecevier } from "egov-ui-kit/utils/commons";
-import logo from "egov-ui-kit/assets/images/logo_black.png";
+import logo from "egov-ui-kit/assets/images/nugp_logo.png";
 import "./index.css";
 
 

@@ -2,7 +2,7 @@ import React from "react";
 import { TextField, Card, Image } from "components";
 import { Button} from "egov-ui-framework/ui-atoms";
 import Label from "egov-ui-kit/utils/translationNode";
-import logo from "egov-ui-kit/assets/images/logo_black.png";
+import logo from "egov-ui-kit/assets/images/nugp_logo.png";
 import { Icon } from "egov-ui-framework/ui-atoms";
 import { CountdownTimer } from "egov-ui-framework/ui-atoms/index";
 import "./index.css";
