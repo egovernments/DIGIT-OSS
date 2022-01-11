@@ -592,6 +592,7 @@ public class PropertyValidator {
 				&& null == criteria.getOldPropertyId();
 		
 		if (isUserCitizen) {
+			criteria.setIsCitizen(true);
 			
 			if (isCriteriaEmpty)
 				criteria.setMobileNumber(user.getMobileNumber());
