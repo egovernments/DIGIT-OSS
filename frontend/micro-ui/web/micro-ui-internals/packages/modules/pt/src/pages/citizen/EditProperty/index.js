@@ -318,10 +318,10 @@ const getPropertyEditDetails = (data = { }) => {
           //// console.log(ob);
           !flooradded.includes(unit.floorNo) && ob.builtUpArea > 0 && unit.floorNo > -1 && unit.floorNo < 3 && ob.selfOccupied !== "" && ob != { }
             ? unitedit.push(ob)
-            : // console.log("");
-          unit.floorNo == -1 && ob != { } && ob.selfOccupied !== "" && ob.builtUpArea > 0 ? (unitedit["-1"] = ob) : // console.log("");
+            : console.log("");
+          unit.floorNo == -1 && ob != { } && ob.selfOccupied !== "" && ob.builtUpArea > 0 ? (unitedit["-1"] = ob) : console.log("");
           if (unitedit["-1"] && unit.floorNo == -2 && !extraunits.includes(unit)) {
-            unit.floorNo == -2 && ob != { } && ob.selfOccupied !== "" && ob.builtUpArea > 0 ? (unitedit["-2"] = ob) : // console.log("");
+            unit.floorNo == -2 && ob != { } && ob.selfOccupied !== "" && ob.builtUpArea > 0 ? (unitedit["-2"] = ob) :  console.log("");
           } else if (!unitedit["-1"] && unit.floorNo == -2 && !extraunits.includes(unit)) {
             extraunits.push(unit);
           }

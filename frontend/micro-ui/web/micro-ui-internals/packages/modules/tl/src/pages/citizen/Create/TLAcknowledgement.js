@@ -74,7 +74,7 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
           onSuccess,
         }) : mutation1.mutate(formdata, {
           onSuccess,
-        })) : // console.log("skipped");
+        })) :  console.log();
       } else {
         let tenantId = data?.address?.city ? data.address?.city?.code : tenantId;
         data.tenantId = tenantId;
