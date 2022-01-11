@@ -29,6 +29,11 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
     <React.Fragment>
       <div className="filter">
         <div className="filter-card">
+        {props.type === "mobile" && (
+            <span onClick={onClose} className="filter-card-close-button">
+              <CloseSvg />
+            </span>
+          )}
           <div className="heading">
             <div className="filter-label">
               <FilterIcon />
@@ -42,11 +47,6 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
                 </svg>
               </span>
             </div>
-            {props.type === "mobile" && (
-              <span onClick={onClose}>
-                <CloseSvg />
-              </span>
-            )}
           </div>
           {loadingApplicationTypes ? <Loader/> : <div>
             <div className="filter-label sub-filter-label">{t("BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL")}</div>

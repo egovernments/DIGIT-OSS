@@ -2,6 +2,7 @@ import useInbox from "../useInbox"
 
 const useBPAInbox = ({ tenantId, filters, config={} }) => {
     const { filterForm, searchForm , tableForm } = filters;
+    const user = Digit.UserService.getUser();
     let { moduleName, businessService, applicationStatus, locality, assignee, applicationType } = filterForm;
     const { mobileNumber, applicationNo } = searchForm;
     const { sortBy, limit, offset, sortOrder } = tableForm;
@@ -15,12 +16,12 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
     const _filters = {
         tenantId,
         processSearchCriteria: {
+          assignee : assignee === "ASSIGNED_TO_ME"?user?.info?.uuid:"",
           moduleName: moduleName !== "BPAREG"  ? "bpa-services" : "BPAREG", 
           businessService: moduleName !== "BPAREG"  ? (businessService ? [businessService] : ["BPA_LOW", "BPA", "BPA_OC"] ) : (businessService ? [businessService.identifier] : ["ARCHITECT","BUILDER","ENGINEER","STRUCTURALENGINEER"]),
           ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
         },
         moduleSearchCriteria: {
-          assignee,
           ...(mobileNumber ? {mobileNumber}: {}),
           ...(!applicationNumber ? applicationNo ? {applicationNo} : {} : (applicationNumber ? {applicationNumber} : {})),
           ...(applicationNumber ? {applicationNumber} : {}),
