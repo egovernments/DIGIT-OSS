@@ -172,6 +172,10 @@ const UploadFile = (props) => {
           accept={props.accept}
           disabled={props.disabled}
           onChange={(e) => props.onUpload(e)}
+          onClick ={ event => {
+            const { target = {} } = event || {};
+            target.value = "";
+          }}
         />
       </div>
       {props?.showHintBelow && <p className="cell-text">{t(props?.hintText)}</p>}
