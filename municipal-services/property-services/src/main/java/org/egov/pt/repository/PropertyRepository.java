@@ -199,6 +199,16 @@ public class PropertyRepository {
 
 		// fetching property id from owner table and enriching criteria
 		ownerIds.addAll(userDetailResponse.getUser().stream().map(User::getUuid).collect(Collectors.toSet()));
+		
+		if (criteria.getIsCitizen()!=null && criteria.getMobileNumber()!=null) {
+			for (OwnerInfo user : userDetailResponse.getUser()) {
+				if (user.getAlternatemobilenumber()!=null && user.getAlternatemobilenumber().equalsIgnoreCase(criteria.getMobileNumber())) {
+					ownerIds.remove(user.getUuid());
+				}
+				
+			}
+		}
+		
 		List<String> propertyIds = getPropertyIds(ownerIds, userTenant);
 
 		// returning empty list if no property id found for user criteria
