@@ -230,6 +230,13 @@ public class BPAService {
                                 }
                         }
                 }
+                for(BPA bpa : bpas) {
+                    List<org.egov.bpa.web.model.Document> documents = bpa.getDocuments();
+                    if(documents != null && !documents.isEmpty()) {
+                        Collections.reverse(documents);
+                        bpa.setDocuments(documents);
+                    }
+                }
                 return bpas;
         }
         /**
