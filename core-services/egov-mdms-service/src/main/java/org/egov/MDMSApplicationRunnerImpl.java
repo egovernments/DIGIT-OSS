@@ -38,7 +38,7 @@ import net.minidev.json.JSONArray;
 public class MDMSApplicationRunnerImpl {
 
     @Autowired
-    public static ResourceLoader resourceLoader;
+    public ResourceLoader resourceLoader;
 
     @Value("${egov.mdms.conf.path}")
     public String mdmsFileDirectory;
@@ -53,7 +53,7 @@ public class MDMSApplicationRunnerImpl {
 
     private static Map<String, Map<String, Object>> masterConfigMap = new HashMap<>();
 
-    static ObjectMapper objectMapper = new ObjectMapper();
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @PostConstruct
     public void run() {
@@ -160,7 +160,7 @@ public class MDMSApplicationRunnerImpl {
         }
     }
 
-    public static void readMdmsConfigFiles(String masterConfigUrl) {
+    public void readMdmsConfigFiles(String masterConfigUrl) throws Exception {
         log.info("Loading master configs from: " + masterConfigUrl);
         Resource resource = resourceLoader.getResource(masterConfigUrl);
         InputStream inputStream = null;
@@ -170,6 +170,7 @@ public class MDMSApplicationRunnerImpl {
             });
         } catch (IOException e) {
             log.error("Exception while fetching service map for: ", e);
+            log.error("Incorrect format of the file: " + masterConfigUrl);
         } finally {
             IOUtils.closeQuietly(inputStream);
         }
