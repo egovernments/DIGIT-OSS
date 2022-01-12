@@ -13,6 +13,7 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
   const [uiFlow, setUiFlow] = useState([]);
   const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", "DocumentTypes");
   const { isLoading: commonDocsLoading, data: commonDocs } = Digit.Hooks.obps.useMDMS(stateCode, "common-masters", ["DocumentType"]);
+  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["RiskTypeComputation"]);
 
   const checkingUrl = window.location.href.includes("ocbpa");
 

@@ -751,3 +751,14 @@ export const getCheckBoxLabelData = (t, appData) => {
     return `${t(`BPA_STAKEHOLDER_1_DECLARAION_LABEL`)}${t(`BPA_STAKEHOLDER_2_DECLARAION_LABEL`)}`;
   }
 };
+
+
+export const scrutinyDetailsData = async (edcrNumber, tenantId) => {
+  const scrutinyDetails = await Digit.OBPSService.scrutinyDetails(tenantId, {edcrNumber: edcrNumber});
+  const bpaDetails = await Digit.OBPSService.BPASearch(tenantId, {edcrNumber: edcrNumber});
+  if (bpaDetails?.BPA?.length == 0) {
+    return scrutinyDetails?.edcrDetail?.[0] ? scrutinyDetails?.edcrDetail?.[0] : {type: "ERROR", message: "BPA_NO_RECORD_FOUND"};
+  } else {
+    return {type: "ERROR", message: "APPLICATION_NUMBER_ALREADY_EXISTS"}
+  }
+}
