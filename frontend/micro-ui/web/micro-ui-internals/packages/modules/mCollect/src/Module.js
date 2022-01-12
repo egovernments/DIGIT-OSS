@@ -6,6 +6,10 @@ import EmployeeApp from "./pages/employee";
 import MCollectCard from "./components/MCollectCard";
 import InboxFilter from "./components/inbox/NewInboxFilter";
 import CitizenApp from "./pages/citizen";
+import EmployeeChallan from "./EmployeeChallan";
+import CreateChallen from "./pages/employee/CreateChallan";
+import MCollectAcknowledgement from "./pages/employee/EmployeeChallanAcknowledgement";
+import EditChallan from "./pages/employee/EditChallan/index";
 
 export const MCollectModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "UC";
@@ -48,6 +52,8 @@ const componentsToRegister = {
   MCollectCard,
   MCollectModule,
   MCollectLinks,
+  EditChallan,
+
   MCOLLECT_INBOX_FILTER: (props) => <InboxFilter {...props} />,
 };
 
