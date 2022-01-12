@@ -166,7 +166,7 @@ function ApplicationDetailsContent({
           {detail?.additionalDetails?.owners && <PropertyOwners owners={detail?.additionalDetails?.owners} />}
           {detail?.additionalDetails?.units && <TLTradeUnits units={detail?.additionalDetails?.units} />}
           {detail?.additionalDetails?.accessories && <TLTradeAccessories units={detail?.additionalDetails?.accessories} />}
-          {detail?.additionalDetails?.permissions && (
+          {detail?.additionalDetails?.permissions && workflowDetails?.data?.nextActions?.length > 0 && (
             <PermissionCheck applicationData={applicationDetails?.applicationData} t={t} permissions={detail?.additionalDetails?.permissions} />
           )}
           {detail?.additionalDetails?.obpsDocuments && (
