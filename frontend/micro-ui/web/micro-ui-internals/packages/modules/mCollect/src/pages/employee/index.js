@@ -1,6 +1,6 @@
 import React from "react";
 import { MCollectLinks } from "../../Module";
-import Inbox from "./Inbox";
+// import Inbox from "./Inbox";
 import { Switch, useLocation, Link } from "react-router-dom";
 import { PrivateRoute } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 // import CreateChallen from "../employee/CreateChallan";
 // import MCollectAcknowledgement from "../employee/EmployeeChallanAcknowledgement";
 // import EditChallan from "../employee/EditChallan/index";
+// import NewChallan from "./NewChallan";
 
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
@@ -46,10 +47,13 @@ const EmployeeApp = ({ path, url, userType }) => {
   };
 
   const searchMW = [{ combineTaxDueInSearchData }];
- const  CreateChallen = Digit?.ComponentRegistryService?.getComponent('CreateChallen');
- const  MCollectAcknowledgement = Digit?.ComponentRegistryService?.getComponent('MCollectAcknowledgement');
- const  EmployeeChallan = Digit?.ComponentRegistryService?.getComponent('EmployeeChallan');
- const  EditChallan = Digit?.ComponentRegistryService?.getComponent('EditChallan');
+
+  const EmployeeChallan = Digit?.ComponentRegistryService?.getComponent('MCollectEmployeeChallan');
+  const MCollectAcknowledgement = Digit?.ComponentRegistryService?.getComponent('MCollectAcknowledgement');
+  const EditChallan = Digit?.ComponentRegistryService?.getComponent('MCollectEditChallan');
+  const CreateChallen = Digit?.ComponentRegistryService?.getComponent('MCollectNewChallan');
+  const Inbox = Digit?.ComponentRegistryService?.getComponent('MCollectInbox');
+
   return (
     <Switch>
       <React.Fragment>

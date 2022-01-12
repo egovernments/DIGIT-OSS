@@ -10,6 +10,10 @@ import EmployeeChallan from "./EmployeeChallan";
 import CreateChallen from "./pages/employee/CreateChallan";
 import MCollectAcknowledgement from "./pages/employee/EmployeeChallanAcknowledgement";
 import EditChallan from "./pages/employee/EditChallan/index";
+import SearchChallanComponent from "./pages/citizen/SearchChallan";
+import SearchResultsComponent from "./pages/citizen/SearchResults";
+import MyChallanResultsComponent from "./pages/citizen/MyChallan";
+import Inbox from "./pages/employee/Inbox";
 
 export const MCollectModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "UC";
@@ -52,8 +56,14 @@ const componentsToRegister = {
   MCollectCard,
   MCollectModule,
   MCollectLinks,
-  EditChallan,
-
+  MCollectEmployeeChallan : EmployeeChallan,
+  MCollectAcknowledgement : MCollectAcknowledgement,
+  MCollectEditChallan : EditChallan,
+  MCollectNewChallan : CreateChallen,
+  MCollectSearchChallanComponent : SearchChallanComponent,
+  MCollectSearchResultsComponent : SearchResultsComponent,
+  MCollectMyChallanResultsComponent : MyChallanResultsComponent,
+  MCollectInbox: Inbox,
   MCOLLECT_INBOX_FILTER: (props) => <InboxFilter {...props} />,
 };
 
