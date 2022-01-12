@@ -5,7 +5,7 @@ export const Search = {
     const response = await OBPSService.scrutinyDetails(tenantId, params, data);
     if (window.location.href.includes("bpa/inbox")) {
       return response?.edcrDetail
-    } else if(response == "No Record Found" && window.location.href.includes("/basic-details")) {
+    } else if(response == "No Record Found" && (window.location.href.includes("/basic-details") || window.location.href.includes("/basic-details"))) {
       return "BPA_NO_RECORD_FOUND"
     } else {
       return response?.edcrDetail?.[0]

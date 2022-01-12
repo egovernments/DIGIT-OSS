@@ -358,6 +358,7 @@ export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = 
     });
 
     data.landInfo.address.landmark = data?.address?.landmark;
+    data.landInfo.address.street = data?.address?.street ? data?.address?.street : null;
     data.landInfo.address.city = data?.landInfo?.address?.city?.code;
 
     data.landInfo.unit =
@@ -761,5 +762,43 @@ export const scrutinyDetailsData = async (edcrNumber, tenantId) => {
     return scrutinyDetails?.edcrDetail?.[0] ? scrutinyDetails?.edcrDetail?.[0] : {type: "ERROR", message: "BPA_NO_RECORD_FOUND"};
   } else {
     return {type: "ERROR", message: "APPLICATION_NUMBER_ALREADY_EXISTS"}
+  }
+}
+
+export const getOCEDCRDetails = async (edcrNumber, tenantId) => {
+  try {
+    const valueToStore = await Digit.OBPSService.scrutinyDetails(tenantId, {edcrNumber: edcrNumber});
+    return valueToStore;
+  } catch (err) {
+    return err?.response?.statusText ? err?.response?.statusText : "BPA_INTERNAL_SERVER_ERROR"
+  }
+}
+
+export const ocScrutinyDetailsData = async (edcrNumber, tenantId) => {
+  const scrutinyDetails = await getOCEDCRDetails(edcrNumber, tenantId);
+  if (!scrutinyDetails?.edcrDetail?.[0]?.edcrNumber) {
+    return {type: "ERROR", message: scrutinyDetails ? scrutinyDetails : "BPA_NO_RECORD_FOUND"}
+  }
+  const bpaDetails = await Digit.OBPSService.BPASearch(tenantId, {approvalNo: scrutinyDetails?.edcrDetail?.[0]?.permitNumber});
+  const bpaEdcrNumber = bpaDetails?.BPA?.[0]?.edcrNumber;
+  tenantId = bpaDetails?.BPA?.[0]?.tenantId;
+  const edcrDetails = await Digit.OBPSService.scrutinyDetails(tenantId, { edcrNumber: bpaEdcrNumber });
+  const bpaResponse = await Digit.OBPSService.BPASearch(tenantId, {edcrNumber: edcrNumber});
+
+  if (!scrutinyDetails?.edcrDetail?.[0]?.edcrNumber) {
+    return {type: "ERROR", message: scrutinyDetails ? scrutinyDetails : "BPA_NO_RECORD_FOUND"}
+  }
+  
+  if (scrutinyDetails?.edcrDetail?.[0]?.edcrNumber) {
+    return {
+      ocEdcrDetails: scrutinyDetails?.edcrDetail?.[0],
+      otherDetails : {
+        bpaApprovalResponse: bpaDetails?.BPA,
+        edcrDetails: edcrDetails?.edcrDetail,
+        bpaResponse: bpaResponse?.BPA,
+      }
+    }
+  } else {
+    return {type: "ERROR", message: "BPA_NO_RECORD_FOUND"}
   }
 }

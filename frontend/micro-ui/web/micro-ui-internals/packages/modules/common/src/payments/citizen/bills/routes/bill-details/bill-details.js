@@ -45,6 +45,10 @@ const BillDetails = ({ paymentRules, businessService }) => {
       }
       from = new Date(billDetails.fromPeriod).getFullYear().toString();
       to = new Date(billDetails.toPeriod).getFullYear().toString();
+      if(from === to)
+      {
+        return "FY "+from;
+      }
       return "FY " + from + "-" + to;
     } else return "N/A";
   };

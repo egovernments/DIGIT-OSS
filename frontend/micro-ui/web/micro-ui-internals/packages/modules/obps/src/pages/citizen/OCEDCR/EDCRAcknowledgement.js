@@ -1,16 +1,46 @@
-import { Banner, Card, CardText, LinkButton, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Banner, Card, CardText, LinkButton, SubmitBar, Toast } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect }  from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const EDCRAcknowledgement = (props) => {
-  sessionStorage.setItem("isPermitApplication", true);
-  const edcrData = props?.data?.[0];
   const { t } = useTranslation();
   const history = useHistory();
+  const [showToast, setShowToast] = useState(false);
+
+  useEffect(() => { 
+    if (props?.data?.type == "ERROR" && !showToast) setShowToast(true); 
+  }, [props?.data?.data]);
+
+  if (props?.data?.type == "ERROR") {
+    return (
+      <Card style={{ padding: "0px" }}>
+        <Banner
+          message={t("CS_BPA_APPLICATION_FAILED")}
+          applicationNumber={""}
+          info={""}
+          successful={false}
+          infoStyles={{ fontSize: "18px", lineHeight: "21px", fontWeight: "bold", textAlign: "center", padding: "0px 15px" }}
+          applicationNumberStyles={{ fontSize: "24px", lineHeight: "28px", fontWeight: "bold", marginTop: "10px" }}
+          style={{ width: "100%", padding: "10px" }}
+        />
+        <div style={{ padding: "10px", paddingBottom: "10px" }}>
+          <Link to={`/digit-ui/citizen`} >
+            <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
+          </Link>
+        </div>
+        {showToast ? <Toast error={"error"} label={t(props?.data?.data)} onClose={() => setShowToast(null)} isDleteBtn={true}/> : null}
+      </Card>
+    )
+  }
+  
+  sessionStorage.setItem("isEDCRDisable", JSON.stringify(true));
+  sessionStorage.setItem("isPermitApplication", true);
+  const edcrData = props?.data?.[0];
   const [bpaLinks, setBpaLinks] = useState({});
   const state = Digit.ULBService.getStateId();
   const { data: homePageUrlLinks, isLoading: homePageUrlLinksLoading } = Digit.Hooks.obps.useMDMS(state, "BPA", ["homePageUrlLinks"]);
+  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(state, "BPA", ["RiskTypeComputation"]);
 
   useEffect(() => {
     if (!homePageUrlLinksLoading && homePageUrlLinks?.BPA?.homePageUrlLinks?.length > 0) {

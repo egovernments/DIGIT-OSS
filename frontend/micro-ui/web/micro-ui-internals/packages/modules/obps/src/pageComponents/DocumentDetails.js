@@ -11,6 +11,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
 import PropertyDocuments from "../../../templates/ApplicationDetails/components/PropertyDocuments";
+import { stringReplaceAll } from "../utils";
 
 const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
     const stateId = Digit.ULBService.getStateId();
@@ -23,7 +24,13 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
     const handleSubmit = () => {
         let document = formData.documents;
         let documentStep;
-        documentStep = { ...document, documents: documents };
+        let RealignedDocument = [];
+        bpaTaxDocuments && bpaTaxDocuments.map((ob) => {
+            documents && documents.filter(x => ob.code === stringReplaceAll(x?.additionalDetails.category,"_",".")).map((doc) => {
+                RealignedDocument.push(doc);
+            })
+        })
+        documentStep = { ...document, documents: RealignedDocument };
         onSelect(config.key, documentStep);
      };
     const onSkip = () => onSelect();
