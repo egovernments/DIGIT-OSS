@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
 
 import { useParams, useLocation, useHistory } from "react-router-dom";
-import { ActionBar, Header, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { ActionBar, Header, Loader, SubmitBar,Card,CardSubHeader,CardSectionHeader,LinkLabel,PopUp,BackButton} from "@egovernments/digit-ui-react-components";
 import { useQueryClient } from "react-query";
 import _ from "lodash";
 
@@ -17,6 +17,7 @@ const AssessmentDetails = () => {
   const queryClient = useQueryClient();
   const history = useHistory();
   const [appDetailsToShow, setAppDetailsToShow] = useState({});
+  const [popup,showPopUp]=useState(false);
 
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, propertyId);
   const { isLoading: assessmentLoading, mutate: assessmentMutate } = Digit.Hooks.pt.usePropertyAssessment(tenantId);
@@ -33,7 +34,6 @@ const AssessmentDetails = () => {
 
   useEffect(() => {
     if (applicationDetails) setAppDetailsToShow(_.cloneDeep(applicationDetails));
-    // applicationDetails.applicationDetails=applicationDetails.applicationDetails.filter(e=>e.title!=="PT_OWNERSHIP_INFO_SUB_HEADER");
   }, [applicationDetails]);
 
   let workflowDetails = Digit.Hooks.useWorkflowDetails({
@@ -67,36 +67,17 @@ const AssessmentDetails = () => {
         value:date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear(),
       },
     ],
+    additionalDetails: {
+      taxHeadEstimatesCalculation: ptCalculationEstimateData?.Calculation[0],
+    },
     }
   );
-  appDetailsToShow?.applicationDetails?.push({
-    belowComponent:()=>{return <a href="" style={{color:"red"}}>Add Rebate/Penality</a>}
-  })
-  appDetailsToShow?.applicationDetails?.push(
-    {
-    title:"Calculation Details",
-    values:[
-        {
-      title:"Calculation Logic",
-      value:"Property Tax = Built up area on GF * Rates per unit of GF - built up empty land on GF * Rate per unit of GF - empty land 𝝨(built-up on nth floor*Rate per unit of nth floor-built up)",  
-        },
-        {
-            title:"Applicable Charge Slabs",
-            values:[
-                    {
-                    title:"Ground floor unit-1",
-                    value:"2/Sq yards",
-                    }],
-          }
-      ],
-    }
-  );
+
+  const requiredDetails=applicationDetails?.applicationDetails?.filter((e)=>e.title=="PT_ASSESMENT_INFO_SUB_HEADER");
   console.log(applicationDetails);
   const closeToast = () => {
     setShowToast(null);
   };
-
-
 
   const handleAssessment = () => {
     if (!queryClient.getQueryData(["PT_ASSESSMENT", propertyId, location?.state?.Assessment?.financialYear])) {
@@ -127,12 +108,146 @@ const AssessmentDetails = () => {
     return <Loader />;
   }
 
+
+let address_to_display=applicationDetails.applicationData.address;
+if(address_to_display.doorNo){
+    address_to_display=address_to_display.doorNo+','+address_to_display.locality.area+','+address_to_display.city;
+}
+else{
+    address_to_display=address_to_display.locality.area+','+address_to_display.city;
+}
+
+// {applicationDetails:[
+//   {
+//     title: "PT_ESTIMATE_DETAILS_HEADER",
+//     values: [ 
+//       {
+//         title: "PT_PROPERTY_PTUID",
+//         value: propertyId,  
+//       },
+//       // changed from here
+//       {
+//         title: "PT_Address",
+//         value: address_to_display,
+//       },
+//       {
+//         title: "ES_PT_TITLE_BILLING_PERIOD",
+//         value: location?.state?.Assessment?.financialYear,
+//       },
+//       {
+//         title:"PT_Billing_Due_Date",
+//         value:date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear(),
+//       },
+//     ],
+//     additionalDetails: {
+//       taxHeadEstimatesCalculation: ptCalculationEstimateData?.Calculation[0],
+//     },
+//     },
+//     {
+//       belowComponent:()=>{return (
+//         <LinkLabel onClick={()=>{return (<PopUp>{<div className="popup-module">popup opened</div>}</PopUp>)}} style={{color:"red"}}>Add Rebate/Penality</LinkLabel>)}
+//     },
+//       ...requiredDetails,
+//   {
+//     belowComponent:()=>{
+//       return (
+      
+//         <div style={{marginTop:"19px"}}>
+//         <CardSubHeader style={{marginBottom:"8px",color:"rgb(80,90,95)",fontSize:"24px"}}>
+//           Calculation Details
+//           <CardSectionHeader style={{marginBottom:"16px",color:"rgb(80,90,95)",fontSize:"16px",marginTop:"revert"}}>Calculation Logic
+//           <br/>
+//           Property Tax = Built up area on GF * Rates per unit of GF - built up empty land on GF * Rate per unit of GF - empty land 𝝨(built-up on nth floor*Rate per unit of nth floor-built up)
+//           </CardSectionHeader>
+//         </CardSubHeader>
+//           <div className="employee-data-table" style={{position:"relative",padding:"8px"}}>
+//           <div style={{position:"absolute",maxWidth:"640px",border:"1px solid rgb(214,213,212)",inset:"0px",width:"auto"}}/>
+//           <div className="row border-none"><h2>Applicable Charge Slabs</h2></div>
+//           <div className="row border-none"><h2>Ground Floor Unit-1</h2>
+//           <div className="value">2 Sq/yards</div>
+//           </div>
+//          </div>
+//         </div>
+        
+//       )
+//     }
+//   }
+// ]}
+
+
+
   return (
     <div>
       {/* <Header>{t("PT_ASSESS_PROPERTY")}</Header> */}
-      <Header>Property Tax Assessment</Header>
+      <Header>PT_Tax_Assessment</Header>
       <ApplicationDetailsTemplate
-        applicationDetails={appDetailsToShow}
+        applicationDetails={
+          {applicationDetails:[
+            {
+              title: "PT_ESTIMATE_DETAILS_HEADER",
+              values: [ 
+                {
+                  title: "PT_PROPERTY_PTUID",
+                  value: propertyId,  
+                },
+                // changed from here
+                {
+                  title: "PT_Address",
+                  value: address_to_display,
+                },
+                {
+                  title: "ES_PT_TITLE_BILLING_PERIOD",
+                  value: location?.state?.Assessment?.financialYear,
+                },
+                {
+                  title:"PT_Billing_Due_Date",
+                  value:date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear(),
+                },
+              ],
+              additionalDetails: {
+                taxHeadEstimatesCalculation: ptCalculationEstimateData?.Calculation[0],
+              },
+              },
+              {
+                belowComponent:()=>{return (
+                  <LinkLabel onClick={()=>{showPopUp((prev)=>!prev)}} style={{color:"red"}}>Add Rebate/Penality<br/>{popup && (
+                    <PopUp>
+                    {
+                      <div className="popup-module">
+                        <input type={"text"} ></input>
+                        <input type={"text"}></input>
+                      </div>
+                    }
+                  </PopUp>
+                  )}</LinkLabel>)}
+              },
+                ...requiredDetails,
+            {
+              belowComponent:()=>{
+                return (
+                
+                  <div style={{marginTop:"19px"}}>
+                  <CardSubHeader style={{marginBottom:"8px",color:"rgb(80,90,95)",fontSize:"24px"}}>
+                    Calculation Details
+                    <CardSectionHeader style={{marginBottom:"16px",color:"rgb(80,90,95)",fontSize:"16px",marginTop:"revert"}}>Calculation Logic
+                    <br/>
+                    Property Tax = Built up area on GF * Rates per unit of GF - built up empty land on GF * Rate per unit of GF - empty land 𝝨(built-up on nth floor*Rate per unit of nth floor-built up)
+                    </CardSectionHeader>
+                  </CardSubHeader>
+                    <div className="employee-data-table" style={{position:"relative",padding:"8px"}}>
+                    <div style={{position:"absolute",maxWidth:"640px",border:"1px solid rgb(214,213,212)",inset:"0px",width:"auto"}}/>
+                    <div className="row border-none"><h2>Applicable Charge Slabs</h2></div>
+                    <div className="row border-none"><h2>Ground Floor Unit-1</h2>
+                    <div className="value">2 Sq/yards</div>
+                    </div>
+                   </div>
+                  </div>
+                  
+                )
+              }
+            }
+          ]}
+        }
         isLoading={isLoading}
         isDataLoading={isLoading}
         applicationData={appDetailsToShow?.applicationData}
@@ -150,6 +265,7 @@ const AssessmentDetails = () => {
         closeToast={closeToast}
         timelineStatusPrefix={"ES_PT_COMMON_STATUS_"}
         forcedActionPrefix={"WF_EMPLOYEE_PT.CREATE"}
+        showTimeline={false}
       />
       {!queryClient.getQueryData(["PT_ASSESSMENT", propertyId, location?.state?.Assessment?.financialYear]) ? (
         <ActionBar>

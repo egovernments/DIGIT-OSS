@@ -20,8 +20,6 @@ const ApplicationDetails = (props) => {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
-console.log(props);
-debugger
   const {
     applicationDetails,
     showToast,
