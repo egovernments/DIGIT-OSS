@@ -155,7 +155,41 @@ export const SuccessfulPayment = (props) => {
     }
   };
 
-  const getPermitOccupancyOrderSearch = async(order) => {
+  const printPdf = (blob) => {
+    const fileURL = URL.createObjectURL(blob);
+    var myWindow = window.open(fileURL);
+    if (myWindow != undefined) {
+      myWindow.addEventListener("load", (event) => {
+        myWindow.focus();
+        myWindow.print();
+      });
+    }
+  };
+
+  const downloadPdf = (blob, fileName) => {
+    if (window.mSewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
+      var reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = function () {
+        var base64data = reader.result;
+        mSewaApp.downloadBase64File(base64data, fileName);
+      };
+    } else {
+      const link = document.createElement("a");
+      // create a blobURI pointing to our Blob
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      // some browser needs the anchor to be in the doc
+      document.body.append(link);
+      link.click();
+      link.remove();
+      // in case the Blob uses a lot of memory
+      setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+    }
+  };
+  
+
+  const getPermitOccupancyOrderSearch = async(order, mode="download") => {
     // let requestData = {...bpaData?.applicationData, edcrDetail:[{...bpaData?.edcrDetails}]}
     // let response = await Digit.PaymentService.generatePdf(bpaData?.applicationData?.tenantId, { Bpa: [requestData] }, order);
     // const fileStore = await Digit.PaymentService.printReciept(bpaData?.applicationData?.tenantId, { fileStoreIds: response.filestoreIds[0] });
@@ -171,6 +205,15 @@ export const SuccessfulPayment = (props) => {
     let response = await Digit.PaymentService.generatePdf(bpaDataDetails?.tenantId, { Bpa: [reqData] }, order);
     const fileStore = await Digit.PaymentService.printReciept(bpaDataDetails?.tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
+
+    reqData["applicationType"] = bpaDataDetails?.additionalDetails?.applicationType;
+    let edcrresponse = await Digit.OBPSService.edcr_report_download({BPA: {...reqData}});
+    const responseStatus = parseInt(edcrresponse.status, 10);
+    if (responseStatus === 201 || responseStatus === 200) {
+      mode == "print"
+        ? printPdf(new Blob([edcrresponse.data], { type: "application/pdf" }))
+        : downloadPdf(new Blob([edcrresponse.data], { type: "application/pdf" }), `edcrReport.pdf`);
+    }
   }
 
   const getBillingPeriod = (billDetails) => {
