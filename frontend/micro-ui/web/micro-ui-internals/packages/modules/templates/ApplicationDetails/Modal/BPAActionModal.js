@@ -29,10 +29,10 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       applicationData?.landInfo?.address?.city ? applicationData?.landInfo?.address?.city : tenantId,
       false
     );
-  const { data: approverData, isLoading: PTALoading } = Digit.Hooks.useEmployeeSearch(
+   const { data: approverData, isLoading: PTALoading } = Digit.Hooks.useEmployeeSearch(
     tenantId,
     {
-      roles: action?.assigneeRoles?.map?.((e) => ({ code: e })),
+      roles: action?.roles.split(",").map(role=>({code:role})),
       isActive: true,
     },
     { enabled: !action?.isTerminateState }

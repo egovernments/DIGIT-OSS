@@ -139,6 +139,7 @@ const SelectDocument = React.memo(function MyComponent({
             e?.map((doc, index) => {
                 newfiles.push({
                         documentType: selectedDocument?.code,
+                        additionalDetails:{category:selectedDocument?.code.split(".").slice(0,2).join('_')},
                         fileStoreId: doc?.[1]?.fileStoreId?.fileStoreId,
                         documentUid: doc?.[1].fileStoreId?.fileStoreId,
                         fileName: doc?.[0] || "",
@@ -181,6 +182,7 @@ const SelectDocument = React.memo(function MyComponent({
                     newfiles.push({
                         documentType: selectedDocument?.code,
                             fileStoreId: doc.fileStoreId,
+                            additionalDetails:{category:selectedDocument?.code.split(".").slice(0,2).join('_')},
                             documentUid: doc.fileStoreId,
                             fileName: fileArray[index]?.name || "",
                             id:documents? documents.find(x => x.documentType === selectedDocument?.code)?.id:undefined,

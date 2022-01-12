@@ -30,7 +30,7 @@ function ApplicationDetailsContent({
   const { t } = useTranslation();
 
   const getTimelineCaptions = (checkpoint) => {
-    if (checkpoint.state === "OPEN" || checkpoint.status === "INITIATED") {
+    if (checkpoint.state === "OPEN" || checkpoint.status === "INITIATED" && !(window.location.href.includes("/obps/"))) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails?.createdTime),
         source: applicationData?.channel || "",
