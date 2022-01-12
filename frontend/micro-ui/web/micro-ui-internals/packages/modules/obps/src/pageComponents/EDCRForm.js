@@ -114,7 +114,7 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
                 value={name}
                 {...(validation = {
                     isRequired: true,
-                    pattern: getPattern("Name"),
+                    pattern: "^[a-zA-Z-.`' ]*$",
                     title: t("BPA_INVALID_NAME"),
                 })}
             />
