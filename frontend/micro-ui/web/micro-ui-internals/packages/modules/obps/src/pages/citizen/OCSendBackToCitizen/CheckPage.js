@@ -19,7 +19,7 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import Timeline from "../../../components/Timeline";
 import OBPSDocument from "../../../pageComponents/OBPSDocuments";
 import ActionModal from "../BpaApplicationDetail/Modal";
-import { convertToBPAObject, stringReplaceAll } from "../../../utils";
+import { convertToBPAObject, stringReplaceAll, convertEpochToDateDMY } from "../../../utils";
 import cloneDeep from "lodash/cloneDeep";
 import { useQueryClient } from "react-query";
 
@@ -215,7 +215,7 @@ const CheckPage = ({ onSubmit, value }) => {
       <Card style={{paddingRight:"16px"}}>
         <CardHeader>{t(`BPA_BASIC_DETAILS_TITLE`)}</CardHeader>
         <StatusTable>
-          <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APP_DATE_LABEL`)} text={getdate(data?.applicationDate)} />
+          <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APP_DATE_LABEL`)} text={convertEpochToDateDMY(Number(data?.applicationDate))} />
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL`)} text={t(`WF_BPA_${data?.applicationType}`)} />
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL`)} text={t(data?.serviceType)} />
           <Row className="border-none" label={t(`BPA_BASIC_DETAILS_OCCUPANCY_LABEL`)} text={data?.occupancyType} />
