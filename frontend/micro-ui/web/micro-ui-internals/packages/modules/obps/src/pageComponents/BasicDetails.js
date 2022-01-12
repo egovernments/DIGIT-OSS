@@ -3,48 +3,30 @@ import { fromUnixTime, format } from 'date-fns';
 import { Card, CardHeader, Label, SearchIconSvg, Toast, StatusTable, TextInput, Row, CardCaption, SubmitBar, Loader } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
 import { useTranslation } from "react-i18next";
+import { scrutinyDetailsData } from "../utils";
 
 const BasicDetails = ({ formData, onSelect, config }) => {
   const [showToast, setShowToast] = useState(null);
-  const [basicData, setBasicData] = useState(null)
+  const [basicData, setBasicData] = useState(formData?.data?.edcrDetails || null);
   const [scrutinyNumber, setScrutinyNumber] = useState(formData?.data?.scrutinyNumber);
   const [isDisabled, setIsDisabled] = useState(formData?.data?.scrutinyNumber ? true : false);
   const { t } = useTranslation();
   const stateCode = Digit.ULBService.getStateId();
   const isMobile = window.Digit.Utils.browser.isMobile();
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["RiskTypeComputation"]);
-  const riskType = Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, basicData?.planDetail?.plot?.area, basicData?.planDetail?.blocks)
-  const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(stateCode, scrutinyNumber, {
-    enabled: formData?.data?.scrutinyNumber ? true : false
-  })
+  const riskType = Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, basicData?.planDetail?.plot?.area, basicData?.planDetail?.blocks);
 
-  const { data: bpaData, isLoading: isSearchLoading, refetch: refetchBPASearch } = Digit.Hooks.obps.useBPASearch(stateCode, scrutinyNumber, {
-    enabled: formData?.data?.scrutinyNumber ? true : false
-  })
-
-  useEffect(() => {
-    if (data === undefined || bpaData === undefined) return;
-    const result = bpaData?.find(bpa => {
-      return bpa?.edcrNumber === scrutinyNumber?.edcrNumber
-    });
-    result !== undefined && !(formData?.id)? setShowToast(true) : setBasicData(data);
-  }, [data, bpaData])
-
-  useEffect(() => {
-    setTimeout(closeToast, 5000);
-  }, showToast)
-
-  const handleKeyPress = (event) => {
-    if(!scrutinyNumber?.edcrNumber) return;
+  const handleKeyPress = async (event) => {
     if (event.key === "Enter") {
-    if (basicData?.edcrNumber) {
-      let data = basicData;
-      data.entredKey = "Enter"
-      setBasicData(data);
-    }
-      setBasicData(null);
-      refetch();
-      refetchBPASearch()
+      const details = await scrutinyDetailsData(scrutinyNumber?.edcrNumber, stateCode);
+      if (details?.type == "ERROR") {
+        setShowToast({ message: details?.message });
+        setBasicData(null);
+      }
+      if (details?.edcrNumber) {
+        setBasicData(details);
+        setShowToast(null);
+      }
     }
   }
 
@@ -52,32 +34,53 @@ const BasicDetails = ({ formData, onSelect, config }) => {
     setShowToast(null);
   };
 
-  const handleSearch = (event) => {
-    if(!scrutinyNumber?.edcrNumber) return;
-    if(basicData?.edcrNumber) {
-      let data = basicData;
-      data.entredKey = "Enter"
-      setBasicData(data);
+  const handleSearch = async (event) => {
+    const details = await scrutinyDetailsData(scrutinyNumber?.edcrNumber, stateCode);
+    if (details?.type == "ERROR") {
+      setShowToast({ message: details?.message });
+      setBasicData(null);
     }
-    setBasicData(null);
-    refetch();
-    refetchBPASearch();
+    if (details?.edcrNumber) {
+      setBasicData(details);
+      setShowToast(null);
+    }
   }
 
   const handleSubmit = (event) => {
-    onSelect(config?.key, { scrutinyNumber, applicantName: data?.planDetail?.planInformation?.applicantName, occupancyType:data?.planDetail?.planInformation?.occupancy, applicationType: data?.appliactionType, serviceType: data?.applicationSubType, applicationDate: data?.applicationDate, riskType: Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, data?.planDetail?.plot?.area, data?.planDetail?.blocks), edcrDetails: data  })
+    onSelect(config?.key, { scrutinyNumber, applicantName: basicData?.planDetail?.planInformation?.applicantName, occupancyType:basicData?.planDetail?.planInformation?.occupancy, applicationType: basicData?.appliactionType, serviceType: basicData?.applicationSubType, applicationDate: basicData?.applicationDate, riskType: Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, basicData?.planDetail?.plot?.area, basicData?.planDetail?.blocks), edcrDetails: basicData  })
   }
 
-  if (isMdmsLoading || isLoading || isSearchLoading) {
-    return <Loader />
+  let disableVlaue = sessionStorage.getItem("isEDCRDisable");
+  disableVlaue = JSON.parse(disableVlaue);
+
+  const getDetails = async () => {
+    const details = await scrutinyDetailsData(scrutinyNumber?.edcrNumber, stateCode);
+    if (details?.type == "ERROR") {
+      setShowToast({ message: details?.message });
+      setBasicData(null);
+    }
+    if (details?.edcrNumber) {
+      setBasicData(details);
+      setShowToast(null);
+    }
+  }
+
+  if (disableVlaue) {
+    let edcrApi = sessionStorage.getItem("isEDCRAPIType");
+    edcrApi = edcrApi ? JSON.parse(edcrApi) : false;
+    if (!edcrApi || !basicData) {
+      sessionStorage.setItem("isEDCRAPIType", JSON.stringify(true));
+      getDetails();
+    }
   }
 
   return (
     <div>
       {showToast && <Toast
         error={true}
-        label={t(`APPLICATION_NUMBER_ALREADY_EXISTS`)}
+        label={t(`${showToast?.message}`)}
         onClose={closeToast}
+        isDleteBtn={true}
       />
       }
       <Timeline />
@@ -85,12 +88,11 @@ const BasicDetails = ({ formData, onSelect, config }) => {
         <Label>{t(`OBPS_SEARCH_EDCR_NUMBER`)}</Label>
         <TextInput className="searchInput"
           onKeyPress={handleKeyPress}
-          onChange={event => setScrutinyNumber({ edcrNumber: event.target.value })} value={scrutinyNumber?.edcrNumber} signature={true} signatureImg={<SearchIconSvg className="signature-img" onClick={!isDisabled ? () => handleSearch() : null} /> }
-          disable={isDisabled}
+          onChange={event => setScrutinyNumber({ edcrNumber: event.target.value })} value={scrutinyNumber?.edcrNumber} signature={true} signatureImg={<SearchIconSvg className="signature-img" onClick={!disableVlaue ? () => handleSearch() : null} /> }
+          disable={disableVlaue}
           style={{ marginBottom: "10px" }}
         />
       </div>
-      {(isSearchLoading || isLoading) && <Loader /> }
       {basicData && <Card>
         <CardCaption>{t(`BPA_SCRUTINY_DETAILS`)}</CardCaption>
         <CardHeader>{t(`BPA_BASIC_DETAILS_TITLE`)}</CardHeader>
