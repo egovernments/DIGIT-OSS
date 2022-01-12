@@ -376,8 +376,10 @@ export const OBPSService = {
       }
     }
 
-    if(permitcondn.length == 0)
-    PermitConditions={};
+    if(permitcondn.length == 0) PermitConditions={};
+    if (riskType == "LOW" && permitcondn.length > 0) {
+      permitcondn = []; PermitConditions={};
+    }
     
     if(BPA?.approvalNo) {
       applicationDetailsInfo?.values?.push({ title: BPA?.businessService !== "BPA_OC" ?  "BPA_PERMIT_NUMBER_LABEL":"BPA_OC_PERMIT_NUMBER_LABEL", value: BPA?.approvalNo || "NA"  });
@@ -538,7 +540,7 @@ export const OBPSService = {
       })
       
       approvalChecksDetails = {
-        title: "BPA_PERMIT_CONDITIONS",
+        title: "", //window.location.href.includes("/employee") ? "" : "BPA_PERMIT_CONDITIONS",
         isTitleVisible: approvalChecks?.length > 0 ? false : true,
         asSectionHeader: true,
         isPermissions: true,
@@ -547,6 +549,8 @@ export const OBPSService = {
         }
       }
     }
+
+    if (riskType == "LOW" && approvalChecks.length > 0) approvalChecksDetails = {}
 
     // if(inspectionReport) details.push(inspectionReport);\
     let val;

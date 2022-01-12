@@ -13,14 +13,14 @@ const BPAApplicationTimeline = (props) => {
   });
 
   const getTimelineCaptions = (checkpoint) => {
-    if (checkpoint.state === "INITIATE") {
-      const caption = {
-        date: Digit.DateUtils.ConvertEpochToDate(props.application?.auditDetails?.createdTime),
-        source: props.application?.tradeLicenseDetail?.channel || "",
-      };
-      return <BPACaption data={caption} />;
-    }  
-    else {
+    // if (checkpoint.state === "INITIATE") {
+    //   const caption = {
+    //     date: Digit.DateUtils.ConvertEpochToDate(props.application?.auditDetails?.createdTime),
+    //     source: props.application?.tradeLicenseDetail?.channel || "",
+    //   };
+    //   return <BPACaption data={caption} />;
+    // }  
+    //else {
       const caption = {
         date: checkpoint?.auditDetails?.lastModified,
         name: checkpoint?.assignes?.[0]?.name,
@@ -28,7 +28,7 @@ const BPAApplicationTimeline = (props) => {
         comment: t(checkpoint?.comment),
       };
       return <BPACaption data={caption} />;
-    }
+    //}
   };
 
   if (isLoading) {

@@ -26,6 +26,7 @@ const BpaApplicationDetail = () => {
   const [appDetails, setAppDetails] = useState({});
   const [showOptions, setShowOptions] = useState(false);
   const [payments, setpayments] = useState([]);
+  const [sanctionFee, setSanctionFee] = useState([]);
   const [checkBoxVisible, setCheckBoxVisible] = useState(false);
   const history = useHistory();
   sessionStorage.setItem("bpaApplicationDetails", false);
@@ -60,6 +61,12 @@ const BpaApplicationDetail = () => {
 
 
   useEffect(async() => {
+    if(data && data?.applicationData?.businessService === "BPA"/*  && data?.applicationData?.status === "PENDING_SANC_FEE_PAYMENT" */){
+    let res = Digit.PaymentService.fetchBill( data?.applicationData?.tenantId, { consumerCode: data?.applicationData?.applicationNo, businessService: businessService[1] }).then((result) => {
+      result?.Bill[0] && !(sanctionFee.filter((val) => val?.id ===result?.Bill[0].id).length>0) && setSanctionFee([...result?.Bill]);
+    })
+  
+    }
     if(data?.applicationData?.tenantId && data?.applicationData?.applicationNo)
     businessService.length > 0 && businessService.map((buss,index) => {
       let res = Digit.PaymentService.recieptSearch(data?.applicationData?.tenantId, buss, {consumerCodes: data?.applicationData?.applicationNo}).then((value) => {
@@ -71,24 +78,51 @@ const BpaApplicationDetail = () => {
   },[data, businessService]);
 
   useEffect(() => {
+    if(data && data?.applicationData?.businessService === "BPA" && data?.applicationData?.status === "PENDING_SANC_FEE_PAYMENT" && sanctionFee == {})
+    {
+      return <Loader />
+    } 
+  },[sanctionFee])
+
+  useEffect(() => {
     let payval=[]
+    let total = 0;
     payments.length>0 && payments.map((ob) => {
       ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.billAccountDetails.map((bill,index) => {
         payval.push({title:`${bill?.taxHeadCode}_DETAILS`, value:" "});
         payval.push({title:bill?.taxHeadCode, value:`₹${bill?.amount}`});
         payval.push({title:"BPA_STATUS_LABEL", value:"Paid"});
+        total = total + parseInt(bill?.amount);
       })
-      payval.push({title:"BPA_TOT_AMT_PAID", value:`₹${ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.amount}`});
+      if(sanctionFee && sanctionFee.length>0 && !(payval.filter((ob) => ob.title === "BPA_SANC_FEE_LABEL").length>0)){
+          payval.push({title:`BPA_SANC_FEE_DETAILS`, value:" "});
+          payval.push({title:`BPA_SANC_FEE_LABEL`, value:`₹${sanctionFee?.[0]?.billDetails?.[0].amount}`});
+          payval.push({title:"BPA_STATUS_LABEL", value:"Unpaid"});
+      } 
     })
-    payments.length > 0 && !(data.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL").length>0)&& data.applicationDetails.push({
-      title:"BPA_FEE_DETAILS_LABEL",
+   total > 0 && payval.push({title:"BPA_TOT_AMT_PAID", value:`₹${total}`});
+    payments.length > 0 && (!(data.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL").length>0))&& data.applicationDetails.push({
+        title:"BPA_FEE_DETAILS_LABEL",
       additionalDetails:{
         inspectionReport:[],
         isFeeDetails: true,
         values:[...payval]
       }
     })
-  },[payments]);
+    if(data && data?.applicationData?.businessService === "BPA" && data?.applicationData?.status === "APPROVED" && (data.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL")?.[0]?.additionalDetails?.values.length < payval.length ))
+    {
+      var foundIndex = data?.applicationDetails.findIndex(x => x.title === "BPA_FEE_DETAILS_LABEL");
+      data?.applicationDetails.splice(foundIndex,1);
+      data.applicationDetails.push({
+        title:"BPA_FEE_DETAILS_LABEL",
+        additionalDetails:{
+          inspectionReport:[],
+          isFeeDetails: true,
+          values:[...payval]
+        }
+      })
+    }
+  },[payments,sanctionFee]);
 
   useEffect(() => {
     if (data?.applicationData?.status == "CITIZEN_APPROVAL_INPROCESS" || data?.applicationData?.status == "INPROGRESS") setCheckBoxVisible(true);
@@ -385,7 +419,7 @@ const BpaApplicationDetail = () => {
                 {/* to get additional common values */}
                 {detail?.additionalDetails?.values?.length > 0 ? detail?.additionalDetails?.values?.map((value) => (
                     <div>
-                    {!detail?.isTitleRepeat && !value?.isHeader && !value?.isUnit ? <Row className="border-none" label={t(value?.title)} text={value?.value ? getTranslatedValues(value?.value, value?.isNotTranslated) : t("CS_NA")} /> : null}
+                    {!detail?.isTitleRepeat && !value?.isHeader && !value?.isUnit ? <Row className="border-none" label={t(value?.title)} textStyle={value?.value === "Paid"?{color:"darkgreen"}:(value?.value === "Unpaid"?{color:"red"}:{})} text={value?.value ? getTranslatedValues(value?.value, value?.isNotTranslated) : t("CS_NA")} /> : null}
                     {!detail?.isTitleRepeat && value?.isUnit ? <Row className="border-none" label={t(value?.title)} text={value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("CS_NA")} /> : null}
                     {!detail?.isTitleRepeat && value?.isHeader ? <CardSubHeader style={{fontSize: "20px"}}>{t(value?.title)}</CardSubHeader> : null}
                     </div>
@@ -456,7 +490,7 @@ const BpaApplicationDetail = () => {
                 {/* to get Fee values */}
                 {(detail?.isFeeDetails && detail?.additionalDetails?.values?.length > 0) ? detail?.additionalDetails?.permit?.map((value) => (
                   <StatusTable>
-                    <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
+                    <Row className="border-none" label={t(value?.title)} textStyle={value?.value === "Paid"?{color:"darkgreen"}:(value?.value === "Unpaid"?{color:"red"}:{})} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
                   </StatusTable>
                 )) : null}
 

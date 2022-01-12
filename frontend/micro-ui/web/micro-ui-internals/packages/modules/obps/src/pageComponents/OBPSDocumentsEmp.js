@@ -62,6 +62,7 @@ const OBPSDocumentsEmp = ({ t, config, onSelect, userType, formData, setError: s
             clearFormErrors={clearFormErrors}
             config={config}
             formState={formState}
+            stateId={stateId}
           />
           </div>
         );
@@ -86,7 +87,8 @@ function SelectDocument({
   formState,
   fromRawData,
   key,
-  id
+  id,
+  stateId={stateId}
 }) {
   const filteredDocument = documents?.filter((item) => item?.documentType);
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -233,7 +235,7 @@ function SelectDocument({
         <div className="field" style={{ width: "100%" }}>
           <MultiUploadWrapper
             module="BPA"
-            tenantId={tenantId}
+            tenantId={stateId}
             getFormState={e => getData(e, doc?.documentType.replaceAll(".", "_"))}
             t={t}
           />

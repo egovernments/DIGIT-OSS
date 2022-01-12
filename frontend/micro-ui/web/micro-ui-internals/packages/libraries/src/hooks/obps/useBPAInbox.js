@@ -45,7 +45,7 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
               locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
               status: application?.ProcessInstance?.state?.state,
               state:  application?.ProcessInstance?.state?.state,
-              owner: application?.businessObject?.landInfo?.owners.map((owner) => owner.name).join(", "),
+              owner: application?.ProcessInstance?.assignes?.[0]?.name || "NA",
               sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
           })),
           totalCount: data.totalCount
