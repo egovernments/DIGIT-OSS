@@ -110,6 +110,14 @@ public class BPAQueryBuilder {
             addToPreparedStatement(preparedStmtList, serviceTypes);
         }
         
+        String pemritNumber = criteria.getPermitNumber();
+        if(pemritNumber != null) {
+            List<String> pemritNumbers = Arrays.asList(pemritNumber.split(","));
+            addClauseIfRequired(preparedStmtList, builder);
+            builder.append(" bpa.additionaldetails ->>'permitNumber' IN (").append(createQuery(pemritNumbers)).append(")");
+            addToPreparedStatement(preparedStmtList, pemritNumbers);
+        }
+        
         Long permitDt = criteria.getApprovalDate();
         if (permitDt != null) {
 
