@@ -311,6 +311,7 @@ const CheckPage = ({ onSubmit, value }) => {
                 <Row className="border-none" label={t(`CORE_COMMON_NAME`)} text={ob?.name} />
                 <Row className="border-none" label={t(`BPA_APPLICANT_GENDER_LABEL`)} text={t(ob?.gender?.i18nKey)} />
                 <Row className="border-none" label={t(`CORE_COMMON_MOBILE_NUMBER`)} text={ob?.mobileNumber} />
+                <Row className="border-none" label={t(`BPA_IS_PRIMARY_OWNER_LABEL`)} text={`${ob?.isPrimaryOwner}`} />
               </StatusTable>
             </div>))}
         </Card>

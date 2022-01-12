@@ -1,9 +1,9 @@
 import { CardLabel, Dropdown, FormStep, Loader, TextInput, Toast, UploadFile } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import { getPattern, stringReplaceAll, sortDropdownNames  } from "../utils";
 
-const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner, isShowToast, isSubmitBtnDisable }) => {
+const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner, isShowToast, isSubmitBtnDisable, setIsShowToast }) => {
     const { pathname: url } = useLocation();
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateId = Digit.ULBService.getStateId();
@@ -15,6 +15,8 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
     const [error, setError] = useState(null);
     const [uploadMessage, setUploadMessage] = useState("");
     const [showToast, setShowToast] = useState(null);
+    const history = useHistory();
+
 
     let validation = { };
 
@@ -51,14 +53,20 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
     }, [citymodules]);
 
     useEffect(() => {
-        if (uploadMessage) {
+        if (uploadMessage || isShowToast) {
             setName("");
             setTenantIdData("");
             setUploadedFile(null);
             setFile("");
             setUploadMessage("");
         }
-    }, [uploadMessage]);
+        if (isShowToast) {
+            history.replace(
+                `/digit-ui/citizen/obps/edcrscrutiny/apply/acknowledgement`,
+                { data: isShowToast?.label ? isShowToast?.label : "BPA_INTERNAL_SERVER_ERROR", type: "ERROR"}
+              );
+        }
+    }, [uploadMessage, isShowToast, isSubmitBtnDisable]);
 
     function onAdd() {
         setUploadMessage("NEED TO DELETE");
@@ -72,7 +80,7 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
         onSelect(config.key, data);
     };
 
-    if (isLoading) {
+    if (isLoading || isSubmitBtnDisable) {
         return <Loader />;
     }
     return (
@@ -125,7 +133,8 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
                 uploadMessage={uploadMessage}
             />
             <div style={{ disabled: "true", height: "30px", width: "100%", fontSize: "14px" }}>{t("EDCR_UPLOAD_FILE_LIMITS_LABEL")}</div>
-            {isShowToast && <Toast error={isShowToast.key} label={t(isShowToast.label)} onClose={() => setShowToast(null)} />}
+            {isShowToast && <Toast error={isShowToast.key} label={t(isShowToast.label)} onClose={() => setIsShowToast(null)} isDleteBtn={true} />}
+            {/* {isSubmitBtnDisable ? <Loader /> : null} */}
         </FormStep>
     );
 };

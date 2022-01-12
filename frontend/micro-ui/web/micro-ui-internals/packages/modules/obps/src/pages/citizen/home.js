@@ -182,6 +182,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
     }
   });
   sessionStorage.setItem("isPermitApplication", true);
+  sessionStorage.setItem("isEDCRDisable", JSON.stringify(false));
   return homeScreen;
 };
 
