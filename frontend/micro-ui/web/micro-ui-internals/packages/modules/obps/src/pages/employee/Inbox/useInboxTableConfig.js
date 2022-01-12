@@ -41,7 +41,7 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
         },
         {
             Header: t("WF_INBOX_HEADER_CURRENT_OWNER"),
-            accessor: (row) => row?.owner,
+            accessor: (row) => t(row?.owner),
             disableSortBy: true,
         },
         {

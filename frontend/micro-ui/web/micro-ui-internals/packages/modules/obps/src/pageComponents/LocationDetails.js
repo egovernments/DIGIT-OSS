@@ -123,7 +123,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
     address.city = selectedCity;
     address.locality = selectedLocality;
     address.street = street;
-    address.Landmark = landmark;
+    address.landmark = landmark;
     address.geoLocation = geoLocation;
     address.placeName = placeName;
     onSelect(config.key, address);
@@ -200,7 +200,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
       t={t}
       config={config}
       onSelect={handleSubmit}
-      isDisabled={!selectedCity || !selectedLocality }
+      isDisabled={!selectedCity || !selectedLocality || Pinerror }
       isMultipleAllow={true}
       forcedError={t(Pinerror)}
     >

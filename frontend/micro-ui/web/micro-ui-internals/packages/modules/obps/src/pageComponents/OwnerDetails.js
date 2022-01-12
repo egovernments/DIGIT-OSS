@@ -280,7 +280,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 if (formData?.address?.city?.code) payload.landInfo.address.city = formData?.address?.city?.code;
                 if (formData?.address?.locality?.code) payload.landInfo.address.locality = { code: formData?.address?.locality?.code };
                 if (formData?.address?.pincode) payload.landInfo.address.pincode = formData?.address?.pincode;
-                if (formData?.address?.Landmark) payload.landInfo.address.landmark = formData?.address?.Landmark;
+                if (formData?.address?.landmark) payload.landInfo.address.landmark = formData?.address?.landmark;
                 if (formData?.address?.street) payload.landInfo.address.street = formData?.address?.street;
                 if (formData?.address?.geoLocation) payload.landInfo.address.geoLocation = formData?.address?.geoLocation;
 

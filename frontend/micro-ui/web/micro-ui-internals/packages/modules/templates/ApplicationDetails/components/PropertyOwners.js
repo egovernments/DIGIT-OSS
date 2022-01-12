@@ -47,16 +47,19 @@ function PropertyOwners({ owners }) {
                   return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
                 }
                 return (
-                  <Row
-                    key={t(value.title)}
-                    label={!checkLocation ? t(value.title) : `${t(value.title)}:`}
-                    text={t(value.value) || "N/A"}
-                    last={index === value?.values?.length - 1}
-                    caption={value.caption}
-                    className="border-none"
-                    // TODO, Later will move to classes
-                    rowContainerStyle={rowContainerStyle}
-                  />
+                  <span>
+                    <Row
+                      key={t(value.title)}
+                      label={!checkLocation ? t(value.title) : `${t(value.title)}`}
+                      text={t(value.value) || "N/A"}
+                      last={index === value?.values?.length - 1}
+                      caption={value.caption}
+                      className="border-none"
+                      textStyle={value.textStyle}
+                      // TODO, Later will move to classes
+                      rowContainerStyle={rowContainerStyle}
+                    />
+                  </span>
                 );
               })}
             </StatusTable>
