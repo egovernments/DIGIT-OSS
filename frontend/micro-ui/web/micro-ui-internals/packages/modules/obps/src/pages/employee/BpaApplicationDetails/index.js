@@ -209,9 +209,12 @@ const BpaApplicationDetail = () => {
     moduleCode: "BPA",
   });
 
-  if (workflowDetails && workflowDetails.data && !workflowDetails.isLoading)
-    workflowDetails.data.actionState = { ...workflowDetails.data };
+  if (workflowDetails && workflowDetails.data && !workflowDetails.isLoading){
 
+  
+  workflowDetails.data.initialActionState=workflowDetails?.data?.initialActionState||{...workflowDetails?.data?.actionState}||{} ;
+    workflowDetails.data.actionState = { ...workflowDetails.data };
+  }
   if (mdmsData?.BPA?.RiskTypeComputation && data?.edcrDetails) {
     risType = Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, data?.edcrDetails?.planDetail?.plot?.area, data?.edcrDetails?.planDetail?.blocks);
     data?.applicationDetails?.map(detail => {
