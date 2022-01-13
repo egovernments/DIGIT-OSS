@@ -481,7 +481,17 @@ public class FSMValidator {
 						}
 					}
 					
-				}else {
+				}else if(((String) mdmsClItem.get("type")).equalsIgnoreCase(FSMConstants.CHECK_LIST_DROP_DOWN)) {
+					log.info("CHECK_LIST_DROP_DOWN ");
+					for( int h=0;h<reqOptions.length;h++) {
+						log.info("reqOptions :: "+reqOptions[h]);
+						if(!mdmsClOptions.contains(reqOptions[h])) {
+							 throw new CustomException(FSMErrorConstants.INVALID_CHECKLIST, "Checklist "+mdmsClItem.get("code")+" does not allow option "+reqOptions[h]);
+						}
+					}
+					
+				}
+				else {
 					throw new CustomException(FSMErrorConstants.INVALID_CHECKLIST, " Value provided is not checklist options.");
 				}
 			}else{
