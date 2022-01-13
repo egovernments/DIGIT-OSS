@@ -106,7 +106,7 @@ public class VehicleTripValidator {
 		org.egov.vehicle.web.model.user.User user = org.egov.vehicle.web.model.user.User.builder().tenantId(owner.getTenantId()).build();
 		BeanUtils.copyProperties(owner,user);
 		userDetailResponse = userService.userExists(user, requestInfo);
-		if (userDetailResponse == null && CollectionUtils.isEmpty(userDetailResponse.getUser())) {
+		if (userDetailResponse == null || CollectionUtils.isEmpty(userDetailResponse.getUser())) {
 			throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "Invalid Trip owner");
 		}else {
 			BeanUtils.copyProperties(userDetailResponse.getUser().get(0),owner);
@@ -120,7 +120,7 @@ public class VehicleTripValidator {
 		org.egov.vehicle.web.model.user.User user = org.egov.vehicle.web.model.user.User.builder().tenantId(driver.getTenantId()).build();
 		BeanUtils.copyProperties(driver,user);
 		userDetailResponse = userService.userExists(user, requestInfo);
-		if (userDetailResponse == null && CollectionUtils.isEmpty(userDetailResponse.getUser())) {
+		if (userDetailResponse == null || CollectionUtils.isEmpty(userDetailResponse.getUser())) {
 			throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "Invalid Trip driver");
 		}else {
 			BeanUtils.copyProperties(userDetailResponse.getUser().get(0),driver);

@@ -447,7 +447,10 @@ public class MigrationService {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return  d.getTime();
+        if(d != null){
+            return d.getTime();
+        }
+        return null;
     }
 
     public  List<Property> migrateProperty(RequestInfo requestInfo, List<OldProperty> oldProperties,Map<String, List<String>> masters,Map<String, String> errorMap) {

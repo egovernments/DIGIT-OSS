@@ -307,7 +307,7 @@ public class EnrichmentService {
 		if (wf != null && wf.getAssignes() != null)
 			assignes.addAll(wf.getAssignes());
 		if (wf != null && wf.getAction().equalsIgnoreCase(BPAConstants.ACTION_SENDBACKTOCITIZEN)
-				|| wf.getAction().equalsIgnoreCase(BPAConstants.ACTION_SEND_TO_CITIZEN)) {
+				|| (wf != null && wf.getAction().equalsIgnoreCase(BPAConstants.ACTION_SEND_TO_CITIZEN))) {
 
 			// Adding owners to assignes list
 			bpa.getLandInfo().getOwners().forEach(ownerInfo -> {

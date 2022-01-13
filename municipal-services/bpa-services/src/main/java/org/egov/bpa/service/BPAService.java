@@ -609,9 +609,13 @@ public class BPAService {
 		}catch (Exception e){
 			log.error("Error while creating temp report.");
 		}finally {
-			writeStream.flush();
-			writeStream.close();
-			readStream.close();
+			if(writeStream != null) {
+				writeStream.flush();
+				writeStream.close();
+			}
+			if(readStream != null) {
+				readStream.close();
+			}
 		}
 
 		document = PDDocument.load(new File(fileName));

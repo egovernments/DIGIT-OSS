@@ -209,7 +209,7 @@ public class CalculationService {
 		if(!CollectionUtils.isEmpty(tripAountAllowed)) {
 			Map<String, String> oldAdditionalDetails = fsm.getAdditionalDetails() != null ? (Map<String, String>)fsm.getAdditionalDetails()
 					: new HashMap<String, String>();
-			if(  oldAdditionalDetails != null || oldAdditionalDetails.get("tripAmount") != null) {
+			if(  oldAdditionalDetails != null && oldAdditionalDetails.get("tripAmount") != null) {
 				amount = BigDecimal.valueOf(Double.valueOf((String)oldAdditionalDetails.get("tripAmount")));
 			}else {
 				List<BillingSlab> billingSlabs = billingSlabRepository.getBillingSlabData(BillingSlabSearchCriteria.builder().capacity(NumberUtils.toDouble(capacity)).slum(slumName).propertyType(fsm.getPropertyUsage()).tenantId(fsm.getTenantId()).build());

@@ -62,39 +62,46 @@ public class TLRenewalNotificationUtil {
 
             case ACTION_STATUS_INITIATED:
                 messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_INITIATED, localizationMessage);
-                message = getInitiatedMsg(license, messageTemplate);
+                if(messageTemplate != null)
+                    message = getInitiatedMsg(license, messageTemplate);
                 break;
 
             case ACTION_STATUS_APPLIED:
                 messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_APPLIED, localizationMessage);
-                message = getAppliedMsg(license, messageTemplate);
+                if(messageTemplate != null)
+                    message = getAppliedMsg(license, messageTemplate);
                 break;
 
             case ACTION_STATUS_FIELDINSPECTION:
                 messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_FIELD_INSPECTION, localizationMessage);
-                message = getFieldInspectionMsg(license, messageTemplate);
+                if(messageTemplate != null)
+                    message = getFieldInspectionMsg(license, messageTemplate);
                 break;
 
             case ACTION_STATUS_PENDINGAPPROVAL:
                 messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_PENDINGAPPROVAL, localizationMessage);
-                message = getPendingApprovalMsg(license, messageTemplate);
+                if(messageTemplate != null)
+                    message = getPendingApprovalMsg(license, messageTemplate);
                 break;
 
             case ACTION_STATUS_REJECTED:
                 messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_REJECTED, localizationMessage);
-                message = getRejectedMsg(license, messageTemplate);
+                if(messageTemplate != null)
+                    message = getRejectedMsg(license, messageTemplate);
                 break;
 
             case ACTION_STATUS_RENEWAL_APPROVED:
                 BigDecimal amountToBePaid = getAmountToBePaid(requestInfo, license);
                 messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_APPROVED, localizationMessage);
-                message = getApprovedMsg(license, amountToBePaid, messageTemplate);
+                if(messageTemplate != null)
+                    message = getApprovedMsg(license, amountToBePaid, messageTemplate);
                 break;
 
             case ACTION_STATUS_RENEWAL_INITIATE_APPROVED:
                 BigDecimal amountToBePaid2 = getAmountToBePaid(requestInfo, license);
                 messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_APPROVED, localizationMessage);
-                message = getApprovedMsg(license, amountToBePaid2, messageTemplate);
+                if(messageTemplate != null)
+                    message = getApprovedMsg(license, amountToBePaid2, messageTemplate);
                 break;
 
             /*
@@ -105,17 +112,20 @@ public class TLRenewalNotificationUtil {
 
             case ACTION_SENDBACKTOCITIZEN_FIELDINSPECTION:
                 messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_SENDBACK_CITIZEN, localizationMessage);
-                message = getCitizenSendBack(license, messageTemplate);
+                if(messageTemplate != null)
+                    message = getCitizenSendBack(license, messageTemplate);
                 break;
 
             case ACTION_FORWARD_CITIZENACTIONREQUIRED:
                 messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_FORWARD_CITIZEN, localizationMessage);
-                message = getCitizenForward(license, messageTemplate);
+                if(messageTemplate != null)
+                    message = getCitizenForward(license, messageTemplate);
                 break;
 
             case ACTION_CANCEL_CANCELLED:
                 messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_CANCELLED, localizationMessage);
-                message = getCancelledMsg(license, messageTemplate);
+                if(messageTemplate != null)
+                    message = getCancelledMsg(license, messageTemplate);
                 break;
         }
 
@@ -387,8 +397,10 @@ public class TLRenewalNotificationUtil {
      */
     public String getOwnerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
         String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_RENEWAL_PAYMENT_OWNER, localizationMessages);
-        messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
-        messageTemplate = messageTemplate.replace("<3>", valMap.get(receiptNumberKey));
+        if(messageTemplate != null) {
+            messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
+            messageTemplate = messageTemplate.replace("<3>", valMap.get(receiptNumberKey));
+        }
         return messageTemplate;
     }
 
@@ -403,8 +415,10 @@ public class TLRenewalNotificationUtil {
      */
     public String getPayerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
         String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_RENEWAL_PAYMENT_PAYER, localizationMessages);
-        messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
-        messageTemplate = messageTemplate.replace("<3>", valMap.get(receiptNumberKey));
+        if(messageTemplate != null) {
+            messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
+            messageTemplate = messageTemplate.replace("<3>", valMap.get(receiptNumberKey));
+        }
         return messageTemplate;
     }
 

@@ -108,10 +108,12 @@ public class EDCRService {
 				: new HashMap<String, String>();
 		LinkedList<String> serviceType = context.read("edcrDetail.*.planDetail.planInformation.serviceType");
 		if(serviceType == null || serviceType.size() == 0){
+			serviceType = new LinkedList<String>();
 			serviceType.add("NEW_CONSTRUCTION");
 		}
 		LinkedList<String> applicationType = context.read("edcrDetail.*.appliactionType");
 		if(applicationType == null || applicationType.size() == 0){
+			applicationType = new LinkedList<String>();
 			applicationType.add("permit");
 		}
 		LinkedList<String> permitNumber = context.read("edcrDetail.*.permitNumber");

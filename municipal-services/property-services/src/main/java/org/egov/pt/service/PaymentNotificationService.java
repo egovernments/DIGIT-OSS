@@ -135,7 +135,7 @@ public class PaymentNotificationService {
 
 			List<SMSRequest> smsRequests = getSMSRequests(mobileNumbers, customMessage, valMap);
 			String payerMobileNo = transaction.getUser().getMobileNumber();
-			if (!mobileNumbers.contains(payerMobileNo)) {
+			if (!mobileNumbers.contains(payerMobileNo) && customMessage != null) {
 				smsRequests.add(getSMSRequestsWithoutReceipt(payerMobileNo, customMessage, valMap));
 			}
             
@@ -229,7 +229,7 @@ public class PaymentNotificationService {
 
             smsRequests.addAll(getSMSRequests(mobileNumbers,customMessage, valMap));
 			String payerMobileNo = paymentRequest.getPayment().getMobileNumber();
-			if (!mobileNumbers.contains(payerMobileNo)) {
+			if (!mobileNumbers.contains(payerMobileNo) && customMessage != null) {
 				smsRequests.add(getSMSRequestsWithoutReceipt(payerMobileNo, customMessage, valMap));
 			}
 
@@ -478,7 +478,7 @@ public class PaymentNotificationService {
     private List<SMSRequest> getSMSRequests(Set<String> mobileNumbers, String customizedMessage, Map<String, String> valMap){
         List<SMSRequest> smsRequests = new ArrayList<>();
         for(String mobileNumber : mobileNumbers){
-            if(mobileNumber!=null)
+            if(mobileNumber!=null && customizedMessage != null)
             {   String finalMessage = customizedMessage.replace("$mobile", mobileNumber);
                 if(customizedMessage.contains("<payLink>")){
                     finalMessage = finalMessage.replace("<payLink>", getPaymentLink(valMap));

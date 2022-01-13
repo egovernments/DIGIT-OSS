@@ -822,11 +822,13 @@ public class EstimationService {
 
 		if(additionalDetails.get(ADHOC_REBATE) != null) {
 			int adhocRebate = (int) additionalDetails.get(ADHOC_REBATE);
-			fees = fees.subtract(BigDecimal.valueOf(adhocRebate));
+			if(fees != null)
+				fees = fees.subtract(BigDecimal.valueOf(adhocRebate));
 		}
 		if(additionalDetails.get(ADHOC_PENALTY) != null) {
 			int adhocPenalty = (int) additionalDetails.get(ADHOC_PENALTY);
-			fees = fees.add(BigDecimal.valueOf(adhocPenalty));
+			if(fees != null)
+				fees = fees.add(BigDecimal.valueOf(adhocPenalty));
 		}
 		return fees;
 	}

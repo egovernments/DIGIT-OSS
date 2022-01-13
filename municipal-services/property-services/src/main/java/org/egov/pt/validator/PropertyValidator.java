@@ -781,7 +781,7 @@ public class PropertyValidator {
 			errorMap.put("MASTER_FETCH_FAILED", "Couldn't fetch master data for validation");
 		}
 
-		if (!codes.get(PTConstants.MDMS_PT_MUTATIONREASON).contains(reasonForTransfer))
+		if (codes != null && !codes.get(PTConstants.MDMS_PT_MUTATIONREASON).contains(reasonForTransfer))
 			errorMap.put("EG_PT_MT_REASON_ERROR",
 					"The reason for tranfer provided is invalid, please provide a valid mdms data");
 		

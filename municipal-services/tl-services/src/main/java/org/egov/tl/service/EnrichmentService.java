@@ -195,6 +195,9 @@ public class EnrichmentService {
             default:
                 break;
         }
+        if(applicationNumbers == null)
+            applicationNumbers = new ArrayList<>();
+
         ListIterator<String> itr = applicationNumbers.listIterator();
 
         Map<String, String> errorMap = new HashMap<>();

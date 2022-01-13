@@ -157,7 +157,8 @@ public class AssessmentValidator {
 				}
 			}
 		}*/
-		assessment.setAdditionalDetails(
+		if(assessmentFromDB != null)
+			assessment.setAdditionalDetails(
 				AssmtUtils.jsonMerge(assessmentFromDB.getAdditionalDetails(), assessment.getAdditionalDetails()));
 
 

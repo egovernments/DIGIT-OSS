@@ -36,8 +36,9 @@ public class PGRConsumer {
 		} catch (final Exception e) {
 			log.error("Error while listening to value: " + record + " on topic: " + topic + ": " + e);
 		}
-		log.debug("PGR data Received: " + serviceRequest.getServices().get(0).getServiceRequestId());
-		if(serviceRequest.getServices().get(0).getSource().equals(SourceEnum.RBBOT)) {
+		if(serviceRequest != null)
+			log.debug("PGR data Received: " + serviceRequest.getServices().get(0).getServiceRequestId());
+		if(serviceRequest != null && serviceRequest.getServices().get(0).getSource().equals(SourceEnum.RBBOT)) {
 			transformService.sendServiceRequestStatusMessage(serviceRequest);
 		}
 		 //TODO enable after implementation

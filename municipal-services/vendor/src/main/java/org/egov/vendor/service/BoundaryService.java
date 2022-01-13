@@ -76,7 +76,7 @@ public class BoundaryService {
 		List<Boundary> boundaryResponse = context
 				.read("$..boundary[?(@.code==\"{}\")]".replace("{}", vendor.getAddress().getLocality().getCode()));
 
-		if (boundaryResponse != null && CollectionUtils.isEmpty((boundaryResponse))) {
+		if (CollectionUtils.isEmpty((boundaryResponse))) {
 			log.debug("The boundary data was not found");
 			throw new CustomException("FSMErrorConstants.BOUNDARY_MDMS_DATA_ERROR", "The boundary data was not found");
 		}
