@@ -24,15 +24,15 @@ const CloseBtn = (props) => {
   );
 };
 
-const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, applicationDetails, applicationData, businessService, moduleCode }) => {
-    const mutation1 = Digit.Hooks.obps.useObpsAPI(
+const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, applicationDetails, applicationData, businessService, moduleCode,workflowDetails }) => {
+  const mutation1 = Digit.Hooks.obps.useObpsAPI(
       applicationData?.landInfo?.address?.city ? applicationData?.landInfo?.address?.city : tenantId,
       false
     );
    const { data: approverData, isLoading: PTALoading } = Digit.Hooks.useEmployeeSearch(
     tenantId,
     {
-      roles: action?.roles.split(",").map(role=>({code:role})),
+      roles: workflowDetails?.data?.initialActionState?.nextActions?.filter(ele=>ele?.action==action?.action)?.[0]?.assigneeRoles?.map(role=>({code:role})),
       isActive: true,
     },
     { enabled: !action?.isTerminateState }
