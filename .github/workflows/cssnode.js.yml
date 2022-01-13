@@ -13,7 +13,7 @@ on:
       # Push events to branches matching refs/heads/mona/octocat
       - 'develop'
       # Push events to branches matching refs/heads/releases/10
-      - 'publish/**'
+      - 'publish-**'
 
 jobs:
   build:
