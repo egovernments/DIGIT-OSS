@@ -3,6 +3,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.6 - 2022-01-13
+- Updated to log4j2 version 2.17.1
+
 ## 1.1.5 - 2021-07-23
 
 - Added rb bot source in pgr model for supporting reap benfit integration
