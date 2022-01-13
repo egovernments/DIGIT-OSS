@@ -125,7 +125,7 @@ public class CreateBoundaryTypeController {
 			boundaryTypeService.createBoundaryType(boundaryType);
 			redirectAttrs.addFlashAttribute("message", "msg.bndrytype.create.success");
 		}
-		if(ObjectUtils.isEmpty(boundaryType.getId()))
+		if(boundaryType== null || ObjectUtils.isEmpty(boundaryType.getId()))
 			throw new CustomException(1l, "EG_BOUNDARY_TYPE_EMPTY_ERR", "Boundary id is not present for the current Boundary Type being created");
 		return "redirect:/boundarytype/view/" + boundaryType.getId();
 	}

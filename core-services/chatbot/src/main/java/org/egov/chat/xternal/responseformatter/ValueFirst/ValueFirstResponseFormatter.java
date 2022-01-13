@@ -163,9 +163,11 @@ public class ValueFirstResponseFormatter implements ResponseFormatter {
                 String uniqueImageMessageId = UUID.randomUUID().toString();
                 request.set("$.SMS[0].@ID", uniqueImageMessageId);
             }
-            request.set("$.SMS[0].ADDRESS[0].@TO", "91" + userMobileNumber);
-            request.set("$.SMS[0].ADDRESS[0].@FROM", fromMobileNumber);
-            valueFirstRequests.add(objectMapper.readTree(request.jsonString()));
+            if(request != null){
+                request.set("$.SMS[0].ADDRESS[0].@TO", "91" + userMobileNumber);
+                request.set("$.SMS[0].ADDRESS[0].@FROM", fromMobileNumber);
+                valueFirstRequests.add(objectMapper.readTree(request.jsonString()));
+            }
         }
 
         log.debug("ValueFirst Requests : " + valueFirstRequests.size());

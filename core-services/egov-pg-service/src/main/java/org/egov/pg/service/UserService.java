@@ -74,8 +74,10 @@ public class UserService {
             log.error("Exception while fetching user: ", e);
         }
 
-        return userResponse.getUser();
-
+        if (userResponse != null){
+            return userResponse.getUser();
+        }
+        else return null;
     }
 
     /**

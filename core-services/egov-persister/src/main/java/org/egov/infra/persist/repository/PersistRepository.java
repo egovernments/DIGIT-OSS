@@ -163,7 +163,8 @@ public class PersistRepository {
                     if (dbType == null)
                         row.add(value);
                     else if (dbType.equals(TypeEnum.DATE))
-                        row.add(new java.sql.Date(Long.parseLong(value.toString())));
+                        if (value != null)
+                            row.add(new java.sql.Date(Long.parseLong(value.toString())));
                 }
 
                 else if (type.equals(TypeEnum.DATE) & value != null) {

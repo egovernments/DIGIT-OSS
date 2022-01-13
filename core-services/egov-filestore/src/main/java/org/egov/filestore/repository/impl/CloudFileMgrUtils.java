@@ -83,9 +83,14 @@ public class CloudFileMgrUtils {
 		} catch (Exception e) {
 			log.error("Error while creating different versions of the image: ", e);
 		} finally {
-			largeImage.flush();
-			mediumImg.flush();
-			smallImg.flush();
+			if (largeImage != null)
+				largeImage.flush();
+
+			if (mediumImg != null)
+				mediumImg.flush();
+
+			if (smallImg != null)
+				smallImg.flush();
 		}
 
 		return mapOfImagesAndPaths;
@@ -129,28 +134,7 @@ public class CloudFileMgrUtils {
 		return sasUrl;
 	}
 
-	/**
-	 * HMAC hash generation using SHA256 and a secret key.
-	 * 
-	 * @param key
-	 * @param input
-	 * @return
-	 */
-	private static String getHMAC256(String key, String input) {
-		Mac sha256_HMAC = null;
-		String hash = null;
-		try {
-			sha256_HMAC = Mac.getInstance("HmacSHA256");
-			SecretKeySpec secret_key = new SecretKeySpec(key.getBytes(), "HmacSHA256");
-			sha256_HMAC.init(secret_key);
-			Encoder encoder = Base64.getEncoder();
-			hash = new String(encoder.encode(sha256_HMAC.doFinal(input.getBytes("UTF-8"))));
-		} catch (Exception e) {
-			log.error("Exception while generating hash for the SAS token: ", e);
-		}
 
-		return hash;
-	}
 
 	/**
 	 * Checks if the file is an image belonging to one of the mentioned

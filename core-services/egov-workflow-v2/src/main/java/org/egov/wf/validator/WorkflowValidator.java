@@ -120,13 +120,15 @@ public class WorkflowValidator {
             if(action==null && !processStateAndAction.getCurrentState().getIsTerminateState())
                 throw new CustomException("INVALID ACTION","Action not found for businessIds: "+
                         processStateAndAction.getCurrentState().getBusinessServiceId());
+            else if (action == null)
+                return;
 
             Integer rating = null;
 
             if(!ObjectUtils.isEmpty(processStateAndAction.getProcessInstanceFromRequest()))
                 rating = processStateAndAction.getProcessInstanceFromRequest().getRating();
 
-            if(rating != null && !action.getAction().equalsIgnoreCase(RATE_ACTION)){
+            if(rating != null && action != null && !action.getAction().equalsIgnoreCase(RATE_ACTION)){
                 throw new CustomException("INVALID_ACTION", "Rating can be given only upon taking RATE action.");
             }
 

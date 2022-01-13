@@ -139,7 +139,9 @@ public class UserService {
         } catch (ParseException e) {
             log.error("Error while parsing user date",e);
         }
-        return  d.getTime();
+        if(d != null)
+            return  d.getTime();
+        else return null;
     }
 
 

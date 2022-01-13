@@ -62,18 +62,22 @@ public class DataUploadConsumer {
 
 			logger.error("Error while listening to value: " + record + " on topic: " + topic + ": ", e);
 
-			UploadJob job = req.getUploadJobs().get(0);
+			if (req != null){
 
-			AuditDetails auditDetails = job.getAuditDetails();
-			auditDetails.setLastModifiedTime(new Date().getTime());
-			job.setStartTime(System.currentTimeMillis());
+				UploadJob job = req.getUploadJobs().get(0);
 
-			job.setEndTime(System.currentTimeMillis());
-			job.setStatus(UploadJob.StatusEnum.FAILED);
-			job.setReasonForFailure("Exception occurred while processing the request");
+				AuditDetails auditDetails = job.getAuditDetails();
+				auditDetails.setLastModifiedTime(new Date().getTime());
+				job.setStartTime(System.currentTimeMillis());
 
-			dataUploadService.updateJobsWithPersister(auditDetails,job,false);
-			uploadUtils.clearInternalDirectory();
+				job.setEndTime(System.currentTimeMillis());
+				job.setStatus(UploadJob.StatusEnum.FAILED);
+				job.setReasonForFailure("Exception occurred while processing the request");
+
+				dataUploadService.updateJobsWithPersister(auditDetails,job,false);
+				uploadUtils.clearInternalDirectory();
+			}
+
 		}
 	}
 
