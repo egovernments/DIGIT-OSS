@@ -7,7 +7,13 @@ on:
   push:
     branches: [ master ]
   pull_request:
-    branches: [ develop ]
+    branches: 
+      # Push events on main branch
+      - 'master'
+      # Push events to branches matching refs/heads/mona/octocat
+      - 'develop'
+      # Push events to branches matching refs/heads/releases/10
+      - 'publish-**'
 
 jobs:
   build:
