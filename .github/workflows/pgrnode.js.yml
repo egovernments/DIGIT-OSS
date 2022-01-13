@@ -1,11 +1,11 @@
 # This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Node.js Publish PT Package
+name: pgrnode.js Publish pgr Package
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
     branches: 
       # Push events on main branch
@@ -24,6 +24,6 @@ jobs:
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
-      - run: cd frontend/micro-ui/web/micro-ui-internals/packages/modules/pt && yarn && yarn prepublish && npm publish --access public
+      - run: cd frontend/micro-ui/web/micro-ui-internals/packages/modules/pgr && yarn && yarn prepublish && npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
