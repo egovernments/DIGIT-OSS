@@ -1,6 +1,9 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.3.1 - 2022-01-13
+- Updated to log4j2 version 2.17.1
+
 ## 1.3.1 - 2021-09-28
 - Added cache burst during initialisation
 
