@@ -34,7 +34,13 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class NotificationUtil {
 
-	private BPAConfiguration config;
+	private static final String STAKEHOLDER_TYPE = "{STAKEHOLDER_TYPE}";
+
+    private static final String STAKEHOLDER_NAME = "{STAKEHOLDER_NAME}";
+
+    private static final String AMOUNT_TO_BE_PAID = "{AMOUNT_TO_BE_PAID}";
+
+    private BPAConfiguration config;
 
 	private ServiceRequestRepository serviceRequestRepository;
 
@@ -100,9 +106,9 @@ public class NotificationUtil {
 			if (!StringUtils.isEmpty(messageTemplate)) {
 				message = getInitiatedMsg(bpa, messageTemplate, serviceType);
 
-				if (message.contains("{AMOUNT_TO_BE_PAID}")) {
+				if (message.contains(AMOUNT_TO_BE_PAID)) {
 					BigDecimal amount = getAmountToBePaid(requestInfo, bpa);
-					message = message.replace("{AMOUNT_TO_BE_PAID}", amount.toString());
+					message = message.replace(AMOUNT_TO_BE_PAID, amount.toString());
 				}
 			}
 		}
@@ -128,9 +134,9 @@ public class NotificationUtil {
 			messageTemplate = getMessageTemplate(messageCode, localizationMessage);
 			if (!StringUtils.isEmpty(messageTemplate)) {
 				message = getInitiatedMsg(bpa, messageTemplate, serviceType);
-				if (message.contains("{AMOUNT_TO_BE_PAID}")) {
+				if (message.contains(AMOUNT_TO_BE_PAID)) {
 					BigDecimal amount = getAmountToBePaid(requestInfo, bpa);
-					message = message.replace("{AMOUNT_TO_BE_PAID}", amount.toString());
+					message = message.replace(AMOUNT_TO_BE_PAID, amount.toString());
 				}
 			}
 		}
@@ -256,14 +262,13 @@ public class NotificationUtil {
 	 *            Message from localization for initiate
 	 * @return customized message for initiate
 	 */
-	@SuppressWarnings("unchecked")
 	private String getInitiatedMsg(BPA bpa, String message, String serviceType) {
-		if(serviceType=="NEW_CONSTRUCTION")
-			message = message.replace("<2>", "New Construction");
+		if("NEW_CONSTRUCTION".equals(serviceType))
+			message = message.replace("{2}", "New Construction");
 		else
-			message = message.replace("<2>", serviceType);
+			message = message.replace("{2}", serviceType);
 
-		message = message.replace("<3>", bpa.getApplicationNo());
+		message = message.replace("{3}", bpa.getApplicationNo());
 		return message;
 	}
 
@@ -298,7 +303,7 @@ public class NotificationUtil {
 		List<SMSRequest> smsRequest = new LinkedList<>();
 
 		for (Map.Entry<String, String> entryset : mobileNumberToOwner.entrySet()) {
-			String customizedMsg = message.replace("<1>", entryset.getValue());
+			String customizedMsg = message.replace("{1}", entryset.getValue());
 			if (customizedMsg.contains("{RECEIPT_LINK}")) {
 				String linkToReplace = getRecepitDownloadLink(bpaRequest, entryset.getKey());
 //				log.info("Link to replace - "+linkToReplace);
@@ -341,11 +346,11 @@ public class NotificationUtil {
 			if (!StringUtils.isEmpty(messageTemplate)) {
 				message = getReplacedMessage(bpa, messageTemplate,serviceType);
 
-				if (message.contains("{AMOUNT_TO_BE_PAID}")) {
+				if (message.contains(AMOUNT_TO_BE_PAID)) {
 					BigDecimal amount = getAmountToBePaid(requestInfo, bpa);
-					message = message.replace("{AMOUNT_TO_BE_PAID}", amount.toString());
+					message = message.replace(AMOUNT_TO_BE_PAID, amount.toString());
 				}
-				if(message.contains("{STAKEHOLDER_NAME}") || message.contains("{STAKEHOLDER_TYPE}"))
+				if(message.contains(STAKEHOLDER_NAME) || message.contains(STAKEHOLDER_TYPE))
 				{
 					message  = getStakeHolderDetailsReplaced(requestInfo,bpa, message);
 				}
@@ -362,23 +367,23 @@ public class NotificationUtil {
 				bpaSearchCriteria.setOwnerIds(ownerId);
 				bpaSearchCriteria.setTenantId(bpa.getTenantId());
 				UserDetailResponse userDetailResponse = userService.getUser(bpaSearchCriteria,requestInfo);
-				if(message.contains("{STAKEHOLDER_TYPE}"))
-				{message = message.replace("{STAKEHOLDER_TYPE}", userDetailResponse.getUser().get(0).getType());}
-			if(message.contains("{STAKEHOLDER_NAME}"))
-			{message = message.replace("{STAKEHOLDER_NAME}", userDetailResponse.getUser().get(0).getName());}
+				if(message.contains(STAKEHOLDER_TYPE))
+				{message = message.replace(STAKEHOLDER_TYPE, userDetailResponse.getUser().get(0).getType());}
+			if(message.contains(STAKEHOLDER_NAME))
+			{message = message.replace(STAKEHOLDER_NAME, userDetailResponse.getUser().get(0).getName());}
 
 			 return message;
 		}
 
 		private String getReplacedMessage(BPA bpa, String message,String serviceType) {
 
-		if(serviceType=="NEW_CONSTRUCTION")
-			message = message.replace("YYYY", "New Construction");
+		if("NEW_CONSTRUCTION".equals(serviceType))
+			message = message.replace("{2}", "New Construction");
 		else
-			message = message.replace("YYYY", serviceType);
+			message = message.replace("{2}", serviceType);
 
-			message = message.replace("ZZZZ", bpa.getApplicationNo());
-		message = message.replace("XYZ", capitalize(bpa.getTenantId().split("\\.")[1]));
+			message = message.replace("{3}", bpa.getApplicationNo());
+		message = message.replace("{1}", capitalize(bpa.getTenantId().split("\\.")[1]));
 		message = message.replace("{PORTAL_LINK}",config.getUiAppHost());
 		//CCC - Designaion configurable according to ULB
 		// message = message.replace("CCC","");
@@ -389,7 +394,7 @@ public class NotificationUtil {
 
 		List<EmailRequest> emailRequest = new LinkedList<>();
 		for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
-			String customizedMsg = message.replace("XXXX",entryset.getValue());
+			String customizedMsg = message.replace("{1}",entryset.getValue());
 			customizedMsg = customizedMsg.replace("{MOBILE_NUMBER}",entryset.getKey());
 			if (customizedMsg.contains("{RECEIPT_LINK}")) {
 				String linkToReplace = getRecepitDownloadLink(bpaRequest, entryset.getKey());
