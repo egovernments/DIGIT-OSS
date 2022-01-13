@@ -213,7 +213,7 @@ const DashBoard = ({ stateCode }) => {
               options={shareOptions}
             />
           </div>
-          <div>
+          <div onClick={handlePrint}>
             <DownloadIcon />
             {t(`ES_DSS_DOWNLOAD`)}
           </div>
