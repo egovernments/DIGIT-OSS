@@ -12,7 +12,7 @@ RUN ls -lah
 #RUN node web/envs.js
 RUN cd web/ \
     && node envs.js \
-    &&  ./install-deps.sh \
+#Commented to fetch packages from the npm    &&  ./install-deps.sh \
     && yarn install \
     && yarn build 
 
