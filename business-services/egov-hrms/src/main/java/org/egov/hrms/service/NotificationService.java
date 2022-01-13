@@ -183,7 +183,7 @@ public class NotificationService {
 		} catch (Exception e) {
 			log.error("Exception while fetching from localization: " + e);
 		}
-		if (null != result) {
+		if (null != result && codes!=null && messages!= null) {
 			for (int i = 0; i < codes.size(); i++) {
 				mapOfCodesAndMessages.put(codes.get(i), messages.get(i));
 			}

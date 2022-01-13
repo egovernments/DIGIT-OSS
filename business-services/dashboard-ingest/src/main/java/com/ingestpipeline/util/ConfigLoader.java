@@ -86,7 +86,9 @@ public class ConfigLoader {
 
         } finally{
             try {
-                is.close();
+                if(is != null){
+                    is.close();
+                }
             } catch (IOException e) {
                 logger.error("Error while closing input stream. ");
             }

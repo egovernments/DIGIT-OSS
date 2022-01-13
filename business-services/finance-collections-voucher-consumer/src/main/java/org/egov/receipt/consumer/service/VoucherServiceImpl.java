@@ -281,11 +281,13 @@ public class VoucherServiceImpl implements VoucherService {
 						exception.append("and Service Attribute ").append(serviceAttribute);
 					throw new VoucherCustomException(ProcessStatus.FAILED, exception.toString());
 				}
-				String glcode = findFirst.get(0).getGlcode();
-				if (amountMapwithGlcode.get(glcode) != null) {
-					amountMapwithGlcode.put(glcode, amountMapwithGlcode.get(glcode).add(adjustedAmount));
-				} else {
-					amountMapwithGlcode.put(glcode, adjustedAmount);
+				if (findFirst != null){
+					String glcode = findFirst.get(0).getGlcode();
+					if (amountMapwithGlcode.get(glcode) != null) {
+						amountMapwithGlcode.put(glcode, amountMapwithGlcode.get(glcode).add(adjustedAmount));
+					} else {
+						amountMapwithGlcode.put(glcode, adjustedAmount);
+					}
 				}
 			}
 		}

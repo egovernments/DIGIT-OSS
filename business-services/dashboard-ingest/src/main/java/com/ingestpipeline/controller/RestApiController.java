@@ -177,7 +177,7 @@ public class RestApiController {
 		Boolean status = elasticService.searchIndex(indexName, queryString, dataContextVersion);
 		if (status) {
 			return new ResponseEntity<String>(HttpStatus.CREATED);
-		} else if (index.equals("notDefinedIndex")) {
+		} else if (index != null && index.equals("notDefinedIndex")) {
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<String>(HttpStatus.SERVICE_UNAVAILABLE);

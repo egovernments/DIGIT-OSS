@@ -379,8 +379,10 @@ public class ReadUtil {
 		}catch (Exception e){
 			LOGGER.error("Error while writing to file. ");
 		}finally {
-			bufferedWriter.flush();
-			bufferedWriter.close();
+			if(bufferedWriter != null){
+				bufferedWriter.flush();
+				bufferedWriter.close();
+			}
 		}
 	}
 }

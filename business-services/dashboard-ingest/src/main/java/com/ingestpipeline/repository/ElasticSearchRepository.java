@@ -52,8 +52,10 @@ public class ElasticSearchRepository {
 		} catch (Exception e) {
 			LOGGER.error(ERROR + e);
 		}
-		if (map != null && map.getStatusCode() != null && (map.getStatusCode() == HttpStatus.OK) || (map.getStatusCode() == HttpStatus.CREATED)) {
-			return true;
+		if(map != null){
+			if (map.getStatusCode() != null && (map.getStatusCode() == HttpStatus.OK) || (map.getStatusCode() == HttpStatus.CREATED)) {
+				return true;
+			}
 		}
 		return false;
 	}

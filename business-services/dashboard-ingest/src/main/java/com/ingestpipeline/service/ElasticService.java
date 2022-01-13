@@ -290,11 +290,13 @@ public class ElasticService implements IESService {
 							} catch (IOException e) {
 								LOGGER.error("Encountered an exception while reading the JSON Node on Thread : " + e.getMessage());
 							}
-							JsonNode dataObjectNode = null; 
-							if(dataNode != null && dataNode.get("Data") == null) { 
-								dataObjectNode = dataNode; 
-							} else { 
-								dataObjectNode= dataNode.get("Data");
+							JsonNode dataObjectNode = null;
+							if(dataNode != null){
+								if(dataNode.get("Data") == null) {
+									dataObjectNode = dataNode;
+								} else {
+									dataObjectNode= dataNode.get("Data");
+								}
 							}
 							ingestService.ingestToPipeline(
 									setIncomingData(scrollSearchParams.get(Constants.DataContexts.CONTEXT), dataContextVersion, dataObjectNode));
@@ -406,11 +408,13 @@ public class ElasticService implements IESService {
 					} catch (IOException e) {
 						LOGGER.error("Encountered an exception while reading the JSON Node on Thread : " + e.getMessage());
 					}
-					JsonNode dataObjectNode = null; 
-					if(dataNode != null && dataNode.get("Data") == null) { 
-						dataObjectNode = dataNode; 
-					} else { 
-						dataObjectNode= dataNode.get("Data");
+					JsonNode dataObjectNode = null;
+					if(dataNode != null){
+						if(dataNode.get("Data") == null) {
+							dataObjectNode = dataNode;
+						} else {
+							dataObjectNode= dataNode.get("Data");
+						}
 					}
 					ingestService.ingestToPipeline(
 							setIncomingData(scrollSearchParams.get(Constants.DataContexts.CONTEXT), dataContextVersion, dataObjectNode));

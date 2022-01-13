@@ -176,7 +176,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 			logger.error("Error while execution in Elasticsearch", ex);
 		}
 
-		if (sr.getHits() == null || sr.getHits().getTotalHits() == 0) {
+		if (sr==null || sr.getHits() == null || sr.getHits().getTotalHits() == 0) {
 			return new HashMap<>();
 		}
 		sr.getHits().getAt(0).getSourceAsMap();

@@ -87,7 +87,9 @@ public class AmazonS3ClientServiceImpl implements AmazonS3ClientService
             logger.error("error [" + ex.getMessage() + "] occurred while uploading [" + orignalFileName + "] ");
         }finally {
             try {
-                fos.close();
+                if(fos != null){
+                    fos.close();
+                }
             } catch (IOException e) {
                 logger.error("Error occured while closing file output stream.");
             }
