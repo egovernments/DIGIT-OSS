@@ -97,6 +97,7 @@ const Response = (props) => {
   useEffect(() => {
     const onSuccess = () => {
       queryClient.clear();
+      window.history.replaceState({}, "FSM_CREATE_RESPONSE")
     };
     if (state.key === "update") {
       mutation.mutate(
