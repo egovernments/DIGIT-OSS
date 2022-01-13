@@ -2,10 +2,6 @@
   "name": "micro-ui",
   "version": "1.4.0",
   "private": true,
-  "workspaces": [
-    "micro-ui-internals/packages/*",
-    "micro-ui-internals/packages/modules/*"
-  ],
   "homepage": "/digit-ui",
   "dependencies": {
     "@egovernments/digit-ui-css": "1.4.3-beta",

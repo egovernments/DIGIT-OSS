@@ -12,9 +12,11 @@ RUN ls -lah
 #RUN node web/envs.js
 RUN cd web/ \
     && node envs.js \
-#Commented to fetch packages from the npm    &&  ./install-deps.sh \
+    && git branch --show-current \
     && yarn install \
     && yarn build 
+#Commented to fetch packages from the npm    &&  ./install-deps.sh \
+
 
 #FROM nginx:mainline-alpine
 FROM ghcr.io/egovernments/nginx:mainline-alpine
