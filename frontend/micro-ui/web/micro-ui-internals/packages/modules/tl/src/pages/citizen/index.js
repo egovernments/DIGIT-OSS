@@ -1,20 +1,28 @@
 import { AppContainer, BackButton, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { Switch, useRouteMatch } from "react-router-dom";
-import TradeLicense from "../../pageComponents/TradeLicense";
-import MyApplications from "../../pages/citizen/Applications/Application";
+// import TradeLicense from "../../pageComponents/TradeLicense";
+// import MyApplications from "../../pages/citizen/Applications/Application";
 // import ApplicationDetails from "../../pages/citizen/Applications/ApplicationDetails";
-import CreateTradeLicence from "./Create";
-import EditTrade from "./EditTrade";
-import { TLList } from "./Renewal";
-import RenewTrade from "./Renewal/renewTrade";
-import SearchTradeComponent from "./SearchTrade";
+// import CreateTradeLicence from "./Create";
+// import EditTrade from "./EditTrade";
+// import { TLList } from "./Renewal";
+// import RenewTrade from "./Renewal/renewTrade";
+// import SearchTradeComponent from "./SearchTrade";
 
 const App = () => {
   const { path, url, ...match } = useRouteMatch();
   let isSuccessScreen = window.location.href.includes("acknowledgement");
 
   const ApplicationDetails = Digit.ComponentRegistryService.getComponent("ApplicationDetails");
+  const CreateTradeLicence = Digit?.ComponentRegistryService?.getComponent('TLCreateTradeLicence');
+  const EditTrade = Digit?.ComponentRegistryService?.getComponent('TLEditTrade');
+  const RenewTrade = Digit?.ComponentRegistryService?.getComponent('TLRenewTrade');
+  const TradeLicense = Digit?.ComponentRegistryService?.getComponent('TradeLicense');
+  const TLList = Digit?.ComponentRegistryService?.getComponent('TLList');
+  const SearchTradeComponent = Digit?.ComponentRegistryService?.getComponent('TLSearchTradeComponent');
+  const MyApplications = Digit?.ComponentRegistryService?.getComponent('MyApplications');
+
   
   return (
     <span className={"tl-citizen"}>
