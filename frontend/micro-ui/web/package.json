@@ -14,6 +14,7 @@
     "@egovernments/digit-ui-module-hrms": "1.4.0-beta",
     "@egovernments/digit-ui-module-mcollect": "1.4.0-beta",
     "@egovernments/digit-ui-module-obps": "1.4.0-beta",
+    "@egovernments/digit-ui-module-noc": "1.4.0-beta",
     "@egovernments/digit-ui-module-pgr": "1.4.0-beta",
     "@egovernments/digit-ui-module-pt": "1.4.0-beta",
     "@egovernments/digit-ui-module-receipts": "1.4.0-beta",
