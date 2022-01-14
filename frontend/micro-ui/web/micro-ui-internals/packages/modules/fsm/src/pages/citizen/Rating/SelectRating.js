@@ -13,6 +13,16 @@ const SelectRating = ({ parentRoute }) => {
   const mutation = Digit.Hooks.fsm.useApplicationUpdate(tenantId);
   const [answers, setAnswers] = useState({});
 
+  const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
+  const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
+  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
+
+  useEffect(() => {
+    setMutationHappened(false);
+    clearSuccessData();
+    clearError();
+  }, []);
+
   function handleSubmit(data) {
     const { rating, comments } = data;
     const allAnswers = { ...data, ...answers };
