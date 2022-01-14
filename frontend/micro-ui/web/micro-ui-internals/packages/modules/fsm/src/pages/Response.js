@@ -99,23 +99,25 @@ const Response = (props) => {
       queryClient.clear();
       window.history.replaceState({}, "FSM_CREATE_RESPONSE")
     };
-    if (state.key === "update") {
-      mutation.mutate(
-        {
-          fsm: state.applicationData,
-          workflow: {
-            action: state.action,
-            ...state.actionData,
+    if(!!state){
+      if (state.key === "update") {
+        mutation.mutate(
+          {
+            fsm: state.applicationData,
+            workflow: {
+              action: state.action,
+              ...state.actionData,
+            },
           },
-        },
-        {
+          {
+            onSuccess,
+          }
+        );
+      } else {
+        mutation.mutate(state, {
           onSuccess,
-        }
-      );
-    } else {
-      mutation.mutate(state, {
-        onSuccess,
-      });
+        });
+      }
     }
   }, []);
 
