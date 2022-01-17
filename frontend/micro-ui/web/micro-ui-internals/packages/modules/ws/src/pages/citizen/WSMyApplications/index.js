@@ -8,7 +8,7 @@ import { propertyCardBodyStyle } from "../../../utils";
 export const WSMyApplications = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-
+  const user = Digit.UserService.getUser();
   let filter = window.location.href.split("/").pop();
   let t1;
   let off;
@@ -19,15 +19,16 @@ export const WSMyApplications = () => {
     t1 = 4;
   }
   let filter1 = !isNaN(parseInt(filter))
-    ? { limit: "50", sortOrder: "ASC", sortBy: "createdTime", offset: off }
-    : { limit: "4", sortOrder: "ASC", sortBy: "createdTime", offset: "0" };
+    ? { tenantId: tenantId, mobileNumber: user?.info?.mobileNumber }
+    : { tenantId: tenantId, mobileNumber: user?.info?.mobileNumber };
 
-  const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch({ filters: filter1 }, { filters: filter1 });
+  const { isLoading, isError, error, data } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter1 }, { filters: filter1 });
   if (isLoading) {
     return <Loader />;
   }
-  const { Properties: applicationsList } = data || {};
 
+  const { WaterConnection: applicationsList } = data || {};
+  console.log(applicationsList);
   return (
     <React.Fragment>
       <Header>{`${t("My Applications")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>

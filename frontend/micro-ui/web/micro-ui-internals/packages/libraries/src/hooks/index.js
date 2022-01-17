@@ -177,6 +177,7 @@ import WSSearchMdmsTypes from "./ws/WSSearchMdmsTypes";
 import usewsTenants from "./ws/useTenants";
 import useWaterSearch from "./ws/useWaterSearch";
 import useSewarageSearch from "./ws/useSewarageSearch";
+import useMyApplicationSearch from "./ws/useMyApplicationSearch";
 
 const pgr = {
   useComplaintDetails,
@@ -358,7 +359,8 @@ const ws = {
   WSSearchMdmsTypes,
   usewsTenants,
   useWaterSearch,
-  useSewarageSearch
+  useSewarageSearch,
+  useMyApplicationSearch
 }
 
 const Hooks = {
