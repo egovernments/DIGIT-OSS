@@ -482,6 +482,9 @@ public class EnrichmentService {
                     default:
                         break;
                 }
+                if(licenseNumbers == null)
+                    licenseNumbers = new ArrayList<>();
+
                 ListIterator<String> itr = licenseNumbers.listIterator();
 
                 Map<String, String> errorMap = new HashMap<>();
