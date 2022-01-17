@@ -25,6 +25,7 @@ import com.tarento.analytics.helper.ComputeHelper;
 import com.tarento.analytics.helper.ComputeHelperFactory;
 
 import com.tarento.analytics.utils.ResponseRecorder;
+import org.springframework.util.CollectionUtils;
 
 /**
  * This handles ES response for single index, multiple index to represent single data value
@@ -125,7 +126,7 @@ public class MetricChartResponseHandler implements IResponseHandler{
 
         String symbol = chartNode.get(IResponseHandler.VALUE_TYPE).asText();
         try{
-            Data data = new Data(chartName, action.equals(PERCENTAGE) && aggrsPaths.size()==2? percentageValue(percentageList, isRoundOff) : (totalValues==null || totalValues.isEmpty())? 0.0 :totalValues.stream().reduce(0.0, Double::sum), symbol);
+            Data data = new Data(chartName, action.equals(PERCENTAGE) && aggrsPaths.size()==2 ? percentageValue(percentageList, isRoundOff) : (CollectionUtils.isEmpty(totalValues))? 0.0 :totalValues.stream().reduce(0.0, Double::sum), symbol);
             responseRecorder.put(visualizationCode, request.getModuleLevel(), data);
             dataList.add(data);
             if(chartNode.get(POST_AGGREGATION_THEORY) != null) { 

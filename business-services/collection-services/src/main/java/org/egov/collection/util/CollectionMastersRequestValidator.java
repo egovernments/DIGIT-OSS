@@ -57,6 +57,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 
 @Service
 @Slf4j
@@ -81,7 +82,7 @@ public class CollectionMastersRequestValidator {
 
         }
 
-        if (errorFields != null && !errorFields.isEmpty()) {
+        if (!CollectionUtils.isEmpty(errorFields)) {
             error = Error.builder().code(HttpStatus.BAD_REQUEST.value())
                     .message(CollectionServiceConstants.SEARCH_BANKACCOUNT_SERVICE_MAPPING_REQUEST)
                     .fields(errorFields).build();

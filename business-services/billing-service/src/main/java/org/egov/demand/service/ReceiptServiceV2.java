@@ -54,7 +54,7 @@ public class ReceiptServiceV2 {
 
 	public void updateDemandFromReceipt(BillRequestV2 billReq, Boolean isReceiptCancellation) {
 
-		if (billReq == null || billReq != null && CollectionUtils.isEmpty(billReq.getBills())) {
+		if (CollectionUtils.isEmpty(billReq.getBills())) {
 
 			log.info(" no data found in payment for update : {} " + billReq);
 			return;
