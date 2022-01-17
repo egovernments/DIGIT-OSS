@@ -186,9 +186,11 @@ public class NotificationUtil {
 	 */
 	private String getInitiatedMsg(TradeLicense license, String message) {
 		// message = message.replace("<1>",license.);
-		message = message.replace("<2>", license.getTradeName());
-		message = message.replace("<3>", license.getApplicationNumber());
 
+		if (message != null){
+			message = message.replace("<2>", license.getTradeName());
+			message = message.replace("<3>", license.getApplicationNumber());
+		}
 		return message;
 	}
 
@@ -203,9 +205,10 @@ public class NotificationUtil {
 	 */
 	private String getAppliedMsg(TradeLicense license, String message) {
 		// message = message.replace("<1>",);
-		message = message.replace("<2>", license.getTradeName());
-		message = message.replace("<3>", license.getApplicationNumber());
-
+		if (message != null) {
+			message = message.replace("<2>", license.getTradeName());
+			message = message.replace("<3>", license.getApplicationNumber());
+		}
 		return message;
 	}
 
@@ -220,7 +223,9 @@ public class NotificationUtil {
 	 */
 	private String getApprovalPendingMsg(TradeLicense license, String message) {
 		// message = message.replace("<1>",);
-		message = message.replace("<2>", license.getTradeName());
+		if (message != null) {
+			message = message.replace("<2>", license.getTradeName());
+		}
 
 		return message;
 	}
@@ -235,20 +240,23 @@ public class NotificationUtil {
 	 * @return customized message for approved
 	 */
 	private String getApprovedMsg(TradeLicense license, BigDecimal amountToBePaid, String message) {
-		message = message.replace("<2>", license.getTradeName());
-		message = message.replace("<3>", amountToBePaid.toString());
+
+		if (message != null) {
+			message = message.replace("<2>", license.getTradeName());
+			message = message.replace("<3>", amountToBePaid.toString());
 
 
-		String UIHost = config.getUiAppHost();
+			String UIHost = config.getUiAppHost();
 
-		String paymentPath = config.getPayLinkSMS();
-		paymentPath = paymentPath.replace("$consumercode",license.getApplicationNumber());
-		paymentPath = paymentPath.replace("$tenantId",license.getTenantId());
-		paymentPath = paymentPath.replace("$businessservice",businessService_TL);
+			String paymentPath = config.getPayLinkSMS();
+			paymentPath = paymentPath.replace("$consumercode", license.getApplicationNumber());
+			paymentPath = paymentPath.replace("$tenantId", license.getTenantId());
+			paymentPath = paymentPath.replace("$businessservice", businessService_TL);
 
-		String finalPath = UIHost + paymentPath;
+			String finalPath = UIHost + paymentPath;
 
-		message = message.replace(PAYMENT_LINK_PLACEHOLDER,getShortenedUrl(finalPath));
+			message = message.replace(PAYMENT_LINK_PLACEHOLDER, getShortenedUrl(finalPath));
+		}
 		return message;
 	}
 
@@ -263,7 +271,8 @@ public class NotificationUtil {
 	 */
 	private String getRejectedMsg(TradeLicense license, String message) {
 		// message = message.replace("<1>",);
-		message = message.replace("<2>", license.getTradeName());
+		if (message != null)
+			message = message.replace("<2>", license.getTradeName());
 
 		return message;
 	}
@@ -278,7 +287,9 @@ public class NotificationUtil {
 	 * @return customized message for rejected
 	 */
 	private String getFieldInspectionMsg(TradeLicense license, String message) {
-		message = message.replace("<2>", license.getTradeName());
+		if (message != null)
+			message = message.replace("<2>", license.getTradeName());
+
 		return message;
 	}
 
@@ -292,8 +303,10 @@ public class NotificationUtil {
 	 * @return customized message for cancelled
 	 */
 	private String getCitizenSendBack(TradeLicense license, String message) {
-		message = message.replace("<2>", license.getApplicationNumber());
-		message = message.replace("<3>", license.getTradeName());
+		if (message != null) {
+			message = message.replace("<2>", license.getApplicationNumber());
+			message = message.replace("<3>", license.getTradeName());
+		}
 
 		return message;
 	}
@@ -308,9 +321,10 @@ public class NotificationUtil {
 	 * @return customized message for cancelled
 	 */
 	private String getCitizenForward(TradeLicense license, String message) {
-		message = message.replace("<2>", license.getApplicationNumber());
-		message = message.replace("<3>", license.getTradeName());
-
+		if (message != null) {
+			message = message.replace("<2>", license.getApplicationNumber());
+			message = message.replace("<3>", license.getTradeName());
+		}
 		return message;
 	}
 
@@ -324,8 +338,11 @@ public class NotificationUtil {
 	 * @return customized message for cancelled
 	 */
 	private String getCancelledMsg(TradeLicense license, String message) {
-		message = message.replace("<2>", license.getTradeName());
-		message = message.replace("<3>", license.getLicenseNumber());
+
+		if (message != null) {
+			message = message.replace("<2>", license.getTradeName());
+			message = message.replace("<3>", license.getLicenseNumber());
+		}
 
 		return message;
 	}
@@ -358,9 +375,11 @@ public class NotificationUtil {
 	 */
 	public String getPayerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
 		String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_PAYMENT_PAYER, localizationMessages);
-		messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
-		messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
-		messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
+		if (messageTemplate != null) {
+			messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
+			messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
+			messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
+		}
 		return messageTemplate;
 	}
 
@@ -374,10 +393,13 @@ public class NotificationUtil {
 	public String getReminderMsg(TradeLicense license, String localizationMessages) {
 
 		String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_TL_REMINDER, localizationMessages);
-		String expiryDate = new SimpleDateFormat("dd/MM/yyyy").format(license.getValidTo());
-		messageTemplate = messageTemplate.replace(NOTIF_TRADE_NAME_KEY, license.getTradeName());
-		messageTemplate = messageTemplate.replace(NOTIF_EXPIRY_DATE_KEY, expiryDate);
-		messageTemplate = messageTemplate.replace(NOTIF_TRADE_LICENSENUMBER_KEY, license.getLicenseNumber());
+		
+		if(messageTemplate != null) {
+			String expiryDate = new SimpleDateFormat("dd/MM/yyyy").format(license.getValidTo());
+			messageTemplate = messageTemplate.replace(NOTIF_TRADE_NAME_KEY, license.getTradeName());
+			messageTemplate = messageTemplate.replace(NOTIF_EXPIRY_DATE_KEY, expiryDate);
+			messageTemplate = messageTemplate.replace(NOTIF_TRADE_LICENSENUMBER_KEY, license.getLicenseNumber());
+		}
 		return messageTemplate;
 	}
 
