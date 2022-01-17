@@ -43,7 +43,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.egov.tracer.model.CustomException;
 import org.elasticsearch.search.aggregations.support.ValuesSource.Numeric;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -128,21 +128,29 @@ public class ReadUtil {
 		int workbookSheetIndex = -1;
 		String getFileExtension = FilenameUtils.getExtension(path.toString());
 		Workbook workbook = null;
-		if (getFileExtension.endsWith("xlsx")) {
-			workbook = new XSSFWorkbook();
-			workbook = WorkbookFactory.create(new File(path.toString()));
-		} else {
-			throw new Exception("invalid file, should be xlsx");
-		}
-
 		JSONArray workbookToJsonArray = new JSONArray();
-		for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
-			Sheet sheet = workbook.getSheetAt(i);
-			workbookSheetName = sheet.getSheetName();
-			workbookSheetIndex = workbook.getSheetIndex(workbookSheetName);
-			if (workbookSheetName != null && workbookSheetName.length() > 0) {
-				workbookToJsonArray = workbookToJsonArray.put(getSheetToJsonObject(workbook, sheet));
+		try {
+			if (getFileExtension.endsWith("xlsx")) {
+				workbook = WorkbookFactory.create(new File(path.toString()));
+			} else {
+				throw new Exception("invalid file, should be xlsx");
 			}
+
+			for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+				Sheet sheet = workbook.getSheetAt(i);
+				workbookSheetName = sheet.getSheetName();
+				workbookSheetIndex = workbook.getSheetIndex(workbookSheetName);
+				if (workbookSheetName != null && workbookSheetName.length() > 0) {
+					workbookToJsonArray = workbookToJsonArray.put(getSheetToJsonObject(workbook, sheet));
+				}
+			}
+		}
+		catch (IOException e){
+			throw new CustomException("WORKBOOK_ERROR","Failed to open WorkBook");
+		}
+		finally {
+			if (workbook != null)
+				workbook.close();
 		}
 
 		JSONArray bookInJsonArray = new JSONArray();
