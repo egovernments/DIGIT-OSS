@@ -100,7 +100,7 @@ public class WSCalculationConfiguration {
 
 	 @Value("${ws.calculator.demand.failed}")
 	 private String onDemandsFailure;
-
+	 
 	 
 	//Localization
 	@Value("${egov.localization.host}")
@@ -198,5 +198,9 @@ public class WSCalculationConfiguration {
 	@Value("${workflow.process.search.path}")
 	private String searchWorkflowProcessEndPoint;
 
+	@Value("${bulk.demand.batch.value}")
+	private Integer bulkbatchSize;
 
+	@Value("${bulk.demand.offset.value}")
+	private Integer batchOffset;
 }

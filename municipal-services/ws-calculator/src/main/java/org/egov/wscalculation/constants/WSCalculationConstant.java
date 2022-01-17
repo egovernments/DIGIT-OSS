@@ -47,6 +47,8 @@ public class WSCalculationConstant {
 	 */
 
 	public static final String CONSUMER_CODE_SEARCH_FIELD_NAME = "consumerCode=";
+	
+	public static final String PAYMENT_COMPLETED_SEARCH_FIELD_NAME = "isPaymentCompleted=";
 
 	public static final String DEMAND_CANCELLED_STATUS = DemandStatus.CANCELLED.toString();
 
@@ -56,6 +58,7 @@ public class WSCalculationConstant {
 	public static final String EG_WS_FINANCIAL_MASTER_NOT_FOUND_MSG = "No Financial Year data is available for the given year value of : ";
 
 	public static final String BUSINESSSERVICE_FIELD_FOR_SEARCH_URL = "businessService=";
+	
 	public static final String WATER_TAX_SERVICE_CODE = "WS";
 
 	public static final String EMPTY_DEMAND_ERROR_CODE = "EMPTY_DEMANDS";
@@ -176,14 +179,6 @@ public class WSCalculationConstant {
 
 	public static final String DEMAND_FAILURE_MESSAGE_EMAIL = "WATER_CONNECTION_DEMAND_FAILURE_EMAIL_MESSAGE";
 
-	public static final String BILL_SUCCESS_MESSAGE_SMS = "WATER_CONNECTION_BILL_SUCCESSFUL_SMS_MESSAGE";
-
-	public static final String BILL_FAILURE_MESSAGE_SMS = "WATER_CONNECTION_BILL_FAILURE_SMS_MESSAGE";
-
-	public static final String BILL_SUCCESS_MESSAGE_EMAIL = "WATER_CONNECTION_BILL_SUCCESSFUL_EMAIL_MESSAGE";
-
-	public static final String BILL_FAILURE_MESSAGE_EMAIL = "WATER_CONNECTION_BILL_FAILURE_EMAIL_MESSAGE";
-
 	public static final String WATER_CONNECTION_BILL_GENERATION_SMS_MESSAGE = "WATER_CONNECTION_BILL_GENERATION_SMS_MESSAGE";
 	
 	public static final String WATER_CONNECTION_BILL_GENERATION_APP_MESSAGE = "WATER_CONNECTION_BILL_GENERATION_APP_MESSAGE";
@@ -257,23 +252,33 @@ public class WSCalculationConstant {
 	
 	public static final String WS_TIME_ADHOC_REBATE = "WS_TIME_ADHOC_REBATE";
 
-	//Notification
-	public static final String CHANNEL_NAME_SMS = "SMS";
+	public static final String MDMS_CACHE_KEY = "WSMasterData";
 
-	public static final String CHANNEL_NAME_EVENT = "EVENT";
+	public static final String ADHOC_PENALTY_REASON = "adhocPenaltyReason";
 
-	public static final String CHANNEL_NAME_EMAIL = "EMAIL";
+	public static final String ADHOC_PENALTY_COMMENT = "adhocPenaltyComment";
 
-	public static final String MODULECONSTANT = "module";
+	public static final String ADHOC_REBATE_REASON = "adhocRebateReason";
 
-	public static final String ACTION = "action";
+	public static final String ADHOC_REBATE_COMMENT = "adhocRebateComment";
 
-	public static final String CHANNEL_LIST = "channelList";
+	public static final String INITIAL_METER_READING_CONST = "initialMeterReading";
 
-	public static final String CHANNEL = "Channel";
+	public static final String SUBMIT_APPLICATION_CONST = "SUBMIT_APPLICATION";
 
-	public static final String ACTION_FOR_DEMAND = "DEMAND";
+	public static final String DETAILS_PROVIDED_BY = "detailsProvidedBy";
 
-	public static final String ACTION_FOR_BILL = "BILL";
+	public static final String APP_CREATED_DATE = "appCreatedDate";
+
+	public static final String ESTIMATION_FILESTORE_ID = "estimationFileStoreId";
+
+	public static final String SANCTION_LETTER_FILESTORE_ID = "sanctionFileStoreId";
+
+	public static final String ESTIMATION_DATE_CONST = "estimationLetterDate";
+
+	public static final String LOCALITY = "locality";
+
+
+
 
 }

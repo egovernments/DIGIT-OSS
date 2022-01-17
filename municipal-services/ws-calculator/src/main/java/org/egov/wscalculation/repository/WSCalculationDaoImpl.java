@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.egov.wscalculation.repository.builder.WSCalculatorQueryBuilder;
+import org.egov.wscalculation.repository.rowmapper.WaterRowMapper;
 import org.egov.wscalculation.web.models.MeterConnectionRequest;
 import org.egov.wscalculation.web.models.MeterReading;
 import org.egov.wscalculation.web.models.MeterReadingSearchCriteria;
@@ -14,6 +15,7 @@ import org.egov.wscalculation.producer.WSCalculationProducer;
 import org.egov.wscalculation.repository.rowmapper.DemandSchedulerRowMapper;
 import org.egov.wscalculation.repository.rowmapper.MeterReadingCurrentReadingRowMapper;
 import org.egov.wscalculation.repository.rowmapper.MeterReadingRowMapper;
+import org.egov.wscalculation.web.models.WaterConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -42,6 +44,9 @@ public class WSCalculationDaoImpl implements WSCalculationDao {
 	
 	@Autowired
 	private DemandSchedulerRowMapper demandSchedulerRowMapper;
+
+	@Autowired
+	private WaterRowMapper waterRowMapper;
 	
 
 	@Value("${egov.meterservice.createmeterconnection}")
@@ -125,11 +130,11 @@ public class WSCalculationDaoImpl implements WSCalculationDao {
 	}
 	
 	@Override
-	public List<String> getConnectionsNoList(String tenantId, String connectionType) {
+	public List<WaterConnection> getConnectionsNoList(String tenantId, String connectionType, Integer batchOffset, Integer batchsize, Long fromDate, Long toDate) {
 		List<Object> preparedStatement = new ArrayList<>();
-		String query = queryBuilder.getConnectionNumberList(tenantId, connectionType, preparedStatement);
+		String query = queryBuilder.getConnectionNumberList(tenantId, connectionType, preparedStatement, batchOffset, batchsize, fromDate, toDate);
 		log.info("water " + connectionType + " connection list : " + query);
-		return jdbcTemplate.query(query, preparedStatement.toArray(), demandSchedulerRowMapper);
+		return jdbcTemplate.query(query, preparedStatement.toArray(), waterRowMapper);
 	}
 
 	@Override
@@ -145,5 +150,13 @@ public class WSCalculationDaoImpl implements WSCalculationDao {
 		String query = queryBuilder.isBillingPeriodExists(connectionNo, billingPeriod, preparedStatement);
 		log.info("Is BillingPeriod Exits Query: " + query);
 		return jdbcTemplate.queryForObject(query, preparedStatement.toArray(), Integer.class);
+	}
+
+	@Override
+	public long getConnectionCount(String tenantid){
+		String query = queryBuilder.getCountQuery();
+		query =	query.replace("{}",tenantid);
+		long count = jdbcTemplate.queryForObject(query, Integer.class);
+		return count;
 	}
 }

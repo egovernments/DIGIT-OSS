@@ -339,7 +339,7 @@ public class CalculatorUtil {
 		StringBuilder url = new StringBuilder(calculationConfig.getPropertyHost());
 		url.append(calculationConfig.getSearchPropertyEndPoint()).append("?");
 		url.append("tenantId=").append(tenantId).append("&");
-		url.append("propertyIds=").append(propertyId);
+		url.append("uuids=").append(propertyId);
 		return url.toString();
 	}
 

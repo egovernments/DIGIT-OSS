@@ -1,15 +1,14 @@
 package org.egov.wscalculation.web.controller;
 
 
-import java.util.*;
+import java.util.List;
 
 import javax.validation.Valid;
 
-import lombok.extern.slf4j.Slf4j;
-import org.egov.wscalculation.config.WSCalculationConfiguration;
-import org.egov.wscalculation.constants.WSCalculationConstant;
-import org.egov.wscalculation.service.*;
 import org.egov.wscalculation.web.models.*;
+import org.egov.wscalculation.service.DemandService;
+import org.egov.wscalculation.service.WSCalculationService;
+import org.egov.wscalculation.service.WSCalculationServiceImpl;
 import org.egov.wscalculation.util.ResponseInfoFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 
-@Slf4j
 @Getter
 @Setter
 @Builder
@@ -45,14 +43,6 @@ public class CalculatorController {
 	
 	@Autowired
 	private final ResponseInfoFactory responseInfoFactory;
-
-	@Autowired
-	private final PaymentNotificationService paymentNotificationService;
-
-	@Autowired
-	private WSCalculationConfiguration config;
-	@Autowired
-	private DemandNotificationService demandNotificationService;
 	
 	@PostMapping("/_estimate")
 	public ResponseEntity<CalculationRes> getTaxEstimation(@RequestBody @Valid CalculationReq calculationReq) {
@@ -77,7 +67,7 @@ public class CalculatorController {
 	@PostMapping("/_updateDemand")
 	public ResponseEntity<DemandResponse> updateDemands(@RequestBody @Valid RequestInfoWrapper requestInfoWrapper,
 			@ModelAttribute @Valid GetBillCriteria getBillCriteria) {
-		List<Demand> demands = demandService.updateDemands(getBillCriteria, requestInfoWrapper);
+		List<Demand> demands = demandService.updateDemands(getBillCriteria, requestInfoWrapper, false);
 		DemandResponse response = DemandResponse.builder().demands(demands)
 				.responseInfo(
 				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
@@ -86,8 +76,8 @@ public class CalculatorController {
 	}
 	
 	@PostMapping("/_jobscheduler")
-	public void jobscheduler(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper) {
-		wSCalculationService.generateDemandBasedOnTimePeriod(requestInfoWrapper.getRequestInfo());
+	public void jobscheduler(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper, @ModelAttribute @Valid BulkBillCriteria bulkBillCriteria) {
+		wSCalculationService.generateDemandBasedOnTimePeriod(requestInfoWrapper.getRequestInfo(), bulkBillCriteria);
 	}
 	
 	@PostMapping("/_applyAdhocTax")
@@ -97,5 +87,6 @@ public class CalculatorController {
 				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(adhocTaxReq.getRequestInfo(), true))
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
+
 	}
 }

@@ -21,16 +21,17 @@ import org.egov.mdms.model.MdmsResponse;
 import org.egov.tracer.model.CustomException;
 import org.egov.wscalculation.config.WSCalculationConfiguration;
 import org.egov.wscalculation.constants.WSCalculationConstant;
+import org.egov.wscalculation.repository.ServiceRequestRepository;
+import org.egov.wscalculation.util.CalculatorUtil;
+import org.egov.wscalculation.util.WSCalculationUtil;
 import org.egov.wscalculation.web.models.CalculationCriteria;
 import org.egov.wscalculation.web.models.RequestInfoWrapper;
 import org.egov.wscalculation.web.models.TaxHeadMaster;
 import org.egov.wscalculation.web.models.TaxHeadMasterResponse;
 import org.egov.wscalculation.web.models.TaxPeriod;
 import org.egov.wscalculation.web.models.TaxPeriodResponse;
-import org.egov.wscalculation.repository.ServiceRequestRepository;
-import org.egov.wscalculation.util.CalculatorUtil;
-import org.egov.wscalculation.util.WSCalculationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -382,6 +383,7 @@ public class MasterDataService {
 	 * @param tenantId TenantId
 	 * @return all masters that is needed for calculation and demand generation.
 	 */
+	@Cacheable(value = WSCalculationConstant.MDMS_CACHE_KEY , sync = true)
 	public Map<String, Object> loadMasterData(RequestInfo requestInfo, String tenantId) {
 		Map<String, Object> master = getMasterMap(requestInfo, tenantId, WSCalculationConstant.SERVICE_FIELD_VALUE_WS);
 		loadBillingSlabsAndTimeBasedExemptions(requestInfo, tenantId, master);

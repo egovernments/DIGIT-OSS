@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Builder
 	
 public class GetBillCriteria {
+	
 	private String connectionNumber;
 	
 	@Default
@@ -32,5 +33,7 @@ public class GetBillCriteria {
 	private String billId;
 
 	private List<String> consumerCodes;
+	
+	private Boolean isPaymentCompleted;
 	
 }

@@ -1,13 +1,18 @@
 package org.egov.wscalculation.util;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.egov.wscalculation.config.WSCalculationConfiguration;
 import org.egov.wscalculation.constants.WSCalculationConstant;
+import org.egov.wscalculation.repository.ServiceRequestRepository;
 import org.egov.wscalculation.web.models.DemandDetail;
 import org.egov.wscalculation.web.models.DemandDetailAndCollection;
 import org.egov.wscalculation.web.models.GetBillCriteria;
@@ -16,7 +21,6 @@ import org.egov.wscalculation.web.models.PropertyCriteria;
 import org.egov.wscalculation.web.models.PropertyResponse;
 import org.egov.wscalculation.web.models.RequestInfoWrapper;
 import org.egov.wscalculation.web.models.WaterConnectionRequest;
-import org.egov.wscalculation.repository.ServiceRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -88,9 +92,11 @@ public class WSCalculationUtil {
 	 * @return - Returns Demand Search URL
 	 */
 	public StringBuilder getDemandSearchUrl(GetBillCriteria getBillCriteria) {
+		
+		StringBuilder url;
 
 		if (CollectionUtils.isEmpty(getBillCriteria.getConsumerCodes()))
-			return new StringBuilder().append(configurations.getBillingServiceHost())
+			url = new StringBuilder().append(configurations.getBillingServiceHost())
 					.append(configurations.getDemandSearchEndPoint()).append(WSCalculationConstant.URL_PARAMS_SEPARATER)
 					.append(WSCalculationConstant.TENANT_ID_FIELD_FOR_SEARCH_URL).append(getBillCriteria.getTenantId())
 					.append(WSCalculationConstant.SEPARATER)
@@ -99,13 +105,21 @@ public class WSCalculationUtil {
 					.append(WSCalculationConstant.WS_CONSUMER_CODE_SEPARATOR)
 					.append(getBillCriteria.getConnectionNumber());
 
-		else
-			return new StringBuilder().append(configurations.getBillingServiceHost())
+		else {
+			 url = new StringBuilder().append(configurations.getBillingServiceHost())
 					.append(configurations.getDemandSearchEndPoint()).append(WSCalculationConstant.URL_PARAMS_SEPARATER)
 					.append(WSCalculationConstant.TENANT_ID_FIELD_FOR_SEARCH_URL).append(getBillCriteria.getTenantId())
 					.append(WSCalculationConstant.SEPARATER)
 					.append(WSCalculationConstant.CONSUMER_CODE_SEARCH_FIELD_NAME)
 					.append(StringUtils.join(getBillCriteria.getConsumerCodes(), ","));
+			 
+			 if(getBillCriteria.getIsPaymentCompleted() != null)
+				 url.append(WSCalculationConstant.SEPARATER)
+				 .append(WSCalculationConstant.PAYMENT_COMPLETED_SEARCH_FIELD_NAME)
+				 .append(getBillCriteria.getIsPaymentCompleted());
+		}
+		
+		return url;
 
 	}
 
@@ -155,9 +169,9 @@ public class WSCalculationUtil {
 	 */
 	public List<Property> propertySearch(WaterConnectionRequest waterConnectionRequest) {
 		PropertyCriteria propertyCriteria = new PropertyCriteria();
-		HashSet<String> propertyIds = new HashSet<>();
-		propertyIds.add(waterConnectionRequest.getWaterConnection().getPropertyId());
-		propertyCriteria.setPropertyIds(propertyIds);
+		HashSet<String> propertyUUID = new HashSet<>();
+		propertyUUID.add(waterConnectionRequest.getWaterConnection().getPropertyId());
+		propertyCriteria.setUuids(propertyUUID);
 		propertyCriteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
 		Object result = serviceRequestRepository.fetchResult(getPropertyURL(propertyCriteria),
 				RequestInfoWrapper.builder().requestInfo(waterConnectionRequest.getRequestInfo()).build());
@@ -165,6 +179,29 @@ public class WSCalculationUtil {
 		if (CollectionUtils.isEmpty(propertyList)) {
 			throw new CustomException("INCORRECT_PROPERTY_ID", "PROPERTY SEARCH ERROR!");
 		}
+		return propertyList;
+	}
+	
+	/**
+	 * 
+	 * @param waterConnectionRequest
+	 *            WaterConnectionRequest containing property
+	 * @return List of Property
+	 */
+	public List<Property> propertySearch(RequestInfo requestInfo, Set<String> propertyUuids, String tenantId) {
+		
+		PropertyCriteria propertyCriteria = PropertyCriteria.builder()
+				.uuids(propertyUuids)
+				.tenantId(tenantId)
+				.build();
+		
+		StringBuilder url = getPropertyURL(propertyCriteria);
+		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder()
+				.requestInfo(requestInfo)
+				.build();
+		
+		Object result = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
+		List<Property> propertyList = getPropertyDetails(result);
 		return propertyList;
 	}
 
