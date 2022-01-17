@@ -183,8 +183,11 @@ public abstract class JdbcRepository {
         Object val = null;
         while (ob1 != null) {
             try {
-                val = declaredField.get(obj);
-                break;
+                if (declaredField != null){
+                    val = declaredField.get(obj);
+                    break;
+                }
+
             } catch (Exception e) {
                 if (ob1.getClass().getSuperclass() != null) {
                     ob1 = ob1.getClass().getSuperclass();
@@ -236,8 +239,11 @@ public abstract class JdbcRepository {
              * System.out.println( "Unable to find the field in this class and its super class for field" + s); } }
              */
             try {
-                f.setAccessible(true);
-                paramValues.put(s, f.get(ob));
+                if (f != null){
+                    f.setAccessible(true);
+                    paramValues.put(s, f.get(ob));
+                }
+
             } catch (IllegalArgumentException e1) {
                 // TODO Auto-generated catch block
                 LOG.error("Illegal Argument exception occurred: " + e1.getMessage());
