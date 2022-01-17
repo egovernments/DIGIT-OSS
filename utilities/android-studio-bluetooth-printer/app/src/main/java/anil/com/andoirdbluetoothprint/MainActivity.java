@@ -131,17 +131,22 @@ public class MainActivity extends Activity {
     }
 
    private void updateReceiptText() {
-        Uri data = getIntent().getData();
-        params = data.getPathSegments();
-        printText=new StringBuffer("");
-        for(String str:params)
-        {
-            printText.append(str).append('/');
+        try{
+            Uri data = getIntent().getData();
+            params = data.getPathSegments();
+            printText=new StringBuffer("");
+            for(String str:params)
+            {
+                printText.append(str).append('/');
+            }
+            printText.deleteCharAt(printText.length()-1);
+            printFinal = printText.toString().replace(NEW_LINE_SYMBOL, "\n");
+            if (printFinal != null)
+                receiptText.setText(printFinal);
         }
-        printText.deleteCharAt(printText.length()-1);
-        printFinal = printText.toString().replace(NEW_LINE_SYMBOL, "\n");
-        if (printFinal != null)
-            receiptText.setText(printFinal);
+        catch(Exception ex){
+            Log.e(TAG, "Updating Receipt failed", ex);
+        }
     }
 
 }
