@@ -199,7 +199,10 @@ public class UserService {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return d.getTime();
+		if(d != null)
+			return d.getTime();
+
+		return null;
 	}
 
 	/**
