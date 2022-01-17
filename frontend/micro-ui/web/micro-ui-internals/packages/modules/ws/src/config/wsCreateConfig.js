@@ -6,7 +6,19 @@ export const newConfig = [
         route: "docs-required",
         component: "WSDocsRequired",
         key: "data",
-        nextStep: "service-name"
+        nextStep: "connection-holder"
+      },
+      {
+        route: "connection-holder",
+        component: "ConnectionHolder",
+        key: "ConnectionHolderDetails",
+        nextStep: "service-name",
+        texts: {
+          headerCaption: "WS_COMMON_CONNECTION_DETAIL",
+          header: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
+          cardText: "WS_CONNECTION_HOLDER_TEXT",
+          submitBarLabel: "CS_COMMON_NEXT",
+        }
       },
       {
         route: "service-name",
@@ -64,7 +76,7 @@ export const newConfig = [
         route: "document-details",
         component: "WSDocumentDetails",
         key: "documents",
-        nextStep: "plot-details",
+        nextStep: null,
         texts: {
           headerCaption: "CE_DOCUMENT_DETAILS",
           header: "WS_DOCUMENT_DETAILS_HEADER",

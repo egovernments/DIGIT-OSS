@@ -6,6 +6,7 @@ import {
     TextInput,
     CardLabel
 } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/Timeline";
 
 const WSWaterConnectionDetails = ({ t, config, onSelect, formData }) => {
     const tenantId = Digit.ULBService.getStateId();
@@ -51,7 +52,7 @@ const WSWaterConnectionDetails = ({ t, config, onSelect, formData }) => {
 
     return (
         <div>
-            {/* <Timeline currentStep={2} /> */}
+            <Timeline currentStep={2} />
             {!wsServiceCalculationLoading ?
                 <FormStep
                     t={t}
