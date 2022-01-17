@@ -247,9 +247,13 @@ public class NotificationService {
 
 			Boolean isPropertyActive = wf.getState().getApplicationStatus().equalsIgnoreCase(Status.ACTIVE.toString());
 			Boolean isTerminateState = wf.getState().getIsTerminateState();
-			Set<String> actions = null != wf.getState().getActions()
-					? actions = wf.getState().getActions().stream().map(Action::getAction).collect(Collectors.toSet())
-					: Collections.emptySet();
+
+			Set<String> actions;
+			if (null != wf.getState().getActions()){
+				actions = wf.getState().getActions().stream().map(Action::getAction).collect(Collectors.toSet());
+			}
+			else actions = Collections.emptySet();
+			
 
 			if (isTerminateState && CollectionUtils.isEmpty(actions)) {
 
