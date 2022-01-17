@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class BPAConstants {
 
 	// MDMS
-
+	private BPAConstants(){}
 	public static final String BPA_MODULE = "BPA";
 
 	public static final String BPA_BusinessService = "BPA";

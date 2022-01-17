@@ -18,9 +18,6 @@ public class EgfMasterAspectj {
     /*
      * This pointcut will execute for all methods
      */
-    @Pointcut("within(org.egov..*)")
-    protected void allMethod() {
-    }
 
 	/* before -> Any resource annotated with @Controller annotation */
 

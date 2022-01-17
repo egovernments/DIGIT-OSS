@@ -7,7 +7,7 @@ public class BPAErrorConstants {
 
 
 	// MDMS
-
+	private BPAErrorConstants(){}
 	public static final String BPA_UNKNOWN_QUESTIONS = "BPA UNKNOWN QUESTIONS";
 	
 	public static final String BPA_UNKNOWN_QUESTIONS_MSG = "Please answer the required questions";

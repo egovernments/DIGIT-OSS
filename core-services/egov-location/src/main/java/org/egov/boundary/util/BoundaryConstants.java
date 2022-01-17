@@ -1,7 +1,7 @@
 package org.egov.boundary.util;
 
 public class BoundaryConstants {
-
+	private BoundaryConstants(){}
 	public static final String INVALID_BOUNDARY_REQUEST_MESSAGE = "BoundaryRequest is invalid";
 	public static final String INVALID_BOUNDARYRequest_REQUEST_MESSAGE = "BoundaryTypeRequest is invalid";
 	public static final String INVALID_HIERARCHYtype_REQUEST_MESSAGE = "HierarchyType Request is invalid";

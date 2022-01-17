@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class Constants {
-
+    private Constants(){}
     public static final String MDMS_SERVICEDEF = "ServiceDefs";
 
     public static final String MDMS_MODULE_NAME = "RAINMAKER-PGR";

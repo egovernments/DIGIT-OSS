@@ -1,7 +1,7 @@
 package org.egov.chat.config;
 
 public class JsonPointerNameConstants {
-
+    private JsonPointerNameConstants(){}
     public static final String tenantId = "/tenantId";
 
     public static final String userId = "/user/userId";

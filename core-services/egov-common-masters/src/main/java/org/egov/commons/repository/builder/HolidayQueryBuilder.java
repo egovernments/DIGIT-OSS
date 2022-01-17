@@ -151,7 +151,6 @@ public class HolidayQueryBuilder {
         if (holidayGetRequest.getFromDate() != null) {
             isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
             selectQuery.append(" h.applicableOn >= ?");
-            System.err.println("fromDate = " + holidayGetRequest.getFromDate());
             preparedStatementValues.add(holidayGetRequest.getFromDate());
         }
 

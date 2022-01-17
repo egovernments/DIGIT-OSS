@@ -31,18 +31,18 @@ import lombok.extern.slf4j.Slf4j;
 public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 
 	@Autowired
-	public static ResourceLoader resourceLoader;
+	private static ResourceLoader resourceLoader;
 
 	@Value("${egov.indexer.yml.repo.path}")
 	private static String yamllist;
 
-	public static final Logger logger = LoggerFactory.getLogger(IndexerApplicationRunnerImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(IndexerApplicationRunnerImpl.class);
 
-	public static ConcurrentHashMap<String, Mapping> mappingMaps = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<String, Mapping> mappingMaps = new ConcurrentHashMap<>();
 
-	public static ConcurrentHashMap<String, List<Mapping>> versionMap = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<String, List<Mapping>> versionMap = new ConcurrentHashMap<>();
 
-	public static ConcurrentHashMap<String, List<String>> topicMap = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<String, List<String>> topicMap = new ConcurrentHashMap<>();
 
 	@Autowired
 	private static ApplicationContext applicationContext;

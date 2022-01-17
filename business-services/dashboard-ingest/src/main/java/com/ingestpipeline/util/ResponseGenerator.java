@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ResponseGenerator {
 
-
+	private ResponseGenerator(){}
 	private static ObjectMapper objectMapper = new ObjectMapper();
 
     public static String failureResponse() throws JsonProcessingException{

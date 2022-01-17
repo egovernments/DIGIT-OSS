@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ErrorConstants {
-	
+	private ErrorConstants(){}
 	public static final String HRMS_USER_EXIST_MOB_CODE = "ERR_HRMS_USER_EXIST_MOB";
 	public static final String HRMS_USER_EXIST_MOB_MSG = "User already exists for the entered mobile number. Use a different mobile number to proceed.";
 	

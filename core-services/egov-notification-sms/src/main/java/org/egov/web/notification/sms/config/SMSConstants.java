@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SMSConstants {
-
+    private SMSConstants(){}
     public static final String SENDER_PASSWORD_IDENTIFIER = "senderPwdId";
     public static final String SENDER_USERNAME_IDENTIFIER = "senderUsernameId";
     public static final String SENDER_SENDERID_IDENTIFIER = "senderIdentifier";

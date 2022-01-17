@@ -58,15 +58,15 @@ public class IdGenerationService {
     // by default 'idformat' will be taken from MDMS. Change value of 'ismdms.on' to 'false'
     // in application.properties to get data from DB instead.
     @Value("${idformat.from.mdms}")
-    public boolean idFormatFromMDMS;
+    private boolean idFormatFromMDMS;
 
     //By default the auto create sequence is disabled
     @Value("${autocreate.new.seq}")
-    public boolean autoCreateNewSeq;
+    private boolean autoCreateNewSeq;
 
 
     //default count value
-    public Integer defaultCount = 1;
+    private Integer defaultCount = 1;
 
 
     /**

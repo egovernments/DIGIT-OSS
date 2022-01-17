@@ -1,7 +1,7 @@
 package org.egov.chat.post.formatter;
 
 public class ChatNodeJsonPointerConstants {
-
+    private ChatNodeJsonPointerConstants(){}
     public static final String responseType = "/response/type";
 
     public static final String responseText = "/response/text";

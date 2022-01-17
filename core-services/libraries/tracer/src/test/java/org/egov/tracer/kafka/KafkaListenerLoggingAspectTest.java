@@ -216,35 +216,3 @@ class TestConfiguration {
     }
 }
 
-class KafkaListenerWithOnlyPayloadAnnotatedHashMap {
-
-    @KafkaListener(topics = "${my.topics1}")
-    public void bar(@Payload HashMap<String, Object> payload) {
-
-    }
-}
-
-class KafkaListenerStringPayloadWithTopicHeaderAnnotation {
-
-    @KafkaListener(topics = "${my.topics2}")
-    public void bar(@Payload String payload, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
-
-    }
-}
-
-class KafkaListenerWithoutPayloadAnnotationAndWithoutTopicHeaderAnnotation {
-
-    @KafkaListener(topics = "${my.topics1}")
-    public void bar(HashMap<String, Object> payload) {
-
-    }
-}
-
-class KafkaListenerStringPayloadWithNonTopicHeaderAnnotation {
-
-    @KafkaListener(topics = "${my.topics2}")
-    public void bar(@Payload String payload, @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) {
-
-    }
-}
-

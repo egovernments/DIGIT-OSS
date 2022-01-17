@@ -1,7 +1,7 @@
 package org.egov.batchtelemetry.util;
 
 public class URLComparator {
-
+    private URLComparator(){}
     public static boolean compareURLs(String url, String checkFor) {
 
         if(url.contains(checkFor)) {

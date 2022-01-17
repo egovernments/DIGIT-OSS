@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ChallanConstants {
-
+    private ChallanConstants(){}
     public static final String STATUS_ACTIVE = "ACTIVE";
 
     public static final String STATUS_CANCELLED  = "CANCELLED";
@@ -49,8 +49,5 @@ public class ChallanConstants {
     public static final String BOUNDARY_TYPE  = "Locality";
 
     public static final String LOCALITY_CODE_PATH = "$.TenantBoundary.[*].boundary[?(@.label==\"Locality\")].code";
-
-
-    public ChallanConstants() {}
 
 }

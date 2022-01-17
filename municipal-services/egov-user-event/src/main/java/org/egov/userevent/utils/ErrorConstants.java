@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ErrorConstants {
-	
+	private ErrorConstants(){}
 	public static final String MISSING_ROLE_USERID_CODE = "MEN_USERID_ROLECODE_MISSING";
 	public static final String MISSING_ROLE_USERID_MSG = "User id, tenantid and rolecode are mandatory in the request info";
 	

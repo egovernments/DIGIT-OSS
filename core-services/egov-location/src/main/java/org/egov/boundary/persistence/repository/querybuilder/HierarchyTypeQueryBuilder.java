@@ -44,7 +44,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class HierarchyTypeQueryBuilder {
-
+	private HierarchyTypeQueryBuilder(){}
 	public static String getHierarchyTypeInsertquery() {
 		return "insert into eg_hierarchy_type(id,name,code,createddate,lastmodifieddate,createdby,lastmodifiedby,version,tenantid,localname) values (:id,:name,:code,:createddate,:lastmodifieddate,:createdby,:lastmodifiedby,:version,:tenantid,:localname)";
 	}

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RoleQueryBuilder {
-
+	private RoleQueryBuilder(){}
 	private static final Logger logger = LoggerFactory.getLogger(RoleQueryBuilder.class);
 
 	public static String insertRoleQuery() {

@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.egov.collection.model.v1.ReceiptSearchCriteria_v1;
 
 public class CollectionQueryBuilder_v1 {
-
+    private CollectionQueryBuilder_v1(){}
     private static final String SELECT_RECEIPTS_SQL = "Select rh.id as rh_id,rh.payername as rh_payername,rh" +
             ".payerAddress as rh_payerAddress, rh.payerEmail as rh_payerEmail, rh.payermobile as rh_payermobile, rh" +
             ".paidBy as rh_paidBy, rh.referenceNumber as rh_referenceNumber, rh.referenceDate as rh_referenceDate,rh.receiptType as "

@@ -47,7 +47,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BoundaryQueryBuilder {
-
+	private BoundaryQueryBuilder(){}
 	public static String getBoundaryInsertquery() {
 		return "insert into eg_boundary (id,boundarynum,parent,code,name,boundarytype,localname,fromdate,todate,bndryid,longitude,latitude,materializedpath,ishistory,tenantid,createddate,lastmodifieddate,createdby,lastmodifiedby)"
 				+ "values (:id,:boundarynum,:parent,:code,:name,:boundarytype,:localname,:fromdate,:todate,:bndryid,:longitude,:latitude,:materializedpath,:ishistory,:tenantid,:createddate,:lastmodifieddate,:createdby,:lastmodifiedby) ";

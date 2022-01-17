@@ -49,8 +49,8 @@ import java.util.List;
 @Data
 public class Pagination<T> {
 
-    public static int DEFAULT_PAGE_SIZE = 10;
-    public static int DEFAULT_PAGE_OFFSET = 0;
+    private static int DEFAULT_PAGE_SIZE = 10;
+    private static int DEFAULT_PAGE_OFFSET = 0;
     @JsonProperty(access = Access.WRITE_ONLY)
     List<T> pagedData;
     private Integer totalResults;

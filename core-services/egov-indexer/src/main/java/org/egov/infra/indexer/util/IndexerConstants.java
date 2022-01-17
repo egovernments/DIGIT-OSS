@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class IndexerConstants {
-
+	private IndexerConstants(){}
 	public static final String ES_INDEX_HEADER_FORMAT = "{ \"index\" : {\"_id\" : \"%s\" } }%n ";
 	public static final String ES_INDEX_WRAPPER_FORMAT = "{ \"root\" : \"%s\" }";
 	public static final String RAINMAKER_PGR_MODULE_NAME = "RAINMAKER-PGR";

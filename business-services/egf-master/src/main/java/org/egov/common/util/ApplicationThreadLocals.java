@@ -9,7 +9,9 @@ import java.util.List;
 
 
 public class ApplicationThreadLocals {
+    private ApplicationThreadLocals(){
 
+    }
     private static ThreadLocal<String> tenantId = new ThreadLocal<>();
     private static ThreadLocal<String> fallBackTenantId = new ThreadLocal<>();
     private static ThreadLocal<User> user = new ThreadLocal<>();

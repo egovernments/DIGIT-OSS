@@ -7,7 +7,7 @@ import org.apache.kafka.common.serialization.Serializer;
 import org.egov.chat.models.EgovChat;
 
 public class EgovChatSerdes {
-
+    private EgovChatSerdes(){}
     public static Serde<EgovChat> getSerde() {
         Serializer<EgovChat> serializer = new EgovChatSerializer();
         Deserializer<EgovChat> deserializer = new EgovChatDesearilizer();

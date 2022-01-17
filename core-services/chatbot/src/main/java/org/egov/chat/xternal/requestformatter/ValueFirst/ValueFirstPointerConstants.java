@@ -1,7 +1,7 @@
 package org.egov.chat.xternal.requestformatter.ValueFirst;
 
 public class ValueFirstPointerConstants {
-
+    private ValueFirstPointerConstants(){}
     public static String timestampPath = "/timestamp";
 
     public static String missedCallFromMobileNumber = "/mobile_number";

@@ -37,10 +37,6 @@ public class KafkaListenerLoggingAspect {
         this.objectMapper = new ObjectMapper();
     }
 
-    @Pointcut(value = " within(org.egov..*) && @annotation(org.springframework.kafka.annotation.KafkaListener)")
-    public void anyKafkaConsumer() {
-    }
-
     @Around("anyKafkaConsumer() ")
     public Object logAction(ProceedingJoinPoint pjp) throws Throwable {
 

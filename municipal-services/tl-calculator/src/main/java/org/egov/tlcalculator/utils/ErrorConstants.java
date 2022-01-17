@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ErrorConstants {
-	
+	private ErrorConstants(){}
 	public static final String MULTIPLE_TENANT_CODE = "MULTIPLE_TENANTS";
 	public static final String MULTIPLE_TENANT_MSG = "All Billingslabs being created must belong to one single tenant";
 	

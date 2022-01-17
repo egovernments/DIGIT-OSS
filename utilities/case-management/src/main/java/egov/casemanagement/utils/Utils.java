@@ -11,7 +11,7 @@ import java.util.Iterator;
 import static java.util.Objects.isNull;
 
 public class Utils {
-
+    private Utils(){}
     public static AuditDetails getAuditDetails(String by, boolean isCreate) {
         Long time = Instant.now().toEpochMilli();
         if(isCreate)

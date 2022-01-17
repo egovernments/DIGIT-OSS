@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApportionConstants {
 
+    private ApportionConstants(){}
     public static final String DEFAULT = "DEFAULT";
 
     public static final String MDMS_BILLING_SERVICE = "BillingService";

@@ -16,9 +16,9 @@ import lombok.ToString;
 public class Pagination {
 	
 	@JsonProperty("noOfRecords")
-	public String noOfRecords;
+	private String noOfRecords;
 	
 	@JsonProperty("offset")
-	public String offset;
+	private String offset;
 	
 }

@@ -1,7 +1,7 @@
 package org.egov.access.util;
 
 public class AccessControlConstants {
-
+	private AccessControlConstants(){}
 	public static final String INVALID_ACTION_REQUEST_MESSAGE = "Action is invalid";
 	public static final String INVALID_ROLE_REQUEST_MESSAGE = "Role is invalid";
 	public static final String INVALID_ROLE_ACTION_REQUEST_MESSAGE = "Role-Action is invalid";

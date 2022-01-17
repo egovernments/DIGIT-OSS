@@ -3,6 +3,7 @@ package org.egov.web.notification.sms.models;
 import org.slf4j.MDC;
 
 public class RequestContext {
+    private RequestContext(){}
 
     private static final ThreadLocal<String> id = new ThreadLocal<>();
     public static String CORRELATION_ID = "X-CORRELATION-ID";

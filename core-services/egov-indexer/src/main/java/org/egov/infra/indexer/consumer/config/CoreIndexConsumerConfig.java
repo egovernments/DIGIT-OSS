@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CoreIndexConsumerConfig implements ApplicationRunner {
 
-	public static KafkaMessageListenerContainer<String, String> kafkContainer;
+	private static KafkaMessageListenerContainer<String, String> kafkContainer;
 	
 	@Value("${spring.kafka.bootstrap.servers}")
     private String brokerAddress;
@@ -76,8 +76,8 @@ public class CoreIndexConsumerConfig implements ApplicationRunner {
     
 	@Autowired
 	private IndexerApplicationRunnerImpl runner;
-    
-    public String[] topics = {};
+
+	private String[] topics = {};
     
      
     @Override

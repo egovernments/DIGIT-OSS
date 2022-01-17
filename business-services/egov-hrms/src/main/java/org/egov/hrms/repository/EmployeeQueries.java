@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EmployeeQueries {
-
+	private EmployeeQueries(){}
 	public static final String HRMS_GET_EMPLOYEES = "SELECT employee.id as employee_id, employee.uuid as employee_uuid, employee.code as employee_code, "
 			+ "employee.dateOfAppointment as employee_doa, employee.employeestatus as employee_status, employeetype as employee_type, employee.active as employee_active, employee.reactivateemployee as employee_reactive, "
 			+ "employee.tenantid as employee_tenantid, employee.createdby as employee_createdby, employee.createddate as employee_createddate, "

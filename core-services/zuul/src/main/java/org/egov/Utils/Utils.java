@@ -11,7 +11,7 @@ import java.util.Optional;
 import static org.egov.constants.RequestContextConstants.*;
 
 public class Utils {
-
+    private Utils(){}
     private static final String EMPTY_STRING = "";
     private static final String JSON_TYPE = "json";
 

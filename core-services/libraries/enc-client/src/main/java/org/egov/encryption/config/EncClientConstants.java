@@ -1,7 +1,7 @@
 package org.egov.encryption.config;
 
 public class EncClientConstants {
-
+    private EncClientConstants(){}
     public static final String MDMS_MODULE_NAME = "DataSecurity";
 
     public static final String MDMS_ENCRYPTION_MASTER_NAME = "EncryptionPolicy";

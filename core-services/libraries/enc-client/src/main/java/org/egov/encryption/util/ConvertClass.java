@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class ConvertClass {
-
+    private ConvertClass(){}
     public static <E,P> P convertTo(JsonNode jsonNode, Class<E> valueType) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper(new JsonFactory());
 

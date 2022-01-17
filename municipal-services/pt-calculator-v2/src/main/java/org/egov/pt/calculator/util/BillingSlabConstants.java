@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BillingSlabConstants {
-	
+	private BillingSlabConstants(){}
 	public static final String MDMS_PT_MOD_NAME = "PropertyTax";
 	public static final String MDMS_PROPERTYSUBTYPE_MASTER_NAME = "PropertySubType";
 	public static final String MDMS_PROPERTYTYPE_MASTER_NAME = "PropertyType";
