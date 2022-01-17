@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 public class ConversationStateQueryBuilder {
-
+    private ConversationStateQueryBuilder(){}
     public static final String UPDATE_CONVERSATION_STATE_QUERY = "UPDATE eg_chat_conversation_state SET " +
             "active_node_id = :active_node_id , question_details = :question_details , " +
             "last_modified_time = :last_modified_time " +

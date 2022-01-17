@@ -7,7 +7,7 @@ public class FSMErrorConstants {
 
 
 	// MDMS
-
+	private FSMErrorConstants(){}
 	public static final String INVALID_SEARCH = "INVALID SEARCH";
 	public static final String INVALID_SEARCH_1 = "INVALID SEARCH";
 	public static final String INVALID_ADDRES = "INVALID ADDRESS";

@@ -10,7 +10,7 @@ public class FSMConstants {
 
 
 	// MDMS
-
+	private FSMConstants(){}
 	public static final String EMPLOYEE="Employee";
 	
 	public static final String FSM_MODULE = "FSM";

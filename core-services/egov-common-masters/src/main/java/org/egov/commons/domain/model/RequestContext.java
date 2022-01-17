@@ -41,6 +41,7 @@
 package org.egov.commons.domain.model;
 
 public class RequestContext {
+	private RequestContext(){}
 
 	public static String CORRELATION_ID = "X-CORRELATION-ID";
 

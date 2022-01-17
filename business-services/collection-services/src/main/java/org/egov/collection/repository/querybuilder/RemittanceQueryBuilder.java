@@ -13,7 +13,7 @@ import org.egov.collection.web.contract.RemittanceSearchRequest;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 public class RemittanceQueryBuilder {
-
+    private RemittanceQueryBuilder(){}
     private static final String TENANT_ID="tenantid";
 
     private static final String REMITTANCE="remittance";

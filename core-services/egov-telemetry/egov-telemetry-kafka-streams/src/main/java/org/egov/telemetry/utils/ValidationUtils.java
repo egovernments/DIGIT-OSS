@@ -17,7 +17,7 @@ import java.net.URL;
 
 
 public class ValidationUtils {
-
+    private ValidationUtils(){}
     public static final String JSON_V4_SCHEMA_IDENTIFIER = "http://json-schema.org/draft-04/schema#";
     public static final String JSON_SCHEMA_IDENTIFIER_ELEMENT = "$schema";
 

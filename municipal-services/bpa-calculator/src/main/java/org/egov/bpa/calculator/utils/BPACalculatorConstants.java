@@ -2,7 +2,7 @@ package org.egov.bpa.calculator.utils;
 
 public class BPACalculatorConstants {
 
-	
+	private BPACalculatorConstants(){}
 
     public static final String MDMS_EGF_MASTER = "egf-master";
 

@@ -4,7 +4,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.pg.web.models.ResponseInfo;
 
 public class ResponseInfoFactory {
-
+    private ResponseInfoFactory(){}
     public static ResponseInfo createResponseInfoFromRequestInfo(final RequestInfo requestInfo, final Boolean success) {
 
         final String apiId = requestInfo != null ? requestInfo.getApiId() : "";

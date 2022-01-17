@@ -45,7 +45,7 @@ import org.egov.receipt.consumer.entity.VoucherIntegrationLog;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 public class VoucherIntegrationLogQueryBuilder {
-	
+	private VoucherIntegrationLogQueryBuilder(){}
 	public static final String INSERT_VOUCHER_LOG_SQL = "INSERT INTO egf_voucher_integration_log(id, referencenumber, status, vouchernumber, TYPE, description, requestjson, tenantid, createddate)"
 			+ "VALUES (:id, :referencenumber, :status, :vouchernumber, :TYPE, :description, cast(:requestjson as jsonb), :tenantid,:createddate)";
 	

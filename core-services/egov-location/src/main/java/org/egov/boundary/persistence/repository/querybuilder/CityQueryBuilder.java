@@ -44,7 +44,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CityQueryBuilder {
-	
+	private CityQueryBuilder(){}
 	public static String getCityByCodeAndTenantId(){
 		return "select * from eg_city where code=:code and tenantid=:tenantId";
 	}

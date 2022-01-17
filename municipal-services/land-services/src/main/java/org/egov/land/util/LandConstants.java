@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class LandConstants {
 
 	// MDMS
-
+	private LandConstants(){}
 	public static final String BPA_MODULE = "BPA";
 
 	public static final String COMMON_MASTERS_MODULE = "common-masters";

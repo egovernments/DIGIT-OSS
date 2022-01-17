@@ -13,7 +13,7 @@ import java.util.List;
 
 @Slf4j
 public class JacksonUtils {
-
+    private JacksonUtils(){}
     public static JsonNode merge(JsonNode newNode, JsonNode originalNode) {
         if(newNode == null || newNode.isNull())
             return originalNode;

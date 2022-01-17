@@ -12,7 +12,7 @@ import java.util.List;
 @ToString
 public class ChartOfAccountsResponse {
 
-    public ResponseInfo responseInfo;
+    private ResponseInfo responseInfo;
 
-    public List<ChartOfAccount> chartOfAccounts;
+    private List<ChartOfAccount> chartOfAccounts;
 }

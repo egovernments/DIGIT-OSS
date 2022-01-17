@@ -12,7 +12,6 @@ public class testing {
     @Test
     public void name() {
         BigDecimal d1 = new BigDecimal(-34);
-        System.out.println(d1.compareTo(BigDecimal.ZERO));
 
         BigDecimal b1 = new BigDecimal(2);
         BigDecimal b2 = new BigDecimal(5);
@@ -25,7 +24,6 @@ public class testing {
 
         BigDecimal max = list.stream().reduce(BigDecimal::max).get();
 
-        System.out.println("max: "+max);
 
     }
 }

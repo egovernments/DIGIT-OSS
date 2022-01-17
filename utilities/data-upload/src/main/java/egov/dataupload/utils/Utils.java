@@ -12,7 +12,7 @@ import java.util.Base64;
 import java.util.List;
 
 public class Utils {
-
+    private Utils(){}
     public static AuditDetails getAuditDetails(String by, boolean isCreate) {
         Long time = Instant.now().toEpochMilli();
         if(isCreate)

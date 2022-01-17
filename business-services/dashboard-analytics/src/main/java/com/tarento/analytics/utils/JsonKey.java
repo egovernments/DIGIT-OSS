@@ -8,7 +8,7 @@ package com.tarento.analytics.utils;
  * 
  */
 public class JsonKey {
-
+    private JsonKey(){}
     public static final String STATUS_CODE = "statusCode";
     public static final String STATUS = "statusInfo";
     public static final String STATUS_MESSAGE = "statusMessage";

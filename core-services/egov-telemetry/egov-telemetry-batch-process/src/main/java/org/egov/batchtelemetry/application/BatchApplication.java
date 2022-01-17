@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Slf4j
 public class BatchApplication {
-
+    private BatchApplication(){}
     public static void executeBatch(Long startTime, Long endTime) throws Exception {
         ElasticsearchConnector elasticsearchConnector = new ElasticsearchConnector();
 

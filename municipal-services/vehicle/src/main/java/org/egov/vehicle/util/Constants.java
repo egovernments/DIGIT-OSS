@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Constants {
-
+	private Constants(){}
 	public static final String EMP_STATUS = "EMPLOYED";
 
 	public static final String EMP_TYPE = "CONTRACT";

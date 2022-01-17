@@ -20,11 +20,4 @@ public class MDMSServiceTest {
         this.mdmsService = new MdmsService(mdmsRepository);
     }
 
-    //TODO Test cases for service, repository
-    @Test
-    public void testFetchGeography() {
-
-
-    }
-
 }

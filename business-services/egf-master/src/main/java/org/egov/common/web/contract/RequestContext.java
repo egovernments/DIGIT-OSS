@@ -1,7 +1,7 @@
 package org.egov.common.web.contract;
 
 public class RequestContext {
-
+	private RequestContext(){}
 	public static String CORRELATION_ID = "X-CORRELATION-ID";
 
 	private static final ThreadLocal<String> id = new ThreadLocal<>();

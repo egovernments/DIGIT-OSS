@@ -3,6 +3,7 @@ package org.egov.tl.util;
 public class BPAConstants {
 
     // mdms master names
+    private BPAConstants(){}
     public static final String TRADETYPE_TO_ROLEMAPPING = "TradeTypetoRoleMapping";
 
     public static final String MDMS_MODULE_BPAREGISTRATION = "StakeholderRegistraition";

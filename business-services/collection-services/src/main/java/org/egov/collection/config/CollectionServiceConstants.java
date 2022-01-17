@@ -43,7 +43,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class CollectionServiceConstants {
-
+    private CollectionServiceConstants(){}
     public static final String INVALID_RECEIPT_REQUEST = "Receipt create request is invalid";
     public static final String INVALID_LEGACY_RECEIPT_REQUEST = "Legacy Receipt Create request is invalid";
     public static final String BUSINESS_KEY = "ReceiptHeader";

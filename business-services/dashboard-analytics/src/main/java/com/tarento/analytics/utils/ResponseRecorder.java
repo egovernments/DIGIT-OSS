@@ -15,7 +15,7 @@ import com.tarento.analytics.constant.Constants;
 public class ResponseRecorder {
 	
 	private static Logger logger = LoggerFactory.getLogger(ResponseRecorder.class);
-	public static volatile ConcurrentHashMap<String, Map<String, Object>> requestModuleResponseMap = new ConcurrentHashMap<>();
+	private static volatile ConcurrentHashMap<String, Map<String, Object>> requestModuleResponseMap = new ConcurrentHashMap<>();
     
 	public Object get(String visualizationCode, String module) {
     	if(StringUtils.isNotBlank(module)) { 

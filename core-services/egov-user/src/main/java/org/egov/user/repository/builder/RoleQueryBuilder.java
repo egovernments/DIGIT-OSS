@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RoleQueryBuilder {
-
+    private RoleQueryBuilder(){}
     public static final String GET_ROLES_BY_ID_TENANTID = "select roleid,roleidtenantid from eg_userrole where userid=:userId and tenantid=:tenantId";
     public static final String GET_ROLES_BY_ROLEIDS = "select * from eg_role where id in (:id) and tenantid=:tenantId";
     public static final String GET_ROLE_BYTENANT_ANDCODE = "select * from eg_role where code =:code and tenantid=:tenantId";

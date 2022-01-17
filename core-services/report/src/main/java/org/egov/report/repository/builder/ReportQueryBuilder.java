@@ -484,10 +484,10 @@ public class ReportQueryBuilder {
                     values.append("(");
                     for (Map.Entry<String, Object> row : jsonMap.entrySet()) {
                         String value = row.getValue().toString();
-                        System.out.println("Values with single quotes without formatting" + value);
+                        log.info("Values with single quotes without formatting" + value);
                         if (value.contains("'")) {
                             String formatted = value.replace("'", "''");
-                            System.out.println("Values with single quotes " + formatted);
+                            log.info("Values with single quotes " + formatted);
                             values.append("'" + formatted + "'" + ",");
                         } else {
                             values.append("'" + row.getValue() + "'" + ",");

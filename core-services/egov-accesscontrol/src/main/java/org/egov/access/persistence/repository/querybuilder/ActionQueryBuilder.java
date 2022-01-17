@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ActionQueryBuilder {
-
+	private ActionQueryBuilder(){}
 	private static final Logger logger = LoggerFactory.getLogger(ActionQueryBuilder.class);
 
 	public static String insertActionQuery() {

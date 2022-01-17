@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ExceptionUtils {
+    private ExceptionUtils(){}
     private static final Logger logger = LoggerFactory.getLogger(ExceptionUtils.class);
     private static final String SEND_ERROR_FILTER_RAN = "sendErrorFilter.ran";
     private static final String CODE_CUSTOM_EXCEPTION = "CustomException";

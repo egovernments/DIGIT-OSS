@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.function.Function;
 
 public class JSONBrowseUtil {
-
+    private JSONBrowseUtil(){}
     public static <T, R> JsonNode mapValues(JsonNode jsonNode, Function<T, R> valueMapper) {
         if(jsonNode.isArray()) {
             jsonNode = mapValuesForArrayNode((ArrayNode) jsonNode, valueMapper);

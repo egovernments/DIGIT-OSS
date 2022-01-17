@@ -20,24 +20,24 @@ public class LegacyIndexRequest {
 	
 	@NotNull
 	@JsonProperty("RequestInfo")
-	public RequestInfo requestInfo;
+	private RequestInfo requestInfo;
 	
 	@NotNull
 	@JsonProperty("apiDetails")
-	public APIDetails apiDetails;
+	private APIDetails apiDetails;
 	
 	@NotNull
 	@JsonProperty("legacyIndexTopic")
-	public String legacyIndexTopic;
+	private String legacyIndexTopic;
 	
 	@NotNull
 	@JsonProperty("tenantId")
-	public String tenantId;
-	
-	public String jobId;
-	
-	public Long startTime;
-	
-	public Integer totalRecords;
+	private String tenantId;
+
+	private String jobId;
+
+	private Long startTime;
+
+	private Integer totalRecords;
 
 }

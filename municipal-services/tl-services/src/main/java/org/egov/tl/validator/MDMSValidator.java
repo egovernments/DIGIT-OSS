@@ -185,7 +185,6 @@ public class MDMSValidator {
             }
         });
 
-        System.err.println(" the mdms response is : " + mdmsResMap);
         return mdmsResMap;
     }
 
@@ -209,7 +208,6 @@ public class MDMSValidator {
             }
         });
 
-        System.err.println(" the mdms response is : " + mdmsResMap);
         return mdmsResMap;
     }
 

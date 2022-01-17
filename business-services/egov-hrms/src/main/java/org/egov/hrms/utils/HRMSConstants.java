@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class HRMSConstants {
-	
+	private HRMSConstants(){}
 	public static final String HRMS_MDMS_COMMON_MASTERS_CODE = "common-masters";
 	public static final String HRMS_MDMS_HR_MASTERS_CODE = "egov-hrms";
 	public static final String HRMS_AC_ROLES_MASTERS_CODE = "ACCESSCONTROL-ROLES";

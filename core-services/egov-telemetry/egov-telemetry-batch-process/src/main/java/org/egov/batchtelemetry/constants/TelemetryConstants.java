@@ -1,7 +1,7 @@
 package org.egov.batchtelemetry.constants;
 
 public class TelemetryConstants {
-
+    private TelemetryConstants(){}
     public final static String userNotFoundIdentifier = "UserNotFound";
 
     public final static String citizenUserType = "Citizen";
