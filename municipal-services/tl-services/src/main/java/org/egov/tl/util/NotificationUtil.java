@@ -358,9 +358,11 @@ public class NotificationUtil {
 	 */
 	public String getOwnerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
 		String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_PAYMENT_OWNER, localizationMessages);
-		messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
-		messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
-		messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
+		if (messageTemplate != null) {
+			messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
+			messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
+			messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
+		}
 		return messageTemplate;
 	}
 
@@ -393,7 +395,7 @@ public class NotificationUtil {
 	public String getReminderMsg(TradeLicense license, String localizationMessages) {
 
 		String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_TL_REMINDER, localizationMessages);
-		
+
 		if(messageTemplate != null) {
 			String expiryDate = new SimpleDateFormat("dd/MM/yyyy").format(license.getValidTo());
 			messageTemplate = messageTemplate.replace(NOTIF_TRADE_NAME_KEY, license.getTradeName());
