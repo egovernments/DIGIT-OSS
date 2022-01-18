@@ -9,7 +9,6 @@ import org.egov.user.domain.model.Email;
 import org.egov.user.domain.model.EmailRequest;
 import org.egov.user.domain.model.SMSRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.egov.user.config.KafkaConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
