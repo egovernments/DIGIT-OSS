@@ -18,6 +18,19 @@ const FileComplaint = ({ parentRoute }) => {
   let config = [];
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
   const { data: commonFields, isLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "CommonFieldsConfig");
+
+  const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
+  const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
+  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
+
+  useEffect(() => {
+    if(!pathname?.includes('new-application/response')){
+      setMutationHappened(false);
+      clearSuccessData();
+      clearError();
+    }
+  }, []);
+
   const goNext = (skipStep) => {
     const currentPath = pathname.split("/").pop();
     const { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
@@ -45,6 +58,7 @@ const FileComplaint = ({ parentRoute }) => {
   const handleSUccess = () => {
     clearParams();
     queryClient.invalidateQueries("FSM_CITIZEN_SEARCH");
+    setMutationHappened(true);
   };
 
   if (isLoading) {
