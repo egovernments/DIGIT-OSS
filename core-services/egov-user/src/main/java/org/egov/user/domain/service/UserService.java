@@ -18,6 +18,7 @@ import org.egov.user.domain.model.User;
 import org.egov.user.domain.model.UserSearchCriteria;
 import org.egov.user.domain.model.enums.UserType;
 import org.egov.user.domain.service.utils.EncryptionDecryptionUtil;
+import org.egov.user.domain.service.utils.NotificationUtil;
 import org.egov.user.persistence.dto.FailedLoginAttempt;
 import org.egov.user.persistence.repository.FileStoreRepository;
 import org.egov.user.persistence.repository.OtpRepository;
@@ -412,6 +413,7 @@ public class UserService {
         validateProfileUpdateIsDoneByTheSameLoggedInUser(user);
         user.nullifySensitiveFields();
         validatePassword(user.getPassword());
+
         userRepository.update(user, existingUser,requestInfo.getUserInfo().getId(), requestInfo.getUserInfo().getUuid() );
         User updatedUser = getUserByUuid(user.getUuid());
         
@@ -420,6 +422,11 @@ public class UserService {
         updatedUser = encryptionDecryptionUtil.decryptObject(updatedUser, "User", User.class, requestInfo);
 
         setFileStoreUrlsByFileStoreIds(Collections.singletonList(updatedUser));
+        if(user.getEmailId() != existingUser.getEmailId()){
+            NotificationUtil notificationUtil = new NotificationUtil();
+            notificationUtil.sendEmail(requestInfo, existingUser.getEmailId(), user.getEmailId(),user.getMobileNumber());
+        }
+        // call here (consider equal case)
         return updatedUser;
     }
 
