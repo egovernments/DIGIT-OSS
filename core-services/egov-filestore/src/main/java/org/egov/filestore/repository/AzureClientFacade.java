@@ -41,7 +41,7 @@ public class AzureClientFacade implements ApplicationRunner{
 	 * Intializes the azure client
 	 * 
 	 */
-	public static void initializeAzureClient() {
+	public void initializeAzureClient() {
 		StringBuilder storageConnectionString = new StringBuilder();
 		storageConnectionString.append("DefaultEndpointsProtocol=").append(defaultEndpointsProtocol).append(";")
 		.append("AccountName=").append(accountName).append(";").append("AccountKey=").append(accountKey);

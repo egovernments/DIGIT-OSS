@@ -82,17 +82,17 @@ public class ReadUtil {
 	private static final String SEPARATOR="file.separator";
 
 	@Value("${filename.length}")
-	public static void setFilenameLength(Integer filenameLengthValue) {
+	public void setFilenameLength(Integer filenameLengthValue) {
 		ReadUtil.filenameLength = filenameLengthValue;
 	}
 
 	@Value("${filename.useletters}")
-	public static void setUseLetters(Boolean useLettersValue) {
+	public void setUseLetters(Boolean useLettersValue) {
 		ReadUtil.useLetters = useLettersValue;
 	}
 
 	@Value("${filename.usenumbers}")
-	public static void setUseNumbers(Boolean useNumbersValue) {
+	public void setUseNumbers(Boolean useNumbersValue) {
 		ReadUtil.useNumbers = useNumbersValue;
 	}
 

@@ -66,7 +66,7 @@ public class ReportApp implements EnvironmentAware {
     private static String locationspath;
 
     @Value("${report.locationsfile.path}")
-    public static void setLocationspath(String locationspath) {
+    public void setLocationspath(String locationspath) {
         ReportApp.locationspath = locationspath;
     }
 
