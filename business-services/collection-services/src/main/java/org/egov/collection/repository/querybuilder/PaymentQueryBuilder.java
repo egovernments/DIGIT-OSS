@@ -35,7 +35,9 @@ public class PaymentQueryBuilder {
     @Autowired
     private ApplicationProperties config;
 
-    private static final String TENANT_ID="tenantid";
+    private static final String TENANT_ID_COLUMN="tenantid";
+
+    private static final String TENANT_ID="tenantId";
 
     private static final String INSTRUMENT_STATUS="instrumentStatus";
 
@@ -222,7 +224,7 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", payment.getId());
-        sqlParameterSource.addValue(TENANT_ID, payment.getTenantId());
+        sqlParameterSource.addValue(TENANT_ID_COLUMN, payment.getTenantId());
         sqlParameterSource.addValue("totaldue", payment.getTotalDue());
         sqlParameterSource.addValue("totalamountpaid", payment.getTotalAmountPaid());
         sqlParameterSource.addValue("transactionnumber", payment.getTransactionNumber());
@@ -254,7 +256,7 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", paymentDetail.getId());
-        sqlParameterSource.addValue(TENANT_ID, paymentDetail.getTenantId());
+        sqlParameterSource.addValue(TENANT_ID_COLUMN, paymentDetail.getTenantId());
         sqlParameterSource.addValue("paymentid", paymentId);
         sqlParameterSource.addValue("due", paymentDetail.getTotalDue());
         sqlParameterSource.addValue("amountpaid", paymentDetail.getTotalAmountPaid());
@@ -285,7 +287,7 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue(STATUS, bill.getStatus().toString());
         sqlParameterSource.addValue("iscancelled", bill.getIsCancelled());
         sqlParameterSource.addValue(ADDITIONAL_DETAILS,getJsonb(bill.getAdditionalDetails()));
-        sqlParameterSource.addValue(TENANT_ID, bill.getTenantId());
+        sqlParameterSource.addValue(TENANT_ID_COLUMN, bill.getTenantId());
         sqlParameterSource.addValue("collectionmodesnotallowed", StringUtils.join(bill.getCollectionModesNotAllowed(),","));
         sqlParameterSource.addValue("partpaymentallowed", bill.getPartPaymentAllowed());
         sqlParameterSource.addValue("isadvanceallowed", bill.getIsAdvanceAllowed());
@@ -310,7 +312,7 @@ public class PaymentQueryBuilder {
 
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
         sqlParameterSource.addValue("id", billDetail.getId());
-        sqlParameterSource.addValue(TENANT_ID, billDetail.getTenantId());
+        sqlParameterSource.addValue(TENANT_ID_COLUMN, billDetail.getTenantId());
         sqlParameterSource.addValue("demandid", billDetail.getDemandId());
         sqlParameterSource.addValue(BILL_ID, billDetail.getBillId());
         sqlParameterSource.addValue("amount", billDetail.getAmount());
@@ -338,7 +340,7 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", billAccountDetail.getId());
-        sqlParameterSource.addValue(TENANT_ID, billAccountDetail.getTenantId());
+        sqlParameterSource.addValue(TENANT_ID_COLUMN, billAccountDetail.getTenantId());
         sqlParameterSource.addValue("billdetailid", billAccountDetail.getBillDetailId());
         sqlParameterSource.addValue("demanddetailid", billAccountDetail.getDemandDetailId());
         sqlParameterSource.addValue("order", billAccountDetail.getOrder());
@@ -355,7 +357,7 @@ public class PaymentQueryBuilder {
     	
     	  StringBuilder selectQuery = new StringBuilder(SELECT_COUNT_PAYMENT_SQL);
     	  preparedStatementValues.put(BUSINESS_SERVICE, businessService);
-    	  preparedStatementValues.put(TENANT_ID, tenantId);
+    	  preparedStatementValues.put(TENANT_ID_COLUMN, tenantId);
     	  
     	return selectQuery.toString();
     }
