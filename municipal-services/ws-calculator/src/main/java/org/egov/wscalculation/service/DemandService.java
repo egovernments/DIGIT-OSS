@@ -699,7 +699,7 @@ public class DemandService {
 
 				CalculationReq calculationReq = CalculationReq.builder().calculationCriteria(calculationCriteriaList)
 						.requestInfo(requestInfo).isconnectionCalculation(true).migrationCount(migrationCount).build();
-				
+				log.info("calculationReq Size: "+calculationReq.getCalculationCriteria().size());
 				wsCalculationProducer.push(configs.getCreateDemand(), calculationReq);
 				calculationCriteriaList.clear();
 				batchOffset = batchOffset + batchsize;
