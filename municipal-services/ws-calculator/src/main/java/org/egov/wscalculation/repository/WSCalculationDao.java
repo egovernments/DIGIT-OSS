@@ -28,6 +28,6 @@ public interface WSCalculationDao {
 	
 	int isBillingPeriodExists(String connectionNo, String billingPeriod);
 
-	long getConnectionCount(String tenantid);
+	long getConnectionCount(String tenantid, Long fromDate, Long toDate);
 
 }
