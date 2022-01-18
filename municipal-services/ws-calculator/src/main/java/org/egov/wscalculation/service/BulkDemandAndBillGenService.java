@@ -117,7 +117,7 @@ public class BulkDemandAndBillGenService {
 		Set<String> propertyIds = new HashSet<String>();
 		for (Calculation calculation: calculations){
 			WaterConnection connection = calculation.getWaterConnection();
-			propertyIds.add(connection.getConnectionNo());
+			propertyIds.add(connection.getPropertyId());
 		}
 		List<Property> properties = wsCalculationUtil.propertySearch(requestInfo, propertyIds, tenantId);
 		Map<String, Property> propertyUuidMap = properties.stream().collect(Collectors.toMap(Property::getId, Function.identity()));
