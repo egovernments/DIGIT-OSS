@@ -199,12 +199,12 @@ public class MasterDataService {
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> enrichBillingPeriod(CalculationCriteria criteria, ArrayList<?> mdmsResponse,
-			Map<String, Object> masterMap) {
+			Map<String, Object> masterMap, String connectiontype) {
 		log.info("Billing Frequency Map {}", mdmsResponse.toString());
 		Map<String, Object> master = new HashMap<>();
 		for (Object o : mdmsResponse) {
 			if ((((Map<String, Object>) o).get(WSCalculationConstant.ConnectionType).toString())
-					.equalsIgnoreCase(criteria.getWaterConnection().getConnectionType())) {
+					.equalsIgnoreCase(connectiontype)) {
 				master = (Map<String, Object>) o;
 				break;
 			}

@@ -673,8 +673,13 @@ public class DemandService {
 			log.info("Count: "+count);
 			Map<String, Object> masterMap = mstrDataService.loadMasterData(requestInfo, tenantId);
 
+			ArrayList<?> billingFrequencyMap = (ArrayList<?>) masterMap
+					.get(WSCalculationConstant.Billing_Period_Master);
+			mstrDataService.enrichBillingPeriod(null, billingFrequencyMap, masterMap, WSCalculationConstant.nonMeterdConnection);
+
 			Map<String, Object> financialYearMaster =  (Map<String, Object>) masterMap
 					.get(WSCalculationConstant.BILLING_PERIOD);
+
 			Long fromDate = (Long) financialYearMaster.get(WSCalculationConstant.STARTING_DATE_APPLICABLES);
 			Long toDate = (Long) financialYearMaster.get(WSCalculationConstant.ENDING_DATE_APPLICABLES);
 
