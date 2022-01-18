@@ -62,7 +62,7 @@ public class WSCalculatorQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id"
+			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id "
 			+ INNER_JOIN_STRING
 			+ " egbs_demand_v1 as dmd on dmd.consumercode = conn.connectionno";
 
