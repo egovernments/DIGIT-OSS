@@ -4,14 +4,27 @@ import java.util.Collections;
 
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.tracer.kafka.CustomKafkaTemplate;
 import org.egov.user.domain.model.Email;
 import org.egov.user.domain.model.EmailRequest;
 import org.egov.user.domain.model.SMSRequest;
-import org.egov.user.producer.Producer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.egov.user.config.KafkaConfig;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
 public class NotificationUtil {
 
+    @Autowired
+    private CustomKafkaTemplate<String, Object> kafkaTemplate;
+
+    @Value("${kafka.topics.notification.mail.name}")
+    public String emailNotificationTopic;
+
+    @Value("${kafka.topics.notification.sms.topic.name}")
+    public String smsNotificationTopic;
 
     public void sendEmail(RequestInfo requestInfo, String oldEmail, String newEmail, String mobileNumber) {
         String emailUpdationMessage = "Dear Citizen, your e-mail has been updated from <oldEmail> to <newEmail>";
@@ -29,11 +42,11 @@ public class NotificationUtil {
         smsRequest.setMessage(emailUpdationMessage);
 
         EmailRequest emailRequest = EmailRequest.builder().requestInfo(requestInfo).email(email).build();
-        Producer producer = new Producer();
-        producer.push("${kafka.topics.notification.mail.name}",emailRequest);
-        producer.push("${kafka.topics.notification.sms.topic.name}",smsRequest);
 
+        kafkaTemplate.send(emailNotificationTopic,emailRequest);
+        kafkaTemplate.send(smsNotificationTopic,smsRequest);
 
+        log.info("Email Update Notifications successfully placed on kafka topics" + emailNotificationTopic + " and " + smsNotificationTopic);
     }
 
 }

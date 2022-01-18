@@ -94,6 +94,9 @@ public class UserService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private NotificationUtil notificationUtil;
+
     public UserService(UserRepository userRepository, OtpRepository otpRepository, FileStoreRepository fileRepository,
                        PasswordEncoder passwordEncoder, EncryptionDecryptionUtil encryptionDecryptionUtil, TokenStore tokenStore,
                        @Value("${default.password.expiry.in.days}") int defaultPasswordExpiryInDays,
@@ -422,9 +425,9 @@ public class UserService {
         updatedUser = encryptionDecryptionUtil.decryptObject(updatedUser, "User", User.class, requestInfo);
 
         setFileStoreUrlsByFileStoreIds(Collections.singletonList(updatedUser));
-        if(user.getEmailId() != existingUser.getEmailId()){
-            NotificationUtil notificationUtil = new NotificationUtil();
+        if(!(user.getEmailId().equalsIgnoreCase(existingUser.getEmailId()))){
             notificationUtil.sendEmail(requestInfo, existingUser.getEmailId(), user.getEmailId(),user.getMobileNumber());
+
         }
         // call here (consider equal case)
         return updatedUser;
