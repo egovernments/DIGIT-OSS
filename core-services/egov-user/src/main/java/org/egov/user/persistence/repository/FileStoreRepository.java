@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -33,7 +34,7 @@ public class FileStoreRepository {
      * @return
      * @throws Exception
      */
-    public Map<String, String> getUrlByFileStoreId(String tenantId, List<String> fileStoreIds) throws Exception {
+    public Map<String, String> getUrlByFileStoreId(String tenantId, List<String> fileStoreIds) {
         Map<String, String> fileStoreUrls = null;
 
         String idLIst = fileStoreIds.toString().substring(1, fileStoreIds.toString().length() - 1).replace(", ", ",");
@@ -43,7 +44,7 @@ public class FileStoreRepository {
         try {
             fileStoreUrls = restTemplate.getForObject(Url, Map.class);
         } catch (HttpClientErrorException e) {
-            throw new RuntimeException(e.getResponseBodyAsString());
+            throw new CustomException("EG_FILESTORE_REPOSITORY_ERR", e.getResponseBodyAsString());
         }
         log.info("filrStoreUrls " + fileStoreUrls);
         if (null != fileStoreUrls && !fileStoreUrls.isEmpty())

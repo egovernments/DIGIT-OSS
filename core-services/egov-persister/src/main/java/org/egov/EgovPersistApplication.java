@@ -103,7 +103,7 @@ public class EgovPersistApplication {
             log.info(" These are all the files " + yamlUrls);
 
             if (yamlUrls.size() == 0) {
-                throw new RuntimeException("There are no config files loaded. Service cannot start");
+                throw new CustomException("EG_PERSISTER_ERR", "There are no config files loaded. Service cannot start");
             }
 
             for (String configPath : yamlUrls) {
@@ -142,7 +142,7 @@ public class EgovPersistApplication {
                 throw new CustomException(errorMap);
             else
                 log.info("====================== CONFIGS LOADED SUCCESSFULLY! ====================== ");
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             log.error("Failed to load configs", ex);
             failed = true;
         }

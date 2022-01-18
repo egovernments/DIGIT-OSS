@@ -77,7 +77,7 @@ public class IdGenerationService {
      * @throws Exception
      */
 
-    public IdGenerationResponse generateIdResponse(IdGenerationRequest idGenerationRequest) throws Exception {
+    public IdGenerationResponse generateIdResponse(IdGenerationRequest idGenerationRequest) {
 
         RequestInfo requestInfo = idGenerationRequest.getRequestInfo();
         List<IdRequest> idRequests = idGenerationRequest.getIdRequests();
@@ -110,7 +110,7 @@ public class IdGenerationService {
      * @return generatedId
      * @throws Exception
      */
-    private List generateIdFromIdRequest(IdRequest idRequest, RequestInfo requestInfo) throws Exception {
+    private List generateIdFromIdRequest(IdRequest idRequest, RequestInfo requestInfo) {
 
         List<String> generatedId = new LinkedList<>();
         boolean autoCreateNewSeqFlag = false;
@@ -145,7 +145,7 @@ public class IdGenerationService {
      * @return generatedId
      * @throws Exception
      */
-    private String getIdFormatFinal(IdRequest idRequest, RequestInfo requestInfo) throws Exception {
+    private String getIdFormatFinal(IdRequest idRequest, RequestInfo requestInfo) {
 
         String idFormat = null;
         try{
@@ -172,7 +172,7 @@ public class IdGenerationService {
      * @return idFormat
      * @throws Exception
      */
-    private String getIdFormatfromDB(IdRequest idRequest, RequestInfo requestInfo) throws Exception {
+    private String getIdFormatfromDB(IdRequest idRequest, RequestInfo requestInfo) {
         // connection and prepared statement
 
         String idFormat = null;
@@ -209,7 +209,7 @@ public class IdGenerationService {
      * @throws Exception
      */
 
-    private List getFormattedId(IdRequest idRequest, RequestInfo requestInfo, boolean autoCreateNewSeqFlag) throws Exception {
+    private List getFormattedId(IdRequest idRequest, RequestInfo requestInfo, boolean autoCreateNewSeqFlag) {
         List<String> idFormatList = new LinkedList();
         String idFormat = idRequest.getFormat();
 
@@ -403,7 +403,7 @@ public class IdGenerationService {
      * @param sequenceName
      */
 
-    private void createSequenceInDb(String sequenceName) throws Exception {
+    private void createSequenceInDb(String sequenceName) {
 
         StringBuilder query = new StringBuilder("CREATE SEQUENCE ");
         try {
@@ -421,7 +421,7 @@ public class IdGenerationService {
      * @param requestInfo
      * @return seqNumber
      */
-    private List<String> generateSequenceNumber(String sequenceName, RequestInfo requestInfo, IdRequest idRequest,boolean autoCreateNewSeqFlag) throws Exception {
+    private List<String> generateSequenceNumber(String sequenceName, RequestInfo requestInfo, IdRequest idRequest,boolean autoCreateNewSeqFlag)  {
         Integer count = getCount(idRequest);
         List<String> sequenceList = new LinkedList<>();
         List<String> sequenceLists = new LinkedList<>();

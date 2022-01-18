@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.chat.config.ApplicationProperties;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
@@ -22,7 +24,7 @@ public class CreateNewUserService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public JsonNode createNewUser(String mobileNumber, String tenantId) throws Exception {
+    public JsonNode createNewUser(String mobileNumber, String tenantId) throws CustomException {
 
         ObjectNode userCreateRequest = objectMapper.createObjectNode();
 
@@ -36,15 +38,18 @@ public class CreateNewUserService {
         user.put("username", mobileNumber);
 
         userCreateRequest.set("User", user);
-
-        ResponseEntity<JsonNode> createResponse =
-                restTemplate.postForEntity(applicationProperties.getUserServiceHost() + applicationProperties.getCitizenCreatePath(),
-                        userCreateRequest, JsonNode.class);
-
+        ResponseEntity<JsonNode> createResponse = null;
+        try {
+            createResponse =
+                    restTemplate.postForEntity(applicationProperties.getUserServiceHost() + applicationProperties.getCitizenCreatePath(),
+                            userCreateRequest, JsonNode.class);
+        }catch (RestClientException e){
+            throw new CustomException("EG_USER_ERR", "Error while creating user");
+        }
         if (createResponse.getStatusCode().is2xxSuccessful()) {
             return createResponse.getBody();
         } else {
-            throw new Exception("User Create Error");
+            throw new CustomException("EG_USER_ERR", "User Create Error");
         }
     }
 

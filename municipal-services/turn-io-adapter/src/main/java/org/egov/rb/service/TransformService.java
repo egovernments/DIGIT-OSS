@@ -1,5 +1,6 @@
 package org.egov.rb.service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class TransformService {
 			try {
 				message = turnIoService.prepareMessage(serviceResponse.getServices().get(0), mobileNumber);
 				turnIoService.sendTurnMessage(message, mobileNumber);
-			} catch (Exception e) {
+			} catch (UnsupportedEncodingException e) {
 				message = "There is some issue in our server.\n we will revert when we get the Complaint Id of your complaint";
 				turnIoService.sendTurnMessage(message, mobileNumber);
 				throw new CustomException("PGR_CREATE_ERROR", "Exception while creating PGR complaint ");
@@ -101,7 +102,7 @@ public class TransformService {
 
 	}
 
-	public void sendServiceRequestStatusMessage(ServiceRequest serviceRequest) throws Exception  {
+	public void sendServiceRequestStatusMessage(ServiceRequest serviceRequest) throws UnsupportedEncodingException  {
 		
 		String message=turnIoService.prepareServiceRequestStatusMessage(serviceRequest);
 		
