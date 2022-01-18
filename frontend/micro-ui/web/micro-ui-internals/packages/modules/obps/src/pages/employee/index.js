@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import ApplicationDetail from "./ApplicationDetail";
 import BpaApplicationDetail from "./BpaApplicationDetails";
 import Search from "./Search";
-import OBPSResponse from "./OBPSResponse";
+// import OBPSResponse from "./OBPSResponse";
 
 const OBPSBreadCrumbs = ({ location }) => {
   const { t } = useTranslation();
