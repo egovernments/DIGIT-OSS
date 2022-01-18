@@ -1,5 +1,6 @@
 package org.egov.rb.consumer;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 import org.egov.rb.config.PropertyConfiguration;
@@ -27,13 +28,13 @@ public class PGRConsumer {
 	TransformService transformService;
 	
 	@KafkaListener(topics = { "${kafka.topics.update.pgr}"})
-	public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) throws Exception {
+	public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) throws UnsupportedEncodingException {
 		ObjectMapper mapper = new ObjectMapper();
 		ServiceRequest serviceRequest=null;
 		try {
 			log.debug("Consuming record: " + record);
 			serviceRequest = mapper.convertValue(record, ServiceRequest.class);
-		} catch (final Exception e) {
+		} catch (final IllegalArgumentException e) {
 			log.error("Error while listening to value: " + record + " on topic: " + topic + ": " + e);
 		}
 		if(serviceRequest != null)

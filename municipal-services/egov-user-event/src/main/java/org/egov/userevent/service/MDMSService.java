@@ -55,8 +55,8 @@ public class MDMSService {
 				eventMasters.put(UserEventsConstants.MEN_MDMS_EVENTCATEGORY_MASTER_CODE, codes);
 			}
 			else
-				throw new Exception();
-		}catch(Exception e) {
+				throw new CustomException();
+		}catch(CustomException e) {
 			throw new CustomException(ErrorConstants.MEN_ERROR_FROM_MDMS_CODE, ErrorConstants.MEN_ERROR_FROM_MDMS_MSG);
 		}
 		return eventMasters;

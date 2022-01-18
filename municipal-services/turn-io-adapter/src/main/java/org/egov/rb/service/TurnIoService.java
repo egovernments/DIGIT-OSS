@@ -140,7 +140,7 @@ public class TurnIoService {
 
 	}
 
-	public String prepareMessage(org.egov.rb.pgrmodels.Service service, String mobileNumber) throws Exception {
+	public String prepareMessage(org.egov.rb.pgrmodels.Service service, String mobileNumber) throws UnsupportedEncodingException {
 		String message = successMessage;
 		String complaintNumber = service.getServiceRequestId();
 		String encodedPath = URLEncoder.encode(complaintNumber, "UTF-8");
@@ -159,7 +159,7 @@ public class TurnIoService {
 	 * @throws UnsupportedEncodingException
 	 */
 
-	public String prepareServiceRequestStatusMessage(ServiceRequest serviceRequest) throws Exception
+	public String prepareServiceRequestStatusMessage(ServiceRequest serviceRequest) throws UnsupportedEncodingException
 			 {
 		String message = statusUpdateMessage;
 		org.egov.rb.pgrmodels.Service service = serviceRequest.getServices().get(0);

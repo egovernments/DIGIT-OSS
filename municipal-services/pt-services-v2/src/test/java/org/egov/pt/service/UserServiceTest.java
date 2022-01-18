@@ -42,7 +42,7 @@ public class UserServiceTest {
     private UserService userServiceMock;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
        MockitoAnnotations.initMocks(this);
        ReflectionTestUtils.setField(userServiceMock, "userHost", "http://localhost:8081");
        ReflectionTestUtils.setField(userServiceMock, "userContextPath", "user/users/");
