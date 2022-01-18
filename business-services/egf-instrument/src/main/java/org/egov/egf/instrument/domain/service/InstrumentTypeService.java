@@ -28,7 +28,7 @@ public class InstrumentTypeService {
     public static final String ACTION_VIEW = "view";
     public static final String ACTION_EDIT = "edit";
     public static final String ACTION_SEARCH = "search";
-
+    private static final String INSTRUMENTS="instruments";
     private InstrumentTypeRepository instrumentTypeRepository;
 
     private SmartValidator validator;
@@ -113,7 +113,7 @@ public class InstrumentTypeService {
                 break;
             case ACTION_CREATE:
                 if (instrumenttypes == null)
-                    throw new InvalidDataException("instruments", ErrorCode.NOT_NULL.getCode(), null);
+                    throw new InvalidDataException(INSTRUMENTS, ErrorCode.NOT_NULL.getCode(), null);
                 for (InstrumentType instrumentType : instrumenttypes) {
                     validator.validate(instrumentType, errors);
                     if (!instrumentTypeRepository.uniqueCheck("name", instrumentType))
@@ -123,7 +123,7 @@ public class InstrumentTypeService {
                 break;
             case ACTION_UPDATE:
                 if (instrumenttypes == null)
-                    throw new InvalidDataException("instruments", ErrorCode.NOT_NULL.getCode(), null);
+                    throw new InvalidDataException(INSTRUMENTS, ErrorCode.NOT_NULL.getCode(), null);
                 for (InstrumentType instrumentType : instrumenttypes) {
                     if (instrumentType.getId() == null)
                         throw new InvalidDataException("id", ErrorCode.MANDATORY_VALUE_MISSING.getCode(), instrumentType.getId());
@@ -135,7 +135,7 @@ public class InstrumentTypeService {
                 break;
             case ACTION_DELETE:
                 if (instrumenttypes == null)
-                    throw new InvalidDataException("instruments", ErrorCode.NOT_NULL.getCode(), null);
+                    throw new InvalidDataException(INSTRUMENTS, ErrorCode.NOT_NULL.getCode(), null);
                 for (InstrumentType instrumenttype : instrumenttypes)
                     if (instrumenttype.getId() == null)
                         throw new InvalidDataException("id", ErrorCode.MANDATORY_VALUE_MISSING.getCode(), instrumenttype.getId());

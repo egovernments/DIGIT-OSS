@@ -34,6 +34,7 @@ public class BudgetGroupService {
 	private SmartValidator validator;
 	@Autowired
 	private ChartOfAccountRepository chartOfAccountRepository;
+	private static final String BUDGET_GROUPS="budgetgroups";
 
 	private BindingResult validate(List<BudgetGroup> budgetgroups, String method, BindingResult errors) {
 
@@ -45,7 +46,7 @@ public class BudgetGroupService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (budgetgroups == null) {
-                            throw new InvalidDataException("budgetgroups", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(BUDGET_GROUPS, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (BudgetGroup budgetGroup : budgetgroups) {
                             validator.validate(budgetGroup, errors);
@@ -57,7 +58,7 @@ public class BudgetGroupService {
                         break;
                     case Constants.ACTION_UPDATE:
                         if (budgetgroups == null) {
-                            throw new InvalidDataException("budgetgroups", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(BUDGET_GROUPS, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (BudgetGroup budgetGroup : budgetgroups) {
                             if (budgetGroup.getId() == null) {
@@ -72,7 +73,7 @@ public class BudgetGroupService {
                         break;
                     case Constants.ACTION_SEARCH:
                         if (budgetgroups == null) {
-                            throw new InvalidDataException("budgetgroups", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(BUDGET_GROUPS, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (BudgetGroup budgetgroup : budgetgroups) {
                             if (budgetgroup.getTenantId() == null) {

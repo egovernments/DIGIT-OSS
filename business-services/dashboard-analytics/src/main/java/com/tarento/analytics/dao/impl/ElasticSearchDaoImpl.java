@@ -90,7 +90,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 	private String docType;
 	private static final String FOR_TYPE=" for Type ";
 	private static final String TOTAL_TIME_ELAPSED=" ,Total time elapsed = ";
-
+	private static final String INTERVAL="interval";
 	public String getIndexName() {
 		return indexName;
 	}
@@ -281,15 +281,15 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 				if ("DATE_HISTOGRAM".equalsIgnoreCase(en.getKey())) {
 					Map<String, String> aggsVal = (Map<String, String>) en.getValue();
 					DateHistogramInterval dateHistogramInterval = null;
-					if (aggsVal.get("interval").equals("day")) {
+					if (aggsVal.get(INTERVAL).equals("day")) {
 						dateHistogramInterval = DateHistogramInterval.DAY;
-					} else if (aggsVal.get("interval").equals("hour")) {
+					} else if (aggsVal.get(INTERVAL).equals("hour")) {
 						dateHistogramInterval = DateHistogramInterval.HOUR;
 
-					} else if (aggsVal.get("interval").equals("month")) {
+					} else if (aggsVal.get(INTERVAL).equals("month")) {
 						dateHistogramInterval = DateHistogramInterval.MONTH;
 
-					} else if (aggsVal.get("interval").equals("year")) {
+					} else if (aggsVal.get(INTERVAL).equals("year")) {
 						dateHistogramInterval = DateHistogramInterval.YEAR;
 
 					}

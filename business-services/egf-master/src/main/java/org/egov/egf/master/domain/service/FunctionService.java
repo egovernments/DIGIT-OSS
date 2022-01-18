@@ -30,6 +30,8 @@ public class FunctionService {
 
 	@Autowired
 	private SmartValidator validator;
+	private static final String FUNCTIONS="functions";
+	private static final String FUNCTION="function";
 
 	@Transactional
 	public List<Function> create(List<Function> functions, BindingResult errors, RequestInfo requestInfo) {
@@ -92,23 +94,23 @@ public class FunctionService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (functions == null) {
-                            throw new InvalidDataException("functions", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(FUNCTIONS, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Function function : functions) {
                             validator.validate(function, errors);
                             if (!functionRepository.uniqueCheck("name", function)) {
-                                errors.addError(new FieldError("function", "name", function.getName(), false,
+                                errors.addError(new FieldError(FUNCTION, "name", function.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                             if (!functionRepository.uniqueCheck("code", function)) {
-                                errors.addError(new FieldError("function", "code", function.getCode(), false,
+                                errors.addError(new FieldError(FUNCTION, "code", function.getCode(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
                         break;
                     case Constants.ACTION_UPDATE:
                         if (functions == null) {
-                            throw new InvalidDataException("functions", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(FUNCTIONS, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Function function : functions) {
                             if (function.getId() == null) {
@@ -116,18 +118,18 @@ public class FunctionService {
                             }
                             validator.validate(function, errors);
                             if (!functionRepository.uniqueCheck("name", function)) {
-                                errors.addError(new FieldError("function", "name", function.getName(), false,
+                                errors.addError(new FieldError(FUNCTION, "name", function.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                             if (!functionRepository.uniqueCheck("code", function)) {
-                                errors.addError(new FieldError("function", "code", function.getCode(), false,
+                                errors.addError(new FieldError(FUNCTION, "code", function.getCode(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
                         break;
                     case Constants.ACTION_SEARCH:
                         if (functions == null) {
-                            throw new InvalidDataException("functions", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(FUNCTIONS, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Function function : functions) {
                             if (function.getTenantId() == null) {

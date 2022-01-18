@@ -33,14 +33,16 @@ public class AppProperties {
     private String streamNameTelemetryElasticsearchFinalPush;
 
     private Integer deDupStorageTime; //In Minutes
-
+    private static final String DEDUP_STORAGE_TIME="DEDUP_STORAGE_TIME";
+    private static final String NUMBER_OF_PARTITIONS="NUMBER_OF_PARTITIONS";
+    private static final String REPLICATION_FACTOR="REPLICATION_FACTOR";
     public AppProperties() {
         kafkaBootstrapServerConfig = System.getenv("BOOTSTRAP_SERVER_CONFIG");
 
-        if(System.getenv("NUMBER_OF_PARTITIONS") != null)
-            numberOfPartitions = Integer.parseInt(System.getenv("NUMBER_OF_PARTITIONS"));
-        if(System.getenv("REPLICATION_FACTOR") != null)
-            replicationFactor = Short.parseShort(System.getenv("REPLICATION_FACTOR"));
+        if(System.getenv(NUMBER_OF_PARTITIONS) != null)
+            numberOfPartitions = Integer.parseInt(System.getenv(NUMBER_OF_PARTITIONS));
+        if(System.getenv(REPLICATION_FACTOR) != null)
+            replicationFactor = Short.parseShort(System.getenv(REPLICATION_FACTOR));
 
         telemetryRawInput = System.getenv("TELEMETRY_RAW_INPUT");
         telemetryValidatedMessages = System.getenv("TELEMETRY_VALIDATED_MESSAGES");
@@ -57,8 +59,8 @@ public class AppProperties {
         streamNameTelemetrySecorFinalPush = System.getenv("STREAM_NAME_TELEMETRY_SECOR_FINAL_PUSH");
         streamNameTelemetryElasticsearchFinalPush = System.getenv("STREAM_NAME_TELEMETRY_ELASTICSEARCH_FINAL_PUSH");
 
-        if(System.getenv("DEDUP_STORAGE_TIME") != null)
-            deDupStorageTime = Integer.parseInt(System.getenv("DEDUP_STORAGE_TIME"));
+        if(System.getenv(DEDUP_STORAGE_TIME) != null)
+            deDupStorageTime = Integer.parseInt(System.getenv(DEDUP_STORAGE_TIME));
 
         Properties properties = new Properties();
         InputStream inputStream = null;
@@ -75,12 +77,12 @@ public class AppProperties {
           kafkaBootstrapServerConfig = properties.getProperty("BOOTSTRAP_SERVER_CONFIG");
 
         if(numberOfPartitions == null)
-            if(properties.getProperty("NUMBER_OF_PARTITIONS") != null)
-                numberOfPartitions = Integer.parseInt(properties.getProperty("NUMBER_OF_PARTITIONS"));
+            if(properties.getProperty(NUMBER_OF_PARTITIONS) != null)
+                numberOfPartitions = Integer.parseInt(properties.getProperty(NUMBER_OF_PARTITIONS));
 
         if(replicationFactor == null)
-            if(properties.getProperty("REPLICATION_FACTOR") != null)
-                replicationFactor = Short.parseShort(properties.getProperty("REPLICATION_FACTOR"));
+            if(properties.getProperty(REPLICATION_FACTOR) != null)
+                replicationFactor = Short.parseShort(properties.getProperty(REPLICATION_FACTOR));
 
         if(telemetryRawInput == null)
             telemetryRawInput = properties.getProperty("TELEMETRY_RAW_INPUT");
@@ -124,8 +126,8 @@ public class AppProperties {
 
 
         if(deDupStorageTime == null)
-            if(properties.getProperty("DEDUP_STORAGE_TIME") != null)
-                deDupStorageTime = Integer.parseInt(properties.getProperty("DEDUP_STORAGE_TIME"));
+            if(properties.getProperty(DEDUP_STORAGE_TIME) != null)
+                deDupStorageTime = Integer.parseInt(properties.getProperty(DEDUP_STORAGE_TIME));
 
     }
 

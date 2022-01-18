@@ -42,7 +42,7 @@ public class AmendmentRepository {
 
 	private static final String AMENDMENT_ID="amendmentid";
 
-	private static final String MESSAGE="status";
+	private static final String STATUS="status";
 	
 	@Transactional
 	public void saveAmendment (AmendmentRequest amendmentRequest) {
@@ -96,7 +96,7 @@ public class AmendmentRepository {
 		mapSqlParameterSource.addValue("consumercode", amendment.getConsumerCode());
 		mapSqlParameterSource.addValue("amendmentreason", amendment.getAmendmentReason().toString());
 		mapSqlParameterSource.addValue("reasondocumentnumber", amendment.getReasonDocumentNumber());
-		mapSqlParameterSource.addValue(MESSAGE, amendment.getStatus().toString());
+		mapSqlParameterSource.addValue(STATUS, amendment.getStatus().toString());
 		mapSqlParameterSource.addValue("effectivetill", amendment.getEffectiveTill());
 		mapSqlParameterSource.addValue("effectivefrom", amendment.getEffectiveFrom());
 		mapSqlParameterSource.addValue("amendeddemandid", amendment.getAmendedDemandId());
@@ -136,7 +136,7 @@ public class AmendmentRepository {
 			documentParamMap.addValue("documenttype", document.getDocumentType());
 			documentParamMap.addValue("filestoreid", document.getFileStoreId());
 			documentParamMap.addValue("documentuid", document.getDocumentUid());
-			documentParamMap.addValue(MESSAGE, "ACTIVE");
+			documentParamMap.addValue(STATUS, "ACTIVE");
 			documentsParamMapList.add(documentParamMap);
 		}
 
@@ -151,7 +151,7 @@ public class AmendmentRepository {
 			AuditDetails auditDetails = amendmentUpdate.getAuditDetails();
 			MapSqlParameterSource updateParamMap = new MapSqlParameterSource();
 
-			updateParamMap.addValue(MESSAGE, amendmentUpdate.getStatus().toString());
+			updateParamMap.addValue(STATUS, amendmentUpdate.getStatus().toString());
 			updateParamMap.addValue("amendeddemandid", amendmentUpdate.getAmendedDemandId());
 			updateParamMap.addValue("lastmodifiedby", auditDetails.getLastModifiedBy());
 			updateParamMap.addValue("lastmodifiedtime", auditDetails.getLastModifiedTime());

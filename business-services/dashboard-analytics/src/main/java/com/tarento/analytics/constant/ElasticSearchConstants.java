@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ElasticSearchConstants {
+	private ElasticSearchConstants(){}
 	 public static final String LTE = "<=";
 	 public static final String LT = "<";
 	 public static final String GTE = ">=";

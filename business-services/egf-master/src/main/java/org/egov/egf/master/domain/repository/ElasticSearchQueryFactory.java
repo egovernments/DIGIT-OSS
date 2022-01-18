@@ -36,7 +36,11 @@ public class ElasticSearchQueryFactory {
 
 	@Autowired
 	private ElasticSearchUtils elasticSearchUtils;
-
+	private static final String ACTIVE="active";
+	private static final String ACCOUNT_DETAIL_TYPE="accountDetailType";
+	private static final String DESCRIPTION="description";
+	private static final String CHART_OF_ACCOUNT="chartOfAccount";
+	private static final String IS_ACTIVE_FOR_POSTING="isActiveForPosting";
 	public BoolQueryBuilder searchFund(FundSearchContract fundSearchContract) {
 		BoolQueryBuilder boolQueryBuilder = boolQuery();
 		if (fundSearchContract.getIds() != null && !fundSearchContract.getIds().isEmpty())
@@ -46,7 +50,7 @@ public class ElasticSearchQueryFactory {
 		elasticSearchUtils.add(fundSearchContract.getIdentifier(), "identifier", boolQueryBuilder);
 		elasticSearchUtils.add(fundSearchContract.getLevel(), "level", boolQueryBuilder);
 		elasticSearchUtils.add(fundSearchContract.getParent(), "parent", boolQueryBuilder);
-		elasticSearchUtils.add(fundSearchContract.getActive(), "active", boolQueryBuilder);
+		elasticSearchUtils.add(fundSearchContract.getActive(), ACTIVE, boolQueryBuilder);
 
 		return boolQueryBuilder;
 	}
@@ -67,7 +71,7 @@ public class ElasticSearchQueryFactory {
 			elasticSearchUtils.add(accountDetailKeySearchContract.getIds(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(accountDetailKeySearchContract.getId(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(accountDetailKeySearchContract.getKey(), "key", boolQueryBuilder);
-		elasticSearchUtils.add(accountDetailKeySearchContract.getAccountDetailType(), "accountDetailType",
+		elasticSearchUtils.add(accountDetailKeySearchContract.getAccountDetailType(), ACCOUNT_DETAIL_TYPE,
 				boolQueryBuilder);
 		return boolQueryBuilder;
 	}
@@ -78,9 +82,9 @@ public class ElasticSearchQueryFactory {
 			elasticSearchUtils.add(accountDetailTypeSearchContract.getIds(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(accountDetailTypeSearchContract.getId(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(accountDetailTypeSearchContract.getName(), "name", boolQueryBuilder);
-		elasticSearchUtils.add(accountDetailTypeSearchContract.getDescription(), "description", boolQueryBuilder);
+		elasticSearchUtils.add(accountDetailTypeSearchContract.getDescription(), DESCRIPTION, boolQueryBuilder);
 		elasticSearchUtils.add(accountDetailTypeSearchContract.getTableName(), "tableName", boolQueryBuilder);
-		elasticSearchUtils.add(accountDetailTypeSearchContract.getActive(), "active", boolQueryBuilder);
+		elasticSearchUtils.add(accountDetailTypeSearchContract.getActive(), ACTIVE, boolQueryBuilder);
 		elasticSearchUtils.add(accountDetailTypeSearchContract.getFullyQualifiedName(), "fullyQualifiedName",
 				boolQueryBuilder);
 		return boolQueryBuilder;
@@ -92,10 +96,10 @@ public class ElasticSearchQueryFactory {
 			elasticSearchUtils.add(accountEntitySearchContract.getIds(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(accountEntitySearchContract.getId(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(accountEntitySearchContract.getName(), "name", boolQueryBuilder);
-		elasticSearchUtils.add(accountEntitySearchContract.getDescription(), "description", boolQueryBuilder);
+		elasticSearchUtils.add(accountEntitySearchContract.getDescription(), DESCRIPTION, boolQueryBuilder);
 		elasticSearchUtils.add(accountEntitySearchContract.getCode(), "code", boolQueryBuilder);
-		elasticSearchUtils.add(accountEntitySearchContract.getActive(), "active", boolQueryBuilder);
-		elasticSearchUtils.add(accountEntitySearchContract.getAccountDetailType(), "accountDetailType",
+		elasticSearchUtils.add(accountEntitySearchContract.getActive(), ACTIVE, boolQueryBuilder);
+		elasticSearchUtils.add(accountEntitySearchContract.getAccountDetailType(), ACCOUNT_DETAIL_TYPE,
 				boolQueryBuilder);
 		return boolQueryBuilder;
 
@@ -106,10 +110,10 @@ public class ElasticSearchQueryFactory {
 		if (bankAccountSearchContract.getIds() != null && !bankAccountSearchContract.getIds().isEmpty())
 			elasticSearchUtils.add(bankAccountSearchContract.getIds(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(bankAccountSearchContract.getId(), "id", boolQueryBuilder);
-		elasticSearchUtils.add(bankAccountSearchContract.getChartOfAccount(), "chartOfAccount", boolQueryBuilder);
-		elasticSearchUtils.add(bankAccountSearchContract.getDescription(), "description", boolQueryBuilder);
+		elasticSearchUtils.add(bankAccountSearchContract.getChartOfAccount(), CHART_OF_ACCOUNT, boolQueryBuilder);
+		elasticSearchUtils.add(bankAccountSearchContract.getDescription(), DESCRIPTION, boolQueryBuilder);
 		elasticSearchUtils.add(bankAccountSearchContract.getFund(), "fund", boolQueryBuilder);
-		elasticSearchUtils.add(bankAccountSearchContract.getActive(), "active", boolQueryBuilder);
+		elasticSearchUtils.add(bankAccountSearchContract.getActive(), ACTIVE, boolQueryBuilder);
 		elasticSearchUtils.add(bankAccountSearchContract.getAccountNumber(), "accountNumber", boolQueryBuilder);
 		elasticSearchUtils.add(bankAccountSearchContract.getAccountType(), "accountType", boolQueryBuilder);
 		elasticSearchUtils.add(bankAccountSearchContract.getPayTo(), "payTo", boolQueryBuilder);
@@ -125,9 +129,9 @@ public class ElasticSearchQueryFactory {
 			elasticSearchUtils.add(bankBranchSearchContract.getIds(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(bankBranchSearchContract.getId(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(bankBranchSearchContract.getName(), "name", boolQueryBuilder);
-		elasticSearchUtils.add(bankBranchSearchContract.getDescription(), "description", boolQueryBuilder);
+		elasticSearchUtils.add(bankBranchSearchContract.getDescription(), DESCRIPTION, boolQueryBuilder);
 		elasticSearchUtils.add(bankBranchSearchContract.getBank(), "bank", boolQueryBuilder);
-		elasticSearchUtils.add(bankBranchSearchContract.getActive(), "active", boolQueryBuilder);
+		elasticSearchUtils.add(bankBranchSearchContract.getActive(), ACTIVE, boolQueryBuilder);
 		elasticSearchUtils.add(bankBranchSearchContract.getAddress(), "address", boolQueryBuilder);
 		elasticSearchUtils.add(bankBranchSearchContract.getAddress2(), "address2", boolQueryBuilder);
 		elasticSearchUtils.add(bankBranchSearchContract.getBank(), "city", boolQueryBuilder);
@@ -149,9 +153,9 @@ public class ElasticSearchQueryFactory {
 		elasticSearchUtils.add(bankSearchContract.getId(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(bankSearchContract.getName(), "name", boolQueryBuilder);
 		elasticSearchUtils.add(bankSearchContract.getCode(), "code", boolQueryBuilder);
-		elasticSearchUtils.add(bankSearchContract.getDescription(), "description", boolQueryBuilder);
+		elasticSearchUtils.add(bankSearchContract.getDescription(), DESCRIPTION, boolQueryBuilder);
 		elasticSearchUtils.add(bankSearchContract.getType(), "type", boolQueryBuilder);
-		elasticSearchUtils.add(bankSearchContract.getActive(), "active", boolQueryBuilder);
+		elasticSearchUtils.add(bankSearchContract.getActive(), ACTIVE, boolQueryBuilder);
 		return boolQueryBuilder;
 
 	}
@@ -162,12 +166,12 @@ public class ElasticSearchQueryFactory {
 			elasticSearchUtils.add(budgetGroupSearchContract.getIds(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(budgetGroupSearchContract.getId(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(budgetGroupSearchContract.getName(), "name", boolQueryBuilder);
-		elasticSearchUtils.add(budgetGroupSearchContract.getDescription(), "description", boolQueryBuilder);
+		elasticSearchUtils.add(budgetGroupSearchContract.getDescription(), DESCRIPTION, boolQueryBuilder);
 		elasticSearchUtils.add(budgetGroupSearchContract.getMajorCode(), "majorCode", boolQueryBuilder);
 		elasticSearchUtils.add(budgetGroupSearchContract.getMaxCode(), "maxCode", boolQueryBuilder);
 		elasticSearchUtils.add(budgetGroupSearchContract.getMinCode(), "minCode", boolQueryBuilder);
 		elasticSearchUtils.add(budgetGroupSearchContract.getAccountType(), "accountType", boolQueryBuilder);
-		elasticSearchUtils.add(budgetGroupSearchContract.getActive(), "active", boolQueryBuilder);
+		elasticSearchUtils.add(budgetGroupSearchContract.getActive(), ACTIVE, boolQueryBuilder);
 		elasticSearchUtils.add(budgetGroupSearchContract.getBudgetingType(), "budgetingType", boolQueryBuilder);
 		return boolQueryBuilder;
 
@@ -179,11 +183,11 @@ public class ElasticSearchQueryFactory {
 			elasticSearchUtils.add(chartOfAccountContract.getIds(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(chartOfAccountContract.getId(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(chartOfAccountContract.getName(), "name", boolQueryBuilder);
-		elasticSearchUtils.add(chartOfAccountContract.getDescription(), "description", boolQueryBuilder);
+		elasticSearchUtils.add(chartOfAccountContract.getDescription(), DESCRIPTION, boolQueryBuilder);
 		elasticSearchUtils.add(chartOfAccountContract.getMajorCode(), "majorCode", boolQueryBuilder);
 		elasticSearchUtils.add(chartOfAccountContract.getGlcode(), "glcode", boolQueryBuilder);
 		elasticSearchUtils.add(chartOfAccountContract.getAccountCodePurpose(), "accountCodePurpose", boolQueryBuilder);
-		elasticSearchUtils.add(chartOfAccountContract.getIsActiveForPosting(), "isActiveForPosting", boolQueryBuilder);
+		elasticSearchUtils.add(chartOfAccountContract.getIsActiveForPosting(), IS_ACTIVE_FOR_POSTING, boolQueryBuilder);
 		elasticSearchUtils.add(chartOfAccountContract.getParentId(), "parentId", boolQueryBuilder);
 		elasticSearchUtils.add(chartOfAccountContract.getType(), "type", boolQueryBuilder);
 		elasticSearchUtils.add(chartOfAccountContract.getClassification(), "classification", boolQueryBuilder);
@@ -202,9 +206,9 @@ public class ElasticSearchQueryFactory {
 				&& !chartOfAccountDetailSearchContract.getIds().isEmpty())
 			elasticSearchUtils.add(chartOfAccountDetailSearchContract.getIds(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(chartOfAccountDetailSearchContract.getId(), "id", boolQueryBuilder);
-		elasticSearchUtils.add(chartOfAccountDetailSearchContract.getChartOfAccount(), "chartOfAccount",
+		elasticSearchUtils.add(chartOfAccountDetailSearchContract.getChartOfAccount(), CHART_OF_ACCOUNT,
 				boolQueryBuilder);
-		elasticSearchUtils.add(chartOfAccountDetailSearchContract.getAccountDetailType(), "accountDetailType",
+		elasticSearchUtils.add(chartOfAccountDetailSearchContract.getAccountDetailType(), ACCOUNT_DETAIL_TYPE,
 				boolQueryBuilder);
 		return boolQueryBuilder;
 
@@ -218,8 +222,8 @@ public class ElasticSearchQueryFactory {
 		elasticSearchUtils.add(financialYearSearchContract.getFinYearRange(), "finYearRange", boolQueryBuilder);
 		elasticSearchUtils.add(financialYearSearchContract.getStartingDate(), "startingDate", boolQueryBuilder);
 		elasticSearchUtils.add(financialYearSearchContract.getEndingDate(), "endingDate", boolQueryBuilder);
-		elasticSearchUtils.add(financialYearSearchContract.getActive(), "active", boolQueryBuilder);
-		elasticSearchUtils.add(financialYearSearchContract.getIsActiveForPosting(), "isActiveForPosting",
+		elasticSearchUtils.add(financialYearSearchContract.getActive(), ACTIVE, boolQueryBuilder);
+		elasticSearchUtils.add(financialYearSearchContract.getIsActiveForPosting(), IS_ACTIVE_FOR_POSTING,
 				boolQueryBuilder);
 		elasticSearchUtils.add(financialYearSearchContract.getIsClosed(), "isClosed", boolQueryBuilder);
 		elasticSearchUtils.add(financialYearSearchContract.getTransferClosingBalance(), "transferClosingBalance",
@@ -236,7 +240,7 @@ public class ElasticSearchQueryFactory {
 		elasticSearchUtils.add(functionSearchContract.getName(), "name", boolQueryBuilder);
 		elasticSearchUtils.add(functionSearchContract.getCode(), "code", boolQueryBuilder);
 		elasticSearchUtils.add(functionSearchContract.getLevel(), "level", boolQueryBuilder);
-		elasticSearchUtils.add(functionSearchContract.getActive(), "active", boolQueryBuilder);
+		elasticSearchUtils.add(functionSearchContract.getActive(), ACTIVE, boolQueryBuilder);
 		elasticSearchUtils.add(functionSearchContract.getParentId(), "parentId", boolQueryBuilder);
 		return boolQueryBuilder;
 
@@ -249,7 +253,7 @@ public class ElasticSearchQueryFactory {
 		elasticSearchUtils.add(functionarySearchContract.getId(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(functionarySearchContract.getName(), "name", boolQueryBuilder);
 		elasticSearchUtils.add(functionarySearchContract.getCode(), "code", boolQueryBuilder);
-		elasticSearchUtils.add(functionarySearchContract.getActive(), "active", boolQueryBuilder);
+		elasticSearchUtils.add(functionarySearchContract.getActive(), ACTIVE, boolQueryBuilder);
 		return boolQueryBuilder;
 	}
 
@@ -260,11 +264,11 @@ public class ElasticSearchQueryFactory {
 		elasticSearchUtils.add(schemeSearchContract.getId(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(schemeSearchContract.getName(), "name", boolQueryBuilder);
 		elasticSearchUtils.add(schemeSearchContract.getCode(), "code", boolQueryBuilder);
-		elasticSearchUtils.add(schemeSearchContract.getActive(), "active", boolQueryBuilder);
+		elasticSearchUtils.add(schemeSearchContract.getActive(), ACTIVE, boolQueryBuilder);
 		elasticSearchUtils.add(schemeSearchContract.getValidFrom(), "validFrom", boolQueryBuilder);
 		elasticSearchUtils.add(schemeSearchContract.getValidTo(), "validTo", boolQueryBuilder);
 		elasticSearchUtils.add(schemeSearchContract.getFund(), "fund", boolQueryBuilder);
-		elasticSearchUtils.add(schemeSearchContract.getDescription(), "description", boolQueryBuilder);
+		elasticSearchUtils.add(schemeSearchContract.getDescription(), DESCRIPTION, boolQueryBuilder);
 		elasticSearchUtils.add(schemeSearchContract.getBoundary(), "boundary", boolQueryBuilder);
 
 		return boolQueryBuilder;
@@ -277,7 +281,7 @@ public class ElasticSearchQueryFactory {
 		elasticSearchUtils.add(subSchemeSearchContract.getId(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(subSchemeSearchContract.getName(), "name", boolQueryBuilder);
 		elasticSearchUtils.add(subSchemeSearchContract.getCode(), "code", boolQueryBuilder);
-		elasticSearchUtils.add(subSchemeSearchContract.getActive(), "active", boolQueryBuilder);
+		elasticSearchUtils.add(subSchemeSearchContract.getActive(), ACTIVE, boolQueryBuilder);
 		elasticSearchUtils.add(subSchemeSearchContract.getValidFrom(), "validFrom", boolQueryBuilder);
 		elasticSearchUtils.add(subSchemeSearchContract.getValidTo(), "validTo", boolQueryBuilder);
 		elasticSearchUtils.add(subSchemeSearchContract.getScheme(), "scheme", boolQueryBuilder);
@@ -293,11 +297,11 @@ public class ElasticSearchQueryFactory {
 		elasticSearchUtils.add(supplierSearchContract.getId(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(supplierSearchContract.getName(), "name", boolQueryBuilder);
 		elasticSearchUtils.add(supplierSearchContract.getCode(), "code", boolQueryBuilder);
-		elasticSearchUtils.add(supplierSearchContract.getActive(), "active", boolQueryBuilder);
+		elasticSearchUtils.add(supplierSearchContract.getActive(), ACTIVE, boolQueryBuilder);
 		elasticSearchUtils.add(supplierSearchContract.getAddress(), "address", boolQueryBuilder);
 		elasticSearchUtils.add(supplierSearchContract.getMobile(), "mobile", boolQueryBuilder);
 		elasticSearchUtils.add(supplierSearchContract.getEmail(), "email", boolQueryBuilder);
-		elasticSearchUtils.add(supplierSearchContract.getDescription(), "description", boolQueryBuilder);
+		elasticSearchUtils.add(supplierSearchContract.getDescription(), DESCRIPTION, boolQueryBuilder);
 		elasticSearchUtils.add(supplierSearchContract.getPanNo(), "panNo", boolQueryBuilder);
 		elasticSearchUtils.add(supplierSearchContract.getTinNo(), "tinNo", boolQueryBuilder);
 		elasticSearchUtils.add(supplierSearchContract.getRegistationNo(), "registationNo", boolQueryBuilder);
@@ -315,10 +319,10 @@ public class ElasticSearchQueryFactory {
 		elasticSearchUtils.add(fiscalPeriodSearchContract.getId(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(fiscalPeriodSearchContract.getName(), "name", boolQueryBuilder);
 		elasticSearchUtils.add(fiscalPeriodSearchContract.getFinancialYear(), "financialYear", boolQueryBuilder);
-		elasticSearchUtils.add(fiscalPeriodSearchContract.getActive(), "active", boolQueryBuilder);
+		elasticSearchUtils.add(fiscalPeriodSearchContract.getActive(), ACTIVE, boolQueryBuilder);
 		elasticSearchUtils.add(fiscalPeriodSearchContract.getStartingDate(), "startingDate", boolQueryBuilder);
 		elasticSearchUtils.add(fiscalPeriodSearchContract.getEndingDate(), "endingDate", boolQueryBuilder);
-		elasticSearchUtils.add(fiscalPeriodSearchContract.getIsActiveForPosting(), "isActiveForPosting",
+		elasticSearchUtils.add(fiscalPeriodSearchContract.getIsActiveForPosting(), IS_ACTIVE_FOR_POSTING,
 				boolQueryBuilder);
 		elasticSearchUtils.add(fiscalPeriodSearchContract.getIsClosed(), "isClosed", boolQueryBuilder);
 
@@ -332,7 +336,7 @@ public class ElasticSearchQueryFactory {
 		elasticSearchUtils.add(fundsourceSearchContract.getId(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(fundsourceSearchContract.getName(), "name", boolQueryBuilder);
 		elasticSearchUtils.add(fundsourceSearchContract.getCode(), "code", boolQueryBuilder);
-		elasticSearchUtils.add(fundsourceSearchContract.getActive(), "active", boolQueryBuilder);
+		elasticSearchUtils.add(fundsourceSearchContract.getActive(), ACTIVE, boolQueryBuilder);
 		elasticSearchUtils.add(fundsourceSearchContract.getParent(), "parent", boolQueryBuilder);
 		elasticSearchUtils.add(fundsourceSearchContract.getIsParent(), "isParent", boolQueryBuilder);
 		elasticSearchUtils.add(fundsourceSearchContract.getLlevel(), "llevel", boolQueryBuilder);
@@ -347,9 +351,9 @@ public class ElasticSearchQueryFactory {
 			elasticSearchUtils.add(recoverySearchContract.getIds(), "id", boolQueryBuilder);
 		elasticSearchUtils.add(recoverySearchContract.getName(), "name", boolQueryBuilder);
 		elasticSearchUtils.add(recoverySearchContract.getCode(), "code", boolQueryBuilder);
-		elasticSearchUtils.add(recoverySearchContract.getActive(), "active", boolQueryBuilder);
+		elasticSearchUtils.add(recoverySearchContract.getActive(), ACTIVE, boolQueryBuilder);
 		if (recoverySearchContract.getChartOfAccount() != null)
-			elasticSearchUtils.add(recoverySearchContract.getChartOfAccount(), "chartOfAccount", boolQueryBuilder);
+			elasticSearchUtils.add(recoverySearchContract.getChartOfAccount(), CHART_OF_ACCOUNT, boolQueryBuilder);
 		elasticSearchUtils.add(recoverySearchContract.getType(), "type", boolQueryBuilder);
 		elasticSearchUtils.add(recoverySearchContract.getFlat(), "flat", boolQueryBuilder);
 		elasticSearchUtils.add(recoverySearchContract.getPercentage(), "percentage", boolQueryBuilder);

@@ -37,6 +37,7 @@ public class ChartOfAccountDetailService {
 	private ChartOfAccountRepository chartOfAccountRepository;
 	@Autowired
 	private AccountDetailTypeRepository accountDetailTypeRepository;
+	private static final String CHART_OF_ACCOUNT_DETAILS="chartofaccountdetails";
 
 	private BindingResult validate(List<ChartOfAccountDetail> chartofaccountdetails, String method,
 			BindingResult errors) {
@@ -49,7 +50,7 @@ public class ChartOfAccountDetailService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (chartofaccountdetails == null) {
-                            throw new InvalidDataException("chartofaccountdetails", ErrorCode.NOT_NULL.getCode(),
+                            throw new InvalidDataException(CHART_OF_ACCOUNT_DETAILS, ErrorCode.NOT_NULL.getCode(),
                                     null);
                         }
                         for (ChartOfAccountDetail chartOfAccountDetail : chartofaccountdetails) {
@@ -58,7 +59,7 @@ public class ChartOfAccountDetailService {
                         break;
                     case Constants.ACTION_UPDATE:
                         if (chartofaccountdetails == null) {
-                            throw new InvalidDataException("chartofaccountdetails", ErrorCode.NOT_NULL.getCode(),
+                            throw new InvalidDataException(CHART_OF_ACCOUNT_DETAILS, ErrorCode.NOT_NULL.getCode(),
                                     null);
                         }
                         for (ChartOfAccountDetail chartOfAccountDetail : chartofaccountdetails) {
@@ -71,7 +72,7 @@ public class ChartOfAccountDetailService {
                         break;
                     case Constants.ACTION_SEARCH:
                         if (chartofaccountdetails == null) {
-                            throw new InvalidDataException("chartofaccountdetails", ErrorCode.NOT_NULL.getCode(),
+                            throw new InvalidDataException(CHART_OF_ACCOUNT_DETAILS, ErrorCode.NOT_NULL.getCode(),
                                     null);
                         }
                         for (ChartOfAccountDetail chartofaccountdetail : chartofaccountdetails) {

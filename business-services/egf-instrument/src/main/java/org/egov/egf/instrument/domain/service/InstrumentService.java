@@ -51,6 +51,8 @@ public class InstrumentService {
 
     private InstrumentTypeRepository instrumentTypeRepository;
 
+    private static final String INSTRUMENTS="instruments";
+
     @Autowired
     public InstrumentService(SmartValidator validator, InstrumentRepository instrumentRepository, BankContractRepository bankContractRepository,
             FinancialStatusContractRepository financialStatusContractRepository,
@@ -135,7 +137,7 @@ public class InstrumentService {
                 break;
             case ACTION_CREATE:
                 if (instruments == null)
-                    throw new InvalidDataException("instruments", ErrorCode.NOT_NULL.getCode(), null);
+                    throw new InvalidDataException(INSTRUMENTS, ErrorCode.NOT_NULL.getCode(), null);
                 Calendar cal = Calendar.getInstance();
                 cal.add(Calendar.MONTH, -6);
                 Calendar cal1 = Calendar.getInstance();
@@ -194,7 +196,7 @@ public class InstrumentService {
                 break;
             case ACTION_UPDATE:
                 if (instruments == null)
-                    throw new InvalidDataException("instruments", ErrorCode.NOT_NULL.getCode(), null);
+                    throw new InvalidDataException(INSTRUMENTS, ErrorCode.NOT_NULL.getCode(), null);
                 for (Instrument instrument : instruments) {
                     if (instrument.getId() == null)
                         throw new InvalidDataException("id", ErrorCode.MANDATORY_VALUE_MISSING.getCode(), instrument.getId());
@@ -203,7 +205,7 @@ public class InstrumentService {
                 break;
             case ACTION_DELETE:
                 if (instruments == null)
-                    throw new InvalidDataException("instruments", ErrorCode.NOT_NULL.getCode(), null);
+                    throw new InvalidDataException(INSTRUMENTS, ErrorCode.NOT_NULL.getCode(), null);
                 for (Instrument instrument : instruments)
                     if (instrument.getId() == null)
                         throw new InvalidDataException("id", ErrorCode.MANDATORY_VALUE_MISSING.getCode(), instrument.getId());

@@ -30,6 +30,11 @@ public class FinancialYearService {
 
 	@Autowired
 	private SmartValidator validator;
+    private static final String STARTING_DATE="startingdate";
+    private static final String FINANCIAL_YEARS="financialyears";
+    private static final String F_IN_YEAR_RANGE="finYearRange";
+    private static final String FINANCIAL_YEAR="financialYear";
+    private static final String ENDING_DATE="endingdate";
 
 	public BindingResult validate(List<FinancialYear> financialyears, String method, BindingResult errors) {
 
@@ -41,50 +46,50 @@ public class FinancialYearService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (financialyears == null) {
-                            throw new InvalidDataException("financialyears", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(FINANCIAL_YEARS, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (FinancialYear financialYear : financialyears) {
                             validator.validate(financialYear, errors);
-                            if (!financialYearRepository.uniqueCheck("finYearRange", financialYear)) {
-                                errors.addError(new FieldError("financialYear", "finYearRange", financialYear.getFinYearRange(), false,
+                            if (!financialYearRepository.uniqueCheck(F_IN_YEAR_RANGE, financialYear)) {
+                                errors.addError(new FieldError(FINANCIAL_YEAR, F_IN_YEAR_RANGE, financialYear.getFinYearRange(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
-                            if (!financialYearRepository.uniqueCheck("startingdate", financialYear)) {
-                                errors.addError(new FieldError("financialYear", "startingdate", financialYear.getStartingDate(), false,
+                            if (!financialYearRepository.uniqueCheck(STARTING_DATE, financialYear)) {
+                                errors.addError(new FieldError(FINANCIAL_YEAR, STARTING_DATE, financialYear.getStartingDate(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
-                            if (!financialYearRepository.uniqueCheck("endingdate", financialYear)) {
-                                errors.addError(new FieldError("financialYear", "endingdate", financialYear.getEndingDate(), false,
+                            if (!financialYearRepository.uniqueCheck(ENDING_DATE, financialYear)) {
+                                errors.addError(new FieldError(FINANCIAL_YEAR, ENDING_DATE, financialYear.getEndingDate(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
                         break;
                     case Constants.ACTION_UPDATE:
                         if (financialyears == null) {
-                            throw new InvalidDataException("financialyears", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(FINANCIAL_YEARS, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (FinancialYear financialYear : financialyears) {
                             if (financialYear.getId() == null) {
                                 throw new InvalidDataException("id", ErrorCode.MANDATORY_VALUE_MISSING.getCode(), financialYear.getId());
                             }
                             validator.validate(financialYear, errors);
-                            if (!financialYearRepository.uniqueCheck("finYearRange", financialYear)) {
-                                errors.addError(new FieldError("financialYear", "finYearRange", financialYear.getFinYearRange(), false,
+                            if (!financialYearRepository.uniqueCheck(F_IN_YEAR_RANGE, financialYear)) {
+                                errors.addError(new FieldError(FINANCIAL_YEAR, F_IN_YEAR_RANGE, financialYear.getFinYearRange(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
-                            if (!financialYearRepository.uniqueCheck("startingdate", financialYear)) {
-                                errors.addError(new FieldError("financialYear", "startingdate", financialYear.getStartingDate(), false,
+                            if (!financialYearRepository.uniqueCheck(STARTING_DATE, financialYear)) {
+                                errors.addError(new FieldError(FINANCIAL_YEAR, STARTING_DATE, financialYear.getStartingDate(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
-                            if (!financialYearRepository.uniqueCheck("endingdate", financialYear)) {
-                                errors.addError(new FieldError("financialYear", "endingdate", financialYear.getEndingDate(), false,
+                            if (!financialYearRepository.uniqueCheck(ENDING_DATE, financialYear)) {
+                                errors.addError(new FieldError(FINANCIAL_YEAR, ENDING_DATE, financialYear.getEndingDate(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
                         break;
                     case Constants.ACTION_SEARCH:
                         if (financialyears == null) {
-                            throw new InvalidDataException("financialyears", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(FINANCIAL_YEARS, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (FinancialYear financialyear : financialyears) {
                             if (financialyear.getTenantId() == null) {

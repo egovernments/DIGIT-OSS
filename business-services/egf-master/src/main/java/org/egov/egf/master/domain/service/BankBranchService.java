@@ -35,6 +35,10 @@ public class BankBranchService {
 	@Autowired
 	private BankRepository bankRepository;
 
+	private static final String BANK_BRANCHES="bankbranches";
+
+	private static final String BANK_BRANCH="bankBranch";
+
 	@Transactional
 	public List<BankBranch> create(List<BankBranch> bankBranches, BindingResult errors, RequestInfo requestInfo) {
 
@@ -92,23 +96,23 @@ public class BankBranchService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (bankbranches == null) {
-                            throw new InvalidDataException("bankbranches", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(BANK_BRANCHES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (BankBranch bankBranch : bankbranches) {
                             validator.validate(bankBranch, errors);
                             if (!bankBranchRepository.uniqueCheck("name", bankBranch)) {
-                                errors.addError(new FieldError("bankBranch", "name", bankBranch.getName(), false,
+                                errors.addError(new FieldError(BANK_BRANCH, "name", bankBranch.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                             if (!bankBranchRepository.uniqueCheck("code", bankBranch)) {
-                                errors.addError(new FieldError("bankBranch", "code", bankBranch.getCode(), false,
+                                errors.addError(new FieldError(BANK_BRANCH, "code", bankBranch.getCode(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
                         break;
                     case Constants.ACTION_UPDATE:
                         if (bankbranches == null) {
-                            throw new InvalidDataException("bankbranches", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(BANK_BRANCHES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (BankBranch bankBranch : bankbranches) {
                             if (bankBranch.getId() == null) {
@@ -116,18 +120,18 @@ public class BankBranchService {
                             }
                             validator.validate(bankBranch, errors);
                             if (!bankBranchRepository.uniqueCheck("name", bankBranch)) {
-                                errors.addError(new FieldError("bankBranch", "name", bankBranch.getName(), false,
+                                errors.addError(new FieldError(BANK_BRANCH, "name", bankBranch.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                             if (!bankBranchRepository.uniqueCheck("code", bankBranch)) {
-                                errors.addError(new FieldError("bankBranch", "code", bankBranch.getCode(), false,
+                                errors.addError(new FieldError(BANK_BRANCH, "code", bankBranch.getCode(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
                         break;
                     case Constants.ACTION_SEARCH:
                         if (bankbranches == null) {
-                            throw new InvalidDataException("bankbranches", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(BANK_BRANCHES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (BankBranch bankbranch : bankbranches) {
                             if (bankbranch.getTenantId() == null) {

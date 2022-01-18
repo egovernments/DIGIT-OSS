@@ -36,7 +36,8 @@ public class EmployeeRepository {
 
 	@Autowired
 	private HRMSUtils hrmsUtils;
-	
+	private static final String MESSAGE="Exception while making the db call: ";
+	private static final String QUERY="query; ";
 	/**
 	 * DB Repository that makes jdbc calls to the db and fetches employees.
 	 * 
@@ -62,8 +63,8 @@ public class EmployeeRepository {
 		try {
 			employees = jdbcTemplate.query(query, preparedStmtList.toArray(),rowMapper);
 		}catch(Exception e) {
-			log.error("Exception while making the db call: ",e);
-			log.error("query; "+query);
+			log.error(MESSAGE,e);
+			log.error(QUERY+query);
 		}
 		return employees;
 	}
@@ -76,8 +77,8 @@ public class EmployeeRepository {
 
 			employeesIds = jdbcTemplate.queryForList(query, preparedStmtList.toArray(),String.class);
 		}catch(Exception e) {
-			log.error("Exception while making the db call: ",e);
-			log.error("query; "+query);
+			log.error(MESSAGE,e);
+			log.error(QUERY+query);
 		}
 		return employeesIds;
 
@@ -94,8 +95,8 @@ public class EmployeeRepository {
 		try {
 			id = jdbcTemplate.queryForObject(query, Long.class);
 		}catch(Exception e) {
-			log.error("Exception while making the db call: ",e);
-			log.error("query; "+query);
+			log.error(MESSAGE,e);
+			log.error(QUERY+query);
 		}
 		return id;
 	}
@@ -111,12 +112,12 @@ public class EmployeeRepository {
 		List<Object> preparedStmtList = new ArrayList<>();
 
 		String query = queryBuilder.getEmployeeCountQuery(tenantId, preparedStmtList);
-		log.info("query; "+query);
+		log.info(QUERY+query);
 		try {
 			response=jdbcTemplate.query(query, preparedStmtList.toArray(),countRowMapper);
 		}catch(Exception e) {
-			log.error("Exception while making the db call: ",e);
-			log.error("query; "+query);
+			log.error(MESSAGE,e);
+			log.error(QUERY+query);
 		}
 		return response;
 	}

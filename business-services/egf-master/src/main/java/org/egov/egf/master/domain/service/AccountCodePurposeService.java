@@ -36,7 +36,7 @@ public class AccountCodePurposeService {
 	@Autowired
 	private SmartValidator validator;
 
-	private String ACCOUNT_CODE_PURPOSES="accountcodepurposes";
+	private static final String ACCOUNT_CODE_PURPOSES="accountcodepurposes";
 
 	@Transactional
 	public List<AccountCodePurpose> create(List<AccountCodePurpose> accountCodePurposes, BindingResult errors,

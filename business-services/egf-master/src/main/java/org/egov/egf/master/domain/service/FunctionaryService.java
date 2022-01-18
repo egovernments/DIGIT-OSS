@@ -27,6 +27,8 @@ public class FunctionaryService {
 
 	@Autowired
 	private FunctionaryRepository functionaryRepository;
+    private static final String FUNCTIONARIES="functionaries";
+    private static final String FUNCTIONARY="functionary";
 
 	@Autowired
 	private SmartValidator validator;
@@ -41,23 +43,23 @@ public class FunctionaryService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (functionaries == null) {
-                            throw new InvalidDataException("functionaries", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(FUNCTIONARIES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Functionary functionary : functionaries) {
                             validator.validate(functionary, errors);
                             if (!functionaryRepository.uniqueCheck("name", functionary)) {
-                                errors.addError(new FieldError("functionary", "name", functionary.getName(), false,
+                                errors.addError(new FieldError(FUNCTIONARY, "name", functionary.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                             if (!functionaryRepository.uniqueCheck("code", functionary)) {
-                                errors.addError(new FieldError("functionary", "code", functionary.getCode(), false,
+                                errors.addError(new FieldError(FUNCTIONARY, "code", functionary.getCode(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
                         break;
                     case Constants.ACTION_UPDATE:
                         if (functionaries == null) {
-                            throw new InvalidDataException("functionaries", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(FUNCTIONARIES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Functionary functionary : functionaries) {
                             if (functionary.getId() == null) {
@@ -65,18 +67,18 @@ public class FunctionaryService {
                             }
                             validator.validate(functionary, errors);
                             if (!functionaryRepository.uniqueCheck("name", functionary)) {
-                                errors.addError(new FieldError("functionary", "name", functionary.getName(), false,
+                                errors.addError(new FieldError(FUNCTIONARY, "name", functionary.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                             if (!functionaryRepository.uniqueCheck("code", functionary)) {
-                                errors.addError(new FieldError("functionary", "code", functionary.getCode(), false,
+                                errors.addError(new FieldError(FUNCTIONARY, "code", functionary.getCode(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
                         break;
                     case Constants.ACTION_SEARCH:
                         if (functionaries == null) {
-                            throw new InvalidDataException("functionaries", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(FUNCTIONARIES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Functionary functionary : functionaries) {
                             if (functionary.getTenantId() == null) {

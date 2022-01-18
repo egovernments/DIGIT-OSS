@@ -28,13 +28,13 @@ public class AppProperties {
 
     private String inputTelemetryIndex;
     private String outputTelemetrySessionsIndex;
-
+    private static final String SESSION_TIMEOUT="SESSION_TIMEOUT";
 
 
     public AppProperties() {
 
-        if(System.getenv("SESSION_TIMEOUT") != null)
-            sessionTimeout = TimeUnit.MINUTES.toMillis(Long.valueOf(System.getenv("SESSION_TIMEOUT")));
+        if(System.getenv(SESSION_TIMEOUT) != null)
+            sessionTimeout = TimeUnit.MINUTES.toMillis(Long.valueOf(System.getenv(SESSION_TIMEOUT)));
 
         kafkaBootstrapServer = System.getenv("KAFKA_BOOTSTRAP_SERVER_CONFIG");
         outputKafkaTopic = System.getenv("KAFKA_OUTPUT_TOPIC");
@@ -60,7 +60,7 @@ public class AppProperties {
         }
 
         if(sessionTimeout == null)
-            sessionTimeout = TimeUnit.MINUTES.toMillis(Long.valueOf(properties.getProperty("SESSION_TIMEOUT")));
+            sessionTimeout = TimeUnit.MINUTES.toMillis(Long.valueOf(properties.getProperty(SESSION_TIMEOUT)));
 
         if(kafkaBootstrapServer == null)
             kafkaBootstrapServer = properties.getProperty("KAFKA_BOOTSTRAP_SERVER_CONFIG");

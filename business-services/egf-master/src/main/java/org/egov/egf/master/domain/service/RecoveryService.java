@@ -36,7 +36,8 @@ public class RecoveryService {
 
     @Autowired
     private ChartOfAccountRepository chartOfAccountRepository;
-
+    private static final String RECOVERIES="recoveries";
+    private static final String RECOVERY="recovery";
     @Transactional
     public List<Recovery> create(List<Recovery> recoveries, BindingResult errors,
                                  RequestInfo requestInfo) {
@@ -95,23 +96,23 @@ public class RecoveryService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (recoveries == null) {
-                            throw new InvalidDataException("recoveries", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(RECOVERIES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Recovery recovery : recoveries) {
                             validator.validate(recovery, errors);
                             if (!recoveryRepository.uniqueCheck("name", recovery)) {
-                                errors.addError(new FieldError("recovery", "name", recovery.getName(), false,
+                                errors.addError(new FieldError(RECOVERY, "name", recovery.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                             if (!recoveryRepository.uniqueCheck("code", recovery)) {
-                                errors.addError(new FieldError("recovery", "code", recovery.getCode(), false,
+                                errors.addError(new FieldError(RECOVERY, "code", recovery.getCode(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
                         break;
                     case Constants.ACTION_UPDATE:
                         if (recoveries == null) {
-                            throw new InvalidDataException("recoveries", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(RECOVERIES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Recovery recovery : recoveries) {
                             if (recovery.getId() == null) {
@@ -119,18 +120,18 @@ public class RecoveryService {
                             }
                             validator.validate(recovery, errors);
                             if (!recoveryRepository.uniqueCheck("name", recovery)) {
-                                errors.addError(new FieldError("recovery", "name", recovery.getName(), false,
+                                errors.addError(new FieldError(RECOVERY, "name", recovery.getName(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                             if (!recoveryRepository.uniqueCheck("code", recovery)) {
-                                errors.addError(new FieldError("recovery", "code", recovery.getCode(), false,
+                                errors.addError(new FieldError(RECOVERY, "code", recovery.getCode(), false,
                                         new String[] { ErrorCode.NON_UNIQUE_VALUE.getCode() }, null, null));
                             }
                         }
                         break;
                     case Constants.ACTION_SEARCH:
                         if (recoveries == null) {
-                            throw new InvalidDataException("recoveries", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(RECOVERIES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Recovery recovery : recoveries) {
                             if (recovery.getTenantId() == null) {

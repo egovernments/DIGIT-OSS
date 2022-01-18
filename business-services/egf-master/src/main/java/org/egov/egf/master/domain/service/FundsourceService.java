@@ -30,7 +30,7 @@ public class FundsourceService {
 
 	@Autowired
 	private SmartValidator validator;
-
+    private static final String FUND_SOURCES="fundsources";
 
 	private BindingResult validate(List<Fundsource> fundsources, String method, BindingResult errors) {
 
@@ -42,7 +42,7 @@ public class FundsourceService {
                         break;
                     case Constants.ACTION_CREATE:
                         if (fundsources == null) {
-                            throw new InvalidDataException("fundsources", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(FUND_SOURCES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Fundsource fundsource : fundsources) {
                             validator.validate(fundsource, errors);
@@ -54,7 +54,7 @@ public class FundsourceService {
                         break;
                     case Constants.ACTION_UPDATE:
                         if (fundsources == null) {
-                            throw new InvalidDataException("fundsources", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(FUND_SOURCES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Fundsource fundsource : fundsources) {
                             if (fundsource.getId() == null) {
@@ -69,7 +69,7 @@ public class FundsourceService {
                         break;
                     case Constants.ACTION_SEARCH:
                         if (fundsources == null) {
-                            throw new InvalidDataException("fundsources", ErrorCode.NOT_NULL.getCode(), null);
+                            throw new InvalidDataException(FUND_SOURCES, ErrorCode.NOT_NULL.getCode(), null);
                         }
                         for (Fundsource fundsource : fundsources) {
                             if (fundsource.getTenantId() == null) {

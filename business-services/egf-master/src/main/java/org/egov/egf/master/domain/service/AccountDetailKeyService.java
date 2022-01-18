@@ -34,6 +34,7 @@ public class AccountDetailKeyService {
 	private SmartValidator validator;
 	@Autowired
 	private AccountDetailTypeRepository accountDetailTypeRepository;
+	private static final String ACCOUNT_DETAIL_KEYS="accountdetailkeys";
 
 	@Transactional
 	public List<AccountDetailKey> create(List<AccountDetailKey> accountDetailKies, BindingResult errors,
@@ -94,7 +95,7 @@ public class AccountDetailKeyService {
 				break;
 			case Constants.ACTION_CREATE:
 				if (accountdetailkeys == null) {
-					throw new InvalidDataException("accountdetailkeys", ErrorCode.NOT_NULL.getCode(), null);
+					throw new InvalidDataException(ACCOUNT_DETAIL_KEYS, ErrorCode.NOT_NULL.getCode(), null);
 				}
 				for (AccountDetailKey accountDetailKey : accountdetailkeys) {
 					validator.validate(accountDetailKey, errors);
@@ -102,7 +103,7 @@ public class AccountDetailKeyService {
 				break;
 			case Constants.ACTION_UPDATE:
 				if (accountdetailkeys == null) {
-					throw new InvalidDataException("accountdetailkeys", ErrorCode.NOT_NULL.getCode(), null);
+					throw new InvalidDataException(ACCOUNT_DETAIL_KEYS, ErrorCode.NOT_NULL.getCode(), null);
 				}
 				for (AccountDetailKey accountDetailKey : accountdetailkeys) {
 					if (accountDetailKey.getId() == null) {
@@ -114,7 +115,7 @@ public class AccountDetailKeyService {
 				break;
 			case Constants.ACTION_SEARCH:
 				if (accountdetailkeys == null) {
-					throw new InvalidDataException("accountdetailkeys", ErrorCode.NOT_NULL.getCode(), null);
+					throw new InvalidDataException(ACCOUNT_DETAIL_KEYS, ErrorCode.NOT_NULL.getCode(), null);
 				}
 				for (AccountDetailKey accountdetailkey : accountdetailkeys) {
 					if (accountdetailkey.getTenantId() == null) {
