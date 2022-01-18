@@ -40,7 +40,7 @@ public class FundJdbcRepositoryTest {
 
 	private static final String PARENT_ID="parentId";
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		fundJdbcRepository = new FundJdbcRepository(namedParameterJdbcTemplate);
 	}
 

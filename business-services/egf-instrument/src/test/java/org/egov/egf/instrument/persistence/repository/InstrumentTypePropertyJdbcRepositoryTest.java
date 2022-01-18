@@ -48,7 +48,7 @@ public class InstrumentTypePropertyJdbcRepositoryTest {
     private static final String STATUS_ON_UPDATE_ID="statusOnUpdateId";
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         instrumentTypePropertyJdbcRepository = new InstrumentTypePropertyJdbcRepository(namedParameterJdbcTemplate);
     }
 

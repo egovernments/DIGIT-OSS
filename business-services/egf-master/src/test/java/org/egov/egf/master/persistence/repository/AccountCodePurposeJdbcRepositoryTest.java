@@ -39,7 +39,7 @@ public class AccountCodePurposeJdbcRepositoryTest {
 	private static final String DEFAULT="default";
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		accountCodePurposeJdbcRepository = new AccountCodePurposeJdbcRepository(namedParameterJdbcTemplate);
 	}
 

@@ -14,6 +14,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.egov.common.domain.exception.InvalidDataException;
 import org.egov.common.domain.model.Pagination;
 import org.egov.common.persistence.entity.AuditableEntity;
+import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -379,7 +380,7 @@ public abstract class JdbcRepository {
         try {
             table = FieldUtils.readDeclaredField(ob, TABLE_NAME).toString();
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(MESSAGE + obName);
+            throw new CustomException("ILLEGAL_ACCESS_ERROR",MESSAGE + obName);
         }
         StringBuffer uniqueQuery = new StringBuffer(
                 "select count(*) as count from " + table + WHERE + fieldName + "=:fieldValue");
@@ -418,7 +419,7 @@ public abstract class JdbcRepository {
         try {
             table = FieldUtils.readDeclaredField(ob, TABLE_NAME).toString();
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(MESSAGE + obName);
+            throw new CustomException("ILLEGAL_ACCESS_ERROR",MESSAGE + obName);
         }
         StringBuffer uniqueQuery = new StringBuffer("select count(*) as count from " + table + WHERE + firstFieldName
                 + "=:firstFieldValue" + AND + secondFieldName + "=:secondFieldValue");
@@ -459,14 +460,14 @@ public abstract class JdbcRepository {
         Collection<Object> values = batchValues.get(0).values();
         for (Object value : values) {
             if (value == null)
-                throw new RuntimeException("id field is null . Delete cannot be performed");
+                throw new CustomException("INVALID_ID","id field is null . Delete cannot be performed");
         }
 
         String table = "";
         try {
             table = FieldUtils.readDeclaredField(entity, TABLE_NAME).toString();
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(MESSAGE + obName);
+            throw new CustomException("ILLGEAL_ACCESS_ERROR",MESSAGE + obName);
         }
         paramValues.put("tablename", table);
         paramValues.put("reason", reason);

@@ -102,7 +102,7 @@ public class ReadUtil {
 	public static File uploadFile = new File(
 			System.getProperty("user.dir") + System.getProperty(SEPARATOR) + "uploads");
 
-	public static JSONArray getFiletoDirectory(MultipartFile file) throws Exception {
+	public static JSONArray getFiletoDirectory(MultipartFile file) throws IOException {
 		byte[] bytes = file.getBytes();
 		if (!uploadFile.exists()) {
 			uploadFile.mkdir();
@@ -123,7 +123,7 @@ public class ReadUtil {
 		return fileIntoJsonArray;
 	}
 
-	private static JSONArray readFilefromDirectory() throws Exception {
+	private static JSONArray readFilefromDirectory() throws IOException {
 		String workbookSheetName = null;
 		int workbookSheetIndex = -1;
 		String getFileExtension = FilenameUtils.getExtension(path.toString());
@@ -133,7 +133,7 @@ public class ReadUtil {
 			if (getFileExtension.endsWith("xlsx")) {
 				workbook = WorkbookFactory.create(new File(path.toString()));
 			} else {
-				throw new Exception("invalid file, should be xlsx");
+				throw new CustomException("INVALID_FILE","invalid file, should be xlsx");
 			}
 
 			for (int i = 0; i < workbook.getNumberOfSheets(); i++) {

@@ -53,7 +53,7 @@ public class InstrumentAccountCodeJdbcRepositoryTest {
     private static final String GL_CODE="glcode";
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         instrumentAccountCodeJdbcRepository = new InstrumentAccountCodeJdbcRepository(namedParameterJdbcTemplate, jdbcTemplate);
     }
 

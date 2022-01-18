@@ -88,7 +88,7 @@ public class InstrumentJdbcRepositoryTest {
     private static final String TRANSACTION_TYPE="transactionType";
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         instrumentJdbcRepository = new InstrumentJdbcRepository(namedParameterJdbcTemplate, jdbcTemplate,
                 instrumentVoucherJdbcRepository, dishonorReasonJdbcRepository);
     }

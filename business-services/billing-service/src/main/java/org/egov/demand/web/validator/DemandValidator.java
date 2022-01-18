@@ -66,6 +66,7 @@ import org.egov.demand.web.contract.DemandRequest;
 import org.egov.demand.web.contract.TaxPeriodCriteria;
 import org.egov.demand.web.contract.User;
 import org.egov.demand.web.contract.UserSearchRequest;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -108,7 +109,7 @@ public class DemandValidator implements Validator {
 		if (target instanceof DemandRequest)
 			demandRequest = (DemandRequest) target;
 		else
-			throw new RuntimeException("Invalid Object type for Demand validator");
+			throw new CustomException("INVALID_OBJECTTYPE","Invalid Object type for Demand validator");
 		validateDemand(demandRequest.getDemands(), errors);
 
 		List<DemandDetail> demandDetails = new ArrayList<>();
@@ -128,7 +129,7 @@ public class DemandValidator implements Validator {
 		if (target instanceof DemandRequest)
 			demandRequest = (DemandRequest) target;
 		else
-			throw new RuntimeException("Invalid Object type for Demand validator");
+			throw new CustomException("INVALID_OBJECTTYPE","Invalid Object type for Demand validator");
 		validateDemandForUpdate(demandRequest, errors);
 		validateTaxHeadMaster(demandRequest, errors);
 		validateBusinessService(demandRequest, errors);

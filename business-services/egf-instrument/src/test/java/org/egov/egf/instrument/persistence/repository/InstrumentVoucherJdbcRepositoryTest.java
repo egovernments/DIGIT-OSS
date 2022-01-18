@@ -47,7 +47,7 @@ public class InstrumentVoucherJdbcRepositoryTest {
     private static final String RECEIPT_HEADER_ID="receiptHeaderId";
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         instrumentVoucherJdbcRepository = new InstrumentVoucherJdbcRepository(namedParameterJdbcTemplate);
     }
 

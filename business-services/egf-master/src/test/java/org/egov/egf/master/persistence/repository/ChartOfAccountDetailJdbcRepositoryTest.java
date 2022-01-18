@@ -46,7 +46,7 @@ public class ChartOfAccountDetailJdbcRepositoryTest {
 
 	private static final String ACCOUNT_DETAIL_TYPE_ID="accountdetailtypeid";
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		chartOfAccountDetailJdbcRepository = new ChartOfAccountDetailJdbcRepository(
 				namedParameterJdbcTemplate,accountDetailTypeJdbcRepository);
 	}

@@ -44,7 +44,7 @@ public class BankAccountJdbcRepositoryTest {
 	private static final String ACCOUNT_NUMBER="accountNumber";
 	private static final String DEFAULT="default";
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		bankAccountJdbcRepository = new BankAccountJdbcRepository(namedParameterJdbcTemplate);
 	}
 

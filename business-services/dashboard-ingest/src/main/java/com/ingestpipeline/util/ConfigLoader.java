@@ -32,7 +32,7 @@ public class ConfigLoader {
      * Loads config resources
      * @throws Exception
      */
-	public void loadResources() throws Exception {
+	public void loadResources() throws IOException{
 	    logger.info("RESOURCE_LOCATION:: "+RESOURCE_LOCATION);
 		Resource[] resources = getResources(RESOURCE_LOCATION);
 
@@ -62,7 +62,7 @@ public class ConfigLoader {
      * @return
      * @throws IOException
      */
-    private Resource[] getResources(String pattern) throws IOException {
+    private Resource[] getResources(String pattern) throws IOException{
         Resource[] resources = ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources(pattern);
         return resources;
     }

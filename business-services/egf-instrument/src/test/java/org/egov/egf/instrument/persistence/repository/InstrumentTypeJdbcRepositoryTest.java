@@ -49,7 +49,7 @@ public class InstrumentTypeJdbcRepositoryTest {
     private static final String ACTIVE="active";
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         instrumentTypeJdbcRepository = new InstrumentTypeJdbcRepository(namedParameterJdbcTemplate, jdbcTemplate);
     }
 

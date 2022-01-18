@@ -41,7 +41,7 @@ public class BankBranchJdbcRepositoryTest {
 
 	private static final String DESCRIPTION="description";
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		bankBranchJdbcRepository = new BankBranchJdbcRepository(namedParameterJdbcTemplate);
 	}
 

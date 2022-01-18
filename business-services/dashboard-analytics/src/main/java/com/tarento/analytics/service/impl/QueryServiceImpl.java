@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.egov.tracer.model.CustomException;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -454,7 +455,7 @@ public class QueryServiceImpl implements QueryService {
 			objectNode.put(Constants.JsonPaths.AGGS, mapper.readTree(aggrQuery).get(Constants.JsonPaths.AGGS));
 		} catch (Exception ex) {
 			logger.error("Encountered an Exception while parsing the JSON : " + ex.getMessage());
-			throw new RuntimeException(ex);
+			throw new CustomException("JSON_PARSING_ERROR",ex.getMessage());
 	    }
 	    return objectNode; 
 		

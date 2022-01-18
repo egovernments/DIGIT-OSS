@@ -47,7 +47,7 @@ public class SurrenderReasonJdbcRepositoryTest {
     private static final String DEFAULT="default";
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         surrenderReasonJdbcRepository = new SurrenderReasonJdbcRepository(namedParameterJdbcTemplate, jdbcTemplate);
     }
 

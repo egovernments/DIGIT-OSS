@@ -42,7 +42,7 @@ public class AccountDetailTypeJdbcRepositoryTest {
 	private static final String TABLE_NAME="tableName";
 	private static final String FULL_QUALIFIED_NAME="fullyQualifiedName";
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		accountDetailTypeJdbcRepository = new AccountDetailTypeJdbcRepository(namedParameterJdbcTemplate);
 	}
 

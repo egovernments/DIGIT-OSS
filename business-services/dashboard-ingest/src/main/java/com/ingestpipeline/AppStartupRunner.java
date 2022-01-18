@@ -14,6 +14,8 @@ import com.ingestpipeline.controller.RestApiController;
 import com.ingestpipeline.util.ConfigLoader;
 import com.ingestpipeline.util.ReadUtil;
 
+import java.io.IOException;
+
 /**
  * The App Startup Runner runs on the start of the application as it implements Application Runner
  * This will be responsible to load the configurations which are necessary for the Enrichment in the Data Pipeline 
@@ -39,7 +41,7 @@ public class AppStartupRunner implements ApplicationRunner {
 
     @SuppressWarnings("static-access")
 	@Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) throws IOException {
     	logger.info("On Boot starts loading: config resources ");
 		configLoader.loadResources();
 		for(DomainConfig domainConfig : domainConfigFactory.getAllConfigs()) { 

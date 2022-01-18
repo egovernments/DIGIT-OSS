@@ -52,7 +52,7 @@ public class ChartOfAccountJdbcRepositoryTest {
 	private static final String MAJOR_CODE="majorCode";
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		chartOfAccountJdbcRepository = new ChartOfAccountJdbcRepository(namedParameterJdbcTemplate,chartOfAccountDetailJdbcRepository);
 	}
 	

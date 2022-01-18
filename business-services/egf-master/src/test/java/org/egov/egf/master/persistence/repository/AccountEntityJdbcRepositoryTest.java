@@ -43,7 +43,7 @@ public class AccountEntityJdbcRepositoryTest {
 
     private static final String ACCOUNT_DETAIL_TYPE_ID="accountDetailTypeId";
     @Before
-    public void setUp() throws Exception {
+    public void setUp(){
         accountEntityJdbcRepository = new AccountEntityJdbcRepository(namedParameterJdbcTemplate);
     }
 

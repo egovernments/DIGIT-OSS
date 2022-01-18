@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tarento.analytics.helper.ComputedFieldFactory;
 import com.tarento.analytics.helper.IComputedField;
 import com.tarento.analytics.model.ComputedFields;
+import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class LineChartResponseHandler implements IResponseHandler {
         boolean isRequestInterval = null == requestDto.getRequestDate() ? false : requestDto.getRequestDate().getInterval()!=null && !requestDto.getRequestDate().getInterval().isEmpty();
         String interval = isRequestInterval ? requestDto.getRequestDate().getInterval(): chartNode.get(Constants.JsonPaths.INTERVAL).asText();
         if(interval == null || interval.isEmpty()){
-            throw new RuntimeException("Interval must have value from config or request");
+            throw new CustomException("INVALID_INTERVAL","Interval must have value from config or request");
         }
 
         String symbol = chartNode.get(IResponseHandler.VALUE_TYPE).asText();
@@ -166,7 +167,7 @@ public class LineChartResponseHandler implements IResponseHandler {
             } else if(interval.equals(Constants.Interval.month)){
                 intervalKey = month.concat("-").concat(year);
             } else {
-                throw new RuntimeException("Invalid interval");
+                throw new CustomException("INVALID_INTERVAL","Invalid interval");
             }
 
             //String weekMonth = "Week " + cal.get(Calendar.WEEK_OF_YEAR)  /*+ " : " +  dayMonth*/;//+" of Month "+ (cal.get(Calendar.MONTH) + 1);

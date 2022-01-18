@@ -1,5 +1,6 @@
 package com.ingestpipeline.controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -121,7 +122,7 @@ public class RestApiController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = Constants.Paths.UPLOAD, method = RequestMethod.POST)
-	public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) throws Exception {
+	public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
 		Boolean status = ingestService.ingestToPipeline(getWrapper(file));
 		if (status) {
 			return new ResponseEntity<String>(HttpStatus.CREATED);
@@ -129,7 +130,7 @@ public class RestApiController {
 		return new ResponseEntity<String>(HttpStatus.SERVICE_UNAVAILABLE);
 	}
 
-	public IncomingData getWrapper(MultipartFile file) throws Exception {
+	public IncomingData getWrapper(MultipartFile file) throws IOException {
 		JSONArray jsonArray = new JSONArray();
 		jsonArray = ReadUtil.getFiletoDirectory(file);
 		IncomingData incomingData = new IncomingData();
@@ -154,7 +155,7 @@ public class RestApiController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/migrate/{indexName}/{version}", method = RequestMethod.POST)
-	public ResponseEntity<?> migrateIndex(@PathVariable String indexName, @PathVariable String version) throws Exception {
+	public ResponseEntity<?> migrateIndex(@PathVariable String indexName, @PathVariable String version) {
 		String queryString = null;
 		Boolean status = elasticService.searchIndex(indexName, queryString, version);
 		if (status) {
@@ -172,7 +173,7 @@ public class RestApiController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/migrateV2/{indexName}/{version}", method = RequestMethod.GET)
-	public ResponseEntity<?> migrateIndexV2(@PathVariable String indexName, @PathVariable String dataContextVersion) throws Exception {
+	public ResponseEntity<?> migrateIndexV2(@PathVariable String indexName, @PathVariable String dataContextVersion) {
 		String index = null, queryString = null, dataContext = null;
 		Boolean status = elasticService.searchIndex(indexName, queryString, dataContextVersion);
 		if (status) {

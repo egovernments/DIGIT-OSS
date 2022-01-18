@@ -41,7 +41,7 @@ public class AccountDetailKeyJdbcRepositoryTest {
 	private static final String ACCOUNT_DETAIL_TYPE_ID="accountDetailTypeId";
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		accountDetailKeyJdbcRepository = new AccountDetailKeyJdbcRepository(namedParameterJdbcTemplate);
 	}
 

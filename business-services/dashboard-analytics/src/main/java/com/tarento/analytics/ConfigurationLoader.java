@@ -44,7 +44,7 @@ public class ConfigurationLoader {
      * @throws Exception
      */
     @PostConstruct
-	public void loadResources() throws Exception {
+	public void loadResources() throws IOException {
 		Resource[] resources = getResources(RESOURCE_LOCATION);
 
 		for (Resource resource : resources) {

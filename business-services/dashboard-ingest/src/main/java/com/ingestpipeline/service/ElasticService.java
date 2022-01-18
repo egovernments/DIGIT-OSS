@@ -256,7 +256,7 @@ public class ElasticService implements IESService {
 	}
 	
 	@Override
-	public Boolean searchIndex(String index, String searchQuery, String dataContextVersion) throws Exception {
+	public Boolean searchIndex(String index, String searchQuery, String dataContextVersion) {
 		LOGGER.info("searching ES for query: " + searchQuery + " on " + index);
 		
 		Map<String, String> scrollSearchParams = getScrollIdForScrollSearch(index, dataContextVersion);
