@@ -6,6 +6,22 @@ import WSWFApplicationTimeline from "../../pageComponents/WSWFApplicationTimelin
 
 const WSApplicationDetails = () => {
   const { t } = useTranslation();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const user = Digit.UserService.getUser();
+  //const { acknowledgementIds } = useParams();
+
+  let filter1 = !isNaN(parseInt(filter))
+  ? { tenantId: tenantId, mobileNumber: user?.info?.mobileNumber,  }
+  : { tenantId: tenantId, mobileNumber: user?.info?.mobileNumber };
+
+const { isLoading, isError, error, data } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter1 }, { filters: filter1 });
+if (isLoading) {
+  return <Loader />;
+}
+
+const { WaterConnection: applicationsList } = data || {};
+console.log(applicationsList);
+
   //const application = data?.Properties[0];
   return (
     <React.Fragment>
@@ -13,8 +29,8 @@ const WSApplicationDetails = () => {
       <div className='hide-seperator'>
         <Card>
           <StatusTable>
-            <Row label={t("Application number")} text={"WS - 767 - 23 - 213433"} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("Service Name")} text={"Sewerage"} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("WS_MYCONNECTIONS_APPLICATION_NO")} text={data.applicationNo} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("WS_MYCONNECTIONS_SERVICE")} text={data.applicationType} textStyle={{ whiteSpace: "pre" }} />
             <Row label={t("Amount Due")} text={"₹ 15000.00"} textStyle={{ whiteSpace: "pre" }} />
           </StatusTable>
         </Card>
@@ -24,38 +40,38 @@ const WSApplicationDetails = () => {
             <Row label={t("One time Fee")} text={"₹ 16500.00"} textStyle={{textAlign: "right" }} />
             <Row label={t("Security Charge")} text={"₹ 500.00"} textStyle={{textAlign: "right" }} />
             <Row label={t("Meter Charge")} text={"₹ 2000.00"} textStyle={{textAlign: "right" }} />
-            <Row label={t("Tax and Cess")} text={" ₹ 200.00"} textStyle={{textAlign: "right" }} />
-            <Row label={t("Total Amount Due")} text={"₹ 15000.00"} textStyle={{textAlign: "right" }} />
+            <Row label={t("Tax")} text={" ₹ 200.00"} textStyle={{textAlign: "right" }} />
+            <Row label={t("WS_COMMON_TOTAL_AMT")} text={"₹ 15000.00"} textStyle={{textAlign: "right" }} />
             <Row label={t("Status")} text={"Unpaid"} textStyle={{textAlign: "right" }} />
           </StatusTable>
         </Card>
         <Card>
           <CardSubHeader>{t("Property Details")}</CardSubHeader>
           <StatusTable>
-            <Row label={t("Property ID")} text={"PG-PT-2021-09-29-006024"} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("Owner Name")} text={"N* P*****"} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("Property Address")} text={"****, ** ******, Ajit Nagar, Area 1, Amritsar"} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("Tax and Cess")} text={" ₹ 200.00"} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("Total Amount Due")} text={" ₹ 15000.00"} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("WS_PROPERTY_ID_LABEL")} text={data.propertyId} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")} text={data.name} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("WS_OWN_DETAIL_CROSADD")} text={data.correspondenceAddress} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("Tax")} text={" ₹ 200.00"} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("WS_COMMON_TOTAL_AMT")} text={" ₹ 15000.00"} textStyle={{ whiteSpace: "pre" }} />
             <Row label={t("Status")} text={"Unpaid"} textStyle={{ whiteSpace: "pre" }} />
           </StatusTable>
         </Card>
         <Card>
           <CardSubHeader>{t("Connection Holder Details")}</CardSubHeader>
           <StatusTable>
-            <Row label={t("Mobile Number")} text={"7********78"} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("Name")} text={"Sheetal"} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("Gender")} text={"Female"} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("Fathers / Husband’s name")} text={"XXXX"} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("Relationship")} text={"Father"} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("Correspondance Address")} text={"A16, Ajit Nagar, City B"} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("Special Applicant category")} text={"NA"} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("WS_OWN_DETAIL_MOBILE_NO_LABEL")} text={data.mobileNumber} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")} text={data.name} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("WS_OWN_DETAIL_GENDER_LABEL")} text={data.gender} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME")} text={data.fatherOrHusbandName} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("WS_OWN_DETAIL_RELATION_LABEL")} text={data.relationship} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("WS_OWN_DETAIL_CROSADD")} text={data.correspondenceAddress} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL")} text={"NA"} textStyle={{ whiteSpace: "pre" }} />
           </StatusTable>
         </Card>
         <Card>
           <CardSubHeader>{t("Connection Details")}</CardSubHeader>
           <StatusTable>
-            <Row label={t("Number of Water Closets")} text={"2"} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED")} text={"2"} textStyle={{ whiteSpace: "pre" }} />
             <Row label={t("Number of Toilets")} text={"2"} textStyle={{ whiteSpace: "pre" }} />
           </StatusTable>
         </Card>
