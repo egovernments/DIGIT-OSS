@@ -230,7 +230,7 @@ public class PropertyFileReader {
 				break;
 		}
 
-		System.out.print("\t");
+		log.info("\t");
 	}
 
 	private void parseUnitDetail(Map<String, Sheet> sheetMap, Map<String, Map<String, Object>> propertyIdMap) throws InvalidFormatException {
@@ -313,7 +313,7 @@ public class PropertyFileReader {
 				break;
 		}
 
-		System.out.print("\t");
+		log.info("\t");
 	}
 
 	private void parseOwnerDetail(Map<String, Sheet> sheetMap, Map<String, Map<String, Object>> propertyIdMap) throws InvalidFormatException {
@@ -426,6 +426,6 @@ public class PropertyFileReader {
 				break;
 		}
 
-		System.out.print("\t");
+		log.info("\t");
 	}
 }

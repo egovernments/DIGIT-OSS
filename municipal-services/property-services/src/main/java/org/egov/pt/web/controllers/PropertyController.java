@@ -106,7 +106,6 @@ public class PropertyController {
 
         long endtime = System.nanoTime();
         long elapsetime = endtime - startTime;
-        System.out.println("Elapsed time--->"+elapsetime);
 
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }

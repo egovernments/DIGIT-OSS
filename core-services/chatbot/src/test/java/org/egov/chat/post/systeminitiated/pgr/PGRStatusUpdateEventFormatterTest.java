@@ -29,8 +29,8 @@ public class PGRStatusUpdateEventFormatterTest {
 
         request.set("$.RequestInfo.userInfo", userInfo.json());
 
-        System.out.println("UserInfo : " + userInfo.jsonString());
-        System.out.println(request.jsonString());
+        log.info("UserInfo : " + userInfo.jsonString());
+        log.info(request.jsonString());
     }
 
     @Test

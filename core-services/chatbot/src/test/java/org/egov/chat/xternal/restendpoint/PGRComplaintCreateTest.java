@@ -28,7 +28,7 @@ public class PGRComplaintCreateTest {
 
         Optional<Message> message = messageList.stream().filter(message1 -> message1.getNodeId() == "type").findFirst();
 
-        System.out.println(message.get().getMessageContent());
+        log.info(message.get().getMessageContent());
 
         ObjectMapper mapper = new ObjectMapper(new JsonFactory());
         ObjectNode objectNode = mapper.createObjectNode();

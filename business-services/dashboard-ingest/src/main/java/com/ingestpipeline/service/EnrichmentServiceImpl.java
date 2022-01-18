@@ -162,7 +162,6 @@ public class EnrichmentServiceImpl implements EnrichmentService {
 		}
 		if (incomingData.get(DATA_CONTEXT).toString().equalsIgnoreCase("target")) {
 			ArrayNode values = new ObjectMapper().convertValue(incomingData.get(Constants.DATA_OBJECT), ArrayNode.class);
-			//System.out.println("incomingData 1209 values " + values);
 
 			values.forEach(val -> {
 				TargetData targetData = new ObjectMapper().convertValue(val, TargetData.class);

@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -41,6 +42,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
 
+@Slf4j
 @Component
 public class DataUploadUtils {
 	
@@ -274,7 +276,7 @@ public class DataUploadUtils {
 	
 	public String createANewFile(String fileName) throws IOException{
 		String outputFile = internalFolderPath + File.separator + fileName;
-        System.out.println("file create : "+outputFile);
+        log.info("file create : "+outputFile);
 		logger.info("Attempting to create a new file: "+outputFile);
 		try (FileOutputStream fileOut = new FileOutputStream(outputFile);
              HSSFWorkbook workbook = new HSSFWorkbook();

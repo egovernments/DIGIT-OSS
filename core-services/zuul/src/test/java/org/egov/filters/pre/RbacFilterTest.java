@@ -3,6 +3,7 @@ package org.egov.filters.pre;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.monitoring.MonitoringHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.egov.contract.Action;
 import org.egov.contract.Role;
 import org.egov.contract.User;
@@ -27,7 +28,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withUnauthorizedRequest;
 
-
+@Slf4j
 public class RbacFilterTest {
 
     private MockHttpServletRequest request;
@@ -145,8 +146,8 @@ public class RbacFilterTest {
         request.setRequestURI("/pgr/seva/123/_update");
         ctx.setRequest(request);
 
-        System.out.println(action1.getRegexUrl());
-        System.out.println("/pgr/seva/123/_update".matches(action1.getRegexUrl()));
+        log.info(action1.getRegexUrl());
+        log.info(Boolean.toString("/pgr/seva/123/_update".matches(action1.getRegexUrl())));
 
         rbacFilter.run();
 

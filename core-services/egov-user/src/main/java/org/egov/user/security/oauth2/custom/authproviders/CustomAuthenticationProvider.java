@@ -197,8 +197,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private String getTenantId(Authentication authentication) {
         final LinkedHashMap<String, String> details = (LinkedHashMap<String, String>) authentication.getDetails();
 
-        System.out.println("details------->" + details);
-        System.out.println("tenantId in CustomAuthenticationProvider------->" + details.get(PARAMETER_TENANT_ID));
+        log.info("details------->" + details);
+        log.info("tenantId in CustomAuthenticationProvider------->" + details.get(PARAMETER_TENANT_ID));
 
         final String tenantId = details.get(PARAMETER_TENANT_ID);
         if (isEmpty(tenantId)) {

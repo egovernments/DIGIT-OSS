@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.access.domain.criteria.RoleSearchCriteria;
 import org.egov.access.domain.model.Role;
 import org.egov.access.domain.service.RoleService;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @Validated
 @RestController
 @RequestMapping("/v1/roles")
@@ -62,8 +64,8 @@ public class RoleController {
 									 @RequestBody @Valid final RoleRequest roleRequest) throws UnsupportedEncodingException, JSONException {
 
 		RoleSearchCriteria roleSearchCriteria = RoleSearchCriteria.builder().codes(new ArrayList<String>()).tenantId(tenantId).build();
-		
-		System.out.println("Tenant id from the controller: "+tenantId);
+
+		log.info("Tenant id from the controller: "+tenantId);
 
 		if (code != null && !code.isEmpty()) {
 

@@ -260,7 +260,6 @@ public abstract class JdbcRepository {
 
     @Transactional
     public Object create(Object ob) {
-        // System.out.println(allInsertQuery);
         ((AuditableEntity) ob).setCreatedDate(new Date());
         ((AuditableEntity) ob).setLastModifiedDate(new Date());
 

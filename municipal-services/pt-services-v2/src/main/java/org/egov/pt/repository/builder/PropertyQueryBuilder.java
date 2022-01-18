@@ -118,7 +118,6 @@ public class PropertyQueryBuilder {
 
 
 		/*builder.append("AND pt.propertyid LIKE ?");
-		System.out.println("\n\ncriteria.getPropertyId()-->"+criteria.getPropertyId()+"\n\n");
 		preparedStmtList.add(criteria.getPropertyId());*/
 
 		//return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);

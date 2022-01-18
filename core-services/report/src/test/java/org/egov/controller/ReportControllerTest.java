@@ -91,8 +91,7 @@ public class ReportControllerTest {
  *//*
 	@Test
 	public void testReloadYamlData() throws Exception {
-		System.out.println("Response is "+content().json(resources.getFileContents("reloadresponse.json")));
-		
+
 		mockMvc.perform(post("/PGR/_reload")
 	            .contentType(MediaType.APPLICATION_JSON_UTF8)
 	            .content(resources.getFileContents("reloadrequest.json")))

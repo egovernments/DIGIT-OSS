@@ -40,7 +40,7 @@ public class PGRComplaintTrackTest {
         Date createdDate = new Date(1559414278168L);
 
         String date = simpleDateFormat.format(createdDate);
-        System.out.println(date);
+        log.info(date);
 
 
         log.info(date.toString());

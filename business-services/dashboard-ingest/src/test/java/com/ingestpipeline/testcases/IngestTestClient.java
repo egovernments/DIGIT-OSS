@@ -7,7 +7,7 @@ import com.ingestpipeline.consumer.DigressionConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
- 
+
 
 public class IngestTestClient {
  
@@ -32,7 +32,6 @@ public class IngestTestClient {
      
     /* DELETE */
     private static void deleteUser() {
-        System.out.println("Testing delete User API----------");
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.delete(REST_SERVICE_URI+"/user/3");
     }
@@ -40,7 +39,6 @@ public class IngestTestClient {
  
     /* DELETE */
     private static void deleteAllUsers() {
-        System.out.println("Testing all delete Users API----------");
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.delete(REST_SERVICE_URI+"/user/");
     }

@@ -137,7 +137,6 @@ public class MetadataServiceImpl implements MetadataService {
 
 		rolesArray.forEach(role -> {
 			Object roleId = roleIds.stream().filter(x -> role.get("roleId").asLong() == (x.getId())).findAny().orElse(null);
-			System.out.println("roleId = "+roleId);
 
 			if (null != roleId) {
 				role.get("dashboards").forEach(dashboard -> {
