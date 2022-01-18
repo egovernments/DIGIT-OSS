@@ -1,6 +1,7 @@
 package org.egov.report.repository.builder;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -459,7 +460,7 @@ public class ReportQueryBuilder {
     }
 
 
-    public String buildInlineQuery(Object json) throws Exception {
+    public String buildInlineQuery(Object json) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         json = mapper.writeValueAsString(json);
         StringBuilder inlineQuery = new StringBuilder();

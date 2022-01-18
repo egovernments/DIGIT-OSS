@@ -68,7 +68,7 @@ public class IndexerService {
 	 * @param kafkaJson
 	 * @throws Exception
 	 */
-	public void esIndexer(String topic, String kafkaJson) throws Exception {
+	public void esIndexer(String topic, String kafkaJson) {
 		Map<String, List<Mapping>> versionMap = runner.getVersionMap();
 		Mapping applicableMapping = getApplicableMapping(topic, versionMap, kafkaJson);
 		if (!ObjectUtils.isEmpty(applicableMapping)) {
@@ -119,7 +119,7 @@ public class IndexerService {
 	 * @param isBulk
 	 * @throws Exception
 	 */
-	public void indexProccessor(Index index, Mapping.ConfigKeyEnum configkey, String kafkaJson, boolean isBulk) throws Exception {
+	public void indexProccessor(Index index, Mapping.ConfigKeyEnum configkey, String kafkaJson, boolean isBulk) {
 		Long startTime = null;
 		log.debug("index: " + index.getCustomJsonMapping());
 		StringBuilder url = new StringBuilder();
@@ -149,7 +149,7 @@ public class IndexerService {
 	 * @param index
 	 * @throws Exception
 	 */
-	public void validateAndIndex(String finalJson, String url, Index index) throws Exception {
+	public void validateAndIndex(String finalJson, String url, Index index) {
 		if (!StringUtils.isEmpty(finalJson)) {
 			if (finalJson.startsWith("{ \"index\""))
 				bulkIndexer.indexJsonOntoES(url.toString(), finalJson, index);
@@ -169,7 +169,7 @@ public class IndexerService {
 	 * @param index
 	 * @throws Exception
 	 */
-	public void indexWithESId(Index index, String finalJson) throws Exception {
+	public void indexWithESId(Index index, String finalJson) {
 		StringBuilder urlForNonBulk = new StringBuilder();
 		urlForNonBulk.append(esHostUrl).append(index.getName()).append("/").append(index.getType()).append("/")
 				.append("_index");

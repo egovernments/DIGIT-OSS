@@ -59,7 +59,7 @@ public class ReportApp implements EnvironmentAware {
     }
 
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         SpringApplication.run(ReportApp.class, args);
     }
 
@@ -72,7 +72,7 @@ public class ReportApp implements EnvironmentAware {
 
     @Bean("reportDefinitions")
     @Value("common")
-    public static ReportDefinitions loadYaml(String moduleName) throws Exception {
+    public static ReportDefinitions loadYaml(String moduleName) {
 
         ObjectMapper mapper = getMapperConfig();
         List<ReportDefinition> localrd = new ArrayList<ReportDefinition>();
@@ -96,7 +96,7 @@ public class ReportApp implements EnvironmentAware {
     }
 
     private static void loadReportDefinitions(String moduleName, ObjectMapper mapper, List<ReportDefinition> localrd,
-                                              ReportDefinitions rd) throws Exception {
+                                              ReportDefinitions rd) {
         BufferedReader br;
         FileReader fr;
         String yamlLocation;

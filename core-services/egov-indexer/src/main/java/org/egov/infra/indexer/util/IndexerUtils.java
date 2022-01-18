@@ -18,6 +18,7 @@ import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
+import org.egov.tracer.model.CustomException;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -309,7 +310,7 @@ public class IndexerUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public JSONArray constructArrayForBulkIndex(String kafkaJson, Index index, boolean isBulk) throws Exception {
+	public JSONArray constructArrayForBulkIndex(String kafkaJson, Index index, boolean isBulk) {
 		JSONArray kafkaJsonArray = null;
 		try {
 			if (isBulk) {
@@ -339,7 +340,7 @@ public class IndexerUtils {
 		} catch (Exception e) {
 			log.error("Exception while constructing json array for bulk index: ", e);
 			log.error("Object: " + kafkaJson);
-			throw e;
+			throw new CustomException("BULK_INDEX_ERROR","Exception while constructing json array for bulk index");
 		}
 		return transformData(index, kafkaJsonArray);
 	}

@@ -8,6 +8,6 @@ public interface URLRepository {
 	
 	 public Long incrementID();
 	 public void saveUrl(String key, ShortenRequest shortenRequest)throws JsonProcessingException ;
-	 public String getUrl(Long id) throws Exception ;
+	 public String getUrl(Long id) ;
 
 }

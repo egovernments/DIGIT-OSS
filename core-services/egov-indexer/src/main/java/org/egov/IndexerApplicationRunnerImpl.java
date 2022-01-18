@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.io.IOUtils;
 import org.egov.infra.indexer.web.contract.Mapping;
 import org.egov.infra.indexer.web.contract.Services;
+import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 	private static ApplicationContext applicationContext;
 
 	@Override
-	public void run(final ApplicationArguments applicationArguments) throws Exception {
+	public void run(final ApplicationArguments applicationArguments) {
 		try {
 			logger.info("Reading yaml files......");
 			readFiles();
@@ -82,7 +83,7 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 		File folder = new File(baseFolderPath);
 
 		if (!folder.exists())
-			throw new RuntimeException("Folder doesn't exists - " + baseFolderPath);
+			throw new CustomException("FOLDER_NOT_FOUND","Folder doesn't exists - " + baseFolderPath);
 
 		File[] listOfFiles = folder.listFiles();
 		List<String> configFolderList = new ArrayList<String>();
@@ -119,7 +120,7 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 			log.info(" These are all the files " + ymlUrlS);
 
 			if (ymlUrlS.size() == 0) {
-				throw new RuntimeException("There are no config files loaded. Service cannot start");
+				throw new CustomException("CONFIG_ERROR","There are no config files loaded. Service cannot start");
 			}
 
 			for (String yamlLocation : ymlUrlS) {

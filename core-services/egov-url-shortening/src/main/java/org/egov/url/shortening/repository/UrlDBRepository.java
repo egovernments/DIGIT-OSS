@@ -3,6 +3,7 @@ package org.egov.url.shortening.repository;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.egov.tracer.model.CustomException;
 import org.egov.url.shortening.model.ShortenRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -58,14 +59,14 @@ public class UrlDBRepository implements URLRepository{
     }
 
 	@Override
-    public String getUrl(Long id) throws Exception {
+    public String getUrl(Long id) {
     	String query =  "SELECT url FROM EG_URL_SHORTENER WHERE id=?";
     	
     	String strprepStmtArgs = "url:"+id;
     	String url = jdbcTemplate.queryForObject(query, new Object[] {strprepStmtArgs}, String.class);
         log.info("Retrieved {} at {}", url ,id);
         if (url == null) {
-            throw new Exception("URL at key" + id + " does not exist");
+            throw new CustomException("URL_NOT_FOUND","URL at key" + id + " does not exist");
         }
         return url;
     }

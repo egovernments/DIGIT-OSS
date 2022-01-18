@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.io.IOUtils;
 import org.egov.search.model.SearchDefinition;
 import org.egov.search.model.SearchDefinitions;
+import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,7 @@ public class SearchApplicationRunnerImpl implements ApplicationRunner {
     public static final Logger logger = LoggerFactory.getLogger(SearchApplicationRunnerImpl.class);
 
     @Override
-    public void run(ApplicationArguments applicationArguments) throws Exception {
+    public void run(ApplicationArguments applicationArguments) {
         try {
             log.info("Reading yaml files......");
             readFiles();
@@ -86,7 +87,7 @@ public class SearchApplicationRunnerImpl implements ApplicationRunner {
         File folder = new File(baseFolderPath);
 
         if (!folder.exists()) {
-            throw new RuntimeException("The folder doesn't exists - " + baseFolderPath);
+            throw new CustomException("FOLDER_NOT_FOUND","The folder doesn't exists - " + baseFolderPath);
         }
 
         File[] listOfFiles = folder.listFiles();
@@ -128,7 +129,7 @@ public class SearchApplicationRunnerImpl implements ApplicationRunner {
             log.info(" These are all the files " + ymlUrlS);
 
             if (ymlUrlS.size() == 0) {
-                throw new RuntimeException("There are no configs loaded. Service cannot start");
+                throw new CustomException("CONFIG_ERROR","There are no configs loaded. Service cannot start");
             }
 
             for (String yamlLocation : ymlUrlS) {

@@ -1,5 +1,6 @@
 package org.egov.url.shortening.repository;
 
+import org.egov.tracer.model.CustomException;
 import org.egov.url.shortening.model.ShortenRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,14 +50,20 @@ public class URLRedisRepository implements URLRepository {
     }
 
     @Override
-    public String getUrl(Long id) throws Exception {
+    public String getUrl(Long id) {
         LOGGER.info("Retrieving at {}", id);
         String shorteningReqStr = jedis.hget(urlKey, "url:"+id);
-        ShortenRequest shortenRequest = objectMapper.readValue(shorteningReqStr, ShortenRequest.class);
-        String url = shortenRequest.getUrl();
-        LOGGER.info("Retrieved {} at {}", url ,id);
+        String url = null;
+        try{
+            ShortenRequest shortenRequest = objectMapper.readValue(shorteningReqStr, ShortenRequest.class);
+            url = shortenRequest.getUrl();
+            LOGGER.info("Retrieved {} at {}", url ,id);
+        }
+        catch (JsonProcessingException ex){
+            LOGGER.info(ex.getMessage());
+        }
         if (url == null) {
-            throw new Exception("URL at key" + id + " does not exist");
+            throw new CustomException("URL_NOT_FOUND","URL at key" + id + " does not exist");
         }
         return url;
     }
