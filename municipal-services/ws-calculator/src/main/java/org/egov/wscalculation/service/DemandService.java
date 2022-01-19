@@ -690,7 +690,7 @@ public class DemandService {
 					List<String> connectionNos = waterCalculatorDao.getConnectionsNoList(tenantId,
 							WSCalculationConstant.nonMeterdConnection, batchOffset, batchsize, fromDate, toDate);
 					String assessmentYear = estimationService.getAssessmentYear();
-					log.info("\n connectionNos Size: " + connectionNos.size() + "\n");
+
 					if (connectionNos.size() > 0) {
 						List<CalculationCriteria> calculationCriteriaList = new ArrayList<>();
 						for (String connectionNo : connectionNos) {
@@ -703,7 +703,7 @@ public class DemandService {
 
 						CalculationReq calculationReq = CalculationReq.builder().calculationCriteria(calculationCriteriaList)
 								.requestInfo(requestInfo).isconnectionCalculation(true).migrationCount(migrationCount).build();
-						log.info("\n calculationReq Size: " + calculationReq.getCalculationCriteria().size() + "\n");
+
 						wsCalculationProducer.push(configs.getCreateDemand(), calculationReq);
 						calculationCriteriaList.clear();
 					}
