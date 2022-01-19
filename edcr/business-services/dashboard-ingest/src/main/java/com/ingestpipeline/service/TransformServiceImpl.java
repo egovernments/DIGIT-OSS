@@ -40,7 +40,6 @@ public class TransformServiceImpl implements TransformService {
 	public Boolean transformData(Map incomingData) {
 		String dataContext = incomingData.get(Constants.DATA_CONTEXT).toString(); 
 		String dataContextVersion = incomingData.get(Constants.DATA_CONTEXT_VERSION).toString(); 
-		ObjectMapper mapper = new ObjectMapper(); 
 		List chainrSpecJSON = null ;
 		InputStream inputStream = null;
 		try {
@@ -55,48 +54,6 @@ public class TransformServiceImpl implements TransformService {
 			IOUtils.closeQuietly(inputStream);
 		}
 
-
-		/*Map<String, Integer> deepRouteSpecSize = new HashMap<>();  
-		
-		Object dataObject = incomingData.get(Constants.DATA_OBJECT); 
-		String digressConfig = configLoader.get(Constants.ConfigurationFileNames.DIGRESSION_POINTS);
-		Gson gson = new Gson(); 
-		JsonNode mainNode = null;
-	    try {
-	    	mainNode = mapper.readTree(gson.toJson(dataObject));
-		} catch (Exception ex) {
-			LOGGER.error("Encountered an error while converting the data to JSON Node : " + ex.getMessage());
-		} 
-	    ObjectNode objectNode = mainNode.deepCopy();
-		DigressionPointConfig config = gson.fromJson(digressConfig, DigressionPointConfig.class); 
-		if (config != null && config.getDigressionPoints() != null && config.getDigressionPoints().size() > 0) {
-			for (DigressionPoint point : config.getDigressionPoints()) {
-				if (incomingData.get(Constants.DATA_CONTEXT).equals(point.getDataContext())) {
-					List<String> paths = point.getPaths();
-					for(String path : paths) { 
-						if(objectNode.findValue(path).isArray()) { 
-							ArrayNode objectAtPathArray = (ArrayNode) objectNode.findValue(path); 
-							int size = objectAtPathArray.size();
-							deepRouteSpecSize.put(path, size); 
-						}
-					}
-					
-				}
-			}
-		}
-		
-		
-		for(int i=0; i< chainrSpecJSON.size() ; i++) { 
-			LinkedHashMap<Object, Object> chainSpec = (LinkedHashMap<Object, Object>) chainrSpecJSON.get(i);
-			for(Map.Entry<String, Integer> entry : deepRouteSpecSize.entrySet()) { 
-				String key = entry.getKey();
-				int iterationsForKey = entry.getValue(); 
-				for()
-			}
-			chainSpec.toString();
-		}*/
-		
-		
        Chainr chainr = Chainr.fromSpec( chainrSpecJSON );
         Object inputJSON = incomingData.get(Constants.DATA_OBJECT);
         try { 
@@ -112,9 +69,8 @@ public class TransformServiceImpl implements TransformService {
 	public Boolean digressData(Object dataObject, DigressionPoint digressionPoint) {
 		ObjectMapper mapper = new ObjectMapper();
 		Gson gson = new Gson(); 
-		JsonNode mainNode = null;
-	    try {
-	    	mainNode = mapper.readTree(gson.toJson(dataObject));
+		try {
+	    	mapper.readTree(gson.toJson(dataObject));
 		} catch (Exception ex) {
 			LOGGER.error("Encountered an error while converting the data to JSON Node : " + ex.getMessage());
 		} 

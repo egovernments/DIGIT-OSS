@@ -82,7 +82,6 @@ public class BusinessDetailsRepository {
         log.info("Create Business Details Repository::" + businessDetails);
         final String businessDetailsInsertQuery = businessDetailsQueryBuilder.insertBusinessDetailsQuery();
         final String accountDetailsInsertQuery = businessDetailsQueryBuilder.insertBusinessAccountDetailsQuery();
-        final String accountSubLedgerDetailsInsertQuery = businessDetailsQueryBuilder.insertAccountSubLedgerDetails();
 
         List<Map<String, Object>> businessDetailsBatchValues = new ArrayList<>(businessDetails.size());
         List<Map<String, Object>> accountDetailsBatchValues = new ArrayList<>(businessDetails.size());
@@ -185,9 +184,6 @@ public class BusinessDetailsRepository {
 	}
 
 	private void updateSubledgerDetails(BusinessAccountSubLedgerDetails subledgerModel) {
-		Object obj[] = new Object[] { subledgerModel.getAmount(), subledgerModel.getBusinessAccountDetail().getId(),
-				subledgerModel.getAccountDetailKey(), subledgerModel.getAccountDetailType(),
-				subledgerModel.getTenantId(), subledgerModel.getId() };
 	//	jdbcTemplate.update(UPDATE_BUSINESS_ACCOUNT_SUBLEDGER_DETAILS, obj);
 	}
 
@@ -209,9 +205,7 @@ public class BusinessDetailsRepository {
 				if (entry.getKey().equals(subledgerModel.getBusinessAccountDetail().getId())) {
 					businessDetailsId = entry.getValue();
 
-					Object obj[] = new Object[] { generateSequence(SEQUENCEFORSUBLEDGER), subledgerModel.getAmount(),
-							businessDetailsId, subledgerModel.getAccountDetailKey(),
-							subledgerModel.getAccountDetailType(), subledgerModel.getTenantId() };
+
 					//jdbcTemplate.update(INSERT_BUSINESS_ACCOUNT_SUBLEDGER_DETAILS, obj);
 
 				}
@@ -220,9 +214,6 @@ public class BusinessDetailsRepository {
 
 		else {
 			businessDetailsId = subledgerModel.getBusinessAccountDetail().getId();
-			Object obj[] = new Object[] { generateSequence(SEQUENCEFORSUBLEDGER), subledgerModel.getAmount(),
-					businessDetailsId, subledgerModel.getAccountDetailKey(), subledgerModel.getAccountDetailType(),
-					subledgerModel.getTenantId() };
 		//	jdbcTemplate.update(INSERT_BUSINESS_ACCOUNT_SUBLEDGER_DETAILS, obj);
 		}
 	}
@@ -265,8 +256,7 @@ public class BusinessDetailsRepository {
 	}
 
 	private void updateAccountDetails(BusinessAccountDetails accountdetail) {
-		Object[] object = new Object[] { accountdetail.getBusinessDetails(), accountdetail.getChartOfAccount(),
-				accountdetail.getAmount(), accountdetail.getTenantId(), accountdetail.getId() };
+
 		//jdbcTemplate.update(UPDATE_BUSINESS_ACCOUNT_DETAILS, object);
 	}
 

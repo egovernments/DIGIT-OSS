@@ -22,7 +22,6 @@ public class BusinessDetailsCombinedRowMapper implements RowMapper<BusinessDetai
 
 	@Override
 	public BusinessDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
-		final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	
 		BusinessDetails businessDetails=new BusinessDetails();

@@ -65,7 +65,6 @@ public class ActionServiceTest {
 		ActionSearchCriteria actionSearchCriteria = ActionSearchCriteria.builder().build();
 
 		List<Object> actionsExpected = getActions();
-		ActionFinderQueryBuilder queryBuilder = new ActionFinderQueryBuilder(actionSearchCriteria);
 		when(repository.run(Mockito.any(ActionFinderQueryBuilder.class), Mockito.any(ActionRowMapper.class)))
 				.thenReturn(actionsExpected);
 
