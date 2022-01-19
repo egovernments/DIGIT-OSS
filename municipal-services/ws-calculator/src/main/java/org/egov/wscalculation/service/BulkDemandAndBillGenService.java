@@ -66,6 +66,7 @@ public class BulkDemandAndBillGenService {
 		BulkBillGenerator bulkBillGenerator = generateDemandInBulk(request.getRequestInfo(), calculations, masterMap,
 				true);
 		bulkBillGenerator.setMigrationCount(request.getMigrationCount());
+		log.info("\nbulkBillGenerator :"+bulkBillGenerator.toString());
 		kafkaTemplate.send(bulkBillGenTopic, bulkBillGenerator);
 	}
 	
