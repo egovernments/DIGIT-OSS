@@ -266,6 +266,19 @@ export const OBPSService = {
       }
     const comparisionReport = await OBPSService.comparisionReport(BPA?.tenantId, { ...comparisionRep });
 
+    function ConvertEpochToValidityDate (dateEpoch){
+      if(dateEpoch == null || dateEpoch == undefined || dateEpoch == ''){
+        return "NA" ;
+      }
+      const dateFromApi = new Date(dateEpoch);
+      let month = dateFromApi.getMonth() + 1;
+      let day = dateFromApi.getDate();
+      let year = dateFromApi.getFullYear()-3;
+      month = (month > 9 ? "" : "0") + month;
+      day = (day > 9 ? "" : "0") + day;
+      return `${day}/${month}/${year}`;
+    };
+    
     const nocDetails = noc
       ?.map((nocDetails, index) => ({
         title: index === 0 ? "BPA_NOC_DETAILS_SUMMARY" : "",
@@ -383,7 +396,7 @@ export const OBPSService = {
     
     if(BPA?.approvalNo) {
       applicationDetailsInfo?.values?.push({ title: BPA?.businessService !== "BPA_OC" ?  "BPA_PERMIT_NUMBER_LABEL":"BPA_OC_PERMIT_NUMBER_LABEL", value: BPA?.approvalNo || "NA"  });
-      applicationDetailsInfo?.values?.push({ title: BPA?.businessService !== "BPA_OC" ? "BPA_PERMIT_VALIDITY" : "BPA_OC_PERMIT_VALIDITY", value: BPA?.additionalDetails?.validityDate ? `${format(new Date(BPA?.applicationDate), 'dd/MM/yyyy')} - ${format(new Date(BPA?.additionalDetails?.validityDate), 'dd/MM/yyyy')}` : "NA"  });
+      applicationDetailsInfo?.values?.push({ title: BPA?.businessService !== "BPA_OC" ? "BPA_PERMIT_VALIDITY" : "BPA_OC_PERMIT_VALIDITY", value: BPA?.additionalDetails?.validityDate ? `${ConvertEpochToValidityDate(BPA?.additionalDetails?.validityDate)} - ${format(new Date(BPA?.additionalDetails?.validityDate), 'dd/MM/yyyy')}` : "NA"  });
     }
 
 

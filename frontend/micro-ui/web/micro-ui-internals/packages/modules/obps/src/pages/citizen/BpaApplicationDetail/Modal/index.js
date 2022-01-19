@@ -4,7 +4,7 @@ import { configAcceptApplication } from "../config/Approve";
 import { configTermsAndConditions } from "../config/TermsAndConditions";
 
 const Heading = (props) => {
-  return <h1 className="heading-m">{props.label}</h1>;
+  return <h1 style={{marginLeft:"22px"}} className="heading-m BPAheading-m">{props.label}</h1>;
 };
 
 const Close = () => (
@@ -28,6 +28,7 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action, applicat
   const [defaultValues, setDefaultValues] = useState({});
   const [error, setError] = useState(null);
   const [termsData, setTermsData] = useState(false);
+  const mobileView = Digit.Utils.browser.isMobile() ? true : false;
 
   const selectFile = (e) => {
     setFile(e.target.files[0]);
@@ -105,14 +106,17 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action, applicat
       actionSaveOnSubmit={() => {}}
       formId="modal-action"
       isDisabled={false}
-      style={{height: "auto", padding: "10px"}}
+      //style={{height: "auto", padding: "10px"}}
+      isOBPSFlow={true}
+      popupStyles={mobileView?{width:"720px"}:{}}
+      style={!mobileView?{height: "43px", width:"107px",paddingLeft:"0px",paddingRight:"0px"}:{height:"43px",width:"160px"}}
       hideSubmit={config?.label?.hideSubmit ? true : false}
-      popupModuleMianStyles={action == "TERMS_AND_CONDITIONS" ? {height : "92%", boxSizing: "border-box"}: {}}
+      popupModuleMianStyles={action == "TERMS_AND_CONDITIONS" ? {height : "92%", boxSizing: "border-box"}: mobileView?{paddingLeft:"0px"}: {}}
       headerBarMainStyle={action == "TERMS_AND_CONDITIONS" ? {margin: "0px", height: "35px"}: {}}
     >
       {config?.form ?
         <FormComposer
-          cardStyle={{ minWidth: "unset", paddingRight: "unset" }}
+          cardStyle={{ minWidth: "unset", paddingRight: "unset", marginRight:"18px",paddingBottom:"64px" }}
           config={config?.form}
           noBoxShadow
           inline
