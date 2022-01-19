@@ -93,7 +93,7 @@ public class PaymentNotificationService {
 			WaterConnection waterConnection = waterConnectionList.get(size-1);
 			WaterConnectionRequest waterConnectionRequest = WaterConnectionRequest.builder()
 					.waterConnection(waterConnection).requestInfo(requestInfo).build();
-			Property property = wSCalculationUtil.getProperty(waterConnectionRequest);
+			Property property = wSCalculationUtil.getProperty(waterConnectionRequest, true);
 			if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
 				if (mappedRecord.get(serviceName).equalsIgnoreCase(WSCalculationConstant.SERVICE_FIELD_VALUE_WS)) {
 					if (waterConnection == null) {

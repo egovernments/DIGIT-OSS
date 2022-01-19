@@ -153,7 +153,7 @@ public class DemandService {
 			}
 			WaterConnectionRequest waterConnectionRequest = WaterConnectionRequest.builder().waterConnection(connection)
 					.requestInfo(requestInfo).build();
-			Property property = wsCalculationUtil.getProperty(waterConnectionRequest);
+			Property property = wsCalculationUtil.getProperty(waterConnectionRequest, true);
 			String tenantId = calculation.getTenantId();
 			String consumerCode = isForConnectionNO ? calculation.getConnectionNo()
 					: calculation.getApplicationNO();
@@ -504,7 +504,7 @@ public class DemandService {
 				if(connection.getApplicationType().equalsIgnoreCase("MODIFY_WATER_CONNECTION")){
 					WaterConnectionRequest waterConnectionRequest = WaterConnectionRequest.builder().waterConnection(connection)
 							.requestInfo(requestInfo).build();
-					Property property = wsCalculationUtil.getProperty(waterConnectionRequest);
+					Property property = wsCalculationUtil.getProperty(waterConnectionRequest, true);
 					User owner = property.getOwners().get(0).toCommonUser();
 					if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
 						owner = waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0).toCommonUser();
