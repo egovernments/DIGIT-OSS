@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const Search = ({ path }) => {
@@ -55,7 +55,11 @@ const Search = ({ path }) => {
       let payload1 = {
         applicationType: "BUILDING_PLAN_SCRUTINY",
         serviceType: "NEW_CONSTRUCTION",
+        ...(window.location.href.includes("/digit-ui/citizen") && {
+          mobileNumber: Digit.UserService.getUser().info.mobileNumber,
+        }),
       };
+
       setPayload({ ...payload, ...payload1 });
     }
     filters = payload;

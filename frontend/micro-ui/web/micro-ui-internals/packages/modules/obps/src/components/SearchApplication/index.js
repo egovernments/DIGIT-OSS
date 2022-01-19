@@ -17,11 +17,12 @@ import useSearchApplicationTableConfig from "./useTableConfig";
 
 const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData, isLoading, Count }) => {
   const [showToast, setShowToast] = useState(null);
+  const currentUserPhoneNumber = Digit.UserService.getUser().info.mobileNumber;
 
   const { register, control, handleSubmit, setValue, getValues, reset, formState } = useForm({
     defaultValues: {
       applicationNo: "",
-      mobileNumber: "",
+      mobileNumber: window.location.href.includes("/digit-ui/citizen") ? currentUserPhoneNumber : "",
       fromDate: "",
       toDate: "",
       status: "",
@@ -54,7 +55,7 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
       //reset({ ...searchData, isSubmitSuccessful: false });
       reset({
         applicationNo: "",
-        mobileNumber: "",
+       mobileNumber: window.location.href.includes("/digit-ui/citizen") ? Digit.UserService.getUser().info.mobileNumber : "",
         fromDate: "",
         toDate: "",
         status: "",
