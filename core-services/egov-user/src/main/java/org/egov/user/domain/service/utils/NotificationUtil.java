@@ -43,7 +43,7 @@ public class NotificationUtil {
         EmailRequest emailRequest = EmailRequest.builder().requestInfo(requestInfo).email(email).build();
 
         kafkaTemplate.send(emailNotificationTopic,emailRequest);
-//        kafkaTemplate.send(smsNotificationTopic,smsRequest);
+        kafkaTemplate.send(smsNotificationTopic,smsRequest);
 
         log.info("Email Update Notifications successfully placed on kafka topics" + emailNotificationTopic + " and " + smsNotificationTopic);
     }
