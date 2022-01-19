@@ -87,8 +87,12 @@ public class VendorService {
 			}
 		}
 		
-		if(!CollectionUtils.isEmpty(criteria.getVehicleRegistrationNumber()) || StringUtils.hasLength(criteria.getVehicleType())) {
-			List<Vehicle> vehicles = vehicleService.getVehicles(null, criteria.getVehicleRegistrationNumber(), criteria.getVehicleType(), requestInfo, criteria.getTenantId());
+		if (!CollectionUtils.isEmpty(criteria.getVehicleRegistrationNumber())
+				|| StringUtils.hasLength(criteria.getVehicleType())
+				|| StringUtils.hasLength(criteria.getVehicleCapacity())) {
+			List<Vehicle> vehicles = vehicleService.getVehicles(null, criteria.getVehicleRegistrationNumber(),
+					criteria.getVehicleType(), criteria.getVehicleCapacity(), requestInfo, criteria.getTenantId());
+			
 			if(CollectionUtils.isEmpty(vehicles)) {
 				return new ArrayList<Vendor>();
 			}
@@ -97,7 +101,6 @@ public class VendorService {
 			}else {
 				criteria.getVehicleIds().addAll(vehicles.stream().map(Vehicle::getId).collect(Collectors.toList()));
 			}
-			
 			
 		}
 		

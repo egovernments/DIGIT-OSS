@@ -85,7 +85,7 @@ public class NotificationUtil {
 		String message = null, messageTemplate;
 
 			FSM fsm = fsmRequest.getFsm();
-			Vendor vendor = this.dsoSerevice.getVendor(fsm.getDsoId(), fsm.getTenantId(), null, null,null, fsmRequest.getRequestInfo());
+			Vendor vendor = this.dsoSerevice.getVendor(fsm.getDsoId(), fsm.getTenantId(), null, null,null,null, fsmRequest.getRequestInfo());
 			messageTemplate = getMessageTemplate(messageCode, localizationMessage);
 			
 			if (!StringUtils.isEmpty(messageTemplate)) {

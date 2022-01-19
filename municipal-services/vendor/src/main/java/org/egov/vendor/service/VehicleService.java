@@ -49,7 +49,8 @@ public class VehicleService {
 			
 			if(!StringUtils.hasLength(reqVehicle.getId()) && StringUtils.hasLength(reqVehicle.getRegistrationNumber())) {
 				
-				List<Vehicle> vehicles = getVehicles(null,Arrays.asList(reqVehicle.getRegistrationNumber()) ,null,requestInfo, vendor.getTenantId());
+				List<Vehicle> vehicles = getVehicles(null, Arrays.asList(reqVehicle.getRegistrationNumber()), null,
+						null, requestInfo, vendor.getTenantId());
 				if( vehicles.size() >0 ) {
 					newVehicles.add(vehicles.get(0));
 					//TODO comparing search result and request vehicle and callig update is peding
@@ -57,7 +58,9 @@ public class VehicleService {
 					newVehicles.add(createVehicle(reqVehicle, requestInfo));
 				}
 			}else {
-				List<Vehicle> vehicles = getVehicles(Arrays.asList(reqVehicle.getId()),Arrays.asList(reqVehicle.getRegistrationNumber()) ,null,requestInfo, vendor.getTenantId());
+				List<Vehicle> vehicles = getVehicles(Arrays.asList(reqVehicle.getId()),
+						Arrays.asList(reqVehicle.getRegistrationNumber()), null, null, requestInfo,
+						vendor.getTenantId());
 				if( vehicles.size() >0 ) {
 					newVehicles.add(vehicles.get(0));
 					//TODO comparing search result and request vehicle and callig update is peding
@@ -74,13 +77,17 @@ public class VehicleService {
 	
 	
 	/**
-	 * 
 	 * @param vehicleIds
+	 * @param registrationNumbers
+	 * @param vehicleType
+	 * @param vehicleCapacity
 	 * @param requestInfo
 	 * @param tenantId
 	 * @return
 	 */
-	public List<Vehicle> getVehicles(List<String> vehicleIds,List<String> registrationNumbers,String vehicleType, RequestInfo requestInfo,String tenantId){
+	public List<Vehicle> getVehicles(List<String> vehicleIds, List<String> registrationNumbers, String vehicleType,
+			String vehicleCapacity, RequestInfo requestInfo, String tenantId) {
+	
 		List<Vehicle> vehicles = null;
 		StringBuilder uri = new StringBuilder();
 		uri.append(config.getVehicleHost()).append(config.getVehicleContextPath()).append(config.getVehicleSearchEndpoint()).append("?tenantId="+tenantId);
@@ -94,6 +101,11 @@ public class VehicleService {
 		if(StringUtils.hasLength(vehicleType)) {
 			uri.append("&type="+vehicleType);
 		}
+		
+		if(StringUtils.hasLength(vehicleCapacity)) {
+			uri.append("&tankCapacity="+vehicleCapacity);
+		}
+		
 		RequestInfoWrapper reqwraper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 		LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, reqwraper);
 		VehicleResponse vehicleResponse = null;

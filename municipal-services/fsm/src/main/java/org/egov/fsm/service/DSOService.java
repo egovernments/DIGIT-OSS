@@ -43,7 +43,8 @@ public class DSOService {
 	@Autowired
 	VehicleService vehicleService;
 	
-	public Vendor getVendor(String dsoId, String tenantId, String ownerId, String mobileNo, String vehicleType, RequestInfo requestInfo) {
+	public Vendor getVendor(String dsoId, String tenantId, String ownerId, String mobileNo, String vehicleType,
+			String vehicleCapacity, RequestInfo requestInfo) {
 		
 		StringBuilder uri  = new StringBuilder(config.getVendorHost()).append(config.getVendorContextPath())
 				.append(config.getVendorSearchEndpoint()).append("?tenantId=").append(tenantId);
@@ -64,6 +65,9 @@ public class DSOService {
 			uri.append("&vehicleType=").append(vehicleType);
 		}
 		
+		if(!StringUtils.isEmpty(vehicleCapacity)) {
+			uri.append("&vehicleCapacity=").append(vehicleCapacity);
+		}
 		
 		RequestInfoWrapper requestInfoWrpr = new RequestInfoWrapper();
 		requestInfoWrpr.setRequestInfo(requestInfo);
@@ -85,7 +89,7 @@ public class DSOService {
 	
 	public void validateDSO(FSMRequest fsmRequest) {
 		FSM fsm = fsmRequest.getFsm();
-		Vendor vendor = this.getVendor(fsm.getDsoId(), fsm.getTenantId(), null, null, null, fsmRequest.getRequestInfo());
+		Vendor vendor = this.getVendor(fsm.getDsoId(), fsm.getTenantId(), null, null, null, null,fsmRequest.getRequestInfo());
 		if(vendor == null) {
 			throw new CustomException(FSMErrorConstants.INVALID_DSO," DSO Does not belong to DSO!");
 		}else {

@@ -117,10 +117,9 @@ public class EnrichmentService {
 	}
 	
 	private void addVehicles(RequestInfo requestInfo, Vendor vendor, String tenantId) {
-		VendorSearchCriteria vendorDriverSearchCriteria = new VendorSearchCriteria();
 		List<String> vehicleIds = vendorRepository.getVehicles(vendor.getId());
 		if(!CollectionUtils.isEmpty(vehicleIds)) {
-			vendor.setVehicles(vehicleService.getVehicles(vehicleIds, null, null,requestInfo, tenantId));
+			vendor.setVehicles(vehicleService.getVehicles(vehicleIds, null, null, null, requestInfo, tenantId));
 		}
 		
 	}

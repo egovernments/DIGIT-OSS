@@ -1,9 +1,7 @@
 package org.egov.fsm.service;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,9 +40,7 @@ import org.egov.fsm.workflow.ActionValidator;
 import org.egov.fsm.workflow.WorkflowIntegrator;
 import org.egov.fsm.workflow.WorkflowService;
 import org.egov.tracer.model.CustomException;
-import org.javers.common.collections.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -256,7 +252,7 @@ public class FSMService {
 			throw new CustomException(FSMErrorConstants.INVALID_VEHICLE_ASSIGN_ACTION," only Employee with FSM_EDITOR role and/or  assigned DSO can take this action. ");
 		}
 
-		Vendor vendor = dsoService.getVendor(oldFSM.getDsoId(),fsm.getTenantId(), dsoOwnerId,null,null, fsmRequest.getRequestInfo());
+		Vendor vendor = dsoService.getVendor(oldFSM.getDsoId(),fsm.getTenantId(), dsoOwnerId,null,null,null, fsmRequest.getRequestInfo());
 		if (vendor == null) {
 			throw new CustomException(FSMErrorConstants.INVALID_DSO,
 					" DSO is invalid, cannot take an action, Application is not assigned to current logged in user !");
@@ -416,7 +412,7 @@ public class FSMService {
 			List<Role> roles = requestInfo.getUserInfo().getRoles();
 			if (roles.stream().anyMatch(role -> Objects.equals(role.getCode(), FSMConstants.ROLE_FSM_DSO))) {
 				Vendor dso = dsoService.getVendor(null, criteria.getTenantId(), null,
-						requestInfo.getUserInfo().getMobileNumber(), null, requestInfo);
+						requestInfo.getUserInfo().getMobileNumber(), null,null, requestInfo);
 				if (dso != null && org.apache.commons.lang3.StringUtils.isNotEmpty(dso.getId())) {
 					dsoId = dso.getId();
 				}

@@ -87,15 +87,16 @@ public class FSMValidator {
 
 			}
 			
-		}else if( fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE)) {
+		} else if (fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE)) {
 			User applicant = fsm.getCitizen();
-			if( applicant == null ||  StringUtils.isEmpty(applicant.getName()) || StringUtils.isEmpty(applicant.getMobileNumber())) {
-				throw new CustomException(FSMErrorConstants.INVALID_APPLICANT_ERROR,"Applicant Name and mobile number mandatory");
+			if (applicant == null || StringUtils.isEmpty(applicant.getName())
+					|| StringUtils.isEmpty(applicant.getMobileNumber())) {
+				throw new CustomException(FSMErrorConstants.INVALID_APPLICANT_ERROR,
+						"Applicant Name and mobile number mandatory");
 			}
 			
-			
-			
-			validateVehicleType(fsmRequest);
+			//validateVehicleType(fsmRequest);
+			validateVehicleCapacity(fsmRequest);
 			mdmsValidator.validateApplicationChannel(fsm.getSource());
 			if(!StringUtils.isEmpty(fsm.getSanitationtype())) {
 				mdmsValidator.validateOnSiteSanitationType(fsm.getSanitationtype(),fsm.getPitDetail());
@@ -120,16 +121,33 @@ public class FSMValidator {
 		validateNoOfTrips(fsmRequest, mdmsData);
 		validateSlum(fsmRequest, mdmsData);
 	}
+	
 	/**
 	 * validate the vehicleMakemodel in MDMS as well as existance of vehicle with given vehicleType in given tenant
 	 */
-	private void validateVehicleType(FSMRequest fsmRequest) {
+	/*
+	 * private void validateVehicleType(FSMRequest fsmRequest) { FSM fsm =
+	 * fsmRequest.getFsm();
+	 * 
+	 * mdmsValidator.validateVehicleType(fsm.getVehicleType()); Vendor vendor =
+	 * dsoService.getVendor(null, fsm.getTenantId(), null, null,
+	 * fsm.getVehicleType(), fsmRequest.getRequestInfo()); if(vendor == null) {
+	 * throw new CustomException(FSMErrorConstants.
+	 * NO_VEHICLE_VEHICLE_TYPE,"DSO Does not exists in the ULB with vehicle of vehicleType "
+	 * +fsm.getVehicleType()); } }
+	 */
+	
+	
+	/**
+	 * validate the vehicle capacity by using Capacity to check if vendor exists for the given vehicle capacity
+	 */
+	private void validateVehicleCapacity(FSMRequest fsmRequest) {
 		FSM fsm = fsmRequest.getFsm();
-		
-		mdmsValidator.validateVehicleType(fsm.getVehicleType());
-		Vendor vendor = dsoService.getVendor(null, fsm.getTenantId(), null, null, fsm.getVehicleType(), fsmRequest.getRequestInfo());
-		if(vendor == null) {
-			throw new CustomException(FSMErrorConstants.NO_VEHICLE_VEHICLE_TYPE,"DSO Does not exists in the ULB with vehicle of vehicleType "+fsm.getVehicleType());
+		Vendor vendor = dsoService.getVendor(null, fsm.getTenantId(), null, null, null,fsm.getVehicleCapacity(),
+				fsmRequest.getRequestInfo());
+		if (vendor == null) {
+			throw new CustomException(FSMErrorConstants.NO_VEHICLE_VEHICLE_TYPE,
+					"DSO Does not exists in the ULB with vehicle of capacity " + fsm.getVehicleCapacity());
 		}
 	}
 
@@ -271,7 +289,9 @@ public class FSMValidator {
 		validateAllIds(searchResult, fsm);
 		
 		mdmsValidator.validateMdmsData(fsmRequest, mdmsData);
-		validateVehicleType(fsmRequest);
+		//validateVehicleType(fsmRequest);
+		validateVehicleCapacity(fsmRequest);
+		
 		if(!StringUtils.isEmpty(fsm.getSource())) {
 			mdmsValidator.validateApplicationChannel(fsm.getSource());
 			
@@ -312,13 +332,15 @@ public class FSMValidator {
 		
 
 		if (!CollectionUtils.isEmpty(listOfAllowedUpdatableParams)) {
+			log.info("SAN-790:listOfAllowedUpdatableParams: " + listOfAllowedUpdatableParams);
 			List<String> listOfUpdatedParams = getDelta(oldFsm, newFsm);
+			log.info("SAN-790:listOfUpdatedParams: " + listOfUpdatedParams);
 			if (listOfAllowedUpdatableParams.contains(FSMConstants.PIT_DETAIL)) {
 				FSMConstants.pitDetailList.forEach(property -> {
 					listOfUpdatedParams.remove(property);
 				});
 			}
-			
+			log.info("SAN-790:listOfUpdatedParams after removing pit detail: " + listOfUpdatedParams);
 			for(String updatedParam : listOfUpdatedParams) {
 				if (!contains(listOfAllowedUpdatableParams, updatedParam)) {
 					throw new CustomException(FSMErrorConstants.UPDATE_ERROR,
@@ -345,16 +367,12 @@ public class FSMValidator {
 	
 	private void validateTripAmount(FSMRequest fsmRequest, Object mdmsData) {
 		FSM fsm = fsmRequest.getFsm();
-
 		List<Map<String,Object>> tripAountAllowed = JsonPath.read(mdmsData, FSMConstants.FSM_TRIP_AMOUNT_OVERRIDE_ALLOWED);
-		
-
 		Map<String, String> additionalDetails=null;
-		
 		try {
 		
-		 additionalDetails = fsm.getAdditionalDetails() != null ? (Map<String,String>)fsm.getAdditionalDetails()
-				: new HashMap<String, String>();
+			additionalDetails = fsm.getAdditionalDetails() != null ? (Map<String, String>) fsm.getAdditionalDetails()
+					: new HashMap<String, String>();
 		}catch (Exception e) {
 		log.info("format is wrong", e.getMessage());
 		}
@@ -368,6 +386,11 @@ public class FSMValidator {
 			}
 		}
 	}
+	
+	/**
+	 * @param fsmRequest
+	 * @param mdmsData
+	 */
 	private void validateNoOfTrips(FSMRequest fsmRequest, Object mdmsData) {
 		FSM fsm = fsmRequest.getFsm();
 		Integer noOfTrips  = fsm.getNoOfTrips();
@@ -379,6 +402,10 @@ public class FSMValidator {
 			}
 		}
 	}
+	/**
+	 * @param fsmRequest
+	 * @param mdmsData
+	 */
 	private void validateSlum(FSMRequest fsmRequest, Object mdmsData) {
 		FSM fsm = fsmRequest.getFsm();
 		
@@ -450,6 +477,10 @@ public class FSMValidator {
 		}
 	}
 	
+	/**
+	 * @param fsmRequest
+	 * @param mdmsData
+	 */
 	public void validateCheckList(FSMRequest fsmRequest, Object mdmsData) {
 		FSM fsm = fsmRequest.getFsm();
 		Map additonalDetails = (Map)fsm.getAdditionalDetails();
