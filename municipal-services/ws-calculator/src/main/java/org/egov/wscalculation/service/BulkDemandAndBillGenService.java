@@ -66,7 +66,6 @@ public class BulkDemandAndBillGenService {
 		BulkBillGenerator bulkBillGenerator = generateDemandInBulk(request.getRequestInfo(), calculations, masterMap,
 				true);
 		bulkBillGenerator.setMigrationCount(request.getMigrationCount());
-		log.info("\nbulkBillGenerator :"+bulkBillGenerator.toString());
 		kafkaTemplate.send(bulkBillGenTopic, bulkBillGenerator);
 	}
 	
@@ -157,7 +156,6 @@ public class BulkDemandAndBillGenService {
 					.minimumAmountPayable(minimumPayableAmount).tenantId(tenantId).taxPeriodFrom(fromDate)
 					.taxPeriodTo(toDate).consumerType("waterConnection").businessService(businessService)
 					.status(StatusEnum.valueOf("ACTIVE")).billExpiryTime(expiryDate).build());
-			log.info("Create Demand");
 		}
 		return demands;
 	}

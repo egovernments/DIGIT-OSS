@@ -66,7 +66,6 @@ public class DemandGenerationConsumer {
 
 		try{
 			CalculationReq calculationReq = mapper.convertValue(records, CalculationReq.class);
-			log.info("consumer calculationReq Size: "+calculationReq.getCalculationCriteria().size());
 			generateDemandInBatch(calculationReq);
 		}catch (final Exception e){
 			log.error("KAFKA_PROCESS_ERROR", e);

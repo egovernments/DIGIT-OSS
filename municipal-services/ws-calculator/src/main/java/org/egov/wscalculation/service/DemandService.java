@@ -426,7 +426,6 @@ public class DemandService {
 		mstrDataService.setWaterConnectionMasterValues(requestInfo, getBillCriteria.getTenantId(), billingSlabMaster,
 				timeBasedExemptionMasterMap);
 
-		log.info("Update Demand");
 		
 		if (CollectionUtils.isEmpty(getBillCriteria.getConsumerCodes()))
 			getBillCriteria.setConsumerCodes(Collections.singletonList(getBillCriteria.getConnectionNumber()));
@@ -685,31 +684,32 @@ public class DemandService {
 			Long toDate = (Long) financialYearMaster.get(WSCalculationConstant.ENDING_DATE_APPLICABLES);
 
 			long count = waterCalculatorDao.getConnectionCount(tenantId, fromDate, toDate);
-			log.info("Count: "+count);
-			while(batchOffset<count){
-				List<String> connectionNos = waterCalculatorDao.getConnectionsNoList(tenantId,
-						WSCalculationConstant.nonMeterdConnection, batchOffset, batchsize, fromDate, toDate);
-				String assessmentYear = estimationService.getAssessmentYear();
-				log.info("\n connectionNos Size: "+connectionNos.size()+"\n");
-				if(connectionNos.size()>0){
-					List<CalculationCriteria> calculationCriteriaList = new ArrayList<>();
-					for (String connectionNo : connectionNos) {
-						CalculationCriteria calculationCriteria = CalculationCriteria.builder().tenantId(tenantId)
-								.assessmentYear(assessmentYear).connectionNo(connectionNo).build();
-						calculationCriteriaList.add(calculationCriteria);
+			log.info("Connection Count: "+count);
+			if(count>0) {
+				while (batchOffset < count) {
+					List<String> connectionNos = waterCalculatorDao.getConnectionsNoList(tenantId,
+							WSCalculationConstant.nonMeterdConnection, batchOffset, batchsize, fromDate, toDate);
+					String assessmentYear = estimationService.getAssessmentYear();
+					log.info("\n connectionNos Size: " + connectionNos.size() + "\n");
+					if (connectionNos.size() > 0) {
+						List<CalculationCriteria> calculationCriteriaList = new ArrayList<>();
+						for (String connectionNo : connectionNos) {
+							CalculationCriteria calculationCriteria = CalculationCriteria.builder().tenantId(tenantId)
+									.assessmentYear(assessmentYear).connectionNo(connectionNo).build();
+							calculationCriteriaList.add(calculationCriteria);
+						}
+						MigrationCount migrationCount = MigrationCount.builder().id(UUID.randomUUID().toString()).offset(Long.valueOf(batchOffset)).limit(Long.valueOf(batchsize)).recordCount(Long.valueOf(connectionNos.size()))
+								.tenantid(tenantId).createdTime(System.currentTimeMillis()).businessService("WS").build();
+
+						CalculationReq calculationReq = CalculationReq.builder().calculationCriteria(calculationCriteriaList)
+								.requestInfo(requestInfo).isconnectionCalculation(true).migrationCount(migrationCount).build();
+						log.info("\n calculationReq Size: " + calculationReq.getCalculationCriteria().size() + "\n");
+						wsCalculationProducer.push(configs.getCreateDemand(), calculationReq);
+						calculationCriteriaList.clear();
 					}
-					MigrationCount migrationCount = MigrationCount.builder().id(UUID.randomUUID().toString()).offset(Long.valueOf(batchOffset)).limit(Long.valueOf(batchsize)).recordCount(Long.valueOf(connectionNos.size()))
-							.tenantid(tenantId).createdTime(System.currentTimeMillis()).businessService("WS").build();
-
-					CalculationReq calculationReq = CalculationReq.builder().calculationCriteria(calculationCriteriaList)
-							.requestInfo(requestInfo).isconnectionCalculation(true).migrationCount(migrationCount).build();
-					log.info("\n calculationReq Size: "+calculationReq.getCalculationCriteria().size()+"\n");
-					wsCalculationProducer.push(configs.getCreateDemand(), calculationReq);
-					calculationCriteriaList.clear();
+					batchOffset = batchOffset + batchsize;
 				}
-				batchOffset = batchOffset + batchsize;
 			}
-
 
 		}
 	}
