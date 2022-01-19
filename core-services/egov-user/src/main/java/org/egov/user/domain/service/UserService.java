@@ -412,7 +412,7 @@ public class UserService {
         /* encrypt here */
         user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
 
-        final User existingUser = getUserByUuid(user.getUuid());
+        User existingUser = getUserByUuid(user.getUuid());
         validateProfileUpdateIsDoneByTheSameLoggedInUser(user);
         user.nullifySensitiveFields();
         validatePassword(user.getPassword());
@@ -421,7 +421,7 @@ public class UserService {
         User updatedUser = getUserByUuid(user.getUuid());
         
         /* decrypt here */
-
+        existingUser = encryptionDecryptionUtil.decryptObject(existingUser, "User", User.class, requestInfo);
         updatedUser = encryptionDecryptionUtil.decryptObject(updatedUser, "User", User.class, requestInfo);
 
         setFileStoreUrlsByFileStoreIds(Collections.singletonList(updatedUser));
