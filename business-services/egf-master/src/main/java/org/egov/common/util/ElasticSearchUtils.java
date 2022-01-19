@@ -13,7 +13,7 @@ public class ElasticSearchUtils {
 
 	public void add(Object fieldValue, String field, BoolQueryBuilder boolQueryBuilder) {
 		if (fieldValue != null) {
-			boolQueryBuilder = boolQueryBuilder.filter(termsQuery(field, fieldValue));
+			boolQueryBuilder.filter(termsQuery(field, fieldValue));
 		}
 
 	}
@@ -27,14 +27,14 @@ public class ElasticSearchUtils {
 
 	public void gte(Object fieldValue, String field, BoolQueryBuilder boolQueryBuilder) {
 		if (fieldValue != null) {
-			boolQueryBuilder = boolQueryBuilder.filter(QueryBuilders.rangeQuery(field).from(fieldValue));
+			boolQueryBuilder.filter(QueryBuilders.rangeQuery(field).from(fieldValue));
 		}
 
 	}
 
 	public void lte(Object fieldValue, String field, BoolQueryBuilder boolQueryBuilder) {
 		if (fieldValue != null) {
-			boolQueryBuilder = boolQueryBuilder.filter(QueryBuilders.rangeQuery(field).to(fieldValue));
+			boolQueryBuilder.filter(QueryBuilders.rangeQuery(field).to(fieldValue));
 		}
 
 	}

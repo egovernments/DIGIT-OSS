@@ -203,7 +203,7 @@ public class InstrumentAccountCodeRepository {
                 && financialConfigurationContractRepository.fetchDataFrom().equalsIgnoreCase("es")) {
 
             InstrumentAccountCodeMapper mapper = new InstrumentAccountCodeMapper();
-            InstrumentAccountCodeSearchContract instrumentAccountCodeSearchContract = new InstrumentAccountCodeSearchContract();
+            InstrumentAccountCodeSearchContract instrumentAccountCodeSearchContract;
             instrumentAccountCodeSearchContract = mapper.toSearchContract(domain);
 
             return instrumentAccountCodeESRepository.search(instrumentAccountCodeSearchContract);

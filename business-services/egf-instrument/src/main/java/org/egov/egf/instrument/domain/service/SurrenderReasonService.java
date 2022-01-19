@@ -111,8 +111,6 @@ public class SurrenderReasonService {
         try {
             switch (method) {
             case ACTION_VIEW:
-                // validator.validate(surrenderReasonContractRequest.getSurrenderReason(),
-                // errors);
                 break;
             case ACTION_CREATE:
                 if (surrenderreasons == null)

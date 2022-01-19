@@ -71,7 +71,7 @@ public class EmployeeValidator {
 
 	public Map<String, List<String>> getBoundaryList(RequestInfo requestInfo,Employee employee){
 		List<String> boundarytList = new ArrayList<>();
-		Map<String, List<String>> eachMasterMap = new HashMap<>();
+		Map<String, List<String>> eachMasterMap;
 		Map<String, List<String>> masterData = new HashMap<>();
 		if(!CollectionUtils.isEmpty(employee.getJurisdictions())){
 			for(Jurisdiction jurisdiction: employee.getJurisdictions()){

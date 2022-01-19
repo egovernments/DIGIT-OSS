@@ -118,8 +118,7 @@ public class CollectionConfigQueryBuilder {
 		// handle limit(also called pageSize) here
 		selectQuery.append(" LIMIT ?");
 		long pageSize = 500l;
-		//FIXME GET PAGESIZE FROM APPLICATION PROPERTIEs 
-		//Integer.parseInt(applicationProperties.collectionSearchPageSizeDefault());
+		//FIXME GET PAGESIZE FROM APPLICATION PROPERTIEs
 		if (collectionConfigGetRequest.getPageSize() != null)
 			pageSize = collectionConfigGetRequest.getPageSize();
 		preparedStatementValues.add(pageSize); // Set limit to pageSize

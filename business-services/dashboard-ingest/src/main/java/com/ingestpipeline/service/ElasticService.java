@@ -43,7 +43,6 @@ import com.ingestpipeline.util.Constants;
 public class ElasticService implements IESService {
 
 
-	//public Map<String , JsonNode > caughtFailedRequests = new HashMap<>();
 
 
 	@Value("${es.index.type}")
@@ -132,7 +131,6 @@ public class ElasticService implements IESService {
 
 		try {
 			response = retryTemplate.postForEntity(uriBuilder.toString(), requestEntity);
-			//restTemplate.postForEntity(uri,requestEntity);
 			LOGGER.info("RestTemplate response status :: {}", response.getStatusCode());
 
 		} catch (HttpClientErrorException e) {
@@ -242,7 +240,6 @@ public class ElasticService implements IESService {
 		try {
 			ResponseEntity<Object> response = retryTemplate.postForEntity(url, requestEntity);
 
-			//ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Object.class);
 			LOGGER.info("Status code on pushing to target index : " + response.getStatusCode());
 			if (response.getStatusCode().value() == 201)
 				return Boolean.TRUE;

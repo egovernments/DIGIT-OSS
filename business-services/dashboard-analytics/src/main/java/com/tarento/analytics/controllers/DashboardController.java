@@ -48,8 +48,7 @@ public class DashboardController {
 	@Autowired
 	private AmazonS3ClientService amazonS3ClientService;
 
-/*    @Autowired
-	private ClientService clientService;*/
+
 
 	@Autowired
 	private ClientServiceFactory clientServiceFactory;
@@ -96,7 +95,6 @@ public class DashboardController {
 	@RequestMapping(value = PathRoutes.DashboardApi.GET_DASHBOARD_CONFIG + "/{dashboardId}", method = RequestMethod.GET)
 	public String getDashboardConfiguration(@PathVariable String dashboardId, @RequestParam(value="catagory", required = false) String catagory, @RequestHeader(value = "x-user-info", required = false) String xUserInfo)
 			throws AINException, IOException {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		UserDto user = new UserDto();
 		user.setId(new Long("10007"));
 		user.setOrgId("1");
@@ -107,7 +105,6 @@ public class DashboardController {
 		List<RoleDto> roles = new ArrayList<>();
 		roles.add(role);
 		user.setRoles(roles);
-		//gson.fromJson(xUserInfo, UserDto.class);
 
 		return ResponseGenerator.successResponse(metadataService.getDashboardConfiguration(dashboardId, catagory, user.getRoles()));
 	}
@@ -116,9 +113,6 @@ public class DashboardController {
 	public String getVisualizationChartV2( @RequestBody RequestDto requestDto, @RequestHeader(value = "x-user-info", required = false) String xUserInfo, ServletWebRequest request)
 			throws IOException {
 
-		/*logger.info("Request Detail:" + requestDto);
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		UserDto user = gson.fromJson(xUserInfo, UserDto.class);*/
 
 		UserDto user = new UserDto();
 		logger.info("user"+xUserInfo);
@@ -126,7 +120,6 @@ public class DashboardController {
 		//Getting the request information only from the Full Request
 		AggregateRequestDto requestInfo = requestDto.getAggregationRequestDto();
 		Map<String, Object> headers = requestDto.getHeaders();
-		//requestInfo.getFilters().putAll(headers);
 		String response = "";
 		try {
 			if (headers.isEmpty()) {
@@ -143,10 +136,7 @@ public class DashboardController {
 				logger.error("Please provide requested Visualization Details");
 				throw new AINException(ErrorCode.ERR320, "Visualization Request is missing");
 			}
-			/*if(requestDto.getAggregationRequestDto().getRequestId() == null) { 
-				logger.error("Please provide Request ID");
-				throw new AINException(ErrorCode.ERR320, "Request ID is missing. Insights will not work");
-			}*/
+
 
 
 			// To be removed once the development is complete
@@ -164,57 +154,7 @@ public class DashboardController {
 		return response;
 	}
 	
-/*
-	@RequestMapping(value = PathRoutes.DashboardApi.GET_CHART_V3, method = RequestMethod.POST)
-	public String getVisualizationChartV3(@RequestBody RequestDtoV3 requestDtoV3, @RequestHeader(value = "x-user-info", required = false) String xUserInfo, ServletWebRequest request)
-			throws IOException {
 
-		*/
-/*logger.info("Request Detail:" + requestDto);
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		UserDto user = gson.fromJson(xUserInfo, UserDto.class);*//*
-
-
-		UserDto user = new UserDto();
-		logger.info("user"+xUserInfo);
-
-		//Getting the request information only from the Full Request
-		AggregateRequestDtoV3 requestInfoV3 = requestDtoV3.getAggregationRequestDto();
-		Map<String, Object> headers = requestDtoV3.getHeaders();
-		//requestInfo.getFilters().putAll(headers);
-		String response = "";
-		try {
-			if (headers.isEmpty()) {
-				logger.error("Please provide header details");
-				throw new AINException(ErrorCode.ERR320, "header is missing");
-			}
-			if (headers.get("tenantId") == null) {
-				logger.error("Please provide tenant ID details");
-				throw new AINException(ErrorCode.ERR320, "tenant is missing");
-			}
-			// To be removed once the development is complete
-			if(StringUtils.isBlank(requestInfoV3.getModuleLevel())) {
-				requestInfoV3.setModuleLevel(Constants.Modules.HOME_REVENUE);
-			}
-
-			List<Object> responseDataList = new ArrayList<>(); 
-			if(requestInfoV3 !=null && requestInfoV3.getVisualizations() != null && requestInfoV3.getVisualizations().size() > 0) {
-				for (int i = 0; i < requestInfoV3.getVisualizations().size(); i++) {
-					AggregateRequestDto requestInfo = new AggregateRequestDto(requestInfoV3,
-							requestInfoV3.getVisualizations().get(i).getType(), requestInfoV3.getVisualizations().get(i).getCode());
-					Object responseData = clientService.getAggregatedData(requestInfo, user.getRoles());
-					responseDataList.add(responseData); 
-				}
-				
-			}
-			response = ResponseGenerator.successResponse(responseDataList);
-		} catch (AINException e) {
-			logger.error("error while executing api getVisualizationChart");
-			response = ResponseGenerator.failureResponse(e.getErrorCode(), e.getErrorMessage());
-		}
-		return response;
-	}
-*/
 
 
 

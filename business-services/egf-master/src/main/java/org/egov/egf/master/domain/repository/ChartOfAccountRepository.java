@@ -76,7 +76,7 @@ public class ChartOfAccountRepository {
 
 		Set<ChartOfAccount> chartOfAccountSet = new HashSet<ChartOfAccount>();
 		Pagination<ChartOfAccount> finalResult = new Pagination<>();
-		Pagination<ChartOfAccount> result = new Pagination<>();
+		Pagination<ChartOfAccount> result;
 		
 		if (!financialConfigurationService.fetchDataFrom().isEmpty()
 	                && financialConfigurationService.fetchDataFrom().equalsIgnoreCase("es")) {
@@ -108,9 +108,9 @@ public class ChartOfAccountRepository {
 
 			return finalResult;
 
-		} else
-
+		} else {
 			return result;
+		}
 
 	}
 

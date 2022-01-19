@@ -137,10 +137,6 @@ public class EmployeeService {
 	 */
 	public EmployeeResponse search(EmployeeSearchCriteria criteria, RequestInfo requestInfo) {
 		boolean  userChecked = false;
-		/*if(null == criteria.getIsActive() || criteria.getIsActive())
-			criteria.setIsActive(true);
-		else
-			criteria.setIsActive(false);*/
         Map<String, User> mapOfUsers = new HashMap<String, User>();
 		if(!StringUtils.isEmpty(criteria.getPhone()) || !CollectionUtils.isEmpty(criteria.getRoles())) {
             Map<String, Object> userSearchCriteria = new HashMap<>();
@@ -338,7 +334,6 @@ public class EmployeeService {
 			updateUser(employee, requestInfo);
 		});
 		hrmsProducer.push(propertiesManager.getUpdateTopic(), employeeRequest);
-		//notificationService.sendReactivationNotification(employeeRequest);
 		return generateResponse(employeeRequest);
 	}
 	
@@ -545,7 +540,7 @@ public class EmployeeService {
 
 	public Map<String,Object> getEmployeeCountResponse(RequestInfo requestInfo, String tenantId){
 		Map<String,Object> response = new HashMap<>();
-		Map<String,String> results = new HashMap<>();
+		Map<String,String> results;
 		ResponseInfo responseInfo = factory.createResponseInfoFromRequestInfo(requestInfo, true);
 
 		response.put("ResponseInfo",responseInfo);

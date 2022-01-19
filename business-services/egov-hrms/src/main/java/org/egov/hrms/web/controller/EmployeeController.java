@@ -124,7 +124,7 @@ public class EmployeeController {
 	@ResponseBody
 	private ResponseEntity<?> count(@RequestParam("tenantId") String tenantId, @RequestBody RequestInfo requestInfo) {
 
-		Map<String,Object> response = new HashMap<>();
+		Map<String,Object> response;
 		validator.validateEmployeeCountRequest(tenantId);
 		response = employeeService.getEmployeeCountResponse(requestInfo,tenantId);
 		return new ResponseEntity<>(response,HttpStatus.OK);

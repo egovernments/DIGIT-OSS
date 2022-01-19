@@ -198,7 +198,7 @@ public class InstrumentTypeRepository {
         if (financialConfigurationContractRepository.fetchDataFrom() != null
                 && financialConfigurationContractRepository.fetchDataFrom().equalsIgnoreCase("es")) {
 
-            InstrumentTypeSearchContract instrumentTypeSearchContract = new InstrumentTypeSearchContract();
+            InstrumentTypeSearchContract instrumentTypeSearchContract;
             InstrumentTypeMapper mapper = new InstrumentTypeMapper();
             instrumentTypeSearchContract = mapper.toSearchContract(domain);
             Pagination<InstrumentType> instrumenttypes = instrumentTypeESRepository

@@ -235,10 +235,6 @@ public abstract class JdbcRepository {
             } catch (Exception e) {
                 LOG.error("No Such field exception occurred: " + e.getMessage());
             }
-            /*
-             * try { f = ob.getClass().getSuperclass().getDeclaredField(s); } catch (NoSuchFieldException e1) {
-             * System.out.println( "Unable to find the field in this class and its super class for field" + s); } }
-             */
             try {
                 if (f != null){
                     f.setAccessible(true);
@@ -321,7 +317,7 @@ public abstract class JdbcRepository {
     }
 
     public void validateSortByOrder(final String sortBy) {
-        List<String> sortByList = new ArrayList<String>();
+        List<String> sortByList;
         InvalidDataException invalidDataException = new InvalidDataException();
         if (sortBy.contains(",")) {
             sortByList = Arrays.asList(sortBy.split(","));
@@ -342,7 +338,7 @@ public abstract class JdbcRepository {
 
     public void validateEntityFieldName(String sortBy, final Class<?> object) {
         InvalidDataException invalidDataException = new InvalidDataException();
-        List<String> sortByList = new ArrayList<String>();
+        List<String> sortByList;
         if (sortBy.contains(",")) {
             sortByList = Arrays.asList(sortBy.split(","));
         } else {

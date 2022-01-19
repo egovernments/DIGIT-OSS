@@ -102,7 +102,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 	 */
 	public void setAssignments(ResultSet rs, Employee currentEmployee) {
 		try {
-			List<Assignment> assignments = new ArrayList<>();
+			List<Assignment> assignments;
 			if(CollectionUtils.isEmpty(currentEmployee.getAssignments()))
 				assignments = new ArrayList<Assignment>();
 			else
@@ -135,7 +135,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 	 */
 	public void setJurisdictions(ResultSet rs, Employee currentEmployee) {
 		try {
-			List<Jurisdiction> jurisdictions = new ArrayList<>();
+			List<Jurisdiction> jurisdictions;
 			if(CollectionUtils.isEmpty(currentEmployee.getJurisdictions()))
 				jurisdictions = new ArrayList<Jurisdiction>();
 			else
@@ -170,7 +170,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 	 */
 	public void setEducationDetails(ResultSet rs, Employee currentEmployee) {
 		try {
-			List<EducationalQualification> educationDetails = new ArrayList<>();
+			List<EducationalQualification> educationDetails;
 			if(CollectionUtils.isEmpty(currentEmployee.getEducation()))
 				educationDetails = new ArrayList<EducationalQualification>();
 			else
@@ -203,7 +203,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 	 */
 	public void setDeptTests(ResultSet rs, Employee currentEmployee) {
 		try {
-			List<DepartmentalTest> tests = new ArrayList<>();
+			List<DepartmentalTest> tests;
 			if(CollectionUtils.isEmpty(currentEmployee.getTests()))
 				tests = new ArrayList<DepartmentalTest>();
 			else
@@ -237,7 +237,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 	 */
 	public void setServiceHistory(ResultSet rs, Employee currentEmployee) {
 		try {
-			List<ServiceHistory> history = new ArrayList<>();
+			List<ServiceHistory> history;
 			if(CollectionUtils.isEmpty(currentEmployee.getServiceHistory()))
 				history = new ArrayList<ServiceHistory>();
 			else
@@ -270,7 +270,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 	 */
 	public void setDocuments(ResultSet rs, Employee currentEmployee) {
 		try {
-			List<EmployeeDocument> documents = new ArrayList<>();
+			List<EmployeeDocument> documents;
 			if(CollectionUtils.isEmpty(currentEmployee.getDocuments()))
 				documents = new ArrayList<EmployeeDocument>();
 			else
@@ -302,7 +302,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 	 */
 	public void setDeactivationDetails(ResultSet rs, Employee currentEmployee) {
 		try {
-			List<DeactivationDetails> deactDetails = new ArrayList<>();
+			List<DeactivationDetails> deactDetails;
 			if(CollectionUtils.isEmpty(currentEmployee.getDeactivationDetails()))
 				deactDetails = new ArrayList<DeactivationDetails>();
 			else
@@ -331,7 +331,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 
 	public void setReactivationDetails(ResultSet rs, Employee currentEmployee){
 		try {
-			List<ReactivationDetails> reactDetails = new ArrayList<>();
+			List<ReactivationDetails> reactDetails;
 			if(CollectionUtils.isEmpty(currentEmployee.getReactivationDetails()))
 				reactDetails = new ArrayList<ReactivationDetails>();
 			else

@@ -115,7 +115,7 @@ public class MdmsServiceImpl implements ClientService {
     private ObjectNode aggrResponseBuilder(String nodeName, AggregateRequestDto requestDto, JsonNode query, String indexName, String interval) {
 
         ObjectNode nodes = JsonNodeFactory.instance.objectNode();
-        ArrayNode bucket = JsonNodeFactory.instance.arrayNode();
+        ArrayNode bucket;
 
         if (groupTenantIds.size() == 0) { //no tenantId filter present
             bucket = getBuckets(mdmsApiMappings.getAll(), requestDto, query, indexName);

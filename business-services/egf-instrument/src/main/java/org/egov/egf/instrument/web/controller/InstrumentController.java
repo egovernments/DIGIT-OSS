@@ -169,7 +169,7 @@ public class InstrumentController {
         InstrumentMapper mapper = new InstrumentMapper();
         InstrumentResponse instrumentResponse = new InstrumentResponse();
         instrumentResponse.setResponseInfo(getResponseInfo(instrumentDepositRequest.getRequestInfo()));
-        List<Instrument> instruments = new ArrayList<>();
+        List<Instrument> instruments;
         List<InstrumentContract> instrumentContracts = new ArrayList<>();
         InstrumentContract contract;
 
@@ -194,7 +194,7 @@ public class InstrumentController {
         InstrumentMapper mapper = new InstrumentMapper();
         InstrumentResponse instrumentResponse = new InstrumentResponse();
         instrumentResponse.setResponseInfo(getResponseInfo(instrumentDepositRequest.getRequestInfo()));
-        List<Instrument> instruments = new ArrayList<>();
+        List<Instrument> instruments;
         List<InstrumentContract> instrumentContracts = new ArrayList<>();
         InstrumentContract contract;
 

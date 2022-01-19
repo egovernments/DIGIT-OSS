@@ -155,7 +155,6 @@ public class PaymentValidator {
                 return;
             }
         }
-        // validateIfReceiptForBillAbsent(errorMap, billDetail);
     }
 
 
