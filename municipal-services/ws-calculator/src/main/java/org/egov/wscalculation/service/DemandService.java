@@ -651,8 +651,7 @@ public class DemandService {
 	}
 
 	/**
-	 * 
-	 * @param master Master MDMS Data
+	 *
 	 * @param requestInfo Request Info
 	 * @param tenantId Tenant Id
 	 */
@@ -688,15 +687,15 @@ public class DemandService {
 			long count = waterCalculatorDao.getConnectionCount(tenantId, fromDate, toDate);
 			log.info("Count: "+count);
 			while(batchOffset<count){
-				List<WaterConnection> connectionNos = waterCalculatorDao.getConnectionsNoList(tenantId,
+				List<String> connectionNos = waterCalculatorDao.getConnectionsNoList(tenantId,
 						WSCalculationConstant.nonMeterdConnection, batchOffset, batchsize, fromDate, toDate);
 				String assessmentYear = estimationService.getAssessmentYear();
 				log.info("\n connectionNos Size: "+connectionNos.size()+"\n");
 				if(connectionNos.size()>0){
 					List<CalculationCriteria> calculationCriteriaList = new ArrayList<>();
-					for (WaterConnection connectionNo : connectionNos) {
+					for (String connectionNo : connectionNos) {
 						CalculationCriteria calculationCriteria = CalculationCriteria.builder().tenantId(tenantId)
-								.assessmentYear(assessmentYear).connectionNo(connectionNo.getConnectionNo()).build();
+								.assessmentYear(assessmentYear).connectionNo(connectionNo).build();
 						calculationCriteriaList.add(calculationCriteria);
 					}
 					MigrationCount migrationCount = MigrationCount.builder().id(UUID.randomUUID().toString()).offset(Long.valueOf(batchOffset)).limit(Long.valueOf(batchsize)).recordCount(Long.valueOf(connectionNos.size()))

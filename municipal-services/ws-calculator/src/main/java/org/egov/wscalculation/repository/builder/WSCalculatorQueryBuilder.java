@@ -33,7 +33,7 @@ public class WSCalculatorQueryBuilder {
 
 	private static final String distinctTenantIdsCriteria = "SELECT distinct(tenantid) FROM eg_ws_connection ws";
 
-	private  static final String countQuery = "select count(*) from eg_ws_connection conn inner join eg_ws_service wc ON wc.connection_id = conn.id inner join egbs_demand_v1 as dmd on dmd.consumercode = conn.connectionno where conn.tenantid = '{}' and wc.connectiontype ='Non Metered' and conn.connectionno is not null";
+	private  static final String countQuery = "select count(distinct(conn.connectionno)) from eg_ws_connection conn inner join eg_ws_service wc ON wc.connection_id = conn.id where conn.tenantid = '{}' and wc.connectiontype ='Non Metered' and conn.connectionno is not null";
 
 	private static String holderSelectValues = "connectionholder.tenantid as holdertenantid, connectionholder.connectionid as holderapplicationId, userid, connectionholder.status as holderstatus, isprimaryholder, connectionholdertype, holdershippercentage, connectionholder.relationship as holderrelationship, connectionholder.createdby as holdercreatedby, connectionholder.createdtime as holdercreatedtime, connectionholder.lastmodifiedby as holderlastmodifiedby, connectionholder.lastmodifiedtime as holderlastmodifiedtime";
 
@@ -196,12 +196,12 @@ public class WSCalculatorQueryBuilder {
 	
 	
 	public String getConnectionNumberList(String tenantId, String connectionType, List<Object> preparedStatement, Integer batchOffset, Integer batchsize, Long fromDate, Long toDate) {
-		//StringBuilder query = new StringBuilder(connectionNoListQuery);
+		StringBuilder query = new StringBuilder(connectionNoListQuery);
 
-		StringBuilder query = new StringBuilder(WATER_SEARCH_QUERY);
+		//StringBuilder query = new StringBuilder(WATER_SEARCH_QUERY);
 		// Add connection type
 		addClauseIfRequired(preparedStatement, query);
-		query.append(" wc.connectiontype = ? ");
+		query.append(" ws.connectiontype = ? ");
 		preparedStatement.add(connectionType);
 		// add tenantid
 		addClauseIfRequired(preparedStatement, query);
