@@ -1,11 +1,11 @@
-import React, { Fragment } from "react";
-import { BrowserRouter as Router, Switch, useRouteMatch, Route } from "react-router-dom";
-import { Body, Header, Loader, CitizenHomeCard, RupeeIcon } from "@egovernments/digit-ui-react-components";
+import { Loader } from "@egovernments/digit-ui-react-components";
+import React from "react";
 import { useTranslation } from "react-i18next";
-
-import EmployeePayment from "./employee";
+import { useRouteMatch } from "react-router-dom";
 import CitizenPayment from "./citizen";
 import { getKeyNotesConfig } from "./citizen/keynotesConfig";
+import EmployeePayment from "./employee";
+
 
 export const PaymentModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "Payment", userType }) => {
   const { path, url } = useRouteMatch();
@@ -24,15 +24,6 @@ export const PaymentModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCod
 
 export const PaymentLinks = ({ matchPath }) => {
   const { t } = useTranslation();
-
-  // const links = [
-  //   {
-  //     link: `/digit-ui/citizen/payment/my-bills/PT`,
-  //     i18nKey: t("CS_HOME_PT"),
-  //   },
-  // ];
-
-  // return <CitizenHomeCard header={t("CS_HOME_QUICK_PAY")} links={links} Icon={RupeeIcon} />;
   return null;
 };
 

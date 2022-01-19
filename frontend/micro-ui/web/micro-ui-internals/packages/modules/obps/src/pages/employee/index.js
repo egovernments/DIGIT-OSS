@@ -2,8 +2,8 @@ import { PrivateRoute, BreadCrumb  } from "@egovernments/digit-ui-react-componen
 import React, { Fragment } from "react";
 import { Switch, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import ApplicationDetail from "./ApplicationDetail";
-import BpaApplicationDetail from "./BpaApplicationDetails";
+// import ApplicationDetail from "./ApplicationDetail";
+// import BpaApplicationDetail from "./BpaApplicationDetails";
 import Search from "./Search";
 
 const OBPSBreadCrumbs = ({ location }) => {
@@ -59,6 +59,8 @@ const EmployeeApp = ({ path }) => {
   const { t } = useTranslation();
   const Inbox = Digit.ComponentRegistryService.getComponent("BPAInbox");
   const StakeholderInbox = Digit.ComponentRegistryService.getComponent("StakeholderInbox");
+  const ApplicationDetail = Digit.ComponentRegistryService.getComponent("ObpsEmpApplicationDetail");
+  const BpaApplicationDetail = Digit.ComponentRegistryService.getComponent("ObpsEmployeeBpaApplicationDetail");
   const isLocation = window.location.href.includes("bpa") || window.location.href.includes("stakeholder-inbox/stakeholder") || window.location.href.includes("application");
   return (
     <Fragment>
