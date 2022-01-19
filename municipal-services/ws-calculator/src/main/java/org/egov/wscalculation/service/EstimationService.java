@@ -204,7 +204,7 @@ public class EstimationService {
 			String calculationAttribute, RequestInfo requestInfo) {
 
 		Property property = wSCalculationUtil.getProperty(
-				WaterConnectionRequest.builder().waterConnection(waterConnection).requestInfo(requestInfo).build(), false);
+				WaterConnectionRequest.builder().waterConnection(waterConnection).requestInfo(requestInfo).build());
 		// get billing Slab
 		log.debug(" the slabs count : " + billingSlabs.size());
 		final String buildingType = (property.getUsageCategory() != null) ? property.getUsageCategory().split("\\.")[0]
@@ -371,7 +371,7 @@ public class EstimationService {
 			throw new CustomException("FEE_SLAB_NOT_FOUND", "fee slab master data not found!!");
 		
 		Property property = wSCalculationUtil.getProperty(WaterConnectionRequest.builder()
-				.waterConnection(criteria.getWaterConnection()).requestInfo(requestInfo).build(), true);
+				.waterConnection(criteria.getWaterConnection()).requestInfo(requestInfo).build());
 		
 		JSONObject feeObj = mapper.convertValue(feeSlab.get(0), JSONObject.class);
 		BigDecimal formFee = BigDecimal.ZERO;

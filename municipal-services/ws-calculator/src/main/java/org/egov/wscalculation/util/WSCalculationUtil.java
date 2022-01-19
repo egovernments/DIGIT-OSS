@@ -167,16 +167,11 @@ public class WSCalculationUtil {
 	 *            WaterConnectionRequest containing property
 	 * @return List of Property
 	 */
-	public List<Property> propertySearch(WaterConnectionRequest waterConnectionRequest, Boolean isUUID) {
+	public List<Property> propertySearch(WaterConnectionRequest waterConnectionRequest) {
 		PropertyCriteria propertyCriteria = new PropertyCriteria();
 		HashSet<String> propertyUUID = new HashSet<>();
 		propertyUUID.add(waterConnectionRequest.getWaterConnection().getPropertyId());
-		if(isUUID){
-			propertyCriteria.setUuids(propertyUUID);
-		}
-		else{
-			propertyCriteria.setPropertyIds(propertyUUID);
-		}
+		propertyCriteria.setUuids(propertyUUID);
 		propertyCriteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
 		Object result = serviceRequestRepository.fetchResult(getPropertyURL(propertyCriteria),
 				RequestInfoWrapper.builder().requestInfo(waterConnectionRequest.getRequestInfo()).build());
@@ -215,8 +210,8 @@ public class WSCalculationUtil {
 	 * @param waterConnectionRequest
 	 *            WaterConnectionRequest
 	 */
-	public Property getProperty(WaterConnectionRequest waterConnectionRequest, Boolean isUUID) {
-		Optional<Property> propertyList = propertySearch(waterConnectionRequest,isUUID).stream().findFirst();
+	public Property getProperty(WaterConnectionRequest waterConnectionRequest) {
+		Optional<Property> propertyList = propertySearch(waterConnectionRequest).stream().findFirst();
 		if (!propertyList.isPresent()) {
 			throw new CustomException("INVALID_WATER_CONNECTION_PROPERTY",
 					"Water connection cannot be enriched without property");
