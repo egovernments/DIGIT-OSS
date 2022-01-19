@@ -426,6 +426,8 @@ public class DemandService {
 		mstrDataService.setWaterConnectionMasterValues(requestInfo, getBillCriteria.getTenantId(), billingSlabMaster,
 				timeBasedExemptionMasterMap);
 
+		log.info("Update Demand");
+		
 		if (CollectionUtils.isEmpty(getBillCriteria.getConsumerCodes()))
 			getBillCriteria.setConsumerCodes(Collections.singletonList(getBillCriteria.getConnectionNumber()));
 
