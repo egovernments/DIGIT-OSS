@@ -9,8 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,12 +25,14 @@ public class ExternalEmailServiceTest {
     @Test
     void sendEmail() {
         Set<String> email_list = new HashSet<String>();
+        Set<String> fileStoreId = new HashSet<>();
+        fileStoreId.add("f44b709d-1256-41d8-aaf4-63fcbfc34e74");
         email_list.add("pranithgoud619@gmail.com");
         Email email = new Email();
         email.setEmailTo(email_list);
         email.setBody("this is body");
         email.setSubject("this is subject");
-        email.setFileStoreId("f44b709d-1256-41d8-aaf4-63fcbfc34e74");
+        email.setFileStoreId(fileStoreId);
         email.setTenantId("pb");
         email.setHTML(true);
         emailService.sendEmail(email);

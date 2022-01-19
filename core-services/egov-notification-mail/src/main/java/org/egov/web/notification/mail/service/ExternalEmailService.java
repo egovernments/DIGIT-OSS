@@ -78,23 +78,25 @@ public class ExternalEmailService implements EmailService {
 			helper.setSubject(email.getSubject());
 			helper.setText(email.getBody(), true);
 
-			String uri = String.format("%s/filestore/v1/files/id?tenantId=%s&fileStoreId=%s", FILESTORE_HOST, email.getTenantId(), email.getFileStoreId());
-			URL url = new URL(uri);
-			URLConnection con = url.openConnection();
-			String fieldValue = con.getHeaderField("Content-Disposition");
-			if (fieldValue == null || ! fieldValue.contains("filename=\"")) {
-				// no file name there -> throw exception ...
+			for(int i=0; i<email.getFileStoreId().size(); i++) {
+				String uri = String.format("%s/filestore/v1/files/id?tenantId=%s&fileStoreId=%s", FILESTORE_HOST, email.getTenantId(), email.getFileStoreId().toArray()[i]);
+				URL url = new URL(uri);
+				URLConnection con = url.openConnection();
+				String fieldValue = con.getHeaderField("Content-Disposition");
+				if (fieldValue == null || ! fieldValue.contains("filename=\"")) {
+					// no file name there -> throw exception ...
+				}
+				String filename = fieldValue.substring(fieldValue.indexOf("filename=\"") + 10, fieldValue.length() - 1);
+				File download = new File(System.getProperty("java.io.tmpdir"), filename);
+				ReadableByteChannel rbc = Channels.newChannel(con.getInputStream());
+				FileOutputStream fos = new FileOutputStream(download);
+				try {
+					fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+				} finally {
+					fos.close();
+				}
+				helper.addAttachment(filename, download);
 			}
-			String filename = fieldValue.substring(fieldValue.indexOf("filename=\"") + 10, fieldValue.length() - 1);
-			File download = new File(System.getProperty("java.io.tmpdir"), filename);
-			ReadableByteChannel rbc = Channels.newChannel(con.getInputStream());
-			FileOutputStream fos = new FileOutputStream(download);
-			try {
-				fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-			} finally {
-				fos.close();
-			}
-			helper.addAttachment(filename, download);
 
 		} catch (MessagingException | MalformedURLException e) {
 			log.error(EXCEPTION_MESSAGE, e);
