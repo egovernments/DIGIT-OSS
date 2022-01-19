@@ -39,7 +39,7 @@ public class BulkBillGenerationConsumer {
 	@Autowired
 	private CustomKafkaTemplate<String, Object> kafkaTemplate;
 	
-	@Value("${kafka.topics.bulk.bill.generation}")
+	@Value("${kafka.topics.bulk.bill.generation.audit}")
 	private String bulkBillGenAuditTopic;
 
 	@KafkaListener(topics = { "${kafka.topics.bulk.bill.generation}" })
