@@ -426,7 +426,7 @@ public class UserService {
 
         setFileStoreUrlsByFileStoreIds(Collections.singletonList(updatedUser));
         if(!(user.getEmailId().equalsIgnoreCase(existingUser.getEmailId()))){
-            notificationUtil.sendEmail(requestInfo, existingUser.getEmailId(), user.getEmailId(),user.getMobileNumber());
+            notificationUtil.sendEmail(requestInfo, existingUser.getEmailId(), updatedUser.getEmailId(),user.getMobileNumber());
 
         }
         // call here (consider equal case)
