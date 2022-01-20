@@ -20,6 +20,7 @@ import ApplicationDetails from "./ApplicationDetail";
 // import OCSendBackToCitizen from "./OCSendBackToCitizen";
 import Inbox from "./ArchitectInbox";
 //import EdcrInbox from "./EdcrInbox";
+import OBPSResponse from "../employee/OBPSResponse";
 
 const App = ({ path }) => {
   const location = useLocation();
@@ -60,6 +61,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/editApplication/ocbpa/:tenantId/:applicationNo`} component={OCSendToArchitect} />
         <PrivateRoute path={`${path}/sendbacktocitizen/bpa/:tenantId/:applicationNo`} component={BPASendBackToCitizen} />
         <PrivateRoute path={`${path}/sendbacktocitizen/ocbpa/:tenantId/:applicationNo`} component={OCSendBackToCitizen} />
+        <PrivateRoute path={`${path}/response`} component={OBPSResponse} />
       </Switch>
     </React.Fragment>
   )

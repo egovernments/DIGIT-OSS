@@ -21,6 +21,15 @@ export const SuccessfulPayment = (props) => {
   }, []);
 
   const getMessage = () => t("ES_PAYMENT_COLLECTED");
+  const getCardText = () => {
+    if (businessService == "BPA" || businessService == "BPA_LOW" || businessService == "BPA_OC") {
+      let nameOfAchitect = sessionStorage.getItem("BPA_ARCHITECT_NAME");
+      let parsedArchitectName = nameOfAchitect ? JSON.parse(nameOfAchitect) : "ARCHITECT";
+      return `ES_PAYMENT_${businessService}_${parsedArchitectName}_SUCCESSFUL_DESCRIPTION`;
+    } else {
+      return t("ES_PAYMENT_SUCCESSFUL_DESCRIPTION")
+    }
+  }
 
   const { data: generatePdfKey } = Digit.Hooks.useCommonMDMS(tenantId, "common-masters", "ReceiptKey", {
     select: (data) =>
@@ -92,7 +101,7 @@ export const SuccessfulPayment = (props) => {
     <React.Fragment>
       <Card>
         <Banner message={getMessage()} info={t("PAYMENT_LOCALIZATION_RECIEPT_NO")} applicationNumber={receiptNumber} successful={true} />
-        <CardText>{t("ES_PAYMENT_SUCCESSFUL_DESCRIPTION")}</CardText>
+        <CardText>{getCardText()}</CardText>
         {generatePdfKey ? (
           <div style={{ display: "flex" }}>
             <div className="primary-label-btn d-grid" style={{ marginLeft: "unset", marginRight: "20px" }} onClick={printReciept}>

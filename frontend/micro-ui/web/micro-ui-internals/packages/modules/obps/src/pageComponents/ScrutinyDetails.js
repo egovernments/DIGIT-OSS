@@ -174,6 +174,9 @@ const onRemove = (index, key,num) => {
         //For LandInfo
         payload.landInfo = formData?.data?.bpaData?.bpaApprovalResponse?.[0].landInfo || {};
 
+        let nameOfAchitect = sessionStorage.getItem("BPA_ARCHITECT_NAME");
+        let parsedArchitectName = nameOfAchitect ? JSON.parse(nameOfAchitect) : "ARCHITECT";
+        payload.additionalDetails.typeOfArchitect = parsedArchitectName;
         // create BPA call
         Digit.OBPSService.create({ BPA: payload }, tenantId)
           .then((result, err) => {

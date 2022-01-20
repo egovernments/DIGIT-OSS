@@ -28,6 +28,9 @@ const BpaApplicationDetail = () => {
   const [payments, setpayments] = useState([]);
   const [sanctionFee, setSanctionFee] = useState([]);
   const [checkBoxVisible, setCheckBoxVisible] = useState(false);
+  const [isEnableLoader, setIsEnableLoader] = useState(false);
+
+
   const history = useHistory();
   sessionStorage.setItem("bpaApplicationDetails", false);
   let isFromSendBack = false;
@@ -224,15 +227,19 @@ const BpaApplicationDetail = () => {
   }
 
   const submitAction = (workflow) => {
+    setIsEnableLoader(true);
     mutation.mutate(
       { BPA: { ...data?.applicationData, workflow } },
       {
         onError: (error, variables) => {
+          setIsEnableLoader(false);
           setShowModal(false);
           setShowToast({ key: "error", action: error?.response?.data?.Errors[0]?.message ? error?.response?.data?.Errors[0]?.message : error });
           setTimeout(closeToast, 5000);
         },
         onSuccess: (data, variables) => {
+          setIsEnableLoader(false);
+          history.replace(`/digit-ui/citizen/obps/response`, { data: data });
           setShowModal(false);
           setShowToast({ key: "success", action: selectedAction });
           setTimeout(closeToast, 5000);
@@ -296,7 +303,7 @@ const BpaApplicationDetail = () => {
       }
   }
 
-  if (isLoading) {
+  if (isLoading || isEnableLoader) {
     return <Loader />
   }
 

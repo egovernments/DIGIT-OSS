@@ -238,7 +238,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     // }
     submitAction({
       BPA:applicationData
-    }, nocDetails);
+    }, nocDetails, {isStakeholder: false, bpa: true});
   }
 
 

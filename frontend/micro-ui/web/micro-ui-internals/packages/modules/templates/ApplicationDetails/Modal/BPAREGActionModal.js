@@ -112,7 +112,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     };
     submitAction({
       Licenses: [applicationData],
-    });
+    }, false, {isStakeholder: true, bpa: false});
   }
 
   useEffect(() => {
