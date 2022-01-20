@@ -4,13 +4,10 @@ import { useTranslation } from "react-i18next";
 import { Link, Switch, useLocation } from "react-router-dom";
 import { PTLinks } from "../../Module";
 import Inbox from "./Inbox";
-import { Switch, useLocation, Link } from "react-router-dom";
-import { PrivateRoute } from "@egovernments/digit-ui-react-components";
-import { useTranslation } from "react-i18next";
-
+import PaymentDetails from "./PaymentDetails";
 import Search from "./Search";
 import SearchApp from "./SearchApp";
-import PaymentDetails from "./PaymentDetails";
+
 
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
