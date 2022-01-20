@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 
-const InboxLinks = ({ parentRoute, businessService, allLinks, headerText }) => {
+const InboxLinks = ({ parentRoute, businessService, allLinks, headerText, classNameForMobileView="" }) => {
   const { t } = useTranslation();
 
   const [links, setLinks] = useState([]);
@@ -29,7 +29,7 @@ const InboxLinks = ({ parentRoute, businessService, allLinks, headerText }) => {
 
   return (
     <Card className="employeeCard filter inboxLinks">
-      <div className="complaint-links-container">
+      <div className={`complaint-links-container ${classNameForMobileView}`}>
         {GetLogo()}
         <div className="body">
           {links.map(({ link, text, hyperlink = false, accessTo = [] }, index) => {

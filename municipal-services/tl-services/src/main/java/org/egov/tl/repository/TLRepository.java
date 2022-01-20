@@ -128,8 +128,11 @@ public class TLRepository {
             license.getTradeLicenseDetail().getTradeUnits().sort(Comparator.comparing(TradeUnit::getId));
             if(!CollectionUtils.isEmpty(license.getTradeLicenseDetail().getAccessories()))
                 license.getTradeLicenseDetail().getAccessories().sort(Comparator.comparing(Accessory::getId));
-            if(!CollectionUtils.isEmpty(license.getTradeLicenseDetail().getApplicationDocuments()))
-                license.getTradeLicenseDetail().getApplicationDocuments().sort(Comparator.comparing(Document::getId));
+            List<Document> applnDocuments = license.getTradeLicenseDetail().getApplicationDocuments();
+            if(!CollectionUtils.isEmpty(applnDocuments)) {
+                Collections.reverse(applnDocuments);
+                license.getTradeLicenseDetail().setApplicationDocuments(applnDocuments);
+            }
             if(!CollectionUtils.isEmpty(license.getTradeLicenseDetail().getVerificationDocuments()))
                 license.getTradeLicenseDetail().getVerificationDocuments().sort(Comparator.comparing(Document::getId));
         });

@@ -22,6 +22,17 @@ import OCEDCRDocsRequired from "./pageComponents/OCEDCRDocsRequired";
 import OCeDCRScrutiny from "./pageComponents/OCeDCRScrutiny";
 import OCUploadPlanDiagram from "./pageComponents/OCUploadPlanDiagram";
 import OCBasicDetails from "./pageComponents/OCBasicDetails";
+import CreateEDCR from "./pages/citizen/EDCR";
+import CreateOCEDCR from "./pages/citizen/OCEDCR";
+import NewBuildingPermit from "./pages/citizen/NewBuildingPermit";
+import OCBuildingPermit from "./pages/citizen/OCBuildingPermit";
+import StakeholderRegistration from "./pages/citizen/StakeholderRegistration";
+import CitizenBpaApplicationDetail from "./pages/citizen/BpaApplicationDetail";
+import BPASendToArchitect from "./pages/citizen/BPASendToArchitect";
+import OCSendToArchitect from "./pages/citizen/OCSendToArchitect";
+import BPASendBackToCitizen from "./pages/citizen/BPASendBackToCitizen";
+import OCSendBackToCitizen from "./pages/citizen/OCSendBackToCitizen";
+import EdcrInbox from "./pages/citizen/EdcrInbox";
 
 import LicenseType from "./pageComponents/LicenseType";
 import LicenseDetails from "./pageComponents/LicenseDetails";
@@ -32,6 +43,8 @@ import EmployeeApp from "./pages/employee";
 import OBPSSearchApplication from "./components/SearchApplication";
 import InspectionReport from "./pageComponents/InspectionReport";
 import OBPSEmployeeHomeCard from "./pages/employee/EmployeeCard";
+import EmpApplicationDetail from "./pages/employee/ApplicationDetail";
+import EmployeeBpaApplicationDetail from "./pages/employee/BpaApplicationDetails";
 
 import BPACheckPage from "./pages/citizen/NewBuildingPermit/CheckPage";
 import OCBPACheckPage from "./pages/citizen/OCBuildingPermit/CheckPage";
@@ -84,7 +97,7 @@ const OBPSLinks = ({ matchPath, userType }) => {
 
   return (
     <CitizenHomeCard header={t("ACTION_TEST_BUILDING_PLAN_APPROVAL")} links={links} Icon={() => <OBPSIcon />}
-      Info={() => <CitizenInfoLabel style={{margin: "0px"}} info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)} />} isInfo={true}
+      Info={() => <CitizenInfoLabel style={{margin: "0px", padding: "10px"}} info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)} />} isInfo={true}
     />
   );
 } 
@@ -127,7 +140,20 @@ const componentsToRegister = {
   BPAAcknowledgement,
   OCBPAAcknowledgement,
   OCSendBackAcknowledgement,
-  StakeholderAcknowledgement
+  StakeholderAcknowledgement,
+  ObpsCreateEDCR : CreateEDCR,
+  ObpsCreateOCEDCR : CreateOCEDCR,
+  ObpsNewBuildingPermit : NewBuildingPermit,
+  ObpsOCBuildingPermit : OCBuildingPermit,
+  ObpsStakeholderRegistration : StakeholderRegistration,
+  ObpsCitizenBpaApplicationDetail : CitizenBpaApplicationDetail,
+  ObpsBPASendToArchitect : BPASendToArchitect,
+  ObpsOCSendToArchitect : OCSendToArchitect,
+  ObpsBPASendBackToCitizen : BPASendBackToCitizen,
+  ObpsOCSendBackToCitizen : OCSendBackToCitizen,
+  ObpsEdcrInbox : EdcrInbox,
+  ObpsEmpApplicationDetail : EmpApplicationDetail,
+  ObpsEmployeeBpaApplicationDetail : EmployeeBpaApplicationDetail
 }
 
 export const initOBPSComponents = () => {

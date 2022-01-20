@@ -34,7 +34,7 @@ const RateView = (props) => {
             .join(", ")}
         />
       ))}
-      <KeyNote keyValue={t("CS_COMMON_COMMENTS")} note={data?.timeline[0]?.comment || "N/A"} />
+      <KeyNote keyValue={t("CS_COMMON_COMMENTS")} note={data?.timeline[0]?.wfComment?.[0] || "N/A"} />
     </Card>
   );
 };

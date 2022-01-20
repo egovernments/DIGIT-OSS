@@ -27,6 +27,7 @@ import Menu from '../common/CustomMenu'
 import getFinancialYearObj from '../../actions/getFinancialYearObj';
 import mdmsAPI from '../../actions/mdms/mdms';
 import moment from 'moment';
+import MapChart from "../Charts/MapChart";
 
 class Home extends React.Component {
     constructor(props) {
@@ -139,7 +140,7 @@ class Home extends React.Component {
         else {
             return (
                 <Grid item xs={12} sm={12} md={4} lg={4} xl={4} className={classes.root} >
-
+                    {/* <MapChart></MapChart> */}
                     <Card color="blue" bgColor={bgColor} page={pageId}>
                         <CardHeader color="rose" icon page={pageId || 'overview'}>
                             <CardIcon color="rose" bgColor={iconColor}>

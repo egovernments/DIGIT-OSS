@@ -7,6 +7,7 @@ import {
     Loader,
     FormStep
 } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/Timeline";
 
 const WSDocumentDetails = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
     const tenantId = Digit.ULBService.getStateId();
@@ -41,7 +42,7 @@ const WSDocumentDetails = ({ t, config, onSelect, userType, formData, setError: 
 
     return (
         <div>
-            {/* <Timeline currentStep={2} /> */}
+            <Timeline currentStep={3} />
             {!wsDocsLoading ?
                 <FormStep
                     t={t}

@@ -711,7 +711,9 @@ class ShowField extends Component {
     let self = this;
     const viewTabel = () => {
       return (
-        <div>
+        // <div>
+              <div class="table-responsive">  
+
           <table
             id="reportTable"
             style={{

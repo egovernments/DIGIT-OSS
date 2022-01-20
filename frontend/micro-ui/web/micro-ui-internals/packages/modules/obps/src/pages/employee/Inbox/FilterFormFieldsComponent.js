@@ -76,7 +76,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
                 );
               }),[props?.value])
             return loadingLocalitiesForEmployeesCurrentTenant ? <Loader/> : <>
-              <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
+              <div className="filter-label sub-filter-label">{t("ES_INBOX_LOCALITY")}</div>
               {/* Done: know that it is rerendering once in mobile view this is due to the fact that controlled components can not react to async calls inside the components ie controlled caomponent can only entertain PURE components hence this molecule needs to be removed and dropdown is to be placed, with this localities should be fetched at the top of the inbox/index.js and memoized functions should be handled accordingly */}
               {/* <Localities selectLocality={ (e) => {props.onChange([e, ...props?.value])}} tenantId={tenantId} optionCardStyles={{maxHeight:'350px'}} boundaryType="revenue" /> */}
               {/* <Dropdown
@@ -109,7 +109,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
           control={controlFilterForm}
           render={(props) => {
             return loadingApplicationTypesOfBPA ? <Loader/> : <>
-              <div className="filter-label">{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</div>
+              <div className="filter-label sub-filter-label">{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</div>
               {applicationTypesOfBPA.map(applicationType => {
                 return <CheckBox
                   key={applicationType.code}
@@ -129,7 +129,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
           control={controlFilterForm}
           render={(props) => {
             return <>
-              <div className="filter-label">{t("ES_INBOX_RISK_TYPE")}</div>
+              <div className="filter-label sub-filter-label">{t("ES_INBOX_RISK_TYPE")}</div>
               <RadioButtons
                 onSelect={(e) => {props.onChange(e.code);
                 setFilterFormValue("applicationStatus",[])}}
@@ -144,7 +144,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
         />
     </FilterFormField> : null}
     {selectedApplicationType?.length > 0 && selectedBusinessService?.length > 0 ? <FilterFormField>
-      <div className="filter-label">{t("ACTION_TEST_APPLICATION_STATUS")}</div>
+      <div className="filter-label sub-filter-label">{t("ACTION_TEST_APPLICATION_STATUS")}</div>
       <Controller
         name="applicationStatus"
         control={controlFilterForm}

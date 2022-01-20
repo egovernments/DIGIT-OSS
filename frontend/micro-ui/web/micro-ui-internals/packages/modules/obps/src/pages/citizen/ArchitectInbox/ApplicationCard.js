@@ -44,7 +44,7 @@ const ApplicationCard = ({
   if (data?.length === 0) {
     result = (
       <Card style={{ marginTop: 20 }}>
-        {t("ES_NO_EVENTS")
+        {t("BPA_NO_APPLICATION_PRESENT")
           .split("\\n")
           .map((text, index) => (
             <p key={index} style={{ textAlign: "center" }}>

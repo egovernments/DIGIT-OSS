@@ -1,4 +1,4 @@
-import { CheckBox, LinkButton, TextInput,Close } from "@egovernments/digit-ui-react-components";
+import { CheckBox, LinkButton, TextInput,Close, CardSubHeader } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 
 const PermissionCheck = ({ permissions, t }) => {
@@ -52,6 +52,7 @@ const PermissionCheck = ({ permissions, t }) => {
 
   return (
     <div>
+      <CardSubHeader style={{ marginBottom: "16px", fontSize: "24px" }}>{t("BPA_PERMIT_CONDITIONS")}</CardSubHeader>
       {approvalChecks?.map((permission, index) => (
         <CheckBox
           key={index}

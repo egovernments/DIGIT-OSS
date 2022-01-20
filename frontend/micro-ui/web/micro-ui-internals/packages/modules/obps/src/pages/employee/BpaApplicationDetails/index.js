@@ -22,7 +22,9 @@ const BpaApplicationDetail = () => {
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", {});
   const [error, setError] = useState(null);
   const [payments, setpayments] = useState([]);
+   const [sanctionFee, setSanctionFee] = useState([]);
   const stateId = Digit.ULBService.getStateId();
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
 
@@ -48,6 +50,12 @@ const BpaApplicationDetail = () => {
 
 
   useEffect(async() => {
+    if(data && data?.applicationData?.businessService === "BPA" /* && data?.applicationData?.status === "PENDING_SANC_FEE_PAYMENT" */){
+    let res = Digit.PaymentService.fetchBill( tenantId, { consumerCode: id, businessService: businessService[1] }).then((result) => {
+      result?.Bill[0] && !(sanctionFee.filter((val) => val?.id ===result?.Bill[0].id).length>0) && setSanctionFee([...result?.Bill]);
+    })
+  
+    }
     businessService.length > 0 && businessService.map((buss,index) => {
       let res = Digit.PaymentService.recieptSearch(data?.applicationData?.tenantId, buss, {consumerCodes: data?.applicationData?.applicationNo, isEmployee:true}).then((value) => {
 
@@ -58,23 +66,51 @@ const BpaApplicationDetail = () => {
   },[data, businessService]);
 
   useEffect(() => {
+    if(data && data?.applicationData?.businessService === "BPA" && data?.applicationData?.status === "PENDING_SANC_FEE_PAYMENT" && sanctionFee == {})
+    {
+      return <Loader />
+    } 
+  },[sanctionFee])
+
+
+  useEffect(() => {
     let payval=[]
+    let total = 0;
     payments.length>0 && payments.map((ob) => {
       ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.billAccountDetails.map((bill,index) => {
         payval.push({title:`${bill?.taxHeadCode}_DETAILS`, value:""});
         payval.push({title:bill?.taxHeadCode, value:`₹${bill?.amount}`});
         payval.push({title:"BPA_STATUS_LABEL", value:"Paid"});
+        total = total + parseInt(bill?.amount);
       })
-      payval.push({title:"BPA_TOT_AMT_PAID", value:`₹${ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.amount}`});
+      if(sanctionFee && sanctionFee.length>0 && !(payval.filter((ob) => ob.title === "BPA_SANC_FEE_LABEL").length>0)){
+          payval.push({title:`BPA_SANC_FEE_DETAILS`, value:""});
+          payval.push({title:`BPA_SANC_FEE_LABEL`, value:`₹${sanctionFee?.[0]?.billDetails?.[0].amount}`});
+          payval.push({title:"BPA_STATUS_LABEL", value:"Unpaid"});
+      } 
     })
-    payments.length > 0 && !(data.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL").length>0)&& data.applicationDetails.push({
-      title:"BPA_FEE_DETAILS_LABEL",
+   total > 0 && payval.push({title:"BPA_TOT_AMT_PAID", value:`₹${total}`});
+    payments.length > 0 && data?.applicationDetails && (!(data.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL").length>0))&& data.applicationDetails.push({
+        title:"BPA_FEE_DETAILS_LABEL",
       additionalDetails:{
         inspectionReport:[],
         values:[...payval]
       }
     })
-  },[payments]);
+    if(data && data?.applicationData?.businessService === "BPA" && data?.applicationData?.status === "APPROVED" && (data.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL")?.[0]?.additionalDetails?.values.length < payval.length ))
+    {
+      var foundIndex = data?.applicationDetails.findIndex(x => x.title === "BPA_FEE_DETAILS_LABEL");
+      data?.applicationDetails.splice(foundIndex,1);
+      data.applicationDetails.push({
+        title:"BPA_FEE_DETAILS_LABEL",
+        additionalDetails:{
+          inspectionReport:[],
+          values:[...payval]
+        }
+      })
+    }
+    
+  },[payments,sanctionFee]);
 
 
   async function getRecieptSearch({tenantId,payments,...params}) {
@@ -173,9 +209,12 @@ const BpaApplicationDetail = () => {
     moduleCode: "BPA",
   });
 
-  if (workflowDetails && workflowDetails.data && !workflowDetails.isLoading)
-    workflowDetails.data.actionState = { ...workflowDetails.data };
+  if (workflowDetails && workflowDetails.data && !workflowDetails.isLoading){
 
+  
+  workflowDetails.data.initialActionState=workflowDetails?.data?.initialActionState||{...workflowDetails?.data?.actionState}||{} ;
+    workflowDetails.data.actionState = { ...workflowDetails.data };
+  }
   if (mdmsData?.BPA?.RiskTypeComputation && data?.edcrDetails) {
     risType = Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, data?.edcrDetails?.planDetail?.plot?.area, data?.edcrDetails?.planDetail?.blocks);
     data?.applicationDetails?.map(detail => {
@@ -311,8 +350,8 @@ const BpaApplicationDetail = () => {
   return (
     <Fragment>
       <div className={"employee-main-application-details"}>
-      <div className={"employee-application-details"}>
-        <Header styles={{marginLeft:"0px", paddingTop: "10px"}}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
+      <div className={"employee-application-details"} style={{marginBottom: "15px"}}>
+        <Header styles={{marginLeft:"0px", paddingTop: "10px", fontSize: "32px"}}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
         {dowloadOptions && dowloadOptions.length>0 && <MultiLink
           className="multilinkWrapper employee-mulitlink-main-div"
           onHeadClick={() => setShowOptions(!showOptions)}
@@ -352,6 +391,8 @@ const BpaApplicationDetail = () => {
         businessService={workflowDetails?.data?.applicationBusinessService ? workflowDetails?.data?.applicationBusinessService : data?.applicationData?.businessService}
         moduleCode="BPA"
         showToast={showToast}
+        ActionBarStyle={isMobile?{}:{paddingRight:"50px"}}
+        MenuStyle={isMobile?{}:{right:"50px"}}
         setShowToast={setShowToast}
         closeToast={closeToast}
         statusAttribute={"state"}

@@ -8,6 +8,7 @@ import { DigitApp } from "./App";
 import SelectOtp from './pages/citizen/Login/SelectOtp';
 
 import getStore from "./redux/store";
+import ErrorBoundary from "./components/ErrorBoundaries";
 
 const DigitUIWrapper = ({ stateCode, enabledModules, moduleReducers }) => {
   const { isLoading, data: initData } = Digit.Hooks.useInitStore(stateCode, enabledModules);
@@ -51,11 +52,13 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
 
   return (
     <div>
-      <QueryClientProvider client={queryClient}>
-        <ComponentProvider.Provider value={registry}>
-          <DigitUIWrapper stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />
-        </ComponentProvider.Provider>
-      </QueryClientProvider>
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <ComponentProvider.Provider value={registry}>
+            <DigitUIWrapper stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />
+          </ComponentProvider.Provider>
+        </QueryClientProvider>
+      </ErrorBoundary>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import GIS from "./GIS";
 import Timeline from "../components/Timeline";
+import { stringReplaceAll } from "../utils";
 
 const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner, isShowToast }) => {
   let currCity = JSON.parse(sessionStorage.getItem("currentCity")) || { };
@@ -20,7 +21,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city  || currCity || null);
   const [street, setStreet] = useState(formData?.address?.street || "");
   const [landmark, setLandmark] = useState(formData?.address?.landmark || formData?.address?.Landmark || "");
-  const [placeName, setplaceName] = useState(formData?.address?.placeName || "");
+  const [placeName, setplaceName] = useState(formData?.address?.placeName || formData?.placeName || "");
   //const { isLoading, data: citymodules } = Digit.Hooks.obps.useMDMS(stateId, "tenant", ["citymodule"]);
   let [cities, setcitiesopetions] = useState(allCities);
   let validation = { };
@@ -36,7 +37,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
             ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
             : allCities;
       setcitiesopetions(cities);
-      if(cities && cities.length==0){
+      if((cities && cities.length==0 || (cities.length == 1 && cities?.[0].code !== selectedCity?.code))){
       setPinerror("BPA_PIN_NOT_VALID_ERROR");
       }
     }
@@ -57,7 +58,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
 
   useEffect(() => {
     if (cities) {
-      if (cities.length === 1) {
+      if (cities.length === 1 && cities?.[0].code === selectedCity?.code) {
         setSelectedCity(cities[0]);
         sessionStorage.setItem("currentCity", JSON.stringify(cities[0]));
       }
@@ -79,14 +80,14 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
 
   const [localities, setLocalities] = useState();
 
-  const [selectedLocality, setSelectedLocality] = useState(formData.address.locality || {});
+  const [selectedLocality, setSelectedLocality] = useState(formData.address.locality || null);
 
   useEffect(() => {
     if (selectedCity && fetchedLocalities  && !Pinerror) {
       let __localityList = fetchedLocalities;
       let filteredLocalityList = [];
 
-      if (formData?.address?.locality) {
+      if (formData?.address?.locality && formData?.address?.locality?.code === selectedLocality?.code) {
         setSelectedLocality(formData.address.locality);
       }
 
@@ -96,14 +97,14 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
       }
       if(!localities || (filteredLocalityList.length > 0 && localities.length !== filteredLocalityList.length) || (filteredLocalityList.length <=0 && localities && localities.length !==__localityList.length))
       {
-        setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));}
-
-      if (filteredLocalityList.length === 1) {
+        setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));
+      }
+      if (filteredLocalityList.length === 1 && ((selectedLocality == null) || (selectedLocality && filteredLocalityList[0]?.code !== selectedLocality?.code))) {
         setSelectedLocality(filteredLocalityList[0]);
         sessionStorage.setItem("currLocality", JSON.stringify(filteredLocalityList[0]));
       }
     }
-  }, [selectedCity, formData?.pincode, fetchedLocalities, pincode]);
+  }, [selectedCity, formData?.pincode, fetchedLocalities, pincode,geoLocation]);
 
 
   const handleGIS = () => {
@@ -122,8 +123,9 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
     address.city = selectedCity;
     address.locality = selectedLocality;
     address.street = street;
-    address.Landmark = landmark;
+    address.landmark = landmark;
     address.geoLocation = geoLocation;
+    address.placeName = placeName;
     onSelect(config.key, address);
   };
 
@@ -134,6 +136,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
     setgeoLocation(geoLocation);
     setplaceName(placeName);
     setIsOpen(false);
+    setPinerror(null);
   }
   function selectPincode(e) {
     setPinerror(null);
@@ -197,7 +200,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
       t={t}
       config={config}
       onSelect={handleSubmit}
-      isDisabled={!selectedCity || !selectedLocality }
+      isDisabled={!selectedCity || !selectedLocality || Pinerror }
       isMultipleAllow={true}
       forcedError={t(Pinerror)}
     >
@@ -246,22 +249,22 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
         onSelect={selectCity}
         t={t}
         isDependent={true}
-        labelKey="TENANT_TENANTS"
+        //labelKey="TENANT_TENANTS"
         disabled={true}
       />}
       {!isOpen && selectedCity && localities && (
         <span className={"form-pt-dropdown-only"}>
           <CardLabel>{`${t("BPA_LOC_MOHALLA_LABEL")}*`}</CardLabel>
           <RadioOrSelect
-            // dropdownStyle={{ paddingBottom: "20px" }}
+            optionCardStyles={{ maxHeight:"20vmax" }}
             isMandatory={config.isMandatory}
             options={localities.sort((a, b) => a.name.localeCompare(b.name))}
             selectedOption={selectedLocality}
             optionKey="i18nkey"
             onSelect={selectLocality}
             t={t}
-            //isDependent={true}
-            labelKey=""
+            isDependent={true}
+            labelKey={`${stringReplaceAll(selectedCity?.code,".","_").toUpperCase()}_REVENUE`}
           //disabled={isEdit}
           />
         </span>

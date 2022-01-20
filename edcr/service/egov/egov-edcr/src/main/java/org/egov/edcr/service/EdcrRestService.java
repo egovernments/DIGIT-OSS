@@ -443,12 +443,16 @@ public class EdcrRestService {
                 && edcrRequest.getFromDate() == null && edcrRequest.getToDate() == null
                 && isBlank(edcrRequest.getApplicationNumber())
                 && isNotBlank(edcrRequest.getTenantId());
+        
+        boolean isStakeholder = edcrRequest != null && (isNotBlank(edcrRequest.getAppliactionType())
+                || isNotBlank(edcrRequest.getApplicationSubType()) || isNotBlank(edcrRequest.getStatus())
+                || edcrRequest.getFromDate() != null || edcrRequest.getToDate() != null);
 
         City stateCity = cityService.fetchStateCityDetails();
 
-        int limit = Integer.valueOf(environmentSettings.getProperty("egov.edcr.default.limit"));
-        int offset = Integer.valueOf(environmentSettings.getProperty("egov.edcr.default.offset"));
-        int maxLimit = Integer.valueOf(environmentSettings.getProperty("egov.edcr.max.limit"));
+        int limit = Integer.parseInt(environmentSettings.getProperty("egov.edcr.default.limit"));
+        int offset = Integer.parseInt(environmentSettings.getProperty("egov.edcr.default.offset"));
+        int maxLimit = Integer.parseInt(environmentSettings.getProperty("egov.edcr.max.limit"));
         if (edcrRequest.getLimit() != null && edcrRequest.getLimit() <= maxLimit)
             limit = edcrRequest.getLimit();
         if (edcrRequest.getLimit() != null && (edcrRequest.getLimit() > maxLimit || edcrRequest.getLimit() == -1)) {
@@ -461,7 +465,8 @@ public class EdcrRestService {
             final Map<String, String> params = new ConcurrentHashMap<>();
 
             StringBuilder queryStr = new StringBuilder();
-            searchAtStateTenantLevel(edcrRequest, userInfo, userId, onlyTenantId, params, queryStr);
+            searchAtStateTenantLevel(edcrRequest, userInfo, userId, onlyTenantId, params, queryStr, isStakeholder);
+            LOG.info(queryStr.toString());
             final Query query = getCurrentSession().createSQLQuery(queryStr.toString()).setFirstResult(offset)
                     .setMaxResults(limit);
             for (final Map.Entry<String, String> param : params.entrySet())
@@ -490,7 +495,8 @@ public class EdcrRestService {
                 return sortedList;
             }
         } else {
-            final Criteria criteria = getCriteriaofSingleTenant(edcrRequest, userInfo, userId, onlyTenantId);
+            final Criteria criteria = getCriteriaofSingleTenant(edcrRequest, userInfo, userId, onlyTenantId, isStakeholder);
+            LOG.info(criteria.toString());
             criteria.setFirstResult(offset);
             criteria.setMaxResults(limit);
             edcrApplications = criteria.list();
@@ -514,6 +520,7 @@ public class EdcrRestService {
             userId = userInfo.getUuid();
         else if (userInfo != null && StringUtils.isNoneBlank(userInfo.getId()))
             userId = userInfo.getId();
+        
         // When the user is ANONYMOUS, then search application by edcrno or transaction
         // number
         if (userInfo != null && StringUtils.isNoneBlank(userId) && userInfo.getPrimaryrole() != null
@@ -529,27 +536,31 @@ public class EdcrRestService {
                 && edcrRequest.getFromDate() == null && edcrRequest.getToDate() == null
                 && isBlank(edcrRequest.getApplicationNumber())
                 && isNotBlank(edcrRequest.getTenantId());
+        
+        boolean isStakeholder = edcrRequest != null && (isNotBlank(edcrRequest.getAppliactionType())
+                || isNotBlank(edcrRequest.getApplicationSubType()) || isNotBlank(edcrRequest.getStatus())
+                || edcrRequest.getFromDate() != null || edcrRequest.getToDate() != null);
 
         City stateCity = cityService.fetchStateCityDetails();
         if (edcrRequest != null && edcrRequest.getTenantId().equalsIgnoreCase(stateCity.getCode())) {
             final Map<String, String> params = new ConcurrentHashMap<>();
 
             StringBuilder queryStr = new StringBuilder();
-            searchAtStateTenantLevel(edcrRequest, userInfo, userId, onlyTenantId, params, queryStr);
+            searchAtStateTenantLevel(edcrRequest, userInfo, userId, onlyTenantId, params, queryStr, isStakeholder);
 
             final Query query = getCurrentSession().createSQLQuery(queryStr.toString());
             for (final Map.Entry<String, String> param : params.entrySet())
                 query.setParameter(param.getKey(), param.getValue());
             return query.list().size();
         } else {
-            final Criteria criteria = getCriteriaofSingleTenant(edcrRequest, userInfo, userId, onlyTenantId);
+            final Criteria criteria = getCriteriaofSingleTenant(edcrRequest, userInfo, userId, onlyTenantId, isStakeholder);
             return criteria.list().size();
         }
 
     }
 
     private void searchAtStateTenantLevel(final EdcrRequest edcrRequest, UserInfo userInfo, String userId, boolean onlyTenantId,
-            final Map<String, String> params, StringBuilder queryStr) {
+            final Map<String, String> params, StringBuilder queryStr, boolean isStakeholder) {
         Map<String, String> tenants = tenantUtils.tenantsMap();
         Iterator<Map.Entry<String, String>> tenantItr = tenants.entrySet().iterator();
         while (tenantItr.hasNext()) {
@@ -586,7 +597,7 @@ public class EdcrRestService {
                 params.put("applicationNumber", edcrRequest.getApplicationNumber());
             }
 
-            if (onlyTenantId && userInfo != null && isNotBlank(userId)) {
+            if ((onlyTenantId || isStakeholder) && userInfo != null && isNotBlank(userId)) {
                 queryStr.append("and appln.thirdPartyUserCode=:thirdPartyUserCode ");
                 params.put("thirdPartyUserCode", userId);
             }
@@ -598,10 +609,10 @@ public class EdcrRestService {
                     applicationType = ApplicationType.PERMIT;
                 } else if ("BUILDING_OC_PLAN_SCRUTINY".equalsIgnoreCase(appliactionType)) {
                     applicationType = ApplicationType.OCCUPANCY_CERTIFICATE;
-                } else if ("Permit".equalsIgnoreCase(appliactionType)) {
-                    applicationType = ApplicationType.PERMIT;
                 } else if ("Occupancy certificate".equalsIgnoreCase(appliactionType)) {
                     applicationType = ApplicationType.OCCUPANCY_CERTIFICATE;
+                } else {
+                    applicationType = ApplicationType.PERMIT;
                 }
                 queryStr.append("and appln.applicationType=:applicationtype ");
                 params.put("applicationtype", applicationType.toString());
@@ -640,7 +651,7 @@ public class EdcrRestService {
     }
 
     private Criteria getCriteriaofSingleTenant(final EdcrRequest edcrRequest, UserInfo userInfo, String userId,
-            boolean onlyTenantId) {
+            boolean onlyTenantId, boolean isStakeholder) {
         final Criteria criteria = getCurrentSession().createCriteria(EdcrApplicationDetail.class,
                 "edcrApplicationDetail");
         criteria.createAlias("edcrApplicationDetail.application", "application");
@@ -675,7 +686,7 @@ public class EdcrRestService {
             criteria.add(Restrictions.eq("application.serviceType", edcrRequest.getApplicationSubType()));
         }
 
-        if (onlyTenantId && userInfo != null && isNotBlank(userId)) {
+        if ((onlyTenantId || isStakeholder) &&  userInfo != null && isNotBlank(userId)) {
             criteria.add(Restrictions.eq("application.thirdPartyUserCode", userId));
         }
 

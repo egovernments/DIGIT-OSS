@@ -14,24 +14,30 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
   
   const onStatusChange = (e, type) => {
     if (e.target.checked) setSearchParams({..._searchParams, applicationStatus: [..._searchParams?.applicationStatus, type] });
-    else setSearchParams({..._searchParams, applicationStatus: _searchParams?.applicationStatus.filter((option) => type.name !== option.name) });
+    else setSearchParams({..._searchParams, applicationStatus: _searchParams?.applicationStatus.filter((option) => type !== option) });
   };
 
   const handleChange = (option) => {
     setSearchParams(old=>({...old,...option}));
   };
-  const clearAll = () => {setSearchParams({applicationType: [], applicationStatus:[]});
-  onFilterChange({});
-};
+  const clearAll = () => {
 
+  setSearchParams({...searchParams,applicationType: [], applicationStatus:[]});
+  onFilterChange({applicationStatus:[]});
+};
   return (
     <React.Fragment>
       <div className="filter">
         <div className="filter-card">
+        {props.type === "mobile" && (
+            <span onClick={onClose} className="filter-card-close-button">
+              <CloseSvg />
+            </span>
+          )}
           <div className="heading">
             <div className="filter-label">
               <FilterIcon />
-              {t("ES_COMMON_FILTER_BY")}:
+              {t("ES_COMMON_FILTER_BY")}
               <span className="clear-search" onClick={clearAll} style={{ border: "1px solid #e0e0e0", padding: "6px" }}>
                 <svg width="17" height="17" viewBox="0 0 16 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -41,14 +47,9 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
                 </svg>
               </span>
             </div>
-            {props.type === "mobile" && (
-              <span onClick={onClose}>
-                <CloseSvg />
-              </span>
-            )}
           </div>
           {loadingApplicationTypes ? <Loader/> : <div>
-            <div className="filter-label">{t("BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL")}</div>
+            <div className="filter-label sub-filter-label">{t("BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL")}</div>
             {/* <Dropdown t={t} option={applicationTypes} selected={_searchParams?.applicationType} optionKey={"i18nKey"} select={(arg) => handleChange({ applicationType: arg })} /> */}
             {applicationTypes.map(applicationType => {
                 return <CheckBox
@@ -68,7 +69,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
             <Dropdown t={t} option={filteredServiceTypes} optionKey={"i18nKey"} selected={_searchParams?.serviceType} select={(arg) => handleChange({ serviceType: arg })} />
           </div> : null} */}
           {availableBusinessServicesOptions?.length > 0 ? <div>
-            <div className="filter-label">{t("ES_INBOX_RISK_TYPE")}</div>
+            <div className="filter-label sub-filter-label">{t("ES_INBOX_RISK_TYPE")}</div>
             <RadioButtons
                 onSelect={(e) => handleChange({businessService: e.code})}
                 selectedOption={availableBusinessServicesOptions.filter((option) => option.code === _searchParams?.businessService)[0]}

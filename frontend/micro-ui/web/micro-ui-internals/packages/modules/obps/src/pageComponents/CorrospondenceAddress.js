@@ -15,6 +15,11 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
   let isopenlink = window.location.href.includes("/openlink/");
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
+  if(isopenlink)  
+  window.onunload = function () {
+    sessionStorage.removeItem("Digit.BUILDING_PERMIT");
+  }
+
   function selectChecked(e) {
     if (isAddressSame == false) {
       setisAddressSame(true);

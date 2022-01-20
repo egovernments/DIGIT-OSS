@@ -34,7 +34,7 @@ const DesktopInbox = (props) => {
       },
       {
         Header: t('BPA_BASIC_DETAILS_APPLICATION_NAME_LABEL'),
-        accessor: 'owner'
+        accessor: 'applicantName'
       },
       {
         Header: t('TL_COMMON_TABLE_COL_STATUS'),
@@ -103,10 +103,14 @@ const DesktopInbox = (props) => {
             allLinks={[
               {
                 text: "OBPS_HOME",
-                link: "/digit-ui/citizen/obps/home",              
-              }
+                link: "/digit-ui/citizen/obps/home",   
+              },
+              {
+                text: "SEARCH_APPLICATION",
+                link: "/digit-ui/citizen/obps/search/application",
+              },
             ]}
-            headerText={t("OBPS_ARCH_INBOX")}
+            headerText={t("ES_COMMON_OBPS_INBOX_LABEL")}
             businessService={props.businessService}
           />
           <div>

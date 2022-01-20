@@ -110,6 +110,7 @@ const SearchFormFieldsComponent = ({ formState, Controller, register, control, t
         <label>{t("BPA_APP_MOBILE_NO_SEARCH_PARAM")}</label>
         <MobileNumber
           name="mobileNumber"
+          disable={window.location.href.includes("/digit-ui/citizen") ? true : false}
           inputRef={register({
             minLength: {
               value: 10,
@@ -120,7 +121,7 @@ const SearchFormFieldsComponent = ({ formState, Controller, register, control, t
               message: t("CORE_COMMON_MOBILE_ERROR"),
             },
             pattern: {
-              value: /[789][0-9]{9}/,
+              value: /[6789][0-9]{9}/,
               //type: "tel",
               message: t("CORE_COMMON_MOBILE_ERROR"),
             },

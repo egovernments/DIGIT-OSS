@@ -86,6 +86,7 @@
 @import "./pages/employee/scroll-table.scss";
 @import "./pages/employee/EmployeeLogin.scss";
 @import "./pages/employee/updateNumber.scss";
+@import "./pages/employee/oldMobileInbox.scss";
 
 @import "./pages/citizen/payment/payment-type.scss";
 @import "./pages/citizen/container.scss";
@@ -154,11 +155,15 @@
 }
 
 .mrlg{
-  @apply mr-lg
+  @apply mr-lg;
 }
 
 .mrsm{
-  @apply mr-sm
+  @apply mr-sm;
+}
+
+.mbsm{
+  @apply mb-sm;
 }
 
 .home-link {
@@ -282,6 +287,7 @@
 
 .border-none {
   border: none;
+  justify-content: space-between;
 }
 
 input[type="number"]::-webkit-inner-spin-button,

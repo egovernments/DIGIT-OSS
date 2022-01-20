@@ -21,7 +21,20 @@ const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix, handleSelect, sele
           return (
             <Link
               key={itemIndex}
-              to={isTwoDynamicPrefix?`${linkPrefix}${typeof serviceRequestIdKey === "function" ? serviceRequestIdKey(object) : `${getRedirectionLink(object["Application Type"]==="BPA_STAKEHOLDER_REGISTRATION"?"BPAREG":"BPA")}/${object[object["Application Type"]==="BPA_STAKEHOLDER_REGISTRATION"?"applicationNo":"Application Number"]}`}`:`${linkPrefix}${typeof serviceRequestIdKey === "function" ? serviceRequestIdKey(object) : object[serviceRequestIdKey]}`}
+              to={isTwoDynamicPrefix 
+                ?
+                  `${linkPrefix}${typeof serviceRequestIdKey === "function"
+                    ?
+                    serviceRequestIdKey(object)
+                      :
+                    `${getRedirectionLink(object["Application Type"]==="BPA_STAKEHOLDER_REGISTRATION"?"BPAREG":"BPA")}/${object[object["Application Type"]==="BPA_STAKEHOLDER_REGISTRATION"?"applicationNo":"Application Number"]}`}`
+                :
+                  `${linkPrefix}${typeof serviceRequestIdKey === "function"
+                    ?
+                    serviceRequestIdKey(object)
+                      :
+                    object[serviceRequestIdKey]}`
+                }
             >
               <div className="details-container">
                 {Object.keys(object).map((name, index) => {

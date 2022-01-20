@@ -1,9 +1,10 @@
+import { Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
-import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
-import { Loader, CitizenHomeCard, OBPSIcon } from "@egovernments/digit-ui-react-components";
 import EmployeeApp from "./pages/employee";
+import ApplicationOverview from "./pages/employee/ApplicationOverview";
 import NOCCard from "./pages/employee/EmployeeCard";
+import Inbox from "./pages/employee/Inbox";
 
 const NOCModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "common-noc";
@@ -18,16 +19,18 @@ const NOCModule = ({ stateCode, userType, tenants }) => {
   }
 
   if (userType === "citizen") {
-    return <CitizenApp path={path} stateCode={stateCode} />;
+    return <div></div>;
   }
 
-  return <EmployeeApp path={path} stateCode={stateCode} />
-}
+  return <EmployeeApp path={path} stateCode={stateCode} />;
+};
 
 const componentsToRegister = {
   NOCModule,
-  NOCCard
-}
+  NOCCard,
+  NOCApplicationOverview: ApplicationOverview,
+  NOCInbox: Inbox,
+};
 
 export const initNOCComponents = () => {
   Object.entries(componentsToRegister).forEach(([key, value]) => {

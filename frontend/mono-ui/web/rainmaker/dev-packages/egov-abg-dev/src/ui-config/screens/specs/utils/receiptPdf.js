@@ -257,7 +257,7 @@ export const downloadMultipleBills = async (
     }
     /*
 to download all bulk pdf directly egov-pdf
-     downloadPdfFile(DOWNLOADRECEIPT.GET.URL,'post',queryStr,{},{},false, `${businesService}_${locality}`); //{ Bill: bills }
+     downloadPdfFile(DOWNLOADRECEIPT.GET.URL,'post',queryStr,{},{},false, `${businesService}_${locality}.pdf`); //{ Bill: bills }
   */
     const resp = await httpRequest(
       "post",

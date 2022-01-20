@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Loader, Modal, FormComposer, ButtonSelector } from "@egovernments/digit-ui-react-components";
+import { Loader, Modal, FormComposer, ButtonSelector, ActionBar,ApplyFilterBar  } from "@egovernments/digit-ui-react-components";
 import { configAcceptApplication } from "../config/Approve";
 import { configTermsAndConditions } from "../config/TermsAndConditions";
 
 const Heading = (props) => {
-  return <h1 className="heading-m">{props.label}</h1>;
+  return <h1 style={{marginLeft:"22px"}} className="heading-m BPAheading-m">{props.label}</h1>;
 };
 
 const Close = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFFFFF">
-    <path d="M0 0h24v24H0V0z" fill="none" />
-    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg">
+    <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="#0B0C0C" />
   </svg>
 );
 
 const CloseBtn = (props) => {
   return (
-    <div className="icon-bg-secondary" onClick={props.onClick}>
+    <div className="icon-bg-secondary" onClick={props.onClick} style={{backgroundColor: "#FFFFFF"}}>
       <Close />
     </div>
   );
@@ -29,6 +28,7 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action, applicat
   const [defaultValues, setDefaultValues] = useState({});
   const [error, setError] = useState(null);
   const [termsData, setTermsData] = useState(false);
+  const mobileView = Digit.Utils.browser.isMobile() ? true : false;
 
   const selectFile = (e) => {
     setFile(e.target.files[0]);
@@ -106,12 +106,17 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action, applicat
       actionSaveOnSubmit={() => {}}
       formId="modal-action"
       isDisabled={false}
-      style={{height: "auto", padding: "10px"}}
+      //style={{height: "auto", padding: "10px"}}
+      isOBPSFlow={true}
+      popupStyles={mobileView?{width:"720px"}:{}}
+      style={!mobileView?{height: "43px", width:"107px",paddingLeft:"0px",paddingRight:"0px"}:{height:"43px",width:"160px"}}
       hideSubmit={config?.label?.hideSubmit ? true : false}
+      popupModuleMianStyles={action == "TERMS_AND_CONDITIONS" ? {height : "92%", boxSizing: "border-box"}: mobileView?{paddingLeft:"0px"}: {}}
+      headerBarMainStyle={action == "TERMS_AND_CONDITIONS" ? {margin: "0px", height: "35px"}: {}}
     >
       {config?.form ?
         <FormComposer
-          cardStyle={{ minWidth: "unset", paddingRight: "unset" }}
+          cardStyle={{ minWidth: "unset", paddingRight: "unset", marginRight:"18px",paddingBottom:"64px" }}
           config={config?.form}
           noBoxShadow
           inline
@@ -122,11 +127,12 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action, applicat
         /> : null
       }
       {termsData ?
-        <div>
-          <div style={{ padding: "10px" }}>
-            {config?.data && config?.data?.map((value, index) => <div>{`${index + 1}. ${value}`}</div>)}
+        <div style={{height: "100%"}}>
+          <div style={{ height: "95%" }}>
+            <div style={{fontSize: "18px", paddingBottom: "16px", color :"#000000", fontWeight : "700"}}>{t("TERMS_AND_CONDITIONS")}</div>
+            {config?.data && config?.data?.map((value, index) => <div style={{ height: "90%", overflow: "auto"}}>{`${value}`}</div>)}
           </div>
-          <div style={{display: "flex", justifyContent: "center"}}>
+          <div style={{display: "flex", justifyContent: "center", minHeight: "5%"}}>
             <ButtonSelector label={t("BPA_GO_BACK_LABEL")} onSubmit={closeModal} style={{minWidth: "240px"}}/>
           </div>
         </div> : null

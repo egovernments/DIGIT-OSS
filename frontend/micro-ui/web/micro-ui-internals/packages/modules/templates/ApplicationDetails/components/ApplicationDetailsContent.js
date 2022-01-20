@@ -30,13 +30,24 @@ function ApplicationDetailsContent({
   const { t } = useTranslation();
 
   const getTimelineCaptions = (checkpoint) => {
-    if (checkpoint.state === "OPEN" || checkpoint.status === "INITIATED") {
+    if (checkpoint.state === "OPEN" || checkpoint.status === "INITIATED" && !(window.location.href.includes("/obps/"))) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails?.createdTime),
         source: applicationData?.channel || "",
       };
       return <TLCaption data={caption} />;
-    } else {
+    } 
+    else if(window.location.href.includes("/obps/"))
+    {
+      const caption = {
+        date: checkpoint?.auditDetails?.lastModified,
+        name: checkpoint?.assignes?.[0]?.name,
+        mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
+        comment: t(checkpoint?.comment),
+      };
+      return <TLCaption data={caption} />;
+    }
+    else {
       const caption = {
         date: Digit.DateUtils?.ConvertTimestampToDate(applicationData?.auditDetails?.lastModifiedTime),
         // name: checkpoint?.assigner?.name,
@@ -83,7 +94,7 @@ function ApplicationDetailsContent({
 
   const getMainDivStyles = () => {
     if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
-      return { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" };
+      return { lineHeight: "19px", maxWidth: "950px", minWidth: "280px" };
     } else if (checkLocation) {
       return { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" };
     } else {
@@ -91,17 +102,23 @@ function ApplicationDetailsContent({
     }
   };
 
+  const getTextValue = (value) => {
+    if (value?.skip) return value.value;
+    else if(value?.isUnit) return value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("N/A");
+    else return value?.value ? getTranslatedValues(value?.value, value?.isNotTranslated) : t("N/A");
+  }
+
   return (
     <Card style={{ position: "relative" }} className={"employeeCard-override"}>
       {applicationDetails?.applicationDetails?.map((detail, index) => (
         <React.Fragment key={index}>
           <div style={getMainDivStyles()}>
             {index === 0 && !detail.asSectionHeader ? (
-              <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>
+              <CardSubHeader style={{ marginBottom: "16px", fontSize: "24px" }}>{t(detail.title)}</CardSubHeader>
             ) : (
               <React.Fragment>
-                <CardSectionHeader style={index == 0 && checkLocation ? { marginBottom: "16px" } : { marginBottom: "16px", marginTop: "32px" }}>
-                  {isNocLocation ? `${t(detail.title)}:` : t(detail.title)}
+                <CardSectionHeader style={index == 0 && checkLocation ? { marginBottom: "16px",fontSize: "24px" } : { marginBottom: "16px", marginTop: "32px", fontSize: "24px" }}>
+                  {isNocLocation ? `${t(detail.title)}` : t(detail.title)}
                   {detail?.Component ? <detail.Component /> : null}
                 </CardSectionHeader>
               </React.Fragment>
@@ -117,8 +134,8 @@ function ApplicationDetailsContent({
                   return (
                     <Row
                       key={t(value.title)}
-                      label={isNocLocation || isBPALocation ? `${t(value.title)}:` : t(value.title)}
-                      text={value?.skip ? value.value : getTranslatedValues(value?.value, value?.isNotTranslated) || "N/A"}
+                      label={isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
+                      text={getTextValue(value)}
                       last={index === detail?.values?.length - 1}
                       caption={value.caption}
                       className="border-none"
@@ -149,7 +166,7 @@ function ApplicationDetailsContent({
           {detail?.additionalDetails?.owners && <PropertyOwners owners={detail?.additionalDetails?.owners} />}
           {detail?.additionalDetails?.units && <TLTradeUnits units={detail?.additionalDetails?.units} />}
           {detail?.additionalDetails?.accessories && <TLTradeAccessories units={detail?.additionalDetails?.accessories} />}
-          {detail?.additionalDetails?.permissions && (
+          {detail?.additionalDetails?.permissions && workflowDetails?.data?.nextActions?.length > 0 && (
             <PermissionCheck applicationData={applicationDetails?.applicationData} t={t} permissions={detail?.additionalDetails?.permissions} />
           )}
           {detail?.additionalDetails?.obpsDocuments && (

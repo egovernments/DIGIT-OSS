@@ -230,8 +230,11 @@ export const Search = {
 
   combineResponse: (vehicleTrip, vendorOwnerKey) => {
     return vehicleTrip.map((trip) => {
-      return { ...trip, dsoName: vendorOwnerKey[trip.tripOwnerId].name };
-    });
+      if (vendorOwnerKey[trip.tripOwnerId]){
+        return { ...trip, dsoName: vendorOwnerKey[trip.tripOwnerId].name };
+      } else return {}
+    }).filter( e => e.tripOwnerId);
+
   },
 
   applicationWithBillSlab: async (t, tenantId, applicationNos) => {

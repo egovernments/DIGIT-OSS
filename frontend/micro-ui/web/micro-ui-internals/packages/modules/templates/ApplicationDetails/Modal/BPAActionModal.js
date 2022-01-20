@@ -6,7 +6,7 @@ import { configBPAApproverApplication } from "../config";
 import * as predefinedConfig from "../config";
 
 const Heading = (props) => {
-  return <h1 className="heading-m">{props.label}</h1>;
+  return <h1 style={{marginLeft:"22px"}} className="heading-m BPAheading-m">{props.label}</h1>;
 };
 
 const Close = () => (
@@ -24,15 +24,15 @@ const CloseBtn = (props) => {
   );
 };
 
-const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, applicationDetails, applicationData, businessService, moduleCode }) => {
-    const mutation1 = Digit.Hooks.obps.useObpsAPI(
+const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, applicationDetails, applicationData, businessService, moduleCode,workflowDetails }) => {
+  const mutation1 = Digit.Hooks.obps.useObpsAPI(
       applicationData?.landInfo?.address?.city ? applicationData?.landInfo?.address?.city : tenantId,
       false
     );
-  const { data: approverData, isLoading: PTALoading } = Digit.Hooks.useEmployeeSearch(
+   const { data: approverData, isLoading: PTALoading } = Digit.Hooks.useEmployeeSearch(
     tenantId,
     {
-      roles: action?.assigneeRoles?.map?.((e) => ({ code: e })),
+      roles: workflowDetails?.data?.initialActionState?.nextActions?.filter(ele=>ele?.action==action?.action)?.[0]?.assigneeRoles?.map(role=>({code:role})),
       isActive: true,
     },
     { enabled: !action?.isTerminateState }
@@ -60,6 +60,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [error, setError] = useState(null);
   const [financialYears, setFinancialYears] = useState([]);
   const [selectedFinancialYear, setSelectedFinancialYear] = useState(null);
+  const mobileView = Digit.Utils.browser.isMobile() ? true : false;
 
   useEffect(() => {
     if (financialYearsData && financialYearsData["egf-master"]) {
@@ -122,7 +123,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       refinedQues.push({
         "remarks": data[`Remarks_${i}`],
         "question": data?.questionList[i].question,
-        "value": data[`question_${i}`].code,
+        "value": data?.[`question_${i}`]?.code,
       })
     }
     return refinedQues;
@@ -190,6 +191,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         comment: data?.comments?.length > 0 ? data?.comments : null,
         comments: data?.comments?.length > 0 ? data?.comments : null,
         assignee: !selectedApprover?.uuid ? null : [selectedApprover?.uuid],
+        assignes: !selectedApprover?.uuid ? null : [selectedApprover?.uuid],
         varificationDocuments: uploadedFile
         ? [
           {
@@ -268,13 +270,18 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       actionSaveLabel={t(config.label.submit)}
       actionSaveOnSubmit={() => { }}
       formId="modal-action"
-      style={{height: "auto", padding: "10px"}}
+      isOBPSFlow={true}
+      popupStyles={mobileView?{width:"720px"}:{}}
+      style={!mobileView?{height: "43px", width:"107px",paddingLeft:"0px",paddingRight:"0px"}:{height:"43px",width:"44%"}}
+      popupModuleMianStyles={mobileView?{paddingLeft:"5px"}: {}}
     >
       {financialYearsLoading ? (
         <Loader />
       ) : (
         <FormComposer
           config={config.form}
+          cardStyle={{marginLeft:"0px",marginRight:"0px", marginTop:"-25px"}}
+          className="BPAemployeeCard"
           noBoxShadow
           inline
           childrenAtTheBottom
