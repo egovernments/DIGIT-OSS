@@ -18,6 +18,7 @@ import useSearchApplicationTableConfig from "./useTableConfig";
 const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData, isLoading, Count }) => {
   const [showToast, setShowToast] = useState(null);
   const currentUserPhoneNumber = Digit.UserService.getUser().info.mobileNumber;
+  const userInformation = Digit.UserService.getUser()?.info;
 
   const { register, control, handleSubmit, setValue, getValues, reset, formState } = useForm({
     defaultValues: {
@@ -30,11 +31,19 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
       limit: 10,
       sortBy: "commencementDate",
       sortOrder: "DESC",
-      applicationType: {
+      applicationType: userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_") ).length>0 &&  userInformation?.roles?.filter((ob) => ob.code.includes("BPA_") ).length<=0? {
+        code: "BPA_STAKEHOLDER_REGISTRATION",
+        i18nKey: "WF_BPA_BPA_STAKEHOLDER_REGISTRATION",
+      }:{
         code: "BUILDING_PLAN_SCRUTINY",
         i18nKey: "WF_BPA_BUILDING_PLAN_SCRUTINY",
       },
-      serviceType: {
+      serviceType:userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_") ).length>0 &&  userInformation?.roles?.filter((ob) => ob.code.includes("BPA_") ).length<=0 ?{
+        code: "BPA_STAKEHOLDER_REGISTRATION",
+        applicationType:["BPA_STAKEHOLDER_REGISTRATION"],
+        roles: ["BPAREG_APPROVER","BPAREG_DOC_VERIFIER"],
+        i18nKey: "BPA_SERVICETYPE_BPA_STAKEHOLDER_REGISTRATION"
+      }:{
         applicationType: ["BUILDING_PLAN_SCRUTINY", "BUILDING_OC_PLAN_SCRUTINY"],
         code: "NEW_CONSTRUCTION",
         i18nKey: "BPA_SERVICETYPE_NEW_CONSTRUCTION",
@@ -63,11 +72,19 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
         limit: 10,
         sortBy: "commencementDate",
         sortOrder: "DESC",
-        applicationType: {
+        applicationType: userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_") && !(ob.code.includes("BPA_"))).length>0 ? {
+          code: "BPA_STAKEHOLDER_REGISTRATION",
+          i18nKey: "WF_BPA_BPA_STAKEHOLDER_REGISTRATION",
+        }: {
           code: "BUILDING_PLAN_SCRUTINY",
           i18nKey: "WF_BPA_BUILDING_PLAN_SCRUTINY",
         },
-        serviceType: {
+        serviceType:userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_") && !(ob.code.includes("BPA_"))).length>0 ?{
+          code: "BPA_STAKEHOLDER_REGISTRATION",
+          applicationType:["BPA_STAKEHOLDER_REGISTRATION"],
+          roles: ["BPAREG_APPROVER","BPAREG_DOC_VERIFIER"],
+          i18nKey: "BPA_SERVICETYPE_BPA_STAKEHOLDER_REGISTRATION"
+        }:{
           applicationType: ["BUILDING_PLAN_SCRUTINY", "BUILDING_OC_PLAN_SCRUTINY"],
           code: "NEW_CONSTRUCTION",
           i18nKey: "BPA_SERVICETYPE_NEW_CONSTRUCTION",

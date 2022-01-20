@@ -69,6 +69,49 @@ const SearchMdmsTypes = {
       }
     ),
 
+    useBPAServiceTypes: (tenantId) =>
+     useQuery(
+      [tenantId, "BPA_MDMS_SERVICE_STATUS"],
+      () =>
+        MdmsService.getDataByCriteria(
+          tenantId,
+          {
+            details: {
+              tenantId: tenantId,
+              moduleDetails: [
+                {
+                  moduleName: "BPA",
+                  masterDetails: [
+                    {
+                      name: "BPAAppicationMapping",
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+          "BPA"
+        ),
+      {
+        select: (data) =>{
+        return [...data?.BPA?.BPAAppicationMapping?.filter(function (currentObject){
+        let flag = 0;
+        currentObject?.roles?.map((bpaRole) => {
+          const found = Digit.UserService.getUser()?.info?.roles.some(role => role?.code === bpaRole )
+          if(found == true)
+          flag = 1;
+        })
+        if(flag == 1) return true;
+        else return false;
+      }).map((type) => ({
+        code: type.code,
+        i18nKey: `BPA_SERVICETYPE_${type.code}`,
+        applicationType: type.applicationType,
+      }))]
+        },
+      }
+    ), 
+
   getFormConfig: (tenantId, config) =>
     useQuery(
       [tenantId, "FORM_CONFIG"],
