@@ -12,23 +12,32 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
   ];
 
   const availableBusinessServices = [{
-      code: "FIRE_NOC_SRV",
-      i18nKey: "WF_FIRE_NOC_FIRE_NOC_SRV"
-    },{
-      code: "FIRE_NOC_OFFLINE",
-      i18nKey: "WF_FIRE_NOC_FIRE_NOC_OFFLINE"
-    },{
-      code: "AIRPORT_NOC_OFFLINE",
-      i18nKey: "WF_FIRE_NOC_AIRPORT_NOC_OFFLINE"
-    },{
-      code: "AIRPORT_NOC_SRV",
-      i18nKey: "WF_FIRE_NOC_AIRPORT_NOC_SRV"
-  }]
+    code: "FIRE_NOC_SRV",
+    active: true,
+    roles: ["FIRE_NOC_APPROVER"],
+    i18nKey: "WF_FIRE_NOC_FIRE_NOC_SRV",
+  }, {
+    code: "AIRPORT_NOC_SRV",
+    active: true,
+    roles: ["AIRPORT_AUTHORITY_APPROVER"],
+    i18nKey: "WF_FIRE_NOC_AIRPORT_NOC_SRV"
+  }];
+ 
+  const newAvailableBusinessServices = []; //passing this as options in filterformfield
+  const loggedInUserRoles = Digit.UserService.getUser().info.roles;
+  availableBusinessServices.map(({roles},index) => {
+    roles.map((role) => {
+      loggedInUserRoles.map((el) => {
+        if(el.code === role) newAvailableBusinessServices.push(availableBusinessServices[index])
+      })
+    })
+  })
 
   applicationTypesOfBPA?.forEach(type => {
     type.name = t(`WF_BPA_${type.code}`);
     type.i18nKey = t(`WF_BPA_${type.code}`);
   });
+
 
   const selectedBusinessService = useWatch({control: controlFilterForm, name: "businessService", defaultValue: null});
 
@@ -61,7 +70,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
                 }}
                   selectedOption={props.value}
                   optionsKey="i18nKey"
-                  options={availableBusinessServices}
+                  options={newAvailableBusinessServices}
                 />  
               </>
           }}

@@ -2,7 +2,7 @@ import useInbox from "../useInbox"
 
 const useNOCInbox = ({ tenantId, filters, config={} }) => {
     const { filterForm, searchForm , tableForm } = filters
-    const { moduleName, businessService, applicationStatus, locality, assignee } = filterForm
+    const { moduleName, businessService, applicationStatus, locality, assignee, businessServiceArray } = filterForm
     const { sourceRefId, applicationNo } = searchForm
     const { sortBy, limit, offset, sortOrder } = tableForm
     
@@ -10,7 +10,7 @@ const useNOCInbox = ({ tenantId, filters, config={} }) => {
         tenantId,
         processSearchCriteria: {
           moduleName: "noc-services", 
-          businessService: businessService ? [businessService.code] : ["FIRE_NOC_SRV","FIRE_NOC_OFFLINE","AIRPORT_NOC_OFFLINE","AIRPORT_NOC_SRV"],
+          businessService: businessService ? [businessService.code] : businessServiceArray ,
           ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
         },
         moduleSearchCriteria: {
