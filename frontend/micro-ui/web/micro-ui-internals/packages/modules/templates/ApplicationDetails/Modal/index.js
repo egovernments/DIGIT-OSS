@@ -5,6 +5,7 @@ import TLActionModal from "./TLActionModal";
 import BPAREGActionModal from "./BPAREGActionModal";
 import BPAActionModal from "./BPAActionModal";
 import NOCActionModal from "./NOCActionModal";
+import WNSActionModal from "./WNSActionModal";
 
 const ActionModal = (props) => {
   if (props?.businessService.includes("PT")) {
@@ -26,7 +27,10 @@ const ActionModal = (props) => {
   if (props?.moduleCode.includes("NOC")) {
     return <NOCActionModal {...props} />;
   }
-  // return <FSMActionModal {...props} />;
+  if (props?.moduleCode.includes("WNS")) {
+    return <WNSActionModal {...props} />;
+  }
+
 };
 
 export default ActionModal;

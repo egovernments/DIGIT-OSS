@@ -134,6 +134,7 @@ const Urls = {
   ws: {
     water_search: "/ws-services/wc/_search",
     sewarage_search : "/sw-services/swc/_search",
+    ws_calculation_estimate: "/ws-calculator/waterCalculator/_estimate",
   },
 
   engagement: {

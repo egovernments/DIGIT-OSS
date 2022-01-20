@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
 import { Loader, CitizenHomeCard, WSICon } from "@egovernments/digit-ui-react-components";
 import CitizenApp from "./pages/citizen";
-
+import EmployeeApp from "./pages/employee";
+import WSCard from "../src/components/WSCard";
 import WSServiceName from "./pageComponents/WSServiceName";
 import WSWaterConnectionDetails from "./pageComponents/WSWaterConnectionDetails";
 import WSDocsRequired from "./pageComponents/WSDocsRequired";
@@ -13,6 +14,7 @@ import WSPlumberPreference from "./pageComponents/WSPlumberPreference";
 
 
 const WSModule = ({ stateCode, userType, tenants }) => {
+  console.log("here is the code ");
   const moduleCode = "ws";
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
@@ -28,7 +30,7 @@ const WSModule = ({ stateCode, userType, tenants }) => {
     return <CitizenApp path={path} stateCode={stateCode} />;
   }
 
-  // return <EmployeeApp path={path} stateCode={stateCode} />
+  return <EmployeeApp path={path} stateCode={stateCode} />
 }
 
 const WSLinks = ({ matchPath, userType }) => {
@@ -60,6 +62,7 @@ const WSLinks = ({ matchPath, userType }) => {
 const componentsToRegister = {
   WSModule,
   WSLinks,
+  WSCard,
   WSDocsRequired,
   WSDocumentDetails,
   WSServiceName,

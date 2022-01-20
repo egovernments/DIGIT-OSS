@@ -175,6 +175,8 @@ import WSSearchMdmsTypes from "./ws/WSSearchMdmsTypes";
 import usewsTenants from "./ws/useTenants";
 import useWaterSearch from "./ws/useWaterSearch";
 import useSewarageSearch from "./ws/useSewarageSearch";
+import useWaterConnectionSearch from "./ws/useWaterConnectionSearch";
+import useWsCalculationEstimate from "./ws/useWsCalculationEstimate";
 
 const pgr = {
   useComplaintDetails,
@@ -354,7 +356,9 @@ const ws = {
   WSSearchMdmsTypes,
   usewsTenants,
   useWaterSearch,
-  useSewarageSearch
+  useSewarageSearch,
+  // useWsCalculationEstimate,
+  useWaterConnectionSearch
 }
 
 const Hooks = {

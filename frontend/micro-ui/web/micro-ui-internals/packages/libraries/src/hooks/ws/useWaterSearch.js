@@ -32,6 +32,7 @@ const useWaterSearch = ({tenantId, filters = {}, BusinessService="WS", t}, confi
     let propertyids = "";
     let consumercodes = "";
     if(BusinessService === "WS")
+
     response?.data?.WaterConnection?.forEach( item => {
         propertyids=propertyids+item?.propertyId+(",");
         consumercodes=consumercodes+item?.connectionNo+",";

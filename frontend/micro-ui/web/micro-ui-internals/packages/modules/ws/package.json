@@ -1,7 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-ws",
   "version": "1.4.0",
-  "description": "",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/Module.js",

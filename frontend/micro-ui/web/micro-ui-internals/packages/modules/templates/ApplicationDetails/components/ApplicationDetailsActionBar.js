@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { SubmitBar, ActionBar, Menu } from "@egovernments/digit-ui-react-components";
 
 function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, setDisplayMenu, businessService, forcedActionPrefix }) {
+  console.log(workflowDetails);
   const { t } = useTranslation();
   const user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);

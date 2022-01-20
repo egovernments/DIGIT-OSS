@@ -12,4 +12,14 @@ export const WSService = {
       setTimeParam: false,
       params: { tenantId, ...filters },
     }),
+    wsCalculationEstimate: (details, tenantId) =>
+    Request({
+      url: Urls.ws.ws_calculation_estimate,
+      data: details,
+      useCache: false,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
+    }),
 };
