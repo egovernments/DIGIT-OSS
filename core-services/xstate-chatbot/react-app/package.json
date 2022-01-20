@@ -8,7 +8,7 @@
     "@progress/kendo-react-intl": "3.17.0",
     "@xstate/inspect": "^0.1.1",
     "axios": "^0.21.1",
-    "marked": "^1.2.0",
+    "marked": "^4.0.10",
     "pg-native": "^3.0.0",
     "prop-types": "^15.7.2",
     "react": "16.13.1",
