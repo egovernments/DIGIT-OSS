@@ -26,7 +26,6 @@ const AssessmentDetails = () => {
   const [popup,showPopUp]=useState(false);
 
   const first_temp=useRef();
-  debugger
   const second_temp=useRef();
   const third_temp=useRef();
   const fourth_temp=useRef();
@@ -84,7 +83,7 @@ const AssessmentDetails = () => {
     }
   );
 
-  // const requiredDetails=applicationDetails?.applicationDetails?.filter((e)=>e.title=="PT_ASSESMENT_INFO_SUB_HEADER");
+  const requiredDetails=applicationDetails?.applicationDetails?.filter((e)=>e.title=="PT_ASSESMENT_INFO_SUB_HEADER");
  
   
   const closeToast = () => {
@@ -116,7 +115,7 @@ const AssessmentDetails = () => {
     history.push(`/digit-ui/employee/payment/collect/PT/${propertyId}`);
   };
 
-  if (ptCalculationEstimateLoading || assessmentLoading) {
+  if (ptCalculationEstimateLoading || assessmentLoading||!applicationDetails?.applicationDetails) {
     return <Loader />;
   }
 
@@ -148,34 +147,40 @@ const CloseBtn = (props) => {
     </div>
   );
 };
-
-console.log(ptCalculationEstimateData?.Calculation[0]?.taxHeadEstimates[6]);
-
 function change(){
-  if(first_temp>0){
-    if(second_temp>0){
+  var first_value=document.getElementById("first").value;
+  var second_value=document.getElementById("second").value;
+  var third_value=document.getElementById("third").value;
+  var fourth_value=document.getElementById("fourth").value;
+  var existing_rebate=0;
+  var existing_penality=0;
+  if(first_value){
+    if(second_value){
+      existing_penality=ptCalculationEstimateData?.Calculation[0]?.taxHeadEstimates[6]?.estimateAmount;
       ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]={
         "taxHeadCode": "PT_TIME_PENALTY",
-        "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]?.estimateAmount+(document.getElementById("first").value)*(document.getElementById("second").value),
+        "estimateAmount": ptCalculationEstimateData?.Calculation[0]?.taxHeadEstimates[6]?.estimateAmount+(first_value)*(second_value),
         "category": "TAX"
     }
        }
   }
-  if(third_temp>0){
-    if(fourth_temp>0){
+  if(third_value){
+    if(fourth_value){
+      existing_rebate=ptCalculationEstimateData?.Calculation[0]?.taxHeadEstimates[5]?.estimateAmount;
       ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]={
         "taxHeadCode": "PT_TIME_REBATE",
-        "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]?.estimateAmount+(document.getElementById("third").value)*(document.getElementById("fourth").value),
+        "estimateAmount": ptCalculationEstimateData?.Calculation[0]?.taxHeadEstimates[5]?.estimateAmount+(third_value)*(fourth_value),
         "category": "TAX"
     }
        }
   }
+  ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+ptCalculationEstimateData?.Calculation[0]?.taxHeadEstimates[5]?.estimateAmount+ptCalculationEstimateData?.Calculation[0]?.taxHeadEstimates[6]?.estimateAmount-existing_rebate-existing_penality;
   showPopUp(false);
 }
 const Add_Rebate_Penality=()=>{
   return (
     <Modal
-          headerBarMain={<Heading label="Add Rebate/Penality"/>}
+          headerBarMain={<Heading label={t("Add_rebate_or_penality")}/>}
           headerBarEnd={<CloseBtn onClick={()=>showPopUp(false)}/>}
           actionCancelLabel="Cancel"
           actionCancelOnSubmit={()=>showPopUp(false)}
@@ -187,9 +192,9 @@ const Add_Rebate_Penality=()=>{
   {
       <div>
         <Card>
-          <CardSectionHeader>Adhoc Penality</CardSectionHeader>
+          <CardSectionHeader>{t("Adhoc_Penality")}</CardSectionHeader>
             <CardLabel>
-              Tax Heads
+              {t("Tax_Heads")}
             </CardLabel>
             <div className="field">
               <div className="field-container">
@@ -199,7 +204,7 @@ const Add_Rebate_Penality=()=>{
               </div>
             </div>      
             <CardLabel>
-              Head Amount
+              {t("Head_Amount")}
             </CardLabel>
             <div className="field">
               <div className="field-container">
@@ -210,8 +215,8 @@ const Add_Rebate_Penality=()=>{
             </div>                    
         </Card>
         <Card>
-          <CardSectionHeader>Adhoc Rebate</CardSectionHeader>
-            <CardLabel>Tax Heads</CardLabel>
+          <CardSectionHeader>{t("Adhoc_Rebate")}</CardSectionHeader>
+            <CardLabel>{t("Tax_Heads")}</CardLabel>
             <div className="field">
               <div className="field-container">
                 <div className="text-input field">
@@ -219,7 +224,7 @@ const Add_Rebate_Penality=()=>{
                 </div>
               </div>
             </div>    
-            <CardLabel>Head Amount</CardLabel>
+            <CardLabel>{t("Head_Amount")}</CardLabel>
             <div className="field">
               <div className="field-container">
                 <div className="text-input field">
@@ -234,8 +239,7 @@ const Add_Rebate_Penality=()=>{
 }
   return (
     <div>
-      {/* <Header>{t("PT_ASSESS_PROPERTY")}</Header> */}
-      <Header>{t(PT_Tax_Assessment)}</Header>
+      <Header>{t("PT_Tax_Assessment")}</Header>
       <ApplicationDetailsTemplate
         applicationDetails={
           {applicationDetails:[
@@ -246,7 +250,6 @@ const Add_Rebate_Penality=()=>{
                   title: "PT_PROPERTY_PTUID",
                   value: propertyId,  
                 },
-                // changed from here
                 {
                   title: "PT_Address",
                   value: address_to_display,
@@ -265,27 +268,25 @@ const Add_Rebate_Penality=()=>{
               },
               },
               {
-                belowComponent:()=><LinkLabel onClick={()=>{showPopUp(true)}} style={{color:"red"}}>Add Rebate/Penality</LinkLabel>
+                belowComponent:()=><LinkLabel onClick={()=>{showPopUp(true)}} style={{color:"red"}}>{t("Add_rebate_or_penality")}</LinkLabel>
               },
-                {
-                  ...filtered_details,
-                },
+                
+                requiredDetails,
             {
               belowComponent:()=>{
                 return (
                   <div style={{marginTop:"19px"}}>
-                  <Heading>Calculation Details</Heading>
-                  <CardSubHeader style={{marginBottom:"8px",color:"rgb(80,90,95)",fontSize:"24px"}}>
-                    <CardSectionHeader style={{marginBottom:"16px",color:"rgb(80,90,95)",fontSize:"16px",marginTop:"revert"}}>Calculation Logic
+                  <CardSubHeader style={{marginBottom:"8px",color:"rgb(80,90,95)",fontSize:"24px"}}>{t("Calculation_Details")}
+                    <CardSectionHeader style={{marginBottom:"16px",color:"rgb(80,90,95)",fontSize:"16px",marginTop:"revert"}}>{t("Calculation_Logic")}
                     <br/>
-                    Property Tax = Built up area on GF * Rates per unit of GF - built up empty land on GF * Rate per unit of GF - empty land 𝝨(built-up on nth floor*Rate per unit of nth floor-built up)
+                    {t("Calc_logic")}
                     </CardSectionHeader>
                   </CardSubHeader>
                     <div className="employee-data-table" style={{position:"relative",padding:"8px"}}>
                     <div style={{position:"absolute",maxWidth:"640px",border:"1px solid rgb(214,213,212)",inset:"0px",width:"auto"}}/>
-                    <div className="row border-none"><h2>Applicable Charge Slabs</h2></div>
-                    <div className="row border-none"><h2>Ground Floor Unit-1</h2>
-                    <div className="value">2 Sq/yards</div>
+                    <div className="row border-none"><h2>{t("Applicable_Charge_Slabs")}</h2></div>
+                    <div className="row border-none"><h2>{t("Ground_Floor_Unit-1")}</h2>
+                    <div className="value">{t("2_Sq/yards")}</div>
                     </div>
                    </div>
                   </div>
