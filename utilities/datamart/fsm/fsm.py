@@ -158,17 +158,29 @@ def mapplantname(s):
     elif s == 'MOH002':
         return 'Mohali SeTPP'
 
+def map_gender(s):
+    if s == 1:
+        return 'Female'
+    elif s == 2:
+        return 'Male'
+    elif s == 3:
+        return 'Transgender'
+    elif s == 4:
+        return 'Prefer not to say'
+    elif s == 0:
+        return 'Not Known'
+
 
 def connect():
     try:
-        conn = psycopg2.connect(database="{{REPLACE-WITH-DATABASE}}", user="{{REPLACE-WITH-USERNAME}}",
+         conn = psycopg2.connect(database="{{REPLACE-WITH-DATABASE}}", user="{{REPLACE-WITH-USERNAME}}",
                             password="{{REPLACE-WITH-PASSWORD}}", host="{{REPLACE-WITH-HOST}}")
         print("Connection established!")
     except Exception as exception:
         print("Exception occurred while connecting to the database")
         print(exception)
 
-    fsmquery="SELECT fsm.tenantid,fsm.applicationno  as ApplicationId,COALESCE(fsm.applicationStatus,'N/A') as ApplicationStatus,split_part(propertyusage::TEXT,'.', 1) as PropertyType, CASE WHEN split_part(propertyusage::TEXT,'.', 2)!='' THEN split_part(propertyusage::TEXT,'.', 2) ELSE 'N/A' END as PropertySubType,COALESCE(fsm.sanitationType,'N/A') as OnSiteSanitationType, COALESCE(REPLACE(fsmaddress.doorno,',','#'),'N/A') as DoorNumber, COALESCE(REPLACE(fsmaddress.street,',','#'),'N/A') as StreetName, COALESCE(fsmaddress.city,'N/A') as City, COALESCE(fsmaddress.pincode,'N/A') as Pincode, COALESCE(fsmaddress.locality,'N/A') as Locality, COALESCE(fsmaddress.district,'N/A') as District, COALESCE(fsmaddress.state,'N/A') as State, COALESCE(fsmaddress.slumname,'N/A') as SlumName, COALESCE(fsm.source,'N/A') as ApplicationSource,COALESCE(fsmdso.name,'N/A') as DesludgingEntity, COALESCE(fsmgeolocation.longitude,0) as Longitude, COALESCE(fsmgeolocation.latitude,0) as Latitude, CASE WHEN fsmgeolocation.longitude>0 THEN 'Yes' ELSE 'No' end as GeoLocationProvided,  COALESCE(fsmvehicle.registrationNumber,'N/A') as DesludgingVehicleNumber, COALESCE(fsm.vehicleType,'N/A') as VehicleType, COALESCE(fsmvehicle.tankcapicity,0) as VehicleCapacity , COALESCE(fsmvehicleTripdetail.volume,0) as WasteCollected, COALESCE(fsmvehicleTrip.volumeCarried,0) as WasteDumped, to_char((to_timestamp(fsmvehicleTrip.tripstarttime)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as VehicleInDateTime, to_char((to_timestamp(fsmvehicleTrip.tripendtime)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as VehicleOutDateTime,  fsmvehicleTrip.additionaldetails->>'plantCode' as fstpplant, COALESCE(fsmpayment.totalamountpaid,0) as PaymentAmount, COALESCE(fsmpayment.paymentstatus,'N/A') as PaymentStatus,COALESCE(fsmpayment.paymentmode,'N/A') as PaymentSource, COALESCE(fsmpayment.paymentmode,'N/A') as PaymentInstrumentType,to_char((to_timestamp(fsm.createdtime/1000)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as ApplicationSumbitDate  FROM eg_fsm_application as fsm JOIN eg_fsm_address as fsmaddress ON ( fsmaddress.fsm_id = fsm.id ) JOIN eg_fsm_geolocation as fsmgeolocation ON ( fsmaddress.id = fsmgeolocation.address_id ) LEFT JOIN eg_vendor as fsmdso ON ( fsmdso.id = fsm.dso_id)  LEFT JOIN eg_vehicle as fsmvehicle ON ( fsm.vehicle_id = fsmvehicle.id) LEFT JOIN eg_vehicle_trip_detail as fsmvehicleTripdetail ON ( fsmvehicleTripdetail.referenceNo = fsm.applicationNo) LEFT JOIN eg_vehicle_trip as fsmvehicleTrip ON ( fsmvehicleTripdetail.trip_id = fsmvehicleTrip.id) LEFT JOIN egcl_bill as egbill ON ( egbill.consumercode =fsm.applicationno) LEFT JOIN egcl_paymentdetail as paymentdl ON ( paymentdl.billid = egbill.id ) LEFT JOIN egcl_payment as fsmpayment ON ( fsmpayment.id=paymentdl.paymentid) AND fsm.createdtime > {START_TIME} AND fsm.createdtime < {END_TIME}"
+    fsmquery="SELECT fsm.tenantid,fsm.applicationno  as ApplicationId,COALESCE(fsm.applicationStatus,'N/A') as ApplicationStatus,split_part(propertyusage::TEXT,'.', 1) as PropertyType, CASE WHEN split_part(propertyusage::TEXT,'.', 2)!='' THEN split_part(propertyusage::TEXT,'.', 2) ELSE 'N/A' END as PropertySubType,COALESCE(fsm.sanitationType,'N/A') as OnSiteSanitationType, COALESCE(REPLACE(fsmaddress.doorno,',','#'),'N/A') as DoorNumber, COALESCE(REPLACE(fsmaddress.street,',','#'),'N/A') as StreetName, COALESCE(fsmaddress.city,'N/A') as City, COALESCE(fsmaddress.pincode,'N/A') as Pincode, COALESCE(fsmaddress.locality,'N/A') as Locality, COALESCE(fsmaddress.district,'N/A') as District, COALESCE(fsmaddress.state,'N/A') as State, COALESCE(fsmaddress.slumname,'N/A') as SlumName, COALESCE(fsm.source,'N/A') as ApplicationSource,COALESCE(fsmdso.name,'N/A') as DesludgingEntity, COALESCE(fsmgeolocation.longitude,0) as Longitude, COALESCE(fsmgeolocation.latitude,0) as Latitude, CASE WHEN fsmgeolocation.longitude>0 THEN 'Yes' ELSE 'No' end as GeoLocationProvided,  COALESCE(fsmvehicle.registrationNumber,'N/A') as DesludgingVehicleNumber, COALESCE(fsm.vehicleType,'N/A') as VehicleType, COALESCE(fsmvehicle.tankcapicity,0) as VehicleCapacity , COALESCE(fsmvehicleTripdetail.volume,0) as WasteCollected, COALESCE(fsmvehicleTrip.volumeCarried,0) as WasteDumped, to_char((to_timestamp(fsmvehicleTrip.tripstarttime)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as VehicleInDateTime, to_char((to_timestamp(fsmvehicleTrip.tripendtime)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as VehicleOutDateTime,  fsmvehicleTrip.additionaldetails->>'plantCode' as fstpplant, COALESCE(fsmpayment.totalamountpaid,0) as PaymentAmount, COALESCE(fsmpayment.paymentstatus,'N/A') as PaymentStatus,COALESCE(fsmpayment.paymentmode,'N/A') as PaymentSource, COALESCE(fsmpayment.paymentmode,'N/A') as PaymentInstrumentType,to_char((to_timestamp(fsm.createdtime/1000)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as ApplicationSumbitDate,COALESCE(egovuser.gender,0) as Gender  FROM eg_fsm_application as fsm JOIN eg_fsm_address as fsmaddress ON ( fsmaddress.fsm_id = fsm.id ) JOIN eg_fsm_geolocation as fsmgeolocation ON ( fsmaddress.id = fsmgeolocation.address_id ) JOIN eg_user as egovuser ON ( egovuser.uuid = fsm.accountid ) LEFT JOIN eg_vendor as fsmdso ON ( fsmdso.id = fsm.dso_id)  LEFT JOIN eg_vehicle as fsmvehicle ON ( fsm.vehicle_id = fsmvehicle.id) LEFT JOIN eg_vehicle_trip_detail as fsmvehicleTripdetail ON ( fsmvehicleTripdetail.referenceNo = fsm.applicationNo) LEFT JOIN eg_vehicle_trip as fsmvehicleTrip ON ( fsmvehicleTripdetail.trip_id = fsmvehicleTrip.id) LEFT JOIN egcl_bill as egbill ON ( egbill.consumercode =fsm.applicationno) LEFT JOIN egcl_paymentdetail as paymentdl ON ( paymentdl.billid = egbill.id ) LEFT JOIN egcl_payment as fsmpayment ON ( fsmpayment.id=paymentdl.paymentid) AND fsm.createdtime > {START_TIME} AND fsm.createdtime < {END_TIME}"
 
     starttime = input('Enter start date (dd-mm-yyyy): ')
     endtime = input('Enter end date (dd-mm-yyyy): ')
@@ -214,7 +226,7 @@ def connect():
     disposedstatus="select referenceno as applicationno, to_char((to_timestamp(process.createdtime/1000)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as disposedtime from eg_wf_processinstance_v2 as process inner join eg_vehicle_trip_detail as detail  on process.businessid=detail.referenceno where businessservice='FSM_VEHICLE_TRIP' and process.status in (select uuid from eg_wf_state_v2 where state='DISPOSED')"
     disposedstatusQuery=pd.read_sql_query(disposedstatus,conn)
     disposedstatusData=pd.DataFrame(disposedstatusQuery)
-    data.columns=['tenantid','Application ID','Application Status', 'Property Type','Property Sub Type','OnSite Sanitation Type','Door Number','Street Name','City','Pincode','Locality','District','State','Slum Name','Application Source','Desludging Entity','Longitude','Latitude','Geo Location Provided','Desludging Vehicle Number','Vehicle Type','Vehicle Capacity','Waste Collected','Waste Dumped','Vehicle In DateTime','Vehicle  Out DateTime','Fstp Plant Name','Payment Amount','Payment Status','Payment Source','Payment Instrument Type','Application Submitted Time']
+    data.columns=['tenantid','Application ID','Application Status', 'Property Type','Property Sub Type','OnSite Sanitation Type','Door Number','Street Name','City','Pincode','Locality','District','State','Slum Name','Application Source','Desludging Entity','Longitude','Latitude','Geo Location Provided','Desludging Vehicle Number','Vehicle Type','Vehicle Capacity','Waste Collected','Waste Dumped','Vehicle In DateTime','Vehicle  Out DateTime','Fstp Plant Name','Payment Amount','Payment Status','Payment Source','Payment Instrument Type','Application Submitted Time','Gender']
     pendingpaymentstatusData.columns=['Application ID','Pending payment Submitted Time']
     assigndsostatusData.columns=['Application ID','Assigned DSO Submitted Time']
     dsorejectstatusData.columns=['Application ID','DSO Rejected Submitted Time']
@@ -275,6 +287,7 @@ def connect():
     fsmdata['Slum Name'] = fsmdata['Slum Name'].map(mapslumName)
     fsmdata['Waste Dumped']=fsmdata['Waste Dumped'].apply(np.int64)
     fsmdata['Fstp Plant Name'] = fsmdata['Fstp Plant Name'].map(mapplantname)
+    fsmdata['Gender'] = fsmdata['Gender'].map(map_gender)
 
     global uniquetenant
     uniquetenant = fsmdata['tenantid'].unique()
@@ -292,6 +305,7 @@ def connect():
 
     print("Datamart exported. Please copy it using kubectl cp command to your required location.")
 
+# for auth token                             
 def accessToken():
     query = {'username':'{{REPLACE-WITH-USERNAME}}','password':'{{REPLACE-WITH-PASSWORD}}','userType':'EMPLOYEE',"scope":"read","grant_type":"password"}
     query['tenantId']='pb.amritsar'
@@ -300,7 +314,7 @@ def accessToken():
     jsondata = response.json()
     return jsondata.get('access_token')
 
-
+#for egov-location api call
 def locationApiCall(tenantid):
     body = { "RequestInfo": {"apiId": "Rainmaker", "ver": ".01","ts": "","action": "","did": "1","key": "","msgId": "20170310130900|en_IN",}}
     body["RequestInfo"]["authToken"]=accesstoken
@@ -334,6 +348,7 @@ def locationApiCall(tenantid):
         dictionary[v['code']]= v['name']
 
     return dictionary
+                              
 
 def storeTenantValues():
     for tenant in uniquetenant:
